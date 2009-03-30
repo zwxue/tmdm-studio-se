@@ -238,4 +238,18 @@ public interface XtentisPort extends java.rmi.Remote {
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSStringArray getObjectsForUniverses(com.amalto.workbench.webservices.WSGetObjectsForUniverses regex) throws 
          java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSSynchronizationPlan getSynchronizationPlan(com.amalto.workbench.webservices.WSGetSynchronizationPlan wsGetSynchronizationPlan) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSBoolean existsSynchronizationPlan(com.amalto.workbench.webservices.WSExistsSynchronizationPlan wsExistsSynchronizationPlan) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSSynchronizationPlanPKArray getSynchronizationPlanPKs(com.amalto.workbench.webservices.WSGetSynchronizationPlanPKs regex) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSSynchronizationPlanPK putSynchronizationPlan(com.amalto.workbench.webservices.WSPutSynchronizationPlan wsSynchronizationPlan) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSSynchronizationPlanPK deleteSynchronizationPlan(com.amalto.workbench.webservices.WSDeleteSynchronizationPlan wsSynchronizationPlanDelete) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSStringArray getObjectsForSynchronizationPlans(com.amalto.workbench.webservices.WSGetObjectsForSynchronizationPlans regex) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSSynchronizationStatusCode synchronizationPlanAction(com.amalto.workbench.webservices.WSSynchronizationPlanAction wsSynchronizationPlan) throws 
+         java.rmi.RemoteException;
 }
