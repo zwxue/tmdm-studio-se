@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="Amalto Workbench"
+            id="com.amalto.workbench">
+      </category>
+      <view
+            category="com.amalto.workbench"
+            class="com.amalto.workbench.views.ServerView"
+            icon="icons/o-logo-16.gif"
+            id="com.amalto.workbench.views.ServerView"
+            name="Xtentis Server View">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.ui.resourcePerspective">
+         <view
+               ratio="0.5"
+               relative="org.eclipse.ui.views.TaskList"
+               relationship="right"
+               id="com.amalto.workbench.views.ServerView">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.amalto.workbench.editors.XObjectEditor"
+            default="false"
+            icon="icons/o-logo-16.gif"
+            id="com.amalto.workbench.editors.XObjectEditor"
+            name="com.amalto.workbench.editors.XObjectEditor"/>
+      <editor
+            class="com.amalto.workbench.editors.XObjectBrowser"
+            default="false"
+            icon="icons/o-logo-16.gif"
+            id="com.amalto.workbench.editors.XObjectBrowser"
+            name="com.amalto.workbench.editors.XObjectBrowser"/>
+   </extension>
+
+</plugin>
