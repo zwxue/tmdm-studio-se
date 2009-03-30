@@ -34,22 +34,6 @@ public interface XtentisPort extends java.rmi.Remote {
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSConceptKey getBusinessConceptKey(com.amalto.workbench.webservices.WSGetBusinessConceptKey wsGetBusinessConceptKey) throws 
          java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSSourceArray getSources(com.amalto.workbench.webservices.WSRegexSources regexp) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSSource getSource(com.amalto.workbench.webservices.WSGetSource wsSourcePK) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSSourcePK putSource(com.amalto.workbench.webservices.WSPutSource wsSource) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSSourcePK deleteSource(com.amalto.workbench.webservices.WSDeleteSource wsSourceDel) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSDestinationArray getDestinations(com.amalto.workbench.webservices.WSRegexDestinations regexp) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSDestination getDestination(com.amalto.workbench.webservices.WSGetDestination wsDestinationPK) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSDestinationPK putDestination(com.amalto.workbench.webservices.WSPutDestination wsDestination) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSDestinationPK deleteDestination(com.amalto.workbench.webservices.WSDeleteDestination wsDestinationDel) throws 
-         java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSDataClusterPKArray getDataClusterPKs(com.amalto.workbench.webservices.WSRegexDataClusterPKs regexp) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSDataCluster getDataCluster(com.amalto.workbench.webservices.WSGetDataCluster wsDataClusterPK) throws 
@@ -61,90 +45,6 @@ public interface XtentisPort extends java.rmi.Remote {
     public com.amalto.workbench.webservices.WSDataClusterPK deleteDataCluster(com.amalto.workbench.webservices.WSDeleteDataCluster wsDeleteDataCluster) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSStringArray getConceptsInDataCluster(com.amalto.workbench.webservices.WSGetConceptsInDataCluster wsGetConceptsInDataCluster) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSTransformArray getTransforms(com.amalto.workbench.webservices.WSRegexTransforms regexp) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSTransform getTransform(com.amalto.workbench.webservices.WSGetTransform wsTransformPK) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSTransformPK putTransform(com.amalto.workbench.webservices.WSPutTransform wsTransform) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSTransformPK deleteTransform(com.amalto.workbench.webservices.WSDeleteTransform wsDeleteTransform) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSInboundPluginArray getInboundPlugins(com.amalto.workbench.webservices.WSRegexInboundPlugins regexp) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSInboundPluginArray getInboundPluginsByCriteria(com.amalto.workbench.webservices.WSGetInboundPluginsByCriteria criteria) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSInboundPlugin getInboundPlugin(com.amalto.workbench.webservices.WSGetInboundPlugin wsInboundPluginPK) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSInboundPluginPK putInboundPlugin(com.amalto.workbench.webservices.WSPutInboundPlugin wsInboundPlugin) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSInboundPluginPK deleteInboundPlugin(com.amalto.workbench.webservices.WSDeleteInboundPlugin wsDeleteInboundPlugin) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSInboundHTMLBodyForm getInboundHTMLBodyForm(com.amalto.workbench.webservices.WSGetInboundHTMLBodyForm wsGetInboundHTMLBodyForm) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSString executeInboundPlugin(com.amalto.workbench.webservices.WSExecuteInboundPlugin wsExecuteInboundPlugin) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSInboundAdaptorArray getInboundAdaptors(com.amalto.workbench.webservices.WSRegexInboundAdaptors regexp) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSInboundAdaptorArray getInboundAdaptorsByCriteria(com.amalto.workbench.webservices.WSGetInboundAdaptorsByCriteria criteria) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSInboundAdaptor getInboundAdaptor(com.amalto.workbench.webservices.WSGetInboundAdaptor wsInboundAdaptorpk) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSInboundAdaptorPK putInboundAdaptor(com.amalto.workbench.webservices.WSPutInboundAdaptor wsInboundAdaptor) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSInboundAdaptorPK deleteInboundAdaptor(com.amalto.workbench.webservices.WSDeleteInboundAdaptor wsInboundAdaptordel) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSOutboundPluginArray getOutboundPlugins(com.amalto.workbench.webservices.WSRegexOutboundPlugins regexp) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSOutboundPluginArray getOutboundPluginsByCriteria(com.amalto.workbench.webservices.WSGetOutboundPluginsByCriteria criteria) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSOutboundPlugin getOutboundPlugin(com.amalto.workbench.webservices.WSGetOutboundPlugin wsOutboundPluginPK) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSOutboundPluginPK putOutboundPlugin(com.amalto.workbench.webservices.WSPutOutboundPlugin wsOutboundPlugin) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSOutboundPluginPK deleteOutboundPlugin(com.amalto.workbench.webservices.WSDeleteOutboundPlugin wsDeleteOutboundPlugin) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSOutboundHTMLBodyForm getOutboundHTMLBodyForm(com.amalto.workbench.webservices.WSGetOutboundHTMLBodyForm wsGetOutboundHTMLBodyForm) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSString executeOutboundPlugin(com.amalto.workbench.webservices.WSExecuteOutboundPlugin wsExecuteOutboundPlugin) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSOutboundAdaptorArray getOutboundAdaptors(com.amalto.workbench.webservices.WSRegexOutboundAdaptors regexp) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSOutboundAdaptorArray getOutboundAdaptorsByCriteria(com.amalto.workbench.webservices.WSGetOutboundAdaptorsByCriteria criteria) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSOutboundAdaptor getOutboundAdaptor(com.amalto.workbench.webservices.WSGetOutboundAdaptor wsOutboundAdaptorpk) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSOutboundAdaptorPK putOutboundAdaptor(com.amalto.workbench.webservices.WSPutOutboundAdaptor wsOutboundAdaptor) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSOutboundAdaptorPK deleteOutboundAdaptor(com.amalto.workbench.webservices.WSDeleteOutboundAdaptor wsOutboundAdaptordel) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSDocumentArray getDocuments(com.amalto.workbench.webservices.WSRegexDocuments regexp) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSDocumentArray getDocumentsByCriteria(com.amalto.workbench.webservices.WSGetDocumentsByCriteria criteria) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSDocument getDocument(com.amalto.workbench.webservices.WSGetDocument wsDocumentPK) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSDocumentPK putDocumentInAFile(com.amalto.workbench.webservices.WSPutDocumentInAFile wsPutDocumentInAFile) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSJobPK putDocumentInAFileAsJob(com.amalto.workbench.webservices.WSPutDocumentInAFileAsJob wsPutDocumentInAFile) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSDocumentPK putDocumentInAString(com.amalto.workbench.webservices.WSPutDocumentInAString wsPutDocumentInAString) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSJobPK putDocumentInAStringAsJob(com.amalto.workbench.webservices.WSPutDocumentInAStringAsJob wsPutDocumentInAString) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSDocumentPK deleteDocument(com.amalto.workbench.webservices.WSDeleteDocument wsDeleteDocument) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSString uploadDocumentByChunks(com.amalto.workbench.webservices.WSUploadDocumentByChunks wsDocumentChunk) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSDocumentPK putDocument2(com.amalto.workbench.webservices.WSPutDocument2 wsDocument) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSJobPK putDocument2AsJob(com.amalto.workbench.webservices.WSPutDocument2AsJob wsDocument) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSJobArray getJobs(com.amalto.workbench.webservices.WSRegexJobs regexp) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSJobPK putJob(com.amalto.workbench.webservices.WSPutJob wsPutJob) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSJob getJob(com.amalto.workbench.webservices.WSGetJob wsGetJob) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSViewPKArray getViewPKs(com.amalto.workbench.webservices.WSGetViewPKs regexp) throws 
          java.rmi.RemoteException;
@@ -158,7 +58,7 @@ public interface XtentisPort extends java.rmi.Remote {
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSString getBusinessConceptValue(com.amalto.workbench.webservices.WSGetBusinessConceptValue wsGetBusinessConceptValue) throws 
          java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSStringArray getBusinessElementValues(com.amalto.workbench.webservices.WSGetBusinessElementValues wsGetBusinessElementValues) throws 
+    public com.amalto.workbench.webservices.WSStringArray getFullPathValues(com.amalto.workbench.webservices.WSGetFullPathValues wsGetFullPathValues) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSItem getItem(com.amalto.workbench.webservices.WSGetItem wsGetItem) throws 
          java.rmi.RemoteException;
@@ -168,13 +68,13 @@ public interface XtentisPort extends java.rmi.Remote {
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSItemPKsByCriteriaResponse getItemPKsByCriteria(com.amalto.workbench.webservices.WSGetItemPKsByCriteria wsGetItemPKsByCriteria) throws 
          java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSStringArray singleSearch(com.amalto.workbench.webservices.WSSingleSearch wsSingleSearch) throws 
+    public com.amalto.workbench.webservices.WSStringArray viewSearch(com.amalto.workbench.webservices.WSViewSearch wsViewSearch) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSStringArray xPathsSearch(com.amalto.workbench.webservices.WSXPathsSearch wsXPathsSearch) throws 
          java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSStringArray quickSearch(com.amalto.workbench.webservices.WSQuickSearch wsQuickSearch) throws 
+    public com.amalto.workbench.webservices.WSString count(com.amalto.workbench.webservices.WSCount wsCount) throws 
          java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSItemPK projectItem(com.amalto.workbench.webservices.WSProjectItem wsProjectItem) throws 
+    public com.amalto.workbench.webservices.WSStringArray quickSearch(com.amalto.workbench.webservices.WSQuickSearch wsQuickSearch) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSItemPK putItem(com.amalto.workbench.webservices.WSPutItem wsPutItem) throws 
          java.rmi.RemoteException;
@@ -182,15 +82,11 @@ public interface XtentisPort extends java.rmi.Remote {
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSPipeline extractUsingTransformerThruView(com.amalto.workbench.webservices.WSExtractUsingTransformerThruView wsExtractUsingTransformerThruView) throws 
          java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSString extractItem(com.amalto.workbench.webservices.WSExtractItem wsExtractItem) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSStringArray singleExtract(com.amalto.workbench.webservices.WSSingleExtract wsSingleExtract) throws 
-         java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSItemPK deleteItem(com.amalto.workbench.webservices.WSDeleteItem wsDeleteItem) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSInt deleteItems(com.amalto.workbench.webservices.WSDeleteItems wsDeleteItems) throws 
          java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSStringArray directQuery(com.amalto.workbench.webservices.WSDirectQuery wsDirectQuery) throws 
+    public com.amalto.workbench.webservices.WSStringArray runQuery(com.amalto.workbench.webservices.WSRunQuery wsRunQuery) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSConnectorInteractionResponse connectorInteraction(com.amalto.workbench.webservices.WSConnectorInteraction wsConnectorInteraction) throws 
          java.rmi.RemoteException;
@@ -203,20 +99,6 @@ public interface XtentisPort extends java.rmi.Remote {
     public com.amalto.workbench.webservices.WSRoutingRulePK putRoutingRule(com.amalto.workbench.webservices.WSPutRoutingRule wsRoutingRule) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSRoutingRulePK deleteRoutingRule(com.amalto.workbench.webservices.WSDeleteRoutingRule wsRoutingRuleDel) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSRouterStatus executeRoutingOrderNow(com.amalto.workbench.webservices.WSExecuteRoutingOrderNow wsExecuteRoutingOrderNow) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSRouterStatus routeItemNow(com.amalto.workbench.webservices.WSRouteItemNow wsRouteItemNow) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSRouterStatus routerAction(com.amalto.workbench.webservices.WSRouterAction wsRouterAction) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSRoutingOrder getRoutingOrder(com.amalto.workbench.webservices.WSGetRoutingOrder wsGetRoutingOrder) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSBoolean existsRoutingOrder(com.amalto.workbench.webservices.WSExistsRoutingOrder wsExistsRoutingOrder) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSRoutingOrderArray getRoutingOrdersByCriteria(com.amalto.workbench.webservices.WSGetRoutingOrdersByCriteria wsGetRoutingOrdersByCriteria) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSRoutingOrderPK deleteRoutingOrder(com.amalto.workbench.webservices.WSDeleteRoutingOrder wsDeleteRoutingOrder) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSString serviceAction(com.amalto.workbench.webservices.WSServiceAction wsServiceAction) throws 
          java.rmi.RemoteException;
@@ -255,16 +137,6 @@ public interface XtentisPort extends java.rmi.Remote {
     public com.amalto.workbench.webservices.WSBackgroundJobPK processBytesUsingTransformerAsBackgroundJob(com.amalto.workbench.webservices.WSProcessBytesUsingTransformerAsBackgroundJob wsProcessBytesUsingTransformerAsBackgroundJob) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSBackgroundJobPK processFileUsingTransformerAsBackgroundJob(com.amalto.workbench.webservices.WSProcessFileUsingTransformerAsBackgroundJob wsProcessFileUsingTransformerAsBackgroundJob) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSBoolean existsTransformerPlugin(com.amalto.workbench.webservices.WSExistsTransformerPlugin wsExistsTransformerPlugin) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSString getTransformerPluginConfiguration(com.amalto.workbench.webservices.WSTransformerPluginGetConfiguration wsGetConfiguration) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSString putTransformerPluginConfiguration(com.amalto.workbench.webservices.WSTransformerPluginPutConfiguration wsPutConfiguration) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSTransformerPluginDetails getTransformerPluginDetails(com.amalto.workbench.webservices.WSGetTransformerPluginDetails wsGetTransformerPluginDetails) throws 
-         java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSTransformerPluginsList getTransformerPluginsList(com.amalto.workbench.webservices.WSGetTransformerPluginsList wsGetTransformerPluginsList) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSTransformerV2 getTransformerV2(com.amalto.workbench.webservices.WSGetTransformerV2 wsGetTransformerV2) throws 
          java.rmi.RemoteException;
@@ -353,5 +225,17 @@ public interface XtentisPort extends java.rmi.Remote {
     public com.amalto.workbench.webservices.WSRoutingRulePKArray routeItemV2(com.amalto.workbench.webservices.WSRouteItemV2 wsRouteItem) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSRoutingEngineV2Status routingEngineV2Action(com.amalto.workbench.webservices.WSRoutingEngineV2Action wsRoutingEngineAction) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSUniverse getUniverse(com.amalto.workbench.webservices.WSGetUniverse wsGetUniverse) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSBoolean existsUniverse(com.amalto.workbench.webservices.WSExistsUniverse wsExistsUniverse) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSUniversePKArray getUniversePKs(com.amalto.workbench.webservices.WSGetUniversePKs regex) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSUniversePK putUniverse(com.amalto.workbench.webservices.WSPutUniverse wsUniverse) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSUniversePK deleteUniverse(com.amalto.workbench.webservices.WSDeleteUniverse wsUniverseDelete) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSStringArray getObjectsForUniverses(com.amalto.workbench.webservices.WSGetObjectsForUniverses regex) throws 
          java.rmi.RemoteException;
 }

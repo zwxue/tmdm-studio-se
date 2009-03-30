@@ -18,38 +18,20 @@ import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
-import com.amalto.workbench.webservices.WSDestination;
-import com.amalto.workbench.webservices.WSDestinationPK;
 import com.amalto.workbench.webservices.WSGetDataCluster;
 import com.amalto.workbench.webservices.WSGetDataModel;
-import com.amalto.workbench.webservices.WSGetDestination;
-import com.amalto.workbench.webservices.WSGetInboundAdaptor;
-import com.amalto.workbench.webservices.WSGetInboundPlugin;
 import com.amalto.workbench.webservices.WSGetMenu;
-import com.amalto.workbench.webservices.WSGetOutboundAdaptor;
-import com.amalto.workbench.webservices.WSGetOutboundPlugin;
 import com.amalto.workbench.webservices.WSGetRole;
 import com.amalto.workbench.webservices.WSGetRoutingRule;
-import com.amalto.workbench.webservices.WSGetSource;
 import com.amalto.workbench.webservices.WSGetStoredProcedure;
 import com.amalto.workbench.webservices.WSGetTransformer;
 import com.amalto.workbench.webservices.WSGetView;
-import com.amalto.workbench.webservices.WSInboundAdaptor;
-import com.amalto.workbench.webservices.WSInboundAdaptorPK;
-import com.amalto.workbench.webservices.WSInboundPlugin;
-import com.amalto.workbench.webservices.WSInboundPluginPK;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuPK;
-import com.amalto.workbench.webservices.WSOutboundAdaptor;
-import com.amalto.workbench.webservices.WSOutboundAdaptorPK;
-import com.amalto.workbench.webservices.WSOutboundPlugin;
-import com.amalto.workbench.webservices.WSOutboundPluginPK;
 import com.amalto.workbench.webservices.WSRole;
 import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
-import com.amalto.workbench.webservices.WSSource;
-import com.amalto.workbench.webservices.WSSourcePK;
 import com.amalto.workbench.webservices.WSStoredProcedure;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSTransformer;
@@ -102,33 +84,9 @@ public class EditXObjectAction extends Action{
 			);
               
             switch(xobject.getType()) {
-	           	case TreeObject.SOURCE:
-	           		WSSource wsSource = port.getSource(new WSGetSource((WSSourcePK)xobject.getWsKey())	); 
-	           		xobject.setWsObject(wsSource);
-	           		break;
-	           	case TreeObject.DESTINATION:
-	           		WSDestination wsDestination = port.getDestination(new WSGetDestination((WSDestinationPK)xobject.getWsKey())	); 
-	           		xobject.setWsObject(wsDestination);
-	           		break;
 	           	case TreeObject.DATA_MODEL:
 	           		WSDataModel wsDataModel = port.getDataModel(new WSGetDataModel((WSDataModelPK)xobject.getWsKey())); 
 	           		xobject.setWsObject(wsDataModel);
-	           		break;
-	           	case TreeObject.INBOUND_ADAPTOR:
-	           		WSInboundAdaptor wsInboundAdaptor = port.getInboundAdaptor(new WSGetInboundAdaptor((WSInboundAdaptorPK)xobject.getWsKey())); 
-	           		xobject.setWsObject(wsInboundAdaptor);
-	           		break;
-	           	case TreeObject.INBOUND_PLUGIN:
-	           		WSInboundPlugin wsInboundPlugin = port.getInboundPlugin(new WSGetInboundPlugin((WSInboundPluginPK)xobject.getWsKey())	); 
-	           		xobject.setWsObject(wsInboundPlugin);
-	           		break;
-	           	case TreeObject.OUTBOUND_ADAPTOR:
-	           		WSOutboundAdaptor wsOutboundAdaptor = port.getOutboundAdaptor(new WSGetOutboundAdaptor((WSOutboundAdaptorPK)xobject.getWsKey())); 
-	           		xobject.setWsObject(wsOutboundAdaptor);
-	           		break;
-	           	case TreeObject.OUTBOUND_PLUGIN:
-	           		WSOutboundPlugin wsOutboundPlugin = port.getOutboundPlugin(new WSGetOutboundPlugin((WSOutboundPluginPK)xobject.getWsKey())	); 
-	           		xobject.setWsObject(wsOutboundPlugin);
 	           		break;
 	           	case TreeObject.VIEW:
 	           		WSView wsView = port.getView(new WSGetView((WSViewPK)xobject.getWsKey())); 

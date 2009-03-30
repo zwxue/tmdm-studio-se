@@ -56,29 +56,12 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
         	xobject.addListener(this);
         	
             switch(xobject.getType()) {
-	           	case TreeObject.SOURCE:
-	           		addPage(new SourceMainPage(this));
-	           		break;
-	           	case TreeObject.DESTINATION:
-	           		addPage(new DestinationMainPage(this));
-	           		break;
 	           	case TreeObject.DATA_MODEL:
 	           		addPage(new DataModelMainPage(this));
                     addPage(new DataModelEditorPage(this));
                     //addPage(new DataModelEditorPage2());
 	           		break;
-	           	case TreeObject.INBOUND_ADAPTOR:
-	           		addPage(new InboundAdaptorMainPage(this));
-	           		addPage(new InboundAdaptorXSLTEditorPage(this));
-	           		addPage(new InboundAdaptorUpdatesPage(this));
-	           		break;
-	           	case TreeObject.DOCUMENT:
-	           		addPage(new DocumentMainPage(this));
-	           		break;
 	           	case TreeObject.INBOUND_PLUGIN:
-	           		break;
-	           	case TreeObject.OUTBOUND_ADAPTOR:
-	           		addPage(new OutboundAdaptorMainPage(this));
 	           		break;
 	           	case TreeObject.OUTBOUND_PLUGIN:
 	           		break;

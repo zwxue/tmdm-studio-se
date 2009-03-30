@@ -16,29 +16,15 @@ import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSDeleteDataCluster;
 import com.amalto.workbench.webservices.WSDeleteDataModel;
-import com.amalto.workbench.webservices.WSDeleteDestination;
-import com.amalto.workbench.webservices.WSDeleteDocument;
-import com.amalto.workbench.webservices.WSDeleteInboundAdaptor;
-import com.amalto.workbench.webservices.WSDeleteInboundPlugin;
 import com.amalto.workbench.webservices.WSDeleteMenu;
-import com.amalto.workbench.webservices.WSDeleteOutboundAdaptor;
-import com.amalto.workbench.webservices.WSDeleteOutboundPlugin;
 import com.amalto.workbench.webservices.WSDeleteRole;
 import com.amalto.workbench.webservices.WSDeleteRoutingRule;
-import com.amalto.workbench.webservices.WSDeleteSource;
 import com.amalto.workbench.webservices.WSDeleteStoredProcedure;
 import com.amalto.workbench.webservices.WSDeleteTransformer;
 import com.amalto.workbench.webservices.WSDeleteView;
-import com.amalto.workbench.webservices.WSDestinationPK;
-import com.amalto.workbench.webservices.WSDocumentPK;
-import com.amalto.workbench.webservices.WSInboundAdaptorPK;
-import com.amalto.workbench.webservices.WSInboundPluginPK;
 import com.amalto.workbench.webservices.WSMenuPK;
-import com.amalto.workbench.webservices.WSOutboundAdaptorPK;
-import com.amalto.workbench.webservices.WSOutboundPluginPK;
 import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
-import com.amalto.workbench.webservices.WSSourcePK;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSTransformerPK;
 import com.amalto.workbench.webservices.WSViewPK;
@@ -82,29 +68,8 @@ public class DeleteXObjectAction extends Action{
 	              
 	            switch(xobject.getType()) {
 	            
-		           	case TreeObject.SOURCE:
-		           		port.deleteSource(new WSDeleteSource((WSSourcePK)xobject.getWsKey()));
-		           		break;
-		           	case TreeObject.DESTINATION:
-		           		port.deleteDestination(new WSDeleteDestination((WSDestinationPK)xobject.getWsKey()));
-		           		break;
-		           	case TreeObject.INBOUND_ADAPTOR:
-		           		port.deleteInboundAdaptor(new WSDeleteInboundAdaptor((WSInboundAdaptorPK)xobject.getWsKey()));
-		           		break;
-		           	case TreeObject.INBOUND_PLUGIN:
-		           		port.deleteInboundPlugin(new WSDeleteInboundPlugin((WSInboundPluginPK)xobject.getWsKey()));
-		           		break;
-		           	case TreeObject.OUTBOUND_ADAPTOR:
-		           		port.deleteOutboundAdaptor(new WSDeleteOutboundAdaptor((WSOutboundAdaptorPK)xobject.getWsKey()));
-		           		break;
-		           	case TreeObject.OUTBOUND_PLUGIN:
-		           		port.deleteOutboundPlugin(new WSDeleteOutboundPlugin((WSOutboundPluginPK)xobject.getWsKey()));
-		           		break;
 		           	case TreeObject.DATA_MODEL:
 		           		port.deleteDataModel(new WSDeleteDataModel((WSDataModelPK)xobject.getWsKey()));
-		           		break;
-		           	case TreeObject.DOCUMENT:
-		           		port.deleteDocument(new WSDeleteDocument((WSDocumentPK)xobject.getWsKey()));
 		           		break;
 		          	case TreeObject.VIEW:
 		           		port.deleteView(new WSDeleteView((WSViewPK)xobject.getWsKey()));

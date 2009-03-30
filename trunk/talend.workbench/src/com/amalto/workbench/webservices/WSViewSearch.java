@@ -6,9 +6,8 @@
 package com.amalto.workbench.webservices;
 
 
-public class WSExtractUsingTransformerThruView {
+public class WSViewSearch {
     protected com.amalto.workbench.webservices.WSDataClusterPK wsDataClusterPK;
-    protected com.amalto.workbench.webservices.WSTransformerPK wsTransformerPK;
     protected com.amalto.workbench.webservices.WSViewPK wsViewPK;
     protected com.amalto.workbench.webservices.WSWhereItem whereItem;
     protected int spellTreshold;
@@ -17,12 +16,11 @@ public class WSExtractUsingTransformerThruView {
     protected java.lang.String orderBy;
     protected java.lang.String direction;
     
-    public WSExtractUsingTransformerThruView() {
+    public WSViewSearch() {
     }
     
-    public WSExtractUsingTransformerThruView(com.amalto.workbench.webservices.WSDataClusterPK wsDataClusterPK, com.amalto.workbench.webservices.WSTransformerPK wsTransformerPK, com.amalto.workbench.webservices.WSViewPK wsViewPK, com.amalto.workbench.webservices.WSWhereItem whereItem, int spellTreshold, int skip, int maxItems, java.lang.String orderBy, java.lang.String direction) {
+    public WSViewSearch(com.amalto.workbench.webservices.WSDataClusterPK wsDataClusterPK, com.amalto.workbench.webservices.WSViewPK wsViewPK, com.amalto.workbench.webservices.WSWhereItem whereItem, int spellTreshold, int skip, int maxItems, java.lang.String orderBy, java.lang.String direction) {
         this.wsDataClusterPK = wsDataClusterPK;
-        this.wsTransformerPK = wsTransformerPK;
         this.wsViewPK = wsViewPK;
         this.whereItem = whereItem;
         this.spellTreshold = spellTreshold;
@@ -38,14 +36,6 @@ public class WSExtractUsingTransformerThruView {
     
     public void setWsDataClusterPK(com.amalto.workbench.webservices.WSDataClusterPK wsDataClusterPK) {
         this.wsDataClusterPK = wsDataClusterPK;
-    }
-    
-    public com.amalto.workbench.webservices.WSTransformerPK getWsTransformerPK() {
-        return wsTransformerPK;
-    }
-    
-    public void setWsTransformerPK(com.amalto.workbench.webservices.WSTransformerPK wsTransformerPK) {
-        this.wsTransformerPK = wsTransformerPK;
     }
     
     public com.amalto.workbench.webservices.WSViewPK getWsViewPK() {

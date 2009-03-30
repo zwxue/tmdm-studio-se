@@ -6,28 +6,20 @@
 package com.amalto.workbench.webservices;
 
 
-public class WSExecuteStoredProcedure {
-    protected com.amalto.workbench.webservices.WSStoredProcedurePK wsStoredProcedurePK;
+public class WSRunQuery {
     protected java.lang.String revisionID;
     protected com.amalto.workbench.webservices.WSDataClusterPK wsDataClusterPK;
+    protected java.lang.String query;
     protected java.lang.String[] parameters;
     
-    public WSExecuteStoredProcedure() {
+    public WSRunQuery() {
     }
     
-    public WSExecuteStoredProcedure(com.amalto.workbench.webservices.WSStoredProcedurePK wsStoredProcedurePK, java.lang.String revisionID, com.amalto.workbench.webservices.WSDataClusterPK wsDataClusterPK, java.lang.String[] parameters) {
-        this.wsStoredProcedurePK = wsStoredProcedurePK;
+    public WSRunQuery(java.lang.String revisionID, com.amalto.workbench.webservices.WSDataClusterPK wsDataClusterPK, java.lang.String query, java.lang.String[] parameters) {
         this.revisionID = revisionID;
         this.wsDataClusterPK = wsDataClusterPK;
+        this.query = query;
         this.parameters = parameters;
-    }
-    
-    public com.amalto.workbench.webservices.WSStoredProcedurePK getWsStoredProcedurePK() {
-        return wsStoredProcedurePK;
-    }
-    
-    public void setWsStoredProcedurePK(com.amalto.workbench.webservices.WSStoredProcedurePK wsStoredProcedurePK) {
-        this.wsStoredProcedurePK = wsStoredProcedurePK;
     }
     
     public java.lang.String getRevisionID() {
@@ -44,6 +36,14 @@ public class WSExecuteStoredProcedure {
     
     public void setWsDataClusterPK(com.amalto.workbench.webservices.WSDataClusterPK wsDataClusterPK) {
         this.wsDataClusterPK = wsDataClusterPK;
+    }
+    
+    public java.lang.String getQuery() {
+        return query;
+    }
+    
+    public void setQuery(java.lang.String query) {
+        this.query = query;
     }
     
     public java.lang.String[] getParameters() {

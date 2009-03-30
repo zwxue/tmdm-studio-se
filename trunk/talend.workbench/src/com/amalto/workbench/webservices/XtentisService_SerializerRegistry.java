@@ -27,514 +27,9 @@ public class XtentisService_SerializerRegistry implements SerializerConstants {
         TypeMapping mapping = registry.getTypeMapping(SOAPConstants.NS_SOAP_ENCODING);
         TypeMapping mapping2 = registry.getTypeMapping("");
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSViewPK");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSViewPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSViewPK.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteRoutingOrder");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteRoutingOrder_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteRoutingOrder.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutStoredProcedure");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutStoredProcedure_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutStoredProcedure.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSJobArray");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSJobArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSJobArray.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsItem");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsItem_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsItem.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSWhereOperator");
-            CombinedSerializer serializer = new LiteralSimpleTypeSerializer(type, "",
-                com.amalto.workbench.webservices.WSWhereOperator_Encoder.getInstance());
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSWhereOperator.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSItemPK");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSItemPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSItemPK.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetTransformerPluginV2Details");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetTransformerPluginV2Details_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetTransformerPluginV2Details.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExecuteOutboundPlugin");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExecuteOutboundPlugin_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExecuteOutboundPlugin.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetTransformerPluginV2sList");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetTransformerPluginV2SList_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetTransformerPluginV2SList.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutSource");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutSource_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutSource.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteOutboundAdaptor");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteOutboundAdaptor_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteOutboundAdaptor.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderV2Status");
-            CombinedSerializer serializer = new LiteralSimpleTypeSerializer(type, "",
-                com.amalto.workbench.webservices.WSRoutingOrderV2Status_Encoder.getInstance());
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingOrderV2Status.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExecuteRoutingOrderNow");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExecuteRoutingOrderNow_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExecuteRoutingOrderNow.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningRestoreObjects");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningRestoreObjects_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningRestoreObjects.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetTransformerPKs");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetTransformerPKs_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetTransformerPKs.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetSource");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetSource_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetSource.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSStoredProcedurePK");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSStoredProcedurePK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSStoredProcedurePK.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginSpec");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerPluginSpec_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPluginSpec.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSSourcePK");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSSourcePK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSSourcePK.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDataClusterPK");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDataClusterPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDataClusterPK.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetView");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetView_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetView.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderV2");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingOrderV2_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingOrderV2.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJob");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSBackgroundJob_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSBackgroundJob.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteStoredProcedure");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteStoredProcedure_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteStoredProcedure.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutTransformer");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutTransformer_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutTransformer.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSWhereOr");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSWhereOr_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSWhereOr.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderArray");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingOrderArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingOrderArray.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrder");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingOrder_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingOrder.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteOutboundPlugin");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteOutboundPlugin_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteOutboundPlugin.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningTagObjects");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningTagObjects_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningTagObjects.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginPutConfiguration");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerPluginPutConfiguration_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPluginPutConfiguration.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetItemPKsByCriteria");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetItemPKsByCriteria_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetItemPKsByCriteria.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExtractItem");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExtractItem_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExtractItem.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSFindBackgroundJobPKs");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSFindBackgroundJobPKs_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSFindBackgroundJobPKs.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRegexInboundPlugins");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRegexInboundPlugins_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRegexInboundPlugins.class, type, serializer);
-        }
-        {
             QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteDataCluster");
             CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteDataCluster_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
             registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteDataCluster.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsTransformerPlugin");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsTransformerPlugin_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsTransformerPlugin.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRole");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRole_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRole.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetOutboundPluginsByCriteria");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetOutboundPluginsByCriteria_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetOutboundPluginsByCriteria.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningInfo");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningInfo_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningInfo.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetRoutingRule");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetRoutingRule_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetRoutingRule.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsView");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsView_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsView.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformer");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformer_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformer.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRegexTransforms");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRegexTransforms_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRegexTransforms.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutDataCluster");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutDataCluster_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutDataCluster.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSServiceGetConfiguration");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSServiceGetConfiguration_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSServiceGetConfiguration.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExecuteRoutingOrderV2Synchronously");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExecuteRoutingOrderV2Synchronously_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExecuteRoutingOrderV2Synchronously.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSProcessBytesUsingTransformer-wsOutputDecisionTable-decisions");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSProcessBytesUsingTransformerWsOutputDecisionTableDecisions_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSProcessBytesUsingTransformerWsOutputDecisionTableDecisions.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsMenu");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsMenu_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsMenu.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExecuteTransformerV2AsJob");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExecuteTransformerV2AsJob_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExecuteTransformerV2AsJob.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSComponent");
-            CombinedSerializer serializer = new LiteralSimpleTypeSerializer(type, "",
-                com.amalto.workbench.webservices.WSComponent_Encoder.getInstance());
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSComponent.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDataModel");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDataModel_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDataModel.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetRolePKs");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetRolePKs_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetRolePKs.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSLanguage");
-            CombinedSerializer serializer = new LiteralSimpleTypeSerializer(type, "",
-                com.amalto.workbench.webservices.WSLanguage_Encoder.getInstance());
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSLanguage.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsRoutingRule");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsRoutingRule_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsRoutingRule.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderCriteria");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingOrderCriteria_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingOrderCriteria.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningObjectsHistory");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningObjectsHistory_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningObjectsHistory.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSInt");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSInt_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSInt.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRouteItemNow");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRouteItemNow_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRouteItemNow.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerV2");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerV2_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerV2.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDocument");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDocument_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDocument.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetRoutingOrderV2sByCriteria");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetRoutingOrderV2SByCriteria_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetRoutingOrderV2SByCriteria.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSProcessBytesUsingTransformerAsBackgroundJob");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSProcessBytesUsingTransformerAsBackgroundJob_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSProcessBytesUsingTransformerAsBackgroundJob.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetInboundPluginsByCriteria");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetInboundPluginsByCriteria_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetInboundPluginsByCriteria.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSView");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSView_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSView.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerContext-pipeline-pipelineItem");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerContextPipelinePipelineItem_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerContextPipelinePipelineItem.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSInboundPluginArray");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSInboundPluginArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSInboundPluginArray.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetRoutingOrdersByCriteria");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetRoutingOrdersByCriteria_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetRoutingOrdersByCriteria.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSSingleSearch");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSSingleSearch_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSSingleSearch.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRolePK");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRolePK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRolePK.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsTransformerPluginV2");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsTransformerPluginV2_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsTransformerPluginV2.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSJobPK");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSJobPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSJobPK.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteItem");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteItem_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteItem.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutVersioningSystemConfiguration");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutVersioningSystemConfiguration_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutVersioningSystemConfiguration.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetTransformerV2");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetTransformerV2_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetTransformerV2.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConcepts");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetBusinessConcepts_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetBusinessConcepts.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetComponentVersion");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetComponentVersion_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetComponentVersion.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutItem");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutItem_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutItem.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetOutboundAdaptor");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetOutboundAdaptor_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetOutboundAdaptor.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSUploadDocumentByChunks");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSUploadDocumentByChunks_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSUploadDocumentByChunks.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutView");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutView_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutView.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetDataModel");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetDataModel_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetDataModel.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTypedContent");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTypedContent_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTypedContent.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningSystemConfiguration");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningSystemConfiguration_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningSystemConfiguration.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSByteArray");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSByteArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSByteArray.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExtractUsingTransformerThruView");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExtractUsingTransformerThruView_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExtractUsingTransformerThruView.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningHistoryEntry");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningHistoryEntry_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningHistoryEntry.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRegexOutboundAdaptors");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRegexOutboundAdaptors_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRegexOutboundAdaptors.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRouterAction");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRouterAction_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRouterAction.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSInboundPlugin");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSInboundPlugin_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSInboundPlugin.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerV2PKArray");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerV2PKArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerV2PKArray.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSProcessBytesUsingTransformer");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSProcessBytesUsingTransformer_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSProcessBytesUsingTransformer.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSInboundAdaptor");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSInboundAdaptor_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSInboundAdaptor.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsTransformer");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsTransformer_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsTransformer.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSServicesList-Item");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSServicesListItem_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSServicesListItem.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingRuleOperator");
-            CombinedSerializer serializer = new LiteralSimpleTypeSerializer(type, "",
-                com.amalto.workbench.webservices.WSRoutingRuleOperator_Encoder.getInstance());
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingRuleOperator.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetItem");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetItem_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetItem.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutRoutingRule");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutRoutingRule_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutRoutingRule.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsTransformerV2");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsTransformerV2_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsTransformerV2.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSI18nString");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSI18NString_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSI18NString.class, type, serializer);
         }
         {
             QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerContext-projectedItemPKs");
@@ -542,546 +37,29 @@ public class XtentisService_SerializerRegistry implements SerializerConstants {
             registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerContextProjectedItemPKs.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginGetConfiguration");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerPluginGetConfiguration_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPluginGetConfiguration.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSItemPK");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSItemPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSItemPK.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSServicePutConfiguration");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSServicePutConfiguration_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSServicePutConfiguration.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsStoredProcedure");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsStoredProcedure_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsStoredProcedure.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginV2sList-Item");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerPluginV2SListItem_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPluginV2SListItem.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutBusinessConceptSchema");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutBusinessConceptSchema_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutBusinessConceptSchema.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSServiceAction");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSServiceAction_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSServiceAction.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetRoutingRule");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetRoutingRule_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetRoutingRule.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSConnectorInteraction");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSConnectorInteraction_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSConnectorInteraction.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSStringArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSStringArray.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutDocument2AsJob");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutDocument2AsJob_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutDocument2AsJob.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetOutboundPlugin");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetOutboundPlugin_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetOutboundPlugin.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetMenu");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetMenu_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetMenu.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteDestination");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteDestination_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteDestination.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSCheckSchema");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSCheckSchema_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSCheckSchema.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSWhereAnd");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSWhereAnd_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSWhereAnd.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSOutboundHTMLBodyForm");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSOutboundHTMLBodyForm_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSOutboundHTMLBodyForm.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetTransformer");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetTransformer_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetTransformer.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutBackgroundJob");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutBackgroundJob_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutBackgroundJob.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDataClusterPKArray");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDataClusterPKArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDataClusterPKArray.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsDataModel");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsDataModel_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsDataModel.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteTransform");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteTransform_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteTransform.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutDocumentInAStringAsJob");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutDocumentInAStringAsJob_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutDocumentInAStringAsJob.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutTransform");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutTransform_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutTransform.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSProcessFileUsingTransformer");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSProcessFileUsingTransformer_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSProcessFileUsingTransformer.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSMenuPK");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSMenuPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSMenuPK.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersion");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersion_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersion.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSViewPKArray");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSViewPKArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSViewPKArray.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutInboundAdaptor");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutInboundAdaptor_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutInboundAdaptor.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConceptValue");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetBusinessConceptValue_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetBusinessConceptValue.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetRoutingRulePKs");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetRoutingRulePKs_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetRoutingRulePKs.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRegexDataClusterPKs");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRegexDataClusterPKs_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRegexDataClusterPKs.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDocumentArray");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDocumentArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDocumentArray.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSProjectItem");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSProjectItem_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSProjectItem.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingRule");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingRule_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingRule.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSMenuPKArray");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSMenuPKArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSMenuPKArray.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSConceptKey");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSConceptKey_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSConceptKey.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRegexInboundAdaptors");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRegexInboundAdaptors_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRegexInboundAdaptors.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutInboundPlugin");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutInboundPlugin_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutInboundPlugin.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetDocument");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetDocument_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetDocument.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetItems");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetItems_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetItems.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteItems");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteItems_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteItems.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDestination");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDestination_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDestination.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSInboundPluginPK");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSInboundPluginPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSInboundPluginPK.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningItemsHistory");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningItemsHistory_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningItemsHistory.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerV2PK");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerV2PK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerV2PK.class, type, serializer);
-        }
-        {
-            CombinedSerializer serializer = new LiteralSimpleTypeSerializer(SchemaConstants.QNAME_TYPE_BASE64_BINARY,
-                "", XSDBase64BinaryEncoder.getInstance());
-            registerSerializer(mapping2,byte[].class, SchemaConstants.QNAME_TYPE_BASE64_BINARY, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDataModelPKArray");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDataModelPKArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDataModelPKArray.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRegexDocuments");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRegexDocuments_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRegexDocuments.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginsList-Item");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerPluginsListItem_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPluginsListItem.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDestinationArray");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDestinationArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDestinationArray.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutDocumentInAString");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutDocumentInAString_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutDocumentInAString.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRegexStoredProcedure");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRegexStoredProcedure_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRegexStoredProcedure.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutTransformerV2");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutTransformerV2_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutTransformerV2.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingEngineV2Action");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingEngineV2Action_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingEngineV2Action.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderV2PK");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingOrderV2PK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingOrderV2PK.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerProcessStep");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerProcessStep_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerProcessStep.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPK");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSBackgroundJobPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSBackgroundJobPK.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSInboundAdaptorArray-wsInboundAdaptors-updates");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSInboundAdaptorArrayWsInboundAdaptorsUpdates_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSInboundAdaptorArrayWsInboundAdaptorsUpdates.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderV2SearchCriteria");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingOrderV2SearchCriteria_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingOrderV2SearchCriteria.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRegexDataModelPKs");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRegexDataModelPKs_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRegexDataModelPKs.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDestinationPK");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDestinationPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDestinationPK.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteBusinessConcept");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteBusinessConcept_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteBusinessConcept.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningObjectsHistory-objects");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningObjectsHistoryObjects_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningObjectsHistoryObjects.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSServiceActionCode");
-            CombinedSerializer serializer = new LiteralSimpleTypeSerializer(type, "",
-                com.amalto.workbench.webservices.WSServiceActionCode_Encoder.getInstance());
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSServiceActionCode.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSOutboundPluginPK");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSOutboundPluginPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSOutboundPluginPK.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSSingleExtract");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSSingleExtract_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSSingleExtract.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetViewPKs");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetViewPKs_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetViewPKs.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSOutboundAdaptor");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSOutboundAdaptor_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSOutboundAdaptor.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningGetInfo");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningGetInfo_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningGetInfo.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingEngineV2ActionCode");
-            CombinedSerializer serializer = new LiteralSimpleTypeSerializer(type, "",
-                com.amalto.workbench.webservices.WSRoutingEngineV2ActionCode_Encoder.getInstance());
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingEngineV2ActionCode.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPKArray");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSBackgroundJobPKArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSBackgroundJobPKArray.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetServicesList");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetServicesList_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetServicesList.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutDocumentInAFile");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutDocumentInAFile_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutDocumentInAFile.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRole-specification");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoleSpecification_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoleSpecification.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetObjectsForRoles");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetObjectsForRoles_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetObjectsForRoles.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSInboundAdaptorArray");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSInboundAdaptorArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSInboundAdaptorArray.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsRoutingOrderV2");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsRoutingOrderV2_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsRoutingOrderV2.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetMenuPKs");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetMenuPKs_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetMenuPKs.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteRoutingRule");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteRoutingRule_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteRoutingRule.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetRoutingOrder");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetRoutingOrder_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetRoutingOrder.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPipeline-typedContentEntry");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPipelineTypedContentEntry_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPipelineTypedContentEntry.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsRoutingOrder");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsRoutingOrder_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsRoutingOrder.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSBusinessConcept");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSBusinessConcept_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSBusinessConcept.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderPK");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingOrderPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingOrderPK.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSInboundAdaptorPK");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSInboundAdaptorPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSInboundAdaptorPK.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSServicesList");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSServicesList_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSServicesList.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSBusinessConceptPK");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSBusinessConceptPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSBusinessConceptPK.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDataModelPK");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDataModelPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDataModelPK.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSWhereItem");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSWhereItem_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSWhereItem.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExtractedContent");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExtractedContent_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExtractedContent.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingRulePKArray");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingRulePKArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingRulePKArray.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerContext");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerContext_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerContext.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetOutboundAdaptorsByCriteria");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetOutboundAdaptorsByCriteria_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetOutboundAdaptorsByCriteria.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSProcessFileUsingTransformerAsBackgroundJob");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSProcessFileUsingTransformerAsBackgroundJob_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSProcessFileUsingTransformerAsBackgroundJob.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutDestination");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutDestination_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutDestination.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningRestoreItems");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningRestoreItems_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningRestoreItems.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutBusinessConcept");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutBusinessConcept_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutBusinessConcept.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetConceptsInDataCluster");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetConceptsInDataCluster_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetConceptsInDataCluster.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderV2PKArray");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingOrderV2PKArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingOrderV2PKArray.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetRoutingOrderV2PKsByCriteria");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetRoutingOrderV2PKsByCriteria_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetRoutingOrderV2PKsByCriteria.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSOutboundAdaptorPK");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSOutboundAdaptorPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSOutboundAdaptorPK.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExecuteInboundPlugin");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExecuteInboundPlugin_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExecuteInboundPlugin.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderV2Array");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingOrderV2Array_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingOrderV2Array.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetRoutingOrderV2");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetRoutingOrderV2_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetRoutingOrderV2.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetInboundHTMLBodyForm");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetInboundHTMLBodyForm_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetInboundHTMLBodyForm.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRegexDestinations");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRegexDestinations_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRegexDestinations.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteRole");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteRole_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteRole.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExecuteRoutingOrderV2Asynchronously");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExecuteRoutingOrderV2Asynchronously_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExecuteRoutingOrderV2Asynchronously.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingRulePK");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingRulePK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingRulePK.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginV2Details");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerPluginV2Details_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPluginV2Details.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSOutboundPluginArray");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSOutboundPluginArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSOutboundPluginArray.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSCount");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSCount_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSCount.class, type, serializer);
         }
         {
             QName type = new QName("urn-com-amalto-xtentis-webservice", "WSStringPredicate");
@@ -1090,155 +68,30 @@ public class XtentisService_SerializerRegistry implements SerializerConstants {
             registerSerializer(mapping2,com.amalto.workbench.webservices.WSStringPredicate.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteRoutingOrderV2");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteRoutingOrderV2_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteRoutingOrderV2.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsRoutingOrderV2");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsRoutingOrderV2_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsRoutingOrderV2.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSBoolean");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSBoolean_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSBoolean.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerV2PKArray");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerV2PKArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerV2PKArray.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetTransformerPluginsList");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetTransformerPluginsList_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetTransformerPluginsList.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetRolePKs");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetRolePKs_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetRolePKs.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetDataCluster");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetDataCluster_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetDataCluster.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginV2sList");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerPluginV2SList_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPluginV2SList.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRolePKArray");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRolePKArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRolePKArray.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetDocumentsByCriteria");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetDocumentsByCriteria_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetDocumentsByCriteria.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRegexJobs");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRegexJobs_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRegexJobs.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSSource");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSSource_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSSource.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSStoredProcedure");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSStoredProcedure_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSStoredProcedure.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSInboundHTMLBodyForm");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSInboundHTMLBodyForm_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSInboundHTMLBodyForm.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetRole");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetRole_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetRole.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetInboundAdaptor");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetInboundAdaptor_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetInboundAdaptor.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutJob");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutJob_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutJob.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRouterStatus");
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderV2Status");
             CombinedSerializer serializer = new LiteralSimpleTypeSerializer(type, "",
-                com.amalto.workbench.webservices.WSRouterStatus_Encoder.getInstance());
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRouterStatus.class, type, serializer);
+                com.amalto.workbench.webservices.WSRoutingOrderV2Status_Encoder.getInstance());
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingOrderV2Status.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginDetails");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerPluginDetails_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPluginDetails.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetInboundAdaptorsByCriteria");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetInboundAdaptorsByCriteria_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetInboundAdaptorsByCriteria.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRegexOutboundPlugins");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRegexOutboundPlugins_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRegexOutboundPlugins.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutDocument2");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutDocument2_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutDocument2.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteTransformer");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteTransformer_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteTransformer.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningItemsHistory-objects");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningItemsHistoryObjects_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningItemsHistoryObjects.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerContext-pipeline");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerContextPipeline_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerContextPipeline.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginV2GetConfiguration");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerPluginV2GetConfiguration_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPluginV2GetConfiguration.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteInboundPlugin");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteInboundPlugin_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteInboundPlugin.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSWhereCondition");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSWhereCondition_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSWhereCondition.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerVariablesMapping");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerVariablesMapping_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerVariablesMapping.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetBackgroundJob");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetBackgroundJob_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetBackgroundJob.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSMenuEntry");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSMenuEntry_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSMenuEntry.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetInboundPlugin");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetInboundPlugin_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetInboundPlugin.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSInitData");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSInitData_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSInitData.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteDataModel");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteDataModel_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteDataModel.class, type, serializer);
         }
         {
             QName type = new QName("urn-com-amalto-xtentis-webservice", "WSOutputDecisionTable");
@@ -1246,9 +99,30 @@ public class XtentisService_SerializerRegistry implements SerializerConstants {
             registerSerializer(mapping2,com.amalto.workbench.webservices.WSOutputDecisionTable.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPKArray");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerPKArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPKArray.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSProcessBytesUsingTransformerAsBackgroundJob");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSProcessBytesUsingTransformerAsBackgroundJob_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSProcessBytesUsingTransformerAsBackgroundJob.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingEngineV2ActionCode");
+            CombinedSerializer serializer = new LiteralSimpleTypeSerializer(type, "",
+                com.amalto.workbench.webservices.WSRoutingEngineV2ActionCode_Encoder.getInstance());
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingEngineV2ActionCode.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderV2");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingOrderV2_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingOrderV2.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSBusinessConceptPK");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSBusinessConceptPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSBusinessConceptPK.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetItems");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetItems_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetItems.class, type, serializer);
         }
         {
             QName type = new QName("urn-com-amalto-xtentis-webservice", "WSKey");
@@ -1256,30 +130,109 @@ public class XtentisService_SerializerRegistry implements SerializerConstants {
             registerSerializer(mapping2,com.amalto.workbench.webservices.WSKey.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSString");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSString_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSString.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsRoutingRule");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsRoutingRule_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsRoutingRule.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutDocumentInAFileAsJob");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutDocumentInAFileAsJob_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutDocumentInAFileAsJob.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerContext-pipeline-pipelineItem");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerContextPipelinePipelineItem_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerContextPipelinePipelineItem.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessElementValues");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetBusinessElementValues_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetBusinessElementValues.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsTransformer");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsTransformer_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsTransformer.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetJob");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetJob_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetJob.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSProcessFileUsingTransformer");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSProcessFileUsingTransformer_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSProcessFileUsingTransformer.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSConnectorFunction");
-            CombinedSerializer serializer = new LiteralSimpleTypeSerializer(type, "",
-                com.amalto.workbench.webservices.WSConnectorFunction_Encoder.getInstance());
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSConnectorFunction.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformer");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformer_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformer.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSConnectorInteraction");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSConnectorInteraction_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSConnectorInteraction.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetConceptsInDataCluster");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetConceptsInDataCluster_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetConceptsInDataCluster.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSUniverse-xtentisObjectsRevisionIDs");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSServicePutConfiguration");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSServicePutConfiguration_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSServicePutConfiguration.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDataClusterPKArray");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDataClusterPKArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDataClusterPKArray.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSInitData");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSInitData_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSInitData.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSBoolean");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSBoolean_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSBoolean.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetTransformerV2PKs");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetTransformerV2PKs_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetTransformerV2PKs.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSMenuPK");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSMenuPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSMenuPK.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSWhereAnd");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSWhereAnd_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSWhereAnd.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsUniverse");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsUniverse_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsUniverse.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSUniverse");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSUniverse_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSUniverse.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutDataModel");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutDataModel_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutDataModel.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRegexDataModelPKs");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRegexDataModelPKs_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRegexDataModelPKs.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsMenu");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsMenu_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsMenu.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningGetItemsHistory");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningGetItemsHistory_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningGetItemsHistory.class, type, serializer);
         }
         {
             QName type = new QName("urn-com-amalto-xtentis-webservice", "BackgroundJobStatusType");
@@ -1288,54 +241,9 @@ public class XtentisService_SerializerRegistry implements SerializerConstants {
             registerSerializer(mapping2,com.amalto.workbench.webservices.BackgroundJobStatusType.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginsList");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerPluginsList_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPluginsList.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetTransformerPluginDetails");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetTransformerPluginDetails_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetTransformerPluginDetails.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExtractUsingTransformer");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExtractUsingTransformer_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExtractUsingTransformer.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSItemPKsByCriteriaResponse-results");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformArray");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformArray.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteView");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteView_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteView.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteDataModel");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteDataModel_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteDataModel.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSItemPKsByCriteriaResponse");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSItemPKsByCriteriaResponse_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSItemPKsByCriteriaResponse.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConceptKey");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetBusinessConceptKey_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetBusinessConceptKey.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteSource");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteSource_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteSource.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSConceptKey");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSConceptKey_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSConceptKey.class, type, serializer);
         }
         {
             QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteMenu");
@@ -1343,50 +251,19 @@ public class XtentisService_SerializerRegistry implements SerializerConstants {
             registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteMenu.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPK");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPK.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSString");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSString_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSString.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingRuleExpression");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingRuleExpression_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingRuleExpression.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerVariablesMapping");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerVariablesMapping_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerVariablesMapping.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsDataCluster");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsDataCluster_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsDataCluster.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSSourceArray");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSSourceArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSSourceArray.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDataCluster");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDataCluster_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDataCluster.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutOutboundAdaptor");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutOutboundAdaptor_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutOutboundAdaptor.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetVersioningSystemConfiguration");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetVersioningSystemConfiguration_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetVersioningSystemConfiguration.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutMenu");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutMenu_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutMenu.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRouterActionCode");
-            CombinedSerializer serializer = new LiteralSimpleTypeSerializer(type, "",
-                com.amalto.workbench.webservices.WSRouterActionCode_Encoder.getInstance());
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRouterActionCode.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetRole");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetRole_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetRole.class, type, serializer);
         }
         {
             QName type = new QName("urn-com-amalto-xtentis-webservice", "WSMenu");
@@ -1394,14 +271,246 @@ public class XtentisService_SerializerRegistry implements SerializerConstants {
             registerSerializer(mapping2,com.amalto.workbench.webservices.WSMenu.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetTransform");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetTransform_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetTransform.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginV2sList");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerPluginV2SList_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPluginV2SList.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetStoredProcedure");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetStoredProcedure_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetStoredProcedure.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetMenu");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetMenu_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetMenu.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingRuleOperator");
+            CombinedSerializer serializer = new LiteralSimpleTypeSerializer(type, "",
+                com.amalto.workbench.webservices.WSRoutingRuleOperator_Encoder.getInstance());
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingRuleOperator.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSStringArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSStringArray.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDataModel");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDataModel_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDataModel.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerContext");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerContext_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerContext.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetFullPathValues");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetFullPathValues_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetFullPathValues.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPipeline");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPipeline_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPipeline.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExtractUsingTransformer");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExtractUsingTransformer_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExtractUsingTransformer.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSView");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSView_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSView.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetViewPKs");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetViewPKs_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetViewPKs.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSQuickSearch");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSQuickSearch_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSQuickSearch.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningInfo");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningInfo_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningInfo.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSMenu-menuEntries-descriptions");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSMenuMenuEntriesDescriptions_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSMenuMenuEntriesDescriptions.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDataCluster");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDataCluster_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDataCluster.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningHistoryEntry");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningHistoryEntry_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningHistoryEntry.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingRuleExpression");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingRuleExpression_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingRuleExpression.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSXPathsSearch");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSXPathsSearch_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSXPathsSearch.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSServiceAction");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSServiceAction_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSServiceAction.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPK");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSBackgroundJobPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSBackgroundJobPK.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteView");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteView_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteView.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExtractedContent");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExtractedContent_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExtractedContent.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetObjectsForRoles");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetObjectsForRoles_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetObjectsForRoles.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSFindBackgroundJobPKs");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSFindBackgroundJobPKs_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSFindBackgroundJobPKs.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsView");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsView_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsView.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerContext-pipeline");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerContextPipeline_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerContextPipeline.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSWhereCondition");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSWhereCondition_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSWhereCondition.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginSpec");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerPluginSpec_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPluginSpec.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSComponent");
+            CombinedSerializer serializer = new LiteralSimpleTypeSerializer(type, "",
+                com.amalto.workbench.webservices.WSComponent_Encoder.getInstance());
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSComponent.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteItems");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteItems_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteItems.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSViewSearch");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSViewSearch_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSViewSearch.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningTagObjects");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningTagObjects_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningTagObjects.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderV2Array");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingOrderV2Array_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingOrderV2Array.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutVersioningSystemConfiguration");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutVersioningSystemConfiguration_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutVersioningSystemConfiguration.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersion");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersion_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersion.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSCheckSchema");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSCheckSchema_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSCheckSchema.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSStoredProcedurePKArray");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSStoredProcedurePKArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSStoredProcedurePKArray.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingEngineV2Action");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingEngineV2Action_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingEngineV2Action.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningItemsHistory");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningItemsHistory_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningItemsHistory.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsItem");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsItem_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsItem.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetObjectsForUniverses");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetObjectsForUniverses_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetObjectsForUniverses.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetMenuPKs");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetMenuPKs_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetMenuPKs.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginV2GetConfiguration");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerPluginV2GetConfiguration_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPluginV2GetConfiguration.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRole");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRole_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRole.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSItem");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSItem_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSItem.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerV2");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerV2_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerV2.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRolePKArray");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRolePKArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRolePKArray.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetServicesList");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetServicesList_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetServicesList.class, type, serializer);
         }
         {
             QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRouteItemV2");
@@ -1409,9 +518,29 @@ public class XtentisService_SerializerRegistry implements SerializerConstants {
             registerSerializer(mapping2,com.amalto.workbench.webservices.WSRouteItemV2.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransform");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransform_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransform.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSServicesList-Item");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSServicesListItem_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSServicesListItem.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetRoutingRulePKs");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetRoutingRulePKs_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetRoutingRulePKs.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSInt");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSInt_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSInt.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteRole");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteRole_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteRole.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJob");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSBackgroundJob_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSBackgroundJob.class, type, serializer);
         }
         {
             QName type = new QName("urn-com-amalto-xtentis-webservice", "WSConnectorResponseCode");
@@ -1420,19 +549,55 @@ public class XtentisService_SerializerRegistry implements SerializerConstants {
             registerSerializer(mapping2,com.amalto.workbench.webservices.WSConnectorResponseCode.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSJob");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSJob_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSJob.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutDataCluster");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutDataCluster_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutDataCluster.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutDataModel");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutDataModel_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutDataModel.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutRole");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutRole_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutRole.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteDocument");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteDocument_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteDocument.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSI18nString");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSI18NString_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSI18NString.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetRoutingOrderV2PKsByCriteria");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetRoutingOrderV2PKsByCriteria_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetRoutingOrderV2PKsByCriteria.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExecuteTransformerV2AsJob");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExecuteTransformerV2AsJob_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExecuteTransformerV2AsJob.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetComponentVersion");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetComponentVersion_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetComponentVersion.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningObjectsHistory");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningObjectsHistory_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningObjectsHistory.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExecuteRoutingOrderV2Synchronously");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExecuteRoutingOrderV2Synchronously_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExecuteRoutingOrderV2Synchronously.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSWhereOperator");
+            CombinedSerializer serializer = new LiteralSimpleTypeSerializer(type, "",
+                com.amalto.workbench.webservices.WSWhereOperator_Encoder.getInstance());
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSWhereOperator.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginV2PutConfiguration");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerPluginV2PutConfiguration_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPluginV2PutConfiguration.class, type, serializer);
         }
         {
             QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningGetObjectsHistory");
@@ -1440,9 +605,211 @@ public class XtentisService_SerializerRegistry implements SerializerConstants {
             registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningGetObjectsHistory.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetOutboundHTMLBodyForm");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetOutboundHTMLBodyForm_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetOutboundHTMLBodyForm.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetItem");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetItem_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetItem.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConcepts");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetBusinessConcepts_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetBusinessConcepts.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsTransformerV2");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsTransformerV2_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsTransformerV2.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRolePK");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRolePK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRolePK.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderV2PKArray");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingOrderV2PKArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingOrderV2PKArray.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteStoredProcedure");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteStoredProcedure_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteStoredProcedure.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDataModelPK");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDataModelPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDataModelPK.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutBusinessConcept");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutBusinessConcept_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutBusinessConcept.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningGetInfo");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningGetInfo_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningGetInfo.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSServiceGetConfiguration");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSServiceGetConfiguration_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSServiceGetConfiguration.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsDataModel");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsDataModel_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsDataModel.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetTransformerPKs");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetTransformerPKs_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetTransformerPKs.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingRulePKArray");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingRulePKArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingRulePKArray.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSStoredProcedurePK");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSStoredProcedurePK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSStoredProcedurePK.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSByteArray");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSByteArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSByteArray.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningRestoreObjects");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningRestoreObjects_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningRestoreObjects.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSBase64KeyValue");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSBase64KeyValue_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSBase64KeyValue.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSLanguage");
+            CombinedSerializer serializer = new LiteralSimpleTypeSerializer(type, "",
+                com.amalto.workbench.webservices.WSLanguage_Encoder.getInstance());
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSLanguage.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningObjectsHistory-objects");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningObjectsHistoryObjects_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningObjectsHistoryObjects.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteTransformerV2");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteTransformerV2_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteTransformerV2.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRunQuery");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRunQuery_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRunQuery.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSBusinessConcept");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSBusinessConcept_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSBusinessConcept.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPKArray");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerPKArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPKArray.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSWhereItem");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSWhereItem_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSWhereItem.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDataClusterPK");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDataClusterPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDataClusterPK.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetRoutingOrderV2sByCriteria");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetRoutingOrderV2SByCriteria_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetRoutingOrderV2SByCriteria.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningTagItems");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningTagItems_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningTagItems.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSUniverse-itemsRevisionIDs");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSUniverseItemsRevisionIDs_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSUniverseItemsRevisionIDs.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutTransformer");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutTransformer_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutTransformer.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginV2Details");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerPluginV2Details_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPluginV2Details.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExtractUsingTransformerThruView");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExtractUsingTransformerThruView_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExtractUsingTransformerThruView.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteBusinessConcept");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteBusinessConcept_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteBusinessConcept.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetDataModel");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetDataModel_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetDataModel.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetItemPKsByCriteria");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetItemPKsByCriteria_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetItemPKsByCriteria.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExecuteRoutingOrderV2Asynchronously");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExecuteRoutingOrderV2Asynchronously_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExecuteRoutingOrderV2Asynchronously.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsRole");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsRole_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsRole.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSItemPKsByCriteriaResponse");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSItemPKsByCriteriaResponse_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSItemPKsByCriteriaResponse.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutItem");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutItem_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutItem.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSConnectorFunction");
+            CombinedSerializer serializer = new LiteralSimpleTypeSerializer(type, "",
+                com.amalto.workbench.webservices.WSConnectorFunction_Encoder.getInstance());
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSConnectorFunction.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningItemsHistory-objects");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningItemsHistoryObjects_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningItemsHistoryObjects.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetTransformerPluginV2Details");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetTransformerPluginV2Details_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetTransformerPluginV2Details.class, type, serializer);
         }
         {
             QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingEngineV2Status");
@@ -1451,60 +818,29 @@ public class XtentisService_SerializerRegistry implements SerializerConstants {
             registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingEngineV2Status.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutBusinessConceptSchema");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutBusinessConceptSchema_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutBusinessConceptSchema.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSViewPK");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSViewPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSViewPK.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "jobStatusType");
-            CombinedSerializer serializer = new LiteralSimpleTypeSerializer(type, "",
-                com.amalto.workbench.webservices.JobStatusType_Encoder.getInstance());
-            registerSerializer(mapping2,com.amalto.workbench.webservices.JobStatusType.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderV2PK");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingOrderV2PK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingOrderV2PK.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSOutboundAdaptorArray");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSOutboundAdaptorArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSOutboundAdaptorArray.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetStoredProcedure");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetStoredProcedure_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetStoredProcedure.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetDestination");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetDestination_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetDestination.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSServicesList");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSServicesList_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSServicesList.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSXPathsSearch");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSXPathsSearch_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSXPathsSearch.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSMenu-menuEntries-descriptions");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSMenuMenuEntriesDescriptions_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSMenuMenuEntriesDescriptions.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningGetItemsHistory");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningGetItemsHistory_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningGetItemsHistory.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningTagItems");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningTagItems_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningTagItems.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSOutboundPlugin");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSOutboundPlugin_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSOutboundPlugin.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSQuickSearch");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSQuickSearch_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSQuickSearch.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPipeline");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPipeline_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPipeline.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRole-specification");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoleSpecification_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoleSpecification.class, type, serializer);
         }
         {
             QName type = new QName("urn-com-amalto-xtentis-webservice", "WSConnectorInteractionResponse");
@@ -1512,19 +848,29 @@ public class XtentisService_SerializerRegistry implements SerializerConstants {
             registerSerializer(mapping2,com.amalto.workbench.webservices.WSConnectorInteractionResponse.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSStoredProcedurePKArray");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSStoredProcedurePKArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSStoredProcedurePKArray.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRegexStoredProcedure");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRegexStoredProcedure_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRegexStoredProcedure.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDirectQuery");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDirectQuery_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDirectQuery.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutMenu");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutMenu_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutMenu.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRole-specification-instance");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoleSpecificationInstance_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoleSpecificationInstance.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningRestoreItems");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningRestoreItems_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningRestoreItems.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSMenuPKArray");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSMenuPKArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSMenuPKArray.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConceptKey");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetBusinessConceptKey_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetBusinessConceptKey.class, type, serializer);
         }
         {
             QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExecuteStoredProcedure");
@@ -1532,24 +878,29 @@ public class XtentisService_SerializerRegistry implements SerializerConstants {
             registerSerializer(mapping2,com.amalto.workbench.webservices.WSExecuteStoredProcedure.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsStoredProcedure");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsStoredProcedure_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsStoredProcedure.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSProcessFileUsingTransformerAsBackgroundJob");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSProcessFileUsingTransformerAsBackgroundJob_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSProcessFileUsingTransformerAsBackgroundJob.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutOutboundPlugin");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutOutboundPlugin_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutOutboundPlugin.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSProcessBytesUsingTransformer");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSProcessBytesUsingTransformer_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSProcessBytesUsingTransformer.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExecuteTransformerV2");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExecuteTransformerV2_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExecuteTransformerV2.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsTransformerPluginV2");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsTransformerPluginV2_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsTransformerPluginV2.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetTransformerV2PKs");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetTransformerV2PKs_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetTransformerV2PKs.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutTransformerV2");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutTransformerV2_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutTransformerV2.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetUniversePKs");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetUniversePKs_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetUniversePKs.class, type, serializer);
         }
         {
             QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginV2VariableDescriptor");
@@ -1557,54 +908,235 @@ public class XtentisService_SerializerRegistry implements SerializerConstants {
             registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPluginV2VariableDescriptor.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSItem");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSItem_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSItem.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningSystemConfiguration");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSVersioningSystemConfiguration_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSVersioningSystemConfiguration.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteInboundAdaptor");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteInboundAdaptor_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteInboundAdaptor.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteRoutingOrderV2");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteRoutingOrderV2_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteRoutingOrderV2.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRegexSources");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRegexSources_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRegexSources.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetBackgroundJob");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetBackgroundJob_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetBackgroundJob.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteTransformerV2");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteTransformerV2_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteTransformerV2.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetView");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetView_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetView.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDocumentPK");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDocumentPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDocumentPK.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteItem");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteItem_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteItem.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformPK");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformPK.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsDataCluster");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsDataCluster_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsDataCluster.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutRole");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutRole_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutRole.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSUniversePK");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSUniversePK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSUniversePK.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExistsRole");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExistsRole_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExistsRole.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetRoutingOrderV2");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetRoutingOrderV2_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetRoutingOrderV2.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSBase64KeyValue");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSBase64KeyValue_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSBase64KeyValue.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutRoutingRule");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutRoutingRule_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutRoutingRule.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginV2PutConfiguration");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerPluginV2PutConfiguration_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPluginV2PutConfiguration.class, type, serializer);
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDataModelPKArray");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDataModelPKArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDataModelPKArray.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetUniverse");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetUniverse_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetUniverse.class, type, serializer);
+        }
+        {
+            CombinedSerializer serializer = new LiteralSimpleTypeSerializer(SchemaConstants.QNAME_TYPE_BASE64_BINARY,
+                "", XSDBase64BinaryEncoder.getInstance());
+            registerSerializer(mapping2,byte[].class, SchemaConstants.QNAME_TYPE_BASE64_BINARY, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSMenuEntry");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSMenuEntry_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSMenuEntry.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRole-specification-instance");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoleSpecificationInstance_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoleSpecificationInstance.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPK");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerPK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPK.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerProcessStep");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerProcessStep_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerProcessStep.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSStoredProcedure");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSStoredProcedure_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSStoredProcedure.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginV2sList-Item");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerPluginV2SListItem_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPluginV2SListItem.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutUniverse");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutUniverse_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutUniverse.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSUniversePKArray");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSUniversePKArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSUniversePKArray.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteRoutingRule");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteRoutingRule_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteRoutingRule.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRegexDataClusterPKs");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRegexDataClusterPKs_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRegexDataClusterPKs.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetVersioningSystemConfiguration");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetVersioningSystemConfiguration_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetVersioningSystemConfiguration.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSProcessBytesUsingTransformer-wsOutputDecisionTable-decisions");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSProcessBytesUsingTransformerWsOutputDecisionTableDecisions_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSProcessBytesUsingTransformerWsOutputDecisionTableDecisions.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSWhereOr");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSWhereOr_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSWhereOr.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPKArray");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSBackgroundJobPKArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSBackgroundJobPKArray.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderV2SearchCriteria");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingOrderV2SearchCriteria_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingOrderV2SearchCriteria.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPipeline-typedContentEntry");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPipelineTypedContentEntry_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPipelineTypedContentEntry.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetDataCluster");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetDataCluster_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetDataCluster.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetTransformerV2");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetTransformerV2_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetTransformerV2.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerV2PK");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerV2PK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerV2PK.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetTransformer");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetTransformer_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetTransformer.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSViewPKArray");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSViewPKArray_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSViewPKArray.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteTransformer");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteTransformer_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteTransformer.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSServiceActionCode");
+            CombinedSerializer serializer = new LiteralSimpleTypeSerializer(type, "",
+                com.amalto.workbench.webservices.WSServiceActionCode_Encoder.getInstance());
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSServiceActionCode.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingRulePK");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingRulePK_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingRulePK.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutBackgroundJob");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutBackgroundJob_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutBackgroundJob.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutView");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutView_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutView.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSExecuteTransformerV2");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSExecuteTransformerV2_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSExecuteTransformerV2.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetTransformerPluginV2sList");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetTransformerPluginV2SList_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetTransformerPluginV2SList.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteUniverse");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSDeleteUniverse_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteUniverse.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingRule");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRoutingRule_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSRoutingRule.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTypedContent");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTypedContent_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSTypedContent.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutStoredProcedure");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSPutStoredProcedure_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSPutStoredProcedure.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSItemPKsByCriteriaResponse-results");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults.class, type, serializer);
+        }
+        {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConceptValue");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSGetBusinessConceptValue_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSGetBusinessConceptValue.class, type, serializer);
         }
         return registry;
     }

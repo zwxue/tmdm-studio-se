@@ -62,7 +62,7 @@ import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataClusterPK;
-import com.amalto.workbench.webservices.WSDirectQuery;
+import com.amalto.workbench.webservices.WSRunQuery;
 import com.amalto.workbench.webservices.WSStoredProcedure;
 
 public class StoredProcedureMainPage extends AMainPage implements ITextListener{
@@ -339,15 +339,17 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener{
 							else
 								currentParameters.add(ps[i]);
 							//replace parameters
-							proc=proc.replaceAll("([^\\\\])%"+i+"([^\\d])", "$1"+ps[i]+"$2");
+//							proc=proc.replaceAll("([^\\\\])%"+i+"([^\\d])", "$1"+ps[i]+"$2");
 						}
         			}
         			//perform call
             		String[] results = 
-            		Util.getPort(getXObject()).directQuery(
-            				new WSDirectQuery(
-            						dcpk,
-            						proc
+            		Util.getPort(getXObject()).runQuery(
+            				new WSRunQuery(
+            					null,
+            					dcpk,
+            					proc,
+            					currentParameters.toArray(new String[currentParameters.size()])
             				)
             		).getStrings();
             		resultsLabel.setText("Procedure returned "+results.length+" items.");

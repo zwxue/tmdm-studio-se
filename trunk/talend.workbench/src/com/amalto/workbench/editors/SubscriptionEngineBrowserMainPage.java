@@ -72,16 +72,18 @@ import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModelPK;
-import com.amalto.workbench.webservices.WSDeleteRoutingOrder;
-import com.amalto.workbench.webservices.WSExecuteRoutingOrderNow;
-import com.amalto.workbench.webservices.WSGetRoutingOrdersByCriteria;
+import com.amalto.workbench.webservices.WSDeleteRoutingOrderV2;
+import com.amalto.workbench.webservices.WSExecuteRoutingOrderV2Synchronously;
+import com.amalto.workbench.webservices.WSGetRoutingOrderV2SByCriteria;
 import com.amalto.workbench.webservices.WSPutItem;
-import com.amalto.workbench.webservices.WSRouterAction;
-import com.amalto.workbench.webservices.WSRouterActionCode;
-import com.amalto.workbench.webservices.WSRouterStatus;
-import com.amalto.workbench.webservices.WSRoutingOrder;
-import com.amalto.workbench.webservices.WSRoutingOrderCriteria;
-import com.amalto.workbench.webservices.WSRoutingOrderPK;
+import com.amalto.workbench.webservices.WSRoutingEngineV2Action;
+import com.amalto.workbench.webservices.WSRoutingEngineV2ActionCode;
+import com.amalto.workbench.webservices.WSRoutingEngineV2Status;
+import com.amalto.workbench.webservices.WSRoutingOrderV2;
+import com.amalto.workbench.webservices.WSRoutingOrderV2Array;
+import com.amalto.workbench.webservices.WSRoutingOrderV2PK;
+import com.amalto.workbench.webservices.WSRoutingOrderV2SearchCriteria;
+import com.amalto.workbench.webservices.WSRoutingOrderV2Status;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXObjectModelListener {
@@ -536,8 +538,8 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
             //if (! this.String xml = (String)((IStructuredSelection)event.getSelection()).getFirstElement();equals(getEditor().getActivePageInstance())) return;
     		XtentisPort port = Util.getPort(getXObject());
             
-			WSRouterStatus status = port.routerAction(new WSRouterAction(WSRouterActionCode.STATUS));
-			statusLabel.setText(status.getValue());
+    		WSRoutingEngineV2Status wsStatus = port.routingEngineV2Action(new WSRoutingEngineV2Action(WSRoutingEngineV2ActionCode.STATUS));
+			statusLabel.setText(wsStatus.getValue());
 			
     		idText.setFocus();
  
@@ -607,7 +609,7 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 	
 
 	
-	protected WSRoutingOrder[] getResults() {
+	protected WSRoutingOrderV2[] getResults() {
 		
 		Cursor waitCursor=null;		
 		
@@ -645,25 +647,32 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 	 			serviceJNDI = "amalto/local/service/"+serviceJNDI;
 	 		}
 
-        	 WSRoutingOrder[] results = 
-	 			port.getRoutingOrdersByCriteria(
- 					new WSGetRoutingOrdersByCriteria(
-						new WSRoutingOrderCriteria(
+        	 WSRoutingOrderV2Array results = 
+	 			port.getRoutingOrderV2SByCriteria(
+ 					new WSGetRoutingOrderV2SByCriteria(
+						new WSRoutingOrderV2SearchCriteria(
+							WSRoutingOrderV2Status.COMPLETED, //FIXME: Routing Order Status
+							("*".equals(idText.getText()) || "".equals(idText.getText())) ? null : idText.getText(),
 							null,
-							queueCombo.getItem(queueCombo.getSelectionIndex()),
+							from,
+							to,
+							-1L,
+							-1L,
+							-1L,
+							-1L,
+							-1L,
+							-1L,
 							("*".equals(documentTypeText.getText()) || "".equals(documentTypeText.getText())) ? null : documentTypeText.getText(),
 							("*".equals(idText.getText()) || "".equals(idText.getText())) ? null : idText.getText(),
-							serviceJNDI,
-							null,
-							-1L
-						),
-						from,
-						to,
-						Integer.MAX_VALUE
- 					)
-	 			).getWsRoutingOrders();
+							serviceJNDI, //service
+							null, //paramters,
+							null //message
+						)
+					)
+ 				);
+						
 	 				 			 		
-	 		return results;
+	 		return results.getWsRoutingOrder();
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (	(e.getLocalizedMessage()!=null) &&
@@ -715,7 +724,7 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 				super.run();
 				
 				IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
-				WSRoutingOrder routingOrder = (WSRoutingOrder) selection.getFirstElement();
+				WSRoutingOrderV2 routingOrder = (WSRoutingOrderV2) selection.getFirstElement();
 				
 				StringWriter sw = new StringWriter();
 				Marshaller.marshal(routingOrder, sw);
@@ -799,7 +808,7 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 								
 				//retrieve the list of items
 				IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
-				List<WSRoutingOrder> lineItems = selection.toList();
+				List<WSRoutingOrderV2> lineItems = selection.toList();
 
 				if (lineItems.size()==0) return;
 				
@@ -841,10 +850,10 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 		//Progress Monitor that implements the actual delete
 		class DeleteItemsWithProgress implements IRunnableWithProgress {
 			TreeObject xObject;
-			Collection<WSRoutingOrder> lineItems;
+			Collection<WSRoutingOrderV2> lineItems;
 			Shell parentShell;
 
-			public DeleteItemsWithProgress(TreeObject object, Collection<WSRoutingOrder> lineItems, Shell shell) {
+			public DeleteItemsWithProgress(TreeObject object, Collection<WSRoutingOrderV2> lineItems, Shell shell) {
 				super();
 				this.xObject = object;
 				this.lineItems = lineItems;
@@ -858,7 +867,7 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 					XtentisPort port = Util.getPort(getXObject());
 					
 					int i=0;
-					for (Iterator<WSRoutingOrder> iter = lineItems.iterator(); iter.hasNext(); ) {
+					for (Iterator<WSRoutingOrderV2> iter = lineItems.iterator(); iter.hasNext(); ) {
 						monitor.subTask("Processing item "+(i++));
 						if (monitor.isCanceled())  {
 							MessageDialog.openWarning(
@@ -869,8 +878,8 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 							);
 							return;
 						}
-						WSRoutingOrder lineItem =  iter.next();
-						port.deleteRoutingOrder(new WSDeleteRoutingOrder(new WSRoutingOrderPK(lineItem.getId())));
+						WSRoutingOrderV2 lineItem =  iter.next();
+						port.deleteRoutingOrderV2(new WSDeleteRoutingOrderV2(new WSRoutingOrderV2PK(lineItem.getName(),lineItem.getStatus())));
 						monitor.worked(1);
 					}//for
 					
@@ -920,7 +929,7 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 								
 				//retrieve the list of items
 				IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
-				List<WSRoutingOrder> lineItems = selection.toList();
+				List<WSRoutingOrderV2> lineItems = selection.toList();
 
 				if (lineItems.size()==0) return;
 				
@@ -962,10 +971,10 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 		//Progress Monitor that implements the actual delete
 		class ExecuteRoutingOrdersWithProgress implements IRunnableWithProgress {
 			TreeObject xObject;
-			Collection<WSRoutingOrder> lineItems;
+			Collection<WSRoutingOrderV2> lineItems;
 			Shell parentShell;
 
-			public ExecuteRoutingOrdersWithProgress(TreeObject object, Collection<WSRoutingOrder> lineItems, Shell shell) {
+			public ExecuteRoutingOrdersWithProgress(TreeObject object, Collection<WSRoutingOrderV2> lineItems, Shell shell) {
 				super();
 				this.xObject = object;
 				this.lineItems = lineItems;
@@ -989,16 +998,16 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 					);
 				}//try				
 
-				for (Iterator<WSRoutingOrder> iter = lineItems.iterator(); iter.hasNext(); ) {
+				for (Iterator<WSRoutingOrderV2> iter = lineItems.iterator(); iter.hasNext(); ) {
 					
-					WSRoutingOrder lineItem = iter.next();
-					monitor.subTask("Executing Routing Order "+lineItem.getId());
+					WSRoutingOrderV2 lineItem = iter.next();
+					monitor.subTask("Executing Routing Order "+lineItem.getName());
 					
 					if (monitor.isCanceled())  {
 						MessageDialog.openWarning(
 								this.parentShell,
 								"User Canceled the Execution",
-								"The execution was canceled by the user on Routing Order "+lineItem.getId()+"\n"+
+								"The execution was canceled by the user on Routing Order "+lineItem.getName()+"\n"+
 								"Some Routing Orders may have not been executed"
 						);
 						return;
@@ -1006,7 +1015,7 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 
 
 					try {
-   						port.executeRoutingOrderNow(new WSExecuteRoutingOrderNow(lineItem.getId()));
+   						port.executeRoutingOrderV2Synchronously(new WSExecuteRoutingOrderV2Synchronously(new WSRoutingOrderV2PK(lineItem.getName(), lineItem.getStatus())));
 						monitor.worked(1);
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -1047,14 +1056,14 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 		}
 
 		public String getColumnText(Object element, int columnIndex) {
-			WSRoutingOrder ro = (WSRoutingOrder) element;
+			WSRoutingOrderV2 ro = (WSRoutingOrderV2) element;
 			switch (columnIndex) {
 			case 0:
 				return ro.getWsItemPK().getConceptName()+"["+Util.joinStrings(ro.getWsItemPK().getIds(), ".")+"]";
 			case 1:
-				return sdf.format(new Date(ro.getTime()));
+				return sdf.format(new Date(ro.getTimeCreated()));
 			case 2:
-				return ro.getService().replaceFirst("amalto/local/service/", "");
+				return ro.getServiceJNDI().replaceFirst("amalto/local/service/", "");
 			case 3:
 				return ro.getMessage();
 			default:
@@ -1096,8 +1105,8 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 
 		@Override
 		public int compare(Viewer viewer, Object e1, Object e2) {
-			WSRoutingOrder ro1 = (WSRoutingOrder) e1;
-			WSRoutingOrder ro2 = (WSRoutingOrder) e2;
+			WSRoutingOrderV2 ro1 = (WSRoutingOrderV2) e1;
+			WSRoutingOrderV2 ro2 = (WSRoutingOrderV2) e2;
 			
 			int res=0;
 			
@@ -1108,10 +1117,10 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 					res= d1.compareToIgnoreCase(d2);
 					break;	
 				case 1:	//date
-					res= (int)( ro1.getTime() - ro2.getTime());
+					res= (int)( ro1.getTimeCreated() - ro2.getTimeCreated());
 					break;
 				case 2:	//service
-					res = ro1.getService().compareToIgnoreCase(ro2.getService());
+					res = ro1.getServiceJNDI().compareToIgnoreCase(ro2.getServiceJNDI());
 					break;
 				case 3:	//message
 					res = ro1.getMessage().compareToIgnoreCase(ro2.getMessage());
@@ -1132,8 +1141,8 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 	public void startSubscriptionEngine() {
 		try {
 			XtentisPort port = Util.getPort(getXObject());
-			WSRouterStatus status = port.routerAction(new WSRouterAction(WSRouterActionCode.START));
-			statusLabel.setText(status.getValue());
+			WSRoutingEngineV2Status wsStatus = port.routingEngineV2Action(new WSRoutingEngineV2Action(WSRoutingEngineV2ActionCode.START));
+			statusLabel.setText(wsStatus.getValue());
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(
@@ -1147,8 +1156,8 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 	public void stopSubscriptionEngine(){
 		try {
 			XtentisPort port = Util.getPort(getXObject());
-			WSRouterStatus status = port.routerAction(new WSRouterAction(WSRouterActionCode.STOP));
-			statusLabel.setText(status.getValue());
+			WSRoutingEngineV2Status wsStatus = port.routingEngineV2Action(new WSRoutingEngineV2Action(WSRoutingEngineV2ActionCode.STOP));
+			statusLabel.setText(wsStatus.getValue());
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(
@@ -1162,8 +1171,8 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 	public void suspendSubscriptionEngine(){
 		try {
 			XtentisPort port = Util.getPort(getXObject());
-			WSRouterStatus status = port.routerAction(new WSRouterAction(WSRouterActionCode.SUSPEND));
-			statusLabel.setText(status.getValue());
+			WSRoutingEngineV2Status wsStatus = port.routingEngineV2Action(new WSRoutingEngineV2Action(WSRoutingEngineV2ActionCode.SUSPEND));
+			statusLabel.setText(wsStatus.getValue());
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(
@@ -1177,8 +1186,8 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 	public void resumeSubscriptionEngine(){
 		try {
 			XtentisPort port = Util.getPort(getXObject());
-			WSRouterStatus status = port.routerAction(new WSRouterAction(WSRouterActionCode.RESUME));
-			statusLabel.setText(status.getValue());
+			WSRoutingEngineV2Status wsStatus = port.routingEngineV2Action(new WSRoutingEngineV2Action(WSRoutingEngineV2ActionCode.RESUME));
+			statusLabel.setText(wsStatus.getValue());
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(
