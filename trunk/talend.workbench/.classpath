@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="com/amalto/workbench/dialogs/ViewsListDialog.java|com/amalto/workbench/actions/ViewsListAction.java|com/amalto/workbench/utils/MenuEntry.java|com/amalto/workbench/editors/DataModelEditorPage2.java|com/amalto/workbench/editors/ProcessResultsPage.java" kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jwsdp-shared"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jwsdp-endorsedlibs"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JAX-RPC"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/saaj"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JAXB"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/commons-httpclient"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

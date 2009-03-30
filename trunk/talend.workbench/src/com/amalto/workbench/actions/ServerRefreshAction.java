@@ -1,0 +1,94 @@
+package com.amalto.workbench.actions;
+
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.IJobChangeListener;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
+
+import com.amalto.workbench.models.TreeParent;
+import com.amalto.workbench.views.ServerView;
+
+public class ServerRefreshAction extends Action {
+
+	protected ServerView view = null;
+	protected String server = null;
+    protected TreeParent serverRoot = null;
+    protected TreeParent forcedRoot = null;
+    protected TreeParent newRoot = null;
+	
+	
+	
+	public ServerRefreshAction(ServerView view, TreeParent forcedRoot) {
+		this(view);
+		this.forcedRoot = forcedRoot;
+	}
+		
+	public ServerRefreshAction(ServerView view) {
+		super();
+		this.view = view;
+		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/refresh.gif"));
+		setText("Refresh");
+		setToolTipText("Refresh the Xtentis Server Objects");
+	}
+	
+	public void run() {
+		try {
+			if (forcedRoot == null)
+				//get it dynamically
+				serverRoot = (TreeParent)((IStructuredSelection)view.getViewer().getSelection()).getFirstElement();
+			else
+				serverRoot = forcedRoot;
+			server = (String)serverRoot.getWsKey();  //we are at server root
+            String[] auth = ((String)serverRoot.getWsObject()).split(":");
+            String username = auth[0];
+            String password = (auth.length == 1) ? "" : auth[1];
+			
+			Job refreshJob = new ServerRefreshJob(server,username,password); 
+            refreshJob.setPriority(Job.INTERACTIVE);
+			refreshJob.schedule();
+            refreshJob.addJobChangeListener(new IJobChangeListener() {
+                public void aboutToRun(IJobChangeEvent event) {
+                    //view.getViewer().getControl().setEnabled(false);
+                }
+                public void awake(IJobChangeEvent event) {}
+                public void done(IJobChangeEvent event) {
+                    if (event.getResult().equals(Status.OK_STATUS)) {
+                        //view.getViewer().getControl().setEnabled(true);
+                        ServerRefreshJob job = (ServerRefreshJob)event.getJob();
+                        ServerRefreshAction.this.newRoot = job.getServerRoot();
+                        ServerRefreshAction.this.view.getViewer().getControl().getDisplay().asyncExec(new Runnable() {
+							public void run() {
+								ServerRefreshAction.this.serverRoot.synchronizeWith(ServerRefreshAction.this.newRoot);
+							}
+                        });
+                        
+                        //ServerRefreshAction.this.view.getViewer().refresh();
+                        //ServerRefreshAction.this.view.getViewer().expandToLevel(serverRoot, 1);
+                    } else {
+                        MessageDialog.openError(
+                                view.getSite().getShell(), 
+                                "Error", 
+                                "The refresh of the Xtentis Server "+(String)ServerRefreshAction.this.serverRoot.getWsKey()+" failed!"
+                         );
+                    }
+                }
+                public void running(IJobChangeEvent event) {}
+                public void scheduled(IJobChangeEvent event) {}
+                public void sleeping(IJobChangeEvent event) {}
+            });
+		} catch (Exception e) {
+			e.printStackTrace();
+			MessageDialog.openError(view.getSite().getShell(), "Error", "Error while refreshing the Xtentis Server Objects: "+e.getLocalizedMessage());
+		}		
+	}
+	public void runWithEvent(Event event) {
+		super.runWithEvent(event);
+	}
+	
+
+}
