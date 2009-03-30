@@ -13,19 +13,23 @@ public class WSQuickSearch {
     protected int maxItems;
     protected int skip;
     protected int spellTreshold;
-    protected boolean doAndBetweenWords;
+    protected boolean matchAllWords;
+    protected java.lang.String orderBy;
+    protected java.lang.String direction;
     
     public WSQuickSearch() {
     }
     
-    public WSQuickSearch(com.amalto.workbench.webservices.WSDataClusterPK wsDataClusterPK, com.amalto.workbench.webservices.WSViewPK wsViewPK, java.lang.String searchedValue, int maxItems, int skip, int spellTreshold, boolean doAndBetweenWords) {
+    public WSQuickSearch(com.amalto.workbench.webservices.WSDataClusterPK wsDataClusterPK, com.amalto.workbench.webservices.WSViewPK wsViewPK, java.lang.String searchedValue, int maxItems, int skip, int spellTreshold, boolean matchAllWords, java.lang.String orderBy, java.lang.String direction) {
         this.wsDataClusterPK = wsDataClusterPK;
         this.wsViewPK = wsViewPK;
         this.searchedValue = searchedValue;
         this.maxItems = maxItems;
         this.skip = skip;
         this.spellTreshold = spellTreshold;
-        this.doAndBetweenWords = doAndBetweenWords;
+        this.matchAllWords = matchAllWords;
+        this.orderBy = orderBy;
+        this.direction = direction;
     }
     
     public com.amalto.workbench.webservices.WSDataClusterPK getWsDataClusterPK() {
@@ -76,11 +80,27 @@ public class WSQuickSearch {
         this.spellTreshold = spellTreshold;
     }
     
-    public boolean isDoAndBetweenWords() {
-        return doAndBetweenWords;
+    public boolean isMatchAllWords() {
+        return matchAllWords;
     }
     
-    public void setDoAndBetweenWords(boolean doAndBetweenWords) {
-        this.doAndBetweenWords = doAndBetweenWords;
+    public void setMatchAllWords(boolean matchAllWords) {
+        this.matchAllWords = matchAllWords;
+    }
+    
+    public java.lang.String getOrderBy() {
+        return orderBy;
+    }
+    
+    public void setOrderBy(java.lang.String orderBy) {
+        this.orderBy = orderBy;
+    }
+    
+    public java.lang.String getDirection() {
+        return direction;
+    }
+    
+    public void setDirection(java.lang.String direction) {
+        this.direction = direction;
     }
 }

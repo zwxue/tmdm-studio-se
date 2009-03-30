@@ -18,46 +18,45 @@ import javax.xml.namespace.QName;
 import java.util.List;
 import java.util.ArrayList;
 
-public class WSQuickSearch_LiteralSerializer extends LiteralObjectSerializerBase implements Initializable  {
+public class WSViewSearch_LiteralSerializer extends LiteralObjectSerializerBase implements Initializable  {
     private static final QName ns1_wsDataClusterPK_QNAME = new QName("", "wsDataClusterPK");
     private static final QName ns2_WSDataClusterPK_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataClusterPK");
     private CombinedSerializer ns2_myWSDataClusterPK_LiteralSerializer;
     private static final QName ns1_wsViewPK_QNAME = new QName("", "wsViewPK");
     private static final QName ns2_WSViewPK_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSViewPK");
     private CombinedSerializer ns2_myWSViewPK_LiteralSerializer;
-    private static final QName ns1_searchedValue_QNAME = new QName("", "searchedValue");
-    private static final QName ns3_string_TYPE_QNAME = SchemaConstants.QNAME_TYPE_STRING;
-    private CombinedSerializer ns3_myns3_string__java_lang_String_String_Serializer;
-    private static final QName ns1_maxItems_QNAME = new QName("", "maxItems");
+    private static final QName ns1_whereItem_QNAME = new QName("", "whereItem");
+    private static final QName ns2_WSWhereItem_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSWhereItem");
+    private CombinedSerializer ns2_myWSWhereItem_LiteralSerializer;
+    private static final QName ns1_spellTreshold_QNAME = new QName("", "spellTreshold");
     private static final QName ns3_int_TYPE_QNAME = SchemaConstants.QNAME_TYPE_INT;
     private CombinedSerializer ns3_myns3__int__int_Int_Serializer;
     private static final QName ns1_skip_QNAME = new QName("", "skip");
-    private static final QName ns1_spellTreshold_QNAME = new QName("", "spellTreshold");
-    private static final QName ns1_matchAllWords_QNAME = new QName("", "matchAllWords");
-    private static final QName ns3_boolean_TYPE_QNAME = SchemaConstants.QNAME_TYPE_BOOLEAN;
-    private CombinedSerializer ns3_myns3__boolean__boolean_Boolean_Serializer;
+    private static final QName ns1_maxItems_QNAME = new QName("", "maxItems");
     private static final QName ns1_orderBy_QNAME = new QName("", "orderBy");
+    private static final QName ns3_string_TYPE_QNAME = SchemaConstants.QNAME_TYPE_STRING;
+    private CombinedSerializer ns3_myns3_string__java_lang_String_String_Serializer;
     private static final QName ns1_direction_QNAME = new QName("", "direction");
     
-    public WSQuickSearch_LiteralSerializer(QName type, String encodingStyle) {
+    public WSViewSearch_LiteralSerializer(QName type, String encodingStyle) {
         this(type, encodingStyle, false);
     }
     
-    public WSQuickSearch_LiteralSerializer(QName type, String encodingStyle, boolean encodeType) {
+    public WSViewSearch_LiteralSerializer(QName type, String encodingStyle, boolean encodeType) {
         super(type, true, encodingStyle, encodeType);
     }
     
     public void initialize(InternalTypeMappingRegistry registry) throws Exception {
         ns2_myWSDataClusterPK_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSDataClusterPK.class, ns2_WSDataClusterPK_TYPE_QNAME);
         ns2_myWSViewPK_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSViewPK.class, ns2_WSViewPK_TYPE_QNAME);
-        ns3_myns3_string__java_lang_String_String_Serializer = (CombinedSerializer)registry.getSerializer("", java.lang.String.class, ns3_string_TYPE_QNAME);
+        ns2_myWSWhereItem_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSWhereItem.class, ns2_WSWhereItem_TYPE_QNAME);
         ns3_myns3__int__int_Int_Serializer = (CombinedSerializer)registry.getSerializer("", int.class, ns3_int_TYPE_QNAME);
-        ns3_myns3__boolean__boolean_Boolean_Serializer = (CombinedSerializer)registry.getSerializer("", boolean.class, ns3_boolean_TYPE_QNAME);
+        ns3_myns3_string__java_lang_String_String_Serializer = (CombinedSerializer)registry.getSerializer("", java.lang.String.class, ns3_string_TYPE_QNAME);
     }
     
     public Object doDeserialize(XMLReader reader,
         SOAPDeserializationContext context) throws Exception {
-        com.amalto.workbench.webservices.WSQuickSearch instance = new com.amalto.workbench.webservices.WSQuickSearch();
+        com.amalto.workbench.webservices.WSViewSearch instance = new com.amalto.workbench.webservices.WSViewSearch();
         Object member=null;
         QName elementName;
         List values;
@@ -98,47 +97,12 @@ public class WSQuickSearch_LiteralSerializer extends LiteralObjectSerializerBase
         }
         elementName = reader.getName();
         if (reader.getState() == XMLReader.START) {
-            if (elementName.equals(ns1_searchedValue_QNAME)) {
-                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_searchedValue_QNAME, reader, context);
-                if (member == null) {
-                    throw new DeserializationException("literal.unexpectedNull");
-                }
-                instance.setSearchedValue((java.lang.String)member);
+            if (elementName.equals(ns1_whereItem_QNAME)) {
+                member = ns2_myWSWhereItem_LiteralSerializer.deserialize(ns1_whereItem_QNAME, reader, context);
+                instance.setWhereItem((com.amalto.workbench.webservices.WSWhereItem)member);
                 reader.nextElementContent();
             } else {
-                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_searchedValue_QNAME, reader.getName() });
-            }
-        }
-        else {
-            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
-        }
-        elementName = reader.getName();
-        if (reader.getState() == XMLReader.START) {
-            if (elementName.equals(ns1_maxItems_QNAME)) {
-                member = ns3_myns3__int__int_Int_Serializer.deserialize(ns1_maxItems_QNAME, reader, context);
-                if (member == null) {
-                    throw new DeserializationException("literal.unexpectedNull");
-                }
-                instance.setMaxItems(((Integer)member).intValue());
-                reader.nextElementContent();
-            } else {
-                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_maxItems_QNAME, reader.getName() });
-            }
-        }
-        else {
-            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
-        }
-        elementName = reader.getName();
-        if (reader.getState() == XMLReader.START) {
-            if (elementName.equals(ns1_skip_QNAME)) {
-                member = ns3_myns3__int__int_Int_Serializer.deserialize(ns1_skip_QNAME, reader, context);
-                if (member == null) {
-                    throw new DeserializationException("literal.unexpectedNull");
-                }
-                instance.setSkip(((Integer)member).intValue());
-                reader.nextElementContent();
-            } else {
-                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_skip_QNAME, reader.getName() });
+                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_whereItem_QNAME, reader.getName() });
             }
         }
         else {
@@ -162,15 +126,31 @@ public class WSQuickSearch_LiteralSerializer extends LiteralObjectSerializerBase
         }
         elementName = reader.getName();
         if (reader.getState() == XMLReader.START) {
-            if (elementName.equals(ns1_matchAllWords_QNAME)) {
-                member = ns3_myns3__boolean__boolean_Boolean_Serializer.deserialize(ns1_matchAllWords_QNAME, reader, context);
+            if (elementName.equals(ns1_skip_QNAME)) {
+                member = ns3_myns3__int__int_Int_Serializer.deserialize(ns1_skip_QNAME, reader, context);
                 if (member == null) {
                     throw new DeserializationException("literal.unexpectedNull");
                 }
-                instance.setMatchAllWords(((Boolean)member).booleanValue());
+                instance.setSkip(((Integer)member).intValue());
                 reader.nextElementContent();
             } else {
-                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_matchAllWords_QNAME, reader.getName() });
+                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_skip_QNAME, reader.getName() });
+            }
+        }
+        else {
+            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
+        }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_maxItems_QNAME)) {
+                member = ns3_myns3__int__int_Int_Serializer.deserialize(ns1_maxItems_QNAME, reader, context);
+                if (member == null) {
+                    throw new DeserializationException("literal.unexpectedNull");
+                }
+                instance.setMaxItems(((Integer)member).intValue());
+                reader.nextElementContent();
+            } else {
+                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_maxItems_QNAME, reader.getName() });
             }
         }
         else {
@@ -198,11 +178,11 @@ public class WSQuickSearch_LiteralSerializer extends LiteralObjectSerializerBase
     }
     
     public void doSerializeAttributes(Object obj, XMLWriter writer, SOAPSerializationContext context) throws Exception {
-        com.amalto.workbench.webservices.WSQuickSearch instance = (com.amalto.workbench.webservices.WSQuickSearch)obj;
+        com.amalto.workbench.webservices.WSViewSearch instance = (com.amalto.workbench.webservices.WSViewSearch)obj;
         
     }
     public void doSerialize(Object obj, XMLWriter writer, SOAPSerializationContext context) throws Exception {
-        com.amalto.workbench.webservices.WSQuickSearch instance = (com.amalto.workbench.webservices.WSQuickSearch)obj;
+        com.amalto.workbench.webservices.WSViewSearch instance = (com.amalto.workbench.webservices.WSViewSearch)obj;
         
         if (instance.getWsDataClusterPK() == null) {
             throw new SerializationException("literal.unexpectedNull");
@@ -212,26 +192,19 @@ public class WSQuickSearch_LiteralSerializer extends LiteralObjectSerializerBase
             throw new SerializationException("literal.unexpectedNull");
         }
         ns2_myWSViewPK_LiteralSerializer.serialize(instance.getWsViewPK(), ns1_wsViewPK_QNAME, null, writer, context);
-        if (instance.getSearchedValue() == null) {
-            throw new SerializationException("literal.unexpectedNull");
-        }
-        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getSearchedValue(), ns1_searchedValue_QNAME, null, writer, context);
-        if (new Integer(instance.getMaxItems()) == null) {
-            throw new SerializationException("literal.unexpectedNull");
-        }
-        ns3_myns3__int__int_Int_Serializer.serialize(new Integer(instance.getMaxItems()), ns1_maxItems_QNAME, null, writer, context);
-        if (new Integer(instance.getSkip()) == null) {
-            throw new SerializationException("literal.unexpectedNull");
-        }
-        ns3_myns3__int__int_Int_Serializer.serialize(new Integer(instance.getSkip()), ns1_skip_QNAME, null, writer, context);
+        ns2_myWSWhereItem_LiteralSerializer.serialize(instance.getWhereItem(), ns1_whereItem_QNAME, null, writer, context);
         if (new Integer(instance.getSpellTreshold()) == null) {
             throw new SerializationException("literal.unexpectedNull");
         }
         ns3_myns3__int__int_Int_Serializer.serialize(new Integer(instance.getSpellTreshold()), ns1_spellTreshold_QNAME, null, writer, context);
-        if (new Boolean(instance.isMatchAllWords()) == null) {
+        if (new Integer(instance.getSkip()) == null) {
             throw new SerializationException("literal.unexpectedNull");
         }
-        ns3_myns3__boolean__boolean_Boolean_Serializer.serialize(new Boolean(instance.isMatchAllWords()), ns1_matchAllWords_QNAME, null, writer, context);
+        ns3_myns3__int__int_Int_Serializer.serialize(new Integer(instance.getSkip()), ns1_skip_QNAME, null, writer, context);
+        if (new Integer(instance.getMaxItems()) == null) {
+            throw new SerializationException("literal.unexpectedNull");
+        }
+        ns3_myns3__int__int_Int_Serializer.serialize(new Integer(instance.getMaxItems()), ns1_maxItems_QNAME, null, writer, context);
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getOrderBy(), ns1_orderBy_QNAME, null, writer, context);
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getDirection(), ns1_direction_QNAME, null, writer, context);
     }

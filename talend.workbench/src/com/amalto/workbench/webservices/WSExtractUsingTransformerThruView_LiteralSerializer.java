@@ -36,6 +36,10 @@ public class WSExtractUsingTransformerThruView_LiteralSerializer extends Literal
     private CombinedSerializer ns3_myns3__int__int_Int_Serializer;
     private static final QName ns1_skip_QNAME = new QName("", "skip");
     private static final QName ns1_maxItems_QNAME = new QName("", "maxItems");
+    private static final QName ns1_orderBy_QNAME = new QName("", "orderBy");
+    private static final QName ns3_string_TYPE_QNAME = SchemaConstants.QNAME_TYPE_STRING;
+    private CombinedSerializer ns3_myns3_string__java_lang_String_String_Serializer;
+    private static final QName ns1_direction_QNAME = new QName("", "direction");
     
     public WSExtractUsingTransformerThruView_LiteralSerializer(QName type, String encodingStyle) {
         this(type, encodingStyle, false);
@@ -51,6 +55,7 @@ public class WSExtractUsingTransformerThruView_LiteralSerializer extends Literal
         ns2_myWSViewPK_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSViewPK.class, ns2_WSViewPK_TYPE_QNAME);
         ns2_myWSWhereItem_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSWhereItem.class, ns2_WSWhereItem_TYPE_QNAME);
         ns3_myns3__int__int_Int_Serializer = (CombinedSerializer)registry.getSerializer("", int.class, ns3_int_TYPE_QNAME);
+        ns3_myns3_string__java_lang_String_String_Serializer = (CombinedSerializer)registry.getSerializer("", java.lang.String.class, ns3_string_TYPE_QNAME);
     }
     
     public Object doDeserialize(XMLReader reader,
@@ -171,6 +176,22 @@ public class WSExtractUsingTransformerThruView_LiteralSerializer extends Literal
         else {
             throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
         }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_orderBy_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_orderBy_QNAME, reader, context);
+                instance.setOrderBy((java.lang.String)member);
+                reader.nextElementContent();
+            }
+        }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_direction_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_direction_QNAME, reader, context);
+                instance.setDirection((java.lang.String)member);
+                reader.nextElementContent();
+            }
+        }
         
         XMLReaderUtil.verifyReaderState(reader, XMLReader.END);
         return (Object)instance;
@@ -208,5 +229,7 @@ public class WSExtractUsingTransformerThruView_LiteralSerializer extends Literal
             throw new SerializationException("literal.unexpectedNull");
         }
         ns3_myns3__int__int_Int_Serializer.serialize(new Integer(instance.getMaxItems()), ns1_maxItems_QNAME, null, writer, context);
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getOrderBy(), ns1_orderBy_QNAME, null, writer, context);
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getDirection(), ns1_direction_QNAME, null, writer, context);
     }
 }

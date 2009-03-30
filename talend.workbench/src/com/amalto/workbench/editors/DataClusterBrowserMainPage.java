@@ -82,7 +82,7 @@ import com.amalto.workbench.webservices.WSItemPK;
 import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults;
 import com.amalto.workbench.webservices.WSPutItem;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
-import com.amalto.workbench.webservices.WSRouteItemNow;
+import com.amalto.workbench.webservices.WSRouteItemV2;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class DataClusterBrowserMainPage extends AMainPage implements IXObjectModelListener {
@@ -1056,8 +1056,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 						return;
 					}
 					try {
-						port.routeItemNow(
-							new WSRouteItemNow(
+						port.routeItemV2(
+							new WSRouteItemV2(
 								new WSItemPK(
 									(WSDataClusterPK)getXObject().getWsKey(),
 									lineItem.getConcept(),

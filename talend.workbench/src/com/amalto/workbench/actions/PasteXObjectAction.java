@@ -31,25 +31,17 @@ import com.amalto.workbench.webservices.WSExistsTransformer;
 import com.amalto.workbench.webservices.WSExistsView;
 import com.amalto.workbench.webservices.WSGetDataCluster;
 import com.amalto.workbench.webservices.WSGetDataModel;
-import com.amalto.workbench.webservices.WSGetInboundAdaptor;
 import com.amalto.workbench.webservices.WSGetMenu;
-import com.amalto.workbench.webservices.WSGetOutboundAdaptor;
 import com.amalto.workbench.webservices.WSGetRole;
 import com.amalto.workbench.webservices.WSGetRoutingRule;
 import com.amalto.workbench.webservices.WSGetStoredProcedure;
 import com.amalto.workbench.webservices.WSGetTransformer;
 import com.amalto.workbench.webservices.WSGetView;
-import com.amalto.workbench.webservices.WSInboundAdaptor;
-import com.amalto.workbench.webservices.WSInboundAdaptorPK;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuPK;
-import com.amalto.workbench.webservices.WSOutboundAdaptor;
-import com.amalto.workbench.webservices.WSOutboundAdaptorPK;
 import com.amalto.workbench.webservices.WSPutDataCluster;
 import com.amalto.workbench.webservices.WSPutDataModel;
-import com.amalto.workbench.webservices.WSPutInboundAdaptor;
 import com.amalto.workbench.webservices.WSPutMenu;
-import com.amalto.workbench.webservices.WSPutOutboundAdaptor;
 import com.amalto.workbench.webservices.WSPutRole;
 import com.amalto.workbench.webservices.WSPutRoutingRule;
 import com.amalto.workbench.webservices.WSPutStoredProcedure;
@@ -401,95 +393,7 @@ public class PasteXObjectAction extends Action{
 		           		//write the new model
 		           		destPort.putMenu(new WSPutMenu(newMenu));
 		           		} break;
-		           	case TreeObject.INBOUND_ADAPTOR: {
-		           		WSInboundAdaptorPK key = (WSInboundAdaptorPK)xobject.getWsKey();
-		           		WSInboundAdaptorPK newKey = new WSInboundAdaptorPK(key.getPk());
-		           		boolean exists = false;
-		           		try {
-		           			destPort.getInboundAdaptor(new WSGetInboundAdaptor((WSInboundAdaptorPK)xobject.getWsKey()));
-		           			exists = true;
-		           		} catch (Exception e) {}
-		           		if (exists) {
-			           		InputDialog id = new InputDialog(
-			           				view.getSite().getShell(),
-			           				"Pasting instance "+key.getPk(),
-			           				"A InboundAdaptor with the name \""+key.getPk()+"\" already exists.\nEnter a new name if you do not want to overwriite the existing object",
-			           				"Copy of "+(selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "": xobject.getEndpointAddress().split(":")[0]+" ")+key.getPk(),
-			           				new IInputValidator() {
-			           					public String isValid(String newText) {
-			           						if ((newText==null) || "".equals(newText)) return "The name cannot be empty";
-			           						return null;
-			           					};
-			           				}
-			           		);
-			           		id.setBlockOnOpen(true);
-			           		if (id.open() == Window.CANCEL) return;
-			           		newKey = new WSInboundAdaptorPK(id.getValue()); 
-		           		}
-		           		//fetch the copied model
-	       				XtentisPort originalPort = Util.getPort(
-	       						new URL(xobject.getEndpointAddress()),
-	       						xobject.getUsername(),
-	       						xobject.getPassword()
-	       				);
-		           		WSInboundAdaptor originalInboundAdaptor = originalPort.getInboundAdaptor(new WSGetInboundAdaptor(key));
-		           		WSInboundAdaptor newInboundAdaptor = new WSInboundAdaptor(
-		           				newKey.getPk(),
-		           				originalInboundAdaptor.getDescription(),
-		           				originalInboundAdaptor.getWsDataModelPK(),
-		           				originalInboundAdaptor.getWsSourcePK(),
-		           				originalInboundAdaptor.getXslt(),
-		           				originalInboundAdaptor.getWSInboundPluginPKs(),
-		           				originalInboundAdaptor.getWsPreTransformPKs(),
-		           				originalInboundAdaptor.getUpdates()
-		           		);
-		           		//write the new model
-		           		destPort.putInboundAdaptor(new WSPutInboundAdaptor(newInboundAdaptor));
-		           		} break;
-		           	case TreeObject.OUTBOUND_ADAPTOR: {
-		           		WSOutboundAdaptorPK key = (WSOutboundAdaptorPK)xobject.getWsKey();
-		           		WSOutboundAdaptorPK newKey = new WSOutboundAdaptorPK(key.getPk());
-		           		boolean exists = false;
-		           		try {
-		           			destPort.getOutboundAdaptor(new WSGetOutboundAdaptor((WSOutboundAdaptorPK)xobject.getWsKey()));
-		           			exists = true;
-		           		} catch (Exception e) {}
-		           		if (exists) {
-			           		InputDialog id = new InputDialog(
-			           				view.getSite().getShell(),
-			           				"Pasting instance "+key.getPk(),
-			           				"A OutboundAdaptor with the name \""+key.getPk()+"\" already exists.\nEnter a new name if you do not want to overwriite the existing object",
-			           				"Copy of "+(selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "": xobject.getEndpointAddress().split(":")[0]+" ")+key.getPk(),
-			           				new IInputValidator() {
-			           					public String isValid(String newText) {
-			           						if ((newText==null) || "".equals(newText)) return "The name cannot be empty";
-			           						return null;
-			           					};
-			           				}
-			           		);
-			           		id.setBlockOnOpen(true);
-			           		if (id.open() == Window.CANCEL) return;
-			           		newKey = new WSOutboundAdaptorPK(id.getValue()); 
-		           		}
-		           		//fetch the copied model
-	       				XtentisPort originalPort = Util.getPort(
-	       						new URL(xobject.getEndpointAddress()),
-	       						xobject.getUsername(),
-	       						xobject.getPassword()
-	       				);
-		           		WSOutboundAdaptor originalOutboundAdaptor = originalPort.getOutboundAdaptor(new WSGetOutboundAdaptor(key));
-		           		WSOutboundAdaptor newOutboundAdaptor = new WSOutboundAdaptor(
-		           				newKey.getPk(),
-		           				originalOutboundAdaptor.getDescription(),
-		           				originalOutboundAdaptor.getWsDataModelPK(),
-		           				originalOutboundAdaptor.getWsDestinationPK(),
-		           				originalOutboundAdaptor.getXslt(),
-		           				originalOutboundAdaptor.getWSOutboundPluginPKs(),
-		           				originalOutboundAdaptor.getWsPreTransformPKs()
-		           		);
-		           		//write the new model
-		           		destPort.putOutboundAdaptor(new WSPutOutboundAdaptor(newOutboundAdaptor));
-		           		} break;	  		           			           				           				           		
+		           	       			           				           				           		
 		           	default:
 		           		
 	            }//switch

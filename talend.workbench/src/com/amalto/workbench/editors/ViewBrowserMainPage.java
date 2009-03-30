@@ -384,8 +384,10 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 	 						("".equals(searchText.getText()) ? "*" : searchText.getText()),
 	 						10, 	//max Items
 	 						0,	//skip
-	 						Integer.MAX_VALUE,	//spell treshold
-	 						true	//do AND between words
+	 						Integer.MAX_VALUE,	//spell threshold
+	 						true,	//do AND between words
+	 						null,
+	 						null
 	 				)
 	 		).getStrings();
 	 		

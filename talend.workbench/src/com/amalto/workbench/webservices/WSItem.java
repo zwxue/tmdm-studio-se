@@ -10,18 +10,16 @@ public class WSItem {
     protected com.amalto.workbench.webservices.WSDataClusterPK wsDataClusterPK;
     protected java.lang.String conceptName;
     protected java.lang.String[] ids;
-    protected com.amalto.workbench.webservices.WSDocumentPK wsDocumentPK;
     protected long insertionTime;
     protected java.lang.String content;
     
     public WSItem() {
     }
     
-    public WSItem(com.amalto.workbench.webservices.WSDataClusterPK wsDataClusterPK, java.lang.String conceptName, java.lang.String[] ids, com.amalto.workbench.webservices.WSDocumentPK wsDocumentPK, long insertionTime, java.lang.String content) {
+    public WSItem(com.amalto.workbench.webservices.WSDataClusterPK wsDataClusterPK, java.lang.String conceptName, java.lang.String[] ids, long insertionTime, java.lang.String content) {
         this.wsDataClusterPK = wsDataClusterPK;
         this.conceptName = conceptName;
         this.ids = ids;
-        this.wsDocumentPK = wsDocumentPK;
         this.insertionTime = insertionTime;
         this.content = content;
     }
@@ -48,14 +46,6 @@ public class WSItem {
     
     public void setIds(java.lang.String[] ids) {
         this.ids = ids;
-    }
-    
-    public com.amalto.workbench.webservices.WSDocumentPK getWsDocumentPK() {
-        return wsDocumentPK;
-    }
-    
-    public void setWsDocumentPK(com.amalto.workbench.webservices.WSDocumentPK wsDocumentPK) {
-        this.wsDocumentPK = wsDocumentPK;
     }
     
     public long getInsertionTime() {

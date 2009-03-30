@@ -13,7 +13,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -69,13 +68,13 @@ import com.amalto.workbench.dialogs.ProcessFileDialog;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.Version;
-import com.amalto.workbench.webservices.WSGetTransformerPluginDetails;
-import com.amalto.workbench.webservices.WSGetTransformerPluginsList;
+import com.amalto.workbench.webservices.WSGetTransformerPluginV2Details;
+import com.amalto.workbench.webservices.WSGetTransformerPluginV2SList;
 import com.amalto.workbench.webservices.WSTransformer;
-import com.amalto.workbench.webservices.WSTransformerPluginDetails;
 import com.amalto.workbench.webservices.WSTransformerPluginSpec;
-import com.amalto.workbench.webservices.WSTransformerPluginsList;
-import com.amalto.workbench.webservices.WSTransformerPluginsListItem;
+import com.amalto.workbench.webservices.WSTransformerPluginV2Details;
+import com.amalto.workbench.webservices.WSTransformerPluginV2SList;
+import com.amalto.workbench.webservices.WSTransformerPluginV2SListItem;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class TransformerMainPage extends AMainPageV2 {
@@ -534,8 +533,8 @@ public class TransformerMainPage extends AMainPageV2 {
 	            	}	            	
 	            });
 	            //feed the combo once
-	            WSTransformerPluginsList list = Util.getPort(getXObject()).getTransformerPluginsList(new WSGetTransformerPluginsList("EN"));
-	            WSTransformerPluginsListItem[] items = list.getItem();
+	            WSTransformerPluginV2SList list = Util.getPort(getXObject()).getTransformerPluginV2SList(new WSGetTransformerPluginV2SList("EN"));
+	            WSTransformerPluginV2SListItem[] items = list.getItem();
 	            if (items!=null) {
 	            	for (int i = 0; i < items.length; i++) {
 						pluginDescriptions.put(items[i].getJndiName(), items[i].getDescription());
@@ -625,8 +624,8 @@ public class TransformerMainPage extends AMainPageV2 {
 	        					getXObject().getUsername(),
 	        					getXObject().getPassword()
 	        			);
-	        			WSTransformerPluginDetails details =port.getTransformerPluginDetails(
-	        					new WSGetTransformerPluginDetails(
+	        			WSTransformerPluginV2Details details =port.getTransformerPluginV2Details(
+	        					new WSGetTransformerPluginV2Details(
 	        							jndi.contains("/") ? jndi : "amalto/local/transformer/plugin/"+jndi,
 	        							"en"
 	        					)

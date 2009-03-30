@@ -54,24 +54,10 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.webservices.WSComponent;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModelPK;
-import com.amalto.workbench.webservices.WSDestination;
-import com.amalto.workbench.webservices.WSDocument;
 import com.amalto.workbench.webservices.WSGetComponentVersion;
 import com.amalto.workbench.webservices.WSGetViewPKs;
-import com.amalto.workbench.webservices.WSInboundAdaptor;
-import com.amalto.workbench.webservices.WSInboundPlugin;
-import com.amalto.workbench.webservices.WSOutboundAdaptor;
-import com.amalto.workbench.webservices.WSOutboundPlugin;
 import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
-import com.amalto.workbench.webservices.WSRegexDestinations;
-import com.amalto.workbench.webservices.WSRegexDocuments;
-import com.amalto.workbench.webservices.WSRegexInboundAdaptors;
-import com.amalto.workbench.webservices.WSRegexInboundPlugins;
-import com.amalto.workbench.webservices.WSRegexOutboundAdaptors;
-import com.amalto.workbench.webservices.WSRegexOutboundPlugins;
-import com.amalto.workbench.webservices.WSRegexSources;
-import com.amalto.workbench.webservices.WSSource;
 import com.amalto.workbench.webservices.WSVersion;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -314,30 +300,7 @@ public class Util {
 	}
 	
 	
-	public static WSSource[] getAllSources(URL url, String username, String password) throws XtentisException{
-		try {
-			XtentisPort port = Util.getPort(url,username,password);
-			return port.getSources(new WSRegexSources("*")).getWsSources();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new XtentisException(
-					"Unable to retrieve all Sources"
-					+": "+e.getLocalizedMessage());
-		}
-	}
 
-	
-	public static WSDestination[] getAllDestinations(URL url, String username, String password) throws XtentisException{
-		try {
-			XtentisPort port = Util.getPort(url,username,password);
-			return port.getDestinations(new WSRegexDestinations("*")).getWsDestinations();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new XtentisException(
-					"Unable to retrieve all Destinations"
-					+": "+e.getLocalizedMessage());
-		}
-	}
 	
 	/*
 	public static WSDataModel[] getAllDataModels(URL url, String username, String password) throws XtentisException{
@@ -365,43 +328,7 @@ public class Util {
 		}
 	}
 	
-	public static WSInboundPlugin[] getAllInboundPlugins(URL url, String username, String password) throws XtentisException{
-		try {
-			XtentisPort port = Util.getPort(url,username,password);
-			return port.getInboundPlugins(new WSRegexInboundPlugins("*")).getWsInboundPlugins();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new XtentisException(
-					"Unable to retrieve all InboundPlugins"
-					+": "+e.getLocalizedMessage());
-		}
-	}
 	
-	public static WSOutboundPlugin[] getAllOutboundPlugins(URL url, String username, String password) throws XtentisException{
-		try {
-			XtentisPort port = Util.getPort(url,username,password);
-			return port.getOutboundPlugins(new WSRegexOutboundPlugins("*")).getWsOutboundPlugins();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new XtentisException(
-					"Unable to retrieve all OutboundPlugins"
-					+": "+e.getLocalizedMessage());
-		}
-	}
-	
-	/*
-	public static WSDataCluster[] getAllDataClusters(URL url, String username, String password) throws XtentisException{
-		try {
-			XtentisPort port = Util.getPort(url,username,password);
-			return port.getDataClusters(new WSRegexDataClusters("*")).getWsDataClusters();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new XtentisException(
-					"Unable to retrieve all Data Clusters"
-					+": "+e.getLocalizedMessage());
-		}
-	}
-	*/
 	
 	public static WSDataClusterPK[] getAllDataClusterPKs(URL url, String username, String password) throws XtentisException{
 		try {
@@ -415,44 +342,7 @@ public class Util {
 		}
 	}
 	
-	public static WSDocument[] getAllDocuments(URL url, String username, String password, String regex) throws XtentisException{
-		try {
-			if ((regex==null) || ("".equals(regex))) regex = "*";
-			XtentisPort port = Util.getPort(url,username,password);
-			return port.getDocuments(new WSRegexDocuments(regex)).getWSDocuments();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new XtentisException(
-					"Unable to retrieve all the Documents"
-					+": "+e.getLocalizedMessage());
-		}
-	}
-
-	public static WSInboundAdaptor[] getAllInboundAdaptors(URL url, String username, String password, String regex) throws XtentisException{
-		try {
-			if ((regex==null) || ("".equals(regex))) regex = "*";
-			XtentisPort port = Util.getPort(url,username,password);
-			return port.getInboundAdaptors(new WSRegexInboundAdaptors(regex)).getWsInboundAdaptors();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new XtentisException(
-					"Unable to retrieve all the Inbound Adaptors"
-					+": "+e.getLocalizedMessage());
-		}
-	}
 	
-	public static WSOutboundAdaptor[] getAllOutboundAdaptors(URL url, String username, String password, String regex) throws XtentisException{
-		try {
-			if ((regex==null) || ("".equals(regex))) regex = "*";
-			XtentisPort port = Util.getPort(url,username,password);
-			return port.getOutboundAdaptors(new WSRegexOutboundAdaptors(regex)).getWsOutboundAdaptors();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new XtentisException(
-					"Unable to retrieve all the Outbound Adaptors"
-					+": "+e.getLocalizedMessage());
-		}
-	}
 
 	
 	public static WSViewPK[] getAllViewPKs(URL url, String username, String password, String regex) throws XtentisException{
@@ -468,29 +358,7 @@ public class Util {
 		}
 	}
 
-	/*
-	public static WSDocument[] getDocumentsByCriteria(String serverNameAndPort, String cluster, String name) throws XtentisException{
-		try {
-			XtentisPort port = Util.getPort(url);
-			return port.getDocumentsByCriteria(
-					new WSGetDocumentsByCriteria(
-							new WSDocument(
-									name,
-									"*",
-									new WSInboundAdaptorPK("*"),
-									new WSDataClusterPK(cluster),
-									null,null,null,null,false),
-							0
-					)
-			).getWSDocuments();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new XtentisException(
-					"Unable to retrieve all Data Clusters"
-					+": "+e.getLocalizedMessage());
-		}
-	}	
-	*/
+
 	
 	/*********************************************************************
 	 *      LOCAL FILE UTILS

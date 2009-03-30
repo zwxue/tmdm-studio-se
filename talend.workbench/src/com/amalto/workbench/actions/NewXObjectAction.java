@@ -21,8 +21,6 @@ import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
-import com.amalto.workbench.webservices.WSDestination;
-import com.amalto.workbench.webservices.WSDestinationPK;
 import com.amalto.workbench.webservices.WSExistsDataCluster;
 import com.amalto.workbench.webservices.WSExistsDataModel;
 import com.amalto.workbench.webservices.WSExistsMenu;
@@ -31,26 +29,16 @@ import com.amalto.workbench.webservices.WSExistsRoutingRule;
 import com.amalto.workbench.webservices.WSExistsStoredProcedure;
 import com.amalto.workbench.webservices.WSExistsTransformer;
 import com.amalto.workbench.webservices.WSExistsView;
-import com.amalto.workbench.webservices.WSGetDestination;
-import com.amalto.workbench.webservices.WSGetInboundAdaptor;
-import com.amalto.workbench.webservices.WSGetOutboundAdaptor;
-import com.amalto.workbench.webservices.WSGetSource;
-import com.amalto.workbench.webservices.WSInboundAdaptor;
-import com.amalto.workbench.webservices.WSInboundAdaptorPK;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuEntry;
 import com.amalto.workbench.webservices.WSMenuMenuEntriesDescriptions;
 import com.amalto.workbench.webservices.WSMenuPK;
-import com.amalto.workbench.webservices.WSOutboundAdaptor;
-import com.amalto.workbench.webservices.WSOutboundAdaptorPK;
 import com.amalto.workbench.webservices.WSPutDataModel;
 import com.amalto.workbench.webservices.WSRole;
 import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRuleExpression;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
-import com.amalto.workbench.webservices.WSSource;
-import com.amalto.workbench.webservices.WSSourcePK;
 import com.amalto.workbench.webservices.WSStoredProcedure;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSTransformer;
@@ -128,42 +116,7 @@ public class NewXObjectAction extends Action{
 			//create a new bare Instance
 			TreeObject newInstance = null;
             switch(xobject.getType()) {
-	           	case TreeObject.SOURCE: {
-	           		//check if already exists
-	           		try {
-	           			port.getSource(new WSGetSource(new WSSourcePK((String)key)));
-	           			MessageDialog.openError(this.view.getSite().getShell(),"Error Creating Instance","Source "+(String)key+" already exists");
-	           			return;
-	           		} catch (Exception e) {}
-	           		//add
-	           		WSSource wsSource = new WSSource((String)key,"");
-	           		//port.putSource(new WSPutSource(wsSource));
-	           		newInstance = new TreeObject(
-	    							(String)key,
-	    							xfolder.getServerRoot(),
-	    							TreeObject.SOURCE,
-	    							new WSSourcePK((String)key),
-	    							wsSource
-	    			);           		
-	           		break; }
-	           	case TreeObject.DESTINATION: {
-	           		//check if already exists
-	           		try {
-	           			port.getDestination(new WSGetDestination(new WSDestinationPK((String)key)));
-	           			MessageDialog.openError(this.view.getSite().getShell(),"Error Creating Instance","Destination "+(String)key+" already exists");
-	           			return;
-	           		} catch (Exception e) {}
-	           		//add
-	           		WSDestination wsDestination = new WSDestination((String)key,"");
-	           		//port.putDestination(new WSPutDestination(wsDestination));
-	           		newInstance = new TreeObject(
-	    							(String)key,
-	    							xfolder.getServerRoot(),
-	    							TreeObject.DESTINATION,
-	    							new WSDestinationPK((String)key),
-	    							wsDestination
-	    			);           		
-	           		break; }
+
 	           	case TreeObject.DATA_MODEL: {
 	           		//check if already exists
            			if (port.existsDataModel(new WSExistsDataModel(new WSDataModelPK((String)key))).is_true()) {;
@@ -186,129 +139,7 @@ public class NewXObjectAction extends Action{
 	    							wsDataModel
 	    			);           		
 	           		break; }
-	           	case TreeObject.INBOUND_ADAPTOR: {
-	           		//check if already exists
-	           		try {
-	           			port.getInboundAdaptor(new WSGetInboundAdaptor(new WSInboundAdaptorPK((String)key)));
-	           			MessageDialog.openError(this.view.getSite().getShell(),"Error Creating Instance","Inbound Adaptor "+(String)key+" already exists");
-	           			return;
-	           		} catch (Exception e) {}
-	           		//add
-	                WSDataModelPK[] dataModelPKs = Util.getAllDataModelPKs(
-	                		new URL(xobject.getEndpointAddress()),
-	                		xobject.getUsername(),
-	                		xobject.getPassword()
-	                );
-	                String firstDataModel = null;
-	                for (int i = 0; i < dataModelPKs.length; i++) {
-						if (dataModelPKs[i].getPk().indexOf("XMLSCHEMA---")==-1) {
-							firstDataModel = dataModelPKs[i].getPk();
-							break;
-						}
-					}
-	                if (firstDataModel == null) {
-	                	MessageDialog.openError(
-	                			view.getSite().getShell(), 
-	                			"Error", 
-	                			"Please create a Data Model before editing an Inbound Adaptor");
-	                	return;
-	                }
-	                WSSource[] sources = Util.getAllSources(
-	                		new URL(xobject.getEndpointAddress()),
-	                		xobject.getUsername(),
-	                		xobject.getPassword()
-	                );
-	                if ((sources == null) || (sources.length == 0)) {
-	                	MessageDialog.openError(
-	                			view.getSite().getShell(), 
-	                			"Error", 
-	                			"Please create Sources before editing an Inbound Adaptor");
-	                	return;
-	                }
-	           		WSInboundAdaptor ia = new WSInboundAdaptor(
-	           				(String)key,
-	           				"",
-	           				new WSDataModelPK(firstDataModel),
-	           				new WSSourcePK(sources[0].getName()),
-	           				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"+
-	           				"<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"1.0\">\n"+
-	           			    "	<xsl:template match=\"/\"><xsl:copy-of select=\".\"/></xsl:template>\n"+
-	           			    "</xsl:stylesheet>",
-	           			    null,
-	           			    null,
-	           			    null
-	           		);
-	           		//port.putInboundAdaptor(new WSPutInboundAdaptor(ia));
-	           		newInstance = new TreeObject(
-	    							(String)key,
-	    							xfolder.getServerRoot(),
-	    							TreeObject.INBOUND_ADAPTOR,
-	    							new WSInboundAdaptorPK((String)key),
-	    							ia
-	    			);           		
-	           		break; }
-	           	
-	           	case TreeObject.OUTBOUND_ADAPTOR: {
-	           		//check if already exists
-	           		try {
-	           			port.getOutboundAdaptor(new WSGetOutboundAdaptor(new WSOutboundAdaptorPK((String)key)));
-	           			MessageDialog.openError(this.view.getSite().getShell(),"Error Creating Instance","Outbound Adaptor "+(String)key+" already exists");
-	           			return;
-	           		} catch (Exception e) {}
-	           		//add
-	                WSDataModelPK[] dataModelPKs = Util.getAllDataModelPKs(
-	                		new URL(xobject.getEndpointAddress()),
-	                		xobject.getUsername(),
-	                		xobject.getPassword()
-	                );
-	                String firstDataModel = null;
-	                for (int i = 0; i < dataModelPKs.length; i++) {
-						if (dataModelPKs[i].getPk().indexOf("XMLSCHEMA---")==-1) {
-							firstDataModel = dataModelPKs[i].getPk();
-							break;
-						}
-					}
-	                if (firstDataModel == null) {
-	                	MessageDialog.openError(
-	                			view.getSite().getShell(), 
-	                			"Error", 
-	                			"Please create a Data Model before editing an Outbound Adaptor");
-	                	return;
-	                }
-	                WSDestination[] destinations = Util.getAllDestinations(
-	                		new URL(xobject.getEndpointAddress()),
-	                		xobject.getUsername(),
-	                		xobject.getPassword()
-	                );
-	                if ((destinations == null) || (destinations.length == 0)) {
-	                	MessageDialog.openError(
-	                			view.getSite().getShell(), 
-	                			"Error", 
-	                			"Please create Destinations before editing an Outbound Adaptor");
-	                	return;
-	                }
-	           		WSOutboundAdaptor ia = new WSOutboundAdaptor(
-	           				(String)key,
-	           				"",
-	           				new WSDataModelPK(firstDataModel),
-	           				new WSDestinationPK(destinations[0].getName()),
-	           				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"+
-	           				"<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"1.0\">\n"+
-	           			    "	<xsl:template match=\"/\"><xsl:copy-of select=\".\"/></xsl:template>\n"+
-	           			    "</xsl:stylesheet>",
-	           			    null,
-	           			    null
-	           		);
-	           		//port.putOutboundAdaptor(new WSPutOutboundAdaptor(ia));
-	           		newInstance = new TreeObject(
-	    							(String)key,
-	    							xfolder.getServerRoot(),
-	    							TreeObject.OUTBOUND_ADAPTOR,
-	    							new WSOutboundAdaptorPK((String)key),
-	    							ia
-	    			);           		
-	           		break; }	          
-	           	
+
 	           	case TreeObject.VIEW: {
 	           		//check if already exists
 	           		if(port.existsView(new WSExistsView(new WSViewPK((String)key))).is_true()) {
