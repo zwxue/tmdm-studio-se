@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Worbench Plug-in
+Bundle-Name: Workbench Plug-in
 Bundle-SymbolicName: com.amalto.workbench; singleton:=true
-Bundle-Version: 2.19.2
+Bundle-Version: 2.20.0
 Bundle-Activator: com.amalto.workbench.AmaltoWorbenchPlugin
 Bundle-Vendor: AMALTO TECHNOLOGIES
 Bundle-Localization: plugin
