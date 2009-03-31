@@ -1,13 +1,9 @@
 package com.amalto.workbench.actions;
 
-import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
@@ -17,7 +13,6 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSMenu;
@@ -27,12 +22,16 @@ import com.amalto.workbench.webservices.WSPutMenu;
 import com.amalto.workbench.webservices.WSPutRole;
 import com.amalto.workbench.webservices.WSPutRoutingRule;
 import com.amalto.workbench.webservices.WSPutStoredProcedure;
+import com.amalto.workbench.webservices.WSPutSynchronizationPlan;
 import com.amalto.workbench.webservices.WSPutTransformer;
+import com.amalto.workbench.webservices.WSPutUniverse;
 import com.amalto.workbench.webservices.WSPutView;
 import com.amalto.workbench.webservices.WSRole;
 import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSStoredProcedure;
+import com.amalto.workbench.webservices.WSSynchronizationPlan;
 import com.amalto.workbench.webservices.WSTransformer;
+import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSView;
 import com.amalto.workbench.webservices.XtentisPort;
 
@@ -90,7 +89,14 @@ public class SaveXObjectAction extends Action{
 	           		break;   	 
 	          	case TreeObject.MENU:
 	           		port.putMenu(new WSPutMenu((WSMenu)newWsObject));
-	           		break;   	 	           		
+	           		break;   	 	
+	          	case TreeObject.UNIVERSE:
+	           		port.putUniverse(new WSPutUniverse((WSUniverse)newWsObject));
+	           		break;   	 	
+
+	          	case TreeObject.SYNCHRONIZATIONPLAN:
+	           		port.putSynchronizationPlan(new WSPutSynchronizationPlan((WSSynchronizationPlan)newWsObject));
+	           		break;   
 	          	default:
 	           		MessageDialog.openError(this.editor.getSite().getShell(), "Error", "Unknown Xtentis Object Type: "+xobject.getType());
 	           		return;

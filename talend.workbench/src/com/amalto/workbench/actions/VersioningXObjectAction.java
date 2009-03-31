@@ -16,7 +16,9 @@ import com.amalto.workbench.webservices.WSMenuPK;
 import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
+import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
 import com.amalto.workbench.webservices.WSTransformerPK;
+import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSViewPK;
 
 public class VersioningXObjectAction extends Action{
@@ -112,7 +114,14 @@ public class VersioningXObjectAction extends Action{
 					type =  "Routing Rule";	
 					instance = (xobject.isXObject() ? ((WSRoutingRulePK)xobject.getWsKey()).getPk() : null);
 					break;
-					
+				case TreeObject.UNIVERSE:
+					type="Universe";
+					instance = (xobject.isXObject() ? ((WSUniversePK)xobject.getWsKey()).getPk() : null);
+					break;
+				case TreeObject.SYNCHRONIZATIONPLAN:
+					type="Synchronization Plan";
+					instance = (xobject.isXObject() ? ((WSSynchronizationPlanPK)xobject.getWsKey()).getPk() : null);
+					break;
 			}  
 	        
 			

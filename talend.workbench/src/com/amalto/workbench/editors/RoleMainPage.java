@@ -37,8 +37,6 @@ import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.DragSourceListener;
 import org.eclipse.swt.dnd.DropTarget;
-import org.eclipse.swt.dnd.DropTargetEvent;
-import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.KeyEvent;
@@ -55,9 +53,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
@@ -1031,63 +1027,63 @@ public class RoleMainPage extends AMainPageV2 {
 		}
 	}
 	
-	/****************************************************************************
-	 *   DND
-	 ****************************************************************************/
-	
-	class DCDragSourceListener implements DragSourceListener {
-		private int selected;
-
-		public void dragFinished(DragSourceEvent event) {
-			Control control = ((DragSource)event.widget).getControl();
-			if ((control instanceof List) && ((event.detail & DND.DROP_MOVE) == DND.DROP_MOVE)) {
-				((List)control).remove(selected);
-				RoleMainPage.this.markDirty();
-			}
-		}
-
-		public void dragSetData(DragSourceEvent event) {
-			Control control = ((DragSource)event.widget).getControl();
-			if ((control instanceof List))
-				if (TextTransfer.getInstance().isSupportedType(event.dataType)) {
-					this.selected = ((List)control).getSelectionIndex();
-					event.data =  ((List)control).getSelection()[0];
-				}
-		}
-
-		public void dragStart(DragSourceEvent event) {
-			Control control = ((DragSource)event.widget).getControl();
-			if ((control instanceof List))
-				event.doit = (((List)control).getItemCount()>0);
-		}
-	}
-	
-	class DCDropTargetListener implements DropTargetListener {
-
-		public void dragEnter(DropTargetEvent event) {
-			//priority to copy
-			if ((event.operations & DND.DROP_COPY) == DND.DROP_COPY)
-				event.detail = DND.DROP_COPY;
-			else if ((event.operations & DND.DROP_MOVE) == DND.DROP_MOVE)
-				event.detail = DND.DROP_MOVE;
-			else	
-				event.detail = DND.DROP_NONE;
-		}
-		public void dragLeave(DropTargetEvent event) {}
-		public void dragOperationChanged(DropTargetEvent event) {}
-		public void dragOver(DropTargetEvent event) {}
-		public void drop(DropTargetEvent event) {
-			Control control = ((DropTarget)event.widget).getControl();
-			if ((control instanceof List) && ((event.operations & DND.DROP_COPY) == DND.DROP_COPY))
-				if (TextTransfer.getInstance().isSupportedType(event.currentDataType)) 
-					if (!Arrays.asList(((List)control).getItems()).contains(event.data)) {
-							((List)control).add((String)event.data);
-							RoleMainPage.this.markDirty();
-					}
-		}
-		public void dropAccept(DropTargetEvent event) {}
-		
-	}
+//	/****************************************************************************
+//	 *   DND
+//	 ****************************************************************************/
+//	
+//	class DCDragSourceListener implements DragSourceListener {
+//		private int selected;
+//
+//		public void dragFinished(DragSourceEvent event) {
+//			Control control = ((DragSource)event.widget).getControl();
+//			if ((control instanceof List) && ((event.detail & DND.DROP_MOVE) == DND.DROP_MOVE)) {
+//				((List)control).remove(selected);
+//				RoleMainPage.this.markDirty();
+//			}
+//		}
+//
+//		public void dragSetData(DragSourceEvent event) {
+//			Control control = ((DragSource)event.widget).getControl();
+//			if ((control instanceof List))
+//				if (TextTransfer.getInstance().isSupportedType(event.dataType)) {
+//					this.selected = ((List)control).getSelectionIndex();
+//					event.data =  ((List)control).getSelection()[0];
+//				}
+//		}
+//
+//		public void dragStart(DragSourceEvent event) {
+//			Control control = ((DragSource)event.widget).getControl();
+//			if ((control instanceof List))
+//				event.doit = (((List)control).getItemCount()>0);
+//		}
+//	}
+//	
+//	class DCDropTargetListener implements DropTargetListener {
+//
+//		public void dragEnter(DropTargetEvent event) {
+//			//priority to copy
+//			if ((event.operations & DND.DROP_COPY) == DND.DROP_COPY)
+//				event.detail = DND.DROP_COPY;
+//			else if ((event.operations & DND.DROP_MOVE) == DND.DROP_MOVE)
+//				event.detail = DND.DROP_MOVE;
+//			else	
+//				event.detail = DND.DROP_NONE;
+//		}
+//		public void dragLeave(DropTargetEvent event) {}
+//		public void dragOperationChanged(DropTargetEvent event) {}
+//		public void dragOver(DropTargetEvent event) {}
+//		public void drop(DropTargetEvent event) {
+//			Control control = ((DropTarget)event.widget).getControl();
+//			if ((control instanceof List) && ((event.operations & DND.DROP_COPY) == DND.DROP_COPY))
+//				if (TextTransfer.getInstance().isSupportedType(event.currentDataType)) 
+//					if (!Arrays.asList(((List)control).getItems()).contains(event.data)) {
+//							((List)control).add((String)event.data);
+//							RoleMainPage.this.markDirty();
+//					}
+//		}
+//		public void dropAccept(DropTargetEvent event) {}
+//		
+//	}
 	
 	
 

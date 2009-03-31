@@ -27,7 +27,8 @@ public class TreeObject implements IAdaptable {
 	public final static int SUBSCRIPTION_ENGINE = 15;
 	public final static int TRANSFORMER = 16;
 	public final static int MENU = 17;
-	
+	public final static int UNIVERSE=18;
+	public final static int SYNCHRONIZATIONPLAN=19;
 	
 	public final static int _ACTION_ = 100;
 	public final static int _WIZARD_ = 101;
@@ -236,6 +237,10 @@ public class TreeObject implements IAdaptable {
 				return "Transfomer";
 			case MENU:
 				return "Menu";	
+			case UNIVERSE:
+				return "Universe";
+			case SYNCHRONIZATIONPLAN:
+				return "Synchronization Plan";
 		}
 		return "Unknown";
 	}

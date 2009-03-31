@@ -24,7 +24,9 @@ import com.amalto.workbench.webservices.WSGetMenu;
 import com.amalto.workbench.webservices.WSGetRole;
 import com.amalto.workbench.webservices.WSGetRoutingRule;
 import com.amalto.workbench.webservices.WSGetStoredProcedure;
+import com.amalto.workbench.webservices.WSGetSynchronizationPlan;
 import com.amalto.workbench.webservices.WSGetTransformer;
+import com.amalto.workbench.webservices.WSGetUniverse;
 import com.amalto.workbench.webservices.WSGetView;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuPK;
@@ -34,8 +36,12 @@ import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSStoredProcedure;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
+import com.amalto.workbench.webservices.WSSynchronizationPlan;
+import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
 import com.amalto.workbench.webservices.WSTransformer;
 import com.amalto.workbench.webservices.WSTransformerPK;
+import com.amalto.workbench.webservices.WSUniverse;
+import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSView;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -115,7 +121,15 @@ public class EditXObjectAction extends Action{
 	           	case TreeObject.MENU:
 	           		WSMenu wsMenu = port.getMenu(new WSGetMenu((WSMenuPK)xobject.getWsKey())); 
 	           		xobject.setWsObject(wsMenu);
-	           		break;	  		           			           		
+	           		break;	 
+	           	case TreeObject.UNIVERSE:
+	           		WSUniverse wsUniverse = port.getUniverse(new WSGetUniverse((WSUniversePK)xobject.getWsKey())); 
+	           		xobject.setWsObject(wsUniverse);
+	           		break;	 
+	           	case TreeObject.SYNCHRONIZATIONPLAN:
+	           		WSSynchronizationPlan wsSynchronizationPlan = port.getSynchronizationPlan(new WSGetSynchronizationPlan((WSSynchronizationPlanPK)xobject.getWsKey())); 
+	           		xobject.setWsObject(wsSynchronizationPlan);
+	           		break;
 	           	default:
 	           		MessageDialog.openError(view.getSite().getShell(), "Error", "Unknown Xtentis Object Type: "+xobject.getType());
 	           		return;

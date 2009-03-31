@@ -17,7 +17,9 @@ import com.amalto.workbench.webservices.WSGetComponentVersion;
 import com.amalto.workbench.webservices.WSGetMenuPKs;
 import com.amalto.workbench.webservices.WSGetRolePKs;
 import com.amalto.workbench.webservices.WSGetRoutingRulePKs;
+import com.amalto.workbench.webservices.WSGetSynchronizationPlanPKs;
 import com.amalto.workbench.webservices.WSGetTransformerPKs;
+import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSGetViewPKs;
 import com.amalto.workbench.webservices.WSMenuPK;
 import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
@@ -26,7 +28,9 @@ import com.amalto.workbench.webservices.WSRegexStoredProcedure;
 import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
+import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
 import com.amalto.workbench.webservices.WSTransformerPK;
+import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSVersion;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -309,12 +313,76 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 				monitor.worked(1);
 				if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
 			}
-			
+
+//			Universe
+			WSUniversePK[] universePKs = null;
+			//boolean hasUniverses = true;
+			try {
+				universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();
+			} catch (Exception e) {
+				System.out.println("No Universes");
+				// This server IS old
+				//hasUniverses = false;
+			}
+			TreeParent Universes = null;
+			//if (hasUniverses) {
+				Universes = new TreeParent("Universes",serverRoot,TreeObject.UNIVERSE,null,null);
+				if (universePKs!=null) {
+					monitor.subTask("Loading Universes");
+					for (int i = 0; i < universePKs.length; i++) {
+						String id =universePKs[i].getPk();
+						TreeObject obj = new TreeObject(
+								id,
+								serverRoot,
+								TreeObject.UNIVERSE,
+								new WSUniversePK(id),
+								null   //no storage to save space
+						);
+						Universes.addChild(obj);
+					}
+				}
+				monitor.worked(1);
+				if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
+			//}
+				
+//				SynchronizationPlan
+				WSSynchronizationPlanPK[] SynchronizationPlanPKs = null;
+				//boolean hasSynchronizationPlans = true;
+				try {
+					SynchronizationPlanPKs = port.getSynchronizationPlanPKs(new WSGetSynchronizationPlanPKs("*")).getWsSynchronizationPlanPK();
+				} catch (Exception e) {
+					System.out.println("No SynchronizationPlans");
+					// This server IS old
+					//hasSynchronizationPlans = false;
+				}
+				TreeParent synchronizationPlans = null;
+				//if (hasSynchronizationPlans) {
+				synchronizationPlans = new TreeParent("SynchronizationPlans",serverRoot,TreeObject.SYNCHRONIZATIONPLAN,null,null);
+					if (SynchronizationPlanPKs!=null) {
+						monitor.subTask("Loading SynchronizationPlans");
+						for (int i = 0; i < SynchronizationPlanPKs.length; i++) {
+							String id =SynchronizationPlanPKs[i].getPk();
+							TreeObject obj = new TreeObject(
+									id,
+									serverRoot,
+									TreeObject.SYNCHRONIZATIONPLAN,
+									new WSSynchronizationPlanPK(id),
+									null   //no storage to save space
+							);
+							synchronizationPlans.addChild(obj);
+						}
+					}
+					monitor.worked(1);
+					if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
+				//}
+
 			serverRoot.addChild(models);
 			serverRoot.addChild(dataClusters);
 			serverRoot.addChild(views);
 			serverRoot.addChild(storedProcedures);
 			serverRoot.addChild(engine);
+			serverRoot.addChild(Universes);
+			serverRoot.addChild(synchronizationPlans);
 			if (hasTransformers)serverRoot.addChild(transformers);
 			if (hasRoles) serverRoot.addChild(roles);
 			if (hasRoutingRules) serverRoot.addChild(rules);

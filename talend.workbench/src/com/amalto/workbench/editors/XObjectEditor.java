@@ -85,7 +85,13 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 	           		break;	
 	           	case TreeObject.MENU:
                     addPage(new MenuMainPage(this));
-	           		break;		           		
+	           		break;
+	           	case TreeObject.UNIVERSE:
+	           		addPage(new UniverseMainPage(this));	           		
+	           		break;
+	           	case TreeObject.SYNCHRONIZATIONPLAN:	           		
+	           		addPage(new SynchronizationMainPage(this));
+	           		break;
 	           	default:
 	           		MessageDialog.openError(this.getSite().getShell(), "Error", "Unknown Xtentis Object Type: "+xobject.getType());
 	           		return;
