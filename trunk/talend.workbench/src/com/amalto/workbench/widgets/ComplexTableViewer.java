@@ -63,7 +63,7 @@ public class ComplexTableViewer {
 		this.mainPage = mainPage;
 	}
 	
-	//isLastCombo =true need to set combo's strings
+	//isLastCombo =true need to set comboStrings
 	protected boolean isLastCombo;
 	protected String[] comboStrings;
 	protected CCombo lastCombo;
@@ -364,8 +364,7 @@ public class ComplexTableViewer {
         
         createLabels();
         createTexts();
-        createViewer();
-	        
+        createViewer();        
 	}
 	
 }
