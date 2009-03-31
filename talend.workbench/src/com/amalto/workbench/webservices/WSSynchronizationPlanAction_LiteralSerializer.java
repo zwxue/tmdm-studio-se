@@ -23,8 +23,8 @@ public class WSSynchronizationPlanAction_LiteralSerializer extends LiteralObject
     private static final QName ns2_WSSynchronizationPlanPK_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlanPK");
     private CombinedSerializer ns2_myWSSynchronizationPlanPK_LiteralSerializer;
     private static final QName ns1_wsAction_QNAME = new QName("", "wsAction");
-    private static final QName ns2_WSSynchronizationActionCode_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationActionCode");
-    private CombinedSerializer ns2myns2_WSSynchronizationActionCode__WSSynchronizationActionCode_LiteralSerializer;
+    private static final QName ns2_WSSynchronizationPlanActionCode_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlanActionCode");
+    private CombinedSerializer ns2myns2_WSSynchronizationPlanActionCode__WSSynchronizationPlanActionCode_LiteralSerializer;
     
     public WSSynchronizationPlanAction_LiteralSerializer(QName type, String encodingStyle) {
         this(type, encodingStyle, false);
@@ -36,7 +36,7 @@ public class WSSynchronizationPlanAction_LiteralSerializer extends LiteralObject
     
     public void initialize(InternalTypeMappingRegistry registry) throws Exception {
         ns2_myWSSynchronizationPlanPK_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSSynchronizationPlanPK.class, ns2_WSSynchronizationPlanPK_TYPE_QNAME);
-        ns2myns2_WSSynchronizationActionCode__WSSynchronizationActionCode_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSSynchronizationActionCode.class, ns2_WSSynchronizationActionCode_TYPE_QNAME);
+        ns2myns2_WSSynchronizationPlanActionCode__WSSynchronizationPlanActionCode_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSSynchronizationPlanActionCode.class, ns2_WSSynchronizationPlanActionCode_TYPE_QNAME);
     }
     
     public Object doDeserialize(XMLReader reader,
@@ -67,11 +67,11 @@ public class WSSynchronizationPlanAction_LiteralSerializer extends LiteralObject
         elementName = reader.getName();
         if (reader.getState() == XMLReader.START) {
             if (elementName.equals(ns1_wsAction_QNAME)) {
-                member = ns2myns2_WSSynchronizationActionCode__WSSynchronizationActionCode_LiteralSerializer.deserialize(ns1_wsAction_QNAME, reader, context);
+                member = ns2myns2_WSSynchronizationPlanActionCode__WSSynchronizationPlanActionCode_LiteralSerializer.deserialize(ns1_wsAction_QNAME, reader, context);
                 if (member == null) {
                     throw new DeserializationException("literal.unexpectedNull");
                 }
-                instance.setWsAction((com.amalto.workbench.webservices.WSSynchronizationActionCode)member);
+                instance.setWsAction((com.amalto.workbench.webservices.WSSynchronizationPlanActionCode)member);
                 reader.nextElementContent();
             } else {
                 throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_wsAction_QNAME, reader.getName() });
@@ -99,6 +99,6 @@ public class WSSynchronizationPlanAction_LiteralSerializer extends LiteralObject
         if (instance.getWsAction() == null) {
             throw new SerializationException("literal.unexpectedNull");
         }
-        ns2myns2_WSSynchronizationActionCode__WSSynchronizationActionCode_LiteralSerializer.serialize(instance.getWsAction(), ns1_wsAction_QNAME, null, writer, context);
+        ns2myns2_WSSynchronizationPlanActionCode__WSSynchronizationPlanActionCode_LiteralSerializer.serialize(instance.getWsAction(), ns1_wsAction_QNAME, null, writer, context);
     }
 }

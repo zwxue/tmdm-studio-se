@@ -9,7 +9,7 @@ package com.amalto.workbench.webservices;
 import java.util.Map;
 import java.util.HashMap;
 
-public class WSSynchronizationStatusCode {
+public class WSSynchronizationPlanStatusCode {
     private java.lang.String value;
     private static Map valueMap = new HashMap();
     public static final String _COMPLETEDString = "COMPLETED";
@@ -20,11 +20,11 @@ public class WSSynchronizationStatusCode {
     public static final java.lang.String _FAILED = new java.lang.String(_FAILEDString);
     public static final java.lang.String _RUNNING = new java.lang.String(_RUNNINGString);
     
-    public static final WSSynchronizationStatusCode COMPLETED = new WSSynchronizationStatusCode(_COMPLETED);
-    public static final WSSynchronizationStatusCode FAILED = new WSSynchronizationStatusCode(_FAILED);
-    public static final WSSynchronizationStatusCode RUNNING = new WSSynchronizationStatusCode(_RUNNING);
+    public static final WSSynchronizationPlanStatusCode COMPLETED = new WSSynchronizationPlanStatusCode(_COMPLETED);
+    public static final WSSynchronizationPlanStatusCode FAILED = new WSSynchronizationPlanStatusCode(_FAILED);
+    public static final WSSynchronizationPlanStatusCode RUNNING = new WSSynchronizationPlanStatusCode(_RUNNING);
     
-    protected WSSynchronizationStatusCode(java.lang.String value) {
+    protected WSSynchronizationPlanStatusCode(java.lang.String value) {
         this.value = value;
         valueMap.put(this.toString(), this);
     }
@@ -33,7 +33,7 @@ public class WSSynchronizationStatusCode {
         return value;
     }
     
-    public static WSSynchronizationStatusCode fromValue(java.lang.String value)
+    public static WSSynchronizationPlanStatusCode fromValue(java.lang.String value)
         throws java.lang.IllegalStateException {
         if (COMPLETED.value.equals(value)) {
             return COMPLETED;
@@ -45,9 +45,9 @@ public class WSSynchronizationStatusCode {
         throw new IllegalArgumentException();
     }
     
-    public static WSSynchronizationStatusCode fromString(String value)
+    public static WSSynchronizationPlanStatusCode fromString(String value)
         throws java.lang.IllegalStateException {
-        WSSynchronizationStatusCode ret = (WSSynchronizationStatusCode)valueMap.get(value);
+        WSSynchronizationPlanStatusCode ret = (WSSynchronizationPlanStatusCode)valueMap.get(value);
         if (ret != null) {
             return ret;
         }
@@ -71,10 +71,10 @@ public class WSSynchronizationStatusCode {
     }
     
     public boolean equals(Object obj) {
-        if (!(obj instanceof WSSynchronizationStatusCode)) {
+        if (!(obj instanceof WSSynchronizationPlanStatusCode)) {
             return false;
         }
-        return ((WSSynchronizationStatusCode)obj).value.equals(value);
+        return ((WSSynchronizationPlanStatusCode)obj).value.equals(value);
     }
     
     public int hashCode() {

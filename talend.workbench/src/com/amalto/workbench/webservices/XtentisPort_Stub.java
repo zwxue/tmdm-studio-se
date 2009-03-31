@@ -44,9 +44,9 @@ public class XtentisPort_Stub
     
     
     /*
-     *  implementation of synchronizationPlanAction
+     *  implementation of getAlgorithmsForSynchronizationPlans
      */
-    public com.amalto.workbench.webservices.WSSynchronizationStatusCode synchronizationPlanAction(com.amalto.workbench.webservices.WSSynchronizationPlanAction wsSynchronizationPlan)
+    public com.amalto.workbench.webservices.WSStringArray getAlgorithmsForSynchronizationPlans(com.amalto.workbench.webservices.WSGetObjectsForSynchronizationPlans regex)
         throws java.rmi.RemoteException {
         
         try {
@@ -54,24 +54,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(synchronizationPlanAction_OPCODE);
+            _request.setOperationCode(getAlgorithmsForSynchronizationPlans_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_synchronizationPlanAction_WSSynchronizationPlanAction_QNAME);
-            _bodyBlock.setValue(wsSynchronizationPlan);
-            _bodyBlock.setSerializer(ns1_myWSSynchronizationPlanAction_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getAlgorithmsForSynchronizationPlans_WSGetObjectsForSynchronizationPlans_QNAME);
+            _bodyBlock.setValue(regex);
+            _bodyBlock.setSerializer(ns1_myWSGetObjectsForSynchronizationPlans_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSSynchronizationStatusCode _result = null;
+            com.amalto.workbench.webservices.WSStringArray _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSSynchronizationStatusCode)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSStringArray)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSSynchronizationStatusCode)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSStringArray)_responseObj;
             }
             
             return _result;
@@ -1717,6 +1717,53 @@ public class XtentisPort_Stub
                 _result = (com.amalto.workbench.webservices.WSTransformer)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
                 _result = (com.amalto.workbench.webservices.WSTransformer)_responseObj;
+            }
+            
+            return _result;
+            
+        } catch (RemoteException e) {
+            // let this one through unchanged
+            throw e;
+        } catch (JAXRPCException e) {
+            throw new RemoteException(e.getMessage(), e);
+        } catch (Exception e) {
+            if (e instanceof RuntimeException) {
+                throw (RuntimeException)e;
+            } else {
+                throw new RemoteException(e.getMessage(), e);
+            }
+        }
+    }
+    
+    /*
+     *  implementation of synchronizationPlanAction
+     */
+    public com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode synchronizationPlanAction(com.amalto.workbench.webservices.WSSynchronizationPlanAction wsSynchronizationPlanAction)
+        throws java.rmi.RemoteException {
+        
+        try {
+            
+            StreamingSenderState _state = _start(_handlerChain);
+            
+            InternalSOAPMessage _request = _state.getRequest();
+            _request.setOperationCode(synchronizationPlanAction_OPCODE);
+            
+            
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_synchronizationPlanAction_WSSynchronizationPlanAction_QNAME);
+            _bodyBlock.setValue(wsSynchronizationPlanAction);
+            _bodyBlock.setSerializer(ns1_myWSSynchronizationPlanAction_LiteralSerializer);
+            _request.setBody(_bodyBlock);
+            
+            _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
+            
+            _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
+            
+            com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode _result = null;
+            Object _responseObj = _state.getResponse().getBody().getValue();
+            if (_responseObj instanceof SOAPDeserializationState) {
+                _result = (com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode)((SOAPDeserializationState) _responseObj).getInstance();
+            } else {
+                _result = (com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode)_responseObj;
             }
             
             return _result;
@@ -5830,8 +5877,8 @@ public class XtentisPort_Stub
     protected void _readFirstBodyElement(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState  state) throws Exception {
         int opcode = state.getRequest().getOperationCode();
         switch (opcode) {
-            case synchronizationPlanAction_OPCODE:
-                _deserialize_synchronizationPlanAction(bodyReader, deserializationContext, state);
+            case getAlgorithmsForSynchronizationPlans_OPCODE:
+                _deserialize_getAlgorithmsForSynchronizationPlans(bodyReader, deserializationContext, state);
                 break;
             case getServicesList_OPCODE:
                 _deserialize_getServicesList(bodyReader, deserializationContext, state);
@@ -5937,6 +5984,9 @@ public class XtentisPort_Stub
                 break;
             case getTransformer_OPCODE:
                 _deserialize_getTransformer(bodyReader, deserializationContext, state);
+                break;
+            case synchronizationPlanAction_OPCODE:
+                _deserialize_synchronizationPlanAction(bodyReader, deserializationContext, state);
                 break;
             case getRoutingOrderV2PKsByCriteria_OPCODE:
                 _deserialize_getRoutingOrderV2PKsByCriteria(bodyReader, deserializationContext, state);
@@ -6207,15 +6257,15 @@ public class XtentisPort_Stub
     
     
     /*
-     * This method deserializes the body of the synchronizationPlanAction operation.
+     * This method deserializes the body of the getAlgorithmsForSynchronizationPlans operation.
      */
-    private void _deserialize_synchronizationPlanAction(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSSynchronizationStatusCodeObj =
-            ns1myns1_WSSynchronizationStatusCode__WSSynchronizationStatusCode_LiteralSerializer.deserialize(ns1_synchronizationPlanAction_WSSynchronizationStatusCode_QNAME,
+    private void _deserialize_getAlgorithmsForSynchronizationPlans(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSStringArrayObj =
+            ns1_myWSStringArray_LiteralSerializer.deserialize(ns1_getAlgorithmsForSynchronizationPlans_WSStringArray_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_synchronizationPlanAction_WSSynchronizationStatusCode_QNAME);
-        bodyBlock.setValue(myWSSynchronizationStatusCodeObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getAlgorithmsForSynchronizationPlans_WSStringArray_QNAME);
+        bodyBlock.setValue(myWSStringArrayObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -6671,6 +6721,19 @@ public class XtentisPort_Stub
         
         SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getTransformer_WSTransformer_QNAME);
         bodyBlock.setValue(myWSTransformerObj);
+        state.getResponse().setBody(bodyBlock);
+    }
+    
+    /*
+     * This method deserializes the body of the synchronizationPlanAction operation.
+     */
+    private void _deserialize_synchronizationPlanAction(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSSynchronizationPlanStatusCodeObj =
+            ns1myns1_WSSynchronizationPlanStatusCode__WSSynchronizationPlanStatusCode_LiteralSerializer.deserialize(ns1_synchronizationPlanAction_WSSynchronizationPlanStatusCode_QNAME,
+                bodyReader, deserializationContext);
+        
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_synchronizationPlanAction_WSSynchronizationPlanStatusCode_QNAME);
+        bodyBlock.setValue(myWSSynchronizationPlanStatusCodeObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -7983,6 +8046,7 @@ public class XtentisPort_Stub
         ns1_myWSPutDataCluster_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSPutDataCluster.class, ns1_WSPutDataCluster_TYPE_QNAME);
         ns1_myWSDeleteUniverse_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSDeleteUniverse.class, ns1_WSDeleteUniverse_TYPE_QNAME);
         ns1_myWSExistsView_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSExistsView.class, ns1_WSExistsView_TYPE_QNAME);
+        ns1myns1_WSSynchronizationPlanStatusCode__WSSynchronizationPlanStatusCode_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode.class, ns1_WSSynchronizationPlanStatusCode_TYPE_QNAME);
         ns1_myWSDeleteBusinessConcept_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSDeleteBusinessConcept.class, ns1_WSDeleteBusinessConcept_TYPE_QNAME);
         ns1_myWSRoutingOrderV2_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSRoutingOrderV2.class, ns1_WSRoutingOrderV2_TYPE_QNAME);
         ns1_myWSVersioningRestoreItems_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSVersioningRestoreItems.class, ns1_WSVersioningRestoreItems_TYPE_QNAME);
@@ -8019,7 +8083,6 @@ public class XtentisPort_Stub
         ns1_myWSUniversePKArray_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSUniversePKArray.class, ns1_WSUniversePKArray_TYPE_QNAME);
         ns1_myWSRole_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSRole.class, ns1_WSRole_TYPE_QNAME);
         ns1_myWSExtractUsingTransformerThruView_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSExtractUsingTransformerThruView.class, ns1_WSExtractUsingTransformerThruView_TYPE_QNAME);
-        ns1myns1_WSSynchronizationStatusCode__WSSynchronizationStatusCode_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSSynchronizationStatusCode.class, ns1_WSSynchronizationStatusCode_TYPE_QNAME);
         ns1_myWSDeleteDataModel_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSDeleteDataModel.class, ns1_WSDeleteDataModel_TYPE_QNAME);
         ns1_myWSDeleteItem_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSDeleteItem.class, ns1_WSDeleteItem_TYPE_QNAME);
         ns1_myWSDeleteRoutingOrderV2_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSDeleteRoutingOrderV2.class, ns1_WSDeleteRoutingOrderV2_TYPE_QNAME);
@@ -8041,7 +8104,7 @@ public class XtentisPort_Stub
     }
     
     private static final QName _portName = new QName("urn-com-amalto-xtentis-webservice", "XtentisPort");
-    private static final int synchronizationPlanAction_OPCODE = 0;
+    private static final int getAlgorithmsForSynchronizationPlans_OPCODE = 0;
     private static final int getServicesList_OPCODE = 1;
     private static final int getTransformerPluginV2Configuration_OPCODE = 2;
     private static final int extractUsingTransformer_OPCODE = 3;
@@ -8077,99 +8140,100 @@ public class XtentisPort_Stub
     private static final int getRolePKs_OPCODE = 33;
     private static final int putTransformerPluginV2Configuration_OPCODE = 34;
     private static final int getTransformer_OPCODE = 35;
-    private static final int getRoutingOrderV2PKsByCriteria_OPCODE = 36;
-    private static final int putBackgroundJob_OPCODE = 37;
-    private static final int existsDataCluster_OPCODE = 38;
-    private static final int getObjectsForSynchronizationPlans_OPCODE = 39;
-    private static final int routingEngineV2Action_OPCODE = 40;
-    private static final int processFileUsingTransformer_OPCODE = 41;
-    private static final int versioningTagObjects_OPCODE = 42;
-    private static final int getStoredProcedure_OPCODE = 43;
-    private static final int getTransformerV2_OPCODE = 44;
-    private static final int deleteItems_OPCODE = 45;
-    private static final int getViewPKs_OPCODE = 46;
-    private static final int getConceptsInDataCluster_OPCODE = 47;
-    private static final int existsTransformerPluginV2_OPCODE = 48;
-    private static final int serviceAction_OPCODE = 49;
-    private static final int existsRole_OPCODE = 50;
-    private static final int getTransformerV2PKs_OPCODE = 51;
-    private static final int putMenu_OPCODE = 52;
-    private static final int getItems_OPCODE = 53;
-    private static final int getVersioningSystemConfiguration_OPCODE = 54;
-    private static final int getSynchronizationPlan_OPCODE = 55;
-    private static final int executeRoutingOrderV2Synchronously_OPCODE = 56;
-    private static final int putSynchronizationPlan_OPCODE = 57;
-    private static final int executeTransformerV2AsJob_OPCODE = 58;
-    private static final int putBusinessConceptSchema_OPCODE = 59;
-    private static final int getItem_OPCODE = 60;
-    private static final int deleteView_OPCODE = 61;
-    private static final int getBackgroundJob_OPCODE = 62;
-    private static final int existsTransformerV2_OPCODE = 63;
-    private static final int checkSchema_OPCODE = 64;
-    private static final int quickSearch_OPCODE = 65;
-    private static final int processFileUsingTransformerAsBackgroundJob_OPCODE = 66;
-    private static final int existsSynchronizationPlan_OPCODE = 67;
-    private static final int getRoutingOrderV2_OPCODE = 68;
-    private static final int getObjectsForRoles_OPCODE = 69;
-    private static final int getBusinessConceptValue_OPCODE = 70;
-    private static final int findBackgroundJobPKs_OPCODE = 71;
-    private static final int deleteTransformer_OPCODE = 72;
-    private static final int getMenuPKs_OPCODE = 73;
-    private static final int xPathsSearch_OPCODE = 74;
-    private static final int getRoutingRule_OPCODE = 75;
-    private static final int viewSearch_OPCODE = 76;
-    private static final int processBytesUsingTransformer_OPCODE = 77;
-    private static final int getTransformerPluginV2Details_OPCODE = 78;
-    private static final int deleteBusinessConcept_OPCODE = 79;
-    private static final int ping_OPCODE = 80;
-    private static final int putVersioningSystemConfiguration_OPCODE = 81;
-    private static final int versioningRestoreItems_OPCODE = 82;
-    private static final int putRoutingRule_OPCODE = 83;
-    private static final int getRoutingRulePKs_OPCODE = 84;
-    private static final int executeStoredProcedure_OPCODE = 85;
-    private static final int putTransformerV2_OPCODE = 86;
-    private static final int putItem_OPCODE = 87;
-    private static final int deleteDataModel_OPCODE = 88;
-    private static final int getServiceConfiguration_OPCODE = 89;
-    private static final int getView_OPCODE = 90;
-    private static final int deleteRoutingOrderV2_OPCODE = 91;
-    private static final int versioningGetInfo_OPCODE = 92;
-    private static final int getUniversePKs_OPCODE = 93;
-    private static final int getDataCluster_OPCODE = 94;
-    private static final int initMDM_OPCODE = 95;
-    private static final int extractUsingTransformerThruView_OPCODE = 96;
-    private static final int processBytesUsingTransformerAsBackgroundJob_OPCODE = 97;
-    private static final int executeTransformerV2_OPCODE = 98;
-    private static final int getRoutingOrderV2sByCriteria_OPCODE = 99;
-    private static final int connectorInteraction_OPCODE = 100;
-    private static final int getFullPathValues_OPCODE = 101;
-    private static final int deleteDataCluster_OPCODE = 102;
-    private static final int routeItemV2_OPCODE = 103;
-    private static final int putServiceConfiguration_OPCODE = 104;
-    private static final int deleteTransformerV2_OPCODE = 105;
-    private static final int deleteItem_OPCODE = 106;
-    private static final int versioningGetObjectsHistory_OPCODE = 107;
-    private static final int deleteUniverse_OPCODE = 108;
-    private static final int getRole_OPCODE = 109;
-    private static final int getBusinessConcepts_OPCODE = 110;
-    private static final int putDataCluster_OPCODE = 111;
-    private static final int putTransformer_OPCODE = 112;
-    private static final int putView_OPCODE = 113;
-    private static final int getItemPKsByCriteria_OPCODE = 114;
-    private static final int getSynchronizationPlanPKs_OPCODE = 115;
-    private static final int getBusinessConceptKey_OPCODE = 116;
-    private static final int deleteMenu_OPCODE = 117;
-    private static final int deleteRoutingRule_OPCODE = 118;
-    private static final int executeRoutingOrderV2Asynchronously_OPCODE = 119;
-    private static final int versioningTagItems_OPCODE = 120;
-    private static final int count_OPCODE = 121;
-    private static final int deleteSynchronizationPlan_OPCODE = 122;
-    private static final QName ns1_synchronizationPlanAction_WSSynchronizationPlanAction_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlanAction");
-    private static final QName ns1_WSSynchronizationPlanAction_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlanAction");
-    private CombinedSerializer ns1_myWSSynchronizationPlanAction_LiteralSerializer;
-    private static final QName ns1_synchronizationPlanAction_WSSynchronizationStatusCode_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationStatusCode");
-    private static final QName ns1_WSSynchronizationStatusCode_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationStatusCode");
-    private CombinedSerializer ns1myns1_WSSynchronizationStatusCode__WSSynchronizationStatusCode_LiteralSerializer;
+    private static final int synchronizationPlanAction_OPCODE = 36;
+    private static final int getRoutingOrderV2PKsByCriteria_OPCODE = 37;
+    private static final int putBackgroundJob_OPCODE = 38;
+    private static final int existsDataCluster_OPCODE = 39;
+    private static final int getObjectsForSynchronizationPlans_OPCODE = 40;
+    private static final int routingEngineV2Action_OPCODE = 41;
+    private static final int processFileUsingTransformer_OPCODE = 42;
+    private static final int versioningTagObjects_OPCODE = 43;
+    private static final int getStoredProcedure_OPCODE = 44;
+    private static final int getTransformerV2_OPCODE = 45;
+    private static final int deleteItems_OPCODE = 46;
+    private static final int getViewPKs_OPCODE = 47;
+    private static final int getConceptsInDataCluster_OPCODE = 48;
+    private static final int existsTransformerPluginV2_OPCODE = 49;
+    private static final int serviceAction_OPCODE = 50;
+    private static final int existsRole_OPCODE = 51;
+    private static final int getTransformerV2PKs_OPCODE = 52;
+    private static final int putMenu_OPCODE = 53;
+    private static final int getItems_OPCODE = 54;
+    private static final int getVersioningSystemConfiguration_OPCODE = 55;
+    private static final int getSynchronizationPlan_OPCODE = 56;
+    private static final int executeRoutingOrderV2Synchronously_OPCODE = 57;
+    private static final int putSynchronizationPlan_OPCODE = 58;
+    private static final int executeTransformerV2AsJob_OPCODE = 59;
+    private static final int putBusinessConceptSchema_OPCODE = 60;
+    private static final int getItem_OPCODE = 61;
+    private static final int deleteView_OPCODE = 62;
+    private static final int getBackgroundJob_OPCODE = 63;
+    private static final int existsTransformerV2_OPCODE = 64;
+    private static final int checkSchema_OPCODE = 65;
+    private static final int quickSearch_OPCODE = 66;
+    private static final int processFileUsingTransformerAsBackgroundJob_OPCODE = 67;
+    private static final int existsSynchronizationPlan_OPCODE = 68;
+    private static final int getRoutingOrderV2_OPCODE = 69;
+    private static final int getObjectsForRoles_OPCODE = 70;
+    private static final int getBusinessConceptValue_OPCODE = 71;
+    private static final int findBackgroundJobPKs_OPCODE = 72;
+    private static final int deleteTransformer_OPCODE = 73;
+    private static final int getMenuPKs_OPCODE = 74;
+    private static final int xPathsSearch_OPCODE = 75;
+    private static final int getRoutingRule_OPCODE = 76;
+    private static final int viewSearch_OPCODE = 77;
+    private static final int processBytesUsingTransformer_OPCODE = 78;
+    private static final int getTransformerPluginV2Details_OPCODE = 79;
+    private static final int deleteBusinessConcept_OPCODE = 80;
+    private static final int ping_OPCODE = 81;
+    private static final int putVersioningSystemConfiguration_OPCODE = 82;
+    private static final int versioningRestoreItems_OPCODE = 83;
+    private static final int putRoutingRule_OPCODE = 84;
+    private static final int getRoutingRulePKs_OPCODE = 85;
+    private static final int executeStoredProcedure_OPCODE = 86;
+    private static final int putTransformerV2_OPCODE = 87;
+    private static final int putItem_OPCODE = 88;
+    private static final int deleteDataModel_OPCODE = 89;
+    private static final int getServiceConfiguration_OPCODE = 90;
+    private static final int getView_OPCODE = 91;
+    private static final int deleteRoutingOrderV2_OPCODE = 92;
+    private static final int versioningGetInfo_OPCODE = 93;
+    private static final int getUniversePKs_OPCODE = 94;
+    private static final int getDataCluster_OPCODE = 95;
+    private static final int initMDM_OPCODE = 96;
+    private static final int extractUsingTransformerThruView_OPCODE = 97;
+    private static final int processBytesUsingTransformerAsBackgroundJob_OPCODE = 98;
+    private static final int executeTransformerV2_OPCODE = 99;
+    private static final int getRoutingOrderV2sByCriteria_OPCODE = 100;
+    private static final int connectorInteraction_OPCODE = 101;
+    private static final int getFullPathValues_OPCODE = 102;
+    private static final int deleteDataCluster_OPCODE = 103;
+    private static final int routeItemV2_OPCODE = 104;
+    private static final int putServiceConfiguration_OPCODE = 105;
+    private static final int deleteTransformerV2_OPCODE = 106;
+    private static final int deleteItem_OPCODE = 107;
+    private static final int versioningGetObjectsHistory_OPCODE = 108;
+    private static final int deleteUniverse_OPCODE = 109;
+    private static final int getRole_OPCODE = 110;
+    private static final int getBusinessConcepts_OPCODE = 111;
+    private static final int putDataCluster_OPCODE = 112;
+    private static final int putTransformer_OPCODE = 113;
+    private static final int putView_OPCODE = 114;
+    private static final int getItemPKsByCriteria_OPCODE = 115;
+    private static final int getSynchronizationPlanPKs_OPCODE = 116;
+    private static final int getBusinessConceptKey_OPCODE = 117;
+    private static final int deleteMenu_OPCODE = 118;
+    private static final int deleteRoutingRule_OPCODE = 119;
+    private static final int executeRoutingOrderV2Asynchronously_OPCODE = 120;
+    private static final int versioningTagItems_OPCODE = 121;
+    private static final int count_OPCODE = 122;
+    private static final int deleteSynchronizationPlan_OPCODE = 123;
+    private static final QName ns1_getAlgorithmsForSynchronizationPlans_WSGetObjectsForSynchronizationPlans_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetObjectsForSynchronizationPlans");
+    private static final QName ns1_WSGetObjectsForSynchronizationPlans_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetObjectsForSynchronizationPlans");
+    private CombinedSerializer ns1_myWSGetObjectsForSynchronizationPlans_LiteralSerializer;
+    private static final QName ns1_getAlgorithmsForSynchronizationPlans_WSStringArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
+    private static final QName ns1_WSStringArray_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
+    private CombinedSerializer ns1_myWSStringArray_LiteralSerializer;
     private static final QName ns1_getServicesList_WSGetServicesList_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetServicesList");
     private static final QName ns1_WSGetServicesList_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetServicesList");
     private CombinedSerializer ns1_myWSGetServicesList_LiteralSerializer;
@@ -8302,8 +8366,6 @@ public class XtentisPort_Stub
     private static final QName ns1_WSRunQuery_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRunQuery");
     private CombinedSerializer ns1_myWSRunQuery_LiteralSerializer;
     private static final QName ns1_runQuery_WSStringArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
-    private static final QName ns1_WSStringArray_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
-    private CombinedSerializer ns1_myWSStringArray_LiteralSerializer;
     private static final QName ns1_putBusinessConcept_WSPutBusinessConcept_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutBusinessConcept");
     private static final QName ns1_WSPutBusinessConcept_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutBusinessConcept");
     private CombinedSerializer ns1_myWSPutBusinessConcept_LiteralSerializer;
@@ -8356,6 +8418,12 @@ public class XtentisPort_Stub
     private static final QName ns1_getTransformer_WSTransformer_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSTransformer");
     private static final QName ns1_WSTransformer_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSTransformer");
     private CombinedSerializer ns1_myWSTransformer_LiteralSerializer;
+    private static final QName ns1_synchronizationPlanAction_WSSynchronizationPlanAction_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlanAction");
+    private static final QName ns1_WSSynchronizationPlanAction_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlanAction");
+    private CombinedSerializer ns1_myWSSynchronizationPlanAction_LiteralSerializer;
+    private static final QName ns1_synchronizationPlanAction_WSSynchronizationPlanStatusCode_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlanStatusCode");
+    private static final QName ns1_WSSynchronizationPlanStatusCode_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlanStatusCode");
+    private CombinedSerializer ns1myns1_WSSynchronizationPlanStatusCode__WSSynchronizationPlanStatusCode_LiteralSerializer;
     private static final QName ns1_getRoutingOrderV2PKsByCriteria_WSGetRoutingOrderV2PKsByCriteria_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetRoutingOrderV2PKsByCriteria");
     private static final QName ns1_WSGetRoutingOrderV2PKsByCriteria_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetRoutingOrderV2PKsByCriteria");
     private CombinedSerializer ns1_myWSGetRoutingOrderV2PKsByCriteria_LiteralSerializer;
@@ -8371,8 +8439,6 @@ public class XtentisPort_Stub
     private CombinedSerializer ns1_myWSExistsDataCluster_LiteralSerializer;
     private static final QName ns1_existsDataCluster_WSBoolean_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSBoolean");
     private static final QName ns1_getObjectsForSynchronizationPlans_WSGetObjectsForSynchronizationPlans_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetObjectsForSynchronizationPlans");
-    private static final QName ns1_WSGetObjectsForSynchronizationPlans_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetObjectsForSynchronizationPlans");
-    private CombinedSerializer ns1_myWSGetObjectsForSynchronizationPlans_LiteralSerializer;
     private static final QName ns1_getObjectsForSynchronizationPlans_WSStringArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
     private static final QName ns1_routingEngineV2Action_WSRoutingEngineV2Action_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingEngineV2Action");
     private static final QName ns1_WSRoutingEngineV2Action_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingEngineV2Action");

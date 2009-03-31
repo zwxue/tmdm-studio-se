@@ -37,8 +37,8 @@ public class WSSynchronizationPlan_LiteralSerializer extends LiteralObjectSerial
     private CombinedSerializer ns3_myns3_dateTime__java_util_Calendar_DateTimeCalendar_Serializer;
     private static final QName ns1_lastRunStopped_QNAME = new QName("", "lastRunStopped");
     private static final QName ns1_wsCurrentStatusCode_QNAME = new QName("", "wsCurrentStatusCode");
-    private static final QName ns2_WSSynchronizationStatusCode_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationStatusCode");
-    private CombinedSerializer ns2myns2_WSSynchronizationStatusCode__WSSynchronizationStatusCode_LiteralSerializer;
+    private static final QName ns2_WSSynchronizationPlanStatusCode_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlanStatusCode");
+    private CombinedSerializer ns2myns2_WSSynchronizationPlanStatusCode__WSSynchronizationPlanStatusCode_LiteralSerializer;
     private static final QName ns1_currentStatusMessage_QNAME = new QName("", "currentStatusMessage");
     
     public WSSynchronizationPlan_LiteralSerializer(QName type, String encodingStyle) {
@@ -54,7 +54,7 @@ public class WSSynchronizationPlan_LiteralSerializer extends LiteralObjectSerial
         ns2_myWSSynchronizationPlanXtentisObjectsSynchronizations_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizations.class, ns2_WSSynchronizationPlan$2d$xtentisObjectsSynchronizations_TYPE_QNAME);
         ns2_myWSSynchronizationPlanItemsSynchronizations_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSSynchronizationPlanItemsSynchronizations.class, ns2_WSSynchronizationPlan$2d$itemsSynchronizations_TYPE_QNAME);
         ns3_myns3_dateTime__java_util_Calendar_DateTimeCalendar_Serializer = (CombinedSerializer)registry.getSerializer("", java.util.Calendar.class, ns3_dateTime_TYPE_QNAME);
-        ns2myns2_WSSynchronizationStatusCode__WSSynchronizationStatusCode_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSSynchronizationStatusCode.class, ns2_WSSynchronizationStatusCode_TYPE_QNAME);
+        ns2myns2_WSSynchronizationPlanStatusCode__WSSynchronizationPlanStatusCode_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode.class, ns2_WSSynchronizationPlanStatusCode_TYPE_QNAME);
     }
     
     public Object doDeserialize(XMLReader reader,
@@ -218,11 +218,11 @@ public class WSSynchronizationPlan_LiteralSerializer extends LiteralObjectSerial
         elementName = reader.getName();
         if (reader.getState() == XMLReader.START) {
             if (elementName.equals(ns1_wsCurrentStatusCode_QNAME)) {
-                member = ns2myns2_WSSynchronizationStatusCode__WSSynchronizationStatusCode_LiteralSerializer.deserialize(ns1_wsCurrentStatusCode_QNAME, reader, context);
+                member = ns2myns2_WSSynchronizationPlanStatusCode__WSSynchronizationPlanStatusCode_LiteralSerializer.deserialize(ns1_wsCurrentStatusCode_QNAME, reader, context);
                 if (member == null) {
                     throw new DeserializationException("literal.unexpectedNull");
                 }
-                instance.setWsCurrentStatusCode((com.amalto.workbench.webservices.WSSynchronizationStatusCode)member);
+                instance.setWsCurrentStatusCode((com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode)member);
                 reader.nextElementContent();
             } else {
                 throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_wsCurrentStatusCode_QNAME, reader.getName() });
@@ -288,7 +288,7 @@ public class WSSynchronizationPlan_LiteralSerializer extends LiteralObjectSerial
         if (instance.getWsCurrentStatusCode() == null) {
             throw new SerializationException("literal.unexpectedNull");
         }
-        ns2myns2_WSSynchronizationStatusCode__WSSynchronizationStatusCode_LiteralSerializer.serialize(instance.getWsCurrentStatusCode(), ns1_wsCurrentStatusCode_QNAME, null, writer, context);
+        ns2myns2_WSSynchronizationPlanStatusCode__WSSynchronizationPlanStatusCode_LiteralSerializer.serialize(instance.getWsCurrentStatusCode(), ns1_wsCurrentStatusCode_QNAME, null, writer, context);
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getCurrentStatusMessage(), ns1_currentStatusMessage_QNAME, null, writer, context);
     }
 }

@@ -340,10 +340,10 @@ public class XtentisService_SerializerRegistry implements SerializerConstants {
             registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPluginV2SList.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationStatusCode");
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlanStatusCode");
             CombinedSerializer serializer = new LiteralSimpleTypeSerializer(type, "",
-                com.amalto.workbench.webservices.WSSynchronizationStatusCode_Encoder.getInstance());
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSSynchronizationStatusCode.class, type, serializer);
+                com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode_Encoder.getInstance());
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode.class, type, serializer);
         }
         {
             QName type = new QName("urn-com-amalto-xtentis-webservice", "WSItemPKsByCriteriaResponse-results");
@@ -589,10 +589,10 @@ public class XtentisService_SerializerRegistry implements SerializerConstants {
             registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPKArray.class, type, serializer);
         }
         {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationActionCode");
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlanActionCode");
             CombinedSerializer serializer = new LiteralSimpleTypeSerializer(type, "",
-                com.amalto.workbench.webservices.WSSynchronizationActionCode_Encoder.getInstance());
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSSynchronizationActionCode.class, type, serializer);
+                com.amalto.workbench.webservices.WSSynchronizationPlanActionCode_Encoder.getInstance());
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSSynchronizationPlanActionCode.class, type, serializer);
         }
         {
             QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginV2VariableDescriptor");
