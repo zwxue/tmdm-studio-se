@@ -53,6 +53,7 @@ import com.amalto.workbench.webservices.WSSynchronizationPlanItemsSynchronizatio
 import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
 import com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode;
 import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizations;
+import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations;
 import com.amalto.workbench.webservices.WSTransformer;
 import com.amalto.workbench.webservices.WSTransformerPK;
 import com.amalto.workbench.webservices.WSUniverse;
@@ -396,7 +397,7 @@ public class NewXObjectAction extends Action{
                     //add
                     List<WSSynchronizationPlanXtentisObjectsSynchronizations> objectsId=new ArrayList<WSSynchronizationPlanXtentisObjectsSynchronizations>();
     				for(String object: port.getObjectsForSynchronizationPlans(new WSGetObjectsForSynchronizationPlans(new String[]{".*"})).getStrings()){//IConstants.XTENTISOBJECTS){
-    					objectsId.add(new WSSynchronizationPlanXtentisObjectsSynchronizations(object,null));
+    					objectsId.add(new WSSynchronizationPlanXtentisObjectsSynchronizations(object,new WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations[0]));
     				}
     				Calendar calendar=Calendar.getInstance();
     				calendar.setTimeInMillis(0);

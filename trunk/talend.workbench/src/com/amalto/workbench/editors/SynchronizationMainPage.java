@@ -20,21 +20,28 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.exolab.castor.xml.Marshaller;
 
+import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.FontUtils;
+import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSGetAlgorithmsForSynchronizationPlans;
 import com.amalto.workbench.webservices.WSGetObjectsForSynchronizationPlans;
+import com.amalto.workbench.webservices.WSSynchronizationPlan;
+import com.amalto.workbench.webservices.WSSynchronizationPlanItemsSynchronizations;
+import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizations;
+import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations;
+import com.amalto.workbench.webservices.WSUniverseItemsRevisionIDs;
+import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
+import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.ComplexTableViewer;
 import com.amalto.workbench.widgets.LabelText;
 
 public class SynchronizationMainPage extends AMainPageV2{
-
 
 	protected DropTarget windowTarget;
 
@@ -46,11 +53,21 @@ public class SynchronizationMainPage extends AMainPageV2{
 	private String[] itemsColumns=new String[]{"Concept Pattern","IDs Pattern","Source Revision ID","Target Revision ID","Algorithm"};
 		
 	protected SyncronizationPlan syncPlan;
+
+	private LabelText passwordText;
+
+	private LabelText usernameText;
+
+	private LabelText urlText;
+
+	private LabelText descriptionText;
+	
+	private Map<String,ComplexTableViewer> xtentisViewers=new HashMap<String, ComplexTableViewer>();
 	public SynchronizationMainPage(FormEditor editor) {
         super(
         		editor,
         		SynchronizationMainPage.class.getName(),
-        		"Synchronization "+((XObjectEditorInput)editor.getEditorInput()).getName()
+        		"SynchronizationPlan "+((XObjectEditorInput)editor.getEditorInput()).getName()
         );        
 	}
 
@@ -61,7 +78,15 @@ public class SynchronizationMainPage extends AMainPageV2{
 		if(syncPlan==null)syncPlan=new SyncronizationPlan();
 		this.toolkit=toolkit;
         //basic setting
-		final LabelText urlText =new LabelText(toolkit,charComposite,"URL");        
+		descriptionText =new LabelText(toolkit,charComposite,"Description");        
+		descriptionText.getText().addModifyListener(new ModifyListener() {
+        	public void modifyText(ModifyEvent e) {
+        		if (refreshing) return;
+        		syncPlan.description=descriptionText.getText().getText();
+        		markDirty();
+        	}
+        });
+		urlText =new LabelText(toolkit,charComposite,"Server URL");        
 		urlText.getText().addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent e) {
         		if (refreshing) return;
@@ -70,7 +95,7 @@ public class SynchronizationMainPage extends AMainPageV2{
         	}
         });
   
-		final LabelText usernameText =new LabelText(toolkit,charComposite,"Username");        
+		usernameText =new LabelText(toolkit,charComposite,"Username");        
 		usernameText.getText().addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent e) {
         		if (refreshing) return;
@@ -78,7 +103,7 @@ public class SynchronizationMainPage extends AMainPageV2{
         		markDirty();
         	}
         });
-		final LabelText passwordText =new LabelText(toolkit,charComposite,"Password");        
+		passwordText =new LabelText(toolkit,charComposite,"Password");        
 		passwordText.getText().addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent e) {
         		if (refreshing) return;
@@ -93,7 +118,7 @@ public class SynchronizationMainPage extends AMainPageV2{
         windowTarget.addDropListener(new DCDropTargetListener());
         
         //Xtentis Objects  Section
-        Composite objecstGroup = this.getNewSectionComposite("Xtentis Objects Synchronization");
+        Composite objecstGroup = this.getNewSectionComposite("Xtentis Objects SynchronizationPlan");
         objecstGroup.setLayout(new GridLayout(1,true));
         
         Composite objectsComposite = toolkit.createComposite(objecstGroup, SWT.BORDER);
@@ -128,9 +153,11 @@ public class SynchronizationMainPage extends AMainPageV2{
             }
             objectViewer.getViewer().setInput(objList);
             ((GridData)objectViewer.getViewer().getTable().getLayoutData()).heightHint=60;
+            
+            xtentisViewers.put(object, objectViewer);
         }
         //Items Section          
-        Composite itemsGroup = this.getNewSectionComposite("Items Synchronization");
+        Composite itemsGroup = this.getNewSectionComposite("Items SynchronizationPlan");
         itemsGroup.setLayout(new GridLayout(1,true));
         Composite itemsComposite = toolkit.createComposite(itemsGroup, SWT.BORDER);
         itemsComposite.setLayoutData(
@@ -167,35 +194,46 @@ public class SynchronizationMainPage extends AMainPageV2{
 			
 			this.refreshing = true;
 			
-//			WSUniverse wsUniverse = (WSUniverse) (getXObject().getWsObject());    	
-//			
-//			universe = new Universe("");
-//			universe.setName(wsUniverse.getName());
-//			universe.setDescription(wsUniverse.getDescription()==null ? "" : wsUniverse.getDescription());
-//			universe.setDefaultReversionID(wsUniverse.getDefaultItemsRevisionID());
-//			universe.getSystemObjectsList().clear();
-//			for(WSUniverseXtentisObjectsRevisionIDs xtentisObjects: wsUniverse.getXtentisObjectsRevisionIDs()){
-//				universe.getSystemObjectsList().add(new KeyValue(xtentisObjects.getXtentisObjectName(),xtentisObjects.getRevisionID()));
-//			}
-//			
-//			for(WSUniverseItemsRevisionIDs item:wsUniverse.getItemsRevisionIDs()){
-//				universe.getItemsList().add(new Line(columns,new String[]{item.getConceptPattern(),item.getRevisionID()}));
-//			}
-//			
-//			XtentisPort port = Util.getPort(getXObject());
-//            String[] objects = port.getObjectsForRoles(null).getStrings();
-//            Arrays.sort(objects);
-//	    	
-//			//Now fill in the values on the page
-//            descriptionText.setText(universe.getDescription()==null ? "" : universe.getDescription());
-//            //nameText.setText(universe.getName()==null?"":universe.getName())  ;
-//            for(KeyValue line: universe.getSystemObjectsList()){
-//            	LabelText labelText=basicLabelTexts.get(line.key);
-//            	if(labelText!=null){
-//            		labelText.getText().setText(line.value);
-//            	}
-//            }
-//            instancesViewer.setInput(universe.getItemsList());
+			WSSynchronizationPlan ws = (WSSynchronizationPlan) (getXObject().getWsObject());    	
+			
+			syncPlan = new SyncronizationPlan();	
+			//basic
+			syncPlan.setDescription(ws.getDescription()==null ? "" : ws.getDescription());
+			syncPlan.setUrl(ws.getRemoteSystemURL());
+			syncPlan.setUsername(ws.getRemoteSystemUsername());
+			syncPlan.setPassword(ws.getRemoteSystemPassword());
+			
+			//xtentisObjects
+			Map<String, List<Line>> xtentisMap=new HashMap<String, List<Line>>();
+			for(WSSynchronizationPlanXtentisObjectsSynchronizations xtentisSync:ws.getXtentisObjectsSynchronizations()){				
+				List<Line> lines=new ArrayList<Line>();
+				for(WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations objSync:xtentisSync.getSynchronizations()){
+					Line line=new Line(xtentisObjectColumns,new String[]{objSync.getInstancePattern(),objSync.getSourceRevisionID(),objSync.getTargetRevisionID(),objSync.getAlgorithm()});
+					lines.add(line);
+				}
+				xtentisMap.put(xtentisSync.getXtentisObjectName(), lines);
+				//refresh the xtentisobject tableviewer
+				ComplexTableViewer viewer=xtentisViewers.get(xtentisSync.getXtentisObjectName());
+				if(viewer!=null){
+					viewer.getViewer().setInput(lines);
+				}
+			}
+			syncPlan.setXtentisObjectsList(xtentisMap);
+			//Items
+			List<Line> lines=new ArrayList<Line>();
+			for(WSSynchronizationPlanItemsSynchronizations itemSync:ws.getItemsSynchronizations()){
+				Line line=new Line(itemsColumns,new String[]{itemSync.getConceptPattern(),itemSync.getIdsPattern(),itemSync.getSourceRevisionID(),itemSync.getTargetRevisionID(),itemSync.getAlgorithm()});
+				lines.add(line);
+			}
+	    	syncPlan.setItemsList(lines);
+	    	
+			//Now fill in the values on the page
+            descriptionText.getText().setText(syncPlan.getDescription()==null ? "" : syncPlan.getDescription());
+            urlText.getText().setText(syncPlan.getUrl()==null?"":syncPlan.getUrl());
+            usernameText.getText().setText(syncPlan.getUsername()==null?"":syncPlan.getUsername());
+            passwordText.getText().setText(syncPlan.getPassword()==null?"":syncPlan.getPassword());
+            //refresh the item tableviewer
+            instancesViewer.setInput(syncPlan.getItemsList());
             this.refreshing = false;
 
 		} catch (Exception e) {
@@ -209,20 +247,49 @@ public class SynchronizationMainPage extends AMainPageV2{
 			if (this.refreshing) return;
 			
 			this.comitting = true;
+			//basic
+			WSSynchronizationPlan ws = (WSSynchronizationPlan) (getXObject().getWsObject());    	
+			ws.setDescription(syncPlan.getDescription());
+			ws.setRemoteSystemURL(syncPlan.getUrl());
+			ws.setRemoteSystemUsername(syncPlan.getUsername());
+			ws.setRemoteSystemPassword(syncPlan.getPassword());
+			//xtentisobjects
+			Map<String, List<Line>> xtentisobjects =syncPlan.getXtentisObjectsList();
+			WSSynchronizationPlanXtentisObjectsSynchronizations[] xtentisObjSyncs=new WSSynchronizationPlanXtentisObjectsSynchronizations[xtentisobjects.size()];
+			int j=0;
+			for(Map.Entry<String, List<Line>> entry: xtentisobjects.entrySet()){
+				WSSynchronizationPlanXtentisObjectsSynchronizations obj=new WSSynchronizationPlanXtentisObjectsSynchronizations();
+				obj.setXtentisObjectName(entry.getKey());
+				
+				WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations[] syncs=new WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations[entry.getValue().size()];				
+				int i=0; 
+				for(Line line: entry.getValue()){
+					syncs[i]=new WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations();
+					syncs[i].setInstancePattern(line.keyValues.get(0).value);
+					syncs[i].setSourceRevisionID(line.keyValues.get(1).value);
+					syncs[i].setTargetRevisionID(line.keyValues.get(2).value);
+					syncs[i].setAlgorithm(line.keyValues.get(3).value);
+					i++;
+				}
+				obj.setSynchronizations(syncs);
+				xtentisObjSyncs[j]=obj;
+				j++;
+			}
+			ws.setXtentisObjectsSynchronizations(xtentisObjSyncs);
+			//items
+			List<Line> items=syncPlan.getItemsList();
+			WSSynchronizationPlanItemsSynchronizations[] itemSyncs=new WSSynchronizationPlanItemsSynchronizations[items.size()];
+			for(int i=0; i<items.size(); i++){
+				Line line=items.get(i);
+				itemSyncs[i]=new WSSynchronizationPlanItemsSynchronizations();
+				itemSyncs[i].setConceptPattern(line.keyValues.get(0).value);
+				itemSyncs[i].setIdsPattern(line.keyValues.get(1).value);
+				itemSyncs[i].setSourceRevisionID(line.keyValues.get(2).value);
+				itemSyncs[i].setTargetRevisionID(line.keyValues.get(3).value);
+				itemSyncs[i].setAlgorithm(line.keyValues.get(4).value);				
+			}
+			ws.setItemsSynchronizations(itemSyncs);
 			
-//			WSUniverse ws = (WSUniverse) (getXObject().getWsObject());    	
-//			ws.setName(universe.getName());
-//			ws.setDescription(universe.getDescription());
-//			List<WSUniverseXtentisObjectsRevisionIDs> xtentisObjectsRevisionIDs=new ArrayList<WSUniverseXtentisObjectsRevisionIDs>();
-//			for(KeyValue line: universe.getSystemObjectsList()){
-//				xtentisObjectsRevisionIDs.add(new WSUniverseXtentisObjectsRevisionIDs(line.key,line.value));
-//			}
-//			ws.setXtentisObjectsRevisionIDs(xtentisObjectsRevisionIDs.toArray(new WSUniverseXtentisObjectsRevisionIDs[xtentisObjectsRevisionIDs.size()] ));
-//			List<WSUniverseItemsRevisionIDs> itemIds=new ArrayList<WSUniverseItemsRevisionIDs>();
-//			for(Line line: universe.getItemsList()){				
-//				itemIds.add(new WSUniverseItemsRevisionIDs(line.keyValues.get(0).value,line.keyValues.get(1).value));
-//			}
-//			ws.setItemsRevisionIDs(itemIds.toArray(new WSUniverseItemsRevisionIDs[itemIds.size()]));
 			this.comitting = false;
 			
 		} catch (Exception e) {
@@ -234,13 +301,22 @@ public class SynchronizationMainPage extends AMainPageV2{
 	/****************************************************************************
 	 *   Comptroler Model
 	 ****************************************************************************/
-	public class SyncronizationPlan {	
+	public class SyncronizationPlan {
+		protected String description=null;
 		protected String url=null;
 	    protected String username=null;
 	    protected String password;
 	    protected Map<String,List<Line>> xtentisObjectsList=new HashMap<String,List<Line>>();
 	    protected List<Line> itemsList=new ArrayList<Line>();
 	    
+		public String getDescription() {
+			return description;
+		}
+
+		public void setDescription(String description) {
+			this.description = description;
+		}
+
 		public String getUrl() {
 			return url;
 		}
