@@ -250,7 +250,7 @@ public interface XtentisPort extends java.rmi.Remote {
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSStringArray getObjectsForSynchronizationPlans(com.amalto.workbench.webservices.WSGetObjectsForSynchronizationPlans regex) throws 
          java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSStringArray getAlgorithmsForSynchronizationPlans(com.amalto.workbench.webservices.WSGetObjectsForSynchronizationPlans regex) throws 
+    public com.amalto.workbench.webservices.WSStringArray getAlgorithmsForSynchronizationPlans(com.amalto.workbench.webservices.WSGetAlgorithmsForSynchronizationPlans regex) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode synchronizationPlanAction(com.amalto.workbench.webservices.WSSynchronizationPlanAction wsSynchronizationPlanAction) throws 
          java.rmi.RemoteException;
