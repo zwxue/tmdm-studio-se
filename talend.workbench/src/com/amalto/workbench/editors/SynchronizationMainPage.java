@@ -207,9 +207,11 @@ public class SynchronizationMainPage extends AMainPageV2{
 			Map<String, List<Line>> xtentisMap=new HashMap<String, List<Line>>();
 			for(WSSynchronizationPlanXtentisObjectsSynchronizations xtentisSync:ws.getXtentisObjectsSynchronizations()){				
 				List<Line> lines=new ArrayList<Line>();
-				for(WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations objSync:xtentisSync.getSynchronizations()){
-					Line line=new Line(xtentisObjectColumns,new String[]{objSync.getInstancePattern(),objSync.getSourceRevisionID(),objSync.getTargetRevisionID(),objSync.getAlgorithm()});
-					lines.add(line);
+				if(xtentisSync.getSynchronizations()!=null){
+					for(WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations objSync:xtentisSync.getSynchronizations()){
+						Line line=new Line(xtentisObjectColumns,new String[]{objSync.getInstancePattern(),objSync.getSourceRevisionID(),objSync.getTargetRevisionID(),objSync.getAlgorithm()});
+						lines.add(line);
+					}
 				}
 				xtentisMap.put(xtentisSync.getXtentisObjectName(), lines);
 				//refresh the xtentisobject tableviewer

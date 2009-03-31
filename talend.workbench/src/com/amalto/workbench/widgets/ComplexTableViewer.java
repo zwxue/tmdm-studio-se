@@ -270,6 +270,7 @@ public class ComplexTableViewer {
         			List<Line> items=(List<Line>)viewer.getInput();
         			items.remove(index);
         			viewer.refresh();
+        			markDirty();
         		}
         	};
         });
