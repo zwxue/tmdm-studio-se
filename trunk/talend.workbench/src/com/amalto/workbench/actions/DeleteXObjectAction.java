@@ -20,13 +20,17 @@ import com.amalto.workbench.webservices.WSDeleteMenu;
 import com.amalto.workbench.webservices.WSDeleteRole;
 import com.amalto.workbench.webservices.WSDeleteRoutingRule;
 import com.amalto.workbench.webservices.WSDeleteStoredProcedure;
+import com.amalto.workbench.webservices.WSDeleteSynchronizationPlan;
 import com.amalto.workbench.webservices.WSDeleteTransformer;
+import com.amalto.workbench.webservices.WSDeleteUniverse;
 import com.amalto.workbench.webservices.WSDeleteView;
 import com.amalto.workbench.webservices.WSMenuPK;
 import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
+import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
 import com.amalto.workbench.webservices.WSTransformerPK;
+import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
 
@@ -91,7 +95,13 @@ public class DeleteXObjectAction extends Action{
 		           		break;
 		          	case TreeObject.MENU:
 		           		port.deleteMenu(new WSDeleteMenu((WSMenuPK)xobject.getWsKey()));
-		           		break;  	           		
+		           		break;  	 
+		          	case TreeObject.UNIVERSE:
+		           		port.deleteUniverse(new WSDeleteUniverse((WSUniversePK)xobject.getWsKey()));
+		           		break;  
+		          	case TreeObject.SYNCHRONIZATIONPLAN:
+		           		port.deleteSynchronizationPlan(new WSDeleteSynchronizationPlan((WSSynchronizationPlanPK)xobject.getWsKey()));
+		           		break; 
 		          	default:
 		           		MessageDialog.openError(view.getSite().getShell(), "Error", "Unknown Xtentis Object Type: "+xobject.getType());
 		           		return;

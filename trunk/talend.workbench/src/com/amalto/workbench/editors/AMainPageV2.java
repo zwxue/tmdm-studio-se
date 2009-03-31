@@ -6,12 +6,24 @@
  */
 package com.amalto.workbench.editors;
 
+import java.util.Arrays;
+
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DragSource;
+import org.eclipse.swt.dnd.DragSourceEvent;
+import org.eclipse.swt.dnd.DragSourceListener;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.DropTargetListener;
+import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.List;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.SectionPart;
@@ -25,9 +37,35 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
+import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.webservices.XtentisPort;
+
 
 public abstract class AMainPageV2 extends AFormPage implements ModifyListener{
+
+	protected boolean comitting;
+	protected boolean refreshing;
 	
+	public boolean isComitting() {
+		return comitting;
+	}
+
+
+	public void setComitting(boolean comitting) {
+		this.comitting = comitting;
+	}
+
+
+	public boolean isRefreshing() {
+		return refreshing;
+	}
+
+
+	public void setRefreshing(boolean refreshing) {
+		this.refreshing = refreshing;
+	}
+
 	private TopFormPart topFormPart = null;
 	
     public AMainPageV2(FormEditor editor,String id, String title) {
@@ -206,5 +244,72 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener{
             return topComposite;
 		}
 	}
+	/****************************************************************************
+	 *   DND
+	 ****************************************************************************/
+	
+	protected class DCDragSourceListener implements DragSourceListener {
+		private int selected;
 
+		public void dragFinished(DragSourceEvent event) {
+			Control control = ((DragSource)event.widget).getControl();
+			if ((control instanceof List) && ((event.detail & DND.DROP_MOVE) == DND.DROP_MOVE)) {
+				((List)control).remove(selected);
+				markDirty();
+			}
+		}
+
+		public void dragSetData(DragSourceEvent event) {
+			Control control = ((DragSource)event.widget).getControl();
+			if ((control instanceof List))
+				if (TextTransfer.getInstance().isSupportedType(event.dataType)) {
+					this.selected = ((List)control).getSelectionIndex();
+					event.data =  ((List)control).getSelection()[0];
+				}
+		}
+
+		public void dragStart(DragSourceEvent event) {
+			Control control = ((DragSource)event.widget).getControl();
+			if ((control instanceof List))
+				event.doit = (((List)control).getItemCount()>0);
+		}
+	}
+	
+	protected class DCDropTargetListener implements DropTargetListener {
+
+		public void dragEnter(DropTargetEvent event) {
+			//priority to copy
+			if ((event.operations & DND.DROP_COPY) == DND.DROP_COPY)
+				event.detail = DND.DROP_COPY;
+			else if ((event.operations & DND.DROP_MOVE) == DND.DROP_MOVE)
+				event.detail = DND.DROP_MOVE;
+			else	
+				event.detail = DND.DROP_NONE;
+		}
+		public void dragLeave(DropTargetEvent event) {}
+		public void dragOperationChanged(DropTargetEvent event) {}
+		public void dragOver(DropTargetEvent event) {}
+		public void drop(DropTargetEvent event) {
+			Control control = ((DropTarget)event.widget).getControl();
+			if ((control instanceof List) && ((event.operations & DND.DROP_COPY) == DND.DROP_COPY))
+				if (TextTransfer.getInstance().isSupportedType(event.currentDataType)) 
+					if (!Arrays.asList(((List)control).getItems()).contains(event.data)) {
+							((List)control).add((String)event.data);
+							markDirty();
+					}
+		}
+		public void dropAccept(DropTargetEvent event) {}
+		
+	}
+
+	protected XtentisPort getPort(){
+		XtentisPort port;
+		try {
+			port = Util.getPort(getXObject());
+			return port;
+		} catch (XtentisException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

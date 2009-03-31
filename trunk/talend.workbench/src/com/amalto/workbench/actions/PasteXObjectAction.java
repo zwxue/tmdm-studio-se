@@ -27,7 +27,9 @@ import com.amalto.workbench.webservices.WSExistsMenu;
 import com.amalto.workbench.webservices.WSExistsRole;
 import com.amalto.workbench.webservices.WSExistsRoutingRule;
 import com.amalto.workbench.webservices.WSExistsStoredProcedure;
+import com.amalto.workbench.webservices.WSExistsSynchronizationPlan;
 import com.amalto.workbench.webservices.WSExistsTransformer;
+import com.amalto.workbench.webservices.WSExistsUniverse;
 import com.amalto.workbench.webservices.WSExistsView;
 import com.amalto.workbench.webservices.WSGetDataCluster;
 import com.amalto.workbench.webservices.WSGetDataModel;
@@ -35,7 +37,9 @@ import com.amalto.workbench.webservices.WSGetMenu;
 import com.amalto.workbench.webservices.WSGetRole;
 import com.amalto.workbench.webservices.WSGetRoutingRule;
 import com.amalto.workbench.webservices.WSGetStoredProcedure;
+import com.amalto.workbench.webservices.WSGetSynchronizationPlan;
 import com.amalto.workbench.webservices.WSGetTransformer;
+import com.amalto.workbench.webservices.WSGetUniverse;
 import com.amalto.workbench.webservices.WSGetView;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuPK;
@@ -45,7 +49,9 @@ import com.amalto.workbench.webservices.WSPutMenu;
 import com.amalto.workbench.webservices.WSPutRole;
 import com.amalto.workbench.webservices.WSPutRoutingRule;
 import com.amalto.workbench.webservices.WSPutStoredProcedure;
+import com.amalto.workbench.webservices.WSPutSynchronizationPlan;
 import com.amalto.workbench.webservices.WSPutTransformer;
+import com.amalto.workbench.webservices.WSPutUniverse;
 import com.amalto.workbench.webservices.WSPutView;
 import com.amalto.workbench.webservices.WSRole;
 import com.amalto.workbench.webservices.WSRolePK;
@@ -53,8 +59,12 @@ import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSStoredProcedure;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
+import com.amalto.workbench.webservices.WSSynchronizationPlan;
+import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
 import com.amalto.workbench.webservices.WSTransformer;
 import com.amalto.workbench.webservices.WSTransformerPK;
+import com.amalto.workbench.webservices.WSUniverse;
+import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSView;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -393,7 +403,89 @@ public class PasteXObjectAction extends Action{
 		           		//write the new model
 		           		destPort.putMenu(new WSPutMenu(newMenu));
 		           		} break;
-		           	       			           				           				           		
+
+		           	case TreeObject.UNIVERSE: {
+		           		WSUniversePK key = (WSUniversePK)xobject.getWsKey();
+		           		WSUniversePK newKey = new WSUniversePK(key.getPk());
+		           		if (destPort.existsUniverse(new WSExistsUniverse((WSUniversePK)xobject.getWsKey())).is_true()) {
+			           		InputDialog id = new InputDialog(
+			           				view.getSite().getShell(),
+			           				"Pasting instance "+key.getPk(),
+			           				"A Universe with the name \""+key.getPk()+"\" already exists.\nEnter a new name if you do not want to overwriite the existing object",
+			           				"Copy of "+(selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "": xobject.getEndpointAddress().split(":")[0]+" ")+key.getPk(),
+			           				new IInputValidator() {
+			           					public String isValid(String newText) {
+			           						if ((newText==null) || "".equals(newText)) return "The name cannot be empty";
+			           						return null;
+			           					};
+			           				}
+			           		);
+			           		id.setBlockOnOpen(true);
+			           		if (id.open() == Window.CANCEL) return;
+			           		newKey = new WSUniversePK(id.getValue()); 
+		           		}
+		           		//fetch the copied model
+	       				XtentisPort originalPort = Util.getPort(
+	       						new URL(xobject.getEndpointAddress()),
+	       						xobject.getUsername(),
+	       						xobject.getPassword()
+	       				);
+		           		WSUniverse originalUniverse = originalPort.getUniverse(new WSGetUniverse(key));
+		           		WSUniverse newUniverse = new WSUniverse(
+		           				originalUniverse.getName(),
+		           				originalUniverse.getDescription(),
+		           				originalUniverse.getXtentisObjectsRevisionIDs(),
+		           				originalUniverse.getDefaultItemsRevisionID(),
+		           				originalUniverse.getItemsRevisionIDs()
+		           		);
+		           		//write the new model
+		           		destPort.putUniverse(new WSPutUniverse(newUniverse));
+		           		} break;
+
+		           	case TreeObject.SYNCHRONIZATIONPLAN: {
+		           		WSSynchronizationPlanPK key = (WSSynchronizationPlanPK)xobject.getWsKey();
+		           		WSSynchronizationPlanPK newKey = new WSSynchronizationPlanPK(key.getPk());
+		           		if (destPort.existsSynchronizationPlan(new WSExistsSynchronizationPlan((WSSynchronizationPlanPK)xobject.getWsKey())).is_true()) {
+			           		InputDialog id = new InputDialog(
+			           				view.getSite().getShell(),
+			           				"Pasting instance "+key.getPk(),
+			           				"A SynchronizationPlan with the name \""+key.getPk()+"\" already exists.\nEnter a new name if you do not want to overwriite the existing object",
+			           				"Copy of "+(selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "": xobject.getEndpointAddress().split(":")[0]+" ")+key.getPk(),
+			           				new IInputValidator() {
+			           					public String isValid(String newText) {
+			           						if ((newText==null) || "".equals(newText)) return "The name cannot be empty";
+			           						return null;
+			           					};
+			           				}
+			           		);
+			           		id.setBlockOnOpen(true);
+			           		if (id.open() == Window.CANCEL) return;
+			           		newKey = new WSSynchronizationPlanPK(id.getValue()); 
+		           		}
+		           		//fetch the copied model
+	       				XtentisPort originalPort = Util.getPort(
+	       						new URL(xobject.getEndpointAddress()),
+	       						xobject.getUsername(),
+	       						xobject.getPassword()
+	       				);
+		           		WSSynchronizationPlan originalSynchronizationPlan = originalPort.getSynchronizationPlan(new WSGetSynchronizationPlan(key));
+		           		WSSynchronizationPlan newSynchronizationPlan = new WSSynchronizationPlan(
+		           				originalSynchronizationPlan.getName(),
+		           				originalSynchronizationPlan.getDescription(),
+		           				originalSynchronizationPlan.getRemoteSystemURL(),
+		           				originalSynchronizationPlan.getRemoteSystemUsername(),
+		           				originalSynchronizationPlan.getRemoteSystemPassword(),
+		           				originalSynchronizationPlan.getXtentisObjectsSynchronizations(),
+		           				originalSynchronizationPlan.getItemsSynchronizations(),
+		           				originalSynchronizationPlan.getLastRunStarted(),
+		           				originalSynchronizationPlan.getLastRunStopped(),
+		           				originalSynchronizationPlan.getWsCurrentStatusCode(),
+		           				originalSynchronizationPlan.getCurrentStatusMessage()
+		           		);
+		           		//write the new model
+		           		destPort.putSynchronizationPlan(new WSPutSynchronizationPlan(newSynchronizationPlan));
+		           		} break;
+
 		           	default:
 		           		
 	            }//switch

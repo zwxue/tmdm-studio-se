@@ -1,6 +1,9 @@
 package com.amalto.workbench.actions;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -27,8 +30,12 @@ import com.amalto.workbench.webservices.WSExistsMenu;
 import com.amalto.workbench.webservices.WSExistsRole;
 import com.amalto.workbench.webservices.WSExistsRoutingRule;
 import com.amalto.workbench.webservices.WSExistsStoredProcedure;
+import com.amalto.workbench.webservices.WSExistsSynchronizationPlan;
 import com.amalto.workbench.webservices.WSExistsTransformer;
+import com.amalto.workbench.webservices.WSExistsUniverse;
 import com.amalto.workbench.webservices.WSExistsView;
+import com.amalto.workbench.webservices.WSGetObjectsForSynchronizationPlans;
+import com.amalto.workbench.webservices.WSGetObjectsForUniverses;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuEntry;
 import com.amalto.workbench.webservices.WSMenuMenuEntriesDescriptions;
@@ -41,8 +48,17 @@ import com.amalto.workbench.webservices.WSRoutingRuleExpression;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSStoredProcedure;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
+import com.amalto.workbench.webservices.WSSynchronizationPlan;
+import com.amalto.workbench.webservices.WSSynchronizationPlanItemsSynchronizations;
+import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
+import com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode;
+import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizations;
 import com.amalto.workbench.webservices.WSTransformer;
 import com.amalto.workbench.webservices.WSTransformerPK;
+import com.amalto.workbench.webservices.WSUniverse;
+import com.amalto.workbench.webservices.WSUniverseItemsRevisionIDs;
+import com.amalto.workbench.webservices.WSUniversePK;
+import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
 import com.amalto.workbench.webservices.WSView;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.WSWhereCondition;
@@ -85,6 +101,8 @@ public class NewXObjectAction extends Action{
 	           	case TreeObject.ROUTING_RULE:
 	           	case TreeObject.TRANSFORMER:
 	           	case TreeObject.MENU:
+	           	case TreeObject.UNIVERSE:
+	           	case TreeObject.SYNCHRONIZATIONPLAN:
 	           		InputDialog id = new InputDialog(
 	           				view.getSite().getShell(),
 	           				"New Xtentis Object Instance",
@@ -340,6 +358,68 @@ public class NewXObjectAction extends Action{
                                     TreeObject.MENU,
                                     new WSMenuPK((String)key),
                                     menu
+                    );                  
+                    break;  }      
+                case TreeObject.UNIVERSE: {
+                    //check if already exists
+                    if(port.existsUniverse(new WSExistsUniverse(new WSUniversePK((String)key))).is_true()){
+                        MessageDialog.openError(this.view.getSite().getShell(),"Error Creating Instance","Universe "+(String)key+" already exists");
+                        return;
+                    }
+                    //add
+                    List<WSUniverseXtentisObjectsRevisionIDs> objectsId=new ArrayList<WSUniverseXtentisObjectsRevisionIDs>();
+    				for(String object: port.getObjectsForUniverses(new WSGetObjectsForUniverses(new String[]{".*"})).getStrings()){//IConstants.XTENTISOBJECTS){
+    					objectsId.add(new WSUniverseXtentisObjectsRevisionIDs(object,""));
+    				}
+                    WSUniverse universe = new WSUniverse(
+                    		(String)key,
+                    		"",
+                    		objectsId.toArray(new WSUniverseXtentisObjectsRevisionIDs[objectsId.size()]),
+                    		"",
+                    		new WSUniverseItemsRevisionIDs[]{
+                    		}
+                    );
+                    newInstance = new TreeObject(
+                                    (String)key,
+                                    xfolder.getServerRoot(),
+                                    TreeObject.UNIVERSE,
+                                    new WSUniversePK((String)key),
+                                    universe
+                    );                  
+                    break;  }      
+                case TreeObject.SYNCHRONIZATIONPLAN: {
+                    //check if already exists
+                    if(port.existsSynchronizationPlan(new WSExistsSynchronizationPlan(new WSSynchronizationPlanPK((String)key))).is_true()){
+                        MessageDialog.openError(this.view.getSite().getShell(),"Error Creating Instance","SynchronizationPlan "+(String)key+" already exists");
+                        return;
+                    }
+                    //add
+                    List<WSSynchronizationPlanXtentisObjectsSynchronizations> objectsId=new ArrayList<WSSynchronizationPlanXtentisObjectsSynchronizations>();
+    				for(String object: port.getObjectsForSynchronizationPlans(new WSGetObjectsForSynchronizationPlans(new String[]{".*"})).getStrings()){//IConstants.XTENTISOBJECTS){
+    					objectsId.add(new WSSynchronizationPlanXtentisObjectsSynchronizations(object,null));
+    				}
+    				Calendar calendar=Calendar.getInstance();
+    				calendar.setTimeInMillis(0);
+                    WSSynchronizationPlan synchronizationPlan = new WSSynchronizationPlan(
+                    		(String)key,
+                    		"",
+                    		"",
+                    		"",
+                    		"",
+                    		objectsId.toArray(new WSSynchronizationPlanXtentisObjectsSynchronizations[objectsId.size()]),
+                    		new WSSynchronizationPlanItemsSynchronizations[]{
+                    		},
+                    		calendar,
+                    		calendar,
+                    		WSSynchronizationPlanStatusCode.COMPLETED,
+                    		""
+                    );
+                    newInstance = new TreeObject(
+                                    (String)key,
+                                    xfolder.getServerRoot(),
+                                    TreeObject.SYNCHRONIZATIONPLAN,
+                                    new WSSynchronizationPlanPK((String)key),
+                                    synchronizationPlan
                     );                  
                     break;  }      
                 
