@@ -22,6 +22,7 @@ public class WSSynchronizationPlanItemsSynchronizations_LiteralSerializer extend
     private static final QName ns1_conceptPattern_QNAME = new QName("", "conceptPattern");
     private static final QName ns3_string_TYPE_QNAME = SchemaConstants.QNAME_TYPE_STRING;
     private CombinedSerializer ns3_myns3_string__java_lang_String_String_Serializer;
+    private static final QName ns1_idsPattern_QNAME = new QName("", "idsPattern");
     private static final QName ns1_sourceRevisionID_QNAME = new QName("", "sourceRevisionID");
     private static final QName ns1_targetRevisionID_QNAME = new QName("", "targetRevisionID");
     private static final QName ns1_algorithm_QNAME = new QName("", "algorithm");
@@ -58,6 +59,22 @@ public class WSSynchronizationPlanItemsSynchronizations_LiteralSerializer extend
                 reader.nextElementContent();
             } else {
                 throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_conceptPattern_QNAME, reader.getName() });
+            }
+        }
+        else {
+            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
+        }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_idsPattern_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_idsPattern_QNAME, reader, context);
+                if (member == null) {
+                    throw new DeserializationException("literal.unexpectedNull");
+                }
+                instance.setIdsPattern((java.lang.String)member);
+                reader.nextElementContent();
+            } else {
+                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_idsPattern_QNAME, reader.getName() });
             }
         }
         else {
@@ -118,6 +135,10 @@ public class WSSynchronizationPlanItemsSynchronizations_LiteralSerializer extend
             throw new SerializationException("literal.unexpectedNull");
         }
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getConceptPattern(), ns1_conceptPattern_QNAME, null, writer, context);
+        if (instance.getIdsPattern() == null) {
+            throw new SerializationException("literal.unexpectedNull");
+        }
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getIdsPattern(), ns1_idsPattern_QNAME, null, writer, context);
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getSourceRevisionID(), ns1_sourceRevisionID_QNAME, null, writer, context);
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getTargetRevisionID(), ns1_targetRevisionID_QNAME, null, writer, context);
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getAlgorithm(), ns1_algorithm_QNAME, null, writer, context);
