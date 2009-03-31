@@ -8,6 +8,7 @@ package com.amalto.workbench.webservices;
 
 public class WSSynchronizationPlanItemsSynchronizations {
     protected java.lang.String conceptPattern;
+    protected java.lang.String idsPattern;
     protected java.lang.String sourceRevisionID;
     protected java.lang.String targetRevisionID;
     protected java.lang.String algorithm;
@@ -15,8 +16,9 @@ public class WSSynchronizationPlanItemsSynchronizations {
     public WSSynchronizationPlanItemsSynchronizations() {
     }
     
-    public WSSynchronizationPlanItemsSynchronizations(java.lang.String conceptPattern, java.lang.String sourceRevisionID, java.lang.String targetRevisionID, java.lang.String algorithm) {
+    public WSSynchronizationPlanItemsSynchronizations(java.lang.String conceptPattern, java.lang.String idsPattern, java.lang.String sourceRevisionID, java.lang.String targetRevisionID, java.lang.String algorithm) {
         this.conceptPattern = conceptPattern;
+        this.idsPattern = idsPattern;
         this.sourceRevisionID = sourceRevisionID;
         this.targetRevisionID = targetRevisionID;
         this.algorithm = algorithm;
@@ -28,6 +30,14 @@ public class WSSynchronizationPlanItemsSynchronizations {
     
     public void setConceptPattern(java.lang.String conceptPattern) {
         this.conceptPattern = conceptPattern;
+    }
+    
+    public java.lang.String getIdsPattern() {
+        return idsPattern;
+    }
+    
+    public void setIdsPattern(java.lang.String idsPattern) {
+        this.idsPattern = idsPattern;
     }
     
     public java.lang.String getSourceRevisionID() {
