@@ -10,12 +10,12 @@ import com.sun.xml.rpc.encoding.simpletype.*;
 import javax.xml.namespace.QName;
 import com.sun.xml.rpc.streaming.*;
 
-public class WSSynchronizationStatusCode_Encoder extends SimpleTypeEncoderBase {
+public class WSSynchronizationPlanStatusCode_Encoder extends SimpleTypeEncoderBase {
     
     private static final SimpleTypeEncoder encoder = XSDStringEncoder.getInstance();
-    private static final WSSynchronizationStatusCode_Encoder instance = new WSSynchronizationStatusCode_Encoder();
+    private static final WSSynchronizationPlanStatusCode_Encoder instance = new WSSynchronizationPlanStatusCode_Encoder();
     
-    private WSSynchronizationStatusCode_Encoder() {
+    private WSSynchronizationPlanStatusCode_Encoder() {
     }
     
     public static SimpleTypeEncoder getInstance() {
@@ -23,12 +23,12 @@ public class WSSynchronizationStatusCode_Encoder extends SimpleTypeEncoderBase {
     }
     
     public String objectToString(Object obj, XMLWriter writer) throws Exception {
-        java.lang.String value = ((WSSynchronizationStatusCode)obj).getValue();
+        java.lang.String value = ((WSSynchronizationPlanStatusCode)obj).getValue();
         return encoder.objectToString(value, writer);
     }
     
     public Object stringToObject(String str, XMLReader reader) throws Exception {
-        return WSSynchronizationStatusCode.fromValue((java.lang.String)encoder.stringToObject(str, reader));
+        return WSSynchronizationPlanStatusCode.fromValue((java.lang.String)encoder.stringToObject(str, reader));
     }
     
 }

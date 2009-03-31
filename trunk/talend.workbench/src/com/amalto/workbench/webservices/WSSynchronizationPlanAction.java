@@ -8,12 +8,12 @@ package com.amalto.workbench.webservices;
 
 public class WSSynchronizationPlanAction {
     protected com.amalto.workbench.webservices.WSSynchronizationPlanPK wsSynchronizationPlanPK;
-    protected com.amalto.workbench.webservices.WSSynchronizationActionCode wsAction;
+    protected com.amalto.workbench.webservices.WSSynchronizationPlanActionCode wsAction;
     
     public WSSynchronizationPlanAction() {
     }
     
-    public WSSynchronizationPlanAction(com.amalto.workbench.webservices.WSSynchronizationPlanPK wsSynchronizationPlanPK, com.amalto.workbench.webservices.WSSynchronizationActionCode wsAction) {
+    public WSSynchronizationPlanAction(com.amalto.workbench.webservices.WSSynchronizationPlanPK wsSynchronizationPlanPK, com.amalto.workbench.webservices.WSSynchronizationPlanActionCode wsAction) {
         this.wsSynchronizationPlanPK = wsSynchronizationPlanPK;
         this.wsAction = wsAction;
     }
@@ -26,11 +26,11 @@ public class WSSynchronizationPlanAction {
         this.wsSynchronizationPlanPK = wsSynchronizationPlanPK;
     }
     
-    public com.amalto.workbench.webservices.WSSynchronizationActionCode getWsAction() {
+    public com.amalto.workbench.webservices.WSSynchronizationPlanActionCode getWsAction() {
         return wsAction;
     }
     
-    public void setWsAction(com.amalto.workbench.webservices.WSSynchronizationActionCode wsAction) {
+    public void setWsAction(com.amalto.workbench.webservices.WSSynchronizationPlanActionCode wsAction) {
         this.wsAction = wsAction;
     }
 }

@@ -16,13 +16,13 @@ public class WSSynchronizationPlan {
     protected com.amalto.workbench.webservices.WSSynchronizationPlanItemsSynchronizations[] itemsSynchronizations;
     protected java.util.Calendar lastRunStarted;
     protected java.util.Calendar lastRunStopped;
-    protected com.amalto.workbench.webservices.WSSynchronizationStatusCode wsCurrentStatusCode;
+    protected com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode wsCurrentStatusCode;
     protected java.lang.String currentStatusMessage;
     
     public WSSynchronizationPlan() {
     }
     
-    public WSSynchronizationPlan(java.lang.String name, java.lang.String description, java.lang.String remoteSystemURL, java.lang.String remoteSystemUsername, java.lang.String remoteSystemPassword, com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizations[] xtentisObjectsSynchronizations, com.amalto.workbench.webservices.WSSynchronizationPlanItemsSynchronizations[] itemsSynchronizations, java.util.Calendar lastRunStarted, java.util.Calendar lastRunStopped, com.amalto.workbench.webservices.WSSynchronizationStatusCode wsCurrentStatusCode, java.lang.String currentStatusMessage) {
+    public WSSynchronizationPlan(java.lang.String name, java.lang.String description, java.lang.String remoteSystemURL, java.lang.String remoteSystemUsername, java.lang.String remoteSystemPassword, com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizations[] xtentisObjectsSynchronizations, com.amalto.workbench.webservices.WSSynchronizationPlanItemsSynchronizations[] itemsSynchronizations, java.util.Calendar lastRunStarted, java.util.Calendar lastRunStopped, com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode wsCurrentStatusCode, java.lang.String currentStatusMessage) {
         this.name = name;
         this.description = description;
         this.remoteSystemURL = remoteSystemURL;
@@ -108,11 +108,11 @@ public class WSSynchronizationPlan {
         this.lastRunStopped = lastRunStopped;
     }
     
-    public com.amalto.workbench.webservices.WSSynchronizationStatusCode getWsCurrentStatusCode() {
+    public com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode getWsCurrentStatusCode() {
         return wsCurrentStatusCode;
     }
     
-    public void setWsCurrentStatusCode(com.amalto.workbench.webservices.WSSynchronizationStatusCode wsCurrentStatusCode) {
+    public void setWsCurrentStatusCode(com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode wsCurrentStatusCode) {
         this.wsCurrentStatusCode = wsCurrentStatusCode;
     }
     
