@@ -29,6 +29,7 @@ public class TreeObject implements IAdaptable {
 	public final static int MENU = 17;
 	public final static int UNIVERSE=18;
 	public final static int SYNCHRONIZATIONPLAN=19;
+	public final static int TRANSFORMER_PLUGIN=20;
 	
 	public final static int _ACTION_ = 100;
 	public final static int _WIZARD_ = 101;

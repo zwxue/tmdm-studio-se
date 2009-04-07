@@ -8,17 +8,21 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
+import com.amalto.workbench.utils.EXtentisObjects;
+import com.amalto.workbench.utils.UnserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSComponent;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSGetComponentVersion;
+import com.amalto.workbench.webservices.WSGetCurrentUniverse;
 import com.amalto.workbench.webservices.WSGetMenuPKs;
 import com.amalto.workbench.webservices.WSGetRolePKs;
 import com.amalto.workbench.webservices.WSGetRoutingRulePKs;
 import com.amalto.workbench.webservices.WSGetSynchronizationPlanPKs;
 import com.amalto.workbench.webservices.WSGetTransformerPKs;
+import com.amalto.workbench.webservices.WSGetUniverse;
 import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSGetViewPKs;
 import com.amalto.workbench.webservices.WSMenuPK;
@@ -30,7 +34,9 @@ import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
 import com.amalto.workbench.webservices.WSTransformerPK;
+import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniversePK;
+import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
 import com.amalto.workbench.webservices.WSVersion;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -41,12 +47,14 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 	private String endpointaddress;
 	private String username;
 	private String password;
+	private String universe;
     private TreeParent serverRoot;
 	
-	public XtentisServerObjectsRetriever(String endpointaddress, String username, String password) {
+	public XtentisServerObjectsRetriever(String endpointaddress, String username, String password, String universe) {
 		this.endpointaddress = endpointaddress;
 		this.username = username;
 		this.password = password;
+		this.universe=universe;
 	}
 
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
@@ -62,9 +70,10 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			//fetch version info
 			try {
 				WSVersion version = port.getComponentVersion(new WSGetComponentVersion(WSComponent.DataManager,null));
-				displayName += "   (v"+version.getMajor()+"."+version.getMinor()+"."+version.getRevision()+"_"+version.getBuild()+")";	
+				
+				displayName += " (v"+version.getMajor()+"."+version.getMinor()+"."+version.getRevision()+"_"+version.getBuild()+")";	
 			} catch (Exception e) {
-				/* old server */
+				e.printStackTrace();
 			}
 			
 			
@@ -388,14 +397,63 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			if (hasRoutingRules) serverRoot.addChild(rules);
 			if (hasMenus) serverRoot.addChild(menus);
 			
-			monitor.done();
-			
+			//reset the display name
+			//fetch universe info
+			WSUniverse wUuniverse=null;
+			if (universePKs!=null) {
+				for (int i = 0; i < universePKs.length; i++) {					
+					if(universePKs[i].getPk().equals(universe)){
+						wUuniverse = port.getUniverse(new WSGetUniverse(universePKs[i]));
+						break;
+					}
+				}
+			}	
+			if(wUuniverse==null)
+				wUuniverse=port.getCurrentUniverse(new WSGetCurrentUniverse("*"));
+			resetNodeDisplayName(wUuniverse);
+			UnserInfo.getInstance().setUsername(username);
+			UnserInfo.getInstance().setPassword(password);
+			UnserInfo.getInstance().setServerUrl(endpointaddress);
+			UnserInfo.getInstance().setUniverse(wUuniverse.getName());
+			monitor.done();			
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new InvocationTargetException(new XtentisException("Could not login: "+e.getLocalizedMessage()));
 		}		
 	}//run
-
+	
+	/**
+	 * add revisionID to each treeobject
+	 * @param universe
+	 */
+	private void resetNodeDisplayName(WSUniverse universe){
+		if(universe.getXtentisObjectsRevisionIDs().length==0){
+			for(TreeObject node: serverRoot.getChildren()){
+				node.setDisplayName(node.getDisplayName() + " "+universe.getName());
+			}
+		}else{
+			WSUniverseXtentisObjectsRevisionIDs[] ids=universe.getXtentisObjectsRevisionIDs();
+			for(TreeObject node: serverRoot.getChildren()){
+				String name=EXtentisObjects.getXtentisObjexts().get(String.valueOf(node.getType()));
+				boolean isSet=false;
+				for(WSUniverseXtentisObjectsRevisionIDs id: ids){					
+					if(id.getXtentisObjectName().equals(name)){
+						if(id.getRevisionID()!=null && id.getRevisionID().length()>0){
+							node.setDisplayName(node.getDisplayName() + " ["+id.getRevisionID() +"]");
+						}else{
+							node.setDisplayName(node.getDisplayName() + " [HEAD]");
+						}
+						isSet=true;
+						break;
+					}
+				}
+				if(!isSet){
+					node.setDisplayName(node.getDisplayName() + " [HEAD]");
+				}
+			}
+		}
+		serverRoot.setDisplayName(serverRoot.getDisplayName()+" "+universe.getName());		
+	}
     public TreeParent getServerRoot() {
         return serverRoot;
     }

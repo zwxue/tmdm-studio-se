@@ -407,6 +407,7 @@ public class NewXObjectAction extends Action{
                     		"",
                     		"",
                     		"",
+                    		"",
                     		objectsId.toArray(new WSSynchronizationPlanXtentisObjectsSynchronizations[objectsId.size()]),
                     		new WSSynchronizationPlanItemsSynchronizations[]{
                     		},

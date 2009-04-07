@@ -472,6 +472,7 @@ public class PasteXObjectAction extends Action{
 		           		WSSynchronizationPlan newSynchronizationPlan = new WSSynchronizationPlan(
 		           				originalSynchronizationPlan.getName(),
 		           				originalSynchronizationPlan.getDescription(),
+		           				originalSynchronizationPlan.getRemoteSystemName(),
 		           				originalSynchronizationPlan.getRemoteSystemURL(),
 		           				originalSynchronizationPlan.getRemoteSystemUsername(),
 		           				originalSynchronizationPlan.getRemoteSystemPassword(),
