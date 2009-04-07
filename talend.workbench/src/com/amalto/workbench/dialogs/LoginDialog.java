@@ -29,6 +29,7 @@ public class LoginDialog extends Dialog {
 	
 	private Properties properties = new Properties();
 	private Collection<String> endpoints;
+	private Collection<String> universes;
 
 	private Combo endpointsCombo=null;
 	private Text usernameText=null;
@@ -36,6 +37,8 @@ public class LoginDialog extends Dialog {
 	
 	private SelectionListener caller = null;
 	private String title = "";
+
+	private Combo universeCombo;
 	
 	/**
 	 * @param parentShell
@@ -63,6 +66,13 @@ public class LoginDialog extends Dialog {
 			properties.load(new FileInputStream(f));
 			if (properties.getProperty("endpoints")!=null)	 
 				endpoints=Arrays.asList(properties.getProperty("endpoints").split(","));
+		} catch (Exception e) {}
+
+		universes = Arrays.asList(new String[]{""});
+		try {
+			properties.load(new FileInputStream(f));
+			if (properties.getProperty("universes")!=null)	 
+				universes=Arrays.asList(properties.getProperty("universes").split(","));
 		} catch (Exception e) {}
 		
 		//Should not really be here but well,....
@@ -115,7 +125,23 @@ public class LoginDialog extends Dialog {
 			new GridData(SWT.FILL,SWT.CENTER,true,false,1,1)
 		);
 		
-		usernameText.setFocus();
+		//universe
+		Label universeLabel = new Label(composite, SWT.NONE);
+		universeLabel.setLayoutData(
+			new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
+		);
+		universeLabel.setText("Universe");
+
+		universeCombo = new Combo(composite, SWT.NONE);
+		universeCombo.setLayoutData(
+			new GridData(SWT.FILL,SWT.CENTER,true,false,1,1)
+		);
+		((GridData)universeCombo.getLayoutData()).widthHint = 300;
+		for (Iterator<String> iter = universes.iterator(); iter.hasNext(); ) {
+			String host = iter.next();
+			universeCombo.add(host);	
+		}
+		universeCombo.select(0);
 		
 	    return composite;
 	}
@@ -144,6 +170,17 @@ public class LoginDialog extends Dialog {
 				if (++i == 10) break;
 			}
 			properties.setProperty("endpoints", endpointsString);
+			//save universe
+			String currentUniverse = universeCombo.getText();
+			String universeString = currentUniverse;
+			i =0;
+			for (Iterator<String> iter = universes.iterator(); iter.hasNext(); ) {
+				String universe = iter.next();
+				if (! universe.equals(currentUniverse)) universeString+=","+universe;
+				if (++i == 5) break;
+			}
+			properties.setProperty("universes", universeString);
+			
 			properties.store(new FileOutputStream(f), null);
 		} catch (Exception e) {}
 		
@@ -151,6 +188,9 @@ public class LoginDialog extends Dialog {
 		//no close let Action Handler handle it
 	}
 	
+	public void saveUserTypes(){
+		
+	}
 	
 
 	public String getPasswordText() {
@@ -165,6 +205,11 @@ public class LoginDialog extends Dialog {
 	public String getServer() {
 		return endpointsCombo.getText();
 	}
+
+	public String getUniverse() {
+		return universeCombo.getText();
+	}
+
 	
 
 }

@@ -64,7 +64,7 @@ public class ComplexTableViewer {
 	}
 	
 	//isLastCombo =true need to set comboStrings
-	protected boolean isLastCombo;
+	protected boolean isLastCombo; //check last column is combo or not
 	protected String[] comboStrings;
 	protected CCombo lastCombo;
 	
