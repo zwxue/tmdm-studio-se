@@ -16,7 +16,6 @@ import com.amalto.workbench.webservices.WSComponent;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSGetComponentVersion;
-import com.amalto.workbench.webservices.WSGetCurrentUniverse;
 import com.amalto.workbench.webservices.WSGetMenuPKs;
 import com.amalto.workbench.webservices.WSGetRolePKs;
 import com.amalto.workbench.webservices.WSGetRoutingRulePKs;
@@ -409,7 +408,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 				}
 			}	
 			if(wUuniverse==null)
-				wUuniverse=port.getCurrentUniverse(new WSGetCurrentUniverse("*"));
+				wUuniverse=port.getCurrentUniverse("");
 			resetNodeDisplayName(wUuniverse);
 			UnserInfo.getInstance().setUsername(username);
 			UnserInfo.getInstance().setPassword(password);

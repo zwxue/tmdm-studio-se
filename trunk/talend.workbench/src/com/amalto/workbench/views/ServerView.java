@@ -1,5 +1,7 @@
 package com.amalto.workbench.views;
 
+import java.net.URL;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -46,7 +48,7 @@ import com.amalto.workbench.webservices.WSVersioningInfo;
 
 /**
  * The view allowing administration of the Xtentis Server
- * @author bgrieder
+ * @author Bruno Grieder
  *
  */
 public class ServerView extends ViewPart implements IXObjectModelListener{
@@ -186,8 +188,24 @@ public class ServerView extends ViewPart implements IXObjectModelListener{
 		logoutAction = new Action() {
 			public void run() {
                 TreeParent serverRoot = (TreeParent)((IStructuredSelection)ServerView.this.viewer.getSelection()).getFirstElement();
+                
+                final String username = serverRoot.getUsername();
+                final String password = serverRoot.getPassword();
+                final String endpointAddress = serverRoot.getEndpointAddress();
+                
                 serverRoot.getParent().removeChild(serverRoot);
                 ServerView.this.viewer.refresh();
+                
+                //attempt logout on the server side
+                ServerView.this.viewer.getControl().getDisplay().syncExec(new Runnable() {
+                	public void run() {
+                		try {
+                			Util.getPort(new URL(endpointAddress), username, password).logout("");
+                		} catch (Exception e) {
+                			e.printStackTrace();
+                		}
+                	}
+                });
 			}
 		};
 		logoutAction.setText("Logout");
@@ -211,7 +229,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener{
 	            ISelection selection = ServerView.this.getViewer().getSelection();
 	            TreeObject xo = (TreeObject)((IStructuredSelection)selection).getFirstElement();
 				if (xo.getType() == TreeObject._ACTION_) {
-                    Class actionClass = (Class)xo.getWsKey();
+                    Class<?> actionClass = (Class<?>)xo.getWsKey();
                     try {
                         AServerViewAction action = (AServerViewAction)actionClass.newInstance();
                         action.setServerView(ServerView.this);

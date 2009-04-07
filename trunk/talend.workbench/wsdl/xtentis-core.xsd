@@ -156,7 +156,14 @@
 	</xsd:complexType>
 	<xsd:element name="WSVersion" type="tns:WSVersion"/>
 	
+		
+	<xsd:simpleType name="WSPing"/>
+	<xsd:element name="WSPing" type="tns:WSPing"/>
+
+	<xsd:simpleType name="WSLogout"/>
+	<xsd:element name="WSLogout" type="tns:WSLogout"/>
 	
+
 	<!-- *****************************************************
 		             INITIALIZATION
 		*******************************************************-->

@@ -32,12 +32,22 @@
 		              M E S S A G E S
 		*******************************************************-->
 
-	<!-- ****************** PING  *********************** -->
+	<!-- ****************** VARIOUS  *********************** -->
 	
-	<message name="pingRequest"/>
+	<message name="pingRequest">
+			<part name="wsPing" element="tns:WSPing"/>
+	</message>
 	<message name="pingResponse">
 		<part name="dummy" element="tns:WSString"/>
 	</message>
+
+	<message name="logoutRequest">
+		<part name="wsLogout" element="tns:WSLogout"/>
+	</message>
+	<message name="logoutResponse">
+		<part name="dummy" element="tns:WSString"/>
+	</message>
+
 
 	<!-- ****************** COMPONENTS MANAGEMENT  *********************** -->
 	
@@ -912,7 +922,7 @@
 	</message>
 	
 	<message name="getCurrentUniverseRequest">
-		<part name="dummy" element="tns:WSGetCurrentUniverse"/>
+		<part name="wsGetCurrentUniverse" element="tns:WSGetCurrentUniverse"/>
 	</message>
 	<message name="getCurrentUniverseResponse">
 		<part name="wsUniverse" element="tns:WSUniverse"/>
@@ -1014,11 +1024,16 @@
 		</operation>
 		
 
-		<!-- ****************** PING  *********************** -->
+		<!-- ****************** VARIOUS  *********************** -->
 		
 		<operation name="ping">
 			<input message="tns:pingRequest"/>
 			<output message="tns:pingResponse"/>
+		</operation>
+		
+		<operation name="logout">
+			<input message="tns:logoutRequest"/>
+			<output message="tns:logoutResponse"/>
 		</operation>
 		
 		<!-- ****************** INITIALIZATION  *********************** -->
@@ -1626,9 +1641,15 @@
 			<output><soap:body use="literal"/></output>
 		</operation>
 
-		<!-- ****************** PING  *********************** -->
+		<!-- ****************** VARIOUS  *********************** -->
 		
 		<operation name="ping">
+			<soap:operation style="document"/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>
+		
+		<operation name="logout">
 			<soap:operation style="document"/>
 			<input><soap:body use="literal"/></input>
 			<output><soap:body use="literal"/></output>
