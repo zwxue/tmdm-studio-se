@@ -51,7 +51,7 @@ public class UniverseMainPage extends AMainPageV2{
 	protected Text reversionIDText;
 	protected FormToolkit toolkit;
 	
-	private String[] columns=new String[]{"Instance Name pattern","Revision ID"};
+	private String[] columns=new String[]{"Concept Name pattern","Revision ID"};
 	
 	protected Map<String,LabelText> xtentisObjectsLabelTexts=new HashMap<String,LabelText>();
 	
@@ -69,23 +69,7 @@ public class UniverseMainPage extends AMainPageV2{
 	try {
 		if(universe==null)universe=new Universe("");
 		this.toolkit=toolkit;
-//        //name
-//        Label nameLabel = toolkit.createLabel(charComposite, "Name", SWT.NULL);
-//        nameLabel.setLayoutData(
-//                new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
-//        );
-//        nameText = toolkit.createText(charComposite, "",SWT.BORDER|SWT.MULTI);
-//        nameText.setLayoutData(    
-//                new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-//        );
-//        ((GridData)nameText.getLayoutData()).minimumHeight = 30;
-//        nameText.addModifyListener(new ModifyListener() {
-//        	public void modifyText(ModifyEvent e) {
-//        		if (refreshing) return;
-//        		universe.setName(nameText.getText());
-//        		markDirty();
-//        	}
-//        }); 
+
 
         //description
         Label descriptionLabel = toolkit.createLabel(charComposite, "Description", SWT.NULL);
@@ -125,7 +109,7 @@ public class UniverseMainPage extends AMainPageV2{
         }
         
         //Items Section          
-        Composite itemsGroup = this.getNewSectionComposite("Items Reversion ID");
+        Composite itemsGroup = this.getNewSectionComposite("Concept Reversion ID");
         itemsGroup.setLayout(new GridLayout(1,true));
         Composite itemsComposite = toolkit.createComposite(itemsGroup, SWT.BORDER);
         itemsComposite.setLayoutData(

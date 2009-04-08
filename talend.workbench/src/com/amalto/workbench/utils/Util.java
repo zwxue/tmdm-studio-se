@@ -247,6 +247,7 @@ public class Util {
 
 	public static XtentisPort getPort(TreeObject xobject) throws XtentisException{
 		try {
+			if(xobject==null)return null;
 			return getPort(
 					new URL(xobject.getEndpointAddress()),
 					xobject.getUsername(),

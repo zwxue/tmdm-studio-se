@@ -13,7 +13,7 @@ import org.eclipse.core.runtime.jobs.Job;
 
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XtentisServerObjectsRetriever;
-import com.amalto.workbench.utils.UnserInfo;
+import com.amalto.workbench.utils.GlobalUserInfo;
 
 public class ServerRefreshJob extends Job {
 
@@ -32,7 +32,7 @@ public class ServerRefreshJob extends Job {
 
     protected IStatus run(IProgressMonitor monitor) {
         //FIXME: remove hardcoding of user
-        XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(server,username,password,UnserInfo.getInstance().getUniverse());
+        XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(server,username,password,GlobalUserInfo.getInstance().getUniverse());
         try {
             retriever.run(monitor);
             serverRoot = retriever.getServerRoot();

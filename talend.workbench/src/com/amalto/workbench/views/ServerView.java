@@ -40,10 +40,12 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.ServerTreeContentProvider;
 import com.amalto.workbench.providers.ServerTreeLabelProvider;
+import com.amalto.workbench.utils.GlobalUserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.webservices.WSVersioningGetInfo;
 import com.amalto.workbench.webservices.WSVersioningInfo;
+import com.amalto.workbench.webservices.XtentisPort;
 
 
 /**
@@ -129,7 +131,9 @@ public class ServerView extends ViewPart implements IXObjectModelListener{
 		
 		boolean hasVersioning = false;
 		try {
-			WSVersioningInfo info = Util.getPort(xobject).versioningGetInfo(new WSVersioningGetInfo(null)); 
+			XtentisPort port=Util.getPort(xobject);
+			if(port==null)return;
+			WSVersioningInfo info = port.versioningGetInfo(new WSVersioningGetInfo(null)); 
 			hasVersioning = info.isEnabled();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -145,7 +149,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener{
 					manager.add(logoutAction);
 					manager.add(serverRefreshAction);
 					if (! WorkbenchClipboard.getWorkbenchClipboard().isEmpty()) manager.add(pasteAction);
-					if ("admin".equals(xobject.getUsername())) manager.add(serverInitAction);
+					if (GlobalUserInfo.getInstance().isAdmin()) manager.add(serverInitAction);
 					break;
 				case TreeObject._ACTION_:
 					manager.add((Action)xobject.getWsObject());
