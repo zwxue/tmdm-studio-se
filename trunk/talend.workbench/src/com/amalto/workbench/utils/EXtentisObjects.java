@@ -11,10 +11,10 @@ import com.amalto.workbench.models.TreeObject;
  *
  */
 public enum EXtentisObjects {
-	DataCluster("Data Cluster","Data Cluster",TreeObject.DATA_CLUSTER,true),              
+	DataCluster("Data Cluster","Data Cluster",TreeObject.DATA_CLUSTER,false),              
 	DataMODEL("Data Model","Data Model",TreeObject.DATA_MODEL,true),                
 	Role("Role","Role",TreeObject.ROLE,true),                      
-	RoutingRule("Routing Rule","Routing Rule",TreeObject.ROUTING_RULE,true),                                 
+	RoutingRule("Routing Rule","Routing Rule",TreeObject.ROUTING_RULE,false),                                 
 	StoredProcedure("Stored Procedure","Stored Procedure",TreeObject.STORED_PROCEDURE,true),                  
 	Transformer("Transformer V2","Transformer V2",TreeObject.TRANSFORMER,true),               
 	TransformerPlugin("Transformer Plugin V2","Transformer Plugin V2",TreeObject.TRANSFORMER_PLUGIN),                

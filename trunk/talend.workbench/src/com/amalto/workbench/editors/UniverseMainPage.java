@@ -29,6 +29,7 @@ import org.exolab.castor.xml.Marshaller;
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.providers.XObjectEditorInput;
+import com.amalto.workbench.utils.FontUtils;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSGetObjectsForUniverses;
 import com.amalto.workbench.webservices.WSUniverse;
@@ -54,6 +55,7 @@ public class UniverseMainPage extends AMainPageV2{
 	private String[] columns=new String[]{"Concept Name pattern","Revision ID"};
 	
 	protected Map<String,LabelText> xtentisObjectsLabelTexts=new HashMap<String,LabelText>();
+	private LabelText defaultReversionIDText;
 	
 	public UniverseMainPage(FormEditor editor) {
         super(
@@ -94,8 +96,31 @@ public class UniverseMainPage extends AMainPageV2{
         windowTarget.setTransfer(new Transfer[]{TextTransfer.getInstance()});
         windowTarget.addDropListener(new DCDropTargetListener());
         
+        //Items Section          
+        Composite itemsGroup = this.getNewSectionComposite("Concept Revision ID");
+        itemsGroup.setLayout(new GridLayout(2,false));
+		defaultReversionIDText =new LabelText(toolkit,itemsGroup,"Default Revision ID");       
+		defaultReversionIDText.getText().addModifyListener(new ModifyListener() {
+        	public void modifyText(ModifyEvent e) {
+        		if (refreshing) return;
+        		universe.setDefaultReversionID(defaultReversionIDText.getText().getText().trim());
+        		markDirty();
+        	}
+        });
+        Composite itemsComposite = toolkit.createComposite(itemsGroup, SWT.BORDER);
+        itemsComposite.setLayoutData(
+                new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
+        );       
+        itemsComposite.setLayout(new GridLayout(1,true));
+        
+        ComplexTableViewer itemsViewer=new ComplexTableViewer(Arrays.asList(columns),toolkit,itemsComposite);
+        itemsViewer.create();
+        itemsViewer.setMainPage(this);
+        instancesViewer=itemsViewer.getViewer();
+        instancesViewer.setInput(universe.getItemsList());                    
+        
         //Xtentis Objects  Section
-        Composite objecstGroup = this.getNewSectionComposite("Xtentis Objects Reversion ID");
+        Composite objecstGroup = this.getNewSectionComposite("Xtentis Objects Revision ID");
         objecstGroup.setLayout(new GridLayout(1,true));
         
         Composite objectsComposite = toolkit.createComposite(objecstGroup, SWT.BORDER);
@@ -108,20 +133,6 @@ public class UniverseMainPage extends AMainPageV2{
         	createLabelText(objectsComposite, line.key);
         }
         
-        //Items Section          
-        Composite itemsGroup = this.getNewSectionComposite("Concept Reversion ID");
-        itemsGroup.setLayout(new GridLayout(1,true));
-        Composite itemsComposite = toolkit.createComposite(itemsGroup, SWT.BORDER);
-        itemsComposite.setLayoutData(
-                new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-        );       
-        itemsComposite.setLayout(new GridLayout(1,true));
-        
-        ComplexTableViewer itemsViewer=new ComplexTableViewer(Arrays.asList(columns),toolkit,itemsComposite);
-        itemsViewer.create();
-        itemsViewer.setMainPage(this);
-        instancesViewer=itemsViewer.getViewer();
-        instancesViewer.setInput(universe.getItemsList());                    
         refreshData();
 
     } catch (Exception e) {
@@ -131,7 +142,7 @@ public class UniverseMainPage extends AMainPageV2{
 	}
 	protected void createLabelText(Composite parent, final String labelName){
 		final LabelText labelText =new LabelText(toolkit,parent,labelName);
-        
+		labelText.getLabel().setFont(FontUtils.getBoldFont(labelText.getLabel().getFont()));
 		labelText.getText().addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent e) {
         		if (refreshing) return;
@@ -167,6 +178,7 @@ public class UniverseMainPage extends AMainPageV2{
 			
 			universe = new Universe("");
 			universe.setName(wsUniverse.getName());
+			universe.setDefaultReversionID(wsUniverse.getDefaultItemsRevisionID());
 			universe.setDescription(wsUniverse.getDescription()==null ? "" : wsUniverse.getDescription());
 			universe.setDefaultReversionID(wsUniverse.getDefaultItemsRevisionID());
 			universe.getXtentisObjectsList().clear();
@@ -184,6 +196,7 @@ public class UniverseMainPage extends AMainPageV2{
 	    	
 			//Now fill in the values on the page
             descriptionText.setText(universe.getDescription()==null ? "" : universe.getDescription());
+            defaultReversionIDText.getText().setText(universe.getDefaultReversionID()==null?"":universe.getDefaultReversionID());
             //nameText.setText(universe.getName()==null?"":universe.getName())  ;
             for(KeyValue line: universe.getXtentisObjectsList()){
             	LabelText labelText=xtentisObjectsLabelTexts.get(line.key);
@@ -208,6 +221,7 @@ public class UniverseMainPage extends AMainPageV2{
 			
 			WSUniverse ws = (WSUniverse) (getXObject().getWsObject());    	
 			ws.setName(universe.getName());
+			ws.setDefaultItemsRevisionID(universe.getDefaultReversionID());
 			ws.setDescription(universe.getDescription());
 			List<WSUniverseXtentisObjectsRevisionIDs> xtentisObjectsRevisionIDs=new ArrayList<WSUniverseXtentisObjectsRevisionIDs>();
 			for(KeyValue line: universe.getXtentisObjectsList()){
