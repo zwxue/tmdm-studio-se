@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
@@ -69,6 +70,8 @@ import com.amalto.workbench.dialogs.DOMViewDialog;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
+import com.amalto.workbench.utils.GlobalUserInfo;
+import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
@@ -83,6 +86,8 @@ import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults;
 import com.amalto.workbench.webservices.WSPutItem;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 import com.amalto.workbench.webservices.WSRouteItemV2;
+import com.amalto.workbench.webservices.WSUniverse;
+import com.amalto.workbench.webservices.WSUniverseItemsRevisionIDs;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class DataClusterBrowserMainPage extends AMainPage implements IXObjectModelListener {
@@ -422,7 +427,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	
 	protected void refreshData() {
 		try {
-			
+			if(conceptCombo.isDisposed()) return;
             //if (! this.String xml = (String)((IStructuredSelection)event.getSelection()).getFirstElement();equals(getEditor().getActivePageInstance())) return;
     		XtentisPort port = Util.getPort(getXObject());
             
@@ -445,6 +450,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 					)
 			).getStrings();
 			Arrays.sort(concepts);
+			//add revision ID for concepts
+			addRevisionID(concepts);
 			
 			conceptCombo.removeAll();
 			conceptCombo.add("*");
@@ -460,7 +467,21 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 			MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page", "Error refreshing the page: "+e.getLocalizedMessage());
 		}    	
 	}
-	
+	private void addRevisionID(String[] concepts){
+		WSUniverse wsUniverse=GlobalUserInfo.getInstance().getWsUuniverse();
+		WSUniverseItemsRevisionIDs[] ids=wsUniverse.getItemsRevisionIDs();
+		for(int i=0; i<concepts.length; i++){
+			boolean isSet=false;
+			for(WSUniverseItemsRevisionIDs id: ids){
+				if(Pattern.compile(id.getConceptPattern()).matcher(concepts[i]).matches()){
+					concepts[i]=concepts[i] + " [" + id.getRevisionID() +"]";
+					isSet=true;
+					break;
+				}
+			}
+			if(!isSet)concepts[i]=concepts[i] + " [" + IConstants.HEAD +"]";
+		}
+	}
 	protected void commit() {
 		try {
 
@@ -560,7 +581,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             String concept = conceptCombo.getText();
             if ("*".equals(concept) | "".equals(concept)) concept = null;
-
+            if(concept != null){
+            	concept=concept.replaceAll("\\[.*\\]", "").trim();
+            }
             String keys = keyText.getText();
             if ("*".equals(keys) | "".equals(keys)) keys = null;
             

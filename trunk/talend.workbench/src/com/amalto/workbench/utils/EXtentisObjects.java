@@ -5,25 +5,43 @@ import java.util.Map;
 
 import com.amalto.workbench.models.TreeObject;
 
+/**
+ * The XtentisObjects
+ * @author aiming
+ *
+ */
 public enum EXtentisObjects {
-	DataCluster("Data Cluster","Data Cluster",TreeObject.DATA_CLUSTER),              
-	DataMODEL("Data Model","Data Model",TreeObject.DATA_MODEL),                
-	Role("Role","Role",TreeObject.ROLE),                      
-	RoutingRule("Routing Rule","Routing Rule",TreeObject.ROUTING_RULE),                                 
-	StoredProcedure("Stored Procedure","Stored Procedure",TreeObject.STORED_PROCEDURE),                  
-	Transformer("Transformer V2","Transformer V2",TreeObject.TRANSFORMER),               
-	TransformerPlugin("Transformer Plugin V2","Transformer Plugin V2",TreeObject.TRANSFORMER_PLUGIN),     
-	//EXtentisObjects("Transformer V2","Transformer V2",),            
-	View("View","View",TreeObject.VIEW),                      
-	Menu("Menu","Menu",TreeObject.MENU),                      
+	DataCluster("Data Cluster","Data Cluster",TreeObject.DATA_CLUSTER,true),              
+	DataMODEL("Data Model","Data Model",TreeObject.DATA_MODEL,true),                
+	Role("Role","Role",TreeObject.ROLE,true),                      
+	RoutingRule("Routing Rule","Routing Rule",TreeObject.ROUTING_RULE,true),                                 
+	StoredProcedure("Stored Procedure","Stored Procedure",TreeObject.STORED_PROCEDURE,true),                  
+	Transformer("Transformer V2","Transformer V2",TreeObject.TRANSFORMER,true),               
+	TransformerPlugin("Transformer Plugin V2","Transformer Plugin V2",TreeObject.TRANSFORMER_PLUGIN),                
+	View("View","View",TreeObject.VIEW,true),                      
+	Menu("Menu","Menu",TreeObject.MENU,true),                      
     SubscriptionEngine("Subscription Engine","Subscription Engine",TreeObject.SUBSCRIPTION_ENGINE),    
 	Universe("Universe","Universe",TreeObject.UNIVERSE),                  
-	SynchronizationPlan("Synchronization Plan","Synchronization Plan",TreeObject.SYNCHRONIZATIONPLAN);       
+	SynchronizationPlan("Synchronization Plan","Synchronization Plan",TreeObject.SYNCHRONIZATIONPLAN,true);       
 
 	private String name;
-	private String displayName;
-	private int type;
 	
+	private String displayName;
+	
+	private int type;
+	/**
+	 * check this object is need revision
+	 */
+	private boolean isRevision=false;
+	
+	public boolean isRevision() {
+		return isRevision;
+	}
+
+	public void setRevision(boolean isRevision) {
+		this.isRevision = isRevision;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -53,12 +71,19 @@ public enum EXtentisObjects {
 		this.displayName=displayName;
 		this.type=type;
 	}
-	
+
+	EXtentisObjects(String displayName,String name, int type, boolean isRevision){
+		this.name=name;
+		this.displayName=displayName;
+		this.type=type;
+		this.isRevision=isRevision;
+	}
 	//key is the type
-	public static Map<String ,String> getXtentisObjexts(){
-		Map<String,String> map=new HashMap<String, String>();
+	public static Map<String ,EXtentisObjects> getXtentisObjexts(){
+		
+		Map<String,EXtentisObjects> map=new HashMap<String, EXtentisObjects>();
 		for(int i=0; i<values().length; i++){
-			map.put(String.valueOf(values()[i].getType()), values()[i].getName());
+			map.put(String.valueOf(values()[i].getType()), values()[i]);
 		}
 		return map;
 	}
