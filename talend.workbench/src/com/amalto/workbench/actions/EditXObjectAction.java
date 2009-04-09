@@ -25,7 +25,7 @@ import com.amalto.workbench.webservices.WSGetRole;
 import com.amalto.workbench.webservices.WSGetRoutingRule;
 import com.amalto.workbench.webservices.WSGetStoredProcedure;
 import com.amalto.workbench.webservices.WSGetSynchronizationPlan;
-import com.amalto.workbench.webservices.WSGetTransformer;
+import com.amalto.workbench.webservices.WSGetTransformerV2;
 import com.amalto.workbench.webservices.WSGetUniverse;
 import com.amalto.workbench.webservices.WSGetView;
 import com.amalto.workbench.webservices.WSMenu;
@@ -39,7 +39,8 @@ import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSSynchronizationPlan;
 import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
 import com.amalto.workbench.webservices.WSTransformer;
-import com.amalto.workbench.webservices.WSTransformerPK;
+import com.amalto.workbench.webservices.WSTransformerV2;
+import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSView;
@@ -115,7 +116,7 @@ public class EditXObjectAction extends Action{
 	           		xobject.setWsObject(wsRoutingRule);
 	           		break;	  	           		
 	           	case TreeObject.TRANSFORMER:
-	           		WSTransformer wsTranformer = port.getTransformer(new WSGetTransformer((WSTransformerPK)xobject.getWsKey())); 
+	           		WSTransformerV2 wsTranformer = port.getTransformerV2(new WSGetTransformerV2((WSTransformerV2PK)xobject.getWsKey())); 
 	           		xobject.setWsObject(wsTranformer);
 	           		break;
 	           	case TreeObject.MENU:
