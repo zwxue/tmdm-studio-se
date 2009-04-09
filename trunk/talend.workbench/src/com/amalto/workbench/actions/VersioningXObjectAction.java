@@ -17,7 +17,7 @@ import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
-import com.amalto.workbench.webservices.WSTransformerPK;
+import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSViewPK;
 
@@ -104,7 +104,7 @@ public class VersioningXObjectAction extends Action{
 					break;
 				case TreeObject.TRANSFORMER:
 					type =  "Transformer V2";
-					instance = (xobject.isXObject() ? ((WSTransformerPK)xobject.getWsKey()).getPk() : null);
+					instance = (xobject.isXObject() ? ((WSTransformerV2PK)xobject.getWsKey()).getPk() : null);
 					break;
 				case TreeObject.MENU:
 					type =  "Menu";	

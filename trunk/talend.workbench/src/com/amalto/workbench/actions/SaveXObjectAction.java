@@ -23,14 +23,14 @@ import com.amalto.workbench.webservices.WSPutRole;
 import com.amalto.workbench.webservices.WSPutRoutingRule;
 import com.amalto.workbench.webservices.WSPutStoredProcedure;
 import com.amalto.workbench.webservices.WSPutSynchronizationPlan;
-import com.amalto.workbench.webservices.WSPutTransformer;
+import com.amalto.workbench.webservices.WSPutTransformerV2;
 import com.amalto.workbench.webservices.WSPutUniverse;
 import com.amalto.workbench.webservices.WSPutView;
 import com.amalto.workbench.webservices.WSRole;
 import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSStoredProcedure;
 import com.amalto.workbench.webservices.WSSynchronizationPlan;
-import com.amalto.workbench.webservices.WSTransformer;
+import com.amalto.workbench.webservices.WSTransformerV2;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSView;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -85,7 +85,7 @@ public class SaveXObjectAction extends Action{
 	           		port.putRoutingRule(new WSPutRoutingRule((WSRoutingRule)newWsObject));
 	           		break;   
 	          	case TreeObject.TRANSFORMER:
-	           		port.putTransformer(new WSPutTransformer((WSTransformer)newWsObject));
+	           		port.putTransformerV2(new WSPutTransformerV2((WSTransformerV2)newWsObject));
 	           		break;   	 
 	          	case TreeObject.MENU:
 	           		port.putMenu(new WSPutMenu((WSMenu)newWsObject));

@@ -31,7 +31,7 @@ import com.amalto.workbench.webservices.WSExistsRole;
 import com.amalto.workbench.webservices.WSExistsRoutingRule;
 import com.amalto.workbench.webservices.WSExistsStoredProcedure;
 import com.amalto.workbench.webservices.WSExistsSynchronizationPlan;
-import com.amalto.workbench.webservices.WSExistsTransformer;
+import com.amalto.workbench.webservices.WSExistsTransformerV2;
 import com.amalto.workbench.webservices.WSExistsUniverse;
 import com.amalto.workbench.webservices.WSExistsView;
 import com.amalto.workbench.webservices.WSGetObjectsForSynchronizationPlans;
@@ -54,8 +54,8 @@ import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
 import com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode;
 import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizations;
 import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations;
-import com.amalto.workbench.webservices.WSTransformer;
-import com.amalto.workbench.webservices.WSTransformerPK;
+import com.amalto.workbench.webservices.WSTransformerV2;
+import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniverseItemsRevisionIDs;
 import com.amalto.workbench.webservices.WSUniversePK;
@@ -312,12 +312,12 @@ public class NewXObjectAction extends Action{
 
                 case TreeObject.TRANSFORMER: {
                     //check if already exists
-                    if (port.existsTransformer(new WSExistsTransformer(new WSTransformerPK((String)key))).is_true()){
+                    if (port.existsTransformerV2(new WSExistsTransformerV2(new WSTransformerV2PK((String)key))).is_true()){
                         MessageDialog.openError(this.view.getSite().getShell(),"Error Creating Instance","Transformer "+(String)key+" already exists");
                         return;
                     }
                     //add
-                    WSTransformer transformer = new WSTransformer(
+                    WSTransformerV2 transformer = new WSTransformerV2(
                     		(String)key,
                     		"",
                     		null
@@ -326,7 +326,7 @@ public class NewXObjectAction extends Action{
                                     (String)key,
                                     xfolder.getServerRoot(),
                                     TreeObject.TRANSFORMER,
-                                    new WSTransformerPK((String)key),
+                                    new WSTransformerV2PK((String)key),
                                     transformer
                     );                  
                     break;  }                    

@@ -28,7 +28,7 @@ import com.amalto.workbench.webservices.WSExistsRole;
 import com.amalto.workbench.webservices.WSExistsRoutingRule;
 import com.amalto.workbench.webservices.WSExistsStoredProcedure;
 import com.amalto.workbench.webservices.WSExistsSynchronizationPlan;
-import com.amalto.workbench.webservices.WSExistsTransformer;
+import com.amalto.workbench.webservices.WSExistsTransformerV2;
 import com.amalto.workbench.webservices.WSExistsUniverse;
 import com.amalto.workbench.webservices.WSExistsView;
 import com.amalto.workbench.webservices.WSGetDataCluster;
@@ -38,7 +38,7 @@ import com.amalto.workbench.webservices.WSGetRole;
 import com.amalto.workbench.webservices.WSGetRoutingRule;
 import com.amalto.workbench.webservices.WSGetStoredProcedure;
 import com.amalto.workbench.webservices.WSGetSynchronizationPlan;
-import com.amalto.workbench.webservices.WSGetTransformer;
+import com.amalto.workbench.webservices.WSGetTransformerV2;
 import com.amalto.workbench.webservices.WSGetUniverse;
 import com.amalto.workbench.webservices.WSGetView;
 import com.amalto.workbench.webservices.WSMenu;
@@ -50,7 +50,7 @@ import com.amalto.workbench.webservices.WSPutRole;
 import com.amalto.workbench.webservices.WSPutRoutingRule;
 import com.amalto.workbench.webservices.WSPutStoredProcedure;
 import com.amalto.workbench.webservices.WSPutSynchronizationPlan;
-import com.amalto.workbench.webservices.WSPutTransformer;
+import com.amalto.workbench.webservices.WSPutTransformerV2;
 import com.amalto.workbench.webservices.WSPutUniverse;
 import com.amalto.workbench.webservices.WSPutView;
 import com.amalto.workbench.webservices.WSRole;
@@ -61,8 +61,8 @@ import com.amalto.workbench.webservices.WSStoredProcedure;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSSynchronizationPlan;
 import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
-import com.amalto.workbench.webservices.WSTransformer;
-import com.amalto.workbench.webservices.WSTransformerPK;
+import com.amalto.workbench.webservices.WSTransformerV2;
+import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSView;
@@ -334,9 +334,9 @@ public class PasteXObjectAction extends Action{
 		           		destPort.putRoutingRule(new WSPutRoutingRule(newRoutingRule));
 		           		} break;	  	           		
 		           	case TreeObject.TRANSFORMER: {
-		           		WSTransformerPK key = (WSTransformerPK)xobject.getWsKey();
-		           		WSTransformerPK newKey = new WSTransformerPK(key.getPk());
-		           		if (destPort.existsTransformer(new WSExistsTransformer((WSTransformerPK)xobject.getWsKey())).is_true()) {
+		           		WSTransformerV2PK key = (WSTransformerV2PK)xobject.getWsKey();
+		           		WSTransformerV2PK newKey = new WSTransformerV2PK(key.getPk());
+		           		if (destPort.existsTransformerV2(new WSExistsTransformerV2((WSTransformerV2PK)xobject.getWsKey())).is_true()) {
 			           		InputDialog id = new InputDialog(
 			           				view.getSite().getShell(),
 			           				"Pasting instance "+key.getPk(),
@@ -351,7 +351,7 @@ public class PasteXObjectAction extends Action{
 			           		);
 			           		id.setBlockOnOpen(true);
 			           		if (id.open() == Window.CANCEL) return;
-			           		newKey = new WSTransformerPK(id.getValue()); 
+			           		newKey = new WSTransformerV2PK(id.getValue()); 
 		           		}
 		           		//fetch the copied model
 	       				XtentisPort originalPort = Util.getPort(
@@ -359,14 +359,14 @@ public class PasteXObjectAction extends Action{
 	       						xobject.getUsername(),
 	       						xobject.getPassword()
 	       				);
-		           		WSTransformer originalTransformer = originalPort.getTransformer(new WSGetTransformer(key));
-		           		WSTransformer newTransformer = new WSTransformer(
+		           		WSTransformerV2 originalTransformer = originalPort.getTransformerV2(new WSGetTransformerV2(key));
+		           		WSTransformerV2 newTransformer = new WSTransformerV2(
 		           				newKey.getPk(),
 		           				originalTransformer.getDescription(),
-		           				originalTransformer.getPluginSpecs()
+		           				originalTransformer.getProcessSteps()
 		           		);
 		           		//write the new model
-		           		destPort.putTransformer(new WSPutTransformer(newTransformer));
+		           		destPort.putTransformerV2(new WSPutTransformerV2(newTransformer));
 		           		} break;
 		           	case TreeObject.MENU: {
 		           		WSMenuPK key = (WSMenuPK)xobject.getWsKey();

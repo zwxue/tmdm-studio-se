@@ -9,8 +9,8 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.EXtentisObjects;
-import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.GlobalUserInfo;
+import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSComponent;
@@ -21,7 +21,7 @@ import com.amalto.workbench.webservices.WSGetMenuPKs;
 import com.amalto.workbench.webservices.WSGetRolePKs;
 import com.amalto.workbench.webservices.WSGetRoutingRulePKs;
 import com.amalto.workbench.webservices.WSGetSynchronizationPlanPKs;
-import com.amalto.workbench.webservices.WSGetTransformerPKs;
+import com.amalto.workbench.webservices.WSGetTransformerV2PKs;
 import com.amalto.workbench.webservices.WSGetUniverse;
 import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSGetViewPKs;
@@ -33,7 +33,7 @@ import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
-import com.amalto.workbench.webservices.WSTransformerPK;
+import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
@@ -265,10 +265,11 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			
 			
 //			Transformers
-			WSTransformerPK[] transformerPKs = null;
+			WSTransformerV2PK[] transformerPKs = null;
 			boolean hasTransformers = true;
 			try {
-				transformerPKs = port.getTransformerPKs(new WSGetTransformerPKs("")).getWsTransformerPK();
+				
+				transformerPKs = port.getTransformerV2PKs(new WSGetTransformerV2PKs("")).getWsTransformerV2PK();
 			} catch (Exception e) {
 				System.out.println("No Transformers");
 				// This server IS old
@@ -285,7 +286,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 								id,
 								serverRoot,
 								TreeObject.TRANSFORMER,
-								new WSTransformerPK(id),
+								new WSTransformerV2PK(id),
 								null   //no storage to save space
 						);
 						transformers.addChild(obj);

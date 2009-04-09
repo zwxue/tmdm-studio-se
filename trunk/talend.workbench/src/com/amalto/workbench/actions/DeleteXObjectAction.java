@@ -21,7 +21,7 @@ import com.amalto.workbench.webservices.WSDeleteRole;
 import com.amalto.workbench.webservices.WSDeleteRoutingRule;
 import com.amalto.workbench.webservices.WSDeleteStoredProcedure;
 import com.amalto.workbench.webservices.WSDeleteSynchronizationPlan;
-import com.amalto.workbench.webservices.WSDeleteTransformer;
+import com.amalto.workbench.webservices.WSDeleteTransformerV2;
 import com.amalto.workbench.webservices.WSDeleteUniverse;
 import com.amalto.workbench.webservices.WSDeleteView;
 import com.amalto.workbench.webservices.WSMenuPK;
@@ -29,7 +29,7 @@ import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
-import com.amalto.workbench.webservices.WSTransformerPK;
+import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -91,7 +91,7 @@ public class DeleteXObjectAction extends Action{
 		           		port.deleteRoutingRule(new WSDeleteRoutingRule((WSRoutingRulePK)xobject.getWsKey()));
 		           		break;  
 		          	case TreeObject.TRANSFORMER:
-		           		port.deleteTransformer(new WSDeleteTransformer((WSTransformerPK)xobject.getWsKey()));
+		           		port.deleteTransformerV2(new WSDeleteTransformerV2((WSTransformerV2PK)xobject.getWsKey()));
 		           		break;
 		          	case TreeObject.MENU:
 		           		port.deleteMenu(new WSDeleteMenu((WSMenuPK)xobject.getWsKey()));
