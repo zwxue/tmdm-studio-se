@@ -355,7 +355,7 @@ public class SynchronizationMainPage extends AMainPageV2{
         ComplexTableViewer itemsViewer=new ComplexTableViewer(Arrays.asList(itemsColumns),toolkit,itemsComposite);
         itemsViewer.setMainPage(this);
         itemsViewer.setLastCombo(true);
-        itemsViewer.setComboStrings(itemsAlgorithmsStrings);
+        itemsViewer.setLastcomboStrings(itemsAlgorithmsStrings);
         itemsViewer.create();
         instancesViewer=itemsViewer.getViewer();
         instancesViewer.setInput(syncPlan.getItemsList());
@@ -391,7 +391,7 @@ public class SynchronizationMainPage extends AMainPageV2{
             ComplexTableViewer objectViewer=new ComplexTableViewer(Arrays.asList(xtentisObjectColumns),toolkit,composite);
             objectViewer.setMainPage(this);
             objectViewer.setLastCombo(true);
-            objectViewer.setComboStrings(objectsAlgorithmStrings);
+            objectViewer.setLastcomboStrings(objectsAlgorithmStrings);
             objectViewer.create();
             List<Line> objList=syncPlan.getXtentisObjectsList().get(object);
             if(objList==null){
