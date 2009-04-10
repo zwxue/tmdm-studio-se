@@ -37,14 +37,6 @@ public class WSSynchronizationPlan_LiteralSerializer extends LiteralObjectSerial
     private static final QName ns1_itemsSynchronizations_QNAME = new QName("", "itemsSynchronizations");
     private static final QName ns2_WSSynchronizationPlan$2d$itemsSynchronizations_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlan-itemsSynchronizations");
     private CombinedSerializer ns2_myWSSynchronizationPlanItemsSynchronizations_LiteralSerializer;
-    private static final QName ns1_lastRunStarted_QNAME = new QName("", "lastRunStarted");
-    private static final QName ns3_dateTime_TYPE_QNAME = SchemaConstants.QNAME_TYPE_DATE_TIME;
-    private CombinedSerializer ns3_myns3_dateTime__java_util_Calendar_DateTimeCalendar_Serializer;
-    private static final QName ns1_lastRunStopped_QNAME = new QName("", "lastRunStopped");
-    private static final QName ns1_wsCurrentStatusCode_QNAME = new QName("", "wsCurrentStatusCode");
-    private static final QName ns2_WSSynchronizationPlanStatusCode_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlanStatusCode");
-    private CombinedSerializer ns2myns2_WSSynchronizationPlanStatusCode__WSSynchronizationPlanStatusCode_LiteralSerializer;
-    private static final QName ns1_currentStatusMessage_QNAME = new QName("", "currentStatusMessage");
     
     public WSSynchronizationPlan_LiteralSerializer(QName type, String encodingStyle) {
         this(type, encodingStyle, false);
@@ -58,8 +50,6 @@ public class WSSynchronizationPlan_LiteralSerializer extends LiteralObjectSerial
         ns3_myns3_string__java_lang_String_String_Serializer = (CombinedSerializer)registry.getSerializer("", java.lang.String.class, ns3_string_TYPE_QNAME);
         ns2_myWSSynchronizationPlanXtentisObjectsSynchronizations_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizations.class, ns2_WSSynchronizationPlan$2d$xtentisObjectsSynchronizations_TYPE_QNAME);
         ns2_myWSSynchronizationPlanItemsSynchronizations_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSSynchronizationPlanItemsSynchronizations.class, ns2_WSSynchronizationPlan$2d$itemsSynchronizations_TYPE_QNAME);
-        ns3_myns3_dateTime__java_util_Calendar_DateTimeCalendar_Serializer = (CombinedSerializer)registry.getSerializer("", java.util.Calendar.class, ns3_dateTime_TYPE_QNAME);
-        ns2myns2_WSSynchronizationPlanStatusCode__WSSynchronizationPlanStatusCode_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode.class, ns2_WSSynchronizationPlanStatusCode_TYPE_QNAME);
     }
     
     public Object doDeserialize(XMLReader reader,
@@ -256,67 +246,6 @@ public class WSSynchronizationPlan_LiteralSerializer extends LiteralObjectSerial
         else {
             instance.setItemsSynchronizations(new com.amalto.workbench.webservices.WSSynchronizationPlanItemsSynchronizations[0]);
         }
-        elementName = reader.getName();
-        if (reader.getState() == XMLReader.START) {
-            if (elementName.equals(ns1_lastRunStarted_QNAME)) {
-                member = ns3_myns3_dateTime__java_util_Calendar_DateTimeCalendar_Serializer.deserialize(ns1_lastRunStarted_QNAME, reader, context);
-                if (member == null) {
-                    throw new DeserializationException("literal.unexpectedNull");
-                }
-                instance.setLastRunStarted((java.util.Calendar)member);
-                reader.nextElementContent();
-            } else {
-                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_lastRunStarted_QNAME, reader.getName() });
-            }
-        }
-        else {
-            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
-        }
-        elementName = reader.getName();
-        if (reader.getState() == XMLReader.START) {
-            if (elementName.equals(ns1_lastRunStopped_QNAME)) {
-                member = ns3_myns3_dateTime__java_util_Calendar_DateTimeCalendar_Serializer.deserialize(ns1_lastRunStopped_QNAME, reader, context);
-                if (member == null) {
-                    throw new DeserializationException("literal.unexpectedNull");
-                }
-                instance.setLastRunStopped((java.util.Calendar)member);
-                reader.nextElementContent();
-            } else {
-                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_lastRunStopped_QNAME, reader.getName() });
-            }
-        }
-        else {
-            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
-        }
-        elementName = reader.getName();
-        if (reader.getState() == XMLReader.START) {
-            if (elementName.equals(ns1_wsCurrentStatusCode_QNAME)) {
-                member = ns2myns2_WSSynchronizationPlanStatusCode__WSSynchronizationPlanStatusCode_LiteralSerializer.deserialize(ns1_wsCurrentStatusCode_QNAME, reader, context);
-                if (member == null) {
-                    throw new DeserializationException("literal.unexpectedNull");
-                }
-                instance.setWsCurrentStatusCode((com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode)member);
-                reader.nextElementContent();
-            } else {
-                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_wsCurrentStatusCode_QNAME, reader.getName() });
-            }
-        }
-        else {
-            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
-        }
-        elementName = reader.getName();
-        if (reader.getState() == XMLReader.START) {
-            if (elementName.equals(ns1_currentStatusMessage_QNAME)) {
-                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_currentStatusMessage_QNAME, reader, context);
-                instance.setCurrentStatusMessage((java.lang.String)member);
-                reader.nextElementContent();
-            } else {
-                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_currentStatusMessage_QNAME, reader.getName() });
-            }
-        }
-        else {
-            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
-        }
         
         XMLReaderUtil.verifyReaderState(reader, XMLReader.END);
         return (Object)instance;
@@ -358,18 +287,5 @@ public class WSSynchronizationPlan_LiteralSerializer extends LiteralObjectSerial
                 ns2_myWSSynchronizationPlanItemsSynchronizations_LiteralSerializer.serialize(instance.getItemsSynchronizations()[i], ns1_itemsSynchronizations_QNAME, null, writer, context);
             }
         }
-        if (instance.getLastRunStarted() == null) {
-            throw new SerializationException("literal.unexpectedNull");
-        }
-        ns3_myns3_dateTime__java_util_Calendar_DateTimeCalendar_Serializer.serialize(instance.getLastRunStarted(), ns1_lastRunStarted_QNAME, null, writer, context);
-        if (instance.getLastRunStopped() == null) {
-            throw new SerializationException("literal.unexpectedNull");
-        }
-        ns3_myns3_dateTime__java_util_Calendar_DateTimeCalendar_Serializer.serialize(instance.getLastRunStopped(), ns1_lastRunStopped_QNAME, null, writer, context);
-        if (instance.getWsCurrentStatusCode() == null) {
-            throw new SerializationException("literal.unexpectedNull");
-        }
-        ns2myns2_WSSynchronizationPlanStatusCode__WSSynchronizationPlanStatusCode_LiteralSerializer.serialize(instance.getWsCurrentStatusCode(), ns1_wsCurrentStatusCode_QNAME, null, writer, context);
-        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getCurrentStatusMessage(), ns1_currentStatusMessage_QNAME, null, writer, context);
     }
 }

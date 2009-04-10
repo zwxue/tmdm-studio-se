@@ -103,13 +103,16 @@
 	<xsd:element name="WSGetObjectsForUniverses" type="tns:WSGetObjectsForUniverses"/>
 		
 		
-	<xsd:simpleType name="WSGetCurrentUniverse">
+	<xsd:complexType name="WSGetCurrentUniverse">
 		<xsd:annotation>
 			<xsd:documentation>
 				Return the Universe the calling user is using
 			</xsd:documentation>
 		</xsd:annotation>
-	</xsd:simpleType>
+		<xsd:sequence>
+			<xsd:element minOccurs="0" maxOccurs="1"  nillable="true" name="dummy" type="xsd:string"/>
+		</xsd:sequence>		
+	</xsd:complexType>
 	<xsd:element name="WSGetCurrentUniverse" type="tns:WSGetCurrentUniverse"/>
 	
 </xsd:schema>

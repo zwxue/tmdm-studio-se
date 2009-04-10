@@ -51,7 +51,6 @@ import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSSynchronizationPlan;
 import com.amalto.workbench.webservices.WSSynchronizationPlanItemsSynchronizations;
 import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
-import com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode;
 import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizations;
 import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations;
 import com.amalto.workbench.webservices.WSTransformerV2;
@@ -413,12 +412,7 @@ public class NewXObjectAction extends Action{
                     		"",
                     		"",
                     		objectsId.toArray(new WSSynchronizationPlanXtentisObjectsSynchronizations[objectsId.size()]),
-                    		new WSSynchronizationPlanItemsSynchronizations[]{
-                    		},
-                    		calendar,
-                    		calendar,
-                    		WSSynchronizationPlanStatusCode.COMPLETED,
-                    		""
+                    		new WSSynchronizationPlanItemsSynchronizations[]{}
                     );
                     newInstance = new TreeObject(
                                     (String)key,
@@ -434,7 +428,6 @@ public class NewXObjectAction extends Action{
 	           		return;
             }//switch
 
-            //xfolder.addChild(newInstance);
             view.getSite().getWorkbenchWindow().getActivePage().openEditor(
                     new XObjectEditorInput(newInstance,newInstance.getDisplayName()),
                     "com.amalto.workbench.editors.XObjectEditor"

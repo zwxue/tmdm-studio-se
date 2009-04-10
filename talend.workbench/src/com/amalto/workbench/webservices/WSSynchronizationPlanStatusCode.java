@@ -12,18 +12,21 @@ import java.util.HashMap;
 public class WSSynchronizationPlanStatusCode {
     private java.lang.String value;
     private static Map valueMap = new HashMap();
+    public static final String _DOES_NOT_EXISTString = "DOES_NOT_EXIST";
     public static final String _COMPLETEDString = "COMPLETED";
     public static final String _FAILEDString = "FAILED";
     public static final String _RUNNINGString = "RUNNING";
     public static final String _SCHEDULEDString = "SCHEDULED";
     public static final String _STOPPINGString = "STOPPING";
     
+    public static final java.lang.String _DOES_NOT_EXIST = new java.lang.String(_DOES_NOT_EXISTString);
     public static final java.lang.String _COMPLETED = new java.lang.String(_COMPLETEDString);
     public static final java.lang.String _FAILED = new java.lang.String(_FAILEDString);
     public static final java.lang.String _RUNNING = new java.lang.String(_RUNNINGString);
     public static final java.lang.String _SCHEDULED = new java.lang.String(_SCHEDULEDString);
     public static final java.lang.String _STOPPING = new java.lang.String(_STOPPINGString);
     
+    public static final WSSynchronizationPlanStatusCode DOES_NOT_EXIST = new WSSynchronizationPlanStatusCode(_DOES_NOT_EXIST);
     public static final WSSynchronizationPlanStatusCode COMPLETED = new WSSynchronizationPlanStatusCode(_COMPLETED);
     public static final WSSynchronizationPlanStatusCode FAILED = new WSSynchronizationPlanStatusCode(_FAILED);
     public static final WSSynchronizationPlanStatusCode RUNNING = new WSSynchronizationPlanStatusCode(_RUNNING);
@@ -41,7 +44,9 @@ public class WSSynchronizationPlanStatusCode {
     
     public static WSSynchronizationPlanStatusCode fromValue(java.lang.String value)
         throws java.lang.IllegalStateException {
-        if (COMPLETED.value.equals(value)) {
+        if (DOES_NOT_EXIST.value.equals(value)) {
+            return DOES_NOT_EXIST;
+        } else if (COMPLETED.value.equals(value)) {
             return COMPLETED;
         } else if (FAILED.value.equals(value)) {
             return FAILED;
@@ -61,7 +66,9 @@ public class WSSynchronizationPlanStatusCode {
         if (ret != null) {
             return ret;
         }
-        if (value.equals(_COMPLETEDString)) {
+        if (value.equals(_DOES_NOT_EXISTString)) {
+            return DOES_NOT_EXIST;
+        } else if (value.equals(_COMPLETEDString)) {
             return COMPLETED;
         } else if (value.equals(_FAILEDString)) {
             return FAILED;

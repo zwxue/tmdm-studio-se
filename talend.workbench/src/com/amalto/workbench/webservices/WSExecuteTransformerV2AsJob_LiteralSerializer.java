@@ -22,9 +22,6 @@ public class WSExecuteTransformerV2AsJob_LiteralSerializer extends LiteralObject
     private static final QName ns1_wsTransformerContext_QNAME = new QName("", "wsTransformerContext");
     private static final QName ns2_WSTransformerContext_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerContext");
     private CombinedSerializer ns2_myWSTransformerContext_LiteralSerializer;
-    private static final QName ns1_wsTypedContent_QNAME = new QName("", "wsTypedContent");
-    private static final QName ns2_WSTypedContent_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSTypedContent");
-    private CombinedSerializer ns2_myWSTypedContent_LiteralSerializer;
     
     public WSExecuteTransformerV2AsJob_LiteralSerializer(QName type, String encodingStyle) {
         this(type, encodingStyle, false);
@@ -36,7 +33,6 @@ public class WSExecuteTransformerV2AsJob_LiteralSerializer extends LiteralObject
     
     public void initialize(InternalTypeMappingRegistry registry) throws Exception {
         ns2_myWSTransformerContext_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSTransformerContext.class, ns2_WSTransformerContext_TYPE_QNAME);
-        ns2_myWSTypedContent_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSTypedContent.class, ns2_WSTypedContent_TYPE_QNAME);
     }
     
     public Object doDeserialize(XMLReader reader,
@@ -64,14 +60,6 @@ public class WSExecuteTransformerV2AsJob_LiteralSerializer extends LiteralObject
         else {
             throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
         }
-        elementName = reader.getName();
-        if (reader.getState() == XMLReader.START) {
-            if (elementName.equals(ns1_wsTypedContent_QNAME)) {
-                member = ns2_myWSTypedContent_LiteralSerializer.deserialize(ns1_wsTypedContent_QNAME, reader, context);
-                instance.setWsTypedContent((com.amalto.workbench.webservices.WSTypedContent)member);
-                reader.nextElementContent();
-            }
-        }
         
         XMLReaderUtil.verifyReaderState(reader, XMLReader.END);
         return (Object)instance;
@@ -88,6 +76,5 @@ public class WSExecuteTransformerV2AsJob_LiteralSerializer extends LiteralObject
             throw new SerializationException("literal.unexpectedNull");
         }
         ns2_myWSTransformerContext_LiteralSerializer.serialize(instance.getWsTransformerContext(), ns1_wsTransformerContext_QNAME, null, writer, context);
-        ns2_myWSTypedContent_LiteralSerializer.serialize(instance.getWsTypedContent(), ns1_wsTypedContent_QNAME, null, writer, context);
     }
 }
