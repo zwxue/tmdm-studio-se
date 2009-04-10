@@ -481,11 +481,7 @@ public class PasteXObjectAction extends Action{
 		           				originalSynchronizationPlan.getTisPassword(),
 		           				originalSynchronizationPlan.getTisParameters(),
 		           				originalSynchronizationPlan.getXtentisObjectsSynchronizations(),
-		           				originalSynchronizationPlan.getItemsSynchronizations(),
-		           				originalSynchronizationPlan.getLastRunStarted(),
-		           				originalSynchronizationPlan.getLastRunStopped(),
-		           				originalSynchronizationPlan.getWsCurrentStatusCode(),
-		           				originalSynchronizationPlan.getCurrentStatusMessage()
+		           				originalSynchronizationPlan.getItemsSynchronizations()
 		           		);
 		           		//write the new model
 		           		destPort.putSynchronizationPlan(new WSPutSynchronizationPlan(newSynchronizationPlan));

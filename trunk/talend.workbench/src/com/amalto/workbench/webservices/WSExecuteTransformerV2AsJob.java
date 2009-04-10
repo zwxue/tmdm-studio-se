@@ -8,14 +8,12 @@ package com.amalto.workbench.webservices;
 
 public class WSExecuteTransformerV2AsJob {
     protected com.amalto.workbench.webservices.WSTransformerContext wsTransformerContext;
-    protected com.amalto.workbench.webservices.WSTypedContent wsTypedContent;
     
     public WSExecuteTransformerV2AsJob() {
     }
     
-    public WSExecuteTransformerV2AsJob(com.amalto.workbench.webservices.WSTransformerContext wsTransformerContext, com.amalto.workbench.webservices.WSTypedContent wsTypedContent) {
+    public WSExecuteTransformerV2AsJob(com.amalto.workbench.webservices.WSTransformerContext wsTransformerContext) {
         this.wsTransformerContext = wsTransformerContext;
-        this.wsTypedContent = wsTypedContent;
     }
     
     public com.amalto.workbench.webservices.WSTransformerContext getWsTransformerContext() {
@@ -24,13 +22,5 @@ public class WSExecuteTransformerV2AsJob {
     
     public void setWsTransformerContext(com.amalto.workbench.webservices.WSTransformerContext wsTransformerContext) {
         this.wsTransformerContext = wsTransformerContext;
-    }
-    
-    public com.amalto.workbench.webservices.WSTypedContent getWsTypedContent() {
-        return wsTypedContent;
-    }
-    
-    public void setWsTypedContent(com.amalto.workbench.webservices.WSTypedContent wsTypedContent) {
-        this.wsTypedContent = wsTypedContent;
     }
 }

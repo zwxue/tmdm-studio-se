@@ -157,10 +157,18 @@
 	<xsd:element name="WSVersion" type="tns:WSVersion"/>
 	
 		
-	<xsd:simpleType name="WSPing"/>
+	<xsd:complexType name="WSPing">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="echo" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType> 
 	<xsd:element name="WSPing" type="tns:WSPing"/>
 
-	<xsd:simpleType name="WSLogout"/>
+	<xsd:complexType name="WSLogout">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" maxOccurs="1"  nillable="true" name="dummy" type="xsd:string"/>
+		</xsd:sequence>		
+	</xsd:complexType>
 	<xsd:element name="WSLogout" type="tns:WSLogout"/>
 	
 

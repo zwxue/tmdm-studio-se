@@ -751,7 +751,7 @@ public class XtentisPort_Stub
     /*
      *  implementation of getCurrentUniverse
      */
-    public com.amalto.workbench.webservices.WSUniverse getCurrentUniverse(java.lang.String wsGetCurrentUniverse)
+    public com.amalto.workbench.webservices.WSUniverse getCurrentUniverse(com.amalto.workbench.webservices.WSGetCurrentUniverse wsGetCurrentUniverse)
         throws java.rmi.RemoteException {
         
         try {
@@ -764,7 +764,7 @@ public class XtentisPort_Stub
             
             SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getCurrentUniverse_WSGetCurrentUniverse_QNAME);
             _bodyBlock.setValue(wsGetCurrentUniverse);
-            _bodyBlock.setSerializer(ns1_myns1_WSGetCurrentUniverse__java_lang_String_String_Serializer);
+            _bodyBlock.setSerializer(ns1_myWSGetCurrentUniverse_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
@@ -3759,7 +3759,7 @@ public class XtentisPort_Stub
     /*
      *  implementation of logout
      */
-    public com.amalto.workbench.webservices.WSString logout(java.lang.String wsLogout)
+    public com.amalto.workbench.webservices.WSString logout(com.amalto.workbench.webservices.WSLogout wsLogout)
         throws java.rmi.RemoteException {
         
         try {
@@ -3772,7 +3772,7 @@ public class XtentisPort_Stub
             
             SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_logout_WSLogout_QNAME);
             _bodyBlock.setValue(wsLogout);
-            _bodyBlock.setSerializer(ns1_myns1_WSLogout__java_lang_String_String_Serializer);
+            _bodyBlock.setSerializer(ns1_myWSLogout_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
@@ -5498,7 +5498,7 @@ public class XtentisPort_Stub
     /*
      *  implementation of ping
      */
-    public com.amalto.workbench.webservices.WSString ping(java.lang.String wsPing)
+    public com.amalto.workbench.webservices.WSString ping(com.amalto.workbench.webservices.WSPing wsPing)
         throws java.rmi.RemoteException {
         
         try {
@@ -5511,7 +5511,7 @@ public class XtentisPort_Stub
             
             SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_ping_WSPing_QNAME);
             _bodyBlock.setValue(wsPing);
-            _bodyBlock.setSerializer(ns1_myns1_WSPing__java_lang_String_String_Serializer);
+            _bodyBlock.setSerializer(ns1_myWSPing_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
@@ -8331,7 +8331,6 @@ public class XtentisPort_Stub
         ns1_myWSDataModel_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSDataModel.class, ns1_WSDataModel_TYPE_QNAME);
         ns1_myWSSynchronizationPlan_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSSynchronizationPlan.class, ns1_WSSynchronizationPlan_TYPE_QNAME);
         ns1_myWSRoutingRulePK_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSRoutingRulePK.class, ns1_WSRoutingRulePK_TYPE_QNAME);
-        ns1_myns1_WSGetCurrentUniverse__java_lang_String_String_Serializer = (CombinedSerializer)registry.getSerializer("", java.lang.String.class, ns1_WSGetCurrentUniverse_TYPE_QNAME);
         ns1_myWSItemPK_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSItemPK.class, ns1_WSItemPK_TYPE_QNAME);
         ns1_myWSDeleteItems_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSDeleteItems.class, ns1_WSDeleteItems_TYPE_QNAME);
         ns1_myWSDeleteRole_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSDeleteRole.class, ns1_WSDeleteRole_TYPE_QNAME);
@@ -8377,8 +8376,8 @@ public class XtentisPort_Stub
         ns1_myWSExistsDataModel_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSExistsDataModel.class, ns1_WSExistsDataModel_TYPE_QNAME);
         ns1_myWSDeleteSynchronizationPlan_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSDeleteSynchronizationPlan.class, ns1_WSDeleteSynchronizationPlan_TYPE_QNAME);
         ns1_myWSGetStoredProcedure_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSGetStoredProcedure.class, ns1_WSGetStoredProcedure_TYPE_QNAME);
-        ns1_myns1_WSPing__java_lang_String_String_Serializer = (CombinedSerializer)registry.getSerializer("", java.lang.String.class, ns1_WSPing_TYPE_QNAME);
         ns1_myWSRoutingOrderV2PK_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSRoutingOrderV2PK.class, ns1_WSRoutingOrderV2PK_TYPE_QNAME);
+        ns1_myWSLogout_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSLogout.class, ns1_WSLogout_TYPE_QNAME);
         ns1_myWSConnectorInteraction_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSConnectorInteraction.class, ns1_WSConnectorInteraction_TYPE_QNAME);
         ns1_myWSGetTransformer_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSGetTransformer.class, ns1_WSGetTransformer_TYPE_QNAME);
         ns1_myWSPutTransformer_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSPutTransformer.class, ns1_WSPutTransformer_TYPE_QNAME);
@@ -8419,6 +8418,7 @@ public class XtentisPort_Stub
         ns1_myWSTransformerPluginV2Details_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSTransformerPluginV2Details.class, ns1_WSTransformerPluginV2Details_TYPE_QNAME);
         ns1_myWSGetRole_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSGetRole.class, ns1_WSGetRole_TYPE_QNAME);
         ns1myns1_WSRoutingEngineV2Status__WSRoutingEngineV2Status_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSRoutingEngineV2Status.class, ns1_WSRoutingEngineV2Status_TYPE_QNAME);
+        ns1_myWSPing_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSPing.class, ns1_WSPing_TYPE_QNAME);
         ns1_myWSTransformerContext_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSTransformerContext.class, ns1_WSTransformerContext_TYPE_QNAME);
         ns1_myWSTransformerV2PK_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSTransformerV2PK.class, ns1_WSTransformerV2PK_TYPE_QNAME);
         ns1_myWSGetObjectsForSynchronizationPlans_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSGetObjectsForSynchronizationPlans.class, ns1_WSGetObjectsForSynchronizationPlans_TYPE_QNAME);
@@ -8431,6 +8431,7 @@ public class XtentisPort_Stub
         ns1_myWSDeleteUniverse_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSDeleteUniverse.class, ns1_WSDeleteUniverse_TYPE_QNAME);
         ns1_myWSExistsView_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSExistsView.class, ns1_WSExistsView_TYPE_QNAME);
         ns1_myWSDeleteBusinessConcept_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSDeleteBusinessConcept.class, ns1_WSDeleteBusinessConcept_TYPE_QNAME);
+        ns1_myWSGetCurrentUniverse_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSGetCurrentUniverse.class, ns1_WSGetCurrentUniverse_TYPE_QNAME);
         ns1_myWSRoutingOrderV2_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSRoutingOrderV2.class, ns1_WSRoutingOrderV2_TYPE_QNAME);
         ns1_myWSVersioningRestoreItems_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSVersioningRestoreItems.class, ns1_WSVersioningRestoreItems_TYPE_QNAME);
         ns1_myWSStoredProcedure_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSStoredProcedure.class, ns1_WSStoredProcedure_TYPE_QNAME);
@@ -8478,7 +8479,6 @@ public class XtentisPort_Stub
         ns1_myWSUniverse_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSUniverse.class, ns1_WSUniverse_TYPE_QNAME);
         ns1_myWSGetRoutingOrderV2SByCriteria_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSGetRoutingOrderV2SByCriteria.class, ns1_WSGetRoutingOrderV2sByCriteria_TYPE_QNAME);
         ns1_myWSGetRoutingRule_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSGetRoutingRule.class, ns1_WSGetRoutingRule_TYPE_QNAME);
-        ns1_myns1_WSLogout__java_lang_String_String_Serializer = (CombinedSerializer)registry.getSerializer("", java.lang.String.class, ns1_WSLogout_TYPE_QNAME);
         ns1_myWSPutVersioningSystemConfiguration_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSPutVersioningSystemConfiguration.class, ns1_WSPutVersioningSystemConfiguration_TYPE_QNAME);
         ns1_myWSGetItemPKsByCriteria_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSGetItemPKsByCriteria.class, ns1_WSGetItemPKsByCriteria_TYPE_QNAME);
         ns1_myWSExtractUsingTransformer_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSExtractUsingTransformer.class, ns1_WSExtractUsingTransformer_TYPE_QNAME);
@@ -8707,7 +8707,7 @@ public class XtentisPort_Stub
     private static final QName ns1_serviceAction_WSString_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSString");
     private static final QName ns1_getCurrentUniverse_WSGetCurrentUniverse_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetCurrentUniverse");
     private static final QName ns1_WSGetCurrentUniverse_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetCurrentUniverse");
-    private CombinedSerializer ns1_myns1_WSGetCurrentUniverse__java_lang_String_String_Serializer;
+    private CombinedSerializer ns1_myWSGetCurrentUniverse_LiteralSerializer;
     private static final QName ns1_getCurrentUniverse_WSUniverse_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSUniverse");
     private static final QName ns1_putRole_WSPutRole_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutRole");
     private static final QName ns1_WSPutRole_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutRole");
@@ -9027,7 +9027,7 @@ public class XtentisPort_Stub
     private static final QName ns1_xPathsSearch_WSStringArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
     private static final QName ns1_logout_WSLogout_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSLogout");
     private static final QName ns1_WSLogout_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSLogout");
-    private CombinedSerializer ns1_myns1_WSLogout__java_lang_String_String_Serializer;
+    private CombinedSerializer ns1_myWSLogout_LiteralSerializer;
     private static final QName ns1_logout_WSString_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSString");
     private static final QName ns1_getBusinessConceptKey_WSGetBusinessConceptKey_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConceptKey");
     private static final QName ns1_WSGetBusinessConceptKey_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConceptKey");
@@ -9201,7 +9201,7 @@ public class XtentisPort_Stub
     private static final QName ns1_synchronizationPutObjectXML_WSString_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSString");
     private static final QName ns1_ping_WSPing_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPing");
     private static final QName ns1_WSPing_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPing");
-    private CombinedSerializer ns1_myns1_WSPing__java_lang_String_String_Serializer;
+    private CombinedSerializer ns1_myWSPing_LiteralSerializer;
     private static final QName ns1_ping_WSString_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSString");
     private static final QName ns1_getMenuPKs_WSGetMenuPKs_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetMenuPKs");
     private static final QName ns1_WSGetMenuPKs_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetMenuPKs");

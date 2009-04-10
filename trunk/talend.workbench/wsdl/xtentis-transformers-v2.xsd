@@ -134,7 +134,6 @@
 	<xsd:complexType name="WSExecuteTransformerV2AsJob">
 		<xsd:sequence>
 			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="wsTransformerContext" type="tns:WSTransformerContext"/>
-			<xsd:element minOccurs="0" maxOccurs="1"  nillable="true" name="wsTypedContent" type="tns:WSTypedContent"/>
 		</xsd:sequence>		
 	</xsd:complexType>
 	<xsd:element name="WSExecuteTransformerV2AsJob" type="tns:WSExecuteTransformerV2AsJob"/>		

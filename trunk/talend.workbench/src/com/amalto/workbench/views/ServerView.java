@@ -43,6 +43,7 @@ import com.amalto.workbench.providers.ServerTreeLabelProvider;
 import com.amalto.workbench.utils.GlobalUserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
+import com.amalto.workbench.webservices.WSLogout;
 import com.amalto.workbench.webservices.WSVersioningGetInfo;
 import com.amalto.workbench.webservices.WSVersioningInfo;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -204,7 +205,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener{
                 ServerView.this.viewer.getControl().getDisplay().syncExec(new Runnable() {
                 	public void run() {
                 		try {
-                			Util.getPort(new URL(endpointAddress), username, password).logout("");
+                			Util.getPort(new URL(endpointAddress), username, password).logout(new WSLogout());
                 		} catch (Exception e) {
                 			e.printStackTrace();
                 		}

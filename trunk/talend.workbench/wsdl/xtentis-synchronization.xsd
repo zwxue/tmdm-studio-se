@@ -51,10 +51,12 @@
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
+			<!-- Obtained via action(STATUS)
 			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="lastRunStarted" type="xsd:dateTime"/>
 			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="lastRunStopped" type="xsd:dateTime"/>
 			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="wsCurrentStatusCode" type="tns:WSSynchronizationPlanStatusCode"/>
 			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="currentStatusMessage" type="xsd:string"/>
+			-->
 		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:element name="WSSynchronizationPlan" type = "tns:WSSynchronizationPlan"/>		
@@ -90,6 +92,7 @@
 	
 	<xsd:simpleType name="WSSynchronizationPlanStatusCode">
 		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="DOES_NOT_EXIST"/>
 			<xsd:enumeration value="COMPLETED"/>
 			<xsd:enumeration value="FAILED"/>
 			<xsd:enumeration value="RUNNING"/>
@@ -106,6 +109,8 @@
 		<xsd:sequence>
 			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="wsStatusCode" type="tns:WSSynchronizationPlanStatusCode"/>
 			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="statusMessage" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="lastRunStarted" type="xsd:dateTime"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="lastRunStopped" type="xsd:dateTime"/>
 		</xsd:sequence>		
 	</xsd:complexType>
 	<xsd:element name="WSSynchronizationPlanStatus" type="tns:WSSynchronizationPlanStatus"/>	

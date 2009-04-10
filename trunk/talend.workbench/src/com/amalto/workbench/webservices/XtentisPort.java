@@ -8,9 +8,9 @@ package com.amalto.workbench.webservices;
 public interface XtentisPort extends java.rmi.Remote {
     public com.amalto.workbench.webservices.WSVersion getComponentVersion(com.amalto.workbench.webservices.WSGetComponentVersion wsGetComponentVersion) throws 
          java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSString ping(java.lang.String wsPing) throws 
+    public com.amalto.workbench.webservices.WSString ping(com.amalto.workbench.webservices.WSPing wsPing) throws 
          java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSString logout(java.lang.String wsLogout) throws 
+    public com.amalto.workbench.webservices.WSString logout(com.amalto.workbench.webservices.WSLogout wsLogout) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSInt initMDM(com.amalto.workbench.webservices.WSInitData initData) throws 
          java.rmi.RemoteException;
@@ -240,7 +240,7 @@ public interface XtentisPort extends java.rmi.Remote {
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSStringArray getObjectsForUniverses(com.amalto.workbench.webservices.WSGetObjectsForUniverses regex) throws 
          java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSUniverse getCurrentUniverse(java.lang.String wsGetCurrentUniverse) throws 
+    public com.amalto.workbench.webservices.WSUniverse getCurrentUniverse(com.amalto.workbench.webservices.WSGetCurrentUniverse wsGetCurrentUniverse) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSSynchronizationPlan getSynchronizationPlan(com.amalto.workbench.webservices.WSGetSynchronizationPlan wsGetSynchronizationPlan) throws 
          java.rmi.RemoteException;

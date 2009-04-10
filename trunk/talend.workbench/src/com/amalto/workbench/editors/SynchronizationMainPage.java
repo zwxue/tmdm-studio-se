@@ -30,6 +30,8 @@ import org.exolab.castor.xml.Marshaller;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.FontUtils;
+import com.amalto.workbench.webservices.WSByteArray;
+import com.amalto.workbench.webservices.WSExecuteTransformerV2AsJob;
 import com.amalto.workbench.webservices.WSGetObjectsForSynchronizationPlans;
 import com.amalto.workbench.webservices.WSGetSynchronizationPlanItemsAlgorithms;
 import com.amalto.workbench.webservices.WSGetSynchronizationPlanObjectsAlgorithms;
@@ -42,6 +44,11 @@ import com.amalto.workbench.webservices.WSSynchronizationPlanStatus;
 import com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode;
 import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizations;
 import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations;
+import com.amalto.workbench.webservices.WSTransformerContext;
+import com.amalto.workbench.webservices.WSTransformerContextPipeline;
+import com.amalto.workbench.webservices.WSTransformerContextPipelinePipelineItem;
+import com.amalto.workbench.webservices.WSTransformerV2PK;
+import com.amalto.workbench.webservices.WSTypedContent;
 import com.amalto.workbench.widgets.ComplexTableViewer;
 import com.amalto.workbench.widgets.LabelText;
 
@@ -124,6 +131,16 @@ public class SynchronizationMainPage extends AMainPageV2{
 		startFullButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
         	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+        		//If dirty, ask user to commit or discard changes first
+        		if (SynchronizationMainPage.this.isDirty()) {
+        			MessageDialog.openError(
+        				SynchronizationMainPage.this.getSite().getShell(), 
+        				"Error starting the synchronization",
+        				"Please save the Plan first"
+        			);
+        			return;
+        		}
+        		//Start it
         		WSSynchronizationPlan ws = (WSSynchronizationPlan) (getXObject().getWsObject()); 
         		try {
 	                getPort().synchronizationPlanAction(new WSSynchronizationPlanAction(
@@ -149,6 +166,16 @@ public class SynchronizationMainPage extends AMainPageV2{
 		startDifferentialButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
         	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+        		//If dirty, ask user to commit or discard changes first
+        		if (SynchronizationMainPage.this.isDirty()) {
+        			MessageDialog.openError(
+        				SynchronizationMainPage.this.getSite().getShell(), 
+        				"Error starting the synchronization",
+        				"Please save the Plan first"
+        			);
+        			return;
+        		}
+        		//Start the synchronization
         		WSSynchronizationPlan ws = (WSSynchronizationPlan) (getXObject().getWsObject()); 
         		try {
 	                getPort().synchronizationPlanAction(new WSSynchronizationPlanAction(
@@ -470,6 +497,7 @@ public class SynchronizationMainPage extends AMainPageV2{
 	protected void refreshStatus() {
 		
 		WSSynchronizationPlan ws = (WSSynchronizationPlan) (getXObject().getWsObject());
+		
 		WSSynchronizationPlanStatus wsStatus = null;
 		try {
 	        wsStatus = getPort().synchronizationPlanAction(new WSSynchronizationPlanAction(
@@ -566,6 +594,9 @@ public class SynchronizationMainPage extends AMainPageV2{
 			MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page", "Error comitting the page: "+e.getLocalizedMessage());
 		}    	
 	}
+	
+	
+	
 
 	/****************************************************************************
 	 *   Comptroller Model
