@@ -138,7 +138,9 @@ public class TransformerMainPage extends AMainPageV2 {
 	private Button disabledButton;
 	private WSTransformerV2 transformer;
 	private Composite specsComposite;
-		
+	
+	java.util.List<Line> cacheList; //remember the setup transformerinputvariablesdialog's input list
+	
     public TransformerMainPage(FormEditor editor) {
         super(
         		editor,
@@ -195,7 +197,7 @@ public class TransformerMainPage extends AMainPageV2 {
             
             
 	            //File Process
-	            Button processButton = toolkit.createButton(descriptionComposite,"Setup input variables",SWT.PUSH | SWT.TRAIL);
+	            Button processButton = toolkit.createButton(descriptionComposite,"Execute...",SWT.PUSH | SWT.TRAIL);
 	            processButton.setLayoutData(
 	                    new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
 	            );
@@ -216,9 +218,12 @@ public class TransformerMainPage extends AMainPageV2 {
 	            			}
 	            			//Open form Dialog	            			
 	            			transformerDialog=new SetupTransformerInputVariablesDialog(TransformerMainPage.this.getSite().getShell(),toolkit,getXObject());
+	            			transformerDialog.setCacheList(cacheList);
 	            			transformerDialog.create();
+	            			
 	            			transformerDialog.getShell().setText("Setup Transformer's input variables");
 	            			transformerDialog.open();
+	            			cacheList=transformerDialog.getCacheList();
 	            		} catch (Exception ex) {
 	            			ex.printStackTrace();
 	            		}

@@ -206,54 +206,55 @@ public class ComplexTableViewer {
         addButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
         	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-
-        		//update underlying role
-        		for(Text txt:txtLists){
-        			if(txt.getText().length()==0)return;
-        		}
-        		if(isLastCombo){
-        			if(lastCombo.getText().length()==0) return;
-        		}
-        		
-        		if(isFirstCombo){
-        			//check unique
-        			if(firstCombo.getText().length()==0) return;
-        			String input=getFirstCombo().getText().trim();
-        			List<Line> list=(List<Line>)getViewer().getInput();
-        			boolean isExist=false;
-        			for(Line line: list){
-        				for(KeyValue keyvalue:line.keyValues){
-        					if(keyvalue.value.equals(input)){
-        						isExist=true;
-        					}
-        				}
-        			}
-        			if(isExist){
-        				MessageDialog.openInformation(null, "Warning", input+" already Exists!");
-        				return;
-        			}
-        		}
-       		
-        		Line line =new Line(columns.toArray(new String[columns.size()]),getTextValus());
-        		List<Line> items=(List<Line>)viewer.getInput();
-        		items.add(line);
-        		//update the instances viewer
-        		viewer.refresh();
-        		
-        		for(Text txt:txtLists){
-        			txt.setText("");
-        		}
-        		if(isLastCombo){
-        			lastCombo.setText("");
-        		}
-        		if(isFirstCombo){
-        			firstCombo.setText("");
-        		}
-        		markDirty();
+        		add();
         	};
         });		
 	}
-	
+	public void add(){
+   		//update underlying role
+		for(Text txt:txtLists){
+			if(txt.getText().length()==0)return;
+		}
+		if(isLastCombo){
+			if(lastCombo.getText().length()==0) return;
+		}
+		
+		if(isFirstCombo){
+			//check unique
+			if(firstCombo.getText().length()==0) return;
+			String input=getFirstCombo().getText().trim();
+			List<Line> list=(List<Line>)getViewer().getInput();
+			boolean isExist=false;
+			for(Line line: list){
+				for(KeyValue keyvalue:line.keyValues){
+					if(keyvalue.value.equals(input)){
+						isExist=true;
+					}
+				}
+			}
+			if(isExist){
+				MessageDialog.openInformation(null, "Warning", input+" already Exists!");
+				return;
+			}
+		}
+		
+		Line line =new Line(columns.toArray(new String[columns.size()]),getTextValus());
+		List<Line> items=(List<Line>)viewer.getInput();
+		items.add(line);
+		//update the instances viewer
+		viewer.refresh();
+		
+		for(Text txt:txtLists){
+			txt.setText("");
+		}
+		if(isLastCombo){
+			lastCombo.setText("");
+		}
+		if(isFirstCombo){
+			firstCombo.setText("");
+		}
+		markDirty();
+	}
 	protected void createViewer(){
         Table table =new Table(mainComposite,SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER|SWT.FULL_SELECTION);
         viewer = new TableViewer(table);

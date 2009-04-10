@@ -7,9 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -40,6 +38,8 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
 	FormToolkit toolkit;
 	TreeObject object;
 	private ComplexTableViewer objectViewer;
+	java.util.List<Line> cacheList;
+	
 	public SetupTransformerInputVariablesDialog(Shell parentShell,FormToolkit toolkit,TreeObject obj) {
 		super(parentShell);	
 		this.toolkit=toolkit;
@@ -91,9 +91,12 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
         
         ((GridData)table.getLayoutData()).minimumHeight = 100;
         ((GridData)table.getLayoutData()).minimumWidth = 600;
-        
-        List<Line> list=new ArrayList<Line>();
-        objectViewer.getViewer().setInput(list);
+        if(cacheList!=null){
+        	objectViewer.getViewer().setInput(cacheList);
+        }else{
+	        List<Line> list=new ArrayList<Line>();
+	        objectViewer.getViewer().setInput(list);
+        }
         return comp;
 		
 	}
@@ -103,10 +106,13 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
 		super.createButtonsForButtonBar(parent);
 		parent.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 	}
+	
 	private void processOk(){
 		try{
+			objectViewer.add();
 			java.util.List<Line> list=(java.util.List<Line>)objectViewer.getViewer().getInput();
 			if(list.size()==0)return;
+			cacheList=list;
 			WSTransformerContextPipelinePipelineItem []items=new WSTransformerContextPipelinePipelineItem[list.size()];
 			int i=0;
 			for(Line line:list){
@@ -137,6 +143,15 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
 			}
 
 	}
+	
+	public java.util.List<Line> getCacheList() {
+		return cacheList;
+	}
+
+	public void setCacheList(java.util.List<Line> cacheList) {
+		this.cacheList = cacheList;
+	}
+
 	@Override
 	protected void setShellStyle(int newShellStyle) {		
 		super.setShellStyle(newShellStyle|SWT.RESIZE);
