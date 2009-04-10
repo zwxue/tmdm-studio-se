@@ -254,9 +254,11 @@ public interface XtentisPort extends java.rmi.Remote {
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSStringArray getObjectsForSynchronizationPlans(com.amalto.workbench.webservices.WSGetObjectsForSynchronizationPlans regex) throws 
          java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSStringArray getAlgorithmsForSynchronizationPlans(com.amalto.workbench.webservices.WSGetAlgorithmsForSynchronizationPlans regex) throws 
+    public com.amalto.workbench.webservices.WSStringArray getSynchronizationPlanObjectsAlgorithms(com.amalto.workbench.webservices.WSGetSynchronizationPlanObjectsAlgorithms regex) throws 
          java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode synchronizationPlanAction(com.amalto.workbench.webservices.WSSynchronizationPlanAction wsSynchronizationPlanAction) throws 
+    public com.amalto.workbench.webservices.WSStringArray getSynchronizationPlanItemsAlgorithms(com.amalto.workbench.webservices.WSGetSynchronizationPlanItemsAlgorithms regex) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSSynchronizationPlanStatus synchronizationPlanAction(com.amalto.workbench.webservices.WSSynchronizationPlanAction wsSynchronizationPlanAction) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSStringArray synchronizationGetUnsynchronizedObjectsIDs(com.amalto.workbench.webservices.WSSynchronizationGetUnsynchronizedObjectsIDs wsSynchronizationGetUnsynchronizedObjectsIDs) throws 
          java.rmi.RemoteException;

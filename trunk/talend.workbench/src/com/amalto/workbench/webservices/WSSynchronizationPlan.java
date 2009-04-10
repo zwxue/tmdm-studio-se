@@ -13,6 +13,10 @@ public class WSSynchronizationPlan {
     protected java.lang.String remoteSystemURL;
     protected java.lang.String remoteSystemUsername;
     protected java.lang.String remoteSystemPassword;
+    protected java.lang.String tisURL;
+    protected java.lang.String tisUsername;
+    protected java.lang.String tisPassword;
+    protected java.lang.String tisParameters;
     protected com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizations[] xtentisObjectsSynchronizations;
     protected com.amalto.workbench.webservices.WSSynchronizationPlanItemsSynchronizations[] itemsSynchronizations;
     protected java.util.Calendar lastRunStarted;
@@ -23,13 +27,17 @@ public class WSSynchronizationPlan {
     public WSSynchronizationPlan() {
     }
     
-    public WSSynchronizationPlan(java.lang.String name, java.lang.String description, java.lang.String remoteSystemName, java.lang.String remoteSystemURL, java.lang.String remoteSystemUsername, java.lang.String remoteSystemPassword, com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizations[] xtentisObjectsSynchronizations, com.amalto.workbench.webservices.WSSynchronizationPlanItemsSynchronizations[] itemsSynchronizations, java.util.Calendar lastRunStarted, java.util.Calendar lastRunStopped, com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode wsCurrentStatusCode, java.lang.String currentStatusMessage) {
+    public WSSynchronizationPlan(java.lang.String name, java.lang.String description, java.lang.String remoteSystemName, java.lang.String remoteSystemURL, java.lang.String remoteSystemUsername, java.lang.String remoteSystemPassword, java.lang.String tisURL, java.lang.String tisUsername, java.lang.String tisPassword, java.lang.String tisParameters, com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizations[] xtentisObjectsSynchronizations, com.amalto.workbench.webservices.WSSynchronizationPlanItemsSynchronizations[] itemsSynchronizations, java.util.Calendar lastRunStarted, java.util.Calendar lastRunStopped, com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode wsCurrentStatusCode, java.lang.String currentStatusMessage) {
         this.name = name;
         this.description = description;
         this.remoteSystemName = remoteSystemName;
         this.remoteSystemURL = remoteSystemURL;
         this.remoteSystemUsername = remoteSystemUsername;
         this.remoteSystemPassword = remoteSystemPassword;
+        this.tisURL = tisURL;
+        this.tisUsername = tisUsername;
+        this.tisPassword = tisPassword;
+        this.tisParameters = tisParameters;
         this.xtentisObjectsSynchronizations = xtentisObjectsSynchronizations;
         this.itemsSynchronizations = itemsSynchronizations;
         this.lastRunStarted = lastRunStarted;
@@ -84,6 +92,38 @@ public class WSSynchronizationPlan {
     
     public void setRemoteSystemPassword(java.lang.String remoteSystemPassword) {
         this.remoteSystemPassword = remoteSystemPassword;
+    }
+    
+    public java.lang.String getTisURL() {
+        return tisURL;
+    }
+    
+    public void setTisURL(java.lang.String tisURL) {
+        this.tisURL = tisURL;
+    }
+    
+    public java.lang.String getTisUsername() {
+        return tisUsername;
+    }
+    
+    public void setTisUsername(java.lang.String tisUsername) {
+        this.tisUsername = tisUsername;
+    }
+    
+    public java.lang.String getTisPassword() {
+        return tisPassword;
+    }
+    
+    public void setTisPassword(java.lang.String tisPassword) {
+        this.tisPassword = tisPassword;
+    }
+    
+    public java.lang.String getTisParameters() {
+        return tisParameters;
+    }
+    
+    public void setTisParameters(java.lang.String tisParameters) {
+        this.tisParameters = tisParameters;
     }
     
     public com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizations[] getXtentisObjectsSynchronizations() {
