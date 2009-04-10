@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class Line{
 	/**
-	 * key is the TableColumn name, value is the caressing column's value
+	 * key is the TableColumn name, value is the  column's value
 	 */
 	public List<KeyValue> keyValues=new ArrayList<KeyValue>();
 	public Line(String[] keys,String[]values ){

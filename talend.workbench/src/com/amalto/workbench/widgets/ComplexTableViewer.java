@@ -3,6 +3,7 @@ package com.amalto.workbench.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -63,22 +64,48 @@ public class ComplexTableViewer {
 		this.mainPage = mainPage;
 	}
 	
-	//isLastCombo =true need to set comboStrings
+	//isLastCombo =true need to set lastcomboStrings
 	protected boolean isLastCombo; //check last column is combo or not
-	protected String[] comboStrings;
+	protected String[] lastcomboStrings;
 	protected CCombo lastCombo;
 	
+	//isFirstCombo=true need to set firstcomboStrings
+	protected boolean isFirstCombo; //check last column is combo or not
+	protected String[] firstcomboStrings;
+	protected CCombo firstCombo;
+	
+	
+	public boolean isFirstCombo() {
+		return isFirstCombo;
+	}
+	public void setFirstCombo(boolean isFirstCombo) {
+		this.isFirstCombo = isFirstCombo;
+	}
+	public String[] getFirstcomboStrings() {
+		return firstcomboStrings;
+	}
+	public void setFirstcomboStrings(String[] firstcomboStrings) {
+		this.firstcomboStrings = firstcomboStrings;
+	}
+	public CCombo getFirstCombo() {
+		return firstCombo;
+	}
+
 	public boolean isLastCombo() {
 		return isLastCombo;
 	}
+
 	public void setLastCombo(boolean isLastCombo) {
 		this.isLastCombo = isLastCombo;
 	}
-	public String[] getComboStrings() {
-		return comboStrings;
+	public void setFirstCombo(CCombo firstCombo) {
+		this.firstCombo = firstCombo;
 	}
-	public void setComboStrings(String[] comboStrings) {
-		this.comboStrings = comboStrings;
+	public String[] getLastcomboStrings() {
+		return lastcomboStrings;
+	}
+	public void setLastcomboStrings(String[] lastcomboStrings) {
+		this.lastcomboStrings = lastcomboStrings;
 	}
 	public Button getAddButton() {
 		return addButton;
@@ -95,6 +122,10 @@ public class ComplexTableViewer {
 	public Button getDeleteButton() {
 		return deleteButton;
 	}
+	
+	public List<Text> getTxtLists() {
+		return txtLists;
+	}
 	public ComplexTableViewer(List<String> columns, FormToolkit toolkit,Composite parent){
 		this.columns=columns;
 		this.parent=parent;
@@ -102,12 +133,16 @@ public class ComplexTableViewer {
 	}
 	protected String[] getTextValus(){
 		List<String> values=new ArrayList<String>();
+		if(isFirstCombo){
+			values.add(firstCombo.getText());
+		}
 		for(Text txt:txtLists){
 			values.add(txt.getText());
 		}
 		if(isLastCombo){
 			values.add(lastCombo.getText());
 		}
+
 		return values.toArray(new String[values.size()]);
 	}
 	
@@ -136,21 +171,37 @@ public class ComplexTableViewer {
 	protected void createTexts(){
 		int length=columns.size();
 		if(isLastCombo()){
-			length=columns.size()-1;
+			length=length-1;
+		}
+		if(isFirstCombo()){
+			length=length-1;
+		}
+		if(isFirstCombo()){
+			firstCombo=new CCombo(mainComposite,SWT.BORDER|SWT.READ_ONLY);
+			firstCombo.setItems(firstcomboStrings);
+			firstCombo.setLayoutData(    
+	                new GridData(SWT.FILL,SWT.TOP,true,false,1,1));
 		}
 		for(int i=0; i<length; i++){
-			Text text = toolkit.createText(mainComposite, "",SWT.BORDER|SWT.MULTI);
+			int style=SWT.BORDER|SWT.MULTI;
+			if(isFirstCombo()){
+				style=SWT.BORDER|SWT.MULTI|SWT.V_SCROLL|SWT.H_SCROLL;
+			}
+			Text text = toolkit.createText(mainComposite, "",style);
 			text.setLayoutData(    
 		                new GridData(SWT.FILL,SWT.FILL,true,true,1,1));
 			txtLists.add(text);
 		}
 		if(isLastCombo()){
 			lastCombo=new CCombo(mainComposite,SWT.BORDER|SWT.READ_ONLY);
-			lastCombo.setItems(comboStrings);
+			lastCombo.setItems(lastcomboStrings);
+			lastCombo.setLayoutData(    
+					new GridData(SWT.FILL,SWT.TOP,true,false,1,1));
 		}
+
         addButton = toolkit.createButton(mainComposite,"Add",SWT.PUSH | SWT.CENTER);
         addButton.setLayoutData(
-                new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+                new GridData(SWT.FILL,SWT.BOTTOM,false,false,1,1)
         );
         addButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
@@ -163,6 +214,26 @@ public class ComplexTableViewer {
         		if(isLastCombo){
         			if(lastCombo.getText().length()==0) return;
         		}
+        		
+        		if(isFirstCombo){
+        			//check unique
+        			if(firstCombo.getText().length()==0) return;
+        			String input=getFirstCombo().getText().trim();
+        			List<Line> list=(List<Line>)getViewer().getInput();
+        			boolean isExist=false;
+        			for(Line line: list){
+        				for(KeyValue keyvalue:line.keyValues){
+        					if(keyvalue.value.equals(input)){
+        						isExist=true;
+        					}
+        				}
+        			}
+        			if(isExist){
+        				MessageDialog.openInformation(null, "Warning", input+" already Exists!");
+        				return;
+        			}
+        		}
+       		
         		Line line =new Line(columns.toArray(new String[columns.size()]),getTextValus());
         		List<Line> items=(List<Line>)viewer.getInput();
         		items.add(line);
@@ -174,6 +245,9 @@ public class ComplexTableViewer {
         		}
         		if(isLastCombo){
         			lastCombo.setText("");
+        		}
+        		if(isFirstCombo){
+        			firstCombo.setText("");
         		}
         		markDirty();
         	};
@@ -206,7 +280,7 @@ public class ComplexTableViewer {
         
         upButton = toolkit.createButton(stepUpDownComposite,"Up",SWT.PUSH | SWT.CENTER);
         upButton.setLayoutData(
-                new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+                new GridData(SWT.FILL,SWT.FILL,false,false,1,1)
         );
         upButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
@@ -233,7 +307,7 @@ public class ComplexTableViewer {
         });
         downButton = toolkit.createButton(stepUpDownComposite,"Down",SWT.PUSH | SWT.CENTER);
         downButton.setLayoutData(
-                new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+                new GridData(SWT.FILL,SWT.FILL,false,false,1,1)
         );
         downButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
@@ -260,7 +334,7 @@ public class ComplexTableViewer {
         });
         deleteButton = toolkit.createButton(stepUpDownComposite,"Delete",SWT.PUSH | SWT.CENTER);
         deleteButton.setLayoutData(
-                new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+                new GridData(SWT.FILL,SWT.FILL,false,false,1,1)
         );
         deleteButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};

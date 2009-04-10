@@ -41,9 +41,13 @@ import org.eclipse.swt.widgets.TableItem;
 
 import com.amalto.workbench.editors.TransformerMainPage;
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.webservices.WSTransformer;
-import com.amalto.workbench.webservices.WSTransformerPluginSpec;
-
+import com.amalto.workbench.webservices.WSTransformerProcessStep;
+import com.amalto.workbench.webservices.WSTransformerV2;
+/**
+ *@deprecated 
+ * @author cli
+ *
+ */
 public class ProcessFileDialog extends Dialog {
 
 	
@@ -80,10 +84,11 @@ public class ProcessFileDialog extends Dialog {
 		this.caller = caller;
 		this.title = title;
 		//feed the output variables with the default processs to console
-		WSTransformerPluginSpec[] pluginSpecs = ((WSTransformer)transformerObject.getWsObject()).getPluginSpecs();
+		WSTransformerProcessStep[] pluginSpecs = ((WSTransformerV2)transformerObject.getWsObject()).getProcessSteps();
 		if (pluginSpecs!=null) {
 			for (int i = 0; i < pluginSpecs.length; i++) {
-				variablesMap.put(pluginSpecs[i].getOutput(), CONSOLE); 
+				//TODO
+				variablesMap.put(pluginSpecs[i].getPluginJNDI(), CONSOLE); 
 			}
 		}
 	}

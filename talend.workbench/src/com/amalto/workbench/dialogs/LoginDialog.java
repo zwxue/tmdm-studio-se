@@ -130,7 +130,7 @@ public class LoginDialog extends Dialog {
 		universeLabel.setLayoutData(
 			new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
 		);
-		universeLabel.setText("Revision ID");
+		universeLabel.setText("Universe");
 
 		universeCombo = new Combo(composite, SWT.NONE);
 		universeCombo.setLayoutData(

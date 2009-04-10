@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -29,7 +28,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.dnd.DND;
@@ -55,7 +53,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
@@ -67,22 +64,30 @@ import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.amalto.workbench.actions.ProcessFileThruTransformerAction;
 import com.amalto.workbench.dialogs.PluginDetailsDialog;
 import com.amalto.workbench.dialogs.ProcessFileDialog;
+import com.amalto.workbench.dialogs.SetupTransformerInputVariablesDialog;
+import com.amalto.workbench.models.Line;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.Version;
 import com.amalto.workbench.utils.WidgetUtils;
+import com.amalto.workbench.webservices.WSByteArray;
+import com.amalto.workbench.webservices.WSExecuteTransformerV2AsJob;
 import com.amalto.workbench.webservices.WSGetTransformerPluginV2Details;
 import com.amalto.workbench.webservices.WSGetTransformerPluginV2SList;
+import com.amalto.workbench.webservices.WSTransformerContext;
+import com.amalto.workbench.webservices.WSTransformerContextPipeline;
+import com.amalto.workbench.webservices.WSTransformerContextPipelinePipelineItem;
 import com.amalto.workbench.webservices.WSTransformerPluginV2Details;
 import com.amalto.workbench.webservices.WSTransformerPluginV2SList;
 import com.amalto.workbench.webservices.WSTransformerPluginV2SListItem;
 import com.amalto.workbench.webservices.WSTransformerPluginV2VariableDescriptor;
 import com.amalto.workbench.webservices.WSTransformerProcessStep;
 import com.amalto.workbench.webservices.WSTransformerV2;
+import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.WSTransformerVariablesMapping;
+import com.amalto.workbench.webservices.WSTypedContent;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.LabelCombo;
 
@@ -107,8 +112,9 @@ public class TransformerMainPage extends AMainPageV2 {
 	
 	protected Text pluginDescription;
 	protected TextViewer parametersTextViewer;
-	protected ProcessFileDialog processFileDialog;
-
+	
+	SetupTransformerInputVariablesDialog transformerDialog =null;
+	
 	protected DropTarget windowTarget;	
 	
 	protected AbstractFormPart topPart;
@@ -154,7 +160,7 @@ public class TransformerMainPage extends AMainPageV2 {
     }
 
     @Override
-	protected void createCharacteristicsContent(FormToolkit toolkit, Composite topComposite) {
+	protected void createCharacteristicsContent(final FormToolkit toolkit, Composite topComposite) {
     	try {
     	    port=Util.getPort(getXObject());
     	    transformer = (WSTransformerV2) getXObject().getWsObject();
@@ -164,11 +170,7 @@ public class TransformerMainPage extends AMainPageV2 {
             descriptionComposite.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
             );
-            descriptionComposite.setLayout(
-            	new GridLayout(
-            		3 ,
-            		false
-            	));
+            descriptionComposite.setLayout(   new GridLayout(3 ,false ));
 
             //description
             Label descriptionLabel = toolkit.createLabel(descriptionComposite, "Description", SWT.NULL);
@@ -193,7 +195,7 @@ public class TransformerMainPage extends AMainPageV2 {
             
             
 	            //File Process
-	            Button processButton = toolkit.createButton(descriptionComposite,"Process a File...",SWT.PUSH | SWT.TRAIL);
+	            Button processButton = toolkit.createButton(descriptionComposite,"Setup input variables",SWT.PUSH | SWT.TRAIL);
 	            processButton.setLayoutData(
 	                    new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
 	            );
@@ -212,51 +214,11 @@ public class TransformerMainPage extends AMainPageV2 {
 	            				if (MessageDialog.openConfirm(TransformerMainPage.this.getSite().getShell(), "Executing the Transformer", "The Transformer was changed and will be executed using the saved version.\nSave the transformer before executing it?"))
 	            					TransformerMainPage.this.getEditor().doSave(new NullProgressMonitor());
 	            			}
-	            			//Open form Dialog
-	    					FileDialog fd = new FileDialog(TransformerMainPage.this.getSite().getShell(),SWT.OPEN);
-	    					fd.setText("Select document to upload");
-	    					/*
-	    					fd.setFilterExtensions(new String[] {"*.*"});
-	    					fd.setFilterExtensions(new String[] {"All Files"});
-	    					*/
-	    					fd.setFilterExtensions(new String[] {"*.*","*.txt","*.xml"});
-	    					if (filePath != null) 
-	    						fd.setFilterPath(filePath+"/xxxyyyyzzzz");
-	    					else
-	    						fd.setFilterPath(System.getProperty("user.home")+"/xxxxxyyyyzzzz");
-	    					fd.open();
-	    					if ("".equals(fd.getFileName())) return;
-	    					filePath = fd.getFilterPath();
-	    					String filename =  fd.getFilterPath()+System.getProperty("file.separator")+fd.getFileName();
-	    					processFileDialog = new ProcessFileDialog(
-    							getXObject(),
-    							filename,
-    							TransformerMainPage.this.getSite().getShell(),
-    							"Process using Transformer "+((WSTransformerV2)getXObject().getWsObject()).getName(),
-    							new SelectionListener() {
-    								public void 
-    								widgetDefaultSelected(SelectionEvent e) {}
-    								public void widgetSelected(SelectionEvent e) {
-    									LinkedHashMap<String,String> variablesMap = processFileDialog.getVariablesMap();
-    									String filename = processFileDialog.getFilename();
-    									String encoding = processFileDialog.getEncoding();
-    									String mimeType = processFileDialog.getMimeType();
-    									processFileDialog.close();
-    									if (processFileDialog.getReturnCode() == Window.OK) {
-    										(new ProcessFileThruTransformerAction(
-    												(XObjectEditor)TransformerMainPage.this.getEditor(),
-    												variablesMap,
-    												filename,
-    												mimeType,
-    												encoding
-    										)).run();
-    										
-    									}
-    								}
-    							}
-	    					);
-	    					processFileDialog.setBlockOnOpen(true);
-	    					processFileDialog.open();	    					
+	            			//Open form Dialog	            			
+	            			transformerDialog=new SetupTransformerInputVariablesDialog(TransformerMainPage.this.getSite().getShell(),toolkit,getXObject());
+	            			transformerDialog.create();
+	            			transformerDialog.getShell().setText("Setup Transformer's input variables");
+	            			transformerDialog.open();
 	            		} catch (Exception ex) {
 	            			ex.printStackTrace();
 	            		}
@@ -288,8 +250,6 @@ public class TransformerMainPage extends AMainPageV2 {
                     new GridData(SWT.FILL,SWT.FILL,true,true,4,1)
             );
 
-
-         
             Button addStepButton = toolkit.createButton(sequenceComposite,"Add",SWT.PUSH | SWT.TRAIL);
             addStepButton.setLayoutData(
                     new GridData(SWT.CENTER,SWT.FILL,false,true,1,1)
@@ -552,7 +512,7 @@ public class TransformerMainPage extends AMainPageV2 {
 						transformer.getProcessSteps()[index].getParameters()
 				)
 		);
-		stepWidget.setProcessStep(transformer.getProcessSteps()[index]);
+		stepWidget.setProcessStep(transformer.getProcessSteps()[index], index);
 		disabledButton.setSelection(transformer.getProcessSteps()[index].getDisabled());
 		WidgetUtils.enable(specsComposite, !disabledButton.getSelection());
 		
@@ -676,8 +636,18 @@ public class TransformerMainPage extends AMainPageV2 {
 			return processStep;
 		}
 
-		public void setProcessStep(WSTransformerProcessStep processStep) {
+		public void setProcessStep(WSTransformerProcessStep processStep,int index) {
 			this.processStep = processStep;
+			//reset the available variables
+			availableVariables.clear();
+			for(int i=0; i<=index; i++){
+				for(WSTransformerVariablesMapping mapping:transformer.getProcessSteps()[i].getInputMappings()){
+					availableVariables.add(mapping.getPipelineVariable()==null?DEFAULT_VAR:mapping.getPipelineVariable());
+				}
+				for(WSTransformerVariablesMapping mapping:transformer.getProcessSteps()[i].getOutputMappings()){
+					availableVariables.add(mapping.getPipelineVariable()==null?DEFAULT_VAR:mapping.getPipelineVariable());
+				}
+			}
 			refreshViewers();
 			refreshCombo();
 		}
@@ -824,13 +794,15 @@ public class TransformerMainPage extends AMainPageV2 {
         			WSTransformerVariablesMapping line = new WSTransformerVariablesMapping();
         			if(inputVariables.getText().trim().length()>0)
         				line.setPipelineVariable(inputVariables.getText());
+        			else
+        				line.setPipelineVariable(DEFAULT_VAR);
         			if(inputParams.getText().trim().length()>0)
         				line.setPluginVariable(inputParams.getText());
         			
         			items.add(line);
         			processStep.setInputMappings(items.toArray(new WSTransformerVariablesMapping[items.size()]));
         			inputViewer.refresh();
-        			availableVariables.add(inputVariables.getText());
+        			if(line.getPipelineVariable()!=null)availableVariables.add(line.getPipelineVariable());
         			outputVariables.setItems(availableVariables.toArray(new String[availableVariables.size()]));
         			markDirty();
 	        	}
@@ -869,13 +841,18 @@ public class TransformerMainPage extends AMainPageV2 {
 	        		if(isExist(items, outputParams.getText())) return;
 	        		
         			WSTransformerVariablesMapping line = new WSTransformerVariablesMapping();
-        			if(outputVariables.getText().length()>0)line.setPipelineVariable(outputVariables.getText());
-        			if(outputParams.getText().trim().length()>0)line.setPluginVariable(outputParams.getText());
+        			if(outputVariables.getText().length()>0)
+        				line.setPipelineVariable(outputVariables.getText());
+        			else
+        				line.setPipelineVariable(DEFAULT_VAR);
+        			
+        			if(outputParams.getText().trim().length()>0)
+        				line.setPluginVariable(outputParams.getText());
          			items.add(line);
         			processStep.setOutputMappings(items.toArray(new WSTransformerVariablesMapping[items.size()]));
-        			availableVariables.add(outputVariables.getText());
-        			outputVariables.setItems(availableVariables.toArray(new String[availableVariables.size()]));
         			outputViewer.refresh();
+        			if(line.getPipelineVariable()!=null)availableVariables.add(line.getPipelineVariable());
+        			outputVariables.setItems(availableVariables.toArray(new String[availableVariables.size()]));
         			markDirty();
 	        	}
 	        });
