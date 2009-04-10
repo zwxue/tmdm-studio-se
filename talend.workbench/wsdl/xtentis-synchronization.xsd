@@ -19,6 +19,10 @@
 			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="remoteSystemURL" type="xsd:string"/>
 			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="remoteSystemUsername" type="xsd:string"/>
 			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="remoteSystemPassword" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="tisURL" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="tisUsername" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="tisPassword" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="tisParameters" type="xsd:string"/>
 			<xsd:element minOccurs="0" maxOccurs="unbounded"  nillable="false" name="xtentisObjectsSynchronizations">
 				<xsd:complexType>
 					<xsd:sequence>
@@ -69,7 +73,42 @@
 	</xsd:complexType>
 	<xsd:element name="WSSynchronizationPlanPKArray" type = "tns:WSSynchronizationPlanPKArray"/>
 
-
+	<xsd:simpleType name="WSSynchronizationPlanActionCode">
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="START_FULL"/>
+			<xsd:enumeration value="START_DIFFERENTIAL"/>
+			<xsd:enumeration value="STOP"/>
+			<xsd:enumeration value="RESET"/>
+			<xsd:enumeration value="STATUS"/>
+			<!--
+				<xsd:enumeration value="SUSPEND"/>
+				<xsd:enumeration value="RESUME"/>
+			-->
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:element name="WSSynchronizationPlanActionCode" type="tns:WSSynchronizationPlanActionCode"/>
+	
+	<xsd:simpleType name="WSSynchronizationPlanStatusCode">
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="COMPLETED"/>
+			<xsd:enumeration value="FAILED"/>
+			<xsd:enumeration value="RUNNING"/>
+			<xsd:enumeration value="SCHEDULED"/>
+			<xsd:enumeration value="STOPPING"/>
+			<!--
+				<xsd:enumeration value="SUSPENDED"/>
+			-->
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:element name="WSSynchronizationPlanStatusCode" type="tns:WSSynchronizationPlanStatusCode"/>
+	
+	<xsd:complexType name="WSSynchronizationPlanStatus">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="wsStatusCode" type="tns:WSSynchronizationPlanStatusCode"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="statusMessage" type="xsd:string"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSSynchronizationPlanStatus" type="tns:WSSynchronizationPlanStatus"/>	
 	
 	<!-- *****************************************************
 		SynchronizationPlan Operations
@@ -117,12 +156,19 @@
 	</xsd:complexType>
 	<xsd:element name="WSGetObjectsForSynchronizationPlans" type="tns:WSGetObjectsForSynchronizationPlans"/>
 
-	<xsd:complexType name="WSGetAlgorithmsForSynchronizationPlans">
+	<xsd:complexType name="WSGetSynchronizationPlanObjectsAlgorithms">
 		<xsd:sequence>
-			<xsd:element minOccurs="0" maxOccurs="unbounded"  nillable="false" name="regex" type="xsd:string"/>
+			<xsd:element minOccurs="0" maxOccurs="unbounded"  nillable="false" name="algorithm" type="xsd:string"/>
 		</xsd:sequence>		
 	</xsd:complexType>
-	<xsd:element name="WSGetAlgorithmsForSynchronizationPlans" type="tns:WSGetAlgorithmsForSynchronizationPlans"/>
+	<xsd:element name="WSGetSynchronizationPlanObjectsAlgorithms" type="tns:WSGetSynchronizationPlanObjectsAlgorithms"/>
+	
+	<xsd:complexType name="WSGetSynchronizationPlanItemsAlgorithms">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" maxOccurs="unbounded"  nillable="false" name="algorithm" type="xsd:string"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSGetSynchronizationPlanItemsAlgorithms" type="tns:WSGetSynchronizationPlanItemsAlgorithms"/>
 	
 	<xsd:complexType name="WSSynchronizationPlanAction">
 		<xsd:sequence>
@@ -132,31 +178,8 @@
 	</xsd:complexType>
 	<xsd:element name="WSSynchronizationPlanAction" type="tns:WSSynchronizationPlanAction"/>	
 	
-	<xsd:simpleType name="WSSynchronizationPlanActionCode">
-		<xsd:restriction base="xsd:NMTOKEN">
-			<xsd:enumeration value="START_FULL"/>
-			<xsd:enumeration value="START_DIFFERENTIAL"/>
-			<xsd:enumeration value="STOP"/>
-			<xsd:enumeration value="STATUS"/>
-			<!--
-			<xsd:enumeration value="SUSPEND"/>
-			<xsd:enumeration value="RESUME"/>
-			-->
-		</xsd:restriction>
-	</xsd:simpleType>
-	<xsd:element name="WSSynchronizationPlanActionCode" type="tns:WSSynchronizationPlanActionCode"/>
-	
-	<xsd:simpleType name="WSSynchronizationPlanStatusCode">
-		<xsd:restriction base="xsd:NMTOKEN">
-			<xsd:enumeration value="COMPLETED"/>
-			<xsd:enumeration value="FAILED"/>
-			<xsd:enumeration value="RUNNING"/>
-			<!--
-				<xsd:enumeration value="SUSPENDED"/>
-			-->
-		</xsd:restriction>
-	</xsd:simpleType>
-	<xsd:element name="WSSynchronizationPlanStatusCode" type="tns:WSSynchronizationPlanStatusCode"/>
+
+
 	
 	<xsd:complexType name="WSSynchronizationGetUnsynchronizedObjectsIDs">
 		<xsd:sequence>

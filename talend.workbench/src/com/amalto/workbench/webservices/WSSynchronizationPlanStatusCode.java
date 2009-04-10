@@ -15,14 +15,20 @@ public class WSSynchronizationPlanStatusCode {
     public static final String _COMPLETEDString = "COMPLETED";
     public static final String _FAILEDString = "FAILED";
     public static final String _RUNNINGString = "RUNNING";
+    public static final String _SCHEDULEDString = "SCHEDULED";
+    public static final String _STOPPINGString = "STOPPING";
     
     public static final java.lang.String _COMPLETED = new java.lang.String(_COMPLETEDString);
     public static final java.lang.String _FAILED = new java.lang.String(_FAILEDString);
     public static final java.lang.String _RUNNING = new java.lang.String(_RUNNINGString);
+    public static final java.lang.String _SCHEDULED = new java.lang.String(_SCHEDULEDString);
+    public static final java.lang.String _STOPPING = new java.lang.String(_STOPPINGString);
     
     public static final WSSynchronizationPlanStatusCode COMPLETED = new WSSynchronizationPlanStatusCode(_COMPLETED);
     public static final WSSynchronizationPlanStatusCode FAILED = new WSSynchronizationPlanStatusCode(_FAILED);
     public static final WSSynchronizationPlanStatusCode RUNNING = new WSSynchronizationPlanStatusCode(_RUNNING);
+    public static final WSSynchronizationPlanStatusCode SCHEDULED = new WSSynchronizationPlanStatusCode(_SCHEDULED);
+    public static final WSSynchronizationPlanStatusCode STOPPING = new WSSynchronizationPlanStatusCode(_STOPPING);
     
     protected WSSynchronizationPlanStatusCode(java.lang.String value) {
         this.value = value;
@@ -41,6 +47,10 @@ public class WSSynchronizationPlanStatusCode {
             return FAILED;
         } else if (RUNNING.value.equals(value)) {
             return RUNNING;
+        } else if (SCHEDULED.value.equals(value)) {
+            return SCHEDULED;
+        } else if (STOPPING.value.equals(value)) {
+            return STOPPING;
         }
         throw new IllegalArgumentException();
     }
@@ -57,6 +67,10 @@ public class WSSynchronizationPlanStatusCode {
             return FAILED;
         } else if (value.equals(_RUNNINGString)) {
             return RUNNING;
+        } else if (value.equals(_SCHEDULEDString)) {
+            return SCHEDULED;
+        } else if (value.equals(_STOPPINGString)) {
+            return STOPPING;
         }
         throw new IllegalArgumentException();
     }

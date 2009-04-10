@@ -27,6 +27,10 @@ public class WSSynchronizationPlan_LiteralSerializer extends LiteralObjectSerial
     private static final QName ns1_remoteSystemURL_QNAME = new QName("", "remoteSystemURL");
     private static final QName ns1_remoteSystemUsername_QNAME = new QName("", "remoteSystemUsername");
     private static final QName ns1_remoteSystemPassword_QNAME = new QName("", "remoteSystemPassword");
+    private static final QName ns1_tisURL_QNAME = new QName("", "tisURL");
+    private static final QName ns1_tisUsername_QNAME = new QName("", "tisUsername");
+    private static final QName ns1_tisPassword_QNAME = new QName("", "tisPassword");
+    private static final QName ns1_tisParameters_QNAME = new QName("", "tisParameters");
     private static final QName ns1_xtentisObjectsSynchronizations_QNAME = new QName("", "xtentisObjectsSynchronizations");
     private static final QName ns2_WSSynchronizationPlan$2d$xtentisObjectsSynchronizations_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlan-xtentisObjectsSynchronizations");
     private CombinedSerializer ns2_myWSSynchronizationPlanXtentisObjectsSynchronizations_LiteralSerializer;
@@ -149,6 +153,58 @@ public class WSSynchronizationPlan_LiteralSerializer extends LiteralObjectSerial
                 reader.nextElementContent();
             } else {
                 throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_remoteSystemPassword_QNAME, reader.getName() });
+            }
+        }
+        else {
+            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
+        }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_tisURL_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_tisURL_QNAME, reader, context);
+                instance.setTisURL((java.lang.String)member);
+                reader.nextElementContent();
+            } else {
+                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_tisURL_QNAME, reader.getName() });
+            }
+        }
+        else {
+            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
+        }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_tisUsername_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_tisUsername_QNAME, reader, context);
+                instance.setTisUsername((java.lang.String)member);
+                reader.nextElementContent();
+            } else {
+                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_tisUsername_QNAME, reader.getName() });
+            }
+        }
+        else {
+            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
+        }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_tisPassword_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_tisPassword_QNAME, reader, context);
+                instance.setTisPassword((java.lang.String)member);
+                reader.nextElementContent();
+            } else {
+                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_tisPassword_QNAME, reader.getName() });
+            }
+        }
+        else {
+            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
+        }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_tisParameters_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_tisParameters_QNAME, reader, context);
+                instance.setTisParameters((java.lang.String)member);
+                reader.nextElementContent();
+            } else {
+                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_tisParameters_QNAME, reader.getName() });
             }
         }
         else {
@@ -288,6 +344,10 @@ public class WSSynchronizationPlan_LiteralSerializer extends LiteralObjectSerial
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getRemoteSystemURL(), ns1_remoteSystemURL_QNAME, null, writer, context);
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getRemoteSystemUsername(), ns1_remoteSystemUsername_QNAME, null, writer, context);
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getRemoteSystemPassword(), ns1_remoteSystemPassword_QNAME, null, writer, context);
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getTisURL(), ns1_tisURL_QNAME, null, writer, context);
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getTisUsername(), ns1_tisUsername_QNAME, null, writer, context);
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getTisPassword(), ns1_tisPassword_QNAME, null, writer, context);
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getTisParameters(), ns1_tisParameters_QNAME, null, writer, context);
         if (instance.getXtentisObjectsSynchronizations() != null) {
             for (int i = 0; i < instance.getXtentisObjectsSynchronizations().length; ++i) {
                 ns2_myWSSynchronizationPlanXtentisObjectsSynchronizations_LiteralSerializer.serialize(instance.getXtentisObjectsSynchronizations()[i], ns1_xtentisObjectsSynchronizations_QNAME, null, writer, context);

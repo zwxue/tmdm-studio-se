@@ -1,6 +1,7 @@
 package com.amalto.workbench.editors;
 
 import java.io.StringWriter;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,28 +17,31 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.exolab.castor.xml.Marshaller;
 
-import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.FontUtils;
-import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.webservices.WSGetAlgorithmsForSynchronizationPlans;
 import com.amalto.workbench.webservices.WSGetObjectsForSynchronizationPlans;
+import com.amalto.workbench.webservices.WSGetSynchronizationPlanItemsAlgorithms;
+import com.amalto.workbench.webservices.WSGetSynchronizationPlanObjectsAlgorithms;
 import com.amalto.workbench.webservices.WSSynchronizationPlan;
+import com.amalto.workbench.webservices.WSSynchronizationPlanAction;
+import com.amalto.workbench.webservices.WSSynchronizationPlanActionCode;
 import com.amalto.workbench.webservices.WSSynchronizationPlanItemsSynchronizations;
+import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
+import com.amalto.workbench.webservices.WSSynchronizationPlanStatus;
+import com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode;
 import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizations;
 import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations;
-import com.amalto.workbench.webservices.WSUniverseItemsRevisionIDs;
-import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
-import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.ComplexTableViewer;
 import com.amalto.workbench.widgets.LabelText;
 
@@ -53,14 +57,24 @@ public class SynchronizationMainPage extends AMainPageV2{
 	private String[] itemsColumns=new String[]{"Concept Pattern","IDs Pattern","Source Revision ID","Target Revision ID","Algorithm"};
 		
 	protected SyncronizationPlan syncPlan;
+	protected LabelText descriptionText;
 
-	private LabelText passwordText;
+	protected Label statusText;
+	protected Button startFullButton;
+	protected Button startDifferentialButton;
+	protected Button stopButton;
+	protected Button resetButton;
+	
+	protected LabelText remoteSystemNameText;
+	protected LabelText remoteSystemPasswordText;
+	protected LabelText remoteSystemUsernameText;
+	protected LabelText remoteSystemURLText;
 
-	private LabelText usernameText;
+	protected LabelText tisURLText;
+	protected LabelText tisUsernameText;
+	protected LabelText tisPasswordText;
+	protected LabelText tisParametersText;
 
-	private LabelText urlText;
-
-	private LabelText descriptionText;
 	
 	private Map<String,ComplexTableViewer> xtentisViewers=new HashMap<String, ComplexTableViewer>();
 	public SynchronizationMainPage(FormEditor editor) {
@@ -77,6 +91,12 @@ public class SynchronizationMainPage extends AMainPageV2{
 	try {
 		if(syncPlan==null)syncPlan=new SyncronizationPlan();
 		this.toolkit=toolkit;
+		
+        //make the Page window a DropTarget - we need to dispose it
+        windowTarget = new DropTarget(this.getPartControl(), DND.DROP_MOVE);
+        windowTarget.setTransfer(new Transfer[]{TextTransfer.getInstance()});
+        windowTarget.addDropListener(new DCDropTargetListener());
+		
         //basic setting
 		descriptionText =new LabelText(toolkit,charComposite,"Description");        
 		descriptionText.getText().addModifyListener(new ModifyListener() {
@@ -86,49 +106,249 @@ public class SynchronizationMainPage extends AMainPageV2{
         		markDirty();
         	}
         });
-		urlText =new LabelText(toolkit,charComposite,"Server URL");        
-		urlText.getText().addModifyListener(new ModifyListener() {
+		
+		toolkit.createLabel(charComposite, "Status");
+		statusText = toolkit.createLabel(charComposite, "");
+		
+		toolkit.createLabel(charComposite, "Actions");
+        Composite actionsComposite = toolkit.createComposite(charComposite, SWT.NONE);
+        actionsComposite.setLayoutData(
+                new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+        );       
+        actionsComposite.setLayout(new GridLayout(4,false));
+        //full synchro
+		startFullButton = toolkit.createButton(actionsComposite,"Start Full",SWT.PUSH );
+		startFullButton.setLayoutData(
+                new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+        );
+		startFullButton.addSelectionListener(new SelectionListener() {
+        	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
+        	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+        		WSSynchronizationPlan ws = (WSSynchronizationPlan) (getXObject().getWsObject()); 
+        		try {
+	                getPort().synchronizationPlanAction(new WSSynchronizationPlanAction(
+	                	new WSSynchronizationPlanPK(ws.getName()),
+	                	WSSynchronizationPlanActionCode.START_FULL
+	                ));
+                } catch (RemoteException ex) {
+                	ex.printStackTrace();
+        			MessageDialog.openError(
+        				SynchronizationMainPage.this.getSite().getShell(), 
+        				"Error Starting the Full Synchronization", 
+        				ex.getLocalizedMessage()
+        			);
+                }
+        		refreshStatus();
+        	}
+        });
+		//differential synchro
+		startDifferentialButton = toolkit.createButton(actionsComposite,"Start Differential",SWT.PUSH);
+		startDifferentialButton.setLayoutData(
+                new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+        );
+		startDifferentialButton.addSelectionListener(new SelectionListener() {
+        	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
+        	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+        		WSSynchronizationPlan ws = (WSSynchronizationPlan) (getXObject().getWsObject()); 
+        		try {
+	                getPort().synchronizationPlanAction(new WSSynchronizationPlanAction(
+	                	new WSSynchronizationPlanPK(ws.getName()),
+	                	WSSynchronizationPlanActionCode.START_DIFFERENTIAL
+	                ));
+                } catch (RemoteException ex) {
+                	ex.printStackTrace();
+        			MessageDialog.openError(
+        				SynchronizationMainPage.this.getSite().getShell(), 
+        				"Error Starting the Differential Synchronization", 
+        				ex.getLocalizedMessage()
+        			);
+                }
+        		refreshStatus();
+        	}
+        });
+		//stop synchro
+		stopButton = toolkit.createButton(actionsComposite,"Stop",SWT.PUSH);
+		stopButton.setLayoutData(
+                new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+        );
+		stopButton.addSelectionListener(new SelectionListener() {
+        	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
+        	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+        		WSSynchronizationPlan ws = (WSSynchronizationPlan) (getXObject().getWsObject()); 
+        		try {
+	                getPort().synchronizationPlanAction(new WSSynchronizationPlanAction(
+	                	new WSSynchronizationPlanPK(ws.getName()),
+	                	WSSynchronizationPlanActionCode.STOP
+	                ));
+                } catch (RemoteException ex) {
+                	ex.printStackTrace();
+        			MessageDialog.openError(
+        				SynchronizationMainPage.this.getSite().getShell(), 
+        				"Error Stopping the Synchronization", 
+        				ex.getLocalizedMessage()
+        			);
+                }
+        		refreshStatus();
+        	}
+        });
+		//stop synchro
+		resetButton = toolkit.createButton(actionsComposite,"Reset",SWT.PUSH);
+		resetButton.setLayoutData(
+                new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+        );
+		resetButton.addSelectionListener(new SelectionListener() {
+        	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
+        	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+        		WSSynchronizationPlan ws = (WSSynchronizationPlan) (getXObject().getWsObject()); 
+        		try {
+	                getPort().synchronizationPlanAction(new WSSynchronizationPlanAction(
+	                	new WSSynchronizationPlanPK(ws.getName()),
+	                	WSSynchronizationPlanActionCode.RESET
+	                ));
+                } catch (RemoteException ex) {
+                	ex.printStackTrace();
+        			MessageDialog.openError(
+        				SynchronizationMainPage.this.getSite().getShell(), 
+        				"Error Resetting the Synchronization", 
+        				ex.getLocalizedMessage()
+        			);
+                }
+        		refreshStatus();
+        	}
+        });
+        
+        
+        //Remote MDM Section          
+        Composite remoteMDMGroup = this.getNewSectionComposite("Remote MDM Server");
+        remoteMDMGroup.setLayout(new GridLayout(1,true));
+        Composite remoteMDMComposite = toolkit.createComposite(remoteMDMGroup, SWT.BORDER);
+        remoteMDMComposite.setLayoutData(
+                new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+        );       
+        remoteMDMComposite.setLayout(new GridLayout(2,false));
+
+		remoteSystemNameText =new LabelText(toolkit,remoteMDMComposite,"Name");        
+		remoteSystemNameText.getText().addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				if (refreshing) return;
+				syncPlan.remoteSystemName = remoteSystemNameText.getText().getText();
+				markDirty();
+			}
+		});
+		
+		remoteSystemURLText =new LabelText(toolkit,remoteMDMComposite,"URL");        
+		remoteSystemURLText.getText().addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent e) {
         		if (refreshing) return;
-        		syncPlan.url=urlText.getText().getText();
+        		syncPlan.remoteSystemURL=remoteSystemURLText.getText().getText();
         		markDirty();
         	}
         });
-  
-		usernameText =new LabelText(toolkit,charComposite,"Username");        
-		usernameText.getText().addModifyListener(new ModifyListener() {
+		
+		remoteSystemUsernameText =new LabelText(toolkit,remoteMDMComposite,"Username");        
+		remoteSystemUsernameText.getText().addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent e) {
         		if (refreshing) return;
-        		syncPlan.username=usernameText.getText().getText();
+        		syncPlan.remoteSystemUsername=remoteSystemUsernameText.getText().getText();
         		markDirty();
         	}
         });
-		passwordText =new LabelText(toolkit,charComposite,"Password");        
-		passwordText.getText().addModifyListener(new ModifyListener() {
+		
+		remoteSystemPasswordText =new LabelText(toolkit,remoteMDMComposite,"Password");        
+		remoteSystemPasswordText.getText().addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent e) {
         		if (refreshing) return;
-        		syncPlan.password=passwordText.getText().getText();
+        		syncPlan.remoteSystemPassword=remoteSystemPasswordText.getText().getText();
+        		markDirty();
+        	}
+        });		
+        
+		
+		//TIS Server Section          
+        Composite TISGroup = this.getNewSectionComposite("TIS Server");
+        TISGroup.setLayout(new GridLayout(1,true));
+        Composite TISComposite = toolkit.createComposite(TISGroup, SWT.BORDER);
+        TISComposite.setLayoutData(
+                new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+        );       
+        TISComposite.setLayout(new GridLayout(2,false));
+
+		
+		tisURLText =new LabelText(toolkit,TISComposite,"URL");        
+		tisURLText.getText().addModifyListener(new ModifyListener() {
+        	public void modifyText(ModifyEvent e) {
+        		if (refreshing) return;
+        		syncPlan.tisURL=tisURLText.getText().getText();
+        		markDirty();
+        	}
+        });
+		
+		tisUsernameText =new LabelText(toolkit,TISComposite,"Username");        
+		tisUsernameText.getText().addModifyListener(new ModifyListener() {
+        	public void modifyText(ModifyEvent e) {
+        		if (refreshing) return;
+        		syncPlan.tisUsername=tisUsernameText.getText().getText();
+        		markDirty();
+        	}
+        });
+		
+		tisPasswordText =new LabelText(toolkit,TISComposite,"Password");        
+		tisPasswordText.getText().addModifyListener(new ModifyListener() {
+        	public void modifyText(ModifyEvent e) {
+        		if (refreshing) return;
+        		syncPlan.tisPassword=tisPasswordText.getText().getText();
         		markDirty();
         	}
         });		
 		
-        //make the Page window a DropTarget - we need to dispose it
-        windowTarget = new DropTarget(this.getPartControl(), DND.DROP_MOVE);
-        windowTarget.setTransfer(new Transfer[]{TextTransfer.getInstance()});
-        windowTarget.addDropListener(new DCDropTargetListener());
+		tisParametersText =new LabelText(toolkit,TISComposite,"Parameters");        
+		tisParametersText.getText().addModifyListener(new ModifyListener() {
+        	public void modifyText(ModifyEvent e) {
+        		if (refreshing) return;
+        		syncPlan.tisParameters=tisParametersText.getText().getText();
+        		markDirty();
+        	}
+        });		
+		
+        //Items Section          
+        Composite itemsGroup = this.getNewSectionComposite("Items SynchronizationPlan");
+        itemsGroup.setLayout(new GridLayout(1,true));
+        Composite itemsComposite = toolkit.createComposite(itemsGroup, SWT.BORDER);
+        itemsComposite.setLayoutData(
+                new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+        );       
+        itemsComposite.setLayout(new GridLayout(1,true));
+
+        //Get algorithms for items
+        String[] itemsAlgorithmsStrings = getPort().getSynchronizationPlanItemsAlgorithms(
+        	new WSGetSynchronizationPlanItemsAlgorithms(new String[]{".*"})
+        ).getStrings();
         
+        //Table
+        ComplexTableViewer itemsViewer=new ComplexTableViewer(Arrays.asList(itemsColumns),toolkit,itemsComposite);
+        itemsViewer.setMainPage(this);
+        itemsViewer.setLastCombo(true);
+        itemsViewer.setComboStrings(itemsAlgorithmsStrings);
+        itemsViewer.create();
+        instancesViewer=itemsViewer.getViewer();
+        instancesViewer.setInput(syncPlan.getItemsList());
+		
         //Xtentis Objects  Section
         Composite objecstGroup = this.getNewSectionComposite("Xtentis Objects SynchronizationPlan");
         objecstGroup.setLayout(new GridLayout(1,true));
+        
+        //Get algorithms for objects
+        String[] objectsAlgorithmStrings = getPort().getSynchronizationPlanObjectsAlgorithms(
+        	new WSGetSynchronizationPlanObjectsAlgorithms(new String[]{".*"})
+        ).getStrings();
         
         Composite objectsComposite = toolkit.createComposite(objecstGroup, SWT.BORDER);
         objectsComposite.setLayoutData(
                 new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
         );
         objectsComposite.setLayout(new GridLayout(1,false));
-        String[] alogrithomStrings= getPort().getAlgorithmsForSynchronizationPlans(new WSGetAlgorithmsForSynchronizationPlans(new String[]{".*"})).getStrings();
-        String[] xtentisObjcts=getPort().getObjectsForSynchronizationPlans(new WSGetObjectsForSynchronizationPlans(new String[]{".*"})).getStrings();//IConstants.XTENTISOBJECTS;
-        for(String object: xtentisObjcts){
+        String[] xtentisObjects=getPort().getObjectsForSynchronizationPlans(new WSGetObjectsForSynchronizationPlans(new String[]{".*"})).getStrings();//IConstants.XTENTISOBJECTS;
+        for(String object: xtentisObjects){
             Composite composite =toolkit.createComposite(objectsComposite,SWT.BORDER);
             composite.setLayoutData(
                     new GridData(SWT.FILL,SWT.RIGHT,true,true,1,1)
@@ -144,7 +364,7 @@ public class SynchronizationMainPage extends AMainPageV2{
             ComplexTableViewer objectViewer=new ComplexTableViewer(Arrays.asList(xtentisObjectColumns),toolkit,composite);
             objectViewer.setMainPage(this);
             objectViewer.setLastCombo(true);
-            objectViewer.setComboStrings(alogrithomStrings);
+            objectViewer.setComboStrings(objectsAlgorithmStrings);
             objectViewer.create();
             List<Line> objList=syncPlan.getXtentisObjectsList().get(object);
             if(objList==null){
@@ -156,22 +376,7 @@ public class SynchronizationMainPage extends AMainPageV2{
             
             xtentisViewers.put(object, objectViewer);
         }
-        //Items Section          
-        Composite itemsGroup = this.getNewSectionComposite("Items SynchronizationPlan");
-        itemsGroup.setLayout(new GridLayout(1,true));
-        Composite itemsComposite = toolkit.createComposite(itemsGroup, SWT.BORDER);
-        itemsComposite.setLayoutData(
-                new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-        );       
-        itemsComposite.setLayout(new GridLayout(1,true));
-        
-        ComplexTableViewer itemsViewer=new ComplexTableViewer(Arrays.asList(itemsColumns),toolkit,itemsComposite);
-        itemsViewer.setMainPage(this);
-        itemsViewer.setLastCombo(true);
-        itemsViewer.setComboStrings(alogrithomStrings);
-        itemsViewer.create();
-        instancesViewer=itemsViewer.getViewer();
-        instancesViewer.setInput(syncPlan.getItemsList());
+
                               
         refreshData();
 
@@ -199,9 +404,16 @@ public class SynchronizationMainPage extends AMainPageV2{
 			syncPlan = new SyncronizationPlan();	
 			//basic
 			syncPlan.setDescription(ws.getDescription()==null ? "" : ws.getDescription());
-			syncPlan.setUrl(ws.getRemoteSystemURL());
-			syncPlan.setUsername(ws.getRemoteSystemUsername());
-			syncPlan.setPassword(ws.getRemoteSystemPassword());
+			
+			syncPlan.setRemoteSystemName(ws.getRemoteSystemName());
+			syncPlan.setRemoteSystemURL(ws.getRemoteSystemURL());
+			syncPlan.setRemoteSystemUsername(ws.getRemoteSystemUsername());
+			syncPlan.setRemoteSystemPassword(ws.getRemoteSystemPassword());
+			
+			syncPlan.setTisURL(ws.getTisURL());
+			syncPlan.setTisUsername(ws.getTisUsername());
+			syncPlan.setTisPassword(ws.getTisPassword());
+			syncPlan.setTisParameters(ws.getTisParameters());
 			
 			//xtentisObjects
 			Map<String, List<Line>> xtentisMap=new HashMap<String, List<Line>>();
@@ -231,17 +443,64 @@ public class SynchronizationMainPage extends AMainPageV2{
 	    	
 			//Now fill in the values on the page
             descriptionText.getText().setText(syncPlan.getDescription()==null ? "" : syncPlan.getDescription());
-            urlText.getText().setText(syncPlan.getUrl()==null?"":syncPlan.getUrl());
-            usernameText.getText().setText(syncPlan.getUsername()==null?"":syncPlan.getUsername());
-            passwordText.getText().setText(syncPlan.getPassword()==null?"":syncPlan.getPassword());
+
+            remoteSystemURLText.getText().setText(syncPlan.getRemoteSystemURL()==null?"":syncPlan.getRemoteSystemURL());
+            remoteSystemNameText.getText().setText(syncPlan.getRemoteSystemName()==null?"":syncPlan.getRemoteSystemName());
+            remoteSystemUsernameText.getText().setText(syncPlan.getRemoteSystemUsername()==null?"":syncPlan.getRemoteSystemUsername());
+            remoteSystemPasswordText.getText().setText(syncPlan.getRemoteSystemPassword()==null?"":syncPlan.getRemoteSystemPassword());
+
+            tisURLText.getText().setText(syncPlan.getTisURL()==null?"":syncPlan.getTisURL());
+            tisUsernameText.getText().setText(syncPlan.getTisUsername()==null?"":syncPlan.getTisUsername());
+            tisPasswordText.getText().setText(syncPlan.getTisPassword()==null?"":syncPlan.getTisPassword());
+            tisParametersText.getText().setText(syncPlan.getTisParameters()==null?"":syncPlan.getTisParameters());
+
             //refresh the item tableviewer
             instancesViewer.setInput(syncPlan.getItemsList());
+            //refresh the status
+            refreshStatus();
+            
             this.refreshing = false;
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page", "Error refreshing the page: "+e.getLocalizedMessage());
 		}    	
+	}
+	
+	protected void refreshStatus() {
+		
+		WSSynchronizationPlan ws = (WSSynchronizationPlan) (getXObject().getWsObject());
+		WSSynchronizationPlanStatus wsStatus = null;
+		try {
+	        wsStatus = getPort().synchronizationPlanAction(new WSSynchronizationPlanAction(
+	        	new WSSynchronizationPlanPK(ws.getName()),
+	        	WSSynchronizationPlanActionCode.STATUS
+	        ));
+        } catch (RemoteException e) {
+        	e.printStackTrace();
+			MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page", "The status of the Plan cannot be fetched: "+e.getLocalizedMessage());
+        }
+		
+    	statusText.setText("["+wsStatus.getWsStatusCode().getValue()+"] "+wsStatus.getStatusMessage());
+    	if (
+    		WSSynchronizationPlanStatusCode.RUNNING.equals(wsStatus.getWsStatusCode())
+    		|| WSSynchronizationPlanStatusCode.SCHEDULED.equals(wsStatus.getWsStatusCode())
+    	) {
+    		startFullButton.setEnabled(false);
+    		startDifferentialButton.setEnabled(false);
+    		stopButton.setEnabled(true);
+    		resetButton.setEnabled(false);
+    	} else if (WSSynchronizationPlanStatusCode.STOPPING.equals(wsStatus.getWsStatusCode())) {
+    		startFullButton.setEnabled(false);
+    		startDifferentialButton.setEnabled(false);
+    		stopButton.setEnabled(false);
+    		resetButton.setEnabled(true);
+    	} else {
+    		startFullButton.setEnabled(true);
+    		startDifferentialButton.setEnabled(true);
+    		stopButton.setEnabled(false);
+    		resetButton.setEnabled(false);
+    	}
 	}
 	
 	protected void commit() {
@@ -252,9 +511,17 @@ public class SynchronizationMainPage extends AMainPageV2{
 			//basic
 			WSSynchronizationPlan ws = (WSSynchronizationPlan) (getXObject().getWsObject());    	
 			ws.setDescription(syncPlan.getDescription());
-			ws.setRemoteSystemURL(syncPlan.getUrl());
-			ws.setRemoteSystemUsername(syncPlan.getUsername());
-			ws.setRemoteSystemPassword(syncPlan.getPassword());
+			
+			ws.setRemoteSystemName(syncPlan.getRemoteSystemName());
+			ws.setRemoteSystemURL(syncPlan.getRemoteSystemURL());
+			ws.setRemoteSystemUsername(syncPlan.getRemoteSystemUsername());
+			ws.setRemoteSystemPassword(syncPlan.getRemoteSystemPassword());
+
+			ws.setTisURL(syncPlan.getTisURL());
+			ws.setTisUsername(syncPlan.getTisUsername());
+			ws.setTisPassword(syncPlan.getTisPassword());
+			ws.setTisParameters(syncPlan.getTisParameters());
+			
 			//xtentisobjects
 			Map<String, List<Line>> xtentisobjects =syncPlan.getXtentisObjectsList();
 			WSSynchronizationPlanXtentisObjectsSynchronizations[] xtentisObjSyncs=new WSSynchronizationPlanXtentisObjectsSynchronizations[xtentisobjects.size()];
@@ -301,13 +568,18 @@ public class SynchronizationMainPage extends AMainPageV2{
 	}
 
 	/****************************************************************************
-	 *   Comptroler Model
+	 *   Comptroller Model
 	 ****************************************************************************/
 	public class SyncronizationPlan {
 		protected String description=null;
-		protected String url=null;
-	    protected String username=null;
-	    protected String password;
+		protected String remoteSystemURL=null;
+		protected String remoteSystemName=null;
+	    protected String remoteSystemUsername=null;
+	    protected String remoteSystemPassword;
+		protected String tisURL=null;
+		protected String tisParameters=null;
+	    protected String tisUsername=null;
+	    protected String tisPassword;
 	    protected Map<String,List<Line>> xtentisObjectsList=new HashMap<String,List<Line>>();
 	    protected List<Line> itemsList=new ArrayList<Line>();
 	    
@@ -319,30 +591,69 @@ public class SynchronizationMainPage extends AMainPageV2{
 			this.description = description;
 		}
 
-		public String getUrl() {
-			return url;
+		public String getRemoteSystemName() {
+        	return remoteSystemName;
+        }
+
+		public void setRemoteSystemName(String remoteSystemName) {
+        	this.remoteSystemName = remoteSystemName;
+        }
+
+		public String getRemoteSystemURL() {
+			return remoteSystemURL;
 		}
 
-		public void setUrl(String url) {
-			this.url = url;
+		public void setRemoteSystemURL(String url) {
+			this.remoteSystemURL = url;
 		}
 
-		public String getUsername() {
-			return username;
+		public String getRemoteSystemUsername() {
+			return remoteSystemUsername;
 		}
 
-		public void setUsername(String username) {
-			this.username = username;
+		public void setRemoteSystemUsername(String username) {
+			this.remoteSystemUsername = username;
 		}
 
-		public String getPassword() {
-			return password;
+		public String getRemoteSystemPassword() {
+			return remoteSystemPassword;
 		}
 
-		public void setPassword(String password) {
-			this.password = password;
+		public void setRemoteSystemPassword(String password) {
+			this.remoteSystemPassword = password;
 		}
 
+		public String getTisURL() {
+        	return tisURL;
+        }
+
+		public void setTisURL(String tisURL) {
+        	this.tisURL = tisURL;
+        }
+
+		public String getTisParameters() {
+        	return tisParameters;
+        }
+
+		public void setTisParameters(String tisParameters) {
+        	this.tisParameters = tisParameters;
+        }
+
+		public String getTisUsername() {
+        	return tisUsername;
+        }
+
+		public void setTisUsername(String tisUsername) {
+        	this.tisUsername = tisUsername;
+        }
+
+		public String getTisPassword() {
+        	return tisPassword;
+        }
+
+		public void setTisPassword(String tisPassword) {
+        	this.tisPassword = tisPassword;
+        }
 
 		public Map<String, List<Line>> getXtentisObjectsList() {
 			return xtentisObjectsList;

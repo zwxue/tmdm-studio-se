@@ -972,10 +972,17 @@
 		<part name="wsSynchronizationPlanObjectNames" element="tns:WSStringArray"/>
 	</message>
 
-	<message name="getAlgorithmsForSynchronizationPlansRequest">
-		<part name="regex" element="tns:WSGetAlgorithmsForSynchronizationPlans"/>
+	<message name="getSynchronizationPlanObjectsAlgorithmsRequest">
+		<part name="regex" element="tns:WSGetSynchronizationPlanObjectsAlgorithms"/>
 	</message>
-	<message name="getAlgorithmsForSynchronizationPlansResponse">
+	<message name="getSynchronizationPlanObjectsAlgorithmsResponse">
+		<part name="wsSynchronizationPlanAlgorithmNames" element="tns:WSStringArray"/>
+	</message>
+
+	<message name="getSynchronizationPlanItemsAlgorithmsRequest">
+		<part name="regex" element="tns:WSGetSynchronizationPlanItemsAlgorithms"/>
+	</message>
+	<message name="getSynchronizationPlanItemsAlgorithmsResponse">
 		<part name="wsSynchronizationPlanAlgorithmNames" element="tns:WSStringArray"/>
 	</message>
 	
@@ -983,7 +990,7 @@
 		<part name="wsSynchronizationPlanAction" element="tns:WSSynchronizationPlanAction"/>
 	</message>
 	<message name="synchronizationPlanActionResponse">
-		<part name="wsSynchronizationPlanStatusCode" element="tns:WSSynchronizationPlanStatusCode"/>
+		<part name="wsSynchronizationPlanStatus" element="tns:WSSynchronizationPlanStatus"/>
 	</message>
 
 	<message name="synchronizationGetUnsynchronizedObjectsIDsRequest">
@@ -1601,9 +1608,13 @@
 			<input message="tns:getObjectsForSynchronizationPlansRequest"/>
 			<output message="tns:getObjectsForSynchronizationPlansResponse"/>
 		</operation>
-		<operation name="getAlgorithmsForSynchronizationPlans">
-			<input message="tns:getAlgorithmsForSynchronizationPlansRequest"/>
-			<output message="tns:getAlgorithmsForSynchronizationPlansResponse"/>
+		<operation name="getSynchronizationPlanObjectsAlgorithms">
+			<input message="tns:getSynchronizationPlanObjectsAlgorithmsRequest"/>
+			<output message="tns:getSynchronizationPlanObjectsAlgorithmsResponse"/>
+		</operation>
+		<operation name="getSynchronizationPlanItemsAlgorithms">
+			<input message="tns:getSynchronizationPlanItemsAlgorithmsRequest"/>
+			<output message="tns:getSynchronizationPlanItemsAlgorithmsResponse"/>
 		</operation>
 		<operation name="synchronizationPlanAction">
 			<input message="tns:synchronizationPlanActionRequest"/>
@@ -2362,7 +2373,12 @@
 			<input><soap:body use="literal"/></input>
 			<output><soap:body use="literal"/></output>
 		</operation>
-		<operation name="getAlgorithmsForSynchronizationPlans">
+		<operation name="getSynchronizationPlanObjectsAlgorithms">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>
+		<operation name="getSynchronizationPlanItemsAlgorithms">
 			<soap:operation/>
 			<input><soap:body use="literal"/></input>
 			<output><soap:body use="literal"/></output>
