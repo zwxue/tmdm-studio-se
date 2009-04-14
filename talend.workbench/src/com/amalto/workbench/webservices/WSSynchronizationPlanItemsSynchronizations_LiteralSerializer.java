@@ -23,8 +23,10 @@ public class WSSynchronizationPlanItemsSynchronizations_LiteralSerializer extend
     private static final QName ns3_string_TYPE_QNAME = SchemaConstants.QNAME_TYPE_STRING;
     private CombinedSerializer ns3_myns3_string__java_lang_String_String_Serializer;
     private static final QName ns1_idsPattern_QNAME = new QName("", "idsPattern");
-    private static final QName ns1_sourceRevisionID_QNAME = new QName("", "sourceRevisionID");
-    private static final QName ns1_targetRevisionID_QNAME = new QName("", "targetRevisionID");
+    private static final QName ns1_localCluster_QNAME = new QName("", "localCluster");
+    private static final QName ns1_localRevisionID_QNAME = new QName("", "localRevisionID");
+    private static final QName ns1_remoteCluster_QNAME = new QName("", "remoteCluster");
+    private static final QName ns1_remoteRevisionID_QNAME = new QName("", "remoteRevisionID");
     private static final QName ns1_algorithm_QNAME = new QName("", "algorithm");
     
     public WSSynchronizationPlanItemsSynchronizations_LiteralSerializer(QName type, String encodingStyle) {
@@ -82,12 +84,15 @@ public class WSSynchronizationPlanItemsSynchronizations_LiteralSerializer extend
         }
         elementName = reader.getName();
         if (reader.getState() == XMLReader.START) {
-            if (elementName.equals(ns1_sourceRevisionID_QNAME)) {
-                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_sourceRevisionID_QNAME, reader, context);
-                instance.setSourceRevisionID((java.lang.String)member);
+            if (elementName.equals(ns1_localCluster_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_localCluster_QNAME, reader, context);
+                if (member == null) {
+                    throw new DeserializationException("literal.unexpectedNull");
+                }
+                instance.setLocalCluster((java.lang.String)member);
                 reader.nextElementContent();
             } else {
-                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_sourceRevisionID_QNAME, reader.getName() });
+                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_localCluster_QNAME, reader.getName() });
             }
         }
         else {
@@ -95,12 +100,41 @@ public class WSSynchronizationPlanItemsSynchronizations_LiteralSerializer extend
         }
         elementName = reader.getName();
         if (reader.getState() == XMLReader.START) {
-            if (elementName.equals(ns1_targetRevisionID_QNAME)) {
-                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_targetRevisionID_QNAME, reader, context);
-                instance.setTargetRevisionID((java.lang.String)member);
+            if (elementName.equals(ns1_localRevisionID_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_localRevisionID_QNAME, reader, context);
+                instance.setLocalRevisionID((java.lang.String)member);
                 reader.nextElementContent();
             } else {
-                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_targetRevisionID_QNAME, reader.getName() });
+                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_localRevisionID_QNAME, reader.getName() });
+            }
+        }
+        else {
+            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
+        }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_remoteCluster_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_remoteCluster_QNAME, reader, context);
+                if (member == null) {
+                    throw new DeserializationException("literal.unexpectedNull");
+                }
+                instance.setRemoteCluster((java.lang.String)member);
+                reader.nextElementContent();
+            } else {
+                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_remoteCluster_QNAME, reader.getName() });
+            }
+        }
+        else {
+            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
+        }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_remoteRevisionID_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_remoteRevisionID_QNAME, reader, context);
+                instance.setRemoteRevisionID((java.lang.String)member);
+                reader.nextElementContent();
+            } else {
+                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_remoteRevisionID_QNAME, reader.getName() });
             }
         }
         else {
@@ -139,8 +173,16 @@ public class WSSynchronizationPlanItemsSynchronizations_LiteralSerializer extend
             throw new SerializationException("literal.unexpectedNull");
         }
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getIdsPattern(), ns1_idsPattern_QNAME, null, writer, context);
-        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getSourceRevisionID(), ns1_sourceRevisionID_QNAME, null, writer, context);
-        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getTargetRevisionID(), ns1_targetRevisionID_QNAME, null, writer, context);
+        if (instance.getLocalCluster() == null) {
+            throw new SerializationException("literal.unexpectedNull");
+        }
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getLocalCluster(), ns1_localCluster_QNAME, null, writer, context);
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getLocalRevisionID(), ns1_localRevisionID_QNAME, null, writer, context);
+        if (instance.getRemoteCluster() == null) {
+            throw new SerializationException("literal.unexpectedNull");
+        }
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getRemoteCluster(), ns1_remoteCluster_QNAME, null, writer, context);
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getRemoteRevisionID(), ns1_remoteRevisionID_QNAME, null, writer, context);
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getAlgorithm(), ns1_algorithm_QNAME, null, writer, context);
     }
 }

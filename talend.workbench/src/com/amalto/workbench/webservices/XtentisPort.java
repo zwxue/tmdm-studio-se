@@ -268,4 +268,10 @@ public interface XtentisPort extends java.rmi.Remote {
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSString synchronizationPutObjectXML(com.amalto.workbench.webservices.WSSynchronizationPutObjectXML wsSynchronizationPutObjectXML) throws 
          java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSItemPKArray synchronizationGetUnsynchronizedItemPKs(com.amalto.workbench.webservices.WSSynchronizationGetUnsynchronizedItemPKs wsSynchronizationGetUnsynchronizedItemPKs) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSString synchronizationGetItemXML(com.amalto.workbench.webservices.WSSynchronizationGetItemXML wsSynchronizationGetItemXML) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSItemPK synchronizationPutItemXML(com.amalto.workbench.webservices.WSSynchronizationPutItemXML wsSynchronizationPutItemXML) throws 
+         java.rmi.RemoteException;
 }
