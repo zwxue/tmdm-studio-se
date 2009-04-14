@@ -1,6 +1,7 @@
 package com.amalto.workbench.actions;
 
 import java.lang.reflect.InvocationTargetException;
+import java.net.Authenticator;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -59,6 +60,10 @@ public class ServerLoginAction extends Action implements SelectionListener{
 		String password = dialog.getPasswordText();
 		String universe=dialog.getUniverse();
 		dialog.close();
+		
+		//Remove authenticator dialog
+		Authenticator.setDefault(null);
+		
 		try {
             XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(
             	server,
