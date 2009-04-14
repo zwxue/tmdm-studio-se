@@ -23,6 +23,7 @@ import com.amalto.workbench.webservices.WSGetRolePKs;
 import com.amalto.workbench.webservices.WSGetRoutingRulePKs;
 import com.amalto.workbench.webservices.WSGetSynchronizationPlanPKs;
 import com.amalto.workbench.webservices.WSGetTransformerV2PKs;
+import com.amalto.workbench.webservices.WSGetUniverse;
 import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSGetViewPKs;
 import com.amalto.workbench.webservices.WSMenuPK;
@@ -68,6 +69,8 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			
 			monitor.beginTask("Loading Xtentis Server Objects", "admin".equals(username)? 12 : 9);
 			//Access to server and get port
+			int pos=username.indexOf('/');
+			if(pos !=-1)username=username.substring(pos+1);
 			XtentisPort port = Util.getPort(new URL(endpointaddress), universe, username, password);
 			monitor.worked(1);
 			
@@ -80,15 +83,15 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 				e.printStackTrace();
 			}
 			WSUniverse wUuniverse=null;
-//			if(universe.trim().length()>0){
-//				wUuniverse=port.getUniverse(new WSGetUniverse(new WSUniversePK(universe)));
-//				if(wUuniverse==null){
-//					isExistUniverse=false;
-//					return;
-//				}
-//			}else{
+			if(universe.trim().length()>0 && !universe.trim().equals(IConstants.HEAD)){
+				wUuniverse=port.getUniverse(new WSGetUniverse(new WSUniversePK(universe)));
+				if(wUuniverse==null){
+					isExistUniverse=false;
+					return;
+				}
+			}else{
 				wUuniverse=port.getCurrentUniverse(new WSGetCurrentUniverse());
-//			}
+			}
 			
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");		
 		
