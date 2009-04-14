@@ -37,6 +37,7 @@ import com.amalto.workbench.webservices.WSUniverseItemsRevisionIDs;
 import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.ComplexTableViewer;
+import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.LabelText;
 
 public class UniverseMainPage extends AMainPageV2{
@@ -52,10 +53,14 @@ public class UniverseMainPage extends AMainPageV2{
 	protected Text reversionIDText;
 	protected FormToolkit toolkit;
 	
-	private String[] columns=new String[]{"Concept Name pattern","Revision ID"};
+	private ComplexTableViewerColumn[] columns= new ComplexTableViewerColumn[]{
+		new ComplexTableViewerColumn("Concept name Pattern", true, ".*", ".*"),
+		new ComplexTableViewerColumn("Revision ID", true, "", "[HEAD]")
+	};
+	
 	
 	protected Map<String,LabelText> xtentisObjectsLabelTexts=new HashMap<String,LabelText>();
-	private LabelText defaultReversionIDText;
+	LabelText defaultReversionIDText;
 	
 	public UniverseMainPage(FormEditor editor) {
         super(
@@ -153,7 +158,8 @@ public class UniverseMainPage extends AMainPageV2{
         });
 		xtentisObjectsLabelTexts.put(labelText.getLabel().getText(),labelText);
 	}
-	private KeyValue getKeyValue(String name){
+	
+	KeyValue getKeyValue(String name){
 		for(KeyValue line: universe.getXtentisObjectsList()){
 			if(name.equals(line.key)){
 				return line;
@@ -161,6 +167,8 @@ public class UniverseMainPage extends AMainPageV2{
 		}
 		return null;
 	}
+	
+	
 	@Override
 	protected void createActions() {
 		// TODO Auto-generated method stub

@@ -132,11 +132,31 @@
 	<xsd:element name="WSExecuteTransformerV2" type="tns:WSExecuteTransformerV2"/>
 	
 	<xsd:complexType name="WSExecuteTransformerV2AsJob">
+		<xsd:annotation>
+			<xsd:documentation>
+				Starts the execution of a transformer as a background job and return the PK of a Background Job
+				The result must be obtained by reading the content of the BackgroundJob
+			</xsd:documentation>
+		</xsd:annotation>
 		<xsd:sequence>
 			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="wsTransformerContext" type="tns:WSTransformerContext"/>
 		</xsd:sequence>		
 	</xsd:complexType>
-	<xsd:element name="WSExecuteTransformerV2AsJob" type="tns:WSExecuteTransformerV2AsJob"/>		
+	<xsd:element name="WSExecuteTransformerV2AsJob" type="tns:WSExecuteTransformerV2AsJob"/>	
+	
+	<xsd:complexType name="WSExtractThroughTransformerV2">
+		<xsd:annotation>
+			<xsd:documentation>
+				Extracts data through a Transformer
+				The item content is mapped to the _DEFAULT_ transformer variable
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="wsItemPK" type="tns:WSItemPK"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="wsTransformerV2PK" type="tns:WSTransformerV2PK"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSExtractThroughTransformerV2" type="tns:WSExtractThroughTransformerV2"/>
 	
 	<!-- *****************************************************
 		Transformer Plugins V2 - Objects

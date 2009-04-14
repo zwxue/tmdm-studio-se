@@ -3,6 +3,8 @@ package com.amalto.workbench.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.amalto.workbench.widgets.ComplexTableViewerColumn;
+
 /**
  * The instance of complexTableViewer
  * @author aiming
@@ -13,9 +15,9 @@ public class Line{
 	 * key is the TableColumn name, value is the  column's value
 	 */
 	public List<KeyValue> keyValues=new ArrayList<KeyValue>();
-	public Line(String[] keys,String[]values ){
+	public Line(ComplexTableViewerColumn[] keys,String[]values ){
 		for(int i=0; i<keys.length && i<values.length; i++){
-			keyValues.add(new KeyValue(keys[i],values[i]));
+			keyValues.add(new KeyValue(keys[i].getName(),values[i]));
 		}
 	}
 	public Line( List<KeyValue> keyValues){
