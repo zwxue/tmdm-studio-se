@@ -70,7 +70,6 @@ import com.amalto.workbench.dialogs.DOMViewDialog;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
-import com.amalto.workbench.utils.GlobalUserInfo;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataCluster;

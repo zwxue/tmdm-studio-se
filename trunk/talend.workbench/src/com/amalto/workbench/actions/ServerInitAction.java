@@ -62,6 +62,7 @@ public class ServerInitAction extends Action {
             TreeObject xobject = (TreeObject)((IStructuredSelection)selection).getFirstElement();
 			XtentisPort port = Util.getPort(
 					new URL(xobject.getEndpointAddress()),
+					xobject.getUniverse(),
 					xobject.getUsername(),
 					xobject.getPassword()
 			);

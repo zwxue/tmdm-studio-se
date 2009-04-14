@@ -51,8 +51,8 @@ public class DeleteXObjectAction extends Action{
 		try {
 			super.run();
 			IStructuredSelection selection = (IStructuredSelection)view.getViewer().getSelection();
-			for (Iterator iter = selection.iterator(); iter.hasNext(); ) {
-				TreeObject xobject = (TreeObject) iter.next();
+			for (Iterator<TreeObject> iter = selection.iterator(); iter.hasNext(); ) {
+				TreeObject xobject = iter.next();
 	            
 	            if (!xobject.isXObject()) return;
 	            
@@ -66,6 +66,7 @@ public class DeleteXObjectAction extends Action{
 	//          Access to server and get port
 				XtentisPort port = Util.getPort(
 						new URL(xobject.getEndpointAddress()),
+						xobject.getUniverse(),
 						xobject.getUsername(),
 						xobject.getPassword()
 				);

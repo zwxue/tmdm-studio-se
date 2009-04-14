@@ -250,6 +250,7 @@ public class Util {
 			if(xobject==null)return null;
 			return getPort(
 					new URL(xobject.getEndpointAddress()),
+					xobject.getUniverse(),
 					xobject.getUsername(),
 					xobject.getPassword()
 			);
@@ -258,9 +259,9 @@ public class Util {
 		}
 	}
 	
-	public static XtentisPort getPort(String username, String password) throws XtentisException{
+	public static XtentisPort getPort(String universe, String username, String password) throws XtentisException{
 		try {
-			return getPort(new URL(default_endpoint_address),username,password);
+			return getPort(new URL(default_endpoint_address), universe, username, password);
 		} catch (MalformedURLException e) {
 			String err = "The default URL '"+default_endpoint_address+"' is invalid!";
 			throw new XtentisException(err);
@@ -268,7 +269,7 @@ public class Util {
 	}
 	
 //	public static XtentisPort getPort(String endpointAddress, String username, String password) throws XtentisException{
-	public static XtentisPort getPort(URL url, String username, String password) throws XtentisException{		
+	public static XtentisPort getPort(URL url, String universe, String username, String password) throws XtentisException{		
 
 		try {
 
@@ -285,8 +286,13 @@ public class Util {
 			//prepare the Web Services Stub
 			Stub stub = (Stub) (new XtentisService_Impl()).getXtentisPort();
 			stub._setProperty(Stub.ENDPOINT_ADDRESS_PROPERTY, url.toString());
-			if (username!=null)
-				stub._setProperty(Stub.USERNAME_PROPERTY, username);
+			if (username!=null) {
+				if (universe != null)
+					stub._setProperty(Stub.USERNAME_PROPERTY, universe+"/"+username);
+				else
+					stub._setProperty(Stub.USERNAME_PROPERTY, username);
+				
+			}
 			if (password!=null)
 	        stub._setProperty(Stub.PASSWORD_PROPERTY, password);
 
@@ -317,9 +323,9 @@ public class Util {
 	}
 	*/
 	
-	public static WSDataModelPK[] getAllDataModelPKs(URL url, String username, String password) throws XtentisException{
+	public static WSDataModelPK[] getAllDataModelPKs(URL url, String universe, String username, String password) throws XtentisException{
 		try {
-			XtentisPort port = Util.getPort(url,username,password);
+			XtentisPort port = Util.getPort(url,universe,username,password);
 			return port.getDataModelPKs(new WSRegexDataModelPKs("*")).getWsDataModelPKs();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -331,9 +337,9 @@ public class Util {
 	
 	
 	
-	public static WSDataClusterPK[] getAllDataClusterPKs(URL url, String username, String password) throws XtentisException{
+	public static WSDataClusterPK[] getAllDataClusterPKs(URL url, String universe, String username, String password) throws XtentisException{
 		try {
-			XtentisPort port = Util.getPort(url,username,password);
+			XtentisPort port = Util.getPort(url,universe,username,password);
 			return port.getDataClusterPKs(new WSRegexDataClusterPKs("*")).getWsDataClusterPKs();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -346,10 +352,10 @@ public class Util {
 	
 
 	
-	public static WSViewPK[] getAllViewPKs(URL url, String username, String password, String regex) throws XtentisException{
+	public static WSViewPK[] getAllViewPKs(URL url, String universe, String username, String password, String regex) throws XtentisException{
 		try {
 			if ((regex==null) || ("".equals(regex))) regex = "*";
-			XtentisPort port = Util.getPort(url,username,password);
+			XtentisPort port = Util.getPort(url,universe,username,password);
 			return port.getViewPKs(new WSGetViewPKs(regex)).getWsViewPK();
 		} catch (Exception e) {
 			e.printStackTrace();

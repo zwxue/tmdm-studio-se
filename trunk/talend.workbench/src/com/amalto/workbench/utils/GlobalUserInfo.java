@@ -29,18 +29,18 @@ public class GlobalUserInfo {
 	public void getUser(String key){
 		userMaps.get(key);
 	}
-	/**
-	 * the real username in db is universe/username
-	 * @param username
-	 * @param universe
-	 * @return
-	 */
-	public static String getRealUsername(String username, String universe){
-		String uname=username;
-		if(universe!=null && universe.trim().length()>0  && !universe.trim().equals(IConstants.HEAD) ){
-			uname=universe.trim()+"/"+username;
-		}
-		return uname;
-	}
+//	/**
+//	 * the real username in db is universe/username
+//	 * @param username
+//	 * @param universe
+//	 * @return
+//	 */
+//	public static String getRealUsername(String username, String universe){
+//		String uname=username;
+//		if(universe!=null && universe.trim().length()>0  && !universe.trim().equals(IConstants.HEAD) ){
+//			uname=universe.trim()+"/"+username;
+//		}
+//		return uname;
+//	}
 
 }
