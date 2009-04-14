@@ -48,7 +48,7 @@ public class ServerRefreshAction extends Action {
             String username = auth[0];
             String password = (auth.length == 1) ? "" : auth[1];
 			
-			Job refreshJob = new ServerRefreshJob(server,username,password); 
+			Job refreshJob = new ServerRefreshJob(server,username,password,serverRoot.getUser().getUniverse()); 
             refreshJob.setPriority(Job.INTERACTIVE);
 			refreshJob.schedule();
             refreshJob.addJobChangeListener(new IJobChangeListener() {

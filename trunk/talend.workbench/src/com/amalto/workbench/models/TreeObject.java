@@ -6,7 +6,7 @@ import java.util.Iterator;
 import org.eclipse.core.runtime.IAdaptable;
 
 import com.amalto.workbench.utils.GlobalUserInfo;
-import com.amalto.workbench.views.ServerView;
+import com.amalto.workbench.utils.UserInfo;
 
 public class TreeObject implements IAdaptable {
 	
@@ -46,6 +46,7 @@ public class TreeObject implements IAdaptable {
 	private boolean isXObject;
 	private Object[] additionalInfo;
 	
+	private UserInfo user;
 	protected ArrayList<IXObjectModelListener> listeners = null; //at root level only
 	
 
@@ -87,6 +88,8 @@ public class TreeObject implements IAdaptable {
 		return null;
 	}
 	
+
+
 	public int getType() {
 		return type;
 	}
@@ -191,13 +194,19 @@ public class TreeObject implements IAdaptable {
 	}
 	
 	
+	public UserInfo getUser() {
+		return user;
+	}
+
+	public void setUser(UserInfo user) {
+		this.user = user;
+	}
+
 	public String getUsername() {
-        String username = GlobalUserInfo.getInstance().getUsername();
-        String universe=GlobalUserInfo.getInstance().getUniverse();
-        return GlobalUserInfo.getRealUsername(username, universe);
+        return GlobalUserInfo.getRealUsername(getServerRoot().getUser().getUsername(), getServerRoot().getUser().getUniverse());
 	}
 	public String getPassword() {
-		return GlobalUserInfo.getInstance().getPassword();
+		return getServerRoot().getUser().getPassword();
 	}
 	public String getEndpointAddress() {
 		return getServerRoot().getWsKey().toString();

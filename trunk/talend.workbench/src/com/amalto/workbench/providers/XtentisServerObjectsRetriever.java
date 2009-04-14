@@ -11,11 +11,13 @@ import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.GlobalUserInfo;
 import com.amalto.workbench.utils.IConstants;
+import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSComponent;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSExistsUniverse;
 import com.amalto.workbench.webservices.WSGetComponentVersion;
 import com.amalto.workbench.webservices.WSGetCurrentUniverse;
 import com.amalto.workbench.webservices.WSGetMenuPKs;
@@ -51,11 +53,17 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 	private String universe;
     private TreeParent serverRoot;
 	
+    private boolean isExistUniverse=true;
+    
 	public XtentisServerObjectsRetriever(String endpointaddress, String username, String password, String universe) {
 		this.endpointaddress = endpointaddress;
 		this.username = username;
 		this.password = password;
 		this.universe=universe;
+	}
+	
+	public boolean isExistUniverse() {
+		return isExistUniverse;
 	}
 
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
@@ -75,17 +83,19 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			WSUniverse wUuniverse=null;
+			if(universe.trim().length()>0 && !universe.equals(IConstants.HEAD)){
+				wUuniverse=port.getUniverse(new WSGetUniverse(new WSUniversePK(universe)));
+				if(wUuniverse==null){
+					isExistUniverse=false;
+					return;
+				}
+			}else{
+				wUuniverse=port.getCurrentUniverse(new WSGetCurrentUniverse());
+			}
 			
-			
-			//System.out.println("PING "+port.ping());
-			
-			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-			
-			//save the user info 
-			GlobalUserInfo.getInstance().setUsername(username);
-			GlobalUserInfo.getInstance().setPassword(password);
-			GlobalUserInfo.getInstance().setServerUrl(endpointaddress);
-			
+			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");		
+		
 			//server
 			serverRoot = new TreeParent(
                     displayName,
@@ -96,6 +106,12 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             );       
 			
 			monitor.subTask("Accessing server....");
+			UserInfo user=new UserInfo();
+			user.setUsername(username);
+			user.setPassword(password);
+			user.setServerUrl(endpointaddress);
+			user.setUniverse(universe);
+			serverRoot.setUser(user);
 			
 			//Data Models
 			TreeParent models = new TreeParent("Data Models",serverRoot,TreeObject.DATA_MODEL,null,null);			
@@ -402,23 +418,14 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			if (hasRoutingRules) serverRoot.addChild(rules);
 			if (hasMenus) serverRoot.addChild(menus);
 			
-			//reset the display name
-			//fetch universe info
-			WSUniverse wUuniverse=null;
-			if (universePKs!=null) {
-				for (int i = 0; i < universePKs.length; i++) {					
-					if(universePKs[i].getPk().equals(universe)){
-						wUuniverse = port.getUniverse(new WSGetUniverse(universePKs[i]));
-						break;
-					}
-				}
-			}	
-			if(wUuniverse==null)
-				wUuniverse=port.getCurrentUniverse(new WSGetCurrentUniverse());
-			GlobalUserInfo.getInstance().setWsUuniverse(wUuniverse);
+
+			
+			user.setWsUuniverse(wUuniverse);
 			addRevision(wUuniverse);
 			String universe1=wUuniverse.getName().replaceAll("\\[", "").replaceAll("\\]", "").trim();
-			GlobalUserInfo.getInstance().setUniverse(universe1);
+			user.setUniverse(universe1);
+			GlobalUserInfo.getInstance().addUser(user.getServerUrl()+user.getUniverse(), user);
+			
 			monitor.done();			
 		} catch (Exception e) {
 			e.printStackTrace();

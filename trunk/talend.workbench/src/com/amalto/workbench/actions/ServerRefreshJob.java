@@ -20,19 +20,20 @@ public class ServerRefreshJob extends Job {
     private String server;
     private String username;
     private String password;
-    
+    private String universe;
     private TreeParent serverRoot = null;
     
-    public ServerRefreshJob(String server, String username, String password) {
+    public ServerRefreshJob(String server, String username, String password,String universe) {
         super("Refreshing Xtentis Objects");
         this.server = server;
         this.username = username;
         this.password = password;
+        this.universe=universe;
     }
 
     protected IStatus run(IProgressMonitor monitor) {
         //FIXME: remove hardcoding of user
-        XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(server,username,password,GlobalUserInfo.getInstance().getUniverse());
+        XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(server,username,password,universe);
         try {
             retriever.run(monitor);
             serverRoot = retriever.getServerRoot();

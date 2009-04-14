@@ -1,6 +1,8 @@
 package com.amalto.workbench.utils;
 
-import com.amalto.workbench.webservices.WSUniverse;
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * Global user Information
@@ -8,12 +10,10 @@ import com.amalto.workbench.webservices.WSUniverse;
  *
  */
 public class GlobalUserInfo {
-	private String username;
-	private String password;
-	private String serverUrl;
-	private String universe;
+	UserInfo currentUser;
+	//key is userinfo.serverUrl + userinfo.universe
+	Map<String, UserInfo> userMaps=new HashMap<String, UserInfo>();
 	
-	private WSUniverse wsUuniverse;
 	private static GlobalUserInfo instance=null;
 	public static GlobalUserInfo getInstance(){
 		if(instance==null){
@@ -21,36 +21,13 @@ public class GlobalUserInfo {
 		}
 		return instance;
 	}
-	public String getUsername() {
-		return username;
-	}
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	public String getServerUrl() {
-		return serverUrl;
-	}
-	public void setServerUrl(String serverUrl) {
-		this.serverUrl = serverUrl;
-	}
-	public String getUniverse() {
-		return universe;
-	}
-	public void setUniverse(String universe) {
-		this.universe = universe;
+	
+	public void addUser(String key, UserInfo user){
+		userMaps.put(key, user);
 	}
 	
-	public WSUniverse getWsUuniverse() {
-		return wsUuniverse;
-	}
-	public void setWsUuniverse(WSUniverse wsUuniverse) {
-		this.wsUuniverse = wsUuniverse;
+	public void getUser(String key){
+		userMaps.get(key);
 	}
 	/**
 	 * the real username in db is universe/username
@@ -65,7 +42,5 @@ public class GlobalUserInfo {
 		}
 		return uname;
 	}
-	public boolean isAdmin(){
-		return ("admin".equals(username));
-	}
+
 }

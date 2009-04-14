@@ -412,14 +412,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
 			}
 		});
-
 		
 		return table;
 	}
-
-
-	
-	
+		
 	protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
 		//Everything is implemented in createFormContent
 	}//createCharacteristicsContent
@@ -468,7 +464,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 		}    	
 	}
 	private void addRevisionID(String[] concepts){
-		WSUniverse wsUniverse=GlobalUserInfo.getInstance().getWsUuniverse();
+		
+		WSUniverse wsUniverse=getXObject().getServerRoot().getUser().getWsUuniverse();
 		WSUniverseItemsRevisionIDs[] ids=wsUniverse.getItemsRevisionIDs();
 		for(int i=0; i<concepts.length; i++){
 			boolean isSet=false;
