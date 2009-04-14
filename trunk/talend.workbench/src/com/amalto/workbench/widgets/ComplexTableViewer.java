@@ -42,7 +42,7 @@ import com.amalto.workbench.models.Line;
  *
  */
 public class ComplexTableViewer {
-	protected List<String> columns;
+	protected List<ComplexTableViewerColumn> columns;
 	protected Composite parent;
 	protected FormToolkit toolkit;
 	
@@ -126,12 +126,12 @@ public class ComplexTableViewer {
 	public List<Text> getTxtLists() {
 		return txtLists;
 	}
-	public ComplexTableViewer(List<String> columns, FormToolkit toolkit,Composite parent){
+	public ComplexTableViewer(List<ComplexTableViewerColumn> columns, FormToolkit toolkit,Composite parent){
 		this.columns=columns;
 		this.parent=parent;
 		this.toolkit=toolkit;
 	}
-	protected String[] getTextValus(){
+	protected String[] getTextValues(){
 		List<String> values=new ArrayList<String>();
 		if(isFirstCombo){
 			values.add(firstCombo.getText());
@@ -153,8 +153,8 @@ public class ComplexTableViewer {
 	}
 	protected void createLabels(){
 		int i=0;
-		for(String column:columns){
-	        Label label = toolkit.createLabel(mainComposite, column, SWT.NULL);
+		for(ComplexTableViewerColumn column:columns){
+	        Label label = toolkit.createLabel(mainComposite, column.getName(), SWT.NULL);
 	        if(i==columns.size()-1){
 		        label.setLayoutData(
 		                new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
@@ -206,67 +206,89 @@ public class ComplexTableViewer {
         addButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
         	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-        		add();
+
+        		//Make sure texts are not nill (empty) where not authorized
+        		for (int i = 0; i < txtLists.size(); i++) {
+					int offset = isFirstCombo ? 1 : 0;
+					ComplexTableViewerColumn column = columns.get(i+offset);
+					Text text = txtLists.get(i);
+					if(text.getText().length()==0) {
+						if (column.isNillable())
+							text.setText(column.getNillValue());
+						else
+							return;
+					}
+				}
+        		
+
+        		if(isLastCombo){
+        			if(lastCombo.getText().length()==0) {
+        				ComplexTableViewerColumn column = columns.get(columns.size()-1);
+        				if (column.isNillable) 
+        					lastCombo.setText(column.getNillValue());
+        				else
+        					return;
+        			}
+        		}
+        		
+        		if(isFirstCombo){
+        			//check empty value
+        			if(firstCombo.getText().length()==0) {
+        				ComplexTableViewerColumn column = columns.get(0);
+        				if (column.isNillable) 
+        					firstCombo.setText(column.getNillValue());
+        				else
+        					return;
+        			}
+        			//check unique
+        			String input=getFirstCombo().getText().trim();
+        			List<Line> list=(List<Line>)getViewer().getInput();
+        			boolean isExist=false;
+        			for(Line line: list){
+        				for(KeyValue keyvalue:line.keyValues){
+        					if(keyvalue.value.equals(input)){
+        						isExist=true;
+        					}
+        				}
+        			}
+        			if(isExist){
+        				MessageDialog.openInformation(null, "Warning", input+" already Exists!");
+        				return;
+        			}
+        		}
+       		
+        		Line line =new Line(columns.toArray(new ComplexTableViewerColumn[columns.size()]),getTextValues());
+        		List<Line> items=(List<Line>)viewer.getInput();
+        		items.add(line);
+        		//update the instances viewer
+        		viewer.refresh();
+        		
+        		for(Text txt:txtLists){
+        			txt.setText("");
+        		}
+        		if(isLastCombo){
+        			lastCombo.setText("");
+        		}
+        		if(isFirstCombo){
+        			firstCombo.setText("");
+        		}
+        		markDirty();
         	};
         });		
 	}
-	public void add(){
-   		//update underlying role
-		for(Text txt:txtLists){
-			if(txt.getText().length()==0)return;
-		}
-		if(isLastCombo){
-			if(lastCombo.getText().length()==0) return;
-		}
-		
-		if(isFirstCombo){
-			//check unique
-			if(firstCombo.getText().length()==0) return;
-			String input=getFirstCombo().getText().trim();
-			List<Line> list=(List<Line>)getViewer().getInput();
-			boolean isExist=false;
-			for(Line line: list){
-				for(KeyValue keyvalue:line.keyValues){
-					if(keyvalue.value.equals(input)){
-						isExist=true;
-					}
-				}
-			}
-			if(isExist){
-				MessageDialog.openInformation(null, "Warning", input+" already Exists!");
-				return;
-			}
-		}
-		
-		Line line =new Line(columns.toArray(new String[columns.size()]),getTextValus());
-		List<Line> items=(List<Line>)viewer.getInput();
-		items.add(line);
-		//update the instances viewer
-		viewer.refresh();
-		
-		for(Text txt:txtLists){
-			txt.setText("");
-		}
-		if(isLastCombo){
-			lastCombo.setText("");
-		}
-		if(isFirstCombo){
-			firstCombo.setText("");
-		}
-		markDirty();
-	}
+	
 	protected void createViewer(){
         Table table =new Table(mainComposite,SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER|SWT.FULL_SELECTION);
         viewer = new TableViewer(table);
         table.setLayoutData(    
                 new GridData(SWT.FILL,SWT.FILL,true,true,columns.size(),1)
         );
-        ((GridData)viewer.getControl().getLayoutData()).minimumHeight=60;
+        ((GridData)viewer.getControl().getLayoutData()).heightHint=60;
         
         //table.setLayoutData(new GridData(GridData.FILL_BOTH));
-        for(String column:columns){
+        for(ComplexTableViewerColumn column:columns){
         	TableColumn tableColumn=new TableColumn(table, SWT.CENTER);
-        	tableColumn.setText(column);
+        	tableColumn.setText(column.getName());
         	tableColumn.setWidth(200);
         	tableColumn.pack();
         }  
@@ -378,8 +400,13 @@ public class ComplexTableViewer {
         		Line line = (Line) element;
         		if(columnIndex>=0 && columnIndex<columns.size()){
         			for(KeyValue keyvalue:line.keyValues){
-        				if(keyvalue.key.equals(columns.get(columnIndex))){
-        					return keyvalue.value;
+        				if(keyvalue.key.equals(columns.get(columnIndex).getName())){
+        					String val = keyvalue.value; 
+        					if (columns.get(columnIndex).isNillable()) {
+        						if (columns.get(columnIndex).getNillValue().equals(val))
+        							val = columns.get(columnIndex).getNillDisplay();
+        					}
+        					return val;
         				}
         			}
         		}
@@ -389,7 +416,11 @@ public class ComplexTableViewer {
         });
 
         // Set the column properties
-        viewer.setColumnProperties(columns.toArray(new String[columns.size()]));
+        ArrayList<String> columnNames = new ArrayList<String>();
+        for (ComplexTableViewerColumn column : columns) {
+			columnNames.add(column.getName());
+		}
+        viewer.setColumnProperties(columnNames.toArray(new String[columnNames.size()]));
         
         //set the Cell Modifier
         viewer.setCellModifier(new ICellModifier() {
