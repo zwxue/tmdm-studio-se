@@ -261,7 +261,7 @@ public class ComplexTableViewer {
         table.setLayoutData(    
                 new GridData(SWT.FILL,SWT.FILL,true,true,columns.size(),1)
         );
-        ((GridData)viewer.getControl().getLayoutData()).heightHint=60;
+        ((GridData)viewer.getControl().getLayoutData()).minimumHeight=60;
         
         //table.setLayoutData(new GridData(GridData.FILL_BOTH));
         for(String column:columns){

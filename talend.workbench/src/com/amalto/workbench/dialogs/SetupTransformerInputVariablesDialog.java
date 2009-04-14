@@ -38,12 +38,13 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
 	FormToolkit toolkit;
 	TreeObject object;
 	private ComplexTableViewer objectViewer;
-	java.util.List<Line> cacheList;
-	
-	public SetupTransformerInputVariablesDialog(Shell parentShell,FormToolkit toolkit,TreeObject obj) {
+
+	TransformerMainPage page;
+	public SetupTransformerInputVariablesDialog(Shell parentShell,FormToolkit toolkit,TreeObject obj,TransformerMainPage page) {
 		super(parentShell);	
 		this.toolkit=toolkit;
 		object=obj;
+		this.page=page;
 		transformer = (WSTransformerV2)obj.getWsObject();
 	}
 
@@ -89,10 +90,10 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
         table.setHeaderVisible(true);
         table.setLinesVisible(true);
         
-        ((GridData)table.getLayoutData()).minimumHeight = 100;
-        ((GridData)table.getLayoutData()).minimumWidth = 600;
-        if(cacheList!=null){
-        	objectViewer.getViewer().setInput(cacheList);
+        //((GridData)table.getLayoutData()).minimumHeight = 100;
+        //((GridData)table.getLayoutData()).minimumWidth = 600;
+        if(page.getCacheList()!=null){
+        	objectViewer.getViewer().setInput(page.getCacheList());
         }else{
 	        List<Line> list=new ArrayList<Line>();
 	        objectViewer.getViewer().setInput(list);
@@ -108,54 +109,17 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
 	}
 	
 	private void processOk(){
-		try{
-			objectViewer.add();
-			java.util.List<Line> list=(java.util.List<Line>)objectViewer.getViewer().getInput();
-			if(list.size()==0)return;
-			cacheList=list;
-			WSTransformerContextPipelinePipelineItem []items=new WSTransformerContextPipelinePipelineItem[list.size()];
-			int i=0;
-			for(Line line:list){
-				String variableName=line.keyValues.get(0).value;
-				String value=line.keyValues.get(1).value;
-				String contentType=line.keyValues.get(2).value;
-				
-				items[i] = new WSTransformerContextPipelinePipelineItem(
-						variableName,
-						new WSTypedContent(
-							null,
-							new WSByteArray(value.getBytes("utf-8")),  
-							contentType
-						)
-				);		
-				i++;
-			}
+		objectViewer.add();
+		java.util.List<Line> list=(java.util.List<Line>)objectViewer.getViewer().getInput();
+		if(list.size()==0)return;
 
-			Util.getPort(object).executeTransformerV2AsJob(
-					new WSExecuteTransformerV2AsJob(
-						new WSTransformerContext(
-							new WSTransformerV2PK(transformer.getName()),
-							new WSTransformerContextPipeline(items ),
-							null)
-						));
-			}catch(Exception e1){
-				e1.printStackTrace();
-			}
+		page.setCacheList(list);
+		page.execute();
 
 	}
 	
-	public java.util.List<Line> getCacheList() {
-		return cacheList;
-	}
 
-	public void setCacheList(java.util.List<Line> cacheList) {
-		this.cacheList = cacheList;
-	}
 
-	@Override
-	protected void setShellStyle(int newShellStyle) {		
-		super.setShellStyle(newShellStyle|SWT.RESIZE);
-	}
 	@Override
 	protected void okPressed() {
 		setReturnCode(OK);

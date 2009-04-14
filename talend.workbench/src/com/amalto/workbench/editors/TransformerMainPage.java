@@ -6,8 +6,11 @@
  */
 package com.amalto.workbench.editors;
 
+import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -16,6 +19,8 @@ import java.util.TreeMap;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
@@ -65,17 +70,25 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.dialogs.PluginDetailsDialog;
-import com.amalto.workbench.dialogs.ProcessFileDialog;
+import com.amalto.workbench.dialogs.ProcessResultsDialog;
 import com.amalto.workbench.dialogs.SetupTransformerInputVariablesDialog;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.Version;
 import com.amalto.workbench.utils.WidgetUtils;
+import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.webservices.BackgroundJobStatusType;
+import com.amalto.workbench.webservices.WSBackgroundJob;
+import com.amalto.workbench.webservices.WSBackgroundJobPK;
 import com.amalto.workbench.webservices.WSByteArray;
 import com.amalto.workbench.webservices.WSExecuteTransformerV2AsJob;
+import com.amalto.workbench.webservices.WSExtractedContent;
+import com.amalto.workbench.webservices.WSGetBackgroundJob;
 import com.amalto.workbench.webservices.WSGetTransformerPluginV2Details;
 import com.amalto.workbench.webservices.WSGetTransformerPluginV2SList;
+import com.amalto.workbench.webservices.WSPipeline;
+import com.amalto.workbench.webservices.WSPipelineTypedContentEntry;
 import com.amalto.workbench.webservices.WSTransformerContext;
 import com.amalto.workbench.webservices.WSTransformerContextPipeline;
 import com.amalto.workbench.webservices.WSTransformerContextPipelinePipelineItem;
@@ -92,7 +105,8 @@ import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.LabelCombo;
 
 public class TransformerMainPage extends AMainPageV2 {
-
+	static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+	
 	public final static String DEFAULT_VAR = "_DEFAULT_";
 	public final static String DEFAULT_DISPLAY = "{}";
 	
@@ -140,6 +154,7 @@ public class TransformerMainPage extends AMainPageV2 {
 	private Composite specsComposite;
 	
 	java.util.List<Line> cacheList; //remember the setup transformerinputvariablesdialog's input list
+
 	
     public TransformerMainPage(FormEditor editor) {
         super(
@@ -160,7 +175,124 @@ public class TransformerMainPage extends AMainPageV2 {
         	);
         } catch (Exception e) {/*no versioning support on old cores*/}
     }
+    
+    public java.util.List<Line> getCacheList() {
+		return cacheList;
+	}
 
+	public void setCacheList(java.util.List<Line> cacheList) {
+		this.cacheList = cacheList;
+	}
+
+	public void execute(){
+		try{
+			WSTransformerContextPipelinePipelineItem []items=new WSTransformerContextPipelinePipelineItem[cacheList.size()];
+			int i=0;
+			for(Line line:cacheList){
+				String variableName=line.keyValues.get(0).value;
+				String value=line.keyValues.get(1).value;
+				String contentType=line.keyValues.get(2).value;
+				
+				items[i] = new WSTransformerContextPipelinePipelineItem(
+						variableName,
+						new WSTypedContent(
+							null,
+							new WSByteArray(value.getBytes("utf-8")),  
+							contentType
+						)
+				);		
+				i++;
+			}
+
+			final WSBackgroundJobPK jobPK=port.executeTransformerV2AsJob(
+					new WSExecuteTransformerV2AsJob(
+						new WSTransformerContext(
+							new WSTransformerV2PK(transformer.getName()),
+							new WSTransformerContextPipeline(items ),
+							null)
+						));
+			
+			IRunnableWithProgress progress=new IRunnableWithProgress(){
+				public void run(IProgressMonitor monitor)
+						throws InvocationTargetException, InterruptedException {
+					/******************************************
+					 * Watch the Background Job
+					 ******************************************/
+					try{
+						boolean firstTime = true;
+						WSBackgroundJob job=null;
+						do {							
+							if (firstTime) {
+								Thread.sleep(1500L);
+								firstTime = false;
+							} else {
+								Thread.sleep(5000L);
+							}
+							
+							if (monitor.isCanceled()) {
+	
+								throw new InterruptedException("User Cancel");
+							}
+							
+							job  =  port.getBackgroundJob(new WSGetBackgroundJob(jobPK.getPk()));	
+							monitor.subTask(job.getMessage());
+	
+						} while (
+									job.getStatus().equals(BackgroundJobStatusType.RUNNING) 
+									|| job.getStatus().equals(BackgroundJobStatusType.SCHEDULED)
+									);
+	
+						if (job.getStatus().equals(BackgroundJobStatusType.STOPPED)) 
+							throw new XtentisException("The job was stopped. "+job.getMessage());
+						
+						monitor.worked(1);			
+						monitor.done();
+						
+						
+						/******************************************
+						 * Build the result console
+						 ******************************************/
+	
+						//Auto sorts the entries
+						final TreeMap pipeline = new TreeMap<String, WSExtractedContent>();
+						WSPipeline wsPipeline = job.getPipeline();
+						WSPipelineTypedContentEntry[] entries = wsPipeline.getTypedContentEntry();
+						for (int i = 0; i < entries.length; i++) {
+							pipeline.put(entries[i].getOutput(), entries[i].getWsExtractedContent());
+						}
+						getSite().getShell().getDisplay().asyncExec (new Runnable () {
+							public void run () {
+								try {
+									/*
+									ProcessResultsPage page = new ProcessResultsPage(editor,pipeline);
+									parent.editor.addPage(page);
+									parent.editor.setActivePage(page.getId());
+									*
+									*parent.editor.getEditorSite().getShell()
+									*/
+									//Shell shell = new Shell(SWT.DIALOG_TRIM | SWT.RESIZE | SWT.MAX | SWT.MIN);
+									ProcessResultsDialog dialog = new ProcessResultsDialog(getSite().getShell() ,"Results at "+sdf.format(new Date(System.currentTimeMillis())), pipeline);
+									dialog.setBlockOnOpen(false);
+									dialog.open();
+								} catch (Exception e) {
+									e.printStackTrace();
+									throw new RuntimeException(e);
+								}
+							}
+						});	
+					
+					}catch(Exception e1){
+						e1.printStackTrace();
+					}					
+				}				
+			};
+			
+			new ProgressMonitorDialog(getSite().getShell()).run(true, true, progress);
+			}catch(Exception e1){
+				e1.printStackTrace();
+			}
+
+    }
     @Override
 	protected void createCharacteristicsContent(final FormToolkit toolkit, Composite topComposite) {
     	try {
@@ -217,13 +349,12 @@ public class TransformerMainPage extends AMainPageV2 {
 	            					TransformerMainPage.this.getEditor().doSave(new NullProgressMonitor());
 	            			}
 	            			//Open form Dialog	            			
-	            			transformerDialog=new SetupTransformerInputVariablesDialog(TransformerMainPage.this.getSite().getShell(),toolkit,getXObject());
-	            			transformerDialog.setCacheList(cacheList);
+	            			transformerDialog=new SetupTransformerInputVariablesDialog(TransformerMainPage.this.getSite().getShell(),toolkit,getXObject(),TransformerMainPage.this);
 	            			transformerDialog.create();
 	            			
 	            			transformerDialog.getShell().setText("Setup Transformer's input variables");
 	            			transformerDialog.open();
-	            			cacheList=transformerDialog.getCacheList();
+
 	            		} catch (Exception ex) {
 	            			ex.printStackTrace();
 	            		}
@@ -236,6 +367,8 @@ public class TransformerMainPage extends AMainPageV2 {
             windowTarget.setTransfer(new Transfer[]{TextTransfer.getInstance()});
             windowTarget.addDropListener(new DCDropTargetListener());
             
+
+           
             //Sequence
             Composite sequenceGroup = this.getNewSectionComposite("Steps Sequence");
             sequenceGroup.setLayout(new GridLayout(1,false));
