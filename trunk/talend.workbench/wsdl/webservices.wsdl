@@ -622,6 +622,13 @@
 		<part name="wsBackgroundJobPK" element="tns:WSBackgroundJobPK"/>
 	</message>	
 	
+	<message name="extractThroughTransformerV2Request">
+		<part name="wsExtractThroughTransformerV2" element="tns:WSExtractThroughTransformerV2"/>
+	</message>
+	<message name="extractThroughTransformerV2Response">
+		<part name="wsTransformerContext" element="tns:WSTransformerContext"/>
+	</message>	
+	
 	<!-- ************************ TransformerPluginV2s  *************************** -->
 
 	<message name="existsTransformerPluginV2Request">
@@ -1346,7 +1353,7 @@
 		</operation>				
 
 		
-		<!-- ********************* TRANSFORMERV2  ************************ -->
+		<!-- ********************* TRANSFORMER V2  ************************ -->
 		
 		<operation name="getTransformerV2">
 			<input message="tns:getTransformerV2Request"/>
@@ -1375,7 +1382,11 @@
 		<operation name="executeTransformerV2AsJob">
 			<input message="tns:executeTransformerV2AsJobRequest"/>
 			<output message="tns:executeTransformerV2AsJobResponse"/>
-		</operation>			
+		</operation>
+		<operation name="extractThroughTransformerV2">
+			<input message="tns:extractThroughTransformerV2Request"/>
+			<output message="tns:extractThroughTransformerV2Response"/>
+		</operation>		
 
 		
 		<!-- *********************  TRANSFORMER PLUGIN  V2 ************************ -->
@@ -2089,8 +2100,13 @@
 			<soap:operation/>
 			<input><soap:body use="literal"/></input>
 			<output><soap:body use="literal"/></output>
-		</operation>		
-		
+		</operation>
+		<operation name="extractThroughTransformerV2">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>	
+			
 				
 		<!-- *********************  TRANSFORMER PLUGIN  V2 ************************ -->
 		

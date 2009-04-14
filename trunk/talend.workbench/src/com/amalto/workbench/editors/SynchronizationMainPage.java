@@ -30,8 +30,6 @@ import org.exolab.castor.xml.Marshaller;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.FontUtils;
-import com.amalto.workbench.webservices.WSByteArray;
-import com.amalto.workbench.webservices.WSExecuteTransformerV2AsJob;
 import com.amalto.workbench.webservices.WSGetObjectsForSynchronizationPlans;
 import com.amalto.workbench.webservices.WSGetSynchronizationPlanItemsAlgorithms;
 import com.amalto.workbench.webservices.WSGetSynchronizationPlanObjectsAlgorithms;
@@ -44,12 +42,8 @@ import com.amalto.workbench.webservices.WSSynchronizationPlanStatus;
 import com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode;
 import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizations;
 import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations;
-import com.amalto.workbench.webservices.WSTransformerContext;
-import com.amalto.workbench.webservices.WSTransformerContextPipeline;
-import com.amalto.workbench.webservices.WSTransformerContextPipelinePipelineItem;
-import com.amalto.workbench.webservices.WSTransformerV2PK;
-import com.amalto.workbench.webservices.WSTypedContent;
 import com.amalto.workbench.widgets.ComplexTableViewer;
+import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.LabelText;
 
 public class SynchronizationMainPage extends AMainPageV2{
@@ -60,8 +54,20 @@ public class SynchronizationMainPage extends AMainPageV2{
 
 	protected FormToolkit toolkit;
 	
-	private String[] xtentisObjectColumns=new String[]{"Instance Pattern","Source Revision ID","Target Revision ID","Algorithm"};
-	private String[] itemsColumns=new String[]{"Concept Pattern","IDs Pattern","Source Revision ID","Target Revision ID","Algorithm"};
+	private ComplexTableViewerColumn[] xtentisObjectColumns= new ComplexTableViewerColumn[]{
+		new ComplexTableViewerColumn("Instance Pattern", true, ".*", ".*"),
+		new ComplexTableViewerColumn("Local Revision ID", true, "", "[HEAD]"),
+		new ComplexTableViewerColumn("Remote Revision ID", true, "", "[HEAD]"),
+		new ComplexTableViewerColumn("Algorithm", false, "", "")
+	};
+		
+	private ComplexTableViewerColumn[] itemsColumns=new ComplexTableViewerColumn[]{
+		new ComplexTableViewerColumn("Concept Pattern", true, ".*", ".*"),
+		new ComplexTableViewerColumn("IDs Pattern", true, ".*", ".*"),
+		new ComplexTableViewerColumn("Local Revision ID", true, "", "[HEAD]"),
+		new ComplexTableViewerColumn("Remote Revision ID", true, "", "[HEAD]"),
+		new ComplexTableViewerColumn("Algorithm", false, "", "")
+	};
 		
 	protected SyncronizationPlan syncPlan;
 	protected LabelText descriptionText;
@@ -352,7 +358,11 @@ public class SynchronizationMainPage extends AMainPageV2{
         ).getStrings();
         
         //Table
-        ComplexTableViewer itemsViewer=new ComplexTableViewer(Arrays.asList(itemsColumns),toolkit,itemsComposite);
+        ComplexTableViewer itemsViewer=new ComplexTableViewer(
+        	Arrays.asList(itemsColumns),
+        	toolkit,
+        	itemsComposite
+        );
         itemsViewer.setMainPage(this);
         itemsViewer.setLastCombo(true);
         itemsViewer.setLastcomboStrings(itemsAlgorithmsStrings);

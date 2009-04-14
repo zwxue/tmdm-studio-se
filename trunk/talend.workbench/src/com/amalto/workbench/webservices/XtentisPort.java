@@ -154,6 +154,8 @@ public interface XtentisPort extends java.rmi.Remote {
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSBackgroundJobPK executeTransformerV2AsJob(com.amalto.workbench.webservices.WSExecuteTransformerV2AsJob wsExecuteTransformerV2AsJob) throws 
          java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSTransformerContext extractThroughTransformerV2(com.amalto.workbench.webservices.WSExtractThroughTransformerV2 wsExtractThroughTransformerV2) throws 
+         java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSBoolean existsTransformerPluginV2(com.amalto.workbench.webservices.WSExistsTransformerPluginV2 wsExistsTransformerPluginV2) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSString getTransformerPluginV2Configuration(com.amalto.workbench.webservices.WSTransformerPluginV2GetConfiguration wsGetConfiguration) throws 
