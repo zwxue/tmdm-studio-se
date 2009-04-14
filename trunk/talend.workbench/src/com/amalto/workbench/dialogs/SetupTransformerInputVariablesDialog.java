@@ -32,19 +32,17 @@ import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.WSTransformerVariablesMapping;
 import com.amalto.workbench.webservices.WSTypedContent;
 import com.amalto.workbench.widgets.ComplexTableViewer;
+import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 
 public class SetupTransformerInputVariablesDialog extends Dialog {
 	WSTransformerV2 transformer;
 	FormToolkit toolkit;
 	TreeObject object;
 	private ComplexTableViewer objectViewer;
-
-	TransformerMainPage page;
-	public SetupTransformerInputVariablesDialog(Shell parentShell,FormToolkit toolkit,TreeObject obj,TransformerMainPage page) {
+	public SetupTransformerInputVariablesDialog(Shell parentShell,FormToolkit toolkit,TreeObject obj) {
 		super(parentShell);	
 		this.toolkit=toolkit;
 		object=obj;
-		this.page=page;
 		transformer = (WSTransformerV2)obj.getWsObject();
 	}
 
@@ -63,7 +61,13 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
   
         comp.setLayout(  new GridLayout(1 ,false ));
         comp.setText("Setup " + transformer.getName() + " input variables");
-		String[] columns={"Input variables","Value","Content/type"};
+        
+    	ComplexTableViewerColumn[] columns= new ComplexTableViewerColumn[]{
+    		new ComplexTableViewerColumn("Input Variables", true, "_DEFAULT_", "_DEFAULT_"),
+    		new ComplexTableViewerColumn("Value", true, "", ""),
+    		new ComplexTableViewerColumn("Content/type", false, "", "")
+    	};
+        
         objectViewer=new ComplexTableViewer(Arrays.asList(columns),toolkit,comp);
         Set<String> strings=new HashSet<String>();
         for(WSTransformerProcessStep step:transformer.getProcessSteps()){
@@ -90,14 +94,11 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
         table.setHeaderVisible(true);
         table.setLinesVisible(true);
         
-        //((GridData)table.getLayoutData()).minimumHeight = 100;
-        //((GridData)table.getLayoutData()).minimumWidth = 600;
-        if(page.getCacheList()!=null){
-        	objectViewer.getViewer().setInput(page.getCacheList());
-        }else{
-	        List<Line> list=new ArrayList<Line>();
-	        objectViewer.getViewer().setInput(list);
-        }
+        ((GridData)table.getLayoutData()).minimumHeight = 100;
+        ((GridData)table.getLayoutData()).minimumWidth = 600;
+        
+        List<Line> list=new ArrayList<Line>();
+        objectViewer.getViewer().setInput(list);
         return comp;
 		
 	}
@@ -107,19 +108,44 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
 		super.createButtonsForButtonBar(parent);
 		parent.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 	}
-	
 	private void processOk(){
-		objectViewer.add();
-		java.util.List<Line> list=(java.util.List<Line>)objectViewer.getViewer().getInput();
-		if(list.size()==0)return;
+		try{
+			java.util.List<Line> list=(java.util.List<Line>)objectViewer.getViewer().getInput();
+			if(list.size()==0)return;
+			WSTransformerContextPipelinePipelineItem []items=new WSTransformerContextPipelinePipelineItem[list.size()];
+			int i=0;
+			for(Line line:list){
+				String variableName=line.keyValues.get(0).value;
+				String value=line.keyValues.get(1).value;
+				String contentType=line.keyValues.get(2).value;
+				
+				items[i] = new WSTransformerContextPipelinePipelineItem(
+						variableName,
+						new WSTypedContent(
+							null,
+							new WSByteArray(value.getBytes("utf-8")),  
+							contentType
+						)
+				);		
+				i++;
+			}
 
-		page.setCacheList(list);
-		page.execute();
+			Util.getPort(object).executeTransformerV2AsJob(
+					new WSExecuteTransformerV2AsJob(
+						new WSTransformerContext(
+							new WSTransformerV2PK(transformer.getName()),
+							new WSTransformerContextPipeline(items ),
+							null)
+						));
+			}catch(Exception e1){
+				e1.printStackTrace();
+			}
 
 	}
-	
-
-
+	@Override
+	protected void setShellStyle(int newShellStyle) {		
+		super.setShellStyle(newShellStyle|SWT.RESIZE);
+	}
 	@Override
 	protected void okPressed() {
 		setReturnCode(OK);
