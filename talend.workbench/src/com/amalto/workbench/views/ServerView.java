@@ -150,7 +150,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener{
 					manager.add(logoutAction);
 					manager.add(serverRefreshAction);
 					if (! WorkbenchClipboard.getWorkbenchClipboard().isEmpty()) manager.add(pasteAction);
-					if (GlobalUserInfo.getInstance().isAdmin()) manager.add(serverInitAction);
+					if ("admin".equalsIgnoreCase(xobject.getUsername())) manager.add(serverInitAction);
 					break;
 				case TreeObject._ACTION_:
 					manager.add((Action)xobject.getWsObject());

@@ -66,20 +66,27 @@ public class ServerLoginAction extends Action implements SelectionListener{
 					true, 
 					retriever
 			);
-            
+            if(!retriever.isExistUniverse()){
+            	//MessageDialog.openError(view.getViewer().getControl().getShell(), "Wrong universe", "Can't find the universe,please try again!");
+            	return;
+            }
             TreeParent serverRoot = retriever.getServerRoot();
             TreeParent invisibleRoot = view.getTreeContentProvider().getInvisibleRoot();
             TreeObject[] serverRoots = invisibleRoot.getChildren();
+            
             boolean found = false;
             for (int i = 0; i < serverRoots.length; i++) {
                 if (serverRoots[i].getWsKey().equals(serverRoot.getWsKey())) {
-                    //server already exists --> synchronize
-                    found = true;
-                    ((TreeParent)serverRoots[i]).synchronizeWith(serverRoot);
+                    //server & universe already exists --> synchronize
+                	if(serverRoots[i].getUser().getUniverse().equalsIgnoreCase(serverRoot.getUser().getUniverse())){
+	                    found = true;
+	                    ((TreeParent)serverRoots[i]).synchronizeWith(serverRoot);
+                	}
                 }
             }
-            if (!found) invisibleRoot.addChild(serverRoot);
-
+            if (!found) 
+            	invisibleRoot.addChild(serverRoot);
+           
             view.getViewer().refresh();
             view.getViewer().expandToLevel(serverRoot,1);
             

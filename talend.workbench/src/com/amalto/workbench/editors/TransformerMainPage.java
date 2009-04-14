@@ -19,7 +19,6 @@ import java.util.TreeMap;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
@@ -287,7 +286,7 @@ public class TransformerMainPage extends AMainPageV2 {
 				}				
 			};
 			
-			new ProgressMonitorDialog(getSite().getShell()).run(true, true, progress);
+			
 			}catch(Exception e1){
 				e1.printStackTrace();
 			}
