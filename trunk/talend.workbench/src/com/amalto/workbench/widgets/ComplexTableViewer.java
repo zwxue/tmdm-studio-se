@@ -274,7 +274,71 @@ public class ComplexTableViewer {
         addButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
         	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+           		//Make sure texts are not nill (empty) where not authorized
+        		for (int i = 0; i < txtLists.size(); i++) {
+					int offset = isFirstCombo ? 1 : 0;
+					ComplexTableViewerColumn column = columns.get(i+offset);
+					Text text = txtLists.get(i);
+					if(text.getText().length()==0) {
+						if (column.isNillable())
+							text.setText(column.getNillValue());
+						else
+							return;
+					}
+				}
 
+        		if(isLastCombo){
+        			if(lastCombo.getText().length()==0) {
+        				ComplexTableViewerColumn column = columns.get(columns.size()-1);
+        				if (column.isNillable) 
+        					lastCombo.setText(column.getNillValue());
+        				else
+        					return;
+        			}
+        		}
+        		
+        		if(isFirstCombo){
+        			//check empty value
+        			if(firstCombo.getText().length()==0) {
+        				ComplexTableViewerColumn column = columns.get(0);
+        				if (column.isNillable) 
+        					firstCombo.setText(column.getNillValue());
+        				else
+        					return;
+        			}
+        			//check unique
+        			String input=getFirstCombo().getText().trim();
+        			List<Line> list=(List<Line>)getViewer().getInput();
+        			boolean isExist=false;
+        			for(Line line: list){
+        				for(KeyValue keyvalue:line.keyValues){
+        					if(keyvalue.value.equals(input)){
+        						isExist=true;
+        					}
+        				}
+        			}
+        			if(isExist){
+        				MessageDialog.openInformation(null, "Warning", input+" already Exists!");
+        				return;
+        			}
+        		}
+       		
+        		Line line =new Line(columns.toArray(new ComplexTableViewerColumn[columns.size()]),getTextValues());
+        		List<Line> items=(List<Line>)viewer.getInput();
+        		items.add(line);
+        		//update the instances viewer
+        		viewer.refresh();
+        		
+        		for(Text txt:txtLists){
+        			txt.setText("");
+        		}
+        		if(isLastCombo){
+        			lastCombo.setText("");
+        		}
+        		if(isFirstCombo){
+        			firstCombo.setText("");
+        		}
+        		markDirty();
          	};
         });		
 	}

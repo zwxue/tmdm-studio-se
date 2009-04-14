@@ -8,17 +8,17 @@ package com.amalto.workbench.webservices;
 
 public class WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations {
     protected java.lang.String instancePattern;
-    protected java.lang.String sourceRevisionID;
-    protected java.lang.String targetRevisionID;
+    protected java.lang.String localRevisionID;
+    protected java.lang.String remoteRevisionID;
     protected java.lang.String algorithm;
     
     public WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations() {
     }
     
-    public WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations(java.lang.String instancePattern, java.lang.String sourceRevisionID, java.lang.String targetRevisionID, java.lang.String algorithm) {
+    public WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations(java.lang.String instancePattern, java.lang.String localRevisionID, java.lang.String remoteRevisionID, java.lang.String algorithm) {
         this.instancePattern = instancePattern;
-        this.sourceRevisionID = sourceRevisionID;
-        this.targetRevisionID = targetRevisionID;
+        this.localRevisionID = localRevisionID;
+        this.remoteRevisionID = remoteRevisionID;
         this.algorithm = algorithm;
     }
     
@@ -30,20 +30,20 @@ public class WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations
         this.instancePattern = instancePattern;
     }
     
-    public java.lang.String getSourceRevisionID() {
-        return sourceRevisionID;
+    public java.lang.String getLocalRevisionID() {
+        return localRevisionID;
     }
     
-    public void setSourceRevisionID(java.lang.String sourceRevisionID) {
-        this.sourceRevisionID = sourceRevisionID;
+    public void setLocalRevisionID(java.lang.String localRevisionID) {
+        this.localRevisionID = localRevisionID;
     }
     
-    public java.lang.String getTargetRevisionID() {
-        return targetRevisionID;
+    public java.lang.String getRemoteRevisionID() {
+        return remoteRevisionID;
     }
     
-    public void setTargetRevisionID(java.lang.String targetRevisionID) {
-        this.targetRevisionID = targetRevisionID;
+    public void setRemoteRevisionID(java.lang.String remoteRevisionID) {
+        this.remoteRevisionID = remoteRevisionID;
     }
     
     public java.lang.String getAlgorithm() {

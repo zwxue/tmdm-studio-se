@@ -63,8 +63,10 @@ public class SynchronizationMainPage extends AMainPageV2{
 		
 	private ComplexTableViewerColumn[] itemsColumns=new ComplexTableViewerColumn[]{
 		new ComplexTableViewerColumn("Concept Pattern", true, ".*", ".*"),
-		new ComplexTableViewerColumn("IDs Pattern", true, ".*", ".*"),
+		new ComplexTableViewerColumn("IDs Pattern       ", true, ".*", ".*"),
+		new ComplexTableViewerColumn("Local Cluster", false, "", ""),
 		new ComplexTableViewerColumn("Local Revision ID", true, "", "[HEAD]"),
+		new ComplexTableViewerColumn("Remote Cluster", false, "", ""),
 		new ComplexTableViewerColumn("Remote Revision ID", true, "", "[HEAD]"),
 		new ComplexTableViewerColumn("Algorithm", false, "", "")
 	};
@@ -458,7 +460,15 @@ public class SynchronizationMainPage extends AMainPageV2{
 				List<Line> lines=new ArrayList<Line>();
 				if(xtentisSync.getSynchronizations()!=null){
 					for(WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations objSync:xtentisSync.getSynchronizations()){
-						Line line=new Line(xtentisObjectColumns,new String[]{objSync.getInstancePattern(),objSync.getSourceRevisionID(),objSync.getTargetRevisionID(),objSync.getAlgorithm()});
+						Line line=new Line(
+							xtentisObjectColumns,
+							new String[]{
+								objSync.getInstancePattern(),
+								objSync.getLocalRevisionID(),
+								objSync.getRemoteRevisionID(),
+								objSync.getAlgorithm()
+							}
+						);
 						lines.add(line);
 					}
 				}
@@ -473,7 +483,18 @@ public class SynchronizationMainPage extends AMainPageV2{
 			//Items
 			List<Line> lines=new ArrayList<Line>();
 			for(WSSynchronizationPlanItemsSynchronizations itemSync:ws.getItemsSynchronizations()){
-				Line line=new Line(itemsColumns,new String[]{itemSync.getConceptPattern(),itemSync.getIdsPattern(),itemSync.getSourceRevisionID(),itemSync.getTargetRevisionID(),itemSync.getAlgorithm()});
+				Line line=new Line(
+					itemsColumns,
+					new String[]{
+						itemSync.getConceptPattern(),
+						itemSync.getIdsPattern(),
+						itemSync.getLocalCluster(),
+						itemSync.getLocalRevisionID(),
+						itemSync.getRemoteCluster(),
+						itemSync.getRemoteRevisionID(),
+						itemSync.getAlgorithm()
+					}
+				);
 				lines.add(line);
 			}
 	    	syncPlan.setItemsList(lines);
@@ -573,8 +594,8 @@ public class SynchronizationMainPage extends AMainPageV2{
 				for(Line line: entry.getValue()){
 					syncs[i]=new WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations();
 					syncs[i].setInstancePattern(line.keyValues.get(0).value);
-					syncs[i].setSourceRevisionID(line.keyValues.get(1).value);
-					syncs[i].setTargetRevisionID(line.keyValues.get(2).value);
+					syncs[i].setLocalRevisionID(line.keyValues.get(1).value);
+					syncs[i].setRemoteRevisionID(line.keyValues.get(2).value);
 					syncs[i].setAlgorithm(line.keyValues.get(3).value);
 					i++;
 				}
@@ -591,9 +612,11 @@ public class SynchronizationMainPage extends AMainPageV2{
 				itemSyncs[i]=new WSSynchronizationPlanItemsSynchronizations();
 				itemSyncs[i].setConceptPattern(line.keyValues.get(0).value);
 				itemSyncs[i].setIdsPattern(line.keyValues.get(1).value);
-				itemSyncs[i].setSourceRevisionID(line.keyValues.get(2).value);
-				itemSyncs[i].setTargetRevisionID(line.keyValues.get(3).value);
-				itemSyncs[i].setAlgorithm(line.keyValues.get(4).value);				
+				itemSyncs[i].setLocalCluster(line.keyValues.get(2).value);
+				itemSyncs[i].setLocalRevisionID(line.keyValues.get(3).value);
+				itemSyncs[i].setRemoteCluster(line.keyValues.get(4).value);
+				itemSyncs[i].setRemoteRevisionID(line.keyValues.get(5).value);
+				itemSyncs[i].setAlgorithm(line.keyValues.get(6).value);				
 			}
 			ws.setItemsSynchronizations(itemSyncs);
 			

@@ -31,8 +31,8 @@
 							<xsd:complexType>
 								<xsd:sequence>
 									<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="instancePattern" type="xsd:string"/>
-									<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="sourceRevisionID" type="xsd:string"/>
-									<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="targetRevisionID" type="xsd:string"/>
+									<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="localRevisionID" type="xsd:string"/>
+									<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="remoteRevisionID" type="xsd:string"/>
 									<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="algorithm" type="xsd:string"/>
 								</xsd:sequence>
 							</xsd:complexType>
@@ -45,8 +45,10 @@
 					<xsd:sequence>
 						<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="conceptPattern" type="xsd:string"/>
 						<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="idsPattern" type="xsd:string"/>
-						<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="sourceRevisionID" type="xsd:string"/>
-						<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="targetRevisionID" type="xsd:string"/>
+						<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="localCluster" type="xsd:string"/>
+						<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="localRevisionID" type="xsd:string"/>
+						<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="remoteCluster" type="xsd:string"/>
+						<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="remoteRevisionID" type="xsd:string"/>
 						<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="algorithm" type="xsd:string"/>
 					</xsd:sequence>
 				</xsd:complexType>
@@ -183,9 +185,6 @@
 	</xsd:complexType>
 	<xsd:element name="WSSynchronizationPlanAction" type="tns:WSSynchronizationPlanAction"/>	
 	
-
-
-	
 	<xsd:complexType name="WSSynchronizationGetUnsynchronizedObjectsIDs">
 		<xsd:sequence>
 			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="revisionID" type="xsd:string"/>
@@ -216,5 +215,35 @@
 		</xsd:sequence>		
 	</xsd:complexType>
 	<xsd:element name="WSSynchronizationPutObjectXML" type="tns:WSSynchronizationPutObjectXML"/>
+
+
+	<xsd:complexType name="WSSynchronizationGetUnsynchronizedItemPKs">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="revisionID" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="wsDataClusterPOJOPK" type="tns:WSDataClusterPK"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="conceptPattern" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="instancePattern" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="synchronizationPlanName" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="start" type="xsd:int"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="limit" type="xsd:int"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSSynchronizationGetUnsynchronizedItemPKs" type="tns:WSSynchronizationGetUnsynchronizedItemPKs"/>
+
+	<xsd:complexType name="WSSynchronizationGetItemXML">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="revisionID" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="wsItemPOJOPK" type="tns:WSItemPK"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSSynchronizationGetItemXML" type="tns:WSSynchronizationGetItemXML"/>
+	
+	<xsd:complexType name="WSSynchronizationPutItemXML">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="revisionID" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="xml" type="xsd:string"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSSynchronizationPutItemXML" type="tns:WSSynchronizationPutItemXML"/>
 
 </xsd:schema>

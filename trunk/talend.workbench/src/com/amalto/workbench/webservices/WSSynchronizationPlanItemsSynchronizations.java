@@ -9,18 +9,22 @@ package com.amalto.workbench.webservices;
 public class WSSynchronizationPlanItemsSynchronizations {
     protected java.lang.String conceptPattern;
     protected java.lang.String idsPattern;
-    protected java.lang.String sourceRevisionID;
-    protected java.lang.String targetRevisionID;
+    protected java.lang.String localCluster;
+    protected java.lang.String localRevisionID;
+    protected java.lang.String remoteCluster;
+    protected java.lang.String remoteRevisionID;
     protected java.lang.String algorithm;
     
     public WSSynchronizationPlanItemsSynchronizations() {
     }
     
-    public WSSynchronizationPlanItemsSynchronizations(java.lang.String conceptPattern, java.lang.String idsPattern, java.lang.String sourceRevisionID, java.lang.String targetRevisionID, java.lang.String algorithm) {
+    public WSSynchronizationPlanItemsSynchronizations(java.lang.String conceptPattern, java.lang.String idsPattern, java.lang.String localCluster, java.lang.String localRevisionID, java.lang.String remoteCluster, java.lang.String remoteRevisionID, java.lang.String algorithm) {
         this.conceptPattern = conceptPattern;
         this.idsPattern = idsPattern;
-        this.sourceRevisionID = sourceRevisionID;
-        this.targetRevisionID = targetRevisionID;
+        this.localCluster = localCluster;
+        this.localRevisionID = localRevisionID;
+        this.remoteCluster = remoteCluster;
+        this.remoteRevisionID = remoteRevisionID;
         this.algorithm = algorithm;
     }
     
@@ -40,20 +44,36 @@ public class WSSynchronizationPlanItemsSynchronizations {
         this.idsPattern = idsPattern;
     }
     
-    public java.lang.String getSourceRevisionID() {
-        return sourceRevisionID;
+    public java.lang.String getLocalCluster() {
+        return localCluster;
     }
     
-    public void setSourceRevisionID(java.lang.String sourceRevisionID) {
-        this.sourceRevisionID = sourceRevisionID;
+    public void setLocalCluster(java.lang.String localCluster) {
+        this.localCluster = localCluster;
     }
     
-    public java.lang.String getTargetRevisionID() {
-        return targetRevisionID;
+    public java.lang.String getLocalRevisionID() {
+        return localRevisionID;
     }
     
-    public void setTargetRevisionID(java.lang.String targetRevisionID) {
-        this.targetRevisionID = targetRevisionID;
+    public void setLocalRevisionID(java.lang.String localRevisionID) {
+        this.localRevisionID = localRevisionID;
+    }
+    
+    public java.lang.String getRemoteCluster() {
+        return remoteCluster;
+    }
+    
+    public void setRemoteCluster(java.lang.String remoteCluster) {
+        this.remoteCluster = remoteCluster;
+    }
+    
+    public java.lang.String getRemoteRevisionID() {
+        return remoteRevisionID;
+    }
+    
+    public void setRemoteRevisionID(java.lang.String remoteRevisionID) {
+        this.remoteRevisionID = remoteRevisionID;
     }
     
     public java.lang.String getAlgorithm() {
