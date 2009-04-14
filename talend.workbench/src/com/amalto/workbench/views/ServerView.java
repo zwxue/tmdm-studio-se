@@ -40,7 +40,6 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.ServerTreeContentProvider;
 import com.amalto.workbench.providers.ServerTreeLabelProvider;
-import com.amalto.workbench.utils.GlobalUserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.webservices.WSLogout;
@@ -194,6 +193,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener{
 			public void run() {
                 TreeParent serverRoot = (TreeParent)((IStructuredSelection)ServerView.this.viewer.getSelection()).getFirstElement();
                 
+                final String universe = serverRoot.getUniverse();
                 final String username = serverRoot.getUsername();
                 final String password = serverRoot.getPassword();
                 final String endpointAddress = serverRoot.getEndpointAddress();
@@ -205,7 +205,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener{
                 ServerView.this.viewer.getControl().getDisplay().syncExec(new Runnable() {
                 	public void run() {
                 		try {
-                			Util.getPort(new URL(endpointAddress), username, password).logout(new WSLogout());
+                			Util.getPort(new URL(endpointAddress), universe, username, password).logout(new WSLogout());
                 		} catch (Exception e) {
                 			e.printStackTrace();
                 		}

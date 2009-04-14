@@ -60,7 +60,12 @@ public class ServerLoginAction extends Action implements SelectionListener{
 		String universe=dialog.getUniverse();
 		dialog.close();
 		try {
-            XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(server,username,password,universe);
+            XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(
+            	server,
+            	username,
+            	password,
+            	universe
+            );
 			new ProgressMonitorDialog(view.getSite().getShell()).run(
 					true, 
 					true, 

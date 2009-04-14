@@ -38,7 +38,6 @@ import com.amalto.workbench.webservices.WSStoredProcedure;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSSynchronizationPlan;
 import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
-import com.amalto.workbench.webservices.WSTransformer;
 import com.amalto.workbench.webservices.WSTransformerV2;
 import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.WSUniverse;
@@ -86,6 +85,7 @@ public class EditXObjectAction extends Action{
 //          Access to server and get port
 			XtentisPort port = Util.getPort(
 					new URL(xobject.getEndpointAddress()),
+					xobject.getUniverse(),
 					xobject.getUsername(),
 					xobject.getPassword()
 			);

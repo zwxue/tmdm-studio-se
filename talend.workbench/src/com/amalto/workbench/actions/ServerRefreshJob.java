@@ -13,7 +13,6 @@ import org.eclipse.core.runtime.jobs.Job;
 
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XtentisServerObjectsRetriever;
-import com.amalto.workbench.utils.GlobalUserInfo;
 
 public class ServerRefreshJob extends Job {
 

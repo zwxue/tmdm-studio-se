@@ -76,6 +76,7 @@ public class ProcessFileThruTransformerAction extends Action{
 					new ProcessFileRunnable(
 							this,
 							xobject.getEndpointAddress(),
+							xobject.getUniverse(),
 							xobject.getUsername(),
 							xobject.getPassword(),
 							localFilename,
@@ -110,6 +111,7 @@ public class ProcessFileThruTransformerAction extends Action{
 		
 		protected ProcessFileThruTransformerAction parent;
 		private String endpointaddress;
+		private String universe;
 		private String username;
 		private String password;
 		private String localfile;
@@ -123,6 +125,7 @@ public class ProcessFileThruTransformerAction extends Action{
 		public ProcessFileRunnable(
 				ProcessFileThruTransformerAction parent, 
 				String endpointaddress, 
+				String universe,
 				String username, 
 				String password, 
 				String localFileName,
@@ -133,6 +136,7 @@ public class ProcessFileThruTransformerAction extends Action{
 			) {
 			this.parent = parent;
 			this.endpointaddress = endpointaddress;
+			this.universe = universe;
 			this.username = username;
 			this.password = password;
 			this.localfile = localFileName;
@@ -161,6 +165,7 @@ public class ProcessFileThruTransformerAction extends Action{
 				monitor.subTask("Accessing web Services on "+endpointaddress);
 				XtentisPort port = Util.getPort(
 						new URL(endpointaddress),
+						universe,
 						username,
 						password
 				);

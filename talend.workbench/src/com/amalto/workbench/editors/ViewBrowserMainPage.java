@@ -297,6 +297,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             dataClusterCombo.removeAll();
             WSDataClusterPK[] dataClusterPKs = Util.getAllDataClusterPKs(
             		new URL(getXObject().getEndpointAddress()),
+            		getXObject().getUniverse(),
             		getXObject().getUsername(),
             		getXObject().getPassword()
             );

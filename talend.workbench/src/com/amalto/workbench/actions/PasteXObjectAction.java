@@ -106,6 +106,7 @@ public class PasteXObjectAction extends Action{
 
 			XtentisPort destPort = Util.getPort(
 					new URL(selected.getEndpointAddress()),
+					selected.getUniverse(),
 					selected.getUsername(),
 					selected.getPassword()
 			);
@@ -140,6 +141,7 @@ public class PasteXObjectAction extends Action{
 		           		//fetch the copied model
 	       				XtentisPort originalPort = Util.getPort(
 	       						new URL(xobject.getEndpointAddress()),
+	       						xobject.getUniverse(),
 	       						xobject.getUsername(),
 	       						xobject.getPassword()
 	       				);
@@ -175,6 +177,7 @@ public class PasteXObjectAction extends Action{
 		           		//fetch the copied model
 	       				XtentisPort originalPort = Util.getPort(
 	       						new URL(xobject.getEndpointAddress()),
+	       						xobject.getUniverse(),
 	       						xobject.getUsername(),
 	       						xobject.getPassword()
 	       				);
@@ -212,6 +215,7 @@ public class PasteXObjectAction extends Action{
 		           		//fetch the copied model
 	       				XtentisPort originalPort = Util.getPort(
 	       						new URL(xobject.getEndpointAddress()),
+	       						xobject.getUniverse(),
 	       						xobject.getUsername(),
 	       						xobject.getPassword()
 	       				);
@@ -247,6 +251,7 @@ public class PasteXObjectAction extends Action{
 		           		//fetch the copied model
 	       				XtentisPort originalPort = Util.getPort(
 	       						new URL(xobject.getEndpointAddress()),
+	       						xobject.getUniverse(),
 	       						xobject.getUsername(),
 	       						xobject.getPassword()
 	       				);
@@ -282,6 +287,7 @@ public class PasteXObjectAction extends Action{
 		           		//fetch the copied model
 	       				XtentisPort originalPort = Util.getPort(
 	       						new URL(xobject.getEndpointAddress()),
+	       						xobject.getUniverse(),
 	       						xobject.getUsername(),
 	       						xobject.getPassword()
 	       				);
@@ -317,6 +323,7 @@ public class PasteXObjectAction extends Action{
 		           		//fetch the copied model
 	       				XtentisPort originalPort = Util.getPort(
 	       						new URL(xobject.getEndpointAddress()),
+	       						xobject.getUniverse(),
 	       						xobject.getUsername(),
 	       						xobject.getPassword()
 	       				);
@@ -356,6 +363,7 @@ public class PasteXObjectAction extends Action{
 		           		//fetch the copied model
 	       				XtentisPort originalPort = Util.getPort(
 	       						new URL(xobject.getEndpointAddress()),
+	       						xobject.getUniverse(),
 	       						xobject.getUsername(),
 	       						xobject.getPassword()
 	       				);
@@ -391,6 +399,7 @@ public class PasteXObjectAction extends Action{
 		           		//fetch the copied model
 	       				XtentisPort originalPort = Util.getPort(
 	       						new URL(xobject.getEndpointAddress()),
+	       						xobject.getUniverse(),
 	       						xobject.getUsername(),
 	       						xobject.getPassword()
 	       				);
@@ -406,7 +415,7 @@ public class PasteXObjectAction extends Action{
 
 		           	case TreeObject.UNIVERSE: {
 		           		WSUniversePK key = (WSUniversePK)xobject.getWsKey();
-		           		WSUniversePK newKey = new WSUniversePK(key.getPk());
+//		           		WSUniversePK newKey = new WSUniversePK(key.getPk());
 		           		if (destPort.existsUniverse(new WSExistsUniverse((WSUniversePK)xobject.getWsKey())).is_true()) {
 			           		InputDialog id = new InputDialog(
 			           				view.getSite().getShell(),
@@ -422,11 +431,12 @@ public class PasteXObjectAction extends Action{
 			           		);
 			           		id.setBlockOnOpen(true);
 			           		if (id.open() == Window.CANCEL) return;
-			           		newKey = new WSUniversePK(id.getValue()); 
+//			           		newKey = new WSUniversePK(id.getValue()); 
 		           		}
 		           		//fetch the copied model
 	       				XtentisPort originalPort = Util.getPort(
 	       						new URL(xobject.getEndpointAddress()),
+	       						xobject.getUniverse(),
 	       						xobject.getUsername(),
 	       						xobject.getPassword()
 	       				);
@@ -444,7 +454,7 @@ public class PasteXObjectAction extends Action{
 
 		           	case TreeObject.SYNCHRONIZATIONPLAN: {
 		           		WSSynchronizationPlanPK key = (WSSynchronizationPlanPK)xobject.getWsKey();
-		           		WSSynchronizationPlanPK newKey = new WSSynchronizationPlanPK(key.getPk());
+//		           		WSSynchronizationPlanPK newKey = new WSSynchronizationPlanPK(key.getPk());
 		           		if (destPort.existsSynchronizationPlan(new WSExistsSynchronizationPlan((WSSynchronizationPlanPK)xobject.getWsKey())).is_true()) {
 			           		InputDialog id = new InputDialog(
 			           				view.getSite().getShell(),
@@ -460,11 +470,12 @@ public class PasteXObjectAction extends Action{
 			           		);
 			           		id.setBlockOnOpen(true);
 			           		if (id.open() == Window.CANCEL) return;
-			           		newKey = new WSSynchronizationPlanPK(id.getValue()); 
+//			           		newKey = new WSSynchronizationPlanPK(id.getValue()); 
 		           		}
 		           		//fetch the copied model
 	       				XtentisPort originalPort = Util.getPort(
 	       						new URL(xobject.getEndpointAddress()),
+	       						xobject.getUniverse(),
 	       						xobject.getUsername(),
 	       						xobject.getPassword()
 	       				);

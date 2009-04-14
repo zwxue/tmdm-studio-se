@@ -59,6 +59,7 @@ public class SaveXObjectAction extends Action{
 //          Access to server and get port
 			XtentisPort port = Util.getPort(
 					new URL(xobject.getEndpointAddress()),
+					xobject.getUniverse(),
 					xobject.getUsername(),
 					xobject.getPassword()
 			);

@@ -219,6 +219,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener{
         try {
 	        dataClusterPKs = Util.getAllDataClusterPKs(
 	        		new URL(getXObject().getEndpointAddress()),
+	        		getXObject().getUniverse(),
 	        		getXObject().getUsername(),
 	        		getXObject().getPassword()
 	        );

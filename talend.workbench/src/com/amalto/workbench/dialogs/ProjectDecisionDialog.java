@@ -78,6 +78,7 @@ public class ProjectDecisionDialog extends Dialog {
 	    
 			XtentisPort port = Util.getPort(
 					new URL(transformerObject.getEndpointAddress()),
+					transformerObject.getUniverse(),
 					transformerObject.getUsername(),
 					transformerObject.getPassword()
 			);

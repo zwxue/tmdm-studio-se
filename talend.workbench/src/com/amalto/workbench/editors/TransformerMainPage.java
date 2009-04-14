@@ -348,7 +348,7 @@ public class TransformerMainPage extends AMainPageV2 {
 	            					TransformerMainPage.this.getEditor().doSave(new NullProgressMonitor());
 	            			}
 	            			//Open form Dialog	            			
-	            			transformerDialog=new SetupTransformerInputVariablesDialog(TransformerMainPage.this.getSite().getShell(),toolkit,getXObject(),TransformerMainPage.this);
+	            			transformerDialog=new SetupTransformerInputVariablesDialog(TransformerMainPage.this.getSite().getShell(),toolkit,getXObject(), TransformerMainPage.this);
 	            			transformerDialog.create();
 	            			
 	            			transformerDialog.getShell().setText("Setup Transformer's input variables");

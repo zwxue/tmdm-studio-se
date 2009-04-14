@@ -127,6 +127,7 @@ public class NewXObjectAction extends Action{
 //          Access to server and get port
 			XtentisPort port = Util.getPort(
 					new URL(xobject.getEndpointAddress()),
+					xobject.getUniverse(),
 					xobject.getUsername(),
 					xobject.getPassword()
 			);
@@ -167,6 +168,7 @@ public class NewXObjectAction extends Action{
 	           		//add
 	                WSDataModelPK[] dataModelPKs = Util.getAllDataModelPKs(
 	                		new URL(xobject.getEndpointAddress()),
+	                		xobject.getUniverse(),
 	                		xobject.getUsername(),
 	                		xobject.getPassword()
 	                );
@@ -186,6 +188,7 @@ public class NewXObjectAction extends Action{
 	                }
 	                WSDataClusterPK[] dataClusterPKs = Util.getAllDataClusterPKs(
 	                		new URL(xobject.getEndpointAddress()),
+	                		xobject.getUniverse(),
 	                		xobject.getUsername(),
 	                		xobject.getPassword()
 	                );

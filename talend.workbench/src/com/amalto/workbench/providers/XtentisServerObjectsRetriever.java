@@ -9,7 +9,6 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.EXtentisObjects;
-import com.amalto.workbench.utils.GlobalUserInfo;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
@@ -17,7 +16,6 @@ import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSComponent;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModelPK;
-import com.amalto.workbench.webservices.WSExistsUniverse;
 import com.amalto.workbench.webservices.WSGetComponentVersion;
 import com.amalto.workbench.webservices.WSGetCurrentUniverse;
 import com.amalto.workbench.webservices.WSGetMenuPKs;
@@ -25,7 +23,6 @@ import com.amalto.workbench.webservices.WSGetRolePKs;
 import com.amalto.workbench.webservices.WSGetRoutingRulePKs;
 import com.amalto.workbench.webservices.WSGetSynchronizationPlanPKs;
 import com.amalto.workbench.webservices.WSGetTransformerV2PKs;
-import com.amalto.workbench.webservices.WSGetUniverse;
 import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSGetViewPKs;
 import com.amalto.workbench.webservices.WSMenuPK;
@@ -70,9 +67,8 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 		try {
 			
 			monitor.beginTask("Loading Xtentis Server Objects", "admin".equals(username)? 12 : 9);
-			String uname=GlobalUserInfo.getRealUsername(username, universe);
 			//Access to server and get port
-			XtentisPort port = Util.getPort(new URL(endpointaddress),uname,password);
+			XtentisPort port = Util.getPort(new URL(endpointaddress), universe, username, password);
 			monitor.worked(1);
 			
 			String displayName=endpointaddress;
@@ -84,15 +80,15 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 				e.printStackTrace();
 			}
 			WSUniverse wUuniverse=null;
-			if(universe.trim().length()>0 && !universe.equals(IConstants.HEAD)){
-				wUuniverse=port.getUniverse(new WSGetUniverse(new WSUniversePK(universe)));
-				if(wUuniverse==null){
-					isExistUniverse=false;
-					return;
-				}
-			}else{
+//			if(universe.trim().length()>0){
+//				wUuniverse=port.getUniverse(new WSGetUniverse(new WSUniversePK(universe)));
+//				if(wUuniverse==null){
+//					isExistUniverse=false;
+//					return;
+//				}
+//			}else{
 				wUuniverse=port.getCurrentUniverse(new WSGetCurrentUniverse());
-			}
+//			}
 			
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");		
 		
@@ -102,7 +98,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                     null,
                     TreeObject._SERVER_,
                     endpointaddress,
-                    username+":"+(password==null?"":password)
+                    ("".equals(universe)? "" : universe+"/")+username+":"+(password==null?"":password)
             );       
 			
 			monitor.subTask("Accessing server....");
@@ -111,6 +107,12 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			user.setPassword(password);
 			user.setServerUrl(endpointaddress);
 			user.setUniverse(universe);
+			user.setWsUuniverse(wUuniverse);
+			//BG: I removed this
+//			String universe1=wUuniverse.getName().replaceAll("\\[", "").replaceAll("\\]", "").trim();
+//			user.setUniverse(universe1);
+//			GlobalUserInfo.getInstance().addUser(user.getServerUrl()+user.getUniverse(), user);
+
 			serverRoot.setUser(user);
 			
 			//Data Models
@@ -420,11 +422,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			
 
 			
-			user.setWsUuniverse(wUuniverse);
 			addRevision(wUuniverse);
-			String universe1=wUuniverse.getName().replaceAll("\\[", "").replaceAll("\\]", "").trim();
-			user.setUniverse(universe1);
-			GlobalUserInfo.getInstance().addUser(user.getServerUrl()+user.getUniverse(), user);
 			
 			monitor.done();			
 		} catch (Exception e) {
