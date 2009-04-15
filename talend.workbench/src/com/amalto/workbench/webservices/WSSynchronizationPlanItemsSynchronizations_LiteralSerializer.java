@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class WSSynchronizationPlanItemsSynchronizations_LiteralSerializer extends LiteralObjectSerializerBase implements Initializable  {
-    private static final QName ns1_conceptPattern_QNAME = new QName("", "conceptPattern");
+    private static final QName ns1_conceptName_QNAME = new QName("", "conceptName");
     private static final QName ns3_string_TYPE_QNAME = SchemaConstants.QNAME_TYPE_STRING;
     private CombinedSerializer ns3_myns3_string__java_lang_String_String_Serializer;
     private static final QName ns1_idsPattern_QNAME = new QName("", "idsPattern");
@@ -52,15 +52,15 @@ public class WSSynchronizationPlanItemsSynchronizations_LiteralSerializer extend
         reader.nextElementContent();
         elementName = reader.getName();
         if (reader.getState() == XMLReader.START) {
-            if (elementName.equals(ns1_conceptPattern_QNAME)) {
-                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_conceptPattern_QNAME, reader, context);
+            if (elementName.equals(ns1_conceptName_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_conceptName_QNAME, reader, context);
                 if (member == null) {
                     throw new DeserializationException("literal.unexpectedNull");
                 }
-                instance.setConceptPattern((java.lang.String)member);
+                instance.setConceptName((java.lang.String)member);
                 reader.nextElementContent();
             } else {
-                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_conceptPattern_QNAME, reader.getName() });
+                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_conceptName_QNAME, reader.getName() });
             }
         }
         else {
@@ -165,10 +165,10 @@ public class WSSynchronizationPlanItemsSynchronizations_LiteralSerializer extend
     public void doSerialize(Object obj, XMLWriter writer, SOAPSerializationContext context) throws Exception {
         com.amalto.workbench.webservices.WSSynchronizationPlanItemsSynchronizations instance = (com.amalto.workbench.webservices.WSSynchronizationPlanItemsSynchronizations)obj;
         
-        if (instance.getConceptPattern() == null) {
+        if (instance.getConceptName() == null) {
             throw new SerializationException("literal.unexpectedNull");
         }
-        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getConceptPattern(), ns1_conceptPattern_QNAME, null, writer, context);
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getConceptName(), ns1_conceptName_QNAME, null, writer, context);
         if (instance.getIdsPattern() == null) {
             throw new SerializationException("literal.unexpectedNull");
         }

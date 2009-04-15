@@ -9,7 +9,7 @@ package com.amalto.workbench.webservices;
 public class WSSynchronizationGetUnsynchronizedItemPKs {
     protected java.lang.String revisionID;
     protected com.amalto.workbench.webservices.WSDataClusterPK wsDataClusterPOJOPK;
-    protected java.lang.String conceptPattern;
+    protected java.lang.String conceptName;
     protected java.lang.String instancePattern;
     protected java.lang.String synchronizationPlanName;
     protected int start;
@@ -18,10 +18,10 @@ public class WSSynchronizationGetUnsynchronizedItemPKs {
     public WSSynchronizationGetUnsynchronizedItemPKs() {
     }
     
-    public WSSynchronizationGetUnsynchronizedItemPKs(java.lang.String revisionID, com.amalto.workbench.webservices.WSDataClusterPK wsDataClusterPOJOPK, java.lang.String conceptPattern, java.lang.String instancePattern, java.lang.String synchronizationPlanName, int start, int limit) {
+    public WSSynchronizationGetUnsynchronizedItemPKs(java.lang.String revisionID, com.amalto.workbench.webservices.WSDataClusterPK wsDataClusterPOJOPK, java.lang.String conceptName, java.lang.String instancePattern, java.lang.String synchronizationPlanName, int start, int limit) {
         this.revisionID = revisionID;
         this.wsDataClusterPOJOPK = wsDataClusterPOJOPK;
-        this.conceptPattern = conceptPattern;
+        this.conceptName = conceptName;
         this.instancePattern = instancePattern;
         this.synchronizationPlanName = synchronizationPlanName;
         this.start = start;
@@ -44,12 +44,12 @@ public class WSSynchronizationGetUnsynchronizedItemPKs {
         this.wsDataClusterPOJOPK = wsDataClusterPOJOPK;
     }
     
-    public java.lang.String getConceptPattern() {
-        return conceptPattern;
+    public java.lang.String getConceptName() {
+        return conceptName;
     }
     
-    public void setConceptPattern(java.lang.String conceptPattern) {
-        this.conceptPattern = conceptPattern;
+    public void setConceptName(java.lang.String conceptName) {
+        this.conceptName = conceptName;
     }
     
     public java.lang.String getInstancePattern() {

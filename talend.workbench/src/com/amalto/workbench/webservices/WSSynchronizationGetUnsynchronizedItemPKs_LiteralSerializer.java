@@ -25,7 +25,7 @@ public class WSSynchronizationGetUnsynchronizedItemPKs_LiteralSerializer extends
     private static final QName ns1_wsDataClusterPOJOPK_QNAME = new QName("", "wsDataClusterPOJOPK");
     private static final QName ns2_WSDataClusterPK_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataClusterPK");
     private CombinedSerializer ns2_myWSDataClusterPK_LiteralSerializer;
-    private static final QName ns1_conceptPattern_QNAME = new QName("", "conceptPattern");
+    private static final QName ns1_conceptName_QNAME = new QName("", "conceptName");
     private static final QName ns1_instancePattern_QNAME = new QName("", "instancePattern");
     private static final QName ns1_synchronizationPlanName_QNAME = new QName("", "synchronizationPlanName");
     private static final QName ns1_start_QNAME = new QName("", "start");
@@ -87,15 +87,15 @@ public class WSSynchronizationGetUnsynchronizedItemPKs_LiteralSerializer extends
         }
         elementName = reader.getName();
         if (reader.getState() == XMLReader.START) {
-            if (elementName.equals(ns1_conceptPattern_QNAME)) {
-                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_conceptPattern_QNAME, reader, context);
+            if (elementName.equals(ns1_conceptName_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_conceptName_QNAME, reader, context);
                 if (member == null) {
                     throw new DeserializationException("literal.unexpectedNull");
                 }
-                instance.setConceptPattern((java.lang.String)member);
+                instance.setConceptName((java.lang.String)member);
                 reader.nextElementContent();
             } else {
-                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_conceptPattern_QNAME, reader.getName() });
+                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_conceptName_QNAME, reader.getName() });
             }
         }
         else {
@@ -176,10 +176,10 @@ public class WSSynchronizationGetUnsynchronizedItemPKs_LiteralSerializer extends
             throw new SerializationException("literal.unexpectedNull");
         }
         ns2_myWSDataClusterPK_LiteralSerializer.serialize(instance.getWsDataClusterPOJOPK(), ns1_wsDataClusterPOJOPK_QNAME, null, writer, context);
-        if (instance.getConceptPattern() == null) {
+        if (instance.getConceptName() == null) {
             throw new SerializationException("literal.unexpectedNull");
         }
-        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getConceptPattern(), ns1_conceptPattern_QNAME, null, writer, context);
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getConceptName(), ns1_conceptName_QNAME, null, writer, context);
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getInstancePattern(), ns1_instancePattern_QNAME, null, writer, context);
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getSynchronizationPlanName(), ns1_synchronizationPlanName_QNAME, null, writer, context);
         if (new Integer(instance.getStart()) == null) {

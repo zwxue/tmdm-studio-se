@@ -1041,6 +1041,50 @@
 	<message name="synchronizationPutItemXMLResponse">
 		<part name="wsItemPK" element="tns:WSItemPK"/>
 	</message>
+	
+	<!-- ************************ Synchronization Items  *************************** -->
+	
+	<message name="getSynchronizationItemPKsRequest">
+		<part name="regex" element="tns:WSGetSynchronizationItemPKs"/>
+	</message>
+	<message name="getSynchronizationItemPKsResponse">
+		<part name="wsSynchronizationItemPKArray" element="tns:WSSynchronizationItemPKArray"/>
+	</message>
+	
+	<message name="getSynchronizationItemRequest">
+		<part name="wsGetSynchronizationItem" element="tns:WSGetSynchronizationItem"/>
+	</message>
+	<message name="getSynchronizationItemResponse">
+		<part name="wsSynchronizationItem" element="tns:WSSynchronizationItem"/>
+	</message>
+
+	<message name="existsSynchronizationItemRequest">
+		<part name="wsExistsSynchronizationItem" element="tns:WSExistsSynchronizationItem"/>
+	</message>
+	<message name="existsSynchronizationItemResponse">
+		<part name="wsBoolean" element="tns:WSBoolean"/>
+	</message>
+	
+	<message name="putSynchronizationItemRequest">
+		<part name="wsSynchronizationItem" element="tns:WSPutSynchronizationItem"/>
+	</message>
+	<message name="putSynchronizationItemResponse">
+		<part name="wsSynchronizationItemPK" element="tns:WSSynchronizationItemPK"/>
+	</message>
+	
+	<message name="deleteSynchronizationItemRequest">
+		<part name="wsSynchronizationItemDelete" element="tns:WSDeleteSynchronizationItem"/>
+	</message>
+	<message name="deleteSynchronizationItemResponse">
+		<part name="wsSynchronizationItemPK" element="tns:WSSynchronizationItemPK"/>
+	</message>
+	
+	<message name="resolveSynchronizationItemRequest">
+		<part name="wsResolveSynchronizationItem" element="tns:WSResolveSynchronizationItem"/>
+	</message>
+	<message name="resolveSynchronizationItemResponse">
+		<part name="wsSynchronizationItem" element="tns:WSSynchronizationItem"/>
+	</message>
 
 
 	<!-- *****************************************************
@@ -1676,8 +1720,37 @@
 			<input message="tns:synchronizationPutItemXMLRequest"/>
 			<output message="tns:synchronizationPutItemXMLResponse"/>
 		</operation>
+		
+		<!-- ********************* Synchronization Item  ************************ -->
+		
+		<operation name="getSynchronizationItem">
+			<input message="tns:getSynchronizationItemRequest"/>
+			<output message="tns:getSynchronizationItemResponse"/>
+		</operation>
+		<operation name="existsSynchronizationItem">
+			<input message="tns:existsSynchronizationItemRequest"/>
+			<output message="tns:existsSynchronizationItemResponse"/>
+		</operation>
+		<operation name="getSynchronizationItemPKs">
+			<input message="tns:getSynchronizationItemPKsRequest"/>
+			<output message="tns:getSynchronizationItemPKsResponse"/>
+		</operation>
+		<operation name="putSynchronizationItem">
+			<input message="tns:putSynchronizationItemRequest"/>
+			<output message="tns:putSynchronizationItemResponse"/>
+		</operation>
+		<operation name="deleteSynchronizationItem">
+			<input message="tns:deleteSynchronizationItemRequest"/>
+			<output message="tns:deleteSynchronizationItemResponse"/>
+		</operation>
+		<operation name="resolveSynchronizationItem">
+			<input message="tns:resolveSynchronizationItemRequest"/>
+			<output message="tns:resolveSynchronizationItemResponse"/>
+		</operation>
+		
 	</portType>
 	
+
 
 	
 		<!-- *****************************************************
@@ -2467,6 +2540,39 @@
 			<input><soap:body use="literal"/></input>
 			<output><soap:body use="literal"/></output>
 		</operation>
+		
+		<!-- ********************* Synchronization Item  ************************ -->
+		<operation name="getSynchronizationItem">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>
+		<operation name="existsSynchronizationItem">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>		
+		<operation name="getSynchronizationItemPKs">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>
+		<operation name="putSynchronizationItem">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>
+		<operation name="deleteSynchronizationItem">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>
+		<operation name="resolveSynchronizationItem">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>
+		
 	</binding>
 		
 	
