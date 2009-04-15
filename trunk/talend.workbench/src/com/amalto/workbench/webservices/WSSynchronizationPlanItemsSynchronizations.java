@@ -7,7 +7,7 @@ package com.amalto.workbench.webservices;
 
 
 public class WSSynchronizationPlanItemsSynchronizations {
-    protected java.lang.String conceptPattern;
+    protected java.lang.String conceptName;
     protected java.lang.String idsPattern;
     protected java.lang.String localCluster;
     protected java.lang.String localRevisionID;
@@ -18,8 +18,8 @@ public class WSSynchronizationPlanItemsSynchronizations {
     public WSSynchronizationPlanItemsSynchronizations() {
     }
     
-    public WSSynchronizationPlanItemsSynchronizations(java.lang.String conceptPattern, java.lang.String idsPattern, java.lang.String localCluster, java.lang.String localRevisionID, java.lang.String remoteCluster, java.lang.String remoteRevisionID, java.lang.String algorithm) {
-        this.conceptPattern = conceptPattern;
+    public WSSynchronizationPlanItemsSynchronizations(java.lang.String conceptName, java.lang.String idsPattern, java.lang.String localCluster, java.lang.String localRevisionID, java.lang.String remoteCluster, java.lang.String remoteRevisionID, java.lang.String algorithm) {
+        this.conceptName = conceptName;
         this.idsPattern = idsPattern;
         this.localCluster = localCluster;
         this.localRevisionID = localRevisionID;
@@ -28,12 +28,12 @@ public class WSSynchronizationPlanItemsSynchronizations {
         this.algorithm = algorithm;
     }
     
-    public java.lang.String getConceptPattern() {
-        return conceptPattern;
+    public java.lang.String getConceptName() {
+        return conceptName;
     }
     
-    public void setConceptPattern(java.lang.String conceptPattern) {
-        this.conceptPattern = conceptPattern;
+    public void setConceptName(java.lang.String conceptName) {
+        this.conceptName = conceptName;
     }
     
     public java.lang.String getIdsPattern() {

@@ -274,4 +274,16 @@ public interface XtentisPort extends java.rmi.Remote {
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSItemPK synchronizationPutItemXML(com.amalto.workbench.webservices.WSSynchronizationPutItemXML wsSynchronizationPutItemXML) throws 
          java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSSynchronizationItem getSynchronizationItem(com.amalto.workbench.webservices.WSGetSynchronizationItem wsGetSynchronizationItem) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSBoolean existsSynchronizationItem(com.amalto.workbench.webservices.WSExistsSynchronizationItem wsExistsSynchronizationItem) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSSynchronizationItemPKArray getSynchronizationItemPKs(com.amalto.workbench.webservices.WSGetSynchronizationItemPKs regex) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSSynchronizationItemPK putSynchronizationItem(com.amalto.workbench.webservices.WSPutSynchronizationItem wsSynchronizationItem) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSSynchronizationItemPK deleteSynchronizationItem(com.amalto.workbench.webservices.WSDeleteSynchronizationItem wsSynchronizationItemDelete) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSSynchronizationItem resolveSynchronizationItem(com.amalto.workbench.webservices.WSResolveSynchronizationItem wsResolveSynchronizationItem) throws 
+         java.rmi.RemoteException;
 }

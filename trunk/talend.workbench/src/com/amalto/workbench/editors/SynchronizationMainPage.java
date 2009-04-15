@@ -62,7 +62,7 @@ public class SynchronizationMainPage extends AMainPageV2{
 	};
 		
 	private ComplexTableViewerColumn[] itemsColumns=new ComplexTableViewerColumn[]{
-		new ComplexTableViewerColumn("Concept Pattern", true, ".*", ".*"),
+		new ComplexTableViewerColumn("Concept Name", true, "", "[any]"),
 		new ComplexTableViewerColumn("IDs Pattern       ", true, ".*", ".*"),
 		new ComplexTableViewerColumn("Local Cluster", false, "", ""),
 		new ComplexTableViewerColumn("Local Revision ID", true, "", "[HEAD]"),
@@ -486,7 +486,7 @@ public class SynchronizationMainPage extends AMainPageV2{
 				Line line=new Line(
 					itemsColumns,
 					new String[]{
-						itemSync.getConceptPattern(),
+						itemSync.getConceptName(),
 						itemSync.getIdsPattern(),
 						itemSync.getLocalCluster(),
 						itemSync.getLocalRevisionID(),
@@ -610,7 +610,7 @@ public class SynchronizationMainPage extends AMainPageV2{
 			for(int i=0; i<items.size(); i++){
 				Line line=items.get(i);
 				itemSyncs[i]=new WSSynchronizationPlanItemsSynchronizations();
-				itemSyncs[i].setConceptPattern(line.keyValues.get(0).value);
+				itemSyncs[i].setConceptName(line.keyValues.get(0).value);
 				itemSyncs[i].setIdsPattern(line.keyValues.get(1).value);
 				itemSyncs[i].setLocalCluster(line.keyValues.get(2).value);
 				itemSyncs[i].setLocalRevisionID(line.keyValues.get(3).value);
