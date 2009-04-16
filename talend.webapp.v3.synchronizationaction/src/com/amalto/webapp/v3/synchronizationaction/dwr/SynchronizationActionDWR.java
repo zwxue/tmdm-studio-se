@@ -25,7 +25,7 @@ public class SynchronizationActionDWR {
 		try{
 			List<String> syncNames=new ArrayList<String>();
 			WSSynchronizationPlanPKArray array
-				=Util.getPort(info.getServerURL(),info.getUsername(),info.getPassword(),Util._FORCE_WEB_SERVICE_).getSynchronizationPlanPKs(new WSGetSynchronizationPlanPKs());
+				= Util.getPort(info.getServerURL(),info.getUsername(),info.getPassword(),Util._FORCE_WEB_SERVICE_).getSynchronizationPlanPKs(new WSGetSynchronizationPlanPKs(".*"));
 			System.out.println("getSyncNames() url:"+info.getServerURL());
 			WSSynchronizationPlanPK[] pks=array.getWsSynchronizationPlanPK();
 			System.out.println("getSyncNames() pks:"+pks.length);
