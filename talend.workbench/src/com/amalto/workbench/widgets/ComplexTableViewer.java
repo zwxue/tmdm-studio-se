@@ -1,6 +1,7 @@
 package com.amalto.workbench.widgets;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -48,7 +49,6 @@ public class ComplexTableViewer {
 	
 	protected Composite mainComposite;
 	protected Button addButton;
-	protected List<Text>txtLists=new ArrayList<Text>();
 	protected TableViewer viewer;
 	protected Button downButton;
 	protected Button upButton;
@@ -63,50 +63,8 @@ public class ComplexTableViewer {
 	public void setMainPage(AMainPageV2 mainPage) {
 		this.mainPage = mainPage;
 	}
-	
-	//isLastCombo =true need to set lastcomboStrings
-	protected boolean isLastCombo; //check last column is combo or not
-	protected String[] lastcomboStrings;
-	protected CCombo lastCombo;
-	
-	//isFirstCombo=true need to set firstcomboStrings
-	protected boolean isFirstCombo; //check last column is combo or not
-	protected String[] firstcomboStrings;
-	protected CCombo firstCombo;
-	
-	
-	public boolean isFirstCombo() {
-		return isFirstCombo;
-	}
-	public void setFirstCombo(boolean isFirstCombo) {
-		this.isFirstCombo = isFirstCombo;
-	}
-	public String[] getFirstcomboStrings() {
-		return firstcomboStrings;
-	}
-	public void setFirstcomboStrings(String[] firstcomboStrings) {
-		this.firstcomboStrings = firstcomboStrings;
-	}
-	public CCombo getFirstCombo() {
-		return firstCombo;
-	}
 
-	public boolean isLastCombo() {
-		return isLastCombo;
-	}
-
-	public void setLastCombo(boolean isLastCombo) {
-		this.isLastCombo = isLastCombo;
-	}
-	public void setFirstCombo(CCombo firstCombo) {
-		this.firstCombo = firstCombo;
-	}
-	public String[] getLastcomboStrings() {
-		return lastcomboStrings;
-	}
-	public void setLastcomboStrings(String[] lastcomboStrings) {
-		this.lastcomboStrings = lastcomboStrings;
-	}
+	
 	public Button getAddButton() {
 		return addButton;
 	}
@@ -122,10 +80,12 @@ public class ComplexTableViewer {
 	public Button getDeleteButton() {
 		return deleteButton;
 	}
+
+	public List<ComplexTableViewerColumn> getColumns() {
+    	return columns;
+    }
 	
-	public List<Text> getTxtLists() {
-		return txtLists;
-	}
+	
 	public ComplexTableViewer(List<ComplexTableViewerColumn> columns, FormToolkit toolkit,Composite parent){
 		this.columns=columns;
 		this.parent=parent;
@@ -133,16 +93,15 @@ public class ComplexTableViewer {
 	}
 	protected String[] getTextValues(){
 		List<String> values=new ArrayList<String>();
-		if(isFirstCombo){
-			values.add(firstCombo.getText());
+		for(ComplexTableViewerColumn column:columns){
+			String text = "";
+			if (column.isCombo()) {
+				text = ((CCombo)column.getControl()).getText();
+			} else {
+				text = ((Text)column.getControl()).getText();
+			}
+			values.add(text);
 		}
-		for(Text txt:txtLists){
-			values.add(txt.getText());
-		}
-		if(isLastCombo){
-			values.add(lastCombo.getText());
-		}
-
 		return values.toArray(new String[values.size()]);
 	}
 	
@@ -167,105 +126,31 @@ public class ComplexTableViewer {
 	        i++;
 		}
 	}
-	public void add(){
-   		//Make sure texts are not nill (empty) where not authorized
-		for (int i = 0; i < txtLists.size(); i++) {
-			int offset = isFirstCombo ? 1 : 0;
-			ComplexTableViewerColumn column = columns.get(i+offset);
-			Text text = txtLists.get(i);
-			if(text.getText().length()==0) {
-				if (column.isNillable())
-					text.setText(column.getNillValue());
-				else
-					return;
-			}
-		}
-		
-
-		if(isLastCombo){
-			if(lastCombo.getText().length()==0) {
-				ComplexTableViewerColumn column = columns.get(columns.size()-1);
-				if (column.isNillable) 
-					lastCombo.setText(column.getNillValue());
-				else
-					return;
-			}
-		}
-		
-		if(isFirstCombo){
-			//check empty value
-			if(firstCombo.getText().length()==0) {
-				ComplexTableViewerColumn column = columns.get(0);
-				if (column.isNillable) 
-					firstCombo.setText(column.getNillValue());
-				else
-					return;
-			}
-			//check unique
-			String input=getFirstCombo().getText().trim();
-			List<Line> list=(List<Line>)getViewer().getInput();
-			boolean isExist=false;
-			for(Line line: list){
-				for(KeyValue keyvalue:line.keyValues){
-					if(keyvalue.value.equals(input)){
-						isExist=true;
-					}
-				}
-			}
-			if(isExist){
-				MessageDialog.openInformation(null, "Warning", input+" already Exists!");
-				return;
-			}
-		}
-		
-		Line line =new Line(columns.toArray(new ComplexTableViewerColumn[columns.size()]),getTextValues());
-		List<Line> items=(List<Line>)viewer.getInput();
-		items.add(line);
-		//update the instances viewer
-		viewer.refresh();
-		
-		for(Text txt:txtLists){
-			txt.setText("");
-		}
-		if(isLastCombo){
-			lastCombo.setText("");
-		}
-		if(isFirstCombo){
-			firstCombo.setText("");
-		}
-		markDirty();
-
-	}
+	
 	protected void createTexts(){
-		int length=columns.size();
-		if(isLastCombo()){
-			length=length-1;
-		}
-		if(isFirstCombo()){
-			length=length-1;
-		}
-		if(isFirstCombo()){
-			firstCombo=new CCombo(mainComposite,SWT.BORDER|SWT.READ_ONLY);
-			firstCombo.setItems(firstcomboStrings);
-			firstCombo.setLayoutData(    
-	                new GridData(SWT.FILL,SWT.TOP,true,false,1,1));
-		}
-		for(int i=0; i<length; i++){
-			int style=SWT.BORDER|SWT.MULTI;
-			if(isFirstCombo()){
-				style=SWT.BORDER|SWT.MULTI|SWT.V_SCROLL|SWT.H_SCROLL;
+		
+		for (Iterator<ComplexTableViewerColumn> iterator = columns.iterator(); iterator.hasNext(); ) {
+			ComplexTableViewerColumn column = iterator.next();
+			if (column.isCombo()) {
+				CCombo combo = new CCombo(mainComposite,SWT.BORDER|SWT.READ_ONLY);
+				combo.setLayoutData(new GridData(SWT.NONE,SWT.TOP,false,false,1,1));
+				combo.setItems(column.getComboValues());
+				combo.setText(column.getDefaultValue());
+				column.setControl(combo);
+			} else {
+				int style=SWT.BORDER|SWT.MULTI;
+				if (column.getTextLines()>1) {
+					style = SWT.BORDER|SWT.MULTI|SWT.V_SCROLL|SWT.H_SCROLL;
+				}
+				Text text = toolkit.createText(mainComposite, column.getDefaultValue(), style);
+				GridData gdata = new GridData(SWT.FILL,SWT.FILL,true,true,1,1);
+				if (column.getTextLines()>1)
+					gdata.heightHint = text.getLineHeight()*column.getTextLines();
+				text.setLayoutData(gdata);
+				column.setControl(text);
 			}
-			Text text = toolkit.createText(mainComposite, "",style);
-			text.setLayoutData(    
-		                new GridData(SWT.FILL,SWT.FILL,true,true,1,1));
-			txtLists.add(text);
 		}
-		if(isLastCombo()){
-			lastCombo=new CCombo(mainComposite,SWT.BORDER|SWT.READ_ONLY);
-			lastCombo.setItems(lastcomboStrings);
-			lastCombo.setLayoutData(    
-					new GridData(SWT.FILL,SWT.TOP,true,false,1,1));
-		}
+
 
         addButton = toolkit.createButton(mainComposite,"Add",SWT.PUSH | SWT.CENTER);
         addButton.setLayoutData(
@@ -274,73 +159,60 @@ public class ComplexTableViewer {
         addButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
         	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+        		String uniqueVal="";
            		//Make sure texts are not nill (empty) where not authorized
-        		for (int i = 0; i < txtLists.size(); i++) {
-					int offset = isFirstCombo ? 1 : 0;
-					ComplexTableViewerColumn column = columns.get(i+offset);
-					Text text = txtLists.get(i);
-					if(text.getText().length()==0) {
-						if (column.isNillable())
-							text.setText(column.getNillValue());
-						else
-							return;
-					}
-				}
-
-        		if(isLastCombo){
-        			if(lastCombo.getText().length()==0) {
-        				ComplexTableViewerColumn column = columns.get(columns.size()-1);
-        				if (column.isNillable) 
-        					lastCombo.setText(column.getNillValue());
-        				else
-        					return;
+        		for (Iterator<ComplexTableViewerColumn> iterator = columns.iterator(); iterator.hasNext(); ) {
+        			ComplexTableViewerColumn column = iterator.next();
+        			String text = "";
+        			if (column.isCombo()) {
+        				text = ((CCombo)column.getControl()).getText();
+        			} else {
+        				text = ((Text)column.getControl()).getText();
         			}
-        		}
-        		
-        		if(isFirstCombo){
-        			//check empty value
-        			if(firstCombo.getText().length()==0) {
-        				ComplexTableViewerColumn column = columns.get(0);
-        				if (column.isNillable) 
-        					firstCombo.setText(column.getNillValue());
-        				else
-        					return;
-        			}
-        			//check unique
-        			String input=getFirstCombo().getText().trim();
-        			List<Line> list=(List<Line>)getViewer().getInput();
-        			boolean isExist=false;
-        			for(Line line: list){
-        				for(KeyValue keyvalue:line.keyValues){
-        					if(keyvalue.value.equals(input)){
-        						isExist=true;
-        					}
+        			if(text.length()==0) {
+        				if (column.isNillable()) {
+        					text = column.getNillValue();
+        					if (column.isCombo()) {
+                				((CCombo)column.getControl()).setText(text);
+                			} else {
+                				((Text)column.getControl()).setText(text);
+                			}
+        				} else {
+        					MessageDialog.openError(
+        						ComplexTableViewer.this.getViewer().getControl().getShell(), 
+        						"Input Error",
+        						"The Column '"+column.getName()+"' cannot be empty"
+        					);
         				}
         			}
-        			if(isExist){
-        				MessageDialog.openInformation(null, "Warning", input+" already Exists!");
+        			uniqueVal+="."+text;
+        		}
+        		
+        		//check uniqueness by concatenating all the values
+        		List<Line> list=(List<Line>)getViewer().getInput();
+        		for(Line line: list){
+        			String thisLineVal = "";
+        			for(KeyValue keyvalue:line.keyValues){
+        				thisLineVal+="."+keyvalue.value;
+        			}
+        			if(thisLineVal.equals(uniqueVal)){
+        				MessageDialog.openInformation(null, "Warning", "This line already Exists!");
         				return;
         			}
         		}
-       		
+        		
+        		//Update the model
         		Line line =new Line(columns.toArray(new ComplexTableViewerColumn[columns.size()]),getTextValues());
-        		List<Line> items=(List<Line>)viewer.getInput();
-        		items.add(line);
+        		list.add(line);
         		//update the instances viewer
         		viewer.refresh();
-        		
-        		for(Text txt:txtLists){
-        			txt.setText("");
-        		}
-        		if(isLastCombo){
-        			lastCombo.setText("");
-        		}
-        		if(isFirstCombo){
-        			firstCombo.setText("");
-        		}
         		markDirty();
          	};
         });		
+	}
+	
+	protected void add() {
+   		
 	}
 	
 	protected void createViewer(){

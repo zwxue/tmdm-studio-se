@@ -19,6 +19,7 @@ import java.util.TreeMap;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
@@ -189,8 +190,8 @@ public class TransformerMainPage extends AMainPageV2 {
 			int i=0;
 			for(Line line:cacheList){
 				String variableName=line.keyValues.get(0).value;
-				String value=line.keyValues.get(1).value;
-				String contentType=line.keyValues.get(2).value;
+				String contentType=line.keyValues.get(1).value;
+				String value=line.keyValues.get(2).value;
 				
 				items[i] = new WSTransformerContextPipelinePipelineItem(
 						variableName,
@@ -212,8 +213,8 @@ public class TransformerMainPage extends AMainPageV2 {
 						));
 			
 			IRunnableWithProgress progress=new IRunnableWithProgress(){
-				public void run(IProgressMonitor monitor)
-						throws InvocationTargetException, InterruptedException {
+				
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					/******************************************
 					 * Watch the Background Job
 					 ******************************************/
@@ -286,10 +287,15 @@ public class TransformerMainPage extends AMainPageV2 {
 				}				
 			};
 			
+			new ProgressMonitorDialog(TransformerMainPage.this.getSite().getWorkbenchWindow().getShell()).run(
+					true,  //fork 
+					true,
+					progress
+			);
 			
-			}catch(Exception e1){
-				e1.printStackTrace();
-			}
+		}catch(Exception e1){
+			e1.printStackTrace();
+		}
 
     }
     @Override
@@ -327,38 +333,43 @@ public class TransformerMainPage extends AMainPageV2 {
             });
             
             
-	            //File Process
-	            Button processButton = toolkit.createButton(descriptionComposite,"Execute...",SWT.PUSH | SWT.TRAIL);
-	            processButton.setLayoutData(
-	                    new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
-	            );
-	            processButton.addSelectionListener(new SelectionListener() {
-	            	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
-	            	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-	            		try {
-	            			//check if we have a step to perfom
-	            			WSTransformerProcessStep[] steps = ((WSTransformerV2)getXObject().getWsObject()).getProcessSteps();
-	            			if ((steps==null) || (steps.length == 0)) {
-	            				MessageDialog.openError(TransformerMainPage.this.getSite().getShell(), "Unable to process a file", "The transformer must have at least one step!");
-	            				return;
-	            			}
-	            			//perform save
-	            			if (TransformerMainPage.this.getEditor().isDirty()) {
-	            				if (MessageDialog.openConfirm(TransformerMainPage.this.getSite().getShell(), "Executing the Transformer", "The Transformer was changed and will be executed using the saved version.\nSave the transformer before executing it?"))
-	            					TransformerMainPage.this.getEditor().doSave(new NullProgressMonitor());
-	            			}
-	            			//Open form Dialog	            			
-	            			transformerDialog=new SetupTransformerInputVariablesDialog(TransformerMainPage.this.getSite().getShell(),toolkit,getXObject(), TransformerMainPage.this);
-	            			transformerDialog.create();
-	            			
-	            			transformerDialog.getShell().setText("Setup Transformer's input variables");
-	            			transformerDialog.open();
+            //File Process
+            Button processButton = toolkit.createButton(descriptionComposite,"Execute...",SWT.PUSH | SWT.TRAIL);
+            processButton.setLayoutData(
+                    new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+            );
+            processButton.addSelectionListener(new SelectionListener() {
+            	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
+            	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+            		try {
+            			//check if we have a step to perfom
+            			WSTransformerProcessStep[] steps = ((WSTransformerV2)getXObject().getWsObject()).getProcessSteps();
+            			if ((steps==null) || (steps.length == 0)) {
+            				MessageDialog.openError(TransformerMainPage.this.getSite().getShell(), "Unable to process a file", "The transformer must have at least one step!");
+            				return;
+            			}
+            			//perform save
+            			if (TransformerMainPage.this.getEditor().isDirty()) {
+            				if (MessageDialog.openConfirm(TransformerMainPage.this.getSite().getShell(), "Executing the Transformer", "The Transformer was changed and will be executed using the saved version.\nSave the transformer before executing it?"))
+            					TransformerMainPage.this.getEditor().doSave(new NullProgressMonitor());
+            			}
+            			//Open form Dialog	            			
+            			transformerDialog=new SetupTransformerInputVariablesDialog(
+            				TransformerMainPage.this.getSite().getShell(),
+            				toolkit,
+            				getXObject(), 
+            				TransformerMainPage.this
+            			);
+            			transformerDialog.create();
+            			
+            			transformerDialog.getShell().setText("Setup Transformer's input variables");
+            			transformerDialog.open();
 
-	            		} catch (Exception ex) {
-	            			ex.printStackTrace();
-	            		}
-	            	};
-	            });
+            		} catch (Exception ex) {
+            			ex.printStackTrace();
+            		}
+            	};
+            });
                         
             
             //make the Page window a DropTarget - we need to dispose it
@@ -396,37 +407,37 @@ public class TransformerMainPage extends AMainPageV2 {
             	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
             		//commit as we go
             		try {
-            				if(stepText.getText().trim().length()==0) return;
-		            		TransformerMainPage.this.comitting= true;
+        				if(stepText.getText().trim().length()==0) return;
+	            		TransformerMainPage.this.comitting= true;
 
-			           		TransformerMainPage.this.stepsList.add(
+		           		TransformerMainPage.this.stepsList.add(
 
-			           				TransformerMainPage.this.stepText.getText()
+		           				TransformerMainPage.this.stepText.getText()
 
-			           		);
-		            		WSTransformerV2 wsTransformer = (WSTransformerV2)getXObject().getWsObject();
-		            		ArrayList<WSTransformerProcessStep> list = new ArrayList<WSTransformerProcessStep>();
-		            		if (wsTransformer.getProcessSteps() != null) { 
-			            		list = new ArrayList<WSTransformerProcessStep>(
-			            				Arrays.asList(wsTransformer.getProcessSteps())
-			            		);
-		            		}
-		            		list.add(new WSTransformerProcessStep(
-		            				"",
-		            				TransformerMainPage.this.stepText.getText(),
-		            				"",
-		            				new WSTransformerVariablesMapping[0],
-		            				new WSTransformerVariablesMapping[0],		            				
-		            				false
-		            		));
-		            		
-		            		wsTransformer.setProcessSteps(list.toArray(new WSTransformerProcessStep[list.size()]));
-		            		TransformerMainPage.this.comitting= false;
-		            		int index = TransformerMainPage.this.stepsList.getItemCount()-1;
-		        			TransformerMainPage.this.stepsList.select(index);
-		        			refreshStep(index);
-		        			TransformerMainPage.this.stepsList.forceFocus();
-		            		markDirty();
+		           		);
+	            		WSTransformerV2 wsTransformer = (WSTransformerV2)getXObject().getWsObject();
+	            		ArrayList<WSTransformerProcessStep> list = new ArrayList<WSTransformerProcessStep>();
+	            		if (wsTransformer.getProcessSteps() != null) { 
+		            		list = new ArrayList<WSTransformerProcessStep>(
+		            				Arrays.asList(wsTransformer.getProcessSteps())
+		            		);
+	            		}
+	            		list.add(new WSTransformerProcessStep(
+	            				"",
+	            				TransformerMainPage.this.stepText.getText(),
+	            				"",
+	            				new WSTransformerVariablesMapping[0],
+	            				new WSTransformerVariablesMapping[0],		            				
+	            				false
+	            		));
+	            		
+	            		wsTransformer.setProcessSteps(list.toArray(new WSTransformerProcessStep[list.size()]));
+	            		TransformerMainPage.this.comitting= false;
+	            		int index = TransformerMainPage.this.stepsList.getItemCount()-1;
+	        			TransformerMainPage.this.stepsList.select(index);
+	        			refreshStep(index);
+	        			TransformerMainPage.this.stepsList.forceFocus();
+	            		markDirty();
             		} catch (Exception ex) {
             			ex.printStackTrace();
             		}
