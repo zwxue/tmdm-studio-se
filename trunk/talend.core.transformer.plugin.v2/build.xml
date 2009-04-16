@@ -15,6 +15,7 @@
 	<property name="jboss.lib.dir" value="${jboss.instance.dir}/lib"/>
 	
 	<property name="ejbs" value="zz.40.talend.transformer.plugins.ejb.jar"/>
+	<property name="wsdl.file" value="src/wsdl/tis.wsdl"/>
 
     <!-- ================================= 
           target: all              
@@ -39,6 +40,7 @@
 				<include name="jboss.xml" />
 			</zipfileset>
 			<zipfileset dir="lib" prefix="META-INF/lib" includes="*.jar"/>
+			<zipfileset file="${wsdl.file}" prefix="META-INF/wsdl"/>
 			<zipfileset dir=".">
 				<include name="RELEASE.NOTES" />
 			</zipfileset>

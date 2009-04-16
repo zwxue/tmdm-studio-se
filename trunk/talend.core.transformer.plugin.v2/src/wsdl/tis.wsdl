@@ -4,7 +4,16 @@
     xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://talend.org"
     xmlns:intf="http://talend.org" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
     xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:tns="urn-com-amalto-xtentis-webservice"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+    xsi:schemaLocation="http://schemas.xmlsoap.org/wsdl/ http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    >
+    
 
     <!--WSDL created by Apache Axis version: 1.4
         Built on Apr 22, 2006 (06:55:48 PDT)-->
@@ -103,7 +112,7 @@
         <wsdl:operation name="runJob">
 
 
-            <wsdlsoap:operation soapAction=""/>
+            <wsdlsoap:operation/>
 
 
             <wsdl:input name="runJobRequest">

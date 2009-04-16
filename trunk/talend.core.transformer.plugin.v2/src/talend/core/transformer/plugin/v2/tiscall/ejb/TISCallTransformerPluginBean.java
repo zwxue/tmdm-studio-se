@@ -1,21 +1,23 @@
 package talend.core.transformer.plugin.v2.tiscall.ejb;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import javax.ejb.SessionBean;
-import javax.xml.rpc.Stub;
+import javax.xml.namespace.QName;
+import javax.xml.ws.BindingProvider;
 
 import org.w3c.dom.Element;
 
 import talend.core.transformer.plugin.v2.tiscall.CompiledParameters;
 import talend.core.transformer.plugin.v2.tiscall.webservices.Args;
-import talend.core.transformer.plugin.v2.tiscall.webservices.ArrayOf_xsd_string;
 import talend.core.transformer.plugin.v2.tiscall.webservices.WSxml;
-import talend.core.transformer.plugin.v2.tiscall.webservices.WSxmlService_Impl;
+import talend.core.transformer.plugin.v2.tiscall.webservices.WSxmlService;
 
+import com.amalto.core.objects.synchronization.ejb.local.SynchronizationPlanCtrlLocal;
 import com.amalto.core.objects.transformers.v2.ejb.TransformerPluginV2CtrlBean;
 import com.amalto.core.objects.transformers.v2.util.TransformerPluginContext;
 import com.amalto.core.objects.transformers.v2.util.TransformerPluginVariableDescriptor;
@@ -200,31 +202,29 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 		TypedContent textTC = (TypedContent)context.get(INPUT_TEXT);
 		
 		try {
-			
+					
 			//attempt to read charset and rebuild the input text string
 			String charset = Util.extractCharset(textTC.getContentType());
 			String text = new String(textTC.getContentBytes(),charset);
 
-			org.apache.log4j.Logger.getLogger(this.getClass()).trace("execute() TIS CALL to '"+parameters.getUrl()+"' input \n"+text);
+			org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute() TIS CALL to '"+parameters.getUrl()+"' input \n"+text);
 
+	        
+	        URL wsdlURL = SynchronizationPlanCtrlLocal.class.getResource("/META-INF/wsdl/tis.wsdl");
 			
-			Stub stub = (Stub) (new WSxmlService_Impl()).getWSxml();
-			stub._setProperty(Stub.ENDPOINT_ADDRESS_PROPERTY, parameters.getUrl());
+			WSxmlService service = new WSxmlService(wsdlURL, new QName("http://talend.org", "WSxmlService"));
+			WSxml port = service.getWSxml();
 			
-			if (parameters.getUsername() != null) {
-    	        stub._setProperty(
-    	                Stub.USERNAME_PROPERTY, parameters.getUsername());
-    	        stub._setProperty(
-    	                Stub.PASSWORD_PROPERTY,parameters.getPassword());
-			}					
-
-			ArrayOf_xsd_string[] stringArray = ((WSxml)stub).runJob(new Args(new String[] {text})).getItem();
+			BindingProvider bp = (BindingProvider)port;
+			bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, parameters.getUrl());
+			bp.getRequestContext().put(BindingProvider.USERNAME_PROPERTY, parameters.getUsername());
+			bp.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, parameters.getPassword());
 			
-			String result = null;
-			if (stringArray != null) {
-				result = stringArray[0].getItem()[0];
-			}
-			org.apache.log4j.Logger.getLogger(this.getClass()).trace("execute() TIS CALL  result \n"+text);
+			Args args = new Args();
+			args.getItem().add(text);
+			String result = port.runJob(args).getItem().get(0).getItem().get(0);
+			
+			org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute() TIS CALL  result \n"+text);
 			//save result to context
 			context.put(OUTPUT_TEXT, new TypedContent(
 				result.getBytes("utf-8"),
@@ -372,6 +372,7 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
     			org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
     			throw new XtentisException(err);
     		}
+    		compiled.setUrl(url);
     		
     		//content Type - defaults to "text/plain; charset=utf-8"
     		String contentType = Util.getFirstTextNode(params, "contentType");
