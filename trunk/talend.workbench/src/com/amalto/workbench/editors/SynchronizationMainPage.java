@@ -58,7 +58,7 @@ public class SynchronizationMainPage extends AMainPageV2{
 		new ComplexTableViewerColumn("Instance Pattern", true, ".*", ".*"),
 		new ComplexTableViewerColumn("Local Revision ID", true, "", "[HEAD]"),
 		new ComplexTableViewerColumn("Remote Revision ID", true, "", "[HEAD]"),
-		new ComplexTableViewerColumn("Algorithm", false, "", "")
+		new ComplexTableViewerColumn("Algorithm", false, "", "", "",true,new String[] {},0)
 	};
 		
 	private ComplexTableViewerColumn[] itemsColumns=new ComplexTableViewerColumn[]{
@@ -68,7 +68,7 @@ public class SynchronizationMainPage extends AMainPageV2{
 		new ComplexTableViewerColumn("Local Revision ID", true, "", "[HEAD]"),
 		new ComplexTableViewerColumn("Remote Cluster", false, "", ""),
 		new ComplexTableViewerColumn("Remote Revision ID", true, "", "[HEAD]"),
-		new ComplexTableViewerColumn("Algorithm", false, "", "")
+		new ComplexTableViewerColumn("Algorithm", false, "", "","Manual",true,new String[] {},0)
 	};
 		
 	protected SyncronizationPlan syncPlan;
@@ -366,8 +366,8 @@ public class SynchronizationMainPage extends AMainPageV2{
         	itemsComposite
         );
         itemsViewer.setMainPage(this);
-        itemsViewer.setLastCombo(true);
-        itemsViewer.setLastcomboStrings(itemsAlgorithmsStrings);
+        itemsViewer.getColumns().get(itemsViewer.getColumns().size()-1).setComboValues(itemsAlgorithmsStrings);
+//        itemsViewer.setLastcomboStrings(itemsAlgorithmsStrings);
         itemsViewer.create();
         instancesViewer=itemsViewer.getViewer();
         instancesViewer.setInput(syncPlan.getItemsList());
@@ -402,8 +402,8 @@ public class SynchronizationMainPage extends AMainPageV2{
             
             ComplexTableViewer objectViewer=new ComplexTableViewer(Arrays.asList(xtentisObjectColumns),toolkit,composite);
             objectViewer.setMainPage(this);
-            objectViewer.setLastCombo(true);
-            objectViewer.setLastcomboStrings(objectsAlgorithmStrings);
+            objectViewer.getColumns().get(objectViewer.getColumns().size()-1).setComboValues(objectsAlgorithmStrings);
+//            objectViewer.setLastcomboStrings(objectsAlgorithmStrings);
             objectViewer.create();
             List<Line> objList=syncPlan.getXtentisObjectsList().get(object);
             if(objList==null){

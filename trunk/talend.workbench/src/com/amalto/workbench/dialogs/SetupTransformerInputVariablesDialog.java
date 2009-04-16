@@ -56,33 +56,57 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
   
         comp.setLayout(  new GridLayout(1 ,false ));
         comp.setText("Setup " + transformer.getName() + " input variables");
-    	ComplexTableViewerColumn[] columns= new ComplexTableViewerColumn[]{
-        		new ComplexTableViewerColumn("Input Variables", true, "_DEFAULT_", "_DEFAULT_"),
-        		new ComplexTableViewerColumn("Value", true, "", ""),
-        		new ComplexTableViewerColumn("Content/type", false, "", "")
-        	};
-        objectViewer=new ComplexTableViewer(Arrays.asList(columns),toolkit,comp);
-        Set<String> strings=new HashSet<String>();
+
+        //Get the input variable names
+        Set<String> inputVariables = new HashSet<String>();
         for(WSTransformerProcessStep step:transformer.getProcessSteps()){
         	for(WSTransformerVariablesMapping mapping:step.getInputMappings()){       		
-        		strings.add(mapping.getPipelineVariable()==null?TransformerMainPage.DEFAULT_VAR:mapping.getPipelineVariable());
+        		inputVariables.add(mapping.getPipelineVariable()==null?TransformerMainPage.DEFAULT_VAR:mapping.getPipelineVariable());
         	}
         }
         
-        objectViewer.setFirstCombo(true);
-        objectViewer.setFirstcomboStrings(strings.toArray(new String[strings.size()]));
-
-        objectViewer.setLastCombo(true);
-        objectViewer.setLastcomboStrings(new String[]{"text/plain","text/xml"});
+    	ComplexTableViewerColumn[] columns= new ComplexTableViewerColumn[]{
+        	new ComplexTableViewerColumn(
+        		"Input Variables",		//name 
+        		true, 					//is Nillable ?
+        		"_DEFAULT_", 			//Nill value
+        		"_DEFAULT_",			//Nill display
+        		"",						//Default Value
+        		true,					//is Combo ?
+        		inputVariables.toArray(new String[inputVariables.size()]), //Combo Values
+        		0						//Text Lines
+        	),
+        	new ComplexTableViewerColumn(
+        		"Content Type",		//name 
+        		false, 					//is Nillable ?
+        		"", 					//Nill value
+        		"",						//Nill display
+        		"text/xml",				//Default Value
+        		true,					//is Combo ?
+        		new String[] {"text/xml", "text/plain"}, //Combo Values
+        		0						//Text Lines
+        	),
+        	new ComplexTableViewerColumn(
+        		"Value",				//name 
+        		true, 					//is Nillable ?
+        		"",			 			//Nill value
+        		"",						//Nill display
+        		"",						//Default Value
+        		false,					//is Combo ?
+        		null, //Combo Values
+        		10						//Text Lines
+        	)
+        };
+        objectViewer=new ComplexTableViewer(Arrays.asList(columns),toolkit,comp);
         objectViewer.create();
         
         Table table=objectViewer.getViewer().getTable();
               	
         table.getColumns()[1].setWidth(500);
         
-        GridData gd=(GridData)objectViewer.getTxtLists().get(0).getLayoutData();
-        gd.minimumHeight=200;
-        gd.minimumWidth=300;
+//        GridData gd=(GridData)objectViewer.getTxtLists().get(0).getLayoutData();
+//        gd.minimumHeight=200;
+//        gd.minimumWidth=300;
        
         table.setHeaderVisible(true);
         table.setLinesVisible(true);
@@ -106,7 +130,7 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
 	}
 	
 	private void processOk(){
-		objectViewer.add();
+//		objectViewer.add();
 		java.util.List<Line> list=(java.util.List<Line>)objectViewer.getViewer().getInput();
 		if(list.size()==0)return;
 		
