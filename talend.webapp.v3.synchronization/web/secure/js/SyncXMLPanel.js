@@ -1,0 +1,402 @@
+/*
+ * Synchronization Plan from several source xmls to a target one.
+ */
+//
+// Extend the XmlTreeLoader to set some custom TreeNode attributes specific to our application:
+loadResource("/SynchronizationPlan/secure/js/XmlTreeLoader.js", "" );
+
+var SyncXMLPanel= function(syncItem){
+	this.syncItem=syncItem;
+	
+	var Sync_dir='/SynchronizationPlan/secure/data/';
+	Ext.app.OrderLoader = Ext.extend(Ext.ux.XmlTreeLoader, {
+	    processAttributes : function(attr,node){				
+		  	attr.text = attr.tagName;	  
+	    }
+	});
+	
+	var remoteNames=[];
+	var remoteItems=function(){
+		var ret=[];
+		for(var i=0; i<syncItem.remoteItemNames.length; i++){
+			remoteNames.push([syncItem.remoteItemNames[i]]);
+		}				
+	}();
+	var currentIndex=0;
+	function setSourceNode(index){		
+		if(index==currentIndex)return;
+		//clear
+		var childNodes=sourceTree.getRootNode().childNodes;
+		for(var i=0; i<childNodes.length; i++){
+			sourceTree.getRootNode().removeChild(childNodes[i]);
+		}
+		//append
+		if(index >= 0 && index <syncItem.remoteNodes.length){
+			sourceTree.getRootNode().appendChild(createTreeNode(syncItem.remoteNodes[index]));
+		}
+	};
+	function createTreeNode(node){
+		var treeNode= new Ext.tree.TreeNode({'text':node.text,'leaf':node.leaf});		
+		if(node.childNodes){
+			for(var i=0; i<node.childNodes.length; i++){
+				var childNode=node.childNodes[i];
+				if(childNode.leaf == true){					
+					var child= new Ext.tree.TreeNode({'text':childNode.text,'leaf':childNode.leaf});
+					treeNode.appendChild(child);
+				}else{
+					treeNode.appendChild(createTreeNode(childNode));
+				}
+			}
+		}
+		
+		return treeNode;
+	};
+    var Tree = Ext.tree;
+    // simple array store
+    
+    var datastore = new Ext.data.SimpleStore({
+        fields: ['filename'],
+        //data : [['targetOrder.xml'],['sourceOrder.xml'],['employee.xml']] // from		// states.js
+        data:remoteNames
+    });    
+    // The action
+    var addAction = new Ext.Action({
+        text: '<b>Add</b>',        
+        handler: function(){
+        	  if(targetSelectNode && sourceSelectNode){
+							Ext.MessageBox.confirm('Confirm', 'Are you sure you want to <b>Add</b> source tree selected item as child of target tree selected Item ?', addOne); 
+			}else{
+	        Ext.MessageBox.show({
+	           title: 'Warning',
+	           msg: 'You must select one item of <b>source</b> tree and <b>target</b> tree!',
+	           buttons: Ext.MessageBox.OK,			           
+	           icon: Ext.MessageBox.WARNING
+	       });							
+			}
+        },
+        tooltip:'<b>Add</b><br/>Add source tree selected item as child of target tree selected item'
+        
+    });
+    var replaceAction = new Ext.Action({
+        text: '<b>Replace</b>',
+        handler: function(){
+           if(targetSelectNode && sourceSelectNode){
+          	var tParentNode=targetSelectNode.parentNode;
+          	if(tParentNode){        	
+           		Ext.MessageBox.confirm('Confirm', 'Are you sure you want to <b>Replace</b> target selected Item with source selected Item ?', replaceOne); 
+           	}
+          }else{
+	        Ext.MessageBox.show({
+	           title: 'Warning',
+	           msg: 'You must select one item of source tree and target tree!',
+	           buttons: Ext.MessageBox.OK,			           
+	           icon: Ext.MessageBox.WARNING
+	       });          	
+          }
+        },
+        tooltip:'<b>Replace</b><br/>Replace source tree selected item with target tree selected item'
+    });    
+    var leftAction=new Ext.Action({
+        text: '<b><--</b>',
+        tooltip:'Upper level',
+        handler: function(){
+            if(targetSelectNode){
+            	var tParentNode=targetSelectNode.parentNode;
+            	if(tParentNode && tParentNode.parentNode){           		
+            		targetSelectNode=tParentNode.parentNode.insertBefore(targetSelectNode,tParentNode.parentNode.item[0]);
+             		tParentNode.parentNode.expand();
+            		targetSelectNode.select(); 		
+            	}
+            }                        
+        }
+    }); 
+    var rightAction=new Ext.Action({
+        text: '<b>--></b>',
+        tooltip:'Lower level',
+        handler: function(){
+            if(targetSelectNode){
+            	     
+        		var sibling=targetSelectNode.previousSibling;
+        		if(!sibling){
+        			sibling=targetSelectNode.nextSibling;
+        		}
+        		if(sibling){
+            		if(sibling.childNodes.length>0)
+            			targetSelectNode=sibling.insertBefore(targetSelectNode,sibling.item[0]);
+            		else
+            			targetSelectNode=sibling.appendChild(targetSelectNode);
+            		sibling.expand();
+            		targetSelectNode.select(); 		
+        		}
+            	
+            }                        
+        }
+    });    
+    var upAction = new Ext.Action({
+        text: '<b>Up</b>',
+        handler: function(){
+            if(targetSelectNode){
+            	var tParentNode=targetSelectNode.parentNode;
+            	if(tParentNode){
+            		var index=tParentNode.indexOf(targetSelectNode);            		
+            		index--;
+            		// first then insert as it's parent's last child
+            		if(index < 0){
+            			//if(tParentNode.parentNode)targetSelectNode=tParentNode.parentNode.insertBefore(targetSelectNode,tParentNode);
+            		}else{
+            			targetSelectNode=tParentNode.insertBefore(targetSelectNode,targetSelectNode.previousSibling);
+            		}           
+            		targetSelectNode.select(); 		
+            	}
+            }                        
+        }
+    }); 
+    var downAction = new Ext.Action({
+        text: '<b>Down</b>',
+        handler: function(){
+            if(targetSelectNode){
+            	var tParentNode=targetSelectNode.parentNode;
+            	if(tParentNode){
+            		var index=tParentNode.indexOf(targetSelectNode);            		
+            		index++;
+            		// first then insert as it's parent's last child
+            		if(index == tParentNode.childNodes.length){            			
+            			//targetSelectNode=tParentNode.parentNode.appendChild(targetSelectNode);           			
+            		}else{
+            			targetSelectNode=tParentNode.insertBefore(targetSelectNode,targetSelectNode.nextSibling.nextSibling);
+            		} 
+            		targetSelectNode.select(); 		           		
+            	}
+            }            
+        }
+        
+    });        
+    var deleteAction = new Ext.Action({
+        text: '<b>Delete</b>',
+        handler: function(){
+        	if(targetSelectNode && targetSelectNode!= targetTree.getRootNode()){
+        	 	Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete the selected item?', deleteOne);
+        	}                     
+        }
+    });     
+    function getTreeNode(node,children){
+    	for(var i=0; i<node.childNodes.length; i++){
+    		var child=node.childNodes[i];
+    		if(child.childNodes.length==0){
+    			children.push({leaf:true,text:child.text,childNodes:new Array()});
+    		}else{
+    			var treeNode={leaf:false,text:child.text,childNodes:new Array()};
+    			children.push(treeNode);
+    			getTreeNode(child,treeNode.childNodes);
+    		}
+    	}
+    };
+    
+    function saveSyncPlan(){
+
+        Ext.MessageBox.show({
+           msg: 'Saving your data, please wait...',
+           progressText: 'Saving...',
+           width:300,
+           wait:true,
+           waitConfig: {interval:100}          
+       });
+        setTimeout(function(){
+            //This simulates a long-running operation like a database save or XHR call.
+            // In real code, this would be in a callback function.
+    	//convert Ext.tree.TreeNode to java TreeNode
+    	var root=targetTree.getRootNode();
+    	var children=new Array();
+    	getTreeNode(root,children);
+    	var saveRoot={leaf:false,text:root.text,childNodes:children};
+    	SynchronizationPlanInterface.saveSynchronizationPlan(function(){},saveRoot);
+    	Ext.MessageBox.hide();
+        Ext.MessageBox.alert('Status', 'Changes saved successfully.');
+        }, 1000);    	
+    };
+
+    function deleteOne(btn){
+    	if(btn == 'yes'){
+				if(targetSelectNode)targetSelectNode.parentNode.removeChild(targetSelectNode); 
+		  }     	
+    };
+    function replaceOne(btn){
+    	if(btn == 'yes'){
+           if(targetSelectNode && sourceSelectNode){
+          	var tParentNode=targetSelectNode.parentNode;
+          	if(tParentNode){
+          		targetSelectNode=tParentNode.replaceChild(sourceSelectNode,targetSelectNode);  
+          		tParentNode.expand();
+          		
+          	}
+          }    		
+    	}
+    };
+    function addOne(btn){
+    	if(btn == 'yes'){
+        if(targetSelectNode && sourceSelectNode){
+        	sourceSelectNode=targetSelectNode.appendChild(sourceSelectNode);
+        	targetSelectNode.expand();
+        	sourceSelectNode.select();
+        }    		
+    	}
+    };
+    var saveAction = new Ext.Action({
+        text: '<b>Save</b>',
+        handler: function(){
+            saveSyncPlan();
+        }
+    }); 
+    var targetRoot=new Ext.tree.TreeNode({text:''});    
+    targetRoot.appendChild(createTreeNode(syncItem.node));        
+    // target tree
+    var targetTree = new Tree.TreePanel({              
+        columnWidth:.43,
+        bodyStyle:'padding:5px 5px 1',
+        title:'Target',
+        border:true,
+        height:400,
+        animate:true, 
+        autoScroll:true,
+        rootVisible: false,
+        root: targetRoot,
+
+ //       loader: new Ext.app.OrderLoader({
+ //       	dataUrl:Sync_dir+'targetOrder.xml'
+ //       }),
+        enableDD:true,
+        containerScroll: true,
+        dropConfig: {appendOnly:true},
+        buttons:[new Ext.Button(leftAction),new Ext.Button(rightAction),new Ext.Button(upAction), new Ext.Button(downAction), new Ext.Button(deleteAction)],
+        listeners: {
+            'render': function(tp){
+                  tp.getSelectionModel().on('selectionchange', function(tree, node){
+                      targetSelectNode=node;                     
+                  });
+            }
+        }        
+    });
+    
+    var targetSelectNode;
+    var sourceSelectNode;
+    var sourceRoot=new Ext.tree.TreeNode({text:''});
+    sourceRoot.appendChild(createTreeNode(syncItem.remoteNodes[0]));
+    // source tree
+    var sourceTree = new Tree.TreePanel({                       
+        title:'Source',
+        bodyStyle:'padding:5px 5px 1',
+        border:true,
+        height:340,
+        animate:true,
+        autoScroll:true,
+        rootVisible: false,
+	    root: sourceRoot,
+        
+        // Our custom TreeLoader:
+ //       loader: new Ext.app.OrderLoader({
+ //           dataUrl:Sync_dir+'sourceOrder.xml'
+ //       }),
+        containerScroll: true,
+        enableDD:true,
+        dropConfig: {appendOnly:true},
+        listeners: {
+            'render': function(tp){
+                  tp.getSelectionModel().on('selectionchange', function(tree, node){
+                      sourceSelectNode=node;
+                  });
+            }
+        }                
+    });
+   
+    // combo
+    var combo = new Ext.form.ComboBox({
+        
+        store: datastore,
+        width:'100%',
+        displayField:'filename',
+        border:true,
+        typeAhead: true,
+        id:'combo',
+        mode: 'local',
+        triggerAction: 'all',
+        emptyText:'Select a filename...',
+        selectOnFocus:true,
+        listeners:{
+        	'select': function(combo,record,index){
+        		//reload the source tree
+        		//var remoteName=combo.getValue().trim();
+        		//if(remoteName.length>0){
+				   //sourceTree.loader.dataUrl=Sync_dir+remoteName;		
+					//sourceTree.getRootNode().reload();
+        			
+				//}
+        		setSourceNode(index);
+    		}
+        }
+    }); 
+      
+    // main panel
+    var syncPanel;      
+    // button panel
+    var buttonPanel;
+    // source panel
+    var sourcePanel;
+    
+    //data
+    var syncItem;
+// -------------------------------------------------------------
+
+   function showSync(){
+    	var tabPanel = amalto.core.getTabPanel();
+    	//if(tabPanel.getItem('synchronizationplan') == undefined){
+	   		Ext.QuickTips.init();
+			
+			buttonPanel = new Ext.Panel({
+						bodyStyle:'padding:5px 5px 0',
+	        layout:'form',
+	        columnWidth:0.14,
+	        buttonAlign:'center',
+	        border:false,
+	        height:100,
+	        items:[
+		        new Ext.Button(addAction), new Ext.Button(replaceAction)],					        					        
+		  }); 
+	
+			sourcePanel = new Ext.Panel({
+			columnWidth:.43,			            
+	        border:false,
+		        items:[combo, sourceTree],					        					        
+		  }); 
+		   
+			syncPanel = new Ext.Panel({
+			bodyStyle:'padding:5px 5px 1',
+	        layout:'column',
+	        //id:'synchronizationplan',
+	        deferredRender: false,
+	        closable: true,
+	        border:false,
+		        title: 'Synchronization Plan',		        
+		        items:[targetTree, buttonPanel, sourcePanel],
+		        tbar: [
+		            saveAction
+		        ]					        					        
+		  }); 
+		  //targetTree.getRootNode().expand();
+		  //sourceTree.getRootNode().expand();  
+		  
+    	//}
+		  tabPanel.add(syncPanel);
+		  syncPanel.show();
+		  //syncPanel.doLayout();
+		  amalto.core.doLayout();   	
+    };
+    return {
+    	//public 
+        init : function(){
+    		showSync();		  
+        },
+    	saveSync:function(){
+        	saveSyncPlan();
+        },
+    };
+};
