@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/opt/jboss/server/default/lib/z.com.amalto.webapp.core.jar"/>
-	<classpathentry kind="lib" path="C:/opt/jboss/client/log4j.jar"/>
-	<classpathentry kind="lib" path="C:/opt/jboss/server/default/lib/z.com.amalto.core.jar"/>
-	<classpathentry kind="output" path="bin"/>
-</classpath>
