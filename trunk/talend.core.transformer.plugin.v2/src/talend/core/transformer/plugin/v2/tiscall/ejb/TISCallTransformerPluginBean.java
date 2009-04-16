@@ -52,7 +52,9 @@ import com.amalto.core.util.XtentisException;
  */
 public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  implements SessionBean{
   
-	private static final String PARAMETERS = "com.amalto.core.plugin.TISCall.parameters"; 
+//	private static final String PARAMETERS = "com.amalto.core.plugin.TISCall.parameters";
+	private static final String CONTENT_TYPE = "com.amalto.core.plugin.TISCall.content.type";
+	private static final String PORT = "com.amalto.core.plugin.TISCall.port";
 	
 	private static final String INPUT_TEXT = "text";
 
@@ -176,7 +178,21 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 			if (!configurationLoaded) loadConfiguration();
 			
 			CompiledParameters parameters = CompiledParameters.deserialize(compiledParameters);
-			context.put(PARAMETERS, parameters);
+			//context.put(PARAMETERS, parameters);
+	        
+	        URL wsdlURL = SynchronizationPlanCtrlLocal.class.getResource("/META-INF/wsdl/tis.wsdl");
+			
+			WSxmlService service = new WSxmlService(wsdlURL, new QName("http://talend.org", "WSxmlService"));
+			WSxml port = service.getWSxml();
+			
+			//set the parameters
+			BindingProvider bp = (BindingProvider)port;
+			bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, parameters.getUrl());
+			bp.getRequestContext().put(BindingProvider.USERNAME_PROPERTY, parameters.getUsername());
+			bp.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, parameters.getPassword());
+			
+			context.put(CONTENT_TYPE, parameters.getContentType());
+			context.put(PORT, port);
 			
 		} catch (XtentisException xe) {
 			throw (xe);
@@ -198,7 +214,8 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
      */
 	public void execute(TransformerPluginContext context) throws XtentisException {
 		
-		CompiledParameters parameters= (CompiledParameters)context.get(PARAMETERS);
+//		CompiledParameters parameters= (CompiledParameters)context.get(PARAMETERS);
+		String contentType = (String)context.get(CONTENT_TYPE);
 		TypedContent textTC = (TypedContent)context.get(INPUT_TEXT);
 		
 		try {
@@ -207,18 +224,11 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 			String charset = Util.extractCharset(textTC.getContentType());
 			String text = new String(textTC.getContentBytes(),charset);
 
-			org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute() TIS CALL to '"+parameters.getUrl()+"' input \n"+text);
+//			org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute() TIS CALL to '"+parameters.getUrl()+"' input \n"+text);
 
-	        
-	        URL wsdlURL = SynchronizationPlanCtrlLocal.class.getResource("/META-INF/wsdl/tis.wsdl");
+			//revover the port
+			WSxml port = (WSxml) context.get(PORT);
 			
-			WSxmlService service = new WSxmlService(wsdlURL, new QName("http://talend.org", "WSxmlService"));
-			WSxml port = service.getWSxml();
-			
-			BindingProvider bp = (BindingProvider)port;
-			bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, parameters.getUrl());
-			bp.getRequestContext().put(BindingProvider.USERNAME_PROPERTY, parameters.getUsername());
-			bp.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, parameters.getPassword());
 			
 			Args args = new Args();
 			args.getItem().add(text);
@@ -228,8 +238,8 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 			//save result to context
 			context.put(OUTPUT_TEXT, new TypedContent(
 				result.getBytes("utf-8"),
-				parameters.getContentType())
-			);
+				contentType
+			));
 
 			//call the callback content is ready
 			context.getPluginCallBack().contentIsReady(context);				
