@@ -402,7 +402,12 @@ public class SynchronizationMainPage extends AMainPageV2{
             data.widthHint=120;
             label.setLayoutData(data);
             label.setFont(FontUtils.getBoldFont(label.getFont()));
-            
+            ComplexTableViewerColumn[] xtentisObjectColumns= new ComplexTableViewerColumn[]{
+            		new ComplexTableViewerColumn("Instance Pattern", true, ".*", ".*"),
+            		new ComplexTableViewerColumn("Local Revision ID", true, "", "[HEAD]"),
+            		new ComplexTableViewerColumn("Remote Revision ID", true, "", "[HEAD]"),
+            		new ComplexTableViewerColumn("Algorithm", false, "", "", "",true,new String[] {},0)
+            	};
             ComplexTableViewer objectViewer=new ComplexTableViewer(Arrays.asList(xtentisObjectColumns),toolkit,composite);
             objectViewer.setMainPage(this);
             objectViewer.getColumns().get(objectViewer.getColumns().size()-1).setComboValues(objectsAlgorithmStrings);

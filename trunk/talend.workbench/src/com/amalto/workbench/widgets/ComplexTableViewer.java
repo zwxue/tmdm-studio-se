@@ -8,14 +8,18 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionListener;
@@ -23,7 +27,9 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -135,19 +141,29 @@ public class ComplexTableViewer {
 				CCombo combo = new CCombo(mainComposite,SWT.BORDER|SWT.READ_ONLY);
 				combo.setLayoutData(new GridData(SWT.NONE,SWT.TOP,false,false,1,1));
 				combo.setItems(column.getComboValues());
-				combo.setText(column.getDefaultValue());
+				if(column.getDefaultValue() ==null ||column.getDefaultValue().length()==0){
+					combo.select(0);
+				}else{
+					combo.setText(column.getDefaultValue());
+				}
 				column.setControl(combo);
 			} else {
 				int style=SWT.BORDER;
 				if (column.getTextLines()>1) {
 					style = SWT.BORDER|SWT.MULTI|SWT.V_SCROLL|SWT.H_SCROLL;
 				}
-				Text text = toolkit.createText(mainComposite, column.getDefaultValue(), style);
+				final Text text = toolkit.createText(mainComposite, column.getDefaultValue(), style);
 				GridData gdata = new GridData(SWT.FILL,SWT.FILL,true,true,1,1);
 				if (column.getTextLines()>1)
 					gdata.heightHint = text.getLineHeight()*column.getTextLines();
 				text.setLayoutData(gdata);
 				column.setControl(text);
+		        text.addFocusListener(new FocusAdapter(){
+		        	@Override
+		        	public void focusGained(FocusEvent e) {
+		        		text.selectAll();
+		        	}
+		        });
 			}
 		}
 
@@ -181,8 +197,9 @@ public class ComplexTableViewer {
         					MessageDialog.openError(
         						ComplexTableViewer.this.getViewer().getControl().getShell(), 
         						"Input Error",
-        						"The Column '"+column.getName()+"' cannot be empty"
+        						"The Column '"+column.getName()+"' cannot be empty"       						
         					);
+        					return;
         				}
         			}
         			uniqueVal+="."+text;
@@ -379,8 +396,47 @@ public class ComplexTableViewer {
         		return null;
         	}
         });
-        
 
+        viewer.addSelectionChangedListener(new ISelectionChangedListener(){
+
+			public void selectionChanged(SelectionChangedEvent event) {
+				// TODO Auto-generated method stub
+    			Line line = (Line)((IStructuredSelection)event.getSelection()).getFirstElement();
+    			
+    			for(int columnIndex=0; columnIndex<columns.size(); columnIndex++){
+    				if(line==null){
+    					Control control=columns.get(columnIndex).getControl();
+    					if(control instanceof Text){
+    						((Text)control).setText("");
+    					}
+    					if(control instanceof CCombo){
+    						((CCombo)control).select(0);
+    					}
+    					if(control instanceof Combo){
+    						((CCombo)control).select(0);
+    					}  					
+    				}else{
+		       			for(KeyValue keyvalue:line.keyValues){
+		    				if(keyvalue.key.equals(columns.get(columnIndex).getName())){
+		    					String val = keyvalue.value; 
+		    					Control control=columns.get(columnIndex).getControl();
+		    					if(control instanceof Text){
+		    						((Text)control).setText(val);
+		    					}
+		    					if(control instanceof CCombo){
+		    						((CCombo)control).setText(val);
+		    					}
+		    					if(control instanceof Combo){
+		    						((CCombo)control).setText(val);
+		    					}
+		    				}
+		    			}
+    				}
+    			}
+			}
+        	
+        });
+        
         
         //display for Delete Key events to delete an instance
         viewer.getTable().addKeyListener(new KeyListener() {
