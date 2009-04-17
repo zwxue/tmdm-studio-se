@@ -11,9 +11,9 @@ import com.amalto.webapp.core.util.Util;
 
 
 public class TreeNode {
-	String text;
-	boolean leaf;
-	TreeNode[] childNodes;
+	private String text;
+	private boolean leaf;
+	private TreeNode[] childNodes;
 	
 	public TreeNode[] getChildNodes() {
 		return childNodes;
@@ -53,13 +53,14 @@ public class TreeNode {
 	}
 	
 	public TreeNode deserialize(String xml)throws Exception{
+		if(xml==null) return null;
 		Element result = Util.parse(xml).getDocumentElement();		
 		return parseElement(result);		
 	}
 	
 	private TreeNode parseElement(Element element)throws Exception{
 		TreeNode node=new TreeNode();		
-		System.out.println("elementnode--"+element.getNodeName() + "/"+element.getNodeValue());
+		
 		node.setText( element.getNodeName());
 		NodeList list=element.getChildNodes();
 		List<TreeNode> childs=new ArrayList<TreeNode>();		
@@ -67,7 +68,7 @@ public class TreeNode {
 			for (int i = 0; i < list.getLength(); i++) {
 				Node el = (Node) list.item(i);
 				if(el.getNodeType()==Element.TEXT_NODE && el.getNodeValue().trim().length()>0){
-					System.out.println("textnode--"+el.getNodeName() + "/"+el.getNodeValue());
+					
 					TreeNode child=new TreeNode();
 					child.setText(el.getNodeValue().trim());
 					child.setLeaf(true);

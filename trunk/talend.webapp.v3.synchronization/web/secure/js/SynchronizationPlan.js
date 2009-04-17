@@ -28,10 +28,10 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
     
     var myColumns = [
     	//{header: "No", width: 25, sortable: true},
-		{header: 'itemPK', width: 120, sortable: true,dataIndex: 'itemPK'}, 
-		{header: 'localRevisionID', width: 165,  sortable: true,dataIndex: 'localRevisionID'}, 
-		{header: 'lastRunPlan', width: 135,  sortable: true,dataIndex: 'lastRunPlan'},
-		{header: 'status', width: 105, sortable: true,dataIndex: 'status'}
+		{header: 'Item PK', width: 100, sortable: true,dataIndex: 'itemPK'}, 
+		{header: 'Local Revision ID', width: 100,  sortable: true,dataIndex: 'localRevisionID'}, 
+		{header: 'Last Run Synchronization Name', width: 120,  sortable: true,dataIndex: 'lastRunPlan'},
+		{header: 'Status', width: 105, sortable: true,dataIndex: 'status'}
 	];
    	var columnModel = new Ext.grid.ColumnModel(myColumns);
     var grid;
@@ -57,7 +57,7 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
    	    				var record=grid.getStore().getAt(rowIndex);
    	    				if(record.data.status == 'MANUAL'){
    	    					record.data.remoteIntances.key;  	    					
-   	   	    				var xmlData=new SyncXMLPanel(record.data);
+   	   	    				var xmlData=new SyncXMLPanel(record.data,store);
    	   	    				xmlData.init();  	    					
    	    				}
    	    			}

@@ -1,13 +1,13 @@
 /*
- * Synchronization Plan from several source xmls to a target one.
+ * Synchronization for conflict data
  */
 //
 // Extend the XmlTreeLoader to set some custom TreeNode attributes specific to our application:
-loadResource("/SynchronizationPlan/secure/js/XmlTreeLoader.js", "" );
+//loadResource("/SynchronizationPlan/secure/js/XmlTreeLoader.js", "" );
 
-var SyncXMLPanel= function(syncItem){
+var SyncXMLPanel= function(syncItem,store){
+	var syncPlanStore=store;
 	this.syncItem=syncItem;
-	
 
 	var remoteNames=[];
 	var remoteItems=function(){
@@ -16,9 +16,9 @@ var SyncXMLPanel= function(syncItem){
 			remoteNames.push([syncItem.remoteItemNames[i]]);
 		}				
 	}();
+	
 	var currentIndex=0;
 	function setSourceNode(index){		
-		if(index==currentIndex)return;
 		//clear
 		var childNodes=sourceTree.getRootNode().childNodes;
 		for(var i=0; i<childNodes.length; i++){
@@ -27,6 +27,8 @@ var SyncXMLPanel= function(syncItem){
 		//append
 		if(index >= 0 && index <syncItem.remoteNodes.length){
 			sourceTree.getRootNode().appendChild(createTreeNode(syncItem.remoteNodes[index]));
+			//sourceTree.title='Source [' + remoteNames[index] +']';
+			currentIndex=index;
 		}
 	};
 	function createTreeNode(node){
@@ -41,31 +43,27 @@ var SyncXMLPanel= function(syncItem){
 					treeNode.appendChild(createTreeNode(childNode));
 				}
 			}
-		}
-		
+		}		
 		return treeNode;
 	};
-    var Tree = Ext.tree;
-    // simple array store
-    
+
     var datastore = new Ext.data.SimpleStore({
         fields: ['filename'],
-        //data : [['targetOrder.xml'],['sourceOrder.xml'],['employee.xml']] // from		// states.js
         data:remoteNames
     });    
     // The action
     var addAction = new Ext.Action({
         text: '<b>Add</b>',        
         handler: function(){
-        	  if(targetSelectNode && sourceSelectNode){
-							Ext.MessageBox.confirm('Confirm', 'Are you sure you want to <b>Add</b> source tree selected item as child of target tree selected Item ?', addOne); 
+        	if(targetSelectNode && sourceSelectNode){
+					Ext.MessageBox.confirm('Confirm', 'Are you sure you want to <b>Add</b> source tree selected item as child of target tree selected Item ?', addOne); 
 			}else{
-	        Ext.MessageBox.show({
-	           title: 'Warning',
-	           msg: 'You must select one item of <b>source</b> tree and <b>target</b> tree!',
-	           buttons: Ext.MessageBox.OK,			           
-	           icon: Ext.MessageBox.WARNING
-	       });							
+		        Ext.MessageBox.show({
+		           title: 'Warning',
+		           msg: 'You must select one item of <b>source</b> tree and <b>target</b> tree!',
+		           buttons: Ext.MessageBox.OK,			           
+		           icon: Ext.MessageBox.WARNING
+		       });							
 			}
         },
         tooltip:'<b>Add</b><br/>Add source tree selected item as child of target tree selected item'
@@ -108,8 +106,7 @@ var SyncXMLPanel= function(syncItem){
         text: '<b>--></b>',
         tooltip:'Lower level',
         handler: function(){
-            if(targetSelectNode){
-            	     
+            if(targetSelectNode){           	     
         		var sibling=targetSelectNode.previousSibling;
         		if(!sibling){
         			sibling=targetSelectNode.nextSibling;
@@ -187,7 +184,6 @@ var SyncXMLPanel= function(syncItem){
     };
     
     function saveSyncPlan(){
-
         Ext.MessageBox.show({
            msg: 'Saving your data, please wait...',
            progressText: 'Saving...',
@@ -199,16 +195,26 @@ var SyncXMLPanel= function(syncItem){
             //This simulates a long-running operation like a database save or XHR call.
             // In real code, this would be in a callback function.
     	//convert Ext.tree.TreeNode to java TreeNode
-    	var root=targetTree.getRootNode();
+    	var root=targetTree.getRootNode().childNodes[0];
     	var children=new Array();
     	getTreeNode(root,children);
     	var saveRoot={leaf:false,text:root.text,childNodes:children};
-    	SynchronizationPlanInterface.saveSynchronizationPlan(function(){},saveRoot);
-    	Ext.MessageBox.hide();
-        Ext.MessageBox.alert('Status', 'Changes saved successfully.');
+    	//set RESOLVED to syncItem   	
+    	syncItem.node=saveRoot;
+    	SynchronizationPlanInterface.saveSyncItem(function(isSaveOk){
+    		Ext.MessageBox.hide();
+    		if(isSaveOk == true){
+    			syncItem.status='RESOLVED';   	    	
+    	        Ext.MessageBox.alert('Status', 'Changes saved successfully.');   			
+    			var tabPanel = amalto.core.getTabPanel();
+    			tabPanel.remove(syncPanel);
+    			syncPlanStore.reload();
+    		}
+    	},syncItem);
         }, 1000);    	
     };
-
+    
+    
     function deleteOne(btn){
     	if(btn == 'yes'){
 				if(targetSelectNode)targetSelectNode.parentNode.removeChild(targetSelectNode); 
@@ -221,7 +227,7 @@ var SyncXMLPanel= function(syncItem){
           	if(tParentNode){
           		targetSelectNode=tParentNode.replaceChild(sourceSelectNode,targetSelectNode);  
           		tParentNode.expand();
-          		
+          		setSourceNode(currentIndex);
           	}
           }    		
     	}
@@ -244,7 +250,7 @@ var SyncXMLPanel= function(syncItem){
     var targetRoot=new Ext.tree.TreeNode({text:'','expanded':true});    
     targetRoot.appendChild(createTreeNode(syncItem.node));        
     // target tree
-    var targetTree = new Tree.TreePanel({              
+    var targetTree = new Ext.tree.TreePanel({              
         columnWidth:.43,
         bodyStyle:'padding:5px 5px 1',
         title:'Target',
@@ -273,16 +279,15 @@ var SyncXMLPanel= function(syncItem){
     var sourceRoot=new Ext.tree.TreeNode({text:'','expanded':true});
     sourceRoot.appendChild(createTreeNode(syncItem.remoteNodes[0]));
     // source tree
-    var sourceTree = new Tree.TreePanel({                       
+    var sourceTree = new Ext.tree.TreePanel({                       
         title:'Source',
         bodyStyle:'padding:5px 5px 1',
         border:true,
-        height:340,
+        height:400,
         animate:true,
         autoScroll:true,
         rootVisible: false,
 	    root: sourceRoot,
-
         containerScroll: true,
         enableDD:true,
         dropConfig: {appendOnly:true},
@@ -296,8 +301,7 @@ var SyncXMLPanel= function(syncItem){
     });
    
     // combo
-    var combo = new Ext.form.ComboBox({
-        
+    var combo = new Ext.form.ComboBox({       
         store: datastore,
         width:'100%',
         displayField:'filename',
@@ -306,7 +310,7 @@ var SyncXMLPanel= function(syncItem){
         id:'combo',
         mode: 'local',
         triggerAction: 'all',
-        emptyText:'Select a filename...',
+        emptyText:'Select a remote data...',
         selectOnFocus:true,
         listeners:{
         	'select': function(combo,record,index){
@@ -332,20 +336,20 @@ var SyncXMLPanel= function(syncItem){
 	   		Ext.QuickTips.init();
 			
 			buttonPanel = new Ext.Panel({
-						bodyStyle:'padding:5px 5px 0',
+			bodyStyle:'padding:5px 5px 0',
 	        layout:'form',
 	        columnWidth:0.14,
 	        buttonAlign:'center',
 	        border:false,
 	        height:100,
 	        items:[
-		        new Ext.Button(addAction), new Ext.Button(replaceAction)],					        					        
-		  }); 
+	        new Ext.Button(addAction), new Ext.Button(replaceAction)],					        					        
+			}); 
 	
 			sourcePanel = new Ext.Panel({
 			columnWidth:.43,			            
 	        border:false,
-		        items:[combo, sourceTree],					        					        
+		    items:[sourceTree,combo],					        					        
 		  }); 
 		   
 			syncPanel = new Ext.Panel({
@@ -356,7 +360,7 @@ var SyncXMLPanel= function(syncItem){
 	        closable: true,
 	        border:false,
 		        title: 'Synchronization conflict data',		        
-		        items:[targetTree, buttonPanel, sourcePanel],
+		        items:[	targetTree, buttonPanel, sourcePanel],
 		        tbar: [
 		            saveAction
 		        ]					        					        

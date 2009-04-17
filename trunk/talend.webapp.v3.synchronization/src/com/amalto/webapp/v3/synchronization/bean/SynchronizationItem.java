@@ -38,7 +38,8 @@ public class SynchronizationItem {
     private String resolvedProjection = null;
     private HashMap<String, SynchronizationItemRemoteInstance> remoteIntances = new HashMap<String, SynchronizationItemRemoteInstance>();
     
-    //retrive the following
+   
+    //retrive data  to web
     private String itemPK;
     String[] remoteItemNames;
     TreeNode[] remoteNodes;
@@ -60,18 +61,15 @@ public class SynchronizationItem {
 	}
 
 	public TreeNode getNode() {
-		TreeNode n=new TreeNode();
-		try {
-			n=n.deserialize(this.getResolvedProjection());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return n;
+		return this.node;
+	}
+	
+
+    public void setNode(TreeNode node) {
+		this.node = node;
 	}
 
-
-    public String getItemPK() {
+	public String getItemPK() {
 		return itemPOJOPK.getUniqueID();
 	}   
 
@@ -79,8 +77,6 @@ public class SynchronizationItem {
 	public String[] getRemoteItemNames() {
 		return remoteIntances.keySet().toArray(new String[remoteIntances.keySet().size()]);
 	}
-
-
 	/** For marshaling */
     public SynchronizationItem() {}
     
