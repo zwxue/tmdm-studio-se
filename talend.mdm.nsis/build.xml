@@ -32,7 +32,7 @@
    		</copy>
 		
 		<!-- build -->
-		<antcall target="windows.nsis"/>
+		<antcall target="make.nsis"/>
 		
 		<!-- final -->
 		<copy todir=".">
@@ -43,7 +43,7 @@
 		<antcall target="clean"/>
 	</target>
 	
-	<target name="windows.nsis">
+	<target name="make.nsis">
    		<copy todir="${tmp.dir}">
    			<fileset dir="src/scripts">
    				<include name="openMDM_installer.nsi"/>
@@ -54,9 +54,9 @@
    				<include name="mdm_uninstaller.ico"/>
    			</fileset>
    		</copy>
-		<!-- run makensi -->
+		<!-- run make nsis -->
 		<exec executable="/opt/local/var/macports/software/nsis/2.39_0/nsis-2.39/bin/makensis">
-			<arg value="-V4"/>
+			<arg value="-v4"/>
 			<arg value="${tmp.dir}/openMDM_installer.nsi"/>
 		</exec>
 	</target>
