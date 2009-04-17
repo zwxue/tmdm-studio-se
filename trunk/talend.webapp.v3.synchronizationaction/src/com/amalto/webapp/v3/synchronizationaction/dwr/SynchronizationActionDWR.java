@@ -1,8 +1,9 @@
 package com.amalto.webapp.v3.synchronizationaction.dwr;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+
+import org.apache.log4j.Logger;
+
 
 import com.amalto.webapp.core.util.Util;
 import com.amalto.webapp.util.webservices.WSGetSynchronizationPlanPKs;
@@ -16,7 +17,7 @@ import com.amalto.webapp.v3.synchronizationaction.bean.SyncStatus;
 
 
 public class SynchronizationActionDWR {
-	
+	private Logger logger=org.apache.log4j.Logger.getLogger(this.getClass());
 	
 	public SynchronizationActionDWR() {
 		super();
@@ -24,17 +25,15 @@ public class SynchronizationActionDWR {
 	
 	public String[] getSyncNames(SyncInfo info)throws Exception{
 		try{
-
 			WSSynchronizationPlanPKArray array
 				= Util.getPort(info.getServerURL(),info.getUsername(),info.getPassword(),Util._FORCE_WEB_SERVICE_).getSynchronizationPlanPKs(new WSGetSynchronizationPlanPKs(".*"));
-			System.out.println("getSyncNames() url:"+info.getServerURL());
 			WSSynchronizationPlanPK[] pks=array.getWsSynchronizationPlanPK();
-			System.out.println("getSyncNames() pks:"+pks.length);
+			logger.debug("pks:"+pks.length);
 			String[] syncNames=new String[pks.length];
 			for(int i=0; i<pks.length; i++){
 				syncNames[i]=pks[i].getPk();
 			}
-			System.out.println("getSyncNames() syncNames:"+Arrays.asList(syncNames));
+			logger.debug("getSyncNames() syncNames:"+Arrays.asList(syncNames));
 			return syncNames;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -45,7 +44,6 @@ public class SynchronizationActionDWR {
 	
 	public void startFull(SyncInfo info)throws Exception {
 		try {
-			System.out.println("StartFull....");
 			Util.getPort(info.getServerURL(),info.getUsername(),info.getPassword(),Util._FORCE_WEB_SERVICE_).synchronizationPlanAction(new WSSynchronizationPlanAction(
                 	new WSSynchronizationPlanPK(info.getSyncName()),
                 	WSSynchronizationPlanActionCode.START_FULL

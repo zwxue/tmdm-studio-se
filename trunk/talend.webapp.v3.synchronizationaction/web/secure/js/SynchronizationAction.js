@@ -46,7 +46,7 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 
 	function updateStatus(syncStatus){
 		if(syncStatus){
-			synccode=syncStatus.value;
+			synccode=syncStatus;
 			Ext.getCmp('status').getEl().update('[' + syncStatus.value + '] ' + syncStatus.message);
 			if('RUNNING' == syncStatus.value || 'SCHEDULED' == syncStatus.value){
 	    		Ext.getCmp('startFullButton').disable();
@@ -73,114 +73,125 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 	
 	function refreshStatus(syncInfo){
 		var timer=setInterval(function(){
-			SynchronizationActionInterface.getStatus(syncInfo,updateStatus);
-			if(!('RUNNING' == synccode || 'SCHEDULED' == synccode)){
-				clearInterval(timer);
-			}
-		},2000);		
+			SynchronizationActionInterface.getStatus(syncInfo,function(syncStatus){
+				updateStatus(syncStatus);
+			});
+			if(synccode){
+				if(!('RUNNING' == synccode.value || 'SCHEDULED' == synccode.value)){
+					clearInterval(timer);
+					updateStatus(synccode);
+				}
+			}			
+		},1000);		
 	};
 
 	function show() {
 		Ext.QuickTips.init();
 
 		var topPanel = new Ext.form.FormPanel(
-				{
-					region : 'center',
-					border : false,
-					bodyStyle : "padding: 8px; background-color: transparent;",
-					labelAlign : "left",
-					labelWidth : 150,
-					autoScroll : true,
-					defaultType : "textfield",
-					buttonAlign : 'left',
-					items : [ new Ext.form.FieldSet( {
-						title : 'Remote system information',
-						autoHeight : true,
-						defaultType : 'textfield',
-						items : [ {
-							fieldLabel : 'Server URL',							
-							selectOnFocus:true,
-							allowBlank:false,
-							hideTrigger:true,
-							id : 'serverURL',
-							text:['http://localhost:8080/xtentis/XtentisPort','b','c'],
-							width : 300
-						}, {
-							fieldLabel : 'UserName',
-							id : 'username',
-							allowBlank:false,
-							width : 300
-						}, {
-							fieldLabel : 'Password',
-							id : 'password',
-							allowBlank:false,
-							inputType:'password',
-							width : 300,
-					        listeners:{
-					        	'blur': function(){										
-									initSyncNames();
-					    		}
-							}
-						}]
-					}),
-					new Ext.Panel({
-							width : 300,
-							border:false,
-							html:'<div> Synchronization Name:    '+'<select id="syncName" ><option value="Select a SyncName..."></option></select></div>' 
-						}) 
-					
-					, {
-						id : 'status',
-						xtype : 'box',
-						autoEl : {
-							cn : ''
-						}
-					} ],
-					buttons : [ 							
-							{	
-								xtype:'button',
-								id:'startFullButton',
-								text : '<b>Start Full</b>',
-								handler : function() {
-									var syncInfo=getSyncInfo();
-									if(syncInfo)
-									SynchronizationActionInterface.startFull(refreshStatus(syncInfo),syncInfo);
-								},
-								tooltip : 'Start synchronization'
-							},
-							{	xtype:'button',
-								id:'startDifferentButton',
-								text : '<b>Start Different</b>',
-								handler : function() {
-									var syncInfo=getSyncInfo();
-									if(syncInfo)
-									SynchronizationActionInterface.startDifferent(refreshStatus(syncInfo),syncInfo);
-								},
-								tooltip : 'Start Different synchronization'
-							},
-							{	xtype:'button',
-								id:'stopButton',
-								text : '<b>Stop</b>',
-								handler : function() {
-									var syncInfo=getSyncInfo();
-									if(syncInfo)
-									SynchronizationActionInterface.stop(refreshStatus(syncInfo),syncInfo);
-								},
-								tooltip : 'Stop synchronization'
-							},
-							{	xtype:'button',
-								id:'resetButton',
-								text : '<b>Reset</b>',
-								handler : function() {
-									var syncInfo=getSyncInfo();
-									if(syncInfo)
-									SynchronizationActionInterface.reset(refreshStatus(syncInfo),syncInfo);
-								},
-								tooltip : 'Reset synchronization'
-							},
-
-							]
-				});
+		{
+			region : 'center',
+			border : false,
+			bodyStyle : "padding: 8px; background-color: transparent;",
+			labelAlign : "left",
+			labelWidth : 150,
+			autoScroll : true,
+			defaultType : "textfield",
+			buttonAlign : 'left',
+			items : [ new Ext.form.FieldSet( {
+				title : 'Remote system information',
+				autoHeight : true,
+				defaultType : 'textfield',
+				items : [ {
+					fieldLabel : 'Server URL',							
+					selectOnFocus:true,
+					allowBlank:false,
+					hideTrigger:true,
+					id : 'serverURL',
+					text:['http://localhost:8080/xtentis/XtentisPort','b','c'],
+					width : 300
+				}, {
+					fieldLabel : 'UserName',
+					id : 'username',
+					allowBlank:false,
+					width : 300
+				}, {
+					fieldLabel : 'Password',
+					id : 'password',
+					allowBlank:false,
+					inputType:'password',
+					width : 300,
+			        listeners:{
+			        	'blur': function(){										
+							initSyncNames();
+			    		}
+					}
+				}]
+			}),
+			new Ext.Panel({
+					width : 300,
+					border:false,
+					html:'<div> Synchronization Name:    '+'<select id="syncName" ><option value="Select a SyncName..."></option></select></div>' 
+				}) 
+			
+			, {
+				id : 'status',
+				xtype : 'box',
+				autoEl : {
+					cn : ''
+				}
+			} ],
+			buttons : [ 							
+					{	
+						xtype:'button',
+						id:'startFullButton',
+						text : '<b>Start Full</b>',
+						handler : function() {
+							var syncInfo=getSyncInfo();
+							if(syncInfo)
+							SynchronizationActionInterface.startFull(refreshStatus(syncInfo),syncInfo);
+						},
+						tooltip : 'Start synchronization'
+					},
+					{	xtype:'button',
+						id:'startDifferentButton',
+						text : '<b>Start Different</b>',
+						handler : function() {
+							var syncInfo=getSyncInfo();
+							if(syncInfo)
+							SynchronizationActionInterface.startDifferent(refreshStatus(syncInfo),syncInfo);
+						},
+						tooltip : 'Start Different synchronization'
+					},
+					{	xtype:'button',
+						id:'stopButton',
+						text : '<b>Stop</b>',
+						disabled:true,
+						handler : function() {
+							var syncInfo=getSyncInfo();
+							if(syncInfo)
+							SynchronizationActionInterface.stop(refreshStatus(syncInfo),syncInfo);
+						},
+						tooltip : 'Stop synchronization'
+					},
+					{	xtype:'button',
+						id:'resetButton',
+						text : '<b>Reset</b>',
+						disabled:true,
+						handler : function() {
+							var syncInfo=getSyncInfo();
+							if(syncInfo)
+							SynchronizationActionInterface.reset(refreshStatus(syncInfo),syncInfo);
+						},
+						tooltip : 'Reset synchronization'
+					}
+					],
+			listeners:{
+				'render':function(){
+					Ext.getCmp('serverURL').focus();
+				}
+			}		
+		});
 
 		 mainPanel = new Ext.Panel( {
 			bodyStyle : 'padding:5px 5px 1',
@@ -198,8 +209,8 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
     	var tabPanel = amalto.core.getTabPanel();
     	if(tabPanel.getItem('synchronizationaction') == undefined){
 			show();			
-
     	}
+    	 //refreshStatus();
 		  tabPanel.add(mainPanel);
 		  mainPanel.show();
 		  //syncPanel.doLayout();
