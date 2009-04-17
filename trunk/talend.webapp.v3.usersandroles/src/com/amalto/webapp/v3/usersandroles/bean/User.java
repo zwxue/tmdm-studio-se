@@ -11,8 +11,8 @@ import java.util.Set;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import com.amalto.core.util.XtentisException;
 import com.amalto.webapp.core.util.Util;
+import com.amalto.webapp.core.util.XtentisWebappException;
 
 
 
@@ -173,14 +173,14 @@ public class User {
 		
 	}
 	
-	public static User parse(String xml) throws XtentisException{
+	public static User parse(String xml) throws XtentisWebappException{
 		User user = new User();
 		parse(xml, user);
 		return user;
 	}
 	
 	
-	public static void parse(String xml, User user) throws XtentisException{
+	public static void parse(String xml, User user) throws XtentisWebappException{
 				
 		try {
 			Element result = Util.parse(xml).getDocumentElement();
@@ -248,7 +248,7 @@ public class User {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new XtentisException("Failed to parse user: " +": "+e.getLocalizedMessage());
+			throw new XtentisWebappException("Failed to parse user: " +": "+e.getLocalizedMessage());
 		}
 		
 	}
