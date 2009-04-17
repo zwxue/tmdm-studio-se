@@ -44,11 +44,8 @@ public class ServerRefreshAction extends Action {
 			else
 				serverRoot = forcedRoot;
 			server = (String)serverRoot.getWsKey();  //we are at server root
-            String[] auth = ((String)serverRoot.getWsObject()).split(":");
-            String username = auth[0];
-            String password = (auth.length == 1) ? "" : auth[1];
 			
-			Job refreshJob = new ServerRefreshJob(server,username,password,serverRoot.getUser().getUniverse()); 
+			Job refreshJob = new ServerRefreshJob(server,serverRoot.getUsername(),serverRoot.getPassword(),serverRoot.getUser().getUniverse()); 
             refreshJob.setPriority(Job.INTERACTIVE);
 			refreshJob.schedule();
             refreshJob.addJobChangeListener(new IJobChangeListener() {

@@ -49,8 +49,8 @@ public class CopyXObjectAction extends Action{
 			WorkbenchClipboard.getWorkbenchClipboard().reset();
 			
 			IStructuredSelection selection = (IStructuredSelection)view.getViewer().getSelection();
-			for (Iterator iter = selection.iterator(); iter.hasNext(); ) {
-				TreeObject xobject = (TreeObject) iter.next();
+			for (Iterator<TreeObject> iter = selection.iterator(); iter.hasNext(); ) {
+				TreeObject xobject = iter.next();
 				
 	            if (!xobject.isXObject()) continue;
 	            

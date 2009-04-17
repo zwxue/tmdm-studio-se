@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TableViewer;
@@ -79,6 +81,7 @@ public class SynchronizationMainPage extends AMainPageV2{
 	protected Button startDifferentialButton;
 	protected Button stopButton;
 	protected Button resetButton;
+	protected Timer timer;
 	
 	protected LabelText remoteSystemNameText;
 	protected LabelText remoteSystemPasswordText;
@@ -163,7 +166,7 @@ public class SynchronizationMainPage extends AMainPageV2{
         				ex.getLocalizedMessage()
         			);
                 }
-        		refreshStatus();
+        		startRefreshTimer();
         	}
         });
 		//differential synchro
@@ -198,7 +201,7 @@ public class SynchronizationMainPage extends AMainPageV2{
         				ex.getLocalizedMessage()
         			);
                 }
-        		refreshStatus();
+                startRefreshTimer();
         	}
         });
 		//stop synchro
@@ -525,6 +528,12 @@ public class SynchronizationMainPage extends AMainPageV2{
 		}    	
 	}
 	
+	@Override
+	public void dispose() {
+		stopRefreshTimer();
+	    super.dispose();
+	}
+	
 	protected void refreshStatus() {
 		
 		WSSynchronizationPlan ws = (WSSynchronizationPlan) (getXObject().getWsObject());
@@ -555,11 +564,41 @@ public class SynchronizationMainPage extends AMainPageV2{
     		stopButton.setEnabled(false);
     		resetButton.setEnabled(true);
     	} else {
+    		stopRefreshTimer();
     		startFullButton.setEnabled(true);
     		startDifferentialButton.setEnabled(true);
     		stopButton.setEnabled(false);
     		resetButton.setEnabled(false);
     	}
+	}
+	
+	protected void startRefreshTimer() {
+		if (timer == null) {
+    		timer = new Timer("Synchronization Plan refresh timer", true);
+    		timer.schedule(
+    			new TimerTask() {
+        			@Override
+        			public void run() {
+        				getSite().getShell().getDisplay().asyncExec(
+							new Runnable() {
+								public void run() {
+									refreshStatus();
+								}
+							}
+						);
+        			}
+        		}, 
+    			0, 
+    			2000
+    		);
+		}
+	}
+	
+	protected void stopRefreshTimer() {
+		if (timer != null) {
+			timer.cancel();
+			timer = null;
+		}
 	}
 	
 	protected void commit() {
