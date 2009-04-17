@@ -8,13 +8,7 @@ loadResource("/SynchronizationPlan/secure/js/XmlTreeLoader.js", "" );
 var SyncXMLPanel= function(syncItem){
 	this.syncItem=syncItem;
 	
-	var Sync_dir='/SynchronizationPlan/secure/data/';
-	Ext.app.OrderLoader = Ext.extend(Ext.ux.XmlTreeLoader, {
-	    processAttributes : function(attr,node){				
-		  	attr.text = attr.tagName;	  
-	    }
-	});
-	
+
 	var remoteNames=[];
 	var remoteItems=function(){
 		var ret=[];
@@ -36,12 +30,12 @@ var SyncXMLPanel= function(syncItem){
 		}
 	};
 	function createTreeNode(node){
-		var treeNode= new Ext.tree.TreeNode({'text':node.text,'leaf':node.leaf});		
+		var treeNode= new Ext.tree.TreeNode({'text':node.text,'leaf':node.leaf,'expanded':true});		
 		if(node.childNodes){
 			for(var i=0; i<node.childNodes.length; i++){
 				var childNode=node.childNodes[i];
 				if(childNode.leaf == true){					
-					var child= new Ext.tree.TreeNode({'text':childNode.text,'leaf':childNode.leaf});
+					var child= new Ext.tree.TreeNode({'text':childNode.text,'leaf':childNode.leaf,'expanded':true});
 					treeNode.appendChild(child);
 				}else{
 					treeNode.appendChild(createTreeNode(childNode));
@@ -242,12 +236,12 @@ var SyncXMLPanel= function(syncItem){
     	}
     };
     var saveAction = new Ext.Action({
-        text: '<b>Save</b>',
+        text: '<b>Resolve</b>',
         handler: function(){
             saveSyncPlan();
         }
     }); 
-    var targetRoot=new Ext.tree.TreeNode({text:''});    
+    var targetRoot=new Ext.tree.TreeNode({text:'','expanded':true});    
     targetRoot.appendChild(createTreeNode(syncItem.node));        
     // target tree
     var targetTree = new Tree.TreePanel({              
@@ -261,9 +255,6 @@ var SyncXMLPanel= function(syncItem){
         rootVisible: false,
         root: targetRoot,
 
- //       loader: new Ext.app.OrderLoader({
- //       	dataUrl:Sync_dir+'targetOrder.xml'
- //       }),
         enableDD:true,
         containerScroll: true,
         dropConfig: {appendOnly:true},
@@ -279,7 +270,7 @@ var SyncXMLPanel= function(syncItem){
     
     var targetSelectNode;
     var sourceSelectNode;
-    var sourceRoot=new Ext.tree.TreeNode({text:''});
+    var sourceRoot=new Ext.tree.TreeNode({text:'','expanded':true});
     sourceRoot.appendChild(createTreeNode(syncItem.remoteNodes[0]));
     // source tree
     var sourceTree = new Tree.TreePanel({                       
@@ -291,11 +282,7 @@ var SyncXMLPanel= function(syncItem){
         autoScroll:true,
         rootVisible: false,
 	    root: sourceRoot,
-        
-        // Our custom TreeLoader:
- //       loader: new Ext.app.OrderLoader({
- //           dataUrl:Sync_dir+'sourceOrder.xml'
- //       }),
+
         containerScroll: true,
         enableDD:true,
         dropConfig: {appendOnly:true},
@@ -323,13 +310,6 @@ var SyncXMLPanel= function(syncItem){
         selectOnFocus:true,
         listeners:{
         	'select': function(combo,record,index){
-        		//reload the source tree
-        		//var remoteName=combo.getValue().trim();
-        		//if(remoteName.length>0){
-				   //sourceTree.loader.dataUrl=Sync_dir+remoteName;		
-					//sourceTree.getRootNode().reload();
-        			
-				//}
         		setSourceNode(index);
     		}
         }
@@ -375,15 +355,12 @@ var SyncXMLPanel= function(syncItem){
 	        deferredRender: false,
 	        closable: true,
 	        border:false,
-		        title: 'Synchronization Plan',		        
+		        title: 'Synchronization conflict data',		        
 		        items:[targetTree, buttonPanel, sourcePanel],
 		        tbar: [
 		            saveAction
 		        ]					        					        
-		  }); 
-		  //targetTree.getRootNode().expand();
-		  //sourceTree.getRootNode().expand();  
-		  
+		  }); 	  
     	//}
 		  tabPanel.add(syncPanel);
 		  syncPanel.show();

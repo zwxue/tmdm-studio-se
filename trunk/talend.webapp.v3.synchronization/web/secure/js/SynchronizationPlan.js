@@ -65,7 +65,7 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
    	   	    }); 
 		store.load({params:{start:0, limit:22}, arg:[]});
 		store.on('load', function(){
-	    alert( store.getTotalCount()  )
+	    
 		});  
     };
     return {
