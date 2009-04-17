@@ -52,9 +52,9 @@ import com.amalto.core.util.XtentisException;
  */
 public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  implements SessionBean{
   
-//	private static final String PARAMETERS = "com.amalto.core.plugin.TISCall.parameters";
 	private static final String CONTENT_TYPE = "com.amalto.core.plugin.TISCall.content.type";
 	private static final String PORT = "com.amalto.core.plugin.TISCall.port";
+	private static final String TIS_VARIABLE_NAME = "com.amalto.core.plugin.TISCall.tis.variable.name";
 	
 	private static final String INPUT_TEXT = "text";
 
@@ -193,6 +193,7 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 			
 			context.put(CONTENT_TYPE, parameters.getContentType());
 			context.put(PORT, port);
+			context.put(TIS_VARIABLE_NAME, parameters.getTisVariableName());
 			
 		} catch (XtentisException xe) {
 			throw (xe);
@@ -214,9 +215,9 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
      */
 	public void execute(TransformerPluginContext context) throws XtentisException {
 		
-//		CompiledParameters parameters= (CompiledParameters)context.get(PARAMETERS);
 		String contentType = (String)context.get(CONTENT_TYPE);
 		TypedContent textTC = (TypedContent)context.get(INPUT_TEXT);
+		String tisVariableName = (String)context.get(TIS_VARIABLE_NAME);
 		
 		try {
 					
@@ -228,18 +229,23 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 
 			//revover the port
 			WSxml port = (WSxml) context.get(PORT);
-			
-			
-			Args args = new Args();
-			args.getItem().add(text);
+
+			//Build call parameters
+			String param = "--context_param "+tisVariableName+"="+text;
+			Args args = new Args();			
+			args.getItem().add(param);
 			String result = port.runJob(args).getItem().get(0).getItem().get(0);
 			
-			org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute() TIS CALL  result \n"+text);
+			org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute() TIS CALL  result \n"+result);
 			//save result to context
-			context.put(OUTPUT_TEXT, new TypedContent(
-				result.getBytes("utf-8"),
-				contentType
-			));
+			if (result != null) { 
+    			context.put(OUTPUT_TEXT, new TypedContent(
+    				result.getBytes("utf-8"),
+    				contentType
+    			));
+			} else {
+				context.put(OUTPUT_TEXT,null);
+			}
 
 			//call the callback content is ready
 			context.getPluginCallBack().contentIsReady(context);				
@@ -294,6 +300,7 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 		"\n" +
 		"Parameters\n" +
 		"	url [mandatory]: the webservice port URL to the TIS Server"+"\n"+
+		"	tisVariableName [mandatory]: the name of the input variable on the TIS Server"+"\n"+
 		"	username [optional]: the username to use for the call"+"\n"+
 		"	password [optional]: the password to  use for the call" +"\n"+
 		"	contentType [optional]: the contentType of the returned data. Defaults to 'text/xml'" +"\n"+
@@ -302,6 +309,7 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 		"Example" +"\n"+
 		"	<configuration>" +"\n"+
 		"		<url>http://server:port/TISService/TISPort</url>" +"\n"+
+		"		<tisVariableName>xmlInput</tisVariableName>" +"\n"+		
 		"		<username>john</username>" +"\n"+
 		"		<password>doe</password>" +"\n"+
 		"	</configuration>"+"\n"+
@@ -383,6 +391,14 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
     			throw new XtentisException(err);
     		}
     		compiled.setUrl(url);
+    		
+    		String tisVariableName = Util.getFirstTextNode(params, "tisVariableName");
+    		if (tisVariableName==null) {
+    			String err = "The TIS variable name parameter of the TIS Call Transformer Plugin cannot be empty";
+    			org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
+    			throw new XtentisException(err);
+    		}
+    		compiled.setTisVariableName(tisVariableName);
     		
     		//content Type - defaults to "text/plain; charset=utf-8"
     		String contentType = Util.getFirstTextNode(params, "contentType");

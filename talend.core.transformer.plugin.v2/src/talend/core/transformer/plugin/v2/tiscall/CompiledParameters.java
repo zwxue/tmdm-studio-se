@@ -12,6 +12,7 @@ import sun.misc.BASE64Encoder;
 
 public class CompiledParameters implements Serializable {
 	String url;
+	String tisVariableName;
 	String username;
 	String password;
 	String contentType = "text/xml; charset=utf-8";
@@ -25,6 +26,14 @@ public class CompiledParameters implements Serializable {
 
 	public void setUrl(String url) {
     	this.url = url;
+    }
+	
+	public String getTisVariableName() {
+    	return tisVariableName;
+    }
+
+	public void setTisVariableName(String tisVariableName) {
+    	this.tisVariableName = tisVariableName;
     }
 
 	public String getUsername() {
