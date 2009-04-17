@@ -138,7 +138,7 @@ public class ComplexTableViewer {
 				combo.setText(column.getDefaultValue());
 				column.setControl(combo);
 			} else {
-				int style=SWT.BORDER|SWT.MULTI;
+				int style=SWT.BORDER;
 				if (column.getTextLines()>1) {
 					style = SWT.BORDER|SWT.MULTI|SWT.V_SCROLL|SWT.H_SCROLL;
 				}

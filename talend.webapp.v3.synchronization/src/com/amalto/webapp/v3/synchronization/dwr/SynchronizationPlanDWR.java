@@ -1,8 +1,9 @@
 package com.amalto.webapp.v3.synchronization.dwr;
 
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import com.amalto.webapp.core.bean.ListRange;
 import com.amalto.webapp.core.util.Util;
@@ -17,47 +18,55 @@ import com.amalto.webapp.v3.synchronization.bean.TreeNode;
 
 
 public class SynchronizationPlanDWR {
+	
+	private Logger logger=org.apache.log4j.Logger.getLogger(this.getClass());
+	
 	public SynchronizationPlanDWR() {
 		super();
 	}
 
-
-	public void saveSynchronizationPlan(TreeNode root) throws Exception {
-		
-		String xml= root.serialize();
-		System.out.println(xml);
-		FileWriter fw=new FileWriter("c:\\abc.xml");
-		
-		fw.write(xml);
-		fw.flush();
-		fw.close();
-	}
-	public void saveSyncItem(SynchronizationItem item)throws Exception{
-		try {
-			WSSynchronizationItem wsitem=new WSSynchronizationItem();
+	public boolean saveSyncItem(SynchronizationItem item)throws Exception{
+		logger.debug("saveSyncItem() ");
+		boolean ret=true;
+		try {			
+			//set item'node resolvedXml 
+			String resolvedXml= item.getNode().serialize();
+			logger.debug("resolvedXml-- " +resolvedXml);
+			item.setResolvedProjection(resolvedXml);
+			WSSynchronizationItem wsitem=new WSSynchronizationItem();			
 			wsitem=item.POJO2WS(item);
 			Util.getPort().putSynchronizationItem(new WSPutSynchronizationItem(wsitem));
-			//Util.getPort().getSynchronizationItem(new WSGetSynchronizationItem(new WSSynchronizationItemPK()));
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
+			ret=false;
 			//Matcher m = Pattern.compile("(.*Exception:)(.+)",Pattern.DOTALL).matcher(e.getLocalizedMessage());
 			//if (m.matches()) throw new Exception(m.group(2));
 			throw new Exception(e.getClass().getName() + ": "
-					+ e.getLocalizedMessage());
+					+ e.getLocalizedMessage());			
+		}finally{
+			return ret;
 		}		
 	}
 	public ListRange getSyncItems()throws Exception{
-		org.apache.log4j.Logger.getLogger(this.getClass()).info("getSyncItems() ");
+		logger.debug("getSyncItems() ");
 		try {
 			List<SynchronizationItem> list=new ArrayList<SynchronizationItem>();	
 			
 			WSSynchronizationItemPKArray pks=Util.getPort().getSynchronizationItemPKs(new WSGetSynchronizationItemPKs());
-			org.apache.log4j.Logger.getLogger(this.getClass()).info("pks() " + pks.getWsSynchronizationItemPK().length);
+			logger.debug("pks() " + pks.getWsSynchronizationItemPK().length);
 			WSSynchronizationItemPK[] items= pks.getWsSynchronizationItemPK();
 			for(WSSynchronizationItemPK pk: items){
 				WSSynchronizationItem item=Util.getPort().getSynchronizationItem(new WSGetSynchronizationItem(pk));
+				if(item.getResolvedProjection() ==null ){
+					continue;
+				}
 				SynchronizationItem syncItem=new SynchronizationItem();
-				syncItem=syncItem.WS2POJO(item);				
+				syncItem=syncItem.WS2POJO(item);
+				TreeNode node=new TreeNode();
+				node=node.deserialize(item.getResolvedProjection());
+				logger.debug("item.getResolvedProjection()-- " +item.getResolvedProjection());
+				syncItem.setNode(node);
 				list.add(syncItem);
 			}	
 

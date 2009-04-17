@@ -21,7 +21,7 @@ public class LabelText {
        label.setLayoutData(
                 new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
         );
-        text = toolkit.createText(parent, "",SWT.BORDER|SWT.MULTI);
+        text = toolkit.createText(parent, "",SWT.BORDER);
         text.setLayoutData(    
                 new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
         );		
