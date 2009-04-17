@@ -241,6 +241,10 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/documents.gif").createImage();			
 		else if (object.getType() == TreeObject.SUBSCRIPTION_ENGINE)
 			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/routing_rule.gif").createImage();
+		else if (object.getType() == TreeObject.SYNCHRONIZATIONPLAN)
+			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/catchuprelease_rls.gif").createImage();
+		else if (object.getType() == TreeObject.UNIVERSE)
+			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/unique.gif").createImage();
 		
 		return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/error.gif").createImage();
     }

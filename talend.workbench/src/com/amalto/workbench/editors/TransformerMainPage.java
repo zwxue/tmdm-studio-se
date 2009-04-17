@@ -150,7 +150,7 @@ public class TransformerMainPage extends AMainPageV2 {
 	private XtentisPort    port;
 	private TransformerStepWidget stepWidget;
 	private Button disabledButton;
-	private WSTransformerV2 transformer;
+	protected WSTransformerV2 transformer;
 	private Composite specsComposite;
 	
 	java.util.List<Line> cacheList; //remember the setup transformerinputvariablesdialog's input list
@@ -214,13 +214,14 @@ public class TransformerMainPage extends AMainPageV2 {
 			
 			IRunnableWithProgress progress=new IRunnableWithProgress(){
 				
+				WSBackgroundJob job=null;
+				
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 					/******************************************
 					 * Watch the Background Job
 					 ******************************************/
 					try{
 						boolean firstTime = true;
-						WSBackgroundJob job=null;
 						do {							
 							if (firstTime) {
 								Thread.sleep(1500L);
@@ -242,8 +243,21 @@ public class TransformerMainPage extends AMainPageV2 {
 									|| job.getStatus().equals(BackgroundJobStatusType.SCHEDULED)
 									);
 	
-						if (job.getStatus().equals(BackgroundJobStatusType.STOPPED)) 
+						if (job.getStatus().equals(BackgroundJobStatusType.STOPPED)) {
+							getSite().getShell().getDisplay().syncExec(
+								new Runnable() {
+									public void run() {
+										MessageDialog.openError(
+											TransformerMainPage.this.getEditor().getSite().getShell(), 
+											"ERROR processing '"+transformer.getName()+"'", 
+											job.getMessage()
+										);
+									    
+									}
+								}
+							);
 							throw new XtentisException("The job was stopped. "+job.getMessage());
+						}
 						
 						monitor.worked(1);			
 						monitor.done();
