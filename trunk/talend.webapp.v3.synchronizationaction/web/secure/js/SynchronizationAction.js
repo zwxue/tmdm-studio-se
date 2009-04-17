@@ -21,10 +21,10 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 		}
 		
 		var syncInfo = {
-			serverURL:$('serverURL').value,
-			username:$('username').value,
-			password:$('password').value,
-			syncName:$('syncName').value
+			serverURL:$('serverURL').value.trim(),
+			username:$('username').value.trim(),
+			password:$('password').value.trim(),
+			syncName:$('syncName').value.trim()
 		};
 		return syncInfo;
 	}
@@ -32,30 +32,34 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 	function initSyncNames(){
 		var syncinfo=getSyncInfo();
 		if(syncinfo){
-			var syncnames=SynchronizationActionInterface.getSyncNames(syncinfo);
-			var tmp=[SELECT_SYNCHRONIZATION];
-			DWRUtil.removeAllOptions("syncName");
-			DWRUtil.addOptions("syncName",tmp);
-			if(!syncnames)return;
-			DWRUtil.addOptions("syncName",syncnames);			
+			
+			SynchronizationActionInterface.getSyncNames(syncinfo,function(syncs){
+				var syncnames=syncs;
+				var tmp=[SELECT_SYNCHRONIZATION];
+				DWRUtil.removeAllOptions("syncName");
+				DWRUtil.addOptions("syncName",tmp);
+				if(!syncnames)return;
+				DWRUtil.addOptions("syncName",syncnames);	
+			});		
 		}
 	};
-	
-	function refreshStatus(syncInfo){
-		var syncStatus=SynchronizationActionInterface.getStatus(syncInfo);
+
+	function updateStatus(syncStatus){
 		if(syncStatus){
-			Ext.getCmp('status').getEl().update('[' + syncStatus.getValue() + '] ' + syncStatus.getMessage());
-			if('RUNNING' == syncStatus.getValue() || 'SCHEDULED' == syncStatus.getValue()){
+			synccode=syncStatus.value;
+			Ext.getCmp('status').getEl().update('[' + syncStatus.value + '] ' + syncStatus.message);
+			if('RUNNING' == syncStatus.value || 'SCHEDULED' == syncStatus.value){
 	    		Ext.getCmp('startFullButton').disable();
 	    		Ext.getCmp('startDifferentButton').disable();
 	    		Ext.getCmp('stopButton').enable();
 	    		Ext.getCmp('resetButton').disable();
 			}
-			else if ("STOPPING" == syncStatus.getValue()) {
+			else if ("STOPPING" == syncStatus.value) {
 	    		Ext.getCmp('startFullButton').disable();
 	    		Ext.getCmp('startDifferentButton').disable();
 	    		Ext.getCmp('stopButton').disable();
 	    		Ext.getCmp('resetButton').enable();
+	    		
 	    	} else {
 	    		Ext.getCmp('startFullButton').enable();
 	    		Ext.getCmp('startDifferentButton').enable();
@@ -63,6 +67,17 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 	    		Ext.getCmp('resetButton').disable();
 	    	}
 		}
+	};
+
+	var synccode;
+	
+	function refreshStatus(syncInfo){
+		var timer=setInterval(function(){
+			SynchronizationActionInterface.getStatus(syncInfo,updateStatus);
+			if(!('RUNNING' == synccode || 'SCHEDULED' == synccode)){
+				clearInterval(timer);
+			}
+		},2000);		
 	};
 
 	function show() {
@@ -88,6 +103,7 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 							allowBlank:false,
 							hideTrigger:true,
 							id : 'serverURL',
+							text:['http://localhost:8080/xtentis/XtentisPort','b','c'],
 							width : 300
 						}, {
 							fieldLabel : 'UserName',
@@ -110,14 +126,14 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 					new Ext.Panel({
 							width : 300,
 							border:false,
-							html:'<div> Synchronization Name:    '+'<select id="syncName" ><option value="Select a SyncPlan"></option></select></div>' 
+							html:'<div> Synchronization Name:    '+'<select id="syncName" ><option value="Select a SyncName..."></option></select></div>' 
 						}) 
 					
 					, {
 						id : 'status',
 						xtype : 'box',
 						autoEl : {
-							cn : 'Status...'
+							cn : ''
 						}
 					} ],
 					buttons : [ 							

@@ -1,6 +1,7 @@
 package com.amalto.webapp.v3.synchronizationaction.dwr;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.amalto.webapp.core.util.Util;
@@ -23,16 +24,18 @@ public class SynchronizationActionDWR {
 	
 	public String[] getSyncNames(SyncInfo info)throws Exception{
 		try{
-			List<String> syncNames=new ArrayList<String>();
+
 			WSSynchronizationPlanPKArray array
 				= Util.getPort(info.getServerURL(),info.getUsername(),info.getPassword(),Util._FORCE_WEB_SERVICE_).getSynchronizationPlanPKs(new WSGetSynchronizationPlanPKs(".*"));
 			System.out.println("getSyncNames() url:"+info.getServerURL());
 			WSSynchronizationPlanPK[] pks=array.getWsSynchronizationPlanPK();
 			System.out.println("getSyncNames() pks:"+pks.length);
-			for(WSSynchronizationPlanPK pk:pks){
-				syncNames.add(pk.getPk());
+			String[] syncNames=new String[pks.length];
+			for(int i=0; i<pks.length; i++){
+				syncNames[i]=pks[i].getPk();
 			}
-			return syncNames.toArray(new String[syncNames.size()]);
+			System.out.println("getSyncNames() syncNames:"+Arrays.asList(syncNames));
+			return syncNames;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception(e.getClass().getName() + ": "
