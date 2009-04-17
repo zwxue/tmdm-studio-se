@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import org.w3c.dom.Element;
 
-import com.amalto.core.util.XtentisException;
 import com.amalto.webapp.core.util.Util;
+import com.amalto.webapp.core.util.XtentisWebappException;
 
 
 public class Role {
@@ -120,14 +120,14 @@ public class Role {
 		
 	}
 	
-	public static Role parse(String xml) throws XtentisException{
+	public static Role parse(String xml) throws XtentisWebappException{
 		Role role = new Role();
 		parse(xml, role);
 		return role;
 	}
 	
 	
-	public static void parse(String xml, Role role) throws XtentisException{
+	public static void parse(String xml, Role role) throws XtentisWebappException{
 				
 		try {
 			Element result = Util.parse(xml).getDocumentElement();
@@ -138,7 +138,7 @@ public class Role {
 						
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new XtentisException("Failed to parse role: " +": "+e.getLocalizedMessage());
+			throw new XtentisWebappException("Failed to parse role: " +": "+e.getLocalizedMessage());
 		}
 		
 	}
@@ -153,7 +153,7 @@ public class Role {
 			 String xml = in.readUTF();
 			 if ((xml == null) || ("".equals(xml))) return;
 			 parse(xml, this);
-		 } catch (XtentisException x) {throw new IOException(x.getLocalizedMessage());}
+		 } catch (XtentisWebappException x) {throw new IOException(x.getLocalizedMessage());}
 	 }
 	
 	
