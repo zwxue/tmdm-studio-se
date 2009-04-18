@@ -31,10 +31,12 @@ public class SynchronizationPlanDWR {
 		try {			
 			//set item'node resolvedXml 
 			String resolvedXml= item.getNode().serialize();
-			logger.debug("resolvedXml-- " +resolvedXml);
+			item.setStatus(SynchronizationItem.STATUS_RESOLVED);
+			logger.debug("resolvedXml-- " +resolvedXml + " status-"+ item.getStatus());
 			item.setResolvedProjection(resolvedXml);
 			WSSynchronizationItem wsitem=new WSSynchronizationItem();			
 			wsitem=item.POJO2WS(item);
+			logger.debug(" wsitem.status-"+ wsitem.getStatus().getValue());
 			Util.getPort().putSynchronizationItem(new WSPutSynchronizationItem(wsitem));
 			return true;
 		} catch (Exception e) {

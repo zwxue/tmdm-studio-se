@@ -3,7 +3,7 @@
  */
 //
 // Extend the XmlTreeLoader to set some custom TreeNode attributes specific to our application:
-//loadResource("/SynchronizationPlan/secure/js/XmlTreeLoader.js", "" );
+
 
 var SyncXMLPanel= function(syncItem,store){
 	var syncPlanStore=store;
@@ -204,7 +204,7 @@ var SyncXMLPanel= function(syncItem,store){
     	SynchronizationPlanInterface.saveSyncItem(function(isSaveOk){
     		Ext.MessageBox.hide();
     		if(isSaveOk == true){
-    			syncItem.status='RESOLVED';   	    	
+    			//syncItem.status='RESOLVED';   	    	
     	        Ext.MessageBox.alert('Status', 'Changes saved successfully.');   			
     			var tabPanel = amalto.core.getTabPanel();
     			tabPanel.remove(syncPanel);
@@ -238,6 +238,7 @@ var SyncXMLPanel= function(syncItem,store){
         	sourceSelectNode=targetSelectNode.appendChild(sourceSelectNode);
         	targetSelectNode.expand();
         	sourceSelectNode.select();
+        	setSourceNode(currentIndex);
         }    		
     	}
     };
@@ -260,8 +261,7 @@ var SyncXMLPanel= function(syncItem,store){
         autoScroll:true,
         rootVisible: false,
         root: targetRoot,
-
-        enableDD:true,
+        enableDD:false,
         containerScroll: true,
         dropConfig: {appendOnly:true},
         buttons:[new Ext.Button(leftAction),new Ext.Button(rightAction),new Ext.Button(upAction), new Ext.Button(downAction), new Ext.Button(deleteAction)],
@@ -283,13 +283,13 @@ var SyncXMLPanel= function(syncItem,store){
         title:'Source',
         bodyStyle:'padding:5px 5px 1',
         border:true,
-        height:400,
+        height:370,
         animate:true,
         autoScroll:true,
         rootVisible: false,
 	    root: sourceRoot,
         containerScroll: true,
-        enableDD:true,
+        enableDD:false,
         dropConfig: {appendOnly:true},
         listeners: {
             'render': function(tp){
