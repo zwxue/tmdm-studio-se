@@ -1,8 +1,10 @@
 amalto.namespace("amalto.SynchronizationAction");
 
+loadResource("/SynchronizationAction/secure/js/Cookies.js", "" );
+
 //contectid.applicaionid
 amalto.SynchronizationAction.SynchronizationAction = function() {
-	var SELECT_SYNCHRONIZATION='Select a SyncPlan';
+	var SELECT_SYNCHRONIZATION='Select a Synchronization Name';
 	function getSyncInfo(){
 		if ($('serverURL').value=='') {
 			//alert ('Server URL');
@@ -68,12 +70,19 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 	    	}
 		}
 	};
-
+	function keepInCookies(){
+		Cookies.set('serverURL',$('serverURL').value.trim());
+		Cookies.set('username',$('username').value.trim());
+	};
 	var synccode;
 	
 	function refreshStatus(syncInfo){
 		var timer=setInterval(function(){
 			SynchronizationActionInterface.getStatus(syncInfo,function(syncStatus){
+				if(syncStatus==null){
+					clearInterval(timer);
+					return;
+				}
 				updateStatus(syncStatus);
 			});
 			if(synccode){
@@ -106,21 +115,23 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 					fieldLabel : 'Server URL',							
 					selectOnFocus:true,
 					allowBlank:false,
-					hideTrigger:true,
 					id : 'serverURL',
-					text:['http://localhost:8080/xtentis/XtentisPort','b','c'],
-					width : 300
+					text:Cookies.get('serverURL'),
+					width : 400
 				}, {
 					fieldLabel : 'UserName',
 					id : 'username',
+					selectOnFocus:true,
 					allowBlank:false,
-					width : 300
+					text:Cookies.get('username'),
+					width : 400
 				}, {
 					fieldLabel : 'Password',
 					id : 'password',
+					selectOnFocus:true,
 					allowBlank:false,
 					inputType:'password',
-					width : 300,
+					width : 400,
 			        listeners:{
 			        	'blur': function(){										
 							initSyncNames();
@@ -129,7 +140,7 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 				}]
 			}),
 			new Ext.Panel({
-					width : 300,
+					width : 400,
 					border:false,
 					html:'<div> Synchronization Name:    '+'<select id="syncName" ><option value="Select a SyncName..."></option></select></div>' 
 				}) 
@@ -148,8 +159,10 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 						text : '<b>Start Full</b>',
 						handler : function() {
 							var syncInfo=getSyncInfo();
-							if(syncInfo)
-							SynchronizationActionInterface.startFull(refreshStatus(syncInfo),syncInfo);
+							if(syncInfo){
+								keepInCookies();
+								SynchronizationActionInterface.startFull(refreshStatus(syncInfo),syncInfo);
+							}
 						},
 						tooltip : 'Start synchronization'
 					},
@@ -158,8 +171,10 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 						text : '<b>Start Different</b>',
 						handler : function() {
 							var syncInfo=getSyncInfo();
-							if(syncInfo)
-							SynchronizationActionInterface.startDifferent(refreshStatus(syncInfo),syncInfo);
+							if(syncInfo){
+								keepInCookies();
+								SynchronizationActionInterface.startDifferent(refreshStatus(syncInfo),syncInfo);
+							}
 						},
 						tooltip : 'Start Different synchronization'
 					},
@@ -188,11 +203,13 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 					],
 			listeners:{
 				'render':function(){
-					Ext.getCmp('serverURL').focus();
+					Ext.getCmp('serverURL').setValue(Cookies.get('serverURL'));
+					Ext.getCmp('username').setValue(Cookies.get('username'));
+					
 				}
 			}		
 		});
-
+		
 		 mainPanel = new Ext.Panel( {
 			bodyStyle : 'padding:5px 5px 1',
 			id:'synchronizationaction',
