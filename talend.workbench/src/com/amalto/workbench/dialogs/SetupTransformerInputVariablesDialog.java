@@ -102,7 +102,7 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
         
         Table table=objectViewer.getViewer().getTable();
               	
-        table.getColumns()[1].setWidth(500);
+        table.getColumns()[2].setWidth(500);
         
 //        GridData gd=(GridData)objectViewer.getTxtLists().get(0).getLayoutData();
 //        gd.minimumHeight=200;

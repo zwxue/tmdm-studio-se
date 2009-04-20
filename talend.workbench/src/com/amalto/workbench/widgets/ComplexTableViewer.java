@@ -122,11 +122,11 @@ public class ComplexTableViewer {
 	        Label label = toolkit.createLabel(mainComposite, column.getName(), SWT.NULL);
 	        if(i==columns.size()-1){
 		        label.setLayoutData(
-		                new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
+		                new GridData(SWT.FILL,SWT.FILL,false,false,2,1)
 		        );			
 	        }else{
 		        label.setLayoutData(
-		                new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+		                new GridData(SWT.FILL,SWT.FILL,false,false,1,1)
 		        );
 	        }
 	        i++;
