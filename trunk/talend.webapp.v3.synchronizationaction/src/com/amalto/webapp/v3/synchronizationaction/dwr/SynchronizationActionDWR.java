@@ -60,7 +60,7 @@ public class SynchronizationActionDWR {
 	public void startDifferent(SyncInfo info)throws Exception {
 		try {
 
-			Util.getPort(info.getServerURL(),info.getUsername(),info.getPassword()).synchronizationPlanAction(new WSSynchronizationPlanAction(
+			Util.getPort(info.getServerURL(),info.getUsername(),info.getPassword(),Util._FORCE_WEB_SERVICE_).synchronizationPlanAction(new WSSynchronizationPlanAction(
                 	new WSSynchronizationPlanPK(info.getSyncName()),
                 	WSSynchronizationPlanActionCode.START_DIFFERENTIAL
                 ));
