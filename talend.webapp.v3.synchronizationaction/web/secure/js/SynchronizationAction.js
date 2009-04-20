@@ -203,8 +203,8 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 					],
 			listeners:{
 				'render':function(){
-					Ext.getCmp('serverURL').setValue(Cookies.get('serverURL'));
-					Ext.getCmp('username').setValue(Cookies.get('username'));
+					if(Cookies.get('serverURL'))Ext.getCmp('serverURL').setValue(Cookies.get('serverURL'));
+					if(Cookies.get('username'))Ext.getCmp('username').setValue(Cookies.get('username'));
 					
 				}
 			}		
