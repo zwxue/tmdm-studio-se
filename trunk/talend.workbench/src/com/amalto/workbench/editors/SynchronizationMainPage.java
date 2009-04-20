@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.editor.FormEditor;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.exolab.castor.xml.Marshaller;
 
@@ -376,7 +377,7 @@ public class SynchronizationMainPage extends AMainPageV2{
         instancesViewer.setInput(syncPlan.getItemsList());
 		
         //Xtentis Objects  Section
-        Composite objecstGroup = this.getNewSectionComposite("Xtentis Objects SynchronizationPlan");
+        Composite objecstGroup = this.getNewSectionComposite("Xtentis Objects SynchronizationPlan",ExpandableComposite.TWISTIE);
         objecstGroup.setLayout(new GridLayout(1,true));
         
         //Get algorithms for objects
