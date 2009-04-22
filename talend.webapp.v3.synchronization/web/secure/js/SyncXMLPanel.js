@@ -3,7 +3,7 @@
  */
 //
 // Extend the XmlTreeLoader to set some custom TreeNode attributes specific to our application:
-
+loadResource("/SynchronizationPlan/secure/css/SynchronizationPlan.css", "" );
 
 var SyncXMLPanel= function(syncItem,store){
 	var syncPlanStore=store;
@@ -31,13 +31,13 @@ var SyncXMLPanel= function(syncItem,store){
 			currentIndex=index;
 		}
 	};
-	function createTreeNode(node){
-		var treeNode= new Ext.tree.TreeNode({'text':node.text,'leaf':node.leaf,'expanded':true});		
+	function createTreeNode(node){	
+		var treeNode= new Ext.tree.TreeNode({'text':node.text,'leaf':node.leaf,'expanded':true,'cls':node.cls,'checked':node.checked});				
 		if(node.childNodes){
 			for(var i=0; i<node.childNodes.length; i++){
-				var childNode=node.childNodes[i];
+				var childNode=node.childNodes[i];				
 				if(childNode.leaf == true){					
-					var child= new Ext.tree.TreeNode({'text':childNode.text,'leaf':childNode.leaf,'expanded':true});
+					var child= new Ext.tree.TreeNode({'text':childNode.text,'leaf':childNode.leaf,'expanded':true,'cls':childNode.cls,'checked':node.checked});
 					treeNode.appendChild(child);
 				}else{
 					treeNode.appendChild(createTreeNode(childNode));
@@ -56,17 +56,17 @@ var SyncXMLPanel= function(syncItem,store){
         text: '<b>Add</b>',        
         handler: function(){
         	if(targetSelectNode && sourceSelectNode){
-					Ext.MessageBox.confirm('Confirm', 'Are you sure you want to <b>Add</b> source tree selected item as child of target tree selected Item ?', addOne); 
+					Ext.MessageBox.confirm('Confirm', 'Are you sure you want to <b>Add</b> remote tree selected item as child of target tree selected Item ?', addOne); 
 			}else{
 		        Ext.MessageBox.show({
 		           title: 'Warning',
-		           msg: 'You must select one item of <b>source</b> tree and <b>target</b> tree!',
+		           msg: 'You must select one item of <b>remote</b> tree and <b>local</b> tree!',
 		           buttons: Ext.MessageBox.OK,			           
 		           icon: Ext.MessageBox.WARNING
 		       });							
 			}
         },
-        tooltip:'<b>Add</b><br/>Add source tree selected item as child of target tree selected item'
+        tooltip:'<b>Add</b><br/>Add remote tree selected item as child of local tree selected item'
         
     });
     var replaceAction = new Ext.Action({
@@ -75,18 +75,18 @@ var SyncXMLPanel= function(syncItem,store){
            if(targetSelectNode && sourceSelectNode){
           	var tParentNode=targetSelectNode.parentNode;
           	if(tParentNode){        	
-           		Ext.MessageBox.confirm('Confirm', 'Are you sure you want to <b>Replace</b> target selected Item with source selected Item ?', replaceOne); 
+           		Ext.MessageBox.confirm('Confirm', 'Are you sure you want to <b>Replace</b> local selected Item with remote selected Item ?', replaceOne); 
            	}
           }else{
 	        Ext.MessageBox.show({
 	           title: 'Warning',
-	           msg: 'You must select one item of source tree and target tree!',
+	           msg: 'You must select one item of remote tree and local tree!',
 	           buttons: Ext.MessageBox.OK,			           
 	           icon: Ext.MessageBox.WARNING
 	       });          	
           }
         },
-        tooltip:'<b>Replace</b><br/>Replace source tree selected item with target tree selected item'
+        tooltip:'<b>Replace</b><br/>Replace remote tree selected item with local tree selected item'
     });    
     var leftAction=new Ext.Action({
         text: '<b><--</b>',
@@ -224,10 +224,14 @@ var SyncXMLPanel= function(syncItem,store){
     	if(btn == 'yes'){
            if(targetSelectNode && sourceSelectNode){
           	var tParentNode=targetSelectNode.parentNode;
-          	if(tParentNode){
-          		targetSelectNode=tParentNode.replaceChild(sourceSelectNode,targetSelectNode);  
-          		tParentNode.expand();
-          		setSourceNode(currentIndex);
+          	if(tParentNode){          		
+          		var child= new Ext.tree.TreeNode({'text':sourceSelectNode.text,'leaf':sourceSelectNode.leaf,'expanded':true,'cls':null});
+          		tParentNode.replaceChild(child,targetSelectNode); 
+          		child.select();
+
+          		var sourceChild= new Ext.tree.TreeNode({'text':sourceSelectNode.text,'leaf':sourceSelectNode.leaf,'expanded':true,'cls':null});
+          		sourceSelectNode.parentNode.replaceChild(sourceChild,sourceSelectNode); 
+          		sourceChild.select();
           	}
           }    		
     	}
@@ -248,13 +252,16 @@ var SyncXMLPanel= function(syncItem,store){
             saveSyncPlan();
         }
     }); 
+    //before create root add conflict attribute
+    showConflictNode(syncItem.remoteNodes[0],syncItem.node);
+    
     var targetRoot=new Ext.tree.TreeNode({text:'','expanded':true});    
     targetRoot.appendChild(createTreeNode(syncItem.node));        
-    // target tree
+    // local tree
     var targetTree = new Ext.tree.TreePanel({              
         columnWidth:.43,
         bodyStyle:'padding:5px 5px 1',
-        title:'Target',
+        title:'Local data',
         border:true,
         height:400,
         animate:true, 
@@ -269,7 +276,8 @@ var SyncXMLPanel= function(syncItem,store){
             'render': function(tp){
                   tp.getSelectionModel().on('selectionchange', function(tree, node){
                       targetSelectNode=node;                     
-                  });
+                  });          
+                  //refreshNode(targetTree, targetRoot);
             }
         }        
     });
@@ -278,9 +286,9 @@ var SyncXMLPanel= function(syncItem,store){
     var sourceSelectNode;
     var sourceRoot=new Ext.tree.TreeNode({text:'','expanded':true});
     sourceRoot.appendChild(createTreeNode(syncItem.remoteNodes[0]));
-    // source tree
+    // remote tree
     var sourceTree = new Ext.tree.TreePanel({                       
-        title:'Source',
+        title:'Remote data',
         bodyStyle:'padding:5px 5px 1',
         border:true,
         height:370,
@@ -289,17 +297,21 @@ var SyncXMLPanel= function(syncItem,store){
         rootVisible: false,
 	    root: sourceRoot,
         containerScroll: true,
-        enableDD:false,
+        enableDD:true,
         dropConfig: {appendOnly:true},
         listeners: {
             'render': function(tp){
                   tp.getSelectionModel().on('selectionchange', function(tree, node){
                       sourceSelectNode=node;
-                  });
+                  });          
+                  
             }
         }                
     });
-   
+    sourceTree.getRootNode().expand(true, null, function(){
+    	//refreshNode(sourceTree, sourceRoot);
+    });
+    
     // combo
     var combo = new Ext.form.ComboBox({       
         store: datastore,
@@ -314,11 +326,12 @@ var SyncXMLPanel= function(syncItem,store){
         selectOnFocus:true,
         listeners:{
         	'select': function(combo,record,index){
-        		setSourceNode(index);
+        		setSourceNode(index);       		
     		}
         }
     }); 
-      
+
+    
     // main panel
     var syncPanel;      
     // button panel
@@ -328,11 +341,41 @@ var SyncXMLPanel= function(syncItem,store){
     
     //data
     var syncItem;
-// -------------------------------------------------------------
+    
+// -------------------------------------------------------------   
 
+   function showConflictNode(sourceNode, targetNode){
+	   if(sourceNode.text != targetNode.text){
+		   setNodeConflict(targetNode);
+		   setNodeConflict(sourceNode);
+	   }
+	   for(var i=0;i<targetNode.childNodes.length; i++){
+		   if(sourceNode.childNodes[i]){
+			   if(targetNode.childNodes[i].text != sourceNode.childNodes[i].text){
+				   setNodeConflict(targetNode.childNodes[i]);
+				   setNodeConflict(sourceNode.childNodes[i]);
+			   }else{
+				   showConflictNode(sourceNode.childNodes[i],targetNode.childNodes[i]);
+			   }
+		   }
+	   }
+   };
+   function setNodeConflict(node){
+	   node.cls='conflictItem';	
+	   node.checked=true;
+	   for(var i=0;i<node.childNodes.length; i++){
+		   if(node.childNodes[i].isLeaf()){
+			   node.childNodes[i].cls='conflictItem';
+			   node.childNodes[i].checked=true;
+
+		   }else{
+			   setNodeConflict(node.childNodes[i]);
+		   }
+	   }
+   };
    function showSync(){
     	var tabPanel = amalto.core.getTabPanel();
-    	//if(tabPanel.getItem('synchronizationplan') == undefined){
+    	if(tabPanel.getItem('synchronizationplan'+syncItem.itemPK) == undefined){
 	   		Ext.QuickTips.init();
 			
 			buttonPanel = new Ext.Panel({
@@ -355,7 +398,7 @@ var SyncXMLPanel= function(syncItem,store){
 			syncPanel = new Ext.Panel({
 			bodyStyle:'padding:5px 5px 1',
 	        layout:'column',
-	        //id:'synchronizationplan',
+	        id:'synchronizationplan'+syncItem.itemPK,
 	        deferredRender: false,
 	        closable: true,
 	        border:false,
@@ -365,16 +408,18 @@ var SyncXMLPanel= function(syncItem,store){
 		            saveAction
 		        ]					        					        
 		  }); 	  
-    	//}
+	    	 
 		  tabPanel.add(syncPanel);
 		  syncPanel.show();
 		  //syncPanel.doLayout();
-		  amalto.core.doLayout();   	
+		  amalto.core.doLayout();  
+    	}
+ 	
     };
     return {
     	//public 
-        init : function(){
-    		showSync();		  
+        init : function(){   		
+    		showSync();	  		
         },
     	saveSync:function(){
         	saveSyncPlan();
