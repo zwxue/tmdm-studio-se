@@ -13,7 +13,7 @@ import com.amalto.webapp.core.util.Util;
 public class TreeNode {
 	private String text;
 	private boolean leaf;
-	private TreeNode[] childNodes;
+	private TreeNode[] childNodes = new TreeNode[0];
 	
 	public TreeNode[] getChildNodes() {
 		return childNodes;
@@ -67,8 +67,7 @@ public class TreeNode {
 		if (list!=null && list.getLength()>0) {
 			for (int i = 0; i < list.getLength(); i++) {
 				Node el = (Node) list.item(i);
-				if(el.getNodeType()==Element.TEXT_NODE && el.getNodeValue().trim().length()>0){
-					
+				if(el.getNodeType()==Element.TEXT_NODE && el.getNodeValue().trim().length()>0){					
 					TreeNode child=new TreeNode();
 					child.setText(el.getNodeValue().trim());
 					child.setLeaf(true);
