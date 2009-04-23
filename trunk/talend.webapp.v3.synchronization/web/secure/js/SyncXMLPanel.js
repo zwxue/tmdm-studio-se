@@ -16,20 +16,50 @@ var SyncXMLPanel= function(syncItem,store){
 			remoteNames.push([syncItem.remoteItemNames[i]]);
 		}				
 	}();
+	   function showConflictNode(sourceNode, targetNode){
+		   if(sourceNode.text != targetNode.text){
+			   setNodeConflict(targetNode);
+			   setNodeConflict(sourceNode);
+		   }
+		   for(var i=0;i<targetNode.childNodes.length; i++){
+			   if(sourceNode.childNodes[i]){
+				   if(targetNode.childNodes[i].text != sourceNode.childNodes[i].text){
+					   setNodeConflict(targetNode.childNodes[i]);
+					   setNodeConflict(sourceNode.childNodes[i]);
+				   }else{
+					   showConflictNode(sourceNode.childNodes[i],targetNode.childNodes[i]);
+				   }
+			   }
+		   }
+	   };
+	   function setNodeConflict(node){
+		   node.cls='conflictItem';	
+		   node.checked=true;
+		   for(var i=0;i<node.childNodes.length; i++){
+			   if(node.childNodes[i].leaf == true){
+				   node.childNodes[i].cls='conflictItem';
+				   node.childNodes[i].checked=true;
+			   }else{
+				   setNodeConflict(node.childNodes[i]);
+			   }
+		   }
+	   };
 	
 	var currentIndex=0;
 	function setSourceNode(index){		
+		if(index == currentIndex) return;
 		//clear
 		var childNodes=sourceTree.getRootNode().childNodes;
 		for(var i=0; i<childNodes.length; i++){
 			sourceTree.getRootNode().removeChild(childNodes[i]);
 		}
+		showConflictNode(syncItem.remoteNodes[index],syncItem.node);
 		//append
 		if(index >= 0 && index <syncItem.remoteNodes.length){
 			sourceTree.getRootNode().appendChild(createTreeNode(syncItem.remoteNodes[index]));
 			//sourceTree.title='Source [' + remoteNames[index] +']';
 			currentIndex=index;
-		}
+		}		
 	};
 	function createTreeNode(node){	
 		var treeNode= new Ext.tree.TreeNode({'text':node.text,'leaf':node.leaf,'expanded':true,'cls':node.cls,'checked':node.checked});				
@@ -220,17 +250,29 @@ var SyncXMLPanel= function(syncItem,store){
 				if(targetSelectNode)targetSelectNode.parentNode.removeChild(targetSelectNode); 
 		  }     	
     };
+    function cloneTreeNode(node){   	
+    	var newNode= new Ext.tree.TreeNode({'text':node.text,'leaf':node.leaf,'expanded':true,'cls':null});
+    	newNode.childNodes=[];
+    	newNode.parentNode=node.parentNode;
+		for(var i=0; i<node.childNodes.length; i++){
+			newNode.appendChild(cloneTreeNode(node.childNodes[i]));
+		}
+		return newNode;    	
+    };
+    
     function replaceOne(btn){
     	if(btn == 'yes'){
            if(targetSelectNode && sourceSelectNode){
           	var tParentNode=targetSelectNode.parentNode;
           	if(tParentNode){          		
-          		var child= new Ext.tree.TreeNode({'text':sourceSelectNode.text,'leaf':sourceSelectNode.leaf,'expanded':true,'cls':null});
-          		tParentNode.replaceChild(child,targetSelectNode); 
+          		var child= cloneTreeNode(sourceSelectNode);//new Ext.tree.TreeNode({'text':sourceSelectNode.text,'leaf':sourceSelectNode.leaf,'expanded':true,'cls':null});
+          		tParentNode.replaceChild(child,targetSelectNode);  
+          		child.expand();
           		child.select();
 
-          		var sourceChild= new Ext.tree.TreeNode({'text':sourceSelectNode.text,'leaf':sourceSelectNode.leaf,'expanded':true,'cls':null});
-          		sourceSelectNode.parentNode.replaceChild(sourceChild,sourceSelectNode); 
+          		var sourceChild=cloneTreeNode(sourceSelectNode);// new Ext.tree.TreeNode({'text':sourceSelectNode.text,'leaf':sourceSelectNode.leaf,'expanded':true,'cls':null});
+          		sourceSelectNode.parentNode.replaceChild(sourceChild,sourceSelectNode);   
+          		sourceChild.expand();
           		sourceChild.select();
           	}
           }    		
@@ -268,7 +310,7 @@ var SyncXMLPanel= function(syncItem,store){
         autoScroll:true,
         rootVisible: false,
         root: targetRoot,
-        enableDD:false,
+        enableDD:true,
         containerScroll: true,
         dropConfig: {appendOnly:true},
         buttons:[new Ext.Button(leftAction),new Ext.Button(rightAction),new Ext.Button(upAction), new Ext.Button(downAction), new Ext.Button(deleteAction)],
@@ -344,35 +386,6 @@ var SyncXMLPanel= function(syncItem,store){
     
 // -------------------------------------------------------------   
 
-   function showConflictNode(sourceNode, targetNode){
-	   if(sourceNode.text != targetNode.text){
-		   setNodeConflict(targetNode);
-		   setNodeConflict(sourceNode);
-	   }
-	   for(var i=0;i<targetNode.childNodes.length; i++){
-		   if(sourceNode.childNodes[i]){
-			   if(targetNode.childNodes[i].text != sourceNode.childNodes[i].text){
-				   setNodeConflict(targetNode.childNodes[i]);
-				   setNodeConflict(sourceNode.childNodes[i]);
-			   }else{
-				   showConflictNode(sourceNode.childNodes[i],targetNode.childNodes[i]);
-			   }
-		   }
-	   }
-   };
-   function setNodeConflict(node){
-	   node.cls='conflictItem';	
-	   node.checked=true;
-	   for(var i=0;i<node.childNodes.length; i++){
-		   if(node.childNodes[i].isLeaf()){
-			   node.childNodes[i].cls='conflictItem';
-			   node.childNodes[i].checked=true;
-
-		   }else{
-			   setNodeConflict(node.childNodes[i]);
-		   }
-	   }
-   };
    function showSync(){
     	var tabPanel = amalto.core.getTabPanel();
     	if(tabPanel.getItem('synchronizationplan'+syncItem.itemPK) == undefined){
