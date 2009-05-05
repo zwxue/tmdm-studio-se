@@ -185,7 +185,7 @@ public abstract class GenericControllerServlet extends HttpServlet {
 			"<body id=\"genericUI\">\n"+
 				"<div id=\"header\" class=\"generic-header\">\n"+
 				//TODO image 				
-				"	<img src=\""+ request.getContextPath() +"/secure/img/top-banner.gif\"/>\n"+
+				"	<img src=\""+ request.getContextPath() +"/secure/img/top-banner-talend.gif\"/>\n"+
 				//"	<div id=\"logout-btn\" class=\"logout-btn\"></div>\n"+
 			    "	<div class=\"language-select\"><select style=\"align: right; font: normal  11px tahoma,verdana,helvetica; right: 5px\" id=\"languageSelect\" onchange=\"amalto.core.switchLanguage();\">\n"+
 			    html+
