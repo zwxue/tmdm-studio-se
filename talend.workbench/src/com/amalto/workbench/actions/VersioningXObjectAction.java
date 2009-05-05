@@ -8,6 +8,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.amalto.workbench.dialogs.VersioningDialog;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSDataClusterPK;
@@ -149,7 +150,7 @@ public class VersioningXObjectAction extends Action{
 			MessageDialog.openError(
 					view.getSite().getShell(),
 					"Error", 
-					"An error occured trying to delete the Xtentis object: "+e.getLocalizedMessage()
+					"An error occured trying to delete the "+IConstants.TALEND+" object: "+e.getLocalizedMessage()
 			);
 		}		
 	}

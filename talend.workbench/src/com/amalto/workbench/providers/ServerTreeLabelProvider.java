@@ -28,7 +28,7 @@ public class ServerTreeLabelProvider extends LabelProvider {
 		//if (obj instanceof TreeParent) {
 			TreeObject  object = (TreeObject)obj;
 			if (object.getType() == TreeObject._SERVER_)
-				return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/xtentis_server.gif").createImage();
+				return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/talend-picto-small.gif").createImage();
 			else if (object.getType() == TreeObject.DATA_CLUSTER)
 				return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/data_cluster.gif").createImage();
 			else if (object.getType() == TreeObject.DATA_MODEL)

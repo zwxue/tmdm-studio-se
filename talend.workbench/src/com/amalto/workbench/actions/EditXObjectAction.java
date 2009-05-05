@@ -12,6 +12,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
+import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSDataCluster;
@@ -69,7 +70,7 @@ public class EditXObjectAction extends Action{
 	private void setDetails() {
 		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/edit.gif"));
 		setText("Edit");
-		setToolTipText("Edit/View this instance of the Xtentis Object");		
+		setToolTipText("Edit/View this instance of the "+IConstants.TALEND+" Object");		
 	}
 	
 	public void run() {
@@ -132,7 +133,7 @@ public class EditXObjectAction extends Action{
 	           		xobject.setWsObject(wsSynchronizationPlan);
 	           		break;
 	           	default:
-	           		MessageDialog.openError(view.getSite().getShell(), "Error", "Unknown Xtentis Object Type: "+xobject.getType());
+	           		MessageDialog.openError(view.getSite().getShell(), "Error", "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
 	           		return;
             }//switch
             

@@ -16,6 +16,7 @@ import com.amalto.workbench.dialogs.LoginDialog;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XtentisServerObjectsRetriever;
+import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.views.ServerView;
 
 public class ServerLoginAction extends Action implements SelectionListener{
@@ -29,14 +30,15 @@ public class ServerLoginAction extends Action implements SelectionListener{
 		this.view = view;
 		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/startserveraction.gif"));
 		setText("Login");
-		setToolTipText("Login to an Xtentis Server");
+		setToolTipText("Login to an "+IConstants.TALEND+" Server");
 
 	}
 	
 	public void run() {
 		try {
 			super.run();
-			dialog = new LoginDialog(this,view.getSite().getShell(),"Xtentis Login");
+			dialog = new LoginDialog(this,view.getSite().getShell(),IConstants.TALEND+" Login");
+			dialog.setDefaultImage(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/talend-picto-small.gif").createImage());
 			dialog.setBlockOnOpen(true);		
 			dialog.open();
 		} catch (Exception e) {

@@ -18,6 +18,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
+import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSDataCluster;
@@ -74,7 +75,7 @@ public class NewXObjectAction extends Action{
 		this.view = view;
 		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/add_obj.gif"));
 		setText("New");
-		setToolTipText("Create a new instance of an Xtentis Object");
+		setToolTipText("Create a new instance of an "+IConstants.TALEND+" Object");
 	}
 	
 	public void run() {
@@ -105,7 +106,7 @@ public class NewXObjectAction extends Action{
 	           	case TreeObject.SYNCHRONIZATIONPLAN:
 	           		InputDialog id = new InputDialog(
 	           				view.getSite().getShell(),
-	           				"New Xtentis Object Instance",
+	           				"New "+IConstants.TALEND+" Object Instance",
 	           				"Enter a Name for the New Instance",
 	           				null,
 	           				new IInputValidator() {
@@ -441,7 +442,7 @@ public class NewXObjectAction extends Action{
 			MessageDialog.openError(
 					view.getSite().getShell(),
 					"Error", 
-					"An error occured trying to create a new Xtentis Object Instance: "+e.getLocalizedMessage()
+					"An error occured trying to create a new "+IConstants.TALEND+" Object Instance: "+e.getLocalizedMessage()
 			);
 		}		
 	}

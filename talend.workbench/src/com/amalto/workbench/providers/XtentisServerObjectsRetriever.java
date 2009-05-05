@@ -65,7 +65,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		try {
-			monitor.beginTask("Loading Xtentis Server Objects", "admin".equals(username)? 12 : 9);
+			monitor.beginTask("Loading "+IConstants.TALEND+" Server Objects", "admin".equals(username)? 12 : 9);
 			//Access to server and get port
 			XtentisPort port = Util.getPort(new URL(endpointaddress), universe, username, password);
 			monitor.worked(1);

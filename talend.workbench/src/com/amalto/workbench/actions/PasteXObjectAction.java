@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.views.ServerView;
@@ -92,7 +93,7 @@ public class PasteXObjectAction extends Action{
 	private void setDetails() {
 		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/paste.gif"));
 		setText("Paste");
-		setToolTipText("Paste this instance of the Xtentis Object");		
+		setToolTipText("Paste this instance of the "+IConstants.TALEND+" Object");		
 	}
 	
 	public void run() {
