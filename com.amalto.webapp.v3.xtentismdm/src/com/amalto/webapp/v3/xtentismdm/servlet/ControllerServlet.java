@@ -76,7 +76,7 @@ public class ControllerServlet extends com.amalto.webapp.core.servlet.GenericCon
 			String html = 
 					"<html>\n" +
 					"<head>\n" +
-					"<title>xtentis MDM</title>\n" +
+					"<title>Talend Open MDM</title>\n" +
 					super.getCommonImport();
 			html += super.getJavascriptImportsHtml();
 			html +="<script type=\"text/javascript\" src=\"/xtentismdmv3/secure/js/conf.js\"></script>\n";
@@ -129,7 +129,7 @@ public class ControllerServlet extends com.amalto.webapp.core.servlet.GenericCon
 		return
 			"<body id=\"genericUI\" style=\"font:13px tahoma,verdana,helvetica\">\n"+
 				"<div id=\"header\" class=\"generic-header\">\n"+
-				"	<img src=\""+ request.getContextPath() +"/secure/img/top-banner.gif\"/>\n" +
+				"	<img src=\""+ request.getContextPath() +"/secure/img/top-banner-talend.gif\"/>\n" +
 				"<table style=\"position: absolute;top: 1px;right:1px;\">"+
 				"	<tr><td><div id=\"logout-btn\" ></div></td></tr>\n"+
 			    "	<tr><td><div ><select style=\"align: right; font: normal  11px tahoma,verdana,helvetica; right: 5px\" id=\"languageSelect\" onchange=\"amalto.core.switchLanguage();\">\n"+
