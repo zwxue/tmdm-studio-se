@@ -12,6 +12,7 @@ import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
+import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataModel;
@@ -99,7 +100,7 @@ public class SaveXObjectAction extends Action{
 	           		port.putSynchronizationPlan(new WSPutSynchronizationPlan((WSSynchronizationPlan)newWsObject));
 	           		break;   
 	          	default:
-	           		MessageDialog.openError(this.editor.getSite().getShell(), "Error", "Unknown Xtentis Object Type: "+xobject.getType());
+	           		MessageDialog.openError(this.editor.getSite().getShell(), "Error", "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
 	           		return;
             }//switch
             
@@ -123,7 +124,7 @@ public class SaveXObjectAction extends Action{
 			MessageDialog.openError(
 					this.editor.getSite().getShell(),
 					"Error Occured on Saving", 
-					"An error occured trying to save the Xtentis object instance: "+e.getLocalizedMessage()
+					"An error occured trying to save the "+IConstants.TALEND+" object instance: "+e.getLocalizedMessage()
 			);
 		}		
 	}

@@ -125,7 +125,7 @@ public class UniverseMainPage extends AMainPageV2{
         instancesViewer.setInput(universe.getItemsList());                    
         
         //Xtentis Objects  Section
-        Composite objecstGroup = this.getNewSectionComposite("Xtentis Objects Revision ID");
+        Composite objecstGroup = this.getNewSectionComposite("System Objects Revision ID");
         objecstGroup.setLayout(new GridLayout(1,true));
         
         Composite objectsComposite = toolkit.createComposite(objecstGroup, SWT.BORDER);

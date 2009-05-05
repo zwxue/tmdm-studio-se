@@ -5,15 +5,15 @@
    <extension
          point="org.eclipse.ui.views">
       <category
-            name="Amalto Workbench"
-            id="com.amalto.workbench">
+            name="Talend Open MDM Workbench"
+            id="com.talend.workbench">
       </category>
       <view
-            category="com.amalto.workbench"
+            category="com.talend.workbench"
             class="com.amalto.workbench.views.ServerView"
-            icon="icons/o-logo-16.gif"
-            id="com.amalto.workbench.views.ServerView"
-            name="Xtentis Server View">
+            icon="icons/talend-picto-small.gif"
+            id="com.talend.workbench.views.ServerView"
+            name="Talend Open MDM Server View">
       </view>
    </extension>
    <extension
@@ -33,13 +33,13 @@
       <editor
             class="com.amalto.workbench.editors.XObjectEditor"
             default="false"
-            icon="icons/o-logo-16.gif"
+            icon="icons/talend-picto-small.gif"
             id="com.amalto.workbench.editors.XObjectEditor"
             name="com.amalto.workbench.editors.XObjectEditor"/>
       <editor
             class="com.amalto.workbench.editors.XObjectBrowser"
             default="false"
-            icon="icons/o-logo-16.gif"
+            icon="icons/talend-picto-small.gif"
             id="com.amalto.workbench.editors.XObjectBrowser"
             name="com.amalto.workbench.editors.XObjectBrowser"/>
    </extension>
