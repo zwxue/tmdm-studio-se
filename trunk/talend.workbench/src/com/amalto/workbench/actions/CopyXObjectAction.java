@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.views.ServerView;
 
@@ -35,7 +36,7 @@ public class CopyXObjectAction extends Action{
 	private void setDetails() {
 		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/copy.gif"));
 		setText("Copy");
-		setToolTipText("Copy this instance of the Xtentis Object");		
+		setToolTipText("Copy this instance of the "+IConstants.TALEND+" Object");		
 	}
 	
 	public void run() {
@@ -122,7 +123,7 @@ public class CopyXObjectAction extends Action{
 		           		xobject.setWsObject(wsMenu);
 		           		break;	  		           			           		
 		           	default:
-		           		MessageDialog.openError(view.getSite().getShell(), "Error", "Unknown Xtentis Object Type: "+xobject.getType());
+		           		MessageDialog.openError(view.getSite().getShell(), "Error", "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
 		           		return;
 	            }//switch
 				*/

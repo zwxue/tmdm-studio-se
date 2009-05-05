@@ -377,7 +377,7 @@ public class SynchronizationMainPage extends AMainPageV2{
         instancesViewer.setInput(syncPlan.getItemsList());
 		
         //Xtentis Objects  Section
-        Composite objecstGroup = this.getNewSectionComposite("Xtentis Objects SynchronizationPlan",ExpandableComposite.TWISTIE);
+        Composite objecstGroup = this.getNewSectionComposite("System Objects SynchronizationPlan",ExpandableComposite.TWISTIE);
         objecstGroup.setLayout(new GridLayout(1,true));
         
         //Get algorithms for objects

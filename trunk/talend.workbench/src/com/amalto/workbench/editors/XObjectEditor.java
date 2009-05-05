@@ -21,6 +21,7 @@ import com.amalto.workbench.actions.SaveXObjectAction;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
+import com.amalto.workbench.utils.IConstants;
 
 public class XObjectEditor extends FormEditor implements IXObjectModelListener{	
 	
@@ -93,7 +94,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 	           		addPage(new SynchronizationMainPage(this));
 	           		break;
 	           	default:
-	           		MessageDialog.openError(this.getSite().getShell(), "Error", "Unknown Xtentis Object Type: "+xobject.getType());
+	           		MessageDialog.openError(this.getSite().getShell(), "Error", "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
 	           		return;
             }//switch
         } catch (PartInitException e) {
@@ -220,7 +221,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
     	TreeObject object = (TreeObject)((XObjectEditorInput)this.getEditorInput()).getModel();
     	
 		if (object.getType() == TreeObject._SERVER_)
-			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/xtentis_server.gif").createImage();
+			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/talend-picto-small.gif").createImage();
 		else if (object.getType() == TreeObject.DATA_CLUSTER)
 			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/data_cluster.gif").createImage();
 		else if (object.getType() == TreeObject.DATA_MODEL)

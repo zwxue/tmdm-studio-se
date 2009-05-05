@@ -20,6 +20,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
+import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.Version;
 import com.amalto.workbench.utils.XtentisException;
@@ -66,7 +67,7 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener{
 	           			addPage(new  SubscriptionEngineBrowserMainPage(this));
 	           		break;	    	           		
 	           	default:
-	           		MessageDialog.openError(this.getSite().getShell(), "Error", "Unsupported Xtentis Object Type: "+xobject.getType());
+	           		MessageDialog.openError(this.getSite().getShell(), "Error", "Unsupported "+IConstants.TALEND+" Object Type: "+xobject.getType());
 	           		return;
             }//switch
         } catch (PartInitException e) {
@@ -162,7 +163,7 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener{
     	TreeObject object = (TreeObject)((XObjectBrowserInput)this.getEditorInput()).getModel();
     	
 		if (object.getType() == TreeObject._SERVER_)
-			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/xtentis_server.gif").createImage();
+			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/talend-picto-small.gif").createImage();
 		else if (object.getType() == TreeObject.DATA_CLUSTER)
 			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/data_cluster.gif").createImage();
 		else if (object.getType() == TreeObject.DATA_MODEL)

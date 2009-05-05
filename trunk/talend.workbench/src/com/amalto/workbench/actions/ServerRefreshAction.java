@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.amalto.workbench.models.TreeParent;
+import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.views.ServerView;
 
 public class ServerRefreshAction extends Action {
@@ -33,7 +34,7 @@ public class ServerRefreshAction extends Action {
 		this.view = view;
 		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/refresh.gif"));
 		setText("Refresh");
-		setToolTipText("Refresh the Xtentis Server Objects");
+		setToolTipText("Refresh the "+IConstants.TALEND+" Server Objects");
 	}
 	
 	public void run() {
@@ -70,7 +71,7 @@ public class ServerRefreshAction extends Action {
                         MessageDialog.openError(
                                 view.getSite().getShell(), 
                                 "Error", 
-                                "The refresh of the Xtentis Server "+(String)ServerRefreshAction.this.serverRoot.getWsKey()+" failed!"
+                                "The refresh of the "+IConstants.TALEND+" Server "+(String)ServerRefreshAction.this.serverRoot.getWsKey()+" failed!"
                          );
                     }
                 }
@@ -80,7 +81,7 @@ public class ServerRefreshAction extends Action {
             });
 		} catch (Exception e) {
 			e.printStackTrace();
-			MessageDialog.openError(view.getSite().getShell(), "Error", "Error while refreshing the Xtentis Server Objects: "+e.getLocalizedMessage());
+			MessageDialog.openError(view.getSite().getShell(), "Error", "Error while refreshing the "+IConstants.TALEND+" Server Objects: "+e.getLocalizedMessage());
 		}		
 	}
 	public void runWithEvent(Event event) {

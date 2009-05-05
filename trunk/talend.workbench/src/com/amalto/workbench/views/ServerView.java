@@ -40,6 +40,7 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.ServerTreeContentProvider;
 import com.amalto.workbench.providers.ServerTreeLabelProvider;
+import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.webservices.WSLogout;
@@ -49,7 +50,7 @@ import com.amalto.workbench.webservices.XtentisPort;
 
 
 /**
- * The view allowing administration of the Xtentis Server
+ * The view allowing administration of the "+IConstants.TALEND+" Server
  * @author Bruno Grieder
  *
  */
@@ -214,7 +215,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener{
 			}
 		};
 		logoutAction.setText("Logout");
-		logoutAction.setToolTipText("Logout From the Xtentis Server");
+		logoutAction.setToolTipText("Logout From the "+IConstants.TALEND+" Server");
 		logoutAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/logout.gif"));
         
 		editXObjectAction = new EditXObjectAction(this);
