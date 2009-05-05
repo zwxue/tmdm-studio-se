@@ -40,14 +40,7 @@ public class LoginDialog extends Dialog {
 
 	private Combo universeCombo;
 	
-	/**
-	 * @param parentShell
-	 */
-	public LoginDialog(SelectionListener caller, IShellProvider parentShell, String title) {
-		super(parentShell);
-		this.caller = caller;
-		this.title = title;
-	}
+
 
 	/**
 	 * @param parentShell

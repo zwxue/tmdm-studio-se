@@ -4,7 +4,7 @@ Bundle-Name: Workbench Plug-in
 Bundle-SymbolicName: com.amalto.workbench; singleton:=true
 Bundle-Version: 2.20.0
 Bundle-Activator: com.amalto.workbench.AmaltoWorbenchPlugin
-Bundle-Vendor: AMALTO TECHNOLOGIES
+Bundle-Vendor: Talend
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

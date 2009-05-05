@@ -16,6 +16,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSInitData;
@@ -30,7 +31,7 @@ public class ServerInitAction extends Action {
 		this.view = view;
 		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/zap.gif"));
 		setText("Initialize");
-		setToolTipText("Initializes an Xtentis MDM Server");
+		setToolTipText("Initializes an "+IConstants.TALEND+" MDM Server");
 
 	}
 	

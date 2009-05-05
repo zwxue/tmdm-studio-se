@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSDataClusterPK;
@@ -44,7 +45,7 @@ public class DeleteXObjectAction extends Action{
 		this.view = view;
 		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/delete_obj.gif"));
 		setText("Delete");
-		setToolTipText("Delete this instance of the Xtentis Object");
+		setToolTipText("Delete this instance of the "+IConstants.TALEND+" Object");
 	}
 	
 	public void run() {
@@ -59,7 +60,7 @@ public class DeleteXObjectAction extends Action{
 	            //ask for confimation
 	            if (! MessageDialog.openConfirm(
 	            		this.view.getSite().getShell(),
-	            		"Delete Xtentis Object Instance",
+	            		"Delete "+IConstants.TALEND+" Object Instance",
 	            		"Are you sure you want to delete "+xobject.getDisplayName()+" ?"
 	            )) return;
 	                        
@@ -104,7 +105,7 @@ public class DeleteXObjectAction extends Action{
 		           		port.deleteSynchronizationPlan(new WSDeleteSynchronizationPlan((WSSynchronizationPlanPK)xobject.getWsKey()));
 		           		break; 
 		          	default:
-		           		MessageDialog.openError(view.getSite().getShell(), "Error", "Unknown Xtentis Object Type: "+xobject.getType());
+		           		MessageDialog.openError(view.getSite().getShell(), "Error", "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
 		           		return;
 	            }//switch
 	            
@@ -118,7 +119,7 @@ public class DeleteXObjectAction extends Action{
 			MessageDialog.openError(
 					view.getSite().getShell(),
 					"Error", 
-					"An error occured trying to delete the Xtentis object: "+e.getLocalizedMessage()
+					"An error occured trying to delete the "+IConstants.TALEND+" object: "+e.getLocalizedMessage()
 			);
 		}		
 	}
