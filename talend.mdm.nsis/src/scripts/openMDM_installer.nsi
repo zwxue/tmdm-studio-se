@@ -1,5 +1,5 @@
 ;NSIS Installer for openMDM
-;©Amalto Technologies
+;Talend Open Data Solutions
 
 ;--------------------------------
 ;Include Modern UI
@@ -90,14 +90,14 @@ Section "install" Installation
   CreateShortCut "$SMPROGRAMS\$StartMenuFolder\openMDM.lnk" "$INSTDIR\openMDM\openMDM.exe"
 
   ;create desktop shortcut
-  CreateShortCut "$DESKTOP\b2een.lnk" "$INSTDIR\openMDM\openMDM.exe" ""
+  CreateShortCut "$DESKTOP\openMDM.lnk" "$INSTDIR\openMDM\openMDM.exe" ""
 
 
   !insertmacro MUI_STARTMENU_WRITE_END
 
   ;write uninstall information to the registry
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\b2een" "DisplayName" "openMDM (remove only)"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\b2een" "UninstallString" "$INSTDIR\Uninstall_openMDM.exe"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\openMDM" "DisplayName" "openMDM (remove only)"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\openMDM" "UninstallString" "$INSTDIR\Uninstall_openMDM.exe"
 
   ;Create uninstaller
   WriteUninstaller "$INSTDIR\Uninstall_openMDM.exe"
