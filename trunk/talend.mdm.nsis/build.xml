@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="b2een" default="generate.installer">
 	
-	<property name="jboss.dir" value="/opt/jboss"/>
-	<property name="tmp.dir" value="/tmp/nsis"/>	
+	<property name="jboss.dir" value="c:/opt/jboss"/>
+	<property name="tmp.dir" value="c:/tmp/nsis"/>	
 	
 	<target name="clean">
    		<!-- clean up temporary directory -->		
@@ -30,17 +30,19 @@
    				<include name="License.txt"/>
    			</fileset>
    		</copy>
+		<!-- generate open mdm -->
+		<antcall target="generate.openMDM.exe"/>
 		
 		<!-- build -->
 		<antcall target="make.nsis"/>
 		
 		<!-- final -->
-		<copy todir=".">
+		<copy todir="build">
 			<fileset dir="${tmp.dir}">
 			   	<include name="*.exe"/>
   			</fileset>
    		</copy>
-		<antcall target="clean"/>
+		
 	</target>
 	
 	<target name="make.nsis">
@@ -55,15 +57,15 @@
    			</fileset>
    		</copy>
 		<!-- run make nsis -->
-		<exec executable="/opt/local/var/macports/software/nsis/2.39_0/nsis-2.39/bin/makensis">
-			<arg value="-v4"/>
+		<exec executable="C:/Program Files/NSIS/makensis">
+			<arg value="/V4"/>
 			<arg value="${tmp.dir}/openMDM_installer.nsi"/>
 		</exec>
 	</target>
 	
 	<target name="generate.openMDM.exe">
 		<!-- run makensi -->
-		<exec executable="/opt/local/var/macports/software/nsis/2.39_0/nsis-2.39/bin/makensis">
+		<exec executable="C:/Program Files/NSIS/makensis">
 			<arg value="src/scripts/JavaLauncher.nsi"/>
 		</exec>
 	</target>	
