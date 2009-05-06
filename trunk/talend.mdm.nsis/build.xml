@@ -5,6 +5,10 @@
 	<property name="tmp.dir" value="c:/tmp/nsis"/>	
 	
 	<target name="clean">
+		<!-- clean up build directory-->
+		<delete dir="build" />
+		<!-- make build directory -->
+		<mkdir dir="build"/>
    		<!-- clean up temporary directory -->		
 		<delete dir="${tmp.dir}"/>
    		<!-- make temporary directory -->
@@ -20,6 +24,9 @@
    			</fileset>
    		</copy>
 		<unjar dest="${tmp.dir}/openMDM" src="src/resources/jre-1.5.0_windows.zip"></unjar>
+		<!-- generate open mdm -->
+		<antcall target="generate.openMDM.exe"/>
+		
    		<copy todir="${tmp.dir}/openMDM">
    			<fileset dir="build">
    				<include name="*.exe"/>
@@ -30,8 +37,6 @@
    				<include name="License.txt"/>
    			</fileset>
    		</copy>
-		<!-- generate open mdm -->
-		<antcall target="generate.openMDM.exe"/>
 		
 		<!-- build -->
 		<antcall target="make.nsis"/>
