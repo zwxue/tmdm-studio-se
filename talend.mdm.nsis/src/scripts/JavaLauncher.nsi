@@ -2,7 +2,7 @@
 ;--------------
  
 Name "openMDM"
-Caption "The open MDM server"
+Caption "The Talend open MDM server"
 Icon "..\resources\mdm.ico"
 OutFile "..\..\build\openMDM.exe"
  
