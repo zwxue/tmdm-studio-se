@@ -213,7 +213,10 @@ var SyncXMLPanel= function(syncItem,store){
     	}
     };
     
-    function saveSyncPlan(){
+    function saveSyncPlan(btn){
+    	if(btn != 'yes'){
+    		return;
+    	}
         Ext.MessageBox.show({
            msg: 'Saving your data, please wait...',
            progressText: 'Saving...',
@@ -291,7 +294,7 @@ var SyncXMLPanel= function(syncItem,store){
     var saveAction = new Ext.Action({
         text: '<b>Resolve</b>',
         handler: function(){
-            saveSyncPlan();
+    		Ext.MessageBox.confirm('Confirm', 'Are you sure you want to <b>Resolve</b> the conflict data now ?', saveSyncPlan);            
         }
     }); 
     //before create root add conflict attribute
