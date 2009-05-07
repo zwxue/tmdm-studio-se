@@ -1,47 +1,38 @@
-/*
- * Synchronization for conflict data
- */
-//
-// Extend the XmlTreeLoader to set some custom TreeNode attributes specific to our application:
-loadResource("/SynchronizationPlan/secure/css/SynchronizationPlan.css", "" );
-
-var SyncXMLPanel= function(syncItem,store){
-
-	var remoteNames=[];
-	var remoteItems=function(){
-		var ret=[];
-		for(var i=0; i<syncItem.remoteItemNames.length; i++){
-			remoteNames.push([syncItem.remoteItemNames[i]]);
-		}				
-	}();
-	   function showConflictNode(sourceNode, targetNode){
-		   if(sourceNode.text != targetNode.text){
-			   setNodeConflict(targetNode);
-			   setNodeConflict(sourceNode);
-		   }
-		   for(var i=0;i<targetNode.childNodes.length; i++){
-			   if(sourceNode.childNodes[i]){
-				   if(targetNode.childNodes[i].text != sourceNode.childNodes[i].text){
-					   setNodeConflict(targetNode.childNodes[i]);
-					   setNodeConflict(sourceNode.childNodes[i]);
-				   }else{
-					   showConflictNode(sourceNode.childNodes[i],targetNode.childNodes[i]);
-				   }
-			   }
-		   }
-	   };
-	   function setNodeConflict(node){
-		   node.cls='conflictItem';	
-		   node.checked=true;
-		   for(var i=0;i<node.childNodes.length; i++){
-			   if(node.childNodes[i].leaf == true){
-				   node.childNodes[i].cls='conflictItem';
-				   node.childNodes[i].checked=true;
+SyncXMLPanel = function(syncItem,store){
+	loadResource("/SynchronizationPlan/secure/css/SynchronizationPlan.css", "" );
+	var remoteNames=[];	
+	for(var i=0; i<syncItem.remoteItemNames.length; i++){
+		remoteNames.push([syncItem.remoteItemNames[i]]);
+	}				
+	
+   function showConflictNode(sourceNode, targetNode){
+	   if(sourceNode.text != targetNode.text){
+		   setNodeConflict(targetNode);
+		   setNodeConflict(sourceNode);
+	   }
+	   for(var i=0;i<targetNode.childNodes.length; i++){
+		   if(sourceNode.childNodes[i]){
+			   if(targetNode.childNodes[i].text != sourceNode.childNodes[i].text){
+				   setNodeConflict(targetNode.childNodes[i]);
+				   setNodeConflict(sourceNode.childNodes[i]);
 			   }else{
-				   setNodeConflict(node.childNodes[i]);
+				   showConflictNode(sourceNode.childNodes[i],targetNode.childNodes[i]);
 			   }
 		   }
-	   };
+	   }
+   };
+   function setNodeConflict(node){
+	   node.cls='conflictItem';	
+	   node.checked=true;
+	   for(var i=0;i<node.childNodes.length; i++){
+		   if(node.childNodes[i].leaf == true){
+			   node.childNodes[i].cls='conflictItem';
+			   node.childNodes[i].checked=true;
+		   }else{
+			   setNodeConflict(node.childNodes[i]);
+		   }
+	   }
+   };
 	
 	var currentIndex=0;
 	function setSourceNode(index){		
@@ -393,21 +384,21 @@ var SyncXMLPanel= function(syncItem,store){
 	   		Ext.QuickTips.init();
 			
 			buttonPanel = new Ext.Panel({
-			bodyStyle:'padding:5px 5px 0',
-	        layout:'form',
-	        columnWidth:0.14,
-	        buttonAlign:'center',
-	        border:false,
-	        height:100,
-	        items:[
-	        new Ext.Button(addAction), new Ext.Button(replaceAction)],					        					        
+				bodyStyle:'padding:5px 5px 0',
+		        layout:'form',
+		        columnWidth:0.14,
+		        buttonAlign:'center',
+		        border:false,
+		        height:100,
+		        items:[
+		               new Ext.Button(addAction), new Ext.Button(replaceAction)]				        					        
 			}); 
 	
 			sourcePanel = new Ext.Panel({
-			columnWidth:.43,			            
-	        border:false,
-		    items:[sourceTree,combo],					        					        
-		  }); 
+				columnWidth:.43,			            
+		        border:false,
+			    items:[sourceTree,combo]				        					        
+			}); 
 		   
 			syncPanel = new Ext.Panel({
 			bodyStyle:'padding:5px 5px 1',
@@ -427,8 +418,7 @@ var SyncXMLPanel= function(syncItem,store){
 		  syncPanel.show();
 		  //syncPanel.doLayout();
 		  amalto.core.doLayout();  
-    	}
- 	
+    	}	
     };
     return {
     	//public 
@@ -437,6 +427,6 @@ var SyncXMLPanel= function(syncItem,store){
         },
     	saveSync:function(){
         	saveSyncPlan();
-        },
+        }
     };
 };
