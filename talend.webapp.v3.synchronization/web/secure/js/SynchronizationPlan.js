@@ -74,6 +74,8 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
 	    	Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 	    	if(tabPanel.getItem('syncDataGrid') == undefined){
 	    		show();		   		
+	    	}else{
+	    		store.load({params:{start:0, limit:22}, arg:[]});
 	    	}
 	      tabPanel.add(grid);
 		  grid.show();
