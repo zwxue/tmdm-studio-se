@@ -12,7 +12,8 @@ SyncXMLPanel = function(syncItem,store){
 	   }
 	   for(var i=0;i<targetNode.childNodes.length; i++){
 		   if(sourceNode.childNodes[i]){
-			   if(targetNode.childNodes[i].text != sourceNode.childNodes[i].text){
+			   if(targetNode.childNodes[i].text != sourceNode.childNodes[i].text ||
+					   targetNode.childNodes[i].childNodes.length != sourceNode.childNodes[i].childNodes.length){
 				   setNodeConflict(targetNode.childNodes[i]);
 				   setNodeConflict(sourceNode.childNodes[i]);
 			   }else{
@@ -23,11 +24,11 @@ SyncXMLPanel = function(syncItem,store){
    };
    function setNodeConflict(node){
 	   node.cls='conflictItem';	
-	   node.checked=true;
+	   //node.checked=true;
 	   for(var i=0;i<node.childNodes.length; i++){
 		   if(node.childNodes[i].leaf == true){
 			   node.childNodes[i].cls='conflictItem';
-			   node.childNodes[i].checked=true;
+			   //node.childNodes[i].checked=true;
 		   }else{
 			   setNodeConflict(node.childNodes[i]);
 		   }
