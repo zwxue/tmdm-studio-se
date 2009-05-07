@@ -50,10 +50,16 @@ public class SynchronizationPlanDWR {
 			return ret;
 		}		
 	}
-	public ListRange getSyncItems()throws Exception{
-		logger.debug("getSyncItems() ");
+	public ListRange getSyncItems(String regex)throws Exception{
+		logger.debug("getSyncItems() regex== "+regex);
 		try {
 			List<SynchronizationItem> list=new ArrayList<SynchronizationItem>();	
+			
+			if(regex==null || regex.length()==0){
+				regex="";
+			}
+			regex=regex.replaceAll("\\*", "");
+			regex=".*"+regex+".*";
 			
 			WSSynchronizationItemPKArray pks=Util.getPort().getSynchronizationItemPKs(new WSGetSynchronizationItemPKs());
 			logger.debug("pks() " + pks.getWsSynchronizationItemPK().length);
@@ -63,12 +69,16 @@ public class SynchronizationPlanDWR {
 				if(item.getResolvedProjection() ==null ){
 					continue;
 				}
+				
 				SynchronizationItem syncItem=new SynchronizationItem();
 				syncItem=syncItem.WS2POJO(item);
+				if(!syncItem.getItemPK().matches(regex)){
+					continue;
+				}
 				TreeNode node=new TreeNode();
 				node=node.deserialize(item.getResolvedProjection());
 				logger.debug("item.getResolvedProjection()-- " +item.getResolvedProjection());
-				syncItem.setNode(node);
+				syncItem.setNode(node);				
 				list.add(syncItem);
 			}	
 

@@ -35,6 +35,12 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
 	];
    	var columnModel = new Ext.grid.ColumnModel(myColumns);
     var grid;
+    
+    function showSyncItems(){
+		var criteria = DWRUtil.getValue('sync-criteria');
+		store.load({params:{start:0, limit:22}, arg:[criteria]});
+    };
+    
     function show(){
    		Ext.QuickTips.init();
    	    // create the Grid
@@ -61,7 +67,25 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
    	   	    				xmlData.init();  	    					
    	    				}
    	    			}
-   	   	        }
+   	   	        },
+				tbar:[
+						new Ext.form.TextField({
+							id:'sync-criteria',
+							//emptyText:LABEL_CRITERIA[language],
+							emptyText:'*',
+							listeners: {
+			                	'specialkey': function(a, e) {
+						            if(e.getKey() == e.ENTER) {
+						            	showSyncItems();
+						            } 
+								}
+			                }
+						}),
+						new Ext.Toolbar.Button({
+							text:'Search',
+							handler:showSyncItems
+						})
+					]
    	   	    }); 
 		store.load({params:{start:0, limit:22}, arg:[]});
 		store.on('load', function(){
@@ -75,7 +99,7 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
 	    	if(tabPanel.getItem('syncDataGrid') == undefined){
 	    		show();		   		
 	    	}else{
-	    		store.load({params:{start:0, limit:22}, arg:[]});
+	    		showSyncItems();
 	    	}
 	      tabPanel.add(grid);
 		  grid.show();
