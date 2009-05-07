@@ -1,4 +1,5 @@
 
+
 loadResource("/SynchronizationPlan/secure/js/SyncXMLPanel.js", "" );
 
 amalto.namespace("amalto.SynchronizationPlan");
@@ -62,8 +63,8 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
    	    			'rowdblclick' : function(grid,rowIndex, e ){
    	    				var record=grid.getStore().getAt(rowIndex);
    	    				if(record.data.status == 'MANUAL'){
-   	    					record.data.remoteIntances.key;  	    					
-   	   	    				var xmlData=new SyncXMLPanel(record.data,store);
+   	    					   	    					
+   	   	    				var xmlData= SyncXMLPanel(record.data,store);
    	   	    				xmlData.init();  	    					
    	    				}
    	    			}
