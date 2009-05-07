@@ -6,8 +6,6 @@
 loadResource("/SynchronizationPlan/secure/css/SynchronizationPlan.css", "" );
 
 var SyncXMLPanel= function(syncItem,store){
-	var syncPlanStore=store;
-	this.syncItem=syncItem;
 
 	var remoteNames=[];
 	var remoteItems=function(){
@@ -241,7 +239,7 @@ var SyncXMLPanel= function(syncItem,store){
     	        Ext.MessageBox.alert('Status', 'Changes saved successfully.');   			
     			var tabPanel = amalto.core.getTabPanel();
     			tabPanel.remove(syncPanel);
-    			syncPlanStore.reload();
+    			store.reload();
     		}
     	},syncItem);
         }, 1000);    	
