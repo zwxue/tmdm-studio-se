@@ -534,7 +534,12 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		        sortInfo:{field: _viewItems2.keys[0], direction: "ASC"},
 		        baseParams:{viewName: viewName,criteria:criteria},
 		        reader: new Ext.data.JsonReader(schema),
-		        remoteSort: true
+		        remoteSort: true,
+		        listeners:{
+		        	'load':function(store, records){
+		        		//alert(records.length);
+		        	}
+		        }
 		    });
 		    
 		var grid = new Ext.grid.GridPanel({
@@ -616,7 +621,11 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 				});
 				
 			}
-			else store.load({params:{start:0, limit:pageSize}});
+			else {
+				
+				store.load({params:{start:0, limit:pageSize}});
+				
+			}
 			amalto.core.ready();
 		});
 			
