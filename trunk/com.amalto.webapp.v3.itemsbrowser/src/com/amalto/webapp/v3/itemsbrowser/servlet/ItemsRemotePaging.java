@@ -196,7 +196,8 @@ public class ItemsRemotePaging  extends HttpServlet{
 					results[i] =emptyTags.matcher(results[i]).replaceAll(" #");
 					String[] elements = results[i].split("#");
 					String[] fields = new String[view.getViewables().length];
-					for (int j = 0; j < fields.length; j++) {
+					int count=Math.min(elements.length, fields.length);
+					for (int j = 0; j < count; j++) {
 						fields[j]=StringEscapeUtils.unescapeXml(elements[j]);
 					}
 					itemsBrowserContent.add(fields);
@@ -291,6 +292,7 @@ public class ItemsRemotePaging  extends HttpServlet{
 				rows.add(fields);
 			}			
 			json.put("items",rows);
+			json.put("success", true);
 			org.apache.log4j.Logger.getLogger(this.getClass()).debug(json);
 			
 			
