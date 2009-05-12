@@ -40,6 +40,7 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.widgets.WidgetFactory;
 
 
 public abstract class AMainPageV2 extends AFormPage implements ModifyListener{
@@ -136,7 +137,10 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener{
 	    	getManagedForm().addPart(topFormPart);
                         
             createCharacteristicsContent(toolkit, topFormPart.getComposite());
-            
+           
+            //adapt body add mouse/focus listener for child
+    		WidgetFactory factory=new WidgetFactory();
+    		factory.adapt(form.getBody());
         } catch (Exception e) {
             e.printStackTrace();
         }

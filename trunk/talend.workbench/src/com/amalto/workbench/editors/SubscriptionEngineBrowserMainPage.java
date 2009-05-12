@@ -87,6 +87,7 @@ import com.amalto.workbench.webservices.WSRoutingOrderV2PK;
 import com.amalto.workbench.webservices.WSRoutingOrderV2SearchCriteria;
 import com.amalto.workbench.webservices.WSRoutingOrderV2Status;
 import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.widgets.WidgetFactory;
 
 public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXObjectModelListener {
 
@@ -449,7 +450,11 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
     		hookContextMenu();
     		
     		managedForm.reflow(true); //nothing will show on the form if not called
-    		    		
+
+            //adapt body add mouse/focus listener for child
+    		WidgetFactory factory=new WidgetFactory();
+    		factory.adapt(managedForm.getForm().getBody());
+    		
         } catch (Exception e) {
             e.printStackTrace();
         }	
