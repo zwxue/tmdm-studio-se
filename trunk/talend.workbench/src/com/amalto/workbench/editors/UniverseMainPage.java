@@ -104,7 +104,7 @@ public class UniverseMainPage extends AMainPageV2{
         //Items Section          
         Composite itemsGroup = this.getNewSectionComposite("Concept Revision ID");
         itemsGroup.setLayout(new GridLayout(2,false));
-		defaultReversionIDText =new LabelText(toolkit,itemsGroup,"Default Revision ID");       
+		defaultReversionIDText =new LabelText(itemsGroup,"Default Revision ID");       
 		defaultReversionIDText.getText().addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent e) {
         		if (refreshing) return;
@@ -146,7 +146,7 @@ public class UniverseMainPage extends AMainPageV2{
 		
 	}
 	protected void createLabelText(Composite parent, final String labelName){
-		final LabelText labelText =new LabelText(toolkit,parent,labelName);
+		final LabelText labelText =new LabelText(parent,labelName);
 		labelText.getLabel().setFont(FontUtils.getBoldFont(labelText.getLabel().getFont()));
 		labelText.getText().addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent e) {

@@ -6,6 +6,7 @@
  */
 package com.amalto.workbench.editors;
 
+
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,6 +42,8 @@ import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
@@ -54,7 +57,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -90,6 +92,7 @@ import com.amalto.workbench.webservices.WSRouteItemV2;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniverseItemsRevisionIDs;
 import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.widgets.WidgetFactory;
 
 public class DataClusterBrowserMainPage extends AMainPage implements IXObjectModelListener {
 
@@ -164,7 +167,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             c.setTimeInMillis(yesterday);
             fromText.setText(sdf.format(c.getTime()));
             fromText.pack();
-            
+//            fromText.addMouseListener(new MouseAdapter(){
+//            	@Override
+//            	public void mouseDown(MouseEvent e) {
+//            		fromText.selectAll();            		
+//            	}
+//            });
         	Button bFrom = toolkit.createButton(composite, "From", SWT.CENTER|SWT.ARROW | SWT.DOWN);
             bFrom.addListener(SWT.Selection, new Listener() {
                 public void handleEvent(Event event) {
@@ -213,6 +221,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             			}//keyReleased
             		}//keyListener
             );
+            toText.addMouseListener(new MouseAdapter(){
+            	@Override
+            	public void mouseDown(MouseEvent e) {
+            		toText.selectAll();            		
+            	}
+            });
             toText.setText("");
             toText.pack();
             
@@ -359,7 +373,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
     		managedForm.reflow(true); //nothng will show on the form if not called
     		
     		searchText.setFocus();
-    		    		
+            //adapt body add mouse/focus listener for child
+    		WidgetFactory factory=new WidgetFactory();
+    		factory.adapt(managedForm.getForm().getBody());
         } catch (Exception e) {
             e.printStackTrace();
         }	
