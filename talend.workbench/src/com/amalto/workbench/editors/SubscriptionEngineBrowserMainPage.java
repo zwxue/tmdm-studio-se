@@ -15,6 +15,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
@@ -200,39 +202,23 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
         	firstLineComposite.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
             );
-        	firstLineComposite.setLayout(new GridLayout(7,false));
+        	firstLineComposite.setLayout(new GridLayout(9,false));
         	
 //        	Routing Orders Label
             Label routingOrdersLabel = toolkit.createLabel(firstLineComposite, "Routing Orders ", SWT.NULL);
             routingOrdersLabel.setLayoutData(
-                    new GridData(SWT.FILL,SWT.CENTER,false,false,7,1)
+                    new GridData(SWT.FILL,SWT.CENTER,false,false,9,1)
             );
         	        	
         	final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
         	
-        	Button bFrom = toolkit.createButton(firstLineComposite, "From", SWT.CENTER);
-            bFrom.addListener(SWT.Selection, new Listener() {
-                public void handleEvent(Event event) {
-                   final CalendarDialog cal = new CalendarDialog(SubscriptionEngineBrowserMainPage.this.getSite().getShell());
-                    cal.addDateChangedListener(new SWTCalendarListener() {
-                        public void dateChanged(SWTCalendarEvent calendarEvent) {
-                            fromText.setText(sdf.format(calendarEvent.getCalendar().getTime()));
-                        }
-                    });
-
-                    if (fromText.getText() != null && fromText.getText().length() > 0) {
-                        try {
-                            Date d = sdf.parse(fromText.getText());
-                            cal.setDate(d);
-                        } catch (ParseException pe) {
-
-                        }
-                    }
-                    cal.open();
-            	};
-            });    
-            
-            fromText = toolkit.createText(firstLineComposite, "",SWT.BORDER|SWT.SINGLE);
+        	//from
+        	Label fromLabel = toolkit.createLabel(firstLineComposite, "From", SWT.NULL);
+        	fromLabel.setLayoutData(
+                    new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
+            );
+        	
+        	fromText = toolkit.createText(firstLineComposite, "",SWT.BORDER|SWT.SINGLE);
             fromText.setLayoutData(    
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
@@ -251,30 +237,39 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
             long yesterday = c.getTimeInMillis() - (1000*60*60*24);
             c.setTimeInMillis(yesterday);
             fromText.setText(sdf.format(c.getTime()));
-
-            //to
-        	Button bTo = toolkit.createButton(firstLineComposite, "To", SWT.CENTER);
-            bTo.addListener(SWT.Selection, new Listener() {
+            fromText.pack();
+        	
+        	Button bFrom = toolkit.createButton(firstLineComposite, "From", SWT.CENTER|SWT.ARROW | SWT.DOWN);
+            bFrom.addListener(SWT.Selection, new Listener() {
                 public void handleEvent(Event event) {
-	                   final CalendarDialog cal = new CalendarDialog(SubscriptionEngineBrowserMainPage.this.getSite().getShell());
-	                    cal.addDateChangedListener(new SWTCalendarListener() {
+                   final CalendarDialog cal = new CalendarDialog(SubscriptionEngineBrowserMainPage.this.getSite().getShell());
+	                   if (fromText.getText() != null && fromText.getText().length() > 0) {
+	                       try {
+	                           Date d = sdf.parse(fromText.getText());
+	                           cal.setDate(d);
+	                       } catch (ParseException pe) {
+	
+	                       }
+	                   } 
+                   
+	                  cal.addDateChangedListener(new SWTCalendarListener() {
 	                        public void dateChanged(SWTCalendarEvent calendarEvent) {
-	                            toText.setText(sdf.format(calendarEvent.getCalendar().getTime()));
+	                            fromText.setText(sdf.format(calendarEvent.getCalendar().getTime()));
 	                        }
 	                    });
 
-	                    if (toText.getText() != null && toText.getText().length() > 0) {
-	                        try {
-	                            Date d = sdf.parse(toText.getText());
-	                            cal.setDate(d);
-	                        } catch (ParseException pe) {
-
-	                        }
-	                    }
-	                    cal.open();
+                    cal.open();
             	};
             });    
-                        
+            
+            
+
+            //to
+            Label toLabel = toolkit.createLabel(firstLineComposite, "To", SWT.NULL);
+            toLabel.setLayoutData(
+                    new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
+            );
+            
             toText = toolkit.createText(firstLineComposite, "",SWT.BORDER|SWT.SINGLE);
             toText.setLayoutData(    
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
@@ -291,6 +286,33 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
             );
             ((GridData)toText.getLayoutData()).widthHint =100;
             toText.setText("");
+            toText.pack();
+            
+        	Button bTo = toolkit.createButton(firstLineComposite, "To", SWT.CENTER|SWT.ARROW | SWT.DOWN);
+            bTo.addListener(SWT.Selection, new Listener() {
+                public void handleEvent(Event event) {
+	                   final CalendarDialog cal = new CalendarDialog(SubscriptionEngineBrowserMainPage.this.getSite().getShell());
+	                    
+	                   if (toText.getText() != null && toText.getText().length() > 0) {
+	                        try {
+	                            Date d = sdf.parse(toText.getText());
+	                            cal.setDate(d);
+	                        } catch (ParseException pe) {
+
+	                        }
+	                    }
+	                   
+	                    cal.addDateChangedListener(new SWTCalendarListener() {
+	                        public void dateChanged(SWTCalendarEvent calendarEvent) {
+	                            toText.setText(sdf.format(calendarEvent.getCalendar().getTime()));
+	                        }
+	                    });
+
+	                    cal.open();
+            	};
+            });    
+                        
+            
 
         	Label queueLabel = toolkit.createLabel(firstLineComposite, "Queue", SWT.NULL);
             queueLabel.setLayoutData(
@@ -625,8 +647,16 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 	 		long to = System.currentTimeMillis();
 	 		
 	 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+	 		Pattern pattern = Pattern.compile("^\\d{4}\\d{2}\\d{2} \\d{2}:\\d{2}:\\d{2}$");
 	 		
 	 		if (! "".equals(fromText.getText().trim())) {
+	 			String dateTimeText=fromText.getText().trim();
+	 			Matcher matcher = pattern.matcher(dateTimeText);
+	 			if(!matcher.matches()){
+	 				MessageDialog.openWarning(this.getSite().getShell(), "Warning", "Time format is illegal! ");
+	 				return new WSRoutingOrderV2[0];
+	 			}
+	 			
 	            try {
 	                Date d = sdf.parse(fromText.getText());
 	                from = d.getTime();
@@ -634,6 +664,13 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 	 		}
 
 	 		if (! "".equals(toText.getText().trim())) {
+	 			String dateTimeText=toText.getText().trim();
+	 			Matcher matcher = pattern.matcher(dateTimeText);
+	 			if(!matcher.matches()){
+	 				MessageDialog.openWarning(this.getSite().getShell(), "Warning", "Time format is illegal! ");
+	 				return new WSRoutingOrderV2[0];
+	 			}
+	 			
 	            try {
 	                Date d = sdf.parse(toText.getText());
 	                to = d.getTime();
@@ -670,6 +707,11 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 						)
 					)
  				);
+        	 
+//        	 if (results==null) {
+//              	MessageDialog.openInformation(this.getSite().getShell(), "Info", "Sorry, no result. ");
+//              	return new WSRoutingOrderV2[0];
+//            }
 						
 	 				 			 		
 	 		return results.getWsRoutingOrder();
