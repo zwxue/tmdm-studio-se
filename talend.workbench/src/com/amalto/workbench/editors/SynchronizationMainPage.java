@@ -117,7 +117,7 @@ public class SynchronizationMainPage extends AMainPageV2{
         windowTarget.addDropListener(new DCDropTargetListener());
 		
         //basic setting
-		descriptionText =new LabelText(toolkit,charComposite,"Description");        
+		descriptionText =new LabelText(charComposite,"Description");        
 		descriptionText.getText().addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent e) {
         		if (refreshing) return;
@@ -266,7 +266,7 @@ public class SynchronizationMainPage extends AMainPageV2{
         );       
         remoteMDMComposite.setLayout(new GridLayout(2,false));
 
-		remoteSystemNameText =new LabelText(toolkit,remoteMDMComposite,"Name");        
+		remoteSystemNameText =new LabelText(remoteMDMComposite,"Name");        
 		remoteSystemNameText.getText().addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				if (refreshing) return;
@@ -275,7 +275,7 @@ public class SynchronizationMainPage extends AMainPageV2{
 			}
 		});
 		
-		remoteSystemURLText =new LabelText(toolkit,remoteMDMComposite,"URL");        
+		remoteSystemURLText =new LabelText(remoteMDMComposite,"URL");        
 		remoteSystemURLText.getText().addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent e) {
         		if (refreshing) return;
@@ -284,7 +284,7 @@ public class SynchronizationMainPage extends AMainPageV2{
         	}
         });
 		
-		remoteSystemUsernameText =new LabelText(toolkit,remoteMDMComposite,"Username");        
+		remoteSystemUsernameText =new LabelText(remoteMDMComposite,"Username");        
 		remoteSystemUsernameText.getText().addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent e) {
         		if (refreshing) return;
@@ -293,7 +293,7 @@ public class SynchronizationMainPage extends AMainPageV2{
         	}
         });
 		
-		remoteSystemPasswordText =new LabelText(toolkit,remoteMDMComposite,"Password");        
+		remoteSystemPasswordText =new LabelText(remoteMDMComposite,"Password");        
 		remoteSystemPasswordText.getText().addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent e) {
         		if (refreshing) return;
@@ -313,7 +313,7 @@ public class SynchronizationMainPage extends AMainPageV2{
         TISComposite.setLayout(new GridLayout(2,false));
 
 		
-		tisURLText =new LabelText(toolkit,TISComposite,"URL");        
+		tisURLText =new LabelText(TISComposite,"URL");        
 		tisURLText.getText().addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent e) {
         		if (refreshing) return;
@@ -322,7 +322,7 @@ public class SynchronizationMainPage extends AMainPageV2{
         	}
         });
 		
-		tisUsernameText =new LabelText(toolkit,TISComposite,"Username");        
+		tisUsernameText =new LabelText(TISComposite,"Username");        
 		tisUsernameText.getText().addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent e) {
         		if (refreshing) return;
@@ -331,7 +331,7 @@ public class SynchronizationMainPage extends AMainPageV2{
         	}
         });
 		
-		tisPasswordText =new LabelText(toolkit,TISComposite,"Password");        
+		tisPasswordText =new LabelText(TISComposite,"Password");        
 		tisPasswordText.getText().addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent e) {
         		if (refreshing) return;
@@ -340,7 +340,7 @@ public class SynchronizationMainPage extends AMainPageV2{
         	}
         });		
 		
-		tisParametersText =new LabelText(toolkit,TISComposite,"Parameters");        
+		tisParametersText =new LabelText(TISComposite,"Parameters");        
 		tisParametersText.getText().addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent e) {
         		if (refreshing) return;

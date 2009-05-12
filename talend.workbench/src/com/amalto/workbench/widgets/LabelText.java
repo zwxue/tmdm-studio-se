@@ -3,6 +3,8 @@ package com.amalto.workbench.widgets;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -17,13 +19,13 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 public class LabelText {
 	protected Label label;
 	protected Text text;
-	
-	public LabelText(FormToolkit toolkit,Composite parent, final String labelName){
-       label = toolkit.createLabel(parent, labelName, SWT.NULL);
+	WidgetFactory factory =new WidgetFactory();
+	public LabelText(Composite parent, final String labelName){
+       label = factory.createLabel(parent, labelName, SWT.NULL);
        label.setLayoutData(
                 new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
         );
-        text = toolkit.createText(parent, "",SWT.BORDER);
+        text = factory.createText(parent, "",SWT.BORDER);
         text.setLayoutData(    
                 new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
         );		
@@ -33,6 +35,13 @@ public class LabelText {
         		text.selectAll();
         	}
         });
+        text.addMouseListener(new MouseAdapter(){
+        	@Override
+        	public void mouseDown(MouseEvent e) {
+        		text.selectAll();
+        	}
+        });
+        factory.adapt(parent);
 	}
 	public Label getLabel() {
 		return label;
