@@ -29,10 +29,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.List;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.views.properties.tabbed.ITabbedPropertyConstants;
 
 
 /**
@@ -238,9 +236,9 @@ public class WidgetFactory extends FormToolkit {
     public Composite createFlatFormComposite(Composite parent) {
         Composite composite = createComposite(parent);
         FormLayout layout = new FormLayout();
-        layout.marginWidth = ITabbedPropertyConstants.HSPACE + 2;
-        layout.marginHeight = ITabbedPropertyConstants.VSPACE;
-        layout.spacing = ITabbedPropertyConstants.VMARGIN + 1;
+        layout.marginWidth = 5 + 2;
+        layout.marginHeight = 6;
+        layout.spacing = 6 + 1;
         composite.setLayout(layout);
         return composite;
     }
