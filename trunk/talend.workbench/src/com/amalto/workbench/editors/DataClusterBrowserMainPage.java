@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -53,6 +54,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -131,35 +133,18 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         	
         	//get the body
         	Composite composite = managedForm.getForm().getBody();
-        	composite.setLayout(new GridLayout(7,false));
+        	composite.setLayout(new GridLayout(9,false));
         	
         	//We do not implement IFormPart: we do not care about lifecycle management
         	final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
         	
-        	Button bFrom = toolkit.createButton(composite, "From", SWT.CENTER);
-            bFrom.addListener(SWT.Selection, new Listener() {
-                public void handleEvent(Event event) {
-                   final CalendarDialog cal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());
-                    cal.addDateChangedListener(new SWTCalendarListener() {
-                        public void dateChanged(SWTCalendarEvent calendarEvent) {
-                            fromText.setText(sdf.format(calendarEvent.getCalendar().getTime()));
-                        }
-                    });
-
-                    if (fromText.getText() != null && fromText.getText().length() > 0) {
-                        try {
-                            Date d = sdf.parse(fromText.getText());
-                            cal.setDate(d);
-                        } catch (ParseException pe) {
-
-                        }
-                    }
-                    cal.open();
-            	};
-            });    
-            
-            
-            fromText = toolkit.createText(composite, "",SWT.BORDER|SWT.SINGLE);
+        	//from
+        	Label fromLabel = toolkit.createLabel(composite, "From", SWT.NULL);
+        	fromLabel.setLayoutData(
+                    new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
+            );
+        	
+        	fromText = toolkit.createText(composite, "",SWT.BORDER|SWT.SINGLE);
             fromText.setLayoutData(    
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
@@ -178,31 +163,40 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             long yesterday = c.getTimeInMillis() - (1000*60*60*24);
             c.setTimeInMillis(yesterday);
             fromText.setText(sdf.format(c.getTime()));
+            fromText.pack();
+            
+        	Button bFrom = toolkit.createButton(composite, "From", SWT.CENTER|SWT.ARROW | SWT.DOWN);
+            bFrom.addListener(SWT.Selection, new Listener() {
+                public void handleEvent(Event event) {
+                   final CalendarDialog cal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());
+                    if (fromText.getText() != null && fromText.getText().length() > 0) {
+                       try {
+                           Date d = sdf.parse(fromText.getText());
+                           cal.setDate(d);
+                       } catch (ParseException pe) {
+
+                       }
+                    }
+                    
+                    cal.addDateChangedListener(new SWTCalendarListener() {
+                        public void dateChanged(SWTCalendarEvent calendarEvent) {
+                            fromText.setText(sdf.format(calendarEvent.getCalendar().getTime()));
+                            //cal.close();
+                        }
+                    });
+
+                    
+                    cal.open();
+            	};
+            });    
+          
 
             
             //to
-        	Button bTo = toolkit.createButton(composite, "To", SWT.CENTER);
-            bTo.addListener(SWT.Selection, new Listener() {
-                public void handleEvent(Event event) {
-	                   final CalendarDialog cal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());
-	                    cal.addDateChangedListener(new SWTCalendarListener() {
-	                        public void dateChanged(SWTCalendarEvent calendarEvent) {
-	                            toText.setText(sdf.format(calendarEvent.getCalendar().getTime()));
-	                        }
-	                    });
-
-	                    if (toText.getText() != null && toText.getText().length() > 0) {
-	                        try {
-	                            Date d = sdf.parse(toText.getText());
-	                            cal.setDate(d);
-	                        } catch (ParseException pe) {
-
-	                        }
-	                    }
-	                    cal.open();
-            	};
-            });    
-            
+            Label toLabel = toolkit.createLabel(composite, "To", SWT.NULL);
+            toLabel.setLayoutData(
+                    new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
+            );
             
             toText = toolkit.createText(composite, "",SWT.BORDER|SWT.SINGLE);
             toText.setLayoutData(    
@@ -220,6 +214,34 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             		}//keyListener
             );
             toText.setText("");
+            toText.pack();
+            
+        	Button bTo = toolkit.createButton(composite, "To", SWT.CENTER|SWT.ARROW | SWT.DOWN);
+            bTo.addListener(SWT.Selection, new Listener() {
+                public void handleEvent(Event event) {
+	                   final CalendarDialog cal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());
+	                    
+	                    if (toText.getText() != null && toText.getText().length() > 0) {
+	                        try {
+	                            Date d = sdf.parse(toText.getText());
+	                            cal.setDate(d);
+	                        } catch (ParseException pe) {
+
+	                        }
+	                    } 
+	                   
+	                    cal.addDateChangedListener(new SWTCalendarListener() {
+	                        public void dateChanged(SWTCalendarEvent calendarEvent) {
+	                            toText.setText(sdf.format(calendarEvent.getCalendar().getTime()));
+	                            //cal.close();
+	                        }
+	                    });
+
+	                    
+	                    cal.open();
+            	};
+            });    
+            
 
 
         	Label conceptLabel = toolkit.createLabel(composite, "Concept", SWT.NULL);
@@ -264,7 +286,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             );
             keyText = toolkit.createText(composite, "",SWT.BORDER|SWT.SINGLE);
             keyText.setLayoutData(    
-                    new GridData(SWT.FILL,SWT.CENTER,false,false,3,1)
+                    new GridData(SWT.FILL,SWT.CENTER,false,false,5,1)
             );
             keyText.addKeyListener(
             		new KeyListener() {
@@ -308,7 +330,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             resultsViewer = new TableViewer(table);
             
             resultsViewer.getControl().setLayoutData(    
-                    new GridData(SWT.FILL,SWT.FILL,true,true,7,1)
+                    new GridData(SWT.FILL,SWT.FILL,true,true,9,1)
             );
             ((GridData)resultsViewer.getControl().getLayoutData()).heightHint=500;
             resultsViewer.setContentProvider(new ArrayContentProvider());
@@ -560,8 +582,17 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	 		long to = -1;
 	 		
 	 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+	 		Pattern pattern = Pattern.compile("^\\d{4}\\d{2}\\d{2} \\d{2}:\\d{2}:\\d{2}$");
 	 		
 	 		if (! "".equals(fromText.getText())) {
+	 			
+	 			String dateTimeText=fromText.getText().trim();
+	 			Matcher matcher = pattern.matcher(dateTimeText);
+	 			if(!matcher.matches()){
+	 				MessageDialog.openWarning(this.getSite().getShell(), "Warning", "Time format is illegal! ");
+	 				return new LineItem[0];
+	 			}
+	 			
 	            try {
 	                Date d = sdf.parse(fromText.getText());
 	                from = d.getTime();
@@ -569,6 +600,13 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	 		}
 
 	 		if (! "".equals(toText.getText())) {
+	 			String dateTimeText=toText.getText().trim();
+	 			Matcher matcher = pattern.matcher(dateTimeText);
+	 			if(!matcher.matches()){
+	 				MessageDialog.openWarning(this.getSite().getShell(), "Warning", "Time format is illegal! ");
+	 				return new LineItem[0];
+	 			}
+	 			
 	            try {
 	                Date d = sdf.parse(toText.getText());
 	                to = d.getTime();
@@ -599,7 +637,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	            	)
 	            ).getResults();
             
-            if (results==null) return new LineItem[0];
+            if (results==null) {
+            	MessageDialog.openInformation(this.getSite().getShell(), "Info", "Sorry, no result. ");
+            	return new LineItem[0];
+            }
             
             LineItem[] res = new LineItem[results.length];
 	 		for (int i = 0; i < results.length; i++) {
@@ -617,7 +658,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 			if (	(e.getLocalizedMessage()!=null) &&
 					e.getLocalizedMessage().contains("10000")
 				)
-				MessageDialog.openError(this.getSite().getShell(), "Too Many Results", "More tha 10000 results returned by the search. \nPlease narrow your search.");
+				MessageDialog.openError(this.getSite().getShell(), "Too Many Results", "More than 10000 results returned by the search. \nPlease narrow your search.");
 			else
 				MessageDialog.openError(this.getSite().getShell(), "Unable to perform the search", e.getLocalizedMessage());
 			return null;
