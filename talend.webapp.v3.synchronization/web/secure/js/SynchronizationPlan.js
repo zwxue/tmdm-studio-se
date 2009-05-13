@@ -1,5 +1,3 @@
-
-
 loadResource("/SynchronizationPlan/secure/js/SyncXMLPanel.js", "" );
 
 amalto.namespace("amalto.SynchronizationPlan");
@@ -21,10 +19,10 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
 	  ]);
 
 	  var store = new Ext.data.Store({
-	    proxy: new Ext.data.DWRProxy(SynchronizationPlanInterface.getSyncItems, false),
+	    proxy: new Ext.data.DWRProxy(SynchronizationPlanInterface.getSyncItems, true),
 	    reader: new Ext.data.ListRangeReader( 
-				{id:'itemPK', totalProperty:'totalSize'}, recordType),
-	    remoteSort: false
+				{id:'itemPK', totalProperty:'totalSize',root: 'data'}, recordType),
+	    remoteSort: true
 	  });
     
     var myColumns = [
@@ -36,10 +34,10 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
 	];
    	var columnModel = new Ext.grid.ColumnModel(myColumns);
     var grid;
+    var pageSize =2;
     
     function showSyncItems(){
-		var criteria = DWRUtil.getValue('sync-criteria');
-		store.load({params:{start:0, limit:22}, arg:[criteria]});
+		store.load({params:{start:0, limit:pageSize}});
     };
     
     function show(){
@@ -86,9 +84,56 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
 							text:'Search',
 							handler:showSyncItems
 						})
-					]
+					],
+				bbar:[
+					       
+							new Ext.PagingToolbar({
+								pageSize: parseInt(pageSize),
+						        store: store,
+						        displayInfo: false,
+						        displayMsg: 'Displaying items'+' {0} - {1} '+'of'+' {2}',
+						        emptyMsg: 'No result',
+						        items:[ 
+						        	new Ext.Toolbar.Separator(),
+						        	new Ext.Toolbar.TextItem('Number of lines per page'+" : "),
+						        	new Ext.form.TextField({
+				    					id:'lineMaxItems',
+				    					value:pageSize,
+				    					width:30,
+				    					disabled:true
+//				    					listeners: {
+//						                	'specialkey': function(a, e) {
+//									            if(e.getKey() == e.ENTER) {
+//							                		var lineMax = DWRUtil.getValue('lineMaxItems');
+//													if(lineMax==null || lineMax=="") lineMax=50;
+//													{
+//													pageSize=lineMax;
+//													showSyncItems();
+//													}
+//									            } 
+//											}
+//						                }
+						            }),
+						        ]
+						    })
+		             ]
    	   	    }); 
-		store.load({params:{start:0, limit:22}, arg:[]});
+   	   	
+   	   	
+   	   	store.on('beforeload', function(){
+   	   	 var criteria;	
+   	   	 if(Ext.get('sync-criteria')!=null){
+   	   	 	criteria= DWRUtil.getValue('sync-criteria');
+   	   	 }else{
+   	   	 	criteria="*";
+   	   	 }
+   	   	  
+         Ext.apply(this.baseParams,{
+          regex: criteria
+         });
+        });
+             
+		store.load({params:{start:0, limit:pageSize}});
 		store.on('load', function(){
 	    
 		});  
