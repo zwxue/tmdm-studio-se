@@ -23,6 +23,7 @@ import com.amalto.webapp.v3.synchronizationaction.bean.SyncStatus;
 
 public class SynchronizationActionDWR {
 	public static final String SAVED_SERVER_URL="save.server.url";
+	public static final String SERVER_URL_DEFAULT="http://localhost:8080/xtentis/XtentisPort";
 	private Logger logger=org.apache.log4j.Logger.getLogger(this.getClass());
 	
 	public SynchronizationActionDWR() {
@@ -128,7 +129,7 @@ public class SynchronizationActionDWR {
 	}
 	
 	public ListRange getSavedURLs()throws Exception{
-		String[] urls=new String[]{"http://localhost:8080/xtentis/XtentisPort"};
+		String[] urls=new String[]{SERVER_URL_DEFAULT};
 		try{
 			Properties configure= XtentisConfiguration.getConfiguration();
 			String url=configure.getProperty(SAVED_SERVER_URL);

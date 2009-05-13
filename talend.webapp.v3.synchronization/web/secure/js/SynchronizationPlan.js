@@ -38,6 +38,10 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
     var pagingToolbar;
     
     function showSyncItems(){
+		var lineMax = DWRUtil.getValue('lineMaxItems');
+		if(lineMax==null || lineMax=="")
+			lineMax=50;		
+		pageSize=lineMax;		    	
 		store.load({params:{start:0, limit:pageSize}});
     };
     
@@ -106,15 +110,10 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
 				    					listeners: {
 						                	'specialkey': function(a, e) {
 									            if(e.getKey() == e.ENTER) {
-							                		var lineMax = DWRUtil.getValue('lineMaxItems');
-													if(lineMax==null || lineMax=="") lineMax=50;
-													{
-													pageSize=lineMax;
-													pagingToolbar.pageSize=parseInt(lineMax);
-													showSyncItems();
-													
+													pagingToolbar.pageSize=parseInt(pageSize);
+													showSyncItems();													
 													//Ext.PagingToolbar toolbar=Ext.get('sync-pagingtoolbar');
-													}
+													
 									            } 
 											}
 						                }
