@@ -198,8 +198,9 @@ public class MenuEntryDialog extends Dialog {
 
         new TableColumn(table, SWT.LEFT).setText(LANGUAGE);
         new TableColumn(table, SWT.CENTER).setText(LABEL);
-        table.getColumn(0).setWidth(200);
-        for (int i = 0, n = table.getColumnCount(); i < n; i++) {
+        table.getColumn(0).setWidth(150);
+        table.getColumn(1).setWidth(150);
+        for (int i = 2, n = table.getColumnCount(); i < n; i++) {
           table.getColumn(i).pack();
         }
         
