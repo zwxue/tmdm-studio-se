@@ -135,6 +135,7 @@ public class SynchronizationActionDWR {
 			if(url!=null){
 				urls= url.split(";");
 			}
+			Arrays.sort(urls);
 			List<ServerURL> list=new ArrayList<ServerURL>();
 			for(String id: urls){
 				ServerURL item=new ServerURL();
