@@ -2,6 +2,7 @@ package com.amalto.webapp.v3.synchronization.dwr;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -50,7 +51,9 @@ public class SynchronizationPlanDWR {
 			return ret;
 		}		
 	}
-	public ListRange getSyncItems(String regex)throws Exception{
+	
+	public ListRange getSyncItems(int start, int limit,String sort,String dir,String regex)throws Exception{
+
 		logger.debug("getSyncItems() regex== "+regex);
 		try {
 			List<SynchronizationItem> list=new ArrayList<SynchronizationItem>();	
@@ -62,8 +65,10 @@ public class SynchronizationPlanDWR {
 			regex=".*"+regex+".*";
 			
 			WSSynchronizationItemPKArray pks=Util.getPort().getSynchronizationItemPKs(new WSGetSynchronizationItemPKs());
-			logger.debug("pks() " + pks.getWsSynchronizationItemPK().length);
 			WSSynchronizationItemPK[] items= pks.getWsSynchronizationItemPK();
+			
+			logger.debug("pks() " + items.length);
+			
 			for(WSSynchronizationItemPK pk: items){
 				WSSynchronizationItem item=Util.getPort().getSynchronizationItem(new WSGetSynchronizationItem(pk));
 				if(item.getResolvedProjection() ==null ){
@@ -81,9 +86,13 @@ public class SynchronizationPlanDWR {
 				syncItem.setNode(node);				
 				list.add(syncItem);
 			}	
+			
+			start=start<list.size()?start:list.size()-1;
+			int end=list.size()<(start+limit)?list.size()-1:(start+limit-1);
+			List<SynchronizationItem> sublist=list.subList(start, end+1);
 
 			ListRange listRange = new ListRange();
-			listRange.setData(list.toArray(new SynchronizationItem[list.size()]));
+			listRange.setData(sublist.toArray(new SynchronizationItem[sublist.size()]));
 			listRange.setTotalSize(list.size());			
 			return listRange;
 
@@ -96,4 +105,18 @@ public class SynchronizationPlanDWR {
 		}
 
 	}
+	
+	public static void main(String[] args) {
+		List list=new ArrayList();
+		list.add("0");
+		list.add("1");
+		list.add("2");
+		list.add("3");
+		List sublist=list.subList(1, 4);
+		for (int i = 0; i < sublist.size(); i++) {
+			System.out.println(sublist.get(i));
+		}
+		
+	}
+	
 }
