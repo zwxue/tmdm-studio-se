@@ -34,7 +34,7 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
 	];
    	var columnModel = new Ext.grid.ColumnModel(myColumns);
     var grid;
-    var pageSize =2;
+    var pageSize =22;
     
     function showSyncItems(){
 		store.load({params:{start:0, limit:pageSize}});
