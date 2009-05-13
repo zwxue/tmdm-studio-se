@@ -1,11 +1,14 @@
 package com.amalto.workbench.widgets;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -33,6 +36,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
@@ -60,6 +64,9 @@ public class ComplexTableViewer {
 	protected Button upButton;
 	protected Button deleteButton;
 	
+	private boolean editable = true;	
+	private static String ERROR_ITEMALREADYEXISTS_CONTENT = "This line already Exists!";
+	private static String ERROR_ITEMALREADYEXISTS_TITLE   = "Warning";
 	//mainPage can be null
 	protected AMainPageV2 mainPage;
 	
@@ -70,7 +77,10 @@ public class ComplexTableViewer {
 		this.mainPage = mainPage;
 	}
 
-	
+	public void setEditable(boolean editable)
+	{
+		this.editable = editable;
+	}
 	public Button getAddButton() {
 		return addButton;
 	}
@@ -174,7 +184,9 @@ public class ComplexTableViewer {
         );
         addButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
-        	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+        	@SuppressWarnings("unchecked")
+			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+
         		String uniqueVal="";
            		//Make sure texts are not nill (empty) where not authorized
         		for (Iterator<ComplexTableViewerColumn> iterator = columns.iterator(); iterator.hasNext(); ) {
@@ -199,7 +211,7 @@ public class ComplexTableViewer {
         						"Input Error",
         						"The Column '"+column.getName()+"' cannot be empty"       						
         					);
-        					return;
+        					return ;
         				}
         			}
         			uniqueVal+="."+text;
@@ -213,11 +225,11 @@ public class ComplexTableViewer {
         				thisLineVal+="."+keyvalue.value;
         			}
         			if(thisLineVal.equals(uniqueVal)){
-        				MessageDialog.openInformation(null, "Warning", "This line already Exists!");
-        				return;
+        				MessageDialog.openInformation(null, ERROR_ITEMALREADYEXISTS_TITLE, ERROR_ITEMALREADYEXISTS_CONTENT);
+        				return ;
         			}
         		}
-        		
+
         		//Update the model
         		Line line =new Line(columns.toArray(new ComplexTableViewerColumn[columns.size()]),getTextValues());
         		list.add(line);
@@ -227,6 +239,7 @@ public class ComplexTableViewer {
          	};
         });		
 	}
+	
 	
 	protected void add() {
    		
@@ -262,9 +275,10 @@ public class ComplexTableViewer {
         );
         upButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
-        	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+        	@SuppressWarnings("unchecked")
+			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
         		int index =viewer.getTable().getSelectionIndex();
-        		if(index >=0 && index < viewer.getTable().getItemCount() ){
+        		if(index >0 && index < viewer.getTable().getItemCount() ){
         			//commit as we go
         			if(mainPage!=null){
         				mainPage.setComitting(true);
@@ -289,9 +303,10 @@ public class ComplexTableViewer {
         );
         downButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
-        	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+        	@SuppressWarnings("unchecked")
+			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
         		int index =viewer.getTable().getSelectionIndex();
-        		if(index >=0 && index < viewer.getTable().getItemCount() ){
+        		if(index >=0 && index < viewer.getTable().getItemCount()-1 ){
         			//commit as we go
         			if(mainPage!=null){
         				mainPage.setComitting(true);
@@ -316,7 +331,8 @@ public class ComplexTableViewer {
         );
         deleteButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
-        	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+        	@SuppressWarnings("unchecked")
+			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
         		int index =viewer.getTable().getSelectionIndex();
         		if(index >=0 && index < viewer.getTable().getItemCount() ){
         			List<Line> items=(List<Line>)viewer.getInput();
@@ -331,7 +347,15 @@ public class ComplexTableViewer {
         // Create the cell editors --> We actually discard those later: not natural for an user
         CellEditor[] editors = new CellEditor[columns.size()];	        
         for(int i=0; i< columns.size(); i++){
-	        editors[i] = new TextCellEditor(table);		        
+        	if (!columns.get(i).isCombo())
+        	{
+    	        editors[i] = new TextCellEditor(table);	
+        	}
+        	else
+        	{
+        		editors[i] = new ComboBoxCellEditor(table, ((ComplexTableViewerColumn)columns.get(i)).getComboValues(), SWT.READ_ONLY);	
+        	}
+	        
         }
         viewer.setCellEditors(editors);
         
@@ -339,7 +363,8 @@ public class ComplexTableViewer {
         viewer.setContentProvider(new IStructuredContentProvider() {
         	public void dispose() {}
         	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {}
-        	public Object[] getElements(Object inputElement) {
+        	@SuppressWarnings("unchecked")
+			public Object[] getElements(Object inputElement) {
         		ArrayList<Line> lines = (ArrayList<Line>)inputElement;
         		return lines.toArray(new Line[lines.size()]);
         	}
@@ -381,19 +406,67 @@ public class ComplexTableViewer {
         viewer.setCellModifier(new ICellModifier() {
         	public boolean canModify(Object element, String property) {
         		//if (INSTANCE_ACCESS.equals(property)) return true; Deactivated
-        		return false;
+        		return editable;
         	}
-        	public void modify(Object element, String property, Object value) {
 
-        	}
+			@SuppressWarnings("unchecked")
+			public void modify(Object element, String property, Object value)
+        	{
+				// modify the text  and combo cell value 
+				TableItem item = (TableItem) element;
+				Line line = (Line) item.getData();
+				int columnIndex = Arrays.asList(viewer.getColumnProperties())
+						.indexOf(property);
+				if (isAColumnWithCombo(columnIndex)) {
+					String[] attrs = columns.get(columnIndex).getComboValues();
+					value = attrs[Integer.parseInt(value.toString())];
+				}
+				KeyValue kv = line.keyValues.get(columnIndex);
+				boolean noChange = kv.value.equals(value.toString());
+				kv = new KeyValue(property, value.toString());
+				Line copyLine = line.clone();
+				copyLine.keyValues.set(columnIndex, kv);
+				List<Line> items = (List<Line>) viewer.getInput();
+				Collections.sort(items);
+				int pos = Collections.binarySearch(items, copyLine);
+				if (pos >= 0 && !copyLine.equals(line)) {
+					MessageDialog.openInformation(null,
+							ERROR_ITEMALREADYEXISTS_TITLE,
+							ERROR_ITEMALREADYEXISTS_CONTENT);
+					return;
+				}
+				line.keyValues.set(columnIndex, kv);
+				viewer.update(line, null);
+				if (!noChange)
+				{
+					markDirty();
+				}
+        	} 
         	public Object getValue(Object element, String property) {
-        		Line line = (Line) element;
-        		for(KeyValue keyvalue:line.keyValues){
-        			if(property.equals(keyvalue.key)){
-        				return keyvalue.value;
-        			}
-        		}
+        		int columnIndex = Arrays.asList(viewer.getColumnProperties())
+						.indexOf(property);
+				Line line = (Line) element;
+				// add getting value from combo
+				if (isAColumnWithCombo(columnIndex)) {
+					String value = line.keyValues.get(columnIndex).value;
+					String[] attrs = columns.get(columnIndex).getComboValues();
+					return Arrays.asList(attrs).indexOf(value);
+				}
+				for (KeyValue keyvalue : line.keyValues) {
+					if (property.equals(keyvalue.key)) {
+						if (keyvalue.value.equals("")) {
+							keyvalue.value = columns.get(columnIndex)
+									.getNillDisplay();
+						}
+						return keyvalue.value;
+					}
+				}
         		return null;
+        	}
+        	
+        	private boolean isAColumnWithCombo(int columnIdx)
+        	{
+        		return columns.get(columnIdx).isCombo();
         	}
         });
 
@@ -441,7 +514,8 @@ public class ComplexTableViewer {
         //display for Delete Key events to delete an instance
         viewer.getTable().addKeyListener(new KeyListener() {
         	public void keyPressed(KeyEvent e) {}
-        	public void keyReleased(KeyEvent e) {
+        	@SuppressWarnings("unchecked")
+			public void keyReleased(KeyEvent e) {
         		if ((e.stateMask==0) && (e.character == SWT.DEL) && (viewer.getSelection()!=null)) {
         			Line line = (Line)((IStructuredSelection)viewer.getSelection()).getFirstElement();
         			//update the underlying role and refresh the table
