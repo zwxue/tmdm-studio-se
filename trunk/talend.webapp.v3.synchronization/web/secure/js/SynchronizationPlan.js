@@ -35,6 +35,7 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
    	var columnModel = new Ext.grid.ColumnModel(myColumns);
     var grid;
     var pageSize =22;
+    var pagingToolbar;
     
     function showSyncItems(){
 		store.load({params:{start:0, limit:pageSize}});
@@ -87,7 +88,8 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
 					],
 				bbar:[
 					       
-							new Ext.PagingToolbar({
+				   pagingToolbar=new Ext.PagingToolbar({
+								id:'sync-pagingtoolbar',
 								pageSize: parseInt(pageSize),
 						        store: store,
 						        displayInfo: false,
@@ -100,19 +102,22 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
 				    					id:'lineMaxItems',
 				    					value:pageSize,
 				    					width:30,
-				    					disabled:true
-//				    					listeners: {
-//						                	'specialkey': function(a, e) {
-//									            if(e.getKey() == e.ENTER) {
-//							                		var lineMax = DWRUtil.getValue('lineMaxItems');
-//													if(lineMax==null || lineMax=="") lineMax=50;
-//													{
-//													pageSize=lineMax;
-//													showSyncItems();
-//													}
-//									            } 
-//											}
-//						                }
+				    					//disabled:true,
+				    					listeners: {
+						                	'specialkey': function(a, e) {
+									            if(e.getKey() == e.ENTER) {
+							                		var lineMax = DWRUtil.getValue('lineMaxItems');
+													if(lineMax==null || lineMax=="") lineMax=50;
+													{
+													pageSize=lineMax;
+													pagingToolbar.pageSize=parseInt(lineMax);
+													showSyncItems();
+													
+													//Ext.PagingToolbar toolbar=Ext.get('sync-pagingtoolbar');
+													}
+									            } 
+											}
+						                }
 						            }),
 						        ]
 						    })
