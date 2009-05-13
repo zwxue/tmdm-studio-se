@@ -29,6 +29,9 @@ Ext.extend(Ext.data.DWRProxy, Ext.data.DataProxy, {
       	callParams.push(params.limit);
       	callParams.push(params.sort);
       	callParams.push(params.dir);
+      	if(params.regex!=null&&params.regex!=undefined){
+      	callParams.push(params.regex);
+      	}
 			}
 			
       callParams.push(delegate);
