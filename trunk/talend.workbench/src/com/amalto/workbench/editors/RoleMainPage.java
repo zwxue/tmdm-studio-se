@@ -47,6 +47,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -60,6 +61,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.exolab.castor.xml.Marshaller;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.RoleMenuParameters;
@@ -328,6 +331,8 @@ public class RoleMainPage extends AMainPageV2 {
             		ArrayList<InstanceLine> lines = new ArrayList<InstanceLine>();
             		for (Iterator iter = names.iterator(); iter.hasNext(); ) {
 						String name = (String) iter.next();
+//						System.out.println(name);//000000000000000000
+//						mmenuParentIDCombo.add(name);
 						InstanceLine line = new InstanceLine(name,instances.get(name).isWritable());
 						lines.add(line);
 					}
@@ -853,16 +858,88 @@ public class RoleMainPage extends AMainPageV2 {
 	protected Composite menuComposite = null;
 	protected Text menuParentIDText = null;
 	protected Combo menuPositionCombo = null;
+	protected Combo menuParentIDCombo = null;
+
 
 	protected boolean menuParametersRefreshing = false;
 	
-	protected void showMenuParameters(String instanceName) {
+	public String[] getStrings(Object inputElement,String instanceName){
+//		System.out.println("getElements() ");
+		
+		HashMap<String, Role.Specification.Instance> instances = 
+			(HashMap<String, Role.Specification.Instance>) inputElement;
+		Set<String> names = instances.keySet();
+		
+//		ArrayList<InstanceLine> lines = new ArrayList<InstanceLine>();
+		String[] string = new String[names.size()];
+		Iterator iter = names.iterator();
+		string[0]="";
+		for (int i=1; iter.hasNext();) {
+			String name = (String) iter.next();
+//			System.out.println(name);//000000000000000000
+//			mmenuParentIDCombo.add(name);
+//			InstanceLine line = new InstanceLine(name,instances.get(name).isWritable());
+//			lines.add(line);
+			if(!instanceName.equals(name)){
+				string[i]=name;
+				i++;
+			}
+				
+		}
+		//we return an instance line made of a Sring and a boolean
+//		return lines.toArray(new InstanceLine[lines.size()]);
+		return string;
+	}
+	
+	
+	protected void showMenuParameters(String instanceName) {//show the "menu location of menu entry..."
 		if (menuComposite==null)
 			menuComposite = getMenuParametersComposite();
 		((StackLayout)paramsClientComposite.getLayout()).topControl = menuComposite;
 		paramsContainerComposite.setVisible(true);
 		this.getManagedForm().reflow(true);
+		//add list here lym
 		refreshMenuParameters(instanceName);
+//		InstanceLine line = (InstanceLine)((IStructuredSelection)event.getSelection()).getFirstElement();
+//		HashMap<String, Role.Specification.Instance> instances = (HashMap<String, Role.Specification.Instance>) inputElement;
+//		Set<String> names = instances.keySet();
+//		ArrayList<InstanceLine> lines = new ArrayList<InstanceLine>();
+//		mmenuParentIDCombo.setItem(1,instanceName);
+	    
+		menuParentIDCombo.setItems(getStrings(instancesViewer.getInput(),instanceName));//add the items
+		
+		HashSet<String> parameters = role.getSpecifications().get(objectTypesCombo.getText())
+										 .getInstances().get(instanceName).getParameters();
+//		ArrayList<String> wcList = new ArrayList<String>();
+//		int i =parameters.size();
+		String parentId = new String();
+		for (Iterator iter = parameters.iterator(); iter.hasNext(); ) {
+			String parent = (String) iter.next();
+//			System.out.println(parent);
+			try{
+				Element result = Util.parse(parent).getDocumentElement();
+//				Document doc = Util.parse(parent);
+//				result.getAttribute("parent-iD");
+//				result.getAttributes();
+				parentId = result.getTextContent();
+//				System.out.println(result);
+			}catch(Exception e){}
+			
+//			RoleWhereCondition.parse(parent);
+		}
+		String[] s = getStrings(instancesViewer.getInput(),instanceName);
+		int i=0;
+		for(;i<s.length;i++){
+			if(parentId.equals(s[i])){
+				menuParentIDCombo.select(i);
+				break;
+			}
+			
+		}
+		
+		//refresh the whole thing
+//		wcListViewer.setInput(wcList);
+		
 	}
 	
 
@@ -880,12 +957,28 @@ public class RoleMainPage extends AMainPageV2 {
                 new GridData(SWT.BEGINNING,SWT.CENTER,false,true,1,1)
         );
         
-        menuParentIDText = toolkit.createText(composite, "",SWT.BORDER|SWT.SINGLE);
-        menuParentIDText.setLayoutData(    
-                new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-        );
-        menuParentIDText.addModifyListener(new ModifyListener() {
-        	public void modifyText(ModifyEvent e) {
+//        menuParentIDText = toolkit.createText(composite, "",SWT.BORDER|SWT.SINGLE);
+//        menuParentIDText.setLayoutData(    
+//                new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+//        );
+//        menuParentIDText.addModifyListener(new ModifyListener() {
+//        	public void modifyText(ModifyEvent e) {
+//        		if (menuParametersRefreshing) return;
+//        		commitMenuParameters();
+//        	}
+//        });
+        
+        menuParentIDCombo = new Combo(composite,SWT.READ_ONLY|SWT.DROP_DOWN|SWT.SINGLE);
+        GridData gridData =new GridData(SWT.BEGINNING,SWT.FILL,true,true,1,1);
+        gridData.widthHint=150;
+        menuParentIDCombo.setLayoutData(gridData);
+        		
+        		 
+       
+//        menuParentIDCombo.setItems(getElements());
+        menuParentIDCombo.addSelectionListener(new SelectionListener(){
+        	public void widgetDefaultSelected(SelectionEvent e) {}
+        	public void widgetSelected(SelectionEvent e) {
         		if (menuParametersRefreshing) return;
         		commitMenuParameters();
         	}
@@ -932,11 +1025,15 @@ public class RoleMainPage extends AMainPageV2 {
 			try {
 				menuParameters = RoleMenuParameters.unmarshalMenuParameters(parameters);
 			} catch (Exception e){}
-			menuParentIDText.setText(menuParameters.getParentID());
+//			menuParentIDText.setText(menuParameters.getParentID());
+			
+			menuParentIDCombo.select(menuParameters.getPosition());
+			
 			menuPositionCombo.select(menuParameters.getPosition());
 		} else {
 			//force a first set of parameters
-			menuParentIDText.setText("");
+//			menuParentIDText.setText("");
+			menuParentIDCombo.select(0);
 			menuPositionCombo.select(0);
 			commitMenuParameters();
 		}
@@ -950,12 +1047,13 @@ public class RoleMainPage extends AMainPageV2 {
 	 */
 	protected void commitMenuParameters() {
 		RoleMenuParameters menuParameters = new RoleMenuParameters();
-		menuParameters.setParentID(menuParentIDText.getText());
+//		menuParameters.setParentID(menuParentIDText.getText());
+		menuParameters.setParentID(menuParentIDCombo.getText());
 		menuParameters.setPosition(menuPositionCombo.getSelectionIndex());
 		//commit as we go
 		String instanceName = ((InstanceLine)((IStructuredSelection)instancesViewer.getSelection()).getFirstElement()).getInstanceName();
-			role.getSpecifications().get(objectTypesCombo.getText())
-				.getInstances().get(instanceName).setParameters(menuParameters.marshalMenuParameters());
+		role.getSpecifications().get(objectTypesCombo.getText())
+			.getInstances().get(instanceName).setParameters(menuParameters.marshalMenuParameters());
 		markDirty();
 	}
 	 
