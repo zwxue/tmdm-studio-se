@@ -294,19 +294,23 @@ public class RoleMainPage extends AMainPageV2 {
             final String INSTANCE_NAME="Instance Name Regular Expression";
             final String INSTANCE_ACCESS = "Access";
             
-            instancesViewer = new TableViewer(instancesComposite);
+            instancesViewer = new TableViewer(instancesComposite,SWT.FULL_SELECTION);
             instancesViewer.getControl().setLayoutData(    
                     new GridData(SWT.FILL,SWT.FILL,true,true,3,1)
             );
             ((GridData)instancesViewer.getControl().getLayoutData()).heightHint=100;
+            
             // Set up the underlying table
             Table table = instancesViewer.getTable();
+            
+            
             //table.setLayoutData(new GridData(GridData.FILL_BOTH));
 
             new TableColumn(table, SWT.LEFT).setText(INSTANCE_NAME);
             new TableColumn(table, SWT.CENTER).setText(INSTANCE_ACCESS);
             table.getColumn(0).setWidth(200);
-            for (int i = 0, n = table.getColumnCount(); i < n; i++) {
+            table.getColumn(1).setWidth(200);
+            for (int i = 2, n = table.getColumnCount(); i < n; i++) {
               table.getColumn(i).pack();
             }
             
