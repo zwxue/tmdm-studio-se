@@ -1,22 +1,28 @@
 package com.amalto.webapp.v3.synchronizationaction.dwr;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-
+import com.amalto.webapp.core.bean.ListRange;
 import com.amalto.webapp.core.util.Util;
+import com.amalto.webapp.core.util.XtentisConfiguration;
 import com.amalto.webapp.util.webservices.WSGetSynchronizationPlanPKs;
 import com.amalto.webapp.util.webservices.WSSynchronizationPlanAction;
 import com.amalto.webapp.util.webservices.WSSynchronizationPlanActionCode;
 import com.amalto.webapp.util.webservices.WSSynchronizationPlanPK;
 import com.amalto.webapp.util.webservices.WSSynchronizationPlanPKArray;
 import com.amalto.webapp.util.webservices.WSSynchronizationPlanStatus;
+import com.amalto.webapp.v3.synchronizationaction.bean.ServerURL;
 import com.amalto.webapp.v3.synchronizationaction.bean.SyncInfo;
 import com.amalto.webapp.v3.synchronizationaction.bean.SyncStatus;
 
 
 public class SynchronizationActionDWR {
+	public static final String SAVED_SERVER_URL="save.server.url";
 	private Logger logger=org.apache.log4j.Logger.getLogger(this.getClass());
 	
 	public SynchronizationActionDWR() {
@@ -115,6 +121,57 @@ public class SynchronizationActionDWR {
 	        status.setMessage(wsStatus.getStatusMessage());
 	        return status;
         } catch (Exception e) {
+        	e.printStackTrace();
+        	throw new Exception(e.getClass().getName() + ": "
+					+ e.getLocalizedMessage());
+        }
+	}
+	
+	public ListRange getSavedURLs()throws Exception{
+		String[] urls=new String[]{"http://localhost:8080/xtentis/XtentisPort"};
+		try{
+			Properties configure= XtentisConfiguration.getConfiguration();
+			String url=configure.getProperty(SAVED_SERVER_URL);
+			if(url!=null){
+				urls= url.split(";");
+			}
+			List<ServerURL> list=new ArrayList<ServerURL>();
+			for(String id: urls){
+				ServerURL item=new ServerURL();
+				item.setId(id);
+				item.setName(id);
+				list.add(item);
+			}
+			ListRange listRange = new ListRange();
+			listRange.setData(list.toArray(new ServerURL[list.size()]));
+			listRange.setTotalSize(urls.length);
+			return listRange;
+		} catch (Exception e) {
+        	e.printStackTrace();
+        	throw new Exception(e.getClass().getName() + ": "
+					+ e.getLocalizedMessage());
+        }
+	
+	}
+	
+	public void saveURLs(String url)throws Exception{
+		logger.debug("saveURLs()---- url =="+url);
+		try{	
+			
+			String[] urls=url.split(";");
+			if(urls.length==0)return;
+			Properties configure= XtentisConfiguration.getConfiguration();
+			StringBuffer sb=new StringBuffer();
+			for(int i=0; i<urls.length; i++){
+				if(i<urls.length-1)
+					sb.append(urls[i]).append(";");
+				else
+					sb.append(urls[i]);
+			}
+			configure.setProperty(SAVED_SERVER_URL, sb.toString());
+			
+			XtentisConfiguration.save();
+		} catch (Exception e) {
         	e.printStackTrace();
         	throw new Exception(e.getClass().getName() + ": "
 					+ e.getLocalizedMessage());
