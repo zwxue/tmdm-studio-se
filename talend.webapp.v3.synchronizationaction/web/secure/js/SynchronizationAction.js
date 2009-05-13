@@ -1,10 +1,12 @@
 amalto.namespace("amalto.SynchronizationAction");
 
-loadResource("/SynchronizationAction/secure/js/Cookies.js", "" );
+//loadResource("/SynchronizationAction/secure/js/Cookies.js", "" );
 
 //contectid.applicaionid
 amalto.SynchronizationAction.SynchronizationAction = function() {
 	var SELECT_SYNCHRONIZATION='Select a Synchronization Name';
+	
+   
 	function getSyncInfo(){
 		if ($('serverURL').value=='') {
 			//alert ('Server URL');
@@ -70,10 +72,7 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 	    	}
 		}
 	};
-	function keepInCookies(){
-		Cookies.set('serverURL',$('serverURL').value.trim());
-		Cookies.set('username',$('username').value.trim());
-	};
+
 	var synccode;
 	
 	function refreshStatus(syncInfo){
@@ -93,10 +92,39 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 			}			
 		},1000);		
 	};
-
+	
+	var store;
+	function saveURLs(){
+		
+		if(store.indexOfId($('serverURL').value) ==-1){
+			store.add([new Ext.data.Record({'id':$('serverURL').value,'name':$('serverURL').value})]);			
+		}
+		var urls="";
+		var len=store.data.items.length;
+		for(var i=0; i<len; i++){
+			if(i<len-1){
+				urls=urls+store.data.items[i].data.id+";";
+			}else{
+				urls=urls+store.data.items[i].data.id;
+			}
+		}		
+		SynchronizationActionInterface.saveURLs(urls,function(){});
+	};	
+	
 	function show() {
 		Ext.QuickTips.init();
+   		var recordType = Ext.data.Record.create([	  
+		  	{name:"id"},{name:"name"}  
+		  ]);
 
+	    store = new Ext.data.Store({
+	    proxy: new Ext.data.DWRProxy(SynchronizationActionInterface.getSavedURLs, false),
+	    reader: new Ext.data.ListRangeReader( 
+				{id:'id', totalProperty:'totalSize'}, recordType),
+	    remoteSort: false
+	  });
+	  
+  	    store.load({params:{start:0, limit:22}, arg:[]});
 		var topPanel = new Ext.form.FormPanel(
 		{
 			region : 'center',
@@ -107,23 +135,30 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 			autoScroll : true,
 			defaultType : "textfield",
 			buttonAlign : 'left',
-			items : [ new Ext.form.FieldSet( {
+			items : [ 
+			          new Ext.form.FieldSet( {
 				title : 'Remote system information',
 				autoHeight : true,
 				defaultType : 'textfield',
-				items : [ {
-					fieldLabel : 'Server URL',							
-					selectOnFocus:true,
-					allowBlank:false,
-					id : 'serverURL',
-					text:Cookies.get('serverURL'),
-					width : 400
-				}, {
+				items : [ 
+						{
+							fieldLabel : 'Server URL',	
+						    store: store,
+						    displayField:'name',
+						    typeAhead: true,
+						    id : 'serverURL',
+						    mode: 'local',
+						    forceSelection: false,
+						    triggerAction: 'all',						    
+						    selectOnFocus:true,
+							xtype:'combo',
+							width : 400
+						},
+						{
 					fieldLabel : 'UserName',
 					id : 'username',
 					selectOnFocus:true,
-					allowBlank:false,
-					text:Cookies.get('username'),
+					allowBlank:false,					
 					width : 400
 				}, {
 					fieldLabel : 'Password',
@@ -160,7 +195,7 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 						handler : function() {
 							var syncInfo=getSyncInfo();
 							if(syncInfo){
-								keepInCookies();
+								saveURLs();
 								SynchronizationActionInterface.startFull(refreshStatus(syncInfo),syncInfo);
 							}
 						},
@@ -172,7 +207,7 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 						handler : function() {
 							var syncInfo=getSyncInfo();
 							if(syncInfo){
-								keepInCookies();
+								saveURLs();
 								SynchronizationActionInterface.startDifferent(refreshStatus(syncInfo),syncInfo);
 							}
 						},
@@ -203,8 +238,8 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 					],
 			listeners:{
 				'render':function(){
-					if(Cookies.get('serverURL'))Ext.getCmp('serverURL').setValue(Cookies.get('serverURL'));
-					if(Cookies.get('username'))Ext.getCmp('username').setValue(Cookies.get('username'));
+					//if(Cookies.get('serverURL'))Ext.getCmp('serverURL').setValue(Cookies.get('serverURL'));
+					//if(Cookies.get('username'))Ext.getCmp('username').setValue(Cookies.get('username'));
 					
 				}
 			}		
@@ -219,6 +254,7 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 			collapsible : true,
 			items : [ topPanel ]
 		});
+				
 	};
 	var mainPanel;
 
