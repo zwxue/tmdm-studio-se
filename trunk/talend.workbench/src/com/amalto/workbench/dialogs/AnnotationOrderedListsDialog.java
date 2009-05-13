@@ -109,7 +109,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
 
         new TableColumn(table, SWT.CENTER).setText(COLUMN);
         table.getColumn(0).setWidth(400);
-        for (int i = 0, n = table.getColumnCount(); i < n; i++) {
+        for (int i = 1, n = table.getColumnCount(); i < n; i++) {
           table.getColumn(i).pack();
         }
         
