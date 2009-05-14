@@ -414,9 +414,31 @@ amalto.core = function () {
 			    		var divId = 'menu-'+menu.id+'-div';
 			    		doms[menu.level] =Ext.get(divId).dom;
 			    		//make IE display the image centered by loading the image now (rather than on initialisation)
-			    		$("menu-"+menu.id+"-span").style.background="url(/core/secure/img/tree-closed.gif) no-repeat 0px 9px;";
+			    		$("menu-"+menu.id+"-span").style.backgroundImage="url(/core/secure/img/tree-closed.gif)";
+			    		$("menu-"+menu.id+"-span").style.backgroundRepeat="no-repeat";
+			    		$("menu-"+menu.id+"-span").style.backgroundPositionX="0px";
+			    		$("menu-"+menu.id+"-span").style.backgroundPositionY="9px";
 			    	} else {
-			    		tplNone.append(doms[menu.level-1], menu);
+			    	
+			    	    if(menu.level>1){
+			    	    menu.name="&nbsp;&nbsp;"+menu.name;
+			    	    }
+			    		
+			    		//tplNone.append(doms[menu.level-1], menu);
+			    		var menuitem = document.createElement("a");
+			    		var menuid=menu.id //must
+			    		var showmenuurl=(menu.url==null||menu.url==undefined)?"":menu.url;
+			    		var showmenuname=(menu.name==null||menu.name==undefined)?"":menu.name;
+			    		var showmenudesc=(menu.desc==null||menu.desc==undefined)?"":menu.desc;
+			    		menuitem.setAttribute("href",showmenuurl);
+                        menuitem.setAttribute("id","menu-"+menuid);
+                        menuitem.innerHTML="<span class=\"body\">"+showmenuname+"<br><span class=\"desc\">"+showmenudesc+"</span></span>";                        
+                        doms[menu.level-1].appendChild(menuitem);
+
+			    		//var menuId = 'menu-'+menu.id;
+			    		//doms[menu.level] =Ext.get(menuId).dom;
+			    		doms[menu.level] =menuitem;
+			    		
 			    	}
 			    }
 				 MENUS = menus;			
