@@ -52,17 +52,31 @@ public class DeleteXObjectAction extends Action{
 		try {
 			super.run();
 			IStructuredSelection selection = (IStructuredSelection)view.getViewer().getSelection();
+			//add the node here
+			
+			StringBuffer names = new StringBuffer();
+			for (Iterator<TreeObject> iter = selection.iterator();iter.hasNext();) {
+				TreeObject xobject = iter.next();
+				names.append(xobject.getDisplayName()) ;
+				names.append(" ");
+			}
+			if(selection.isEmpty()){
+				return;
+			}
+			else{
+				if (! MessageDialog.openConfirm(
+	            		this.view.getSite().getShell(),
+	            		"Delete "+IConstants.TALEND+" Object Instance",
+	            		"Are you sure you want to delete the "+ names +"?"
+	            )) return;
+			}//end of if(selection...)
+			
 			for (Iterator<TreeObject> iter = selection.iterator(); iter.hasNext(); ) {
 				TreeObject xobject = iter.next();
 	            
 	            if (!xobject.isXObject()) return;
 	            
 	            //ask for confimation
-	            if (! MessageDialog.openConfirm(
-	            		this.view.getSite().getShell(),
-	            		"Delete "+IConstants.TALEND+" Object Instance",
-	            		"Are you sure you want to delete "+xobject.getDisplayName()+" ?"
-	            )) return;
 	                        
 	//          Access to server and get port
 				XtentisPort port = Util.getPort(
