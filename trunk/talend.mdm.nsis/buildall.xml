@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="openmdm" default="generate.installer">
+	<!-- public properties -->
+	<loadproperties srcfile="build.properties"></loadproperties>
+		
+	<!-- add ant-contrib.jar-->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+	  <classpath>
+	    <pathelement location="${basedir}/svnkit/ant-contrib-1.0b3.jar"/>
+	  </classpath>
+	</taskdef>
+ 	
+	<!-- deploy each plug-in to jboss server directory-->
+    <target name="deploy.all" depends="svn.ssh.checkout.all">  
+        <foreach target="deploy.each" param="file.full.name" > 
+       		<path location="${workspace.dir}" > 
+              <dirset dir=".." includes="*"></dirset>
+       		</path>
+        </foreach>  
+    </target>  
+	
+    <target name="deploy.each">
+    	<available property="file.exist" file="build.xml" filepath="${file.full.name}"/>	   	    
+	        <if>
+	            <isset property="file.exist"/>
+	            <then>	
+	            	<echo message="running  ${file.full.name}"></echo>
+	            	<ant antfile="${file.full.name}/build.xml" target="all" dir="${file.full.name}" inheritall="yes" description="running ${file.full.name}/build.xml"/>
+	            </then>
+	        </if>       
+    </target>  
+        
+
+		
+	  <!-- list all plugin name need to checkout-->
+	  <target name="svn.ssh.list" description="list all plugin name need to checkout ">	    
+	    <property name="repository.URL" value="${svn.server.url}"/>		
+		
+	  	<java classname="org.tmatesoft.svn.cli.SVN"
+	        fork="true" output="svn_file_list.txt">
+	      <arg value="ls"/>
+	      <arg value="--username"/>
+	      <arg value="${svn.username}"/>
+	      <arg value="--password"/>
+	      <arg value="${svn.password}"/>
+	      <arg value="${repository.URL}"/>
+
+	      <classpath>
+	      	<!--if use ssh need add ganymed.jar-->
+	        <pathelement location="${basedir}/svnkit/ganymed.jar" />
+	      	
+	        <pathelement location="${basedir}/svnkit/svnkit.jar" />
+	        <pathelement location="${basedir}/svnkit/svnkit-cli.jar" />
+	      	<pathelement location="${basedir}/svnkit/jna.jar" />
+	        <pathelement location="${basedir}/svnkit/trilead.jar" />
+	      	<pathelement location="${basedir}/svnkit/svnkit-javahl.jar" />
+	      </classpath>
+	    </java>
+	  </target>
+	
+  	<!-- check out all source code from svn-->    
+	
+    <target name="svn.ssh.checkout.all" depends="svn.ssh.list" description="checking out all source code form svn">  
+        <loadfile   property="filepath"  
+            srcFile="svn_file_list.txt" />  
+     	<foreach list="${filepath}" target="svn.ssh.checkout" param="file.full.name" delimiter="${line.separator}}" >
+     		
+     	</foreach> 
+    </target> 
+	
+	  <target name="svn.ssh.checkout" description="checkouting ${file.full.name} ">
+	    <property name="source-root" value="${workspace.dir}/${file.full.name}"/>
+	    <property name="repository.URL" value="${svn.server.url}"/>		
+		
+	  	<java classname="org.tmatesoft.svn.cli.SVN"
+	       dir="${source-root}" fork="true" >
+	      <arg value="co"/>
+	      <arg value="--username"/>
+	      <arg value="${svn.username}"/>
+	      <arg value="--password"/>
+	      <arg value="${svn.password}"/>
+	      <arg value="${repository.URL}/${file.full.name}"/>
+
+	      <classpath>
+	      	<!--if use ssh need add ganymed.jar-->
+	        <pathelement location="${basedir}/svnkit/ganymed.jar" />	      	
+	        <pathelement location="${basedir}/svnkit/svnkit.jar" />
+	        <pathelement location="${basedir}/svnkit/svnkit-cli.jar" />
+	      	<pathelement location="${basedir}/svnkit/jna.jar" />
+	        <pathelement location="${basedir}/svnkit/trilead.jar" />
+	      	<pathelement location="${basedir}/svnkit/svnkit-javahl.jar" />
+	      </classpath>
+	    </java>
+	  </target>
+	
+	<target name="clean">		
+		<!-- clean up build directory-->
+		<delete dir="build" />
+		<!-- make build directory -->
+		<mkdir dir="build"/>
+   		<!-- clean up temporary directory -->		
+		<delete dir="${tmp.dir}"/>
+   		<!-- make temporary directory -->
+   		<mkdir dir="${tmp.dir}"/>
+	</target>
+	
+	<target name="prepare" depends="">
+		
+	</target>
+
+	<target name="generate.installer" depends="clean,deploy.all">	
+   		<copy todir="${tmp.dir}/openMDM">
+   			<fileset dir="${jboss.dir}">
+   				<include name="**/*.*"/>
+   				<exclude name="**/*.sh"/>
+   			</fileset>
+   		</copy>
+		<unjar dest="${tmp.dir}/openMDM" src="src/resources/jre-1.5.0_windows.zip"></unjar>
+		<!-- generate open mdm -->
+		<antcall target="generate.openMDM.exe"/>
+		
+   		<copy todir="${tmp.dir}/openMDM">
+   			<fileset dir="build">
+   				<include name="*.exe"/>
+   			</fileset>
+   		</copy>
+   		<copy todir="${tmp.dir}/openMDM">
+   			<fileset dir="src/resources">
+   				<include name="License.txt"/>
+   			</fileset>
+   		</copy>
+		
+		<!-- build -->
+		<antcall target="make.nsis"/>
+		
+		<!-- final -->
+		<copy todir="build">
+			<fileset dir="${tmp.dir}">
+			   	<include name="*.exe"/>
+  			</fileset>
+   		</copy>
+		
+	</target>
+	
+	<target name="make.nsis">
+   		<copy todir="${tmp.dir}">
+   			<fileset dir="src/scripts">
+   				<include name="openMDM_installer.nsi"/>
+   			</fileset>
+   			<fileset dir="src/resources">
+   				<include name="logo-openMDM.bmp"/>
+   				<include name="mdm_installer.ico"/>
+   				<include name="mdm_uninstaller.ico"/>
+   			</fileset>
+   		</copy>
+		<!-- run make nsis -->
+		<exec executable="${makensis.file.name}">
+			<arg value="/V4"/>
+			<arg value="${tmp.dir}/openMDM_installer.nsi"/>
+		</exec>
+	</target>
+	
+	<target name="generate.openMDM.exe">
+		<!-- run makensi -->
+		<exec executable="${makensis.file.name}">
+			<arg value="src/scripts/JavaLauncher.nsi"/>
+		</exec>
+	</target>	
+	
+
+</project>
+
