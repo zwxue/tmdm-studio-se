@@ -391,7 +391,7 @@ public class MenuMainPage extends AMainPageV2 {
 							treeEntry.getWsMenuEntry(),
 							new MenuEntryDialogSelectionListener(viewer,treeEntry),
 							this.viewer.getControl().getShell(),
-							"Edit the Menu Entry "+treeEntry.getWsMenuEntry().getId()
+							"Edit the Menu Entry "+treeEntry.getWsMenuEntry().getId(),false
 					);
 					dlg.setBlockOnOpen(true);
 					dlg.open();
