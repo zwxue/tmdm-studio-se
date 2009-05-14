@@ -56,6 +56,7 @@ public class MenuEntryDialog extends Dialog {
 	protected LinkedHashMap<String, String> descriptionsMap = new LinkedHashMap<String, String>();
 	private SelectionListener caller = null;
 	private String title = "";
+	private boolean isChanged = true;
 	
 	
 
@@ -75,7 +76,20 @@ public class MenuEntryDialog extends Dialog {
 			}
 		}
 	}
-
+	public MenuEntryDialog(WSMenuEntry wsMenuEntry, SelectionListener caller, Shell parentShell, String title,boolean isChanged) {
+		super(parentShell);
+		this.wsMenuEntry = wsMenuEntry;
+		this.caller = caller;
+		this.title = title;
+		this.isChanged = isChanged;
+		//feed the descritions hashmap used by the labels Table
+		WSMenuMenuEntriesDescriptions[] descriptions = wsMenuEntry.getDescriptions();
+		if (descriptions!=null) {
+			for (int i = 0; i < descriptions.length; i++) {
+				descriptionsMap.put(descriptions[i].getLanguage(), descriptions[i].getLabel());
+			}
+		}
+	}
 
 	protected Control createDialogArea(Composite parent) {
 				
@@ -92,9 +106,15 @@ public class MenuEntryDialog extends Dialog {
 		idLabel.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 		);
+		
 		idLabel.setText("ID");
-
-		idText = new Text(composite, SWT.NONE);
+        if(this.isChanged){
+        	idText = new Text(composite, SWT.NONE);
+        }
+        else{
+        	idText = new Text(composite, SWT.NONE|SWT.READ_ONLY);
+        }
+		
 		idText.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 		);
