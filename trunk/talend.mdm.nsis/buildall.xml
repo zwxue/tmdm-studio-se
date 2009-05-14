@@ -104,9 +104,7 @@
    		<mkdir dir="${tmp.dir}"/>
 	</target>
 	
-	<target name="prepare" depends="">
-		
-	</target>
+
 
 	<target name="generate.installer" depends="clean,deploy.all">	
    		<copy todir="${tmp.dir}/openMDM">
