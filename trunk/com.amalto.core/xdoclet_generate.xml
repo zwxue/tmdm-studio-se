@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="XtentisCore - xdoclet generate" default="xdoclet-generation" basedir=".">
-    	
+ 
+	<property name="jboss.dir" value="c:/opt/jboss"/>
+	<property name="jboss.instance.dir" value="${jboss.dir}/server/default"/>
+	<property name="jboss.deploy.dir" value="${jboss.instance.dir}/deploy"/>
+	<property name="jboss.instance.lib" value="${jboss.instance.dir}/lib"/>
+	
+	<property name="jwsdp.dir" location="c:/opt/jwsdp-1.5"/>
+
 	<property name="xdoclet.root.dir" value="c:/opt/xdoclet-1.2.3.patched"/>
     <property file="${xdoclet.root.dir}/build.properties"/>
 	<property name="xdoclet.lib.dir" value = "${xdoclet.root.dir}/lib"/>
@@ -24,13 +31,13 @@
         <fileset dir="${xdoclet.lib.dir}">
             <include name="*.jar"/>
         </fileset>	
-        <fileset dir="c:/opt/jboss/server/default/lib">
+        <fileset dir="${jboss.instance.lib}">
             <include name="*.jar"/>
         </fileset>
-        <fileset dir="c:/opt/jboss/lib">
+        <fileset dir="${jboss.dir}/lib">
             <include name="*.jar"/>
         </fileset>
-    	<fileset dir="c:/opt/jwsdp-1.5/jaxp/lib">
+    	<fileset dir="${jwsdp.dir}/jaxp/lib">
     		<include name="**/*.jar"/>
     	</fileset>
     </path>
