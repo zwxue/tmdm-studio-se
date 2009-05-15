@@ -89,10 +89,11 @@ import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSTransformerPK;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.widgets.DescAnnotationComposite;
 
 public class RoleMainPage extends AMainPageV2 {
 
-	protected Text descriptionText;
+	protected DescAnnotationComposite desAntionComposite ;
 	protected Combo objectTypesCombo;
 	protected Button isAdminButton;
 	
@@ -126,22 +127,7 @@ public class RoleMainPage extends AMainPageV2 {
         try {
         	                     
             //description
-            Label descriptionLabel = toolkit.createLabel(charComposite, "Description", SWT.NULL);
-            descriptionLabel.setLayoutData(
-                    new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
-            );
-            descriptionText = toolkit.createText(charComposite, "",SWT.BORDER|SWT.MULTI);
-            descriptionText.setLayoutData(    
-                    new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-            );
-            ((GridData)descriptionText.getLayoutData()).minimumHeight = 30;
-            descriptionText.addModifyListener(new ModifyListener() {
-            	public void modifyText(ModifyEvent e) {
-            		if (refreshing) return;
-            		role.setDescription(descriptionText.getText());
-            		markDirty();
-            	}
-            }); 
+        	desAntionComposite = new DescAnnotationComposite("Description" ," ...", toolkit, charComposite, (AMainPageV2)this);
             
             //make the Page window a DropTarget - we need to dispose it
             windowTarget = new DropTarget(this.getPartControl(), DND.DROP_MOVE);
@@ -498,7 +484,7 @@ public class RoleMainPage extends AMainPageV2 {
             Arrays.sort(objects);
 	    	
 			//Now fill in the values on the page
-            descriptionText.setText(role.getDescription()==null ? "" : role.getDescription());
+            desAntionComposite.setText(role.getDescription()==null ? "" : role.getDescription());
             int selected = (objectTypesCombo.getSelectionIndex() == -1 ? 0 : objectTypesCombo.getSelectionIndex());
 	    	objectTypesCombo.setItems(objects);
 	    	objectTypesCombo.select(selected);

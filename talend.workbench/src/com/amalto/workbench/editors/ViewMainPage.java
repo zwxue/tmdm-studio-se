@@ -53,10 +53,10 @@ import com.amalto.workbench.webservices.WSStringPredicate;
 import com.amalto.workbench.webservices.WSView;
 import com.amalto.workbench.webservices.WSWhereCondition;
 import com.amalto.workbench.webservices.WSWhereOperator;
+import com.amalto.workbench.widgets.DescAnnotationComposite;
 
 public class ViewMainPage extends AMainPageV2 implements ITextListener{
-
-	protected Text descriptionText;
+    
 	protected Text viewableBEText;
 	protected List viewableBEsList;
 	protected Text searchableBEText;
@@ -68,6 +68,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 	protected ListViewer wcListViewer;
 	protected Button wcButton;
 
+	protected DescAnnotationComposite desAntionComposite ;
 	protected DropTarget windowTarget;
 	
 	private boolean refreshing = false;
@@ -84,19 +85,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 	protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
 
         try {
-        	                     
-            //description
-            Label descriptionLabel = toolkit.createLabel(charComposite, "Description", SWT.NULL);
-            descriptionLabel.setLayoutData(
-                    new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
-            );
-            descriptionText = toolkit.createText(charComposite, "",SWT.BORDER|SWT.MULTI);
-            descriptionText.setLayoutData(    
-                    new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-            );
-            ((GridData)descriptionText.getLayoutData()).minimumHeight = 30;
-            descriptionText.addModifyListener(this);
-            
+        	desAntionComposite = new DescAnnotationComposite("Description" ," ...", toolkit, charComposite, (AMainPageV2)this);
             //make the Page window a DropTarget - we need to dispose it
             windowTarget = new DropTarget(this.getPartControl(), DND.DROP_MOVE);
             windowTarget.setTransfer(new Transfer[]{TextTransfer.getInstance()});
@@ -425,8 +414,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 			this.refreshing = true;
 			
 			WSView wsObject = (WSView) (getXObject().getWsObject());    	
-	    	
-            descriptionText.setText(wsObject.getDescription()==null ? "" : wsObject.getDescription());
+			desAntionComposite.setText(wsObject.getDescription()==null ? "" : wsObject.getDescription());
+//            descriptionText.setText(wsObject.getDescription()==null ? "" : wsObject.getDescription());
 	    	
             viewableBEsList.removeAll();
             String[] vbes = wsObject.getViewableBusinessElements();
@@ -463,7 +452,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 			this.comitting = true;
 			
 	    	WSView wsObject = (WSView) (getXObject().getWsObject());
-			wsObject.setDescription(descriptionText.getText());
+			wsObject.setDescription(desAntionComposite.getText());
 			wsObject.setViewableBusinessElements(viewableBEsList.getItems());
 			wsObject.setSearchableBusinessElements(searchableBEsList.getItems());
 			//wsObject.setWhereConditions() //automatically refreshed by the viewer
