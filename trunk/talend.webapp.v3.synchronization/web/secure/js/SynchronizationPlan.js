@@ -59,17 +59,29 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
    	   	        closable:true,
    	   	        stripeRows: true,
    	   	        height:350,
-   	   	        width:600,
+   	   	        width:600,				   	   	      
    	   	        title:'Synchronization Items',
+	   	   	    viewConfig: {
+	   	   	        forceFit: true,
+	
+	   	   	        //Return CSS class to apply to rows depending upon data values
+	   	   	        getRowClass: function(record, index) {	   	   	        	
+	   	   	            var status = record.get('status');
+	   	   	            if (status == 'MANUAL') {
+	   	   	                return 'conflictItem';
+	   	   	            } 
+	   	   	        }
+	   	   	    },
+
    	   	        listeners:
    	   	        {
    	    			'rowdblclick' : function(grid,rowIndex, e ){
    	    				var record=grid.getStore().getAt(rowIndex);
-   	    				if(record.data.status == 'MANUAL'){
+   	    				//if(record.data.status == 'MANUAL'){
    	    					   	    					
    	   	    				var xmlData= SyncXMLPanel(record.data,store);
    	   	    				xmlData.init();  	    					
-   	    				}
+   	    				//}
    	    			}
    	   	        },
 				tbar:[
