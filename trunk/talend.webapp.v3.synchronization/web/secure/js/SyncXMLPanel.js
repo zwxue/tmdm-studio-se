@@ -1,5 +1,4 @@
-SyncXMLPanel = function(syncItem,store){
-	loadResource("/SynchronizationPlan/secure/css/SynchronizationPlan.css", "" );
+SyncXMLPanel = function(syncItem,store){	
 	var remoteNames=[];	
 	for(var i=0; i<syncItem.remoteItemNames.length; i++){
 		remoteNames.push([syncItem.remoteItemNames[i]]);

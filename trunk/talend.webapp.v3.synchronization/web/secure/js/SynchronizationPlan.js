@@ -1,4 +1,5 @@
 loadResource("/SynchronizationPlan/secure/js/SyncXMLPanel.js", "" );
+loadResource("/SynchronizationPlan/secure/css/SynchronizationPlan.css", "" );
 
 amalto.namespace("amalto.SynchronizationPlan");
 
