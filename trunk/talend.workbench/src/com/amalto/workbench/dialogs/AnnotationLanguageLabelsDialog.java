@@ -307,7 +307,4 @@ public class AnnotationLanguageLabelsDialog extends Dialog {
 			this.language = language;
 		}
 	}
-	
-	
-	
 }
