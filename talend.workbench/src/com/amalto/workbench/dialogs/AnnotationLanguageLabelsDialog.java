@@ -123,7 +123,7 @@ public class AnnotationLanguageLabelsDialog extends Dialog {
         final String LANGUAGE="Language";
         final String LABEL = "Label";
         
-        descriptionsViewer = new TableViewer(composite);
+        descriptionsViewer = new TableViewer(composite,SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER|SWT.FULL_SELECTION);
         descriptionsViewer.getControl().setLayoutData(    
                 new GridData(SWT.FILL,SWT.FILL,true,true,3,1)
         );
