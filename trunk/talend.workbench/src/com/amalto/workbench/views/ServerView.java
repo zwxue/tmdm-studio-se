@@ -16,6 +16,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
@@ -43,19 +45,39 @@ import com.amalto.workbench.providers.ServerTreeLabelProvider;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
+import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSDeleteDataCluster;
+import com.amalto.workbench.webservices.WSDeleteDataModel;
+import com.amalto.workbench.webservices.WSDeleteMenu;
+import com.amalto.workbench.webservices.WSDeleteRole;
+import com.amalto.workbench.webservices.WSDeleteRoutingRule;
+import com.amalto.workbench.webservices.WSDeleteStoredProcedure;
+import com.amalto.workbench.webservices.WSDeleteSynchronizationPlan;
+import com.amalto.workbench.webservices.WSDeleteTransformerV2;
+import com.amalto.workbench.webservices.WSDeleteUniverse;
+import com.amalto.workbench.webservices.WSDeleteView;
 import com.amalto.workbench.webservices.WSLogout;
+import com.amalto.workbench.webservices.WSMenuPK;
+import com.amalto.workbench.webservices.WSRolePK;
+import com.amalto.workbench.webservices.WSRoutingRulePK;
+import com.amalto.workbench.webservices.WSStoredProcedurePK;
+import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
+import com.amalto.workbench.webservices.WSTransformerV2PK;
+import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSVersioningGetInfo;
 import com.amalto.workbench.webservices.WSVersioningInfo;
+import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
-
 
 /**
  * The view allowing administration of the "+IConstants.TALEND+" Server
+ * 
  * @author Bruno Grieder
- *
+ * 
  */
-public class ServerView extends ViewPart implements IXObjectModelListener{
-	
+public class ServerView extends ViewPart implements IXObjectModelListener {
+
 	protected TreeViewer viewer;
 	protected DrillDownAdapter drillDownAdapter;
 	protected Action loginAction;
@@ -70,8 +92,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener{
 	protected Action pasteAction;
 	protected Action versionAction;
 
-	
-	
 	/**********************************************************************************
 	 * The VIEW
 	 * 
@@ -84,19 +104,22 @@ public class ServerView extends ViewPart implements IXObjectModelListener{
 	}
 
 	/**
-	 * This is a callback that will allow us
-	 * to create the viewer and initialize it.
+	 * This is a callback that will allow us to create the viewer and initialize
+	 * it.
 	 */
 	public void createPartControl(Composite parent) {
 		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		drillDownAdapter = new DrillDownAdapter(viewer);
-		setTreeContentProvider(new ServerTreeContentProvider(this.getSite(), new TreeParent("INVISIBLE ROOT",null,TreeObject._ROOT_,null,null)));
+		setTreeContentProvider(new ServerTreeContentProvider(this.getSite(),
+				new TreeParent("INVISIBLE ROOT", null, TreeObject._ROOT_, null,
+						null)));
 		viewer.setLabelProvider(new ServerTreeLabelProvider());
 		viewer.setSorter(new ViewerSorter());
 		viewer.setInput(getViewSite());
 		makeActions();
 		hookContextMenu();
 		hookDoubleClickAction();
+		hookKeyPressAction();
 		contributeToActionBars();
 	}
 
@@ -121,57 +144,62 @@ public class ServerView extends ViewPart implements IXObjectModelListener{
 
 	private void fillLocalPullDown(IMenuManager manager) {
 		manager.add(loginAction);
-        /*
-		manager.add(new Separator());
-		manager.add(logoutAction);
-        */
+		/*
+		 * manager.add(new Separator()); manager.add(logoutAction);
+		 */
 	}
 
 	protected void fillContextMenu(IMenuManager manager) {
-		TreeObject xobject = (TreeObject)((IStructuredSelection)viewer.getSelection()).getFirstElement();
-		
+		TreeObject xobject = (TreeObject) ((IStructuredSelection) viewer
+				.getSelection()).getFirstElement();
+
 		boolean hasVersioning = false;
 		try {
-			XtentisPort port=Util.getPort(xobject);
-			if(port==null)return;
-			WSVersioningInfo info = port.versioningGetInfo(new WSVersioningGetInfo(null)); 
+			XtentisPort port = Util.getPort(xobject);
+			if (port == null)
+				return;
+			WSVersioningInfo info = port
+					.versioningGetInfo(new WSVersioningGetInfo(null));
 			hasVersioning = info.isEnabled();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		
 		if (xobject == null) {
 			manager.add(loginAction);
-		} else {	
+		} else {
 			switch (xobject.getType()) {
-				case TreeObject._SERVER_:
-					manager.add(loginAction);
-					manager.add(logoutAction);
-					manager.add(serverRefreshAction);
-					if (! WorkbenchClipboard.getWorkbenchClipboard().isEmpty()) manager.add(pasteAction);
-					if ("admin".equalsIgnoreCase(xobject.getUsername())) manager.add(serverInitAction);
-					break;
-				case TreeObject._ACTION_:
-					manager.add((Action)xobject.getWsObject());
-					break;
-				case TreeObject.SUBSCRIPTION_ENGINE:
+			case TreeObject._SERVER_:
+				manager.add(loginAction);
+				manager.add(logoutAction);
+				manager.add(serverRefreshAction);
+				if (!WorkbenchClipboard.getWorkbenchClipboard().isEmpty())
+					manager.add(pasteAction);
+				if ("admin".equalsIgnoreCase(xobject.getUsername()))
+					manager.add(serverInitAction);
+				break;
+			case TreeObject._ACTION_:
+				manager.add((Action) xobject.getWsObject());
+				break;
+			case TreeObject.SUBSCRIPTION_ENGINE:
+				manager.add(browseViewAction);
+				break;
+			case TreeObject.VIEW:
+			case TreeObject.DATA_CLUSTER:
+				if (xobject.isXObject()) {
 					manager.add(browseViewAction);
-					break;
-				case TreeObject.VIEW:
-				case TreeObject.DATA_CLUSTER:
-					if (xobject.isXObject()) {
-						manager.add(browseViewAction);
-					}
-				default:
-					manager.add(newXObjectAction);
-					if (xobject.isXObject()) {
-						manager.add(editXObjectAction);
-						manager.add(deleteXObjectAction);
-						manager.add(copyAction);
-					}
-					if (hasVersioning) manager.add(versionAction);
-					if (! WorkbenchClipboard.getWorkbenchClipboard().isEmpty()) manager.add(pasteAction);
+				}
+			default:
+				manager.add(newXObjectAction);
+				if (xobject.isXObject()) {
+					manager.add(editXObjectAction);
+					manager.add(deleteXObjectAction);
+					manager.add(copyAction);
+				}
+				if (hasVersioning)
+					manager.add(versionAction);
+				if (!WorkbenchClipboard.getWorkbenchClipboard().isEmpty())
+					manager.add(pasteAction);
 			}
 		}
 		manager.add(new Separator());
@@ -179,45 +207,52 @@ public class ServerView extends ViewPart implements IXObjectModelListener{
 		// Other plug-ins can contribute there actions here
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}
-	
+
 	private void fillLocalToolBar(IToolBarManager manager) {
 		manager.add(loginAction);
-		//manager.add(logoutAction);
+		// manager.add(logoutAction);
 		manager.add(new Separator());
 		drillDownAdapter.addNavigationActions(manager);
 	}
 
 	private void makeActions() {
 		loginAction = new ServerLoginAction(this);
-		
+
 		logoutAction = new Action() {
 			public void run() {
-                TreeParent serverRoot = (TreeParent)((IStructuredSelection)ServerView.this.viewer.getSelection()).getFirstElement();
-                
-                final String universe = serverRoot.getUniverse();
-                final String username = serverRoot.getUsername();
-                final String password = serverRoot.getPassword();
-                final String endpointAddress = serverRoot.getEndpointAddress();
-                
-                serverRoot.getParent().removeChild(serverRoot);
-                ServerView.this.viewer.refresh();
-                
-                //attempt logout on the server side
-                ServerView.this.viewer.getControl().getDisplay().syncExec(new Runnable() {
-                	public void run() {
-                		try {
-                			Util.getPort(new URL(endpointAddress), universe, username, password).logout(new WSLogout());
-                		} catch (Exception e) {
-                			e.printStackTrace();
-                		}
-                	}
-                });
+				TreeParent serverRoot = (TreeParent) ((IStructuredSelection) ServerView.this.viewer
+						.getSelection()).getFirstElement();
+
+				final String universe = serverRoot.getUniverse();
+				final String username = serverRoot.getUsername();
+				final String password = serverRoot.getPassword();
+				final String endpointAddress = serverRoot.getEndpointAddress();
+
+				serverRoot.getParent().removeChild(serverRoot);
+				ServerView.this.viewer.refresh();
+
+				// attempt logout on the server side
+				ServerView.this.viewer.getControl().getDisplay().syncExec(
+						new Runnable() {
+							public void run() {
+								try {
+									Util.getPort(new URL(endpointAddress),
+											universe, username, password)
+											.logout(new WSLogout());
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
 			}
 		};
 		logoutAction.setText("Logout");
-		logoutAction.setToolTipText("Logout From the "+IConstants.TALEND+" Server");
-		logoutAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/logout.gif"));
-        
+		logoutAction.setToolTipText("Logout From the " + IConstants.TALEND
+				+ " Server");
+		logoutAction.setImageDescriptor(AbstractUIPlugin
+				.imageDescriptorFromPlugin("com.amalto.workbench",
+						"icons/logout.gif"));
+
 		editXObjectAction = new EditXObjectAction(this);
 		newXObjectAction = new NewXObjectAction(this);
 		deleteXObjectAction = new DeleteXObjectAction(this);
@@ -225,30 +260,30 @@ public class ServerView extends ViewPart implements IXObjectModelListener{
 		serverInitAction = new ServerInitAction(this);
 		browseViewAction = new BrowseViewAction(this);
 		copyAction = new CopyXObjectAction(this);
-		pasteAction = new PasteXObjectAction(this); 
+		pasteAction = new PasteXObjectAction(this);
 		versionAction = new VersioningXObjectAction(this);
 	}
 
 	private void hookDoubleClickAction() {
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event) {
-	            ISelection selection = ServerView.this.getViewer().getSelection();
-	            TreeObject xo = (TreeObject)((IStructuredSelection)selection).getFirstElement();
+				ISelection selection = ServerView.this.getViewer()
+						.getSelection();
+				TreeObject xo = (TreeObject) ((IStructuredSelection) selection)
+						.getFirstElement();
 				if (xo.getType() == TreeObject._ACTION_) {
-                    Class<?> actionClass = (Class<?>)xo.getWsKey();
-                    try {
-                        AServerViewAction action = (AServerViewAction)actionClass.newInstance();
-                        action.setServerView(ServerView.this);
-                        action.run();
-                    } catch (Exception ex) {
-                        MessageDialog.openError(
-                                viewer.getControl().getShell(),
-                                "Error",
-                                "Unable to run action"
-                          );
-                    }
-                    return;
-				}//if action
+					Class<?> actionClass = (Class<?>) xo.getWsKey();
+					try {
+						AServerViewAction action = (AServerViewAction) actionClass
+								.newInstance();
+						action.setServerView(ServerView.this);
+						action.run();
+					} catch (Exception ex) {
+						MessageDialog.openError(viewer.getControl().getShell(),
+								"Error", "Unable to run action");
+					}
+					return;
+				}// if action
 				if (xo.getType() == TreeObject.SUBSCRIPTION_ENGINE)
 					browseViewAction.run();
 				else
@@ -256,7 +291,46 @@ public class ServerView extends ViewPart implements IXObjectModelListener{
 			}
 		});
 	}
-	
+
+	private void hookKeyPressAction() {
+		viewer.getTree().addKeyListener(new KeyListener() {
+
+			public void keyPressed(KeyEvent e) {
+
+				ISelection selection = ServerView.this.getViewer()
+						.getSelection();
+				TreeObject xo = (TreeObject) ((IStructuredSelection) selection)
+						.getFirstElement();
+
+				// delete
+				if ((e.stateMask==0) && (e.keyCode == SWT.DEL)) {
+
+					switch (xo.getType()) {
+
+					case TreeObject.DATA_MODEL:
+						if(xo.getParent().getType()==TreeObject.DATA_MODEL){
+							deleteXObjectAction.run();
+						}
+						
+						break;
+					default:
+//						MessageDialog.openError(getSite().getShell(),
+//								"Error", "Unknown " + IConstants.TALEND
+//										+ " Object Type: " + xo.getType());
+						return;
+					}// switch
+
+				}
+
+			}
+
+			public void keyReleased(KeyEvent e) {
+
+			}
+
+		});
+
+	}
 
 	/**
 	 * Passing the focus request to the viewer's control.
@@ -264,45 +338,54 @@ public class ServerView extends ViewPart implements IXObjectModelListener{
 	public void setFocus() {
 		viewer.getControl().setFocus();
 	}
-	
+
 	/**
 	 * Access to the Tree Model
-	 *
+	 * 
 	 */
 	public ServerTreeContentProvider getTreeContentProvider() {
-		return (ServerTreeContentProvider)viewer.getContentProvider();
+		return (ServerTreeContentProvider) viewer.getContentProvider();
 	}
-	public void setTreeContentProvider(ServerTreeContentProvider treeContentProvider) {
-		ServerTreeContentProvider oldProvider = (ServerTreeContentProvider) this.viewer.getContentProvider();
-		if (oldProvider != null) oldProvider.removeListener(this);
-		
+
+	public void setTreeContentProvider(
+			ServerTreeContentProvider treeContentProvider) {
+		ServerTreeContentProvider oldProvider = (ServerTreeContentProvider) this.viewer
+				.getContentProvider();
+		if (oldProvider != null)
+			oldProvider.removeListener(this);
+
 		viewer.setContentProvider(treeContentProvider);
 		treeContentProvider.addListener(this);
 	}
+
 	public void handleEvent(int type, TreeObject parent, TreeObject child) {
-		//System.out.println("VIEWER HANDLE EVENT "+type+" Parent:  "+(parent==null?" no parent":parent.getDisplayName())+"-->"+child.getDisplayName());
-        
-        switch(type) {
-            case IXObjectModelListener.NEED_REFRESH:
-                new ServerRefreshAction(this,(TreeParent)child).run();
-                break;
-        }
-        
+		// System.out.println("VIEWER HANDLE EVENT "+type+" Parent:  "+(parent==
+		// null
+		// ?" no parent":parent.getDisplayName())+"-->"+child.getDisplayName());
+
+		switch (type) {
+		case IXObjectModelListener.NEED_REFRESH:
+			new ServerRefreshAction(this, (TreeParent) child).run();
+			break;
+		}
+
 		this.viewer.refresh(false);
 	}
 
 	public TreeViewer getViewer() {
-        return viewer;
-    }
-    public void setViewer(TreeViewer viewer) {
-        this.viewer = viewer;
-    }
+		return viewer;
+	}
+
+	public void setViewer(TreeViewer viewer) {
+		this.viewer = viewer;
+	}
 
 	public void dispose() {
-		ServerTreeContentProvider oldProvider = (ServerTreeContentProvider) this.viewer.getContentProvider();
-		if (oldProvider != null) oldProvider.removeListener(this);
+		ServerTreeContentProvider oldProvider = (ServerTreeContentProvider) this.viewer
+				.getContentProvider();
+		if (oldProvider != null)
+			oldProvider.removeListener(this);
 		super.dispose();
 	}
-    
-	
+
 }
