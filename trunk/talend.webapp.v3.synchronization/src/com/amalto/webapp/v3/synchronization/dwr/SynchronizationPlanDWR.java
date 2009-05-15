@@ -86,11 +86,12 @@ public class SynchronizationPlanDWR {
 				syncItem.setNode(node);				
 				list.add(syncItem);
 			}	
-			
-			start=start<list.size()?start:list.size()-1;
-			int end=list.size()<(start+limit)?list.size()-1:(start+limit-1);
-			List<SynchronizationItem> sublist=list.subList(start, end+1);
-
+			List<SynchronizationItem> sublist=list;
+			if(list.size()>0){
+				start=start<list.size()?start:list.size()-1;
+				int end=list.size()<(start+limit)?list.size()-1:(start+limit-1);
+				sublist=list.subList(start, end+1);
+			}
 			ListRange listRange = new ListRange();
 			listRange.setData(sublist.toArray(new SynchronizationItem[sublist.size()]));
 			listRange.setTotalSize(list.size());			
