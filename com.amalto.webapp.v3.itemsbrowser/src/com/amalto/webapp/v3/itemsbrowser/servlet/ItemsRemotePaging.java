@@ -196,6 +196,7 @@ public class ItemsRemotePaging  extends HttpServlet{
 					results[i] =emptyTags.matcher(results[i]).replaceAll(" #");
 					String[] elements = results[i].split("#");
 					String[] fields = new String[view.getViewables().length];
+					//aiming modify
 					int count=Math.min(elements.length, fields.length);
 					for (int j = 0; j < count; j++) {
 						fields[j]=StringEscapeUtils.unescapeXml(elements[j]);
@@ -292,6 +293,7 @@ public class ItemsRemotePaging  extends HttpServlet{
 				rows.add(fields);
 			}			
 			json.put("items",rows);
+			//aiming add 'success' to let the search result can display after get the results
 			json.put("success", true);
 			org.apache.log4j.Logger.getLogger(this.getClass()).debug(json);
 			
