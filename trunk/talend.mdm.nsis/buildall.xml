@@ -69,12 +69,11 @@
     </target> 
 	
 	  <target name="svn.ssh.checkout" description="checkouting ${file.full.name} ">
-	    <property name="source-root" value="${workspace.dir}/${file.full.name}"/>
-	    <property name="repository.URL" value="${svn.server.url}"/>		
-		
+	    <property name="source-root" value="${workspace.dir}"/>
+	    <property name="repository.URL" value="${svn.server.url}"/>				
 	  	<java classname="org.tmatesoft.svn.cli.SVN"
 	       dir="${source-root}" fork="true" >
-	      <arg value="up"/>
+	      <arg value="co"/>
 	      <arg value="--username"/>
 	      <arg value="${svn.username}"/>
 	      <arg value="--password"/>
