@@ -23,6 +23,8 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -92,7 +94,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	protected Text descriptionText;
 	protected TreeViewer viewer;
 	protected DrillDownAdapter drillDownAdapter;
-	
+
 	private XSDNewConceptAction newConceptAction = null;
 	private XSDDeleteConceptAction deleteConceptAction = null;
 	private XSDNewElementAction newElementAction = null;
@@ -124,137 +126,205 @@ public class DataModelMainPage extends AMainPageV2 {
 	private XSDSetAnnotationTargetSystemsAction setAnnotationTargetSystemsAction = null;
 	private XSDSetAnnotationSourceSystemAction setAnnotationSourceSystemAction = null;
 	private XSDSetAnnotationDocumentationAction setAnnotationDocumentationAction = null;
-	
-	
-    public DataModelMainPage(FormEditor editor) {
-        super(
-        		editor,
-        		DataModelMainPage.class.getName(),
-        		"Data Model "+((XObjectEditorInput)editor.getEditorInput()).getName()
-        );        
-    }
 
-	protected void createCharacteristicsContent(FormToolkit toolkit, Composite mainComposite) {
+	public DataModelMainPage(FormEditor editor) {
+		super(editor, DataModelMainPage.class.getName(), "Data Model "
+				+ ((XObjectEditorInput) editor.getEditorInput()).getName());
+	}
 
-        try {
-        	
-        	WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
-                      
-            //description
-            Label descriptionLabel = toolkit.createLabel(mainComposite, "Description", SWT.NULL);
-            descriptionLabel.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
-            );
-            
-            descriptionText = toolkit.createText(mainComposite, "",SWT.BORDER|SWT.MULTI);
-            descriptionText.setLayoutData(    
-                    new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-            );
-            descriptionText.setText(wsObject.getDescription()==null ? "" : wsObject.getDescription());
-            ((GridData)descriptionText.getLayoutData()).minimumHeight = 30;
-            descriptionText.addModifyListener(this);
-            
-            Label xsdLabel = toolkit.createLabel(mainComposite, "Schema", SWT.NULL);
-            xsdLabel.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,false,true,2,1)
-            );
-            
-            
-            //get the XSDSchema
-            XSDSchema xsdSchema = getXSDSchema(wsObject.getXsdSchema());
-            
-    		viewer = new TreeViewer(mainComposite, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-            viewer.getControl().setLayoutData(    
-                    new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
-            );
-            ((GridData)viewer.getControl().getLayoutData()).heightHint=1000;
-    		drillDownAdapter = new DrillDownAdapter(viewer);
-    		viewer.setContentProvider(new XSDTreeContentProvider(this.getSite(), xsdSchema));
-    		viewer.setLabelProvider(new XSDTreeLabelProvider());
-    		viewer.setSorter(new ViewerSorter() {
-    			public int category(Object element) {
-    				//we want facets before Base TypeDefinitions in SimpleTypeDefinition
-    				if (element instanceof XSDFacet) return 100;
-    				//unique keys after element declarations and before other keys
-    				if (element instanceof XSDIdentityConstraintDefinition) {
-    					XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) element;
-    					if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL))
-    						return 300;
-    					else if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.KEY_LITERAL))
-    						return 301;
-    					else
-    						return 302;
-    				}
-    				return 200;
-    			}
-    			public int compare(Viewer theViewer, Object e1, Object e2) {
-    		        int cat1 = category(e1);
-    		        int cat2 = category(e2);
-    		        return cat1 - cat2;
-    			}
-    		});
-    		viewer.setInput(this.getSite());//getViewSite());
-    		
-    		hookContextMenu();
-    		
-    		//if this created after the editorPage and it is dirty , mark this one as dirty too
-    		DataModelEditorPage editorPage = ((DataModelEditorPage) getEditor().findPage(DataModelEditorPage.class.getName()));
-    		if (editorPage.isDirty()) this.markDirty();
-    		
-    		//FIXME: does the reflow before the tree is actually expanded
-    		/*
-    		viewer.addTreeListener(new ITreeViewerListener() {
-    			public void treeExpanded(TreeExpansionEvent event) {
-    				DataModelMainPage.this.getManagedForm().getForm().reflow(true);
-    			}
-    			public void treeCollapsed(TreeExpansionEvent event) {
-    				DataModelMainPage.this.getManagedForm().getForm().reflow(true);
-    			}
-    		});
-    		*/
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+	protected void createCharacteristicsContent(FormToolkit toolkit,
+			Composite mainComposite) {
 
-    }//createCharacteristicsContent
+		try {
 
+			WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
+
+			// description
+			Label descriptionLabel = toolkit.createLabel(mainComposite,
+					"Description", SWT.NULL);
+			descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
+					false, true, 1, 1));
+
+			descriptionText = toolkit.createText(mainComposite, "", SWT.BORDER
+					| SWT.MULTI);
+			descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
+					true, true, 1, 1));
+			descriptionText.setText(wsObject.getDescription() == null ? ""
+					: wsObject.getDescription());
+			((GridData) descriptionText.getLayoutData()).minimumHeight = 30;
+			descriptionText.addModifyListener(this);
+
+			Label xsdLabel = toolkit.createLabel(mainComposite, "Schema",
+					SWT.NULL);
+			xsdLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
+					true, 2, 1));
+
+			// get the XSDSchema
+			XSDSchema xsdSchema = getXSDSchema(wsObject.getXsdSchema());
+
+			viewer = new TreeViewer(mainComposite, SWT.MULTI | SWT.H_SCROLL
+					| SWT.V_SCROLL);
+			viewer.getControl().setLayoutData(
+					new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+			((GridData) viewer.getControl().getLayoutData()).heightHint = 1000;
+			drillDownAdapter = new DrillDownAdapter(viewer);
+			viewer.setContentProvider(new XSDTreeContentProvider(
+					this.getSite(), xsdSchema));
+			viewer.setLabelProvider(new XSDTreeLabelProvider());
+			viewer.setSorter(new ViewerSorter() {
+				public int category(Object element) {
+					// we want facets before Base TypeDefinitions in
+					// SimpleTypeDefinition
+					if (element instanceof XSDFacet)
+						return 100;
+					// unique keys after element declarations and before other
+					// keys
+					if (element instanceof XSDIdentityConstraintDefinition) {
+						XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) element;
+						if (icd.getIdentityConstraintCategory().equals(
+								XSDIdentityConstraintCategory.UNIQUE_LITERAL))
+							return 300;
+						else if (icd.getIdentityConstraintCategory().equals(
+								XSDIdentityConstraintCategory.KEY_LITERAL))
+							return 301;
+						else
+							return 302;
+					}
+					return 200;
+				}
+
+				public int compare(Viewer theViewer, Object e1, Object e2) {
+					int cat1 = category(e1);
+					int cat2 = category(e2);
+					return cat1 - cat2;
+				}
+			});
+			viewer.setInput(this.getSite());// getViewSite());
+			viewer.getTree().addKeyListener(new KeyListener() {
+
+				public void keyPressed(KeyEvent e) {
+
+					IStructuredSelection selection = ((IStructuredSelection) viewer
+							.getSelection());
+
+					if ((selection != null)
+							&& (selection.getFirstElement() != null)) {
+
+						// delete
+						if ((e.stateMask == 0) && (e.keyCode == SWT.DEL)) {
+
+							Object obj = selection.getFirstElement();
+
+							if (obj instanceof XSDElementDeclaration) {
+								XSDElementDeclaration decl = (XSDElementDeclaration) obj;
+
+								boolean isConcept = false;
+								EList l = decl.getIdentityConstraintDefinitions();
+								for (Iterator iter = l.iterator(); iter.hasNext();) {
+									XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) iter.next();
+									if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
+										isConcept = true;
+										break;
+									}
+								}
+
+								if (isConcept) {
+									deleteConceptAction.run();
+								} else {
+									deleteElementAction.run();
+								}
+
+							} else if (obj instanceof XSDParticle) {
+
+								deleteParticleAction.run();
+
+							} else if (obj instanceof XSDIdentityConstraintDefinition) {
+
+								deleteIdentityConstraintAction.run();
+
+							} else if (obj instanceof XSDXPathDefinition) {
+
+								deleteXPathAction.run();
+
+							} else {
+
+							}
+						}
+
+					}
+
+				}
+
+				public void keyReleased(KeyEvent e) {
+
+				}
+
+			});
+
+			hookContextMenu();
+
+			// if this created after the editorPage and it is dirty , mark this
+			// one as dirty too
+			DataModelEditorPage editorPage = ((DataModelEditorPage) getEditor()
+					.findPage(DataModelEditorPage.class.getName()));
+			if (editorPage.isDirty())
+				this.markDirty();
+
+			// FIXME: does the reflow before the tree is actually expanded
+			/*
+			 * viewer.addTreeListener(new ITreeViewerListener() { public void
+			 * treeExpanded(TreeExpansionEvent event) {
+			 * DataModelMainPage.this.getManagedForm().getForm().reflow(true); }
+			 * public void treeCollapsed(TreeExpansionEvent event) {
+			 * DataModelMainPage.this.getManagedForm().getForm().reflow(true); }
+			 * });
+			 */
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}// createCharacteristicsContent
 
 	protected void refreshData() {
 		try {
-			
-            if (! this.equals(getEditor().getActivePageInstance())) return;
-            
-	    	WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());    	
-	    	String s;
-	    		    	
-	    	s = wsObject.getDescription()==null ? "" : wsObject.getDescription();
-	    	if (!s.equals(descriptionText.getText())) descriptionText.setText(s);
-	    	
-	    	viewer.setContentProvider(
-	    			new XSDTreeContentProvider(
-	    					this.getSite(), 
-	    					getXSDSchema(wsObject.getXsdSchema())
-	    			)
-	    	);
+
+			if (!this.equals(getEditor().getActivePageInstance()))
+				return;
+
+			WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
+			String s;
+
+			s = wsObject.getDescription() == null ? "" : wsObject
+					.getDescription();
+			if (!s.equals(descriptionText.getText()))
+				descriptionText.setText(s);
+
+			viewer.setContentProvider(new XSDTreeContentProvider(
+					this.getSite(), getXSDSchema(wsObject.getXsdSchema())));
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page", "Error refreshing the page: "+e.getLocalizedMessage());
-		}    	
+			MessageDialog.openError(this.getSite().getShell(),
+					"Error refreshing the page", "Error refreshing the page: "
+							+ e.getLocalizedMessage());
+		}
 	}
-	
+
 	protected void commit() {
 		try {
-	    	WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
-			wsObject.setDescription(descriptionText.getText() == null ? "" : descriptionText.getText());
-			String schema = ((XSDTreeContentProvider)viewer.getContentProvider()).getXSDSchemaAsString();
+			WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
+			wsObject.setDescription(descriptionText.getText() == null ? ""
+					: descriptionText.getText());
+			String schema = ((XSDTreeContentProvider) viewer
+					.getContentProvider()).getXSDSchemaAsString();
 			wsObject.setXsdSchema(schema);
 		} catch (Exception e) {
 			e.printStackTrace();
-			MessageDialog.openError(this.getSite().getShell(), "Error committing the page", "Error committing the page: "+e.getLocalizedMessage());
-		}    	
+			MessageDialog.openError(this.getSite().getShell(),
+					"Error committing the page", "Error committing the page: "
+							+ e.getLocalizedMessage());
+		}
 	}
-		
 
 	protected void createActions() {
 		this.newConceptAction = new XSDNewConceptAction(this);
@@ -264,15 +334,20 @@ public class DataModelMainPage extends AMainPageV2 {
 		this.changeToComplexTypeAction = new XSDChangeToComplexTypeAction(this);
 		this.deleteParticleAction = new XSDDeleteParticleAction(this);
 		this.newParticleFromTypeAction = new XSDNewParticleFromTypeAction(this);
-		this.newParticleFromParticleAction = new XSDNewParticleFromParticleAction(this);
+		this.newParticleFromParticleAction = new XSDNewParticleFromParticleAction(
+				this);
 		this.newGroupFromTypeAction = new XSDNewGroupFromTypeAction(this);
-		this.newGroupFromParticleAction = new XSDNewGroupFromParticleAction(this);
+		this.newGroupFromParticleAction = new XSDNewGroupFromParticleAction(
+				this);
 		this.editParticleAction = new XSDEditParticleAction(this);
 		this.editConceptAction = new XSDEditConceptAction(this);
 		this.editElementAction = new XSDEditElementAction(this);
-		this.deleteIdentityConstraintAction = new XSDDeleteIdentityConstraintAction(this);
-		this.editIdentityConstraintAction = new XSDEditIdentityConstraintAction(this);
-		this.newIdentityConstraintAction = new XSDNewIdentityConstraintAction(this);
+		this.deleteIdentityConstraintAction = new XSDDeleteIdentityConstraintAction(
+				this);
+		this.editIdentityConstraintAction = new XSDEditIdentityConstraintAction(
+				this);
+		this.newIdentityConstraintAction = new XSDNewIdentityConstraintAction(
+				this);
 		this.deleteXPathAction = new XSDDeleteXPathAction(this);
 		this.newXPathAction = new XSDNewXPathAction(this);
 		this.editXPathAction = new XSDEditXPathAction(this);
@@ -280,14 +355,20 @@ public class DataModelMainPage extends AMainPageV2 {
 		this.changeBaseTypeAction = new XSDChangeBaseTypeAction(this);
 		this.getXPathAction = new XSDGetXPathAction(this);
 		this.setAnnotationLabelAction = new XSDSetAnnotationLabelAction(this);
-		this.setAnnotationDescriptionsAction = new XSDSetAnnotationDescriptionsAction(this);
-		this.setAnnotationForeignKeyAction = new XSDSetAnnotationForeignKeyAction(this);
-		this.setAnnotationForeignKeyInfoAction = new XSDSetAnnotationForeignKeyInfoAction(this);
+		this.setAnnotationDescriptionsAction = new XSDSetAnnotationDescriptionsAction(
+				this);
+		this.setAnnotationForeignKeyAction = new XSDSetAnnotationForeignKeyAction(
+				this);
+		this.setAnnotationForeignKeyInfoAction = new XSDSetAnnotationForeignKeyInfoAction(
+				this);
 		this.setAnnotationWriteAction = new XSDSetAnnotationWriteAction(this);
 		this.setAnnotationHiddenAction = new XSDSetAnnotationHiddenAction(this);
-		this.setAnnotationTargetSystemsAction = new XSDSetAnnotationTargetSystemsAction(this);
-		this.setAnnotationSourceSystemAction = new XSDSetAnnotationSourceSystemAction(this);
-		this.setAnnotationDocumentationAction = new XSDSetAnnotationDocumentationAction(this);
+		this.setAnnotationTargetSystemsAction = new XSDSetAnnotationTargetSystemsAction(
+				this);
+		this.setAnnotationSourceSystemAction = new XSDSetAnnotationSourceSystemAction(
+				this);
+		this.setAnnotationDocumentationAction = new XSDSetAnnotationDocumentationAction(
+				this);
 	}
 
 	private void hookContextMenu() {
@@ -304,27 +385,29 @@ public class DataModelMainPage extends AMainPageV2 {
 	}
 
 	protected void fillContextMenu(IMenuManager manager) {
-		IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
-		
-		if ((selection == null) || (selection.getFirstElement()==null)) {
+		IStructuredSelection selection = ((IStructuredSelection) viewer
+				.getSelection());
+
+		if ((selection == null) || (selection.getFirstElement() == null)) {
 			manager.add(newConceptAction);
 			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 			return;
 		}
-		
+
 		Object obj = selection.getFirstElement();
-		
-		
-		//Element Declaration
-		if (obj instanceof XSDElementDeclaration){
-			//check if concept or "just" element
+
+		// Element Declaration
+		if (obj instanceof XSDElementDeclaration) {
+			// check if concept or "just" element
 			XSDElementDeclaration decl = (XSDElementDeclaration) obj;
-			boolean isConcept=false;
+			boolean isConcept = false;
 			EList l = decl.getIdentityConstraintDefinitions();
-			for (Iterator iter = l.iterator(); iter.hasNext(); ) {
-				XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) iter.next();
-				if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
-					isConcept=true;
+			for (Iterator iter = l.iterator(); iter.hasNext();) {
+				XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) iter
+						.next();
+				if (icd.getIdentityConstraintCategory().equals(
+						XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
+					isConcept = true;
 					break;
 				}
 			}
@@ -343,13 +426,13 @@ public class DataModelMainPage extends AMainPageV2 {
 			manager.add(changeToSimpleTypeAction);
 			manager.add(new Separator());
 			manager.add(newIdentityConstraintAction);
-			//Annotations
+			// Annotations
 			setAnnotationActions(manager);
 		}
-		
-		if (obj instanceof XSDParticle){
-			XSDTerm term = ((XSDParticle)obj).getTerm();
-			if (! (term instanceof XSDWildcard)) {
+
+		if (obj instanceof XSDParticle) {
+			XSDTerm term = ((XSDParticle) obj).getTerm();
+			if (!(term instanceof XSDWildcard)) {
 				manager.add(editParticleAction);
 				manager.add(newGroupFromParticleAction);
 				manager.add(newParticleFromParticleAction);
@@ -364,62 +447,62 @@ public class DataModelMainPage extends AMainPageV2 {
 				manager.add(new Separator());
 				manager.add(newIdentityConstraintAction);
 				if (term instanceof XSDElementDeclaration) {
-					//Annotations
+					// Annotations
 					setAnnotationActions(manager);
-					//Xpath
+					// Xpath
 					manager.add(new Separator());
-					manager.add(getXPathAction);				
+					manager.add(getXPathAction);
 				}
 			}
 		}
-		
-		if (obj instanceof XSDComplexTypeDefinition){
+
+		if (obj instanceof XSDComplexTypeDefinition) {
 			manager.add(newParticleFromTypeAction);
 			manager.add(newGroupFromTypeAction);
 		}
 
-		if (obj instanceof XSDIdentityConstraintDefinition){
+		if (obj instanceof XSDIdentityConstraintDefinition) {
 			manager.add(editIdentityConstraintAction);
 			manager.add(deleteIdentityConstraintAction);
 			manager.add(newIdentityConstraintAction);
 			manager.add(new Separator());
 			manager.add(newXPathAction);
 		}
-		
-		if (obj instanceof XSDXPathDefinition){
+
+		if (obj instanceof XSDXPathDefinition) {
 			manager.add(editXPathAction);
 			manager.add(newXPathAction);
 			XSDXPathDefinition xpath = (XSDXPathDefinition) obj;
 			if (xpath.getVariety().equals(XSDXPathVariety.FIELD_LITERAL))
 				manager.add(deleteXPathAction);
 		}
-		
-		if (obj instanceof XSDSimpleTypeDefinition){
-			XSDSimpleTypeDefinition typedef = (XSDSimpleTypeDefinition)obj;
-						
-			if (!typedef.getSchema().getSchemaForSchemaNamespace().equals(typedef.getTargetNamespace())) {
+
+		if (obj instanceof XSDSimpleTypeDefinition) {
+			XSDSimpleTypeDefinition typedef = (XSDSimpleTypeDefinition) obj;
+
+			if (!typedef.getSchema().getSchemaForSchemaNamespace().equals(
+					typedef.getTargetNamespace())) {
 				manager.add(changeBaseTypeAction);
 				manager.add(new Separator());
 				EList list = typedef.getBaseTypeDefinition().getValidFacets();
-				for (Iterator iter = list.iterator(); iter.hasNext(); ) {
+				for (Iterator iter = list.iterator(); iter.hasNext();) {
 					String element = (String) iter.next();
-					manager.add(new XSDEditFacetAction(this,element));
+					manager.add(new XSDEditFacetAction(this, element));
 				}
 
 			}
 		}
-		
+
 		if (obj instanceof XSDAnnotation) {
 			setAnnotationActions(manager);
 		}
-		
+
 		manager.add(new Separator());
-		
+
 		drillDownAdapter.addNavigationActions(manager);
 		// Other plug-ins can contribute there actions here
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}
-	
 
 	private void setAnnotationActions(IMenuManager manager) {
 		manager.add(setAnnotationLabelAction);
@@ -432,21 +515,24 @@ public class DataModelMainPage extends AMainPageV2 {
 		manager.add(setAnnotationSourceSystemAction);
 		manager.add(setAnnotationDocumentationAction);
 	}
-	
+
 	/**
-	 * Returns and XSDSchema Object from an xsd 
+	 * Returns and XSDSchema Object from an xsd
+	 * 
 	 * @param schema
 	 * @return
 	 * @throws Exception
 	 */
-	private XSDSchema getXSDSchema(String schema) throws Exception{
-   		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+	private XSDSchema getXSDSchema(String schema) throws Exception {
+		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory
+				.newInstance();
 		documentBuilderFactory.setNamespaceAware(true);
 		documentBuilderFactory.setValidating(false);
 		InputSource source = new InputSource(new StringReader(schema));
-		DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+		DocumentBuilder documentBuilder = documentBuilderFactory
+				.newDocumentBuilder();
 		Document document = documentBuilder.parse(source);
-		return XSDSchemaImpl.createSchema(document.getDocumentElement());		
+		return XSDSchemaImpl.createSchema(document.getDocumentElement());
 	}
 
 	public TreeViewer getTreeViewer() {
@@ -454,24 +540,26 @@ public class DataModelMainPage extends AMainPageV2 {
 	}
 
 	/**
-	 * We need to override the method so that the schema object is serialized into xsd an stored in the wsObject via the commit method
-	 * We also need to marDirty both Pages 
-	 * The super.markDirty() method will trigger the appropriate events to the registered listeners
+	 * We need to override the method so that the schema object is serialized
+	 * into xsd an stored in the wsObject via the commit method We also need to
+	 * marDirty both Pages The super.markDirty() method will trigger the
+	 * appropriate events to the registered listeners
 	 */
 	@Override
 	public void markDirty() {
 		commit();
 		super.markDirty();
-		DataModelEditorPage editorPage = ((DataModelEditorPage) getEditor().findPage(DataModelEditorPage.class.getName()));
-		if (!editorPage.isDirty()) editorPage.markDirty();
+		DataModelEditorPage editorPage = ((DataModelEditorPage) getEditor()
+				.findPage(DataModelEditorPage.class.getName()));
+		if (!editorPage.isDirty())
+			editorPage.markDirty();
 		/*
-		try {
-			String schema = ((XSDTreeContentProvider)viewer.getContentProvider()).getXSDSchemaAsString();
-			System.out.println("SCHEMA\n"+schema);
-		} catch (Exception e) {e.printStackTrace();}
-		*/
-		
+		 * try { String schema =
+		 * ((XSDTreeContentProvider)viewer.getContentProvider
+		 * ()).getXSDSchemaAsString(); System.out.println("SCHEMA\n"+schema); }
+		 * catch (Exception e) {e.printStackTrace();}
+		 */
+
 	}
-		
 
 }
