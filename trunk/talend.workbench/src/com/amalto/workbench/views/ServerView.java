@@ -45,29 +45,9 @@ import com.amalto.workbench.providers.ServerTreeLabelProvider;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
-import com.amalto.workbench.webservices.WSDataClusterPK;
-import com.amalto.workbench.webservices.WSDataModelPK;
-import com.amalto.workbench.webservices.WSDeleteDataCluster;
-import com.amalto.workbench.webservices.WSDeleteDataModel;
-import com.amalto.workbench.webservices.WSDeleteMenu;
-import com.amalto.workbench.webservices.WSDeleteRole;
-import com.amalto.workbench.webservices.WSDeleteRoutingRule;
-import com.amalto.workbench.webservices.WSDeleteStoredProcedure;
-import com.amalto.workbench.webservices.WSDeleteSynchronizationPlan;
-import com.amalto.workbench.webservices.WSDeleteTransformerV2;
-import com.amalto.workbench.webservices.WSDeleteUniverse;
-import com.amalto.workbench.webservices.WSDeleteView;
 import com.amalto.workbench.webservices.WSLogout;
-import com.amalto.workbench.webservices.WSMenuPK;
-import com.amalto.workbench.webservices.WSRolePK;
-import com.amalto.workbench.webservices.WSRoutingRulePK;
-import com.amalto.workbench.webservices.WSStoredProcedurePK;
-import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
-import com.amalto.workbench.webservices.WSTransformerV2PK;
-import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSVersioningGetInfo;
 import com.amalto.workbench.webservices.WSVersioningInfo;
-import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
 
 /**
@@ -121,8 +101,31 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		hookDoubleClickAction();
 		hookKeyPressAction();
 		contributeToActionBars();
+		hookKeyboard();
 	}
 
+	/**
+	 * // fliu 
+	 *  add keyboard listener into tree to assist ctrl+c, ctrl+v and del
+	 */
+	private void hookKeyboard()
+	{
+		viewer.getControl().addKeyListener(new KeyListener() {
+        	public void keyPressed(KeyEvent e) {}
+        	public void keyReleased(KeyEvent e) {
+        		if ((e.stateMask & SWT.CTRL) != 0 && e.keyCode == 99) {
+        			copyAction.run();
+        			   }
+        		else if((e.stateMask & SWT.CTRL) != 0 && (e.keyCode == 118)){
+        			pasteAction.run();
+        		}
+        		else if (e.keyCode == SWT.DEL){
+        			deleteXObjectAction.run();
+        		}
+        		}
+        	});
+	}
+	
 	private void hookContextMenu() {
 		MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
