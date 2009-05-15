@@ -53,8 +53,8 @@ public class UsersDWR {
 					new WSGetItems(
 							new WSDataClusterPK(dataclusterPK),"User", wi, 0, 0, Integer.MAX_VALUE)
 					).getStrings();
-			if ((results == null) || (results.length == 0))
-				return null;
+//			if ((results == null) || (results.length == 0))
+//				return null;
 
 			ArrayList<User> names = new ArrayList<User>();
 			for (int i = 0; i < results.length; i++) {
