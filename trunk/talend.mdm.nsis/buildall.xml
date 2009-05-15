@@ -74,7 +74,7 @@
 		
 	  	<java classname="org.tmatesoft.svn.cli.SVN"
 	       dir="${source-root}" fork="true" >
-	      <arg value="co"/>
+	      <arg value="up"/>
 	      <arg value="--username"/>
 	      <arg value="${svn.username}"/>
 	      <arg value="--password"/>
