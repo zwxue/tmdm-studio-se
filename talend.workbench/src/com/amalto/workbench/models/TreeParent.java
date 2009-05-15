@@ -93,7 +93,12 @@ public class TreeParent extends TreeObject {
                     break;
                 }
             }//for thist
-            if (!found) this.addChild(targetChildren[j]); 
+            if (!found) 
+            {
+            	this.addChild(targetChildren[j]); 
+            	// fliu  set the root node value of the new created child  
+            	targetChildren[j].setServerRoot(this.getServerRoot());
+            }
         }//for add
         
     }//synchronizewith
