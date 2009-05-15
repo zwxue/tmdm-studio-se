@@ -207,7 +207,7 @@ public class MenuEntryDialog extends Dialog {
         final String LANGUAGE="Language";
         final String LABEL = "Label";
         
-        descriptionsViewer = new TableViewer(descriptionsComposite);
+        descriptionsViewer = new TableViewer(descriptionsComposite,SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER|SWT.FULL_SELECTION);
         descriptionsViewer.getControl().setLayoutData(    
                 new GridData(SWT.FILL,SWT.FILL,true,true,3,1)
         );

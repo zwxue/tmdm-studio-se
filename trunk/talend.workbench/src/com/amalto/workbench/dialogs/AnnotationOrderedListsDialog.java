@@ -98,7 +98,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
 		
         final String COLUMN = columnName;
         
-        viewer = new TableViewer(composite);
+        viewer = new TableViewer(composite,SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER|SWT.FULL_SELECTION);
         viewer.getControl().setLayoutData(    
                 new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
         );
