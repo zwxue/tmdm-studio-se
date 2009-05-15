@@ -15,6 +15,9 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.amalto.workbench.editors.AMainPage;
+import com.amalto.workbench.editors.AMainPageV2;
+import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
@@ -432,11 +435,24 @@ public class NewXObjectAction extends Action{
 	           		return;
             }//switch
 
-            view.getSite().getWorkbenchWindow().getActivePage().openEditor(
+            XObjectEditor editpart=(XObjectEditor)view.getSite().getWorkbenchWindow().getActivePage().openEditor(
                     new XObjectEditorInput(newInstance,newInstance.getDisplayName()),
                     "com.amalto.workbench.editors.XObjectEditor"
            	);
-       
+            
+            /*
+             * make the new page dirty
+             */
+            if(editpart.getSelectedPage() instanceof AMainPageV2){
+            	((AMainPageV2)editpart.getSelectedPage()).markDirty();
+            }
+            
+            /*
+             * make the new page dirty
+             */
+            if(editpart.getSelectedPage() instanceof AMainPage)
+            	((AMainPage)editpart.getSelectedPage()).markDirty();
+            
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(

@@ -54,20 +54,28 @@ public class DeleteXObjectAction extends Action{
 			IStructuredSelection selection = (IStructuredSelection)view.getViewer().getSelection();
 			//add the node here
 			
-			StringBuffer names = new StringBuffer();
-			for (Iterator<TreeObject> iter = selection.iterator();iter.hasNext();) {
-				TreeObject xobject = iter.next();
-				names.append(xobject.getDisplayName()) ;
-				names.append(" ");
-			}
+//			StringBuffer names = new StringBuffer();
+//			for (Iterator<TreeObject> iter = selection.iterator();iter.hasNext();) {
+//				TreeObject xobject = iter.next();
+//				names.append(xobject.getDisplayName()) ;
+//				names.append(" ");
+//			}
 			if(selection.isEmpty()){
 				return;
 			}
 			else{
+				int size = selection.size();
+				String s = new String();
+				
+				if(size>1)
+					s="Instances";
+				else
+					s="Instance";
+				
 				if (! MessageDialog.openConfirm(
 	            		this.view.getSite().getShell(),
 	            		"Delete "+IConstants.TALEND+" Object Instance",
-	            		"Are you sure you want to delete the "+ names +"?"
+	            		"Are you sure you want to delete the "+ selection.size() + " " +s +"?"
 	            )) return;
 			}//end of if(selection...)
 			

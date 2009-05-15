@@ -59,7 +59,9 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
             switch(xobject.getType()) {
 	           	case TreeObject.DATA_MODEL:
 	           		addPage(new DataModelMainPage(this));
+//	           		DataModelEditorPage page = new DataModelEditorPage(this);
                     addPage(new DataModelEditorPage(this));
+                   
                     //addPage(new DataModelEditorPage2());
 	           		break;
 	           	case TreeObject.INBOUND_PLUGIN:
@@ -105,7 +107,9 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
     
     //Overloaded - Fixes issues with getEditor()
     public int addPage(IFormPage page) throws PartInitException {
-		formPages.add(page);
+//    	((DataModelMainPage)page).markDirty();
+    	formPages.add(page);
+//		((DataModelMainPage)page).markDirty();
 		return super.addPage(page);
 	}
 
