@@ -4,17 +4,23 @@
 	String contextPath = request.getContextPath();
 	Locale locale = request.getLocale();
 	String language=locale.getLanguage();
-	language="".equals(language)? "en" : language; //default language
-
-	String _USERNAME_ = "Identifiant";
-	String _PASSWORD_ = "Mot&nbsp;de&nbsp;passe";
-	String _ERROR = "Mauvais identifiant ou mot de passe";
 	
-	if ("en".equals(language)) {
-		_USERNAME_ = "Login";
-		_PASSWORD_ = "Password";
-		_ERROR = "Login failed. Please check your login and password";
+	//if language is empty or unsupported
+	if(language==""||!(language=="en"||language=="fr")){
+	    language="en"; //default language
 	}
+	
+	//default en
+	String _USERNAME_ = "Login";
+	String _PASSWORD_ = "Password";
+	String _ERROR = "Login failed. Please check your login and password";
+	
+	if ("fr".equals(language)) {
+		 _USERNAME_ = "Identifiant";
+		 _PASSWORD_ = "Mot&nbsp;de&nbsp;passe";
+		 _ERROR = "Mauvais identifiant ou mot de passe";
+	}
+
 	
 %>
 
