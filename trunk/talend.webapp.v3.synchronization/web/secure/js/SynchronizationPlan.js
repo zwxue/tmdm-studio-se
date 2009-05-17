@@ -109,9 +109,10 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
 								id:'sync-pagingtoolbar',
 								pageSize: parseInt(pageSize),
 						        store: store,
-						        displayInfo: false,
+						        displayInfo: true,
 						        displayMsg: 'Displaying items'+' {0} - {1} '+'of'+' {2}',
 						        emptyMsg: 'No result',
+						        width: 800,
 						        items:[ 
 						        	new Ext.Toolbar.Separator(),
 						        	new Ext.Toolbar.TextItem('Number of lines per page'+" : "),
