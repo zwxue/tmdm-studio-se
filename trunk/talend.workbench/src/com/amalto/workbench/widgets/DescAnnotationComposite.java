@@ -2,10 +2,13 @@ package com.amalto.workbench.widgets;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -33,11 +36,15 @@ public class DescAnnotationComposite implements  SelectionListener{
 
 	private Button annotationButton;
 	private Text descriptionText;
+	
 	private Composite descAntionHolder;
     private AMainPageV2 accommodation;
     
+    private String descriptionValue;
+    private String dlgTitle;
+    
     private LinkedHashMap<String, String> dataStore = new LinkedHashMap<String, String>();
-    private static final String REGEXP_METACHARACTERS = "\\[([\\w]+):([\\w]+)\\]";  
+    private static final String REGEXP_METACHARACTERS = "\\[([\\w]+)[\\s]*:[\\s]*([^]]*)\\]";  
     private static final Pattern DESC_PATTERN = Pattern.compile(REGEXP_METACHARACTERS);
     
 	public DescAnnotationComposite(String labelName, String buttonName, FormToolkit toolkit, Composite parent, AMainPageV2 dialog)
@@ -58,24 +65,47 @@ public class DescAnnotationComposite implements  SelectionListener{
         descriptionText.setLayoutData(    
                  new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
          );
-        descriptionText.setEnabled(false);
+        descriptionText.addModifyListener(new ModifyListener() {
+        	public void modifyText(ModifyEvent e) {
+        		if (descriptionValue != null && !descriptionValue.equals(descriptionText.getText())) {
+					accommodation.markDirty();
+				}
+        		descriptionValue = descriptionText.getText();
+        		fillDataStore(descriptionText.getText());
+        	}
+        }); 
         
         accommodation = dialog;
+        dlgTitle = "Set the Descriptions";
+	}
+	
+	public void setAnnotationDialogTitle(String title)
+	{
+		dlgTitle = title;
 	}
 	
 	public void setText(String text)
 	{
-		dataStore.clear();
 		descriptionText.setText(text);
+		descriptionValue = text;
 		
+		fillDataStore(text);
+	}
+	
+	private void fillDataStore(String text)
+	{
+		dataStore.clear();
 		boolean find = false;
 		Matcher match = DESC_PATTERN.matcher(text);
 		while (match.find())
 		{	
 			find = true;
-			String country = match.group(1);
-			String desc = match.group(2);
-			dataStore.put(country.toLowerCase(), desc.trim());
+			String country = match.group(1).trim().toLowerCase();
+			String desc = match.group(2).trim();
+			if (Util.iso2lang.get(country)!= null)
+			{
+				dataStore.put(country, desc);
+			}
 		}
 		
 		if (!find && !text.equals(""))
@@ -95,7 +125,7 @@ public class DescAnnotationComposite implements  SelectionListener{
         		dataStore,
         		new DescAnnotationListener(),
 				accommodation.getPartControl().getShell(),
-				"Set the Descriptions of This Element"
+				dlgTitle
 		);
         
         dlg.setBlockOnOpen(true);
