@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -114,7 +115,11 @@ public class NewXObjectAction extends Action{
 	           				null,
 	           				new IInputValidator() {
 	           					public String isValid(String newText) {
-	           						if ((newText==null) || "".equals(newText)) return "The Name cannot be empty";
+	           						if ((newText==null) || "".equals(newText)) 
+	           							return "The Name cannot be empty";
+	           						if(!Pattern.matches("\\w*(\\s*)\\w+", newText)){
+	           							return "The name cannot contains invalid character!";
+	           						}
 	           						return null;
 	           					};
 	           				}
