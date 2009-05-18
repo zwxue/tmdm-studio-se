@@ -1,9 +1,10 @@
-loadResource("/SynchronizationPlan/secure/js/SyncXMLPanel.js", "" );
-loadResource("/SynchronizationPlan/secure/css/SynchronizationPlan.css", "" );
-
 amalto.namespace("amalto.SynchronizationPlan");
 
 amalto.SynchronizationPlan.SynchronizationPlan=function(){
+	
+	loadResource("/SynchronizationPlan/secure/js/SyncXMLPanel.js", "amalto.SynchronizationPlan.SyncXMLPanel" );
+    
+    loadResource("/SynchronizationPlan/secure/css/SynchronizationPlan.css", "" );
 
     var recordType = Ext.data.Record.create([
 	  //{name: "id", type: "int"},
@@ -80,7 +81,7 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
    	    				var record=grid.getStore().getAt(rowIndex);
    	    				//if(record.data.status == 'MANUAL'){
    	    					   	    					
-   	   	    				var xmlData= SyncXMLPanel(record.data,store);
+   	   	    				var xmlData= amalto.SynchronizationPlan.SyncXMLPanel(record.data,store);
    	   	    				xmlData.init();  	    					
    	    				//}
    	    			}
