@@ -128,7 +128,9 @@ public class SynchronizationMainPage extends AMainPageV2{
 		
 		toolkit.createLabel(charComposite, "Status");
 		statusText = toolkit.createLabel(charComposite, "");
-		
+		statusText.setLayoutData(
+                new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+        );		
 		toolkit.createLabel(charComposite, "Actions");
         Composite actionsComposite = toolkit.createComposite(charComposite, SWT.NONE);
         actionsComposite.setLayoutData(
