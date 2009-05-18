@@ -51,7 +51,7 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 	function updateStatus(syncStatus){
 		if(syncStatus){
 			synccode=syncStatus;
-			Ext.getCmp('status').getEl().update('[' + syncStatus.value + '] ' + syncStatus.message);
+			Ext.getCmp('sync_status').getEl().update('[' + syncStatus.value + '] ' + syncStatus.message);
 			if('RUNNING' == syncStatus.value || 'SCHEDULED' == syncStatus.value){
 	    		Ext.getCmp('startFullButton').disable();
 	    		Ext.getCmp('startDifferentButton').disable();
@@ -177,11 +177,11 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 			new Ext.Panel({
 					width : 400,
 					border:false,
-					html:'<div> Synchronization Name:    '+'<select id="syncName" ><option value="Select a SyncName..."></option></select></div>' 
+					html:'<div> Synchronization Name:    '+'<select id="syncName" ></select></div>' 
 				}) 
 			
 			, {
-				id : 'status',
+				id : 'sync_status',
 				xtype : 'box',
 				autoEl : {
 					cn : ''
