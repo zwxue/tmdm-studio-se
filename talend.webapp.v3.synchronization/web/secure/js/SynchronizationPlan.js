@@ -131,7 +131,7 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
 									            } 
 											}
 						                }
-						            }),
+						            })
 						        ]
 						    })
 		             ]
