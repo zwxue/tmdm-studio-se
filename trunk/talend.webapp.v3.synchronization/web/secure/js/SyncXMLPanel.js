@@ -1,4 +1,4 @@
-SyncXMLPanel = function(syncItem,store){	
+amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){	
 	var remoteNames=[];	
 	for(var i=0; i<syncItem.remoteItemNames.length; i++){
 		remoteNames.push([syncItem.remoteItemNames[i]]);
