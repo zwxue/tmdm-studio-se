@@ -128,7 +128,7 @@ public class RoleMainPage extends AMainPageV2 {
         	                     
             //description
         	desAntionComposite = new DescAnnotationComposite("Description" ," ...", toolkit, charComposite, (AMainPageV2)this);
-            
+        	desAntionComposite.setAnnotationDialogTitle("Set the Description of the Role");
             //make the Page window a DropTarget - we need to dispose it
             windowTarget = new DropTarget(this.getPartControl(), DND.DROP_MOVE);
             windowTarget.setTransfer(new Transfer[]{TextTransfer.getInstance()});
@@ -453,7 +453,7 @@ public class RoleMainPage extends AMainPageV2 {
 			this.refreshing = true;
 			
 			WSRole wsRole = (WSRole) (getXObject().getWsObject());    	
-			
+			desAntionComposite.setText(wsRole.getDescription()==null ? "" : wsRole.getDescription());
 			role = new Role();
 			role.setName(wsRole.getName());
 			role.setDescription(wsRole.getDescription()==null ? "" : wsRole.getDescription());
@@ -506,8 +506,8 @@ public class RoleMainPage extends AMainPageV2 {
 			this.comitting = true;
 			
 			WSRole ws = (WSRole) (getXObject().getWsObject());
+			ws.setDescription(desAntionComposite.getText());
 			ws.setName(role.getName());
-			ws.setDescription(role.getDescription());
 			Set<String> objectTypes =role.getSpecifications().keySet();
 			ArrayList<WSRoleSpecification> wsSpecifications = new ArrayList<WSRoleSpecification>();
 			for (Iterator iter = objectTypes.iterator(); iter.hasNext(); ) {
