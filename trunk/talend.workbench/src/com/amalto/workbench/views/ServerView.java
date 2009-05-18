@@ -113,10 +113,12 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		viewer.getControl().addKeyListener(new KeyListener() {
         	public void keyPressed(KeyEvent e) {}
         	public void keyReleased(KeyEvent e) {
-        		if ((e.stateMask & SWT.CTRL) != 0 && e.keyCode == 99) {
+        		if (e.keyCode == 'c' && e.stateMask ==
+        			SWT.CTRL) {
         			copyAction.run();
-        			   }
-        		else if((e.stateMask & SWT.CTRL) != 0 && (e.keyCode == 118)){
+        		}
+        		else if(e.keyCode == 'v' && e.stateMask ==
+        			SWT.CTRL){
         			pasteAction.run();
         		}
         		else if (e.keyCode == SWT.DEL){
