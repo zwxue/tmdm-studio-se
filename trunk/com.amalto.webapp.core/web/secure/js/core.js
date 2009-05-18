@@ -121,7 +121,42 @@ function loadResource(pathFromRootContext,verifiedObjectName) {
 	
 	load();
 	wait();
-}
+};
+
+//Synchronously Load a Javascript Or Css with callback
+
+function loadResource(pathFromRootContext,verifiedObjectName,loaderCallback) {
+	//log('Load resource '+pathFromRootContext);
+	var type ='html';
+	if(pathFromRootContext.substr(pathFromRootContext.length-3,3) == 'css' ) type = 'css';
+	if(pathFromRootContext.substr(pathFromRootContext.length-2,2) == 'js' ) type = 'js';
+	
+	function loaderFailure() {
+		Ext.Msg.alert("ERROR",  "There was an error loading resource from server side! ")
+	}
+	
+	function load() {
+		if ( (type=='js') && isDefined('window',verifiedObjectName)) return;
+		//Begin by creating a new Loader instance:
+		var loader = new YAHOO.util.YUILoader();
+		//Add the module to YUILoader
+	    loader.addModule({
+	        name: pathFromRootContext, //module name; must be unique
+	        type: type,
+	        fullpath: "../../../../"+pathFromRootContext, //can use a fullpath instead
+	        varName: verifiedObjectName //replaces the verifier function in 2.4.0 - ignored if css
+	    });
+		//include the new script
+	    loader.require(pathFromRootContext); 
+	    //new for 2.4.0 - specify call back function
+	    loader.onSuccess = loaderCallback;
+	    loader.onFailure = loaderFailure;
+		//Insert Script on the page, passing in our callback:
+	    loader.insert(); //do not pass callback in 2.4.0 - use onSuccess
+	}
+	
+	load();
+};
 
 
 /********************************************************************
