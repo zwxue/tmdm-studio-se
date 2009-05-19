@@ -51,12 +51,12 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
 		}		
 	};
 	function createTreeNode(node){	
-		var treeNode= new Ext.tree.TreeNode({'text':node.text,'leaf':node.leaf,'expanded':true,'cls':node.cls,'checked':node.checked});				
+		var treeNode= new Ext.tree.TreeNode({'text':node.text,'leaf':node.leaf,'expanded':true,'cls':node.cls,'type':'1'});				
 		if(node.childNodes){
 			for(var i=0; i<node.childNodes.length; i++){
 				var childNode=node.childNodes[i];				
 				if(childNode.leaf == true){					
-					var child= new Ext.tree.TreeNode({'text':childNode.text,'leaf':childNode.leaf,'expanded':true,'cls':childNode.cls,'checked':node.checked});
+					var child= new Ext.tree.TreeNode({'text':childNode.text,'leaf':childNode.leaf,'expanded':true,'cls':childNode.cls,'type':childNode.type});
 					treeNode.appendChild(child);
 				}else{
 					treeNode.appendChild(createTreeNode(childNode));
@@ -192,10 +192,12 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
     function getTreeNode(node,children){
     	for(var i=0; i<node.childNodes.length; i++){
     		var child=node.childNodes[i];
+    		if(!child.attributes.type)
+    			child.attributes.type=3;
     		if(child.childNodes.length==0){
-    			children.push({leaf:true,text:child.text,childNodes:new Array()});
+    			children.push({leaf:true,text:child.text,childNodes:new Array(),type:child.attributes.type});
     		}else{
-    			var treeNode={leaf:false,text:child.text,childNodes:new Array()};
+    			var treeNode={leaf:false,text:child.text,childNodes:new Array(),type:'1'};
     			children.push(treeNode);
     			getTreeNode(child,treeNode.childNodes);
     		}
@@ -243,7 +245,7 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
 		  }     	
     };
     function cloneTreeNode(node){   	
-    	var newNode= new Ext.tree.TreeNode({'text':node.text,'leaf':node.leaf,'expanded':true,'cls':null});
+    	var newNode= new Ext.tree.TreeNode({'text':node.text,'leaf':node.leaf,'expanded':true,'cls':null,'type':node.attributes.type});
     	newNode.childNodes=[];
     	newNode.parentNode=node.parentNode;
 		for(var i=0; i<node.childNodes.length; i++){
