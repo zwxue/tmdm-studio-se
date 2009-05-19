@@ -9,6 +9,7 @@ package com.amalto.workbench.editors;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
@@ -48,6 +49,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.amalto.workbench.dialogs.XpathSelectDialog;
+import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.webservices.WSStringPredicate;
 import com.amalto.workbench.webservices.WSView;
@@ -67,9 +70,11 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 	protected Combo predicateCombo;
 	protected ListViewer wcListViewer;
 	protected Button wcButton;
-
+    protected TreeParent treeParent;
 	protected DescAnnotationComposite desAntionComposite ;
 	protected DropTarget windowTarget;
+	
+	private XpathSelectDialog xpathSelectDialog;
 	
 	private boolean refreshing = false;
 	private boolean comitting = false;
@@ -117,19 +122,65 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 				}
             });
             
-            Button addVBEButton = toolkit.createButton(vbeComposite,"Add",SWT.PUSH | SWT.TRAIL);
-            addVBEButton.setLayoutData(
+            /**
+             * test lym
+             */
+            Button testButton = toolkit.createButton(vbeComposite,"Add",SWT.PUSH | SWT.TRAIL);
+            testButton.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
             );
-            addVBEButton.addSelectionListener(new SelectionListener() {
+            treeParent = this.getXObject().getParent();
+            testButton.addSelectionListener(new SelectionListener() {
             	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
             	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-            		ViewMainPage.this.viewableBEsList.add(ViewMainPage.this.viewableBEText.getText());
-        			ViewMainPage.this.viewableBEsList.select(ViewMainPage.this.viewableBEsList.getItemCount()-1);
-        			ViewMainPage.this.viewableBEsList.forceFocus();
-            		markDirty();
+            		try {
+            			//check if we have a step to perfom
+//            			WSTransformerProcessStep[] steps = ((WSTransformerV2)getXObject().getWsObject()).getProcessSteps();
+//            			if ((steps==null) || (steps.length == 0)) {
+//            				MessageDialog.openError(TransformerMainPage.this.getSite().getShell(), "Unable to process a file", "The transformer must have at least one step!");
+//            				return;
+//            			}
+            			//perform save
+//            			if (TransformerMainPage.this.getEditor().isDirty()) {
+//            				if (MessageDialog.openConfirm(TransformerMainPage.this.getSite().getShell(), "Executing the Transformer", "The Transformer was changed and will be executed using the saved version.\nSave the transformer before executing it?"))
+//            					TransformerMainPage.this.getEditor().doSave(new NullProgressMonitor());
+//            			}
+            			//Open form Dialog	            		
+            			
+            			xpathSelectDialog=new XpathSelectDialog(ViewMainPage.this.getSite().getShell(),treeParent,"test",ViewMainPage.this.getSite());
+            			xpathSelectDialog.create();
+            			
+            			xpathSelectDialog.getShell().setText("test dialog");
+            			if(xpathSelectDialog.open()== Dialog.OK){
+            				xpathSelectDialog.getXpath();
+            			}
+            		
+            			
+            		} catch (Exception ex) {
+            			ex.printStackTrace();
+            		}
             	};
             });
+            
+            
+            
+            
+            
+//            Button addVBEButton = toolkit.createButton(vbeComposite,"Add",SWT.PUSH | SWT.TRAIL);
+//            addVBEButton.setLayoutData(
+//                    new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+//            );
+//            addVBEButton.addSelectionListener(new SelectionListener() {
+//            	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
+//            	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+//            		ViewMainPage.this.viewableBEsList.add(ViewMainPage.this.viewableBEText.getText());
+//        			ViewMainPage.this.viewableBEsList.select(ViewMainPage.this.viewableBEsList.getItemCount()-1);
+//        			ViewMainPage.this.viewableBEsList.forceFocus();
+//            		markDirty();
+//            	};
+//            });
+            
+            
             
             viewableBEsList = new List(vbeComposite,SWT.SINGLE | SWT.V_SCROLL | SWT.BORDER);
             viewableBEsList.setLayoutData(
@@ -267,6 +318,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             wcButton.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
             );
+            
             wcButton.addSelectionListener(new SelectionListener() {
             	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
             	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
