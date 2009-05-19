@@ -4,8 +4,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.VersioningDialog;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.IConstants;
@@ -30,7 +30,7 @@ public class VersioningXObjectAction extends Action{
 	public VersioningXObjectAction(ServerView view) {
 		super();
 		this.view = view;
-		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/versioning.gif"));
+		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/versioning.gif"));
 		setText("Versioning");
 		setToolTipText("Manages the versioning of this item");
 	}

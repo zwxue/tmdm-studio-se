@@ -19,9 +19,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+import com.amalto.workbench.AmaltoWorbenchPlugin;
 
 public class TextViewDialog extends Dialog {
 
@@ -162,7 +163,7 @@ public class TextViewDialog extends Dialog {
 					return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
 			}
 			
-			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/small_warn.gif").createImage();
+			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/small_warn.gif").createImage();
 			//return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);		
 		}
 		

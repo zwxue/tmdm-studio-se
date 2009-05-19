@@ -10,8 +10,8 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.LoginDialog;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
@@ -28,7 +28,7 @@ public class ServerLoginAction extends Action implements SelectionListener{
 	public ServerLoginAction(ServerView view) {
 		super();
 		this.view = view;
-		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/startserveraction.gif"));
+		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/startserveraction.gif"));
 		setText("Login");
 		setToolTipText("Login to an "+IConstants.TALEND+" Server");
 
@@ -38,7 +38,7 @@ public class ServerLoginAction extends Action implements SelectionListener{
 		try {
 			super.run();
 			dialog = new LoginDialog(this,view.getSite().getShell(),IConstants.TALEND+" Login");
-			dialog.setDefaultImage(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/talend-picto-small.gif").createImage());
+			dialog.setDefaultImage(AmaltoWorbenchPlugin.getImageDescriptor( "icons/talend-picto-small.gif").createImage());
 			dialog.setBlockOnOpen(true);		
 			dialog.open();
 		} catch (Exception e) {
