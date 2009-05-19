@@ -28,18 +28,6 @@ public class LabelText {
         text.setLayoutData(    
                 new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
         );		
-        text.addFocusListener(new FocusAdapter(){
-        	@Override
-        	public void focusGained(FocusEvent e) {
-        		text.selectAll();
-        	}
-        });
-        text.addMouseListener(new MouseAdapter(){
-        	@Override
-        	public void mouseDown(MouseEvent e) {
-        		text.selectAll();
-        	}
-        });
         factory.adapt(parent);
 	}
 	public Label getLabel() {
