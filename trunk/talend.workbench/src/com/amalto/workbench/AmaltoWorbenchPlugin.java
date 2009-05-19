@@ -9,7 +9,7 @@ import org.osgi.framework.BundleContext;
  */
 public class AmaltoWorbenchPlugin extends AbstractUIPlugin {
 	
-	public static final String ID="com.amalto.workbench";
+	public static final String ID="org.talend.openmdm.workbench";
 
 	//The shared instance.
 	private static AmaltoWorbenchPlugin plugin;

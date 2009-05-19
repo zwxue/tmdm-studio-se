@@ -12,7 +12,7 @@
             category="com.talend.workbench"
             class="com.amalto.workbench.views.ServerView"
             icon="icons/talend-picto-small.gif"
-            id="com.talend.workbench.views.ServerView"
+            id="org.talend.openmdm.workbench.views.ServerView"
             name="Talend Open MDM Server View">
       </view>
    </extension>

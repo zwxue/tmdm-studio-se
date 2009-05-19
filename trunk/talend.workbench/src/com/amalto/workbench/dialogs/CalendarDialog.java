@@ -22,7 +22,7 @@ public class CalendarDialog  {
 	 */
 	public CalendarDialog(Shell parentShell) {
 		display =parentShell.getDisplay();
-        shell = new Shell(display, SWT.APPLICATION_MODAL | SWT.CLOSE);
+        shell = new Shell(display, SWT.CLOSE);
         shell.setText("Date Picker");
         shell.setLayout(new RowLayout());
         swtcal = new SWTCalendar(shell);

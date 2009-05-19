@@ -5,9 +5,11 @@ import java.util.Iterator;
 
 import org.eclipse.core.runtime.IAdaptable;
 
+import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.UserInfo;
 
 public class TreeObject implements IAdaptable {
+	public static final String UNKNOWN="Unknown";
 	
 	public final static int _ROOT_ = -1;
 	public final static int _SERVER_ = 0;
@@ -219,45 +221,49 @@ public class TreeObject implements IAdaptable {
 	
 	
 	public static String getTypeName(int type) {
-		switch (type) {
-			case INBOUND_ADAPTOR :
-				return "Inbound Adaptor";
-			case INBOUND_PLUGIN:
-				return "Inbound Plugin";
-			case DESTINATION :
-				return "Destination";
-			case OUTBOUND_ADAPTOR:
-				return "Outbound Adaptor";
-			case OUTBOUND_PLUGIN:
-				return "Outbound Plugin";
-			case DOCUMENT:
-				return "Document";
-			case ITEM:
-				return "Item";
-			case VIEW:
-				return "View";
-			case DATA_MODEL:
-				return "Data Model";
-			case SOURCE:
-				return "Source";
-			case DATA_CLUSTER:
-				return "Data Cluster";
-			case SUBSCRIPTION_ENGINE:
-				return "Subscription Engine";
-			case ROLE:
-				return "Role";
-			case STORED_PROCEDURE:
-				return "Stored Procedure";	
-			case TRANSFORMER:
-				return "Transfomer";
-			case MENU:
-				return "Menu";	
-			case UNIVERSE:
-				return "Universe";
-			case SYNCHRONIZATIONPLAN:
-				return "Synchronization Plan";
-		}
-		return "Unknown";
+		EXtentisObjects obj=EXtentisObjects.getXtentisObjexts().get(String.valueOf(type));
+		if(obj!=null)
+			return obj.getName();
+		else
+			return UNKNOWN;
+//		switch (type) {
+//			case INBOUND_ADAPTOR :
+//				return "Inbound Adaptor";
+//			case INBOUND_PLUGIN:
+//				return "Inbound Plugin";
+//			case DESTINATION :
+//				return "Destination";
+//			case OUTBOUND_ADAPTOR:
+//				return "Outbound Adaptor";
+//			case OUTBOUND_PLUGIN:
+//				return "Outbound Plugin";
+//			case DOCUMENT:
+//				return "Document";
+//			case ITEM:
+//				return "Item";
+//			case VIEW:
+//				return "View";
+//			case DATA_MODEL:
+//				return "Data Model";
+//			case SOURCE:
+//				return "Source";
+//			case DATA_CLUSTER:
+//				return "Data Cluster";
+//			case SUBSCRIPTION_ENGINE:
+//				return "Subscription Engine";
+//			case ROLE:
+//				return "Role";
+//			case STORED_PROCEDURE:
+//				return "Stored Procedure";	
+//			case TRANSFORMER:
+//				return "Transfomer";
+//			case MENU:
+//				return "Menu";	
+//			case UNIVERSE:
+//				return "Universe";
+//			case SYNCHRONIZATIONPLAN:
+//				return "Synchronization Plan";
+//		}
 	}
 		
 }
