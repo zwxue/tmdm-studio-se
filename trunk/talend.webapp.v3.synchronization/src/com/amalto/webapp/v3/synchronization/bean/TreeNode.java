@@ -13,8 +13,16 @@ import com.amalto.webapp.core.util.Util;
 public class TreeNode {
 	private String text;
 	private boolean leaf;
+	private short type;//Element.TEXT_NODE or Element.ELEMENT_NODE
 	private TreeNode[] childNodes = new TreeNode[0];
 	
+
+	public short getType() {
+		return type;
+	}
+	public void setType(short type) {
+		this.type = type;
+	}
 	public TreeNode[] getChildNodes() {
 		return childNodes;
 	}
@@ -42,7 +50,10 @@ public class TreeNode {
 			sb.append("<"+node.text+">");
 			for(TreeNode n: node.childNodes){
 				if(n.isLeaf() && n.text.trim().length()>0){
-					sb.append(n.text);
+					if(n.type == Node.TEXT_NODE)
+						sb.append(n.text);
+					else if(n.type == Node.ELEMENT_NODE)
+						sb.append("<"+n.text + "/>");
 				}else{
 					sb.append(getXMLStr(n));
 				}
@@ -60,7 +71,7 @@ public class TreeNode {
 	
 	private TreeNode parseElement(Element element)throws Exception{
 		TreeNode node=new TreeNode();		
-		
+		node.setType(Element.ELEMENT_NODE);
 		node.setText( element.getNodeName());
 		NodeList list=element.getChildNodes();
 		List<TreeNode> childs=new ArrayList<TreeNode>();		
@@ -71,8 +82,10 @@ public class TreeNode {
 					TreeNode child=new TreeNode();
 					child.setText(el.getNodeValue().trim());
 					child.setLeaf(true);
+					child.setType(Element.TEXT_NODE);
 					childs.add(child);
 				}else if(el.getNodeType()==Element.ELEMENT_NODE){
+					
 					childs.add(parseElement((Element)el));
 				}
 			}
