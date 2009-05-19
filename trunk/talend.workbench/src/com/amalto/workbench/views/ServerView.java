@@ -21,7 +21,9 @@ import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -57,7 +59,9 @@ import com.amalto.workbench.webservices.XtentisPort;
  * 
  */
 public class ServerView extends ViewPart implements IXObjectModelListener {
-
+	
+	public static final String VIEW_ID="org.talend.openmdm.workbench.views.ServerView";
+	
 	protected TreeViewer viewer;
 	protected DrillDownAdapter drillDownAdapter;
 	protected Action loginAction;
@@ -71,6 +75,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	protected Action copyAction;
 	protected Action pasteAction;
 	protected Action versionAction;
+	private ServerTreeContentProvider contentProvider;
 
 	/**********************************************************************************
 	 * The VIEW
@@ -83,6 +88,22 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	public ServerView() {
 	}
 
+    public static ServerView show() {
+        IViewPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(VIEW_ID);
+        if (part == null) {
+            try {
+                part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(VIEW_ID);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return (ServerView) part;
+    }
+    
+    public TreeParent getRoot(){
+    	return contentProvider.getInvisibleRoot();
+    }
+    
 	/**
 	 * This is a callback that will allow us to create the viewer and initialize
 	 * it.
@@ -90,9 +111,10 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	public void createPartControl(Composite parent) {
 		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		drillDownAdapter = new DrillDownAdapter(viewer);
-		setTreeContentProvider(new ServerTreeContentProvider(this.getSite(),
+		 contentProvider=new ServerTreeContentProvider(this.getSite(),
 				new TreeParent("INVISIBLE ROOT", null, TreeObject._ROOT_, null,
-						null)));
+						null));
+		setTreeContentProvider(contentProvider);
 		viewer.setLabelProvider(new ServerTreeLabelProvider());
 		viewer.setSorter(new ViewerSorter());
 		viewer.setInput(getViewSite());
