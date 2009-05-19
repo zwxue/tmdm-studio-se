@@ -14,8 +14,8 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.editors.AMainPage;
 import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.editors.XObjectEditor;
@@ -77,7 +77,7 @@ public class NewXObjectAction extends Action{
 	public NewXObjectAction(ServerView view) {
 		super();
 		this.view = view;
-		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/add_obj.gif"));
+		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/add_obj.gif"));
 		setText("New");
 		setToolTipText("Create a new instance of an "+IConstants.TALEND+" Object");
 	}

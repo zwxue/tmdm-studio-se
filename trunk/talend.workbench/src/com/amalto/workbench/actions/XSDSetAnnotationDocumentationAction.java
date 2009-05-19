@@ -7,10 +7,10 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDSchema;
 
+import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
@@ -24,7 +24,7 @@ public class XSDSetAnnotationDocumentationAction extends Action{
 	public XSDSetAnnotationDocumentationAction(DataModelMainPage page) {
 		super();
 		this.page = page;
-		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/annotation.gif"));
+		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/annotation.gif"));
 		setText("Set the Documentation");
 		setToolTipText("Set the Documentation for this element");
 	}

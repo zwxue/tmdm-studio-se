@@ -10,7 +10,7 @@ public class ViewsListAction extends AServerViewAction{
 	
 	public ViewsListAction() {
 		super();
-		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/search.gif"));
+		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/search.gif"));
 		setText("Browse Views...");
 		setToolTipText("Select a views from the ist and browse");
 	}

@@ -15,8 +15,8 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
@@ -163,29 +163,29 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener{
     	TreeObject object = (TreeObject)((XObjectBrowserInput)this.getEditorInput()).getModel();
     	
 		if (object.getType() == TreeObject._SERVER_)
-			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/talend-picto-small.gif").createImage();
+			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/talend-picto-small.gif").createImage();
 		else if (object.getType() == TreeObject.DATA_CLUSTER)
-			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/data_cluster.gif").createImage();
+			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/data_cluster.gif").createImage();
 		else if (object.getType() == TreeObject.DATA_MODEL)
-			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/data_model.gif").createImage();
+			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/data_model.gif").createImage();
 		else if (object.getType() == TreeObject.MENU)
-			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/menu.gif").createImage();
+			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/menu.gif").createImage();
 		else if (object.getType() == TreeObject.TRANSFORMER)
-			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/transformer.gif").createImage();
+			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/transformer.gif").createImage();
 		else if (object.getType() == TreeObject.ROLE)
-			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/role.gif").createImage();
+			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/role.gif").createImage();
 		else if (object.getType() == TreeObject.STORED_PROCEDURE)
-			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/stored_procedure.gif").createImage();
+			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/stored_procedure.gif").createImage();
 		else if (object.getType() == TreeObject.ROUTING_RULE)
-			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/routing_rule.gif").createImage();
+			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/routing_rule.gif").createImage();
 		else if (object.getType() == TreeObject.VIEW)
-			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/view.gif").createImage();
+			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/view.gif").createImage();
 		else if (object.getType() == TreeObject.DOCUMENT)
-			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/documents.gif").createImage();			
+			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/documents.gif").createImage();			
 		else if (object.getType() == TreeObject.SUBSCRIPTION_ENGINE)
-			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/routing_rule.gif").createImage();
+			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/routing_rule.gif").createImage();
 		
-		return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/error.gif").createImage();
+		return AmaltoWorbenchPlugin.getImageDescriptor( "icons/error.gif").createImage();
     }
     
     

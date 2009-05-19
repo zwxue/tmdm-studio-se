@@ -31,13 +31,13 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.utils.Util;
 
 public class DOMViewDialog extends Dialog {
@@ -408,9 +408,9 @@ public class DOMViewDialog extends Dialog {
 				else
 					return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
 			}else if (obj instanceof Node) {
-				return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/attribute.gif").createImage();
+				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/attribute.gif").createImage();
 			}			
-			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/small_warn.gif").createImage();
+			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/small_warn.gif").createImage();
 		}
 		
 	}//Class DOM Tree Label Provider

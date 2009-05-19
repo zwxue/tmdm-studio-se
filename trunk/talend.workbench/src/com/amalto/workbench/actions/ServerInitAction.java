@@ -12,8 +12,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.IConstants;
@@ -29,7 +29,7 @@ public class ServerInitAction extends Action {
 	public ServerInitAction(ServerView view) {
 		super();
 		this.view = view;
-		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/zap.gif"));
+		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/zap.gif"));
 		setText("Initialize");
 		setToolTipText("Initializes an "+IConstants.TALEND+" MDM Server");
 

@@ -54,8 +54,8 @@ import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.MenuEntryDialog;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.webservices.WSMenu;
@@ -185,7 +185,7 @@ public class MenuMainPage extends AMainPageV2 {
     			}
     			@Override
     			public Image getImage(Object element) {
-    				return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/menu.gif").createImage();
+    				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/menu.gif").createImage();
     			}
     		});
     		
@@ -378,7 +378,7 @@ public class MenuMainPage extends AMainPageV2 {
 				super();
 				this.viewer = view;
 				treeEntry =(TreeEntry)((IStructuredSelection)viewer.getSelection()).getFirstElement();
-				setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/edit_obj.gif"));
+				setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/edit_obj.gif"));
 				setText("Edit");
 				setToolTipText("Edit ThisMenu Entry");		
 			}
@@ -450,7 +450,7 @@ public class MenuMainPage extends AMainPageV2 {
 						label = "Add a menu entry after this entry";
 						break;
 				}
-				setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/add_obj.gif"));
+				setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/add_obj.gif"));
 				setText(label);
 				setToolTipText("Add a menu entry");		
 			}
@@ -553,7 +553,7 @@ public class MenuMainPage extends AMainPageV2 {
 				super();
 				this.viewer = view;
 				treeEntry =(TreeEntry)((IStructuredSelection)viewer.getSelection()).getFirstElement();
-				setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/delete_obj.gif"));
+				setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/delete_obj.gif"));
 				setText("Delete Entry");
 				setToolTipText("Delete This Menu Entry");		
 			}
