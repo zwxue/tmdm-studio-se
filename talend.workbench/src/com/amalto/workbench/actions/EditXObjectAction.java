@@ -8,8 +8,8 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.IConstants;
@@ -68,7 +68,7 @@ public class EditXObjectAction extends Action{
 	}
 	
 	private void setDetails() {
-		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/edit.gif"));
+		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/edit.gif"));
 		setText("Edit");
 		setToolTipText("Edit/View this instance of the "+IConstants.TALEND+" Object");		
 	}

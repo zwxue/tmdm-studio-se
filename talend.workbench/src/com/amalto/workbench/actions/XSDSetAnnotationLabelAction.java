@@ -12,10 +12,10 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Widget;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDSchema;
 
+import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.AnnotationLanguageLabelsDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
@@ -29,7 +29,7 @@ public class XSDSetAnnotationLabelAction extends Action{
 	public XSDSetAnnotationLabelAction(DataModelMainPage page) {
 		super();
 		this.page = page;
-		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/annotation.gif"));
+		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/annotation.gif"));
 		setText("Set the Labels");
 		setToolTipText("Set the Element Labels");
 	}
