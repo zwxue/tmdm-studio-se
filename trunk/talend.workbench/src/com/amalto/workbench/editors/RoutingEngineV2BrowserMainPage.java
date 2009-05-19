@@ -62,14 +62,13 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.exolab.castor.xml.Marshaller;
 import org.vafada.swtcalendar.SWTCalendarEvent;
 import org.vafada.swtcalendar.SWTCalendarListener;
 
+import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.CalendarDialog;
 import com.amalto.workbench.dialogs.DOMViewDialog;
-import com.amalto.workbench.editors.DataClusterBrowserMainPage.LineItem;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
@@ -834,7 +833,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 			super();
 			this.shell = shell;
 			this.viewer = viewer;
-			setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/edit_obj.gif"));
+			setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/edit_obj.gif"));
 			setText("Edit Item");
 			setToolTipText("View Routing Order details");
 		}
@@ -894,7 +893,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 			super();
 			this.shell = shell;
 			this.viewer = viewer;
-			setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/delete_obj.gif"));
+			setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/delete_obj.gif"));
 			IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
 			if (selection.size()==1)
 				setText("Delete the selected item");
@@ -1016,7 +1015,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 			this.shell = shell;
 			this.viewer = viewer;
 			this.synchronously = synchronously;
-			setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/execute.gif"));
+			setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/execute.gif"));
 			IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
 			if (selection.size()==1)
 				setText("Execute "+(synchronously? "synchronously" : "asynchronously")+" the selected Routing Order ");

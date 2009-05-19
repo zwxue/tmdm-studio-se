@@ -11,10 +11,10 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDSchema;
 
+import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.editors.DataModelMainPage;
 
 public class XSDEditIdentityConstraintAction extends Action{
@@ -25,7 +25,7 @@ public class XSDEditIdentityConstraintAction extends Action{
 	public XSDEditIdentityConstraintAction(DataModelMainPage page) {
 		super();
 		this.page = page;
-		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/edit_obj.gif"));
+		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/edit_obj.gif"));
 		setText("Edit Key");
 		setToolTipText("Edit a Key");
 	}

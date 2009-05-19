@@ -8,8 +8,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.views.ServerView;
@@ -32,7 +32,7 @@ public class ServerRefreshAction extends Action {
 	public ServerRefreshAction(ServerView view) {
 		super();
 		this.view = view;
-		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/refresh.gif"));
+		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/refresh.gif"));
 		setText("Refresh");
 		setToolTipText("Refresh the "+IConstants.TALEND+" Server Objects");
 	}

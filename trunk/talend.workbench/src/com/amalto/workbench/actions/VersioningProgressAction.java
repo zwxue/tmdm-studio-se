@@ -10,8 +10,8 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.BackgroundJobStatusType;
 import com.amalto.workbench.webservices.WSBackgroundJob;
@@ -32,7 +32,7 @@ public class VersioningProgressAction extends Action{
 		this.shell = shell;
 		this.port = port;
 		this.wsJobPK = wsJobPK;
-		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/save_edit.gif"));
+		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/save_edit.gif"));
 	}
 	
 	public void run() {

@@ -7,8 +7,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
@@ -43,7 +43,7 @@ public class DeleteXObjectAction extends Action{
 	public DeleteXObjectAction(ServerView view) {
 		super();
 		this.view = view;
-		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/delete_obj.gif"));
+		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/delete_obj.gif"));
 		setText("Delete");
 		setToolTipText("Delete this instance of the "+IConstants.TALEND+" Object");
 	}

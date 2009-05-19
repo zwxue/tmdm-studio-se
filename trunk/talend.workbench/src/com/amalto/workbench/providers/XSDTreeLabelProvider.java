@@ -6,7 +6,6 @@ import java.util.List;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDAttributeGroupDefinition;
 import org.eclipse.xsd.XSDAttributeUse;
@@ -30,6 +29,7 @@ import org.eclipse.xsd.XSDXPathVariety;
 import org.eclipse.xsd.util.XSDConstants;
 import org.w3c.dom.Element;
 
+import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.utils.Util;
 
 
@@ -237,14 +237,14 @@ public class XSDTreeLabelProvider extends LabelProvider {
 			}
 			//display approprite image
 			if (isConcept) {
-				return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/concept.gif").createImage();
+				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/concept.gif").createImage();
 			} else {
-				return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/element_only.gif").createImage();
+				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/element_only.gif").createImage();
 				/*
 				if (decl.getTypeDefinition() instanceof XSDComplexTypeDefinition)
 					return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FOLDER);
 				else
-					return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/elements_obj_+.gif").createImage();
+					return AmaltoWorbenchPlugin.getImageDescriptor( "icons/elements_obj_+.gif").createImage();
 				*/
 			}
 		}
@@ -257,29 +257,29 @@ public class XSDTreeLabelProvider extends LabelProvider {
 				XSDConcreteComponent xsdConcreteComponent =  xsdParticle.getContainer();
 				if (xsdConcreteComponent instanceof XSDModelGroup) {
 					if (((XSDModelGroup)xsdConcreteComponent).getCompositor() == XSDCompositor.CHOICE_LITERAL)
-						return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/elements_obj_choice.gif").createImage();
-					return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/elements_obj_sequence.gif").createImage();
+						return AmaltoWorbenchPlugin.getImageDescriptor( "icons/elements_obj_choice.gif").createImage();
+					return AmaltoWorbenchPlugin.getImageDescriptor( "icons/elements_obj_sequence.gif").createImage();
 				}
 			} else if (xsdTerm instanceof XSDModelGroup) {
 				int type = ((XSDModelGroup)xsdTerm).getCompositor().getValue();
 				switch (type) {
 					case XSDCompositor.ALL:
-						return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/complex_all.gif").createImage();
+						return AmaltoWorbenchPlugin.getImageDescriptor( "icons/complex_all.gif").createImage();
 					case XSDCompositor.CHOICE:
-						return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/complex_choice.gif").createImage();
+						return AmaltoWorbenchPlugin.getImageDescriptor( "icons/complex_choice.gif").createImage();
 					case XSDCompositor.SEQUENCE:
-						return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/complex_sequence.gif").createImage();				
+						return AmaltoWorbenchPlugin.getImageDescriptor( "icons/complex_sequence.gif").createImage();				
 				}
 			} else if (xsdTerm instanceof XSDWildcard) {
-				return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/wildcard.gif").createImage();
+				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/wildcard.gif").createImage();
 			} else {
 				System.out.println("ERROR XSD Term "+xsdTerm.getClass().getName());
-				return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/error.gif").createImage();
+				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/error.gif").createImage();
 			}			
 		}
 		
 		if (obj instanceof XSDSimpleTypeDefinition) {
-			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/type_definition.gif").createImage();
+			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/type_definition.gif").createImage();
 		}
 		
 		/*
@@ -291,16 +291,16 @@ public class XSDTreeLabelProvider extends LabelProvider {
 					int type = ((XSDModelGroup)((XSDParticle)ctc).getTerm()).getCompositor().getValue();
 					switch (type) {
 						case XSDCompositor.ALL:
-							return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/complex_all.gif").createImage();
+							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/complex_all.gif").createImage();
 						case XSDCompositor.CHOICE:
-							return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/complex_choice.gif").createImage();
+							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/complex_choice.gif").createImage();
 						case XSDCompositor.SEQUENCE:
-							return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/complex_sequence.gif").createImage();				
+							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/complex_sequence.gif").createImage();				
 					}
 				}
 			} else {
 				//simple Type!!!
-				return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/error.gif").createImage();
+				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/error.gif").createImage();
 			}
 		}
 		*/
@@ -308,85 +308,85 @@ public class XSDTreeLabelProvider extends LabelProvider {
 			int type = ((XSDModelGroup)obj).getCompositor().getValue();
 			switch (type) {
 				case XSDCompositor.ALL:
-					return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/complex_all.gif").createImage();
+					return AmaltoWorbenchPlugin.getImageDescriptor( "icons/complex_all.gif").createImage();
 				case XSDCompositor.CHOICE:
-					return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/complex_choice.gif").createImage();
+					return AmaltoWorbenchPlugin.getImageDescriptor( "icons/complex_choice.gif").createImage();
 				case XSDCompositor.SEQUENCE:
-					return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/complex_sequence.gif").createImage();
+					return AmaltoWorbenchPlugin.getImageDescriptor( "icons/complex_sequence.gif").createImage();
 			}
 		}
 
 		
 		
 		if (obj instanceof XSDFacet) {
-			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/facet.gif").createImage();
+			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/facet.gif").createImage();
 		}
 		
 		if (obj instanceof XSDIdentityConstraintDefinition) {
 			XSDIdentityConstraintDefinition identity = (XSDIdentityConstraintDefinition) obj;
 			if (identity.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL))
-				return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/unique.gif").createImage();
-			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/key.gif").createImage();
+				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/unique.gif").createImage();
+			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/key.gif").createImage();
 		}
 
 		if (obj instanceof XSDXPathDefinition) {
 			XSDXPathDefinition xpath = (XSDXPathDefinition) obj;
 			if (xpath.getVariety().equals(XSDXPathVariety.FIELD_LITERAL))
-				return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/field.gif").createImage();
-			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/selector.gif").createImage();
+				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/field.gif").createImage();
+			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/selector.gif").createImage();
 		}
 		
 		if (obj instanceof XSDAttributeGroupDefinition) {
-			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/attribute_group.gif").createImage();
+			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/attribute_group.gif").createImage();
 		}
 
 		if (obj instanceof XSDAttributeUse) {
 			XSDAttributeUse att = (XSDAttributeUse) obj;
 			if ("xmlns".equals(att.getAttributeDeclaration().getTargetNamespace())) {
-				return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/annotation.gif").createImage();
+				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/annotation.gif").createImage();
 			}
 			if (att.getUse().equals(XSDAttributeUseCategory.REQUIRED_LITERAL))
-				return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/attribute_mandatory.gif").createImage();
+				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/attribute_mandatory.gif").createImage();
 			else
-				return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/attribute.gif").createImage();
+				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/attribute.gif").createImage();
 		}
 
 		if (obj instanceof XSDAnnotation) {
-			return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/annotation.gif").createImage();
+			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/annotation.gif").createImage();
 		}
 
 		if (obj instanceof Element) {
 			try {
 				Element e = (Element) obj;
 				if (e.getLocalName().equals("documentation")) { 
-					return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/documentation.gif").createImage();
+					return AmaltoWorbenchPlugin.getImageDescriptor( "icons/documentation.gif").createImage();
 				} else  if (e.getLocalName().equals("appinfo")) {
 					String source = e.getAttribute("source");
 					if (source!=null) {
 						if (source.startsWith("X_Label_")) {
-							return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/label.gif").createImage();
+							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/label.gif").createImage();
 						} else if (source.equals("X_ForeignKey")) {
-							return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/key.gif").createImage();
+							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/key.gif").createImage();
 						} else if (source.equals("X_ForeignKeyInfo")) {
-							return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/info.gif").createImage();
+							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/info.gif").createImage();
 						} else if (source.equals("X_SourceSystem")) {
-							return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/sourcesystem.gif").createImage();
+							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/sourcesystem.gif").createImage();
 						} else if (source.equals("X_TargetSystem")) {
-							return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/targetsystem.gif").createImage();
+							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/targetsystem.gif").createImage();
 						} else if (source.startsWith("X_Description_")) {
-							return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/documentation.gif").createImage();
+							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/documentation.gif").createImage();
 						} else if (source.equals("X_Write")) {
-							return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/writable.gif").createImage();
+							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/writable.gif").createImage();
 						} else if (source.equals("X_Hide")) {
-							return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/hideable.gif").createImage();
+							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/hideable.gif").createImage();
 						} else {
-							return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/documentation.gif").createImage();
+							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/documentation.gif").createImage();
 						}
 					} else {
-						return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/documentation.gif").createImage();
+						return AmaltoWorbenchPlugin.getImageDescriptor( "icons/documentation.gif").createImage();
 					}
 				} else {
-					return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/documentation.gif").createImage();
+					return AmaltoWorbenchPlugin.getImageDescriptor( "icons/documentation.gif").createImage();
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -394,7 +394,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
 		}
 
 		
-		return AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/small_warn.gif").createImage();
+		return AmaltoWorbenchPlugin.getImageDescriptor( "icons/small_warn.gif").createImage();
 		//return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);		
 	}
 	
