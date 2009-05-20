@@ -13,12 +13,14 @@ import java.util.TimerTask;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -32,10 +34,15 @@ import org.exolab.castor.xml.Marshaller;
 
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.providers.XObjectEditorInput;
+import com.amalto.workbench.utils.BusinessPortHelper;
 import com.amalto.workbench.utils.FontUtils;
+import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSGetConceptsInDataCluster;
 import com.amalto.workbench.webservices.WSGetObjectsForSynchronizationPlans;
 import com.amalto.workbench.webservices.WSGetSynchronizationPlanItemsAlgorithms;
 import com.amalto.workbench.webservices.WSGetSynchronizationPlanObjectsAlgorithms;
+import com.amalto.workbench.webservices.WSGetUniversePKs;
+import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
 import com.amalto.workbench.webservices.WSSynchronizationPlan;
 import com.amalto.workbench.webservices.WSSynchronizationPlanAction;
 import com.amalto.workbench.webservices.WSSynchronizationPlanActionCode;
@@ -45,6 +52,7 @@ import com.amalto.workbench.webservices.WSSynchronizationPlanStatus;
 import com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode;
 import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizations;
 import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations;
+import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.widgets.ComplexTableViewer;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.LabelText;
@@ -63,12 +71,13 @@ public class SynchronizationMainPage extends AMainPageV2{
 		new ComplexTableViewerColumn("Remote Revision ID", true, "", "[HEAD]"),
 		new ComplexTableViewerColumn("Algorithm", false, "", "", "",true,new String[] {},0)
 	};
-		
+	
+	//use name to identify each column, if you change it , you must change the reference part below 
 	private ComplexTableViewerColumn[] itemsColumns=new ComplexTableViewerColumn[]{
-		new ComplexTableViewerColumn("Concept Name", true, "", "[any]"),
+		new ComplexTableViewerColumn("Local Cluster", false, "", "","",true,new String[] {},0,true,true),
+		new ComplexTableViewerColumn("Concept Name", true, "", "[any]","",true,new String[]{},0,true,true),
+		new ComplexTableViewerColumn("Local Revision ID", true, "", "[HEAD]","",true,new String[] {},0,true,true),
 		new ComplexTableViewerColumn("IDs Pattern       ", true, ".*", ".*"),
-		new ComplexTableViewerColumn("Local Cluster", false, "", ""),
-		new ComplexTableViewerColumn("Local Revision ID", true, "", "[HEAD]"),
 		new ComplexTableViewerColumn("Remote Cluster", false, "", ""),
 		new ComplexTableViewerColumn("Remote Revision ID", true, "", "[HEAD]"),
 		new ComplexTableViewerColumn("Algorithm", false, "", "","Manual",true,new String[] {},0)
@@ -359,7 +368,19 @@ public class SynchronizationMainPage extends AMainPageV2{
                 new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
         );       
         itemsComposite.setLayout(new GridLayout(1,true));
-
+        
+        
+        //Get data clusters for items
+        WSDataClusterPK[] xdcPKs = getPort().getDataClusterPKs(new WSRegexDataClusterPKs("")).getWsDataClusterPKs();
+        final List<String> dataClustersStrings=new ArrayList<String>();  
+        for (int i = 0; i < xdcPKs.length; i++) {
+			String name = xdcPKs[i].getPk();
+			//filter cache
+			if (name!=null&&name!=""&&!"CACHE".equals(name)){
+				dataClustersStrings.add(name);
+			}
+		}
+        
         //Get algorithms for items
         String[] itemsAlgorithmsStrings = getPort().getSynchronizationPlanItemsAlgorithms(
         	new WSGetSynchronizationPlanItemsAlgorithms(new String[]{".*"})
@@ -372,9 +393,65 @@ public class SynchronizationMainPage extends AMainPageV2{
         	itemsComposite
         );
         itemsViewer.setMainPage(this);
-        itemsViewer.getColumns().get(itemsViewer.getColumns().size()-1).setComboValues(itemsAlgorithmsStrings);
-//        itemsViewer.setLastcomboStrings(itemsAlgorithmsStrings);
+        
+        
+        ComplexTableViewerColumn complexTableViewerDataClusterColumn=itemsViewer.getColumn(new ComplexTableViewerColumn("Local Cluster"));
+        complexTableViewerDataClusterColumn.setComboValues(dataClustersStrings.toArray(new String[dataClustersStrings.size()]));
+        final ComplexTableViewerColumn complexTableViewerModelConceptColumn=itemsViewer.getColumn(new ComplexTableViewerColumn("Concept Name"));  
+        itemsViewer.getColumn(new ComplexTableViewerColumn("Algorithm")).setComboValues(itemsAlgorithmsStrings);
+        final ComplexTableViewerColumn complexTableViewerRevisionIdColumn=itemsViewer.getColumn(new ComplexTableViewerColumn("Local Revision ID"));
+        
+        //above before create complexTableViewer
         itemsViewer.create();
+        //below after create complexTableViewer
+        
+        ((CCombo)complexTableViewerDataClusterColumn.getControl()).addSelectionListener(new SelectionListener(){
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+
+			public void widgetSelected(SelectionEvent e) {
+				int selectedIndex=((CCombo)e.getSource()).getSelectionIndex();
+				String clusterName=dataClustersStrings.get(selectedIndex);
+				try {
+					//Get data concepts for items
+					String[] concepts= getPort().getConceptsInDataCluster(
+							new WSGetConceptsInDataCluster(
+									new WSDataClusterPK(clusterName)
+							)
+					).getStrings();
+					
+					complexTableViewerModelConceptColumn.setComboValues(concepts);
+					((CCombo)complexTableViewerModelConceptColumn.getControl()).setItems(complexTableViewerModelConceptColumn.getComboValues());
+					
+				} catch (RemoteException e1) {
+					e1.printStackTrace();
+				}
+			}
+        	
+        });
+        
+        ((CCombo)complexTableViewerModelConceptColumn.getControl()).addSelectionListener(new SelectionListener(){
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+				
+			}
+
+			public void widgetSelected(SelectionEvent e) {
+				int selectedIndex=((CCombo)e.getSource()).getSelectionIndex();
+				String[] concepts=complexTableViewerModelConceptColumn.getComboValues();
+				String selectedConcept=concepts[selectedIndex];
+				try {
+					List<String> pRevisions = BusinessPortHelper.getPossibleItemsRevisionsInCurrentUniverse(getPort(), selectedConcept);
+					complexTableViewerRevisionIdColumn.setComboValues(pRevisions.toArray(new String[pRevisions.size()]));
+					((CCombo)complexTableViewerRevisionIdColumn.getControl()).setItems(complexTableViewerRevisionIdColumn.getComboValues());
+				} catch (RemoteException e1) {
+					e1.printStackTrace();
+				}
+				
+			}
+        });
+        
         instancesViewer=itemsViewer.getViewer();
         instancesViewer.setInput(syncPlan.getItemsList());
 		
@@ -393,6 +470,7 @@ public class SynchronizationMainPage extends AMainPageV2{
         );
         objectsComposite.setLayout(new GridLayout(1,false));
         String[] xtentisObjects=getPort().getObjectsForSynchronizationPlans(new WSGetObjectsForSynchronizationPlans(new String[]{".*"})).getStrings();//IConstants.XTENTISOBJECTS;
+        Map<String,String> objectsRevisionMap=BusinessPortHelper.getObjectsRevisionMapInCurrentUniverse(getPort());
         for(String object: xtentisObjects){
             Composite composite =toolkit.createComposite(objectsComposite,SWT.BORDER);
             composite.setLayoutData(
@@ -413,7 +491,11 @@ public class SynchronizationMainPage extends AMainPageV2{
             	};
             ComplexTableViewer objectViewer=new ComplexTableViewer(Arrays.asList(xtentisObjectColumns),toolkit,composite);
             objectViewer.setMainPage(this);
-            objectViewer.getColumns().get(objectViewer.getColumns().size()-1).setComboValues(objectsAlgorithmStrings);
+            if(objectsRevisionMap.get(object)!=null&&objectsRevisionMap.get(object).length()>0){
+            objectViewer.getColumn(new ComplexTableViewerColumn("Instance Pattern")).setDefaultValue(object);
+            objectViewer.getColumn(new ComplexTableViewerColumn("Local Revision ID")).setDefaultValue(objectsRevisionMap.get(object));
+            }
+            objectViewer.getColumn(new ComplexTableViewerColumn("Algorithm")).setComboValues(objectsAlgorithmStrings);
 //            objectViewer.setLastcomboStrings(objectsAlgorithmStrings);
             objectViewer.create();
             List<Line> objList=syncPlan.getXtentisObjectsList().get(object);
@@ -497,10 +579,10 @@ public class SynchronizationMainPage extends AMainPageV2{
 				Line line=new Line(
 					itemsColumns,
 					new String[]{
+						itemSync.getLocalCluster(),	
 						itemSync.getConceptName(),
-						itemSync.getIdsPattern(),
-						itemSync.getLocalCluster(),
 						itemSync.getLocalRevisionID(),
+						itemSync.getIdsPattern(),
 						itemSync.getRemoteCluster(),
 						itemSync.getRemoteRevisionID(),
 						itemSync.getAlgorithm()
@@ -657,10 +739,10 @@ public class SynchronizationMainPage extends AMainPageV2{
 			for(int i=0; i<items.size(); i++){
 				Line line=items.get(i);
 				itemSyncs[i]=new WSSynchronizationPlanItemsSynchronizations();
-				itemSyncs[i].setConceptName(line.keyValues.get(0).value);
-				itemSyncs[i].setIdsPattern(line.keyValues.get(1).value);
-				itemSyncs[i].setLocalCluster(line.keyValues.get(2).value);
-				itemSyncs[i].setLocalRevisionID(line.keyValues.get(3).value);
+				itemSyncs[i].setLocalCluster(line.keyValues.get(0).value);
+				itemSyncs[i].setConceptName(line.keyValues.get(1).value);
+				itemSyncs[i].setLocalRevisionID(line.keyValues.get(2).value);
+				itemSyncs[i].setIdsPattern(line.keyValues.get(3).value);
 				itemSyncs[i].setRemoteCluster(line.keyValues.get(4).value);
 				itemSyncs[i].setRemoteRevisionID(line.keyValues.get(5).value);
 				itemSyncs[i].setAlgorithm(line.keyValues.get(6).value);				
