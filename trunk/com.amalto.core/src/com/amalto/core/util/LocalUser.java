@@ -323,6 +323,12 @@ public class LocalUser {
 
     }
     
+    public static void resetLocalUsers() throws XtentisException{
+    	 localUserCache.clear();
+    	 localUserTimeoutCache.clear();
+    	 org.apache.log4j.Logger.getLogger(LocalUser.class).info("Reset the state of LocalUser Cache! ");
+	}
+    
 
     /**
      * Logs out the user by removing it from the cache an invalidating the session
