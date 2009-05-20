@@ -101,6 +101,16 @@ public class ComplexTableViewer {
     	return columns;
     }
 	
+	public ComplexTableViewerColumn getColumn(ComplexTableViewerColumn compareComplexTableViewerColumn) {
+		for (Iterator iterator = columns.iterator(); iterator.hasNext();) {
+			ComplexTableViewerColumn complexTableViewerColumn = (ComplexTableViewerColumn) iterator.next();
+			if(complexTableViewerColumn.equals(compareComplexTableViewerColumn)){
+				return complexTableViewerColumn;
+			}
+		}
+    	return null;
+    }
+	
 	
 	public ComplexTableViewer(List<ComplexTableViewerColumn> columns, FormToolkit toolkit,Composite parent){
 		this.columns=columns;
@@ -155,6 +165,10 @@ public class ComplexTableViewer {
 					combo.select(0);
 				}else{
 					combo.setText(column.getDefaultValue());
+				}
+				if(column.isComboEditable()){
+					combo.setEditable(true);
+					combo.setText("");
 				}
 				column.setControl(combo);
 			} else {
@@ -347,7 +361,12 @@ public class ComplexTableViewer {
         // Create the cell editors --> We actually discard those later: not natural for an user
         CellEditor[] editors = new CellEditor[columns.size()];	        
         for(int i=0; i< columns.size(); i++){
-        	if (!columns.get(i).isCombo())
+        	if(columns.get(i).isForceTextCellEditor()){
+        		
+        		editors[i] = new TextCellEditor(table);
+        		
+        	}
+        	else if (!columns.get(i).isCombo())
         	{
     	        editors[i] = new TextCellEditor(table);	
         	}
@@ -417,7 +436,7 @@ public class ComplexTableViewer {
 				Line line = (Line) item.getData();
 				int columnIndex = Arrays.asList(viewer.getColumnProperties())
 						.indexOf(property);
-				if (isAColumnWithCombo(columnIndex)) {
+				if (!isForceTextCellEditor(columnIndex)&&isAColumnWithCombo(columnIndex)) {
 					String[] attrs = columns.get(columnIndex).getComboValues();
 					value = attrs[Integer.parseInt(value.toString())];
 				}
@@ -447,7 +466,7 @@ public class ComplexTableViewer {
 						.indexOf(property);
 				Line line = (Line) element;
 				// add getting value from combo
-				if (isAColumnWithCombo(columnIndex)) {
+				if (!isForceTextCellEditor(columnIndex)&&isAColumnWithCombo(columnIndex)) {
 					String value = line.keyValues.get(columnIndex).value;
 					String[] attrs = columns.get(columnIndex).getComboValues();
 					return Arrays.asList(attrs).indexOf(value);
@@ -467,6 +486,11 @@ public class ComplexTableViewer {
         	private boolean isAColumnWithCombo(int columnIdx)
         	{
         		return columns.get(columnIdx).isCombo();
+        	}
+        	
+        	private boolean isForceTextCellEditor(int columnIdx)
+        	{
+        		return columns.get(columnIdx).isForceTextCellEditor();
         	}
         });
 
