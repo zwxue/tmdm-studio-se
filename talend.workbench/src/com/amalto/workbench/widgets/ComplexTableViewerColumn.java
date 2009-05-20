@@ -1,5 +1,8 @@
 package com.amalto.workbench.widgets;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.swt.widgets.Control;
 
 public class ComplexTableViewerColumn {
@@ -15,6 +18,10 @@ public class ComplexTableViewerColumn {
 	
 	//The actual control
 	private Control control;
+	
+	//Extra fields
+	private boolean isComboEditable = false;
+	private boolean forceTextCellEditor = false;
 	
 	public String getName() {
     	return name;
@@ -44,6 +51,20 @@ public class ComplexTableViewerColumn {
 	    this.isCombo = isCombo;
 	    this.comboValues = comboValues;
 	    this.textLines = textLines;
+    }
+	
+	public ComplexTableViewerColumn(String name, boolean isNillable, String nillValue, String nillDisplay, String defaultValue, boolean isCombo, String[] comboValues, int textLines,boolean isComboEditable,boolean forceTextCellEditor) {
+	    super();
+	    this.name = name;
+	    this.isNillable = isNillable;
+	    this.nillValue = nillValue;
+	    this.nillDisplay = nillDisplay;
+	    this.defaultValue = defaultValue;
+	    this.isCombo = isCombo;
+	    this.comboValues = comboValues;
+	    this.textLines = textLines;
+	    this.isComboEditable= isComboEditable;
+	    this.forceTextCellEditor=forceTextCellEditor;
     }
 
 	public void setName(String name) {
@@ -109,8 +130,38 @@ public class ComplexTableViewerColumn {
     }
 	
 	
+	public boolean isComboEditable() {
+		return isComboEditable;
+	}
+
+	public void setComboEditable(boolean isComboEditable) {
+		this.isComboEditable = isComboEditable;
+	}
+
+	public boolean isForceTextCellEditor() {
+		return forceTextCellEditor;
+	}
+
+	public void setForceTextCellEditor(boolean forceTextCellEditor) {
+		this.forceTextCellEditor = forceTextCellEditor;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof ComplexTableViewerColumn){
+			ComplexTableViewerColumn compareObj=(ComplexTableViewerColumn)obj;
+			String compareName=compareObj.getName()==null?"":compareObj.getName();
+			String currentName=name==null?"":name;
+			return compareName.equals(currentName);
+		}
+		return false;
+	}
 	
-	
+	@Override
+	public int hashCode() {
+		String currentName=name==null?"":name;
+		return currentName.hashCode();
+	}
 	
 	
 }
