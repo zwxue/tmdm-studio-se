@@ -3242,6 +3242,7 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
 				ctrl.putRole(
 					WS2POJO(wsRole.getWsRole())
 				);
+			LocalUser.resetLocalUsers();
 			return new WSRolePK(pk.getUniqueId());
 		} catch (Exception e) {
 			String err = "ERROR SYSTRACE: "+e.getMessage();
