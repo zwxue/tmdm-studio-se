@@ -126,14 +126,18 @@ public class Configuration {
 			Node node = nodeList.item(i);
 			if("cluster".equals(Util.getFirstTextNode(node,"name"))){		
 				//configuration.setCluster(Util.getNodeList(node, "value").item(0).getTextContent());
-				configuration.setCluster(Util.getNodeList(node, "value").item(0).getFirstChild().getNodeValue());
+				Node fchild=Util.getNodeList(node, "value").item(0).getFirstChild();
+				if(fchild!=null)
+				configuration.setCluster(fchild.getNodeValue());
 			}
 		}
 		for (int i = 0; i < nodeList.getLength(); i++) { 
 			Node node = nodeList.item(i);
 			if("model".equals(Util.getFirstTextNode(node,"name"))){	
 				//configuration.setModel(Util.getNodeList(node, "value").item(0).getTextContent());
-				configuration.setModel(Util.getNodeList(node, "value").item(0).getFirstChild().getNodeValue());
+				Node fchild=Util.getNodeList(node, "value").item(0).getFirstChild();
+				if(fchild!=null)
+				configuration.setModel(fchild.getNodeValue());
 			}
 		}		
 		if(configuration.getCluster()==null && CommonDWR.getClusters().length>0){
