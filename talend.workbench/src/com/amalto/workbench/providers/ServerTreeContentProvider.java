@@ -17,9 +17,6 @@ public class ServerTreeContentProvider implements IStructuredContentProvider, IT
 		this.site = site;
 		this.invisibleRoot = invisibleRoot;
 	}
-	public ServerTreeContentProvider( TreeParent invisibleRoot ) {
-		this.invisibleRoot = invisibleRoot;
-	}
 	
 	public void inputChanged(Viewer v, Object oldInput, Object newInput) {
 	}

@@ -72,7 +72,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.amalto.workbench.dialogs.PluginDetailsDialog;
 import com.amalto.workbench.dialogs.ProcessResultsDialog;
 import com.amalto.workbench.dialogs.SetupTransformerInputVariablesDialog;
-import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
@@ -153,7 +152,6 @@ public class TransformerMainPage extends AMainPageV2 {
 	private Button disabledButton;
 	protected WSTransformerV2 transformer;
 	private Composite specsComposite;
-	private XpathSelectDialog xpathSelectDialog;
 	
 	java.util.List<Line> cacheList; //remember the setup transformerinputvariablesdialog's input list
 
@@ -387,7 +385,7 @@ public class TransformerMainPage extends AMainPageV2 {
             	};
             });
                         
-          
+            
             //make the Page window a DropTarget - we need to dispose it
             windowTarget = new DropTarget(this.getPartControl(), DND.DROP_MOVE);
             windowTarget.setTransfer(new Transfer[]{TextTransfer.getInstance()});
