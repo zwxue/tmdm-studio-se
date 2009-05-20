@@ -490,7 +490,7 @@ public class SynchronizationMainPage extends AMainPageV2{
             ComplexTableViewer objectViewer=new ComplexTableViewer(Arrays.asList(xtentisObjectColumns),toolkit,composite);
             objectViewer.setMainPage(this);
             if(objectsRevisionMap.get(object)!=null&&objectsRevisionMap.get(object).length()>0){
-            objectViewer.getColumn(new ComplexTableViewerColumn("Instance Pattern")).setDefaultValue(object);
+            //objectViewer.getColumn(new ComplexTableViewerColumn("Instance Pattern")).setDefaultValue(object);
             objectViewer.getColumn(new ComplexTableViewerColumn("Local Revision ID")).setDefaultValue(objectsRevisionMap.get(object));
             }
             objectViewer.getColumn(new ComplexTableViewerColumn("Algorithm")).setComboValues(objectsAlgorithmStrings);
