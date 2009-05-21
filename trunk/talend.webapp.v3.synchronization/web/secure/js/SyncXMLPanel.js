@@ -72,44 +72,44 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
     });    
     // The action
     var addAction = new Ext.Action({
-        text: '<b>Add</b>',        
+        text: '<b>'+Local.get('ADD_BUTTON')+'</b>',     
         handler: function(){
         	if(targetSelectNode && sourceSelectNode){
-					Ext.MessageBox.confirm('Confirm', 'Are you sure you want to <b>Add</b> remote tree selected item as child of target tree selected Item ?', addOne); 
+					Ext.MessageBox.confirm(Local.get('DIALOG_CONFIRM_TITLE'),Local.get('ADD_BUTTON_CONFIRM'), addOne); 
 			}else{
 		        Ext.MessageBox.show({
-		           title: 'Warning',
-		           msg: 'You must select one item of <b>remote</b> tree and <b>local</b> tree!',
+		           title: Local.get('DIALOG_WARNING_TITLE'),
+		           msg: Local.get('ADD_BUTTON_WARNING'),
 		           buttons: Ext.MessageBox.OK,			           
 		           icon: Ext.MessageBox.WARNING
 		       });							
 			}
         },
-        tooltip:'<b>Add</b><br/>Add remote tree selected item as child of local tree selected item'
+        tooltip:Local.get('ADD_BUTTON_TOOLTIP')
         
     });
     var replaceAction = new Ext.Action({
-        text: '<b>Replace</b>',
+        text: '<b>'+Local.get('REPLACE_BUTTON')+'</b>',
         handler: function(){
            if(targetSelectNode && sourceSelectNode){
           	var tParentNode=targetSelectNode.parentNode;
           	if(tParentNode){        	
-           		Ext.MessageBox.confirm('Confirm', 'Are you sure you want to <b>Replace</b> local selected Item with remote selected Item ?', replaceOne); 
+           		Ext.MessageBox.confirm(Local.get('DIALOG_CONFIRM_TITLE'),Local.get('REPLACE_BUTTON_CONFIRM'), replaceOne); 
            	}
           }else{
 	        Ext.MessageBox.show({
-	           title: 'Warning',
-	           msg: 'You must select one item of remote tree and local tree!',
+	           title: Local.get('DIALOG_WARNING_TITLE'),
+	           msg: Local.get('REPLACE_BUTTON_WARNING'),
 	           buttons: Ext.MessageBox.OK,			           
 	           icon: Ext.MessageBox.WARNING
 	       });          	
           }
         },
-        tooltip:'<b>Replace</b><br/>Replace remote tree selected item with local tree selected item'
+        tooltip:Local.get('REPLACE_BUTTON_TOOLTIP')
     });    
     var leftAction=new Ext.Action({
         text: '<b><--</b>',
-        tooltip:'Upper level',
+        tooltip:Local.get('LEFT_ACTION'),
         handler: function(){
             if(targetSelectNode){
             	var tParentNode=targetSelectNode.parentNode;
@@ -123,7 +123,7 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
     }); 
     var rightAction=new Ext.Action({
         text: '<b>--></b>',
-        tooltip:'Lower level',
+        tooltip:Local.get('RIGHT_ACTION'),
         handler: function(){
             if(targetSelectNode){           	     
         		var sibling=targetSelectNode.previousSibling;
@@ -143,7 +143,7 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
         }
     });    
     var upAction = new Ext.Action({
-        text: '<b>Up</b>',
+        text: '<b>'+Local.get('UP_ACTION')+'</b>',
         handler: function(){
             if(targetSelectNode){
             	var tParentNode=targetSelectNode.parentNode;
@@ -162,7 +162,7 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
         }
     }); 
     var downAction = new Ext.Action({
-        text: '<b>Down</b>',
+        text: '<b>'+Local.get('DOWN_ACTION')+'</b>',
         handler: function(){
             if(targetSelectNode){
             	var tParentNode=targetSelectNode.parentNode;
@@ -182,10 +182,10 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
         
     });        
     var deleteAction = new Ext.Action({
-        text: '<b>Delete</b>',
+        text: '<b>'+Local.get('DELETE_ACTION')+'</b>',
         handler: function(){
         	if(targetSelectNode && targetSelectNode!= targetTree.getRootNode()){
-        	 	Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete the selected item?', deleteOne);
+        	 	Ext.MessageBox.confirm(Local.get('DIALOG_CONFIRM_TITLE'), Local.get('DELETE_ACTION_CONFIRM'), deleteOne);
         	}                     
         }
     });     
@@ -209,8 +209,8 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
     		return;
     	}
         Ext.MessageBox.show({
-           msg: 'Saving your data, please wait...',
-           progressText: 'Saving...',
+           msg: Local.get('RESOLVE_ACTION_WAITING'),
+           progressText: Local.get('RESOLVE_ACTION_TITLE'),
            width:300,
            wait:true,
            waitConfig: {interval:100}          
@@ -229,7 +229,7 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
     		Ext.MessageBox.hide();
     		if(isSaveOk == true){
     			//syncItem.status='RESOLVED';   	    	
-    	        Ext.MessageBox.alert('Status', 'Changes saved successfully.');   			
+    	        Ext.MessageBox.alert(Local.get('DIALOG_STATUS_TITLE'),Local.get('DIALOG_STATUS_MESSAGE'));   			
     			var tabPanel = amalto.core.getTabPanel();
     			tabPanel.remove(syncPanel);
     			store.reload();
@@ -283,9 +283,9 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
     	}
     };
     var saveAction = new Ext.Action({
-        text: '<b>Resolve</b>',
+        text: '<b>'+Local.get('RESOLVE_BUTTON')+'</b>',
         handler: function(){
-    		Ext.MessageBox.confirm('Confirm', 'Are you sure you want to <b>Resolve</b> the conflict data now ?', saveSyncPlan);            
+    		Ext.MessageBox.confirm(Local.get('DIALOG_CONFIRM_TITLE'), Local.get('RESOLVE_BUTTON_CONFIRM'), saveSyncPlan);            
         }
     }); 
     //before create root add conflict attribute
@@ -297,7 +297,7 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
     var targetTree = new Ext.tree.TreePanel({              
         columnWidth:.43,
         bodyStyle:'padding:5px 5px 1',
-        title:'Local data',
+        title:Local.get('TARGET_TREE_TITLE'),
         border:true,
         height:400,
         animate:true, 
@@ -324,7 +324,7 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
     sourceRoot.appendChild(createTreeNode(syncItem.remoteNodes[0]));
     // remote tree
     var sourceTree = new Ext.tree.TreePanel({                       
-        title:'Remote data',
+        title:Local.get('REMOTE_TREE_TITLE'),
         bodyStyle:'padding:5px 5px 1',
         border:true,
         height:370,
@@ -358,7 +358,7 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
         id:'combo',
         mode: 'local',
         triggerAction: 'all',
-        emptyText:'Select a remote data...',
+        emptyText:Local.get('REMOTE_COMBO_EMPTY'),
         selectOnFocus:true,
         listeners:{
         	'select': function(combo,record,index){
@@ -409,7 +409,7 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
 	        deferredRender: false,
 	        closable: true,
 	        border:false,
-		        title: 'Synchronization conflict data',		        
+		        title: Local.get('SYNC_PANEL_TITLE'),		        
 		        items:[	targetTree, buttonPanel, sourcePanel],
 		        tbar: [
 		            saveAction
