@@ -72,44 +72,44 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
     });    
     // The action
     var addAction = new Ext.Action({
-        text: '<b>'+Local.get('ADD_BUTTON')+'</b>',     
+        text: '<b>'+amalto.SynchronizationPlan.SynchronizationPlanLocal.get('ADD_BUTTON')+'</b>',     
         handler: function(){
         	if(targetSelectNode && sourceSelectNode){
-					Ext.MessageBox.confirm(Local.get('DIALOG_CONFIRM_TITLE'),Local.get('ADD_BUTTON_CONFIRM'), addOne); 
+					Ext.MessageBox.confirm(amalto.SynchronizationPlan.SynchronizationPlanLocal.get('DIALOG_CONFIRM_TITLE'),amalto.SynchronizationPlan.SynchronizationPlanLocal.get('ADD_BUTTON_CONFIRM'), addOne); 
 			}else{
 		        Ext.MessageBox.show({
-		           title: Local.get('DIALOG_WARNING_TITLE'),
-		           msg: Local.get('ADD_BUTTON_WARNING'),
+		           title: amalto.SynchronizationPlan.SynchronizationPlanLocal.get('DIALOG_WARNING_TITLE'),
+		           msg: amalto.SynchronizationPlan.SynchronizationPlanLocal.get('ADD_BUTTON_WARNING'),
 		           buttons: Ext.MessageBox.OK,			           
 		           icon: Ext.MessageBox.WARNING
 		       });							
 			}
         },
-        tooltip:Local.get('ADD_BUTTON_TOOLTIP')
+        tooltip:amalto.SynchronizationPlan.SynchronizationPlanLocal.get('ADD_BUTTON_TOOLTIP')
         
     });
     var replaceAction = new Ext.Action({
-        text: '<b>'+Local.get('REPLACE_BUTTON')+'</b>',
+        text: '<b>'+amalto.SynchronizationPlan.SynchronizationPlanLocal.get('REPLACE_BUTTON')+'</b>',
         handler: function(){
            if(targetSelectNode && sourceSelectNode){
           	var tParentNode=targetSelectNode.parentNode;
           	if(tParentNode){        	
-           		Ext.MessageBox.confirm(Local.get('DIALOG_CONFIRM_TITLE'),Local.get('REPLACE_BUTTON_CONFIRM'), replaceOne); 
+           		Ext.MessageBox.confirm(amalto.SynchronizationPlan.SynchronizationPlanLocal.get('DIALOG_CONFIRM_TITLE'),amalto.SynchronizationPlan.SynchronizationPlanLocal.get('REPLACE_BUTTON_CONFIRM'), replaceOne); 
            	}
           }else{
 	        Ext.MessageBox.show({
-	           title: Local.get('DIALOG_WARNING_TITLE'),
-	           msg: Local.get('REPLACE_BUTTON_WARNING'),
+	           title: amalto.SynchronizationPlan.SynchronizationPlanLocal.get('DIALOG_WARNING_TITLE'),
+	           msg: amalto.SynchronizationPlan.SynchronizationPlanLocal.get('REPLACE_BUTTON_WARNING'),
 	           buttons: Ext.MessageBox.OK,			           
 	           icon: Ext.MessageBox.WARNING
 	       });          	
           }
         },
-        tooltip:Local.get('REPLACE_BUTTON_TOOLTIP')
+        tooltip:amalto.SynchronizationPlan.SynchronizationPlanLocal.get('REPLACE_BUTTON_TOOLTIP')
     });    
     var leftAction=new Ext.Action({
         text: '<b><--</b>',
-        tooltip:Local.get('LEFT_ACTION'),
+        tooltip:amalto.SynchronizationPlan.SynchronizationPlanLocal.get('LEFT_ACTION'),
         handler: function(){
             if(targetSelectNode){
             	var tParentNode=targetSelectNode.parentNode;
@@ -123,7 +123,7 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
     }); 
     var rightAction=new Ext.Action({
         text: '<b>--></b>',
-        tooltip:Local.get('RIGHT_ACTION'),
+        tooltip:amalto.SynchronizationPlan.SynchronizationPlanLocal.get('RIGHT_ACTION'),
         handler: function(){
             if(targetSelectNode){           	     
         		var sibling=targetSelectNode.previousSibling;
@@ -143,7 +143,7 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
         }
     });    
     var upAction = new Ext.Action({
-        text: '<b>'+Local.get('UP_ACTION')+'</b>',
+        text: '<b>'+amalto.SynchronizationPlan.SynchronizationPlanLocal.get('UP_ACTION')+'</b>',
         handler: function(){
             if(targetSelectNode){
             	var tParentNode=targetSelectNode.parentNode;
@@ -162,7 +162,7 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
         }
     }); 
     var downAction = new Ext.Action({
-        text: '<b>'+Local.get('DOWN_ACTION')+'</b>',
+        text: '<b>'+amalto.SynchronizationPlan.SynchronizationPlanLocal.get('DOWN_ACTION')+'</b>',
         handler: function(){
             if(targetSelectNode){
             	var tParentNode=targetSelectNode.parentNode;
@@ -182,10 +182,10 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
         
     });        
     var deleteAction = new Ext.Action({
-        text: '<b>'+Local.get('DELETE_ACTION')+'</b>',
+        text: '<b>'+amalto.SynchronizationPlan.SynchronizationPlanLocal.get('DELETE_ACTION')+'</b>',
         handler: function(){
         	if(targetSelectNode && targetSelectNode!= targetTree.getRootNode()){
-        	 	Ext.MessageBox.confirm(Local.get('DIALOG_CONFIRM_TITLE'), Local.get('DELETE_ACTION_CONFIRM'), deleteOne);
+        	 	Ext.MessageBox.confirm(amalto.SynchronizationPlan.SynchronizationPlanLocal.get('DIALOG_CONFIRM_TITLE'), amalto.SynchronizationPlan.SynchronizationPlanLocal.get('DELETE_ACTION_CONFIRM'), deleteOne);
         	}                     
         }
     });     
@@ -209,8 +209,8 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
     		return;
     	}
         Ext.MessageBox.show({
-           msg: Local.get('RESOLVE_ACTION_WAITING'),
-           progressText: Local.get('RESOLVE_ACTION_TITLE'),
+           msg: amalto.SynchronizationPlan.SynchronizationPlanLocal.get('RESOLVE_ACTION_WAITING'),
+           progressText: amalto.SynchronizationPlan.SynchronizationPlanLocal.get('RESOLVE_ACTION_TITLE'),
            width:300,
            wait:true,
            waitConfig: {interval:100}          
@@ -229,7 +229,7 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
     		Ext.MessageBox.hide();
     		if(isSaveOk == true){
     			//syncItem.status='RESOLVED';   	    	
-    	        Ext.MessageBox.alert(Local.get('DIALOG_STATUS_TITLE'),Local.get('DIALOG_STATUS_MESSAGE'));   			
+    	        Ext.MessageBox.alert(amalto.SynchronizationPlan.SynchronizationPlanLocal.get('DIALOG_STATUS_TITLE'),amalto.SynchronizationPlan.SynchronizationPlanLocal.get('DIALOG_STATUS_MESSAGE'));   			
     			var tabPanel = amalto.core.getTabPanel();
     			tabPanel.remove(syncPanel);
     			store.reload();
@@ -283,9 +283,9 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
     	}
     };
     var saveAction = new Ext.Action({
-        text: '<b>'+Local.get('RESOLVE_BUTTON')+'</b>',
+        text: '<b>'+amalto.SynchronizationPlan.SynchronizationPlanLocal.get('RESOLVE_BUTTON')+'</b>',
         handler: function(){
-    		Ext.MessageBox.confirm(Local.get('DIALOG_CONFIRM_TITLE'), Local.get('RESOLVE_BUTTON_CONFIRM'), saveSyncPlan);            
+    		Ext.MessageBox.confirm(amalto.SynchronizationPlan.SynchronizationPlanLocal.get('DIALOG_CONFIRM_TITLE'), amalto.SynchronizationPlan.SynchronizationPlanLocal.get('RESOLVE_BUTTON_CONFIRM'), saveSyncPlan);            
         }
     }); 
     //before create root add conflict attribute
@@ -297,7 +297,7 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
     var targetTree = new Ext.tree.TreePanel({              
         columnWidth:.43,
         bodyStyle:'padding:5px 5px 1',
-        title:Local.get('TARGET_TREE_TITLE'),
+        title:amalto.SynchronizationPlan.SynchronizationPlanLocal.get('TARGET_TREE_TITLE'),
         border:true,
         height:400,
         animate:true, 
@@ -324,7 +324,7 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
     sourceRoot.appendChild(createTreeNode(syncItem.remoteNodes[0]));
     // remote tree
     var sourceTree = new Ext.tree.TreePanel({                       
-        title:Local.get('REMOTE_TREE_TITLE'),
+        title:amalto.SynchronizationPlan.SynchronizationPlanLocal.get('REMOTE_TREE_TITLE'),
         bodyStyle:'padding:5px 5px 1',
         border:true,
         height:370,
@@ -358,7 +358,7 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
         id:'combo',
         mode: 'local',
         triggerAction: 'all',
-        emptyText:Local.get('REMOTE_COMBO_EMPTY'),
+        emptyText:amalto.SynchronizationPlan.SynchronizationPlanLocal.get('REMOTE_COMBO_EMPTY'),
         selectOnFocus:true,
         listeners:{
         	'select': function(combo,record,index){
@@ -409,7 +409,7 @@ amalto.SynchronizationPlan.SyncXMLPanel = function(syncItem,store){
 	        deferredRender: false,
 	        closable: true,
 	        border:false,
-		        title: Local.get('SYNC_PANEL_TITLE'),		        
+		        title: amalto.SynchronizationPlan.SynchronizationPlanLocal.get('SYNC_PANEL_TITLE'),		        
 		        items:[	targetTree, buttonPanel, sourcePanel],
 		        tbar: [
 		            saveAction
