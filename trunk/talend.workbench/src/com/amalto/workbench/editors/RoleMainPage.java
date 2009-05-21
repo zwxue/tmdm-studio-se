@@ -265,6 +265,16 @@ public class RoleMainPage extends AMainPageV2 {
             		instance.setWritable(instanceAccessCombo.getSelectionIndex()==1);
 
             		specification.getInstances().put(instanceNameCombo.getText(), instance);
+            		
+            		if ("Menu".equals(objectTypesCombo.getText())) {
+            			//init Menu Parameters
+    					RoleMenuParameters menuParameters = new RoleMenuParameters();
+    					menuParameters.setParentID("");
+    					menuParameters.setPosition(1);
+    					String instanceName = instanceNameCombo.getText();
+    					specification.getInstances().get(instanceName).setParameters(menuParameters.marshalMenuParameters());
+            		}
+            		
             		//update the instances viewer
             		instancesViewer.refresh();
             		//hide params (viewer has no selection)
@@ -968,6 +978,8 @@ public class RoleMainPage extends AMainPageV2 {
         	public void widgetDefaultSelected(SelectionEvent e) {}
         	public void widgetSelected(SelectionEvent e) {
         		if (menuParametersRefreshing) return;
+        		//reset position
+        		menuPositionCombo.select(0);
         		commitMenuParameters();
         	}
         });
@@ -1017,7 +1029,7 @@ public class RoleMainPage extends AMainPageV2 {
 			
 			menuParentIDCombo.select(menuParameters.getPosition());
 			
-			menuPositionCombo.select(menuParameters.getPosition());
+			menuPositionCombo.select(menuParameters.getPosition()-1);
 		} else {
 			//force a first set of parameters
 //			menuParentIDText.setText("");
@@ -1037,7 +1049,7 @@ public class RoleMainPage extends AMainPageV2 {
 		RoleMenuParameters menuParameters = new RoleMenuParameters();
 //		menuParameters.setParentID(menuParentIDText.getText());
 		menuParameters.setParentID(menuParentIDCombo.getText());
-		menuParameters.setPosition(menuPositionCombo.getSelectionIndex());
+		menuParameters.setPosition(menuPositionCombo.getSelectionIndex()+1);
 		//commit as we go
 		String instanceName = ((InstanceLine)((IStructuredSelection)instancesViewer.getSelection()).getFirstElement()).getInstanceName();
 		role.getSpecifications().get(objectTypesCombo.getText())
