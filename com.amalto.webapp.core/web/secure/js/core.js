@@ -37,6 +37,19 @@ Ext.ux.comboBoxRenderer = function(combo) {
   };
 }
 
+Ext.ux.LocaleMap = function(M) {
+	   this.map = M || {};
+	};
+Ext.extend(Ext.ux.LocaleMap, Ext.util.Observable, {
+	   get : function(key) {
+	      //var value = this.map[key] || (key + ' not found!');
+	      var value = this.map[key] || ''; 
+	      if(arguments.length > 1 && value.toString().indexOf('{') >= 0) {
+	         value = new Ext.Template(value).apply(Array.prototype.slice.call(arguments, 1));
+	      }
+	      return value;
+	   }
+});
 
 Ext.BLANK_IMAGE_URL = '/core/secure/ext-2.0/resources/images/default/s.gif';
 
@@ -160,7 +173,7 @@ function loadResource(pathFromRootContext,verifiedObjectName,loaderCallback) {
 
 
 /********************************************************************
-* Utilities / defined
+* Utilities / defined / Local
 *********************************************************************/				
 
 
@@ -181,8 +194,13 @@ function isDefined(objectName, variables){
     }
 	return (typeof eval(ev) != 'undefined');
 };
-		
 
+function initLocaleMap(language,locales){
+	  var localesMap = new Ext.ux.LocaleMap(locales);
+	  var localeMap = new Ext.ux.LocaleMap(localesMap.get(language));
+	  return localeMap;
+	}
+		
 				
 /********************************************************************
 * Logging Stuff
