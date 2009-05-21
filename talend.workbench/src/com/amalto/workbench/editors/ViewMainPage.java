@@ -72,7 +72,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 	protected DescAnnotationComposite desAntionComposite ;
 	protected DropTarget windowTarget;
 	
-	protected XpathWidget xpathWidget;
+	protected XpathWidget xpathWidget0;
 	protected XpathWidget xpathWidget1;
 	protected XpathWidget xpathWidget2;
 	private boolean refreshing = false;
@@ -112,7 +112,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             /**
              * add by lym
              */
-            xpathWidget = new XpathWidget("...",treeParent, toolkit, vbeComposite, (AMainPageV2)this,false);
+            xpathWidget0 = new XpathWidget("...",treeParent, toolkit, vbeComposite, (AMainPageV2)this,false);
             
             Button addVBEButton = toolkit.createButton(vbeComposite,"Add",SWT.PUSH | SWT.CENTER);
             addVBEButton.setLayoutData(
@@ -125,9 +125,9 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 
 				public void widgetSelected(
 						org.eclipse.swt.events.SelectionEvent e) {
-					if (!"".equals(ViewMainPage.this.xpathWidget.getText()))
-						ViewMainPage.this.viewableBEsList.add(ViewMainPage.this.xpathWidget.getText());
-					ViewMainPage.this.xpathWidget.setText("");
+					if (!"".equals(ViewMainPage.this.xpathWidget0.getText()))
+						ViewMainPage.this.viewableBEsList.add(ViewMainPage.this.xpathWidget0.getText());
+					ViewMainPage.this.xpathWidget0.setText("");
 					ViewMainPage.this.viewableBEsList.select(ViewMainPage.this.viewableBEsList.getItemCount() - 1);
 					ViewMainPage.this.viewableBEsList.forceFocus();
 					markDirty();
@@ -140,9 +140,11 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
                     new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
             );
             ((GridData)viewableBEsList.getLayoutData()).heightHint = 100;
-            DragSource vbeSource = new DragSource(viewableBEsList,DND.DROP_MOVE);
+            
+            /*DragSource vbeSource = new DragSource(viewableBEsList,DND.DROP_MOVE);
             vbeSource.setTransfer(new Transfer[]{TextTransfer.getInstance()});
-            vbeSource.addDragListener(new DCDragSourceListener());
+            vbeSource.addDragListener(new DCDragSourceListener());*/
+            
             viewableBEsList.addKeyListener(new KeyListener() {
 				public void keyPressed(KeyEvent e) {}
 				public void keyReleased(KeyEvent e) {
@@ -241,9 +243,11 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
                     new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
             );
             ((GridData)searchableBEsList.getLayoutData()).heightHint = 100;
-            DragSource sbeSource = new DragSource(searchableBEsList,DND.DROP_MOVE);
+            
+            /*DragSource sbeSource = new DragSource(searchableBEsList,DND.DROP_MOVE);
             sbeSource.setTransfer(new Transfer[]{TextTransfer.getInstance()});
-            sbeSource.addDragListener(new DCDragSourceListener());
+            sbeSource.addDragListener(new DCDragSourceListener());*/
+            
             searchableBEsList.addKeyListener(new KeyListener() {
 				public void keyPressed(KeyEvent e) {}
 				public void keyReleased(KeyEvent e) {
@@ -370,9 +374,11 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 				public boolean isLabelProperty(Object element, String property) {return false;}
 				public void removeListener(ILabelProviderListener listener) {}
             });
-            DragSource wcSource = new DragSource(wcListViewer.getControl(),DND.DROP_MOVE);
+            
+            /*DragSource wcSource = new DragSource(wcListViewer.getControl(),DND.DROP_MOVE);
             wcSource.setTransfer(new Transfer[]{TextTransfer.getInstance()});
-            wcSource.addDragListener(new WCDragSourceListener());
+            wcSource.addDragListener(new WCDragSourceListener());*/
+            
             wcListViewer.getControl().addKeyListener(new KeyListener() {
 				public void keyPressed(KeyEvent e) {}
 				public void keyReleased(KeyEvent e) {
