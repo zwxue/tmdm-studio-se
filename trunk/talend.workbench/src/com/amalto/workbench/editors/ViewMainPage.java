@@ -62,7 +62,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 	protected List viewableBEsList;
 	protected Text searchableBEText;
 	protected List searchableBEsList;
-	protected Text leftText;
+//	protected Text leftText;
 	protected Combo operatorCombo;
 	protected Text rightText;
 	protected Combo predicateCombo;
@@ -71,10 +71,10 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
     protected TreeParent treeParent;
 	protected DescAnnotationComposite desAntionComposite ;
 	protected DropTarget windowTarget;
-	protected XpathWidget xpathWidget1;
 	
 	protected XpathWidget xpathWidget;
-	
+	protected XpathWidget xpathWidget1;
+	protected XpathWidget xpathWidget2;
 	private boolean refreshing = false;
 	private boolean comitting = false;
 	
@@ -269,13 +269,11 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             	};
             });
             
-            leftText = toolkit.createText(wcGroup, "",SWT.BORDER|SWT.SINGLE);
-            leftText.setLayoutData(    
-                    new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-            );
+            xpathWidget2 = new XpathWidget("...",treeParent, toolkit, wcGroup, (AMainPageV2)this,true);
+            
             operatorCombo = new Combo(wcGroup,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
             operatorCombo.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+                    new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
             );
             operatorCombo.add("Contains");
             operatorCombo.add("Contains Text Of");
@@ -302,8 +300,9 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             
             rightText = toolkit.createText(wcGroup, "",SWT.BORDER|SWT.SINGLE);
             rightText.setLayoutData(    
-                    new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+                    new GridData(SWT.FILL,SWT.CENTER,true,true,1,1)
             );
+            
             rightText.addKeyListener(new KeyListener() {
 				public void keyPressed(KeyEvent e) {}
 				public void keyReleased(KeyEvent e) {
@@ -314,7 +313,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             });
             predicateCombo = new Combo(wcGroup,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
             predicateCombo.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+                    new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
             );
             predicateCombo.add("");
             predicateCombo.add("Or");
@@ -484,7 +483,10 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 	protected void addWhereCondition() {
   		markDirty();
 		WSWhereCondition wc = new WSWhereCondition();
-		wc.setLeftPath(ViewMainPage.this.leftText.getText());
+//		wc.setLeftPath(ViewMainPage.this.leftText.getText());
+		if(!"".equals(ViewMainPage.this.xpathWidget2.getText()))
+				wc.setLeftPath(ViewMainPage.this.xpathWidget2.getText());
+		ViewMainPage.this.xpathWidget2.setText("");
 		WSWhereOperator operator=null;
 		if (ViewMainPage.this.operatorCombo.getText().equals("Contains")) operator = WSWhereOperator.CONTAINS;
 		else if (ViewMainPage.this.operatorCombo.getText().equals("Contains Text Of")) operator = WSWhereOperator.JOIN;
