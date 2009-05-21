@@ -47,13 +47,14 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-
+import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.webservices.WSStringPredicate;
 import com.amalto.workbench.webservices.WSView;
 import com.amalto.workbench.webservices.WSWhereCondition;
 import com.amalto.workbench.webservices.WSWhereOperator;
 import com.amalto.workbench.widgets.DescAnnotationComposite;
+import com.amalto.workbench.widgets.XpathWidget;
 
 public class ViewMainPage extends AMainPageV2 implements ITextListener{
     
@@ -67,9 +68,12 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 	protected Combo predicateCombo;
 	protected ListViewer wcListViewer;
 	protected Button wcButton;
-
+    protected TreeParent treeParent;
 	protected DescAnnotationComposite desAntionComposite ;
 	protected DropTarget windowTarget;
+	protected XpathWidget xpathWidget1;
+	
+	protected XpathWidget xpathWidget;
 	
 	private boolean refreshing = false;
 	private boolean comitting = false;
@@ -79,7 +83,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
         		editor,
         		ViewMainPage.class.getName(),
         		"View "+((XObjectEditorInput)editor.getEditorInput()).getName()
-        );        
+        );     
+        treeParent = this.getXObject().getParent();
     }
 
 	protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
@@ -103,33 +108,32 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             );
             vbeComposite.setLayout(new GridLayout(2,false));
 
-            viewableBEText = toolkit.createText(vbeComposite, "",SWT.BORDER|SWT.SINGLE);
-            viewableBEText.setLayoutData(    
-                    new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-            );
-            viewableBEText.addKeyListener(new KeyListener() {
-				public void keyPressed(KeyEvent e) {}
-				public void keyReleased(KeyEvent e) {
-					if ((e.stateMask==0) && (e.character == SWT.CR)) {
-		           		ViewMainPage.this.viewableBEsList.add(ViewMainPage.this.viewableBEText.getText());
-	            		markDirty();
-					}
-				}
-            });
+           
+            /**
+             * add by lym
+             */
+            xpathWidget = new XpathWidget("...",treeParent, toolkit, vbeComposite, (AMainPageV2)this,false);
             
-            Button addVBEButton = toolkit.createButton(vbeComposite,"Add",SWT.PUSH | SWT.TRAIL);
+            Button addVBEButton = toolkit.createButton(vbeComposite,"Add",SWT.PUSH | SWT.CENTER);
             addVBEButton.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
             );
             addVBEButton.addSelectionListener(new SelectionListener() {
-            	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
-            	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-            		ViewMainPage.this.viewableBEsList.add(ViewMainPage.this.viewableBEText.getText());
-        			ViewMainPage.this.viewableBEsList.select(ViewMainPage.this.viewableBEsList.getItemCount()-1);
-        			ViewMainPage.this.viewableBEsList.forceFocus();
-            		markDirty();
-            	};
-            });
+				public void widgetDefaultSelected(
+						org.eclipse.swt.events.SelectionEvent e) {
+				};
+
+				public void widgetSelected(
+						org.eclipse.swt.events.SelectionEvent e) {
+					if (!"".equals(ViewMainPage.this.xpathWidget.getText()))
+						ViewMainPage.this.viewableBEsList.add(ViewMainPage.this.xpathWidget.getText());
+					ViewMainPage.this.xpathWidget.setText("");
+					ViewMainPage.this.viewableBEsList.select(ViewMainPage.this.viewableBEsList.getItemCount() - 1);
+					ViewMainPage.this.viewableBEsList.forceFocus();
+					markDirty();
+
+				};
+			});
             
             viewableBEsList = new List(vbeComposite,SWT.SINGLE | SWT.V_SCROLL | SWT.BORDER);
             viewableBEsList.setLayoutData(
@@ -218,28 +222,19 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
                     new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
             );
             Button addSBEButton = toolkit.createButton(sbeComposite,"Add",SWT.PUSH | SWT.TRAIL);
+            
+            xpathWidget1 = new XpathWidget("...",treeParent, toolkit, sbeComposite, (AMainPageV2)this,true);
             addSBEButton.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
             );
             addSBEButton.addSelectionListener(new SelectionListener() {
             	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
             	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-            		ViewMainPage.this.searchableBEsList.add(ViewMainPage.this.searchableBEText.getText());
+            	if(!"".equals(ViewMainPage.this.xpathWidget1.getText()))
+            		 ViewMainPage.this.searchableBEsList.add(ViewMainPage.this.xpathWidget1.getText());
+            	ViewMainPage.this.xpathWidget1.setText("");
             		markDirty();
             	};
-            });
-            searchableBEText = toolkit.createText(sbeComposite, "",SWT.BORDER|SWT.SINGLE);
-            searchableBEText.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-            );
-            searchableBEText.addKeyListener(new KeyListener() {
-				public void keyPressed(KeyEvent e) {}
-				public void keyReleased(KeyEvent e) {
-					if ((e.stateMask==0) && (e.character == SWT.CR)) {
-		           		ViewMainPage.this.searchableBEsList.add(ViewMainPage.this.searchableBEText.getText());
-	            		markDirty();
-					}
-				}
             });
             searchableBEsList = new List(sbeComposite,SWT.SINGLE | SWT.V_SCROLL | SWT.BORDER);
             searchableBEsList.setLayoutData(
