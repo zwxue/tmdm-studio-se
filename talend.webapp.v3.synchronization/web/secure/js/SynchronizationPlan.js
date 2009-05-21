@@ -1,7 +1,10 @@
 amalto.namespace("amalto.SynchronizationPlan");
 
 amalto.SynchronizationPlan.SynchronizationPlan=function(){
-	    
+	
+	//declare application local
+    loadResource("/SynchronizationPlan/secure/js/SynchronizationPlanLocal.js", "amalto.SynchronizationPlan.SynchronizationPlanLocal" );
+    
     loadResource("/SynchronizationPlan/secure/css/SynchronizationPlan.css", "" );
 
     var recordType = Ext.data.Record.create([
@@ -18,21 +21,13 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
 	  
 	  ]);
 
-	  var store = new Ext.data.Store({
+     var store = new Ext.data.Store({
 	    proxy: new Ext.data.DWRProxy(SynchronizationPlanInterface.getSyncItems, true),
 	    reader: new Ext.data.ListRangeReader( 
 				{id:'itemPK', totalProperty:'totalSize',root: 'data'}, recordType),
 	    remoteSort: true
 	  });
     
-    var myColumns = [
-    	//{header: "No", width: 25, sortable: true},
-		{header: 'Item PK', width: 100, sortable: true,dataIndex: 'itemPK'}, 
-		{header: 'Local Revision ID', width: 100,  sortable: true,dataIndex: 'localRevisionID'}, 
-		{header: 'Last Run Synchronization Name', width: 120,  sortable: true,dataIndex: 'lastRunPlan'},
-		{header: 'Status', width: 105, sortable: true,dataIndex: 'status'}
-	];
-   	var columnModel = new Ext.grid.ColumnModel(myColumns);
     var grid;
     var pageSize =22;
     var pagingToolbar;
@@ -46,6 +41,15 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
     };
     
     function show(){
+    	var myColumns = [
+    	//{header: "No", width: 25, sortable: true},
+		{header: Local.get('GRID_COLUMN_1'), width: 100, sortable: true,dataIndex: 'itemPK'}, 
+		{header: Local.get('GRID_COLUMN_2'), width: 100,  sortable: true,dataIndex: 'localRevisionID'}, 
+		{header: Local.get('GRID_COLUMN_3'), width: 120,  sortable: true,dataIndex: 'lastRunPlan'},
+		{header: Local.get('GRID_COLUMN_4'), width: 105, sortable: true,dataIndex: 'status'}
+	    ];
+   	    var columnModel = new Ext.grid.ColumnModel(myColumns);
+   	
    		Ext.QuickTips.init();
    	    // create the Grid
    	    grid = new Ext.grid.GridPanel({
@@ -60,7 +64,7 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
    	   	        stripeRows: true,
    	   	        height:350,
    	   	        width:600,				   	   	      
-   	   	        title:'Synchronization Items',
+   	   	        title:Local.get('GRID_TITLE'),
 	   	   	    viewConfig: {
 	   	   	        forceFit: true,
 	
@@ -101,7 +105,7 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
 			                }
 						}),
 						new Ext.Toolbar.Button({
-							text:'Search',
+							text:Local.get('BUTTON_SEARCH'),
 							handler:showSyncItems
 						})
 					],
@@ -112,12 +116,12 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
 								pageSize: parseInt(pageSize),
 						        store: store,
 						        displayInfo: true,
-						        displayMsg: 'Displaying items'+' {0} - {1} '+'of'+' {2}',
-						        emptyMsg: 'No result',
+						        displayMsg: Local.get('LABEL_DISPLAYING')+' {0} - {1} '+Local.get('LABEL_OF')+' {2}',
+						        emptyMsg: Local.get('LABEL_NO_RESULT'),
 						        width: 800,
 						        items:[ 
 						        	new Ext.Toolbar.Separator(),
-						        	new Ext.Toolbar.TextItem('Number of lines per page'+" : "),
+						        	new Ext.Toolbar.TextItem(Local.get('LABEL_LINES_PER_PAGE')+" : "),
 						        	new Ext.form.TextField({
 				    					id:'lineMaxItems',
 				    					value:pageSize,
@@ -160,6 +164,10 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
     };
     return {
         init : function(){
+        	//init application local
+        	Local = amalto.SynchronizationPlan.SynchronizationPlanLocal;
+        	Local.init();
+        	
 	    	var tabPanel = amalto.core.getTabPanel();
 	    	Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 	    	if(tabPanel.getItem('syncDataGrid') == undefined){
