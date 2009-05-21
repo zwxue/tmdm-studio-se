@@ -36,7 +36,8 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
 		var lineMax = DWRUtil.getValue('lineMaxItems');
 		if(lineMax==null || lineMax=="")
 			lineMax=50;		
-		pageSize=lineMax;		    	
+		pageSize=lineMax;
+		pagingToolbar.pageSize=parseInt(pageSize);		    	
 		store.load({params:{start:0, limit:pageSize}});
     };
     
@@ -130,7 +131,7 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
 				    					listeners: {
 						                	'specialkey': function(a, e) {
 									            if(e.getKey() == e.ENTER) {
-													pagingToolbar.pageSize=parseInt(pageSize);
+													
 													showSyncItems();													
 													//Ext.PagingToolbar toolbar=Ext.get('sync-pagingtoolbar');
 													
