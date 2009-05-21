@@ -463,9 +463,10 @@ public class TransformerMainPage extends AMainPageV2 {
                     new GridData(SWT.FILL,SWT.FILL,true,true,5,1)
             );
             ((GridData)stepsList.getLayoutData()).heightHint = 40;
-            DragSource stepsSource = new DragSource(stepsList,DND.DROP_MOVE);
+            
+            /*DragSource stepsSource = new DragSource(stepsList,DND.DROP_MOVE);
             stepsSource.setTransfer(new Transfer[]{TextTransfer.getInstance()});
-            stepsSource.addDragListener(new DCDragSourceListener());
+            stepsSource.addDragListener(new DCDragSourceListener());*/
             
             stepsList.addSelectionListener(new SelectionListener() {
             	public void widgetDefaultSelected(SelectionEvent e) {widgetSelected(e);}
