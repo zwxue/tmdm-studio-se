@@ -48,6 +48,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.Version;
@@ -57,17 +58,17 @@ import com.amalto.workbench.webservices.WSRoutingRuleExpression;
 import com.amalto.workbench.webservices.WSRoutingRuleOperator;
 import com.amalto.workbench.webservices.WSServicesList;
 import com.amalto.workbench.webservices.WSServicesListItem;
+import com.amalto.workbench.widgets.XpathWidget;
 
-public class RoutingRuleMainPage extends AMainPage {
+public class RoutingRuleMainPage extends AMainPageV2 {
 	
 	protected Text descriptionText;
 	protected Text objectTypeText; //Concept
 	protected Button isSynchronousButton;
-	//protected Text serviceNameText;
 	protected Combo serviceNameCombo;
 	protected Text serviceParametersText;
 	protected ListViewer routingExpressionsViewer;
-	protected Text xPathText;
+	protected XpathWidget xpathWidget;
 	protected Combo operatorCombo;
 	protected Text rightValueText; 
 	
@@ -76,6 +77,7 @@ public class RoutingRuleMainPage extends AMainPage {
 	protected boolean refreshing = false;
 	protected boolean comitting = false;
 	
+	protected	TreeParent treeParent;
 	protected boolean version_greater_than_2_17_0 = false;
 	
     public RoutingRuleMainPage(FormEditor editor) {
@@ -92,6 +94,7 @@ public class RoutingRuleMainPage extends AMainPage {
         			((ver.getMajor()==2)&&(ver.getMinor()>=17))
         	);
         } catch (Exception e) {/*no versioning support on old cores*/}
+        treeParent = this.getXObject().getParent();
     }
 
 	protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
@@ -252,16 +255,12 @@ public class RoutingRuleMainPage extends AMainPage {
             	};
             });
             
-            //xPath Text
-            xPathText = toolkit.createText(routingExpressionsComposite, "",SWT.BORDER|SWT.SINGLE);
-            xPathText.setLayoutData(    
-                    new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-            );
-            
+            //xPathWidget
+            xpathWidget = new XpathWidget("...",treeParent, toolkit, routingExpressionsComposite,(AMainPageV2)RoutingRuleMainPage.this,true);
             //operator
             operatorCombo = new Combo(routingExpressionsComposite,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
             operatorCombo.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+                    new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
             );
             operatorCombo.add("Contains");
             operatorCombo.add("Matches");
@@ -283,7 +282,7 @@ public class RoutingRuleMainPage extends AMainPage {
             
             rightValueText = toolkit.createText(routingExpressionsComposite, "",SWT.BORDER|SWT.SINGLE);
             rightValueText.setLayoutData(    
-                    new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+                    new GridData(SWT.FILL,SWT.CENTER,true,true,1,1)
             );
             rightValueText.addKeyListener(new KeyListener() {
 				public void keyPressed(KeyEvent e) {}
@@ -335,11 +334,11 @@ public class RoutingRuleMainPage extends AMainPage {
 				public boolean isLabelProperty(Object element, String property) {return false;}
 				public void removeListener(ILabelProviderListener listener) {}
             });
-            /*
-            DragSource wcSource = new DragSource(routingExpressionsViewer.getControl(),DND.DROP_MOVE);
+            
+           /* DragSource wcSource = new DragSource(routingExpressionsViewer.getControl(),DND.DROP_MOVE);
             wcSource.setTransfer(new Transfer[]{TextTransfer.getInstance()});
-            wcSource.addDragListener(new WCDragSourceListener());
-            */
+            wcSource.addDragListener(new WCDragSourceListener());*/
+            
             routingExpressionsViewer.getControl().addKeyListener(new KeyListener() {
 				public void keyPressed(KeyEvent e) {}
 				public void keyReleased(KeyEvent e) {
@@ -349,7 +348,7 @@ public class RoutingRuleMainPage extends AMainPage {
 						if (selection.getFirstElement()!=null) {
 							WSRoutingRuleExpression rre = (WSRoutingRuleExpression) selection.getFirstElement();
 							ArrayList<WSRoutingRuleExpression> rreList = new ArrayList<WSRoutingRuleExpression>(Arrays.asList(wsObject.getWsRoutingRuleExpressions()));
-							xPathText.setText(rre.getXpath());
+							xpathWidget.setText(rre.getXpath());
 							rightValueText.setText(rre.getValue());
 							rreList.remove(rre);
 							wsObject.setWsRoutingRuleExpressions(rreList.toArray(new WSRoutingRuleExpression[rreList.size()]));
@@ -429,7 +428,12 @@ public class RoutingRuleMainPage extends AMainPage {
 	protected void addRoutingRuleExpression() {
   		markDirty();
 		WSRoutingRuleExpression rre = new WSRoutingRuleExpression();
-		rre.setXpath(xPathText.getText());
+		if(!"".equals(this.xpathWidget.getText())&&!this.xpathWidget.getText().equals(null))
+			rre.setXpath(this.xpathWidget.getText());
+		else
+			rre.setXpath("");
+		this.xpathWidget.setText("");
+		this.rightValueText.setText("");
 		WSRoutingRuleOperator operator=null;
 		if (RoutingRuleMainPage.this.operatorCombo.getText().equals("Contains")) operator = WSRoutingRuleOperator.CONTAINS;
 		else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("Matches")) operator = WSRoutingRuleOperator.MATCHES;
