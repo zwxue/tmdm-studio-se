@@ -157,7 +157,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             			public void keyPressed(KeyEvent e) {}
             			public void keyReleased(KeyEvent e) {
         					if ((e.stateMask==0) && (e.character == SWT.CR)) {
-        						DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults());
+        						DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(true));
         					}
             			}//keyReleased
             		}//keyListener
@@ -216,7 +216,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             			public void keyPressed(KeyEvent e) {}
             			public void keyReleased(KeyEvent e) {
         					if ((e.stateMask==0) && (e.character == SWT.CR)) {
-        						DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults());
+        						DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(true));
         					}
             			}//keyReleased
             		}//keyListener
@@ -272,7 +272,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             			public void keyPressed(KeyEvent e) {}
             			public void keyReleased(KeyEvent e) {
         					if ((e.stateMask==0) && (e.character == SWT.CR)) {
-        						DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults());
+        						DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(true));
         					}
             			}//keyReleased
             		}//keyListener
@@ -285,7 +285,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             );
             bSearch.addListener(SWT.Selection, new Listener() {
                 public void handleEvent(Event event) {
-					DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults());
+					DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(true));
             	};
             });    
             
@@ -307,7 +307,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             			public void keyPressed(KeyEvent e) {}
             			public void keyReleased(KeyEvent e) {
         					if ((e.stateMask==0) && (e.character == SWT.CR)) {
-        						DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults());
+        						DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(true));
         					}
             			}//keyReleased
             		}//keyListener
@@ -332,7 +332,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             			public void keyPressed(KeyEvent e) {}
             			public void keyReleased(KeyEvent e) {
         					if ((e.stateMask==0) && (e.character == SWT.CR)) {
-        						DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults());
+        						DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(true));
         					}
             			}//keyReleased
             		}//keyListener
@@ -367,6 +367,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             		}
 	            }
             });
+            
+            hookKeyboard();
                
     		hookContextMenu();
     		
@@ -529,6 +531,21 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	protected void createActions() {
 
 	}
+	
+	private void hookKeyboard()
+	{
+		resultsViewer.getControl().addKeyListener(new KeyListener() {
+        	public void keyPressed(KeyEvent e) {}
+        	public void keyReleased(KeyEvent e) {
+	        		if (e.keyCode == SWT.DEL){
+	        			new DeleteItemsAction(
+								DataClusterBrowserMainPage.this.getSite().getShell(),
+								DataClusterBrowserMainPage.this.resultsViewer
+						).run();
+	        		}
+        		}
+        	});
+	}
 
 	private void hookContextMenu() {
 		MenuManager menuMgr = new MenuManager();
@@ -582,7 +599,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	
 
 	
-	protected LineItem[] getResults() {
+	protected LineItem[] getResults(boolean showResultInfo) {
 		
 		Cursor waitCursor=null;		
 		
@@ -653,7 +670,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	            	)
 	            ).getResults();
             
-            if (results==null) {
+            if (showResultInfo&&(results==null)) {
             	MessageDialog.openInformation(this.getSite().getShell(), "Info", "Sorry, no result. ");
             	return new LineItem[0];
             }
@@ -853,7 +870,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 						diwp
 				);
 				//refresh the search
-				DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults());
+				DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(false));
 	       
 			} catch (Exception e) {
 				e.printStackTrace();
