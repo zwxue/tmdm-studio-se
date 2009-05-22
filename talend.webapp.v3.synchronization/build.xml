@@ -7,7 +7,8 @@
 	<property name="jboss.instance.dir" value="${jboss.dir}/server/default"/>
 	<property name="jboss.deploy.dir" value="${jboss.instance.dir}/deploy"/>
 	<property name="jboss.instance.lib" value="${jboss.instance.dir}/lib"/>
-
+	
+	<property name="webapp.core.lib" value="../com.amalto.webapp.core/z.com.amalto.webapp.core.jar"/>
 	<property name="war" value="zz.20.webapp.v3.synchronizationplan.war"/>
 
     <!-- ================================= 
@@ -31,6 +32,7 @@
 			<zipfileset dir="src/WEB-INF" prefix="WEB-INF">
 				<include name="web.xml" />
 			</zipfileset>
+			<zipfileset file="${webapp.core.lib}" prefix="WEB-INF/lib"/>
 			<zipfileset dir="src/WEB-INF" prefix="WEB-INF">
 				<include name="jboss-web.xml" />
 			</zipfileset>
