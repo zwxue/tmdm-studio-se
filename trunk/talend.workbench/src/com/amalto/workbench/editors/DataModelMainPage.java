@@ -7,7 +7,10 @@
 package com.amalto.workbench.editors;
 
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -207,52 +210,10 @@ public class DataModelMainPage extends AMainPageV2 {
 					IStructuredSelection selection = ((IStructuredSelection) viewer
 							.getSelection());
 
-					if ((selection != null)
-							&& (selection.getFirstElement() != null)) {
-
-						// delete
-						if ((e.stateMask == 0) && (e.keyCode == SWT.DEL)) {
-
-							Object obj = selection.getFirstElement();
-
-							if (obj instanceof XSDElementDeclaration) {
-								XSDElementDeclaration decl = (XSDElementDeclaration) obj;
-
-								boolean isConcept = false;
-								EList l = decl.getIdentityConstraintDefinitions();
-								for (Iterator iter = l.iterator(); iter.hasNext();) {
-									XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) iter.next();
-									if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
-										isConcept = true;
-										break;
-									}
-								}
-
-								if (isConcept) {
-									deleteConceptAction.run();
-								} else {
-									deleteElementAction.run();
-								}
-
-							} else if (obj instanceof XSDParticle) {
-
-								deleteParticleAction.run();
-
-							} else if (obj instanceof XSDIdentityConstraintDefinition) {
-
-								deleteIdentityConstraintAction.run();
-
-							} else if (obj instanceof XSDXPathDefinition) {
-
-								deleteXPathAction.run();
-
-							} else {
-
-							}
-						}
-
+					// delete
+					if ((e.stateMask == 0) && (e.keyCode == SWT.DEL)) {
+						deleteSelectedItems(selection);
 					}
-
 				}
 
 				public void keyReleased(KeyEvent e) {
@@ -284,6 +245,107 @@ public class DataModelMainPage extends AMainPageV2 {
 		}
 
 	}// createCharacteristicsContent
+
+	/**
+	 * Author: Fliu
+	 * this fun is to filter out all the children listed in the selections, 
+	 * all left is the top parent level ones in the selections
+	 * @param selections
+	 * @return all parent array with no corresponding children in the selection list
+	 */
+	private Object[] filterSelectedItemsToDel(IStructuredSelection selections) {
+		Object[] objs = selections.toArray();
+		List lst = new ArrayList();
+
+		for (Object obj : objs) {
+			for (Object objOther : objs) {
+				if (obj == objOther) {
+					continue;
+				}
+				Object[] offsprings = populateAllOffspring(objOther,
+						new ArrayList());
+				for (Object offspring : offsprings) {
+					if (offspring == obj) {
+						lst.add(obj);
+					}
+				}
+			}
+		}
+
+		for (Object ca : objs) {
+			if (lst.indexOf(ca) >= 0) {
+				lst.remove(ca);
+			} else {
+				lst.add(ca);
+			}
+		}
+		return lst.toArray();
+	}
+
+	/**
+	 * Author: Fliu
+	 * this fun is to populate all offsprings for a specific object
+	 */
+	private Object[] populateAllOffspring(Object obj, ArrayList offspringList) {
+		XSDTreeContentProvider provider = (XSDTreeContentProvider) viewer
+				.getContentProvider();
+		Object[] offersprings = provider.getChildren(obj);
+		offspringList.addAll(Arrays.asList(offersprings));
+		for (Object subObj : offersprings) {
+			if (provider.hasChildren(subObj)) {
+				populateAllOffspring(subObj, offspringList);
+			}
+		}
+		return offspringList.toArray();
+	}
+
+    /**
+     * author: Fliu
+	 * it is meant to support multiple deletions on data modules on key press
+     * @param selections: tree node picking up in the data module view
+     */
+	private void deleteSelectedItems(IStructuredSelection selections) {
+
+		Object[] objs = selections.toArray();
+		String instance = objs.length > 1 ? " instances ?" : " instance";
+		if (!MessageDialog
+				.openConfirm(getSite().getShell(), "Delete Model",
+						"Are you sure you want to delete the " + objs.length
+								+ instance))
+			return;
+
+		objs = filterSelectedItemsToDel(selections);
+		for (Object obj : objs) {
+			if (obj instanceof XSDElementDeclaration) {
+				XSDElementDeclaration decl = (XSDElementDeclaration) obj;
+
+				boolean isConcept = false;
+				EList l = decl.getIdentityConstraintDefinitions();
+				for (Iterator iter = l.iterator(); iter.hasNext();) {
+					XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) iter
+							.next();
+					if (icd.getIdentityConstraintCategory().equals(
+							XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
+						isConcept = true;
+						break;
+					}
+				}
+				if (isConcept) {
+					deleteConceptAction.run(obj);
+				} else {
+					deleteElementAction.run(obj);
+				}
+			} else if (obj instanceof XSDParticle) {
+				deleteParticleAction.run(obj);
+			} else if (obj instanceof XSDIdentityConstraintDefinition) {
+				deleteIdentityConstraintAction.run(obj);
+			} else if (obj instanceof XSDXPathDefinition) {
+				deleteXPathAction.run(obj);
+
+			} else {
+			}
+		}
+	}
 
 	protected void refreshData() {
 		try {
