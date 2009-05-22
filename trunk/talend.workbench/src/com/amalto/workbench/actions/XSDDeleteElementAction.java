@@ -18,6 +18,7 @@ public class XSDDeleteElementAction extends Action{
 
 	private DataModelMainPage page = null;
 	private XSDSchema schema = null;
+	private XSDElementDeclaration xsdElem = null;
 	
 	public XSDDeleteElementAction(DataModelMainPage page) {
 		super();
@@ -26,21 +27,33 @@ public class XSDDeleteElementAction extends Action{
 		setText("Delete Element");
 		setToolTipText("Delete an Element");
 	}
+	/**
+	 * Author: Fiu 
+	 * this function is meant to support deletion on key press
+	 * which can pass a specific object to be deleted
+	 * @param toDel
+	 */
+	public void run(Object toDel)
+	{
+		if (!(toDel instanceof XSDElementDeclaration)) {
+			return;
+		}
+		xsdElem = (XSDElementDeclaration) toDel;
+		run();
+	}
 	
 	public void run() {
 		try {
 			super.run();
             schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
-            ISelection selection = page.getTreeViewer().getSelection();
-            XSDElementDeclaration decl = (XSDElementDeclaration)((IStructuredSelection)selection).getFirstElement();
-            
-            //ask for confimation
-            if (! MessageDialog.openConfirm(
-            		this.page.getSite().getShell(),
-            		"Delete Element",
-            		"Are you sure you want to delete the element "+decl.getAliasName()+" ?"
-            )) return;
-
+            // xsdElem is to support the multiple delete action on key press,
+			// which each delete action on element must be explicit passed a xsdElem to
+			// delete
+            XSDElementDeclaration decl = xsdElem;
+            if (decl == null){
+                ISelection selection = page.getTreeViewer().getSelection();
+                decl = (XSDElementDeclaration)((IStructuredSelection)selection).getFirstElement();
+            }
             //backup current Type Definition
             XSDTypeDefinition current = decl.getTypeDefinition();
             
@@ -56,7 +69,7 @@ public class XSDDeleteElementAction extends Action{
 			}
             
             schema.update();
-       		
+            xsdElem = null;
        		page.getTreeViewer().refresh(true);
        		page.markDirty();
        
@@ -73,6 +86,8 @@ public class XSDDeleteElementAction extends Action{
 		super.runWithEvent(event);
 	}
 	
-
+    public void setXSDTODel(XSDElementDeclaration elem) {
+		xsdElem = elem;
+	}
 
 }

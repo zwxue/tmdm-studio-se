@@ -39,10 +39,12 @@ public class XSDChangeToComplexTypeAction extends Action implements SelectionLis
 	protected XSDElementDeclaration decl = null;
 	protected ComplexTypeInputDialog dialog =null;
 	
+	XSDElementDeclaration declNew = null;
 	String typeName = null;
 	boolean isChoice = false;
 	boolean isAll = false;
 	
+	boolean showDlg = true; 
 	public XSDChangeToComplexTypeAction(DataModelMainPage page) {
 		super();
 		this.page = page;
@@ -50,6 +52,18 @@ public class XSDChangeToComplexTypeAction extends Action implements SelectionLis
 		setText("Change to a Complex Element");
 		setToolTipText("Make an Element a Complex Element or change the type of current Complex Element");
 		setDescription(getToolTipText());
+	}
+	
+	public XSDChangeToComplexTypeAction(DataModelMainPage page, XSDElementDeclaration dec,
+			String name, boolean choice, boolean all) {
+		
+		this(page);
+		
+		declNew = dec;
+		showDlg = false;
+		typeName = name;
+		isChoice = choice;
+		isAll = all;
 	}
 	
 	public void run() {
@@ -61,8 +75,15 @@ public class XSDChangeToComplexTypeAction extends Action implements SelectionLis
             
             IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
             isConcept=false;
-            if (selection.getFirstElement() instanceof XSDElementDeclaration) {
+			// fliu
+			// add declNew to support convert action invoked from new concept/new element menu, in this case 
+			// declNew is the new created one not the selected one in tree vew
+            if (selection.getFirstElement() instanceof XSDElementDeclaration || declNew != null) {
             	decl = (XSDElementDeclaration) selection.getFirstElement();
+                if (declNew != null)
+                {
+                	decl = declNew;
+                }
     			//check if concept or "just" element
     			EList l = decl.getIdentityConstraintDefinitions();
     			for (Iterator iter = l.iterator(); iter.hasNext(); ) {
@@ -73,24 +94,30 @@ public class XSDChangeToComplexTypeAction extends Action implements SelectionLis
     				}
     			}
             } else {
-            	//a sub element
-            	decl = (XSDElementDeclaration) ((XSDParticle)selection.getFirstElement()).getTerm();
+            	if (selection.getFirstElement() != null) {
+					// a sub element
+					decl = (XSDElementDeclaration) ((XSDParticle) selection
+							.getFirstElement()).getTerm();
+				}
             }
             
        		///save current Type Definition
        		//XSDTypeDefinition current = decl.getTypeDefinition();      		
            
-       		
-			dialog = new ComplexTypeInputDialog(
-					this,
-					page.getSite().getShell()
-			);
-			
-			dialog.setBlockOnOpen(true);
-			int ret = dialog.open();
-			if (ret == Dialog.CANCEL) return;
-       		
-          
+       		if (showDlg) {
+				dialog = new ComplexTypeInputDialog(this, page.getSite()
+						.getShell());
+
+				dialog.setBlockOnOpen(true);
+				int ret = dialog.open();
+				if (ret == Dialog.CANCEL)
+					return;
+			}
+
+			if (!showDlg && !validateType()) {
+				return;
+			}
+            
        		XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
        		boolean anonymous = (typeName==null) || ("".equals(typeName));
 			boolean alreadyExists = false;
@@ -256,7 +283,7 @@ public class XSDChangeToComplexTypeAction extends Action implements SelectionLis
        			//editAction.run();
        		}
        		*/
-
+       		declNew = null;
        		page.markDirty();
        		
 		} catch (Exception e) {
@@ -283,7 +310,16 @@ public class XSDChangeToComplexTypeAction extends Action implements SelectionLis
 		typeName = dialog.getTypeName();
 		isChoice = dialog.isChoice();
 		isAll = dialog.isAll();
-
+		
+		if (!validateType())
+		{
+			return;
+		}
+		dialog.close();		
+	}
+	
+	private boolean validateType()
+	{
 		if (! "".equals(typeName)) {
 			EList list = schema.getTypeDefinitions();
 			for (Iterator iter = list.iterator(); iter.hasNext(); ) {
@@ -295,14 +331,13 @@ public class XSDChangeToComplexTypeAction extends Action implements SelectionLis
 								"Error", 
 								"This type \""+typeName+"\" already exists as a Simple Type"
 						);
-						return;
+						return false;
 					}
 				}
 			}//for
-		}		
-		dialog.close();		
+		}
+		
+		return true;
 	}
-	
-	
 }
 
