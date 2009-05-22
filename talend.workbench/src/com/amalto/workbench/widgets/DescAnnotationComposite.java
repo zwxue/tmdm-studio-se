@@ -60,6 +60,7 @@ public class DescAnnotationComposite implements  SelectionListener{
 		annotationButton = toolkit.createButton(descAntionHolder, buttonName, SWT.PUSH);
 		annotationButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		annotationButton.addSelectionListener(this);
+		annotationButton.setToolTipText("Set the Descriptions");
 		
 		descriptionText = toolkit.createText(descAntionHolder, "",SWT.BORDER|SWT.MULTI);
         descriptionText.setLayoutData(    
