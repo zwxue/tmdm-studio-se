@@ -19,6 +19,8 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -26,6 +28,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.part.DrillDownAdapter;
@@ -64,6 +67,7 @@ public class XpathSelectDialog extends Dialog {
 	protected DrillDownAdapter drillDownAdapter;
 	protected IWorkbenchPartSite site ;
 	protected Panel panel;
+	protected Text xpathText;
 	public XpathSelectDialog(Shell parentShell,TreeParent parent,String title,IWorkbenchPartSite site) {
 		// TODO Auto-generated constructor stub
 		super(parentShell);
@@ -92,7 +96,11 @@ public class XpathSelectDialog extends Dialog {
         if(selection.getFirstElement() instanceof XSDParticle)
         	particle  = (XSDParticle) selection.getFirstElement();
         
-        if(particle==null&& xSDElementDeclaration==null)return xpath;
+        if(particle==null&& xSDElementDeclaration==null){
+        	xpathText.setText("");
+        	xpath = "";
+        	return xpath;
+        }
         XSDTerm term=null;
         if(!(particle==null))
         	term = particle.getTerm();
@@ -114,6 +122,7 @@ public class XpathSelectDialog extends Dialog {
         	} else if (component instanceof XSDElementDeclaration) {
         			path=((XSDElementDeclaration)component).getName()+path;
         	}
+        		
         	item = item.getParentItem();
         } while (item!=null);
         
@@ -125,16 +134,17 @@ public class XpathSelectDialog extends Dialog {
 		parent.getShell().setText(this.title);
 		Composite composite = (Composite) super.createDialogArea(parent);
 		GridLayout layout = (GridLayout)composite.getLayout();
-		layout.numColumns = 1;
+		layout.makeColumnsEqualWidth=false;
+		layout.numColumns = 2;
 		
 		Label datamoelsLabel = new Label(composite, SWT.NONE);
-		GridData dg= new GridData(SWT.FILL,SWT.FILL,true,true,1,1);
+		GridData dg= new GridData(SWT.FILL,SWT.FILL,false,true,1,1);
 		datamoelsLabel.setLayoutData(
 				dg
 		);
 		datamoelsLabel.setText("Data Models:");
 		
-		dg= new GridData(SWT.FILL,SWT.FILL,true,true,1,1);
+		dg= new GridData(SWT.FILL,SWT.FILL,true,true,2,1);
 		dg.widthHint=400;
 		dataModelCombo = new Combo(composite,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
 		dataModelCombo.setLayoutData(dg        );
@@ -193,11 +203,13 @@ public class XpathSelectDialog extends Dialog {
 				
 			}
 		  });
-		
 		  schemaLabel = new Label (composite,SWT.NONE); 
-		  schemaLabel.setText("Schama:");
-		  schemaLabel.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,1,1));
-		  
+		  schemaLabel.setText("Xpath: ");
+		  schemaLabel.setLayoutData(new GridData(SWT.FILL,SWT.FILL,false,true,1,1));
+		  ((GridData)schemaLabel.getLayoutData()).widthHint=10;
+		  xpathText = new Text(composite,SWT.BORDER);
+		  xpathText.setEditable(false);
+		  xpathText.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,1,1));
 		  domViewer = new TreeViewer(composite, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL|SWT.BORDER);
           domViewer.getControl().setLayoutData(    
                   new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
@@ -229,7 +241,9 @@ public class XpathSelectDialog extends Dialog {
 
 			public void selectionChanged(SelectionChangedEvent e) {
 				StructuredSelection sel= (StructuredSelection)e.getSelection();
-				xpath=getXpath(sel);				
+				xpath=getXpath(sel);	
+//				schemaLabel.setText("Xpath: "+xpath);
+				xpathText.setText(xpath);
 			}
 			
 		});
