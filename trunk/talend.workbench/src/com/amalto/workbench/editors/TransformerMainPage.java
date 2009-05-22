@@ -39,6 +39,8 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
@@ -480,6 +482,7 @@ public class TransformerMainPage extends AMainPageV2 {
             		}
             	}
             });
+            
             stepsList.addMouseListener(new MouseListener() {
             	public void mouseDoubleClick(MouseEvent e) {
             		int index = stepsList.getSelectionIndex();
@@ -505,10 +508,32 @@ public class TransformerMainPage extends AMainPageV2 {
 					if ((e.stateMask==0) && (e.character == SWT.DEL) && (TransformerMainPage.this.stepsList.getSelectionIndex()>=0)) {
 						int index = TransformerMainPage.this.stepsList.getSelectionIndex();
 						removeStep(index);
+						if (stepsList.getItemCount() == 0)
+						{
+							section.setVisible(false);
+						}
+						if (stepsList.getItemCount() >= 1 && index == 0)
+						{
+							stepsList.select(0);
+							refreshStep(0);
+						}
 					}
 				}
             });
 
+            stepsList.addFocusListener(new FocusListener() {
+				public void focusGained(FocusEvent e) {
+					if (stepsList.getSelectionIndex() >= 0)
+					{
+						System.out.println(stepsList.getSelectionIndex());
+						refreshStep(stepsList.getSelectionIndex());
+						section.setVisible(true);
+					}
+				}
+				public void focusLost(FocusEvent e) {
+					}
+				}
+            );
             
             Composite stepUpDownComposite = toolkit.createComposite(sequenceComposite,SWT.NONE);
             stepUpDownComposite.setLayoutData(
