@@ -157,7 +157,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             viewableBEsList.addMouseListener(new MouseListener(){
             	public void mouseDoubleClick(org.eclipse.swt.events.MouseEvent e) {
             		int index = ViewMainPage.this.viewableBEsList.getSelectionIndex();
-            		ViewMainPage.this.viewableBEText.setText(ViewMainPage.this.viewableBEsList.getItem(index));
+            		ViewMainPage.this.xpathWidget0.setText(ViewMainPage.this.viewableBEsList.getItem(index));
 					ViewMainPage.this.viewableBEsList.remove(index);
             		markDirty();
             	}
