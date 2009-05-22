@@ -2,6 +2,7 @@ package com.amalto.workbench.actions;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDElementDeclaration;
@@ -18,6 +19,7 @@ import com.amalto.workbench.utils.XtentisException;
 public class XSDDeleteParticleAction extends Action{
 
 	private DataModelMainPage page = null;
+	private XSDParticle xsdPartle = null;
 	
 	public XSDDeleteParticleAction(DataModelMainPage page) {
 		super();
@@ -27,31 +29,33 @@ public class XSDDeleteParticleAction extends Action{
 		setToolTipText("Delete a Business Elementt");
 	}
 	
+	public void run(Object toDel)
+	{
+		if (!(toDel instanceof XSDParticle)) {
+			return;
+		}
+		xsdPartle = (XSDParticle) toDel;
+		run();
+	}
+	
 	public void run() {
 		try {
 			super.run();
-            IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
-            XSDParticle particle = (XSDParticle) selection.getFirstElement();
+            // xsdPartle is to support the multiple delete action on key press,
+			// which each delete action on particle must be explicit passed a xsd particle to
+			// delete
+            XSDParticle particle = (XSDParticle)xsdPartle ;
+            if (particle == null){
+                ISelection selection = page.getTreeViewer().getSelection();
+                particle = (XSDParticle)((IStructuredSelection)selection).getFirstElement();
+            }
             XSDTerm term = particle.getTerm();
             
             XSDElementDeclaration decl = null;
             if (term instanceof  XSDElementDeclaration) {
             	decl = (XSDElementDeclaration)particle.getTerm();		            
-	            //ask for confimation
-	            if (! MessageDialog.openConfirm(
-	            		this.page.getSite().getShell(),
-	            		"Delete Business Element",
-	            		"Are you sure you want to delete the Business Element "+decl.getAliasName()+" ?"
-	            )) return;
-            } else {
-	            if (! MessageDialog.openConfirm(
-	            		this.page.getSite().getShell(),
-	            		"Delete Group",
-	            		"Are you sure you want to delete the nested Group ?"
-	            )) return;            	
-            }
+            } 
 		   
-
             if (!(particle.getContainer() instanceof XSDModelGroup))
             	throw new XtentisException("Unknown container "+particle.getContainer().getClass().getName());
 
@@ -71,7 +75,7 @@ public class XSDDeleteParticleAction extends Action{
             }
             
             group.updateElement();
-            
+            xsdPartle = null;
        		page.getTreeViewer().refresh(true);
        		page.markDirty();
        
@@ -89,5 +93,7 @@ public class XSDDeleteParticleAction extends Action{
 	}
 	
 
-
+    public void setXSDTODel(XSDParticle elem) {
+    	xsdPartle = elem;
+	}
 }

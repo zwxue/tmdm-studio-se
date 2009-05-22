@@ -15,6 +15,7 @@ import com.amalto.workbench.editors.DataModelMainPage;
 public class XSDDeleteXPathAction extends Action{
 
 	private DataModelMainPage page = null;
+	private XSDXPathDefinition xsdPath = null;
 	
 	public XSDDeleteXPathAction(DataModelMainPage page) {
 		super();
@@ -24,11 +25,26 @@ public class XSDDeleteXPathAction extends Action{
 		setToolTipText("Delete a Field");
 	}
 	
+	public void run(Object toDel) {
+		if (!(toDel instanceof XSDXPathDefinition)) {
+			return;
+		}
+		xsdPath = (XSDXPathDefinition) toDel;
+		run();
+	}
+	
 	public void run() {
 		try {
 			super.run();
-            ISelection selection = page.getTreeViewer().getSelection();
-            XSDXPathDefinition xpath = (XSDXPathDefinition)((IStructuredSelection)selection).getFirstElement();
+            // xsdPath is to support the multiple delete action on key press,
+			// which each delete action on xpath must be explicit passed a xsd path to
+			// delete
+            XSDXPathDefinition xpath = xsdPath;
+            if (xpath == null) {
+				ISelection selection = page.getTreeViewer().getSelection();
+				xpath = (XSDXPathDefinition) ((IStructuredSelection) selection)
+						.getFirstElement();
+			}
             XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) xpath.getContainer();
             
             if (xpath.getVariety().equals(XSDXPathVariety.SELECTOR_LITERAL)) {
@@ -48,17 +64,10 @@ public class XSDDeleteXPathAction extends Action{
     			);
     			return;            	
             }
-            
-            //ask for confimation
-            if (! MessageDialog.openConfirm(
-            		this.page.getSite().getShell(),
-            		"Delete Field",
-            		"Are you sure you want to delete the field "+xpath.getValue()+" ?"
-            )) return;
-
+           
             icd.getFields().remove(xpath);
             icd.updateElement();
-            
+            xsdPath = null;
        		page.getTreeViewer().refresh(true);
        		page.markDirty();
        
@@ -75,6 +84,8 @@ public class XSDDeleteXPathAction extends Action{
 		super.runWithEvent(event);
 	}
 	
-
+    public void setXSDTODel(XSDXPathDefinition elem) {
+    	xsdPath = elem;
+	}
 
 }
