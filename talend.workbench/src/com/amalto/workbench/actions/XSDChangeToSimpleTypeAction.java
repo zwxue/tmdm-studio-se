@@ -39,6 +39,9 @@ public class XSDChangeToSimpleTypeAction extends Action implements SelectionList
 	private boolean builtIn = false;
 	private boolean isConcept = false;
 	
+	private XSDElementDeclaration declNew = null;
+	boolean showDlg = true; 
+	
 	public XSDChangeToSimpleTypeAction(DataModelMainPage page) {
 		super();
 		this.page = page;
@@ -48,19 +51,38 @@ public class XSDChangeToSimpleTypeAction extends Action implements SelectionList
 		setDescription(getToolTipText());
 	}
 	
+	public XSDChangeToSimpleTypeAction(DataModelMainPage page, XSDElementDeclaration dec, String name,
+			boolean built) {
+		this(page);
+		showDlg = false;
+		typeName = name;
+		builtIn = built;
+		
+		declNew = dec;
+	}
+	
 	public void run() {
 		try {
 			super.run();
 			schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
-			
 			XSDElementDeclaration decl = null;
 			IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
-			if (selection.getFirstElement() instanceof XSDElementDeclaration) {
+			// fliu
+			// add declNew to support convert action invoked from new concept/new element menu, in this case 
+			// declNew is the new created one not the selected one in tree vew
+			if (selection.getFirstElement() instanceof XSDElementDeclaration || declNew != null) {
 				isConcept = true;
 				decl = (XSDElementDeclaration) selection.getFirstElement();
+				if (declNew != null)
+				{
+					decl = declNew;
+				}
 			} else {
 				isConcept = false;
-				decl = (XSDElementDeclaration) ((XSDParticle)selection.getFirstElement()).getTerm();
+				if (selection.getFirstElement() != null) {
+					decl = (XSDElementDeclaration) ((XSDParticle) selection
+							.getFirstElement()).getTerm();
+				}
 			}
 			
 			//build list of custom types and built in types
@@ -77,17 +99,20 @@ public class XSDChangeToSimpleTypeAction extends Action implements SelectionList
 					builtInTypes.add(type.getName());
 			}
 			
-			dialog = new SimpleTypeInputDialog(
-					this,
-					page.getSite().getShell(),
-					"Make Simple Type",
-					customTypes,
-					builtInTypes
-			);
-			
-			dialog.setBlockOnOpen(true);
-			int ret = dialog.open();
-			if (ret == Window.CANCEL) return;
+			if (showDlg)
+			{
+				dialog = new SimpleTypeInputDialog(
+						this,
+						page.getSite().getShell(),
+						"Make Simple Type",
+						customTypes,
+						builtInTypes
+				);
+				
+				dialog.setBlockOnOpen(true);
+				int ret = dialog.open();
+				if (ret == Window.CANCEL) return;
+			}
 			
 			//if concept
 			//remove all unique keys and make new one
@@ -145,6 +170,7 @@ public class XSDChangeToSimpleTypeAction extends Action implements SelectionList
 	       	    }
 			}
 			
+			declNew = null;
 			page.getTreeViewer().refresh(true);
 			page.markDirty();
 			
@@ -173,29 +199,34 @@ public class XSDChangeToSimpleTypeAction extends Action implements SelectionList
 		builtIn = dialog.isBuiltIn();
 		
 		//if built in, check that the type actually exists
-		if (builtIn) {
-			boolean found =false;
-            for (Iterator iter =  schema.getSchemaForSchema().getTypeDefinitions().iterator(); iter.hasNext(); ) {
-				XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
-				if (type instanceof XSDSimpleTypeDefinition)
-					if (type.getName().equals(typeName)) {
-						found = true;
-						break;
-					}
-            }
-            if (!found) {
-    			MessageDialog.openError(
-    					page.getSite().getShell(),
-    					"Error", 
-    					"The built-in type "+typeName+" does not exist"
-    			);            	
-				return;
-			}			
+		if (builtIn && !validateType()) {
+			return;
 		}
 		dialog.close();		
 	}
 	
-	
+	private boolean validateType()
+	{
+		boolean found =false;
+        for (Iterator iter =  schema.getSchemaForSchema().getTypeDefinitions().iterator(); iter.hasNext(); ) {
+			XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
+			if (type instanceof XSDSimpleTypeDefinition)
+				if (type.getName().equals(typeName)) {
+					found = true;
+					break;
+				}
+        }
+        if (!found) {
+			MessageDialog.openError(
+					page.getSite().getShell(),
+					"Error", 
+					"The built-in type "+typeName+" does not exist"
+			);            	
+			return false;
+		}
+        
+        return true;
+	}
 	
 
 }
