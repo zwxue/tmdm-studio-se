@@ -36,7 +36,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
@@ -68,6 +67,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
 
 import com.amalto.workbench.dialogs.PluginDetailsDialog;
 import com.amalto.workbench.dialogs.ProcessResultsDialog;
@@ -152,6 +152,7 @@ public class TransformerMainPage extends AMainPageV2 {
 	private Button disabledButton;
 	protected WSTransformerV2 transformer;
 	private Composite specsComposite;
+	private Section section;
 	
 	java.util.List<Line> cacheList; //remember the setup transformerinputvariablesdialog's input list
 
@@ -474,6 +475,7 @@ public class TransformerMainPage extends AMainPageV2 {
             		int index = stepsList.getSelectionIndex();
             		currentPlugin = index;
             		if (index>=0) {
+            			section.setVisible(true);
             			refreshStep(index);
             		}
             	}
@@ -588,19 +590,20 @@ public class TransformerMainPage extends AMainPageV2 {
     
             //Plugin Specifications
             //Sequence
-            Composite specsGroup = this.getNewSectionComposite("Step Specification");
+            section = this.getNewSection("Step Specification");
+            section.setVisible(false);
+
             sequenceGroup.setLayout(new GridLayout(4,false));
-	        disabledButton= toolkit.createButton(specsGroup, "Disabled", SWT.CHECK);
+	        disabledButton= toolkit.createButton(section, "Disabled", SWT.CHECK);
 	        disabledButton.setLayoutData(
 	                new GridData(SWT.FILL,SWT.FILL,false,true,4,1)
 	        );
             
-	       specsComposite = toolkit.createComposite(specsGroup,SWT.NULL);
+	       specsComposite = toolkit.createComposite((Composite)section.getClient(),SWT.NULL);
 	        specsComposite.setLayoutData(
 	                new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 	        );
 	        specsComposite.setLayout(new GridLayout(4,false));
-
 
 	        disabledButton.addSelectionListener(new SelectionAdapter(){
 	        	@Override
