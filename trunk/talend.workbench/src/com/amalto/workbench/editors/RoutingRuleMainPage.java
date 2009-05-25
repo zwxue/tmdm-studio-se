@@ -228,7 +228,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             blankLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
             );
-            Label xPathLabel = toolkit.createLabel(routingExpressionsComposite,  "xPath", SWT.NULL);
+            Label xPathLabel = toolkit.createLabel(routingExpressionsComposite,  "       xPath", SWT.NULL);
             xPathLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
             );
