@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.ejb.CreateException;
@@ -17,6 +18,9 @@ import javax.ejb.TimedObject;
 import javax.ejb.Timer;
 import javax.ejb.TimerHandle;
 import javax.ejb.TimerService;
+import javax.naming.InitialContext;
+import javax.naming.NameClassPair;
+import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.xml.transform.TransformerException;
 
@@ -615,11 +619,16 @@ public class RoutingEngineV2CtrlBean implements SessionBean, TimedObject {
 			return;
 		}
 		
-
+		List<String> serviceJndiList = getRuntimeServiceJndiList();
 		//slot new routing orders and execute them
 		int tokenIndex =0;
 		for (int i = 0; i < routingOrders.length && tokenIndex < availableTokens.size(); i++) {
 			ActiveRoutingOrderV2POJO routingOrder = routingOrders[i];
+			//make sure service JNDI is exist
+			if (!serviceJndiList.contains(routingOrder.getServiceJNDI())){
+				org.apache.log4j.Logger.getLogger(this.getClass()).info("Unable to lookup \""+routingOrder.getServiceJNDI()+"\", this service not bound!");
+				continue;
+			}
 			//make sure it is not already sloted (though not yet started)
 			if (slotedRoutingOrderIDs.contains(routingOrder.getItemPOJOPK().getUniqueID())) continue;
 			//Not already sloted --> we will slot it and execute it
@@ -664,8 +673,24 @@ public class RoutingEngineV2CtrlBean implements SessionBean, TimedObject {
 		createTimer(new RoutingEngineV2POJOPK(routingEngine.getPK()), routingEngine.getRunPeriodMillis() - duration);
 		
 	}
-    
-	
-    
+
+	private List<String> getRuntimeServiceJndiList() {
+		List<String> serviceJndiList = new ArrayList<String>();
+		String serviceJndiPrefix="amalto/local/service";
+		try {
+		InitialContext ctx = new InitialContext();
+		NamingEnumeration<NameClassPair> list = ctx.list(serviceJndiPrefix);
+			while (list.hasMore()) {
+			    NameClassPair nc;
+				
+				nc = list.next();
+				
+			    serviceJndiList.add(serviceJndiPrefix+"/"+nc.getName());
+			}
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+		return serviceJndiList;
+	}  
       
 }
