@@ -23,6 +23,8 @@ import org.w3c.dom.NodeList;
 import com.amalto.webapp.core.bean.Configuration;
 import com.amalto.webapp.core.bean.UpdateReportItem;
 import com.amalto.webapp.core.dwr.CommonDWR;
+import com.amalto.webapp.core.json.JSONArray;
+import com.amalto.webapp.core.json.JSONObject;
 import com.amalto.webapp.core.util.Util;
 import com.amalto.webapp.core.util.XtentisWebappException;
 import com.amalto.webapp.util.webservices.WSConceptKey;
@@ -789,12 +791,14 @@ public class ItemsBrowserDWR {
 	
 	
 
-	public TreeMap<String,String> getForeignKeyList(String xpathForeignKey, String xpathInfoForeignKey, String value) throws RemoteException, Exception{
+//	public TreeMap<String,String> getForeignKeyList(String xpathForeignKey, String xpathInfoForeignKey, String value) throws RemoteException, Exception{
 		
-		org.apache.log4j.Logger.getLogger(this.getClass()).trace("getForeignKeyList() xPath FK: '"+xpathForeignKey+"' xPath FK Info: '"+xpathInfoForeignKey+"' value: '"+value+"'");
+	public String getForeignKeyList(int start, int limit, String value, String xpathForeignKey, String xpathInfoForeignKey) throws RemoteException, Exception{
+		
+		org.apache.log4j.Logger.getLogger(this.getClass()).debug("getForeignKeyList() xPath FK: '"+xpathForeignKey+"' xPath FK Info: '"+xpathInfoForeignKey+"' value: '"+value+"'");
 		
 		Configuration config = Configuration.getInstance();
-		TreeMap<String,String> map = new TreeMap<String,String>();
+//		TreeMap<String,String> map = new TreeMap<String,String>();
 		
 		// foreign key set by business concept
 		if(xpathForeignKey.split("/").length == 1){
@@ -807,7 +811,9 @@ public class ItemsBrowserDWR {
 			// build query - add a content condition on the pivot if we search for a particular value
 			String filteredConcept = conceptName;
 			if(value!=null && !"".equals(value.trim())){
-				filteredConcept+="[(descendant-or-self::* &= \""+value+"*\"),(descendant-or-self::*/attribute() &= \""+value+"*\")]";
+				//filteredConcept+="[(descendant-or-self::* &= \""+value+"*\"),(descendant-or-self::*/attribute() &= \""+value+"*\")]";
+				//Value is unlikely to be in attributes
+				filteredConcept+="[descendant-or-self::* &= \""+value+"\"]";
 			}
 			
 			//add the xPath Infos Path
@@ -825,11 +831,19 @@ public class ItemsBrowserDWR {
 				new WSStringArray(xPaths.toArray(new String[xPaths.size()])),
 				null,
 				-1,
-				0,
-				-1,
+				start,
+				limit,
 				null,
 				null
 			)).getStrings();
+			
+			if (results == null) results = new String[0];
+			
+			JSONObject json = new JSONObject();
+			json.put("count", results.length);
+			
+			JSONArray rows = new JSONArray();
+			json.put("rows", rows);
 			
 			//parse the results - each result contains the xPathInfo values, followed by the keys
 			for (int i = 0; i < results.length; i++) {
@@ -858,10 +872,17 @@ public class ItemsBrowserDWR {
     				}
 				}
 				
+				JSONObject row = new JSONObject();
+				row.put("keys", keys);
+				row.put("infos", infos);
+				rows.put(row);
+				
+				
 				//update the map
-				map.put(StringEscapeUtils.escapeXml(keys), infos);
+//				map.put(StringEscapeUtils.escapeXml(keys), infos);
 			}
-			return map;
+//			return map;
+			return json.toString();
 		}
 		
 
@@ -894,6 +915,14 @@ public class ItemsBrowserDWR {
 					)
 				).getStrings();
 		
+		if (results == null) results = new String[0];
+		
+		JSONObject json = new JSONObject();
+		json.put("count", results.length);
+		
+		JSONArray rows = new JSONArray();
+		json.put("rows", rows);
+		
 		//parse the results to put them in the map
 		for (int i = 0; i < results.length; i++) {
 			if(results[i]!=null){
@@ -902,12 +931,20 @@ public class ItemsBrowserDWR {
 				for (int j = 0; j < xpaths.length; j++) {
 					tmp += " - "+Util.getFirstTextNode(d,"//"+xpaths[j].split("/")[xpaths[j].split("/").length-1]);
 				}
-				if(Util.getFirstTextNode(d,"//"+xpathForeignKey.split("/")[xpathForeignKey.split("/").length-1])!=null)
-					map.put(Util.getFirstTextNode(d,"//"+xpathForeignKey.split("/")[xpathForeignKey.split("/").length-1]),tmp.substring(3));	
+				if(Util.getFirstTextNode(d,"//"+xpathForeignKey.split("/")[xpathForeignKey.split("/").length-1])!=null) {
+					String keys = Util.getFirstTextNode(d,"//"+xpathForeignKey.split("/")[xpathForeignKey.split("/").length-1]);
+					String infos = tmp.substring(3);
+					JSONObject row = new JSONObject();
+					row.put("keys", keys);
+					row.put("infos", infos);
+					rows.put(row);
+//					map.put(Util.getFirstTextNode(d,"//"+xpathForeignKey.split("/")[xpathForeignKey.split("/").length-1]),tmp.substring(3));	
+				}
 			}		
 		}
-		
-		return map;
+	
+		return json.toString();
+//		return map;
 	}
 	
 	
