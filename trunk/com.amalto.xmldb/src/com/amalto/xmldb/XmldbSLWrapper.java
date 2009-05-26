@@ -869,7 +869,9 @@ public class XmldbSLWrapper implements IXmlServerSLWrapper,IXmlServerEBJLifeCycl
 				}
 
 				xqFor+="".equals(xqFor)?"for ": ", ";
-				xqFor+="$"+pivotName+" in "+getXQueryCollectionName(revisionID, clusterName)+"/ii/p/"+path;
+//				xqFor+="$"+pivotName+" in "+getXQueryCollectionName(revisionID, clusterName)+"/ii/p/"+path;
+//				Optimization - speeds up text queries but the risk is to query sub items with the same name
+				xqFor+="$"+pivotName+" in "+getXQueryCollectionName(revisionID, clusterName)+"//"+path;
 	    	}
 	    	
 	    	
@@ -878,6 +880,12 @@ public class XmldbSLWrapper implements IXmlServerSLWrapper,IXmlServerEBJLifeCycl
 	    		+("".equals(xqWhere)? "" : "\nwhere "+xqWhere)
 	    		+("".equals(xqOrderBy) ? "" : "\n"+xqOrderBy)
 	    		+"\nreturn "+(moreThanOneViewable ? "<result>":"")+xqReturn+(moreThanOneViewable ? "</result>":""); 
+	    	
+	    	if (start>=0 && limit>0) {
+	    		query = 
+	    			"let $leres := \n"+query
+	    			+"\n return subsequence($leres,"+(start+1)+","+limit+")";
+	    	}
 	    	
 	    	return query;
 	    	
@@ -1038,6 +1046,12 @@ public class XmldbSLWrapper implements IXmlServerSLWrapper,IXmlServerEBJLifeCycl
 	    		+("".equals(xqWhere)? "" : "\nwhere "+xqWhere)
 	    		+("".equals(xqOrderBy) ? "" : "\n"+xqOrderBy)
 	    		+"\nreturn "+(moreThanOneViewable ? "<result>":"")+xqReturn+(moreThanOneViewable ? "</result>":""); 
+	    	
+	    	if (start>=0 && limit>0) {
+	    		query = 
+	    			"let $leres := \n"+query
+	    			+"\n return subsequence($leres,"+(start+1)+","+limit+")";
+	    	}
 	    	
 	    	return query;
 	    	
