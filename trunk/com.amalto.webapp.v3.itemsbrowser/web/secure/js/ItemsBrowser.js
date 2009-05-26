@@ -8,6 +8,8 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	
 	loadResource("/itemsbrowser/secure/css/ItemsBrowser.css", "" );
 	
+	loadResource("/itemsbrowser/secure/js/ImprovedDWRProxy.js", "");
+	
 	/********************************************************************
 	 * Localization
 	 ********************************************************************/
@@ -279,6 +281,9 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	var treeCount=1; 
 	
 	var criteriaCount = 1;
+	
+	/** The foreign key search window */
+	var foreignKeyWindow;
 	 
 	function browseItems(){
 		showItemsPanel();
@@ -289,19 +294,18 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	
 	function showItemsPanel() {	
 		var tabPanel = amalto.core.getTabPanel();
-		if(tabPanel.getItem('itemsBrowser') == undefined){
+		itemsBrowserPanel = tabPanel.getItem('itemsBrowser');
+		
+		if(itemsBrowserPanel == undefined){
 				
 			gridContainerPanel = new Ext.Panel({
 				id: 'items-list',
 	    		region: 'center',
 	    		layout:'fit',
 				border: false,
-				//height:300,
 				header:true,
 				split:true,
 				collapsible: false
-				//items:{id:'items-list'}
-				//html:'<div id="items-list"/>'
 			});
 				
 			itemsBrowserPanel = new Ext.Panel({
@@ -342,9 +346,9 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 				    gridContainerPanel
 				]
 			});			
-	
-		}		
-		tabPanel.add(itemsBrowserPanel); 
+			tabPanel.add(itemsBrowserPanel); 
+		}//if
+		
 		itemsBrowserPanel.show();
 		itemsBrowserPanel.doLayout();
 		amalto.core.doLayout();
@@ -436,22 +440,13 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		tpl.insertAfter(criteriaParent,{id:criteriaCount});
 		DWRUtil.addOptions('itemsSearchOperator'+criteriaCount,OPERATORS[language]);
 		DWRUtil.addOptions('itemsSearchField'+criteriaCount,itemsElements);
-		
 	}
 	
 	function removeItemsCriteria(id){
 		//criteria.splice(parseInt(id),1);
 		var criteriaId = "itemsCriteria"+id;
 		$('itemsCriterias').removeChild($(criteriaId));
-		
 	}
-	
-	/*
-	function displayItemsEnter(e){
-		e.preventDefault();
-		displayItems();
-	}
-	*/
 	
 	
 	
@@ -492,7 +487,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	    };
 
 	   
-	    var tmpFields = new Array;
+	    var tmpFields = new Array();
 	    for(var i=0; i<_viewItems2.viewables.length; i++) {
 	    	var tmp = "/"+_viewItems2.viewables[i];
 	    	tmpFields.push(tmp);
@@ -519,12 +514,12 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		};
 	
 	    
+		//Build a comma-dash separated list of search criteria
 	    var criteria = "";
 	    var nodeList = $('itemsCriterias').childNodes;
 		for(var i=0; i<nodeList.length; i++) {
 			var id = nodeList[i].id.substring(13);
 			criteria += DWRUtil.getValue('itemsSearchField'+id)+"#"+DWRUtil.getValue('itemsSearchOperator'+id)+"#"+DWRUtil.getValue('itemsSearchValue'+id)+"#,";
-	
 		}
 
 		var store = new Ext.data.Store({
@@ -534,24 +529,16 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		        sortInfo:{field: _viewItems2.keys[0], direction: "ASC"},
 		        baseParams:{viewName: viewName,criteria:criteria},
 		        reader: new Ext.data.JsonReader(schema),
-		        remoteSort: true,
-		        listeners:{
-		        	'load':function(store, records){
-		        		//alert(records.length);
-		        	}
-		        }
+		        remoteSort: true
 		    });
 		    
 		var grid = new Ext.grid.GridPanel({
 			id:'items-grid',
 		    store: store,
-		    //height:200,
-		    //autoHeight:true,
 		    autoScroll:true,
 		    columns: myColumns,
 			enableColumnMove:true,
 			border:false,
-			//forceFit:true,
 		    viewConfig: {
 		    	autoFill:true,
 		        forceFit: false
@@ -579,15 +566,15 @@ amalto.itemsbrowser.ItemsBrowser = function () {
     					value:pageSize,
     					width:30,
     					listeners: {
-				                	'specialkey': function(a, e) {
-							            if(e.getKey() == e.ENTER) {
-					                		var lineMax = DWRUtil.getValue('lineMaxItems');
-											if(lineMax==null || lineMax=="") 
-												lineMax=50;
-											displayItems2(columnsHeader,lineMax);
-							            } 
-									}
-				                }
+		                	'specialkey': function(a, e) {
+					            if(e.getKey() == e.ENTER) {
+			                		var lineMax = DWRUtil.getValue('lineMaxItems');
+									if(lineMax==null || lineMax=="") 
+										lineMax=50;
+									displayItems2(columnsHeader,lineMax);
+					            } 
+							}
+		                }
 		            })
 		        ]
 		    })
@@ -605,7 +592,6 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		
 		ItemsBrowserInterface.countItems(criteria, _dataObject, function(result){
 			if(result>1000) {
-
 				Ext.MessageBox.buttonText.yes = "Oui"; //french
 				Ext.MessageBox.buttonText.no = "Non"; //french
 				Ext.MessageBox.show({
@@ -621,11 +607,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 				});
 				
 			}
-			else {
-				
-				store.load({params:{start:0, limit:pageSize}});
-				
-			}
+			else store.load({params:{start:0, limit:pageSize}});
 			amalto.core.ready();
 		});
 			
@@ -633,9 +615,9 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	}   
 	
 	
-	/*
+	/********
 	  Toolbars management
-	*/
+	*********/
 	
 	
 	// options
@@ -1103,71 +1085,96 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	
 	var panel;
 	function chooseForeignKey(nodeId, xpathForeignKey, xpathInfoForeignKey, treeIndex) {
+		
 		amalto.core.working('Running...');
 	    amalto.core.ready();
 	    
 		ItemsBrowserInterface.countForeignKey(xpathForeignKey, function(count){
-			if(Ext.getCmp('foreign-key-window')!=null) Ext.getCmp('foreign-key-window').destroy();
 			//Display a pop-up window to search for foreign keys
-			var win = new Ext.Window({
-				id : 'foreign-key-window',
-	            title : TITLE_WINDOW_FK[language]+" ("+count+" "+(count>1?"clés possibles trouvées)":"clé possible trouvée)"),
-	            width : 380,
-	            height : 190,
-	            closeAction : 'hide',
-	            modal: true,
-	            items:[
-	            	new Ext.Panel({
-	            		border:false,
-	            		frame:true,
-	            		labelWidth:200,
-			            defaults: {labelSeparator:''},
-			            layout : 'form',
-			            //style:'padding:15px',
-			            html:'<div style="padding-top:15px"><select id="foreignkey-list-'+nodeId+'" STYLE="width: 300px"></select></div>',
-			            items:[
-			           		new Ext.form.TextField({
-			            		fieldLabel: FILTER[language],
-			            		id: 'foreignkey-filter-'+nodeId,
-			            		listeners:{
-				            		'specialkey': function(field,e){
-						            	if(e.getKey()==13){// 13 is enter key
-					            			var value = Ext.getCmp('foreignkey-filter-'+nodeId).getValue();
-					            			filterForeignKey(xpathForeignKey, xpathInfoForeignKey, nodeId, value)
-						            	}
-						            }
-			            		}
-			            	}),
-			            	new Ext.Button({
-			            		text: BUTTON_SEARCH[language],
-			            		id:'foreignkey-search-button-'+nodeId,
-			            		//style:'padding:15px',
-			            		handler:function(){
-			            			var value = Ext.getCmp('foreignkey-filter-'+nodeId).getValue();
-			            			filterForeignKey(xpathForeignKey, xpathInfoForeignKey, nodeId, value)
-			            		}
-			            	})	            	
-			            ]
-	            	})
-	            ],
-	
-	            buttons: [{
-	                text : SELECT[language],
-	                id : 'foreignkey-select-button-'+nodeId,
-	                handler : function(){
-						DWRUtil.setValue(nodeId+'Value',DWRUtil.getValue('foreignkey-list-'+nodeId));
-						updateNode(nodeId,treeIndex);
-						win.destroy();
-	                }
-	            },{
-	                text     : CLOSE[language],
-	                handler  : function(){
-	                    win.destroy();
-	                }
-	            }]
-	        });
-			win.show();
-			if(count<500) filterForeignKey(xpathForeignKey, xpathInfoForeignKey, nodeId, "");
+			if(foreignKeyWindow){
+			    foreignKeyWindow.hide();
+			    foreignKeyWindow.destroy();
+			}
+				
+			var store = new Ext.data.Store({
+				proxy: new Ext.ux.data.ImprovedDWRProxy({
+			        dwrFunction: ItemsBrowserInterface.getForeignKeyList,
+			        dwrAdditional: [xpathForeignKey, xpathInfoForeignKey ] //, Ext.getCmp('foreign-key-filter').getValue()]}
+				}),
+		        reader: new Ext.data.JsonReader({
+		            root: 'rows',
+		            totalProperty: 'count',
+		            id: 'keys'
+		        }, [
+		            {name: 'keys', mapping: 'keys'},
+		            {name: 'infos', mapping: 'infos'}
+		        ])
+			});
+			
+
+
+		    // Custom rendering Template
+		    var resultTpl = new Ext.XTemplate(
+			        '<tpl for="."><div class="search-item" style="font-size: 0.8em">',
+			            '<h3>{infos}</h3>',
+			            '{keys}',
+			        '</div></tpl>'
+			    );
+		    
+		    var combo = new Ext.form.ComboBox({
+                width: 250,
+                fieldLabel: FILTER[language],
+                id: 'foreign-key-filter',
+		        store: store,
+		        displayField:'title',
+		        typeAhead: false,
+		        loadingText: 'Searching...',
+		        pageSize:100,
+		        minChars: 2,
+		        hideTrigger: true,
+		        tpl: resultTpl,
+		        listAlign: 'tl-bl',
+		        itemSelector: 'div.search-item',
+		        onSelect: function(record){
+                    this.collapse();
+                	DWRUtil.setValue(nodeId+'Value', record.get("keys"));
+                	updateNode(nodeId,treeIndex);
+		        	foreignKeyWindow.hide();
+		        }
+		    });
+
+			
+			foreignKeyWindow = new Ext.Window({
+                layout:'fit',
+                width:300,
+                height: 150,
+                closeAction:'hide',
+                plain: true,
+                title: TITLE_WINDOW_FK[language]+'<br/>('+count+' '+(count>1?'clés possibles trouvées)':'clé possible trouvée)'),
+                
+                items: [new Ext.form.FormPanel({
+                	labelAlign: 'top',
+                    items: [
+                        new Ext.Panel({html: '', border: false}),
+	                    combo
+	                ]
+                })]
+
+            });
+			
+			foreignKeyWindow.on('show', function() {
+				var combo = Ext.getCmp('foreign-key-filter');
+				combo.focus(true, 100);
+				combo.reset();
+				if(count<500) {
+					combo.doQuery(".*",true);
+//						combo.setRawValue("");
+				}
+			});
+
+			
+			foreignKeyWindow.show(this);
+			
 		});
 		
 		
