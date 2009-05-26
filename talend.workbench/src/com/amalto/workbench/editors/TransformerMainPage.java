@@ -525,7 +525,6 @@ public class TransformerMainPage extends AMainPageV2 {
 				public void focusGained(FocusEvent e) {
 					if (stepsList.getSelectionIndex() >= 0)
 					{
-						System.out.println(stepsList.getSelectionIndex());
 						refreshStep(stepsList.getSelectionIndex());
 						section.setVisible(true);
 					}
