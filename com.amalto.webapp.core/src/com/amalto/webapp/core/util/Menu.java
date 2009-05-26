@@ -224,8 +224,6 @@ public class Menu {
 					);
 				}
 			}
-		} catch (XtentisWebappException e) {
-			throw(e);
 		} catch (Exception e) {
 			String err;
 			try {
@@ -235,7 +233,6 @@ public class Menu {
 				err="Unable to get user when adding the menu entries "+
 					": "+ex.getClass().getName()+": "+ex.getLocalizedMessage();
 			}
-			throw new XtentisWebappException(err);
 		}
 	}
 	
