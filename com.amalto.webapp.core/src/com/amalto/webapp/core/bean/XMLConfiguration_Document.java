@@ -131,7 +131,7 @@ public class XMLConfiguration_Document {
 		
 		// System.err.println("*i*i*i*i*i>" + nl2.getLength());
 		
-		if ((nl2!=null) || nl2.getLength()>0) {
+		if ((nl2 != null) && nl2.getLength() > 0) {
 			for (int i = 0; i < nl2.getLength(); i++) {
 				Element xPath = (Element)nl2.item(i);
 				list.add(
@@ -149,7 +149,7 @@ public class XMLConfiguration_Document {
 	private static ArrayList<XMLConfiguration_XPath> getXPaths(Element document, String path) throws XtentisWebappException, Exception{
 		ArrayList<XMLConfiguration_XPath> list = new ArrayList<XMLConfiguration_XPath>();		
 		NodeList nl2 = Util.getNodeList(document, path);
-		if ((nl2!=null) || nl2.getLength()>0) {
+		if ((nl2 != null) && nl2.getLength() > 0) {
 			for (int i = 0; i < nl2.getLength(); i++) {
 				Element xPath = (Element)nl2.item(i);
 				list.add(
