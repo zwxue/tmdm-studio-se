@@ -861,8 +861,9 @@ public class SynchronizationPlanCtrlBean implements SessionBean, TimedObject{
             		}
             		
             		String info = 
-            				"Processing Items concepts matching '"+line.getConceptName()+"', instances ids matching '"+line.getIdsPattern()
-        					+"  Local/Remote revisions: '"+line.getLocalRevisionID()+"/"+line.getRemoteRevisionID()+"'" 
+            				"Processing Items concepts matching '"+line.getConceptName()+"', instances ids matching '"+line.getIdsPattern()+"'"
+        					+"  LOCAL Cluster '"+line.getLocalClusterPOJOPK().getUniqueId()+"' and revision '"+line.getLocalRevisionID()+"'"
+        					+" <--> REMOTE Cluster '"+line.getRemoteClusterPOJOPK().getUniqueId()+"' and revision '"+line.getRemoteRevisionID()+"'"  
         					+" ["+line.getAlgorithm()+"]";
             		org.apache.log4j.Logger.getLogger(this.getClass()).debug("executeFullSynchronization() "+info);
             		
@@ -887,8 +888,8 @@ public class SynchronizationPlanCtrlBean implements SessionBean, TimedObject{
 					
 					if (remotePKs != null) {
 						for (int i = 0; i < remotePKs.length; i++) {
-							ItemPOJOPK remotePK = new ItemPOJOPK(
-								new DataClusterPOJOPK(remotePKs[i].getWsDataClusterPK().getPk()),
+							ItemPOJOPK localPK = new ItemPOJOPK(
+								new DataClusterPOJOPK(line.getLocalClusterPOJOPK()),
 								remotePKs[i].getConceptName(),
 								remotePKs[i].getIds()
 							);
@@ -900,12 +901,13 @@ public class SynchronizationPlanCtrlBean implements SessionBean, TimedObject{
 								synchroItemCtrl, 
 								line.getAlgorithm(), 
 								line.getLocalRevisionID(), 
+								line.getRemoteClusterPOJOPK(),
 								line.getRemoteRevisionID(),
-								remotePK, 
+								localPK, 
 								SYNCH_TYPE_FULL
 							);
 							
-							alreadySynchronizedPKs.add(remotePK.getUniqueID());
+							alreadySynchronizedPKs.add(localPK.getUniqueID());
 							
 						}
 					}
@@ -935,7 +937,8 @@ public class SynchronizationPlanCtrlBean implements SessionBean, TimedObject{
 							planCtrl, 
 							synchroItemCtrl, 
 							line.getAlgorithm(), 
-							line.getLocalRevisionID(), 
+							line.getLocalRevisionID(),
+							line.getRemoteClusterPOJOPK(),
 							line.getRemoteRevisionID(),
 							localPK, 
 							SYNCH_TYPE_FULL
@@ -1184,6 +1187,7 @@ public class SynchronizationPlanCtrlBean implements SessionBean, TimedObject{
     								synchroItemCtrl, 
     								line.getAlgorithm(), 
     								line.getLocalRevisionID(), 
+    								line.getRemoteClusterPOJOPK(),
     								line.getRemoteRevisionID(),
     								remotePK, 
     								SYNCH_TYPE_FULL
@@ -1198,6 +1202,7 @@ public class SynchronizationPlanCtrlBean implements SessionBean, TimedObject{
     								synchroItemCtrl, 
     								line.getAlgorithm(), 
     								line.getLocalRevisionID(), 
+    								line.getRemoteClusterPOJOPK(),
     								line.getRemoteRevisionID(),
     								remotePK, 
     								SYNCH_TYPE_OVERWRITE_LOCAL
@@ -1230,6 +1235,7 @@ public class SynchronizationPlanCtrlBean implements SessionBean, TimedObject{
 							synchroItemCtrl, 
 							line.getAlgorithm(), 
 							line.getLocalRevisionID(), 
+							line.getRemoteClusterPOJOPK(),
 							line.getRemoteRevisionID(),
 							localPK, 
 							SYNCH_TYPE_OVERWRITE_REMOTE
@@ -1492,44 +1498,44 @@ public class SynchronizationPlanCtrlBean implements SessionBean, TimedObject{
 		SynchronizationItemCtrlLocal synchroItemCtrl,
 		String algorithm,
 		String localRevisionID,
+		DataClusterPOJOPK remoteDataClusterPOJOPK,
 		String remoteRevisionID,
 		ItemPOJOPK itemPOJOPK,
 		int synchType
 	) throws XtentisException {
 		
     	org.apache.log4j.Logger.getLogger(this.getClass()).debug(
-    		"Synchronizing item '"+itemPOJOPK.getUniqueID()+" local/remote revisions "+localRevisionID+"/"+remoteRevisionID+ "  ["+algorithm+"] " +
-    		(synchType == SYNCH_TYPE_FULL ? "FULL" : (synchType == SYNCH_TYPE_OVERWRITE_LOCAL ? "OVERWRITE LOCAL": "OVERWRITE REMOTE"))
+    		"Synchronizing LOCAL item '"+itemPOJOPK.getUniqueID()+" in revision '"+localRevisionID+"'"
+    		+" <---> REMOTE item of cluster "+remoteDataClusterPOJOPK.getUniqueId()+" in revision '"+remoteRevisionID+"'"
+    		+ " using alog. ["+algorithm+"] and" + 
+    		" synchro. type '"+(synchType == SYNCH_TYPE_FULL ? "FULL" : (synchType == SYNCH_TYPE_OVERWRITE_LOCAL ? "OVERWRITE LOCAL": "OVERWRITE REMOTE"))+"'"
     	);
     	
 		//if this is not an overwrite of the remote XML, fetch the xml from the remote system
 		ItemPOJO remotePOJO = null;
-//		if (synchType != SYNCH_TYPE_OVERWRITE_REMOTE) {
-            try {
-    	        String remoteXML = remotePort.synchronizationGetItemXML(new WSSynchronizationGetItemXML(
-    	        	remoteRevisionID,
-    	        	new WSItemPK(
-    	        		new WSDataClusterPK(
-    	        			itemPOJOPK.getDataClusterPOJOPK().getUniqueId()), 
-    	        			itemPOJOPK.getConceptName(), 
-    	        			itemPOJOPK.getIds()
-    	        		)
-    	        )).getValue();
-    	        remotePOJO = remoteXML == null ? null : ItemPOJO.parse(remoteXML);
-            } catch (RemoteException e) {
-    	        String err = "Plan '"+plan.getName()+"': unable to fetch remote item '"+itemPOJOPK.getUniqueID()+"' " +
-    	        		"of revision '"+remoteRevisionID+"' from system '"+plan.getRemoteSystemName()+"'";
-    	        org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);
-    			throw new XtentisException(e);
-            }
-//		}
+        try {
+	        String remoteXML = remotePort.synchronizationGetItemXML(new WSSynchronizationGetItemXML(
+	        	remoteRevisionID,
+	        	new WSItemPK(
+	        		new WSDataClusterPK(remoteDataClusterPOJOPK.getUniqueId()), 
+	        			itemPOJOPK.getConceptName(), 
+	        			itemPOJOPK.getIds()
+	        		)
+	        )).getValue();
+	        remotePOJO = remoteXML == null ? null : ItemPOJO.parse(remoteXML);
+        } catch (RemoteException e) {
+	        String err = "Plan '"+plan.getName()+"': unable to fetch remote item '"+itemPOJOPK.getUniqueID()+"' " +
+	        		"of revision '"+remoteRevisionID+"' from system '"+plan.getRemoteSystemName()+"'";
+	        org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);
+			throw new XtentisException(e);
+        }
 		
-        //if this is not an overwrite of the local system, load the xml of the local system
         ItemPOJO localPOJO = null;
-//        if (synchType != SYNCH_TYPE_OVERWRITE_LOCAL) {
-        	String localXML = planCtrl.synchronizationGetMarshaledItem(localRevisionID, itemPOJOPK);
-        	localPOJO = localXML == null ? null : ItemPOJO.parse(localXML);
-//        }
+    	String localXML = planCtrl.synchronizationGetMarshaledItem(
+    		localRevisionID, 
+    		itemPOJOPK
+    	);
+    	localPOJO = localXML == null ? null : ItemPOJO.parse(localXML);
     	
 		//Check if we have an existing Synchronization for this object
 		SynchronizationItemPOJO synchro = synchroItemCtrl.existsSynchronizationItem(
@@ -1702,10 +1708,12 @@ public class SynchronizationPlanCtrlBean implements SessionBean, TimedObject{
     	        
     	        //write the xml remotely - in case this fails, the synchro will remain as RESOLVED 
     	        try {
+    	        	ItemPOJO remoteWinner = winner;
+    	        	remoteWinner.setDataClusterPK(remoteDataClusterPOJOPK);
     	            remotePort.synchronizationPutItemXML(
-    	            	new WSSynchronizationPutItemXML(remoteRevisionID, winner.serialize())
+    	            	new WSSynchronizationPutItemXML(remoteRevisionID, remoteWinner.serialize())
     	            );
-    	            remoteInstance.setXml(winner.getProjectionAsString());
+    	            remoteInstance.setXml(remoteWinner.getProjectionAsString());
                 } catch (Exception e) {
                 	String err = "Plan '"+plan.getName()+"': unable to fully synchronize remote item '"+itemPOJOPK.getUniqueID()+"' " +
     					"of revision '"+remoteRevisionID+"' from system '"+plan.getRemoteSystemName()+"' " +
@@ -1716,7 +1724,9 @@ public class SynchronizationPlanCtrlBean implements SessionBean, TimedObject{
                 }
                 
     	        //write the XML locally
-    	        planCtrl.synchronizationPutMarshaledItem(localRevisionID, winner.serialize());
+                ItemPOJO localWinner = winner;
+                localWinner.setDataClusterPK(itemPOJOPK.getDataClusterPOJOPK());
+    	        planCtrl.synchronizationPutMarshaledItem(localRevisionID, localWinner.serialize());
 	        }
 	        
 	        
