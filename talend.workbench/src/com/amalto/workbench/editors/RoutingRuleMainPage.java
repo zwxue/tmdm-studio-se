@@ -42,22 +42,28 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.amalto.workbench.dialogs.PluginDetailsDialog;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.Version;
+import com.amalto.workbench.webservices.WSGetRoutingRule;
 import com.amalto.workbench.webservices.WSGetServicesList;
 import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRuleExpression;
 import com.amalto.workbench.webservices.WSRoutingRuleOperator;
+import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSServicesList;
 import com.amalto.workbench.webservices.WSServicesListItem;
+import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.XpathWidget;
 
 public class RoutingRuleMainPage extends AMainPageV2 {
@@ -71,7 +77,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 	protected XpathWidget xpathWidget;
 	protected Combo operatorCombo;
 	protected Text rightValueText; 
-	
+	protected Button defultParameterBtn;
 	protected DropTarget windowTarget;
 	
 	protected boolean refreshing = false;
@@ -79,6 +85,8 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 	
 	protected	TreeParent treeParent;
 	protected boolean version_greater_than_2_17_0 = false;
+	
+	private static String ROUTE_SERVICE = "amalto/local/service/";
 	
     public RoutingRuleMainPage(FormEditor editor) {
         super(
@@ -153,7 +161,11 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             serviceNameLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
             );
-            serviceNameCombo = new Combo(charComposite, SWT.DROP_DOWN|SWT.SINGLE);
+            
+            Composite subPanel = toolkit.createComposite(charComposite);
+            subPanel.setLayoutData( new GridData(SWT.LEFT,SWT.CENTER,false,true,1,1));
+            subPanel.setLayout(new GridLayout(2,false));
+            serviceNameCombo = new Combo(subPanel, SWT.DROP_DOWN|SWT.SINGLE);
             serviceNameCombo.setLayoutData(
                     new GridData(SWT.LEFT,SWT.CENTER,false,true,1,1)
             );
@@ -179,6 +191,44 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 	            }
             }
 
+            //default parameters button 
+            defultParameterBtn = toolkit.createButton(subPanel, "Default parameters", SWT.PUSH);
+            defultParameterBtn.setLayoutData( new GridData(SWT.FILL,SWT.FILL,false,true,1,1));
+            defultParameterBtn.addSelectionListener(new SelectionListener() {
+            	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
+            	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+            		String value = "";
+            		WSRoutingRule wsObject = (WSRoutingRule) (getXObject().getWsObject());
+            		try {
+						XtentisPort port=Util.getPort(getXObject());
+						WSRoutingRule wsStr = port
+								.getRoutingRule(new WSGetRoutingRule((WSRoutingRulePK)getXObject().getWsKey()));
+	        			value = wsStr.getParameters();
+					} catch (Exception e1) {
+						value = "<configuration/>";
+					}
+					finally
+					{
+						showUpDialog(value);
+					}
+            	};
+            	
+            	private void showUpDialog(String value)
+            	{
+        			final PluginDetailsDialog dialog = new PluginDetailsDialog(
+        					getSite().getShell(),
+        					"Default Parameters",
+        					value,
+        					null
+        			);
+        			dialog.addListener(new Listener() {
+        				public void handleEvent(Event event) {dialog.close();}
+        			});
+        			
+        			dialog.setBlockOnOpen(true);
+        			dialog.open();
+            	}
+            });
             /*
             serviceNameText = toolkit.createText(charComposite, "",SWT.BORDER|SWT.SINGLE);
             serviceNameText.setLayoutData(    
@@ -246,7 +296,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             //add button
             Button addButton = toolkit.createButton(routingExpressionsComposite,"Add",SWT.PUSH | SWT.TRAIL);
             addButton.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+                    new GridData(SWT.LEFT,SWT.FILL,false,true,1,1)
             );
             addButton.addSelectionListener(new SelectionListener() {
             	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
@@ -296,7 +346,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             
             routingExpressionsViewer = new ListViewer(routingExpressionsComposite,SWT.BORDER);
             routingExpressionsViewer.getControl().setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,true,true,4,1)
+                    new GridData(SWT.FILL,SWT.FILL,true,true,5,1)
             );
             ((GridData)routingExpressionsViewer.getControl().getLayoutData()).minimumHeight = 100;
             routingExpressionsViewer.setContentProvider(new IStructuredContentProvider() {
