@@ -14,7 +14,7 @@
 
 	<property name="version.props" value="version.properties"/>
 		
-	<property name="jboss.dir" value="/opt/jboss"/>
+	<property name="jboss.dir" value="c:/opt/jboss"/>
 	<property name="jboss.instance.dir" value="${jboss.dir}/server/default"/>
 	<property name="jboss.deploy.dir" value="${jboss.instance.dir}/deploy"/>
 	<property name="jboss.lib.dir" value="${jboss.instance.dir}/lib"/>
@@ -117,9 +117,9 @@
 	
 	<target name="deploy">
 		<echo>Deploying ${ejbs}, ${war} and ${lib}</echo>
-		<!--
+		
 		<copy file="${lib}" tofile="${jboss.lib.dir}/${lib}"/>
-		--> 
+		 
 		<copy file="${ejbs}" tofile="${jboss.deploy.dir}/${ejbs}"/>
 		<copy file="${war}" tofile="${jboss.deploy.dir}/${war}"/>
     </target>
