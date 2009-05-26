@@ -204,8 +204,14 @@ public class ItemsBrowserDWR {
 	public TreeNode getRootNode(String concept, String language) throws RemoteException, Exception{
 		Configuration config = Configuration.getInstance();
 		String dataModelPK = config.getModel();
-		Map<String,XSElementDecl> map = CommonDWR.getConceptMap(dataModelPK);    	
-    	XSAnnotation xsa = map.get(concept).getAnnotation();    	
+		Map<String,XSElementDecl> map = CommonDWR.getConceptMap(dataModelPK);
+		XSElementDecl decl = map.get(concept);
+		if (decl == null) {
+			String err = "Concept '"+concept+"' is not found in model '"+dataModelPK+"'";
+			org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
+			throw new RemoteException(err);
+		}
+    	XSAnnotation xsa = decl.getAnnotation();    	
     	TreeNode rootNode = new TreeNode();
 		ArrayList<String> roles = Util.getAjaxSubject().getRoles();
     	rootNode.fetchAnnotations(xsa,roles, language);
