@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.regex.Pattern;
@@ -2162,12 +2163,10 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
 	public WSServicesList getServicesList(WSGetServicesList wsGetServicesList) throws RemoteException {
 		try {
 			ArrayList<WSServicesListItem> wsList = new ArrayList<WSServicesListItem>();
-			InitialContext ctx = new InitialContext();
-			NamingEnumeration<NameClassPair> list = ctx.list("amalto/local/service");
-			while (list.hasMore()) {
-			    NameClassPair nc = list.next();
+			List<String > jndiList= Util.getRuntimeServiceJndiList();
+			for(String jndi: jndiList){
 			    WSServicesListItem item =new WSServicesListItem();
-			    item.setJndiName(nc.getName());
+			    item.setJndiName(jndi);
 			    wsList.add(item);
 			}
 			return new WSServicesList(wsList.toArray(new WSServicesListItem[wsList.size()]));

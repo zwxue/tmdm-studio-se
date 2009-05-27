@@ -5,7 +5,7 @@ package com.amalto.core.objects.transformers.v2.ejb.local;
 
 /**
  * Local interface for TransformerPluginV2Ctrl.
- * @xdoclet-generated at 14-04-09
+ * @xdoclet-generated at 27-05-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
@@ -13,6 +13,11 @@ package com.amalto.core.objects.transformers.v2.ejb.local;
 public interface TransformerPluginV2CtrlLocal
    extends javax.ejb.EJBLocalObject
 {
+
+   public void setGlobalContext( com.amalto.core.objects.transformers.v2.util.TransformerGlobalContext gcontext ) ;
+
+   public com.amalto.core.objects.transformers.v2.util.TransformerGlobalContext getGlobalContext(  ) ;
+
    /**
     * Configuration received from outbound, typically a portlet The default implementation stores the configuration string "as is"
     * @throws XtentisException
