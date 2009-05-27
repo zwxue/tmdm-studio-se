@@ -560,6 +560,8 @@ public class TransformerV2CtrlBean implements SessionBean, TimedObject, Transfor
 	    		//fetch and initialize the plugin 
 		    	plugin = getPlugin(processStep.getPluginJNDI());
 		    	
+		    	//set global context to each plugin by aiming
+		    	plugin.setGlobalContext(globalContext);
 	        	//the plugin handle is the plugin number
 		    	plugin.init(
 					globalContext.getTransformerPluginContext(pluginNumber),

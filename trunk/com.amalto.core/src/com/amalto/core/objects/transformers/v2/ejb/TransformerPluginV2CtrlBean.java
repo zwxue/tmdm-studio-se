@@ -36,6 +36,7 @@ import com.amalto.core.objects.storedprocedure.ejb.local.StoredProcedureCtrlLoca
 import com.amalto.core.objects.storedprocedure.ejb.local.StoredProcedureCtrlLocalHome;
 import com.amalto.core.objects.transformers.v2.ejb.local.TransformerV2CtrlLocal;
 import com.amalto.core.objects.transformers.v2.ejb.local.TransformerV2CtrlLocalHome;
+import com.amalto.core.objects.transformers.v2.util.TransformerGlobalContext;
 import com.amalto.core.objects.transformers.v2.util.TransformerPluginContext;
 import com.amalto.core.objects.transformers.v2.util.TransformerPluginVariableDescriptor;
 import com.amalto.core.objects.view.ejb.local.ViewCtrlLocal;
@@ -64,8 +65,31 @@ import com.amalto.core.util.XtentisException;
  * 	unchecked = "true"
  */
 public abstract class TransformerPluginV2CtrlBean implements SessionBean {
-  
-    
+	
+	/**
+	 * add one global context shared among the plugins by aiming
+	 */
+	protected TransformerGlobalContext globalContext;
+	
+    /**
+     * 	   
+     * 
+     * @ejb.interface-method view-type = "both"
+     * @ejb.facade-method 
+     */
+	public void setGlobalContext(TransformerGlobalContext gcontext){
+		this.globalContext=gcontext;
+	}
+    /**
+     * 	   
+     * 
+     * @ejb.interface-method view-type = "both"
+     * @ejb.facade-method 
+     */	
+	public TransformerGlobalContext getGlobalContext(){
+		return globalContext;
+	}
+	
     /**
      * InboundPluginCtrlBean.java
      * Constructor
