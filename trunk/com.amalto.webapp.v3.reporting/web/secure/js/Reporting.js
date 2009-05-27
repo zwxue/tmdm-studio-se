@@ -563,7 +563,9 @@ amalto.reporting.Reporting = function () {
 	
 	function deleteReportingCB(){
 		DWRUtil.setValue('reportingInfo',"");
-		getReportingsName();
+		ReportingInterface.getReportingsName();
+		Ext.getCmp('reportingSelect').setValue('');
+		Ext.getCmp('reportingSelect').store.reload();
 	}
 	
 	
@@ -761,7 +763,9 @@ amalto.reporting.Reporting = function () {
 		else{		
 			var tabPanel = amalto.core.getTabPanel();
 			tabPanel.remove('newReportingDiv');
-			if(Ext.get('reporting')) getReportingsName();		
+			if(Ext.get('reporting')) ReportingInterface.getReportingsName();
+			Ext.getCmp('reportingSelect').setValue('');
+			Ext.getCmp('reportingSelect').store.reload();	
 		}			
 	}
 	
