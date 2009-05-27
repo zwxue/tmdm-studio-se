@@ -1,19 +1,27 @@
 package talend.core.transformer.plugin.v2.tiscall.ejb;
 
+import java.io.ByteArrayInputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
 import java.util.regex.Pattern;
 
 import javax.ejb.SessionBean;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import talend.core.transformer.plugin.v2.tiscall.CompiledParameters;
+import talend.core.transformer.plugin.v2.tiscall.ContextParam;
 import talend.core.transformer.plugin.v2.tiscall.webservices.Args;
+import talend.core.transformer.plugin.v2.tiscall.webservices.ArrayOfXsdString;
 import talend.core.transformer.plugin.v2.tiscall.webservices.WSxml;
 import talend.core.transformer.plugin.v2.tiscall.webservices.WSxmlService;
 
@@ -64,7 +72,7 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 	
     private transient boolean configurationLoaded = false;
     
-
+    CompiledParameters compiledParameters;
 
 	public TISCallTransformerPluginBean() {
 		super();
@@ -123,7 +131,7 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 		 HashMap<String, String> descriptions1 = new HashMap<String, String>();
 		 descriptions1.put("en", "The text to run the TISCall on");
 		 descriptor1.setDescriptions(descriptions1);
-		 descriptor1.setMandatory(true);
+		 descriptor1.setMandatory(false);
 		 descriptor1.setPossibleValuesRegex(null);
 		 inputDescriptors.add(descriptor1);
 		 
@@ -175,11 +183,12 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 			) throws XtentisException {
 		try {
 						
-			if (!configurationLoaded) loadConfiguration();
+			if (!configurationLoaded) 
+				loadConfiguration();
 			
-			CompiledParameters parameters = CompiledParameters.deserialize(compiledParameters);
+			CompiledParameters parameters = CompiledParameters.deserialize(compiledParameters);			
 			//context.put(PARAMETERS, parameters);
-	        
+	        this.compiledParameters=parameters;
 	        URL wsdlURL = SynchronizationPlanCtrlLocal.class.getResource("/META-INF/wsdl/tis.wsdl");
 			
 			WSxmlService service = new WSxmlService(wsdlURL, new QName("http://talend.org", "WSxmlService"));
@@ -215,8 +224,10 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
      */
 	public void execute(TransformerPluginContext context) throws XtentisException {
 		
+		
 		String contentType = (String)context.get(CONTENT_TYPE);
 		TypedContent textTC = (TypedContent)context.get(INPUT_TEXT);
+		
 		String tisVariableName = (String)context.get(TIS_VARIABLE_NAME);
 		
 		try {
@@ -224,18 +235,68 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 			//attempt to read charset and rebuild the input text string
 			String charset = Util.extractCharset(textTC.getContentType());
 			String text = new String(textTC.getContentBytes(),charset);
-
+			//if(text==null || text.length()==0) return;
 //			org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute() TIS CALL to '"+parameters.getUrl()+"' input \n"+text);
 
 			//revover the port
 			WSxml port = (WSxml) context.get(PORT);
-
-			//Build call parameters
-			String param = "--context_param "+tisVariableName+"="+text;
-			Args args = new Args();			
-			args.getItem().add(param);
-			String result = port.runJob(args).getItem().get(0).getItem().get(0);
 			
+			//the text should be a map(key=value)
+			Properties p=new Properties();
+			//p.load(new ByteArrayInputStream(text.getBytes()));	
+			if(compiledParameters.getTisContext()!=null){
+				for(ContextParam kv:compiledParameters.getTisContext()){
+					String value=kv.getValue();
+					//if piplevariablename ,get from globalcontext
+					if(kv.isPipleVariableName()){
+						 textTC=getGlobalContext().getFromPipeline(kv.getValue());
+						 charset = Util.extractCharset(textTC.getContentType());
+						 if(textTC!=null)
+							 value = new String(textTC.getContentBytes(),charset);
+						 else
+							 value="";
+					}
+					p.setProperty(kv.getName(), value);					
+				}
+			}
+			
+			Args args = new Args();	
+			Iterator it=p.keySet().iterator();
+			while(it.hasNext()){
+				String key=(String)it.next();
+				String value=p.getProperty(key);
+				String param = "--context_param "+key+"="+value;
+				args.getItem().add(param);
+			}
+			
+			//Build call parameters
+			
+//			Args args = new Args();			
+//			args.getItem().add(param);
+			List<ArrayOfXsdString> list=port.runJob(args).getItem();
+			String result="";
+			StringBuffer sb=new StringBuffer();
+			if(list.size()>0){
+				sb=sb.append("<results>\n");
+				for(int i=0; i<list.size(); i++){
+					List<String> results=list.get(i).getItem();
+					sb=sb.append("<item>\n");				
+					for(int j=0; j<results.size(); j++){
+						String str=results.get(j);
+						if(str!=null)
+						{
+							sb=sb.append("<attr name=\"" + str + "\"/>" +"\n");
+						}
+					}			
+					
+					sb=sb.append("</item>\n");
+				}
+				sb=sb.append("</results>" +"\n");
+			}else{ //exception
+				
+			}
+			//String result = port.runJob(args).getItem().get(0).getItem().get(0);
+			result=sb.toString();
 			org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute() TIS CALL  result \n"+result);
 			//save result to context
 			if (result != null) { 
@@ -300,7 +361,10 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 		"\n" +
 		"Parameters\n" +
 		"	url [mandatory]: the webservice port URL to the TIS Server"+"\n"+
-		"	tisVariableName [mandatory]: the name of the input variable on the TIS Server"+"\n"+
+		"	contextParam the contextParam of the tis job"+"\n"+
+		"		name the name of the context param"+"\n"+
+		"		value the value of context param"+"\n"+
+		"		isPipleVariableName[[optional]] true to set contextParam value as one piplevariableName"+"\n"+
 		"	username [optional]: the username to use for the call"+"\n"+
 		"	password [optional]: the password to  use for the call" +"\n"+
 		"	contentType [optional]: the contentType of the returned data. Defaults to 'text/xml'" +"\n"+
@@ -309,7 +373,15 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 		"Example" +"\n"+
 		"	<configuration>" +"\n"+
 		"		<url>http://server:port/TISService/TISPort</url>" +"\n"+
-		"		<tisVariableName>xmlInput</tisVariableName>" +"\n"+		
+		"		<contextParam>" +"\n"+	
+		"			<name>firstname</name>" +"\n"+
+		"			<value>john</value>" +"\n"+
+		"		</contextParam>" +"\n"+
+		"		<contextParam>" +"\n"+	
+		"			<name>lastname</name>" +"\n"+
+		"			<value>pipleVariableName</value>" +"\n"+
+		"			<isPipleVariableName>true</isPipleVariableName>" +"\n"+
+		"		</contextParam>" +"\n"+		
 		"		<username>john</username>" +"\n"+
 		"		<password>doe</password>" +"\n"+
 		"	</configuration>"+"\n"+
@@ -393,13 +465,31 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
     		compiled.setUrl(url);
     		
     		String tisVariableName = Util.getFirstTextNode(params, "tisVariableName");
-    		if (tisVariableName==null) {
-    			String err = "The TIS variable name parameter of the TIS Call Transformer Plugin cannot be empty";
-    			org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
-    			throw new XtentisException(err);
-    		}
+//    		if (tisVariableName==null) {
+//    			String err = "The TIS variable name parameter of the TIS Call Transformer Plugin cannot be empty";
+//    			org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
+//    			throw new XtentisException(err);
+//    		}
     		compiled.setTisVariableName(tisVariableName);
-    		
+			Document parametersDoc = Util.parse(parameters);
+			List<ContextParam> paramsList=new ArrayList<ContextParam>();
+			NodeList paramList = Util.getNodeList(parametersDoc.getDocumentElement(), "//contextParam");
+			for (int i=0; i<paramList.getLength(); i++) {
+				String paramName = Util.getFirstTextNode(paramList.item(i), "name");
+				String paramValue = Util.getFirstTextNode(paramList.item(i), "value");
+				String isPipleVariableName = Util.getFirstTextNode(paramList.item(i), "isPipleVariableName");
+				if (paramValue == null)
+					paramValue = "";
+				
+				if (paramName!=null) {
+					boolean ispiple=false;
+					if(isPipleVariableName!=null){
+						ispiple=Boolean.valueOf(isPipleVariableName).booleanValue();
+					}
+					paramsList.add(new ContextParam(paramName,paramValue,ispiple));
+				}
+			}
+			compiled.setTisContext(paramsList);
     		//content Type - defaults to "text/plain; charset=utf-8"
     		String contentType = Util.getFirstTextNode(params, "contentType");
     		if (contentType == null) contentType = "text/xml; charset=utf-8";
@@ -411,8 +501,7 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 
     		//password - defaults to null
     		String password = Util.getFirstTextNode(params, "password");
-    		compiled.setPassword(password);
-
+    		compiled.setPassword(password);    		
     		return compiled.serialize();
     	} catch (XtentisException e) {
     		throw(e);
