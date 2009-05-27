@@ -13,7 +13,7 @@ package com.amalto.core.objects.transformers.v2.util;
 public interface TransformerPluginV2LocalInterface
 //   extends javax.ejb.EJBLocalObject
 {
-
+   public void setGlobalContext(TransformerGlobalContext gcontext);
    public java.lang.String getJNDIName(  ) throws com.amalto.core.util.XtentisException;
 
    public java.lang.String getDescription( java.lang.String twoLetterLanguageCode ) throws com.amalto.core.util.XtentisException;
