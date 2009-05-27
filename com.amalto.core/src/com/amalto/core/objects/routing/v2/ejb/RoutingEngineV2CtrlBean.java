@@ -619,7 +619,7 @@ public class RoutingEngineV2CtrlBean implements SessionBean, TimedObject {
 			return;
 		}
 		
-		List<String> serviceJndiList = getRuntimeServiceJndiList();
+		List<String> serviceJndiList = Util.getRuntimeServiceJndiList();
 		//slot new routing orders and execute them
 		int tokenIndex =0;
 		for (int i = 0; i < routingOrders.length && tokenIndex < availableTokens.size(); i++) {
@@ -674,23 +674,6 @@ public class RoutingEngineV2CtrlBean implements SessionBean, TimedObject {
 		
 	}
 
-	private List<String> getRuntimeServiceJndiList() {
-		List<String> serviceJndiList = new ArrayList<String>();
-		String serviceJndiPrefix="amalto/local/service";
-		try {
-		InitialContext ctx = new InitialContext();
-		NamingEnumeration<NameClassPair> list = ctx.list(serviceJndiPrefix);
-			while (list.hasMore()) {
-			    NameClassPair nc;
-				
-				nc = list.next();
-				
-			    serviceJndiList.add(serviceJndiPrefix+"/"+nc.getName());
-			}
-		} catch (NamingException e) {
-			e.printStackTrace();
-		}
-		return serviceJndiList;
-	}  
+ 
       
 }
