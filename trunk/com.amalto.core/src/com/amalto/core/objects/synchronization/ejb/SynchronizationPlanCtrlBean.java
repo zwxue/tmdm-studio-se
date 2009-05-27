@@ -712,7 +712,7 @@ public class SynchronizationPlanCtrlBean implements SessionBean, TimedObject{
     	    org.apache.log4j.Logger.getLogger(this.getClass()).error(err, e);
     	    throw new XtentisException(err);
 	    }
-    	
+    	 
     }
     
     private void executeFullSynchronization(String revisionID, SynchronizationPlanPOJO plan) throws XtentisException {
