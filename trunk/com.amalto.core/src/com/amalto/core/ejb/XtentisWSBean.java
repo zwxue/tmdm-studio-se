@@ -2164,9 +2164,10 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
 		try {
 			ArrayList<WSServicesListItem> wsList = new ArrayList<WSServicesListItem>();
 			List<String > jndiList= Util.getRuntimeServiceJndiList();
+			String serviceJndiPrefix="amalto/local/service/";
 			for(String jndi: jndiList){
 			    WSServicesListItem item =new WSServicesListItem();
-			    item.setJndiName(jndi);
+			    item.setJndiName(jndi.replaceAll(serviceJndiPrefix, ""));
 			    wsList.add(item);
 			}
 			return new WSServicesList(wsList.toArray(new WSServicesListItem[wsList.size()]));
