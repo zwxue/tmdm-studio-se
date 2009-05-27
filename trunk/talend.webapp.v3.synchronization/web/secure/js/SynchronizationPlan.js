@@ -1,3 +1,8 @@
+/*
+ * @include  "/com.amalto.webapp.core/web/secure/ext.ux/DWRProxy.js"
+ * @include  "/com.amalto.webapp.core/web/secure/js/core.js"
+ */
+ 
 amalto.namespace("amalto.SynchronizationPlan");
 
 amalto.SynchronizationPlan.SynchronizationPlan=function(){
