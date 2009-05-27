@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeMap;
 
+import com.amalto.webapp.util.webservices.WSBoolean;
+import com.amalto.webapp.util.webservices.WSExistsMenu;
 import com.amalto.webapp.util.webservices.WSGetMenu;
 import com.amalto.webapp.util.webservices.WSGetRole;
 import com.amalto.webapp.util.webservices.WSMenu;
@@ -213,17 +215,23 @@ public class Menu {
 	private static void addMenuEntries(HashMap<String, Menu> index,WSRoleSpecificationInstance instance) throws XtentisWebappException{
 		org.apache.log4j.Logger.getLogger(Menu.class).debug("addMenuEntries() "+instance.getInstanceName());
 		try {		
-			RoleMenuParameters params = RoleMenuParameters.unmarshalMenuParameters(instance.getParameter()[0]);
-			WSMenu wsMenu = Util.getPort().getMenu(new WSGetMenu(new WSMenuPK(instance.getInstanceName())));
-			WSMenuEntry[] wsEntries = wsMenu.getMenuEntries();
-			if (wsEntries!=null) {
-				for (int i = 0; i < wsEntries.length; i++) {
-					index.put(
-							wsEntries[i].getId(),
-							wsMenu2Menu(index, wsEntries[i],null,params.getParentID(),params.getPosition())
-					);
+			//check menu exist 
+			WSBoolean menuExist=Util.getPort().existsMenu(new WSExistsMenu(new WSMenuPK(instance.getInstanceName())));			
+			if(menuExist.is_true()){
+				RoleMenuParameters params = RoleMenuParameters.unmarshalMenuParameters(instance.getParameter()[0]);
+				WSMenu wsMenu = Util.getPort().getMenu(new WSGetMenu(new WSMenuPK(instance.getInstanceName())));
+				WSMenuEntry[] wsEntries = wsMenu.getMenuEntries();
+				if (wsEntries!=null) {
+					for (int i = 0; i < wsEntries.length; i++) {
+						index.put(
+								wsEntries[i].getId(),
+								wsMenu2Menu(index, wsEntries[i],null,params.getParentID(),params.getPosition())
+						);
+					}
 				}
 			}
+		} catch (XtentisWebappException e) {
+			throw(e);
 		} catch (Exception e) {
 			String err;
 			try {
@@ -233,6 +241,7 @@ public class Menu {
 				err="Unable to get user when adding the menu entries "+
 					": "+ex.getClass().getName()+": "+ex.getLocalizedMessage();
 			}
+			throw new XtentisWebappException(err);
 		}
 	}
 	
