@@ -17,6 +17,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,6 +27,8 @@ import javax.ejb.EJBException;
 import javax.ejb.EJBLocalHome;
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.naming.NameClassPair;
+import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.resource.cci.Connection;
 import javax.resource.cci.ConnectionFactory;
@@ -108,7 +111,27 @@ public final class Util {
 	 */
 	public final static boolean USE_HOME_CACHES = "true".equals(System.getProperty("com.amalto.use.home.caches"));
 	
-
+	/**
+	 * helper class
+	 */
+	public static List<String> getRuntimeServiceJndiList() {
+		List<String> serviceJndiList = new ArrayList<String>();
+		String serviceJndiPrefix="amalto/local/service";
+		try {
+		InitialContext ctx = new InitialContext();
+		NamingEnumeration<NameClassPair> list = ctx.list(serviceJndiPrefix);
+			while (list.hasMore()) {
+			    NameClassPair nc;
+				
+				nc = list.next();
+				
+			    serviceJndiList.add(serviceJndiPrefix+"/"+nc.getName());
+			}
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
+		return serviceJndiList;
+	}
 	/*********************************************************************
 	 *     Xml server Access Stuff
 	 *********************************************************************/
