@@ -1,18 +1,43 @@
 package talend.core.transformer.plugin.v2.tiscall;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+
+import org.apache.commons.lang.StringEscapeUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import com.amalto.core.util.Util;
+import com.amalto.core.util.XtentisException;
 
 public class CompiledParameters implements Serializable {
 	String url;
+	List<ContextParam> tisContext;
 	String tisVariableName;
+	
+	public List<ContextParam> getTisContext() {
+		return tisContext;
+	}
+
+	public void setTisContext(List<ContextParam> tisContext) {
+		this.tisContext = tisContext;
+	}
+
+	public String getTisVariableName() {
+		return tisVariableName;
+	}
+
+	public void setTisVariableName(String tisVariableName) {
+		this.tisVariableName = tisVariableName;
+	}
+
 	String username;
 	String password;
 	String contentType = "text/xml; charset=utf-8";
@@ -28,13 +53,6 @@ public class CompiledParameters implements Serializable {
     	this.url = url;
     }
 	
-	public String getTisVariableName() {
-    	return tisVariableName;
-    }
-
-	public void setTisVariableName(String tisVariableName) {
-    	this.tisVariableName = tisVariableName;
-    }
 
 	public String getUsername() {
     	return username;
@@ -61,17 +79,79 @@ public class CompiledParameters implements Serializable {
     }
 
 	public String serialize() throws IOException{
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		ObjectOutputStream ois = new ObjectOutputStream(bos);
-		ois.writeObject(this);
-		return new BASE64Encoder().encode(bos.toByteArray());
+		String xml="<configuration>";
+		xml+="<url>"+StringEscapeUtils.escapeXml(url)+"</url>";
+		xml+="<username>"+username+"</username>";
+		xml+="<password>"+password+"</password>";
+		xml+="<tisVariableName>"+tisVariableName+"</tisVariableName>";		
+		for(ContextParam kv: tisContext){
+			xml+="<contextParam>";
+			xml+="<name>"+kv.getName()+"</name>";
+			xml+="<value>"+kv.getValue()+"</value>";
+			xml+="<isPipleVariableName>"+kv.isPipleVariableName+"</isPipleVariableName>";
+			xml+="</contextParam>";
+		}
+		xml+="</configuration>";
+		return xml;
 	}
 	
-	public static CompiledParameters deserialize(String base64String) throws IOException,ClassNotFoundException{
-		byte[] bytes = new BASE64Decoder().decodeBuffer(base64String); 
-		ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-		ObjectInputStream ois = new ObjectInputStream(bis);
-		return (CompiledParameters)ois.readObject();
+	public static CompiledParameters deserialize(String xml) 
+		throws IOException,						
+						XtentisException,
+						ParserConfigurationException,
+						SAXException, TransformerException
+	{
+		CompiledParameters compiled = new CompiledParameters();
+		Element params = Util.parse(xml).getDocumentElement();
+		
+		//TISCall - mandatory
+		String url = Util.getFirstTextNode(params, "url");
+		if (url==null) {
+			String err = "The url parameter of the TIS Call Transformer Plugin cannot be empty";			
+			throw new XtentisException(err);
+		}
+		compiled.setUrl(url);
+		
+		String tisVariableName = Util.getFirstTextNode(params, "tisVariableName");
+//		if (tisVariableName==null) {
+//			String err = "The TIS variable name parameter of the TIS Call Transformer Plugin cannot be empty";
+//			throw new XtentisException(err);
+//		}
+		compiled.setTisVariableName(tisVariableName);
+		
+		Document parametersDoc = Util.parse(xml);
+		List<ContextParam> paramsList=new ArrayList<ContextParam>();
+		NodeList paramList = Util.getNodeList(parametersDoc.getDocumentElement(), "//contextParam");
+		for (int i=0; i<paramList.getLength(); i++) {
+			String paramName = Util.getFirstTextNode(paramList.item(i), "name");
+			String paramValue = Util.getFirstTextNode(paramList.item(i), "value");
+			String isPipleVariableName = Util.getFirstTextNode(paramList.item(i), "isPipleVariableName");
+			if (paramValue == null)
+				paramValue = "";
+			
+			if (paramName!=null) {
+				boolean ispiple=false;
+				if(isPipleVariableName!=null){
+					ispiple=Boolean.valueOf(isPipleVariableName).booleanValue();
+				}
+				paramsList.add(new ContextParam(paramName,paramValue,ispiple));
+			}
+		}
+		compiled.setTisContext(paramsList);
+		//content Type - defaults to "text/plain; charset=utf-8"
+		String contentType = Util.getFirstTextNode(params, "contentType");
+		if (contentType == null) contentType = "text/xml; charset=utf-8";
+		compiled.setContentType(contentType);
+
+		//username - defaults to null
+		String username = Util.getFirstTextNode(params, "username");
+		compiled.setUsername(username);
+
+		//password - defaults to null
+		String password = Util.getFirstTextNode(params, "password");
+		compiled.setPassword(password);
+	
+		return compiled;
 	}
 	
 }

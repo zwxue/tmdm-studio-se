@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="DumpToConsoleService - xdoclet generate" default="xdoclet-generation" basedir=".">
+	<property name="jwsdp.home" value="C:/opt/jwsdp-1.5"/>
+	<property name="jboss.dir" value="c:/opt/jboss"/>
 	
-	<property name="xdoclet.root.dir" value="/opt/xdoclet-1.2.3.patched"/>
+	<property name="xdoclet.root.dir" value="c:/opt/xdoclet-1.2.3.patched"/>
     <property file="${xdoclet.root.dir}/build.properties"/>
 	<property name="xdoclet.lib.dir" value = "${xdoclet.root.dir}/lib"/>
 	<property name="dist.lib.dir" value = "${xdoclet.lib.dir}"/>
@@ -24,13 +26,13 @@
         <fileset dir="${xdoclet.lib.dir}">
             <include name="*.jar"/>
         </fileset>	
-        <fileset dir="/opt/jboss/server/default/lib">
+        <fileset dir="${jboss.dir}/server/default/lib">
             <include name="*.jar"/>
         </fileset>
-        <fileset dir="/opt/jboss/lib">
+        <fileset dir="${jboss.dir}/lib">
             <include name="*.jar"/>
         </fileset>
-    	<fileset dir="/opt/jwsdp-1.5/jaxp/lib">
+    	<fileset dir="${jwsdp.home}/jaxp/lib">
     		<include name="**/*.jar"/>
     	</fileset>
     </path>
