@@ -5,7 +5,7 @@ package com.amalto.core.objects.versioning.ejb.local;
 
 /**
  * Local home interface for VersioningServiceCtrl.
- * @xdoclet-generated at 14-04-09
+ * @xdoclet-generated at 27-05-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}

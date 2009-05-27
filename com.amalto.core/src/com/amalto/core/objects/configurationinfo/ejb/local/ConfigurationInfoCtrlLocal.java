@@ -5,7 +5,7 @@ package com.amalto.core.objects.configurationinfo.ejb.local;
 
 /**
  * Local interface for ConfigurationInfoCtrl.
- * @xdoclet-generated at 14-04-09
+ * @xdoclet-generated at 27-05-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
