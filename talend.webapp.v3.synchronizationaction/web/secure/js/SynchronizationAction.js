@@ -38,12 +38,14 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 		if(syncinfo){
 			
 			SynchronizationActionInterface.getSyncNames(syncinfo,function(syncs){
-				var syncnames=syncs;
-				var tmp=[SELECT_SYNCHRONIZATION];
-				DWRUtil.removeAllOptions("syncName");
-				DWRUtil.addOptions("syncName",tmp);
-				if(!syncnames)return;
-				DWRUtil.addOptions("syncName",syncnames);	
+				if(syncs){
+					var syncnames=syncs;
+					var tmp=[SELECT_SYNCHRONIZATION];
+					DWRUtil.removeAllOptions("syncName");
+					DWRUtil.addOptions("syncName",tmp);
+					if(!syncnames)return;
+					DWRUtil.addOptions("syncName",syncnames);
+				}
 			});		
 		}
 	};
