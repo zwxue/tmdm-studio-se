@@ -23,6 +23,8 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
+import com.amalto.workbench.utils.FontUtils;
+
 public class PluginDetailsDialog extends Dialog {
 
 	protected TabFolder tabFolder;
@@ -63,7 +65,7 @@ public class PluginDetailsDialog extends Dialog {
 			composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 			applyDialogFont(composite);
 			
-			tabFolder = new TabFolder(composite,SWT.TOP | SWT.H_SCROLL | SWT.V_SCROLL);
+			tabFolder = new TabFolder(composite,SWT.TOP);
 			tabFolder.setLayoutData(    
                     new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
             );
@@ -77,7 +79,7 @@ public class PluginDetailsDialog extends Dialog {
 			descriptionTI.setToolTipText("Display the plugin description and documentation");
 
 						
-			Composite descriptionC = new Composite(tabFolder,SWT.NULL|SWT.H_SCROLL|SWT.V_SCROLL);
+			Composite descriptionC = new Composite(tabFolder,SWT.NULL);
 			descriptionC.setLayout(new GridLayout(1,true));
 			descriptionC.setLayoutData(    
                     new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
@@ -104,14 +106,12 @@ public class PluginDetailsDialog extends Dialog {
             documentationLabel.setLayoutData(
                     new GridData(SWT.LEFT,SWT.CENTER,false,false,1,1)
             );
-            FontData fd = documentationLabel.getFont().getFontData()[0];
-            fd.setStyle(SWT.BOLD);
-            documentationLabel.setFont(new Font(Display.getDefault(),fd));
+            documentationLabel.setFont(FontUtils.getBoldFont(documentationLabel.getFont()));
             documentationLabel.setText("Documentation");
 
-            Text docValue = new Text(descriptionC, SWT.WRAP | SWT.READ_ONLY);
+            Text docValue = new Text(descriptionC, SWT.WRAP | SWT.READ_ONLY|SWT.V_SCROLL);
             docValue.setLayoutData(
-                    new GridData(SWT.FILL,SWT.TOP,true,true,1,1)
+                    new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
             );
             docValue.setBackground(documentationLabel.getBackground());
             docValue.setText(documentation);
