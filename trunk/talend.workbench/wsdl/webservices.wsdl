@@ -459,7 +459,12 @@
 		<part name="wsServicesList" element="tns:WSServicesList"/>
 	</message>
 
-	
+	<message name="getServiceDocumentRequest">
+		<part name="serviceName" element="tns:WSString"/>
+	</message>
+	<message name="getServiceDocumentResponse">
+		<part name="result" element="tns:WSServiceGetDocument"/>
+	</message>	
 	<!-- ************************ Stored Procedure  *************************** -->
 	
 	<message name="getStoredProcedurePKsRequest">
@@ -1349,7 +1354,10 @@
 			<input message="tns:getServicesListRequest"/>
 			<output message="tns:getServicesListResponse"/>
 		</operation>		
-		
+		<operation name="getServiceDocument">
+			<input message="tns:getServiceDocumentRequest"/>
+			<output message="tns:getServiceDocumentResponse"/>
+		</operation>			
 		<!-- ********************* STORED PROCEDURE  ************************ -->
 		
 		<operation name="getStoredProcedure">
@@ -2085,7 +2093,11 @@
 			<input><soap:body use="literal"/></input>
 			<output><soap:body use="literal"/></output>
 		</operation>
-		
+		<operation name="getServiceDocument">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>		
 		<!-- ********************* STORED PROCEDURES  ************************ -->
 		
 		<operation name="getStoredProcedure">

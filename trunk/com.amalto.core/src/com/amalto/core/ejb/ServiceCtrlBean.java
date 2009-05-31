@@ -127,6 +127,15 @@ public abstract class ServiceCtrlBean implements SessionBean {
 
 
     /**
+     * @author achen
+     * @throws XtentisException
+     * @ejb.interface-method view-type = "both"
+     * @ejb.facade-method 
+     */
+    public  String getDocumentation(String twoLettersLanguageCode) throws XtentisException{
+    	return "";
+    }
+    /**
      * To be Implemented.
      * Starts if needed the service
      * Can be null
