@@ -73,6 +73,22 @@ public class DeleteXObjectAction extends Action{
 				else
 					s="Instance";
 				
+				boolean isDefault = false;
+				for (Iterator<TreeObject> iter = selection.iterator(); iter.hasNext(); ) {
+					TreeObject xobject = iter.next();
+					if (!xobject.isXObject()) return;
+					if(ESystemDefaultObjects.isExist(xobject.getType(), xobject.getDisplayName())){
+						isDefault=true;
+						
+					}
+				}
+				if(isDefault){
+	            	MessageDialog.openError(
+	            			this.view.getSite().getShell(), 
+	            			"Delete "+IConstants.TALEND+" Object Instance",
+	            			"Can not delete the "+ selection.size() + " default " +s);
+	            	return;
+	            }
 				
 				
 				if (! MessageDialog.openConfirm(
@@ -86,13 +102,13 @@ public class DeleteXObjectAction extends Action{
 				TreeObject xobject = iter.next();
 				
 	            if (!xobject.isXObject()) return;
-	            if(ESystemDefaultObjects.isExist(xobject.getType(), xobject.getDisplayName())){
-	            	MessageDialog.openError(
-	            			this.view.getSite().getShell(), 
-	            			"Delete "+IConstants.TALEND+" Object Instance",
-	            			"Can not delelte this Instance!");
-	            	return;
-	            }
+//	            if(ESystemDefaultObjects.isExist(xobject.getType(), xobject.getDisplayName())){
+//	            	MessageDialog.openError(
+//	            			this.view.getSite().getShell(), 
+//	            			"Delete "+IConstants.TALEND+" Object Instance",
+//	            			"Can not delelte this Instance!");
+//	            	return;
+//	            }
 	            	
 	            		
 	            
