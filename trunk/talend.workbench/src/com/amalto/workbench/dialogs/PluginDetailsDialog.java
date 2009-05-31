@@ -77,7 +77,7 @@ public class PluginDetailsDialog extends Dialog {
 			descriptionTI.setToolTipText("Display the plugin description and documentation");
 
 						
-			Composite descriptionC = new Composite(tabFolder,SWT.NULL);
+			Composite descriptionC = new Composite(tabFolder,SWT.NULL|SWT.H_SCROLL|SWT.V_SCROLL);
 			descriptionC.setLayout(new GridLayout(1,true));
 			descriptionC.setLayoutData(    
                     new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
