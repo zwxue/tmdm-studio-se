@@ -377,7 +377,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 					else if (rre.getWsOperator().equals(WSRoutingRuleOperator.IS_NULL)) text+="Is Null";
 					else if (rre.getWsOperator().equals(WSRoutingRuleOperator.IS_NOT_NULL)) text+="Is Not Null";
 					text+=" ";
-					text+=rre.getValue();
+					text+="\"" + rre.getValue() + "\"";
 					return text;
 				}
 				public void addListener(ILabelProviderListener listener) {}
@@ -477,6 +477,10 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 	
 	
 	protected void addRoutingRuleExpression() {
+		if (xpathWidget.getText().trim().equals("")
+				|| rightValueText.getText().equals("")) {
+			return;
+		}
   		markDirty();
 		WSRoutingRuleExpression rre = new WSRoutingRuleExpression();
 		if(!"".equals(this.xpathWidget.getText())&&!this.xpathWidget.getText().equals(null))
