@@ -487,6 +487,10 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 	}
 	
 	protected void addWhereCondition() {
+		if (xpathWidget2.getText().trim().equals("")
+				|| rightText.getText().equals("")) {
+			return;
+		}
   		markDirty();
 		WSWhereCondition wc = new WSWhereCondition();
 //		wc.setLeftPath(ViewMainPage.this.leftText.getText());
@@ -519,6 +523,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 		wcList.add(wc);
 		wsObject.setWhereConditions(wcList.toArray(new WSWhereCondition[wcList.size()]));
 		ViewMainPage.this.wcListViewer.refresh();
+		rightText.setText("");
 	}
 	
 	//description text listener
