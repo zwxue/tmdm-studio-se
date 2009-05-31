@@ -4,6 +4,11 @@ amalto.namespace("amalto.SynchronizationAction");
 
 //contectid.applicaionid
 amalto.SynchronizationAction.SynchronizationAction = function() {
+	//declare application local
+    loadResource("/SynchronizationAction/secure/js/SynchronizationActionLocal.js", "amalto.SynchronizationAction.SynchronizationActionLocal" );
+    
+    loadResource("/SynchronizationAction/secure/css/SynchronizationAction.css", "" );
+    
 	var SELECT_SYNCHRONIZATION='Select a Synchronization Name';
 	
    
@@ -139,12 +144,12 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 			buttonAlign : 'left',
 			items : [ 
 			          new Ext.form.FieldSet( {
-				title : 'Remote system information',
+				title : amalto.SynchronizationAction.SynchronizationActionLocal.get('LABEL_SYSTEM_INFO_GROUP'),
 				autoHeight : true,
 				defaultType : 'textfield',
 				items : [ 
 						{
-							fieldLabel : 'Server URL',	
+							fieldLabel : amalto.SynchronizationAction.SynchronizationActionLocal.get('LABEL_SERVER_URL'),	
 						    store: store,
 						    displayField:'name',
 						    typeAhead: true,
@@ -157,13 +162,13 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 							width : 400
 						},
 						{
-					fieldLabel : 'UserName',
+					fieldLabel : amalto.SynchronizationAction.SynchronizationActionLocal.get('LABEL_USER_NAME'),
 					id : 'username',
 					selectOnFocus:true,
 					allowBlank:false,					
 					width : 400
 				}, {
-					fieldLabel : 'Password',
+					fieldLabel :  amalto.SynchronizationAction.SynchronizationActionLocal.get('LABEL_PASSWORD'),
 					id : 'password',
 					selectOnFocus:true,
 					allowBlank:false,
@@ -179,7 +184,7 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 			new Ext.Panel({
 					width : 400,
 					border:false,
-					html:'<div> Synchronization Name:    '+'<select id="syncName" ></select></div>' 
+					html:'<div> '+ amalto.SynchronizationAction.SynchronizationActionLocal.get('LABEL_SYNCHRONIZATION_NAME') + '    ' + '<select id="syncName" ></select></div>' 
 				}) 
 			
 			, {
@@ -193,7 +198,7 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 					{	
 						xtype:'button',
 						id:'startFullButton',
-						text : '<b>Start Full</b>',
+						text : '<b>' + amalto.SynchronizationAction.SynchronizationActionLocal.get('START_FULL_BUTTON') + '</b>',
 						handler : function() {
 							var syncInfo=getSyncInfo();
 							if(syncInfo){
@@ -201,11 +206,11 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 								SynchronizationActionInterface.startFull(refreshStatus(syncInfo),syncInfo);
 							}
 						},
-						tooltip : 'Start synchronization'
+						tooltip : amalto.SynchronizationAction.SynchronizationActionLocal.get('TOOLTIP_START_SYNCHRONIZATION')
 					},
 					{	xtype:'button',
 						id:'startDifferentButton',
-						text : '<b>Start Different</b>',
+						text : '<b>' + amalto.SynchronizationAction.SynchronizationActionLocal.get('START_DIFFERENT_BUTTON') + '</b>',
 						handler : function() {
 							var syncInfo=getSyncInfo();
 							if(syncInfo){
@@ -213,29 +218,29 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 								SynchronizationActionInterface.startDifferent(refreshStatus(syncInfo),syncInfo);
 							}
 						},
-						tooltip : 'Start Different synchronization'
+						tooltip : amalto.SynchronizationAction.SynchronizationActionLocal.get('TOOLTIP_START_DIFFERENCE_SYNCHRONIZATION')
 					},
 					{	xtype:'button',
 						id:'stopButton',
-						text : '<b>Stop</b>',
+						text : '<b>' + amalto.SynchronizationAction.SynchronizationActionLocal.get('STOP_BUTTON') + '</b>',
 						disabled:true,
 						handler : function() {
 							var syncInfo=getSyncInfo();
 							if(syncInfo)
 							SynchronizationActionInterface.stop(refreshStatus(syncInfo),syncInfo);
 						},
-						tooltip : 'Stop synchronization'
+						tooltip : amalto.SynchronizationAction.SynchronizationActionLocal.get('TOOLTIP_STOP_SYNCHRONIZATION')
 					},
 					{	xtype:'button',
 						id:'resetButton',
-						text : '<b>Reset</b>',
+						text : '<b>' + amalto.SynchronizationAction.SynchronizationActionLocal.get('RESET_BUTTON') + '</b>',
 						disabled:true,
 						handler : function() {
 							var syncInfo=getSyncInfo();
 							if(syncInfo)
 							SynchronizationActionInterface.reset(refreshStatus(syncInfo),syncInfo);
 						},
-						tooltip : 'Reset synchronization'
+						tooltip : amalto.SynchronizationAction.SynchronizationActionLocal.get('TOOLTIP_RESET_SYNCHRONIZATION')
 					}
 					],
 			listeners:{
@@ -252,7 +257,7 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
 			id:'synchronizationaction',
 			border : true,
 			closable:true,
-			title : 'Synchronization Action',
+			title : amalto.SynchronizationAction.SynchronizationActionLocal.get('MAIN_PANEL_TITLE'),
 			collapsible : true,
 			items : [ topPanel ]
 		});
@@ -275,6 +280,7 @@ amalto.SynchronizationAction.SynchronizationAction = function() {
     return {
     	//public 
         init : function(){
+    	amalto.SynchronizationAction.SynchronizationActionLocal.init();
     		showSync();		  
         }
     };
