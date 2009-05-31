@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Event;
 
 import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.ESystemDefaultObjects;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
@@ -72,6 +73,8 @@ public class DeleteXObjectAction extends Action{
 				else
 					s="Instance";
 				
+				
+				
 				if (! MessageDialog.openConfirm(
 	            		this.view.getSite().getShell(),
 	            		"Delete "+IConstants.TALEND+" Object Instance",
@@ -81,8 +84,17 @@ public class DeleteXObjectAction extends Action{
 			
 			for (Iterator<TreeObject> iter = selection.iterator(); iter.hasNext(); ) {
 				TreeObject xobject = iter.next();
-	            
+				
 	            if (!xobject.isXObject()) return;
+	            if(ESystemDefaultObjects.isExist(xobject.getType(), xobject.getDisplayName())){
+	            	MessageDialog.openError(
+	            			this.view.getSite().getShell(), 
+	            			"Delete "+IConstants.TALEND+" Object Instance",
+	            			"Can not delelte this Instance!");
+	            	return;
+	            }
+	            	
+	            		
 	            
 	            //ask for confimation
 	                        
