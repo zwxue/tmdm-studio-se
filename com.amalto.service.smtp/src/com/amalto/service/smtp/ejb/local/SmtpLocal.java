@@ -5,7 +5,7 @@ package com.amalto.service.smtp.ejb.local;
 
 /**
  * Local interface for Smtp.
- * @xdoclet-generated at 1-04-09
+ * @xdoclet-generated at 31-05-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
@@ -27,6 +27,8 @@ public interface SmtpLocal
    public java.io.Serializable receiveFromOutbound( java.util.HashMap map ) throws com.amalto.core.util.XtentisException;
 
    public java.lang.String receiveFromInbound( com.amalto.core.ejb.ItemPOJOPK itemPK,java.lang.String routingOrderID,java.lang.String parameters ) throws com.amalto.core.util.XtentisException;
+
+   public java.lang.String getDocumentation( java.lang.String twoLettersLanguageCode ) throws com.amalto.core.util.XtentisException;
 
    public java.lang.String getConfiguration( java.lang.String optionalParameters ) throws com.amalto.core.util.XtentisException;
 
