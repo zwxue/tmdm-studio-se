@@ -483,7 +483,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 		else
 			rre.setXpath("");
 		this.xpathWidget.setText("");
-		this.rightValueText.setText("");
+
 		WSRoutingRuleOperator operator=null;
 		if (RoutingRuleMainPage.this.operatorCombo.getText().equals("Contains")) operator = WSRoutingRuleOperator.CONTAINS;
 		else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("Matches")) operator = WSRoutingRuleOperator.MATCHES;
@@ -511,6 +511,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 		wcList.add(rre);
 		wsObject.setWsRoutingRuleExpressions(wcList.toArray(new WSRoutingRuleExpression[wcList.size()]));
 		RoutingRuleMainPage.this.routingExpressionsViewer.refresh();
+		this.rightValueText.setText("");
 	}
 
 		
