@@ -55,14 +55,14 @@ import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.Version;
-import com.amalto.workbench.webservices.WSGetRoutingRule;
 import com.amalto.workbench.webservices.WSGetServicesList;
 import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRuleExpression;
 import com.amalto.workbench.webservices.WSRoutingRuleOperator;
-import com.amalto.workbench.webservices.WSRoutingRulePK;
+import com.amalto.workbench.webservices.WSServiceGetDocument;
 import com.amalto.workbench.webservices.WSServicesList;
 import com.amalto.workbench.webservices.WSServicesListItem;
+import com.amalto.workbench.webservices.WSString;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.XpathWidget;
 
@@ -197,28 +197,29 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             defultParameterBtn.addSelectionListener(new SelectionListener() {
             	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
             	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-            		String value = "";
+            		String doc = "";
+            		String desc="";
             		WSRoutingRule wsObject = (WSRoutingRule) (getXObject().getWsObject());
             		try {
 						XtentisPort port=Util.getPort(getXObject());
-						WSRoutingRule wsStr = port
-								.getRoutingRule(new WSGetRoutingRule((WSRoutingRulePK)getXObject().getWsKey()));
-	        			value = wsStr.getParameters();
+						WSServiceGetDocument document= port.getServiceDocument(new WSString(serviceNameCombo.getText().trim()));
+						doc=document.getDocument();
+						desc=document.getDescription();
 					} catch (Exception e1) {
-						value = "<configuration/>";
+						doc = "There is no document for this service";
 					}
 					finally
 					{
-						showUpDialog(value);
+						showUpDialog(desc,doc);
 					}
             	};
             	
-            	private void showUpDialog(String value)
+            	private void showUpDialog(String desc,String doc)
             	{
         			final PluginDetailsDialog dialog = new PluginDetailsDialog(
         					getSite().getShell(),
-        					"Default Parameters",
-        					value,
+        					desc,
+        					doc,
         					null
         			);
         			dialog.addListener(new Listener() {

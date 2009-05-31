@@ -5,7 +5,7 @@ package com.amalto.service.smtp.ejb.local;
 
 /**
  * Session layer for Smtp.
- * @xdoclet-generated at 1-04-09
+ * @xdoclet-generated at 31-05-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}

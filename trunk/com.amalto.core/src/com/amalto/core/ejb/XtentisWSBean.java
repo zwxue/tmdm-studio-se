@@ -2048,6 +2048,53 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
 	/***************************************************************************
 	 * SERVICES
 	 * **************************************************************************/
+	/**
+	 * @ejb.interface-method view-type = "service-endpoint"
+	 * @ejb.permission 
+	 * 	role-name = "authenticated"
+	 * 	view-type = "service-endpoint"
+	 */
+	public WSServiceGetDocument getServiceDocument(WSString serviceName) throws RemoteException {
+		try {
+			Object service= 
+				Util.retrieveComponent(
+					null, 
+					"amalto/local/service/"+serviceName.getValue()
+				);
+
+			String desc = (String)
+			Util.getMethod(service, "getDescription").invoke(
+				service,
+				new Object[] {
+						""
+				}
+			);
+			String configuration = (String)
+				Util.getMethod(service, "getConfiguration").invoke(
+					service,
+					new Object[] {
+							""
+					}
+				);
+			String doc = "";
+			try{doc=(String)
+			Util.getMethod(service, "getDocumentation").invoke(
+				service,
+				new Object[] {
+						""
+				}
+			);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			return new WSServiceGetDocument(desc,configuration,doc);
+		} catch (XtentisException e) {
+			throw(new RemoteException(e.getLocalizedMessage()));
+		} catch (Exception e) {
+			throw new RemoteException((e.getCause() == null ? e.getLocalizedMessage() : e.getCause().getLocalizedMessage()));
+		}
+	}
+
 	
 	/**
 	 * @ejb.interface-method view-type = "service-endpoint"

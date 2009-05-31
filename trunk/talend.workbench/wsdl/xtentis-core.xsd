@@ -1252,6 +1252,14 @@
 	</xsd:complexType>
 	<xsd:element name="WSServiceGetConfiguration" type="tns:WSServiceGetConfiguration"/>
 	
+	<xsd:complexType name="WSServiceGetDocument">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="description" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="configure" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="document" type="xsd:string"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSServiceGetDocument" type="tns:WSServiceGetDocument"/>
 	
 	
 	<!-- *****************************************************
