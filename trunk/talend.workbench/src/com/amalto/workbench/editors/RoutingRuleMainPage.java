@@ -192,14 +192,15 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             }
 
             //default parameters button 
-            defultParameterBtn = toolkit.createButton(subPanel, "Default parameters", SWT.PUSH);
+            defultParameterBtn = toolkit.createButton(subPanel, "Help", SWT.PUSH);
             defultParameterBtn.setLayoutData( new GridData(SWT.FILL,SWT.FILL,false,true,1,1));
             defultParameterBtn.addSelectionListener(new SelectionListener() {
             	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
             	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+            		if(serviceNameCombo.getText().trim().length()==0) return;
             		String doc = "";
             		String desc="";
-            		WSRoutingRule wsObject = (WSRoutingRule) (getXObject().getWsObject());
+            		//WSRoutingRule wsObject = (WSRoutingRule) (getXObject().getWsObject());
             		try {
 						XtentisPort port=Util.getPort(getXObject());
 						WSServiceGetDocument document= port.getServiceDocument(new WSString(serviceNameCombo.getText().trim()));
@@ -225,7 +226,8 @@ public class RoutingRuleMainPage extends AMainPageV2 {
         			dialog.addListener(new Listener() {
         				public void handleEvent(Event event) {dialog.close();}
         			});
-        			
+        			dialog.create();
+        			dialog.getShell().setText("Service Details");
         			dialog.setBlockOnOpen(true);
         			dialog.open();
             	}
