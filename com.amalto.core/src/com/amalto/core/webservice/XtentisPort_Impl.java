@@ -313,6 +313,12 @@ public class XtentisPort_Impl implements com.amalto.core.webservice.XtentisPort,
         com.amalto.core.webservice.WSServicesList _retVal = null;
         return _retVal;
     }
+    public com.amalto.core.webservice.WSServiceGetDocument getServiceDocument(com.amalto.core.webservice.WSString serviceName) throws 
+         java.rmi.RemoteException {
+        
+        com.amalto.core.webservice.WSServiceGetDocument _retVal = null;
+        return _retVal;
+    }
     public com.amalto.core.webservice.WSStoredProcedure getStoredProcedure(com.amalto.core.webservice.WSGetStoredProcedure wsGetStoredProcedure) throws 
          java.rmi.RemoteException {
         

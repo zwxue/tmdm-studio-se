@@ -5,7 +5,7 @@ package com.amalto.core.ejb.local;
 
 /**
  * Local interface for ServiceCtrl.
- * @xdoclet-generated at 27-05-09
+ * @xdoclet-generated at 31-05-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
@@ -24,6 +24,8 @@ public interface ServiceCtrlLocal
     * @throws EJBException
     */
    public java.lang.String getDescription( java.lang.String twoLettersLanguageCode ) throws com.amalto.core.util.XtentisException;
+
+   public java.lang.String getDocumentation( java.lang.String twoLettersLanguageCode ) throws com.amalto.core.util.XtentisException;
 
    /**
     * To be Implemented. Starts if needed the service Can be null
