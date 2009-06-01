@@ -233,8 +233,12 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener{
 		topFormPart.markDirty();
 		commitChanges();
 	}
-
 	
+	public void markDirtyWithoutCommit() {
+		topFormPart.markDirty();
+	}
+
+
 
 	//This Part is meant to track dirty states changes
 	class TopFormPart  extends AbstractFormPart{
