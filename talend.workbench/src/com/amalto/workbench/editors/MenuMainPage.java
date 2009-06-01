@@ -55,9 +55,9 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.MenuEntryDialog;
 import com.amalto.workbench.providers.XObjectEditorInput;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuEntry;
 import com.amalto.workbench.webservices.WSMenuMenuEntriesDescriptions;
@@ -185,7 +185,7 @@ public class MenuMainPage extends AMainPageV2 {
     			}
     			@Override
     			public Image getImage(Object element) {
-    				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/menu.gif").createImage();
+    				return ImageCache.getImage( "icons/menu.gif").createImage();
     			}
     		});
     		
@@ -378,7 +378,7 @@ public class MenuMainPage extends AMainPageV2 {
 				super();
 				this.viewer = view;
 				treeEntry =(TreeEntry)((IStructuredSelection)viewer.getSelection()).getFirstElement();
-				setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/edit_obj.gif"));
+				setImageDescriptor(ImageCache.getImage( "icons/edit_obj.gif"));
 				setText("Edit");
 				setToolTipText("Edit ThisMenu Entry");		
 			}
@@ -450,7 +450,7 @@ public class MenuMainPage extends AMainPageV2 {
 						label = "Add a menu entry after this entry";
 						break;
 				}
-				setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/add_obj.gif"));
+				setImageDescriptor(ImageCache.getImage( "icons/add_obj.gif"));
 				setText(label);
 				setToolTipText("Add a menu entry");		
 			}
@@ -553,7 +553,7 @@ public class MenuMainPage extends AMainPageV2 {
 				super();
 				this.viewer = view;
 				treeEntry =(TreeEntry)((IStructuredSelection)viewer.getSelection()).getFirstElement();
-				setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/delete_obj.gif"));
+				setImageDescriptor(ImageCache.getImage( "icons/delete_obj.gif"));
 				setText("Delete Entry");
 				setToolTipText("Delete This Menu Entry");		
 			}

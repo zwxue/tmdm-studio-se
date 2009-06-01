@@ -24,10 +24,10 @@ import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.SimpleTypeInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 
 public class XSDChangeToSimpleTypeAction extends Action implements SelectionListener{
@@ -45,7 +45,7 @@ public class XSDChangeToSimpleTypeAction extends Action implements SelectionList
 	public XSDChangeToSimpleTypeAction(DataModelMainPage page) {
 		super();
 		this.page = page;
-		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/change_to_simple.gif"));
+		setImageDescriptor(ImageCache.getImage( "icons/change_to_simple.gif"));
 		setText("Change to a Simple Element");
 		setToolTipText("Make Element a Simple Element or change the current Simple Type");
 		setDescription(getToolTipText());

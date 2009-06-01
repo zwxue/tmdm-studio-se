@@ -52,7 +52,6 @@ import org.eclipse.ui.forms.events.IHyperlinkListener;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.actions.EditXObjectAction;
 import com.amalto.workbench.dialogs.DOMViewDialog;
 import com.amalto.workbench.dialogs.QueryParametersDialog;
@@ -60,6 +59,7 @@ import com.amalto.workbench.dialogs.TextViewDialog;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSRunQuery;
@@ -377,7 +377,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener{
 			super();
 			this.shell = shell;
 			this.viewer = viewer;
-			setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/add_obj.gif"));
+			setImageDescriptor(ImageCache.getImage( "icons/add_obj.gif"));
 			setText("Details");
 			setToolTipText("View in Details");
 		}

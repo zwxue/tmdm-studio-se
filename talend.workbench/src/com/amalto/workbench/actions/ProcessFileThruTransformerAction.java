@@ -17,11 +17,11 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Event;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.ProcessResultsDialog;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.BackgroundJobStatusType;
@@ -60,7 +60,7 @@ public class ProcessFileThruTransformerAction extends Action{
 		this.mimeType = mimeType;
 		this.encoding = encoding;
 		
-		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/save_edit.gif"));
+		setImageDescriptor(ImageCache.getImage( "icons/save_edit.gif"));
 	}
 	
 	public void run() {

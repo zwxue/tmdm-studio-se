@@ -9,9 +9,9 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.IConstants;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.views.ServerView;
 
 public class ServerRefreshAction extends Action {
@@ -32,7 +32,7 @@ public class ServerRefreshAction extends Action {
 	public ServerRefreshAction(ServerView view) {
 		super();
 		this.view = view;
-		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/refresh.gif"));
+		setImageDescriptor(ImageCache.getImage( "icons/refresh.gif"));
 		setText("Refresh");
 		setToolTipText("Refresh the "+IConstants.TALEND+" Server Objects");
 	}

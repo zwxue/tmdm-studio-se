@@ -26,10 +26,10 @@ import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.ComplexTypeInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
+import com.amalto.workbench.utils.ImageCache;
 
 public class XSDChangeToComplexTypeAction extends Action implements SelectionListener{
 
@@ -48,7 +48,7 @@ public class XSDChangeToComplexTypeAction extends Action implements SelectionLis
 	public XSDChangeToComplexTypeAction(DataModelMainPage page) {
 		super();
 		this.page = page;
-		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/change_to_complex.gif"));
+		setImageDescriptor(ImageCache.getImage( "icons/change_to_complex.gif"));
 		setText("Change to a Complex Element");
 		setToolTipText("Make an Element a Complex Element or change the type of current Complex Element");
 		setDescription(getToolTipText());

@@ -6,13 +6,13 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Event;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.IConstants;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataModel;
@@ -46,7 +46,7 @@ public class SaveXObjectAction extends Action{
 		super();
 		this.editor = editor;
 		//this.initialXObject = initialXObject;
-		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/save_edit.gif"));
+		setImageDescriptor(ImageCache.getImage( "icons/save_edit.gif"));
 	}
 	
 	public void run() {

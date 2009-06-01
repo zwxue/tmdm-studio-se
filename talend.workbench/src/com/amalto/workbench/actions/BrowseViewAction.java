@@ -6,9 +6,9 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.views.ServerView;
 
 public class BrowseViewAction extends Action{
@@ -20,7 +20,7 @@ public class BrowseViewAction extends Action{
 		super();
 		this.server = serverView;
 			
-		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/edit.gif"));
+		setImageDescriptor(ImageCache.getImage( "icons/edit.gif"));
 		setText("Browse");
 		setToolTipText("Browse Content");
 	}
