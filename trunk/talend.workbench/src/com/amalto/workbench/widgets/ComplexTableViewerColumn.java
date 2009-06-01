@@ -1,8 +1,5 @@
 package com.amalto.workbench.widgets;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.swt.widgets.Control;
 
 public class ComplexTableViewerColumn {

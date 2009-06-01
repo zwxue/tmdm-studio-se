@@ -6,9 +6,11 @@
 package com.amalto.workbench.webservices;
 
 
-import com.sun.xml.rpc.encoding.simpletype.*;
-import javax.xml.namespace.QName;
-import com.sun.xml.rpc.streaming.*;
+import com.sun.xml.rpc.encoding.simpletype.SimpleTypeEncoder;
+import com.sun.xml.rpc.encoding.simpletype.SimpleTypeEncoderBase;
+import com.sun.xml.rpc.encoding.simpletype.XSDStringEncoder;
+import com.sun.xml.rpc.streaming.XMLReader;
+import com.sun.xml.rpc.streaming.XMLWriter;
 
 public class WSRoutingEngineV2Status_Encoder extends SimpleTypeEncoderBase {
     
