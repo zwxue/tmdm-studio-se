@@ -59,6 +59,7 @@ import com.amalto.workbench.actions.XSDChangeBaseTypeAction;
 import com.amalto.workbench.actions.XSDChangeToComplexTypeAction;
 import com.amalto.workbench.actions.XSDChangeToSimpleTypeAction;
 import com.amalto.workbench.actions.XSDDeleteConceptAction;
+import com.amalto.workbench.actions.XSDDeleteConceptWrapAction;
 import com.amalto.workbench.actions.XSDDeleteElementAction;
 import com.amalto.workbench.actions.XSDDeleteIdentityConstraintAction;
 import com.amalto.workbench.actions.XSDDeleteParticleAction;
@@ -100,6 +101,7 @@ public class DataModelMainPage extends AMainPageV2 {
 
 	private XSDNewConceptAction newConceptAction = null;
 	private XSDDeleteConceptAction deleteConceptAction = null;
+	private XSDDeleteConceptWrapAction deleteConceptWrapAction = null;
 	private XSDNewElementAction newElementAction = null;
 	private XSDDeleteElementAction deleteElementAction = null;
 	private XSDChangeToComplexTypeAction changeToComplexTypeAction = null;
@@ -391,6 +393,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	protected void createActions() {
 		this.newConceptAction = new XSDNewConceptAction(this);
 		this.deleteConceptAction = new XSDDeleteConceptAction(this);
+		this.deleteConceptWrapAction = new XSDDeleteConceptWrapAction(this,deleteConceptAction);
 		this.newElementAction = new XSDNewElementAction(this);
 		this.deleteElementAction = new XSDDeleteElementAction(this);
 		this.changeToComplexTypeAction = new XSDChangeToComplexTypeAction(this);
@@ -475,7 +478,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			}
 			if (isConcept) {
 				manager.add(editConceptAction);
-				manager.add(deleteConceptAction);
+				manager.add(deleteConceptWrapAction);
 			} else {
 				manager.add(editElementAction);
 				manager.add(deleteElementAction);
