@@ -12,10 +12,10 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDSchema;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.AnnotationOrderedListsDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDSetAnnotationWriteAction extends Action{
@@ -28,7 +28,7 @@ public class XSDSetAnnotationWriteAction extends Action{
 	public XSDSetAnnotationWriteAction(DataModelMainPage page) {
 		super();
 		this.page = page;
-		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/annotation.gif"));
+		setImageDescriptor(ImageCache.getImage( "icons/annotation.gif"));
 		setText("Set the Roles with Write Access");
 		setToolTipText("Set the Roles That Have Write Access");
 	}

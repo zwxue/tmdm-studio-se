@@ -11,12 +11,12 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.LoginDialog;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XtentisServerObjectsRetriever;
 import com.amalto.workbench.utils.IConstants;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.views.ServerView;
 
 public class ServerLoginAction extends Action implements SelectionListener{
@@ -28,7 +28,7 @@ public class ServerLoginAction extends Action implements SelectionListener{
 	public ServerLoginAction(ServerView view) {
 		super();
 		this.view = view;
-		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/startserveraction.gif"));
+		setImageDescriptor(ImageCache.getImage( "icons/startserveraction.gif"));
 		setText("Login");
 		setToolTipText("Login to an "+IConstants.TALEND+" Server");
 
@@ -38,7 +38,7 @@ public class ServerLoginAction extends Action implements SelectionListener{
 		try {
 			super.run();
 			dialog = new LoginDialog(this,view.getSite().getShell(),IConstants.TALEND+" Login");
-			dialog.setDefaultImage(AmaltoWorbenchPlugin.getImageDescriptor( "icons/talend-picto-small.gif").createImage());
+			dialog.setDefaultImage(ImageCache.getImage( "icons/talend-picto-small.gif").createImage());
 			dialog.setBlockOnOpen(true);		
 			dialog.open();
 		} catch (Exception e) {

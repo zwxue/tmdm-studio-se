@@ -13,8 +13,8 @@ import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.utils.ImageCache;
 
 public class XSDEditXPathAction extends Action{
 
@@ -24,7 +24,7 @@ public class XSDEditXPathAction extends Action{
 	public XSDEditXPathAction(DataModelMainPage page) {
 		super();
 		this.page = page;
-		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/edit_obj.gif"));
+		setImageDescriptor(ImageCache.getImage( "icons/edit_obj.gif"));
 		setText("Edit Selector/Field");
 		setToolTipText("Edit a Selector/Field");
 	}

@@ -9,9 +9,9 @@ import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDTypeDefinition;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 
 public class XSDDeleteElementAction extends Action{
@@ -23,7 +23,7 @@ public class XSDDeleteElementAction extends Action{
 	public XSDDeleteElementAction(DataModelMainPage page) {
 		super();
 		this.page = page;
-		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/delete_obj.gif"));
+		setImageDescriptor(ImageCache.getImage( "icons/delete_obj.gif"));
 		setText("Delete Element");
 		setToolTipText("Delete an Element");
 	}

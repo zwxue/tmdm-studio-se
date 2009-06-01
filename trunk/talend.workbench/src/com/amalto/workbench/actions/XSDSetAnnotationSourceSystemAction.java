@@ -10,9 +10,9 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDSchema;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDSetAnnotationSourceSystemAction extends Action{
@@ -24,7 +24,7 @@ public class XSDSetAnnotationSourceSystemAction extends Action{
 	public XSDSetAnnotationSourceSystemAction(DataModelMainPage page) {
 		super();
 		this.page = page;
-		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/annotation.gif"));
+		setImageDescriptor(ImageCache.getImage( "icons/annotation.gif"));
 		setText("Set the Source System");
 		setToolTipText("Set the Source System name for the content of this element");
 	}

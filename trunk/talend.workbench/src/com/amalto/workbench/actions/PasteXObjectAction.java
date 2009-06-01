@@ -12,9 +12,9 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Event;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.IConstants;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.views.ServerView;
@@ -91,7 +91,7 @@ public class PasteXObjectAction extends Action{
 	}
 	
 	private void setDetails() {
-		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/paste.gif"));
+		setImageDescriptor(ImageCache.getImage( "icons/paste.gif"));
 		setText("Paste");
 		setToolTipText("Paste this instance of the "+IConstants.TALEND+" Object");		
 	}

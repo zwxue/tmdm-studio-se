@@ -7,9 +7,9 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.IConstants;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.views.ServerView;
 
@@ -34,7 +34,7 @@ public class CopyXObjectAction extends Action{
 	}
 	
 	private void setDetails() {
-		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/copy.gif"));
+		setImageDescriptor(ImageCache.getImage( "icons/copy.gif"));
 		setText("Copy");
 		setToolTipText("Copy this instance of the "+IConstants.TALEND+" Object");		
 	}
