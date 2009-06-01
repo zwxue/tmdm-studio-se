@@ -133,7 +133,7 @@ public class DataModelEditorPage extends AFormPage implements ITextListener{
 			this.comitting = true;
 			
 	    	WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
-			wsObject.setXsdSchema(schemaViewer.getDocument().get());
+			if(schemaViewer!=null&&schemaViewer.getDocument()!=null)wsObject.setXsdSchema(schemaViewer.getDocument().get());
 			
 			this.comitting = false;
 			
