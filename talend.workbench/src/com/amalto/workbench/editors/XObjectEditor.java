@@ -218,7 +218,29 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
         super.pageChange(newPageIndex);
         AFormPage page = (AFormPage)formPages.get(newPageIndex);
         page.refreshPage();
+        
+        linkDirty(page);
+        
     }
+
+
+	private void linkDirty(AFormPage page) {
+		if(page instanceof DataModelMainPage&&page.isDirty()){
+        	
+        	if(findPage(DataModelEditorPage.class.getName())!=null){
+        		DataModelEditorPage editorPage = (DataModelEditorPage)findPage(DataModelEditorPage.class.getName());
+        		editorPage.markDirtyWithoutCommit();
+        	}
+        	
+        }else if(page instanceof DataModelEditorPage&&page.isDirty()){
+        	
+        	if(findPage(DataModelMainPage.class.getName())!=null){
+        		DataModelMainPage mainPage = (DataModelMainPage)findPage(DataModelMainPage.class.getName());
+        		mainPage.markDirtyWithoutCommit();
+        	}
+
+        }
+	}
 
     @Override
     public Image getTitleImage() {
