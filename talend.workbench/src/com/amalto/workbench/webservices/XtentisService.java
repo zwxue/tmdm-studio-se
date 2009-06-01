@@ -5,7 +5,7 @@
 
 package com.amalto.workbench.webservices;
 
-import javax.xml.rpc.*;
+import javax.xml.rpc.ServiceException;
 
 public interface XtentisService extends javax.xml.rpc.Service {
     public com.amalto.workbench.webservices.XtentisPort getXtentisPort() throws ServiceException;
