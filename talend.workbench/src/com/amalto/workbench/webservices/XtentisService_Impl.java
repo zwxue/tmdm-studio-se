@@ -5,16 +5,12 @@
 
 package com.amalto.workbench.webservices;
 
-import com.sun.xml.rpc.encoding.*;
-import com.sun.xml.rpc.client.ServiceExceptionImpl;
-import com.sun.xml.rpc.util.exception.*;
-import com.sun.xml.rpc.soap.SOAPVersion;
-import com.sun.xml.rpc.client.HandlerChainImpl;
-import javax.xml.rpc.*;
-import javax.xml.rpc.encoding.*;
-import javax.xml.rpc.handler.HandlerChain;
-import javax.xml.rpc.handler.HandlerInfo;
 import javax.xml.namespace.QName;
+import javax.xml.rpc.JAXRPCException;
+
+import com.sun.xml.rpc.client.HandlerChainImpl;
+import com.sun.xml.rpc.client.ServiceExceptionImpl;
+import com.sun.xml.rpc.util.exception.LocalizableExceptionAdapter;
 
 public class XtentisService_Impl extends com.sun.xml.rpc.client.BasicService implements XtentisService {
     private static final QName serviceName = new QName("urn-com-amalto-xtentis-webservice", "XtentisService");

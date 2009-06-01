@@ -5,16 +5,22 @@
 
 package com.amalto.workbench.webservices;
 
-import com.sun.xml.rpc.client.BasicService;
-import com.sun.xml.rpc.encoding.*;
-import com.sun.xml.rpc.encoding.simpletype.*;
-import com.sun.xml.rpc.encoding.soap.*;
-import com.sun.xml.rpc.encoding.literal.*;
-import com.sun.xml.rpc.soap.SOAPVersion;
-import com.sun.xml.rpc.wsdl.document.schema.SchemaConstants;
-import javax.xml.rpc.*;
-import javax.xml.rpc.encoding.*;
 import javax.xml.namespace.QName;
+import javax.xml.rpc.encoding.Deserializer;
+import javax.xml.rpc.encoding.Serializer;
+import javax.xml.rpc.encoding.TypeMapping;
+import javax.xml.rpc.encoding.TypeMappingRegistry;
+
+import com.sun.xml.rpc.client.BasicService;
+import com.sun.xml.rpc.encoding.CombinedSerializer;
+import com.sun.xml.rpc.encoding.SerializerConstants;
+import com.sun.xml.rpc.encoding.SingletonDeserializerFactory;
+import com.sun.xml.rpc.encoding.SingletonSerializerFactory;
+import com.sun.xml.rpc.encoding.literal.LiteralSimpleTypeSerializer;
+import com.sun.xml.rpc.encoding.simpletype.XSDBase64BinaryEncoder;
+import com.sun.xml.rpc.encoding.soap.SOAP12Constants;
+import com.sun.xml.rpc.encoding.soap.SOAPConstants;
+import com.sun.xml.rpc.wsdl.document.schema.SchemaConstants;
 
 public class XtentisService_SerializerRegistry implements SerializerConstants {
     public XtentisService_SerializerRegistry() {
