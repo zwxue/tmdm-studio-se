@@ -2,7 +2,11 @@ package com.amalto.workbench.utils;
 
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * Using enum to list all image resources in workbench 
+ * @author liyanmei
+ *
+ */
 public enum EImage {
 	
 	ACTIVITY_CATEGORY("icons/activity_category.gif"),
