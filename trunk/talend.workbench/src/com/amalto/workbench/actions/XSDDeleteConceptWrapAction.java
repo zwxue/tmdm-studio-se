@@ -31,8 +31,8 @@ public class XSDDeleteConceptWrapAction extends Action{
 			if(selection.isEmpty()){
 				return;
 			}else{
-				String conceptLabel = selection.size() > 1 ? " concepts ?" : " concept ?";
-				if (!MessageDialog.openConfirm(page.getSite().getShell(), "Delete Model", "Are you sure you want to delete this " + selection.size() + conceptLabel))
+				String conceptLabel = selection.size() > 1 ? (" these "+selection.size()+" concepts ?") : " the selected concept ?";
+				if (!MessageDialog.openConfirm(page.getSite().getShell(), "Delete Model", "Are you sure you want to delete" + conceptLabel))
 					return;
 			}
 			
