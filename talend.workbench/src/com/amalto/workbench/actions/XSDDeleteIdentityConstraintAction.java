@@ -7,8 +7,8 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.utils.ImageCache;
 
 public class XSDDeleteIdentityConstraintAction extends Action{
 
@@ -18,7 +18,7 @@ public class XSDDeleteIdentityConstraintAction extends Action{
 	public XSDDeleteIdentityConstraintAction(DataModelMainPage page) {
 		super();
 		this.page = page;
-		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/delete_obj.gif"));
+		setImageDescriptor(ImageCache.getImage( "icons/delete_obj.gif"));
 		setText("Delete Key");
 		setToolTipText("Delete a Key");
 	}

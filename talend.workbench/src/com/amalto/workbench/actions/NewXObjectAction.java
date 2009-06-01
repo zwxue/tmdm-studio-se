@@ -15,7 +15,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Event;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.editors.AMainPage;
 import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.editors.XObjectEditor;
@@ -23,6 +22,7 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.IConstants;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSDataCluster;
@@ -77,7 +77,7 @@ public class NewXObjectAction extends Action{
 	public NewXObjectAction(ServerView view) {
 		super();
 		this.view = view;
-		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/add_obj.gif"));
+		setImageDescriptor(ImageCache.getImage( "icons/add_obj.gif"));
 		setText("New");
 		setToolTipText("Create a new instance of an "+IConstants.TALEND+" Object");
 	}

@@ -37,7 +37,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 
 public class DOMViewDialog extends Dialog {
@@ -408,9 +408,9 @@ public class DOMViewDialog extends Dialog {
 				else
 					return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
 			}else if (obj instanceof Node) {
-				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/attribute.gif").createImage();
+				return ImageCache.getImage( "icons/attribute.gif").createImage();
 			}			
-			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/small_warn.gif").createImage();
+			return ImageCache.getImage( "icons/small_warn.gif").createImage();
 		}
 		
 	}//Class DOM Tree Label Provider

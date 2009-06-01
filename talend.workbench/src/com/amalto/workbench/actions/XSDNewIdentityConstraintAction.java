@@ -24,10 +24,10 @@ import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.IdentityConstraintInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
+import com.amalto.workbench.utils.ImageCache;
 
 public class XSDNewIdentityConstraintAction extends Action implements SelectionListener{
 
@@ -41,7 +41,7 @@ public class XSDNewIdentityConstraintAction extends Action implements SelectionL
 	public XSDNewIdentityConstraintAction(DataModelMainPage page) {
 		super();
 		this.page = page;
-		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/add_obj.gif"));
+		setImageDescriptor(ImageCache.getImage( "icons/add_obj.gif"));
 		setText("Add Key");
 		setToolTipText("Add a new Key");
 	}

@@ -8,6 +8,7 @@ import java.util.Map;
  *
  */
 public enum EImage {
+	DEFAULT("icons/talend-picto-small.gif"),
 	
 	ACTIVITY_CATEGORY("icons/activity_category.gif"),
 	ACTIVITY("icons/activity.gif"),
@@ -249,16 +250,12 @@ public enum EImage {
 	public String getPath() {
 		return path;
 	}
-	public void setPath(String path) {
-		this.path = path;
-	}
-	
+
 	public static Map<String, EImage> getAlllEimages(){
 		Map<String,EImage> map=new HashMap<String, EImage>();
 		for(int i=0;i<values().length;i++){
-			map.put(values()[i].name(), values()[i]);
+			map.put(values()[i].getPath(), values()[i]);
 		}
 		return map;
-				
 	}
 }

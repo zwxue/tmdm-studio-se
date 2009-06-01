@@ -14,8 +14,8 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDSchema;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.utils.ImageCache;
 
 public class XSDEditIdentityConstraintAction extends Action{
 
@@ -25,7 +25,7 @@ public class XSDEditIdentityConstraintAction extends Action{
 	public XSDEditIdentityConstraintAction(DataModelMainPage page) {
 		super();
 		this.page = page;
-		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/edit_obj.gif"));
+		setImageDescriptor(ImageCache.getImage( "icons/edit_obj.gif"));
 		setText("Edit Key");
 		setToolTipText("Edit a Key");
 	}

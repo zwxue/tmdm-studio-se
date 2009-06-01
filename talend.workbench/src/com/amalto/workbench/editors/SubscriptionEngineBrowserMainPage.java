@@ -65,12 +65,12 @@ import org.exolab.castor.xml.Marshaller;
 import org.vafada.swtcalendar.SWTCalendarEvent;
 import org.vafada.swtcalendar.SWTCalendarListener;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.CalendarDialog;
 import com.amalto.workbench.dialogs.DOMViewDialog;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModelPK;
@@ -761,7 +761,7 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 			super();
 			this.shell = shell;
 			this.viewer = viewer;
-			setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/edit_obj.gif"));
+			setImageDescriptor(ImageCache.getImage( "icons/edit_obj.gif"));
 			setText("Edit Item");
 			setToolTipText("View as a DOM Tree or edit the XML source");
 		}
@@ -840,7 +840,7 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 			super();
 			this.shell = shell;
 			this.viewer = viewer;
-			setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/delete_obj.gif"));
+			setImageDescriptor(ImageCache.getImage( "icons/delete_obj.gif"));
 			IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
 			if (selection.size()==1)
 				setText("Delete the selected Routing Order");
@@ -961,7 +961,7 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 			super();
 			this.shell = shell;
 			this.viewer = viewer;
-			setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/execute.gif"));
+			setImageDescriptor(ImageCache.getImage( "icons/execute.gif"));
 			IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
 			if (selection.size()==1)
 				setText("Execute the selected Routing Order ");

@@ -15,10 +15,10 @@ import org.eclipse.swt.widgets.Widget;
 import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDSchema;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.AnnotationLanguageLabelsDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDSetAnnotationLabelAction extends Action{
@@ -29,7 +29,7 @@ public class XSDSetAnnotationLabelAction extends Action{
 	public XSDSetAnnotationLabelAction(DataModelMainPage page) {
 		super();
 		this.page = page;
-		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/annotation.gif"));
+		setImageDescriptor(ImageCache.getImage( "icons/annotation.gif"));
 		setText("Set the Labels");
 		setToolTipText("Set the Element Labels");
 	}

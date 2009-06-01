@@ -29,7 +29,7 @@ import org.eclipse.xsd.XSDXPathVariety;
 import org.eclipse.xsd.util.XSDConstants;
 import org.w3c.dom.Element;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 
 
@@ -237,14 +237,14 @@ public class XSDTreeLabelProvider extends LabelProvider {
 			}
 			//display approprite image
 			if (isConcept) {
-				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/concept.gif").createImage();
+				return ImageCache.getImage( "icons/concept.gif").createImage();
 			} else {
-				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/element_only.gif").createImage();
+				return ImageCache.getImage( "icons/element_only.gif").createImage();
 				/*
 				if (decl.getTypeDefinition() instanceof XSDComplexTypeDefinition)
 					return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_FOLDER);
 				else
-					return AmaltoWorbenchPlugin.getImageDescriptor( "icons/elements_obj_+.gif").createImage();
+					return ImageCache.getImage( "icons/elements_obj_+.gif").createImage();
 				*/
 			}
 		}
@@ -257,29 +257,29 @@ public class XSDTreeLabelProvider extends LabelProvider {
 				XSDConcreteComponent xsdConcreteComponent =  xsdParticle.getContainer();
 				if (xsdConcreteComponent instanceof XSDModelGroup) {
 					if (((XSDModelGroup)xsdConcreteComponent).getCompositor() == XSDCompositor.CHOICE_LITERAL)
-						return AmaltoWorbenchPlugin.getImageDescriptor( "icons/elements_obj_choice.gif").createImage();
-					return AmaltoWorbenchPlugin.getImageDescriptor( "icons/elements_obj_sequence.gif").createImage();
+						return ImageCache.getImage( "icons/elements_obj_choice.gif").createImage();
+					return ImageCache.getImage( "icons/elements_obj_sequence.gif").createImage();
 				}
 			} else if (xsdTerm instanceof XSDModelGroup) {
 				int type = ((XSDModelGroup)xsdTerm).getCompositor().getValue();
 				switch (type) {
 					case XSDCompositor.ALL:
-						return AmaltoWorbenchPlugin.getImageDescriptor( "icons/complex_all.gif").createImage();
+						return ImageCache.getImage( "icons/complex_all.gif").createImage();
 					case XSDCompositor.CHOICE:
-						return AmaltoWorbenchPlugin.getImageDescriptor( "icons/complex_choice.gif").createImage();
+						return ImageCache.getImage( "icons/complex_choice.gif").createImage();
 					case XSDCompositor.SEQUENCE:
-						return AmaltoWorbenchPlugin.getImageDescriptor( "icons/complex_sequence.gif").createImage();				
+						return ImageCache.getImage( "icons/complex_sequence.gif").createImage();				
 				}
 			} else if (xsdTerm instanceof XSDWildcard) {
-				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/wildcard.gif").createImage();
+				return ImageCache.getImage( "icons/wildcard.gif").createImage();
 			} else {
 				System.out.println("ERROR XSD Term "+xsdTerm.getClass().getName());
-				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/error.gif").createImage();
+				return ImageCache.getImage( "icons/error.gif").createImage();
 			}			
 		}
 		
 		if (obj instanceof XSDSimpleTypeDefinition) {
-			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/type_definition.gif").createImage();
+			return ImageCache.getImage( "icons/type_definition.gif").createImage();
 		}
 		
 		/*
@@ -291,16 +291,16 @@ public class XSDTreeLabelProvider extends LabelProvider {
 					int type = ((XSDModelGroup)((XSDParticle)ctc).getTerm()).getCompositor().getValue();
 					switch (type) {
 						case XSDCompositor.ALL:
-							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/complex_all.gif").createImage();
+							return ImageCache.getImage( "icons/complex_all.gif").createImage();
 						case XSDCompositor.CHOICE:
-							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/complex_choice.gif").createImage();
+							return ImageCache.getImage( "icons/complex_choice.gif").createImage();
 						case XSDCompositor.SEQUENCE:
-							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/complex_sequence.gif").createImage();				
+							return ImageCache.getImage( "icons/complex_sequence.gif").createImage();				
 					}
 				}
 			} else {
 				//simple Type!!!
-				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/error.gif").createImage();
+				return ImageCache.getImage( "icons/error.gif").createImage();
 			}
 		}
 		*/
@@ -308,85 +308,85 @@ public class XSDTreeLabelProvider extends LabelProvider {
 			int type = ((XSDModelGroup)obj).getCompositor().getValue();
 			switch (type) {
 				case XSDCompositor.ALL:
-					return AmaltoWorbenchPlugin.getImageDescriptor( "icons/complex_all.gif").createImage();
+					return ImageCache.getImage( "icons/complex_all.gif").createImage();
 				case XSDCompositor.CHOICE:
-					return AmaltoWorbenchPlugin.getImageDescriptor( "icons/complex_choice.gif").createImage();
+					return ImageCache.getImage( "icons/complex_choice.gif").createImage();
 				case XSDCompositor.SEQUENCE:
-					return AmaltoWorbenchPlugin.getImageDescriptor( "icons/complex_sequence.gif").createImage();
+					return ImageCache.getImage( "icons/complex_sequence.gif").createImage();
 			}
 		}
 
 		
 		
 		if (obj instanceof XSDFacet) {
-			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/facet.gif").createImage();
+			return ImageCache.getImage( "icons/facet.gif").createImage();
 		}
 		
 		if (obj instanceof XSDIdentityConstraintDefinition) {
 			XSDIdentityConstraintDefinition identity = (XSDIdentityConstraintDefinition) obj;
 			if (identity.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL))
-				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/unique.gif").createImage();
-			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/key.gif").createImage();
+				return ImageCache.getImage( "icons/unique.gif").createImage();
+			return ImageCache.getImage( "icons/key.gif").createImage();
 		}
 
 		if (obj instanceof XSDXPathDefinition) {
 			XSDXPathDefinition xpath = (XSDXPathDefinition) obj;
 			if (xpath.getVariety().equals(XSDXPathVariety.FIELD_LITERAL))
-				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/field.gif").createImage();
-			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/selector.gif").createImage();
+				return ImageCache.getImage( "icons/field.gif").createImage();
+			return ImageCache.getImage( "icons/selector.gif").createImage();
 		}
 		
 		if (obj instanceof XSDAttributeGroupDefinition) {
-			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/attribute_group.gif").createImage();
+			return ImageCache.getImage( "icons/attribute_group.gif").createImage();
 		}
 
 		if (obj instanceof XSDAttributeUse) {
 			XSDAttributeUse att = (XSDAttributeUse) obj;
 			if ("xmlns".equals(att.getAttributeDeclaration().getTargetNamespace())) {
-				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/annotation.gif").createImage();
+				return ImageCache.getImage( "icons/annotation.gif").createImage();
 			}
 			if (att.getUse().equals(XSDAttributeUseCategory.REQUIRED_LITERAL))
-				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/attribute_mandatory.gif").createImage();
+				return ImageCache.getImage( "icons/attribute_mandatory.gif").createImage();
 			else
-				return AmaltoWorbenchPlugin.getImageDescriptor( "icons/attribute.gif").createImage();
+				return ImageCache.getImage( "icons/attribute.gif").createImage();
 		}
 
 		if (obj instanceof XSDAnnotation) {
-			return AmaltoWorbenchPlugin.getImageDescriptor( "icons/annotation.gif").createImage();
+			return ImageCache.getImage( "icons/annotation.gif").createImage();
 		}
 
 		if (obj instanceof Element) {
 			try {
 				Element e = (Element) obj;
 				if (e.getLocalName().equals("documentation")) { 
-					return AmaltoWorbenchPlugin.getImageDescriptor( "icons/documentation.gif").createImage();
+					return ImageCache.getImage( "icons/documentation.gif").createImage();
 				} else  if (e.getLocalName().equals("appinfo")) {
 					String source = e.getAttribute("source");
 					if (source!=null) {
 						if (source.startsWith("X_Label_")) {
-							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/label.gif").createImage();
+							return ImageCache.getImage( "icons/label.gif").createImage();
 						} else if (source.equals("X_ForeignKey")) {
-							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/key.gif").createImage();
+							return ImageCache.getImage( "icons/key.gif").createImage();
 						} else if (source.equals("X_ForeignKeyInfo")) {
-							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/info.gif").createImage();
+							return ImageCache.getImage( "icons/info.gif").createImage();
 						} else if (source.equals("X_SourceSystem")) {
-							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/sourcesystem.gif").createImage();
+							return ImageCache.getImage( "icons/sourcesystem.gif").createImage();
 						} else if (source.equals("X_TargetSystem")) {
-							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/targetsystem.gif").createImage();
+							return ImageCache.getImage( "icons/targetsystem.gif").createImage();
 						} else if (source.startsWith("X_Description_")) {
-							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/documentation.gif").createImage();
+							return ImageCache.getImage( "icons/documentation.gif").createImage();
 						} else if (source.equals("X_Write")) {
-							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/writable.gif").createImage();
+							return ImageCache.getImage( "icons/writable.gif").createImage();
 						} else if (source.equals("X_Hide")) {
-							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/hideable.gif").createImage();
+							return ImageCache.getImage( "icons/hideable.gif").createImage();
 						} else {
-							return AmaltoWorbenchPlugin.getImageDescriptor( "icons/documentation.gif").createImage();
+							return ImageCache.getImage( "icons/documentation.gif").createImage();
 						}
 					} else {
-						return AmaltoWorbenchPlugin.getImageDescriptor( "icons/documentation.gif").createImage();
+						return ImageCache.getImage( "icons/documentation.gif").createImage();
 					}
 				} else {
-					return AmaltoWorbenchPlugin.getImageDescriptor( "icons/documentation.gif").createImage();
+					return ImageCache.getImage( "icons/documentation.gif").createImage();
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -394,7 +394,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
 		}
 
 		
-		return AmaltoWorbenchPlugin.getImageDescriptor( "icons/small_warn.gif").createImage();
+		return ImageCache.getImage( "icons/small_warn.gif").createImage();
 		//return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);		
 	}
 	

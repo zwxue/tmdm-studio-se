@@ -15,10 +15,10 @@ import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTypeDefinition;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.SimpleTypeInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 
 public class XSDChangeBaseTypeAction extends Action implements SelectionListener{
@@ -32,7 +32,7 @@ public class XSDChangeBaseTypeAction extends Action implements SelectionListener
 	public XSDChangeBaseTypeAction(DataModelMainPage page) {
 		super();
 		this.page = page;
-		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/change_to_simple.gif"));
+		setImageDescriptor(ImageCache.getImage( "icons/change_to_simple.gif"));
 		setText("Change Base Type");
 		setToolTipText("Change the Base Type of the Element Simple Type");
 		setDescription(getToolTipText());
