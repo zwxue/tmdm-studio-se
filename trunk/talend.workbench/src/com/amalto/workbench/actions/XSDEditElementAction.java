@@ -15,9 +15,9 @@ import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDSchema;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
+import com.amalto.workbench.utils.ImageCache;
 
 public class XSDEditElementAction extends Action{
 
@@ -27,7 +27,7 @@ public class XSDEditElementAction extends Action{
 	public XSDEditElementAction(DataModelMainPage page) {
 		super();
 		this.page = page;
-		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/edit_obj.gif"));
+		setImageDescriptor(ImageCache.getImage( "icons/edit_obj.gif"));
 		setText("Edit Element");
 		setToolTipText("Edit an Element");
 	}

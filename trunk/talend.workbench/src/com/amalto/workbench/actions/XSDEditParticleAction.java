@@ -14,9 +14,9 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDParticle;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.BusinessElementInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.utils.ImageCache;
 
 public class XSDEditParticleAction extends Action implements SelectionListener{
 
@@ -31,7 +31,7 @@ public class XSDEditParticleAction extends Action implements SelectionListener{
 	public XSDEditParticleAction(DataModelMainPage page) {
 		super();
 		this.page = page;
-		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/edit_obj.gif"));
+		setImageDescriptor(ImageCache.getImage( "icons/edit_obj.gif"));
 		setText("Edit Element");
 		setToolTipText("Edit the Business Element Name and Cardinality.");
 	}

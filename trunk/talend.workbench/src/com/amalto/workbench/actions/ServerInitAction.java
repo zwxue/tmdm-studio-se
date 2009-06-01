@@ -13,10 +13,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.IConstants;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSInitData;
@@ -29,7 +29,7 @@ public class ServerInitAction extends Action {
 	public ServerInitAction(ServerView view) {
 		super();
 		this.view = view;
-		setImageDescriptor(AmaltoWorbenchPlugin.getImageDescriptor( "icons/zap.gif"));
+		setImageDescriptor(ImageCache.getImage( "icons/zap.gif"));
 		setText("Initialize");
 		setToolTipText("Initializes an "+IConstants.TALEND+" MDM Server");
 
