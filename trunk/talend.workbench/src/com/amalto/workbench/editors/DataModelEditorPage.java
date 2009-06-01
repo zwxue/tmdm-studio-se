@@ -150,7 +150,6 @@ public class DataModelEditorPage extends AFormPage implements ITextListener{
 	public void textChanged(TextEvent event) {
 		if (this.refreshing) return;
 		markDirty();
-        commitChanges();
 	}
 
 	/*
@@ -167,8 +166,14 @@ public class DataModelEditorPage extends AFormPage implements ITextListener{
 	
 	public void markDirty() {
 		if (editorPart!=null) editorPart.markDirty();
+        commitChanges();
 		DataModelMainPage page = ((DataModelMainPage) getEditor().findPage(DataModelMainPage.class.getName()));
-		if ( !page.isDirty()) page.markDirty();
+		if ( !page.isDirty()) page.markDirtyWithoutCommit();
+	}
+	
+	
+	public void markDirtyWithoutCommit() {
+		if (editorPart!=null) editorPart.markDirty();
 	}
 
 
