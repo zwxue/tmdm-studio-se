@@ -28,6 +28,9 @@
   ;Set compression algorithm
   SetCompressor bzip2
 
+;Constants
+!define MDM_SERVICE "openMDMService"
+
 ;--------------------------------
 ;Variables
 
@@ -57,8 +60,12 @@
   !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
   
   !insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
-
+	
   !insertmacro MUI_PAGE_INSTFILES
+  !define MUI_FINISHPAGE_RUN ""
+  !define MUI_FINISHPAGE_RUN_TEXT "run openMDM as a windows service(autostart)"
+  !define MUI_FINISHPAGE_RUN_FUNCTION runService
+  !insertmacro MUI_PAGE_FINISH  	
   
   !insertmacro MUI_UNPAGE_CONFIRM
   !insertmacro MUI_UNPAGE_INSTFILES
@@ -79,7 +86,7 @@ Section "install" Installation
   File /r openMDM
 
   ;Store installation folder
-  WriteRegStr HKCU "Software\b2een" "" $INSTDIR
+  WriteRegStr HKCU "Software\openMDM" "" $INSTDIR
   
   
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
@@ -139,7 +146,18 @@ Section "Uninstall"
   ;Delete Uninstaller And Unistall Registry Entries
   DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\openMDM"
   DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\openMDM"  
- 
-
-
+  
+    ;DeleteRegKey HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Run\openMDM"	
+    ;remove the service
+	SimpleSC::StopService "${MDM_SERVICE}"
+	SimpleSC::RemoveService "${MDM_SERVICE}"  
 SectionEnd
+
+Function runService
+	SimpleSC::StopService "${MDM_SERVICE}"
+	SimpleSC::RemoveService "${MDM_SERVICE}"
+	SimpleSC::InstallService "${MDM_SERVICE}" "Talend open MDM Service" "272" "2" "$INSTDIR\openMDM\openMDM.exe" "" "" ""
+	;registry it to let openMDM star when windows startup
+	;WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Run\openMDM" "openMDM" "$INSTDIR\openMDM\openMDM.exe"	
+	SimpleSC::StartService "${MDM_SERVICE}"     
+FunctionEnd
