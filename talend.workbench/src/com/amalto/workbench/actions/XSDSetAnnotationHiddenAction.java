@@ -53,7 +53,9 @@ public class XSDSetAnnotationHiddenAction extends Action{
             		},
        				page.getSite().getShell(),
        				"Set The Roles That Cannot Access This Field",
-       				"Roles"
+       				"Roles",
+       				page,
+       				AnnotationOrderedListsDialog.AnnotationHidden_ActionType
        		);
             
        		dlg.setBlockOnOpen(true);
