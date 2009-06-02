@@ -1,14 +1,30 @@
 package com.amalto.workbench.providers;
 
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.swt.graphics.Image;
 
+import org.eclipse.jface.resource.ColorDescriptor;
+import org.eclipse.jface.resource.FontDescriptor;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.resource.LocalResourceManager;
+import org.eclipse.jface.resource.ResourceManager;
+import org.eclipse.jface.viewers.IColorProvider;
+import org.eclipse.jface.viewers.IFontProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.RGB;
 import com.amalto.workbench.actions.AServerViewAction;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.ESystemDefaultObjects;
 import com.amalto.workbench.utils.ImageCache;
 
-public class ServerTreeLabelProvider extends LabelProvider {
-
+public class ServerTreeLabelProvider extends LabelProvider implements IColorProvider,IFontProvider{
+	
+	ResourceManager resourceManager =  new LocalResourceManager(JFaceResources.getResources());
+	FontData font = new FontData();
+	RGB color = new RGB(150,150,150);
 	public String getText(Object obj) {
         if (obj instanceof TreeObject)
             if (((TreeObject)obj).getType() == TreeObject._ACTION_) {
@@ -74,6 +90,35 @@ public class ServerTreeLabelProvider extends LabelProvider {
         return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
         */       
 		
+   }
+	public Color getBackground(Object element) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	private IColorProvider colorProvider;
+	
+		public Color getForeground(Object element) {
+			TreeObject tb = (TreeObject)element;
+			if(ESystemDefaultObjects.isExist(tb.getType(),tb.getDisplayName())){
+		        return resourceManager.createColor(ColorDescriptor.createFrom(color));
+			}
+			else
+				return null;
+	        
+	}
+
+	public Font getFont(Object element) {
+		// TODO Auto-generated method stub
+
+		TreeObject tb = (TreeObject)element;
+		if(ESystemDefaultObjects.isExist(tb.getType(),tb.getDisplayName())){
+			
+			font.setStyle(SWT.BOLD);
+	        return resourceManager.createFont(FontDescriptor.createFrom(font));
+		}
+		else
+			return null;
+        
 	}
 	
 }
