@@ -1,0 +1,10 @@
+###########step to build#####################
+1. install nsis
+	after install NSIS,unzip NSIS_Simple_Service_Plugin_1.26.zip, copy SimpleSC.dll to NSIS_DIR/Plugins/
+2. install jboss
+	
+3. setup parameters in build.properties file
+
+4. run buildall.xml
+   
+	
