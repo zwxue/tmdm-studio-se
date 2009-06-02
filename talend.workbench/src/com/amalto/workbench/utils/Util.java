@@ -51,6 +51,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.webservices.WSComponent;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModelPK;
@@ -743,6 +744,23 @@ public class Util {
     		throw new XtentisException("Unable to get core version "+e.getClass().getName()+" : "+e.getMessage());
     	}
     }
+    
+    public static List<String> getCachedXObjectsNameSet(TreeObject xObject,int objectType) {
+		List<String> xObjectsNameSet=new ArrayList<String>();
+		if(xObject!=null){
+			
+			TreeParent treeNode = xObject.findServerFolder(objectType);
+			TreeObject[] xObjectsSet = treeNode.getChildren();
+			for (int i = 0; i < xObjectsSet.length; i++) {
+				xObject = xObjectsSet[i];
+				String xObjectName = xObject.getDisplayName();
+				xObjectsNameSet.add(xObjectName);
+			}
+			
+		}
+		return xObjectsNameSet;
+	}
+
     
 
 }

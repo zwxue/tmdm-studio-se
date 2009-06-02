@@ -2,6 +2,7 @@ package com.amalto.workbench.dialogs;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -16,9 +17,12 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -31,10 +35,15 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
+import com.amalto.workbench.editors.AMainPageV2;
+import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.Util;
+
 public class AnnotationOrderedListsDialog extends Dialog {
 	
-	
-	protected Text labelText;
+	protected Control textControl;
+	//protected Text labelText;
+	//protected Combo combo;
 	protected TableViewer viewer;
 	
 	protected ArrayList<String> xPaths = new ArrayList<String>();
@@ -42,18 +51,29 @@ public class AnnotationOrderedListsDialog extends Dialog {
 	private String title = "";
 	private String columnName = "";
 	
+	private AMainPageV2 parentPage = null;
+	private TreeObject xObject = null;
+	private int actionType;
+	
+	public static final int AnnotationForeignKeyInfo_ActionType=1<<0;
+	public static final int AnnotationHidden_ActionType=1<<1;
+	public static final int AnnotationTargetSystems_ActionType=1<<2;
+	public static final int AnnotationWrite_ActionType=1<<3;
 	
 
 	/**
 	 * @param parentShell
 	 */
-	public AnnotationOrderedListsDialog(ArrayList<String> xPaths, SelectionListener caller, Shell parentShell, String title, String columnName) {
+	public AnnotationOrderedListsDialog(ArrayList<String> xPaths, SelectionListener caller, Shell parentShell, String title, String columnName ,AMainPageV2 parentPage, int actionType) {
 		super(parentShell);
 		setShellStyle(this.getShellStyle() | SWT.RESIZE);
 		this.xPaths = xPaths;
 		this.caller = caller;
 		this.title = title;			
 		this.columnName = columnName;
+		this.parentPage = parentPage;
+		this.xObject = parentPage.getXObject();
+		this.actionType=actionType;
 	}
 
 
@@ -67,21 +87,65 @@ public class AnnotationOrderedListsDialog extends Dialog {
 		GridLayout layout = (GridLayout)composite.getLayout();
 		layout.numColumns = 3;
 		//layout.verticalSpacing = 10;
-        
-        labelText = new Text(composite, SWT.BORDER|SWT.SINGLE);
-        labelText.setLayoutData(
-                new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
-        );
-        ((GridData)labelText.getLayoutData()).minimumWidth = 300;
-        labelText.addKeyListener(new KeyListener() {
+		
+		if(actionType==AnnotationOrderedListsDialog.AnnotationWrite_ActionType){
+			textControl = new CCombo(composite,SWT.BORDER);
+
+			List<String> roles=Util.getCachedXObjectsNameSet(this.xObject, TreeObject.ROLE);
+			((CCombo)textControl).setItems(roles.toArray(new String[roles.size()]));
+
+		}else{
+			textControl = new Text(composite, SWT.BORDER|SWT.SINGLE);
+		}
+		
+		if(actionType==AnnotationOrderedListsDialog.AnnotationForeignKeyInfo_ActionType){
+			textControl.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,1,1));
+		}else{
+			textControl.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,2,1));
+		}
+		
+		((GridData)textControl.getLayoutData()).minimumWidth = 300;
+
+        textControl.addKeyListener(new KeyListener() {
 			public void keyPressed(KeyEvent e) {}
 			public void keyReleased(KeyEvent e) {
 				if ((e.stateMask==0) && (e.character == SWT.CR)){
-					xPaths.add(labelText.getText());
+					xPaths.add(AnnotationOrderedListsDialog.getControlText(textControl));
 	        		viewer.refresh();
 				}
 			}
         });
+        
+        if(actionType==AnnotationOrderedListsDialog.AnnotationForeignKeyInfo_ActionType){
+			Button xpathButton = new Button(composite,SWT.PUSH | SWT.CENTER);
+			xpathButton.setLayoutData(new GridData(SWT.FILL,SWT.FILL,false,true,1,1));
+			xpathButton.setText("...");
+			xpathButton.setToolTipText("Select one xpath");
+			xpathButton.addSelectionListener(new SelectionListener(){
+
+				public void widgetDefaultSelected(SelectionEvent e) {
+					
+				}
+
+				public void widgetSelected(SelectionEvent e) {
+					XpathSelectDialog dlg = new XpathSelectDialog(
+							parentPage.getSite().getShell(),
+							xObject.getParent(),"Select one Xpath ...",
+							parentPage.getSite()
+					);
+			        dlg.setBlockOnOpen(true);
+					dlg.open();
+					
+					if (dlg.getReturnCode() == Window.OK)  {
+						((Text)textControl).setText(dlg.getXpath());
+						dlg.close();
+					}
+					
+				}
+				
+			});
+
+		}
         
         Button addLabelButton = new Button(composite,SWT.PUSH | SWT.CENTER);
         addLabelButton.setLayoutData(
@@ -91,7 +155,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
         addLabelButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
         	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-				xPaths.add(labelText.getText());
+				xPaths.add(getControlText(textControl));
         		viewer.refresh();
         	};
         });
@@ -281,7 +345,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
         	};
         });
 
-		labelText.setFocus();
+		textControl.setFocus();
 		
 	    return composite;
 	}
@@ -322,6 +386,17 @@ public class AnnotationOrderedListsDialog extends Dialog {
 	}
 	
 	
+	private static String getControlText(Control textControl) {
+		if(textControl instanceof CCombo){
+			return ((CCombo)textControl).getText();
+		}else if(textControl instanceof Text){
+			return ((Text)textControl).getText();
+		}else{
+			return "";
+		}
+
+	}
+	
 	/**************************************************************************************************
 	 * A table viewer line
 	 ***************************************************************************************************/
@@ -337,8 +412,6 @@ public class AnnotationOrderedListsDialog extends Dialog {
 		public void setLabel(String label) {
 			this.label = label;
 		}
-	}
-	
-	
+	}	
 	
 }

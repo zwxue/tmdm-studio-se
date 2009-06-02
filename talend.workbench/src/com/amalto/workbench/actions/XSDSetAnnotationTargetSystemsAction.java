@@ -53,7 +53,9 @@ public class XSDSetAnnotationTargetSystemsAction extends Action{
             		},
        				page.getSite().getShell(),
        				"Set the Target Systems for the content of this element",
-       				"Target System Name"
+       				"Target System Name",
+       				page,
+       				AnnotationOrderedListsDialog.AnnotationTargetSystems_ActionType
        		);
             
        		dlg.setBlockOnOpen(true);
