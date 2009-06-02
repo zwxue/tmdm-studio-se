@@ -53,7 +53,9 @@ public class XSDSetAnnotationForeignKeyInfoAction extends Action{
             		},
        				page.getSite().getShell(),
        				"Set the Foreign Key Infos",
-       				"xPaths"
+       				"xPaths",
+       				page,
+       				AnnotationOrderedListsDialog.AnnotationForeignKeyInfo_ActionType
        		);
             
        		dlg.setBlockOnOpen(true);
