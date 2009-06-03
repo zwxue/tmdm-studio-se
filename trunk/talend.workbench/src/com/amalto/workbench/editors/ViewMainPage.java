@@ -48,6 +48,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.webservices.WSStringPredicate;
@@ -85,11 +86,11 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
         		ViewMainPage.class.getName(),
         		"View "+((XObjectEditorInput)editor.getEditorInput()).getName()
         );     
-        treeParent = this.getXObject().getParent();
+       this.treeParent = this.getXObject().getParent();
     }
-
+   
 	protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
-
+		
         try {
         	desAntionComposite = new DescAnnotationComposite("Description" ," ...", toolkit, charComposite, (AMainPageV2)this);
             //make the Page window a DropTarget - we need to dispose it
@@ -113,6 +114,16 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             /**
              * add by lym
              */
+//           if this view is a new one,the treeParent should be null,so the treeParent should be get this way
+            if(this.treeParent==null){
+            	TreeObject tb = (TreeObject)((XObjectEditorInput)this.getEditorInput()).getModel();
+                if (tb.getParent() == null) {
+                	if (tb.getType() != TreeObject.DOCUMENT) {
+                		treeParent = tb.findServerFolder(tb.getType());
+                	}
+                }
+            }
+                        
             xpathWidget0 = new XpathWidget("...",treeParent, toolkit, vbeComposite, (AMainPageV2)this,false);
             
             Button addVBEButton = toolkit.createButton(vbeComposite,"Add",SWT.PUSH | SWT.CENTER);
