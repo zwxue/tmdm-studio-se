@@ -1,15 +1,16 @@
 package com.amalto.workbench.actions;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.IInputValidator;
-import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDSchema;
 
+import com.amalto.workbench.dialogs.SimpleXpathInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.utils.ImageCache;
@@ -19,7 +20,7 @@ public class XSDSetAnnotationForeignKeyAction extends Action{
 
 	protected DataModelMainPage page = null;
 	protected XSDSchema schema = null;
-	
+	protected SimpleXpathInputDialog sxid = null;
 	
 	public XSDSetAnnotationForeignKeyAction(DataModelMainPage page) {
 		super();
@@ -39,24 +40,26 @@ public class XSDSetAnnotationForeignKeyAction extends Action{
             	throw new RuntimeException("Unable to edit an annotation for object of type "+selection.getFirstElement().getClass().getName());
             }
             
-       		InputDialog id = new InputDialog(
-       				page.getSite().getShell(),
+       		
+            sxid = new SimpleXpathInputDialog(
+       				page,
        				"Set the Foreign Key",
        				"Enter an xPath for the Foreign Key - Leave BLANK to delete the Foreign Key",
        				struc.getForeignKey(),
-       				new IInputValidator() {
-       					public String isValid(String newText) {
-       						return null;
-       					};
-       				}
+       				new SelectionListener() {
+            			public void widgetDefaultSelected(SelectionEvent e) {}
+            			public void widgetSelected(SelectionEvent e) {
+            				sxid.close();
+            			}
+            		}
        		);
             
-       		id.setBlockOnOpen(true);
-       		int ret = id.open();
+            sxid.setBlockOnOpen(true);
+       		int ret = sxid.open();
        		if (ret == Window.CANCEL) return;
        		
        		
-       		struc.setForeignKey("".equals(id.getValue()) ? null : id.getValue());
+       		struc.setForeignKey("".equals(sxid.getXpath()) ? null : sxid.getXpath());
        		
        		if (struc.hasChanged()) {
        			page.getTreeViewer().refresh(true);
