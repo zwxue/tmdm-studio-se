@@ -25,14 +25,15 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.amalto.webapp.core.util.Menu;
+import com.amalto.webapp.core.bean.Configuration;
 import com.amalto.webapp.core.util.Util;
+import com.amalto.webapp.core.util.XObjectType;
+import com.amalto.webapp.core.util.XSystemObjects;
 import com.amalto.webapp.util.webservices.WSDataClusterPK;
 import com.amalto.webapp.util.webservices.WSDataModelPK;
 import com.amalto.webapp.util.webservices.WSGetDataModel;
 import com.amalto.webapp.util.webservices.WSRegexDataClusterPKs;
 import com.amalto.webapp.util.webservices.WSRegexDataModelPKs;
-import com.amalto.webapp.core.bean.Configuration;
 import com.sun.org.apache.xpath.internal.XPathAPI;
 import com.sun.org.apache.xpath.internal.objects.XObject;
 import com.sun.xml.xsom.XSAnnotation;
@@ -96,15 +97,21 @@ public class CommonDWR {
 					new WSRegexDataClusterPKs("*")
 					).getWsDataClusterPKs();
 			ArrayList<String> list = new ArrayList<String>();			
-			for (int i = 0; i < wsDataClustersPK.length; i++) {
-				if(!"MDMCONF".equals(wsDataClustersPK[i].getPk())
-						&& !"PROVISIONING".equals(wsDataClustersPK[i].getPk())
-						&& !"amaltoOBJECTSjcaadapters".equals(wsDataClustersPK[i].getPk())
-						&& !"UpdateReport".equals(wsDataClustersPK[i].getPk())
-						&& !"b2box CROSSREFERENCING".equals(wsDataClustersPK[i].getPk())
-						)
-					list.add(wsDataClustersPK[i].getPk());
-			}
+			filterSystemClustersPK(wsDataClustersPK, list);
+			return  (String[])list.toArray(new String[list.size()]);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static String[] getModels(){
+		try {
+			WSDataModelPK[] wsDataModelsPK = Util.getPort().getDataModelPKs(
+					new WSRegexDataModelPKs("*")
+					).getWsDataModelPKs();
+			ArrayList<String> list = new ArrayList<String>();
+			filterSystemDataModelsPK(wsDataModelsPK, list);
 			return  (String[])list.toArray(new String[list.size()]);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -112,27 +119,43 @@ public class CommonDWR {
 		}
 	}
 	
-	public static String[] getModels(){
-		try {
-			WSDataModelPK[] wsDataModelsPK = Util.getPort().getDataModelPKs(
-					new WSRegexDataModelPKs("*")
-					).getWsDataModelPKs();
-			ArrayList<String> list = new ArrayList<String>();
-			for (int i = 0; i < wsDataModelsPK.length; i++) {
-				if(!"REPORTING".equals(wsDataModelsPK[i].getPk())
-						&& !"PROVISIONING".equals(wsDataModelsPK[i].getPk())
-						&& !"CONF".equals(wsDataModelsPK[i].getPk())
-						&& !"UpdateReport".equals(wsDataModelsPK[i].getPk())
-						&& !"b2box CROSSREFERENCING".equals(wsDataModelsPK[i].getPk())
-						)
-					list.add(wsDataModelsPK[i].getPk());
+	private static void filterSystemClustersPK(WSDataClusterPK[] wsDataClustersPK, ArrayList<String> list) {
+		Map<String, XSystemObjects> xDataClustersMap=XSystemObjects.getXSystemObjects(XObjectType.DATA_CLUSTER);
+		for (int i = 0; i < wsDataClustersPK.length; i++) {
+			if(!XSystemObjects.isXSystemObject(xDataClustersMap,XObjectType.DATA_CLUSTER, wsDataClustersPK[i].getPk())){
+				list.add(wsDataClustersPK[i].getPk());
 			}
-			return  (String[])list.toArray(new String[list.size()]);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
 		}
 	}
+	
+	public static void filterSystemClustersPK(WSDataClusterPK[] wsDataClustersPK, Map<String, String> map) {
+		Map<String, XSystemObjects> xDataClustersMap=XSystemObjects.getXSystemObjects(XObjectType.DATA_CLUSTER);
+		for (int i = 0; i < wsDataClustersPK.length; i++) {
+			if(!XSystemObjects.isXSystemObject(xDataClustersMap,XObjectType.DATA_CLUSTER, wsDataClustersPK[i].getPk())){
+				map.put(wsDataClustersPK[i].getPk(),wsDataClustersPK[i].getPk());
+			}
+		}
+	}
+
+	private static void filterSystemDataModelsPK(WSDataModelPK[] wsDataModelsPK, ArrayList<String> list) {
+		Map<String, XSystemObjects> xDataModelsMap=XSystemObjects.getXSystemObjects(XObjectType.DATA_MODEL);
+		for (int i = 0; i < wsDataModelsPK.length; i++) {
+			if(!XSystemObjects.isXSystemObject(xDataModelsMap,XObjectType.DATA_MODEL, wsDataModelsPK[i].getPk())){
+				list.add(wsDataModelsPK[i].getPk());
+			}	
+		}
+	}
+	
+	public static void filterSystemDataModelsPK(WSDataModelPK[] wsDataModelsPK, Map<String, String> map) {
+		Map<String, XSystemObjects> xDataModelsMap=XSystemObjects.getXSystemObjects(XObjectType.DATA_MODEL);
+		for (int i = 0; i < wsDataModelsPK.length; i++) {
+			if(!XSystemObjects.isXSystemObject(xDataModelsMap,XObjectType.DATA_MODEL, wsDataModelsPK[i].getPk())){
+				map.put(wsDataModelsPK[i].getPk(), wsDataModelsPK[i].getPk());
+			}
+		}
+	}
+	
+	
 	
 	public String getUsername() throws Exception{
 		try {
