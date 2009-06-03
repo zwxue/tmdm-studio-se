@@ -55,12 +55,7 @@ public class DeleteXObjectAction extends Action{
 			IStructuredSelection selection = (IStructuredSelection)view.getViewer().getSelection();
 			//add the node here
 			
-//			StringBuffer names = new StringBuffer();
-//			for (Iterator<TreeObject> iter = selection.iterator();iter.hasNext();) {
-//				TreeObject xobject = iter.next();
-//				names.append(xobject.getDisplayName()) ;
-//				names.append(" ");
-//			}
+
 			if(selection.isEmpty()){
 				return;
 			}
@@ -73,22 +68,6 @@ public class DeleteXObjectAction extends Action{
 				else
 					s="Instance";
 				
-				boolean isDefault = false;
-				for (Iterator<TreeObject> iter = selection.iterator(); iter.hasNext(); ) {
-					TreeObject xobject = iter.next();
-					if (!xobject.isXObject()) return;
-					if(ESystemDefaultObjects.isExist(xobject.getType(), xobject.getDisplayName())){
-						isDefault=true;
-						
-					}
-				}
-				if(isDefault){
-	            	MessageDialog.openError(
-	            			this.view.getSite().getShell(), 
-	            			"Delete "+IConstants.TALEND+" Object Instance",
-	            			"Can not delete the "+ selection.size() + " default " +s);
-	            	return;
-	            }
 				
 				
 				if (! MessageDialog.openConfirm(
@@ -96,21 +75,18 @@ public class DeleteXObjectAction extends Action{
 	            		"Delete "+IConstants.TALEND+" Object Instance",
 	            		"Are you sure you want to delete the "+ selection.size() + " " +s +"?"
 	            )) return;
+				
+			
+				
 			}//end of if(selection...)
 			
 			for (Iterator<TreeObject> iter = selection.iterator(); iter.hasNext(); ) {
 				TreeObject xobject = iter.next();
 				
 	            if (!xobject.isXObject()) return;
-//	            if(ESystemDefaultObjects.isExist(xobject.getType(), xobject.getDisplayName())){
-//	            	MessageDialog.openError(
-//	            			this.view.getSite().getShell(), 
-//	            			"Delete "+IConstants.TALEND+" Object Instance",
-//	            			"Can not delelte this Instance!");
-//	            	return;
-//	            }
-	            	
-	            		
+	            if(ESystemDefaultObjects.isExist(xobject.getType(), xobject.getDisplayName())){
+	            	continue;
+	            }
 	            
 	            //ask for confimation
 	                        
