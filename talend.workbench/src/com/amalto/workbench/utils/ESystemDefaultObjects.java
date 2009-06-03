@@ -78,11 +78,11 @@ public enum ESystemDefaultObjects {
 	 * @author liyanmei
 	 * @return map
 	 */
-	public static Map<String ,ESystemDefaultObjects> getSystemDefaultObjexts(){
+	public static Map<String ,ESystemDefaultObjects> getAllSystemDefaultObjexts(){
 		
 		Map<String,ESystemDefaultObjects> map=new HashMap<String, ESystemDefaultObjects>();
 		for(int i=0; i<values().length; i++){
-			map.put(String.valueOf(values()[i].getName()), values()[i]);
+			map.put(values()[i].getType()+String.valueOf(values()[i].getName()), values()[i]);
 		}
 		return map;
 	}
@@ -93,12 +93,12 @@ public enum ESystemDefaultObjects {
 	 * @param type
 	 * @return map
 	 */
-public static Map<String ,ESystemDefaultObjects> getSystemDefaultObjexts(int type){
+public static Map<String ,ESystemDefaultObjects> getSystemDefaultObjectsByType(int type){
 		
 		Map<String,ESystemDefaultObjects> map=new HashMap<String, ESystemDefaultObjects>();
 		for(int i=0; i<values().length; i++){
 			if(type==values()[i].getType())
-				map.put(String.valueOf(values()[i].getType()), values()[i]);
+				map.put(String.valueOf(values()[i].getName()), values()[i]);
 		}
 		return map;
 	}
