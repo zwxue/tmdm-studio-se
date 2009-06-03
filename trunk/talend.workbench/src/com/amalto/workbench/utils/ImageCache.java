@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.swt.graphics.Image;
 
 import com.amalto.workbench.AmaltoWorbenchPlugin;
 
@@ -25,6 +26,14 @@ public class ImageCache {
 			return registry.getDescriptor(path);
 		else{
 			return registry.getDescriptor("icons/talend-picto-small.gif");
+		}
+	}
+	
+	public static Image getCreatedImage(String path){
+		if(null!=registry.get(path))
+			return registry.get(path);
+		else{
+			return registry.get("icons/talend-picto-small.gif");
 		}
 	}
 }
