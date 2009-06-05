@@ -482,7 +482,28 @@ public class LoggingSmtpBean extends ServiceCtrlBean  implements SessionBean {
 			"</configuration>";
     }
     
-
+    /**
+     * @author achen
+     * @throws XtentisException
+     * @ejb.interface-method view-type = "both"
+     * @ejb.facade-method 
+     */
+    public  String getDocumentation(String twoLettersLanguageCode) throws XtentisException{
+    	return "There is two type parameters,\n\n" +
+    			"One(Example) :\n"+
+    			"from=b2box@customer.com&to=aiming_chen@hotmail.com&subjectprefix=MDM Logging Event" +"\n\n\n"+
+    			"Two(Example) :\n"+
+		"<parameters>\n"+
+		"	<from>b2box@customer.com</from>\n"+
+		"	<to>aiming_chen@hotmail.com</to>\n"+
+		"	<cc></cc>\n"+
+		"	<bcc></bcc>\n"+
+		"	<logFileName></logFileName>\n"+
+		"	<subjectprefix></transformer>\n"+
+		"	<logfilename></logfilename>\n"+
+		"	<transformer></transformer>\n"+
+		"</parameters>\n";	
+    }
     
     /**
      * @throws EJBException
