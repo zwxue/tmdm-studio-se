@@ -5,7 +5,7 @@ package com.amalto.service.loggingsmtp.ejb.local;
 
 /**
  * Session layer for LoggingSmtp.
- * @xdoclet-generated at 12-06-08
+ * @xdoclet-generated at 5-06-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
