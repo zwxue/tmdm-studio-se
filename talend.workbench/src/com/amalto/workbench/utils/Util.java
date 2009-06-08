@@ -38,10 +38,14 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.methods.MultipartPostMethod;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.xsd.XSDElementDeclaration;
+import org.eclipse.xsd.XSDModelGroup;
+import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
+import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTypeDefinition;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
@@ -720,6 +724,63 @@ public class Util {
         return elemsUsingType;
     }
     
+    
+    public static Object[] getAllObject(Object elem, ArrayList<Object> objList, IStructuredContentProvider provider) {
+
+		Object[] elems = provider.getElements(elem);
+		for (Object obj : elems) {
+			if (!objList.contains(obj)) {
+				objList.add(obj);
+				getAllObject(obj, objList, provider);
+			} else {
+				continue;
+			}
+		}
+
+		return objList.toArray();
+		
+	}
+    
+    
+    public static void updateReference(Object decl, Object[] objs, String newValue) {
+		if (!(decl instanceof XSDElementDeclaration)) {
+			return;
+		}
+
+		for (Object obj : objs) {
+			if (obj instanceof XSDParticle) {
+				XSDTerm term = ((XSDParticle) obj).getTerm();
+
+				if (term instanceof XSDElementDeclaration) {
+					XSDElementDeclaration xsdElem = (XSDElementDeclaration) term;
+					if (xsdElem == decl) {
+						((XSDParticle) obj)
+								.setTerm((XSDElementDeclaration) decl);
+						((XSDParticle) obj).updateElement();
+					}
+				}
+			}
+		}
+		
+	}
+    
+    public static  void deleteReference(Object decl, Object[] objs) {
+		for (Object obj : objs) {
+			if (obj instanceof XSDParticle) {
+				XSDTerm term = ((XSDParticle) obj).getTerm();
+
+				if (term instanceof XSDElementDeclaration) {
+					XSDElementDeclaration xsdElem = (XSDElementDeclaration) term;
+					if (xsdElem == decl) {
+			       	    	XSDModelGroup group = (XSDModelGroup)((XSDParticle)obj).getContainer();
+			       	    	if (group != null)
+			       	    		group.getContents().remove(obj);
+					}
+				}
+			}
+		}
+		
+	}
     
     private static Clipboard clipboard = null;
     /**

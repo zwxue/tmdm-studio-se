@@ -1,12 +1,20 @@
 package com.amalto.workbench.actions;
 
+import java.util.ArrayList;
+
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDElementDeclaration;
+import org.eclipse.xsd.XSDModelGroup;
+import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
+import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTypeDefinition;
 
 import com.amalto.workbench.editors.DataModelMainPage;
@@ -54,6 +62,13 @@ public class XSDDeleteElementAction extends Action{
                 ISelection selection = page.getTreeViewer().getSelection();
                 decl = (XSDElementDeclaration)((IStructuredSelection)selection).getFirstElement();
             }
+
+            ArrayList<Object> objList = new ArrayList<Object>();
+    		IStructuredContentProvider provider = (IStructuredContentProvider) page
+			.getTreeViewer().getContentProvider();
+    		Object[] all = Util.getAllObject(page.getSite(), objList, provider);
+            Util.deleteReference(decl, all);
+
             //backup current Type Definition
             XSDTypeDefinition current = decl.getTypeDefinition();
             
@@ -61,14 +76,15 @@ public class XSDDeleteElementAction extends Action{
             schema.getContents().remove(decl);
             
             //remove type definition is no more used and type is not built in
-       	    if (	(current.getName()!=null) &&  //anonymous type
+       	    if (current != null && (current.getName()!=null) &&  //anonymous type
        	    		(!schema.getSchemaForSchemaNamespace().equals(current.getTargetNamespace()))
        	    	){
        			if (Util.findElementsUsingType(schema,current.getTargetNamespace(), current.getName()).size()==0)
        				schema.getContents().remove(current);
 			}
-            
+
             schema.update();
+            
             xsdElem = null;
        		page.getTreeViewer().refresh(true);
        		page.markDirty();
@@ -89,5 +105,4 @@ public class XSDDeleteElementAction extends Action{
     public void setXSDTODel(XSDElementDeclaration elem) {
 		xsdElem = elem;
 	}
-
 }
