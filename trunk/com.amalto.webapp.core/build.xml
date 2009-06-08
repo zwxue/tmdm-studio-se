@@ -76,9 +76,9 @@
 		<property file="${version.props}" />
 		<echo>Deploying ${major}.${minor}.${rev}-${build.number}</echo>
 		<copy file="${war}" tofile="${jboss.deploy.dir}/${war}"/> 
-		<!--
+		
 		<copy file="${jar}" tofile="${jboss.instance.lib}/${jar}"/>
-		-->   
+		   
     </target>
 
 

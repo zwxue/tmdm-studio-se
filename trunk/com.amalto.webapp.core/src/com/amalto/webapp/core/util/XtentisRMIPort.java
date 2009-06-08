@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.regex.Pattern;
@@ -29,7 +30,9 @@ import javax.resource.cci.Interaction;
 import javax.resource.cci.MappedRecord;
 
 import org.jboss.security.Base64Encoder;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import sun.misc.BASE64Decoder;
 
@@ -106,6 +109,7 @@ import com.amalto.core.util.LocalUser;
 import com.amalto.core.util.RoleInstance;
 import com.amalto.core.util.RoleSpecification;
 import com.amalto.core.util.TransformerPluginSpec;
+import com.amalto.core.util.UUIDKey;
 import com.amalto.core.util.Util;
 import com.amalto.core.util.Version;
 import com.amalto.core.util.XSDKey;
@@ -1074,23 +1078,48 @@ public class XtentisRMIPort implements XtentisPort {
 		try {
 			String projection = wsPutItem.getXmlString();
 			Element root = Util.parse(projection).getDocumentElement();
-			
+		
 			String concept = root.getLocalName();
 
 			DataModelPOJO dataModel = com.amalto.core.util.Util.getDataModelCtrlLocal().getDataModel(
 					new DataModelPOJOPK(wsPutItem.getWsDataModelPK().getPk())
 			);
+			Document schema=Util.parse(dataModel.getSchema());
             XSDKey conceptKey = com.amalto.core.util.Util.getBusinessConceptKey(
-            		Util.parse(dataModel.getSchema()),
-					concept
+            		schema,
+					concept					
 			);
-    		
+           
 			//get key values
 			String[] itemKeyValues = com.amalto.core.util.Util.getKeyValuesFromItem(
        			root,
    				conceptKey
-			);
-			
+			);	
+			//check the xsdkey is uuid by aiming			
+	        if(conceptKey.getFields().length==1){	        	
+	        	//if key don't exist in projection
+	        	if(projection.indexOf("<"+conceptKey.getFields()[0]+">") ==-1){
+	        		Element rootNS=Util.getRootElement("nsholder",schema.getDocumentElement().getNamespaceURI(),"xsd");	        		
+	        		NodeList complexLists=Util.getNodeList(schema.getDocumentElement(),"//xsd:element[count(child::xsd:complexType)>0]",rootNS.getNamespaceURI(),"xsd");
+	        		List<UUIDKey> keys=new ArrayList<UUIDKey>();
+	        		for(int i=0; i<complexLists.getLength(); i++){
+	        			Element element=(Element)complexLists.item(i);
+	        			UUIDKey uuidKey=Util.getUUIDKey(element);
+	        			if(uuidKey!=null){
+	        				keys.add(uuidKey);
+	        				//get the first key.uuidValue as itemKeyValues
+	        				if(i==0){
+	        					itemKeyValues=new String[]{uuidKey.getUuidValue()};
+	        				}
+	        			}
+	        		}	        		
+	        		//regenerate projection
+	        		if(keys.size()>0){	        			
+	        			projection=Util.getProjectXMLString(keys.toArray(new UUIDKey[keys.size()]), projection);
+	        		}	      
+	        	}
+	        }			
+
 			DataClusterPOJOPK dcpk = new DataClusterPOJOPK(wsPutItem.getWsDataClusterPK().getPk());
 			
 			ItemPOJOPK itemPOJOPK =  
@@ -3708,6 +3737,7 @@ public class XtentisRMIPort implements XtentisPort {
 			RoutingEngineV2CtrlLocal ctrl = Util.getRoutingEngineV2CtrlLocal();
 			RoutingRulePOJOPK[] rules = ctrl.route(WS2POJO(wsRouteItem.getWsItemPK()));
 			ArrayList<WSRoutingRulePK> list = new ArrayList<WSRoutingRulePK>();
+			if(rules==null || rules.length==0) return null;
 			for (int i = 0; i < rules.length; i++) {
 				list.add(new WSRoutingRulePK(rules[i].getUniqueId()));
 			}

@@ -2,6 +2,7 @@ package com.amalto.core.objects.configurationinfo.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.Properties;
 
 
@@ -11,7 +12,18 @@ import java.util.Properties;
  *
  */
 public final class XtentisConfiguration {
-
+	static File file = new File("xtentis.conf");
+	static{
+		if (!file.exists()) {
+			//try file in Amalto configuration path
+			String os = System.getProperty("os.name");
+			file = new File("/etc/amalto/xtentis/xtentis.conf");
+			if (os.toLowerCase().matches(".*windows.*")) {
+				file = new File("c:\\amalto\\xtentis\\xtentis.conf");
+			}			
+		}
+		
+	}
 	private static Properties CONFIGURATION = null;
 	
 	protected XtentisConfiguration() {}
@@ -26,15 +38,6 @@ public final class XtentisConfiguration {
 		CONFIGURATION = new Properties();
 		
 		//first try Current path
-		File file = new File("xtentis.conf");
-		if (!file.exists()) {
-			//try file in Amalto configuration path
-			String os = System.getProperty("os.name");
-			file = new File("/etc/amalto/xtentis/xtentis.conf");
-			if (os.toLowerCase().matches(".*windows.*")) {
-				file = new File("c:\\amalto\\xtentis\\xtentis.conf");
-			}			
-		}
 		
 		if (file.exists()) {
 			try {
@@ -52,5 +55,19 @@ public final class XtentisConfiguration {
 		
 	}
 	
+	/**
+	 * save configure file
+	 */
+	public static void save(){
+		FileOutputStream out;
+		try {
+			out = new FileOutputStream(file);
+			CONFIGURATION.store(out, "mdm configure file");
+		} catch (Exception e) {
+			String err = "XTENTIS Configuration: unable to save the configuration in '"+file.getAbsolutePath()+"' :"+e.getMessage(); 
+			org.apache.log4j.Logger.getLogger(XtentisConfiguration.class).error(err,e);
+		}
+		
+	}
 
 }
