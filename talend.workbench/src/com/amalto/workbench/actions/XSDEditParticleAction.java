@@ -12,10 +12,16 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDElementDeclaration;
+import org.eclipse.xsd.XSDFactory;
+import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
+import org.eclipse.xsd.XSDSimpleTypeDefinition;
+import org.eclipse.xsd.util.XSDConstants;
+import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.BusinessElementInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.utils.ImageCache;
 
 public class XSDEditParticleAction extends Action implements SelectionListener{
@@ -101,11 +107,28 @@ public class XSDEditParticleAction extends Action implements SelectionListener{
        			decl.setResolvedElementDeclaration(newRef);
        			decl.updateElement();
        		} else if (ref!=null) {
-       			//no more element declarations --> we create a new Declaration
+       			//fliu
+       			//no more element declarations --> we create a new Declaration with String simpleType definition instead
        			//FIXME: dereferecning and element is buggy
-       			XSDElementDeclaration newD = (XSDElementDeclaration)ref.cloneConcreteComponent(true, true);
+       			XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
+       			XSDElementDeclaration newD = (XSDElementDeclaration)factory.createXSDElementDeclaration();
+       			newD.setName(this.elementName);
        			newD.updateElement();
-       			selParticle.setContent(newD);
+       			XSDSimpleTypeDefinition stringType = ((XSDTreeContentProvider) page
+						.getTreeViewer().getContentProvider()).getXsdSchema()
+						.getSchemaForSchema().resolveSimpleTypeDefinition(
+								XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001,
+								"string");
+
+       			newD.setTypeDefinition(stringType);
+       			if (selParticle.getContainer() instanceof XSDModelGroup)
+       			{
+       				XSDModelGroup group = ((XSDModelGroup)selParticle.getContainer());
+       				((XSDModelGroup)selParticle.getContainer()).getContents().remove(selParticle);
+       				selParticle = factory.createXSDParticle();
+           			selParticle.setContent(newD);
+           			group.getContents().add(selParticle);
+       			}
        		}
        		
        		selParticle.setMinOccurs(this.minOccurs);

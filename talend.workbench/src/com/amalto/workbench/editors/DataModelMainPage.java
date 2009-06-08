@@ -8,7 +8,6 @@ package com.amalto.workbench.editors;
 
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -28,8 +27,12 @@ import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Text;
@@ -93,9 +96,11 @@ import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.providers.XSDTreeLabelProvider;
 import com.amalto.workbench.webservices.WSDataModel;
 
+
 public class DataModelMainPage extends AMainPageV2 {
 
 	protected Text descriptionText;
+	protected Button importXSDBtn, exportBtn;
 	protected TreeViewer viewer;
 	protected DrillDownAdapter drillDownAdapter;
 
@@ -158,12 +163,72 @@ public class DataModelMainPage extends AMainPageV2 {
 					: wsObject.getDescription());
 			((GridData) descriptionText.getLayoutData()).minimumHeight = 30;
 			descriptionText.addModifyListener(this);
-
+			
+			importXSDBtn = toolkit.createButton(mainComposite, "Import", SWT.PUSH);
+			exportBtn = toolkit.createButton(mainComposite, "Export", SWT.PUSH);
+			importXSDBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
+					true, 1, 1));
+			exportBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
+					true, 1, 1));
+			importXSDBtn.addSelectionListener(new SelectionAdapter(){
+	        	@Override
+	        	public void widgetSelected(SelectionEvent e) {
+	    			FileDialog fd = new FileDialog(getSite().getShell(),SWT.OPEN);
+	    			fd.setFilterExtensions(new String[]{"*.xml","*.dtd"});
+	    			fd.setText("Select the XML definition for XML Schema");
+	    			String filename = fd.open();
+	    			if (filename == null) return;
+	    			inferXsdFromXml(filename);
+	        	}
+	        	
+	        	private void inferXsdFromXml(String xmlFile) {
+					int infer = 0;
+					try {
+                        XSDDriver d = new XSDDriver();
+                        infer = d.doMain(new String[]{xmlFile, "out.xsd"});
+                        String xsd = d.outputXSD();
+						if (infer == 0 && !xsd.equals("")) {
+							WSDataModel wsObj = (WSDataModel) (getXObject()
+									.getWsObject());
+							wsObj.setXsdSchema(xsd);
+							refreshData();
+							markDirty();
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+						infer = 2;
+					}
+					finally {
+						if (infer != 0) {
+							MessageDialog
+									.openError(getSite().getShell(), "Error",
+											"XSD schema can not be inferred from the given xml");
+						}
+					}
+				}
+	        });
+			
+			exportBtn.addSelectionListener(new SelectionAdapter(){
+	        	@Override
+	        	public void widgetSelected(SelectionEvent e) {
+	    			FileDialog fd = new FileDialog(getSite().getShell(),SWT.SAVE);
+	    			fd.setFilterExtensions(new String[]{"*.xsd"});
+	    			fd.setText("Save the Data Module as XSD Schema");
+	    			String filename = fd.open();
+	    			if (filename == null) return;
+	    			inferXsdFromDataModule(filename);
+	        	}
+	        	
+	        	private void inferXsdFromDataModule(String xmlFile) {
+					WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());  
+                    XSDDriver d = new XSDDriver();
+                    d.outputXSD(wsObject.getXsdSchema(), xmlFile);
+				}
+	        });
 			Label xsdLabel = toolkit.createLabel(mainComposite, "Schema",
 					SWT.NULL);
 			xsdLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
 					true, 2, 1));
-
 			// get the XSDSchema
 			XSDSchema xsdSchema = getXSDSchema(wsObject.getXsdSchema());
 
@@ -292,11 +357,20 @@ public class DataModelMainPage extends AMainPageV2 {
 		XSDTreeContentProvider provider = (XSDTreeContentProvider) viewer
 				.getContentProvider();
 		Object[] offersprings = provider.getChildren(obj);
-		offspringList.addAll(Arrays.asList(offersprings));
+
 		for (Object subObj : offersprings) {
-			if (provider.hasChildren(subObj)) {
-				populateAllOffspring(subObj, offspringList);
+			if (!offspringList.contains(subObj))
+			{
+				offspringList.add(subObj);
+				if (provider.hasChildren(subObj)) {
+					populateAllOffspring(subObj, offspringList);
+				}
 			}
+			else
+			{
+				continue;
+			}
+
 		}
 		return offspringList.toArray();
 	}

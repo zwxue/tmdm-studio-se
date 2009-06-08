@@ -1,5 +1,6 @@
 package com.amalto.workbench.actions;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.eclipse.emf.common.util.EList;
@@ -9,15 +10,19 @@ import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
+import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
+import org.eclipse.xsd.XSDTerm;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.utils.ImageCache;
+import com.amalto.workbench.utils.Util;
 
 public class XSDEditConceptAction extends Action{
 
@@ -38,6 +43,10 @@ public class XSDEditConceptAction extends Action{
             schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
             ISelection selection = page.getTreeViewer().getSelection();
             XSDElementDeclaration decl = (XSDElementDeclaration)((IStructuredSelection)selection).getFirstElement();
+            ArrayList<Object> objList = new ArrayList<Object>();
+    		IStructuredContentProvider provider = (IStructuredContentProvider) page
+			.getTreeViewer().getContentProvider();
+            Object[] objs = Util.getAllObject(page.getSite(), objList, provider);
             String oldName = decl.getName();
             
        		InputDialog id = new InputDialog(
@@ -64,6 +73,7 @@ public class XSDEditConceptAction extends Action{
        		
        		decl.setName(id.getValue());
        		decl.updateElement();
+       		Util.updateReference(decl, objs, id.getValue());
        		
        	    //change unique key with new name of concept
        	    EList list = decl.getIdentityConstraintDefinitions();
@@ -95,7 +105,4 @@ public class XSDEditConceptAction extends Action{
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}
-	
-
-
 }
