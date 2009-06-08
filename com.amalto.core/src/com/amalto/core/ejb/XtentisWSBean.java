@@ -40,6 +40,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
 import org.jboss.security.Base64Encoder;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -119,6 +120,7 @@ import com.amalto.core.util.RoleInstance;
 import com.amalto.core.util.RoleSpecification;
 import com.amalto.core.util.TransformerPluginContext;
 import com.amalto.core.util.TransformerPluginSpec;
+import com.amalto.core.util.UUIDKey;
 import com.amalto.core.util.Util;
 import com.amalto.core.util.Version;
 import com.amalto.core.util.XSDKey;
@@ -1611,16 +1613,44 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
 			DataModelPOJO dataModel  = Util.getDataModelCtrlLocal().getDataModel(
 						new DataModelPOJOPK(wsPutItem.getWsDataModelPK().getPk())
 				);
-            XSDKey conceptKey = Util.getBusinessConceptKey(
-            		Util.parse(dataModel.getSchema()),
-					concept
+			Document schema=Util.parse(dataModel.getSchema());
+            XSDKey conceptKey = com.amalto.core.util.Util.getBusinessConceptKey(
+            		schema,
+					concept					
 			);
-    		
+           
 			//get key values
-			String[] itemKeyValues = Util.getItemKeyValues(
+			String[] itemKeyValues = com.amalto.core.util.Util.getKeyValuesFromItem(
        			root,
    				conceptKey
-			);
+			);	
+
+			//check the xsdkey is uuid by aiming
+	        if(conceptKey.getFields().length==1){
+	        	//if key don't exist in projection
+	        	if(projection.indexOf("<"+conceptKey.getFields()[0]+">") ==-1){
+	        		Element rootNS=Util.getRootElement("nsholder",schema.getDocumentElement().getNamespaceURI(),"xsd");
+	        		
+	        		NodeList complexLists=Util.getNodeList(schema.getDocumentElement(),"//xsd:element[count(child::xsd:complexType)>0]",rootNS.getNamespaceURI(),"xsd");
+	        		List<UUIDKey> keys=new ArrayList<UUIDKey>();
+	        		for(int i=0; i<complexLists.getLength(); i++){
+	        			Element element=(Element)complexLists.item(i);
+	        			UUIDKey uuidKey=Util.getUUIDKey(element);
+	        			if(uuidKey!=null){
+	        				keys.add(uuidKey);
+	        				//get the first key.uuidValue as itemKeyValues
+	        				if(i==0){
+	        					itemKeyValues=new String[]{uuidKey.getUuidValue()};
+	        				}
+	        			}
+	        		}	        		
+	        		//regenerate projection
+	        		if(keys.size()>0){
+	        			
+	        			projection=Util.getProjectXMLString(keys.toArray(new UUIDKey[keys.size()]), projection);
+	        		}	      
+	        	}
+	        }			
 			
 			DataClusterPOJOPK dcpk = new DataClusterPOJOPK(wsPutItem.getWsDataClusterPK().getPk());
 			
