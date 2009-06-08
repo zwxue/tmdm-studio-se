@@ -68,15 +68,25 @@ public class DeleteXObjectAction extends Action{
 				else
 					s="Instance";
 				
+				boolean isnotdefault = false;
+				for (Iterator<TreeObject> iter = selection.iterator(); iter.hasNext(); ) {
+					TreeObject xobject = iter.next();
+					
+		            if (!xobject.isXObject()) return;
+		            if(!ESystemDefaultObjects.isExist(xobject.getType(), xobject.getDisplayName())){
+		            	isnotdefault=true;
+		            	break;
+		            }//if there are items which are not default, isnotdefault is true
+				}
+				if(isnotdefault){
+					if (! MessageDialog.openConfirm(
+		            		this.view.getSite().getShell(),
+		            		"Delete "+IConstants.TALEND+" Object Instance",
+		            		"Are you sure you want to delete the "+ selection.size() + " " +s +"?"
+		            )) return;
+					
+				}//if the isnotdefault is true,open this dialog
 				
-				
-				if (! MessageDialog.openConfirm(
-	            		this.view.getSite().getShell(),
-	            		"Delete "+IConstants.TALEND+" Object Instance",
-	            		"Are you sure you want to delete the "+ selection.size() + " " +s +"?"
-	            )) return;
-				
-			
 				
 			}//end of if(selection...)
 			
