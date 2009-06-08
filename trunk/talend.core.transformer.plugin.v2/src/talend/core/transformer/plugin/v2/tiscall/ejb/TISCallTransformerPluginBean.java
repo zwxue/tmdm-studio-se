@@ -361,10 +361,10 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 		"\n" +
 		"Parameters\n" +
 		"	url [mandatory]: the webservice port URL to the TIS Server"+"\n"+
-		"	contextParam the contextParam of the tis job"+"\n"+
-		"		name the name of the context param"+"\n"+
-		"		value the value of context param"+"\n"+
-		"		isPipleVariableName [optional] true to set contextParam value as one piplevariableName"+"\n"+
+		"	contextParam   : the contextParam of the tis job"+"\n"+
+		"		name: the name of the context param"+"\n"+
+		"		value: the value of context param"+"\n"+
+		"		isPipleVariableName [optional]: true to set contextParam value as one piplevariableName"+"\n"+
 		"	username [optional]: the username to use for the call"+"\n"+
 		"	password [optional]: the password to  use for the call" +"\n"+
 		"	contentType [optional]: the contentType of the returned data. Defaults to 'text/xml'" +"\n"+
