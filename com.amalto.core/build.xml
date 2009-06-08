@@ -108,9 +108,7 @@
     <target name="undeploy" description="remove packages">		
 		<delete>
 			<fileset dir="${jboss.lib.dir}" includes="${lib}"/>
-			<fileset dir="${jboss.deploy.dir}" includes="zz.20.xtentis.MDM.ejb.jar"/>
 			<fileset dir="${jboss.deploy.dir}" includes="${ejbs}"/>
-			<fileset dir="${jboss.deploy.dir}" includes="zz.30.xtentis.MDM.servlets.war"/>
 			<fileset dir="${jboss.deploy.dir}" includes="${war}"/>
 		</delete>
     </target>
