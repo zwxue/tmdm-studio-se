@@ -1,7 +1,9 @@
 package com.amalto.workbench.widgets;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyListener;
@@ -14,6 +16,8 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+
+import com.amalto.workbench.utils.EUUIDCustomType;
 
 /**
  * this class is meant to encapsulate all widgets rendering element
@@ -90,10 +94,15 @@ public class ElementComposite {
 		customButton.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
             	typeCombo.removeAll();
+            	Set<String> alltypes=new HashSet<String>();
             	for (Iterator iter = customTypes.iterator(); iter.hasNext(); ) {
 					String name = (String) iter.next();
-					typeCombo.add(name);
+					alltypes.add(name);
 				}
+            	//add uuid type aiming
+            	Set<String> uuidtypes=EUUIDCustomType.allTypes();
+            	alltypes.addAll(uuidtypes);
+            	typeCombo.setItems(alltypes.toArray(new String[alltypes.size()]));
             	typeCombo.select(0);
             }
         });
