@@ -285,7 +285,7 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 						String str=results.get(j);
 						if(str!=null)
 						{
-							sb=sb.append("<attr name=\"" + str + "\"/>" +"\n");
+							sb=sb.append("<attr value=\"" + str + "\"/>" +"\n");
 						}
 					}			
 					
@@ -364,7 +364,7 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 		"	contextParam the contextParam of the tis job"+"\n"+
 		"		name the name of the context param"+"\n"+
 		"		value the value of context param"+"\n"+
-		"		isPipleVariableName[[optional]] true to set contextParam value as one piplevariableName"+"\n"+
+		"		isPipleVariableName [optional] true to set contextParam value as one piplevariableName"+"\n"+
 		"	username [optional]: the username to use for the call"+"\n"+
 		"	password [optional]: the password to  use for the call" +"\n"+
 		"	contentType [optional]: the contentType of the returned data. Defaults to 'text/xml'" +"\n"+
@@ -375,10 +375,14 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 		"		<url>http://server:port/TISService/TISPort</url>" +"\n"+
 		"		<contextParam>" +"\n"+	
 		"			<name>firstname</name>" +"\n"+
-		"			<value>john</value>" +"\n"+
+		"			<value>jack</value>" +"\n"+
 		"		</contextParam>" +"\n"+
 		"		<contextParam>" +"\n"+	
 		"			<name>lastname</name>" +"\n"+
+		"			<value>jones</value>" +"\n"+
+		"		</contextParam>" +"\n"+		
+		"		<contextParam>" +"\n"+	
+		"			<name>company</name>" +"\n"+
 		"			<value>pipleVariableName</value>" +"\n"+
 		"			<isPipleVariableName>true</isPipleVariableName>" +"\n"+
 		"		</contextParam>" +"\n"+		
