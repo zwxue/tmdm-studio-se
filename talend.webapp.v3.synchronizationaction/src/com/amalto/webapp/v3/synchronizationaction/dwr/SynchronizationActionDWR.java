@@ -35,13 +35,16 @@ public class SynchronizationActionDWR {
 			WSSynchronizationPlanPKArray array
 				= Util.getPort(info.getServerURL(),info.getUsername(),info.getPassword(),Util._FORCE_WEB_SERVICE_).getSynchronizationPlanPKs(new WSGetSynchronizationPlanPKs(".*"));
 			WSSynchronizationPlanPK[] pks=array.getWsSynchronizationPlanPK();
-			logger.debug("pks:"+pks.length);
-			String[] syncNames=new String[pks.length];
-			for(int i=0; i<pks.length; i++){
-				syncNames[i]=pks[i].getPk();
-			}
-			logger.debug("getSyncNames() syncNames:"+Arrays.asList(syncNames));
-			return syncNames;
+			if(pks!=null && pks.length>0){
+				logger.debug("pks:"+pks.length);
+				String[] syncNames=new String[pks.length];
+				for(int i=0; i<pks.length; i++){
+					syncNames[i]=pks[i].getPk();
+				}
+				logger.debug("getSyncNames() syncNames:"+Arrays.asList(syncNames));
+				return syncNames;
+			}else
+				return new String[0];
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception(e.getClass().getName() + ": "
