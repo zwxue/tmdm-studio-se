@@ -56,6 +56,10 @@ public class XSDDeleteParticleAction extends Action{
             	decl = (XSDElementDeclaration)particle.getTerm();		            
             } 
 		   
+            if (particle.getContainer() == null) {
+				return;
+			}
+            
             if (!(particle.getContainer() instanceof XSDModelGroup))
             	throw new XtentisException("Unknown container "+particle.getContainer().getClass().getName());
 
