@@ -94,6 +94,8 @@ import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.providers.XSDTreeLabelProvider;
+import com.amalto.workbench.utils.EImage;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.webservices.WSDataModel;
 
 
@@ -164,8 +166,12 @@ public class DataModelMainPage extends AMainPageV2 {
 			((GridData) descriptionText.getLayoutData()).minimumHeight = 30;
 			descriptionText.addModifyListener(this);
 			
-			importXSDBtn = toolkit.createButton(mainComposite, "Import", SWT.PUSH);
-			exportBtn = toolkit.createButton(mainComposite, "Export", SWT.PUSH);
+			importXSDBtn = toolkit.createButton(mainComposite, "", SWT.PUSH);
+			importXSDBtn.setImage(ImageCache.getCreatedImage(EImage.WRITABLE.getPath()));
+			importXSDBtn.setToolTipText("Import...");
+			exportBtn = toolkit.createButton(mainComposite, "", SWT.PUSH);
+			exportBtn.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
+			exportBtn.setToolTipText("Export...");
 			importXSDBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
 					true, 1, 1));
 			exportBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
