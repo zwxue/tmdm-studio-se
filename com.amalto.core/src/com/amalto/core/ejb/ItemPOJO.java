@@ -1,6 +1,7 @@
 package com.amalto.core.ejb;
 
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,7 +12,11 @@ import javax.ejb.EJBException;
 import javax.naming.InitialContext;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.exolab.castor.xml.Marshaller;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.amalto.core.ejb.local.XmlServerSLWrapperLocal;
 import com.amalto.core.ejb.local.XmlServerSLWrapperLocalHome;
@@ -396,6 +401,150 @@ public class ItemPOJO implements Serializable{
             
 	    } catch (Exception e) {
     	    String err = "Unable to remove the item "+itemPOJOPK.getUniqueID()
+    	    		+": "+e.getClass().getName()+": "+e.getLocalizedMessage();
+    	    org.apache.log4j.Logger.getLogger(ItemPOJO.class).error(err,e);
+    	    throw new XtentisException(err);
+	    }  
+
+    }
+    
+    /**
+     * @param itemPOJOPK
+     * @param partPath
+     * @return DroppedItemPOJOPK
+     * @throws XtentisException
+     * 
+     * drop an item to items-trash
+     */
+    public static DroppedItemPOJOPK drop(ItemPOJOPK itemPOJOPK,String partPath) throws XtentisException {
+    	
+        //validate input
+    	if (itemPOJOPK==null) return null;
+    	if (partPath==null||partPath.equals(""))partPath="/";
+    	
+    	//for load we need to be admin, or have a role of admin , or role of write on instance or role of read on instance
+    	boolean authorized = false;
+    	LocalUser user = LocalUser.getLocalUser();
+    	if ("admin".equals(user.getUsername()) || LocalUser.UNAUTHENTICATED_USER.equals(user.getUsername())) { 
+    		authorized = true;
+    	} else if (user.userCanWrite(ItemPOJO.class, itemPOJOPK.getUniqueID())) {
+    		authorized = true;
+    	}
+    	
+    	if (! authorized) {
+    	    String err = 
+    	    	"Unauthorized drop access by " +
+    	    	"user "+user.getUsername()+" on Item '"+itemPOJOPK.getUniqueID()+"'"; 
+    	    org.apache.log4j.Logger.getLogger(ObjectPOJO.class).error(err);
+    		throw new XtentisException(err);    				
+    	}
+    	String userName=user.getUsername();
+    	
+    	//get the universe and revision ID
+    	UniversePOJO universe = LocalUser.getLocalUser().getUniverse();
+    	if (universe == null) {
+    		String err = "ERROR: no Universe set for user '"+LocalUser.getLocalUser().getUsername()+"'";
+    		org.apache.log4j.Logger.getLogger(ItemPOJO.class).error(err);
+    		throw new XtentisException(err);
+    	}
+    	String revisionID = universe.getConceptRevisionID(itemPOJOPK.getConceptName());
+    	
+    	
+    	//get XmlServerSLWrapperLocal
+    	XmlServerSLWrapperLocal server;
+    	
+		try {
+			server  =  ((XmlServerSLWrapperLocalHome)new InitialContext().lookup(XmlServerSLWrapperLocalHome.JNDI_NAME)).create();
+		} catch (Exception e) {
+			String err = "Unable to access the XML Server wrapper";
+			org.apache.log4j.Logger.getLogger(ItemPOJO.class).error(err,e);
+			throw new XtentisException(err);
+		}
+    	
+        try {
+        	
+        	String dataClusterName=itemPOJOPK.getDataClusterPOJOPK().getUniqueId();
+        	String uniqueID=getFilename(itemPOJOPK);
+        	
+        	StringBuffer xmlDocument=new StringBuffer();
+        	Document sourceDoc=null;
+        	NodeList toDeleteNodeList=null;
+        	String xml = server.getDocumentAsString(revisionID, dataClusterName, uniqueID,null);
+        	if (xml==null) return null;
+        	//get to delete item content
+        	if(partPath.equals("/")){
+        		
+            	xmlDocument.append(xml);
+            	
+        	}else{
+        		
+        		String xPath ="/ii/p"+partPath;
+        		
+        		sourceDoc=Util.parse(xml);
+        		toDeleteNodeList=Util.getNodeList(sourceDoc, xPath);
+        		if(toDeleteNodeList.getLength()==0)return null;
+            	for (int i = 0; i < toDeleteNodeList.getLength(); i++) {
+            		Node node=toDeleteNodeList.item(i);
+            		xmlDocument.append(Util.nodeToString(node));
+				}
+        		
+            	/* another way:
+            	String query ="document('"+uniqueID+"')/ii/p"+partPath;
+            	ArrayList<String> results=server.runQuery(revisionID, dataClusterName, query,null);
+        		if (results==null||results.size()==0) return null; 
+        		for (int i = 0; i < results.size(); i++) {
+        			xmlDocument.append(results.get(i));
+				}
+        		*/
+        	}
+        	
+        	//str 2 pojo
+        	DroppedItemPOJO droppedItemPOJO=new DroppedItemPOJO(revisionID,itemPOJOPK.getDataClusterPOJOPK(),uniqueID,itemPOJOPK.getConceptName(),itemPOJOPK.getIds(),partPath,xmlDocument.toString(),userName,new Long(System.currentTimeMillis()));
+        	
+        	//Marshal
+    		StringWriter sw = new StringWriter();
+    		Marshaller.marshal(droppedItemPOJO, sw);
+    		
+        	//copy item content
+        	long res=server.putDocumentFromString(sw.toString(), droppedItemPOJO.obtainDroppedItemPK().getUniquePK(), "MDMItemsTrash", null);
+            if(res==-1)return null;
+        	//delete source item
+        	
+            try {
+				if (partPath.equals("/")) {
+
+					server.deleteDocument(revisionID, dataClusterName,uniqueID);
+
+				} else {
+					if (toDeleteNodeList != null) {
+						Node lastParentNode = null;
+						Node formatSiblingNode = null;
+						for (int i = 0; i < toDeleteNodeList.getLength(); i++) {
+							Node node = toDeleteNodeList.item(i);
+							lastParentNode = node.getParentNode();
+							formatSiblingNode = node.getNextSibling();
+							if (lastParentNode != null){
+								lastParentNode.removeChild(node);
+							}	
+							if (formatSiblingNode != null && formatSiblingNode.getNodeValue().matches("\\s+")){
+								lastParentNode.removeChild(formatSiblingNode);
+							}
+						}
+					}
+
+					server.putDocumentFromString(Util.nodeToString(sourceDoc),uniqueID, dataClusterName, revisionID);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				// roll back
+				server.deleteDocument(null, "MDMItemsTrash",droppedItemPOJO.obtainDroppedItemPK().getUniquePK());
+				return null;
+			}
+            
+            return droppedItemPOJO.obtainDroppedItemPK();
+            
+	    } catch (Exception e) {
+    	    String err = "Unable to drop the item "+itemPOJOPK.getUniqueID()
     	    		+": "+e.getClass().getName()+": "+e.getLocalizedMessage();
     	    org.apache.log4j.Logger.getLogger(ItemPOJO.class).error(err,e);
     	    throw new XtentisException(err);

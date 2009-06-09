@@ -4,14 +4,18 @@
 package com.amalto.core.ejb.local;
 
 /**
- * Utility class for XtentisWS.
- * @xdoclet-generated at 9-06-09
+ * Utility class for DroppedItemCtrl.
+ * @xdoclet-generated at 8-06-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
  */
-public class XtentisWSUtil
+public class DroppedItemCtrlUtil
 {
+   /** Cached remote home (EJBHome). Uses lazy loading to obtain its value (loaded by getHome() methods). */
+   private static com.amalto.core.ejb.remote.DroppedItemCtrlHome cachedRemoteHome = null;
+   /** Cached local home (EJBLocalHome). Uses lazy loading to obtain its value (loaded by getLocalHome() methods). */
+   private static com.amalto.core.ejb.local.DroppedItemCtrlLocalHome cachedLocalHome = null;
 
    private static Object lookupHome(java.util.Hashtable environment, String jndiName, Class narrowTo) throws javax.naming.NamingException {
       // Obtain initial context
@@ -29,6 +33,40 @@ public class XtentisWSUtil
    }
 
    // Home interface lookup methods
+
+   /**
+    * Obtain remote home interface from default initial context
+    * @return Home interface for DroppedItemCtrl. Lookup using COMP_NAME
+    */
+   public static com.amalto.core.ejb.remote.DroppedItemCtrlHome getHome() throws javax.naming.NamingException
+   {
+      if (cachedRemoteHome == null) {
+            cachedRemoteHome = (com.amalto.core.ejb.remote.DroppedItemCtrlHome) lookupHome(null, com.amalto.core.ejb.remote.DroppedItemCtrlHome.COMP_NAME, com.amalto.core.ejb.remote.DroppedItemCtrlHome.class);
+      }
+      return cachedRemoteHome;
+   }
+
+   /**
+    * Obtain remote home interface from parameterised initial context
+    * @param environment Parameters to use for creating initial context
+    * @return Home interface for DroppedItemCtrl. Lookup using COMP_NAME
+    */
+   public static com.amalto.core.ejb.remote.DroppedItemCtrlHome getHome( java.util.Hashtable environment ) throws javax.naming.NamingException
+   {
+       return (com.amalto.core.ejb.remote.DroppedItemCtrlHome) lookupHome(environment, com.amalto.core.ejb.remote.DroppedItemCtrlHome.COMP_NAME, com.amalto.core.ejb.remote.DroppedItemCtrlHome.class);
+   }
+
+   /**
+    * Obtain local home interface from default initial context
+    * @return Local home interface for DroppedItemCtrl. Lookup using COMP_NAME
+    */
+   public static com.amalto.core.ejb.local.DroppedItemCtrlLocalHome getLocalHome() throws javax.naming.NamingException
+   {
+      if (cachedLocalHome == null) {
+            cachedLocalHome = (com.amalto.core.ejb.local.DroppedItemCtrlLocalHome) lookupHome(null, com.amalto.core.ejb.local.DroppedItemCtrlLocalHome.COMP_NAME, com.amalto.core.ejb.local.DroppedItemCtrlLocalHome.class);
+      }
+      return cachedLocalHome;
+   }
 
    /** Cached per JVM server IP. */
    private static String hexServerIP = null;
@@ -52,7 +90,7 @@ public class XtentisWSUtil
                localInetAddress = java.net.InetAddress.getLocalHost();
            }
            catch (java.net.UnknownHostException uhe) {
-               System.err.println("XtentisWSUtil: Could not get the local IP address using InetAddress.getLocalHost()!");
+               System.err.println("DroppedItemCtrlUtil: Could not get the local IP address using InetAddress.getLocalHost()!");
                // todo: find better way to get around this...
                uhe.printStackTrace();
                return null;

@@ -247,6 +247,12 @@ public class XtentisPort_Impl implements com.amalto.core.webservice.XtentisPort,
         com.amalto.core.webservice.WSInt _retVal = null;
         return _retVal;
     }
+    public com.amalto.core.webservice.WSDroppedItemPK dropItem(com.amalto.core.webservice.WSDropItem wsDropItem) throws 
+         java.rmi.RemoteException {
+        
+        com.amalto.core.webservice.WSDroppedItemPK _retVal = null;
+        return _retVal;
+    }
     public com.amalto.core.webservice.WSStringArray runQuery(com.amalto.core.webservice.WSRunQuery wsRunQuery) throws 
          java.rmi.RemoteException {
         
@@ -845,6 +851,30 @@ public class XtentisPort_Impl implements com.amalto.core.webservice.XtentisPort,
          java.rmi.RemoteException {
         
         com.amalto.core.webservice.WSSynchronizationItem _retVal = null;
+        return _retVal;
+    }
+    public com.amalto.core.webservice.WSItemPK recoverDroppedItem(com.amalto.core.webservice.WSRecoverDroppedItem wsRecoverDroppedItem) throws 
+         java.rmi.RemoteException {
+        
+        com.amalto.core.webservice.WSItemPK _retVal = null;
+        return _retVal;
+    }
+    public com.amalto.core.webservice.WSDroppedItemPKArray findAllDroppedItemsPKs(com.amalto.core.webservice.WSFindAllDroppedItemsPKs regex) throws 
+         java.rmi.RemoteException {
+        
+        com.amalto.core.webservice.WSDroppedItemPKArray _retVal = null;
+        return _retVal;
+    }
+    public com.amalto.core.webservice.WSDroppedItem loadDroppedItem(com.amalto.core.webservice.WSLoadDroppedItem wsLoadDroppedItem) throws 
+         java.rmi.RemoteException {
+        
+        com.amalto.core.webservice.WSDroppedItem _retVal = null;
+        return _retVal;
+    }
+    public com.amalto.core.webservice.WSDroppedItemPK removeDroppedItem(com.amalto.core.webservice.WSRemoveDroppedItem wsRemoveDroppedItem) throws 
+         java.rmi.RemoteException {
+        
+        com.amalto.core.webservice.WSDroppedItemPK _retVal = null;
         return _retVal;
     }
 }
