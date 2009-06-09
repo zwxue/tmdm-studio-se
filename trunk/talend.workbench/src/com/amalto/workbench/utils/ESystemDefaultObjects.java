@@ -30,7 +30,7 @@ public enum ESystemDefaultObjects {
 	
 	M_BROWSE_ITEMS(TreeObject.MENU,"Browse items"),
 	M_BROWSE_VIEWS(TreeObject.MENU,"Browse views"),
-	M_MANAGER_USERS(TreeObject.MENU,"manager users"),
+	M_MANAGER_USERS(TreeObject.MENU,"Manage users"),
 	M_REPORTING(TreeObject.MENU,"Reporting"),
 	M_SYNCHRONIZATIONACTION(TreeObject.MENU,"SynchronizationAction"),
 	M_SYNCHRONIZATIONPLAN(TreeObject.MENU,"SynchronizationPlan"),
