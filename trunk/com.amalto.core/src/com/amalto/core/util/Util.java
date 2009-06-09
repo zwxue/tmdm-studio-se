@@ -19,6 +19,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -602,7 +603,180 @@ public final class Util {
     	}
     
     }
+    
+    public static boolean isUUIDType(String type){
+    	return EUUIDCustomType.allTypes().contains(type);
+    	
+    }
+    
+    /**
+     * get uuidkey info if the currentNode has a uuid element
+     * @param currentNode
+     * @return
+     * @throws TransformerException
+     */
+    public static UUIDKey getUUIDKey(Node currentNode) throws TransformerException{
+    	String businessConceptName=getFirstTextNode(currentNode, "@name");
+    	try {
 
+        	String keyName;
+        	boolean isSequence;
+        	String nextNodeName =null;
+        	
+        	UUIDKey key=new UUIDKey();
+        	        	
+        	NodeList list=getNodeList(currentNode, "xsd:complexType//xsd:element");
+        	for(int j=0; j<list.getLength(); j++){
+        		Node n=list.item(j);
+        		String type=getFirstTextNode(n, "@type");
+	        	if(isUUIDType(type)){
+	        		keyName=getFirstTextNode(n, "@name");
+	        		NodeList seqlist=getNodeList(
+	        				currentNode,
+	        				"xsd:complexType//xsd:sequence"
+	        		);
+	        		isSequence=seqlist.getLength()>0;		
+	        		if(isSequence){
+	        			NodeList ellist=getNodeList(currentNode, "xsd:complexType//xsd:sequence/xsd:element");	    		
+	        			for (int i = 0; i < ellist.getLength(); i++) { 
+	        				Node node = ellist.item(i);
+	        				String name=Util.getFirstTextNode(node, "@name");
+	        				if(name!=null && name.equalsIgnoreCase(keyName)){
+	        					if( i < ellist.getLength()-1){
+	        						//get next node name
+	        						nextNodeName=Util.getFirstTextNode(ellist.item(i+1), "@name");
+	        						break;
+	        					}	    				
+	        				}
+	        			}
+	        		}
+	        		key.setType(type);
+	        		key.setSequence(isSequence);
+	        		key.setNextNodeName(nextNodeName);
+	        		key.setElementName(businessConceptName);
+	        		key.setKeyName(keyName);
+	        		if(EUUIDCustomType.UUID.getName().equalsIgnoreCase(type)){
+	        			key.setUuidValue(UUID.randomUUID().toString());
+	        		}
+	        		if(EUUIDCustomType.AUTO_INCREMENT.getName().equalsIgnoreCase(type)){
+	        			key.setUuidValue(String.valueOf(AutoIncrementGenerator.generateNum()));
+	        		}
+	        		return key;
+	        	}
+        	}
+        	return null;
+    	} catch(Exception e) {
+    	    String err = "Unable to get the keys for the Business Concept "+businessConceptName+": "+e.getLocalizedMessage();
+    		throw new TransformerException(err);
+    	}
+    
+    }   
+
+	 /**
+	  * @author achen
+	  * @param keys
+	  * @param projection
+	  * @return
+	  * @throws Exception
+	  */
+	 public static String getProjectXMLString(UUIDKey[] keys, String projection) throws Exception{
+		 Element root = Util.parse(projection).getDocumentElement();		
+		// Node clone_root=root.cloneNode(true);
+		//if datamodel use sequence,insert the key in the right order of the projectstring	
+		 for(UUIDKey key: keys){
+			 insertUUIDKeyNode(key, root);
+			 
+		 }
+		String xml=getXMLStringFromNode(root);
+		//projection=getXMLStringFromNode(clone_root);
+		projection = xml.replaceAll("<\\?xml.*?\\?>","");
+		return projection;
+	 }
+	 
+	 /**
+	  * @author achen
+	  * @param node
+	  * @param key
+	  * @return
+	  */
+	 private static boolean isNodeContainsKey(Node node, String key){
+			NodeList list=node.getChildNodes();				
+	   		for (int i = 0; i < list.getLength(); i++) { 
+	   			Node n = list.item(i);
+	   			if(key.equalsIgnoreCase(n.getNodeName())){
+	   				return true;
+	   			}
+	   		}
+	   		return false;
+	 }
+	/**
+	 * @author achen
+	 * @param key
+	 * @param currentNode
+	 * @return
+	 */
+	 private static boolean insertUUIDKeyNode(UUIDKey key, Node currentNode){			
+		if(currentNode.getNodeName().equalsIgnoreCase(key.getElementName())){
+			//be sure the current node don't contains the keyName
+			if(!isNodeContainsKey(currentNode, key.getKeyName())){
+				NodeList list=currentNode.getChildNodes();			
+		   		for (int i = 0; i < list.getLength(); i++) { 
+		   			Node node = list.item(i);
+		   			if(node.getNodeType()== Node.ELEMENT_NODE ){
+		   				Element newId=currentNode.getOwnerDocument().createElement(key.getKeyName());
+		   				newId.setTextContent(key.getUuidValue());			    				
+		   				if(key.getNextNodeName() == null){//is the last one?
+		   					currentNode.appendChild(newId);
+		   					return true;
+		   				}else if(node.getNodeName().equals(key.getNextNodeName())){		
+		   					currentNode.insertBefore(newId, node);
+			    			return true;
+			    		}    				
+		   			}
+		   		}			
+			}
+		}else{
+			 NodeList nodes=currentNode.getChildNodes();
+			 for(int j=0; j<nodes.getLength(); j++){
+				 Node n=nodes.item(j);
+				 insertUUIDKeyNode(key,n);
+		 	}
+		}
+		return false;
+	 }
+	 
+	public static String getXMLStringFromNode(Node d) throws TransformerException{
+		StringWriter writer = new StringWriter();
+		TransformerFactory.newInstance().newTransformer()
+		.transform(new DOMSource(d), new StreamResult(writer));
+		
+		return writer.toString();
+	}
+     
+    /**
+     * @author achen
+     * @param xsd
+     * @param businessConceptName
+     * @param keyName
+     * @return
+     * @throws TransformerException
+     */
+    public static String getBusinessConceptKeyType(Document xsd, String businessConceptName,String keyName) throws TransformerException{
+    	try {
+    		String type;
+    		type = Util.getTextNodes(
+    			xsd.getDocumentElement(),
+    			"xsd:element[@name='"+businessConceptName+"']/xsd:complexType//xsd:element[@name='"+keyName+"']/@type",
+				getRootElement("nsholder",xsd.getDocumentElement().getNamespaceURI(),"xsd")
+				)[0];
+    	
+        	return type;
+    	} catch(TransformerException e) {
+    	    String err = "Unable to get the keys for the Business Concept "+businessConceptName+": "+e.getLocalizedMessage();
+    		throw new TransformerException(err);
+    	}    
+    }
+    
     /**
      * @deprecated use {@link #getItemKeyValues(Element, XSDKey)}
      * @param item
@@ -1546,6 +1720,5 @@ public final class Util {
 	 	//testSpellCheck();
 	// 	System.out.println(getTimestamp());
 	 }
- 
- 
+	
 }
