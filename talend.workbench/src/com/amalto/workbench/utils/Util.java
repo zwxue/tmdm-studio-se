@@ -6,6 +6,7 @@ package com.amalto.workbench.utils;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -38,6 +39,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.methods.MultipartPostMethod;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.widgets.Display;
@@ -376,12 +378,10 @@ public class Util {
 	 *      LOCAL FILE UTILS
 	 *********************************************************************/
 	
-	public static String getXML(Class<? extends Object> c, String filename) throws Exception{
+	public static String getXML(String filename) throws Exception{
 	    BufferedReader in = null;
         in = new BufferedReader(
-        			new InputStreamReader(
-        			        c.getResourceAsStream(filename)
-        			)
+        			new InputStreamReader(new FileInputStream(filename), "utf-8")
         );
 	
 	    String xml="";
@@ -780,6 +780,20 @@ public class Util {
 			}
 		}
 		
+	}
+    
+    public static XSDElementDeclaration findReference(String refName,
+			XSDElementDeclaration elem) {
+		EList eDecls = elem.getSchema().getElementDeclarations();
+
+		for (Iterator iter = eDecls.iterator(); iter.hasNext();) {
+			XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
+			if (d.getQName().equals(refName)) {
+				return d;
+			}
+		}
+
+		return null;
 	}
     
     private static Clipboard clipboard = null;

@@ -97,7 +97,7 @@ import com.amalto.workbench.providers.XSDTreeLabelProvider;
 import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.webservices.WSDataModel;
-
+import com.amalto.workbench.utils.Util;
 
 public class DataModelMainPage extends AMainPageV2 {
 
@@ -180,7 +180,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	        	@Override
 	        	public void widgetSelected(SelectionEvent e) {
 	    			FileDialog fd = new FileDialog(getSite().getShell(),SWT.OPEN);
-	    			fd.setFilterExtensions(new String[]{"*.xml","*.dtd"});
+	    			fd.setFilterExtensions(new String[]{"*.xml","*.dtd", "*.xsd"});
 	    			fd.setText("Select the XML definition for XML Schema");
 	    			String filename = fd.open();
 	    			if (filename == null) return;
@@ -189,10 +189,26 @@ public class DataModelMainPage extends AMainPageV2 {
 	        	
 	        	private void inferXsdFromXml(String xmlFile) {
 					int infer = 0;
+					String xsd = "";
 					try {
-                        XSDDriver d = new XSDDriver();
-                        infer = d.doMain(new String[]{xmlFile, "out.xsd"});
-                        String xsd = d.outputXSD();
+						String inputType = xmlFile.substring(xmlFile
+								.lastIndexOf("."));
+						if (inputType.equals(".xsd")) {
+							xsd = Util.getXML(xmlFile);
+						} else {
+							XSDDriver d = new XSDDriver();
+							infer = d
+									.doMain(new String[] { xmlFile, "out.xsd" });
+							if (infer == 0) {
+								xsd = d.outputXSD();
+							}
+						}
+
+					} catch (Exception e) {
+						e.printStackTrace();
+						infer = 2;
+					}
+					finally {
 						if (infer == 0 && !xsd.equals("")) {
 							WSDataModel wsObj = (WSDataModel) (getXObject()
 									.getWsObject());
@@ -200,16 +216,11 @@ public class DataModelMainPage extends AMainPageV2 {
 							refreshData();
 							markDirty();
 						}
-					} catch (Exception e) {
-						e.printStackTrace();
-						infer = 2;
-					}
-					finally {
-						if (infer != 0) {
+						else if (infer != 0) {
 							MessageDialog
-									.openError(getSite().getShell(), "Error",
-											"XSD schema can not be inferred from the given xml");
-						}
+							.openError(getSite().getShell(), "Error",
+									"XSD schema can not be inferred from the given xml");
+							}
 					}
 				}
 	        });

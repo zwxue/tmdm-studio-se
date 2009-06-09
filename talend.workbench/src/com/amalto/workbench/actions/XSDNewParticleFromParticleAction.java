@@ -1,7 +1,9 @@
 package com.amalto.workbench.actions;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -21,6 +23,7 @@ import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.BusinessElementInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
+import com.amalto.workbench.utils.Util;
 
 public class XSDNewParticleFromParticleAction extends Action implements SelectionListener{
 
@@ -30,6 +33,7 @@ public class XSDNewParticleFromParticleAction extends Action implements Selectio
 	private XSDParticle selParticle = null;
 	
 	private String  elementName;
+	private String  refName;
 	private int minOccurs;
 	private int maxOccurs;
 	
@@ -63,8 +67,16 @@ public class XSDNewParticleFromParticleAction extends Action implements Selectio
 				}
 				i++;
 			}
-  
-            dialog = new BusinessElementInputDialog(this,page.getSite().getShell(),"Add a new Business Element");
+            
+            EList<XSDElementDeclaration> eDecls  = schema.getElementDeclarations();
+			ArrayList<String> elementDeclarations = new ArrayList<String>();
+			for (Iterator iter = eDecls.iterator(); iter.hasNext(); ) {
+				XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
+				elementDeclarations.add(d.getQName());
+			}
+			elementDeclarations.add("");
+			
+            dialog = new BusinessElementInputDialog(this,page.getSite().getShell(),"Add a new Business Element", null, null, elementDeclarations, 0, 0);
             dialog.setBlockOnOpen(true);
        		int ret = dialog.open();
        		if (ret == Dialog.CANCEL) return;
@@ -73,7 +85,18 @@ public class XSDNewParticleFromParticleAction extends Action implements Selectio
        		
        		XSDElementDeclaration decl = factory.createXSDElementDeclaration();
        		decl.setName(this.elementName);
-       		decl.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));
+       		if (!refName.equals(""))
+       		{
+       			XSDElementDeclaration ref = Util.findReference(refName, schema.getElementDeclarations().get(0));
+       			if (ref != null)
+       			{
+       				decl.setResolvedElementDeclaration(ref);
+       			}
+       		}
+       		else
+       		{
+       		  decl.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));
+       		}
        		
        		XSDParticle particle = factory.createXSDParticle();
        		particle.setContent(decl);
@@ -110,6 +133,7 @@ public class XSDNewParticleFromParticleAction extends Action implements Selectio
 	public void widgetSelected(SelectionEvent e) {
 		if (dialog.getReturnCode() ==  -1) return; //there was a validation error	
 		elementName = dialog.getElementName();
+		refName = dialog.getRefName();
 		minOccurs = dialog.getMinOccurs();
 		maxOccurs = dialog.getMaxOccurs();
 		
