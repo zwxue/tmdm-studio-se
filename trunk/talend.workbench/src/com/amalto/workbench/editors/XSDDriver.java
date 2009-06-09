@@ -165,6 +165,7 @@ public class XSDDriver {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}
 		
 		return file;
