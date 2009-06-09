@@ -220,6 +220,11 @@ import com.amalto.xmlserver.interfaces.WhereOr;
  * 					ejb-name = "SynchronizationItemCtrl" 
  * 					ref-name = "ejb/SynchronizationItemCtrlLocal" 
  * 					view-type = "local"
+ * 
+ * @ejb.ejb-ref 
+ * 					ejb-name = "DroppedItemCtrl" 
+ * 					ref-name = "ejb/DroppedItemCtrlLocal" 
+ * 					view-type = "local"
  */
 @SuppressWarnings({"deprecation", "unchecked"})
 public class XtentisWSBean implements SessionBean, XtentisPort {
@@ -1794,7 +1799,30 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
 		} catch (Exception e) {
 			throw new RemoteException((e.getCause() == null ? e.getLocalizedMessage() : e.getCause().getLocalizedMessage()));
 		}
-	}    
+	} 
+	
+	/**
+	 * @ejb.interface-method view-type = "service-endpoint"
+	 * @ejb.permission 
+	 * 	role-name = "authenticated"
+	 * 	view-type = "service-endpoint"
+	 */
+	public WSDroppedItemPK dropItem(WSDropItem wsDropItem)
+		throws RemoteException {
+		try {
+			WSItemPK wsItemPK=wsDropItem.getWsItemPK();
+			String partPath=wsDropItem.getPartPath();
+			
+			DroppedItemPOJOPK droppedItemPOJOPK = Util.getItemCtrl2Local().dropItem(WS2POJO(wsItemPK), partPath);
+			
+			return POJO2WS(droppedItemPOJOPK);
+
+		} catch (XtentisException e) {
+			throw(new RemoteException(e.getLocalizedMessage()));				
+		} catch (Exception e) {
+			throw new RemoteException((e.getCause() == null ? e.getLocalizedMessage() : e.getCause().getLocalizedMessage()));
+		}
+	}
 	
 	
 	/***************************************************************************
@@ -5655,6 +5683,131 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
 		return new WSPipeline(entries.toArray(new WSPipelineTypedContentEntry[entries.size()]));
 	}
 	
+	private WSDroppedItemPK POJO2WS(DroppedItemPOJOPK droppedItemPOJOPK) throws Exception{
+		ItemPOJOPK refItemPOJOPK=droppedItemPOJOPK.getRefItemPOJOPK();
+		return new WSDroppedItemPK(
+				POJO2WS(refItemPOJOPK),
+				droppedItemPOJOPK.getPartPath(),
+				droppedItemPOJOPK.getRevisionId()
+		);
+		 
+	}
+	
+	private DroppedItemPOJOPK WS2POJO(WSDroppedItemPK wsDroppedItemPK) throws Exception{
+		ItemPOJOPK refItemPOJOPK = WS2POJO(wsDroppedItemPK.getWsItemPK());
+		return new DroppedItemPOJOPK(
+				wsDroppedItemPK.getRevisionId(),
+				refItemPOJOPK,
+				wsDroppedItemPK.getPartPath()
+		);
+	}
+	
+	private WSDroppedItem POJO2WS(DroppedItemPOJO droppedItemPOJO) throws Exception{
+
+		WSDroppedItem wsDroppedItem=new WSDroppedItem(droppedItemPOJO.getRevisionID(),
+				                                      new WSDataClusterPK(droppedItemPOJO.getDataClusterPOJOPK().getUniqueId()),
+				                                      droppedItemPOJO.getUniqueId(),
+				                                      droppedItemPOJO.getConceptName(),
+				                                      droppedItemPOJO.getIds(),
+				                                      droppedItemPOJO.getPartPath(),
+				                                      droppedItemPOJO.getInsertionUserName(),
+				                                      droppedItemPOJO.getInsertionTime(),
+				                                      droppedItemPOJO.getProjection());
+				                                      
+		return wsDroppedItem;
+		 
+	}
+	
+	/**
+	 * @ejb.interface-method view-type = "service-endpoint"
+	 * @ejb.permission 
+	 * 	role-name = "authenticated"
+	 * 	view-type = "service-endpoint"
+	 */
+	public WSDroppedItemPKArray findAllDroppedItemsPKs(WSFindAllDroppedItemsPKs regex)
+			throws RemoteException {
+		try {
+			
+			List droppedItemPOJOPKs=Util.getDroppedItemCtrlLocal().findAllDroppedItemsPKs(regex.getRegex());
+			
+			WSDroppedItemPK[] wsDroppedItemPKs=new WSDroppedItemPK[droppedItemPOJOPKs.size()];
+			for (int i = 0; i < droppedItemPOJOPKs.size(); i++) {
+				DroppedItemPOJOPK droppedItemPOJOPK = (DroppedItemPOJOPK) droppedItemPOJOPKs.get(i);
+				wsDroppedItemPKs[i]=POJO2WS(droppedItemPOJOPK);
+			}
+			
+			return new WSDroppedItemPKArray(wsDroppedItemPKs);
+			
+		} catch (XtentisException e) {
+			throw(new RemoteException(e.getLocalizedMessage()));
+		} catch (Exception e) {
+			throw new RemoteException((e.getCause() == null ? e.getLocalizedMessage() : e.getCause().getLocalizedMessage()));
+		}
+	}
+	
+	/**
+	 * @ejb.interface-method view-type = "service-endpoint"
+	 * @ejb.permission 
+	 * 	role-name = "authenticated"
+	 * 	view-type = "service-endpoint"
+	 */
+	public WSDroppedItem loadDroppedItem(WSLoadDroppedItem wsLoadDroppedItem)
+			throws RemoteException {
+        try {
+			
+        	DroppedItemPOJO droppedItemPOJO=Util.getDroppedItemCtrlLocal().loadDroppedItem(WS2POJO(wsLoadDroppedItem.getWsDroppedItemPK()));
+			
+			return POJO2WS(droppedItemPOJO);
+			
+		} catch (XtentisException e) {
+			throw(new RemoteException(e.getLocalizedMessage()));
+		} catch (Exception e) {
+			throw new RemoteException((e.getCause() == null ? e.getLocalizedMessage() : e.getCause().getLocalizedMessage()));
+		}
+	}
+
+	/**
+	 * @ejb.interface-method view-type = "service-endpoint"
+	 * @ejb.permission 
+	 * 	role-name = "authenticated"
+	 * 	view-type = "service-endpoint"
+	 */
+	public WSItemPK recoverDroppedItem(WSRecoverDroppedItem wsRecoverDroppedItem)
+			throws RemoteException {
+		
+        try {
+			
+        	ItemPOJOPK itemPOJOPK=Util.getDroppedItemCtrlLocal().recoverDroppedItem(WS2POJO(wsRecoverDroppedItem.getWsDroppedItemPK()));
+			
+			return POJO2WS(itemPOJOPK);
+			
+		} catch (XtentisException e) {
+			throw(new RemoteException(e.getLocalizedMessage()));
+		} catch (Exception e) {
+			throw new RemoteException((e.getCause() == null ? e.getLocalizedMessage() : e.getCause().getLocalizedMessage()));
+		}
+	}
+
+	/**
+	 * @ejb.interface-method view-type = "service-endpoint"
+	 * @ejb.permission 
+	 * 	role-name = "authenticated"
+	 * 	view-type = "service-endpoint"
+	 */
+	public WSDroppedItemPK removeDroppedItem(WSRemoveDroppedItem wsRemoveDroppedItem)
+			throws RemoteException {
+        try {
+			
+        	DroppedItemPOJOPK droppedItemPOJOPK=Util.getDroppedItemCtrlLocal().removeDroppedItem(WS2POJO(wsRemoveDroppedItem.getWsDroppedItemPK()));
+			
+			return POJO2WS(droppedItemPOJOPK);
+			
+		} catch (XtentisException e) {
+			throw(new RemoteException(e.getLocalizedMessage()));
+		} catch (Exception e) {
+			throw new RemoteException((e.getCause() == null ? e.getLocalizedMessage() : e.getCause().getLocalizedMessage()));
+		}
+	}
 
 
 

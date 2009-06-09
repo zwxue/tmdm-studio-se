@@ -53,6 +53,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.amalto.core.ejb.ItemPOJOPK;
+import com.amalto.core.ejb.local.DroppedItemCtrlLocal;
+import com.amalto.core.ejb.local.DroppedItemCtrlLocalHome;
 import com.amalto.core.ejb.local.ItemCtrl2Local;
 import com.amalto.core.ejb.local.ItemCtrl2LocalHome;
 import com.amalto.core.ejb.local.ServiceLocalHome;
@@ -1264,6 +1266,12 @@ public final class Util {
 		return getItemCtrl2LocalHome().create();
 	}
 	
+	public static DroppedItemCtrlLocalHome getDroppedItemCtrlLocalHome() throws NamingException {
+		return (DroppedItemCtrlLocalHome) getLocalHome(DroppedItemCtrlLocalHome.JNDI_NAME);
+	}
+	public static DroppedItemCtrlLocal getDroppedItemCtrlLocal() throws NamingException,CreateException {
+		return getDroppedItemCtrlLocalHome().create();
+	}
 
 	public static DataModelCtrlLocalHome getDataModelCtrlLocalHome() throws NamingException {
 		return (DataModelCtrlLocalHome) getLocalHome(DataModelCtrlLocalHome.JNDI_NAME);

@@ -73,6 +73,22 @@
       </session>
 
       <session >
+         <description><![CDATA[Description for VersioningSystemCtrl]]></description>
+         <display-name>Name for VersioningSystemCtrl</display-name>
+
+         <ejb-name>VersioningSystemCtrl</ejb-name>
+
+         <home>com.amalto.core.objects.versioning.ejb.remote.VersioningSystemCtrlHome</home>
+         <remote>com.amalto.core.objects.versioning.ejb.remote.VersioningSystemCtrl</remote>
+         <local-home>com.amalto.core.objects.versioning.ejb.local.VersioningSystemCtrlLocalHome</local-home>
+         <local>com.amalto.core.objects.versioning.ejb.local.VersioningSystemCtrlLocal</local>
+         <ejb-class>com.amalto.core.objects.versioning.ejb.local.VersioningSystemCtrlSession</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+
+      </session>
+
+      <session >
          <description><![CDATA[Description for ConfigurationInfoCtrl]]></description>
          <display-name>Name for ConfigurationInfoCtrl</display-name>
 
@@ -105,16 +121,16 @@
       </session>
 
       <session >
-         <description><![CDATA[Description for VersioningSystemCtrl]]></description>
-         <display-name>Name for VersioningSystemCtrl</display-name>
+         <description><![CDATA[Description for DroppedItemCtrl]]></description>
+         <display-name>Name for DroppedItemCtrl</display-name>
 
-         <ejb-name>VersioningSystemCtrl</ejb-name>
+         <ejb-name>DroppedItemCtrl</ejb-name>
 
-         <home>com.amalto.core.objects.versioning.ejb.remote.VersioningSystemCtrlHome</home>
-         <remote>com.amalto.core.objects.versioning.ejb.remote.VersioningSystemCtrl</remote>
-         <local-home>com.amalto.core.objects.versioning.ejb.local.VersioningSystemCtrlLocalHome</local-home>
-         <local>com.amalto.core.objects.versioning.ejb.local.VersioningSystemCtrlLocal</local>
-         <ejb-class>com.amalto.core.objects.versioning.ejb.local.VersioningSystemCtrlSession</ejb-class>
+         <home>com.amalto.core.ejb.remote.DroppedItemCtrlHome</home>
+         <remote>com.amalto.core.ejb.remote.DroppedItemCtrl</remote>
+         <local-home>com.amalto.core.ejb.local.DroppedItemCtrlLocalHome</local-home>
+         <local>com.amalto.core.ejb.local.DroppedItemCtrlLocal</local>
+         <ejb-class>com.amalto.core.ejb.local.DroppedItemCtrlSession</ejb-class>
          <session-type>Stateless</session-type>
          <transaction-type>Container</transaction-type>
 
@@ -269,6 +285,13 @@
             <local-home>com.amalto.core.objects.synchronization.ejb.local.SynchronizationItemCtrlLocalHome</local-home>
             <local>com.amalto.core.objects.synchronization.ejb.local.SynchronizationItemCtrlLocal</local>
             <ejb-link>SynchronizationItemCtrl</ejb-link>
+         </ejb-local-ref>
+         <ejb-local-ref >
+            <ejb-ref-name>ejb/DroppedItemCtrlLocal</ejb-ref-name>
+            <ejb-ref-type>Session</ejb-ref-type>
+            <local-home>com.amalto.core.ejb.local.DroppedItemCtrlLocalHome</local-home>
+            <local>com.amalto.core.ejb.local.DroppedItemCtrlLocal</local>
+            <ejb-link>DroppedItemCtrl</ejb-link>
          </ejb-local-ref>
 
       </session>
@@ -693,6 +716,47 @@
       <role-name>administration</role-name>
       <method >
          <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>VersioningSystemCtrl</ejb-name>
+         <method-intf>Remote</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <role-name>administration</role-name>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>VersioningSystemCtrl</ejb-name>
+         <method-intf>Home</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <unchecked/>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>VersioningSystemCtrl</ejb-name>
+         <method-intf>Local</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <unchecked/>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>VersioningSystemCtrl</ejb-name>
+         <method-intf>LocalHome</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <role-name>administration</role-name>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
          <ejb-name>ConfigurationInfoCtrl</ejb-name>
          <method-intf>Remote</method-intf>
          <method-name>*</method-name>
@@ -775,7 +839,7 @@
       <role-name>administration</role-name>
       <method >
          <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>VersioningSystemCtrl</ejb-name>
+         <ejb-name>DroppedItemCtrl</ejb-name>
          <method-intf>Remote</method-intf>
          <method-name>*</method-name>
       </method>
@@ -785,7 +849,7 @@
       <role-name>administration</role-name>
       <method >
          <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>VersioningSystemCtrl</ejb-name>
+         <ejb-name>DroppedItemCtrl</ejb-name>
          <method-intf>Home</method-intf>
          <method-name>*</method-name>
       </method>
@@ -795,7 +859,7 @@
       <unchecked/>
       <method >
          <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>VersioningSystemCtrl</ejb-name>
+         <ejb-name>DroppedItemCtrl</ejb-name>
          <method-intf>Local</method-intf>
          <method-name>*</method-name>
       </method>
@@ -805,7 +869,7 @@
       <unchecked/>
       <method >
          <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>VersioningSystemCtrl</ejb-name>
+         <ejb-name>DroppedItemCtrl</ejb-name>
          <method-intf>LocalHome</method-intf>
          <method-name>*</method-name>
       </method>
@@ -1442,6 +1506,19 @@
          <method-name>deleteItems</method-name>
          <method-params>
             <method-param>com.amalto.core.webservice.WSDeleteItems</method-param>
+         </method-params>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <role-name>authenticated</role-name>
+      <method >
+         <description><![CDATA[]]></description>
+         <ejb-name>XtentisWS</ejb-name>
+         <method-intf>ServiceEndpoint</method-intf>
+         <method-name>dropItem</method-name>
+         <method-params>
+            <method-param>com.amalto.core.webservice.WSDropItem</method-param>
          </method-params>
       </method>
    </method-permission>
@@ -2755,6 +2832,58 @@
          <method-name>processFileUsingTransformerAsBackgroundJob</method-name>
          <method-params>
             <method-param>com.amalto.core.webservice.WSProcessFileUsingTransformerAsBackgroundJob</method-param>
+         </method-params>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <role-name>authenticated</role-name>
+      <method >
+         <description><![CDATA[]]></description>
+         <ejb-name>XtentisWS</ejb-name>
+         <method-intf>ServiceEndpoint</method-intf>
+         <method-name>findAllDroppedItemsPKs</method-name>
+         <method-params>
+            <method-param>com.amalto.core.webservice.WSFindAllDroppedItemsPKs</method-param>
+         </method-params>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <role-name>authenticated</role-name>
+      <method >
+         <description><![CDATA[]]></description>
+         <ejb-name>XtentisWS</ejb-name>
+         <method-intf>ServiceEndpoint</method-intf>
+         <method-name>loadDroppedItem</method-name>
+         <method-params>
+            <method-param>com.amalto.core.webservice.WSLoadDroppedItem</method-param>
+         </method-params>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <role-name>authenticated</role-name>
+      <method >
+         <description><![CDATA[]]></description>
+         <ejb-name>XtentisWS</ejb-name>
+         <method-intf>ServiceEndpoint</method-intf>
+         <method-name>recoverDroppedItem</method-name>
+         <method-params>
+            <method-param>com.amalto.core.webservice.WSRecoverDroppedItem</method-param>
+         </method-params>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <role-name>authenticated</role-name>
+      <method >
+         <description><![CDATA[]]></description>
+         <ejb-name>XtentisWS</ejb-name>
+         <method-intf>ServiceEndpoint</method-intf>
+         <method-name>removeDroppedItem</method-name>
+         <method-params>
+            <method-param>com.amalto.core.webservice.WSRemoveDroppedItem</method-param>
          </method-params>
       </method>
    </method-permission>
