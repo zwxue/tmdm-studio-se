@@ -618,7 +618,7 @@ public class TransformerMainPage extends AMainPageV2 {
             section.setVisible(false);
 
             sequenceGroup.setLayout(new GridLayout(4,false));
-	        disabledButton= toolkit.createButton(section, "Disabled", SWT.CHECK);
+	        disabledButton= toolkit.createButton((Composite)section.getClient(), "Disabled", SWT.CHECK);
 	        disabledButton.setLayoutData(
 	                new GridData(SWT.FILL,SWT.FILL,false,true,4,1)
 	        );
