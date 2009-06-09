@@ -23,6 +23,7 @@ import com.amalto.workbench.dialogs.BusinessElementInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.utils.ImageCache;
+import com.amalto.workbench.utils.Util;
 
 public class XSDEditParticleAction extends Action implements SelectionListener{
 
@@ -85,13 +86,7 @@ public class XSDEditParticleAction extends Action implements SelectionListener{
        		//find reference
        		XSDElementDeclaration newRef = null;
        		if (! "".equals(refName.trim())) {
-    			for (Iterator iter = eDecls.iterator(); iter.hasNext(); ) {
-    				XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
-    				if (d.getQName().equals(refName)) {
-    					newRef = d;
-    					break;
-    				}
-    			}
+       			newRef = Util.findReference(refName, decl);
 				if (newRef==null) {
 					MessageDialog.openError(
 							this.page.getSite().getShell(), 
