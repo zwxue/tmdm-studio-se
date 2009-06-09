@@ -368,7 +368,13 @@
 	<message name="deleteItemsResponse">
 		<part name="numItems" element="tns:WSInt"/>
 	</message>
-
+	
+	<message name="dropItemRequest">
+		<part name="wsDropItem" element="tns:WSDropItem"/>
+	</message>
+	<message name="dropItemResponse">
+		<part name="wsDroppedItemPK" element="tns:WSDroppedItemPK"/>
+	</message>
 
 
 	<!-- ************************ DIRECT QUERY *************************** -->
@@ -1090,7 +1096,37 @@
 	<message name="resolveSynchronizationItemResponse">
 		<part name="wsSynchronizationItem" element="tns:WSSynchronizationItem"/>
 	</message>
+	
+	<!-- ************************ Dropped Item  *************************** -->
+	
+	<message name="recoverDroppedItemRequest">
+		<part name="wsRecoverDroppedItem" element="tns:WSRecoverDroppedItem"/>
+	</message>
+	<message name="recoverDroppedItemResponse">
+		<part name="wsItemPK" element="tns:WSItemPK"/>
+	</message>
+	
+	<message name="findAllDroppedItemsPKsRequest">
+		<part name="regex" element="tns:WSFindAllDroppedItemsPKs"/>
+	</message>
+	<message name="findAllDroppedItemsPKsResponse">
+		<part name="wsDroppedItemPKArray" element="tns:WSDroppedItemPKArray"/>
+	</message>
 
+	<message name="loadDroppedItemRequest">
+		<part name="wsLoadDroppedItem" element="tns:WSLoadDroppedItem"/>
+	</message>
+	<message name="loadDroppedItemResponse">
+		<part name="wsDroppedItem" element="tns:WSDroppedItem"/>
+	</message>
+	
+	<message name="removeDroppedItemRequest">
+		<part name="wsRemoveDroppedItem" element="tns:WSRemoveDroppedItem"/>
+	</message>
+	<message name="removeDroppedItemResponse">
+		<part name="wsDroppedItemPK" element="tns:WSDroppedItemPK"/>
+	</message>
+	
 
 	<!-- *****************************************************
 		              P O R T		
@@ -1297,6 +1333,10 @@
 			<output message="tns:deleteItemsResponse"/>
 		</operation>				
 		
+		<operation name="dropItem">
+			<input message="tns:dropItemRequest"/>
+			<output message="tns:dropItemResponse"/>
+		</operation>
 
 		<!-- *********************  DIRECT QUERY  ************************ -->
 		
@@ -1756,6 +1796,25 @@
 			<output message="tns:resolveSynchronizationItemResponse"/>
 		</operation>
 		
+		<!-- ********************* Dropped Item  ************************ -->
+		
+		<operation name="recoverDroppedItem">
+			<input message="tns:recoverDroppedItemRequest"/>
+			<output message="tns:recoverDroppedItemResponse"/>
+		</operation>
+		<operation name="findAllDroppedItemsPKs">
+			<input message="tns:findAllDroppedItemsPKsRequest"/>
+			<output message="tns:findAllDroppedItemsPKsResponse"/>
+		</operation>
+		<operation name="loadDroppedItem">
+			<input message="tns:loadDroppedItemRequest"/>
+			<output message="tns:loadDroppedItemResponse"/>
+		</operation>
+		<operation name="removeDroppedItem">
+			<input message="tns:removeDroppedItemRequest"/>
+			<output message="tns:removeDroppedItemResponse"/>
+		</operation>
+		
 	</portType>
 	
 
@@ -2011,6 +2070,12 @@
 		</operation>
 		
 		<operation name="deleteItems">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>
+		
+		<operation name="dropItem">
 			<soap:operation/>
 			<input><soap:body use="literal"/></input>
 			<output><soap:body use="literal"/></output>
@@ -2580,6 +2645,28 @@
 			<output><soap:body use="literal"/></output>
 		</operation>
 		<operation name="resolveSynchronizationItem">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>
+		
+		<!-- ********************* Dropped Item  ************************ -->
+		<operation name="recoverDroppedItem">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>
+		<operation name="findAllDroppedItemsPKs">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>		
+		<operation name="loadDroppedItem">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>
+		<operation name="removeDroppedItem">
 			<soap:operation/>
 			<input><soap:body use="literal"/></input>
 			<output><soap:body use="literal"/></output>

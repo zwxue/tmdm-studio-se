@@ -11,7 +11,7 @@ import java.util.*;
  * facade session bean. Inverit from this class to provide reasonable caching and event handling capabilities.
  *
  * Remote facade for ItemCtrl2.
- * @xdoclet-generated at 27-05-09
+ * @xdoclet-generated at 7-06-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
@@ -93,6 +93,16 @@ public class ItemCtrl2Remote extends Observable
    {
         int retval;
        retval =  getSession().deleteItems( dataClusterPOJOPK,conceptName,search,spellTreshold );
+
+      return retval;
+
+   }
+
+   public com.amalto.core.ejb.DroppedItemPOJOPK dropItem ( com.amalto.core.ejb.ItemPOJOPK itemPOJOPK,java.lang.String partPath )
+	  throws com.amalto.core.util.XtentisException, java.rmi.RemoteException
+   {
+        com.amalto.core.ejb.DroppedItemPOJOPK retval;
+       retval =  getSession().dropItem( itemPOJOPK,partPath );
 
       return retval;
 
