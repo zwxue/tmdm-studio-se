@@ -239,7 +239,13 @@ public class DataModelMainPage extends AMainPageV2 {
 	        	private void inferXsdFromDataModule(String xmlFile) {
 					WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());  
                     XSDDriver d = new XSDDriver();
-                    d.outputXSD(wsObject.getXsdSchema(), xmlFile);
+                    if (d.outputXSD(wsObject.getXsdSchema(), xmlFile) != null) {
+						MessageDialog.openInformation(getSite().getShell(),
+								"Export XSD", "The operation for Exporting XSD completed successfully!");
+					} else {
+						MessageDialog.openError(getSite().getShell(), "Error",
+								"failed to export XSD file!");
+					}
 				}
 	        });
 			Label xsdLabel = toolkit.createLabel(mainComposite, "Schema",
