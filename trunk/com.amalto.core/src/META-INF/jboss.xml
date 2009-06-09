@@ -59,6 +59,14 @@
         </method-attributes>
       </session>
       <session>
+         <ejb-name>VersioningSystemCtrl</ejb-name>
+         <jndi-name>amalto/remote/core/versioningsystemctrl</jndi-name>
+         <local-jndi-name>amalto/local/core/versioningsystemctrl</local-jndi-name>
+
+        <method-attributes>
+        </method-attributes>
+      </session>
+      <session>
          <ejb-name>ConfigurationInfoCtrl</ejb-name>
          <jndi-name>amalto/remote/core/configurationinfoctrl</jndi-name>
          <local-jndi-name>amalto/local/core/configurationinfoctrl</local-jndi-name>
@@ -75,9 +83,9 @@
         </method-attributes>
       </session>
       <session>
-         <ejb-name>VersioningSystemCtrl</ejb-name>
-         <jndi-name>amalto/remote/core/versioningsystemctrl</jndi-name>
-         <local-jndi-name>amalto/local/core/versioningsystemctrl</local-jndi-name>
+         <ejb-name>DroppedItemCtrl</ejb-name>
+         <jndi-name>amalto/remote/core/droppeditemctrl</jndi-name>
+         <local-jndi-name>amalto/local/core/droppeditemctrl</local-jndi-name>
 
         <method-attributes>
         </method-attributes>

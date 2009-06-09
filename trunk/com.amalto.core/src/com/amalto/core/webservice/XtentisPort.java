@@ -88,6 +88,8 @@ public interface XtentisPort extends java.rmi.Remote {
          java.rmi.RemoteException;
     public com.amalto.core.webservice.WSInt deleteItems(com.amalto.core.webservice.WSDeleteItems wsDeleteItems) throws 
          java.rmi.RemoteException;
+    public com.amalto.core.webservice.WSDroppedItemPK dropItem(com.amalto.core.webservice.WSDropItem wsDropItem) throws 
+         java.rmi.RemoteException;
     public com.amalto.core.webservice.WSStringArray runQuery(com.amalto.core.webservice.WSRunQuery wsRunQuery) throws 
          java.rmi.RemoteException;
     public com.amalto.core.webservice.WSConnectorInteractionResponse connectorInteraction(com.amalto.core.webservice.WSConnectorInteraction wsConnectorInteraction) throws 
@@ -287,5 +289,13 @@ public interface XtentisPort extends java.rmi.Remote {
     public com.amalto.core.webservice.WSSynchronizationItemPK deleteSynchronizationItem(com.amalto.core.webservice.WSDeleteSynchronizationItem wsSynchronizationItemDelete) throws 
          java.rmi.RemoteException;
     public com.amalto.core.webservice.WSSynchronizationItem resolveSynchronizationItem(com.amalto.core.webservice.WSResolveSynchronizationItem wsResolveSynchronizationItem) throws 
+         java.rmi.RemoteException;
+    public com.amalto.core.webservice.WSItemPK recoverDroppedItem(com.amalto.core.webservice.WSRecoverDroppedItem wsRecoverDroppedItem) throws 
+         java.rmi.RemoteException;
+    public com.amalto.core.webservice.WSDroppedItemPKArray findAllDroppedItemsPKs(com.amalto.core.webservice.WSFindAllDroppedItemsPKs regex) throws 
+         java.rmi.RemoteException;
+    public com.amalto.core.webservice.WSDroppedItem loadDroppedItem(com.amalto.core.webservice.WSLoadDroppedItem wsLoadDroppedItem) throws 
+         java.rmi.RemoteException;
+    public com.amalto.core.webservice.WSDroppedItemPK removeDroppedItem(com.amalto.core.webservice.WSRemoveDroppedItem wsRemoveDroppedItem) throws 
          java.rmi.RemoteException;
 }

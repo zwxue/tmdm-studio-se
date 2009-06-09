@@ -5,7 +5,7 @@ package com.amalto.core.ejb.remote;
 
 /**
  * Remote interface for ItemCtrl2.
- * @xdoclet-generated at 27-05-09
+ * @xdoclet-generated at 7-06-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
@@ -46,6 +46,13 @@ public interface ItemCtrl2
     * @throws XtentisException
     */
    public int deleteItems( com.amalto.core.objects.datacluster.ejb.DataClusterPOJOPK dataClusterPOJOPK,java.lang.String conceptName,com.amalto.xmlserver.interfaces.IWhereItem search,int spellTreshold )
+      throws com.amalto.core.util.XtentisException, java.rmi.RemoteException;
+
+   /**
+    * Drop an item - returns null if no item was dropped
+    * @throws XtentisException
+    */
+   public com.amalto.core.ejb.DroppedItemPOJOPK dropItem( com.amalto.core.ejb.ItemPOJOPK itemPOJOPK,java.lang.String partPath )
       throws com.amalto.core.util.XtentisException, java.rmi.RemoteException;
 
    /**

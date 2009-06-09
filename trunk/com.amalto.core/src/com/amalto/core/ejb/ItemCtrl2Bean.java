@@ -305,6 +305,27 @@ public class ItemCtrl2Bean implements SessionBean {
 	    }
     }    
     
+    /**
+     * Drop an item - returns null if no item was dropped
+     * @throws XtentisException
+     * 
+     * @ejb.interface-method view-type = "both"
+     * @ejb.facade-method 
+     */
+    public DroppedItemPOJOPK dropItem(ItemPOJOPK itemPOJOPK,String partPath) throws XtentisException{
+    	org.apache.log4j.Logger.getLogger(this.getClass()).trace(
+ 		       "Dropping "+itemPOJOPK.getDataClusterPOJOPK().getUniqueId()+"."+Util.joinStrings(itemPOJOPK.getIds(), "."));
+        try {
+        	return ItemPOJO.drop(itemPOJOPK, partPath);
+	    } catch (XtentisException e) {
+	    	throw(e);
+	    } catch (Exception e) {
+    	    String err = "Unable to drop the item "+itemPOJOPK.toString()
+    	    		+": "+e.getClass().getName()+": "+e.getLocalizedMessage();
+    	    org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);
+    	    throw new XtentisException(err);
+	    }
+    }
 
     /**
      * Get unordered items of a Concept using an optional where condition
