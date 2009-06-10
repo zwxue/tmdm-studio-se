@@ -831,6 +831,7 @@ public class TransformerMainPage extends AMainPageV2 {
 			//reset the available variables
 			availableVariables.clear();
 			for(int i=0; i<=index; i++){
+				if(transformer.getProcessSteps()[i].getDisabled()) continue;
 				for(WSTransformerVariablesMapping mapping:transformer.getProcessSteps()[i].getInputMappings()){
 					availableVariables.add(mapping.getPipelineVariable()==null?DEFAULT_VAR:mapping.getPipelineVariable());
 				}
