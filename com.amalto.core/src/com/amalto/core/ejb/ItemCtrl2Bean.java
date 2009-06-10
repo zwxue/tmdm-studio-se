@@ -313,7 +313,7 @@ public class ItemCtrl2Bean implements SessionBean {
      * @ejb.facade-method 
      */
     public DroppedItemPOJOPK dropItem(ItemPOJOPK itemPOJOPK,String partPath) throws XtentisException{
-    	org.apache.log4j.Logger.getLogger(this.getClass()).trace(
+    	org.apache.log4j.Logger.getLogger(this.getClass()).debug(
  		       "Dropping "+itemPOJOPK.getDataClusterPOJOPK().getUniqueId()+"."+Util.joinStrings(itemPOJOPK.getIds(), "."));
         try {
         	return ItemPOJO.drop(itemPOJOPK, partPath);

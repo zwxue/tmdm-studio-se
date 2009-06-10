@@ -109,13 +109,13 @@ public class DroppedItemCtrlBean implements SessionBean {
      * @ejb.facade-method 
      */
     public List<DroppedItemPOJOPK> findAllDroppedItemsPKs(String regex) throws XtentisException{
-    	org.apache.log4j.Logger.getLogger(this.getClass()).debug("finding all all dropped items pks ");
+    	org.apache.log4j.Logger.getLogger(this.getClass()).debug("finding all dropped items pks ");
     	try {
         	return DroppedItemPOJO.findAllPKs(regex);
 	    } catch (XtentisException e) {
 	    	throw(e);
 	    } catch (Exception e) {
-    	    String err = "Unable to find all all dropped items pks  "
+    	    String err = "Unable to find all dropped items pks  "
     	    		+": "+e.getClass().getName()+": "+e.getLocalizedMessage();
     	    org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
     	    throw new XtentisException(err);
