@@ -38,7 +38,7 @@
 		</xsd:sequence>		
 	</xsd:complexType>
 	<xsd:element name="WSInt" type="tns:WSInt"/>
-
+	
 	<xsd:complexType name="WSI18nString">
 		<xsd:sequence>
 				<xsd:element minOccurs="1" maxOccurs="1" name="language" type="tns:WSLanguage"/>
@@ -1007,7 +1007,18 @@
 	</xsd:complexType>
 	<xsd:element name="WSDeleteItems" type="tns:WSDeleteItems"/>
 	
-	
+	<xsd:complexType name="WSDropItem">
+		<xsd:annotation>
+			<xsd:documentation>
+				Drop an item to items trash
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1" nillable="false" name="wsItemPK" type="tns:WSItemPK"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="partPath" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="WSDropItem" type="tns:WSDropItem"/>
 	
 	<!-- *****************************************************
 		D I R E C T   Q U E R Y
@@ -1425,7 +1436,87 @@
 	</xsd:complexType>
 	<xsd:element name="WSGetMenuPKs" type="tns:WSGetMenuPKs"/>	
 	
-
-
+   <!-- *****************************************************
+		Dropped Item
+		*******************************************************-->
+    <xsd:complexType name="WSDroppedItem">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1" nillable="true" name="revisionID" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1" nillable="false" name="wsDataClusterPK" type="tns:WSDataClusterPK"/>
+			<xsd:element minOccurs="1" maxOccurs="1" nillable="false" name="uniqueId" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1" nillable="true" name="conceptName" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="unbounded" nillable="true" name="ids" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1" nillable="false" name="partPath" type="xsd:string"/>
+		    <xsd:element minOccurs="1" maxOccurs="1" nillable="true" name="insertionUserName" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1" nillable="true" name="insertionTime" type="xsd:long"/>
+			<xsd:element minOccurs="1" maxOccurs="1" nillable="false" name="projection" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="WSDroppedItem" type="tns:WSDroppedItem"/>
+	
+	<xsd:complexType name="WSDroppedItemPK">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="wsItemPK" type="tns:WSItemPK"/>
+			<xsd:element minOccurs="1" maxOccurs="1" nillable="false" name="partPath" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1" nillable="true" name="revisionId" type="xsd:string"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSDroppedItemPK" type="tns:WSDroppedItemPK"/>
+	
+	<xsd:complexType name="WSDroppedItemPKArray">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="unbounded"  nillable="false" name="wsDroppedItemPK" type="tns:WSDroppedItemPK"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSDroppedItemPKArray" type="tns:WSDroppedItemPKArray"/>
+	
+	<xsd:complexType name="WSFindAllDroppedItemsPKs">
+	    <xsd:annotation>
+			<xsd:documentation>
+				Find all dropped items in items trash
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="regex" type="xsd:string"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSFindAllDroppedItemsPKs" type="tns:WSFindAllDroppedItemsPKs"/>
+	
+	<xsd:complexType name="WSLoadDroppedItem">
+	    <xsd:annotation>
+			<xsd:documentation>
+				Load a dropped item from items trash
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="wsDroppedItemPK" type="tns:WSDroppedItemPK"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSLoadDroppedItem" type="tns:WSLoadDroppedItem"/>
+	
+	<xsd:complexType name="WSRecoverDroppedItem">
+	    <xsd:annotation>
+			<xsd:documentation>
+				Recover a dropped item from items trash
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="wsDroppedItemPK" type="tns:WSDroppedItemPK"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSRecoverDroppedItem" type="tns:WSRecoverDroppedItem"/>
+	
+	<xsd:complexType name="WSRemoveDroppedItem">
+	    <xsd:annotation>
+			<xsd:documentation>
+				Remove a dropped item from items trash
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="wsDroppedItemPK" type="tns:WSDroppedItemPK"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSRemoveDroppedItem" type="tns:WSRemoveDroppedItem"/>
+	
 			
 </xsd:schema>

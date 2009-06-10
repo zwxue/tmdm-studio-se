@@ -88,6 +88,8 @@ public interface XtentisPort extends java.rmi.Remote {
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSInt deleteItems(com.amalto.workbench.webservices.WSDeleteItems wsDeleteItems) throws 
          java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSDroppedItemPK dropItem(com.amalto.workbench.webservices.WSDropItem wsDropItem) throws 
+         java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSStringArray runQuery(com.amalto.workbench.webservices.WSRunQuery wsRunQuery) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSConnectorInteractionResponse connectorInteraction(com.amalto.workbench.webservices.WSConnectorInteraction wsConnectorInteraction) throws 
@@ -287,5 +289,13 @@ public interface XtentisPort extends java.rmi.Remote {
     public com.amalto.workbench.webservices.WSSynchronizationItemPK deleteSynchronizationItem(com.amalto.workbench.webservices.WSDeleteSynchronizationItem wsSynchronizationItemDelete) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSSynchronizationItem resolveSynchronizationItem(com.amalto.workbench.webservices.WSResolveSynchronizationItem wsResolveSynchronizationItem) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSItemPK recoverDroppedItem(com.amalto.workbench.webservices.WSRecoverDroppedItem wsRecoverDroppedItem) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSDroppedItemPKArray findAllDroppedItemsPKs(com.amalto.workbench.webservices.WSFindAllDroppedItemsPKs regex) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSDroppedItem loadDroppedItem(com.amalto.workbench.webservices.WSLoadDroppedItem wsLoadDroppedItem) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSDroppedItemPK removeDroppedItem(com.amalto.workbench.webservices.WSRemoveDroppedItem wsRemoveDroppedItem) throws 
          java.rmi.RemoteException;
 }
