@@ -73,7 +73,7 @@
 	    <property name="repository.URL" value="${svn.server.url}"/>				
 	  	<java classname="org.tmatesoft.svn.cli.SVN"
 	       dir="${source-root}" fork="true" >
-	      <arg value="co"/>
+	      <arg value="${svn_operation}"/>
 	      <arg value="--username"/>
 	      <arg value="${svn.username}"/>
 	      <arg value="--password"/>
