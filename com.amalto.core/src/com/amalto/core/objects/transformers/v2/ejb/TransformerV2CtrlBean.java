@@ -607,15 +607,20 @@ public class TransformerV2CtrlBean implements SessionBean, TimedObject, Transfor
     		throw new XtentisException(err);
 	    }
         	
-    	
     	/*******************************************************************
     	 * Execute the plugin
     	 *******************************************************************/
         try {    	
         	//content will be sent through the contentIsReady method below.
-        	pluginContext.setPluginCallBack(this);        	
-        	//execute the plugin
-        	plugin.execute(pluginContext);        	
+        	pluginContext.setPluginCallBack(this);      
+        	//check if disabled should not exe this plugin by aiming
+        	if(!processStep.isDisabled()){      	
+	        	//execute the plugin
+	        	plugin.execute(pluginContext);
+        	}else{
+        		//sigal content is ready by aiming
+        		pluginContext.getPluginCallBack().contentIsReady(pluginContext);
+        	}
 	    } catch (XtentisException e) {
 	    	throw(e);
 	    }
@@ -776,6 +781,8 @@ public class TransformerV2CtrlBean implements SessionBean, TimedObject, Transfor
 					if (pluginvariable!=null) {
 						//map the output of the plugin to the pipeline variable
 						TypedContent content = (TypedContent)pluginContext.get(pluginvariable);
+						//check content null
+						if(content !=null){
 						if (content instanceof TypedContent_Drop_Variable) {
 							org.apache.log4j.Logger.getLogger(this.getClass()).debug(
 									"contentIsReady() Dropping pipeline variable: "+mapping.getPipelineVariable()
@@ -788,6 +795,7 @@ public class TransformerV2CtrlBean implements SessionBean, TimedObject, Transfor
 									+"   Content: "+s.substring(0, Math.min(0, s.length()))+"..."
 							);
 							globalContext.putInPipeline(mapping.getPipelineVariable(), content);
+						}
 						}
 					} else if (mapping.getHardCoding() !=null) {
 						//harcode the value into the pipeline
