@@ -64,7 +64,7 @@ public class SynchronizationPlanDWR {
 			regex=regex.replaceAll("\\*", "");
 			regex=".*"+regex+".*";
 			
-			WSSynchronizationItemPKArray pks=Util.getPort().getSynchronizationItemPKs(new WSGetSynchronizationItemPKs());
+			WSSynchronizationItemPKArray pks=Util.getPort().getSynchronizationItemPKs(new WSGetSynchronizationItemPKs(regex));
 			WSSynchronizationItemPK[] items= pks.getWsSynchronizationItemPK();
 			
 			logger.debug("pks() " + items.length);
