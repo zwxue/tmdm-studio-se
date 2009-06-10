@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -464,20 +465,22 @@ public class ItemPOJO implements Serializable{
 			throw new XtentisException(err);
 		}
 		
-		//get DataClusterCtrlLocal
-		DataClusterCtrlLocal dataClusterCtrlLocal;
-		try {
-			dataClusterCtrlLocal  =  ((DataClusterCtrlLocalHome)new InitialContext().lookup(DataClusterCtrlLocalHome.JNDI_NAME)).create();
-		} catch (Exception e) {
-			String err = "Unable to access the DataClusterCtrlLocal";
-			org.apache.log4j.Logger.getLogger(ItemPOJO.class).error(err,e);
-			throw new XtentisException(err);
-		}
-		
         try {
         	//init MDMItemsTrash Cluster
-        	if(dataClusterCtrlLocal.existsDataCluster(new DataClusterPOJOPK("MDMItemsTrash"))==null){
-    			dataClusterCtrlLocal.putDataCluster(new DataClusterPOJO("MDMItemsTrash","Holds logical deleted items",null));
+    		if(ObjectPOJO.load(null,DataClusterPOJO.class,new DataClusterPOJOPK("MDMItemsTrash"))==null){
+    			//create record
+    			DataClusterPOJO dataCluster=new DataClusterPOJO("MDMItemsTrash","Holds logical deleted items",null); 
+    			ObjectPOJOPK pk = dataCluster.store(null);
+    		    if (pk == null) throw new XtentisException("Unable to create the Data Cluster. Please check the XML Server logs");
+    		    
+    		    //create cluster
+    		    boolean exist=false;
+    		    String[] clusters = server.getAllClusters(null);
+    			if (clusters != null) {
+    				exist = Arrays.asList(clusters).contains(pk.getUniqueId());
+    			}
+    			if (!exist) server.createCluster(null, pk.getUniqueId()); 
+    			//log
     			org.apache.log4j.Logger.getLogger(ItemPOJO.class).info("Init MDMItemsTrash Cluster");
     		}
         	

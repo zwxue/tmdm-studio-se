@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.naming.InitialContext;
@@ -315,7 +316,7 @@ public class DroppedItemPOJO implements Serializable{
     	//get XmlServerSLWrapperLocal
     	XmlServerSLWrapperLocal server=obtainXmlServerSLWrapperLocal();
     	
-		initItemsTrash();
+    	initItemsTrash(server);
 		
     	if ("".equals(regex) || "*".equals(regex) || ".*".equals(regex)) regex = null;
   
@@ -432,32 +433,41 @@ public class DroppedItemPOJO implements Serializable{
 	    } catch (Exception e) {
     	    String err = "Unable to "+actionName+" the dropped item "+droppedItemPOJOPK.getUniquePK()
     	    		+": "+e.getClass().getName()+": "+e.getLocalizedMessage();
-    	    org.apache.log4j.Logger.getLogger(ItemPOJO.class).error(err,e);
+    	    org.apache.log4j.Logger.getLogger(DroppedItemPOJO.class).error(err,e);
     	    throw new XtentisException(err);
 	    }  
 
     }
     
-    /**
-	 * @throws XtentisException
-	 * 
-	 * used in entry method 
-	 */
-	private static void initItemsTrash() throws XtentisException {
-		try {
-			//get DataClusterCtrlLocal
-			DataClusterCtrlLocal dataClusterCtrlLocal  =  ((DataClusterCtrlLocalHome)new InitialContext().lookup(DataClusterCtrlLocalHome.JNDI_NAME)).create();
-			//init MDMItemsTrash Cluster
-	    	if(dataClusterCtrlLocal.existsDataCluster(new DataClusterPOJOPK("MDMItemsTrash"))==null){
-				dataClusterCtrlLocal.putDataCluster(new DataClusterPOJO("MDMItemsTrash","Holds logical deleted items",null));
-				org.apache.log4j.Logger.getLogger(ItemPOJO.class).info("Init MDMItemsTrash Cluster");
-			}
-		} catch (Exception e) {
-			String err = "Unable to access the DataClusterCtrlLocal";
-			org.apache.log4j.Logger.getLogger(ItemPOJO.class).error(err,e);
-			throw new XtentisException(err);
-		}
-	}
+    private static void initItemsTrash(XmlServerSLWrapperLocal server)throws XtentisException {
+    	
+    	try {
+    		 
+    		//init MDMItemsTrash Cluster
+    		if(ObjectPOJO.load(null,DataClusterPOJO.class,new DataClusterPOJOPK("MDMItemsTrash"))==null){
+    			//create record
+    			DataClusterPOJO dataCluster=new DataClusterPOJO("MDMItemsTrash","Holds logical deleted items",null); 
+    			ObjectPOJOPK pk = dataCluster.store(null);
+    		    if (pk == null) throw new XtentisException("Unable to create the Data Cluster. Please check the XML Server logs");
+    		    
+    		    //create cluster
+    		    boolean exist=false;
+    		    String[] clusters = server.getAllClusters(null);
+    			if (clusters != null) {
+    				exist = Arrays.asList(clusters).contains(pk.getUniqueId());
+    			}
+    			if (!exist) server.createCluster(null, pk.getUniqueId()); 
+    			//log
+    			org.apache.log4j.Logger.getLogger(ItemPOJO.class).info("Init MDMItemsTrash Cluster");
+    		}
+            
+	    } catch (Exception e) {
+    	    String err = "Unable to init the items-trash "+": "+e.getClass().getName()+": "+e.getLocalizedMessage();
+    	    org.apache.log4j.Logger.getLogger(DroppedItemPOJO.class).error(err,e);
+    	    throw new XtentisException(err);
+	    }
+		
+    }
     
 	private static XmlServerSLWrapperLocal obtainXmlServerSLWrapperLocal() throws XtentisException {
 		XmlServerSLWrapperLocal server;
