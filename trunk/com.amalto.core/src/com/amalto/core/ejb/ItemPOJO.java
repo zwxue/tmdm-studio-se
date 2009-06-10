@@ -477,7 +477,7 @@ public class ItemPOJO implements Serializable{
         try {
         	//init MDMItemsTrash Cluster
         	if(dataClusterCtrlLocal.existsDataCluster(new DataClusterPOJOPK("MDMItemsTrash"))==null){
-    			dataClusterCtrlLocal.putDataCluster(new DataClusterPOJO(null,"MDMItemsTrash"));
+    			dataClusterCtrlLocal.putDataCluster(new DataClusterPOJO("MDMItemsTrash","Holds logical deleted items",null));
     			org.apache.log4j.Logger.getLogger(ItemPOJO.class).info("Init MDMItemsTrash Cluster");
     		}
         	
