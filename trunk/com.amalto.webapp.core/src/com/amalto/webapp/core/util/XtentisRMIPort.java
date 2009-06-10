@@ -859,7 +859,8 @@ public class XtentisRMIPort implements XtentisPort {
 			//check the xsdkey is uuid by aiming			
 	        if(conceptKey.getFields().length==1){	        	
 	        	//if key don't exist in projection
-	        	if(projection.indexOf("<"+conceptKey.getFields()[0]+">") ==-1){
+	        	Element conceptRoot = Util.parse(projection).getDocumentElement();	        
+	        	if(Util.getNodeList(conceptRoot, concept+"/"+conceptKey.getFields()[0]).getLength()==0){
 	        		Element rootNS=Util.getRootElement("nsholder",schema.getDocumentElement().getNamespaceURI(),"xsd");	        		
 	        		NodeList complexLists=Util.getNodeList(schema.getDocumentElement(),"//xsd:element[count(child::xsd:complexType)>0]",rootNS.getNamespaceURI(),"xsd");
 	        		List<UUIDKey> keys=new ArrayList<UUIDKey>();
@@ -880,7 +881,6 @@ public class XtentisRMIPort implements XtentisPort {
 	        		}	      
 	        	}
 	        }			
-
 			DataClusterPOJOPK dcpk = new DataClusterPOJOPK(wsPutItem.getWsDataClusterPK().getPk());
 			
 			ItemPOJOPK itemPOJOPK =  
