@@ -647,6 +647,11 @@ public final class Util {
 	        					if( i < ellist.getLength()-1){
 	        						//get next node name
 	        						nextNodeName=Util.getFirstTextNode(ellist.item(i+1), "@name");
+	        						//if next node is ref node
+	        						String ref=Util.getFirstTextNode(ellist.item(i+1), "@ref");
+	        						if(nextNodeName==null && ref!=null){
+	        							nextNodeName=ref;
+	        						}	        						
 	        						break;
 	        					}	    				
 	        				}
