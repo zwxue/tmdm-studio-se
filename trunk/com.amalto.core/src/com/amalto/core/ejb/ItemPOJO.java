@@ -20,7 +20,10 @@ import org.w3c.dom.NodeList;
 
 import com.amalto.core.ejb.local.XmlServerSLWrapperLocal;
 import com.amalto.core.ejb.local.XmlServerSLWrapperLocalHome;
+import com.amalto.core.objects.datacluster.ejb.DataClusterPOJO;
 import com.amalto.core.objects.datacluster.ejb.DataClusterPOJOPK;
+import com.amalto.core.objects.datacluster.ejb.local.DataClusterCtrlLocal;
+import com.amalto.core.objects.datacluster.ejb.local.DataClusterCtrlLocalHome;
 import com.amalto.core.objects.synchronization.ejb.SynchronizationPlanPOJOPK;
 import com.amalto.core.objects.universe.ejb.UniversePOJO;
 import com.amalto.core.util.LocalUser;
@@ -460,8 +463,23 @@ public class ItemPOJO implements Serializable{
 			org.apache.log4j.Logger.getLogger(ItemPOJO.class).error(err,e);
 			throw new XtentisException(err);
 		}
-    	
+		
+		//get DataClusterCtrlLocal
+		DataClusterCtrlLocal dataClusterCtrlLocal;
+		try {
+			dataClusterCtrlLocal  =  ((DataClusterCtrlLocalHome)new InitialContext().lookup(DataClusterCtrlLocalHome.JNDI_NAME)).create();
+		} catch (Exception e) {
+			String err = "Unable to access the DataClusterCtrlLocal";
+			org.apache.log4j.Logger.getLogger(ItemPOJO.class).error(err,e);
+			throw new XtentisException(err);
+		}
+		
         try {
+        	//init MDMItemsTrash Cluster
+        	if(dataClusterCtrlLocal.existsDataCluster(new DataClusterPOJOPK("MDMItemsTrash"))==null){
+    			dataClusterCtrlLocal.putDataCluster(new DataClusterPOJO(null,"MDMItemsTrash"));
+    			org.apache.log4j.Logger.getLogger(ItemPOJO.class).info("Init MDMItemsTrash Cluster");
+    		}
         	
         	String dataClusterName=itemPOJOPK.getDataClusterPOJOPK().getUniqueId();
         	String uniqueID=getFilename(itemPOJOPK);
