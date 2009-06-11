@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="com/amalto/core/test/ZZCoreV2EJBTest.java|com/amalto/core/ejb/OutboundPluginBeanOLD.java|com/amalto/core/ejb/OutboundPluginCtrlBeanOLD.java|com/amalto/core/ejb/OutboundAdaptorBeanOLD.java|com/amalto/core/ejb/OutboundAdaptorCtrlBeanOLD.java|com/amalto/core/ejb/DocumentCtrlBean.java|com/amalto/core/ejb/XmlServerSFWrapperBean.java" kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/opt/jboss/client/jbossall-client.jar"/>
+	<classpathentry kind="lib" path="/opt/jboss/client/log4j.jar"/>
+	<classpathentry kind="lib" path="/opt/jboss/server/default/lib/jbosssx.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://docs.jboss.com/jbossas/javadoc/4.0.2/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/opt/jboss/lib/jboss-common.jar"/>
+	<classpathentry kind="lib" path="/opt/jboss/lib/jboss-jmx.jar"/>
+	<classpathentry kind="lib" path="/opt/jboss/lib/jboss-system.jar"/>
+	<classpathentry kind="lib" path="/opt/jboss/server/default/lib/z.commons-lang-2.1.jar" sourcepath="/opt/commons-lang-2.1/src">
+		<attributes>
+			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/lang/api-release/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/opt/jboss/server/default/lib/z.castor-1.0.5-xml.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/opt/castor-1.0.5/build/doc/javadoc/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/talend.connector.core"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/talend.connector.svn"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/talend.core"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
