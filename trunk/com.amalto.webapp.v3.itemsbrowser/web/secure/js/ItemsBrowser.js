@@ -134,6 +134,16 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	    'en' : 'Do you really want to delete this item : '
 	};
 	
+	var  MSG_CONFIRM_LOGICAL_DELETE_ITEM =    {
+	    'fr' : 'Please enter this path: ',
+	    'en' : 'Please enter this path: '
+	};
+	
+	var  MSG_CONFIRM_TITLE_LOGICAL_DELETE_ITEM =    {
+	    'fr' : 'path name: ',
+	    'en' : 'path name: '
+	};
+	
 	var MSG_CONFIRM_SAVE_ITEM = {
 		'fr' : 'Cet item existe déjà. Souhaitez-vous l\'écraser ?',
 		'en' : 'This item exists. Do you want to overwrite it ?'
@@ -178,6 +188,11 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	var BUTTON_DELETE = {
 		'fr':'Supprimer',
 		'en':'Delete'
+	};
+	
+	var BUTTON_LOGICAL_DEL = {
+		'fr':'Logical delete',
+		'en':'Logical delete'
 	};
 	
 	var BUTTON_CREATE_USER = {
@@ -627,6 +642,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	var O_SAVE 			= 8;
 	var O_SAVE_QUIT 	= 16;
 	var O_DELETE 		= 32;
+	var O_LOGICAL_DEL   = 64;
 	
 	// modes
 	var M_TREE_VIEW		= 1;
@@ -663,6 +679,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 				options |= (toolbar.baseOptions & O_SAVE);
 				options |= (toolbar.baseOptions & O_SAVE_QUIT);
 				options |= (toolbar.baseOptions & O_DELETE);
+				options |= (toolbar.baseOptions & O_LOGICAL_DEL);
 			break;
 			case M_PERSO_VIEW:
 				options |= O_TREE_VIEW;
@@ -748,6 +765,19 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 			}
 	
 			toolbar.addButton( {text: BUTTON_DELETE[language], className: 'tb-button tb-button-nude', handler: toolbar.deleteItemHandler});
+			nbButtons++;
+		}
+		
+		// logical delete
+		if ( (options&O_LOGICAL_DEL)==O_LOGICAL_DEL )
+		{
+			if (nbButtons>0)
+			{
+				toolbar.addSeparator();
+				nbButtons++;
+			}
+	
+			toolbar.addButton( {text: BUTTON_LOGICAL_DEL[language], className: 'tb-button tb-button-nude', handler: toolbar.logicalDelItemHandler});
 			nbButtons++;
 		}
 	}
@@ -873,6 +903,10 @@ amalto.itemsbrowser.ItemsBrowser = function () {
         			deleteItem(ids, dataObject, treeIndex);
         		};
         		
+        		tbDetail.logicalDelItemHandler = function() {
+        			logicalDelItem(ids, dataObject, treeIndex);
+        		};
+        		
         		ItemsBrowserInterface.checkIfTransformerExists(dataObject, language, function(result){
         			
         			var mode = M_TREE_VIEW;
@@ -910,7 +944,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
     		
     			
     			if(rootNode.readOnly==false && newItem[treeIndex]==false) {
-    				tbDetail.baseOptions |= O_DELETE;	
+    				tbDetail.baseOptions |= O_DELETE|O_LOGICAL_DEL;	
     			}		
     	
     			ItemsBrowserInterface.setTree(dataObject, itemPK2, node1.index, false, treeIndex, function(result){
@@ -1018,7 +1052,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		amalto.core.ready();
 	}
 	
-	
+	 
 	function saveItemAndQuit(ids,dataObject,treeIndex){
 		//alert(DWRUtil.toDescriptiveString(itemPK2,2)+" "+dataObject+" "+treeIndex);	
 		saveItem(ids,dataObject,treeIndex);
@@ -1066,7 +1100,33 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		}
 	}
 
-	
+	function logicalDelItem(ids, dataObject, treeIndex){
+		var tmp = "";
+		var itemPK = ids.split('@');
+
+		Ext.MessageBox.prompt(MSG_CONFIRM_TITLE_LOGICAL_DELETE_ITEM[language], MSG_CONFIRM_LOGICAL_DELETE_ITEM[language] , doLogicalDel);
+		
+		function doLogicalDel(btn, path){
+			if (btn == 'ok' && path == '') {
+				Ext.MessageBox.alert("warning", "please input the path");
+				return;
+			} else if (btn == 'cancel') {
+				return;
+			}
+			var tmp = "";
+			var itemPK = ids.split('@');
+			for(var i=0; i<itemPK.length; i++) {
+				tmp += " "+itemPK[i];
+			}
+			ItemsBrowserInterface.logicalDeleteItem(dataObject, itemPK, path, function(result){
+				amalto.core.getTabPanel().remove('itemDetailsdiv'+treeIndex);
+				amalto.core.ready(result);
+				displayItems();
+				
+			});
+		};
+	}
+
 	/**
 	 * Search for foreign keys and return a map that can be used 
 	 * to fill the Foreign Key Search Combo

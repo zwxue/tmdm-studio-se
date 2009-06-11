@@ -32,6 +32,8 @@ import com.amalto.webapp.util.webservices.WSCount;
 import com.amalto.webapp.util.webservices.WSDataClusterPK;
 import com.amalto.webapp.util.webservices.WSDataModelPK;
 import com.amalto.webapp.util.webservices.WSDeleteItem;
+import com.amalto.webapp.util.webservices.WSDropItem;
+import com.amalto.webapp.util.webservices.WSDroppedItemPK;
 import com.amalto.webapp.util.webservices.WSExistsItem;
 import com.amalto.webapp.util.webservices.WSGetBusinessConceptKey;
 import com.amalto.webapp.util.webservices.WSGetBusinessConcepts;
@@ -742,6 +744,34 @@ public class ItemsBrowserDWR {
 		}        
 	}
 	
+	public String logicalDeleteItem(String concept, String[] ids, String path)
+	{
+		WebContext ctx = WebContextFactory.get();
+		try {
+			Configuration config = Configuration.getInstance();
+			String dataClusterPK = config.getCluster();
+			TreeNode rootNode = getRootNode(concept, "en");
+	        if(ids!=null && !rootNode.isReadOnly()){
+	        	WSDroppedItemPK wsItem = Util.getPort().dropItem(
+						new WSDropItem(new WSItemPK(
+								new WSDataClusterPK(dataClusterPK),
+								concept, ids
+								), path));
+				if(wsItem!=null)
+					pushUpdateReport(ids,concept, "DELETE");
+				else
+					return "ERROR";
+				ctx.getSession().setAttribute("viewNameItems",null);
+				return "OK";
+	        }
+	        else {
+	        	return "OK - But no update report";
+	        }
+		}
+		catch(Exception e){
+			return "ERROR";
+		}   
+	}
 	/**
 	 * create an "empty" item from scratch, set every text node to empty
 	 * @param viewPK
