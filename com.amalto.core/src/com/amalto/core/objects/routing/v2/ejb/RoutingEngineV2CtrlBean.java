@@ -544,8 +544,8 @@ public class RoutingEngineV2CtrlBean implements SessionBean, TimedObject {
 		//garbage Collect executors
 		HashMap<String, RoutingEngineV2ExecutorPOJO> previousRunExecutors = new HashMap<String, RoutingEngineV2ExecutorPOJO>(routingEngine.getExecutors());
 		HashMap<String, RoutingEngineV2ExecutorPOJO> thisRunExecutors = new HashMap<String, RoutingEngineV2ExecutorPOJO>();
-		ArrayList<String> slotedRoutingOrderIDs = new ArrayList<String>();
-		
+		ArrayList<AbstractRoutingOrderV2POJOPK> slotedRoutingOrderIDs = new ArrayList<AbstractRoutingOrderV2POJOPK>();
+
 		Set<String> tokens = previousRunExecutors.keySet();
 		for (Iterator<String> iterator = tokens.iterator(); iterator.hasNext(); ) {
 			String token = iterator.next();
@@ -555,7 +555,8 @@ public class RoutingEngineV2CtrlBean implements SessionBean, TimedObject {
 				AbstractRoutingOrderV2POJOPK routingOrderPK = routingEngineV2ExecutorPOJO.getExecutingRoutingOrderPK();
     			if (routingOrderCtrl.existsRoutingOrder(routingOrderPK) != null) {
     				thisRunExecutors.put(token,routingEngineV2ExecutorPOJO);
-    				slotedRoutingOrderIDs.add(routingOrderPK.getUniqueId());
+    				//Routing order already sloted
+    				slotedRoutingOrderIDs.add(routingOrderPK);
     				org.apache.log4j.Logger.getLogger(this.getClass()).debug("ejbTimeout() Executor of Routing Order "+routingOrderPK.getUniqueId()+" still running");
     			} else {
     				org.apache.log4j.Logger.getLogger(this.getClass()).debug("ejbTimeout() Executor of Routing Order "+routingOrderPK.getUniqueId()+" stopped running");
@@ -568,10 +569,10 @@ public class RoutingEngineV2CtrlBean implements SessionBean, TimedObject {
 				return;
 			}
 		}
-		
+
 		//update the Routing Engine with the garbage collected executors
 		routingEngine.setExecutors(thisRunExecutors);
-		
+
 		//determine the number of available tokens
 		//fill in an array will all the tokens (their number)
 		ArrayList<String> availableTokens = new ArrayList<String>();
@@ -584,7 +585,7 @@ public class RoutingEngineV2CtrlBean implements SessionBean, TimedObject {
 			String token = iterator.next();
 			availableTokens.remove(token);
 		}
-		
+
 		//stop here if no available slots
 		if (availableTokens.size()==0) {
 			org.apache.log4j.Logger.getLogger(this.getClass()).info("Subscription Engine Executors: all "+numberOfExecutors+" executors already busy");
@@ -603,7 +604,7 @@ public class RoutingEngineV2CtrlBean implements SessionBean, TimedObject {
 			routingOrders = routingOrderCtrl.findActiveRoutingOrders(System.currentTimeMillis(), availableTokens.size());
 		} catch (XtentisException e) {
 			//mark the engine as stopped
-//			routingEngine.setStatus(RoutingEngineV2POJO.STOPPED); -- 2.19.1 We do not want to stop the engine anymore, just make a pause. 
+//			routingEngine.setStatus(RoutingEngineV2POJO.STOPPED); -- 2.19.1 We do not want to stop the engine anymore, just make a pause.
 //			Likely the database is overloaded -  so just wait a bit
 			String err="Unable to fetch active routing orders: "+e.getMessage()+". Routing Engine will be pause for a few seconds.";
 			org.apache.log4j.Logger.getLogger(this.getClass()).info("ERROR SYSTRACE "+err,e);
@@ -630,10 +631,10 @@ public class RoutingEngineV2CtrlBean implements SessionBean, TimedObject {
 				continue;
 			}
 			//make sure it is not already sloted (though not yet started)
-			if (slotedRoutingOrderIDs.contains(routingOrder.getItemPOJOPK().getUniqueID())) continue;
+			if (slotedRoutingOrderIDs.contains(new ActiveRoutingOrderV2POJOPK(routingOrder.getPK()))) continue;
 			//Not already sloted --> we will slot it and execute it
 			org.apache.log4j.Logger.getLogger(this.getClass()).debug(
-				"ejbTimeout() Scheduling Routing Order "+routingOrder.getName()+"on thread ID "+Thread.currentThread().getId()
+				"ejbTimeout() Scheduling Routing Order "+routingOrder.getName()+" on thread ID "+Thread.currentThread().getId()
 				+" - "+(availableTokens.size()-i-1)+" tokens left"
 			);
 			//slot
@@ -644,7 +645,7 @@ public class RoutingEngineV2CtrlBean implements SessionBean, TimedObject {
 																			routingOrder.getAbstractRoutingOrderPOJOPK()
 			);
 			thisRunExecutors.put(token,executor);
-			slotedRoutingOrderIDs.add(routingOrder.getItemPOJOPK().getUniqueID());
+			slotedRoutingOrderIDs.add(new ActiveRoutingOrderV2POJOPK(routingOrder.getPK()));
 			//update routing Order
 			routingOrder.setRoutingEnginePOJOPK(new RoutingEngineV2POJOPK(routingEngine.getPK()));
 			routingOrder.setRoutingEngineToken(token);
@@ -662,18 +663,19 @@ public class RoutingEngineV2CtrlBean implements SessionBean, TimedObject {
 				break;
 			}
 		}
-		
+
 		//update the Routing Engine with the scheduled or currently executing Executors -- BG I guess this should not be here.....
 		routingEngine.setExecutors(thisRunExecutors);
-		
+
 		//catch time it took
 		long duration = System.currentTimeMillis() - startTime + extraTime;
-		
+
 		//restart process at FREQUENCY
 		createTimer(new RoutingEngineV2POJOPK(routingEngine.getPK()), routingEngine.getRunPeriodMillis() - duration);
-		
+
 	}
 
- 
-      
+
+
+
 }
