@@ -14,6 +14,7 @@ public enum XSystemObjects {
 	DC_UPDATE_PREPORT(XObjectType.DATA_CLUSTER, "UpdateReport"), 
 	DC_XTENTIS_COMMON_CONF(XObjectType.DATA_CLUSTER, "Xtentis Common Conf"), 
 	DC_XTENTIS_COMMON_REPORTING(XObjectType.DATA_CLUSTER, "Xtentis Common Reporting"),
+	DC_MDMITEMSTRASH(XObjectType.DATA_CLUSTER,"MDMItemsTrash"),
 
 	// Data Models
 	DM_BUG_TRACKING(XObjectType.DATA_MODEL, "Bug Tracking"), 
