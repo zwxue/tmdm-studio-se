@@ -15,6 +15,7 @@ public enum ESystemDefaultObjects {
 	DC_UPDATE_PREPORT(TreeObject.DATA_CLUSTER,"UpdateReport"),
 	DC_XTENTIS_COMMON_CONF(TreeObject.DATA_CLUSTER,"Xtentis Common Conf"),
 	DC_XTENTIS_COMMON_REPORTING(TreeObject.DATA_CLUSTER,"Xtentis Common Reporting"),
+	DC_MDMITEMSTRASH(TreeObject.DATA_CLUSTER,"MDMItemsTrash"),
 	
 	
 	//Data Models
@@ -119,4 +120,5 @@ public static boolean isExist(int type,String name){
 	}
 	return is;
 }
+
 }

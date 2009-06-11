@@ -527,6 +527,7 @@ public class Util {
 			
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			documentBuilder.setErrorHandler(seh);
+			if(xmlString==null||xmlString.length()==0||xmlString.matches("\\s+"))return d;
 			d = documentBuilder.parse(new InputSource(new StringReader(xmlString)));
 			
 			if (schema != null) {
