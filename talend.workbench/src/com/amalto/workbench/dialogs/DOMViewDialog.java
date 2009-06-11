@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
@@ -62,10 +63,25 @@ public class DOMViewDialog extends Dialog {
 	private Collection<String> dataModelNames;
 	private String selectedDataModel;
 	
+	private String desc;
+	
 	private Collection<Listener> listeners = new ArrayList<Listener>();
 
 	public DOMViewDialog(Shell parentShell, Node node) {
 		this(parentShell,node,false,null,TREE_VIEWER,null);
+	}
+	
+	public DOMViewDialog(
+			Shell parentShell, 
+			Node node, 
+			boolean editable, 
+			Collection<String> dataModelNames,
+			int firstTab,
+			String selectedDataModel,
+			String desc
+			){
+		this(parentShell,node,editable,dataModelNames,firstTab,selectedDataModel);
+		this.desc=desc;
 	}
 
 	public DOMViewDialog(
@@ -93,7 +109,11 @@ public class DOMViewDialog extends Dialog {
 		
 		try {
 			//Should not really be here but well,....
-			parent.getShell().setText("XML Editor/Viewer");
+			if(editable){
+				parent.getShell().setText("XML Editor/Viewer");
+			}else{
+				parent.getShell().setText("XML Viewer");
+			}
 			
 			Composite composite = new Composite(parent, SWT.NULL);
 			GridLayout layout = new GridLayout();
@@ -104,6 +124,10 @@ public class DOMViewDialog extends Dialog {
 			composite.setLayout(layout);
 			composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 			applyDialogFont(composite);
+			
+			if(desc!=null&&desc.length()>0){
+			new Label(composite, SWT.NONE).setText(desc);
+			}
 			
 			tabFolder = new TabFolder(composite,SWT.TOP | SWT.H_SCROLL | SWT.V_SCROLL);
 			tabFolder.setLayoutData(    
@@ -118,8 +142,13 @@ public class DOMViewDialog extends Dialog {
 					if (tabFolder.getSelectionIndex() == 0) {
 						if (node == null) {
 							try {
+	
+								if(sourceViewer==null||sourceViewer.getDocument()==null)return;
 								node = Util.parse(sourceViewer.getDocument().get());
+								
+								
 							} catch (Exception ex) {
+								ex.printStackTrace();
 								tabFolder.setSelection(1);
 								MessageDialog.openError(
 										DOMViewDialog.this.getShell(), 

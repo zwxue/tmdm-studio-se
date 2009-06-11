@@ -44,6 +44,7 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.ServerTreeContentProvider;
 import com.amalto.workbench.providers.ServerTreeLabelProvider;
+import com.amalto.workbench.utils.ESystemDefaultObjects;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
@@ -215,6 +216,9 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			case TreeObject.DATA_CLUSTER:
 				if (xobject.isXObject()) {
 					manager.add(browseViewAction);
+				}
+				if (xobject.getDisplayName()!=null&&xobject.getDisplayName().equals(ESystemDefaultObjects.DC_MDMITEMSTRASH.getName())) {
+					break;
 				}
 			default:
 				manager.add(newXObjectAction);
