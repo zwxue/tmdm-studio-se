@@ -19,6 +19,7 @@ import org.eclipse.ui.forms.editor.IFormPage;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
+import com.amalto.workbench.utils.ESystemDefaultObjects;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
@@ -53,7 +54,11 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener{
 	           		addPage(new  ViewBrowserMainPage(this));
 	           		break;
 	           	case TreeObject.DATA_CLUSTER:
-	           		addPage(new  DataClusterBrowserMainPage(this));
+	           		if (xobject.getDisplayName()!=null&&xobject.getDisplayName().equals(ESystemDefaultObjects.DC_MDMITEMSTRASH.getName())) {
+	           			addPage(new ItemsTrashBrowserMainPage(this));
+	           			break;
+					}
+	           		addPage(new DataClusterBrowserMainPage(this));
 	           		break;	    
 	           	case TreeObject.SUBSCRIPTION_ENGINE:
 	           		boolean version_greater_2_19_0 = false;

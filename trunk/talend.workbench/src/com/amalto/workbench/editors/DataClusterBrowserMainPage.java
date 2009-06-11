@@ -26,6 +26,9 @@ import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IInputValidator;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -80,6 +83,7 @@ import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSDeleteItem;
+import com.amalto.workbench.webservices.WSDropItem;
 import com.amalto.workbench.webservices.WSGetConceptsInDataCluster;
 import com.amalto.workbench.webservices.WSGetDataCluster;
 import com.amalto.workbench.webservices.WSGetItem;
@@ -538,7 +542,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         	public void keyPressed(KeyEvent e) {}
         	public void keyReleased(KeyEvent e) {
 	        		if (e.keyCode == SWT.DEL){
-	        			new DeleteItemsAction(
+	        			new PhysicalDeleteItemsAction(
 								DataClusterBrowserMainPage.this.getSite().getShell(),
 								DataClusterBrowserMainPage.this.resultsViewer
 						).run();
@@ -565,7 +569,14 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 				);
 				manager.appendToGroup(
 						IWorkbenchActionConstants.MB_ADDITIONS,
-						new DeleteItemsAction(
+						new PhysicalDeleteItemsAction(
+								DataClusterBrowserMainPage.this.getSite().getShell(),
+								DataClusterBrowserMainPage.this.resultsViewer
+						)
+				);
+				manager.appendToGroup(
+						IWorkbenchActionConstants.MB_ADDITIONS,
+						new LogicalDeleteItemsAction(
 								DataClusterBrowserMainPage.this.getSite().getShell(),
 								DataClusterBrowserMainPage.this.resultsViewer
 						)
@@ -822,22 +833,164 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	 * @author bgrieder
 	 *
 	 ***************************************************************/
-	class DeleteItemsAction extends Action{
+	
+	class LogicalDeleteItemsAction extends Action{
 
 		protected Shell shell = null;
 		protected Viewer viewer;
 		
-		public DeleteItemsAction(Shell shell, Viewer viewer) {
+		public LogicalDeleteItemsAction(Shell shell, Viewer viewer) {
+			super();
+			this.shell = shell;
+			this.viewer = viewer;
+			setImageDescriptor(ImageCache.getImage( "icons/delete_obj.gif"));
+			
+			IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
+			if (selection.size()==1)
+				setText("Logically delete the selected item");
+			else
+				setText("Logically delete these "+selection.size()+" Items");
+			
+			setToolTipText("Logically delete the Selected Item"+(selection.size()>1? "s":""));
+		}
+		
+		public void run() {
+			try {
+				super.run();
+								
+				//retrieve the list of items
+				IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
+				List<LineItem> lineItems = selection.toList();
+
+				if (lineItems.size()==0) return;
+
+				InputDialog id = new InputDialog(
+						this.shell,
+	       				"Confirm Deletion",
+	       				"Are you sure you want to drop the selected "+lineItems.size()+" items to items-trash?\nSet Part-Path:",
+	       				"/",
+	       				new IInputValidator() {
+	       					public String isValid(String newText) {
+	       						if ((newText==null) || !newText.matches("^\\/.*$")) return "Illegal Part-Path";
+	       						return null;
+	       					};
+	       				}
+	       		);
+	            
+	       		id.setBlockOnOpen(true);
+	       		int ret = id.open();
+	       		if (ret == Dialog.CANCEL) return;
+	       		
+				//Instantiate the Monitor with actual deletes
+	       		LogicalDeleteItemsWithProgress diwp = 
+					new LogicalDeleteItemsWithProgress(
+							getXObject(),
+							lineItems,
+							id.getValue(),
+							this.shell
+					);
+				//run
+				new ProgressMonitorDialog(this.shell).run(
+						false,	//fork 
+						true, 	//cancelable
+						diwp
+				);
+				//refresh the search
+				DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(false));
+	       
+			} catch (Exception e) {
+				e.printStackTrace();
+				MessageDialog.openError(
+						shell,
+						"Error", 
+						"An error occured trying to delete the items: "+e.getLocalizedMessage()
+				);
+			}		
+		}
+		public void runWithEvent(Event event) {
+			super.runWithEvent(event);
+		}
+		
+		//Progress Monitor that implements the actual delete
+		class LogicalDeleteItemsWithProgress implements IRunnableWithProgress {
+			TreeObject xObject;
+			Collection<LineItem> lineItems;
+			String partPath;
+			Shell parentShell;
+
+			public LogicalDeleteItemsWithProgress(TreeObject object, Collection<LineItem> lineItems, String partPath, Shell shell) {
+				super();
+				this.xObject = object;
+				this.lineItems = lineItems;
+				this.partPath = partPath;
+				this.parentShell = shell;
+			}
+
+			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+				try {
+					monitor.beginTask("Deleting items", lineItems.size());
+					
+					XtentisPort port = Util.getPort(xObject);
+				
+					
+					int i=0;
+					for (Iterator<LineItem> iter = lineItems.iterator(); iter.hasNext(); ) {
+						LineItem lineItem = iter.next();
+						String itemID = ((WSDataClusterPK)xObject.getWsKey()).getPk()+"."+lineItem.getConcept()+"."+Util.joinStrings(lineItem.getIds(), ".");
+						monitor.subTask("Processing item "+(i++)+": "+itemID);
+						if (monitor.isCanceled())  {
+							MessageDialog.openWarning(
+									this.parentShell,
+									"User canceled the logically delete",
+									"The logical-deletes was canceled by the user on item "+i+"\n"+
+									"Some items may have not been logically deleted"
+							);
+							return;
+						}
+						port.dropItem(
+							new WSDropItem(
+								new WSItemPK(
+									(WSDataClusterPK)xObject.getWsKey(),
+									lineItem.getConcept(),
+									lineItem.getIds()
+								),partPath
+							)
+						);
+						monitor.worked(1);
+					}//for
+					
+					monitor.done();
+				} catch (Exception e) {
+					e.printStackTrace();
+					MessageDialog.openError(
+							shell,
+							"Error logically Deleting", 
+							"An error occured trying to logically delete the items:\n\n "+e.getLocalizedMessage()
+					);
+				}//try				
+				
+			}//run
+		}//class DeleteItemsWithProgress
+
+	}//class DeletItemsAction
+	
+	class PhysicalDeleteItemsAction extends Action{
+
+		protected Shell shell = null;
+		protected Viewer viewer;
+		
+		public PhysicalDeleteItemsAction(Shell shell, Viewer viewer) {
 			super();
 			this.shell = shell;
 			this.viewer = viewer;
 			setImageDescriptor(ImageCache.getImage( "icons/delete_obj.gif"));
 			IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
 			if (selection.size()==1)
-				setText("Delete the selected item");
+				setText("Physically delete the selected item");
 			else
-				setText("Delete these "+selection.size()+" Items");
-			setToolTipText("Delete the Selected Item"+(selection.size()>1? "s":""));
+				setText("Physically delete these "+selection.size()+" Items");
+			 
+			setToolTipText("Physically delete the selected Item"+(selection.size()>1? "s":""));
 		}
 		
 		public void run() {
@@ -857,8 +1010,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 					)	return;
 
 				//Instantiate the Monitor with actual deletes
-				DeleteItemsWithProgress diwp = 
-					new DeleteItemsWithProgress(
+				PhysicalDeleteItemsWithProgress diwp = 
+					new PhysicalDeleteItemsWithProgress(
 							getXObject(),
 							lineItems,
 							this.shell
@@ -886,12 +1039,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 		}
 		
 		//Progress Monitor that implements the actual delete
-		class DeleteItemsWithProgress implements IRunnableWithProgress {
+		class PhysicalDeleteItemsWithProgress implements IRunnableWithProgress {
 			TreeObject xObject;
 			Collection<LineItem> lineItems;
 			Shell parentShell;
 
-			public DeleteItemsWithProgress(TreeObject object, Collection<LineItem> lineItems, Shell shell) {
+			public PhysicalDeleteItemsWithProgress(TreeObject object, Collection<LineItem> lineItems, Shell shell) {
 				super();
 				this.xObject = object;
 				this.lineItems = lineItems;
