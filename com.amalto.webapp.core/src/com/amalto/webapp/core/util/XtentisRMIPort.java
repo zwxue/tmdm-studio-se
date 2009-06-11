@@ -860,7 +860,7 @@ public class XtentisRMIPort implements XtentisPort {
 	        if(conceptKey.getFields().length==1){	        	
 	        	//if key don't exist in projection
 	        	Element conceptRoot = Util.parse(projection).getDocumentElement();	        
-	        	if(Util.getNodeList(conceptRoot, concept+"/"+conceptKey.getFields()[0]).getLength()==0){
+	        	if(Util.getNodeList(conceptRoot, "//"+concept+"/"+conceptKey.getFields()[0]).getLength()==0){
 	        		Element rootNS=Util.getRootElement("nsholder",schema.getDocumentElement().getNamespaceURI(),"xsd");	        		
 	        		NodeList complexLists=Util.getNodeList(schema.getDocumentElement(),"//xsd:element[count(child::xsd:complexType)>0]",rootNS.getNamespaceURI(),"xsd");
 	        		List<UUIDKey> keys=new ArrayList<UUIDKey>();
