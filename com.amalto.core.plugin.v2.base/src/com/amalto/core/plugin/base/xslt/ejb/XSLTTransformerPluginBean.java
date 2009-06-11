@@ -2,7 +2,6 @@ package com.amalto.core.plugin.base.xslt.ejb;
 
 import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,7 +18,6 @@ import javax.xml.transform.ErrorListener;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -45,47 +43,115 @@ import com.amalto.core.util.XtentisException;
 import com.amalto.xmlserver.interfaces.WhereAnd;
 import com.amalto.xmlserver.interfaces.WhereCondition;
 
-
-
 /**
+* <h1>XSLT Plugin</h1>
+ * <h3>Plugin name: xslt</h3>
+ * <h3>Description</h3>
+ * The XSLT plugin executes an XSLT on an input XML document.<br/>
+ * <br/>
+ * The XSLT plugin supports XSLT 2.0 and provides and extension to perform
+ * cross-referencing on the fly when the output method of the xslt is set to 'xml' or to 'xhtml'.<br/>
+ *
+ * <br/>
+ * Cross-referencing is carried out AFTER the xslt is processed on ALL elements with the following attributes:
+ *
+ * <pre>
+ * &lt;MyElement
+ *     xrefCluster='CLUSTER'
+ *     xrefIn='TEST1, ..., TESTN'
+ *     xrefOut='XPATH_IN_ITEM'
+ *     xrefIgnore='true|false'
+ *     xrefDefault='DEFAULT_VALUE'
+ * &gt;OLD_VALUE&lt;/MyElement&gt;
+ * </pre>
+ *
+ * Where<ul>
+ * <li><b>xrefCluster</b>: the cluster where the Items used for cross-referencing are stored</li>
+ * <li><b>xrefIn</b>: a series of XPaths tests to match this item content with a remote Item</li>
+ * <li><b>xrefOut</b>: the XPath in the remote item, starting with the concept name, of the content that
+ * will replace the content of this item</li>
+ * <li><b>xrefIgnore</b>: optional, defaults to <code>false</code>. If set to <code>true</code>,
+ * the cross referencing will not fail if not Item is found and the <code>xrefDefault</code> value will be inserted.</li>
+ * <li><b>xrefDefault</b>: if <code>xrefIgnore</code> is set to <code>true</code> and the cross-referencing is
+ * failing, this value will be used instead.</li>
+ * </ul>
+ * <h3>Inputs</h3>
+ * <ul>
+ * <li><b>xml</b>: the xml on which to apply the XSLT</li>
+ * <li><b>parameters</b>: optional input parameters to the XSLT in the form of <pre>
+ * &lt;Parameters&gt;
+ *     &lt;Parameter&gt;
+ *         &lt;Name&gt;PARAMETER_NAME&lt;/Name&gt;
+ *         &lt;Value&gt;PARAMETER_VALUE&lt;/Value&gt;
+ *     &lt;/Parameter&gt;
+ * &lt;/Parameters&gt;</pre>
+ * </li></ul>
+ * <h3>Outputs</h3>
+ * <ul>
+ * <li><b>text</b>: the result of the XSLT</li>
+ * </ul>
+ * <h3>Parameters</h3>
+ * The XSLT - see the description.
+ * <h3>Example</h3>
+ * The following example parameters will loop over all the <code>LineItem</code>s of the input XML
+ * and send them to the rest of the transformer as XML fragments
+ *
+ * <pre>
+ * &lt;Country
+ *     xrefCluster='MYCLUSTER'
+ *     xrefIn='.=Country/Codes/ISO2, ../Customer/Name=[ACME]'
+ *     xrefOut='Country/Name/FR'
+ * &gt;&lt;xsl:value-of select='State/CountryCode'/&gt;&lt;/Country&gt;
+ * </pre>
+ * The example above does the following: <ul>
+ * <li>1-the xslt generates a &lt;Country&gt; element in the target document</li>
+ * <li>2-the content of State/CountryCode of the source document is inserted as the value of the <Country> element</li>
+ * <li>3-the rest of the xsl transformations complete</li>
+ * <li>4-the system queries the Country data in cluster MYCLUSTER where<ul>
+ * 		<li>Codes/ISO2Code is equal to  State/CountryCode (the current value of the Country element)</li>
+ * 		<li>and ../Customer/Name in the target document is equal to hard coded value ACME</li></ul>
+ * <li>5-the matching Country document is returned and the value in Name/FR is extracted</li>
+ * <li>6-the value in Country of the target document is replaced with the extracted value</li>
+ * </ul>
+ *
  * @author Bruno Grieder
- * 
- * @ejb.bean 	name="XSLTTransformerPlugin" 
+ *
+ * @ejb.bean 	name="XSLTTransformerPlugin"
  *           	display-name="Name for XSLTPlugin"
  *           	description="Description for XSLTPlugin"
  * 		  		local-jndi-name = "amalto/local/transformer/plugin/xslt"
  *           	type="Stateless"
  *           	view-type="local"
  *           	local-business-interface="com.amalto.core.objects.transformers.v2.util.TransformerPluginV2LocalInterface"
- * 
+ *
  * @ejb.remote-facade
- * 
+ *
  * @ejb.permission
  * 	view-type = "remote"
  * 	role-name = "administration"
  * @ejb.permission
  * 	view-type = "local"
  * 	unchecked = "true"
- * 
- * 
- * 
+ *
+ *
+ *
  */
 public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  implements SessionBean{
-  
+
 	private static final long serialVersionUID = 22487085713480L;
 
     private transient boolean configurationLoaded = false;
 
     private static final String OUTPUT_METHOD = "com.amalto.core.plugin.xpath.outputMethod";
     private static final String TRANSFORMER = "com.amalto.core.plugin.xpath.transformer";
-    
+
 	private static final String INPUT_XML = "xml";
 	private static final String INPUT_PARAMETERS = "parameters";
 	private static final String OUTPUT_TEXT = "text";
-    
+
 	/** A transformation error */
 	String transformatioError = null;
-	
+
 	/** A transformation warning */
 	String transformationeWarning = null;
 
@@ -101,21 +167,21 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
 
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
-	public String getJNDIName() throws XtentisException {	
+	public String getJNDIName() throws XtentisException {
 		return "amalto/local/transformer/plugin/xslt";
 	}
-	
-	
+
+
 
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getDescription(String twoLetterLanguageCode) throws XtentisException {
 		if ("fr".matches(twoLetterLanguageCode.toLowerCase()))
@@ -123,17 +189,17 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
 		return "Transform an XML using an XSLT";
 	}
 
-	
-	
+
+
 	/**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public ArrayList<TransformerPluginVariableDescriptor> getInputVariableDescriptors(String twoLettersLanguageCode) throws XtentisException {
 		 ArrayList<TransformerPluginVariableDescriptor> inputDescriptors = new ArrayList<TransformerPluginVariableDescriptor>();
-		 
+
 		 //The csv_line descriptor
 		 TransformerPluginVariableDescriptor descriptor1 = new TransformerPluginVariableDescriptor();
 		 descriptor1.setVariableName(INPUT_XML);
@@ -150,7 +216,7 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
 		 descriptor1.setMandatory(true);
 		 descriptor1.setPossibleValuesRegex(null);
 		 inputDescriptors.add(descriptor1);
-		 
+
 //		The xslt parameters descriptor
 		 TransformerPluginVariableDescriptor descriptor2 = new TransformerPluginVariableDescriptor();
 		 descriptor2.setVariableName(INPUT_PARAMETERS);
@@ -168,21 +234,21 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
 		 descriptor2.setMandatory(false);
 		 descriptor2.setPossibleValuesRegex(null);
 		 inputDescriptors.add(descriptor2);
-	
+
 		 return inputDescriptors;
 	}
 
 
-	
+
 	/**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public ArrayList<TransformerPluginVariableDescriptor> getOutputVariableDescriptors(String twoLettersLanguageCode) throws XtentisException {
 		ArrayList<TransformerPluginVariableDescriptor> outputDescriptors = new ArrayList<TransformerPluginVariableDescriptor>();
-		 
+
 		 //The csv_line descriptor
 		 TransformerPluginVariableDescriptor descriptor = new TransformerPluginVariableDescriptor();
 		 descriptor.setVariableName(OUTPUT_TEXT);
@@ -199,29 +265,29 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
 		 descriptor.setMandatory(true);
 		 descriptor.setPossibleValuesRegex(null);
 		 outputDescriptors.add(descriptor);
-		 
+
 		 return outputDescriptors;
 	}
-	
-	
-	
+
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void init(
-			TransformerPluginContext context, 
+			TransformerPluginContext context,
 			String compiledParameters
 			) throws XtentisException {
 		try {
 			org.apache.log4j.Logger.getLogger(this.getClass()).debug("init() ");
-			
+
 			if (!configurationLoaded) loadConfiguration();
 			//fetech the parameters
 			CompiledParameters parameters = CompiledParameters.deserialize(compiledParameters);
-			
+
 			//get the xslt compiled style sheet and the Transformer
 			/**
 			 * Unfortunately this does not work for the moment
@@ -245,14 +311,14 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
 		        		}
 		        	}
 			);
-			transFactory.setAttribute(FeatureKeys.VERSION_WARNING, Boolean.valueOf(false)); 
+			transFactory.setAttribute(FeatureKeys.VERSION_WARNING, Boolean.valueOf(false));
 			if (!"".equals(getCompilationErrors())) {
 				String err = "XSLT Plugin: Errors occured during the compilation of the XSLT:"+getCompilationErrors();
 				org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
 				throw new XtentisException(err);
 			}
 			Transformer transformer = transFactory.newTransformer(new StreamSource(new StringReader(parameters.getXslt())));
-			
+
 			//Pass Parameters to the XSLT processor
 			String username = Util.getUsernameFromSubject(Util.getActiveSubject());
         	transformer.setParameter("USERNAME", username);
@@ -272,11 +338,11 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
         			org.apache.log4j.Logger.getLogger(this.getClass()).warn("init() "+err);
         		}
         	});
-			
+
 			//Insert all this in the context
 			context.put(TRANSFORMER,transformer);
 			context.put(OUTPUT_METHOD, parameters.getOutputMethod());
-			
+
 		} catch (XtentisException xe) {
 			throw (xe);
 		} catch (Exception e) {
@@ -285,43 +351,43 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
 				e.getClass().getName()+": "+e.getLocalizedMessage();
 			org.apache.log4j.Logger.getLogger(this.getClass()).error("init() "+err);
 			throw new XtentisException(err);
-		} 
-		
+		}
+
 	}
 
-	
 
-	
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void execute(TransformerPluginContext context) throws XtentisException {
 		org.apache.log4j.Logger.getLogger(this.getClass()).trace("execute() ");
-		
-		try {			
+
+		try {
 			//fetch data from context
 			Transformer transformer= (Transformer)context.get(TRANSFORMER);
 			String outputMethod = (String) context.get(OUTPUT_METHOD);
 			TypedContent xmlTC = (TypedContent)context.get(INPUT_XML);
-			
+
 			//get the charset
 			String charset = Util.extractCharset(xmlTC.getContentType());
 
-			//get the xml String 
+			//get the xml String
 			String xml = new String(xmlTC.getContentBytes(),charset);
-			
+
 			//get the xml parameters
 			TypedContent parametersTC = (TypedContent)context.get(INPUT_PARAMETERS);
 			if (parametersTC!=null) {
 				String parametersCharset = Util.extractCharset(parametersTC.getContentType());
-				
+
 				byte [] parametersBytes = parametersTC.getContentBytes();
 				if (parametersBytes!=null) {
 					String parameters = new String(parametersBytes,parametersCharset);
-					
+
 					Document parametersDoc = Util.parse(parameters);
 					NodeList paramList = Util.getNodeList(parametersDoc.getDocumentElement(), "//Parameter");
 					for (int i=0; i<paramList.getLength(); i++) {
@@ -329,7 +395,7 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
 						String paramValue = Util.getFirstTextNode(paramList.item(i), "Value");
 						if (paramValue == null)
 							paramValue = "";
-						
+
 						if (paramName!=null) {
 							//org.apache.log4j.Logger.getLogger(this.getClass()).debug("Add parameter "+paramName+" with value '"+paramValue+"'");
 							transformer.setParameter(paramName, paramValue);
@@ -337,9 +403,9 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
 					}
 				}
 			}
-			
+
 			//FIXME: ARRRRGHHHHHH - How do you prevent the Transformer to process doctype instructions?
-			
+
 			//Sets the current time
         	transformer.setParameter("TIMESTAMP", Util.getTimestamp());
     		transformer.setErrorListener(new ErrorListener() {
@@ -351,19 +417,19 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
     			}
     			public void warning(TransformerException exception) throws TransformerException {
     			    transformationeWarning = exception.getMessage();
-    			    
+
     			}
     		});
     		transformatioError = null;
     		transformationeWarning = null;
 
     		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        	
+
         	if ("xml".equals(outputMethod) || "xhtml".equals(outputMethod)) {
         		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         		Document document = builder.newDocument();
         		DOMResult domResult = new DOMResult(document);
-        	        		
+
     			transformer.transform(
     				new StreamSource(new StringReader(xml)),
     				domResult
@@ -378,7 +444,7 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
     				org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
     				throw new XtentisException(err);
     			}
-    			
+
     			Node rootNode = document.getDocumentElement();
 
     			//process the cross-referencings
@@ -391,17 +457,17 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
 	    			Element xrefe = (Element)xrefl.item(i);
 	    			xrefe = processMappings(xrefe);
 	    		}
-	    		
+
 	    		net.sf.saxon.TransformerFactoryImpl transFactory = new net.sf.saxon.TransformerFactoryImpl();
-	    		Transformer serializer = transFactory.newTransformer(); 
+	    		Transformer serializer = transFactory.newTransformer();
 	    		serializer.setOutputProperty(OutputKeys.METHOD, outputMethod);
 	    		serializer.setOutputProperty(OutputKeys.INDENT, "yes");
 	    		serializer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
 	    		//serializer.setOutputProperty("include-content-type", "no");
 	    		serializer.transform(new DOMSource(rootNode), new StreamResult(baos));
 	    		//result = Util.nodeToString(newItem,false);
-	    		//result = Util.nodeToString(newDoc,false); 		
-	    		
+	    		//result = Util.nodeToString(newDoc,false);
+
 //	           	ByteArrayOutputStream baos = new ByteArrayOutputStream();
 //	           	OutputFormat  format = new OutputFormat("XML", "UTF-8", true);
 //	           	format.setPreserveSpace(true);
@@ -410,10 +476,10 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
 //	           	XMLSerializer selializer = new XMLSerializer(baos, format);
 //	           	selializer.asDOMSerializer().serialize(newItem.getOwnerDocument());
 //	           	result = baos.toString();
-	           	
-	        	//calback		
+
+	        	//calback
 			} else {
-				
+
     			if (transformationeWarning != null) {
     				String err ="Warning processing the XSLT: "+transformationeWarning;
     				org.apache.log4j.Logger.getLogger(this.getClass()).warn(err);
@@ -423,35 +489,35 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
     				org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
     				throw new XtentisException(err);
     			}
-				
+
 	    		//transform the item
 				transformer.transform(
 						new StreamSource(new StringReader(xml)),
 						new StreamResult(baos)
 				);
 			}
-        	
+
 //			} else {
 //				result = projection.replaceAll("<\\?.*?\\?>", "");
 //			}
-        	
+
 			//Call Back
         	byte[] bytes = baos.toByteArray();
         	if (org.apache.log4j.Logger.getLogger(this.getClass()).isDebugEnabled())
     			org.apache.log4j.Logger.getLogger(this.getClass()).debug(
     				"execute() Inserting XSL Result in '"+OUTPUT_TEXT+"'\n"+new String(bytes, "utf-8")
     			);
-        	
+
 			context.put(
-					OUTPUT_TEXT, 
+					OUTPUT_TEXT,
 					new TypedContent(
 							bytes,
 							("xhtml".equals(outputMethod) ? "application/xhtml+xml" : "text/"+outputMethod)+"; charset=utf-8"
 					)
 			);
-			
+
 			context.getPluginCallBack().contentIsReady(context);
-			
+
 		} catch (XtentisException xe) {
 			throw (xe);
 		} catch (Exception e) {
@@ -460,17 +526,17 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
 				e.getClass().getName()+": "+e.getLocalizedMessage();
 			org.apache.log4j.Logger.getLogger(this.getClass()).info("execute() "+err);
 			throw new XtentisException(e);
-		} 
+		}
 	}
-	
-	
-    
-    
+
+
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void end(TransformerPluginContext context) throws XtentisException {
     	context.removeAll();
@@ -483,21 +549,21 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
      * @return the processed Element
      */
     private Element processMappings(Element xrefElement)  throws XtentisException{
-    	
+
     	try {
-    		
+
 			String xrefcluster = xrefElement.getAttribute("xrefCluster");
-			
+
 			String xrefIn = xrefElement.getAttribute("xrefIn");
-			String xrefOut = xrefElement.getAttribute("xrefOut");					
+			String xrefOut = xrefElement.getAttribute("xrefOut");
 			String xrefIgnore = xrefElement.getAttribute("xrefIgnore");
-			String xrefDefault = xrefElement.getAttribute("xrefDefault");			
-			
+			String xrefDefault = xrefElement.getAttribute("xrefDefault");
+
 			Logger.getLogger(XSLTTransformerPluginBean.class).debug(
 					"\n xrefIgnore=" + xrefIgnore +
 					"\n xrefDefault=" + xrefDefault
 					);
-			
+
 			//parse xrefbein  dockey1:xrefkey1,dockey2:xrefkey2
 			String[] mappings = xrefIn.split(",");
 			HashMap<String,String> itemvals = new HashMap<String,String>();
@@ -519,8 +585,8 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
 				}
 				itemvals.put(xrefpath,itemval);
 			}
-					
-			 
+
+
 			WhereAnd wAnd = new WhereAnd();
 
 	        Collection<Map.Entry<String,String>> c = itemvals.entrySet();
@@ -536,20 +602,20 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
 						false
 				));
 			}
-			
-			ArrayList<String> resList = 
+
+			ArrayList<String> resList =
 				Util.getItemCtrl2LocalHome().create().xPathsSearch(
-					new DataClusterPOJOPK(xrefcluster), 
-					null, 
-					new ArrayList<String>(Arrays.asList(new String[]{xrefOut})), 
-					wAnd, 
+					new DataClusterPOJOPK(xrefcluster),
+					null,
+					new ArrayList<String>(Arrays.asList(new String[]{xrefOut})),
+					wAnd,
 					-1, 	//spell
-					0,		//start 
+					0,		//start
 					1		//limit
 			);
-			
+
 			String val = "";
-			
+
 	        if ((resList==null)||(resList.size()==0)) {
 	        	if (xrefIgnore.equals("true") || xrefIgnore.equals("1")) {
 	        		if (xrefDefault!=null)
@@ -569,7 +635,7 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
 	        	//read result
 	           	Pattern p = Pattern.compile("<.*?>(.*?)</.*>",Pattern.DOTALL);
 				Matcher m = p.matcher(resList.iterator().next());
-				
+
 				if (m.matches())
 					val = StringEscapeUtils.unescapeXml(m.group(1));
 				else {
@@ -580,7 +646,7 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
 					}
 				}
 	        }
-			
+
 			NodeList l = xrefElement.getChildNodes();
 			for (int j = 0; j <l.getLength(); j++) {
 				switch (l.item(j).getNodeType()) {
@@ -591,16 +657,16 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
 						xrefElement.removeChild(l.item(j));
 						break;
 					default:
-						
+
 				}
 			}
-			
+
 			xrefElement.removeAttribute("xrefCluster");
 			xrefElement.removeAttribute("xrefIgnore");
 			xrefElement.removeAttribute("xrefDefault");
 			xrefElement.removeAttribute("xrefIn");
 			xrefElement.removeAttribute("xrefOut");
-	   	
+
 	    	return xrefElement;
 	    } catch (XtentisException e) {
 	    	e.printStackTrace();
@@ -616,30 +682,30 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
 	    }
     }
 
-    
-    
 
-    
 
-    	
+
+
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getParametersSchema() throws XtentisException {
 		return null;
 
 	}
 
-	
-    
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getDocumentation(String twoLettersLanguageCode) throws XtentisException {
 		return
@@ -670,13 +736,13 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
 		"The example above does the following:" +"\n"+
 		"	1-the xslt generates a <Country> element in the target document" +"\n"+
 		"	2-the value of State/CountryCode of the source document is inserted as the value of the <Country> element"+"\n"+
-		"	3-the rest of the xsl transformations complete"+"\n"+	
+		"	3-the rest of the xsl transformations complete"+"\n"+
 		"	4-the system queries the Country data in cluster MYCLUSTER where " +"\n"+
 		"			Codes/ISO2Code is equal to  State/CountryCode (the current value of the Country element)" +"\n"+
 		"			and ../Customer/Name in the target document is equal to hard coded value ACME." +"\n"+
 		"	5-the matching Country document is returned and the value in Name/FR is extracted" +"\n"+
 		"	6- the value in Cuuntry of the traget document is replaced with the extracted value";
-		
+
 	}
 
 
@@ -686,15 +752,15 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
     		"	<charset>utf-8</charset>"+
 			"</configuration>";
     }
-    
 
 
-	
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
     public String getConfiguration(String optionalParameters) throws XtentisException{
     	try {
@@ -712,43 +778,43 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
     	    		+": "+e.getClass().getName()+": "+e.getLocalizedMessage();
     	    org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
     	    throw new XtentisException(err);
-	    }	
+	    }
     }
 
 
 
-	
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void putConfiguration(String configuration) throws XtentisException {
 		configurationLoaded = false;
 		super.putConfiguration(configuration);
 	}
-	
-	
+
+
 	/********************************************************************************************
 	 * Compilation - decompilation of parameters
 	 ********************************************************************************************/
-	
+
 	//XSLT ouput determination
     private static Pattern XLST_OUTPUT_PATTERN = Pattern.compile(".+?<[a-z]+?:output[^>]*? method\\s*=\\s*[\"|'](.*?)[\"|'].*",Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
-	
-	
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String compileParameters(String parameters) throws XtentisException {
     	try {
     		String xslt = parameters;
     		CompiledParameters compiled = new CompiledParameters();
-    		
+
 			//Determine the ouput of the xslt
 			String output = "xml"; //default
 			Matcher mxslt = XLST_OUTPUT_PATTERN.matcher(xslt);
@@ -756,7 +822,7 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
 				output = mxslt.group(1).toLowerCase().trim();
 			}
 			compiled.setOutputMethod(output);
-    		
+
     		//compile the sytlesheet
 			//USE SAXON for XSLT 2.0 Support
 			setCompilationErrors("");
@@ -776,7 +842,7 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
 		        		}
 		        	}
 			);
-			transFactory.setAttribute(FeatureKeys.VERSION_WARNING, Boolean.valueOf(false)); 
+			transFactory.setAttribute(FeatureKeys.VERSION_WARNING, Boolean.valueOf(false));
 			PreparedStylesheet preparedStyleSheet = (PreparedStylesheet)transFactory.newTemplates(new StreamSource(new StringReader(xslt)));
 			if (!"".equals(getCompilationErrors())) {
 				String err = "XSLT Plugin: Errors occured during the compilation of the XSLT:"+getCompilationErrors();
@@ -785,12 +851,12 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
 			}
 			compiled.setPreparedStyleSheet(preparedStyleSheet);
 			*/
-			
+
 			//PreparedStyleSheet cause issues - save the XSLT
 			compiled.setXslt(xslt);
-			
+
     		return compiled.serialize();
-    		
+
 //    	} catch (XtentisException e) {
 //    		throw(e);
 	    } catch (Exception e) {
@@ -798,7 +864,7 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
     	    		+": "+e.getClass().getName()+": "+e.getLocalizedMessage();
     	    org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
     	    throw new XtentisException(err);
-	    }	
+	    }
 	}
 
 
@@ -814,5 +880,5 @@ public class XSLTTransformerPluginBean extends TransformerPluginV2CtrlBean  impl
 	}
 
 
-    
+
 }

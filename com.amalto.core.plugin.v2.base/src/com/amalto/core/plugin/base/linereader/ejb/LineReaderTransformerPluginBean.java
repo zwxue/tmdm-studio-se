@@ -18,11 +18,45 @@ import com.amalto.core.objects.transformers.v2.util.TypedContent;
 import com.amalto.core.util.Util;
 import com.amalto.core.util.XtentisException;
 
-
-
 /**
- * @author bgrieder
- * 
+ * <h1>Line Reader Plugin</h1>
+ * <h3>Plugin name: linereader</h3>
+ * <h3>Description</h3>
+ * The Line Reader plugin reads a text line by line.<br/>
+ * <br/>
+ * This plugin is a "looping" plugin. Once a line is read, it is sent for processing by the rest of the transformer,
+ * then the next line is read and sent for processing, and so forth until the end of the text.<br/>
+ * This plugin is usually used in front of the Fixed Length Parser Plugin or the CSV Parser Plugin
+ * <h3>Inputs</h3>
+ * <ul>
+ * <li><b>text_content</b>: the text to read line by line</li>
+ * </ul>
+ * <h3>Outputs</h3>
+ * <ul>
+ * <li><b>line</b>: the line read</li>
+ * </ul>
+ * <h3>Parameters</h3>
+ * The parameters are specified as an XML <pre>
+    &lt;parameters&gt;
+      &lt;ignoreFirstLines&gt;NUMBER_OF_LINES_TO_IGNORE&lt;/ignoreFirstLines&gt;
+      &lt;ignoreBlankLine&gt;true|false&lt;/ignoreBlankLine&gt;
+    &lt;/parameters&gt;
+ * </pre>
+ * <ul>
+ * <li><b>ignoreFirstLines</b>: optional; defaults to zero. The number of lines at the beginning of the text that will be ignored by this plugin</li>
+ * <li><b>ignoreBlankLine</b>: optional; defaults to <code>true</code>. If set to <code>true</code>, blank lines will be ignored by the processing</li>
+ *</ul>
+ * <h3>Example</h3>
+ * The following example parameters will read a text line by line except for the first line
+ * which will be ignored.
+ * <pre>
+    &lt;parameters&gt;
+      &lt;ignoreFirstLines&gt;1&lt;/ignoreFirstLines&gt;
+    &lt;/parameters&gt;
+ * </pre>
+ *
+ * @author Bruno Grieder
+ *
  * @ejb.bean name="LineReaderTransformerPlugin"
  *           display-name="Name for LineReaderPlugin"
  *           description="Description for LineReaderPlugin"
@@ -30,34 +64,34 @@ import com.amalto.core.util.XtentisException;
  *           type="Stateless"
  *           view-type="local"
  *           local-business-interface="com.amalto.core.objects.transformers.v2.util.TransformerPluginV2LocalInterface"
- * 
+ *
  * @ejb.remote-facade
- * 
+ *
  * @ejb.permission
  * 	view-type = "remote"
  * 	role-name = "administration"
  * @ejb.permission
  * 	view-type = "local"
  * 	unchecked = "true"
- * 
- * 
- * 
+ *
+ *
+ *
  */
 public class LineReaderTransformerPluginBean extends TransformerPluginV2CtrlBean  implements SessionBean{
-  
+
 	public static final String PARAMETERS ="com.amalto.core.plugin.linereader.parameters";
 	public static final String LINES_TO_IGNORE =  "com.amalto.core.plugin.linereader.linesToIgnore" ;
 	public static final String IGNORE_BLANK_LINE =  "com.amalto.core.plugin.linereader.ignoreBlankLine" ;
 	public static final String NUMLINES = "com.amalto.core.plugin.linereader.numLines" ;
 	public static final String STOP = "com.amalto.core.plugin.linereader.stop";
-	
+
 	private static final long serialVersionUID = 1148709892480L;
 	private static final String INPUT_CONTENT = "text_content";
 	private static final String OUTPUT_LINE = "line";
 
     private transient boolean configurationLoaded = false;
 
-	
+
 
 	public LineReaderTransformerPluginBean() {
 		super();
@@ -67,24 +101,24 @@ public class LineReaderTransformerPluginBean extends TransformerPluginV2CtrlBean
 	}
 
 
-	
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getJNDIName() throws XtentisException {
 		return "amalto/local/transformer/plugin/linereader";
 	}
-	
-	
-	
+
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getDescription(String twoLetterLanguageCode) throws XtentisException {
 		if ("fr".matches(twoLetterLanguageCode.toLowerCase()))
@@ -92,18 +126,18 @@ public class LineReaderTransformerPluginBean extends TransformerPluginV2CtrlBean
 		return "Reads a text, line by line";
 	}
 
-	
 
-	
+
+
 	/**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public ArrayList<TransformerPluginVariableDescriptor> getInputVariableDescriptors(String twoLettersLanguageCode) throws XtentisException {
 		 ArrayList<TransformerPluginVariableDescriptor> inputDescriptors = new ArrayList<TransformerPluginVariableDescriptor>();
-		 
+
 		 //The csv_line descriptor
 		 TransformerPluginVariableDescriptor descriptor = new TransformerPluginVariableDescriptor();
 		 descriptor.setVariableName(INPUT_CONTENT);
@@ -124,16 +158,16 @@ public class LineReaderTransformerPluginBean extends TransformerPluginV2CtrlBean
 	}
 
 
-	
+
 	/**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public ArrayList<TransformerPluginVariableDescriptor> getOutputVariableDescriptors(String twoLettersLanguageCode) throws XtentisException {
 		ArrayList<TransformerPluginVariableDescriptor> outputDescriptors = new ArrayList<TransformerPluginVariableDescriptor>();
-		 
+
 		 //The csv_line descriptor
 		 TransformerPluginVariableDescriptor descriptor = new TransformerPluginVariableDescriptor();
 		 descriptor.setVariableName(OUTPUT_LINE);
@@ -150,25 +184,25 @@ public class LineReaderTransformerPluginBean extends TransformerPluginV2CtrlBean
 		 descriptor.setMandatory(true);
 		 descriptor.setPossibleValuesRegex(null);
 		 outputDescriptors.add(descriptor);
-		 
+
 		 return outputDescriptors;
 	}
-	
-	
-	
+
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void init(
-			TransformerPluginContext context, 
+			TransformerPluginContext context,
 			String compiledParameters
 			) throws XtentisException {
 		try {
 			if (!configurationLoaded) loadConfiguration();
-			
+
 			//parse parameters
 			Element params = Util.parse(compiledParameters).getDocumentElement();
 
@@ -179,7 +213,7 @@ public class LineReaderTransformerPluginBean extends TransformerPluginV2CtrlBean
 			Boolean ignoreBlankLine = Boolean.TRUE;
 			temp = Util.getFirstTextNode(params, "ignoreBlankLine");
 			if (temp!=null) ignoreBlankLine = Boolean.parseBoolean(temp);
-			
+
 			context.put( IGNORE_BLANK_LINE, ignoreBlankLine);
 			context.put( PARAMETERS, params);
 			context.put( LINES_TO_IGNORE, linesToIgnore);
@@ -188,32 +222,32 @@ public class LineReaderTransformerPluginBean extends TransformerPluginV2CtrlBean
 		} catch (Exception e) {
 			String err = "Could not init the Line Reader plugin:"+
 				e.getClass().getName()+": "+e.getLocalizedMessage();
-			org.apache.log4j.Category.getInstance(this.getClass()).error("init() "+err);
+			org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);
 			throw new XtentisException(e);
-		} 
-		
+		}
+
 	}
 
 
-	
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void execute(TransformerPluginContext context) throws XtentisException {
-		
+
 		org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute() ");
-		
-		try {			
-		
+
+		try {
+
 			//Element params= (Element)context.get( PARAMETERS);
 			TypedContent content = (TypedContent)context.get(INPUT_CONTENT);
-			
+
 			//read the charset
 			String charset  = Util.extractCharset(content.getContentType());
-						
+
 			//Read from the stream and insert the bytes into the TypedContent when processing
 			//If no stream is available, attempt to read the bytes
 			BufferedReader br = new BufferedReader(new InputStreamReader(content.getContentStream(),charset));
@@ -236,35 +270,35 @@ public class LineReaderTransformerPluginBean extends TransformerPluginV2CtrlBean
 						//reinsert the bytes into the context - for use by subsequent plugins
 						context.put(OUTPUT_LINE, new TypedContent(bytes,"text/plain; charset=utf-8"));
 						//call the callback content is ready
-						context.getPluginCallBack().contentIsReady(context);	
+						context.getPluginCallBack().contentIsReady(context);
 					}
 				}
 			}//while
-			
+
 			//cleanup
 			br.close();
 
-			
+
 		} catch (XtentisException xe) {
 			throw (xe);
 		} catch (Exception e) {
 			String err = "Could not execute the Line Reader transformer plugin "+
 				e.getClass().getName()+": "+e.getLocalizedMessage();
-			org.apache.log4j.Category.getInstance(this.getClass()).error("execute() "+err);
+			org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);
 			throw new XtentisException(e);
-		} 
+		}
 	}
-	
 
-    
-	
-	
-    
+
+
+
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getParametersSchema() throws XtentisException {
 		return
@@ -276,21 +310,21 @@ public class LineReaderTransformerPluginBean extends TransformerPluginV2CtrlBean
 		"			<xsd:complexType >" +
 		"				<xsd:sequence>" +
 		"					<xsd:element minOccurs='0' maxOccurs='1' nillable='false' name='contentType' type='xsd:int'/>" +
-		"					<xsd:element minOccurs='0' maxOccurs='1' nillable='false' name='charset' type='xsd:int'/>" +		
+		"					<xsd:element minOccurs='0' maxOccurs='1' nillable='false' name='charset' type='xsd:int'/>" +
 		"					<xsd:element minOccurs='0' maxOccurs='1' nillable='false' name='ignoreFirstLines' type='xsd:int'/>" +
 		"				</xsd:sequence>" +
 		"			</xsd:complexType>" +
 		"</xsd:element>"+
 		"</xsd:schema>";
 	}
-	
-	
-    
+
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getDocumentation(String twoLettersLanguageCode) throws XtentisException {
 		return
@@ -321,15 +355,15 @@ public class LineReaderTransformerPluginBean extends TransformerPluginV2CtrlBean
     		"	<charset>utf-8</charset>"+
 			"</configuration>";
     }
-    
 
 
-	
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
     public String getConfiguration(String optionalParameters) throws XtentisException{
     	try {
@@ -344,19 +378,19 @@ public class LineReaderTransformerPluginBean extends TransformerPluginV2CtrlBean
 	    } catch (Exception e) {
     	    String err = "Unable to deserialize the configuration of the Line Reader Transformer Plugin"
     	    		+": "+e.getClass().getName()+": "+e.getLocalizedMessage();
-    	    org.apache.log4j.Category.getInstance(this.getClass()).error(err);
+    	    org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);
     	    throw new XtentisException(err);
-	    }	
+	    }
     }
 
 
 
-	
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void putConfiguration(String configuration) throws XtentisException {
 		configurationLoaded = false;
@@ -367,20 +401,20 @@ public class LineReaderTransformerPluginBean extends TransformerPluginV2CtrlBean
 	/********************************************************************************************
 	 * Compilation - decompilation of parameters
 	 ********************************************************************************************/
-	
+
 
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String compileParameters(String parameters) throws XtentisException {
 		return parameters;
 	}
-	
 
 
 
-    
+
+
 }

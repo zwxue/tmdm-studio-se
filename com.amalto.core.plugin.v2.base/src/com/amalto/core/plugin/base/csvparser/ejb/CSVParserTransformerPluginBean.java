@@ -21,11 +21,105 @@ import com.amalto.core.objects.transformers.v2.util.TypedContent_Do_Not_Process;
 import com.amalto.core.util.Util;
 import com.amalto.core.util.XtentisException;
 
-
-
 /**
- * @author bgrieder
- * 
+ * <h1>CSV Parser Plugin</h1>
+ * <h3>Plugin name: csvparser</h3>
+ * <h3>Description</h3>
+ * The CSV Parser plugin takes one or more CSV lines as input and will XMLize it/them.<br/>
+ * This plugin is typically called right after the Lines Reader plugin which reads a text line by line.<br/>
+ * <br/>
+ * The plugin offers the possibility to<ul>
+ * <li>extract column content based on the column name or the column number</li>
+ * <li>create xml list structures by grouping columns using the <code>LOOP</code> instruction in the template</li>
+ * </ul>
+ * <h3>Inputs</h3>
+ * <ul>
+ * <li><b>csv_line</b>: the input line(s) to XMLize</li>
+ * </ul>
+ * <h3>Outputs</h3>
+ * <ul>
+ * <li><b>xml</b>: the XMLized line(s) (see <code>template</code> and the <code>mulitplelines</code> parameters)</li>
+ * </ul>
+ * <h3>Parameters</h3>
+ * The parameters are specified as an XML which includes the template of the xml to be generated <pre>
+    &lt;parameters&gt;
+    	&lt;separator&gt;COLUMN_SEPARATOR&lt;/separator&gt;
+    	&lt;template&gt;
+    	&lt;![CDATA[
+    		&lt;MyXml&gt;
+    			&lt;MyElement1&gt;COLUMN_SPECIFICATION&lt;/MyElement1&gt;
+    			...
+    			[LOOP COLUMN_NAME_PATTERN]
+    				&lt;MyLoopElement1&gt;COLUMN_SPECIFICATION&lt;/MyLoopElement1&gt;
+    				...
+    				&lt;MyLoopElementN&gt;COLUMN_SPECIFICATION&lt;/MyLoopElementN&gt;
+    			[/LOOP]
+    			...
+    			&lt;MyElementN&gt;COLUMN_SPECIFICATION&lt;/MyElementN&gt;
+        	&lt;/MyXml&gt;
+    	]]&gt;
+    	&lt;/template&gt;
+    	&lt;headersOnFirstLine&gt;true|false&lt;/headersOnFirstLine&gt;
+    	&lt;headers&gt;COMMA_SEPARATED_LIST&lt;/headers&gt;
+    	&lt;failOnMissingHeaders&gt;true|false&lt;/failOnMissingHeaders&gt;
+    	&lt;multiplelines&gt;true|false&lt;/multiplelines&gt;
+    	&lt;lineseparator&gt;LINE_SEPARATOR&lt;/lineseparator&gt;
+    &lt;/parameters&gt;
+ * </pre>
+ * <ul>
+ * <li><b>separator</b>: the sequence of characters used as a separator between columns in the CSV, typically a comma or semi-colon</li>
+ * <li><b>template</b>: the template xml that will be generated. The template is usually inserted in a CDATA section to avoid escaping the xml reserved characters.
+ * Where inserted, the COLUMN_SPECIFICATIONS will be replaced by the corresponding column value in the CSV. The COLUMN_SPECIFICATION is a character sequence
+ * between accolades {} and can be<ul>
+ * 	<li>either a column number: for column n, use <code>{n}</code></li>
+ * 	<li>or a column name pattern: for pattern <code>LineNum.*</code>, use <code>{LineNum.*}</code></li>
+ * </ul></li>
+ * When using a column name pattern, headers must have been specified either by setting <code>headersOnFirstLine</code> to <code>true</code> or
+ * specifying headers using the <code>headers</code> parameters.<br/>
+ * To insert an accolade in the XML, escape it using a backslash e.g. <code>\{</code><br/>
+ * <br/>
+ * The LOOP instruction will perform logical grouping of columns and repeat the sub-template inside the instruction on these groups. A group of columns
+ * is constituted by all the columns between a first column matching COLUMN_NAME_PATTERN inclusive and the next column matching COLUMN_NAME_PATTERN exclusive or
+ * the end of the columns as appropriate.</li>
+ * <li><b>headersOnFirstLine</b>: optional; defaults to <code>false</code>. When set to <code>true</code>, the CSV Parser will expect that the
+ * first line pushed to it by the transformer contains the list of header names. These names are cached by the CSV parser and can be used
+ * in the COLUMN_SPECIFICATIONS of the <code>template</code></li>
+ * <li><b>headers</b>: optional; default to empty. When <code>headersOnFirstLine</code> is set to <code>false</code> but you want to use column names in the template,
+ * specify the list of headers using this parameter</li>
+ * <li><b>failOnMissingHeaders</b>: optional; defaults to <code>true</code>. If set to <code>false</code> the transformer will not stop when a column referenced by name or
+ * number is not found</li>
+ * <li><b>multiplelines</b>: optional; defaults to <code>false</code>. If set to <code>true</code> the plugin will loop over the lines and generate the template XML for each line.
+ * It will then return a single xml with the list of generated xmls as sub-elements of a root <code>multiple</code> element: <code>&lt;multiple&gt;xml1...xmlN&lt;/multiple&gt;</code></li>
+ * <li><b>lineseparator</b>: when <code>multiplelines</code> is set to <code>true</code>, the character sequence use as a separator between the lines. For a carriage return, use <code>\n</code></li>
+ *</ul>
+ * <h3>Example</h3>
+ * The following example parameters will generate an XML starting with root element <code>MyXml</code> from a single line of CSV
+ * </ul>
+ * The transformer will stop if a column cannot be found.
+ * <pre>
+  &lt;parameters&gt;
+    &lt;separator&gt;,&lt;/separator&gt;                              &lt;!-- the fields are separated by a comma --&gt;
+    &lt;headersOnFirstLine&gt;true&lt;/headersOnFirstLine&gt;         &lt;!-- the header names are on the first line of the CSV --&gt;
+    &lt;template&gt;
+      &lt;![CDATA[
+        &lt;MyXml&gt;
+          &lt;Field1&gt;{1}&lt;/Field1&gt;                            &lt;!-- first column --&gt;
+          &lt;Combo&gt;{2}-{4}&lt;/Combo&gt;                          &lt;!-- values of fields 2 and 4 separated by a dash --&gt;
+          &lt;NotInterpreted&gt;\{3}&lt;/NotInterpreted&gt;           &lt;!-- the value will remain {3} --&gt;
+          &lt;HeaderReference&gt;{/Header1}&lt;/HeaderReference&gt;   &lt;!-- the value in column named 'Header1' --&gt;
+          [LOOP lineNumber.*]                             &lt;!-- starts a loop triggered by headers matching the regular expression lineNumber.* --&gt;
+            &lt;Line&gt;                                        &lt;!-- inside the loop - multiple Line elements may be generated --&gt;
+              &lt;Quantity&gt;{/Quantity.*}&lt;/Quantity&gt;          &lt;!-- the value in first column matching 'Quantity.*' after the one matching 'lineNumber.*'--&gt;
+            &lt;/Line&gt;
+          [/LOOP]                                         &lt;!-- End Of Loop --&gt;
+        &lt;/MyXml&gt;
+      ]]&gt;
+    &lt;/template&gt;
+  &lt;/parameters&gt;
+ * </pre>
+ *
+ * @author Bruno Grieder
+ *
  * @ejb.bean name="CSVParserTransformerPlugin"
  *           display-name="Name for CSVParserPlugin"
  *           description="Description for CSVParserPlugin"
@@ -33,21 +127,21 @@ import com.amalto.core.util.XtentisException;
  *           type="Stateless"
  *           view-type="local"
  *           local-business-interface="com.amalto.core.objects.transformers.v2.util.TransformerPluginV2LocalInterface"
- * 
+ *
  * @ejb.remote-facade
- * 
+ *
  * @ejb.permission
  * 	view-type = "remote"
  * 	role-name = "administration"
  * @ejb.permission
  * 	view-type = "local"
  * 	unchecked = "true"
- * 
- * 
- * 
+ *
+ *
+ *
  */
 public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean  implements SessionBean{
-  
+
 //	public static final String CALLBACK = "com.amalto.core.plugin.csvparser.callback";
 //	public static final String HANDLE =  "com.amalto.core.plugin.csvparser.handle";
 	public static final String SEPARATOR ="com.amalto.core.plugin.csvparser.separator";
@@ -59,15 +153,15 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 	public static final String HEADERS ="com.amalto.core.plugin.csvparser.line.headers";
 	public static final String HEADERS_ON_FIRST_LINE ="com.amalto.core.plugin.csvparser.line.headers.on.first.line";
 	public static final String FAIL_ON_MISSING_HEADERS ="com.amalto.core.plugin.csvparser.fail.on.missing.headers";
-	
+
 	private static final long serialVersionUID = 114870935892480L;
 	private static final String INPUT_CSV_LINE ="csv_line";
 	private static final String OUTPUT_XML ="xml";
-	
+
 	private static Pattern templatePattern = Pattern.compile(".*?<template>\\s*(<!\\[CDATA\\[)?(.*?)(\\]\\]>)?\\s*</template>.*",Pattern.DOTALL);
 
     private transient boolean configurationLoaded = false;
-    
+
 	public CSVParserTransformerPluginBean() {
 		super();
 		try {
@@ -81,23 +175,23 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 	 */
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getJNDIName() throws XtentisException {
 		return "amalto/local/transformer/plugin/csvparser";
 	}
-	
-	
+
+
 	/* (non-Javadoc)
 	 * @see com.amalto.core.ejb.ServiceCtrlBean#getDescription()
 	 */
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getDescription(String twoLetterLanguageCode) throws XtentisException {
 		if ("fr".matches(twoLetterLanguageCode.toLowerCase()))
@@ -105,19 +199,19 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 		return "Parses a text line with fields separated with a separator";
 	}
 
-	
-    
 
-	
+
+
+
 	/**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public ArrayList<TransformerPluginVariableDescriptor> getInputVariableDescriptors(String twoLettersLanguageCode) throws XtentisException {
 		 ArrayList<TransformerPluginVariableDescriptor> inputDescriptors = new ArrayList<TransformerPluginVariableDescriptor>();
-		 
+
 		 //The csv_line descriptor
 		 TransformerPluginVariableDescriptor descriptor = new TransformerPluginVariableDescriptor();
 		 descriptor.setVariableName(INPUT_CSV_LINE);
@@ -134,21 +228,21 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 		 descriptor.setMandatory(true);
 		 descriptor.setPossibleValuesRegex(null);
 		 inputDescriptors.add(descriptor);
-		 
+
 		 return inputDescriptors;
 	}
 
 
-	
+
 	/**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public ArrayList<TransformerPluginVariableDescriptor> getOutputVariableDescriptors(String twoLettersLanguageCode) throws XtentisException {
 		ArrayList<TransformerPluginVariableDescriptor> outputDescriptors = new ArrayList<TransformerPluginVariableDescriptor>();
-		 
+
 		 //The csv_line descriptor
 		 TransformerPluginVariableDescriptor descriptor = new TransformerPluginVariableDescriptor();
 		 descriptor.setVariableName(OUTPUT_XML);
@@ -165,27 +259,27 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 		 descriptor.setMandatory(true);
 		 descriptor.setPossibleValuesRegex(null);
 		 outputDescriptors.add(descriptor);
-		 
+
 		 return outputDescriptors;
 	}
 
 
 
-	
+
 	/**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void init(
-			TransformerPluginContext context, 
-			String compiledParameters 
+			TransformerPluginContext context,
+			String compiledParameters
 			) throws XtentisException {
 		try {
-			
+
 			if (!configurationLoaded) loadConfiguration();
-			
+
 			//extract parameters
 			Element params = Util.parse(compiledParameters).getDocumentElement();
 			String separator = Util.getFirstTextNode(params, "separator");
@@ -194,26 +288,26 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 				org.apache.log4j.Logger.getLogger(this.getClass()).error("init() "+err);
 				throw new XtentisException(err);
 			}
-			
+
 			String lineseparator = Util.getFirstTextNode(params, "lineseparator");
 			if (lineseparator == null) {
 				String err = "Invalid parameters for the CSV parser line "+context.getPluginNumber()+": the lineseparator cannot be found";
 				org.apache.log4j.Logger.getLogger(this.getClass()).error("init() "+err);
 				throw new XtentisException(err);
 			}
-			
+
 			Boolean multiplelines = new Boolean(false);
 			String ml = Util.getFirstTextNode(params, "multiplelines");
 			if ((ml != null) && (("true,yes,1".indexOf(ml.toLowerCase())!=-1)))
 				multiplelines = new Boolean(true);
-			
-			
+
+
 			//template extraction is done using a pattern
 			String template;
 			Matcher m = templatePattern.matcher(compiledParameters);
 			if (m.matches()) {
 				if (m.groupCount()==3) {
-					//There is a <![CDATA[ 
+					//There is a <![CDATA[
 					template = m.group(2);
 				} else {
 					template = m.group(1);
@@ -226,7 +320,7 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 			ArrayList<String> headers = new ArrayList<String>();
 			String hl = Util.getFirstTextNode(params, "headers");	//a comma separated list of headers
 			if (hl!=null) {
-				headers = new ArrayList(Arrays.asList(hl.split(",")));
+				headers = new ArrayList<String>(Arrays.asList(hl.split(",")));
 			}
 			Boolean headersOnFirstLine = new Boolean(false);
 			String hofl = Util.getFirstTextNode(params, "headersOnFirstLine");	//the first line of the CSV contains the header
@@ -255,10 +349,10 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 		} catch (Exception e) {
 			String err = "Could not init the CSV Parser plugin:"+
 				e.getClass().getName()+": "+e.getLocalizedMessage();
-			org.apache.log4j.Category.getInstance(this.getClass()).error("start() "+err);
+			org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);
 			throw new XtentisException(e);
-		} 
-		
+		}
+
 	}
 
 
@@ -267,18 +361,18 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 	 */
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void execute(TransformerPluginContext context) throws XtentisException {
 		org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute() ");
-		
+
 		try {
 			//fetch parameters
 			String  separator = (String)context.get(SEPARATOR);
 			boolean multiplelines = ((Boolean)context.get(MULTIPLELINES)).booleanValue();
-			String lineseparator = (String)context.get(LINESEPARATOR); 
+			String lineseparator = (String)context.get(LINESEPARATOR);
 			String  template = (String)context.get(TEMPLATE);
 			int lineNumber = ((Integer)context.get(LINE_NUMBER)).intValue();
 			ArrayList<String> headers = (ArrayList<String>)context.get(HEADERS);
@@ -287,22 +381,22 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 			//fetch the content
 			TypedContent content = (TypedContent)context.get(INPUT_CSV_LINE);
 			String charset = Util.extractCharset(content.getContentType());
-			
+
 			//update the item count
 			context.put(LINE_NUMBER, new Integer(++lineNumber));
-			
+
 			//read the recrod fully
 			String record = new String(content.getContentBytes(), charset);
-			
+
 			//separate lines
 			String[] lines = record.split(lineseparator.toString());
-								
+
 			//get the fields
 			String[] fields = record.split(separator, -1);
-			 
+
 			//If this is the first line and we must grab the headers, just do that
 			if (lineNumber == 1) {
-				if (headersOnFirstLine) { 
+				if (headersOnFirstLine) {
 					headers = new ArrayList<String>(Arrays.asList(fields));
 					context.put(HEADERS, headers);
 				}
@@ -315,88 +409,87 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 					context.getPluginCallBack().contentIsReady(context);
 					return;
 				}
-				
+
 			}
-			
+
 			String text = "";
 			if (multiplelines) {
 				text = "<multiple>";
-				
-				
+
+
 				org.apache.log4j.Logger.getLogger(this.getClass()).debug("lines.length = "+lines.length);
-				
+
 				for (int i=0; i < lines.length; i++) {
 					String line = lines[i];
-					
+
 					String [] tmpFields = line.split(separator, -1);
-					
+
 					text  += runTemplate(
-							(ArrayList<Step>)context.get(COMPILED_TEMPLATE), 
+							(ArrayList<Step>)context.get(COMPILED_TEMPLATE),
 							tmpFields
 						);
 				}
 				text += "</multiple>";
-				
+
 			} else {
 			//this is a "NORMAL" data line - run the compiled template
 				text  = runTemplate(
-					(ArrayList<Step>)context.get(COMPILED_TEMPLATE), 
+					(ArrayList<Step>)context.get(COMPILED_TEMPLATE),
 					fields
 				);
 			}
-			
+
 			//notify of ready content
 			org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute(): calling callback content is ready ");
 			byte[] bytes = text.getBytes("utf-8");
 			context.put(OUTPUT_XML, new TypedContent(bytes,"text/xml; charset=utf-8"));
 			context.getPluginCallBack().contentIsReady(context);
-			
+
 			//end -execute
 			org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute(): calling callback done ");
-			
+
 		} catch (XtentisException xe) {
 			throw (xe);
 		} catch (Exception e) {
-			e.printStackTrace();
 			String err = "Could not execute the CSV Parser transformer plugin at position "+context.getPluginNumber()
 				+": "+e.getClass().getName()+": "+e.getLocalizedMessage();
-			org.apache.log4j.Category.getInstance(this.getClass()).error("execute() "+err);
+			org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);
 			throw new XtentisException(e);
-		} 
+		}
 	}
-    
-    
-    
+
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void end(TransformerPluginContext context) throws XtentisException {
     	//clean up
     	context.removeAll();
 	}
 
-   	
-	
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getParametersSchema() throws XtentisException {
 		return null;
 	}
 
-	
-	
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getDocumentation(String twoLettersLanguageCode) throws XtentisException {
 		return
@@ -423,7 +516,7 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 		"Parameters\n" +
 		"	separator: the separator used between fields\n"+
 		"	lineseparator: the line separator used at the end of each line\n"+
-		"	multiplelines: multiple lines (true or false)\n"+		
+		"	multiplelines: multiple lines (true or false)\n"+
 		"	template: the new text containing the extraction sequences\n"+
 		"	headers: [OPTIONAL defaults to nil]. A separated list of column names\n"+
 		"	headersOnFirstLine: [OPTIONAL defaults to false]. If set to true, will pick up column names from the CSV first line\n"+
@@ -451,7 +544,7 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 		"		]]>"+"\n"+
 		"		</template>" +"\n"+
 		"	</parameters>" +"\n"+
-		"";	
+		"";
 	}
 
 
@@ -461,7 +554,7 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
     		"	<charset>utf-8</charset>"+
 			"</configuration>";
     }
-    
+
 
 
 	/* (non-Javadoc)
@@ -469,9 +562,9 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 	 */
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
     public String getConfiguration(String optionalParameters) throws XtentisException{
     	try {
@@ -486,9 +579,9 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 	    } catch (Exception e) {
     	    String err = "Unable to deserialize the configuration of the CSV Parser Transformer Plugin"
     	    		+": "+e.getClass().getName()+": "+e.getLocalizedMessage();
-    	    org.apache.log4j.Category.getInstance(this.getClass()).error(err);
+    	    org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);
     	    throw new XtentisException(err);
-	    }	
+	    }
     }
 
 
@@ -498,22 +591,22 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 	 */
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void putConfiguration(String configuration) throws XtentisException {
 		configurationLoaded = false;
 		super.putConfiguration(configuration);
 	}
 
-	
+
 	/********************************************************************************************
 	 * Compile/run the template
 	 ********************************************************************************************/
-	
 
-	
+
+
 	/**
 	 * Runs a pre-compiled template
 	 * @param steps
@@ -523,8 +616,8 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 	 */
 	private String runTemplate(ArrayList<Step> steps, String[] fields) throws XtentisException{
 		String result="";
-		for (Iterator iter = steps.iterator(); iter.hasNext(); ) {
-			Step step = (Step) iter.next();
+		for (Iterator<Step> iter = steps.iterator(); iter.hasNext(); ) {
+			Step step = iter.next();
 			if (step.constant != null) {
 				//a constant
 				result+=step.constant;
@@ -533,10 +626,10 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 				if (step.column>fields.length) {
 					String err = 	"CSV Parser ERROR. No field at position "+step.column
 							+". The last fields is at position "+fields.length;
-					org.apache.log4j.Category.getInstance(this.getClass()).error("start() "+err);
+					org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
 					throw new XtentisException(err);
 				}
-				//apply operations			
+				//apply operations
 				if (step.operations.contains("trim")) fields[step.column-1] = fields[step.column-1].trim();
 				//add to result
 				result+=StringEscapeUtils.escapeXml(fields[step.column-1]);
@@ -546,8 +639,8 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 		}
 		return result;
 	}
-	
-	
+
+
 	/********************************************************************************************
 	 * Compilation - decompilation of parameters
 	 ********************************************************************************************/
@@ -578,8 +671,8 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 			this.operations = operations;
 		}
 	}
-	
-	
+
+
 	/**
 	 * Compiles a template after the headers have been determined (if any)
 	 * @param template
@@ -598,27 +691,27 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 		} catch (Exception e) {
 			e.printStackTrace();
 			String err = "CSV Parser could not compile the template: "+e.getClass().getName()+": "+e.getMessage();
-			org.apache.log4j.Category.getInstance(this.getClass()).error("init() "+err);
+			org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);
 			throw new XtentisException(err);
 		}
 	}
-		
+
 	private static  Pattern loopsPattern = Pattern.compile("[^\\\\]\\[LOOP (.+?)([,.+?]*)\\](.+)\\[/LOOP]", Pattern.DOTALL);
 	private static  Pattern failPattern = Pattern.compile("\\s*fail\\s*=\\s*(.+?)\\s*", Pattern.DOTALL);
-	
+
 	private ArrayList<Step> compileLoops(String template, ArrayList<String> headers, int startHeader, int lastHeader, boolean failOnMissingHeaders) throws XtentisException{
 		org.apache.log4j.Logger.getLogger(this.getClass()).debug("compileLoops() "+startHeader+"-"+lastHeader+": "+template);
 		ArrayList<Step> steps = new ArrayList<Step>();
-		
+
 		int lastEnd = 0;
 		Matcher m = loopsPattern.matcher(template);
-		
+
 		while (m.find(lastEnd ==0 ? 0 : lastEnd -1)) {
 			//portion of the template before the loop
 			String beforeLoop = template.substring(lastEnd, m.start()+1);
 			//there is no loop there send it for further processing
 			steps.addAll(compileSpecs(beforeLoop, headers, startHeader,failOnMissingHeaders));
-			
+
 			String loopHeaderRegex = m.group(1).trim();
 			String loopTemplate="";;
 			String optionString = "";
@@ -633,10 +726,10 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 					if ("true,1,yes".indexOf(fpm.group(1))>=0) failMissingHeadersInLoop = true;
 				}
 			}
-			
+
 			Pattern loopHeaderPattern = Pattern.compile(loopHeaderRegex, Pattern.DOTALL);
 			org.apache.log4j.Logger.getLogger(this.getClass()).debug("compileLoops() Loop header Regex "+loopHeaderRegex);
-			
+
 			//loop over matching headers
 			int previousHeaderMatch=-1;
 			for (int i = startHeader; i <= lastHeader; i++) {
@@ -671,16 +764,16 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 		steps.addAll(compileSpecs(afterLoop, headers, startHeader,failOnMissingHeaders));
 		return steps;
 	}
-	
+
 	private static  Pattern specsPattern = Pattern.compile("[^\\\\]\\{(.+?[,.+?]*)\\}");
-	
+
 	private ArrayList<Step> compileSpecs(String template, ArrayList<String> headers, int startHeader, boolean failOnMissingHeaders) throws XtentisException{
 		org.apache.log4j.Logger.getLogger(this.getClass()).debug("compileSpecs() "+startHeader+": "+template);
 		ArrayList<Step> steps = new ArrayList<Step>();
 
 		int lastEnd = 0;
 		Matcher m = specsPattern.matcher(template);
-		
+
 		while (m.find(lastEnd ==0 ? 0 : lastEnd -1)) {
 			//the column number
 			int column=-1;
@@ -692,7 +785,7 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 				if (headers.size()==0) {
 					String err = "CSV Parser no headers provided in the CSV or Parameters. No header available matching the name '"+specs.get(0).substring(1)+"'";
 					if (failOnMissingHeaders) {
-						org.apache.log4j.Category.getInstance(this.getClass()).error("compileSpecs() "+err);
+						org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
 						throw new XtentisException(err);
 					} else {
 						org.apache.log4j.Logger.getLogger(this.getClass()).debug("compileSpecs() "+err);
@@ -707,7 +800,7 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 				if (column==-1) {
 					String err = "CSV Parser at position could not find any header matching the name '"+specs.get(0).substring(1)+"' starting from column "+startHeader;
 					if (failOnMissingHeaders) {
-						org.apache.log4j.Category.getInstance(this.getClass()).error("compileSpecs() "+err);
+						org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
 						throw new XtentisException(err);
 					} else {
 						org.apache.log4j.Logger.getLogger(this.getClass()).debug("compileSpecs() "+err);
@@ -717,12 +810,12 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 				//a column number specification
 				column = (new Integer(specs.get(0))).intValue();
 			}
-		
+
 			//the step containing the hard coded values before the match
 			Step constantStep = new Step();
 			constantStep.constant = template.substring(lastEnd, m.start()+1);
 			steps.add(constantStep);
-			
+
 			//the step containing the column ref
 			Step columnStep = new Step();
 			columnStep.column = column;
@@ -731,35 +824,35 @@ public class CSVParserTransformerPluginBean extends TransformerPluginV2CtrlBean 
 				columnStep.operations.add(specs.get(i));
 			}
 			steps.add(columnStep);
-			
+
 			lastEnd= m.end();
 		}
 		//the remaining constant text after the last match
 		Step step = new Step();
 		step.constant = template.substring(lastEnd).replaceAll("\\\\\\{", "{");
 		steps.add(step);
-		
+
 		return steps;
-		
+
 	}
 
-	
+
 	/********************************************************************************************
 	 * Compilation - decompilation of parameters
 	 ********************************************************************************************/
-	
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String compileParameters(String parameters) throws XtentisException {
 		return parameters;
 	}
 
-	
-	
-	
-	
+
+
+
+
 }

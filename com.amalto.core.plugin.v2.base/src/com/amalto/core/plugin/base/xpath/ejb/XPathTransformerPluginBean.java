@@ -22,8 +22,55 @@ import com.amalto.core.util.XtentisException;
 
 
 /**
- * @author bgrieder
- * 
+ * <h1>XPath Plugin</h1>
+ * <h3>Plugin name: xpath</h3>
+ * <h3>Description</h3>
+ * The XPath plugin executes an XPath on an xml document.<br/>
+ * <br/>
+ * The result of the xPath may be <ul>
+ * <li>either an XML fragment (content type of text/xml)</li>
+ * <li>or a text fragment (content type text/plain)</li>
+ * <li> or set of nodes in which case the plugin will loop over the results.</li>
+ * </ul>
+ * This plugin is a "looping" plugin. When the result is a set of nodes (xmls), the first node is sent for processing
+ * by the rest of the transformer then the next node and so forth until the last node.<br/>
+ * <br/>
+ * This plugin is usually used in front of the Fixed Length Parser Plugin or the CSV Parser Plugin.
+ * <h3>Inputs</h3>
+ * <ul>
+ * <li><b>xml</b>: the xml on which to apply the XPath</li>
+ * </ul>
+ * <h3>Outputs</h3>
+ * <ul>
+ * <li><b>text</b>: the result of the XPath</li>
+ * </ul>
+ * <h3>Parameters</h3>
+ * The parameters are specified as an XML <pre>
+    &lt;parameters&gt;
+      &lt;xPath&gt;XPATH_V2&lt;/xPath&gt;
+      &lt;contentType&gt;text/plain|text/xml&lt;/contentType&gt;
+    &lt;/parameters&gt;
+ * </pre>
+ * <ul>
+ * <li><b>xPath</b>: an XPath v2.0 to apply to the input XML. The XPath may return a text node, an element or a set of nodes</li>
+ * <li><b>contentType</b>: the content type of the result. If the result of the XPath is an element (or a set of elements)
+ * and the content type is<ul>
+ * 		<li>text/xml: an xml is returned with the element name as root element name</li>
+ * 		<li>text/plain: the text content of the element is returned</li>
+ * </ul>
+ *</ul>
+ * <h3>Example</h3>
+ * The following example parameters will loop over all the <code>LineItem</code>s of the input XML
+ * and send them to the rest of the transformer as XML fragments
+ * <pre>
+    &lt;parameters&gt;
+      &lt;xPath&gt;//LineItem[@category='Office Supplies']&lt;/xPath&gt;
+      &lt;contentType&gt;text/xml&lt;/contentType&gt;
+    &lt;/parameters&gt;
+ * </pre>
+ *
+ * @author Bruno Grieder
+ *
  * @ejb.bean name="xPathTransformerPlugin"
  *           display-name="Name for xPathPlugin"
  *           description="Description for xPathPlugin"
@@ -31,29 +78,29 @@ import com.amalto.core.util.XtentisException;
  *           type="Stateless"
  *           view-type="local"
  *           local-business-interface="com.amalto.core.objects.transformers.v2.util.TransformerPluginV2LocalInterface"
- * 
+ *
  * @ejb.remote-facade
- * 
+ *
  * @ejb.permission
  * 	view-type = "remote"
  * 	role-name = "administration"
  * @ejb.permission
  * 	view-type = "local"
  * 	unchecked = "true"
- * 
- * 
- * 
+ *
+ *
+ *
  */
 public class XPathTransformerPluginBean extends TransformerPluginV2CtrlBean  implements SessionBean{
-  
-	private static final String PARAMETERS = "com.amalto.core.plugin.xpath.parameters"; 
-	
+
+	private static final String PARAMETERS = "com.amalto.core.plugin.xpath.parameters";
+
 	private static final String INPUT_XML = "xml";
 	//private static final String INPUT_RESULTING_CONTENT_TYPE = "output_content_type";
 	private static final String OUTPUT_TEXT = "text";
-	
+
 	private static final long serialVersionUID = 11487098995680L;
-	
+
     private transient boolean configurationLoaded = false;
 
 
@@ -65,24 +112,24 @@ public class XPathTransformerPluginBean extends TransformerPluginV2CtrlBean  imp
 	}
 
 
-	
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getJNDIName() throws XtentisException {
 		return "amalto/local/transformer/plugin/xpath";
 	}
-	
-	
-	
+
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getDescription(String twoLetterLanguageCode) throws XtentisException {
 		if ("fr".matches(twoLetterLanguageCode.toLowerCase()))
@@ -91,16 +138,16 @@ public class XPathTransformerPluginBean extends TransformerPluginV2CtrlBean  imp
 	}
 
 
-	
+
 	/**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public ArrayList<TransformerPluginVariableDescriptor> getInputVariableDescriptors(String twoLettersLanguageCode) throws XtentisException {
 		 ArrayList<TransformerPluginVariableDescriptor> inputDescriptors = new ArrayList<TransformerPluginVariableDescriptor>();
-		 
+
 		 //The csv_line descriptor
 		 TransformerPluginVariableDescriptor descriptor1 = new TransformerPluginVariableDescriptor();
 		 descriptor1.setVariableName(INPUT_XML);
@@ -117,7 +164,7 @@ public class XPathTransformerPluginBean extends TransformerPluginV2CtrlBean  imp
 		 descriptor1.setMandatory(true);
 		 descriptor1.setPossibleValuesRegex(null);
 		 inputDescriptors.add(descriptor1);
-		 
+
 		 /* To be implemented when the xPath is passed as variable
 		 TransformerPluginVariableDescriptor descriptor2 = new TransformerPluginVariableDescriptor();
 		 descriptor2.setVariableName(INPUT_RESULTING_CONTENT_TYPE);
@@ -140,16 +187,16 @@ public class XPathTransformerPluginBean extends TransformerPluginV2CtrlBean  imp
 	}
 
 
-	
+
 	/**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public ArrayList<TransformerPluginVariableDescriptor> getOutputVariableDescriptors(String twoLettersLanguageCode) throws XtentisException {
 		ArrayList<TransformerPluginVariableDescriptor> outputDescriptors = new ArrayList<TransformerPluginVariableDescriptor>();
-		 
+
 		 //The csv_line descriptor
 		 TransformerPluginVariableDescriptor descriptor = new TransformerPluginVariableDescriptor();
 		 descriptor.setVariableName(OUTPUT_TEXT);
@@ -166,29 +213,29 @@ public class XPathTransformerPluginBean extends TransformerPluginV2CtrlBean  imp
 		 descriptor.setMandatory(true);
 		 descriptor.setPossibleValuesRegex(null);
 		 outputDescriptors.add(descriptor);
-		 
+
 		 return outputDescriptors;
 	}
-	
-	
-	
+
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void init(
-			TransformerPluginContext context, 
-			String compiledParameters 
+			TransformerPluginContext context,
+			String compiledParameters
 			) throws XtentisException {
 		try {
-						
+
 			if (!configurationLoaded) loadConfiguration();
-			
+
 			CompiledParameters parameters = CompiledParameters.deserialize(compiledParameters);
 			context.put( PARAMETERS, parameters);
-			
+
 		} catch (XtentisException xe) {
 			throw (xe);
 		} catch (Exception e) {
@@ -196,30 +243,30 @@ public class XPathTransformerPluginBean extends TransformerPluginV2CtrlBean  imp
 				e.getClass().getName()+": "+e.getLocalizedMessage();
 			org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
 			throw new XtentisException(e);
-		} 
-		
+		}
+
 	}
 
-	
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void execute(TransformerPluginContext context) throws XtentisException {
-		
+
 		org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute() ");
 		CompiledParameters parameters= (CompiledParameters)context.get( PARAMETERS);
 		TypedContent xmlTC = (TypedContent)context.get(INPUT_XML);
-		
+
 		try {
-			
+
 			//attempt to read charset
 			String charset = Util.extractCharset(xmlTC.getContentType());
 			String xml = new String(xmlTC.getContentBytes(),charset);
 
-			//read the bytes from Bytes in priority, 
+			//read the bytes from Bytes in priority,
 			//If non available, attempt to read from the stream and insert the bytes into the TypedContent
 			NodeList nodes = Util.getNodeList(Util.parse(xml), parameters.getXPath());
 			for (int i = 0; i < nodes.getLength(); i++) {
@@ -239,7 +286,7 @@ public class XPathTransformerPluginBean extends TransformerPluginV2CtrlBean  imp
 				//save result to context
 				context.put(OUTPUT_TEXT, tc);
 				//call the callback content is ready
-				context.getPluginCallBack().contentIsReady(context);				
+				context.getPluginCallBack().contentIsReady(context);
 			}
 			org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute() XPath done");
 		} catch (XtentisException xe) {
@@ -250,41 +297,41 @@ public class XPathTransformerPluginBean extends TransformerPluginV2CtrlBean  imp
 				e.getClass().getName()+": "+e.getLocalizedMessage();
 			org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
 			throw new XtentisException(e);
-		} 
+		}
 	}
-	
-	
-    
+
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void end(TransformerPluginContext context) throws XtentisException {
     	context.removeAll();
 	}
 
 
-	
-    
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getParametersSchema() throws XtentisException {
 		return null;
 	}
-	
-	
-    
+
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getDocumentation(String twoLettersLanguageCode) throws XtentisException {
 		return
@@ -318,15 +365,15 @@ public class XPathTransformerPluginBean extends TransformerPluginV2CtrlBean  imp
     		"	<contentType>text/xml</contentType>"+
     		"</configuration>";
     }
-    
 
 
-	
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
     public String getConfiguration(String optionalParameters) throws XtentisException{
     	try {
@@ -343,31 +390,31 @@ public class XPathTransformerPluginBean extends TransformerPluginV2CtrlBean  imp
     	    		+": "+e.getClass().getName()+": "+e.getLocalizedMessage();
     	    org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
     	    throw new XtentisException(err);
-	    }	
+	    }
     }
 
 
 
-	
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void putConfiguration(String configuration) throws XtentisException {
 		configurationLoaded = false;
 		super.putConfiguration(configuration);
 	}
-	
-	
 
-	
+
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String compileParameters(String parameters) throws XtentisException {
     	try {
@@ -385,7 +432,7 @@ public class XPathTransformerPluginBean extends TransformerPluginV2CtrlBean  imp
 				throw new XtentisException(err);
 			}
     		compiled.setXPath(xPath);
-    		
+
     		return compiled.serialize();
     	} catch (XtentisException e) {
     		throw(e);
@@ -394,11 +441,11 @@ public class XPathTransformerPluginBean extends TransformerPluginV2CtrlBean  imp
     	    		+": "+e.getClass().getName()+": "+e.getLocalizedMessage();
     	    org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
     	    throw new XtentisException(err);
-	    }	
+	    }
 	}
 
 
 
 
-    
+
 }
