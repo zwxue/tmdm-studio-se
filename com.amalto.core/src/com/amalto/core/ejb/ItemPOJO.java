@@ -230,7 +230,7 @@ public class ItemPOJO implements Serializable{
 	
 
 
-	private static Pattern pLoad = Pattern.compile(".*?(<c>.*?</t>).*?<p>(.*)</p>.*",Pattern.DOTALL);
+	private static Pattern pLoad = Pattern.compile(".*?(<c>.*?</t>).*?(<p>(.*)</p>|<p/>).*",Pattern.DOTALL);
 	
     
     /**
@@ -322,7 +322,13 @@ public class ItemPOJO implements Serializable{
             		newItem.setPlanPK(new SynchronizationPlanPOJOPK(plan));
             	else
             		newItem.setPlanPK(null);
-            	newItem.setProjectionAsString(m.group(2));
+            	
+            	if(m.group(2)==null||m.group(2).equals("<p/>")){
+            		newItem.setProjectionAsString("");
+            	}else{
+            		newItem.setProjectionAsString(m.group(3));
+            	}
+            	
             }else {
             	throw new XtentisException("Cannot parse item read from XML Server");
             }
@@ -679,7 +685,12 @@ public class ItemPOJO implements Serializable{
             		newItem.setPlanPK(new SynchronizationPlanPOJOPK(plan));
             	else
             		newItem.setPlanPK(null);
-            	newItem.setProjectionAsString(m.group(2));
+            	//newItem.setProjectionAsString(m.group(2));
+            	if(m.group(2)==null||m.group(2).equals("<p/>")){
+            		newItem.setProjectionAsString("");
+            	}else{
+            		newItem.setProjectionAsString(m.group(3));
+            	}
             	return newItem;
             } else {
             	throw new XtentisException("Cannot parse item read from XML Server");
