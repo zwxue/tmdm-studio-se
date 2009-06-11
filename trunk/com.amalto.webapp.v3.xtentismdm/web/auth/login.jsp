@@ -13,6 +13,7 @@
 	//default en
 	String _USERNAME_ = "Login";
 	String _PASSWORD_ = "Password";
+	String _UNIVERSE_ ="Universe";
 	String _ERROR = "Login failed. Please check your login and password";
 	
 	if ("fr".equals(language)) {
@@ -46,6 +47,18 @@
 		padding-right:10px
 	}
 </style>
+<script type="text/javascript">
+function f_submit(){	
+	var universe=document.loginform.j_universe.value;
+	var username=document.loginform.j_username.value;
+	var password=document.loginform.j_password.value;
+	if(universe){
+		document.loginform.j_username.value=universe+"/"+username;
+	}	
+	//alert(document.loginform.j_username.value);
+	document.loginform.submit();
+}
+</script>
 </head>
 <body onload="document.loginform.j_username.focus();">
 
@@ -77,7 +90,12 @@
 							</td>
 						</tr>
 						<tr>
-							<td colspan="2" align="center"><input type="submit" name="login" value="Login" /></td>
+							<td align="right" width="120"><%= _UNIVERSE_ %>:&nbsp;</td>
+							<td align="left"><input type="text" name="j_universe" value="" />
+							</td>
+						</tr>						
+						<tr>
+							<td colspan="2" align="center"><input type="submit" name="login" value="Login" onclick="f_submit()"/></td>
 						</tr>
 					</table>
 				</form>
