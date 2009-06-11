@@ -27,7 +27,7 @@
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>administration</role-name>
-			<role-name>b2box Smtp</role-name>
+			<role-name>authenticated</role-name>
 		</auth-constraint>
 	</security-constraint>
 	<login-config>
@@ -39,7 +39,7 @@
 		</form-login-config>
 	</login-config>
 	<security-role>
-		<role-name>b2box Smtp</role-name>
+		<role-name>authenticated</role-name>
 	</security-role>
 	<security-role>
 		<role-name>administration</role-name>
