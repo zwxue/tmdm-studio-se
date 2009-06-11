@@ -19,8 +19,26 @@ import com.amalto.core.util.XtentisException;
 
 
 /**
- * @author bgrieder
- * 
+* <h1>Route Item Plugin</h1>
+ * <h3>Plugin name: route</h3>
+ * <h3>Description</h3>
+ * The Route plugin submits an item to subscription engine<br/>
+ * <br/>
+ * This plugin is usually used after the Project Item plugin which outputs a Primary Key
+ * <h3>Inputs</h3>
+ * <ul>
+ * <li><b>item_primary_key</b>: the primary key of the item to route as an object of type <code>application/xtentis.itempk</code></li>
+ * </ul>
+ * <h3>Outputs</h3>
+ * <ul>
+ * <li><b>item_primary_key</b>: the primary key of the item routed as an object of type <code>application/xtentis.itempk</code></li>
+ * </ul>
+ * <h3>Parameters</h3>
+ * There are no parameters for this plugin.<br/>
+ * <br/>
+ *
+ * @author Bruno Grieder
+ *
  * @ejb.bean name="RouteTransformerPlugin"
  *           display-name="Name for RoutePlugin"
  *           description="Description for RoutePlugin"
@@ -28,33 +46,33 @@ import com.amalto.core.util.XtentisException;
  *           type="Stateless"
  *           view-type="local"
  *           local-business-interface="com.amalto.core.objects.transformers.v2.util.TransformerPluginV2LocalInterface"
- * 
+ *
  * @ejb.remote-facade
- * 
+ *
  * @ejb.permission
  * 	view-type = "remote"
  * 	role-name = "administration"
  * @ejb.permission
  * 	view-type = "local"
  * 	unchecked = "true"
- * 
- * 
- * 
+ *
+ *
+ *
  */
 public class RouteTransformerPluginBean extends TransformerPluginV2CtrlBean  implements SessionBean{
-  
+
 	//private final static Pattern declarationPattern = Pattern.compile("<\\?.*?\\?>",Pattern.DOTALL);
-	
+
 	private static final String PARAMETERS ="com.amalto.core.plugin.route.parameters";
-	
+
 	private static final long serialVersionUID = 5648768989892480L;
-	
+
 	private static final String INPUT_PK = "item_primary_key";
 	private static final String OUTPUT_PK = "item_primary_key";
 
     private transient boolean configurationLoaded = false;
 
-	
+
 
 	public RouteTransformerPluginBean() {
 		super();
@@ -64,24 +82,24 @@ public class RouteTransformerPluginBean extends TransformerPluginV2CtrlBean  imp
 	}
 
 
-	
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getJNDIName() throws XtentisException {
 		return "amalto/local/transformer/plugin/route";
 	}
-	
-	
-	
+
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getDescription(String twoLetterLanguageCode) throws XtentisException {
 		if ("fr".matches(twoLetterLanguageCode.toLowerCase()))
@@ -89,18 +107,18 @@ public class RouteTransformerPluginBean extends TransformerPluginV2CtrlBean  imp
 		return "Submits an item to the subscription engine";
 	}
 
-	
 
-	
+
+
 	/**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public ArrayList<TransformerPluginVariableDescriptor> getInputVariableDescriptors(String twoLettersLanguageCode) throws XtentisException {
 		 ArrayList<TransformerPluginVariableDescriptor> inputDescriptors = new ArrayList<TransformerPluginVariableDescriptor>();
-		 
+
 
 		 TransformerPluginVariableDescriptor descriptor1 = new TransformerPluginVariableDescriptor();
 		 descriptor1.setVariableName(INPUT_PK);
@@ -123,16 +141,16 @@ public class RouteTransformerPluginBean extends TransformerPluginV2CtrlBean  imp
 	}
 
 
-	
+
 	/**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public ArrayList<TransformerPluginVariableDescriptor> getOutputVariableDescriptors(String twoLettersLanguageCode) throws XtentisException {
 		ArrayList<TransformerPluginVariableDescriptor> outputDescriptors = new ArrayList<TransformerPluginVariableDescriptor>();
-		 
+
 		 //The csv_line descriptor
 		 TransformerPluginVariableDescriptor descriptor = new TransformerPluginVariableDescriptor();
 		 descriptor.setVariableName(OUTPUT_PK);
@@ -149,25 +167,25 @@ public class RouteTransformerPluginBean extends TransformerPluginV2CtrlBean  imp
 		 descriptor.setMandatory(true);
 		 descriptor.setPossibleValuesRegex(null);
 		 outputDescriptors.add(descriptor);
-		 
+
 		 return outputDescriptors;
 	}
-	
-	
-	
+
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void init(
-			TransformerPluginContext context, 
+			TransformerPluginContext context,
 			String compiledParameters
 			) throws XtentisException {
 		try {
 			if (!configurationLoaded) loadConfiguration();
-			
+
 			//parse parameters
 			CompiledParameters parameters = CompiledParameters.deserialize(compiledParameters);
 			context.put( PARAMETERS, parameters);
@@ -179,44 +197,44 @@ public class RouteTransformerPluginBean extends TransformerPluginV2CtrlBean  imp
 				e.getClass().getName()+": "+e.getLocalizedMessage();
 			org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);
 			throw new XtentisException(e);
-		} 
-		
+		}
+
 	}
 
 
-	
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void execute(TransformerPluginContext context) throws XtentisException {
-		
+
 		org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute() ");
-		
-		try {			
-			
+
+		try {
+
 //			CompiledParameters parameters= (CompiledParameters)context.get( PARAMETERS);
 			TypedContent inputPKTC = (TypedContent)context.get(INPUT_PK);
-			
+
 			//Get the Key
 			ItemPOJOPK pk =  ItemPOJOPK.unmarshal(new String(inputPKTC.getContentBytes(),"UTF8"));
-			
+
 			org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute() PK "+pk);
 
 			org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute() Routing "+pk.getUniqueID());
-			
+
 			//now perform updates
 			//getRoutingEngineLocal().routeItemNow(pk);
 			//Routing engine V2
 			Util.getRoutingEngineV2CtrlLocal().route(pk);
-			
+
 			//save result to context
 			context.put(OUTPUT_PK, new TypedContent(pk.marshal().getBytes("utf-8"),"application/xtentis.itempk"));
 			//call the callback content is ready
 			context.getPluginCallBack().contentIsReady(context);
-			
+
 		} catch (XtentisException xe) {
 			throw (xe);
 		} catch (Exception e) {
@@ -224,21 +242,21 @@ public class RouteTransformerPluginBean extends TransformerPluginV2CtrlBean  imp
 				e.getClass().getName()+": "+e.getLocalizedMessage();
 			org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);
 			throw new XtentisException(e);
-		} 
+		}
 	}
-	
 
 
-	
-	
-	
-	
-    
+
+
+
+
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getDocumentation(String twoLettersLanguageCode) throws XtentisException {
 		return
@@ -258,15 +276,15 @@ public class RouteTransformerPluginBean extends TransformerPluginV2CtrlBean  imp
     		"	<charset>utf-8</charset>"+
 			"</configuration>";
     }
-    
 
 
-	
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
     public String getConfiguration(String optionalParameters) throws XtentisException{
     	try {
@@ -283,42 +301,42 @@ public class RouteTransformerPluginBean extends TransformerPluginV2CtrlBean  imp
     	    		+": "+e.getClass().getName()+": "+e.getLocalizedMessage();
     	    org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);
     	    throw new XtentisException(err);
-	    }	
+	    }
     }
 
 
 
-	
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void putConfiguration(String configuration) throws XtentisException {
 		configurationLoaded = false;
 		super.putConfiguration(configuration);
 	}
-	
 
-    
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getParametersSchema() throws XtentisException {
 		return null;
 	}
-	
-	
-	
+
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String compileParameters(String parameters) throws XtentisException {
     	try {
@@ -331,7 +349,7 @@ public class RouteTransformerPluginBean extends TransformerPluginV2CtrlBean  imp
     	    		+": "+e.getClass().getName()+": "+e.getLocalizedMessage();
     	    org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);
     	    throw new XtentisException(err);
-	    }	
+	    }
 	}
 
 }

@@ -32,11 +32,73 @@ import com.amalto.core.util.Util;
 import com.amalto.core.util.XSDKey;
 import com.amalto.core.util.XtentisException;
 
-
-
 /**
- * @author bgrieder
- * 
+ * <h1>Partial Update Plugin</h1>
+ * <h3>Plugin name: partialupdate</h3>
+ * <h3>Description</h3>
+ * The Partial Update plugin updates elements of an exiting Item from the content of a supplied XML<br/>
+ * <br/>
+ * This plugin provides the ability to<ul>
+ * <li>add sub elements or update existing elements</li>
+ * <li>add sub elements to an existing list of sub-elements starting from a specified position</li>
+ * </ul>
+ * <h3>Inputs</h3>
+ * <ul>
+ * <li><b>xml_instance</b>: the XML used to find and update an existing Item. The updated Item is searched based on the XML content, and the XML
+ * must follow certain specifications:<ul>
+ * 		<li>the root element MUST have the same name as the name of the concept of the item</li>
+ * 		<li>the XML MUST contain the value of all the Item keys at the same XPath as those of the Item UNLESS <code>item_primary_key</code> is specified</li>
+ * 		<li>other than the keys, the XML CAN contain more elements than the one updated on the Item but does NOT have to validate
+ * the Item data model</li></ul>
+ * <li><b>item_primary_key</b>: optional if the key values are set on the <code>xml_instance</code>. The primary key must be supplied as an object of
+ * type <code>application/xtentis.itempk</code> as returned by the Project Item plugin</li>
+ * <li><b>data_model</b>: optional. The Data Model used to validate the Item after update. Overwrites the corresponding the value supplied in the parameters</li>
+ * <li><b>clear_cache</b>: optional, defaults to <code>false</code>. If set to <code>true</code>, the Data Model is re-read and parsed from the DB for each invocation
+ * of the plugin during the transformer execution</li>
+ * </ul>
+ * <h3>Outputs</h3>
+ * <ul>
+ * <li><b>item_primary_key</b>: the primary key of the updated item as an object of type <code>application/xtentis.itempk</code></li>
+ * </ul>
+ * <h3>Parameters</h3>
+ * The parameters are specified as an XML <pre>
+    &lt;parameters&gt;
+      &lt;pivot&gt;XPATH_TO_SUB_ELEMENT&lt;/pivot&gt;
+      &lt;dataCluster&gt;DATA_CLUSTER_NAME&lt;/dataCluster&gt;
+      &lt;overwrite&gt;true|false&lt;/overwrite&gt;
+      &lt;keyXPath&gt;XPATH_RELATIVE_TO_PIVOT&lt;/keyXPath&gt;
+      &lt;startingPosition&gt;POSITIVE_NUMBER|-1&lt;/startingPosition&gt;
+      &lt;dataModel&gt;DATA_MODEL_NAME&lt;/dataModel&gt;
+    &lt;/parameters&gt;
+ * </pre>
+ * <ul>
+ * <li><b>pivot</b>: the xPath of sub-elements that must be added or updated on the original item</li>
+ * <li><b>dataCluster</b>: the name of the data cluster from which to pull the Item</li>
+ * <li><b>overwrite</b>: optional; defaults to <code>true</code>. If set to <code>true</code>, an existing sub-element matching on <code>keyXPath</code> will be overwritten</li>
+ * <li><b>keyXPath</b>: optional; defaults to <code>empty</code>; mandatory if <code>overwrite</code> is set to true. The <code>keyXPath</code> is
+ * an XPath relative to the <code>pivot</code> that will help matching a sub-element of the source XML with a sub-element of the Item. If not supplied,
+ * all sub-elements of an Item with and XPath matching that of the sub-element of the source XML will be replaced</li>
+ * <li><b>startingPosition</b>: optional; defaults to <code>0x7fffffff (a VERY large value)</code>. The position at which to add a new sub-element in a sub-elements list.
+ * Setting this value to -1, prevents sub-elements to be added (they still can be replaced)</li>
+ * <li><b>dataModel</b>: optional if supplied as input. the name of the data model to use to validate the updated item</li>
+ *</ul>
+ * <h3>Example</h3>
+ * The following example parameters will update the <code>ChildElement</code> elements. Those where the content of their sub-element <code>ChildElemenKey</code>
+ * matches will be updated (<code>overwrite</code> is set to <code>true</code>), the other ones will be added after element 9999999999 (e.g. at the end).
+ * Items are fetched using the key supplied in the XML from data cluster <code>myDataCluster></code> and validated after update against model <code>myDataModel</code>.
+ * <pre>
+    &lt;parameters&gt;
+      &lt;pivot&gt;MyRecord/ListOfChildElements/ChildElement&lt;/pivot&gt;
+      &lt;overwrite&gt;true&lt;/overwrite&gt;
+      &lt;keyXPath&gt;./ChildElementKey&lt;/keyXPath&gt;
+      &lt;startingPosition&gt;9999999999&lt;/startingPosition&gt;
+      &lt;dataCluster&gt;myDataCluster&lt;/dataCluster&gt;
+      &lt;dataModel&gt;myDataModel&lt;/dataModel&gt;
+    &lt;/parameters&gt;
+ * </pre>
+ *
+ * @author Bruno Grieder
+ *
  * @ejb.bean name="PartialUpdateTransformerPlugin"
  *          display-name="Name for PartialUpdatePlugin"
  *          description="Description for PartialUpdatePlugin"
@@ -44,30 +106,30 @@ import com.amalto.core.util.XtentisException;
  *          type="Stateless"
  *          view-type="local"
  *          local-business-interface="com.amalto.core.objects.transformers.v2.util.TransformerPluginV2LocalInterface"
- * 
+ *
  * @ejb.remote-facade
- * 
+ *
  * @ejb.permission
  * 	view-type = "remote"
  * 	role-name = "administration"
  * @ejb.permission
  * 	view-type = "local"
  * 	unchecked = "true"
- * 
- * 
- * 
+ *
+ *
+ *
  */
 public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlBean  implements SessionBean{
-  
+
 //	private final static Pattern declarationPattern = Pattern.compile("<\\?.*?\\?>",Pattern.DOTALL);
-	
+
 	private static final String PARAMETERS ="com.amalto.core.plugin.partialUpdate.parameters";
 	private static final String DATA_CLUSTER_PK ="com.amalto.core.plugin.partialUpdate.dataClusterPOJOPK";
 	private static final String DATA_MODEL_POJO_CACHE ="com.amalto.core.plugin.partialUpdate.dataModelPJOCache";
 	private static final String DATA_MODEL_XSD_CACHE ="com.amalto.core.plugin.partialUpdate.dataModelXSDCache";
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	private static final String INPUT_XML = "xml_instance";
 	private static final String OUTPUT_PK = "item_primary_key";
 	private static final String INPUT_PK = "item_primary_key";
@@ -78,7 +140,7 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
 
     private transient boolean configurationLoaded = false;
 
-	
+
 
 	public PartialUpdateTransformerPluginBean() {
 		super();
@@ -88,24 +150,24 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
 	}
 
 
-	
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getJNDIName() throws XtentisException {
 		return "amalto/local/transformer/plugin/partialupdate";
 	}
-	
-	
-	
+
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getDescription(String twoLetterLanguageCode) throws XtentisException {
 		if ("fr".matches(twoLetterLanguageCode.toLowerCase()))
@@ -113,18 +175,18 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
 		return "Partial update of an existing item";
 	}
 
-	
 
-	
+
+
 	/**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public ArrayList<TransformerPluginVariableDescriptor> getInputVariableDescriptors(String twoLettersLanguageCode) throws XtentisException {
 		 ArrayList<TransformerPluginVariableDescriptor> inputDescriptors = new ArrayList<TransformerPluginVariableDescriptor>();
-		 
+
 		 //The csv_line descriptor
 		 TransformerPluginVariableDescriptor descriptor1 = new TransformerPluginVariableDescriptor();
 		 descriptor1.setVariableName(INPUT_XML);
@@ -141,7 +203,7 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
 		 descriptor1.setMandatory(true);
 		 descriptor1.setPossibleValuesRegex(null);
 		 inputDescriptors.add(descriptor1);
-		 
+
 		 TransformerPluginVariableDescriptor descriptor2 = new TransformerPluginVariableDescriptor();
 		 descriptor2.setVariableName(INPUT_PK);
 		 descriptor2.setContentTypesRegex(
@@ -201,16 +263,16 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
 	}
 
 
-	
+
 	/**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public ArrayList<TransformerPluginVariableDescriptor> getOutputVariableDescriptors(String twoLettersLanguageCode) throws XtentisException {
 		ArrayList<TransformerPluginVariableDescriptor> outputDescriptors = new ArrayList<TransformerPluginVariableDescriptor>();
-		 
+
 		 //The csv_line descriptor
 		 TransformerPluginVariableDescriptor descriptor = new TransformerPluginVariableDescriptor();
 		 descriptor.setVariableName(OUTPUT_PK);
@@ -227,25 +289,25 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
 		 descriptor.setMandatory(true);
 		 descriptor.setPossibleValuesRegex(null);
 		 outputDescriptors.add(descriptor);
-		 
+
 		 return outputDescriptors;
 	}
-	
-	
-	
+
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void init(
-			TransformerPluginContext context, 
+			TransformerPluginContext context,
 			String compiledParameters
 			) throws XtentisException {
 		try {
 			if (!configurationLoaded) loadConfiguration();
-			
+
 			//parse parameters
 			CompiledParameters parameters = CompiledParameters.deserialize(compiledParameters);
 			context.put( PARAMETERS, parameters);
@@ -258,42 +320,42 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
 				e.getClass().getName()+": "+e.getLocalizedMessage();
 			org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
 			throw new XtentisException(e);
-		} 
-		
+		}
+
 	}
 
 
-	
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void execute(TransformerPluginContext context) throws XtentisException {
-		
+
 		org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute() ");
-		
-		try {			
-			
+
+		try {
+
 			CompiledParameters parameters= (CompiledParameters)context.get( PARAMETERS);
 			TypedContent xmlTC = (TypedContent)context.get(INPUT_XML);
 			TypedContent inputPKTC = (TypedContent)context.get(INPUT_PK);
 			TypedContent dataModelTC = (TypedContent) context.get(INPUT_DATA_MODEL);
 			TypedContent clearCacheTC = (TypedContent) context.get(INPUT_CLEAR_MODEL_CACHE);
-			
+
 			String charset =  Util.extractCharset(xmlTC.getContentType());
-			
+
 			String xml = new String(xmlTC.getContentBytes(),charset);
-			
+
 			//org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute() input xml \n"+xml);
-			
+
 			boolean clearCache =! (
-						(clearCacheTC instanceof TypedContent_Use_Default) || 
+						(clearCacheTC instanceof TypedContent_Use_Default) ||
 						"false".equals(new String(clearCacheTC.getContentBytes(),"UTF8"))
 						);
 			if (clearCache) clearCaches(context);
-			
+
 			String dataModelName = null;
 			if (dataModelTC instanceof TypedContent_Use_Default) {
 				//fetch the DataModel Name from the parameters
@@ -304,15 +366,15 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
 					throw new XtentisException(err);
 				}
 			} else {
-				dataModelName = new String(dataModelTC.getContentBytes(),"UTF8"); 
+				dataModelName = new String(dataModelTC.getContentBytes(),"UTF8");
 			}
-				
+
 //			get the Data Model POJO from the cache
 			DataModelPOJO dataModelPOJO = getDataModelPOJO(context, dataModelName);
-			
+
 			 //Get the item as an Element
 			 Element partialUpdateItem= Util.parse(xml).getDocumentElement();
-			 
+
 			//Determine the item Key
 			ItemPOJOPK pk = null;
 			if (! (inputPKTC instanceof TypedContent_Use_Default)) {
@@ -330,12 +392,12 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
 					context.put(DATA_CLUSTER_PK, dataClusterPOJOPK);
 				}
 				pk = Util.getItemPOJOPK(
-						dataClusterPOJOPK, 
-						partialUpdateItem, 
+						dataClusterPOJOPK,
+						partialUpdateItem,
 						getDataModelXSD(context, dataModelPOJO)
 				);
 			}
-					
+
 			//retrieve the original Item
 			ItemPOJO originalItemPOJO = getItemCtrl2Local().existsItem(pk);
 			if (originalItemPOJO==null) {
@@ -346,7 +408,7 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
 
 			//Parse original Item
 			Element originalItem = originalItemPOJO.getProjection();
-			
+
 			//Get a list of partialUdateItems
 			NodeList partialUpdateElementsList = Util.getNodeList(partialUpdateItem.getOwnerDocument(), parameters.getParentPivotPath()+"/"+parameters.getPivotLeaf());
 			if ((partialUpdateElementsList == null) || (partialUpdateElementsList.getLength()==0)) {
@@ -359,7 +421,7 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
 				return;
 			}
 
-			
+
 			//Loop over original parents
 			NodeList originalParentsList = Util.getNodeList(originalItem.getOwnerDocument(),parameters.getParentPivotPath());
 			if ((originalParentsList == null) || (originalParentsList.getLength()==0)) {
@@ -377,7 +439,7 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
 					org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute() ---- Processing partial update "+j);
 					Element partialUpdateElement = (Element)partialUpdateElementsList.item(j);
 					boolean addMe = (parameters.getStartingPosition() != -1);
-					
+
 					//overwrite if a priority
 					boolean didOverwrite = false;
 					if (parameters.isOverwrite() ) {
@@ -397,7 +459,7 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
 							//A key XPath was given --> overwrite items with matching key
 							String partialupdateElementKey = Util.joinStrings(
 									Util.getTextNodes(
-											partialUpdateElement,parameters.getKeyPathFromPivot()), 
+											partialUpdateElement,parameters.getKeyPathFromPivot()),
 									"."
 							);
 							org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute() ---- overwrite: looking for key ["+partialupdateElementKey+"] in original elements");
@@ -409,7 +471,7 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
 									Element originalElement = (Element)originalElementsList.item(k);
 									String originalElementKey = Util.joinStrings(
 											Util.getTextNodes(
-													originalElementsList.item(k),parameters.getKeyPathFromPivot()), 
+													originalElementsList.item(k),parameters.getKeyPathFromPivot()),
 											"."
 									);
 									org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute() -------- key is "+originalElementKey);
@@ -426,7 +488,7 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
 							}
 						}
 					}//if overwrite
-					
+
 					//performs add
 					if (addMe && (!didOverwrite)) {
 						org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute() performing add");
@@ -451,14 +513,14 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
 								Element originalElement = (Element)originalElementsList.item(k);
 								originalParent.appendChild(originalElement);
 							}
-						}						
+						}
 					}//end add
-					
-					
+
+
 				}//for partial update Items
-				
+
 			}
-			
+
 			//now write back updates
 			originalItemPOJO.setProjection(originalItem);
 			pk = getItemCtrl2Local().putItem(
@@ -467,13 +529,13 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
 			);
 			//update list of projected keys
 			//context.getProjectedPKs().add(pk); - FIXME: Class Cast Exception
-			
-			
+
+
 			//save result to context
 			context.put(OUTPUT_PK, new TypedContent(pk.marshal().getBytes("utf-8"),"application/xtentis.itempk"));
 			//call the callback content is ready
 			context.getPluginCallBack().contentIsReady(context);
-			
+
 		} catch (XtentisException xe) {
 			xe.printStackTrace();
 			throw (xe);
@@ -483,15 +545,15 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
 				e.getClass().getName()+": "+e.getLocalizedMessage();
 			org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
 			throw new XtentisException(e);
-		} 
+		}
 	}
-	
+
 
 	private void clearCaches(TransformerPluginContext context) {
 		context.put(DATA_MODEL_POJO_CACHE, new HashMap<String, DataModelPOJO>());
 		context.put(DATA_MODEL_XSD_CACHE, new HashMap<String, Document>());
 	}
-	
+
 	private DataModelPOJO getDataModelPOJO(TransformerPluginContext context, String dataModelName) throws XtentisException, CreateException,NamingException{
 		HashMap<String, DataModelPOJO> cache = (HashMap<String, DataModelPOJO>)context.get(DATA_MODEL_POJO_CACHE);
 		DataModelPOJO pojo = cache.get(dataModelName);
@@ -501,7 +563,7 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
 		}
 		return pojo;
 	}
-	
+
 	private Document getDataModelXSD(TransformerPluginContext context, DataModelPOJO dataModelPOJO) throws ParserConfigurationException,SAXException,IOException{
 		HashMap<String, Document> cache = (HashMap<String, Document>)context.get(DATA_MODEL_XSD_CACHE);
 		Document xsd = cache.get(dataModelPOJO.getName());
@@ -512,16 +574,16 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
 		return xsd;
 	}
 
-	
-	
-	
-	
-    
+
+
+
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getDocumentation(String twoLettersLanguageCode) throws XtentisException {
 		return
@@ -536,7 +598,7 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
 		"	startingPosition [optional]: the position of the added sub-element in the original item parent childs list. " +"\n"+
 		"	    Set to -1 if you want to diable add. Default: add at the the end of the parent's chailds"+"\n"+
 		"	dataModel [optional]: the Data Model to use if none is given at runtime"+"\n"+
-		"	dataCluster [optional]: the Data Cluster to use if none is given at runtime"+"\n"+	
+		"	dataCluster [optional]: the Data Cluster to use if none is given at runtime"+"\n"+
 		"\n"+
 		"\n"+
 		"Example" +"\n"+
@@ -558,15 +620,15 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
     		"	<charset>utf-8</charset>"+
 			"</configuration>";
     }
-    
 
 
-	
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
     public String getConfiguration(String optionalParameters) throws XtentisException{
     	try {
@@ -583,42 +645,42 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
     	    		+": "+e.getClass().getName()+": "+e.getLocalizedMessage();
     	    org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
     	    throw new XtentisException(err);
-	    }	
+	    }
     }
 
 
 
-	
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void putConfiguration(String configuration) throws XtentisException {
 		configurationLoaded = false;
 		super.putConfiguration(configuration);
 	}
-	
 
-    
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getParametersSchema() throws XtentisException {
 		return null;
 	}
-	
-	
-	
+
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String compileParameters(String parameters) throws XtentisException {
     	try {
@@ -640,7 +702,7 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
     		compiled.setKeyPathFromPivot(Util.getFirstTextNode(params, "keyXPath"));
     		String position = Util.getFirstTextNode(params, "startingPosition");
     		if ((position == null) || "".equals(position)) {
-    			compiled.setStartingPosition(Integer.MAX_VALUE); //apend to the end by default
+    			compiled.setStartingPosition(Integer.MAX_VALUE); //append to the end by default
     		} else {
     			compiled.setStartingPosition(Integer.parseInt(position));
     		}
@@ -650,30 +712,30 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
     	    		+": "+e.getClass().getName()+": "+e.getLocalizedMessage();
     	    org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
     	    throw new XtentisException(err);
-	    }	
+	    }
 	}
 
-	
+
 	//datamodels cach
 	protected HashMap<String, XSDKey> keys = new HashMap<String, XSDKey>();
 	protected HashMap<String, DataModelPOJO> dataModels = new HashMap<String, DataModelPOJO>();
-    
-	
+
+
     protected ItemPOJOPK getPK(Element newItem, String dataCluster, String dataModel) throws XtentisException{
     	org.apache.log4j.Logger.getLogger(this.getClass()).debug("getPK() ");
     	try {
 			//get conceptName
 			String conceptName = newItem.getLocalName();
-    		
+
 			XSDKey conceptKey = keys.get(dataModel+"/"+conceptName);
-			if (conceptKey == null) {	
+			if (conceptKey == null) {
 				//get the DataModel
 	    		DataModelPOJO dataModelPOJO = dataModels.get(dataModel);
 	    		if (dataModelPOJO == null) {
 	    			dataModelPOJO = Util.getDataModelCtrlLocal().getDataModel(new DataModelPOJOPK(dataModel));
 	    			dataModels.put(dataModel,dataModelPOJO);
 	    		}
-		        
+
 	    		//find the key for the business concept --> it will become the element id
 	            Document xsd = Util.parse(dataModelPOJO.getSchema());
 	            conceptKey = Util.getBusinessConceptKey(
@@ -687,13 +749,13 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
        			newItem,
    				conceptKey
 			);
-			
+
 			return new ItemPOJOPK(
 					new DataClusterPOJOPK(dataCluster),
 					conceptName,
 					itemKeyValues
 			);
-			
+
 		} catch (XtentisException e) {
 			throw (e);
 	    } catch (Exception e) {
@@ -703,13 +765,13 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
     	    throw new XtentisException(err);
 	    }
 	}
-    
-    
+
+
     private String[] getParentAndLeafPath(String pivot) throws XtentisException {
 		if (pivot.endsWith(")")) {
 			String err = "Invalid pivot '"+pivot+"': pivots must be 'pure' path, with no functions";
 			org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
-			throw new XtentisException(err);							
+			throw new XtentisException(err);
 		}
     	//Normalize path
 		pivot = pivot.startsWith("/") ? pivot.substring(1): pivot; //remove leading slash
@@ -718,10 +780,10 @@ public class PartialUpdateTransformerPluginBean extends TransformerPluginV2CtrlB
 		if (pivotPaths.length <2) {
 			String err = "Invalid pivot '"+pivot+"': partial updates cannot be applied to the root element";
 			org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
-			throw new XtentisException(err);				
+			throw new XtentisException(err);
 		}
 		//build parent pivot
-		String parentPivot = ""; 
+		String parentPivot = "";
 		for (int i = 0; i < pivotPaths.length-1; i++) {
 			parentPivot+="/"+pivotPaths[i];
 		}
