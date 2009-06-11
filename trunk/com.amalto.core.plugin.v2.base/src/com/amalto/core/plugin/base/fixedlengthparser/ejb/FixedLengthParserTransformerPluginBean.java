@@ -17,11 +17,60 @@ import com.amalto.core.objects.transformers.v2.util.TypedContent;
 import com.amalto.core.util.Util;
 import com.amalto.core.util.XtentisException;
 
-
-
 /**
- * @author bgrieder
- * 
+ * <h1>Fixed Length Parser Plugin</h1>
+ * <h3>Plugin name: fixedlengthparser</h3>
+ * <h3>Description</h3>
+ * The Fixed Length Parser plugin takes an input text line/s and XMLize it by splitting it into
+ * chunks of fixed size<br/>
+ * This plugin is typically called right after the Lines Reader plugin which reads a text line by line.<br/>
+ * <h3>Inputs</h3>
+ * <ul>
+ * <li><b>line</b>: the input line(s) to XMLize</li>
+ * </ul>
+ * <h3>Outputs</h3>
+ * <ul>
+ * <li><b>xml</b>: the XMLized line</li>
+ * </ul>
+ * <h3>Parameters</h3>
+ * The parameters are specified as an XML and only contain the template of the xml to be generated <pre>
+    &lt;parameters&gt;
+    	&lt;template&gt;
+    	&lt;![CDATA[
+    		&lt;MyXml&gt;
+    			&lt;MyElement1&gt;SEQUENCE_SPECIFICATION&lt;/MyElement1&gt;
+    			...
+    			&lt;MyElementN&gt;SEQUENCE_SPECIFICATION&lt;/MyElementN&gt;
+        	&lt;/MyXml&gt;
+    	]]&gt;
+    	&lt;/template&gt;
+    &lt;/parameters&gt;
+ * </pre>
+ * <ul>
+ * <li><b>template</b>: the template xml that will be generated. The template is usually inserted in a CDATA section to avoid escaping the xml reserved characters.
+ * Where inserted, the SEQUENCE_SPECIFICATIONS will be replaced by the corresponding characters sequence from the text line. The SEQUENCE_SPECIFICATIONS is made of
+ * a pair of the number of the first character and of the sequence length between accolades e.g. <code>{first,length}</code>
+ * To insert an accolade in the XML, escape it using a backslash e.g. <code>\{</code><br/>
+ *</ul>
+ * <h3>Example</h3>
+ * The following example parameters will generate an XML starting with root element <code>MyXml</code> from a single line of text
+ * <pre>
+  &lt;parameters&gt;
+    &lt;template&gt;
+      &lt;![CDATA[
+        &lt;MyXml&gt;
+          &lt;!-- characters 3 to 12 inclusive of the line --&gt;
+          &lt;Field1&gt;{3,10}&lt;/Field1&gt;
+          &lt;Combo&gt;{15,2}--{17,2}&lt;/Combo&gt;
+          &lt;NotInterpreted&gt;\{20,1}&lt;/NotInterpreted&gt;
+        &lt;/MyXml&gt;
+      ]]&gt;
+    &lt;/template&gt;
+  &lt;/parameters&gt;
+ * </pre>
+ *
+ * @author Bruno Grieder
+ *
  * @ejb.bean name="FixedLengthParserTransformerPlugin"
  *           display-name="Name for FixedLengthParserPlugin"
  *           description="Description for FixedLengthParserPlugin"
@@ -29,31 +78,31 @@ import com.amalto.core.util.XtentisException;
  *           type="Stateless"
  *           view-type="local"
  *           local-business-interface="com.amalto.core.objects.transformers.v2.util.TransformerPluginV2LocalInterface"
- * 
+ *
  * @ejb.remote-facade
- * 
+ *
  * @ejb.permission
  * 	view-type = "remote"
  * 	role-name = "administration"
  * @ejb.permission
  * 	view-type = "local"
  * 	unchecked = "true"
- * 
- * 
- * 
+ *
+ *
+ *
  */
 public class FixedLengthParserTransformerPluginBean extends TransformerPluginV2CtrlBean  implements SessionBean{
-  
+
 	public static final String PARAMETERS ="com.amalto.core.plugin.fixedlengthparser.parameters";
-	
+
 	private static final long serialVersionUID = 1148709892480L;
-	
+
 	private final static Pattern templatePattern = Pattern.compile("(.*?<template>)(.*)(</template>.*)",Pattern.DOTALL);
 	private final static String INPUT_LINE = "line";
 	private final static String OUTPUT_XML = "xml";
-	
+
     private transient boolean configurationLoaded = false;
-    
+
 
 	public FixedLengthParserTransformerPluginBean() {
 		super();
@@ -63,24 +112,24 @@ public class FixedLengthParserTransformerPluginBean extends TransformerPluginV2C
 	}
 
 
-	
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getJNDIName() throws XtentisException {
 		return "amalto/local/transformer/plugin/fixedlengthparser";
 	}
-	
-	
-	
+
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getDescription(String twoLetterLanguageCode) throws XtentisException {
 		if ("fr".matches(twoLetterLanguageCode.toLowerCase()))
@@ -88,17 +137,17 @@ public class FixedLengthParserTransformerPluginBean extends TransformerPluginV2C
 		return "Parses a text line with fixed length fields";
 	}
 
-	
-	
+
+
 	/**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public ArrayList<TransformerPluginVariableDescriptor> getInputVariableDescriptors(String twoLettersLanguageCode) throws XtentisException {
 		 ArrayList<TransformerPluginVariableDescriptor> inputDescriptors = new ArrayList<TransformerPluginVariableDescriptor>();
-		 
+
 		 //The csv_line descriptor
 		 TransformerPluginVariableDescriptor descriptor = new TransformerPluginVariableDescriptor();
 		 descriptor.setVariableName(INPUT_LINE);
@@ -115,21 +164,21 @@ public class FixedLengthParserTransformerPluginBean extends TransformerPluginV2C
 		 descriptor.setMandatory(true);
 		 descriptor.setPossibleValuesRegex(null);
 		 inputDescriptors.add(descriptor);
-		 
+
 		 return inputDescriptors;
 	}
 
 
-	
+
 	/**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public ArrayList<TransformerPluginVariableDescriptor> getOutputVariableDescriptors(String twoLettersLanguageCode) throws XtentisException {
 		ArrayList<TransformerPluginVariableDescriptor> outputDescriptors = new ArrayList<TransformerPluginVariableDescriptor>();
-		 
+
 		 //The csv_line descriptor
 		 TransformerPluginVariableDescriptor descriptor = new TransformerPluginVariableDescriptor();
 		 descriptor.setVariableName(OUTPUT_XML);
@@ -146,25 +195,25 @@ public class FixedLengthParserTransformerPluginBean extends TransformerPluginV2C
 		 descriptor.setMandatory(true);
 		 descriptor.setPossibleValuesRegex(null);
 		 outputDescriptors.add(descriptor);
-		 
+
 		 return outputDescriptors;
 	}
-	
-	
-	
+
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void init(
-			TransformerPluginContext context, 
+			TransformerPluginContext context,
 			String compiledParameters
 			) throws XtentisException {
 		try {
-			
-			if (!configurationLoaded) loadConfiguration();				
+
+			if (!configurationLoaded) loadConfiguration();
 			context.put(PARAMETERS, compiledParameters);
 
 		} catch (XtentisException xe) {
@@ -172,36 +221,36 @@ public class FixedLengthParserTransformerPluginBean extends TransformerPluginV2C
 		} catch (Exception e) {
 			String err = "Could not init the Fixed Length Parser plugin:"+
 				e.getClass().getName()+": "+e.getLocalizedMessage();
-			org.apache.log4j.Category.getInstance(this.getClass()).error("start() "+err);
+			org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);
 			throw new XtentisException(e);
-		} 
-		
+		}
+
 	}
 
-	
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void execute(TransformerPluginContext context) throws XtentisException {
 		org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute() ");
-		
-		try {			
+
+		try {
 			String  parameters = (String)context.get(PARAMETERS);
 			TypedContent content = (TypedContent)context.get(INPUT_LINE);
 			String charset = Util.extractCharset(content.getContentType());
 
-			//read the bytes from Bytes in priority, 
+			//read the bytes from Bytes in priority,
 			//If non available, attempt to read from the stream and insert the bytes into the TypedContent
 			String record =  new String(content.getContentBytes(),charset);
 			if (record == null) {
 				String err = "Could not initialize the XPath Plugin: there is no available content to process. ";
-				org.apache.log4j.Category.getInstance(this.getClass()).error("init() "+err);
+				org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
 				throw new XtentisException(err);
 			}
-		
+
 			//extract template
 			String template = null;
 			Matcher m = templatePattern.matcher(parameters);
@@ -209,8 +258,8 @@ public class FixedLengthParserTransformerPluginBean extends TransformerPluginV2C
 				template = m.group(2);
 			} else {
 				throw new XtentisException("Fixed Length Parser: the template cannot be found :\n"+parameters);
-			}	
-			
+			}
+
 			Pattern p = Pattern.compile("[^\\\\]\\{(\\d+,\\d+[,.*?]?)\\}");
 			String xml="";
 			int lastEnd = 0;
@@ -224,10 +273,10 @@ public class FixedLengthParserTransformerPluginBean extends TransformerPluginV2C
 				if (record.length()<offset+length) {
 					String err = 	"Field at position "+offset+"," +length+" is outside of record position. "+
 					"Record is: "+record;
-					org.apache.log4j.Category.getInstance(this.getClass()).error("start() "+err);
+					org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
 					throw new XtentisException(err);
 				}
-				//read the data from the input stream			
+				//read the data from the input stream
 				String s = record.substring(offset-1,offset+length-1);
 				if (specs.contains("trim")) s = s.trim();
 				//build the xml
@@ -236,7 +285,7 @@ public class FixedLengthParserTransformerPluginBean extends TransformerPluginV2C
 				xml+=StringEscapeUtils.escapeXml(s);
 			}
 			xml+=template.substring(lastEnd);
-						
+
 			//Replace the escaped  accolades by normal accolades
 			xml = xml.replaceAll("\\\\{", "{");
 
@@ -244,37 +293,37 @@ public class FixedLengthParserTransformerPluginBean extends TransformerPluginV2C
 			byte[] bytes = xml.getBytes("utf-8");
 			context.put(OUTPUT_XML, new TypedContent(bytes,"text/xml; charset=utf-8"));
 			context.getPluginCallBack().contentIsReady(context);
-			
-			
+
+
 		} catch (XtentisException xe) {
 			throw (xe);
 		} catch (Exception e) {
 			String err = "Could not start the Fixed Length Parser transformer plugin"+
 				e.getClass().getName()+": "+e.getLocalizedMessage();
-			org.apache.log4j.Category.getInstance(this.getClass()).error("start() "+err);
+			org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);
 			throw new XtentisException(e);
-		} 
+		}
 	}
-	
-    
-    
+
+
+
 	/**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void end(TransformerPluginContext context) throws XtentisException {
     	context.removeAll();
 	}
 
-    
-    	
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getParametersSchema() throws XtentisException {
 		return
@@ -303,13 +352,13 @@ public class FixedLengthParserTransformerPluginBean extends TransformerPluginV2C
 		"</xsd:schema>";
 	}
 
-	
-    
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getDocumentation(String twoLettersLanguageCode) throws XtentisException {
 		return
@@ -330,11 +379,11 @@ public class FixedLengthParserTransformerPluginBean extends TransformerPluginV2C
 		"			<MyXml>" +"\n"+
 		"					<Field1>{3,10}</Field1> <!-- characters 3 to 12 included of the input text -->" +"\n"+
 		"					<Combo>{15,2}--{17,2}</Combo>" +"\n"+
-		"					<NotInterpreted>\\{20,1}</NotInterpreted>" +"\n"+		
+		"					<NotInterpreted>\\{20,1}</NotInterpreted>" +"\n"+
 		"			</MyXml>" +"\n"+
 		"		</template>" +"\n"+
 		"	</parameters>" +"\n"+
-		"";	
+		"";
 	}
 
 
@@ -344,15 +393,15 @@ public class FixedLengthParserTransformerPluginBean extends TransformerPluginV2C
     		"	<charset>utf-8</charset>"+
 			"</configuration>";
     }
-    
 
 
-	
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
     public String getConfiguration(String optionalParameters) throws XtentisException{
     	try {
@@ -369,34 +418,34 @@ public class FixedLengthParserTransformerPluginBean extends TransformerPluginV2C
     	    		+": "+e.getClass().getName()+": "+e.getLocalizedMessage();
     	    org.apache.log4j.Category.getInstance(this.getClass()).error(err);
     	    throw new XtentisException(err);
-	    }	
+	    }
     }
 
 
 
-	
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void putConfiguration(String configuration) throws XtentisException {
 		configurationLoaded = false;
 		super.putConfiguration(configuration);
 	}
 
-	
+
 	/********************************************************************************************
 	 * Compilation - decompilation of parameters
 	 ********************************************************************************************/
-	
-	
+
+
     /**
      * @throws XtentisException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String compileParameters(String parameters) throws XtentisException {
 		return parameters;
@@ -404,9 +453,9 @@ public class FixedLengthParserTransformerPluginBean extends TransformerPluginV2C
 
 
 
-    
-	
-	
-	
-	
+
+
+
+
+
 }
