@@ -551,7 +551,7 @@ public class ItemPOJO implements Serializable{
 							if (lastParentNode != null){
 								lastParentNode.removeChild(node);
 							}	
-							if (formatSiblingNode != null && formatSiblingNode.getNodeValue().matches("\\s+")){
+							if (formatSiblingNode != null && formatSiblingNode.getNodeValue() != null && formatSiblingNode.getNodeValue().matches("\\s+")){
 								lastParentNode.removeChild(formatSiblingNode);
 							}
 						}
