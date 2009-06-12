@@ -135,8 +135,8 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	};
 	
 	var  MSG_CONFIRM_LOGICAL_DELETE_ITEM =    {
-	    'fr' : 'Please enter this path: ',
-	    'en' : 'Please enter this path: '
+	    'fr' : 'Please input the path to delete element(s): ',
+	    'en' : 'Please input the path to delete element(s): '
 	};
 	
 	var  MSG_CONFIRM_TITLE_LOGICAL_DELETE_ITEM =    {
