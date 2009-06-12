@@ -5,6 +5,7 @@ import java.util.Properties;
 import com.amalto.core.objects.configurationinfo.util.XtentisConfiguration;
 
 /**
+ * @deprecated use org.jboss.util.id.UID
  * AutoIncrement to generate a num
  * @author achen
  *
