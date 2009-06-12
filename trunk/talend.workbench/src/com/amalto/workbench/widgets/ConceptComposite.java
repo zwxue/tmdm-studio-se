@@ -72,7 +72,7 @@ public class ConceptComposite {
 				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
 		);
 		
-		sequenceButton.setSelection(true);
+		allButton.setSelection(true);
 		container = parent;
 	}
 	
