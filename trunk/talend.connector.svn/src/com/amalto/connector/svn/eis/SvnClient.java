@@ -16,6 +16,7 @@ import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNNodeKind;
+import org.tmatesoft.svn.core.SVNProperties;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.io.ISVNEditor;
@@ -142,7 +143,10 @@ public class SvnClient  {
 		//Check if file already exists
 		//SVNProperties fileProperties = new SVNProperties();
 	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	    HashMap<String,String> fileProperties = new HashMap<String,String>();
+	    //using svnkit 1.3.0 ,using SVNProperties
+	    //HashMap<String,String> fileProperties = new HashMap<String,String>();
+	    SVNProperties fileProperties =new SVNProperties();
+	    
         /*
          * Checks up if the specified path really corresponds to a file. If
          * doesn't the program exits. SVNNodeKind is that one who says what is
@@ -411,7 +415,9 @@ public class SvnClient  {
 
 	public byte[] checkout(String filePath, String tag) throws SVNException {
 	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	    HashMap<String,String> fileProperties = new HashMap<String,String>();
+	    //using svnkit 1.3.0 ,using SVNProperties
+	    //HashMap<String,String> fileProperties = new HashMap<String,String>();
+	    SVNProperties fileProperties =new SVNProperties();
 
 	    if ((tag!=null) && !"".equals(tag)) {
 			int indexDir = filePath.indexOf("/",1);
@@ -629,10 +635,13 @@ public class SvnClient  {
 
                 	if (itemPath!=null && !"".equals(itemPath)) {
                 		Logger.getLogger(SvnClient.class).debug("File "+itemPath+" exists in version "+version+".");
-                		HashMap<String,String> fileProperties = new HashMap<String,String>();
+                	    //using svnkit 1.3.0 ,using SVNProperties
+                	    //HashMap<String,String> fileProperties = new HashMap<String,String>();
+                	    SVNProperties fileProperties =new SVNProperties();
                 		repository.getFile(tmpFilePath, -1, fileProperties, null);
 
-                		String revisionS = fileProperties.get("svn:entry:committed-rev");
+                		//String revisionS = fileProperties.get("svn:entry:committed-rev");
+                		String revisionS = fileProperties.getStringValue("svn:entry:committed-rev");
                 		revision = Integer.parseInt(revisionS);
                 		Logger.getLogger(SvnClient.class).debug("File "+tmpFilePath+" last revision = "+revision);
                 	}
