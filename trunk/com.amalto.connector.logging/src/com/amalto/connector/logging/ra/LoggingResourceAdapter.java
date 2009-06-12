@@ -1,5 +1,6 @@
 package com.amalto.connector.logging.ra;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.lang.reflect.Method;
 import java.util.Collections;
@@ -41,10 +42,14 @@ import com.amalto.connector.logging.eis.LoggingListener;
 public class LoggingResourceAdapter implements ResourceAdapter,IXtentisResourceAdapter {
 	
 	
-	private static String configurationFile;
+	private static String configurationFile="xtentis.conf";
 	{
-		if (SystemUtils.IS_OS_WINDOWS) configurationFile = "c:\\amalto\\xtentis\\xtentis.conf";
-		else configurationFile = "/etc/amalto/xtentis/xtentis.conf";
+		if(!new File(configurationFile).exists()){
+			if (SystemUtils.IS_OS_WINDOWS) {
+				configurationFile = "c:\\amalto\\xtentis\\xtentis.conf";			
+			}
+			else configurationFile = "/etc/amalto/xtentis/xtentis.conf";
+		}
 	}
 	
 	private final static String JNDI_NAME="java:jca/xtentis/connector/logging";
