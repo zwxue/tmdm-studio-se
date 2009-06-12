@@ -44,6 +44,10 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.jboss.util.id.GUID;
+import org.jboss.util.id.UID;
+import org.jboss.util.id.VMID;
+import org.jboss.util.platform.PID;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -663,10 +667,14 @@ public final class Util {
 	        		key.setElementName(businessConceptName);
 	        		key.setKeyName(keyName);
 	        		if(EUUIDCustomType.UUID.getName().equalsIgnoreCase(type)){
+	        			System.out.println("uid=="+new UID().getID());
+	        			
 	        			key.setUuidValue(UUID.randomUUID().toString());
 	        		}
 	        		if(EUUIDCustomType.AUTO_INCREMENT.getName().equalsIgnoreCase(type)){
-	        			key.setUuidValue(String.valueOf(AutoIncrementGenerator.generateNum()));
+	        			//System.out.println("uid=="+new UID().getID());
+
+	        			key.setUuidValue(String.valueOf(new UID().getID()));
 	        		}
 	        		return key;
 	        	}
