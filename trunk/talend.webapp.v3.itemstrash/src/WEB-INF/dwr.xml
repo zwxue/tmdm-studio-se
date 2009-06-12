@@ -3,6 +3,13 @@
 <dwr>
 
     <allow>
-
-    </allow>
+         <create creator="new" javascript="ItemsTrashInterface">
+            <param name="class" value="com.amalto.webapp.v3.itemstrash.dwr.ItemsTrashDWR"/>
+        </create>       
+        <convert converter="bean" match="java.lang.Exception"/>
+        <convert converter="bean" match="java.lang.StackTraceElement"/>
+        <convert converter="bean" match="com.amalto.webapp.core.bean.ListRange"/>
+        <convert converter="bean" match="com.amalto.webapp.v3.itemstrash.bean.ItemPK"/>
+        <convert converter="bean" match="com.amalto.webapp.v3.itemstrash.bean.ItemsTrashItem"/>
+     </allow>
 </dwr>
