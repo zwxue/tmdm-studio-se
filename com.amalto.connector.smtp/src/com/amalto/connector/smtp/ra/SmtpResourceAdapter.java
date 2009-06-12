@@ -1,5 +1,6 @@
 package com.amalto.connector.smtp.ra;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -32,10 +33,14 @@ public class SmtpResourceAdapter implements IXtentisResourceAdapter, ResourceAda
 	
 	public static String VERSION = "1.0";
 	
-	private static String configurationFile;
+	private static String configurationFile="xtentis.conf";
 	{
-		if (SystemUtils.IS_OS_WINDOWS) configurationFile = "c:\\amalto\\xtentis\\xtentis.conf";
-		else configurationFile = "/etc/amalto/xtentis/xtentis.conf";
+		if(!new File(configurationFile).exists()){
+			if (SystemUtils.IS_OS_WINDOWS) {
+				configurationFile = "c:\\amalto\\xtentis\\xtentis.conf";			
+			}
+			else configurationFile = "/etc/amalto/xtentis/xtentis.conf";
+		}
 	}
 	
 	
