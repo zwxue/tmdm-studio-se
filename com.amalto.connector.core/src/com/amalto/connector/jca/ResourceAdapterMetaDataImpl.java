@@ -23,7 +23,7 @@ public class ResourceAdapterMetaDataImpl implements ResourceAdapterMetaData {
         return "Xtentis Connector";
     }
     public String getAdapterVendorName() {
-        return "Amalto Technologies";
+        return "Talend SA";
     }
     public String getAdapterVersion() {
         return "core libraries v1.0";
