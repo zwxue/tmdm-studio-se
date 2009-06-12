@@ -1107,13 +1107,10 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		Ext.MessageBox.prompt(MSG_CONFIRM_TITLE_LOGICAL_DELETE_ITEM[language], MSG_CONFIRM_LOGICAL_DELETE_ITEM[language] , doLogicalDel);
 		
 		function doLogicalDel(btn, path){
-			var m = path.match(/^(\/\w+)+$/);
-			if (btn == 'ok' && !m) {
-				Ext.MessageBox.alert("warning", "please input the valid path");
-				return;
-			} else if (btn == 'cancel') {
+	       if (btn == 'cancel') {
 				return;
 			}
+			if (path == '')path = '/';
 			var tmp = "";
 			var itemPK = ids.split('@');
 			for(var i=0; i<itemPK.length; i++) {
