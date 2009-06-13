@@ -1373,6 +1373,8 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
 			
 			return new WSItem(
 					wsGetItem.getWsItemPK().getWsDataClusterPK(),
+					pojo.getDataModelName(),
+					pojo.getDataModelRevision(),
 					wsGetItem.getWsItemPK().getConceptName(),
 					wsGetItem.getWsItemPK().getIds(),
 					pojo.getInsertionTime(),
