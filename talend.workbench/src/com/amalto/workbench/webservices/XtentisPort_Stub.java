@@ -1736,6 +1736,53 @@ public class XtentisPort_Stub
     }
     
     /*
+     *  implementation of removeDroppedItem
+     */
+    public com.amalto.workbench.webservices.WSDroppedItemPK removeDroppedItem(com.amalto.workbench.webservices.WSRemoveDroppedItem wsRemoveDroppedItem)
+        throws java.rmi.RemoteException {
+        
+        try {
+            
+            StreamingSenderState _state = _start(_handlerChain);
+            
+            InternalSOAPMessage _request = _state.getRequest();
+            _request.setOperationCode(removeDroppedItem_OPCODE);
+            
+            
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_removeDroppedItem_WSRemoveDroppedItem_QNAME);
+            _bodyBlock.setValue(wsRemoveDroppedItem);
+            _bodyBlock.setSerializer(ns1_myWSRemoveDroppedItem_LiteralSerializer);
+            _request.setBody(_bodyBlock);
+            
+            _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
+            
+            _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
+            
+            com.amalto.workbench.webservices.WSDroppedItemPK _result = null;
+            Object _responseObj = _state.getResponse().getBody().getValue();
+            if (_responseObj instanceof SOAPDeserializationState) {
+                _result = (com.amalto.workbench.webservices.WSDroppedItemPK)((SOAPDeserializationState) _responseObj).getInstance();
+            } else {
+                _result = (com.amalto.workbench.webservices.WSDroppedItemPK)_responseObj;
+            }
+            
+            return _result;
+            
+        } catch (RemoteException e) {
+            // let this one through unchanged
+            throw e;
+        } catch (JAXRPCException e) {
+            throw new RemoteException(e.getMessage(), e);
+        } catch (Exception e) {
+            if (e instanceof RuntimeException) {
+                throw (RuntimeException)e;
+            } else {
+                throw new RemoteException(e.getMessage(), e);
+            }
+        }
+    }
+    
+    /*
      *  implementation of getBusinessConcepts
      */
     public com.amalto.workbench.webservices.WSStringArray getBusinessConcepts(com.amalto.workbench.webservices.WSGetBusinessConcepts wsGetBusinessConcepts)
@@ -2817,9 +2864,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of removeDroppedItem
+     *  implementation of loadDroppedItem
      */
-    public com.amalto.workbench.webservices.WSDroppedItemPK removeDroppedItem(com.amalto.workbench.webservices.WSRemoveDroppedItem wsRemoveDroppedItem)
+    public com.amalto.workbench.webservices.WSDroppedItem loadDroppedItem(com.amalto.workbench.webservices.WSLoadDroppedItem wsLoadDroppedItem)
         throws java.rmi.RemoteException {
         
         try {
@@ -2827,24 +2874,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(removeDroppedItem_OPCODE);
+            _request.setOperationCode(loadDroppedItem_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_removeDroppedItem_WSRemoveDroppedItem_QNAME);
-            _bodyBlock.setValue(wsRemoveDroppedItem);
-            _bodyBlock.setSerializer(ns1_myWSRemoveDroppedItem_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_loadDroppedItem_WSLoadDroppedItem_QNAME);
+            _bodyBlock.setValue(wsLoadDroppedItem);
+            _bodyBlock.setSerializer(ns1_myWSLoadDroppedItem_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSDroppedItemPK _result = null;
+            com.amalto.workbench.webservices.WSDroppedItem _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSDroppedItemPK)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSDroppedItem)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSDroppedItemPK)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSDroppedItem)_responseObj;
             }
             
             return _result;
@@ -3080,53 +3127,6 @@ public class XtentisPort_Stub
                 _result = (com.amalto.workbench.webservices.WSTransformerV2PK)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
                 _result = (com.amalto.workbench.webservices.WSTransformerV2PK)_responseObj;
-            }
-            
-            return _result;
-            
-        } catch (RemoteException e) {
-            // let this one through unchanged
-            throw e;
-        } catch (JAXRPCException e) {
-            throw new RemoteException(e.getMessage(), e);
-        } catch (Exception e) {
-            if (e instanceof RuntimeException) {
-                throw (RuntimeException)e;
-            } else {
-                throw new RemoteException(e.getMessage(), e);
-            }
-        }
-    }
-    
-    /*
-     *  implementation of findAllDroppedItemsPKs
-     */
-    public com.amalto.workbench.webservices.WSDroppedItemPKArray findAllDroppedItemsPKs(com.amalto.workbench.webservices.WSFindAllDroppedItemsPKs regex)
-        throws java.rmi.RemoteException {
-        
-        try {
-            
-            StreamingSenderState _state = _start(_handlerChain);
-            
-            InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(findAllDroppedItemsPKs_OPCODE);
-            
-            
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_findAllDroppedItemsPKs_WSFindAllDroppedItemsPKs_QNAME);
-            _bodyBlock.setValue(regex);
-            _bodyBlock.setSerializer(ns1_myWSFindAllDroppedItemsPKs_LiteralSerializer);
-            _request.setBody(_bodyBlock);
-            
-            _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
-            
-            _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
-            
-            com.amalto.workbench.webservices.WSDroppedItemPKArray _result = null;
-            Object _responseObj = _state.getResponse().getBody().getValue();
-            if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSDroppedItemPKArray)((SOAPDeserializationState) _responseObj).getInstance();
-            } else {
-                _result = (com.amalto.workbench.webservices.WSDroppedItemPKArray)_responseObj;
             }
             
             return _result;
@@ -4180,9 +4180,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of loadDroppedItem
+     *  implementation of findAllDroppedItemsPKs
      */
-    public com.amalto.workbench.webservices.WSDroppedItem loadDroppedItem(com.amalto.workbench.webservices.WSLoadDroppedItem wsLoadDroppedItem)
+    public com.amalto.workbench.webservices.WSDroppedItemPKArray findAllDroppedItemsPKs(com.amalto.workbench.webservices.WSFindAllDroppedItemsPKs regex)
         throws java.rmi.RemoteException {
         
         try {
@@ -4190,24 +4190,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(loadDroppedItem_OPCODE);
+            _request.setOperationCode(findAllDroppedItemsPKs_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_loadDroppedItem_WSLoadDroppedItem_QNAME);
-            _bodyBlock.setValue(wsLoadDroppedItem);
-            _bodyBlock.setSerializer(ns1_myWSLoadDroppedItem_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_findAllDroppedItemsPKs_WSFindAllDroppedItemsPKs_QNAME);
+            _bodyBlock.setValue(regex);
+            _bodyBlock.setSerializer(ns1_myWSFindAllDroppedItemsPKs_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSDroppedItem _result = null;
+            com.amalto.workbench.webservices.WSDroppedItemPKArray _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSDroppedItem)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSDroppedItemPKArray)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSDroppedItem)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSDroppedItemPKArray)_responseObj;
             }
             
             return _result;
@@ -7020,6 +7020,9 @@ public class XtentisPort_Stub
             case getUniverse_OPCODE:
                 _deserialize_getUniverse(bodyReader, deserializationContext, state);
                 break;
+            case removeDroppedItem_OPCODE:
+                _deserialize_removeDroppedItem(bodyReader, deserializationContext, state);
+                break;
             case getBusinessConcepts_OPCODE:
                 _deserialize_getBusinessConcepts(bodyReader, deserializationContext, state);
                 break;
@@ -7089,8 +7092,8 @@ public class XtentisPort_Stub
             case getViewPKs_OPCODE:
                 _deserialize_getViewPKs(bodyReader, deserializationContext, state);
                 break;
-            case removeDroppedItem_OPCODE:
-                _deserialize_removeDroppedItem(bodyReader, deserializationContext, state);
+            case loadDroppedItem_OPCODE:
+                _deserialize_loadDroppedItem(bodyReader, deserializationContext, state);
                 break;
             case processBytesUsingTransformerAsBackgroundJob_OPCODE:
                 _deserialize_processBytesUsingTransformerAsBackgroundJob(bodyReader, deserializationContext, state);
@@ -7106,9 +7109,6 @@ public class XtentisPort_Stub
                 break;
             case putTransformerV2_OPCODE:
                 _deserialize_putTransformerV2(bodyReader, deserializationContext, state);
-                break;
-            case findAllDroppedItemsPKs_OPCODE:
-                _deserialize_findAllDroppedItemsPKs(bodyReader, deserializationContext, state);
                 break;
             case existsRoutingOrderV2_OPCODE:
                 _deserialize_existsRoutingOrderV2(bodyReader, deserializationContext, state);
@@ -7176,8 +7176,8 @@ public class XtentisPort_Stub
             case getTransformerV2PKs_OPCODE:
                 _deserialize_getTransformerV2PKs(bodyReader, deserializationContext, state);
                 break;
-            case loadDroppedItem_OPCODE:
-                _deserialize_loadDroppedItem(bodyReader, deserializationContext, state);
+            case findAllDroppedItemsPKs_OPCODE:
+                _deserialize_findAllDroppedItemsPKs(bodyReader, deserializationContext, state);
                 break;
             case getView_OPCODE:
                 _deserialize_getView(bodyReader, deserializationContext, state);
@@ -7826,6 +7826,19 @@ public class XtentisPort_Stub
     }
     
     /*
+     * This method deserializes the body of the removeDroppedItem operation.
+     */
+    private void _deserialize_removeDroppedItem(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSDroppedItemPKObj =
+            ns1_myWSDroppedItemPK_LiteralSerializer.deserialize(ns1_removeDroppedItem_WSDroppedItemPK_QNAME,
+                bodyReader, deserializationContext);
+        
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_removeDroppedItem_WSDroppedItemPK_QNAME);
+        bodyBlock.setValue(myWSDroppedItemPKObj);
+        state.getResponse().setBody(bodyBlock);
+    }
+    
+    /*
      * This method deserializes the body of the getBusinessConcepts operation.
      */
     private void _deserialize_getBusinessConcepts(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
@@ -8125,15 +8138,15 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the removeDroppedItem operation.
+     * This method deserializes the body of the loadDroppedItem operation.
      */
-    private void _deserialize_removeDroppedItem(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSDroppedItemPKObj =
-            ns1_myWSDroppedItemPK_LiteralSerializer.deserialize(ns1_removeDroppedItem_WSDroppedItemPK_QNAME,
+    private void _deserialize_loadDroppedItem(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSDroppedItemObj =
+            ns1_myWSDroppedItem_LiteralSerializer.deserialize(ns1_loadDroppedItem_WSDroppedItem_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_removeDroppedItem_WSDroppedItemPK_QNAME);
-        bodyBlock.setValue(myWSDroppedItemPKObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_loadDroppedItem_WSDroppedItem_QNAME);
+        bodyBlock.setValue(myWSDroppedItemObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -8199,19 +8212,6 @@ public class XtentisPort_Stub
         
         SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_putTransformerV2_WSTransformerV2PK_QNAME);
         bodyBlock.setValue(myWSTransformerV2PKObj);
-        state.getResponse().setBody(bodyBlock);
-    }
-    
-    /*
-     * This method deserializes the body of the findAllDroppedItemsPKs operation.
-     */
-    private void _deserialize_findAllDroppedItemsPKs(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSDroppedItemPKArrayObj =
-            ns1_myWSDroppedItemPKArray_LiteralSerializer.deserialize(ns1_findAllDroppedItemsPKs_WSDroppedItemPKArray_QNAME,
-                bodyReader, deserializationContext);
-        
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_findAllDroppedItemsPKs_WSDroppedItemPKArray_QNAME);
-        bodyBlock.setValue(myWSDroppedItemPKArrayObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -8502,15 +8502,15 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the loadDroppedItem operation.
+     * This method deserializes the body of the findAllDroppedItemsPKs operation.
      */
-    private void _deserialize_loadDroppedItem(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSDroppedItemObj =
-            ns1_myWSDroppedItem_LiteralSerializer.deserialize(ns1_loadDroppedItem_WSDroppedItem_QNAME,
+    private void _deserialize_findAllDroppedItemsPKs(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSDroppedItemPKArrayObj =
+            ns1_myWSDroppedItemPKArray_LiteralSerializer.deserialize(ns1_findAllDroppedItemsPKs_WSDroppedItemPKArray_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_loadDroppedItem_WSDroppedItem_QNAME);
-        bodyBlock.setValue(myWSDroppedItemObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_findAllDroppedItemsPKs_WSDroppedItemPKArray_QNAME);
+        bodyBlock.setValue(myWSDroppedItemPKArrayObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -9558,36 +9558,36 @@ public class XtentisPort_Stub
     private static final int getSynchronizationPlanObjectsAlgorithms_OPCODE = 33;
     private static final int existsSynchronizationPlan_OPCODE = 34;
     private static final int getUniverse_OPCODE = 35;
-    private static final int getBusinessConcepts_OPCODE = 36;
-    private static final int deleteSynchronizationPlan_OPCODE = 37;
-    private static final int existsDataCluster_OPCODE = 38;
-    private static final int executeTransformerV2AsJob_OPCODE = 39;
-    private static final int getBusinessConceptValue_OPCODE = 40;
-    private static final int existsUniverse_OPCODE = 41;
-    private static final int versioningGetObjectsHistory_OPCODE = 42;
-    private static final int versioningGetInfo_OPCODE = 43;
-    private static final int getStoredProcedure_OPCODE = 44;
-    private static final int ping_OPCODE = 45;
-    private static final int putItem_OPCODE = 46;
-    private static final int putDataCluster_OPCODE = 47;
-    private static final int putBusinessConcept_OPCODE = 48;
-    private static final int viewSearch_OPCODE = 49;
-    private static final int processFileUsingTransformer_OPCODE = 50;
-    private static final int getServiceConfiguration_OPCODE = 51;
-    private static final int getRole_OPCODE = 52;
-    private static final int getObjectsForSynchronizationPlans_OPCODE = 53;
-    private static final int getCurrentUniverse_OPCODE = 54;
-    private static final int putDataModel_OPCODE = 55;
-    private static final int deleteMenu_OPCODE = 56;
-    private static final int getSynchronizationPlanPKs_OPCODE = 57;
-    private static final int getViewPKs_OPCODE = 58;
-    private static final int removeDroppedItem_OPCODE = 59;
-    private static final int processBytesUsingTransformerAsBackgroundJob_OPCODE = 60;
-    private static final int quickSearch_OPCODE = 61;
-    private static final int deleteSynchronizationItem_OPCODE = 62;
-    private static final int executeRoutingOrderV2Synchronously_OPCODE = 63;
-    private static final int putTransformerV2_OPCODE = 64;
-    private static final int findAllDroppedItemsPKs_OPCODE = 65;
+    private static final int removeDroppedItem_OPCODE = 36;
+    private static final int getBusinessConcepts_OPCODE = 37;
+    private static final int deleteSynchronizationPlan_OPCODE = 38;
+    private static final int existsDataCluster_OPCODE = 39;
+    private static final int executeTransformerV2AsJob_OPCODE = 40;
+    private static final int getBusinessConceptValue_OPCODE = 41;
+    private static final int existsUniverse_OPCODE = 42;
+    private static final int versioningGetObjectsHistory_OPCODE = 43;
+    private static final int versioningGetInfo_OPCODE = 44;
+    private static final int getStoredProcedure_OPCODE = 45;
+    private static final int ping_OPCODE = 46;
+    private static final int putItem_OPCODE = 47;
+    private static final int putDataCluster_OPCODE = 48;
+    private static final int putBusinessConcept_OPCODE = 49;
+    private static final int viewSearch_OPCODE = 50;
+    private static final int processFileUsingTransformer_OPCODE = 51;
+    private static final int getServiceConfiguration_OPCODE = 52;
+    private static final int getRole_OPCODE = 53;
+    private static final int getObjectsForSynchronizationPlans_OPCODE = 54;
+    private static final int getCurrentUniverse_OPCODE = 55;
+    private static final int putDataModel_OPCODE = 56;
+    private static final int deleteMenu_OPCODE = 57;
+    private static final int getSynchronizationPlanPKs_OPCODE = 58;
+    private static final int getViewPKs_OPCODE = 59;
+    private static final int loadDroppedItem_OPCODE = 60;
+    private static final int processBytesUsingTransformerAsBackgroundJob_OPCODE = 61;
+    private static final int quickSearch_OPCODE = 62;
+    private static final int deleteSynchronizationItem_OPCODE = 63;
+    private static final int executeRoutingOrderV2Synchronously_OPCODE = 64;
+    private static final int putTransformerV2_OPCODE = 65;
     private static final int existsRoutingOrderV2_OPCODE = 66;
     private static final int extractUsingTransformerThruView_OPCODE = 67;
     private static final int getObjectsForRoles_OPCODE = 68;
@@ -9610,7 +9610,7 @@ public class XtentisPort_Stub
     private static final int getDataModel_OPCODE = 85;
     private static final int routeItemV2_OPCODE = 86;
     private static final int getTransformerV2PKs_OPCODE = 87;
-    private static final int loadDroppedItem_OPCODE = 88;
+    private static final int findAllDroppedItemsPKs_OPCODE = 88;
     private static final int getView_OPCODE = 89;
     private static final int getComponentVersion_OPCODE = 90;
     private static final int connectorInteraction_OPCODE = 91;
@@ -9862,6 +9862,12 @@ public class XtentisPort_Stub
     private static final QName ns1_getUniverse_WSUniverse_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSUniverse");
     private static final QName ns1_WSUniverse_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSUniverse");
     private CombinedSerializer ns1_myWSUniverse_LiteralSerializer;
+    private static final QName ns1_removeDroppedItem_WSRemoveDroppedItem_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRemoveDroppedItem");
+    private static final QName ns1_WSRemoveDroppedItem_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRemoveDroppedItem");
+    private CombinedSerializer ns1_myWSRemoveDroppedItem_LiteralSerializer;
+    private static final QName ns1_removeDroppedItem_WSDroppedItemPK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDroppedItemPK");
+    private static final QName ns1_WSDroppedItemPK_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDroppedItemPK");
+    private CombinedSerializer ns1_myWSDroppedItemPK_LiteralSerializer;
     private static final QName ns1_getBusinessConcepts_WSGetBusinessConcepts_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConcepts");
     private static final QName ns1_WSGetBusinessConcepts_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConcepts");
     private CombinedSerializer ns1_myWSGetBusinessConcepts_LiteralSerializer;
@@ -9976,12 +9982,12 @@ public class XtentisPort_Stub
     private static final QName ns1_getViewPKs_WSViewPKArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSViewPKArray");
     private static final QName ns1_WSViewPKArray_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSViewPKArray");
     private CombinedSerializer ns1_myWSViewPKArray_LiteralSerializer;
-    private static final QName ns1_removeDroppedItem_WSRemoveDroppedItem_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRemoveDroppedItem");
-    private static final QName ns1_WSRemoveDroppedItem_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRemoveDroppedItem");
-    private CombinedSerializer ns1_myWSRemoveDroppedItem_LiteralSerializer;
-    private static final QName ns1_removeDroppedItem_WSDroppedItemPK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDroppedItemPK");
-    private static final QName ns1_WSDroppedItemPK_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDroppedItemPK");
-    private CombinedSerializer ns1_myWSDroppedItemPK_LiteralSerializer;
+    private static final QName ns1_loadDroppedItem_WSLoadDroppedItem_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSLoadDroppedItem");
+    private static final QName ns1_WSLoadDroppedItem_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSLoadDroppedItem");
+    private CombinedSerializer ns1_myWSLoadDroppedItem_LiteralSerializer;
+    private static final QName ns1_loadDroppedItem_WSDroppedItem_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDroppedItem");
+    private static final QName ns1_WSDroppedItem_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDroppedItem");
+    private CombinedSerializer ns1_myWSDroppedItem_LiteralSerializer;
     private static final QName ns1_processBytesUsingTransformerAsBackgroundJob_WSProcessBytesUsingTransformerAsBackgroundJob_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSProcessBytesUsingTransformerAsBackgroundJob");
     private static final QName ns1_WSProcessBytesUsingTransformerAsBackgroundJob_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSProcessBytesUsingTransformerAsBackgroundJob");
     private CombinedSerializer ns1_myWSProcessBytesUsingTransformerAsBackgroundJob_LiteralSerializer;
@@ -10006,12 +10012,6 @@ public class XtentisPort_Stub
     private static final QName ns1_putTransformerV2_WSTransformerV2PK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerV2PK");
     private static final QName ns1_WSTransformerV2PK_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerV2PK");
     private CombinedSerializer ns1_myWSTransformerV2PK_LiteralSerializer;
-    private static final QName ns1_findAllDroppedItemsPKs_WSFindAllDroppedItemsPKs_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSFindAllDroppedItemsPKs");
-    private static final QName ns1_WSFindAllDroppedItemsPKs_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSFindAllDroppedItemsPKs");
-    private CombinedSerializer ns1_myWSFindAllDroppedItemsPKs_LiteralSerializer;
-    private static final QName ns1_findAllDroppedItemsPKs_WSDroppedItemPKArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDroppedItemPKArray");
-    private static final QName ns1_WSDroppedItemPKArray_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDroppedItemPKArray");
-    private CombinedSerializer ns1_myWSDroppedItemPKArray_LiteralSerializer;
     private static final QName ns1_existsRoutingOrderV2_WSExistsRoutingOrderV2_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExistsRoutingOrderV2");
     private static final QName ns1_WSExistsRoutingOrderV2_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExistsRoutingOrderV2");
     private CombinedSerializer ns1_myWSExistsRoutingOrderV2_LiteralSerializer;
@@ -10126,12 +10126,12 @@ public class XtentisPort_Stub
     private static final QName ns1_getTransformerV2PKs_WSTransformerV2PKArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerV2PKArray");
     private static final QName ns1_WSTransformerV2PKArray_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerV2PKArray");
     private CombinedSerializer ns1_myWSTransformerV2PKArray_LiteralSerializer;
-    private static final QName ns1_loadDroppedItem_WSLoadDroppedItem_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSLoadDroppedItem");
-    private static final QName ns1_WSLoadDroppedItem_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSLoadDroppedItem");
-    private CombinedSerializer ns1_myWSLoadDroppedItem_LiteralSerializer;
-    private static final QName ns1_loadDroppedItem_WSDroppedItem_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDroppedItem");
-    private static final QName ns1_WSDroppedItem_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDroppedItem");
-    private CombinedSerializer ns1_myWSDroppedItem_LiteralSerializer;
+    private static final QName ns1_findAllDroppedItemsPKs_WSFindAllDroppedItemsPKs_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSFindAllDroppedItemsPKs");
+    private static final QName ns1_WSFindAllDroppedItemsPKs_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSFindAllDroppedItemsPKs");
+    private CombinedSerializer ns1_myWSFindAllDroppedItemsPKs_LiteralSerializer;
+    private static final QName ns1_findAllDroppedItemsPKs_WSDroppedItemPKArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDroppedItemPKArray");
+    private static final QName ns1_WSDroppedItemPKArray_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDroppedItemPKArray");
+    private CombinedSerializer ns1_myWSDroppedItemPKArray_LiteralSerializer;
     private static final QName ns1_getView_WSGetView_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetView");
     private static final QName ns1_WSGetView_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetView");
     private CombinedSerializer ns1_myWSGetView_LiteralSerializer;

@@ -2248,6 +2248,14 @@
       <xml-element-name>wsDataClusterPK</xml-element-name>
     </variable-mapping>
     <variable-mapping>
+      <java-variable-name>dataModelName</java-variable-name>
+      <xml-element-name>dataModelName</xml-element-name>
+    </variable-mapping>
+    <variable-mapping>
+      <java-variable-name>dataModelRevision</java-variable-name>
+      <xml-element-name>dataModelRevision</xml-element-name>
+    </variable-mapping>
+    <variable-mapping>
       <java-variable-name>conceptName</java-variable-name>
       <xml-element-name>conceptName</xml-element-name>
     </variable-mapping>

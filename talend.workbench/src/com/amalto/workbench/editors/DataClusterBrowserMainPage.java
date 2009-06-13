@@ -88,6 +88,7 @@ import com.amalto.workbench.webservices.WSGetConceptsInDataCluster;
 import com.amalto.workbench.webservices.WSGetDataCluster;
 import com.amalto.workbench.webservices.WSGetItem;
 import com.amalto.workbench.webservices.WSGetItemPKsByCriteria;
+import com.amalto.workbench.webservices.WSItem;
 import com.amalto.workbench.webservices.WSItemPK;
 import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults;
 import com.amalto.workbench.webservices.WSPutItem;
@@ -113,7 +114,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	protected ListViewer wcListViewer; 
 	
 	protected boolean[] ascending = {true,false,false};
-	protected String previousDataModel=null;
+	//protected String previousDataModel=null;
 		
     public DataClusterBrowserMainPage(FormEditor editor) {
         super(
@@ -750,8 +751,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 				IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
 				LineItem li = (LineItem) selection.getFirstElement();
 				
-				String xml = 
-				Util.getPort(getXObject()).getItem(
+				WSItem wsItem=Util.getPort(getXObject()).getItem(
 						new WSGetItem(
 								new WSItemPK(
 										(WSDataClusterPK)getXObject().getWsKey(),
@@ -759,7 +759,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 										li.getIds()
 								)
 						)
-				).getContent();
+				);
+				String xml = wsItem.getContent();
 				
 				WSDataModelPK[] dmPKs = 
 					Util.getPort(getXObject()).getDataModelPKs(
@@ -779,7 +780,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         				true,
         				dataModels,
         				DOMViewDialog.TREE_VIEWER,
-        				previousDataModel
+        				wsItem.getDataModelName()
         		);
         		d.addListener(new Listener() {
         			public void handleEvent(Event event) {
@@ -793,7 +794,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	        									"".equals(d.getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName())
 	        							)
 	        					);
-	        					previousDataModel = d.getDataModelName();
+	        					//previousDataModel = d.getDataModelName();
         					}catch (Exception e) {
         						MessageDialog.openError(
         								shell,
@@ -961,11 +962,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 					
 					monitor.done();
 				} catch (Exception e) {
-					e.printStackTrace();
+					//e.printStackTrace();
 					MessageDialog.openError(
 							shell,
 							"Error logically Deleting", 
-							"An error occured trying to logically delete the items:\n\n "+e.getLocalizedMessage()
+							"An error occured trying to logically delete the items:\n\n"+e.getLocalizedMessage()
 					);
 				}//try				
 				

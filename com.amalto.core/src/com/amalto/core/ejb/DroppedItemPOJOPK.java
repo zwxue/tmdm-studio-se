@@ -21,12 +21,13 @@ public class DroppedItemPOJOPK implements Serializable {
 
 
 	public String getUniquePK() {
-		if(revisionId.equals(""))revisionId="head";
+		if(revisionId==null||revisionId.equals(""))revisionId="head";
     	return revisionId+"."+refItemPOJOPK.getUniqueID()+convertItemPartPath(partPath);
 	}
 	
 	
 	public String getRevisionId() {
+		if(revisionId!=null&&revisionId.toLowerCase().equals("head"))revisionId=null;
 		return revisionId;
 	}
 
