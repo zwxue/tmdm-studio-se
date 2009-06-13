@@ -418,11 +418,15 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
     	 		for (int i = 0; i < results.length; i++) {
     	 			WSDroppedItemPK wsDroppedItemPK=results[i];
     	 			WSItemPK refWSItemPK=wsDroppedItemPK.getWsItemPK();
+    	 			
+    	 			String revison=wsDroppedItemPK.getRevisionId();
+    	 			if(revison==null||revison.equals(""))revison="head";
+    	 				
     	 			res[i] = new LineItem(
     	 					refWSItemPK.getWsDataClusterPK().getPk(),
     	 					refWSItemPK.getConceptName(),
     	 					refWSItemPK.getIds(),
-    	 					wsDroppedItemPK.getRevisionId(),
+    	 					revison,
     	 					wsDroppedItemPK.getPartPath()
     	 			);
     			}
@@ -587,11 +591,11 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 				ItemsTrashBrowserMainPage.this.resultsViewer.setInput(getResults(false));
 	       
 			} catch (Exception e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 				MessageDialog.openError(
 						shell,
 						"Error", 
-						"An error occured trying to restore the selected dropped item: "+e.getLocalizedMessage()
+						"An error occured trying to restore the selected dropped item:\n\n"+e.getLocalizedMessage()
 				);
 			}		
 		}

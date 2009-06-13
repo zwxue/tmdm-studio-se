@@ -708,6 +708,8 @@ public class XtentisRMIPort implements XtentisPort {
 				);
 			return new WSItem(
 					wsGetItem.getWsItemPK().getWsDataClusterPK(),
+					vo.getDataModelName(),
+					vo.getDataModelRevision(),
 					wsGetItem.getWsItemPK().getConceptName(),
 					wsGetItem.getWsItemPK().getIds(),
 					vo.getInsertionTime(),
