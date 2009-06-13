@@ -22,9 +22,11 @@ public class WSItem_LiteralSerializer extends LiteralObjectSerializerBase implem
     private static final QName ns1_wsDataClusterPK_QNAME = new QName("", "wsDataClusterPK");
     private static final QName ns2_WSDataClusterPK_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataClusterPK");
     private CombinedSerializer ns2_myWSDataClusterPK_LiteralSerializer;
-    private static final QName ns1_conceptName_QNAME = new QName("", "conceptName");
+    private static final QName ns1_dataModelName_QNAME = new QName("", "dataModelName");
     private static final QName ns3_string_TYPE_QNAME = SchemaConstants.QNAME_TYPE_STRING;
     private CombinedSerializer ns3_myns3_string__java_lang_String_String_Serializer;
+    private static final QName ns1_dataModelRevision_QNAME = new QName("", "dataModelRevision");
+    private static final QName ns1_conceptName_QNAME = new QName("", "conceptName");
     private static final QName ns1_ids_QNAME = new QName("", "ids");
     private static final QName ns1_insertionTime_QNAME = new QName("", "insertionTime");
     private static final QName ns3_long_TYPE_QNAME = SchemaConstants.QNAME_TYPE_LONG;
@@ -65,6 +67,32 @@ public class WSItem_LiteralSerializer extends LiteralObjectSerializerBase implem
                 reader.nextElementContent();
             } else {
                 throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_wsDataClusterPK_QNAME, reader.getName() });
+            }
+        }
+        else {
+            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
+        }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_dataModelName_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_dataModelName_QNAME, reader, context);
+                instance.setDataModelName((java.lang.String)member);
+                reader.nextElementContent();
+            } else {
+                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_dataModelName_QNAME, reader.getName() });
+            }
+        }
+        else {
+            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
+        }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_dataModelRevision_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_dataModelRevision_QNAME, reader, context);
+                instance.setDataModelRevision((java.lang.String)member);
+                reader.nextElementContent();
+            } else {
+                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_dataModelRevision_QNAME, reader.getName() });
             }
         }
         else {
@@ -157,6 +185,8 @@ public class WSItem_LiteralSerializer extends LiteralObjectSerializerBase implem
             throw new SerializationException("literal.unexpectedNull");
         }
         ns2_myWSDataClusterPK_LiteralSerializer.serialize(instance.getWsDataClusterPK(), ns1_wsDataClusterPK_QNAME, null, writer, context);
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getDataModelName(), ns1_dataModelName_QNAME, null, writer, context);
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getDataModelRevision(), ns1_dataModelRevision_QNAME, null, writer, context);
         if (instance.getConceptName() == null) {
             throw new SerializationException("literal.unexpectedNull");
         }

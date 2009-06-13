@@ -17,11 +17,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import com.amalto.core.ejb.local.XmlServerSLWrapperLocal;
 import com.amalto.core.ejb.local.XmlServerSLWrapperLocalHome;
 import com.amalto.core.objects.datacluster.ejb.DataClusterPOJO;
 import com.amalto.core.objects.datacluster.ejb.DataClusterPOJOPK;
+import com.amalto.core.objects.datamodel.ejb.DataModelPOJO;
+import com.amalto.core.objects.datamodel.ejb.DataModelPOJOPK;
 import com.amalto.core.objects.universe.ejb.UniversePOJO;
 import com.amalto.core.util.LocalUser;
 import com.amalto.core.util.Util;
@@ -205,7 +208,8 @@ public class DroppedItemPOJO implements Serializable{
     	//for recover we need to be admin, or have a role of admin , or role of write on instance 
     	String userName=rolesFilter(refItemPOJOPK,actionName,"w");
     	//get the universe and revision ID
-    	String sourceItemRevision=universeFilter(refItemPOJOPK);
+    	universeFilter(refItemPOJOPK);
+    	String sourceItemRevision=droppedItemPOJOPK.getRevisionId();
     	//get XmlServerSLWrapperLocal
     	XmlServerSLWrapperLocal server=obtainXmlServerSLWrapperLocal();
     	
@@ -247,6 +251,7 @@ public class DroppedItemPOJO implements Serializable{
         		String insertText=partDom.getFirstChild().getTextContent();
         		Node inserNode=Util.parse(insertText).getFirstChild();
 
+        		if(bakDoc==null)throw new XtentisException("The source item is not exist now!\n"); 
         		Document targetDom=Util.parse(bakDoc);
         		
                 String xPath = "/ii/p"+parserParentPartPath(partPath);
@@ -262,6 +267,13 @@ public class DroppedItemPOJO implements Serializable{
                 	Node importNode = targetDom.importNode(inserNode, true);
                 	singleParentNode.appendChild(importNode);
                 }
+                
+                //validate
+				ItemPOJO itemPOJO=ItemPOJO.parse(bakDoc);
+				if(itemPOJO.getDataModelName()!=null){
+					DataModelPOJO dataModelPOJO=ObjectPOJO.load(itemPOJO.getDataModelRevision(), DataModelPOJO.class, new DataModelPOJOPK(itemPOJO.getDataModelName()));
+					if(dataModelPOJO!=null)Util.validate(targetDom.getDocumentElement(), dataModelPOJO.getSchema());
+				}
                 
                 //server.putDocumentFromDOM(targetDom.getDocumentElement(), refItemPOJOPK.getUniqueID(), refItemPOJOPK.getDataClusterPOJOPK().getUniqueId(), sourceItemRevision);
                 server.putDocumentFromString(Util.nodeToString(targetDom), refItemPOJOPK.getUniqueID(), refItemPOJOPK.getDataClusterPOJOPK().getUniqueId(), sourceItemRevision);//need set indent-number
@@ -287,6 +299,9 @@ public class DroppedItemPOJO implements Serializable{
         	
         	return refItemPOJOPK;  
             
+	    } catch (SAXException e) {
+	    	String err = "The automatic recovered item did not obey the rules of data model.\nYou can do it manually.\n\n"+e.getLocalizedMessage();
+	    	throw new XtentisException(err);
 	    } catch (Exception e) {
     	    String err = "Unable to "+actionName+" the dropped item "+droppedItemPOJOPK.getUniquePK()
     	    		+": "+e.getClass().getName()+": "+e.getLocalizedMessage();

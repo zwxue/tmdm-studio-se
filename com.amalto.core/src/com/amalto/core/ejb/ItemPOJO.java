@@ -18,11 +18,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import com.amalto.core.ejb.local.XmlServerSLWrapperLocal;
 import com.amalto.core.ejb.local.XmlServerSLWrapperLocalHome;
 import com.amalto.core.objects.datacluster.ejb.DataClusterPOJO;
 import com.amalto.core.objects.datacluster.ejb.DataClusterPOJOPK;
+import com.amalto.core.objects.datamodel.ejb.DataModelPOJO;
+import com.amalto.core.objects.datamodel.ejb.DataModelPOJOPK;
 import com.amalto.core.objects.synchronization.ejb.SynchronizationPlanPOJOPK;
 import com.amalto.core.objects.universe.ejb.UniversePOJO;
 import com.amalto.core.util.LocalUser;
@@ -38,6 +41,8 @@ public class ItemPOJO implements Serializable{
    
 	public final static String LOGGING_EVENT="logging_event";
 	
+	private String dataModelName;//used for binding data model
+	private String dataModelRevision;//used for binding data model
     private String conceptName;
     private DataClusterPOJOPK dataClusterPOJOPK;
     private SynchronizationPlanPOJOPK planPK;
@@ -86,6 +91,26 @@ public class ItemPOJO implements Serializable{
 		this.itemIds = ids;
 		this.projectionString = projectionAsString;
 		this.planPK = null;
+	}
+	
+	
+	public String getDataModelName() {
+		return dataModelName;
+	}
+
+
+	public void setDataModelName(String dataModelName) {
+		this.dataModelName = dataModelName;
+	}
+
+
+	public String getDataModelRevision() {
+		return dataModelRevision;
+	}
+
+
+	public void setDataModelRevision(String dataModelRevision) {
+		this.dataModelRevision = dataModelRevision;
 	}
 
 
@@ -316,6 +341,9 @@ public class ItemPOJO implements Serializable{
             if (m.matches()) {
             	String h = "<header>"+m.group(1)+"</header>";
             	Element header = Util.parse(h).getDocumentElement();
+            	//used for binding data model
+            	if(Util.getFirstTextNode(header, "dmn")!=null)newItem.setDataModelName(Util.getFirstTextNode(header, "dmn"));
+            	if(Util.getFirstTextNode(header, "dmr")!=null)newItem.setDataModelRevision(Util.getFirstTextNode(header, "dmr"));
             	newItem.setInsertionTime(Long.parseLong(Util.getFirstTextNode(header, "t")));
             	String plan = Util.getFirstTextNode(header, "sp");
             	if (plan !=null)
@@ -507,7 +535,7 @@ public class ItemPOJO implements Serializable{
         		
         		sourceDoc=Util.parse(xml);
         		toDeleteNodeList=Util.getNodeList(sourceDoc, xPath);
-        		if(toDeleteNodeList.getLength()==0)return null;
+        		if(toDeleteNodeList.getLength()==0)throw new XtentisException("\nThe target content is not exist or have been deleted already.");
             	for (int i = 0; i < toDeleteNodeList.getLength(); i++) {
             		Node node=toDeleteNodeList.item(i);
             		xmlDocument.append(Util.nodeToString(node));
@@ -522,6 +550,35 @@ public class ItemPOJO implements Serializable{
 				}
         		*/
         	}
+        	
+        	//make source left doc && validate
+        	if (partPath.equals("/")) {
+
+			} else {
+				if (toDeleteNodeList != null) {
+					Node lastParentNode = null;
+					Node formatSiblingNode = null;
+					for (int i = 0; i < toDeleteNodeList.getLength(); i++) {
+						Node node = toDeleteNodeList.item(i);
+						lastParentNode = node.getParentNode();
+						formatSiblingNode = node.getNextSibling();
+						if (lastParentNode != null){
+							lastParentNode.removeChild(node);
+						}	
+						if (formatSiblingNode != null && formatSiblingNode.getNodeValue() != null && formatSiblingNode.getNodeValue().matches("\\s+")){
+							lastParentNode.removeChild(formatSiblingNode);
+						}
+					}
+				}
+				//validate
+				String leftSourceDoc=Util.nodeToString(sourceDoc);
+				ItemPOJO itemPOJO=parse(leftSourceDoc);
+				if(itemPOJO.getDataModelName()!=null){
+					DataModelPOJO dataModelPOJO=ObjectPOJO.load(itemPOJO.getDataModelRevision(), DataModelPOJO.class, new DataModelPOJOPK(itemPOJO.getDataModelName()));
+					if(dataModelPOJO!=null)Util.validate(sourceDoc.getDocumentElement(), dataModelPOJO.getSchema());
+				}
+				
+			}
         	
         	//str 2 pojo
         	DroppedItemPOJO droppedItemPOJO=new DroppedItemPOJO(revisionID,itemPOJOPK.getDataClusterPOJOPK(),uniqueID,itemPOJOPK.getConceptName(),itemPOJOPK.getIds(),partPath,xmlDocument.toString(),userName,new Long(System.currentTimeMillis()));
@@ -541,22 +598,7 @@ public class ItemPOJO implements Serializable{
 					server.deleteDocument(revisionID, dataClusterName,uniqueID);
 
 				} else {
-					if (toDeleteNodeList != null) {
-						Node lastParentNode = null;
-						Node formatSiblingNode = null;
-						for (int i = 0; i < toDeleteNodeList.getLength(); i++) {
-							Node node = toDeleteNodeList.item(i);
-							lastParentNode = node.getParentNode();
-							formatSiblingNode = node.getNextSibling();
-							if (lastParentNode != null){
-								lastParentNode.removeChild(node);
-							}	
-							if (formatSiblingNode != null && formatSiblingNode.getNodeValue() != null && formatSiblingNode.getNodeValue().matches("\\s+")){
-								lastParentNode.removeChild(formatSiblingNode);
-							}
-						}
-					}
-
+			
 					server.putDocumentFromString(Util.nodeToString(sourceDoc),uniqueID, dataClusterName, revisionID);
 				}
 			} catch (Exception e) {
@@ -568,7 +610,12 @@ public class ItemPOJO implements Serializable{
             
             return droppedItemPOJO.obtainDroppedItemPK();
             
-	    } catch (Exception e) {
+	    }
+        catch (SAXException e) {
+	    	String err = "The remaining item did not obey the rules of data model.\nYou can modify the data model, and try it again.\n\n"+e.getLocalizedMessage();
+	    	throw new XtentisException(err);
+	    }
+	    catch (Exception e) {
     	    String err = "Unable to drop the item "+itemPOJOPK.getUniqueID()
     	    		+": "+e.getClass().getName()+": "+e.getLocalizedMessage();
     	    org.apache.log4j.Logger.getLogger(ItemPOJO.class).error(err,e);
@@ -613,6 +660,14 @@ public class ItemPOJO implements Serializable{
     		throw new XtentisException(err);
     	}
     	String revisionID = universe.getConceptRevisionID(getItemPOJOPK().getConceptName());
+    	
+    	//used for binding data model
+    	if(this.getDataModelName()!=null){
+    		
+    		String objectName=ObjectPOJO.getObjectsClasses2NamesMap().get(DataModelPOJO.class);
+    		String dataModelRevisionID = universe.getXtentisObjectsRevisionIDs().get(objectName);
+    		if(dataModelRevisionID!=null)this.dataModelRevision=dataModelRevisionID;
+    	}
     	
     	return store(revisionID);
 
@@ -677,6 +732,9 @@ public class ItemPOJO implements Serializable{
             	String h = "<header>"+m.group(1)+"</header>";
             	Element header = Util.parse(h).getDocumentElement();
             	newItem.setConceptName(Util.getFirstTextNode(header, "n"));
+            	//used for binding data model
+            	if(Util.getFirstTextNode(header, "dmn")!=null)newItem.setDataModelName(Util.getFirstTextNode(header, "dmn"));
+            	if(Util.getFirstTextNode(header, "dmr")!=null)newItem.setDataModelRevision(Util.getFirstTextNode(header, "dmr"));
             	newItem.setDataClusterPK(new DataClusterPOJOPK(Util.getFirstTextNode(header, "c")));
             	newItem.setItemIds(Util.getTextNodes(header, "i"));
             	newItem.setInsertionTime(Long.parseLong(Util.getFirstTextNode(header, "t")));
@@ -707,12 +765,16 @@ public class ItemPOJO implements Serializable{
      * Serializes the object to an xml string
      * @return the xml string
      * 
+     * Note: dmn&dmr tags are used for binding data model
+     * 
      */
     public String serialize() throws XtentisException{
             String item =
                 "<ii>" +
                 "	<c>"+StringEscapeUtils.escapeXml(getDataClusterPOJOPK().getUniqueId())+"</c>" +
                 "	<n>"+StringEscapeUtils.escapeXml(getConceptName())+"</n>" +
+                "	<dmn>"+(getDataModelName()==null?"":StringEscapeUtils.escapeXml(getDataModelName()))+"</dmn>" +
+                "	<dmr>"+(getDataModelRevision()==null?"":StringEscapeUtils.escapeXml(getDataModelRevision()))+"</dmr>" +
                 "	<sp>"+(getPlanPK() == null ? "" : StringEscapeUtils.escapeXml(getPlanPK().getUniqueId()))+"</sp>";
             	String[] ids = getItemIds();
             	for (int i = 0; i < ids.length; i++) {

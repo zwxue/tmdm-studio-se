@@ -136,10 +136,10 @@ public class ItemCtrl2Bean implements SessionBean {
      * @ejb.facade-method 
      */
     public ItemPOJOPK putItem(ItemPOJO item, DataModelPOJO datamodel) throws XtentisException{
-    	return putItem(item, (datamodel == null ? null : datamodel.getSchema()));
+    	return putItem(item, (datamodel == null ? null : datamodel.getSchema()),(datamodel == null ? null : datamodel.getName()));
     }
     
-    protected ItemPOJOPK putItem(ItemPOJO item, String schema) throws XtentisException{
+    protected ItemPOJOPK putItem(ItemPOJO item, String schema,String dataModelName) throws XtentisException{
     	
     	org.apache.log4j.Logger.getLogger(this.getClass()).trace("putItem() "+item.getItemPOJOPK().getUniqueID());
     	
@@ -163,7 +163,8 @@ public class ItemCtrl2Bean implements SessionBean {
             
         	//make sure the plan is reset
         	item.setPlanPK(null);
-        	
+        	//used for binding data model
+        	if(dataModelName!=null)item.setDataModelName(dataModelName);
         	//Store
             ItemPOJOPK pk = item.store();
             if (pk == null) throw new XtentisException("Could not put item "+Util.joinStrings(item.getItemIds(),".")+".Check the XML Server logs");
