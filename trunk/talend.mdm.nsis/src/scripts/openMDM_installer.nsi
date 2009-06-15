@@ -63,7 +63,7 @@
 	
   !insertmacro MUI_PAGE_INSTFILES
   !define MUI_FINISHPAGE_RUN ""
-  !define MUI_FINISHPAGE_RUN_TEXT "run openMDM as a windows service(autostart)"
+  !define MUI_FINISHPAGE_RUN_TEXT "run as a windows service(autostart)"
   !define MUI_FINISHPAGE_RUN_FUNCTION runService
   !insertmacro MUI_PAGE_FINISH  	
   
