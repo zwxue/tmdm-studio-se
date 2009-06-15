@@ -39,7 +39,7 @@ import com.amalto.core.util.XtentisException;
 /**
  * <h1>Service SMTP</h1>
  *
- * <h3>Descrition</h3>
+ * <h3>Description</h3>
  * This service sends an email through the SMTP connector.<br/>
  *
  * <h3>Parameters</h3>
@@ -49,13 +49,13 @@ import com.amalto.core.util.XtentisException;
  * <li><b>from</b>: mandatory; the email address of the sender</li>
  * <li><b>to</b>: mandatory; the email addresses, separated by commas, of the recipients</li>
  * <li><b>cc</b>: optional; the email addresses, separated by commas, of the copied recipients</li>
- * <li><b>bcc</b>: optional; the email addresses, separated by commas, of the bliend copied recipients</li>
+ * <li><b>bcc</b>: optional; the email addresses, separated by commas, of the blind copied recipients</li>
  * <li><b>subjectprefix</b>: optional; a sentence inserted at the beginning of the subject line</li>
  * <li><b>transformer</b>: optional; an optional transformer. When no transformer is supplied,
  * the item xml is used as the body of the mail. When a transformer is supplied, the following variables,
  * are extracted from the pipeline after the transformer is run:<ul>
  * 		<li><b>body</b>: mandatory; the body content of the email</li>
- * 		<li><b>recipients</b>: optional; if provided, al list of email addresses separated by commas that
+ * 		<li><b>recipients</b>: optional; if provided, a list of email addresses separated by commas that
  * 		will be added to those provided by the <code>to</code> parameter</li>
  * 		<li><b>subject</b>: optional; if provided, will be appended to the <code>subjectprefix</code> parameter
  * 		to for the subject line</li>
