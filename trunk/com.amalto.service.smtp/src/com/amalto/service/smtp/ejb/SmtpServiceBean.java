@@ -37,29 +37,65 @@ import com.amalto.core.util.XtentisException;
 
 
 /**
- * @author bgrieder, jfeltesse
- * 
+ * <h1>Service SMTP</h1>
+ *
+ * <h3>Descrition</h3>
+ * This service sends an email through the SMTP connector.<br/>
+ *
+ * <h3>Parameters</h3>
+ * Parameters are set in the key/pair form separated by & e.g. <code>key1=value1&key2=value2</code>
+ * <ul>
+ * <li><b>logfilename</b>: optional; the full path of a log file that records the mails sent;</li>
+ * <li><b>from</b>: mandatory; the email address of the sender</li>
+ * <li><b>to</b>: mandatory; the email addresses, separated by commas, of the recipients</li>
+ * <li><b>cc</b>: optional; the email addresses, separated by commas, of the copied recipients</li>
+ * <li><b>bcc</b>: optional; the email addresses, separated by commas, of the bliend copied recipients</li>
+ * <li><b>subjectprefix</b>: optional; a sentence inserted at the beginning of the subject line</li>
+ * <li><b>transformer</b>: optional; an optional transformer. When no transformer is supplied,
+ * the item xml is used as the body of the mail. When a transformer is supplied, the following variables,
+ * are extracted from the pipeline after the transformer is run:<ul>
+ * 		<li><b>body</b>: mandatory; the body content of the email</li>
+ * 		<li><b>recipients</b>: optional; if provided, al list of email addresses separated by commas that
+ * 		will be added to those provided by the <code>to</code> parameter</li>
+ * 		<li><b>subject</b>: optional; if provided, will be appended to the <code>subjectprefix</code> parameter
+ * 		to for the subject line</li>
+ * 		<li><b>files</b>: optional; a comma separated list of full path to files that will added in the email
+ * 		as attachments</li>
+ * 		</ul>
+ * </li>
+ * </ul>
+ *
+ * <h3>Configuration</h3>
+ * The following parameters are set via the UI:<ul>
+ * <li><b>host</b>: the smtp server host name</li>
+ * <li><b>port</b>: the smtp server port</li>
+ * <li><b>username</b>: optional; the smtp server username</li>
+ * <li><b>password</b>: optional; the smtp server password</li>
+ *</ul>
+ *
+ * @author Bruno Grieder
+ *
  * @ejb.bean name="Smtp"
  *           display-name="Name for Smtp"
  *           description="Description for Smtp"
  * 		  local-jndi-name = "amalto/local/service/smtp"
  *           type="Stateless"
  *           view-type="local"
- * 
+ *
  * @ejb.remote-facade
- * 
+ *
  * @ejb.permission
  * 	view-type = "remote"
  * 	role-name = "administration"
  * @ejb.permission
  * 	view-type = "local"
  * 	unchecked = "true"
- * 
- * 
- * 
+ *
+ *
+ *
  */
 public class SmtpServiceBean extends ServiceCtrlBean  implements SessionBean {
-	
+
 	protected class MailInfos
 	{
 		public String logFileName = null;
@@ -70,16 +106,16 @@ public class SmtpServiceBean extends ServiceCtrlBean  implements SessionBean {
 		public String subjectPrefix = null;
 		public String mails = null;
 		public String[] fileNames = null;
-		
-		
+
+
 		public String transformerParameters = null;
 	}
-	
+
 	private static final long serialVersionUID = 7146969238534906425L;
-	
+
 	private boolean configurationLoaded = false;
 	private boolean serviceStarted = false;
-	
+
 	private String host;
 	private Integer port;
 	private String username;
@@ -88,104 +124,104 @@ public class SmtpServiceBean extends ServiceCtrlBean  implements SessionBean {
 	private String permanentbcc;
 	private String logfilename;
 	private String transformer;
-	
-    
+
+
     /**
      * @throws EJBException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
-	public String getJNDIName() throws XtentisException {		
+	public String getJNDIName() throws XtentisException {
 		return "amalto/local/service/smtp";
 	}
-	
+
     /**
      * @throws EJBException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getDescription(String twoLetterLanguageCode) throws XtentisException {
 		if ("fr".matches(twoLetterLanguageCode.toLowerCase()))
 			return "Le service smtp";
 		return "The smtp service";
 	}
-	
+
     /**
      * @throws EJBException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getStatus() throws XtentisException {
 		// N/A
 		return "N/A";
 	}
-	
-		
+
+
     /**
      * @throws EJBException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void start() throws XtentisException {
 
 		try {
-		
+
 			if (!configurationLoaded) getConfiguration(null);
-			
+
 			serviceStarted = true;
-			
+
 			return;
-			
+
 		}
-		catch (XtentisException xe) { 
-			throw (xe); 
+		catch (XtentisException xe) {
+			throw (xe);
 		} catch (Exception e) {
     	    String err = "Could not start the Smtp service: "+e.getClass().getName()+": "+e.getLocalizedMessage();
     	    org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);
     	    org.apache.log4j.Logger.getLogger(this.getClass()).error(err, e);
     	    throw new XtentisException(err);
 	    }
-		
+
 	}
 
 
-	
+
     /**
      * @throws EJBException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void stop() throws XtentisException {
 		// N/A
 	}
 
 
-	
+
     /**
      * @throws EJBException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public Serializable receiveFromOutbound(HashMap<String, Serializable> map) throws XtentisException {
 		// N/A
 		return null;
 	}
-	
 
-	
+
+
 	private void parseParametersPOSTFormat(MailInfos mailInfos, String parameters) {
 		String kvs[] = parameters.split("&");
 		if (kvs!=null) {
 			for (int i = 0; i < kvs.length; i++) {
 				String[] kv = kvs[i].split("=");
 				String key = kv[0].trim().toLowerCase();
-				
+
 				if (("logfilename".equals(key)) && (kv.length == 2)) {
 					mailInfos.logFileName = kv[1];
 				} else
@@ -210,9 +246,9 @@ public class SmtpServiceBean extends ServiceCtrlBean  implements SessionBean {
 			}
 		}
 	}
-	
+
 	private void parseParametersXMLFormat(MailInfos mailInfos, String parameters) throws TransformerException {
-	
+
 		try {
 			Element root = Util.parse(parameters).getDocumentElement();;
 			NodeList nl = root.getElementsByTagName("from");
@@ -223,13 +259,13 @@ public class SmtpServiceBean extends ServiceCtrlBean  implements SessionBean {
 
 			nl = root.getElementsByTagName("logfilename");
 			if (nl.item(0)!=null) mailInfos.logFileName = nl.item(0).getTextContent();
-			
+
 			nl = root.getElementsByTagName("cc");
 			if (nl.item(0)!=null) mailInfos.cc = nl.item(0).getTextContent();
-			
+
 			nl = root.getElementsByTagName("bcc");
 			if (nl.item(0)!=null) mailInfos.bcc = nl.item(0).getTextContent();
-			
+
 			nl = root.getElementsByTagName("transformer");
 			if (nl.item(0)!=null)
 			{
@@ -238,7 +274,7 @@ public class SmtpServiceBean extends ServiceCtrlBean  implements SessionBean {
 				nl = nl.item(0).getOwnerDocument().getElementsByTagName("name");
 				transformer = nl.item(0).getTextContent();
 				//root = nl.item(0);
-				
+
 			}
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
@@ -248,7 +284,7 @@ public class SmtpServiceBean extends ServiceCtrlBean  implements SessionBean {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void parseParameters(MailInfos mailInfos, String parameters) throws TransformerException {
 		if (parameters.trim().charAt(0) == '<')	{
 			parseParametersXMLFormat(mailInfos, parameters);
@@ -257,17 +293,17 @@ public class SmtpServiceBean extends ServiceCtrlBean  implements SessionBean {
 			parseParametersPOSTFormat(mailInfos, parameters);
 		}
 	}
-	
+
     /**
      * @throws EJBException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String receiveFromInbound(ItemPOJOPK itemPK, String routingOrderID, String parameters) throws com.amalto.core.util.XtentisException {
 		org.apache.log4j.Logger.getLogger(this.getClass()).debug("receiveFromInbound() : sending message...");
 		boolean isLoggingEvent = "logging_event".equals(itemPK.getConceptName());
-		
+
 		//check things are initialized and loaded
 		if (!serviceStarted) {
 			org.apache.log4j.Logger.getLogger(this.getClass()).debug("receiveFromInbound() : service not started. starting...");
@@ -275,12 +311,12 @@ public class SmtpServiceBean extends ServiceCtrlBean  implements SessionBean {
 		}
 		if (!configurationLoaded) getConfiguration(null);
 		Connection conx = null;
-		
+
 		try {
-			
+
 			MailInfos mailInfos = new MailInfos();
 
-			
+
 			// Parse parameters
 			if (parameters != null) {
 				parseParameters(mailInfos, parameters);
@@ -291,12 +327,12 @@ public class SmtpServiceBean extends ServiceCtrlBean  implements SessionBean {
 				if (mailInfos.bcc != null) mailInfos.bcc = mailInfos.bcc + ", " + permanentbcc;
 				else mailInfos.bcc = permanentbcc;
 			}
-			
+
 			//run transformer if any
 			String recipients = null;
 			String subject = null;
 			String body;
-			String contentType; 
+			String contentType;
 			if (transformer == null) {
 				// Send generic messages with no transformation
 				String msg = StringEscapeUtils.unescapeXml(
@@ -323,12 +359,12 @@ public class SmtpServiceBean extends ServiceCtrlBean  implements SessionBean {
 					org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
 					throw new XtentisException(err);
 				}
-				
+
 				if (ctx.getFromPipeline("files")!=null)
 				{
 					mailInfos.fileNames = (new String(ctx.getFromPipeline("files").getContentBytes(),"UTF-8")).split("\\;");
 				}
-				
+
 				body = (new BASE64Encoder()).encode(ctx.getFromPipeline("body").getContentBytes());
 				contentType = ctx.getFromPipeline("body").getContentType().split(";")[0].toLowerCase();
 			}
@@ -341,7 +377,7 @@ public class SmtpServiceBean extends ServiceCtrlBean  implements SessionBean {
 			addXmlElement(sb, "to", (mailInfos.to == null ? "" : mailInfos.to)+(recipients == null ? "" : (mailInfos.to==null?"":",")+recipients), true);
 			addXmlElement(sb, "cc", mailInfos.cc, true);
 			addXmlElement(sb, "bcc", mailInfos.bcc, true);
-			addXmlElement(sb, "subject",subject , true);				
+			addXmlElement(sb, "subject",subject , true);
 			sb.append("<part><mime-type>"+contentType+"</mime-type><charset>UTF-8</charset>");
 			addXmlElement(sb, "body", body, false);
 			sb.append("</part>");
@@ -354,9 +390,9 @@ public class SmtpServiceBean extends ServiceCtrlBean  implements SessionBean {
 					mailInfos.fileNames[i] = mailInfos.fileNames[i].trim();
 					if ("".equals(mailInfos.fileNames))
 						continue;
-					
+
 					org.apache.log4j.Logger.getLogger(this.getClass()).debug("fileName "+i+" = "+mailInfos.fileNames[i]);
-					
+
 					File f = new File(mailInfos.fileNames[i]);
 					if (f.exists())
 					{
@@ -372,10 +408,10 @@ public class SmtpServiceBean extends ServiceCtrlBean  implements SessionBean {
 						int lastIndex = shortName.lastIndexOf("/");
 						if (lastIndex!=-1 && lastIndex<shortName.length()-1)
 							shortName = shortName.substring(lastIndex+1);
-						
-						String lowFileName = fileName.toLowerCase(); 
+
+						String lowFileName = fileName.toLowerCase();
 						String mimeType = "text/plain";
-						
+
 						if (lowFileName.endsWith(".pdf"))
 							mimeType = "application/pdf";
 						else if (lowFileName.endsWith(".xls"))
@@ -389,21 +425,21 @@ public class SmtpServiceBean extends ServiceCtrlBean  implements SessionBean {
 						body = (new BASE64Encoder()).encode(bytes);
 						addXmlElement(sb, "body", body, false);
 						sb.append("</part>");
-						
+
 					} else
 						org.apache.log4j.Logger.getLogger(this.getClass()).error("Attachment with fileName "+mailInfos.fileNames[i]+" doesn't exist");
 				}
 			}
 
-			
+
 			sb.append("</email></outboundmails>");
 			mailInfos.mails = sb.toString();
-			
+
 			//Get Connection to the Smtp Sender
 			conx  = getConnection("java:jca/xtentis/connector/smtp");
 			Interaction interaction = conx.createInteraction();
 	    	InteractionSpecImpl interactionSpec = new InteractionSpecImpl();
-	    	
+
 	    	//Create the Record
 			MappedRecord recordIn = new RecordFactoryImpl().createMappedRecord(RecordFactoryImpl.RECORD_IN);
 	    	HashMap<String,Serializable> params = new HashMap<String,Serializable>();
@@ -415,14 +451,14 @@ public class SmtpServiceBean extends ServiceCtrlBean  implements SessionBean {
 	    	params.put("auth", auth);
 	    	params.put("logfilename", mailInfos.logFileName);
 	    	recordIn.put(RecordFactoryImpl.PARAMS_HASHMAP_IN, params);
-	    	
+
 	    	//Process the post
 			interactionSpec.setFunctionName(InteractionSpecImpl.FUNCTION_PUSH);
 			MappedRecord result = (MappedRecord) interaction.execute(interactionSpec, recordIn);
-			
+
 			String statusCode = (String) result.get(RecordFactoryImpl.STATUS_CODE_OUT);
 			String statusMsg = (String)((HashMap<String,Serializable>)result.get(RecordFactoryImpl.PARAMS_HASHMAP_OUT)).get("message");
-			
+
 			//parse the result
 			if (!"OK".equals(statusCode)) {
 				String err = "Smtp Service: could not post message: "+statusMsg;
@@ -436,39 +472,39 @@ public class SmtpServiceBean extends ServiceCtrlBean  implements SessionBean {
 					org.apache.log4j.Logger.getLogger(this.getClass()).debug("receiveFromInbound() : removed itemPK '"+itemPK.getIds()[0]+"'");
 				}
 			}
-			
+
 			String response = (new SimpleDateFormat("yyyyMMdd'T'HH:mm:ss, SSS")).format(new Date(System.currentTimeMillis()))
 			+": SUCCESS routing to SMTP Service.";
-			
+
 			return response;
-			
-			
+
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			String msg = 
+			String msg =
 				(new SimpleDateFormat("yyyyMMdd'T'HH:mm:ss, SSS")).format(new Date(System.currentTimeMillis()))
 				+": ERROR routing to SMTP Service "
 				+": "+e.getLocalizedMessage();
-			
+
 			if (! isLoggingEvent) {
-				if (e instanceof XtentisException) { 
+				if (e instanceof XtentisException) {
 					throw new XtentisException(e.getLocalizedMessage());
 				} else {
 					org.apache.log4j.Logger.getLogger(this.getClass()).error(msg+" ("+e.getClass().getName()+")");
 					throw new XtentisException("Smtp Service Error: "+e.getClass().getName()+": "+e.getLocalizedMessage());
 				}
 			}
-			
+
 			return "Error occured trying to handle logging_event with Smtp service.";
-			
+
 	    } finally {
 			try {conx.close();} catch (Exception e) { }
 	    }
-		
+
 	}
 
 
-    
+
     private String getDefaultConfiguration() {
     	return
     		"<configuration>"+
@@ -485,7 +521,7 @@ public class SmtpServiceBean extends ServiceCtrlBean  implements SessionBean {
      * @author achen
      * @throws XtentisException
      * @ejb.interface-method view-type = "both"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
     public  String getDocumentation(String twoLettersLanguageCode) throws XtentisException{
     	return "There is two type parameters,\n\n" +
@@ -501,13 +537,13 @@ public class SmtpServiceBean extends ServiceCtrlBean  implements SessionBean {
 		"	<subjectprefix></transformer>\n"+
 		"	<logfilename></logfilename>\n"+
 		"	<transformer></transformer>\n"+
-		"</parameters>\n";	
+		"</parameters>\n";
     }
     /**
      * @throws EJBException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
     public String getConfiguration(String optionalParameters) throws XtentisException {
     	try {
@@ -516,38 +552,38 @@ public class SmtpServiceBean extends ServiceCtrlBean  implements SessionBean {
     			org.apache.log4j.Logger.getLogger(this.getClass()).debug("getConfiguration() : configuration is null, fall back to default one");
     			configuration = getDefaultConfiguration();
     		}
-    		
+
     		Document d = Util.parse(configuration);
-    		
+
     		// Parsing & checking of mandatory parameters
     		String tmphost = StringEscapeUtils.unescapeXml(Util.getFirstTextNode(d.getDocumentElement(), "host"));
     		if  (tmphost == null) throw new XtentisException("Host required");
     		else this.host = tmphost;
-    		
+
     		String tmpport = Util.getFirstTextNode(d.getDocumentElement(), "port");
     		if  (tmpport == null) throw new XtentisException("Port number required");
     		else this.port = new Integer(tmpport);
     		if (this.port.intValue() < 1) throw new XtentisException("Invalid port number");
-    		
-    		
+
+
     		// If username is null then authentication is set to false
     		String usertmp = StringEscapeUtils.unescapeXml(Util.getFirstTextNode(d.getDocumentElement(), "username"));
     		if (usertmp == null) auth = new Boolean(false);
     		else auth = new Boolean(true);
     		username = usertmp;
-    		
+
     		// Parsing of not so important parameters
     		transformer = StringEscapeUtils.unescapeXml(Util.getFirstTextNode(d.getDocumentElement(), "transformer"));
     		password = StringEscapeUtils.unescapeXml(Util.getFirstTextNode(d.getDocumentElement(), "password"));
     		permanentbcc = Util.getFirstTextNode(d.getDocumentElement(), "permanentbcc");
     		logfilename = StringEscapeUtils.unescapeXml(Util.getFirstTextNode(d.getDocumentElement(), "logfilename"));
-    		
+
     		configurationLoaded = true;
-    		
+
     		//org.apache.log4j.Logger.getLogger(this.getClass()).debug("getConfiguration() : Configuration String: "+configuration);
     		org.apache.log4j.Logger.getLogger(this.getClass()).debug("getConfiguration() : Variables: host="+host+", port="+port+", "+
     				"username="+username+", password="+(password == null ? "null" : "(hidden)")+", permanentbcc="+permanentbcc+", logfilename="+logfilename);
-    		
+
     		return configuration;
         }
     	catch (XtentisException e) { throw (e); }
@@ -555,35 +591,35 @@ public class SmtpServiceBean extends ServiceCtrlBean  implements SessionBean {
     	    String err = "Unable to deserialize the configuration of the Smtp Service: "+e.getClass().getName()+": "+e.getLocalizedMessage();
     	    org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);
     	    throw new XtentisException(err);
-	    }	
+	    }
     }
 
 
-    
+
     /**
      * @throws EJBException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void putConfiguration(String configuration) throws XtentisException {
 		configurationLoaded = false;
 		super.putConfiguration(configuration);
 	}
 
-	
-	
-	
-	
-	
+
+
+
+
+
 	private void addXmlElement(StringBuffer target, String name, String value, boolean escapeXML) {
-		
+
 		if (value == null) value = "";
 		else if (escapeXML) value = StringEscapeUtils.escapeXml(value);
-		
+
 		target.append("<"+name+">"+value+"</"+name+">");
 	}
-	
-	
-    
+
+
+
 }
