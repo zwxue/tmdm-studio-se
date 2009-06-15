@@ -52,26 +52,23 @@ amalto.ItemsTrash.ItemsTrash=function(){
 		pagingToolbar.pageSize=parseInt(pageSize);		    	
 		store.load({params:{start:0, limit:pageSize}});
     };
-    function result(result){
-    	showTrashItems();
-    }
+
     function toDelete(pk,partPath,revisionID,conceptName,ids){
-//    	Ext.MessageBox.alert("delete","toDelete?");
-    	//removeDroppedItem(String itemPk,String partPath,String revisionId,String conceptName,String ids)
-    	if(confirm("Effacer?")) {
-    		ItemsTrashInterface.removeDroppedItem(result(result),pk,partPath,revisionID,conceptName,ids);
-//		  		showTrashItems();
-//		  	});   		
-		}
-	   	else return;
-    	
-    	
+    	Ext.MessageBox.confirm("confirm","Are you sure to delete the this physically?",function de(e){
+    		if(e.toLocaleString()=="yes")
+    			ItemsTrashInterface.removeDroppedItem(pk,partPath,revisionID,conceptName,ids,showTrashItems);
+    		else
+    			showTrashItems();
+    		}) ;
     }
     function toRestore(pk,partPath,revisionID,conceptName,ids){
-    	//Ext.MessageBox.alert("restore","toRestore?");
-    	ItemsTrashInterface.recoverDroppedItem(result(result),pk,partPath,revisionID,conceptName,ids);
-//    	showTrashItems();
     	
+    	Ext.MessageBox.confirm("confirm","Are you sure to restore this item?",function re(en){
+    		if(en=="yes")
+    			ItemsTrashInterface.recoverDroppedItem(pk,partPath,revisionID,conceptName,ids,showTrashItems);
+    		else
+    			showTrashItems();
+    		});
     }
 
     function show(){
@@ -80,12 +77,10 @@ amalto.ItemsTrash.ItemsTrash=function(){
 		{header: 'dataClusterName',  sortable: true,dataIndex: 'itemPK'}, 
 		{header: 'revisionID',   sortable: true,dataIndex: 'revisionID'}, 
 		{header: 'conceptName',   sortable: true,dataIndex: 'conceptName'},
-		//{header: 'uniqueId', sortable: true,dataIndex: 'uniqueId'},
 		{header: 'ids',  sortable: true,dataIndex: 'ids'},
 		{header: 'partPath', sortable: true,dataIndex: 'partPath'},
 		{header: 'insertionUserName', sortable: true,dataIndex: 'insertionUserName'},
 		{header: 'insertionTime',  sortable: true,dataIndex: 'insertionTime'},
-		//{header: 'projection',  sortable: true,dataIndex: 'projection'},
 		{header: 'delete', sortable: false, renderer:deleteItem},
 		{header: 'restore', sortable: false, renderer:restore}
 	    ];
@@ -109,36 +104,18 @@ amalto.ItemsTrash.ItemsTrash=function(){
    	   	        title:'itemsTrash',
 	   	   	    viewConfig: {
 	   	   	        forceFit: true
-	
-	   	   	        //Return CSS class to apply to rows depending upon data values
-	   	   	        /*
-	   	   	        getRowClass: function(record, index) {	   	   	        	
-	   	   	            var status = record.get('status');
-	   	   	            if (status == 'MANUAL') {
-	   	   	                return 'conflictItem';
-	   	   	            } 
-	   	   	        }
-	   	   	        */
 	   	   	    },
 
    	   	        listeners:
    	   	        {
-//   	    			
 		   						cellclick: function(g, rowIndex,  columnIndex, e){
 		   						var record = g.getStore().getAt(rowIndex);
-		   						if(columnIndex==7){ //delete user
-//		   							deleteUser(record.id);
-//		   							Ext.MessageBox.alert("warning","Sure to Delete? "+record.id);
+		   						if(columnIndex==7){
+		   							
 		   							toDelete(record.data.itemPK,record.data.partPath,record.data.revisionID,record.data.conceptName,record.data.ids);
 		   						}
-		   						else{ //display user detail
-//						    		displayUserDetails(record.id);
+		   						else{ 
 		   							if(columnIndex==8){
-//		   								Ext.MessageBox.alert("warning","Sure to Restore? "+record.id);
-		   								
-		   								//[Object name=itemPK.pk type=auto sortDir=ASC, Object name=uniqueId type=auto sortDir=ASC,
-		   								//Object name=conceptName type=auto sortDir=ASC, 8 more... 0=Object 1=Object 2=Object 3=Object 4=Object 5=Object]
-		   								
 		   								toRestore(record.data.itemPK,record.data.partPath,record.data.revisionID,record.data.conceptName,record.data.ids);
 		   							}
 		   						}
@@ -149,7 +126,6 @@ amalto.ItemsTrash.ItemsTrash=function(){
 				tbar:[
 						new Ext.form.TextField({
 							id:'trash-criteria',
-							//emptyText:LABEL_CRITERIA[language],
 							emptyText:'*',
 							listeners: {
 			                	'specialkey': function(a, e) {
@@ -171,7 +147,7 @@ amalto.ItemsTrash.ItemsTrash=function(){
 								pageSize: parseInt(pageSize),
 						        store: store,
 						        displayInfo: true,
-						        displayMsg: 'Displaying items'+' {0} - {1} '+'of'+' {2}',
+						       // displayMsg: 'Displaying items'+' {0} - {1} '+'of'+' {2}',
 						        emptyMsg: 'No result',
 						        width: 800,
 						        items:[ 
@@ -185,10 +161,7 @@ amalto.ItemsTrash.ItemsTrash=function(){
 				    					listeners: {
 						                	'specialkey': function(a, e) {
 									            if(e.getKey() == e.ENTER) {
-													
 													showTrashItems();													
-													//Ext.PagingToolbar toolbar=Ext.get('trash-pagingtoolbar');
-													
 									            } 
 											}
 						                }
@@ -215,15 +188,9 @@ amalto.ItemsTrash.ItemsTrash=function(){
    	
                
 		store.load({params:{start:0, limit:pageSize}});
-//		store.on('load', function(list){
-//	    	alert(list.length);
-//		});  
     };
     return {
         init : function(){
-        //	Ext.MessageBox.alert("warning","ni hao!");
-        	//alert("test");
-        	//init application local
         	var tabPanel = amalto.core.getTabPanel();
 	    	Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 	    	if(tabPanel.getItem('trashDataGrid') == undefined){
@@ -236,9 +203,6 @@ amalto.ItemsTrash.ItemsTrash=function(){
 		  amalto.core.doLayout(); 	   		
 	    	 
         } 	//init
-//        torestore:function(){toDelete()},
-//        todelete:function(){toRestore()}
     };//return
 }();//ItemStrashPlan
 
-//Ext.onReady(ItemsTrashPlan.init, ItemsTrashPlan, true);
