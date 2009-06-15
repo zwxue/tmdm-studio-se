@@ -165,6 +165,7 @@ amalto.usersandroles.Users = function () {
 	
 	var userProfile=null;
 	
+	
 	function browseUsers(){
 		showUsersPanel();
 		displayUsers();
@@ -291,7 +292,7 @@ amalto.usersandroles.Users = function () {
 							new Ext.form.FieldSet({
 								title:ROLES[language],
 								autoHeight:true,
-										html:'<select id="sRoles" class="leftField" ><option value="-1"></option></select>' +
+										html:'<select id="sRoles" class="leftField" onchange="amalto.usersandroles.Users.changeSrolesTpl()"><option value="-1"></option></select>' +
 											'<input  id="addRole" type="button" onclick="amalto.usersandroles.Users.addRoleInBox();" ' +
 											'value="'+BUTTON_ADD_ROLE[language]+'"  title="Ajouter le role."/><br/>' +
 											'<select id="nRoles"  class="leftField" style="width:150px" size="5"></select>' +
@@ -299,6 +300,7 @@ amalto.usersandroles.Users = function () {
 
 
 							})
+							
 						],
 						buttons:[
 							{
@@ -314,6 +316,12 @@ amalto.usersandroles.Users = function () {
 		usersPanel.show();
 		//usersPanel.doLayout();
 		amalto.core.doLayout();
+	}
+	
+	function changeSrolesTpl(){
+        var tipBody=Ext.query("*[class=x-tip-body]",Ext.getDom('sRolesTpl'))[0];
+		tipBody.innerHTML=$('sRoles').options[$('sRoles').selectedIndex].value;
+        
 	}
 	
 	function displayUsersEnter(e){
@@ -410,8 +418,15 @@ amalto.usersandroles.Users = function () {
 			if(Ext.get('sRoles')==undefined) return;
 			DWRUtil.removeAllOptions('sRoles');
 			//DWRUtil.addOptions('sRoles',[LABEL_SELECT[language]]);
-			DWRUtil.addOptions('sRoles',results);
-		});	    
+			DWRUtil.addOptions('sRoles',results,'name');
+			
+			new Ext.ToolTip({
+				          id:'sRolesTpl',
+		                  target: 'sRoles',
+				          html: $('sRoles').options[0].value
+                        });
+		});	
+		
 	    
 	} 
 	
@@ -488,7 +503,7 @@ amalto.usersandroles.Users = function () {
 	function addRoleInBox() {
 		var index = $('sRoles').selectedIndex;
 		if (index==-1) return;
-		var name = $('sRoles').options[$('sRoles').selectedIndex].value;
+		var name = $('sRoles').options[$('sRoles').selectedIndex].text;
 		var sel = new Array();
 		sel[0] = name;
 		sel.sort();
@@ -622,6 +637,7 @@ amalto.usersandroles.Users = function () {
 		createUser:function(){createUser();},
 		saveUser:function(a){saveUser(a)},
 		addRoleInBox:function(){addRoleInBox()},
+		changeSrolesTpl:function(){changeSrolesTpl()},
 		deleteRoleSelected:function(){deleteRoleSelected()}
  	}
 }();
