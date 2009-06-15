@@ -171,6 +171,16 @@ public class DataModelEditorPage extends AFormPage implements ITextListener{
 		if ( !page.isDirty()) page.markDirtyWithoutCommit();
 	}
 	
+	public boolean isDirty()
+	{
+		if (editorPart!=null)
+			return editorPart.isDirty();
+		else
+		{
+			DataModelMainPage page = ((DataModelMainPage) getEditor().findPage(DataModelMainPage.class.getName()));
+			return page.isDirty();
+		}
+	}
 	
 	public void markDirtyWithoutCommit() {
 		if (editorPart!=null) editorPart.markDirty();
