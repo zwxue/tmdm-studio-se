@@ -27,9 +27,9 @@ import com.amalto.core.util.XtentisException;
 
 
 /**
- * <h1>Service SMTP</h1>
+ * <h1>Service Call Transformer</h1>
  *
- * <h3>Descrition</h3>
+ * <h3>Description</h3>
  * This service calls a transformer<br/>
  *
  * <h3>Parameters</h3>
