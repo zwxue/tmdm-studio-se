@@ -2,6 +2,7 @@ package com.amalto.webapp.v3.itemstrash.dwr;
 
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -17,6 +18,7 @@ import com.amalto.webapp.util.webservices.WSItemPK;
 import com.amalto.webapp.util.webservices.WSLoadDroppedItem;
 import com.amalto.webapp.util.webservices.WSRecoverDroppedItem;
 import com.amalto.webapp.util.webservices.WSRemoveDroppedItem;
+import com.amalto.webapp.v3.itemstrash.bean.ItemsTrashInstances;
 import com.amalto.webapp.v3.itemstrash.bean.ItemsTrashItem;
 
 
@@ -26,6 +28,10 @@ public class ItemsTrashDWR {
 	
 	public ItemsTrashDWR() {
 		super();
+	}
+
+	public boolean saveSyncItem(ItemsTrashInstances item)throws Exception{
+		return true;
 	}
 	
 //	Date date =new Date(2009,6,4);
@@ -40,7 +46,6 @@ public class ItemsTrashDWR {
 			regex=regex.replaceAll("\\*", "");
 			regex=".*"+regex+".*";
 			
-			ListRange lr = new ListRange();
 			List<ItemsTrashItem> li = new ArrayList<ItemsTrashItem>();
 			
 			WSDroppedItemPKArray  pks= Util.getPort().findAllDroppedItemsPKs(new WSFindAllDroppedItemsPKs(regex));
@@ -52,9 +57,18 @@ public class ItemsTrashDWR {
 				item = item.WS2POJO(wsitem);
 				li.add(item);
 			}
-			lr.setData(li.toArray());
-			lr.setTotalSize(li.size());
-			return lr;
+//			lr.setData(li.toArray());
+//			lr.setTotalSize(li.size());
+			List<ItemsTrashItem> sublist=li;
+			if(li.size()>0){
+				start=start<li.size()?start:li.size()-1;
+				int end=li.size()<(start+limit)?li.size()-1:(start+limit-1);
+				sublist=li.subList(start, end+1);
+			}
+			ListRange listRange = new ListRange();
+			listRange.setData(sublist.toArray(new ItemsTrashItem[sublist.size()]));
+			listRange.setTotalSize(li.size());			
+			return listRange;
 		}catch(Exception e) {
 			e.printStackTrace();
 			throw new Exception(e.getClass().getName() + ": "
@@ -64,15 +78,16 @@ public class ItemsTrashDWR {
 		
 	}
 	
-	public WSDroppedItemPK removeDroppedItem(String itemPk,String partPath,String revisionId,String conceptName,String ids) throws Exception{
+	public void removeDroppedItem(String itemPk,String partPath,String revisionId,String conceptName,String ids) throws Exception{
 		try{
+//			WSDroppedItemPK
 			String[] ids1 = ids.split("\\.");
 			WSDataClusterPK wddcpk = new WSDataClusterPK(itemPk);
 			WSItemPK wdipk = new WSItemPK(wddcpk,conceptName,ids1);
 			WSDroppedItemPK wddipk = new WSDroppedItemPK(wdipk,partPath,revisionId);
 			WSRemoveDroppedItem wsrdi = new WSRemoveDroppedItem(wddipk);
 			WSDroppedItemPK wdipkd = Util.getPort().removeDroppedItem(wsrdi);
-			return wdipkd;
+//			return wdipkd;
 		}catch(Exception e) {
 			e.printStackTrace();
 			
@@ -82,7 +97,7 @@ public class ItemsTrashDWR {
 		
 	}
 	 
-	public WSItemPK recoverDroppedItem(String itemPk,String partPath,String revisionId,String conceptName,String ids) throws Exception{
+	public void recoverDroppedItem(String itemPk,String partPath,String revisionId,String conceptName,String ids) throws Exception{
 		try{
 			
 			String[] ids1 = ids.split("\\.");
@@ -91,7 +106,7 @@ public class ItemsTrashDWR {
 			WSDroppedItemPK wsdipk = new WSDroppedItemPK(wdipk,partPath,revisionId);
 			WSRecoverDroppedItem wsrdi = new WSRecoverDroppedItem(wsdipk);
 			WSItemPK wsipk = Util.getPort().recoverDroppedItem(wsrdi);
-			return wsipk;
+//			return wsipk;
 		}catch(Exception e) {
 			e.printStackTrace();
 				throw new Exception(e.getClass().getName() + ": "
