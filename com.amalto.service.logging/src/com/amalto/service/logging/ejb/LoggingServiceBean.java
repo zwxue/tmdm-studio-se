@@ -29,94 +29,119 @@ import com.amalto.core.util.XtentisException;
 
 
 /**
- * @author bgrieder, jfeltesse
- * 
+ * <h1>Service Logging</h1>
+ *
+ * <h3>Description</h3>
+ * This service main role is to start, stop and configure the logging connector.<br/>
+ * It is not meant to be called from a Routing Rule.
+ *
+ * <h3>Parameters</h3>
+ * None. This service should not be called from a Routing Rule<br/>
+ *
+ * <h3>Configuration</h3>
+ * The following parameters are set via the UI:<ul>
+ * <li><b>port</b>: mandatory; the Log4J port to which the logging events will be pushed. Typically 4561</li>
+ * <li><b>threshold</b>: the threshold, an integer value, one of the static value from {@link Priority}: <ul>
+ * 		<li>OFF_INT</li>
+ * 		<li>TRACE_INT</li>
+ * 		<li>DEBUG_INT</li>
+ * 		<li>INFO_INT</li>
+ * 		<li>WARN_INT</li>
+ * 		<li>EROR_INT</li>
+ * 		<li>FATAL_INT</li>
+ * </li></ul>
+ * </li>
+ * <li><b>pattern</b>: optional; a regular expression that should be met by the message</li>
+ *</ul>
+ *
+ * @author Bruno Grieder
+ *
  * @ejb.bean name="Logging"
  *           display-name="Name for Logging"
  *           description="Description for Logging"
  * 		  local-jndi-name = "amalto/local/service/logging"
  *           type="Stateless"
  *           view-type="local"
- * 
+ *
  * @ejb.remote-facade
- * 
+ *
  * @ejb.permission
  * 	view-type = "remote"
  * 	role-name = "administration"
  * @ejb.permission
  * 	view-type = "local"
  * 	unchecked = "true"
- * 
- * 
- * 
+ *
+ *
+ *
  */
 public class LoggingServiceBean extends ServiceCtrlBean  implements SessionBean{
-	
+
 	private static final long serialVersionUID = 7146969238534906425L;
-	
+
 	private boolean configurationLoaded = false;
-	
+
 	private Integer port;
 	private Integer threshold;
 	private String pattern;
-	
+
 	// Default null values for this version
 	private String xtentisusername;
 	private String xtentispassword;
 	private String logfilename;
-	
-		
-    
+
+
+
     /**
      * @throws EJBException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
-	public String getJNDIName() throws XtentisException {		
+	public String getJNDIName() throws XtentisException {
 		return "amalto/local/service/logging";
 	}
-	
+
     /**
      * @throws EJBException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getDescription(String twoLetterLanguageCode) throws XtentisException {
 		if ("fr".matches(twoLetterLanguageCode.toLowerCase()))
 			return "Le service de logging";
 		return "The logging service";
 	}
-	
+
     /**
      * @throws EJBException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String getStatus() throws XtentisException {
-		
+
 		Connection conx = null;
-		
+
 		try {
-			
+
 			//Check that listener is started
 			conx = getConnection("java:jca/xtentis/connector/logging");
 			Interaction interaction = conx.createInteraction();
 	    	InteractionSpecImpl interactionSpec = new InteractionSpecImpl();
-	    	
+
 			MappedRecord recordIn = new RecordFactoryImpl().createMappedRecord(RecordFactoryImpl.RECORD_IN);
 	    	HashMap<String,Serializable> params = new HashMap<String,Serializable>();
 	    	params.put("port", port);
 	    	recordIn.put(RecordFactoryImpl.PARAMS_HASHMAP_IN, params);
-	    	
+
 			interactionSpec.setFunctionName(InteractionSpecImpl.FUNCTION_GET_STATUS);
 			MappedRecord recordOut = (MappedRecord)interaction.execute(interactionSpec, recordIn);
 			String code = (String)recordOut.get(RecordFactoryImpl.STATUS_CODE_OUT);
-			
+
 			Logger.getLogger(this.getClass()).debug("getStatus(): code="+code);
-			
+
 			if (! "OK".equals(code)) return "STOPPED";
 			else return "OK";
 
@@ -130,20 +155,20 @@ public class LoggingServiceBean extends ServiceCtrlBean  implements SessionBean{
 
 	}
 
-	
+
     /**
      * @throws EJBException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void start() throws XtentisException {
-		
+
 		Connection conx = null;
 		try {
-		
+
 			if (!configurationLoaded) getConfiguration(null);
-			
+
 			//DEPRECATED: the connector supplies a logging_event in the appropriate format
 			//check that the inbound adaptor exists
 			/*
@@ -158,8 +183,8 @@ public class LoggingServiceBean extends ServiceCtrlBean  implements SessionBean{
 
 		        //create Source
 		        SourceValue sv = getSourceLocalHome().create(new SourceValue("JBoss Logger", "Jboss server logs")).getSourceValue();
-		        
-		        
+
+
 		        InboundAdaptorValue iavo = new InboundAdaptorValue(
         				"Logging",
         				"Logging Inbound",
@@ -169,11 +194,11 @@ public class LoggingServiceBean extends ServiceCtrlBean  implements SessionBean{
 		        //get Data Model
 		        iavo.setDataModel(getDataModelLocalHome().findByPrimaryKey(new DataModelPK("B2BOX")).getDataModelValue());
 		        iavo.setSource(sv);
-		        
+
 		        iaHome.create(iavo);
 			} // inbound adaptor
 			*/
-			
+
 			//Restart the listener
 			conx  = getConnection("java:jca/xtentis/connector/logging");
 			Interaction interaction = conx.createInteraction();
@@ -181,11 +206,11 @@ public class LoggingServiceBean extends ServiceCtrlBean  implements SessionBean{
 			MappedRecord recordIn = new RecordFactoryImpl().createMappedRecord(RecordFactoryImpl.RECORD_IN);
 			HashMap<String,Serializable> params = new HashMap<String,Serializable>();
 	    	recordIn.put(RecordFactoryImpl.PARAMS_HASHMAP_IN, params);
-			
+
 			//stop the listener
 			interactionSpec.setFunctionName(InteractionSpecImpl.FUNCTION_STOP);
 			try {interaction.execute(interactionSpec, recordIn); } catch (Exception e) {}
-			
+
 			//start the listener
 	    	params.put("port", port);
 	    	params.put("threshold", threshold);
@@ -197,7 +222,7 @@ public class LoggingServiceBean extends ServiceCtrlBean  implements SessionBean{
 	    	recordIn.put(RecordFactoryImpl.PARAMS_HASHMAP_IN, params);
 			interactionSpec.setFunctionName(InteractionSpecImpl.FUNCTION_START);
 			MappedRecord result = (MappedRecord)interaction.execute(interactionSpec, recordIn);
-			
+
 			//check the result
 			if (!"OK".equals(result.get(RecordFactoryImpl.STATUS_CODE_OUT))) {
 				String message = (String)((HashMap<String,Serializable>)result.get(RecordFactoryImpl.PARAMS_HASHMAP_OUT)).get("message");
@@ -220,28 +245,28 @@ public class LoggingServiceBean extends ServiceCtrlBean  implements SessionBean{
 	}
 
 
-	
+
     /**
      * @throws EJBException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void stop() throws XtentisException {
-		
+
 		Logger.getLogger(this.getClass()).debug("stop() : SERVICE: STOP");
-		
+
 		Connection conx = null;
-		
+
 		try {
-			
+
 			if (!configurationLoaded) getConfiguration(null);
-			
+
 			//Try to stop the  port
 			conx  = getConnection("java:jca/xtentis/connector/logging");
 			Interaction interaction = conx.createInteraction();
 	    	InteractionSpecImpl interactionSpec = new InteractionSpecImpl();
-	    	
+
 			MappedRecord recordIn = new RecordFactoryImpl().createMappedRecord(RecordFactoryImpl.RECORD_IN);
 	    	HashMap<String,Serializable> params = new HashMap<String,Serializable>();
 	    	params.put("port", port);
@@ -249,7 +274,7 @@ public class LoggingServiceBean extends ServiceCtrlBean  implements SessionBean{
 			interactionSpec.setFunctionName(InteractionSpecImpl.FUNCTION_STOP);
 			interaction.execute(interactionSpec, recordIn);
 			return;
-			
+
 		}
 		catch (XtentisException e) { throw (e); }
 		catch (Exception e) {
@@ -267,28 +292,28 @@ public class LoggingServiceBean extends ServiceCtrlBean  implements SessionBean{
 	private final static Pattern timePattern = Pattern.compile(".*?<time>(.*?)</time>.*",Pattern.DOTALL);
     /**
      * @throws EJBException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public Serializable receiveFromOutbound(HashMap<String, Serializable> map) throws XtentisException {
-		
+
 		try {
-			
+
 			org.apache.log4j.Logger.getLogger(this.getClass()).debug("receiveFromOutbound() ");
-			
+
 			String charset = (String) map.get("charset");
 			String cluster = (String) map.get("cluster");
 			byte[] bytes = (byte[])map.get("bytes");
 			String logging_event = new String(bytes, charset);
-			
+
 			//gréb time
 			String id = ""+System.currentTimeMillis();
 			Matcher m = timePattern.matcher(logging_event);
 			if (m.matches()) {
 				id = m.group(1);
 			}
-			
+
 			//build the ItemPOJO
 			ItemPOJO pojo =
 				new ItemPOJO(
@@ -298,15 +323,15 @@ public class LoggingServiceBean extends ServiceCtrlBean  implements SessionBean{
 						System.currentTimeMillis(),
 						logging_event
 				);
-			
+
 			// project to repository
 			ItemCtrl2Local ictrl = Util.getItemCtrl2Local();
-			
+
 			ictrl.putItem(
 					pojo,
-					null //no data model - we know what we are doing right?  
+					null //no data model - we know what we are doing right?
 			);
-			
+
 			/*
 			ItemPOJO pojo = ictrl.projectItem(
 					new String(bytes, charset),
@@ -318,13 +343,13 @@ public class LoggingServiceBean extends ServiceCtrlBean  implements SessionBean{
 					username
 			);
 			*/
-			
-			
+
+
 			//send to router
 			Util.getRoutingEngineV2CtrlLocal().route(pojo.getItemPOJOPK());
-			
+
 			return null;
-			
+
 		} catch (XtentisException e) {
 			throw(e);
 		} catch (Exception e) {
@@ -338,12 +363,12 @@ public class LoggingServiceBean extends ServiceCtrlBean  implements SessionBean{
 
 
 
-	
+
     /**
      * @throws EJBException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public String receiveFromInbound(ItemPOJOPK itemPK, String routingOrderID, String parameters) throws com.amalto.core.util.XtentisException {
 		// Not needed for the logging service
@@ -351,7 +376,7 @@ public class LoggingServiceBean extends ServiceCtrlBean  implements SessionBean{
 	}
 
 
-    
+
     private String getDefaultConfiguration() {
     	return
     		"<configuration>"+
@@ -363,39 +388,39 @@ public class LoggingServiceBean extends ServiceCtrlBean  implements SessionBean{
     		"	<logfilename></logfilename>"+
 			"</configuration>";
     }
-    
 
-    
+
+
     /**
      * @throws EJBException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
     public String getConfiguration(String optionalParameters) throws XtentisException {
-    	
+
     	try {
-    		
+
     		Logger.getLogger(this.getClass()).debug("getConfiguration() : ");
-    		
+
     		String configuration = loadConfiguration();
     		if (configuration == null) {
     			Logger.getLogger(this.getClass()).debug("getConfiguration() : configuration is null, falling back to default one");
     			configuration = getDefaultConfiguration();
     		}
-    		
+
     		Document d = Util.parse(configuration);
-    		
+
     		// Parsing & checking of mandatory parameters
     		String tmpport = Util.getFirstTextNode(d.getDocumentElement(), "port");
     		if  (tmpport == null) throw new XtentisException("Port number required");
     		else this.port = new Integer(tmpport);
     		if (this.port.intValue() < 1) throw new XtentisException("Invalid port number");
-    		
+
     		String tmpthreshold = Util.getFirstTextNode(d.getDocumentElement(), "threshold");
     		if  (tmpthreshold == null) throw new XtentisException("Threshold required");
-    		else this.threshold = new Integer(tmpthreshold);    		
-    		   		
+    		else this.threshold = new Integer(tmpthreshold);
+
     		// Parsing of other parameters
     		String tmppattern = StringEscapeUtils.unescapeXml(Util.getFirstTextNode(d.getDocumentElement(), "pattern"));
     		if  (tmppattern == null) {
@@ -403,20 +428,20 @@ public class LoggingServiceBean extends ServiceCtrlBean  implements SessionBean{
     			this.pattern = "com\\.amalto\\..*";
     		}
     		else this.pattern = tmppattern;
-    		
+
     		xtentisusername = StringEscapeUtils.unescapeXml(Util.getFirstTextNode(d.getDocumentElement(), "xtentisusername"));
     		xtentispassword = StringEscapeUtils.unescapeXml(Util.getFirstTextNode(d.getDocumentElement(), "xtentispassword"));
 		    logfilename = StringEscapeUtils.unescapeXml(Util.getFirstTextNode(d.getDocumentElement(), "logfilename"));
-		    
+
     		configurationLoaded = true;
-    		
+
     		Logger.getLogger(this.getClass()).debug("getConfiguration() : Configuration String: "+configuration);
-    		Logger.getLogger(this.getClass()).debug("getConfiguration() : Variables: port="+port+", threshold="+threshold+", " + 
+    		Logger.getLogger(this.getClass()).debug("getConfiguration() : Variables: port="+port+", threshold="+threshold+", " +
     				"pattern="+pattern+", xtentisusername="+xtentisusername+", xtentispassword="+(xtentispassword == null ? "null" : "(hidden)")+", logfilename="+logfilename);
-    		
+
     		return configuration;
         }
-    	catch (XtentisException e) { 
+    	catch (XtentisException e) {
     		e.printStackTrace();
     		throw (e); }
         catch (Exception e) {
@@ -425,19 +450,19 @@ public class LoggingServiceBean extends ServiceCtrlBean  implements SessionBean{
     	    throw new XtentisException(err);
 	    }
     }
-    
 
-    
+
+
     /**
      * @throws EJBException
-     * 
+     *
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method 
+     * @ejb.facade-method
      */
 	public void putConfiguration(String configuration) throws XtentisException {
 		configurationLoaded = false;
 		super.putConfiguration(configuration);
 	}
 
-    
+
 }
