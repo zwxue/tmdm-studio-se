@@ -35,10 +35,11 @@ public enum ESystemDefaultObjects {
 	M_REPORTING(TreeObject.MENU,"Reporting"),
 	M_SYNCHRONIZATIONACTION(TreeObject.MENU,"SynchronizationAction"),
 	M_SYNCHRONIZATIONPLAN(TreeObject.MENU,"SynchronizationPlan"),
+	M_ITEMSTRASH(TreeObject.MENU,"ItemsTrash"),
 	
 	
 	//roles
-	R_BOLLORE_CONTRIBUTOR(TreeObject.ROLE,"BOLLORE_Contributor"),
+	//R_BOLLORE_CONTRIBUTOR(TreeObject.ROLE,"BOLLORE_Contributor"),
 	
 	//Views
 	
