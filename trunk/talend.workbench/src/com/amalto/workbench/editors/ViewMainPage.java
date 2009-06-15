@@ -108,7 +108,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             vbeComposite.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
             );
-            vbeComposite.setLayout(new GridLayout(2,false));
+            vbeComposite.setLayout(new GridLayout(4,false));
 
            
             /**
@@ -124,7 +124,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
                 }
             }
                         
-            xpathWidget0 = new XpathWidget("...",treeParent, toolkit, vbeComposite, (AMainPageV2)this,false);
+            
             
             Button addVBEButton = toolkit.createButton(vbeComposite,"Add",SWT.PUSH | SWT.CENTER);
             addVBEButton.setLayoutData(
@@ -147,9 +147,11 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 				};
 			});
             
+            xpathWidget0 = new XpathWidget("...",treeParent, toolkit, vbeComposite, (AMainPageV2)this,true);
+            
             viewableBEsList = new List(vbeComposite,SWT.SINGLE | SWT.V_SCROLL | SWT.BORDER);
             viewableBEsList.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+                    new GridData(SWT.FILL,SWT.FILL,true,true,3,1)
             );
             ((GridData)viewableBEsList.getLayoutData()).heightHint = 100;
             
