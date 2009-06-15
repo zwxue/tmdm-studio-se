@@ -33,12 +33,13 @@ amalto.actions = function () {
 							proxy: new Ext.data.SimpleDWRProxy(ActionsInterface.getClusters),
 				        	reader: new Ext.data.MapReader()
 						}),
-						displayField: 'value',
+						displayField: 'key',
 						valueField: 'key',
 						fieldLabel:'Data Cluster',
 					  	loadingText:'Loading...',
 			         	mode:'remote',
 			          	triggerAction:'all',
+			          	tpl:'<tpl for="."><div class="x-combo-list-item" qtip="{value}">{key}</div></tpl>', 
 			          	editable:false
 					}),
 					new Ext.form.ComboBox({
@@ -47,12 +48,13 @@ amalto.actions = function () {
 							proxy: new Ext.data.SimpleDWRProxy(ActionsInterface.getModels),
 				        	reader: new Ext.data.MapReader()
 						}),
-						displayField: 'value',
+						displayField: 'key',
 						valueField: 'key',
 						fieldLabel:'Data Model',
 					  	loadingText:'Loading...',
 			         	mode:'remote',
 			          	triggerAction:'all',
+			          	tpl:'<tpl for="."><div class="x-combo-list-item" qtip="{value}">{key}</div></tpl>',
 			          	editable:false
 					}),
 					new Ext.Button({

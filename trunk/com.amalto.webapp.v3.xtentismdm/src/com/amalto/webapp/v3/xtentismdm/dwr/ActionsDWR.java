@@ -4,10 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.amalto.webapp.core.bean.Configuration;
-import com.amalto.webapp.core.dwr.CommonDWR;
 import com.amalto.webapp.core.util.Util;
+import com.amalto.webapp.core.util.XObjectType;
+import com.amalto.webapp.core.util.XSystemObjects;
+import com.amalto.webapp.util.webservices.WSDataCluster;
 import com.amalto.webapp.util.webservices.WSDataClusterPK;
+import com.amalto.webapp.util.webservices.WSDataModel;
 import com.amalto.webapp.util.webservices.WSDataModelPK;
+import com.amalto.webapp.util.webservices.WSGetDataCluster;
+import com.amalto.webapp.util.webservices.WSGetDataModel;
 import com.amalto.webapp.util.webservices.WSRegexDataClusterPKs;
 import com.amalto.webapp.util.webservices.WSRegexDataModelPKs;
 
@@ -17,10 +22,20 @@ public class ActionsDWR {
 	public static Map<String, String> getClusters(String value){
 		try {
 			Map<String, String> map = new HashMap<String, String>();
-			WSDataClusterPK[] wsDataClustersPK = Util.getPort().getDataClusterPKs(
+			WSDataClusterPK[] wsDataClustersPKs = Util.getPort().getDataClusterPKs(
 					new WSRegexDataClusterPKs("*")
 					).getWsDataClusterPKs();
-			CommonDWR.filterSystemClustersPK(wsDataClustersPK, map);
+			
+			//CommonDWR.filterSystemClustersPK(wsDataClustersPKs, map);
+			
+			Map<String, XSystemObjects> xDataClustersMap=XSystemObjects.getXSystemObjects(XObjectType.DATA_CLUSTER);
+			for (int i = 0; i < wsDataClustersPKs.length; i++) {
+				if(!XSystemObjects.isXSystemObject(xDataClustersMap,XObjectType.DATA_CLUSTER, wsDataClustersPKs[i].getPk())){
+					WSDataCluster wsGetDataCluster=Util.getPort().getDataCluster(new WSGetDataCluster(wsDataClustersPKs[i]));
+					map.put(wsDataClustersPKs[i].getPk(),wsGetDataCluster.getDescription()==null?"":wsGetDataCluster.getDescription());
+				}
+			}
+			
 			return  map;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -31,10 +46,20 @@ public class ActionsDWR {
 	public static Map<String, String> getModels(String value){
 		try {
 			Map<String, String> map = new HashMap<String, String>();
-			WSDataModelPK[] wsDataModelsPK = Util.getPort().getDataModelPKs(
+			WSDataModelPK[] wsDataModelsPKs = Util.getPort().getDataModelPKs(
 					new WSRegexDataModelPKs("*")
 					).getWsDataModelPKs();
-			CommonDWR.filterSystemDataModelsPK(wsDataModelsPK, map);
+			
+			//CommonDWR.filterSystemDataModelsPK(wsDataModelsPK, map);
+			
+			Map<String, XSystemObjects> xDataModelsMap=XSystemObjects.getXSystemObjects(XObjectType.DATA_MODEL);
+			for (int i = 0; i < wsDataModelsPKs.length; i++) {
+				if(!XSystemObjects.isXSystemObject(xDataModelsMap,XObjectType.DATA_MODEL, wsDataModelsPKs[i].getPk())){
+					WSDataModel wsDataModel=Util.getPort().getDataModel(new WSGetDataModel(wsDataModelsPKs[i]));
+					map.put(wsDataModelsPKs[i].getPk(), wsDataModel.getDescription()==null?"":wsDataModel.getDescription());
+				}
+			}
+			
 			return  map;
 		} catch (Exception e) {
 			e.printStackTrace();
