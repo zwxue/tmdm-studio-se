@@ -56,6 +56,9 @@ import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
 import org.eclipse.xsd.impl.XSDSchemaImpl;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import com.amalto.workbench.actions.XSDChangeBaseTypeAction;
@@ -96,8 +99,8 @@ import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.providers.XSDTreeLabelProvider;
 import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.ImageCache;
-import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.webservices.WSDataModel;
 
 public class DataModelMainPage extends AMainPageV2 {
 
@@ -213,6 +216,7 @@ public class DataModelMainPage extends AMainPageV2 {
 							WSDataModel wsObj = (WSDataModel) (getXObject()
 									.getWsObject());
 							wsObj.setXsdSchema(xsd);
+							validateSchema(xsd);
 							refreshData();
 							markDirty();
 						}
@@ -223,6 +227,33 @@ public class DataModelMainPage extends AMainPageV2 {
 							}
 					}
 				}
+	        	
+	        	void validateSchema(String xsd)
+	        	{
+	        		try {
+						boolean elem = false;
+						XSDSchema schema = getXSDSchema(xsd);
+						NodeList nodeList = schema.getDocument()
+								.getDocumentElement().getChildNodes();
+						for (int idx = 0; idx < nodeList.getLength(); idx++) {
+							Node node = nodeList.item(idx);
+							if (node instanceof Element
+									&& node.getLocalName().indexOf("element") >= 0) {
+								elem = true;
+								break;
+							}
+						}
+						if (!elem) {
+							MessageDialog
+									.openWarning(getSite().getShell(),
+											"Warnning",
+											"There is no element node in the imported xsd schema");
+						}
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	        	}
 	        });
 			
 			exportBtn.addSelectionListener(new SelectionAdapter(){
