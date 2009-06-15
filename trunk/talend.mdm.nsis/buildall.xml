@@ -38,7 +38,7 @@
 		
 	  	<java classname="org.tmatesoft.svn.cli.SVN"
 	        fork="true" output="svn_file_list.txt">
-	      <arg value="ls"/>
+	      <arg value="list"/>
 	      <arg value="--username"/>
 	      <arg value="${svn.username}"/>
 	      <arg value="--password"/>
@@ -51,7 +51,6 @@
 	      	
 	        <pathelement location="${basedir}/svnkit/svnkit.jar" />
 	        <pathelement location="${basedir}/svnkit/svnkit-cli.jar" />
-	      	<pathelement location="${basedir}/svnkit/jna.jar" />
 	        <pathelement location="${basedir}/svnkit/trilead.jar" />
 	      	<pathelement location="${basedir}/svnkit/svnkit-javahl.jar" />
 	      </classpath>
@@ -85,7 +84,6 @@
 	        <pathelement location="${basedir}/svnkit/ganymed.jar" />	      	
 	        <pathelement location="${basedir}/svnkit/svnkit.jar" />
 	        <pathelement location="${basedir}/svnkit/svnkit-cli.jar" />
-	      	<pathelement location="${basedir}/svnkit/jna.jar" />
 	        <pathelement location="${basedir}/svnkit/trilead.jar" />
 	      	<pathelement location="${basedir}/svnkit/svnkit-javahl.jar" />
 	      </classpath>
