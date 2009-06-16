@@ -682,7 +682,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	            	)
 	            ).getResults();
             
-            if (showResultInfo&&(results==null)) {
+            if ((results==null)) {
             	MessageDialog.openInformation(this.getSite().getShell(), "Info", "Sorry, no result. ");
             	return new LineItem[0];
             }
