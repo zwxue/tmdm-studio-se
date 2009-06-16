@@ -420,7 +420,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
     	 			WSItemPK refWSItemPK=wsDroppedItemPK.getWsItemPK();
     	 			
     	 			String revison=wsDroppedItemPK.getRevisionId();
-    	 			if(revison==null||revison.equals(""))revison="head";
+    	 			//if(revison==null||revison.equals(""))revison="head";
     	 				
     	 			res[i] = new LineItem(
     	 					refWSItemPK.getWsDataClusterPK().getPk(),
