@@ -2,6 +2,7 @@ package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -18,18 +19,20 @@ import org.eclipse.xsd.XSDTypeDefinition;
 import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
+import com.amalto.workbench.utils.EImage;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 
-public class XSDDeleteConceptAction extends Action{
+public class XSDDeleteConceptAction extends UndoAction{
 
-	private DataModelMainPage page = null;
+	//private DataModelMainPage page = null;
 	private XSDSchema schema = null;
 	private XSDElementDeclaration xsdElem = null;
 	
 	public XSDDeleteConceptAction(DataModelMainPage page) {
-		super();
-		this.page = page;
-		setImageDescriptor(AmaltoWorbenchPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/delete_obj.gif"));
+		super(page);
+		//this.page = page;
+		setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
 		setText("Delete Concept");
 		setToolTipText("Delete a Business Concept");
 	}
@@ -40,13 +43,14 @@ public class XSDDeleteConceptAction extends Action{
 			return;
 		}
 		xsdElem = (XSDElementDeclaration) toDel;
-		run();
+		super.run();
 	}
 	
-	public void run() {
+	public void doAction() {
 		try {
-			super.run();
+			
             schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
+            ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXSDSchemaAsString();
             // xsdElem is to support the multiple delete action on key press,
 			// which each delete action on concept must be explicit passed a xsdElem to
 			// delete
@@ -62,9 +66,10 @@ public class XSDDeleteConceptAction extends Action{
             Util.deleteReference(decl, objs);
             //backup current Type Definition
             XSDTypeDefinition current = decl.getTypeDefinition();
-            
+            System.out.println(schema.contains(xsdElem));
             //remove declaration
             schema.getContents().remove(decl);
+            
             
             //remove type definition is no more used and type is not built in
        	    if (	(current.getName()!=null) &&  //anonymous type
@@ -88,8 +93,14 @@ public class XSDDeleteConceptAction extends Action{
 			);
 		}		
 	}
-	public void runWithEvent(Event event) {
-		super.runWithEvent(event);
+	@Override
+	protected IStatus undo() {
+		//add decl
+		if(xsdElem != null){
+			schema.getContents().add(xsdElem);
+			schema.update();
+		}
+		return super.undo();
 	}
 	
     public void setXSDTODel(XSDElementDeclaration elem) {

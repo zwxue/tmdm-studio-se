@@ -52,7 +52,7 @@ public class XSDNewIdentityConstraintAction extends Action implements SelectionL
 	
 	public void run() {
 		try {
-			super.run();
+			
             schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
             int index = -1;
             

@@ -9,6 +9,8 @@ import org.eclipse.swt.widgets.Event;
 
 import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.utils.EImage;
+import com.amalto.workbench.utils.ImageCache;
 
 public class XSDDeleteConceptWrapAction extends Action{
 
@@ -19,14 +21,14 @@ public class XSDDeleteConceptWrapAction extends Action{
 		super();
 		this.deleteConceptAction = deleteConceptAction;
 		this.page = page;
-		setImageDescriptor(AmaltoWorbenchPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/delete_obj.gif"));
+		setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
 		setText("Delete Concepts");
 		setToolTipText("Delete Business Concepts");
 	}
 	
 	public void run() {
 		try {
-			super.run();
+			
 			IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
 			if(selection.isEmpty()){
 				return;

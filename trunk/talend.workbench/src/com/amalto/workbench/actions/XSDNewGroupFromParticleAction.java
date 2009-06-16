@@ -22,6 +22,8 @@ import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.NewGroupDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
+import com.amalto.workbench.utils.EImage;
+import com.amalto.workbench.utils.ImageCache;
 
 public class XSDNewGroupFromParticleAction extends Action implements SelectionListener{
 
@@ -38,14 +40,14 @@ public class XSDNewGroupFromParticleAction extends Action implements SelectionLi
 	public XSDNewGroupFromParticleAction(DataModelMainPage page) {
 		super();
 		this.page = page;
-		setImageDescriptor(AmaltoWorbenchPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/add_obj.gif"));
+		setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
 		setText("Add Group (after)");
 		setToolTipText("Add a new Group after this one. Add from the Type to add at First Position.");
 	}
 	
 	public void run() {
 		try {
-			super.run();
+			
             schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
             
             IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();

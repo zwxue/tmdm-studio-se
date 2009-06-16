@@ -35,7 +35,7 @@ public class XSDSetAnnotationTargetSystemsAction extends Action{
 	
 	public void run() {
 		try {
-			super.run();
+			
             schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
             IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
             XSDAnnotationsStructure struc = new XSDAnnotationsStructure((XSDComponent)selection.getFirstElement());

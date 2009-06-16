@@ -22,6 +22,11 @@ import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSInitData;
 import com.amalto.workbench.webservices.XtentisPort;
 
+/**
+ * @deprecated
+ * 
+ *
+ */
 public class ServerInitAction extends Action {
 
 	private ServerView view = null;

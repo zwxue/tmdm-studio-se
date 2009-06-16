@@ -2,6 +2,7 @@ package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -19,19 +20,20 @@ import org.eclipse.xsd.XSDTypeDefinition;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
+import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 
-public class XSDDeleteElementAction extends Action{
+public class XSDDeleteElementAction extends UndoAction{
 
-	private DataModelMainPage page = null;
+	//private DataModelMainPage page = null;
 	private XSDSchema schema = null;
 	private XSDElementDeclaration xsdElem = null;
 	
 	public XSDDeleteElementAction(DataModelMainPage page) {
-		super();
-		this.page = page;
-		setImageDescriptor(ImageCache.getImage( "icons/delete_obj.gif"));
+		super(page);
+		//this.page = page;
+		setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
 		setText("Delete Element");
 		setToolTipText("Delete an Element");
 	}
@@ -47,12 +49,13 @@ public class XSDDeleteElementAction extends Action{
 			return;
 		}
 		xsdElem = (XSDElementDeclaration) toDel;
-		run();
+		
+		super.run();
 	}
 	
-	public void run() {
+	public void doAction() {
 		try {
-			super.run();
+			
             schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
             // xsdElem is to support the multiple delete action on key press,
 			// which each delete action on element must be explicit passed a xsdElem to
@@ -98,9 +101,15 @@ public class XSDDeleteElementAction extends Action{
 			);
 		}		
 	}
-	public void runWithEvent(Event event) {
-		super.runWithEvent(event);
+	@Override
+	protected IStatus undo() {
+		if(xsdElem !=null ){
+			schema.getContents().add(xsdElem);
+			schema.update();
+		}
+		return super.undo();
 	}
+
 	
     public void setXSDTODel(XSDElementDeclaration elem) {
 		xsdElem = elem;

@@ -33,7 +33,7 @@ public class XSDDeleteIdentityConstraintAction extends Action{
 	
 	public void run() {
 		try {
-			super.run();
+			
             // xsdIdenty is to support the multiple delete action on key press,
 			// which each delete action on identity must be explicit passed a xsd key to
 			// delete
