@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.events.SelectionEvent;
@@ -62,7 +63,9 @@ public class XSDSetAnnotationHiddenAction extends Action{
        		int ret = dlg.open();
        		if (ret == Window.CANCEL) return;
 
-       		struc.setHiddenAccesses(dlg.getXPaths());
+       		struc.setAccessRole(dlg.getXPaths(), dlg.getRecursive(),
+					(IStructuredContentProvider) page.getTreeViewer()
+					.getContentProvider(), "X_Hide");
        		
        		if (struc.hasChanged()) {
        			page.getTreeViewer().refresh(true);
