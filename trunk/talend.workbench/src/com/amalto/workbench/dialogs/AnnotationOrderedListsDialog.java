@@ -53,7 +53,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
 	private SelectionListener caller = null;
 	private String title = "";
 	private String columnName = "";
-	private boolean recursive = false;
+	private boolean recursive = true;
 	
 	private AMainPageV2 parentPage = null;
 	private TreeObject xObject = null;
@@ -364,7 +364,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
 	        		recursive = checkBox.getSelection();
 	        	};
 	        });
-			checkBox.setSelection(true);
+			checkBox.setSelection(recursive);
 			checkBox.setText("set role recursively");
 //			Label label = new Label(composite, SWT.LEFT);
 //			label.setText("set role recursively");
