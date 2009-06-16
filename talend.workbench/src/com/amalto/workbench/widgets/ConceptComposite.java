@@ -56,22 +56,24 @@ public class ConceptComposite {
 			typeNameText.setParent(radioGroup);
 		}
 		
-		sequenceButton = new Button(radioGroup,SWT.RADIO);
-		sequenceButton.setText("Sequence");
-		sequenceButton.setLayoutData(
-				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
-		);
-		choiceButton = new Button(radioGroup,SWT.RADIO);
-		choiceButton.setText("Choice");
-		choiceButton.setLayoutData(
-				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
-		);
 		allButton = new Button(radioGroup,SWT.RADIO);
 		allButton.setText("All");
 		allButton.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
 		);
 		
+		sequenceButton = new Button(radioGroup,SWT.RADIO);
+		sequenceButton.setText("Sequence");
+		sequenceButton.setLayoutData(
+				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+		);
+		
+		choiceButton = new Button(radioGroup,SWT.RADIO);
+		choiceButton.setText("Choice");
+		choiceButton.setLayoutData(
+				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+		);
+
 		allButton.setSelection(true);
 		container = parent;
 	}
