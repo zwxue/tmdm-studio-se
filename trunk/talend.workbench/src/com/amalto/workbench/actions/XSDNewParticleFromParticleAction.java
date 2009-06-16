@@ -23,6 +23,8 @@ import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.BusinessElementInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
+import com.amalto.workbench.utils.EImage;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 
 public class XSDNewParticleFromParticleAction extends Action implements SelectionListener{
@@ -40,14 +42,14 @@ public class XSDNewParticleFromParticleAction extends Action implements Selectio
 	public XSDNewParticleFromParticleAction(DataModelMainPage page) {
 		super();
 		this.page = page;
-		setImageDescriptor(AmaltoWorbenchPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/add_obj.gif"));
+		setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
 		setText("Add Element (after)");
 		setToolTipText("Add a new Business Element after this one. Add from the Type to add at First Position.");
 	}
 	
 	public void run() {
 		try {
-			super.run();
+			
             schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
             
             IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();

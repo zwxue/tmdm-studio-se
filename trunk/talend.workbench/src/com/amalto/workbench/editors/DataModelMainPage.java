@@ -14,6 +14,7 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -37,8 +38,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.operations.UndoRedoActionGroup;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
@@ -141,6 +144,8 @@ public class DataModelMainPage extends AMainPageV2 {
 	private XSDSetAnnotationTargetSystemsAction setAnnotationTargetSystemsAction = null;
 	private XSDSetAnnotationSourceSystemAction setAnnotationSourceSystemAction = null;
 	private XSDSetAnnotationDocumentationAction setAnnotationDocumentationAction = null;
+	private ObjectUndoContext undoContext;
+	private MenuManager menuMgr;
 
 	public DataModelMainPage(FormEditor editor) {
 		super(editor, DataModelMainPage.class.getName(), "Data Model "
@@ -351,7 +356,8 @@ public class DataModelMainPage extends AMainPageV2 {
 					.findPage(DataModelEditorPage.class.getName()));
 			if (editorPage.isDirty())
 				this.markDirty();
-
+			//init undo history
+			initializeOperationHistory();
 			// FIXME: does the reflow before the tree is actually expanded
 			/*
 			 * viewer.addTreeListener(new ITreeViewerListener() { public void
@@ -493,7 +499,7 @@ public class DataModelMainPage extends AMainPageV2 {
 
 			viewer.setContentProvider(new XSDTreeContentProvider(
 					this.getSite(), getXSDSchema(wsObject.getXsdSchema())));
-
+			viewer.refresh(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(this.getSite().getShell(),
@@ -565,7 +571,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	}
 
 	private void hookContextMenu() {
-		MenuManager menuMgr = new MenuManager();
+		menuMgr = new MenuManager();
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager manager) {
@@ -716,7 +722,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	 * @return
 	 * @throws Exception
 	 */
-	private XSDSchema getXSDSchema(String schema) throws Exception {
+	public XSDSchema getXSDSchema(String schema) throws Exception {
 		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory
 				.newInstance();
 		documentBuilderFactory.setNamespaceAware(true);
@@ -740,7 +746,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	 */
 	@Override
 	public void markDirty() {
-		commit();
+		//commit();
 		super.markDirty();
 		DataModelEditorPage editorPage = ((DataModelEditorPage) getEditor()
 				.findPage(DataModelEditorPage.class.getName()));
@@ -754,5 +760,30 @@ public class DataModelMainPage extends AMainPageV2 {
 		 */
 
 	}
+	
+	/**
+	 * @author achen
+	 */
+	private void initializeOperationHistory() {		
+		undoContext = new ObjectUndoContext(this);
 
+		int limit = 10;		
+		PlatformUI.getWorkbench().getOperationSupport().getOperationHistory().setLimit(undoContext, limit);
+
+		UndoRedoActionGroup undoRedoGroup = new UndoRedoActionGroup(getSite(), undoContext, true);
+
+		
+		undoRedoGroup.fillActionBars(getEditorSite().getActionBars());
+		
+		/*// Install an operation approver for this undo context that prompts
+		// according to a user preference.
+		operationApprover = new PromptingUserApprover(undoContext);
+		getOperationHistory().addOperationApprover(operationApprover);*/
+	}
+
+	public ObjectUndoContext getUndoContext() {
+		return undoContext;
+	}
+	
+	
 }

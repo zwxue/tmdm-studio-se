@@ -2,7 +2,9 @@ package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
@@ -21,27 +23,29 @@ import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.NewConceptOrElementDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
+import com.amalto.workbench.utils.EImage;
+import com.amalto.workbench.utils.ImageCache;
+import com.amalto.workbench.utils.Util;
 
-public class XSDNewConceptAction extends Action implements SelectionListener{
+public class XSDNewConceptAction extends UndoAction implements SelectionListener{
 
-	protected DataModelMainPage page = null;
+	//protected DataModelMainPage page = null;
 	protected XSDSchema schema = null;
+	private XSDElementDeclaration decl;
 	
 	public XSDNewConceptAction(DataModelMainPage page) {
-		super();
+		super(page);
 		this.page = page;
-		setImageDescriptor(AmaltoWorbenchPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/add_obj.gif"));
+		setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
 		setText("New Concept");
 		setToolTipText("Create a new Business Concept");
 	}
 	
-	public void run() {
-		try {
-			super.run();
+	public void doAction(){
+		try {			
             schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
                    
 			ArrayList customTypes = new ArrayList();
@@ -71,6 +75,7 @@ public class XSDNewConceptAction extends Action implements SelectionListener{
 					"An error occured trying to create a new Concept: "+e.getLocalizedMessage()
 			);
 		}		
+
 	}
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
@@ -92,7 +97,7 @@ public class XSDNewConceptAction extends Action implements SelectionListener{
 		if (dlg.getReturnCode() == Window.OK)  {
        		XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
        		
-       		XSDElementDeclaration decl = factory.createXSDElementDeclaration();
+       		decl = factory.createXSDElementDeclaration();
        		decl.setName(dlg.getTypeName());
        		decl.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));
        		
@@ -114,7 +119,7 @@ public class XSDNewConceptAction extends Action implements SelectionListener{
        		decl.updateElement();
        		
        		page.getTreeViewer().refresh(true);
-       		page.markDirty();
+       		//page.markDirty();
        		
        		Action changeAction = null;
        		if (dlg.isComplexType()) {
@@ -130,5 +135,16 @@ public class XSDNewConceptAction extends Action implements SelectionListener{
        		
        		changeAction.run();
 		}
+	}
+
+	@Override
+	protected IStatus undo() {
+		//FIXME
+//		List<XSDElementDeclaration> list=Util.findElementsUsingType(schema, schema.getSchemaForSchemaNamespace(), decl.getName());
+//		if(!schema.contains(decl) && list.size()>0){
+//			decl=list.get(0);
+//		}
+		new XSDDeleteConceptAction(page).run(decl);
+		return super.undo();
 	}
 }

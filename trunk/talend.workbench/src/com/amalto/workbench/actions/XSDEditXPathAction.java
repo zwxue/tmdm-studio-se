@@ -31,7 +31,7 @@ public class XSDEditXPathAction extends Action{
 	
 	public void run() {
 		try {
-			super.run();
+			
             
             IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
             XSDXPathDefinition xpath = (XSDXPathDefinition)selection.getFirstElement();

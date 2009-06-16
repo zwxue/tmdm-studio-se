@@ -44,8 +44,10 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.ServerTreeContentProvider;
 import com.amalto.workbench.providers.ServerTreeLabelProvider;
+import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.ESystemDefaultObjects;
 import com.amalto.workbench.utils.IConstants;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.webservices.WSLogout;
@@ -71,7 +73,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	protected Action editXObjectAction;
 	protected Action deleteXObjectAction;
 	protected Action serverRefreshAction;
-	protected Action serverInitAction;
+	//protected Action serverInitAction;
 	protected Action browseViewAction;
 	protected Action copyAction;
 	protected Action pasteAction;
@@ -203,8 +205,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				manager.add(serverRefreshAction);
 				if (!WorkbenchClipboard.getWorkbenchClipboard().isEmpty())
 					manager.add(pasteAction);
-				if ("admin".equalsIgnoreCase(xobject.getUsername()))
-					manager.add(serverInitAction);
+//				if ("admin".equalsIgnoreCase(xobject.getUsername()))
+//					manager.add(serverInitAction);
 				break;
 			case TreeObject._ACTION_:
 				manager.add((Action) xobject.getWsObject());
@@ -280,15 +282,13 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		logoutAction.setText("Logout");
 		logoutAction.setToolTipText("Logout From the " + IConstants.TALEND
 				+ " Server");
-		logoutAction.setImageDescriptor(AbstractUIPlugin
-				.imageDescriptorFromPlugin("com.amalto.workbench",
-						"icons/logout.gif"));
+		logoutAction.setImageDescriptor(ImageCache.getImage(EImage.LOGOUT.getPath()));
 
 		editXObjectAction = new EditXObjectAction(this);
 		newXObjectAction = new NewXObjectAction(this);
 		deleteXObjectAction = new DeleteXObjectAction(this);
 		serverRefreshAction = new ServerRefreshAction(this);
-		serverInitAction = new ServerInitAction(this);
+		//serverInitAction = new ServerInitAction(this);
 		browseViewAction = new BrowseViewAction(this);
 		copyAction = new CopyXObjectAction(this);
 		pasteAction = new PasteXObjectAction(this);
