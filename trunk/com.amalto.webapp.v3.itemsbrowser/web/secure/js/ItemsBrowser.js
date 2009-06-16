@@ -1127,7 +1127,8 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 				amalto.core.getTabPanel().remove('itemDetailsdiv'+treeIndex);
 				amalto.core.ready(result);
 				displayItems();
-				
+				if(result)
+				Ext.MessageBox.alert('Status', result);				
 			});
 		};
 	}
