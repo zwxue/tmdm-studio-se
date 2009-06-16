@@ -30,6 +30,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -38,10 +39,12 @@ import org.eclipse.swt.widgets.Text;
 import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.widgets.ConceptComposite;
 
 public class AnnotationOrderedListsDialog extends Dialog {
 	
 	protected Control textControl;
+	protected Button checkBox;
 	//protected Text labelText;
 	//protected Combo combo;
 	protected TableViewer viewer;
@@ -50,6 +53,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
 	private SelectionListener caller = null;
 	private String title = "";
 	private String columnName = "";
+	private boolean recursive = false;
 	
 	private AMainPageV2 parentPage = null;
 	private TreeObject xObject = null;
@@ -64,16 +68,18 @@ public class AnnotationOrderedListsDialog extends Dialog {
 	/**
 	 * @param parentShell
 	 */
-	public AnnotationOrderedListsDialog(ArrayList<String> xPaths, SelectionListener caller, Shell parentShell, String title, String columnName ,AMainPageV2 parentPage, int actionType) {
+	public AnnotationOrderedListsDialog(ArrayList<String> xPaths,
+			SelectionListener caller, Shell parentShell, String title,
+			String columnName, AMainPageV2 parentPage, int actionType) {
 		super(parentShell);
 		setShellStyle(this.getShellStyle() | SWT.RESIZE);
 		this.xPaths = xPaths;
 		this.caller = caller;
-		this.title = title;			
+		this.title = title;
 		this.columnName = columnName;
 		this.parentPage = parentPage;
 		this.xObject = parentPage.getXObject();
-		this.actionType=actionType;
+		this.actionType = actionType;
 	}
 
 
@@ -347,12 +353,30 @@ public class AnnotationOrderedListsDialog extends Dialog {
 
 		textControl.setFocus();
 		
+        if (actionType != AnnotationOrderedListsDialog.AnnotationForeignKeyInfo_ActionType
+				&& actionType != AnnotationOrderedListsDialog.AnnotationTargetSystems_ActionType) {
+			checkBox = new Button(composite, SWT.CHECK);
+			checkBox.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
+					true, 1, 1));
+			checkBox.addSelectionListener(new SelectionListener() {
+	        	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
+	        	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+	        		recursive = checkBox.getSelection();
+	        	};
+	        });
+			Label label = new Label(composite, SWT.LEFT);
+			label.setText("set role recursively");
+			label.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true,
+					1, 1));
+		}
+
 	    return composite;
 	}
 
 	
-	protected void createButtonsForButtonBar(Composite parent) {
+	protected void createButtonsForButtonBar(Composite parent) {		
 		super.createButtonsForButtonBar(parent);
+		
 		getButton(IDialogConstants.OK_ID).addSelectionListener(this.caller);
 		getButton(IDialogConstants.CANCEL_ID).addSelectionListener(this.caller);
 	}
@@ -385,6 +409,10 @@ public class AnnotationOrderedListsDialog extends Dialog {
 		return xPaths;
 	}
 	
+	public boolean getRecursive()
+	{
+		return recursive;
+	}
 	
 	private static String getControlText(Control textControl) {
 		if(textControl instanceof CCombo){

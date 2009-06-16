@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
@@ -27,6 +28,11 @@ public class XSDAnnotationsStructure {
 	 * @param component
 	 */
 	public XSDAnnotationsStructure(XSDComponent component) {
+		inputChanged(component);
+	}
+	
+	protected void inputChanged(Object component)
+	{
         if (component instanceof XSDAnnotation) {
         	annotation = (XSDAnnotation) component;
         	declaration = (XSDElementDeclaration)annotation.getContainer();
@@ -54,10 +60,7 @@ public class XSDAnnotationsStructure {
             	}
            	}
         }
-        
 	}
-	
-	
 	/****************************************************************************
 	 *           DOCUMENTATION
 	 ****************************************************************************/
@@ -275,12 +278,43 @@ public class XSDAnnotationsStructure {
 	/****************************************************************************
 	 *           WRITE ACCESS
 	 ****************************************************************************/
-	public boolean setWriteAccesses(ArrayList<String> roles) {
-		removeAppInfos("X_Write");
-		for (Iterator iter = roles.iterator(); iter.hasNext(); ) {
-			String role = (String) iter.next();
-			addAppInfo("X_Write", role);
+	public boolean setAccessRole(ArrayList<String> roles, boolean recursive, IStructuredContentProvider provider, String roleName)
+	{
+		if (recursive) {
+			ArrayList<Object> objList = new ArrayList<Object>();
+			Object[] objs = Util.getAllObject(declaration, objList, provider);
+			
+			for (Object obj : objs) {
+				if (obj instanceof XSDAnnotation
+						|| obj instanceof XSDElementDeclaration
+						|| obj instanceof XSDParticle) {
+					XSDAnnotationsStructure annotion = new XSDAnnotationsStructure(
+							(XSDComponent) obj);
+					annotion.removeAppInfos(roleName);  //X_Write
+					for (Iterator iter = roles.iterator(); iter.hasNext();) {
+						String role = (String) iter.next();
+						annotion.addAppInfo(roleName, role);
+					}
+				}
+
+			}
+			
+			return setAccessRole(roles, roleName);
 		}
+		else {
+			return setAccessRole(roles, roleName);
+		}
+	}
+
+	
+	private boolean setAccessRole(ArrayList<String> roles, String roleName)
+	{
+		removeAppInfos(roleName);  //X_Write   X_Hide
+		for (Iterator iter = roles.iterator(); iter.hasNext();) {
+			String role = (String) iter.next();
+			addAppInfo(roleName, role);
+		}
+		
 		hasChanged = true;
 		return true;
 	}
@@ -305,15 +339,7 @@ public class XSDAnnotationsStructure {
 	/****************************************************************************
 	 *           HIDDEN ACCESSES
 	 ****************************************************************************/
-	public boolean setHiddenAccesses(ArrayList<String> roles) {
-		removeAppInfos("X_Hide");
-		for (Iterator iter = roles.iterator(); iter.hasNext(); ) {
-			String role = (String) iter.next();
-			addAppInfo("X_Hide", role);
-		}
-		hasChanged = true;
-		return true;
-	}
+	
 	
 	public boolean setHiddenAccess(int num, String role) {
 		TreeMap< String, String> infos = getHiddenAccesses();
