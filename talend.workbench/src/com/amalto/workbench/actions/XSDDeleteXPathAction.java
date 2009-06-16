@@ -9,8 +9,9 @@ import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.utils.EImage;
+import com.amalto.workbench.utils.ImageCache;
 
 public class XSDDeleteXPathAction extends Action{
 
@@ -20,7 +21,7 @@ public class XSDDeleteXPathAction extends Action{
 	public XSDDeleteXPathAction(DataModelMainPage page) {
 		super();
 		this.page = page;
-		setImageDescriptor(AmaltoWorbenchPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/delete_obj.gif"));
+		setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
 		setText("Delete Field");
 		setToolTipText("Delete a Field");
 	}
@@ -35,7 +36,7 @@ public class XSDDeleteXPathAction extends Action{
 	
 	public void run() {
 		try {
-			super.run();
+			
             // xsdPath is to support the multiple delete action on key press,
 			// which each delete action on xpath must be explicit passed a xsd path to
 			// delete

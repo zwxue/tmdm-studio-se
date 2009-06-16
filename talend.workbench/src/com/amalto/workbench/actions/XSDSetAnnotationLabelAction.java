@@ -36,7 +36,7 @@ public class XSDSetAnnotationLabelAction extends Action{
 	
 	public void run() {
 		try {
-			super.run();
+			
             schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
             IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
             	

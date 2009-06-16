@@ -3,6 +3,7 @@ package com.amalto.workbench.actions;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
@@ -21,23 +22,24 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 import com.amalto.workbench.dialogs.NewConceptOrElementDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
+import com.amalto.workbench.utils.EImage;
+import com.amalto.workbench.utils.ImageCache;
 
-public class XSDNewElementAction extends Action implements SelectionListener{
+public class XSDNewElementAction extends UndoAction implements SelectionListener{
 
-	protected DataModelMainPage page = null;
+	//protected DataModelMainPage page = null;
 	protected XSDSchema schema = null;
 	
 	public XSDNewElementAction(DataModelMainPage page) {
-		super();
-		this.page = page;
-		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/add_obj.gif"));
+		super(page);
+		//this.page = page;
+		setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
 		setText("New Element");
 		setToolTipText("Create a new Element");
 	}
 	
-	public void run() {
-		try {
-			super.run();
+	public void doAction() {
+		try {			
             schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
             
 			ArrayList customTypes = new ArrayList();
@@ -97,7 +99,7 @@ public class XSDNewElementAction extends Action implements SelectionListener{
        		decl.updateElement();
        		
        		page.getTreeViewer().refresh(true);
-       		page.markDirty();
+       		//page.markDirty();
        		
        		Action changeAction = null;
        		if (dlg.isComplexType()) {
@@ -113,5 +115,11 @@ public class XSDNewElementAction extends Action implements SelectionListener{
 			changeAction.run();
 		}
 	}
-
+	
+	@Override
+	protected IStatus undo() {
+		//FIXME
+		//new XSDDeleteElementAction(page).run();
+		return super.undo();
+	}
 }

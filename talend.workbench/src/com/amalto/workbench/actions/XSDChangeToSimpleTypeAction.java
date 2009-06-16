@@ -63,7 +63,7 @@ public class XSDChangeToSimpleTypeAction extends Action implements SelectionList
 	
 	public void run() {
 		try {
-			super.run();
+			
 			schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
 			XSDElementDeclaration decl = null;
 			IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();

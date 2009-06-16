@@ -16,6 +16,8 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.utils.EImage;
+import com.amalto.workbench.utils.ImageCache;
 
 public class XSDNewXPathAction extends Action{
 
@@ -25,14 +27,14 @@ public class XSDNewXPathAction extends Action{
 	public XSDNewXPathAction(DataModelMainPage page) {
 		super();
 		this.page = page;
-		setImageDescriptor(AmaltoWorbenchPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/add_obj.gif"));
+		setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
 		setText("New Field");
 		setToolTipText("Create a new Field");
 	}
 	
 	public void run() {
 		try {
-			super.run();
+			
 
             int index = 0;
             IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();

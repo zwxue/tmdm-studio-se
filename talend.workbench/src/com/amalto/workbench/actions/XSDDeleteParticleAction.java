@@ -11,8 +11,9 @@ import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTypeDefinition;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.utils.EImage;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 
@@ -24,7 +25,7 @@ public class XSDDeleteParticleAction extends Action{
 	public XSDDeleteParticleAction(DataModelMainPage page) {
 		super();
 		this.page = page;
-		setImageDescriptor(AmaltoWorbenchPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/delete_obj.gif"));
+		setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
 		setText("Delete Element");
 		setToolTipText("Delete a Business Elementt");
 	}
@@ -40,7 +41,7 @@ public class XSDDeleteParticleAction extends Action{
 	
 	public void run() {
 		try {
-			super.run();
+			
             // xsdPartle is to support the multiple delete action on key press,
 			// which each delete action on particle must be explicit passed a xsd particle to
 			// delete

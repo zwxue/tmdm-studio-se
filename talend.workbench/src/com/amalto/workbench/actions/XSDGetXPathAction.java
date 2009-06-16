@@ -13,8 +13,9 @@ import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDTerm;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.utils.EImage;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 
 public class XSDGetXPathAction extends Action{
@@ -24,14 +25,14 @@ public class XSDGetXPathAction extends Action{
 	public XSDGetXPathAction(DataModelMainPage page) {
 		super();
 		this.page = page;
-		setImageDescriptor(AmaltoWorbenchPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/xpath.gif"));
+		setImageDescriptor(ImageCache.getImage(EImage.XPATH.getPath()));
 		setText("Copy XPath");
 		setToolTipText("Copy the XPath");
 	}
 	
 	public void run() {
 		try {
-			super.run();
+			
             IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
             XSDParticle particle = (XSDParticle) selection.getFirstElement();
             XSDTerm term = particle.getTerm();

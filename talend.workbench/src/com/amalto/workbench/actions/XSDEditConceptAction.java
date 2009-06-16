@@ -39,7 +39,7 @@ public class XSDEditConceptAction extends Action{
 	
 	public void run() {
 		try {
-			super.run();
+			
             schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
             ISelection selection = page.getTreeViewer().getSelection();
             XSDElementDeclaration decl = (XSDElementDeclaration)((IStructuredSelection)selection).getFirstElement();
