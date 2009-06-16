@@ -768,9 +768,14 @@ public class ItemsBrowserDWR {
 	        	return "OK - But no update report";
 	        }
 		}
-		catch(Exception e){
-			return "ERROR";
-		}   
+		 catch (RemoteException e) {
+	    	throw new RuntimeException(e.getLocalizedMessage());
+	    } catch (Exception e) {
+	    	if (e.getCause()==null)
+	    		throw new RuntimeException(e.getClass().getName()+": "+e.getLocalizedMessage());
+	    	else
+	    		throw new RuntimeException(e.getCause().getClass().getName()+": "+e.getCause().getLocalizedMessage());
+	    }    	
 	}
 	/**
 	 * create an "empty" item from scratch, set every text node to empty
