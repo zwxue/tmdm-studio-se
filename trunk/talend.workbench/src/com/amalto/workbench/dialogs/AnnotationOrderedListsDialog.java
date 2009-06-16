@@ -357,17 +357,19 @@ public class AnnotationOrderedListsDialog extends Dialog {
 				&& actionType != AnnotationOrderedListsDialog.AnnotationTargetSystems_ActionType) {
 			checkBox = new Button(composite, SWT.CHECK);
 			checkBox.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
-					true, 1, 1));
+					true, 2, 1));
 			checkBox.addSelectionListener(new SelectionListener() {
 	        	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
 	        	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 	        		recursive = checkBox.getSelection();
 	        	};
 	        });
-			Label label = new Label(composite, SWT.LEFT);
-			label.setText("set role recursively");
-			label.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true,
-					1, 1));
+			checkBox.setSelection(true);
+			checkBox.setText("set role recursively");
+//			Label label = new Label(composite, SWT.LEFT);
+//			label.setText("set role recursively");
+//			label.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true,
+//					1, 1));
 		}
 
 	    return composite;
