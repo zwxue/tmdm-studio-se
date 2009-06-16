@@ -45,7 +45,7 @@ public class XSDEditParticleAction extends Action implements SelectionListener{
 	
 	public void run() {
 		try {
-			super.run();
+			
             
             IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
             XSDParticle selParticle = (XSDParticle) selection.getFirstElement();

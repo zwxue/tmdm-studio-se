@@ -70,7 +70,7 @@ public class XSDChangeToComplexTypeAction extends Action implements SelectionLis
 		
 		
 		try {
-			super.run();
+			
             schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
             
             IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();

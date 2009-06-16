@@ -25,6 +25,8 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.FacetsListInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.utils.EImage;
+import com.amalto.workbench.utils.ImageCache;
 
 public class XSDEditFacetAction extends Action{
 
@@ -41,7 +43,7 @@ public class XSDEditFacetAction extends Action{
 		super();
 		this.page = page;
 		this.facetName = facetName;
-		setImageDescriptor(AmaltoWorbenchPlugin.imageDescriptorFromPlugin("com.amalto.workbench", "icons/facet.gif"));
+		setImageDescriptor(ImageCache.getImage(EImage.FACET.getPath()));
 		setText("Edit "+facetName);
 		setToolTipText("Edit the Facet "+facetName);
 	}
@@ -51,8 +53,7 @@ public class XSDEditFacetAction extends Action{
 			
 			ISelection selection = page.getTreeViewer().getSelection();
 			std = (XSDSimpleTypeDefinition)((IStructuredSelection)selection).getFirstElement();
-			
-			super.run();
+						
             if (facetName.equals("pattern")) {
             	editPattern();
             } else if (facetName.equals("enumeration")) {

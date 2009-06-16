@@ -32,7 +32,7 @@ public class XSDEditIdentityConstraintAction extends Action{
 	
 	public void run() {
 		try {
-			super.run();
+			
             ISelection selection = page.getTreeViewer().getSelection();
             constraint = (XSDIdentityConstraintDefinition)((IStructuredSelection)selection).getFirstElement();
             String oldName = constraint.getName();
