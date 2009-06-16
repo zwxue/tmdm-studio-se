@@ -2,7 +2,6 @@ package com.amalto.webapp.v3.itemstrash.dwr;
 
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -18,7 +17,6 @@ import com.amalto.webapp.util.webservices.WSItemPK;
 import com.amalto.webapp.util.webservices.WSLoadDroppedItem;
 import com.amalto.webapp.util.webservices.WSRecoverDroppedItem;
 import com.amalto.webapp.util.webservices.WSRemoveDroppedItem;
-import com.amalto.webapp.v3.itemstrash.bean.ItemsTrashInstances;
 import com.amalto.webapp.v3.itemstrash.bean.ItemsTrashItem;
 
 
@@ -30,9 +28,6 @@ public class ItemsTrashDWR {
 		super();
 	}
 
-	public boolean saveSyncItem(ItemsTrashInstances item)throws Exception{
-		return true;
-	}
 	
 //	Date date =new Date(2009,6,4);
 //	ItemsTrashInstances iti = new ItemsTrashInstances();
