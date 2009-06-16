@@ -159,8 +159,11 @@ amalto.ItemsTrash.ItemsTrash=function(){
 				    					width:30,
 				    					//disabled:true,
 				    					listeners: {
-						                	'specialkey': function(a, e) {
-									            if(e.getKey() == e.ENTER) {
+						                	'specialkey': function(a, ee) {
+//						                		alert("test "+ee.getKey());
+						                		
+									            if(ee.getKey() == ee.ENTER) {
+									            	
 													showTrashItems();													
 									            } 
 											}
