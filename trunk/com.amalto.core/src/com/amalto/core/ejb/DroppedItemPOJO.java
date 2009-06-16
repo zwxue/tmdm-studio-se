@@ -14,6 +14,7 @@ import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.Unmarshaller;
 import org.exolab.castor.xml.ValidationException;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -269,14 +270,24 @@ public class DroppedItemPOJO implements Serializable{
                 }
                 
                 //validate
-				ItemPOJO itemPOJO=ItemPOJO.parse(bakDoc);
+                String targetDomXml=Util.nodeToString(targetDom);
+				ItemPOJO itemPOJO=ItemPOJO.parse(targetDomXml);
 				if(itemPOJO.getDataModelName()!=null){
 					DataModelPOJO dataModelPOJO=ObjectPOJO.load(itemPOJO.getDataModelRevision(), DataModelPOJO.class, new DataModelPOJOPK(itemPOJO.getDataModelName()));
-					if(dataModelPOJO!=null)Util.validate(targetDom.getDocumentElement(), dataModelPOJO.getSchema());
+					
+					if(dataModelPOJO!=null){
+						Element projection=null;
+						try {
+							projection = itemPOJO.getProjection();
+						} catch (Exception e) {
+							throw new XtentisException("\nThe recovered item can not be empty!");
+						}
+						Util.validate(projection, dataModelPOJO.getSchema());
+					}
 				}
                 
                 //server.putDocumentFromDOM(targetDom.getDocumentElement(), refItemPOJOPK.getUniqueID(), refItemPOJOPK.getDataClusterPOJOPK().getUniqueId(), sourceItemRevision);
-                server.putDocumentFromString(Util.nodeToString(targetDom), refItemPOJOPK.getUniqueID(), refItemPOJOPK.getDataClusterPOJOPK().getUniqueId(), sourceItemRevision);//need set indent-number
+                server.putDocumentFromString(targetDomXml, refItemPOJOPK.getUniqueID(), refItemPOJOPK.getDataClusterPOJOPK().getUniqueId(), sourceItemRevision);//need set indent-number
         	}
         	//delete dropped item
         	long res = server.deleteDocument(
