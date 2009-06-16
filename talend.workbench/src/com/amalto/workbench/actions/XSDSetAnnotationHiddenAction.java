@@ -30,7 +30,7 @@ public class XSDSetAnnotationHiddenAction extends Action{
 		super();
 		this.page = page;
 		setImageDescriptor(ImageCache.getImage( "icons/annotation.gif"));
-		setText("Set the Hidden Accesses");
+		setText("Set the Roles with Hidden Accesses");
 		setToolTipText("Set the Roles That Cannot See This Filed");
 	}
 	
