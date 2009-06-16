@@ -52,8 +52,6 @@ public class ItemsTrashDWR {
 				item = item.WS2POJO(wsitem);
 				li.add(item);
 			}
-//			lr.setData(li.toArray());
-//			lr.setTotalSize(li.size());
 			List<ItemsTrashItem> sublist=li;
 			if(li.size()>0){
 				start=start<li.size()?start:li.size()-1;
