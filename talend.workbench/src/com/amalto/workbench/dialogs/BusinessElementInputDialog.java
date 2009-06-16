@@ -27,7 +27,7 @@ public class BusinessElementInputDialog extends Dialog {
 
 	private String elementName="";
 	private String refName="";
-	private int minOccurs=1;
+	private int minOccurs=0;
 	private int maxOccurs=1;
 	
 	private SelectionListener caller = null;
@@ -38,7 +38,7 @@ public class BusinessElementInputDialog extends Dialog {
 	 * @param parentShell
 	 */
 	public BusinessElementInputDialog(SelectionListener caller, Shell parentShell, String title) {
-		this(caller,parentShell,title,"","",new ArrayList<String>(),1,1);
+		this(caller,parentShell,title,"","",new ArrayList<String>(),0,1);
 	}
 
 	/**
