@@ -575,7 +575,16 @@ public class ItemPOJO implements Serializable{
 				ItemPOJO itemPOJO=parse(leftSourceDoc);
 				if(itemPOJO.getDataModelName()!=null){
 					DataModelPOJO dataModelPOJO=ObjectPOJO.load(itemPOJO.getDataModelRevision(), DataModelPOJO.class, new DataModelPOJOPK(itemPOJO.getDataModelName()));
-					if(dataModelPOJO!=null)Util.validate(sourceDoc.getDocumentElement(), dataModelPOJO.getSchema());
+					if(dataModelPOJO!=null){
+						Element projection=null;
+						try {
+							projection = itemPOJO.getProjection();
+						} catch (Exception e) {
+							throw new XtentisException("\nThe remaining item can not be empty!");
+						}
+						
+						if(projection!=null)Util.validate(itemPOJO.getProjection(), dataModelPOJO.getSchema());
+					}
 				}
 				
 			}
