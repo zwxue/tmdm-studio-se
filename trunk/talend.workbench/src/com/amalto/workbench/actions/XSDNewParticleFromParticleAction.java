@@ -78,7 +78,7 @@ public class XSDNewParticleFromParticleAction extends Action implements Selectio
 			}
 			elementDeclarations.add("");
 			
-            dialog = new BusinessElementInputDialog(this,page.getSite().getShell(),"Add a new Business Element", null, null, elementDeclarations, 1, 1);
+            dialog = new BusinessElementInputDialog(this,page.getSite().getShell(),"Add a new Business Element", null, null, elementDeclarations, 0, 1);
             dialog.setBlockOnOpen(true);
        		int ret = dialog.open();
        		if (ret == Dialog.CANCEL) return;
