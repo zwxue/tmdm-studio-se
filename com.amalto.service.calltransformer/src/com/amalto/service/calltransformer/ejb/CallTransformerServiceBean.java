@@ -112,11 +112,24 @@ public class CallTransformerServiceBean extends ServiceCtrlBean  implements Sess
 	public String getDescription(String twoLetterLanguageCode) throws XtentisException {
 		if ("fr".matches(twoLetterLanguageCode.toLowerCase()))
 			return "Service qui appelle des transformateurs";
+		
 		return "The service call transformers";
 	}
 
 
-
+    /**
+     * @author achen
+     * @throws XtentisException
+     * @ejb.interface-method view-type = "both"
+     * @ejb.facade-method 
+     */
+    public  String getDocumentation(String twoLettersLanguageCode) throws XtentisException{
+    	return "This service takes a single parameter: \n"+
+    	"transformer: the name of the transformer. \n\n" +
+    	"The transformer should expect to receive the content of the Item sent to the transformer in the DEFAULT variable \n"+
+    	"with a content-type of text/xml. \n\n"+
+    	"Example: transformer=tiscall_test";
+    }
 	/* (non-Javadoc)
 	 * @see com.amalto.core.ejb.ServiceCtrlBean#getStatus()
 	 */

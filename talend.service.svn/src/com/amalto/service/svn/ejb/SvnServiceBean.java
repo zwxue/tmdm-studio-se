@@ -406,6 +406,16 @@ public class SvnServiceBean extends VersioningServiceCtrlBean implements Session
     	return configuration;
     }
 
+    /**
+     * @author achen
+     * @throws XtentisException
+     * @ejb.interface-method view-type = "both"
+     * @ejb.facade-method 
+     */
+    public  String getDocumentation(String twoLettersLanguageCode) throws XtentisException{
+    	return "N/A";
+    }
+    
 	/* (non-Javadoc)
 	 * @see com.amalto.core.ejb.ServiceCtrlBean#getConfiguration(java.lang.String)
 	 */

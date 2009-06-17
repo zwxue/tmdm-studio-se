@@ -5,7 +5,7 @@ package com.amalto.service.dumptoconsole.ejb.local;
 
 /**
  * Utility class for DumpToConsole.
- * @xdoclet-generated at 17-04-09
+ * @xdoclet-generated at 17-06-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
