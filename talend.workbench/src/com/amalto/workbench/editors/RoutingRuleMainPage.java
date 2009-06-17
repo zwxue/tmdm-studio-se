@@ -484,42 +484,48 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			return;
 		}
   		markDirty();
-		WSRoutingRuleExpression rre = new WSRoutingRuleExpression();
-		if(!"".equals(this.xpathWidget.getText())&&!this.xpathWidget.getText().equals(null))
-			rre.setXpath(this.xpathWidget.getText());
-		else
-			rre.setXpath("");
-		this.xpathWidget.setText("");
-
-		WSRoutingRuleOperator operator=null;
-		if (RoutingRuleMainPage.this.operatorCombo.getText().equals("Contains")) operator = WSRoutingRuleOperator.CONTAINS;
-		else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("Matches")) operator = WSRoutingRuleOperator.MATCHES;
-		else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("=")) operator = WSRoutingRuleOperator.EQUALS;
-		else if (RoutingRuleMainPage.this.operatorCombo.getText().equals(">")) operator = WSRoutingRuleOperator.GREATER_THAN;
-		else if (RoutingRuleMainPage.this.operatorCombo.getText().equals(">=")) operator = WSRoutingRuleOperator.GREATER_THAN_OR_EQUAL;
-		else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("<")) operator = WSRoutingRuleOperator.LOWER_THAN;
-		else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("<=")) operator = WSRoutingRuleOperator.LOWER_THAN_OR_EQUAL;
-		else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("!=")) operator = WSRoutingRuleOperator.NOT_EQUALS;
-		else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("Starts With")) operator = WSRoutingRuleOperator.STARTSWITH;
-		else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("Is Null")) operator = WSRoutingRuleOperator.IS_NULL;
-		else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("Is Not Null")) operator = WSRoutingRuleOperator.IS_NOT_NULL;
-		rre.setWsOperator(operator);
-		if (
-				(	operator.equals(WSRoutingRuleOperator.IS_NULL) || 
-					operator.equals(WSRoutingRuleOperator.IS_NOT_NULL)
-				)
-		) 
-			rre.setValue("");
-		else
-			rre.setValue(rightValueText.getText());
-
+		
+//		if(!"".equals(this.xpathWidget.getText())&&!this.xpathWidget.getText().equals(null))
+//			rre.setXpath(this.xpathWidget.getText());
 		WSRoutingRule wsObject = (WSRoutingRule)RoutingRuleMainPage.this.getXObject().getWsObject();
 		ArrayList<WSRoutingRuleExpression> wcList = new ArrayList<WSRoutingRuleExpression>(Arrays.asList(wsObject.getWsRoutingRuleExpressions()));
-		wcList.add(rre);
-		wsObject.setWsRoutingRuleExpressions(wcList.toArray(new WSRoutingRuleExpression[wcList.size()]));
-		RoutingRuleMainPage.this.routingExpressionsViewer.refresh();
-		this.rightValueText.setText("");
-	}
+		String[] items = this.xpathWidget.getText().split("\\&");
+		
+			for(int i = 0;i<items.length;i++){
+				WSRoutingRuleExpression rre = new WSRoutingRuleExpression();
+				rre.setXpath(items[i]);
+				this.xpathWidget.setText("");
+
+				WSRoutingRuleOperator operator=null;
+				if (RoutingRuleMainPage.this.operatorCombo.getText().equals("Contains")) operator = WSRoutingRuleOperator.CONTAINS;
+				else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("Matches")) operator = WSRoutingRuleOperator.MATCHES;
+				else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("=")) operator = WSRoutingRuleOperator.EQUALS;
+				else if (RoutingRuleMainPage.this.operatorCombo.getText().equals(">")) operator = WSRoutingRuleOperator.GREATER_THAN;
+				else if (RoutingRuleMainPage.this.operatorCombo.getText().equals(">=")) operator = WSRoutingRuleOperator.GREATER_THAN_OR_EQUAL;
+				else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("<")) operator = WSRoutingRuleOperator.LOWER_THAN;
+				else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("<=")) operator = WSRoutingRuleOperator.LOWER_THAN_OR_EQUAL;
+				else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("!=")) operator = WSRoutingRuleOperator.NOT_EQUALS;
+				else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("Starts With")) operator = WSRoutingRuleOperator.STARTSWITH;
+				else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("Is Null")) operator = WSRoutingRuleOperator.IS_NULL;
+				else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("Is Not Null")) operator = WSRoutingRuleOperator.IS_NOT_NULL;
+				rre.setWsOperator(operator);
+				if (
+						(	operator.equals(WSRoutingRuleOperator.IS_NULL) || 
+							operator.equals(WSRoutingRuleOperator.IS_NOT_NULL)
+						)
+				) 
+					rre.setValue("");
+				else
+					rre.setValue(rightValueText.getText());
+
+				
+				wcList.add(rre);
+				
+			}//for
+			wsObject.setWsRoutingRuleExpressions(wcList.toArray(new WSRoutingRuleExpression[wcList.size()]));
+			RoutingRuleMainPage.this.routingExpressionsViewer.refresh();
+			this.rightValueText.setText("");
+	}//addRoutingRuleExpression
 
 		
 	protected void createActions() {
