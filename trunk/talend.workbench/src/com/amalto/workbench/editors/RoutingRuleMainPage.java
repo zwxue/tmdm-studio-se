@@ -207,7 +207,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 						doc=document.getDocument();
 						desc=document.getDescription();
 					} catch (Exception e1) {
-						doc = "There is no document for this service";
+						doc = "N/A";
 					}
 					finally
 					{
@@ -227,7 +227,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
         				public void handleEvent(Event event) {dialog.close();}
         			});
         			dialog.create();
-        			dialog.getShell().setText("Service Details");
+        			dialog.getShell().setText(serviceNameCombo.getText()+" Service Details");
         			dialog.setBlockOnOpen(true);
         			dialog.open();
             	}
