@@ -79,8 +79,8 @@ amalto.ItemsTrash.ItemsTrash=function(){
 		{header: 'conceptName',   sortable: true,dataIndex: 'conceptName'},
 		{header: 'ids',  sortable: true,dataIndex: 'ids'},
 		{header: 'partPath', sortable: true,dataIndex: 'partPath'},
-		{header: 'insertionUserName', sortable: true,dataIndex: 'insertionUserName'},
-		{header: 'insertionTime',  sortable: true,dataIndex: 'insertionTime'},
+		{header: 'UserName', sortable: true,dataIndex: 'insertionUserName'},
+		{header: 'Date',  sortable: true,dataIndex: 'insertionTime'},
 		{header: 'delete', sortable: false, renderer:deleteItem},
 		{header: 'restore', sortable: false, renderer:restore}
 	    ];
@@ -127,6 +127,9 @@ amalto.ItemsTrash.ItemsTrash=function(){
 						new Ext.form.TextField({
 							id:'trash-criteria',
 							emptyText:'*',
+							hideLabel:true,
+							blankText:'blankText',
+							fieldLabel:'fieldLabel',
 							listeners: {
 			                	'specialkey': function(a, e) {
 						            if(e.getKey() == e.ENTER) {
@@ -134,9 +137,11 @@ amalto.ItemsTrash.ItemsTrash=function(){
 						            } 
 								}
 			                }
+			                
 						}),
 						new Ext.Toolbar.Button({
 							text:'search',
+							tooltip:'first four properties can be searched',
 							handler:showTrashItems
 						})
 					],
@@ -188,8 +193,6 @@ amalto.ItemsTrash.ItemsTrash=function(){
          });
         });
            	
-   	
-               
 		store.load({params:{start:0, limit:pageSize}});
     };
     return {
