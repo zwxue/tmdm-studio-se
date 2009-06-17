@@ -10,6 +10,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -18,6 +19,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -66,66 +68,97 @@ public class XpathSelectDialog extends Dialog {
 	protected IWorkbenchPartSite site ;
 	protected Panel panel;
 	protected Text xpathText;
-	public XpathSelectDialog(Shell parentShell,TreeParent parent,String title,IWorkbenchPartSite site) {
+	protected Button add;
+	protected SelectionListener listener;
+	private boolean isMulti=true;
+	public XpathSelectDialog(Shell parentShell,TreeParent parent,String title,IWorkbenchPartSite site,boolean isMulti) {
 		// TODO Auto-generated constructor stub
 		super(parentShell);
 		this.title = title;
 		this.parent = parent;
 		this.site = site;
-	
+		this.isMulti=isMulti;
 	}
 	
 	private String xpath="";
+	private String totalXpath="";
 	
 	public String getXpath(){
 		return xpath;
 	}
 
 	private  String getXpath(StructuredSelection sel){
+//		getOKButton().setText("Add");
 		getOKButton().setEnabled(false);
+//		getOKButton().setText("ADD");
 		XSDParticle particle = null;
+		String path ="";
+		totalXpath="";
 		XSDElementDeclaration xSDElementDeclaration = null;
-		
+		Object next =null;
         IStructuredSelection selection = sel;//(IStructuredSelection)domViewer.getSelection();
-        
-        if(selection.getFirstElement() instanceof XSDElementDeclaration)
-        	xSDElementDeclaration  = (XSDElementDeclaration) selection.getFirstElement();
-        
-        if(selection.getFirstElement() instanceof XSDParticle)
-        	particle  = (XSDParticle) selection.getFirstElement();
-        
-        if(particle==null&& xSDElementDeclaration==null){
-        	xpathText.setText("");
-        	xpath = "";
-        	return xpath;
+//        selection.size();
+        next= selection.getFirstElement();
+//        for(Iterator it = selection.iterator();it.hasNext();){
+//        	next = it.next();
+        	if(next instanceof XSDElementDeclaration) 
+        		xSDElementDeclaration  = (XSDElementDeclaration) next;
+                
+            if(next instanceof XSDParticle)
+               particle  = (XSDParticle) next;
+            
+            if(particle==null&& xSDElementDeclaration==null){
+            	xpathText.setText("");
+            	xpath = " ";
+            	return xpath;
+            }
+            XSDTerm term=null;
+            if(!(particle==null))
+            	term = particle.getTerm();
+            
+            TreeItem item;
+            TreeItem[] items = domViewer.getTree().getSelection();
+            for(int i=0;i<items.length;i++){
+            	item = items[i];
+            	XSDConcreteComponent component = (XSDConcreteComponent)item.getData();
+            	if(!(component instanceof XSDParticle)&&!(component instanceof XSDElementDeclaration))
+            		continue;
+            	do {
+                	 component = (XSDConcreteComponent)item.getData();
+                	
+//                	if(component instanceof XSDElementDeclaration){
+                		
+//                		path = ((XSDElementDeclaration)component).getName()+path;
+//                		 getOKButton().setEnabled(true);
+////                		return path;
+//                		 item = item.getParentItem();
+//                		 continue;
+//                	}
+                	
+                	
+                	if (component instanceof XSDParticle) {
+                		getOKButton().setEnabled(true);
+                		if (((XSDParticle)component).getTerm() instanceof XSDElementDeclaration){
+                			path = "/"+((XSDElementDeclaration)((XSDParticle)component).getTerm()).getName();
+                		}
+                	} else if (component instanceof XSDElementDeclaration) {
+                			path=((XSDElementDeclaration)component).getName()+path;
+                			getOKButton().setEnabled(true);
+                	}
+                	
+                	
+                	item = item.getParentItem();
+                	
+                } while (item!=null);
+            	if(i==0)
+            		totalXpath = path;
+            	else
+            		totalXpath +="&"+path;
+            	path="";
+            }//for(i=0
+//    	}//for(Iterator
+           return totalXpath;     
         }
-        XSDTerm term=null;
-        if(!(particle==null))
-        	term = particle.getTerm();
-        String path ="";
-        TreeItem item = domViewer.getTree().getSelection()[0];
-        do {
-        	XSDConcreteComponent component = (XSDConcreteComponent)item.getData();
-        	
-        	if(component instanceof XSDElementDeclaration){
-        		path = ((XSDElementDeclaration)component).getName()+path;
-        		 getOKButton().setEnabled(true);
-        		return path;
-        	}
-        	
-        	if (component instanceof XSDParticle) {
-        		getOKButton().setEnabled(true);
-        		if (((XSDParticle)component).getTerm() instanceof XSDElementDeclaration)
-        			path = "/"+((XSDElementDeclaration)((XSDParticle)component).getTerm()).getName()+path;
-        	} else if (component instanceof XSDElementDeclaration) {
-        			path=((XSDElementDeclaration)component).getName()+path;
-        	}
-        		
-        	item = item.getParentItem();
-        } while (item!=null);
-        
-        return path;
-	}
 		
 	protected Control createDialogArea (Composite parent) {
 		
@@ -208,13 +241,20 @@ public class XpathSelectDialog extends Dialog {
 		  xpathText = new Text(composite,SWT.BORDER);
 		  xpathText.setEditable(false);
 		  xpathText.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,1,1));
-		  domViewer = new TreeViewer(composite, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL|SWT.BORDER);
+		  if(isMulti){
+			 domViewer = new TreeViewer(composite, SWT.H_SCROLL |SWT.MULTI| SWT.V_SCROLL|SWT.BORDER); 
+		  }
+		  else{
+			  domViewer = new TreeViewer(composite, SWT.H_SCROLL | SWT.V_SCROLL|SWT.BORDER);
+		  }
+		 
           domViewer.getControl().setLayoutData(    
                   new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
           );
           ((GridData)domViewer.getControl().getLayoutData()).heightHint=300;
           ((GridData)domViewer.getControl().getLayoutData()).widthHint=200;
-         
+//          add = createButton(composite, 0, "Add", true);
+//          buttonPressed(3);
 		return composite;
 	}
 	
@@ -278,5 +318,15 @@ public class XpathSelectDialog extends Dialog {
 		domViewer.setInput(site);	
 	
 	  }
+	  /**
+	   * reload this method to set the text of OKButton Add
+	   */
+	  protected Control createButtonBar(Composite parent) {
+
+	         Control btnBar = super.createButtonBar(parent);
+	         getButton(IDialogConstants.OK_ID).setText("Add");
+	         return btnBar;
+
+	     }
 
 }

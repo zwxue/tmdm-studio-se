@@ -137,7 +137,8 @@ public class AnnotationOrderedListsDialog extends Dialog {
 					XpathSelectDialog dlg = new XpathSelectDialog(
 							parentPage.getSite().getShell(),
 							xObject.getParent(),"Select one Xpath ...",
-							parentPage.getSite()
+							parentPage.getSite(),
+							false
 					);
 			        dlg.setBlockOnOpen(true);
 					dlg.open();
