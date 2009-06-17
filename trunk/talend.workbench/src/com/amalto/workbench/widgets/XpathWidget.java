@@ -37,7 +37,7 @@ public class XpathWidget implements  SelectionListener{
 		xpathAntionHolder.setLayout(new GridLayout(2, false));
 		this.isButtonLeft = isButtonLeft;
 
-		dlgTitle = "Select one Xpath ...";
+		dlgTitle = "Select Xpath ...";
 		accommodation = dialog;
 		ModifyListener listenr=new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
