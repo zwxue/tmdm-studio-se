@@ -137,8 +137,11 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 
 				public void widgetSelected(
 						org.eclipse.swt.events.SelectionEvent e) {
-					if (!"".equals(ViewMainPage.this.xpathWidget0.getText()))
-						ViewMainPage.this.viewableBEsList.add(ViewMainPage.this.xpathWidget0.getText());
+					String[] items = ViewMainPage.this.xpathWidget0.getText().split("\\&");
+					for(int i=0;i<items.length;i++){
+						if (!"".equals(ViewMainPage.this.xpathWidget0.getText()))
+							ViewMainPage.this.viewableBEsList.add(items[i]);
+					}
 					ViewMainPage.this.xpathWidget0.setText("");
 					ViewMainPage.this.viewableBEsList.select(ViewMainPage.this.viewableBEsList.getItemCount() - 1);
 					ViewMainPage.this.viewableBEsList.forceFocus();
@@ -246,8 +249,13 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             addSBEButton.addSelectionListener(new SelectionListener() {
             	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
             	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-            	if(!"".equals(ViewMainPage.this.xpathWidget1.getText()))
-            		 ViewMainPage.this.searchableBEsList.add(ViewMainPage.this.xpathWidget1.getText());
+            		String[] items = ViewMainPage.this.xpathWidget1.getText().split("\\&");
+					for(int i=0;i<items.length;i++){
+						if (!"".equals(ViewMainPage.this.xpathWidget1.getText()))
+							ViewMainPage.this.searchableBEsList.add(items[i]);
+					}
+//            	if(!"".equals(ViewMainPage.this.xpathWidget1.getText()))
+//            		 ViewMainPage.this.searchableBEsList.add(ViewMainPage.this.xpathWidget1.getText());
             	ViewMainPage.this.xpathWidget1.setText("");
             		markDirty();
             	};
@@ -506,36 +514,71 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 			return;
 		}
   		markDirty();
-		WSWhereCondition wc = new WSWhereCondition();
+		
 //		wc.setLeftPath(ViewMainPage.this.leftText.getText());
-		if(!"".equals(ViewMainPage.this.xpathWidget2.getText()))
-				wc.setLeftPath(ViewMainPage.this.xpathWidget2.getText());
-		ViewMainPage.this.xpathWidget2.setText("");
-		WSWhereOperator operator=null;
-		if (ViewMainPage.this.operatorCombo.getText().equals("Contains")) operator = WSWhereOperator.CONTAINS;
-		else if (ViewMainPage.this.operatorCombo.getText().equals("Contains Text Of")) operator = WSWhereOperator.JOIN;
-		else if (ViewMainPage.this.operatorCombo.getText().equals("=")) operator = WSWhereOperator.EQUALS;
-		else if (ViewMainPage.this.operatorCombo.getText().equals(">")) operator = WSWhereOperator.GREATER_THAN;
-		else if (ViewMainPage.this.operatorCombo.getText().equals(">=")) operator = WSWhereOperator.GREATER_THAN_OR_EQUAL;
-		else if (ViewMainPage.this.operatorCombo.getText().equals("<")) operator = WSWhereOperator.LOWER_THAN;
-		else if (ViewMainPage.this.operatorCombo.getText().equals("<=")) operator = WSWhereOperator.LOWER_THAN_OR_EQUAL;
-		else if (ViewMainPage.this.operatorCombo.getText().equals("!=")) operator = WSWhereOperator.NOT_EQUALS;
-		else if (ViewMainPage.this.operatorCombo.getText().equals("Starts With")) operator = WSWhereOperator.STARTSWITH;
-		else if (ViewMainPage.this.operatorCombo.getText().equals("Strict Contains")) operator = WSWhereOperator.STRICTCONTAINS;
-		wc.setOperator(operator);
-		wc.setRightValueOrPath(ViewMainPage.this.rightText.getText());
-		WSStringPredicate predicate = null;
-		if (ViewMainPage.this.predicateCombo.getText().equals("")) predicate = WSStringPredicate.NONE;
-		else if (ViewMainPage.this.predicateCombo.getText().equals("Or")) predicate = WSStringPredicate.OR;
-		if (ViewMainPage.this.predicateCombo.getText().equals("And")) predicate = WSStringPredicate.AND;
-		if (ViewMainPage.this.predicateCombo.getText().equals("Strict And")) predicate = WSStringPredicate.STRICTAND;
-		if (ViewMainPage.this.predicateCombo.getText().equals("Exactly")) predicate = WSStringPredicate.EXACTLY;
-		if (ViewMainPage.this.predicateCombo.getText().equals("Not")) predicate = WSStringPredicate.NOT;
-		wc.setStringPredicate(predicate);
-		WSView wsObject = (WSView)ViewMainPage.this.getXObject().getWsObject();
-		ArrayList<WSWhereCondition> wcList = new ArrayList<WSWhereCondition>(Arrays.asList(wsObject.getWhereConditions()));
-		wcList.add(wc);
-		wsObject.setWhereConditions(wcList.toArray(new WSWhereCondition[wcList.size()]));
+		
+		String[] items = ViewMainPage.this.xpathWidget2.getText().split("\\&");
+//		for(int i=0;i<items.length;i++){
+//			if (!"".equals(ViewMainPage.this.xpathWidget2.getText()))
+//				ViewMainPage.this.searchableBEsList.add(items[i]);
+//		}
+		WSView wsObject = (WSView) ViewMainPage.this.getXObject()
+		.getWsObject();
+		ArrayList<WSWhereCondition> wcList = new ArrayList<WSWhereCondition>(
+				Arrays.asList(wsObject.getWhereConditions()));
+		
+		for (int i = 0; i < items.length; i++) {
+			WSWhereCondition wc = new WSWhereCondition();
+			wc.setLeftPath(items[i]);
+			ViewMainPage.this.xpathWidget2.setText("");
+			WSWhereOperator operator = null;
+			if (ViewMainPage.this.operatorCombo.getText().equals("Contains"))
+				operator = WSWhereOperator.CONTAINS;
+			else if (ViewMainPage.this.operatorCombo.getText().equals(
+					"Contains Text Of"))
+				operator = WSWhereOperator.JOIN;
+			else if (ViewMainPage.this.operatorCombo.getText().equals("="))
+				operator = WSWhereOperator.EQUALS;
+			else if (ViewMainPage.this.operatorCombo.getText().equals(">"))
+				operator = WSWhereOperator.GREATER_THAN;
+			else if (ViewMainPage.this.operatorCombo.getText().equals(">="))
+				operator = WSWhereOperator.GREATER_THAN_OR_EQUAL;
+			else if (ViewMainPage.this.operatorCombo.getText().equals("<"))
+				operator = WSWhereOperator.LOWER_THAN;
+			else if (ViewMainPage.this.operatorCombo.getText().equals("<="))
+				operator = WSWhereOperator.LOWER_THAN_OR_EQUAL;
+			else if (ViewMainPage.this.operatorCombo.getText().equals("!="))
+				operator = WSWhereOperator.NOT_EQUALS;
+			else if (ViewMainPage.this.operatorCombo.getText().equals(
+					"Starts With"))
+				operator = WSWhereOperator.STARTSWITH;
+			else if (ViewMainPage.this.operatorCombo.getText().equals(
+					"Strict Contains"))
+				operator = WSWhereOperator.STRICTCONTAINS;
+			wc.setOperator(operator);
+			wc.setRightValueOrPath(ViewMainPage.this.rightText.getText());
+			WSStringPredicate predicate = null;
+			if (ViewMainPage.this.predicateCombo.getText().equals(""))
+				predicate = WSStringPredicate.NONE;
+			else if (ViewMainPage.this.predicateCombo.getText().equals("Or"))
+				predicate = WSStringPredicate.OR;
+			if (ViewMainPage.this.predicateCombo.getText().equals("And"))
+				predicate = WSStringPredicate.AND;
+			if (ViewMainPage.this.predicateCombo.getText().equals("Strict And"))
+				predicate = WSStringPredicate.STRICTAND;
+			if (ViewMainPage.this.predicateCombo.getText().equals("Exactly"))
+				predicate = WSStringPredicate.EXACTLY;
+			if (ViewMainPage.this.predicateCombo.getText().equals("Not"))
+				predicate = WSStringPredicate.NOT;
+			wc.setStringPredicate(predicate);
+			wcList.add(wc);
+			
+			
+		}// for
+//		if(!"".equals(ViewMainPage.this.xpathWidget2.getText()))
+//				wc.setLeftPath(ViewMainPage.this.xpathWidget2.getText());
+		wsObject.setWhereConditions(wcList
+				.toArray(new WSWhereCondition[wcList.size()]));
 		ViewMainPage.this.wcListViewer.refresh();
 		rightText.setText("");
 	}
