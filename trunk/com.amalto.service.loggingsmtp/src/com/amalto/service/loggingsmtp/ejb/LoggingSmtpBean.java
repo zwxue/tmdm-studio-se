@@ -133,9 +133,9 @@ public class LoggingSmtpBean extends ServiceCtrlBean  implements SessionBean {
      * @ejb.facade-method
      */
 	public String getDescription(String twoLetterLanguageCode) throws XtentisException {
-		if ("fr".matches(twoLetterLanguageCode.toLowerCase()))
-			return "Le service smtp";
-		return "The smtp service";
+
+		return "logging smtp service";
+		
 	}
 
     /**
@@ -519,7 +519,14 @@ public class LoggingSmtpBean extends ServiceCtrlBean  implements SessionBean {
      * @ejb.facade-method 
      */
     public  String getDocumentation(String twoLettersLanguageCode) throws XtentisException{
-    	return "There is two type parameters,\n\n" +
+    	return "This service sends Logging Event emails through the SMTP connector. \n"+
+    	"The diference with the SMTP service is that the Logging SMTP service only logs warnings \n"+
+    	"in case of error, to avoid infnite looping. \n\n"+
+
+    	"This service creates a default 'Logging Events to Smtp HTML Transformer' transformer \n"+
+    	"when it does not exist. This transformer provdes a default formatting. \n\n"+
+    	
+    	"There are two type parameters,\n\n" +
     			"One(Example) :\n"+
     			"from=b2box@customer.com&to=aiming_chen@hotmail.com&subjectprefix=MDM Logging Event" +"\n\n\n"+
     			"Two(Example) :\n"+

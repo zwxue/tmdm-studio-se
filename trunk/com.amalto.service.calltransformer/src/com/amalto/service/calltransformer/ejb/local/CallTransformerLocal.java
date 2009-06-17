@@ -5,7 +5,7 @@ package com.amalto.service.calltransformer.ejb.local;
 
 /**
  * Local interface for CallTransformer.
- * @xdoclet-generated at 15-05-09
+ * @xdoclet-generated at 17-06-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
@@ -17,6 +17,8 @@ public interface CallTransformerLocal
    public java.lang.String getJNDIName(  ) throws com.amalto.core.util.XtentisException;
 
    public java.lang.String getDescription( java.lang.String twoLetterLanguageCode ) throws com.amalto.core.util.XtentisException;
+
+   public java.lang.String getDocumentation( java.lang.String twoLettersLanguageCode ) throws com.amalto.core.util.XtentisException;
 
    public java.lang.String getStatus(  ) throws com.amalto.core.util.XtentisException;
 

@@ -5,7 +5,7 @@ package com.amalto.service.logging.ejb.local;
 
 /**
  * Local interface for Logging.
- * @xdoclet-generated at 1-04-09
+ * @xdoclet-generated at 17-06-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
@@ -17,6 +17,8 @@ public interface LoggingLocal
    public java.lang.String getJNDIName(  ) throws com.amalto.core.util.XtentisException;
 
    public java.lang.String getDescription( java.lang.String twoLetterLanguageCode ) throws com.amalto.core.util.XtentisException;
+
+   public java.lang.String getDocumentation( java.lang.String twoLettersLanguageCode ) throws com.amalto.core.util.XtentisException;
 
    public java.lang.String getStatus(  ) throws com.amalto.core.util.XtentisException;
 
