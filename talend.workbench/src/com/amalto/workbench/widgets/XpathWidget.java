@@ -1,5 +1,8 @@
 package com.amalto.workbench.widgets;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -28,9 +31,12 @@ public class XpathWidget implements  SelectionListener{
     protected TreeParent treeParent;
     protected XpathSelectDialog xpathSelectDialog;
     private boolean isButtonLeft;
-
+    private Map appendInfo;
+    private boolean readOnly=false;
+    
+    
 	public XpathWidget(String buttonName,TreeParent treeParent,
-			FormToolkit toolkit, Composite parent, AMainPageV2 dialog,boolean isButtonLeft) {
+			FormToolkit toolkit, Composite parent, AMainPageV2 dialog,boolean isButtonLeft,boolean readOnly) {
 		this.treeParent = treeParent;
 		xpathAntionHolder = toolkit.createComposite(parent);
 		xpathAntionHolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1));
@@ -52,13 +58,22 @@ public class XpathWidget implements  SelectionListener{
 			annotationButton = toolkit.createButton(xpathAntionHolder, buttonName,SWT.PUSH);
 			annotationButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,false, false, 1, 1));
 			annotationButton.addSelectionListener(this);
-			descriptionText = toolkit.createText(xpathAntionHolder, "", SWT.BORDER| SWT.MULTI|SWT.LEFT);
+			if(readOnly){
+				descriptionText = toolkit.createText(xpathAntionHolder, "", SWT.BORDER| SWT.MULTI|SWT.LEFT|SWT.READ_ONLY);
+			}else{
+				descriptionText = toolkit.createText(xpathAntionHolder, "", SWT.BORDER| SWT.MULTI|SWT.LEFT);
+			}
 			descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1));
 			descriptionText.addModifyListener(listenr);
+			
 
 		}
 		else{
-			descriptionText = toolkit.createText(xpathAntionHolder, "", SWT.BORDER| SWT.MULTI|SWT.LEFT);
+			if(readOnly){
+				descriptionText = toolkit.createText(xpathAntionHolder, "", SWT.BORDER| SWT.MULTI|SWT.LEFT|SWT.READ_ONLY);
+			}else{
+				descriptionText = toolkit.createText(xpathAntionHolder, "", SWT.BORDER| SWT.MULTI|SWT.LEFT);
+			}
 			descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1));
 			descriptionText.addModifyListener(listenr);			
 			annotationButton = toolkit.createButton(xpathAntionHolder, buttonName,SWT.PUSH);
@@ -67,6 +82,9 @@ public class XpathWidget implements  SelectionListener{
 		}
 		annotationButton.setToolTipText("Select one xpath");
 	}
+	
+	
+	
 	public void widgetDefaultSelected(SelectionEvent e) {
 		// TODO Auto-generated method stub
 		
@@ -86,6 +104,7 @@ public class XpathWidget implements  SelectionListener{
 		
 		if (dlg.getReturnCode() == Window.OK)  {
 			descriptionText.setText(dlg.getXpath());
+			putAppendInfo("dmn", dlg.getSelectedDataModelName());
 			dlg.close();
 		}
 	}
@@ -98,5 +117,22 @@ public class XpathWidget implements  SelectionListener{
 	}
 	public void setText(String text){
 		descriptionText.setText(text);
-	}	
+	}
+	
+	public void putAppendInfo(String key,Object value) {
+		if(appendInfo==null)appendInfo=new HashMap();
+		appendInfo.put(key, value);
+	}
+	
+	public Object getAppendInfo(String key) {
+		return appendInfo.get(key);
+	}
+	public boolean isReadOnly() {
+		return readOnly;
+	}
+	public void setReadOnly(boolean readOnly) {
+		this.readOnly = readOnly;
+	}
+	
+	
 }
