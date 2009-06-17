@@ -5,7 +5,7 @@ package com.amalto.service.dumptoconsole.ejb.local;
 
 /**
  * Local interface for DumpToConsole.
- * @xdoclet-generated at 17-04-09
+ * @xdoclet-generated at 17-06-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
@@ -16,7 +16,11 @@ public interface DumpToConsoleLocal
 
    public java.lang.String getJNDIName(  ) throws com.amalto.core.util.XtentisException;
 
+   public java.lang.String getConfiguration( java.lang.String optionalParameters ) throws com.amalto.core.util.XtentisException;
+
    public java.lang.String getDescription( java.lang.String twoLetterLanguageCode ) throws com.amalto.core.util.XtentisException;
+
+   public java.lang.String getDocumentation( java.lang.String twoLettersLanguageCode ) throws com.amalto.core.util.XtentisException;
 
    public java.lang.String getStatus(  ) throws com.amalto.core.util.XtentisException;
 

@@ -5,7 +5,7 @@ package com.amalto.service.logging.ejb.local;
 
 /**
  * Local home interface for Logging.
- * @xdoclet-generated at 1-04-09
+ * @xdoclet-generated at 17-06-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
