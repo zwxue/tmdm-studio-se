@@ -83,7 +83,8 @@ public class SimpleXpathInputDialog extends Dialog {
 						parentPage.getSite().getShell(),
 						parentPage.getXObject().getParent(),
 						"Select one Xpath ...",
-						parentPage.getSite()
+						parentPage.getSite(),
+						false
 				);
 		        dlg.setBlockOnOpen(true);
 				dlg.open();
