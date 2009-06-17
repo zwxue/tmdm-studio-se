@@ -14,85 +14,92 @@ import com.amalto.core.util.Util;
 import com.amalto.core.util.XtentisException;
 
 /**
- * <h1>Service Dump To Console</h1>
- *
- * <h3>Description</h3>
- * This service dumps the content of the Item to the console and logs it as INFO.<br/>
- *
- * <h3>Parameters</h3>
- * None.
- *
- * <h3>Configuration</h3>
- * No UI.
- *
  * @author Bruno Grieder
- *
+ * 
  * @ejb.bean 	name="DumpToConsole"
  *           	display-name="Name for DumpToConsole"
  *           	description="Description for DumpToConsole"
  * 		  		local-jndi-name = "amalto/local/service/dumptoconsole"
  *           	type="Stateless"
  *           	view-type="local"
- *
+ * 
  * @ejb.remote-facade
- *
+ * 
  * @ejb.permission
  * 	view-type = "remote"
  * 	role-name = "administration"
  * @ejb.permission
  * 	view-type = "local"
  * 	unchecked = "true"
- *
- *
- *
+ * 
+ * 
+ * 
  */
 public class DumpToConsoleBean extends ServiceCtrlBean  implements SessionBean{
-
+  
 	private static final long serialVersionUID = 290873987;
 
-
+	
 
 	/* (non-Javadoc)
 	 * @see com.amalto.core.ejb.ServiceCtrlBean#getJNDIName()
 	 */
     /**
      * @throws EJBException
-     *
+     * 
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method
+     * @ejb.facade-method 
      */
 	public String getJNDIName() throws XtentisException {
 		return "amalto/local/service/dumptoconsole";
 	}
-
-
+	
+    /**
+     * 
+     * @see com.amalto.core.ejb.ServiceCtrlBean#getConfiguration(java.lang.String)
+     * @throws EJBException
+     * 
+     * @ejb.interface-method view-type = "local"
+     * @ejb.facade-method 
+     */
+    public String getConfiguration(String optionalParameters) throws XtentisException{
+    	return "";
+    }
 	/* (non-Javadoc)
 	 * @see com.amalto.core.ejb.ServiceCtrlBean#getDescription()
 	 */
     /**
      * @throws EJBException
-     *
+     * 
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method
+     * @ejb.facade-method 
      */
 	public String getDescription(String twoLetterLanguageCode) throws XtentisException {
 		if ("fr".matches(twoLetterLanguageCode.toLowerCase()))
-			return "Envoie le résultat à la console";
-		return "Send the result to the console";
+			return "This service dumps the content of the Item to the console and logs it as INFO";
+		return "This service dumps the content of the Item to the console and logs it as INFO";
 	}
 
-
+    /**
+     * @author achen
+     * @throws XtentisException
+     * @ejb.interface-method view-type = "both"
+     * @ejb.facade-method 
+     */
+    public  String getDocumentation(String twoLettersLanguageCode) throws XtentisException{
+    	return "N/A";
+    }
 	/* (non-Javadoc)
 	 * @see com.amalto.core.ejb.ServiceCtrlBean#getStatus()
 	 */
     /**
      * @throws EJBException
-     *
+     * 
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method
+     * @ejb.facade-method 
      */
 	public String getStatus() throws XtentisException {
-		return "OK";
+		return "OK"; 
 	}
 
 
@@ -101,9 +108,9 @@ public class DumpToConsoleBean extends ServiceCtrlBean  implements SessionBean{
 	 */
     /**
      * @throws EJBException
-     *
+     * 
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method
+     * @ejb.facade-method 
      */
 	public void start() throws XtentisException {
 		return;
@@ -115,9 +122,9 @@ public class DumpToConsoleBean extends ServiceCtrlBean  implements SessionBean{
 	 */
     /**
      * @throws EJBException
-     *
+     * 
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method
+     * @ejb.facade-method 
      */
 	public void stop() throws XtentisException {
 		return;
@@ -129,17 +136,17 @@ public class DumpToConsoleBean extends ServiceCtrlBean  implements SessionBean{
 	 */
     /**
      * @throws EJBException
-     *
+     * 
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method
+     * @ejb.facade-method 
      */
 	public Serializable receiveFromOutbound(HashMap<String, Serializable> map) throws XtentisException {
 		try {
 			String contentType = (String)map.get("contentType");
 			String charset = (String)map.get("charset");
 			byte[] bytes = (byte[])map.get("bytes");
-			if (
-					(contentType!=null) &&
+			if (	
+					(contentType!=null) && 
 					(contentType.toLowerCase().startsWith("text"))
 				)
 			{
@@ -165,9 +172,9 @@ public class DumpToConsoleBean extends ServiceCtrlBean  implements SessionBean{
 	 */
     /**
      * @throws EJBException
-     *
+     * 
      * @ejb.interface-method view-type = "local"
-     * @ejb.facade-method
+     * @ejb.facade-method 
      */
 	public String receiveFromInbound(ItemPOJOPK itemPK, String routingOrderID, String parameters) throws XtentisException {
 		try {
@@ -182,16 +189,16 @@ public class DumpToConsoleBean extends ServiceCtrlBean  implements SessionBean{
     	    throw new XtentisException(err);
 	    }
 	    return "Document successfully dumped to console";
-
+		
 	}
-
-
+	
+	
 
 	private void dump(String string) {
 		System.out.println("DUMP TO CONSOLE<<<<<<<<<<<<");
 		System.out.println(string);
-		System.out.println(">>>>>>>>>>>>DUMP TO CONSOLE");
+		System.out.println(">>>>>>>>>>>>DUMP TO CONSOLE");		
 	}
 
-
+    
 }
