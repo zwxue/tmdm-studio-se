@@ -2122,7 +2122,6 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
 					null, 
 					"amalto/local/service/"+serviceName.getValue()
 				);
-
 			String desc = (String)
 			Util.getMethod(service, "getDescription").invoke(
 				service,
@@ -2130,6 +2129,7 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
 						""
 				}
 			);
+			
 			String configuration = (String)
 				Util.getMethod(service, "getConfiguration").invoke(
 					service,
@@ -2138,16 +2138,13 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
 					}
 				);
 			String doc = "";
-			try{doc=(String)
+			doc=(String)
 			Util.getMethod(service, "getDocumentation").invoke(
 				service,
 				new Object[] {
 						""
 				}
-			);
-			}catch(Exception e){
-				e.printStackTrace();
-			}
+			);			
 			return new WSServiceGetDocument(desc,configuration,doc);
 		} catch (XtentisException e) {
 			throw(new RemoteException(e.getLocalizedMessage()));
