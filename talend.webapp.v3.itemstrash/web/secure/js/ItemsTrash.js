@@ -127,9 +127,6 @@ amalto.ItemsTrash.ItemsTrash=function(){
 						new Ext.form.TextField({
 							id:'trash-criteria',
 							emptyText:'*',
-							hideLabel:true,
-							blankText:'blankText',
-							fieldLabel:'fieldLabel',
 							listeners: {
 			                	'specialkey': function(a, e) {
 						            if(e.getKey() == e.ENTER) {
