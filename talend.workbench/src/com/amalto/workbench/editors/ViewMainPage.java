@@ -79,6 +79,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 	protected XpathWidget xpathWidget2;
 	private boolean refreshing = false;
 	private boolean comitting = false;
+	private String lastDataModelName = null;
 	
     public ViewMainPage(FormEditor editor) {
         super(
@@ -137,6 +138,10 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 
 				public void widgetSelected(
 						org.eclipse.swt.events.SelectionEvent e) {
+					if(ViewMainPage.this.xpathWidget0.getAppendInfo("dmn")!=null){
+						lastDataModelName=(String) ViewMainPage.this.xpathWidget0.getAppendInfo("dmn");
+					}
+					//split method be encapsulated in xpathWidget will much better
 					String[] items = ViewMainPage.this.xpathWidget0.getText().split("\\&");
 					for(int i=0;i<items.length;i++){
 						if (!"".equals(ViewMainPage.this.xpathWidget0.getText()))
@@ -150,7 +155,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 				};
 			});
             
-            xpathWidget0 = new XpathWidget("...",treeParent, toolkit, vbeComposite, (AMainPageV2)this,true);
+            xpathWidget0 = new XpathWidget("...",treeParent, toolkit, vbeComposite, (AMainPageV2)this,true,true);
+
             
             viewableBEsList = new List(vbeComposite,SWT.SINGLE | SWT.V_SCROLL | SWT.BORDER);
             viewableBEsList.setLayoutData(
@@ -242,7 +248,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             );
             Button addSBEButton = toolkit.createButton(sbeComposite,"Add",SWT.PUSH | SWT.TRAIL);
             
-            xpathWidget1 = new XpathWidget("...",treeParent, toolkit, sbeComposite, (AMainPageV2)this,true);
+            xpathWidget1 = new XpathWidget("...",treeParent, toolkit, sbeComposite, (AMainPageV2)this,true,false);
             addSBEButton.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
             );
@@ -295,7 +301,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             	};
             });
             
-            xpathWidget2 = new XpathWidget("...",treeParent, toolkit, wcGroup, (AMainPageV2)this,true);
+            xpathWidget2 = new XpathWidget("...",treeParent, toolkit, wcGroup, (AMainPageV2)this,true,false);
             
             operatorCombo = new Combo(wcGroup,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
             operatorCombo.setLayoutData(

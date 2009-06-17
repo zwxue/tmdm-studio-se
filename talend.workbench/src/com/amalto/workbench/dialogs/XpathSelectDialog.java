@@ -71,6 +71,8 @@ public class XpathSelectDialog extends Dialog {
 	protected Button add;
 	protected SelectionListener listener;
 	private boolean isMulti=true;
+	protected String selectedDataModelName;
+	
 	public XpathSelectDialog(Shell parentShell,TreeParent parent,String title,IWorkbenchPartSite site,boolean isMulti) {
 		// TODO Auto-generated constructor stub
 		super(parentShell);
@@ -85,6 +87,10 @@ public class XpathSelectDialog extends Dialog {
 	
 	public String getXpath(){
 		return xpath;
+	}
+	
+	public String getSelectedDataModelName() {
+		return selectedDataModelName;
 	}
 
 	private  String getXpath(StructuredSelection sel){
@@ -199,6 +205,7 @@ public class XpathSelectDialog extends Dialog {
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 				// TODO Auto-generated method stub
 				String	modelDisplay = dataModelCombo.getText();
+				XpathSelectDialog.this.selectedDataModelName=modelDisplay;
 				xobject = pObject.findObject(TreeObject.DATA_MODEL, modelDisplay);
 				XtentisPort	port = null;
 				try {
