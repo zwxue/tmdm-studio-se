@@ -77,7 +77,9 @@ public class XpathWidget implements  SelectionListener{
 		XpathSelectDialog dlg = new XpathSelectDialog(
 				accommodation.getSite().getShell(),
 				treeParent,dlgTitle,
-				accommodation.getSite()
+				accommodation.getSite(),
+				true
+				
 		);
         dlg.setBlockOnOpen(true);
 		dlg.open();
