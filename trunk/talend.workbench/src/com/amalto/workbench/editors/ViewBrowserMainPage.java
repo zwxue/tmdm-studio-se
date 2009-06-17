@@ -256,7 +256,8 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 	
 	protected void refreshData() {
 		try {
-			
+
+			if(viewableBEsList.isDisposed()||searchableBEsList.isDisposed()||wcListViewer.getList().isDisposed())return;
             //if (! this.String xml = (String)((IStructuredSelection)event.getSelection()).getFirstElement();equals(getEditor().getActivePageInstance())) return;
             
 			WSView view = null;
