@@ -309,7 +309,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             });
             
             //xPathWidget
-            xpathWidget = new XpathWidget("...",treeParent, toolkit, routingExpressionsComposite,(AMainPageV2)RoutingRuleMainPage.this,true);
+            xpathWidget = new XpathWidget("...",treeParent, toolkit, routingExpressionsComposite,(AMainPageV2)RoutingRuleMainPage.this,true,false);
             //operator
             operatorCombo = new Combo(routingExpressionsComposite,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
             operatorCombo.setLayoutData(
