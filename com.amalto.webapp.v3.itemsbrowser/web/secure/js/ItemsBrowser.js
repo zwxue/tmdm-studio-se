@@ -576,9 +576,11 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		    },
 		    sm: sm2,
 	        // inline buttons
-	        buttons: [
+	        bbar: [
 	        	{text:BUTTON_DELETE[language],
-	        		id:'btn-delete',	        	
+	        		id:'btn-delete',
+	        		xtype:'button',
+	        		tooltip:'delete the selected items physically',
 		        	listeners:{
 		        		'click':function(){
 			        		var sel=sm2.getSelections();
@@ -608,8 +610,11 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		        		}
 		        	}
 	        	},
+	        	new Ext.Toolbar.Separator(),
 	        	{text:BUTTON_LOGICAL_DEL[language],
 	        		id:'btn-logicaldelete',
+	        		xtype:'button',
+	        		tooltip:'delete the selected items logically',
 	        		listeners:{
 		        		'click':function(){
 			        		var sel=sm2.getSelections();
