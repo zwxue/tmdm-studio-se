@@ -269,9 +269,18 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		'fr':'Rechercher',
 		'en':'Search'
 	};
-	
-
-	
+	var EDIT_ITEM_TOOLTIP={
+		'fr':'Tips: The field with * is required.',
+		'en':'Tips: The field with * is required.'
+	};
+	var PHYSICALLY_DELETE_TOOLTIP={
+		'fr':'delete the item physically',
+		'en':'delete the item physically'
+	};
+	var LOGICALLY_DELETE_TOOLTIP={
+		'fr':'delete the item logically',
+		'en':'delete the item logically'
+	}
 	/*****************
 	 * EXT 2.0
 	 *****************/
@@ -580,7 +589,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	        	{text:BUTTON_DELETE[language],
 	        		id:'btn-delete',
 	        		xtype:'button',
-	        		tooltip:'delete the selected items physically',
+	        		tooltip:PHYSICALLY_DELETE_TOOLTIP[language],
 		        	listeners:{
 		        		'click':function(){
 			        		var sel=sm2.getSelections();
@@ -614,7 +623,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	        	{text:BUTTON_LOGICAL_DEL[language],
 	        		id:'btn-logicaldelete',
 	        		xtype:'button',
-	        		tooltip:'delete the selected items logically',
+	        		tooltip:LOGICALLY_DELETE_TOOLTIP[language],
 	        		listeners:{
 		        		'click':function(){
 			        		var sel=sm2.getSelections();
@@ -865,7 +874,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 				nbButtons++;
 			}
 	
-			toolbar.addButton( {text: BUTTON_DELETE[language], className: 'tb-button tb-button-nude', handler: toolbar.deleteItemHandler});
+			toolbar.addButton( {tooltip:PHYSICALLY_DELETE_TOOLTIP[language],text: BUTTON_DELETE[language], className: 'tb-button tb-button-nude', handler: toolbar.deleteItemHandler});
 			nbButtons++;
 		}
 		
@@ -878,7 +887,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 				nbButtons++;
 			}
 	
-			toolbar.addButton( {text: BUTTON_LOGICAL_DEL[language], className: 'tb-button tb-button-nude', handler: toolbar.logicalDelItemHandler});
+			toolbar.addButton( {tooltip:LOGICALLY_DELETE_TOOLTIP[language],text: BUTTON_LOGICAL_DEL[language], className: 'tb-button tb-button-nude', handler: toolbar.logicalDelItemHandler});
 			nbButtons++;
 		}
 	}
@@ -1065,7 +1074,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
     				html:html,
     				closable:true,
     				bbar : new Ext.Toolbar([{
-						text : "Tips: The field with asterisk must be entered. ",
+						text : EDIT_ITEM_TOOLTIP[language],
 						xtype : "tbtext"
 					}])
     			});
