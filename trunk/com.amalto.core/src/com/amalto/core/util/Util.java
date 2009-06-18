@@ -271,7 +271,11 @@ public final class Util {
 		DocumentBuilder builder;
 		builder = factory.newDocumentBuilder();
 		builder.setErrorHandler(seh);
-		d = builder.parse(new InputSource(new StringReader(Util.nodeToString(element))));
+		String xmlstr=Util.nodeToString(element);
+       	//if element is null, remove it aiming added 
+       	//see 7828
+		xmlstr=xmlstr.replaceAll("<\\w+?/>", "");		
+		d = builder.parse(new InputSource(new StringReader(xmlstr)));
 		
 		//check if dcument parsed correctly against the schema
 		if (schema != null) {
@@ -968,10 +972,7 @@ public final class Util {
 				new StreamResult(sw)
 				);
        	if (sw==null) return null;       	
-       	//if element is null, remove it aiming added 
-       	//see 7828
-       	return sw.toString().replaceAll("<\\w+?/>", "");
-		//return sw.toString();
+		return sw.toString();
 	}
 	
 	/**
