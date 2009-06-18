@@ -125,6 +125,7 @@ public class XpathWidget implements  SelectionListener{
 	}
 	
 	public Object getAppendInfo(String key) {
+		if(appendInfo==null)return null;
 		return appendInfo.get(key);
 	}
 	public boolean isReadOnly() {
