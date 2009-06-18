@@ -133,7 +133,10 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	    'fr' : 'Voulez vous réellement effacer cet item : ',
 	    'en' : 'Do you really want to delete this item : '
 	};
-	
+	var  MSG_CONFIRM_DELETE_ITEMS =    {
+	    'fr' : 'Do you really want to delete the selected items ',
+	    'en' : 'Do you really want to delete the selected items '
+	};	
 	var  MSG_CONFIRM_LOGICAL_DELETE_ITEM =    {
 	    'fr' : 'Please input the path to delete element(s): ',
 	    'en' : 'Please input the path to delete element(s): '
@@ -417,8 +420,11 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	
 		// get root node to know if user can create item
 		ItemsBrowserInterface.getRootNode(_dataObject,language, function(rootNode){
-			if(!rootNode.readOnly) $('item-new-btn').disabled = false;
-			else $('item-new-btn').disabled = true;
+//			if(!rootNode.readOnly) $('item-new-btn').disabled = false;
+//			else $('item-new-btn').disabled = true;
+			$('item-new-btn').disabled=rootNode.readOnly;
+			if($('btn-logicaldelete'))$('btn-logicaldelete').disabled=$('item-new-btn').disabled;
+			if($('btn-delete'))$('btn-delete').disabled=$('item-new-btn').disabled;			
 		});
 		//empty grid when another view is selected
 		if(_gridItems){    
@@ -473,6 +479,10 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 			ItemsBrowserInterface.getViewables(viewName, language, function(result){		
 				columnsHeader = result;
 				displayItems2(columnsHeader,50);
+				
+				//delete/logicaldelete should be the same as new buttton
+				$('btn-logicaldelete').disabled=$('item-new-btn').disabled;
+				$('btn-delete').disabled=$('item-new-btn').disabled;		
 			});	
 		}
 	
@@ -508,16 +518,21 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	    	tmpFields.push(tmp);
 	    }
 	    
-	    var myColumns = [];
+	    var myColumns = [];	    
+	    var sm2 = new Ext.grid.CheckboxSelectionModel();
 	    //myColumns.push(new Ext.grid.RowNumberer());
+	    myColumns.push(sm2);
 		for(var k=0;k<_viewItems2.viewables.length;k++){
 			myColumns.push({
 				header: columnsHeader[k], 
 				sortable: true,
+				width:100,
 				dataIndex: tmpFields[k]
+				
 			});
 		}
-		var cm = new Ext.grid.ColumnModel(myColumns);
+		
+		var cm = new Ext.grid.ColumnModel(myColumns);		
 		//cm.defaultWidth = 200;
 	   	cm.defaultSortable = true;
 	   	
@@ -551,16 +566,97 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 			id:'items-grid',
 		    store: store,
 		    autoScroll:true,
-		    columns: myColumns,
+		    //columns: myColumns,
+		    cm:cm,
 			enableColumnMove:true,
 			border:false,
 		    viewConfig: {
 		    	autoFill:true,
 		        forceFit: false
 		    },
+		    sm: sm2,
+	        // inline buttons
+	        buttons: [
+	        	{text:BUTTON_DELETE[language],
+	        		id:'btn-delete',	        	
+		        	listeners:{
+		        		'click':function(){
+			        		var sel=sm2.getSelections();
+			        		if(sel.length==0) return;
+				    		Ext.MessageBox.confirm("confirm",MSG_CONFIRM_DELETE_ITEMS[language]+ " ?",function re(en){
+					    		if(en=="yes"){
+					        		for(var j=0; j<sel.length; j++){
+					        			//get ItemPK
+					        			var itemPK=[];
+								    	for(var i=0; i<_viewItems2.keys.length; i++) {
+								    		itemPK[i] = sel[j].get(_viewItems2.keys[i]);
+								    	}
+								    	var ids="";
+										for(var i=0; i<itemPK.length; i++) {
+											ids += (ids==""?"":"@"); 
+											ids += itemPK[i];			
+										}							    	
+										var treeIndex=1;
+										if(_dataObject==null) _dataObject=_dataObject2;
+										ItemsBrowserInterface.deleteItem(_dataObject, ids, function(result){			
+											amalto.core.getTabPanel().remove('itemDetailsdiv'+treeIndex);
+											displayItems();										
+										});
+					        		}				    		
+					    		}				    			
+				    		});			        			        		
+		        		}
+		        	}
+	        	},
+	        	{text:BUTTON_LOGICAL_DEL[language],
+	        		id:'btn-logicaldelete',
+	        		listeners:{
+		        		'click':function(){
+			        		var sel=sm2.getSelections();
+			        		if(sel.length==0) return;
+							Ext.Msg.show({
+							   title: MSG_CONFIRM_TITLE_LOGICAL_DELETE_ITEM[language],
+							   msg:  MSG_CONFIRM_LOGICAL_DELETE_ITEM[language],
+							   buttons: Ext.Msg.OKCANCEL,
+							   fn: doLogicalDelete,
+							   prompt:true,
+							   value: '/',
+							   width:300
+							});
+							
+							function doLogicalDelete(btn, path){
+						       if (btn == 'cancel') {
+									return;
+								}
+										        		
+				        		for(var j=0; j<sel.length; j++){
+				        			//get ItemPK
+				        			var itemPK=[];
+							    	for(var i=0; i<_viewItems2.keys.length; i++) {
+							    		itemPK[i] = sel[j].get(_viewItems2.keys[i]);
+							    	}
+							    	var ids="";
+									for(var i=0; i<itemPK.length; i++) {
+										ids += (ids==""?"":"@"); 
+										ids += itemPK[i];			
+									}							    	
+									var treeIndex=1;
+									if(_dataObject==null) _dataObject=_dataObject2;
+									ItemsBrowserInterface.logicalDeleteItem(_dataObject, ids, path, function(result){
+										displayItems();
+//										if(result)
+//										Ext.MessageBox.alert('Status', result);				
+									});									
+				        		}							
+							};			        				        		
+		        		}
+		        	}
+	        	}
+	        ],
+	        buttonAlign:'left',		    
 		    listeners: {
-		    	'rowclick': function(g, rowIndex, e){
-								//alert("keys "+DWRUtil.toDescriptiveString(_viewItems2.keys,3));
+		    	'rowdblclick': function(g, rowIndex, e){
+								//alert("keys "+DWRUtil.toDescriptiveString(_viewItems2.keys,3));		    					
 						    	for(var i=0; i<_viewItems2.keys.length; i++) {
 						    		itemPK[i] = g.getStore().getAt(rowIndex).get(_viewItems2.keys[i]);
 						    	}
@@ -1089,17 +1185,30 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		for(var i=0; i<itemPK.length; i++) {
 			tmp += " "+itemPK[i];
 		}
-		if(confirm(MSG_CONFIRM_DELETE_ITEM[language]+tmp+" ?")) {
-			//alert(DWRUtil.toDescriptiveString(itemPK,2));
+		Ext.MessageBox.confirm("confirm",MSG_CONFIRM_DELETE_ITEM[language]+ " ?",function re(en){
+		if(en=="yes"){
 			ItemsBrowserInterface.deleteItem(dataObject, itemPK, function(result){			
 				amalto.core.getTabPanel().remove('itemDetailsdiv'+treeIndex);
 				amalto.core.ready(result);
-				displayItems();
-				
-			});
-		}
+				displayItems();				
+			});		
+		}});		
 	}
-
+	function logicalDelOneItem(ids, dataObject, treeIndex){
+		var tmp = "";
+		var itemPK = ids.split('@');
+		for(var i=0; i<itemPK.length; i++) {
+			tmp += " "+itemPK[i];
+		}
+		ItemsBrowserInterface.logicalDeleteItem(dataObject, itemPK, path, function(result){
+			amalto.core.getTabPanel().remove('itemDetailsdiv'+treeIndex);
+			amalto.core.ready(result);
+			displayItems();
+			if(result)
+			Ext.MessageBox.alert('Status', result);				
+		});
+	}
+	
 	function logicalDelItem(ids, dataObject, treeIndex){
 		var tmp = "";
 		var itemPK = ids.split('@');
@@ -1118,18 +1227,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	       if (btn == 'cancel') {
 				return;
 			}
-			var tmp = "";
-			var itemPK = ids.split('@');
-			for(var i=0; i<itemPK.length; i++) {
-				tmp += " "+itemPK[i];
-			}
-			ItemsBrowserInterface.logicalDeleteItem(dataObject, itemPK, path, function(result){
-				amalto.core.getTabPanel().remove('itemDetailsdiv'+treeIndex);
-				amalto.core.ready(result);
-				displayItems();
-				if(result)
-				Ext.MessageBox.alert('Status', result);				
-			});
+			logicalDelOneItem(ids,dataObject, treeIndex);
 		};
 	}
 
