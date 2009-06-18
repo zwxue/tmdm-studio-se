@@ -576,8 +576,17 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 						
 						String[] ids=wsConceptKey.getFields();
 						for (int i = 0; i < ids.length; i++) {
-							if(!viewableList.contains(ids[i])){
-								toAddViewableList.add(ids[i]);
+							String id=ids[i];
+							
+							//need to care about more case
+							if(id.startsWith("/")){
+								id=id.substring(1);
+							}else if(id.startsWith("//")){
+								id=id.substring(2);
+							}
+							
+							if(!viewableList.contains(id)){
+								toAddViewableList.add(id);
 							}
 						}
 						
@@ -834,8 +843,6 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 								
 				for (Iterator<String> iter = toAddViewableList.iterator(); iter.hasNext(); ) {
 					String keyPath = iter.next();
-					//need to care about more case,like '//' etc.
-					if(keyPath.startsWith("/"))keyPath=keyPath.substring(1);
 					viewableBEsList.add(keyPath);
 					commit();
 					monitor.worked(1);
