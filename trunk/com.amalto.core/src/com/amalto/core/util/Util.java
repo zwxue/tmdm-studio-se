@@ -957,7 +957,7 @@ public final class Util {
 	 */
 	public static String nodeToString(Node n, boolean omitXMLDeclaration) throws TransformerException{
        	StringWriter sw = new StringWriter();
-       	Transformer transformer = TransformerFactory.newInstance().newTransformer();
+       	Transformer transformer = TransformerFactory.newInstance().newTransformer();       	
        	if (omitXMLDeclaration)
        		transformer.setOutputProperty("omit-xml-declaration","yes");
        	else
@@ -967,10 +967,13 @@ public final class Util {
 				new DOMSource(n),
 				new StreamResult(sw)
 				);
-       	if (sw==null) return null;
-		return sw.toString();
+       	if (sw==null) return null;       	
+       	//if element is null, remove it aiming added 
+       	//see 7828
+       	return sw.toString().replaceAll("<\\w+?/>", "");
+		//return sw.toString();
 	}
-
+	
 	/**
 	 * Get a nodelist from an xPath
 	 * @throws XtentisException
