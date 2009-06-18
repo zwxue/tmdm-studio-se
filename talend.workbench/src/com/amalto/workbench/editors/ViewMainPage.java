@@ -6,10 +6,16 @@
  */
 package com.amalto.workbench.editors;
 
+import java.lang.reflect.InvocationTargetException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -44,6 +50,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -51,10 +58,18 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
+import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.webservices.WSConceptKey;
+import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSGetBusinessConceptKey;
+import com.amalto.workbench.webservices.WSGetView;
 import com.amalto.workbench.webservices.WSStringPredicate;
 import com.amalto.workbench.webservices.WSView;
+import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.WSWhereCondition;
 import com.amalto.workbench.webservices.WSWhereOperator;
+import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.DescAnnotationComposite;
 import com.amalto.workbench.widgets.XpathWidget;
 
@@ -80,6 +95,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 	private boolean refreshing = false;
 	private boolean comitting = false;
 	private String lastDataModelName = null;
+	private String viewName=null;
 	
     public ViewMainPage(FormEditor editor) {
         super(
@@ -88,6 +104,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
         		"View "+((XObjectEditorInput)editor.getEditorInput()).getName()
         );     
        this.treeParent = this.getXObject().getParent();
+       this.viewName = ((XObjectEditorInput)editor.getEditorInput()).getName();
     }
    
 	protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
@@ -411,7 +428,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 				public void keyPressed(KeyEvent e) {}
 				public void keyReleased(KeyEvent e) {
 					if ((e.stateMask==0) && (e.character == SWT.DEL)) {
-						WSView wsObject = (WSView) (ViewMainPage.this.getXObject().getWsObject());
+						WSView wsObject = (WSView) (ViewMainPage.this.getWsViewObject());
 						IStructuredSelection selection = (IStructuredSelection)ViewMainPage.this.wcListViewer.getSelection();
 						if (selection.getFirstElement()!=null) {
 							WSWhereCondition wc = (WSWhereCondition) selection.getFirstElement();
@@ -441,7 +458,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 			
 			this.refreshing = true;
 			
-			WSView wsObject = (WSView) (getXObject().getWsObject());    	
+			WSView wsObject = getWsViewObject();
+			
 			desAntionComposite.setText(wsObject.getDescription()==null ? "" : wsObject.getDescription());
 //            descriptionText.setText(wsObject.getDescription()==null ? "" : wsObject.getDescription());
 	    	
@@ -471,6 +489,31 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 			MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page", "Error refreshing the page: "+e.getLocalizedMessage());
 		}    	
 	}
+
+	private WSView getWsViewObject(){
+		WSView wsObject = null;
+		try {
+			if (getXObject().getWsObject() == null) { //then fetch from server			
+				
+				XtentisPort	port = Util.getPort(getXObject());
+				
+				wsObject = 
+					port.getView(
+							new WSGetView(
+								(WSViewPK)getXObject().getWsKey()
+							)
+					);
+				getXObject().setWsObject(wsObject);
+			} else { //it has been opened by an editor - use the object there
+				wsObject = (WSView)getXObject().getWsObject();
+			}
+		} catch (XtentisException e) {
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		return wsObject;
+	}
 	
 	protected void commit() {
 		try {
@@ -479,7 +522,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 			
 			this.comitting = true;
 			
-	    	WSView wsObject = (WSView) (getXObject().getWsObject());
+	    	WSView wsObject = (WSView) (getWsViewObject());
 			wsObject.setDescription(desAntionComposite.getText());
 			wsObject.setViewableBusinessElements(viewableBEsList.getItems());
 			wsObject.setSearchableBusinessElements(searchableBEsList.getItems());
@@ -491,6 +534,86 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 			e.printStackTrace();
 			MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page", "Error comitting the page: "+e.getLocalizedMessage());
 		}    	
+	}
+	
+
+	public void doSave(IProgressMonitor monitor) {
+		super.doSave(monitor);
+		if(this.viewName!=null&&this.viewName.length()>0){
+			if(viewName.matches("Browse_items.*")){
+				
+				String concept = viewName.replaceAll("Browse_items_","").replaceAll("#.*","");
+				if(concept!=null&&concept.length()>0&&lastDataModelName!=null&&lastDataModelName.length()>0){
+					
+					//keys validate
+					java.util.List<String> toAddViewableList=new ArrayList<String>();
+					
+					WSGetBusinessConceptKey wsGetBusinessConceptKey=new WSGetBusinessConceptKey(new WSDataModelPK(lastDataModelName),concept);
+					WSConceptKey wsConceptKey = null;
+					try {
+						wsConceptKey = Util.getPort(getXObject()).getBusinessConceptKey(wsGetBusinessConceptKey);
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					} catch (XtentisException e) {
+						e.printStackTrace();
+					}
+					
+					if(wsConceptKey!=null){
+
+						java.util.List<String> viewableList=new ArrayList<String>();
+						for (int i = 0; i < viewableBEsList.getItemCount(); i++) {
+							viewableList.add(viewableBEsList.getItem(i));
+						}
+						
+						String[] keys = wsConceptKey.getFields();
+						for (int i = 0; i < keys.length; i++) {
+							if(".".equals(wsConceptKey.getSelector()))
+								keys[i] = "/"+concept+"/"+keys[i];					
+							else
+								keys[i] = wsConceptKey.getSelector()+keys[i];
+						}
+						
+						String[] ids=wsConceptKey.getFields();
+						for (int i = 0; i < ids.length; i++) {
+							if(!viewableList.contains(ids[i])){
+								toAddViewableList.add(ids[i]);
+							}
+						}
+						
+					}
+					
+					//show verify report
+					if(toAddViewableList.size()>0){
+						
+						String msg="[Missing Unique Key]: \n\n";
+						for (Iterator iterator = toAddViewableList.iterator(); iterator.hasNext();) {
+							String toAddItem = (String) iterator.next();
+							msg+=(toAddItem+"\n");
+						}
+						msg+="\nSystem will add these key-paths for you automatically.\n";
+						
+						MessageDialog.openInformation(this.getSite().getShell(), "Verify Report", msg);
+					}
+					
+					//auto fix
+					IRunnableWithProgress autoFixProcess = new AutoFixProgress(toAddViewableList, viewableBEsList, this.getSite().getShell());
+
+					try {
+						new ProgressMonitorDialog(this.getSite().getShell()).run(
+								false,	
+								true, 
+								autoFixProcess
+						);
+					} catch (InvocationTargetException e) {
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					
+				}
+			}
+		}
+	    
 	}
 		
 	protected void createActions() {
@@ -528,8 +651,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 //			if (!"".equals(ViewMainPage.this.xpathWidget2.getText()))
 //				ViewMainPage.this.searchableBEsList.add(items[i]);
 //		}
-		WSView wsObject = (WSView) ViewMainPage.this.getXObject()
-		.getWsObject();
+		WSView wsObject = (WSView) ViewMainPage.this.getWsViewObject();
 		ArrayList<WSWhereCondition> wcList = new ArrayList<WSWhereCondition>(
 				Arrays.asList(wsObject.getWhereConditions()));
 		
@@ -660,7 +782,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 	class WCDragSourceListener implements DragSourceListener {
 
 		public void dragFinished(DragSourceEvent event) {
-			WSView wsObject = (WSView) (ViewMainPage.this.getXObject().getWsObject());
+			WSView wsObject = (WSView) (ViewMainPage.this.getWsViewObject());
 			IStructuredSelection selection = (IStructuredSelection)ViewMainPage.this.wcListViewer.getSelection();
 			if (selection.getFirstElement()!=null) {
 				WSWhereCondition wc = (WSWhereCondition) selection.getFirstElement();
@@ -685,4 +807,50 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 		}
 
 	}
+	
+	
+	/**
+	 * @author stakey
+	 *
+	 */
+	class AutoFixProgress implements IRunnableWithProgress {
+		
+		java.util.List<String> toAddViewableList;
+		org.eclipse.swt.widgets.List viewableBEsList;
+		Shell parentShell;
+		
+		public AutoFixProgress(java.util.List<String> toAddViewableList,org.eclipse.swt.widgets.List viewableBEsList, Shell shell) {
+			super();
+			this.toAddViewableList = toAddViewableList;
+			this.viewableBEsList = viewableBEsList;
+			this.parentShell = shell;
+		}
+
+		public void run(IProgressMonitor monitor)
+				throws InvocationTargetException, InterruptedException {
+			try {
+				monitor.beginTask("Adding key-path", toAddViewableList.size());
+								
+				for (Iterator<String> iter = toAddViewableList.iterator(); iter.hasNext(); ) {
+					String keyPath = iter.next();
+					//need to care about more case,like '//' etc.
+					if(keyPath.startsWith("/"))keyPath=keyPath.substring(1);
+					viewableBEsList.add(keyPath);
+					commit();
+					monitor.worked(1);
+				}//for
+				
+				monitor.done();
+			} catch (Exception e) {
+				e.printStackTrace();
+				MessageDialog.openError(
+						parentShell,
+						"Error Auto Fix", 
+						"An error occured trying to fix issues automatically:\n\n "+e.getLocalizedMessage()
+				);
+			}//try	
+		}
+		
+	}
+	
 }
