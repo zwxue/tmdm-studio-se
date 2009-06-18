@@ -140,12 +140,10 @@ public class XpathSelectDialog extends Dialog {
 //                		 item = item.getParentItem();
 //                		 continue;
 //                	}
-                	
-                	
                 	if (component instanceof XSDParticle) {
                 		getOKButton().setEnabled(true);
                 		if (((XSDParticle)component).getTerm() instanceof XSDElementDeclaration){
-                			path = "/"+((XSDElementDeclaration)((XSDParticle)component).getTerm()).getName();
+                			path = "/"+((XSDElementDeclaration)((XSDParticle)component).getTerm()).getName()+path;
                 		}
                 	} else if (component instanceof XSDElementDeclaration) {
                 			path=((XSDElementDeclaration)component).getName()+path;
