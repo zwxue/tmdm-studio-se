@@ -57,8 +57,6 @@ amalto.ItemsTrash.ItemsTrash=function(){
     	Ext.MessageBox.confirm("confirm","Are you sure to delete the this physically?",function de(e){
     		if(e.toLocaleString()=="yes")
     			ItemsTrashInterface.removeDroppedItem(pk,partPath,revisionID,conceptName,ids,showTrashItems);
-    		else
-    			showTrashItems();
     		}) ;
     }
     function toRestore(pk,partPath,revisionID,conceptName,ids){
@@ -66,8 +64,6 @@ amalto.ItemsTrash.ItemsTrash=function(){
     	Ext.MessageBox.confirm("confirm","Are you sure to restore this item?",function re(en){
     		if(en=="yes")
     			ItemsTrashInterface.recoverDroppedItem(pk,partPath,revisionID,conceptName,ids,showTrashItems);
-    		else
-    			showTrashItems();
     		});
     }
 
