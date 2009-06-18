@@ -35,6 +35,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -281,7 +282,8 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             blankLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
             );
-            Label xPathLabel = toolkit.createLabel(routingExpressionsComposite,  "       xPath", SWT.NULL);
+            Label xPathLabel = toolkit.createLabel(routingExpressionsComposite,  "       xPath(*)", SWT.NULL);
+            xPathLabel.setForeground(new Color(null, 255,0,0));
             xPathLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
             );
@@ -289,7 +291,8 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             operatorLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
             );
-            Label rightValueLabel = toolkit.createLabel(routingExpressionsComposite,  "Value", SWT.NULL);
+            Label rightValueLabel = toolkit.createLabel(routingExpressionsComposite,  "Value(*)", SWT.NULL);
+            rightValueLabel.setForeground(new Color(null, 255,0,0));
             rightValueLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
             );
