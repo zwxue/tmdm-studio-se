@@ -1058,7 +1058,11 @@ amalto.itemsbrowser.ItemsBrowser = function () {
     				autoScroll:true,
     				tbar: tbDetail,
     				html:html,
-    				closable:true
+    				closable:true,
+    				bbar : new Ext.Toolbar([{
+						text : "Tips: The field with asterisk must be entered. ",
+						xtype : "tbtext"
+					}])
     			});
 		
 			}
