@@ -348,6 +348,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             });
             
             rightText = toolkit.createText(wcGroup, "",SWT.BORDER|SWT.SINGLE);
+            
             rightText.setLayoutData(    
                     new GridData(SWT.FILL,SWT.CENTER,true,true,1,1)
             );
