@@ -197,7 +197,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 		int style = SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | 
 					SWT.FULL_SELECTION | SWT.HIDE_SELECTION;
 
-		Table table = new Table(parent, style);
+		final Table table = new Table(parent, style);
 		
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessVerticalSpace = true;
@@ -208,7 +208,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 		table.setHeaderVisible(true);
 
 		// 1st column 
-		TableColumn column = new TableColumn(table, SWT.LEFT, 0);		
+		final TableColumn column = new TableColumn(table, SWT.LEFT, 0);		
 		column.setText("Data Cluster");
 		column.setWidth(150);
 		column.addSelectionListener(new SelectionListener() {
@@ -218,77 +218,111 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 			}
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 				ascending[0] = ! ascending[0];
+				table.setSortColumn(column);
 				ItemsTrashBrowserMainPage.this.resultsViewer.setSorter(new TableSorter(0,ascending[0]));
-
+				if(ascending[0]){
+					
+					table.setSortDirection(SWT.UP);
+				}
+				else{
+					table.setSortDirection(SWT.DOWN);
+				}
 			}
 		});
 
 		// 2nd column
-		column = new TableColumn(table, SWT.LEFT, 1);
-		column.setText("Concept");
-		column.setWidth(150);
+		final TableColumn column1 = new TableColumn(table, SWT.LEFT, 1);
+		column1.setText("Concept");
+		column1.setWidth(150);
 		// Add listener to column so tasks are sorted by description when clicked 
-		column.addSelectionListener(new SelectionListener() {
+		column1.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
 				ascending[1] = ! ascending[1];
 				ItemsTrashBrowserMainPage.this.resultsViewer.setSorter(new TableSorter(1,ascending[1]));
 			}
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 				ascending[1] = ! ascending[1];
+				table.setSortColumn(column1);
 				ItemsTrashBrowserMainPage.this.resultsViewer.setSorter(new TableSorter(1,ascending[1]));
-
+				if(ascending[1]){
+					
+					table.setSortDirection(SWT.UP);
+				}
+				else{
+					table.setSortDirection(SWT.DOWN);
+				}
 			}
 		});
 
 		
 		// 3rd column
-		column = new TableColumn(table, SWT.LEFT, 2);
-		column.setText("Keys");
-		column.setWidth(150);
+		final TableColumn column2 = new TableColumn(table, SWT.LEFT, 2);
+		column2.setText("Keys");
+		column2.setWidth(150);
 		// Add listener to column so tasks are sorted by description when clicked 
-		column.addSelectionListener(new SelectionListener() {
+		column2.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
 				ascending[2] = ! ascending[2];
 				ItemsTrashBrowserMainPage.this.resultsViewer.setSorter(new TableSorter(2,ascending[2]));
 			}
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 				ascending[2] = ! ascending[2];
+				table.setSortColumn(column2);
 				ItemsTrashBrowserMainPage.this.resultsViewer.setSorter(new TableSorter(2,ascending[2]));
-
+				if(ascending[2]){
+					table.setSortDirection(SWT.UP);
+				}
+				else{
+					
+					table.setSortDirection(SWT.DOWN);
+				}
 			}
 		});
 		
 		// 4th column
-		column = new TableColumn(table, SWT.LEFT, 3);
-		column.setText("Revision ID");
-		column.setWidth(150);
+		final TableColumn column3 = new TableColumn(table, SWT.LEFT, 3);
+		column3.setText("Revision ID");
+		column3.setWidth(150);
 		// Add listener to column so tasks are sorted by description when clicked 
-		column.addSelectionListener(new SelectionListener() {
+		column3.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
-				ascending[3] = ! ascending[3];
+				table.setSortDirection(SWT.UP);
 				ItemsTrashBrowserMainPage.this.resultsViewer.setSorter(new TableSorter(3,ascending[3]));
 			}
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 				ascending[3] = ! ascending[3];
+				table.setSortColumn(column3);
 				ItemsTrashBrowserMainPage.this.resultsViewer.setSorter(new TableSorter(3,ascending[3]));
-
+				if(ascending[3]){
+					table.setSortDirection(SWT.UP);
+				}
+				else{
+					table.setSortDirection(SWT.DOWN);
+				}
 			}
 		});
 		
 		// 5th column
-		column = new TableColumn(table, SWT.LEFT, 4);
-		column.setText("Part Path");
-		column.setWidth(150);
+		final TableColumn column4 = new TableColumn(table, SWT.LEFT, 4);
+		column4.setText("Part Path");
+		column4.setWidth(150);
 		// Add listener to column so tasks are sorted by description when clicked 
-		column.addSelectionListener(new SelectionListener() {
+		column4.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
 				ascending[4] = ! ascending[4];
 				ItemsTrashBrowserMainPage.this.resultsViewer.setSorter(new TableSorter(4,ascending[4]));
 			}
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 				ascending[4] = ! ascending[4];
+				table.setSortColumn(column4);
 				ItemsTrashBrowserMainPage.this.resultsViewer.setSorter(new TableSorter(4,ascending[4]));
-
+				if(ascending[4]){
+				
+					table.setSortDirection(SWT.UP);
+				}
+				else{
+					table.setSortDirection(SWT.DOWN);
+				}
 			}
 		});
 		
