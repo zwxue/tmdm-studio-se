@@ -940,12 +940,27 @@ public class ItemsBrowserDWR {
 			xpaths = new String[1];
 			xpaths[0] = xpathForeignKey;
 		}
+		
+		//filter with value 
+		for (int i = 0; i < xpaths.length; i++) {
+			String xpath=xpaths[i];
+			
+			int pos=xpath.indexOf("/");
+			String conceptName=xpath.substring(0,pos);
+			String left=xpath.substring(pos);
+			
+			String filteredConcept=conceptName;
+			filteredConcept+="[descendant-or-self::* &= \""+value+"\"]";
+			xpath=filteredConcept+left;
+			
+			xpaths[i]=xpath;
+		}
 		 
 		//run the search
 		String[] results = Util.getPort().xPathsSearch(
 				new WSXPathsSearch(
 					new WSDataClusterPK(config.getCluster()),
-					xpathForeignKey,//pivot
+					xpaths[0],//pivot
 					new WSStringArray(xpaths),
 					null,
 					-1,		//spell Threshold
