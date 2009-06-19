@@ -58,6 +58,12 @@ public class NewGroupDialog extends Dialog {
 				new GridData(SWT.FILL,SWT.FILL,false,true,2,1)
 		);
 		radioGroup.setLayout(new GridLayout(1,false));
+		allButton = new Button(radioGroup,SWT.RADIO);
+		allButton.setText("All");
+		allButton.setLayoutData(
+				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+		);		
+		allButton.setSelection(true);
 		
 		sequenceButton = new Button(radioGroup,SWT.RADIO);
 		sequenceButton.setText("Sequence");
@@ -69,12 +75,7 @@ public class NewGroupDialog extends Dialog {
 		choiceButton.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
 		);
-		allButton = new Button(radioGroup,SWT.RADIO);
-		allButton.setText("All");
-		allButton.setLayoutData(
-				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
-		);		
-		sequenceButton.setSelection(true);
+
 		
 		
 		Label minOccursLabel = new Label(composite, SWT.NONE);
