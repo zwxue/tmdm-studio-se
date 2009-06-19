@@ -231,11 +231,7 @@ public enum EImage {
 	WRITABLE("icons/writable.gif"),
 	XPATH("icons/xpath.gif"),
 	XTENTIS_SERVER("icons/xtentis_server.gif"),
-	ZAP("icons/zap.gif")
-	;
-	
-	
-	
+	ZAP("icons/zap.gif");
 	EImage(String path){
 		this.path=path;
 		
