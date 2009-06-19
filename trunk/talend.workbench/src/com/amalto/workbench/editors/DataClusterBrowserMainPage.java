@@ -393,11 +393,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	 * Create the Table
 	 */
 	private Table createTable(Composite parent) {
-		int style = SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | 
+		int style = SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL |
 					SWT.FULL_SELECTION | SWT.HIDE_SELECTION;
 
-		Table table = new Table(parent, style);
-		
+		final Table table = new Table(parent, style);
+
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessVerticalSpace = true;
 		gridData.horizontalSpan = 3;
@@ -405,11 +405,15 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 					
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
-
+		
+		//		table.setSortDirection(0);
 		// 1st column 
-		TableColumn column = new TableColumn(table, SWT.LEFT, 0);		
+		final TableColumn column = new TableColumn(table, SWT.LEFT, 0);	
+//		table.setSortColumn(column);
+//		table.setSortDirection(SWT.UP);
 		column.setText("Date");
 		column.setWidth(150);
+//		column.setImage(getDefaultImage());//============
 		column.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
 				ascending[0] = ! ascending[0];
@@ -418,16 +422,29 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 				ascending[0] = ! ascending[0];
 				DataClusterBrowserMainPage.this.resultsViewer.setSorter(new TableSorter(0,ascending[0]));
-
+				if(ascending[0]){
+					table.setSortColumn(column);
+					table.setSortDirection(SWT.DOWN);
+				}
+				else{
+					table.setSortColumn(column);
+					table.setSortDirection(SWT.UP);
+				}
+				
+					
+//					column.setImage(ImageCache.getCreatedImage("icons/view_menu_down.gif"));//============
+//				else
+//					column.setImage(ImageCache.getCreatedImage("icons/view_menu_up.gif"));//============
 			}
 		});
 
 		// 2nd column
-		column = new TableColumn(table, SWT.LEFT, 1);
-		column.setText("Concept");
-		column.setWidth(150);
+		final TableColumn column1 = new TableColumn(table, SWT.LEFT, 1);
+//		 table.setSortColumn(column1);
+		column1.setText("Concept");
+		column1.setWidth(150);
 		// Add listener to column so tasks are sorted by description when clicked 
-		column.addSelectionListener(new SelectionListener() {
+		column1.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
 				ascending[1] = ! ascending[1];
 				DataClusterBrowserMainPage.this.resultsViewer.setSorter(new TableSorter(1,ascending[1]));
@@ -435,17 +452,26 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 				ascending[1] = ! ascending[1];
 				DataClusterBrowserMainPage.this.resultsViewer.setSorter(new TableSorter(1,ascending[1]));
-
+				if(ascending[1]){
+					table.setSortColumn(column1);
+					table.setSortDirection(SWT.DOWN);
+				}
+				else{
+					table.setSortColumn(column1);
+					table.setSortDirection(SWT.UP);
+				}
+				
 			}
 		});
 
 		
 		// 3rd column
-		column = new TableColumn(table, SWT.LEFT, 2);
-		column.setText("Keys");
-		column.setWidth(150);
+		final TableColumn column2 = new TableColumn(table, SWT.LEFT, 2);
+//		table.setSortColumn(column2);
+		column2.setText("Keys");
+		column2.setWidth(150);
 		// Add listener to column so tasks are sorted by description when clicked 
-		column.addSelectionListener(new SelectionListener() {
+		column2.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
 				ascending[2] = ! ascending[2];
 				DataClusterBrowserMainPage.this.resultsViewer.setSorter(new TableSorter(2,ascending[2]));
@@ -453,7 +479,15 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 				ascending[2] = ! ascending[2];
 				DataClusterBrowserMainPage.this.resultsViewer.setSorter(new TableSorter(2,ascending[2]));
-
+				if(ascending[2]){
+					table.setSortColumn(column2);
+					table.setSortDirection(SWT.DOWN);
+				}
+				else{
+					table.setSortColumn(column2);
+					table.setSortDirection(SWT.UP);
+				}
+				
 			}
 		});
 		
@@ -1373,6 +1407,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	}
 	
 	
+	
 	/***************************************************************
 	 * Table Sorter
 	 * @author bgrieder
@@ -1458,9 +1493,6 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 		}
 		
 		
-		
-		
 	}
-
 
 }
