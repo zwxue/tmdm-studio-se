@@ -274,14 +274,12 @@ public class DOMViewDialog extends Dialog {
 			dataModelCombo.setItems(dms);
 			dataModelCombo.select(-1);
 			if (selectedDataModel != null) {
-				int i=0;
-				for (Iterator<String> iter = dataModelNames.iterator(); iter.hasNext(); ) {
-					String dm =  iter.next();
+				for (int i = 0; i < dms.length; i++) {
+					String dm =  dms[i];
 					if (dm.equals(selectedDataModel)) {
 						dataModelCombo.select(i);
 						break;
 					}
-					i++;
 				}
 			}
 			
