@@ -1,5 +1,8 @@
 package com.amalto.workbench.dialogs;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -12,16 +15,16 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.xsd.XSDIdentityConstraintCategory;
 
 public class IdentityConstraintInputDialog extends Dialog {
 
-	private Text keyNameText=null;
 	private  Combo typeCombo=null;
+	private Combo keyNameCombo=null;
 
 	private String keyName="";
 	private XSDIdentityConstraintCategory type;
+	private List<String> deElements;
 	
 	private SelectionListener caller = null;
 	private String title = "";
@@ -30,8 +33,8 @@ public class IdentityConstraintInputDialog extends Dialog {
 	/**
 	 * @param parentShell
 	 */
-	public IdentityConstraintInputDialog(SelectionListener caller, Shell parentShell, String title) {
-		this(caller,parentShell,title,"",XSDIdentityConstraintCategory.KEY_LITERAL);
+	public IdentityConstraintInputDialog(SelectionListener caller, Shell parentShell, String title,List<String> deElements) {
+		this(caller,parentShell,title,"",XSDIdentityConstraintCategory.KEY_LITERAL,deElements);
 	}
 
 	/**
@@ -42,13 +45,15 @@ public class IdentityConstraintInputDialog extends Dialog {
 			Shell parentShell, 
 			String title,
 			String keyName,
-			XSDIdentityConstraintCategory type
+			XSDIdentityConstraintCategory type,
+			List<String> deElements
 			) {
 		super(parentShell);
 		this.caller = caller;
 		this.title = title;
 		this.keyName = keyName;
 		this.type = type;
+		this.deElements = deElements;
 	}
 
 	
@@ -69,13 +74,24 @@ public class IdentityConstraintInputDialog extends Dialog {
 		);
 		serverLabel.setText("Key Name");
 
-		keyNameText = new Text(composite, SWT.NONE);
-		keyNameText.setLayoutData(
+
+		keyNameCombo  = new Combo(composite,SWT.DROP_DOWN | SWT.READ_ONLY);
+		keyNameCombo.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 		);
-		keyNameText.setText(getKeyName());
-		((GridData)keyNameText.getLayoutData()).widthHint = 100;
-
+		keyNameCombo.setLayoutData(
+				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+		);
+//		keyNameCombo.add("key");
+//		String[] names = new String[deElements.length];
+//		for(int i=0;i<deElements.length;i++){
+//			keyNameCombo.add(deElements[i].getName());
+//		}
+//		
+		for(Iterator it = deElements.iterator();it.hasNext();){
+			String string = (String)it.next();
+			keyNameCombo.add(string);
+		}
 		Label typeLabel = new Label(composite, SWT.NONE);
 		typeLabel.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
@@ -86,8 +102,8 @@ public class IdentityConstraintInputDialog extends Dialog {
 		typeCombo.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 		);
-		typeCombo.add("Simple Key");
 		typeCombo.add("Unique Key");
+		typeCombo.add("Simple Key");
 		typeCombo.select(0);
 		//typeList.add("Foreign Key");  -- FIXME: foreign keys not supported now
 				
@@ -107,14 +123,16 @@ public class IdentityConstraintInputDialog extends Dialog {
 	}
 	
 	protected void okPressed() {
-		keyName = keyNameText.getText();
+//		keyName = keyNameText.getText();
+		keyName = keyNameCombo.getText();
 		if ((keyName==null) || ("".equals(keyName))) {
 			MessageDialog.openError(
 					this.getShell(), 
 					"Error", "The Key Name cannot be empty"
 			);
 			setReturnCode(-1);
-			keyNameText.setFocus();
+//			keyNameText.setFocus();
+			keyNameCombo.setFocus();
 			return;
 		}
 		
