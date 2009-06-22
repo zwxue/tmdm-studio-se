@@ -56,6 +56,7 @@ public class DOMViewDialog extends Dialog {
 	protected Combo dataModelCombo;
 	protected TabFolder tabFolder;
 	protected int firstTab = TREE_VIEWER;
+	protected Label mcLable=null;
 	//protected boolean elementChanged = false;
 	
 	private int buttonPressed=0;
@@ -265,9 +266,12 @@ public class DOMViewDialog extends Dialog {
 	
 	
 	protected void createButtonsForButtonBar(Composite parent) {
+		
 		if (! editable) {
 			createButton(parent, BUTTON_CLOSE, "Close",true);
 		} else {
+			mcLable = new Label(parent,SWT.RIGHT);
+			mcLable.setText("Data Cluster");
 			dataModelCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
 			String[] dms = dataModelNames.toArray(new String[dataModelNames.size()]);
 			Arrays.sort(dms);
