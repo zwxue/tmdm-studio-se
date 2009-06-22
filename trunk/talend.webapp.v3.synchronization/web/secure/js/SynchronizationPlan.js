@@ -111,8 +111,7 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
 			                }
 						}),
 						new Ext.Toolbar.Button({
-							text:amalto.SynchronizationPlan.SynchronizationPlanLocal.get('BUTTON_SEARCH'),
-							tooltip:'the first property can be searched',
+							text:amalto.SynchronizationPlan.SynchronizationPlanLocal.get('BUTTON_SEARCH'),							
 							handler:showSyncItems
 						})
 					],
