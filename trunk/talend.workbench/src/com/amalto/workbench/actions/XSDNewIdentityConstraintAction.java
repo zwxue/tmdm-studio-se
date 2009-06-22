@@ -1,6 +1,8 @@
 package com.amalto.workbench.actions;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.action.Action;
@@ -20,14 +22,21 @@ import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
+import org.eclipse.xsd.XSDTerm;
+import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
+import org.eclipse.xsd.impl.XSDParticleImpl;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.amalto.workbench.dialogs.IdentityConstraintInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.utils.ImageCache;
+import com.amalto.workbench.utils.Util;
+import com.sun.xml.xsom.impl.parser.DelayedRef.ModelGroup;
 
 public class XSDNewIdentityConstraintAction extends Action implements SelectionListener{
 
@@ -55,14 +64,20 @@ public class XSDNewIdentityConstraintAction extends Action implements SelectionL
 			
             schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
             int index = -1;
-            
+//            EList list = schema.getIdentityConstraintDefinitions();
+         
+//            schema.getElement();
             IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
-            
-            if (selection.getFirstElement() instanceof XSDElementDeclaration)
+            List<String> childNames=new ArrayList<String>();
+            if (selection.getFirstElement() instanceof XSDElementDeclaration){
             	decl = (XSDElementDeclaration) selection.getFirstElement();
+            	childNames = Util.getChildElementNames(decl.getElement());
+            }
+            	
             else if (selection.getFirstElement() instanceof XSDIdentityConstraintDefinition) {
             	XSDIdentityConstraintDefinition selIcd = (XSDIdentityConstraintDefinition) selection.getFirstElement();
             	decl = (XSDElementDeclaration)(selIcd.getContainer());
+            	
 //            	get position of the selected Identity Constraint in the container (Element Declaration)
             	int i=0;
                 for (Iterator iter = decl.getIdentityConstraintDefinitions().iterator(); iter.hasNext(); ) {
@@ -72,17 +87,20 @@ public class XSDNewIdentityConstraintAction extends Action implements SelectionL
     					break;
     				}
     				i++;
-    			}            	
+    			} 
+                childNames = Util.getChildElementNames(decl.getElement());
             } else if (selection.getFirstElement() instanceof XSDParticle) {
             	XSDParticle selParticle = (XSDParticle) selection.getFirstElement();
                 if (! (selParticle.getTerm() instanceof XSDElementDeclaration)) return;
                 decl = (XSDElementDeclaration) selParticle.getTerm();
+//                childNames.add(decl.getName());
+                
             } else {
             	MessageDialog.openError(this.page.getSite().getShell(),"Error", "huhhh: "+selection.getFirstElement().getClass().getName());
             	return;
             }
-                        
-            dialog = new IdentityConstraintInputDialog(this,page.getSite().getShell(),"Add a new Key");
+      
+            dialog = new IdentityConstraintInputDialog(this,page.getSite().getShell(),"Add a new Key",childNames);
             dialog.setBlockOnOpen(true);
        		int ret = dialog.open();
        		if (ret == Window.CANCEL) return;
