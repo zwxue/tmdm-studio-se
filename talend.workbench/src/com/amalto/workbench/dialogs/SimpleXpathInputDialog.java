@@ -72,7 +72,7 @@ public class SimpleXpathInputDialog extends Dialog {
 		Button xpathButton = new Button(composite,SWT.PUSH | SWT.CENTER);
 		xpathButton.setLayoutData(new GridData(SWT.FILL,SWT.FILL,false,true,1,1));
 		xpathButton.setText("...");
-		xpathButton.setToolTipText("Select one xpath");
+		xpathButton.setToolTipText("Select xpath");
 		xpathButton.addSelectionListener(new SelectionListener(){
 
 			public void widgetDefaultSelected(SelectionEvent e) {
@@ -82,7 +82,7 @@ public class SimpleXpathInputDialog extends Dialog {
 				XpathSelectDialog dlg = new XpathSelectDialog(
 						parentPage.getSite().getShell(),
 						parentPage.getXObject().getParent(),
-						"Select one Xpath ...",
+						"Select Xpath",
 						parentPage.getSite(),
 						false
 				);
