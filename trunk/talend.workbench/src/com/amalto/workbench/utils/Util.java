@@ -838,5 +838,39 @@ public class Util {
 	}
 
     
-
+    public static List<String> getChildElementNames(Node node) throws Exception{
+    	//check complex is sequence/all/choice?
+   		NodeList seqlist=Util.getNodeList(
+				node,
+				"xsd:complexType//xsd:sequence"
+		);
+		String xpath="";
+		if(seqlist.getLength()>0){
+			xpath="xsd:complexType//xsd:sequence/xsd:element";
+		}
+		NodeList alllist=Util.getNodeList(
+				node,
+				"xsd:complexType//xsd:all"
+		);
+		if(alllist.getLength()>0){
+			xpath="xsd:complexType//xsd:all/xsd:element";
+		}
+		NodeList choicelist=Util.getNodeList(
+				node,
+				"xsd:complexType//xsd:choice"
+		);
+		if(choicelist.getLength()>0){
+			xpath="xsd:complexType//xsd:choice/xsd:element";
+		}
+		//get child element name list
+    	NodeList list=Util.getNodeList(node, xpath); 
+    	List<String> childNames=new ArrayList<String>();
+    	for(int i=0; i<list.getLength(); i++){
+    		String name=Util.getFirstTextNode(list.item(i), "@name");
+    		if(name!=null)
+    		childNames.add(name);
+    	}
+    	
+    	return childNames;
+    }
 }
