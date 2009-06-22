@@ -43,7 +43,7 @@ public class XpathWidget implements  SelectionListener{
 		xpathAntionHolder.setLayout(new GridLayout(2, false));
 		this.isButtonLeft = isButtonLeft;
 
-		dlgTitle = "Select Xpath ...";
+		dlgTitle = "Select Xpath";
 		accommodation = dialog;
 		ModifyListener listenr=new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
@@ -80,7 +80,7 @@ public class XpathWidget implements  SelectionListener{
 			annotationButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,false, false, 1, 1));
 			annotationButton.addSelectionListener(this);
 		}
-		annotationButton.setToolTipText("Select one xpath");
+		annotationButton.setToolTipText("Select xpath");
 	}
 	
 	

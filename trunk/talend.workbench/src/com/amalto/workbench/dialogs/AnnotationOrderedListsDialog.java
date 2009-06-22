@@ -126,7 +126,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
 			Button xpathButton = new Button(composite,SWT.PUSH | SWT.CENTER);
 			xpathButton.setLayoutData(new GridData(SWT.FILL,SWT.FILL,false,true,1,1));
 			xpathButton.setText("...");
-			xpathButton.setToolTipText("Select one xpath");
+			xpathButton.setToolTipText("Select xpath");
 			xpathButton.addSelectionListener(new SelectionListener(){
 
 				public void widgetDefaultSelected(SelectionEvent e) {
@@ -136,7 +136,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
 				public void widgetSelected(SelectionEvent e) {
 					XpathSelectDialog dlg = new XpathSelectDialog(
 							parentPage.getSite().getShell(),
-							xObject.getParent(),"Select one Xpath ...",
+							xObject.getParent(),"Select Xpath ...",
 							parentPage.getSite(),
 							false
 					);

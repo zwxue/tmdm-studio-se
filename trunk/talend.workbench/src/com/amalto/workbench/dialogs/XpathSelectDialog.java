@@ -19,10 +19,10 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -46,7 +46,7 @@ import org.xml.sax.InputSource;
 
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
-import com.amalto.workbench.providers.XSDTreeContentProvider;
+import com.amalto.workbench.providers.XPathTreeContentProvider;
 import com.amalto.workbench.providers.XSDTreeLabelProvider;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
@@ -256,10 +256,10 @@ public class XpathSelectDialog extends Dialog {
           domViewer.getControl().setLayoutData(    
                   new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
           );
-          ((GridData)domViewer.getControl().getLayoutData()).heightHint=300;
+          ((GridData)domViewer.getControl().getLayoutData()).heightHint=400;
           ((GridData)domViewer.getControl().getLayoutData()).widthHint=200;
 //          add = createButton(composite, 0, "Add", true);
-//          buttonPressed(3);
+//          buttonPressed(3);          
 		return composite;
 	}
 	
@@ -278,7 +278,7 @@ public class XpathSelectDialog extends Dialog {
 	  protected void provideViwerContent(XSDSchema xsdSchema){
 		drillDownAdapter = new DrillDownAdapter(domViewer);
 		domViewer.setLabelProvider(new XSDTreeLabelProvider());
-		domViewer.setContentProvider(new XSDTreeContentProvider(site, xsdSchema));
+		domViewer.setContentProvider(new XPathTreeContentProvider(site, xsdSchema));
 		
 		domViewer.addSelectionChangedListener(new ISelectionChangedListener(){
 
@@ -321,7 +321,7 @@ public class XpathSelectDialog extends Dialog {
 			}
 		});
 		domViewer.setInput(site);	
-	
+		//domViewer.expandToLevel(3);
 	  }
 	  /**
 	   * reload this method to set the text of OKButton Add
