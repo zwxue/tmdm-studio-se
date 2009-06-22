@@ -271,7 +271,7 @@ public class DOMViewDialog extends Dialog {
 			createButton(parent, BUTTON_CLOSE, "Close",true);
 		} else {
 			mcLable = new Label(parent,SWT.RIGHT);
-			mcLable.setText("Data Cluster");
+			mcLable.setText("Data Model");
 			dataModelCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
 			String[] dms = dataModelNames.toArray(new String[dataModelNames.size()]);
 			Arrays.sort(dms);
