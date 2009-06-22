@@ -28,7 +28,7 @@ import org.w3c.dom.Element;
 import com.amalto.workbench.utils.Util;
 
 public class XSDTreeContentProvider implements IStructuredContentProvider, ITreeContentProvider {
-	private XSDSchema xsdSchema;
+	protected XSDSchema xsdSchema;
 	IWorkbenchPartSite site = null;
 
 	public XSDTreeContentProvider(IWorkbenchPartSite site, XSDSchema invisibleRoot ) {
