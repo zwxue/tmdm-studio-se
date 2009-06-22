@@ -626,7 +626,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			manager.add(new Separator());
 			manager.add(newIdentityConstraintAction);
 			// Annotations
-			setAnnotationActions(manager);
+			setAnnotationActions2(manager);
 		}
 
 		if (obj instanceof XSDParticle) {
@@ -644,7 +644,7 @@ public class DataModelMainPage extends AMainPageV2 {
 				manager.add(changeToComplexTypeAction);
 				manager.add(changeToSimpleTypeAction);
 				manager.add(new Separator());
-				manager.add(newIdentityConstraintAction);
+				//manager.add(newIdentityConstraintAction);
 				if (term instanceof XSDElementDeclaration) {
 					// Annotations
 					setAnnotationActions(manager);
@@ -708,6 +708,16 @@ public class DataModelMainPage extends AMainPageV2 {
 		manager.add(setAnnotationDescriptionsAction);
 		manager.add(setAnnotationForeignKeyAction);
 		manager.add(setAnnotationForeignKeyInfoAction);
+		manager.add(setAnnotationWriteAction);
+		manager.add(setAnnotationHiddenAction);
+		manager.add(setAnnotationTargetSystemsAction);
+		manager.add(setAnnotationSourceSystemAction);
+		manager.add(setAnnotationDocumentationAction);
+	}
+	
+	private void setAnnotationActions2(IMenuManager manager) {
+		manager.add(setAnnotationLabelAction);
+		manager.add(setAnnotationDescriptionsAction);
 		manager.add(setAnnotationWriteAction);
 		manager.add(setAnnotationHiddenAction);
 		manager.add(setAnnotationTargetSystemsAction);
