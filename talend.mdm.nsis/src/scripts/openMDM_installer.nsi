@@ -63,7 +63,7 @@
 	
   !insertmacro MUI_PAGE_INSTFILES
   !define MUI_FINISHPAGE_RUN ""
-  !define MUI_FINISHPAGE_RUN_TEXT "run as a windows service(autostart)"
+  !define MUI_FINISHPAGE_RUN_TEXT "run as a windows service(Manual)"
   !define MUI_FINISHPAGE_RUN_FUNCTION runService
   !insertmacro MUI_PAGE_FINISH  	
   
@@ -147,17 +147,13 @@ Section "Uninstall"
   DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\openMDM"
   DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\openMDM"  
   
-    ;DeleteRegKey HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Run\openMDM"	
-    ;remove the service
-	SimpleSC::StopService "${MDM_SERVICE}"
-	SimpleSC::RemoveService "${MDM_SERVICE}"  
+  ;DeleteRegKey HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Run\openMDM"	
+  ;remove the service  
+  Exec '"$INSTDIR\openMDM\bin\service.bat" uninstall /NCRC'		
 SectionEnd
 
 Function runService
-	SimpleSC::StopService "${MDM_SERVICE}"
-	SimpleSC::RemoveService "${MDM_SERVICE}"
-	SimpleSC::InstallService "${MDM_SERVICE}" "Talend open MDM Service" "272" "2" "$INSTDIR\openMDM\openMDM.exe" "" "" ""
+	Exec '"$INSTDIR\openMDM\bin\service.bat" install /NCRC'	
 	;registry it to let openMDM star when windows startup
-	;WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Run\openMDM" "openMDM" "$INSTDIR\openMDM\openMDM.exe"	
-	SimpleSC::StartService "${MDM_SERVICE}"     
+	;WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Run\openMDM" "openMDM" "$INSTDIR\openMDM\openMDM.exe"	  
 FunctionEnd
