@@ -96,7 +96,8 @@ public class XpathWidget implements  SelectionListener{
 				accommodation.getSite().getShell(),
 				treeParent,dlgTitle,
 				accommodation.getSite(),
-				true
+				true,
+				null
 				
 		);
         dlg.setBlockOnOpen(true);

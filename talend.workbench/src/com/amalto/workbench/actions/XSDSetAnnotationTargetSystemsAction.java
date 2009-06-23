@@ -23,14 +23,15 @@ public class XSDSetAnnotationTargetSystemsAction extends Action{
 	protected DataModelMainPage page = null;
 	protected XSDSchema schema = null;
 	protected AnnotationOrderedListsDialog dlg = null;
+	protected String dataModelName;
 	
-	
-	public XSDSetAnnotationTargetSystemsAction(DataModelMainPage page) {
+	public XSDSetAnnotationTargetSystemsAction(DataModelMainPage page,String dataModelName) {
 		super();
 		this.page = page;
 		setImageDescriptor(ImageCache.getImage( "icons/annotation.gif"));
 		setText("Set the Target Systems");
 		setToolTipText("Set the the Target Systems for the content of this element");
+		this.dataModelName = dataModelName;
 	}
 	
 	public void run() {
@@ -55,7 +56,8 @@ public class XSDSetAnnotationTargetSystemsAction extends Action{
        				"Set the Target Systems for the content of this element",
        				"Target System Name",
        				page,
-       				AnnotationOrderedListsDialog.AnnotationTargetSystems_ActionType
+       				AnnotationOrderedListsDialog.AnnotationTargetSystems_ActionType,
+       				dataModelName 
        		);
             
        		dlg.setBlockOnOpen(true);

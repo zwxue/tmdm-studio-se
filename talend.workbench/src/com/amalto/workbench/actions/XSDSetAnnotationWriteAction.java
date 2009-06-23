@@ -56,7 +56,7 @@ public class XSDSetAnnotationWriteAction extends Action{
        				"Set The Roles That Have Write Access",
        				"Roles",
        				page,
-       				AnnotationOrderedListsDialog.AnnotationWrite_ActionType
+       				AnnotationOrderedListsDialog.AnnotationWrite_ActionType,null
        		);
             
        		dlg.setBlockOnOpen(true);
