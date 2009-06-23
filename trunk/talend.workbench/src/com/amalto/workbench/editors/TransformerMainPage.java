@@ -23,8 +23,10 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
+import org.eclipse.jface.text.ITextOperationTarget;
 import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.text.TextViewer;
+import org.eclipse.jface.text.TextViewerUndoManager;
 import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.jface.text.source.VerticalRuler;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -35,6 +37,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.TextTransfer;
@@ -661,7 +664,7 @@ public class TransformerMainPage extends AMainPageV2 {
 	        parametersTextViewer.getControl().setLayoutData(
 	                new GridData(SWT.FILL,SWT.FILL,true,true,4,1)
 	        );
-	        
+	        WidgetUtils.initRedoUndo(parametersTextViewer);
 	        parametersTextViewer.addTextListener(new ITextListener() {
 	        	public void textChanged(TextEvent event) {
 	        		if (refreshing) return;
@@ -680,8 +683,7 @@ public class TransformerMainPage extends AMainPageV2 {
         }
 
     }
-
-       
+    
     protected void refreshStep(int index) {
     	if (index < 0) {
 			stepWidget.inputViewer.setInput(new ArrayList<WSTransformerVariablesMapping>());
@@ -786,6 +788,7 @@ public class TransformerMainPage extends AMainPageV2 {
 	}
 
 	public void dispose() {
+		parametersTextViewer.getUndoManager().disconnect();
 		super.dispose();
 		windowTarget.dispose();
 	}
@@ -793,6 +796,7 @@ public class TransformerMainPage extends AMainPageV2 {
 	public void doSave(IProgressMonitor monitor) {
 		super.doSave(monitor);
 		stepsList.setSelection(currentPlugin);
+		parametersTextViewer.getUndoManager().disconnect();
 	}
 	
 	class TransformerStepWidget {

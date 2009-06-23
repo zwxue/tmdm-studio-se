@@ -61,6 +61,7 @@ import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.WidgetUtils;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSRunQuery;
 import com.amalto.workbench.webservices.WSStoredProcedure;
@@ -119,7 +120,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener{
                     new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
             );
             procedureViewer.addTextListener(this);
-            
+            WidgetUtils.initRedoUndo(procedureViewer);
             /************************************************************
              * Execute Stored Procedure
              ************************************************************/
