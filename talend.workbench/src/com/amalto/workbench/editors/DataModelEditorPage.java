@@ -25,6 +25,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
+import com.amalto.workbench.utils.WidgetUtils;
 import com.amalto.workbench.webservices.WSDataModel;
 
 public class DataModelEditorPage extends AFormPage implements ITextListener{
@@ -87,6 +88,7 @@ public class DataModelEditorPage extends AFormPage implements ITextListener{
             		new VerticalRuler(10), SWT.V_SCROLL | SWT.H_SCROLL
             );
             schemaViewer.addTextListener(this);
+            WidgetUtils.initRedoUndo(schemaViewer);
             editorSection.setClient(schemaViewer.getControl());
             refreshData();
             
@@ -100,8 +102,7 @@ public class DataModelEditorPage extends AFormPage implements ITextListener{
         }
 
     }//createFormContent
-
-
+	
 
 	protected void refreshData() {
 		try {
@@ -162,6 +163,7 @@ public class DataModelEditorPage extends AFormPage implements ITextListener{
 	*/
 	
 	public void dispose() {
+		schemaViewer.getUndoManager().disconnect();
 		super.dispose();
 	}
 	
