@@ -134,7 +134,7 @@ amalto.ItemsTrash.ItemsTrash=function(){
 						}),
 						new Ext.Toolbar.Button({
 							text:'search',
-							tooltip:'First four fields can be input search text',
+							tooltip:'First four fields can be input as search text',
 							handler:showTrashItems
 						})
 					],
