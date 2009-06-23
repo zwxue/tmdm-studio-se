@@ -21,13 +21,15 @@ public class XSDSetAnnotationForeignKeyAction extends Action{
 	protected DataModelMainPage page = null;
 	protected XSDSchema schema = null;
 	protected SimpleXpathInputDialog sxid = null;
+	protected String dataModelName;
 	
-	public XSDSetAnnotationForeignKeyAction(DataModelMainPage page) {
+	public XSDSetAnnotationForeignKeyAction(DataModelMainPage page,String dataModelName) {
 		super();
 		this.page = page;
 		setImageDescriptor(ImageCache.getImage( "icons/annotation.gif"));
 		setText("Set the Foreign Key");
 		setToolTipText("Set the Foreign Key");
+		this.dataModelName = dataModelName;
 	}
 	
 	public void run() {
@@ -51,7 +53,8 @@ public class XSDSetAnnotationForeignKeyAction extends Action{
             			public void widgetSelected(SelectionEvent e) {
             				sxid.close();
             			}
-            		}
+            		}, dataModelName
+       				
        		);
             
             sxid.setBlockOnOpen(true);

@@ -23,14 +23,15 @@ public class XSDSetAnnotationForeignKeyInfoAction extends Action{
 	protected DataModelMainPage page = null;
 	protected XSDSchema schema = null;
 	protected AnnotationOrderedListsDialog dlg = null;
+	protected String dataModelName;
 	
-	
-	public XSDSetAnnotationForeignKeyInfoAction(DataModelMainPage page) {
+	public XSDSetAnnotationForeignKeyInfoAction(DataModelMainPage page,String dataModelName) {
 		super();
 		this.page = page;
 		setImageDescriptor(ImageCache.getImage( "icons/annotation.gif"));
 		setText("Set the Foreign Key Infos");
 		setToolTipText("Set the Foreign Key Infos");
+		this.dataModelName = dataModelName;
 	}
 	
 	public void run() {
@@ -55,7 +56,9 @@ public class XSDSetAnnotationForeignKeyInfoAction extends Action{
        				"Set the Foreign Key Infos",
        				"xPaths",
        				page,
-       				AnnotationOrderedListsDialog.AnnotationForeignKeyInfo_ActionType
+       				AnnotationOrderedListsDialog.AnnotationForeignKeyInfo_ActionType,
+       				dataModelName
+       				
        		);
             
        		dlg.setBlockOnOpen(true);

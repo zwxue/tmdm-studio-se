@@ -19,7 +19,10 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -54,6 +57,7 @@ import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSGetDataModel;
 import com.amalto.workbench.webservices.XtentisPort;
+import com.sun.java.swing.plaf.windows.WindowsBorders;
 
 
 public class XpathSelectDialog extends Dialog {
@@ -72,14 +76,17 @@ public class XpathSelectDialog extends Dialog {
 	protected SelectionListener listener;
 	private boolean isMulti=true;
 	protected String selectedDataModelName;
-	
-	public XpathSelectDialog(Shell parentShell,TreeParent parent,String title,IWorkbenchPartSite site,boolean isMulti) {
+	protected String dataModelName;
+	private int t=0;
+
+	public XpathSelectDialog(Shell parentShell,TreeParent parent,String title,IWorkbenchPartSite site,boolean isMulti,String dataModelName) {
 		// TODO Auto-generated constructor stub
 		super(parentShell);
 		this.title = title;
 		this.parent = parent;
 		this.site = site;
 		this.isMulti=isMulti;
+		this.dataModelName =dataModelName;//default dataModel
 	}
 	
 	private String xpath="";
@@ -94,9 +101,7 @@ public class XpathSelectDialog extends Dialog {
 	}
 
 	private  String getXpath(StructuredSelection sel){
-//		getOKButton().setText("Add");
 		getOKButton().setEnabled(false);
-//		getOKButton().setText("ADD");
 		XSDParticle particle = null;
 		String path ="";
 		totalXpath="";
@@ -105,8 +110,6 @@ public class XpathSelectDialog extends Dialog {
         IStructuredSelection selection = sel;//(IStructuredSelection)domViewer.getSelection();
 //        selection.size();
         next= selection.getFirstElement();
-//        for(Iterator it = selection.iterator();it.hasNext();){
-//        	next = it.next();
         	if(next instanceof XSDElementDeclaration) 
         		xSDElementDeclaration  = (XSDElementDeclaration) next;
                 
@@ -131,15 +134,6 @@ public class XpathSelectDialog extends Dialog {
             		continue;
             	do {
                 	 component = (XSDConcreteComponent)item.getData();
-                	
-//                	if(component instanceof XSDElementDeclaration){
-                		
-//                		path = ((XSDElementDeclaration)component).getName()+path;
-//                		 getOKButton().setEnabled(true);
-////                		return path;
-//                		 item = item.getParentItem();
-//                		 continue;
-//                	}
                 	if (component instanceof XSDParticle) {
                 		getOKButton().setEnabled(true);
                 		if (((XSDParticle)component).getTerm() instanceof XSDElementDeclaration){
@@ -149,8 +143,6 @@ public class XpathSelectDialog extends Dialog {
                 			path=((XSDElementDeclaration)component).getName()+path;
                 			getOKButton().setEnabled(true);
                 	}
-                	
-                	
                 	item = item.getParentItem();
                 	
                 } while (item!=null);
@@ -174,70 +166,36 @@ public class XpathSelectDialog extends Dialog {
 		
 		Label datamoelsLabel = new Label(composite, SWT.NONE);
 		GridData dg= new GridData(SWT.FILL,SWT.FILL,false,true,1,1);
-		datamoelsLabel.setLayoutData(
-				dg
-		);
+		datamoelsLabel.setLayoutData(dg);
 		datamoelsLabel.setText("Data Models:");
 		
 		dg= new GridData(SWT.FILL,SWT.FILL,true,true,2,1);
 		dg.widthHint=400;
 		dataModelCombo = new Combo(composite,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
-		dataModelCombo.setLayoutData(dg        );
-
-		
+		dataModelCombo.setLayoutData(dg);
 		TreeParent grantTreeParent = this.parent.getParent();
 		TreeParent tree = grantTreeParent.findServerFolder(TreeObject.DATA_MODEL);
 		TreeObject[] trees = tree.getChildren();
 		TreeObject treeobject;
+		
 		for (int i = 0; i < trees.length; i++) {
 			treeobject = trees[i];
 			String treeName = treeobject.getDisplayName();
 			dataModelCombo.add(treeName);
+			if(treeName.equals(dataModelName)){
+				t =i;
+			}
 		}
- 
-		  final TreeParent pObject =tree;
-		  dataModelCombo.addSelectionListener(new SelectionListener() {
-			public void widgetDefaultSelected(
-					org.eclipse.swt.events.SelectionEvent e) {
+		 final TreeParent pObject =tree;
+		 
+		 	dataModelCombo.addSelectionListener(new SelectionListener() {
+			public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
+		
 			}
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-				// TODO Auto-generated method stub
-				String	modelDisplay = dataModelCombo.getText();
-				XpathSelectDialog.this.selectedDataModelName=modelDisplay;
-				xobject = pObject.findObject(TreeObject.DATA_MODEL, modelDisplay);
-				XtentisPort	port = null;
-				try {
-						port = Util.getPort(
-							new URL(xobject.getEndpointAddress()),
-							xobject.getUniverse(),
-							xobject.getUsername(),
-							xobject.getPassword()
-					);
-				} catch (MalformedURLException e3) {
-					// TODO Auto-generated catch block
-					e3.printStackTrace();
-				} catch (XtentisException e3) {
-					// TODO Auto-generated catch block
-					e3.printStackTrace();
-				}
-//			  WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
-			  WSDataModel wsDataModel=null;
-					try {
-						 wsDataModel = port.getDataModel(new WSGetDataModel((WSDataModelPK)xobject.getWsKey()));
-					} catch (RemoteException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
-			  try {
-				XSDSchema xsdSchema =getXSDSchema(wsDataModel.getXsdSchema());
-				
-				provideViwerContent(xsdSchema);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				changeDomTree(pObject);
 			}
-				
-			}
+			
 		  });
 		  schemaLabel = new Label (composite,SWT.NONE); 
 		  schemaLabel.setText("Xpath: ");
@@ -252,16 +210,52 @@ public class XpathSelectDialog extends Dialog {
 		  else{
 			  domViewer = new TreeViewer(composite, SWT.H_SCROLL | SWT.V_SCROLL|SWT.BORDER);
 		  }
-		 
-          domViewer.getControl().setLayoutData(    
+          dataModelCombo.select(t);
+		  changeDomTree(pObject);
+		  
+		  domViewer.getControl().setLayoutData(    
                   new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
           );
           ((GridData)domViewer.getControl().getLayoutData()).heightHint=400;
           ((GridData)domViewer.getControl().getLayoutData()).widthHint=200;
-//          add = createButton(composite, 0, "Add", true);
-//          buttonPressed(3);          
 		return composite;
 	}
+	
+	private void changeDomTree(final TreeParent pObject) {
+		String	modelDisplay = dataModelCombo.getText();
+		XpathSelectDialog.this.selectedDataModelName=modelDisplay;
+		xobject = pObject.findObject(TreeObject.DATA_MODEL, modelDisplay);
+		XtentisPort	port = null;
+		try {
+				port = Util.getPort(
+					new URL(xobject.getEndpointAddress()),
+					xobject.getUniverse(),
+					xobject.getUsername(),
+					xobject.getPassword()
+			);
+		} catch (MalformedURLException e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		} catch (XtentisException e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
+//	  WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
+	  WSDataModel wsDataModel=null;
+			try {
+				 wsDataModel = port.getDataModel(new WSGetDataModel((WSDataModelPK)xobject.getWsKey()));
+			} catch (RemoteException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+	  try {
+		XSDSchema xsdSchema =getXSDSchema(wsDataModel.getXsdSchema());
+		provideViwerContent(xsdSchema);
+	} catch (Exception e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+	}//changeDomTree(
 	
 
 	private XSDSchema getXSDSchema(String schema) throws Exception{
@@ -281,14 +275,11 @@ public class XpathSelectDialog extends Dialog {
 		domViewer.setContentProvider(new XPathTreeContentProvider(site, xsdSchema));
 		
 		domViewer.addSelectionChangedListener(new ISelectionChangedListener(){
-
 			public void selectionChanged(SelectionChangedEvent e) {
 				StructuredSelection sel= (StructuredSelection)e.getSelection();
 				xpath=getXpath(sel);	
-//				schemaLabel.setText("Xpath: "+xpath);
 				xpathText.setText(xpath);
 			}
-			
 		});
 //		domViewer.expandAll();
 		domViewer.getControl().setLayoutData(
@@ -327,11 +318,9 @@ public class XpathSelectDialog extends Dialog {
 	   * reload this method to set the text of OKButton Add
 	   */
 	  protected Control createButtonBar(Composite parent) {
-
 	         Control btnBar = super.createButtonBar(parent);
 	         getButton(IDialogConstants.OK_ID).setText("Add");
 	         return btnBar;
 
 	     }
-
 }

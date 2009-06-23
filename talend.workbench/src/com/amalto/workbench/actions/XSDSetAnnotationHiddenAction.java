@@ -24,14 +24,15 @@ public class XSDSetAnnotationHiddenAction extends Action{
 	protected DataModelMainPage page = null;
 	protected XSDSchema schema = null;
 	protected AnnotationOrderedListsDialog dlg = null;
+	protected String dataModelName;
 	
-	
-	public XSDSetAnnotationHiddenAction(DataModelMainPage page) {
+	public XSDSetAnnotationHiddenAction(DataModelMainPage page,String dataModelName) {
 		super();
 		this.page = page;
 		setImageDescriptor(ImageCache.getImage( "icons/annotation.gif"));
 		setText("Set the Roles with Hidden Accesses");
 		setToolTipText("Set the Roles That Cannot See This Filed");
+		this.dataModelName = dataModelName;
 	}
 	
 	public void run() {
@@ -56,7 +57,8 @@ public class XSDSetAnnotationHiddenAction extends Action{
        				"Set The Roles That Cannot Access This Field",
        				"Roles",
        				page,
-       				AnnotationOrderedListsDialog.AnnotationHidden_ActionType
+       				AnnotationOrderedListsDialog.AnnotationHidden_ActionType,
+       				dataModelName
        		);
             
        		dlg.setBlockOnOpen(true);
