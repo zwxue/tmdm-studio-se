@@ -31,18 +31,20 @@ public class SimpleXpathInputDialog extends Dialog {
 	private SelectionListener caller = null;
 	
 	private String xpath = "";
+	private String dataModelName;
 
 	/**
 	 * @param parentShell
 	 */
 	public SimpleXpathInputDialog(AMainPageV2 parentPage, String title,
-			String dialogMessage, String initialValue, SelectionListener caller) {
+			String dialogMessage, String initialValue, SelectionListener caller,String dataModelName) {
 		super(parentPage.getSite().getShell());
 		this.parentPage=parentPage;
 		this.title = title;
 		this.dialogMessage = dialogMessage;
 		this.initialValue = initialValue;
 		this.caller = caller;
+		this.dataModelName = dataModelName;
 	}
 
 	protected Control createDialogArea(Composite parent) {
@@ -84,7 +86,8 @@ public class SimpleXpathInputDialog extends Dialog {
 						parentPage.getXObject().getParent(),
 						"Select Xpath",
 						parentPage.getSite(),
-						false
+						false,
+						dataModelName
 				);
 		        dlg.setBlockOnOpen(true);
 				dlg.open();

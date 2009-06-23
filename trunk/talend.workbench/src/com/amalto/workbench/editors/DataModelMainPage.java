@@ -146,16 +146,19 @@ public class DataModelMainPage extends AMainPageV2 {
 	private XSDSetAnnotationDocumentationAction setAnnotationDocumentationAction = null;
 	private ObjectUndoContext undoContext;
 	private MenuManager menuMgr;
+	private String dataModelName;
 
 	public DataModelMainPage(FormEditor editor) {
 		super(editor, DataModelMainPage.class.getName(), "Data Model "
 				+ ((XObjectEditorInput) editor.getEditorInput()).getName());
+		this.dataModelName =((XObjectEditorInput) editor.getEditorInput()).getName();
 	}
 
 	protected void createCharacteristicsContent(FormToolkit toolkit,
 			Composite mainComposite) {
 
 		try {
+			
 
 			WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
 
@@ -554,16 +557,13 @@ public class DataModelMainPage extends AMainPageV2 {
 		this.changeBaseTypeAction = new XSDChangeBaseTypeAction(this);
 		this.getXPathAction = new XSDGetXPathAction(this);
 		this.setAnnotationLabelAction = new XSDSetAnnotationLabelAction(this);
-		this.setAnnotationDescriptionsAction = new XSDSetAnnotationDescriptionsAction(
-				this);
-		this.setAnnotationForeignKeyAction = new XSDSetAnnotationForeignKeyAction(
-				this);
+		this.setAnnotationDescriptionsAction = new XSDSetAnnotationDescriptionsAction(this);
+		this.setAnnotationForeignKeyAction = new XSDSetAnnotationForeignKeyAction(this,dataModelName);
 		this.setAnnotationForeignKeyInfoAction = new XSDSetAnnotationForeignKeyInfoAction(
-				this);
+				this,dataModelName);
 		this.setAnnotationWriteAction = new XSDSetAnnotationWriteAction(this);
-		this.setAnnotationHiddenAction = new XSDSetAnnotationHiddenAction(this);
-		this.setAnnotationTargetSystemsAction = new XSDSetAnnotationTargetSystemsAction(
-				this);
+		this.setAnnotationHiddenAction = new XSDSetAnnotationHiddenAction(this,dataModelName);
+		this.setAnnotationTargetSystemsAction = new XSDSetAnnotationTargetSystemsAction(this,dataModelName);
 		this.setAnnotationSourceSystemAction = new XSDSetAnnotationSourceSystemAction(
 				this);
 		this.setAnnotationDocumentationAction = new XSDSetAnnotationDocumentationAction(
