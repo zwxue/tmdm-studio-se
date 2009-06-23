@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Workbench Plug-in
+Bundle-Name: talend openmdm Workbench Plug-in
 Bundle-SymbolicName: org.talend.openmdm.workbench;singleton:=true
 Bundle-Version: 2.20.0
 Bundle-Activator: com.amalto.workbench.AmaltoWorbenchPlugin
@@ -13,7 +13,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.workbench.texteditor,
  org.eclipse.ui.forms,
  org.eclipse.xsd,
- talend.mdm.client.libraries;bundle-version="1.0.0"
+ org.talend.openmdm.client.libraries;bundle-version="1.0.0"
 Eclipse-AutoStart: true
 Bundle-ClassPath: com.amalto.workbench.jar,
  META-INF/lib/activation.jar,
