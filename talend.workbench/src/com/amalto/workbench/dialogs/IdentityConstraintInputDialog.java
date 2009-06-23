@@ -93,7 +93,8 @@ public class IdentityConstraintInputDialog extends Dialog {
 				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 		);
 		fieldNameCombo.setItems(deElements.toArray(new String[deElements.size()]));
-		fieldNameCombo.select(0);
+		if(deElements.size()>0)
+			fieldNameCombo.select(0);
 		Label typeLabel = new Label(composite, SWT.NONE);
 		typeLabel.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
