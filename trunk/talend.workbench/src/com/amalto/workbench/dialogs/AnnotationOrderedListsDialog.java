@@ -58,6 +58,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
 	private AMainPageV2 parentPage = null;
 	private TreeObject xObject = null;
 	private int actionType;
+	private String dataModelName;
 	
 	public static final int AnnotationForeignKeyInfo_ActionType=1<<0;
 	public static final int AnnotationHidden_ActionType=1<<1;
@@ -70,7 +71,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
 	 */
 	public AnnotationOrderedListsDialog(ArrayList<String> xPaths,
 			SelectionListener caller, Shell parentShell, String title,
-			String columnName, AMainPageV2 parentPage, int actionType) {
+			String columnName, AMainPageV2 parentPage, int actionType,String dataModelName) {
 		super(parentShell);
 		setShellStyle(this.getShellStyle() | SWT.RESIZE);
 		this.xPaths = xPaths;
@@ -80,6 +81,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
 		this.parentPage = parentPage;
 		this.xObject = parentPage.getXObject();
 		this.actionType = actionType;
+		this.dataModelName = dataModelName;
 	}
 
 
@@ -138,8 +140,10 @@ public class AnnotationOrderedListsDialog extends Dialog {
 							parentPage.getSite().getShell(),
 							xObject.getParent(),"Select Xpath ...",
 							parentPage.getSite(),
-							false
+							false,
+							dataModelName
 					);
+					
 			        dlg.setBlockOnOpen(true);
 					dlg.open();
 					
