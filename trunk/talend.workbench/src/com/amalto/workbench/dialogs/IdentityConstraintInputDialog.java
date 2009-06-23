@@ -1,12 +1,12 @@
 package com.amalto.workbench.dialogs;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -15,26 +15,29 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.xsd.XSDIdentityConstraintCategory;
 
 public class IdentityConstraintInputDialog extends Dialog {
 
-	private  Combo typeCombo=null;
-	private Combo keyNameCombo=null;
+	private  CCombo typeCombo=null;
+	private CCombo fieldNameCombo=null;
 
 	private String keyName="";
+	private String fieldName="";
 	private XSDIdentityConstraintCategory type;
 	private List<String> deElements;
 	
 	private SelectionListener caller = null;
 	private String title = "";
+	private Text keyNameText;
 	
 
 	/**
 	 * @param parentShell
 	 */
-	public IdentityConstraintInputDialog(SelectionListener caller, Shell parentShell, String title,List<String> deElements) {
-		this(caller,parentShell,title,"",XSDIdentityConstraintCategory.KEY_LITERAL,deElements);
+	public IdentityConstraintInputDialog(SelectionListener caller, Shell parentShell, String title,List<String> deElements, String keyName) {
+		this(caller,parentShell,title,keyName,XSDIdentityConstraintCategory.KEY_LITERAL,deElements);
 	}
 
 	/**
@@ -67,38 +70,37 @@ public class IdentityConstraintInputDialog extends Dialog {
 		GridLayout layout = (GridLayout)composite.getLayout();
 		layout.numColumns = 2;
 		//layout.verticalSpacing = 10;
+		Label Label = new Label(composite, SWT.NONE);
+		Label.setLayoutData(
+				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+		);
+		Label.setText("Key Name(*)");
+		keyNameText=new Text(composite, SWT.BORDER);
+		keyNameText.setLayoutData(
+				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+		);
+		keyNameText.setText(keyName);
 		
 		Label serverLabel = new Label(composite, SWT.NONE);
 		serverLabel.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
 		);
-		serverLabel.setText("Key Name");
+		serverLabel.setText("Field Name");
 
 
-		keyNameCombo  = new Combo(composite,SWT.DROP_DOWN | SWT.READ_ONLY);
-		keyNameCombo.setLayoutData(
+		fieldNameCombo=new CCombo(composite,SWT.DROP_DOWN|SWT.BORDER);
+		fieldNameCombo.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 		);
-		keyNameCombo.setLayoutData(
-				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-		);
-//		keyNameCombo.add("key");
-//		String[] names = new String[deElements.length];
-//		for(int i=0;i<deElements.length;i++){
-//			keyNameCombo.add(deElements[i].getName());
-//		}
-//		
-		for(Iterator it = deElements.iterator();it.hasNext();){
-			String string = (String)it.next();
-			keyNameCombo.add(string);
-		}
+		fieldNameCombo.setItems(deElements.toArray(new String[deElements.size()]));
+		fieldNameCombo.select(0);
 		Label typeLabel = new Label(composite, SWT.NONE);
 		typeLabel.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
 		);
 		typeLabel.setText("Type");
 				
-		typeCombo = new Combo(composite,SWT.DROP_DOWN | SWT.READ_ONLY);
+		typeCombo = new CCombo(composite,SWT.DROP_DOWN | SWT.READ_ONLY|SWT.BORDER);
 		typeCombo.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 		);
@@ -124,18 +126,28 @@ public class IdentityConstraintInputDialog extends Dialog {
 	
 	protected void okPressed() {
 //		keyName = keyNameText.getText();
-		keyName = keyNameCombo.getText();
+		fieldName = fieldNameCombo.getText();
+		keyName=keyNameText.getText();
 		if ((keyName==null) || ("".equals(keyName))) {
 			MessageDialog.openError(
 					this.getShell(), 
 					"Error", "The Key Name cannot be empty"
 			);
 			setReturnCode(-1);
-//			keyNameText.setFocus();
-			keyNameCombo.setFocus();
+			keyNameText.setFocus();
+			//fieldNameCombo.setFocus();
 			return;
 		}
-		
+//		if ((fieldName==null) || ("".equals(fieldName))) {
+//			MessageDialog.openError(
+//					this.getShell(), 
+//					"Error", "The Field Name cannot be empty"
+//			);
+//			setReturnCode(-1);
+//			//keyNameText.setFocus();
+//			fieldNameCombo.setFocus();
+//			return;
+//		}		
 		String selection = (typeCombo.getText()).toUpperCase();
 		if (selection.indexOf("UNIQUE")>=0)
 			type = XSDIdentityConstraintCategory.UNIQUE_LITERAL;
@@ -154,6 +166,10 @@ public class IdentityConstraintInputDialog extends Dialog {
 
 	public XSDIdentityConstraintCategory getType() {
 		return type;
+	}
+
+	public String getFieldName() {
+		return fieldName;
 	}
 	
 

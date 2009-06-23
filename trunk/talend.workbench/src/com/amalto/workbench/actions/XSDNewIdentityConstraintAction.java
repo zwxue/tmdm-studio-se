@@ -44,6 +44,7 @@ public class XSDNewIdentityConstraintAction extends Action implements SelectionL
 	private XSDSchema schema = null;
 	private IdentityConstraintInputDialog dialog = null;	
 	private String  keyName;
+	private String fieldName;
 	private XSDIdentityConstraintCategory type;
 	private XSDElementDeclaration decl=null;
 	
@@ -98,9 +99,8 @@ public class XSDNewIdentityConstraintAction extends Action implements SelectionL
             } else {
             	MessageDialog.openError(this.page.getSite().getShell(),"Error", "huhhh: "+selection.getFirstElement().getClass().getName());
             	return;
-            }
-      
-            dialog = new IdentityConstraintInputDialog(this,page.getSite().getShell(),"Add a new Key",childNames);
+            }           
+            dialog = new IdentityConstraintInputDialog(this,page.getSite().getShell(),"Add a new Key",childNames,decl.getName());
             dialog.setBlockOnOpen(true);
        		int ret = dialog.open();
        		if (ret == Window.CANCEL) return;
@@ -118,16 +118,20 @@ public class XSDNewIdentityConstraintAction extends Action implements SelectionL
        		field.setVariety(XSDXPathVariety.FIELD_LITERAL);
    			field.setValue(".");
    			//if complex content set name of first field
-   			if (decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
-	   			XSDComplexTypeContent ctc = ((XSDComplexTypeDefinition)decl.getTypeDefinition()).getContent();
-	   			if (ctc instanceof XSDParticle) {
-	   				if (((XSDParticle)ctc).getTerm() instanceof XSDModelGroup) {
-	   					XSDModelGroup mg = (XSDModelGroup) ((XSDParticle)ctc).getTerm();
-	   					if (mg.getContents().size()>0) 
-	   						if (((XSDParticle)mg.getContents().get(0)).getTerm() instanceof XSDElementDeclaration)
-	   							field.setValue(((XSDElementDeclaration)(((XSDParticle)mg.getContents().get(0)).getTerm())).getName());
-	   				}
+   			if(fieldName==null || fieldName.trim().length()==0){
+	   			if (decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+		   			XSDComplexTypeContent ctc = ((XSDComplexTypeDefinition)decl.getTypeDefinition()).getContent();
+		   			if (ctc instanceof XSDParticle) {
+		   				if (((XSDParticle)ctc).getTerm() instanceof XSDModelGroup) {
+		   					XSDModelGroup mg = (XSDModelGroup) ((XSDParticle)ctc).getTerm();
+		   					if (mg.getContents().size()>0) 
+		   						if (((XSDParticle)mg.getContents().get(0)).getTerm() instanceof XSDElementDeclaration)
+		   							field.setValue(((XSDElementDeclaration)(((XSDParticle)mg.getContents().get(0)).getTerm())).getName());
+		   				}
+		   			}
 	   			}
+   			}else{
+   				field.setValue(fieldName);
    			}
        		icd.getFields().add(field);
  
@@ -161,6 +165,7 @@ public class XSDNewIdentityConstraintAction extends Action implements SelectionL
 		if (dialog.getReturnCode() ==  -1) return; //there was a validation error
 
 		keyName = dialog.getKeyName();
+		fieldName=dialog.getFieldName();
 		type = dialog.getType();
 		
 		//check if key does not already exist
