@@ -72,7 +72,7 @@ public class XSDNewIdentityConstraintAction extends Action implements SelectionL
             List<String> childNames=new ArrayList<String>();
             if (selection.getFirstElement() instanceof XSDElementDeclaration){
             	decl = (XSDElementDeclaration) selection.getFirstElement();
-            	childNames = Util.getChildElementNames(decl.getElement());
+            	//childNames = Util.getChildElementNames(decl.getElement());
             }
             	
             else if (selection.getFirstElement() instanceof XSDIdentityConstraintDefinition) {
@@ -89,7 +89,7 @@ public class XSDNewIdentityConstraintAction extends Action implements SelectionL
     				}
     				i++;
     			} 
-                childNames = Util.getChildElementNames(decl.getElement());
+                
             } else if (selection.getFirstElement() instanceof XSDParticle) {
             	XSDParticle selParticle = (XSDParticle) selection.getFirstElement();
                 if (! (selParticle.getTerm() instanceof XSDElementDeclaration)) return;
@@ -100,6 +100,7 @@ public class XSDNewIdentityConstraintAction extends Action implements SelectionL
             	MessageDialog.openError(this.page.getSite().getShell(),"Error", "huhhh: "+selection.getFirstElement().getClass().getName());
             	return;
             }           
+            childNames = Util.getChildElementNames(decl.getElement());
             dialog = new IdentityConstraintInputDialog(this,page.getSite().getShell(),"Add a new Key",childNames,decl.getName());
             dialog.setBlockOnOpen(true);
        		int ret = dialog.open();
