@@ -120,7 +120,7 @@
 	</target>
 	
 
-
+	<!-- generate installer for windows-->
 	<target name="generate.installer.windows" depends="clean,init,deploy.all">	
 
    		<copy todir="${tmp.dir}/openMDM">
@@ -144,7 +144,7 @@
    		</copy>
 		
 		<!-- build -->
-		<antcall target="make.nsis"/>
+		<antcall target="geneate.openMDM_installer.exe"/>
 		<!-- final -->
 		<copy todir="build">
 			<fileset dir="${tmp.dir}">
@@ -154,8 +154,9 @@
 		<!-- rename -->		
 		<move file="${basedir}/build/openMDM_installer.exe" tofile="${basedir}/build/${output.file.name}-Win32-r${Revision}-V${version.id}.exe"/>		
 	</target>
-
-	<target name="make.nsis">
+	
+	<!-- generate openMDM_installer.exe-->
+	<target name="geneate.openMDM_installer.exe">
    		<copy todir="${tmp.dir}">
    			<fileset dir="src/scripts">
    				<include name="openMDM_installer.nsi"/>
@@ -172,7 +173,7 @@
 			<arg value="${tmp.dir}/openMDM_installer.nsi"/>
 		</exec>
 	</target>
-	
+		
 	<target name="generate.openMDM.exe">
 		<!-- run makensi -->
 		<exec executable="${makensis.file.name}">
@@ -180,7 +181,8 @@
 		</exec>
 	</target>	
 	
-	<target name="generate.all.os" depends="clean,init">
+	<!-- generate installer for all OS-->
+	<target name="generate.installer.all" depends="clean,init">
    		<copy todir="${tmp.dir}/openMDM">
    			<fileset dir="${jboss.dir}">
    				<include name="**/*.*"/>   				
