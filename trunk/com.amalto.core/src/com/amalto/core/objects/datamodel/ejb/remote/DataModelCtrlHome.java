@@ -5,7 +5,7 @@ package com.amalto.core.objects.datamodel.ejb.remote;
 
 /**
  * Home interface for DataModelCtrl.
- * @xdoclet-generated at 27-05-09
+ * @xdoclet-generated at 24-06-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}

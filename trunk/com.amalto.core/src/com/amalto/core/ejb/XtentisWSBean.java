@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.regex.Pattern;
@@ -1693,6 +1694,66 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
 			throw new RemoteException((e.getCause() == null ? e.getLocalizedMessage() : e.getCause().getLocalizedMessage()));
 		}
 	}	
+	
+	
+	private UpdateReportItemPOJO WS2POJO(WSUpdateReportItemPOJO wsUpdateReportItemPOJO) throws Exception{
+		return new UpdateReportItemPOJO(
+				wsUpdateReportItemPOJO.getPath(),
+				wsUpdateReportItemPOJO.getOldValue(),
+				wsUpdateReportItemPOJO.getNewValue()
+		);
+	}
+	
+	/**
+	 * @ejb.interface-method view-type = "service-endpoint"
+	 * @ejb.permission 
+	 * 	role-name = "authenticated"
+	 * 	view-type = "service-endpoint"
+	 */
+	public WSItemPK putItemWithReport(com.amalto.core.webservice.WSPutItemWithReport wsPutItemWithReport) throws RemoteException {
+		try {
+			
+			WSPutItem wsPutItem=wsPutItemWithReport.getWsPutItem();
+			String source=wsPutItemWithReport.getSource();
+			String operationType=wsPutItemWithReport.getOperationType();
+			Map<String,UpdateReportItemPOJO> updateReportItemsMap=new HashMap<String, UpdateReportItemPOJO>();
+			WSUpdateReportItemArray wsUpdateReportItemArray=wsPutItemWithReport.getWsUpdateReportItemArray();
+			if(wsUpdateReportItemArray!=null){
+				WSUpdateReportItemPOJO[] contentEntries=wsUpdateReportItemArray.getWsUpdateReportItemPOJO();
+				for (int i = 0; i < contentEntries.length; i++) {
+					updateReportItemsMap.put(contentEntries[i].getPath(), WS2POJO(contentEntries[i]));
+				}
+			}
+			
+			
+			String dataClusterPK = wsPutItem.getWsDataClusterPK().getPk();
+	
+			org.apache.log4j.Logger.getLogger(this.getClass()).debug("[putItem-of-putItemWithReport] in dataCluster:"+dataClusterPK);
+			WSItemPK wsi = putItem(wsPutItem);	
+			
+			String concept=wsi.getConceptName();
+			String[] ids=wsi.getIds();
+			
+			org.apache.log4j.Logger.getLogger(this.getClass()).debug("[pushUpdateReport-of-putItemWithReport] with concept:"+concept+" operation:"+operationType);
+			UpdateReportPOJO updateReportPOJO=new UpdateReportPOJO(concept, Util.joinStrings(ids, "."), operationType, source, System.currentTimeMillis(),updateReportItemsMap);
+			
+				WSItemPK itemPK = putItem(
+						new WSPutItem(
+								new WSDataClusterPK("UpdateReport"), 
+								updateReportPOJO.serialize(),
+								new WSDataModelPK("UpdateReport")));
+				
+				//Util.getPort().routeItemV2(new WSRouteItemV2(itemPK));
+				
+			return wsi;	
+
+		} catch (XtentisException e) {
+			throw(new RemoteException(e.getLocalizedMessage()));			
+		} catch (Exception e) {
+			throw new RemoteException((e.getCause() == null ? e.getLocalizedMessage() : e.getCause().getLocalizedMessage()));
+		}
+		
+	}
     
 	/***************************************************************************
 	 *Extract Items
