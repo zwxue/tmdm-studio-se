@@ -11,6 +11,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Observable;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -175,7 +176,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             xpathWidget0 = new XpathWidget("...",treeParent, toolkit, vbeComposite, (AMainPageV2)this,true,true);
 
             
-            viewableBEsList = new List(vbeComposite,SWT.SINGLE | SWT.V_SCROLL | SWT.BORDER);
+            viewableBEsList = new List(vbeComposite,SWT.MULTI | SWT.V_SCROLL | SWT.BORDER);
             viewableBEsList.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,true,true,3,1)
             );
@@ -184,16 +185,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             /*DragSource vbeSource = new DragSource(viewableBEsList,DND.DROP_MOVE);
             vbeSource.setTransfer(new Transfer[]{TextTransfer.getInstance()});
             vbeSource.addDragListener(new DCDragSourceListener());*/
-            
-            viewableBEsList.addKeyListener(new KeyListener() {
-				public void keyPressed(KeyEvent e) {}
-				public void keyReleased(KeyEvent e) {
-					if ((e.stateMask==0) && (e.character == SWT.DEL) && (ViewMainPage.this.viewableBEsList.getSelectionIndex()>=0)) {
-						ViewMainPage.this.viewableBEsList.remove(ViewMainPage.this.viewableBEsList.getSelectionIndex());
-	            		markDirty();
-					}
-				}
-            });
+            wrap.Wrap(this, viewableBEsList);
             viewableBEsList.addMouseListener(new MouseListener(){
             	public void mouseDoubleClick(org.eclipse.swt.events.MouseEvent e) {
             		int index = ViewMainPage.this.viewableBEsList.getSelectionIndex();
@@ -283,7 +275,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             		markDirty();
             	};
             });
-            searchableBEsList = new List(sbeComposite,SWT.SINGLE | SWT.V_SCROLL | SWT.BORDER);
+            searchableBEsList = new List(sbeComposite,SWT.MULTI | SWT.V_SCROLL | SWT.BORDER);
             searchableBEsList.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
             );
@@ -293,16 +285,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             sbeSource.setTransfer(new Transfer[]{TextTransfer.getInstance()});
             sbeSource.addDragListener(new DCDragSourceListener());*/
             
-            searchableBEsList.addKeyListener(new KeyListener() {
-				public void keyPressed(KeyEvent e) {}
-				public void keyReleased(KeyEvent e) {
-					if ((e.stateMask==0) && (e.character == SWT.DEL) && (ViewMainPage.this.searchableBEsList.getSelectionIndex()>=0)) {
-						ViewMainPage.this.searchableBEsList.remove(ViewMainPage.this.searchableBEsList.getSelectionIndex());
-	            		markDirty();
-					}
-				}
-            });
-            
+            wrap.Wrap(this, searchableBEsList);
             //Where Conditions
             Composite wcGroup = this.getNewSectionComposite("Where Conditions");
             wcGroup.setLayout(new GridLayout(5,false));
@@ -372,7 +355,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             predicateCombo.add("Exactly");
             predicateCombo.add("Not");
             
-            wcListViewer = new ListViewer(wcGroup,SWT.BORDER);
+            wcListViewer = new ListViewer(wcGroup,SWT.BORDER | SWT.MULTI);
             wcListViewer.getControl().setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,true,true,5,1)
             );
@@ -425,23 +408,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             wcSource.setTransfer(new Transfer[]{TextTransfer.getInstance()});
             wcSource.addDragListener(new WCDragSourceListener());*/
             
-            wcListViewer.getControl().addKeyListener(new KeyListener() {
-				public void keyPressed(KeyEvent e) {}
-				public void keyReleased(KeyEvent e) {
-					if ((e.stateMask==0) && (e.character == SWT.DEL)) {
-						WSView wsObject = (WSView) (ViewMainPage.this.getWsViewObject());
-						IStructuredSelection selection = (IStructuredSelection)ViewMainPage.this.wcListViewer.getSelection();
-						if (selection.getFirstElement()!=null) {
-							WSWhereCondition wc = (WSWhereCondition) selection.getFirstElement();
-							ArrayList<WSWhereCondition> wcList = new ArrayList<WSWhereCondition>(Arrays.asList(wsObject.getWhereConditions()));
-							wcList.remove(wc);
-							wsObject.setWhereConditions(wcList.toArray(new WSWhereCondition[wcList.size()]));
-							ViewMainPage.this.wcListViewer.refresh();
-							ViewMainPage.this.markDirty();
-						}
-					}
-				}
-            });
+            wrap.Wrap(this, wcListViewer);
             
             refreshData();
 
@@ -451,6 +418,41 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 
     }//createCharacteristicsContent
 
+    public void update(Observable o, Object arg)
+    {
+    	if (arg != null
+				&& (arg == wcListViewer || arg == viewableBEsList || arg == searchableBEsList)) {
+			deleteItems(arg);
+		}
+    }
+    
+    private void deleteItems(Object view)
+    {
+    	if (view == wcListViewer)
+    	{
+			IStructuredSelection selections = (IStructuredSelection) wcListViewer
+			.getSelection();
+			java.util.List list = (java.util.List) Arrays.asList(selections.toArray());
+	        if (list.size() == 0)return;
+	        WSView wsObject = (WSView) (ViewMainPage.this.getXObject().getWsObject());
+			ArrayList<WSWhereCondition> wcList = new ArrayList<WSWhereCondition>(Arrays.asList(wsObject.getWhereConditions()));
+			wcList.removeAll(list);
+			wsObject.setWhereConditions(wcList.toArray(new WSWhereCondition[wcList.size()]));
+			wcListViewer.refresh();
+    	}
+    	else if (view == viewableBEsList)
+    	{
+    		if (viewableBEsList.getSelectionIndices().length == 0)return;
+			viewableBEsList.remove(viewableBEsList.getSelectionIndices());
+    	}
+    	else if (view == searchableBEsList)
+    	{
+    		if (searchableBEsList.getSelectionIndices().length == 0)return;
+			ViewMainPage.this.searchableBEsList.remove(searchableBEsList.getSelectionIndices());
+    	}
+    	
+		markDirty();
+    }
 
 	protected void refreshData() {
 		try {

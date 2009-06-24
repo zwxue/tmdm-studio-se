@@ -13,6 +13,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Set;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -89,7 +92,7 @@ import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.DescAnnotationComposite;
 
-public class RoleMainPage extends AMainPageV2 {
+public class RoleMainPage extends AMainPageV2 implements Observer{
 
 	protected DescAnnotationComposite desAntionComposite ;
 	protected Combo objectTypesCombo;
@@ -288,7 +291,7 @@ public class RoleMainPage extends AMainPageV2 {
             final String INSTANCE_NAME="Instance Name Regular Expression";
             final String INSTANCE_ACCESS = "Access";
             
-            instancesViewer = new TableViewer(instancesComposite,SWT.FULL_SELECTION);
+            instancesViewer = new TableViewer(instancesComposite,SWT.FULL_SELECTION | SWT.MULTI);
             instancesViewer.getControl().setLayoutData(    
                     new GridData(SWT.FILL,SWT.FILL,true,true,3,1)
             );
@@ -402,28 +405,6 @@ public class RoleMainPage extends AMainPageV2 {
             	}
             });
             
-            //display for Delete Key events to delete an instance
-            instancesViewer.getTable().addKeyListener(new KeyListener() {
-            	public void keyPressed(KeyEvent e) {}
-            	public void keyReleased(KeyEvent e) {
-//            		System.out.println("Table keyReleased() ");
-            		if ((e.stateMask==0) && (e.character == SWT.DEL) && (instancesViewer.getSelection()!=null)) {
-            			InstanceLine line = (InstanceLine)((IStructuredSelection)instancesViewer.getSelection()).getFirstElement();
-            			//update the underlying role and refresh the table
-            			//update the underlying model
-            			role
-            				.getSpecifications().get(objectTypesCombo.getText())
-            					.getInstances().remove(line.getInstanceName());
-            			//refresh
-            			instancesViewer.refresh();
-            			//Hide parameters
-            			paramsContainerComposite.setVisible(false);
-            			//mark for update
-            			markDirty();
-            		}
-            	}
-            });
-            
             instancesViewer.refresh();
 
                         
@@ -443,7 +424,7 @@ public class RoleMainPage extends AMainPageV2 {
                     new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
             );
             paramsClientComposite.setLayout(new StackLayout());
-            
+            wrap.Wrap(this, instancesViewer);
             refreshData();
 
         } catch (Exception e) {
@@ -452,7 +433,56 @@ public class RoleMainPage extends AMainPageV2 {
 
     }//createCharacteristicsContent
 
+    public void update(Observable o, Object arg)
+    {
+    	if (arg != null && (arg == instancesViewer || arg == wcListViewer)) {
+			deleteItems(arg);
+		}
+    }
+    
+    private void deleteItems(Object view)
+    {
+    	List list = null;
+		if (instancesViewer == view) {
+			list = ((IStructuredSelection) instancesViewer.getSelection())
+					.toList();
+		} else if (wcListViewer != null) {
+			IStructuredSelection selections = (IStructuredSelection) wcListViewer
+					.getSelection();
+			list = Arrays.asList(selections.toArray());
+			String instanceName = ((InstanceLine)((IStructuredSelection)instancesViewer.getSelection()).getFirstElement()).getInstanceName();
+			ArrayList<RoleWhereCondition> wcList = (ArrayList<RoleWhereCondition>)wcListViewer.getInput();
+			wcList.removeAll(list);
+			LinkedHashSet<String> parameters = new LinkedHashSet<String>();
+			for (Iterator iter = wcList.iterator(); iter.hasNext(); ) {
+				RoleWhereCondition rwc = (RoleWhereCondition) iter.next();
+				parameters.add(rwc.toString());
+			}
+			role
+				.getSpecifications().get(objectTypesCombo.getText())
+					.getInstances().get(instanceName)
+						.setParameters(parameters);
+			wcListViewer.refresh();
+		}
+    	
 
+		for (Object le : list) {
+			Object line = le;
+			if (line instanceof InstanceLine) {
+				HashMap map = role.getSpecifications().get(objectTypesCombo.getText())
+					.getInstances();
+				boolean is = map.containsKey(((InstanceLine) line).getInstanceName());
+				map.remove(((InstanceLine) line).getInstanceName());
+				// refresh
+				instancesViewer.refresh();
+				paramsContainerComposite.setVisible(false);
+			}
+			// mark for update
+			markDirty();
+		}
+    }
+    
+    
 	protected void refreshData() {
 		try {
 //			System.out.println("refreshData() ");
@@ -700,7 +730,7 @@ public class RoleMainPage extends AMainPageV2 {
         	};
         });        
         
-        wcListViewer = new ListViewer(composite,SWT.BORDER);
+        wcListViewer = new ListViewer(composite,SWT.BORDER | SWT.MULTI);
         wcListViewer.getControl().setLayoutData(
                 new GridData(SWT.FILL,SWT.FILL,true,true,5,1)
         );
@@ -737,33 +767,8 @@ public class RoleMainPage extends AMainPageV2 {
         DragSource wcSource = new DragSource(wcListViewer.getControl(),DND.DROP_MOVE);
         wcSource.setTransfer(new Transfer[]{TextTransfer.getInstance()});
         wcSource.addDragListener(new WCDragSourceListener());
-        wcListViewer.getControl().addKeyListener(new KeyListener() {
-			public void keyPressed(KeyEvent e) {}
-			public void keyReleased(KeyEvent e) {
-				if ((e.stateMask==0) && (e.character == SWT.DEL)) {
-					IStructuredSelection selection = (IStructuredSelection)wcListViewer.getSelection();
-					if (selection.getFirstElement()!=null) {
-						String instanceName = ((InstanceLine)((IStructuredSelection)instancesViewer.getSelection()).getFirstElement()).getInstanceName();
-						RoleWhereCondition wc = (RoleWhereCondition) selection.getFirstElement();
-						ArrayList<RoleWhereCondition> wcList = (ArrayList<RoleWhereCondition>)wcListViewer.getInput();
-						wcList.remove(wc);
-						//update underlying role
-						LinkedHashSet<String> parameters = new LinkedHashSet<String>();
-						for (Iterator iter = wcList.iterator(); iter.hasNext(); ) {
-							RoleWhereCondition rwc = (RoleWhereCondition) iter.next();
-							parameters.add(rwc.toString());
-						}
-						role
-							.getSpecifications().get(objectTypesCombo.getText())
-								.getInstances().get(instanceName)
-									.setParameters(parameters);
-						wcListViewer.refresh();
-						markDirty();
-					}
-				}
-			}
-        });
-        
+
+        wrap.Wrap(RoleMainPage.this, wcListViewer);
         return composite;
 	}
 	
