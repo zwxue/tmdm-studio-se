@@ -7,6 +7,8 @@
 package com.amalto.workbench.editors;
 
 import java.util.Arrays;
+import java.util.Observable;
+import java.util.Observer;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
@@ -40,13 +42,16 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.widgets.TableViewWrapper;
 import com.amalto.workbench.widgets.WidgetFactory;
 
 
-public abstract class AMainPageV2 extends AFormPage implements ModifyListener{
+public abstract class AMainPageV2 extends AFormPage implements ModifyListener, Observer{
 
 	protected boolean comitting;
 	protected boolean refreshing;
+	
+	protected TableViewWrapper wrap = new TableViewWrapper();;
 	
 	public boolean isComitting() {
 		return comitting;
@@ -73,7 +78,10 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener{
         super(editor,id, title);        
     }
 
-        
+    public void update(Observable o, Object arg)
+    {
+    }
+    
     protected void createFormContent(IManagedForm managedForm) {
         super.createFormContent(managedForm);
 

@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Observable;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -464,7 +465,7 @@ public class TransformerMainPage extends AMainPageV2 {
             	};
             });
             
-            stepsList = new List(sequenceComposite,SWT.SINGLE | SWT.V_SCROLL | SWT.BORDER);
+            stepsList = new List(sequenceComposite,SWT.MULTI | SWT.V_SCROLL | SWT.BORDER);
             stepsList.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,true,true,5,1)
             );
@@ -505,25 +506,7 @@ public class TransformerMainPage extends AMainPageV2 {
             });
 
             
-            stepsList.addKeyListener(new KeyListener() {
-				public void keyPressed(KeyEvent e) {}
-				public void keyReleased(KeyEvent e) {
-					if ((e.stateMask==0) && (e.character == SWT.DEL) && (TransformerMainPage.this.stepsList.getSelectionIndex()>=0)) {
-						int index = TransformerMainPage.this.stepsList.getSelectionIndex();
-						removeStep(index);
-						if (stepsList.getItemCount() == 0)
-						{
-							section.setVisible(false);
-						}
-						if (stepsList.getItemCount() >= 1 && index == 0)
-						{
-							stepsList.select(0);
-							refreshStep(0);
-						}
-					}
-				}
-            });
-
+            wrap.Wrap(this, stepsList);
             stepsList.addFocusListener(new FocusListener() {
 				public void focusGained(FocusEvent e) {
 					if (stepsList.getSelectionIndex() >= 0)
@@ -742,6 +725,55 @@ public class TransformerMainPage extends AMainPageV2 {
     }
     
 
+    public void update(Observable o, Object arg)
+    {
+    	if (arg != null
+				&& (arg == stepsList || arg == stepWidget.inputViewer || arg == stepWidget.outputViewer)) {
+			deleteItems(arg);
+		}
+
+    }
+    
+    private void deleteItems(Object view)
+    {
+    	if (view == stepsList)
+    	{
+			int[] index = stepsList.getSelectionIndices();
+			boolean firstPos = false;
+			for (int i = index.length - 1; i >= 0; i--) {
+				if (index[i] == 0) {
+					firstPos = true;
+				}
+				removeStep(index[i]);
+			}
+
+			if (stepsList.getItemCount() == 0) {
+				section.setVisible(false);
+			}
+			if (stepsList.getItemCount() >= 1 && firstPos) {
+				stepsList.select(0);
+				refreshStep(0);
+			}	
+    	}
+    	else if (view == stepWidget.inputViewer || view == stepWidget.outputViewer)
+    	{
+    		TableViewer viewer = (TableViewer)view;
+			IStructuredSelection selections = (IStructuredSelection) viewer.getSelection();
+			java.util.List list = (java.util.List) Arrays.asList(selections.toArray());
+			if (list.size() == 0)return;
+			java.util.List<WSTransformerVariablesMapping> items=(java.util.List<WSTransformerVariablesMapping>)viewer.getInput();
+			items.removeAll(list);
+			
+			if(view == stepWidget.inputViewer)
+				stepWidget.processStep.setInputMappings(items.toArray(new WSTransformerVariablesMapping[items.size()]));
+			else
+				stepWidget.processStep.setOutputMappings(items.toArray(new WSTransformerVariablesMapping[items.size()]));
+			//refresh
+			viewer.refresh();
+			//mark for update
+			markDirty();
+    	}
+    }
 	protected void refreshData() {
 		try {
 //			System.out.println("refreshData() ");
@@ -901,27 +933,7 @@ public class TransformerMainPage extends AMainPageV2 {
 
 	        // Set the column properties
 	        viewer.setColumnProperties(columns.toArray(new String[columns.size()]));
-	    
-	        //display for Delete Key events to delete an instance
-	        viewer.getTable().addKeyListener(new KeyListener() {
-	        	public void keyPressed(KeyEvent e) {}
-	        	public void keyReleased(KeyEvent e) {
-	        		if ((e.stateMask==0) && (e.character == SWT.DEL) && (viewer.getSelection()!=null)) {
-	        			WSTransformerVariablesMapping line = (WSTransformerVariablesMapping)((IStructuredSelection)viewer.getSelection()).getFirstElement();
-	        			java.util.List<WSTransformerVariablesMapping> items=(java.util.List<WSTransformerVariablesMapping>)viewer.getInput();
-	        			items.remove(line);
-	        			
-	        			if(isInput)
-	        				processStep.setInputMappings(items.toArray(new WSTransformerVariablesMapping[items.size()]));
-	        			else
-	        				processStep.setOutputMappings(items.toArray(new WSTransformerVariablesMapping[items.size()]));
-	        			//refresh
-	        			viewer.refresh();
-	        			//mark for update
-	        			markDirty();
-	        		}
-	        	}
-	        });		
+	    	
 	        return viewer;
 		}
 		void refreshViewers(){
@@ -1010,6 +1022,7 @@ public class TransformerMainPage extends AMainPageV2 {
 			columns.add("Input Variables");
 			columns.add("Input Parameters");
 			inputViewer=createViewer(columns,inputComposite,true);
+			wrap.Wrap(TransformerMainPage.this, inputViewer);
 		}
 
 		private void createOutput(){
@@ -1059,6 +1072,7 @@ public class TransformerMainPage extends AMainPageV2 {
 			columns.add("Output Parameters");
 			columns.add("Output Variables");
 			outputViewer=createViewer(columns,outputComposite,false);
+			wrap.Wrap(TransformerMainPage.this, outputViewer);
 		}
 		private void createPlugin() throws Exception{
 	        Composite specsComposite = toolkit.createComposite(mainComposite,SWT.NONE);
