@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="openmdm" default="generate.installer">
+<project name="openmdm" default="generate.installer.windows">
 	<!-- public properties -->
 	<loadproperties srcfile="build.properties"></loadproperties>
 		
@@ -9,7 +9,10 @@
 	    <pathelement location="${basedir}/svnkit/ant-contrib-1.0b3.jar"/>
 	  </classpath>
 	</taskdef>
- 	
+    <path id="svnkit.classpath">
+        <fileset dir="${basedir}/svnkit" includes="**/*.jar"/>
+    </path>
+	
 	<!-- deploy each plug-in to jboss server directory-->
     <target name="deploy.all" depends="svn.ssh.checkout.all">  
         <foreach target="deploy.each" param="file.full.name" > 
@@ -30,7 +33,6 @@
 	        </if>       
     </target>  
         
-
 		
 	  <!-- list all plugin name need to checkout-->
 	  <target name="svn.ssh.list" description="list all plugin name need to checkout ">	    
@@ -46,16 +48,36 @@
 	      <arg value="${repository.URL}"/>
 
 	      <classpath>
-	      	<!--if use ssh need add ganymed.jar-->
-	        <pathelement location="${basedir}/svnkit/ganymed.jar" />
-	      	
-	        <pathelement location="${basedir}/svnkit/svnkit.jar" />
-	        <pathelement location="${basedir}/svnkit/svnkit-cli.jar" />
-	        <pathelement location="${basedir}/svnkit/trilead.jar" />
-	      	<pathelement location="${basedir}/svnkit/svnkit-javahl.jar" />
+			<path refid="svnkit.classpath"></path>			
 	      </classpath>
 	    </java>
 	  </target>
+
+	  <target name="svn.ssh.info" description="list all plugin name need to checkout ">	    
+	    <property name="repository.URL" value="${svn.server.url}"/>		
+		
+	  	<java classname="org.tmatesoft.svn.cli.SVN"
+	        fork="true" output="${svn.revision.filename}">
+	      <arg value="info"/>
+	      <arg value="--username"/>
+	      <arg value="${svn.username}"/>
+	      <arg value="--password"/>
+	      <arg value="${svn.password}"/>
+	      <arg value="${repository.URL}"/>
+
+	      <classpath>
+	      	<!--if use ssh need add ganymed.jar-->
+				<path refid="svnkit.classpath"></path>			
+	      </classpath>
+	    </java>
+	  </target>
+	
+	<target name="init">
+		<antcall target="svn.ssh.info"></antcall>
+	 	<!-- Get Last revision number from svn -->	 	
+		<loadproperties srcfile="${svn.revision.filename}"></loadproperties>
+	 	<echo >revision: r${Revision}</echo>	
+	</target>
 	
   	<!-- check out all source code from svn-->    
 	
@@ -79,13 +101,9 @@
 	      <arg value="${svn.password}"/>
 	      <arg value="${repository.URL}/${file.full.name}"/>
 
-	      <classpath>
+	      <classpath>	      	
 	      	<!--if use ssh need add ganymed.jar-->
-	        <pathelement location="${basedir}/svnkit/ganymed.jar" />	      	
-	        <pathelement location="${basedir}/svnkit/svnkit.jar" />
-	        <pathelement location="${basedir}/svnkit/svnkit-cli.jar" />
-	        <pathelement location="${basedir}/svnkit/trilead.jar" />
-	      	<pathelement location="${basedir}/svnkit/svnkit-javahl.jar" />
+	      	<path refid="svnkit.classpath"></path>			
 	      </classpath>
 	    </java>
 	  </target>
@@ -103,11 +121,11 @@
 	
 
 
-	<target name="generate.installer" depends="clean,deploy.all">	
+	<target name="generate.installer.windows" depends="clean,init,deploy.all">	
+
    		<copy todir="${tmp.dir}/openMDM">
    			<fileset dir="${jboss.dir}">
-   				<include name="**/*.*"/>
-   				<exclude name="**/*.sh"/>
+   				<include name="**/*.*"/>   				
    			</fileset>
    		</copy>
 		<unjar dest="${tmp.dir}/openMDM" src="src/resources/jre-1.5.0_windows.zip"></unjar>
@@ -127,16 +145,16 @@
 		
 		<!-- build -->
 		<antcall target="make.nsis"/>
-		
 		<!-- final -->
 		<copy todir="build">
 			<fileset dir="${tmp.dir}">
 			   	<include name="*.exe"/>
   			</fileset>
    		</copy>
-		
+		<!-- rename -->		
+		<move file="${basedir}/build/openMDM_installer.exe" tofile="${basedir}/build/${output.file.name}-Win32-r${Revision}-V${version.id}.exe"/>		
 	</target>
-	
+
 	<target name="make.nsis">
    		<copy todir="${tmp.dir}">
    			<fileset dir="src/scripts">
@@ -162,6 +180,25 @@
 		</exec>
 	</target>	
 	
+	<target name="generate.all.os" depends="clean,init">
+   		<copy todir="${tmp.dir}/openMDM">
+   			<fileset dir="${jboss.dir}">
+   				<include name="**/*.*"/>   				
+   			</fileset>
+   		</copy>
+		<unjar dest="${tmp.dir}/openMDM" src="src/resources/jre-1.5.0_windows.zip"></unjar>
 
+   		<copy todir="${tmp.dir}/openMDM">
+   			<fileset dir="src/resources">
+   				<include name="License.txt"/>
+   			</fileset>
+   		</copy>
+		
+		<!--zip the openMDM  -->
+	    <jar destfile="${basedir}/build/${output.file.name}-ALL-r${Revision}-V${version.id}.zip"   basedir="${tmp.dir}/openMDM"   includes="**/*.*"     />		
+	
+	</target>
+
+	
 </project>
 
