@@ -70,7 +70,7 @@ public class XSDNewXPathAction extends Action{
 //       		);
             
             List<String> childNames = Util.getChildElementNames(icd.getContainer().getElement());
-            SelectFieldDialog id=new SelectFieldDialog(page.getSite().getShell(),"Select one field",childNames);
+            SelectFieldDialog id=new SelectFieldDialog(page.getSite().getShell(),"Select one field",childNames,null);
             id.create();            
        		id.setBlockOnOpen(true);
        		int ret = id.open();
