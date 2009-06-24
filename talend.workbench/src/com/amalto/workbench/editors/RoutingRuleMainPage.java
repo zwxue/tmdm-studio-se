@@ -8,6 +8,7 @@ package com.amalto.workbench.editors;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Observable;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.TextEvent;
@@ -350,7 +351,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             });
             
             
-            routingExpressionsViewer = new ListViewer(routingExpressionsComposite,SWT.BORDER);
+            routingExpressionsViewer = new ListViewer(routingExpressionsComposite,SWT.BORDER | SWT.MULTI);
             routingExpressionsViewer.getControl().setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,true,true,5,1)
             );
@@ -394,26 +395,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
            /* DragSource wcSource = new DragSource(routingExpressionsViewer.getControl(),DND.DROP_MOVE);
             wcSource.setTransfer(new Transfer[]{TextTransfer.getInstance()});
             wcSource.addDragListener(new WCDragSourceListener());*/
-            
-            routingExpressionsViewer.getControl().addKeyListener(new KeyListener() {
-				public void keyPressed(KeyEvent e) {}
-				public void keyReleased(KeyEvent e) {
-					if ((e.stateMask==0) && (e.character == SWT.DEL)) {
-						WSRoutingRule wsObject = (WSRoutingRule) (RoutingRuleMainPage.this.getXObject().getWsObject());
-						IStructuredSelection selection = (IStructuredSelection)RoutingRuleMainPage.this.routingExpressionsViewer.getSelection();
-						if (selection.getFirstElement()!=null) {
-							WSRoutingRuleExpression rre = (WSRoutingRuleExpression) selection.getFirstElement();
-							ArrayList<WSRoutingRuleExpression> rreList = new ArrayList<WSRoutingRuleExpression>(Arrays.asList(wsObject.getWsRoutingRuleExpressions()));
-							xpathWidget.setText(rre.getXpath());
-							rightValueText.setText(rre.getValue());
-							rreList.remove(rre);
-							wsObject.setWsRoutingRuleExpressions(rreList.toArray(new WSRoutingRuleExpression[rreList.size()]));
-							RoutingRuleMainPage.this.routingExpressionsViewer.refresh();
-							RoutingRuleMainPage.this.markDirty();
-						}
-					}
-				}
-            });
+            wrap.Wrap(this, routingExpressionsViewer);
             
                         
             //make the Page window a DropTarget - we need to dispose it
@@ -430,7 +412,29 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
     }//createCharacteristicsContent
 
+    public void update(Observable o, Object arg)
+    {
+    	if (arg != null && arg == routingExpressionsViewer)
+    	{
+    		deleteItems(arg);
+    	}
+    }
+    
+    private void deleteItems(Object view)
+    {
+		WSRoutingRule wsObject = (WSRoutingRule) (RoutingRuleMainPage.this.getXObject().getWsObject());
+		IStructuredSelection selection = (IStructuredSelection)routingExpressionsViewer.getSelection();
+		java.util.List list = Arrays.asList(selection.toArray());
+        if (list.size() == 0)return;
+		ArrayList<WSRoutingRuleExpression> rreList = new ArrayList<WSRoutingRuleExpression>(Arrays.asList(wsObject.getWsRoutingRuleExpressions()));
 
+		rreList.removeAll(list);
+		wsObject.setWsRoutingRuleExpressions(rreList.toArray(new WSRoutingRuleExpression[rreList.size()]));
+		routingExpressionsViewer.refresh();
+		markDirty();
+		
+    }
+    
 	protected void refreshData() {
 		try {
 			
