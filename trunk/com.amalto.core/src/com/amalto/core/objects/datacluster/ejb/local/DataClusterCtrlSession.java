@@ -5,7 +5,7 @@ package com.amalto.core.objects.datacluster.ejb.local;
 
 /**
  * Session layer for DataClusterCtrl.
- * @xdoclet-generated at 27-05-09
+ * @xdoclet-generated at 24-06-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
