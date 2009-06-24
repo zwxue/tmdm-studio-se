@@ -17,10 +17,12 @@ public class SelectFieldDialog  extends Dialog{
 	private CCombo fieldNameCombo;
 	private List<String>fields;
 	private String field;
-	public SelectFieldDialog(Shell parentShell,String title, List<String>fields) {
+	private String defualtField;
+	public SelectFieldDialog(Shell parentShell,String title, List<String>fields, String defualtField) {
 		super(parentShell);
 		this.title=title;
 		this.fields=fields;
+		this.defualtField=defualtField;
 	}
 	@Override
 	protected Control createDialogArea(Composite parent) {
@@ -42,9 +44,12 @@ public class SelectFieldDialog  extends Dialog{
 				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 		);
 		fieldNameCombo.setItems(fields.toArray(new String[fields.size()]));
-		if(fields.size()>0)
-		fieldNameCombo.select(0);
-		
+		if(fields.size()>0){
+			if(defualtField==null)
+				fieldNameCombo.select(0);
+			else
+				fieldNameCombo.setText(defualtField);
+		}			
 		return composite;
 	}
 	

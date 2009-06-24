@@ -1,5 +1,7 @@
 package com.amalto.workbench.actions;
 
+import java.util.List;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -13,8 +15,10 @@ import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
+import com.amalto.workbench.dialogs.SelectFieldDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.utils.ImageCache;
+import com.amalto.workbench.utils.Util;
 
 public class XSDEditXPathAction extends Action{
 
@@ -37,25 +41,28 @@ public class XSDEditXPathAction extends Action{
             XSDXPathDefinition xpath = (XSDXPathDefinition)selection.getFirstElement();
             icd = (XSDIdentityConstraintDefinition) xpath.getContainer();
                         
-       		InputDialog id = new InputDialog(
-       				page.getSite().getShell(),
-       				"Edit XPath",
-       				"Enter a new XPath for the "+((xpath.getVariety().equals(XSDXPathVariety.FIELD_LITERAL))?"field":"selector"),
-       				xpath.getValue(),
-       				new IInputValidator() {
-       					public String isValid(String newText) {
-       						if ((newText==null) || "".equals(newText)) return "The XPath cannot be empty";
-       						return null;
-       					};
-       				}
-       		);
-            
+//       		InputDialog id = new InputDialog(
+//       				page.getSite().getShell(),
+//       				"Edit XPath",
+//       				"Enter a new XPath for the "+((xpath.getVariety().equals(XSDXPathVariety.FIELD_LITERAL))?"field":"selector"),
+//       				xpath.getValue(),
+//       				new IInputValidator() {
+//       					public String isValid(String newText) {
+//       						if ((newText==null) || "".equals(newText)) return "The XPath cannot be empty";
+//       						return null;
+//       					};
+//       				}
+//       		);
+            List<String> childNames = Util.getChildElementNames(icd.getContainer().getElement());
+            SelectFieldDialog id=new SelectFieldDialog(page.getSite().getShell(),"Select one field",childNames,xpath.getValue());
+            id.create();
        		id.setBlockOnOpen(true);
        		int ret = id.open();
        		if (ret == Window.CANCEL) return;
-       		
+       		String field=id.getField();
+       		if(field.length()==0)return;
        		XSDXPathDefinition newXpath = XSDSchemaBuildingTools.getXSDFactory().createXSDXPathDefinition();
-       		newXpath.setValue(id.getValue());
+       		newXpath.setValue(field);
        		if (xpath.getVariety().equals(XSDXPathVariety.FIELD_LITERAL)) {
        			int index = icd.getFields().indexOf(xpath);
        			newXpath.setVariety(XSDXPathVariety.FIELD_LITERAL);
