@@ -14,7 +14,9 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Shell;
 
+import com.amalto.workbench.dialogs.ViewInputDialog;
 import com.amalto.workbench.editors.AMainPage;
 import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.editors.XObjectEditor;
@@ -91,7 +93,53 @@ public class NewXObjectAction extends Action{
             
             //get New Key
        		Object key  = null;
+       		
+       		//(Shell parentShell, String dialogTitle, String dialogMessage, String initialValue, IInputValidator validator)
             switch(xfolder.getType()) {
+        		case TreeObject.TRANSFORMER:
+        			ViewInputDialog vid = new ViewInputDialog(
+        					view.getSite().getShell(),
+	           				"New "+IConstants.TALEND+" Object Instance",
+	           				"Enter a Name for the New Instance",
+	           				null,
+	           				new IInputValidator() {
+	           					public String isValid(String newText) {
+	           						if ((newText==null) || "".equals(newText)) 
+	           							return "The Name cannot be empty";
+	           						if(!Pattern.matches("\\w*(\\s*|#|\\w+)+\\w+", newText)){
+	           							return "The name cannot contains invalid character!";
+	           						}
+	           						return null;
+	           					};
+	           				}
+	           		);
+        			vid.setBlockOnOpen(true);
+	           		if (vid.open() == Window.CANCEL) return;
+	           		key  = vid.getValue();
+        			break;
+        			
+        		case TreeObject.VIEW:
+        			InputDialog id = new InputDialog(
+	           				view.getSite().getShell(),
+	           				"New "+IConstants.TALEND+" Object Instance",
+	           				"Enter a view name follow the pattern: Browse_items_<ConceptName>",
+	           				null,
+	           				new IInputValidator() {
+	           					public String isValid(String newText) {
+	           						if ((newText==null) || "".equals(newText)) 
+	           							return "The Name cannot be empty";
+	           						if(!Pattern.matches("\\w*(\\s*|#|\\w+)+\\w+", newText)){
+	           							return "The name cannot contains invalid character!";
+	           						}
+	           						return null;
+	           					};
+	           				}
+	           		);
+        			
+        			id.setBlockOnOpen(true);
+	           		if (id.open() == Window.CANCEL) return;
+	           		key  = id.getValue();
+	           		break;
 	           	case TreeObject.SOURCE:
 	           	case TreeObject.DESTINATION:
 	           	case TreeObject.DATA_MODEL:
@@ -99,16 +147,16 @@ public class NewXObjectAction extends Action{
 	           	case TreeObject.INBOUND_PLUGIN:
 	           	case TreeObject.OUTBOUND_ADAPTOR:         		
 	           	case TreeObject.OUTBOUND_PLUGIN:
-	           	case TreeObject.VIEW:
+	           
 	           	case TreeObject.DATA_CLUSTER:
 	           	case TreeObject.STORED_PROCEDURE:
 	           	case TreeObject.ROLE:
 	           	case TreeObject.ROUTING_RULE:
-	           	case TreeObject.TRANSFORMER:
+	           
 	           	case TreeObject.MENU:
 	           	case TreeObject.UNIVERSE:
 	           	case TreeObject.SYNCHRONIZATIONPLAN:
-	           		InputDialog id = new InputDialog(
+	           		InputDialog id1 = new InputDialog(
 	           				view.getSite().getShell(),
 	           				"New "+IConstants.TALEND+" Object Instance",
 	           				"Enter a Name for the New Instance",
@@ -124,9 +172,9 @@ public class NewXObjectAction extends Action{
 	           					};
 	           				}
 	           		);
-	           		id.setBlockOnOpen(true);
-	           		if (id.open() == Window.CANCEL) return;
-	           		key  = id.getValue();
+	           		id1.setBlockOnOpen(true);
+	           		if (id1.open() == Window.CANCEL) return;
+	           		key  = id1.getValue();
 	           		break;
 	           	default:
 	           		//server or not supported
