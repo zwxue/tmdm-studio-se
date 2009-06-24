@@ -976,6 +976,38 @@
 	</xsd:complexType>
 	<xsd:element name="WSPutItem" type="tns:WSPutItem"/>
 	
+	
+	<xsd:complexType name="WSUpdateReportItemPOJO">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1" nillable="false" name="path" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1" nillable="false" name="newValue" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1" nillable="false" name="oldValue" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="WSUpdateReportItemPOJO" type="tns:WSUpdateReportItemPOJO"/>
+	
+	<xsd:complexType name="WSUpdateReportItemArray">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="unbounded"  nillable="true" name="wsUpdateReportItemPOJO" type="tns:WSUpdateReportItemPOJO"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSUpdateReportItemArray" type="tns:WSUpdateReportItemArray"/>
+	
+	<xsd:complexType name="WSPutItemWithReport">
+		<xsd:annotation>
+			<xsd:documentation>
+				Puts an item in the xml storage with update report
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="wsPutItem" type="tns:WSPutItem"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="source" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="operationType" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="wsUpdateReportItemArray" type="tns:WSUpdateReportItemArray"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSPutItemWithReport" type="tns:WSPutItemWithReport"/>
+	
 
 	
 	<!-- *****************************************************
@@ -1520,5 +1552,6 @@
 	</xsd:complexType>
 	<xsd:element name="WSRemoveDroppedItem" type="tns:WSRemoveDroppedItem"/>
 	
+
 			
 </xsd:schema>
