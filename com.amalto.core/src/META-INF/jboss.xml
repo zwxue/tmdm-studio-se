@@ -27,65 +27,17 @@
       </entity>
 
       <session>
-         <ejb-name>DataModelCtrl</ejb-name>
-         <jndi-name>amalto/remote/core/datamodelctrl</jndi-name>
-         <local-jndi-name>amalto/local/core/datamodelctrl</local-jndi-name>
+         <ejb-name>MenuCtrl</ejb-name>
+         <jndi-name>amalto/remote/core/menuctrl</jndi-name>
+         <local-jndi-name>amalto/local/core/menuctrl</local-jndi-name>
 
         <method-attributes>
         </method-attributes>
       </session>
       <session>
-         <ejb-name>TransformerCtrl</ejb-name>
-         <jndi-name>amalto/remote/core/transformerctrl</jndi-name>
-         <local-jndi-name>amalto/local/core/transformerctrl</local-jndi-name>
-
-        <method-attributes>
-        </method-attributes>
-      </session>
-      <session>
-         <ejb-name>SynchronizationObjectCtrl</ejb-name>
-         <jndi-name>amalto/remote/core/synchronizationObjectctrl</jndi-name>
-         <local-jndi-name>amalto/local/core/synchronizationObjectctrl</local-jndi-name>
-
-        <method-attributes>
-        </method-attributes>
-      </session>
-      <session>
-         <ejb-name>DataClusterCtrl</ejb-name>
-         <jndi-name>amalto/remote/core/dataclusterctrl</jndi-name>
-         <local-jndi-name>amalto/local/core/dataclusterctrl</local-jndi-name>
-
-        <method-attributes>
-        </method-attributes>
-      </session>
-      <session>
-         <ejb-name>VersioningSystemCtrl</ejb-name>
-         <jndi-name>amalto/remote/core/versioningsystemctrl</jndi-name>
-         <local-jndi-name>amalto/local/core/versioningsystemctrl</local-jndi-name>
-
-        <method-attributes>
-        </method-attributes>
-      </session>
-      <session>
-         <ejb-name>ConfigurationInfoCtrl</ejb-name>
-         <jndi-name>amalto/remote/core/configurationinfoctrl</jndi-name>
-         <local-jndi-name>amalto/local/core/configurationinfoctrl</local-jndi-name>
-
-        <method-attributes>
-        </method-attributes>
-      </session>
-      <session>
-         <ejb-name>BackgroundJobCtrl</ejb-name>
-         <jndi-name>amalto/remote/core/backgroundjobctrl</jndi-name>
-         <local-jndi-name>amalto/local/core/backgroundjobctrl</local-jndi-name>
-
-        <method-attributes>
-        </method-attributes>
-      </session>
-      <session>
-         <ejb-name>DroppedItemCtrl</ejb-name>
-         <jndi-name>amalto/remote/core/droppeditemctrl</jndi-name>
-         <local-jndi-name>amalto/local/core/droppeditemctrl</local-jndi-name>
+         <ejb-name>SynchronizationItemCtrl</ejb-name>
+         <jndi-name>amalto/remote/core/synchronizationItemctrl</jndi-name>
+         <local-jndi-name>amalto/local/core/synchronizationItemctrl</local-jndi-name>
 
         <method-attributes>
         </method-attributes>
@@ -99,9 +51,17 @@
         </method-attributes>
       </session>
       <session>
-         <ejb-name>ItemCtrl2</ejb-name>
-         <jndi-name>amalto/remote/core/itemctrl2</jndi-name>
-         <local-jndi-name>amalto/local/core/itemctrl2</local-jndi-name>
+         <ejb-name>ViewCtrl</ejb-name>
+         <jndi-name>amalto/remote/core/viewctrl</jndi-name>
+         <local-jndi-name>amalto/local/core/viewctrl</local-jndi-name>
+
+        <method-attributes>
+        </method-attributes>
+      </session>
+      <session>
+         <ejb-name>DataModelCtrl</ejb-name>
+         <jndi-name>amalto/remote/core/datamodelctrl</jndi-name>
+         <local-jndi-name>amalto/local/core/datamodelctrl</local-jndi-name>
 
         <method-attributes>
         </method-attributes>
@@ -115,13 +75,49 @@
         </method-attributes>
       </session>
       <session>
-         <ejb-name>XtentisWS</ejb-name>
+         <ejb-name>XmlServerSLWrapper</ejb-name>
+         <jndi-name>amalto/remote/xmldb/xmlserverslwrapper</jndi-name>
+         <local-jndi-name>amalto/local/xmldb/xmlserverslwrapper</local-jndi-name>
 
-         <port-component>
-            <port-component-name>XtentisPort</port-component-name>
-            <port-component-uri>/xtentis/XtentisPort</port-component-uri>
-            <auth-method>BASIC</auth-method>
-         </port-component>
+        <method-attributes>
+        </method-attributes>
+      </session>
+      <session>
+         <ejb-name>TransformerCtrl</ejb-name>
+         <jndi-name>amalto/remote/core/transformerctrl</jndi-name>
+         <local-jndi-name>amalto/local/core/transformerctrl</local-jndi-name>
+
+        <method-attributes>
+        </method-attributes>
+      </session>
+      <session>
+         <ejb-name>RoutingOrderV2Ctrl</ejb-name>
+         <jndi-name>amalto/remote/core/RoutingOrderCtrlV2</jndi-name>
+         <local-jndi-name>amalto/local/core/RoutingOrderCtrlV2</local-jndi-name>
+
+        <method-attributes>
+        </method-attributes>
+      </session>
+      <session>
+         <ejb-name>ItemCtrl2</ejb-name>
+         <jndi-name>amalto/remote/core/itemctrl2</jndi-name>
+         <local-jndi-name>amalto/local/core/itemctrl2</local-jndi-name>
+
+        <method-attributes>
+        </method-attributes>
+      </session>
+      <session>
+         <ejb-name>RoutingEngineV2Ctrl</ejb-name>
+         <jndi-name>amalto/remote/core/routingenginev2ctrl</jndi-name>
+         <local-jndi-name>amalto/local/core/routingenginev2ctrl</local-jndi-name>
+
+        <method-attributes>
+        </method-attributes>
+      </session>
+      <session>
+         <ejb-name>StoredProcedureCtrl</ejb-name>
+         <jndi-name>amalto/remote/core/storedprocedurectrl</jndi-name>
+         <local-jndi-name>amalto/local/core/storedprocedurectrl</local-jndi-name>
 
         <method-attributes>
         </method-attributes>
@@ -143,14 +139,6 @@
         </method-attributes>
       </session>
       <session>
-         <ejb-name>SynchronizationItemCtrl</ejb-name>
-         <jndi-name>amalto/remote/core/synchronizationItemctrl</jndi-name>
-         <local-jndi-name>amalto/local/core/synchronizationItemctrl</local-jndi-name>
-
-        <method-attributes>
-        </method-attributes>
-      </session>
-      <session>
          <ejb-name>UniverseCtrl</ejb-name>
          <jndi-name>amalto/remote/core/universectrl</jndi-name>
          <local-jndi-name>amalto/local/core/universectrl</local-jndi-name>
@@ -159,49 +147,61 @@
         </method-attributes>
       </session>
       <session>
-         <ejb-name>RoutingOrderV2Ctrl</ejb-name>
-         <jndi-name>amalto/remote/core/RoutingOrderCtrlV2</jndi-name>
-         <local-jndi-name>amalto/local/core/RoutingOrderCtrlV2</local-jndi-name>
+         <ejb-name>SynchronizationObjectCtrl</ejb-name>
+         <jndi-name>amalto/remote/core/synchronizationObjectctrl</jndi-name>
+         <local-jndi-name>amalto/local/core/synchronizationObjectctrl</local-jndi-name>
 
         <method-attributes>
         </method-attributes>
       </session>
       <session>
-         <ejb-name>StoredProcedureCtrl</ejb-name>
-         <jndi-name>amalto/remote/core/storedprocedurectrl</jndi-name>
-         <local-jndi-name>amalto/local/core/storedprocedurectrl</local-jndi-name>
+         <ejb-name>XtentisWS</ejb-name>
+
+         <port-component>
+            <port-component-name>XtentisPort</port-component-name>
+            <port-component-uri>/xtentis/XtentisPort</port-component-uri>
+            <auth-method>BASIC</auth-method>
+         </port-component>
 
         <method-attributes>
         </method-attributes>
       </session>
       <session>
-         <ejb-name>RoutingEngineV2Ctrl</ejb-name>
-         <jndi-name>amalto/remote/core/routingenginev2ctrl</jndi-name>
-         <local-jndi-name>amalto/local/core/routingenginev2ctrl</local-jndi-name>
+         <ejb-name>VersioningSystemCtrl</ejb-name>
+         <jndi-name>amalto/remote/core/versioningsystemctrl</jndi-name>
+         <local-jndi-name>amalto/local/core/versioningsystemctrl</local-jndi-name>
 
         <method-attributes>
         </method-attributes>
       </session>
       <session>
-         <ejb-name>MenuCtrl</ejb-name>
-         <jndi-name>amalto/remote/core/menuctrl</jndi-name>
-         <local-jndi-name>amalto/local/core/menuctrl</local-jndi-name>
+         <ejb-name>DataClusterCtrl</ejb-name>
+         <jndi-name>amalto/remote/core/dataclusterctrl</jndi-name>
+         <local-jndi-name>amalto/local/core/dataclusterctrl</local-jndi-name>
 
         <method-attributes>
         </method-attributes>
       </session>
       <session>
-         <ejb-name>XmlServerSLWrapper</ejb-name>
-         <jndi-name>amalto/remote/xmldb/xmlserverslwrapper</jndi-name>
-         <local-jndi-name>amalto/local/xmldb/xmlserverslwrapper</local-jndi-name>
+         <ejb-name>BackgroundJobCtrl</ejb-name>
+         <jndi-name>amalto/remote/core/backgroundjobctrl</jndi-name>
+         <local-jndi-name>amalto/local/core/backgroundjobctrl</local-jndi-name>
 
         <method-attributes>
         </method-attributes>
       </session>
       <session>
-         <ejb-name>ViewCtrl</ejb-name>
-         <jndi-name>amalto/remote/core/viewctrl</jndi-name>
-         <local-jndi-name>amalto/local/core/viewctrl</local-jndi-name>
+         <ejb-name>DroppedItemCtrl</ejb-name>
+         <jndi-name>amalto/remote/core/droppeditemctrl</jndi-name>
+         <local-jndi-name>amalto/local/core/droppeditemctrl</local-jndi-name>
+
+        <method-attributes>
+        </method-attributes>
+      </session>
+      <session>
+         <ejb-name>ConfigurationInfoCtrl</ejb-name>
+         <jndi-name>amalto/remote/core/configurationinfoctrl</jndi-name>
+         <local-jndi-name>amalto/local/core/configurationinfoctrl</local-jndi-name>
 
         <method-attributes>
         </method-attributes>
