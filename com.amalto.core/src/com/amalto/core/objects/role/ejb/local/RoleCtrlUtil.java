@@ -5,7 +5,7 @@ package com.amalto.core.objects.role.ejb.local;
 
 /**
  * Utility class for RoleCtrl.
- * @xdoclet-generated at 27-05-09
+ * @xdoclet-generated at 24-06-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}

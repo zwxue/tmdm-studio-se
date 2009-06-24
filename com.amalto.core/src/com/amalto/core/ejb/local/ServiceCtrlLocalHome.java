@@ -5,7 +5,7 @@ package com.amalto.core.ejb.local;
 
 /**
  * Local home interface for ServiceCtrl.
- * @xdoclet-generated at 31-05-09
+ * @xdoclet-generated at 24-06-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
