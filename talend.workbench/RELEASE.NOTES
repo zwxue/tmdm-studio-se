@@ -1,5 +1,10 @@
 RELEASE NOTES
 
+#############################################################
+	CHANGE META-INF/MANIFEST.MF BUNDLE VERSION
+	WHEN BUILDING A NEW RELEASE
+#############################################################	
+
 2.20.0 NOT RELEASED
 For core 2.20.0
 
