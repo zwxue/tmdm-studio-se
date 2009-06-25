@@ -2,10 +2,12 @@ package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.events.SelectionEvent;
@@ -13,9 +15,11 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDFactory;
+import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
+import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.util.XSDConstants;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
@@ -69,6 +73,19 @@ public class XSDEditParticleAction extends Action implements SelectionListener{
 			}
 			elementDeclarations.add("");
 			
+    		IStructuredContentProvider provider = (IStructuredContentProvider) page
+			.getTreeViewer().getContentProvider();
+
+            XSDIdentityConstraintDefinition identify = null;
+            XSDXPathDefinition keyPath = null;
+            List<Object> keyInfo = Util.getKeyInfo(decl);
+            if (keyInfo != null && keyInfo.size() > 0)
+            {
+            	identify = (XSDIdentityConstraintDefinition)keyInfo.get(0);
+            	keyPath = (XSDXPathDefinition)keyInfo.get(1);
+            	identify.getFields().remove(keyPath);
+            }
+
             dialog = new BusinessElementInputDialog(
             		this,
             		page.getSite().getShell(),
@@ -97,7 +114,14 @@ public class XSDEditParticleAction extends Action implements SelectionListener{
        		}//ref
        		
        		decl.setName("".equals(this.elementName) ? null : this.elementName);
-       		
+       		if (keyPath != null) {
+       			XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
+           		XSDXPathDefinition field = factory.createXSDXPathDefinition();
+           		field.setVariety(keyPath.getVariety());
+       			field.setValue(elementName);
+       			identify.getFields().add(field);
+			}
+
        		if (newRef!=null) {
        			decl.setResolvedElementDeclaration(newRef);
        			decl.updateElement();
@@ -129,7 +153,7 @@ public class XSDEditParticleAction extends Action implements SelectionListener{
        		selParticle.setMinOccurs(this.minOccurs);
        		selParticle.setMaxOccurs(this.maxOccurs);
        		selParticle.updateElement();
-       		
+            
        		page.getTreeViewer().refresh(true);
        		page.markDirty();
        

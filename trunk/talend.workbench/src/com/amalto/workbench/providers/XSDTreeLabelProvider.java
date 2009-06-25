@@ -254,6 +254,8 @@ public class XSDTreeLabelProvider extends LabelProvider {
 			XSDTerm xsdTerm = xsdParticle.getTerm();
 			if (xsdTerm instanceof XSDElementDeclaration) {
 				//get Type of Parent Group
+				if (Util.getKeyInfo((XSDElementDeclaration)xsdTerm) != null)
+					return ImageCache.getCreatedImage( "icons/key.gif");
 				XSDConcreteComponent xsdConcreteComponent =  xsdParticle.getContainer();
 				if (xsdConcreteComponent instanceof XSDModelGroup) {
 					if (((XSDModelGroup)xsdConcreteComponent).getCompositor() == XSDCompositor.CHOICE_LITERAL)
