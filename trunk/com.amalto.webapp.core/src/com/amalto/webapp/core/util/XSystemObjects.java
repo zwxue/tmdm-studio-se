@@ -33,6 +33,7 @@ public enum XSystemObjects {
 	M_REPORTING(XObjectType.MENU,"Reporting"), 
 	M_SYNCHRONIZATIONACTION(XObjectType.MENU,"SynchronizationAction"), 
 	M_SYNCHRONIZATIONPLAN(XObjectType.MENU,"SynchronizationPlan"),
+	M_DATA_CHANGES(XObjectType.MENU,"Data changes"),
 
 	// roles
 	R_BOLLORE_CONTRIBUTOR(XObjectType.ROLE, "BOLLORE_Contributor"),
