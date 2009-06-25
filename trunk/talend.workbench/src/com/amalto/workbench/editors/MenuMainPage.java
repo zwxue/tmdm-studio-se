@@ -90,7 +90,6 @@ public class MenuMainPage extends AMainPageV2 {
 	protected void createCharacteristicsContent(FormToolkit toolkit, Composite mainComposite) {
 
         try {
-        	                     
             //description
             Label descriptionLabel = toolkit.createLabel(mainComposite, "Description", SWT.NULL);
             descriptionLabel.setLayoutData(
