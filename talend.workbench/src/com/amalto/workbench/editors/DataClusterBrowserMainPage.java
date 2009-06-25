@@ -181,10 +181,13 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 //            	}
 //            });
         	Button bFrom = toolkit.createButton(composite, "From", SWT.CENTER|SWT.ARROW | SWT.DOWN);
+        	
             bFrom.addListener(SWT.Selection, new Listener() {
                 public void handleEvent(Event event) {
                 	if(frCal==null||(frCal!=null&&frCal.getShell().isDisposed())){
                 		frCal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());
+//                		frCal.getShell().setLocation(new Point(300,300));
+                		frCal.getShell().setLocation(450, 250);
                 	}
                     if (fromText.getText() != null && fromText.getText().length() > 0) {
                        try {
@@ -243,6 +246,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 public void handleEvent(Event event) {
                 	if(toCal==null||(toCal!=null&&toCal.getShell().isDisposed())){
                 		toCal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());
+                		toCal.getShell().setLocation(600, 250);
                 	}
 	                  // final CalendarDialog toCal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());
 	                    
