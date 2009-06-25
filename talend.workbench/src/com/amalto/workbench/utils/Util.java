@@ -43,12 +43,17 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDElementDeclaration;
+import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
+import org.eclipse.xsd.XSDSchemaContent;
+import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTypeDefinition;
+import org.eclipse.xsd.XSDXPathDefinition;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -725,6 +730,109 @@ public class Util {
         return elemsUsingType;
     }
     
+    public static List<String> getAllCustomSimpleDataType(XSDSchema schema)
+    {
+		ArrayList customTypes = new ArrayList();
+		for (Iterator iter =  schema.getTypeDefinitions().iterator(); iter.hasNext(); ) {
+			XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
+			if (type instanceof XSDSimpleTypeDefinition)
+				customTypes.add(type.getName());
+		}
+		return customTypes;
+    }
+    
+    public static List<String> getAllSchemaSimpleDataType(XSDSchema schema)
+    {
+    	List<String> builtInTypes = new ArrayList<String>();
+		for (Iterator<XSDTypeDefinition> iter =  schema.getSchemaForSchema().getTypeDefinitions().iterator(); iter.hasNext(); ) {
+			XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
+			if (type instanceof XSDSimpleTypeDefinition)
+				builtInTypes.add(type.getName());
+		}
+		return builtInTypes;
+    }
+    
+    public static Object findElementUsingName(XSDSchema schema, String name) {
+		EList<XSDElementDeclaration> elems = schema.getElementDeclarations();
+		for (XSDElementDeclaration elem : elems) {
+			if (elem.getName().equals(name))
+				return elem;
+		}
+		return null;
+	}
+    
+    public static List<Object> getKeyInfo(Object key)
+    {
+    	if (!((key instanceof XSDElementDeclaration))) {
+			return null;
+		}
+    	
+    	List<Object> list = new ArrayList<Object>();
+    	
+    	Object parent = getParent(key);
+        if (parent != null && parent instanceof XSDElementDeclaration)
+        {
+        	XSDElementDeclaration top = (XSDElementDeclaration)parent;
+        	EList<XSDIdentityConstraintDefinition> idtylist = top.getIdentityConstraintDefinitions();
+        	for (XSDIdentityConstraintDefinition idty : idtylist)
+        	{
+        		EList<XSDXPathDefinition> fields = idty.getFields();
+        		for (XSDXPathDefinition path: fields)
+        		{
+        			if (path.getValue().equals(((XSDElementDeclaration)key).getName()))
+        			{
+        				list.add(idty);
+        				list.add(path);
+        				return list;
+        			}
+        		}
+        	}
+        }
+        
+        return null;
+    }
+    
+    public static Object getParent(Object son)
+    {
+    	if (!((son instanceof XSDElementDeclaration) || (son instanceof XSDParticle))) {
+			return null;
+		}
+
+		XSDElementDeclaration elem = null;
+		if (son instanceof XSDParticle) {
+			elem = (XSDElementDeclaration) ((XSDParticle) son).getContent();
+		} else
+			elem = (XSDElementDeclaration) son;
+
+		EList<XSDSchemaContent> parentList = elem.getSchema().getContents();
+		ArrayList<Object> list = new ArrayList<Object>();
+		for (XSDSchemaContent top : parentList) {
+			list.clear();
+			if (!(top instanceof XSDElementDeclaration)) {
+				continue;
+			}
+			XSDElementDeclaration decl = (XSDElementDeclaration) top;
+			if (decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+				XSDComplexTypeDefinition type = (XSDComplexTypeDefinition) decl
+						.getTypeDefinition();
+				if (type.getContent() instanceof XSDParticle) {
+					XSDParticle particle = (XSDParticle) type.getContent();
+					if (particle.getTerm() instanceof XSDModelGroup) {
+						XSDModelGroup group = (XSDModelGroup) particle
+								.getTerm();
+						EList<XSDParticle> elist = group.getContents();
+						for (XSDParticle pt : elist) {
+							if (((XSDElementDeclaration) pt.getContent()) == elem) {
+								return decl;
+							}
+
+						}
+					}
+				}
+			}
+		}
+		return null;
+    }
     
     public static Object[] getAllObject(Object elem, ArrayList<Object> objList, IStructuredContentProvider provider) {
 
@@ -758,6 +866,14 @@ public class Util {
 						((XSDParticle) obj)
 								.setTerm((XSDElementDeclaration) decl);
 						((XSDParticle) obj).updateElement();
+					}
+				}
+				XSDElementDeclaration elem = (XSDElementDeclaration) ((XSDParticle) obj).getContent();
+				if (elem.isElementDeclarationReference())
+				{
+					if (elem.getResolvedElementDeclaration() == decl)
+					{
+						elem.setResolvedElementDeclaration((XSDElementDeclaration)decl);
 					}
 				}
 			}
