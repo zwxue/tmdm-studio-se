@@ -251,7 +251,7 @@ public class Util {
 
 
 	
-	public static String default_endpoint_address = "http://localhost:8080/xtentis/XtentisPort";
+	public static String default_endpoint_address = "http://localhost:8080/talend/TalendPort";
 	
 	/*********************************************************************
 	 *      WEB SERVICES
