@@ -878,7 +878,8 @@ public class XtentisRMIPort implements XtentisPort {
 	        			}
 	        		}	        		
 	        		//regenerate projection
-	        		if(keys.size()>0){	        			
+	        		if(keys.size()>0){
+	        			if(itemKeyValues==null|| itemKeyValues[0] ==null) itemKeyValues=new String[]{keys.get(0).getUuidValue()};
 	        			projection=Util.getProjectXMLString(keys.toArray(new UUIDKey[keys.size()]), projection);
 	        		}	      
 	        	}
