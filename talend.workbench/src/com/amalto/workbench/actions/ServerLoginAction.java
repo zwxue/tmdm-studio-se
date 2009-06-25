@@ -88,13 +88,16 @@ public class ServerLoginAction extends Action implements SelectionListener{
             
             boolean found = false;
             for (int i = 0; i < serverRoots.length; i++) {
-                if (serverRoots[i].getWsKey().equals(serverRoot.getWsKey())) {
-                    //server & universe already exists --> synchronize
-                	if(serverRoots[i].getUser().getUniverse().equalsIgnoreCase(serverRoot.getUser().getUniverse())){
-	                    found = true;
-	                    ((TreeParent)serverRoots[i]).synchronizeWith(serverRoot);
-                	}
-                }
+            	//aiming add root displayName as unique ID of each server
+            	if(serverRoots[i].getDisplayName().equals(serverRoot.getDisplayName())){
+	                if (serverRoots[i].getWsKey().equals(serverRoot.getWsKey())) {
+	                    //server & universe already exists --> synchronize
+	                	if(serverRoots[i].getUser().getUniverse().equalsIgnoreCase(serverRoot.getUser().getUniverse())){
+		                    found = true;
+		                    ((TreeParent)serverRoots[i]).synchronizeWith(serverRoot);
+	                	}
+	                }
+            	}
             }
             if (!found) 
             	invisibleRoot.addChild(serverRoot);
