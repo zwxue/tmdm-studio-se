@@ -112,7 +112,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	protected Text keyText;
 	protected TableViewer resultsViewer; 
 	protected ListViewer wcListViewer; 
-	
+    protected CalendarDialog frCal;	
+    protected CalendarDialog toCal;	
 	protected boolean[] ascending = {true,false,false};
 	//protected String previousDataModel=null;
 		
@@ -132,8 +133,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	protected void createFormContent(IManagedForm managedForm) {
 
         try {
- 
         	//sets the title
+        	frCal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());
+        	toCal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());
         	managedForm.getForm().setText(this.getTitle());
         	
         	//get the toolkit
@@ -181,25 +183,26 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         	Button bFrom = toolkit.createButton(composite, "From", SWT.CENTER|SWT.ARROW | SWT.DOWN);
             bFrom.addListener(SWT.Selection, new Listener() {
                 public void handleEvent(Event event) {
-                   final CalendarDialog cal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());
+                	if(frCal==null||(frCal!=null&&frCal.getShell().isDisposed())){
+                		frCal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());
+                	}
                     if (fromText.getText() != null && fromText.getText().length() > 0) {
                        try {
+                    	   if(frCal.equals(null));
                            Date d = sdf.parse(fromText.getText());
-                           cal.setDate(d);
+                           frCal.setDate(d);
                        } catch (ParseException pe) {
 
                        }
                     }
                     
-                    cal.addDateChangedListener(new SWTCalendarListener() {
+                    frCal.addDateChangedListener(new SWTCalendarListener() {
                         public void dateChanged(SWTCalendarEvent calendarEvent) {
                             fromText.setText(sdf.format(calendarEvent.getCalendar().getTime()));
-                            //cal.close();
+                            //frCal.close();
                         }
                     });
-
-                    
-                    cal.open();
+                    frCal.open();
             	};
             });    
           
@@ -238,18 +241,21 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         	Button bTo = toolkit.createButton(composite, "To", SWT.CENTER|SWT.ARROW | SWT.DOWN);
             bTo.addListener(SWT.Selection, new Listener() {
                 public void handleEvent(Event event) {
-	                   final CalendarDialog cal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());
+                	if(toCal==null||(toCal!=null&&toCal.getShell().isDisposed())){
+                		toCal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());
+                	}
+	                  // final CalendarDialog toCal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());
 	                    
 	                    if (toText.getText() != null && toText.getText().length() > 0) {
 	                        try {
 	                            Date d = sdf.parse(toText.getText());
-	                            cal.setDate(d);
+	                            toCal.setDate(d);
 	                        } catch (ParseException pe) {
 
 	                        }
 	                    } 
 	                   
-	                    cal.addDateChangedListener(new SWTCalendarListener() {
+	                    toCal.addDateChangedListener(new SWTCalendarListener() {
 	                        public void dateChanged(SWTCalendarEvent calendarEvent) {
 	                            toText.setText(sdf.format(calendarEvent.getCalendar().getTime()));
 	                            //cal.close();
@@ -257,7 +263,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	                    });
 
 	                    
-	                    cal.open();
+	                    toCal.open();
             	};
             });    
             
