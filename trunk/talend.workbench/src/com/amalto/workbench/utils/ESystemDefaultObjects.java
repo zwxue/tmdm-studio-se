@@ -39,7 +39,7 @@ public enum ESystemDefaultObjects {
 	M_ITEMSTRASH(TreeObject.MENU,"ItemsTrash"),
 	M_LOGGING(TreeObject.MENU,"logging"),
 	M_SMTP(TreeObject.MENU,"smtp"),
-	
+	M_DATA_CHANGES(TreeObject.MENU,"Data changes"),
 	
 	//roles
 	//R_BOLLORE_CONTRIBUTOR(TreeObject.ROLE,"BOLLORE_Contributor"),
