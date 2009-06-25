@@ -39,8 +39,8 @@
 		<auth-method>FORM</auth-method>
 		<realm-name>xtentisWebAppSecurity</realm-name>
 		<form-login-config>
-			<form-login-page>/xtentismdmv3/auth/login.jsp</form-login-page>
-		    <form-error-page>/xtentismdmv3/auth/login.jsp?error=loginFailed</form-error-page>
+			<form-login-page>/talendmdm/auth/login.jsp</form-login-page>
+		    <form-error-page>/talendmdm/auth/login.jsp?error=loginFailed</form-error-page>
 		</form-login-config>
 	</login-config>
     
