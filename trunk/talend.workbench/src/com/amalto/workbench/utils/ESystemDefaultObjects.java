@@ -8,6 +8,7 @@ import com.amalto.workbench.models.TreeObject;
 public enum ESystemDefaultObjects {
 	//Data Clusters
 	DC_JCAADAPTERS(TreeObject.DATA_CLUSTER, "amaltoOBJECTSjcaadapters"),
+	DC_UPDATE_REPORT(TreeObject.DATA_CLUSTER,"UpdateReport"),
 	DC_BUG_TRACKING(TreeObject.DATA_CLUSTER,"Bug Tracking"),
 	DC_CONF(TreeObject.DATA_CLUSTER,"CONF"),
 	DC_MDMCONF(TreeObject.DATA_CLUSTER,"MDMCONF"),
@@ -36,6 +37,8 @@ public enum ESystemDefaultObjects {
 	M_SYNCHRONIZATIONACTION(TreeObject.MENU,"SynchronizationAction"),
 	M_SYNCHRONIZATIONPLAN(TreeObject.MENU,"SynchronizationPlan"),
 	M_ITEMSTRASH(TreeObject.MENU,"ItemsTrash"),
+	M_LOGGING(TreeObject.MENU,"logging"),
+	M_SMTP(TreeObject.MENU,"smtp"),
 	
 	
 	//roles
