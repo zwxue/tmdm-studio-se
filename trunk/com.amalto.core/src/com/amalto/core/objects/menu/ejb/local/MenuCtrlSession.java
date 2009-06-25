@@ -5,7 +5,7 @@ package com.amalto.core.objects.menu.ejb.local;
 
 /**
  * Session layer for MenuCtrl.
- * @xdoclet-generated at 24-06-09
+ * @xdoclet-generated at 25-06-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}

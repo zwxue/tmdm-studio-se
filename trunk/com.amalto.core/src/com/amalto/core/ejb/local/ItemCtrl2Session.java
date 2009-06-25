@@ -5,7 +5,7 @@ package com.amalto.core.ejb.local;
 
 /**
  * Session layer for ItemCtrl2.
- * @xdoclet-generated at 24-06-09
+ * @xdoclet-generated at 25-06-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}

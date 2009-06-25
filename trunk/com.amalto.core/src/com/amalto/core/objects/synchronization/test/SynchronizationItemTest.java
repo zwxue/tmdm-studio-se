@@ -235,7 +235,7 @@ public class SynchronizationItemTest {
 		Logger.getLogger("org").setLevel(Level.INFO);
 		Logger.getLogger("org.jboss.ws").setLevel(Level.INFO);
 		
-		String endpointAddress = "http://localhost:8080/xtentis/XtentisPort?WSDL";
+		String endpointAddress = "http://localhost:8080/talend/TalendPort?WSDL";
 		String username = "admin";
 		String password = "xtentis"; 
 		

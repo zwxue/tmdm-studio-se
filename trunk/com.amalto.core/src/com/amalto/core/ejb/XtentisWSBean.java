@@ -146,7 +146,7 @@ import com.amalto.xmlserver.interfaces.WhereOr;
  * @jboss.port-component 
  * 		auth-method = "BASIC" 
  * 		name = "XtentisPort" 
- * 		uri = "/xtentis/XtentisPort"
+ * 		uri = "/talend/TalendPort"
  *                   
  *  @wsee.port-component 
  * 					description = "The Xtentis Port" 

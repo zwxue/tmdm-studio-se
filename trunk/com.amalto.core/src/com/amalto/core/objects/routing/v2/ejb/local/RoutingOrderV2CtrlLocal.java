@@ -5,7 +5,7 @@ package com.amalto.core.objects.routing.v2.ejb.local;
 
 /**
  * Local interface for RoutingOrderV2Ctrl.
- * @xdoclet-generated at 24-06-09
+ * @xdoclet-generated at 25-06-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
