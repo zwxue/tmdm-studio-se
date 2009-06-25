@@ -458,7 +458,8 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 				node.setDisplayName(node.getDisplayName() + " ["+IConstants.HEAD+"]");
 			}
 		}	
-		serverRoot.setDisplayName(serverRoot.getDisplayName()+" ["+universe.getName().replaceAll("\\[", "").replaceAll("\\]", "").trim()+"]");		
+		String name = serverRoot.getDisplayName()+" ["+universe.getName().replaceAll("\\[", "").replaceAll("\\]", "").trim()+"]" +" " +username;
+		serverRoot.setDisplayName(name);		
 	}
     public TreeParent getServerRoot() {
         return serverRoot;
