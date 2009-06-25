@@ -30,7 +30,7 @@ public class TISCallTest {
 	@Test
 	public void callTIStest() {
 		CompiledParameters parameters = new CompiledParameters();
-		parameters.setUrl("http://localhost:8080/xtentis/XtentisPort");
+		parameters.setUrl("http://localhost:8080/talend/TalendPort");
 		parameters.setUsername("admin");
 		parameters.setPassword("xtentis");
 		

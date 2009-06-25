@@ -61,7 +61,7 @@ import com.sun.org.apache.xpath.internal.objects.XObject;
  */
 public class Util {
 	
-	private static String endpoint_address = "http://localhost:8080/xtentis/XtentisPort";
+	private static String endpoint_address = "http://localhost:8080/talend/TalendPort";
 	
 	public static int _AUTO_ = 0;
 	public static int _FORCE_RMI_ = 1;
@@ -82,7 +82,7 @@ public class Util {
     	if (as==null) throw new XtentisWebappException("Session Expired");
 //    	org.apache.log4j.Category.getInstance(Util.class).debug("getPort() ");
     	String[] mdm = as.getMDMData();
-    	String url = "http://"+mdm[0]+"/xtentis/XtentisPort";
+    	String url = "http://"+mdm[0]+"/talend/TalendPort";
 		return Util.getPort(url, mdm[1], mdm[2]);
 	}
 	
