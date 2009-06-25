@@ -123,7 +123,7 @@ public class NewXObjectAction extends Action{
 	           				view.getSite().getShell(),
 	           				"New "+IConstants.TALEND+" Object Instance",
 	           				"Enter a view name follow the pattern: Browse_items_<ConceptName>",
-	           				null,
+	           				"Browse_items_",
 	           				new IInputValidator() {
 	           					public String isValid(String newText) {
 	           						if ((newText==null) || "".equals(newText)) 
