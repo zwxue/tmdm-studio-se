@@ -72,7 +72,7 @@ import com.amalto.jaas.ldap.jboss.util.Util;
 		  <module-option name="passwordPath">./password</module-option>
 		  <module-option name="rolesPath">./roles/role</module-option>
 		  <module-option name="enabledPath">./enabled</module-option>
-		  <module-option name="adminPassword">9bd2dbdf7fbdf7c9770edd3f0383c148</module-option>
+		  <module-option name="adminPassword">1a254116eb5e70714b0680dfd4d8f7d4</module-option>
         </login-module>
        <!-- Add this line to your login-config.xml to include the ClientLoginModule propogation -->      
         <login-module code="org.jboss.security.ClientLoginModule" flag="required" />
@@ -111,7 +111,7 @@ public class XtentisLoginModule extends UsernamePasswordLoginModule {
 	private String passwordPath = "./password";
 	private String permissionsPath = "./roles/role";
 	private String enabledPath = "./enabled";
-	private String adminPassword = "9bd2dbdf7fbdf7c9770edd3f0383c148";
+	private String adminPassword = "1a254116eb5e70714b0680dfd4d8f7d4";
 	private String adminPermission = "administration";
 		
 	private boolean ldapLogin = false;
