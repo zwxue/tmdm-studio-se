@@ -77,7 +77,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	protected Action browseViewAction;
 	protected Action copyAction;
 	protected Action pasteAction;
-	protected Action versionAction;
+	//protected Action versionAction;
 	private ServerTreeContentProvider contentProvider;
 
 	/**********************************************************************************
@@ -229,8 +229,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					manager.add(deleteXObjectAction);
 					manager.add(copyAction);
 				}
-				if (hasVersioning)
-					manager.add(versionAction);
+//				if (hasVersioning)
+//					manager.add(versionAction);
 				if (!WorkbenchClipboard.getWorkbenchClipboard().isEmpty())
 					manager.add(pasteAction);
 			}
@@ -292,7 +292,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		browseViewAction = new BrowseViewAction(this);
 		copyAction = new CopyXObjectAction(this);
 		pasteAction = new PasteXObjectAction(this);
-		versionAction = new VersioningXObjectAction(this);
+		//versionAction = new VersioningXObjectAction(this);
 	}
 
 	private void hookDoubleClickAction() {
