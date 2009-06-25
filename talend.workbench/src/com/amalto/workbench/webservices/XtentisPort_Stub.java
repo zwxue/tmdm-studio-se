@@ -39,7 +39,7 @@ public class XtentisPort_Stub
      */
     public XtentisPort_Stub(HandlerChain handlerChain) {
         super(handlerChain);
-        _setProperty(ENDPOINT_ADDRESS_PROPERTY, "http://localhost:8080/xtentis/XtentisPort");
+        _setProperty(ENDPOINT_ADDRESS_PROPERTY, "http://localhost:8080/talend/TalendPort");
     }
     
     
