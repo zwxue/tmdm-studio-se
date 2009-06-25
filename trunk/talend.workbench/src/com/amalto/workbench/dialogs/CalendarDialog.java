@@ -53,6 +53,11 @@ public class CalendarDialog  {
     public void addDateChangedListener(SWTCalendarListener listener) {
         swtcal.addSWTCalendarListener(listener);
     }
+
+	public Shell getShell() {
+		return shell;
+	}
 	
+    
 
 }
