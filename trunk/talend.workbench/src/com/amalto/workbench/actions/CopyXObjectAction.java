@@ -60,7 +60,7 @@ public class CopyXObjectAction extends Action{
 	            /*
 				//          Access to server and get port
 				XtentisPort port = Util.getPort(
-						"http://"+xobject.getServer()+"/xtentis/XtentisPort",
+						"http://"+xobject.getServer()+"/talend/TalendPort",
 						xobject.getUsername(),
 						xobject.getPassword()
 				);
