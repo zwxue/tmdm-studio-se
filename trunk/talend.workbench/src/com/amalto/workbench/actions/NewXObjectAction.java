@@ -13,8 +13,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Shell;
 
 import com.amalto.workbench.dialogs.ViewInputDialog;
 import com.amalto.workbench.editors.AMainPage;
@@ -113,6 +113,8 @@ public class NewXObjectAction extends Action{
 	           					};
 	           				}
 	           		);
+        			vid.create();
+        			vid.getShell().setSize(new Point(500,250));
         			vid.setBlockOnOpen(true);
 	           		if (vid.open() == Window.CANCEL) return;
 	           		key  = vid.getValue();
