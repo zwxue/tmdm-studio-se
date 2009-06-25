@@ -80,6 +80,8 @@ public interface XtentisPort extends java.rmi.Remote {
          java.rmi.RemoteException;
     public com.amalto.webapp.util.webservices.WSItemPK putItem(com.amalto.webapp.util.webservices.WSPutItem wsPutItem) throws 
          java.rmi.RemoteException;
+    public com.amalto.webapp.util.webservices.WSItemPK putItemWithReport(com.amalto.webapp.util.webservices.WSPutItemWithReport wsPutItemWithReport) throws 
+         java.rmi.RemoteException;
     public com.amalto.webapp.util.webservices.WSPipeline extractUsingTransformer(com.amalto.webapp.util.webservices.WSExtractUsingTransformer wsExtractUsingTransformer) throws 
          java.rmi.RemoteException;
     public com.amalto.webapp.util.webservices.WSPipeline extractUsingTransformerThruView(com.amalto.webapp.util.webservices.WSExtractUsingTransformerThruView wsExtractUsingTransformerThruView) throws 

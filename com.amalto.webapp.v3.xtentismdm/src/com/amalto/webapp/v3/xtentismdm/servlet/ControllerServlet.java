@@ -79,9 +79,9 @@ public class ControllerServlet extends com.amalto.webapp.core.servlet.GenericCon
 					"<title>Talend Open MDM</title>\n" +
 					super.getCommonImport();
 			html += super.getJavascriptImportsHtml();
-			html +="<script type=\"text/javascript\" src=\"/xtentismdmv3/secure/js/conf.js\"></script>\n";
-			html +="<script type=\"text/javascript\" src=\"/xtentismdmv3/secure/js/actions.js\"></script>\n";
-			html +="<script type=\"text/javascript\" src=\"/xtentismdmv3/secure/dwr/interface/ActionsInterface.js\"></script>\n";
+			html +="<script type=\"text/javascript\" src=\"/talendmdm/secure/js/conf.js\"></script>\n";
+			html +="<script type=\"text/javascript\" src=\"/talendmdm/secure/js/actions.js\"></script>\n";
+			html +="<script type=\"text/javascript\" src=\"/talendmdm/secure/dwr/interface/ActionsInterface.js\"></script>\n";
 
 			//TODO specific YUI import
 			//LOGGER
@@ -95,7 +95,7 @@ public class ControllerServlet extends com.amalto.webapp.core.servlet.GenericCon
 			//html +="<script type=\"text/javascript\" src=\"/xtentismdm/secure/yui-0.12/treeview/treeview-debug.js\"></script>\n";
 			//html +="<script type=\"text/javascript\" src=\"/itemsbrowser/secure/js/ItemNode.js\"></script>\n";
 			
-			//html+="<link type=\"text/css\" rel=\"stylesheet\" href=\"/xtentismdmv3/secure/css/GenericUI.css\" ></link>";
+			//html+="<link type=\"text/css\" rel=\"stylesheet\" href=\"/talendmdm/secure/css/GenericUI.css\" ></link>";
 			html+=
 					"</head>\n" +
 					

@@ -3,7 +3,7 @@
 
 <jboss-web>
   <security-domain  flushOnSessionInvalidation="true">java:/jaas/xtentisSecurity</security-domain>
-   <context-root>/xtentismdmv3</context-root>
+   <context-root>/talendmdm</context-root>
 
    <!-- Resource Environment References -->
    <!--

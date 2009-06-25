@@ -216,7 +216,7 @@ amalto.viewbrowser.ViewBrowser = function () {
 				border: false,
 				bodyBorder:false,
 				//bodyborder: true,
-				closable: false,
+				closable: true,
 				items: 
 				[	
 					new Ext.Panel({
