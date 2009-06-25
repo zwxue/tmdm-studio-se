@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: talend openmdm Workbench Plug-in
 Bundle-SymbolicName: org.talend.openmdm.workbench;singleton:=true
-Bundle-Version: 3.1.1
+Bundle-Version: 3.1.2
 Bundle-Activator: com.amalto.workbench.AmaltoWorbenchPlugin
 Bundle-Vendor: Talend
 Bundle-Localization: plugin
