@@ -5,7 +5,7 @@ package com.amalto.core.ejb.remote;
 
 /**
  * Primary key for Service.
- * @xdoclet-generated at 24-06-09
+ * @xdoclet-generated at 25-06-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}

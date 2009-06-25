@@ -2695,7 +2695,7 @@
 	
 	<service name="XtentisService">
 		<port binding="tns:XtentisBinding" name="XtentisPort">
-			<soap:address location="http://localhost:8080/xtentis/XtentisPort"/>
+			<soap:address location="http://localhost:8080/talend/TalendPort"/>
 		</port>
 	</service>
 	
