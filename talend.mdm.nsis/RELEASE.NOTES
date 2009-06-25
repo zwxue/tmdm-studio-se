@@ -1,5 +1,22 @@
 RELEASE NOTES
+###############################################################################
+	THE FOLLOWING IS FROM TALEND NOTES
+###############################################################################
+3.1.3
+do the following change:
+	A. workbench change http://localhost:8080/xtentis/XtentisPort [^] to
+        http://localhost:8080/talend/TalendPort [^]
+	B. web UI change http://localhost:8080/xtentismdmv3/secure [^] to
+        http://localhost:8080/talendmdm/secure [^]
+	C. change default admin password 'xtentis' to 'talend' 
 
+
+
+	
+
+#######################################################################################
+		THE FOLLOWING IS FROM amalto notes
+#######################################################################################		
 Core libraries implemented by Xtentis JCA connectors
 To use build a ResourceAdapted that implements IXtentisResourceAdapter
 
