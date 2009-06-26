@@ -160,15 +160,15 @@ public class XSDChangeToSimpleTypeAction extends Action implements SelectionList
 			decl.updateElement();
 			
        	    //remove current if no more in use
-			if (current != null) {
-	       	    if (	(current.getName()!=null) &&  //anonymous type
-	       	    		(!schema.getSchemaForSchemaNamespace().equals(current.getTargetNamespace()))
-	       	    	){
-	       	    	List eut =Util.findElementsUsingType(schema, current.getTargetNamespace(), current.getName()); 
-	       	    	if (eut.size()==0)
-	       	    		schema.getContents().remove(current);   
-	       	    }
-			}
+//			if (current != null) {
+//	       	    if (	(current.getName()!=null) &&  //anonymous type
+//	       	    		(!schema.getSchemaForSchemaNamespace().equals(current.getTargetNamespace()))
+//	       	    	){
+//	       	    	List eut =Util.findElementsUsingType(schema, current.getTargetNamespace(), current.getName()); 
+//	       	    	if (eut.size()==0)
+//	       	    		schema.getContents().remove(current);   
+//	       	    }
+//			}
 			
 			declNew = null;
 			page.getTreeViewer().refresh(true);
