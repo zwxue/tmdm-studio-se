@@ -87,6 +87,7 @@ import com.amalto.workbench.webservices.WSRoutingOrderV2PK;
 import com.amalto.workbench.webservices.WSRoutingOrderV2SearchCriteria;
 import com.amalto.workbench.webservices.WSRoutingOrderV2Status;
 import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.widgets.CalendarSelectWidget;
 import com.amalto.workbench.widgets.WidgetFactory;
 
 public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXObjectModelListener {
@@ -212,110 +213,26 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
             );
         	        	
         	final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
-        	
+        	       	
         	//from
-        	Label fromLabel = toolkit.createLabel(firstLineComposite, "From", SWT.NULL);
+        	Label fromLabel = toolkit.createLabel(composite, "From", SWT.NULL);
         	fromLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
         	
-        	fromText = toolkit.createText(firstLineComposite, "",SWT.BORDER|SWT.SINGLE);
-            fromText.setLayoutData(    
-                    new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
-            );
-            fromText.addKeyListener(
-            		new KeyListener() {
-            			public void keyPressed(KeyEvent e) {}
-            			public void keyReleased(KeyEvent e) {
-        					if ((e.stateMask==0) && (e.character == SWT.CR)) {
-        						SubscriptionEngineBrowserMainPage.this.resultsViewer.setInput(getResults());
-        					}
-            			}//keyReleased
-            		}//keyListener
-            );
-            ((GridData)fromText.getLayoutData()).widthHint =100;
-            Calendar c= Calendar.getInstance();
-            long yesterday = c.getTimeInMillis() - (1000*60*60*24);
-            c.setTimeInMillis(yesterday);
-            fromText.setText(sdf.format(c.getTime()));
-            fromText.pack();
-        	
-        	Button bFrom = toolkit.createButton(firstLineComposite, "From", SWT.CENTER|SWT.ARROW | SWT.DOWN);
-            bFrom.addListener(SWT.Selection, new Listener() {
-                public void handleEvent(Event event) {
-                   final CalendarDialog cal = new CalendarDialog(SubscriptionEngineBrowserMainPage.this.getSite().getShell());
-	                   if (fromText.getText() != null && fromText.getText().length() > 0) {
-	                       try {
-	                           Date d = sdf.parse(fromText.getText());
-	                           cal.setDate(d);
-	                       } catch (ParseException pe) {
-	
-	                       }
-	                   } 
-                   
-	                  cal.addDateChangedListener(new SWTCalendarListener() {
-	                        public void dateChanged(SWTCalendarEvent calendarEvent) {
-	                            fromText.setText(sdf.format(calendarEvent.getCalendar().getTime()));
-	                        }
-	                    });
-
-                    cal.open();
-            	};
-            });    
-            
-            
-
+            CalendarSelectWidget fromCalendar=new CalendarSelectWidget(toolkit,composite,true);
+            fromText=fromCalendar.getText();
             //to
-            Label toLabel = toolkit.createLabel(firstLineComposite, "To", SWT.NULL);
+            Label toLabel = toolkit.createLabel(composite, "To", SWT.NULL);
             toLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
             
-            toText = toolkit.createText(firstLineComposite, "",SWT.BORDER|SWT.SINGLE);
-            toText.setLayoutData(    
-                    new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
-            );
-            toText.addKeyListener(
-            		new KeyListener() {
-            			public void keyPressed(KeyEvent e) {}
-            			public void keyReleased(KeyEvent e) {
-        					if ((e.stateMask==0) && (e.character == SWT.CR)) {
-        						SubscriptionEngineBrowserMainPage.this.resultsViewer.setInput(getResults());
-        					}
-            			}//keyReleased
-            		}//keyListener
-            );
-            ((GridData)toText.getLayoutData()).widthHint =100;
-            toText.setText("");
-            toText.pack();
-            
-        	Button bTo = toolkit.createButton(firstLineComposite, "To", SWT.CENTER|SWT.ARROW | SWT.DOWN);
-            bTo.addListener(SWT.Selection, new Listener() {
-                public void handleEvent(Event event) {
-	                   final CalendarDialog cal = new CalendarDialog(SubscriptionEngineBrowserMainPage.this.getSite().getShell());
-	                    
-	                   if (toText.getText() != null && toText.getText().length() > 0) {
-	                        try {
-	                            Date d = sdf.parse(toText.getText());
-	                            cal.setDate(d);
-	                        } catch (ParseException pe) {
-
-	                        }
-	                    }
-	                   
-	                    cal.addDateChangedListener(new SWTCalendarListener() {
-	                        public void dateChanged(SWTCalendarEvent calendarEvent) {
-	                            toText.setText(sdf.format(calendarEvent.getCalendar().getTime()));
-	                        }
-	                    });
-
-	                    cal.open();
-            	};
-            });    
-                        
+            CalendarSelectWidget toCalendar=new CalendarSelectWidget(toolkit,composite,false);
+            toText=toCalendar.getText();               
             
 
-        	Label queueLabel = toolkit.createLabel(firstLineComposite, "Queue", SWT.NULL);
+         	Label queueLabel = toolkit.createLabel(firstLineComposite, "Queue", SWT.NULL);
             queueLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
