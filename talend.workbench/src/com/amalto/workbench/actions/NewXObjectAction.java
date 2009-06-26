@@ -124,7 +124,7 @@ public class NewXObjectAction extends Action{
         			InputDialog id = new InputDialog(
 	           				view.getSite().getShell(),
 	           				"New "+IConstants.TALEND+" Object Instance",
-	           				"Enter a view name follow the pattern: Browse_items_<ConceptName>[#For your purpose]",
+	           				"The view name should follow the pattern: Browse_items_<ConceptName>[#For your purpose]",
 	           				"Browse_items_",
 	           				new IInputValidator() {
 	           					public String isValid(String newText) {
