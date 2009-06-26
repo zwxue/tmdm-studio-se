@@ -187,9 +187,6 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 public void handleEvent(Event event) {
                 	if(frCal==null||(frCal!=null&&frCal.getShell().isDisposed())){
                 		frCal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());
-                		Point sbPoint=bFrom.getDisplay().map(bFrom.getParent(), null, bFrom.getLocation());
-                		
-                		frCal.getShell().setLocation(new Point(sbPoint.x,sbPoint.y+bFrom.getSize().y));
                 	}
                     if (fromText.getText() != null && fromText.getText().length() > 0) {
                        try {
@@ -207,6 +204,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                             //frCal.close();
                         }
                     });
+            		Point sbPoint=bFrom.getDisplay().map(bFrom.getParent(), null, bFrom.getLocation());
+            		
+            		frCal.getShell().setLocation(new Point(sbPoint.x,sbPoint.y+bFrom.getSize().y));
+                    
                     frCal.open();
             	};
             });    
@@ -243,12 +244,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             toText.setText("");
             toText.pack();
             
-        	Button bTo = toolkit.createButton(composite, "To", SWT.CENTER|SWT.ARROW | SWT.DOWN);
+        	final Button bTo = toolkit.createButton(composite, "To", SWT.CENTER|SWT.ARROW | SWT.DOWN);
             bTo.addListener(SWT.Selection, new Listener() {
                 public void handleEvent(Event event) {
                 	if(toCal==null||(toCal!=null&&toCal.getShell().isDisposed())){
-                		toCal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());
-                		toCal.getShell().setLocation(600, 250);
+                		toCal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());                		
                 	}
 	                  // final CalendarDialog toCal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());
 	                    
@@ -268,6 +268,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	                        }
 	                    });
 
+                		Point sbPoint=bFrom.getDisplay().map(bTo.getParent(), null, bTo.getLocation());
+                		
+                		toCal.getShell().setLocation(new Point(sbPoint.x,sbPoint.y+bTo.getSize().y));
 	                    
 	                    toCal.open();
             	};
