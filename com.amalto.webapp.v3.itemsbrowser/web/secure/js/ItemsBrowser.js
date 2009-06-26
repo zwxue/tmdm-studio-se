@@ -332,6 +332,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 				border: false,
 				header:true,
 				split:true,
+				closable:true,
 				collapsible: false
 			});
 				
@@ -342,7 +343,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 				autoScroll: false,
 				border: false,
 				bodyBorder:false,
-				closable: false,
+				closable: true,
 				items: 
 				[	
 					new Ext.Panel({
@@ -355,6 +356,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 						autoScroll: true,	
 						collapsible: true,
 						header:true,
+						closable:true,
 						bodyStyle:'padding:5px',
 						height:200,		
 						split:true,
@@ -578,6 +580,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		    //columns: myColumns,
 		    cm:cm,
 			enableColumnMove:true,
+			closable:true,
 			border:false,
 		    viewConfig: {
 		    	autoFill:true,
