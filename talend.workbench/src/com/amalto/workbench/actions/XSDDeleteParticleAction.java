@@ -1,15 +1,19 @@
 package com.amalto.workbench.actions;
 
+import java.util.List;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDElementDeclaration;
+import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTypeDefinition;
+import org.eclipse.xsd.XSDXPathDefinition;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.utils.EImage;
@@ -61,6 +65,15 @@ public class XSDDeleteParticleAction extends Action{
 				return;
 			}
             
+            XSDIdentityConstraintDefinition identify = null;
+            XSDXPathDefinition keyPath = null;
+            List<Object> keyInfo = Util.getKeyInfo(decl);
+            if (keyInfo != null && keyInfo.size() > 0)
+            {
+            	identify = (XSDIdentityConstraintDefinition)keyInfo.get(0);
+            	keyPath = (XSDXPathDefinition)keyInfo.get(1);
+            	identify.getFields().remove(keyPath);
+            }
             if (!(particle.getContainer() instanceof XSDModelGroup))
             	throw new XtentisException("Unknown container "+particle.getContainer().getClass().getName());
 
