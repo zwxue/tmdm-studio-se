@@ -128,7 +128,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             }); 
             
             //objectType
-            Label objectTypeLabel = toolkit.createLabel(charComposite,  "Object Type", SWT.NULL);
+            Label objectTypeLabel = toolkit.createLabel(charComposite, "Concept", SWT.NULL);
             objectTypeLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
             );
