@@ -39,16 +39,16 @@ public enum ESystemDefaultObjects {
 	M_ITEMSTRASH(TreeObject.MENU,"ItemsTrash"),
 	M_LOGGING(TreeObject.MENU,"logging"),
 	M_SMTP(TreeObject.MENU,"smtp"),
-	M_DATA_CHANGES(TreeObject.MENU,"Data changes"),
+	M_DATA_CHANGES(TreeObject.MENU,"Data changes");
 	
 	//roles
 	//R_BOLLORE_CONTRIBUTOR(TreeObject.ROLE,"BOLLORE_Contributor"),
 	
 	//Views
 	
-	V_MDM_REPORTING_VIEW(TreeObject.VIEW,"MDM Reporting View"),
-	V_XTENTIS_MDM_REPORTING(TreeObject.VIEW,"Xtentis MDM Reporting"),
-	V_XTENTIS_PORTAL_ROLE_VIEW(TreeObject.VIEW,"XTENTIS PORTAL ROLE VIEW");
+//	V_MDM_REPORTING_VIEW(TreeObject.VIEW,"MDM Reporting View"),
+//	V_XTENTIS_MDM_REPORTING(TreeObject.VIEW,"Xtentis MDM Reporting"),
+//	V_XTENTIS_PORTAL_ROLE_VIEW(TreeObject.VIEW,"XTENTIS PORTAL ROLE VIEW");
 	
 	
 	ESystemDefaultObjects(int type, String name){
