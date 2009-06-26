@@ -16,6 +16,8 @@ public class UpdateReportPOJO {
 	
 	public final static String OPERATIONTYPE_UPDATEE="UPDATE";
 	
+	public final static String OPERATIONTYPE_DELETE="DELETE";
+	
 	private String source;
 	
 	private long timeInMillis;
