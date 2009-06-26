@@ -50,6 +50,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -180,14 +181,15 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 //            		fromText.selectAll();            		
 //            	}
 //            });
-        	Button bFrom = toolkit.createButton(composite, "From", SWT.CENTER|SWT.ARROW | SWT.DOWN);
+        	final Button bFrom = toolkit.createButton(composite, "From", SWT.CENTER|SWT.ARROW | SWT.DOWN);
         	
             bFrom.addListener(SWT.Selection, new Listener() {
                 public void handleEvent(Event event) {
                 	if(frCal==null||(frCal!=null&&frCal.getShell().isDisposed())){
                 		frCal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());
-//                		frCal.getShell().setLocation(new Point(300,300));
-                		frCal.getShell().setLocation(450, 250);
+                		Point sbPoint=bFrom.getDisplay().map(bFrom.getParent(), null, bFrom.getLocation());
+                		
+                		frCal.getShell().setLocation(new Point(sbPoint.x,sbPoint.y+bFrom.getSize().y));
                 	}
                     if (fromText.getText() != null && fromText.getText().length() > 0) {
                        try {
