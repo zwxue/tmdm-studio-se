@@ -98,6 +98,7 @@ import com.amalto.workbench.webservices.WSRouteItemV2;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniverseItemsRevisionIDs;
 import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.widgets.CalendarSelectWidget;
 import com.amalto.workbench.widgets.WidgetFactory;
 
 public class DataClusterBrowserMainPage extends AMainPage implements IXObjectModelListener {
@@ -113,8 +114,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	protected Text keyText;
 	protected TableViewer resultsViewer; 
 	protected ListViewer wcListViewer; 
-    protected CalendarDialog frCal;	
-    protected CalendarDialog toCal;	
+
 	protected boolean[] ascending = {true,false,false};
 	//protected String previousDataModel=null;
 		
@@ -135,8 +135,6 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
         try {
         	//sets the title
-        	frCal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());
-        	toCal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());
         	managedForm.getForm().setText(this.getTitle());
         	
         	//get the toolkit
@@ -147,7 +145,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         	composite.setLayout(new GridLayout(9,false));
         	
         	//We do not implement IFormPart: we do not care about lifecycle management
-        	final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+
         	
         	//from
         	Label fromLabel = toolkit.createLabel(composite, "From", SWT.NULL);
@@ -155,127 +153,16 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
         	
-        	fromText = toolkit.createText(composite, "",SWT.BORDER|SWT.SINGLE);
-            fromText.setLayoutData(    
-                    new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
-            );
-            ((GridData) fromText.getLayoutData()).widthHint = 100;
-            fromText.addKeyListener(
-            		new KeyListener() {
-            			public void keyPressed(KeyEvent e) {}
-            			public void keyReleased(KeyEvent e) {
-        					if ((e.stateMask==0) && (e.character == SWT.CR)) {
-        						DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(true));
-        					}
-            			}//keyReleased
-            		}//keyListener
-            );
-            Calendar c= Calendar.getInstance();
-            long yesterday = c.getTimeInMillis() - (1000*60*60*24);
-            c.setTimeInMillis(yesterday);
-            fromText.setText(sdf.format(c.getTime()));
-            fromText.pack();
-//            fromText.addMouseListener(new MouseAdapter(){
-//            	@Override
-//            	public void mouseDown(MouseEvent e) {
-//            		fromText.selectAll();            		
-//            	}
-//            });
-        	final Button bFrom = toolkit.createButton(composite, "From", SWT.CENTER|SWT.ARROW | SWT.DOWN);
-        	
-            bFrom.addListener(SWT.Selection, new Listener() {
-                public void handleEvent(Event event) {
-                	if(frCal==null||(frCal!=null&&frCal.getShell().isDisposed())){
-                		frCal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());
-                	}
-                    if (fromText.getText() != null && fromText.getText().length() > 0) {
-                       try {
-                    	   if(frCal.equals(null));
-                           Date d = sdf.parse(fromText.getText());
-                           frCal.setDate(d);
-                       } catch (ParseException pe) {
-
-                       }
-                    }
-                    
-                    frCal.addDateChangedListener(new SWTCalendarListener() {
-                        public void dateChanged(SWTCalendarEvent calendarEvent) {
-                            fromText.setText(sdf.format(calendarEvent.getCalendar().getTime()));
-                            //frCal.close();
-                        }
-                    });
-            		Point sbPoint=bFrom.getDisplay().map(bFrom.getParent(), null, bFrom.getLocation());
-            		
-            		frCal.getShell().setLocation(new Point(sbPoint.x,sbPoint.y+bFrom.getSize().y));
-                    
-                    frCal.open();
-            	};
-            });    
-          
-
-            
+            CalendarSelectWidget fromCalendar=new CalendarSelectWidget(toolkit,composite,true);
+            fromText=fromCalendar.getText();
             //to
             Label toLabel = toolkit.createLabel(composite, "To", SWT.NULL);
             toLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
             
-            toText = toolkit.createText(composite, "",SWT.BORDER|SWT.SINGLE);
-            toText.setLayoutData(    
-                    new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
-            );
-            ((GridData) toText.getLayoutData()).widthHint = 100;
-            toText.addKeyListener(
-            		new KeyListener() {
-            			public void keyPressed(KeyEvent e) {}
-            			public void keyReleased(KeyEvent e) {
-        					if ((e.stateMask==0) && (e.character == SWT.CR)) {
-        						DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(true));
-        					}
-            			}//keyReleased
-            		}//keyListener
-            );
-            toText.addMouseListener(new MouseAdapter(){
-            	@Override
-            	public void mouseDown(MouseEvent e) {
-            		toText.selectAll();            		
-            	}
-            });
-            toText.setText("");
-            toText.pack();
-            
-        	final Button bTo = toolkit.createButton(composite, "To", SWT.CENTER|SWT.ARROW | SWT.DOWN);
-            bTo.addListener(SWT.Selection, new Listener() {
-                public void handleEvent(Event event) {
-                	if(toCal==null||(toCal!=null&&toCal.getShell().isDisposed())){
-                		toCal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());                		
-                	}
-	                  // final CalendarDialog toCal = new CalendarDialog(DataClusterBrowserMainPage.this.getSite().getShell());
-	                    
-	                    if (toText.getText() != null && toText.getText().length() > 0) {
-	                        try {
-	                            Date d = sdf.parse(toText.getText());
-	                            toCal.setDate(d);
-	                        } catch (ParseException pe) {
-
-	                        }
-	                    } 
-	                   
-	                    toCal.addDateChangedListener(new SWTCalendarListener() {
-	                        public void dateChanged(SWTCalendarEvent calendarEvent) {
-	                            toText.setText(sdf.format(calendarEvent.getCalendar().getTime()));
-	                            //cal.close();
-	                        }
-	                    });
-
-                		Point sbPoint=bFrom.getDisplay().map(bTo.getParent(), null, bTo.getLocation());
-                		
-                		toCal.getShell().setLocation(new Point(sbPoint.x,sbPoint.y+bTo.getSize().y));
-	                    
-	                    toCal.open();
-            	};
-            });    
-            
+            CalendarSelectWidget toCalendar=new CalendarSelectWidget(toolkit,composite,false);
+            toText=toCalendar.getText();            
 
 
         	Label conceptLabel = toolkit.createLabel(composite, "Concept", SWT.NULL);
