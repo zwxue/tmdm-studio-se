@@ -89,6 +89,7 @@ import com.amalto.workbench.webservices.WSRoutingOrderV2Status;
 import com.amalto.workbench.webservices.WSServicesListItem;
 import com.amalto.workbench.webservices.WSString;
 import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.widgets.CalendarSelectWidget;
 import com.amalto.workbench.widgets.WidgetFactory;
 
 public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjectModelListener {
@@ -221,106 +222,16 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
         	fromLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
+            CalendarSelectWidget fromCalendar=new CalendarSelectWidget(toolkit,firstLineComposite,true);
+            fromText=fromCalendar.getText();
             
-        	fromText = toolkit.createText(firstLineComposite, "",SWT.BORDER|SWT.SINGLE);
-            fromText.setLayoutData(    
-                    new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
-            );
-            ((GridData)fromText.getLayoutData()).widthHint =100;
-            fromText.addKeyListener(
-            		new KeyListener() {
-            			public void keyPressed(KeyEvent e) {}
-            			public void keyReleased(KeyEvent e) {
-        					if ((e.stateMask==0) && (e.character == SWT.CR)) {
-        						RoutingEngineV2BrowserMainPage.this.resultsViewer.setInput(getResults());
-        					}
-            			}//keyReleased
-            		}//keyListener
-            );
-            Calendar c= Calendar.getInstance();
-            long yesterday = c.getTimeInMillis() - (1000*60*60*24);
-            c.setTimeInMillis(yesterday);
-            fromText.setText(sdf.format(c.getTime()));
-            fromText.pack();
-
-        	
-        	Button bFrom = toolkit.createButton(firstLineComposite, "", SWT.CENTER|SWT.ARROW | SWT.DOWN);
-            bFrom.addListener(SWT.Selection, new Listener() {
-                public void handleEvent(Event event) {
-                   final CalendarDialog cal = new CalendarDialog(RoutingEngineV2BrowserMainPage.this.getSite().getShell());
-                   if (fromText.getText() != null && fromText.getText().length() > 0) {
-                       try {
-                           Date d = sdf.parse(fromText.getText());
-                           cal.setDate(d);
-                       } catch (ParseException pe) {
-
-                       }
-                   } 
-                   
-                   cal.addDateChangedListener(new SWTCalendarListener() {
-                        public void dateChanged(SWTCalendarEvent calendarEvent) {
-                            fromText.setText(sdf.format(calendarEvent.getCalendar().getTime()));
-                            //cal.close();
-                        }
-                    });
-
-                    
-                    cal.open();
-            	};
-            });    
-            
-            
-
             //to
             Label toLabel = toolkit.createLabel(firstLineComposite, "To", SWT.NULL);
             toLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
-            
-            toText = toolkit.createText(firstLineComposite, "",SWT.BORDER|SWT.SINGLE);
-            toText.setLayoutData(    
-                    new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
-            );
-            ((GridData)toText.getLayoutData()).widthHint =100;
-            toText.addKeyListener(
-            		new KeyListener() {
-            			public void keyPressed(KeyEvent e) {}
-            			public void keyReleased(KeyEvent e) {
-        					if ((e.stateMask==0) && (e.character == SWT.CR)) {
-        						RoutingEngineV2BrowserMainPage.this.resultsViewer.setInput(getResults());
-        					}
-            			}//keyReleased
-            		}//keyListener
-            );
-            //toText.setText(sdf.format(new Date()));
-            toText.setText("");
-            toText.pack();
-        	
-        	Button bTo = toolkit.createButton(firstLineComposite, "To", SWT.CENTER|SWT.ARROW | SWT.DOWN);
-            bTo.addListener(SWT.Selection, new Listener() {
-                public void handleEvent(Event event) {
-	                  final CalendarDialog cal = new CalendarDialog(RoutingEngineV2BrowserMainPage.this.getSite().getShell());
-	                    if (toText.getText() != null && toText.getText().length() > 0) {
-	                        try {
-	                            Date d = sdf.parse(toText.getText());
-	                            cal.setDate(d);
-	                        } catch (ParseException pe) {
-
-	                        }
-	                    }
-	                   
-	                     cal.addDateChangedListener(new SWTCalendarListener() {
-	                        public void dateChanged(SWTCalendarEvent calendarEvent) {
-	                            toText.setText(sdf.format(calendarEvent.getCalendar().getTime()));
-	                            //cal.close();
-	                        }
-	                    });
-
-	                    
-	                    cal.open();
-            	};
-            });    
-            
+            CalendarSelectWidget toCalendar=new CalendarSelectWidget(toolkit,firstLineComposite,false);
+            toText=toCalendar.getText();
 
         	Label statusLabel = toolkit.createLabel(firstLineComposite, "Status", SWT.NULL);
             statusLabel.setLayoutData(
