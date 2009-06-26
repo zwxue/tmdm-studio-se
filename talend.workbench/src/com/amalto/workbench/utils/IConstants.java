@@ -19,4 +19,6 @@ public interface IConstants {
 	public final static String OPERATIONTYPE_CREATE="CREATE";
 	
 	public final static String OPERATIONTYPE_UPDATEE="UPDATE";
+	
+	public final static String OPERATIONTYPE_DELETE="DELETE";
 }
