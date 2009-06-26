@@ -124,7 +124,7 @@ public class NewXObjectAction extends Action{
         			InputDialog id = new InputDialog(
 	           				view.getSite().getShell(),
 	           				"New "+IConstants.TALEND+" Object Instance",
-	           				"Enter a view name follow the pattern: Browse_items_<ConceptName>",
+	           				"Enter a view name follow the pattern: Browse_items_<ConceptName>[#For your purpose]",
 	           				"Browse_items_",
 	           				new IInputValidator() {
 	           					public String isValid(String newText) {
@@ -137,7 +137,8 @@ public class NewXObjectAction extends Action{
 	           					};
 	           				}
 	           		);
-        			
+        			id.create();
+        			id.getShell().setSize(new Point(600,180));
         			id.setBlockOnOpen(true);
 	           		if (id.open() == Window.CANCEL) return;
 	           		key  = id.getValue();
