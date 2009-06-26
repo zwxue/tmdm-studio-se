@@ -97,13 +97,13 @@ public class XSDChangeBaseTypeAction extends Action implements SelectionListener
 			typedef.updateElement();
 			
        	    //remove current if no more in use
-       	    if (	(current.getName()!=null) &&  //anonymous type
-       	    		(!schema.getSchemaForSchemaNamespace().equals(current.getTargetNamespace()))
-       	    	){
-       	    	List eut =Util.findElementsUsingType(schema, current.getTargetNamespace(), current.getName()); 
-       	    	if (eut.size()==0)
-       	    		schema.getContents().remove(current);
-       	    }
+//       	    if (	(current.getName()!=null) &&  //anonymous type
+//       	    		(!schema.getSchemaForSchemaNamespace().equals(current.getTargetNamespace()))
+//       	    	){
+//       	    	List eut =Util.findElementsUsingType(schema, current.getTargetNamespace(), current.getName()); 
+//       	    	if (eut.size()==0)
+//       	    		schema.getContents().remove(current);
+//       	    }
 			
 			page.getTreeViewer().refresh(true);
 			page.markDirty();

@@ -74,7 +74,7 @@ public class XSDDeleteParticleAction extends Action{
             	identify.getFields().remove(keyPath);
             	if (identify.getFields().size() == 0)
             	{
-                    XSDElementDeclaration top = (XSDElementDeclaration)Util.getParent(decl);
+                    XSDElementDeclaration top  = (XSDElementDeclaration)Util.getParent(decl);
             		top.getIdentityConstraintDefinitions().remove(identify);
             	}
             }
@@ -83,6 +83,18 @@ public class XSDDeleteParticleAction extends Action{
 
             XSDModelGroup group = (XSDModelGroup)particle.getContainer(); 
             group.getContents().remove(particle);
+
+            
+//            if (term instanceof  XSDElementDeclaration) {
+//	            //remove type definition is no more used and type is not built in
+//	            XSDTypeDefinition typeDef = decl.getTypeDefinition();
+//	       	    if (	(typeDef.getName()!=null) &&  //anonymous type
+//	       	    		(!typeDef.getSchema().getSchemaForSchemaNamespace().equals(typeDef.getTargetNamespace()))
+//	       	    	){
+//	       			if (Util.findElementsUsingType(group.getSchema(),typeDef.getTargetNamespace(), typeDef.getName()).size()==0)
+//	       				group.getSchema().getContents().remove(typeDef);
+//				}
+//            }
             
             group.updateElement();
             xsdPartle = null;

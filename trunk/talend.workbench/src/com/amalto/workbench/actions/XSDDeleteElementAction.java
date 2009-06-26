@@ -79,12 +79,12 @@ public class XSDDeleteElementAction extends UndoAction{
             schema.getContents().remove(decl);
             
             //remove type definition is no more used and type is not built in
-       	    if (current != null && (current.getName()!=null) &&  //anonymous type
-       	    		(!schema.getSchemaForSchemaNamespace().equals(current.getTargetNamespace()))
-       	    	){
-       			if (Util.findElementsUsingType(schema,current.getTargetNamespace(), current.getName()).size()==0)
-       				schema.getContents().remove(current);
-			}
+//       	    if (current != null && (current.getName()!=null) &&  //anonymous type
+//       	    		(!schema.getSchemaForSchemaNamespace().equals(current.getTargetNamespace()))
+//       	    	){
+//       			if (Util.findElementsUsingType(schema,current.getTargetNamespace(), current.getName()).size()==0)
+//       				schema.getContents().remove(current);
+//			}
 
             schema.update();
             
