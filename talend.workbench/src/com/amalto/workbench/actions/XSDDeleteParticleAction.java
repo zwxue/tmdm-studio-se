@@ -12,7 +12,6 @@ import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDTerm;
-import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 
 import com.amalto.workbench.editors.DataModelMainPage;
@@ -64,7 +63,7 @@ public class XSDDeleteParticleAction extends Action{
             if (particle.getContainer() == null) {
 				return;
 			}
-            
+
             XSDIdentityConstraintDefinition identify = null;
             XSDXPathDefinition keyPath = null;
             List<Object> keyInfo = Util.getKeyInfo(decl);
@@ -73,24 +72,17 @@ public class XSDDeleteParticleAction extends Action{
             	identify = (XSDIdentityConstraintDefinition)keyInfo.get(0);
             	keyPath = (XSDXPathDefinition)keyInfo.get(1);
             	identify.getFields().remove(keyPath);
+            	if (identify.getFields().size() == 0)
+            	{
+                    XSDElementDeclaration top = (XSDElementDeclaration)Util.getParent(decl);
+            		top.getIdentityConstraintDefinitions().remove(identify);
+            	}
             }
             if (!(particle.getContainer() instanceof XSDModelGroup))
             	throw new XtentisException("Unknown container "+particle.getContainer().getClass().getName());
 
             XSDModelGroup group = (XSDModelGroup)particle.getContainer(); 
             group.getContents().remove(particle);
-
-            
-            if (term instanceof  XSDElementDeclaration) {
-	            //remove type definition is no more used and type is not built in
-	            XSDTypeDefinition typeDef = decl.getTypeDefinition();
-	       	    if (	(typeDef.getName()!=null) &&  //anonymous type
-	       	    		(!typeDef.getSchema().getSchemaForSchemaNamespace().equals(typeDef.getTargetNamespace()))
-	       	    	){
-	       			if (Util.findElementsUsingType(group.getSchema(),typeDef.getTargetNamespace(), typeDef.getName()).size()==0)
-	       				group.getSchema().getContents().remove(typeDef);
-				}
-            }
             
             group.updateElement();
             xsdPartle = null;
