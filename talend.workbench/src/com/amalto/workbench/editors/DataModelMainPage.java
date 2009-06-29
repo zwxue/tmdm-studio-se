@@ -20,6 +20,7 @@ import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -31,6 +32,7 @@ import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
@@ -97,9 +99,11 @@ import com.amalto.workbench.actions.XSDSetAnnotationLabelAction;
 import com.amalto.workbench.actions.XSDSetAnnotationSourceSystemAction;
 import com.amalto.workbench.actions.XSDSetAnnotationTargetSystemsAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
+import com.amalto.workbench.dialogs.DataModelFilterDialog;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.providers.XSDTreeLabelProvider;
+import com.amalto.workbench.utils.DataModelFilter;
 import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
@@ -108,7 +112,7 @@ import com.amalto.workbench.webservices.WSDataModel;
 public class DataModelMainPage extends AMainPageV2 {
 
 	protected Text descriptionText;
-	protected Button importXSDBtn, exportBtn;
+	protected Button importXSDBtn, exportBtn,filterBtn;
 	protected TreeViewer viewer;
 	protected DrillDownAdapter drillDownAdapter;
 
@@ -147,7 +151,9 @@ public class DataModelMainPage extends AMainPageV2 {
 	private ObjectUndoContext undoContext;
 	private MenuManager menuMgr;
 	private String dataModelName;
-
+	
+	private DataModelFilterDialog dataModelFilterDialog;
+	private DataModelFilter dataModelFilter;
 	public DataModelMainPage(FormEditor editor) {
 		super(editor, DataModelMainPage.class.getName(), "Data Model "
 				+ ((XObjectEditorInput) editor.getEditorInput()).getName());
@@ -177,16 +183,46 @@ public class DataModelMainPage extends AMainPageV2 {
 			((GridData) descriptionText.getLayoutData()).minimumHeight = 30;
 			descriptionText.addModifyListener(this);
 			
-			importXSDBtn = toolkit.createButton(mainComposite, "", SWT.PUSH);
+			Composite btnCmp=toolkit.createComposite(mainComposite);
+			btnCmp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
+					false, 2, 1));
+			GridLayout gLayout=new GridLayout();
+			gLayout.numColumns=3;
+			gLayout.horizontalSpacing=20;
+			btnCmp.setLayout(gLayout);
+			
+			importXSDBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
 			importXSDBtn.setImage(ImageCache.getCreatedImage(EImage.WRITABLE.getPath()));
 			importXSDBtn.setToolTipText("Import...");
-			exportBtn = toolkit.createButton(mainComposite, "", SWT.PUSH);
+						
+			exportBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
 			exportBtn.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
 			exportBtn.setToolTipText("Export...");
+
+			filterBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
+			filterBtn.setImage(ImageCache.getCreatedImage(EImage.FILTER_PS.getPath()));
+			filterBtn.setToolTipText("Filter...");
+			
 			importXSDBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
-					true, 1, 1));
+					false, 1, 1));
 			exportBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
-					true, 1, 1));
+					false, 1, 1));
+			filterBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
+					false, 1, 1));			
+			filterBtn.addSelectionListener(new SelectionAdapter(){				
+
+				public void widgetSelected(SelectionEvent e) {
+					if(dataModelFilterDialog==null){
+						dataModelFilter=new DataModelFilter("",false,false,false,true);
+						dataModelFilterDialog=new DataModelFilterDialog(getSite().getShell(),getXObject(),dataModelFilter);
+					}					 
+					 if(dataModelFilterDialog.open()== Dialog.OK){	
+						 ((XSDTreeContentProvider)viewer.getContentProvider()).setFilter(dataModelFilter);						 
+						 viewer.setAutoExpandLevel(3);
+						 viewer.setInput(getSite());
+					 }
+				}
+			});
 			importXSDBtn.addSelectionListener(new SelectionAdapter(){
 	        	@Override
 	        	public void widgetSelected(SelectionEvent e) {
@@ -502,7 +538,10 @@ public class DataModelMainPage extends AMainPageV2 {
 
 			viewer.setContentProvider(new XSDTreeContentProvider(
 					this.getSite(), getXSDSchema(wsObject.getXsdSchema())));
-			viewer.refresh(true);
+			((XSDTreeContentProvider)viewer.getContentProvider()).setFilter(dataModelFilter);			
+			viewer.setAutoExpandLevel(3);
+			viewer.setInput(getSite());
+			//viewer.refresh(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(this.getSite().getShell(),
