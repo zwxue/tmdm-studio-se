@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -26,7 +27,7 @@ import com.amalto.workbench.utils.EUUIDCustomType;
  *
  */
 public class ElementComposite {
-	private  Combo typeCombo=null;
+	private  CCombo typeCombo=null;
 	private Button customButton = null;
 	private Button builtInButton = null;
 	private Label serverLabel = null;
@@ -68,7 +69,7 @@ public class ElementComposite {
 			);
 			serverLabel.setText("Type");
 							
-			typeCombo = new Combo(cr, SWT.DROP_DOWN);
+			typeCombo = new CCombo(cr, SWT.BORDER|SWT.READ_ONLY);
 			typeCombo.setLayoutData(
 					new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 			);
@@ -81,7 +82,7 @@ public class ElementComposite {
 			);
 			serverLabel.setText("Type");
 							
-			typeCombo = new Combo(parent, SWT.DROP_DOWN);
+			typeCombo = new CCombo(parent, SWT.BORDER|SWT.READ_ONLY);
 			typeCombo.setLayoutData(
 					new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 			);
