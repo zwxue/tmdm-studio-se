@@ -20,14 +20,12 @@ import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 
-public class XSDDeleteParticleAction extends Action{
+public class XSDDeleteParticleAction extends UndoAction{
 
-	private DataModelMainPage page = null;
 	private XSDParticle xsdPartle = null;
 	
 	public XSDDeleteParticleAction(DataModelMainPage page) {
-		super();
-		this.page = page;
+		super(page);
 		setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
 		setText("Delete Element");
 		setToolTipText("Delete a Business Elementt");

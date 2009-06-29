@@ -1,6 +1,5 @@
 package com.amalto.workbench.actions;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -13,14 +12,12 @@ import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.ImageCache;
 
-public class XSDDeleteXPathAction extends Action{
+public class XSDDeleteXPathAction extends UndoAction{
 
-	private DataModelMainPage page = null;
 	private XSDXPathDefinition xsdPath = null;
 	
 	public XSDDeleteXPathAction(DataModelMainPage page) {
-		super();
-		this.page = page;
+		super(page);
 		setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
 		setText("Delete Field");
 		setToolTipText("Delete a Field");
@@ -47,6 +44,7 @@ public class XSDDeleteXPathAction extends Action{
 						.getFirstElement();
 			}
             XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) xpath.getContainer();
+            if (icd == null) return;
             
             if (xpath.getVariety().equals(XSDXPathVariety.SELECTOR_LITERAL)) {
     			MessageDialog.openError(

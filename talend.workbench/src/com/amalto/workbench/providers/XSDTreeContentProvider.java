@@ -1,8 +1,12 @@
 package com.amalto.workbench.providers;
 
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -23,8 +27,10 @@ import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDVariety;
 import org.eclipse.xsd.XSDWildcard;
+import org.eclipse.xsd.impl.XSDSchemaImpl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
 
 import com.amalto.workbench.utils.DataModelFilter;
 import com.amalto.workbench.utils.Util;
@@ -378,6 +384,25 @@ public class XSDTreeContentProvider implements IStructuredContentProvider, ITree
 
 	public XSDSchema getXsdSchema() {
 		return xsdSchema;
+	}
+	
+	public void setXsdSchema(String xsd)
+	{
+	    DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+		documentBuilderFactory.setNamespaceAware(true);
+		documentBuilderFactory.setValidating(false);
+		InputSource source = new InputSource(new StringReader(xsd));
+		DocumentBuilder documentBuilder;
+		Document document = null;
+		try {
+			documentBuilder = documentBuilderFactory.newDocumentBuilder();
+			 document = documentBuilder.parse(source);
+		}catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		xsdSchema = XSDSchemaImpl.createSchema(document.getDocumentElement());;
 	}
 	
 	public String getXSDSchemaAsString() throws Exception{
