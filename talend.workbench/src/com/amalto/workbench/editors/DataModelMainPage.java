@@ -59,7 +59,11 @@ import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDWildcard;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
+import org.eclipse.xsd.impl.XSDElementDeclarationImpl;
+import org.eclipse.xsd.impl.XSDIdentityConstraintDefinitionImpl;
+import org.eclipse.xsd.impl.XSDParticleImpl;
 import org.eclipse.xsd.impl.XSDSchemaImpl;
+import org.eclipse.xsd.impl.XSDXPathDefinitionImpl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -152,6 +156,9 @@ public class DataModelMainPage extends AMainPageV2 {
 	private MenuManager menuMgr;
 	private String dataModelName;
 	
+	private XSDSchema  xsdSchema;
+	private XSDTreeContentProvider provider;
+	
 	private DataModelFilterDialog dataModelFilterDialog;
 	private DataModelFilter dataModelFilter;
 	public DataModelMainPage(FormEditor editor) {
@@ -231,6 +238,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	    			fd.setText("Select the XML definition for XML Schema");
 	    			String filename = fd.open();
 	    			if (filename == null) return;
+	    			xsdSchema = null;
 	    			inferXsdFromXml(filename);
 	        	}
 	        	
@@ -336,8 +344,9 @@ public class DataModelMainPage extends AMainPageV2 {
 					new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 			((GridData) viewer.getControl().getLayoutData()).heightHint = 1000;
 			drillDownAdapter = new DrillDownAdapter(viewer);
-			viewer.setContentProvider(new XSDTreeContentProvider(
-					this.getSite(), xsdSchema));
+			provider = new XSDTreeContentProvider(
+					this.getSite(), xsdSchema);
+			viewer.setContentProvider(provider);
 			viewer.setLabelProvider(new XSDTreeLabelProvider());
 			viewer.setSorter(new ViewerSorter() {
 				public int category(Object element) {
@@ -377,7 +386,18 @@ public class DataModelMainPage extends AMainPageV2 {
 
 					// delete
 					if ((e.stateMask == 0) && (e.keyCode == SWT.DEL)) {
-						deleteSelectedItems(selection);
+						if (deleteConceptWrapAction
+								.checkInDeletableType(selection.toArray())) {
+							deleteConceptWrapAction.prepareToDelSelectedItems(
+									selection, viewer);
+							deleteConceptWrapAction.run();
+						}
+						else
+						{
+							MessageDialog.openWarning(getSite().getShell(), "Warnning",
+							"Please select the deletable node and try again!");
+						}
+
 					}
 				}
 
@@ -535,9 +555,9 @@ public class DataModelMainPage extends AMainPageV2 {
 					.getDescription();
 			if (!s.equals(descriptionText.getText()))
 				descriptionText.setText(s);
-
-			viewer.setContentProvider(new XSDTreeContentProvider(
-					this.getSite(), getXSDSchema(wsObject.getXsdSchema())));
+			provider.setXsdSchema(wsObject.getXsdSchema());
+//			viewer.setContentProvider(new XSDTreeContentProvider(
+//					this.getSite(), getXSDSchema(wsObject.getXsdSchema())));
 			((XSDTreeContentProvider)viewer.getContentProvider()).setFilter(dataModelFilter);			
 			//viewer.setAutoExpandLevel(3);
 			viewer.setInput(getSite());
@@ -569,7 +589,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	protected void createActions() {
 		this.newConceptAction = new XSDNewConceptAction(this);
 		this.deleteConceptAction = new XSDDeleteConceptAction(this);
-		this.deleteConceptWrapAction = new XSDDeleteConceptWrapAction(this,deleteConceptAction);
+		this.deleteConceptWrapAction = new XSDDeleteConceptWrapAction(this);
 		this.newElementAction = new XSDNewElementAction(this);
 		this.deleteElementAction = new XSDDeleteElementAction(this);
 		this.changeToComplexTypeAction = new XSDChangeToComplexTypeAction(this);
@@ -607,6 +627,12 @@ public class DataModelMainPage extends AMainPageV2 {
 				this);
 		this.setAnnotationDocumentationAction = new XSDSetAnnotationDocumentationAction(
 				this);
+		
+		deleteConceptWrapAction.regisDelAction(XSDElementDeclarationImpl.class, deleteConceptAction);
+		deleteConceptWrapAction.regisDelAction(XSDParticleImpl.class, deleteParticleAction);
+		deleteConceptWrapAction.regisDelAction(XSDIdentityConstraintDefinitionImpl.class, deleteIdentityConstraintAction);
+		deleteConceptWrapAction.regisDelAction(XSDXPathDefinitionImpl.class, deleteXPathAction);
+		deleteConceptWrapAction.regisDelAction(null, deleteElementAction);
 	}
 
 	private void hookContextMenu() {
@@ -627,37 +653,28 @@ public class DataModelMainPage extends AMainPageV2 {
 				.getSelection());
 
 		if ((selection == null) || (selection.getFirstElement() == null)) {
-			manager.add(newConceptAction);
+			manager.add(new XSDNewConceptAction(this));
 			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 			return;
 		}
-
+		
+        Object[] selectedObjs = selection.toArray();
 		Object obj = selection.getFirstElement();
 
 		// Element Declaration
-		if (obj instanceof XSDElementDeclaration) {
+		if (obj instanceof XSDElementDeclaration && selectedObjs.length == 1) {
 			// check if concept or "just" element
 			XSDElementDeclaration decl = (XSDElementDeclaration) obj;
-			boolean isConcept = false;
-			EList l = decl.getIdentityConstraintDefinitions();
-			for (Iterator iter = l.iterator(); iter.hasNext();) {
-				XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) iter
-						.next();
-				if (icd.getIdentityConstraintCategory().equals(
-						XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
-					isConcept = true;
-					break;
-				}
-			}
+			boolean isConcept = deleteConceptWrapAction.checkConcept(decl);
 			if (isConcept) {
 				manager.add(editConceptAction);
-				manager.add(deleteConceptWrapAction);
+				manager.add(deleteConceptAction);
 			} else {
 				manager.add(editElementAction);
 				manager.add(deleteElementAction);
 			}
 			manager.add(new Separator());
-			manager.add(newConceptAction);
+			manager.add(new XSDNewConceptAction(this));
 			manager.add(newElementAction);
 			manager.add(new Separator());
 			manager.add(changeToComplexTypeAction);
@@ -667,8 +684,9 @@ public class DataModelMainPage extends AMainPageV2 {
 			// Annotations
 			setAnnotationActions2(manager);
 		}
+		
 
-		if (obj instanceof XSDParticle) {
+		if (obj instanceof XSDParticle && selectedObjs.length == 1) {
 			XSDTerm term = ((XSDParticle) obj).getTerm();
 			if (!(term instanceof XSDWildcard)) {
 				manager.add(editParticleAction);
@@ -694,20 +712,23 @@ public class DataModelMainPage extends AMainPageV2 {
 			}
 		}
 
-		if (obj instanceof XSDComplexTypeDefinition) {
+		
+		if (obj instanceof XSDComplexTypeDefinition && selectedObjs.length == 1) {
 			manager.add(newParticleFromTypeAction);
 			manager.add(newGroupFromTypeAction);
 		}
 
-		if (obj instanceof XSDIdentityConstraintDefinition) {
+		
+		if (obj instanceof XSDIdentityConstraintDefinition && selectedObjs.length == 1) {
 			manager.add(editIdentityConstraintAction);
 			manager.add(deleteIdentityConstraintAction);
 			manager.add(newIdentityConstraintAction);
 			manager.add(new Separator());
 			manager.add(newXPathAction);
 		}
-
-		if (obj instanceof XSDXPathDefinition) {
+		
+		
+		if (obj instanceof XSDXPathDefinition && selectedObjs.length == 1) {
 			manager.add(editXPathAction);
 			manager.add(newXPathAction);
 			XSDXPathDefinition xpath = (XSDXPathDefinition) obj;
@@ -715,7 +736,7 @@ public class DataModelMainPage extends AMainPageV2 {
 				manager.add(deleteXPathAction);
 		}
 
-		if (obj instanceof XSDSimpleTypeDefinition) {
+		if (obj instanceof XSDSimpleTypeDefinition && selectedObjs.length == 1) {
 			XSDSimpleTypeDefinition typedef = (XSDSimpleTypeDefinition) obj;
 
 			if (!typedef.getSchema().getSchemaForSchemaNamespace().equals(
@@ -731,15 +752,28 @@ public class DataModelMainPage extends AMainPageV2 {
 			}
 		}
 
-		if (obj instanceof XSDAnnotation) {
+		if (obj instanceof XSDAnnotation && selectedObjs.length == 1) {
 			setAnnotationActions(manager);
 		}
 
+		
+		if (selectedObjs.length > 1
+				&& deleteConceptWrapAction.checkInDeletableType(selectedObjs)) {
+			deleteConceptWrapAction.prepareToDelSelectedItems(selection, viewer);
+		}
+		
+
+		if (selectedObjs.length > 1
+				&& deleteConceptWrapAction.outPutDeleteActions() != null) {
+			manager.add(deleteConceptWrapAction.outPutDeleteActions());
+		}
+		
 		manager.add(new Separator());
 
 		drillDownAdapter.addNavigationActions(manager);
 		// Other plug-ins can contribute there actions here
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+
 	}
 
 	private void setAnnotationActions(IMenuManager manager) {
@@ -772,15 +806,21 @@ public class DataModelMainPage extends AMainPageV2 {
 	 * @throws Exception
 	 */
 	public XSDSchema getXSDSchema(String schema) throws Exception {
-		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory
-				.newInstance();
+	    DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		documentBuilderFactory.setNamespaceAware(true);
 		documentBuilderFactory.setValidating(false);
 		InputSource source = new InputSource(new StringReader(schema));
-		DocumentBuilder documentBuilder = documentBuilderFactory
-				.newDocumentBuilder();
+		DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 		Document document = documentBuilder.parse(source);
-		return XSDSchemaImpl.createSchema(document.getDocumentElement());
+		
+		if (xsdSchema == null) {
+			xsdSchema = XSDSchemaImpl.createSchema(document
+					.getDocumentElement());
+		} else {
+			xsdSchema.setDocument(document);
+		}
+		
+		return xsdSchema;
 	}
 
 	public TreeViewer getTreeViewer() {
