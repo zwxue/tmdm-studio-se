@@ -1,6 +1,7 @@
 package com.amalto.workbench.providers;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.eclipse.emf.common.util.EList;
@@ -25,12 +26,14 @@ import org.eclipse.xsd.XSDWildcard;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.amalto.workbench.utils.DataModelFilter;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDTreeContentProvider implements IStructuredContentProvider, ITreeContentProvider {
 	protected XSDSchema xsdSchema;
 	IWorkbenchPartSite site = null;
-
+	DataModelFilter filter;
 	public XSDTreeContentProvider(IWorkbenchPartSite site, XSDSchema invisibleRoot ) {
 		this.site = site;
 		this.xsdSchema = invisibleRoot;
@@ -56,6 +59,10 @@ public class XSDTreeContentProvider implements IStructuredContentProvider, ITree
 	
 	
 	
+	public void setFilter(DataModelFilter filter) {
+		this.filter = filter;
+	}
+
 	public Object [] getChildren(Object parent) {	
 		
 		if (parent  == null) {
@@ -65,6 +72,15 @@ public class XSDTreeContentProvider implements IStructuredContentProvider, ITree
 
 		if (parent instanceof XSDSchema) {
 			EList xsdElementDeclarations = xsdSchema.getElementDeclarations();
+			List<XSDElementDeclaration> list=new ArrayList<XSDElementDeclaration>();
+			if(filter!=null && !filter.isAll()){
+				for(XSDElementDeclaration el: (XSDElementDeclaration[])xsdElementDeclarations.toArray(new XSDElementDeclaration[xsdElementDeclarations.size()] )){
+					if(isInclude( el.getAnnotation())){
+						list.add(el);
+					}
+				}
+				return list.toArray(new XSDElementDeclaration[list.size()]);
+			}
 			return xsdElementDeclarations.toArray(new XSDElementDeclaration[xsdElementDeclarations.size()] );
 		}
 		
@@ -154,6 +170,19 @@ public class XSDTreeContentProvider implements IStructuredContentProvider, ITree
 		if (parent instanceof XSDModelGroup) {
 			XSDModelGroup modelGroup = ((XSDModelGroup)parent);
 			EList list = modelGroup.getContents();
+			List<XSDParticle> ls=new ArrayList<XSDParticle>();
+			if(filter!=null && !filter.isAll()){
+				for(XSDParticle el: (XSDParticle[])list.toArray(new XSDParticle[list.size()] )){
+					XSDTerm tm = el.getTerm();
+					if (tm instanceof XSDElementDeclaration) {
+						XSDAnnotation annotation = ((XSDElementDeclaration)tm).getAnnotation();
+						if(isInclude(annotation)){
+							ls.add(el);
+						}
+					}
+				}
+				return ls.toArray(new XSDParticle[ls.size()]);
+			}			
 			return list.toArray(new Object[list.size()]);
 		}
 		
@@ -225,7 +254,23 @@ public class XSDTreeContentProvider implements IStructuredContentProvider, ITree
 		
 		return new Object[0];
 	}
-	
+	private boolean isInclude(XSDAnnotation annotation){
+		boolean include=false;
+		if(annotation!=null){
+			XSDAnnotationsStructure annotion = new XSDAnnotationsStructure(
+					 annotation);
+			if((!annotion.getWriteAccesses().values().contains(filter.getRole()) && filter.isReadOnly())){
+				return true;
+			}
+			if((annotion.getWriteAccesses().values().contains(filter.getRole()) && filter.isWriteAccess())){
+				return true;
+			}
+			if((annotion.getHiddenAccesses().values().contains(filter.getRole()) && filter.isHiddenAccess())){
+				return true;
+			}			
+		}
+		return include;
+	}
 	private Object[] getXSDParticleChildren(XSDParticle particle) {
 //		System.out.println("getXSDParticleChildren() CLASS "+particle.getClass().getName());
 //		System.out.println("getXSDParticleChildren() TERM "+particle.getTerm().getClass().getName()+": "+particle.getTerm());
