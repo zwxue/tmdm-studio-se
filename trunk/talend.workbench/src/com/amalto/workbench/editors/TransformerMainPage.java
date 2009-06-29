@@ -606,7 +606,7 @@ public class TransformerMainPage extends AMainPageV2 {
             sequenceGroup.setLayout(new GridLayout(4,false));
 	        disabledButton= toolkit.createButton((Composite)section.getClient(), "Disabled", SWT.CHECK);
 	        disabledButton.setLayoutData(
-	                new GridData(SWT.FILL,SWT.FILL,false,true,4,1)
+	                new GridData(SWT.LEFT,SWT.FILL,false,true,4,1)
 	        );
             
 	       specsComposite = toolkit.createComposite((Composite)section.getClient(),SWT.NULL);
