@@ -14,7 +14,16 @@
             <param-value>true</param-value>
         </init-param>
     </servlet>
-
+    
+    <servlet>
+        <servlet-name>UpdateReportDetailsServelt</servlet-name>
+        <servlet-class>talend.webapp.v3.updatereport.servlet.UpdateReportDetailsServelt</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>UpdateReportDetailsServelt</servlet-name>
+        <url-pattern>/secure/updateReportDetails</url-pattern>
+    </servlet-mapping>
       
     <servlet-mapping>
         <servlet-name>dwr-invoker</servlet-name>
