@@ -53,6 +53,7 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.dialogs.PluginDetailsDialog;
+import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
@@ -103,14 +104,21 @@ public class RoutingRuleMainPage extends AMainPageV2 {
         			(ver.getMajor()>2) ||
         			((ver.getMajor()==2)&&(ver.getMinor()>=17))
         	);
+        	
+        	 treeParent = this.getXObject().getParent();
+      		if(treeParent==null){//if it is a new page,treeParent should be ROUTING_RULE
+      			treeParent = this.getXObject().getServerRoot().findServerFolder(TreeObject.ROUTING_RULE);
+      			} 
         } catch (Exception e) {/*no versioning support on old cores*/}
-        treeParent = this.getXObject().getParent();
+       
+        	
+        
     }
 
 	protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
 
         try {
-        	                     
+        	              
             //description
             Label descriptionLabel = toolkit.createLabel(charComposite, "Description", SWT.NULL);
             descriptionLabel.setLayoutData(
