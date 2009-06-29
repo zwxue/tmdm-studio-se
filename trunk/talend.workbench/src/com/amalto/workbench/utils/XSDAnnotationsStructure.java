@@ -277,8 +277,9 @@ public class XSDAnnotationsStructure {
 	
 	/****************************************************************************
 	 *           WRITE ACCESS
+	 * @throws XtentisException 
 	 ****************************************************************************/
-	public boolean setAccessRole(ArrayList<String> roles, boolean recursive, IStructuredContentProvider provider, String roleName)
+	public boolean setAccessRole(ArrayList<String> roles, boolean recursive, IStructuredContentProvider provider, String roleName) throws XtentisException
 	{
 		if (recursive) {
 			ArrayList<Object> objList = new ArrayList<Object>();
@@ -290,6 +291,13 @@ public class XSDAnnotationsStructure {
 						|| obj instanceof XSDParticle) {
 					XSDAnnotationsStructure annotion = new XSDAnnotationsStructure(
 							(XSDComponent) obj);
+					//see 7993, if UUID/AUTO_INCREMENT ,should not add write access 
+					if(obj instanceof XSDParticle){
+						XSDParticle o=(XSDParticle)obj;
+						//String name=Util.getFirstTextNode(o.getElement(), "@name");
+						String type=Util.getFirstTextNode(o.getElement(), "@type");
+						if(EUUIDCustomType.allTypes().contains(type))continue;
+					}
 					annotion.removeAppInfos(roleName);  //X_Write
 					for (Iterator iter = roles.iterator(); iter.hasNext();) {
 						String role = (String) iter.next();
