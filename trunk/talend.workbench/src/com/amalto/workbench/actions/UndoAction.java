@@ -12,6 +12,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.xsd.XSDElementDeclaration;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 
@@ -23,7 +24,7 @@ public  class UndoAction extends Action {
 		this.page=page;
 		
 	}
-	protected class XsdUndoableOperation extends AbstractOperation{
+	public class XsdUndoableOperation extends AbstractOperation{
 
 		public XsdUndoableOperation(String label) {
 			super(label);
@@ -41,7 +42,7 @@ public  class UndoAction extends Action {
 		public IStatus redo(IProgressMonitor monitor, IAdaptable info)
 				throws ExecutionException {
 			// TODO Auto-generated method stub
-			return execute(monitor,info);
+			return UndoAction.this.redo();
 		}
 
 		@Override
@@ -59,6 +60,10 @@ public  class UndoAction extends Action {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}			
+	}
+	
+	public void run(Object toDel)
+	{
 	}
 	
 	protected XsdUndoableOperation operation=new XsdUndoableOperation("");
@@ -80,11 +85,17 @@ public  class UndoAction extends Action {
 	 */
 	protected IStatus undo(){
 		System.out.println(getText()+" undo....");
+		
+   		page.getTreeViewer().refresh(true);
+   		page.markDirty();
 		return Status.OK_STATUS;
 	}
 	
 	protected IStatus redo(){
 		System.out.println(getText()+" redo....");
+		
+   		page.getTreeViewer().refresh(true);
+   		page.markDirty();
 		return Status.OK_STATUS;
 	}
 	public XsdUndoableOperation getOperation() {

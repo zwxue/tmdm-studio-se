@@ -1,6 +1,5 @@
 package com.amalto.workbench.actions;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
@@ -10,14 +9,12 @@ import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.utils.ImageCache;
 
-public class XSDDeleteIdentityConstraintAction extends Action{
+public class XSDDeleteIdentityConstraintAction extends UndoAction {
 
-	private DataModelMainPage page = null;
 	private XSDIdentityConstraintDefinition xsdIdenty = null;
 	
 	public XSDDeleteIdentityConstraintAction(DataModelMainPage page) {
-		super();
-		this.page = page;
+		super(page);
 		setImageDescriptor(ImageCache.getImage( "icons/delete_obj.gif"));
 		setText("Delete Key");
 		setToolTipText("Delete a Key");
@@ -41,6 +38,8 @@ public class XSDDeleteIdentityConstraintAction extends Action{
             XSDElementDeclaration decl = null;
             if (constraint != null) {
 				decl = (XSDElementDeclaration) constraint.getContainer();
+				if (decl == null) 
+					return;
 			}
             if (decl == null) {
 				IStructuredSelection selection = (IStructuredSelection) page
