@@ -539,7 +539,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			viewer.setContentProvider(new XSDTreeContentProvider(
 					this.getSite(), getXSDSchema(wsObject.getXsdSchema())));
 			((XSDTreeContentProvider)viewer.getContentProvider()).setFilter(dataModelFilter);			
-			viewer.setAutoExpandLevel(3);
+			//viewer.setAutoExpandLevel(3);
 			viewer.setInput(getSite());
 			//viewer.refresh(true);
 		} catch (Exception e) {
