@@ -97,7 +97,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
 		//layout.verticalSpacing = 10;
 		
 		if(actionType==AnnotationOrderedListsDialog.AnnotationWrite_ActionType||actionType==AnnotationOrderedListsDialog.AnnotationHidden_ActionType){
-			textControl = new CCombo(composite,SWT.BORDER);
+			textControl = new CCombo(composite,SWT.BORDER|SWT.READ_ONLY);
 
 			List<String> roles=Util.getCachedXObjectsNameSet(this.xObject, TreeObject.ROLE);
 			((CCombo)textControl).setItems(roles.toArray(new String[roles.size()]));
