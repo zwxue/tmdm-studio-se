@@ -7,6 +7,8 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -81,7 +83,7 @@ public class BusinessElementInputDialog extends Dialog {
 		);
 		nameLabel.setText("Business Element Name");
 
-		elementNameText = new Text(composite, SWT.NONE);
+		elementNameText = new Text(composite, SWT.BORDER);
 		elementNameText.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 		);
@@ -103,6 +105,35 @@ public class BusinessElementInputDialog extends Dialog {
 		refCombo.setItems(elementDeclarations.toArray(new String[elementDeclarations.size()]));
 		refCombo.setText(getRefName() == null ? "": getRefName());
 		((GridData)refCombo.getLayoutData()).widthHint = 200;
+		
+		
+		if(refCombo.getText()!=""&&refCombo.getText()!=null){
+			elementNameText.setText("");
+			elementNameText.setEditable(false);
+		}
+		else{
+			elementNameText.setEditable(true);
+		}
+		
+		
+		refCombo.addSelectionListener(new SelectionListener(){
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+				
+				
+			}
+
+			public void widgetSelected(SelectionEvent e) {
+				if(refCombo.getText()!=""&&refCombo.getText()!=null){
+					elementNameText.setText("");
+					elementNameText.setEditable(false);
+				}
+				else{
+					elementNameText.setEditable(true);
+				}
+								
+			}});
+		
 
 		
 		Label minLabel = new Label(composite, SWT.NONE);
