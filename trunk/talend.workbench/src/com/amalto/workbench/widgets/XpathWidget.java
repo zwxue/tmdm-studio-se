@@ -14,6 +14,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.dialogs.XpathSelectDialog;
@@ -33,11 +34,21 @@ public class XpathWidget implements  SelectionListener{
     private boolean isButtonLeft;
     private Map appendInfo;
     private boolean readOnly=false;
+    private Composite parent;
+    private IWorkbenchPartSite site;
     
-    
+
+
 	public XpathWidget(String buttonName,TreeParent treeParent,
 			FormToolkit toolkit, Composite parent, AMainPageV2 dialog,boolean isButtonLeft,boolean readOnly) {
+//		if(treeParent==null){
+//			treeParent = 
+//		}
+		this.parent = parent;
 		this.treeParent = treeParent;
+		if(toolkit==null)
+			toolkit = new FormToolkit(parent.getDisplay());
+		
 		xpathAntionHolder = toolkit.createComposite(parent);
 		xpathAntionHolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1));
 		xpathAntionHolder.setLayout(new GridLayout(2, false));
@@ -84,7 +95,7 @@ public class XpathWidget implements  SelectionListener{
 	}
 	
 	
-	
+	XpathSelectDialog dlg;
 	public void widgetDefaultSelected(SelectionEvent e) {
 		// TODO Auto-generated method stub
 		
@@ -92,14 +103,27 @@ public class XpathWidget implements  SelectionListener{
 
 	public void widgetSelected(SelectionEvent e) {
 		// TODO Auto-generated method stub
-		XpathSelectDialog dlg = new XpathSelectDialog(
-				accommodation.getSite().getShell(),
-				treeParent,dlgTitle,
-				accommodation.getSite(),
-				true,
-				null
-				
-		);
+		if(accommodation!=null){
+			dlg = new XpathSelectDialog(
+					accommodation.getSite().getShell(),
+					treeParent,dlgTitle,
+					accommodation.getSite(),
+					true,
+					null
+					
+			);
+		}
+		else{
+			
+			dlg = new XpathSelectDialog(
+					parent.getShell(),
+					treeParent,dlgTitle,
+					site,
+					false,
+					null
+			);
+		}
+	
         dlg.setBlockOnOpen(true);
 		dlg.open();
 		
