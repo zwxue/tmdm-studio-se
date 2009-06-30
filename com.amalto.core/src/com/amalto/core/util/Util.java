@@ -619,151 +619,40 @@ public final class Util {
     	
     }
     
-    /**
-     * get uuidkey info if the currentNode has a uuid element
-     * @param currentNode
-     * @return
-     * @throws TransformerException
-     */
-    public static UUIDKey getUUIDKey(Node currentNode) throws TransformerException{
-    	String businessConceptName=getFirstTextNode(currentNode, "@name");
-    	try {
-
-        	String keyName;
-        	boolean isSequence;
-        	String nextNodeName =null;
-        	
-        	UUIDKey key=new UUIDKey();
-        	        	
-        	NodeList list=getNodeList(currentNode, "xsd:complexType//xsd:element");
-        	for(int j=0; j<list.getLength(); j++){
-        		Node n=list.item(j);
-        		String type=getFirstTextNode(n, "@type");
-	        	if(isUUIDType(type)){
-	        		keyName=getFirstTextNode(n, "@name");
-	        		NodeList seqlist=getNodeList(
-	        				currentNode,
-	        				"xsd:complexType//xsd:sequence"
-	        		);
-	        		isSequence=seqlist.getLength()>0;		
-	        		if(isSequence){
-	        			NodeList ellist=getNodeList(currentNode, "xsd:complexType//xsd:sequence/xsd:element");	    		
-	        			for (int i = 0; i < ellist.getLength(); i++) { 
-	        				Node node = ellist.item(i);
-	        				String name=Util.getFirstTextNode(node, "@name");
-	        				if(name!=null && name.equalsIgnoreCase(keyName)){
-	        					if( i < ellist.getLength()-1){
-	        						//get next node name
-	        						nextNodeName=Util.getFirstTextNode(ellist.item(i+1), "@name");
-	        						//if next node is ref node
-	        						String ref=Util.getFirstTextNode(ellist.item(i+1), "@ref");
-	        						if(nextNodeName==null && ref!=null){
-	        							nextNodeName=ref;
-	        						}	        						
-	        						break;
-	        					}	    				
-	        				}
-	        			}
-	        		}
-	        		key.setType(type);
-	        		key.setSequence(isSequence);
-	        		key.setNextNodeName(nextNodeName);
-	        		key.setElementName(businessConceptName);
-	        		key.setKeyName(keyName);
-	        		if(EUUIDCustomType.UUID.getName().equalsIgnoreCase(type)){
-	        			System.out.println("uid=="+new UID().getID());
-	        			
-	        			key.setUuidValue(UUID.randomUUID().toString());
-	        		}
-	        		if(EUUIDCustomType.AUTO_INCREMENT.getName().equalsIgnoreCase(type)){
-	        			//System.out.println("uid=="+new UID().getID());
-
-	        			key.setUuidValue(String.valueOf(new UID().getID()));
-	        		}
-	        		return key;
-	        	}
-        	}
-        	return null;
-    	} catch(Exception e) {
-    	    String err = "Unable to get the keys for the Business Concept "+businessConceptName+": "+e.getLocalizedMessage();
-    		throw new TransformerException(err);
-    	}
-    
-    }   
-
-	 /**
-	  * @author achen
-	  * @param keys
-	  * @param projection
-	  * @return
-	  * @throws Exception
-	  */
-	 public static String getProjectXMLString(UUIDKey[] keys, String projection) throws Exception{
-		 Element root = Util.parse(projection).getDocumentElement();		
-		// Node clone_root=root.cloneNode(true);
-		//if datamodel use sequence,insert the key in the right order of the projectstring	
-		 for(UUIDKey key: keys){
-			 insertUUIDKeyNode(key, root);
-			 
-		 }
-		String xml=getXMLStringFromNode(root);
-		//projection=getXMLStringFromNode(clone_root);
-		projection = xml.replaceAll("<\\?xml.*?\\?>","");
-		return projection;
-	 }
-	 
-	 /**
-	  * @author achen
-	  * @param node
-	  * @param key
-	  * @return
-	  */
-	 private static boolean isNodeContainsKey(Node node, String key){
-			NodeList list=node.getChildNodes();				
-	   		for (int i = 0; i < list.getLength(); i++) { 
-	   			Node n = list.item(i);
-	   			if(key.equalsIgnoreCase(n.getNodeName())){
-	   				return true;
-	   			}
-	   		}
-	   		return false;
-	 }
-	/**
-	 * @author achen
-	 * @param key
-	 * @param currentNode
-	 * @return
-	 */
-	 private static boolean insertUUIDKeyNode(UUIDKey key, Node currentNode){			
-		if(currentNode.getNodeName().equalsIgnoreCase(key.getElementName())){
-			//be sure the current node don't contains the keyName
-			if(!isNodeContainsKey(currentNode, key.getKeyName())){
-				NodeList list=currentNode.getChildNodes();			
-		   		for (int i = 0; i < list.getLength(); i++) { 
-		   			Node node = list.item(i);
-		   			if(node.getNodeType()== Node.ELEMENT_NODE ){
-		   				Element newId=currentNode.getOwnerDocument().createElement(key.getKeyName());
-		   				newId.setTextContent(key.getUuidValue());			    				
-		   				if(key.getNextNodeName() == null){//is the last one?
-		   					currentNode.appendChild(newId);
-		   					return true;
-		   				}else if(node.getNodeName().equals(key.getNextNodeName())){		
-		   					currentNode.insertBefore(newId, node);
-			    			return true;
-			    		}    				
-		   			}
-		   		}			
-			}
-		}else{
-			 NodeList nodes=currentNode.getChildNodes();
-			 for(int j=0; j<nodes.getLength(); j++){
-				 Node n=nodes.item(j);
-				 insertUUIDKeyNode(key,n);
-		 	}
+    public static void generateUUIDForElement(Document schema,String concept, Element conceptRoot) throws Exception{
+		Element rootNS=Util.getRootElement("nsholder",schema.getDocumentElement().getNamespaceURI(),"xsd");	
+		String xpath="//xsd:element[@name='"+concept+"']//xsd:element[@type='"+EUUIDCustomType.AUTO_INCREMENT+"' or @type='"+EUUIDCustomType.UUID+"']";
+		NodeList uuidLists=Util.getNodeList(schema.getDocumentElement(),xpath,rootNS.getNamespaceURI(),"xsd");
+		//Element conceptRoot = (Element)root.cloneNode(true);	
+		for(int i=0; i<uuidLists.getLength(); i++){
+			Element element=(Element)uuidLists.item(i);
+			String name=Util.getFirstTextNode(element, "@name");
+			String type=Util.getFirstTextNode(element, "@type");
+			String value=null;
+			for(int j=0; j<conceptRoot.getChildNodes().getLength(); j++){
+				Node node= conceptRoot.getChildNodes().item(j);
+				if(node.getNodeType() != Node.ELEMENT_NODE) continue;	
+				if(node.getChildNodes().getLength()>1){
+					generateUUIDForElement(schema, node.getNodeName(),(Element)node);
+				}else{
+					if(node.getNodeName().equalsIgnoreCase(name)){
+						if(node.getTextContent()==null ||node.getTextContent().length()==0 ){							
+							if(EUUIDCustomType.AUTO_INCREMENT.getName().equalsIgnoreCase(type)){
+								value=String.valueOf(new UID().getID());
+							}
+							if(EUUIDCustomType.UUID.getName().equalsIgnoreCase(type)){
+								value=String.valueOf(UUID.randomUUID().toString());
+							}							
+							node.setTextContent(value);
+						}
+						break;
+					}					
+				}
+			}	
 		}
-		return false;
-	 }
-	 
+		
+    }
+ 	 
 	public static String getXMLStringFromNode(Node d) throws TransformerException{
 		StringWriter writer = new StringWriter();
 		TransformerFactory.newInstance().newTransformer()

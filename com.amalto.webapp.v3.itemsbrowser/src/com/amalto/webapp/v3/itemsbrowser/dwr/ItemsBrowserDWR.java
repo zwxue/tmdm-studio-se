@@ -792,8 +792,10 @@ public class ItemsBrowserDWR {
 		Map<String,XSElementDecl> map = CommonDWR.getConceptMap(config.getModel());
     	XSComplexType xsct = (XSComplexType)(map.get(concept).getType());
     	XSParticle[] xsp = xsct.getContentType().asParticle().getTerm().asModelGroup().getChildren();
-    	for (int j = 0; j < xsp.length; j++) {  			
-    		//setChilden(xsp[j], "/"+concept, docIndex);
+    	for (int j = 0; j < xsp.length; j++) {  		
+    		//why don't set up children element? FIXME
+    		
+    		setChilden(xsp[j], "/"+concept, docIndex);
     	}
 	}
 
