@@ -19,10 +19,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -57,7 +54,6 @@ import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSGetDataModel;
 import com.amalto.workbench.webservices.XtentisPort;
-import com.sun.java.swing.plaf.windows.WindowsBorders;
 
 
 public class XpathSelectDialog extends Dialog {
@@ -78,17 +74,19 @@ public class XpathSelectDialog extends Dialog {
 	protected String selectedDataModelName;
 	protected String dataModelName;
 	private int t=0;
-
+//	public static final String VIEW_ID="org.talend.openmdm.workbench.views.ServerView";
 	public XpathSelectDialog(Shell parentShell,TreeParent parent,String title,IWorkbenchPartSite site,boolean isMulti,String dataModelName) {
 		// TODO Auto-generated constructor stub
 		super(parentShell);
 		this.title = title;
 		this.parent = parent;
 		this.site = site;
+		
 		this.isMulti=isMulti;
 		this.dataModelName =dataModelName;//default dataModel
 	}
 	
+
 	private String xpath="";
 	private String totalXpath="";
 	
@@ -272,7 +270,7 @@ public class XpathSelectDialog extends Dialog {
 	  protected void provideViwerContent(XSDSchema xsdSchema){
 		drillDownAdapter = new DrillDownAdapter(domViewer);
 		domViewer.setLabelProvider(new XSDTreeLabelProvider());
-		domViewer.setContentProvider(new XPathTreeContentProvider(site, xsdSchema));
+		domViewer.setContentProvider(new XPathTreeContentProvider(this.site, xsdSchema));
 		
 		domViewer.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
