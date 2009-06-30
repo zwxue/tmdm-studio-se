@@ -4,7 +4,7 @@ package com.amalto.core.util;
  * 
  * @author achen
  * support for custom type UUID/AUTO_INCREMENT
- *
+ *	@deprecated
  */
 public class UUIDKey {
 	//add the following to support UUID aiming
