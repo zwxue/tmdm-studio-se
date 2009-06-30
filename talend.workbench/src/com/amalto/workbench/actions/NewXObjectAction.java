@@ -98,10 +98,12 @@ public class NewXObjectAction extends Action{
             switch(xfolder.getType()) {
         		case TreeObject.TRANSFORMER:
         			ViewInputDialog vid = new ViewInputDialog(
+        					view.getSite(),
+        					(TreeParent)view.getRoot().getChildren()[0].findServerFolder(TreeObject.TRANSFORMER),
         					view.getSite().getShell(),
 	           				"New "+IConstants.TALEND+" Object Instance",
 	           				"Enter a Name for the New Instance",
-	           				null,
+	           				"Smart_view_",
 	           				new IInputValidator() {
 	           					public String isValid(String newText) {
 	           						if ((newText==null) || "".equals(newText)) 
@@ -111,7 +113,7 @@ public class NewXObjectAction extends Action{
 	           						}
 	           						return null;
 	           					};
-	           				}
+	           				},true
 	           		);
         			vid.create();
         			vid.getShell().setSize(new Point(500,250));
@@ -121,10 +123,29 @@ public class NewXObjectAction extends Action{
         			break;
         			
         		case TreeObject.VIEW:
-        			InputDialog id = new InputDialog(
-	           				view.getSite().getShell(),
+//        			InputDialog id = new InputDialog(
+//	           				view.getSite().getShell(),
+//	           				"New "+IConstants.TALEND+" Object Instance",
+//	           				"The view name should follow the pattern: Browse_items_<ConceptName>[#For your purpose]",
+//	           				"Browse_items_",
+//	           				new IInputValidator() {
+//	           					public String isValid(String newText) {
+//	           						if ((newText==null) || "".equals(newText)) 
+//	           							return "The Name cannot be empty";
+//	           						if(!Pattern.matches("\\w*(\\s*|#|\\w+)+\\w+", newText)){
+//	           							return "The name cannot contains invalid character!";
+//	           						}
+//	           						return null;
+//	           					};
+//	           				}
+//	           		);
+        			
+        			ViewInputDialog tid = new ViewInputDialog(
+        					view.getSite(),
+        					(TreeParent)view.getRoot().getChildren()[0].findServerFolder(TreeObject.TRANSFORMER),
+        					view.getSite().getShell(),
 	           				"New "+IConstants.TALEND+" Object Instance",
-	           				"The view name should follow the pattern: Browse_items_<ConceptName>[#For your purpose]",
+	           				"Enter a Name for the New Instance",
 	           				"Browse_items_",
 	           				new IInputValidator() {
 	           					public String isValid(String newText) {
@@ -135,13 +156,14 @@ public class NewXObjectAction extends Action{
 	           						}
 	           						return null;
 	           					};
-	           				}
+	           				},false
 	           		);
-        			id.create();
-        			id.getShell().setSize(new Point(600,180));
-        			id.setBlockOnOpen(true);
-	           		if (id.open() == Window.CANCEL) return;
-	           		key  = id.getValue();
+        			
+        			tid.create();
+        			tid.getShell().setSize(new Point(600,180));
+        			tid.setBlockOnOpen(true);
+	           		if (tid.open() == Window.CANCEL) return;
+	           		key  = tid.getValue();
 	           		break;
 	           	case TreeObject.SOURCE:
 	           	case TreeObject.DESTINATION:
