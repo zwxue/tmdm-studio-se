@@ -881,13 +881,17 @@ public class ItemsBrowserDWR {
 			if (results == null) results = new String[0];
 			
 			JSONObject json = new JSONObject();
-			json.put("count", results.length);
+			//json.put("count", results.length);
 			
 			JSONArray rows = new JSONArray();
 			json.put("rows", rows);
 			
 			//parse the results - each result contains the xPathInfo values, followed by the keys
 			for (int i = 0; i < results.length; i++) {
+				//process no infos case
+				if(!results[i].startsWith("<result>")){
+					results[i]="<result>"+results[i]+"</result>";
+				}
 				Element root = Util.parse(results[i]).getDocumentElement();
 				NodeList list = root.getChildNodes();
 
@@ -913,12 +917,16 @@ public class ItemsBrowserDWR {
     				}
 				}
 				
-				JSONObject row = new JSONObject();
-				row.put("keys", keys);
-				row.put("infos", infos);
-				rows.put(row);
+				if(keys.equals("[]")&&(infos.equals("")||infos.equals("[]"))){
+					//empty row
+				}else{
+					JSONObject row = new JSONObject();
+					row.put("keys", keys);
+					row.put("infos", infos);
+					rows.put(row);
+				}
 				
-				
+				json.put("count", rows.length());
 				//update the map
 //				map.put(StringEscapeUtils.escapeXml(keys), infos);
 			}
