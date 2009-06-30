@@ -67,7 +67,8 @@ public class View {
 			}	
 			
 			for (int i = 0; i < searchables.length; i++) {
-				labelSearchables.put(searchables[i],xpathToLabel.get(searchables[i]));
+				String label=xpathToLabel.get(searchables[i]);
+				if(label!=null)labelSearchables.put(searchables[i],label);
 			}
 			try{
 				return CommonDWR.getMapSortedByValue(labelSearchables);
