@@ -311,8 +311,6 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	
 	/** The foreign key search window */
 	var foreignKeyWindow;
-	
-	var saveItemStatus;
 	 
 	function browseItems(){
 		showItemsPanel();
