@@ -3,7 +3,7 @@ package com.amalto.workbench.actions;
 /**
  * All actions need to support Undo/Redo(DataModelMainPage) must subclass this one
  */
-import java.util.HashMap;
+
 import java.util.Map;
 
 import org.eclipse.core.commands.ExecutionException;
@@ -28,12 +28,17 @@ public  class UndoAction extends Action {
 	protected DataModelMainPage page;
 	protected static XSDSchema schema = null;
 	
-	private static Map<Integer, String> undoActionTrack = new HashMap<Integer, String>();
-	private static Map<Integer, String> redoActionTrack = new HashMap<Integer, String>();
+	private  Map<Integer, String> undoActionTrack = null;
+	private  Map<Integer, String> redoActionTrack = null;
+	
+
 	
 	public UndoAction(DataModelMainPage page){
 		this.page=page;
+		undoActionTrack = page.getUndoActionTrack();
+		redoActionTrack = page.getRedoActionTrack();
 	}
+	
 	public class XsdUndoableOperation extends AbstractOperation{
 
 		public XsdUndoableOperation(String label) {
