@@ -71,9 +71,10 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
     private TreeParent treeParent;
     private IWorkbenchPartSite site;
     private  XpathSelectDialog dlg;
-    private Composite composite;
+    private Composite composite;    
     private boolean smartViewSelected=true;
     private boolean isTransfor = false;
+    private static String Smart_view="Smart_view_";
     
     
 	public ViewInputDialog(IWorkbenchPartSite site,TreeParent treeParent,Shell parentShell, String dialogTitle, String dialogMessage, String initialValue, IInputValidator validator,boolean isTransfor) {
@@ -128,19 +129,14 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
         composite = (Composite) super.createDialogArea(parent);
         GridLayout layout = (GridLayout)composite.getLayout();
 		layout.makeColumnsEqualWidth=false;
-			layout.numColumns = 2;
+		layout.numColumns = 2;
 		
 		
         // create message
         if (message != null) {
         	label = new Label(composite, SWT.WRAP);
             label.setText(message);
-            GridData data = new GridData(GridData.GRAB_HORIZONTAL
-                    | GridData.GRAB_VERTICAL | GridData.HORIZONTAL_ALIGN_FILL
-                    | GridData.VERTICAL_ALIGN_CENTER);
-            data.widthHint = convertHorizontalDLUsToPixels(IDialogConstants.MINIMUM_MESSAGE_AREA_WIDTH);
-            label.setLayoutData(data);
-            label.setLayoutData(new GridData(SWT.FILL,SWT.FILL,false,true,2,1));
+            label.setLayoutData(new GridData(SWT.FILL,SWT.CENTER,false,false,2,1));
             label.setFont(parent.getFont());
         }
         
@@ -154,19 +150,19 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
                 validateInput();
             }
         });
-        
+        text.setText("");
 //        xpathwidget = new XpathWidget(site,"...",treeParent,null, composite, null,false,true);
 //        XpathSelectDialog(Shell parentShell,TreeParent parent,String title,IWorkbenchPartSite site,boolean isMulti,String dataModelName)
       
     	   openDLG = new Button(composite,SWT.NONE);
            openDLG.setText("...");
            openDLG.addSelectionListener(this);
-        
-        
+           openDLG.setLayoutData(new GridData(SWT.RIGHT,SWT.CENTER,false,false,1,1));
+           openDLG.setVisible(false);
+           openDLG.setToolTipText("Select one Concept");
         
         errorMessageText = new Text(composite, SWT.READ_ONLY | SWT.WRAP);
-        errorMessageText.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
-                | GridData.HORIZONTAL_ALIGN_FILL));
+        errorMessageText.setLayoutData(new GridData(SWT.FILL,SWT.TOP,false,false,2,1));
         errorMessageText.setBackground(errorMessageText.getDisplay()
                 .getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
         // Set the error message text
@@ -174,18 +170,11 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
         if(isTransfor){
         	Group radioGroup = new Group(parent,SWT.SHADOW_NONE);
     		radioGroup.setLayoutData(
-    				new GridData(SWT.FILL,SWT.FILL,false,true,2,1)
+    				new GridData(SWT.FILL,SWT.FILL,false,false,2,1)
     		);
-    		radioGroup.setLayout(new GridLayout(1,false));
-    		radioGroup.setSize(200, 50);
+    		radioGroup.setLayout(new GridLayout(1,false));    		
     		radioGroup.setText("select one type");
-    		
-    		((GridLayout)radioGroup.getLayout()).horizontalSpacing=10;
-    		((GridLayout)radioGroup.getLayout()).verticalSpacing=5;
-    		((GridLayout)radioGroup.getLayout()).marginLeft=10;
-    		((GridLayout)radioGroup.getLayout()).marginRight=10;
-    	
-    		
+        	
     		transformeButton = new Button(radioGroup,SWT.RADIO);
     		transformeButton.setText("create transformer");
     		transformeButton.setLayoutData(
@@ -202,17 +191,18 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
     				text.setText("");
     				label.setText(message);
     				smartViewSelected = false;
+    				openDLG.setVisible(false);
     			}
     			
     		});
-    		
+    		transformeButton.setSelection(true);
     		smartViewButton  = new Button(radioGroup,SWT.RADIO);
     		smartViewButton.setText("create smart view");
     		smartViewButton.setLayoutData(
     				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
     		);
     		
-    		smartViewButton.setSelection(true);
+    		//smartViewButton.setSelection(true);
     		smartViewButton.addSelectionListener(new SelectionListener(){
     			
     			public void widgetDefaultSelected(SelectionEvent e) {
@@ -220,9 +210,10 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
     			}
 
     			public void widgetSelected(SelectionEvent e) {
-    				text.setText(value);
+    				text.setText(Smart_view);
     				label.setText("Enter a name follow the pattern:Smart_view_<ConceptName>_<language ISO code>");
     				smartViewSelected = true;
+    				openDLG.setVisible(true);
     			}
     			
     		});
@@ -284,7 +275,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
 	public void widgetSelected(SelectionEvent e) {
 		dlg = new XpathSelectDialog(
 				composite.getShell(),
-				treeParent,"",
+				treeParent,"Select one Concept",
 				site,
 				false,
 				null
@@ -293,19 +284,12 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
 			dlg.open();
 			
 			if (dlg.getReturnCode() == Window.OK)  {
-				String defalutText;
-				if(smartViewSelected||!isTransfor)
-					defalutText = value;
-				else
-					defalutText = "";
-				
-				
 				if(dlg.getXpath()!=null&&dlg.getXpath().length()>0){
 					int point = dlg.getXpath().indexOf("/");
 					if(point>=0)
-						text.setText(defalutText+dlg.getXpath().substring(0, point));
+						text.setText(Smart_view+dlg.getXpath().substring(0, point));
 					else
-						text.setText(defalutText+dlg.getXpath());
+						text.setText(Smart_view+dlg.getXpath());
 				}
 				
 				dlg.close();

@@ -103,7 +103,7 @@ public class NewXObjectAction extends Action{
         					view.getSite().getShell(),
 	           				"New "+IConstants.TALEND+" Object Instance",
 	           				"Enter a Name for the New Instance",
-	           				"Smart_view_",
+	           				"",
 	           				new IInputValidator() {
 	           					public String isValid(String newText) {
 	           						if ((newText==null) || "".equals(newText)) 
@@ -116,7 +116,7 @@ public class NewXObjectAction extends Action{
 	           				},true
 	           		);
         			vid.create();
-        			vid.getShell().setSize(new Point(500,250));
+        			vid.getShell().setSize(new Point(500,220));
         			vid.setBlockOnOpen(true);
 	           		if (vid.open() == Window.CANCEL) return;
 	           		key  = vid.getValue();

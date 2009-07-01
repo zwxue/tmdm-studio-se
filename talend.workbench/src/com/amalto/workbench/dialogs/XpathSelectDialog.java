@@ -60,7 +60,7 @@ public class XpathSelectDialog extends Dialog {
 	protected Label schemaLabel = null;
 	protected Combo languagesCombo;
 	protected TreeViewer domViewer;
-	private String title = "";
+	private String title = "Select Xpath";
 	protected TreeParent parent;
 	protected Combo dataModelCombo ;
 	protected TreeObject xobject;
