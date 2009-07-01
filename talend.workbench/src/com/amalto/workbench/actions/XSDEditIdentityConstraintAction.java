@@ -2,8 +2,9 @@ package com.amalto.workbench.actions;
 
 import java.util.Iterator;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -17,20 +18,18 @@ import org.eclipse.xsd.XSDSchema;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.utils.ImageCache;
 
-public class XSDEditIdentityConstraintAction extends Action{
+public class XSDEditIdentityConstraintAction extends UndoAction{
 
-	protected DataModelMainPage page = null;
 	protected XSDIdentityConstraintDefinition constraint;
 	
 	public XSDEditIdentityConstraintAction(DataModelMainPage page) {
-		super();
-		this.page = page;
+		super(page);
 		setImageDescriptor(ImageCache.getImage( "icons/edit_obj.gif"));
 		setText("Edit Key");
 		setToolTipText("Edit a Key");
 	}
 	
-	public void run() {
+	public IStatus doAction() {
 		try {
 			
             ISelection selection = page.getTreeViewer().getSelection();
@@ -59,7 +58,9 @@ public class XSDEditIdentityConstraintAction extends Action{
             
        		id.setBlockOnOpen(true);
        		int ret = id.open();
-       		if (ret == Dialog.CANCEL) return;
+       		if (ret == Dialog.CANCEL){
+                return Status.CANCEL_STATUS;
+       		}
        		
        		constraint.setName(id.getValue());
        		constraint.updateElement();
@@ -74,8 +75,11 @@ public class XSDEditIdentityConstraintAction extends Action{
 					"Error", 
 					"An error occured trying to edit a Concept: "+e.getLocalizedMessage()
 			);
-		}		
+            return Status.CANCEL_STATUS;
+		}
+        return Status.OK_STATUS;
 	}
+	
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}

@@ -3,8 +3,9 @@ package com.amalto.workbench.actions;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -15,32 +16,22 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
-import org.eclipse.xsd.XSDParticle;
-import org.eclipse.xsd.XSDSchema;
-import org.eclipse.xsd.XSDTerm;
 
 import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 
-public class XSDEditElementAction extends Action{
-
-	protected DataModelMainPage page = null;
-	protected XSDSchema schema = null;
+public class XSDEditElementAction extends UndoAction{
 	
 	public XSDEditElementAction(DataModelMainPage page) {
-		super();
-		this.page = page;
+		super(page);
 		setImageDescriptor(ImageCache.getImage( "icons/edit_obj.gif"));
 		setText("Edit Element");
 		setToolTipText("Edit an Element");
 	}
 	
-	public void run() {
+	public IStatus doAction() {
 		try {
-			
-            schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
             ISelection selection = page.getTreeViewer().getSelection();
             XSDElementDeclaration decl = (XSDElementDeclaration)((IStructuredSelection)selection).getFirstElement();
             ArrayList<Object> objList = new ArrayList<Object>();
@@ -69,7 +60,9 @@ public class XSDEditElementAction extends Action{
             
        		id.setBlockOnOpen(true);
        		int ret = id.open();
-       		if (ret == Window.CANCEL) return;
+       		if (ret == Window.CANCEL) {
+				return Status.CANCEL_STATUS;
+			}
        		
        		decl.setName(id.getValue());
        		decl.updateElement();
@@ -99,8 +92,11 @@ public class XSDEditElementAction extends Action{
 					"Error", 
 					"An error occured trying to edit an Element: "+e.getLocalizedMessage()
 			);
-		}		
+            return Status.CANCEL_STATUS;
+		}
+        return Status.OK_STATUS;
 	}
+	
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}

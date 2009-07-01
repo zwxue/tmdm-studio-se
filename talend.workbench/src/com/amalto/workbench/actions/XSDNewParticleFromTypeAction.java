@@ -2,7 +2,8 @@ package com.amalto.workbench.actions;
 
 import java.util.Iterator;
 
-import org.eclipse.jface.action.Action;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -15,20 +16,15 @@ import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDFactory;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
-import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.BusinessElementInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.ImageCache;
 
-public class XSDNewParticleFromTypeAction extends Action implements SelectionListener{
-
-	private DataModelMainPage page = null;
-	private XSDSchema schema = null;
+public class XSDNewParticleFromTypeAction extends UndoAction implements SelectionListener{
+	
 	private BusinessElementInputDialog dialog = null;
 	private XSDModelGroup group = null;
 	
@@ -37,35 +33,34 @@ public class XSDNewParticleFromTypeAction extends Action implements SelectionLis
 	private int maxOccurs;
 	
 	public XSDNewParticleFromTypeAction(DataModelMainPage page) {
-		super();
-		this.page = page;
+		super(page);
 		setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
 		setText("Add Element");
 		setToolTipText("Add a new Business Element at the top of the Business Elements");
 	}
 	
-	public void run() {
+	public IStatus doAction() {
 		try {
-			
-            schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
             
             IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
             if (selection.getFirstElement() instanceof XSDComplexTypeDefinition) {
             	XSDComplexTypeDefinition ctd = (XSDComplexTypeDefinition) selection.getFirstElement();
-            	if (!(ctd.getContent() instanceof XSDParticle)) return;
-            	if (!(((XSDParticle)ctd.getContent()).getTerm() instanceof XSDModelGroup)) return;
+            	if (!(ctd.getContent() instanceof XSDParticle)) return Status.CANCEL_STATUS;
+            	if (!(((XSDParticle)ctd.getContent()).getTerm() instanceof XSDModelGroup))return Status.CANCEL_STATUS;;
             	group = (XSDModelGroup) ((XSDParticle)ctd.getContent()).getTerm();
             } else if (selection.getFirstElement() instanceof XSDParticle) {
             	group = (XSDModelGroup) ((XSDParticle)selection.getFirstElement()).getTerm();
             } else {
             	System.out.println("UNKNOWN SELECTION: "+selection.getFirstElement().getClass().getName()+"  --  "+selection.getFirstElement());
-            	return;
+                return Status.CANCEL_STATUS;
             }
   
             dialog = new BusinessElementInputDialog(this,page.getSite().getShell(),"Add a new Business Element");
             dialog.setBlockOnOpen(true);
        		int ret = dialog.open();
-       		if (ret == Dialog.CANCEL) return;
+       		if (ret == Dialog.CANCEL){
+                return Status.CANCEL_STATUS;
+       		}
        		
        		XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
        		
@@ -93,8 +88,11 @@ public class XSDNewParticleFromTypeAction extends Action implements SelectionLis
 					"Error", 
 					"An error occured trying to create a new Business Element: "+e.getLocalizedMessage()
 			);
-		}		
+            return Status.CANCEL_STATUS;
+		}
+        return Status.OK_STATUS;
 	}
+	
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}

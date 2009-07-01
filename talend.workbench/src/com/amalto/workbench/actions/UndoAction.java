@@ -3,6 +3,9 @@ package com.amalto.workbench.actions;
 /**
  * All actions need to support Undo/Redo(DataModelMainPage) must subclass this one
  */
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.commands.operations.IOperationHistory;
@@ -12,17 +15,24 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.xsd.XSDElementDeclaration;
+import org.eclipse.xsd.XSDSchema;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.providers.XSDTreeContentProvider;
+import com.amalto.workbench.utils.Util;
 
 public  class UndoAction extends Action {
 	
 	protected DataModelMainPage page;
+	protected static XSDSchema schema = null;
+	
+	private static Map<Integer, String> undoActionTrack = new HashMap<Integer, String>();
+	private static Map<Integer, String> redoActionTrack = new HashMap<Integer, String>();
 	
 	public UndoAction(DataModelMainPage page){
 		this.page=page;
-		
 	}
 	public class XsdUndoableOperation extends AbstractOperation{
 
@@ -34,7 +44,7 @@ public  class UndoAction extends Action {
 		@Override
 		public IStatus execute(IProgressMonitor monitor, IAdaptable info)
 				throws ExecutionException {
-			// TODO Auto-generated method stub
+
 			return UndoAction.this.execute();
 		}
 
@@ -71,33 +81,97 @@ public  class UndoAction extends Action {
 	/**
 	 * need override by subclass
 	 */
-	protected void doAction(){
-		
-	}
-	protected IStatus execute(){
-		System.out.println(getText()+" execute....");
-		doAction();
+	protected IStatus doAction(){
 		return Status.OK_STATUS;
 	}
+	
+	protected IStatus execute(){
+		System.out.println(getText()+" execute....");
+		beforeDoAction();
+		
+		if (doAction() == Status.CANCEL_STATUS) {
+			cancelDoAction();
+			return Status.CANCEL_STATUS;
+		}
+		
+		afterDoAction();
+		return Status.OK_STATUS;
+	}
+	
+	protected void beforeDoAction()
+	{
+        schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
+        commitDocumentToHistory(schema.getDocument());
+	}
+	
+	protected void afterDoAction()
+	{
+   		commitDocumentToCurrent(schema.getDocument());
+	}
+	
+    protected void cancelDoAction()
+    {
+		removeDocumentFromHistory();
+    }
+    
+	protected void commitDocumentToHistory(Document history) {
+		try {
+			 String value = Util.nodeToString((Node)history);
+			 undoActionTrack.put(getActionUndoPos(), value);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	protected void removeDocumentFromHistory()
+	{
+		undoActionTrack.remove(getActionUndoPos());
+	}
+	
+	protected void commitDocumentToCurrent(Document currnt) {
+		try {
+			 String value = Util.nodeToString((Node)currnt);
+			 redoActionTrack.put(getActionUndoPos(), value);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private int getActionUndoPos() {
+		IOperationHistory history = getOperationHistory();
+		return history.getUndoHistory(page.getUndoContext()).length;
+	}
+
+	private int getActionRedoPos() {
+		IOperationHistory history = getOperationHistory();
+		return history.getRedoHistory(page.getUndoContext()).length;
+	}
+	
 	/**
 	 * need override by subclass
 	 * @return
 	 */
 	protected IStatus undo(){
 		System.out.println(getText()+" undo....");
-		
-   		page.getTreeViewer().refresh(true);
-   		page.markDirty();
+		String doc = undoActionTrack.get(getActionUndoPos() - 1);
+		refresh(doc);
 		return Status.OK_STATUS;
 	}
 	
 	protected IStatus redo(){
 		System.out.println(getText()+" redo....");
-		
-   		page.getTreeViewer().refresh(true);
-   		page.markDirty();
+		String doc = redoActionTrack.get(getActionUndoPos());
+		refresh(doc);
 		return Status.OK_STATUS;
 	}
+	
+	private void refresh(String content)
+	{
+        ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).setXsdSchema(content);
+   		page.getTreeViewer().refresh(true);
+   		page.markDirty();	
+	}
+	
 	public XsdUndoableOperation getOperation() {
 		return operation;
 	}

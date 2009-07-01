@@ -5,8 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -30,10 +32,10 @@ import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 
+
 public class XSDNewConceptAction extends UndoAction implements SelectionListener{
 
 	//protected DataModelMainPage page = null;
-	protected XSDSchema schema = null;
 	private XSDElementDeclaration decl;
 	
 	public XSDNewConceptAction(DataModelMainPage page) {
@@ -44,10 +46,8 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
 		setToolTipText("Create a new Business Concept");
 	}
 	
-	public void doAction(){
+	public IStatus doAction(){
 		try {			
-            schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
-                   
 			ArrayList customTypes = new ArrayList();
 			for (Iterator iter =  schema.getTypeDefinitions().iterator(); iter.hasNext(); ) {
 				XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
@@ -66,7 +66,10 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
        		
        		id.setBlockOnOpen(true);
        		id.open();
-       
+       		
+    		if (id.getReturnCode() == Window.CANCEL){
+    			 return Status.CANCEL_STATUS;
+    		}
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(
@@ -74,9 +77,11 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
 					"Error", 
 					"An error occured trying to create a new Concept: "+e.getLocalizedMessage()
 			);
+            return Status.CANCEL_STATUS;
 		}		
-
+        return Status.OK_STATUS;
 	}
+	
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}
@@ -117,11 +122,11 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
        		schema.getContents().add(decl);
        		//schema.getElementDeclarations().add(decl);
        		decl.updateElement();
-       		
+
        		page.getTreeViewer().refresh(true);
        		//page.markDirty();
-       		
-       		Action changeAction = null;
+       		getOperationHistory();
+       		UndoAction changeAction = null;
        		if (dlg.isComplexType()) {
 				changeAction = new XSDChangeToComplexTypeAction(page, decl, dlg
 						.getComplexType(), dlg.isChoice(), dlg.isAll());
@@ -133,18 +138,7 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
 			dlg.close();
 			
        		
-       		changeAction.run();
+       		changeAction.doAction();
 		}
-	}
-
-	@Override
-	protected IStatus undo() {
-		//FIXME
-//		List<XSDElementDeclaration> list=Util.findElementsUsingType(schema, schema.getSchemaForSchemaNamespace(), decl.getName());
-//		if(!schema.contains(decl) && list.size()>0){
-//			decl=list.get(0);
-//		}
-		new XSDDeleteConceptAction(page).run(decl);
-		return super.undo();
 	}
 }

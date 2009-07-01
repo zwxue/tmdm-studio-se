@@ -1,5 +1,7 @@
 package com.amalto.workbench.actions;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
@@ -28,7 +30,7 @@ public class XSDDeleteIdentityConstraintAction extends UndoAction {
 		run();
 	}
 	
-	public void run() {
+	public IStatus doAction() {
 		try {
 			
             // xsdIdenty is to support the multiple delete action on key press,
@@ -39,8 +41,9 @@ public class XSDDeleteIdentityConstraintAction extends UndoAction {
             if (constraint != null) {
 				decl = (XSDElementDeclaration) constraint.getContainer();
 				if (decl == null) 
-					return;
+		            return Status.CANCEL_STATUS;
 			}
+            
             if (decl == null) {
 				IStructuredSelection selection = (IStructuredSelection) page
 						.getTreeViewer().getSelection();
@@ -74,8 +77,11 @@ public class XSDDeleteIdentityConstraintAction extends UndoAction {
 					"Error", 
 					"An error occured trying to remove Concept: "+e.getLocalizedMessage()
 			);
-		}		
+            return Status.CANCEL_STATUS;
+		}
+        return Status.OK_STATUS;
 	}
+	
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}
