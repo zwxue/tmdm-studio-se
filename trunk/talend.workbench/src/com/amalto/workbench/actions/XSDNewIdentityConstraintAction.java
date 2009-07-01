@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -21,27 +22,17 @@ import org.eclipse.xsd.XSDIdentityConstraintCategory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
-import org.eclipse.xsd.XSDSchema;
-import org.eclipse.xsd.XSDTerm;
-import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
-import org.eclipse.xsd.impl.XSDParticleImpl;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import com.amalto.workbench.dialogs.IdentityConstraintInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
-import com.sun.xml.xsom.impl.parser.DelayedRef.ModelGroup;
 
-public class XSDNewIdentityConstraintAction extends Action implements SelectionListener{
+public class XSDNewIdentityConstraintAction extends UndoAction implements SelectionListener{
 
-	private DataModelMainPage page = null;
-	private XSDSchema schema = null;
 	private IdentityConstraintInputDialog dialog = null;	
 	private String  keyName;
 	private String fieldName;
@@ -49,21 +40,15 @@ public class XSDNewIdentityConstraintAction extends Action implements SelectionL
 	private XSDElementDeclaration decl=null;
 	
 	public XSDNewIdentityConstraintAction(DataModelMainPage page) {
-		super();
-		this.page = page;
+		super(page);
 		setImageDescriptor(ImageCache.getImage( "icons/add_obj.gif"));
 		setText("Add Key");
 		setToolTipText("Add a new Key");
 	}
 	
-
-	//	FIXME: Can we have Unique Keys for sub-elements?
-
-	
-	public void run() {
+	public IStatus doAction() {
 		try {
 			
-            schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
             int index = -1;
 //            EList list = schema.getIdentityConstraintDefinitions();
          
@@ -92,19 +77,21 @@ public class XSDNewIdentityConstraintAction extends Action implements SelectionL
                 
             } else if (selection.getFirstElement() instanceof XSDParticle) {
             	XSDParticle selParticle = (XSDParticle) selection.getFirstElement();
-                if (! (selParticle.getTerm() instanceof XSDElementDeclaration)) return;
+                if (! (selParticle.getTerm() instanceof XSDElementDeclaration))  return Status.CANCEL_STATUS;
                 decl = (XSDElementDeclaration) selParticle.getTerm();
 //                childNames.add(decl.getName());
                 
             } else {
             	MessageDialog.openError(this.page.getSite().getShell(),"Error", "huhhh: "+selection.getFirstElement().getClass().getName());
-            	return;
+                return Status.CANCEL_STATUS;
             }           
             childNames = Util.getChildElementNames(decl.getElement());
             dialog = new IdentityConstraintInputDialog(this,page.getSite().getShell(),"Add a new Key",childNames,decl.getName());
             dialog.setBlockOnOpen(true);
        		int ret = dialog.open();
-       		if (ret == Window.CANCEL) return;
+       		if (ret == Window.CANCEL){
+                return Status.CANCEL_STATUS;
+       		}
        		
        		XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
        		
@@ -150,8 +137,12 @@ public class XSDNewIdentityConstraintAction extends Action implements SelectionL
 					"Error", 
 					"An error occured trying to create a new Key: "+e.getLocalizedMessage()
 			);
-		}		
+            return Status.CANCEL_STATUS;
+		}
+		
+        return Status.OK_STATUS;
 	}
+	
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}

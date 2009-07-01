@@ -1,5 +1,7 @@
 package com.amalto.workbench.actions;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -31,7 +33,7 @@ public class XSDDeleteXPathAction extends UndoAction{
 		run();
 	}
 	
-	public void run() {
+	public IStatus doAction() {
 		try {
 			
             // xsdPath is to support the multiple delete action on key press,
@@ -44,7 +46,7 @@ public class XSDDeleteXPathAction extends UndoAction{
 						.getFirstElement();
 			}
             XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) xpath.getContainer();
-            if (icd == null) return;
+            if (icd == null)  return Status.CANCEL_STATUS;
             
             if (xpath.getVariety().equals(XSDXPathVariety.SELECTOR_LITERAL)) {
     			MessageDialog.openError(
@@ -52,7 +54,7 @@ public class XSDDeleteXPathAction extends UndoAction{
     					"Error", 
     					"The Selector cannot be deleted"
     			);
-    			return;
+                return Status.CANCEL_STATUS;
             }
             
             if (icd.getFields().size()==1) {
@@ -61,7 +63,7 @@ public class XSDDeleteXPathAction extends UndoAction{
     					"Error", 
     					"The Key must contain at least one field"
     			);
-    			return;            	
+                return Status.CANCEL_STATUS;          	
             }
            
             icd.getFields().remove(xpath);
@@ -77,7 +79,10 @@ public class XSDDeleteXPathAction extends UndoAction{
 					"Error", 
 					"An error occured trying to remove a Field: "+e.getLocalizedMessage()
 			);
-		}		
+			
+            return Status.CANCEL_STATUS;
+		}	
+        return Status.OK_STATUS;
 	}
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);

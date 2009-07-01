@@ -2,9 +2,8 @@ package com.amalto.workbench.actions;
 
 import java.util.List;
 
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.IInputValidator;
-import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -20,23 +19,19 @@ import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 
-public class XSDEditXPathAction extends Action{
+public class XSDEditXPathAction extends UndoAction{
 
-	private DataModelMainPage page = null;
 	private XSDIdentityConstraintDefinition icd = null;
 	
 	public XSDEditXPathAction(DataModelMainPage page) {
-		super();
-		this.page = page;
+		super(page);
 		setImageDescriptor(ImageCache.getImage( "icons/edit_obj.gif"));
 		setText("Edit Selector/Field");
 		setToolTipText("Edit a Selector/Field");
 	}
 	
-	public void run() {
+	public IStatus doAction() {
 		try {
-			
-            
             IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
             XSDXPathDefinition xpath = (XSDXPathDefinition)selection.getFirstElement();
             icd = (XSDIdentityConstraintDefinition) xpath.getContainer();
@@ -58,9 +53,11 @@ public class XSDEditXPathAction extends Action{
             id.create();
        		id.setBlockOnOpen(true);
        		int ret = id.open();
-       		if (ret == Window.CANCEL) return;
+       		if (ret == Window.CANCEL){
+                return Status.CANCEL_STATUS;
+       		}
        		String field=id.getField();
-       		if(field.length()==0)return;
+       		if(field.length()==0) return Status.CANCEL_STATUS;
        		XSDXPathDefinition newXpath = XSDSchemaBuildingTools.getXSDFactory().createXSDXPathDefinition();
        		newXpath.setValue(field);
        		if (xpath.getVariety().equals(XSDXPathVariety.FIELD_LITERAL)) {
@@ -84,8 +81,12 @@ public class XSDEditXPathAction extends Action{
 					"Error", 
 					"An error occured trying to edit a Field/Selector: "+e.getLocalizedMessage()
 			);
-		}		
+			
+            return Status.CANCEL_STATUS;
+		}
+        return Status.OK_STATUS;
 	}
+	
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}

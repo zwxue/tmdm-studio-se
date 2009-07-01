@@ -1,6 +1,7 @@
 package com.amalto.workbench.actions;
 
-import org.eclipse.jface.action.Action;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
@@ -8,34 +9,27 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDComponent;
-import org.eclipse.xsd.XSDSchema;
 
 import com.amalto.workbench.dialogs.SimpleXpathInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
-public class XSDSetAnnotationForeignKeyAction extends Action{
+public class XSDSetAnnotationForeignKeyAction extends UndoAction{
 
-	protected DataModelMainPage page = null;
-	protected XSDSchema schema = null;
 	protected SimpleXpathInputDialog sxid = null;
 	protected String dataModelName;
 	
 	public XSDSetAnnotationForeignKeyAction(DataModelMainPage page,String dataModelName) {
-		super();
-		this.page = page;
+		super(page);
 		setImageDescriptor(ImageCache.getImage( "icons/annotation.gif"));
 		setText("Set the Foreign Key");
 		setToolTipText("Set the Foreign Key");
 		this.dataModelName = dataModelName;
 	}
 	
-	public void run() {
+	public IStatus doAction() {
 		try {
-			
-            schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
             IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
             XSDAnnotationsStructure struc = new XSDAnnotationsStructure((XSDComponent)selection.getFirstElement());
             if (struc.getAnnotation() == null) {
@@ -59,7 +53,9 @@ public class XSDSetAnnotationForeignKeyAction extends Action{
             
             sxid.setBlockOnOpen(true);
        		int ret = sxid.open();
-       		if (ret == Window.CANCEL) return;
+       		if (ret == Window.CANCEL){
+                return Status.CANCEL_STATUS;
+       		}
        		
        		
        		struc.setForeignKey("".equals(sxid.getXpath()) ? null : sxid.getXpath());
@@ -78,8 +74,11 @@ public class XSDSetAnnotationForeignKeyAction extends Action{
 					"Error", 
 					"An error occured trying to set a Foreign Key: "+e.getLocalizedMessage()
 			);
-		}		
+            return Status.CANCEL_STATUS;
+		}
+        return Status.OK_STATUS;
 	}
+	
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}
