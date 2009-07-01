@@ -2,7 +2,8 @@ package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 
-import org.eclipse.jface.action.Action;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -11,7 +12,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDComponent;
-import org.eclipse.xsd.XSDSchema;
 
 import com.amalto.workbench.dialogs.AnnotationOrderedListsDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
@@ -19,23 +19,20 @@ import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
-public class XSDSetAnnotationHiddenAction extends Action{
+public class XSDSetAnnotationHiddenAction extends UndoAction{
 
-	protected DataModelMainPage page = null;
-	protected XSDSchema schema = null;
 	protected AnnotationOrderedListsDialog dlg = null;
 	protected String dataModelName;
 	
 	public XSDSetAnnotationHiddenAction(DataModelMainPage page,String dataModelName) {
-		super();
-		this.page = page;
+		super(page);
 		setImageDescriptor(ImageCache.getImage( "icons/annotation.gif"));
 		setText("Set the Roles with Hidden Accesses");
 		setToolTipText("Set the Roles That Cannot See This Filed");
 		this.dataModelName = dataModelName;
 	}
 	
-	public void run() {
+	public IStatus doAction() {
 		try {
 			
             schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
@@ -63,7 +60,9 @@ public class XSDSetAnnotationHiddenAction extends Action{
             
        		dlg.setBlockOnOpen(true);
        		int ret = dlg.open();
-       		if (ret == Window.CANCEL) return;
+       		if (ret == Window.CANCEL) {
+                return Status.CANCEL_STATUS;
+       		}
 
        		struc.setAccessRole(dlg.getXPaths(), dlg.getRecursive(),
 					(IStructuredContentProvider) page.getTreeViewer()
@@ -83,8 +82,11 @@ public class XSDSetAnnotationHiddenAction extends Action{
 					"Error", 
 					"An error occured trying to set the Hidden Access: "+e.getLocalizedMessage()
 			);
-		}		
+            return Status.CANCEL_STATUS;
+		}
+        return Status.OK_STATUS;
 	}
+	
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}

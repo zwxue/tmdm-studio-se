@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -29,9 +30,8 @@ import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 
-public class XSDEditParticleAction extends Action implements SelectionListener{
+public class XSDEditParticleAction extends UndoAction implements SelectionListener{
 
-	private DataModelMainPage page = null;
 	private BusinessElementInputDialog dialog = null;
 	
 	private String  elementName;
@@ -40,21 +40,18 @@ public class XSDEditParticleAction extends Action implements SelectionListener{
 	private int maxOccurs;
 	
 	public XSDEditParticleAction(DataModelMainPage page) {
-		super();
-		this.page = page;
+		super(page);
 		setImageDescriptor(ImageCache.getImage( "icons/edit_obj.gif"));
 		setText("Edit Element");
 		setToolTipText("Edit the Business Element Name and Cardinality.");
 	}
 	
-	public void run() {
+	public IStatus doAction() {
 		try {
-			
-            
             IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
             XSDParticle selParticle = (XSDParticle) selection.getFirstElement();
             
-            if (!(selParticle.getTerm() instanceof XSDElementDeclaration)) return;
+            if (!(selParticle.getTerm() instanceof XSDElementDeclaration)) return Status.CANCEL_STATUS;
 
 			XSDElementDeclaration decl = (XSDElementDeclaration) selParticle.getContent();
 
@@ -98,7 +95,9 @@ public class XSDEditParticleAction extends Action implements SelectionListener{
             );
             dialog.setBlockOnOpen(true);
        		int ret = dialog.open();
-       		if (ret == Window.CANCEL) return;
+       		if (ret == Window.CANCEL){
+       			return Status.CANCEL_STATUS;
+       		}
 
        		//find reference
        		XSDElementDeclaration newRef = null;
@@ -109,7 +108,7 @@ public class XSDEditParticleAction extends Action implements SelectionListener{
 							this.page.getSite().getShell(), 
 							"Error", "The Referenced Element "+refName+" cannot be found"
 					);
-					return;
+					return Status.CANCEL_STATUS;
 				}
        		}//ref
        		
@@ -164,7 +163,10 @@ public class XSDEditParticleAction extends Action implements SelectionListener{
 					"Error", 
 					"An error occured trying to Edit a Business Elementt: "+e.getLocalizedMessage()
 			);
-		}		
+            return Status.CANCEL_STATUS;
+		}
+		
+		return Status.OK_STATUS;
 	}
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);

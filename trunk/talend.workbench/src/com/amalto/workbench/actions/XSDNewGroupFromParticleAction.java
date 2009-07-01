@@ -2,7 +2,8 @@ package com.amalto.workbench.actions;
 
 import java.util.Iterator;
 
-import org.eclipse.jface.action.Action;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -15,20 +16,15 @@ import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDFactory;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
-import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.NewGroupDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.ImageCache;
 
-public class XSDNewGroupFromParticleAction extends Action implements SelectionListener{
+public class XSDNewGroupFromParticleAction extends UndoAction implements SelectionListener{
 
-	private DataModelMainPage page = null;
-	private XSDSchema schema = null;
 	private NewGroupDialog dialog = null;
 	private XSDParticle selParticle = null;
 	
@@ -38,22 +34,18 @@ public class XSDNewGroupFromParticleAction extends Action implements SelectionLi
 	private int maxOccurs;
 	
 	public XSDNewGroupFromParticleAction(DataModelMainPage page) {
-		super();
-		this.page = page;
+		super(page);
 		setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
 		setText("Add Group (after)");
 		setToolTipText("Add a new Group after this one. Add from the Type to add at First Position.");
 	}
 	
-	public void run() {
-		try {
-			
-            schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
-            
+	public IStatus doAction() {
+		try {            
             IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
             selParticle = (XSDParticle) selection.getFirstElement();
             
-            if (!(selParticle.getContainer() instanceof XSDModelGroup)) return;
+            if (!(selParticle.getContainer() instanceof XSDModelGroup)) return Status.CANCEL_STATUS;
             
             XSDModelGroup group = (XSDModelGroup) selParticle.getContainer();
             //get position of the selected particle in the container
@@ -71,7 +63,9 @@ public class XSDNewGroupFromParticleAction extends Action implements SelectionLi
             dialog = new NewGroupDialog(this,page.getSite().getShell());
             dialog.setBlockOnOpen(true);
        		int ret = dialog.open();
-       		if (ret == Dialog.CANCEL) return;
+       		if (ret == Dialog.CANCEL) {
+                return Status.CANCEL_STATUS;
+       		}
        		
        		XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
        		
@@ -116,7 +110,11 @@ public class XSDNewGroupFromParticleAction extends Action implements SelectionLi
 					"Error", 
 					"An error occured trying to create a new Business Element: "+e.getLocalizedMessage()
 			);
-		}		
+			
+            return Status.CANCEL_STATUS;
+		}	
+		
+        return Status.CANCEL_STATUS;
 	}
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);

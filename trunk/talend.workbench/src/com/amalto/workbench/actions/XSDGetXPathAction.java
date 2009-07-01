@@ -1,6 +1,7 @@
 package com.amalto.workbench.actions;
 
-import org.eclipse.jface.action.Action;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.dnd.Clipboard;
@@ -18,26 +19,23 @@ import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 
-public class XSDGetXPathAction extends Action{
-
-	private DataModelMainPage page = null;
+public class XSDGetXPathAction extends UndoAction{
 	
 	public XSDGetXPathAction(DataModelMainPage page) {
-		super();
-		this.page = page;
+		super(page);
 		setImageDescriptor(ImageCache.getImage(EImage.XPATH.getPath()));
 		setText("Copy XPath");
 		setToolTipText("Copy the XPath");
 	}
 	
-	public void run() {
+	public IStatus doAction() {
 		try {
 			
             IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
             XSDParticle particle = (XSDParticle) selection.getFirstElement();
             XSDTerm term = particle.getTerm();
             
-            if (! (term instanceof  XSDElementDeclaration)) return;
+            if (! (term instanceof  XSDElementDeclaration))  return Status.CANCEL_STATUS;
             
             Clipboard clipboard = Util.getClipboard();
             
@@ -65,8 +63,11 @@ public class XSDGetXPathAction extends Action{
 					"Error", 
 					"An error occured trying to remove Concept: "+e.getLocalizedMessage()
 			);
-		}		
+            return Status.CANCEL_STATUS;
+		}
+        return Status.OK_STATUS;
 	}
+	
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}

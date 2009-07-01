@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
@@ -28,7 +29,6 @@ import com.amalto.workbench.utils.ImageCache;
 public class XSDNewElementAction extends UndoAction implements SelectionListener{
 
 	//protected DataModelMainPage page = null;
-	protected XSDSchema schema = null;
 	
 	public XSDNewElementAction(DataModelMainPage page) {
 		super(page);
@@ -38,10 +38,8 @@ public class XSDNewElementAction extends UndoAction implements SelectionListener
 		setToolTipText("Create a new Element");
 	}
 	
-	public void doAction() {
-		try {			
-            schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
-            
+	public IStatus doAction() {
+		try {
 			ArrayList customTypes = new ArrayList();
 			for (Iterator iter =  schema.getTypeDefinitions().iterator(); iter.hasNext(); ) {
 				XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
@@ -60,7 +58,9 @@ public class XSDNewElementAction extends UndoAction implements SelectionListener
        		
        		id.setBlockOnOpen(true);
        		id.open();
-       
+       		if (id.getReturnCode() == Window.CANCEL)  {
+       			return Status.CANCEL_STATUS;
+       		}
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(
@@ -68,8 +68,11 @@ public class XSDNewElementAction extends UndoAction implements SelectionListener
 					"Error", 
 					"An error occured trying to create a new Element: "+e.getLocalizedMessage()
 			);
-		}		
+            return Status.CANCEL_STATUS;
+		}
+        return Status.OK_STATUS;
 	}
+	
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}
@@ -114,12 +117,5 @@ public class XSDNewElementAction extends UndoAction implements SelectionListener
 
 			changeAction.run();
 		}
-	}
-	
-	@Override
-	protected IStatus undo() {
-		//FIXME
-		//new XSDDeleteElementAction(page).run();
-		return super.undo();
 	}
 }

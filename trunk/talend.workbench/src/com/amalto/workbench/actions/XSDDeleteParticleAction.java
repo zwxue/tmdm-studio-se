@@ -2,7 +2,8 @@ package com.amalto.workbench.actions;
 
 import java.util.List;
 
-import org.eclipse.jface.action.Action;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -40,7 +41,7 @@ public class XSDDeleteParticleAction extends UndoAction{
 		run();
 	}
 	
-	public void run() {
+	public IStatus doAction() {
 		try {
 			
             // xsdPartle is to support the multiple delete action on key press,
@@ -59,7 +60,7 @@ public class XSDDeleteParticleAction extends UndoAction{
             } 
 		   
             if (particle.getContainer() == null) {
-				return;
+                return Status.CANCEL_STATUS;
 			}
 
             XSDIdentityConstraintDefinition identify = null;
@@ -106,7 +107,9 @@ public class XSDDeleteParticleAction extends UndoAction{
 					"Error", 
 					"An error occured trying to remove Concept: "+e.getLocalizedMessage()
 			);
-		}		
+            return Status.CANCEL_STATUS;
+		}
+        return Status.OK_STATUS;
 	}
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);

@@ -3,8 +3,9 @@ package com.amalto.workbench.actions;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -19,7 +20,6 @@ import org.eclipse.xsd.XSDIdentityConstraintCategory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
-import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
@@ -28,13 +28,10 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.ComplexTypeInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.utils.ImageCache;
 
-public class XSDChangeToComplexTypeAction extends Action implements SelectionListener{
+public class XSDChangeToComplexTypeAction extends UndoAction implements SelectionListener{
 
-	protected DataModelMainPage page = null;
-	protected XSDSchema schema = null;
 	protected boolean isConcept = false;
 	protected XSDElementDeclaration decl = null;
 	protected ComplexTypeInputDialog dialog =null;
@@ -46,8 +43,7 @@ public class XSDChangeToComplexTypeAction extends Action implements SelectionLis
 	
 	boolean showDlg = true; 
 	public XSDChangeToComplexTypeAction(DataModelMainPage page) {
-		super();
-		this.page = page;
+		super(page);
 		setImageDescriptor(ImageCache.getImage( "icons/change_to_complex.gif"));
 		setText("Change to a Complex Element");
 		setToolTipText("Make an Element a Complex Element or change the type of current Complex Element");
@@ -66,13 +62,10 @@ public class XSDChangeToComplexTypeAction extends Action implements SelectionLis
 		isAll = all;
 	}
 	
-	public void run() {
+	public IStatus doAction() {
 		
 		
 		try {
-			
-            schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
-            
             IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
             isConcept=false;
 			// fliu
@@ -110,12 +103,13 @@ public class XSDChangeToComplexTypeAction extends Action implements SelectionLis
 
 				dialog.setBlockOnOpen(true);
 				int ret = dialog.open();
-				if (ret == Dialog.CANCEL)
-					return;
+				if (ret == Dialog.CANCEL) {
+					return Status.CANCEL_STATUS;
+				}
 			}
 
 			if (!showDlg && !validateType()) {
-				return;
+				return Status.CANCEL_STATUS;
 			}
             
        		XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
@@ -293,8 +287,12 @@ public class XSDChangeToComplexTypeAction extends Action implements SelectionLis
 					"Error", 
 					"An error occured trying to change to Complex Type: "+e.getLocalizedMessage()
 			);
-		}		
+			return Status.CANCEL_STATUS;
+		}
+		
+		return Status.OK_STATUS;
 	}
+	
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}

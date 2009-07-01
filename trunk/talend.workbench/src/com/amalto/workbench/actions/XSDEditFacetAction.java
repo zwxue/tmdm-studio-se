@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.jface.action.Action;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -22,15 +23,13 @@ import org.eclipse.xsd.XSDPatternFacet;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.FacetsListInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.ImageCache;
 
-public class XSDEditFacetAction extends Action{
+public class XSDEditFacetAction extends UndoAction{
 
-	protected DataModelMainPage page = null;
 	protected String facetName = null;
 	//protected XSDSchema schema = null;
 	protected XSDSimpleTypeDefinition std = null;
@@ -40,15 +39,14 @@ public class XSDEditFacetAction extends Action{
 	
 	
 	public XSDEditFacetAction(DataModelMainPage page, String facetName) {
-		super();
-		this.page = page;
+		super(page);
 		this.facetName = facetName;
 		setImageDescriptor(ImageCache.getImage(EImage.FACET.getPath()));
 		setText("Edit "+facetName);
 		setToolTipText("Edit the Facet "+facetName);
 	}
 	
-	public void run() {
+	public IStatus doAction() {
 		try {
 			
 			ISelection selection = page.getTreeViewer().getSelection();
@@ -70,7 +68,7 @@ public class XSDEditFacetAction extends Action{
     					"Error", 
     					"No editor available for the Facet: "+facetName
     			);
-    			return;
+                return Status.CANCEL_STATUS;
             }
 			
        		std.updateElement();
@@ -86,9 +84,11 @@ public class XSDEditFacetAction extends Action{
 					"Error", 
 					"An error occured trying to edit a Facet: "+e.getLocalizedMessage()
 			);
+            return Status.CANCEL_STATUS;
 		}
-		
+        return Status.OK_STATUS;
 	}
+	
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}

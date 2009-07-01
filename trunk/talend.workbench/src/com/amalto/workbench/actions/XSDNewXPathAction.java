@@ -2,10 +2,9 @@ package com.amalto.workbench.actions;
 
 import java.util.List;
 
-import org.eclipse.jface.action.Action;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IInputValidator;
-import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -16,30 +15,25 @@ import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.dialogs.SelectFieldDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 
-public class XSDNewXPathAction extends Action{
+public class XSDNewXPathAction extends UndoAction{
 
-	private DataModelMainPage page = null;
 	private XSDIdentityConstraintDefinition icd = null;
 	
 	public XSDNewXPathAction(DataModelMainPage page) {
-		super();
-		this.page = page;
+		super(page);
 		setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
 		setText("New Field");
 		setToolTipText("Create a new Field");
 	}
 	
-	public void run() {
+	public IStatus doAction() {
 		try {
-			
-
             int index = 0;
             IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
             if (selection.getFirstElement() instanceof XSDIdentityConstraintDefinition) {
@@ -53,7 +47,7 @@ public class XSDNewXPathAction extends Action{
             		index = 0;
             } else {
             	MessageDialog.openError(this.page.getSite().getShell(),"Error", "huhhh: "+selection.getFirstElement().getClass().getName());
-            	return;
+                return Status.CANCEL_STATUS;
             }
             
 //       		InputDialog id = new InputDialog(
@@ -74,9 +68,11 @@ public class XSDNewXPathAction extends Action{
             id.create();            
        		id.setBlockOnOpen(true);
        		int ret = id.open();
-       		if (ret == Dialog.CANCEL) return;
+       		if (ret == Dialog.CANCEL) {
+				return Status.CANCEL_STATUS;
+			}
        		String field=id.getField();
-       		if(field.length()==0)return;
+       		if(field.length()==0) return Status.CANCEL_STATUS;;
        		XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
        		
        		XSDXPathDefinition xpath = factory.createXSDXPathDefinition();
@@ -97,8 +93,12 @@ public class XSDNewXPathAction extends Action{
 					"Error", 
 					"An error occured trying to create a new Field: "+e.getLocalizedMessage()
 			);
-		}		
+            return Status.CANCEL_STATUS;
+		}
+		
+        return Status.OK_STATUS;
 	}
+	
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}

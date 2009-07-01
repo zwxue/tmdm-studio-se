@@ -3,6 +3,7 @@ package com.amalto.workbench.actions;
 import java.util.ArrayList;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -26,8 +27,6 @@ import com.amalto.workbench.utils.Util;
 
 public class XSDDeleteElementAction extends UndoAction{
 
-	//private DataModelMainPage page = null;
-	private XSDSchema schema = null;
 	private XSDElementDeclaration xsdElem = null;
 	
 	public XSDDeleteElementAction(DataModelMainPage page) {
@@ -53,10 +52,9 @@ public class XSDDeleteElementAction extends UndoAction{
 		super.run();
 	}
 	
-	public void doAction() {
+	public IStatus doAction() {
 		try {
 			
-            schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
             // xsdElem is to support the multiple delete action on key press,
 			// which each delete action on element must be explicit passed a xsdElem to
 			// delete
@@ -99,18 +97,11 @@ public class XSDDeleteElementAction extends UndoAction{
 					"Error", 
 					"An error occured trying to remove the Element: "+e.getLocalizedMessage()
 			);
-		}		
-	}
-	@Override
-	protected IStatus undo() {
-		if(xsdElem !=null ){
-			schema.getContents().add(xsdElem);
-			schema.update();
+            return Status.CANCEL_STATUS;
 		}
-		return super.undo();
+        return Status.OK_STATUS;
 	}
 
-	
     public void setXSDTODel(XSDElementDeclaration elem) {
 		xsdElem = elem;
 	}

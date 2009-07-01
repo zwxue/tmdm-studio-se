@@ -1,6 +1,7 @@
 package com.amalto.workbench.actions;
 
-import org.eclipse.jface.action.Action;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -8,31 +9,22 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDComponent;
-import org.eclipse.xsd.XSDSchema;
 
 import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
-public class XSDSetAnnotationSourceSystemAction extends Action{
-
-	protected DataModelMainPage page = null;
-	protected XSDSchema schema = null;
-	
+public class XSDSetAnnotationSourceSystemAction extends UndoAction{	
 	
 	public XSDSetAnnotationSourceSystemAction(DataModelMainPage page) {
-		super();
-		this.page = page;
+		super(page);
 		setImageDescriptor(ImageCache.getImage( "icons/annotation.gif"));
 		setText("Set the Source System");
 		setToolTipText("Set the Source System name for the content of this element");
 	}
 	
-	public void run() {
+	public IStatus doAction() {
 		try {
-			
-            schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
             IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
             XSDAnnotationsStructure struc = new XSDAnnotationsStructure((XSDComponent)selection.getFirstElement());
             if (struc.getAnnotation() == null) {
@@ -53,7 +45,9 @@ public class XSDSetAnnotationSourceSystemAction extends Action{
             
        		id.setBlockOnOpen(true);
        		int ret = id.open();
-       		if (ret == Window.CANCEL) return;
+       		if (ret == Window.CANCEL) {
+                return Status.CANCEL_STATUS;
+       		}
        		
        		
        		struc.setSourceSystem("".equals(id.getValue()) ? null : id.getValue());
@@ -72,8 +66,11 @@ public class XSDSetAnnotationSourceSystemAction extends Action{
 					"Error", 
 					"An error occured trying to set a Forign Key: "+e.getLocalizedMessage()
 			);
-		}		
+            return Status.CANCEL_STATUS;
+		}
+        return Status.OK_STATUS;
 	}
+	
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}
