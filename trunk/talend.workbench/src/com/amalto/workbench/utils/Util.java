@@ -957,7 +957,16 @@ public class Util {
 
     
     public static List<String> getChildElementNames(Node node) throws Exception{
-    	//check complex is sequence/all/choice?
+    	List<String> childNames=new ArrayList<String>();
+    	//is simple type
+    	if(Util.getNodeList(
+				node,
+				"xsd:complexType"
+		).getLength()==0){
+    		node.getChildNodes();
+    		return childNames;
+    	}
+    	//check complex is sequence/all/choice?    	
    		NodeList seqlist=Util.getNodeList(
 				node,
 				"xsd:complexType//xsd:sequence"
@@ -981,8 +990,7 @@ public class Util {
 			xpath="xsd:complexType//xsd:choice/xsd:element";
 		}
 		//get child element name list
-    	NodeList list=Util.getNodeList(node, xpath); 
-    	List<String> childNames=new ArrayList<String>();
+    	NodeList list=Util.getNodeList(node, xpath);     	
     	for(int i=0; i<list.getLength(); i++){
     		String name=Util.getFirstTextNode(list.item(i), "@name");
     		if(name!=null)
