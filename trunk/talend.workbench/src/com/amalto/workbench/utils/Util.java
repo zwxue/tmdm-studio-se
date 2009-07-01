@@ -801,8 +801,9 @@ public class Util {
 		XSDElementDeclaration elem = null;
 		if (son instanceof XSDParticle) {
 			elem = (XSDElementDeclaration) ((XSDParticle) son).getContent();
-		} else
+		} else if (son instanceof XSDElementDeclaration) {
 			elem = (XSDElementDeclaration) son;
+		}
 
 		EList<XSDSchemaContent> parentList = elem.getSchema().getContents();
 		ArrayList<Object> list = new ArrayList<Object>();
@@ -822,6 +823,7 @@ public class Util {
 								.getTerm();
 						EList<XSDParticle> elist = group.getContents();
 						for (XSDParticle pt : elist) {
+							if(pt.getContent() instanceof XSDElementDeclaration)
 							if (((XSDElementDeclaration) pt.getContent()) == elem) {
 								return decl;
 							}
