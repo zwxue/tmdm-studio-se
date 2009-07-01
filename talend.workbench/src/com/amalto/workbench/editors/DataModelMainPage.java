@@ -7,9 +7,9 @@
 package com.amalto.workbench.editors;
 
 import java.io.StringReader;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -43,6 +43,7 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.operations.UndoActionHandler;
 import org.eclipse.ui.operations.UndoRedoActionGroup;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.xsd.XSDAnnotation;
@@ -158,6 +159,10 @@ public class DataModelMainPage extends AMainPageV2 {
 	
 	private XSDSchema  xsdSchema;
 	private XSDTreeContentProvider provider;
+	
+	private static Map<ObjectUndoContext, Map<Integer, String>> contextToUndoAction = new HashMap<ObjectUndoContext, Map<Integer, String>>();
+	private static Map<ObjectUndoContext, Map<Integer, String>> contextToRedoAction = new HashMap<ObjectUndoContext, Map<Integer, String>>(); 
+	private static int undoLimit = 20;
 	
 	private DataModelFilterDialog dataModelFilterDialog;
 	private DataModelFilter dataModelFilter;
@@ -432,115 +437,6 @@ public class DataModelMainPage extends AMainPageV2 {
 
 	}// createCharacteristicsContent
 
-	/**
-	 * Author: Fliu
-	 * this fun is to filter out all the children listed in the selections, 
-	 * all left is the top parent level ones in the selections
-	 * @param selections
-	 * @return all parent array with no corresponding children in the selection list
-	 */
-	private Object[] filterSelectedItemsToDel(IStructuredSelection selections) {
-		Object[] objs = selections.toArray();
-		List lst = new ArrayList();
-
-		for (Object obj : objs) {
-			for (Object objOther : objs) {
-				if (obj == objOther) {
-					continue;
-				}
-				Object[] offsprings = populateAllOffspring(objOther,
-						new ArrayList());
-				for (Object offspring : offsprings) {
-					if (offspring == obj) {
-						lst.add(obj);
-					}
-				}
-			}
-		}
-
-		for (Object ca : objs) {
-			if (lst.indexOf(ca) >= 0) {
-				lst.remove(ca);
-			} else {
-				lst.add(ca);
-			}
-		}
-		return lst.toArray();
-	}
-
-	/**
-	 * Author: Fliu
-	 * this fun is to populate all offsprings for a specific object
-	 */
-	private Object[] populateAllOffspring(Object obj, ArrayList offspringList) {
-		XSDTreeContentProvider provider = (XSDTreeContentProvider) viewer
-				.getContentProvider();
-		Object[] offersprings = provider.getChildren(obj);
-
-		for (Object subObj : offersprings) {
-			if (!offspringList.contains(subObj))
-			{
-				offspringList.add(subObj);
-				if (provider.hasChildren(subObj)) {
-					populateAllOffspring(subObj, offspringList);
-				}
-			}
-			else
-			{
-				continue;
-			}
-
-		}
-		return offspringList.toArray();
-	}
-
-    /**
-     * author: Fliu
-	 * it is meant to support multiple deletions on data modules on key press
-     * @param selections: tree node picking up in the data module view
-     */
-	private void deleteSelectedItems(IStructuredSelection selections) {
-
-		Object[] objs = selections.toArray();
-		String instance = objs.length > 1 ? " instances ?" : " instance";
-		if (!MessageDialog
-				.openConfirm(getSite().getShell(), "Delete Model",
-						"Are you sure you want to delete the " + objs.length
-								+ instance))
-			return;
-
-		objs = filterSelectedItemsToDel(selections);
-		for (Object obj : objs) {
-			if (obj instanceof XSDElementDeclaration) {
-				XSDElementDeclaration decl = (XSDElementDeclaration) obj;
-
-				boolean isConcept = false;
-				EList l = decl.getIdentityConstraintDefinitions();
-				for (Iterator iter = l.iterator(); iter.hasNext();) {
-					XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) iter
-							.next();
-					if (icd.getIdentityConstraintCategory().equals(
-							XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
-						isConcept = true;
-						break;
-					}
-				}
-				if (isConcept) {
-					deleteConceptAction.run(obj);
-				} else {
-					deleteElementAction.run(obj);
-				}
-			} else if (obj instanceof XSDParticle) {
-				deleteParticleAction.run(obj);
-			} else if (obj instanceof XSDIdentityConstraintDefinition) {
-				deleteIdentityConstraintAction.run(obj);
-			} else if (obj instanceof XSDXPathDefinition) {
-				deleteXPathAction.run(obj);
-
-			} else {
-			}
-		}
-	}
 
 	protected void refreshData() {
 		try {
@@ -850,14 +746,23 @@ public class DataModelMainPage extends AMainPageV2 {
 
 	}
 	
+	public boolean isDirty()
+	{
+		initializeOperationHistory();
+		UndoActionHandler handler = (UndoActionHandler)getEditorSite().getActionBars().getGlobalActionHandler("undo");
+		handler.update();
+		return super.isDirty();
+	}
 	/**
 	 * @author achen
 	 */
-	private void initializeOperationHistory() {		
-		undoContext = new ObjectUndoContext(this);
-
-		int limit = 10;		
-		PlatformUI.getWorkbench().getOperationSupport().getOperationHistory().setLimit(undoContext, limit);
+	private void initializeOperationHistory() {	
+		
+		if (undoContext == null) {
+			undoContext = new ObjectUndoContext(this, this.getPartName());
+		}	
+		
+		PlatformUI.getWorkbench().getOperationSupport().getOperationHistory().setLimit(undoContext, undoLimit);
 
 		UndoRedoActionGroup undoRedoGroup = new UndoRedoActionGroup(getSite(), undoContext, true);
 
@@ -874,5 +779,24 @@ public class DataModelMainPage extends AMainPageV2 {
 		return undoContext;
 	}
 	
+	public Map<Integer, String> getUndoActionTrack() {
+		Map<Integer, String> map = contextToUndoAction.get(undoContext);
+		if (map == null) {
+			map = new HashMap<Integer, String>();
+			contextToUndoAction.put(undoContext, map);
+		}
+
+		return map;
+	}
+	
+	public Map<Integer, String> getRedoActionTrack() {
+		Map<Integer, String> map = contextToRedoAction.get(undoContext);
+		if (map == null) {
+			map = new HashMap<Integer, String>();
+			contextToRedoAction.put(undoContext, map);
+		}
+
+		return map;
+	}
 	
 }
