@@ -311,6 +311,8 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	
 	/** The foreign key search window */
 	var foreignKeyWindow;
+	
+	var saveItemStatus;
 	 
 	function browseItems(){
 		showItemsPanel();
@@ -1171,13 +1173,26 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	
 	 
 	function saveItemAndQuit(ids,dataObject,treeIndex){
-		//alert(DWRUtil.toDescriptiveString(itemPK2,2)+" "+dataObject+" "+treeIndex);	
-		saveItem(ids,dataObject,treeIndex);
-		amalto.core.getTabPanel().remove('itemDetailsdiv'+treeIndex);
-		displayItems();
+		//alert(DWRUtil.toDescriptiveString(itemPK2,2)+" "+dataObject+" "+treeIndex);
+
+		//saveItem(ids,dataObject,treeIndex);
+		saveItem(ids,dataObject,treeIndex,function(){
+				  amalto.core.getTabPanel().remove('itemDetailsdiv'+treeIndex);
+			      displayItems();
+				 });
+		
+			
+		
 	}
 	
 	function saveItem(ids,dataObject,treeIndex){
+		saveItem(ids,dataObject,treeIndex,function(){
+				  amalto.core.getTabPanel().remove('itemDetailsdiv'+treeIndex);
+			      displayItems();
+				 });
+	}
+	
+	function saveItem(ids,dataObject,treeIndex,callbackOnSuccess){
 		if(navigator.appName=="Microsoft Internet Explorer" && lastUpdatedInputFlag[treeIndex]!=null) {
 			updateNode(lastUpdatedInputFlag[treeIndex], treeIndex);
 		}
@@ -1187,15 +1202,24 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 				if(!confirm(MSG_CONFIRM_SAVE_ITEM[language])) return;
 			}
 			var itemPK = ids.split('@');
-			ItemsBrowserInterface.saveItem(itemPK,dataObject, newItem[treeIndex],treeIndex,function(result){ 
+			ItemsBrowserInterface.saveItem(itemPK,dataObject, newItem[treeIndex],treeIndex,{
+			callback:function(result){ 
 				amalto.core.ready(result);
 				if(result=="ERROR_2"){
 					amalto.core.ready(ALERT_NO_CHANGE[language]);
 					//alert(ALERT_NO_CHANGE[language]);
+				}else{
+			       if(callbackOnSuccess)callbackOnSuccess();   
 				}
-			});
-			amalto.core.ready();	
+				
+			},
+			errorHandler:function(errorString, exception) {//on exception  
+              alert('An exception occurs when saving ：'+ errorString);
+            }
+           });
+			amalto.core.ready();
 		});
+
 	}
 	
 	function deleteItem(ids, dataObject, treeIndex) {
