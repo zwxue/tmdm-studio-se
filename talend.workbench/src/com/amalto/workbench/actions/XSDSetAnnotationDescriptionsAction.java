@@ -4,7 +4,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
-import org.eclipse.jface.action.Action;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
@@ -13,31 +14,23 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.xsd.XSDComponent;
-import org.eclipse.xsd.XSDSchema;
 
 import com.amalto.workbench.dialogs.AnnotationLanguageLabelsDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
-public class XSDSetAnnotationDescriptionsAction extends Action{
-
-	protected DataModelMainPage page = null;
-	protected XSDSchema schema = null;
+public class XSDSetAnnotationDescriptionsAction extends UndoAction{
 	
 	public XSDSetAnnotationDescriptionsAction(DataModelMainPage page) {
-		super();
-		this.page = page;
+		super(page);
 		setImageDescriptor(ImageCache.getImage( "icons/annotation.gif"));
 		setText("Set the Descriptions");
 		setToolTipText("Set the Descriptions of This Element");
 	}
 	
-	public void run() {
+	public IStatus doAction() {
 		try {
-			
-            schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
             IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
             	
             XSDAnnotationsStructure struc = new XSDAnnotationsStructure((XSDComponent)selection.getFirstElement());
@@ -65,6 +58,9 @@ public class XSDSetAnnotationDescriptionsAction extends Action{
 					struc.setDescription(isoCode, descriptions.get(isoCode));
 				}
 	        }
+			else {
+	            return Status.CANCEL_STATUS;
+			}
 			
 			if (struc.hasChanged()) {
 				page.markDirty();
@@ -80,8 +76,12 @@ public class XSDSetAnnotationDescriptionsAction extends Action{
 					"Error", 
 					"An error occured trying to create a new Element: "+e.getLocalizedMessage()
 			);
-		}		
+            return Status.CANCEL_STATUS;
+		}
+		
+        return Status.OK_STATUS;
 	}
+	
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}

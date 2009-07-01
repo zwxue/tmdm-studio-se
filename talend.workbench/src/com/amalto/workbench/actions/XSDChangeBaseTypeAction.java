@@ -2,52 +2,43 @@ package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
-import org.eclipse.jface.action.Action;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTypeDefinition;
 
 import com.amalto.workbench.dialogs.SimpleTypeInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.utils.ImageCache;
-import com.amalto.workbench.utils.Util;
 
-public class XSDChangeBaseTypeAction extends Action implements SelectionListener{
+public class XSDChangeBaseTypeAction extends UndoAction implements SelectionListener{
 
-	private DataModelMainPage page = null;
-	private XSDSchema schema = null;
 	private SimpleTypeInputDialog dialog = null;
 	private String typeName = null;
 	private boolean builtIn = false;
 	
 	public XSDChangeBaseTypeAction(DataModelMainPage page) {
-		super();
-		this.page = page;
+		super(page);
 		setImageDescriptor(ImageCache.getImage( "icons/change_to_simple.gif"));
 		setText("Change Base Type");
 		setToolTipText("Change the Base Type of the Element Simple Type");
 		setDescription(getToolTipText());
 	}
 	
-	public void run() {
-		try {
-			
-			schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
-			
+	public IStatus doAction() {
+		try {			
 			IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
 			XSDSimpleTypeDefinition typedef = (XSDSimpleTypeDefinition)selection.getFirstElement();
 						
 			//Cannot change the simple type definition of built in type
-			if (schema.getSchemaForSchemaNamespace().equals(typedef.getTargetNamespace())) return;
+			if (schema.getSchemaForSchemaNamespace().equals(typedef.getTargetNamespace())) return Status.CANCEL_STATUS;
 			
 			//build list of custom types and built in types
 			ArrayList customTypes = new ArrayList();
@@ -73,7 +64,9 @@ public class XSDChangeBaseTypeAction extends Action implements SelectionListener
 			
 			dialog.setBlockOnOpen(true);
 			int ret = dialog.open();
-			if (ret == Window.CANCEL) return;
+			if (ret == Window.CANCEL){
+				return Status.CANCEL_STATUS;
+			}
 			
 			//backup current Base Type
 			XSDTypeDefinition current = typedef.getBaseTypeDefinition();
@@ -115,8 +108,11 @@ public class XSDChangeBaseTypeAction extends Action implements SelectionListener
 					"Error", 
 					"An error occured trying to change the Base Type Definition: "+e.getLocalizedMessage()
 			);
-		}		
+			return Status.CANCEL_STATUS;
+		}
+		return Status.OK_STATUS;
 	}
+	
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}

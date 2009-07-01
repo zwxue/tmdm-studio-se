@@ -2,10 +2,10 @@ package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
@@ -17,7 +17,6 @@ import org.eclipse.xsd.XSDFactory;
 import org.eclipse.xsd.XSDIdentityConstraintCategory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDParticle;
-import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
@@ -26,14 +25,10 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.SimpleTypeInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.utils.ImageCache;
-import com.amalto.workbench.utils.Util;
 
-public class XSDChangeToSimpleTypeAction extends Action implements SelectionListener{
+public class XSDChangeToSimpleTypeAction extends UndoAction implements SelectionListener{
 
-	private DataModelMainPage page = null;
-	private XSDSchema schema = null;
 	private SimpleTypeInputDialog dialog = null;
 	private String typeName = null;
 	private boolean builtIn = false;
@@ -43,8 +38,7 @@ public class XSDChangeToSimpleTypeAction extends Action implements SelectionList
 	boolean showDlg = true; 
 	
 	public XSDChangeToSimpleTypeAction(DataModelMainPage page) {
-		super();
-		this.page = page;
+		super(page);
 		setImageDescriptor(ImageCache.getImage( "icons/change_to_simple.gif"));
 		setText("Change to a Simple Element");
 		setToolTipText("Make Element a Simple Element or change the current Simple Type");
@@ -61,10 +55,8 @@ public class XSDChangeToSimpleTypeAction extends Action implements SelectionList
 		declNew = dec;
 	}
 	
-	public void run() {
+	public IStatus doAction() {
 		try {
-			
-			schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
 			XSDElementDeclaration decl = null;
 			IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
 			// fliu
@@ -111,7 +103,9 @@ public class XSDChangeToSimpleTypeAction extends Action implements SelectionList
 				
 				dialog.setBlockOnOpen(true);
 				int ret = dialog.open();
-				if (ret == Window.CANCEL) return;
+				if (ret == Window.CANCEL) {
+					return Status.CANCEL_STATUS;
+				}
 			}
 			
 			//if concept
@@ -181,8 +175,11 @@ public class XSDChangeToSimpleTypeAction extends Action implements SelectionList
 					"Error", 
 					"An error occured trying to change to Simple Type: "+e.getLocalizedMessage()
 			);
-		}		
+			return Status.CANCEL_STATUS;
+		}
+		return Status.OK_STATUS;
 	}
+	
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}

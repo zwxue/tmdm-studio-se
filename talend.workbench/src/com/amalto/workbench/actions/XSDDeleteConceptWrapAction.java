@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -25,9 +27,8 @@ import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.ImageCache;
 
-public class XSDDeleteConceptWrapAction extends Action{
+public class XSDDeleteConceptWrapAction extends UndoAction{
 
-	private DataModelMainPage page = null;
 	private TreeViewer viewer = null;
 	private XSDDeleteConceptAction deleteConceptAction = null;
 	
@@ -35,8 +36,7 @@ public class XSDDeleteConceptWrapAction extends Action{
 	private Map<Class, UndoAction> clsAction = new HashMap<Class, UndoAction>();
 	
 	public XSDDeleteConceptWrapAction(DataModelMainPage page) {
-		super();
-		this.page = page;
+		super(page);
 		viewer = page.getTreeViewer();
 		setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
 
@@ -48,12 +48,12 @@ public class XSDDeleteConceptWrapAction extends Action{
 		clsAction.put(cls, action);
 	}
 	
-	public void run() {
+	public IStatus doAction() {
 		try {
 			
 			IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
 			if(delObjs.isEmpty()){
-				return;
+	            return Status.CANCEL_STATUS;
 			}else{
 				boolean sameType = checkInSameClassType(delObjs.toArray(), delObjs.get(0).getClass());
 				String deleteLabel = "Are you sure you want to ";
@@ -74,8 +74,10 @@ public class XSDDeleteConceptWrapAction extends Action{
 									.substring(backPos + 1));
 
 
-				if (!MessageDialog.openConfirm(page.getSite().getShell(), "Delete Model", deleteLabel))
-					return;
+				if (!MessageDialog.openConfirm(page.getSite().getShell(),
+						"Delete Model", deleteLabel)) {
+					return Status.CANCEL_STATUS;
+				}
 			}
 			
 			for (Iterator iterator = delObjs.iterator(); iterator.hasNext();) {
@@ -107,7 +109,31 @@ public class XSDDeleteConceptWrapAction extends Action{
 				if (isElem && toDel instanceof XSDElementDeclaration) {
 					delExecute = clsAction.get(null);
 				}
-				delExecute.run(toDel);
+				
+				if (delExecute instanceof XSDDeleteConceptAction && toDel instanceof XSDElementDeclaration)
+				{
+					((XSDDeleteConceptAction)delExecute).setXSDTODel((XSDElementDeclaration)toDel);
+				}
+				else if (delExecute instanceof XSDDeleteElementAction && toDel instanceof XSDElementDeclaration)
+				{
+					((XSDDeleteElementAction)delExecute).setXSDTODel((XSDElementDeclaration)toDel);
+				}
+				else if (delExecute instanceof XSDDeleteParticleAction && toDel instanceof XSDParticle)
+				{
+					((XSDDeleteParticleAction)delExecute).setXSDTODel((XSDParticle)toDel);
+				}
+				else if (delExecute instanceof XSDDeleteXPathAction && toDel instanceof XSDXPathDefinition)
+				{
+					((XSDDeleteXPathAction)delExecute).setXSDTODel((XSDXPathDefinition)toDel);
+				}
+				else if (delExecute instanceof XSDDeleteIdentityConstraintAction && toDel instanceof XSDIdentityConstraintDefinition)
+				{
+					((XSDDeleteIdentityConstraintAction)delExecute).setXSDTODel((XSDIdentityConstraintDefinition)toDel);
+				}
+				else
+					return Status.CANCEL_STATUS;
+				
+				delExecute.doAction();
 			}
        
 		} catch (Exception e) {
@@ -117,7 +143,11 @@ public class XSDDeleteConceptWrapAction extends Action{
 					"Error", 
 					"An error occured trying to remove Concept: "+e.getLocalizedMessage()
 			);
-		}		
+			
+			return Status.CANCEL_STATUS;
+		}	
+		
+		return Status.OK_STATUS;
 	}
 	
 	private void wrapDelObj(Object[] toDels) {

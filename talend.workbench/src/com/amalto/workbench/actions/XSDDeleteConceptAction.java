@@ -3,11 +3,13 @@ package com.amalto.workbench.actions;
 import java.util.ArrayList;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.xsd.XSDElementDeclaration;
+import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDTypeDefinition;
 
@@ -20,7 +22,6 @@ import com.amalto.workbench.utils.Util;
 public class XSDDeleteConceptAction extends UndoAction{
 
 	//private DataModelMainPage page = null;
-	private XSDSchema schema = null;
 	private XSDElementDeclaration xsdElem = null;
 	
 	public XSDDeleteConceptAction(DataModelMainPage page) {
@@ -40,10 +41,8 @@ public class XSDDeleteConceptAction extends UndoAction{
 		super.run();
 	}
 	
-	public void doAction() {
+	public IStatus doAction() {
 		try {
-			
-            schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
             ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXSDSchemaAsString();
             // xsdElem is to support the multiple delete action on key press,
 			// which each delete action on concept must be explicit passed a xsdElem to
@@ -84,21 +83,13 @@ public class XSDDeleteConceptAction extends UndoAction{
 					"Error", 
 					"An error occured trying to remove Concept: "+e.getLocalizedMessage()
 			);
-		}		
-	}
-	@Override
-	protected IStatus undo() {
-		//add decl
-		if(xsdElem != null){
-			schema.getContents().add(xsdElem);
-			schema.update();
+			
+			return Status.CANCEL_STATUS;
 		}
-		return super.undo();
+		return Status.OK_STATUS;
 	}
 	
-	protected IStatus redo(){
-		
-		return super.redo();
+    public void setXSDTODel(XSDElementDeclaration elem) {
+    	xsdElem = elem;
 	}
-	
 }
