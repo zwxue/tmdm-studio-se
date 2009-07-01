@@ -75,6 +75,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
     private boolean smartViewSelected=true;
     private boolean isTransfor = false;
     private static String Smart_view="Smart_view_";
+    boolean isBtnShow=true;
     
     
 	public ViewInputDialog(IWorkbenchPartSite site,TreeParent treeParent,Shell parentShell, String dialogTitle, String dialogMessage, String initialValue, IInputValidator validator,boolean isTransfor) {
@@ -94,7 +95,12 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
     }//ViewInputDialog(
 	
 	
-    protected void buttonPressed(int buttonId) {
+    public void setBtnShow(boolean isBtnShow) {
+		this.isBtnShow = isBtnShow;
+	}
+
+
+	protected void buttonPressed(int buttonId) {
         if (buttonId == IDialogConstants.OK_ID) {
             value = text.getText();
         } else {
@@ -116,9 +122,6 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
                 IDialogConstants.CANCEL_LABEL, false);
         //do this here because setting the text will set enablement on the ok
         // button
-        if (value != null) {
-        	text.setText(value);
-        }
     }
     
     /*
@@ -149,8 +152,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
             public void modifyText(ModifyEvent e) {
                 validateInput();
             }
-        });
-        text.setText("");
+        });        
 //        xpathwidget = new XpathWidget(site,"...",treeParent,null, composite, null,false,true);
 //        XpathSelectDialog(Shell parentShell,TreeParent parent,String title,IWorkbenchPartSite site,boolean isMulti,String dataModelName)
       
@@ -158,7 +160,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
            openDLG.setText("...");
            openDLG.addSelectionListener(this);
            openDLG.setLayoutData(new GridData(SWT.RIGHT,SWT.CENTER,false,false,1,1));
-           openDLG.setVisible(false);
+           openDLG.setVisible(isBtnShow);
            openDLG.setToolTipText("Select one Concept");
         
         errorMessageText = new Text(composite, SWT.READ_ONLY | SWT.WRAP);
@@ -180,7 +182,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
     		transformeButton.setLayoutData(
     				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
     		);
-    	
+    		text.setText("");
     		transformeButton.addSelectionListener(new SelectionListener(){
 
     			public void widgetDefaultSelected(SelectionEvent e) {
@@ -217,6 +219,10 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
     			}
     			
     		});
+        }else{
+            if (value != null) {
+            	text.setText(value);
+            }        	
         }
         
 		
@@ -287,9 +293,9 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
 				if(dlg.getXpath()!=null&&dlg.getXpath().length()>0){
 					int point = dlg.getXpath().indexOf("/");
 					if(point>=0)
-						text.setText(Smart_view+dlg.getXpath().substring(0, point));
+						text.setText(value+dlg.getXpath().substring(0, point));
 					else
-						text.setText(Smart_view+dlg.getXpath());
+						text.setText(value+dlg.getXpath());
 				}
 				
 				dlg.close();
