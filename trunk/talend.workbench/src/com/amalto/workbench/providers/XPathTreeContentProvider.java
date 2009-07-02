@@ -158,7 +158,9 @@ public class XPathTreeContentProvider extends XSDTreeContentProvider {
 				list.add(((XSDElementDeclaration)parent).getTypeDefinition());	
 			}
 			//the keys
-			list.addAll(((XSDElementDeclaration)parent).getIdentityConstraintDefinitions());
+
+			//list.addAll(((XSDElementDeclaration)parent).getIdentityConstraintDefinitions());
+			
 			//the annotations
 //			XSDAnnotation annotation = ((XSDElementDeclaration)parent).getAnnotation(); 
 //			if (annotation!=null) {
@@ -167,10 +169,12 @@ public class XPathTreeContentProvider extends XSDTreeContentProvider {
 			return list.toArray(new Object[list.size()]);
 		}
 		
-		if (parent instanceof XSDIdentityConstraintDefinition) {
+		if (parent instanceof XSDIdentityConstraintDefinition) {			
 			ArrayList list = new ArrayList();
-			list.add(((XSDIdentityConstraintDefinition)parent).getSelector());
-			list.addAll(((XSDIdentityConstraintDefinition)parent).getFields());
+
+//			list.add(((XSDIdentityConstraintDefinition)parent).getSelector());
+//			list.addAll(((XSDIdentityConstraintDefinition)parent).getFields());
+			
 			return list.toArray(new Object[list.size()]);
 		}
 		
@@ -207,7 +211,9 @@ public class XPathTreeContentProvider extends XSDTreeContentProvider {
 			} else {
 				list.add(typeDef);
 			}
-			list.addAll(((XSDElementDeclaration)term).getIdentityConstraintDefinitions());
+
+			//list.addAll(((XSDElementDeclaration)term).getIdentityConstraintDefinitions());
+			
 //			XSDAnnotation annotation = ((XSDElementDeclaration)term).getAnnotation(); 
 //			if (annotation!=null) {
 //				list.add(annotation);
