@@ -532,7 +532,7 @@ public class ItemCtrl2Bean implements SessionBean {
     	
     	//build the patterns to revision ID map
     	LinkedHashMap<String, String> conceptPatternsToRevisionID = new LinkedHashMap<String, String>(universe.getItemsRevisionIDs());
-    	if (universe.getDefaultItemRevisionID() != null) conceptPatternsToRevisionID.put(".*", universe.getDefaultItemRevisionID());
+    	if (universe.getDefaultItemRevisionID() != null&&universe.getDefaultItemRevisionID().length()>0) conceptPatternsToRevisionID.put(".*", universe.getDefaultItemRevisionID());
     	
     	//build the patterns to cluster map - only one cluster at this stage
     	LinkedHashMap<String, String> conceptPatternsToClusterName = new LinkedHashMap<String, String>();
