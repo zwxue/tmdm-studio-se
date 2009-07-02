@@ -83,7 +83,7 @@ public class XSDTreeContentProvider implements IStructuredContentProvider, ITree
 				for(XSDElementDeclaration el: (XSDElementDeclaration[])xsdElementDeclarations.toArray(new XSDElementDeclaration[xsdElementDeclarations.size()] )){
 					if(isInclude( el.getAnnotation())){
 						list.add(el);
-					}
+					}					
 				}
 				return list.toArray(new XSDElementDeclaration[list.size()]);
 			}
@@ -227,27 +227,44 @@ public class XSDTreeContentProvider implements IStructuredContentProvider, ITree
 				list.add(((XSDElementDeclaration)parent).getTypeDefinition());	
 			}
 			//the keys
-			list.addAll(((XSDElementDeclaration)parent).getIdentityConstraintDefinitions());
+			if(filter!=null && !filter.isAll()){
+				
+			}else{
+				list.addAll(((XSDElementDeclaration)parent).getIdentityConstraintDefinitions());
+			}
 			//the annotations
 			XSDAnnotation annotation = ((XSDElementDeclaration)parent).getAnnotation(); 
-			if (annotation!=null) {
-				list.add(annotation);
+			if(filter!=null && !filter.isAll()){
+				
+			}else{
+				if (annotation!=null) {
+					list.add(annotation);
+				}
 			}
 			return list.toArray(new Object[list.size()]);
 		}
 		
 		if (parent instanceof XSDIdentityConstraintDefinition) {
 			ArrayList list = new ArrayList();
-			list.add(((XSDIdentityConstraintDefinition)parent).getSelector());
-			list.addAll(((XSDIdentityConstraintDefinition)parent).getFields());
+			if(filter!=null && !filter.isAll()){
+				
+			}else{
+				list.add(((XSDIdentityConstraintDefinition)parent).getSelector());
+				list.addAll(((XSDIdentityConstraintDefinition)parent).getFields());
+			}
+			
 			return list.toArray(new Object[list.size()]);
 		}
 		
 		if (parent instanceof XSDAnnotation) {
-			XSDAnnotation annotation = (XSDAnnotation) parent;
 			ArrayList list = new ArrayList();
-			list.addAll(annotation.getUserInformation());
-			list.addAll(annotation.getApplicationInformation());
+			if(filter!=null && !filter.isAll()){
+				
+			}else{
+				XSDAnnotation annotation = (XSDAnnotation) parent;			
+				list.addAll(annotation.getUserInformation());
+				list.addAll(annotation.getApplicationInformation());
+			}
 			return list.size()== 0 ? new Object[0] : list.toArray(new Object[list.size()]);
 		}
 		
@@ -294,8 +311,12 @@ public class XSDTreeContentProvider implements IStructuredContentProvider, ITree
 			}
 			list.addAll(((XSDElementDeclaration)term).getIdentityConstraintDefinitions());
 			XSDAnnotation annotation = ((XSDElementDeclaration)term).getAnnotation(); 
-			if (annotation!=null) {
-				list.add(annotation);
+			if(filter!=null && !filter.isAll()){
+				
+			}else{
+				if (annotation!=null) {
+					list.add(annotation);
+				}
 			}
 			return list.toArray(new Object[list.size()]);
 		}		
