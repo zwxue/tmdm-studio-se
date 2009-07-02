@@ -5,12 +5,14 @@ import java.util.Calendar;
 
 public class DataChangeLog {
 	
+	
+	
 	private String source;
 	
 	private String timeInMillis;
 	
     private String operationType;
-	
+    
 	private String concept;
 	
 	private String key;
@@ -18,6 +20,15 @@ public class DataChangeLog {
 	private String xmlSource;
 	
 	private String ids;
+	
+	//additional fields
+	private String userName;
+	
+    private String revisionID;
+    
+    private String dataCluster;
+    
+    private String dataModel;
 	
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
 
@@ -82,6 +93,38 @@ public class DataChangeLog {
 	public void setIds(String ids) {
 		this.ids = ids;
 	}
+	
+	public String getUserName() {
+		return cleanOutput(userName);
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getRevisionID() {
+		return cleanOutput(revisionID);
+	}
+
+	public void setRevisionID(String revisionID) {
+		this.revisionID = revisionID;
+	}
+
+	public String getDataCluster() {
+		return cleanOutput(dataCluster);
+	}
+
+	public void setDataCluster(String dataCluster) {
+		this.dataCluster = dataCluster;
+	}
+
+	public String getDataModel() {
+		return cleanOutput(dataModel);
+	}
+
+	public void setDataModel(String dataModel) {
+		this.dataModel = dataModel;
+	}
 
 	private String cleanOutput(String output) {
 		
@@ -91,5 +134,7 @@ public class DataChangeLog {
 		
 		return output;
 	}
+	
+	
 	
 }

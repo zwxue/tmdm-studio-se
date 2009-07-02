@@ -18,6 +18,8 @@ import java.io.UnsupportedEncodingException;
 import java.rmi.RemoteException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.Principal;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
@@ -37,6 +39,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.jboss.security.Base64Encoder;
+import org.jboss.security.SimpleGroup;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -46,8 +49,12 @@ import org.xml.sax.InputSource;
 
 import sun.misc.BASE64Decoder;
 
+import com.amalto.core.objects.universe.ejb.UniversePOJO;
 import com.amalto.webapp.util.webservices.WSBase64KeyValue;
 import com.amalto.webapp.util.webservices.WSConnectorResponseCode;
+import com.amalto.webapp.util.webservices.WSGetUniverse;
+import com.amalto.webapp.util.webservices.WSUniverse;
+import com.amalto.webapp.util.webservices.WSUniversePK;
 import com.amalto.webapp.util.webservices.XtentisPort;
 import com.amalto.webapp.util.webservices.XtentisService_Impl;
 import com.sun.org.apache.xpath.internal.XPathAPI;
@@ -385,6 +392,77 @@ public class Util {
 		String SUBJECT_CONTEXT_KEY = "javax.security.auth.Subject.container";
 		return new AjaxSubject((Subject) PolicyContext.getContext(SUBJECT_CONTEXT_KEY));
     }
+    
+    public static String getPrincipalMember(String key) throws Exception{
+    	String result="";
+    	// Get the Authenticated Subject
+
+        Subject subject = (Subject) PolicyContext.getContext("javax.security.auth.Subject.container");
+
+        // Now look for a Group 
+
+        Set principals = subject.getPrincipals(Principal.class);
+
+        Iterator iter = principals.iterator();
+
+        while(iter.hasNext())
+
+		{
+
+		  Principal p = (Principal)iter.next();
+		  if(p instanceof SimpleGroup)
+		  {
+
+             SimpleGroup sg = (SimpleGroup)p;
+
+             if(key.equals(sg.getName()))
+
+             {
+
+                Enumeration en = sg.members();
+
+                while(en.hasMoreElements())
+
+                {
+
+					String info = en.nextElement().toString();
+					
+					result=result+","+info;
+
+                }
+
+             }
+
+          }
+
+        }
+        
+        if(result.length()>0)result=result.substring(1);
+    	return result;
+    }
+    
+    public static String getLoginUserName()throws Exception {
+		return getPrincipalMember("Username");
+
+	}
+    
+    public static String getLoginUniverse() throws Exception{
+		return getPrincipalMember("Universe");
+
+	}
+    
+    public static String getLoginRoles() throws Exception{
+		return getPrincipalMember("Roles");
+
+	}
+    
+    public static String getRevisionIdFromUniverse(String universeName,String conceptName) throws Exception{
+    	String revisonId="";
+		WSUniverse wsUniverse=Util.getPort().getUniverse(new WSGetUniverse(new WSUniversePK(universeName)));
+		UniversePOJO universe=XConverter.WS2POJO(wsUniverse);
+		revisonId=universe.getConceptRevisionID(conceptName);
+		return revisonId;
+	}
 
 	/*********************************************************************
 	 *      PASSWORD UTILS
