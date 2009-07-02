@@ -315,7 +315,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					}
 					return;
 				}// if action
-				if (xo.getType() == TreeObject.SUBSCRIPTION_ENGINE)
+				if (xo.getType() == TreeObject.SUBSCRIPTION_ENGINE||xo.getType()==TreeObject.DATA_CLUSTER)
 					browseViewAction.run();
 				else
 					editXObjectAction.run();
