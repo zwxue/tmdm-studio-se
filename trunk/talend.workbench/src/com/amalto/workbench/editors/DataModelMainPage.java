@@ -22,7 +22,10 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
@@ -57,6 +60,7 @@ import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTerm;
+import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDWildcard;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
@@ -117,7 +121,7 @@ import com.amalto.workbench.webservices.WSDataModel;
 public class DataModelMainPage extends AMainPageV2 {
 
 	protected Text descriptionText;
-	protected Button importXSDBtn, exportBtn,filterBtn;
+	protected Button importXSDBtn, exportBtn,filterBtn,expandBtn,foldBtn,expandSelBtn;
 	protected TreeViewer viewer;
 	protected DrillDownAdapter drillDownAdapter;
 
@@ -157,6 +161,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	private MenuManager menuMgr;
 	private String dataModelName;
 	
+	
 	private XSDSchema  xsdSchema;
 	private XSDTreeContentProvider provider;
 	
@@ -166,6 +171,8 @@ public class DataModelMainPage extends AMainPageV2 {
 	
 	private DataModelFilterDialog dataModelFilterDialog;
 	private DataModelFilter dataModelFilter;
+	
+	private StructuredSelection sel;
 	public DataModelMainPage(FormEditor editor) {
 		super(editor, DataModelMainPage.class.getName(), "Data Model "
 				+ ((XObjectEditorInput) editor.getEditorInput()).getName());
@@ -199,7 +206,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			btnCmp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 					false, 2, 1));
 			GridLayout gLayout=new GridLayout();
-			gLayout.numColumns=3;
+			gLayout.numColumns=6;
 			gLayout.horizontalSpacing=20;
 			btnCmp.setLayout(gLayout);
 			
@@ -215,12 +222,75 @@ public class DataModelMainPage extends AMainPageV2 {
 			filterBtn.setImage(ImageCache.getCreatedImage(EImage.FILTER_PS.getPath()));
 			filterBtn.setToolTipText("Filter...");
 			
+			//add by lym
+			expandBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
+			expandBtn.setImage(ImageCache.getCreatedImage(EImage.FLDR_OBJ.getPath()));
+			expandBtn.setToolTipText("Expand...");
+			expandBtn.addSelectionListener(new SelectionAdapter(){
+				public void widgetSelected(SelectionEvent e) {
+					Iterator it = sel.iterator();
+					while(it.hasNext()){
+						Object obj = it.next();
+						viewer.expandToLevel(obj, 3);
+
+					}
+				}
+			});
+			
+			
+			foldBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
+			foldBtn.setImage(ImageCache.getCreatedImage(EImage.COMPRESSED_FOLDER_OBJ.getPath()));
+			foldBtn.setToolTipText("Fold...");
+			foldBtn.addSelectionListener(new SelectionAdapter(){
+				public void widgetSelected(SelectionEvent e) {
+					Iterator it = sel.iterator();
+					while(it.hasNext()){
+						Object obj = it.next();
+						viewer.collapseToLevel(obj, 3);
+					}
+				}
+			});
+			
+			expandSelBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
+			expandSelBtn.setImage(ImageCache.getCreatedImage(EImage.ACTIVITY_CATEGORY.getPath()));
+			expandSelBtn.setToolTipText("Expand...");
+			expandSelBtn.addSelectionListener(new SelectionAdapter(){
+				public void widgetSelected(SelectionEvent e) {
+					Iterator it = sel.iterator();
+					while(it.hasNext()){
+						Object obj = it.next();
+						viewer.collapseToLevel(obj, 3);
+						if(obj instanceof XSDModelGroup){
+							viewer.expandToLevel(obj, 1);
+						}
+						if(obj instanceof XSDElementDeclaration){
+							viewer.expandToLevel(obj, 1);
+							XSDTypeDefinition type = ((XSDElementDeclaration) obj).getTypeDefinition();
+							if(type instanceof XSDComplexTypeDefinition){
+								XSDModelGroup mg = (XSDModelGroup) ((XSDParticle)((XSDComplexTypeDefinition) type).getContent()).getTerm();
+								viewer.expandToLevel(mg, 1);
+							}
+						}
+						
+					}
+				}
+			});
+			
 			importXSDBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
 					false, 1, 1));
 			exportBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
 					false, 1, 1));
 			filterBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
 					false, 1, 1));			
+			
+			expandBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
+					false, 1, 1));	
+			foldBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
+					false, 1, 1));	
+			expandSelBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
+					false, 1, 1));	
+			
+			
 			filterBtn.addSelectionListener(new SelectionAdapter(){				
 
 				public void widgetSelected(SelectionEvent e) {
@@ -352,6 +422,13 @@ public class DataModelMainPage extends AMainPageV2 {
 			provider = new XSDTreeContentProvider(
 					this.getSite(), xsdSchema);
 			viewer.setContentProvider(provider);
+			
+			viewer.addSelectionChangedListener(new ISelectionChangedListener(){
+				public void selectionChanged(SelectionChangedEvent e) {
+					sel= (StructuredSelection)e.getSelection();
+				}
+			});
+			
 			viewer.setLabelProvider(new XSDTreeLabelProvider());
 			viewer.setSorter(new ViewerSorter() {
 				public int category(Object element) {
