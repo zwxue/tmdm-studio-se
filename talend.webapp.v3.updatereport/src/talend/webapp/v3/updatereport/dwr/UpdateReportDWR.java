@@ -30,6 +30,7 @@ public class UpdateReportDWR {
 	}
 	
 	public ListRange getUpdateReportList(int start, int limit,String sort,String dir,String regex)throws Exception{
+		
 		ListRange listRange = new ListRange();
 		
 
@@ -145,12 +146,22 @@ public class UpdateReportDWR {
             		Integer.MAX_VALUE
             	)
             ).getStrings();
+ 		
+ 		//sub result
+ 		start=start<results.length?start:results.length-1;
+		int end=results.length<(start+limit)?results.length-1:(start+limit-1);
 		
-		DataChangeLog[] data=new DataChangeLog[results.length];
+		String[] subResults=end+1-start<limit?new String[end+1-start]:new String[limit];
+		for (int i = start,j=0; i < end+1; i++,j++) {
+			subResults[j]=results[i];
+		}
+		
+		//parse data
+		DataChangeLog[] data=new DataChangeLog[subResults.length];
 		for (int i = 0; i < data.length; i++) {
 			DataChangeLog item=new DataChangeLog();
 			
-			String result=results[i];
+			String result=subResults[i];
 			if(result!=null){
 				//Not very OO
 				Document doc=Util.parse(result);
@@ -188,15 +199,8 @@ public class UpdateReportDWR {
 			return listRange;
 		}
 		
-		start=start<data.length?start:data.length-1;
-		int end=data.length<(start+limit)?data.length-1:(start+limit-1);
 		
-		DataChangeLog[] subData=end+1-start<limit?new DataChangeLog[end+1-start]:new DataChangeLog[limit];
-		for (int i = start,j=0; i < end+1; i++,j++) {
-			subData[j]=data[i];
-		}
-		
-		listRange.setData(subData);
+		listRange.setData(data);
 		listRange.setTotalSize(results.length);			
 		return listRange;
 	}
