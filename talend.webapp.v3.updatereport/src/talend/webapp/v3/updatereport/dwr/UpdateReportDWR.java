@@ -149,6 +149,7 @@ public class UpdateReportDWR {
  		
  		//sub result
  		start=start<results.length?start:results.length-1;
+ 		if(start<0)start=0;
 		int end=results.length<(start+limit)?results.length-1:(start+limit-1);
 		
 		String[] subResults=end+1-start<limit?new String[end+1-start]:new String[limit];
