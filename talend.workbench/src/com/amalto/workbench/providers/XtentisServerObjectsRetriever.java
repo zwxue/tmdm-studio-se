@@ -26,6 +26,7 @@ import com.amalto.workbench.webservices.WSGetTransformerV2PKs;
 import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSGetViewPKs;
 import com.amalto.workbench.webservices.WSMenuPK;
+import com.amalto.workbench.webservices.WSPing;
 import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 import com.amalto.workbench.webservices.WSRegexStoredProcedure;
@@ -68,7 +69,9 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			monitor.beginTask("Loading "+IConstants.TALEND+" Server Objects", "admin".equals(username)? 12 : 9);
 			//Access to server and get port
 			XtentisPort port = Util.getPort(new URL(endpointaddress), universe, username, password);
+			port.ping(new WSPing("Hello MDM!"));
 			monitor.worked(1);
+			
 			
 			String displayName=endpointaddress;
 			//fetch version info
@@ -111,8 +114,8 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 //			String universe1=wUuniverse.getName().replaceAll("\\[", "").replaceAll("\\]", "").trim();
 //			user.setUniverse(universe1);
 //			GlobalUserInfo.getInstance().addUser(user.getServerUrl()+user.getUniverse(), user);
-
 			serverRoot.setUser(user);
+			
 			
 			//Data Models
 			TreeParent models = new TreeParent("Data Models",serverRoot,TreeObject.DATA_MODEL,null,null);			
@@ -425,6 +428,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			
 			monitor.done();			
 		} catch (Exception e) {
+			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
 			e.printStackTrace();
 			throw new InvocationTargetException(new XtentisException("Could not login: "+e.getLocalizedMessage()));
 		}		
