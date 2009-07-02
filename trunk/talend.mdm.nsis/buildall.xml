@@ -14,7 +14,7 @@
     </path>
 	
 	<!-- deploy each plug-in to jboss server directory-->
-    <target name="deploy.all" depends="svn.ssh.checkout.all">  
+    <target name="deploy.all" depends="">  
         <foreach target="deploy.each" param="file.full.name" > 
        		<path location="${workspace.dir}" > 
               <dirset dir=".." includes="*"></dirset>
