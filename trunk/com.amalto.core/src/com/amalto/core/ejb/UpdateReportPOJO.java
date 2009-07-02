@@ -29,6 +29,15 @@ public class UpdateReportPOJO {
 	private String key;
 	
 	private Map<String,UpdateReportItemPOJO> updateReportItemsMap;
+	
+	//additional fields
+	private String dataCluster;
+	
+	private String dataModel;
+	
+	private String userName;
+	
+	private String revisionID;
 
 	public UpdateReportPOJO(String concept, String key, String operationType,String source, long timeInMillis) {
 		super();
@@ -43,6 +52,20 @@ public class UpdateReportPOJO {
 	public UpdateReportPOJO(String concept, String key, String operationType,
 			String source, long timeInMillis,Map<String,UpdateReportItemPOJO> updateReportItemsMap) {
 		this(concept,key,operationType,source,timeInMillis);
+		if(updateReportItemsMap==null){
+			updateReportItemsMap=new HashMap<String,UpdateReportItemPOJO>();
+		}else{
+			this.updateReportItemsMap=updateReportItemsMap;
+		}
+	}
+	
+	public UpdateReportPOJO(String concept, String key, String operationType,
+			String source, long timeInMillis,String dataCluster,String dataModel,String userName,String revisionID,Map<String,UpdateReportItemPOJO> updateReportItemsMap) {
+		this(concept,key,operationType,source,timeInMillis);
+		this.dataCluster=dataCluster;
+		this.dataModel=dataModel;
+		this.userName=userName;
+		this.revisionID=revisionID;
 		if(updateReportItemsMap==null){
 			updateReportItemsMap=new HashMap<String,UpdateReportItemPOJO>();
 		}else{
@@ -99,6 +122,47 @@ public class UpdateReportPOJO {
 	public void setKey(String key) {
 		this.key = key;
 	}
+	
+
+
+	public String getDataCluster() {
+		return dataCluster;
+	}
+
+
+	public void setDataCluster(String dataCluster) {
+		this.dataCluster = dataCluster;
+	}
+
+
+	public String getDataModel() {
+		return dataModel;
+	}
+
+
+	public void setDataModel(String dataModel) {
+		this.dataModel = dataModel;
+	}
+
+
+	public String getUserName() {
+		return userName;
+	}
+
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+
+	public String getRevisionID() {
+		return revisionID;
+	}
+
+
+	public void setRevisionID(String revisionID) {
+		this.revisionID = revisionID;
+	}
 
 
 	public Map<String,UpdateReportItemPOJO> getUpdateReportItemsMap() {
@@ -115,9 +179,13 @@ public class UpdateReportPOJO {
 		
 		StringBuffer log=new StringBuffer();
 		log.append("<Update>\n")
-		   .append("<Source>").append(this.source).append("</Source>\n")
+		   .append("<UserName>").append(StringEscapeUtils.escapeXml(this.userName)).append("</UserName>\n")
+		   .append("<Source>").append(StringEscapeUtils.escapeXml(this.source)).append("</Source>\n")
 		   .append("<TimeInMillis>").append(this.timeInMillis).append("</TimeInMillis>\n")
 		   .append("<OperationType>").append(StringEscapeUtils.escapeXml(this.operationType)).append("</OperationType>\n")
+		   .append("<RevisionID>").append(StringEscapeUtils.escapeXml(this.revisionID)).append("</RevisionID>\n")
+		   .append("<DataCluster>").append(StringEscapeUtils.escapeXml(this.dataCluster)).append("</DataCluster>\n")
+		   .append("<DataModel>").append(StringEscapeUtils.escapeXml(this.dataModel)).append("</DataModel>\n")
 		   .append("<Concept>").append(StringEscapeUtils.escapeXml(this.concept)).append("</Concept>\n")
 		   .append("<Key>").append(StringEscapeUtils.escapeXml(this.key)).append("</Key>\n");
 		   
@@ -136,16 +204,17 @@ public class UpdateReportPOJO {
        return log.toString();
     }
 	
-	public static void main(String[] args) {
-		
-		Map<String,UpdateReportItemPOJO> itemsMap =new HashMap<String,UpdateReportItemPOJO>();
-		UpdateReportItemPOJO updateReportItemPOJO1=new UpdateReportItemPOJO("/root/part1","v0","v1");
-		UpdateReportItemPOJO updateReportItemPOJO2=new UpdateReportItemPOJO("/root/part2","v2","v3");
-		itemsMap.put("/root/part1",updateReportItemPOJO1);
-		itemsMap.put("/root/part2",updateReportItemPOJO2);
-		
-		UpdateReportPOJO updateReportPOJO=new UpdateReportPOJO("concept1", "a.1", UpdateReportPOJO.OPERATIONTYPE_UPDATEE, UpdateReportPOJO.SOURCE_GENERICUI, System.currentTimeMillis(),itemsMap);
-		System.out.println(updateReportPOJO.serialize());
-	}
+//	//used for test serialize
+//	public static void main(String[] args) {
+//		
+//		Map<String,UpdateReportItemPOJO> itemsMap =new HashMap<String,UpdateReportItemPOJO>();
+//		UpdateReportItemPOJO updateReportItemPOJO1=new UpdateReportItemPOJO("/root/part1","v0","v1");
+//		UpdateReportItemPOJO updateReportItemPOJO2=new UpdateReportItemPOJO("/root/part2","v2","v3");
+//		itemsMap.put("/root/part1",updateReportItemPOJO1);
+//		itemsMap.put("/root/part2",updateReportItemPOJO2);
+//		
+//		UpdateReportPOJO updateReportPOJO=new UpdateReportPOJO("concept1", "a.1", UpdateReportPOJO.OPERATIONTYPE_UPDATEE, UpdateReportPOJO.SOURCE_GENERICUI, System.currentTimeMillis(),itemsMap);
+//		System.out.println(updateReportPOJO.serialize());
+//	}
 
 }

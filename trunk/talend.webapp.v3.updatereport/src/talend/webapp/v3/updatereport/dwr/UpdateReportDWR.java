@@ -154,16 +154,24 @@ public class UpdateReportDWR {
 			if(result!=null){
 				//Not very OO
 				Document doc=Util.parse(result);
+				
+				String userName=Util.getFirstTextNode(doc, "/Update/UserName");
 				String source=Util.getFirstTextNode(doc, "/Update/Source");
 				String timeInMillis=Util.getFirstTextNode(doc, "/Update/TimeInMillis");
 				String operationType=Util.getFirstTextNode(doc, "/Update/OperationType");
+				String revisionID=Util.getFirstTextNode(doc, "/Update/RevisionID");
+				String dataCluster=Util.getFirstTextNode(doc, "/Update/DataCluster");
+				String dataModel=Util.getFirstTextNode(doc, "/Update/DataModel");
 				String concept=Util.getFirstTextNode(doc, "/Update/Concept");
 				String key=Util.getFirstTextNode(doc, "/Update/Key");
 				
-				
+				item.setUserName(userName);
 				item.setSource(source);
 				item.setTimeInMillis(timeInMillis);
 				item.setOperationType(operationType);
+				item.setRevisionID(revisionID);
+				item.setDataCluster(dataCluster);
+				item.setDataModel(dataModel);
 				item.setConcept(concept);
 				item.setKey(key);
 				//item.setXmlSource(result);
