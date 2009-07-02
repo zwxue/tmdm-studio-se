@@ -1729,8 +1729,18 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
 			String concept=wsi.getConceptName();
 			String[] ids=wsi.getIds();
 			
+			//additional attributes for data changes log
+			LocalUser user = LocalUser.getLocalUser();
+			String userName=user.getUsername();
+			String revisionID ="";
+			UniversePOJO universe = user.getUniverse();
+            if(universe!=null){
+            	revisionID=universe.getConceptRevisionID(concept);
+            }
+            String dataModelPK = wsPutItem.getWsDataModelPK().getPk();
+			
 			org.apache.log4j.Logger.getLogger(this.getClass()).debug("[pushUpdateReport-of-putItemWithReport] with concept:"+concept+" operation:"+operationType);
-			UpdateReportPOJO updateReportPOJO=new UpdateReportPOJO(concept, Util.joinStrings(ids, "."), operationType, source, System.currentTimeMillis(),updateReportItemsMap);
+			UpdateReportPOJO updateReportPOJO=new UpdateReportPOJO(concept, Util.joinStrings(ids, "."), operationType, source, System.currentTimeMillis(),dataClusterPK,dataModelPK,userName,revisionID,updateReportItemsMap);
 			
 				WSItemPK itemPK = putItem(
 						new WSPutItem(
