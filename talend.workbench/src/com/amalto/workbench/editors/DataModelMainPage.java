@@ -240,7 +240,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			
 			foldBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
 			foldBtn.setImage(ImageCache.getCreatedImage(EImage.COMPRESSED_FOLDER_OBJ.getPath()));
-			foldBtn.setToolTipText("Fold...");
+			foldBtn.setToolTipText("Collapse...");
 			foldBtn.addSelectionListener(new SelectionAdapter(){
 				public void widgetSelected(SelectionEvent e) {
 					Iterator it = sel.iterator();
@@ -253,7 +253,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			
 			expandSelBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
 			expandSelBtn.setImage(ImageCache.getCreatedImage(EImage.ACTIVITY_CATEGORY.getPath()));
-			expandSelBtn.setToolTipText("Expand...");
+			expandSelBtn.setToolTipText("Expand ModelGroup...");
 			expandSelBtn.addSelectionListener(new SelectionAdapter(){
 				public void widgetSelected(SelectionEvent e) {
 					Iterator it = sel.iterator();
