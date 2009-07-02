@@ -14,11 +14,15 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
 
 		this.recordType = Ext.data.Record.create([
 		
+		  {name: "dataCluster", type: "string"},
+		  {name: "dataModel", type: "string"},
 		  {name: "concept", type: "string"},
 		  {name: "key", type: "string"},
+		  {name: "revisionID", type: "string"},
 		  {name: "operationType", type: "string"},
 		  {name: "timeInMillis", type: "string"},
 		  {name: "source", type: "string"},
+		  {name: "userName", type: "string"},
 		  {name: "ids", type: "string"}
 		  
 		 ]);
@@ -44,6 +48,16 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
 			selModel : new Ext.grid.RowSelectionModel({}),
 			columns : [{
 				hidden : false,
+				header : "Data cluster",
+				dataIndex : "dataCluster",
+				sortable : true
+			},{
+				hidden : false,
+				header : "Data model",
+				dataIndex : "dataModel",
+				sortable : true
+			},{
+				hidden : false,
 				header : "Concept",
 				dataIndex : "concept",
 				sortable : true
@@ -51,6 +65,11 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
 				hidden : false,
 				header : "Key",
 				dataIndex : "key",
+				sortable : true
+			},{
+				hidden : false,
+				header : "Revision ID",
+				dataIndex : "revisionID",
 				sortable : true
 			}, {
 				hidden : false,
@@ -66,6 +85,11 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
 				hidden : false,
 				header : "Source",
 				dataIndex : "source",
+				sortable : true
+			}, {
+				hidden : false,
+				header : "User name",
+				dataIndex : "userName",
 				sortable : true
 			}],
 			listeners:

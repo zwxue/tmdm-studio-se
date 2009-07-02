@@ -54,13 +54,23 @@ public class UpdateReportDetailsServelt extends HttpServlet{
 				if(content!=null&&content.length()>0){
 					//no recursion
 					Document doc=Util.parse(content);
+					String userName=Util.getFirstTextNode(doc, "/Update/UserName");
 					String source=Util.getFirstTextNode(doc, "/Update/Source");
 					String timeInMillis=Util.getFirstTextNode(doc, "/Update/TimeInMillis");
 					String operationType=Util.getFirstTextNode(doc, "/Update/OperationType");
+					String revisionID=Util.getFirstTextNode(doc, "/Update/RevisionID");
+					String dataCluster=Util.getFirstTextNode(doc, "/Update/DataCluster");
+					String dataModel=Util.getFirstTextNode(doc, "/Update/DataModel");
 					String concept=Util.getFirstTextNode(doc, "/Update/Concept");
 					String key=Util.getFirstTextNode(doc, "/Update/Key");
 								
 					ArrayList<JSONObject> rootGroup = new ArrayList<JSONObject>();
+					JSONObject userNameNode = new JSONObject();
+					userNameNode.put("id", "userName");
+					userNameNode.put("text", "UserName:"+cleanOutput(userName));
+					userNameNode.put("leaf", true);
+					rootGroup.add(userNameNode);
+					
 					JSONObject sourceNode = new JSONObject();
 					sourceNode.put("id", "source");
 					sourceNode.put("text", "Source:"+source);
@@ -69,25 +79,43 @@ public class UpdateReportDetailsServelt extends HttpServlet{
 					
 					JSONObject timeInMillisNode = new JSONObject();
 					timeInMillisNode.put("id", "timeInMillis");
-					timeInMillisNode.put("text", "timeInMillis:"+timeInMillis);
+					timeInMillisNode.put("text", "TimeInMillis:"+timeInMillis);
 					timeInMillisNode.put("leaf", true);
 					rootGroup.add(timeInMillisNode);
 					
 					JSONObject operationTypeNode = new JSONObject();
 					operationTypeNode.put("id", "operationType");
-					operationTypeNode.put("text", "operationType:"+operationType);
+					operationTypeNode.put("text", "OperationType:"+operationType);
 					operationTypeNode.put("leaf", true);
 					rootGroup.add(operationTypeNode);
 					
 					JSONObject conceptNode = new JSONObject();
 					conceptNode.put("id", "concept");
-					conceptNode.put("text", "concept:"+concept);
+					conceptNode.put("text", "Concept:"+concept);
 					conceptNode.put("leaf", true);
 					rootGroup.add(conceptNode);
 					
+					JSONObject revisionIDNode = new JSONObject();
+					revisionIDNode.put("id", "revisionID");
+					revisionIDNode.put("text", "RevisionID:"+cleanOutput(revisionID));
+					revisionIDNode.put("leaf", true);
+					rootGroup.add(revisionIDNode);
+					
+					JSONObject dataClusterNode = new JSONObject();
+					dataClusterNode.put("id", "dataCluster");
+					dataClusterNode.put("text", "DataCluster:"+cleanOutput(dataCluster));
+					dataClusterNode.put("leaf", true);
+					rootGroup.add(dataClusterNode);
+					
+					JSONObject dataModelNode = new JSONObject();
+					dataModelNode.put("id", "dataModel");
+					dataModelNode.put("text", "DataModel:"+cleanOutput(dataModel));
+					dataModelNode.put("leaf", true);
+					rootGroup.add(dataModelNode);
+					
 					JSONObject keyNode = new JSONObject();
 					keyNode.put("id", "key");
-					keyNode.put("text", "key:"+key);
+					keyNode.put("text", "Key:"+key);
 					keyNode.put("leaf", true);
 					rootGroup.add(keyNode);
 					
@@ -143,6 +171,15 @@ public class UpdateReportDetailsServelt extends HttpServlet{
 		out.println(jsonTree);
 		out.close();
 		
+	}
+	
+    private String cleanOutput(String output) {
+		
+		if(output==null||output.equals("null"))output="";
+		
+		output=output.trim();
+		
+		return output;
 	}
 
 }

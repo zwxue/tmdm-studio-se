@@ -1014,14 +1014,36 @@ public class ItemsBrowserDWR {
 	}
 	
 	
-	private static String pushUpdateReport(String[] ids, String concept, String operationType){
+	private static String pushUpdateReport(String[] ids, String concept, String operationType)throws Exception{
 		org.apache.log4j.Logger.getLogger(ItemsBrowserDWR.class).trace("pushUpdateReport() concept "+concept+" operation "+operationType);
+		
 		WebContext ctx = WebContextFactory.get();
 		HashMap<String,UpdateReportItem> updatedPath = new HashMap<String,UpdateReportItem>();
 		updatedPath = (HashMap<String,UpdateReportItem>) ctx.getSession().getAttribute("updatedPath");
 		if(!"DELETE".equals(operationType) && updatedPath==null){
 			return "ERROR_2";
 		}
+		
+		String username="";
+		String revisionId="";
+		
+		String dataModelPK ="";
+		String dataClusterPK ="";
+		try {
+			
+			Configuration config = Configuration.getInstance();
+	    	dataModelPK = config.getModel()==null?"":config.getModel();
+	    	dataClusterPK = config.getCluster()==null?"":config.getCluster();
+	    	
+			username=Util.getLoginUserName();
+	    	String universename=Util.getLoginUniverse();
+	    	if(universename!=null&&universename.length()>0)revisionId=Util.getRevisionIdFromUniverse(universename, concept);
+	    	
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			throw e1;
+		}
+		
 		String key = "";
 		if(ids!=null){
 			for (int i = 0; i < ids.length; i++) {
@@ -1031,9 +1053,13 @@ public class ItemsBrowserDWR {
 		}
 		String xml2 = "" +
 			"<Update>"+
+			"<UserName>"+username+"</UserName>"+
             "<Source>genericUI</Source>"+
             "<TimeInMillis>"+System.currentTimeMillis()+"</TimeInMillis>"+
             "<OperationType>"+StringEscapeUtils.escapeXml(operationType)+"</OperationType>"+
+            "<RevisionID>"+revisionId+"</RevisionID>"+
+            "<DataCluster>"+dataClusterPK+"</DataCluster>"+
+            "<DataModel>"+dataModelPK+"</DataModel>"+
             "<Concept>"+StringEscapeUtils.escapeXml(concept)+"</Concept>"+
             "<Key>"+StringEscapeUtils.escapeXml(key)+"</Key>";
 		if("UPDATE".equals(operationType)){
