@@ -166,7 +166,13 @@ public class AnnotationOrderedListsDialog extends Dialog {
         addLabelButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
         	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-				xPaths.add(getControlText(textControl));
+        		boolean exist = false;
+        		for(Iterator it = xPaths.iterator();it.hasNext();){
+        			if(((String)it.next()).equals(getControlText(textControl)))
+        				exist=true;
+        		}
+        		if(!exist&&getControlText(textControl)!=null&&getControlText(textControl)!="")
+        			xPaths.add(getControlText(textControl));
         		viewer.refresh();
         	};
         });
