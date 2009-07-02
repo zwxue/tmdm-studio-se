@@ -10,6 +10,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Observable;
 
@@ -162,7 +164,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 					//split method be encapsulated in xpathWidget will much better
 					String[] items = ViewMainPage.this.xpathWidget0.getText().split("\\&");
 					for(int i=0;i<items.length;i++){
-						if (!"".equals(ViewMainPage.this.xpathWidget0.getText()))
+						if (!"".equals(ViewMainPage.this.xpathWidget0.getText())&& ViewMainPage.this.viewableBEsList.indexOf(items[i])<0)
 							ViewMainPage.this.viewableBEsList.add(items[i]);
 					}
 					ViewMainPage.this.xpathWidget0.setText("");
@@ -266,7 +268,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
             		String[] items = ViewMainPage.this.xpathWidget1.getText().split("\\&");
 					for(int i=0;i<items.length;i++){
-						if (!"".equals(ViewMainPage.this.xpathWidget1.getText()))
+						if (!"".equals(ViewMainPage.this.xpathWidget1.getText())&&ViewMainPage.this.searchableBEsList.indexOf(items[i])<0)
 							ViewMainPage.this.searchableBEsList.add(items[i]);
 					}
 //            	if(!"".equals(ViewMainPage.this.xpathWidget1.getText()))
@@ -711,9 +713,14 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 			if (ViewMainPage.this.predicateCombo.getText().equals("Not"))
 				predicate = WSStringPredicate.NOT;
 			wc.setStringPredicate(predicate);
-			wcList.add(wc);
-			
-			
+			boolean exist=false;
+			for(Iterator it = wcList.iterator(); it.hasNext();){
+				WSWhereCondition wc1 = (WSWhereCondition)it.next();
+				if(this.equals(wc1, wc))
+					exist = true;
+			}
+			if(!exist)
+				wcList.add(wc);
 		}// for
 //		if(!"".equals(ViewMainPage.this.xpathWidget2.getText()))
 //				wc.setLeftPath(ViewMainPage.this.xpathWidget2.getText());
@@ -862,5 +869,13 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 		}
 		
 	}
-	
+	 public boolean equals(WSWhereCondition wcObj, WSWhereCondition obj) {
+		if (wcObj.getLeftPath().equals(obj.getLeftPath())
+				&& wcObj.getOperator().getValue().equals(obj.getOperator().getValue())
+				&& wcObj.getRightValueOrPath().equals(obj.getRightValueOrPath())
+				&& wcObj.getStringPredicate().getValue().equals(obj.getStringPredicate().getValue()))
+			return true;
+		else
+			return false;
+	}
 }

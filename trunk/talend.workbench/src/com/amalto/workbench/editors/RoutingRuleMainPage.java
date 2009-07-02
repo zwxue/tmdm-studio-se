@@ -8,6 +8,7 @@ package com.amalto.workbench.editors;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Observable;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -532,9 +533,21 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 					rre.setValue("");
 				else
 					rre.setValue(rightValueText.getText());
-
 				
-				wcList.add(rre);
+				if(wcList.size()==0){
+					wcList.add(rre);
+				}
+				else{
+					boolean exist = false;
+					WSRoutingRuleExpression wsrre;
+					for(Iterator it = wcList.iterator();it.hasNext();){
+						wsrre = (WSRoutingRuleExpression)it.next();
+						if(equals(wsrre, rre))
+							exist = true;
+					}//for(Iterator
+					if(!exist)
+					wcList.add(rre);
+				}//else{
 				
 			}//for
 			wsObject.setWsRoutingRuleExpressions(wcList.toArray(new WSRoutingRuleExpression[wcList.size()]));
@@ -658,5 +671,14 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
 
 	}
+	  public boolean equals(WSRoutingRuleExpression obj1,WSRoutingRuleExpression obj2) {
+		if (	obj1.getValue().equals(obj2.getValue())
+				&& obj1.getXpath().equals(obj2.getXpath())
+				&& obj1.getWsOperator().getValue().equals(obj2.getWsOperator().getValue()))
+			return true;
+		else
+			return false;
+	}
+	
 
 }
