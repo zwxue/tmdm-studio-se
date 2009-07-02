@@ -282,13 +282,14 @@ public class XSDTreeContentProvider implements IStructuredContentProvider, ITree
 		if(annotation!=null){
 			XSDAnnotationsStructure annotion = new XSDAnnotationsStructure(
 					 annotation);
-			if((!annotion.getWriteAccesses().values().contains(filter.getRole()) && filter.isReadOnly())){
-				return true;
-			}
 			if((annotion.getWriteAccesses().values().contains(filter.getRole()) && filter.isWriteAccess())){
 				return true;
 			}
 			if((annotion.getHiddenAccesses().values().contains(filter.getRole()) && filter.isHiddenAccess())){
+				return true;
+			}			
+		}else{
+			if((filter.isReadOnly())){
 				return true;
 			}			
 		}
