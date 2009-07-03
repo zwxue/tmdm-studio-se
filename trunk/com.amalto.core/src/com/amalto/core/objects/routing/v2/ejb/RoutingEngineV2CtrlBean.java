@@ -29,6 +29,7 @@ import com.amalto.core.ejb.ItemPOJOPK;
 import com.amalto.core.ejb.local.ItemCtrl2Local;
 import com.amalto.core.objects.routing.v2.ejb.local.RoutingOrderV2CtrlLocal;
 import com.amalto.core.objects.routing.v2.ejb.local.RoutingRuleCtrlLocal;
+import com.amalto.core.util.AutoIncrementGenerator;
 import com.amalto.core.util.Util;
 import com.amalto.core.util.XtentisException;
 
@@ -82,6 +83,8 @@ public class RoutingEngineV2CtrlBean implements SessionBean, TimedObject {
 			public void run() {
 		    	org.apache.log4j.Logger.getLogger(this.getClass()).info("Shutdown detected. Stopping the Routing Engine");
 		    	RoutingEngineV2POJO.getInstance().setStatus(RoutingEngineV2POJO.STOPPED);
+				//save the configure file when jboss shutdown				
+				AutoIncrementGenerator.saveToFile();		    	
 			}
 		});
     }

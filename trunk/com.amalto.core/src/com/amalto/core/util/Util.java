@@ -619,7 +619,7 @@ public final class Util {
     	
     }
     
-    public static void generateUUIDForElement(Document schema,String concept, Element conceptRoot) throws Exception{
+    public static void generateUUIDForElement(Document schema,String dataCluster,String concept, Element conceptRoot) throws Exception{
 		Element rootNS=Util.getRootElement("nsholder",schema.getDocumentElement().getNamespaceURI(),"xsd");	
 		String xpath="//xsd:element[@name='"+concept+"']//xsd:element[@type='"+EUUIDCustomType.AUTO_INCREMENT+"' or @type='"+EUUIDCustomType.UUID+"']";
 		NodeList uuidLists=Util.getNodeList(schema.getDocumentElement(),xpath,rootNS.getNamespaceURI(),"xsd");
@@ -633,12 +633,13 @@ public final class Util {
 				Node node= conceptRoot.getChildNodes().item(j);
 				if(node.getNodeType() != Node.ELEMENT_NODE) continue;	
 				if(node.getChildNodes().getLength()>1){
-					generateUUIDForElement(schema, node.getNodeName(),(Element)node);
+					generateUUIDForElement(schema, dataCluster,node.getNodeName(),(Element)node);
 				}else{
 					if(node.getNodeName().equalsIgnoreCase(name)){
 						if(node.getTextContent()==null ||node.getTextContent().length()==0 ){							
-							if(EUUIDCustomType.AUTO_INCREMENT.getName().equalsIgnoreCase(type)){
-								value=String.valueOf(new UID().getID());
+							if(EUUIDCustomType.AUTO_INCREMENT.getName().equalsIgnoreCase(type)){								
+								//value=String.valueOf(new UID().getID());
+								value=String.valueOf(AutoIncrementGenerator.generateNum(LocalUser.getLocalUser().getUniverse().getName(), dataCluster,concept+"."+name));
 							}
 							if(EUUIDCustomType.UUID.getName().equalsIgnoreCase(type)){
 								value=String.valueOf(UUID.randomUUID().toString());
