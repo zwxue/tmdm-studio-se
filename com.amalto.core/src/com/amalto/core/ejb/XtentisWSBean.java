@@ -40,6 +40,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.log4j.Logger;
 import org.jboss.security.Base64Encoder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -55,6 +56,7 @@ import com.amalto.core.ejb.local.TransformerCtrlLocal;
 import com.amalto.core.objects.backgroundjob.ejb.BackgroundJobPOJO;
 import com.amalto.core.objects.backgroundjob.ejb.BackgroundJobPOJOPK;
 import com.amalto.core.objects.backgroundjob.ejb.local.BackgroundJobCtrlUtil;
+import com.amalto.core.objects.configurationinfo.util.XtentisConfiguration;
 import com.amalto.core.objects.datacluster.ejb.DataClusterPOJO;
 import com.amalto.core.objects.datacluster.ejb.DataClusterPOJOPK;
 import com.amalto.core.objects.datamodel.ejb.DataModelPOJO;
@@ -117,6 +119,7 @@ import com.amalto.core.objects.view.ejb.ViewPOJO;
 import com.amalto.core.objects.view.ejb.ViewPOJOPK;
 import com.amalto.core.objects.view.ejb.local.ViewCtrlUtil;
 import com.amalto.core.util.ArrayListHolder;
+import com.amalto.core.util.AutoIncrementGenerator;
 import com.amalto.core.util.LocalUser;
 import com.amalto.core.util.RoleInstance;
 import com.amalto.core.util.RoleSpecification;
@@ -253,6 +256,7 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
 	 * @see javax.ejb.essionBean#ejbRemove()
 	 */
 	public void ejbRemove() throws EJBException, RemoteException {
+
 	}
 
 	/*
@@ -1636,7 +1640,7 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
 
 			//generate uuid 
 			Element conceptRoot = (Element)root.cloneNode(true);			
-			Util.generateUUIDForElement(schema, concept, conceptRoot);			
+			Util.generateUUIDForElement(schema, wsPutItem.getWsDataClusterPK().getPk(),concept, conceptRoot);			
 			//get concept key values
 			for(int j=0; j<conceptKey.getFields().length; j++){
 				for(int i=0; i<conceptRoot.getChildNodes().getLength(); i++){
