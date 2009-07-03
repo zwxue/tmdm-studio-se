@@ -111,7 +111,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 	protected ListViewer wcListViewer; 
 	protected Button suspendButton; 
 	
-	protected boolean[] ascending = {true,false,false}; 
+	protected boolean[] ascending = {true,false,false,false}; 
 		
     public RoutingEngineV2BrowserMainPage(FormEditor editor) {
         super(
@@ -423,7 +423,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 		int style = SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | 
 					SWT.FULL_SELECTION | SWT.HIDE_SELECTION;
 
-		Table table = new Table(parent, style);
+		final Table table = new Table(parent, style);
 		
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.grabExcessVerticalSpace = true;
@@ -434,10 +434,10 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 		table.setHeaderVisible(true);
 
 		// 1st column 
-		TableColumn column = new TableColumn(table, SWT.LEFT, 0);		
-		column.setText("Document");
-		column.setWidth(150);
-		column.addSelectionListener(new SelectionListener() {
+		final TableColumn column0 = new TableColumn(table, SWT.LEFT, 0);		
+		column0.setText("Document");
+		column0.setWidth(150);
+		column0.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
 				ascending[0] = ! ascending[0];
 				RoutingEngineV2BrowserMainPage.this.resultsViewer.setSorter(new TableSorter(0,ascending[0]));
@@ -445,16 +445,22 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 				ascending[0] = ! ascending[0];
 				RoutingEngineV2BrowserMainPage.this.resultsViewer.setSorter(new TableSorter(0,ascending[0]));
+				table.setSortColumn(column0);
+				if(ascending[0])					
+					table.setSortDirection(SWT.UP);
+				else
+					table.setSortDirection(SWT.DOWN);
+			
 
 			}
 		});
 
 		// 2nd column
-		column = new TableColumn(table, SWT.LEFT, 1);
-		column.setText("Date");
-		column.setWidth(150);
+		final TableColumn 	column1 = new TableColumn(table, SWT.LEFT, 1);
+		column1.setText("Date");
+		column1.setWidth(150);
 		// Add listener to column so tasks are sorted by description when clicked 
-		column.addSelectionListener(new SelectionListener() {
+		column1.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
 				ascending[1] = ! ascending[1];
 				RoutingEngineV2BrowserMainPage.this.resultsViewer.setSorter(new TableSorter(1,ascending[1]));
@@ -462,16 +468,22 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 				ascending[1] = ! ascending[1];
 				RoutingEngineV2BrowserMainPage.this.resultsViewer.setSorter(new TableSorter(1,ascending[1]));
+				table.setSortColumn(column1);
+				if(ascending[1])					
+					table.setSortDirection(SWT.UP);
+				else
+					table.setSortDirection(SWT.DOWN);
+			
 			}
 		});
 
 		
 		// 3rd column
-		column = new TableColumn(table, SWT.LEFT, 2);
-		column.setText("Service");
-		column.setWidth(100);
+		final TableColumn column2 = new TableColumn(table, SWT.LEFT, 2);
+		column2.setText("Service");
+		column2.setWidth(100);
 		// Add listener to column so tasks are sorted by description when clicked 
-		column.addSelectionListener(new SelectionListener() {
+		column2.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
 				ascending[2] = ! ascending[2];
 				RoutingEngineV2BrowserMainPage.this.resultsViewer.setSorter(new TableSorter(2,ascending[2]));
@@ -479,17 +491,22 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 				ascending[2] = ! ascending[2];
 				RoutingEngineV2BrowserMainPage.this.resultsViewer.setSorter(new TableSorter(2,ascending[2]));
-
+				table.setSortColumn(column2);
+				if(ascending[2])					
+					table.setSortDirection(SWT.UP);
+				else
+					table.setSortDirection(SWT.DOWN);
+			
 			}
 		});
 
 
 		// 4th column
-		column = new TableColumn(table, SWT.LEFT, 3);
-		column.setText("Message");
-		column.setWidth(300);
+		final TableColumn column3 = new TableColumn(table, SWT.LEFT, 3);
+		column3.setText("Message");
+		column3.setWidth(300);
 		// Add listener to column so tasks are sorted by description when clicked 
-		column.addSelectionListener(new SelectionListener() {
+		column3.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
 				ascending[3] = ! ascending[3];
 				RoutingEngineV2BrowserMainPage.this.resultsViewer.setSorter(new TableSorter(3,ascending[3]));
@@ -498,6 +515,11 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 				ascending[3] = ! ascending[3];
 				RoutingEngineV2BrowserMainPage.this.resultsViewer.setSorter(new TableSorter(3,ascending[3]));
 
+				table.setSortColumn(column3);
+				if(ascending[3])					
+					table.setSortDirection(SWT.UP);
+				else
+					table.setSortDirection(SWT.DOWN);
 			}
 		});
 
