@@ -303,6 +303,10 @@ public class ItemsBrowserDWR {
 	 * @return an array of TreeNode
 	 */
 	public TreeNode[] getChildren(int id, int nodeCount, String language, boolean foreignKey, int docIndex){
+		return getChildrenWithMask( id, nodeCount, language, foreignKey, docIndex, false);
+	}
+	
+	public TreeNode[] getChildrenWithMask(int id, int nodeCount, String language, boolean foreignKey, int docIndex, boolean maskKey){
 		WebContext ctx = WebContextFactory.get();	
 		HashMap<Integer,XSParticle> idToParticle = 
 			(HashMap<Integer,XSParticle>) ctx.getSession().getAttribute("idToParticle");
@@ -488,7 +492,11 @@ public class ItemsBrowserDWR {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-    		}   	   		
+    		}
+    		if(maskKey&&treeNode.isKey()){
+    			treeNode.setValue("");
+    			treeNode.setReadOnly(false);
+    		}
 		}		
 
 		return list.toArray(new TreeNode[list.size()]); 
