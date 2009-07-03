@@ -86,7 +86,8 @@ public class ItemsBrowserDWR {
 	 * @throws Exception
 	 */
 	public Map<String,String> getViewsList(String language) throws RemoteException, Exception{
-		Configuration config = Configuration.getInstance();
+		//Configuration config = Configuration.getInstance();
+		Configuration config = Configuration.getInstance(true);
 		String model = config.getModel();
 		String [] businessConcept = Util.getPort().	getBusinessConcepts(
 					new WSGetBusinessConcepts(

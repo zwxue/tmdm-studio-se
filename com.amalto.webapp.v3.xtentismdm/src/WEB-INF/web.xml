@@ -4,7 +4,11 @@
 
 <web-app >
     <!-- <distributable/> -->
-    
+    <!-- 
+       <listener>
+          <listener-class>com.amalto.webapp.core.util.SessionListener</listener-class>
+       </listener>
+    -->
     
         <servlet>
             <servlet-name>dwr-invoker</servlet-name>
