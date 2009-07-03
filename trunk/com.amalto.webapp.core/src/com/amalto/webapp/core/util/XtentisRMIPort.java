@@ -865,10 +865,9 @@ public class XtentisRMIPort implements XtentisPort {
    				conceptKey
 			);							
 			//generate uuid 
-			Element conceptRoot = (Element)root.cloneNode(true);			
-			Util.generateUUIDForElement(schema, concept, conceptRoot);			
-			//get concept key values
-			
+			Element conceptRoot = (Element)root.cloneNode(true);				
+			Util.generateUUIDForElement(schema, wsPutItem.getWsDataClusterPK().getPk(),concept, conceptRoot);			
+			//get concept key values			
 			for(int j=0; j<conceptKey.getFields().length; j++){
 				for(int i=0; i<conceptRoot.getChildNodes().getLength(); i++){
 					Node node= conceptRoot.getChildNodes().item(i);
