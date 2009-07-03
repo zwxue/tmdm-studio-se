@@ -57,6 +57,9 @@ import com.amalto.webapp.util.webservices.WSUniverse;
 import com.amalto.webapp.util.webservices.WSUniversePK;
 import com.amalto.webapp.util.webservices.XtentisPort;
 import com.amalto.webapp.util.webservices.XtentisService_Impl;
+import com.amalto.xmlserver.interfaces.IXmlServerEBJLifeCycle;
+import com.amalto.xmlserver.interfaces.IXmlServerSLWrapper;
+import com.amalto.xmlserver.interfaces.XmlServerException;
 import com.sun.org.apache.xpath.internal.XPathAPI;
 import com.sun.org.apache.xpath.internal.objects.XObject;
 
@@ -463,6 +466,35 @@ public class Util {
 		revisonId=universe.getConceptRevisionID(conceptName);
 		return revisonId;
 	}
+    
+    public static Element getLoginProvisioningFromDB() throws Exception,XmlServerException {
+			IXmlServerSLWrapper server=null;
+			//get the DB implementation class
+			String serverClass = XtentisConfiguration.getConfiguration().getProperty("xmlserver.class");
+			if ((serverClass==null) || "".equals(serverClass)) serverClass = "com.amalto.xmldb.XmldbSLWrapper";
+			
+			//instantiate the DB implementation class
+			//we cannot user ObjectPOJO.load since it will try to check our authentication
+			try {
+			    server = (IXmlServerSLWrapper) Class.forName(serverClass).newInstance();
+			    if (server instanceof IXmlServerEBJLifeCycle) {
+			    	((IXmlServerEBJLifeCycle)server).doCreate();
+			    }
+			} catch (Throwable t) {
+				String err = "Unable to start the XMLDB driver "+serverClass+": "+t.getMessage();
+				throw new IllegalArgumentException(err);
+			}
+			String provisioningCluster  = "PROVISIONING";
+			String userConcept = "User";
+			String username = Util.getLoginUserName();
+			String userString = server.getDocumentAsString(
+					null, //head
+					provisioningCluster, 
+					provisioningCluster+"."+userConcept+"."+username
+				);
+			Element user  = (Element)Util.getNodeList(Util.parse(userString), "//"+userConcept).item(0);
+			return user;
+    }
 
 	/*********************************************************************
 	 *      PASSWORD UTILS

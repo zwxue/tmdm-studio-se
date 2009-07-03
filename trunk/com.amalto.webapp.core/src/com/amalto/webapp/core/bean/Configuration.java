@@ -1,30 +1,16 @@
 package com.amalto.webapp.core.bean;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.rmi.RemoteException;
-
-import javax.security.jacc.PolicyContextException;
-
-import org.apache.commons.lang.StringEscapeUtils;
 import org.directwebremoting.WebContext;
 import org.directwebremoting.WebContextFactory;
-import org.exolab.castor.xml.MarshalException;
-import org.exolab.castor.xml.Marshaller;
-import org.exolab.castor.xml.Unmarshaller;
-import org.exolab.castor.xml.ValidationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
 import com.amalto.webapp.core.dwr.CommonDWR;
 import com.amalto.webapp.core.util.Util;
 import com.amalto.webapp.util.webservices.WSDataClusterPK;
 import com.amalto.webapp.util.webservices.WSDataModelPK;
-import com.amalto.webapp.util.webservices.WSGetItem;
 import com.amalto.webapp.util.webservices.WSItemPK;
 import com.amalto.webapp.util.webservices.WSPutItem;
 
@@ -65,6 +51,17 @@ public class Configuration {
 			 instance = (Configuration) ctx.getSession().getAttribute("configuration");
 		}
 			
+		return instance;
+	}
+	
+	public static Configuration getInstance(boolean forceReload) throws Exception {
+		
+		Configuration instance;
+		if(forceReload){
+			instance = load();
+		}else{
+			instance = getInstance();
+		}
 		return instance;
 	}
 	
@@ -119,9 +116,12 @@ public class Configuration {
 	private static Configuration load() throws Exception {
 		WebContext ctx = WebContextFactory.get();
 		Configuration configuration = new Configuration();
-		String xml = Util.getAjaxSubject().getXml();
-		Document d = Util.parse(xml);
-		NodeList nodeList = Util.getNodeList(d,"//property");
+		
+		//String xml = Util.getAjaxSubject().getXml();
+		Element user=Util.getLoginProvisioningFromDB();
+		
+		//Document d = Util.parse(userString);
+		NodeList nodeList = Util.getNodeList(user,"//property");
 		for (int i = 0; i < nodeList.getLength(); i++) { 
 			Node node = nodeList.item(i);
 			if("cluster".equals(Util.getFirstTextNode(node,"name"))){		
@@ -152,6 +152,7 @@ public class Configuration {
 
 		return configuration;
 	}
+	
 	
 	/*	
 	public static Configuration getInstance() throws Exception {
@@ -251,5 +252,10 @@ public class Configuration {
 		this.model = model;
 	}
 	
+	@Override
+	public String toString() {
+		
+		return "cluster:"+cluster+","+"model:"+model;
+	}
 
 }
