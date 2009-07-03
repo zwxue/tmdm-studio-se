@@ -193,6 +193,11 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		'en':'Delete'
 	};
 	
+	var BUTTON_DUPLICATE = {
+		'fr':'Dupliquer',
+		'en':'Duplicate'
+	};
+	
 	var BUTTON_LOGICAL_DEL = {
 		'fr':'Logical delete',
 		'en':'Logical delete'
@@ -280,6 +285,10 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	var LOGICALLY_DELETE_TOOLTIP={
 		'fr':'delete the item logically',
 		'en':'delete the item logically'
+	};
+	var DUPLICATE_TOOLTIP={
+		'fr':'clone the selected item',
+		'en':'clone the selected item'
 	}
 	/*****************
 	 * EXT 2.0
@@ -756,6 +765,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	var O_SAVE_QUIT 	= 16;
 	var O_DELETE 		= 32;
 	var O_LOGICAL_DEL   = 64;
+	var O_DUPLICATE     = 128;
 	
 	// modes
 	var M_TREE_VIEW		= 1;
@@ -793,6 +803,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 				options |= (toolbar.baseOptions & O_SAVE_QUIT);
 				options |= (toolbar.baseOptions & O_DELETE);
 				options |= (toolbar.baseOptions & O_LOGICAL_DEL);
+				options |= (toolbar.baseOptions & O_DUPLICATE);
 			break;
 			case M_PERSO_VIEW:
 				options |= O_TREE_VIEW;
@@ -893,6 +904,19 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 			toolbar.addButton( {tooltip:LOGICALLY_DELETE_TOOLTIP[language],text: BUTTON_LOGICAL_DEL[language], className: 'tb-button tb-button-nude', handler: toolbar.logicalDelItemHandler});
 			nbButtons++;
 		}
+		
+		// duplicate
+		if ( (options&O_DUPLICATE)==O_DUPLICATE )
+		{
+			if (nbButtons>0)
+			{
+				toolbar.addSeparator();
+				nbButtons++;
+			}
+	
+			toolbar.addButton( {tooltip:DUPLICATE_TOOLTIP[language],text: BUTTON_DUPLICATE[language], className: 'tb-button tb-button-nude', handler: toolbar.duplicateItemHandler});
+			nbButtons++;
+		}
 	}
 	
 	
@@ -904,6 +928,16 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	var itemTreeFK;
 	
 	function displayItemDetails(itemPK2, dataObject){
+		
+	    displayItemDetails2(itemPK2, dataObject, false);
+	}
+	
+	function displayItemDetailsWithMask(itemPK2, dataObject){
+		
+	    displayItemDetails2(itemPK2, dataObject, true);
+	}
+	
+	function displayItemDetails2(itemPK2, dataObject, maskKeys){
 		loadResource("/itemsbrowser/secure/js/ItemNode.js", "amalto.itemsbrowser.ItemNode" );
 		//alert("display items "+DWRUtil.toDescriptiveString(itemPK2,2)+" "+ dataObject);
 		amalto.core.working();
@@ -912,7 +946,6 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		
 		var ids = "";
 		
-		newItem[treeIndex] = false;
 		
 		if(itemPK2==null) {
 			newItem[treeIndex] = true;
@@ -923,6 +956,11 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 				ids += (ids==""?"":"@"); 
 				ids += itemPK2[i];			
 			}
+		}
+		
+		//add for duplicate case
+		if(maskKeys){
+		   newItem[treeIndex] = true;
 		}
 	
 	
@@ -974,8 +1012,43 @@ amalto.itemsbrowser.ItemsBrowser = function () {
     			
     			var itemTree= new YAHOO.widget.TreeView("itemDetails"+treeIndex);
     			itemTreeList[treeIndex] = itemTree;
-    		
-    			var fnLoadData = function(oNode, fnCallback) {
+    		    
+    			//add for duplicate case
+    			if(maskKeys==true){
+    				
+	    			var fnLoadData = function(oNode, fnCallback) {
+	    				//getChildren(oNode.index,fnCallback, false, newItem, itemTree, treeIndex);
+	    				ItemsBrowserInterface.getChildrenWithMask(oNode.index, YAHOO.widget.TreeView.nodeCount, language, false, treeIndex,true,function(result){
+	    					if(result==null) {
+	    						fnCallback();
+	    						return;
+	    					}
+	    	
+	    					for(var i=0; i<result.length; i++) {
+	    						var readOnly = (result[i].readOnly==true || (result[i].key==true && newItem[treeIndex]==false));
+	    						if (!readOnly)
+	    						{
+	    							//var tbDetail = tabPanel.getComponent('itemDetailsdiv'+treeIndex).getTopToolbar();
+	    							if (!(tbDetail.baseOptions&O_SAVE))
+	    							{
+	    								tbDetail.baseOptions |= O_SAVE|O_SAVE_QUIT|O_DUPLICATE; 
+	    								initToolBar(tbDetail, tbDetail.currentMode);
+	    							}
+	    						}
+	    	
+	    						var tmp = new amalto.itemsbrowser.ItemNode(result[i],newItem[treeIndex],treeIndex,
+	    									itemTree.getNodeByIndex(oNode.index),false,true);
+	    						//new Ext.form.TextField({applyTo:result[i].nodeId+'Value'});
+	    						if(result[i].type=="simple") tmp.setDynamicLoad();
+	    						else tmp.setDynamicLoad(fnLoadData, 1);
+	    					}
+	    					fnCallback();
+	        			});
+	        		};
+	        		
+    			}else{
+    				
+    				var fnLoadData = function(oNode, fnCallback) {
     				//getChildren(oNode.index,fnCallback, false, newItem, itemTree, treeIndex);
     				ItemsBrowserInterface.getChildren(oNode.index, YAHOO.widget.TreeView.nodeCount, language, false, treeIndex,function(result){
     					if(result==null) {
@@ -990,7 +1063,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
     							//var tbDetail = tabPanel.getComponent('itemDetailsdiv'+treeIndex).getTopToolbar();
     							if (!(tbDetail.baseOptions&O_SAVE))
     							{
-    								tbDetail.baseOptions |= O_SAVE|O_SAVE_QUIT; 
+    								tbDetail.baseOptions |= O_SAVE|O_SAVE_QUIT|O_DUPLICATE; 
     								initToolBar(tbDetail, tbDetail.currentMode);
     							}
     						}
@@ -1004,6 +1077,9 @@ amalto.itemsbrowser.ItemsBrowser = function () {
     					fnCallback();
         			});
         		};
+    			
+    			}
+        		
     	
     			
         		var root = itemTree.getRoot();	
@@ -1018,6 +1094,10 @@ amalto.itemsbrowser.ItemsBrowser = function () {
         		
         		tbDetail.logicalDelItemHandler = function() {
         			logicalDelItem(ids, dataObject, treeIndex);
+        		};
+        		
+        		tbDetail.duplicateItemHandler = function() {
+        			duplicateItem(ids, dataObject);
         		};
         		
         		ItemsBrowserInterface.checkIfTransformerExists(dataObject, language, function(result){
@@ -1272,6 +1352,11 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 			}
 			logicalDelOneItem(ids,dataObject, treeIndex);
 		};
+	}
+	
+	function duplicateItem(ids, dataObject){
+		var itemPK = ids.split('@');
+		displayItemDetailsWithMask(itemPK,dataObject,true);
 	}
 
 	/**
