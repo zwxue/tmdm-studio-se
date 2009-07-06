@@ -39,8 +39,6 @@ public class XSDDeleteConceptWrapAction extends UndoAction{
 		super(page);
 		viewer = page.getTreeViewer();
 		setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
-
-		
 	}
 	
 	public void regisDelAction(Class cls, UndoAction action)
@@ -302,6 +300,17 @@ public class XSDDeleteConceptWrapAction extends UndoAction{
 			}
 		}
 		return isConcept;
+	}
+	
+	public boolean checkOutAllConcept(Object[] selections)
+	{
+		for (Object obj: selections)
+		{
+			if (!(obj instanceof XSDElementDeclaration))return false;
+			if (!checkConcept((XSDElementDeclaration)obj)) return false;
+		}
+		
+		return true;
 	}
 	
 	public Action outPutDeleteActions() {
