@@ -303,10 +303,10 @@ public class ItemsBrowserDWR {
 	 * @return an array of TreeNode
 	 */
 	public TreeNode[] getChildren(int id, int nodeCount, String language, boolean foreignKey, int docIndex){
-		return getChildrenWithMask( id, nodeCount, language, foreignKey, docIndex, false);
+		return getChildrenWithKeyMask(id, nodeCount, language, foreignKey, docIndex, false);
 	}
 	
-	public TreeNode[] getChildrenWithMask(int id, int nodeCount, String language, boolean foreignKey, int docIndex, boolean maskKey){
+	public TreeNode[] getChildrenWithKeyMask(int id, int nodeCount, String language, boolean foreignKey, int docIndex, boolean maskKey){
 		WebContext ctx = WebContextFactory.get();	
 		HashMap<Integer,XSParticle> idToParticle = 
 			(HashMap<Integer,XSParticle>) ctx.getSession().getAttribute("idToParticle");
@@ -494,9 +494,21 @@ public class ItemsBrowserDWR {
 				}
     		}
     		if(maskKey&&treeNode.isKey()){
+    			String oldPath=treeNode.getValue();
     			treeNode.setValue("");
     			treeNode.setReadOnly(false);
+    			
+    			HashMap<String,UpdateReportItem> updatedPath;
+    			if(ctx.getSession().getAttribute("updatedPath")!=null){
+    				updatedPath = (HashMap<String,UpdateReportItem>) ctx.getSession().getAttribute("updatedPath");
+    			}				
+    			else{
+    				updatedPath = new HashMap<String,UpdateReportItem>();
+    			}
+    			ctx.getSession().setAttribute("updatedPath",updatedPath);
+    			updatedPath.put(xpath, new UpdateReportItem(xpath,oldPath,""));
     		}
+    		
 		}		
 
 		return list.toArray(new TreeNode[list.size()]); 
@@ -546,6 +558,27 @@ public class ItemsBrowserDWR {
 			return "Error";
 		}
 //		System.out.println("xml"+CommonDWR.getXMLStringFromDocument(d));
+	}
+	
+	public void updateKeyNodesToEmptyInItemDocument(int docIndex) throws TransformerException{
+		WebContext ctx = WebContextFactory.get();
+		String[] keys = (String[]) ctx.getSession().getAttribute("foreignKeys");
+		for (int i = 0; i < keys.length; i++) {
+			try {
+				Document d = (Document) ctx.getSession().getAttribute("itemDocument" + docIndex);
+				//Document d2 = checkNode(keys[i], d);
+				String oldValue = Util.getFirstTextNode(d, keys[i]);
+				if (oldValue == null)
+					Util.getNodeList(d, keys[i]).item(0).appendChild(
+							d.createTextNode(""));
+				else
+					Util.getNodeList(d, keys[i]).item(0).getFirstChild()
+							.setNodeValue("");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+				
+		}
 	}
 	
 
@@ -1095,7 +1128,7 @@ public class ItemsBrowserDWR {
 							new WSDataModelPK("UpdateReport")));
 			org.apache.log4j.Logger.getLogger(ItemsBrowserDWR.class).debug(
 					"pushUpdateReport() "+xml2);
-			Util.getPort().routeItemV2(new WSRouteItemV2(itemPK));
+			//Util.getPort().routeItemV2(new WSRouteItemV2(itemPK));
 			return "OK";
 		} catch (RemoteException e) {			
 			e.printStackTrace();
