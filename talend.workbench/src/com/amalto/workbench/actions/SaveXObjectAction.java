@@ -2,10 +2,14 @@ package com.amalto.workbench.actions;
 
 import java.net.URL;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Event;
 
+import com.amalto.workbench.dialogs.ErrorExceptionDialog;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
@@ -120,12 +124,13 @@ public class SaveXObjectAction extends Action{
             }
 
 		} catch (Exception e) {
+			
 			e.printStackTrace();
-			MessageDialog.openError(
-					this.editor.getSite().getShell(),
+			ErrorExceptionDialog.openError(
+					this.editor.getSite().getShell(), 
 					"Error Occured on Saving", 
 					"An error occured trying to save the "+IConstants.TALEND+" object instance: "+e.getLocalizedMessage()
-			);
+					);
 		}		
 	}
 	public void runWithEvent(Event event) {
