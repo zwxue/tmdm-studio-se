@@ -104,7 +104,7 @@ public class XSDNewElementAction extends UndoAction implements SelectionListener
        		page.getTreeViewer().refresh(true);
        		//page.markDirty();
        		
-       		Action changeAction = null;
+       		UndoAction changeAction = null;
        		if (dlg.isComplexType()) {
 				changeAction = new XSDChangeToComplexTypeAction(page, decl, dlg
 						.getComplexType(), dlg.isChoice(), dlg.isAll());
@@ -115,7 +115,7 @@ public class XSDNewElementAction extends UndoAction implements SelectionListener
        		}
 			dlg.close();
 
-			changeAction.run();
+			changeAction.doAction();
 		}
 	}
 }
