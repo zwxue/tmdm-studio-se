@@ -63,7 +63,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
     /**
      * Error message string.
      */
-    private String errorMessage;
+    private String errorMessage="";
     
     private  Label label;
     private Button transformeButton;
@@ -127,7 +127,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
     /*
      * (non-Javadoc) Method declared on Dialog.
      */
-    protected Control createDialogArea(Composite parent) {
+    protected Control createDialogArea(final Composite parent) {
         // create composite
         composite = (Composite) super.createDialogArea(parent);
         GridLayout layout = (GridLayout)composite.getLayout();
@@ -137,7 +137,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
 		
         // create message
         if (message != null) {
-        	label = new Label(composite, SWT.WRAP);
+        	label = new Label(composite, SWT.NONE);
             label.setText(message);
             label.setLayoutData(new GridData(SWT.FILL,SWT.CENTER,false,false,2,1));
             label.setFont(parent.getFont());
@@ -194,6 +194,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
     				label.setText(message);
     				smartViewSelected = false;
     				openDLG.setVisible(false);
+    				parent.layout(true);
     			}
     			
     		});
