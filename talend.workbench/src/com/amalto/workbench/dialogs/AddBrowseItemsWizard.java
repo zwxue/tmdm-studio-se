@@ -42,6 +42,7 @@ import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.webservices.WSDeleteView;
 import com.amalto.workbench.webservices.WSGetRole;
 import com.amalto.workbench.webservices.WSPutRole;
 import com.amalto.workbench.webservices.WSPutView;
@@ -50,6 +51,7 @@ import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.WSRoleSpecification;
 import com.amalto.workbench.webservices.WSRoleSpecificationInstance;
 import com.amalto.workbench.webservices.WSView;
+import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.ComplexTableViewer;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
@@ -139,6 +141,12 @@ public class AddBrowseItemsWizard extends Wizard{
             	view.setViewableBusinessElements(keys.toArray(new String[]{}));
             	view.setDescription("[EN:" + decl.getName() + "]");
             	wrap.setWsView(view);
+            	
+            	WSDeleteView delView = new WSDeleteView();
+            	WSViewPK viewPk = new WSViewPK();
+            	viewPk.setPk(browseItem);
+            	delView.setWsViewPK(viewPk);
+            	port.deleteView(delView);
     			port.putView(wrap);
     		}
     	}
