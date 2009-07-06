@@ -6,7 +6,6 @@
  */
 package com.amalto.workbench.editors;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
@@ -25,6 +24,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
+import com.amalto.workbench.dialogs.ErrorExceptionDialog;
 import com.amalto.workbench.utils.WidgetUtils;
 import com.amalto.workbench.webservices.WSDataModel;
 
@@ -122,7 +122,7 @@ public class DataModelEditorPage extends AFormPage implements ITextListener{
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page", "Error refreshing the page: "+e.getLocalizedMessage());
+			ErrorExceptionDialog.openError(this.getSite().getShell(), "Error refreshing the page", "Error refreshing the page: "+e.getLocalizedMessage());
 		}    	
 	}
 	
@@ -140,7 +140,7 @@ public class DataModelEditorPage extends AFormPage implements ITextListener{
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			MessageDialog.openError(this.getSite().getShell(), "Error comitting the page", "Error comitting the page: "+e.getLocalizedMessage());
+			ErrorExceptionDialog.openError(this.getSite().getShell(), "Error comitting the page", "Error comitting the page: "+e.getLocalizedMessage());
 		}    	
 	}
 		
