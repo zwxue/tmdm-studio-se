@@ -64,6 +64,7 @@ public class ComplexTableViewer {
 	protected Button upButton;
 	protected Button deleteButton;
 	
+	private ComplexTableViewerColumn[] keyColumns;
 	private boolean editable = true;	
 	private static String ERROR_ITEMALREADYEXISTS_CONTENT = "This line already Exists!";
 	private static String ERROR_ITEMALREADYEXISTS_TITLE   = "Warning";
@@ -76,7 +77,11 @@ public class ComplexTableViewer {
 	public void setMainPage(AMainPageV2 mainPage) {
 		this.mainPage = mainPage;
 	}
-
+    
+	public void setKeyColumns(ComplexTableViewerColumn[] keyIndex) {
+		keyColumns = keyIndex;
+	}
+	
 	public void setEditable(boolean editable)
 	{
 		this.editable = editable;
@@ -159,7 +164,10 @@ public class ComplexTableViewer {
 			ComplexTableViewerColumn column = iterator.next();
 			if (column.isCombo()) {
 				CCombo combo = new CCombo(mainComposite,SWT.BORDER|SWT.READ_ONLY);
-				combo.setLayoutData(new GridData(SWT.NONE,SWT.TOP,false,false,1,1));
+				GridData gd = new GridData(SWT.NONE,SWT.TOP,false,false,1,1);
+				if (column.getColumnWidth() > 0)
+					gd.widthHint = column.getColumnWidth();
+				combo.setLayoutData(gd);
 				combo.setItems(column.getComboValues());
 				if(column.getDefaultValue() ==null ||column.getDefaultValue().length()==0){
 					combo.select(0);
@@ -202,6 +210,7 @@ public class ComplexTableViewer {
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 
         		String uniqueVal="";
+        		String keyVal = "";
            		//Make sure texts are not nill (empty) where not authorized
         		for (Iterator<ComplexTableViewerColumn> iterator = columns.iterator(); iterator.hasNext(); ) {
         			ComplexTableViewerColumn column = iterator.next();
@@ -228,6 +237,10 @@ public class ComplexTableViewer {
         					return ;
         				}
         			}
+        			if (keyColumns != null && Arrays.asList(keyColumns).indexOf(column) >= 0)
+        			{
+        				keyVal +=text;
+        			}
         			uniqueVal+="."+text;
         		}
         		
@@ -238,7 +251,7 @@ public class ComplexTableViewer {
         			for(KeyValue keyvalue:line.keyValues){
         				thisLineVal+="."+keyvalue.value;
         			}
-        			if(thisLineVal.equals(uniqueVal)){
+        			if(thisLineVal.equals(uniqueVal) || (keyVal.length() > 0 && thisLineVal.indexOf(keyVal) >= 0)){
         				MessageDialog.openInformation(null, ERROR_ITEMALREADYEXISTS_TITLE, ERROR_ITEMALREADYEXISTS_CONTENT);
         				return ;
         			}
@@ -268,12 +281,18 @@ public class ComplexTableViewer {
         ((GridData)viewer.getControl().getLayoutData()).heightHint=60;
         
         //table.setLayoutData(new GridData(GridData.FILL_BOTH));
+
         for(ComplexTableViewerColumn column:columns){
         	TableColumn tableColumn=new TableColumn(table, SWT.CENTER);
         	tableColumn.setText(column.getName());
-        	tableColumn.setWidth(200);
-        	tableColumn.pack();
+        	if (column.getColumnWidth() > 0) {
+				tableColumn.setWidth(column.getColumnWidth());
+			} else {
+				tableColumn.setWidth(200);
+				tableColumn.pack();
+			}
         }  
+        
         table.setHeaderVisible(true);
         table.setLinesVisible(true);
        // Up Down Delete button group

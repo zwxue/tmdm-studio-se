@@ -12,7 +12,7 @@ public class ComplexTableViewerColumn {
 	private boolean isCombo = false;
 	private String[] comboValues = new String[0];
 	private int textLines = 1;
-	
+	private int columnWidth = 0;
 	//The actual control
 	private Control control;
 	
@@ -135,6 +135,16 @@ public class ComplexTableViewerColumn {
 		this.isComboEditable = isComboEditable;
 	}
 
+	public void setColumnWidth(int width)
+	{
+		columnWidth = width;
+	}
+	
+	public int getColumnWidth()
+	{
+		return columnWidth;
+	}
+	
 	public boolean isForceTextCellEditor() {
 		return forceTextCellEditor;
 	}
