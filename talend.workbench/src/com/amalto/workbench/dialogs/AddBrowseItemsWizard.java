@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
+import org.eclipse.xsd.XSDXPathDefinition;
 
 import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.models.IXObjectModelListener;
@@ -60,6 +61,7 @@ public class AddBrowseItemsWizard extends Wizard{
 	private List<XSDElementDeclaration> declList = new ArrayList<XSDElementDeclaration>();
 	private Map<String, List<Line>>  browseItemToRoles = new HashMap<String , List<Line>>();
 	private static String INSTANCE_NAME = "Browse Item View";
+	private static String BROWSE_ITEMS = "Browse_items_";
 	
 	private static ComplexTableViewerColumn[] roleConfigurationColumns= new ComplexTableViewerColumn[]{
 		new ComplexTableViewerColumn("Role Name", false, "", "", "",true,new String[] {},0),
@@ -72,7 +74,7 @@ public class AddBrowseItemsWizard extends Wizard{
 		page = launchPage;
 		declList = list;
 		for (XSDElementDeclaration dl : declList) {
-			browseItemToRoles.put("Browse_item_" + dl.getName(), new ArrayList<Line>());
+			browseItemToRoles.put(BROWSE_ITEMS + dl.getName(), new ArrayList<Line>());
 		}
 	}
 	
@@ -114,7 +116,7 @@ public class AddBrowseItemsWizard extends Wizard{
     {
     	for (XSDElementDeclaration decl: declList)
     	{
-    		String fullName = "Browse_item_" + decl.getName();
+    		String fullName = BROWSE_ITEMS + decl.getName();
     		if (fullName.equals(browseItem))
     		{
     			XtentisPort port = getXtentisPort();
@@ -124,11 +126,18 @@ public class AddBrowseItemsWizard extends Wizard{
             	EList<XSDIdentityConstraintDefinition> idtylist = decl.getIdentityConstraintDefinitions();
             	List<String> keys = new ArrayList<String>();
             	for (XSDIdentityConstraintDefinition idty : idtylist) {
-					keys.add(idty.getName());
+            		 EList<XSDXPathDefinition> xpathList = idty.getFields();
+            		 for (XSDXPathDefinition path: xpathList)
+            		 {
+                 		String key = decl.getName();
+            			 key += "/" + path.getValue();
+            			 keys.add(key);
+            		 }
+					
 				}
             	view.setSearchableBusinessElements(keys.toArray(new String[]{}));
             	view.setViewableBusinessElements(keys.toArray(new String[]{}));
-            	view.setDescription(decl.getName());
+            	view.setDescription("[EN:" + decl.getName() + "]");
             	wrap.setWsView(view);
     			port.putView(wrap);
     		}
@@ -230,7 +239,7 @@ public class AddBrowseItemsWizard extends Wizard{
 	          		ArrayList<String> values = new ArrayList<String>();
 	          		for (XSDElementDeclaration decl: declList) {
 							String name = decl.getName();
-							name = "Browse_item_" + name;
+							name = BROWSE_ITEMS + name;
 							values.add(name);
 						}
 	          		//we return an instance line made of a Sring and a boolean
