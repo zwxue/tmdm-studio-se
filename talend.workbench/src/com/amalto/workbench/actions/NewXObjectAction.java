@@ -102,7 +102,7 @@ public class NewXObjectAction extends Action{
         					(TreeParent)view.getRoot().getChildren()[0].findServerFolder(TreeObject.TRANSFORMER),
         					view.getSite().getShell(),
 	           				"New "+IConstants.TALEND+" Object Instance",
-	           				"Enter a Name for the New Instance",
+	           				"Enter a Name for the New Instance                       ",
 	           				"Smart_view_",
 	           				new IInputValidator() {
 	           					public String isValid(String newText) {
@@ -117,7 +117,7 @@ public class NewXObjectAction extends Action{
 	           		);
         			vid.setBtnShow(false);
         			vid.create();
-        			vid.getShell().setSize(new Point(500,220));
+        			//vid.getShell().setSize(new Point(500,270));
         			vid.setBlockOnOpen(true);
 	           		if (vid.open() == Window.CANCEL) return;
 	           		key  = vid.getValue();
