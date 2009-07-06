@@ -54,6 +54,7 @@ import org.eclipse.ui.forms.widgets.Hyperlink;
 
 import com.amalto.workbench.actions.EditXObjectAction;
 import com.amalto.workbench.dialogs.DOMViewDialog;
+import com.amalto.workbench.dialogs.ErrorExceptionDialog;
 import com.amalto.workbench.dialogs.QueryParametersDialog;
 import com.amalto.workbench.dialogs.TextViewDialog;
 import com.amalto.workbench.models.TreeObject;
@@ -362,7 +363,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener{
         					"Error",
         					"Unable to execute the procedure:\n"+
         					ex.getClass().getName()+": "+ex.getMessage()
-        			);
+        					);
         		}
 			}
 		});

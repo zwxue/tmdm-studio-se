@@ -110,6 +110,7 @@ import com.amalto.workbench.actions.XSDSetAnnotationSourceSystemAction;
 import com.amalto.workbench.actions.XSDSetAnnotationTargetSystemsAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
 import com.amalto.workbench.dialogs.DataModelFilterDialog;
+import com.amalto.workbench.dialogs.ErrorExceptionDialog;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.providers.XSDTreeLabelProvider;
@@ -539,7 +540,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			//viewer.refresh(true);
 		} catch (Exception e) {
 			e.printStackTrace();
-			MessageDialog.openError(this.getSite().getShell(),
+			ErrorExceptionDialog.openError(this.getSite().getShell(),
 					"Error refreshing the page", "Error refreshing the page: "
 							+ e.getLocalizedMessage());
 		}
@@ -555,7 +556,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			wsObject.setXsdSchema(schema);
 		} catch (Exception e) {
 			e.printStackTrace();
-			MessageDialog.openError(this.getSite().getShell(),
+			ErrorExceptionDialog.openError(this.getSite().getShell(),
 					"Error committing the page", "Error committing the page: "
 							+ e.getLocalizedMessage());
 		}
