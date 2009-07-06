@@ -932,12 +932,13 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	    displayItemDetails2(itemPK2, dataObject, false);
 	}
 	
-	function displayItemDetailsWithMask(itemPK2, dataObject){
+	function displayItemDetails4Duplicate(itemPK2, dataObject){
 		
 	    displayItemDetails2(itemPK2, dataObject, true);
+	    
 	}
 	
-	function displayItemDetails2(itemPK2, dataObject, maskKeys){
+	function displayItemDetails2(itemPK2, dataObject, isDuplicate){
 		loadResource("/itemsbrowser/secure/js/ItemNode.js", "amalto.itemsbrowser.ItemNode" );
 		//alert("display items "+DWRUtil.toDescriptiveString(itemPK2,2)+" "+ dataObject);
 		amalto.core.working();
@@ -959,7 +960,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		}
 		
 		//add for duplicate case
-		if(maskKeys){
+		if(isDuplicate){
 		   newItem[treeIndex] = true;
 		}
 	
@@ -1014,41 +1015,41 @@ amalto.itemsbrowser.ItemsBrowser = function () {
     			itemTreeList[treeIndex] = itemTree;
     		    
     			//add for duplicate case
-    			if(maskKeys==true){
-    				
-	    			var fnLoadData = function(oNode, fnCallback) {
-	    				//getChildren(oNode.index,fnCallback, false, newItem, itemTree, treeIndex);
-	    				ItemsBrowserInterface.getChildrenWithMask(oNode.index, YAHOO.widget.TreeView.nodeCount, language, false, treeIndex,true,function(result){
-	    					if(result==null) {
-	    						fnCallback();
-	    						return;
-	    					}
-	    	
-	    					for(var i=0; i<result.length; i++) {
-	    						var readOnly = (result[i].readOnly==true || (result[i].key==true && newItem[treeIndex]==false));
-	    						if (!readOnly)
-	    						{
-	    							//var tbDetail = tabPanel.getComponent('itemDetailsdiv'+treeIndex).getTopToolbar();
-	    							if (!(tbDetail.baseOptions&O_SAVE))
-	    							{
-	    								tbDetail.baseOptions |= O_SAVE|O_SAVE_QUIT|O_DUPLICATE; 
-	    								initToolBar(tbDetail, tbDetail.currentMode);
-	    							}
-	    						}
-	    	
-	    						var tmp = new amalto.itemsbrowser.ItemNode(result[i],newItem[treeIndex],treeIndex,
-	    									itemTree.getNodeByIndex(oNode.index),false,true);
-	    						//new Ext.form.TextField({applyTo:result[i].nodeId+'Value'});
-	    						if(result[i].type=="simple") tmp.setDynamicLoad();
-	    						else tmp.setDynamicLoad(fnLoadData, 1);
-	    					}
-	    					fnCallback();
-	        			});
-	        		};
-	        		
-    			}else{
-    				
-    				var fnLoadData = function(oNode, fnCallback) {
+				if(isDuplicate){
+					
+				   var fnLoadData = function(oNode, fnCallback) {
+    				//getChildren(oNode.index,fnCallback, false, newItem, itemTree, treeIndex);
+    				ItemsBrowserInterface.getChildrenWithKeyMask(oNode.index, YAHOO.widget.TreeView.nodeCount, language, false, treeIndex,true,function(result){
+    					if(result==null) {
+    						fnCallback();
+    						return;
+    					}
+    	
+    					for(var i=0; i<result.length; i++) {
+    						var readOnly = (result[i].readOnly==true || (result[i].key==true && newItem[treeIndex]==false));
+    						if (!readOnly)
+    						{
+    							//var tbDetail = tabPanel.getComponent('itemDetailsdiv'+treeIndex).getTopToolbar();
+    							if (!(tbDetail.baseOptions&O_SAVE))
+    							{
+    								tbDetail.baseOptions |= O_SAVE|O_SAVE_QUIT|O_DUPLICATE; 
+    								initToolBar(tbDetail, tbDetail.currentMode);
+    							}
+    						}
+    	
+    						var tmp = new amalto.itemsbrowser.ItemNode(result[i],newItem[treeIndex],treeIndex,
+    									itemTree.getNodeByIndex(oNode.index),false,true);
+    						//new Ext.form.TextField({applyTo:result[i].nodeId+'Value'});
+    						if(result[i].type=="simple") tmp.setDynamicLoad();
+    						else tmp.setDynamicLoad(fnLoadData, 1);
+    					}
+    					fnCallback();
+        			});
+        		  };
+        		  
+				}else{
+					
+					var fnLoadData = function(oNode, fnCallback) {
     				//getChildren(oNode.index,fnCallback, false, newItem, itemTree, treeIndex);
     				ItemsBrowserInterface.getChildren(oNode.index, YAHOO.widget.TreeView.nodeCount, language, false, treeIndex,function(result){
     					if(result==null) {
@@ -1076,11 +1077,13 @@ amalto.itemsbrowser.ItemsBrowser = function () {
     					}
     					fnCallback();
         			});
-        		};
+        		  };
+				
+				}
+    				
     			
-    			}
-        		
-    	
+    			
+    			
     			
         		var root = itemTree.getRoot();	
         		var nameTmp = dataObject;
@@ -1140,11 +1143,22 @@ amalto.itemsbrowser.ItemsBrowser = function () {
     				tbDetail.baseOptions |= O_DELETE|O_LOGICAL_DEL;	
     			}		
     	
-    			ItemsBrowserInterface.setTree(dataObject, itemPK2, node1.index, false, treeIndex, function(result){
+    			//add for duplicate case
+				if(isDuplicate){
+					ItemsBrowserInterface.setTree(dataObject, itemPK2, node1.index, false, treeIndex, function(result){
     				node1.setDynamicLoad(fnLoadData,1);
     				node1.expand();
     				itemTree.draw();
-    			});
+    				ItemsBrowserInterface.updateKeyNodesToEmptyInItemDocument(treeIndex);
+    			    });
+				}else{
+					ItemsBrowserInterface.setTree(dataObject, itemPK2, node1.index, false, treeIndex, function(result){
+    				node1.setDynamicLoad(fnLoadData,1);
+    				node1.expand();
+    				itemTree.draw();
+    			    });
+				}
+    			
     		
     			var contentPanel = new Ext.Panel({
     				id:'itemDetailsdiv'+treeIndex, 
@@ -1170,6 +1184,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		});
 		
 		amalto.core.ready();
+		
 	}
 	
 	
@@ -1356,7 +1371,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	
 	function duplicateItem(ids, dataObject){
 		var itemPK = ids.split('@');
-		displayItemDetailsWithMask(itemPK,dataObject,true);
+		displayItemDetails4Duplicate(itemPK,dataObject,true);
 	}
 
 	/**
