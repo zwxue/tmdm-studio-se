@@ -101,8 +101,8 @@ public class NewXObjectAction extends Action{
         					view.getSite(),
         					(TreeParent)view.getRoot().getChildren()[0].findServerFolder(TreeObject.TRANSFORMER),
         					view.getSite().getShell(),
-	           				"New "+IConstants.TALEND+" Object Instance",
-	           				"Enter a Name for the New Instance                       ",
+	           				"New "+IConstants.TALEND+" Object Instance",	           				
+	           				"Enter a Name for the New Instance                                           ",
 	           				"Smart_view_",
 	           				new IInputValidator() {
 	           					public String isValid(String newText) {
