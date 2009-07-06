@@ -91,6 +91,7 @@ import com.amalto.workbench.actions.XSDEditIdentityConstraintAction;
 import com.amalto.workbench.actions.XSDEditParticleAction;
 import com.amalto.workbench.actions.XSDEditXPathAction;
 import com.amalto.workbench.actions.XSDGetXPathAction;
+import com.amalto.workbench.actions.XSDNewBrowseItemViewAction;
 import com.amalto.workbench.actions.XSDNewConceptAction;
 import com.amalto.workbench.actions.XSDNewElementAction;
 import com.amalto.workbench.actions.XSDNewGroupFromParticleAction;
@@ -128,6 +129,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	private XSDNewConceptAction newConceptAction = null;
 	private XSDDeleteConceptAction deleteConceptAction = null;
 	private XSDDeleteConceptWrapAction deleteConceptWrapAction = null;
+	private XSDNewBrowseItemViewAction newBrowseItemAction = null;
 	private XSDNewElementAction newElementAction = null;
 	private XSDDeleteElementAction deleteElementAction = null;
 	private XSDChangeToComplexTypeAction changeToComplexTypeAction = null;
@@ -562,6 +564,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	protected void createActions() {
 		this.newConceptAction = new XSDNewConceptAction(this);
 		this.deleteConceptAction = new XSDDeleteConceptAction(this);
+		this.newBrowseItemAction = new XSDNewBrowseItemViewAction(this);
 		this.deleteConceptWrapAction = new XSDDeleteConceptWrapAction(this);
 		this.newElementAction = new XSDNewElementAction(this);
 		this.deleteElementAction = new XSDDeleteElementAction(this);
@@ -642,6 +645,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			if (isConcept) {
 				manager.add(editConceptAction);
 				manager.add(deleteConceptAction);
+				manager.add(newBrowseItemAction);
 			} else {
 				manager.add(editElementAction);
 				manager.add(deleteElementAction);
@@ -739,6 +743,8 @@ public class DataModelMainPage extends AMainPageV2 {
 		if (selectedObjs.length > 1
 				&& deleteConceptWrapAction.outPutDeleteActions() != null) {
 			manager.add(deleteConceptWrapAction.outPutDeleteActions());
+			if (deleteConceptWrapAction.checkOutAllConcept(selectedObjs))
+				manager.add(newBrowseItemAction);
 		}
 		
 		manager.add(new Separator());

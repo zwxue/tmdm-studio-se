@@ -813,6 +813,7 @@ public class Util {
 				continue;
 			}
 			XSDElementDeclaration decl = (XSDElementDeclaration) top;
+			if (decl == son) return decl;
 			if (decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
 				XSDComplexTypeDefinition type = (XSDComplexTypeDefinition) decl
 						.getTypeDefinition();
