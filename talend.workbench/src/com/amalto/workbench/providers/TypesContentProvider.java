@@ -78,7 +78,15 @@ public class TypesContentProvider implements IStructuredContentProvider, ITreeCo
 
 		if (parent instanceof XSDSchema) {
 			EList xsdElementDeclarations = xsdSchema.getTypeDefinitions();
-			
+//			List<XSDTypeDefinition> list=new ArrayList<XSDTypeDefinition>();
+//			if(filter!=null && !filter.isAll()){
+//				for(XSDTypeDefinition el: (XSDTypeDefinition[])xsdElementDeclarations.toArray(new XSDElementDeclaration[xsdElementDeclarations.size()] )){
+//					if(isInclude( el.getAnnotation())){
+//						list.add(el);
+//					}					
+//				}
+//				return list.toArray(new XSDTypeDefinition[list.size()]);
+//			}
 			return xsdElementDeclarations.toArray(new XSDTypeDefinition[xsdElementDeclarations.size()] );
 		}
 		

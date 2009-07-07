@@ -317,8 +317,10 @@ public class DataModelMainPage extends AMainPageV2 {
 					}					 
 					 if(dataModelFilterDialog.open()== Dialog.OK){	
 						 ((XSDTreeContentProvider)viewer.getContentProvider()).setFilter(dataModelFilter);						 
-						 //viewer.setAutoExpandLevel(3);
 						 viewer.setInput(getSite());
+						 
+//						 ((TypesContentProvider)typesViewer.getContentProvider()).setFilter(dataModelFilter);						 
+//						 typesViewer.setInput(getSite());
 					 }
 				}
 			});
