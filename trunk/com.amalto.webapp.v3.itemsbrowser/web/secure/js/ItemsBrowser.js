@@ -290,6 +290,14 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		'fr':'clone the selected item',
 		'en':'clone the selected item'
 	}
+	var SAVE_TOOLTIP={
+		'fr':'Save this object',
+		'en':'Save this object'
+	} 		
+	var SAVEANDCLOSE_TOOLTIP={
+		'fr':'Save this object and close the tab',
+		'en':'Save this object and close the tab'
+	}
 	/*****************
 	 * EXT 2.0
 	 *****************/
@@ -862,7 +870,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 				nbButtons++;
 			}
 	
-			toolbar.addButton( {text: BUTTON_SAVE[language], className: 'tb-button tb-button-nude', handler: toolbar.saveItemHandler});
+			toolbar.addButton( {tooltip:SAVE_TOOLTIP[language],text: BUTTON_SAVE[language], className: 'tb-button tb-button-nude', handler: toolbar.saveItemHandler});
 			nbButtons++;
 		}
 	
@@ -875,7 +883,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 				nbButtons++;
 			}
 	
-			toolbar.addButton( {text: BUTTON_SAVE_AND_QUIT[language], className: 'tb-button tb-button-nude', handler: toolbar.saveItemAndQuitHandler});
+			toolbar.addButton( {tooltip:SAVEANDCLOSE_TOOLTIP[language],text: BUTTON_SAVE_AND_QUIT[language], className: 'tb-button tb-button-nude', handler: toolbar.saveItemAndQuitHandler});
 			nbButtons++;
 		}
 		
