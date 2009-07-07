@@ -91,8 +91,17 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 	protected boolean version_greater_than_2_17_0 = false;
 	
 	private static String ROUTE_SERVICE = "amalto/local/service/";
+	private String dataModelName;
 	
-    public RoutingRuleMainPage(FormEditor editor) {
+    public String getDataModelName() {
+		return dataModelName;
+	}
+
+	public void setDataModelName(String dataModelName) {
+		this.dataModelName = dataModelName;
+	}
+
+	public RoutingRuleMainPage(FormEditor editor) {
         super(
         		editor,
         		RoutingRuleMainPage.class.getName(),
@@ -318,11 +327,12 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
             	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
             		addRoutingRuleExpression();
+            		dataModelName=xpathWidget.getDataModelName();
             	};
             });
             
             //xPathWidget
-            xpathWidget = new XpathWidget("...",treeParent, toolkit, routingExpressionsComposite,(AMainPageV2)RoutingRuleMainPage.this,true,false);
+            xpathWidget = new XpathWidget("...",treeParent, toolkit, routingExpressionsComposite,(AMainPageV2)RoutingRuleMainPage.this,true,false,dataModelName);
             //operator
             operatorCombo = new Combo(routingExpressionsComposite,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
             operatorCombo.setLayoutData(
