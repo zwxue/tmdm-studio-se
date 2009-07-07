@@ -45,6 +45,7 @@ import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDElementDeclaration;
+import org.eclipse.xsd.XSDIdentityConstraintCategory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
@@ -837,6 +838,22 @@ public class Util {
 		return null;
     }
     
+    
+	public static boolean checkConcept(XSDElementDeclaration decl) {
+		boolean isConcept = false;
+		EList l = decl.getIdentityConstraintDefinitions();
+		for (Iterator iter = l.iterator(); iter.hasNext();) {
+			XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) iter
+					.next();
+			if (icd.getIdentityConstraintCategory().equals(
+					XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
+				isConcept = true;
+				break;
+			}
+		}
+		return isConcept;
+	}
+	
     public static Object[] getAllObject(Object elem, ArrayList<Object> objList, IStructuredContentProvider provider) {
 
 		Object[] elems = provider.getElements(elem);
