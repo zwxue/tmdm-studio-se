@@ -83,7 +83,7 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
         		"",						//Nill display
         		"text/xml",				//Default Value
         		true,					//is Combo ?
-        		new String[] {"text/xml", "text/plain"}, //Combo Values
+        		new String[] {"text/xml", "text/plain","application/xtentis.itempk"}, //Combo Values
         		0						//Text Lines
         	),
         	new ComplexTableViewerColumn(
