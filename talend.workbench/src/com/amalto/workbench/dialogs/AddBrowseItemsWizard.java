@@ -236,9 +236,9 @@ public class AddBrowseItemsWizard extends Wizard{
 	          table.setHeaderVisible(true);
 	          table.setLinesVisible(true);
 	          
-	          CellEditor[] editors = new CellEditor[1];
-	          editors[0] = new TextCellEditor(table);
-	          browseViewer.setCellEditors(editors);
+//	          CellEditor[] editors = new CellEditor[1];
+//	          editors[0] = new TextCellEditor(table);
+//	          browseViewer.setCellEditors(editors);
 	          
 	          browseViewer.setContentProvider(new IStructuredContentProvider() {
 	          	public void dispose() {}
