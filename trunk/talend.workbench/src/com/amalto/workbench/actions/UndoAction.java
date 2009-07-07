@@ -92,10 +92,10 @@ public  class UndoAction extends Action {
 	
 	protected IStatus execute(){
 		System.out.println(getText()+" execute....");
-		beforeDoAction();
+		String oldValue = beforeDoAction();
 		
 		if (doAction() == Status.CANCEL_STATUS) {
-			cancelDoAction();
+			cancelDoAction(oldValue);
 			return Status.CANCEL_STATUS;
 		}
 		
@@ -103,10 +103,10 @@ public  class UndoAction extends Action {
 		return Status.OK_STATUS;
 	}
 	
-	protected void beforeDoAction()
+	protected String beforeDoAction()
 	{
         schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
-        commitDocumentToHistory(schema.getDocument());
+        return commitDocumentToHistory(schema.getDocument());
 	}
 	
 	protected void afterDoAction()
@@ -114,18 +114,24 @@ public  class UndoAction extends Action {
    		commitDocumentToCurrent(schema.getDocument());
 	}
 	
-    protected void cancelDoAction()
+    protected void cancelDoAction(String oldValue)
     {
 		removeDocumentFromHistory();
+		if (oldValue != null) {
+			undoActionTrack.put(getActionUndoPos(), oldValue);
+		}
     }
     
-	protected void commitDocumentToHistory(Document history) {
+	protected String commitDocumentToHistory(Document history) {
+		String oldValue = null;
 		try {
 			 String value = Util.nodeToString((Node)history);
+			 oldValue = undoActionTrack.get(getActionUndoPos());
 			 undoActionTrack.put(getActionUndoPos(), value);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return oldValue;
 	}
 
 	protected void removeDocumentFromHistory()
