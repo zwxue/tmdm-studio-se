@@ -36,11 +36,19 @@ public class XpathWidget implements  SelectionListener{
     private boolean readOnly=false;
     private Composite parent;
     private IWorkbenchPartSite site;
-    
+    private String dataModelName;
 
+
+	public String getDataModelName() {
+		return dataModelName;
+	}
+
+	public void setDataModelName(String dataModelName) {
+		this.dataModelName = dataModelName;
+	}
 
 	public XpathWidget(String buttonName,TreeParent treeParent,
-			FormToolkit toolkit, Composite parent, AMainPageV2 dialog,boolean isButtonLeft,boolean readOnly) {
+			FormToolkit toolkit, Composite parent, AMainPageV2 dialog,boolean isButtonLeft,boolean readOnly, String dataModelName) {
 //		if(treeParent==null){
 //			treeParent = 
 //		}
@@ -109,7 +117,7 @@ public class XpathWidget implements  SelectionListener{
 					treeParent,dlgTitle,
 					accommodation.getSite(),
 					true,
-					null
+					dataModelName
 					
 			);
 		}
@@ -120,7 +128,7 @@ public class XpathWidget implements  SelectionListener{
 					treeParent,dlgTitle,
 					site,
 					false,
-					null
+					dataModelName
 			);
 		}
 	
@@ -129,6 +137,7 @@ public class XpathWidget implements  SelectionListener{
 		
 		if (dlg.getReturnCode() == Window.OK)  {
 			descriptionText.setText(dlg.getXpath());
+			dataModelName = dlg.getDataModelName();
 			putAppendInfo("dmn", dlg.getSelectedDataModelName());
 			dlg.close();
 		}
