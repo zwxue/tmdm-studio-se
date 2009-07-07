@@ -102,7 +102,7 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
        		group.getContents().add(index+1,particle);
        		group.updateElement();
        		
-       		page.getTreeViewer().refresh(true);
+       		page.refresh();
        		page.getTreeViewer().setSelection(new StructuredSelection(particle),true);
        		page.markDirty();
        

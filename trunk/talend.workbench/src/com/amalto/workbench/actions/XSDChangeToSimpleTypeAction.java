@@ -165,7 +165,7 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
 //			}
 			
 			declNew = null;
-			page.getTreeViewer().refresh(true);
+			page.refresh();
 			page.markDirty();
 			
 		} catch (Exception e) {

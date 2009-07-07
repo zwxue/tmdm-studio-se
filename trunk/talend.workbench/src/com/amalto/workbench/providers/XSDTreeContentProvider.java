@@ -36,7 +36,7 @@ import com.amalto.workbench.utils.DataModelFilter;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
-public class XSDTreeContentProvider implements IStructuredContentProvider, ITreeContentProvider {
+public class XSDTreeContentProvider implements IStructuredContentProvider, ITreeContentProvider,ISchemaContentProvider {
 	protected XSDSchema xsdSchema;
 	IWorkbenchPartSite site = null;
 	DataModelFilter filter;
@@ -410,21 +410,10 @@ public class XSDTreeContentProvider implements IStructuredContentProvider, ITree
 	
 	public void setXsdSchema(String xsd)
 	{
-	    DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-		documentBuilderFactory.setNamespaceAware(true);
-		documentBuilderFactory.setValidating(false);
-		InputSource source = new InputSource(new StringReader(xsd));
-		DocumentBuilder documentBuilder;
-		Document document = null;
-		try {
-			documentBuilder = documentBuilderFactory.newDocumentBuilder();
-			 document = documentBuilder.parse(source);
-		}catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		xsdSchema = XSDSchemaImpl.createSchema(document.getDocumentElement());;
+		xsdSchema = Util.createXsdSchema(xsd);
+	}
+	public void setXsdSchema(XSDSchema xsdSchema){
+		this.xsdSchema=xsdSchema;
 	}
 	
 	public String getXSDSchemaAsString() throws Exception{
