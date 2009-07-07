@@ -100,6 +100,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 	private String lastDataModelName = null;
 	private String viewName=null;
 	
+	private String dataModelName = null;
+	
     public ViewMainPage(FormEditor editor) {
         super(
         		editor,
@@ -156,8 +158,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 						org.eclipse.swt.events.SelectionEvent e) {
 				};
 
-				public void widgetSelected(
-						org.eclipse.swt.events.SelectionEvent e) {
+				public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+					 dataModelName = xpathWidget0.getDataModelName();
 					if(ViewMainPage.this.xpathWidget0.getAppendInfo("dmn")!=null){
 						lastDataModelName=(String) ViewMainPage.this.xpathWidget0.getAppendInfo("dmn");
 					}
@@ -175,7 +177,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 				};
 			});
             
-            xpathWidget0 = new XpathWidget("...",treeParent, toolkit, vbeComposite, (AMainPageV2)this,true,true);
+            xpathWidget0 = new XpathWidget("...",treeParent, toolkit, vbeComposite, (AMainPageV2)this,true,true,dataModelName);
+           
 
             
             viewableBEsList = new List(vbeComposite,SWT.MULTI | SWT.V_SCROLL | SWT.BORDER);
@@ -259,13 +262,15 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             );
             Button addSBEButton = toolkit.createButton(sbeComposite,"Add",SWT.PUSH | SWT.TRAIL);
             
-            xpathWidget1 = new XpathWidget("...",treeParent, toolkit, sbeComposite, (AMainPageV2)this,true,false);
+            xpathWidget1 = new XpathWidget("...",treeParent, toolkit, sbeComposite, (AMainPageV2)this,true,false,dataModelName);
+            
             addSBEButton.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
             );
             addSBEButton.addSelectionListener(new SelectionListener() {
             	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
             	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+            		dataModelName = xpathWidget1.getDataModelName();
             		String[] items = ViewMainPage.this.xpathWidget1.getText().split("\\&");
 					for(int i=0;i<items.length;i++){
 						if (!"".equals(ViewMainPage.this.xpathWidget1.getText())&&ViewMainPage.this.searchableBEsList.indexOf(items[i])<0)
@@ -300,10 +305,11 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
             	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
             		addWhereCondition();
+            		 dataModelName = xpathWidget2.getDataModelName();
             	};
             });
             
-            xpathWidget2 = new XpathWidget("...",treeParent, toolkit, wcGroup, (AMainPageV2)this,true,false);
+            xpathWidget2 = new XpathWidget("...",treeParent, toolkit, wcGroup, (AMainPageV2)this,true,false,dataModelName);
             
             operatorCombo = new Combo(wcGroup,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
             operatorCombo.setLayoutData(

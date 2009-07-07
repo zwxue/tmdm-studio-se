@@ -87,6 +87,11 @@ public class XpathSelectDialog extends Dialog {
 	}
 	
 
+	public String getDataModelName() {
+		return dataModelName;
+	}
+
+
 	private String xpath="";
 	private String totalXpath="";
 	
@@ -180,9 +185,8 @@ public class XpathSelectDialog extends Dialog {
 			treeobject = trees[i];
 			String treeName = treeobject.getDisplayName();
 			dataModelCombo.add(treeName);
-			if(treeName.equals(dataModelName)){
+			if(treeName.equals(dataModelName))
 				t =i;
-			}
 		}
 		 final TreeParent pObject =tree;
 		 
@@ -221,6 +225,7 @@ public class XpathSelectDialog extends Dialog {
 	
 	private void changeDomTree(final TreeParent pObject) {
 		String	modelDisplay = dataModelCombo.getText();
+		this.dataModelName = modelDisplay;
 		XpathSelectDialog.this.selectedDataModelName=modelDisplay;
 		xobject = pObject.findObject(TreeObject.DATA_MODEL, modelDisplay);
 		XtentisPort	port = null;
@@ -275,7 +280,7 @@ public class XpathSelectDialog extends Dialog {
 		domViewer.addSelectionChangedListener(new ISelectionChangedListener(){
 			public void selectionChanged(SelectionChangedEvent e) {
 				StructuredSelection sel= (StructuredSelection)e.getSelection();
-				xpath=getXpath(sel);	
+				xpath=getXpath(sel);
 				xpathText.setText(xpath);
 			}
 		});
