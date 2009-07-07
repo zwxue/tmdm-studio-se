@@ -871,6 +871,7 @@ public class Util {
 						((XSDParticle) obj).updateElement();
 					}
 				}
+				if (!(((XSDParticle) obj).getContent() instanceof XSDElementDeclaration)) continue;
 				XSDElementDeclaration elem = (XSDElementDeclaration) ((XSDParticle) obj).getContent();
 				if (elem.isElementDeclarationReference())
 				{
