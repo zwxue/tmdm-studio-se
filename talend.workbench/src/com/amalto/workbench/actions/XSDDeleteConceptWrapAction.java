@@ -26,6 +26,7 @@ import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.ImageCache;
+import com.amalto.workbench.utils.Util;
 
 public class XSDDeleteConceptWrapAction extends UndoAction{
 
@@ -254,9 +255,9 @@ public class XSDDeleteConceptWrapAction extends UndoAction{
 		}
 
 		if (selects[0] instanceof XSDElementDeclaration) {
-			boolean isConcept = checkConcept((XSDElementDeclaration) selects[0]);
+			boolean isConcept = Util.checkConcept((XSDElementDeclaration) selects[0]);
 			for (Object obj : selects) {
-				if (checkConcept((XSDElementDeclaration) obj) != isConcept) {
+				if (Util.checkConcept((XSDElementDeclaration) obj) != isConcept) {
 					return false;
 				}
 			}
@@ -287,27 +288,13 @@ public class XSDDeleteConceptWrapAction extends UndoAction{
 		return true;
 	}
 	
-	public boolean checkConcept(XSDElementDeclaration decl) {
-		boolean isConcept = false;
-		EList l = decl.getIdentityConstraintDefinitions();
-		for (Iterator iter = l.iterator(); iter.hasNext();) {
-			XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) iter
-					.next();
-			if (icd.getIdentityConstraintCategory().equals(
-					XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
-				isConcept = true;
-				break;
-			}
-		}
-		return isConcept;
-	}
 	
 	public boolean checkOutAllConcept(Object[] selections)
 	{
 		for (Object obj: selections)
 		{
 			if (!(obj instanceof XSDElementDeclaration))return false;
-			if (!checkConcept((XSDElementDeclaration)obj)) return false;
+			if (!Util.checkConcept((XSDElementDeclaration)obj)) return false;
 		}
 		
 		return true;

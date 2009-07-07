@@ -22,6 +22,8 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -484,16 +486,34 @@ public class DataModelMainPage extends AMainPageV2 {
 						}
 
 					}
+					else if ((e.stateMask == 0) && (e.keyCode == SWT.INSERT)) {
+						int elem = isTopElement(selection.getFirstElement());
+						if (elem == 0)
+							newConceptAction.run();
+						else if (elem == 1)
+							newElementAction.run();
+					}
 				}
 
 				public void keyReleased(KeyEvent e) {
-
+					IStructuredSelection selection = ((IStructuredSelection) viewer
+							.getSelection());
+					
+					if ((e.stateMask == 0) && (e.keyCode == SWT.CR)) {
+						int elem = isTopElement(selection.getFirstElement());
+						if (elem == 0)
+							editConceptAction.run();
+						else if (elem == 1)
+							editElementAction.run();
+					}
 				}
 
 			});
 
 			hookContextMenu();
 
+			hookDoubleClickAction();
+			
 			// if this created after the editorPage and it is dirty , mark this
 			// one as dirty too
 			DataModelEditorPage editorPage = ((DataModelEditorPage) getEditor()
@@ -612,6 +632,37 @@ public class DataModelMainPage extends AMainPageV2 {
 		deleteConceptWrapAction.regisDelAction(null, deleteElementAction);
 	}
 
+    private int isTopElement(Object decl) {
+		if (!(decl instanceof XSDElementDeclaration)) {
+			return 2;
+		}
+
+		if (Util.getParent(decl) == decl) {
+			if (Util.checkConcept((XSDElementDeclaration) decl)) {
+				return 0;
+			}
+			return 1;
+		}
+
+		return 2;
+	}
+    
+	private void hookDoubleClickAction()
+	{
+		viewer.addDoubleClickListener(new IDoubleClickListener() {
+			public void doubleClick(DoubleClickEvent event) {
+				IStructuredSelection selection = ((IStructuredSelection) viewer
+						.getSelection());
+				int elem = isTopElement(selection.getFirstElement());
+				if (elem == 0) {
+					editConceptAction.run();
+				} else if (elem == 1) {
+					editElementAction.run();
+				}
+			}
+		});
+	}
+	
 	private void hookContextMenu() {
 		menuMgr = new MenuManager();
 		menuMgr.setRemoveAllWhenShown(true);
@@ -642,7 +693,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		if (obj instanceof XSDElementDeclaration && selectedObjs.length == 1) {
 			// check if concept or "just" element
 			XSDElementDeclaration decl = (XSDElementDeclaration) obj;
-			boolean isConcept = deleteConceptWrapAction.checkConcept(decl);
+			boolean isConcept = Util.checkConcept(decl);
 			if (isConcept) {
 				manager.add(editConceptAction);
 				manager.add(deleteConceptAction);
