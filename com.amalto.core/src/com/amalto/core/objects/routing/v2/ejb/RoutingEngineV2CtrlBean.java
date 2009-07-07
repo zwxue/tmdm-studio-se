@@ -315,9 +315,10 @@ public class RoutingEngineV2CtrlBean implements SessionBean, TimedObject {
     	
     	String content = null;
     	int contentInt,expInt;
-    	
+    	String expXpath=exp.getXpath();
+    	if(!expXpath.startsWith("/"))expXpath="/"+expXpath;
     	try {
-    		content = Util.getFirstTextNode(itemPOJO.getProjection(), exp.getXpath());
+    		content = Util.getFirstTextNode(itemPOJO.getProjection(),expXpath);
     	} catch (TransformerException e) {
     		String err = "Subscription rule expression match: unable extract xpath '"+exp.getXpath()+"' from Item '"+itemPOJO.getItemPOJOPK().getUniqueID()+"': "+e.getLocalizedMessage();
     		org.apache.log4j.Logger.getLogger(this.getClass()).error(err, e);
