@@ -77,7 +77,7 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
        		group.updateElement();
        		
        		
-       		page.getTreeViewer().refresh(true);
+       		page.refresh();
        		page.getTreeViewer().setSelection(new StructuredSelection(particle),true);
        		page.markDirty();
        

@@ -98,7 +98,7 @@ public class XSDChangeBaseTypeAction extends UndoAction implements SelectionList
 //       	    		schema.getContents().remove(current);
 //       	    }
 			
-			page.getTreeViewer().refresh(true);
+			page.refresh();
 			page.markDirty();
 			
 		} catch (Exception e) {

@@ -64,7 +64,7 @@ public class XSDSetAnnotationTargetSystemsAction extends UndoAction{
        		struc.setTargetSystems(dlg.getXPaths());
        		
        		if (struc.hasChanged()) {
-       			page.getTreeViewer().refresh(true);
+       			page.refresh();
        			page.getTreeViewer().expandToLevel(selection.getFirstElement(), 2);
        			page.markDirty();
        		}

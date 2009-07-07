@@ -53,7 +53,7 @@ public class XSDSetAnnotationSourceSystemAction extends UndoAction{
        		struc.setSourceSystem("".equals(id.getValue()) ? null : id.getValue());
        		
        		if (struc.hasChanged()) {
-       			page.getTreeViewer().refresh(true);
+       			page.refresh();
        			page.getTreeViewer().expandToLevel(selection.getFirstElement(), 2);
        			page.markDirty();
        		}

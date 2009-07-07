@@ -83,7 +83,7 @@ public class XSDEditConceptAction extends UndoAction{
        	    	toUpdate.updateElement();
        	    }
        	           		
-       		page.getTreeViewer().refresh(true);
+       		page.refresh();
        		page.markDirty();
        		page.refreshPage();
        

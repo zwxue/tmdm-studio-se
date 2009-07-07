@@ -73,7 +73,7 @@ public class XSDEditFacetAction extends UndoAction{
 			
        		std.updateElement();
        		
-    		page.getTreeViewer().refresh(true);
+    		page.refresh();
     		page.markDirty();
     		
        

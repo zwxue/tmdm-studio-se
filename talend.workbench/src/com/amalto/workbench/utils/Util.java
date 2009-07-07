@@ -55,6 +55,7 @@ import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
+import org.eclipse.xsd.impl.XSDSchemaImpl;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -1017,5 +1018,23 @@ public class Util {
     	}
     	
     	return childNames;
+    }
+    
+    public static XSDSchema createXsdSchema(String xsd){
+	    DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+		documentBuilderFactory.setNamespaceAware(true);
+		documentBuilderFactory.setValidating(false);
+		InputSource source = new InputSource(new StringReader(xsd));
+		DocumentBuilder documentBuilder;
+		Document document = null;
+		try {
+			documentBuilder = documentBuilderFactory.newDocumentBuilder();
+			 document = documentBuilder.parse(source);
+		}catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return XSDSchemaImpl.createSchema(document.getDocumentElement());
     }
 }

@@ -64,7 +64,7 @@ public class XSDSetAnnotationDescriptionsAction extends UndoAction{
 			
 			if (struc.hasChanged()) {
 				page.markDirty();
-				page.getTreeViewer().refresh(true);
+				page.refresh();
 				page.getTreeViewer().expandToLevel(selection.getFirstElement(), 2);
 			}
        		
