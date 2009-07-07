@@ -92,7 +92,7 @@ public class XSDNewGroupFromTypeAction extends UndoAction implements SelectionLi
        		group.updateElement();
        		
        		
-       		page.getTreeViewer().refresh(true);
+       		page.refresh();
        		page.getTreeViewer().setSelection(new StructuredSelection(particle),true);
        		page.markDirty();
        

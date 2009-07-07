@@ -69,7 +69,7 @@ public class XSDDeleteXPathAction extends UndoAction{
             icd.getFields().remove(xpath);
             icd.updateElement();
             xsdPath = null;
-       		page.getTreeViewer().refresh(true);
+       		page.refresh();
        		page.markDirty();
        
 		} catch (Exception e) {

@@ -97,7 +97,7 @@ public class XSDDeleteParticleAction extends UndoAction{
             
             group.updateElement();
             xsdPartle = null;
-       		page.getTreeViewer().refresh(true);
+       		page.refresh();
        		page.markDirty();
        
 		} catch (Exception e) {

@@ -32,8 +32,11 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -113,6 +116,8 @@ import com.amalto.workbench.actions.XSDSetAnnotationTargetSystemsAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
 import com.amalto.workbench.dialogs.DataModelFilterDialog;
 import com.amalto.workbench.dialogs.ErrorExceptionDialog;
+import com.amalto.workbench.providers.TypesContentProvider;
+import com.amalto.workbench.providers.TypesLabelProvider;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.providers.XSDTreeLabelProvider;
@@ -178,6 +183,13 @@ public class DataModelMainPage extends AMainPageV2 {
 	private DataModelFilter dataModelFilter;
 	
 	private StructuredSelection sel;
+	private SashForm sash;
+	FormToolkit toolkit;
+	private TreeViewer typesViewer;
+	private DrillDownAdapter typesDrillDownAdapter;
+	private TypesContentProvider typesProvider;
+	private MenuManager typesMenuMgr;
+	boolean isSchemaSelected=true;
 	public DataModelMainPage(FormEditor editor) {
 		super(editor, DataModelMainPage.class.getName(), "Data Model "
 				+ ((XObjectEditorInput) editor.getEditorInput()).getName());
@@ -188,7 +200,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			Composite mainComposite) {
 
 		try {
-			
+			this.toolkit=toolkit;
 
 			WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
 
@@ -416,104 +428,14 @@ public class DataModelMainPage extends AMainPageV2 {
 			xsdLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
 					true, 2, 1));
 			// get the XSDSchema
-			XSDSchema xsdSchema = getXSDSchema(wsObject.getXsdSchema());
-
-			viewer = new TreeViewer(mainComposite, SWT.MULTI | SWT.H_SCROLL
-					| SWT.V_SCROLL);
-			viewer.getControl().setLayoutData(
-					new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
-			((GridData) viewer.getControl().getLayoutData()).heightHint = 1000;
-			drillDownAdapter = new DrillDownAdapter(viewer);
-			provider = new XSDTreeContentProvider(
-					this.getSite(), xsdSchema);
-			viewer.setContentProvider(provider);
-			
-			viewer.addSelectionChangedListener(new ISelectionChangedListener(){
-				public void selectionChanged(SelectionChangedEvent e) {
-					sel= (StructuredSelection)e.getSelection();
-				}
-			});
-			
-			viewer.setLabelProvider(new XSDTreeLabelProvider());
-			viewer.setSorter(new ViewerSorter() {
-				public int category(Object element) {
-					// we want facets before Base TypeDefinitions in
-					// SimpleTypeDefinition
-					if (element instanceof XSDFacet)
-						return 100;
-					// unique keys after element declarations and before other
-					// keys
-					if (element instanceof XSDIdentityConstraintDefinition) {
-						XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) element;
-						if (icd.getIdentityConstraintCategory().equals(
-								XSDIdentityConstraintCategory.UNIQUE_LITERAL))
-							return 300;
-						else if (icd.getIdentityConstraintCategory().equals(
-								XSDIdentityConstraintCategory.KEY_LITERAL))
-							return 301;
-						else
-							return 302;
-					}
-					return 200;
-				}
-
-				public int compare(Viewer theViewer, Object e1, Object e2) {
-					int cat1 = category(e1);
-					int cat2 = category(e2);
-					return cat1 - cat2;
-				}
-			});
-			viewer.setInput(this.getSite());// getViewSite());
-			viewer.getTree().addKeyListener(new KeyListener() {
-
-				public void keyPressed(KeyEvent e) {
-
-					IStructuredSelection selection = ((IStructuredSelection) viewer
-							.getSelection());
-
-					// delete
-					if ((e.stateMask == 0) && (e.keyCode == SWT.DEL)) {
-						if (deleteConceptWrapAction
-								.checkInDeletableType(selection.toArray())) {
-							deleteConceptWrapAction.prepareToDelSelectedItems(
-									selection, viewer);
-							deleteConceptWrapAction.run();
-						}
-						else
-						{
-							MessageDialog.openWarning(getSite().getShell(), "Warnning",
-							"Please select the deletable node and try again!");
-						}
-
-					}
-					else if ((e.stateMask == 0) && (e.keyCode == SWT.INSERT)) {
-						int elem = isTopElement(selection.getFirstElement());
-						if (elem == 0)
-							newConceptAction.run();
-						else if (elem == 1)
-							newElementAction.run();
-					}
-				}
-
-				public void keyReleased(KeyEvent e) {
-					IStructuredSelection selection = ((IStructuredSelection) viewer
-							.getSelection());
-					
-					if ((e.stateMask == 0) && (e.keyCode == SWT.CR)) {
-						int elem = isTopElement(selection.getFirstElement());
-						if (elem == 0)
-							editConceptAction.run();
-						else if (elem == 1)
-							editElementAction.run();
-					}
-				}
-
-			});
+			xsdSchema = getXSDSchema(wsObject.getXsdSchema());
+			createSash(mainComposite);
 
 			hookContextMenu();
 
 			hookDoubleClickAction();
-			
+			//hookTypesDoubleClickAction();
+			hookTypesContextMenu();
 			// if this created after the editorPage and it is dirty , mark this
 			// one as dirty too
 			DataModelEditorPage editorPage = ((DataModelEditorPage) getEditor()
@@ -536,8 +458,230 @@ public class DataModelMainPage extends AMainPageV2 {
 		}
 
 	}// createCharacteristicsContent
+	
+	private void createSchemaTree(Composite parent){
+		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL
+				| SWT.V_SCROLL);
+		viewer.getControl().setLayoutData(
+				new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		drillDownAdapter = new DrillDownAdapter(viewer);
+		provider = new XSDTreeContentProvider(
+				this.getSite(), xsdSchema);
+		viewer.setContentProvider(provider);
+		
+		viewer.addSelectionChangedListener(new ISelectionChangedListener(){
+			public void selectionChanged(SelectionChangedEvent e) {
+				sel= (StructuredSelection)e.getSelection();
+				
+			}
+		});
+		viewer.getTree().addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseUp(MouseEvent e) {
+				isSchemaSelected=true;			
+			}
+		});
+		viewer.setLabelProvider(new XSDTreeLabelProvider());
+		viewer.setSorter(new ViewerSorter() {
+			public int category(Object element) {
+				// we want facets before Base TypeDefinitions in
+				// SimpleTypeDefinition
+				if (element instanceof XSDFacet)
+					return 100;
+				// unique keys after element declarations and before other
+				// keys
+				if (element instanceof XSDIdentityConstraintDefinition) {
+					XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) element;
+					if (icd.getIdentityConstraintCategory().equals(
+							XSDIdentityConstraintCategory.UNIQUE_LITERAL))
+						return 300;
+					else if (icd.getIdentityConstraintCategory().equals(
+							XSDIdentityConstraintCategory.KEY_LITERAL))
+						return 301;
+					else
+						return 302;
+				}
+				return 200;
+			}
 
+			public int compare(Viewer theViewer, Object e1, Object e2) {
+				int cat1 = category(e1);
+				int cat2 = category(e2);
+				return cat1 - cat2;
+			}
+		});
+		viewer.setInput(this.getSite());// getViewSite());
+		viewer.getTree().addKeyListener(new KeyListener() {
 
+			public void keyPressed(KeyEvent e) {
+
+				IStructuredSelection selection = ((IStructuredSelection) viewer
+						.getSelection());
+
+				// delete
+				if ((e.stateMask == 0) && (e.keyCode == SWT.DEL)) {
+					if (deleteConceptWrapAction
+							.checkInDeletableType(selection.toArray())) {
+						deleteConceptWrapAction.prepareToDelSelectedItems(
+								selection, viewer);
+						deleteConceptWrapAction.run();
+					}
+					else
+					{
+						MessageDialog.openWarning(getSite().getShell(), "Warnning",
+						"Please select the deletable node and try again!");
+					}
+
+				}
+			}
+
+			public void keyReleased(KeyEvent e) {
+
+			}
+
+		});
+
+	}
+	private void createButton(){
+        Composite buttonComposite = toolkit.createComposite(sash);
+        GridLayout layout=new GridLayout();
+        layout.marginLeft=0;
+        layout.marginRight=0;
+        buttonComposite.setLayout(layout);
+
+        final Button moveButton = new Button(buttonComposite, SWT.PUSH);
+        moveButton.setText(">>"); //$NON-NLS-1$
+        moveButton.setToolTipText("Show types"); //$NON-NLS-1$
+
+        final GridData layoutData = new GridData();
+        layoutData.verticalAlignment = GridData.BEGINNING;
+        layoutData.horizontalAlignment = GridData.CENTER;
+        layoutData.grabExcessHorizontalSpace = true;
+        layoutData.grabExcessVerticalSpace = true;
+        layoutData.widthHint = 30;
+        moveButton.setLayoutData(layoutData);
+
+        // add listner
+        moveButton.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(final SelectionEvent e) {
+                if (moveButton.getText().equals("<<")) { //$NON-NLS-1$
+                    sash.setWeights(new int[] { 28, 1, 0 });
+                    moveButton.setText(">>"); //$NON-NLS-1$
+                    moveButton.setToolTipText("Show types"); //$NON-NLS-1$
+                } else if (moveButton.getText().equals(">>")) { //$NON-NLS-1$
+                    sash.setWeights(new int[] { 14, 1, 14 });
+                    moveButton.setText("<<"); //$NON-NLS-1$
+                    moveButton.setToolTipText("Hide types");//$NON-NLS-1$
+                }
+            }
+        });
+		
+	}
+   public SashForm createSash(Composite parent) {
+        // Splitter	   
+        sash = new SashForm(parent, SWT.HORIZONTAL | SWT.SMOOTH);
+        sash.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+        ((GridData) sash.getLayoutData()).heightHint = 1000;
+        GridLayout layout = new GridLayout();
+        sash.setLayout(layout);
+        sash.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+        // create schema tree
+        createSchemaTree(sash);
+        // create button
+        createButton();
+        //create type tree
+        createTypeTree(sash);
+        //init 
+        sash.setWeights(new int[]{28, 1, 0});
+        return sash;
+    }
+	private void createTypeTree(Composite parent){
+		typesViewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL
+				| SWT.V_SCROLL);
+		typesViewer.getControl().setLayoutData(
+				new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		typesDrillDownAdapter = new DrillDownAdapter(viewer);
+		typesProvider = new TypesContentProvider(
+				this.getSite(), xsdSchema);
+		typesViewer.setContentProvider(typesProvider);
+		
+		typesViewer.addSelectionChangedListener(new ISelectionChangedListener(){
+			public void selectionChanged(SelectionChangedEvent e) {
+				//sel= (StructuredSelection)e.getSelection();
+				
+			}
+		});
+		typesViewer.getTree().addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseUp(MouseEvent e) {
+				isSchemaSelected=false;	
+			}
+		});
+		typesViewer.setLabelProvider(new TypesLabelProvider());
+		typesViewer.setSorter(new ViewerSorter() {
+			public int category(Object element) {
+				// we want facets before Base TypeDefinitions in
+				// SimpleTypeDefinition
+				if (element instanceof XSDFacet)
+					return 100;
+				// unique keys after element declarations and before other
+				// keys
+				if (element instanceof XSDIdentityConstraintDefinition) {
+					XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) element;
+					if (icd.getIdentityConstraintCategory().equals(
+							XSDIdentityConstraintCategory.UNIQUE_LITERAL))
+						return 300;
+					else if (icd.getIdentityConstraintCategory().equals(
+							XSDIdentityConstraintCategory.KEY_LITERAL))
+						return 301;
+					else
+						return 302;
+				}
+				return 200;
+			}
+
+			public int compare(Viewer theViewer, Object e1, Object e2) {
+				int cat1 = category(e1);
+				int cat2 = category(e2);
+				return cat1 - cat2;
+			}
+		});
+		typesViewer.setInput(this.getSite());// getViewSite());
+		typesViewer.getTree().addKeyListener(new KeyListener() {
+
+			public void keyPressed(KeyEvent e) {
+
+				IStructuredSelection selection = ((IStructuredSelection) typesViewer
+						.getSelection());
+
+				// delete
+				if ((e.stateMask == 0) && (e.keyCode == SWT.DEL)) {
+					if (deleteConceptWrapAction
+							.checkInDeletableType(selection.toArray())) {
+						deleteConceptWrapAction.prepareToDelSelectedItems(
+								selection, viewer);
+						deleteConceptWrapAction.run();
+					}
+					else
+					{
+						MessageDialog.openWarning(getSite().getShell(), "Warnning",
+						"Please select the deletable node and try again!");
+					}
+
+				}
+			}
+
+			public void keyReleased(KeyEvent e) {
+
+			}
+
+		});
+
+	}   
 	protected void refreshData() {
 		try {
 
@@ -551,13 +695,14 @@ public class DataModelMainPage extends AMainPageV2 {
 					.getDescription();
 			if (!s.equals(descriptionText.getText()))
 				descriptionText.setText(s);
-			provider.setXsdSchema(wsObject.getXsdSchema());
-//			viewer.setContentProvider(new XSDTreeContentProvider(
-//					this.getSite(), getXSDSchema(wsObject.getXsdSchema())));
+			XSDSchema xsd= Util.createXsdSchema(wsObject.getXsdSchema());
+			provider.setXsdSchema(xsd);
 			((XSDTreeContentProvider)viewer.getContentProvider()).setFilter(dataModelFilter);			
 			//viewer.setAutoExpandLevel(3);
 			viewer.setInput(getSite());
-			//viewer.refresh(true);
+			//refresh types
+			typesProvider.setXsdSchema(xsd);
+			typesViewer.setInput(getSite());
 		} catch (Exception e) {
 			e.printStackTrace();
 			ErrorExceptionDialog.openError(this.getSite().getShell(),
@@ -662,7 +807,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			}
 		});
 	}
-	
+
 	private void hookContextMenu() {
 		menuMgr = new MenuManager();
 		menuMgr.setRemoveAllWhenShown(true);
@@ -676,6 +821,148 @@ public class DataModelMainPage extends AMainPageV2 {
 		getSite().registerContextMenu(menuMgr, viewer);
 	}
 
+	private void hookTypesContextMenu() {
+		typesMenuMgr = new MenuManager();
+		typesMenuMgr.setRemoveAllWhenShown(true);
+		typesMenuMgr.addMenuListener(new IMenuListener() {
+			public void menuAboutToShow(IMenuManager manager) {
+				DataModelMainPage.this.fillTypesContextMenu(manager);
+			}
+		});
+		Menu menu = typesMenuMgr.createContextMenu(typesViewer.getControl());
+		typesViewer.getControl().setMenu(menu);
+		getSite().registerContextMenu(typesMenuMgr, typesViewer);
+	}
+	protected void fillTypesContextMenu(IMenuManager manager) {
+		IStructuredSelection selection = ((IStructuredSelection) typesViewer
+				.getSelection());
+
+		if ((selection == null) || (selection.getFirstElement() == null)) {
+
+			return;
+		}
+		
+        Object[] selectedObjs = selection.toArray();
+		Object obj = selection.getFirstElement();
+
+		// Element Declaration
+		if (obj instanceof XSDElementDeclaration && selectedObjs.length == 1) {
+			// check if concept or "just" element
+			XSDElementDeclaration decl = (XSDElementDeclaration) obj;
+			boolean isConcept = Util.checkConcept(decl);
+			if (isConcept) {
+				manager.add(editConceptAction);
+				manager.add(deleteConceptAction);
+				manager.add(newBrowseItemAction);
+			} else {
+				manager.add(editElementAction);
+				manager.add(deleteElementAction);
+			}
+			manager.add(new Separator());
+			manager.add(new XSDNewConceptAction(this));
+			manager.add(newElementAction);
+			manager.add(new Separator());
+			manager.add(changeToComplexTypeAction);
+			manager.add(changeToSimpleTypeAction);
+			manager.add(new Separator());
+			manager.add(newIdentityConstraintAction);
+			// Annotations
+			setAnnotationActions2(manager);
+		}
+		
+
+		if (obj instanceof XSDParticle && selectedObjs.length == 1) {
+			XSDTerm term = ((XSDParticle) obj).getTerm();
+			if (!(term instanceof XSDWildcard)) {
+				manager.add(editParticleAction);
+				//manager.add(newGroupFromParticleAction);
+				manager.add(newParticleFromParticleAction);
+				if (term instanceof XSDModelGroup) {
+					manager.add(newParticleFromTypeAction);
+					manager.add(newGroupFromTypeAction);
+				}
+				manager.add(deleteParticleAction);
+				manager.add(new Separator());
+				manager.add(changeToComplexTypeAction);
+				manager.add(changeToSimpleTypeAction);
+				manager.add(new Separator());
+				//manager.add(newIdentityConstraintAction);
+				if (term instanceof XSDElementDeclaration) {
+					// Annotations
+					setAnnotationActions(manager);
+					// Xpath
+					manager.add(new Separator());
+					manager.add(getXPathAction);
+				}
+			}
+		}
+
+		
+		if (obj instanceof XSDComplexTypeDefinition && selectedObjs.length == 1) {
+			manager.add(newParticleFromTypeAction);
+			manager.add(newGroupFromTypeAction);
+		}
+
+		
+		if (obj instanceof XSDIdentityConstraintDefinition && selectedObjs.length == 1) {
+			manager.add(editIdentityConstraintAction);
+			manager.add(deleteIdentityConstraintAction);
+			manager.add(newIdentityConstraintAction);
+			manager.add(new Separator());
+			manager.add(newXPathAction);
+		}
+		
+		
+		if (obj instanceof XSDXPathDefinition && selectedObjs.length == 1) {
+			manager.add(editXPathAction);
+			manager.add(newXPathAction);
+			XSDXPathDefinition xpath = (XSDXPathDefinition) obj;
+			if (xpath.getVariety().equals(XSDXPathVariety.FIELD_LITERAL))
+				manager.add(deleteXPathAction);
+		}
+
+		if (obj instanceof XSDSimpleTypeDefinition && selectedObjs.length == 1) {
+			XSDSimpleTypeDefinition typedef = (XSDSimpleTypeDefinition) obj;
+
+			if (!typedef.getSchema().getSchemaForSchemaNamespace().equals(
+					typedef.getTargetNamespace())) {
+				manager.add(changeBaseTypeAction);
+				manager.add(new Separator());
+				EList list = typedef.getBaseTypeDefinition().getValidFacets();
+				for (Iterator iter = list.iterator(); iter.hasNext();) {
+					String element = (String) iter.next();
+					manager.add(new XSDEditFacetAction(this, element));
+				}
+
+			}
+		}
+
+		if (obj instanceof XSDAnnotation && selectedObjs.length == 1) {
+			setAnnotationActions(manager);
+		}
+
+		
+		if (selectedObjs.length > 1
+				&& deleteConceptWrapAction.checkInDeletableType(selectedObjs)) {
+			deleteConceptWrapAction.prepareToDelSelectedItems(selection, viewer);
+		}
+		
+
+		if (selectedObjs.length > 1
+				&& deleteConceptWrapAction.outPutDeleteActions() != null) {
+			manager.add(deleteConceptWrapAction.outPutDeleteActions());
+			if (deleteConceptWrapAction.checkOutAllConcept(selectedObjs))
+				manager.add(newBrowseItemAction);
+		}
+		
+		manager.add(new Separator());
+
+		typesDrillDownAdapter.addNavigationActions(manager);
+		// Other plug-ins can contribute there actions here
+		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+
+	}
+	
 	protected void fillContextMenu(IMenuManager manager) {
 		IStructuredSelection selection = ((IStructuredSelection) viewer
 				.getSelection());
@@ -854,10 +1141,18 @@ public class DataModelMainPage extends AMainPageV2 {
 		return xsdSchema;
 	}
 
-	public TreeViewer getTreeViewer() {
-		return viewer;
+	public TreeViewer getTreeViewer() {		
+		if(isSchemaSelected){
+			return viewer;
+		}else{
+			return typesViewer;
+		}
 	}
-
+	
+	public void refresh(){
+		viewer.refresh(true);
+		typesViewer.refresh(true);
+	}
 	/**
 	 * We need to override the method so that the schema object is serialized
 	 * into xsd an stored in the wsObject via the commit method We also need to

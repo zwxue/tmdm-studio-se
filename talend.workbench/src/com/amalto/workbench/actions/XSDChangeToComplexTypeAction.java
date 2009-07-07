@@ -261,7 +261,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
        	    
        		decl.updateElement();
        		
-       		page.getTreeViewer().refresh(true);
+       		page.refresh();
       		
        		//FIXME: reveal the sub element created and edit it
        		/*

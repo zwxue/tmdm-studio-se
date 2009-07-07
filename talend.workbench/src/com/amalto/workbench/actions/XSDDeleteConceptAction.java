@@ -73,7 +73,7 @@ public class XSDDeleteConceptAction extends UndoAction{
             
             schema.update();
             xsdElem = null;
-       		page.getTreeViewer().refresh(true);
+       		page.refresh();
        		page.markDirty();
        
 		} catch (Exception e) {
