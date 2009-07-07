@@ -70,7 +70,7 @@ public class XSDEditXPathAction extends UndoAction{
        		}
 
        		icd.updateElement();
-       		page.getTreeViewer().refresh(true);
+       		page.refresh();
        		page.getTreeViewer().setSelection(new StructuredSelection(newXpath),true);
        		page.markDirty();
        

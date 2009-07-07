@@ -20,7 +20,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.providers.XSDTreeContentProvider;
+import com.amalto.workbench.providers.ISchemaContentProvider;
 import com.amalto.workbench.utils.Util;
 
 public  class UndoAction extends Action {
@@ -105,7 +105,7 @@ public  class UndoAction extends Action {
 	
 	protected String beforeDoAction()
 	{
-        schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
+        schema = ((ISchemaContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
         return commitDocumentToHistory(schema.getDocument());
 	}
 	
@@ -178,8 +178,9 @@ public  class UndoAction extends Action {
 	
 	private void refresh(String content)
 	{
-        ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).setXsdSchema(content);
-   		page.getTreeViewer().refresh(true);
+		XSDSchema xsd= Util.createXsdSchema(content);
+        ((ISchemaContentProvider)page.getTreeViewer().getContentProvider()).setXsdSchema(xsd);
+   		page.refresh();
    		page.markDirty();	
 	}
 	

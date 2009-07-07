@@ -126,7 +126,7 @@ public class XSDNewIdentityConstraintAction extends UndoAction implements Select
        		decl.getIdentityConstraintDefinitions().add(index+1, icd);
        		decl.updateElement();
                    		
-       		page.getTreeViewer().refresh(true);
+       		page.refresh();
        		page.getTreeViewer().setSelection(new StructuredSelection(icd),true);
        		page.markDirty();
        

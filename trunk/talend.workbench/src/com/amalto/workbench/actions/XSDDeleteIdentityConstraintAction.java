@@ -67,7 +67,7 @@ public class XSDDeleteIdentityConstraintAction extends UndoAction {
             decl.getIdentityConstraintDefinitions().remove(constraint);
             decl.updateElement();
             xsdIdenty = null;
-       		page.getTreeViewer().refresh(true);
+       		page.refresh();
        		page.markDirty();
        
 		} catch (Exception e) {

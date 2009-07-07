@@ -65,7 +65,7 @@ public class XSDEditIdentityConstraintAction extends UndoAction{
        		constraint.setName(id.getValue());
        		constraint.updateElement();
        		       	           		
-       		page.getTreeViewer().refresh(true);
+       		page.refresh();
        		page.markDirty();
        
 		} catch (Exception e) {

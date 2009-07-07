@@ -82,7 +82,7 @@ public class XSDNewXPathAction extends UndoAction{
        		icd.getFields().add(index,xpath);
        		icd.updateElement();
        		
-       		page.getTreeViewer().refresh(true);
+       		page.refresh();
        		page.getTreeViewer().setSelection(new StructuredSelection(xpath),true);
        		page.markDirty();
        

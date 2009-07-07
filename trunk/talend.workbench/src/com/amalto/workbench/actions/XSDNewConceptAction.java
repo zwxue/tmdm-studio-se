@@ -123,7 +123,7 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
        		//schema.getElementDeclarations().add(decl);
        		decl.updateElement();
 
-       		page.getTreeViewer().refresh(true);
+       		page.refresh();
        		//page.markDirty();
        		getOperationHistory();
        		UndoAction changeAction = null;

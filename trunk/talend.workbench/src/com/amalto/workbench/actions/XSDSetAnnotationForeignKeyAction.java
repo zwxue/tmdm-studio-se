@@ -61,7 +61,7 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction{
        		struc.setForeignKey("".equals(sxid.getXpath()) ? null : sxid.getXpath());
        		
        		if (struc.hasChanged()) {
-       			page.getTreeViewer().refresh(true);
+       			page.refresh();
        			page.getTreeViewer().expandToLevel(selection.getFirstElement(), 2);
        			page.markDirty();
        		}
