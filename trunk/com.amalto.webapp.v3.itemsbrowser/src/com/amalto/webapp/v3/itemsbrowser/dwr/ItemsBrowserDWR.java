@@ -1058,7 +1058,8 @@ public class ItemsBrowserDWR {
 	
 	private static String pushUpdateReport(String[] ids, String concept, String operationType)throws Exception{
 		org.apache.log4j.Logger.getLogger(ItemsBrowserDWR.class).trace("pushUpdateReport() concept "+concept+" operation "+operationType);
-		
+
+		//check updatedPath
 		WebContext ctx = WebContextFactory.get();
 		HashMap<String,UpdateReportItem> updatedPath = new HashMap<String,UpdateReportItem>();
 		updatedPath = (HashMap<String,UpdateReportItem>) ctx.getSession().getAttribute("updatedPath");
@@ -1066,6 +1067,43 @@ public class ItemsBrowserDWR {
 			return "ERROR_2";
 		}
 		
+		String xml2 = createUpdateReport(ids, concept, operationType,updatedPath);
+
+		synchronizeUpdateState(ctx);
+		return persistentUpdateReport(xml2,true);			
+	}
+
+
+	private static String persistentUpdateReport(String xml2,boolean routeAfterSaving) {
+		try {
+			WSItemPK itemPK = Util.getPort().putItem(
+					new WSPutItem(
+							new WSDataClusterPK("UpdateReport"), 
+							xml2,
+							new WSDataModelPK("UpdateReport")));
+			org.apache.log4j.Logger.getLogger(ItemsBrowserDWR.class).debug(
+					"pushUpdateReport() "+xml2);
+			if(routeAfterSaving)Util.getPort().routeItemV2(new WSRouteItemV2(itemPK));
+			return "OK";
+		} catch (RemoteException e) {			
+			e.printStackTrace();
+			return "ERROR";
+		} catch (XtentisWebappException e) {
+			e.printStackTrace();
+			return "ERROR";
+		}
+	}
+
+
+	private static void synchronizeUpdateState(WebContext ctx) {
+		ctx.getSession().setAttribute("updatedPath",null);
+		ctx.getSession().setAttribute("viewNameItems",null);
+	}
+
+
+	private static String createUpdateReport(String[] ids, String concept,
+			String operationType, HashMap<String, UpdateReportItem> updatedPath)
+			throws Exception {
 		String username="";
 		String revisionId="";
 		
@@ -1117,26 +1155,7 @@ public class ItemsBrowserDWR {
 				}     
 		}
         xml2 += "</Update>";
-
-		ctx.getSession().setAttribute("updatedPath",null);
-		ctx.getSession().setAttribute("viewNameItems",null);
-		try {
-			WSItemPK itemPK = Util.getPort().putItem(
-					new WSPutItem(
-							new WSDataClusterPK("UpdateReport"), 
-							xml2,
-							new WSDataModelPK("UpdateReport")));
-			org.apache.log4j.Logger.getLogger(ItemsBrowserDWR.class).debug(
-					"pushUpdateReport() "+xml2);
-			//Util.getPort().routeItemV2(new WSRouteItemV2(itemPK));
-			return "OK";
-		} catch (RemoteException e) {			
-			e.printStackTrace();
-			return "ERROR";
-		} catch (XtentisWebappException e) {
-			e.printStackTrace();
-			return "ERROR";
-		}			
+		return xml2;
 	}
 	
 	private void insertAfter(Node newNode, Node node){
