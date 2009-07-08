@@ -1,7 +1,10 @@
 package com.amalto.workbench.actions;
 
 import java.net.URL;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -26,8 +29,14 @@ import com.amalto.workbench.webservices.WSDeleteSynchronizationPlan;
 import com.amalto.workbench.webservices.WSDeleteTransformerV2;
 import com.amalto.workbench.webservices.WSDeleteUniverse;
 import com.amalto.workbench.webservices.WSDeleteView;
+import com.amalto.workbench.webservices.WSGetRole;
+import com.amalto.workbench.webservices.WSGetRolePKs;
 import com.amalto.workbench.webservices.WSMenuPK;
+import com.amalto.workbench.webservices.WSPutRole;
+import com.amalto.workbench.webservices.WSRole;
 import com.amalto.workbench.webservices.WSRolePK;
+import com.amalto.workbench.webservices.WSRoleSpecification;
+import com.amalto.workbench.webservices.WSRoleSpecificationInstance;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
@@ -112,12 +121,15 @@ public class DeleteXObjectAction extends Action{
 	            
 		           	case TreeObject.DATA_MODEL:
 		           		port.deleteDataModel(new WSDeleteDataModel((WSDataModelPK)xobject.getWsKey()));
+		           		deleteSpecificationFromAttachedRole(port, xobject, "Data Model");
 		           		break;
 		          	case TreeObject.VIEW:
 		           		port.deleteView(new WSDeleteView((WSViewPK)xobject.getWsKey()));
+		           		deleteSpecificationFromAttachedRole(port, xobject, "View");
 		           		break;           		
 		          	case TreeObject.DATA_CLUSTER:
 		           		port.deleteDataCluster(new WSDeleteDataCluster((WSDataClusterPK)xobject.getWsKey()));
+		           		deleteSpecificationFromAttachedRole(port, xobject, "Data Cluster");
 		           		break;      
 		          	case TreeObject.STORED_PROCEDURE:
 		           		port.deleteStoredProcedure(new WSDeleteStoredProcedure((WSStoredProcedurePK)xobject.getWsKey()));
@@ -133,6 +145,7 @@ public class DeleteXObjectAction extends Action{
 		           		break;
 		          	case TreeObject.MENU:
 		           		port.deleteMenu(new WSDeleteMenu((WSMenuPK)xobject.getWsKey()));
+		           		deleteSpecificationFromAttachedRole(port, xobject, "Menu");
 		           		break;  	 
 		          	case TreeObject.UNIVERSE:
 		           		port.deleteUniverse(new WSDeleteUniverse((WSUniversePK)xobject.getWsKey()));
@@ -159,6 +172,38 @@ public class DeleteXObjectAction extends Action{
 			);
 		}		
 	}
+	
+	private void deleteSpecificationFromAttachedRole(XtentisPort port, TreeObject xobject, String objectType) throws RemoteException
+	{
+   		WSRolePK[] pks = port.getRolePKs(new WSGetRolePKs(".*")).getWsRolePK();
+   		for (WSRolePK pk : pks) {
+			WSGetRole getRole = new WSGetRole();
+			getRole.setWsRolePK(new WSRolePK(pk.getPk()));
+			WSRole role = port.getRole(getRole);
+			for (WSRoleSpecification spec : role.getSpecification()) {
+				if (spec.getObjectType().equals(objectType)) {
+					WSRoleSpecificationInstance[] specInstance = spec
+							.getInstance();
+					List<WSRoleSpecificationInstance> newSpecInstanceLst = new ArrayList<WSRoleSpecificationInstance>();
+					for (WSRoleSpecificationInstance specIns : specInstance) {
+						if (!specIns.getInstanceName().equals(
+								xobject.getDisplayName())) {
+							newSpecInstanceLst.add(specIns);
+						}
+					}
+					if (newSpecInstanceLst.size() < specInstance.length) {
+						spec.setInstance(newSpecInstanceLst
+								.toArray(new WSRoleSpecificationInstance[] {}));
+						WSPutRole putRole = new WSPutRole();
+						putRole.setWsRole(role);
+						port.putRole(putRole);
+						break;
+					}
+				}
+			}
+		}
+	}
+	
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}
