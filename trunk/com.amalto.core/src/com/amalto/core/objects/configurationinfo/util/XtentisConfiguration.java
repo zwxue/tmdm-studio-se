@@ -14,14 +14,7 @@ import java.util.Properties;
 public final class XtentisConfiguration {
 	static File file = new File("xtentis.conf");
 	static{
-		if (!file.exists()) {
-			//try file in Amalto configuration path
-			String os = System.getProperty("os.name");
-			file = new File("/etc/amalto/xtentis/xtentis.conf");
-			if (os.toLowerCase().matches(".*windows.*")) {
-				file = new File("c:\\amalto\\xtentis\\xtentis.conf");
-			}			
-		}
+
 		
 	}
 	private static Properties CONFIGURATION = null;

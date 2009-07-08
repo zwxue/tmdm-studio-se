@@ -87,7 +87,7 @@ public class CoreUpgrades {
     	ctrl.putConfigurationInfo(previousCoreConf);
     
     }
-    
+    static File f = new File("xtentis.conf");
     /**
 	 * Returns the previously run Core Configuration
 	 * @return a {@link ConfigurationInfoPOJO} cntainin the core Configuration
@@ -103,13 +103,13 @@ public class CoreUpgrades {
 			coreConfigurationInfo.setRevision(0);
 			coreConfigurationInfo.setReleaseNote("");
 			//Convert properties from xtentis.conf
-			String os = System.getProperty("os.name");
-			String f ="/etc/amalto/xtentis/xtentis.conf";
+//			String os = System.getProperty("os.name");
+//			String f ="/etc/amalto/xtentis/xtentis.conf";
 			Properties properties = new Properties();
-			if (os.toLowerCase().matches(".*windows.*")) {
-				f = "c:\\amalto\\xtentis\\xtentis.conf";
-			}
-			if (new File(f).exists()) {
+//			if (os.toLowerCase().matches(".*windows.*")) {
+//				f = "c:\\amalto\\xtentis\\xtentis.conf";
+//			}
+			if (f.exists()) {
 				try {
 					properties.load(new FileInputStream(f));
 					Set<Object> keys = properties.keySet();

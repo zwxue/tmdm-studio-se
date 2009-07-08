@@ -27,14 +27,7 @@ public final class XtentisConfiguration {
 		
 		//first try Current path
 		File file = new File("xtentis.conf");
-		if (!file.exists()) {
-			//try file in Amalto configuration path
-			String os = System.getProperty("os.name");
-			file = new File("/etc/amalto/xtentis/xtentis.conf");
-			if (os.toLowerCase().matches(".*windows.*")) {
-				file = new File("c:\\amalto\\xtentis\\xtentis.conf");
-			}			
-		}
+
 		
 		if (file.exists()) {
 			try {

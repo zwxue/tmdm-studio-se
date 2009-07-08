@@ -34,14 +34,7 @@ public class SmtpResourceAdapter implements IXtentisResourceAdapter, ResourceAda
 	public static String VERSION = "1.0";
 	
 	private static String configurationFile="xtentis.conf";
-	{
-		if(!new File(configurationFile).exists()){
-			if (SystemUtils.IS_OS_WINDOWS) {
-				configurationFile = "c:\\amalto\\xtentis\\xtentis.conf";			
-			}
-			else configurationFile = "/etc/amalto/xtentis/xtentis.conf";
-		}
-	}
+
 	
 	
 	
