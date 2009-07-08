@@ -42,8 +42,10 @@ import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDeleteView;
 import com.amalto.workbench.webservices.WSGetRole;
+import com.amalto.workbench.webservices.WSGetView;
 import com.amalto.workbench.webservices.WSPutRole;
 import com.amalto.workbench.webservices.WSPutView;
 import com.amalto.workbench.webservices.WSRole;
@@ -60,7 +62,7 @@ public class AddBrowseItemsWizard extends Wizard{
 
 	private AMainPageV2 page;
 	private XtentisPort port;
-	private List<XSDElementDeclaration> declList = new ArrayList<XSDElementDeclaration>();
+	private List<XSDElementDeclaration> declList = null;
 	private Map<String, List<Line>>  browseItemToRoles = new HashMap<String , List<Line>>();
 	private static String INSTANCE_NAME = "Browse Item View";
 	private static String BROWSE_ITEMS = "Browse_items_";
@@ -142,11 +144,20 @@ public class AddBrowseItemsWizard extends Wizard{
             	view.setDescription("[EN:" + decl.getName() + "]");
             	wrap.setWsView(view);
             	
-            	WSDeleteView delView = new WSDeleteView();
+            	
             	WSViewPK viewPk = new WSViewPK();
             	viewPk.setPk(browseItem);
+            	
+            	WSDeleteView delView = new WSDeleteView();
             	delView.setWsViewPK(viewPk);
-            	port.deleteView(delView);
+            	WSGetView getView = new WSGetView();
+            	getView.setWsViewPK(viewPk);
+            	try {
+					port.getView(getView);
+					port.deleteView(delView);
+				} catch (RemoteException ex) {
+				}
+
     			port.putView(wrap);
     		}
     	}
@@ -236,22 +247,12 @@ public class AddBrowseItemsWizard extends Wizard{
 	          table.setHeaderVisible(true);
 	          table.setLinesVisible(true);
 	          
-//	          CellEditor[] editors = new CellEditor[1];
-//	          editors[0] = new TextCellEditor(table);
-//	          browseViewer.setCellEditors(editors);
-	          
 	          browseViewer.setContentProvider(new IStructuredContentProvider() {
 	          	public void dispose() {}
 	          	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {}
 	          	public Object[] getElements(Object inputElement) {
-	          		ArrayList<String> values = new ArrayList<String>();
-	          		for (XSDElementDeclaration decl: declList) {
-							String name = decl.getName();
-							name = BROWSE_ITEMS + name;
-							values.add(name);
-						}
-	          		//we return an instance line made of a Sring and a boolean
-	          		return values.toArray(new String[values.size()]);
+	          		ArrayList<XSDElementDeclaration> values = (ArrayList<XSDElementDeclaration>)inputElement;
+	          		return values.toArray(new XSDElementDeclaration[values.size()]);
 	          	}
 	          });
 	          
@@ -261,7 +262,8 @@ public class AddBrowseItemsWizard extends Wizard{
 	            	public void addListener(ILabelProviderListener listener) {}
 	            	public void removeListener(ILabelProviderListener listener) {}
 	            	public String getColumnText(Object element, int columnIndex) {
-	            		return element.toString();
+
+	            		return BROWSE_ITEMS + ((XSDElementDeclaration)element).getName();
 	            	}
 	            	public Image getColumnImage(Object element, int columnIndex) {return null;}
 	            });
@@ -279,11 +281,13 @@ public class AddBrowseItemsWizard extends Wizard{
 	            //Listen for changes in the selection of the viewer to display additional parameters
 	          browseViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 	            	public void selectionChanged(SelectionChangedEvent event) {
-	            		String name = (String)((IStructuredSelection)event.getSelection()).getFirstElement();
-	            		refreshRoleView(name);
+	            		XSDElementDeclaration decl = (XSDElementDeclaration)((IStructuredSelection)event.getSelection()).getFirstElement();
+	            		refreshRoleView(BROWSE_ITEMS + decl.getName());
+	            		UpdateComplexViewButton(true);
 	            	}
 	            });
               browseViewer.setInput(declList);
+              browseViewer.setColumnProperties(new String[]{INSTANCE_NAME});
 	          browseViewer.refresh();
 
 	          Label infoLabel = new Label(composite, SWT.NONE);
@@ -301,9 +305,17 @@ public class AddBrowseItemsWizard extends Wizard{
 	          complexTableViewer.setMainPage(page);
 	          complexTableViewer.setKeyColumns(new ComplexTableViewerColumn[]{roleConfigurationColumns[0]});
 	          complexTableViewer.create();
-	          complexTableViewer.getViewer().setInput(browseItemToRoles.get(declList.get(0)));
-	          
+	          complexTableViewer.getViewer().setInput(new ArrayList<Line> ());
+	          UpdateComplexViewButton(false);
 	          setControl(composite);
+		  }
+		  
+		  private void UpdateComplexViewButton(boolean enabled)
+		  {
+	          complexTableViewer.getAddButton().setEnabled(enabled);
+	          complexTableViewer.getUpButton().setEnabled(enabled);
+	          complexTableViewer.getDownButton().setEnabled(enabled);
+	          complexTableViewer.getDeleteButton().setEnabled(enabled);
 		  }
 		  
 		  private void refreshRoleView(String browseItem)
