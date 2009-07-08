@@ -1309,7 +1309,11 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 				if(result=="ERROR_2"){
 					amalto.core.ready(ALERT_NO_CHANGE[language]);
 					//alert(ALERT_NO_CHANGE[language]);
-				}else{
+				}else if(result.indexOf('ERROR_3:')==0){
+					//add for before saving transformer check
+                    amalto.core.ready(result.substring(8));
+                    alert(result.substring(8));
+                }else{
 			       if(callbackOnSuccess)callbackOnSuccess();   
 				}
 				

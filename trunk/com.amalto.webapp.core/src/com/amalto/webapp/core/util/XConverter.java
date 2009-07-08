@@ -607,15 +607,17 @@ public class XConverter {
 	
 	public static TransformerContext WS2POJO(WSTransformerContext wsContext) throws Exception{
 		TransformerContext context = new TransformerContext(new TransformerV2POJOPK(wsContext.getWsTransformerPK().getPk()));
-		
-		for (int i = 0; i < wsContext.getPipeline().getPipelineItem().length; i++) {
-			WSTransformerContextPipelinePipelineItem wsItem = wsContext.getPipeline().getPipelineItem()[i];
-			context.putInPipeline(wsItem.getVariable(), WS2POJO(wsItem.getWsTypedContent()));
+		if (wsContext.getPipeline()!=null) {
+			for (int i = 0; i < wsContext.getPipeline().getPipelineItem().length; i++) {
+				WSTransformerContextPipelinePipelineItem wsItem = wsContext.getPipeline().getPipelineItem()[i];
+				context.putInPipeline(wsItem.getVariable(), WS2POJO(wsItem.getWsTypedContent()));
+			}
 		}
-		
-		for (int i = 0; i < wsContext.getProjectedItemPKs().getWsItemPOJOPK().length; i++) {
-			WSItemPK wsPK = wsContext.getProjectedItemPKs().getWsItemPOJOPK()[i];
-			context.getProjectedPKs().add(XConverter.WS2POJO(wsPK));
+		if (wsContext.getProjectedItemPKs()!=null) {
+			for (int i = 0; i < wsContext.getProjectedItemPKs().getWsItemPOJOPK().length; i++) {
+				WSItemPK wsPK = wsContext.getProjectedItemPKs().getWsItemPOJOPK()[i];
+				context.getProjectedPKs().add(XConverter.WS2POJO(wsPK));
+			}
 		}
 		
 		return context;
