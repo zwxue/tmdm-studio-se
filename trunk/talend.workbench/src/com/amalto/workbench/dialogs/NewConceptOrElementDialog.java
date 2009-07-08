@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDSchema;
 
+import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.widgets.ConceptComposite;
 import com.amalto.workbench.widgets.ElementComposite;
 
@@ -86,7 +87,7 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
 		complexTypeBtn.setSelection(true);
 		complexTypeBtn.addSelectionListener(this);
 		
-		conceptPanel = new ConceptComposite(composite, true);
+		conceptPanel = new ConceptComposite(composite, true, Util.getComplexTypes(schema));
 		
 		simpleTypeBtn = new Button(composite, SWT.RADIO);
 		simpleTypeBtn.setText("Simple Type");

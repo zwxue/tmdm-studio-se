@@ -632,16 +632,10 @@ public class DataModelMainPage extends AMainPageV2 {
 					return 100;
 				// unique keys after element declarations and before other
 				// keys
-				if (element instanceof XSDIdentityConstraintDefinition) {
-					XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) element;
-					if (icd.getIdentityConstraintCategory().equals(
-							XSDIdentityConstraintCategory.UNIQUE_LITERAL))
-						return 300;
-					else if (icd.getIdentityConstraintCategory().equals(
-							XSDIdentityConstraintCategory.KEY_LITERAL))
-						return 301;
-					else
-						return 302;
+				if (element instanceof XSDSimpleTypeDefinition) {
+					return 102;
+				}else if(element instanceof XSDComplexTypeDefinition){
+					return 101;
 				}
 				return 200;
 			}
