@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.security.jacc.PolicyContextException;
@@ -27,6 +28,7 @@ import com.amalto.webapp.core.json.JSONArray;
 import com.amalto.webapp.core.json.JSONObject;
 import com.amalto.webapp.core.util.Util;
 import com.amalto.webapp.core.util.XtentisWebappException;
+import com.amalto.webapp.util.webservices.WSByteArray;
 import com.amalto.webapp.util.webservices.WSConceptKey;
 import com.amalto.webapp.util.webservices.WSCount;
 import com.amalto.webapp.util.webservices.WSDataClusterPK;
@@ -34,6 +36,7 @@ import com.amalto.webapp.util.webservices.WSDataModelPK;
 import com.amalto.webapp.util.webservices.WSDeleteItem;
 import com.amalto.webapp.util.webservices.WSDropItem;
 import com.amalto.webapp.util.webservices.WSDroppedItemPK;
+import com.amalto.webapp.util.webservices.WSExecuteTransformerV2;
 import com.amalto.webapp.util.webservices.WSExistsItem;
 import com.amalto.webapp.util.webservices.WSGetBusinessConceptKey;
 import com.amalto.webapp.util.webservices.WSGetBusinessConcepts;
@@ -47,7 +50,11 @@ import com.amalto.webapp.util.webservices.WSPutItem;
 import com.amalto.webapp.util.webservices.WSRouteItemV2;
 import com.amalto.webapp.util.webservices.WSStringArray;
 import com.amalto.webapp.util.webservices.WSStringPredicate;
+import com.amalto.webapp.util.webservices.WSTransformerContext;
+import com.amalto.webapp.util.webservices.WSTransformerContextPipelinePipelineItem;
 import com.amalto.webapp.util.webservices.WSTransformerPK;
+import com.amalto.webapp.util.webservices.WSTransformerV2PK;
+import com.amalto.webapp.util.webservices.WSTypedContent;
 import com.amalto.webapp.util.webservices.WSView;
 import com.amalto.webapp.util.webservices.WSViewPK;
 import com.amalto.webapp.util.webservices.WSWhereAnd;
@@ -726,6 +733,38 @@ public class ItemsBrowserDWR {
 		}		
 	}
 	
+	//back up for old revision of save item
+//	public static String saveItem(String[] ids, String concept, boolean newItem, int docIndex) throws Exception{
+//		WebContext ctx = WebContextFactory.get();		
+//		try {		
+//			Configuration config = Configuration.getInstance();
+//			String dataModelPK = config.getModel();
+//			String dataClusterPK = config.getCluster();
+//			Document d = (Document) ctx.getSession().getAttribute("itemDocument"+docIndex);
+//			String xml = CommonDWR.getXMLStringFromDocument(d);
+//			xml = xml.replaceAll("<\\?xml.*?\\?>","");	
+//			//<?xml version="1.0" encoding="UTF-8"?>
+//			org.apache.log4j.Logger.getLogger(ItemsBrowserDWR.class).debug("saveItem() "+xml);
+//			WSItemPK wsi = Util.getPort().putItem(
+//					new WSPutItem(
+//							new WSDataClusterPK(dataClusterPK), 
+//							xml,
+//							new WSDataModelPK(dataModelPK)));	
+//			ctx.getSession().setAttribute("viewNameItems",null);
+//			String operationType = "";
+//			if(newItem==true) operationType = "CREATE";
+//			else operationType = "UPDATE";
+//			String result = pushUpdateReport(wsi.getIds(),concept,operationType);		
+//			return result;
+//		}
+//		catch(Exception e){			
+//			String err= "Unable to save item '"+concept+"."+Util.joinStrings(ids, ".")+"'";
+//			org.apache.log4j.Logger.getLogger(ItemsBrowserDWR.class).error(err,e);
+//			throw new Exception(e.getLocalizedMessage());
+//		}		
+//
+//	}
+	
 	public static String saveItem(String[] ids, String concept, boolean newItem, int docIndex) throws Exception{
 		WebContext ctx = WebContextFactory.get();		
 		try {		
@@ -737,17 +776,83 @@ public class ItemsBrowserDWR {
 			xml = xml.replaceAll("<\\?xml.*?\\?>","");	
 			//<?xml version="1.0" encoding="UTF-8"?>
 			org.apache.log4j.Logger.getLogger(ItemsBrowserDWR.class).debug("saveItem() "+xml);
-			WSItemPK wsi = Util.getPort().putItem(
-					new WSPutItem(
-							new WSDataClusterPK(dataClusterPK), 
-							xml,
-							new WSDataModelPK(dataModelPK)));	
+			
 			ctx.getSession().setAttribute("viewNameItems",null);
 			String operationType = "";
 			if(newItem==true) operationType = "CREATE";
 			else operationType = "UPDATE";
-			String result = pushUpdateReport(wsi.getIds(),concept,operationType);		
-			return result;
+			
+			//check updatedPath
+			HashMap<String,UpdateReportItem> updatedPath = new HashMap<String,UpdateReportItem>();
+			updatedPath = (HashMap<String,UpdateReportItem>) ctx.getSession().getAttribute("updatedPath");
+			if(!"DELETE".equals(operationType) && updatedPath==null){
+				return "ERROR_2";
+			}
+			//create updateReport
+			String resultUpdateReport = createUpdateReport(ids, concept, operationType, updatedPath);
+			
+			//check before saving transformer
+			boolean isBeforeSavingTransformerExist=false;
+			WSTransformerPK[] wst = Util.getPort().getTransformerPKs(new WSGetTransformerPKs("*")).getWsTransformerPK();
+			for (int i = 0; i < wst.length; i++) {
+				if(wst[i].getPk().equals("beforeSaving_"+concept)){
+					isBeforeSavingTransformerExist=true;
+				}
+			}
+			//call before saving transformer
+			if(isBeforeSavingTransformerExist){
+				
+				WSTransformerContext wsTransformerContext=new WSTransformerContext(new WSTransformerV2PK("beforeSaving_"+concept),null,null);
+				WSTypedContent wsTypedContent=new WSTypedContent(null,new WSByteArray(resultUpdateReport.getBytes("UTF-8")),"text/xml; charset=utf-8");
+				WSExecuteTransformerV2 wsExecuteTransformerV2 =new WSExecuteTransformerV2(wsTransformerContext,wsTypedContent);
+				
+				WSTransformerContextPipelinePipelineItem[] entries = Util.getPort().executeTransformerV2(wsExecuteTransformerV2).getPipeline().getPipelineItem();
+	    		
+				String outputErrorMessage="";
+	    		//Scan the entries - in priority, taka the content of the 'output_error_message' entry, 
+	    			for (int i = 0; i < entries.length; i++) {
+	    				
+	    				if ("output_error_message".equals(entries[i].getVariable())) {
+	    					outputErrorMessage = new String(entries[i].getWsTypedContent().getWsBytes().getBytes(), "UTF-8");
+	    					break;
+	    				}
+	    				
+	    			}
+				//handle error message
+	    		if(outputErrorMessage.length()>0){
+	    			
+	    			String errorCode="";
+	    			String errorMessage="";
+	    			Pattern pattern = Pattern.compile("<error code=['\042](.*)['\042]>(.*)</error>");
+	    			Matcher matcher = pattern.matcher(outputErrorMessage);
+	    			while(matcher.find())
+
+	    	        {
+	    				 errorCode=matcher.group(1);
+	    				 errorMessage=matcher.group(2);
+	    	           
+	    	        }
+	    	        if(!errorCode.equals("")&&!errorCode.equals("0")){
+	    	        	errorMessage="ERROR_3:"+errorMessage;
+	    	        	return errorMessage;
+	    	        }
+	    	        
+	    		}
+			}
+			
+			
+			//put item
+			WSItemPK wsi = Util.getPort().putItem(
+					new WSPutItem(
+							new WSDataClusterPK(dataClusterPK), 
+							xml,
+							new WSDataModelPK(dataModelPK)));
+			//update update report key
+			resultUpdateReport=resultUpdateReport.replaceFirst("<Key>.*</Key>", "<Key>"+Util.joinStrings(wsi.getIds(),".")+"</Key>"); 
+			//put update report
+			synchronizeUpdateState(ctx);
+					
+			return persistentUpdateReport(resultUpdateReport,true);
 		}
 		catch(Exception e){			
 			String err= "Unable to save item '"+concept+"."+Util.joinStrings(ids, ".")+"'";
