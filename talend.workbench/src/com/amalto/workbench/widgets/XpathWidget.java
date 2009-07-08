@@ -138,7 +138,7 @@ public class XpathWidget implements  SelectionListener{
 		if (dlg.getReturnCode() == Window.OK)  {
 			descriptionText.setText(dlg.getXpath());
 			dataModelName = dlg.getDataModelName();
-			putAppendInfo("dmn", dlg.getSelectedDataModelName());
+			putAppendInfo("dmn", dlg.getDataModelName());
 			dlg.close();
 		}
 	}
