@@ -56,7 +56,7 @@ public class AutoIncrementGenerator {
 		FileOutputStream out;
 		try {
 			out = new FileOutputStream(file);
-			CONFIGURATION.store(out, "auto_increment configure file");
+			CONFIGURATION.store(out, "AUTO GENERATED FILE DON'T DELETE auto_increment configure file");
 		} catch (Exception e) {
 			String err = "AUTOINCREMENT Configuration: unable to save the configuration in '"+file.getAbsolutePath()+"' :"+e.getMessage(); 
 			org.apache.log4j.Logger.getLogger(AutoIncrementGenerator.class).error(err,e);
