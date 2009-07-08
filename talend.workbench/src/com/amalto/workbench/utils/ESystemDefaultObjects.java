@@ -1,6 +1,8 @@
 package com.amalto.workbench.utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.amalto.workbench.models.TreeObject;
@@ -108,6 +110,19 @@ public static Map<String ,ESystemDefaultObjects> getSystemDefaultObjectsByType(i
 		}
 		return map;
 	}
+/**
+ * get the names of SystemObjects of type
+ * @param type :TreeObject.type(DATAMODEL)
+ * @return objects
+ */
+public static List getValueByType(int type){
+	List list = new ArrayList();
+	for(int i=0; i<values().length; i++){
+		if(type==values()[i].getType())
+			list.add(values()[i].getName());
+	}
+	return list;
+}
 /**
  * chenk if the element is exist
  * @author liyanmei
