@@ -31,6 +31,7 @@ public class XSDNewBrowseItemViewAction extends Action{
 	
 	public void run() {
 		IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
+		declList.clear();
 		List list = selection.toList();
 		for (Object obj: list)
 		{
@@ -40,12 +41,9 @@ public class XSDNewBrowseItemViewAction extends Action{
 					declList.add((XSDElementDeclaration)obj);
 			}
 		}
-		AddBrowseItemsWizard wizard = new AddBrowseItemsWizard(page, list);
+		AddBrowseItemsWizard wizard = new AddBrowseItemsWizard(page, declList);
 		WizardDialog dialog = new WizardDialog(page.getSite().getShell(), wizard);
-		dialog.open();
-        dialog.setBlockOnOpen(true);
-        
-        
+		dialog.open(); 
 	}
 	
 	public void runWithEvent(Event event) {
