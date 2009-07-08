@@ -163,6 +163,7 @@ public class DataModelEditorPage extends AFormPage implements ITextListener{
 	*/
 	
 	public void dispose() {
+		if(schemaViewer!=null && schemaViewer.getUndoManager()!=null)
 		schemaViewer.getUndoManager().disconnect();
 		super.dispose();
 	}
