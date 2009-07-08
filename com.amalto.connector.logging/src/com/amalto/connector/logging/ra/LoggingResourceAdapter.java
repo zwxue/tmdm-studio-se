@@ -43,14 +43,7 @@ public class LoggingResourceAdapter implements ResourceAdapter,IXtentisResourceA
 	
 	
 	private static String configurationFile="xtentis.conf";
-	{
-		if(!new File(configurationFile).exists()){
-			if (SystemUtils.IS_OS_WINDOWS) {
-				configurationFile = "c:\\amalto\\xtentis\\xtentis.conf";			
-			}
-			else configurationFile = "/etc/amalto/xtentis/xtentis.conf";
-		}
-	}
+
 	
 	private final static String JNDI_NAME="java:jca/xtentis/connector/logging";
 	
