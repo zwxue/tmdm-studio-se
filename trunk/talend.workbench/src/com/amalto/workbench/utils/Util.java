@@ -1037,4 +1037,15 @@ public class Util {
 		
 		return XSDSchemaImpl.createSchema(document.getDocumentElement());
     }
+    
+    public static List<XSDComplexTypeDefinition> getComplexTypes(XSDSchema xsd){
+			EList<XSDTypeDefinition> types=xsd.getTypeDefinitions();
+   			List<XSDComplexTypeDefinition> complexs=new ArrayList<XSDComplexTypeDefinition>();
+   			for(XSDTypeDefinition type: types){
+   				if(type instanceof XSDComplexTypeDefinition){
+   					complexs.add((XSDComplexTypeDefinition)type);
+   				}
+   			}
+   			return complexs;
+    }
 }
