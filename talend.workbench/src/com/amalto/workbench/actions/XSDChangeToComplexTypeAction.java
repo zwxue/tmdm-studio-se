@@ -2,6 +2,7 @@ package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -29,6 +30,7 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 import com.amalto.workbench.dialogs.ComplexTypeInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.utils.ImageCache;
+import com.amalto.workbench.utils.Util;
 
 public class XSDChangeToComplexTypeAction extends UndoAction implements SelectionListener{
 
@@ -45,7 +47,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 	public XSDChangeToComplexTypeAction(DataModelMainPage page) {
 		super(page);
 		setImageDescriptor(ImageCache.getImage( "icons/change_to_complex.gif"));
-		setText("Change to a Complex Element");
+		setText("Change to a Complex Type");
 		setToolTipText("Make an Element a Complex Element or change the type of current Complex Element");
 		setDescription(getToolTipText());
 	}
@@ -98,8 +100,9 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
        		//XSDTypeDefinition current = decl.getTypeDefinition();      		
            
        		if (showDlg) {
+       			
 				dialog = new ComplexTypeInputDialog(this, page.getSite()
-						.getShell());
+						.getShell(),Util.getComplexTypes(decl.getSchema()));
 
 				dialog.setBlockOnOpen(true);
 				int ret = dialog.open();

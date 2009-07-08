@@ -1,6 +1,10 @@
 package com.amalto.workbench.widgets;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -8,6 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.xsd.XSDComplexTypeDefinition;
 
 /**
  * this class is meant to encapsulate all widgets rendering concept 
@@ -17,31 +22,34 @@ import org.eclipse.swt.widgets.Text;
  */
 public class ConceptComposite {
 	
-	private  Text typeNameText=null;
+	private  CCombo typeNameText=null;
 	private Button sequenceButton = null;
 	private Button choiceButton = null;
 	private Button allButton = null;
 	private Label typeNameLabel = null;
 	
 	private Composite container = null;
-	
-	public  ConceptComposite(Composite parent, boolean encloseTextField) {
+
+	public  ConceptComposite(Composite parent, boolean encloseTextField,List<XSDComplexTypeDefinition> types) {
 		
 		GridLayout layout = (GridLayout)parent.getLayout();
 		layout.numColumns = 2;
 		//layout.verticalSpacing = 10;
-		
+		List<String> typeNames=new ArrayList<String>();
+		for(XSDComplexTypeDefinition type: types){
+			typeNames.add(type.getName());
+		}
 		typeNameLabel = new Label(parent, SWT.NONE);
 		typeNameLabel.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
 		);
 		typeNameLabel.setText("Enter the name of the complex type. Leave blank for anonymous");
 
-		typeNameText = new Text(parent,SWT.SINGLE | SWT.BORDER);
+		typeNameText = new CCombo(parent,SWT.SINGLE | SWT.BORDER);
 		typeNameText.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,false,true,2,1)
 		);
-		
+		typeNameText.setItems(typeNames.toArray(new String[typeNames.size()]));
 
 		Group radioGroup = new Group(parent,SWT.SHADOW_NONE);
 		radioGroup.setText(encloseTextField ? "" : "Sub-Elements Group");
