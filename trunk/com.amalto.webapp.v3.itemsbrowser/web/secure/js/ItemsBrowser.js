@@ -1,4 +1,4 @@
-amalto.namespace("amalto.itemsbrowser");
+﻿amalto.namespace("amalto.itemsbrowser");
 
 amalto.itemsbrowser.ItemsBrowser = function () {
 
@@ -1378,8 +1378,10 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	}
 	
 	function duplicateItem(ids, dataObject){
+		if(ids){
 		var itemPK = ids.split('@');
 		displayItemDetails4Duplicate(itemPK,dataObject,true);
+	}
 	}
 
 	/**
