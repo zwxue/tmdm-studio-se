@@ -37,6 +37,7 @@ import com.amalto.core.util.Util;
 import com.amalto.core.util.XtentisException;
 import com.amalto.core.webservice.WSDataClusterPK;
 import com.amalto.core.webservice.WSItemPK;
+import com.amalto.core.webservice.WSString;
 import com.amalto.core.webservice.WSSynchronizationGetItemXML;
 import com.amalto.core.webservice.WSSynchronizationGetObjectXML;
 import com.amalto.core.webservice.WSSynchronizationGetUnsynchronizedItemPKs;
@@ -1711,13 +1712,26 @@ public class SynchronizationPlanCtrlBean implements SessionBean, TimedObject{
     	        try {
     	        	ItemPOJO remoteWinner = winner;
     	        	remoteWinner.setDataClusterPK(remoteDataClusterPOJOPK);
+    	        	
+    	        	//do check
+    	        	boolean isExistBeforeSynchro=false;
+    	        	WSString checkGetItemXML=remotePort.synchronizationGetItemXML(new WSSynchronizationGetItemXML(remoteRevisionID,
+    	    	            new WSItemPK(
+    	    	            		new WSDataClusterPK(itemPOJOPK.getDataClusterPOJOPK().getUniqueId()),
+    	    	            		itemPOJOPK.getConceptName(),
+    	    	            		itemPOJOPK.getIds()
+    	    	            )));
+    	    	    if(checkGetItemXML.getValue()==null||checkGetItemXML.getValue().equals("")||checkGetItemXML.getValue().equals("null"))isExistBeforeSynchro=true;
+    	    	    
     	            remotePort.synchronizationPutItemXML(
     	            	new WSSynchronizationPutItemXML(remoteRevisionID, remoteWinner.serialize())
     	            );
     	            
     	            //update remote report
-    	            String userName="User of "+((Stub)remotePort)._getProperty(Stub.ENDPOINT_ADDRESS_PROPERTY);    			
-        	        ItemPOJO updateReportItem = getUpdateReportItem(remoteWinner,remoteRevisionID, userName);
+    	            String userName="User of "+((Stub)remotePort)._getProperty(Stub.ENDPOINT_ADDRESS_PROPERTY);
+    	            String operationType=UpdateReportPOJO.OPERATIONTYPE_UPDATEE;
+    	            if(isExistBeforeSynchro)operationType=UpdateReportPOJO.OPERATIONTYPE_CREATE;
+        	        ItemPOJO updateReportItem = getUpdateReportItem(remoteWinner,remoteRevisionID, userName,operationType);
     				remotePort.synchronizationPutItemXML(
         	            	new WSSynchronizationPutItemXML(remoteRevisionID, updateReportItem.serialize())
         	            );
@@ -1738,8 +1752,12 @@ public class SynchronizationPlanCtrlBean implements SessionBean, TimedObject{
     	        planCtrl.synchronizationPutMarshaledItem(localRevisionID, localWinner.serialize());
 
     	        //update local report 
-    	        String userName="User of http://localhost:8080/talend/TalendPort";    			
-    	        ItemPOJO updateReportItem = getUpdateReportItem(localWinner,localRevisionID, userName);
+    	        String userName="User of http://localhost:8080/talend/TalendPort"; 
+    	        String operationType=UpdateReportPOJO.OPERATIONTYPE_UPDATEE;
+    	        if(localWinner.load(localRevisionID,itemPOJOPK)==null){
+    	        	operationType=UpdateReportPOJO.OPERATIONTYPE_CREATE;
+    	        }
+    	        ItemPOJO updateReportItem = getUpdateReportItem(localWinner,localRevisionID, userName,operationType);
 				updateReportItem.store(localRevisionID);
 				
 	        }
@@ -1787,10 +1805,10 @@ public class SynchronizationPlanCtrlBean implements SessionBean, TimedObject{
 	 * @param userName
 	 * @return
 	 */
-	private ItemPOJO getUpdateReportItem(ItemPOJO logWinner, String revison,String userName) {
+	private ItemPOJO getUpdateReportItem(ItemPOJO logWinner, String revison,String userName,String operationType) {
 		UpdateReportPOJO updateReportPOJO=new UpdateReportPOJO(logWinner.getConceptName(), 
 				                                               Util.joinStrings(logWinner.getItemIds(), "."), 
-				                                               UpdateReportPOJO.OPERATIONTYPE_SYNCHRONIZE, 
+				                                               operationType, 
 				                                               UpdateReportPOJO.SOURCE_DATASYNCHRONIZATION, 
 				                                               System.currentTimeMillis(),
 				                                               logWinner.getDataClusterPOJOPK().getUniqueId(),

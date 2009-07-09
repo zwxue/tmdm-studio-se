@@ -154,7 +154,7 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
        });
        
        this.operationTypeStore = new Ext.data.Store({
-          proxy: new Ext.data.MemoryProxy([['CREATE','CREATE'],['UPDATE','UPDATE'],['DELETE','DELETE'],['SYNCHRONIZE','SYNCHRONIZE']]),
+          proxy: new Ext.data.MemoryProxy([['CREATE','CREATE'],['UPDATE','UPDATE'],['DELETE','DELETE']]),
           reader: new Ext.data.ArrayReader({}, [
               {name: 'value',mapping: 0, type: 'string'},
               {name: 'text',mapping: 1}
