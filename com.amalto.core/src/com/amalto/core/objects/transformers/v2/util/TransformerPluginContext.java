@@ -1,6 +1,14 @@
 package com.amalto.core.objects.transformers.v2.util;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import com.amalto.core.ejb.ItemPOJOPK;
 import com.amalto.core.objects.transformers.v2.ejb.TransformerV2POJO;
+import com.amalto.core.util.Util;
 import com.amalto.core.util.XtentisException;
 
 public class TransformerPluginContext extends TransformerContext{
@@ -40,6 +48,20 @@ public class TransformerPluginContext extends TransformerContext{
 	}
 	public void setPluginCallBack(TransformerPluginCallBack callback) {
 		put(PLUGINS_CALLBACK,callback);
+	}
+	
+	public void setProjectedPKToGlobalContext(ItemPOJOPK projectedPK) {
+
+		SortedSet<ItemPOJOPK> itemPOJOPKs=this.getTransformerGlobalContext().getProjectedPKs();
+		if(itemPOJOPKs==null){
+			itemPOJOPKs=Collections.synchronizedSortedSet(new TreeSet<ItemPOJOPK>());
+		}
+		
+		synchronized(itemPOJOPKs) {
+			itemPOJOPKs.add(projectedPK);
+		}
+		
+		this.getTransformerGlobalContext().setProjectedPKs(itemPOJOPKs);
 	}
 
 	
