@@ -27,6 +27,7 @@ import com.amalto.core.ejb.ItemPOJO;
 import com.amalto.core.ejb.ItemPOJOPK;
 import com.amalto.core.ejb.ObjectPOJO;
 import com.amalto.core.ejb.ObjectPOJOPK;
+import com.amalto.core.ejb.UpdateReportPOJO;
 import com.amalto.core.objects.datacluster.ejb.DataClusterPOJOPK;
 import com.amalto.core.objects.synchronization.ejb.local.SynchronizationItemCtrlLocal;
 import com.amalto.core.objects.synchronization.ejb.local.SynchronizationObjectCtrlLocal;
@@ -1713,6 +1714,14 @@ public class SynchronizationPlanCtrlBean implements SessionBean, TimedObject{
     	            remotePort.synchronizationPutItemXML(
     	            	new WSSynchronizationPutItemXML(remoteRevisionID, remoteWinner.serialize())
     	            );
+    	            
+    	            //update remote report
+    	            String userName="User of "+((Stub)remotePort)._getProperty(Stub.ENDPOINT_ADDRESS_PROPERTY);    			
+        	        ItemPOJO updateReportItem = getUpdateReportItem(remoteWinner,remoteRevisionID, userName);
+    				remotePort.synchronizationPutItemXML(
+        	            	new WSSynchronizationPutItemXML(remoteRevisionID, updateReportItem.serialize())
+        	            );
+
     	            remoteInstance.setXml(remoteWinner.getProjectionAsString());
                 } catch (Exception e) {
                 	String err = "Plan '"+plan.getName()+"': unable to fully synchronize remote item '"+itemPOJOPK.getUniqueID()+"' " +
@@ -1727,6 +1736,12 @@ public class SynchronizationPlanCtrlBean implements SessionBean, TimedObject{
                 ItemPOJO localWinner = winner;
                 localWinner.setDataClusterPK(itemPOJOPK.getDataClusterPOJOPK());
     	        planCtrl.synchronizationPutMarshaledItem(localRevisionID, localWinner.serialize());
+
+    	        //update local report 
+    	        String userName="User of http://localhost:8080/talend/TalendPort";    			
+    	        ItemPOJO updateReportItem = getUpdateReportItem(localWinner,localRevisionID, userName);
+				updateReportItem.store(localRevisionID);
+				
 	        }
 	        
 	        
@@ -1764,6 +1779,28 @@ public class SynchronizationPlanCtrlBean implements SessionBean, TimedObject{
     			synchroItemCtrl.putSynchronizationItem(synchro);
     		}
         }
+	}
+
+	/**
+	 * @param logWinner
+	 * @param revison
+	 * @param userName
+	 * @return
+	 */
+	private ItemPOJO getUpdateReportItem(ItemPOJO logWinner, String revison,String userName) {
+		UpdateReportPOJO updateReportPOJO=new UpdateReportPOJO(logWinner.getConceptName(), 
+				                                               Util.joinStrings(logWinner.getItemIds(), "."), 
+				                                               UpdateReportPOJO.OPERATIONTYPE_SYNCHRONIZE, 
+				                                               UpdateReportPOJO.SOURCE_DATASYNCHRONIZATION, 
+				                                               System.currentTimeMillis(),
+				                                               logWinner.getDataClusterPOJOPK().getUniqueId(),
+				                                               logWinner.getDataModelName(),
+				                                               userName,
+				                                               revison,
+				                                               null);
+ 	      
+		ItemPOJO updateReportItem=new ItemPOJO(new DataClusterPOJOPK("UpdateReport"),"Update",updateReportPOJO.obtainIds(),updateReportPOJO.getTimeInMillis(),updateReportPOJO.serialize());
+		return updateReportItem;
 	}
     
 	
