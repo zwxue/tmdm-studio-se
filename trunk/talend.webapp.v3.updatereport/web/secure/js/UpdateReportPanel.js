@@ -145,7 +145,7 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
 		});
 		
 	   this.sourceStore = new Ext.data.Store({
-          proxy: new Ext.data.MemoryProxy([['genericUI','genericUI'],['adminWorkbench','adminWorkbench']]),
+          proxy: new Ext.data.MemoryProxy([['genericUI','genericUI'],['adminWorkbench','adminWorkbench'],['dataSynchronization','dataSynchronization']]),
           reader: new Ext.data.ArrayReader({}, [
               {name: 'value',mapping: 0, type: 'string'},
               {name: 'text',mapping: 1}
@@ -154,7 +154,7 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
        });
        
        this.operationTypeStore = new Ext.data.Store({
-          proxy: new Ext.data.MemoryProxy([['CREATE','CREATE'],['UPDATE','UPDATE'],['DELETE','DELETE']]),
+          proxy: new Ext.data.MemoryProxy([['CREATE','CREATE'],['UPDATE','UPDATE'],['DELETE','DELETE'],['SYNCHRONIZE','SYNCHRONIZE']]),
           reader: new Ext.data.ArrayReader({}, [
               {name: 'value',mapping: 0, type: 'string'},
               {name: 'text',mapping: 1}
