@@ -920,7 +920,8 @@ public class TransformerV2CtrlBean implements SessionBean, TimedObject, Transfor
 							for (Iterator<ItemPOJOPK> iter = pks.iterator(); iter.hasNext(); ) {
 								ItemPOJOPK pk = iter.next();
 								if(!"".equals(pksAsLine)) pksAsLine += "\n";
-								pksAsLine += pk.getConceptName()+","+Util.joinStrings(pk.getIds(), ",");
+								//pksAsLine += pk.getConceptName()+"."+Util.joinStrings(pk.getIds(), ".");
+								pksAsLine += pk.getUniqueID();
 							}
 						}
 						org.apache.log4j.Logger.getLogger(this.getClass()).debug("done() Projected PKs\n"+pksAsLine);
