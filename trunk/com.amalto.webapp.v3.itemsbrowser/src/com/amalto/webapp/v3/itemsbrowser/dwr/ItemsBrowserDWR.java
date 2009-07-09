@@ -797,47 +797,63 @@ public class ItemsBrowserDWR {
 			for (int i = 0; i < wst.length; i++) {
 				if(wst[i].getPk().equals("beforeSaving_"+concept)){
 					isBeforeSavingTransformerExist=true;
+					break;
 				}
 			}
 			//call before saving transformer
 			if(isBeforeSavingTransformerExist){
 				
-				WSTransformerContext wsTransformerContext=new WSTransformerContext(new WSTransformerV2PK("beforeSaving_"+concept),null,null);
-				WSTypedContent wsTypedContent=new WSTypedContent(null,new WSByteArray(resultUpdateReport.getBytes("UTF-8")),"text/xml; charset=utf-8");
-				WSExecuteTransformerV2 wsExecuteTransformerV2 =new WSExecuteTransformerV2(wsTransformerContext,wsTypedContent);
-				
-				WSTransformerContextPipelinePipelineItem[] entries = Util.getPort().executeTransformerV2(wsExecuteTransformerV2).getPipeline().getPipelineItem();
-	    		
-				String outputErrorMessage="";
-	    		//Scan the entries - in priority, taka the content of the 'output_error_message' entry, 
-	    			for (int i = 0; i < entries.length; i++) {
-	    				
-	    				if ("output_error_message".equals(entries[i].getVariable())) {
-	    					outputErrorMessage = new String(entries[i].getWsTypedContent().getWsBytes().getBytes(), "UTF-8");
-	    					break;
-	    				}
-	    				
-	    			}
-				//handle error message
-	    		if(outputErrorMessage.length()>0){
-	    			
-	    			String errorCode="";
-	    			String errorMessage="";
-	    			Pattern pattern = Pattern.compile("<error code=['\042](.*)['\042]>(.*)</error>");
-	    			Matcher matcher = pattern.matcher(outputErrorMessage);
-	    			while(matcher.find())
+				try {
+					WSTransformerContext wsTransformerContext = new WSTransformerContext(
+							new WSTransformerV2PK("beforeSaving_" + concept),
+							null, null);
+					WSTypedContent wsTypedContent = new WSTypedContent(null,
+							new WSByteArray(resultUpdateReport
+									.getBytes("UTF-8")),
+							"text/xml; charset=utf-8");
+					WSExecuteTransformerV2 wsExecuteTransformerV2 = new WSExecuteTransformerV2(
+							wsTransformerContext, wsTypedContent);
+					WSTransformerContextPipelinePipelineItem[] entries = Util
+							.getPort().executeTransformerV2(
+									wsExecuteTransformerV2).getPipeline()
+							.getPipelineItem();
+					String outputErrorMessage = "";
+					//Scan the entries - in priority, taka the content of the 'output_error_message' entry, 
+					for (int i = 0; i < entries.length; i++) {
 
-	    	        {
-	    				 errorCode=matcher.group(1);
-	    				 errorMessage=matcher.group(2);
-	    	           
-	    	        }
-	    	        if(!errorCode.equals("")&&!errorCode.equals("0")){
-	    	        	errorMessage="ERROR_3:"+errorMessage;
-	    	        	return errorMessage;
-	    	        }
-	    	        
-	    		}
+						if ("output_error_message".equals(entries[i]
+								.getVariable())) {
+							outputErrorMessage = new String(entries[i]
+									.getWsTypedContent().getWsBytes()
+									.getBytes(), "UTF-8");
+							break;
+						}
+
+					}
+					//handle error message
+					if (outputErrorMessage.length() > 0) {
+
+						String errorCode = "";
+						String errorMessage = "";
+						Pattern pattern = Pattern
+								.compile("<error code=['\042](.*)['\042]>(.*)</error>");
+						Matcher matcher = pattern.matcher(outputErrorMessage);
+						while (matcher.find())
+
+						{
+							errorCode = matcher.group(1);
+							errorMessage = matcher.group(2);
+
+						}
+						if (!errorCode.equals("") && !errorCode.equals("0")) {
+							errorMessage = "ERROR_3:" + errorMessage;
+							return errorMessage;
+						}
+
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			
 			
