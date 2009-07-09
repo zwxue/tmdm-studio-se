@@ -40,11 +40,9 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
-import org.apache.log4j.Logger;
 import org.jboss.security.Base64Encoder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
@@ -56,7 +54,6 @@ import com.amalto.core.ejb.local.TransformerCtrlLocal;
 import com.amalto.core.objects.backgroundjob.ejb.BackgroundJobPOJO;
 import com.amalto.core.objects.backgroundjob.ejb.BackgroundJobPOJOPK;
 import com.amalto.core.objects.backgroundjob.ejb.local.BackgroundJobCtrlUtil;
-import com.amalto.core.objects.configurationinfo.util.XtentisConfiguration;
 import com.amalto.core.objects.datacluster.ejb.DataClusterPOJO;
 import com.amalto.core.objects.datacluster.ejb.DataClusterPOJOPK;
 import com.amalto.core.objects.datamodel.ejb.DataModelPOJO;
@@ -119,13 +116,11 @@ import com.amalto.core.objects.view.ejb.ViewPOJO;
 import com.amalto.core.objects.view.ejb.ViewPOJOPK;
 import com.amalto.core.objects.view.ejb.local.ViewCtrlUtil;
 import com.amalto.core.util.ArrayListHolder;
-import com.amalto.core.util.AutoIncrementGenerator;
 import com.amalto.core.util.LocalUser;
 import com.amalto.core.util.RoleInstance;
 import com.amalto.core.util.RoleSpecification;
 import com.amalto.core.util.TransformerPluginContext;
 import com.amalto.core.util.TransformerPluginSpec;
-import com.amalto.core.util.UUIDKey;
 import com.amalto.core.util.Util;
 import com.amalto.core.util.Version;
 import com.amalto.core.util.XSDKey;
@@ -1636,30 +1631,7 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
 			String[] itemKeyValues = com.amalto.core.util.Util.getKeyValuesFromItem(
        			root,
    				conceptKey
-			);	
-
-			//generate uuid 
-			Element conceptRoot = (Element)root.cloneNode(true);			
-			Util.generateUUIDForElement(schema, wsPutItem.getWsDataClusterPK().getPk(),concept, conceptRoot);			
-			//get concept key values
-			for(int j=0; j<conceptKey.getFields().length; j++){
-				for(int i=0; i<conceptRoot.getChildNodes().getLength(); i++){
-					Node node= conceptRoot.getChildNodes().item(i);
-					String name=node.getLocalName();
-					if(node.getNodeType() != Node.ELEMENT_NODE) continue;
-					String key=conceptKey.getFields()[j];
-					if(name.equals(key) && itemKeyValues[j]==null){
-						itemKeyValues[j]=node.getTextContent();
-						break;
-					}
-				}										
-			}			
-			if(itemKeyValues[0]==null){
-				throw(new RemoteException("putItem()  itemKeyValues is null"));
-			}
-			projection=Util.getXMLStringFromNode(conceptRoot);
-			projection = projection.replaceAll("<\\?xml.*?\\?>","");			
-			
+			);				
 			DataClusterPOJOPK dcpk = new DataClusterPOJOPK(wsPutItem.getWsDataClusterPK().getPk());
 			
 			ItemPOJOPK itemPOJOPK =  

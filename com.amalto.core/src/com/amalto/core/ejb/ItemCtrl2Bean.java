@@ -18,6 +18,8 @@ import javax.ejb.SessionContext;
 import javax.naming.InitialContext;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import com.amalto.core.ejb.local.XmlServerSLWrapperLocal;
 import com.amalto.core.ejb.local.XmlServerSLWrapperLocalHome;
@@ -40,7 +42,9 @@ import com.amalto.core.util.RoleSpecification;
 import com.amalto.core.util.RoleWhereCondition;
 import com.amalto.core.util.TransformerPluginCallBack;
 import com.amalto.core.util.TransformerPluginContext;
+import com.amalto.core.util.UUIDItemContent;
 import com.amalto.core.util.Util;
+import com.amalto.core.util.XSDKey;
 import com.amalto.core.util.XtentisException;
 import com.amalto.xmlserver.interfaces.IWhereItem;
 import com.amalto.xmlserver.interfaces.IXmlServerSLWrapper;
@@ -130,7 +134,7 @@ public class ItemCtrl2Bean implements SessionBean {
     
     /**
      * Creates or updates a item
-     * @throws XtentisException
+     * @throws XtentisException 
      * 
      * @ejb.interface-method view-type = "both"
      * @ejb.facade-method 
@@ -146,7 +150,27 @@ public class ItemCtrl2Bean implements SessionBean {
         try {
         	//parse the item against the datamodel - no parsing for cache items
         	
-        	if (schema!=null) {
+        	if (schema!=null) {            	
+        		Document schema1=Util.parse(schema);
+    	    	String concept=item.getConceptName();
+    	    	if(Util.getUUIDNodes(schema1, concept).getLength()>0){ //check uuid key exists
+    		    	String dataCluster=item.getDataClusterPOJOPK().getIds()[0];
+    		    	Element root=(Element)item.getProjection().cloneNode(true);
+    		        XSDKey conceptKey = com.amalto.core.util.Util.getBusinessConceptKey(
+    		        		schema1,
+    						concept					
+    				);	       
+    				//get key values
+    				String[] itemKeyValues = com.amalto.core.util.Util.getKeyValuesFromItem(
+    		   			root,
+    						conceptKey
+    				);			
+    				UUIDItemContent content=Util.processUUID(root, schema1, dataCluster, concept, conceptKey, itemKeyValues);
+    				//reset item projection & itemids
+    				item.setProjectionAsString(content.getItemContent());    				
+    				item.setItemIds(content.getItemKeyValues());
+    	    	}
+    	    	
         		Util.validate(item.getProjection(),schema);
         	}
         	
