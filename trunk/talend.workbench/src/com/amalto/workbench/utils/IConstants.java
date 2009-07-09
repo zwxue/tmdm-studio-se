@@ -16,9 +16,14 @@ public interface IConstants {
 
 	public final static String SOURCE_ADMINWORKBENCH="adminWorkbench";
 	
+	public final static String SOURCE_DATASYNCHRONIZATION="dataSynchronization";
+	
 	public final static String OPERATIONTYPE_CREATE="CREATE";
 	
 	public final static String OPERATIONTYPE_UPDATEE="UPDATE";
 	
 	public final static String OPERATIONTYPE_DELETE="DELETE";
+	
+	public final static String OPERATIONTYPE_SYNCHRONIZE="SYNCHRONIZE";
+	
 }
