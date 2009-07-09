@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 
+import com.amalto.workbench.actions.XSDNewComplexTypeDefinition;
 import com.amalto.workbench.widgets.ConceptComposite;
 
 public class ComplexTypeInputDialog extends Dialog {
@@ -38,12 +39,17 @@ public class ComplexTypeInputDialog extends Dialog {
 
 	protected Control createDialogArea(Composite parent) {
 		//Should not really be here but well,....
-		parent.getShell().setText("Change To Complex Type");
-		
 		final Composite composite = (Composite) super.createDialogArea(parent);
-		// encapsulate all widgets into the ConceptComposite which can be applied to several cases
-		conceptPanel = new ConceptComposite(composite, false,types);
 		
+		// encapsulate all widgets into the ConceptComposite which can be applied to several cases
+		if (caller instanceof XSDNewComplexTypeDefinition) {
+			parent.getShell().setText("Create a Complex Type");
+			conceptPanel = new ConceptComposite(composite, false,types, true);
+		} else {
+			parent.getShell().setText("Change To Complex Type");
+			conceptPanel = new ConceptComposite(composite, false,types, false);
+		}
+
 	    return conceptPanel.getComposite();
 	}
 

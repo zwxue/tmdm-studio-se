@@ -30,7 +30,7 @@ public class ConceptComposite {
 	
 	private Composite container = null;
 
-	public  ConceptComposite(Composite parent, boolean encloseTextField,List<XSDComplexTypeDefinition> types) {
+	public  ConceptComposite(Composite parent, boolean encloseTextField,List<XSDComplexTypeDefinition> types, boolean newComplex) {
 		
 		GridLayout layout = (GridLayout)parent.getLayout();
 		layout.numColumns = 2;
@@ -43,7 +43,10 @@ public class ConceptComposite {
 		typeNameLabel.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
 		);
-		typeNameLabel.setText("Enter the name of the complex type. Leave blank for anonymous");
+		
+		typeNameLabel
+				.setText(newComplex == false ? "Please enter the name of the complex type. Leave blank for anonymous"
+						: "Please enter the name of the complex type");
 
 		typeNameText = new CCombo(parent,SWT.SINGLE | SWT.BORDER);
 		typeNameText.setLayoutData(

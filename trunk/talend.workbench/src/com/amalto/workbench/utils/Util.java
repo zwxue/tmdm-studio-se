@@ -728,6 +728,29 @@ public class Util {
     			elemsUsingType.add(elem);
     			continue;
     		}
+    		else if (typedef instanceof XSDComplexTypeDefinition)
+    		{
+    			XSDComplexTypeDefinition type = (XSDComplexTypeDefinition)typedef;
+				if (type.getContent() instanceof XSDParticle) {
+					XSDParticle particle = (XSDParticle) type.getContent();
+					if (particle.getTerm() instanceof XSDModelGroup) {
+						XSDModelGroup group = (XSDModelGroup) particle
+								.getTerm();
+						EList<XSDParticle> elist = group.getContents();
+						for (XSDParticle pt : elist) {
+							if(pt.getContent() instanceof XSDElementDeclaration)
+							if (((XSDElementDeclaration) pt.getContent())
+										.getTypeDefinition().getName().equals(
+												localName)) {
+									elemsUsingType
+											.add((XSDElementDeclaration) pt
+													.getContent());
+								}
+
+						}
+					}
+				}
+    		}
     	}
         return elemsUsingType;
     }
@@ -871,6 +894,48 @@ public class Util {
 		
 	}
     
+    public static void updateComplexType(Object elem, Object newType,  IStructuredContentProvider provider)
+    {
+    	if (!(newType instanceof XSDComplexTypeDefinition)){
+    		return;
+    	}
+        ArrayList<Object> objList = new ArrayList<Object>();
+    	Object[] allNodes = getAllObject(elem, objList, provider);
+    	for (Object node : allNodes)
+    	{
+    		if (node instanceof XSDElementDeclaration)
+    		{
+				XSDElementDeclaration xsdElem = (XSDElementDeclaration) node;
+				if (xsdElem.getTypeDefinition() == newType) {
+					xsdElem.setTypeDefinition((XSDComplexTypeDefinition) newType);
+				}
+    		}
+    		else if (node instanceof XSDParticle) {
+					XSDParticle particle = (XSDParticle) node;
+					if (particle.getTerm() instanceof XSDModelGroup) {
+						XSDModelGroup group = (XSDModelGroup) particle
+								.getTerm();
+						EList<XSDParticle> elist = group.getContents();
+						for (XSDParticle pt : elist) {
+							if(pt.getContent() instanceof XSDElementDeclaration)
+							if (((XSDElementDeclaration) pt.getContent()).getTypeDefinition() == newType) {
+								((XSDElementDeclaration) pt.getContent()).setTypeDefinition((XSDComplexTypeDefinition)newType);
+							}
+
+						}
+					}
+					else if (particle.getTerm() instanceof XSDElementDeclaration)
+					{
+						XSDElementDeclaration xsdElem = (XSDElementDeclaration) particle.getTerm();
+						if (xsdElem.getTypeDefinition() == newType) {
+						xsdElem
+								.setTypeDefinition((XSDComplexTypeDefinition) newType);
+					      }
+					}
+				}
+    	}
+    	
+    }
     
     public static void updateReference(Object decl, Object[] objs, String newValue) {
 		if (!(decl instanceof XSDElementDeclaration)) {
