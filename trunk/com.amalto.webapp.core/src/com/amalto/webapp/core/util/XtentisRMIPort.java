@@ -16,7 +16,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.naming.InitialContext;
 import javax.naming.NameClassPair;
@@ -28,11 +27,8 @@ import javax.resource.cci.Interaction;
 import javax.resource.cci.MappedRecord;
 
 import org.jboss.security.Base64Encoder;
-import org.jboss.util.id.UID;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import sun.misc.BASE64Decoder;
 
@@ -93,9 +89,7 @@ import com.amalto.core.objects.universe.ejb.local.UniverseCtrlLocal;
 import com.amalto.core.objects.versioning.ejb.VersioningSystemPOJOPK;
 import com.amalto.core.objects.versioning.ejb.local.VersioningSystemCtrlLocal;
 import com.amalto.core.objects.view.ejb.ViewPOJOPK;
-import com.amalto.core.util.EUUIDCustomType;
 import com.amalto.core.util.LocalUser;
-import com.amalto.core.util.UUIDKey;
 import com.amalto.core.util.Util;
 import com.amalto.core.util.Version;
 import com.amalto.core.util.XSDKey;
@@ -863,29 +857,7 @@ public class XtentisRMIPort implements XtentisPort {
 			String[] itemKeyValues = com.amalto.core.util.Util.getKeyValuesFromItem(
        			root,
    				conceptKey
-			);							
-			//generate uuid 
-			Element conceptRoot = (Element)root.cloneNode(true);				
-			Util.generateUUIDForElement(schema, wsPutItem.getWsDataClusterPK().getPk(),concept, conceptRoot);			
-			//get concept key values			
-			for(int j=0; j<conceptKey.getFields().length; j++){
-				for(int i=0; i<conceptRoot.getChildNodes().getLength(); i++){
-					Node node= conceptRoot.getChildNodes().item(i);
-					String name=node.getLocalName();
-					if(node.getNodeType() != Node.ELEMENT_NODE) continue;
-					String key=conceptKey.getFields()[j];
-					if(name.equals(key) && itemKeyValues[j]==null){
-						itemKeyValues[j]=node.getTextContent();
-						break;
-					}
-				}										
-			}			
-			if(itemKeyValues[0]==null){
-				throw(new RemoteException("putItem()  itemKeyValues is null"));
-			}
-			projection=Util.getXMLStringFromNode(conceptRoot);
-			projection = projection.replaceAll("<\\?xml.*?\\?>","");
-			
+			);										
 			DataClusterPOJOPK dcpk = new DataClusterPOJOPK(wsPutItem.getWsDataClusterPK().getPk());
 			
 			ItemPOJOPK itemPOJOPK =  
