@@ -1,12 +1,8 @@
 package com.amalto.workbench.providers;
 
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -27,10 +23,8 @@ import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDVariety;
 import org.eclipse.xsd.XSDWildcard;
-import org.eclipse.xsd.impl.XSDSchemaImpl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
 
 import com.amalto.workbench.utils.DataModelFilter;
 import com.amalto.workbench.utils.Util;
@@ -78,16 +72,16 @@ public class TypesContentProvider implements IStructuredContentProvider, ITreeCo
 
 		if (parent instanceof XSDSchema) {
 			EList xsdElementDeclarations = xsdSchema.getTypeDefinitions();
-//			List<XSDTypeDefinition> list=new ArrayList<XSDTypeDefinition>();
-//			if(filter!=null && !filter.isAll()){
-//				for(XSDTypeDefinition el: (XSDTypeDefinition[])xsdElementDeclarations.toArray(new XSDElementDeclaration[xsdElementDeclarations.size()] )){
-//					if(isInclude( el.getAnnotation())){
-//						list.add(el);
-//					}					
-//				}
-//				return list.toArray(new XSDTypeDefinition[list.size()]);
-//			}
-			return xsdElementDeclarations.toArray(new XSDTypeDefinition[xsdElementDeclarations.size()] );
+			List<XSDTypeDefinition> list=new ArrayList<XSDTypeDefinition>();
+			
+				for(XSDTypeDefinition el: (XSDTypeDefinition[])xsdElementDeclarations.toArray(new XSDTypeDefinition[xsdElementDeclarations.size()] )){
+					if( el instanceof XSDComplexTypeDefinition){
+						list.add(el);
+					}					
+				}
+				return list.toArray(new XSDTypeDefinition[list.size()]);
+			
+			//return xsdElementDeclarations.toArray(new XSDTypeDefinition[xsdElementDeclarations.size()] );
 		}
 		
 		if (parent instanceof XSDAttributeGroupDefinition) {
