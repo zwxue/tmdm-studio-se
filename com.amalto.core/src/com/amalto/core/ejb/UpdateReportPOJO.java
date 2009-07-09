@@ -20,7 +20,7 @@ public class UpdateReportPOJO {
 	
 	public final static String OPERATIONTYPE_DELETE="DELETE";
 	
-	public final static String OPERATIONTYPE_SYNCHRONIZE="SYNCHRONIZE";
+	//public final static String OPERATIONTYPE_SYNCHRONIZE="SYNCHRONIZE";
 	
 	private String source;
 	
