@@ -896,7 +896,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		
 		if (obj instanceof XSDComplexTypeDefinition && selectedObjs.length == 1) {
 			manager.add(newParticleFromTypeAction);
-			manager.add(newGroupFromTypeAction);
+			//manager.add(newGroupFromTypeAction);
 		}
 
 		
