@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 import javax.ejb.CreateException;
@@ -405,6 +406,9 @@ public class ProjectTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 
 			//save result to context
 			context.put(OUTPUT_PK, new TypedContent(pk.marshal().getBytes("utf-8"),"application/xtentis.itempk"));
+			
+			context.setProjectedPKToGlobalContext(pk);
+			
 			//call the callback content is ready
 			context.getPluginCallBack().contentIsReady(context);
 

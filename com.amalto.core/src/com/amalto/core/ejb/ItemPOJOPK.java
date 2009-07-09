@@ -12,7 +12,7 @@ import com.amalto.core.util.Util;
 import com.amalto.core.util.XtentisException;
 
 
-public class ItemPOJOPK implements Serializable {
+public class ItemPOJOPK implements Serializable,Comparable{
 	
 	private DataClusterPOJOPK dataClusterPK;
 	private String conceptName;
@@ -131,6 +131,15 @@ public class ItemPOJOPK implements Serializable {
 	    if (! (obj instanceof ItemPOJOPK)) return false;
 	    ItemPOJOPK other = (ItemPOJOPK) obj;
 	    return other.getUniqueID().equals(this.getUniqueID());
+	}
+
+	public int compareTo(Object o) {
+		if(o instanceof ItemPOJOPK){
+			ItemPOJOPK itemPOJOPK=((ItemPOJOPK) o);
+			String itemPOJOPKID=itemPOJOPK.getUniqueID();
+			return this.getUniqueID().compareTo(itemPOJOPKID);
+		}
+		return 0;
 	}
 	 
 	 
