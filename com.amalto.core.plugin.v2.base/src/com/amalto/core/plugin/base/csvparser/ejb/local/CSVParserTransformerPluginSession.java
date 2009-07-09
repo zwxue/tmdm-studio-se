@@ -5,7 +5,7 @@ package com.amalto.core.plugin.base.csvparser.ejb.local;
 
 /**
  * Session layer for CSVParserTransformerPlugin.
- * @xdoclet-generated at 18-08-08
+ * @xdoclet-generated at 9-07-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
