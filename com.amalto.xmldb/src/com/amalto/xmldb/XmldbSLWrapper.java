@@ -537,7 +537,7 @@ public class XmldbSLWrapper implements IXmlServerSLWrapper,IXmlServerEBJLifeCycl
 			
 	        res = (XMLResource)col.getResource(encodedID);
 	        
-	        if (res==null) return null;
+	        if (res==null||res.getContent()==null) return null;
 	        
 	        return (encoding == null ? "" : "<?xml version=\"1.0\" encoding=\""+encoding+"\"?>\n")+res.getContent();
 		} catch (Exception e) {
