@@ -69,6 +69,7 @@ import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDWildcard;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
+import org.eclipse.xsd.impl.XSDComplexTypeDefinitionImpl;
 import org.eclipse.xsd.impl.XSDElementDeclarationImpl;
 import org.eclipse.xsd.impl.XSDIdentityConstraintDefinitionImpl;
 import org.eclipse.xsd.impl.XSDParticleImpl;
@@ -88,7 +89,9 @@ import com.amalto.workbench.actions.XSDDeleteConceptWrapAction;
 import com.amalto.workbench.actions.XSDDeleteElementAction;
 import com.amalto.workbench.actions.XSDDeleteIdentityConstraintAction;
 import com.amalto.workbench.actions.XSDDeleteParticleAction;
+import com.amalto.workbench.actions.XSDDeleteTypeDefinition;
 import com.amalto.workbench.actions.XSDDeleteXPathAction;
+import com.amalto.workbench.actions.XSDEditComplexTypeAction;
 import com.amalto.workbench.actions.XSDEditConceptAction;
 import com.amalto.workbench.actions.XSDEditElementAction;
 import com.amalto.workbench.actions.XSDEditFacetAction;
@@ -97,6 +100,7 @@ import com.amalto.workbench.actions.XSDEditParticleAction;
 import com.amalto.workbench.actions.XSDEditXPathAction;
 import com.amalto.workbench.actions.XSDGetXPathAction;
 import com.amalto.workbench.actions.XSDNewBrowseItemViewAction;
+import com.amalto.workbench.actions.XSDNewComplexTypeDefinition;
 import com.amalto.workbench.actions.XSDNewConceptAction;
 import com.amalto.workbench.actions.XSDNewElementAction;
 import com.amalto.workbench.actions.XSDNewGroupFromParticleAction;
@@ -116,6 +120,7 @@ import com.amalto.workbench.actions.XSDSetAnnotationTargetSystemsAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
 import com.amalto.workbench.dialogs.DataModelFilterDialog;
 import com.amalto.workbench.dialogs.ErrorExceptionDialog;
+import com.amalto.workbench.providers.ISchemaContentProvider;
 import com.amalto.workbench.providers.TypesContentProvider;
 import com.amalto.workbench.providers.TypesLabelProvider;
 import com.amalto.workbench.providers.XObjectEditorInput;
@@ -167,6 +172,9 @@ public class DataModelMainPage extends AMainPageV2 {
 	private XSDSetAnnotationTargetSystemsAction setAnnotationTargetSystemsAction = null;
 	private XSDSetAnnotationSourceSystemAction setAnnotationSourceSystemAction = null;
 	private XSDSetAnnotationDocumentationAction setAnnotationDocumentationAction = null;
+	private XSDDeleteTypeDefinition   deleteTypeDefinition = null;
+	private XSDNewComplexTypeDefinition  newComplexTypeAction = null;
+	private XSDEditComplexTypeAction   editComplexTypeAction = null;
 	private ObjectUndoContext undoContext;
 	private MenuManager menuMgr;
 	private String dataModelName;
@@ -656,6 +664,8 @@ public class DataModelMainPage extends AMainPageV2 {
 
 				// delete
 				if ((e.stateMask == 0) && (e.keyCode == SWT.DEL)) {
+					deleteConceptWrapAction
+							.regisExtraClassToDel(XSDComplexTypeDefinitionImpl.class);
 					if (deleteConceptWrapAction
 							.checkInDeletableType(selection.toArray())) {
 						deleteConceptWrapAction.prepareToDelSelectedItems(
@@ -667,7 +677,7 @@ public class DataModelMainPage extends AMainPageV2 {
 						MessageDialog.openWarning(getSite().getShell(), "Warnning",
 						"Please select the deletable node and try again!");
 					}
-
+					deleteConceptWrapAction.clearExtraClassToDel();
 				}
 			}
 
@@ -765,12 +775,15 @@ public class DataModelMainPage extends AMainPageV2 {
 				this);
 		this.setAnnotationDocumentationAction = new XSDSetAnnotationDocumentationAction(
 				this);
-		
+		this.deleteTypeDefinition = new XSDDeleteTypeDefinition(this);
+		this.newComplexTypeAction = new XSDNewComplexTypeDefinition(this);
+		this.editComplexTypeAction = new XSDEditComplexTypeAction(this);
 		deleteConceptWrapAction.regisDelAction(XSDElementDeclarationImpl.class, deleteConceptAction);
 		deleteConceptWrapAction.regisDelAction(XSDParticleImpl.class, deleteParticleAction);
 		deleteConceptWrapAction.regisDelAction(XSDIdentityConstraintDefinitionImpl.class, deleteIdentityConstraintAction);
 		deleteConceptWrapAction.regisDelAction(XSDXPathDefinitionImpl.class, deleteXPathAction);
 		deleteConceptWrapAction.regisDelAction(null, deleteElementAction);
+		deleteConceptWrapAction.regisDelAction(XSDComplexTypeDefinitionImpl.class, deleteTypeDefinition);
 	}
 
     private int isTopElement(Object decl) {
@@ -834,7 +847,7 @@ public class DataModelMainPage extends AMainPageV2 {
 				.getSelection());
 
 		if ((selection == null) || (selection.getFirstElement() == null)) {
-
+			manager.add(newComplexTypeAction);
 			return;
 		}
 		
@@ -895,8 +908,10 @@ public class DataModelMainPage extends AMainPageV2 {
 
 		
 		if (obj instanceof XSDComplexTypeDefinition && selectedObjs.length == 1) {
+			manager.add(newComplexTypeAction);
 			manager.add(newParticleFromTypeAction);
-			//manager.add(newGroupFromTypeAction);
+			manager.add(deleteTypeDefinition);
+			manager.add(editComplexTypeAction);
 		}
 
 		
@@ -922,8 +937,6 @@ public class DataModelMainPage extends AMainPageV2 {
 
 			if (!typedef.getSchema().getSchemaForSchemaNamespace().equals(
 					typedef.getTargetNamespace())) {
-				manager.add(changeBaseTypeAction);
-				manager.add(new Separator());
 				EList list = typedef.getBaseTypeDefinition().getValidFacets();
 				for (Iterator iter = list.iterator(); iter.hasNext();) {
 					String element = (String) iter.next();
@@ -937,6 +950,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			setAnnotationActions(manager);
 		}
 
+		deleteConceptWrapAction.regisExtraClassToDel(XSDComplexTypeDefinitionImpl.class);
 		
 		if (selectedObjs.length > 1
 				&& deleteConceptWrapAction.checkInDeletableType(selectedObjs)) {
@@ -957,6 +971,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		// Other plug-ins can contribute there actions here
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 
+		deleteConceptWrapAction.clearExtraClassToDel();
 	}
 	
 	protected void fillContextMenu(IMenuManager manager) {
@@ -1143,6 +1158,16 @@ public class DataModelMainPage extends AMainPageV2 {
 		}else{
 			return typesViewer;
 		}
+	}
+	
+	public void setXsdSchema(XSDSchema xsd)
+	{
+		((ISchemaContentProvider)viewer.getContentProvider()).setXsdSchema(xsd);
+		((ISchemaContentProvider)typesViewer.getContentProvider()).setXsdSchema(xsd);
+	}
+	
+	public ISchemaContentProvider getSchemaContentProvider() {
+		return (ISchemaContentProvider)viewer.getContentProvider();
 	}
 	
 	public void refresh(){

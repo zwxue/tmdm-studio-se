@@ -87,7 +87,7 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
 		complexTypeBtn.setSelection(true);
 		complexTypeBtn.addSelectionListener(this);
 		
-		conceptPanel = new ConceptComposite(composite, true, Util.getComplexTypes(schema));
+		conceptPanel = new ConceptComposite(composite, true, Util.getComplexTypes(schema), false);
 		
 		simpleTypeBtn = new Button(composite, SWT.RADIO);
 		simpleTypeBtn.setText("Simple Type");

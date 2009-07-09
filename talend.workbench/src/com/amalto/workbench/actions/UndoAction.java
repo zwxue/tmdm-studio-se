@@ -179,7 +179,7 @@ public  class UndoAction extends Action {
 	private void refresh(String content)
 	{
 		XSDSchema xsd= Util.createXsdSchema(content);
-        ((ISchemaContentProvider)page.getTreeViewer().getContentProvider()).setXsdSchema(xsd);
+        page.setXsdSchema(xsd);
    		page.refresh();
    		page.markDirty();	
 	}
