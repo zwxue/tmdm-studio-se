@@ -207,10 +207,18 @@ public class ItemPOJO implements Serializable{
 	}
 
 	/**
-	 * @param projection The projection to set.
+	 * @param str The projection to set.
 	 */
-	public void setProjectionAsString(String projection) throws XtentisException{
-		this.projectionString = projection;
+	public void setProjectionAsString(String str) throws XtentisException{
+		this.projectionString = str;
+		try {
+			projection = Util.parse(this.projectionString).getDocumentElement();
+		} catch (Exception e) {
+			String err = "Unable to parse the Item "+this.getItemPOJOPK().getUniqueID()+". "
+			+e.getClass().getName()+": "+e.getLocalizedMessage();
+			org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);
+			throw new XtentisException(err);
+		}
 	}
 
 
