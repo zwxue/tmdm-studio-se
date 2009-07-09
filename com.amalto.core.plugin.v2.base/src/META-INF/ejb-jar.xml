@@ -37,6 +37,90 @@
       </session>
 
       <session >
+         <description><![CDATA[Description for ReplacePlugin]]></description>
+         <display-name>Name for ReplacePlugin</display-name>
+
+         <ejb-name>ReplaceTransformerPlugin</ejb-name>
+
+         <local-home>com.amalto.core.plugin.base.replace.ejb.local.ReplaceTransformerPluginLocalHome</local-home>
+         <local>com.amalto.core.plugin.base.replace.ejb.local.ReplaceTransformerPluginLocal</local>
+         <ejb-class>com.amalto.core.plugin.base.replace.ejb.local.ReplaceTransformerPluginSession</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+
+      </session>
+
+      <session >
+         <description><![CDATA[Description for FixedLengthParserPlugin]]></description>
+         <display-name>Name for FixedLengthParserPlugin</display-name>
+
+         <ejb-name>FixedLengthParserTransformerPlugin</ejb-name>
+
+         <local-home>com.amalto.core.plugin.base.fixedlengthparser.ejb.local.FixedLengthParserTransformerPluginLocalHome</local-home>
+         <local>com.amalto.core.plugin.base.fixedlengthparser.ejb.local.FixedLengthParserTransformerPluginLocal</local>
+         <ejb-class>com.amalto.core.plugin.base.fixedlengthparser.ejb.local.FixedLengthParserTransformerPluginSession</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+
+      </session>
+
+      <session >
+         <description><![CDATA[Description for RoutePlugin]]></description>
+         <display-name>Name for RoutePlugin</display-name>
+
+         <ejb-name>RouteTransformerPlugin</ejb-name>
+
+         <local-home>com.amalto.core.plugin.base.route.ejb.local.RouteTransformerPluginLocalHome</local-home>
+         <local>com.amalto.core.plugin.base.route.ejb.local.RouteTransformerPluginLocal</local>
+         <ejb-class>com.amalto.core.plugin.base.route.ejb.local.RouteTransformerPluginSession</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+
+      </session>
+
+      <session >
+         <description><![CDATA[Description for XSLTPlugin]]></description>
+         <display-name>Name for XSLTPlugin</display-name>
+
+         <ejb-name>XSLTTransformerPlugin</ejb-name>
+
+         <local-home>com.amalto.core.plugin.base.xslt.ejb.local.XSLTTransformerPluginLocalHome</local-home>
+         <local>com.amalto.core.plugin.base.xslt.ejb.local.XSLTTransformerPluginLocal</local>
+         <ejb-class>com.amalto.core.plugin.base.xslt.ejb.local.XSLTTransformerPluginSession</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+
+      </session>
+
+      <session >
+         <description><![CDATA[Description for xPathPlugin]]></description>
+         <display-name>Name for xPathPlugin</display-name>
+
+         <ejb-name>xPathTransformerPlugin</ejb-name>
+
+         <local-home>com.amalto.core.plugin.base.xpath.ejb.local.xPathTransformerPluginLocalHome</local-home>
+         <local>com.amalto.core.plugin.base.xpath.ejb.local.xPathTransformerPluginLocal</local>
+         <ejb-class>com.amalto.core.plugin.base.xpath.ejb.local.xPathTransformerPluginSession</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+
+      </session>
+
+      <session >
+         <description><![CDATA[Description for ProjectPlugin]]></description>
+         <display-name>Name for ProjectPlugin</display-name>
+
+         <ejb-name>ProjectTransformerPlugin</ejb-name>
+
+         <local-home>com.amalto.core.plugin.base.project.ejb.local.ProjectTransformerPluginLocalHome</local-home>
+         <local>com.amalto.core.plugin.base.project.ejb.local.ProjectTransformerPluginLocal</local>
+         <ejb-class>com.amalto.core.plugin.base.project.ejb.local.ProjectTransformerPluginSession</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+
+      </session>
+
+      <session >
          <description><![CDATA[Description for GroupedLinesReaderTransformerPlugin]]></description>
          <display-name>Name for GroupedLinesReaderTransformerPlugin</display-name>
 
@@ -79,56 +163,14 @@
       </session>
 
       <session >
-         <description><![CDATA[Description for ReplacePlugin]]></description>
-         <display-name>Name for ReplacePlugin</display-name>
+         <description><![CDATA[Description for BatchProjectPlugin]]></description>
+         <display-name>Name for BatchProjectPlugin</display-name>
 
-         <ejb-name>ReplaceTransformerPlugin</ejb-name>
+         <ejb-name>BatchProjectPlugin</ejb-name>
 
-         <local-home>com.amalto.core.plugin.base.replace.ejb.local.ReplaceTransformerPluginLocalHome</local-home>
-         <local>com.amalto.core.plugin.base.replace.ejb.local.ReplaceTransformerPluginLocal</local>
-         <ejb-class>com.amalto.core.plugin.base.replace.ejb.local.ReplaceTransformerPluginSession</ejb-class>
-         <session-type>Stateless</session-type>
-         <transaction-type>Container</transaction-type>
-
-      </session>
-
-      <session >
-         <description><![CDATA[Description for FixedLengthParserPlugin]]></description>
-         <display-name>Name for FixedLengthParserPlugin</display-name>
-
-         <ejb-name>FixedLengthParserTransformerPlugin</ejb-name>
-
-         <local-home>com.amalto.core.plugin.base.fixedlengthparser.ejb.local.FixedLengthParserTransformerPluginLocalHome</local-home>
-         <local>com.amalto.core.plugin.base.fixedlengthparser.ejb.local.FixedLengthParserTransformerPluginLocal</local>
-         <ejb-class>com.amalto.core.plugin.base.fixedlengthparser.ejb.local.FixedLengthParserTransformerPluginSession</ejb-class>
-         <session-type>Stateless</session-type>
-         <transaction-type>Container</transaction-type>
-
-      </session>
-
-      <session >
-         <description><![CDATA[Description for XSLTPlugin]]></description>
-         <display-name>Name for XSLTPlugin</display-name>
-
-         <ejb-name>XSLTTransformerPlugin</ejb-name>
-
-         <local-home>com.amalto.core.plugin.base.xslt.ejb.local.XSLTTransformerPluginLocalHome</local-home>
-         <local>com.amalto.core.plugin.base.xslt.ejb.local.XSLTTransformerPluginLocal</local>
-         <ejb-class>com.amalto.core.plugin.base.xslt.ejb.local.XSLTTransformerPluginSession</ejb-class>
-         <session-type>Stateless</session-type>
-         <transaction-type>Container</transaction-type>
-
-      </session>
-
-      <session >
-         <description><![CDATA[Description for RoutePlugin]]></description>
-         <display-name>Name for RoutePlugin</display-name>
-
-         <ejb-name>RouteTransformerPlugin</ejb-name>
-
-         <local-home>com.amalto.core.plugin.base.route.ejb.local.RouteTransformerPluginLocalHome</local-home>
-         <local>com.amalto.core.plugin.base.route.ejb.local.RouteTransformerPluginLocal</local>
-         <ejb-class>com.amalto.core.plugin.base.route.ejb.local.RouteTransformerPluginSession</ejb-class>
+         <local-home>com.amalto.core.plugin.base.batchproject.ejb.local.BatchProjectPluginLocalHome</local-home>
+         <local>com.amalto.core.plugin.base.batchproject.ejb.local.BatchProjectPluginLocal</local>
+         <ejb-class>com.amalto.core.plugin.base.batchproject.ejb.local.BatchProjectPluginSession</ejb-class>
          <session-type>Stateless</session-type>
          <transaction-type>Container</transaction-type>
 
@@ -143,34 +185,6 @@
          <local-home>com.amalto.core.plugin.base.csvparser.ejb.local.CSVParserTransformerPluginLocalHome</local-home>
          <local>com.amalto.core.plugin.base.csvparser.ejb.local.CSVParserTransformerPluginLocal</local>
          <ejb-class>com.amalto.core.plugin.base.csvparser.ejb.local.CSVParserTransformerPluginSession</ejb-class>
-         <session-type>Stateless</session-type>
-         <transaction-type>Container</transaction-type>
-
-      </session>
-
-      <session >
-         <description><![CDATA[Description for xPathPlugin]]></description>
-         <display-name>Name for xPathPlugin</display-name>
-
-         <ejb-name>xPathTransformerPlugin</ejb-name>
-
-         <local-home>com.amalto.core.plugin.base.xpath.ejb.local.xPathTransformerPluginLocalHome</local-home>
-         <local>com.amalto.core.plugin.base.xpath.ejb.local.xPathTransformerPluginLocal</local>
-         <ejb-class>com.amalto.core.plugin.base.xpath.ejb.local.xPathTransformerPluginSession</ejb-class>
-         <session-type>Stateless</session-type>
-         <transaction-type>Container</transaction-type>
-
-      </session>
-
-      <session >
-         <description><![CDATA[Description for ProjectPlugin]]></description>
-         <display-name>Name for ProjectPlugin</display-name>
-
-         <ejb-name>ProjectTransformerPlugin</ejb-name>
-
-         <local-home>com.amalto.core.plugin.base.project.ejb.local.ProjectTransformerPluginLocalHome</local-home>
-         <local>com.amalto.core.plugin.base.project.ejb.local.ProjectTransformerPluginLocal</local>
-         <ejb-class>com.amalto.core.plugin.base.project.ejb.local.ProjectTransformerPluginSession</ejb-class>
          <session-type>Stateless</session-type>
          <transaction-type>Container</transaction-type>
 
@@ -309,6 +323,252 @@
       <role-name>administration</role-name>
       <method >
          <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>ReplaceTransformerPlugin</ejb-name>
+         <method-intf>Remote</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <role-name>administration</role-name>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>ReplaceTransformerPlugin</ejb-name>
+         <method-intf>Home</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <unchecked/>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>ReplaceTransformerPlugin</ejb-name>
+         <method-intf>Local</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <unchecked/>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>ReplaceTransformerPlugin</ejb-name>
+         <method-intf>LocalHome</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <role-name>administration</role-name>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>FixedLengthParserTransformerPlugin</ejb-name>
+         <method-intf>Remote</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <role-name>administration</role-name>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>FixedLengthParserTransformerPlugin</ejb-name>
+         <method-intf>Home</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <unchecked/>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>FixedLengthParserTransformerPlugin</ejb-name>
+         <method-intf>Local</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <unchecked/>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>FixedLengthParserTransformerPlugin</ejb-name>
+         <method-intf>LocalHome</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <role-name>administration</role-name>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>RouteTransformerPlugin</ejb-name>
+         <method-intf>Remote</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <role-name>administration</role-name>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>RouteTransformerPlugin</ejb-name>
+         <method-intf>Home</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <unchecked/>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>RouteTransformerPlugin</ejb-name>
+         <method-intf>Local</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <unchecked/>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>RouteTransformerPlugin</ejb-name>
+         <method-intf>LocalHome</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <role-name>administration</role-name>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>XSLTTransformerPlugin</ejb-name>
+         <method-intf>Remote</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <role-name>administration</role-name>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>XSLTTransformerPlugin</ejb-name>
+         <method-intf>Home</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <unchecked/>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>XSLTTransformerPlugin</ejb-name>
+         <method-intf>Local</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <unchecked/>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>XSLTTransformerPlugin</ejb-name>
+         <method-intf>LocalHome</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <role-name>administration</role-name>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>xPathTransformerPlugin</ejb-name>
+         <method-intf>Remote</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <role-name>administration</role-name>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>xPathTransformerPlugin</ejb-name>
+         <method-intf>Home</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <unchecked/>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>xPathTransformerPlugin</ejb-name>
+         <method-intf>Local</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <unchecked/>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>xPathTransformerPlugin</ejb-name>
+         <method-intf>LocalHome</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <role-name>administration</role-name>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>ProjectTransformerPlugin</ejb-name>
+         <method-intf>Remote</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <role-name>administration</role-name>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>ProjectTransformerPlugin</ejb-name>
+         <method-intf>Home</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <unchecked/>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>ProjectTransformerPlugin</ejb-name>
+         <method-intf>Local</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <unchecked/>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+         <ejb-name>ProjectTransformerPlugin</ejb-name>
+         <method-intf>LocalHome</method-intf>
+         <method-name>*</method-name>
+      </method>
+   </method-permission>
+
+   <method-permission >
+      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
+      <role-name>administration</role-name>
+      <method >
+         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
          <ejb-name>GroupedLinesReaderTransformerPlugin</ejb-name>
          <method-intf>Remote</method-intf>
          <method-name>*</method-name>
@@ -432,7 +692,7 @@
       <role-name>administration</role-name>
       <method >
          <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>ReplaceTransformerPlugin</ejb-name>
+         <ejb-name>BatchProjectPlugin</ejb-name>
          <method-intf>Remote</method-intf>
          <method-name>*</method-name>
       </method>
@@ -442,7 +702,7 @@
       <role-name>administration</role-name>
       <method >
          <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>ReplaceTransformerPlugin</ejb-name>
+         <ejb-name>BatchProjectPlugin</ejb-name>
          <method-intf>Home</method-intf>
          <method-name>*</method-name>
       </method>
@@ -452,7 +712,7 @@
       <unchecked/>
       <method >
          <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>ReplaceTransformerPlugin</ejb-name>
+         <ejb-name>BatchProjectPlugin</ejb-name>
          <method-intf>Local</method-intf>
          <method-name>*</method-name>
       </method>
@@ -462,130 +722,7 @@
       <unchecked/>
       <method >
          <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>ReplaceTransformerPlugin</ejb-name>
-         <method-intf>LocalHome</method-intf>
-         <method-name>*</method-name>
-      </method>
-   </method-permission>
-
-   <method-permission >
-      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-      <role-name>administration</role-name>
-      <method >
-         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>FixedLengthParserTransformerPlugin</ejb-name>
-         <method-intf>Remote</method-intf>
-         <method-name>*</method-name>
-      </method>
-   </method-permission>
-   <method-permission >
-      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-      <role-name>administration</role-name>
-      <method >
-         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>FixedLengthParserTransformerPlugin</ejb-name>
-         <method-intf>Home</method-intf>
-         <method-name>*</method-name>
-      </method>
-   </method-permission>
-   <method-permission >
-      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-      <unchecked/>
-      <method >
-         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>FixedLengthParserTransformerPlugin</ejb-name>
-         <method-intf>Local</method-intf>
-         <method-name>*</method-name>
-      </method>
-   </method-permission>
-   <method-permission >
-      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-      <unchecked/>
-      <method >
-         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>FixedLengthParserTransformerPlugin</ejb-name>
-         <method-intf>LocalHome</method-intf>
-         <method-name>*</method-name>
-      </method>
-   </method-permission>
-
-   <method-permission >
-      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-      <role-name>administration</role-name>
-      <method >
-         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>XSLTTransformerPlugin</ejb-name>
-         <method-intf>Remote</method-intf>
-         <method-name>*</method-name>
-      </method>
-   </method-permission>
-   <method-permission >
-      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-      <role-name>administration</role-name>
-      <method >
-         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>XSLTTransformerPlugin</ejb-name>
-         <method-intf>Home</method-intf>
-         <method-name>*</method-name>
-      </method>
-   </method-permission>
-   <method-permission >
-      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-      <unchecked/>
-      <method >
-         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>XSLTTransformerPlugin</ejb-name>
-         <method-intf>Local</method-intf>
-         <method-name>*</method-name>
-      </method>
-   </method-permission>
-   <method-permission >
-      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-      <unchecked/>
-      <method >
-         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>XSLTTransformerPlugin</ejb-name>
-         <method-intf>LocalHome</method-intf>
-         <method-name>*</method-name>
-      </method>
-   </method-permission>
-
-   <method-permission >
-      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-      <role-name>administration</role-name>
-      <method >
-         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>RouteTransformerPlugin</ejb-name>
-         <method-intf>Remote</method-intf>
-         <method-name>*</method-name>
-      </method>
-   </method-permission>
-   <method-permission >
-      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-      <role-name>administration</role-name>
-      <method >
-         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>RouteTransformerPlugin</ejb-name>
-         <method-intf>Home</method-intf>
-         <method-name>*</method-name>
-      </method>
-   </method-permission>
-   <method-permission >
-      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-      <unchecked/>
-      <method >
-         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>RouteTransformerPlugin</ejb-name>
-         <method-intf>Local</method-intf>
-         <method-name>*</method-name>
-      </method>
-   </method-permission>
-   <method-permission >
-      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-      <unchecked/>
-      <method >
-         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>RouteTransformerPlugin</ejb-name>
+         <ejb-name>BatchProjectPlugin</ejb-name>
          <method-intf>LocalHome</method-intf>
          <method-name>*</method-name>
       </method>
@@ -627,88 +764,6 @@
       <method >
          <description><![CDATA[description not supported yet by ejbdoclet]]></description>
          <ejb-name>CSVParserTransformerPlugin</ejb-name>
-         <method-intf>LocalHome</method-intf>
-         <method-name>*</method-name>
-      </method>
-   </method-permission>
-
-   <method-permission >
-      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-      <role-name>administration</role-name>
-      <method >
-         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>xPathTransformerPlugin</ejb-name>
-         <method-intf>Remote</method-intf>
-         <method-name>*</method-name>
-      </method>
-   </method-permission>
-   <method-permission >
-      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-      <role-name>administration</role-name>
-      <method >
-         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>xPathTransformerPlugin</ejb-name>
-         <method-intf>Home</method-intf>
-         <method-name>*</method-name>
-      </method>
-   </method-permission>
-   <method-permission >
-      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-      <unchecked/>
-      <method >
-         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>xPathTransformerPlugin</ejb-name>
-         <method-intf>Local</method-intf>
-         <method-name>*</method-name>
-      </method>
-   </method-permission>
-   <method-permission >
-      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-      <unchecked/>
-      <method >
-         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>xPathTransformerPlugin</ejb-name>
-         <method-intf>LocalHome</method-intf>
-         <method-name>*</method-name>
-      </method>
-   </method-permission>
-
-   <method-permission >
-      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-      <role-name>administration</role-name>
-      <method >
-         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>ProjectTransformerPlugin</ejb-name>
-         <method-intf>Remote</method-intf>
-         <method-name>*</method-name>
-      </method>
-   </method-permission>
-   <method-permission >
-      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-      <role-name>administration</role-name>
-      <method >
-         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>ProjectTransformerPlugin</ejb-name>
-         <method-intf>Home</method-intf>
-         <method-name>*</method-name>
-      </method>
-   </method-permission>
-   <method-permission >
-      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-      <unchecked/>
-      <method >
-         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>ProjectTransformerPlugin</ejb-name>
-         <method-intf>Local</method-intf>
-         <method-name>*</method-name>
-      </method>
-   </method-permission>
-   <method-permission >
-      <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-      <unchecked/>
-      <method >
-         <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>ProjectTransformerPlugin</ejb-name>
          <method-intf>LocalHome</method-intf>
          <method-name>*</method-name>
       </method>

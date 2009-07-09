@@ -5,7 +5,7 @@ package com.amalto.core.plugin.base.replace.ejb.local;
 
 /**
  * Session layer for ReplaceTransformerPlugin.
- * @xdoclet-generated at 19-11-08
+ * @xdoclet-generated at 9-07-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}

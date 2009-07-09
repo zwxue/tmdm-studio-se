@@ -1,19 +1,19 @@
 /*
  * Generated file - Do not edit!
  */
-package com.amalto.core.plugin.base.linereader.ejb.local;
+package com.amalto.core.plugin.base.batchproject.ejb.local;
 
 /**
- * Utility class for LineReaderTransformerPlugin.
+ * Utility class for BatchProjectPlugin.
  * @xdoclet-generated at 9-07-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
  */
-public class LineReaderTransformerPluginUtil
+public class BatchProjectPluginUtil
 {
    /** Cached local home (EJBLocalHome). Uses lazy loading to obtain its value (loaded by getLocalHome() methods). */
-   private static com.amalto.core.plugin.base.linereader.ejb.local.LineReaderTransformerPluginLocalHome cachedLocalHome = null;
+   private static com.amalto.core.plugin.base.batchproject.ejb.local.BatchProjectPluginLocalHome cachedLocalHome = null;
 
    private static Object lookupHome(java.util.Hashtable environment, String jndiName, Class narrowTo) throws javax.naming.NamingException {
       // Obtain initial context
@@ -34,12 +34,12 @@ public class LineReaderTransformerPluginUtil
 
    /**
     * Obtain local home interface from default initial context
-    * @return Local home interface for LineReaderTransformerPlugin. Lookup using COMP_NAME
+    * @return Local home interface for BatchProjectPlugin. Lookup using COMP_NAME
     */
-   public static com.amalto.core.plugin.base.linereader.ejb.local.LineReaderTransformerPluginLocalHome getLocalHome() throws javax.naming.NamingException
+   public static com.amalto.core.plugin.base.batchproject.ejb.local.BatchProjectPluginLocalHome getLocalHome() throws javax.naming.NamingException
    {
       if (cachedLocalHome == null) {
-            cachedLocalHome = (com.amalto.core.plugin.base.linereader.ejb.local.LineReaderTransformerPluginLocalHome) lookupHome(null, com.amalto.core.plugin.base.linereader.ejb.local.LineReaderTransformerPluginLocalHome.COMP_NAME, com.amalto.core.plugin.base.linereader.ejb.local.LineReaderTransformerPluginLocalHome.class);
+            cachedLocalHome = (com.amalto.core.plugin.base.batchproject.ejb.local.BatchProjectPluginLocalHome) lookupHome(null, com.amalto.core.plugin.base.batchproject.ejb.local.BatchProjectPluginLocalHome.COMP_NAME, com.amalto.core.plugin.base.batchproject.ejb.local.BatchProjectPluginLocalHome.class);
       }
       return cachedLocalHome;
    }
@@ -66,7 +66,7 @@ public class LineReaderTransformerPluginUtil
                localInetAddress = java.net.InetAddress.getLocalHost();
            }
            catch (java.net.UnknownHostException uhe) {
-               System.err.println("LineReaderTransformerPluginUtil: Could not get the local IP address using InetAddress.getLocalHost()!");
+               System.err.println("BatchProjectPluginUtil: Could not get the local IP address using InetAddress.getLocalHost()!");
                // todo: find better way to get around this...
                uhe.printStackTrace();
                return null;
