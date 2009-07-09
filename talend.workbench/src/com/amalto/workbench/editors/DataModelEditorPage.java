@@ -176,6 +176,7 @@ public class DataModelEditorPage extends AFormPage implements ITextListener{
 	
 	public boolean isDirty()
 	{
+		refreshData();
 		if (editorPart!=null)
 			return editorPart.isDirty();
 		else
