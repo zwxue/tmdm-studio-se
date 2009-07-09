@@ -7,6 +7,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.rmi.RemoteException;
 import java.security.Principal;
 import java.security.acl.Group;
 import java.text.SimpleDateFormat;
@@ -44,10 +45,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.jboss.util.id.GUID;
-import org.jboss.util.id.UID;
-import org.jboss.util.id.VMID;
-import org.jboss.util.platform.PID;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -619,10 +616,42 @@ public final class Util {
     	
     }
     
-    public static void generateUUIDForElement(Document schema,String dataCluster,String concept, Element conceptRoot) throws Exception{
+    public static UUIDItemContent processUUID(Element root, Document schema, String dataCluster, String concept,XSDKey conceptKey, String[] itemKeyValues) throws Exception{
+		//generate uuid 
+		Element conceptRoot = (Element)root.cloneNode(true);			
+		Util.generateUUIDForElement(schema, dataCluster,concept, conceptRoot);			
+		//get concept key values
+		for(int j=0; j<conceptKey.getFields().length; j++){
+			for(int i=0; i<conceptRoot.getChildNodes().getLength(); i++){
+				Node node= conceptRoot.getChildNodes().item(i);
+				String name=node.getLocalName();
+				if(node.getNodeType() != Node.ELEMENT_NODE) continue;
+				String key=conceptKey.getFields()[j];
+				if(name.equals(key) && itemKeyValues[j]==null){
+					itemKeyValues[j]=node.getTextContent();
+					break;
+				}
+			}										
+		}			
+		if(itemKeyValues[0]==null){
+			throw(new RemoteException("putItem()  itemKeyValues is null"));
+		}
+		String projection=Util.getXMLStringFromNode(conceptRoot);
+		projection = projection.replaceAll("<\\?xml.*?\\?>","");			
+		UUIDItemContent  content =new UUIDItemContent();
+		content.setItemContent(projection);
+		content.setItemKeyValues(itemKeyValues);
+		return content;
+    }
+    public static NodeList getUUIDNodes(Document schema, String concept) throws Exception{
 		Element rootNS=Util.getRootElement("nsholder",schema.getDocumentElement().getNamespaceURI(),"xsd");	
 		String xpath="//xsd:element[@name='"+concept+"']//xsd:element[@type='"+EUUIDCustomType.AUTO_INCREMENT+"' or @type='"+EUUIDCustomType.UUID+"']";
 		NodeList uuidLists=Util.getNodeList(schema.getDocumentElement(),xpath,rootNS.getNamespaceURI(),"xsd");
+		return uuidLists;
+    }
+    
+    private static void generateUUIDForElement(Document schema,String dataCluster,String concept, Element conceptRoot) throws Exception{
+    	NodeList uuidLists=getUUIDNodes(schema, concept);
 		//Element conceptRoot = (Element)root.cloneNode(true);	
 		for(int i=0; i<uuidLists.getLength(); i++){
 			Element element=(Element)uuidLists.item(i);
