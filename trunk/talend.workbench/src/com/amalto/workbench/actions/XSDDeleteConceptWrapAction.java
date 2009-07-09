@@ -14,6 +14,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDConcreteComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintCategory;
@@ -36,6 +37,8 @@ public class XSDDeleteConceptWrapAction extends UndoAction{
 	private List<XSDConcreteComponent> delObjs = new ArrayList<XSDConcreteComponent>();
 	private Map<Class, UndoAction> clsAction = new HashMap<Class, UndoAction>();
 	
+	private List<Class> extraClsToDel = new ArrayList<Class>();
+	
 	public XSDDeleteConceptWrapAction(DataModelMainPage page) {
 		super(page);
 		viewer = page.getTreeViewer();
@@ -47,9 +50,20 @@ public class XSDDeleteConceptWrapAction extends UndoAction{
 		clsAction.put(cls, action);
 	}
 	
+	public void regisExtraClassToDel(Class cls)
+	{
+		extraClsToDel.add(cls);
+	}
+	
+	public void clearExtraClassToDel()
+	{
+		extraClsToDel.clear();
+	}
+	
 	public IStatus doAction() {
+		
+		List<IStatus> results = new ArrayList<IStatus>();
 		try {
-			
 			IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
 			if(delObjs.isEmpty()){
 	            return Status.CANCEL_STATUS;
@@ -78,7 +92,7 @@ public class XSDDeleteConceptWrapAction extends UndoAction{
 					return Status.CANCEL_STATUS;
 				}
 			}
-			
+
 			for (Iterator iterator = delObjs.iterator(); iterator.hasNext();) {
 				Object toDel = (Object) iterator.next();
 				UndoAction delExecute = null;
@@ -129,10 +143,14 @@ public class XSDDeleteConceptWrapAction extends UndoAction{
 				{
 					((XSDDeleteIdentityConstraintAction)delExecute).setXSDTODel((XSDIdentityConstraintDefinition)toDel);
 				}
+				else if (delExecute instanceof XSDDeleteTypeDefinition && toDel instanceof XSDComplexTypeDefinition)
+				{
+					((XSDDeleteTypeDefinition)delExecute).setXSDTODel((XSDComplexTypeDefinition)toDel);
+				}
 				else
 					return Status.CANCEL_STATUS;
 				
-				delExecute.doAction();
+				results.add(delExecute.doAction());
 			}
        
 		} catch (Exception e) {
@@ -143,10 +161,11 @@ public class XSDDeleteConceptWrapAction extends UndoAction{
 					"An error occured trying to remove Concept: "+e.getLocalizedMessage()
 			);
 			
-			return Status.CANCEL_STATUS;
+			return (results.indexOf(Status.OK_STATUS)>= 0 ? Status.OK_STATUS : Status.CANCEL_STATUS);
 		}	
 		
-		return Status.OK_STATUS;
+		
+		return  (results.indexOf(Status.OK_STATUS)>= 0 ? Status.OK_STATUS : Status.CANCEL_STATUS);
 	}
 	
 	private void wrapDelObj(Object[] toDels) {
@@ -282,9 +301,10 @@ public class XSDDeleteConceptWrapAction extends UndoAction{
 				else
 					return false;
 			}
-			else
+			else if (extraClsToDel.indexOf(obj.getClass()) < 0)
 				return false;
 		}
+
 		return true;
 	}
 	
