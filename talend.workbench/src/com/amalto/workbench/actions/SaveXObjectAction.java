@@ -44,7 +44,7 @@ public class SaveXObjectAction extends Action{
 
 	protected XObjectEditor editor = null;
 	//private TreeObject initialXObject = null;
-	
+	int state=-1; //0: success 1:failed 
 	
 	public SaveXObjectAction(XObjectEditor editor) {
 		super();
@@ -122,6 +122,7 @@ public class SaveXObjectAction extends Action{
                 //existing object saved
                 xobject.fireEvent(IXObjectModelListener.SAVE, xobject.getParent(), xobject);
             }
+            state=0;
 
 		} catch (Exception e) {
 			
@@ -131,11 +132,17 @@ public class SaveXObjectAction extends Action{
 					"Error Occured on Saving", 
 					"An error occured trying to save the "+IConstants.TALEND+" object instance: "+e.getLocalizedMessage()
 					);
+			state=1;
 		}		
 	}
+	public int getState() {
+		return state;
+	}
+
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}
+
 	
 
 	/***************************************
