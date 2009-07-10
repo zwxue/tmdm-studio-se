@@ -5,7 +5,9 @@ public class ConceptMappingParam {
 	
 	private String concept;
 	
-	private String fields;//using json format
+	//using json format
+	//TODO now only support 2 level mapping
+	private String fields;
 	
 	public ConceptMappingParam(String concept, String fields) {
 		super();
