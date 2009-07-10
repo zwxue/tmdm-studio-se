@@ -120,6 +120,7 @@ import com.amalto.workbench.actions.XSDSetAnnotationTargetSystemsAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
 import com.amalto.workbench.dialogs.DataModelFilterDialog;
 import com.amalto.workbench.dialogs.ErrorExceptionDialog;
+import com.amalto.workbench.editors.xmleditor.XMLEditor;
 import com.amalto.workbench.providers.ISchemaContentProvider;
 import com.amalto.workbench.providers.TypesContentProvider;
 import com.amalto.workbench.providers.TypesLabelProvider;
@@ -198,10 +199,16 @@ public class DataModelMainPage extends AMainPageV2 {
 	private TypesContentProvider typesProvider;
 	private MenuManager typesMenuMgr;
 	boolean isSchemaSelected=true;
+	XObjectEditor editor;
 	public DataModelMainPage(FormEditor editor) {
 		super(editor, DataModelMainPage.class.getName(), "Data Model "
 				+ ((XObjectEditorInput) editor.getEditorInput()).getName());
 		this.dataModelName =((XObjectEditorInput) editor.getEditorInput()).getName();
+		this.editor=(XObjectEditor)editor;
+	}
+
+	public XObjectEditor getEditor() {
+		return editor;
 	}
 
 	protected void createCharacteristicsContent(FormToolkit toolkit,
@@ -448,10 +455,13 @@ public class DataModelMainPage extends AMainPageV2 {
 			hookTypesContextMenu();
 			// if this created after the editorPage and it is dirty , mark this
 			// one as dirty too
-			DataModelEditorPage editorPage = ((DataModelEditorPage) getEditor()
-					.findPage(DataModelEditorPage.class.getName()));
-			if (editorPage.isDirty())
-				this.markDirty();
+//			DataModelEditorPage editorPage = ((DataModelEditorPage) getEditor()
+//					.findPage(DataModelEditorPage.class.getName()));
+//			if (editorPage.isDirty())
+//				this.markDirty();
+			XMLEditor xmleditor=((XObjectEditor)getEditor()).getXmlEditor();
+			if(xmleditor!=null && xmleditor.isDirty())
+				xmleditor.markDirty();
 			//init undo history
 			initializeOperationHistory();
 			// FIXME: does the reflow before the tree is actually expanded
@@ -709,6 +719,9 @@ public class DataModelMainPage extends AMainPageV2 {
 			//refresh types
 			typesProvider.setXsdSchema(xsd);
 			typesViewer.setInput(getSite());
+			
+			//refresh xmleditor
+			if(getEditor().getXmlEditor()!=null)getEditor().getXmlEditor().refresh(getXObject());
 		} catch (Exception e) {
 			e.printStackTrace();
 			ErrorExceptionDialog.openError(this.getSite().getShell(),
@@ -1184,10 +1197,9 @@ public class DataModelMainPage extends AMainPageV2 {
 	public void markDirty() {
 		//commit();
 		super.markDirty();
-		DataModelEditorPage editorPage = ((DataModelEditorPage) getEditor()
-				.findPage(DataModelEditorPage.class.getName()));
-		if (!editorPage.isDirty())
-			editorPage.markDirty();
+		XMLEditor xmleditor=((XObjectEditor)getEditor()).getXmlEditor();
+		if(xmleditor!=null && xmleditor.isDirty())
+			xmleditor.markDirty();
 		/*
 		 * try { String schema =
 		 * ((XSDTreeContentProvider)viewer.getContentProvider
