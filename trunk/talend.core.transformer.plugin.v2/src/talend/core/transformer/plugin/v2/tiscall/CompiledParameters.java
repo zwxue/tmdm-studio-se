@@ -11,6 +11,7 @@ import javax.xml.transform.TransformerException;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -41,6 +42,7 @@ public class CompiledParameters implements Serializable {
 	String username;
 	String password;
 	String contentType = "text/xml; charset=utf-8";
+	ConceptMappingParam conceptMappingParam;
 
 	public CompiledParameters() {
     }
@@ -77,6 +79,15 @@ public class CompiledParameters implements Serializable {
 	public void setContentType(String contentType) {
     	this.contentType = contentType;
     }
+	
+	
+	public ConceptMappingParam getConceptMappingParam() {
+		return conceptMappingParam;
+	}
+
+	public void setConceptMappingParam(ConceptMappingParam conceptMappingParam) {
+		this.conceptMappingParam = conceptMappingParam;
+	}
 
 	public String serialize() throws IOException{
 		String xml="<configuration>";
@@ -90,6 +101,12 @@ public class CompiledParameters implements Serializable {
 			xml+="<value>"+kv.getValue()+"</value>";
 			xml+="<isPipleVariableName>"+kv.isPipleVariableName+"</isPipleVariableName>";
 			xml+="</contextParam>";
+		};
+		if(this.conceptMappingParam!=null){
+			xml+="<conceptMapping>";
+			xml+="<concept>"+conceptMappingParam.getConcept()+"</concept>";
+			xml+="<fields>"+conceptMappingParam.getFields()+"</fields>";
+			xml+="</conceptMapping>";
 		}
 		xml+="</configuration>";
 		return xml;
@@ -150,6 +167,17 @@ public class CompiledParameters implements Serializable {
 		//password - defaults to null
 		String password = Util.getFirstTextNode(params, "password");
 		compiled.setPassword(password);
+		
+		//conceptMapping
+		NodeList conceptMappingList = Util.getNodeList(parametersDoc.getDocumentElement(), "//conceptMapping");
+		if(conceptMappingList!=null&&conceptMappingList.getLength()>0){
+			Node conceptMapping=conceptMappingList.item(0);
+			String concept=Util.getFirstTextNode(conceptMapping, "concept");
+			String fields=Util.getFirstTextNode(conceptMapping, "fields");
+			compiled.setConceptMappingParam(new ConceptMappingParam(concept,fields));
+		}else{
+			compiled.setConceptMappingParam(null);
+		}
 	
 		return compiled;
 	}
