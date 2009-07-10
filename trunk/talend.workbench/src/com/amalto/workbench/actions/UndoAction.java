@@ -70,7 +70,10 @@ public  class UndoAction extends Action {
 	public void run() {
 		try {			
 			operation.addContext(page.getUndoContext());
-			getOperationHistory().execute(operation, null, null);			
+			getOperationHistory().execute(operation, null, null);		
+			
+			//refresh xml editor
+			page.getEditor().getXmlEditor().refresh(page.getXObject());
 		} catch (ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

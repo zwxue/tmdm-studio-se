@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.text.Document;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.PartInitException;
@@ -17,11 +18,14 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 
 import com.amalto.workbench.actions.SaveXObjectAction;
+import com.amalto.workbench.editors.xmleditor.XMLEditor;
+import com.amalto.workbench.editors.xmleditor.XMLEditorInput;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.ImageCache;
+import com.amalto.workbench.webservices.WSDataModel;
 
 public class XObjectEditor extends FormEditor implements IXObjectModelListener{	
 	
@@ -30,6 +34,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 	
 	protected boolean saveInProgress = false;
 	
+	protected XMLEditor xmlEditor;
 	/*
      * (non-Javadoc)
      * 
@@ -59,10 +64,14 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
             switch(xobject.getType()) {
 	           	case TreeObject.DATA_MODEL:
 	           		addPage(new DataModelMainPage(this));
-//	           		DataModelEditorPage page = new DataModelEditorPage(this);
-                    addPage(new DataModelEditorPage(this));
-                   
-                    //addPage(new DataModelEditorPage2());
+
+                    //addPage(new DataModelEditorPage(this));
+	           		WSDataModel wsObject = (WSDataModel) (xobject.getWsObject()); 
+	           		Document doc = new Document(wsObject.getXsdSchema());
+	           		xmlEditor=new XMLEditor(this, xobject);
+	           		addPage(xmlEditor, new XMLEditorInput(doc));	           		
+	           		this.setPageText(1, "Schema");
+
 	           		break;
 	           	case TreeObject.INBOUND_PLUGIN:
 	           		break;
@@ -133,10 +142,14 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
     			return;
     		}
 		}
-    	
+    	//if(xmlEditor!=null)xmlEditor.doSave(monitor);
     	//perform the actual save
     	SaveXObjectAction action = new SaveXObjectAction(this);
     	action.run();
+    	if(xmlEditor!=null && action.getState()==0)
+    	{
+    		xmlEditor.refresh();
+    	}
     	monitor.done();
     	
     	this.saveInProgress = false;
@@ -215,32 +228,23 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 
     
     protected void pageChange(int newPageIndex) {
-        AFormPage page = (AFormPage)formPages.get(0);
-        boolean dirty = page.isDirty();
+    	AFormPage page = (AFormPage)formPages.get(0);
+    	boolean isdirty=page.isDirty();
         super.pageChange(newPageIndex);
-        page.refreshPage();
-       
-        linkDirty(page, dirty);
-        
+                
+    	if(xmlEditor!=null )xmlEditor.refresh();
+    	page.refreshPage();
+    	linkDirty(page, isdirty);   
+                          
     }
 
-	private void linkDirty(AFormPage page, boolean dirty) {
+	private void linkDirty(Object page, boolean dirty) {
 		if(page instanceof DataModelMainPage && dirty){
-        	
-        	if(findPage(DataModelEditorPage.class.getName())!=null){
-        		DataModelEditorPage editorPage = (DataModelEditorPage)findPage(DataModelEditorPage.class.getName());
-        		editorPage.markDirtyWithoutCommit();
-        		((DataModelMainPage)page).markDirtyWithoutCommit();
-        	}
-        	
-        }else if(page instanceof DataModelEditorPage && dirty){
         	
         	if(findPage(DataModelMainPage.class.getName())!=null){
         		DataModelMainPage mainPage = (DataModelMainPage)findPage(DataModelMainPage.class.getName());
         		mainPage.markDirtyWithoutCommit();
-        		((DataModelEditorPage)page).markDirtyWithoutCommit();
-        	}
-
+        	}			        	
         }
 	}
 
@@ -277,5 +281,10 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 		
 		return ImageCache.getImage( "icons/error.gif").createImage();
     }
+
+
+	public XMLEditor getXmlEditor() {
+		return xmlEditor;
+	}
     
 }

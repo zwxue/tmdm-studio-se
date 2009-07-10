@@ -28,6 +28,11 @@ import com.amalto.workbench.dialogs.ErrorExceptionDialog;
 import com.amalto.workbench.utils.WidgetUtils;
 import com.amalto.workbench.webservices.WSDataModel;
 
+/**
+ * @deprecated
+ * @author achen
+ *
+ */
 public class DataModelEditorPage extends AFormPage implements ITextListener{
 
 	private SourceViewer schemaViewer;
