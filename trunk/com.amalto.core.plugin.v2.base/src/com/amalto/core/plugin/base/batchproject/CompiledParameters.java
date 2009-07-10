@@ -15,7 +15,7 @@ public class CompiledParameters implements Serializable {
 	private String dataClusterName = null;
 	private String dataModelName = null;
 	private String conceptName = null;
-	
+	private boolean overwrite=true;
 	
 	public String getDataClusterName() {
 		return dataClusterName;
@@ -39,6 +39,14 @@ public class CompiledParameters implements Serializable {
 
 	public void setConceptName(String conceptName) {
 		this.conceptName = conceptName;
+	}
+	
+	public boolean isOverwrite() {
+		return overwrite;
+	}
+
+	public void setOverwrite(boolean overwrite) {
+		this.overwrite = overwrite;
 	}
 
 	public String serialize() throws IOException{
