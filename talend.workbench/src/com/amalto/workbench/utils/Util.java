@@ -739,9 +739,9 @@ public class Util {
 						EList<XSDParticle> elist = group.getContents();
 						for (XSDParticle pt : elist) {
 							if(pt.getContent() instanceof XSDElementDeclaration)
-							if (((XSDElementDeclaration) pt.getContent())
-										.getTypeDefinition().getName().equals(
-												localName)) {
+							if ((localName.equals(((XSDElementDeclaration) pt.getContent())
+									.getTypeDefinition().getName()
+												))) {
 									elemsUsingType
 											.add((XSDElementDeclaration) pt
 													.getContent());
