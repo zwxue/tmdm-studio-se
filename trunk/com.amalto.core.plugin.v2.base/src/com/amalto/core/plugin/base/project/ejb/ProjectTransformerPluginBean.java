@@ -399,15 +399,16 @@ public class ProjectTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 			org.apache.log4j.Logger.getLogger(this.getClass()).debug("execute() Projecting "+newItemPOJO.getItemPOJOPK().getUniqueID()+" usign model "+dataModelName+"\n"+xml);
 
 			//now perform updates
-			getItemCtrl2Local().putItem(
+			ItemPOJOPK puttedItemPOJOPK=getItemCtrl2Local().putItem(
 					newItemPOJO,
 					dataModelPOJO
 			);
 
+
 			//save result to context
-			context.put(OUTPUT_PK, new TypedContent(pk.marshal().getBytes("utf-8"),"application/xtentis.itempk"));
+			context.put(OUTPUT_PK, new TypedContent(puttedItemPOJOPK.marshal().getBytes("utf-8"),"application/xtentis.itempk"));
 			
-			context.setProjectedPKToGlobalContext(pk);
+			context.setProjectedPKToGlobalContext(puttedItemPOJOPK);
 			
 			//call the callback content is ready
 			context.getPluginCallBack().contentIsReady(context);
