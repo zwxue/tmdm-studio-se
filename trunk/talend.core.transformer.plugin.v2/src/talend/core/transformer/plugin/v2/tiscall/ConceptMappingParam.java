@@ -7,6 +7,8 @@ public class ConceptMappingParam {
 	
 	//using json format
 	//TODO now only support 2 level mapping
+	//maybe we can support tree structure
+	//or simple functions
 	private String fields;
 	
 	public ConceptMappingParam(String concept, String fields) {
