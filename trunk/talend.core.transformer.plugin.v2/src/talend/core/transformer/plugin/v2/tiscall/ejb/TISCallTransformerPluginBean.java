@@ -1,6 +1,5 @@
 package talend.core.transformer.plugin.v2.tiscall.ejb;
 
-import java.io.ByteArrayInputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,10 +15,14 @@ import javax.xml.ws.BindingProvider;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import talend.core.transformer.plugin.v2.tiscall.CompiledParameters;
+import talend.core.transformer.plugin.v2.tiscall.ConceptMappingParam;
 import talend.core.transformer.plugin.v2.tiscall.ContextParam;
+import talend.core.transformer.plugin.v2.tiscall.util.JSONException;
+import talend.core.transformer.plugin.v2.tiscall.util.JSONObject;
 import talend.core.transformer.plugin.v2.tiscall.webservices.Args;
 import talend.core.transformer.plugin.v2.tiscall.webservices.ArrayOfXsdString;
 import talend.core.transformer.plugin.v2.tiscall.webservices.WSxml;
@@ -269,6 +272,22 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 				args.getItem().add(param);
 			}
 			
+			//parse concept parameters
+			ConceptMappingParam conceptMappingParam=compiledParameters.getConceptMappingParam();
+			boolean hasConcept=false;
+			String conceptName="";
+			boolean hasFields=false;
+			JSONObject fieldsObject=null;
+			if(conceptMappingParam!=null){
+				if(conceptMappingParam.getConcept().length()>0){
+					hasConcept=true;
+					conceptName=conceptMappingParam.getConcept();
+				}
+				if(conceptMappingParam.getFields().length()>0){
+					hasFields=true;
+					fieldsObject=new JSONObject(conceptMappingParam.getFields());
+				}
+			}
 			//Build call parameters
 			
 //			Args args = new Args();			
@@ -280,16 +299,38 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 				sb=sb.append("<results>\n");
 				for(int i=0; i<list.size(); i++){
 					List<String> results=list.get(i).getItem();
-					sb=sb.append("<item>\n");				
+					
+					if(hasConcept){
+						sb=sb.append("<"+conceptName+">\n");
+					}else{
+						sb=sb.append("<item>\n");
+					}
+									
 					for(int j=0; j<results.size(); j++){
 						String str=results.get(j);
 						if(str!=null)
 						{
-							sb=sb.append("<attr value=\"" + str + "\"/>" +"\n");
+							if(hasFields){
+								if(fieldsObject.has("p"+j)){
+									String columnName=(String) fieldsObject.get("p"+j);
+									sb=sb.append("<"+columnName+">" + str + "</"+columnName+">" +"\n");
+								}else{
+									//do nothing
+								}
+								
+							}else{
+								sb=sb.append("<attr>" + str + "</attr>" +"\n");
+							}
+							
 						}
 					}			
 					
-					sb=sb.append("</item>\n");
+					if(hasConcept){
+						sb=sb.append("</"+conceptName+">\n");
+					}else{
+						sb=sb.append("</item>\n");
+					}
+					
 				}
 				sb=sb.append("</results>" +"\n");
 			}else{ //exception
@@ -368,6 +409,9 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 		"	username [optional]: the username to use for the call"+"\n"+
 		"	password [optional]: the password to  use for the call" +"\n"+
 		"	contentType [optional]: the contentType of the returned data. Defaults to 'text/xml'" +"\n"+
+		"	conceptMapping [optional]: Directly map the result of a TIS call to a TOM concept"+"\n"+
+		"		concept: the name of the concept"+"\n"+
+		"		fields: mapping rule with json format"+"\n"+
 		"\n"+
 		"\n"+
 		"Example" +"\n"+
@@ -388,6 +432,15 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 		"		</contextParam>" +"\n"+		
 		"		<username>john</username>" +"\n"+
 		"		<password>doe</password>" +"\n"+
+		"		<conceptMapping>" +"\n"+	
+		"			<concept>User</concept>" +"\n"+
+		"			<fields>" +"\n"+
+		"			  {" +"\n"+
+		"			  p1:firstname," +"\n"+
+		"			  p2:lastname" +"\n"+
+		"			  }" +"\n"+
+		"			</fields>" +"\n"+
+		"		</conceptMapping>" +"\n"+
 		"	</configuration>"+"\n"+
 		"\n"+
 		"\n";
@@ -505,7 +558,26 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 
     		//password - defaults to null
     		String password = Util.getFirstTextNode(params, "password");
-    		compiled.setPassword(password);    		
+    		compiled.setPassword(password);
+    		
+    		//conceptMapping
+    		NodeList conceptMappingList = Util.getNodeList(parametersDoc.getDocumentElement(), "//conceptMapping");
+    		if(conceptMappingList!=null&&conceptMappingList.getLength()>0){
+    			Node conceptMapping=conceptMappingList.item(0);
+    			String concept=Util.getFirstTextNode(conceptMapping, "concept");
+    			String fields=Util.getFirstTextNode(conceptMapping, "fields");
+    			try {
+    				new JSONObject(fields);
+    			} catch (JSONException e) {
+    				String err = "The format of fields parameter of conceptMapping is invalid";
+    				org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
+    				throw new XtentisException(err);
+    			}
+    			compiled.setConceptMappingParam(new ConceptMappingParam(concept,fields));
+    		}else{
+    			compiled.setConceptMappingParam(null);
+    		}
+    		
     		return compiled.serialize();
     	} catch (XtentisException e) {
     		throw(e);
