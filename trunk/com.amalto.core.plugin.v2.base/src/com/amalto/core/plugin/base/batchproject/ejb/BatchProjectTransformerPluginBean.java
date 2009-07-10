@@ -7,8 +7,16 @@ import java.util.regex.Pattern;
 
 import javax.ejb.SessionBean;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
+import com.amalto.core.ejb.ItemPOJO;
+import com.amalto.core.ejb.ItemPOJOPK;
+import com.amalto.core.objects.datacluster.ejb.DataClusterPOJOPK;
+import com.amalto.core.objects.datamodel.ejb.DataModelPOJO;
+import com.amalto.core.objects.datamodel.ejb.DataModelPOJOPK;
 import com.amalto.core.objects.transformers.v2.ejb.TransformerPluginV2CtrlBean;
 import com.amalto.core.objects.transformers.v2.util.TransformerPluginContext;
 import com.amalto.core.objects.transformers.v2.util.TransformerPluginVariableDescriptor;
@@ -54,6 +62,8 @@ public class BatchProjectTransformerPluginBean extends TransformerPluginV2CtrlBe
 	private static final String INPUT_XML ="xml_instance";
 	private static final String OUTPUT_XML ="unavailable_content";
 
+	private static final Pattern declarationPattern = Pattern.compile("<\\?.*?\\?>",Pattern.DOTALL);
+	private static final String br ="\n";
     private transient boolean configurationLoaded = false;
 
 	public BatchProjectTransformerPluginBean() {
@@ -303,17 +313,65 @@ public class BatchProjectTransformerPluginBean extends TransformerPluginV2CtrlBe
 			//attempt to read charset
 			String charset =  Util.extractCharset(xmlTC.getContentType());
 			String xml = new String(xmlTC.getContentBytes(),charset);
+			//cleanup declaration
+			xml = declarationPattern.matcher(xml).replaceAll("");
 			
-			
-			//TODO main process
+			//main process
 			String conceptName=parameters.getConceptName();
 			String dataClusterName=parameters.getDataClusterName();
 			String dataModelName=parameters.getDataModelName();
 			
-			String resultText="";
-			resultText+=xml;
+            //get the Data Model POJO from the cache
+			DataModelPOJO dataModelPOJO  = Util.getDataModelCtrlLocal().getDataModel(new DataModelPOJOPK(dataModelName));
+			//TODO add data model cache
 			
-		    context.put(OUTPUT_XML, new TypedContent(resultText.getBytes(),"UTF-8"));
+			String resultContent="<invalid-items>"+br+br;
+			Document doc=Util.parse(xml);
+			NodeList nlist=Util.getNodeList(doc, "//"+conceptName);
+			if(nlist.getLength()>0){
+				for (int i = 0; i < nlist.getLength(); i++) {
+					Node selectedConceptNode=nlist.item(i);
+					String selectedConceptXml=Util.nodeToString(selectedConceptNode);
+					
+					//Determine item Key
+					ItemPOJOPK pk = Util.getItemPOJOPK(
+							new DataClusterPOJOPK(dataClusterName),
+							(Element) selectedConceptNode,
+							Util.parse(dataModelPOJO.getSchema())
+					);
+					
+					
+					//create the item
+					ItemPOJO newItemPOJO = 	new ItemPOJO(
+							pk.getDataClusterPOJOPK(),
+							pk.getConceptName(),
+							pk.getIds(),
+							System.currentTimeMillis(),
+							selectedConceptXml
+					);
+					
+					//TODO check exist
+					
+					//now perform updates
+					ItemPOJOPK puttedItemPOJOPK=null;
+					try {
+						puttedItemPOJOPK=getItemCtrl2Local().putItem(
+								newItemPOJO,
+								dataModelPOJO
+						);
+					} catch (Exception e) {
+						String err = "Could not project item "+pk.getUniqueID()+": "+e.getLocalizedMessage();
+					    //org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);//error message stack be printed by ItemCtrl2Bean
+					    resultContent+=(selectedConceptXml+br);
+					}
+					if(puttedItemPOJOPK!=null)context.setProjectedPKToGlobalContext(puttedItemPOJOPK);
+				}
+			}
+			
+			resultContent+="</invalid-items>";
+		    context.put(OUTPUT_XML, new TypedContent(resultContent.getBytes(),"UTF-8"));
+		    
+		    
 			//call the callback content is ready
 			context.getPluginCallBack().contentIsReady(context);
 			
