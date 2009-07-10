@@ -63,7 +63,10 @@ public class BatchProjectTransformerPluginBean extends TransformerPluginV2CtrlBe
 	private static final String OUTPUT_XML ="unavailable_content";
 
 	private static final Pattern declarationPattern = Pattern.compile("<\\?.*?\\?>",Pattern.DOTALL);
+	private static final String overwriteRegex ="(true|false)";
 	private static final String br ="\n";
+	
+	
     private transient boolean configurationLoaded = false;
 
 	public BatchProjectTransformerPluginBean() {
@@ -116,6 +119,7 @@ public class BatchProjectTransformerPluginBean extends TransformerPluginV2CtrlBe
 		"	dataClusterName [mandatory]: the Data Cluster to use "+"\n"+
 		"	dataModelName [mandatory]: the Data Model to use "+"\n"+
 		"	conceptName [mandatory]: the Concept Model to use "+"\n"+
+		"	overwrite [optional]: overwrite an existing item 'true' or 'false'. Default: 'true'"+"\n"+
 		"\n"+
 		"\n"+
 		"Example" +"\n"+
@@ -209,6 +213,7 @@ public class BatchProjectTransformerPluginBean extends TransformerPluginV2CtrlBe
 		"					<xsd:element minOccurs='1' maxOccurs='1' nillable='false' name='dataClusterName' type='xsd:string'/>" +
 		"					<xsd:element minOccurs='1' maxOccurs='1' nillable='false' name='dataModelName' type='xsd:string'/>" +
 		"					<xsd:element minOccurs='1' maxOccurs='1' nillable='false' name='conceptName' type='xsd:string'/>" +
+		"					<xsd:element minOccurs='0' maxOccurs='1' nillable='false' name='overwrite' type='xsd:string'/>" +
 		"				</xsd:sequence>" +
 		"			</xsd:complexType>" +
 		"</xsd:element>"+
@@ -254,6 +259,19 @@ public class BatchProjectTransformerPluginBean extends TransformerPluginV2CtrlBe
 				throw new XtentisException(err);
 			}
     		compiled.setConceptName(conceptName);
+    		
+    		//optional case
+    		boolean isOverwrite=true;
+    		String overwrite = Util.getFirstTextNode(params, "overwrite");
+			if (overwrite!=null&&overwrite.length()>0) {
+				if(!overwrite.trim().matches(overwriteRegex)){
+					String err = "The format of the overwrite parameter of the BatchProject Transformer Plugin is invalid";
+					org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
+					throw new XtentisException(err);
+				}
+				isOverwrite=Boolean.parseBoolean(overwrite.trim());
+			}
+    		compiled.setOverwrite(isOverwrite);
 
     		return compiled.serialize();
     		
@@ -320,12 +338,13 @@ public class BatchProjectTransformerPluginBean extends TransformerPluginV2CtrlBe
 			String conceptName=parameters.getConceptName();
 			String dataClusterName=parameters.getDataClusterName();
 			String dataModelName=parameters.getDataModelName();
+			boolean isOverwrite=parameters.isOverwrite();
 			
             //get the Data Model POJO from the cache
 			DataModelPOJO dataModelPOJO  = Util.getDataModelCtrlLocal().getDataModel(new DataModelPOJOPK(dataModelName));
 			//TODO add data model cache
 			
-			String resultContent="<invalid-items>"+br+br;
+			String resultContent="<no-insert-items>"+br+br;
 			Document doc=Util.parse(xml);
 			NodeList nlist=Util.getNodeList(doc, "//"+conceptName);
 			if(nlist.getLength()>0){
@@ -334,10 +353,11 @@ public class BatchProjectTransformerPluginBean extends TransformerPluginV2CtrlBe
 					String selectedConceptXml=Util.nodeToString(selectedConceptNode);
 					
 					//Determine item Key
+					Document dataModelXSD=Util.parse(dataModelPOJO.getSchema());
 					ItemPOJOPK pk = Util.getItemPOJOPK(
 							new DataClusterPOJOPK(dataClusterName),
 							(Element) selectedConceptNode,
-							Util.parse(dataModelPOJO.getSchema())
+							dataModelXSD
 					);
 					
 					
@@ -350,8 +370,16 @@ public class BatchProjectTransformerPluginBean extends TransformerPluginV2CtrlBe
 							selectedConceptXml
 					);
 					
-					//TODO check exist
-					
+					//check exist
+					if(!isOverwrite){
+						ItemPOJO check = getItemCtrl2Local().existsItem(pk);
+						if (check!=null) {
+							org.apache.log4j.Logger.getLogger(this.getClass()).warn("execute() BatchProject:Item "+pk.getUniqueID()+" already exists and overwrite is set to false --> skipping");
+							resultContent+=(selectedConceptXml+br);
+							continue;
+						}
+					}
+						
 					//now perform updates
 					ItemPOJOPK puttedItemPOJOPK=null;
 					try {
@@ -368,7 +396,7 @@ public class BatchProjectTransformerPluginBean extends TransformerPluginV2CtrlBe
 				}
 			}
 			
-			resultContent+="</invalid-items>";
+			resultContent+="</no-insert-items>";
 		    context.put(OUTPUT_XML, new TypedContent(resultContent.getBytes(),"UTF-8"));
 		    
 		    
