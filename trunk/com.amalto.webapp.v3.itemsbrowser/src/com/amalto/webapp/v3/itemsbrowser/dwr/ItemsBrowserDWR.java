@@ -807,12 +807,14 @@ public class ItemsBrowserDWR {
 					WSTransformerContext wsTransformerContext = new WSTransformerContext(
 							new WSTransformerV2PK("beforeSaving_" + concept),
 							null, null);
+					String exchangeData = mergeExchangeData(xml,resultUpdateReport);
 					WSTypedContent wsTypedContent = new WSTypedContent(null,
-							new WSByteArray(resultUpdateReport
+							new WSByteArray(exchangeData
 									.getBytes("UTF-8")),
 							"text/xml; charset=utf-8");
 					WSExecuteTransformerV2 wsExecuteTransformerV2 = new WSExecuteTransformerV2(
 							wsTransformerContext, wsTypedContent);
+					//TODO process no plug-in issue
 					WSTransformerContextPipelinePipelineItem[] entries = Util
 							.getPort().executeTransformerV2(
 									wsExecuteTransformerV2).getPipeline()
@@ -876,6 +878,17 @@ public class ItemsBrowserDWR {
 			throw new Exception(e.getLocalizedMessage());
 		}		
 
+	}
+
+
+	private static String mergeExchangeData(String xml,
+			String resultUpdateReport) {
+		String exchangeData="<Exchange>\n";
+		exchangeData+=xml;
+		exchangeData+="\n";
+		exchangeData+=resultUpdateReport;
+		exchangeData+="\n</Exchange>";
+		return exchangeData;
 	}
 	
 	
