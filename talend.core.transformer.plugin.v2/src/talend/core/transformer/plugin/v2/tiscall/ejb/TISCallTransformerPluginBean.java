@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.ejb.SessionBean;
@@ -542,6 +543,12 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 					boolean ispiple=false;
 					if(isPipleVariableName!=null){
 						ispiple=Boolean.valueOf(isPipleVariableName).booleanValue();
+					}
+					Pattern pipeParamPattern = Pattern.compile("\\{([^\\}]+)\\}");
+					Matcher match = pipeParamPattern.matcher(paramValue);
+					if (match.matches()) {
+						paramValue = match.group(1);
+						ispiple = true;
 					}
 					paramsList.add(new ContextParam(paramName,paramValue,ispiple));
 				}
