@@ -52,7 +52,7 @@ public class BatchProjectTransformerPluginBean extends TransformerPluginV2CtrlBe
 	public static final String PARAMETERS ="com.amalto.core.plugin.batchproject.parameters";
 	//various
 	private static final String INPUT_XML ="xml_instance";
-	private static final String OUTPUT_TEXT ="success_number";
+	private static final String OUTPUT_XML ="unavailable_content";
 
     private transient boolean configurationLoaded = false;
 
@@ -162,16 +162,16 @@ public class BatchProjectTransformerPluginBean extends TransformerPluginV2CtrlBe
 
 		 //The output descriptor
 		 TransformerPluginVariableDescriptor descriptor = new TransformerPluginVariableDescriptor();
-		 descriptor.setVariableName(OUTPUT_TEXT);
+		 descriptor.setVariableName(OUTPUT_XML);
 		 descriptor.setContentTypesRegex(
 				 new ArrayList<Pattern>(
 						 Arrays.asList(new Pattern[]{
-								 Pattern.compile("text/.*")
+								 Pattern.compile("text/xml")
 						})
 				)
 		 );
 		 HashMap<String, String> descriptions = new HashMap<String, String>();
-		 descriptions.put("en", "The number of items which have been projected successfully");
+		 descriptions.put("en", "The content of items which are invalid during projecting ");
 		 descriptor.setDescriptions(descriptions);
 		 descriptor.setMandatory(true);
 		 descriptor.setPossibleValuesRegex(null);
@@ -306,10 +306,14 @@ public class BatchProjectTransformerPluginBean extends TransformerPluginV2CtrlBe
 			
 			
 			//TODO main process
+			String conceptName=parameters.getConceptName();
+			String dataClusterName=parameters.getDataClusterName();
+			String dataModelName=parameters.getDataModelName();
+			
 			String resultText="";
 			resultText+=xml;
 			
-		    context.put(OUTPUT_TEXT, new TypedContent(resultText.getBytes(),"UTF-8"));
+		    context.put(OUTPUT_XML, new TypedContent(resultText.getBytes(),"UTF-8"));
 			//call the callback content is ready
 			context.getPluginCallBack().contentIsReady(context);
 			
