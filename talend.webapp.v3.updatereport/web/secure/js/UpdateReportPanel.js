@@ -180,7 +180,12 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
 						items : [{
 							name : "concept",
 							fieldLabel : "Concept",
-							xtype : "textfield"
+							xtype : "textfield",
+							listeners : {
+                               'specialkey' : function(field, event) {
+                               	                  this.onSearchKeyClick(field, event);
+                                              }.createDelegate(this)
+                                        }
 						}, {
 							name : "source",
 							//emptyText : "Select a source...",
@@ -191,14 +196,24 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
 					        valueField:'value',   
 					        typeAhead: true,
 					        triggerAction: 'all',
-					        forceSelection:true
+					        forceSelection:true,
+					        listeners : {
+                               'specialkey' : function(field, event) {
+                               	                  this.onSearchKeyClick(field, event);
+                                              }.createDelegate(this)
+                                        }
 						}, {
 							name : "startDate",
 							fieldLabel : "Start Date",
 							xtype : "datefield",
 							format : "Y-m-d H:i:s",
 							width: 150,
-							readOnly : false
+							readOnly : false,
+							listeners : {
+                               'specialkey' : function(field, event) {
+                               	                  this.onSearchKeyClick(field, event);
+                                              }.createDelegate(this)
+                                        }
 						}],
 						border : false
 					}, {
@@ -207,7 +222,12 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
 						items : [{
 							name : "key",
 							fieldLabel : "Key",
-							xtype : "textfield"
+							xtype : "textfield",
+							listeners : {
+                               'specialkey' : function(field, event) {
+                               	                  this.onSearchKeyClick(field, event);
+                                              }.createDelegate(this)
+                                        }
 						}, {
 							name : "operationType",
 							//emptyText : "Select a type...",
@@ -218,14 +238,24 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
 					        valueField:'value',   
 					        typeAhead: true,
 					        triggerAction: 'all',
-					        forceSelection:true
+					        forceSelection:true,
+					        listeners : {
+                               'specialkey' : function(field, event) {
+                               	                  this.onSearchKeyClick(field, event);
+                                              }.createDelegate(this)
+                                        }
 						}, {
 							name : "endDate",
 							fieldLabel : "End Date",
 							xtype : "datefield",
 							format : "Y-m-d H:i:s",
 							width: 150,
-							readOnly : false
+							readOnly : false,
+							listeners : {
+                               'specialkey' : function(field, event) {
+                               	                  this.onSearchKeyClick(field, event);
+                                              }.createDelegate(this)
+                                        }
 						}],
 						border : false
 					}],
@@ -260,6 +290,15 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
     	
 		var pageSize=Ext.getCmp("updateReportPagingToolbar").pageSize;
 		this.store1.reload({params:{start:0, limit:pageSize}});
+		
+    },
+    
+    onSearchKeyClick : function(field, event){
+    	
+    	if (event.getKey() == Ext.EventObject.ENTER) {
+	       var pageSize=Ext.getCmp("updateReportPagingToolbar").pageSize;
+		   this.store1.reload({params:{start:0, limit:pageSize}});
+	    }
 		
     },
     
