@@ -56,7 +56,7 @@ public class XmldbSLWrapper implements IXmlServerSLWrapper,IXmlServerEBJLifeCycl
 	protected static String SERVERNAME = "localhost";
 	protected static String SERVERPORT = "8080";
 	protected static String ADMIN_USERNAME = "admin";
-	protected static String ADMIN_PASSWORD = "";
+	protected static String ADMIN_PASSWORD = "1bc29b36f623ba82aaf6724fd3b16718";
 	protected static String DRIVER = "org.exist.xmldb.DatabaseImpl";
 	protected static String DBID = "exist";
 	protected static String DBURL = "exist/xmlrpc/db";
