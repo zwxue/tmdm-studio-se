@@ -136,7 +136,7 @@ import com.amalto.workbench.webservices.WSDataModel;
 public class DataModelMainPage extends AMainPageV2 {
 
 	protected Text descriptionText;
-	protected Button importXSDBtn, exportBtn,filterBtn,expandBtn,foldBtn,expandSelBtn;
+	protected Button importXSDBtn, exportBtn,sortUPBtn,sortDownBtn,filterBtn,expandBtn,foldBtn,expandSelBtn;
 	protected TreeViewer viewer;
 	protected DrillDownAdapter drillDownAdapter;
 
@@ -238,16 +238,16 @@ public class DataModelMainPage extends AMainPageV2 {
 			btnCmp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 					false, 2, 1));
 			GridLayout gLayout=new GridLayout();
-			gLayout.numColumns=6;
+			gLayout.numColumns=8;
 			gLayout.horizontalSpacing=20;
 			btnCmp.setLayout(gLayout);
 			
 			importXSDBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
-			importXSDBtn.setImage(ImageCache.getCreatedImage(EImage.WRITABLE.getPath()));
+			importXSDBtn.setImage(ImageCache.getCreatedImage(EImage.IMPORT.getPath()));
 			importXSDBtn.setToolTipText("Import...");
 						
 			exportBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
-			exportBtn.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
+			exportBtn.setImage(ImageCache.getCreatedImage(EImage.EXPORT.getPath()));
 			exportBtn.setToolTipText("Export...");
 
 			filterBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
@@ -255,6 +255,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			filterBtn.setToolTipText("Filter...");
 			
 			//add by lym
+			
 			expandBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
 			expandBtn.setImage(ImageCache.getCreatedImage(EImage.FLDR_OBJ.getPath()));
 			expandBtn.setToolTipText("Expand...");
