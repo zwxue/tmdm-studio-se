@@ -53,6 +53,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.amalto.core.ejb.ItemPOJO;
 import com.amalto.core.ejb.ItemPOJOPK;
 import com.amalto.core.ejb.local.DroppedItemCtrlLocal;
 import com.amalto.core.ejb.local.DroppedItemCtrlLocalHome;
@@ -668,7 +669,23 @@ public final class Util {
 						if(node.getTextContent()==null ||node.getTextContent().length()==0 ){							
 							if(EUUIDCustomType.AUTO_INCREMENT.getName().equalsIgnoreCase(type)){								
 								//value=String.valueOf(new UID().getID());
-								value=String.valueOf(AutoIncrementGenerator.generateNum(LocalUser.getLocalUser().getUniverse().getName(), dataCluster,concept+"."+name));
+								String id=String.valueOf(AutoIncrementGenerator.generateNum(LocalUser.getLocalUser().getUniverse().getName(), dataCluster,concept+"."+name));
+								//check id exists
+								ItemPOJOPK pk=new ItemPOJOPK(new DataClusterPOJOPK(dataCluster),concept,new String[]{id});
+								ItemPOJO pojo=ItemPOJO.load(pk);
+								while(pojo!=null){
+									id=String.valueOf(AutoIncrementGenerator.generateNum(LocalUser.getLocalUser().getUniverse().getName(), dataCluster,concept+"."+name));
+									pk=new ItemPOJOPK(new DataClusterPOJOPK(dataCluster),concept,new String[]{id});
+									pojo=ItemPOJO.load(pk);
+									if(pojo==null){ //if don't exist, select the id 
+										value=id;
+										break;
+									}
+								}
+								if(pojo==null){
+									value=id;
+								}
+								
 							}
 							if(EUUIDCustomType.UUID.getName().equalsIgnoreCase(type)){
 								value=String.valueOf(UUID.randomUUID().toString());
