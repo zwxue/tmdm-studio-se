@@ -503,7 +503,12 @@ public class ItemsBrowserDWR {
     		if(maskKey&&treeNode.isKey()){
     			String oldPath=treeNode.getValue();
     			treeNode.setValue("");
-    			treeNode.setReadOnly(false);
+    			if(treeNode.getTypeName().trim().toUpperCase().equals("UUID")||treeNode.getTypeName().trim().toUpperCase().equals("AUTO_INCREMENT")){
+    				treeNode.setReadOnly(true);
+    			}else{
+    				treeNode.setReadOnly(false);
+    			}
+    			
     			
     			HashMap<String,UpdateReportItem> updatedPath;
     			if(ctx.getSession().getAttribute("updatedPath")!=null){
