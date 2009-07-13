@@ -405,8 +405,11 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 		"	url [mandatory]: the webservice port URL to the TIS Server"+"\n"+
 		"	contextParam   : the contextParam of the tis job"+"\n"+
 		"		name: the name of the context param"+"\n"+
-		"		value: the value of context param"+"\n"+
-		"		isPipleVariableName [optional]: true to set contextParam value as one piplevariableName"+"\n"+
+		"		value: the value of context param, the value will be viewed as a priple" + "\n" + 
+		"                   variable if the value is embraced with a brace, "+"\n"+
+		"		isPipleVariableName [optional]: true to set contextParam value as one " + "\n" + 
+		"                                            piplevariableName , this parameter will be " + "\n" + 
+		"                                            ignored if value is embraced with brace" + "\n" +
 		"	username [optional]: the username to use for the call"+"\n"+
 		"	password [optional]: the password to  use for the call" +"\n"+
 		"	contentType [optional]: the contentType of the returned data. Defaults to 'text/xml'" +"\n"+
@@ -428,8 +431,7 @@ public class TISCallTransformerPluginBean extends TransformerPluginV2CtrlBean  i
 		"		</contextParam>" +"\n"+		
 		"		<contextParam>" +"\n"+	
 		"			<name>company</name>" +"\n"+
-		"			<value>pipleVariableName</value>" +"\n"+
-		"			<isPipleVariableName>true</isPipleVariableName>" +"\n"+
+		"			<value>{pipleVariableName}</value>" +"\n"+
 		"		</contextParam>" +"\n"+		
 		"		<username>john</username>" +"\n"+
 		"		<password>doe</password>" +"\n"+
