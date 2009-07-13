@@ -155,6 +155,16 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         	
             CalendarSelectWidget fromCalendar=new CalendarSelectWidget(toolkit,composite,true);
             fromText=fromCalendar.getText();
+            fromText.addKeyListener(
+            		new KeyListener() {
+            			public void keyPressed(KeyEvent e) {}
+            			public void keyReleased(KeyEvent e) {
+        					if ((e.stateMask==0) && (e.character == SWT.CR)) {
+        						DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(true));
+        					}
+            			}//keyReleased
+            		}//keyListener
+            );
             //to
             Label toLabel = toolkit.createLabel(composite, "To", SWT.NULL);
             toLabel.setLayoutData(
@@ -162,7 +172,17 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             );
             
             CalendarSelectWidget toCalendar=new CalendarSelectWidget(toolkit,composite,false);
-            toText=toCalendar.getText();            
+            toText=toCalendar.getText();
+            toText.addKeyListener(
+            		new KeyListener() {
+            			public void keyPressed(KeyEvent e) {}
+            			public void keyReleased(KeyEvent e) {
+        					if ((e.stateMask==0) && (e.character == SWT.CR)) {
+        						DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(true));
+        					}
+            			}//keyReleased
+            		}//keyListener
+            );
 
 
         	Label conceptLabel = toolkit.createLabel(composite, "Concept", SWT.NULL);
