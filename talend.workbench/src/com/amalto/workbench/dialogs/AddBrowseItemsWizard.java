@@ -302,7 +302,6 @@ public class AddBrowseItemsWizard extends Wizard{
 	          complexTableViewer = new ComplexTableViewer(Arrays
 					.asList(roleConfigurationColumns), page.getManagedForm()
 					.getToolkit(), composite);
-	          complexTableViewer.setMainPage(page);
 	          complexTableViewer.setKeyColumns(new ComplexTableViewerColumn[]{roleConfigurationColumns[0]});
 	          complexTableViewer.create();
 	          complexTableViewer.getViewer().setInput(new ArrayList<Line> ());
