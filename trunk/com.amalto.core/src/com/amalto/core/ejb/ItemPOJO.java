@@ -921,6 +921,21 @@ public class ItemPOJO implements Serializable{
     	}
     }
 
-    
+    public static String getBindingSchema(ItemPOJO itemPOJO) {
+    	String schema=null;
+    	try {
+			String dataModelName=itemPOJO.getDataModelName();
+			String dataModelRevision=itemPOJO.getDataModelRevision();
+			if(dataModelName!=null&&dataModelName.length()>0){
+				DataModelPOJO sp =  ObjectPOJO.load(dataModelRevision,DataModelPOJO.class,new DataModelPOJOPK(dataModelName));
+	        	if (sp != null) {
+	        		schema=sp.getSchema();
+	        	}
+			}
+		} catch (XtentisException e) {
+			e.printStackTrace();
+		}
+		return schema;
+	}
 
 }
