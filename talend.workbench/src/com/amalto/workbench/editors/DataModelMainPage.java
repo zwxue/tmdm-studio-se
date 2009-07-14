@@ -39,6 +39,7 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -56,12 +57,14 @@ import org.eclipse.ui.operations.UndoRedoActionGroup;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
+import org.eclipse.xsd.XSDConcreteComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDFacet;
 import org.eclipse.xsd.XSDIdentityConstraintCategory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
+import org.eclipse.xsd.XSDParticleContent;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTerm;
@@ -132,6 +135,7 @@ import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataModel;
+import com.sun.org.apache.xerces.internal.impl.io.ASCIIReader;
 
 public class DataModelMainPage extends AMainPageV2 {
 
@@ -179,6 +183,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	private ObjectUndoContext undoContext;
 	private MenuManager menuMgr;
 	private String dataModelName;
+	private boolean isDESC = false;
 	
 	
 	private XSDSchema  xsdSchema;
@@ -191,7 +196,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	private DataModelFilterDialog dataModelFilterDialog;
 	private DataModelFilter dataModelFilter;
 	
-	private StructuredSelection sel;
+	static private StructuredSelection sel;
 	private SashForm sash;
 	FormToolkit toolkit;
 	private TreeViewer typesViewer;
@@ -289,25 +294,30 @@ public class DataModelMainPage extends AMainPageV2 {
 			expandSelBtn.setToolTipText("Expand ModelGroup...");
 			expandSelBtn.addSelectionListener(new SelectionAdapter(){
 				public void widgetSelected(SelectionEvent e) {
-					Iterator it = sel.iterator();
-					while(it.hasNext()){
-						Object obj = it.next();
-						viewer.collapseToLevel(obj, 3);
-						if(obj instanceof XSDModelGroup){
-							viewer.expandToLevel(obj, 1);
-						}
-						if(obj instanceof XSDElementDeclaration){
-							viewer.expandToLevel(obj, 1);
-							XSDTypeDefinition type = ((XSDElementDeclaration) obj).getTypeDefinition();
-							if(type instanceof XSDComplexTypeDefinition){
-								XSDModelGroup mg = (XSDModelGroup) ((XSDParticle)((XSDComplexTypeDefinition) type).getContent()).getTerm();
-								viewer.expandToLevel(mg, 1);
-							}
-						}
-						
-					}
+					openXSDParticle();
 				}
 			});
+			
+			sortUPBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
+			sortUPBtn.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
+			sortUPBtn.setToolTipText("ASC...");
+			sortUPBtn.addSelectionListener(new SelectionAdapter(){
+				public void widgetSelected(SelectionEvent e){
+					isDESC = true;
+					viewer.refresh();
+				}
+			});
+			
+			sortDownBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
+			sortDownBtn.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
+			sortDownBtn.setToolTipText("DESC...");
+			sortDownBtn.addSelectionListener(new SelectionAdapter(){
+				public void widgetSelected(SelectionEvent e){
+					isDESC = false;
+					viewer.refresh();
+				}
+			});
+			
 			
 			importXSDBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
 					false, 1, 1));
@@ -321,6 +331,10 @@ public class DataModelMainPage extends AMainPageV2 {
 			foldBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
 					false, 1, 1));	
 			expandSelBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
+					false, 1, 1));	
+			sortUPBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
+					false, 1, 1));	
+			sortDownBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
 					false, 1, 1));	
 			
 			
@@ -514,6 +528,7 @@ public class DataModelMainPage extends AMainPageV2 {
 				// keys
 				if (element instanceof XSDIdentityConstraintDefinition) {
 					XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) element;
+					
 					if (icd.getIdentityConstraintCategory().equals(
 							XSDIdentityConstraintCategory.UNIQUE_LITERAL))
 						return 300;
@@ -525,10 +540,24 @@ public class DataModelMainPage extends AMainPageV2 {
 				}
 				return 200;
 			}
+			
 
 			public int compare(Viewer theViewer, Object e1, Object e2) {
 				int cat1 = category(e1);
 				int cat2 = category(e2);
+				if(cat1==cat2&&cat1==200){
+					if(e1 instanceof XSDParticle&&e2 instanceof XSDParticle){
+						XSDParticle xp1= (XSDParticle)e1;
+						XSDParticle xp2= (XSDParticle)e2;
+						String name1 = ((XSDElementDeclaration)xp1.getTerm()).getName();
+						String name2 = ((XSDElementDeclaration)xp2.getTerm()).getName();
+						if(isDESC)
+							return name1.compareToIgnoreCase(name2);
+						else
+							return -name1.compareToIgnoreCase(name2);
+					}
+				}
+					
 				return cat1 - cat2;
 			}
 		});
@@ -553,7 +582,6 @@ public class DataModelMainPage extends AMainPageV2 {
 						MessageDialog.openWarning(getSite().getShell(), "Warnning",
 						"Please select the deletable node and try again!");
 					}
-
 				}
 			}
 
@@ -699,7 +727,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		});
 
 	}   
-	protected void refreshData() {
+	public void refreshData() {
 		try {
 
 			if (!this.equals(getEditor().getActivePageInstance()))
@@ -1261,6 +1289,32 @@ public class DataModelMainPage extends AMainPageV2 {
 		}
 
 		return map;
+	}
+	
+	public int getValue(String name){
+		int value = 0;
+		for(int i=0;i<name.length();i++)
+			value=value*10+name.charAt(i);
+		return value;
+	}
+	public void openXSDParticle(){
+		Iterator it = sel.iterator();
+		while(it.hasNext()){
+			Object obj = it.next();
+			viewer.collapseToLevel(obj, 3);
+			if(obj instanceof XSDModelGroup){
+				viewer.expandToLevel(obj, 1);
+			}
+			if(obj instanceof XSDElementDeclaration){
+				viewer.expandToLevel(obj, 1);
+				XSDTypeDefinition type = ((XSDElementDeclaration) obj).getTypeDefinition();
+				if(type instanceof XSDComplexTypeDefinition){
+					XSDModelGroup mg = (XSDModelGroup) ((XSDParticle)((XSDComplexTypeDefinition) type).getContent()).getTerm();
+					viewer.expandToLevel(mg, 1);
+				}
+			}
+			
+		}
 	}
 	
 }
