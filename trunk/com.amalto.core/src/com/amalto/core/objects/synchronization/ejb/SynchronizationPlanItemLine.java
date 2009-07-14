@@ -44,6 +44,11 @@ public class SynchronizationPlanItemLine {
     }
 
 	public String getLocalRevisionID() {
+		if(localRevisionID!=null){
+			if(localRevisionID.trim().toUpperCase().equals("HEAD")||localRevisionID.trim().toUpperCase().equals("[HEAD]")){
+				localRevisionID="";
+			}
+		}
     	return localRevisionID;
     }
 
@@ -52,6 +57,11 @@ public class SynchronizationPlanItemLine {
     }
 
 	public String getRemoteRevisionID() {
+		if(remoteRevisionID!=null){
+			if(remoteRevisionID.trim().toUpperCase().equals("HEAD")||remoteRevisionID.trim().toUpperCase().equals("[HEAD]")){
+				remoteRevisionID="";
+			}
+		}
     	return remoteRevisionID;
     }
 
