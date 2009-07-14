@@ -161,6 +161,15 @@ public class SynchronizationMainPage extends AMainPageV2{
         			);
         			return;
         		}
+        		//do form validate
+        		if (remoteSystemURLText.getText().getText()==null||remoteSystemURLText.getText().getText().trim().equals("")) {
+        			MessageDialog.openError(
+        				SynchronizationMainPage.this.getSite().getShell(), 
+        				"Error starting the synchronization",
+        				"Please input the URL address of remote system first"
+        			);
+        			return;
+        		}
         		//Start it
         		WSSynchronizationPlan ws = (WSSynchronizationPlan) (getXObject().getWsObject()); 
         		try {
@@ -196,6 +205,17 @@ public class SynchronizationMainPage extends AMainPageV2{
         			);
         			return;
         		}
+        		
+        		//do form validate
+        		if (remoteSystemURLText.getText().getText()==null||remoteSystemURLText.getText().getText().trim().equals("")) {
+        			MessageDialog.openError(
+        				SynchronizationMainPage.this.getSite().getShell(), 
+        				"Error starting the synchronization",
+        				"Please input the URL address of remote system first"
+        			);
+        			return;
+        		}
+        		
         		//Start the synchronization
         		WSSynchronizationPlan ws = (WSSynchronizationPlan) (getXObject().getWsObject()); 
         		try {
