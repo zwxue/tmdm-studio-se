@@ -42,7 +42,7 @@ import com.amalto.connector.logging.eis.LoggingListener;
 public class LoggingResourceAdapter implements ResourceAdapter,IXtentisResourceAdapter {
 	
 	
-	private static String configurationFile="xtentis.conf";
+	private static String configurationFile="mdm.conf";
 
 	
 	private final static String JNDI_NAME="java:jca/xtentis/connector/logging";

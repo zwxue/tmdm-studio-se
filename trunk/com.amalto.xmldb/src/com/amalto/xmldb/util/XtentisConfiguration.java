@@ -6,7 +6,7 @@ import java.util.Properties;
 
 
 /**
- * Handles the xtentis.conf file
+ * Handles the mdm.conf file
  * @author bgrieder
  *
  */
@@ -26,18 +26,18 @@ public final class XtentisConfiguration {
 		CONFIGURATION = new Properties();
 		
 		//first try Current path
-		File file = new File("xtentis.conf");
+		File file = new File("mdm.conf");
 		
 		if (file.exists()) {
 			try {
 				CONFIGURATION.load(new FileInputStream(file));
-				org.apache.log4j.Logger.getLogger(XtentisConfiguration.class).info("XTENTIS Configuration: loaded configuration in '"+file.getAbsolutePath()+"'");
+				org.apache.log4j.Logger.getLogger(XtentisConfiguration.class).info("MDM Configuration: loaded configuration in '"+file.getAbsolutePath()+"'");
 			} catch (Exception e) {
-				String err = "XTENTIS Configuration: unable to load the configuration in '"+file.getAbsolutePath()+"' :"+e.getMessage()+". The default configurations will be used."; 
+				String err = "MDM Configuration: unable to load the configuration in '"+file.getAbsolutePath()+"' :"+e.getMessage()+". The default configurations will be used."; 
 				org.apache.log4j.Logger.getLogger(XtentisConfiguration.class).error(err,e);
 			}
 		} else {
-			org.apache.log4j.Logger.getLogger(XtentisConfiguration.class).info("XTENTIS Configuration: no xtentis.conf file found. Using the default configurations");
+			org.apache.log4j.Logger.getLogger(XtentisConfiguration.class).info("MDM Configuration: no mdm.conf file found. Using the default configurations");
 		}
 		
 		return CONFIGURATION;
