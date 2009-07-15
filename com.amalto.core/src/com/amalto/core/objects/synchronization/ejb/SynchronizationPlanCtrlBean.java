@@ -37,6 +37,7 @@ import com.amalto.core.util.Util;
 import com.amalto.core.util.XtentisException;
 import com.amalto.core.webservice.WSDataClusterPK;
 import com.amalto.core.webservice.WSItemPK;
+import com.amalto.core.webservice.WSPing;
 import com.amalto.core.webservice.WSString;
 import com.amalto.core.webservice.WSSynchronizationGetItemXML;
 import com.amalto.core.webservice.WSSynchronizationGetObjectXML;
@@ -724,7 +725,7 @@ public class SynchronizationPlanCtrlBean implements SessionBean, TimedObject{
         	
         	//Get the remote port
         	XtentisPort remotePort = getWSPort(plan.getRemoteSystemURL(), plan.getRemoteSystemUsername(), plan.getRemoteSystemPassword());
-        	
+        	remotePort.ping(new WSPing("to"));//ping test
         	//Get the Synchronization Object Ctrl
         	SynchronizationObjectCtrlLocal objectCtrl = Util.getSynchronizationObjectCtrlLocal();
         	
@@ -982,6 +983,7 @@ public class SynchronizationPlanCtrlBean implements SessionBean, TimedObject{
     		
         	//Get the remote port
         	XtentisPort remotePort = getWSPort(plan.getRemoteSystemURL(), plan.getRemoteSystemUsername(), plan.getRemoteSystemPassword());
+        	remotePort.ping(new WSPing("to"));//ping test
         	
         	//Get the Synchronization Object Ctrl
         	SynchronizationObjectCtrlLocal objectCtrl = Util.getSynchronizationObjectCtrlLocal();
