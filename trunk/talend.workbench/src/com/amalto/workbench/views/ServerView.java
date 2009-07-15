@@ -1,6 +1,8 @@
 package com.amalto.workbench.views;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
@@ -16,17 +18,28 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DragSource;
+import org.eclipse.swt.dnd.DragSourceEvent;
+import org.eclipse.swt.dnd.DragSourceListener;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetAdapter;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.amalto.workbench.actions.AServerViewAction;
 import com.amalto.workbench.actions.BrowseViewAction;
@@ -35,12 +48,11 @@ import com.amalto.workbench.actions.DeleteXObjectAction;
 import com.amalto.workbench.actions.EditXObjectAction;
 import com.amalto.workbench.actions.NewXObjectAction;
 import com.amalto.workbench.actions.PasteXObjectAction;
-import com.amalto.workbench.actions.ServerInitAction;
 import com.amalto.workbench.actions.ServerLoginAction;
 import com.amalto.workbench.actions.ServerRefreshAction;
-import com.amalto.workbench.actions.VersioningXObjectAction;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.models.TreeObjectTransfer;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.ServerTreeContentProvider;
 import com.amalto.workbench.providers.ServerTreeLabelProvider;
@@ -80,6 +92,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	//protected Action versionAction;
 	private ServerTreeContentProvider contentProvider;
 
+	private ArrayList<TreeObject> dndTreeObjs = new ArrayList<TreeObject>();
+    private int dragType = -1;
 	/**********************************************************************************
 	 * The VIEW
 	 * 
@@ -107,6 +121,163 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     	return contentProvider.getInvisibleRoot();
     }
     
+    
+    private DragSource createTreeDragSource(){
+		DragSource dragSource = new DragSource(viewer.getTree(), DND.DROP_MOVE | DND.DROP_COPY);
+		dragSource.setTransfer(new Transfer[] { TreeObjectTransfer.getInstance() });
+		dragSource.addDragListener(new DragSourceListener() {
+			IStructuredSelection dndSelection = null;
+			public void dragStart(DragSourceEvent event){
+			    dragType = -1;
+				dndSelection  = (IStructuredSelection)viewer.getSelection();
+				event.doit = dndSelection.size() > 0;
+				dndTreeObjs.clear();
+				for (Iterator<TreeObject> iter = dndSelection.iterator(); iter
+						.hasNext();) {
+					TreeObject xobject = iter.next();
+					dndTreeObjs.add(xobject);
+					if (dragType != -1 && dragType != xobject.getType()) {
+						event.doit = false;
+						break;
+					} else {
+						dragType = xobject.getType();
+					}
+				}
+			}
+			
+			public void dragFinished(DragSourceEvent event){
+				dndSelection = null;
+			}
+			
+			public void dragSetData(DragSourceEvent event){
+				if (dndSelection == null || dndSelection.size() == 0) return;
+				if (! TreeObjectTransfer.getInstance().isSupportedType(event.dataType)) return;
+				
+				TreeObject[] sourceObjs  = new TreeObject[dndSelection.size()];
+				int index = 0;
+				for (Iterator<TreeObject> iter = dndSelection.iterator(); iter.hasNext(); ) {
+					TreeObject xobject = iter.next();
+					sourceObjs[index++] = xobject;
+				}
+				event.data = sourceObjs;
+			}
+		});
+		
+		return dragSource;
+    }
+    
+    
+	private DropTarget createTreeDropTarget() {
+		DropTarget dropTarget = new DropTarget(viewer.getTree(), DND.DROP_MOVE | DND.DROP_COPY);
+		dropTarget.setTransfer(new Transfer[] { TreeObjectTransfer.getInstance() });
+		dropTarget.addDropListener(new DropTargetAdapter() {
+			public void dragEnter(DropTargetEvent event) {
+
+			}
+			public void dragLeave(DropTargetEvent event) {
+
+			}
+			public void dragOver(DropTargetEvent event) {
+				dropTargetValidate(event);
+				event.feedback |= DND.FEEDBACK_EXPAND | DND.FEEDBACK_SCROLL;
+			}
+			
+			public void drop(DropTargetEvent event) {
+				
+				resetTargetTreeObject(event);
+				if (dropTargetValidate(event))
+					dropTargetHandleDrop(event);
+			}
+			
+			
+			private void resetTargetTreeObject(DropTargetEvent event) {
+				// Determine the target XObject for the drop 
+				IStructuredSelection dndSelection  = (IStructuredSelection)viewer.getSelection();
+				for (Iterator<TreeObject> iter = dndSelection.iterator(); iter
+						.hasNext();) {
+					TreeObject xobject = iter.next();
+					if (!xobject.isXObject() && xobject instanceof TreeParent) {
+						if (dndTreeObjs.indexOf(xobject) >= 0)
+							dndTreeObjs.remove(xobject);
+						TreeParent dir = (TreeParent) xobject;
+						for (TreeObject treeObj : dir.getChildren()) {
+							if (dndTreeObjs.indexOf(treeObj) == -1)
+								dndTreeObjs.add(treeObj);
+						}
+					}
+				}
+			}
+		});
+		
+		return dropTarget;	
+	}
+	
+	private boolean dropTargetValidate(DropTargetEvent event) {
+
+		Object obj = event.item.getData();
+		if (obj instanceof TreeObject)
+		{
+			TreeObject treeObj = (TreeObject)obj;
+			if (treeObj.getType() != dragType) {
+				event.detail = DND.DROP_NONE;
+			} else  {
+				for (TreeObject tos: dndTreeObjs)
+				{
+					if (tos == obj) {
+						event.detail = DND.DROP_LINK;
+						break;
+					}
+					else
+						event.detail = DND.DROP_MOVE;
+				}
+			}
+		}
+	
+		return event.detail != DND.DROP_NONE;
+	}
+	
+
+	private void dropTargetHandleDrop(DropTargetEvent event) {
+		
+		WorkbenchClipboard.getWorkbenchClipboard().get().clear();
+		WorkbenchClipboard.getWorkbenchClipboard().get().addAll(dndTreeObjs);
+		TreeObject remoteObj = (TreeObject)event.item.getData();
+		
+		((PasteXObjectAction)pasteAction).setXtentisPort(remoteObj);
+		pasteAction.run();
+		handleEvent(IXObjectModelListener.NEED_REFRESH, null, !remoteObj.isXObject() ? remoteObj.getParent(): remoteObj.getServerRoot());
+	}
+	
+	protected class DCDragSourceListener implements DragSourceListener {
+		private int selected;
+
+		public void dragFinished(DragSourceEvent event) {
+			Control control = ((DragSource)event.widget).getControl();
+			if ((control instanceof List) && ((event.detail & DND.DROP_MOVE) == DND.DROP_MOVE)) {
+				((List)control).remove(selected);
+			}
+		}
+
+		public void dragSetData(DragSourceEvent event) {
+			Control control = ((DragSource)event.widget).getControl();
+			if ((control instanceof List))
+				if (TextTransfer.getInstance().isSupportedType(event.dataType)) {
+					this.selected = ((List)control).getSelectionIndex();
+					event.data =  ((List)control).getSelection()[0];
+				}
+		}
+
+	   public  void  dragStart(DragSourceEvent event){ 
+			Control control = ((DragSource)event.widget).getControl();
+	        if (control instanceof Tree){ 
+	        	IStructuredSelection selection = (IStructuredSelection)viewer.getSelection();
+	            if (selection.size() == 0 ){            
+	              event.doit = false ; 
+	          } 
+	      } 
+	  } 
+
+	}
 	/**
 	 * This is a callback that will allow us to create the viewer and initialize
 	 * it.
@@ -121,6 +292,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		viewer.setLabelProvider(new ServerTreeLabelProvider());
 		viewer.setSorter(new ViewerSorter());
 		viewer.setInput(getViewSite());
+		createTreeDragSource();
+		createTreeDropTarget();
 		makeActions();
 		hookContextMenu();
 		hookDoubleClickAction();
