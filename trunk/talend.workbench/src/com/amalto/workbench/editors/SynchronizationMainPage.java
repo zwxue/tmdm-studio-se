@@ -1,6 +1,7 @@
 package com.amalto.workbench.editors;
 
 import java.io.StringWriter;
+import java.net.SocketException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +42,7 @@ import com.amalto.workbench.webservices.WSGetConceptsInDataCluster;
 import com.amalto.workbench.webservices.WSGetObjectsForSynchronizationPlans;
 import com.amalto.workbench.webservices.WSGetSynchronizationPlanItemsAlgorithms;
 import com.amalto.workbench.webservices.WSGetSynchronizationPlanObjectsAlgorithms;
+import com.amalto.workbench.webservices.WSPing;
 import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
 import com.amalto.workbench.webservices.WSSynchronizationPlan;
 import com.amalto.workbench.webservices.WSSynchronizationPlanAction;
@@ -643,9 +645,19 @@ public class SynchronizationMainPage extends AMainPageV2{
 	}
 	
 	protected void refreshStatus() {
+		//check server status( maybe waste some time, but more safety ) 
+		try {
+			getPort().ping(new WSPing("check"));
+		} catch (RemoteException e1) {			
+			e1.printStackTrace();
+			stopRefreshTimer();
+			startFullButton.setEnabled(false);
+    		startDifferentialButton.setEnabled(false);
+    		stopButton.setEnabled(false);
+    		resetButton.setEnabled(true);
+		}
 		
 		WSSynchronizationPlan ws = (WSSynchronizationPlan) (getXObject().getWsObject());
-		
 		WSSynchronizationPlanStatus wsStatus = null;
 		try {
 	        wsStatus = getPort().synchronizationPlanAction(new WSSynchronizationPlanAction(
@@ -655,7 +667,8 @@ public class SynchronizationMainPage extends AMainPageV2{
         } catch (RemoteException e) {
         	e.printStackTrace();
 			MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page", "The status of the Plan cannot be fetched: "+e.getLocalizedMessage());
-        }
+			
+        } 
 		
     	statusText.setText("["+wsStatus.getWsStatusCode().getValue()+"] "+wsStatus.getStatusMessage());
     	if (
