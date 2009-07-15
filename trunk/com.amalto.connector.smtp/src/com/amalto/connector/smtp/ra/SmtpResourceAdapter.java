@@ -54,7 +54,13 @@ public class SmtpResourceAdapter implements IXtentisResourceAdapter, ResourceAda
 			
 			// might throw a NullPointerExceptions so be sure to check parameters before calling here !!
     		String host = (String) params.get("host");
-    		int port = ((Integer) params.get("port")).intValue();	
+    		int port = 0;	
+    		Object getPort=params.get("port");
+    		if(getPort instanceof String){
+    			port=Integer.parseInt((String)getPort);
+    		}else if(getPort instanceof Integer){
+    			port=((Integer)getPort).intValue();
+    		}
 			String username = (String) params.get("username");
 			String password = (String) params.get("password");
 			String mails = (String) params.get("mails");
