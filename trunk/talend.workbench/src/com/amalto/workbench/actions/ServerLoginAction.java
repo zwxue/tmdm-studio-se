@@ -72,7 +72,7 @@ public class ServerLoginAction extends Action implements SelectionListener{
 		dialog.close();
 		
 		Properties properties = new Properties();
-		String f = System.getProperty("user.home")+"/.xtentisworkbench.conf";
+		String f = System.getProperty("user.home")+"/.mdmworkbench.conf";
 		Collection<String> endpoints;
 		Collection<String> universes;
 		String endpointsString=server;
