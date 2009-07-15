@@ -87,7 +87,7 @@ public class CoreUpgrades {
     	ctrl.putConfigurationInfo(previousCoreConf);
     
     }
-    static File f = new File("xtentis.conf");
+    static File f = new File("mdm.conf");
     /**
 	 * Returns the previously run Core Configuration
 	 * @return a {@link ConfigurationInfoPOJO} cntainin the core Configuration
@@ -102,13 +102,8 @@ public class CoreUpgrades {
 			coreConfigurationInfo.setMinor(0);
 			coreConfigurationInfo.setRevision(0);
 			coreConfigurationInfo.setReleaseNote("");
-			//Convert properties from xtentis.conf
-//			String os = System.getProperty("os.name");
-//			String f ="/etc/amalto/xtentis/xtentis.conf";
+
 			Properties properties = new Properties();
-//			if (os.toLowerCase().matches(".*windows.*")) {
-//				f = "c:\\amalto\\xtentis\\xtentis.conf";
-//			}
 			if (f.exists()) {
 				try {
 					properties.load(new FileInputStream(f));
@@ -118,7 +113,7 @@ public class CoreUpgrades {
 						coreConfigurationInfo.setProperty(key, properties.getProperty(key));
 					}
 				} catch (Exception e) {
-					String err= "Unable to read xtentis.conf and assign the properties to the core"+
+					String err= "Unable to read mdm.conf and assign the properties to the core"+
 										e.getClass().getName()+": "+e.getMessage();
 					org.apache.log4j.Logger.getLogger(CoreUpgrades.class).error(err,e);
 					throw new XtentisException(err);

@@ -33,7 +33,7 @@ public class SmtpResourceAdapter implements IXtentisResourceAdapter, ResourceAda
 	
 	public static String VERSION = "1.0";
 	
-	private static String configurationFile="xtentis.conf";
+	private static String configurationFile="mdm.conf";
 
 	
 	
