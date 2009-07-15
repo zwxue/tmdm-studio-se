@@ -28,6 +28,7 @@ public class LoginDialog extends Dialog {
 	
 	private Properties properties = new Properties();
 	private Collection<String> endpoints;
+
 	private Collection<String> universes;
 
 	private Combo endpointsCombo=null;
@@ -153,33 +154,38 @@ public class LoginDialog extends Dialog {
 	protected void okPressed() {
 		//save hosts
 		try {
-			String currentHost = endpointsCombo.getText();
-			String endpointsString = currentHost;
-			int i =0;
-			for (Iterator<String> iter = endpoints.iterator(); iter.hasNext(); ) {
-				String endpoint = iter.next();
-				if (! endpoint.equals(currentHost)) endpointsString+=","+endpoint;
-				if (++i == 10) break;
-			}
-			properties.setProperty("endpoints", endpointsString);
-			//save universe
-			String currentUniverse = universeCombo.getText();
-			String universeString = currentUniverse;
-			i =0;
-			for (Iterator<String> iter = universes.iterator(); iter.hasNext(); ) {
-				String universe = iter.next();
-				if (! universe.equals(currentUniverse)) universeString+=","+universe;
-				if (++i == 5) break;
-			}
-			properties.setProperty("universes", universeString);
-			
-			properties.store(new FileOutputStream(f), null);
+//			String currentHost = endpointsCombo.getText();
+//			String endpointsString = currentHost;
+//			int i =0;
+//			for (Iterator<String> iter = endpoints.iterator(); iter.hasNext(); ) {
+//				String endpoint = iter.next();
+//				if (! endpoint.equals(currentHost)) endpointsString+=","+endpoint;
+//				if (++i == 10) break;
+//			}
+//			properties.setProperty("endpoints", endpointsString);
+//			//save universe
+//			String currentUniverse = universeCombo.getText();
+//			String universeString = currentUniverse;
+//			i =0;
+//			for (Iterator<String> iter = universes.iterator(); iter.hasNext(); ) {
+//				String universe = iter.next();
+//				if (! universe.equals(currentUniverse)) universeString+=","+universe;
+//				if (++i == 5) break;
+//			}
+//			properties.setProperty("universes", universeString);
+//			
+//			properties.store(new FileOutputStream(f), null);
 		} catch (Exception e) {}
 		
 		setReturnCode(OK);
 		//no close let Action Handler handle it
 	}
 	
+	public Properties getProperties() {
+		return properties;
+	}
+
+
 	public void saveUserTypes(){
 		
 	}
