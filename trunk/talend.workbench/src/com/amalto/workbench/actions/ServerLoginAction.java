@@ -1,7 +1,13 @@
 package com.amalto.workbench.actions;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.Authenticator;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Properties;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -18,6 +24,8 @@ import com.amalto.workbench.providers.XtentisServerObjectsRetriever;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.views.ServerView;
+
+import com.amalto.workbench.utils.Util;
 
 public class ServerLoginAction extends Action implements SelectionListener{
 
@@ -63,6 +71,13 @@ public class ServerLoginAction extends Action implements SelectionListener{
 		String universe=dialog.getUniverse();
 		dialog.close();
 		
+		Properties properties = new Properties();
+		String f = System.getProperty("user.home")+"/.xtentisworkbench.conf";
+		Collection<String> endpoints;
+		Collection<String> universes;
+		String endpointsString=server;
+		String universeString = universe;
+		
 		//Remove authenticator dialog
 		Authenticator.setDefault(null);
 		
@@ -78,6 +93,41 @@ public class ServerLoginAction extends Action implements SelectionListener{
 					true, 
 					retriever
 			);
+			
+			
+			try {//add the memory of universe and server
+				properties.load(new FileInputStream(f));
+
+				int index = 0;
+				endpoints = Arrays.asList(new String[]{Util.default_endpoint_address});
+				if (properties.getProperty("endpoints")!=null)	 
+					endpoints = Arrays.asList(properties.getProperty("endpoints").split(","));
+				if (properties.getProperty("universes")!=null)	 
+					universes=Arrays.asList(properties.getProperty("universes").split(","));
+				for (Iterator<String> iter = endpoints.iterator(); iter.hasNext();) {
+					String endpoint = iter.next();
+					if (!endpoint.equals(server))
+						endpointsString += "," + endpoint;
+					if (++index == 10)
+						break;
+				}
+				properties.setProperty("endpoints", endpointsString);
+				index = 0;
+				universes = Arrays.asList(new String[]{""});
+				for (Iterator<String> iter = universes.iterator(); iter.hasNext(); ) {
+					universe = iter.next();
+					if (! universe.equals(server)) universeString+=","+universe;
+					if (++index == 5) break;
+				}
+				properties.setProperty("universes", universeString);
+				
+				properties.store(new FileOutputStream(f), null);
+			} catch (Exception e1) {
+			}
+			
+			
+			
+			
             if(!retriever.isExistUniverse()){
             	//MessageDialog.openError(view.getViewer().getControl().getShell(), "Wrong universe", "Can't find the universe,please try again!");
             	return;
