@@ -644,12 +644,31 @@ public final class Util {
 		content.setItemKeyValues(itemKeyValues);
 		return content;
     }
+    
     public static NodeList getUUIDNodes(Document schema, String concept) throws Exception{
 		Element rootNS=Util.getRootElement("nsholder",schema.getDocumentElement().getNamespaceURI(),"xsd");	
 		String xpath="//xsd:element[@name='"+concept+"']//xsd:element[@type='"+EUUIDCustomType.AUTO_INCREMENT+"' or @type='"+EUUIDCustomType.UUID+"']";
 		NodeList uuidLists=Util.getNodeList(schema.getDocumentElement(),xpath,rootNS.getNamespaceURI(),"xsd");
 		return uuidLists;
     }
+    
+    public static String[] getTargetSystemsFromSchema(Document schema, String concept) throws Exception{
+    	String[] targetSystems=null;
+    	
+    	Element rootNS=Util.getRootElement("nsholder",schema.getDocumentElement().getNamespaceURI(),"xsd");	
+		String xpath="//xsd:element[@name='"+concept+"']//xsd:appinfo[@source='X_TargetSystem']";
+		NodeList tsList=Util.getNodeList(schema.getDocumentElement(),xpath,rootNS.getNamespaceURI(),"xsd");
+		
+		if(tsList!=null){
+			targetSystems=new String[tsList.getLength()];
+			for (int i = 0; i < tsList.getLength(); i++) {
+				Node tsNode=tsList.item(i);
+				targetSystems[i]=tsNode.getTextContent();
+			}
+		}
+		
+		return targetSystems;
+	}
     
     private static void generateUUIDForElement(Document schema,String dataCluster,String concept, Element conceptRoot) throws Exception{
     	NodeList uuidLists=getUUIDNodes(schema, concept);
