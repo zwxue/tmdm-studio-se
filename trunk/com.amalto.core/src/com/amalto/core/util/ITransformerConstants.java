@@ -8,4 +8,6 @@ public interface ITransformerConstants {
 	
 	public static final String VARIABLE_OUTPUT_TO_ITEMDISPATCHERSERVICE = "output_to_itemdispatcher";
 	
+	public static final String VARIABLE_OUTPUT_FOR_SMARTVIEW = "html";
+	
 }
