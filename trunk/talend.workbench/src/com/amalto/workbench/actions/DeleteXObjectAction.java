@@ -170,6 +170,16 @@ public class DeleteXObjectAction extends Action{
 					"Error", 
 					"An error occured trying to delete the "+IConstants.TALEND+" object: "+e.getLocalizedMessage()
 			);
+		}finally {
+			//refresh view
+			try {
+				TreeObject selected = (TreeObject)((IStructuredSelection)view.getViewer().getSelection()).getFirstElement();
+				if (selected == null)
+				{
+					selected = view.getTreeContentProvider().getInvisibleRoot().getChildren()[0];
+				}
+				(new ServerRefreshAction(this.view,selected.getServerRoot())).run();
+			} catch (Exception e) {}
 		}		
 	}
 	
