@@ -3,6 +3,13 @@ package com.amalto.workbench.editors.xmleditor;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.ITextOperationTarget;
+import org.eclipse.jface.text.source.SourceViewer;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.editors.text.TextEditor;
 
 import com.amalto.workbench.actions.SaveXObjectAction;
@@ -22,6 +29,28 @@ public class XMLEditor extends TextEditor {
 		colorManager = new ColorManager();
 		setSourceViewerConfiguration(new XMLConfiguration(colorManager));
 		setDocumentProvider(new XMLDocumentProvider());
+	}
+	
+	public void createPartControl(Composite parent) {
+		super.createPartControl(parent);
+		initializeKeyPress((SourceViewer)getSourceViewer());
+	}
+	
+	private void initializeKeyPress(final SourceViewer viewer)
+	{		
+		StyledText styledText = viewer.getTextWidget();
+        styledText.addKeyListener(new KeyListener( ) {
+            public void keyPressed(KeyEvent e) {
+			}
+
+            public void keyReleased(KeyEvent e) {
+				if (e.keyCode == 'x' && e.stateMask == SWT.CTRL) {
+					viewer.doOperation(ITextOperationTarget.CUT);
+				} else if (e.keyCode == 'v' && e.stateMask == SWT.CTRL) {
+					viewer.doOperation(ITextOperationTarget.PASTE);
+				}
+			}
+        });
 	}
 	
 	public void dispose() {
@@ -64,7 +93,7 @@ public class XMLEditor extends TextEditor {
 	}
 	
 	@Override
-	public boolean isDirty() {		
+	public boolean isDirty() {	
 		if(state==1){
 			return true;
 		}
