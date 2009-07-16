@@ -20,6 +20,8 @@ public class UpdateReportPOJO {
 	
 	public final static String OPERATIONTYPE_DELETE="DELETE";
 	
+	//TODO maybe need add pushed type
+	
 	//public final static String OPERATIONTYPE_SYNCHRONIZE="SYNCHRONIZE";
 	
 	private String source;
