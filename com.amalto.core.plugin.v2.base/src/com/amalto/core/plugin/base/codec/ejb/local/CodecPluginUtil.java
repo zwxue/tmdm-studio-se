@@ -1,19 +1,19 @@
 /*
  * Generated file - Do not edit!
  */
-package com.amalto.core.plugin.base.crossreferencing.ejb.local;
+package com.amalto.core.plugin.base.codec.ejb.local;
 
 /**
- * Utility class for CrossReferencingTransformerPluginBean.
+ * Utility class for CodecPlugin.
  * @xdoclet-generated at 16-07-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
  */
-public class CrossReferencingTransformerPluginBeanUtil
+public class CodecPluginUtil
 {
    /** Cached local home (EJBLocalHome). Uses lazy loading to obtain its value (loaded by getLocalHome() methods). */
-   private static com.amalto.core.plugin.base.crossreferencing.ejb.local.CrossReferencingTransformerPluginBeanLocalHome cachedLocalHome = null;
+   private static com.amalto.core.plugin.base.codec.ejb.local.CodecPluginLocalHome cachedLocalHome = null;
 
    private static Object lookupHome(java.util.Hashtable environment, String jndiName, Class narrowTo) throws javax.naming.NamingException {
       // Obtain initial context
@@ -34,12 +34,12 @@ public class CrossReferencingTransformerPluginBeanUtil
 
    /**
     * Obtain local home interface from default initial context
-    * @return Local home interface for CrossReferencingTransformerPluginBean. Lookup using COMP_NAME
+    * @return Local home interface for CodecPlugin. Lookup using COMP_NAME
     */
-   public static com.amalto.core.plugin.base.crossreferencing.ejb.local.CrossReferencingTransformerPluginBeanLocalHome getLocalHome() throws javax.naming.NamingException
+   public static com.amalto.core.plugin.base.codec.ejb.local.CodecPluginLocalHome getLocalHome() throws javax.naming.NamingException
    {
       if (cachedLocalHome == null) {
-            cachedLocalHome = (com.amalto.core.plugin.base.crossreferencing.ejb.local.CrossReferencingTransformerPluginBeanLocalHome) lookupHome(null, com.amalto.core.plugin.base.crossreferencing.ejb.local.CrossReferencingTransformerPluginBeanLocalHome.COMP_NAME, com.amalto.core.plugin.base.crossreferencing.ejb.local.CrossReferencingTransformerPluginBeanLocalHome.class);
+            cachedLocalHome = (com.amalto.core.plugin.base.codec.ejb.local.CodecPluginLocalHome) lookupHome(null, com.amalto.core.plugin.base.codec.ejb.local.CodecPluginLocalHome.COMP_NAME, com.amalto.core.plugin.base.codec.ejb.local.CodecPluginLocalHome.class);
       }
       return cachedLocalHome;
    }
@@ -66,7 +66,7 @@ public class CrossReferencingTransformerPluginBeanUtil
                localInetAddress = java.net.InetAddress.getLocalHost();
            }
            catch (java.net.UnknownHostException uhe) {
-               System.err.println("CrossReferencingTransformerPluginBeanUtil: Could not get the local IP address using InetAddress.getLocalHost()!");
+               System.err.println("CodecPluginUtil: Could not get the local IP address using InetAddress.getLocalHost()!");
                // todo: find better way to get around this...
                uhe.printStackTrace();
                return null;
