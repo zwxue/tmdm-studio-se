@@ -18,11 +18,11 @@ import com.amalto.webapp.v3.synchronization.bean.SynchronizationItem;
 import com.amalto.webapp.v3.synchronization.bean.TreeNode;
 
 
-public class SynchronizationPlanDWR {
+public class SynchronizationItemDWR {
 	
 	private Logger logger=org.apache.log4j.Logger.getLogger(this.getClass());
 	
-	public SynchronizationPlanDWR() {
+	public SynchronizationItemDWR() {
 		super();
 	}
 

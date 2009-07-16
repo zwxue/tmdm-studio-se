@@ -3,8 +3,8 @@
 <dwr>
 
     <allow>
-         <create creator="new" javascript="SynchronizationPlanInterface">
-            <param name="class" value="com.amalto.webapp.v3.synchronization.dwr.SynchronizationPlanDWR"/>
+         <create creator="new" javascript="SynchronizationItemInterface">
+            <param name="class" value="com.amalto.webapp.v3.synchronization.dwr.SynchronizationItemDWR"/>
         </create>       
         <convert converter="bean" match="java.lang.Exception"/>
         <convert converter="bean" match="java.lang.StackTraceElement"/>
