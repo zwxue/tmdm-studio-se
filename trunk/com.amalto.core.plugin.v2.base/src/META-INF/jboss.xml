@@ -44,15 +44,15 @@
         </method-attributes>
       </session>
       <session>
-         <ejb-name>RouteTransformerPlugin</ejb-name>
-         <local-jndi-name>amalto/local/transformer/plugin/route</local-jndi-name>
+         <ejb-name>XSLTTransformerPlugin</ejb-name>
+         <local-jndi-name>amalto/local/transformer/plugin/xslt</local-jndi-name>
 
         <method-attributes>
         </method-attributes>
       </session>
       <session>
-         <ejb-name>XSLTTransformerPlugin</ejb-name>
-         <local-jndi-name>amalto/local/transformer/plugin/xslt</local-jndi-name>
+         <ejb-name>RouteTransformerPlugin</ejb-name>
+         <local-jndi-name>amalto/local/transformer/plugin/route</local-jndi-name>
 
         <method-attributes>
         </method-attributes>
@@ -67,6 +67,13 @@
       <session>
          <ejb-name>ProjectTransformerPlugin</ejb-name>
          <local-jndi-name>amalto/local/transformer/plugin/project</local-jndi-name>
+
+        <method-attributes>
+        </method-attributes>
+      </session>
+      <session>
+         <ejb-name>CodecPlugin</ejb-name>
+         <local-jndi-name>amalto/local/transformer/plugin/codec</local-jndi-name>
 
         <method-attributes>
         </method-attributes>
