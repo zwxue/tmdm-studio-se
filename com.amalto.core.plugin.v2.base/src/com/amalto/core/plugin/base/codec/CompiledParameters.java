@@ -16,6 +16,8 @@ public class CompiledParameters implements Serializable {
 	
 	private String algorithm;
 	
+	private boolean wrap;
+	
 	public String getMethod() {
 		return method;
 	}
@@ -31,6 +33,15 @@ public class CompiledParameters implements Serializable {
 
 	public void setAlgorithm(String algorithm) {
 		this.algorithm = algorithm;
+	}
+	
+	
+	public boolean isWrap() {
+		return wrap;
+	}
+
+	public void setWrap(boolean wrap) {
+		this.wrap = wrap;
 	}
 
 	public String serialize() throws IOException{

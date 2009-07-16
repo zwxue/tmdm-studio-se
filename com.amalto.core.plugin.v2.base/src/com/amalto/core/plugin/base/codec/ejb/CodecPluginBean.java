@@ -65,6 +65,7 @@ public class CodecPluginBean extends TransformerPluginV2CtrlBean  implements Ses
 	static{
 		AVAILABLE_ALGORITHMS.add(ALGORITHM_TYPE_BASE64);
 	}
+	private static final String wrapRegex ="(true|false)";
 
 	public CodecPluginBean() {
 		super();
@@ -112,6 +113,7 @@ public class CodecPluginBean extends TransformerPluginV2CtrlBean  implements Ses
 		"Parameters\n" +
 		"	method [mandatory]: specify whether ENCODE or DECODE input text"+"\n"+
 		"	algorithm [mandatory]: specify which algorithm will be used"+"\n"+
+		"	wrap [optional]: wrap an xml tag of an codec text 'true' or 'false'. Default: 'false'"+"\n"+
 		"\n"+
 		"\n"+
 		"Example" +"\n"+
@@ -203,6 +205,7 @@ public class CodecPluginBean extends TransformerPluginV2CtrlBean  implements Ses
 		"				<xsd:sequence>" +
 		"					<xsd:element minOccurs='1' maxOccurs='1' nillable='false' name='method' type='xsd:string'/>" +
 		"					<xsd:element minOccurs='1' maxOccurs='1' nillable='false' name='algorithm' type='xsd:string'/>" +
+		"					<xsd:element minOccurs='0' maxOccurs='1' nillable='false' name='wrap' type='xsd:string'/>" +
 		"				</xsd:sequence>" +
 		"			</xsd:complexType>" +
 		"</xsd:element>"+
@@ -248,6 +251,19 @@ public class CodecPluginBean extends TransformerPluginV2CtrlBean  implements Ses
 				throw new XtentisException(err);
 			}
     		compiled.setAlgorithm(algorithm);
+    		
+    		//optional case
+    		boolean isWrap=false;
+    		String wrap = Util.getFirstTextNode(params, "//wrap");
+			if (wrap!=null&&wrap.length()>0) {
+				if(!wrap.trim().toLowerCase().matches(wrapRegex)){
+					String err = "The format of the wrap parameter of the Codec Transformer Plugin is unavailable";
+					org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
+					throw new XtentisException(err);
+				}
+				isWrap=Boolean.parseBoolean(wrap.trim());
+			}
+    		compiled.setWrap(isWrap);
 
     		return compiled.serialize();
     		
@@ -317,6 +333,10 @@ public class CodecPluginBean extends TransformerPluginV2CtrlBean  implements Ses
 				}else if(method.equals(METHOD_TYPE_DECODE)){
 					codecText=new String((new BASE64Decoder()).decodeBuffer(lawText),charset);
 				}
+			}
+			
+			if(parameters.isWrap()){
+				codecText="<Codec_Output>"+codecText+"</Codec_Output>";
 			}
 			
 			context.put(OUTPUT_TEXT, new TypedContent(codecText.getBytes(),charset));
