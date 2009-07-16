@@ -384,13 +384,13 @@ public abstract class ConnectorMDB implements MessageDrivenBean, MessageListener
 		try {
 			DataClusterCtrlLocal dcctrl = getDataClusterCtrlLocal();
 			DataClusterPOJO dataCluster = 
-				dcctrl.existsDataCluster(new DataClusterPOJOPK("amaltoOBJECTSjcaadapters"));
+				dcctrl.existsDataCluster(new DataClusterPOJOPK("JCAAdapters"));
 			if (dataCluster==null) {
 				//the cluster was not found - attempt to create it
 				return dcctrl.putDataCluster(
 						new DataClusterPOJO(
-								"amaltoOBJECTSjcaadapters", 
-								"Xtentis JCA Adapters", 
+								"JCAAdapters", 
+								"JCA Adapters", 
 								"" //no intitial vocabulary
 				));
 			}  
