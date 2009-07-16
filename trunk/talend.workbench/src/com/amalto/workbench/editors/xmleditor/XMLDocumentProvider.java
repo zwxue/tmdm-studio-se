@@ -29,4 +29,8 @@ public class XMLDocumentProvider extends FileDocumentProvider {
 		}
 		return null;
 	}
+	
+	public boolean isReadOnly(Object element) {
+		return false;
+	}
 }
