@@ -7,10 +7,12 @@
 amalto.namespace("amalto.updatereport");
 
 amalto.updatereport.UpdateReport = function () {
+	loadResource("/updatereport/secure/js/UpdateReportLocal.js", "amalto.updatereport.UpdateReportLocal" );
 	
     loadResource("/updatereport/secure/js/UpdateReportPanel.js", "");
     
     loadResource("/updatereport/secure/js/DataLogViewer.js", "");
+    
     
     var updateReportPanel;
 	
@@ -37,7 +39,10 @@ amalto.updatereport.UpdateReport = function () {
 
  	return {
  		
-		init: function() {browseUpdateReport();}
+		init: function() {
+ 		amalto.updatereport.UpdateReportLocal.init();
+ 		browseUpdateReport();
+ 		}
 		
  	}
 }();
