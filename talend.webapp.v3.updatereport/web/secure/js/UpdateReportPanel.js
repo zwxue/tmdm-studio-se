@@ -4,9 +4,11 @@
  */
 Ext.namespace('amalto.updatereport');
 amalto.updatereport.UpdateReportPanel = function(config) {
+	
 	Ext.applyIf(this, config);
 	this.initUIComponents();
 	amalto.updatereport.UpdateReportPanel.superclass.constructor.call(this);
+	loadResource("/updatereport/secure/js/UpdateReportLocal.js", "amalto.updatereport.UpdateReportLocal" );
 };
 Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
     initPageSize:20,
@@ -48,47 +50,47 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
 			selModel : new Ext.grid.RowSelectionModel({}),
 			columns : [{
 				hidden : false,
-				header : "Data cluster",
+				header : amalto.updatereport.UpdateReportLocal.get("dataCluster"),
 				dataIndex : "dataCluster",
 				sortable : true
 			},{
 				hidden : false,
-				header : "Data model",
+				header : amalto.updatereport.UpdateReportLocal.get("dataModel"),
 				dataIndex : "dataModel",
 				sortable : true
 			},{
 				hidden : false,
-				header : "Concept",
+				header : amalto.updatereport.UpdateReportLocal.get("concept"),
 				dataIndex : "concept",
 				sortable : true
 			}, {
 				hidden : false,
-				header : "Key",
-				dataIndex : "key",
+				header :  amalto.updatereport.UpdateReportLocal.get("key"),
+				dataIndex :"key",
 				sortable : true
 			},{
 				hidden : false,
-				header : "Revision ID",
-				dataIndex : "revisionID",
+				header : amalto.updatereport.UpdateReportLocal.get("revisionID"),
+				dataIndex :"revisionID", 
 				sortable : true
 			}, {
 				hidden : false,
-				header : "Operation type",
-				dataIndex : "operationType",
+				header : amalto.updatereport.UpdateReportLocal.get("operationType"),
+				dataIndex :"operationType",
 				sortable : true
 			}, {
 				hidden : false,
-				header : "Operation time",
+				header : amalto.updatereport.UpdateReportLocal.get("timeInMillis"),
 				dataIndex : "timeInMillis",
 				sortable : true
 			}, {
 				hidden : false,
-				header : "Source",
+				header : amalto.updatereport.UpdateReportLocal.get("source"),
 				dataIndex : "source",
 				sortable : true
 			}, {
 				hidden : false,
-				header : "User name",
+				header : amalto.updatereport.UpdateReportLocal.get("userName"),
 				dataIndex : "userName",
 				sortable : true
 			}],
@@ -116,15 +118,15 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
    	   	    },
 			bbar : new Ext.PagingToolbar({
 				id:"updateReportPagingToolbar",
-				displayMsg : "Displaying items {0} - {1} of {2}",
+				displayMsg : amalto.updatereport.UpdateReportLocal.get("displayMsg"),
 				displayInfo: true,
 				store : this.store1,
 				xtype : "paging",
-				emptyMsg : "No data to display",
+				emptyMsg :amalto.updatereport.UpdateReportLocal.get("emptyMsg"),
 				pageSize : this.initPageSize,
 				items:[ 
 		        	new Ext.Toolbar.Separator(),
-		        	new Ext.Toolbar.TextItem("Number of lines per page"+" : "),
+		        	new Ext.Toolbar.TextItem(amalto.updatereport.UpdateReportLocal.get("lines_per_page")+" : "),
 		        	new Ext.form.TextField({
     					id:'lineMaxItems',
     					value:this.initPageSize,
@@ -164,12 +166,12 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
        
 		Ext.apply(this, {
 			layout : "border",
-			title : "Update Report Panel",
+			title : amalto.updatereport.UpdateReportLocal.get("title"),
 			items : [this.gridPanel1, {
 				frame : false,
 				height : 150,
 				layout : "fit",
-				title : "Search Panel",
+				title : amalto.updatereport.UpdateReportLocal.get("searchPanel_tile"),
 				collapsible : true,
 				items : [{
 					height : 30,
@@ -179,7 +181,7 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
 						layout : "form",
 						items : [{
 							name : "concept",
-							fieldLabel : "Concept",
+							fieldLabel : amalto.updatereport.UpdateReportLocal.get("concept"),
 							xtype : "textfield",
 							listeners : {
                                'specialkey' : function(field, event) {
@@ -189,7 +191,7 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
 						}, {
 							name : "source",
 							//emptyText : "Select a source...",
-							fieldLabel : "Source",
+							fieldLabel :amalto.updatereport.UpdateReportLocal.get("source"),
 							xtype : "combo",
 							store: this.sourceStore,
 							displayField:'text',
@@ -204,7 +206,7 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
                                         }
 						}, {
 							name : "startDate",
-							fieldLabel : "Start Date",
+							fieldLabel : amalto.updatereport.UpdateReportLocal.get("start_date"),
 							xtype : "datefield",
 							format : "Y-m-d H:i:s",
 							width: 150,
@@ -221,7 +223,7 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
 						layout : "form",
 						items : [{
 							name : "key",
-							fieldLabel : "Key",
+							fieldLabel :amalto.updatereport.UpdateReportLocal.get( "key"),
 							xtype : "textfield",
 							listeners : {
                                'specialkey' : function(field, event) {
@@ -231,7 +233,7 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
 						}, {
 							name : "operationType",
 							//emptyText : "Select a type...",
-							fieldLabel : "Operation type",
+							fieldLabel : amalto.updatereport.UpdateReportLocal.get("operationType"),
 							xtype : "combo",
 							store: this.operationTypeStore,
 							displayField:'text',
@@ -246,7 +248,7 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
                                         }
 						}, {
 							name : "endDate",
-							fieldLabel : "End Date",
+							fieldLabel : amalto.updatereport.UpdateReportLocal.get("end_date"),
 							xtype : "datefield",
 							format : "Y-m-d H:i:s",
 							width: 150,
@@ -266,12 +268,12 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
 					handler : function(button, event) {
 						this.onResetBtnClick(button, event);
 					}.createDelegate(this),
-					text : "Reset"
+					text : amalto.updatereport.UpdateReportLocal.get("reset")
 				},{
 					handler : function(button, event) {
 						this.onSearchBtnClick(button, event);
 					}.createDelegate(this),
-					text : "Search"
+					text : amalto.updatereport.UpdateReportLocal.get("search")
 				}]
 			}],
 			id : "UpdateReportPanel",
