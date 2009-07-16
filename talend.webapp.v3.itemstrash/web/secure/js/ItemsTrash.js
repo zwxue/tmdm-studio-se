@@ -6,7 +6,7 @@
 amalto.namespace("amalto.ItemsTrash");
 //contextid.appid
 amalto.ItemsTrash.ItemsTrash=function(){
-	
+	 loadResource("/ItemsTrash/secure/js/ItemsTrashLocal.js", "amalto.ItemsTrash.ItemsTrashLocal" );
      loadResource("/ItemsTrash/secure/css/ItemsTrash.css", "" );
 
     var recordType = Ext.data.Record.create([
@@ -54,14 +54,14 @@ amalto.ItemsTrash.ItemsTrash=function(){
     };
 
     function toDelete(pk,partPath,revisionID,conceptName,ids){
-    	Ext.MessageBox.confirm("confirm","Are you sure to delete the this physically?",function de(e){
+    	Ext.MessageBox.confirm("confirm",amalto.ItemsTrash.ItemsTrashLocal.get("delete_conform"),function de(e){
     		if(e.toLocaleString()=="yes")
     			ItemsTrashInterface.removeDroppedItem(pk,partPath,revisionID,conceptName,ids,showTrashItems);
     		}) ;
     }
     function toRestore(pk,partPath,revisionID,conceptName,ids){
     	
-    	Ext.MessageBox.confirm("confirm","Are you sure to restore this item?",function re(en){
+    	Ext.MessageBox.confirm("confirm",amalto.ItemsTrash.ItemsTrashLocal.get("restore_conform"),function re(en){
     		if(en=="yes")
     			ItemsTrashInterface.recoverDroppedItem(pk,partPath,revisionID,conceptName,ids,showTrashItems);
     		});
@@ -70,15 +70,15 @@ amalto.ItemsTrash.ItemsTrash=function(){
     function show(){
     	var myColumns = [
     	//{header: "No", width: 25, sortable: true},
-		{header: 'dataClusterName',  sortable: true,dataIndex: 'itemPK'}, 
-		{header: 'revisionID',   sortable: true,dataIndex: 'revisionID'}, 
-		{header: 'conceptName',   sortable: true,dataIndex: 'conceptName'},
-		{header: 'ids',  sortable: true,dataIndex: 'ids'},
-		{header: 'partPath', sortable: true,dataIndex: 'partPath'},
-		{header: 'UserName', sortable: true,dataIndex: 'insertionUserName'},
-		{header: 'Date',  sortable: true,dataIndex: 'insertionTime'},
-		{header: 'delete', sortable: false, renderer:deleteItem},
-		{header: 'restore', sortable: false, renderer:restore}
+		{header: amalto.ItemsTrash.ItemsTrashLocal.get('dataClusterName'),  sortable: true,dataIndex: 'itemPK'}, 
+		{header: amalto.ItemsTrash.ItemsTrashLocal.get('revisionID'),   sortable: true,dataIndex: 'revisionID'}, 
+		{header: amalto.ItemsTrash.ItemsTrashLocal.get('conceptName'),   sortable: true,dataIndex: 'conceptName'},
+		{header: amalto.ItemsTrash.ItemsTrashLocal.get('Ids'),  sortable: true,dataIndex: 'ids'},
+		{header: amalto.ItemsTrash.ItemsTrashLocal.get('partPath'), sortable: true,dataIndex: 'partPath'},
+		{header: amalto.ItemsTrash.ItemsTrashLocal.get('UserName'), sortable: true,dataIndex: 'insertionUserName'},
+		{header: amalto.ItemsTrash.ItemsTrashLocal.get('Date'),  sortable: true,dataIndex: 'insertionTime'},
+		{header: amalto.ItemsTrash.ItemsTrashLocal.get('delete'), sortable: false, renderer:deleteItem},
+		{header: amalto.ItemsTrash.ItemsTrashLocal.get('restore'), sortable: false, renderer:restore}
 	    ];
    	    var columnModel = new Ext.grid.ColumnModel(myColumns);
    	    columnModel.defaultWidth;
@@ -97,7 +97,7 @@ amalto.ItemsTrash.ItemsTrash=function(){
    	   	        stripeRows: true,
    	   	        height:350,
    	   	        width:600,				   	   	      
-   	   	        title:'itemsTrash',
+   	   	        title: amalto.ItemsTrash.ItemsTrashLocal.get('title'),
 	   	   	    viewConfig: {
 	   	   	        forceFit: true
 	   	   	    },
@@ -133,8 +133,8 @@ amalto.ItemsTrash.ItemsTrash=function(){
 			                
 						}),
 						new Ext.Toolbar.Button({
-							text:'search',
-							tooltip:'First four fields can be input as search text',
+							text:amalto.ItemsTrash.ItemsTrashLocal.get('search'),
+							tooltip:amalto.ItemsTrash.ItemsTrashLocal.get('serarch_tooltip'),
 							handler:showTrashItems
 						})
 					],
@@ -150,7 +150,7 @@ amalto.ItemsTrash.ItemsTrash=function(){
 						        width: 800,
 						        items:[ 
 						        	new Ext.Toolbar.Separator(),
-						        	new Ext.Toolbar.TextItem('Number of lines per page'+" : "),
+						        	new Ext.Toolbar.TextItem(amalto.ItemsTrash.ItemsTrashLocal.get('lines_per_page')+" : "),
 						        	new Ext.form.TextField({
 				    					id:'lineMaxItems',
 				    					value:pageSize,
@@ -190,6 +190,8 @@ amalto.ItemsTrash.ItemsTrash=function(){
     };
     return {
         init : function(){
+        	amalto.ItemsTrash.ItemsTrashLocal.init();
+        	
         	var tabPanel = amalto.core.getTabPanel();
 	    	Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 	    	if(tabPanel.getItem('trashDataGrid') == undefined){
