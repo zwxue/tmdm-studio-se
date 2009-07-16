@@ -16,8 +16,8 @@
      -->
 
       <session>
-         <ejb-name>ItemDispatcher</ejb-name>
-         <local-jndi-name>amalto/local/service/itemdispatcher</local-jndi-name>
+         <ejb-name>DumpToConsole</ejb-name>
+         <local-jndi-name>amalto/local/service/dumptoconsole</local-jndi-name>
 
         <method-attributes>
         </method-attributes>

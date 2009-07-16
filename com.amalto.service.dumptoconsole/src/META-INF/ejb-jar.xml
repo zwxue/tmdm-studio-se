@@ -9,14 +9,14 @@
 
       <!-- Session Beans -->
       <session >
-         <description><![CDATA[Description for ItemDispatcher]]></description>
-         <display-name>Name for ItemDispatcher</display-name>
+         <description><![CDATA[Description for DumpToConsole]]></description>
+         <display-name>Name for DumpToConsole</display-name>
 
-         <ejb-name>ItemDispatcher</ejb-name>
+         <ejb-name>DumpToConsole</ejb-name>
 
-         <local-home>com.amalto.service.itemdispatcher.ejb.local.ItemDispatcherLocalHome</local-home>
-         <local>com.amalto.service.itemdispatcher.ejb.local.ItemDispatcherLocal</local>
-         <ejb-class>com.amalto.service.itemdispatcher.ejb.local.ItemDispatcherSession</ejb-class>
+         <local-home>com.amalto.service.dumptoconsole.ejb.local.DumpToConsoleLocalHome</local-home>
+         <local>com.amalto.service.dumptoconsole.ejb.local.DumpToConsoleLocal</local>
+         <ejb-class>com.amalto.service.dumptoconsole.ejb.local.DumpToConsoleSession</ejb-class>
          <session-type>Stateless</session-type>
          <transaction-type>Container</transaction-type>
 
@@ -73,7 +73,7 @@
       <role-name>administration</role-name>
       <method >
          <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>ItemDispatcher</ejb-name>
+         <ejb-name>DumpToConsole</ejb-name>
          <method-intf>Remote</method-intf>
          <method-name>*</method-name>
       </method>
@@ -83,7 +83,7 @@
       <role-name>administration</role-name>
       <method >
          <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>ItemDispatcher</ejb-name>
+         <ejb-name>DumpToConsole</ejb-name>
          <method-intf>Home</method-intf>
          <method-name>*</method-name>
       </method>
@@ -93,7 +93,7 @@
       <unchecked/>
       <method >
          <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>ItemDispatcher</ejb-name>
+         <ejb-name>DumpToConsole</ejb-name>
          <method-intf>Local</method-intf>
          <method-name>*</method-name>
       </method>
@@ -103,7 +103,7 @@
       <unchecked/>
       <method >
          <description><![CDATA[description not supported yet by ejbdoclet]]></description>
-         <ejb-name>ItemDispatcher</ejb-name>
+         <ejb-name>DumpToConsole</ejb-name>
          <method-intf>LocalHome</method-intf>
          <method-name>*</method-name>
       </method>
