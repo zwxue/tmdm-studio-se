@@ -3,14 +3,14 @@
  * @include  "/com.amalto.webapp.core/web/secure/js/core.js"
  */
  
-amalto.namespace("amalto.SynchronizationPlan");
+amalto.namespace("amalto.SynchronizationItem");
 
-amalto.SynchronizationPlan.SynchronizationPlan=function(){
+amalto.SynchronizationItem.SynchronizationItem=function(){
 	
 	//declare application local
-    loadResource("/SynchronizationPlan/secure/js/SynchronizationPlanLocal.js", "amalto.SynchronizationPlan.SynchronizationPlanLocal" );
+    loadResource("/SynchronizationItem/secure/js/SynchronizationItemLocal.js", "amalto.SynchronizationItem.SynchronizationItemLocal" );
     
-    loadResource("/SynchronizationPlan/secure/css/SynchronizationPlan.css", "" );
+    loadResource("/SynchronizationItem/secure/css/SynchronizationItem.css", "" );
 
     var recordType = Ext.data.Record.create([
 	  //{name: "id", type: "int"},
@@ -27,7 +27,7 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
 	  ]);
 
      var store = new Ext.data.Store({
-	    proxy: new Ext.data.DWRProxy(SynchronizationPlanInterface.getSyncItems, true),
+	    proxy: new Ext.data.DWRProxy(SynchronizationItemInterface.getSyncItems, true),
 	    reader: new Ext.data.ListRangeReader( 
 				{id:'itemPK', totalProperty:'totalSize',root: 'data'}, recordType),
 	    remoteSort: true
@@ -49,10 +49,10 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
     function show(){
     	var myColumns = [
     	//{header: "No", width: 25, sortable: true},
-		{header: amalto.SynchronizationPlan.SynchronizationPlanLocal.get('GRID_COLUMN_1'), width: 100, sortable: true,dataIndex: 'itemPK'}, 
-		{header: amalto.SynchronizationPlan.SynchronizationPlanLocal.get('GRID_COLUMN_2'), width: 100,  sortable: true,dataIndex: 'localRevisionID'}, 
-		{header: amalto.SynchronizationPlan.SynchronizationPlanLocal.get('GRID_COLUMN_3'), width: 120,  sortable: true,dataIndex: 'lastRunPlan'},
-		{header: amalto.SynchronizationPlan.SynchronizationPlanLocal.get('GRID_COLUMN_4'), width: 105, sortable: true,dataIndex: 'status'}
+		{header: amalto.SynchronizationItem.SynchronizationItemLocal.get('GRID_COLUMN_1'), width: 100, sortable: true,dataIndex: 'itemPK'}, 
+		{header: amalto.SynchronizationItem.SynchronizationItemLocal.get('GRID_COLUMN_2'), width: 100,  sortable: true,dataIndex: 'localRevisionID'}, 
+		{header: amalto.SynchronizationItem.SynchronizationItemLocal.get('GRID_COLUMN_3'), width: 120,  sortable: true,dataIndex: 'lastRunPlan'},
+		{header: amalto.SynchronizationItem.SynchronizationItemLocal.get('GRID_COLUMN_4'), width: 105, sortable: true,dataIndex: 'status'}
 	    ];
    	    var columnModel = new Ext.grid.ColumnModel(myColumns);
    	
@@ -70,7 +70,7 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
    	   	        stripeRows: true,
    	   	        height:350,
    	   	        width:600,				   	   	      
-   	   	        title:amalto.SynchronizationPlan.SynchronizationPlanLocal.get('GRID_TITLE'),
+   	   	        title:amalto.SynchronizationItem.SynchronizationItemLocal.get('GRID_TITLE'),
 	   	   	    viewConfig: {
 	   	   	        forceFit: true,
 	
@@ -86,11 +86,11 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
    	   	        listeners:
    	   	        {
    	    			'rowdblclick' : function(grid,rowIndex, e ){
-   	    				loadResource("/SynchronizationPlan/secure/js/SyncXMLPanel.js", "amalto.SynchronizationPlan.SyncXMLPanel",function(){
+   	    				loadResource("/SynchronizationItem/secure/js/SyncXMLPanel.js", "amalto.SynchronizationItem.SyncXMLPanel",function(){
    	    				   var record=grid.getStore().getAt(rowIndex);
    	    				   //if(record.data.status == 'MANUAL'){
    	    					   	    					
-   	   	    			   var xmlData= amalto.SynchronizationPlan.SyncXMLPanel(record.data,store);
+   	   	    			   var xmlData= amalto.SynchronizationItem.SyncXMLPanel(record.data,store);
    	   	    			   xmlData.init();  	    					
    	    				   //}
    	    				});
@@ -111,7 +111,7 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
 			                }
 						}),
 						new Ext.Toolbar.Button({
-							text:amalto.SynchronizationPlan.SynchronizationPlanLocal.get('BUTTON_SEARCH'),							
+							text:amalto.SynchronizationItem.SynchronizationItemLocal.get('BUTTON_SEARCH'),							
 							handler:showSyncItems
 						})
 					],
@@ -122,12 +122,12 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
 								pageSize: parseInt(pageSize),
 						        store: store,
 						        displayInfo: true,
-						        displayMsg: amalto.SynchronizationPlan.SynchronizationPlanLocal.get('LABEL_DISPLAYING')+' {0} - {1} '+amalto.SynchronizationPlan.SynchronizationPlanLocal.get('LABEL_OF')+' {2}',
-						        emptyMsg: amalto.SynchronizationPlan.SynchronizationPlanLocal.get('LABEL_NO_RESULT'),
+						        displayMsg: amalto.SynchronizationItem.SynchronizationItemLocal.get('LABEL_DISPLAYING')+' {0} - {1} '+amalto.SynchronizationItem.SynchronizationItemLocal.get('LABEL_OF')+' {2}',
+						        emptyMsg: amalto.SynchronizationItem.SynchronizationItemLocal.get('LABEL_NO_RESULT'),
 						        width: 800,
 						        items:[ 
 						        	new Ext.Toolbar.Separator(),
-						        	new Ext.Toolbar.TextItem(amalto.SynchronizationPlan.SynchronizationPlanLocal.get('LABEL_LINES_PER_PAGE')+" : "),
+						        	new Ext.Toolbar.TextItem(amalto.SynchronizationItem.SynchronizationItemLocal.get('LABEL_LINES_PER_PAGE')+" : "),
 						        	new Ext.form.TextField({
 				    					id:'lineMaxItems',
 				    					value:pageSize,
@@ -171,7 +171,7 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
     return {
         init : function(){
         	//init application local
-        	amalto.SynchronizationPlan.SynchronizationPlanLocal.init();
+        	amalto.SynchronizationItem.SynchronizationItemLocal.init();
         	
 	    	var tabPanel = amalto.core.getTabPanel();
 	    	Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
@@ -187,4 +187,4 @@ amalto.SynchronizationPlan.SynchronizationPlan=function(){
     };
 }();
 
-//Ext.onReady(SynchronizationPlan.init, SynchronizationPlan, true);
+//Ext.onReady(SynchronizationItem.init, SynchronizationItem, true);

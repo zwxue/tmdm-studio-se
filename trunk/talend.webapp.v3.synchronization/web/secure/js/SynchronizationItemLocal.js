@@ -2,7 +2,7 @@
 /********************************************************************
  * name space : {companyName}.{context}.{application}Local
  ********************************************************************/
-amalto.SynchronizationPlan.SynchronizationPlanLocal=function(){
+amalto.SynchronizationItem.SynchronizationItemLocal=function(){
 	    
     
     var locale_en;
@@ -18,7 +18,7 @@ amalto.SynchronizationPlan.SynchronizationPlanLocal=function(){
 			 ********************************************************************/
 			 
 	    	locale_en= {
-	    		  'GRID_TITLE':'Synchronization Items',   
+	    		  'GRID_TITLE':'Synchronization Item',   
 	              'BUTTON_SEARCH':'Search',
                   'GRID_COLUMN_1':'Item PK',
                   'GRID_COLUMN_2':'Local Revision ID',
@@ -58,7 +58,7 @@ amalto.SynchronizationPlan.SynchronizationPlanLocal=function(){
                  };
                  
             locale_fr= {     
-                  'GRID_TITLE':'Synchronization Items',   
+                  'GRID_TITLE':'Item de Synchronization',   
 	              'BUTTON_SEARCH':'Rechercher',
                   'GRID_COLUMN_1':'Item PK',
                   'GRID_COLUMN_2':'Local Revision ID',
