@@ -37,9 +37,10 @@ public class TreeParent extends TreeObject {
 				((TreeParent)child).removeChild(subchildren[i]);
 			}
         }		
-		child.fireEvent(IXObjectModelListener.DELETE, this, child);
+		
 		children.remove(child);
 		child.setParent(null);
+		this.fireEvent(IXObjectModelListener.DELETE, this, child);
 		
 	}
     
