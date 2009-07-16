@@ -37,7 +37,7 @@ public enum ESystemDefaultObjects {
 	M_MANAGER_USERS(TreeObject.MENU,"Manage users"),
 	M_REPORTING(TreeObject.MENU,"Reporting"),
 	M_SYNCHRONIZATIONACTION(TreeObject.MENU,"SynchronizationAction"),
-	M_SYNCHRONIZATIONPLAN(TreeObject.MENU,"SynchronizationPlan"),
+	M_SYNCHRONIZATIONPLAN(TreeObject.MENU,"SynchronizationItem"),
 	M_ITEMSTRASH(TreeObject.MENU,"ItemsTrash"),
 	M_LOGGING(TreeObject.MENU,"logging"),
 	M_SMTP(TreeObject.MENU,"smtp"),
