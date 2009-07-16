@@ -6,24 +6,24 @@ import java.util.Map;
 public enum XSystemObjects {
 
 	// Data Clusters
-	DC_JCAADAPTERS(XObjectType.DATA_CLUSTER, "amaltoOBJECTSjcaadapters"), 
+	DC_JCAADAPTERS(XObjectType.DATA_CLUSTER, "JCAAdapters"), 
 	DC_BUG_TRACKING(XObjectType.DATA_CLUSTER, "Bug Tracking"), 
 	DC_CONF(XObjectType.DATA_CLUSTER, "CONF"), 
-	DC_MDMCONF(XObjectType.DATA_CLUSTER, "MDMCONF"), 
+	//DC_MDMCONF(XObjectType.DATA_CLUSTER, "MDMCONF"), 
 	DC_PROVISIONING(XObjectType.DATA_CLUSTER, "PROVISIONING"), 
 	DC_UPDATE_PREPORT(XObjectType.DATA_CLUSTER, "UpdateReport"), 
-	DC_XTENTIS_COMMON_CONF(XObjectType.DATA_CLUSTER, "Xtentis Common Conf"), 
-	DC_XTENTIS_COMMON_REPORTING(XObjectType.DATA_CLUSTER, "Xtentis Common Reporting"),
+	//DC_XTENTIS_COMMON_CONF(XObjectType.DATA_CLUSTER, "Xtentis Common Conf"), 
+	DC_XTENTIS_COMMON_REPORTING(XObjectType.DATA_CLUSTER, "Reporting"),
 	DC_MDMITEMSTRASH(XObjectType.DATA_CLUSTER,"MDMItemsTrash"),
 
 	// Data Models
 	DM_BUG_TRACKING(XObjectType.DATA_MODEL, "Bug Tracking"), 
 	DM_CONF(XObjectType.DATA_MODEL, "CONF"), 
 	DM_PROVISIONING(XObjectType.DATA_MODEL, "PROVISIONING"), 
-	DM_REPORTING(XObjectType.DATA_MODEL, "REPORTING"), 
+	//DM_REPORTING(XObjectType.DATA_MODEL, "REPORTING"), 
 	DM_UPDATEREPORT(XObjectType.DATA_MODEL, "UpdateReport"), 
-	DM_XTENTIS_COMMON_CONF(XObjectType.DATA_MODEL, "Xtentis Common Conf"), 
-	DM_XTENTIS_COMMON_REPORTING(XObjectType.DATA_MODEL, "Xtentis Common Reporting"),
+	//DM_XTENTIS_COMMON_CONF(XObjectType.DATA_MODEL, "Xtentis Common Conf"), 
+	DM_XTENTIS_COMMON_REPORTING(XObjectType.DATA_MODEL, "Reporting"),
 
 	// Menus
 
@@ -32,17 +32,17 @@ public enum XSystemObjects {
 	M_MANAGER_USERS(XObjectType.MENU, "Manage users"), 
 	M_REPORTING(XObjectType.MENU,"Reporting"), 
 	M_SYNCHRONIZATIONACTION(XObjectType.MENU,"SynchronizationAction"), 
-	M_SYNCHRONIZATIONPLAN(XObjectType.MENU,"SynchronizationPlan"),
+	M_SYNCHRONIZATIONPLAN(XObjectType.MENU,"SynchronizationItem"),
 	M_DATA_CHANGES(XObjectType.MENU,"Data changes"),
 
 	// roles
-	R_BOLLORE_CONTRIBUTOR(XObjectType.ROLE, "BOLLORE_Contributor"),
+	R_BOLLORE_CONTRIBUTOR(XObjectType.ROLE, "BOLLORE_Contributor");
 
 	// Views
 
-	V_MDM_REPORTING_VIEW(XObjectType.VIEW, "MDM Reporting View"), 
-	V_XTENTIS_MDM_REPORTING(XObjectType.VIEW, "Xtentis MDM Reporting"), 
-	V_XTENTIS_PORTAL_ROLE_VIEW(XObjectType.VIEW, "XTENTIS PORTAL ROLE VIEW");
+	//V_MDM_REPORTING_VIEW(XObjectType.VIEW, "MDM Reporting View"), 
+	//V_XTENTIS_MDM_REPORTING(XObjectType.VIEW, "Xtentis MDM Reporting"), 
+	//V_XTENTIS_PORTAL_ROLE_VIEW(XObjectType.VIEW, "XTENTIS PORTAL ROLE VIEW");
 
 	XSystemObjects(int type, String name) {
 		this.name = name;

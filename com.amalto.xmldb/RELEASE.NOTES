@@ -32,7 +32,7 @@ Use XtentisConfiguration - Requires core 2-19+ and jaas.xtentis.jboss 2.1+
 Better logging
 
 2.0.3 NOT RELEASED
-Fixed improper default values when xtentis.conf not present.
+Fixed improper default values when mdm.conf not present.
 
 2.0.2
 Better Detection of is Up and Running
