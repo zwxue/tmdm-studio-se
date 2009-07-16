@@ -397,7 +397,7 @@ public class BatchProjectTransformerPluginBean extends TransformerPluginV2CtrlBe
 			}
 			
 			resultContent+="</no-insert-items>";
-		    context.put(OUTPUT_XML, new TypedContent(resultContent.getBytes(),"UTF-8"));
+		    context.put(OUTPUT_XML, new TypedContent(resultContent.getBytes(),"text/xml; charset=utf-8"));
 		    
 		    
 			//call the callback content is ready

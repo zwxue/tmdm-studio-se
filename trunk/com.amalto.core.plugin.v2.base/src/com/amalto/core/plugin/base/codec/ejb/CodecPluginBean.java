@@ -339,7 +339,7 @@ public class CodecPluginBean extends TransformerPluginV2CtrlBean  implements Ses
 				codecText="<Codec_Output>"+codecText+"</Codec_Output>";
 			}
 			
-			context.put(OUTPUT_TEXT, new TypedContent(codecText.getBytes(),charset));
+			context.put(OUTPUT_TEXT, new TypedContent(codecText.getBytes(),"text/xml; charset=utf-8"));
 			//call the callback content is ready
 			context.getPluginCallBack().contentIsReady(context);
 
