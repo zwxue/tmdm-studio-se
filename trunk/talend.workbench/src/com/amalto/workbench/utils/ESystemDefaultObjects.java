@@ -9,15 +9,15 @@ import com.amalto.workbench.models.TreeObject;
 
 public enum ESystemDefaultObjects {
 	//Data Clusters
-	DC_JCAADAPTERS(TreeObject.DATA_CLUSTER, "amaltoOBJECTSjcaadapters"),
+	DC_JCAADAPTERS(TreeObject.DATA_CLUSTER, "JCAAdapters"),
 	DC_UPDATE_REPORT(TreeObject.DATA_CLUSTER,"UpdateReport"),
 	DC_BUG_TRACKING(TreeObject.DATA_CLUSTER,"Bug Tracking"),
 	DC_CONF(TreeObject.DATA_CLUSTER,"CONF"),
-	DC_MDMCONF(TreeObject.DATA_CLUSTER,"MDMCONF"),
+	//DC_MDMCONF(TreeObject.DATA_CLUSTER,"MDMCONF"),
 	DC_PROVISIONING(TreeObject.DATA_CLUSTER,"PROVISIONING"),
 	DC_UPDATE_PREPORT(TreeObject.DATA_CLUSTER,"UpdateReport"),
-	DC_XTENTIS_COMMON_CONF(TreeObject.DATA_CLUSTER,"Xtentis Common Conf"),
-	DC_XTENTIS_COMMON_REPORTING(TreeObject.DATA_CLUSTER,"Xtentis Common Reporting"),
+	//DC_XTENTIS_COMMON_CONF(TreeObject.DATA_CLUSTER,"Xtentis Common Conf"),
+	DC_XTENTIS_COMMON_REPORTING(TreeObject.DATA_CLUSTER,"Reporting"),
 	DC_MDMITEMSTRASH(TreeObject.DATA_CLUSTER,"MDMItemsTrash"),
 	
 	
@@ -25,10 +25,10 @@ public enum ESystemDefaultObjects {
 	DM_BUG_TRACKING(TreeObject.DATA_MODEL,"Bug Tracking"),
 	DM_CONF(TreeObject.DATA_MODEL,"CONF"),
 	DM_PROVISIONING(TreeObject.DATA_MODEL,"PROVISIONING"),
-	DM_REPORTING(TreeObject.DATA_MODEL,"REPORTING"),
+	//DM_REPORTING(TreeObject.DATA_MODEL,"REPORTING"),
 	DM_UPDATEREPORT(TreeObject.DATA_MODEL,"UpdateReport"),
-	DM_XTENTIS_COMMON_CONF(TreeObject.DATA_MODEL,"Xtentis Common Conf"),
-	DM_XTENTIS_COMMON_REPORTING(TreeObject.DATA_MODEL,"Xtentis Common Reporting"),
+	//DM_XTENTIS_COMMON_CONF(TreeObject.DATA_MODEL,"Xtentis Common Conf"),
+	DM_XTENTIS_COMMON_REPORTING(TreeObject.DATA_MODEL,"Reporting"),
 	
 	//Menus
 	

@@ -12,7 +12,7 @@ a-In jboss/server/default/lib, remove
 	-z.xmldb.jar and z.xmlrpc-1.2-patched.jar if they exist
 Then add the five z.exist-1.2.4-*.jar files in common/ to the jboss/server/default/lib directory
 
-b-in //amalto/xtentis.conf or jboss/xtentis.conf, depending on your implementation,
+b-in //amalto/mdm.conf or jboss/mdm.conf, depending on your implementation,
 update (or add) the entry xmldb.administrator.password with the value nimda
 NOTE: the database password is determined by the element cluster/@dbaPassword in conf.xml.
 
@@ -21,7 +21,7 @@ STANDALONE
 Assuming, you have installed eXist in /opt/eXist-1.2.4:
 a-Replace the file in /opt/eXist-1.2.4/conf.xml with the one in standalone/conf.xml
 b-Replace the file in /opt/eXist-1.2.4/tools/jetty/etc/jetty.xml with the one in standalone/jetty.xml
-c-in //amalto/xtentis.conf or jboss/xtentis.conf, depending on your implementation,
+c-in //amalto/mdm.conf or jboss/mdm.conf, depending on your implementation,
 update (or add) the entry xmldb.server.port with the value 8088
 
 AS WAR
