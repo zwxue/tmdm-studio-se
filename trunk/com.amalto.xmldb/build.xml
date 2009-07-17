@@ -16,7 +16,7 @@
 	<!--    DO NOT CHANGE ANYTHING BELOW THIS LINE   -->
 	
 	<property name="version.props" value="version.properties"/>
-	<property name="jboss.dir" value="c:/opt/jboss"/>
+	<property name="jboss.dir" value="/opt/jboss"/>
 	<property name="jboss.instance.dir" value="${jboss.dir}/server/default"/>
 	<property name="jboss.deploy.dir" value="${jboss.instance.dir}/deploy"/>
 	<property name="jboss.instance.lib" value="${jboss.instance.dir}/lib"/>
@@ -72,7 +72,7 @@
 		<echo>Deploying ${major}.${minor}.${rev}-${build.number}</echo>
 		<copy file="${jar}" tofile="${jboss.instance.lib}/${jar}"/>
 		<copy todir="${jboss.instance.lib}">
-			<fileset dir="lib-1.2.4/common" includes="*.jar"/>
+			<fileset dir="lib-1.2.6/common" includes="*.jar"/>
 		</copy>
 	</target>
 
