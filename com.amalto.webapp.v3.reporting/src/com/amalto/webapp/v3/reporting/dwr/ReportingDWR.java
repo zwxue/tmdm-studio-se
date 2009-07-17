@@ -18,6 +18,7 @@ import com.amalto.webapp.core.bean.XMLConfiguration;
 import com.amalto.webapp.core.bean.XMLConfiguration_Document;
 import com.amalto.webapp.core.dwr.CommonDWR;
 import com.amalto.webapp.core.util.Util;
+import com.amalto.webapp.core.util.XSystemObjects;
 import com.amalto.webapp.core.util.XtentisWebappException;
 import com.amalto.webapp.util.webservices.WSDataClusterPK;
 import com.amalto.webapp.util.webservices.WSDataModelPK;
@@ -62,8 +63,8 @@ public class ReportingDWR {
 		super();
 	}
 	
-	private static final String _reportingCluster = "Xtentis Common Reporting";
-	private static final String _reportingModel = "Xtentis Common Reporting";
+	private static final String _reportingCluster = XSystemObjects.DC_XTENTIS_COMMON_REPORTING.getName();
+	private static final String _reportingModel = XSystemObjects.DM_XTENTIS_COMMON_REPORTING.getName();
 	
 		
 	public Map<String,String> getReportingsName(String value) throws XtentisWebappException, Exception {
