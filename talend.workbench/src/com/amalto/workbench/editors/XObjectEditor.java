@@ -210,7 +210,18 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 				break;
 			case IXObjectModelListener.UPDATE:
 				if (xobject.equals(child)) {
-					((AFormPage)getActivePageInstance()).refreshPage();
+					AFormPage activePage = ((AFormPage)getActivePageInstance());
+					if (activePage == null)
+					{
+						int editPos = pages.indexOf(xmlEditor);
+						if (editPos >= 1)
+						{
+							activePage = (AFormPage)pages.get(editPos -1);
+						}
+						xmlEditor.refresh();
+					}
+					activePage.refreshPage();
+					
 					/*
 			    	for (int i = formPages.size()-1; i >=0 ; i--) {
 			    		((AFormPage) formPages.get(i)).refreshPage();
