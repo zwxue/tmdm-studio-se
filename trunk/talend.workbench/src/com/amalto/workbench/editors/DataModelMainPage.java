@@ -767,6 +767,9 @@ public class DataModelMainPage extends AMainPageV2 {
 			String schema = ((XSDTreeContentProvider) viewer
 					.getContentProvider()).getXSDSchemaAsString();
 			wsObject.setXsdSchema(schema);
+			
+			XMLEditor xmleditor=((XObjectEditor)getEditor()).getXmlEditor();
+			xmleditor.refresh(getXObject());
 		} catch (Exception e) {
 			e.printStackTrace();
 			ErrorExceptionDialog.openError(this.getSite().getShell(),
