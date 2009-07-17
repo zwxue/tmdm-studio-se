@@ -198,6 +198,11 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		'en':'Duplicate'
 	};
 	
+	var BUTTON_JOURNAL = {
+		'fr':'Journal',
+		'en':'Journal'
+	};
+	
 	var BUTTON_LOGICAL_DEL = {
 		'fr':'Logical delete',
 		'en':'Logical delete'
@@ -286,18 +291,22 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		'fr':'delete the item logically',
 		'en':'delete the item logically'
 	};
-	var DUPLICATE_TOOLTIP={
-		'fr':'clone the selected item',
-		'en':'clone the selected item'
-	}
 	var SAVE_TOOLTIP={
 		'fr':'Save this object',
 		'en':'Save this object'
-	} 		
+	}; 		
 	var SAVEANDCLOSE_TOOLTIP={
 		'fr':'Save this object and close the tab',
 		'en':'Save this object and close the tab'
-	}
+	};
+	var DUPLICATE_TOOLTIP={
+		'fr':'clone the selected item',
+		'en':'clone the selected item'
+	};
+	var JOURNAL_TOOLTIP={
+		'fr':'browse a journal for this item',
+		'en':'browse a journal for this item'
+	};
 	/*****************
 	 * EXT 2.0
 	 *****************/
@@ -774,6 +783,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	var O_DELETE 		= 32;
 	var O_LOGICAL_DEL   = 64;
 	var O_DUPLICATE     = 128;
+	var O_JOURNAL       = 256;
 	
 	// modes
 	var M_TREE_VIEW		= 1;
@@ -812,6 +822,8 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 				options |= (toolbar.baseOptions & O_DELETE);
 				options |= (toolbar.baseOptions & O_LOGICAL_DEL);
 				options |= (toolbar.baseOptions & O_DUPLICATE);
+				options |= (toolbar.baseOptions & O_JOURNAL);
+				
 			break;
 			case M_PERSO_VIEW:
 				options |= O_TREE_VIEW;
@@ -923,6 +935,19 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 			}
 	
 			toolbar.addButton( {tooltip:DUPLICATE_TOOLTIP[language],text: BUTTON_DUPLICATE[language], className: 'tb-button tb-button-nude', handler: toolbar.duplicateItemHandler});
+			nbButtons++;
+		}
+		
+		// journal
+		if ( (options&O_JOURNAL)==O_JOURNAL )
+		{
+			if (nbButtons>0)
+			{
+				toolbar.addSeparator();
+				nbButtons++;
+			}
+	
+			toolbar.addButton( {tooltip:JOURNAL_TOOLTIP[language],text: BUTTON_JOURNAL[language], className: 'tb-button tb-button-nude', handler: toolbar.journalItemHandler});
 			nbButtons++;
 		}
 	}
@@ -1040,7 +1065,8 @@ amalto.itemsbrowser.ItemsBrowser = function () {
     							//var tbDetail = tabPanel.getComponent('itemDetailsdiv'+treeIndex).getTopToolbar();
     							if (!(tbDetail.baseOptions&O_SAVE))
     							{
-    								tbDetail.baseOptions |= O_SAVE|O_SAVE_QUIT|O_DUPLICATE; 
+    								//case new
+    								tbDetail.baseOptions |= O_SAVE|O_SAVE_QUIT; 
     								initToolBar(tbDetail, tbDetail.currentMode);
     							}
     						}
@@ -1072,7 +1098,8 @@ amalto.itemsbrowser.ItemsBrowser = function () {
     							//var tbDetail = tabPanel.getComponent('itemDetailsdiv'+treeIndex).getTopToolbar();
     							if (!(tbDetail.baseOptions&O_SAVE))
     							{
-    								tbDetail.baseOptions |= O_SAVE|O_SAVE_QUIT|O_DUPLICATE; 
+    								//case new
+    								tbDetail.baseOptions |= O_SAVE|O_SAVE_QUIT; 
     								initToolBar(tbDetail, tbDetail.currentMode);
     							}
     						}
@@ -1111,6 +1138,10 @@ amalto.itemsbrowser.ItemsBrowser = function () {
         			duplicateItem(ids, dataObject);
         		};
         		
+        		tbDetail.journalItemHandler = function() {
+        			journalItem(ids, dataObject);
+        		};
+        		
         		ItemsBrowserInterface.checkIfTransformerExists(dataObject, language, function(result){
         			
         			var mode = M_TREE_VIEW;
@@ -1146,9 +1177,9 @@ amalto.itemsbrowser.ItemsBrowser = function () {
     				saveItemAndQuit(ids,dataObject,treeIndex);
     			};
     		
-    			
+    			//case edit and no editable
     			if(rootNode.readOnly==false && newItem[treeIndex]==false) {
-    				tbDetail.baseOptions |= O_DELETE|O_LOGICAL_DEL;	
+    				tbDetail.baseOptions |= O_DELETE|O_LOGICAL_DEL|O_DUPLICATE|O_JOURNAL;	
     			}		
     	
     			//add for duplicate case
@@ -1385,8 +1416,14 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		if(ids){
 		var itemPK = ids.split('@');
 		displayItemDetails4Duplicate(itemPK,dataObject,true);
+	    }
 	}
-	}
+	
+	
+	function journalItem(ids, dataObject){
+		if(ids.indexOf("@")>0)ids=ids.replaceAll("@",".");
+	    amalto.updatereport.UpdateReport.browseUpdateReportWithSearchCriteria(dataObject,ids);	
+	}	
 
 	/**
 	 * Search for foreign keys and return a map that can be used 

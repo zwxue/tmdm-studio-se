@@ -7,6 +7,7 @@
 amalto.namespace("amalto.updatereport");
 
 amalto.updatereport.UpdateReport = function () {
+	
 	loadResource("/updatereport/secure/js/UpdateReportLocal.js", "amalto.updatereport.UpdateReportLocal" );
 	
     loadResource("/updatereport/secure/js/UpdateReportPanel.js", "");
@@ -15,34 +16,51 @@ amalto.updatereport.UpdateReport = function () {
     
     
     var updateReportPanel;
-	
-	function browseUpdateReport(){
-		//init UI
+    
+    function initUI(){
+    	var isFirstTime=false;
 		var tabPanel = amalto.core.getTabPanel();
 		updateReportPanel = tabPanel.getItem('UpdateReportPanel');
+		
 		if(updateReportPanel == undefined){
-			
-			updateReportPanel=new amalto.updatereport.UpdateReportPanel();
-			
+			isFirstTime=true;
+			amalto.updatereport.UpdateReportLocal.init();
+			updateReportPanel=new amalto.updatereport.UpdateReportPanel();			
 			tabPanel.add(updateReportPanel);
-			
 		}
         
         updateReportPanel.show();
 		updateReportPanel.doLayout();
 		amalto.core.doLayout();
+		return isFirstTime;
+    };
+	
+	function browseUpdateReport(){
+		//init UI
+		initUI();
 		// init data
 		updateReportPanel.initListData();
+		
+	};
+	
+	function browseUpdateReportWithSearchCriteria(dataObject,ids){
+		
+		var isFirstTime=initUI();
+		//set search criteria
+		updateReportPanel.setSearchCriteria(dataObject,ids,"","","","");
+		// load data
+		if(isFirstTime){
+			updateReportPanel.initListData();
+		}else{
+			updateReportPanel.doSearchList();
+		}
 		
 	}
 
 
  	return {
  		
-		init: function() {
- 		amalto.updatereport.UpdateReportLocal.init();
- 		browseUpdateReport();
- 		}
-		
+		init: function() {browseUpdateReport();},
+		browseUpdateReportWithSearchCriteria: function(dataObject,ids) {browseUpdateReportWithSearchCriteria(dataObject,ids);}
  	}
 }();
