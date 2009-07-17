@@ -160,7 +160,7 @@ public abstract class ConnectorMDB implements MessageDrivenBean, MessageListener
 				 cluster = (String) params.get("cluster");
 			}
 			//FIXME: put default cluster in conf
-			hmap.put("cluster",(cluster == null ? "B2BOX" : cluster));
+			hmap.put("cluster",(cluster == null ? "Inbox" : cluster));
 
 			//access the service
 			Object service = null;
