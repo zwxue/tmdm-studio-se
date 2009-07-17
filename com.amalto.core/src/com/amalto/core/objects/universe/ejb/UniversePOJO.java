@@ -169,7 +169,8 @@ public class UniversePOJO extends ObjectPOJO{
     			"Transformer V2", 
     			"View",
     			"Menu",
-    			"Synchronization Plan"
+    			"Synchronization Plan",
+    			"Routing Rule"
     		})
     	);
 	}
