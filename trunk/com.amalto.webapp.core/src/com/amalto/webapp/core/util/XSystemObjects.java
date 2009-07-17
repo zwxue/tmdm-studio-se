@@ -7,7 +7,8 @@ public enum XSystemObjects {
 
 	// Data Clusters
 	DC_JCAADAPTERS(XObjectType.DATA_CLUSTER, "JCAAdapters"), 
-	DC_BUG_TRACKING(XObjectType.DATA_CLUSTER, "Bug Tracking"), 
+	DC_INBOX(XObjectType.DATA_CLUSTER, "Inbox"),
+	//DC_BUG_TRACKING(XObjectType.DATA_CLUSTER, "Bug Tracking"), 
 	DC_CONF(XObjectType.DATA_CLUSTER, "CONF"), 
 	//DC_MDMCONF(XObjectType.DATA_CLUSTER, "MDMCONF"), 
 	DC_PROVISIONING(XObjectType.DATA_CLUSTER, "PROVISIONING"), 
@@ -17,7 +18,7 @@ public enum XSystemObjects {
 	DC_MDMITEMSTRASH(XObjectType.DATA_CLUSTER,"MDMItemsTrash"),
 
 	// Data Models
-	DM_BUG_TRACKING(XObjectType.DATA_MODEL, "Bug Tracking"), 
+	//DM_BUG_TRACKING(XObjectType.DATA_MODEL, "Bug Tracking"), 
 	DM_CONF(XObjectType.DATA_MODEL, "CONF"), 
 	DM_PROVISIONING(XObjectType.DATA_MODEL, "PROVISIONING"), 
 	//DM_REPORTING(XObjectType.DATA_MODEL, "REPORTING"), 
