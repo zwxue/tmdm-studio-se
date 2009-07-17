@@ -10,8 +10,9 @@ import com.amalto.workbench.models.TreeObject;
 public enum ESystemDefaultObjects {
 	//Data Clusters
 	DC_JCAADAPTERS(TreeObject.DATA_CLUSTER, "JCAAdapters"),
+	DC_INBOX(TreeObject.DATA_CLUSTER, "Inbox"),
 	DC_UPDATE_REPORT(TreeObject.DATA_CLUSTER,"UpdateReport"),
-	DC_BUG_TRACKING(TreeObject.DATA_CLUSTER,"Bug Tracking"),
+	//DC_BUG_TRACKING(TreeObject.DATA_CLUSTER,"Bug Tracking"),
 	DC_CONF(TreeObject.DATA_CLUSTER,"CONF"),
 	//DC_MDMCONF(TreeObject.DATA_CLUSTER,"MDMCONF"),
 	DC_PROVISIONING(TreeObject.DATA_CLUSTER,"PROVISIONING"),
@@ -22,7 +23,7 @@ public enum ESystemDefaultObjects {
 	
 	
 	//Data Models
-	DM_BUG_TRACKING(TreeObject.DATA_MODEL,"Bug Tracking"),
+	//DM_BUG_TRACKING(TreeObject.DATA_MODEL,"Bug Tracking"),
 	DM_CONF(TreeObject.DATA_MODEL,"CONF"),
 	DM_PROVISIONING(TreeObject.DATA_MODEL,"PROVISIONING"),
 	//DM_REPORTING(TreeObject.DATA_MODEL,"REPORTING"),
