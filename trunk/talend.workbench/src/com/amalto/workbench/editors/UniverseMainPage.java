@@ -29,6 +29,7 @@ import org.exolab.castor.xml.Marshaller;
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.providers.XObjectEditorInput;
+import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.FontUtils;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSGetObjectsForUniverses;
@@ -191,7 +192,12 @@ public class UniverseMainPage extends AMainPageV2{
 			universe.setDefaultReversionID(wsUniverse.getDefaultItemsRevisionID());
 			universe.getXtentisObjectsList().clear();
 			for(WSUniverseXtentisObjectsRevisionIDs xtentisObjects: wsUniverse.getXtentisObjectsRevisionIDs()){
-				universe.getXtentisObjectsList().add(new KeyValue(xtentisObjects.getXtentisObjectName(),xtentisObjects.getRevisionID()));
+				//if transformer v2 using it's display name transformer
+				String name=xtentisObjects.getXtentisObjectName();
+				if(EXtentisObjects.Transformer.getName().equals(name)){
+					name=EXtentisObjects.Transformer.getDisplayName();
+				}
+				universe.getXtentisObjectsList().add(new KeyValue(name,xtentisObjects.getRevisionID()));
 			}
 			
 			for(WSUniverseItemsRevisionIDs item:wsUniverse.getItemsRevisionIDs()){
@@ -233,7 +239,12 @@ public class UniverseMainPage extends AMainPageV2{
 			ws.setDescription(universe.getDescription());
 			List<WSUniverseXtentisObjectsRevisionIDs> xtentisObjectsRevisionIDs=new ArrayList<WSUniverseXtentisObjectsRevisionIDs>();
 			for(KeyValue line: universe.getXtentisObjectsList()){
-				xtentisObjectsRevisionIDs.add(new WSUniverseXtentisObjectsRevisionIDs(line.key,line.value));
+				//if transformer v2 using it's name transformer V2
+				String name=line.key;
+				if(EXtentisObjects.Transformer.getDisplayName().equals(name)){
+					name=EXtentisObjects.Transformer.getName();
+				}				
+				xtentisObjectsRevisionIDs.add(new WSUniverseXtentisObjectsRevisionIDs(name,line.value));
 			}
 			ws.setXtentisObjectsRevisionIDs(xtentisObjectsRevisionIDs.toArray(new WSUniverseXtentisObjectsRevisionIDs[xtentisObjectsRevisionIDs.size()] ));
 			List<WSUniverseItemsRevisionIDs> itemIds=new ArrayList<WSUniverseItemsRevisionIDs>();
@@ -261,7 +272,12 @@ public class UniverseMainPage extends AMainPageV2{
 	    public Universe(String defaultReversionID) throws RemoteException{
 	    	this.defaultReversionID=defaultReversionID;
 	    	for(String str: getPort().getObjectsForUniverses(new WSGetObjectsForUniverses(new String[]{".*"})).getStrings()){//IConstants.XTENTISOBJECTS){
-	    		xtentisObjectsList.add(new KeyValue(str,""));
+				//if transformer v2 using it's display name transformer
+				String name=str;
+				if(EXtentisObjects.Transformer.getName().equals(name)){
+					name=EXtentisObjects.Transformer.getDisplayName();
+				}
+	    		xtentisObjectsList.add(new KeyValue(name,""));
 	    	}
 	    }
 	    
