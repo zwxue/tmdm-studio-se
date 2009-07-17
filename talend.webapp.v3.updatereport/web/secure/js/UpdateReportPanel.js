@@ -288,19 +288,35 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
 		
     },
     
-    onSearchBtnClick : function(button, event){
-    	
+    doSearchList : function(){
+
 		var pageSize=Ext.getCmp("updateReportPagingToolbar").pageSize;
 		this.store1.reload({params:{start:0, limit:pageSize}});
+		
+    },
+    
+    onSearchBtnClick : function(button, event){
+    	
+		this.doSearchList();
 		
     },
     
     onSearchKeyClick : function(field, event){
     	
     	if (event.getKey() == Ext.EventObject.ENTER) {
-	       var pageSize=Ext.getCmp("updateReportPagingToolbar").pageSize;
-		   this.store1.reload({params:{start:0, limit:pageSize}});
+	      this.doSearchList();
 	    }
+		
+    },
+    
+    setSearchCriteria : function(conceptValue,keyValue,sourceValue,operationTypeValue,startDateValue,endDateValue){
+
+		if(conceptValue!='')DWRUtil.setValue('concept',conceptValue);
+		if(keyValue!='')DWRUtil.setValue('key',keyValue);
+		if(sourceValue!='')DWRUtil.setValue('source',sourceValue);
+		if(operationTypeValue!='')DWRUtil.setValue('operationType',operationTypeValue);
+		if(startDateValue!='')DWRUtil.setValue('startDate',startDateValue);
+		if(endDateValue!='')DWRUtil.setValue('endDate',endDateValue);
 		
     },
     
