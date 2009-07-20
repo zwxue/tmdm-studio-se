@@ -8,9 +8,11 @@ import java.util.TreeMap;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.xsd.XSDAnnotation;
+import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDFactory;
+import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
@@ -285,26 +287,58 @@ public class XSDAnnotationsStructure {
 			ArrayList<Object> objList = new ArrayList<Object>();
 			Object[] objs = Util.getAllObject(declaration, objList, provider);
 			
-			for (Object obj : objs) {
-				if (obj instanceof XSDAnnotation
-						|| obj instanceof XSDElementDeclaration
-						|| obj instanceof XSDParticle) {
-					XSDAnnotationsStructure annotion = new XSDAnnotationsStructure(
-							(XSDComponent) obj);
-					//see 7993, if UUID/AUTO_INCREMENT ,should not add write access 
-					if(obj instanceof XSDParticle){
-						XSDParticle o=(XSDParticle)obj;
-						//String name=Util.getFirstTextNode(o.getElement(), "@name");
-						String type=Util.getFirstTextNode(o.getElement(), "@type");
-						if(EUUIDCustomType.allTypes().contains(type))continue;
+			while (objs.length > 0)
+			{
+				Object[] objCpys = objs;
+				for (Object obj : objCpys) {
+					if (obj instanceof XSDModelGroup)
+					{
+						XSDModelGroup modelGp = (XSDModelGroup)obj;
+						if (modelGp.getContainer() instanceof XSDParticle)
+						{
+							XSDParticle partle = (XSDParticle)modelGp.getContainer();
+							if (partle.getContainer() instanceof XSDComplexTypeDefinition)
+							{
+								XSDComplexTypeDefinition typeElem = (XSDComplexTypeDefinition)partle.getContainer();
+								if (typeElem != null && typeElem.getName() != null && !typeElem.getName().equals(""))
+								{
+									ArrayList<Object> subObjList = new ArrayList<Object>();
+									Util.getAllObject(obj, subObjList, provider);
+									objList.removeAll(subObjList);
+									objList.remove(obj);
+				                    objs = objList.toArray();
+				                    break;
+								}
+							}
+						}
 					}
-					annotion.removeAppInfos(roleName);  //X_Write
-					for (Iterator iter = roles.iterator(); iter.hasNext();) {
-						String role = (String) iter.next();
-						annotion.addAppInfo(roleName, role);
+					
+					if (obj instanceof XSDAnnotation
+							|| obj instanceof XSDElementDeclaration
+							|| obj instanceof XSDParticle) {
+						XSDAnnotationsStructure annotion = new XSDAnnotationsStructure(
+								(XSDComponent) obj);
+						//see 7993, if UUID/AUTO_INCREMENT ,should not add write access 
+						if(obj instanceof XSDParticle){
+							XSDParticle o=(XSDParticle)obj;
+							//String name=Util.getFirstTextNode(o.getElement(), "@name");
+							String type=Util.getFirstTextNode(o.getElement(), "@type");
+							if(EUUIDCustomType.allTypes().contains(type))
+							{
+								objList.remove(obj);
+								objs = objList.toArray();
+								continue;
+							}
+						}
+						annotion.removeAppInfos(roleName);  //X_Write
+						for (Iterator iter = roles.iterator(); iter.hasNext();) {
+							String role = (String) iter.next();
+							annotion.addAppInfo(roleName, role);
+						}
 					}
+					objList.remove(obj);
+					objs = objList.toArray();
 				}
-
 			}
 			
 			return setAccessRole(roles, roleName);
