@@ -39,7 +39,6 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -48,6 +47,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -64,7 +64,6 @@ import org.eclipse.xsd.XSDIdentityConstraintCategory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
-import org.eclipse.xsd.XSDParticleContent;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTerm;
@@ -135,7 +134,6 @@ import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataModel;
-import com.sun.org.apache.xerces.internal.impl.io.ASCIIReader;
 
 public class DataModelMainPage extends AMainPageV2 {
 
@@ -183,7 +181,6 @@ public class DataModelMainPage extends AMainPageV2 {
 	private ObjectUndoContext undoContext;
 	private MenuManager menuMgr;
 	private String dataModelName;
-	private boolean isDESC = false;
 	
 	
 	private XSDSchema  xsdSchema;
@@ -300,20 +297,26 @@ public class DataModelMainPage extends AMainPageV2 {
 			
 			sortUPBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
 			sortUPBtn.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
-			sortUPBtn.setToolTipText("ASC...");
+			sortUPBtn.setToolTipText("UP...");
 			sortUPBtn.addSelectionListener(new SelectionAdapter(){
 				public void widgetSelected(SelectionEvent e){
-					isDESC = true;
+					stepUp();
 					viewer.refresh();
 				}
 			});
 			
 			sortDownBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
 			sortDownBtn.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
-			sortDownBtn.setToolTipText("DESC...");
+			sortDownBtn.setToolTipText("DOWN...");
 			sortDownBtn.addSelectionListener(new SelectionAdapter(){
 				public void widgetSelected(SelectionEvent e){
-					isDESC = false;
+					try {
+						stepDown();
+						refresh();
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					viewer.refresh();
 				}
 			});
@@ -545,19 +548,19 @@ public class DataModelMainPage extends AMainPageV2 {
 			public int compare(Viewer theViewer, Object e1, Object e2) {
 				int cat1 = category(e1);
 				int cat2 = category(e2);
-				if(cat1==cat2&&cat1==200){
-					if(e1 instanceof XSDParticle&&e2 instanceof XSDParticle){
-						XSDParticle xp1= (XSDParticle)e1;
-						XSDParticle xp2= (XSDParticle)e2;
-						String name1 = ((XSDElementDeclaration)xp1.getTerm()).getName();
-						String name2 = ((XSDElementDeclaration)xp2.getTerm()).getName();
-						if(isDESC)
-							return name1.compareToIgnoreCase(name2);
-						else
-							return -name1.compareToIgnoreCase(name2);
-					}
-				}
-					
+//				if(cat1==cat2&&cat1==200){
+//					if(e1 instanceof XSDParticle&&e2 instanceof XSDParticle){
+//						XSDParticle xp1= (XSDParticle)e1;
+//						XSDParticle xp2= (XSDParticle)e2;
+//						String name1 = ((XSDElementDeclaration)xp1.getTerm()).getName();
+//						String name2 = ((XSDElementDeclaration)xp2.getTerm()).getName();
+//						if(isDESC)
+//							return name1.compareToIgnoreCase(name2);
+//						else
+//							return -name1.compareToIgnoreCase(name2);
+//					}
+//				}
+//					
 				return cat1 - cat2;
 			}
 		});
@@ -590,7 +593,63 @@ public class DataModelMainPage extends AMainPageV2 {
 			}
 
 		});
+		
 
+	}
+	
+	public void stepUp() {
+		 TreeItem item;
+		 TreeItem[] items = viewer.getTree().getSelection();
+         for(int i=0;i<items.length;i++){
+        	 item = items[i];
+         	 XSDConcreteComponent component = (XSDConcreteComponent)item.getData();
+         	if(!(component instanceof XSDParticle))
+         		continue;
+         	else{
+         		
+         		XSDParticle particle = (XSDParticle)component;
+         		if(particle.getContainer() instanceof XSDModelGroup){
+         			XSDModelGroup mp = (XSDModelGroup)particle.getContainer();
+//             		EList<XSDParticle> el = mp.getParticles();
+             		int index = mp.getContents().indexOf(particle);
+             		if(index>0){
+             			mp.getContents().move(index-1, index);
+//             		    openXSDParticle();
+             		    this.refresh();	
+             		}//else
+             	
+         		}
+         	
+         	}
+         	
+         }
+		this.markDirty();
+	}
+	public void stepDown(){
+		 TreeItem item;
+		 TreeItem[] items = viewer.getTree().getSelection();
+         for(int i=0;i<items.length;i++){
+        	 item = items[i];
+         	 XSDConcreteComponent component = (XSDConcreteComponent)item.getData();
+         	if(!(component instanceof XSDParticle))
+         		continue;
+         	else{
+         		XSDParticle particle = (XSDParticle)component;
+         		if(particle.getContainer() instanceof XSDModelGroup){
+         			XSDModelGroup mp = (XSDModelGroup)particle.getContainer();
+//             		EList<XSDParticle> el = mp.getParticles();
+             		int index = mp.getContents().indexOf(particle);
+             		if(index<mp.getContents().size()-1){
+             			mp.getContents().move(index, index+1);
+             			System.out.println(xsdSchema.getDocument().getTextContent());
+             		    this.refresh();	
+             		}//else
+         		}
+         	
+         	}
+         }
+		this.markDirty();
+		
 	}
 	private void createButton(){
         Composite buttonComposite = toolkit.createComposite(sash);
@@ -1319,5 +1378,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			
 		}
 	}
+	
+	
 	
 }
