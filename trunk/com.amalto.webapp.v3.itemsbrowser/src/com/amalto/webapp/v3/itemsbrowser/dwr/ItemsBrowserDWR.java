@@ -381,6 +381,7 @@ public class ItemsBrowserDWR {
     		treeNode.setNodeId(nodeCount);
     		treeNode.setMaxOccurs(maxOccurs);
     		treeNode.setMinOccurs(xsp[j].getMinOccurs());
+    		treeNode.setNillable(xsp[j].getTerm().asElementDecl().isNillable());
     		
 			// this child is a complex type
     		if(xsp[j].getTerm().asElementDecl().getType().isComplexType()==true) {    			

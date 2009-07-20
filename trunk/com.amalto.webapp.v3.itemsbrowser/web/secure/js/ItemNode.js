@@ -80,7 +80,9 @@ YAHOO.extend(amalto.itemsbrowser.ItemNode, YAHOO.widget.Node, {
 		}
 
 		var mandatory = "";
-		if(itemData.readOnly==false && itemData.minOccurs==1) mandatory='<span style="color:red">*</span>';			
+		if(itemData.readOnly==false && itemData.minOccurs==1) mandatory='<span style="color:red">*</span>';
+		var descInfo = "";
+		if(itemData.description!=null)descInfo='<img src="img/genericUI/information_icon.gif" ext:qtitle="Description" ext:qtip="'+itemData.description+'"/>';
 		if(itemData.type=="simple"){
 				
 			var readOnly = "";
@@ -140,7 +142,7 @@ YAHOO.extend(amalto.itemsbrowser.ItemNode, YAHOO.widget.Node, {
 			}
 			
 
-			html[html.length] = '<div style="display:inline"><div style="width:180;float:left;font-size:13px">'+itemData.name+' '+mandatory+'</div>';
+			html[html.length] = '<div style="display:inline"><div style="width:180;float:left;font-size:13px">'+itemData.name+' '+mandatory+' '+descInfo+'</div>';
 			html[html.length] = input +'</div>';
 			html[html.length] = '	<span id="'+itemData.nodeId+'OpenDetails" onclick="amalto.itemsbrowser.ItemsBrowser.displayXsdDetails(\''+itemData.nodeId+'\')" >';
 			html[html.length] = '		<img src="img/genericUI/open-detail2.gif"/></span>' ;
@@ -161,7 +163,7 @@ YAHOO.extend(amalto.itemsbrowser.ItemNode, YAHOO.widget.Node, {
 
 		else { //complex type
 			
-			html[html.length] = '<div style="display:inline"><div style="width:180;float:left;font-size:13px">'+itemData.name+' '+mandatory+'</div>' ;
+			html[html.length] = '<div style="display:inline"><div style="width:180;float:left;font-size:13px">'+itemData.name+' '+mandatory+' '+descInfo+'</div>' ;
 			html[html.length] = 	'<input type="text" size="72" class="dotted-line" READONLY /></div>' ;
 			html[html.length] = 	'<span id="'+itemData.nodeId+'OpenDetails" onclick="amalto.itemsbrowser.ItemsBrowser.displayXsdDetails(\''+itemData.nodeId+'\')" >' ;
 			html[html.length] = 	' <img src="img/genericUI/open-detail2.gif"/></span>';
