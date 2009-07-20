@@ -1,12 +1,15 @@
 package com.amalto.workbench.dialogs;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -30,16 +33,15 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.widgets.ConceptComposite;
 
 public class AnnotationOrderedListsDialog extends Dialog {
 	
@@ -48,6 +50,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
 	//protected Text labelText;
 	//protected Combo combo;
 	protected TableViewer viewer;
+	private List<String> roles;
 	
 	protected ArrayList<String> xPaths = new ArrayList<String>();
 	private SelectionListener caller = null;
@@ -96,10 +99,10 @@ public class AnnotationOrderedListsDialog extends Dialog {
 		layout.numColumns = 3;
 		//layout.verticalSpacing = 10;
 		
-		if(actionType==AnnotationOrderedListsDialog.AnnotationWrite_ActionType||actionType==AnnotationOrderedListsDialog.AnnotationHidden_ActionType){
+		if(actionType==AnnotationWrite_ActionType||actionType==AnnotationHidden_ActionType){
 			textControl = new CCombo(composite,SWT.BORDER|SWT.READ_ONLY);
 
-			List<String> roles=Util.getCachedXObjectsNameSet(this.xObject, TreeObject.ROLE);
+			roles=Util.getCachedXObjectsNameSet(this.xObject, TreeObject.ROLE);
 			((CCombo)textControl).setItems(roles.toArray(new String[roles.size()]));
 
 		}else{
@@ -198,8 +201,16 @@ public class AnnotationOrderedListsDialog extends Dialog {
         table.setLinesVisible(true);
 
         // Create the cell editors --> We actually discard those later: not natural for an user
-        CellEditor[] editors = new CellEditor[2];
-        editors[0] = new TextCellEditor(table);
+        CellEditor[] editors = new CellEditor[1];
+        if (actionType == AnnotationOrderedListsDialog.AnnotationWrite_ActionType
+				|| actionType == AnnotationOrderedListsDialog.AnnotationHidden_ActionType) {
+			editors[0] = new ComboBoxCellEditor(table, roles
+					.toArray(new String[] {}), SWT.READ_ONLY);
+		}
+        else {
+			editors[0] = new TextCellEditor(table);
+		}
+
         viewer.setCellEditors(editors);
         
         //set the content provider
@@ -245,20 +256,52 @@ public class AnnotationOrderedListsDialog extends Dialog {
         viewer.setCellModifier(new ICellModifier() {
         	public boolean canModify(Object element, String property) {
         		//if (INSTANCE_ACCESS.equals(property)) return true; Deactivated
-        		return false;
+        		return true;
         	}
         	public void modify(Object element, String property, Object value) {
-//        		System.out.println("modify() "+element.getClass().getName()+": "+property+": "+value);
-        		//DescriptionLine line = (DescriptionLine)((IStructuredSelection)instancesViewer.getSelection()).getFirstElement();
-        		//deactivated: editing in places is not natural for users 
+        		TableItem item = (TableItem) element;
+        		DescriptionLine line = (DescriptionLine) item.getData();
+        		String orgValue = line.getLabel();
+        		if(actionType != AnnotationWrite_ActionType && actionType != AnnotationHidden_ActionType){
+        			int targetPos = xPaths.indexOf(value.toString());
+        			if (targetPos < 0) {
+						line.setLabel(value.toString());
+						xPaths.add(value.toString());
+						viewer.update(line, null);
+					} else if (targetPos >= 0 && !value.toString().equals(orgValue)) {
+						MessageDialog.openInformation(null, "Warnning",
+								"The Target System already exists");
+					}
+        			return;
+        		}
+        		else
+        		{
+    				String[] attrs = roles.toArray(new String[]{});
+    				value = attrs[Integer.parseInt(value.toString())];
+    				int pos = xPaths.indexOf(value.toString());
+    				if (pos >= 0 && !(orgValue.equals(value))) {
+    					MessageDialog.openInformation(null, "Warnning",
+    							"The Role already exists");
+    					return;
+    				} else if (pos < 0) {
+    					line.setLabel(value.toString());
+    					xPaths.set(xPaths.indexOf(orgValue), value.toString());
+    					viewer.update(line, null);
+    				}	
+        		}
         	}
         	public Object getValue(Object element, String property) {
-//        		System.out.println("getValue() "+property);
         		DescriptionLine line = (DescriptionLine) element;
-        		if (COLUMN.equals(property)) {
-        			return line.getLabel();
-        		}
-        		return null;
+				String value = line.getLabel();
+				
+				if(actionType==AnnotationWrite_ActionType||actionType==AnnotationHidden_ActionType){
+					String[] attrs = roles.toArray(new String[]{});
+					return Arrays.asList(attrs).indexOf(value);
+				}
+				else {
+					return value;
+				}
+
         	}
         });
         

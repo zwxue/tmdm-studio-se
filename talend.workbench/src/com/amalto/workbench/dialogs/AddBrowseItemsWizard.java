@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
@@ -247,6 +248,10 @@ public class AddBrowseItemsWizard extends Wizard{
 	          table.setHeaderVisible(true);
 	          table.setLinesVisible(true);
 	          
+	          CellEditor[] editors = new CellEditor[1];
+	          editors[0] = new TextCellEditor(table);
+	          browseViewer.setCellEditors(editors);
+	          
 	          browseViewer.setContentProvider(new IStructuredContentProvider() {
 	          	public void dispose() {}
 	          	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {}
@@ -270,11 +275,38 @@ public class AddBrowseItemsWizard extends Wizard{
 	          
 	          browseViewer.setCellModifier(new ICellModifier() {
 	            	public boolean canModify(Object element, String property) {
-	            		return false;
+	            		return true;
 	            	}
-	            	public void modify(Object element, String property, Object value) {}
+	            	public void modify(Object element, String property, Object value) 
+	            	{
+	            		TableItem item = (TableItem) element;
+	            		XSDElementDeclaration elem = (XSDElementDeclaration)item.getData();
+	            		if (!(BROWSE_ITEMS + elem.getName()).equals(value.toString()))
+	            		{
+	            			for (XSDElementDeclaration theElem: declList)
+	            			{
+	            				if(theElem == elem)
+	            					continue;
+	            				if ((BROWSE_ITEMS + theElem.getName()).equals(value.toString()))
+	            				{
+	    							MessageDialog.openInformation(null, "Warnning",
+	    							"The Browse Items name already exists");
+	    							return;
+	            				}
+	            			}
+	            			List<Line> lines = browseItemToRoles.get(BROWSE_ITEMS + elem.getName());
+	            			browseItemToRoles.remove(BROWSE_ITEMS + elem.getName());
+		            		int prex = value.toString().indexOf(BROWSE_ITEMS);
+		            		elem.setName(value.toString().substring(prex + BROWSE_ITEMS.length()));
+		            		browseItemToRoles.put(value.toString(), lines);
+		            		refreshRoleView(BROWSE_ITEMS + elem.getName());
+		            		browseViewer.update(elem, null);
+	            		}
+	            	}
+	            	
 	            	public Object getValue(Object element, String property) {
-	            		return element.toString();
+	            		XSDElementDeclaration elem = (XSDElementDeclaration)element;
+	            		return BROWSE_ITEMS + elem.getName();
 	            	}
 	            });
 	          
