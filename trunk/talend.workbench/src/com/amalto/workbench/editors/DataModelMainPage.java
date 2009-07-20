@@ -641,7 +641,6 @@ public class DataModelMainPage extends AMainPageV2 {
              		int index = mp.getContents().indexOf(particle);
              		if(index<mp.getContents().size()-1){
              			mp.getContents().move(index, index+1);
-             			System.out.println(xsdSchema.getDocument().getTextContent());
              		    this.refresh();	
              		}//else
          		}
