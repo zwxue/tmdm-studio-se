@@ -114,13 +114,15 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 	protected boolean comitting = false;
 	
 	protected Role role;
+	protected String roleName;
 	
     public RoleMainPage(FormEditor editor) {
         super(
         		editor,
         		RoleMainPage.class.getName(),
         		"Role "+((XObjectEditorInput)editor.getEditorInput()).getName()
-        );        
+        );  
+        roleName = ((XObjectEditorInput)editor.getEditorInput()).getName();
     }
 
 	protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
@@ -186,6 +188,8 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
         			}
         		}
             );
+            
+        
             isAdminButton = toolkit.createButton(objectTypesComposite, "Admin Permissions On All Instances", SWT.CHECK);
             isAdminButton.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
@@ -268,6 +272,8 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
             		instance.setWritable(instanceAccessCombo.getSelectionIndex()==1);
 
             		specification.getInstances().put(instanceNameCombo.getText(), instance);
+            		
+            		
             		
             		if ("Menu".equals(objectTypesCombo.getText())) {
             			//init Menu Parameters
@@ -407,7 +413,7 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
             
             instancesViewer.refresh();
 
-                        
+                 
             //ADDITIONAL PARAMETERS
             paramsContainerComposite = toolkit.createComposite(permissionsGroup, SWT.BORDER);
             paramsContainerComposite.setLayoutData(
@@ -425,6 +431,7 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
             );
             paramsClientComposite.setLayout(new StackLayout());
             wrap.Wrap(this, instancesViewer);
+            
             refreshData();
 
         } catch (Exception e) {
@@ -514,6 +521,22 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 					specification.setInstances(instances);
 					specifications.put(wsSpecification.getObjectType(), specification);
 				}
+			}
+			if(specifications.get("Role")==null||specifications.get("Role").getInstances().size()==0){
+				//add by lym
+				//if the Role is a new one or have no Roles Item,add itself as the role
+				Role.Specification specification = (new Role()).new Specification();
+				specification.setAdmin(false);
+				HashMap<String, Role.Specification.Instance> instances = new HashMap<String, Role.Specification.Instance>();
+				
+				Role.Specification.Instance instance = specification.new Instance();
+				instance.setWritable(false);
+				instance.setParameters(new LinkedHashSet<String>(Arrays.asList(roleName)));
+				
+				instances.put(roleName, instance);
+				specification.setInstances(instances);
+				specifications.put("Role", specification);
+				
 			}
 			role.setSpecifications(specifications);
 			
@@ -1059,7 +1082,8 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 		String instanceName = ((InstanceLine)((IStructuredSelection)instancesViewer.getSelection()).getFirstElement()).getInstanceName();
 		role.getSpecifications().get(objectTypesCombo.getText())
 			.getInstances().get(instanceName).setParameters(menuParameters.marshalMenuParameters());
-		markDirty();
+	
+			markDirty();
 	}
 	 
 	protected void feedInstanceNameCombo() throws Exception{
