@@ -14,10 +14,12 @@ public class TreeNode implements Cloneable {
 	}
 
 	private String name;
+	private String description;
 	private String value;
 	private boolean expandable;
 	private String type;
 	private int nodeId;
+	
 	
 	//browse item specific
 	private String typeName;
@@ -27,6 +29,7 @@ public class TreeNode implements Cloneable {
 	private boolean readOnly = true;
 	private int maxOccurs;
 	private int minOccurs;
+	private boolean nillable = true;
 	private boolean choice;
 	private ArrayList<Restriction> restrictions;
 	private ArrayList<String> enumeration;
@@ -77,6 +80,8 @@ public class TreeNode implements Cloneable {
     					}		
     					else if("X_ForeignKeyInfo".equals(appinfoSource)){							
     						fkInfoList.add(annotList.item(k).getFirstChild().getNodeValue());
+    					}else if(("X_Description_"+language.toUpperCase()).equals(appinfoSource)){						
+    						setDescription(annotList.item(k).getFirstChild().getNodeValue());
     					}	
     				}
     				if("documentation".equals(annotList.item(k).getLocalName())) {
@@ -156,6 +161,17 @@ public class TreeNode implements Cloneable {
 	public void setMinOccurs(int minOccurs) {
 		this.minOccurs = minOccurs;
 	}
+	
+	
+	public boolean isNillable() {
+		return nillable;
+	}
+
+
+	public void setNillable(boolean nillable) {
+		this.nillable = nillable;
+	}
+
 
 	public String getName() {
 		return name;
@@ -171,8 +187,15 @@ public class TreeNode implements Cloneable {
 
 	public void setNodeId(int nodeId) {
 		this.nodeId = nodeId;
+	}	
+
+	public String getDescription() {
+		return description;
 	}
 
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 
 	public ArrayList<String> getEnumeration() {
