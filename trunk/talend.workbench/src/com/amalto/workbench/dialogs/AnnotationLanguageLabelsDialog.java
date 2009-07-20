@@ -1,13 +1,16 @@
 package com.amalto.workbench.dialogs;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -34,6 +37,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.amalto.workbench.utils.Util;
@@ -146,7 +150,7 @@ public class AnnotationLanguageLabelsDialog extends Dialog {
 
         // Create the cell editors --> We actually discard those later: not natural for an user
         CellEditor[] editors = new CellEditor[2];
-        editors[0] = new TextCellEditor(table);
+        editors[0] = new ComboBoxCellEditor(table, Util.lang2iso.keySet().toArray(new String[]{}), SWT.READ_ONLY);
         editors[1] = new TextCellEditor(table);
         descriptionsViewer.setCellEditors(editors);
         
@@ -199,22 +203,56 @@ public class AnnotationLanguageLabelsDialog extends Dialog {
         descriptionsViewer.setCellModifier(new ICellModifier() {
         	public boolean canModify(Object element, String property) {
         		//if (INSTANCE_ACCESS.equals(property)) return true; Deactivated
-        		return false;
+        		return true;
         	}
         	public void modify(Object element, String property, Object value) {
-//        		System.out.println("modify() "+element.getClass().getName()+": "+property+": "+value);
-        		//DescriptionLine line = (DescriptionLine)((IStructuredSelection)instancesViewer.getSelection()).getFirstElement();
-        		//deactivated: editing in places is not natural for users 
+        		TableItem item = (TableItem) element;
+				int columnIndex = Arrays.asList(descriptionsViewer.getColumnProperties()).indexOf(property);
+				DescriptionLine line = (DescriptionLine)item.getData();
+				if (columnIndex == 0)
+				{
+					String[] attrs = Util.lang2iso.keySet().toArray(new String[]{});
+					int orgIndx = Arrays.asList(attrs).indexOf(line.getLanguage());
+					if (orgIndx != Integer.parseInt(value.toString()) )
+					{
+						String newLang = attrs[Integer.parseInt(value.toString())];
+						if (descriptionsMap.containsKey(Util.lang2iso.get(newLang)))
+						{
+							MessageDialog.openInformation(null, "Warnning",
+							"The Language already exists");
+							return;
+						}
+						descriptionsMap.remove(Util.lang2iso.get(line.getLanguage()));
+						line.setLanguage(newLang);
+						descriptionsMap.put(Util.lang2iso.get(newLang), line.getLabel());
+					}
+				}
+				else  // column label
+				{
+					line.setLabel(value.toString());
+					descriptionsMap.put(Util.lang2iso.get(line.getLanguage()), line.getLabel());
+				}
+				
+				descriptionsViewer.update(line, null);
         	}
         	public Object getValue(Object element, String property) {
-//        		System.out.println("getValue() "+property);
-        		DescriptionLine line = (DescriptionLine) element;
-        		if (LANGUAGE.equals(property)) {
-        			return line.getLanguage();
+        		int columnIndex = Arrays.asList(descriptionsViewer.getColumnProperties()).indexOf(property);
+        		DescriptionLine line = (DescriptionLine)element;
+        		if (columnIndex == 0)
+        		{
+					String[] attrs = Util.lang2iso.keySet().toArray(new String[]{});
+					return Arrays.asList(attrs).indexOf(line.getLanguage());
         		}
-        		if (LABEL.equals(property)) {
-        			return line.getLabel();
+        		else
+        		{
+            		if (LANGUAGE.equals(property)) {
+            			return line.getLanguage();
+            		}
+            		if (LABEL.equals(property)) {
+            			return line.getLabel();
+            		}	
         		}
+
         		return null;
         	}
         });
