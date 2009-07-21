@@ -24,10 +24,8 @@ public enum EXtentisObjects {
 	Universe("Universe","Universe",TreeObject.UNIVERSE),                  
 	SynchronizationPlan("Synchronization Plan","Synchronization Plan",TreeObject.SYNCHRONIZATIONPLAN,true);       
 
-	private String name;
-	
 	private String displayName;
-	
+	private String name;	
 	private int type;
 	/**
 	 * check this object is need revision

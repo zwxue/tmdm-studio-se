@@ -10,6 +10,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
 
 import com.amalto.workbench.models.TreeParent;
+import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.views.ServerView;
@@ -32,7 +33,7 @@ public class ServerRefreshAction extends Action {
 	public ServerRefreshAction(ServerView view) {
 		super();
 		this.view = view;
-		setImageDescriptor(ImageCache.getImage( "icons/refresh.gif"));
+		setImageDescriptor(ImageCache.getImage( EImage.REFRESH.getPath()));
 		setText("Refresh");
 		setToolTipText("Refresh the "+IConstants.TALEND+" Server Objects");
 	}
