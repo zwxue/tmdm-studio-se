@@ -143,7 +143,11 @@ YAHOO.extend(amalto.itemsbrowser.ItemNode, YAHOO.widget.Node, {
 			
 
 			html[html.length] = '<div style="display:inline"><div style="width:180;float:left;font-size:13px">'+itemData.name+' '+mandatory+' '+descInfo+'</div>';
-			html[html.length] = input +'</div>';
+			if(itemData.typeName!=null&&(itemData.typeName=="date"||itemData.typeName=="dateTime")){			
+			  html[html.length] = input +'	<span style="cursor: pointer;" onclick="javascript:amalto.itemsbrowser.ItemsBrowser.showDatePicker(\''+itemData.nodeId+'\','+treeIndex+',\''+itemData.typeName+'\')"><img src="img/genericUI/date-picker.gif"/></span>'+'</div>';
+			}else{
+			  html[html.length] = input +'</div>';
+			}
 			html[html.length] = '	<span id="'+itemData.nodeId+'OpenDetails" onclick="amalto.itemsbrowser.ItemsBrowser.displayXsdDetails(\''+itemData.nodeId+'\')" >';
 			html[html.length] = '		<img src="img/genericUI/open-detail2.gif"/></span>' ;
 			html[html.length] = 		cloneNodeImg+' '+removeNodeImg+' '+foreignKeyImg;
