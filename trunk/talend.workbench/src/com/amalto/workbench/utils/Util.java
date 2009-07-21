@@ -1119,7 +1119,13 @@ public class Util {
    			}
    			return complexs;
     }
-    
+    /**
+     * 
+     * @param filename
+     * @param server
+     * @param monitor
+     * @throws Exception
+     */
     public static void importDataCluster(String filename, String server,IProgressMonitor monitor) throws Exception{
 		List<String> list=new ArrayList<String>();
 		String home=getExistHome();
@@ -1144,11 +1150,11 @@ public class Util {
     }
     
     /**
-     * Export data cluster
+     * 
      * @param datacluster
      * @param filename
      * @param server
-     * @throws Exception 
+     * @param monitor
      * @throws Exception
      */
     public static void exportDataCluster(String datacluster, String filename,String server,IProgressMonitor monitor) throws Exception{
