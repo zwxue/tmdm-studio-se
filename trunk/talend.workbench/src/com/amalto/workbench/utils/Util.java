@@ -7,6 +7,7 @@ package com.amalto.workbench.utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -16,6 +17,7 @@ import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -39,6 +41,9 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.methods.MultipartPostMethod;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.swt.dnd.Clipboard;
@@ -63,6 +68,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import com.amalto.workbench.AmaltoWorbenchPlugin;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.webservices.WSComponent;
@@ -1113,4 +1119,77 @@ public class Util {
    			}
    			return complexs;
     }
+    
+    public static void importDataCluster(String filename, String server,IProgressMonitor monitor) throws Exception{
+		List<String> list=new ArrayList<String>();
+		String home=getExistHome();
+		String path=new File(home+"/start.jar").getAbsolutePath();		
+		String cmd="java -Xms128m -Xmx512m -Dfile.encoding=UTF-8 -jar "+path+" backup -u "+IConstants.EXIST_ADMIN+" -p "+IConstants.EXIST_ADMIN_PASSWD;
+		String[] cmds=cmd.split("\\s");
+		list.addAll(Arrays.asList(cmds));
+		list.add("-r");
+		list.add(filename);
+		//add server
+		String uri="-ouri=xmldb:exist://"+server+":"+IConstants.EXIST_PORT+"/exist/xmlrpc";
+		list.add(uri);
+		//set exist home       
+        if(Platform.getOS().indexOf("win") != -1){//windows
+        	list.add(0,"cmd");
+        	list.add(1,"/c");
+        }
+        
+		//Main.getMain().run(list.toArray(new String[list.size()]));
+		ConsoleSimulator.runCmd(list.toArray(new String[list.size()]), null, home,monitor);
+		//Runtime.getRuntime().exec(list.toArray(new String[list.size()]), null, new File(home));
+    }
+    
+    /**
+     * Export data cluster
+     * @param datacluster
+     * @param filename
+     * @param server
+     * @throws Exception 
+     * @throws Exception
+     */
+    public static void exportDataCluster(String datacluster, String filename,String server,IProgressMonitor monitor) throws Exception{
+    	if("ALL".equalsIgnoreCase(datacluster)){
+    		datacluster="";
+    	}
+		List<String> list=new ArrayList<String>();
+		String home=getExistHome();
+		String path=new File(home+"/start.jar").getAbsolutePath();		
+		String cmd="java -Xms128m -Xmx512m -Dfile.encoding=UTF-8 -jar "+path+" backup -u "+IConstants.EXIST_ADMIN+" -p "+IConstants.EXIST_ADMIN_PASSWD+" -b /db/"+datacluster;
+		String[] cmds=cmd.split("\\s");
+		list.addAll(Arrays.asList(cmds));
+		list.add("-d");
+		list.add(filename);
+		//add server
+		String uri="-ouri=xmldb:exist://"+server+":"+IConstants.EXIST_PORT+"/exist/xmlrpc";
+		list.add(uri);
+		//set exist home       
+        if(Platform.getOS().indexOf("win") != -1){//windows
+        	list.add(0,"cmd");
+        	list.add(1,"/c");
+        }
+        
+		//Main.getMain().run(list.toArray(new String[list.size()]));
+        ConsoleSimulator.runCmd(list.toArray(new String[list.size()]), null, home,monitor);
+		//Runtime.getRuntime().exec(list.toArray(new String[list.size()]), null, new File(home));
+    }
+    
+    public static String getExistHome(){
+    	URL existURL=Platform.getBundle(AmaltoWorbenchPlugin.ID).getEntry("/exist");
+    	String home="";
+    	try {
+    		home=FileLocator.resolve(existURL).getFile();
+    		home=new File(home).getAbsolutePath();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		//home="c:\\opt\\exist";
+        //System.setProperty("exist.home", home);
+        //System.out.println("exist.home==="+home);
+        return home;
+    }    
 }

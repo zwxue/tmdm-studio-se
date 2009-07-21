@@ -28,7 +28,7 @@ import com.amalto.workbench.utils.XtentisException;
 
 
 public class XObjectBrowser extends FormEditor implements IXObjectModelListener{	
-	
+	public static String ID="com.amalto.workbench.editors.XObjectBrowser";
 	private ArrayList<IFormPage> formPages = new ArrayList<IFormPage>();
 	private TreeObject initialXObject = null;  //backup
 	

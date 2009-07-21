@@ -6,6 +6,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
 
+import com.amalto.workbench.editors.XObjectBrowser;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.utils.ImageCache;
@@ -34,7 +35,7 @@ public class BrowseViewAction extends Action{
 			
        		server.getSite().getWorkbenchWindow().getActivePage().openEditor(
                     new XObjectBrowserInput(xobject,xobject.getDisplayName()),
-                    "com.amalto.workbench.editors.XObjectBrowser"
+                    XObjectBrowser.ID
            	);
        
 		} catch (Exception e) {
