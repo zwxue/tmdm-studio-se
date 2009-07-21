@@ -109,6 +109,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	protected ListViewer wcListViewer; 
 
 	protected boolean[] ascending = {true,false,false};
+	private static int DEFAULT_VIEWER_HEIGHT = 500;
+	
 	//protected String previousDataModel=null;
 		
     public DataClusterBrowserMainPage(FormEditor editor) {
@@ -154,8 +156,20 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             			public void keyReleased(KeyEvent e) {
         					if ((e.stateMask==0) && (e.character == SWT.CR)) {
         						DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(true));
+        						readjustViewerHeight();
         					}
             			}//keyReleased
+            			
+            			private void readjustViewerHeight()
+            			{
+            				LineItem[] items = (LineItem[])resultsViewer.getInput();
+    						GridData grid = (GridData)resultsViewer.getTable().getLayoutData();
+    						int actualHeight = 14*items.length;
+    						if (actualHeight < DEFAULT_VIEWER_HEIGHT)actualHeight = DEFAULT_VIEWER_HEIGHT;
+    						grid.heightHint = actualHeight;
+    						resultsViewer.refresh();
+    						getManagedForm().reflow(true);
+            			}
             		}//keyListener
             );
             //to
@@ -266,7 +280,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             resultsViewer.getControl().setLayoutData(    
                     new GridData(SWT.FILL,SWT.FILL,true,true,9,1)
             );
-            ((GridData)resultsViewer.getControl().getLayoutData()).heightHint=500;
+            ((GridData)resultsViewer.getControl().getLayoutData()).heightHint=DEFAULT_VIEWER_HEIGHT;
             resultsViewer.setContentProvider(new ArrayContentProvider());
             resultsViewer.setLabelProvider(new ClusterTableLabelProvider());
             resultsViewer.addDoubleClickListener(new IDoubleClickListener() {
@@ -308,7 +322,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	 * Create the Table
 	 */
 	private Table createTable(Composite parent) {
-		int style = SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL |
+		int style = SWT.MULTI | SWT.BORDER | SWT.H_SCROLL  |
 					SWT.FULL_SELECTION | SWT.HIDE_SELECTION;
 
 		final Table table = new Table(parent, style);
