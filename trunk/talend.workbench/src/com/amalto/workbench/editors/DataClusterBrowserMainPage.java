@@ -159,17 +159,6 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         						readjustViewerHeight();
         					}
             			}//keyReleased
-            			
-            			private void readjustViewerHeight()
-            			{
-            				LineItem[] items = (LineItem[])resultsViewer.getInput();
-    						GridData grid = (GridData)resultsViewer.getTable().getLayoutData();
-    						int actualHeight = 14*items.length;
-    						if (actualHeight < DEFAULT_VIEWER_HEIGHT)actualHeight = DEFAULT_VIEWER_HEIGHT;
-    						grid.heightHint = actualHeight;
-    						resultsViewer.refresh();
-    						getManagedForm().reflow(true);
-            			}
             		}//keyListener
             );
             //to
@@ -220,6 +209,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             bSearch.addListener(SWT.Selection, new Listener() {
                 public void handleEvent(Event event) {
 					DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(true));
+					readjustViewerHeight();
             	};
             });    
             
@@ -317,6 +307,19 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         }	
 	}//createFormContent
 	
+	/**
+	 *  readjust the viewer height
+	 */
+	private void readjustViewerHeight()
+	{
+		LineItem[] items = (LineItem[])resultsViewer.getInput();
+		GridData grid = (GridData)resultsViewer.getTable().getLayoutData();
+		int actualHeight = 14*items.length;
+		if (actualHeight < DEFAULT_VIEWER_HEIGHT)actualHeight = DEFAULT_VIEWER_HEIGHT;
+		grid.heightHint = actualHeight;
+		resultsViewer.refresh();
+		getManagedForm().reflow(true);
+	}
 	
 	/**
 	 * Create the Table
