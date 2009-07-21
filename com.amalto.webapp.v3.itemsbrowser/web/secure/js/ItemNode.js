@@ -129,7 +129,8 @@ YAHOO.extend(amalto.itemsbrowser.ItemNode, YAHOO.widget.Node, {
 					'<input class="inputTree'+readOnlyStyle+'" '+readOnly+' ' +
 					//TODO'onFocus="amalto.itemsbrowser.ItemsBrowser.setlastUpdatedInputFlagPublic(\''+itemData.nodeId+'\','+treeIndex+');" ' +
 					'onchange="amalto.itemsbrowser.ItemsBrowser.updateNode(\''+itemData.nodeId+'\','+treeIndex+');" size="72" type="text"  ' +
-					'id="'+itemData.nodeId+'Value" value="'+value+'"/>';
+					'id="'+itemData.nodeId+'Value" value="'+value+'"/>'
+                   +'<div id="'+itemData.nodeId+'ErrorMessage" style="display:none" ></div>';
 			//EXTJS input
 			//this.extItem = new Ext.form.TextField({applyTo:itemData.nodeId+'Value'});
 			}
@@ -138,7 +139,8 @@ YAHOO.extend(amalto.itemsbrowser.ItemNode, YAHOO.widget.Node, {
 				var input = ' ' +
 						'<textarea class="inputTree'+readOnlyStyle+'" '+readOnly+' ' +
 						'onblur="amalto.itemsbrowser.ItemsBrowser.updateNode(\''+itemData.nodeId+'\','+treeIndex+');" id="'+itemData.nodeId+'Value" ' +
-						'rows="4" cols="69" type="text">'+value+'</textarea>';
+						'rows="4" cols="69" type="text">'+value+'</textarea>'
+					   +'<div id="'+itemData.nodeId+'ErrorMessage" style="display:none" ></div>';
 			}
 			
 
@@ -214,43 +216,57 @@ YAHOO.extend(amalto.itemsbrowser.ItemNode, YAHOO.widget.Node, {
 		&& typeof(value)!=this.itemData.typeName){
 			alert("mauvais type "+typeof(value));
 		}*/
-		if(this.itemData.restrictions!=null){
+		var errorMessageDivId = this.itemData.nodeId+"ErrorMessage";
+		$(errorMessageDivId).style.display = "none";
+		if(this.itemData.restrictions!=null){	
 			for(var i=0;i<this.itemData.restrictions.length;i++){
 				if(this.itemData.restrictions[i].name=="minLength" 
-				&& value.length<parseInt(this.itemData.restrictions[i].value)){
-					alert("\""+this.itemData.name+"\" doit comporter au minimum "+this.itemData.restrictions[i].value+" caractères.");					
+				&& value.length<parseInt(this.itemData.restrictions[i].value)){				
+					var msg="\""+this.itemData.name+"\" doit comporter au minimum "+this.itemData.restrictions[i].value+" caractères.";
+					this.displayErrorMessage(errorMessageDivId,msg);
 					return false;
 				}
 				if(this.itemData.restrictions[i].name=="maxLength" 
 				&& value.length>parseInt(this.itemData.restrictions[i].value)){
-					alert("\""+this.itemData.name+"\" n'accepte que "+this.itemData.restrictions[i].value+" caractères maximum.");
+					var msg="\""+this.itemData.name+"\" n'accepte que "+this.itemData.restrictions[i].value+" caractères maximum.";
+					this.displayErrorMessage(errorMessageDivId,msg);
 					return false;
 				}
 				if(this.itemData.restrictions[i].name=="minExclusive" 
-				&& parseInt(value)<=parseInt(this.itemData.restrictions[i].value)){
-					alert("\""+this.itemData.name+"\" doit etre superieur à "+this.itemData.restrictions[i].value+".");					
+				&& parseInt(value)<=parseInt(this.itemData.restrictions[i].value)){					
+					var msg="\""+this.itemData.name+"\" doit etre superieur à "+this.itemData.restrictions[i].value+".";
+					this.displayErrorMessage(errorMessageDivId,msg);
 					return false;
 				}
 				if(this.itemData.restrictions[i].name=="maxExclusive" 
 				&& parseInt(value)>=parseInt(this.itemData.restrictions[i].value)){
-					alert("\""+this.itemData.name+"\" doit etre inférieur à "+this.itemData.restrictions[i].value+".");					
+					var msg="\""+this.itemData.name+"\" doit etre inférieur à "+this.itemData.restrictions[i].value+".";
+					this.displayErrorMessage(errorMessageDivId,msg);
 					return false;
 				}
 				if(this.itemData.restrictions[i].name=="minInclusive" 
 				&& parseInt(value)<parseInt(this.itemData.restrictions[i].value)){
-					alert("\""+this.itemData.name+"\" doit etre superieur ou égal à "+this.itemData.restrictions[i].value+".");					
+					var msg="\""+this.itemData.name+"\" doit etre superieur ou égal à "+this.itemData.restrictions[i].value+".";
+					this.displayErrorMessage(errorMessageDivId,msg);
 					return false;
 				}
 				if(this.itemData.restrictions[i].name=="maxInclusive" 
 				&& parseInt(value)>parseInt(this.itemData.restrictions[i].value)){
-					alert("\""+this.itemData.name+"\" doit etre inférieur ou égal à "+this.itemData.restrictions[i].value+".");					
+					var msg="\""+this.itemData.name+"\" doit etre inférieur ou égal à "+this.itemData.restrictions[i].value+".";
+					this.displayErrorMessage(errorMessageDivId,msg);
 					return false;
 				}
+				//TODO ADD MORE CASE
 			}
 		}
 		this.itemData.value = value;
 		this.initContent(this.itemData, this.newItem,this.treeIndex, this.hasIcon);
 		return true;
+	},
+	
+	displayErrorMessage: function(errorMessageDivId,msg){
+		$(errorMessageDivId).style.display = "block";
+		$(errorMessageDivId).innerHTML='<font color="red">'+msg+'</font>';
 	},
 	
 	updateNodeId: function(nodeId){
