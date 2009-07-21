@@ -82,16 +82,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 				e.printStackTrace();
 			}
 			WSUniverse wUuniverse=null;
-//			if(universe.trim().length()>0){
-//				wUuniverse=port.getUniverse(new WSGetUniverse(new WSUniversePK(universe)));
-//				if(wUuniverse==null){
-//					isExistUniverse=false;
-//					return;
-//				}
-//			}else{
-				wUuniverse=port.getCurrentUniverse(new WSGetCurrentUniverse());
-//			}
-			
+			wUuniverse=port.getCurrentUniverse(new WSGetCurrentUniverse());
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");		
 		
 			//server
@@ -110,15 +101,12 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			user.setServerUrl(endpointaddress);
 			user.setUniverse(universe);
 			user.setWsUuniverse(wUuniverse);
-			//BG: I removed this
-//			String universe1=wUuniverse.getName().replaceAll("\\[", "").replaceAll("\\]", "").trim();
-//			user.setUniverse(universe1);
-//			GlobalUserInfo.getInstance().addUser(user.getServerUrl()+user.getUniverse(), user);
+
 			serverRoot.setUser(user);
 			
 			
 			//Data Models
-			TreeParent models = new TreeParent("Data Models",serverRoot,TreeObject.DATA_MODEL,null,null);			
+			TreeParent models = new TreeParent(EXtentisObjects.DataMODEL.getDisplayName(),serverRoot,TreeObject.DATA_MODEL,null,null);			
 			//WSDataModel[] xdm = port.getDataModels(new WSRegexDataModels("*")).getWsDataModels();
 			WSDataModelPK[] xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs();
 			if (xdmPKs != null) {
@@ -141,7 +129,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
 			
 			//DataClusters
-			TreeParent dataClusters = new TreeParent("Data Clusters",serverRoot,TreeObject.DATA_CLUSTER,null,null);
+			TreeParent dataClusters = new TreeParent(EXtentisObjects.DataCluster.getDisplayName(),serverRoot,TreeObject.DATA_CLUSTER,null,null);
 			//WSDataCluster[] xdc = port.getDataClusters(new WSRegexDataClusters("*")).getWsDataClusters();
 			WSDataClusterPK[] xdcPKs = port.getDataClusterPKs(new WSRegexDataClusterPKs("")).getWsDataClusterPKs();
 			if (xdcPKs != null) {
@@ -169,7 +157,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
 
 			//Views
-			TreeParent views = new TreeParent("Views",serverRoot,TreeObject.VIEW,null,null);
+			TreeParent views = new TreeParent(EXtentisObjects.View.getDisplayName(),serverRoot,TreeObject.VIEW,null,null);
 			WSViewPK[] viewPKs = port.getViewPKs((new WSGetViewPKs(""))).getWsViewPK();
 			if (viewPKs!=null) {
 				monitor.subTask("Loading Views");
@@ -190,7 +178,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			
 
 			//Stored Procedures
-			TreeParent storedProcedures = new TreeParent("Stored Procedures",serverRoot,TreeObject.STORED_PROCEDURE,null,null);
+			TreeParent storedProcedures = new TreeParent(EXtentisObjects.StoredProcedure.getDisplayName(),serverRoot,TreeObject.STORED_PROCEDURE,null,null);
 			WSStoredProcedurePK[] spk = port.getStoredProcedurePKs(new WSRegexStoredProcedure("")).getWsStoredProcedurePK();
 			if (spk!=null) {
 				monitor.subTask("Loading Stored Procedures");
@@ -221,7 +209,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			}
 			TreeParent roles = null;
 			if (hasRoles) {
-				roles = new TreeParent("Roles",serverRoot,TreeObject.ROLE,null,null);
+				roles = new TreeParent(EXtentisObjects.Role.getDisplayName(),serverRoot,TreeObject.ROLE,null,null);
 				if (rolePKs!=null) {
 					monitor.subTask("Loading Roles");
 					for (int i = 0; i < rolePKs.length; i++) {
@@ -253,7 +241,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			}
 			TreeParent rules = null;
 			if (hasRoutingRules) {
-				rules = new TreeParent("Routing Rules",serverRoot,TreeObject.ROUTING_RULE,null,null);
+				rules = new TreeParent(EXtentisObjects.RoutingRule.getDisplayName(),serverRoot,TreeObject.ROUTING_RULE,null,null);
 				if (routingRulePKs!=null) {
 					monitor.subTask("Loading Routing Rules");
 					for (int i = 0; i < routingRulePKs.length; i++) {
@@ -275,7 +263,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			
 			//Subscription Engine
 			TreeObject  engine = new TreeObject(
-					"Subscription Engine",
+					EXtentisObjects.SubscriptionEngine.getDisplayName(),
 					serverRoot,
 					TreeObject.SUBSCRIPTION_ENGINE,
 					null,
@@ -298,7 +286,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			}
 			TreeParent transformers = null;
 			if (hasTransformers) {
-				transformers = new TreeParent("Transformers",serverRoot,TreeObject.TRANSFORMER,null,null);
+				transformers = new TreeParent(EXtentisObjects.Transformer.getDisplayName(),serverRoot,TreeObject.TRANSFORMER,null,null);
 				if (transformerPKs!=null) {
 					monitor.subTask("Loading Transfomers");
 					for (int i = 0; i < transformerPKs.length; i++) {
@@ -329,7 +317,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			}
 			TreeParent menus = null;
 			if (hasMenus) {
-				menus = new TreeParent("Menus",serverRoot,TreeObject.MENU,null,null);
+				menus = new TreeParent(EXtentisObjects.Menu.getDisplayName(),serverRoot,TreeObject.MENU,null,null);
 				if (menuPKs!=null) {
 					monitor.subTask("Loading Menus");
 					for (int i = 0; i < menuPKs.length; i++) {
@@ -360,7 +348,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			}
 			TreeParent Universes = null;
 			//if (hasUniverses) {
-				Universes = new TreeParent("Universes",serverRoot,TreeObject.UNIVERSE,null,null);
+				Universes = new TreeParent(EXtentisObjects.Universe.getDisplayName(),serverRoot,TreeObject.UNIVERSE,null,null);
 				if (universePKs!=null) {
 					monitor.subTask("Loading Universes");
 					for (int i = 0; i < universePKs.length; i++) {
@@ -391,7 +379,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 				}
 				TreeParent synchronizationPlans = null;
 				//if (hasSynchronizationPlans) {
-				synchronizationPlans = new TreeParent("SynchronizationPlans",serverRoot,TreeObject.SYNCHRONIZATIONPLAN,null,null);
+				synchronizationPlans = new TreeParent(EXtentisObjects.SynchronizationPlan.getDisplayName(),serverRoot,TreeObject.SYNCHRONIZATIONPLAN,null,null);
 					if (SynchronizationPlanPKs!=null) {
 						monitor.subTask("Loading SynchronizationPlans");
 						for (int i = 0; i < SynchronizationPlanPKs.length; i++) {

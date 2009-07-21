@@ -44,6 +44,8 @@ import org.eclipse.ui.part.ViewPart;
 import com.amalto.workbench.actions.AServerViewAction;
 import com.amalto.workbench.actions.BrowseViewAction;
 import com.amalto.workbench.actions.CopyXObjectAction;
+import com.amalto.workbench.actions.DataClusterExportAction;
+import com.amalto.workbench.actions.DataClusterImportAction;
 import com.amalto.workbench.actions.DeleteXObjectAction;
 import com.amalto.workbench.actions.EditXObjectAction;
 import com.amalto.workbench.actions.NewXObjectAction;
@@ -58,6 +60,7 @@ import com.amalto.workbench.providers.ServerTreeContentProvider;
 import com.amalto.workbench.providers.ServerTreeLabelProvider;
 import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.ESystemDefaultObjects;
+import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
@@ -90,10 +93,13 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	protected Action copyAction;
 	protected Action pasteAction;
 	//protected Action versionAction;
+	protected Action exportAction;
 	private ServerTreeContentProvider contentProvider;
 
 	private ArrayList<TreeObject> dndTreeObjs = new ArrayList<TreeObject>();
     private int dragType = -1;
+
+	private DataClusterImportAction importAction;
 	/**********************************************************************************
 	 * The VIEW
 	 * 
@@ -390,12 +396,18 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			case TreeObject.VIEW:
 			case TreeObject.DATA_CLUSTER:
 				if (xobject.isXObject()) {
+					manager.add(exportAction);
+					manager.add(importAction);
 					manager.add(browseViewAction);
 				}
 				if (xobject.getDisplayName()!=null&&xobject.getDisplayName().equals(ESystemDefaultObjects.DC_MDMITEMSTRASH.getName())) {
 					break;
 				}
 			default:
+				if (!xobject.isXObject() && xobject.getDisplayName().equalsIgnoreCase(EXtentisObjects.DataCluster.getDisplayName())) {
+					manager.add(exportAction);
+					manager.add(importAction);
+				}
 				manager.add(newXObjectAction);
 				if (xobject.isXObject()) {
 					manager.add(editXObjectAction);
@@ -465,6 +477,9 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		browseViewAction = new BrowseViewAction(this);
 		copyAction = new CopyXObjectAction(this);
 		pasteAction = new PasteXObjectAction(this);
+		
+		exportAction=new DataClusterExportAction(this);
+		importAction=new DataClusterImportAction(this);
 		//versionAction = new VersioningXObjectAction(this);
 	}
 
