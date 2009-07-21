@@ -75,9 +75,9 @@ public class TypesContentProvider implements IStructuredContentProvider, ITreeCo
 			List<XSDTypeDefinition> list=new ArrayList<XSDTypeDefinition>();
 			
 				for(XSDTypeDefinition el: (XSDTypeDefinition[])xsdElementDeclarations.toArray(new XSDTypeDefinition[xsdElementDeclarations.size()] )){
-					if( el instanceof XSDComplexTypeDefinition){
+					//if( el instanceof XSDComplexTypeDefinition){
 						list.add(el);
-					}					
+					//}					
 				}
 				return list.toArray(new XSDTypeDefinition[list.size()]);
 			
