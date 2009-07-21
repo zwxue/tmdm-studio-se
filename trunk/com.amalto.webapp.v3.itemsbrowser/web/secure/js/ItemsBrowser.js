@@ -337,6 +337,8 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	
 	/** The foreign key search window */
 	var foreignKeyWindow;
+	/** The node date picker */
+	var nodeDatePicker;
 	 
 	function browseItems(){
 		showItemsPanel();
@@ -1441,6 +1443,37 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		});
 	}
 	
+	function showDatePicker(nodeId, treeIndex, nodeType){
+		if(nodeDatePicker){
+			 nodeDatePicker.hide();
+			 nodeDatePicker.destroy();
+		}
+		
+		var inputText=nodeId+"Value";
+		nodeDatePicker = new Ext.DatePicker({  
+					     applyTo:inputText,  
+					     renderTo:inputText,   
+					     hidden:"true",  
+					     format:"Y-m-d"  
+	     }); 
+	     
+	     nodeDatePicker.on("select",function(src,date){
+	     	     var setValue=date.format("Y-m-d");
+	     	     if(nodeType=="dateTime"){setValue+="T00:00:00"};
+			     DWRUtil.setValue(inputText,setValue);
+			     updateNode(nodeId,treeIndex);
+			     nodeDatePicker.hide();
+		 });
+		 
+		 var initValue=$(inputText).value;
+		 if(initValue!=null&&initValue!=""){
+		 	if(initValue.indexOf('T')!=-1)initValue=initValue.substring(0,initValue.indexOf('T'));
+		 	nodeDatePicker.setValue(Date.parseDate(initValue,"Y-m-d"));
+		 }
+		 
+		 nodeDatePicker.show(this);
+	}
+	
 	var panel;
 	function chooseForeignKey(nodeId, xpathForeignKey, xpathInfoForeignKey, treeIndex) {
 		
@@ -1540,6 +1573,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	
 	var fnLoadData2;
 	
+		
 	function browseForeignKey(nodeId, foreignKeyXpath){
 		//Check if have a Primary key made of multiple Item Ids or a single one
 		if(DWRUtil.getValue(nodeId+'Value').match(/\[(.*?)\]/g)!=null){
@@ -1656,6 +1690,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	function printSmartView(ids,dataObject){
 		window.open('/itemsbrowser/secure/SmartViewServlet?ids='+ids+'&concept='+dataObject+'&language='+language,'Print','toolbar=no,location=no,directories=no,menubar=yes,scrollbars=yes,resizable=yes');
 	}
+	
 
 
  	return {
@@ -1667,6 +1702,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		updateNode:function(id,treeIndex){updateNode(id,treeIndex);},
 		setlastUpdatedInputFlagPublic:function(id,treeIndex){alert("setlastUpdatedInputFlagPublic");setlastUpdatedInputFlag(id,treeIndex);},
 		browseForeignKey:function(nodeId, foreignKeyXpath){browseForeignKey(nodeId, foreignKeyXpath);},
+		showDatePicker:function(nodeId,treeIndex,nodeType){showDatePicker(nodeId,treeIndex,nodeType);},
 		chooseForeignKey:function(nodeId,xpath,xpathInfo,treeIndex){chooseForeignKey(nodeId,xpath,xpathInfo,treeIndex);},
 		cloneNode2:function(siblingId,hasIcon,treeIndex){cloneNode2(siblingId,hasIcon,treeIndex)},
 		removeNode2:function(id,treeIndex){removeNode2(id,treeIndex)},
