@@ -69,7 +69,7 @@ public class ElementComposite {
 			);
 			serverLabel.setText("Type");
 							
-			typeCombo = new CCombo(cr, SWT.BORDER|SWT.READ_ONLY);
+			typeCombo = new CCombo(cr, SWT.BORDER);
 			typeCombo.setLayoutData(
 					new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 			);
@@ -82,7 +82,7 @@ public class ElementComposite {
 			);
 			serverLabel.setText("Type");
 							
-			typeCombo = new CCombo(parent, SWT.BORDER|SWT.READ_ONLY);
+			typeCombo = new CCombo(parent, SWT.BORDER);
 			typeCombo.setLayoutData(
 					new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 			);
