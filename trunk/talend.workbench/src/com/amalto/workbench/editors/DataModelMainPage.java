@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.SpecialAction;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -110,6 +111,7 @@ import com.amalto.workbench.actions.XSDNewGroupFromTypeAction;
 import com.amalto.workbench.actions.XSDNewIdentityConstraintAction;
 import com.amalto.workbench.actions.XSDNewParticleFromParticleAction;
 import com.amalto.workbench.actions.XSDNewParticleFromTypeAction;
+import com.amalto.workbench.actions.XSDNewSimpleTypeDefinition;
 import com.amalto.workbench.actions.XSDNewXPathAction;
 import com.amalto.workbench.actions.XSDSetAnnotationDescriptionsAction;
 import com.amalto.workbench.actions.XSDSetAnnotationDocumentationAction;
@@ -138,7 +140,7 @@ import com.amalto.workbench.webservices.WSDataModel;
 public class DataModelMainPage extends AMainPageV2 {
 
 	protected Text descriptionText;
-	protected Button importXSDBtn, exportBtn,sortUPBtn,sortDownBtn,filterBtn,expandBtn,foldBtn,expandSelBtn;
+	protected Button importXSDBtn, exportBtn,sortUPBtn,sortDownBtn,filterBtn,expandBtn,foldBtn,expandSelBtn,sortNaturalBtn ;
 	protected TreeViewer viewer;
 	protected DrillDownAdapter drillDownAdapter;
 
@@ -177,6 +179,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	private XSDSetAnnotationDocumentationAction setAnnotationDocumentationAction = null;
 	private XSDDeleteTypeDefinition   deleteTypeDefinition = null;
 	private XSDNewComplexTypeDefinition  newComplexTypeAction = null;
+	private XSDNewSimpleTypeDefinition  newSimpleTypeAction = null;
 	private XSDEditComplexTypeAction   editComplexTypeAction = null;
 	private ObjectUndoContext undoContext;
 	private MenuManager menuMgr;
@@ -272,7 +275,6 @@ public class DataModelMainPage extends AMainPageV2 {
 				}
 			});
 			
-			
 			foldBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
 			foldBtn.setImage(ImageCache.getCreatedImage(EImage.COMPRESSED_FOLDER_OBJ.getPath()));
 			foldBtn.setToolTipText("Collapse...");
@@ -310,17 +312,10 @@ public class DataModelMainPage extends AMainPageV2 {
 			sortDownBtn.setToolTipText("DOWN...");
 			sortDownBtn.addSelectionListener(new SelectionAdapter(){
 				public void widgetSelected(SelectionEvent e){
-					try {
 						stepDown();
-						refresh();
-					} catch (Exception e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					viewer.refresh();
+						viewer.refresh();
 				}
 			});
-			
 			
 			importXSDBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
 					false, 1, 1));
@@ -628,7 +623,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	public void stepDown(){
 		 TreeItem item;
 		 TreeItem[] items = viewer.getTree().getSelection();
-         for(int i=0;i<items.length;i++){
+         for(int i=items.length-1;i>=0;i--){
         	 item = items[i];
          	 XSDConcreteComponent component = (XSDConcreteComponent)item.getData();
          	if(!(component instanceof XSDParticle))
@@ -648,7 +643,6 @@ public class DataModelMainPage extends AMainPageV2 {
          	}
          }
 		this.markDirty();
-		
 	}
 	private void createButton(){
         Composite buttonComposite = toolkit.createComposite(sash);
@@ -880,6 +874,8 @@ public class DataModelMainPage extends AMainPageV2 {
 				this);
 		this.deleteTypeDefinition = new XSDDeleteTypeDefinition(this);
 		this.newComplexTypeAction = new XSDNewComplexTypeDefinition(this);
+		this.newSimpleTypeAction = new XSDNewSimpleTypeDefinition(this);
+		
 		this.editComplexTypeAction = new XSDEditComplexTypeAction(this);
 		deleteConceptWrapAction.regisDelAction(XSDElementDeclarationImpl.class, deleteConceptAction);
 		deleteConceptWrapAction.regisDelAction(XSDParticleImpl.class, deleteParticleAction);
@@ -951,6 +947,7 @@ public class DataModelMainPage extends AMainPageV2 {
 
 		if ((selection == null) || (selection.getFirstElement() == null)) {
 			manager.add(newComplexTypeAction);
+			manager.add(newSimpleTypeAction);
 			return;
 		}
 		
@@ -1012,6 +1009,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		
 		if (obj instanceof XSDComplexTypeDefinition && selectedObjs.length == 1) {
 			manager.add(newComplexTypeAction);
+			manager.add(newSimpleTypeAction);
 			manager.add(newParticleFromTypeAction);
 			manager.add(deleteTypeDefinition);
 			manager.add(editComplexTypeAction);
@@ -1037,15 +1035,16 @@ public class DataModelMainPage extends AMainPageV2 {
 
 		if (obj instanceof XSDSimpleTypeDefinition && selectedObjs.length == 1) {
 			XSDSimpleTypeDefinition typedef = (XSDSimpleTypeDefinition) obj;
-
-			if (!typedef.getSchema().getSchemaForSchemaNamespace().equals(
-					typedef.getTargetNamespace())) {
+			manager.add(changeBaseTypeAction);
+			manager.add(deleteTypeDefinition);
+			manager.add(new Separator());
+			if (!typedef.getSchema().getSchemaForSchemaNamespace().equals(typedef.getTargetNamespace())) {
 				EList list = typedef.getBaseTypeDefinition().getValidFacets();
+				list.remove("whiteSpace");
 				for (Iterator iter = list.iterator(); iter.hasNext();) {
 					String element = (String) iter.next();
 					manager.add(new XSDEditFacetAction(this, element));
 				}
-
 			}
 		}
 

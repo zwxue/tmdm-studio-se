@@ -22,6 +22,7 @@ import com.amalto.workbench.utils.Util;
 public class XSDDeleteTypeDefinition extends  UndoAction{
 	
 	private XSDComplexTypeDefinition xsdCmpexType;
+	private XSDSimpleTypeDefinition xsdSimpType;
 	public XSDDeleteTypeDefinition(DataModelMainPage page) {
 		super(page);
 		setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
@@ -32,10 +33,13 @@ public class XSDDeleteTypeDefinition extends  UndoAction{
 	
 	public void run(Object toDel)
 	{
-		if (!(toDel instanceof XSDComplexTypeDefinition)) {
+		if (!(toDel instanceof XSDComplexTypeDefinition||toDel instanceof XSDSimpleTypeDefinition)) {
 			return;
 		}
-		xsdCmpexType = (XSDComplexTypeDefinition) toDel;
+		if(toDel instanceof XSDComplexTypeDefinition)
+			xsdCmpexType = (XSDComplexTypeDefinition) toDel;
+		else
+			xsdSimpType = (XSDSimpleTypeDefinition) toDel;
 		run();
 	}
 	
@@ -44,24 +48,38 @@ public class XSDDeleteTypeDefinition extends  UndoAction{
 		XSDSchema schema = ((ISchemaContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
 		
 		if (selection.getFirstElement() instanceof XSDSimpleTypeDefinition) {
-			return Status.CANCEL_STATUS;
+			XSDSimpleTypeDefinition simpleType = (XSDSimpleTypeDefinition)selection.getFirstElement();
+			if(xsdSimpType!=null)
+				simpleType = xsdSimpType;
+			List<XSDElementDeclaration> list = Util.findElementsUsingType(schema, null, simpleType.getName());
+			if(!list.isEmpty()){
+				MessageDialog
+				.openWarning(page.getSite().getShell(), "Warnning",
+						"The Simple type definition : " + simpleType.getName() + " is being referred to by Elements");
+				xsdSimpType = null;
+				return Status.CANCEL_STATUS;
+			}//iif(!list.isEmpty())
+			schema.getContents().remove(simpleType);
+		}//if (selection.getFirstElement()
+		else{
+
+			XSDComplexTypeDefinition complxType = (XSDComplexTypeDefinition)selection.getFirstElement();
+			if (xsdCmpexType != null) {
+				complxType = xsdCmpexType;
+			}
+			List<XSDElementDeclaration> list = Util.findElementsUsingType(schema, null, complxType.getName());
+			if (!list.isEmpty())
+			{
+				MessageDialog
+						.openWarning(page.getSite().getShell(), "Warnning",
+								"The Complex type definition : " + complxType.getName() + " is being referred to by Elements");
+				xsdCmpexType = null;
+				return Status.CANCEL_STATUS;
+			}
+			schema.getContents().remove(complxType);
 		}
 
 		
-		XSDComplexTypeDefinition complxType = (XSDComplexTypeDefinition)selection.getFirstElement();
-		if (xsdCmpexType != null) {
-			complxType = xsdCmpexType;
-		}
-		List<XSDElementDeclaration> list = Util.findElementsUsingType(schema, null, complxType.getName());
-		if (!list.isEmpty())
-		{
-			MessageDialog
-					.openWarning(page.getSite().getShell(), "Warnning",
-							"The Complex type definition : " + complxType.getName() + " is being referred to by Elements");
-			xsdCmpexType = null;
-			return Status.CANCEL_STATUS;
-		}
-		schema.getContents().remove(complxType);
 		xsdCmpexType = null;
 		page.refresh();
 		page.markDirty();
