@@ -1124,7 +1124,11 @@ amalto.itemsbrowser.ItemsBrowser = function () {
     			
         		var root = itemTree.getRoot();	
         		var nameTmp = dataObject;
-        		if(rootNode.name!=null) nameTmp = '<div style="width:180;float:left;font-size:13px">'+rootNode.name+'</div>';
+        		var descInfo = "";
+        		
+        		if(rootNode.name!=null) nameTmp = '<div style="width:180;float:left;font-size:130px">'+rootNode.name+'</div>';
+        		if(rootNode.description!=null&&rootNode.description!="")descInfo=' <img src="img/genericUI/information_icon.gif" ext:qtitle="Description" ext:qtip="'+rootNode.description+'"/>';
+        		nameTmp=nameTmp+descInfo;
         		var node1 = new YAHOO.widget.HTMLNode(nameTmp,root,false, true);
         		
         	
