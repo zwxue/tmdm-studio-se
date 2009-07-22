@@ -16,11 +16,17 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDEnumerationFacet;
+import org.eclipse.xsd.XSDFractionDigitsFacet;
 import org.eclipse.xsd.XSDLengthFacet;
+import org.eclipse.xsd.XSDMaxExclusiveFacet;
+import org.eclipse.xsd.XSDMaxInclusiveFacet;
 import org.eclipse.xsd.XSDMaxLengthFacet;
+import org.eclipse.xsd.XSDMinExclusiveFacet;
+import org.eclipse.xsd.XSDMinInclusiveFacet;
 import org.eclipse.xsd.XSDMinLengthFacet;
 import org.eclipse.xsd.XSDPatternFacet;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
+import org.eclipse.xsd.XSDTotalDigitsFacet;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.FacetsListInputDialog;
@@ -51,7 +57,9 @@ public class XSDEditFacetAction extends UndoAction{
 			
 			ISelection selection = page.getTreeViewer().getSelection();
 			std = (XSDSimpleTypeDefinition)((IStructuredSelection)selection).getFirstElement();
-						
+				/**
+				 * totalDigits, fractionDigits, maxInclusive, maxExclusive, minInclusive, minExclusive		
+				 */
             if (facetName.equals("pattern")) {
             	editPattern();
             } else if (facetName.equals("enumeration")) {
@@ -62,7 +70,22 @@ public class XSDEditFacetAction extends UndoAction{
             	editMinLength();
             } else if (facetName.equals("maxLength")) {
             	editMaxLength();            	
-            } else {
+            }else if(facetName.equals("totalDigits")){
+            	editTotalDigits();
+            }else if(facetName .equals("fractionDigits")){
+            	editFractionDigits();
+            }else if(facetName.equals("maxInclusive")){
+            	editMaxInclusive();
+            }else if(facetName.equals("maxExclusive")){
+            	editMaxExclusive();
+            }else if(facetName.equals("minInclusive")){
+            	editMinInclusive();
+            }else if(facetName.equals("minExclusive")){
+            	editMinExclusive();
+            }
+            
+            
+            else {
     			MessageDialog.openError(
     					page.getSite().getShell(),
     					"Error", 
@@ -237,7 +260,6 @@ public class XSDEditFacetAction extends UndoAction{
    		}
 
 	}//EditMinLength
-
 	
 	private void editMaxLength() {
 		XSDMaxLengthFacet currentValue = std.getMaxLengthFacet();
@@ -261,7 +283,6 @@ public class XSDEditFacetAction extends UndoAction{
 					}
 				}
    		);
-        
    		dialog.setBlockOnOpen(true);
    		int ret = dialog.open();
    		if (ret == Dialog.CANCEL) return;
@@ -275,4 +296,213 @@ public class XSDEditFacetAction extends UndoAction{
    		}
 
 	}//EditMaxLength
+
+
+	private void editTotalDigits(){
+    	XSDTotalDigitsFacet currentValue = std.getTotalDigitsFacet();
+    	String stringValue ="0";
+    	if (currentValue != null)	stringValue = currentValue.getLexicalValue();
+		dialog = new InputDialog(
+				page.getSite().getShell(),
+   				"TotalDigits Facet",
+   				"Enter a new value for the facet; 0 to remove it",
+   				stringValue==null ? "" : stringValue,
+   				new IInputValidator() {
+					public String isValid(String newText) {
+						int val;
+						try {
+							val = Integer.parseInt(newText);
+						} catch (Exception e) {
+							return "The value must be a non negative integer";
+						}
+						if (val < 0) return "The value must be a non negative integer";
+						return null;
+					}
+				}
+   		);
+   		dialog.setBlockOnOpen(true);
+   		int ret = dialog.open();
+   		if (ret == Dialog.CANCEL) return;
+
+   		if (currentValue!=null) std.getFacetContents().remove(currentValue);
+   		int intValue = Integer.parseInt(((InputDialog)dialog).getValue());
+   		if (intValue>0) {
+   			XSDTotalDigitsFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDTotalDigitsFacet();
+   			f.setLexicalValue(""+intValue);
+   			std.getFacetContents().add(f);
+   		}
+    }
+	
+	private void editFractionDigits(){
+    	XSDFractionDigitsFacet currentValue = std.getFractionDigitsFacet();
+    	String stringValue ="0";
+    	if (currentValue != null)	stringValue = currentValue.getLexicalValue();
+		dialog = new InputDialog(
+				page.getSite().getShell(),
+   				"TotalDigits Facet",
+   				"Enter a new value for the facet; 0 to remove it",
+   				stringValue==null ? "" : stringValue,
+   				new IInputValidator() {
+					public String isValid(String newText) {
+						int val;
+						try {
+							val = Integer.parseInt(newText);
+						} catch (Exception e) {
+							return "The value must be a non negative integer";
+						}
+						if (val < 0) return "The value must be a non negative integer";
+						return null;
+					}
+				}
+   		);
+   		dialog.setBlockOnOpen(true);
+   		int ret = dialog.open();
+   		if (ret == Dialog.CANCEL) return;
+
+   		if (currentValue!=null) std.getFacetContents().remove(currentValue);
+   		int intValue = Integer.parseInt(((InputDialog)dialog).getValue());
+   		if (intValue>0) {
+   			XSDFractionDigitsFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDFractionDigitsFacet();
+   			f.setLexicalValue(""+intValue);
+   			std.getFacetContents().add(f);
+   		}
+    }
+	private void editMaxInclusive(){
+    	XSDMaxInclusiveFacet currentValue = std.getMaxInclusiveFacet();
+    	String stringValue ="0";
+    	if (currentValue != null)	stringValue = currentValue.getLexicalValue();
+		dialog = new InputDialog(
+				page.getSite().getShell(),
+   				"TotalDigits Facet",
+   				"Enter a new value for the facet; 0 to remove it",
+   				stringValue==null ? "" : stringValue,
+   				new IInputValidator() {
+					public String isValid(String newText) {
+						int val;
+						try {
+							val = Integer.parseInt(newText);
+						} catch (Exception e) {
+							return "The value must be a non negative integer";
+						}
+						if (val < 0) return "The value must be a non negative integer";
+						return null;
+					}
+				}
+   		);
+   		dialog.setBlockOnOpen(true);
+   		int ret = dialog.open();
+   		if (ret == Dialog.CANCEL) return;
+
+   		if (currentValue!=null) std.getFacetContents().remove(currentValue);
+   		int intValue = Integer.parseInt(((InputDialog)dialog).getValue());
+   		if (intValue>0) {
+   			XSDMaxInclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMaxInclusiveFacet();
+   			f.setLexicalValue(""+intValue);
+   			std.getFacetContents().add(f);
+   		}
+    }
+	private void editMaxExclusive(){
+    	XSDMaxExclusiveFacet currentValue = std.getMaxExclusiveFacet();
+    	String stringValue ="0";
+    	if (currentValue != null)	stringValue = currentValue.getLexicalValue();
+		dialog = new InputDialog(
+				page.getSite().getShell(),
+   				"TotalDigits Facet",
+   				"Enter a new value for the facet; 0 to remove it",
+   				stringValue==null ? "" : stringValue,
+   				new IInputValidator() {
+					public String isValid(String newText) {
+						int val;
+						try {
+							val = Integer.parseInt(newText);
+						} catch (Exception e) {
+							return "The value must be a non negative integer";
+						}
+						if (val < 0) return "The value must be a non negative integer";
+						return null;
+					}
+				}
+   		);
+   		dialog.setBlockOnOpen(true);
+   		int ret = dialog.open();
+   		if (ret == Dialog.CANCEL) return;
+
+   		if (currentValue!=null) std.getFacetContents().remove(currentValue);
+   		int intValue = Integer.parseInt(((InputDialog)dialog).getValue());
+   		if (intValue>0) {
+   			XSDMaxExclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMaxExclusiveFacet();
+   			f.setLexicalValue(""+intValue);
+   			std.getFacetContents().add(f);
+   		}
+    }
+	
+	private void editMinInclusive(){
+    	XSDMinInclusiveFacet currentValue = std.getMinInclusiveFacet();
+    	String stringValue ="0";
+    	if (currentValue != null)	stringValue = currentValue.getLexicalValue();
+		dialog = new InputDialog(
+				page.getSite().getShell(),
+   				"TotalDigits Facet",
+   				"Enter a new value for the facet; 0 to remove it",
+   				stringValue==null ? "" : stringValue,
+   				new IInputValidator() {
+					public String isValid(String newText) {
+						int val;
+						try {
+							val = Integer.parseInt(newText);
+						} catch (Exception e) {
+							return "The value must be a non negative integer";
+						}
+						if (val < 0) return "The value must be a non negative integer";
+						return null;
+					}
+				}
+   		);
+   		dialog.setBlockOnOpen(true);
+   		int ret = dialog.open();
+   		if (ret == Dialog.CANCEL) return;
+
+   		if (currentValue!=null) std.getFacetContents().remove(currentValue);
+   		int intValue = Integer.parseInt(((InputDialog)dialog).getValue());
+   		if (intValue>0) {
+   			XSDMinInclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMinInclusiveFacet();
+   			f.setLexicalValue(""+intValue);
+   			std.getFacetContents().add(f);
+   		}
+    }
+
+	private void editMinExclusive(){
+    	XSDMinExclusiveFacet currentValue = std.getMinExclusiveFacet();
+    	String stringValue ="0";
+    	if (currentValue != null)	stringValue = currentValue.getLexicalValue();
+		dialog = new InputDialog(
+				page.getSite().getShell(),
+   				"TotalDigits Facet",
+   				"Enter a new value for the facet; 0 to remove it",
+   				stringValue==null ? "" : stringValue,
+   				new IInputValidator() {
+					public String isValid(String newText) {
+						int val;
+						try {
+							val = Integer.parseInt(newText);
+						} catch (Exception e) {
+							return "The value must be a non negative integer";
+						}
+						if (val < 0) return "The value must be a non negative integer";
+						return null;
+					}
+				}
+   		);
+   		dialog.setBlockOnOpen(true);
+   		int ret = dialog.open();
+   		if (ret == Dialog.CANCEL) return;
+
+   		if (currentValue!=null) std.getFacetContents().remove(currentValue);
+   		int intValue = Integer.parseInt(((InputDialog)dialog).getValue());
+   		if (intValue>0) {
+   			XSDMinExclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMinExclusiveFacet();
+   			f.setLexicalValue(""+intValue);
+   			std.getFacetContents().add(f);
+   		}
+    }
 }
