@@ -1120,8 +1120,6 @@ amalto.itemsbrowser.ItemsBrowser = function () {
     				
     			
     			
-    			
-    			
         		var root = itemTree.getRoot();	
         		var nameTmp = dataObject;
         		var descInfo = "";
