@@ -176,9 +176,13 @@ public class DeleteXObjectAction extends Action{
 				TreeObject selected = (TreeObject)((IStructuredSelection)view.getViewer().getSelection()).getFirstElement();
 				if (selected == null)
 				{
-					selected = view.getTreeContentProvider().getInvisibleRoot().getChildren()[0];
+					TreeObject[] childs = view.getTreeContentProvider().getInvisibleRoot().getChildren();
+					for (TreeObject child: childs)
+					{
+						(new ServerRefreshAction(this.view,child.getServerRoot())).run();	
+					}
 				}
-				(new ServerRefreshAction(this.view,selected.getServerRoot())).run();
+				
 			} catch (Exception e) {}
 		}		
 	}
