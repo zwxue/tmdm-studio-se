@@ -256,7 +256,8 @@ public class AnnotationOrderedListsDialog extends Dialog {
         viewer.setCellModifier(new ICellModifier() {
         	public boolean canModify(Object element, String property) {
         		//if (INSTANCE_ACCESS.equals(property)) return true; Deactivated
-        		return true;
+        		//return true;
+        		return false;
         	}
         	public void modify(Object element, String property, Object value) {
         		TableItem item = (TableItem) element;
