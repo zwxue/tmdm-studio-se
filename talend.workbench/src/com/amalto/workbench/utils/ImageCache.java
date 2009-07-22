@@ -7,7 +7,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Image;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
+import com.amalto.workbench.MDMWorbenchPlugin;
 
 public class ImageCache {
 	static org.eclipse.jface.resource.ImageRegistry registry=null;
@@ -17,7 +17,7 @@ public class ImageCache {
 		Iterator<EImage> it=map.values().iterator();
 		while(it.hasNext()){
 			EImage image =it.next();			
-			registry.put(image.getPath(), AmaltoWorbenchPlugin.getImageDescriptor(image.getPath()));
+			registry.put(image.getPath(), MDMWorbenchPlugin.getImageDescriptor(image.getPath()));
 		}		
 	}
 	

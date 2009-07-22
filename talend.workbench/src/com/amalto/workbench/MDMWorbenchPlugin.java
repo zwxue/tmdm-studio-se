@@ -7,18 +7,18 @@ import org.osgi.framework.BundleContext;
 /**
  * The main plugin class to be used in the desktop.
  */
-public class AmaltoWorbenchPlugin extends AbstractUIPlugin {
+public class MDMWorbenchPlugin extends AbstractUIPlugin {
 	
 	public static final String ID="org.talend.openmdm.workbench";
 
 	//The shared instance.
-	private static AmaltoWorbenchPlugin plugin;
+	private static MDMWorbenchPlugin plugin;
 	
 	
 	/**
 	 * The constructor.
 	 */
-	public AmaltoWorbenchPlugin() {
+	public MDMWorbenchPlugin() {
 		plugin = this;
 	}
 
@@ -40,7 +40,7 @@ public class AmaltoWorbenchPlugin extends AbstractUIPlugin {
 	/**
 	 * Returns the shared instance.
 	 */
-	public static AmaltoWorbenchPlugin getDefault() {
+	public static MDMWorbenchPlugin getDefault() {
 		return plugin;
 	}
 

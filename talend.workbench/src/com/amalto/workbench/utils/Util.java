@@ -7,7 +7,7 @@ package com.amalto.workbench.utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.FilenameFilter;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -61,6 +61,7 @@ import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.impl.XSDSchemaImpl;
+import org.osgi.framework.Bundle;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -68,7 +69,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import com.amalto.workbench.AmaltoWorbenchPlugin;
+import com.amalto.workbench.MDMWorbenchPlugin;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.webservices.WSComponent;
@@ -1165,6 +1166,7 @@ public class Util {
 		String home=getExistHome();
 		String path=new File(home+"/start.jar").getAbsolutePath();		
 		String cmd="java -Xms128m -Xmx512m -Dfile.encoding=UTF-8 -jar "+path+" backup -u "+IConstants.EXIST_ADMIN+" -p "+IConstants.EXIST_ADMIN_PASSWD+" -b /db/"+datacluster;
+		//String cmd="java -Xms128m -Xmx512m -Dfile.encoding=UTF-8 org.exist.start.Main backup -u "+IConstants.EXIST_ADMIN+" -p "+IConstants.EXIST_ADMIN_PASSWD+" -b /db/"+datacluster;
 		String[] cmds=cmd.split("\\s");
 		list.addAll(Arrays.asList(cmds));
 		list.add("-d");
@@ -1183,19 +1185,47 @@ public class Util {
 		//Runtime.getRuntime().exec(list.toArray(new String[list.size()]), null, new File(home));
     }
     
-    public static String getExistHome(){
-    	URL existURL=Platform.getBundle(AmaltoWorbenchPlugin.ID).getEntry("/exist");
-    	String home="";
-    	try {
-    		home=FileLocator.resolve(existURL).getFile();
-    		home=new File(home).getAbsolutePath();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		//home="c:\\opt\\exist";
-        //System.setProperty("exist.home", home);
-        //System.out.println("exist.home==="+home);
+    public static String getExistHome()throws Exception{
+    	String home=getRealPath(MDMWorbenchPlugin.ID, "/");
+		System.out.println("plugin jar name ==="+home);
+
+		File tmp=new File(getTmpFolder());
+    	home=new File(home+"/exist").getAbsolutePath();    				
+        System.setProperty("exist.home", home);
+        System.out.println("exist.home==="+home);
         return home;
     }    
+    
+    public static String getTmpFolder() {
+        String tmp = System.getProperty("user.dir") + "/exist"; //$NON-NLS-1$ //$NON-NLS-2$
+        tmp = tmp.replace('\\', '/');
+        return tmp;
+    }
+    
+    /**
+     * Deletes the temporary files.
+     */
+    public static void deleteTempFiles() {
+        String tmpFold = getTmpFolder();
+        File file = new File(tmpFold);
+        if (!file.exists() && !file.isDirectory()) {
+            return;
+        }
+        ZipToFile.deleteDirectory(file);
+    }
+    
+    public static String getRealPath(String bundleID, String entry)throws Exception
+	 {
+		URL urlentry;
+		String strEntry;
+		
+	    Bundle bundle = Platform.getBundle(bundleID);
+	
+	    // get path URL
+	    urlentry = bundle.getEntry(entry);
+	
+	    strEntry = FileLocator.toFileURL(urlentry).getPath();
+		
+		return strEntry;
+	}
 }
