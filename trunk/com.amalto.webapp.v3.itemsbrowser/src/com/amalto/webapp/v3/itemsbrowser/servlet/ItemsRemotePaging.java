@@ -18,6 +18,7 @@ import com.amalto.webapp.core.bean.Configuration;
 import com.amalto.webapp.core.json.JSONObject;
 import com.amalto.webapp.core.util.Util;
 import com.amalto.webapp.core.util.XtentisWebappException;
+import com.amalto.webapp.util.webservices.WSCount;
 import com.amalto.webapp.util.webservices.WSDataClusterPK;
 import com.amalto.webapp.util.webservices.WSStringPredicate;
 import com.amalto.webapp.util.webservices.WSViewPK;
@@ -99,7 +100,6 @@ public class ItemsRemotePaging  extends HttpServlet{
 				"sortDir : "+sortDir);
 		
 		JSONObject json = new JSONObject();
-		int totalCount=0;
 		String[] results;
 		ArrayList<String[]> itemsBrowserContent = new ArrayList<String[]>();
 		
@@ -109,174 +109,154 @@ public class ItemsRemotePaging  extends HttpServlet{
 			int skip = Integer.parseInt(start);		
 			View view = new View(viewName); 
 			
-			if(request.getSession().getAttribute("totalCountItems")==null 
-					|| !viewName.equals(request.getSession().getAttribute("viewNameItems"))
-					|| !criteria.equals(request.getSession().getAttribute("criteriaItems"))
-				){
-				org.apache.log4j.Logger.getLogger(this.getClass()).debug(
-						"doPost() case : new remote items call");
-				ArrayList<WSWhereItem> conditions=new ArrayList<WSWhereItem>();
-				WSWhereItem wi;
-				String[] filters = criteria.split(",");
-				String[] filterXpaths = new String[filters.length];
-				String[] filterOperators = new String[filters.length];
-				String[] filterValues = new String[filters.length];
 
+			org.apache.log4j.Logger.getLogger(this.getClass()).debug(
+					"doPost() case : new remote items call");
+			ArrayList<WSWhereItem> conditions=new ArrayList<WSWhereItem>();
+			WSWhereItem wi;
+			String[] filters = criteria.split(",");
+			String[] filterXpaths = new String[filters.length];
+			String[] filterOperators = new String[filters.length];
+			String[] filterValues = new String[filters.length];
+
+			
+			for (int i = 0; i < filters.length; i++) {
+				if(filters[i].split("#").length>2){
+					filterXpaths[i] = filters[i].split("#")[0];
+					filterOperators[i] = filters[i].split("#")[1];
+					filterValues[i] = filters[i].split("#")[2];
+				}					
+			}
+			for(int i=0;i<filterValues.length;i++){
+				if ((filterValues[i]==null) || ("*".equals(filterValues[i])) || "".equals(filterValues[i])) {
+					continue;
+				}
+				WSWhereCondition wc=new WSWhereCondition(
+						filterXpaths[i],
+						getOperator(filterOperators[i]),
+						filterValues[i],
+						WSStringPredicate.NONE,
+						false
+				);
+				//System.out.println("iterator :"+i+"field - getErrors- : " + fields[i] + " " + operator[i]);
+				//System.out.println("Xpath field - getErrors- : " + giveXpath(fields[i]) + " - values : "+ regexs[i]);
+				WSWhereItem item=new WSWhereItem(wc,null,null);
+				conditions.add(item);
+			}				
+			if(conditions.size()==0) { 
+				wi=null;
+			} else {
+				WSWhereAnd and=new WSWhereAnd(conditions.toArray(new WSWhereItem[conditions.size()]));
+				wi=new WSWhereItem(null,and,null);
+			}
+			if("Any field".equals(filterXpaths[0])){
+				//System.out.println("Any field");
+				results = Util.getPort().viewSearch(
+						new WSViewSearch(
+								new WSDataClusterPK(config.getCluster()),
+								new WSViewPK(view.getViewPK()),
+								wi,
+								-1,
+								skip,
+								max,
+								null,
+								null
+						)
+					).getStrings();
+			} else {
+				org.apache.log4j.Logger.getLogger(this.getClass()).trace("doPost() starting to search");
 				
-				for (int i = 0; i < filters.length; i++) {
-					if(filters[i].split("#").length>2){
-						filterXpaths[i] = filters[i].split("#")[0];
-						filterOperators[i] = filters[i].split("#")[1];
-						filterValues[i] = filters[i].split("#")[2];
-					}					
-				}
-				for(int i=0;i<filterValues.length;i++){
-					if ((filterValues[i]==null) || ("*".equals(filterValues[i])) || "".equals(filterValues[i])) {
-						continue;
-					}
-					WSWhereCondition wc=new WSWhereCondition(
-							filterXpaths[i],
-							getOperator(filterOperators[i]),
-							filterValues[i],
-							WSStringPredicate.NONE,
-							false
-					);
-					//System.out.println("iterator :"+i+"field - getErrors- : " + fields[i] + " " + operator[i]);
-					//System.out.println("Xpath field - getErrors- : " + giveXpath(fields[i]) + " - values : "+ regexs[i]);
-					WSWhereItem item=new WSWhereItem(wc,null,null);
-					conditions.add(item);
-				}				
-				if(conditions.size()==0) { 
-					wi=null;
-				} else {
-					WSWhereAnd and=new WSWhereAnd(conditions.toArray(new WSWhereItem[conditions.size()]));
-					wi=new WSWhereItem(null,and,null);
-				}
-				if("Any field".equals(filterXpaths[0])){
-					//System.out.println("Any field");
-					results = Util.getPort().viewSearch(
-							new WSViewSearch(
-									new WSDataClusterPK(config.getCluster()),
-									new WSViewPK(view.getViewPK()),
-									wi,
-									-1,
-									0,
-									-1,
-									null,
-									null
-							)
-						).getStrings();
-				} else {
-					org.apache.log4j.Logger.getLogger(this.getClass()).trace("doPost() starting to search");
-					
-					results = Util.getPort().viewSearch(
-    						new WSViewSearch(
-    							new WSDataClusterPK(config.getCluster()),
-    							new WSViewPK(view.getViewPK()),
-    							wi,
-    							-1,
-    							0,
-    							-1,
-    							null,
-    							null
-    					)
-    				).getStrings();
-					org.apache.log4j.Logger.getLogger(this.getClass()).trace("doPost() end of search");
-				}
+				results = Util.getPort().viewSearch(
+						new WSViewSearch(
+							new WSDataClusterPK(config.getCluster()),
+							new WSViewPK(view.getViewPK()),
+							wi,
+							-1,
+							skip,
+							max,
+							null,
+							null
+					)
+				).getStrings();
+				org.apache.log4j.Logger.getLogger(this.getClass()).trace("doPost() end of search");
+			}
 
 
-				
-				for (int i = 0; i < results.length; i++) {
-					results[i] = results[i].replaceAll("<result>","");
-					results[i] = results[i].replaceAll("</result>","");	
+			
+			for (int i = 0; i < results.length; i++) {
+				results[i] = results[i].replaceAll("<result>","");
+				results[i] = results[i].replaceAll("</result>","");	
 //					results[i] =highlightLeft.matcher(results[i]).replaceAll(" ");
 //					results[i] =highlightRight.matcher(results[i]).replaceAll(" ");
-					results[i] =openingTags.matcher(results[i]).replaceAll("");
-					results[i] =closingTags.matcher(results[i]).replaceAll("#");	
-					results[i] =emptyTags.matcher(results[i]).replaceAll(" #");
-					String[] elements = results[i].split("#");
-					String[] fields = new String[view.getViewables().length];
-					//aiming modify
-					int count=Math.min(elements.length, fields.length);
-					for (int j = 0; j < count; j++) {
-						fields[j]=StringEscapeUtils.unescapeXml(elements[j]);
-					}
-					itemsBrowserContent.add(fields);
-				}				
+				results[i] =openingTags.matcher(results[i]).replaceAll("");
+				results[i] =closingTags.matcher(results[i]).replaceAll("#");	
+				results[i] =emptyTags.matcher(results[i]).replaceAll(" #");
+				String[] elements = results[i].split("#");
+				String[] fields = new String[view.getViewables().length];
+				//aiming modify
+				int count=Math.min(elements.length, fields.length);
+				for (int j = 0; j < count; j++) {
+					fields[j]=StringEscapeUtils.unescapeXml(elements[j]);
+				}
+				itemsBrowserContent.add(fields);
+			}				
 
-				request.getSession().setAttribute("itemsBrowserContent",itemsBrowserContent);
-				totalCount = results.length;
-				org.apache.log4j.Logger.getLogger(this.getClass()).debug(
-						"doPost() Total result = "+totalCount);
-				request.getSession().setAttribute("totalCountItems",totalCount);
-				request.getSession().setAttribute("viewNameItems",viewName);
-				request.getSession().setAttribute("criteriaItems",criteria);
-				request.getSession().setAttribute("sortColItems",sortCol);
-				request.getSession().setAttribute("sortDirItems",sortDir);
+			int totalCount = (Integer)request.getSession().getAttribute("totalCountItems");
+			org.apache.log4j.Logger.getLogger(this.getClass()).debug(
+					"doPost() Total result = "+totalCount);
+
+			//sort arraylist
+			int tmp = 0;
+			for (int i = 0; i < view.getViewables().length; i++) {
+				org.apache.log4j.Logger.getLogger(this.getClass())
+				.debug("doPost() sortCol "+sortCol+" "+view.getViewables()[i]+" "+i);
+				if(sortCol.equals("/"+view.getViewables()[i])){
+					tmp = i;
+					break;
+				}
+
+			}
+
+			final int column = tmp;
+			final String direction = sortDir;
+			Comparator sort;
+			if(direction.equals("ASC")){
+				sort = new Comparator() {
+					  public int compare(Object o1, Object o2) {
+						  try{
+							  Double test= ( Double.parseDouble(((String[]) o1)[column])-
+									  			Double.parseDouble(((String[]) o2)[column]));
+							  return test.intValue();
+						  }
+						  catch(Exception e){}
+						  try{
+							  return (((String[]) o1)[column]).compareTo(((String[]) o2)[column]);
+						  }						  
+						  catch(Exception e){return 0;}
+					  }
+					};
 			}
 			else{
-				itemsBrowserContent = (ArrayList<String[]>) request.getSession().getAttribute("itemsBrowserContent");
-				totalCount=(Integer)request.getSession().getAttribute("totalCountItems");
+				sort = new Comparator() {
+					  public int compare(Object o1, Object o2) {
+						try{
+							Double test= ( Double.parseDouble(((String[]) o2)[column])-
+						  			Double.parseDouble(((String[]) o1)[column]));
+							return test.intValue();
+						}
+						catch(Exception e){}
+						try{
+							return (((String[]) o2)[column]).compareTo(((String[]) o1)[column]);
+						}
+						
+						catch(Exception e){return 0;}
+					  }
+					};			
 			}
-			
-			//if(!sortCol.equals(request.getSession().getAttribute("sortColItems")) 
-			//		|| !sortDir.equals(request.getSession().getAttribute("sortDirItems")))
-			{
-				
-				//sort arraylist
-				int tmp = 0;
-				for (int i = 0; i < view.getViewables().length; i++) {
-					org.apache.log4j.Logger.getLogger(this.getClass())
-					.debug("doPost() sortCol "+sortCol+" "+view.getViewables()[i]+" "+i);
-					if(sortCol.equals("/"+view.getViewables()[i])){
-						tmp = i;
-						break;
-					}
-
-				}
-
-				final int column = tmp;
-				final String direction = sortDir;
-				Comparator sort;
-				if(direction.equals("ASC")){
-					sort = new Comparator() {
-						  public int compare(Object o1, Object o2) {
-							  try{
-								  Double test= ( Double.parseDouble(((String[]) o1)[column])-
-										  			Double.parseDouble(((String[]) o2)[column]));
-								  return test.intValue();
-							  }
-							  catch(Exception e){}
-							  try{
-								  return (((String[]) o1)[column]).compareTo(((String[]) o2)[column]);
-							  }						  
-							  catch(Exception e){return 0;}
-						  }
-						};
-				}
-				else{
-					sort = new Comparator() {
-						  public int compare(Object o1, Object o2) {
-							try{
-								Double test= ( Double.parseDouble(((String[]) o2)[column])-
-							  			Double.parseDouble(((String[]) o1)[column]));
-								return test.intValue();
-							}
-							catch(Exception e){}
-							try{
-								return (((String[]) o2)[column]).compareTo(((String[]) o1)[column]);
-							}
-							
-							catch(Exception e){return 0;}
-						  }
-						};			
-				}
-				org.apache.log4j.Logger.getLogger(this.getClass()).debug(
-						"doPost() sorting the result...");
-				request.getSession().setAttribute("sortColItems",sortCol);
-				request.getSession().setAttribute("sortDirItems",sortDir);
-				Collections.sort(itemsBrowserContent, sort);
-			}			
+			org.apache.log4j.Logger.getLogger(this.getClass()).debug(
+					"doPost() sorting the result...");
+			Collections.sort(itemsBrowserContent, sort);
+					
 			
 			//get part we are interested
 			if(max>totalCount) max=totalCount;
@@ -287,8 +267,8 @@ public class ItemsRemotePaging  extends HttpServlet{
 			ArrayList<JSONObject> rows = new ArrayList<JSONObject>();
 			for(int i=skip;i<(max+skip);i++){
 				JSONObject fields = new JSONObject();
-				for (int j = 0; j < itemsBrowserContent.get(i).length; j++) {
-					fields.put("/"+view.getViewables()[j],itemsBrowserContent.get(i)[j]);
+				for (int j = 0; j < itemsBrowserContent.get(i-skip).length; j++) {
+					fields.put("/"+view.getViewables()[j],itemsBrowserContent.get(i-skip)[j]);
 				}
 				rows.add(fields);
 			}			

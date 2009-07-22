@@ -1374,6 +1374,10 @@ public class ItemsBrowserDWR {
 				wi,
 				0
 		)).getValue());
+		
+		WebContext ctx = WebContextFactory.get();
+		ctx.getSession().setAttribute("totalCountItems", count);
+		
 		return count;
 		
 	}
