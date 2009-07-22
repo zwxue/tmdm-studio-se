@@ -220,6 +220,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	
 	private boolean dropTargetValidate(DropTargetEvent event) {
 
+		if (event.item == null) return false;
 		Object obj = event.item.getData();
 		if (obj instanceof TreeObject)
 		{
