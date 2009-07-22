@@ -256,6 +256,14 @@ YAHOO.extend(amalto.itemsbrowser.ItemNode, YAHOO.widget.Node, {
 					this.displayErrorMessage(errorMessageDivId,msg);
 					return false;
 				}
+				if(this.itemData.restrictions[i].name=="pattern"){
+					var patrn=new RegExp(this.itemData.restrictions[i].value);
+					if(!patrn.exec(value)){
+						var msg="\""+this.itemData.name+"\" de pattern est \""+this.itemData.restrictions[i].value+"\".";
+						this.displayErrorMessage(errorMessageDivId,msg);
+						return false;
+					}
+				}
 				//TODO ADD MORE CASE
 			}
 		}
