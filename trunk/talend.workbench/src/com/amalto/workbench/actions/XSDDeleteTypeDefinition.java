@@ -23,6 +23,8 @@ public class XSDDeleteTypeDefinition extends  UndoAction{
 	
 	private XSDComplexTypeDefinition xsdCmpexType;
 	private XSDSimpleTypeDefinition xsdSimpType;
+	
+
 	public XSDDeleteTypeDefinition(DataModelMainPage page) {
 		super(page);
 		setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
@@ -79,7 +81,7 @@ public class XSDDeleteTypeDefinition extends  UndoAction{
 			schema.getContents().remove(complxType);
 		}
 
-		
+		xsdSimpType=null;
 		xsdCmpexType = null;
 		page.refresh();
 		page.markDirty();
@@ -94,4 +96,8 @@ public class XSDDeleteTypeDefinition extends  UndoAction{
     public void setXSDTODel(XSDComplexTypeDefinition elem) {
     	xsdCmpexType = elem;
 	}
+    public void setXSDTODel(XSDSimpleTypeDefinition xsdSimpType) {
+		this.xsdSimpType = xsdSimpType;
+	}
+    
 }

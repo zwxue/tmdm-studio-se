@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.swing.text.html.HTMLDocument.HTMLReader.SpecialAction;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -77,6 +76,7 @@ import org.eclipse.xsd.impl.XSDElementDeclarationImpl;
 import org.eclipse.xsd.impl.XSDIdentityConstraintDefinitionImpl;
 import org.eclipse.xsd.impl.XSDParticleImpl;
 import org.eclipse.xsd.impl.XSDSchemaImpl;
+import org.eclipse.xsd.impl.XSDSimpleTypeDefinitionImpl;
 import org.eclipse.xsd.impl.XSDXPathDefinitionImpl;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -750,25 +750,30 @@ public class DataModelMainPage extends AMainPageV2 {
 
 			public void keyPressed(KeyEvent e) {
 
-				IStructuredSelection selection = ((IStructuredSelection) typesViewer
-						.getSelection());
+				IStructuredSelection selection = ((IStructuredSelection) typesViewer.getSelection());
 
 				// delete
 				if ((e.stateMask == 0) && (e.keyCode == SWT.DEL)) {
-					deleteConceptWrapAction
-							.regisExtraClassToDel(XSDComplexTypeDefinitionImpl.class);
-					if (deleteConceptWrapAction
-							.checkInDeletableType(selection.toArray())) {
-						deleteConceptWrapAction.prepareToDelSelectedItems(
-								selection, viewer);
+					
+					deleteConceptWrapAction.regisExtraClassToDel(XSDComplexTypeDefinitionImpl.class);
+					if (deleteConceptWrapAction.checkInDeletableType(selection.toArray())) {
+						deleteConceptWrapAction.prepareToDelSelectedItems(selection, viewer);
 						deleteConceptWrapAction.run();
 					}
 					else
-					{
-						MessageDialog.openWarning(getSite().getShell(), "Warnning",
-						"Please select the deletable node and try again!");
+					{ 	deleteConceptWrapAction.clearExtraClassToDel();
+						deleteConceptWrapAction.regisExtraClassToDel(XSDSimpleTypeDefinitionImpl.class);
+						if (deleteConceptWrapAction.checkInDeletableType(selection.toArray())) {
+							deleteConceptWrapAction.prepareToDelSelectedItems(selection, viewer);
+							deleteConceptWrapAction.run();
+						}
+						else{
+							MessageDialog.openWarning(getSite().getShell(), "Warnning",
+							"Please select the deletable node and try again!");
+						}
+						
 					}
-					deleteConceptWrapAction.clearExtraClassToDel();
+					
 				}
 			}
 
@@ -883,6 +888,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		deleteConceptWrapAction.regisDelAction(XSDXPathDefinitionImpl.class, deleteXPathAction);
 		deleteConceptWrapAction.regisDelAction(null, deleteElementAction);
 		deleteConceptWrapAction.regisDelAction(XSDComplexTypeDefinitionImpl.class, deleteTypeDefinition);
+		deleteConceptWrapAction.regisDelAction(XSDSimpleTypeDefinitionImpl.class, deleteTypeDefinition);
 	}
 
     private int isTopElement(Object decl) {

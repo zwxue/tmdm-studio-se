@@ -20,6 +20,7 @@ import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintCategory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDParticle;
+import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
 
@@ -146,6 +147,10 @@ public class XSDDeleteConceptWrapAction extends UndoAction{
 				else if (delExecute instanceof XSDDeleteTypeDefinition && toDel instanceof XSDComplexTypeDefinition)
 				{
 					((XSDDeleteTypeDefinition)delExecute).setXSDTODel((XSDComplexTypeDefinition)toDel);
+				}
+				else if (delExecute instanceof XSDDeleteTypeDefinition && toDel instanceof XSDSimpleTypeDefinition)
+				{
+					((XSDDeleteTypeDefinition)delExecute).setXSDTODel((XSDSimpleTypeDefinition)toDel);
 				}
 				else
 					return Status.CANCEL_STATUS;
