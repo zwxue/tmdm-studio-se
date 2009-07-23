@@ -3537,7 +3537,7 @@ public class XtentisRMIPort implements XtentisPort {
 								updateReportPOJO.serialize(),
 								new WSDataModelPK("UpdateReport")));
 				
-				//Util.getPort().routeItemV2(new WSRouteItemV2(itemPK));
+				com.amalto.webapp.core.util.Util.getPort().routeItemV2(new WSRouteItemV2(itemPK));
 				
 			return wsi;	
 
