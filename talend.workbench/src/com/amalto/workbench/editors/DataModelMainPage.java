@@ -671,11 +671,11 @@ public class DataModelMainPage extends AMainPageV2 {
                 if (moveButton.getText().equals(">>")) { //$NON-NLS-1$
                     sash.setWeights(new int[] { 28, 1, 0 });
                     moveButton.setText("<<"); //$NON-NLS-1$
-                    moveButton.setToolTipText("Show complex types"); //$NON-NLS-1$
+                    moveButton.setToolTipText("Show types"); //$NON-NLS-1$
                 } else if (moveButton.getText().equals("<<")) { //$NON-NLS-1$
                     sash.setWeights(new int[] { 14, 1, 14 });
                     moveButton.setText(">>"); //$NON-NLS-1$
-                    moveButton.setToolTipText("Hide complex types");//$NON-NLS-1$
+                    moveButton.setToolTipText("Hide types");//$NON-NLS-1$
                 }
             }
         });
