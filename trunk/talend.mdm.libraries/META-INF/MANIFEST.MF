@@ -39,9 +39,9 @@ Bundle-ClassPath: lib/jbossall-client.jar,
  lib/jaxb-api.jar,
  lib/jboss-jaxws.jar,
  lib/z.svnkit.jar,
- lib/commons-beanutils-1.6.1.jar,
  lib/log4j.jar,
- lib/commons-codec.jar
+ lib/commons-codec.jar,
+ lib/commons-beanutils-1.6.1.jar
 Export-Package: .,
  EDU.oswego.cs.dl.util.concurrent,
  EDU.oswego.cs.dl.util.concurrent.misc,
