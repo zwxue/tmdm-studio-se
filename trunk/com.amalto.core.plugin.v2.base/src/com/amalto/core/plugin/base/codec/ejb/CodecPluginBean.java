@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 import javax.ejb.SessionBean;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.w3c.dom.Document;
 
 import sun.misc.BASE64Decoder;
@@ -61,9 +62,11 @@ public class CodecPluginBean extends TransformerPluginV2CtrlBean  implements Ses
 	private static final String METHOD_TYPE_DECODE ="DECODE";
 	private static final String METHOD_TYPES ="("+METHOD_TYPE_ENCODE+"|"+METHOD_TYPE_DECODE+")";
 	private static final String ALGORITHM_TYPE_BASE64 ="BASE64";
+	private static final String ALGORITHM_TYPE_XMLESCAPE ="XMLESCAPE";
 	private static final List<String> AVAILABLE_ALGORITHMS =new ArrayList<String>();
 	static{
 		AVAILABLE_ALGORITHMS.add(ALGORITHM_TYPE_BASE64);
+		AVAILABLE_ALGORITHMS.add(ALGORITHM_TYPE_XMLESCAPE);
 	}
 	private static final String wrapRegex ="(true|false)";
 
@@ -332,6 +335,12 @@ public class CodecPluginBean extends TransformerPluginV2CtrlBean  implements Ses
 					codecText=(new BASE64Encoder()).encode(lawText.getBytes(charset));
 				}else if(method.equals(METHOD_TYPE_DECODE)){
 					codecText=new String((new BASE64Decoder()).decodeBuffer(lawText),charset);
+				}
+			}else if(algorithm.equals(ALGORITHM_TYPE_XMLESCAPE)){
+				if(method.equals(METHOD_TYPE_ENCODE)){
+					codecText=StringEscapeUtils.escapeXml(lawText);
+				}else if(method.equals(METHOD_TYPE_DECODE)){
+					codecText=StringEscapeUtils.unescapeXml(lawText);
 				}
 			}
 			
