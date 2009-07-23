@@ -5,14 +5,18 @@ import java.util.Iterator;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.xsd.XSDConstrainingFacet;
+import org.eclipse.xsd.XSDPatternFacet;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTypeDefinition;
+import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.SimpleTypeInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
@@ -88,6 +92,23 @@ public class XSDChangeBaseTypeAction extends UndoAction implements SelectionList
 			typedef.getFacetContents().removeAll(typedef.getFacetContents());
 			
 			typedef.updateElement();
+			
+			typedef.updateElement();
+			
+			if (builtIn) {
+				EList<XSDConstrainingFacet> constrainFacts = typedef
+						.getBaseTypeDefinition().getFacetContents();
+				for (XSDConstrainingFacet fact : constrainFacts) {
+					if (fact instanceof XSDPatternFacet) {
+						XSDPatternFacet newFact = XSDSchemaBuildingTools
+								.getXSDFactory().createXSDPatternFacet();
+						newFact.setLexicalValue(((XSDPatternFacet) fact)
+								.getLexicalValue());
+						typedef.getFacetContents().add(newFact);
+					}
+				}
+			  typedef.updateElement();	
+			}
 			
        	    //remove current if no more in use
 //       	    if (	(current.getName()!=null) &&  //anonymous type
