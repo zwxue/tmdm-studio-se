@@ -1724,7 +1724,7 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
 								updateReportPOJO.serialize(),
 								new WSDataModelPK("UpdateReport")));
 				
-				//Util.getPort().routeItemV2(new WSRouteItemV2(itemPK));
+				routeItemV2(new WSRouteItemV2(itemPK));
 				
 			return wsi;	
 
