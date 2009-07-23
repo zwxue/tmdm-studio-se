@@ -9,7 +9,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDElementDeclaration;
-import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 
