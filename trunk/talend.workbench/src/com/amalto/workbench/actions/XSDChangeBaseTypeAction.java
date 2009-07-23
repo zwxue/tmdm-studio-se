@@ -93,8 +93,6 @@ public class XSDChangeBaseTypeAction extends UndoAction implements SelectionList
 			
 			typedef.updateElement();
 			
-			typedef.updateElement();
-			
 			if (builtIn) {
 				EList<XSDConstrainingFacet> constrainFacts = typedef
 						.getBaseTypeDefinition().getFacetContents();
