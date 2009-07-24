@@ -771,7 +771,6 @@ public class Util {
 	    		{
 	    			XSDSimpleTypeDefinition type = (XSDSimpleTypeDefinition)typedef;
 	    			XSDSimpleTypeDefinition baseType = type.getBaseTypeDefinition();
-	    			if (type.getName().equals(localName)) return true;
 	    			if (baseType != null && baseType.getName().equals(localName))return true;
 	    		}
     		}
