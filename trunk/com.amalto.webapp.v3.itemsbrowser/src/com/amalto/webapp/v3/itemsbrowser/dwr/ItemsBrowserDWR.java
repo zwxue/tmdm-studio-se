@@ -337,7 +337,7 @@ public class ItemsBrowserDWR {
 		}
 	
 		XSParticle[] xsp = null;
-
+		if(idToParticle==null) return null;
 		if(idToParticle.get(id)==null){//simple type case, no children
 			return null;
 		}
@@ -992,10 +992,12 @@ public class ItemsBrowserDWR {
 		if(xsp.getTerm().asElementDecl().getType().isComplexType()==true ){
 			XSParticle particle = xsp.getTerm().asElementDecl()
 			.getType().asComplexType().getContentType().asParticle();
-			XSParticle[] xsps = particle.getTerm().asModelGroup().getChildren();
-			xpathParent = xpathParent+"/"+xsp.getTerm().asElementDecl().getName();
-			for (int i = 0; i < xsps.length; i++) {
-				setChilden(xsps[i],xpathParent, docIndex);
+			if(particle!=null){
+				XSParticle[] xsps = particle.getTerm().asModelGroup().getChildren();
+				xpathParent = xpathParent+"/"+xsp.getTerm().asElementDecl().getName();
+				for (int i = 0; i < xsps.length; i++) {
+					setChilden(xsps[i],xpathParent, docIndex);
+				}
 			}
 		}		
 	}
