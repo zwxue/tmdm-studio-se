@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.utils.EUUIDCustomType;
 
@@ -31,6 +32,7 @@ public class ElementComposite {
 	private Button customButton = null;
 	private Button builtInButton = null;
 	private Label serverLabel = null;
+	private Label tipLabel = null;
 	
 	private Composite container = null;
 	
@@ -38,6 +40,8 @@ public class ElementComposite {
 			final List customTypes, final List builtInTypes, boolean encloseTextField) {
 		GridLayout layout = (GridLayout)parent.getLayout();
 		layout.numColumns = 2;
+		layout.makeColumnsEqualWidth=false;
+		
 		//layout.verticalSpacing = 10;
 
 		Group radioGroup = new Group(parent,SWT.SHADOW_NONE);
@@ -58,9 +62,15 @@ public class ElementComposite {
 				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
 		);
 		
+		GridData gd = new GridData(SWT.FILL,SWT.FILL,true,true,2,1);
+		tipLabel = new Label(parent,SWT.NONE);
+		tipLabel.setText("Leave blank for anonymous");
+		tipLabel.setLayoutData(gd);
+		gd.widthHint=250;
+		
 		if (encloseTextField) {
 			Composite cr = new Composite(radioGroup, SWT.NONE);
-			cr.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
+			cr.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
 					true, 2, 1));
 			cr.setLayout(new GridLayout(2,false));
 			serverLabel = new Label(cr, SWT.NONE);
@@ -68,7 +78,6 @@ public class ElementComposite {
 					new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 			);
 			serverLabel.setText("Type");
-							
 			typeCombo = new CCombo(cr, SWT.BORDER);
 			typeCombo.setLayoutData(
 					new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
