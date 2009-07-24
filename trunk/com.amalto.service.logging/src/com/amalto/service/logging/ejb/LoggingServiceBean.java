@@ -367,8 +367,8 @@ public class LoggingServiceBean extends ServiceCtrlBean  implements SessionBean{
     		"	<port>4561</port>"+
     		"	<threshold>"+Priority.ERROR_INT+"</threshold>"+
     		"	<pattern>com\\.amalto\\..*</pattern>"+
-    		"	<xtentisusername></xtentisusername>"+
-    		"	<xtentispassword></xtentispassword>"+
+    		"	<xtentisusername>admin</xtentisusername>"+
+    		"	<xtentispassword>talend</xtentispassword>"+
     		"	<logfilename></logfilename>"+
 			"</configuration>";
     }
