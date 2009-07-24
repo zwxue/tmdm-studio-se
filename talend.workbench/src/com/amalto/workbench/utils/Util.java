@@ -749,8 +749,7 @@ public class Util {
 					if (type.getContent() instanceof XSDParticle) {
 						XSDParticle particle = (XSDParticle) type.getContent();
 						if (particle.getTerm() instanceof XSDModelGroup) {
-							XSDModelGroup group = (XSDModelGroup) particle
-									.getTerm();
+							XSDModelGroup group = (XSDModelGroup) particle.getTerm();
 							EList<XSDParticle> elist = group.getContents();
 							for (XSDParticle pt : elist) {
 								if(pt.getContent() instanceof XSDElementDeclaration)
