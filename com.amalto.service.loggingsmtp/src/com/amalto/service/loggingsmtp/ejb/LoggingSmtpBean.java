@@ -233,6 +233,7 @@ public class LoggingSmtpBean extends ServiceCtrlBean  implements SessionBean {
 			if (Util.getRoutingRuleCtrlLocal().existsRoutingRule(new RoutingRulePOJOPK(routingRuleName))!=null)
 				return;
 
+			//TODO change default mail address
 			Util.getRoutingRuleCtrlLocal().putRoutingRule(
 				new RoutingRulePOJO(
 					routingRuleName,
@@ -241,7 +242,7 @@ public class LoggingSmtpBean extends ServiceCtrlBean  implements SessionBean {
 					false,
 					"logging_event",
 					getJNDIName(),
-					"from=b2box@customer.com&to=support@amalto.com&subjectprefix=b2box Logging Event "
+					"from=support@talend.com&to=MDMAdmin@talend.com&subjectprefix=Talend MDM Logging Event "
 				)
 			);
 		} catch (NamingException e) {
