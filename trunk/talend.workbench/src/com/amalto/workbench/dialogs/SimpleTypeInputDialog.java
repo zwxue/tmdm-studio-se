@@ -65,16 +65,16 @@ public class SimpleTypeInputDialog extends Dialog{
 	
 	protected void okPressed() {
 		typeName = elemPanel.getText();
-		if ((typeName==null) || ("".equals(typeName))) {
-			MessageDialog.openError(
-					this.getShell(), 
-					"Error", "The Key Name cannot be empty"
-			);
-			setReturnCode(-1);
-			elemPanel.setFocus();
-			return;
-		}
-				
+//		if ((typeName==null) || ("".equals(typeName))) {
+//			MessageDialog.openError(
+//					this.getShell(), 
+//					"Error", "The Key Name cannot be empty"
+//			);
+//			setReturnCode(-1);
+//			elemPanel.setFocus();
+//			return;
+//		}
+//				
 		setReturnCode(OK);
 		//no close let Action Handler handle it
 	}
