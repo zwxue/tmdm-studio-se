@@ -5,14 +5,16 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
 import org.w3c.dom.Document;
 
 import com.amalto.webapp.core.util.Util;
+import com.amalto.webapp.core.util.XtentisWebappException;
 import com.amalto.webapp.util.webservices.WSServiceAction;
 import com.amalto.webapp.util.webservices.WSServiceActionCode;
 import com.amalto.webapp.util.webservices.WSServiceGetConfiguration;
 import com.amalto.webapp.util.webservices.WSServicePutConfiguration;
-import org.apache.log4j.Priority;
 
 
 /**
@@ -176,10 +178,14 @@ public class LoggingServiceDWR {
             throw new Exception(e.getClass().getName()+": "+e.getLocalizedMessage());
         }    	
     }
+	
+	public void tryMe() throws XtentisWebappException{
+		
+		String errorMsg="This is a sample error message! ";
+		Logger.getLogger(this.getClass()).error(errorMsg);
+		throw new XtentisWebappException(errorMsg);
 
-
-
-
+	}
 
 
 	public String getLogfilename() {
