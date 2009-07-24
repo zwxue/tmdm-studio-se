@@ -104,7 +104,7 @@ public class ElementComposite {
             	Set<String> uuidtypes=EUUIDCustomType.allTypes();
             	alltypes.addAll(uuidtypes);
             	typeCombo.setItems(alltypes.toArray(new String[alltypes.size()]));
-            	typeCombo.select(0);
+            	typeCombo.indexOf("");
             }
         });
 		
