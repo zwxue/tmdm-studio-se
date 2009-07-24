@@ -33,7 +33,7 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
 	private String typeName = null;
 	private boolean builtIn = false;
 	private boolean isConcept = false;
-	
+	private XSDSimpleTypeDefinition simpleType;
 	private XSDElementDeclaration declNew = null;
 	boolean showDlg = true; 
 	
@@ -144,12 +144,20 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
 				decl.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), typeName));
 			} else {
 				//check if concept already exists
-				XSDSimpleTypeDefinition std = schema.resolveSimpleTypeDefinition(typeName);
-				if (!schema.getTypeDefinitions().contains(std)) {
-					std.setBaseTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));
-					schema.getContents().add(std);
+				if(typeName !=null&&typeName.length()>0){
+					XSDSimpleTypeDefinition std = schema.resolveSimpleTypeDefinition(typeName);
+					if (!schema.getTypeDefinitions().contains(std)) {
+						std.setBaseTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));
+						schema.getContents().add(std);
+					}
+					decl.setTypeDefinition(std);
 				}
-				decl.setTypeDefinition(std);
+				else{
+					XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
+					simpleType = factory.createXSDSimpleTypeDefinition();
+					simpleType.setBaseTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));
+					decl.setAnonymousTypeDefinition(simpleType);
+				}
 			}
 			decl.updateElement();
 			
