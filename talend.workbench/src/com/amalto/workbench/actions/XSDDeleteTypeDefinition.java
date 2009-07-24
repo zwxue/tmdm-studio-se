@@ -60,7 +60,7 @@ public class XSDDeleteTypeDefinition extends  UndoAction{
 			if(find){
 				MessageDialog
 				.openWarning(page.getSite().getShell(), "Warnning",
-						"The Simple type definition : " + simpleType.getName() + " is being referred to by Elements");
+						"The Simple type definition : " + simpleType.getName() + " is referring to other Elements");
 				xsdSimpType = null;
 				return Status.CANCEL_STATUS;
 			}//iif(!list.isEmpty())
@@ -78,7 +78,7 @@ public class XSDDeleteTypeDefinition extends  UndoAction{
 			{
 				MessageDialog
 						.openWarning(page.getSite().getShell(), "Warnning",
-								"The Complex type definition : " + complxType.getName() + " is being referred to by Elements");
+								"The Complex type definition : " + complxType.getName() + " is referring to other Elements");
 				xsdCmpexType = null;
 				return Status.CANCEL_STATUS;
 			}
