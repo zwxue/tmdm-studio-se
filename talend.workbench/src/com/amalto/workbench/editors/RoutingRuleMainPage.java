@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Observable;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -185,7 +186,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             Composite subPanel = toolkit.createComposite(charComposite);
             subPanel.setLayoutData( new GridData(SWT.LEFT,SWT.CENTER,false,true,1,1));
             subPanel.setLayout(new GridLayout(2,false));
-            serviceNameCombo = new Combo(subPanel, SWT.DROP_DOWN|SWT.SINGLE);
+            serviceNameCombo = new Combo(subPanel, SWT.DROP_DOWN|SWT.SINGLE|SWT.READ_ONLY);
             serviceNameCombo.setLayoutData(
                     new GridData(SWT.LEFT,SWT.CENTER,false,true,1,1)
             );
@@ -208,6 +209,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 	            	for (int i = 0; i < sortedList.length; i++) {
 						serviceNameCombo.add(sortedList[i]);
 					}
+	            	//serviceNameCombo.add("");
 	            }
             }
 
@@ -489,6 +491,9 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			ws.setDescription(descriptionText.getText());
 			ws.setConcept(objectTypeText.getText());
 			//ws.setServiceJNDI(serviceNameText.getText().contains("/") ? serviceNameText.getText() : "amalto/local/service/"+serviceNameText.getText());
+//			if(serviceNameCombo.getText()==null||serviceNameCombo.getText().length()==0){
+//				MessageDialog.openError(this.getSite().getShell(), "Error Service JNDI Name", "Service JNDI Name cannot be null");
+//			}
 			ws.setServiceJNDI(serviceNameCombo.getText().contains("/") ? serviceNameCombo.getText() : "amalto/local/service/"+serviceNameCombo.getText());
 			ws.setParameters("".equals(serviceParametersText.getText())? null : serviceParametersText.getText());
 			ws.setSynchronous(isSynchronousButton.getSelection());
@@ -690,5 +695,20 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			return false;
 	}
 	
-
+//		public void doSave(IProgressMonitor monitor) throws Exception{
+//			if(serviceNameCombo.getText()==null||serviceNameCombo.getText().length()==0){
+//				MessageDialog.openError(this.getSite().getShell(), "Error Service JNDI Name", "Service JNDI Name cannot be null");
+//					throw new Exception( "Service JNDI Name cannot be null");
+//			}
+//		}
+	  
+	@Override
+	public boolean beforeDoSave() {
+		if(serviceNameCombo.getText()==null||serviceNameCombo.getText().length()==0){
+			MessageDialog.openError(this.getSite().getShell(), "Error saving", "Service JNDI Name cannot be null");
+			return false;
+		}
+		else
+			return true;
+	}
 }
