@@ -25,6 +25,10 @@ amalto.loggingadapter.LoggingAdapter = function () {
 		'fr':'Statut',
 		'en':'Status'
 	}
+	var TRYME={
+	    'fr':'Try Me',
+		'en':'Try Me'	
+	}
 	var THRESHOLD={
 		'fr':'Niveau',
 		'en':'Threshold'
@@ -172,7 +176,11 @@ amalto.loggingadapter.LoggingAdapter = function () {
 							new Ext.Button({
 								text:STATUS[language],
 								handler:getStatus
-							})				
+							}),
+							new Ext.Button({
+								text:TRYME[language],
+								handler:tryMe
+							})
 						]
 					}),
         			new Ext.FormPanel({						
@@ -313,6 +321,10 @@ amalto.loggingadapter.LoggingAdapter = function () {
 		LoggingAdapterInterface.getStatus(function(status){
 			DWRUtil.setValue('status-logging', status);
 		});
+	}
+	
+	function tryMe() {
+		LoggingAdapterInterface.tryMe();
 	}
 	
 	
