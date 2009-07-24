@@ -1278,6 +1278,10 @@ public class DataModelMainPage extends AMainPageV2 {
 		return (ISchemaContentProvider)viewer.getContentProvider();
 	}
 	
+	public ISchemaContentProvider getTypeContentProvider(){
+		return (ISchemaContentProvider)typesViewer.getContentProvider();
+	}
+	
 	public void refresh(){
 		viewer.refresh(true);
 		typesViewer.refresh(true);

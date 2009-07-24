@@ -1,14 +1,14 @@
 package com.amalto.workbench.actions;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
-import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 
@@ -48,12 +48,16 @@ public class XSDDeleteTypeDefinition extends  UndoAction{
 		IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
 		XSDSchema schema = ((ISchemaContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
 		
+		ArrayList<Object> objList = new ArrayList<Object>();
+		Util.getAllObject(page.getSite(), objList, (IStructuredContentProvider)page.getSchemaContentProvider());
+		Util.getAllObject(page.getSite(), objList, (IStructuredContentProvider)page.getTypeContentProvider());
+		
 		if (selection.getFirstElement() instanceof XSDSimpleTypeDefinition) {
 			XSDSimpleTypeDefinition simpleType = (XSDSimpleTypeDefinition)selection.getFirstElement();
 			if(xsdSimpType!=null)
 				simpleType = xsdSimpType;
-			List<XSDElementDeclaration> list = Util.findElementsUsingType(schema, null, simpleType.getName());
-			if(!list.isEmpty()){
+			boolean find = Util.findElementsUsingType(objList, null, simpleType.getName());
+			if(find){
 				MessageDialog
 				.openWarning(page.getSite().getShell(), "Warnning",
 						"The Simple type definition : " + simpleType.getName() + " is being referred to by Elements");
@@ -68,8 +72,9 @@ public class XSDDeleteTypeDefinition extends  UndoAction{
 			if (xsdCmpexType != null) {
 				complxType = xsdCmpexType;
 			}
-			List<XSDElementDeclaration> list = Util.findElementsUsingType(schema, null, complxType.getName());
-			if (!list.isEmpty())
+
+			boolean find = Util.findElementsUsingType(objList, null, complxType.getName());
+			if (find)
 			{
 				MessageDialog
 						.openWarning(page.getSite().getShell(), "Warnning",
@@ -80,7 +85,7 @@ public class XSDDeleteTypeDefinition extends  UndoAction{
 			schema.getContents().remove(complxType);
 		}
 
-		xsdSimpType=null;
+		
 		xsdCmpexType = null;
 		page.refresh();
 		page.markDirty();
