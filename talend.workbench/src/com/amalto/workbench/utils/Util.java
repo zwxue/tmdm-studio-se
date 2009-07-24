@@ -692,74 +692,92 @@ public class Util {
      * how to find specific kinds of typeDefinitions.
      * </p>
      * 
-     * @param schema
-     *            to search for elemDecls
+     * @param objList
+     *            collection set to search for elemDecls
      * @param namespace
      *            for the type used
      * @param localName
      *            for the type used
-     * @return List of any XSDElementDeclarations found
+     * @return Boolean  indicate any XSDElementDeclarations is found or not
      */
-    public static List<XSDElementDeclaration> findElementsUsingType(XSDSchema schema, String namespace, String localName)   {
+    public static boolean findElementsUsingType(ArrayList<Object> objList, String namespace, String localName)   {
     	if (null == localName)  	{
     		throw new IllegalArgumentException("findElementsUsingType called with null localName");
     	}
     	
-    	ArrayList<XSDElementDeclaration> elemsUsingType = new ArrayList<XSDElementDeclaration>();
     	
     	// A handy convenience method quickly gets all
     	// elementDeclarations within our schema; note that
     	// whether or not this returns types in included,
     	// imported, or redefined schemas is subject to change
-    	List<XSDElementDeclaration> elemDecls = schema.getElementDeclarations();
     	
-    	for (Iterator<XSDElementDeclaration> iter = elemDecls.iterator(); iter.hasNext(); /* no-op */)  	{
-    		XSDElementDeclaration elem = iter.next();
-    		XSDTypeDefinition typedef = null;
-    		if (elem.getAnonymousTypeDefinition() != null)	{
-    			typedef = elem.getAnonymousTypeDefinition();
-    		} else if (elem.getTypeDefinition() != null) {
-    			typedef = elem.getTypeDefinition();
-    		} else	{
-    			// Element is not complete, since it has no type,
-    			// thus it's not using our type
-    			continue;
-    		}
-    		
-    		// Ask this type and walk the baseTypes from this
-    		// typedef seeing if any of them match the requested one
-    		if (typedef.hasNameAndTargetNamespace(localName, namespace)
-    				|| isTypeDerivedFrom(typedef, namespace, localName))
+    	for (Iterator<Object> iter = objList.iterator(); iter.hasNext(); /* no-op */)  	{
+    		Object obj = iter.next();
+    		if (obj instanceof XSDElementDeclaration || obj instanceof XSDTypeDefinition)
     		{
-    			// We found it, return the element and continue
-    			elemsUsingType.add(elem);
-    			continue;
-    		}
-    		else if (typedef instanceof XSDComplexTypeDefinition)
-    		{
-    			XSDComplexTypeDefinition type = (XSDComplexTypeDefinition)typedef;
-				if (type.getContent() instanceof XSDParticle) {
-					XSDParticle particle = (XSDParticle) type.getContent();
-					if (particle.getTerm() instanceof XSDModelGroup) {
-						XSDModelGroup group = (XSDModelGroup) particle
-								.getTerm();
-						EList<XSDParticle> elist = group.getContents();
-						for (XSDParticle pt : elist) {
-							if(pt.getContent() instanceof XSDElementDeclaration)
-							if ((localName.equals(((XSDElementDeclaration) pt.getContent())
-									.getTypeDefinition().getName()
-												))) {
-									elemsUsingType
-											.add((XSDElementDeclaration) pt
-													.getContent());
-								}
+    			XSDTypeDefinition typedef = null;
+    			if (obj instanceof XSDElementDeclaration)
+    			{
+        			XSDElementDeclaration elem = (XSDElementDeclaration)obj;
+    	    		if (elem.getAnonymousTypeDefinition() != null)	{
+    	    			typedef = elem.getAnonymousTypeDefinition();
+    	    		} else if (elem.getTypeDefinition() != null) {
+    	    			typedef = elem.getTypeDefinition();
+    	    		} else	{
+    	    			// Element is not complete, since it has no type,
+    	    			// thus it's not using our type
+    	    			continue;
+    	    		}
+    			}
+    			else {
+					typedef = (XSDTypeDefinition) obj;
+				}
 
+	    		
+	    		// Ask this type and walk the baseTypes from this
+	    		// typedef seeing if any of them match the requested one
+//	    		if (typedef.hasNameAndTargetNamespace(localName, namespace)
+//	    				|| isTypeDerivedFrom(typedef, namespace, localName))
+//	    		{
+//	    			// We found it, return the element and continue
+//	    			return true;
+//	    		}
+    			
+	    		if (typedef instanceof XSDComplexTypeDefinition)
+	    		{
+	    			XSDComplexTypeDefinition type = (XSDComplexTypeDefinition)typedef;
+					if (type.getContent() instanceof XSDParticle) {
+						XSDParticle particle = (XSDParticle) type.getContent();
+						if (particle.getTerm() instanceof XSDModelGroup) {
+							XSDModelGroup group = (XSDModelGroup) particle
+									.getTerm();
+							EList<XSDParticle> elist = group.getContents();
+							for (XSDParticle pt : elist) {
+								if(pt.getContent() instanceof XSDElementDeclaration)
+								{
+									XSDTypeDefinition typeDef = ((XSDElementDeclaration) pt.getContent()).getTypeDefinition();
+									if (typeDef != null && typeDef.getName() != null)
+									{
+										if ((localName.equals(typeDef.getName()))) {
+											  return true;
+											}
+									}
+								}
+							}
 						}
 					}
-				}
+	    		}
+	    		else if (typedef instanceof XSDSimpleTypeDefinition)
+	    		{
+	    			XSDSimpleTypeDefinition type = (XSDSimpleTypeDefinition)typedef;
+	    			XSDSimpleTypeDefinition baseType = type.getBaseTypeDefinition();
+	    			if (type.getName().equals(localName)) return true;
+	    			if (baseType != null && baseType.getName().equals(localName))return true;
+	    		}
     		}
     	}
-        return elemsUsingType;
+    	
+        return false;
     }
     
     public static List<String> getAllCustomSimpleDataType(XSDSchema schema)
