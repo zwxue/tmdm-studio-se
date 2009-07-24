@@ -263,9 +263,11 @@ public class CommonDWR {
 		if(xsp.getTerm().asElementDecl().getType().isComplexType()==true ){
 			XSParticle particle = xsp.getTerm().asElementDecl()
 			.getType().asComplexType().getContentType().asParticle();
-			XSParticle[] xsps = particle.getTerm().asModelGroup().getChildren();
-			for (int i = 0; i < xsps.length; i++) {
-				getChildren(xsps[i],xpathParent+"/"+xsp.getTerm().asElementDecl().getName(),x_Label, includeComplex, xpathToLabel);
+			if(particle!=null){
+				XSParticle[] xsps = particle.getTerm().asModelGroup().getChildren();
+				for (int i = 0; i < xsps.length; i++) {
+					getChildren(xsps[i],xpathParent+"/"+xsp.getTerm().asElementDecl().getName(),x_Label, includeComplex, xpathToLabel);
+				}
 			}
 		}		 
 	}
@@ -278,7 +280,9 @@ public class CommonDWR {
 			NodeList list = el.getChildNodes();			
 			for (int k = 0; k < list.getLength(); k++) {
 				if("appinfo".equals(list.item(k).getLocalName())){
-					String appinfoSource = list.item(k).getAttributes().getNamedItem("source").getNodeValue();					
+					Node source=list.item(k).getAttributes().getNamedItem("source");
+					if(source==null) continue;
+					String appinfoSource = source.getNodeValue();					
 					if(x_Label.equals(appinfoSource)){							
 						label = list.item(k).getFirstChild().getNodeValue();		
 						//System.out.println("xlabel found :"+label);		
