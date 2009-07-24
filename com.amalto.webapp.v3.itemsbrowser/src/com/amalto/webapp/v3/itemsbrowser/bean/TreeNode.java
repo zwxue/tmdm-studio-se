@@ -3,6 +3,7 @@ package com.amalto.webapp.v3.itemsbrowser.bean;
 import java.util.ArrayList;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.sun.xml.xsom.XSAnnotation;
@@ -58,6 +59,8 @@ public class TreeNode implements Cloneable {
     			ArrayList<String> fkInfoList = new ArrayList<String>();
     			for (int k = 0; k < annotList.getLength(); k++) {					
     				if("appinfo".equals(annotList.item(k).getLocalName())) {
+    					Node source=annotList.item(k).getAttributes().getNamedItem("source");
+    					if(source==null) continue;
     					String appinfoSource = annotList.item(k).getAttributes().getNamedItem("source").getNodeValue();
     					if(X_Label.equals(appinfoSource)){
     						setName(annotList.item(k).getFirstChild().getNodeValue());
