@@ -1,0 +1,8 @@
+<updateaction>
+	
+	<operation>INSERT</operation>
+	<part>
+		<content>&amp;lt;Customer mapping-table="tuser"&amp;gt; 	&amp;lt;CustomerId mapping-field="id"&amp;gt;"TEST008"&amp;lt;/CustomerId&amp;gt; 	&amp;lt;Name mapping-field="name"&amp;gt;"TEST008"&amp;lt;/Name&amp;gt; 	&amp;lt;Address mapping-field="address"&amp;gt;"United States"&amp;lt;/Address&amp;gt; &amp;lt;/Customer&amp;gt; </content>
+	</part>
+	
+</updateaction>
