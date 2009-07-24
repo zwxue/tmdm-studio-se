@@ -129,31 +129,29 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
      */
     public void doSave(IProgressMonitor monitor) {
 
-    	this.saveInProgress = true;
-    	
-    	int numPages = formPages.size();
-    	monitor.beginTask("Saving "+this.getEditorInput().getName(), numPages+1);
-    	
-    	for (int i = 0; i < numPages; i++) {
-    		(formPages.get(i)).doSave(monitor);
-    		monitor.worked(1);
-    		if (monitor.isCanceled()) {
-    			this.saveInProgress = false;
-    			return;
-    		}
-		}
-    	//if(xmlEditor!=null)xmlEditor.doSave(monitor);
-    	//perform the actual save
-    	SaveXObjectAction action = new SaveXObjectAction(this);
-    	action.run();
-    	if(xmlEditor!=null && action.getState()==0)
-    	{
-    		xmlEditor.refresh();
-    	}
-    	monitor.done();
-    	
-    	this.saveInProgress = false;
-        
+			this.saveInProgress = true;
+			int numPages = formPages.size();
+			monitor.beginTask("Saving " + this.getEditorInput().getName(),
+					numPages + 1);
+			for (int i = 0; i < numPages; i++) {
+				if((formPages.get(i)) instanceof AFormPage){
+					if(!((AFormPage)(formPages.get(i))).beforeDoSave())return;
+				}
+				(formPages.get(i)).doSave(monitor);
+				monitor.worked(1);
+				if (monitor.isCanceled()) {
+					this.saveInProgress = false;
+					return;
+				}
+			}
+			//if(xmlEditor!=null)xmlEditor.doSave(monitor);
+			//perform the actual save
+			SaveXObjectAction action = new SaveXObjectAction(this);
+			action.run();
+			if (xmlEditor != null && action.getState() == 0) {
+				xmlEditor.refresh();
+			}
+			monitor.done();
     }
 
     /*
