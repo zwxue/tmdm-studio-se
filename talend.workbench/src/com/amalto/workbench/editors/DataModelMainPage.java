@@ -653,7 +653,7 @@ public class DataModelMainPage extends AMainPageV2 {
 
         final Button moveButton = new Button(buttonComposite, SWT.PUSH);
         moveButton.setText("<<"); //$NON-NLS-1$
-        moveButton.setToolTipText("Show complex types"); //$NON-NLS-1$
+        moveButton.setToolTipText("Show types"); //$NON-NLS-1$
 
         final GridData layoutData = new GridData();
         layoutData.verticalAlignment = GridData.BEGINNING;
