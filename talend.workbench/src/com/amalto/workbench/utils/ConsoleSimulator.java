@@ -49,11 +49,18 @@ public class ConsoleSimulator implements Runnable {
 	                        Thread.sleep(10);
 	                    } catch (InterruptedException ex) {
 	                        ex.printStackTrace();
+	                    	monitor.subTask("Failed! " + ex.getLocalizedMessage());
+	                    	monitor.worked(1);	                        
 	                    }
 	                }
 	            }
 	        } catch (IOException ex) {
-	            ex.printStackTrace();
+	        	ex.printStackTrace();
+            	monitor.subTask("Failed! " + ex.getLocalizedMessage());
+            	monitor.worked(1);
+	        }finally{
+            	monitor.subTask("sucessfully!");
+            	monitor.worked(1);
 	        }
 
 		}
@@ -84,7 +91,7 @@ public class ConsoleSimulator implements Runnable {
     }
 
     public static void main(String[] args) {
-        //runCmd("java -jar start.jar backup -u admin -p 1bc29b36f623ba82aaf6724fd3b16718 -b /db/CONF -d c:/CONF.zip");
+        //runCmd("java -jar start.jar backup -u admin -p  -b /db/CONF -d c:/CONF.zip");
         // runCmd("echo heeel;");
         // System.exit(0);
 
