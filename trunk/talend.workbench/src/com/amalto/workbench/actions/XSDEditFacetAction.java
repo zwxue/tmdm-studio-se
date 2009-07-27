@@ -378,9 +378,9 @@ public class XSDEditFacetAction extends UndoAction{
    				stringValue==null ? "" : stringValue,
    				new IInputValidator() {
 					public String isValid(String newText) {
-						int val;
+						double val;
 						try {
-							val = Integer.parseInt(newText);
+							val = Double.parseDouble(newText);
 						} catch (Exception e) {
 							return "The value must be a non negative integer";
 						}
@@ -394,7 +394,7 @@ public class XSDEditFacetAction extends UndoAction{
    		if (ret == Dialog.CANCEL) return;
 
    		if (currentValue!=null) std.getFacetContents().remove(currentValue);
-   		int intValue = Integer.parseInt(((InputDialog)dialog).getValue());
+   		double intValue = Double.parseDouble(((InputDialog)dialog).getValue());
    		if (intValue>0) {
    			XSDMaxInclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMaxInclusiveFacet();
    			f.setLexicalValue(""+intValue);
@@ -412,9 +412,9 @@ public class XSDEditFacetAction extends UndoAction{
    				stringValue==null ? "" : stringValue,
    				new IInputValidator() {
 					public String isValid(String newText) {
-						int val;
+						double val;
 						try {
-							val = Integer.parseInt(newText);
+							val = Double.parseDouble(newText);
 						} catch (Exception e) {
 							return "The value must be a non negative integer";
 						}
@@ -428,7 +428,7 @@ public class XSDEditFacetAction extends UndoAction{
    		if (ret == Dialog.CANCEL) return;
 
    		if (currentValue!=null) std.getFacetContents().remove(currentValue);
-   		int intValue = Integer.parseInt(((InputDialog)dialog).getValue());
+   		double intValue = Double.parseDouble(((InputDialog)dialog).getValue());
    		if (intValue>0) {
    			XSDMaxExclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMaxExclusiveFacet();
    			f.setLexicalValue(""+intValue);
@@ -447,9 +447,9 @@ public class XSDEditFacetAction extends UndoAction{
    				stringValue==null ? "" : stringValue,
    				new IInputValidator() {
 					public String isValid(String newText) {
-						int val;
+						double val;
 						try {
-							val = Integer.parseInt(newText);
+							val = Double.parseDouble(newText);
 						} catch (Exception e) {
 							return "The value must be a non negative integer";
 						}
@@ -463,7 +463,7 @@ public class XSDEditFacetAction extends UndoAction{
    		if (ret == Dialog.CANCEL) return;
 
    		if (currentValue!=null) std.getFacetContents().remove(currentValue);
-   		int intValue = Integer.parseInt(((InputDialog)dialog).getValue());
+   		double intValue = Double.parseDouble(((InputDialog)dialog).getValue());
    		if (intValue>0) {
    			XSDMinInclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMinInclusiveFacet();
    			f.setLexicalValue(""+intValue);
@@ -482,9 +482,9 @@ public class XSDEditFacetAction extends UndoAction{
    				stringValue==null ? "" : stringValue,
    				new IInputValidator() {
 					public String isValid(String newText) {
-						int val;
+						double val;
 						try {
-							val = Integer.parseInt(newText);
+							val = Double.parseDouble(newText);
 						} catch (Exception e) {
 							return "The value must be a non negative integer";
 						}
@@ -498,7 +498,7 @@ public class XSDEditFacetAction extends UndoAction{
    		if (ret == Dialog.CANCEL) return;
 
    		if (currentValue!=null) std.getFacetContents().remove(currentValue);
-   		int intValue = Integer.parseInt(((InputDialog)dialog).getValue());
+   		double intValue = Double.parseDouble(((InputDialog)dialog).getValue());
    		if (intValue>0) {
    			XSDMinExclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMinExclusiveFacet();
    			f.setLexicalValue(""+intValue);
