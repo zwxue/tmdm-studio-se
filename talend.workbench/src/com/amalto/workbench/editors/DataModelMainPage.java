@@ -1046,7 +1046,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			manager.add(new Separator());
 			if (!typedef.getSchema().getSchemaForSchemaNamespace().equals(typedef.getTargetNamespace())) {
 				EList list = typedef.getBaseTypeDefinition().getValidFacets();
-				list.remove("whiteSpace");
+				//list.remove("whiteSpace");
 				for (Iterator iter = list.iterator(); iter.hasNext();) {
 					String element = (String) iter.next();
 					manager.add(new XSDEditFacetAction(this, element));
