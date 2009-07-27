@@ -1,10 +1,8 @@
 package com.amalto.workbench.dialogs;
 
-import java.util.Collections;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
@@ -16,43 +14,23 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 public class InputComboDialog extends Dialog {
-	/**
-	 * The title of the dialog.
-	 */
+	
 	private String title;
 
-	/**
-	 * The message to display, or <code>null</code> if none.
-	 */
 	private String message;
 
-	/**
-	 * The input value; the empty string by default.
-	 */
 	private String value = "";
 	public String getValue() {
 		return value;
 	}
-	/**
-	 * Ok button widget.
-	 */
+
 	private Button okButton;
 
-	/**
-	 * Input text widget.
-	 */
 	private Combo inputCombo;
 
 
-
-	/**
-	 * Error message label widget.
-	 */
 	private Text errorMessageText;
 
-	/**
-	 * Error message string.
-	 */
 	
 	private String[] values;
 
