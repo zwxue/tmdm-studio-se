@@ -510,8 +510,10 @@ public class XSDEditFacetAction extends UndoAction{
    			std.getFacetContents().add(f);
    		}
 	}
-	String[] values = {"preserve","replace","collapse"};
+	
+	
 	private void editWhiteSpace(){
+		String[] values = {"preserve","replace","collapse"};
     	XSDWhiteSpaceFacet  currentValue = std.getWhiteSpaceFacet();
     	String stringValue ="preserve";
     	if (currentValue != null)	stringValue = currentValue.getLexicalValue();
