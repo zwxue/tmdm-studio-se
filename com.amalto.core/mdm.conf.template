@@ -1,7 +1,7 @@
 ######################################################
 #
 # Configuration file for Xtentis MDM
-# this file should be called xtentis.conf
+# this file should be called mdm.conf
 # and located at the root of the jboss/MDM directory
 #
 ######################################################
