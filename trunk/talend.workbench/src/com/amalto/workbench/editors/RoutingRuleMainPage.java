@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Observable;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -273,12 +272,12 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             serviceParametersLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,true,2,1)
             );
-            serviceParametersText = toolkit.createText(charComposite, "",SWT.BORDER|SWT.MULTI);
+            serviceParametersText = toolkit.createText(charComposite, "",SWT.BORDER|SWT.MULTI|SWT.V_SCROLL);
             serviceParametersText.setLayoutData(    
                     new GridData(SWT.FILL,SWT.FILL,true,false,2,1)
             );
             ((GridData)serviceParametersText.getLayoutData()).widthHint = 200;
-            ((GridData)serviceParametersText.getLayoutData()).heightHint = 50;
+            ((GridData)serviceParametersText.getLayoutData()).heightHint = 80;
             serviceParametersText.addModifyListener(new ModifyListener() {
             	public void modifyText(ModifyEvent e) {
             		if (refreshing) return;
