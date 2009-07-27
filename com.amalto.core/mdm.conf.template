@@ -8,44 +8,6 @@
 
 
 ######################################################
-# XML Database
-######################################################
-
-#The type of DB - only xmldb supported in 2.20
-#xmldb uses the direver in com.amalto.xmldb
-xmlserver.type=xmldb
-
-#The host of the the xmldb database
-xmldb.server.name=localhost
-
-#The port on the host typically 8080 for embedded use, 8088 for standalone use
-xmldb.server.port=8080
-
-#The username of the  xmld db administrator
-#For eXist this is set in conf.xml located in the WEB-INF directory
-xmldb.administrator.username=admin
-
-#The password of the  xmld db administrator
-#For eXist this is set in conf.xml located in the WEB-INF directory
-xmldb.administrator.password
-
-#The database XML:DB compliant driver
-xmldb.driver=org.exist.xmldb.DatabaseImpl
-
-#The database XML:DB id
-xmldb.dbid=exist
-
-#The database XML:DB path to the root collection
-#the full URL will look like xmldb:exist://localhost:8080/exist/xmlrpc/db
-#For standalone, the usual value is xmlrpc/db  (not exist suffix)
-xmldb.dburl=exist/xmlrpc/db
-
-#An url to test to see if the db is up
-#The URL will look like http://localhost:8080/exist/
-#Leave empty for standalone use
-xmldb.isupurl=exist/
-
-######################################################
 # Subscription Engine
 ######################################################
 
