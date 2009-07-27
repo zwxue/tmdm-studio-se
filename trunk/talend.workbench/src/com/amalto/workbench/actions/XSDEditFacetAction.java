@@ -27,9 +27,11 @@ import org.eclipse.xsd.XSDMinLengthFacet;
 import org.eclipse.xsd.XSDPatternFacet;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTotalDigitsFacet;
+import org.eclipse.xsd.XSDWhiteSpaceFacet;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.FacetsListInputDialog;
+import com.amalto.workbench.dialogs.InputComboDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.ImageCache;
@@ -82,7 +84,10 @@ public class XSDEditFacetAction extends UndoAction{
             	editMinInclusive();
             }else if(facetName.equals("minExclusive")){
             	editMinExclusive();
+            }else if(facetName.equals("whiteSpace")){
+            	editWhiteSpace();
             }
+            
             
             
             else {
@@ -502,6 +507,30 @@ public class XSDEditFacetAction extends UndoAction{
    		if (intValue>0) {
    			XSDMinExclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMinExclusiveFacet();
    			f.setLexicalValue(""+intValue);
+   			std.getFacetContents().add(f);
+   		}
+	}
+	String[] values = {"preserve","replace","collapse"};
+	private void editWhiteSpace(){
+    	XSDWhiteSpaceFacet  currentValue = std.getWhiteSpaceFacet();
+    	String stringValue ="preserve";
+    	if (currentValue != null)	stringValue = currentValue.getLexicalValue();
+		dialog = new InputComboDialog(
+				page.getSite().getShell(),
+   				"WhiteSpace Facet",
+   				"Select a new value for the facet",
+   				values,
+   				stringValue
+   		);
+   		dialog.setBlockOnOpen(true);
+   		int ret = dialog.open();
+   		if (ret == Dialog.CANCEL) return;
+
+   		if (currentValue!=null) std.getFacetContents().remove(currentValue);
+   		String stirngValue = ((InputComboDialog)dialog).getValue();
+   		if (stirngValue!=null&&stirngValue.length()>0) {
+   			XSDWhiteSpaceFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDWhiteSpaceFacet();
+   			f.setLexicalValue(""+stirngValue);
    			std.getFacetContents().add(f);
    		}
     }

@@ -49,6 +49,7 @@ public class SimpleTypeInputDialog extends Dialog{
 		final Composite composite = (Composite) super.createDialogArea(parent);
 		// encapsulate all widgets into the ElementComposite which can be applied to several cases
 		elemPanel = new ElementComposite(composite, customTypes, builtInTypes, false);
+		
 	    return elemPanel.getComposite();
 	}
     
