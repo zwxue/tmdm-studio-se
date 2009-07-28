@@ -5,12 +5,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
 import javax.ejb.EJBException;
 import javax.ejb.SessionBean;
+import javax.resource.NotSupportedException;
+import javax.resource.ResourceException;
 import javax.resource.cci.Connection;
 import javax.resource.cci.Interaction;
 import javax.resource.cci.MappedRecord;
@@ -501,8 +504,112 @@ public class SmtpServiceBean extends ServiceCtrlBean  implements SessionBean {
 	    }
 
 	}
+	
+	/**
+     * @throws EJBException
+     *
+     * @ejb.interface-method view-type = "local"
+     * @ejb.facade-method
+     */
+    public String sendSimpleMail(String from,String to,String cc,String bcc,String subject,String body) throws XtentisException{
+    	
+    	String returnStatusYes = "Success";
+		String returnStatusNo="Failure";
+		Connection conx = null;
+		
+		try {
+			//process parameters
+			if(from==null||from.length()==0)return returnStatusNo;
+			if(to==null||to.length()==0)return returnStatusNo;
+			if(cc==null)cc="";
+			if(bcc==null)bcc="";
+			if(subject==null)subject="";
+			if(body==null)body="";
+			
+			//check things are initialized and loaded
+			if (!serviceStarted) {
+				org.apache.log4j.Logger.getLogger(this.getClass()).debug("receiveFromInbound() : service not started. starting...");
+				start();
+			}
+			if (!configurationLoaded) getConfiguration(null);
+			
+			org.apache.log4j.Logger.getLogger(this.getClass()).debug("host:"+host);
+			org.apache.log4j.Logger.getLogger(this.getClass()).debug("port:"+port);
+			org.apache.log4j.Logger.getLogger(this.getClass()).debug("username:"+username);
+			org.apache.log4j.Logger.getLogger(this.getClass()).debug("password:"+password);
+			
+			//build simple mail
+			StringBuffer sb = new StringBuffer();
+			sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?> "); 
+			sb.append(" "); 
+			sb.append("<outboundmails> "); 
+			sb.append(" "); 
+			sb.append("	<email> "); 
+			sb.append("		<from>").append(from.trim()).append("</from> "); 
+			sb.append("		<to>").append(to.trim()).append("</to> "); 
+			sb.append("		<cc>").append(cc.trim()).append("</cc> ");
+			sb.append("		<bcc>").append(bcc.trim()).append("</bcc> ");
+			sb.append("		<subject>").append(subject).append("</subject> ");
+			sb.append("		<part> "); 
+			sb.append("		<mime-type>text/plain</mime-type> "); 
+			sb.append("		<charset>UTF-8</charset> "); 
+			sb.append("		<body>").append((new BASE64Encoder()).encode(body.getBytes("UTF-8"))).append("</body> "); 
+			sb.append("		</part> "); 
+			sb.append("</email> "); 
+			sb.append(" "); 
+			sb.append("</outboundmails> ");
+			
+			
+			//Get Connection to the Smtp Sender
+			conx  = getConnection("java:jca/xtentis/connector/smtp");
+			Interaction interaction = conx.createInteraction();
+			InteractionSpecImpl interactionSpec = new InteractionSpecImpl();
+			
+			//Create the Record
+			MappedRecord recordIn = new RecordFactoryImpl().createMappedRecord(RecordFactoryImpl.RECORD_IN);
+			HashMap<String,Serializable> params = new HashMap<String,Serializable>();
+			params.put("host", host);
+			params.put("port", port);
+			params.put("username", username);
+			params.put("password", password);
+			params.put("mails", sb.toString());
+			params.put("auth", auth);
+			params.put("logfilename", null);
+			recordIn.put(RecordFactoryImpl.PARAMS_HASHMAP_IN, params);
 
+			//Process the post
+			interactionSpec.setFunctionName(InteractionSpecImpl.FUNCTION_PUSH);
+			MappedRecord result = (MappedRecord) interaction.execute(interactionSpec, recordIn);
 
+			String statusCode = (String) result.get(RecordFactoryImpl.STATUS_CODE_OUT);
+			String statusMsg = (String)((HashMap<String,Serializable>)result.get(RecordFactoryImpl.PARAMS_HASHMAP_OUT)).get("message");
+			
+			if (!"OK".equals(statusCode)) {
+				return returnStatusNo;
+			}
+			
+			return returnStatusYes;
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return returnStatusNo;
+		} catch (NotSupportedException e) {
+			e.printStackTrace();
+			return returnStatusNo;
+		} catch (ResourceException e) {
+			e.printStackTrace();
+			return returnStatusNo;
+		}finally{
+			if(conx!=null)
+				try {
+					conx.close();
+				} catch (ResourceException e) {
+					e.printStackTrace();
+				}
+		}
+		
+
+	}
+    
 
     private String getDefaultConfiguration() {
     	return
