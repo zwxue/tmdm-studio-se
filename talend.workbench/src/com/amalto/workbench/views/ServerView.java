@@ -1,6 +1,8 @@
 package com.amalto.workbench.views;
 
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -14,7 +16,9 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
@@ -59,12 +63,15 @@ import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.ServerTreeContentProvider;
 import com.amalto.workbench.providers.ServerTreeLabelProvider;
 import com.amalto.workbench.utils.EImage;
-import com.amalto.workbench.utils.ESystemDefaultObjects;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
+import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.webservices.WSDataCluster;
+import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSGetDataCluster;
 import com.amalto.workbench.webservices.WSLogout;
 import com.amalto.workbench.webservices.WSVersioningGetInfo;
 import com.amalto.workbench.webservices.WSVersioningInfo;
@@ -299,6 +306,41 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		viewer.setLabelProvider(new ServerTreeLabelProvider());
 		viewer.setSorter(new ViewerSorter());
 		viewer.setInput(getViewSite());
+		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+			public void selectionChanged(SelectionChangedEvent event) {
+
+				TreeObject xobject = (TreeObject) ((IStructuredSelection) viewer
+						.getSelection()).getFirstElement();
+
+				if (xobject.getType() == TreeObject.DATA_CLUSTER) {
+
+					try {
+						XtentisPort port = Util.getPort(new URL(
+								xobject.getEndpointAddress()), 
+								xobject.getUniverse(),
+								xobject.getUsername(), 
+								xobject.getPassword());
+						WSDataCluster wsObject = port
+								.getDataCluster(new WSGetDataCluster(
+										(WSDataClusterPK) xobject.getWsKey()));
+						String tip = "";
+						if (wsObject != null&& wsObject.getDescription() != null)
+							tip = wsObject.getDescription();
+						viewer.getControl().setToolTipText(tip);
+					} catch (MalformedURLException e) {
+						e.printStackTrace();
+					} catch (XtentisException e) {
+						e.printStackTrace();
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}
+
+				}
+
+			}
+
+		});
 		createTreeDragSource();
 		createTreeDropTarget();
 		makeActions();
@@ -401,9 +443,9 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					manager.add(importAction);
 					manager.add(browseViewAction);
 				}
-				if (xobject.getDisplayName()!=null&&xobject.getDisplayName().equals(ESystemDefaultObjects.DC_MDMITEMSTRASH.getName())) {
-					break;
-				}
+//				if (xobject.getDisplayName()!=null&&xobject.getDisplayName().equals(ESystemDefaultObjects.DC_MDMITEMSTRASH.getName())) {
+//					break;
+//				}
 			default:
 				if (!xobject.isXObject() && xobject.getDisplayName().equalsIgnoreCase(EXtentisObjects.DataCluster.getDisplayName())) {
 					manager.add(exportAction);
