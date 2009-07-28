@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Method;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1157,10 +1158,12 @@ public class XtentisRMIPort implements XtentisPort {
 			String result = "";
 			
 			if (WSServiceActionCode.EXECUTE.equals(wsServiceAction.getWsAction())) {
-				result = (String)
-					com.amalto.core.util.Util.getMethod(service, wsServiceAction.getMethodName()).invoke(
+				
+					Method method = com.amalto.core.util.Util.getMethod(service, wsServiceAction.getMethodName());
+					
+					result = (String)method.invoke(
 							service,
-							new Object[] {wsServiceAction.getMethodParameters()}
+							wsServiceAction.getMethodParameters()
 						);				
 			} else {
 				if (WSServiceActionCode.START.equals(wsServiceAction.getWsAction())) {
@@ -1182,8 +1185,10 @@ public class XtentisRMIPort implements XtentisPort {
 			}
 			return new WSString(result);
 		} catch (com.amalto.core.util.XtentisException e) {
+			e.printStackTrace();
 			throw(new RemoteException(e.getLocalizedMessage()));
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new RemoteException((e.getCause() == null ? e.getLocalizedMessage() : e.getCause().getLocalizedMessage()));
 		}
 	}
