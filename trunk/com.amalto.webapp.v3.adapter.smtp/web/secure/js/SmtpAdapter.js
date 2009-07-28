@@ -1,8 +1,11 @@
 amalto.namespace("amalto.smtp");
 
 		
-amalto.smtp.smtp = function () {
+amalto.smtp.SmtpAdapter = function () {
+	
 	loadResource("/smtp/secure/dwr/interface/SmtpAdapterInterface.js", "" );
+	
+	loadResource("/smtp/secure/js/tryform.js", "" );
 	
 	var START={
 		'fr':'Démarrer',
@@ -43,6 +46,10 @@ amalto.smtp.smtp = function () {
 	var SAVE={
 		'fr':'Sauvegarder',
 		'en':'Save'
+	}
+	var TRYME={
+		'fr':'Try Me',
+		'en':'Try Me'
 	}
 	var SAVING ={
 			'fr':'Sauvegarde en cours',
@@ -111,8 +118,9 @@ amalto.smtp.smtp = function () {
 	
 
 		var tabPanel = amalto.core.getTabPanel();
-		if(tabPanel.getItem('smtpForm') == undefined){		
-			var panel = new Ext.FormPanel({						
+		var panel = tabPanel.getItem('smtpForm');
+		if( panel == undefined){		
+			panel = new Ext.FormPanel({						
 				id: 'smtpForm',
 				deferredRender: false,
 				closable: true,
@@ -123,6 +131,7 @@ amalto.smtp.smtp = function () {
 				labelWidth:150,
   				bodyStyle:'padding:15px',
   				defaultType: 'textfield',
+  				buttonAlign:"left",
 				defaults: {
 			        // applied to each contained item
 			        width: 300,
@@ -228,16 +237,39 @@ amalto.smtp.smtp = function () {
 								});			
 							}); 
 				        }//handler function
+			    	},
+			    	{
+				        text: TRYME[language],
+						handler: function(){
+							openTryMePanel(); 
+				        }//handler function
 			    	}
 			    ]
             });	
 						
-    	    tabPanel.add(panel); 
-    		panel.show();
-    		amalto.core.doLayout();
+    	    
     	}
+    	
+    	tabPanel.add(panel); 
+    	panel.show();
+    	amalto.core.doLayout();
 		loadConfiguration();
 	    
+	}
+	
+	function openTryMePanel(){
+		var tabPanel = amalto.core.getTabPanel();
+   	    var tryMailPanel=tabPanel.getItem('tryMailPanel');
+		if( tryMailPanel == undefined){
+							
+				tryMailPanel=new amalto.smtp.tryform();
+				tabPanel.add(tryMailPanel);							
+		
+		}
+				        
+		tryMailPanel.show();
+		tryMailPanel.doLayout();
+		amalto.core.doLayout();
 	}
 	
 	
