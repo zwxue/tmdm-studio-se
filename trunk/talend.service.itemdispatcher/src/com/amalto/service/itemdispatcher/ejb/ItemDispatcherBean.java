@@ -2,6 +2,7 @@ package com.amalto.service.itemdispatcher.ejb;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 import javax.ejb.EJBException;
@@ -66,6 +67,10 @@ public class ItemDispatcherBean extends ServiceCtrlBean  implements SessionBean{
 	
 	public static final String VARIABLE_THIS_ITEM = "{this}";
 	
+	public static final String JNDI_TYPE_JCA_PREFIX = "java:jca/xtentis/connector";
+	
+	public static final String JNDI_TYPE_SERVICE_PREFIX = "amalto/local/service";
+	
 
     /**
      * @throws EJBException
@@ -126,7 +131,7 @@ public class ItemDispatcherBean extends ServiceCtrlBean  implements SessionBean{
      * @ejb.facade-method 
      */
 	public String getStatus() throws XtentisException {
-		return IServiceConstants.JCA_RESPONSE_STATUS_CODE_OK; 
+		return IServiceConstants.RESPONSE_STATUS_CODE_OK; 
 	}
 
     
@@ -231,6 +236,7 @@ public class ItemDispatcherBean extends ServiceCtrlBean  implements SessionBean{
 
 	private void dispatch(ItemPOJO itemPOJO,Object bindingTransformerNames) throws XtentisException,Exception {
 		Logger.getLogger(ItemDispatcherBean.class).info("[Begin dispatch item]");
+		ItemPOJOPK itemPOJOPK=itemPOJO.getItemPOJOPK();
 		String itemProjectAsString=itemPOJO.getProjectionAsString();
 		String schema=ItemPOJO.getBindingSchema(itemPOJO);
 		String[] targetSystems=null;
@@ -241,7 +247,6 @@ public class ItemDispatcherBean extends ServiceCtrlBean  implements SessionBean{
 			String fullPath=targetSystems[i];
 			fullPath=Util.xmlDecode(fullPath);
 			Logger.getLogger(ItemDispatcherBean.class).debug("[Start Processing]:"+fullPath);
-			Connection conx=null;
 			try {
 	            
 				//parse JNDI name
@@ -254,6 +259,7 @@ public class ItemDispatcherBean extends ServiceCtrlBean  implements SessionBean{
 	            	jndiName=fullPath.substring(0,pos);
 	            	parameters=fullPath.substring(pos+1);
 	            }
+	            
 	            //parse runtime Parameters
 	            HashMap<String,Serializable> paramMap = new HashMap<String,Serializable>();
 	            if(parameters.length()>0){
@@ -303,28 +309,96 @@ public class ItemDispatcherBean extends ServiceCtrlBean  implements SessionBean{
 	            		paramMap.put(key, value);
 					}
 	            }
-	            Logger.getLogger(ItemDispatcherBean.class).debug("[Parameters]:"+paramMap);
-	            //TODO default get jca configuration from db
-	            //Before call connect
-	              
-	            //TODO check jca is exist&start
-				//Get Connection
-            	conx = getConnection(jndiName);
-				Interaction interaction = conx.createInteraction();
-				InteractionSpecImpl interactionSpec = new InteractionSpecImpl();
-				//Create the Record
-				MappedRecord recordIn = new RecordFactoryImpl()
-						.createMappedRecord(RecordFactoryImpl.RECORD_IN);
-				recordIn.put(RecordFactoryImpl.PARAMS_HASHMAP_IN, paramMap);
-				//Process the post
-				interactionSpec
-						.setFunctionName(InteractionSpecImpl.FUNCTION_PUSH);
-				MappedRecord result = (MappedRecord) interaction.execute(
-						interactionSpec, recordIn);
-				String statusCode = (String) result
-						.get(RecordFactoryImpl.STATUS_CODE_OUT);
+	            
+	            Logger.getLogger(ItemDispatcherBean.class).debug("[Parameters]:"+parameters);
+	            Logger.getLogger(ItemDispatcherBean.class).debug("[ParametersMap]:"+paramMap);
+	            
+	            String statusCode="";
+	            //switch jndi type is jca or service
+	            if(jndiName.startsWith(this.JNDI_TYPE_JCA_PREFIX)){
+	            	org.apache.log4j.Logger.getLogger(this.getClass()).debug("Processing this item through JCA... ");
+	            	//TODO default get jca configuration from db
+		            //Before call connect
+	    			Connection conx=null;   
+		            try {
+						//TODO check jca is exist&start
+						//Get Connection
+						conx = getConnection(jndiName);
+						Interaction interaction = conx.createInteraction();
+						InteractionSpecImpl interactionSpec = new InteractionSpecImpl();
+						//Create the Record
+						MappedRecord recordIn = new RecordFactoryImpl()
+								.createMappedRecord(RecordFactoryImpl.RECORD_IN);
+						recordIn.put(RecordFactoryImpl.PARAMS_HASHMAP_IN,
+								paramMap);
+						//Process the post
+						interactionSpec
+								.setFunctionName(InteractionSpecImpl.FUNCTION_PUSH);
+						MappedRecord result = (MappedRecord) interaction
+								.execute(interactionSpec, recordIn);
+						statusCode = (String) result
+								.get(RecordFactoryImpl.STATUS_CODE_OUT);
+					} catch (Exception e) {
+						String err = "Unable to process this item through JCA: "+e.getClass().getName()+": "+e.getLocalizedMessage();
+	    	            org.apache.log4j.Logger.getLogger(this.getClass()).error(err, e);
+					}finally {
+						try {
+							if(conx!=null)conx.close();
+							} 
+						catch (Exception e) {}
+				    }
+	            	
+	            }else if(jndiName.startsWith(this.JNDI_TYPE_SERVICE_PREFIX)){
+	            	org.apache.log4j.Logger.getLogger(this.getClass()).debug("Processing this item through Service... ");
+	            	//TODO to consider about muti thread work 
+	            	Object service=null;
+	        		try {
+	        			service = Util.retrieveComponent(
+	        				null, 
+	        				jndiName
+	        			);
+	        		} catch (XtentisException e) {
+	        			String err = " The service: '"+jndiName+"' is not found. "+e.getMessage();
+	        			throw new XtentisException(err);
+	        		}
+	        		
+	        		String result = null;
+	        		try {
+	        			result = (String)Util.getMethod(service, "receiveFromInbound").invoke(
+	        					service,
+	        					new Object[] {
+	        							itemPOJOPK,
+	        							null,
+	        							parameters
+	        					}
+	        			);
+	        		} catch (IllegalArgumentException e) {
+	        			String err = " The service: '"+jndiName+"' cannot be executed due to wrong parameters. "+e.getMessage();
+	        			throw new XtentisException(err);
+	        		} catch (EJBException e) {
+	        			String err = " The service: '"+jndiName+"' cannot be executed. "+e.getMessage();
+	        			throw new XtentisException(err);
+	        		} catch (IllegalAccessException e) {
+	        			String err = " The service: '"+jndiName+"' cannot be executed due to security reasons. "+e.getMessage();
+	        			throw new XtentisException(err);
+	        		} catch (InvocationTargetException e) {
+	        			String err = " The service: '"+jndiName+"' failed. "+e.getMessage();
+	        			throw new XtentisException(err);
+	        		}
+	            	
+	        		//parse status
+	        		//TODO this is not a good way to parse response string of service
+	        		if(result!=null&&result.toLowerCase().indexOf("error")!=-1){
+	        		   //error	
+	        		}else{
+	        			statusCode=IServiceConstants.RESPONSE_STATUS_CODE_OK;
+	        		}
+	            }else{
+	            	throw new XtentisException("Unsupported JNDI Path! ");
+	            }
+	            
 				//Parse the result
-				if (!IServiceConstants.JCA_RESPONSE_STATUS_CODE_OK.equals(statusCode)) {
+				if (!IServiceConstants.RESPONSE_STATUS_CODE_OK.equals(statusCode)) {
 					String err = "Item Dispatcher Service: could not push item to "
 							+ fullPath + "! ";
 					org.apache.log4j.Logger.getLogger(this.getClass()).debug(
@@ -341,12 +415,7 @@ public class ItemDispatcherBean extends ServiceCtrlBean  implements SessionBean{
 				String err = "Unable to dispatch the item to "+fullPath
     	    		+": "+e.getClass().getName()+": "+e.getLocalizedMessage();
     	        org.apache.log4j.Logger.getLogger(this.getClass()).error(err, e);
-			}finally {
-				try {
-					if(conx!=null)conx.close();
-					} 
-				catch (Exception e) {}
-		    }
+			}
 		}
 		Logger.getLogger(ObjectPOJO.class).info("[End dispatch item]");
 	}
