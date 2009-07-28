@@ -138,7 +138,7 @@ public class XpathSelectDialog extends Dialog {
 		for (int i = 0; i < trees.length; i++) //add all the DataModels to systemDataModelValues
 			systemDataModelValues.add(((TreeObject)trees[i]).getDisplayName()) ;
 		
-		systemDataModelValues.removeAll(ESystemDefaultObjects.getValueByType(TreeObject.DATA_MODEL));// remove the System
+		//systemDataModelValues.removeAll(ESystemDefaultObjects.getValueByType(TreeObject.DATA_MODEL));// remove the System
 		dataModelCombo.setItems(systemDataModelValues.toArray(new String[systemDataModelValues.size()]));
 		dataModelCombo.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(
