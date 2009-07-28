@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StringReader;
+import java.lang.reflect.Method;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -2260,43 +2261,47 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
 	 * 	view-type = "service-endpoint"
 	 */
 	public WSString serviceAction(WSServiceAction wsServiceAction) throws RemoteException {
-		org.apache.log4j.Category.getInstance(this.getClass()).debug("serviceAction() "+wsServiceAction.getJndiName());
+		org.apache.log4j.Logger.getLogger(this.getClass()).debug("serviceAction() "+wsServiceAction.getJndiName());
 		try {
 			Object service= 
-				Util.retrieveComponent(
+				com.amalto.core.util.Util.retrieveComponent(
 					null, 
 					wsServiceAction.getJndiName()
 				);
 			String result = "";
 			
 			if (WSServiceActionCode.EXECUTE.equals(wsServiceAction.getWsAction())) {
-				result = (String)
-					Util.getMethod(service, wsServiceAction.getMethodName()).invoke(
+				
+					Method method = com.amalto.core.util.Util.getMethod(service, wsServiceAction.getMethodName());
+					
+					result = (String)method.invoke(
 							service,
-							new Object[] {wsServiceAction.getMethodParameters()}
+							wsServiceAction.getMethodParameters()
 						);				
 			} else {
 				if (WSServiceActionCode.START.equals(wsServiceAction.getWsAction())) {
-					Util.getMethod(service, "start").invoke(
+					com.amalto.core.util.Util.getMethod(service, "start").invoke(
 							service,
 							new Object[] {}
 						);
 				} else if (WSServiceActionCode.STOP.equals(wsServiceAction.getWsAction())) {
-					Util.getMethod(service, "stop").invoke(
+					com.amalto.core.util.Util.getMethod(service, "stop").invoke(
 							service,
 							new Object[] {}
 						);				
 				}
 				result = (String)
-					Util.getMethod(service, "getStatus").invoke(
+					com.amalto.core.util.Util.getMethod(service, "getStatus").invoke(
 							service,
 							new Object[] {}
 						);
 			}
 			return new WSString(result);
-		} catch (XtentisException e) {
+		} catch (com.amalto.core.util.XtentisException e) {
+			e.printStackTrace();
 			throw(new RemoteException(e.getLocalizedMessage()));
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new RemoteException((e.getCause() == null ? e.getLocalizedMessage() : e.getCause().getLocalizedMessage()));
 		}
 	}
