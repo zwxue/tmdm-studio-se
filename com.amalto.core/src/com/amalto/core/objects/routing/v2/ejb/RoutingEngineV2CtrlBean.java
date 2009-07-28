@@ -222,9 +222,17 @@ public class RoutingEngineV2CtrlBean implements SessionBean, TimedObject {
 
 		//loop over the known rules
 		Collection<RoutingRulePOJOPK> routingRulePOJOPKs = routingRuleCtrl.getRoutingRulePKs("*");
+		List<String> serviceJndiList = Util.getRuntimeServiceJndiList();
 		for (Iterator<RoutingRulePOJOPK> iter = routingRulePOJOPKs.iterator(); iter.hasNext(); ) {
 			RoutingRulePOJOPK routingRulePOJOPK = iter.next();
 			RoutingRulePOJO routingRule = routingRuleCtrl.getRoutingRule(routingRulePOJOPK);
+			
+			//check integrity of Routing Rule
+			if (!serviceJndiList.contains(routingRule.getServiceJNDI())){
+				org.apache.log4j.Logger.getLogger(this.getClass()).info("Unable to lookup \""+routingRule.getServiceJNDI()+"\", this service not bound!");
+				continue;
+			}
+			
 			//check if document type is OK
 			if (! "*".equals(routingRule.getConcept())) {
 				String docType = itemPOJOPK.getConceptName();
@@ -631,7 +639,7 @@ public class RoutingEngineV2CtrlBean implements SessionBean, TimedObject {
 			ActiveRoutingOrderV2POJO routingOrder = routingOrders[i];
 			//make sure service JNDI is exist
 			if (!serviceJndiList.contains(routingOrder.getServiceJNDI())){
-				org.apache.log4j.Logger.getLogger(this.getClass()).info("Unable to lookup \""+routingOrder.getServiceJNDI()+"\", this service not bound!");
+				org.apache.log4j.Logger.getLogger(this.getClass()).info("The service jndi \""+routingOrder.getServiceJNDI()+"\"is not exist, please delete related Routing Order! ");
 				continue;
 			}
 			//make sure it is not already sloted (though not yet started)
