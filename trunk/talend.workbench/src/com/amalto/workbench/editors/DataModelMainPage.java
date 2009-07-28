@@ -1232,7 +1232,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		manager.add(setAnnotationHiddenAction);
 		manager.add(setAnnotationTargetSystemsAction);
 		manager.add(setAnnotationSourceSystemAction);
-		manager.add(setAnnotationDocumentationAction);
+		//manager.add(setAnnotationDocumentationAction);
 	}
 
 	/**
