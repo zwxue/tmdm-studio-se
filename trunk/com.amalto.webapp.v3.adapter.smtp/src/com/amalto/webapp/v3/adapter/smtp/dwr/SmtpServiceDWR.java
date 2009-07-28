@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.w3c.dom.Document;
 
 import com.amalto.webapp.core.util.Util;
+import com.amalto.webapp.core.util.XtentisWebappException;
 import com.amalto.webapp.core.util.dwr.ExtJSFormResponse;
 import com.amalto.webapp.core.util.dwr.ExtJSFormSuccessResponse;
 import com.amalto.webapp.util.webservices.WSServiceAction;
@@ -187,10 +188,33 @@ public class SmtpServiceDWR {
         }    	
  	
     }
-  
-
-
-		
-
+    
+    public boolean sendSampleEmail(String from,String to,String cc,String bcc,String subject,String body) {
+    	
+    	String[] params={from,to,cc,bcc,subject,body};
+    	String returnStatus="";
+    	
+    	try {
+    		
+    	returnStatus=Util.getPort().serviceAction(
+					new WSServiceAction(
+							JNDI_NAME,
+							WSServiceActionCode.EXECUTE,
+							"sendSimpleMail",
+							params
+					)
+			).getValue();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		} catch (XtentisWebappException e) {
+			e.printStackTrace();
+		}
+    	
+    	if(returnStatus!=null&&returnStatus.equals("Success")){
+			return true;
+		}else{
+			return false;
+		}
+    }
   
 }
