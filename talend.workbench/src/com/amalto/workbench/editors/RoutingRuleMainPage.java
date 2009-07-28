@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
@@ -49,11 +50,14 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.dialogs.PluginDetailsDialog;
+import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
@@ -79,6 +83,8 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 	protected Text serviceParametersText;
 	protected ListViewer routingExpressionsViewer;
 	protected XpathWidget xpathWidget;
+	protected XpathWidget xpathWidget1;
+	protected Button xpathButton;
 	protected Combo operatorCombo;
 	protected Text rightValueText; 
 	protected Button defultParameterBtn;
@@ -146,22 +152,56 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             }); 
             
             //objectType
-            Label objectTypeLabel = toolkit.createLabel(charComposite, "Concept", SWT.NULL);
+            Composite typeComposite = toolkit.createComposite(charComposite);
+            typeComposite.setLayoutData(
+                    new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
+            );
+            typeComposite.setLayout(new GridLayout(3,false));
+            
+            Label objectTypeLabel = toolkit.createLabel(typeComposite, "Concept         ", SWT.NULL);
             objectTypeLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
             );
-            objectTypeText =  toolkit.createText(charComposite, "",SWT.BORDER|SWT.SINGLE);
+            objectTypeText =  toolkit.createText(typeComposite, "",SWT.BORDER|SWT.SINGLE);
             objectTypeText.setLayoutData(
                     new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING,SWT.CENTER,false,false,1,1)
             );
             ((GridData)objectTypeText.getLayoutData()).widthHint = 300;
+//            objectTypeText.setLocation(descriptionText.getLocation().x,descriptionText.getLocation().y+10);
             objectTypeText.addModifyListener(new ModifyListener() {
             	public void modifyText(ModifyEvent e) {
             		if (refreshing) return;
             		markDirty();
             	}
             });
- 
+            xpathButton = toolkit.createButton(typeComposite,"...", SWT.PUSH);
+            xpathButton.setToolTipText("select a concept");
+            xpathButton.addSelectionListener(new SelectionListener(){
+
+				public void widgetDefaultSelected(SelectionEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				public void widgetSelected(SelectionEvent e) {
+					// TODO Auto-generated method stub
+					XpathSelectDialog xpathDialog;
+					xpathDialog = new XpathSelectDialog(getSite().getShell(),treeParent,"Select Concept",getSite(),false,dataModelName);
+					xpathDialog.setBlockOnOpen(true);
+					xpathDialog.open();
+					if (xpathDialog.getReturnCode() == Window.OK)  {
+						String xpath = xpathDialog.getXpath();
+						int index = xpathDialog.getXpath().indexOf("/");
+						if(index>0){
+							xpath = xpathDialog.getXpath().substring(0, index);
+						}
+						objectTypeText.setText(xpath);
+					}
+				}
+            	
+            });
+            // xpathWidget1 = new XpathWidget("...",treeParent, toolkit, charComposite,(AMainPageV2)RoutingRuleMainPage.this,false,false,dataModelName);
+            
             //issynchronous Button
             isSynchronousButton = toolkit.createButton(charComposite, "Execute Synchronously", SWT.CHECK);
             isSynchronousButton.setLayoutData(
@@ -469,6 +509,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			serviceNameCombo.setText(wsRoutingRule.getServiceJNDI().replaceFirst("amalto/local/service/", ""));
 			serviceParametersText.setText(wsRoutingRule.getParameters()==null? "" : wsRoutingRule.getParameters());
 			objectTypeText.setText(wsRoutingRule.getConcept());
+			//xpathWidget1.setText(wsRoutingRule.getConcept());
 			routingExpressionsViewer.setInput(wsRoutingRule);
 			
 			this.refreshing = false;
@@ -489,6 +530,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			WSRoutingRule ws = (WSRoutingRule) (getXObject().getWsObject());
 			ws.setDescription(descriptionText.getText());
 			ws.setConcept(objectTypeText.getText());
+			//ws.setConcept(xpathWidget1.getText());
 			//ws.setServiceJNDI(serviceNameText.getText().contains("/") ? serviceNameText.getText() : "amalto/local/service/"+serviceNameText.getText());
 //			if(serviceNameCombo.getText()==null||serviceNameCombo.getText().length()==0){
 //				MessageDialog.openError(this.getSite().getShell(), "Error Service JNDI Name", "Service JNDI Name cannot be null");
