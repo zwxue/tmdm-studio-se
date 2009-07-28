@@ -11,6 +11,8 @@
 # Subscription Engine
 ######################################################
 
+subscription.engine.autostart=true
+
 #The number of simultaneous routing orders executed concurrently.
 #This is a token based mechanism, when all tokens are distributed,
 #the next Routing Order execution is put on hold until tokens are available
