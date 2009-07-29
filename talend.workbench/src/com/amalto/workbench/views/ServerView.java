@@ -314,7 +314,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				TreeObject xobject = (TreeObject) ((IStructuredSelection) viewer
 						.getSelection()).getFirstElement();
 
-				if (xobject.getType() == TreeObject.DATA_CLUSTER && xobject.isXObject()) {
+				if (xobject!=null && xobject.getType() == TreeObject.DATA_CLUSTER && xobject.isXObject()) {
 
 					try {
 						XtentisPort port = Util.getPort(new URL(
@@ -484,30 +484,31 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
 		logoutAction = new Action() {
 			public void run() {
-				TreeParent serverRoot = (TreeParent) ((IStructuredSelection) ServerView.this.viewer
-						.getSelection()).getFirstElement();
+				
+					TreeParent serverRoot = (TreeParent) ((IStructuredSelection) ServerView.this.viewer
+							.getSelection()).getFirstElement();
 
-				final String universe = serverRoot.getUniverse();
-				final String username = serverRoot.getUsername();
-				final String password = serverRoot.getPassword();
-				final String endpointAddress = serverRoot.getEndpointAddress();
+					final String universe = serverRoot.getUniverse();
+					final String username = serverRoot.getUsername();
+					final String password = serverRoot.getPassword();
+					final String endpointAddress = serverRoot.getEndpointAddress();
 
-				serverRoot.getParent().removeChild(serverRoot);
-				ServerView.this.viewer.refresh();
+					serverRoot.getParent().removeChild(serverRoot);
+					ServerView.this.viewer.refresh();
 
-				// attempt logout on the server side
-				ServerView.this.viewer.getControl().getDisplay().syncExec(
-						new Runnable() {
-							public void run() {
-								try {
-									Util.getPort(new URL(endpointAddress),
-											universe, username, password)
-											.logout(new WSLogout());
-								} catch (Exception e) {
-									e.printStackTrace();
+					// attempt logout on the server side
+					ServerView.this.viewer.getControl().getDisplay().syncExec(
+							new Runnable() {
+								public void run() {
+									try {
+										Util.getPort(new URL(endpointAddress),
+												universe, username, password)
+												.logout(new WSLogout());
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
 								}
-							}
-						});
+							});
 			}
 		};
 		logoutAction.setText("Logout");
