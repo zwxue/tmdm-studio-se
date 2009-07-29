@@ -63,6 +63,7 @@ import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.ServerTreeContentProvider;
 import com.amalto.workbench.providers.ServerTreeLabelProvider;
 import com.amalto.workbench.utils.EImage;
+import com.amalto.workbench.utils.ESystemDefaultObjects;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.ImageCache;
@@ -313,7 +314,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				TreeObject xobject = (TreeObject) ((IStructuredSelection) viewer
 						.getSelection()).getFirstElement();
 
-				if (xobject.getType() == TreeObject.DATA_CLUSTER) {
+				if (xobject.getType() == TreeObject.DATA_CLUSTER && xobject.isXObject()) {
 
 					try {
 						XtentisPort port = Util.getPort(new URL(
@@ -325,9 +326,11 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 								.getDataCluster(new WSGetDataCluster(
 										(WSDataClusterPK) xobject.getWsKey()));
 						String tip = "";
-						if (wsObject != null&& wsObject.getDescription() != null)
+						if (wsObject != null&& wsObject.getDescription() != null){
 							tip = wsObject.getDescription();
-						viewer.getControl().setToolTipText(tip);
+						    viewer.getControl().setToolTipText(tip);
+						}
+							
 					} catch (MalformedURLException e) {
 						e.printStackTrace();
 					} catch (XtentisException e) {
