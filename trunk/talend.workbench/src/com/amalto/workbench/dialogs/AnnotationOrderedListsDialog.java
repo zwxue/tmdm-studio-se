@@ -91,13 +91,17 @@ public class AnnotationOrderedListsDialog extends Dialog {
 	protected Control createDialogArea(Composite parent) {
 						
 		//Should not really be here but well,....
+		
 		parent.getShell().setText(this.title);
+		
 		
 		Composite composite = (Composite) super.createDialogArea(parent);
 		
 		GridLayout layout = (GridLayout)composite.getLayout();
 		layout.numColumns = 3;
+		layout.makeColumnsEqualWidth=false;
 		//layout.verticalSpacing = 10;
+		
 		
 		if(actionType==AnnotationWrite_ActionType||actionType==AnnotationHidden_ActionType){
 			textControl = new CCombo(composite,SWT.BORDER|SWT.READ_ONLY);
@@ -115,7 +119,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
 			textControl.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,2,1));
 		}
 		
-		((GridData)textControl.getLayoutData()).minimumWidth = 300;
+		((GridData)textControl.getLayoutData()).minimumWidth = 400;
 
         textControl.addKeyListener(new KeyListener() {
 			public void keyPressed(KeyEvent e) {}
@@ -192,7 +196,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
         //table.setLayoutData(new GridData(GridData.FILL_BOTH));
 
         new TableColumn(table, SWT.CENTER).setText(COLUMN);
-        table.getColumn(0).setWidth(400);
+        table.getColumn(0).setWidth(500);
         for (int i = 1, n = table.getColumnCount(); i < n; i++) {
           table.getColumn(i).pack();
         }
@@ -308,8 +312,13 @@ public class AnnotationOrderedListsDialog extends Dialog {
         
         //Listen for changes in the selection of the viewer to display additional parameters
         viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-        	public void selectionChanged(SelectionChangedEvent event) {}
+        	public void selectionChanged(SelectionChangedEvent event) {
+        		DescriptionLine line = (DescriptionLine)((IStructuredSelection)viewer.getSelection()).getFirstElement();
+        		if(line!=null)
+        			((Text)textControl).setText(line.getLabel());
+        	}
         });
+        
         
         //display for Delete Key events to delete an instance
         viewer.getTable().addKeyListener(new KeyListener() {
