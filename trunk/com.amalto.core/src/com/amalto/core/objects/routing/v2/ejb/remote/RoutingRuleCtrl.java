@@ -5,7 +5,7 @@ package com.amalto.core.objects.routing.v2.ejb.remote;
 
 /**
  * Remote interface for RoutingRuleCtrl.
- * @xdoclet-generated at 25-06-09
+ * @xdoclet-generated at 29-07-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}

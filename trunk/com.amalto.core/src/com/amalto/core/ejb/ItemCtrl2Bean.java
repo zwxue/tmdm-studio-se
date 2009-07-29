@@ -234,6 +234,33 @@ public class ItemCtrl2Bean implements SessionBean {
     }
     
     /**
+     * Get item with revisionID
+     * @throws XtentisException
+     * 
+     * @ejb.interface-method view-type = "both"
+     * @ejb.facade-method 
+     */
+    public ItemPOJO getItem(String revisionID,ItemPOJOPK pk) throws XtentisException{
+
+        try {
+        	ItemPOJO pojo = ItemPOJO.load(revisionID,pk);
+        	if (pojo==null) {
+        		String err= "The item '"+pk.getUniqueID()+"' cannot be found.";
+        		org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
+        		throw new XtentisException(err);
+        	}
+        	return pojo;
+	    } catch (XtentisException e) {
+	    	throw(e);
+	    } catch (Exception e) {
+    	    String err = "Unable to get the item "+pk.toString()
+    	    		+": "+e.getClass().getName()+": "+e.getLocalizedMessage();
+    	    org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);
+    	    throw new XtentisException(err);
+	    }
+    }
+    
+    /**
      * Get an item - no exception is thrown: returns null if not found 
      * @throws XtentisException
      * 
