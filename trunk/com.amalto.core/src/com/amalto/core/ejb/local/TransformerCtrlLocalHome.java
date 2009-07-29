@@ -6,7 +6,7 @@ package com.amalto.core.ejb.local;
 /**
  * Local home interface for TransformerCtrl.
  * @deprecated - use TransformerV2 package
- * @xdoclet-generated at 25-06-09
+ * @xdoclet-generated at 29-07-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}

@@ -5,7 +5,7 @@ package com.amalto.core.objects.menu.ejb.remote;
 
 /**
  * Remote interface for MenuCtrl.
- * @xdoclet-generated at 25-06-09
+ * @xdoclet-generated at 29-07-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
