@@ -139,7 +139,6 @@ public class XSDNewComplexTypeDefinition extends UndoAction implements Selection
 			);
 			return false;
 		}
-		
 		return true;
 	}
 }
