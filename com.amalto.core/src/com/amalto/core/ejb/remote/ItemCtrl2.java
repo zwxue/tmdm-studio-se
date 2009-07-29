@@ -5,7 +5,7 @@ package com.amalto.core.ejb.remote;
 
 /**
  * Remote interface for ItemCtrl2.
- * @xdoclet-generated at 25-06-09
+ * @xdoclet-generated at 29-07-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
@@ -25,6 +25,13 @@ public interface ItemCtrl2
     * @throws XtentisException
     */
    public com.amalto.core.ejb.ItemPOJO getItem( com.amalto.core.ejb.ItemPOJOPK pk )
+      throws com.amalto.core.util.XtentisException, java.rmi.RemoteException;
+
+   /**
+    * Get item with revisionID
+    * @throws XtentisException
+    */
+   public com.amalto.core.ejb.ItemPOJO getItem( java.lang.String revisionID,com.amalto.core.ejb.ItemPOJOPK pk )
       throws com.amalto.core.util.XtentisException, java.rmi.RemoteException;
 
    /**
