@@ -41,7 +41,8 @@ Bundle-ClassPath: lib/jbossall-client.jar,
  lib/z.svnkit.jar,
  lib/log4j.jar,
  lib/commons-codec.jar,
- lib/commons-beanutils-1.6.1.jar
+ lib/commons-beanutils-1.6.1.jar,
+ lib/commons-collections.jar
 Export-Package: .,
  EDU.oswego.cs.dl.util.concurrent,
  EDU.oswego.cs.dl.util.concurrent.misc,
