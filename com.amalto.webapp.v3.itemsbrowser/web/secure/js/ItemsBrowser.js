@@ -339,7 +339,8 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	var foreignKeyWindow;
 	/** The node date picker */
 	var nodeDatePicker;
-	 
+	/** The node upload file window */
+	var uploadFileWindow;
 	function browseItems(){
 		showItemsPanel();
 		//populate list
@@ -1475,7 +1476,61 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		 
 		 nodeDatePicker.show(this);
 	}
-	
+
+		function showUploadFile(nodeId, treeIndex, nodeType){
+		if(uploadFileWindow){
+			 uploadFileWindow.hide();
+			 uploadFileWindow.destroy();
+		}
+		
+		var inputText=nodeId+"Value";	
+    	var uploadFilePanel =  new Ext.form.FormPanel({    
+	     
+	     labelAlign: 'right',    	      
+	     labelWidth: 60,    
+	     frame:true,   
+	     url: '../upload.do?op=uploadFile',//fileUploadServlet    
+	     fileUpload: true,   
+		 width: 300,
+		 height:100,  
+	     items: [{    
+	        xtype: 'textfield',    
+	        fieldLabel: 'File Name',    
+	        name: 'file',    
+	        inputType: 'file'//file type
+	      }],    
+	        
+	    buttons: [{    
+	        text: 'Upload',    
+	        handler: function() {    
+	        uploadFilePanel.getForm().submit({    
+		        success: function(uploadFilePanel, action){    
+		           Ext.Msg.alert('Sucess', 'File upload sucessfully!');    
+		        },    
+		       failure: function(){    
+	          	Ext.Msg.alert('Failed', 'File upload failed!');    
+		       },
+		       waitMsg : 'Uploading...'
+		     });    
+		    }    
+	 	 },{
+            text: 'Reset',
+            handler: function(){
+                uploadFilePanel.getForm().reset();
+            }
+        }]    
+	  });	
+			uploadFileWindow = new Ext.Window({
+                layout:'fit',
+                closeAction:'hide',
+                plain: true,
+                title: 'Upload File',
+			     width: 320,
+			     height:120,                
+                items: [uploadFilePanel]
+            });						
+			uploadFileWindow.show(this);
+	}
 	var panel;
 	function chooseForeignKey(nodeId, xpathForeignKey, xpathInfoForeignKey, treeIndex) {
 		
@@ -1705,6 +1760,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		setlastUpdatedInputFlagPublic:function(id,treeIndex){alert("setlastUpdatedInputFlagPublic");setlastUpdatedInputFlag(id,treeIndex);},
 		browseForeignKey:function(nodeId, foreignKeyXpath){browseForeignKey(nodeId, foreignKeyXpath);},
 		showDatePicker:function(nodeId,treeIndex,nodeType){showDatePicker(nodeId,treeIndex,nodeType);},
+		showUploadFile: function (nodeId, treeIndex, nodeType){showUploadFile(nodeId, treeIndex, nodeType)},
 		chooseForeignKey:function(nodeId,xpath,xpathInfo,treeIndex){chooseForeignKey(nodeId,xpath,xpathInfo,treeIndex);},
 		cloneNode2:function(siblingId,hasIcon,treeIndex){cloneNode2(siblingId,hasIcon,treeIndex)},
 		removeNode2:function(id,treeIndex){removeNode2(id,treeIndex)},

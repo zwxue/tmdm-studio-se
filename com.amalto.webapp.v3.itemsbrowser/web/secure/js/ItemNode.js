@@ -124,13 +124,19 @@ YAHOO.extend(amalto.itemsbrowser.ItemNode, YAHOO.widget.Node, {
 						'</select>';
 				}
 			//input text
-			else if(value.length<70) {				
-				var input = ' ' +
-					'<input class="inputTree'+readOnlyStyle+'" '+readOnly+' ' +
-					//TODO'onFocus="amalto.itemsbrowser.ItemsBrowser.setlastUpdatedInputFlagPublic(\''+itemData.nodeId+'\','+treeIndex+');" ' +
-					'onchange="amalto.itemsbrowser.ItemsBrowser.updateNode(\''+itemData.nodeId+'\','+treeIndex+');" size="72" type="text"  ' +
-					'id="'+itemData.nodeId+'Value" value="'+value+'"/>'
-                   +'<div id="'+itemData.nodeId+'ErrorMessage" style="display:none" ></div>';
+			else if(value.length<70) {					
+				var input = ' ';
+				if(value.length>0 && itemData.typeName!=null && itemData.typeName=="PICTURE"){
+					input='	<span style="cursor: pointer;" onclick=""><img src="' + value+ '"/></span>'+
+					'	<span style="cursor: pointer;" onclick=""><img src="img/genericUI/delete.gif"/></span>';
+				}else{
+					input=
+						'<input class="inputTree'+readOnlyStyle+'" '+readOnly+' ' +
+						//TODO'onFocus="amalto.itemsbrowser.ItemsBrowser.setlastUpdatedInputFlagPublic(\''+itemData.nodeId+'\','+treeIndex+');" ' +
+						'onchange="amalto.itemsbrowser.ItemsBrowser.updateNode(\''+itemData.nodeId+'\','+treeIndex+');" size="72" type="text"  ' +
+						'id="'+itemData.nodeId+'Value" value="'+value+'"/>'
+	                   +'<div id="'+itemData.nodeId+'ErrorMessage" style="display:none" ></div>';
+				}
 			//EXTJS input
 			//this.extItem = new Ext.form.TextField({applyTo:itemData.nodeId+'Value'});
 			}
@@ -150,6 +156,12 @@ YAHOO.extend(amalto.itemsbrowser.ItemNode, YAHOO.widget.Node, {
 			}else{
 			  html[html.length] = input +'</div>';
 			}
+			// PICTURE field
+			html[html.length] = '<div style="display:inline"><div style="width:180;float:left;font-size:13px">'+'</div>';
+			if(itemData.typeName!=null&&(itemData.typeName=="PICTURE")){			
+			  html[html.length] = '	<span style="cursor: pointer;" onclick="javascript:amalto.itemsbrowser.ItemsBrowser.showUploadFile(\''+itemData.nodeId+'\','+treeIndex+',\''+itemData.typeName+'\')"><img src="img/genericUI/image_add.png"/></span>'+'</div>';
+			}
+			
 			html[html.length] = '	<span id="'+itemData.nodeId+'OpenDetails" onclick="amalto.itemsbrowser.ItemsBrowser.displayXsdDetails(\''+itemData.nodeId+'\')" >';
 			html[html.length] = '		<img src="img/genericUI/open-detail2.gif"/></span>' ;
 			html[html.length] = 		cloneNodeImg+' '+removeNodeImg+' '+foreignKeyImg;
