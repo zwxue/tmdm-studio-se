@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="lib/commons-fileupload.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-beanutils-1.6.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-codec.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/log4j.jar"/>
@@ -27,7 +28,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/servlet-api.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/z.castor-1.0.5-xml.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/z.com.amalto.connector.library.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/z.commons-fileupload-1.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/z.crimson.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/z.jazzy-core.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jbossall-client.jar"/>
@@ -36,5 +36,6 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="lib/zz.20.xtentis.connector.logging-mdb.ejb.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
