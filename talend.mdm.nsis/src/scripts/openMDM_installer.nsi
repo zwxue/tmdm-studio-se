@@ -126,7 +126,9 @@ SectionEnd
 ;Uninstaller Section
 
 Section "Uninstall"
-
+  ;remove the service  
+  Exec '"$INSTDIR\openMDM\bin\service.bat" uninstall /NCRC'	
+  
   ;Remove files
   RMDir /r "$INSTDIR\openMDM"
   Delete "$INSTDIR\Uninstall_openMDM.exe"
@@ -148,8 +150,7 @@ Section "Uninstall"
   DeleteRegKey HKEY_LOCAL_MACHINE "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\openMDM"  
   
   ;DeleteRegKey HKEY_LOCAL_MACHINE "Software\Microsoft\Windows\CurrentVersion\Run\openMDM"	
-  ;remove the service  
-  Exec '"$INSTDIR\openMDM\bin\service.bat" uninstall /NCRC'		
+
 SectionEnd
 
 Function runService
