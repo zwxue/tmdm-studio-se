@@ -504,11 +504,18 @@ public class XmldbSLWrapper implements IXmlServerSLWrapper,IXmlServerEBJLifeCycl
 			} else {
 				res = col.getResource(encodedID);
 				if (res==null) return null;
-				InputStream is = (InputStream) ((BinaryResource)res).getContent();
+				BinaryResource binRes= (BinaryResource)res;
+				
+				if(binRes.getContent() instanceof byte[]){
+					if(binRes.getContent()!=null)return (byte[]) binRes.getContent();
+				}
+				
+				InputStream is = (InputStream) binRes.getContent();
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				byte[] buffer = new byte[8 * 1024];
 				int len;
 				while ((len=is.read(buffer))>0) baos.write(buffer, 0, len);
+				
 				return baos.toByteArray();
 			}
 		} catch (Exception e) {
