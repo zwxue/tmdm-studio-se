@@ -26,6 +26,9 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import talend.ext.images.server.backup.DBDelegate;
+import talend.ext.images.server.backup.ResourcePK;
+import talend.ext.images.server.util.ReflectionUtil;
 import talend.ext.images.server.util.Uuid;
 
 public class ImageUploadServlet extends HttpServlet {
@@ -36,6 +39,9 @@ public class ImageUploadServlet extends HttpServlet {
 	private String defaultFilefieldName="";
 	private String defaultCatalogfieldName="";
 	private String outputFormat="xml";
+	private String bakInDB="false";
+	private String dbDelegateClass="";
+	private String bakUseTransaction="false";
 	
 	private String uploadPath = "/upload"; // the folder to upload
 	private String tempPath = "/upload_tmp"; // the folder used to store temporary files of uploading
@@ -43,6 +49,8 @@ public class ImageUploadServlet extends HttpServlet {
 	private String sourceFileName = "";
 	private String sourceFileType = "";
 	private String targetUri = "upload";
+	private String targetCatalogName = "";
+	private String targetFileName = "";
 
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -53,6 +61,10 @@ public class ImageUploadServlet extends HttpServlet {
 		defaultFilefieldName = config.getInitParameter("default-file-field-name");
 		defaultCatalogfieldName =  config.getInitParameter("default-catalog-field-name");
 		outputFormat = config.getInitParameter("output-format");
+		bakInDB = config.getInitParameter("bak-in-db");
+		dbDelegateClass = config.getInitParameter("db-delegate-class");
+		bakUseTransaction =  config.getInitParameter("bak-use-transaction");
+		
 
 		uploadPath = getServletContext().getRealPath(uploadPath);
 		tempPath = getServletContext().getRealPath(tempPath);
@@ -70,8 +82,10 @@ public class ImageUploadServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		targetUri="upload";//reset
-		response.setContentType("text/html");
+		
 		String result=onUpload(request, response);
+		
+		response.setContentType("text/html");
 		PrintWriter writer = response.getWriter();
         writer.write(result.toString());
         writer.close();
@@ -125,16 +139,24 @@ public class ImageUploadServlet extends HttpServlet {
 					Object uploadFileItemObj = getFileItem(fileItems, defaultFilefieldName);
 					if (uploadFileItemObj != null) {
 						FileItem uploadFileItem = (FileItem) uploadFileItemObj;
-						String catalogName = "";
+
 						Object catalogNameObj = getFileItem(fileItems, defaultCatalogfieldName);
 						if (catalogNameObj != null)
-							catalogName = (String) catalogNameObj;
+							targetCatalogName = (String) catalogNameObj;
 
-						if (processUploadedFile(catalogName, uploadFileItem,
-								true) == 1) {
-							logger.info(sourceFileName
-									+ " has been uploaded successfully!");
+						int rtnStatus=processUploadedFile(uploadFileItem,true,Boolean.parseBoolean(bakInDB),Boolean.parseBoolean(bakUseTransaction));
+						
+						if ( rtnStatus == 1) {
+							logger.info(sourceFileName + " has been uploaded successfully!");
 							return buildUploadResult(true,targetUri);
+						}else if( rtnStatus == -1){
+							String msg="Unavailable file type! ";
+							logger.error(msg);
+							return buildUploadResult(false,msg);
+						}else if( rtnStatus == -2){
+							String msg="Operation rolled back, since backuping to database failed. ";
+							logger.error(msg);
+							return buildUploadResult(false,msg);
 						}
 					}
 
@@ -153,8 +175,20 @@ public class ImageUploadServlet extends HttpServlet {
 		return buildUploadResult(false,"It seems that Upload Task has not been executed, please check your post enctype and post field name! ");
 	}
 
-	private int processUploadedFile(String catalogName, FileItem item,
-			boolean writeToFile) throws Exception {
+	/**
+	 * @param item
+	 * @param writeToFile
+	 * @param bakInDB
+	 * @param bakUseTransaction
+	 * @return 
+	 *        1 :success
+	 *        0 :unknown failure
+	 *        -1:nonsupport type
+	 *        -2:roll back, failure in DB Backup
+	 * @throws Exception
+	 */
+	private int processUploadedFile(FileItem item,
+			boolean writeToFile,boolean inBakInDB,boolean inBakUseTransaction) throws Exception {
 
 		// Process a file upload
 		if (!item.isFormField()) {
@@ -175,20 +209,36 @@ public class ImageUploadServlet extends HttpServlet {
 			if (writeToFile) {
 				StringBuffer upath = new StringBuffer();
 				// generate catalogName
-				if (StringUtils.isEmpty(catalogName))
-					catalogName = generateCatalogName();
+				if (StringUtils.isEmpty(targetCatalogName))targetCatalogName = generateCatalogName();
 
 				upath.append(uploadPath);
-				if(!catalogName.equals("/"))upath.append(File.separator).append(catalogName);
+				if(!targetCatalogName.equals("/"))upath.append(File.separator).append(targetCatalogName);
 				locateCatalog(upath);
-				upath.append(File.separator).append(uid).append(".").append(
-						sourceFileType);
+				targetFileName=(uid+"."+sourceFileType);
+				upath.append(File.separator).append(targetFileName);
 
-				if(!catalogName.equals("/"))targetUri += ("/"+catalogName);
+				if(!targetCatalogName.equals("/"))targetUri += ("/"+targetCatalogName);
 				targetUri += ("/" + uid + "." + sourceFileType);
 
 				File uploadedFile = new File(upath.toString());
 				item.write(uploadedFile);
+				
+				if(inBakInDB){
+					boolean isBakOK=false;
+					
+					
+					DBDelegate dbDelegate=(DBDelegate) ReflectionUtil.newInstance(dbDelegateClass,new Object[0]);
+					isBakOK=dbDelegate.putResource(new ResourcePK(targetCatalogName,targetFileName), upath.toString());
+						
+					//do roll back
+                    if(!isBakOK&&inBakUseTransaction){
+                    	    uploadedFile.delete();
+                        	logger.debug("Rolled back in image server. ");
+                        	return -2;
+                    }
+					
+				}
+				
 				return 1;
 
 			} else {
@@ -293,6 +343,5 @@ public class ImageUploadServlet extends HttpServlet {
 		return sb.toString();
 
 	}
-	
 
 }
