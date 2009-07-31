@@ -64,7 +64,7 @@ public class ElementComposite {
 		
 		GridData gd = new GridData(SWT.FILL,SWT.FILL,true,true,2,1);
 		tipLabel = new Label(parent,SWT.NONE);
-		tipLabel.setText("Leave blank for anonymous");
+		//tipLabel.setText("Leave blank for anonymous");
 		tipLabel.setLayoutData(gd);
 		gd.widthHint=250;
 		
@@ -100,6 +100,7 @@ public class ElementComposite {
 		
 
 		builtInButton.setSelection(true);
+		typeCombo.setEditable(false);
 
 		customButton.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
@@ -114,6 +115,8 @@ public class ElementComposite {
             	alltypes.addAll(uuidtypes);
             	typeCombo.setItems(alltypes.toArray(new String[alltypes.size()]));
             	typeCombo.indexOf("");
+            	typeCombo.setEditable(true);
+            	tipLabel.setText("Leave blank for anonymous");
             }
         });
 		
@@ -125,6 +128,8 @@ public class ElementComposite {
 					typeCombo.add(name);
 				}
             	typeCombo.select(0);
+            	typeCombo.setEditable(false);
+            	tipLabel.setText("");
             }
         });
 		
