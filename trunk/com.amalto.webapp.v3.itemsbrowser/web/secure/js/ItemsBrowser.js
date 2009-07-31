@@ -310,8 +310,22 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		'en':'browse a journal for this item'
 	};
 	
-	
-
+	var UPLOAD_FILE={
+		'fr':'Upload Picture',
+		'en':'Upload Picture'
+	};
+	var UPLOAD={
+		'fr':'Upload',
+		'en':'Upload'
+	};
+	var RESET={
+		'fr':'Reset',
+		'en':'Reset'
+	};
+	var FILE_NAME={
+		'fr':'File Name',
+		'en':'File Name'
+	}
 
 	/*****************
 	 * EXT 2.0
@@ -1314,7 +1328,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		amalto.core.ready();
 	}
 	
-	 
+		 
 	function saveItemAndQuit(ids,dataObject,treeIndex){
 		//alert(DWRUtil.toDescriptiveString(itemPK2,2)+" "+dataObject+" "+treeIndex);
 
@@ -1482,36 +1496,51 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		 
 		 nodeDatePicker.show(this);
 	}
-
-		function showUploadFile(nodeId, treeIndex, nodeType){
+	
+	function removePicture(nodeId, treeIndex){
+	    var inputText=nodeId+"Value";	
+	    DWRUtil.setValue(inputText,'');
+	    updateNode(nodeId,treeIndex);
+	    if($('showPicture'))
+	       $('showPicture').src='img/genericUI/blank.gif';
+	}
+	
+	function showUploadFile(nodeId, treeIndex, nodeType){
 		if(uploadFileWindow){
 			 uploadFileWindow.hide();
 			 uploadFileWindow.destroy();
 		}
 		
-		var inputText=nodeId+"Value";	
+		
     	var uploadFilePanel =  new Ext.form.FormPanel({    
 	     
 	     labelAlign: 'right',    	      
 	     labelWidth: 60,    
 	     frame:true,   
-	     url: '../upload.do?op=uploadFile',//fileUploadServlet    
+	     url: '/imageserver/secure/ImageUploadServlet',//fileUploadServlet    
 	     fileUpload: true,   
 		 width: 300,
 		 height:100,  
 	     items: [{    
 	        xtype: 'textfield',    
-	        fieldLabel: 'File Name',    
-	        name: 'file',    
+	        fieldLabel: FILE_NAME[language],    
+	        name: 'imageFile',    
 	        inputType: 'file'//file type
 	      }],    
 	        
 	    buttons: [{    
-	        text: 'Upload',    
+	        text: UPLOAD[language],    
 	        handler: function() {    
 	        uploadFilePanel.getForm().submit({    
-		        success: function(uploadFilePanel, action){    
-		           Ext.Msg.alert('Sucess', 'File upload sucessfully!');    
+		        success: function(uploadFilePanel, action){
+		           var text=action.response.responseText;
+		           var url='/imageserver/'+eval('('+text+')').message+"?width=150&height=150&preserveAspectRatio=true";		
+		           var inputText=nodeId+"Value";	
+				    DWRUtil.setValue(inputText,url);
+				    updateNode(nodeId,treeIndex);		           
+		            Ext.Msg.alert('Sucess', 'File upload sucessfully!');
+		            uploadFileWindow.hide();
+		            if($('showPicture'))$('showPicture').src=url;
 		        },    
 		       failure: function(){    
 	          	Ext.Msg.alert('Failed', 'File upload failed!');    
@@ -1520,7 +1549,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		     });    
 		    }    
 	 	 },{
-            text: 'Reset',
+            text: RESET[language],
             handler: function(){
                 uploadFilePanel.getForm().reset();
             }
@@ -1530,7 +1559,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
                 layout:'fit',
                 closeAction:'hide',
                 plain: true,
-                title: 'Upload File',
+                title: UPLOAD_FILE[language],
 			     width: 320,
 			     height:120,                
                 items: [uploadFilePanel]
@@ -1767,6 +1796,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		browseForeignKey:function(nodeId, foreignKeyXpath){browseForeignKey(nodeId, foreignKeyXpath);},
 		showDatePicker:function(nodeId,treeIndex,nodeType){showDatePicker(nodeId,treeIndex,nodeType);},
 		showUploadFile: function (nodeId, treeIndex, nodeType){showUploadFile(nodeId, treeIndex, nodeType)},
+		removePicture: function (nodeId, treeIndex){removePicture(nodeId, treeIndex)},
 		chooseForeignKey:function(nodeId,xpath,xpathInfo,treeIndex){chooseForeignKey(nodeId,xpath,xpathInfo,treeIndex);},
 		cloneNode2:function(siblingId,hasIcon,treeIndex){cloneNode2(siblingId,hasIcon,treeIndex)},
 		removeNode2:function(id,treeIndex){removeNode2(id,treeIndex)},
