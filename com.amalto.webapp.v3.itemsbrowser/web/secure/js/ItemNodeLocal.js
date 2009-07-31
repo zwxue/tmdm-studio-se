@@ -19,7 +19,7 @@ amalto.itemsbrowser.ItemNodeLocal=function(){
 	    	locale_en= {
 	    		  'MINLENGTH_MSG1':' doit comporter au minimum',
 	    		  'MINLENGTH_MSG2':'caractères',   
-	    		  'MAXLENGTH_MSG1':' n'accepte que ',
+	    		  'MAXLENGTH_MSG1':' n\'accepte que ',
 	    		  'MAXLENGTH_MSG2':' caractères maximum.',
 	    		  'MINEXCLUSIVE_MSG1':'doit etre superieur à  ',
 	    		  'MAXEXCLUSIVE_MSG1':'doit etre inférieur à  ',
@@ -32,7 +32,7 @@ amalto.itemsbrowser.ItemNodeLocal=function(){
             locale_fr= {     
             	  'MINLENGTH_MSG1':' doit comporter au minimum',
    	    		  'MINLENGTH_MSG2':'caractères',   
-   	    		  'MAXLENGTH_MSG1':' n'accepte que ',
+   	    		  'MAXLENGTH_MSG1':' n\'accepte que ',
    	    		  'MAXLENGTH_MSG2':' caractères maximum.',
    	    		  'MINEXCLUSIVE_MSG1':'doit etre superieur à  ',
    	    		  'MAXEXCLUSIVE_MSG1':'doit etre inférieur à  ',
