@@ -25,6 +25,9 @@ package com.mchange.v2.ssim;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
+
+import talend.ext.images.server.ImageLoadFrontFilter;
+
 import java.io.*;
 import java.net.*;
 import com.mchange.v1.io.InputStreamUtils;
@@ -63,6 +66,10 @@ public class SsimServlet extends HttpServlet
     String[]   allowDomains            = null; //all lower case
     String     baseUrl                 = null;
     String     baseResourcePath        = null;
+    
+    //MODIFIED BY STARKEY
+    boolean    useDBBackup             = false;
+    String     dbDelegateClass         = null;
 
     InetAddress localHostAddr; // only used for access checks, iff open_relay stays false
     // MT: end unchanging after init()
@@ -80,6 +87,10 @@ public class SsimServlet extends HttpServlet
 	String cacheSizeStr         = this.getInitParameter( "cacheSize" );
 	String cullDelayStr         = this.getInitParameter( "cullDelay" );
 	String maxConcurrencyStr    = this.getInitParameter( "maxConcurrency" );
+	
+	//MODIFIED BY STARKEY
+	useDBBackup          = Boolean.valueOf(this.getInitParameter( "use-db-backup" ));
+	dbDelegateClass      = this.getInitParameter( "db-delegate-class" );
 
 	// figure out cache dir
 	// MODIFIED by starkey, made cache dir on web server
@@ -173,6 +184,14 @@ public class SsimServlet extends HttpServlet
     public void doGet(HttpServletRequest req, HttpServletResponse res)
 	throws IOException, ServletException
     {
+    
+    //MODIFIED BY STARKEY
+    if(!ImageLoadFrontFilter.doFilter(getServletContext(),req, res,useDBBackup,dbDelegateClass)){
+    	res.sendError( HttpServletResponse.SC_NOT_FOUND, 
+			       "Image file has not been found! " );
+    	return;
+    }
+    	
 	String widthStr               = req.getParameter( "width" );
 	String heightStr              = req.getParameter( "height" );
 	String mimeType               = req.getParameter( "mimeType" );
