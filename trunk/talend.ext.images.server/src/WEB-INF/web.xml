@@ -23,6 +23,18 @@
 			<param-name>output-format</param-name>
 			<param-value>json</param-value>
 		</init-param>
+		<init-param>
+			<param-name>bak-in-db</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>db-delegate-class</param-name>
+			<param-value>talend.ext.images.server.backup.DBDelegateExistImpl</param-value>
+		</init-param>
+		<init-param>
+			<param-name>bak-use-transaction</param-name>
+			<param-value>true</param-value>
+		</init-param>
 	</servlet>
 	<servlet>
 		<servlet-name>ImageScaleServlet</servlet-name>
@@ -30,6 +42,14 @@
 		<init-param>
 			<param-name>cacheDir</param-name>
 			<param-value>/scale_tmp</param-value>
+		</init-param>
+		<init-param>
+			<param-name>use-db-backup</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>db-delegate-class</param-name>
+			<param-value>talend.ext.images.server.backup.DBDelegateExistImpl</param-value>
 		</init-param>
 	</servlet>
 	
