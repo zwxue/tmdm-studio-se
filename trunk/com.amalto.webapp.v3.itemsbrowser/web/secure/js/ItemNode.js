@@ -72,13 +72,17 @@ YAHOO.extend(amalto.itemsbrowser.ItemNode, YAHOO.widget.Node, {
 			
 		var cloneNodeImg = '';
 		var removeNodeImg = '';
+		var type='text'; //default is text
 		if((itemData.maxOccurs<0 || itemData.maxOccurs>1) && (itemData.readOnly==false)){
 			cloneNodeImg = '<span style="cursor: pointer;" onclick="amalto.itemsbrowser.ItemsBrowser.cloneNode2(\''+itemData.nodeId+'\',false,'+treeIndex+')">' +
 					' <img src="img/genericUI/add-element.gif"/></span>';
 			removeNodeImg = '<span style="cursor: pointer;" onclick="amalto.itemsbrowser.ItemsBrowser.removeNode2(\''+itemData.nodeId+'\','+treeIndex+')">' +
 					' <img src="img/genericUI/remove-element.gif"/></span>';
 		}
-
+		if(itemData.typeName!=null&&(itemData.typeName=="PICTURE")){
+			type='hidden';
+		}
+		
 		var mandatory = "";
 		if(itemData.readOnly==false && itemData.minOccurs==1) mandatory='<span style="color:red">*</span>';
 		var descInfo = "";
@@ -124,24 +128,17 @@ YAHOO.extend(amalto.itemsbrowser.ItemNode, YAHOO.widget.Node, {
 						'</select>';
 				}
 			//input text
-			else if(value.length<70) {					
-				var input = ' ';
-				if(value.length>0 && itemData.typeName!=null && itemData.typeName=="PICTURE"){
-					input='	<span style="cursor: pointer;" onclick=""><img src="' + value+ '"/></span>'+
-					'	<span style="cursor: pointer;" onclick=""><img src="img/genericUI/delete.gif"/></span>';
-				}else{
-					input=
-						'<input class="inputTree'+readOnlyStyle+'" '+readOnly+' ' +
+			else if(value.length<70 ||(itemData.typeName=="PICTURE")) {					
+					var input=' ' +
+						' <input class="inputTree'+readOnlyStyle+'" '+readOnly+' ' +
 						//TODO'onFocus="amalto.itemsbrowser.ItemsBrowser.setlastUpdatedInputFlagPublic(\''+itemData.nodeId+'\','+treeIndex+');" ' +
-						'onchange="amalto.itemsbrowser.ItemsBrowser.updateNode(\''+itemData.nodeId+'\','+treeIndex+');" size="72" type="text"  ' +
+						'onchange="amalto.itemsbrowser.ItemsBrowser.updateNode(\''+itemData.nodeId+'\','+treeIndex+');" size="72" type="'+ type+ '"  ' +
 						'id="'+itemData.nodeId+'Value" value="'+value+'"/>'
 	                   +'<div id="'+itemData.nodeId+'ErrorMessage" style="display:none" ></div>';
-				}
-			//EXTJS input
-			//this.extItem = new Ext.form.TextField({applyTo:itemData.nodeId+'Value'});
 			}
 			//text area
 			else {
+				
 				var input = ' ' +
 						'<textarea class="inputTree'+readOnlyStyle+'" '+readOnly+' ' +
 						'onblur="amalto.itemsbrowser.ItemsBrowser.updateNode(\''+itemData.nodeId+'\','+treeIndex+');" id="'+itemData.nodeId+'Value" ' +
@@ -151,15 +148,22 @@ YAHOO.extend(amalto.itemsbrowser.ItemNode, YAHOO.widget.Node, {
 			
 
 			html[html.length] = '<div style="display:inline"><div style="width:180;float:left;font-size:13px">'+itemData.name+' '+mandatory+' '+descInfo+'</div>';
-			if(itemData.typeName!=null&&(itemData.typeName=="date"||itemData.typeName=="dateTime")){			
-			  html[html.length] = input +'	<span style="cursor: pointer;" onclick="javascript:amalto.itemsbrowser.ItemsBrowser.showDatePicker(\''+itemData.nodeId+'\','+treeIndex+',\''+itemData.typeName+'\')"><img src="img/genericUI/date-picker.gif"/></span>'+'</div>';
+			if(itemData.typeName!=null&&(itemData.typeName=="date"||itemData.typeName=="dateTime")){//DATE			
+			   html[html.length] = input +'	<span style="cursor: pointer;" onclick="javascript:amalto.itemsbrowser.ItemsBrowser.showDatePicker(\''+itemData.nodeId+'\','+treeIndex+',\''+itemData.typeName+'\')"><img src="img/genericUI/date-picker.gif"/></span>'+'</div>';
+			}else if(itemData.typeName!=null&&(itemData.typeName=="PICTURE")){//PICTURE
+				   //show picture
+				   if(value.length>0){
+				 		html[html.length] = '<span style="cursor: pointer;" '+	' <img id="showPicture" src="'+ itemData.value+ '"/></span>';	
+				 	}else{
+				 		html[html.length] = '<span style="cursor: pointer;" '+	' <img id="showPicture" src="img/genericUI/blank.gif"/></span>';	
+				 	}					
+					//remove picture
+					html[html.length]='<span style="cursor: pointer;" onclick="amalto.itemsbrowser.ItemsBrowser.removePicture(\''+itemData.nodeId+'\','+treeIndex+')">' +
+					' <img alt="Remove the picture" src="img/genericUI/delete.gif"/></span>';					
+				
+				html[html.length] =input+ ' <span style="cursor: pointer;" onclick="javascript:amalto.itemsbrowser.ItemsBrowser.showUploadFile(\''+itemData.nodeId+'\','+treeIndex+',\''+itemData.typeName+'\')"><img alt="Select a picture" src="img/genericUI/image_add.png"/></span>'+'</div>';
 			}else{
 			  html[html.length] = input +'</div>';
-			}
-			// PICTURE field
-			html[html.length] = '<div style="display:inline"><div style="width:180;float:left;font-size:13px">'+'</div>';
-			if(itemData.typeName!=null&&(itemData.typeName=="PICTURE")){			
-			  html[html.length] = '	<span style="cursor: pointer;" onclick="javascript:amalto.itemsbrowser.ItemsBrowser.showUploadFile(\''+itemData.nodeId+'\','+treeIndex+',\''+itemData.typeName+'\')"><img src="img/genericUI/image_add.png"/></span>'+'</div>';
 			}
 			
 			html[html.length] = '	<span id="'+itemData.nodeId+'OpenDetails" onclick="amalto.itemsbrowser.ItemsBrowser.displayXsdDetails(\''+itemData.nodeId+'\')" >';
@@ -231,6 +235,7 @@ YAHOO.extend(amalto.itemsbrowser.ItemNode, YAHOO.widget.Node, {
 		
 
 		var errorMessageDivId = this.itemData.nodeId+"ErrorMessage";
+		if($(errorMessageDivId))
 		$(errorMessageDivId).style.display = "none";
 		if(this.itemData.restrictions!=null){	
 			for(var i=0;i<this.itemData.restrictions.length;i++){
