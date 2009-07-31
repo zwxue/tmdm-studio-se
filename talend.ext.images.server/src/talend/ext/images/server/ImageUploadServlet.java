@@ -70,8 +70,8 @@ public class ImageUploadServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		targetUri="upload";//reset
+		response.setContentType("text/html");
 		String result=onUpload(request, response);
-		
 		PrintWriter writer = response.getWriter();
         writer.write(result.toString());
         writer.close();
