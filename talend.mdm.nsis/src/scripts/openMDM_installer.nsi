@@ -155,7 +155,6 @@ SectionEnd
 
 Function runService
   	;remove the service  
-  	Exec '"$INSTDIR\openMDM\bin\service.bat" uninstall /NCRC'	
   	
 	Exec '"$INSTDIR\openMDM\bin\service.bat" install /NCRC'	
 	;registry it to let openMDM star when windows startup
