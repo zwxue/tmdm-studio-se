@@ -10,3 +10,6 @@ Initial release
 
 1.1.0
 add db backup function
+
+1.1.1
+add delete function
