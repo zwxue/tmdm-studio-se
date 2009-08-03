@@ -1,8 +1,6 @@
 package talend.ext.images.server;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.servlet.ServletContext;
@@ -13,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import talend.ext.images.server.backup.DBDelegate;
 import talend.ext.images.server.backup.ResourcePK;
+import talend.ext.images.server.util.IOUtil;
 import talend.ext.images.server.util.ReflectionUtil;
 
 public class ImageLoadFrontFilter {
@@ -41,7 +40,7 @@ public class ImageLoadFrontFilter {
 					DBDelegate dbDelegate=(DBDelegate) ReflectionUtil.newInstance(inDBDelegateClass,new Object[0]);
 					byte[] fileBytes=dbDelegate.getResource(new ResourcePK(resourceCatalogName,resourceFileName));
 					if(fileBytes!=null){
-						if(byteToImage(fileBytes,resourcePath)){
+						if(IOUtil.byteToImage(fileBytes,resourcePath)){
 							logger.debug("Restore file from backup database! ");
 							return true;
 						}
@@ -85,29 +84,6 @@ public class ImageLoadFrontFilter {
 		}
 	}
 
-	private static boolean byteToImage(byte[] b, String filePath) {
-		boolean bl = false;
-		File binaryFile = new File(filePath);
-		FileOutputStream fileOutStream = null;
-		try {
-			fileOutStream = new FileOutputStream(binaryFile);
-			for (int i = 0; i < b.length; i++) {
-				fileOutStream.write(b[i]);
-			}
-			fileOutStream.flush();
-			bl = true;
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				fileOutStream.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return bl;
-	}
+	
 
 }

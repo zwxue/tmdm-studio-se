@@ -26,7 +26,8 @@ function _submit(){
 File:<input type="file" name="imageFile" /><br />
 Catalog:<input type="text" name="catalogName" /><br />
 <input type="button" name="upload" value="upload" onclick="_submit()"><br />
-You can request the uploaded image in this way: "http://{web_context}[:port]/{feedback_uri}?width=300&height=300&preserveAspectRatio=true"
+You can request the uploaded image in this way: "http://{domain}[:port]/{web_context}/{feedback_uri}?width=300&height=300&preserveAspectRatio=true"<br />
+You can delete the uploaded image in this way:"http://{domain}[:port]/{web_context}/secure/ImageDeleteServlet?uri={feedback_uri}"
 </form>
 
 </BODY>
