@@ -100,13 +100,15 @@ public class WidgetFactory extends FormToolkit {
                     Composite parent = (Composite) control;
                     setChildFocus(parent);
                 } else {
-                    control.setFocus();
-                    if(control instanceof Text){
-                    	((Text)control).selectAll();
-                    }
-                    if(control instanceof StyledText){
-                    	((StyledText)control).selectAll();
-                    }
+                	if(control.isFocusControl()){
+	                    //control.setFocus();
+	                    if(control instanceof Text){
+	                    	((Text)control).selectAll();
+	                    }
+	                    if(control instanceof StyledText){
+	                    	((StyledText)control).selectAll();
+	                    }
+                	}
                 }
             }
         };
