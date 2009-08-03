@@ -55,4 +55,19 @@ public class DBDelegateExistImpl implements DBDelegate{
 		
 	}
 
+	public boolean deleteResource(ResourcePK resourcePK) {
+		try {
+			long rtnStatus=server.deleteDocument(null, BACKUP_CLUSTER_NAME, resourcePK.toString(), "BINARY");
+			if(rtnStatus==-1){
+				return false;
+			}else{
+				return true;
+			}
+		} catch (XtentisException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+
 }
