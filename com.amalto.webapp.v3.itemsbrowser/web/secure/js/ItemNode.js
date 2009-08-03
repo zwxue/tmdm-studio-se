@@ -235,50 +235,49 @@ YAHOO.extend(amalto.itemsbrowser.ItemNode, YAHOO.widget.Node, {
 		
 
 		var errorMessageDivId = this.itemData.nodeId+"ErrorMessage";
-		if($(errorMessageDivId))
 		$(errorMessageDivId).style.display = "none";
 		if(this.itemData.restrictions!=null){	
 			for(var i=0;i<this.itemData.restrictions.length;i++){
 				if(this.itemData.restrictions[i].name=="minLength" 
 				&& value.length<parseInt(this.itemData.restrictions[i].value)){				
-					var msg="\""+this.itemData.name+"\""+amalto.ItemsTrash.ItemsTrashLocal.get('MINLENGTH_MSG')+this.itemData.restrictions[i].value+amalto.ItemsTrash.ItemsTrashLocal.get('MINLENGTH_MSG2');
+					var msg="\""+this.itemData.name+"\" doit comporter au minimum "+this.itemData.restrictions[i].value+" caractères.";
 					this.displayErrorMessage(errorMessageDivId,msg);
 					return false;
 				}
 				if(this.itemData.restrictions[i].name=="maxLength" 
 				&& value.length>parseInt(this.itemData.restrictions[i].value)){
-					var msg="\""+this.itemData.name+"\""+amalto.ItemsTrash.ItemsTrashLocal.get('MAXLENGTH_MSG1')+this.itemData.restrictions[i].value+amalto.ItemsTrash.ItemsTrashLocal.get('MAXLENGTH_MSG2');
+					var msg="\""+this.itemData.name+"\" n'accepte que "+this.itemData.restrictions[i].value+" caractères maximum.";
 					this.displayErrorMessage(errorMessageDivId,msg);
 					return false;
 				}
 				if(this.itemData.restrictions[i].name=="minExclusive" 
 				&& parseInt(value)<=parseInt(this.itemData.restrictions[i].value)){					
-					var msg="\""+this.itemData.name+"\" "+amalto.ItemsTrash.ItemsTrashLocal.get('MINEXCLUSIVE_MSG1')+this.itemData.restrictions[i].value+".";
+					var msg="\""+this.itemData.name+"\" doit etre superieur à "+this.itemData.restrictions[i].value+".";
 					this.displayErrorMessage(errorMessageDivId,msg);
 					return false;
 				}
 				if(this.itemData.restrictions[i].name=="maxExclusive" 
 				&& parseInt(value)>=parseInt(this.itemData.restrictions[i].value)){
-					var msg="\""+this.itemData.name+"\" "+amalto.ItemsTrash.ItemsTrashLocal.get('MAXEXCLUSIVE_MSG1')+this.itemData.restrictions[i].value+".";
+					var msg="\""+this.itemData.name+"\" doit etre inférieur à "+this.itemData.restrictions[i].value+".";
 					this.displayErrorMessage(errorMessageDivId,msg);
 					return false;
 				}
 				if(this.itemData.restrictions[i].name=="minInclusive" 
 				&& parseInt(value)<parseInt(this.itemData.restrictions[i].value)){
-					var msg="\""+this.itemData.name+"\"  "+amalto.ItemsTrash.ItemsTrashLocal.get('MININCLUSIVE_MSG1')+this.itemData.restrictions[i].value+".";
+					var msg="\""+this.itemData.name+"\" doit etre superieur ou égal à "+this.itemData.restrictions[i].value+".";
 					this.displayErrorMessage(errorMessageDivId,msg);
 					return false;
 				}
 				if(this.itemData.restrictions[i].name=="maxInclusive" 
 				&& parseInt(value)>parseInt(this.itemData.restrictions[i].value)){
-					var msg="\""+this.itemData.name+"\" "+amalto.ItemsTrash.ItemsTrashLocal.get('MAXINCLUSIVE_MSG1')+this.itemData.restrictions[i].value+".";
+					var msg="\""+this.itemData.name+"\" doit etre inférieur ou égal à "+this.itemData.restrictions[i].value+".";
 					this.displayErrorMessage(errorMessageDivId,msg);
 					return false;
 				}
 				if(this.itemData.restrictions[i].name=="pattern"){
 					var patrn=new RegExp(this.itemData.restrictions[i].value);
 					if(!patrn.exec(value)){
-						var msg="\""+this.itemData.name+amalto.ItemsTrash.ItemsTrashLocal.get('PATTEN_MSG1')+this.itemData.restrictions[i].value+"\".";
+						var msg="\""+this.itemData.name+"\" de pattern est \""+this.itemData.restrictions[i].value+"\".";
 						this.displayErrorMessage(errorMessageDivId,msg);
 						return false;
 					}

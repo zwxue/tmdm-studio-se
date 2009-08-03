@@ -3,9 +3,7 @@
 amalto.itemsbrowser.ItemsBrowser = function () {
 
 	loadResource("/core/secure/yui-2.4.0/build/treeview/treeview.js", "YAHOO.widget.TreeView" );
-	
-	loadResource("/itemsbrowser/secure/js/ItemNodeLocal.js", "amalto.itemsbrowser.ItemNodeLocal" );
-	
+		
 	loadResource("/core/secure/yui-2.4.0/build/treeview/assets/treeview.css", "" );
 	
 	loadResource("/itemsbrowser/secure/css/ItemsBrowser.css", "" );
