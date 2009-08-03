@@ -1500,32 +1500,42 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	    DWRUtil.setValue(inputText,'');
 	    updateNode(nodeId,treeIndex);
 	    if($('showPicture'))
-	       $('showPicture').src='img/genericUI/blank.gif';
+	       $('showPicture').src='';
 	}
 	
 	function showUploadFile(nodeId, treeIndex, nodeType){
-		if(uploadFileWindow){
-			 uploadFileWindow.hide();
-			 uploadFileWindow.destroy();
-		}
-		
-		
-    	var uploadFilePanel =  new Ext.form.FormPanel({    
-	     
+
+	if(uploadFileWindow){
+		 uploadFileWindow.hide();
+		 uploadFileWindow.destroy();
+	}
+    var uploadFilePanel = new Ext.form.FormPanel({
+          baseCls: 'x-plain',
 	     labelAlign: 'right',    	      
-	     labelWidth: 60,    
-	     frame:true,   
+	     labelWidth: 60,           
+         //layout:'fit',
+         defaultType: 'textfield',
 	     url: '/imageserver/secure/ImageUploadServlet',//fileUploadServlet    
 	     fileUpload: true,   
-		 width: 300,
-		 height:100,  
 	     items: [{    
 	        xtype: 'textfield',    
 	        fieldLabel: FILE_NAME[language],    
 	        name: 'imageFile',    
 	        inputType: 'file'//file type
-	      }],    
-	        
+	      }]
+        
+    });
+
+    uploadFileWindow = new Ext.Window({
+        title: UPLOAD_FILE[language],
+        width: 320,
+        height:120,
+        layout: 'fit',
+        plain:true,
+        bodyStyle:'padding:5px;',
+        buttonAlign:'center',
+        items: uploadFilePanel,
+
 	    buttons: [{    
 	        text: UPLOAD[language],    
 	        handler: function() {    
@@ -1537,8 +1547,8 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 				    DWRUtil.setValue(inputText,url);
 				    updateNode(nodeId,treeIndex);		           
 		            Ext.Msg.alert('Sucess', 'File upload sucessfully!');
-		            uploadFileWindow.hide();
 		            if($('showPicture'))$('showPicture').src=url;
+		            uploadFileWindow.hide();
 		        },    
 		       failure: function(){    
 	          	Ext.Msg.alert('Failed', 'File upload failed!');    
@@ -1552,17 +1562,9 @@ amalto.itemsbrowser.ItemsBrowser = function () {
                 uploadFilePanel.getForm().reset();
             }
         }]    
-	  });	
-			uploadFileWindow = new Ext.Window({
-                layout:'fit',
-                closeAction:'hide',
-                plain: true,
-                title: UPLOAD_FILE[language],
-			     width: 320,
-			     height:120,                
-                items: [uploadFilePanel]
-            });						
-			uploadFileWindow.show(this);
+    });
+
+    uploadFileWindow.show();
 	}
 	var panel;
 	function chooseForeignKey(nodeId, xpathForeignKey, xpathInfoForeignKey, treeIndex) {

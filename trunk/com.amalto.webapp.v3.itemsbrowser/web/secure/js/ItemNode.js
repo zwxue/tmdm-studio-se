@@ -153,15 +153,14 @@ YAHOO.extend(amalto.itemsbrowser.ItemNode, YAHOO.widget.Node, {
 			}else if(itemData.typeName!=null&&(itemData.typeName=="PICTURE")){//PICTURE
 				   //show picture
 				   if(value.length>0){
-				 		html[html.length] = '<span style="cursor: pointer;" '+	' <img id="showPicture" src="'+ itemData.value+ '"/></span>';	
-				 	}else{
-				 		html[html.length] = '<span style="cursor: pointer;" '+	' <img id="showPicture" src="img/genericUI/blank.gif"/></span>';	
+				 		html[html.length] = '<span style="cursor: pointer;"> '+	' <img alt="Picture" id="showPicture" src="'+ itemData.value+ '"/></span>';	
+				 	}else{				 		
+				 		html[html.length] = '<span style="cursor: pointer;"> '+	' <img alt="Picture" id="showPicture" src=""/></span>';	
 				 	}					
 					//remove picture
 					html[html.length]='<span style="cursor: pointer;" onclick="amalto.itemsbrowser.ItemsBrowser.removePicture(\''+itemData.nodeId+'\','+treeIndex+')">' +
-					' <img alt="Remove the picture" src="img/genericUI/delete.gif"/></span>';					
-				
-				html[html.length] =input+ ' <span style="cursor: pointer;" onclick="javascript:amalto.itemsbrowser.ItemsBrowser.showUploadFile(\''+itemData.nodeId+'\','+treeIndex+',\''+itemData.typeName+'\')"><img alt="Select a picture" src="img/genericUI/image_add.png"/></span>'+'</div>';
+					' <img alt="Remove the picture" src="img/genericUI/delete.gif"/></span>';									
+				    html[html.length] =input+ '<span style="cursor: pointer;" onclick="javascript:amalto.itemsbrowser.ItemsBrowser.showUploadFile(\''+itemData.nodeId+'\','+treeIndex+',\''+itemData.typeName+'\')"><img alt="Select a picture" src="img/genericUI/image_add.png"/></span>'+'</div>';
 			}else{
 			  html[html.length] = input +'</div>';
 			}
