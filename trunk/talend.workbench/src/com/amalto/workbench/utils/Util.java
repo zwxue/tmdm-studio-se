@@ -7,7 +7,6 @@ package com.amalto.workbench.utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FilenameFilter;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -18,9 +17,11 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -76,9 +77,14 @@ import com.amalto.workbench.webservices.WSComponent;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSGetComponentVersion;
+import com.amalto.workbench.webservices.WSGetUniverse;
+import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSGetViewPKs;
 import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
+import com.amalto.workbench.webservices.WSUniverse;
+import com.amalto.workbench.webservices.WSUniversePK;
+import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
 import com.amalto.workbench.webservices.WSVersion;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -1244,4 +1250,26 @@ public class Util {
 		
 		return strEntry;
 	}
+    
+    //key is the objectname, value is revisionids
+    public static Map<String, List<String>> getUniverseMap(XtentisPort port){
+    	Map<String, List<String>> map=new HashMap<String, List<String>>();
+		WSUniversePK[] universePKs = null;
+		//boolean hasUniverses = true;
+		try {
+			universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();
+			for(WSUniversePK pk: universePKs){
+				WSUniverse universe=port.getUniverse(new WSGetUniverse(pk));
+				for(WSUniverseXtentisObjectsRevisionIDs id:universe.getXtentisObjectsRevisionIDs()){
+					if(map.get(id.getXtentisObjectName())==null){
+						map.put(id.getXtentisObjectName(), new ArrayList<String>());
+					}
+					map.get(id.getXtentisObjectName()).add(id.getRevisionID());					
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("No Universes");
+		}
+    	return map;
+    }
 }
