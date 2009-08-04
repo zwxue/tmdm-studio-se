@@ -81,6 +81,7 @@ public class DescribeCommand
    */
   public void execute()
   {
+	//TODO to support more db
 	ResultSet resultSet = null;  
     try
     {
