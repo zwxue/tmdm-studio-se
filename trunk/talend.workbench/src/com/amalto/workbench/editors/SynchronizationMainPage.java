@@ -498,7 +498,7 @@ public class SynchronizationMainPage extends AMainPageV2{
             );       	
             composite.setLayout(new GridLayout(2,false));
             
-            Label label = toolkit.createLabel(composite, object, SWT.NULL);
+            Label label = toolkit.createLabel(composite, object, SWT.WRAP);
             GridData data =new GridData(SWT.FILL,SWT.RIGHT,false,true,1,1);
             data.widthHint=120;
             label.setLayoutData(data);
