@@ -22,7 +22,7 @@ amalto.ItemsTrash.ItemsTrashLocal=function(){
 	              'revisionID':'RevisionID',
                   'conceptName':'Concept',
                   'Ids':'Ids',
-                  'partPath':'Part Path',
+                  'partPath':'Part path',
                   'UserName':'User Name',
                   'Date':'Date',
                   'delete':'Delete',
