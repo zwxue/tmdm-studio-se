@@ -19,6 +19,7 @@ import org.eclipse.ui.forms.editor.IFormPage;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
+import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.ESystemDefaultObjects;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.ImageCache;
@@ -168,29 +169,29 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener{
     	TreeObject object = (TreeObject)((XObjectBrowserInput)this.getEditorInput()).getModel();
     	
 		if (object.getType() == TreeObject._SERVER_)
-			return ImageCache.getImage( "icons/talend-picto-small.gif").createImage();
+			return ImageCache.getImage( EImage.TALEND_PICTO_SMALL.getPath()).createImage();
 		else if (object.getType() == TreeObject.DATA_CLUSTER)
-			return ImageCache.getImage( "icons/data_cluster.gif").createImage();
+			return ImageCache.getImage( EImage.DATA_CLUSTER.getPath()).createImage();
 		else if (object.getType() == TreeObject.DATA_MODEL)
-			return ImageCache.getImage( "icons/data_model.gif").createImage();
+			return ImageCache.getImage( EImage.DATA_MODEL.getPath()).createImage();
 		else if (object.getType() == TreeObject.MENU)
-			return ImageCache.getImage( "icons/menu.gif").createImage();
+			return ImageCache.getImage( EImage.MENU.getPath()).createImage();
 		else if (object.getType() == TreeObject.TRANSFORMER)
-			return ImageCache.getImage( "icons/transformer.gif").createImage();
+			return ImageCache.getImage( EImage.TRANSFORMER.getPath()).createImage();
 		else if (object.getType() == TreeObject.ROLE)
-			return ImageCache.getImage( "icons/role.gif").createImage();
+			return ImageCache.getImage( EImage.ROLE.getPath()).createImage();
 		else if (object.getType() == TreeObject.STORED_PROCEDURE)
-			return ImageCache.getImage( "icons/stored_procedure.gif").createImage();
+			return ImageCache.getImage( EImage.STORED_PROCEDURE.getPath()).createImage();
 		else if (object.getType() == TreeObject.ROUTING_RULE)
-			return ImageCache.getImage( "icons/routing_rule.gif").createImage();
+			return ImageCache.getImage( EImage.ROUTING_RULE.getPath()).createImage();
 		else if (object.getType() == TreeObject.VIEW)
-			return ImageCache.getImage( "icons/view.gif").createImage();
+			return ImageCache.getImage( EImage.VIEW.getPath()).createImage();
 		else if (object.getType() == TreeObject.DOCUMENT)
-			return ImageCache.getImage( "icons/documents.gif").createImage();			
+			return ImageCache.getImage( EImage.DOCUMENTS.getPath()).createImage();			
 		else if (object.getType() == TreeObject.SUBSCRIPTION_ENGINE)
-			return ImageCache.getImage( "icons/routing_rule.gif").createImage();
+			return ImageCache.getImage( EImage.ROUTING_RULE.getPath()).createImage();
 		
-		return ImageCache.getImage( "icons/error.gif").createImage();
+		return ImageCache.getImage( EImage.ERROR.getPath()).createImage();
     }
     
     

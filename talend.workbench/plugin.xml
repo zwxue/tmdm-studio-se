@@ -42,6 +42,13 @@
             icon="icons/talend-picto-small.gif"
             id="com.amalto.workbench.editors.XObjectBrowser"
             name="com.amalto.workbench.editors.XObjectBrowser"/>
+      <editor
+            class="com.amalto.workbench.editors.XObjectRevisionBrowser"
+            default="false"
+            icon="icons/talend-picto-small.gif"
+            id="com.amalto.workbench.editors.XObjectRevisionBrowser"
+            name="com.amalto.workbench.editors.XObjectRevisionBrowser">
+      </editor>
    </extension>
 
 </plugin>

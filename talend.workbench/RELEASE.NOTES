@@ -13,9 +13,9 @@ Web Services in line with core 2.19.0 (new Routing Engine V2)
 New Routing Engine Interface with possibility to resubmit Routing Orders for Cores 2.19+;
 The "old" Subscription Engine Interface for earlier cores also offer the possibility to resubmit Routing Orders.
 Possibility to resubmit a document to the Routing Engine from the Cluster Browser Page (all cores).
-Login is now made based on the full endpoint address eg http://localhost:8080/xtentis/XtentisPort instead of localhost:8080
+Login is now made based on the full endpoint address eg http://localhost:8080/talend/TalendPort instead of localhost:8080
 SSL connections (e.g. HTTPS) are now directly supported from the workbench
-Saved endpoint addresses are now located in {user.home}/.xtentisworkbench.conf
+Saved endpoint addresses are now located in {user.home}/.mdmworkbench.conf
 Multiple minor UI improvements.  
 
 2.18.0
