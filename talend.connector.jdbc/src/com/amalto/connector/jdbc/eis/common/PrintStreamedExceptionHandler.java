@@ -64,6 +64,8 @@ public class PrintStreamedExceptionHandler
     this.println("");
     this.println(cause.getMessage());
     this.println("");
+    
+    this.flushLocalBuffer();
   }
   
   //----------------------------------------------------------------------------
