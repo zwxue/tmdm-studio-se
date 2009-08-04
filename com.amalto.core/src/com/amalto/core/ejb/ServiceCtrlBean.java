@@ -212,6 +212,22 @@ public abstract class ServiceCtrlBean implements SessionBean {
     
     
     /**
+     * To be implemented
+     * To request and get the response from other applications 
+     * 
+     * @param command - used to call different pull method in service Object
+     * @param parameters - incoming parameters, may be in xml format 
+     * @param schedulePlanID - the ID of schedule plan, if in schedule mode 
+     * @return Serializable - a serializable Object to be passed backed to the system
+     * @throws XtentisException
+     * 
+     * @ejb.interface-method view-type = "both"
+     * @ejb.facade-method 
+     */
+    public abstract Serializable fetchFromOutbound(String command, String parameters, String schedulePlanID) throws XtentisException;
+    
+    
+    /**
      * Configuration received from outbound, typically a portlet
      * The default implementation stores the configuration string "as is"
      * 	

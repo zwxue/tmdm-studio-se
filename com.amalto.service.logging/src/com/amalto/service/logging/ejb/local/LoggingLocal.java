@@ -5,7 +5,7 @@ package com.amalto.service.logging.ejb.local;
 
 /**
  * Local interface for Logging.
- * @xdoclet-generated at 17-06-09
+ * @xdoclet-generated at 3-08-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
@@ -33,5 +33,7 @@ public interface LoggingLocal
    public java.lang.String getConfiguration( java.lang.String optionalParameters ) throws com.amalto.core.util.XtentisException;
 
    public void putConfiguration( java.lang.String configuration ) throws com.amalto.core.util.XtentisException;
+
+   public java.io.Serializable fetchFromOutbound( java.lang.String command,java.lang.String parameters,java.lang.String schedulePlanID ) throws com.amalto.core.util.XtentisException;
 
 }
