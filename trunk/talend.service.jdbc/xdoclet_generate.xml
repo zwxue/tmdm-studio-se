@@ -4,7 +4,7 @@
     
 	<property name="project.name" value = "talend.service.jdbc"/>
 	
-	<property name="xdoclet.root.dir" value="c:/opt/xdoclet-1.2.3.patched"/>
+	<property name="xdoclet.root.dir" value="/opt/xdoclet-1.2.3.patched"/>
     <property file="${xdoclet.root.dir}/build.properties"/>
 	<property name="xdoclet.lib.dir" value = "${xdoclet.root.dir}/lib"/>
 	<property name="dist.lib.dir" value = "${xdoclet.lib.dir}"/>
@@ -26,13 +26,13 @@
         <fileset dir="${xdoclet.lib.dir}">
             <include name="*.jar"/>
         </fileset>	
-        <fileset dir="c:/opt/jboss/server/default/lib">
+        <fileset dir="/opt/jboss/server/default/lib">
             <include name="*.jar"/>
         </fileset>
-        <fileset dir="c:/opt/jboss/lib">
+        <fileset dir="/opt/jboss/lib">
             <include name="*.jar"/>
         </fileset>
-    	<fileset dir="c:/opt/jwsdp-1.5/jaxp/lib">
+    	<fileset dir="/opt/jwsdp-1.5/jaxp/lib">
     		<include name="**/*.jar"/>
     	</fileset>
     </path>
