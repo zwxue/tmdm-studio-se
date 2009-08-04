@@ -34,6 +34,8 @@ public class BasicPrintStreamed implements PrintStreamed
 
   private List printStreams;
   
+  private StringBuffer localBuffer;
+  
   //----------------------------------------------------------------------------
   // Constructors
   //----------------------------------------------------------------------------
@@ -45,6 +47,7 @@ public class BasicPrintStreamed implements PrintStreamed
   public BasicPrintStreamed()
   {
     this.printStreams = new ArrayList();
+    localBuffer =new StringBuffer();
   }
   
   //----------------------------------------------------------------------------
@@ -104,6 +107,7 @@ public class BasicPrintStreamed implements PrintStreamed
     {
       PrintStream printStream = (PrintStream) iter.next();
       printStream.print(line);
+      localBuffer.append(line);
     }
   }
   
@@ -118,6 +122,7 @@ public class BasicPrintStreamed implements PrintStreamed
     {
       PrintStream printStream = (PrintStream) iter.next();
       printStream.println(line);
+      localBuffer.append(line).append("\n");
     }
   }
 
@@ -130,11 +135,20 @@ public class BasicPrintStreamed implements PrintStreamed
   {
     return this.printStreams.iterator();
   }
+
+
   
   //----------------------------------------------------------------------------
   // Other methods
   //----------------------------------------------------------------------------
+  public StringBuffer getLocalBuffer() {
+		return localBuffer;
+  }
   
+  public void flushLocalBuffer() {
+	   this.localBuffer=null;
+	   this.localBuffer=new StringBuffer();
+   }
   //----------------------------------------------------------------------------
   // Member classes
   //----------------------------------------------------------------------------

@@ -77,6 +77,7 @@ public class ShowTablesCommand
    */
   public void execute()
   {
+	//TODO to support more db
 	ResultSet resultSet=null;  
     try
     {
