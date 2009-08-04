@@ -46,6 +46,7 @@ import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
 
 import com.amalto.workbench.actions.AServerViewAction;
+import com.amalto.workbench.actions.BrowseRevisionAction;
 import com.amalto.workbench.actions.BrowseViewAction;
 import com.amalto.workbench.actions.CopyXObjectAction;
 import com.amalto.workbench.actions.DataClusterExportAction;
@@ -63,7 +64,6 @@ import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.ServerTreeContentProvider;
 import com.amalto.workbench.providers.ServerTreeLabelProvider;
 import com.amalto.workbench.utils.EImage;
-import com.amalto.workbench.utils.ESystemDefaultObjects;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.ImageCache;
@@ -108,6 +108,9 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     private int dragType = -1;
 
 	private DataClusterImportAction importAction;
+
+
+	private BrowseRevisionAction browseRevisionAction;
 	/**********************************************************************************
 	 * The VIEW
 	 * 
@@ -455,6 +458,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					manager.add(importAction);
 				}
 				manager.add(newXObjectAction);
+				if(Util.hasUniverse(xobject))
+					manager.add(browseRevisionAction);
 				if (xobject.isXObject()) {
 					manager.add(editXObjectAction);
 					manager.add(deleteXObjectAction);
@@ -518,6 +523,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
 		editXObjectAction = new EditXObjectAction(this);
 		newXObjectAction = new NewXObjectAction(this);
+		browseRevisionAction = new BrowseRevisionAction(this);
 		deleteXObjectAction = new DeleteXObjectAction(this);
 		serverRefreshAction = new ServerRefreshAction(this);
 		//serverInitAction = new ServerInitAction(this);

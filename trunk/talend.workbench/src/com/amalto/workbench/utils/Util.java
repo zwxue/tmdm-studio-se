@@ -1272,4 +1272,42 @@ public class Util {
 		}
     	return map;
     }
+    //key is the universename, value is revisionids
+    public static Map<String, List<String>> getUniverseMap2(XtentisPort port){
+    	Map<String, List<String>> map=new HashMap<String, List<String>>();
+		WSUniversePK[] universePKs = null;
+		//boolean hasUniverses = true;
+		try {
+			universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();
+			for(WSUniversePK pk: universePKs){
+				WSUniverse universe=port.getUniverse(new WSGetUniverse(pk));
+				for(WSUniverseXtentisObjectsRevisionIDs id:universe.getXtentisObjectsRevisionIDs()){
+					String name=universe.getName();
+					if(map.get(name)==null){
+						map.put(name, new ArrayList<String>());
+					}
+					map.get(name).add(id.getRevisionID());					
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("No Universes");
+		}
+    	return map;
+    }   
+    public static boolean hasUniverse(TreeObject xobject){
+    	if(xobject.isXObject()) return false;
+        switch(xobject.getType()) {
+	    	case TreeObject.DATA_MODEL:
+	       	case TreeObject.VIEW:	           	  
+	       	case TreeObject.MENU:
+	       	case TreeObject.ROLE:
+	       	case TreeObject.ROUTING_RULE:
+	       	case TreeObject.SYNCHRONIZATIONPLAN:
+	       	case TreeObject.STORED_PROCEDURE:
+	       	case TreeObject.TRANSFORMER:
+	       		return true;
+	       	default:
+	       		return false;
+        }
+    }	
 }
