@@ -201,12 +201,13 @@ public class LocalTreeObjectRepository implements IXObjectModelListener{
 		if (elemFolder != null)
 		{
 			String displayName = filterOutBlank(child.getDisplayName());
-			if (elemFolder.element(displayName) == null && catalog.equals(""))
+			Element childElem = elemFolder.element(displayName);
+			if ((childElem == null || !childElem.getText().equals(child.getType() + ""))&& catalog.equals(""))
 			{
 				elemFolder.addElement(filterOutBlank(child.getDisplayName())).setText(child.getType() + "");
 			}
 		}
-		
+		System.out.println();
 		saveDocument(doc);
 	}
 	
@@ -217,7 +218,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener{
 		synchronizeWithElem(child, (TreeParent)parent, true);
 		Element elemFolder = getParentElement(parent);
 		Element elemChild = elemFolder.element(filterOutBlank(child.getDisplayName()));
-		if (elemChild != null)
+		if (elemChild != null && elemChild.getText().equals(child.getType() + ""))
 		  elemFolder.remove(elemChild);
 		
 		saveDocument(doc);
