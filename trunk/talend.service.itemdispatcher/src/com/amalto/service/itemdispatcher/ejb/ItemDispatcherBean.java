@@ -430,6 +430,17 @@ public class ItemDispatcherBean extends ServiceCtrlBean  implements SessionBean{
     public String getConfiguration(String optionalParameters) throws XtentisException{
     	return "";
     }
+    
+	/**
+	 * @throws EJBException
+	 *
+	 * @ejb.interface-method view-type = "local"
+	 * @ejb.facade-method
+	 */
+	 public Serializable fetchFromOutbound(String command, String parameters,String schedulePlanID) throws XtentisException {
+			// N/A
+			return null;
+	 }
 
     
 }

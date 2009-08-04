@@ -642,4 +642,20 @@ public class SvnServiceBean extends VersioningServiceCtrlBean implements Session
 	   return path;
    }
 
+
+   /**
+    * @throws EJBException
+    *
+    * @ejb.interface-method view-type = "local"
+    * @ejb.facade-method
+    */
+    public Serializable fetchFromOutbound(String command, String parameters,String schedulePlanID) throws XtentisException {
+		// TODO We can handle this functions of SVN
+		//      list
+		//		checkoutFile
+		//		getHistory
+		//		getVersions
+		return null;
+	}
+
 }
