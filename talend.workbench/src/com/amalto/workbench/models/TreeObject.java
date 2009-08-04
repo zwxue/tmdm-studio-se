@@ -6,6 +6,7 @@ import java.util.Iterator;
 import org.eclipse.core.runtime.IAdaptable;
 
 import com.amalto.workbench.utils.EXtentisObjects;
+import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.UserInfo;
 
 public class TreeObject implements IAdaptable {
@@ -34,6 +35,7 @@ public class TreeObject implements IAdaptable {
 	public final static int UNIVERSE=18;
 	public final static int SYNCHRONIZATIONPLAN=19;
 	public final static int TRANSFORMER_PLUGIN=20;
+	public final static int CATEGORY_FOLDER = 21;
 	
 	public final static int _ACTION_ = 100;
 	public final static int _WIZARD_ = 101;
@@ -71,6 +73,8 @@ public class TreeObject implements IAdaptable {
 		this.wsObject = wsObject;
 		this.isXObject = true;
 		this.additionalInfo = additionalInfo;
+		
+		addListener(LocalTreeObjectRepository.getInstance());
 	}
 
 	protected void setParent(TreeParent parent) {
@@ -150,7 +154,7 @@ public class TreeObject implements IAdaptable {
 		if (listeners.contains(listener)) listeners.remove(listener);
 	}
 	
-	public void fireEvent(int eventType, TreeObject objectParent, TreeObject child) {
+	public synchronized void fireEvent(int eventType, TreeObject objectParent, TreeObject child) {
 		 TreeObject current = this;
 		do {
 			if (current.listeners!=null) {

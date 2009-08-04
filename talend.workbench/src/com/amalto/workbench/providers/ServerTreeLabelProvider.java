@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.amalto.workbench.actions.AServerViewAction;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.ESystemDefaultObjects;
 import com.amalto.workbench.utils.FontUtils;
 import com.amalto.workbench.utils.ImageCache;
@@ -64,7 +65,10 @@ public class ServerTreeLabelProvider extends LabelProvider implements IColorProv
 				return ImageCache.getCreatedImage( "icons/unique.gif");		
 			else if (object.getType() == TreeObject.SYNCHRONIZATIONPLAN)
 				return ImageCache.getCreatedImage( "icons/catchuprelease_rls.gif");	
+			else if (object.getType() == TreeObject.CATEGORY_FOLDER)
+				return ImageCache.getCreatedImage( "icons/folder.gif");
 			
+				
 			//return PlatformUI.getWorkbench().getSharedImages().getCreatedImage(ISharedImages.IMG_OBJ_ELEMENT);
 
 			
