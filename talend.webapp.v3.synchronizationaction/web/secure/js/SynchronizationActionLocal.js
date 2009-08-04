@@ -35,20 +35,20 @@ amalto.SynchronizationAction.SynchronizationActionLocal=function(){
                  };
                  
             locale_fr= {     
-  				  'LABEL_SYSTEM_INFO_GROUP':'Remote system information',
-	    		  'LABEL_SERVER_URL':'serverURL',   
-	              'LABEL_USER_NAME':'UserName',
-                  'LABEL_PASSWORD':'Password',
-                  'LABEL_SYNCHRONIZATION_NAME':'Synchronization Name',
-                  'START_FULL_BUTTON':'Start Full',
-                  'START_DIFFERENT_BUTTON':'Start Different',
-                  'STOP_BUTTON':'Stop',
-                  'RESET_BUTTON':'Reset',
-                  'TOOLTIP_START_SYNCHRONIZATION':'Start synchronization',
-                  'TOOLTIP_START_DIFFERENCE_SYNCHRONIZATION':'Start Different synchronization',
-                  'TOOLTIP_STOP_SYNCHRONIZATION':'Stop synchronization',
-                  'TOOLTIP_RESET_SYNCHRONIZATION':'Reset synchronization',
-                  'MAIN_PANEL_TITLE':'Synchronization Action'
+            		 'LABEL_SYSTEM_INFO_GROUP':'Informations du système distant',
+            		 'LABEL_SERVER_URL':'URL du serveur',   
+            		 'LABEL_USER_NAME':'Utilisateur',
+                     'LABEL_PASSWORD':'Mot de passe',
+                     'LABEL_SYNCHRONIZATION_NAME':'Synchronization Name:',
+                     'START_FULL_BUTTON':'Synchro complète',
+                     'START_DIFFERENT_BUTTON':'Synchro différentielle',
+                     'STOP_BUTTON':'Stop',
+                     'RESET_BUTTON':'Reset',
+                     'TOOLTIP_START_SYNCHRONIZATION':'Start synchronization',
+                     'TOOLTIP_START_DIFFERENCE_SYNCHRONIZATION':'Start Different synchronization',
+                     'TOOLTIP_STOP_SYNCHRONIZATION':'Stop synchronization',
+                     'TOOLTIP_RESET_SYNCHRONIZATION':'Reset synchronization',
+                     'MAIN_PANEL_TITLE':'Action de Syschronization'
                  };
                  
             /********************************************************************
