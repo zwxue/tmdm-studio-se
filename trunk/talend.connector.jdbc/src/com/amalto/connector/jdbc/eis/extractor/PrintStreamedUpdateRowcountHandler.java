@@ -59,6 +59,8 @@ public class PrintStreamedUpdateRowcountHandler
     this.println("");
     this.println(rowCount + " row(s)");
     this.println("");
+    
+    this.flushLocalBuffer();
   }
   
   //----------------------------------------------------------------------------

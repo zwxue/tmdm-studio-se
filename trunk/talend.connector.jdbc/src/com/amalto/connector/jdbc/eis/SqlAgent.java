@@ -3,9 +3,8 @@ package com.amalto.connector.jdbc.eis;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Properties;
-import java.util.Set;
 
 import com.amalto.connector.jdbc.eis.command.DescribeCommand;
 import com.amalto.connector.jdbc.eis.command.SelectCommand;
@@ -19,13 +18,19 @@ import com.amalto.connector.jdbc.eis.extractor.PrintStreamedUpdateRowcountHandle
 
 public class SqlAgent {
 	
+	public static final String EXCEPTION_PS="exceptionHandler";
+	public static final String SELECT_PS="resultSetExtractor";
+	public static final String UPDATE_PS="rowcountHandler";
+	public static final String SHOWTABLE_PS="showTableResultSetExtractor";
+	public static final String DESCRIBE_PS="describeResultSetExtractor";
+	
 	private String driverClassName;
 	private String url;
 	private String username;
 	private String password;
 	private Properties properties;
 	
-	private Set printStreamed;
+	private HashMap printStreamed;
 	private SelectCommand selectCommand;
 	private UpdateCommand updateCommand;
 	private ShowTablesCommand showTablesCommand;
@@ -70,6 +75,10 @@ public class SqlAgent {
 	public String getPassword() {
 		return password;
 	}
+	
+	public HashMap getPrintStreamed() {
+		return printStreamed;
+	}
 
 	public Connection getConnection() throws ClassNotFoundException, SQLException
 	  {
@@ -100,16 +109,16 @@ public class SqlAgent {
 		} 
 	}
 	
-	public Set initCommands(Connection connection) throws SQLException {
-		this.printStreamed=new HashSet();
+	public HashMap initCommands(Connection connection) throws SQLException {
+		this.printStreamed=new HashMap();
 		
 		PrintStreamedExceptionHandler exceptionHandler = new PrintStreamedExceptionHandler();
 	    exceptionHandler.addPrintStream(System.out);
-	    this.printStreamed.add(exceptionHandler);
+	    this.printStreamed.put(EXCEPTION_PS,exceptionHandler);
 
 	    PrintStreamedResultSetExtractor resultSetExtractor = new PrintStreamedResultSetExtractor();
 	    resultSetExtractor.addPrintStream(System.out);
-	    this.printStreamed.add(resultSetExtractor);
+	    this.printStreamed.put(SELECT_PS,resultSetExtractor);
 	    this.selectCommand = new SelectCommand();
 	    this.selectCommand.setConnection(connection);
 	    this.selectCommand.setResultSetExtractor(resultSetExtractor);
@@ -117,7 +126,7 @@ public class SqlAgent {
 	    
 	    PrintStreamedUpdateRowcountHandler rowcountHandler = new PrintStreamedUpdateRowcountHandler();
 	    rowcountHandler.addPrintStream(System.out);
-	    this.printStreamed.add(rowcountHandler);
+	    this.printStreamed.put(UPDATE_PS,rowcountHandler);
 	    this.updateCommand = new UpdateCommand();
 	    this.updateCommand.setConnection(connection);
 	    this.updateCommand.setExceptionHandler(exceptionHandler);
@@ -126,7 +135,7 @@ public class SqlAgent {
 	    PrintStreamedShowTablesResultSetExtractor showTableResultSetExtractor = new PrintStreamedShowTablesResultSetExtractor();
 	    showTableResultSetExtractor.addPrintStream(System.out);
 	    showTableResultSetExtractor.setDatabaseMetaData(connection.getMetaData());
-	    this.printStreamed.add(showTableResultSetExtractor);
+	    this.printStreamed.put(SHOWTABLE_PS,showTableResultSetExtractor);
 	    this.showTablesCommand = new ShowTablesCommand();
 	    this.showTablesCommand.setConnection(connection);
 	    this.showTablesCommand.setExceptionHandler(exceptionHandler);
@@ -134,7 +143,7 @@ public class SqlAgent {
 	    
 	    PrintStreamedDescribeResultSetExtractor describeResultSetExtractor = new PrintStreamedDescribeResultSetExtractor();
 	    describeResultSetExtractor.addPrintStream(System.out);
-	    this.printStreamed.add(describeResultSetExtractor);
+	    this.printStreamed.put(DESCRIBE_PS,describeResultSetExtractor);
 	    this.describeCommand = new DescribeCommand();
 	    this.describeCommand.setConnection(connection);
 	    this.describeCommand.setResultSetExtractor(describeResultSetExtractor);
