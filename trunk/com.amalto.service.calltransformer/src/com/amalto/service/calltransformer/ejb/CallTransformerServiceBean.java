@@ -12,6 +12,9 @@ import javax.ejb.EJBException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
 import com.amalto.core.ejb.ItemPOJO;
 import com.amalto.core.ejb.ItemPOJOPK;
 import com.amalto.core.ejb.ServiceCtrlBean;
@@ -300,6 +303,54 @@ public class CallTransformerServiceBean extends ServiceCtrlBean  implements Sess
 		org.apache.log4j.Logger.getLogger(this.getClass()).debug("putConfiguration() "+configuration);
 //		configurationLoaded = false;
 		super.putConfiguration(configuration);
+	}
+	
+	/**
+     * @throws EJBException
+     *
+     * @ejb.interface-method view-type = "local"
+     * @ejb.facade-method
+     */
+	public Serializable fetchFromOutbound(String command, String parameters,String schedulePlanID) throws XtentisException {
+		
+		
+		try {
+			
+			//parse input parameter
+			if(parameters==null||parameters.length()==0)throw new XtentisException("Parameters can not be empty! ");
+			Document paramDoc=Util.parse(parameters);
+			String transformerName=Util.getFirstTextNode(paramDoc, "//transformer");
+			
+			String  typedContentType=Util.getFirstTextNode(paramDoc, "//typedContent/type");
+			String	typedContentValue=Util.getFirstTextNode(paramDoc, "//typedContent/value");
+			
+			//TODO care about output log to UI-console
+			
+			//execute main process
+			if (transformerName == null || "".equals(transformerName)) {
+            	org.apache.log4j.Logger.getLogger(this.getClass()).debug("Service CallTransformer - mandatory parameter transformer name is missing");
+            	throw new XtentisException("Service CallTransformer - mandatory parameter transformer name is missing");
+    		}
+			
+			TransformerV2CtrlLocal tctrl = Util.getTransformerV2CtrlLocal();
+			if (tctrl.existsTransformer(new TransformerV2POJOPK(transformerName)) == null) {
+            	org.apache.log4j.Logger.getLogger(this.getClass()).debug("Service CallTransformer is unable to call transformer "+transformerName+" - transformer doesn't exist");
+            	throw new XtentisException("Unable to find the transformer "+transformerName);
+    		}
+			TransformerContext context = new TransformerContext(new TransformerV2POJOPK(transformerName));
+			context.putInPipeline(TransformerV2CtrlBean.DEFAULT_VARIABLE, new TypedContent(typedContentValue.getBytes(),typedContentType));
+			tctrl.executeUntilDone(context);
+
+			return "OK";
+		} catch (XtentisException e) {
+    		throw (e);
+	    } catch (Exception e) {
+    	    String err = "Unable to fetchFromOutbound of the Call Transformer Service"
+    	    		+": "+e.getClass().getName()+": "+e.getLocalizedMessage();
+    	    org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
+    	    throw new XtentisException(err);
+	    }
+
 	}
 
 

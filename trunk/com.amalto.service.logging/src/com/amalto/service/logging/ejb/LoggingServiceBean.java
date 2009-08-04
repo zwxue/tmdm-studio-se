@@ -447,6 +447,17 @@ public class LoggingServiceBean extends ServiceCtrlBean  implements SessionBean{
 		configurationLoaded = false;
 		super.putConfiguration(configuration);
 	}
+	
+	/**
+	 * @throws EJBException
+	 *
+	 * @ejb.interface-method view-type = "local"
+	 * @ejb.facade-method
+	 */
+	 public Serializable fetchFromOutbound(String command, String parameters,String schedulePlanID) throws XtentisException {
+			// N/A
+			return null;
+	 }
 
     
 }

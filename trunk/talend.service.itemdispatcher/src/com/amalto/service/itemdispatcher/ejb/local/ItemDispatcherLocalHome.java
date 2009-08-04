@@ -5,7 +5,7 @@ package com.amalto.service.itemdispatcher.ejb.local;
 
 /**
  * Local home interface for ItemDispatcher.
- * @xdoclet-generated at 14-07-09
+ * @xdoclet-generated at 3-08-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}

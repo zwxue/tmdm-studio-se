@@ -5,7 +5,7 @@ package com.amalto.service.dumptoconsole.ejb.local;
 
 /**
  * Local interface for DumpToConsole.
- * @xdoclet-generated at 17-06-09
+ * @xdoclet-generated at 3-08-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
@@ -31,5 +31,7 @@ public interface DumpToConsoleLocal
    public java.io.Serializable receiveFromOutbound( java.util.HashMap map ) throws com.amalto.core.util.XtentisException;
 
    public java.lang.String receiveFromInbound( com.amalto.core.ejb.ItemPOJOPK itemPK,java.lang.String routingOrderID,java.lang.String parameters ) throws com.amalto.core.util.XtentisException;
+
+   public java.io.Serializable fetchFromOutbound( java.lang.String command,java.lang.String parameters,java.lang.String schedulePlanID ) throws com.amalto.core.util.XtentisException;
 
 }

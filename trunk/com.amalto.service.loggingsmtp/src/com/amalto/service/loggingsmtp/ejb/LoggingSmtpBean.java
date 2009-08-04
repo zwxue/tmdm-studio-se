@@ -623,6 +623,16 @@ public class LoggingSmtpBean extends ServiceCtrlBean  implements SessionBean {
 		target.append("<"+name+">"+value+"</"+name+">");
 	}
 
+	/**
+	 * @throws EJBException
+	 *
+	 * @ejb.interface-method view-type = "local"
+	 * @ejb.facade-method
+	 */
+	 public Serializable fetchFromOutbound(String command, String parameters,String schedulePlanID) throws XtentisException {
+			// N/A
+			return null;
+	 }
 
 
 }
