@@ -5,7 +5,7 @@ package com.amalto.core.objects.versioning.ejb.local;
 
 /**
  * Local interface for VersioningServiceCtrl.
- * @xdoclet-generated at 29-07-09
+ * @xdoclet-generated at 3-08-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
@@ -104,6 +104,16 @@ public interface VersioningServiceCtrlLocal
     * @throws XtentisException
     */
    public java.lang.String receiveFromInbound( com.amalto.core.ejb.ItemPOJOPK itemPK,java.lang.String routingOrderID,java.lang.String parameters ) throws com.amalto.core.util.XtentisException;
+
+   /**
+    * To be implemented To request and get the response from other applications
+    * @param command - used to call different pull method in service Object
+    * @param parameters - incoming parameters, may be in xml format
+    * @param schedulePlanID - the ID of schedule plan, if in schedule mode
+    * @return Serializable - a serializable Object to be passed backed to the system
+    * @throws XtentisException
+    */
+   public java.io.Serializable fetchFromOutbound( java.lang.String command,java.lang.String parameters,java.lang.String schedulePlanID ) throws com.amalto.core.util.XtentisException;
 
    /**
     * Configuration received from outbound, typically a portlet The default implementation stores the configuration string "as is"

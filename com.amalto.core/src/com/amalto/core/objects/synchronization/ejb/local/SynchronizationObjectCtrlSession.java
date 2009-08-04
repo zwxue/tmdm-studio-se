@@ -5,7 +5,7 @@ package com.amalto.core.objects.synchronization.ejb.local;
 
 /**
  * Session layer for SynchronizationObjectCtrl.
- * @xdoclet-generated at 29-07-09
+ * @xdoclet-generated at 3-08-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}

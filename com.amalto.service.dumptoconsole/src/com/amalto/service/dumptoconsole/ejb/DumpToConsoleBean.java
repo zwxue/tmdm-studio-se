@@ -199,6 +199,17 @@ public class DumpToConsoleBean extends ServiceCtrlBean  implements SessionBean{
 		System.out.println(string);
 		System.out.println(">>>>>>>>>>>>DUMP TO CONSOLE");		
 	}
+	
+	/**
+	 * @throws EJBException
+	 *
+	 * @ejb.interface-method view-type = "local"
+	 * @ejb.facade-method
+	 */
+	 public Serializable fetchFromOutbound(String command, String parameters,String schedulePlanID) throws XtentisException {
+			// N/A
+			return null;
+	 }
 
     
 }

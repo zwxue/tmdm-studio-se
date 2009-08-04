@@ -5,7 +5,7 @@ package com.amalto.core.objects.role.ejb.remote;
 
 /**
  * Home interface for RoleCtrl.
- * @xdoclet-generated at 29-07-09
+ * @xdoclet-generated at 3-08-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
