@@ -23,6 +23,7 @@ import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XtentisServerObjectsRetriever;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.ImageCache;
+import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.views.ServerView;
 
 import com.amalto.workbench.utils.Util;
@@ -80,7 +81,9 @@ public class ServerLoginAction extends Action implements SelectionListener{
 		
 		//Remove authenticator dialog
 		Authenticator.setDefault(null);
-		
+        LocalTreeObjectRepository.getInstance().startUp(view, username);
+        LocalTreeObjectRepository.getInstance().switchOnListening();
+        
 		try {
             XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(
             	server,
@@ -152,9 +155,9 @@ public class ServerLoginAction extends Action implements SelectionListener{
             if (!found) 
             	invisibleRoot.addChild(serverRoot);
            
+//            LocalTreeObjectRepository.getInstance().synchronizeWithDoc(serverRoot);
             view.getViewer().refresh();
             view.getViewer().expandToLevel(serverRoot,1);
-            
 		} catch (InterruptedException ie){
 			return;
 		} catch (InvocationTargetException ite) {

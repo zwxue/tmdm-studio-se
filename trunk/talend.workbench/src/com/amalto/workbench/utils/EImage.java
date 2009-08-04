@@ -89,6 +89,8 @@ public enum EImage {
 	FLDR_OBJ("icons/fldr_obj.gif"),
 	FONT("icons/font.gif"),
 	FORWARD_NAV("icons/forward_nav.gif"),
+	FORDER("icons/folder.gif"),
+	FORDER_OPEN("icons/folder_open.gif"),
 	GOTOOBJ_TSK("icons/gotoobj_tsk.gif"),
 	HEADER_COMPLETE("icons/header_complete.gif"),
 	HEADER_PRIORITY("icons/header_priority.gif"),

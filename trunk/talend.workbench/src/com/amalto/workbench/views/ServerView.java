@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import org.eclipse.jface.action.Action;
@@ -18,7 +19,9 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
@@ -38,6 +41,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -53,6 +58,7 @@ import com.amalto.workbench.actions.DataClusterExportAction;
 import com.amalto.workbench.actions.DataClusterImportAction;
 import com.amalto.workbench.actions.DeleteXObjectAction;
 import com.amalto.workbench.actions.EditXObjectAction;
+import com.amalto.workbench.actions.NewCategoryAction;
 import com.amalto.workbench.actions.NewXObjectAction;
 import com.amalto.workbench.actions.PasteXObjectAction;
 import com.amalto.workbench.actions.ServerLoginAction;
@@ -67,6 +73,7 @@ import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.ImageCache;
+import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.utils.XtentisException;
@@ -102,6 +109,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	protected Action pasteAction;
 	//protected Action versionAction;
 	protected Action exportAction;
+	protected Action NewCategoryAction;
 	private ServerTreeContentProvider contentProvider;
 
 	private ArrayList<TreeObject> dndTreeObjs = new ArrayList<TreeObject>();
@@ -153,7 +161,12 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 						.hasNext();) {
 					TreeObject xobject = iter.next();
 					dndTreeObjs.add(xobject);
-					if (dragType != -1 && dragType != xobject.getType()) {
+					if ((dragType != -1 && dragType != xobject.getType())
+							|| xobject.getType() == TreeObject.CATEGORY_FOLDER
+							|| (xobject.getParent().getType() == TreeObject.CATEGORY_FOLDER && xobject
+									.getParent().getDisplayName().equals(
+											"System"))
+							|| (xobject.getServerRoot() == xobject.getParent())) {
 						event.doit = false;
 						break;
 					} else {
@@ -236,7 +249,16 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		if (obj instanceof TreeObject)
 		{
 			TreeObject treeObj = (TreeObject)obj;
-			if (treeObj.getType() != dragType) {
+			if (treeObj.getParent() == null)
+				System.out.println(treeObj.getDisplayName());
+			if ((treeObj.getType() != dragType && treeObj.getType() != TreeObject.CATEGORY_FOLDER)
+					|| dragType == TreeObject.CATEGORY_FOLDER
+					|| (treeObj.getType() == TreeObject.CATEGORY_FOLDER && treeObj
+							.getParent().getType() != dragType)
+					|| (treeObj.getType() == TreeObject.CATEGORY_FOLDER
+							&& treeObj.getParent().getType() == dragType && treeObj
+							.getDisplayName().equals("System"))
+					|| (treeObj.getParent().getType() == TreeObject.CATEGORY_FOLDER && treeObj.getParent().getDisplayName().equals("System"))) {
 				event.detail = DND.DROP_NONE;
 			} else  {
 				for (TreeObject tos: dndTreeObjs)
@@ -246,7 +268,14 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 						break;
 					}
 					else
-						event.detail = DND.DROP_MOVE;
+					{
+						if (tos.getParent().getType() == TreeObject.CATEGORY_FOLDER
+								&& tos.getParent().getDisplayName().equals(
+										"System")) {
+							event.detail = DND.DROP_NONE;
+						}
+						event.detail = DND.DROP_MOVE;	
+					}
 				}
 			}
 		}
@@ -256,14 +285,60 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	
 
 	private void dropTargetHandleDrop(DropTargetEvent event) {
-		
-		WorkbenchClipboard.getWorkbenchClipboard().get().clear();
-		WorkbenchClipboard.getWorkbenchClipboard().get().addAll(dndTreeObjs);
 		TreeObject remoteObj = (TreeObject)event.item.getData();
+		TreeParent parent =null;
+		if (remoteObj instanceof TreeParent)
+			parent = (TreeParent)remoteObj;
+		else
+			parent = remoteObj.getParent();
 		
-		((PasteXObjectAction)pasteAction).setXtentisPort(remoteObj);
-		pasteAction.run();
-		handleEvent(IXObjectModelListener.NEED_REFRESH, null, !remoteObj.isXObject() ? remoteObj.getParent(): remoteObj.getServerRoot());
+		ArrayList<TreeObject> subDdnList = new ArrayList<TreeObject>();
+		
+		if (parent != null) {
+			java.util.List<TreeObject> list = Arrays.asList(parent
+					.getChildren());
+			for (TreeObject xobj : dndTreeObjs) {
+				for (TreeObject another : list) {
+					if (another.getDisplayName().equals(xobj.getDisplayName())) {
+						subDdnList.add(xobj);
+					}
+				}	
+			}
+			dndTreeObjs.removeAll(subDdnList);
+		}
+		
+		transformCatalog(remoteObj);
+		dndTreeObjs.clear();
+		dndTreeObjs.addAll(subDdnList);
+		
+		if (!dndTreeObjs.isEmpty()) {
+			WorkbenchClipboard.getWorkbenchClipboard().get().clear();
+			WorkbenchClipboard.getWorkbenchClipboard().get().addAll(dndTreeObjs);
+			((PasteXObjectAction)pasteAction).setXtentisPort(remoteObj);
+			pasteAction.run();
+		}
+		forceAllSiteToRefresh();
+	}
+	
+	public void forceAllSiteToRefresh()
+	{
+		TreeObject[] childs = getTreeContentProvider().getInvisibleRoot().getChildren();
+		for (TreeObject child: childs)
+		{
+			(new ServerRefreshAction(this,child.getServerRoot())).run();	
+		}
+	}
+	
+	private void transformCatalog(TreeObject remoteObj)
+	{
+		TreeParent catalog = remoteObj instanceof TreeParent ? (TreeParent)remoteObj : remoteObj.getParent();
+		for (TreeObject theObj : dndTreeObjs)
+		{
+			theObj.getParent().removeChild(theObj);
+			catalog.addChild(theObj);
+			theObj.setServerRoot(catalog.getServerRoot());
+		}
+		getViewer().refresh(false);
 	}
 	
 	protected class DCDragSourceListener implements DragSourceListener {
@@ -302,6 +377,33 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	 */
 	public void createPartControl(Composite parent) {
 		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+		viewer.addTreeListener(new ITreeViewerListener() {
+            public void treeCollapsed(TreeExpansionEvent event) {
+            	Object elem = event.getElement();
+            	Widget item = viewer.testFindItem(event.getElement());
+            	if (elem instanceof TreeParent)
+            	{
+            		TreeParent parent = (TreeParent)elem;
+            		if (parent.getType() == TreeObject.CATEGORY_FOLDER)
+            		{
+            			((TreeItem)item).setImage(ImageCache.getCreatedImage( "icons/folder.gif"));
+            		}
+            	}
+            }
+
+            public void treeExpanded(TreeExpansionEvent event) {
+            	Object elem = event.getElement();
+            	Widget item = viewer.testFindItem(event.getElement());
+            	if (elem instanceof TreeParent)
+            	{
+            		TreeParent parent = (TreeParent)elem;
+            		if (parent.getType() == TreeObject.CATEGORY_FOLDER)
+            		{
+            			((TreeItem)item).setImage(ImageCache.getCreatedImage( "icons/folder_open.gif"));
+            		}
+            	}
+            }
+        });
 		drillDownAdapter = new DrillDownAdapter(viewer);
 		 contentProvider=new ServerTreeContentProvider(this.getSite(),
 				new TreeParent("INVISIBLE ROOT", null, TreeObject._ROOT_, null,
@@ -457,13 +559,21 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					manager.add(exportAction);
 					manager.add(importAction);
 				}
-				manager.add(newXObjectAction);
+			
+			    if (!LocalTreeObjectRepository.getInstance().isInSystemCatalog(xobject))
+			    {
+			    	manager.add(newXObjectAction);	
+			    }
 				if(Util.hasUniverse(xobject))
 					manager.add(browseRevisionAction);
+			    
 				if (xobject.isXObject()) {
 					manager.add(editXObjectAction);
 					manager.add(deleteXObjectAction);
 					manager.add(copyAction);
+				}
+				else if (xobject.getType() != TreeObject.CATEGORY_FOLDER){
+					manager.add(NewCategoryAction);
 				}
 //				if (hasVersioning)
 //					manager.add(versionAction);
@@ -489,33 +599,34 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
 		logoutAction = new Action() {
 			public void run() {
-				
-					TreeParent serverRoot = (TreeParent) ((IStructuredSelection) ServerView.this.viewer
-							.getSelection()).getFirstElement();
+				TreeParent serverRoot = (TreeParent) ((IStructuredSelection) ServerView.this.viewer
+						.getSelection()).getFirstElement();
 
-					final String universe = serverRoot.getUniverse();
-					final String username = serverRoot.getUsername();
-					final String password = serverRoot.getPassword();
-					final String endpointAddress = serverRoot.getEndpointAddress();
+				final String universe = serverRoot.getUniverse();
+				final String username = serverRoot.getUsername();
+				final String password = serverRoot.getPassword();
+				final String endpointAddress = serverRoot.getEndpointAddress();
+               
+				LocalTreeObjectRepository.getInstance().switchOffListening();
+				serverRoot.getParent().removeChild(serverRoot);
+				ServerView.this.viewer.refresh();
 
-					serverRoot.getParent().removeChild(serverRoot);
-					ServerView.this.viewer.refresh();
-
-					// attempt logout on the server side
-					ServerView.this.viewer.getControl().getDisplay().syncExec(
-							new Runnable() {
-								public void run() {
-									try {
-										Util.getPort(new URL(endpointAddress),
-												universe, username, password)
-												.logout(new WSLogout());
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
+				// attempt logout on the server side
+				ServerView.this.viewer.getControl().getDisplay().syncExec(
+						new Runnable() {
+							public void run() {
+								try {
+									Util.getPort(new URL(endpointAddress),
+											universe, username, password)
+											.logout(new WSLogout());
+								} catch (Exception e) {
+									e.printStackTrace();
 								}
-							});
+							}
+						});
 			}
 		};
+
 		logoutAction.setText("Logout");
 		logoutAction.setToolTipText("Logout From the " + IConstants.TALEND
 				+ " Server");
@@ -533,6 +644,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		
 		exportAction=new DataClusterExportAction(this);
 		importAction=new DataClusterImportAction(this);
+		NewCategoryAction = new NewCategoryAction(this);
 		//versionAction = new VersioningXObjectAction(this);
 	}
 

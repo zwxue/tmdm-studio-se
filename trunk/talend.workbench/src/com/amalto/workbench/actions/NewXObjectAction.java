@@ -27,6 +27,7 @@ import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.ImageCache;
+import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSDataCluster;
@@ -91,11 +92,12 @@ public class NewXObjectAction extends Action{
 			super.run();
             ISelection selection = view.getViewer().getSelection();
             TreeObject xobject = (TreeObject)((IStructuredSelection)selection).getFirstElement();
+            xobject = LocalTreeObjectRepository.getInstance().registerNewTreeObject(xobject);       
             TreeParent xfolder = (xobject.isXObject()) ? xobject.getParent() : (TreeParent) xobject;
-            
+
             //get New Key
        		Object key  = null;
-       		
+
        		//(Shell parentShell, String dialogTitle, String dialogMessage, String initialValue, IInputValidator validator)
             switch(xfolder.getType()) {
         		case TreeObject.TRANSFORMER:
@@ -517,7 +519,9 @@ public class NewXObjectAction extends Action{
 	           		//server
 	           		return;
             }//switch
-
+            
+            LocalTreeObjectRepository.getInstance().merge(newInstance);
+            
             XObjectEditor editpart=(XObjectEditor)view.getSite().getWorkbenchWindow().getActivePage().openEditor(
                     new XObjectEditorInput(newInstance,newInstance.getDisplayName()),
                     "com.amalto.workbench.editors.XObjectEditor"

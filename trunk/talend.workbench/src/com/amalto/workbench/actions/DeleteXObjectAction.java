@@ -3,6 +3,7 @@ package com.amalto.workbench.actions;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -12,9 +13,11 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
 
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.ESystemDefaultObjects;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.ImageCache;
+import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSDataClusterPK;
@@ -64,7 +67,8 @@ public class DeleteXObjectAction extends Action{
 			IStructuredSelection selection = (IStructuredSelection)view.getViewer().getSelection();
 			//add the node here
 			
-
+			ArrayList<TreeObject> toDelList = new ArrayList<TreeObject>();
+			
 			if(selection.isEmpty()){
 				return;
 			}
@@ -77,37 +81,38 @@ public class DeleteXObjectAction extends Action{
 				else
 					s="Instance";
 				
-				boolean isnotdefault = false;
 				for (Iterator<TreeObject> iter = selection.iterator(); iter.hasNext(); ) {
 					TreeObject xobject = iter.next();
 					
-		            if (!xobject.isXObject()) return;
-		            if(!ESystemDefaultObjects.isExist(xobject.getType(), xobject.getDisplayName())){
-		            	isnotdefault=true;
-		            	break;
+		            if ((!xobject.isXObject() && xobject.getType() != TreeObject.CATEGORY_FOLDER)
+							|| (xobject.getType() == TreeObject.CATEGORY_FOLDER
+							&& xobject.getDisplayName().equals("System")))
+						continue;
+		            else if (xobject.getType() == TreeObject.CATEGORY_FOLDER && !xobject.getDisplayName().equals("System"))
+		            {
+		            	TreeParent parent = (TreeParent)xobject;
+		            	toDelList.addAll(Arrays.asList(parent.getChildren()));
+		            	toDelList.add(xobject);
+		            }
+		            else if(!ESystemDefaultObjects.isExist(xobject.getType(), xobject.getDisplayName())){
+		            	toDelList.add(xobject);
 		            }//if there are items which are not default, isnotdefault is true
 				}
-				if(isnotdefault){
+				if(toDelList.size() > 0){
 					if (! MessageDialog.openConfirm(
 		            		this.view.getSite().getShell(),
 		            		"Delete "+IConstants.TALEND+" Object Instance",
-		            		"Are you sure you want to delete the "+ selection.size() + " " +s +"?"
+		            		"Are you sure you want to delete the "+ toDelList.size() + " " +s +"?"
 		            )) return;
 					
 				}//if the isnotdefault is true,open this dialog
 				
 				
 			}//end of if(selection...)
-			
-			for (Iterator<TreeObject> iter = selection.iterator(); iter.hasNext(); ) {
+
+
+			for (Iterator<TreeObject> iter = toDelList.iterator(); iter.hasNext(); ) {
 				TreeObject xobject = iter.next();
-				
-	            if (!xobject.isXObject()) return;
-	            if(ESystemDefaultObjects.isExist(xobject.getType(), xobject.getDisplayName())){
-	            	continue;
-	            }
-	            
-	            //ask for confimation
 	                        
 	//          Access to server and get port
 				XtentisPort port = Util.getPort(
@@ -152,7 +157,10 @@ public class DeleteXObjectAction extends Action{
 		           		break;  
 		          	case TreeObject.SYNCHRONIZATIONPLAN:
 		           		port.deleteSynchronizationPlan(new WSDeleteSynchronizationPlan((WSSynchronizationPlanPK)xobject.getWsKey()));
-		           		break; 
+		           		break;
+		          	case TreeObject.CATEGORY_FOLDER:
+		          		// do nothing over here
+		          		break;
 		          	default:
 		           		MessageDialog.openError(view.getSite().getShell(), "Error", "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
 		           		return;
@@ -161,6 +169,7 @@ public class DeleteXObjectAction extends Action{
 	       		xobject.getParent().removeChild(xobject);
 	       		view.getViewer().refresh();
 			}//for
+			
        		//view.getSite().getWorkbenchWindow().get
                    
 		} catch (Exception e) {
@@ -172,18 +181,7 @@ public class DeleteXObjectAction extends Action{
 			);
 		}finally {
 			//refresh view
-			try {
-				TreeObject selected = (TreeObject)((IStructuredSelection)view.getViewer().getSelection()).getFirstElement();
-				if (selected == null)
-				{
-					TreeObject[] childs = view.getTreeContentProvider().getInvisibleRoot().getChildren();
-					for (TreeObject child: childs)
-					{
-						(new ServerRefreshAction(this.view,child.getServerRoot())).run();	
-					}
-				}
-				
-			} catch (Exception e) {}
+			view.forceAllSiteToRefresh();
 		}		
 	}
 	
