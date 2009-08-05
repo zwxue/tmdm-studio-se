@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="imageserver" default="all">
 	<property name="version.props" value="version.properties" />
-	<property name="jboss.dir" value="/opt/jboss" />
+	<property name="jboss.dir" value="c:/opt/jboss" />
 	<property name="jboss.instance.dir" value="${jboss.dir}/server/default" />
 	<property name="jboss.deploy.dir" value="${jboss.instance.dir}/deploy" />
 	<property name="jboss.instance.lib" value="${jboss.instance.dir}/lib" />
-	<property name="war" value="zz.20.ext.imageserver.war" />
+	<property name="war" value="zz.50.ext.imageserver.war" />
 	<!--
 		================================= target: all
 		=================================
 	-->
-	<target name="all" depends="version,package,deploy" description="--> MDM Image Server App">
+	<target name="all" depends="clean,version,package,deploy" description="--> MDM Image Server App">
 		<eclipse.refreshLocal resource="../" />
+	</target>
+	<target name="clean" description="Clean old release">
+		<delete dir="zz.20.ext.imageserver.war"/>
+		<delete dir="${jboss.deploy.dir}/zz.20.ext.imageserver.war"/>
 	</target>
 	<target name="version" description="Maintain build.date property">
 		<buildnumber file="${version.props}" />
