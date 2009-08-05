@@ -317,7 +317,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			((PasteXObjectAction)pasteAction).setXtentisPort(remoteObj);
 			pasteAction.run();
 		}
-		forceAllSiteToRefresh();
 	}
 	
 	public void forceAllSiteToRefresh()
@@ -331,12 +330,19 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	
 	private void transformCatalog(TreeObject remoteObj)
 	{
-		TreeParent catalog = remoteObj instanceof TreeParent ? (TreeParent)remoteObj : remoteObj.getParent();
+		boolean transform = false;
+		TreeParent catalog = remoteObj instanceof TreeParent ? (TreeParent) remoteObj
+				: remoteObj.getParent();
 		for (TreeObject theObj : dndTreeObjs)
 		{
 			theObj.getParent().removeChild(theObj);
 			catalog.addChild(theObj);
 			theObj.setServerRoot(catalog.getServerRoot());
+			transform = true;
+		}
+		
+		if (transform &&  getTreeContentProvider().getInvisibleRoot().getChildren().length > 1) {
+			forceAllSiteToRefresh();
 		}
 		getViewer().refresh(false);
 	}
