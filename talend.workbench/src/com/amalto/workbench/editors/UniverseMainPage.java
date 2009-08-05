@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,8 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -30,7 +33,6 @@ import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.EXtentisObjects;
-import com.amalto.workbench.utils.FontUtils;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSGetObjectsForUniverses;
 import com.amalto.workbench.webservices.WSUniverse;
@@ -39,6 +41,7 @@ import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.ComplexTableViewer;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
+import com.amalto.workbench.widgets.LabelCombo;
 import com.amalto.workbench.widgets.LabelText;
 
 public class UniverseMainPage extends AMainPageV2{
@@ -60,7 +63,8 @@ public class UniverseMainPage extends AMainPageV2{
 	};
 	
 	
-	protected Map<String,LabelText> xtentisObjectsLabelTexts=new HashMap<String,LabelText>();
+	//protected Map<String,LabelText> xtentisObjectsLabelTexts=new HashMap<String,LabelText>();
+	protected Map<String,LabelCombo> xtentisObjectsLabelCombos=new HashMap<String,LabelCombo>();
 	LabelText defaultReversionIDText;
 	
 	public UniverseMainPage(FormEditor editor) {
@@ -133,10 +137,24 @@ public class UniverseMainPage extends AMainPageV2{
         objectsComposite.setLayoutData(
                 new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
         );
-        objectsComposite.setLayout(new GridLayout(2,false));
+        objectsComposite.setLayout(new GridLayout(1,false));
 
         for(KeyValue line: universe.getXtentisObjectsList()){
-        	createLabelText(objectsComposite, line.key);
+        	WSUniverse wsUniverse = (WSUniverse) (getXObject().getWsObject()); 
+        	wsUniverse.getXtentisObjectsRevisionIDs();
+        	String value="";
+        	for(WSUniverseXtentisObjectsRevisionIDs xtentisObjects: wsUniverse.getXtentisObjectsRevisionIDs()){
+        		String name = xtentisObjects.getXtentisObjectName();
+        		if(EXtentisObjects.Transformer.getName().equals(name)){
+    				name=EXtentisObjects.Transformer.getDisplayName();
+    			}
+        		if(name.equals(line.key)){
+        			value = xtentisObjects.getRevisionID();
+        			break;
+        		}
+        	}
+        	
+        	createLabelCombo(objectsComposite, line.key,value);
         }
         
         refreshData();
@@ -146,20 +164,62 @@ public class UniverseMainPage extends AMainPageV2{
     }
 		
 	}
-	protected void createLabelText(Composite parent, final String labelName){
-		final LabelText labelText =new LabelText(parent,labelName);
-		labelText.getLabel().setFont(FontUtils.getBoldFont(labelText.getLabel().getFont()));
-		labelText.getText().addModifyListener(new ModifyListener() {
-        	public void modifyText(ModifyEvent e) {
-        		if (refreshing) return;
-        		KeyValue line=getKeyValue(labelName);
-        		if(line!=null)line.value=labelText.getText().getText();
-        		markDirty();
-        	}
-        });
-		xtentisObjectsLabelTexts.put(labelText.getLabel().getText(),labelText);
+	protected void createLabelCombo(Composite parent, final String comboName,String value){
+		StringBuffer labelName=new StringBuffer(comboName);
+		if(comboName.length()<23){
+			for(int i=0;i<22-comboName.length();i++)
+				labelName.append(" ");;
+		}
+		Map<String, List<String>> universeMap = Util.getUniverseMap(getPort());
+		final LabelCombo labelCombo =new LabelCombo(toolkit,parent,labelName.toString(),SWT.BORDER,2);
+		if (universeMap.get(comboName) != null) {
+			String[] universes = new String[universeMap.get(comboName).size()];
+			Iterator it = universeMap.get(comboName).iterator();
+			for (int i = 0; it.hasNext(); i++)
+				universes[i] = (String) it.next();
+			labelCombo.getCombo().setItems(universes);
+			labelCombo.getCombo().setText(value);
+		}
+		else if(EXtentisObjects.Transformer.getDisplayName().equals(comboName)){
+				String name=EXtentisObjects.Transformer.getName();
+				String[] universes = new String[universeMap.get(name).size()];
+				Iterator it = universeMap.get(name).iterator();
+				for (int i = 0; it.hasNext(); i++)
+					universes[i] = (String) it.next();
+				labelCombo.getCombo().setItems(universes);
+				labelCombo.getCombo().setText(value);
+			
+		}
+		
+		labelCombo.getCombo().addSelectionListener(new SelectionListener() {
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+
+			public void widgetSelected(SelectionEvent e) {
+				if (refreshing)
+					return;
+				KeyValue line = getKeyValue(comboName);
+				if (line != null)
+					line.value = labelCombo.getCombo().getText();
+				markDirty();
+			}
+
+		});
+		labelCombo.getCombo().addModifyListener(new ModifyListener() {
+
+			public void modifyText(ModifyEvent e) {
+				if (refreshing)
+					return;
+				KeyValue line = getKeyValue(comboName);
+				if (line != null)
+					line.value = labelCombo.getCombo().getText();
+				markDirty();
+			}
+
+		});
+		xtentisObjectsLabelCombos.put(labelCombo.getCombo().getText(),labelCombo);
 	}
-	
 	KeyValue getKeyValue(String name){
 		for(KeyValue line: universe.getXtentisObjectsList()){
 			if(name.equals(line.key)){
@@ -213,9 +273,9 @@ public class UniverseMainPage extends AMainPageV2{
             defaultReversionIDText.getText().setText(universe.getDefaultReversionID()==null?"":universe.getDefaultReversionID());
             //nameText.setText(universe.getName()==null?"":universe.getName())  ;
             for(KeyValue line: universe.getXtentisObjectsList()){
-            	LabelText labelText=xtentisObjectsLabelTexts.get(line.key);
-            	if(labelText!=null){
-            		labelText.getText().setText(line.value);
+            	LabelCombo combo=xtentisObjectsLabelCombos.get(line.key);
+            	if(combo!=null){
+            		combo.getCombo().setText(line.value);
             	}
             }
             instancesViewer.setInput(universe.getItemsList());
