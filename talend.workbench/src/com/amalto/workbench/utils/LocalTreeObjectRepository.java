@@ -200,7 +200,6 @@ public class LocalTreeObjectRepository implements IXObjectModelListener{
 		Element elemFolder = getParentElement(parent);
 		if (elemFolder != null)
 		{
-			String displayName = filterOutBlank(child.getDisplayName());
 			String xpath = "child::*[name()='" + filterOutBlank(child.getDisplayName()) + "' and text()='" + child.getType() + "']";
 			List<Element> list = elemFolder.selectNodes(xpath);
 			if (list.isEmpty() && catalog.equals(""))
