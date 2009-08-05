@@ -192,7 +192,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener{
     }
     
     
-	public void addChild(TreeObject parent, TreeObject child)
+	private void addChild(TreeObject parent, TreeObject child)
 	{
 		if (parent.getParent() == null && parent.getDisplayName().equals("INVISIBLE ROOT"))
 			return;
@@ -201,25 +201,26 @@ public class LocalTreeObjectRepository implements IXObjectModelListener{
 		if (elemFolder != null)
 		{
 			String displayName = filterOutBlank(child.getDisplayName());
-			Element childElem = elemFolder.element(displayName);
-			if ((childElem == null || !childElem.getText().equals(child.getType() + ""))&& catalog.equals(""))
+			String xpath = "child::*[name()='" + filterOutBlank(child.getDisplayName()) + "' and text()='" + child.getType() + "']";
+			List<Element> list = elemFolder.selectNodes(xpath);
+			if (list.isEmpty() && catalog.equals(""))
 			{
 				elemFolder.addElement(filterOutBlank(child.getDisplayName())).setText(child.getType() + "");
 			}
 		}
-		System.out.println();
 		saveDocument(doc);
 	}
 	
-	public void removeChild(TreeObject parent, TreeObject child) 
+	private void removeChild(TreeObject parent, TreeObject child) 
 	{
 		if (parent.getParent() == null && parent.getDisplayName().equals("INVISIBLE ROOT"))
 			return;
 		synchronizeWithElem(child, (TreeParent)parent, true);
 		Element elemFolder = getParentElement(parent);
-		Element elemChild = elemFolder.element(filterOutBlank(child.getDisplayName()));
-		if (elemChild != null && elemChild.getText().equals(child.getType() + ""))
-		  elemFolder.remove(elemChild);
+		String xpath = "child::*[name()='" + filterOutBlank(child.getDisplayName()) + "' and text()='" + child.getType() + "']";
+		List<Element> list = elemFolder.selectNodes(xpath);
+		if (!list.isEmpty())
+		  elemFolder.remove(list.get(0));
 		
 		saveDocument(doc);
 	}
