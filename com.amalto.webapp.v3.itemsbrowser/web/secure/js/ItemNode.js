@@ -234,7 +234,7 @@ YAHOO.extend(amalto.itemsbrowser.ItemNode, YAHOO.widget.Node, {
 		
 
 		var errorMessageDivId = this.itemData.nodeId+"ErrorMessage";
-		$(errorMessageDivId).style.display = "none";
+		if($(errorMessageDivId))$(errorMessageDivId).style.display = "none";
 		if(this.itemData.restrictions!=null){	
 			for(var i=0;i<this.itemData.restrictions.length;i++){
 				if(this.itemData.restrictions[i].name=="minLength" 
