@@ -1226,7 +1226,12 @@ public class ItemsBrowserDWR {
 							new WSDataModelPK("UpdateReport")));
 			org.apache.log4j.Logger.getLogger(ItemsBrowserDWR.class).debug(
 					"pushUpdateReport() "+xml2);
-			if(routeAfterSaving)Util.getPort().routeItemV2(new WSRouteItemV2(itemPK));
+			try {
+				if(routeAfterSaving)Util.getPort().routeItemV2(new WSRouteItemV2(itemPK));
+			} catch (RemoteException e) {
+				//e.printStackTrace();
+				org.apache.log4j.Logger.getLogger(ItemsBrowserDWR.class).warn("Can not route the item, maybe there is no Routing Rule defined for this item! ");
+			}
 			return "OK";
 		} catch (RemoteException e) {			
 			e.printStackTrace();
