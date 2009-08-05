@@ -36,6 +36,7 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.List;
@@ -385,30 +386,23 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		viewer.addTreeListener(new ITreeViewerListener() {
             public void treeCollapsed(TreeExpansionEvent event) {
-            	Object elem = event.getElement();
-            	Widget item = viewer.testFindItem(event.getElement());
-            	if (elem instanceof TreeParent)
-            	{
-            		TreeParent parent = (TreeParent)elem;
-            		if (parent.getType() == TreeObject.CATEGORY_FOLDER)
-            		{
-            			((TreeItem)item).setImage(ImageCache.getCreatedImage( "icons/folder.gif"));
-            		}
-            	}
+            	setTreeNodeImage(event, ImageCache.getCreatedImage( "icons/folder.gif"));
             }
 
             public void treeExpanded(TreeExpansionEvent event) {
-            	Object elem = event.getElement();
-            	Widget item = viewer.testFindItem(event.getElement());
-            	if (elem instanceof TreeParent)
-            	{
-            		TreeParent parent = (TreeParent)elem;
-            		if (parent.getType() == TreeObject.CATEGORY_FOLDER)
-            		{
-            			((TreeItem)item).setImage(ImageCache.getCreatedImage( "icons/folder_open.gif"));
-            		}
-            	}
+            	setTreeNodeImage(event, ImageCache.getCreatedImage( "icons/folder_open.gif"));
             }
+            
+            private void setTreeNodeImage(TreeExpansionEvent event, Image image) {
+				Object elem = event.getElement();
+				Widget item = viewer.testFindItem(event.getElement());
+				if (elem instanceof TreeParent) {
+					TreeParent parent = (TreeParent) elem;
+					if (parent.getType() == TreeObject.CATEGORY_FOLDER) {
+						((TreeItem) item).setImage(image);
+					}
+				}
+			}
         });
 		drillDownAdapter = new DrillDownAdapter(viewer);
 		 contentProvider=new ServerTreeContentProvider(this.getSite(),
