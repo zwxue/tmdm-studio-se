@@ -654,9 +654,7 @@ public class PasteXObjectAction extends Action{
 		}	finally {
 			keyTrackMap.clear();
 			//refresh view
-			try {
-				(new ServerRefreshAction(this.view,selected.getServerRoot())).run();
-			} catch (Exception e) {}
+			view.forceAllSiteToRefresh();
 		}
 	}
 	public void runWithEvent(Event event) {
