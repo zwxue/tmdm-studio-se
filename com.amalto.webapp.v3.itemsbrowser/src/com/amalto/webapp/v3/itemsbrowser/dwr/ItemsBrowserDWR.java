@@ -813,8 +813,8 @@ public class ItemsBrowserDWR {
 					WSTransformerContext wsTransformerContext = new WSTransformerContext(
 							new WSTransformerV2PK("beforeSaving_" + concept),
 							null, null);
-					//String exchangeData = mergeExchangeData(xml,resultUpdateReport);
-					String exchangeData = resultUpdateReport;
+					String exchangeData = mergeExchangeData(xml,resultUpdateReport);
+					//String exchangeData = resultUpdateReport;
 					WSTypedContent wsTypedContent = new WSTypedContent(null,
 							new WSByteArray(exchangeData
 									.getBytes("UTF-8")),
@@ -890,11 +890,11 @@ public class ItemsBrowserDWR {
 
 	private static String mergeExchangeData(String xml,
 			String resultUpdateReport) {
-		String exchangeData="<Exchange>\n";
-		exchangeData+=xml;
+		String exchangeData="<exchange>\n";
+		exchangeData+="<report>"+resultUpdateReport+"</report>";
 		exchangeData+="\n";
-		exchangeData+=resultUpdateReport;
-		exchangeData+="\n</Exchange>";
+		exchangeData+="<item>"+xml+"</item>";
+		exchangeData+="\n</exchange>";
 		return exchangeData;
 	}
 	
