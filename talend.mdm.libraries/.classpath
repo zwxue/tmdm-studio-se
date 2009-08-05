@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="lib/commons-collections.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/xercesImpl-2.9.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/z.exist-1.2.6-xmldb.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/z.exist-1.2.6.jar"/>
