@@ -299,7 +299,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					.getChildren());
 			for (TreeObject xobj : dndTreeObjs) {
 				for (TreeObject another : list) {
-					if (another.getDisplayName().equals(xobj.getDisplayName())) {
+					if (another.getDisplayName().equals(xobj.getDisplayName()) && (another.getType() == xobj.getType())) {
 						subDdnList.add(xobj);
 					}
 				}	
