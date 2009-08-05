@@ -12,8 +12,8 @@ import javax.ejb.EJBException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 
 import com.amalto.core.ejb.ItemPOJO;
 import com.amalto.core.ejb.ItemPOJOPK;
@@ -323,6 +323,7 @@ public class CallTransformerServiceBean extends ServiceCtrlBean  implements Sess
 			
 			String  typedContentType=Util.getFirstTextNode(paramDoc, "//typedContent/type");
 			String	typedContentValue=Util.getFirstTextNode(paramDoc, "//typedContent/value");
+			typedContentValue=StringEscapeUtils.unescapeXml(typedContentValue);
 			
 			//TODO care about output log to UI-console
 			
