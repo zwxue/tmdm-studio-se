@@ -127,7 +127,7 @@ public class JdbcBean extends ServiceCtrlBean  implements SessionBean{
      * @ejb.facade-method 
      */
 	public String getStatus() throws XtentisException {
-		return "OK"; 
+		return "N/A"; 
 	}
 
 
