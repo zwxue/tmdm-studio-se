@@ -1068,7 +1068,19 @@ public class Util {
 		}
 		return xObjectsNameSet;
 	}
-
+	public static List<String> getChildren(TreeParent xObject,int objectType){
+		List<String> objs=new ArrayList<String>();
+		for( TreeObject obj:xObject.getChildren()){
+			if(obj instanceof TreeParent){
+				TreeParent parent=(TreeParent)obj;
+				objs.addAll(getChildren(parent, objectType));
+			}else{
+				if(obj.getType() == objectType)
+				objs.add(obj.getDisplayName());
+			}
+		}
+		return objs;
+	}
     
     public static List<String> getChildElementNames(Node node) throws Exception{
     	List<String> childNames=new ArrayList<String>();
