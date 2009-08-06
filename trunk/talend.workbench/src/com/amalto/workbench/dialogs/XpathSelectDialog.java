@@ -5,7 +5,6 @@ import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -48,7 +47,6 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XPathTreeContentProvider;
 import com.amalto.workbench.providers.XSDTreeLabelProvider;
-import com.amalto.workbench.utils.ESystemDefaultObjects;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDataModel;
@@ -71,7 +69,7 @@ public class XpathSelectDialog extends Dialog {
 	protected Text xpathText;
 	protected Button add;
 	protected SelectionListener listener;
-	protected String dataModelName;
+	protected static String dataModelName;
 	private String xpath="";
 	private boolean isMulti=true;
 	
