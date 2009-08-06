@@ -1053,6 +1053,12 @@ public class Util {
     	}
     }
     
+    /**
+     * @deprecated using getChildren(TreeParent xObject,int objectType)
+     * @param xObject
+     * @param objectType
+     * @return
+     */
     public static List<String> getCachedXObjectsNameSet(TreeObject xObject,int objectType) {
 		List<String> xObjectsNameSet=new ArrayList<String>();
 		if(xObject!=null){
