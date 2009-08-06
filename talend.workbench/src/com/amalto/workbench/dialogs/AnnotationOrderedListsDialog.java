@@ -106,7 +106,8 @@ public class AnnotationOrderedListsDialog extends Dialog {
 		if(actionType==AnnotationWrite_ActionType||actionType==AnnotationHidden_ActionType){
 			textControl = new CCombo(composite,SWT.BORDER|SWT.READ_ONLY);
 
-			roles=Util.getCachedXObjectsNameSet(this.xObject, TreeObject.ROLE);
+			//roles=Util.getCachedXObjectsNameSet(this.xObject, TreeObject.ROLE);
+			roles=Util.getChildren(this.xObject.getServerRoot(), TreeObject.ROLE);
 			((CCombo)textControl).setItems(roles.toArray(new String[roles.size()]));
 
 		}else{
