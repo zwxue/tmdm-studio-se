@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -133,10 +134,11 @@ public class XpathSelectDialog extends Dialog {
 		dataModelCombo.setLayoutData(dg);
 		
 		final TreeParent tree = this.parent.findServerFolder(TreeObject.DATA_MODEL);
-		TreeObject[] trees = tree.getChildren();
-		ArrayList <String> systemDataModelValues  = new ArrayList<String>();
-		for (int i = 0; i < trees.length; i++) //add all the DataModels to systemDataModelValues
-			systemDataModelValues.add(((TreeObject)trees[i]).getDisplayName()) ;
+//		TreeObject[] trees = tree.getChildren();
+//		ArrayList <String> systemDataModelValues  = new ArrayList<String>();
+//		for (int i = 0; i < trees.length; i++) //add all the DataModels to systemDataModelValues
+//			systemDataModelValues.add(((TreeObject)trees[i]).getDisplayName()) ;
+		List<String> systemDataModelValues=Util.getChildren(this.parent.getServerRoot(), TreeObject.DATA_MODEL);
 		
 		//systemDataModelValues.removeAll(ESystemDefaultObjects.getValueByType(TreeObject.DATA_MODEL));// remove the System
 		dataModelCombo.setItems(systemDataModelValues.toArray(new String[systemDataModelValues.size()]));

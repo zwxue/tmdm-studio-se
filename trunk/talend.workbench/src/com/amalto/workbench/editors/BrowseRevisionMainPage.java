@@ -54,7 +54,8 @@ public class BrowseRevisionMainPage  extends AMainPage implements IXObjectModelL
     		//Universe
     		final LabelCombo comboUniverse=new LabelCombo(toolkit,composite,"Universe",SWT.BORDER,1);
     		comboUniverse.getCombo().setEditable(false);
-    		List<String> dcs=Util.getCachedXObjectsNameSet(getXObject(), TreeObject.UNIVERSE);
+    		//List<String> dcs=Util.getCachedXObjectsNameSet(getXObject(), TreeObject.UNIVERSE);
+    		List<String> dcs=Util.getChildren(getXObject().getServerRoot(), TreeObject.UNIVERSE);
     		comboUniverse.getCombo().setItems(dcs.toArray(new String[dcs.size()]));
     		comboUniverse.getCombo().add(IConstants.HEAD,0);
     		if(getXObject().getUniverse().trim().length()==0){
