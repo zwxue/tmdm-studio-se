@@ -125,7 +125,7 @@ public class RouteTransformerPluginBean extends TransformerPluginV2CtrlBean  imp
 		 descriptor1.setContentTypesRegex(
 				 new ArrayList<Pattern>(
 						 Arrays.asList(new Pattern[]{
-								 Pattern.compile("application/xtentis.itempk")
+								 Pattern.compile("(text/xml|application/xtentis.itempk)")
 						})
 				)
 		 );
