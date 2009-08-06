@@ -326,7 +326,8 @@ public class AddBrowseItemsWizard extends Wizard{
 	          infoLabel.setText("Role Access definition");
 	          ComplexTableViewerColumn ruleColumn = roleConfigurationColumns[0];
 	          ruleColumn.setColumnWidth(250);
-	          List<String> roles=Util.getCachedXObjectsNameSet(page.getXObject(), TreeObject.ROLE);
+	          //List<String> roles=Util.getCachedXObjectsNameSet(page.getXObject(), TreeObject.ROLE);
+	          List<String> roles=Util.getChildren(page.getXObject().getServerRoot(), TreeObject.ROLE);
 	          ruleColumn.setComboValues(roles.toArray(new String[]{}));
 	          ComplexTableViewerColumn acsColumn = roleConfigurationColumns[1];
 	          acsColumn.setColumnWidth(250);

@@ -48,7 +48,8 @@ public class DataClusterExportDialog extends Dialog{
 
 		comboDataCluster=new LabelCombo(toolkit,composite,"Data Cluster",SWT.BORDER,2);
 		comboDataCluster.getCombo().setEditable(false);
-		List<String> dcs=Util.getCachedXObjectsNameSet(this.xObject, TreeObject.DATA_CLUSTER);
+		//List<String> dcs=Util.getCachedXObjectsNameSet(this.xObject, TreeObject.DATA_CLUSTER);
+		List<String> dcs=Util.getChildren(this.xObject.getServerRoot(), TreeObject.DATA_CLUSTER);
 		dcs.add(0,"ALL");
 		comboDataCluster.getCombo().setItems(dcs.toArray(new String[dcs.size()]));
 		

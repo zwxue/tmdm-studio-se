@@ -45,7 +45,8 @@ public class DataModelFilterDialog extends Dialog {
 		
 		comboRole=new LabelCombo(toolkit,composite,"Role",SWT.BORDER,2);
 		comboRole.getCombo().setEditable(false);
-		List<String> roles=Util.getCachedXObjectsNameSet(this.xObject, TreeObject.ROLE);
+		//List<String> roles=Util.getCachedXObjectsNameSet(this.xObject, TreeObject.ROLE);
+		List<String> roles=Util.getChildren(this.xObject.getServerRoot(), TreeObject.ROLE);
 		comboRole.getCombo().setItems(roles.toArray(new String[roles.size()]));
 		if(dataModelFilter.getRole()==null || dataModelFilter.getRole().length()==0){
 			comboRole.getCombo().select(0);
