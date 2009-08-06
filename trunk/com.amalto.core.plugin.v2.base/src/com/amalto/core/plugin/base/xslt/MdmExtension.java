@@ -45,6 +45,24 @@ public class MdmExtension {
        
 	}
 	
+	public static String buildItemPKXmlString(String clusterName,String conceptName,String ids) {
+		 StringBuffer itemPKXmlString = new StringBuffer();
+		
+		 if(clusterName==null||clusterName.length()==0)return itemPKXmlString.toString();
+		 if(conceptName==null||conceptName.length()==0)return itemPKXmlString.toString();
+		 if(ids==null)return itemPKXmlString.toString();
+		 
+		 itemPKXmlString.append("<item-pOJOPK><concept-name>")
+		                .append(conceptName)
+		                .append("</concept-name><ids>")
+		                .append(ids)
+		                .append("</ids><data-cluster-pOJOPK><ids>")
+		                .append(clusterName)
+		                .append("</ids></data-cluster-pOJOPK></item-pOJOPK>");
+		                
+        return itemPKXmlString.toString();
+	}
+	
 	//TODO ADD MORE FUNCTIONS HERE
 	
 
