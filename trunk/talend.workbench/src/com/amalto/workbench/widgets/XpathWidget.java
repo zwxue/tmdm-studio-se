@@ -112,24 +112,27 @@ public class XpathWidget implements  SelectionListener{
 	public void widgetSelected(SelectionEvent e) {
 		// TODO Auto-generated method stub
 		if(accommodation!=null){
-			dlg = new XpathSelectDialog(
-					accommodation.getSite().getShell(),
-					treeParent,dlgTitle,
-					accommodation.getSite(),
-					true,
-					dataModelName
-					
-			);
+			if(dlg==null){
+				dlg = new XpathSelectDialog(
+						accommodation.getSite().getShell(),
+						treeParent,dlgTitle,
+						accommodation.getSite(),
+						true,
+						dataModelName
+						
+				);
+			}
 		}
 		else{
-			
-			dlg = new XpathSelectDialog(
-					parent.getShell(),
-					treeParent,dlgTitle,
-					site,
-					false,
-					dataModelName
-			);
+			if(dlg==null){
+				dlg = new XpathSelectDialog(
+						parent.getShell(),
+						treeParent,dlgTitle,
+						site,
+						false,
+						dataModelName
+				);
+			}
 		}
 	
         dlg.setBlockOnOpen(true);
