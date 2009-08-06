@@ -1524,9 +1524,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
         items: form,
         buttons: [{
             text: 'Yes',
-	        handler: function() {
-
-          	        	
+	        handler: function() {          	        	
 	        form.getForm().submit({    
 		        success: function(form, action){		          	           
 		            Ext.Msg.alert('Sucess', 'Picture delete sucessfully!');		 
