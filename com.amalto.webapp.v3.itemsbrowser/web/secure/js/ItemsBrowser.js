@@ -1496,11 +1496,64 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	}
 	
 	function removePicture(nodeId, treeIndex){
-	    var inputText=nodeId+"Value";	
-	    DWRUtil.setValue(inputText,'');
-	    updateNode(nodeId,treeIndex);
-	    if($('showPicture'))
-	       $('showPicture').src='';
+	var url=$(nodeId+"Value").value;
+	var pos=url.indexOf('?');
+	var uri=url.substring("/imageserver/".length,pos);
+	
+    var form = new Ext.form.FormPanel({
+        baseCls: 'x-plain',
+        layout:'fit',
+        method: 'POST',   
+        frame:true, 
+        url:'/imageserver/secure/ImageDeleteServlet?uri='+uri,
+        defaultType: 'textfield',
+
+        items: [{
+            xtype:'label',
+            text: 'Are you sure to delete?'
+        }]
+    });	
+    var window = new Ext.Window({
+        title: 'Confirm',
+        width: 200,
+        height:120,
+        layout: 'fit',
+        plain:true,
+        bodyStyle:'padding:5px;',
+        buttonAlign:'center',
+        items: form,
+        buttons: [{
+            text: 'Yes',
+	        handler: function() {
+
+          	        	
+	        form.getForm().submit({    
+		        success: function(form, action){		          	           
+		            Ext.Msg.alert('Sucess', 'Picture delete sucessfully!');		 
+				    var inputText=nodeId+"Value";	
+				    DWRUtil.setValue(inputText,'');
+				    updateNode(nodeId,treeIndex);
+				    if($('showPicture'))
+				       $('showPicture').src='';		            
+		           window.hide();
+		        },    
+		       failure: function(form, action){  
+		       	 var text=action.result;
+	          	Ext.Msg.alert('Failed', text.message);
+	          	window.hide();
+		       },
+		       waitMsg : 'Deleting...'
+		     });    
+		    }              
+        },{
+            text: 'No',
+            handler:function(){
+            	window.hide();
+            }
+        }]
+    });
+
+    window.show();	       
 	}
 	
 	function showUploadFile(nodeId, treeIndex, nodeType){
@@ -1550,8 +1603,8 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 		            if($('showPicture'))$('showPicture').src=url;
 		            uploadFileWindow.hide();
 		        },    
-		       failure: function(){    
-	          	Ext.Msg.alert('Failed', 'File upload failed!');    
+		       failure: function(form, action){    
+	          	Ext.Msg.alert('Failed', action.result.message);    
 		       },
 		       waitMsg : 'Uploading...'
 		     });    
