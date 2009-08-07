@@ -347,7 +347,8 @@ public class TransformerMainPage extends AMainPageV2 {
             		if (refreshing) return;
             		//commit as we go
             		TransformerMainPage.this.comitting= true;
-            		((WSTransformerV2)getXObject().getWsObject()).setDescription(descriptionText.getText());
+            		//((WSTransformerV2)getXObject().getWsObject())
+            		transformer.setDescription(descriptionText.getText());
             		TransformerMainPage.this.comitting= false;
             		markDirty();
             	}
@@ -364,7 +365,8 @@ public class TransformerMainPage extends AMainPageV2 {
             	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
             		try {
             			//check if we have a step to perfom
-            			WSTransformerProcessStep[] steps = ((WSTransformerV2)getXObject().getWsObject()).getProcessSteps();
+            			WSTransformerProcessStep[] steps = //((WSTransformerV2)getXObject().getWsObject())
+            			transformer.getProcessSteps();
             			if ((steps==null) || (steps.length == 0)) {
             				MessageDialog.openError(TransformerMainPage.this.getSite().getShell(), "Unable to process a file", "The transformer must have at least one step!");
             				return;
@@ -501,7 +503,7 @@ public class TransformerMainPage extends AMainPageV2 {
             			TransformerMainPage.this.stepsList.remove(index);
             			TransformerMainPage.this.stepsList.add(val, index-1);
             			TransformerMainPage.this.stepsList.select(index-1);            			
-            			WSTransformerV2 wsTransformer = (WSTransformerV2)getXObject().getWsObject(); 
+            			WSTransformerV2 wsTransformer = transformer;//(WSTransformerV2)getXObject().getWsObject(); 
 	            		ArrayList<WSTransformerProcessStep> list = new ArrayList<WSTransformerProcessStep>(
 	            				Arrays.asList(wsTransformer.getProcessSteps())
 	            		);
@@ -531,7 +533,7 @@ public class TransformerMainPage extends AMainPageV2 {
             			TransformerMainPage.this.stepsList.remove(index);
             			TransformerMainPage.this.stepsList.add(val, index+1);
             			TransformerMainPage.this.stepsList.select(index+1);            			
-            			WSTransformerV2 wsTransformer = (WSTransformerV2)getXObject().getWsObject(); 
+            			WSTransformerV2 wsTransformer = transformer;//(WSTransformerV2)getXObject().getWsObject(); 
 	            		ArrayList<WSTransformerProcessStep> list = new ArrayList<WSTransformerProcessStep>(
 	            				Arrays.asList(wsTransformer.getProcessSteps())
 	            		);
@@ -615,7 +617,8 @@ public class TransformerMainPage extends AMainPageV2 {
 	        		if (TransformerMainPage.this.stepsList.getSelectionIndex()==-1) return;
 	        		//commit as we go
 	        		TransformerMainPage.this.comitting= true;
-	        		((WSTransformerV2)getXObject().getWsObject()).getProcessSteps()[stepsList.getSelectionIndex()].setParameters(parametersTextViewer.getDocument().get());
+	        		//((WSTransformerV2)getXObject().getWsObject())
+	        		transformer.getProcessSteps()[stepsList.getSelectionIndex()].setParameters(parametersTextViewer.getDocument().get());
 	        		TransformerMainPage.this.comitting= false;
 	        		markDirty();            		
 	        	};
@@ -644,7 +647,7 @@ public class TransformerMainPage extends AMainPageV2 {
        				TransformerMainPage.this.stepText.getText()
 
        		);
-    		WSTransformerV2 wsTransformer = (WSTransformerV2)getXObject().getWsObject();
+    		WSTransformerV2 wsTransformer = transformer;//(WSTransformerV2)getXObject().getWsObject();
     		ArrayList<WSTransformerProcessStep> list = new ArrayList<WSTransformerProcessStep>();
     		if (wsTransformer.getProcessSteps() != null) { 
         		list = new ArrayList<WSTransformerProcessStep>(
@@ -1109,8 +1112,8 @@ public class TransformerMainPage extends AMainPageV2 {
 	            		//commit as we go
 	            		//TransformerMainPage.this.comitting= true;	            		
 	            		if (! jndi.contains("/")) jndi=TRANSFORMER_PLUGIN+jndi;
-	            		((WSTransformerV2)getXObject().getWsObject())
-	            				.getProcessSteps()[stepsList.getSelectionIndex()]
+	            		//((WSTransformerV2)getXObject().getWsObject())
+	            		transformer.getProcessSteps()[stepsList.getSelectionIndex()]
 	            			                  	.setPluginJNDI(jndi);
 	            		TransformerMainPage.this.comitting= false;
 	            		markDirty();
