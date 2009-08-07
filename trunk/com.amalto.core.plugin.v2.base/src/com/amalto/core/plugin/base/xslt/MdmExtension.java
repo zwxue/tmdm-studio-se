@@ -45,7 +45,7 @@ public class MdmExtension {
        
 	}
 	
-	public static String buildItemPKXmlString(String clusterName,String conceptName,String ids) {
+	public static String getItemPKXmlString(String clusterName,String conceptName,String ids) {
 		 StringBuffer itemPKXmlString = new StringBuffer();
 		
 		 if(clusterName==null||clusterName.length()==0)return itemPKXmlString.toString();
