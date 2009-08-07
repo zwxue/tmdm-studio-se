@@ -316,7 +316,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
         	public void selectionChanged(SelectionChangedEvent event) {
         		DescriptionLine line = (DescriptionLine)((IStructuredSelection)viewer.getSelection()).getFirstElement();
         		if(line!=null)
-        			((Text)textControl).setText(line.getLabel());
+        			((CCombo)textControl).setText(line.getLabel());
         	}
         });
         
