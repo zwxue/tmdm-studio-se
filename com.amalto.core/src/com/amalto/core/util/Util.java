@@ -119,7 +119,7 @@ public final class Util {
 	/**
 	 * helper class
 	 */
-	public static List<String> getRuntimeServiceJndiList() {
+	public static List<String> getRuntimeServiceJndiList(boolean withPrefix) {
 		List<String> serviceJndiList = new ArrayList<String>();
 		String serviceJndiPrefix="amalto/local/service";
 		try {
@@ -130,12 +130,20 @@ public final class Util {
 				
 				nc = list.next();
 				
-			    serviceJndiList.add(serviceJndiPrefix+"/"+nc.getName());
+			    if(withPrefix){
+			    	serviceJndiList.add(serviceJndiPrefix+"/"+nc.getName());
+			    }else{
+			    	serviceJndiList.add(nc.getName());
+			    }
 			}
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
 		return serviceJndiList;
+	}
+	
+	public static List<String> getRuntimeServiceJndiList(){
+		return getRuntimeServiceJndiList(true);
 	}
 	/*********************************************************************
 	 *     Xml server Access Stuff
