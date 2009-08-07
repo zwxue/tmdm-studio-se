@@ -3,7 +3,7 @@
 	<operation>INSERT</operation>
 	<part>
 	    <!-- UPDATE will using key field-->
-		<content>&amp;lt;Customer mapping-table="tuser"&amp;gt; 	&amp;lt;CustomerId mapping-field="id" key-field="true"&amp;gt;"TEST008"&amp;lt;/CustomerId&amp;gt; 	&amp;lt;Name mapping-field="name"&amp;gt;"TEST008"&amp;lt;/Name&amp;gt; 	&amp;lt;Address mapping-field="address"&amp;gt;"United States"&amp;lt;/Address&amp;gt; &amp;lt;/Customer&amp;gt; </content>
+		<content><Customer mapping-table="tuser"> 	<CustomerId mapping-field="id" key-field="true">"TEST008"</CustomerId> 	<Name mapping-field="name">"TEST008"</Name> 	<Address mapping-field="address">"United States"</Address> </Customer> </content>
 	</part>
 	
 </updateaction>
