@@ -8,6 +8,9 @@ import java.util.Set;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -15,11 +18,14 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.editors.TransformerMainPage;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.EContentType;
+import com.amalto.workbench.utils.EInputTemplate;
 import com.amalto.workbench.webservices.WSTransformerProcessStep;
 import com.amalto.workbench.webservices.WSTransformerV2;
 import com.amalto.workbench.webservices.WSTransformerVariablesMapping;
@@ -83,7 +89,7 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
         		"",						//Nill display
         		"text/xml",				//Default Value
         		true,					//is Combo ?
-        		new String[] {"text/xml", "text/plain","application/xhtml+xml","application/xtentis.itempk"}, //Combo Values
+        		EContentType.allTypes().toArray(new String[EContentType.allTypes().size()]), //Combo Values
         		0						//Text Lines
         	),
         	new ComplexTableViewerColumn(
@@ -119,6 +125,23 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
 	        List<Line> list=new ArrayList<Line>();
 	        objectViewer.getViewer().setInput(list);
         }
+        final CCombo combo=(CCombo)objectViewer.getColumns().get(1).getControl();
+        combo.addSelectionListener(new SelectionListener(){
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void widgetSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub				
+				if(combo.getText().equals(EInputTemplate.APPLICATION_ITEMPK.getName())){
+					Text t=(Text)objectViewer.getColumns().get(2).getControl();
+					t.setText(EInputTemplate.APPLICATION_ITEMPK.getContent());
+				}
+			}
+        	
+        });
         return comp;
 		
 	}
@@ -139,9 +162,6 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
 
 	}
 	
-
-
-
 	@Override
 	protected void okPressed() {
 		setReturnCode(OK);

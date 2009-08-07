@@ -374,16 +374,17 @@ public class TransformerMainPage extends AMainPageV2 {
             				if (MessageDialog.openConfirm(TransformerMainPage.this.getSite().getShell(), "Executing the Transformer", "The Transformer was changed and will be executed using the saved version.\nSave the transformer before executing it?"))
             					TransformerMainPage.this.getEditor().doSave(new NullProgressMonitor());
             			}
-            			//Open form Dialog	            			
-            			transformerDialog=new SetupTransformerInputVariablesDialog(
-            				TransformerMainPage.this.getSite().getShell(),
-            				toolkit,
-            				getXObject(), 
-            				TransformerMainPage.this
-            			);
-            			transformerDialog.create();
-            			
-            			transformerDialog.getShell().setText("Setup Transformer's input variables");
+            			//Open form Dialog	   
+            			if(transformerDialog==null){
+	            			transformerDialog=new SetupTransformerInputVariablesDialog(
+	            				TransformerMainPage.this.getSite().getShell(),
+	            				toolkit,
+	            				getXObject(), 
+	            				TransformerMainPage.this
+	            			);
+	            			transformerDialog.create();
+	            			transformerDialog.getShell().setText("Setup Transformer's input variables");
+            			}
             			transformerDialog.open();
 
             		} catch (Exception ex) {
