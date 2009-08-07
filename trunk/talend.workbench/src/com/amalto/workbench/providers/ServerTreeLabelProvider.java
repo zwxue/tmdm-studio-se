@@ -15,6 +15,7 @@ import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.ESystemDefaultObjects;
 import com.amalto.workbench.utils.FontUtils;
 import com.amalto.workbench.utils.ImageCache;
+import com.amalto.workbench.utils.LocalTreeObjectRepository;
 
 public class ServerTreeLabelProvider extends LabelProvider implements IColorProvider,IFontProvider{
 	
@@ -67,6 +68,8 @@ public class ServerTreeLabelProvider extends LabelProvider implements IColorProv
 				return ImageCache.getCreatedImage( "icons/catchuprelease_rls.gif");	
 			else if (object.getType() == TreeObject.CATEGORY_FOLDER)
 				return ImageCache.getCreatedImage( "icons/folder.gif");
+			
+					
 			
 				
 			//return PlatformUI.getWorkbench().getSharedImages().getCreatedImage(ISharedImages.IMG_OBJ_ELEMENT);
