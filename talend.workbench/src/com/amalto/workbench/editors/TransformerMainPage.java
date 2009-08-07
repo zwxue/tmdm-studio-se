@@ -419,7 +419,22 @@ public class TransformerMainPage extends AMainPageV2 {
             stepText.setLayoutData(    
                     new GridData(SWT.FILL,SWT.FILL,true,true,4,1)
             );
+            stepText.addKeyListener(new KeyListener(){
 
+				public void keyPressed(KeyEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				public void keyReleased(KeyEvent e) {
+					if(e.keyCode == 13){ //enter
+						performAdd();
+						int index = stepsList.getItemCount()-1;
+						performSelect(index);
+					}					
+				}
+            	
+            });
             Button addStepButton = toolkit.createButton(sequenceComposite,"Add",SWT.PUSH | SWT.TRAIL);
             addStepButton.setLayoutData(
                     new GridData(SWT.CENTER,SWT.FILL,false,true,1,1)
@@ -428,45 +443,11 @@ public class TransformerMainPage extends AMainPageV2 {
             	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
             	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
             		//commit as we go
-            		try {
-        				if(stepText.getText().trim().length()==0) return;
-	            		TransformerMainPage.this.comitting= true;
-
-		           		TransformerMainPage.this.stepsList.add(
-
-		           				TransformerMainPage.this.stepText.getText()
-
-		           		);
-	            		WSTransformerV2 wsTransformer = (WSTransformerV2)getXObject().getWsObject();
-	            		ArrayList<WSTransformerProcessStep> list = new ArrayList<WSTransformerProcessStep>();
-	            		if (wsTransformer.getProcessSteps() != null) { 
-		            		list = new ArrayList<WSTransformerProcessStep>(
-		            				Arrays.asList(wsTransformer.getProcessSteps())
-		            		);
-	            		}
-	            		list.add(new WSTransformerProcessStep(
-	            				"",
-	            				TransformerMainPage.this.stepText.getText(),
-	            				"",
-	            				new WSTransformerVariablesMapping[0],
-	            				new WSTransformerVariablesMapping[0],		            				
-	            				false
-	            		));
-	            		
-	            		wsTransformer.setProcessSteps(list.toArray(new WSTransformerProcessStep[list.size()]));
-	            		TransformerMainPage.this.comitting= false;
-	            		int index = TransformerMainPage.this.stepsList.getItemCount()-1;
-	        			TransformerMainPage.this.stepsList.select(index);
-	        			refreshStep(index);
-	        			TransformerMainPage.this.stepsList.forceFocus();
-	            		markDirty();
-            		} catch (Exception ex) {
-            			ex.printStackTrace();
-            		}
+            		performAdd();
             	};
             });
             
-            stepsList = new List(sequenceComposite,SWT.MULTI | SWT.V_SCROLL | SWT.BORDER);
+            stepsList = new List(sequenceComposite,SWT.V_SCROLL | SWT.BORDER);
             stepsList.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,true,true,5,1)
             );
@@ -479,32 +460,10 @@ public class TransformerMainPage extends AMainPageV2 {
             stepsList.addSelectionListener(new SelectionListener() {
             	public void widgetDefaultSelected(SelectionEvent e) {widgetSelected(e);}
             	public void widgetSelected(SelectionEvent e) {
-            		int index = stepsList.getSelectionIndex();
-            		currentPlugin = index;
-            		if (index>=0) {
-            			section.setVisible(true);
-            			refreshStep(index);
-            		}
+            		performSelect(stepsList.getSelectionIndex());
             	}
             });
-            
-            stepsList.addMouseListener(new MouseListener() {
-            	public void mouseDoubleClick(MouseEvent e) {
-            		int index = stepsList.getSelectionIndex();
-            		currentPlugin = index;
-            		//removeStep(index);
-            	}
-            	public void mouseUp(MouseEvent e) {}
-            	public void mouseDown(MouseEvent e) {
-            		/*
-            		int index = stepsList.getSelectionIndex();
-            		currentPlugin = index;
-            		if (index>=0) {
-            			refreshStep(index);
-            		}
-            		*/
-            	}
-            });
+
 
             
             wrap.Wrap(this, stepsList);
@@ -667,7 +626,51 @@ public class TransformerMainPage extends AMainPageV2 {
         }
 
     }
-    
+    protected void performSelect(int index){		
+		currentPlugin = index;
+		if (index>=0) {
+			section.setVisible(true);
+			refreshStep(index);
+		}
+    }
+    protected void performAdd(){
+		try {
+			if(stepText.getText().trim().length()==0) return;
+    		TransformerMainPage.this.comitting= true;
+
+       		TransformerMainPage.this.stepsList.add(
+
+       				TransformerMainPage.this.stepText.getText()
+
+       		);
+    		WSTransformerV2 wsTransformer = (WSTransformerV2)getXObject().getWsObject();
+    		ArrayList<WSTransformerProcessStep> list = new ArrayList<WSTransformerProcessStep>();
+    		if (wsTransformer.getProcessSteps() != null) { 
+        		list = new ArrayList<WSTransformerProcessStep>(
+        				Arrays.asList(wsTransformer.getProcessSteps())
+        		);
+    		}
+    		list.add(new WSTransformerProcessStep(
+    				"",
+    				TransformerMainPage.this.stepText.getText(),
+    				"",
+    				new WSTransformerVariablesMapping[0],
+    				new WSTransformerVariablesMapping[0],		            				
+    				false
+    		));
+    		
+    		wsTransformer.setProcessSteps(list.toArray(new WSTransformerProcessStep[list.size()]));
+    		TransformerMainPage.this.comitting= false;
+    		int index = TransformerMainPage.this.stepsList.getItemCount()-1;
+			TransformerMainPage.this.stepsList.select(index);
+			refreshStep(index);
+			TransformerMainPage.this.stepsList.forceFocus();
+    		markDirty();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+    	
+    }
     protected void refreshStep(int index) {
     	if (index < 0) {
 			stepWidget.inputViewer.setInput(new ArrayList<WSTransformerVariablesMapping>());
