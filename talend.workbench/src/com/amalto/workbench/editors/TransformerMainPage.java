@@ -500,8 +500,7 @@ public class TransformerMainPage extends AMainPageV2 {
             			String val = TransformerMainPage.this.stepsList.getItem(index);
             			TransformerMainPage.this.stepsList.remove(index);
             			TransformerMainPage.this.stepsList.add(val, index-1);
-            			TransformerMainPage.this.stepsList.select(index-1);
-            			TransformerMainPage.this.stepsList.forceFocus();
+            			TransformerMainPage.this.stepsList.select(index-1);            			
             			WSTransformerV2 wsTransformer = (WSTransformerV2)getXObject().getWsObject(); 
 	            		ArrayList<WSTransformerProcessStep> list = new ArrayList<WSTransformerProcessStep>(
 	            				Arrays.asList(wsTransformer.getProcessSteps())
@@ -509,8 +508,10 @@ public class TransformerMainPage extends AMainPageV2 {
 	            		WSTransformerProcessStep spec = list.get(index);
 	            		list.remove(index);
 	            		list.add(index-1, spec);
+	            		performSelect(index-1);
 	            		wsTransformer.setProcessSteps(list.toArray(new WSTransformerProcessStep[list.size()]));
 	            		TransformerMainPage.this.comitting= false;
+	            		TransformerMainPage.this.stepsList.forceFocus();
 	            		markDirty();
             		}
             	};
@@ -529,8 +530,7 @@ public class TransformerMainPage extends AMainPageV2 {
             			String val = TransformerMainPage.this.stepsList.getItem(index);
             			TransformerMainPage.this.stepsList.remove(index);
             			TransformerMainPage.this.stepsList.add(val, index+1);
-            			TransformerMainPage.this.stepsList.select(index+1);
-            			TransformerMainPage.this.stepsList.forceFocus();
+            			TransformerMainPage.this.stepsList.select(index+1);            			
             			WSTransformerV2 wsTransformer = (WSTransformerV2)getXObject().getWsObject(); 
 	            		ArrayList<WSTransformerProcessStep> list = new ArrayList<WSTransformerProcessStep>(
 	            				Arrays.asList(wsTransformer.getProcessSteps())
@@ -540,6 +540,7 @@ public class TransformerMainPage extends AMainPageV2 {
 	            		list.add(index+1, spec);
 	            		wsTransformer.setProcessSteps(list.toArray(new WSTransformerProcessStep[list.size()]));
 	            		TransformerMainPage.this.comitting= false;
+	            		TransformerMainPage.this.stepsList.forceFocus();
 	            		markDirty();
             		}
             	};
