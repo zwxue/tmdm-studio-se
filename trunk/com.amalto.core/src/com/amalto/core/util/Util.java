@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,6 +46,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -69,6 +71,8 @@ import com.amalto.core.objects.configurationinfo.ejb.local.ConfigurationInfoCtrl
 import com.amalto.core.objects.datacluster.ejb.DataClusterPOJOPK;
 import com.amalto.core.objects.datacluster.ejb.local.DataClusterCtrlLocal;
 import com.amalto.core.objects.datacluster.ejb.local.DataClusterCtrlLocalHome;
+import com.amalto.core.objects.datamodel.ejb.DataModelPOJO;
+import com.amalto.core.objects.datamodel.ejb.DataModelPOJOPK;
 import com.amalto.core.objects.datamodel.ejb.local.DataModelCtrlLocal;
 import com.amalto.core.objects.datamodel.ejb.local.DataModelCtrlLocalHome;
 import com.amalto.core.objects.menu.ejb.local.MenuCtrlLocal;
@@ -89,14 +93,20 @@ import com.amalto.core.objects.synchronization.ejb.local.SynchronizationObjectCt
 import com.amalto.core.objects.synchronization.ejb.local.SynchronizationObjectCtrlLocalHome;
 import com.amalto.core.objects.synchronization.ejb.local.SynchronizationPlanCtrlLocal;
 import com.amalto.core.objects.synchronization.ejb.local.SynchronizationPlanCtrlLocalHome;
+import com.amalto.core.objects.transformers.v2.ejb.TransformerV2POJOPK;
 import com.amalto.core.objects.transformers.v2.ejb.local.TransformerV2CtrlLocal;
 import com.amalto.core.objects.transformers.v2.ejb.local.TransformerV2CtrlLocalHome;
+import com.amalto.core.objects.transformers.v2.util.TransformerCallBack;
+import com.amalto.core.objects.transformers.v2.util.TransformerContext;
+import com.amalto.core.objects.transformers.v2.util.TypedContent;
+import com.amalto.core.objects.universe.ejb.UniversePOJO;
 import com.amalto.core.objects.universe.ejb.local.UniverseCtrlLocal;
 import com.amalto.core.objects.universe.ejb.local.UniverseCtrlLocalHome;
 import com.amalto.core.objects.versioning.ejb.local.VersioningSystemCtrlLocal;
 import com.amalto.core.objects.versioning.ejb.local.VersioningSystemCtrlLocalHome;
 import com.amalto.core.objects.view.ejb.local.ViewCtrlLocal;
 import com.amalto.core.objects.view.ejb.local.ViewCtrlLocalHome;
+import com.amalto.core.webservice.WSPutItem;
 import com.sun.org.apache.xpath.internal.XPathAPI;
 import com.sun.org.apache.xpath.internal.objects.XObject;
 
@@ -1534,6 +1544,204 @@ public final class Util {
 		return tmpBuffer.toString();
 	}
 	
+	public static ItemPOJO getItem(String datacluster, String xml)throws Exception{
+		String projection = xml;
+		Element root = Util.parse(projection).getDocumentElement();
+		
+		String concept = root.getLocalName();
+
+		DataModelPOJO dataModel  = Util.getDataModelCtrlLocal().getDataModel(
+					new DataModelPOJOPK(datacluster)
+			);
+		Document schema=Util.parse(dataModel.getSchema());
+        XSDKey conceptKey = com.amalto.core.util.Util.getBusinessConceptKey(
+        		schema,
+				concept					
+		);
+       
+		//get key values
+		String[] ids = com.amalto.core.util.Util.getKeyValuesFromItem(
+   			root,
+				conceptKey
+		);				
+		DataClusterPOJOPK dcpk = new DataClusterPOJOPK(datacluster);
+		ItemPOJOPK itemPOJOPK=new ItemPOJOPK(dcpk,concept, ids);
+		return ItemPOJO.load(itemPOJOPK);
+	}
+	
+	public static HashMap<String, UpdateReportItem> compareElement(String parentPath,Node newElement, Node oldElement )throws Exception{
+		HashMap<String, UpdateReportItem> map =new HashMap<String, UpdateReportItem>();
+		NodeList list=newElement.getChildNodes();
+		for(int i=0; i<list.getLength(); i++){
+			Node node=list.item(i);
+			if(node.getNodeType() == Node.ELEMENT_NODE){
+				String nName=node.getNodeName();
+				String xPath=parentPath+"/"+nName;
+				String nValue=getFirstTextNode(node, ".");
+				if( !hasChildren(node)){
+					String oldValue=getFirstTextNode(oldElement, xPath);
+					if(!nValue.equals(oldValue)){
+						UpdateReportItem item =new UpdateReportItem(xPath, oldValue, nValue);
+						map.put(xPath, item);
+					}
+				}else{					
+					map.putAll(compareElement(xPath, node, oldElement));
+				}
+			}
+		}
+		return map;
+	}
+	
+	private static boolean hasChildren(Node node){
+		NodeList list=node.getChildNodes();
+		for(int i=0; i<list.getLength(); i++){
+			if(list.item(i).getNodeType() == Node.ELEMENT_NODE){
+				return true;
+			}
+		}
+		return false;
+	}
+	private static String mergeExchangeData(String xml,
+			String resultUpdateReport) {
+		String exchangeData="<exchange>\n";
+		exchangeData+="<report>"+resultUpdateReport+"</report>";
+		exchangeData+="\n";
+		exchangeData+="<item>"+xml+"</item>";
+		exchangeData+="\n</exchange>";
+		return exchangeData;
+	}	
+	
+	public static String createUpdateReport(String[] ids, String concept,
+			String operationType, HashMap<String, UpdateReportItem> updatedPath,String dataModelPK, String dataClusterPK )
+			throws Exception {
+		String username="";
+		String revisionId="";
+		
+
+		try {
+			
+	    	
+			username=LocalUser.getLocalUser().getUsername();
+	    	UniversePOJO pojo=LocalUser.getLocalUser().getUniverse();
+	    	if(pojo!=null)revisionId=pojo.getConceptRevisionID(concept);
+	    	
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			throw e1;
+		}
+		
+		String key = "";
+		if(ids!=null){
+			for (int i = 0; i < ids.length; i++) {
+				key+=ids[i];
+				if(i!=ids.length-1) key+=".";
+			}
+		}
+		String xml2 = "" +
+			"<Update>"+
+			"<UserName>"+username+"</UserName>"+
+            "<Source>genericUI</Source>"+
+            "<TimeInMillis>"+System.currentTimeMillis()+"</TimeInMillis>"+
+            "<OperationType>"+StringEscapeUtils.escapeXml(operationType)+"</OperationType>"+
+            "<RevisionID>"+revisionId+"</RevisionID>"+
+            "<DataCluster>"+dataClusterPK+"</DataCluster>"+
+            "<DataModel>"+dataModelPK+"</DataModel>"+
+            "<Concept>"+StringEscapeUtils.escapeXml(concept)+"</Concept>"+
+            "<Key>"+StringEscapeUtils.escapeXml(key)+"</Key>";
+		if("UPDATE".equals(operationType)){
+			Collection<UpdateReportItem> list = updatedPath.values();
+			for (Iterator<UpdateReportItem> iter = list.iterator(); iter.hasNext();) {
+				UpdateReportItem item = iter.next();
+		            xml2 += 
+		            "<Item>"+
+		            "   <path>"+StringEscapeUtils.escapeXml(item.getPath())+"</path>"+
+		            "   <oldValue>"+StringEscapeUtils.escapeXml(item.getOldValue())+"</oldValue>"+
+		            "   <newValue>"+StringEscapeUtils.escapeXml(item.getNewValue())+"</newValue>"+
+		           "</Item>"; 		
+				}     
+		}
+        xml2 += "</Update>";
+		return xml2;
+	}
+
+	public static String beforeSaving(String concept,String xml, String resultUpdateReport)throws Exception{
+		//check before saving transformer
+		boolean isBeforeSavingTransformerExist=false;
+		Collection<TransformerV2POJOPK> wst = getTransformerV2CtrlLocal().getTransformerPKs("*");
+		for(TransformerV2POJOPK id: wst){
+			if(id.getIds()[0].equals("beforeSaving_"+concept)){
+				isBeforeSavingTransformerExist=true;
+				break;
+			}
+		}
+		//call before saving transformer
+		if(isBeforeSavingTransformerExist){
+			
+			try {
+				final String RUNNING = "XtentisWSBean.executeTransformerV2.running";
+				TransformerContext context = new TransformerContext(
+						new TransformerV2POJOPK("beforeSaving_" + concept));
+				String exchangeData = mergeExchangeData(xml,resultUpdateReport);
+				//String exchangeData = resultUpdateReport;
+				context.put(RUNNING, Boolean.TRUE);
+				TransformerV2CtrlLocal ctrl = Util.getTransformerV2CtrlLocal();
+				TypedContent wsTypedContent = new TypedContent(
+						exchangeData
+								.getBytes("UTF-8"),
+						"text/xml; charset=utf-8");
+				ctrl.execute(
+						context, 
+						wsTypedContent,
+						new TransformerCallBack() {
+							public void contentIsReady(TransformerContext context) throws XtentisException {
+								org.apache.log4j.Logger.getLogger(this.getClass()).debug("XtentisWSBean.executeTransformerV2.contentIsReady() ");
+							}
+							public void done(TransformerContext context) throws XtentisException {
+								org.apache.log4j.Logger.getLogger(this.getClass()).debug("XtentisWSBean.executeTransformerV2.done() ");
+								context.put(RUNNING, Boolean.FALSE);
+							}
+						}
+				);
+				while (((Boolean)context.get(RUNNING)).booleanValue()) {
+					Thread.sleep(100);
+				}				
+				//TODO process no plug-in issue
+				String outputErrorMessage = "";
+				//Scan the entries - in priority, taka the content of the 'output_error_message' entry, 
+				for(Entry<String, TypedContent> entry: context.getPipelineClone().entrySet()){
+
+					if ("output_error_message".equals(entry.getKey()	)) {
+						outputErrorMessage = new String(entry.getValue().getContentBytes(), "UTF-8");
+						break;
+					}
+				}
+				//handle error message
+				if (outputErrorMessage.length() > 0) {
+
+					String errorCode = "";
+					String errorMessage = "";
+					Pattern pattern = Pattern
+							.compile("<error code=['\042](.*)['\042]>(.*)</error>");
+					Matcher matcher = pattern.matcher(outputErrorMessage);
+					while (matcher.find())
+
+					{
+						errorCode = matcher.group(1);
+						errorMessage = matcher.group(2);
+
+					}
+					if (!errorCode.equals("") && !errorCode.equals("0")) {
+						errorMessage = "ERROR_3:" + errorMessage;
+						return errorMessage;
+					}
+
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
 	/*********************************************************************
 	 *  TESTS
 	 *********************************************************************/
