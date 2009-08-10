@@ -25,10 +25,9 @@ public class WSPutItemWithReport_LiteralSerializer extends LiteralObjectSerializ
     private static final QName ns1_source_QNAME = new QName("", "source");
     private static final QName ns3_string_TYPE_QNAME = SchemaConstants.QNAME_TYPE_STRING;
     private CombinedSerializer ns3_myns3_string__java_lang_String_String_Serializer;
-    private static final QName ns1_operationType_QNAME = new QName("", "operationType");
-    private static final QName ns1_wsUpdateReportItemArray_QNAME = new QName("", "wsUpdateReportItemArray");
-    private static final QName ns2_WSUpdateReportItemArray_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSUpdateReportItemArray");
-    private CombinedSerializer ns2_myWSUpdateReportItemArray_LiteralSerializer;
+    private static final QName ns1_invokeBeforeSaving_QNAME = new QName("", "invokeBeforeSaving");
+    private static final QName ns3_boolean_TYPE_QNAME = SchemaConstants.QNAME_TYPE_BOOLEAN;
+    private CombinedSerializer ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer;
     
     public WSPutItemWithReport_LiteralSerializer(QName type, String encodingStyle) {
         this(type, encodingStyle, false);
@@ -41,7 +40,7 @@ public class WSPutItemWithReport_LiteralSerializer extends LiteralObjectSerializ
     public void initialize(InternalTypeMappingRegistry registry) throws Exception {
         ns2_myWSPutItem_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSPutItem.class, ns2_WSPutItem_TYPE_QNAME);
         ns3_myns3_string__java_lang_String_String_Serializer = (CombinedSerializer)registry.getSerializer("", java.lang.String.class, ns3_string_TYPE_QNAME);
-        ns2_myWSUpdateReportItemArray_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSUpdateReportItemArray.class, ns2_WSUpdateReportItemArray_TYPE_QNAME);
+        ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer = (CombinedSerializer)registry.getSerializer("", java.lang.Boolean.class, ns3_boolean_TYPE_QNAME);
     }
     
     public Object doDeserialize(XMLReader reader,
@@ -87,32 +86,14 @@ public class WSPutItemWithReport_LiteralSerializer extends LiteralObjectSerializ
         }
         elementName = reader.getName();
         if (reader.getState() == XMLReader.START) {
-            if (elementName.equals(ns1_operationType_QNAME)) {
-                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_operationType_QNAME, reader, context);
+            if (elementName.equals(ns1_invokeBeforeSaving_QNAME)) {
+                member = ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer.deserialize(ns1_invokeBeforeSaving_QNAME, reader, context);
                 if (member == null) {
                     throw new DeserializationException("literal.unexpectedNull");
                 }
-                instance.setOperationType((java.lang.String)member);
+                instance.setInvokeBeforeSaving((java.lang.Boolean)member);
                 reader.nextElementContent();
-            } else {
-                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_operationType_QNAME, reader.getName() });
             }
-        }
-        else {
-            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
-        }
-        elementName = reader.getName();
-        if (reader.getState() == XMLReader.START) {
-            if (elementName.equals(ns1_wsUpdateReportItemArray_QNAME)) {
-                member = ns2_myWSUpdateReportItemArray_LiteralSerializer.deserialize(ns1_wsUpdateReportItemArray_QNAME, reader, context);
-                instance.setWsUpdateReportItemArray((com.amalto.workbench.webservices.WSUpdateReportItemArray)member);
-                reader.nextElementContent();
-            } else {
-                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_wsUpdateReportItemArray_QNAME, reader.getName() });
-            }
-        }
-        else {
-            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
         }
         
         XMLReaderUtil.verifyReaderState(reader, XMLReader.END);
@@ -134,10 +115,8 @@ public class WSPutItemWithReport_LiteralSerializer extends LiteralObjectSerializ
             throw new SerializationException("literal.unexpectedNull");
         }
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getSource(), ns1_source_QNAME, null, writer, context);
-        if (instance.getOperationType() == null) {
-            throw new SerializationException("literal.unexpectedNull");
+        if (instance.getInvokeBeforeSaving() != null) {
+            ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer.serialize(instance.getInvokeBeforeSaving(), ns1_invokeBeforeSaving_QNAME, null, writer, context);
         }
-        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getOperationType(), ns1_operationType_QNAME, null, writer, context);
-        ns2_myWSUpdateReportItemArray_LiteralSerializer.serialize(instance.getWsUpdateReportItemArray(), ns1_wsUpdateReportItemArray_QNAME, null, writer, context);
     }
 }

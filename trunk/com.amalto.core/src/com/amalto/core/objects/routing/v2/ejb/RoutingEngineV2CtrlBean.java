@@ -304,7 +304,8 @@ public class RoutingEngineV2CtrlBean implements SessionBean, TimedObject {
 				org.apache.log4j.Logger.getLogger(this.getClass()).info(err);
 			else
 				org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
-    	    throw new XtentisException(err);
+    	    //throw new XtentisException(err);
+			return new RoutingRulePOJOPK[0];
     	}
 
 		return routingRulesThatMatched.toArray(new RoutingRulePOJOPK[routingRulesThatMatched.size()]);
