@@ -5,7 +5,7 @@ package com.amalto.core.objects.universe.ejb.local;
 
 /**
  * Local interface for UniverseCtrl.
- * @xdoclet-generated at 3-08-09
+ * @xdoclet-generated at 10-08-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}

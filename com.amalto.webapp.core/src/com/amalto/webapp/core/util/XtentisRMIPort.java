@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.naming.InitialContext;
 import javax.naming.NameClassPair;
@@ -91,6 +92,7 @@ import com.amalto.core.objects.versioning.ejb.VersioningSystemPOJOPK;
 import com.amalto.core.objects.versioning.ejb.local.VersioningSystemCtrlLocal;
 import com.amalto.core.objects.view.ejb.ViewPOJOPK;
 import com.amalto.core.util.LocalUser;
+import com.amalto.core.util.UpdateReportItem;
 import com.amalto.core.util.Util;
 import com.amalto.core.util.Version;
 import com.amalto.core.util.XSDKey;
@@ -3502,27 +3504,70 @@ public class XtentisRMIPort implements XtentisPort {
 	public WSItemPK putItemWithReport(WSPutItemWithReport wsPutItemWithReport) throws RemoteException {
 		try {
 			
-			WSPutItem wsPutItem=wsPutItemWithReport.getWsPutItem();
+			com.amalto.webapp.util.webservices.WSPutItem wsPutItem=wsPutItemWithReport.getWsPutItem();
 			String source=wsPutItemWithReport.getSource();
-			String operationType=wsPutItemWithReport.getOperationType();
+			String operationType="";
 			Map<String,UpdateReportItemPOJO> updateReportItemsMap=new HashMap<String, UpdateReportItemPOJO>();
-			WSUpdateReportItemArray wsUpdateReportItemArray=wsPutItemWithReport.getWsUpdateReportItemArray();
-			if(wsUpdateReportItemArray!=null){
-				WSUpdateReportItemPOJO[] contentEntries=wsUpdateReportItemArray.getWsUpdateReportItemPOJO();
-				for (int i = 0; i < contentEntries.length; i++) {
-					updateReportItemsMap.put(contentEntries[i].getPath(), WS2POJO(contentEntries[i]));
+
+			//before saving
+			String projection = wsPutItem.getXmlString();
+			Element root = Util.parse(projection).getDocumentElement();
+			
+			String concept = root.getLocalName();
+
+			DataModelPOJO dataModel  = Util.getDataModelCtrlLocal().getDataModel(
+						new DataModelPOJOPK(wsPutItem.getWsDataModelPK().getPk())
+				);
+			Document schema=Util.parse(dataModel.getSchema());
+	        XSDKey conceptKey = com.amalto.core.util.Util.getBusinessConceptKey(
+	        		schema,
+					concept					
+			);
+	       
+			//get key values
+			String[] ids = com.amalto.core.util.Util.getKeyValuesFromItem(
+	   			root,
+					conceptKey
+			);				
+			DataClusterPOJOPK dcpk = new DataClusterPOJOPK(wsPutItem.getWsDataClusterPK().getPk());
+			ItemPOJOPK itemPOJOPK=new ItemPOJOPK(dcpk,concept, ids);			
+			//get operationType
+			ItemPOJO itemPoJo=ItemPOJO.load(itemPOJOPK);
+			HashMap<String, UpdateReportItem> updatedPath=new HashMap<String, UpdateReportItem>();
+
+			if(itemPoJo==null){
+				operationType=UpdateReportPOJO.OPERATIONTYPE_CREATE;
+			}else{
+				operationType=UpdateReportPOJO.OPERATIONTYPE_UPDATEE;
+				// get updated path			
+				Element old=itemPoJo.getProjection();
+				Element newNode=root;
+				updatedPath=Util.compareElement("/"+old.getLocalName(), newNode, old);
+				WSUpdateReportItemArray wsUpdateReportItemArray=new WSUpdateReportItemArray();
+					for(Entry<String, UpdateReportItem> entry:updatedPath.entrySet()){
+						UpdateReportItemPOJO pojo=new UpdateReportItemPOJO(entry.getValue().getPath(), entry.getValue().getOldValue(),entry.getValue().getNewValue());
+						updateReportItemsMap.put(entry.getKey(), pojo);
+				}				
+			}
+			//create resultUpdateReport
+			
+			String resultUpdateReport= Util.createUpdateReport(ids, concept, operationType, updatedPath, wsPutItem.getWsDataModelPK().getPk(), wsPutItem.getWsDataClusterPK().getPk());
+			//invoke before saving
+			if(wsPutItemWithReport.getInvokeBeforeSaving()){
+				String err=Util.beforeSaving(concept, projection, resultUpdateReport);
+				if(err!=null){
+					err="execute beforeSaving ERROR:"+ err;
+					org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
 				}
 			}
-			
-			
+						
 			String dataClusterPK = wsPutItem.getWsDataClusterPK().getPk();
 	
 			org.apache.log4j.Logger.getLogger(this.getClass()).debug("[putItem-of-putItemWithReport] in dataCluster:"+dataClusterPK);
 			WSItemPK wsi = putItem(wsPutItem);	
 			
-			String concept=wsi.getConceptName();
-			String[] ids=wsi.getIds();
-			
+			concept=wsi.getConceptName();
+			ids=wsi.getIds();			
 			//additional attributes for data changes log
 			LocalUser user = LocalUser.getLocalUser();
 			String userName=user.getUsername();
@@ -3542,17 +3587,15 @@ public class XtentisRMIPort implements XtentisPort {
 								updateReportPOJO.serialize(),
 								new WSDataModelPK("UpdateReport")));
 				
-				com.amalto.webapp.core.util.Util.getPort().routeItemV2(new WSRouteItemV2(itemPK));
+				routeItemV2(new WSRouteItemV2(itemPK));
 				
-			return wsi;	
-
-		} catch (XtentisException e) {
+			return wsi;			
+		}catch (XtentisException e) {
 			throw(new RemoteException(e.getLocalizedMessage()));			
 		} catch (Exception e) {
 			throw new RemoteException((e.getCause() == null ? e.getLocalizedMessage() : e.getCause().getLocalizedMessage()));
 		}
-		
-	}
 
+	}
 	
 }

@@ -9,17 +9,15 @@ package com.amalto.core.webservice;
 public class WSPutItemWithReport {
     protected com.amalto.core.webservice.WSPutItem wsPutItem;
     protected java.lang.String source;
-    protected java.lang.String operationType;
-    protected com.amalto.core.webservice.WSUpdateReportItemArray wsUpdateReportItemArray;
+    protected java.lang.Boolean invokeBeforeSaving;
     
     public WSPutItemWithReport() {
     }
     
-    public WSPutItemWithReport(com.amalto.core.webservice.WSPutItem wsPutItem, java.lang.String source, java.lang.String operationType, com.amalto.core.webservice.WSUpdateReportItemArray wsUpdateReportItemArray) {
+    public WSPutItemWithReport(com.amalto.core.webservice.WSPutItem wsPutItem, java.lang.String source, java.lang.Boolean invokeBeforeSaving) {
         this.wsPutItem = wsPutItem;
         this.source = source;
-        this.operationType = operationType;
-        this.wsUpdateReportItemArray = wsUpdateReportItemArray;
+        this.invokeBeforeSaving = invokeBeforeSaving;
     }
     
     public com.amalto.core.webservice.WSPutItem getWsPutItem() {
@@ -38,19 +36,11 @@ public class WSPutItemWithReport {
         this.source = source;
     }
     
-    public java.lang.String getOperationType() {
-        return operationType;
+    public java.lang.Boolean getInvokeBeforeSaving() {
+        return invokeBeforeSaving;
     }
     
-    public void setOperationType(java.lang.String operationType) {
-        this.operationType = operationType;
-    }
-    
-    public com.amalto.core.webservice.WSUpdateReportItemArray getWsUpdateReportItemArray() {
-        return wsUpdateReportItemArray;
-    }
-    
-    public void setWsUpdateReportItemArray(com.amalto.core.webservice.WSUpdateReportItemArray wsUpdateReportItemArray) {
-        this.wsUpdateReportItemArray = wsUpdateReportItemArray;
+    public void setInvokeBeforeSaving(java.lang.Boolean invokeBeforeSaving) {
+        this.invokeBeforeSaving = invokeBeforeSaving;
     }
 }

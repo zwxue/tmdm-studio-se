@@ -1002,8 +1002,7 @@
 		<xsd:sequence>
 			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="wsPutItem" type="tns:WSPutItem"/>
 			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="source" type="xsd:string"/>
-			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="operationType" type="xsd:string"/>
-			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="wsUpdateReportItemArray" type="tns:WSUpdateReportItemArray"/>
+			<xsd:element minOccurs="0" maxOccurs="1"  nillable="false" name="invokeBeforeSaving" default="true" type="xsd:boolean"/>
 		</xsd:sequence>		
 	</xsd:complexType>
 	<xsd:element name="WSPutItemWithReport" type="tns:WSPutItemWithReport"/>
