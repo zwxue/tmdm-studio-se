@@ -520,7 +520,7 @@ public class NewXObjectAction extends Action{
 	           		return;
             }//switch
             
-            LocalTreeObjectRepository.getInstance().merge(newInstance);
+            LocalTreeObjectRepository.getInstance().mergeNewTreeObject(newInstance);
             
             XObjectEditor editpart=(XObjectEditor)view.getSite().getWorkbenchWindow().getActivePage().openEditor(
                     new XObjectEditorInput(newInstance,newInstance.getDisplayName()),

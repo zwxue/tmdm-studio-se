@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -38,6 +39,8 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	private static String EXPAND_NAME = "Expand";
 	private static String EXPAND_VALUE = "true";
 	private static String COLLAPSE_VALUE = "false";
+	
+	private static int XTENTIS_LEVEL = 4;
 	
 	private Element catalogTreeObj = null;
 	private TreeItem itemFocus = null;
@@ -97,8 +100,9 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	{
 		if (elem != null) {
 			xpathList.add(elem.getName());
+			recurseElementForXPath(elem.getParent(), xpathList);
 		}
-		recurseElementForXPath(elem.getParent(), xpathList);
+
 	}
 		
 	
@@ -122,6 +126,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		Element elementUser;
 		if (userRoots.isEmpty()) {
 			elementUser = doc.getRootElement().addElement(user);
+			elementUser.setText("0");	
 		} else {
 			elementUser = userRoots.get(0);
 		}
@@ -162,8 +167,11 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		
 		Element elemFolder = null;
 		String xpath = getXPathForTreeObject(treeObj);
+
 		if (doc.selectNodes(xpath).isEmpty()) {
-			xpath = getXPathForTreeObject(treeObj.getParent() != null ? treeObj.getParent() : treeObj.getServerRoot());
+			xpath = xpath.replaceAll("\\[.*\\]", "");
+			if (doc.selectNodes(xpath).isEmpty())
+			  xpath = getXPathForTreeObject(treeObj.getParent() != null ? treeObj.getParent() : treeObj.getServerRoot());
 			if (xpath != null)
 			{
 				Element elemTop = null;
@@ -183,6 +191,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		{
 			elemFolder = (Element)doc.selectNodes(xpath).get(0);
 		}
+		
 			
 		
 		return elemFolder;
@@ -256,7 +265,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	}
 	
 	private String getXPathForTreeObject(TreeObject theObj)
-	{	
+	{			
 		List<String> xpathList = new ArrayList<String>();
 		recurseTreeObjectForXPath(theObj, xpathList);
 		
@@ -264,6 +273,8 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		for (int idx = xpathList.size() - 1; idx >= 0; idx--) {
 			xpathVar += "/" + xpathList.get(idx);
 		}
+		
+		xpathVar += "[text() = '" + theObj.getType() + "']";
 		
 		return xpathVar;
 	}
@@ -290,32 +301,40 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	private String synchronizeWithElem(TreeObject theObj, TreeParent folder, boolean fireEvent)
 	{
 		internalCheck = fireEvent;
-		String catalogPath = checkUpCatalogRepositoryForTreeObject(theObj, folder);
-		if (!catalogPath.equals("") && folder.getType() != TreeObject.CATEGORY_FOLDER)
+		String catalogPath = "";
+		ArrayList<String> catalogs = checkUpCatalogRepositoryForTreeObject(theObj, folder);
+		if (catalogs != null && folder.getType() != TreeObject.CATEGORY_FOLDER)
 		{
 			// create a catalog folder and insert the theObj into it
+			TreeParent subFolder = folder;
 			TreeParent category = null;
-			for (TreeObject child: folder.getChildren())
+			for (String catalogName: catalogs)
 			{
-				if (child.getDisplayName().equals(catalogPath)
-						&& child.getType() == TreeObject.CATEGORY_FOLDER
-						&& child instanceof TreeParent)
+				if (catalogName.equals(filterOutBlank(folder.getDisplayName())))
+					continue;
+				category = null;
+				for (TreeObject child: subFolder.getChildren())
 				{
-					category = (TreeParent)child;
-					break;
+					if (child.getDisplayName().equals(catalogName)
+							&& child.getType() == TreeObject.CATEGORY_FOLDER
+							&& child instanceof TreeParent)
+					{
+						category = (TreeParent)child;
+						subFolder = category;
+						break;
+					}
+				}
+				
+				if (category == null) {
+					category = new TreeParent(catalogName, folder
+							.getServerRoot(), TreeObject.CATEGORY_FOLDER, null,
+							null);				
+					subFolder.addChild(category);
+			   		category.setServerRoot(folder.getServerRoot());
+			   		addAttributeToCategoryElem(category, EXPAND_NAME, COLLAPSE_VALUE);
+			   		subFolder = category;
 				}
 			}
-			
-			if (category == null) {
-				category = new TreeParent(catalogPath.substring(
-						catalogPath.lastIndexOf("/") + 1).trim(), folder
-						.getServerRoot(), TreeObject.CATEGORY_FOLDER, null,
-						null);				
-		   		folder.addChild(category);
-		   		category.setServerRoot(folder.getServerRoot());
-		   		addAttributeToCategoryElem(category, EXPAND_NAME, COLLAPSE_VALUE);
-			}
-
 
 	   		boolean exist = false;
 	   		for (TreeObject obj: category.getChildren())
@@ -332,6 +351,8 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		   		folder.removeChild(theObj);
 	   		  category.addChild(theObj);
 	   		}
+	   		
+	   		catalogPath = catalogs.isEmpty() ? "" : catalogs.get(0);
 		}
 		else
 		{
@@ -383,8 +404,6 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 						
 						addAttributeToCategoryElem(systemCatalog, EXPAND_NAME, COLLAPSE_VALUE);
 						saveDocument(doc);
-						
-						catalogPath = systemCatalog.getDisplayName();
 	        	    }
 				}
 				else
@@ -418,7 +437,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		}
 
 		// check up the catalog with none children
-		checkUpForCatalogWithNoChildren(theObj, folder);
+		checkUpCatalogHavingNoChildren(theObj, folder);
 		
         if (theObj instanceof TreeParent) {
 			TreeParent subParent = (TreeParent) theObj;
@@ -433,7 +452,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	}
 	
 	
-	private void checkUpForCatalogWithNoChildren(TreeObject theObj, TreeParent folder)
+	private void checkUpCatalogHavingNoChildren(TreeObject theObj, TreeParent folder)
 	{
 		if (folder.getServerRoot() == folder) return;
 		
@@ -441,69 +460,116 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		+ "/" + filterOutBlank(folder.getDisplayName())
 		+ "//child::*[text() = '" + TreeObject.CATEGORY_FOLDER
 		+ "' and count(child::*) = 0]";
+		
+
+		TreeParent subFolder = folder;
 		List<Element> elems = doc.selectNodes(xpath);
 		for (Element elem: elems)
 		{
-			boolean catalogExist = false;
-			for (TreeObject child: folder.getChildren())
+			String xpaths = getXPathForElem(elem);
+			int modelPos = xpaths.indexOf(filterOutBlank(folder.getDisplayName()));
+			if (modelPos == -1)
 			{
-				if (elem.getName().equals(
-						filterOutBlank(child.getDisplayName()))
-						&& child.getType() == TreeObject.CATEGORY_FOLDER)
+				System.err.println("elem.getName() is in wrong position !!!");
+				return;
+			}
+			xpaths = xpaths.substring(modelPos + filterOutBlank(folder.getDisplayName()).length() + 1);
+			modelPos = xpaths.indexOf("/");
+			while(modelPos != -1 || (!xpaths.equals("") && modelPos == -1))
+			{
+				String nodeName = modelPos != -1 ? xpaths.substring(0, modelPos) : xpaths;
+				boolean catalogExist = false;
+				for (TreeObject child: subFolder.getChildren())
 				{
-					catalogExist = true;
-					break;
+					if (nodeName.equals(filterOutBlank(child.getDisplayName()))
+							&& child.getType() == TreeObject.CATEGORY_FOLDER)
+					{
+						catalogExist = true;
+						subFolder = (TreeParent)child;
+						break;
+					}
 				}
+				
+				if (!catalogExist)
+				{
+					TreeParent catalog = new TreeParent(nodeName, folder
+							.getServerRoot(), TreeObject.CATEGORY_FOLDER, null, null);
+					subFolder.addChild(catalog);
+					subFolder = catalog;
+				}
+				
+				if (xpaths.indexOf("/") != -1)
+				{
+					xpaths = xpaths.substring(modelPos + 1);
+					modelPos = xpaths.indexOf("/");
+				}
+				else
+					xpaths = "";
+
 			}
-			
-			if (catalogExist == false)
-			{
-				TreeParent catalog = new TreeParent(elem.getName(), folder
-						.getServerRoot(), TreeObject.CATEGORY_FOLDER, null, null);
-				folder.addChild(catalog);
-			}
+
 		}
 	}
 	
-	private String checkUpCatalogRepositoryForTreeObject(TreeObject theObj, TreeObject folder)
+
+	private ArrayList<String> checkUpCatalogRepositoryForTreeObject(TreeObject theObj, TreeObject folder)
 	{
+		if (theObj.getType() == 0) return null;
 		try
 		{
-			String modelName = "";
-			if (theObj.isXObject()) {
-				if (theObj.getParent() != theObj.getServerRoot())
-				{
-					if (folder.getType() == TreeObject.CATEGORY_FOLDER)
-						folder = folder.getParent();
-				    modelName = filterOutBlank(folder.getDisplayName());
-				}
-				else
-					modelName = filterOutBlank(theObj.getDisplayName());
-			} else {
-				if (theObj.getServerRoot() == theObj) return "";
-				if (theObj.getType() == TreeObject.CATEGORY_FOLDER)
-					modelName = filterOutBlank(folder.getDisplayName());
-				else
-					modelName = filterOutBlank(theObj.getDisplayName());
-			}
-			String xpath = "//" + theObj.getServerRoot().getUser().getUsername() + "//" + modelName
-					+ "//child::*/.[text() = '" + TreeObject.CATEGORY_FOLDER
-					+ "']/child::*";
+			String modelName = getXPathForTreeObject(folder);
+			
+			String xpath = modelName + "//child::*[text() = '" + TreeObject.CATEGORY_FOLDER + "']//child::*";
 			List<Element> elems = doc.selectNodes(xpath);
 			for (Element elem : elems)
 			{
 				if (elem.getName().equals(filterOutBlank(theObj.getDisplayName()))
 						&& elem.getData().toString().equals(theObj.getType() + ""))
 				{
-					return elem.getParent().getName();
+					ArrayList<String> path = new ArrayList<String>();
+					while (isAEXtentisObjects(elem) > XTENTIS_LEVEL)
+					{
+						path.add(elem.getParent().getName());
+						elem = elem.getParent();
+					}
+                    Collections.reverse(path);
+					return path;
 				}
 			}
 		}
 		catch(Exception ex)
 		{
-			return "";
+			return null;
 		}	
-		return "";
+		return null;
+	}
+	
+	private int isAEXtentisObjects(Element elemXobj)
+	{
+		if (elemXobj == null)
+			return 0;
+		
+		if (elemXobj == doc.getRootElement())
+		     return 1;
+
+		return 1 + isAEXtentisObjects(elemXobj.getParent());
+	}
+	
+	public int receiveUnCertainTreeObjectType(TreeObject xobj)
+	{
+		String path = this.getXPathForTreeObject(xobj);
+		List<Element> elems = doc.selectNodes(path);
+		if (!elems.isEmpty())
+		{
+			Element elem = elems.get(0);
+			while (isAEXtentisObjects(elem) >= XTENTIS_LEVEL)
+			{
+				elem = elem.getParent();
+			}
+			return Integer.parseInt(elem.getText());
+		}
+		else
+			return -1;
 	}
 	
 	public void switchOnListening()
@@ -520,17 +586,16 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	{
         if (treeObject.getType() == TreeObject.CATEGORY_FOLDER)
         {
-        	String xpath = "//"
-					+ treeObject.getServerRoot().getUser().getUsername() + "/"
-					+ filterOutBlank(treeObject.getParent().getDisplayName())
-					+ "//child::*[name() = '" + treeObject.getDisplayName() + "']";
+        	String xpath = getXPathForTreeObject(treeObject);
         	List<Element> elems = doc.selectNodes(xpath);
         	if (!elems.isEmpty())
         	{
-        		catalogTreeObj = elems.get(0);
+        		if (catalogTreeObj == null)
+        			catalogTreeObj = elems.get(0);
         	}
         	
         	treeObject = treeObject.getParent();
+        	treeObject = registerNewTreeObject(treeObject);
         }
         else if (!(treeObject instanceof TreeParent) && treeObject.getParent().getType() == TreeObject.CATEGORY_FOLDER)
         {
@@ -541,7 +606,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
         return treeObject;
 	}
 	
-	public void merge(TreeObject newTreeObject)
+	public void mergeNewTreeObject(TreeObject newTreeObject)
 	{
 		if (catalogTreeObj != null)
 		{
@@ -557,7 +622,17 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		if (xobject instanceof TreeParent)
 		{
 			if (xobject.getType() == TreeObject.CATEGORY_FOLDER && xobject.getDisplayName().equals("System"))
-				return true;
+			{
+				String path = this.getXPathForTreeObject(xobject);
+				List<Element> elems = doc.selectNodes(path);
+				if (!elems.isEmpty())
+				{
+					Element elem = elems.get(0);
+					if (isAEXtentisObjects(elem) == XTENTIS_LEVEL) {
+						return true;
+					}
+				}
+			}
 			return false;
 		}
 		else
@@ -676,15 +751,13 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
     	Element elemCategory = null;
 		for (TreeObject xobj : model.getChildren())
 		{
-			if (xobj.getType() != TreeObject.CATEGORY_FOLDER)
+			if(xobj instanceof TreeParent)
 			{
-				if(xobj instanceof  TreeParent)
-				{
-					refreshCategoryStateWithinModel((TreeParent)xobj);
-				}
-				else
-					continue;
+				refreshCategoryStateWithinModel((TreeParent)xobj);
 			}
+			else 
+				continue;
+			
 			elemCategory = locateCategoryElement((TreeParent)xobj);
 			if (elemCategory == null) continue;
 			Attribute attr = elemCategory.attribute(EXPAND_NAME);
