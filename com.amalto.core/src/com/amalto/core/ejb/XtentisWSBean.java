@@ -2084,7 +2084,7 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
 			}
 		}
 		s.setWsRoutingRuleExpressions(routingExpressions);
-
+		s.setCondition(pojo.getCondition());
 		return s;
 	}
 	
@@ -2106,7 +2106,7 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
 			}
 	    }
 	    pojo.setRoutingExpressions(l);
-	    
+	    pojo.setCondition(ws.getCondition());
 		return pojo;
 	}	
 
@@ -2152,6 +2152,7 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
     			ws.setWsOperator(WSRoutingRuleOperator.STARTSWITH);
     			break;
     	}
+    	
     	return ws;
     }
 	
