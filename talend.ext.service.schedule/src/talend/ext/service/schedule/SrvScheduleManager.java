@@ -1,11 +1,17 @@
 package talend.ext.service.schedule;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.quartz.CronTrigger;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.impl.StdSchedulerFactory;
 
+import talend.ext.service.dao.ServiceSchedulPlanDAO;
+import talend.ext.service.dao.ServiceSchedulePlanDAOImpl;
+import talend.ext.service.entity.SrvSchedulePlan;
 import talend.ext.service.util.CommonUtil;
 
 import com.amalto.core.util.XtentisException;
@@ -35,12 +41,27 @@ public class SrvScheduleManager {
 		  Scheduler sched = StdSchedulerFactory.getDefaultScheduler();
 		  sched.start();
 		  
-		  //TODO schedule history jobs
-		  if(SrvScheduleLogicStatusManager.isInitial()){
-			  logger.debug("Load and scheduling history jobs... ");
+		  try {
+				//schedule history jobs
+				  if(SrvScheduleLogicStatusManager.isInitial()){
+					  logger.info("Load and scheduling history jobs... ");
+					  ServiceSchedulPlanDAO serviceSchedulPlanDAO=new ServiceSchedulePlanDAOImpl();
+					  List schedulingPlans=serviceSchedulPlanDAO.findAllSchedulingPlans();
+					  for (Iterator iterator = schedulingPlans.iterator(); iterator.hasNext();) {
+						  String schedulingPlanXml = (String) iterator.next();
+						  SrvSchedulePlan srvSchedulePlan=CommonUtil.convertPlanStrToPOJO(schedulingPlanXml);
+						  if(srvSchedulePlan!=null){
+							  boolean scheduleFlag=SrvScheduleManager.scheduleJob(srvSchedulePlan.getSchedulePlanId(), srvSchedulePlan.getServiceName(), srvSchedulePlan.getMethodName(), srvSchedulePlan.getParameters(), srvSchedulePlan.getMode(),true);
+							  if(scheduleFlag)logger.info("Init JOB: "+srvSchedulePlan.getSchedulePlanId());
+						  }
+					  }
+				  }
+		  } catch (Exception e) {
+			  e.printStackTrace();
 		  }
 		  
 		  SrvScheduleLogicStatusManager.updateStatus(SrvScheduleLogicStatusManager.STARTED);
+		  
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
@@ -74,6 +95,10 @@ public class SrvScheduleManager {
 	}
 	
 	public static boolean scheduleJob(String jobName,String serviceName, String methodName,String parameters, String mode) throws SrvScheduleException{
+		return scheduleJob(jobName,serviceName,methodName,parameters,mode,false);
+	}
+	
+	public static boolean scheduleJob(String jobName,String serviceName, String methodName,String parameters, String mode ,boolean force) throws SrvScheduleException{
 		
 		try {
 			
@@ -96,7 +121,7 @@ public class SrvScheduleManager {
 			Scheduler sched = StdSchedulerFactory.getDefaultScheduler();
 			
 			//check logical status
-			if(!getSrvSchedulerStatus().equals(SrvScheduleLogicStatusManager.STARTED)){
+			if(!force&&!getSrvSchedulerStatus().equals(SrvScheduleLogicStatusManager.STARTED)){
 				throw new SrvScheduleException("Service Scheduler has not been started! ");
 			}
 			

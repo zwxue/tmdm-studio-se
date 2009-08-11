@@ -10,6 +10,8 @@ amalto.SrvSchedule.SchedulePlan = function(config) {
 };
 Ext.extend(amalto.SrvSchedule.SchedulePlan, Ext.Panel, {
 	
+	modifyLock:false, 
+	
 	initUIComponents : function() {
 		
 	  this.serviceNameStore = new Ext.data.Store({
@@ -39,7 +41,7 @@ Ext.extend(amalto.SrvSchedule.SchedulePlan, Ext.Panel, {
        });
        
 	   Ext.apply(this, {
-			title : "Schedule Plan",
+			title : this.pid,
 			id : this.pid,
 			layout : "form",
 			autoScroll : true,
@@ -53,21 +55,21 @@ Ext.extend(amalto.SrvSchedule.SchedulePlan, Ext.Panel, {
 					fieldLabel : "Schedule Plan ID",
 					xtype : "textfield",
 					readOnly : true,
-					name : "schedulePlanId",
-					id : "schedulePlanId"
+					name : "schedulePlanId"
+					//id : "schedulePlanId"
 				}, {
 					fieldLabel : "Status",
 					xtype : "textfield",
 					readOnly : true,
-					name : "schedulePlanStatus",
-					id : "schedulePlanStatus"
+					name : "schedulePlanStatus"
+					//id : "schedulePlanStatus"
 				}, {
 					width : 450,
 					height : 50,
 					fieldLabel : "Description",
 					xtype : "textarea",
-					name : "schedulePlanDesc",
-					id : "schedulePlanDesc"
+					name : "schedulePlanDesc"
+					//id : "schedulePlanDesc"
 				}],
 				xtype : "fieldset"
 			}, {
@@ -79,7 +81,7 @@ Ext.extend(amalto.SrvSchedule.SchedulePlan, Ext.Panel, {
 					fieldLabel : "Service Name",
 					xtype : "combo",
 					name : "serviceName",
-					id : "serviceName",
+					//id : "serviceName",
 					store: this.serviceNameStore,
 			        valueField : "value",
 			        displayField: "text",
@@ -96,7 +98,7 @@ Ext.extend(amalto.SrvSchedule.SchedulePlan, Ext.Panel, {
 					fieldLabel : "Method Name",
 					xtype : "combo",
 					name : "methodName",
-					id : "methodName",
+					//id : "methodName",
 					store: this.methodNameStore,
 			        valueField : "value",
 			        displayField: "text",
@@ -113,8 +115,8 @@ Ext.extend(amalto.SrvSchedule.SchedulePlan, Ext.Panel, {
 					height : 250,
 					fieldLabel : "Parameters",
 					xtype : "textarea",
-					name : "parameters",
-					id : "parameters"
+					name : "parameters"
+					//id : "parameters"
 				}],
 				xtype : "fieldset"
 			}, {
@@ -126,7 +128,7 @@ Ext.extend(amalto.SrvSchedule.SchedulePlan, Ext.Panel, {
 					fieldLabel : "Mode",
 					xtype : "textfield",
 					name : "mode",
-					id : "mode",
+					//id : "mode",
 					value : "0 0 0 * * ?"
 				}],
 				xtype : "fieldset"
@@ -156,7 +158,52 @@ Ext.extend(amalto.SrvSchedule.SchedulePlan, Ext.Panel, {
 	},
 	
 	initData : function(){
-	   //TODO
+		
+	   //reset
+	   DWRUtil.setValue('schedulePlanId',"");
+	   DWRUtil.setValue('schedulePlanStatus',"");
+	   DWRUtil.setValue('schedulePlanDesc',"");
+	   DWRUtil.setValue('serviceName',"");
+	   DWRUtil.setValue('methodName',"");
+	   DWRUtil.setValue('parameters',"");
+	   DWRUtil.setValue('mode',"0 0 0 * * ?");	
+
+	   this.updateLockStatus();
+	   
+    },
+    
+    resetData : function(iSchedulePlanId,iSchedulePlanStatus,iSchedulePlanDesc,iServiceName,iMethodName,iParameters,iMode){
+       //reset
+	   DWRUtil.setValue('schedulePlanId',"");
+	   DWRUtil.setValue('schedulePlanStatus',"");
+	   DWRUtil.setValue('schedulePlanDesc',"");
+	   DWRUtil.setValue('serviceName',"");
+	   DWRUtil.setValue('methodName',"");
+	   DWRUtil.setValue('parameters',"");
+	   DWRUtil.setValue('mode',"0 0 0 * * ?");
+		
+	   DWRUtil.setValue('schedulePlanId',iSchedulePlanId);
+	   DWRUtil.setValue('schedulePlanStatus',iSchedulePlanStatus);
+	   DWRUtil.setValue('schedulePlanDesc',iSchedulePlanDesc);
+	   DWRUtil.setValue('serviceName',iServiceName);
+	   DWRUtil.setValue('methodName',iMethodName);
+	   DWRUtil.setValue('parameters',iParameters);
+	   DWRUtil.setValue('mode',iMode);
+	   
+	   this.updateLockStatus();
+    },
+    
+    updateLockStatus : function(){
+	   var schedulePlanStatus = DWRUtil.getValue('schedulePlanStatus');
+	   if(schedulePlanStatus=="scheduling"){
+	      this.modifyLock=true;
+	   }else if(schedulePlanStatus==""||schedulePlanStatus=="unschedule"){
+	   	  this.modifyLock=false;
+	   }
+    },
+    
+    updateLockStatusDirectly : function(status){
+	      this.modifyLock=status;
     },
     
     loadTemplateOfParameter : function(){
@@ -217,7 +264,7 @@ Ext.extend(amalto.SrvSchedule.SchedulePlan, Ext.Panel, {
 												xtype : "textarea",
 												readOnly : true,
 												name : "ResultConsole",
-												id : "ResultConsole",
+												//id : "ResultConsole",
 												value : data
 												//style:"background-color:yellow"
 											}
@@ -231,6 +278,11 @@ Ext.extend(amalto.SrvSchedule.SchedulePlan, Ext.Panel, {
     },
     
     onSaveClick :  function(button, event){
+    	//alert(this.modifyLock);
+    	if(this.modifyLock){
+    	   Ext.MessageBox.alert('Sorry', "This operation has been locked, since this plan is under scheduling! ");
+		   return;
+    	}
     	
     	//check parameters
     	var fields="";
@@ -254,69 +306,107 @@ Ext.extend(amalto.SrvSchedule.SchedulePlan, Ext.Panel, {
 		}
 		
 		SrvScheduleInterface.saveServiceSchedulePlan(schedulePlanId,schedulePlanStatus,schedulePlanDesc,serviceName,methodName,parameters,mode,function(data){
-		             //update status
-		             DWRUtil.setValue('schedulePlanId',data[0]);
-		             DWRUtil.setValue('schedulePlanStatus',data[1]);
 		             
-		             var serviceName = DWRUtil.getValue('serviceName');
-					 var methodName = DWRUtil.getValue('methodName');
-				     if(serviceName!=""&&methodName!=""){
-				    	SrvScheduleInterface.reloadParameterTemplate(serviceName,methodName,data[0],function(param){
-				    	    DWRUtil.setValue('parameters',param);
-				    	});
-				     }
-				     
-		             Ext.MessageBox.alert('Info', "The plan has been saved successfully!");
-        });
+			         this.saveServiceSchedulePlanFB(data);
+			         
+        }.createDelegate(this));
     	
+    },
+    
+    saveServiceSchedulePlanFB : function(data){
+    	
+    	//update status
+		DWRUtil.setValue('schedulePlanId',data[0]);
+		DWRUtil.setValue('schedulePlanStatus',data[1]);
+		DWRUtil.setValue('parameters',data[2]);
+		             
+		Ext.MessageBox.alert('Info', "The plan has been saved successfully!");
+		
+		if(this.srcStore!=undefined&&this.srcStore!=null)this.srcStore.reload();
+		             
     },
   
     onScheduleClick :  function(button, event){
+    	
     	var schedulePlanId = DWRUtil.getValue('schedulePlanId');
     	if(schedulePlanId==""){
     		Ext.MessageBox.alert('Sorry', "SchedulePlanId is empty, please save this plan first! ");
     		return;
     	}
     	
-    	//check parameters
-    	var fields="";
-    	var serviceName = DWRUtil.getValue('serviceName');
-		var methodName = DWRUtil.getValue('methodName');
-		var parameters = DWRUtil.getValue('parameters');
-		var mode = DWRUtil.getValue('mode');
-		if(serviceName=="")fields+="'Service Name' ";
-		if(methodName=="")fields+="'Method Name' ";
-		if(mode=="")fields+="'Mode' ";
-		if(fields!=""){
-		   Ext.MessageBox.alert('Sorry', fields+"can not be empty! ");
-		   return;
-		}
+    	//check status
+    	var schedulePlanStatus = DWRUtil.getValue('schedulePlanStatus');
+    	if(schedulePlanStatus=="scheduling"){
+    		Ext.MessageBox.alert('Sorry', "This schedule plan is already under scheduling! ");
+    		return;
+    	}
+    	
+//    	//check parameters
+//    	var fields="";
+//    	var serviceName = DWRUtil.getValue('serviceName');
+//		var methodName = DWRUtil.getValue('methodName');
+//		var parameters = DWRUtil.getValue('parameters');
+//		var mode = DWRUtil.getValue('mode');
+//		if(serviceName=="")fields+="'Service Name' ";
+//		if(methodName=="")fields+="'Method Name' ";
+//		if(mode=="")fields+="'Mode' ";
+//		if(fields!=""){
+//		   Ext.MessageBox.alert('Sorry', fields+"can not be empty! ");
+//		   return;
+//		}
 		
-		SrvScheduleInterface.scheduleServiceSchedulePlan(schedulePlanId,serviceName,methodName,parameters,mode,function(data){
-		             if(data==true){
+		SrvScheduleInterface.scheduleServiceSchedulePlan(schedulePlanId,function(data){
+			         this.onScheduleClickFB(data);     
+        }.createDelegate(this));
+       
+    },
+    
+    onScheduleClickFB : function(data){
+    	             if(data==true){
+		             	//update status
+                        DWRUtil.setValue('schedulePlanStatus','scheduling');
 		             	Ext.MessageBox.alert('Info', "The plan has been scheduled successfully!");
+		             	this.updateLockStatusDirectly(true);
+		             	if(this.srcStore!=undefined&&this.srcStore!=null)this.srcStore.reload();
 		             }else{
 		             	Ext.MessageBox.alert('Error', "Scheduling this plan failed!");
+		             	return;
 		             }
-		             
-        });
     },
     
     onUnscheduleClick:  function(button, event){
+    	
+    	
     	var schedulePlanId = DWRUtil.getValue('schedulePlanId');
     	if(schedulePlanId==""){
     		Ext.MessageBox.alert('Sorry', "SchedulePlanId is empty, please save this plan first! ");
+    		return;
+    	}
+    	
+    	//check status
+    	var schedulePlanStatus = DWRUtil.getValue('schedulePlanStatus');
+    	if(schedulePlanStatus==""||schedulePlanStatus=="unschedule"){
+    		Ext.MessageBox.alert('Sorry', "This schedule plan has already been unscheduled! ");
     		return;
     	}
     	
     	SrvScheduleInterface.unScheduleServiceSchedulePlan(schedulePlanId,function(data){
-		             if(data==true){
+    		         this.onUnscheduleClickFB(data);
+        }.createDelegate(this));
+        
+    },
+    
+    onUnscheduleClickFB : function(data){
+    	             if(data==true){
+		             	//update status
+                        DWRUtil.setValue('schedulePlanStatus','unschedule');
 		             	Ext.MessageBox.alert('Info', "The plan has been unscheduled successfully!");
+		             	this.updateLockStatusDirectly(false);
+		             	if(this.srcStore!=undefined&&this.srcStore!=null)this.srcStore.reload();
 		             }else{
 		             	Ext.MessageBox.alert('Error', "Unscheduling this plan failed!");
+		             	return;
 		             }
-		             
-        });
     }
 
 });
