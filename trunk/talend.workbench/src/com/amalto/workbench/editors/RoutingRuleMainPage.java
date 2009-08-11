@@ -532,6 +532,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
 				public void modifyText(ModifyEvent e) {
 					// TODO Auto-generated method stub
+					if(!refreshing)
 					markDirty();
 				}
             	
@@ -604,7 +605,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
 		rreList.removeAll(list);
 		wsObject.setWsRoutingRuleExpressions(rreList.toArray(new WSRoutingRuleExpression[rreList.size()]));
-		routingExpressionsViewer.refresh();
+		routingExpressionsViewer.setInput(wsObject);
 		markDirty();
 		
     }
