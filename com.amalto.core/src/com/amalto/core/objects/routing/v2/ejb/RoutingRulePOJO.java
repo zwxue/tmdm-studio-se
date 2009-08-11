@@ -18,7 +18,7 @@ public class RoutingRulePOJO extends ObjectPOJO{
     private String concept;
     private String serviceJNDI;
     private String parameters;
-    
+    private String condition;
     
 
     public RoutingRulePOJO() {}
@@ -29,7 +29,7 @@ public class RoutingRulePOJO extends ObjectPOJO{
 	}
 
 
-	public RoutingRulePOJO(String name, String description, ArrayList<RoutingRuleExpressionPOJO> routingExpressions, boolean synchronous, String concept, String serviceJNDI, String parameters) {
+	public RoutingRulePOJO(String name, String description, ArrayList<RoutingRuleExpressionPOJO> routingExpressions, boolean synchronous, String concept, String serviceJNDI, String parameters,String condition) {
 		super();
 		this.name = name;
 		this.description = description;
@@ -38,9 +38,18 @@ public class RoutingRulePOJO extends ObjectPOJO{
 		this.concept = concept;
 		this.serviceJNDI = serviceJNDI;
 		this.parameters = parameters;
+		this.condition=condition;
 	}
 	
 	
+
+	public String getCondition() {
+		return condition;
+	}
+
+	public void setCondition(String condition) {
+		this.condition = condition;
+	}
 
 	public String getConcept() {
 		return concept;

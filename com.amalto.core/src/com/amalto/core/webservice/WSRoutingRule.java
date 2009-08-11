@@ -14,11 +14,12 @@ public class WSRoutingRule {
     protected java.lang.String serviceJNDI;
     protected java.lang.String parameters;
     protected com.amalto.core.webservice.WSRoutingRuleExpression[] wsRoutingRuleExpressions;
+    protected java.lang.String condition;
     
     public WSRoutingRule() {
     }
     
-    public WSRoutingRule(java.lang.String name, java.lang.String description, boolean synchronous, java.lang.String concept, java.lang.String serviceJNDI, java.lang.String parameters, com.amalto.core.webservice.WSRoutingRuleExpression[] wsRoutingRuleExpressions) {
+    public WSRoutingRule(java.lang.String name, java.lang.String description, boolean synchronous, java.lang.String concept, java.lang.String serviceJNDI, java.lang.String parameters, com.amalto.core.webservice.WSRoutingRuleExpression[] wsRoutingRuleExpressions, java.lang.String condition) {
         this.name = name;
         this.description = description;
         this.synchronous = synchronous;
@@ -26,6 +27,7 @@ public class WSRoutingRule {
         this.serviceJNDI = serviceJNDI;
         this.parameters = parameters;
         this.wsRoutingRuleExpressions = wsRoutingRuleExpressions;
+        this.condition = condition;
     }
     
     public java.lang.String getName() {
@@ -82,5 +84,13 @@ public class WSRoutingRule {
     
     public void setWsRoutingRuleExpressions(com.amalto.core.webservice.WSRoutingRuleExpression[] wsRoutingRuleExpressions) {
         this.wsRoutingRuleExpressions = wsRoutingRuleExpressions;
+    }
+    
+    public java.lang.String getCondition() {
+        return condition;
+    }
+    
+    public void setCondition(java.lang.String condition) {
+        this.condition = condition;
     }
 }

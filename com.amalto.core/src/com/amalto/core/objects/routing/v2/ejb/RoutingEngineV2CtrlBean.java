@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -18,11 +20,11 @@ import javax.ejb.TimedObject;
 import javax.ejb.Timer;
 import javax.ejb.TimerHandle;
 import javax.ejb.TimerService;
-import javax.naming.InitialContext;
-import javax.naming.NameClassPair;
-import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.xml.transform.TransformerException;
+
+import bsh.EvalError;
+import bsh.Interpreter;
 
 import com.amalto.core.ejb.ItemPOJO;
 import com.amalto.core.ejb.ItemPOJOPK;
@@ -239,23 +241,62 @@ public class RoutingEngineV2CtrlBean implements SessionBean, TimedObject {
 				if (! docType.equals(routingRule.getConcept())) continue;
 			}
 			//check if all routing rule expression matches - null: always matches
-			boolean matches = true;
-			Collection<RoutingRuleExpressionPOJO> routingExpressions = routingRule.getRoutingExpressions();
-			if (routingExpressions != null) {
-				for (Iterator<RoutingRuleExpressionPOJO> iterator = routingExpressions.iterator(); iterator.hasNext(); ) {
-					//retrieve the itemPOJO if not already done
-					if (itemPOJO==null) {
-						itemPOJO = itemCtrl.getItem(itemPOJOPK);
-					}
-					//Match the rule
-					RoutingRuleExpressionPOJO rrePOJO = iterator.next();
-					if (! ruleExpressionMatches(itemPOJO, rrePOJO)) {
-						matches = false;
-						break;
+			//aiming modify see 4572 add condition to check
+			if(routingRule.getCondition()==null || routingRule.getCondition().trim().length()==0){ 
+				boolean matches = true;
+				Collection<RoutingRuleExpressionPOJO> routingExpressions = routingRule.getRoutingExpressions();
+				if (routingExpressions != null) {
+					for (Iterator<RoutingRuleExpressionPOJO> iterator = routingExpressions.iterator(); iterator.hasNext(); ) {
+						//retrieve the itemPOJO if not already done
+						if (itemPOJO==null) {
+							itemPOJO = itemCtrl.getItem(itemPOJOPK);
+						}
+						//Match the rule
+						RoutingRuleExpressionPOJO rrePOJO = iterator.next();
+						if (! ruleExpressionMatches(itemPOJO, rrePOJO)) {
+							matches = false;
+							break;
+						}
 					}
 				}
+				if (! matches) continue;
+			}else{
+				String condition=routingRule.getCondition();
+				
+				condition=condition.replaceAll("And|and", "&&");
+				condition=condition.replaceAll("Or|or", "||");
+				condition=condition.replaceAll("Not|not", "!");
+				String compileCondition=new String (condition);
+				Pattern p=Pattern.compile("C([0-9]+)", Pattern.CASE_INSENSITIVE);
+				Matcher m=p.matcher(condition);
+				Collection<RoutingRuleExpressionPOJO> routingExpressions = routingRule.getRoutingExpressions();
+				List<RoutingRuleExpressionPOJO> list =new ArrayList<RoutingRuleExpressionPOJO>();	
+				list.addAll(routingExpressions);
+				Interpreter ntp = new Interpreter();
+				try {
+					while(m.find()){
+						String g=m.group();
+						String n=g.replaceAll("C|c", "");
+						Integer index=Integer.valueOf(n);
+						RoutingRuleExpressionPOJO rrePOJO =list.get(index);
+						if(rrePOJO!=null){
+							if (itemPOJO==null) {
+								itemPOJO = itemCtrl.getItem(itemPOJOPK);
+							}						
+							ntp.set(g, ruleExpressionMatches(itemPOJO, rrePOJO));							
+						}
+					}
+					//compile
+			          ntp.eval("truth = "+ compileCondition+";");
+			          boolean truth = ((Boolean)ntp.get("truth")).booleanValue();
+			          org.apache.log4j.Logger.getLogger(this.getClass()).info(condition+" : " + truth);
+			          if(!truth) continue;
+				} catch (EvalError e) {
+					String err = "Condition compile error :"+e.getMessage();
+					org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);
+					throw new XtentisException(err);
+				}
 			}
-			if (! matches) continue;
 		
 			org.apache.log4j.Logger.getLogger(this.getClass()).debug(
 				"route() Routing Rule MATCH '"+routingRulePOJOPK.getUniqueId()+"' for item '"+itemPOJOPK.getUniqueID()+"'"

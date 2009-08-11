@@ -32,6 +32,7 @@ public class WSRoutingRule_LiteralSerializer extends LiteralObjectSerializerBase
     private static final QName ns1_wsRoutingRuleExpressions_QNAME = new QName("", "wsRoutingRuleExpressions");
     private static final QName ns2_WSRoutingRuleExpression_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingRuleExpression");
     private CombinedSerializer ns2_myWSRoutingRuleExpression_LiteralSerializer;
+    private static final QName ns1_condition_QNAME = new QName("", "condition");
     
     public WSRoutingRule_LiteralSerializer(QName type, String encodingStyle) {
         this(type, encodingStyle, false);
@@ -163,6 +164,14 @@ public class WSRoutingRule_LiteralSerializer extends LiteralObjectSerializerBase
         else {
             instance.setWsRoutingRuleExpressions(new com.amalto.workbench.webservices.WSRoutingRuleExpression[0]);
         }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_condition_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_condition_QNAME, reader, context);
+                instance.setCondition((java.lang.String)member);
+                reader.nextElementContent();
+            }
+        }
         
         XMLReaderUtil.verifyReaderState(reader, XMLReader.END);
         return (Object)instance;
@@ -195,5 +204,6 @@ public class WSRoutingRule_LiteralSerializer extends LiteralObjectSerializerBase
                 ns2_myWSRoutingRuleExpression_LiteralSerializer.serialize(instance.getWsRoutingRuleExpressions()[i], ns1_wsRoutingRuleExpressions_QNAME, null, writer, context);
             }
         }
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getCondition(), ns1_condition_QNAME, null, writer, context);
     }
 }
