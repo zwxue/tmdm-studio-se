@@ -395,7 +395,7 @@ public class XConverter {
 			}
 		}
 		s.setWsRoutingRuleExpressions(routingExpressions);
-
+		s.setCondition(vo.getCondition());
 		return s;
 	}
 	
@@ -417,7 +417,7 @@ public class XConverter {
 			}
 	    }
 	    vo.setRoutingExpressions(l);
-	    
+	    vo.setCondition(ws.getCondition());
 		return vo;
 	}	
 

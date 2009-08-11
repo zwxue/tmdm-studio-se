@@ -13,6 +13,8 @@ import java.util.Observable;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.TextEvent;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -47,6 +49,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
@@ -61,6 +64,8 @@ import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
+import com.amalto.workbench.utils.EImage;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.Version;
 import com.amalto.workbench.webservices.WSGetServicesList;
@@ -98,6 +103,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 	
 	private static String ROUTE_SERVICE = "amalto/local/service/";
 	private String dataModelName;
+	private Text conditionText;
 	
     public String getDataModelName() {
 		return dataModelName;
@@ -371,7 +377,6 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             		dataModelName=xpathWidget.getDataModelName();
             	};
             });
-            
             //xPathWidget
             xpathWidget = new XpathWidget("...",treeParent, toolkit, routingExpressionsComposite,(AMainPageV2)RoutingRuleMainPage.this,true,false,dataModelName);
             //operator
@@ -451,7 +456,116 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 				public boolean isLabelProperty(Object element, String property) {return false;}
 				public void removeListener(ILabelProviderListener listener) {}
             });
+            routingExpressionsViewer.addDoubleClickListener(new IDoubleClickListener(){
+
+				public void doubleClick(DoubleClickEvent event) {
+					int index=routingExpressionsViewer.getList().getSelectionIndex();
+					if(index!=-1){
+						String condition=conditionText.getText()+" C"+index;
+						conditionText.setText(condition);
+						conditionText.setFocus();
+						markDirty();
+					}
+				}            	
+            });
+            //+ x button
+            Composite xComposite = toolkit.createComposite(routingExpressionsGroup, SWT.NULL);
+            xComposite.setLayoutData(
+                    new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+            );
+            xComposite.setLayout(new GridLayout(2,false));
+            Button btnAdd=toolkit.createButton(xComposite, "", SWT.PUSH);
+            btnAdd.setLayoutData(
+                    new GridData(SWT.LEFT,SWT.FILL,false,true,1,1)
+            );
+            btnAdd.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
+            btnAdd.setToolTipText("Add the selected item to condition");
+            btnAdd.addSelectionListener(new SelectionListener(){
+
+				public void widgetDefaultSelected(SelectionEvent e) {					
+					
+				}
+
+				public void widgetSelected(SelectionEvent e) {
+					int index=routingExpressionsViewer.getList().getSelectionIndex();
+					if(index!=-1){
+						String condition=conditionText.getText()+" C"+index;
+						conditionText.setText(condition);
+						conditionText.forceFocus();
+						markDirty();
+					}
+				}            	
+            });
             
+            Button minusButton=toolkit.createButton(xComposite, "", SWT.PUSH);
+            minusButton.setLayoutData(
+                    new GridData(SWT.LEFT,SWT.FILL,false,true,1,1)
+            );
+            minusButton.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
+            minusButton.setToolTipText("Remove the selected item from list");
+            minusButton.addSelectionListener(new SelectionListener(){
+
+				public void widgetDefaultSelected(SelectionEvent e) {					
+					
+				}
+
+				public void widgetSelected(SelectionEvent e) {
+					int index=routingExpressionsViewer.getList().getSelectionIndex();
+					if(index!=-1){
+						routingExpressionsViewer.getList().remove(index);
+						markDirty();
+					}
+				}            	
+            });
+            //and or not condition
+            Group conditionComposite = new Group(routingExpressionsGroup,SWT.NONE);
+            conditionComposite.setBackground(routingExpressionsGroup.getBackground());
+            conditionComposite.setText("Conditions:");
+            conditionComposite.setLayoutData(
+                    new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+            );
+            conditionComposite.setLayout(new GridLayout(3,false));
+            
+            conditionText= toolkit.createText(conditionComposite, "",SWT.BORDER|SWT.WRAP|SWT.V_SCROLL);
+            conditionText.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,2,3));
+            conditionText.addModifyListener(new ModifyListener(){
+
+				public void modifyText(ModifyEvent e) {
+					// TODO Auto-generated method stub
+					markDirty();
+				}
+            	
+            });
+            Composite conditionBtnComposite = toolkit.createComposite(conditionComposite, SWT.NULL);
+            conditionBtnComposite.setLayoutData(
+                    new GridData(SWT.RIGHT,SWT.FILL,false,true,1,1)
+            );
+            conditionBtnComposite.setLayout(new GridLayout(5,false));
+            ButtonListenr listener=new ButtonListenr();
+            Button btnLeft=toolkit.createButton(conditionBtnComposite, "(", SWT.PUSH);
+            btnLeft.setLayoutData(new GridData(SWT.RIGHT,SWT.FILL,false,true,1,1));
+            btnLeft.setData("(");
+            btnLeft.addSelectionListener(listener);
+            
+            Button btnRight=toolkit.createButton(conditionBtnComposite, ")", SWT.PUSH);
+            btnRight.setLayoutData(new GridData(SWT.RIGHT,SWT.FILL,false,true,1,1));
+            btnRight.setData(")");
+            btnRight.addSelectionListener(listener);
+            
+            Button btnAnd=toolkit.createButton(conditionBtnComposite, "And", SWT.PUSH);
+            btnAnd.setLayoutData(new GridData(SWT.RIGHT,SWT.FILL,false,true,1,1));
+            btnAnd.setData("&&");
+            btnAnd.addSelectionListener(listener);
+            
+            Button btnOr=toolkit.createButton(conditionBtnComposite, "Or", SWT.PUSH);
+            btnOr.setData("||");
+            btnOr.setLayoutData(new GridData(SWT.RIGHT,SWT.FILL,false,true,1,1));  
+            btnOr.addSelectionListener(listener);
+            
+            Button btnNot=toolkit.createButton(conditionBtnComposite, "Not", SWT.PUSH);
+            btnNot.setData("!");
+            btnNot.setLayoutData(new GridData(SWT.RIGHT,SWT.FILL,false,true,1,1));    
+            btnNot.addSelectionListener(listener);
            /* DragSource wcSource = new DragSource(routingExpressionsViewer.getControl(),DND.DROP_MOVE);
             wcSource.setTransfer(new Transfer[]{TextTransfer.getInstance()});
             wcSource.addDragListener(new WCDragSourceListener());*/
@@ -511,7 +625,8 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			objectTypeText.setText(wsRoutingRule.getConcept());
 			//xpathWidget1.setText(wsRoutingRule.getConcept());
 			routingExpressionsViewer.setInput(wsRoutingRule);
-			
+			if(wsRoutingRule.getCondition()!=null)
+			conditionText.setText(wsRoutingRule.getCondition());
 			this.refreshing = false;
 
 		} catch (Exception e) {
@@ -539,7 +654,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			ws.setParameters("".equals(serviceParametersText.getText())? null : serviceParametersText.getText());
 			ws.setSynchronous(isSynchronousButton.getSelection());
 			//WsRoutingRuleExpressions refreshed by viewer
-			
+			ws.setCondition(conditionText.getText());
 			this.comitting = false;
 			
 		} catch (Exception e) {
@@ -607,7 +722,8 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 				
 			}//for
 			wsObject.setWsRoutingRuleExpressions(wcList.toArray(new WSRoutingRuleExpression[wcList.size()]));
-			RoutingRuleMainPage.this.routingExpressionsViewer.refresh();
+			//RoutingRuleMainPage.this.routingExpressionsViewer.refresh();
+			routingExpressionsViewer.setInput(wsObject);
 			this.rightValueText.setText("");
 	}//addRoutingRuleExpression
 
@@ -751,5 +867,23 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 		}
 		else
 			return true;
+	}	
+	class ButtonListenr implements SelectionListener{
+
+		public void widgetDefaultSelected(SelectionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void widgetSelected(SelectionEvent e) {
+			// TODO Auto-generated method stub
+			if(e.widget instanceof Button){
+				Button btn=(Button)e.widget;
+				String condition=conditionText.getText()+" "+btn.getText();
+				conditionText.setText(condition);
+				conditionText.setFocus();
+				markDirty();
+			}
+		}		
 	}
 }
