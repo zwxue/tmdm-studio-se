@@ -155,10 +155,8 @@ public class ServerLoginAction extends Action implements SelectionListener{
             if (!found) 
             	invisibleRoot.addChild(serverRoot);
            
-//            LocalTreeObjectRepository.getInstance().synchronizeWithDoc(serverRoot);
             view.getViewer().refresh();
             view.getViewer().expandToLevel(serverRoot,1);
-            LocalTreeObjectRepository.getInstance().refreshCategoryStateWithinModel(serverRoot);
 		} catch (InterruptedException ie){
 			return;
 		} catch (InvocationTargetException ite) {
