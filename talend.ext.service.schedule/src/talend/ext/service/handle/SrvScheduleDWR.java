@@ -13,7 +13,6 @@ import talend.ext.service.entity.SrvSchedulePlanStatus;
 import talend.ext.service.schedule.SrvScheduleException;
 import talend.ext.service.schedule.SrvScheduleManager;
 import talend.ext.service.template.ITemplateHandler;
-import talend.ext.service.template.TemplateFillAssistant;
 import talend.ext.service.util.AvailableMethodList;
 import talend.ext.service.util.CommonUtil;
 import talend.ext.service.view.ComboItemBean;
@@ -76,12 +75,6 @@ public class SrvScheduleDWR {
     	
 	}
     
-     public String reloadParameterTemplate(String serviceName,String methodName,String schedulePlanId) throws Exception {
-		
-    	ITemplateHandler iTemplateHandler = CommonUtil.getMethodTemplateHandler(methodName);
-    	String lawContent=iTemplateHandler.getContent(serviceName);
-    	return TemplateFillAssistant.fill(serviceName, methodName, lawContent, schedulePlanId);
-	}
     
     public String getServiceSchedulerStatus() {
     	
@@ -109,13 +102,14 @@ public class SrvScheduleDWR {
     
     private String[] saveServiceSchedulePlan(SrvSchedulePlan srvSchedulePlan) {
     	
-    	String[] rtn={"",SrvSchedulePlanStatus.UNSCHEDULE};
+    	String[] rtn={"","",""};
     	
     	ServiceSchedulPlanDAO serviceSchedulPlanDAO=new ServiceSchedulePlanDAOImpl();
     	boolean isSaveOK=serviceSchedulPlanDAO.savePlan(srvSchedulePlan);
     	if(isSaveOK){
-    		String serviceSchedulePlanId=srvSchedulePlan.obtainSrvSchedulePlanPk().getUniqueId();
-    		rtn[0]=serviceSchedulePlanId;
+    		rtn[0]=srvSchedulePlan.getSchedulePlanId();
+    		rtn[1]=srvSchedulePlan.getSchedulePlanStatus();
+    		rtn[2]=srvSchedulePlan.getParameters();
     	}
     	
     	return rtn;
@@ -124,25 +118,83 @@ public class SrvScheduleDWR {
     
    public String[] saveServiceSchedulePlan(String schedulePlanId,String schedulePlanStatus,String schedulePlanDesc,String serviceName,String methodName,String parameters,String mode) {
 	    
-	    if(schedulePlanStatus!=null&&schedulePlanStatus.trim().equals(""))schedulePlanStatus=SrvSchedulePlanStatus.UNSCHEDULE;
 	    SrvSchedulePlan srvSchedulePlan=new SrvSchedulePlan(schedulePlanId,schedulePlanStatus,schedulePlanDesc,serviceName,methodName,parameters,mode);
     
     	return saveServiceSchedulePlan(srvSchedulePlan);
 
 	}
    
-   public boolean scheduleServiceSchedulePlan(String serviceSchedulePlanId,String serviceName,String methodName,String parameters,String mode) throws SrvScheduleException{
+   public boolean scheduleServiceSchedulePlan(String serviceSchedulePlanId) throws SrvScheduleException{
+	   ServiceSchedulPlanDAO serviceSchedulPlanDAO=new ServiceSchedulePlanDAOImpl();
+	   SrvSchedulePlan srvSchedulePlan=serviceSchedulPlanDAO.loadPlan(serviceSchedulePlanId);
+	   if(srvSchedulePlan==null)return false;
 	   
-	   //TODO UPDATE STATUS IN DB
-	   return SrvScheduleManager.scheduleJob(serviceSchedulePlanId, serviceName, methodName, parameters, mode);
+	   boolean scheduleFlag=SrvScheduleManager.scheduleJob(serviceSchedulePlanId, srvSchedulePlan.getServiceName(), srvSchedulePlan.getMethodName(), srvSchedulePlan.getParameters(), srvSchedulePlan.getMode());
+	   if(!scheduleFlag)return false;
+	   
+	   //UPDATE STATUS IN DB
+	   boolean updateFlag=serviceSchedulPlanDAO.updatePlanStatus(srvSchedulePlan, SrvSchedulePlanStatus.SCHEDULING);
+	   if(!updateFlag){
+		   //roll back
+		   SrvScheduleManager.removeJob(serviceSchedulePlanId);
+		   return false;
+	   }
+	   
+	   return true;
    
    }
    
    public boolean unScheduleServiceSchedulePlan(String serviceSchedulePlanId) {
 	   
-	   //TODO UPDATE STATUS IN DB
-	   return SrvScheduleManager.removeJob(serviceSchedulePlanId);
+	   ServiceSchedulPlanDAO serviceSchedulPlanDAO=new ServiceSchedulePlanDAOImpl();
+	   SrvSchedulePlan srvSchedulePlan=serviceSchedulPlanDAO.loadPlan(serviceSchedulePlanId);
+	   if(srvSchedulePlan==null)return false;
+	   
+	   boolean unscheduleFlag=SrvScheduleManager.removeJob(serviceSchedulePlanId);
+	   if(!unscheduleFlag)return false;
+	   
+	   //UPDATE STATUS IN DB
+	   boolean updateFlag=serviceSchedulPlanDAO.updatePlanStatus(srvSchedulePlan, SrvSchedulePlanStatus.UNSCHEDULE);
+	   if(!updateFlag){
+     	   //roll back
+		   SrvScheduleManager.scheduleJob(serviceSchedulePlanId,srvSchedulePlan.getServiceName(),srvSchedulePlan.getMethodName(),srvSchedulePlan.getParameters(),srvSchedulePlan.getMode());
+		   return false;
+	   }
+	   
+	   return true; 
+	   
+   }
    
+   public ListRange getSchedulePlanList() {
+	   
+	    ListRange listRange =new ListRange();
+	    try {
+	      ServiceSchedulPlanDAO serviceSchedulPlanDAO=new ServiceSchedulePlanDAOImpl();
+	      
+		  List allPlans=serviceSchedulPlanDAO.findAllPlans();
+		  Object [] data=new Object[allPlans.size()];
+		  for (int i = 0; i < allPlans.size(); i++) {
+			  
+			  String planXml = (String) allPlans.get(i);
+			  SrvSchedulePlan srvSchedulePlan=CommonUtil.convertPlanStrToPOJO(planXml);
+			  data[i]=srvSchedulePlan;
+		  }
+		  
+		  listRange.setData(data);
+		  listRange.setTotalSize(data.length);
+		  
+		} catch (XtentisException e) {
+			e.printStackTrace();
+		}
+		return listRange;
+
+   }
+   
+   public boolean deleteSchedulePlan(String serviceSchedulePlanId){
+	   
+	   ServiceSchedulPlanDAO serviceSchedulPlanDAO=new ServiceSchedulePlanDAOImpl();
+	   return serviceSchedulPlanDAO.deletePlan(serviceSchedulePlanId);
+	   
    }
 	
 

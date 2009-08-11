@@ -1,13 +1,19 @@
 package talend.ext.service.util;
 
+import java.io.StringReader;
 import java.lang.reflect.Method;
 
 import org.apache.commons.lang.WordUtils;
+import org.exolab.castor.xml.MarshalException;
+import org.exolab.castor.xml.Unmarshaller;
+import org.exolab.castor.xml.ValidationException;
+import org.xml.sax.InputSource;
+
+import talend.ext.service.entity.SrvSchedulePlan;
+import talend.ext.service.template.ITemplateHandler;
 
 import com.amalto.core.util.Util;
 import com.amalto.core.util.XtentisException;
-
-import talend.ext.service.template.ITemplateHandler;
 
 public class CommonUtil {
 
@@ -52,6 +58,18 @@ public class CommonUtil {
 			throw new XtentisException(e);
 		}
 		return rtn;
+	}
+	
+	public static SrvSchedulePlan convertPlanStrToPOJO(String srvSchedulePlanXml){
+		SrvSchedulePlan srvSchedulePlan = null;
+		try {
+			srvSchedulePlan = (SrvSchedulePlan) Unmarshaller.unmarshal(SrvSchedulePlan.class, new InputSource(new StringReader(srvSchedulePlanXml)));
+		} catch (MarshalException e) {
+			e.printStackTrace();
+		} catch (ValidationException e) {
+			e.printStackTrace();
+		}
+		return srvSchedulePlan;
 	}
 
 }
