@@ -11,48 +11,66 @@ amalto.SrvSchedule.ScheduleManager = function(config) {
 };
 Ext.extend(amalto.SrvSchedule.ScheduleManager, Ext.Panel, {
 	initUIComponents : function() {
+		
+		this.recordType1 = Ext.data.Record.create([
+		
+		  {name: "schedulePlanId", type: "string"},
+		  {name: "schedulePlanStatus", type: "string"},
+		  {name: "schedulePlanDesc", type: "string"},
+		  {name: "serviceName", type: "string"},
+		  {name: "methodName", type: "string"},
+		  {name: "parameters", type: "string"},
+		  {name: "mode", type: "string"}
+		 ]);
+		
 		this.store1 = new Ext.data.Store({
-			reader : new Ext.data.JsonReader({
-				total : "total",
-				root : "root",
-				id : "id"
-			}, [{
-				mapping : "name",
-				name : "name"
-			}, {
-				mapping : "age",
-				type : "int",
-				name : "age"
-			}]),
-			proxy : new Ext.data.HttpProxy({})
+			proxy: new Ext.data.DWRProxy(SrvScheduleInterface.getSchedulePlanList, false),
+	        reader: new Ext.data.ListRangeReader( 
+				{id:'schedulePlanId', totalProperty:'totalSize',root: 'data'}, this.recordType1),
+	        remoteSort: false,
+	        autoLoad: true
 		});
+		
+		this.checkboxSelectionModel1=new Ext.grid.CheckboxSelectionModel({singleSelect:true});
 
 		this.gridPanel1 = new Ext.grid.GridPanel({
 			store : this.store1,
+			height:430,
 			title : "Schedule Plans",
-			selModel : new Ext.grid.RowSelectionModel({}),
-			columns : [{
+			selModel : this.checkboxSelectionModel1,
+			border : false,
+			columns : [
+			new Ext.grid.RowNumberer(),
+			this.checkboxSelectionModel1,
+			{
 				hidden : false,
 				header : "ID",
-				dataIndex : "ID",
-				sortable : true
+				dataIndex : "schedulePlanId",
+				sortable : true,
+				width : 200
 			}, {
 				hidden : false,
 				header : "Status",
-				dataIndex : "Status",
-				sortable : true
+				dataIndex : "schedulePlanStatus",
+				sortable : true,
+				width : 100,
+				renderer:this.changeColor
 			}, {
 				hidden : false,
 				header : "Description",
-				dataIndex : "Description",
+				dataIndex : "schedulePlanDesc",
+				width : 500,
 				sortable : true
+				
 			}],
-			bbar : new Ext.PagingToolbar({
-				displayMsg : "Displaying {0} - {1} of {2}",
-				store : this.store1,
-				xtype : "paging",
-				emptyMsg : "No data to display"
-			})
+			listeners:
+   	   	    {
+   	    			'rowdblclick' : function(grid,rowIndex, e ){
+   	    				
+   	    				this.onRowdblclick(grid,rowIndex, e);
+
+   	    			}.createDelegate(this)
+   	   	    }
 		});
 
 		Ext.apply(this, {
@@ -90,6 +108,11 @@ Ext.extend(amalto.SrvSchedule.ScheduleManager, Ext.Panel, {
 						this.onNewPlanClick(button, event);
 					}.createDelegate(this),
 					text : "New Plan"
+				}, {
+					handler : function(button, event) {
+						this.onDeletePlanClick(button, event);
+					}.createDelegate(this),
+					text : "Delete Plan"
 				}],
 				buttonAlign : "left",
 				bodyBorder : true,
@@ -102,15 +125,73 @@ Ext.extend(amalto.SrvSchedule.ScheduleManager, Ext.Panel, {
 		});
 	},
 	
+	changeColor : function (value){
+		if (value == 'scheduling') {
+            return "<span style='color:green;font-weight:bold;'>"+value+"</span>";
+	    } else {
+	        return "<span style='color:red;font-weight:bold;'>"+value+"</span>";
+	    }
+	},
+	
+	onRowdblclick : function (grid,rowIndex, e){
+		var record=grid.getStore().getAt(rowIndex);
+   	    var schedulePlanId = record.data.schedulePlanId;
+   	    var schedulePlanStatus = record.data.schedulePlanStatus;
+   	    var schedulePlanDesc = record.data.schedulePlanDesc;
+   	    var serviceName = record.data.serviceName;
+   	    var methodName = record.data.methodName;
+   	    var parameters = record.data.parameters;
+   	    var mode = record.data.mode;
+   	    
+   	    var pid = "Service Schedule Plan";
+   	    
+   	    var tabPanel = amalto.core.getTabPanel();
+   	    var	srvPlan=tabPanel.getItem(pid);
+   	    if( srvPlan == undefined){
+   	       srvPlan=new amalto.SrvSchedule.SchedulePlan({'pid':pid,'srcStore':this.store1});
+		   tabPanel.add(srvPlan);
+   	    }
+   	       srvPlan.show();
+		   srvPlan.doLayout();
+		   amalto.core.doLayout();
+		   
+		   srvPlan.resetData(schedulePlanId,schedulePlanStatus,schedulePlanDesc,serviceName,methodName,parameters,mode);
+	},
+	
+	onDeletePlanClick : function(button, event){
+		var sel=this.checkboxSelectionModel1.getSelections();
+		if(sel.length==0){
+			Ext.MessageBox.alert('Sorry', "Please select one plan at least! ");
+			return;
+		}
+		
+		for(var j=0; j<sel.length; j++)
+		{
+			var selectPlanId=sel[j].get('schedulePlanId');
+			SrvScheduleInterface.deleteSchedulePlan(selectPlanId,function(status){
+			   this.deleteSchedulePlanFB(status);
+		    }.createDelegate(this));
+		}
+	},
+	
+	deleteSchedulePlanFB : function(status){
+		if(status==true){
+	   	  Ext.MessageBox.alert('Info', "The plan deleted successfully! ");
+	   	  this.store1.reload();
+	   	}else{
+	   	  Ext.MessageBox.alert('Sorry', "The plan deleted failed! ");
+	   	}
+	},
+	
 	onNewPlanClick : function(button, event){
 
-		var pid = "newServiceSchedulePlan";
+		var pid = "Service Schedule Plan";
    	    				
    	    var tabPanel = amalto.core.getTabPanel();
    	    var	srvPlan=tabPanel.getItem(pid);
 		if( srvPlan== undefined){
 							
-			srvPlan=new amalto.SrvSchedule.SchedulePlan({'pid':pid});
+			srvPlan=new amalto.SrvSchedule.SchedulePlan({'pid':pid,'srcStore':this.store1});
 			tabPanel.add(srvPlan);							
 		
 		}
@@ -135,19 +216,19 @@ Ext.extend(amalto.SrvSchedule.ScheduleManager, Ext.Panel, {
     
     onStartClick : function(button, event){
 	   SrvScheduleInterface.startServiceScheduler(function(){
-            this.updateStatusLabel()
+            this.updateStatusLabel();
 		}.createDelegate(this));
     },
     
     onStandbyClick : function(button, event){
 	   SrvScheduleInterface.standbyServiceScheduler(function(){
-            this.updateStatusLabel()
+            this.updateStatusLabel();
 		}.createDelegate(this));
     },
     
     onShutdownClick : function(button, event){
 	   SrvScheduleInterface.shutdownServiceScheduler(function(){
-            this.updateStatusLabel()
+            this.updateStatusLabel();
 		}.createDelegate(this));
     }
    
