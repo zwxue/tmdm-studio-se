@@ -168,6 +168,13 @@ Ext.extend(amalto.SrvSchedule.ScheduleManager, Ext.Panel, {
 		for(var j=0; j<sel.length; j++)
 		{
 			var selectPlanId=sel[j].get('schedulePlanId');
+			var schedulePlanStatus=sel[j].get('schedulePlanStatus');
+			
+			if(schedulePlanStatus=="scheduling"){
+			    Ext.MessageBox.alert('Sorry', "Please unschedule the plan '"+selectPlanId+"' first! ");
+			    continue;
+			}
+			
 			SrvScheduleInterface.deleteSchedulePlan(selectPlanId,function(status){
 			   this.deleteSchedulePlanFB(status);
 		    }.createDelegate(this));
