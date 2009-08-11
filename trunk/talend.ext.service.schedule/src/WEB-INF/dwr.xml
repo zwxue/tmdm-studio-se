@@ -11,6 +11,8 @@
 		<convert converter="bean" match="java.lang.StackTraceElement"/>
 		<convert converter="bean" match="talend.ext.service.schedule.SrvScheduleException"/>
 		<convert converter="bean" match="com.amalto.core.util.XtentisException"/>
+		<convert converter="bean" match="com.amalto.webapp.core.bean.ListRange"/>
+		<convert converter="bean" match="talend.ext.service.entity.SrvSchedulePlan"/>
 		
 	</allow>
 </dwr>

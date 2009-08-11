@@ -2,6 +2,8 @@ package talend.ext.service.entity;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 public class SrvSchedulePlan implements Serializable{
 	
 	private String schedulePlanId;
@@ -18,17 +20,21 @@ public class SrvSchedulePlan implements Serializable{
 	
 	private String mode;
 	
+	public SrvSchedulePlan() {
+		super();
+	}
+	
 	public SrvSchedulePlan(String schedulePlanId, String schedulePlanStatus,
 			String schedulePlanDesc, String serviceName, String methodName,
 			String parameters, String mode) {
 		super();
-		this.schedulePlanId = schedulePlanId;
-		this.schedulePlanStatus = schedulePlanStatus;
-		this.schedulePlanDesc = schedulePlanDesc;
-		this.serviceName = serviceName;
-		this.methodName = methodName;
-		this.parameters = parameters;
-		this.mode = mode;
+		this.setSchedulePlanId(schedulePlanId);
+		this.setSchedulePlanStatus(schedulePlanStatus);
+		this.setSchedulePlanDesc(schedulePlanDesc);
+		this.setServiceName(serviceName);
+		this.setMethodName(methodName);
+		this.setParameters(parameters);
+		this.setMode(mode);
 	}
 
 	public SrvSchedulePlanPK obtainSrvSchedulePlanPk() {
@@ -78,11 +84,11 @@ public class SrvSchedulePlan implements Serializable{
 	}
 
 	public String getParameters() {
-		return parameters;
+		return StringEscapeUtils.unescapeXml(parameters);
 	}
 
 	public void setParameters(String parameters) {
-		this.parameters = parameters;
+		this.parameters = StringEscapeUtils.escapeXml(parameters);
 	}
 
 	public String getMode() {
