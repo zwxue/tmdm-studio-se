@@ -1388,6 +1388,10 @@
 <java-variable-name>wsRoutingRuleExpressions</java-variable-name>
 <xml-element-name>wsRoutingRuleExpressions</xml-element-name>
 </variable-mapping>
+<variable-mapping>
+<java-variable-name>condition</java-variable-name>
+<xml-element-name>condition</xml-element-name>
+</variable-mapping>
 </java-xml-type-mapping>
 <java-xml-type-mapping>
 <java-type>com.amalto.core.webservice.WSExtractUsingTransformerThruView</java-type>
