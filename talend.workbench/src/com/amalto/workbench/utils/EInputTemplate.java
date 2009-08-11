@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public enum EInputTemplate {
-	APPLICATION_ITEMPK(EContentType.APPLICATION_ITEMPK.getName(),"<item-pOJOPK><concept-name>{ConceptName}</concept-name><ids>{id}</ids><data-cluster-pOJOPK><ids>{DataClusterId}</ids></data-cluster-pOJOPK></item-pOJOPK>");
+	APPLICATION_ITEMPK(EContentType.APPLICATION_ITEMPK.getName(),"<item-pOJOPK><concept-name>?</concept-name><ids>?</ids><data-cluster-pOJOPK><ids>?</ids></data-cluster-pOJOPK></item-pOJOPK>");
 	
 	String name;
 	String content;
