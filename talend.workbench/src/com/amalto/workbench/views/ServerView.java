@@ -164,9 +164,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					dndTreeObjs.add(xobject);
 					if ((dragType != -1 && dragType != xobject.getType())
 							|| xobject.getType() == TreeObject.CATEGORY_FOLDER
-							|| (xobject.getParent().getType() == TreeObject.CATEGORY_FOLDER && xobject
-									.getParent().getDisplayName().equals(
-											"System"))
+							|| (LocalTreeObjectRepository.getInstance().isInSystemCatalog(xobject))
 							|| (xobject.getServerRoot() == xobject.getParent())) {
 						event.doit = false;
 						break;
@@ -252,14 +250,14 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			TreeObject treeObj = (TreeObject)obj;
 			if (treeObj.getParent() == null)
 				System.out.println(treeObj.getDisplayName());
+			int xtentisType = LocalTreeObjectRepository.getInstance().receiveUnCertainTreeObjectType(treeObj);
 			if ((treeObj.getType() != dragType && treeObj.getType() != TreeObject.CATEGORY_FOLDER)
 					|| dragType == TreeObject.CATEGORY_FOLDER
-					|| (treeObj.getType() == TreeObject.CATEGORY_FOLDER && treeObj
-							.getParent().getType() != dragType)
+					|| (treeObj.getType() == TreeObject.CATEGORY_FOLDER && xtentisType != dragType)
 					|| (treeObj.getType() == TreeObject.CATEGORY_FOLDER
 							&& treeObj.getParent().getType() == dragType && treeObj
 							.getDisplayName().equals("System"))
-					|| (treeObj.getParent().getType() == TreeObject.CATEGORY_FOLDER && treeObj.getParent().getDisplayName().equals("System"))) {
+					|| (LocalTreeObjectRepository.getInstance().isInSystemCatalog(treeObj.getParent()))) {
 				event.detail = DND.DROP_NONE;
 			} else  {
 				for (TreeObject tos: dndTreeObjs)
@@ -318,13 +316,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			((PasteXObjectAction)pasteAction).setXtentisPort(remoteObj);
 			pasteAction.run();
 		}
-		
-		if (EXtentisObjects.getXtentisObjexts().get(String.valueOf(parent.getType())) != null)
-			LocalTreeObjectRepository.getInstance()
-					.refreshCategoryStateWithinModel(parent);
-		else
-			LocalTreeObjectRepository.getInstance()
-					.refreshCategoryStateWithinModel(parent.getParent());
 	}
 	
 	public void forceAllSiteToRefresh()
@@ -391,7 +382,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	 */
 	public void createPartControl(Composite parent) {
 		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-		viewer.addTreeListener(LocalTreeObjectRepository.getInstance());
 		
 		drillDownAdapter = new DrillDownAdapter(viewer);
 		 contentProvider=new ServerTreeContentProvider(this.getSite(),
@@ -549,7 +539,9 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					manager.add(importAction);
 				}
 			
-			    if (!LocalTreeObjectRepository.getInstance().isInSystemCatalog(xobject))
+			    if (!LocalTreeObjectRepository.getInstance().isInSystemCatalog(
+						xobject)
+						&& xobject instanceof TreeParent)
 			    {
 			    	manager.add(newXObjectAction);	
 			    }
@@ -561,7 +553,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					manager.add(deleteXObjectAction);
 					manager.add(copyAction);
 				}
-				else if (xobject.getType() != TreeObject.CATEGORY_FOLDER){
+				else if (LocalTreeObjectRepository.getInstance().isInSystemCatalog(xobject) == false){
 					manager.add(NewCategoryAction);
 				}
 //				if (hasVersioning)
@@ -596,11 +588,12 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				final String password = serverRoot.getPassword();
 				final String endpointAddress = serverRoot.getEndpointAddress();
                
-				LocalTreeObjectRepository.getInstance().resetAllCategoryState(serverRoot);
+				TreeParent root = serverRoot.getParent();
+
 				LocalTreeObjectRepository.getInstance().switchOffListening();
 				serverRoot.getParent().removeChild(serverRoot);
 				ServerView.this.viewer.refresh();
-
+				
 				// attempt logout on the server side
 				ServerView.this.viewer.getControl().getDisplay().syncExec(
 						new Runnable() {
@@ -759,7 +752,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				.getContentProvider();
 		if (oldProvider != null)
 			oldProvider.removeListener(this);
-		LocalTreeObjectRepository.getInstance().resetAllCategoryState(contentProvider.getInvisibleRoot());
 		
 		super.dispose();
 	}

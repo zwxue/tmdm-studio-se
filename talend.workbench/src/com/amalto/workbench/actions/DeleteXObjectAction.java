@@ -168,7 +168,6 @@ public class DeleteXObjectAction extends Action{
 	            
 	       		xobject.getParent().removeChild(xobject);
 	       		view.getViewer().refresh();
-	       		LocalTreeObjectRepository.getInstance().refreshCategoryStateWithinModel(xobject.getServerRoot());
 			}//for
 			
        		//view.getSite().getWorkbenchWindow().get
