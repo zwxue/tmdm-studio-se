@@ -43,7 +43,8 @@ public enum ESystemDefaultObjects {
 	M_LOGGING(TreeObject.MENU,"logging"),
 	M_SMTP(TreeObject.MENU,"smtp"),
 	M_DATA_CHANGES(TreeObject.MENU,"Data changes"),
-	M_UPDATE_REPORT(TreeObject.MENU,"UpdateReport");
+	M_UPDATE_REPORT(TreeObject.MENU,"UpdateReport"),
+	M_SERVICE_SCHEDULE(TreeObject.MENU,"Service Schedule");
 	
 	//roles
 	//R_BOLLORE_CONTRIBUTOR(TreeObject.ROLE,"BOLLORE_Contributor"),
