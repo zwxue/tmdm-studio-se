@@ -24,7 +24,7 @@ import com.amalto.workbench.utils.Util;
 
 public class LoginDialog extends Dialog {
 
-	private static String f = System.getProperty("user.home")+"/.mdmworkbench.conf";
+	private static String f = System.getProperty("user.dir")+"/.mdmworkbench.conf";
 	
 	private Properties properties = new Properties();
 	private Collection<String> endpoints;
