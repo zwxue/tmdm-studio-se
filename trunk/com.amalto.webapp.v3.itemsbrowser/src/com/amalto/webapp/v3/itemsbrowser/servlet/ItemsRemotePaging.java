@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
@@ -13,10 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.w3c.dom.Element;
 
 import com.amalto.webapp.core.bean.Configuration;
 import com.amalto.webapp.core.json.JSONObject;
 import com.amalto.webapp.core.util.Util;
+import com.amalto.webapp.core.util.Util2;
 import com.amalto.webapp.core.util.XtentisWebappException;
 import com.amalto.webapp.util.webservices.WSCount;
 import com.amalto.webapp.util.webservices.WSDataClusterPK;
@@ -89,7 +92,7 @@ public class ItemsRemotePaging  extends HttpServlet{
 		
 		String viewName= request.getParameter("viewName");				
 		String criteria = request.getParameter("criteria");
-
+		String concept = viewName.replaceAll("Browse_items_","").replaceAll("#.*","");
 		
 		org.apache.log4j.Logger.getLogger(this.getClass()).debug("doPost() \n" +
 				"start : "+start+"\n"+
@@ -182,22 +185,32 @@ public class ItemsRemotePaging  extends HttpServlet{
 			}
 
 
-			
+
 			for (int i = 0; i < results.length; i++) {
-				results[i] = results[i].replaceAll("<result>","");
-				results[i] = results[i].replaceAll("</result>","");	
-//					results[i] =highlightLeft.matcher(results[i]).replaceAll(" ");
-//					results[i] =highlightRight.matcher(results[i]).replaceAll(" ");
-				results[i] =openingTags.matcher(results[i]).replaceAll("");
-				results[i] =closingTags.matcher(results[i]).replaceAll("#");	
-				results[i] =emptyTags.matcher(results[i]).replaceAll(" #");
-				String[] elements = results[i].split("#");
-				String[] fields = new String[view.getViewables().length];
 				//aiming modify
-				int count=Math.min(elements.length, fields.length);
-				for (int j = 0; j < count; j++) {
-					fields[j]=StringEscapeUtils.unescapeXml(elements[j]);
+				results[i] = results[i].replaceAll("<result>","<"+ concept+">");
+				results[i] = results[i].replaceAll("</result>","</"+ concept+">");					
+				Element root = Util.parse(results[i]).getDocumentElement();
+				HashMap<String, String> vMap=com.amalto.core.util.Util.getElementValueMap("/"+concept, root);
+				String[] fields = new String[view.getViewables().length];
+				for(int j=0; j<view.getViewables().length; j++){
+					fields[j]=vMap.get("/"+view.getViewables()[j]);
 				}
+//				results[i] = results[i].replaceAll("<result>","");
+//				results[i] = results[i].replaceAll("</result>","");	
+////					results[i] =highlightLeft.matcher(results[i]).replaceAll(" ");
+////					results[i] =highlightRight.matcher(results[i]).replaceAll(" ");
+//				results[i] =openingTags.matcher(results[i]).replaceAll("");
+//				results[i] =closingTags.matcher(results[i]).replaceAll("#");	
+//				results[i] =emptyTags.matcher(results[i]).replaceAll(" #");
+//				String[] elements = results[i].split("#");
+//				String[] fields = new String[view.getViewables().length];
+//				//aiming modify
+//				int count=Math.min(elements.length, fields.length);
+//				for (int j = 0; j < count; j++) {
+//					if(elements[j]!=null)
+//					fields[j]=StringEscapeUtils.unescapeXml(elements[j]);
+//				}				
 				itemsBrowserContent.add(fields);
 			}				
 
@@ -255,7 +268,7 @@ public class ItemsRemotePaging  extends HttpServlet{
 			}
 			org.apache.log4j.Logger.getLogger(this.getClass()).debug(
 					"doPost() sorting the result...");
-			Collections.sort(itemsBrowserContent, sort);
+			//Collections.sort(itemsBrowserContent, sort);
 					
 			
 			//get part we are interested
@@ -266,10 +279,11 @@ public class ItemsRemotePaging  extends HttpServlet{
 			json.put("TotalCount",totalCount);
 			ArrayList<JSONObject> rows = new ArrayList<JSONObject>();
 			for(int i=skip;i<(max+skip);i++){
-				if(i-skip > itemsBrowserContent.size()-1 ) break;
+				int index= i-skip;
+				if(index > itemsBrowserContent.size()-1 ) break;
 				JSONObject fields = new JSONObject();
-				for (int j = 0; j < itemsBrowserContent.get(i-skip).length; j++) {
-					fields.put("/"+view.getViewables()[j],itemsBrowserContent.get(i-skip)[j]);
+				for (int j = 0; j < itemsBrowserContent.get(index).length; j++) {
+					fields.put("/"+view.getViewables()[j],itemsBrowserContent.get(index)[j]);
 				}
 				rows.add(fields);
 			}			
