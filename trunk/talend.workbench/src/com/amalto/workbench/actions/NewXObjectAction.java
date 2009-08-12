@@ -389,8 +389,8 @@ public class NewXObjectAction extends Action{
                     		"*",
                     		"",
                     		"",
-                    		new WSRoutingRuleExpression[0]
-                    		
+                    		new WSRoutingRuleExpression[0],
+                    		null                    		
                     );
                     newInstance = new TreeObject(
                                     (String)key,
