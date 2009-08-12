@@ -1591,6 +1591,25 @@ public final class Util {
 		}
 		return map;
 	}
+	//key is the xpath, value is the xpath value
+	public static HashMap<String, String> getElementValueMap(String parentPath,Node n)throws Exception{
+		HashMap<String, String> map =new HashMap<String, String>();
+		NodeList list=n.getChildNodes();
+		for(int i=0; i<list.getLength(); i++){
+			Node node=list.item(i);
+			if(node.getNodeType() == Node.ELEMENT_NODE){
+				String nName=node.getNodeName();
+				String xPath=parentPath+"/"+nName;
+				String nValue=getFirstTextNode(node, ".");
+				if( !hasChildren(node)){
+					map.put(xPath, nValue);
+				}else{					
+					map.putAll(getElementValueMap(xPath, node));
+				}
+			}
+		}
+		return map;
+	}
 	
 	private static boolean hasChildren(Node node){
 		NodeList list=node.getChildNodes();
