@@ -33,7 +33,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	private ServerView view;
 	private boolean internalCheck = false;
 	
-	private static String config = System.getProperty("user.home")+"/.treeObjectConfig.xml";
+	private static String config = System.getProperty("user.dir")+"/.treeObjectConfig.xml";
 	private static String rootPath = "/root";
 	private static String DEFAULT_CATALOG = "System";
 	private static String EXPAND_NAME = "Expand";
