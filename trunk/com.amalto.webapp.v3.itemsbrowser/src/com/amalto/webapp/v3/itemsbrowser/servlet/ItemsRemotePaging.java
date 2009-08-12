@@ -266,6 +266,7 @@ public class ItemsRemotePaging  extends HttpServlet{
 			json.put("TotalCount",totalCount);
 			ArrayList<JSONObject> rows = new ArrayList<JSONObject>();
 			for(int i=skip;i<(max+skip);i++){
+				if(i-skip > itemsBrowserContent.size()-1 ) break;
 				JSONObject fields = new JSONObject();
 				for (int j = 0; j < itemsBrowserContent.get(i-skip).length; j++) {
 					fields.put("/"+view.getViewables()[j],itemsBrowserContent.get(i-skip)[j]);
