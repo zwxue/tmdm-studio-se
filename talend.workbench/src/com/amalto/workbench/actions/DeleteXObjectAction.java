@@ -91,7 +91,7 @@ public class DeleteXObjectAction extends Action{
 		            else if (xobject.getType() == TreeObject.CATEGORY_FOLDER && !xobject.getDisplayName().equals("System"))
 		            {
 		            	TreeParent parent = (TreeParent)xobject;
-		            	toDelList.addAll(Arrays.asList(parent.getChildren()));
+		            	LocalTreeObjectRepository.getInstance().receiveAllOffsprings(parent, toDelList);
 		            	toDelList.add(xobject);
 		            }
 		            else if(!ESystemDefaultObjects.isExist(xobject.getType(), xobject.getDisplayName())){
@@ -159,14 +159,15 @@ public class DeleteXObjectAction extends Action{
 		           		port.deleteSynchronizationPlan(new WSDeleteSynchronizationPlan((WSSynchronizationPlanPK)xobject.getWsKey()));
 		           		break;
 		          	case TreeObject.CATEGORY_FOLDER:
-		          		// do nothing over here
+		          	    // do nothing over here
 		          		break;
 		          	default:
 		           		MessageDialog.openError(view.getSite().getShell(), "Error", "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
 		           		return;
 	            }//switch
 	            
-	       		xobject.getParent().removeChild(xobject);
+	            if (xobject.getParent() != null)
+	       		  xobject.getParent().removeChild(xobject);
 	       		view.getViewer().refresh();
 			}//for
 			
