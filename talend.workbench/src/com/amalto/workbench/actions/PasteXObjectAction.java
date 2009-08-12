@@ -422,7 +422,8 @@ public class PasteXObjectAction extends Action{
 			           				originalRoutingRule.getConcept(),
 			           				originalRoutingRule.getServiceJNDI(),
 			           				originalRoutingRule.getParameters(),
-			           				originalRoutingRule.getWsRoutingRuleExpressions()
+			           				originalRoutingRule.getWsRoutingRuleExpressions(),
+			           				originalRoutingRule.getCondition()
 			           		);
 			           		//write the new model
 			           		destPort.putRoutingRule(new WSPutRoutingRule(newRoutingRule));
