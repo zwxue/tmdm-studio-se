@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -810,4 +811,16 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
     	
     	saveDocument(doc);
     }
+    
+	public void receiveAllOffsprings(TreeParent parent, ArrayList<TreeObject>list)
+	{
+		list.addAll(Arrays.asList(parent.getChildren()));
+		for(TreeObject obj: parent.getChildren())
+		{
+			if (obj instanceof TreeParent)
+			{
+				receiveAllOffsprings((TreeParent)obj, list);
+			}
+		}
+	}
 }
