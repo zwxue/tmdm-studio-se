@@ -33,7 +33,9 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -64,10 +66,10 @@ public class ComplexTableViewer {
 	protected Button upButton;
 	protected Button deleteButton;
 	
-	private ComplexTableViewerColumn[] keyColumns;
-	private boolean editable = true;	
-	private static String ERROR_ITEMALREADYEXISTS_CONTENT = "This line already Exists!";
-	private static String ERROR_ITEMALREADYEXISTS_TITLE   = "Warning";
+	protected ComplexTableViewerColumn[] keyColumns;
+	protected boolean editable = true;	
+	protected static String ERROR_ITEMALREADYEXISTS_CONTENT = "This line already Exists!";
+	protected static String ERROR_ITEMALREADYEXISTS_TITLE   = "Warning";
 	//mainPage can be null
 	protected AMainPageV2 mainPage;
 	
@@ -128,14 +130,26 @@ public class ComplexTableViewer {
 			String text = "";
 			if (column.isCombo()) {
 				text = ((CCombo)column.getControl()).getText();
-			} else {
+			} else if(column.isText()) {
 				text = ((Text)column.getControl()).getText();
+			}else if(column.isXPATH()){
+				Control text1=((Composite)column.getControl()).getChildren()[0];
+				if(text1 instanceof Text){
+					text= ((Text)text1).getText();
+				}
 			}
 			values.add(text);
 		}
 		return values.toArray(new String[values.size()]);
 	}
-	
+	protected String[] getInitValues(){
+		List<String> values=new ArrayList<String>();
+		for(ComplexTableViewerColumn column:columns){
+			String text = column.getNillValue();
+			values.add(text);
+		}
+		return values.toArray(new String[values.size()]);
+	}
 	protected void markDirty(){
 		if(mainPage!=null){
 			mainPage.markDirty();
@@ -217,8 +231,13 @@ public class ComplexTableViewer {
         			String text = "";
         			if (column.isCombo()) {
         				text = ((CCombo)column.getControl()).getText();
-        			} else {
+        			} else if(column.isText()) {
         				text = ((Text)column.getControl()).getText();
+        			}else if(column.isXPATH()){
+        				Control text1=((Composite)column.getControl()).getChildren()[0];
+        				if(text1 instanceof Text){
+        					text= ((Text)text1).getText();
+        				}
         			}
         			if(text.length()==0) {
         				if (column.isNillable()) {
@@ -295,6 +314,11 @@ public class ComplexTableViewer {
         
         table.setHeaderVisible(true);
         table.setLinesVisible(true);
+        table.addListener(SWT.MeasureItem, new Listener() {
+            public void handleEvent(Event event) {
+               event.height = event.gc.getFontMetrics().getHeight() + 10;
+            }
+         });
        // Up Down Delete button group
         Composite stepUpDownComposite = toolkit.createComposite(mainComposite,SWT.NONE);
         stepUpDownComposite.setLayoutData(
@@ -380,20 +404,15 @@ public class ComplexTableViewer {
         // Create the cell editors --> We actually discard those later: not natural for an user
         CellEditor[] editors = new CellEditor[columns.size()];	        
         for(int i=0; i< columns.size(); i++){
-        	if(columns.get(i).isForceTextCellEditor()){
-        		
-        		editors[i] = new TextCellEditor(table);
-        		
+        	if(columns.get(i).isText()){        		
+        		editors[i] = new TextCellEditor(table);        		
         	}
-        	else if (!columns.get(i).isCombo())
-        	{
-    	        editors[i] = new TextCellEditor(table);	
-        	}
-        	else
+        	else if(columns.get(i).isCombo())
         	{
         		editors[i] = new ComboBoxCellEditor(table, ((ComplexTableViewerColumn)columns.get(i)).getComboValues(), SWT.READ_ONLY);	
-        	}
-	        
+        	}else if(columns.get(i).isXPATH()){
+        		editors[i]= new XpathCellEditor(table);
+        	}	        
         }
         viewer.setCellEditors(editors);
         
@@ -485,7 +504,7 @@ public class ComplexTableViewer {
 						.indexOf(property);
 				Line line = (Line) element;
 				// add getting value from combo
-				if (!isForceTextCellEditor(columnIndex)&&isAColumnWithCombo(columnIndex)) {
+				if (isAColumnWithCombo(columnIndex)) {
 					String value = line.keyValues.get(columnIndex).value;
 					String[] attrs = columns.get(columnIndex).getComboValues();
 					return Arrays.asList(attrs).indexOf(value);
@@ -509,7 +528,7 @@ public class ComplexTableViewer {
         	
         	private boolean isForceTextCellEditor(int columnIdx)
         	{
-        		return columns.get(columnIdx).isForceTextCellEditor();
+        		return columns.get(columnIdx).isText();
         	}
         });
 
@@ -585,5 +604,44 @@ public class ComplexTableViewer {
         createViewer();        
 	}
 	
+	
+	public Composite getMainComposite() {
+		return mainComposite;
+	}
+
+
+	class XpathCellEditor extends CellEditor{
+
+		XpathWidget xpath;
+		public XpathCellEditor(Composite parent){
+			super(parent);
+		}
+		@Override
+		protected Control createControl(Composite parent) {			
+			xpath= new XpathWidget(parent, mainPage);
+			((GridData)xpath.getComposite().getChildren()[0].getLayoutData()).heightHint=15;
+			((GridData)xpath.getComposite().getChildren()[1].getLayoutData()).heightHint=15;
+			return xpath.getComposite();
+		}
+
+		@Override
+		protected Object doGetValue() {
+			// TODO Auto-generated method stub
+			return xpath.getText();
+		}
+
+		@Override
+		protected void doSetFocus() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		protected void doSetValue(Object value) {
+			// TODO Auto-generated method stub
+			xpath.setText(value.toString());
+		}
+		
+	}	
 }
 
