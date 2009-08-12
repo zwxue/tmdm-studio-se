@@ -1,8 +1,6 @@
 package com.amalto.workbench.widgets;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Observable;
 
 import org.eclipse.jface.action.Action;

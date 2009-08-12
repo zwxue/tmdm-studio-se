@@ -10,8 +10,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.Observable;
 
@@ -21,12 +19,6 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ListViewer;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
@@ -37,18 +29,13 @@ import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -58,22 +45,26 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
+import com.amalto.workbench.utils.EImage;
+import com.amalto.workbench.utils.IConstants;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSConceptKey;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSGetBusinessConceptKey;
 import com.amalto.workbench.webservices.WSGetView;
-import com.amalto.workbench.webservices.WSStringPredicate;
 import com.amalto.workbench.webservices.WSView;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.WSWhereCondition;
-import com.amalto.workbench.webservices.WSWhereOperator;
 import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.DescAnnotationComposite;
+import com.amalto.workbench.widgets.TisTableViewer;
 import com.amalto.workbench.widgets.XpathWidget;
 
 public class ViewMainPage extends AMainPageV2 implements ITextListener{
@@ -82,12 +73,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 	protected List viewableBEsList;
 	protected Text searchableBEText;
 	protected List searchableBEsList;
-//	protected Text leftText;
-	protected Combo operatorCombo;
-	protected Text rightText;
-	protected Combo predicateCombo;
-	protected ListViewer wcListViewer;
-	protected Button wcButton;
+
     protected TreeParent treeParent;
 	protected DescAnnotationComposite desAntionComposite ;
 	protected DropTarget windowTarget;
@@ -99,9 +85,16 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 	private boolean comitting = false;
 	private String lastDataModelName = null;
 	private String viewName=null;
-	
+
 	private String dataModelName = null;
-	
+    ComplexTableViewerColumn[] conditionsColumns= new ComplexTableViewerColumn[]{
+    		new ComplexTableViewerColumn("XPath", false, "newXPath", "", "",ComplexTableViewerColumn.XPATH_STYLE,new String[] {},0),
+    		new ComplexTableViewerColumn("Operator", false, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,IConstants.OPERATORS,0),
+    		new ComplexTableViewerColumn("Value", true, "", ""),
+    		new ComplexTableViewerColumn("Predicate", true, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,IConstants.PREDICATES,0),
+    };
+	private TisTableViewer conditionViewer;
+    
     public ViewMainPage(FormEditor editor) {
         super(
         		editor,
@@ -177,7 +170,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 				};
 			});
             
-            xpathWidget0 = new XpathWidget("...",treeParent, toolkit, vbeComposite, (AMainPageV2)this,true,true,dataModelName);
+            xpathWidget0 = new XpathWidget("...",treeParent, toolkit, vbeComposite, this,true,true,dataModelName);
            
 
             
@@ -208,7 +201,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             );
             vbeUpDownComposite.setLayout(new GridLayout(1,false));
             
-            Button upVBEButton = toolkit.createButton(vbeUpDownComposite,"Up",SWT.PUSH | SWT.CENTER);
+            Button upVBEButton = toolkit.createButton(vbeUpDownComposite,"",SWT.PUSH | SWT.CENTER);
+            upVBEButton.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
             upVBEButton.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
             );
@@ -226,7 +220,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             		}
             	};
             });
-            Button downVBEButton = toolkit.createButton(vbeUpDownComposite,"Down",SWT.PUSH | SWT.CENTER);
+            Button downVBEButton = toolkit.createButton(vbeUpDownComposite,"",SWT.PUSH | SWT.CENTER);
+            downVBEButton.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
             downVBEButton.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
             );
@@ -296,127 +291,19 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             //Where Conditions
             Composite wcGroup = this.getNewSectionComposite("Where Conditions");
             wcGroup.setLayout(new GridLayout(5,false));
+            conditionsColumns[0].setColumnWidth(200);
+            conditionsColumns[1].setColumnWidth(150);
+            conditionsColumns[3].setColumnWidth(120);
+            conditionViewer=new TisTableViewer(Arrays.asList(conditionsColumns),toolkit,wcGroup);
+            conditionViewer.setMainPage(this);
+            conditionViewer.create();
             
-            wcButton = toolkit.createButton(wcGroup,"Add",SWT.PUSH | SWT.TRAIL);
-            wcButton.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
-            );
-            wcButton.addSelectionListener(new SelectionListener() {
-            	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
-            	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-            		addWhereCondition();
-            		 dataModelName = xpathWidget2.getDataModelName();
-            	};
-            });
-            
-            xpathWidget2 = new XpathWidget("...",treeParent, toolkit, wcGroup, (AMainPageV2)this,true,false,dataModelName);
-            
-            operatorCombo = new Combo(wcGroup,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
-            operatorCombo.setLayoutData(
-                    new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
-            );
-            operatorCombo.add("Contains");
-            operatorCombo.add("Contains Text Of");
-            operatorCombo.add("Starts With");
-            operatorCombo.add("Strict Contains");
-            operatorCombo.add("=");
-            operatorCombo.add("!=");
-            operatorCombo.add(">");
-            operatorCombo.add(">=");
-            operatorCombo.add("<");
-            operatorCombo.add("<=");
-            operatorCombo.select(0);
-            operatorCombo.addSelectionListener(new SelectionListener() {
-            	public void widgetDefaultSelected(SelectionEvent e) {}
-            	public void widgetSelected(SelectionEvent e) {
-            		if ("Contains".equals(ViewMainPage.this.operatorCombo.getText())) {
-            			ViewMainPage.this.predicateCombo.setEnabled(true);
-            		} else {
-            			ViewMainPage.this.predicateCombo.select(0);
-            			ViewMainPage.this.predicateCombo.setEnabled(false);
-            		}
-            	}
-            });
-            
-            rightText = toolkit.createText(wcGroup, "",SWT.BORDER|SWT.SINGLE);
-            
-            rightText.setLayoutData(    
-                    new GridData(SWT.FILL,SWT.CENTER,true,true,1,1)
-            );
-            
-            rightText.addKeyListener(new KeyListener() {
-				public void keyPressed(KeyEvent e) {}
-				public void keyReleased(KeyEvent e) {
-					if ((e.stateMask==0) && (e.character == SWT.CR)){
-	            		addWhereCondition();
-					}
-				}
-            });
-            predicateCombo = new Combo(wcGroup,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
-            predicateCombo.setLayoutData(
-                    new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
-            );
-            predicateCombo.add("");
-            predicateCombo.add("Or");
-            predicateCombo.add("And");
-            predicateCombo.add("Strict And");
-            predicateCombo.add("Exactly");
-            predicateCombo.add("Not");
-            
-            wcListViewer = new ListViewer(wcGroup,SWT.BORDER | SWT.MULTI);
-            wcListViewer.getControl().setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,true,true,5,1)
-            );
-            ((GridData)wcListViewer.getControl().getLayoutData()).minimumHeight = 100;
-            wcListViewer.setContentProvider(new IStructuredContentProvider() {
-				public void dispose() {}
-				public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {}
-				public Object[] getElements(Object inputElement) {
-					return 
-						((WSView) inputElement).getWhereConditions() == null ? 
-								new WSWhereCondition[0] : 
-								((WSView) inputElement).getWhereConditions();
-				}
-            });
-            wcListViewer.setLabelProvider(new ILabelProvider() {
-				public Image getImage(Object element) {return null;}
-				public String getText(Object element) {
-					WSWhereCondition wc = (WSWhereCondition) element;
-					String text = wc.getLeftPath()+" ";
-					if (wc.getOperator().equals(WSWhereOperator.CONTAINS)) text+="Contains";
-					else if (wc.getOperator().equals(WSWhereOperator.EQUALS)) text+="=";
-					else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN)) text+=">";
-					else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN_OR_EQUAL)) text+=">=";
-					else if (wc.getOperator().equals(WSWhereOperator.JOIN)) text+="Contains Text Of";
-					else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN)) text+="<";
-					else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN_OR_EQUAL)) text+="<=";
-					else if (wc.getOperator().equals(WSWhereOperator.NOT_EQUALS)) text+="!=";
-					else if (wc.getOperator().equals(WSWhereOperator.STARTSWITH)) text+="Starts With";
-					else if (wc.getOperator().equals(WSWhereOperator.STRICTCONTAINS)) text+="Strict Contains";
-					text+=" ";
-					if (!wc.getOperator().equals(WSWhereOperator.JOIN)) text+="\"";
-					text+=wc.getRightValueOrPath();
-					if (!wc.getOperator().equals(WSWhereOperator.JOIN)) text+="\"";
-					text+=" ";
-					if (wc.getStringPredicate().equals(WSStringPredicate.AND)) text+="[and]";
-					else if (wc.getStringPredicate().equals(WSStringPredicate.EXACTLY)) text+="[exactly]";
-					else if (wc.getStringPredicate().equals(WSStringPredicate.NONE)) text+="";
-					else if (wc.getStringPredicate().equals(WSStringPredicate.NOT)) text+="[not]";
-					else if (wc.getStringPredicate().equals(WSStringPredicate.OR)) text+="[or]";
-					else if (wc.getStringPredicate().equals(WSStringPredicate.STRICTAND)) text+="[strict and]";
-					return text;
-				}
-				public void addListener(ILabelProviderListener listener) {}
-				public void dispose() {}
-				public boolean isLabelProperty(Object element, String property) {return false;}
-				public void removeListener(ILabelProviderListener listener) {}
-            });
             
             /*DragSource wcSource = new DragSource(wcListViewer.getControl(),DND.DROP_MOVE);
             wcSource.setTransfer(new Transfer[]{TextTransfer.getInstance()});
             wcSource.addDragListener(new WCDragSourceListener());*/
             
-            wrap.Wrap(this, wcListViewer);
+            wrap.Wrap(this, conditionViewer);
             
             refreshData();
 
@@ -429,26 +316,15 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
     public void update(Observable o, Object arg)
     {
     	if (arg != null
-				&& (arg == wcListViewer || arg == viewableBEsList || arg == searchableBEsList)) {
+				&& ( arg == viewableBEsList || arg == searchableBEsList)) {
 			deleteItems(arg);
 		}
     }
     
     private void deleteItems(Object view)
     {
-    	if (view == wcListViewer)
-    	{
-			IStructuredSelection selections = (IStructuredSelection) wcListViewer
-			.getSelection();
-			java.util.List list = (java.util.List) Arrays.asList(selections.toArray());
-	        if (list.size() == 0)return;
-	        WSView wsObject = (WSView) (ViewMainPage.this.getXObject().getWsObject());
-			ArrayList<WSWhereCondition> wcList = new ArrayList<WSWhereCondition>(Arrays.asList(wsObject.getWhereConditions()));
-			wcList.removeAll(list);
-			wsObject.setWhereConditions(wcList.toArray(new WSWhereCondition[wcList.size()]));
-			wcListViewer.refresh();
-    	}
-    	else if (view == viewableBEsList)
+
+    	if (view == viewableBEsList)
     	{
     		if (viewableBEsList.getSelectionIndices().length == 0)return;
 			viewableBEsList.remove(viewableBEsList.getSelectionIndices());
@@ -472,7 +348,6 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 			WSView wsObject = getWsViewObject();
 			
 			desAntionComposite.setText(wsObject.getDescription()==null ? "" : wsObject.getDescription());
-//            descriptionText.setText(wsObject.getDescription()==null ? "" : wsObject.getDescription());
 	    	
             viewableBEsList.removeAll();
             String[] vbes = wsObject.getViewableBusinessElements();
@@ -489,10 +364,15 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 					searchableBEsList.add(sbes[i]);
 				}
             }
-
-            wcListViewer.setInput(wsObject);
-            wcListViewer.refresh();
-            
+            java.util.List<Line> lines=new ArrayList<Line>();
+            for(WSWhereCondition wc:wsObject.getWhereConditions()){
+				Line line=new Line(
+						conditionsColumns,
+						Util.convertWhereCondition(wc)
+					);
+				lines.add(line);
+            }
+            conditionViewer.getViewer().setInput(lines);
             this.refreshing = false;
 
 		} catch (Exception e) {
@@ -538,6 +418,17 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 			wsObject.setViewableBusinessElements(viewableBEsList.getItems());
 			wsObject.setSearchableBusinessElements(searchableBEsList.getItems());
 			//wsObject.setWhereConditions() //automatically refreshed by the viewer
+			java.util.List<Line> lines=(java.util.List<Line>)conditionViewer.getViewer().getInput();
+			java.util.List<WSWhereCondition> wclist=new ArrayList<WSWhereCondition>();
+			for(Line item: lines){
+				String[] values=new String[]{item.keyValues.get(0).value,
+						item.keyValues.get(1).value,
+						item.keyValues.get(2).value,
+						item.keyValues.get(3).value};
+				WSWhereCondition wc =Util.convertLine(values);
+				wclist.add(wc);
+			}
+			wsObject.setWhereConditions(wclist.toArray(new WSWhereCondition[wclist.size()]));
 			
 			this.comitting = false;
 			
@@ -644,96 +535,10 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 		markDirty();
 	}
 
-	/*
-	private void hookContextMenu(TreeViewer viewer) {
-	}
-
-	private void fillContextMenu(IMenuManager manager) {
-	}
-	*/
 	
 	public void dispose() {
 		super.dispose();
 		windowTarget.dispose();
-	}
-	
-	protected void addWhereCondition() {
-		if (xpathWidget2.getText().trim().equals("")
-				|| rightText.getText().equals("")) {
-			return;
-		}
-  		markDirty();
-		
-//		wc.setLeftPath(ViewMainPage.this.leftText.getText());
-		
-		String[] items = ViewMainPage.this.xpathWidget2.getText().split("\\&");
-//		for(int i=0;i<items.length;i++){
-//			if (!"".equals(ViewMainPage.this.xpathWidget2.getText()))
-//				ViewMainPage.this.searchableBEsList.add(items[i]);
-//		}
-		WSView wsObject = (WSView) ViewMainPage.this.getWsViewObject();
-		ArrayList<WSWhereCondition> wcList = new ArrayList<WSWhereCondition>(
-				Arrays.asList(wsObject.getWhereConditions()));
-		
-		for (int i = 0; i < items.length; i++) {
-			WSWhereCondition wc = new WSWhereCondition();
-			wc.setLeftPath(items[i]);
-			ViewMainPage.this.xpathWidget2.setText("");
-			WSWhereOperator operator = null;
-			if (ViewMainPage.this.operatorCombo.getText().equals("Contains"))
-				operator = WSWhereOperator.CONTAINS;
-			else if (ViewMainPage.this.operatorCombo.getText().equals(
-					"Contains Text Of"))
-				operator = WSWhereOperator.JOIN;
-			else if (ViewMainPage.this.operatorCombo.getText().equals("="))
-				operator = WSWhereOperator.EQUALS;
-			else if (ViewMainPage.this.operatorCombo.getText().equals(">"))
-				operator = WSWhereOperator.GREATER_THAN;
-			else if (ViewMainPage.this.operatorCombo.getText().equals(">="))
-				operator = WSWhereOperator.GREATER_THAN_OR_EQUAL;
-			else if (ViewMainPage.this.operatorCombo.getText().equals("<"))
-				operator = WSWhereOperator.LOWER_THAN;
-			else if (ViewMainPage.this.operatorCombo.getText().equals("<="))
-				operator = WSWhereOperator.LOWER_THAN_OR_EQUAL;
-			else if (ViewMainPage.this.operatorCombo.getText().equals("!="))
-				operator = WSWhereOperator.NOT_EQUALS;
-			else if (ViewMainPage.this.operatorCombo.getText().equals(
-					"Starts With"))
-				operator = WSWhereOperator.STARTSWITH;
-			else if (ViewMainPage.this.operatorCombo.getText().equals(
-					"Strict Contains"))
-				operator = WSWhereOperator.STRICTCONTAINS;
-			wc.setOperator(operator);
-			wc.setRightValueOrPath(ViewMainPage.this.rightText.getText());
-			WSStringPredicate predicate = null;
-			if (ViewMainPage.this.predicateCombo.getText().equals(""))
-				predicate = WSStringPredicate.NONE;
-			else if (ViewMainPage.this.predicateCombo.getText().equals("Or"))
-				predicate = WSStringPredicate.OR;
-			if (ViewMainPage.this.predicateCombo.getText().equals("And"))
-				predicate = WSStringPredicate.AND;
-			if (ViewMainPage.this.predicateCombo.getText().equals("Strict And"))
-				predicate = WSStringPredicate.STRICTAND;
-			if (ViewMainPage.this.predicateCombo.getText().equals("Exactly"))
-				predicate = WSStringPredicate.EXACTLY;
-			if (ViewMainPage.this.predicateCombo.getText().equals("Not"))
-				predicate = WSStringPredicate.NOT;
-			wc.setStringPredicate(predicate);
-			boolean exist=false;
-			for(Iterator it = wcList.iterator(); it.hasNext();){
-				WSWhereCondition wc1 = (WSWhereCondition)it.next();
-				if(this.equals(wc1, wc))
-					exist = true;
-			}
-			if(!exist)
-				wcList.add(wc);
-		}// for
-//		if(!"".equals(ViewMainPage.this.xpathWidget2.getText()))
-//				wc.setLeftPath(ViewMainPage.this.xpathWidget2.getText());
-		wsObject.setWhereConditions(wcList
-				.toArray(new WSWhereCondition[wcList.size()]));
-		ViewMainPage.this.wcListViewer.refresh();
-		rightText.setText("");
 	}
 	
 	//description text listener
@@ -799,39 +604,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 		public void dropAccept(DropTargetEvent event) {}
 		
 	}
-	
-	/**
-	 * Where Condition Drag
-	 *
-	 */	
-	class WCDragSourceListener implements DragSourceListener {
 
-		public void dragFinished(DragSourceEvent event) {
-			WSView wsObject = (WSView) (ViewMainPage.this.getWsViewObject());
-			IStructuredSelection selection = (IStructuredSelection)ViewMainPage.this.wcListViewer.getSelection();
-			if (selection.getFirstElement()!=null) {
-				WSWhereCondition wc = (WSWhereCondition) selection.getFirstElement();
-				ArrayList<WSWhereCondition> wcList = new ArrayList<WSWhereCondition>(Arrays.asList(wsObject.getWhereConditions()));
-				wcList.remove(wc);
-				wsObject.setWhereConditions(wcList.toArray(new WSWhereCondition[wcList.size()]));
-				ViewMainPage.this.wcListViewer.refresh();
-				ViewMainPage.this.markDirty();
-			}
-		}
-
-		public void dragSetData(DragSourceEvent event) {
-			IStructuredSelection selection = (IStructuredSelection)ViewMainPage.this.wcListViewer.getSelection();
-			if (selection.getFirstElement()!=null) {
-					event.data =  selection.getFirstElement();
-			}
-		}
-
-		public void dragStart(DragSourceEvent event) {
-			IStructuredSelection selection = (IStructuredSelection)ViewMainPage.this.wcListViewer.getSelection();
-			event.doit = (selection.getFirstElement()!=null);
-		}
-
-	}
 	
 	
 	/**

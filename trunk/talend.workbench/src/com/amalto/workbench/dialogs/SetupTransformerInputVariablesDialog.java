@@ -78,7 +78,7 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
         		"_DEFAULT_", 			//Nill value
         		"_DEFAULT_",			//Nill display
         		"",						//Default Value
-        		true,					//is Combo ?
+        		ComplexTableViewerColumn.COMBO_STYLE,					//is Combo ?
         		inputVariables.toArray(new String[inputVariables.size()]), //Combo Values
         		0						//Text Lines
         	),
@@ -88,7 +88,7 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
         		"", 					//Nill value
         		"",						//Nill display
         		"text/xml",				//Default Value
-        		true,					//is Combo ?
+        		ComplexTableViewerColumn.COMBO_STYLE,					//is Combo ?
         		EContentType.allTypes().toArray(new String[EContentType.allTypes().size()]), //Combo Values
         		0						//Text Lines
         	),
@@ -98,7 +98,7 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
         		"",			 			//Nill value
         		"",						//Nill display
         		"",						//Default Value
-        		false,					//is Combo ?
+        		ComplexTableViewerColumn.TEXT_STYLE,					//is Combo ?
         		null, //Combo Values
         		10						//Text Lines
         	)

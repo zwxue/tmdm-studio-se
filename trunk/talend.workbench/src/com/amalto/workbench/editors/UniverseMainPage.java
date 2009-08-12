@@ -43,6 +43,7 @@ import com.amalto.workbench.widgets.ComplexTableViewer;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.LabelCombo;
 import com.amalto.workbench.widgets.LabelText;
+import com.amalto.workbench.widgets.TisTableViewer;
 
 public class UniverseMainPage extends AMainPageV2{
 
@@ -117,18 +118,18 @@ public class UniverseMainPage extends AMainPageV2{
         		markDirty();
         	}
         });
-        Composite itemsComposite = toolkit.createComposite(itemsGroup, SWT.BORDER);
-        itemsComposite.setLayoutData(
-                new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
-        );       
-        itemsComposite.setLayout(new GridLayout(1,true));
+//        Composite itemsComposite = toolkit.createComposite(itemsGroup, SWT.NULL);
+//        itemsComposite.setLayoutData(
+//                new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
+//        );       
+//        itemsComposite.setLayout(new GridLayout(1,true));
         
-        ComplexTableViewer itemsViewer=new ComplexTableViewer(Arrays.asList(columns),toolkit,itemsComposite);
+        TisTableViewer itemsViewer=new TisTableViewer(Arrays.asList(columns),toolkit,itemsGroup);
         itemsViewer.create();
         itemsViewer.setMainPage(this);
         instancesViewer=itemsViewer.getViewer();
         instancesViewer.setInput(universe.getItemsList());                    
-        
+        itemsViewer.getMainComposite().setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,2,2));
         //Xtentis Objects  Section
         Composite objecstGroup = this.getNewSectionComposite("System Objects Revision ID");
         objecstGroup.setLayout(new GridLayout(1,true));
@@ -170,25 +171,27 @@ public class UniverseMainPage extends AMainPageV2{
 			for(int i=0;i<22-comboName.length();i++)
 				labelName.append(" ");;
 		}
-		Map<String, List<String>> universeMap = Util.getUniverseMap(getPort());
 		final LabelCombo labelCombo =new LabelCombo(toolkit,parent,labelName.toString(),SWT.BORDER,2);
-		if (universeMap.get(comboName) != null) {
-			String[] universes = new String[universeMap.get(comboName).size()];
-			Iterator it = universeMap.get(comboName).iterator();
-			for (int i = 0; it.hasNext(); i++)
-				universes[i] = (String) it.next();
-			labelCombo.getCombo().setItems(universes);
-			labelCombo.getCombo().setText(value);
-		}
-		else if(EXtentisObjects.Transformer.getDisplayName().equals(comboName)){
-				String name=EXtentisObjects.Transformer.getName();
-				String[] universes = new String[universeMap.get(name).size()];
-				Iterator it = universeMap.get(name).iterator();
+		Map<String, List<String>> universeMap = Util.getUniverseMap(getPort());
+		if(universeMap.size()>0){
+			if (universeMap.get(comboName) != null) {
+				String[] universes = new String[universeMap.get(comboName).size()];
+				Iterator it = universeMap.get(comboName).iterator();
 				for (int i = 0; it.hasNext(); i++)
 					universes[i] = (String) it.next();
 				labelCombo.getCombo().setItems(universes);
 				labelCombo.getCombo().setText(value);
-			
+			}
+			else if(EXtentisObjects.Transformer.getDisplayName().equals(comboName)){
+					String name=EXtentisObjects.Transformer.getName();
+					String[] universes = new String[universeMap.get(name).size()];
+					Iterator it = universeMap.get(name).iterator();
+					for (int i = 0; it.hasNext(); i++)
+						universes[i] = (String) it.next();
+					labelCombo.getCombo().setItems(universes);
+					labelCombo.getCombo().setText(value);
+				
+			}
 		}
 		
 		labelCombo.getCombo().addSelectionListener(new SelectionListener() {
