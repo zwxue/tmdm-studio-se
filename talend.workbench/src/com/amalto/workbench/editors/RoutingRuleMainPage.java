@@ -49,13 +49,10 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
@@ -77,6 +74,7 @@ import com.amalto.workbench.webservices.WSServicesList;
 import com.amalto.workbench.webservices.WSServicesListItem;
 import com.amalto.workbench.webservices.WSString;
 import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.widgets.ConditionWidget;
 import com.amalto.workbench.widgets.XpathWidget;
 
 public class RoutingRuleMainPage extends AMainPageV2 {
@@ -518,55 +516,17 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 				}            	
             });
             //and or not condition
-            Group conditionComposite = new Group(routingExpressionsGroup,SWT.NONE);
-            conditionComposite.setBackground(routingExpressionsGroup.getBackground());
-            conditionComposite.setText("Conditions:");
-            conditionComposite.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-            );
-            conditionComposite.setLayout(new GridLayout(3,false));
-            
-            conditionText= toolkit.createText(conditionComposite, "",SWT.BORDER|SWT.WRAP|SWT.V_SCROLL);
-            conditionText.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,2,3));
+            ConditionWidget conditionWidget=new ConditionWidget(routingExpressionsGroup,toolkit,this);
+            conditionText=conditionWidget.getConditionText();
             conditionText.addModifyListener(new ModifyListener(){
 
-				public void modifyText(ModifyEvent e) {
-					// TODO Auto-generated method stub
-					if(!refreshing)
-					markDirty();
-				}
+    			public void modifyText(ModifyEvent e) {
+    				// TODO Auto-generated method stub
+    				if(!refreshing)
+    				markDirty();
+    			}
             	
             });
-            Composite conditionBtnComposite = toolkit.createComposite(conditionComposite, SWT.NULL);
-            conditionBtnComposite.setLayoutData(
-                    new GridData(SWT.RIGHT,SWT.FILL,false,true,1,1)
-            );
-            conditionBtnComposite.setLayout(new GridLayout(5,false));
-            ButtonListenr listener=new ButtonListenr();
-            Button btnLeft=toolkit.createButton(conditionBtnComposite, "(", SWT.PUSH);
-            btnLeft.setLayoutData(new GridData(SWT.RIGHT,SWT.FILL,false,true,1,1));
-            btnLeft.setData("(");
-            btnLeft.addSelectionListener(listener);
-            
-            Button btnRight=toolkit.createButton(conditionBtnComposite, ")", SWT.PUSH);
-            btnRight.setLayoutData(new GridData(SWT.RIGHT,SWT.FILL,false,true,1,1));
-            btnRight.setData(")");
-            btnRight.addSelectionListener(listener);
-            
-            Button btnAnd=toolkit.createButton(conditionBtnComposite, "And", SWT.PUSH);
-            btnAnd.setLayoutData(new GridData(SWT.RIGHT,SWT.FILL,false,true,1,1));
-            btnAnd.setData("&&");
-            btnAnd.addSelectionListener(listener);
-            
-            Button btnOr=toolkit.createButton(conditionBtnComposite, "Or", SWT.PUSH);
-            btnOr.setData("||");
-            btnOr.setLayoutData(new GridData(SWT.RIGHT,SWT.FILL,false,true,1,1));  
-            btnOr.addSelectionListener(listener);
-            
-            Button btnNot=toolkit.createButton(conditionBtnComposite, "Not", SWT.PUSH);
-            btnNot.setData("!");
-            btnNot.setLayoutData(new GridData(SWT.RIGHT,SWT.FILL,false,true,1,1));    
-            btnNot.addSelectionListener(listener);
            /* DragSource wcSource = new DragSource(routingExpressionsViewer.getControl(),DND.DROP_MOVE);
             wcSource.setTransfer(new Transfer[]{TextTransfer.getInstance()});
             wcSource.addDragListener(new WCDragSourceListener());*/
@@ -869,22 +829,5 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 		else
 			return true;
 	}	
-	class ButtonListenr implements SelectionListener{
 
-		public void widgetDefaultSelected(SelectionEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		public void widgetSelected(SelectionEvent e) {
-			// TODO Auto-generated method stub
-			if(e.widget instanceof Button){
-				Button btn=(Button)e.widget;
-				String condition=conditionText.getText()+" "+btn.getText();
-				conditionText.setText(condition);
-				conditionText.setFocus();
-				markDirty();
-			}
-		}		
-	}
 }
