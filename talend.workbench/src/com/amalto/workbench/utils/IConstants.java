@@ -1,6 +1,8 @@
 package com.amalto.workbench.utils;
 
 public interface IConstants {
+	static final String[] OPERATORS={"Contains","Contains Text Of","Starts With","Strict Contains","=","!=",">",">=","<","<="};
+	static final String[] PREDICATES={"","Or","And","Strict And","Exactly","Not"};
 	/**
 	 * The default universe name
 	 */

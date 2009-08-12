@@ -3,13 +3,17 @@ package com.amalto.workbench.widgets;
 import org.eclipse.swt.widgets.Control;
 
 public class ComplexTableViewerColumn {
-
+	
+	public static final int TEXT_STYLE=0;
+	public static final int COMBO_STYLE=1;
+	public static final int XPATH_STYLE=2;
+	
 	String name;
 	boolean isNillable = false;
 	String nillValue = "";
 	String nillDisplay = "";
 	private String defaultValue = "";
-	private boolean isCombo = false;
+	private int style;
 	private String[] comboValues = new String[0];
 	private int textLines = 1;
 	private int columnWidth = 0;
@@ -38,26 +42,26 @@ public class ComplexTableViewerColumn {
 	
 	
 
-	public ComplexTableViewerColumn(String name, boolean isNillable, String nillValue, String nillDisplay, String defaultValue, boolean isCombo, String[] comboValues, int textLines) {
+	public ComplexTableViewerColumn(String name, boolean isNillable, String nillValue, String nillDisplay, String defaultValue, int style, String[] comboValues, int textLines) {
 	    super();
 	    this.name = name;
 	    this.isNillable = isNillable;
 	    this.nillValue = nillValue;
 	    this.nillDisplay = nillDisplay;
 	    this.defaultValue = defaultValue;
-	    this.isCombo = isCombo;
+	    this.style=style;
 	    this.comboValues = comboValues;
 	    this.textLines = textLines;
     }
 	
-	public ComplexTableViewerColumn(String name, boolean isNillable, String nillValue, String nillDisplay, String defaultValue, boolean isCombo, String[] comboValues, int textLines,boolean isComboEditable,boolean forceTextCellEditor) {
+	public ComplexTableViewerColumn(String name, boolean isNillable, String nillValue, String nillDisplay, String defaultValue, int style, String[] comboValues, int textLines,boolean isComboEditable,boolean forceTextCellEditor) {
 	    super();
 	    this.name = name;
 	    this.isNillable = isNillable;
 	    this.nillValue = nillValue;
 	    this.nillDisplay = nillDisplay;
 	    this.defaultValue = defaultValue;
-	    this.isCombo = isCombo;
+	    this.style=style;
 	    this.comboValues = comboValues;
 	    this.textLines = textLines;
 	    this.isComboEditable= isComboEditable;
@@ -95,13 +99,14 @@ public class ComplexTableViewerColumn {
     }
 
 	public boolean isCombo() {
-    	return isCombo;
+    	return this.style==COMBO_STYLE;
     }
-
-	public void setCombo(boolean isCombo) {
-    	this.isCombo = isCombo;
-    }
-
+	public boolean isXPATH(){
+		return this.style==XPATH_STYLE;
+	}
+	public boolean isText(){
+		return this.style==TEXT_STYLE;
+	}
 	public String[] getComboValues() {
     	return comboValues;
     }
@@ -144,14 +149,7 @@ public class ComplexTableViewerColumn {
 	{
 		return columnWidth;
 	}
-	
-	public boolean isForceTextCellEditor() {
-		return forceTextCellEditor;
-	}
 
-	public void setForceTextCellEditor(boolean forceTextCellEditor) {
-		this.forceTextCellEditor = forceTextCellEditor;
-	}
 
 	@Override
 	public boolean equals(Object obj) {

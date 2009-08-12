@@ -46,7 +46,9 @@ public class XpathWidget implements  SelectionListener{
 	public void setDataModelName(String dataModelName) {
 		this.dataModelName = dataModelName;
 	}
-
+	public XpathWidget(Composite parent,AMainPageV2 page){		
+		this("...",page.getXObject().getParent(),null,parent,page,false,false,"");
+	}
 	public XpathWidget(String buttonName,TreeParent treeParent,
 			FormToolkit toolkit, Composite parent, AMainPageV2 dialog,boolean isButtonLeft,boolean readOnly, String dataModelName) {
 //		if(treeParent==null){

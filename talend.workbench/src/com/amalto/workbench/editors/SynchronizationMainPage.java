@@ -56,6 +56,7 @@ import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynch
 import com.amalto.workbench.widgets.ComplexTableViewer;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.LabelText;
+import com.amalto.workbench.widgets.TisTableViewer;
 
 public class SynchronizationMainPage extends AMainPageV2{
 
@@ -69,18 +70,18 @@ public class SynchronizationMainPage extends AMainPageV2{
 		new ComplexTableViewerColumn("Instance Pattern", true, ".*", ".*"),
 		new ComplexTableViewerColumn("Local Revision ID", true, "", "[HEAD]"),
 		new ComplexTableViewerColumn("Remote Revision ID", true, "", "[HEAD]"),
-		new ComplexTableViewerColumn("Algorithm", false, "", "", "",true,new String[] {},0)
+		new ComplexTableViewerColumn("Algorithm", false, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,new String[] {},0)
 	};
 	
 	//use name to identify each column, if you change it , you must change the reference part below 
 	private ComplexTableViewerColumn[] itemsColumns=new ComplexTableViewerColumn[]{
-		new ComplexTableViewerColumn("Local Cluster", false, "", "","",true,new String[] {},0,true,true),
-		new ComplexTableViewerColumn("Concept Name", true, "", "[any]","",true,new String[]{},0,true,true),
-		new ComplexTableViewerColumn("Local Revision ID", true, "", "[HEAD]","",true,new String[] {},0,true,true),
+		new ComplexTableViewerColumn("Local Cluster", false, "", "","",ComplexTableViewerColumn.COMBO_STYLE,new String[] {},0,true,true),
+		new ComplexTableViewerColumn("Concept Name", true, "", "[any]","",ComplexTableViewerColumn.COMBO_STYLE,new String[]{},0,true,true),
+		new ComplexTableViewerColumn("Local Revision ID", true, "", "[HEAD]","",ComplexTableViewerColumn.COMBO_STYLE,new String[] {},0,true,true),
 		new ComplexTableViewerColumn("IDs Pattern       ", true, ".*", ".*"),
 		new ComplexTableViewerColumn("Remote Cluster", false, "", ""),
 		new ComplexTableViewerColumn("Remote Revision ID", true, "", "[HEAD]"),
-		new ComplexTableViewerColumn("Algorithm", false, "", "","Manual",true,new String[] {},0)
+		new ComplexTableViewerColumn("Algorithm", false, "", "","Manual",ComplexTableViewerColumn.COMBO_STYLE,new String[] {},0)
 	};
 		
 	protected SyncronizationPlan syncPlan;
@@ -507,9 +508,9 @@ public class SynchronizationMainPage extends AMainPageV2{
             		new ComplexTableViewerColumn("Instance Pattern", true, ".*", ".*"),
             		new ComplexTableViewerColumn("Local Revision ID", true, "", "[HEAD]"),
             		new ComplexTableViewerColumn("Remote Revision ID", true, "", "[HEAD]"),
-            		new ComplexTableViewerColumn("Algorithm", false, "", "", "",true,new String[] {},0)
+            		new ComplexTableViewerColumn("Algorithm", false, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,new String[] {},0)
             	};
-            ComplexTableViewer objectViewer=new ComplexTableViewer(Arrays.asList(xtentisObjectColumns),toolkit,composite);
+            TisTableViewer objectViewer=new TisTableViewer(Arrays.asList(xtentisObjectColumns),toolkit,composite);
             objectViewer.setMainPage(this);
             if(objectsRevisionMap.get(object)!=null&&objectsRevisionMap.get(object).length()>0){
             //objectViewer.getColumn(new ComplexTableViewerColumn("Instance Pattern")).setDefaultValue(object);

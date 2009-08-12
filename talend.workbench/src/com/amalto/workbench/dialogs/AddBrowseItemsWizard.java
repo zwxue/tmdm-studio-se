@@ -69,8 +69,8 @@ public class AddBrowseItemsWizard extends Wizard{
 	private static String BROWSE_ITEMS = "Browse_items_";
 	
 	private static ComplexTableViewerColumn[] roleConfigurationColumns= new ComplexTableViewerColumn[]{
-		new ComplexTableViewerColumn("Role Name", false, "", "", "",true,new String[] {},0),
-		new ComplexTableViewerColumn("Access", false, "", "", "",true,new String[] {},0)
+		new ComplexTableViewerColumn("Role Name", false, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,new String[] {},0),
+		new ComplexTableViewerColumn("Access", false, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,new String[] {},0)
 		};
 	
 	public AddBrowseItemsWizard(AMainPageV2 launchPage, List<XSDElementDeclaration> list) {
