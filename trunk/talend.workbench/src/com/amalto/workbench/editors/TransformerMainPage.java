@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.ITextOperationTarget;
@@ -80,6 +81,8 @@ import com.amalto.workbench.dialogs.ProcessResultsDialog;
 import com.amalto.workbench.dialogs.SetupTransformerInputVariablesDialog;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.providers.XObjectEditorInput;
+import com.amalto.workbench.utils.EImage;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.Version;
 import com.amalto.workbench.utils.WidgetUtils;
@@ -356,10 +359,12 @@ public class TransformerMainPage extends AMainPageV2 {
             
             
             //File Process
-            Button processButton = toolkit.createButton(descriptionComposite,"Execute...",SWT.PUSH | SWT.TRAIL);
+            Button processButton = toolkit.createButton(descriptionComposite,"",SWT.PUSH);
             processButton.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+                    new GridData(SWT.BEGINNING,SWT.CENTER,false,false,1,1)
             );
+            processButton.setImage(ImageCache.getCreatedImage(EImage.RUN_EXC.getPath()));
+            processButton.setToolTipText("Execute...");
             processButton.addSelectionListener(new SelectionListener() {
             	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
             	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -437,10 +442,12 @@ public class TransformerMainPage extends AMainPageV2 {
 				}
             	
             });
-            Button addStepButton = toolkit.createButton(sequenceComposite,"Add",SWT.PUSH | SWT.TRAIL);
+            Button addStepButton = toolkit.createButton(sequenceComposite,"",SWT.PUSH);
             addStepButton.setLayoutData(
                     new GridData(SWT.CENTER,SWT.FILL,false,true,1,1)
             );
+            addStepButton.setToolTipText("Add");
+            addStepButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
             addStepButton.addSelectionListener(new SelectionListener() {
             	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
             	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -488,10 +495,12 @@ public class TransformerMainPage extends AMainPageV2 {
             );
             stepUpDownComposite.setLayout(new GridLayout(1,false));
             
-            Button stepUpButton = toolkit.createButton(stepUpDownComposite,"Up",SWT.PUSH | SWT.CENTER);
+            Button stepUpButton = toolkit.createButton(stepUpDownComposite,"",SWT.PUSH | SWT.CENTER);
             stepUpButton.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
             );
+            stepUpButton.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
+            stepUpButton.setToolTipText("Move up the selected item");
             stepUpButton.addSelectionListener(new SelectionListener() {
             	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
             	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -518,10 +527,12 @@ public class TransformerMainPage extends AMainPageV2 {
             		}
             	};
             });
-            Button stepDownButton = toolkit.createButton(stepUpDownComposite,"Down",SWT.PUSH | SWT.CENTER);
+            Button stepDownButton = toolkit.createButton(stepUpDownComposite,"",SWT.PUSH | SWT.CENTER);
             stepDownButton.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
             );
+            stepDownButton.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
+            stepDownButton.setToolTipText("Move down the selected item");
             stepDownButton.addSelectionListener(new SelectionListener() {
             	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
             	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -547,10 +558,12 @@ public class TransformerMainPage extends AMainPageV2 {
             		}
             	};
             });
-            Button deleteStepButton = toolkit.createButton(stepUpDownComposite,"Delete",SWT.PUSH | SWT.CENTER);
+            Button deleteStepButton = toolkit.createButton(stepUpDownComposite,"",SWT.PUSH | SWT.CENTER);
             deleteStepButton.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
             );
+            deleteStepButton.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
+            deleteStepButton.setToolTipText("Delete the selected item");
             deleteStepButton.addSelectionListener(new SelectionListener() {
             	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
             	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {

@@ -8,6 +8,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import com.amalto.workbench.editors.XObjectRevisionBrowser;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
+import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.views.ServerView;
 
@@ -17,9 +18,8 @@ public class BrowseRevisionAction extends Action {
 	
 	public BrowseRevisionAction(ServerView serverView) {
 		super();
-		this.server = serverView;
-			
-		setImageDescriptor(ImageCache.getImage( "icons/edit.gif"));
+		this.server = serverView;			
+		setImageDescriptor(ImageCache.getImage(EImage.SEARCH.getPath()));
 		setText("Browse Revision");
 		setToolTipText("Browse revision");
 	}

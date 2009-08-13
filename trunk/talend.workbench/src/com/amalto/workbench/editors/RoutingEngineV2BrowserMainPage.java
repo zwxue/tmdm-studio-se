@@ -71,6 +71,7 @@ import com.amalto.workbench.dialogs.DOMViewDialog;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
+import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
@@ -158,7 +159,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                     new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
             );
             //start/stop/suspend/resume
-            Button startButton = toolkit.createButton(statusComposite, "Start", SWT.CENTER);
+            Button startButton = toolkit.createButton(statusComposite, "", SWT.TOGGLE);
+            startButton.setImage(ImageCache.getCreatedImage(EImage.RUN_EXC.getPath()));
+            startButton.setToolTipText("Start");
             startButton.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
             );
@@ -167,7 +170,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 	startSubscriptionEngine();
             	};
             });    
-            Button stopButton = toolkit.createButton(statusComposite, "Stop", SWT.CENTER);
+            Button stopButton = toolkit.createButton(statusComposite, "", SWT.TOGGLE);
+            stopButton.setImage(ImageCache.getCreatedImage(EImage.STOP.getPath()));
+            stopButton.setToolTipText("Stop");
             stopButton.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
             );
@@ -176,7 +181,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 	stopSubscriptionEngine();
             	};
             });
-            suspendButton = toolkit.createButton(statusComposite, "Suspend", SWT.CENTER | SWT.TOGGLE);
+            suspendButton = toolkit.createButton(statusComposite, "",  SWT.TOGGLE);
+            suspendButton.setImage(ImageCache.getCreatedImage(EImage.SUSPEND.getPath()));
+            suspendButton.setToolTipText("Suspend");
             suspendButton.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
             );
@@ -257,7 +264,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             statusCombo.select(0);
             
             //to
-        	Button bSearch = toolkit.createButton(firstLineComposite, "Search", SWT.CENTER);
+        	Button bSearch = toolkit.createButton(firstLineComposite, "", SWT.CENTER);
+        	bSearch.setImage(ImageCache.getCreatedImage(EImage.SEARCH.getPath()));
+        	bSearch.setToolTipText("Search");
             bSearch.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
