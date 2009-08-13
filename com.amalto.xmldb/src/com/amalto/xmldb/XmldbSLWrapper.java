@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Properties;
@@ -1068,6 +1069,142 @@ public class XmldbSLWrapper implements IXmlServerSLWrapper,IXmlServerEBJLifeCycl
      	    throw new XmlServerException(err);
 	    } 
     	
+    	
+    }
+    
+    public String getPivotIndexQuery(
+			String clusterName, 
+			String mainPivotName,
+			LinkedHashMap<String, String[]> pivotWithKeys, 
+			String[] indexPaths,
+			IWhereItem whereItem, 
+			String[] pivotDirections,
+			String[] indexDirections, 
+			int start, 
+			int limit
+	) throws XmlServerException{
+    	
+    	try {
+    		
+    		String query = "";
+        	StringBuffer xq = new StringBuffer();
+        	StringBuffer xqFor=new StringBuffer();
+        	StringBuffer xqWhere=new StringBuffer();
+        	StringBuffer xqOrderby=new StringBuffer();
+        	StringBuffer xqReturn=new StringBuffer();
+        	
+        	HashSet<String> conceptMap=new HashSet<String>();
+        	String[] pivotPaths=new String[pivotWithKeys.size()];
+        	
+        	//parse pivotWithKeys
+        	int i=0;
+        	for (Iterator iterator = pivotWithKeys.keySet().iterator(); iterator.hasNext();i++) {
+    			String pivot = (String) iterator.next();
+    			pivotPaths[i]=pivot;
+    			String[] tmp=pivot.split("/");//TODO maybe care about other cases, like '//'
+    			if(tmp.length>0)conceptMap.add(tmp[0]);
+    		}
+        	//for
+        	if(conceptMap.size()>0){
+        		xqFor.append("for ");
+        		int j=0;
+            	for (Iterator iterator = conceptMap.iterator(); iterator.hasNext();j++) {
+        			String conceptName = (String) iterator.next();
+        			xqFor.append("$").append(conceptName).append(" in collection(\"").append(clusterName).append("\")//").append(conceptName);
+        			
+        			if(j<conceptMap.size()-1){
+        				xqFor.append(", ");
+        			}else{
+        				xqFor.append(" ");
+        			}
+        		}
+        	}
+        	
+        	//where
+        	if(pivotPaths.length>0){
+        		xqWhere.append("where 1=1 ");
+        		if(pivotPaths.length>1){
+            		for (int k = 0; k < pivotPaths.length-1 ; k++) {
+            			String[] k1keys=pivotWithKeys.get(pivotPaths[k+1]);
+            			if(k1keys.length==1){
+            				xqWhere.append(" and ($").append(pivotPaths[k]).append("=$").append(k1keys[0]).append(" or $").append(pivotPaths[k]).append("=concat('[',$").append(k1keys[0]).append(",']')) ");
+            			}else if(k1keys.length>1){
+            				xqWhere.append(" and $").append(pivotPaths[k]).append("=concat(");
+            				for (int l = 0; l < k1keys.length; l++) {
+            					if(l>0)xqWhere.append(",");
+            					xqWhere.append("'['")
+            					       .append(",$")
+            					       .append(k1keys[l])
+            					       .append(",']'");
+        					}
+            				xqWhere.append(") ");
+            			}           
+            		}
+            	}
+        	}
+        	
+            //build from  WhereItem
+        	if (whereItem != null){
+        			
+        			HashMap<String,String> pivots=new HashMap<String,String>();
+        			pivots.put(mainPivotName, mainPivotName);
+    				xqWhere.append(buildWhere(" and ",pivots ,whereItem));
+    				xqWhere.append(" ");
+    			
+        	}
+    			
+        	//order by
+        	if(pivotPaths.length>0){
+        		xqOrderby.append("order by ");
+        		for (int m = pivotPaths.length-1; m > -1; m--) {
+            		if(m<pivotPaths.length-1)xqOrderby.append(",");
+            		xqOrderby.append("$").append(pivotPaths[m]).append(" ");
+            		//add direction
+            		if(pivotDirections!=null&&pivotDirections.length>0)xqOrderby.append(pivotDirections[m] == null ? "" : " "+pivotDirections[m]+" ");
+        		}
+        		
+        		for (int m = 0; m < indexPaths.length; m++) {
+        			xqOrderby.append(",").append("$").append(indexPaths[m]).append(" ");
+        			//add direction
+        			if(indexDirections!=null&&indexDirections.length>0)xqOrderby.append(indexDirections[m] == null ? "" : " "+indexDirections[m]+" ");
+    			}
+        	}
+        	
+        	//return
+        	if(pivotPaths.length>0){
+        		xqReturn.append("return ");
+        		xqReturn.append("<result>");
+        		for (int n = pivotPaths.length-1; n > -1; n--) {
+        			xqReturn.append("{$").append(pivotPaths[n]).append("}");
+    			}
+        		for (int n = 0; n < indexPaths.length; n++) {
+        			xqReturn.append("{$").append(indexPaths[n]).append("}");
+    			}
+        		
+        		String[] mainKeys=pivotWithKeys.get(pivotPaths[0]);
+        		for (int n = 0; n < mainKeys.length; n++) {
+        			xqReturn.append("{$").append(mainKeys[n]).append("}");
+    			}
+        		xqReturn.append("</result>  ");
+        	}
+        	
+
+        	xq.append(xqFor).append(xqWhere).append(xqOrderby).append(xqReturn);
+        	query=xq.toString();
+        	
+        	if (start>=0 && limit>0) {
+        		query = 
+        			"let $list := \n"+query
+        			+"\n return subsequence($list,"+(start+1)+","+limit+")";
+        	}
+        	
+    		return query;
+    		
+    	} catch (Exception e) {
+     	    String err = "Unable to build the PivotIndex XQuery";
+     	    org.apache.log4j.Logger.getLogger("INFO SYSTRACE "+this.getClass()).info(err,e);
+     	    throw new XmlServerException(err);
+	    }
     	
     }
 	
