@@ -241,7 +241,6 @@ public class TransformerMainPage extends AMainPageV2 {
 							}
 							
 							if (monitor.isCanceled()) {
-	
 								throw new InterruptedException("User Cancel");
 							}
 							
@@ -1007,7 +1006,9 @@ public class TransformerMainPage extends AMainPageV2 {
 			LabelCombo inputV=new LabelCombo(toolkit,inputComposite,"Input Variables",SWT.BORDER,1);		
 			inputVariables=inputV.getCombo();
 			
-	        inputLinkButton = toolkit.createButton(inputComposite,"Link",SWT.PUSH | SWT.CENTER);
+	        inputLinkButton = toolkit.createButton(inputComposite,"",SWT.PUSH | SWT.CENTER);
+	        inputLinkButton.setImage(ImageCache.getCreatedImage(EImage.SYNCED.getPath()));
+	        inputLinkButton.setToolTipText("Link");
 	        inputLinkButton.setToolTipText("Add a link for Input Variables and Transformer Plugin's Input Parameters");
 	        inputLinkButton.setLayoutData(
 	                new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
@@ -1057,7 +1058,9 @@ public class TransformerMainPage extends AMainPageV2 {
 			outputParams=outputP.getCombo();
 
 			
-	        outputLinkButton = toolkit.createButton(outputComposite,"Link",SWT.PUSH | SWT.CENTER);
+	        outputLinkButton = toolkit.createButton(outputComposite,"",SWT.PUSH | SWT.CENTER);
+	        outputLinkButton.setImage(ImageCache.getCreatedImage(EImage.SYNCED.getPath()));
+	        outputLinkButton.setToolTipText("Link");
 	        outputLinkButton.setToolTipText("Add a link for output Variables and Transformer Plugin's output Parameters");
 	        outputLinkButton.setLayoutData(
 	                new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
@@ -1176,7 +1179,9 @@ public class TransformerMainPage extends AMainPageV2 {
 			            outputVariablesMap.put(jndi, output);		            
 					}
 	            }
-	        Button detailsButton = toolkit.createButton(specsComposite,"Help",SWT.PUSH | SWT.CENTER);
+	        Button detailsButton = toolkit.createButton(specsComposite,"",SWT.PUSH | SWT.CENTER);
+	        detailsButton.setImage(ImageCache.getCreatedImage(EImage.HELP_CONTENTS.getPath()));
+	        detailsButton.setToolTipText("Help...");
 	        detailsButton.setLayoutData(
 	                new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
 	        );
