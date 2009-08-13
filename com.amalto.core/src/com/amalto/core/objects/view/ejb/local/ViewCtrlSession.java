@@ -5,7 +5,7 @@ package com.amalto.core.objects.view.ejb.local;
 
 /**
  * Session layer for ViewCtrl.
- * @xdoclet-generated at 10-08-09
+ * @xdoclet-generated at 13-08-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}

@@ -828,7 +828,103 @@ public class ItemCtrl2Bean implements SessionBean {
     	    org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);
     	    throw new XtentisException(err);
 	    }
-    }    
+    }
+    
+    /**
+     * Get items hierarchical tree according to pivots
+     * 
+     * @param clusterName
+     * 		The Data Cluster where to run the query
+	 * @param mainPivotName
+     * 		The main Business Concept name
+	 * @param pivotWithKeys
+	 * 		The pivots with their IDs which selected to be the catalog of the hierarchical tree
+     * @param indexPaths
+     * 		The title as the content of each leaf node of the hierarchical tree
+     * @param whereItem
+     * 		The condition
+     * @param pivotDirections
+     * 		One of {@link IXmlServerSLWrapper#ORDER_ASCENDING} or {@link IXmlServerSLWrapper#ORDER_DESCENDING}
+     * @param indexDirections
+     * 		One of {@link IXmlServerSLWrapper#ORDER_ASCENDING} or {@link IXmlServerSLWrapper#ORDER_DESCENDING}
+     * @param start
+     * 		The first item index (starts at zero)
+     * @param limit
+     * 		The maximum number of items to return
+     * @return	
+     * 		The ordered list of results
+     * @throws XtentisException
+     * 
+     * @ejb.interface-method view-type = "both"
+     * @ejb.facade-method 
+     */
+    public ArrayList<String> getItemsPivotIndex(
+    		String clusterName, 
+			String mainPivotName,
+			LinkedHashMap<String, String[]> pivotWithKeys, 
+			String[] indexPaths,
+			IWhereItem whereItem, 
+			String[] pivotDirections,
+			String[] indexDirections, 
+			int start, 
+			int limit
+		) throws XtentisException{
+        try {
+        	
+            //validate parameters
+        	if (pivotWithKeys.size()==0) {
+        	    String err = "The Map of pivots must contain at least one element";
+        	    org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
+        	    throw new XtentisException(err);
+        	}
+        	
+        	if (indexPaths.length==0) {
+        	    String err = "The Array of Index Paths must contain at least one element";
+        	    org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
+        	    throw new XtentisException(err);
+        	}
+        	
+        	//get the universe and revision ID
+        	UniversePOJO universe = LocalUser.getLocalUser().getUniverse();
+        	if (universe == null) {
+        		String err = "ERROR: no Universe set for user '"+LocalUser.getLocalUser().getUsername()+"'";
+        		org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
+        		throw new XtentisException(err);
+        	}
+        	
+        	XmlServerSLWrapperLocal server = null;
+    		try {
+    			server  =  ((XmlServerSLWrapperLocalHome)new InitialContext().lookup(XmlServerSLWrapperLocalHome.JNDI_NAME)).create();
+    		} catch (Exception e) {
+    			String err = "Unable to search items in data cluster '"+clusterName+"': unable to access the XML Server wrapper";
+    			org.apache.log4j.Logger.getLogger(this.getClass()).error(err);
+    			throw new XtentisException(err);
+    		}
+            
+            String query = server.getPivotIndexQuery(
+            		                clusterName, 
+            		                mainPivotName, 
+            		                pivotWithKeys, 
+            		                indexPaths, 
+            		                whereItem, 
+            		                pivotDirections,
+            		                indexDirections, 
+            		                start,
+            		                limit);
+            
+            org.apache.log4j.Logger.getLogger(this.getClass()).debug(query);
+            
+            return server.runQuery(null, null, query, null);
+            
+	    } catch (XtentisException e) {
+	    	throw(e);
+	    } catch (Exception e) {
+    	    String err = "Unable to search: "
+    	    		+": "+e.getClass().getName()+": "+e.getLocalizedMessage();
+    	    org.apache.log4j.Logger.getLogger(this.getClass()).error(err,e);
+    	    throw new XtentisException(err);
+	    }
+    }
 
     
     /**

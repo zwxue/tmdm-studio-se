@@ -317,6 +317,12 @@
 	<message name="xPathsSearchResponse">
 		<part name="results" element="tns:WSStringArray"/>
 	</message>
+	<message name="getItemsPivotIndexRequest">
+		<part name="wsGetItemsPivotIndex" element="tns:WSGetItemsPivotIndex"/>
+	</message>
+	<message name="getItemsPivotIndexResponse">
+		<part name="results" element="tns:WSStringArray"/>
+	</message>
 	<message name="countRequest">
 		<part name="wsCount" element="tns:WSCount"/>
 	</message>
@@ -1304,6 +1310,10 @@
 			<input message="tns:xPathsSearchRequest"/>
 			<output message="tns:xPathsSearchResponse"/>
 		</operation>
+		<operation name="getItemsPivotIndex">
+			<input message="tns:getItemsPivotIndexRequest"/>
+			<output message="tns:getItemsPivotIndexResponse"/>
+		</operation>
 		<operation name="count">
 			<input message="tns:countRequest"/>
 			<output message="tns:countResponse"/>
@@ -2036,6 +2046,11 @@
 			<output><soap:body use="literal"/></output>
 		</operation>
 		<operation name="xPathsSearch">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>
+		<operation name="getItemsPivotIndex">
 			<soap:operation/>
 			<input><soap:body use="literal"/></input>
 			<output><soap:body use="literal"/></output>

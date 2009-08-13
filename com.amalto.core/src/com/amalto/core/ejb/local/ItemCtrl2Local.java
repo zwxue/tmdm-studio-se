@@ -5,7 +5,7 @@ package com.amalto.core.ejb.local;
 
 /**
  * Local interface for ItemCtrl2.
- * @xdoclet-generated at 10-08-09
+ * @xdoclet-generated at 13-08-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
@@ -138,6 +138,22 @@ public interface ItemCtrl2Local
     * @throws XtentisException
     */
    public java.util.ArrayList xPathsSearch( com.amalto.core.objects.datacluster.ejb.DataClusterPOJOPK dataClusterPOJOPK,java.lang.String forceMainPivot,java.util.ArrayList viewablePaths,com.amalto.xmlserver.interfaces.IWhereItem whereItem,int spellThreshold,java.lang.String orderBy,java.lang.String direction,int start,int limit ) throws com.amalto.core.util.XtentisException;
+
+   /**
+    * Get items hierarchical tree according to pivots
+    * @param clusterName The Data Cluster where to run the query
+    * @param mainPivotName The main Business Concept name
+    * @param pivotWithKeys The pivots with their IDs which selected to be the catalog of the hierarchical tree
+    * @param indexPaths The title as the content of each leaf node of the hierarchical tree
+    * @param whereItem The condition
+    * @param pivotDirections One of {@link IXmlServerSLWrapper#ORDER_ASCENDING} or {@link IXmlServerSLWrapper#ORDER_DESCENDING}
+    * @param indexDirections One of {@link IXmlServerSLWrapper#ORDER_ASCENDING} or {@link IXmlServerSLWrapper#ORDER_DESCENDING}
+    * @param start The first item index (starts at zero)
+    * @param limit The maximum number of items to return
+    * @return The ordered list of results
+    * @throws XtentisException
+    */
+   public java.util.ArrayList getItemsPivotIndex( java.lang.String clusterName,java.lang.String mainPivotName,java.util.LinkedHashMap pivotWithKeys,java.lang.String[] indexPaths,com.amalto.xmlserver.interfaces.IWhereItem whereItem,java.lang.String[] pivotDirections,java.lang.String[] indexDirections,int start,int limit ) throws com.amalto.core.util.XtentisException;
 
    /**
     * Count the items denoted by concept name meeting the optional condition whereItem

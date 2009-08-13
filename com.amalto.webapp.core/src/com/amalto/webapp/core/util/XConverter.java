@@ -60,7 +60,9 @@ import com.amalto.webapp.util.webservices.WSDataModel;
 import com.amalto.webapp.util.webservices.WSDroppedItem;
 import com.amalto.webapp.util.webservices.WSDroppedItemPK;
 import com.amalto.webapp.util.webservices.WSExtractedContent;
+import com.amalto.webapp.util.webservices.WSGetItemsPivotIndexPivotWithKeysTypedContentEntry;
 import com.amalto.webapp.util.webservices.WSItemPK;
+import com.amalto.webapp.util.webservices.WSLinkedHashMap;
 import com.amalto.webapp.util.webservices.WSMenu;
 import com.amalto.webapp.util.webservices.WSMenuEntry;
 import com.amalto.webapp.util.webservices.WSMenuMenuEntriesDescriptions;
@@ -110,6 +112,18 @@ import com.amalto.xmlserver.interfaces.WhereCondition;
 import com.amalto.xmlserver.interfaces.WhereOr;
 
 public class XConverter {
+	
+	public static LinkedHashMap WS2VO(WSLinkedHashMap wsLinkedHashMap) throws Exception{
+		LinkedHashMap vo = new LinkedHashMap();
+		WSGetItemsPivotIndexPivotWithKeysTypedContentEntry[] typedContentEntries=wsLinkedHashMap.getTypedContentEntry();
+		for (int i = 0; i < typedContentEntries.length; i++) {
+			WSGetItemsPivotIndexPivotWithKeysTypedContentEntry typedContentEntry=typedContentEntries[i];
+			String key=typedContentEntry.getKey();
+			String[] value=typedContentEntry.getValue().getStrings();
+			vo.put(key, value);
+		}
+		return vo;
+	}
 	
 	public static WSDataModel VO2WS(DataModelPOJO vo) {
 	    WSDataModel s = new WSDataModel();

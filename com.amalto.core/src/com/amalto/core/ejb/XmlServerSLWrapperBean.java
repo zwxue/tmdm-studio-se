@@ -809,6 +809,49 @@ public class XmlServerSLWrapperBean implements SessionBean {
 		}
 	}
 	
+	/**
+	 * @param clusterName
+	 * @param mainPivotName
+	 * @param pivotWithKeys
+	 * @param indexPaths
+	 * @param whereItem
+	 * @param pivotDirections
+	 * @param indexDirections
+	 * @param start
+	 * @param limit
+	 * @return
+	 * @throws XtentisException
+	 * 
+	 * @ejb.interface-method view-type = "both"
+	 * @ejb.facade-method
+	 */
+	public String getPivotIndexQuery(
+			String clusterName, 
+			String mainPivotName,
+			LinkedHashMap<String, String[]> pivotWithKeys, 
+			String[] indexPaths,
+			IWhereItem whereItem, 
+			String[] pivotDirections,
+			String[] indexDirections, 
+			int start, 
+			int limit
+	) throws XtentisException{
+		try {
+	        return server.getPivotIndexQuery(
+	        	clusterName, 
+	        	mainPivotName,
+	        	pivotWithKeys,
+	        	indexPaths, 
+	        	whereItem, 
+	        	pivotDirections, 
+	        	indexDirections,
+	        	start, 
+	        	limit
+	        );
+        } catch (XmlServerException e) {
+	        throw new XtentisException("Unable to get the Xtentis Objects Query "+e.getMessage());
+        }
+	}
 	
 	/**
 	 * 
