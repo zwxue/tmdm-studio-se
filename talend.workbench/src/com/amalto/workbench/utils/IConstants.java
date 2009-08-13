@@ -1,7 +1,10 @@
 package com.amalto.workbench.utils;
 
 public interface IConstants {
-	static final String[] OPERATORS={"Contains","Contains Text Of","Starts With","Strict Contains","=","!=",">",">=","<","<="};
+	/*Conditions operator*/
+	static final String[] VIEW_CONDITION_OPERATORS={"Contains","Contains Text Of","Starts With","Strict Contains","=","!=",">",">=","<","<="};
+	static final String[] ROUTE_CONDITION_OPERATORS={"Contains","Matches","Starts With","Is Null","Is Not Null","=","!=",">",">=","<","<="};
+	
 	static final String[] PREDICATES={"","Or","And","Strict And","Exactly","Not"};
 	/**
 	 * The default universe name

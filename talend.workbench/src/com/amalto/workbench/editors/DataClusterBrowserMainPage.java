@@ -70,6 +70,7 @@ import com.amalto.workbench.dialogs.DOMViewDialog;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
+import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
@@ -202,7 +203,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             );
             
             //search
-        	Button bSearch = toolkit.createButton(composite, "Search", SWT.CENTER);
+        	Button bSearch = toolkit.createButton(composite, "", SWT.CENTER);
+        	bSearch.setImage(ImageCache.getCreatedImage(EImage.SEARCH.getPath()));
+        	bSearch.setToolTipText("Search");
             bSearch.setLayoutData(
                     new GridData(SWT.NONE,SWT.CENTER,false,false,1,1)
             );

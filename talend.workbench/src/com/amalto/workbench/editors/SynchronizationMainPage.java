@@ -36,7 +36,9 @@ import org.exolab.castor.xml.Marshaller;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.BusinessPortHelper;
+import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.FontUtils;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSGetConceptsInDataCluster;
 import com.amalto.workbench.webservices.WSGetObjectsForSynchronizationPlans;
@@ -148,7 +150,10 @@ public class SynchronizationMainPage extends AMainPageV2{
         );       
         actionsComposite.setLayout(new GridLayout(4,false));
         //full synchro
-		startFullButton = toolkit.createButton(actionsComposite,"Start Full",SWT.PUSH );
+		startFullButton = toolkit.createButton(actionsComposite,"",SWT.PUSH );
+		startFullButton.setToolTipText("Start Full");
+		startFullButton.setImage(ImageCache.getCreatedImage(EImage.RUN_EXC.getPath()));
+		
 		startFullButton.setLayoutData(
                 new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
         );
@@ -192,7 +197,9 @@ public class SynchronizationMainPage extends AMainPageV2{
         	}
         });
 		//differential synchro
-		startDifferentialButton = toolkit.createButton(actionsComposite,"Start Differential",SWT.PUSH);
+		startDifferentialButton = toolkit.createButton(actionsComposite,"",SWT.PUSH);
+		startDifferentialButton.setImage(ImageCache.getCreatedImage(EImage.RUNLAST_CO.getPath()));
+		startDifferentialButton.setToolTipText("Start Differential");
 		startDifferentialButton.setLayoutData(
                 new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
         );
@@ -238,7 +245,9 @@ public class SynchronizationMainPage extends AMainPageV2{
         	}
         });
 		//stop synchro
-		stopButton = toolkit.createButton(actionsComposite,"Stop",SWT.PUSH);
+		stopButton = toolkit.createButton(actionsComposite,"",SWT.PUSH);
+		stopButton.setImage(ImageCache.getCreatedImage(EImage.STOP.getPath()));
+		stopButton.setToolTipText("Stop");
 		stopButton.setLayoutData(
                 new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
         );
@@ -263,7 +272,9 @@ public class SynchronizationMainPage extends AMainPageV2{
         	}
         });
 		//stop synchro
-		resetButton = toolkit.createButton(actionsComposite,"Reset",SWT.PUSH);
+		resetButton = toolkit.createButton(actionsComposite,"",SWT.PUSH);
+		resetButton.setImage(ImageCache.getCreatedImage(EImage.UNDO_EDIT.getPath()));
+		resetButton.setToolTipText("Reset");
 		resetButton.setLayoutData(
                 new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
         );
@@ -504,12 +515,7 @@ public class SynchronizationMainPage extends AMainPageV2{
             data.widthHint=120;
             label.setLayoutData(data);
             label.setFont(FontUtils.getBoldFont(label.getFont()));
-            ComplexTableViewerColumn[] xtentisObjectColumns= new ComplexTableViewerColumn[]{
-            		new ComplexTableViewerColumn("Instance Pattern", true, ".*", ".*"),
-            		new ComplexTableViewerColumn("Local Revision ID", true, "", "[HEAD]"),
-            		new ComplexTableViewerColumn("Remote Revision ID", true, "", "[HEAD]"),
-            		new ComplexTableViewerColumn("Algorithm", false, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,new String[] {},0)
-            	};
+
             TisTableViewer objectViewer=new TisTableViewer(Arrays.asList(xtentisObjectColumns),toolkit,composite);
             objectViewer.setMainPage(this);
             if(objectsRevisionMap.get(object)!=null&&objectsRevisionMap.get(object).length()>0){

@@ -24,6 +24,7 @@ public class ComplexTableViewerColumn {
 	private boolean isComboEditable = false;
 	private boolean forceTextCellEditor = false;
 	
+	private boolean isUnique=false;
 	public String getName() {
     	return name;
     }
@@ -40,7 +41,14 @@ public class ComplexTableViewerColumn {
 	    this.nillDisplay = nillDisplay;
     }
 	
-	
+	public ComplexTableViewerColumn(String name, boolean isNillable, String nillValue, String nillDisplay, boolean isUnique) {
+	    super();
+	    this.name = name;
+	    this.isNillable = isNillable;
+	    this.nillValue = nillValue;
+	    this.nillDisplay = nillDisplay;
+	    this.isUnique=isUnique;
+    }	
 
 	public ComplexTableViewerColumn(String name, boolean isNillable, String nillValue, String nillDisplay, String defaultValue, int style, String[] comboValues, int textLines) {
 	    super();
@@ -67,6 +75,14 @@ public class ComplexTableViewerColumn {
 	    this.isComboEditable= isComboEditable;
 	    this.forceTextCellEditor=forceTextCellEditor;
     }
+
+	public boolean isUnique() {
+		return isUnique;
+	}
+
+	public void setUnique(boolean isUnique) {
+		this.isUnique = isUnique;
+	}
 
 	public void setName(String name) {
     	this.name = name;
