@@ -180,7 +180,7 @@ public class NewXObjectAction extends Action{
 	           
 	           	case TreeObject.DATA_CLUSTER:
 	           	case TreeObject.STORED_PROCEDURE:
-	           	case TreeObject.ROLE:
+	           //	case TreeObject.ROLE:
 	           	case TreeObject.ROUTING_RULE:
 	           
 	           	case TreeObject.MENU:
