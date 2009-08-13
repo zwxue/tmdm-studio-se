@@ -41,6 +41,8 @@ import org.eclipse.swt.widgets.Text;
 
 import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.EImage;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 
 public class AnnotationOrderedListsDialog extends Dialog {
@@ -166,11 +168,13 @@ public class AnnotationOrderedListsDialog extends Dialog {
 
 		}
         
-        Button addLabelButton = new Button(composite,SWT.PUSH | SWT.CENTER);
+        Button addLabelButton = new Button(composite,SWT.PUSH);
         addLabelButton.setLayoutData(
                 new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
         );
-        addLabelButton.setText("Set");
+        //addLabelButton.setText("Set");
+        addLabelButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
+        addLabelButton.setToolTipText("Add");
         addLabelButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
         	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -349,7 +353,8 @@ public class AnnotationOrderedListsDialog extends Dialog {
         upButton.setLayoutData(
                 new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
         );
-        upButton.setText("Up");
+        upButton.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
+        upButton.setToolTipText("Move up the selected item");
         upButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
         	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -376,7 +381,8 @@ public class AnnotationOrderedListsDialog extends Dialog {
         downButton.setLayoutData(
                 new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
         );
-        downButton.setText("Down");
+        downButton.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
+        downButton.setToolTipText("Move down the selected item");
         downButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
         	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -403,7 +409,9 @@ public class AnnotationOrderedListsDialog extends Dialog {
         delButton.setLayoutData(
                 new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
         );
-        delButton.setText("Delete");
+        delButton.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
+        delButton.setToolTipText("Delete the selected item");
+        
         delButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
         	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
