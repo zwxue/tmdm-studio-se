@@ -1,6 +1,6 @@
 package com.amalto.workbench.dialogs;
 
-import java.io.File;
+import java.io.InputStream;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -16,6 +16,8 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -56,7 +58,7 @@ public class NewUserWizard extends Wizard {
 	public NewUserWizard(TreeObject xobject,ServerView view){
 		super();
 		this.xobject = xobject;
-		this.view = view;
+		this.view = view;		
 	}
 
 	@Override
@@ -101,10 +103,15 @@ public class NewUserWizard extends Wizard {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document document;
-			if (isAdmin)
-				document = builder.parse(new File("talend.workbench/src/com/amalto/workbench/dialogs/admin.xml"));
-			else
-				document = builder.parse(new File("talend.workbench/src/com/amalto/workbench/dialogs/user.xml"));
+						
+			if (isAdmin){
+				InputStream in=NewUserWizard.class.getResourceAsStream("admin.xml");
+				document = builder.parse(in);
+			}
+			else{
+				InputStream in=NewUserWizard.class.getResourceAsStream("user.xml");
+				document = builder.parse(in);
+			}
 			NodeList nodelist = document.getElementsByTagName("typeName");
 
 			int size = nodelist.getLength();
@@ -173,16 +180,16 @@ public class NewUserWizard extends Wizard {
 	class EditUserNamePage extends WizardPage {
 		String userName = "";
 		private Label tipLabel = null;
-		private Label warningLabel = null;
+		//private Label warningLabel = null;
 		public EditUserNamePage(ISelection selection) {
-			super("Name the new Role");
+			super("RoleName");
 			setTitle("Role Name");
 			setDescription("Please enter a name for the new Role");
-			setPageComplete(false);
+			setPageComplete(false);			
 		}
 
 		public void createControl(Composite parent) {
-			Composite composite = new Composite(parent, SWT.BORDER);
+			Composite composite = new Composite(parent, SWT.NULL);
 			composite.setLayout(new GridLayout(1, false));
 //			
 			tipLabel = new Label(composite,SWT.NONE);
@@ -195,25 +202,26 @@ public class NewUserWizard extends Wizard {
 			nameText.addModifyListener(new ModifyListener(){
 				public void modifyText(ModifyEvent e) {
 					String name = nameText.getText();
-					
-					if(isValid(name)!=null){
-						warningLabel.setText(isValid(name));
+					String errmsg=isValid(name);
+					if(errmsg!=null){
+						//warningLabel.setText(isValid(name));
+						setErrorMessage(errmsg);
 						setPageComplete(false);
 					}
 					else{
-						warningLabel.setText("");
+						//warningLabel.setText("");
 						userName = name;
 						setPageComplete(true);
 					}
 				}
 			});
-			warningLabel = new Label(composite,SWT.NONE);
-			warningLabel.setText(isValid(null));
-			setPageComplete(false);
-			GridData gd1 = new GridData(GridData.FILL_HORIZONTAL);
-			gd1.widthHint = 200;
-			gd1.heightHint = 20;
-			warningLabel.setLayoutData(gd1);
+//			warningLabel = new Label(composite,SWT.NONE);
+//			warningLabel.setText(isValid(null));
+//			setPageComplete(false);
+//			GridData gd1 = new GridData(GridData.FILL_HORIZONTAL);
+//			gd1.widthHint = 200;
+//			gd1.heightHint = 20;
+//			warningLabel.setLayoutData(gd1);
 			setControl(composite);
 		}
 		public String getUserName() {
@@ -231,7 +239,7 @@ public class NewUserWizard extends Wizard {
 		private Button adminButton = null;
 		private Button userButton = null;
 		public SelectRolePage(ISelection selection) {
-			super("Select a type for the new Role");
+			super("RoleType");
 			setTitle("Role Type");
 			setDescription("Please Select a type for the new Role");
 			setPageComplete(true);
@@ -239,7 +247,7 @@ public class NewUserWizard extends Wizard {
 
 		public void createControl(Composite parent) {
 			
-			Composite composite = new Composite(parent, SWT.BORDER);
+			Composite composite = new Composite(parent, SWT.NULL);
 			composite.setLayout(new GridLayout(1, false));
 			
 			Group radioGroup = new Group(composite,SWT.SHADOW_NONE);
@@ -249,39 +257,46 @@ public class NewUserWizard extends Wizard {
 			);
 			radioGroup.setLayout(new GridLayout(2,false));
 			adminButton = new Button(radioGroup,SWT.RADIO);
-			adminButton.setText("Admin");
+			adminButton.setText("Administrator");
 			//adminButton.setSelection(true);
 			
 			userButton =  new Button(radioGroup,SWT.RADIO);
-			userButton.setText("User");
-			
-			adminButton.addFocusListener(new FocusListener(){
-			public void focusGained(FocusEvent e) {
-				isFinish = true;
-				setPageComplete(true);
-				tipLabel.setVisible(true);
-				tipLabel.setText(" If the Admin is selected,\n All of the DataCluster,Menu,View,Role,Routing Rule and Data Model can be see.");
-				isAdmin = true;
-			}
+			userButton.setText("Normal User");
+			adminButton.addSelectionListener(new SelectionListener(){
 
-			public void focusLost(FocusEvent e) {
-				tipLabel.setText("");
-			}
-			});
-	
-			userButton.addFocusListener(new FocusListener(){
+				public void widgetDefaultSelected(SelectionEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
 
-				public void focusGained(FocusEvent e) {
+				public void widgetSelected(SelectionEvent e) {
 					isFinish = true;
 					setPageComplete(true);
-					tipLabel.setText(" If the User is selected,\n Part of the DataCluster,Menu,View and all of the other items can be seen.");
-					isAdmin = false;
+					tipLabel.setVisible(true);
+					tipLabel.setText("Administrator can operate all of the DataCluster,Menu,View,Role,Routing Rule and \nData Model etc. He can setup normal user's access right.");
+					isAdmin = true;
+					
+				}
+				
+			});
+
+			userButton.addSelectionListener(new SelectionListener(){
+
+				public void widgetDefaultSelected(SelectionEvent e) {
+					// TODO Auto-generated method stub
+					
 				}
 
-				public void focusLost(FocusEvent e) {
-					tipLabel.setText("");
+				public void widgetSelected(SelectionEvent e) {
+					isFinish = true;
+					setPageComplete(true);
+					tipLabel.setText("Normal User can operate part of the DataCluster,Menu,View,Role,Routing Rule and \nData Model etc.");
+					isAdmin = false;
+					
 				}
+				
 			});
+
 			tipLabel = new Label(composite,SWT.NONE);
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.widthHint = 150;
