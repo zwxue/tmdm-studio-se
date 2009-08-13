@@ -551,7 +551,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			
 			    if (!LocalTreeObjectRepository.getInstance().isInSystemCatalog(
 						xobject)
-						&& xobject instanceof TreeParent)
+						&& xobject instanceof TreeParent && xobject.getType() != TreeObject.ROLE)
 			    {
 			    	manager.add(newXObjectAction);	
 			    }
