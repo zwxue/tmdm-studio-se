@@ -20,6 +20,9 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.amalto.workbench.utils.EImage;
+import com.amalto.workbench.utils.ImageCache;
+
 public class FacetsListInputDialog extends Dialog {
 
 	protected  List itemsList=null;
@@ -82,7 +85,8 @@ public class FacetsListInputDialog extends Dialog {
 		addButton.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 		);
-		addButton.setText("add");
+		addButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
+		addButton.setToolTipText("Add");
 		parent.getShell().setDefaultButton(addButton);
 		addButton.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
@@ -96,7 +100,8 @@ public class FacetsListInputDialog extends Dialog {
 		deleteButton.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 		);
-		deleteButton.setText("delete");
+		deleteButton.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
+		deleteButton.setToolTipText("Delete");
 		deleteButton.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
             	ArrayList<String> backup = new ArrayList<String>(Arrays.asList(itemsList.getItems()));
