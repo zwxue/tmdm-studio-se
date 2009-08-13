@@ -444,6 +444,30 @@ public interface IXmlServerSLWrapper {
 		int limit
 	) throws XmlServerException;
 	
+	/**
+	 * @param clusterName
+	 * @param mainPivotName
+	 * @param pivotWithKeys
+	 * @param indexPaths
+	 * @param whereItem
+	 * @param pivotDirections
+	 * @param indexDirections
+	 * @param start
+	 * @param limit
+	 * @return
+	 * @throws XmlServerException
+	 */
+	public String getPivotIndexQuery(
+			String clusterName, 
+			String mainPivotName,
+			LinkedHashMap<String, String[]> pivotWithKeys, 
+			String[] indexPaths,
+			IWhereItem whereItem, 
+			String[] pivotDirections,
+			String[] indexDirections, 
+			int start, 
+			int limit
+	) throws XmlServerException;
 	
 	/**
 	 * Performs a query on the db with optional parameters<br>
