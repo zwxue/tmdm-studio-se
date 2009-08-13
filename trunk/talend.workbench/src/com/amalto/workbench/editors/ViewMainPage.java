@@ -487,7 +487,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 							}
 							
 							if(!viewableList.contains(id)){
-								toAddViewableList.add(id);
+								toAddViewableList.add(0,id);
 							}
 						}
 						
