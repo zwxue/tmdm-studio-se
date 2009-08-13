@@ -37,6 +37,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
+import com.amalto.workbench.utils.EImage;
+import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSMenuEntry;
 import com.amalto.workbench.webservices.WSMenuMenuEntriesDescriptions;
@@ -190,11 +192,12 @@ public class MenuEntryDialog extends Dialog {
         });
 
         
-        Button addLabelButton = new Button(descriptionsComposite,SWT.PUSH | SWT.TRAIL);
+        Button addLabelButton = new Button(descriptionsComposite,SWT.PUSH );
         addLabelButton.setLayoutData(
                 new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
         );
-        addLabelButton.setText("add");
+        addLabelButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
+        addLabelButton.setToolTipText("Add");
         addLabelButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
         	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
