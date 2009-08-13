@@ -242,7 +242,8 @@ public class LoggingSmtpBean extends ServiceCtrlBean  implements SessionBean {
 					false,
 					"logging_event",
 					getJNDIName(),
-					"from=support@talend.com&to=MDMAdmin@talend.com&subjectprefix=Talend MDM Logging Event "
+					"from=support@talend.com&to=MDMAdmin@talend.com&subjectprefix=Talend MDM Logging Event ",
+					null
 				)
 			);
 		} catch (NamingException e) {
