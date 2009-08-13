@@ -60,6 +60,7 @@ import com.amalto.workbench.actions.DataClusterImportAction;
 import com.amalto.workbench.actions.DeleteXObjectAction;
 import com.amalto.workbench.actions.EditXObjectAction;
 import com.amalto.workbench.actions.NewCategoryAction;
+import com.amalto.workbench.actions.NewUserAction;
 import com.amalto.workbench.actions.NewXObjectAction;
 import com.amalto.workbench.actions.PasteXObjectAction;
 import com.amalto.workbench.actions.ServerLoginAction;
@@ -111,6 +112,11 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	//protected Action versionAction;
 	protected Action exportAction;
 	protected Action NewCategoryAction;
+	
+	//test for NewUserAction 
+	protected NewUserAction newUserActon;
+	
+	
 	private ServerTreeContentProvider contentProvider;
 
 	private ArrayList<TreeObject> dndTreeObjs = new ArrayList<TreeObject>();
@@ -523,16 +529,20 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			case TreeObject.SUBSCRIPTION_ENGINE:
 				manager.add(browseViewAction);
 				break;
+			case TreeObject.ROLE:
+				manager.add(newUserActon);
+//				if (xobject.getDisplayName()!=null&&xobject.getDisplayName().equals(ESystemDefaultObjects.DC_MDMITEMSTRASH.getName())) {
+//					break;
+//				}	
 			case TreeObject.VIEW:
+				
 			case TreeObject.DATA_CLUSTER:
 				if (xobject.isXObject()) {
 					manager.add(exportAction);
 					manager.add(importAction);
 					manager.add(browseViewAction);
 				}
-//				if (xobject.getDisplayName()!=null&&xobject.getDisplayName().equals(ESystemDefaultObjects.DC_MDMITEMSTRASH.getName())) {
-//					break;
-//				}
+		
 			default:
 				if (!xobject.isXObject() && xobject.getDisplayName().equalsIgnoreCase(EXtentisObjects.DataCluster.getDisplayName())) {
 					manager.add(exportAction);
@@ -629,6 +639,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		importAction=new DataClusterImportAction(this);
 		NewCategoryAction = new NewCategoryAction(this);
 		//versionAction = new VersioningXObjectAction(this);
+		newUserActon = new NewUserAction(this);
 	}
 
 	private void hookDoubleClickAction() {
