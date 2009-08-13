@@ -38,7 +38,7 @@ public class XpathWidget implements  SelectionListener{
     private IWorkbenchPartSite site;
     private String dataModelName;
 
-
+    boolean isMulti=true;
 	public String getDataModelName() {
 		return dataModelName;
 	}
@@ -46,8 +46,9 @@ public class XpathWidget implements  SelectionListener{
 	public void setDataModelName(String dataModelName) {
 		this.dataModelName = dataModelName;
 	}
-	public XpathWidget(Composite parent,AMainPageV2 page){		
+	public XpathWidget(Composite parent,AMainPageV2 page, boolean isMulti){		
 		this("...",page.getXObject().getParent(),null,parent,page,false,false,"");
+		this.isMulti=isMulti;
 	}
 	public XpathWidget(String buttonName,TreeParent treeParent,
 			FormToolkit toolkit, Composite parent, AMainPageV2 dialog,boolean isButtonLeft,boolean readOnly, String dataModelName) {
@@ -119,7 +120,7 @@ public class XpathWidget implements  SelectionListener{
 						accommodation.getSite().getShell(),
 						treeParent,dlgTitle,
 						accommodation.getSite(),
-						true,
+						isMulti,
 						dataModelName
 						
 				);
