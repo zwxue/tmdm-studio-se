@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.TreeSet;
 
 import javax.security.jacc.PolicyContextException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -20,6 +22,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.directwebremoting.WebContext;
 import org.directwebremoting.WebContextFactory;
+import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -237,6 +240,12 @@ public class CommonDWR {
 	public static HashMap<String,String> getFieldsByDataModel(
 			String dataModelPK, String concept, String language, boolean includeComplex) 
 			throws RemoteException, Exception{
+		return getFieldsByDataModel(dataModelPK,concept,language,includeComplex,false);
+	}
+	
+	public static HashMap<String,String> getFieldsByDataModel(
+			String dataModelPK, String concept, String language, boolean includeComplex,boolean includeFKReference) 
+			throws RemoteException, Exception{
 		
 		WebContext ctx = WebContextFactory.get();
 		String x_Label = "X_Label_"+language.toUpperCase();    	
@@ -247,16 +256,21 @@ public class CommonDWR {
     	//xpathToLabel.put(concept,CommonDWR.getConceptLabel(dataModelPK,concept,language));
     	XSParticle[] xsp = xsct.getContentType().asParticle().getTerm().asModelGroup().getChildren();
     	for (int j = 0; j < xsp.length; j++) {  
-   			getChildren(xsp[j],""+concept,x_Label,includeComplex,xpathToLabel);
+   			getChildren(xsp[j],""+concept,x_Label,includeComplex,includeFKReference,xpathToLabel);
     	}
     	ctx.getSession().setAttribute("xpathToLabel",xpathToLabel);
     	return xpathToLabel; 
 	}
 	
-	private static void getChildren(XSParticle xsp, String xpathParent, String x_Label, boolean includeComplex,HashMap<String,String> xpathToLabel){
+	private static void getChildren(XSParticle xsp, String xpathParent, String x_Label, boolean includeComplex,boolean includeFKReference,HashMap<String,String> xpathToLabel){
 		if(xsp.getTerm().asElementDecl().getType().isComplexType()==false || includeComplex==true){
+			String toPutKey=xpathParent+"/"+xsp.getTerm().asElementDecl().getName();
+			if(includeFKReference){
+				String foreignkeyPath=getForeignkeyPath(xsp.getTerm().asElementDecl());
+				if(foreignkeyPath!=null)toPutKey+="@FK_"+foreignkeyPath;
+			}
 			xpathToLabel.put(
-					xpathParent+"/"+xsp.getTerm().asElementDecl().getName(),
+					toPutKey,
 					getLabel(xsp.getTerm().asElementDecl(),x_Label)
 					);	
 		}		
@@ -266,10 +280,97 @@ public class CommonDWR {
 			if(particle!=null){
 				XSParticle[] xsps = particle.getTerm().asModelGroup().getChildren();
 				for (int i = 0; i < xsps.length; i++) {
-					getChildren(xsps[i],xpathParent+"/"+xsp.getTerm().asElementDecl().getName(),x_Label, includeComplex, xpathToLabel);
+					getChildren(xsps[i],xpathParent+"/"+xsp.getTerm().asElementDecl().getName(),x_Label, includeComplex,includeFKReference, xpathToLabel);
 				}
 			}
 		}		 
+	}
+	
+	private static String getForeignkeyPath(XSElementDecl elementDecl) {
+		
+		String foreignkeyPath=null;
+		
+		//annotation support
+		XSAnnotation xsa = elementDecl.getAnnotation();;
+		if(xsa!=null && xsa.getAnnotation()!=null){
+			Element el = (Element) xsa.getAnnotation();
+			NodeList annotList = el.getChildNodes();
+			for (int k = 0; k < annotList.getLength(); k++) {
+				if("appinfo".equals(annotList.item(k).getLocalName())) {
+					Node source=annotList.item(k).getAttributes().getNamedItem("source");
+					if(source==null) continue;
+					String appinfoSource = annotList.item(k).getAttributes().getNamedItem("source").getNodeValue();
+					if("X_ForeignKey".equals(appinfoSource)){
+						foreignkeyPath=annotList.item(k).getFirstChild().getNodeValue();
+						break;
+					}
+				}
+			}
+		}
+		
+		return foreignkeyPath;
+
+	}
+	
+	public static String[] getBusinessConceptKeyPaths(String dataModelPK, String businessConceptName) throws Exception{
+    	
+		String[] keyPaths=null;
+		
+		try {
+    		String xsdXml = Util.getPort().getDataModel(new WSGetDataModel(new WSDataModelPK(dataModelPK))).getXsdSchema();
+    		Document xsd=Util.parse(xsdXml);
+    		
+        	String selector = null;
+        	String[] fields = null;
+    		selector = Util.getTextNodes(
+    			xsd.getDocumentElement(),
+    			"xsd:element/xsd:unique[@name='"+businessConceptName+"']/xsd:selector/@xpath",
+				getRootElement("nsholder",xsd.getDocumentElement().getNamespaceURI(),"xsd")
+				)[0];
+    	
+    		fields =  Util.getTextNodes(
+    			xsd.getDocumentElement(),
+    			"xsd:element/xsd:unique[@name='"+businessConceptName+"']/xsd:field/@xpath",
+				getRootElement("nsholder",xsd.getDocumentElement().getNamespaceURI(),"xsd")
+				);
+    		
+    		String prefixPath="";
+    		if(selector!=null){
+    			if(selector.length()>0&&!selector.equals("."))prefixPath=selector+"/";
+    		}
+    		keyPaths=new String[fields.length];
+    		for (int i = 0; i < keyPaths.length; i++) {
+    			keyPaths[i]=businessConceptName+"/"+prefixPath+fields[i];
+			}
+    		
+    	} catch(TransformerException e) {
+    	    String err = "Unable to get the keys for the Business Concept "+businessConceptName+": "+e.getLocalizedMessage();
+    		throw new TransformerException(err);
+    	} catch (RemoteException e) {
+			e.printStackTrace();
+			throw new RemoteException();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		
+		return keyPaths;
+    }
+	
+	public static Element getRootElement(String elementName, String namespace, String prefix) throws TransformerException{
+	 	Element rootNS=null;
+    	try {
+	    	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	        factory.setNamespaceAware(true);   
+	        DocumentBuilder builder = factory.newDocumentBuilder();
+	    	DOMImplementation impl = builder.getDOMImplementation();
+	    	Document namespaceHolder = impl.createDocument(namespace,(prefix==null?"":prefix+":")+elementName, null);    
+	    	rootNS = namespaceHolder.getDocumentElement();
+	    	rootNS.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:"+prefix, namespace);
+    	} catch (Exception e) {
+    	    String err="Error creating a namespace holder document: "+e.getLocalizedMessage();
+    	    throw new TransformerException(err);    
+    	}
+    	return rootNS;
 	}
 	
 	private static String getLabel(XSElementDecl xsed, String x_Label){
