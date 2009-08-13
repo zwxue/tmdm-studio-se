@@ -11,7 +11,7 @@ import java.util.*;
  * facade session bean. Inverit from this class to provide reasonable caching and event handling capabilities.
  *
  * Remote facade for XmlServerSLWrapper.
- * @xdoclet-generated at 10-08-09
+ * @xdoclet-generated at 13-08-09
  * @copyright The XDoclet Team
  * @author XDoclet
  * @version ${version}
@@ -283,6 +283,16 @@ public class XmlServerSLWrapperRemote extends Observable
    {
         java.lang.String retval;
        retval =  getSession().getItemsQuery( conceptPatternsToRevisionID,conceptPatternsToClusterName,forceMainPivot,viewableFullPaths,whereItem,orderBy,direction,start,limit,spellThreshold );
+
+      return retval;
+
+   }
+
+   public java.lang.String getPivotIndexQuery ( java.lang.String clusterName,java.lang.String mainPivotName,java.util.LinkedHashMap pivotWithKeys,java.lang.String[] indexPaths,com.amalto.xmlserver.interfaces.IWhereItem whereItem,java.lang.String[] pivotDirections,java.lang.String[] indexDirections,int start,int limit )
+	  throws com.amalto.core.util.XtentisException, java.rmi.RemoteException
+   {
+        java.lang.String retval;
+       retval =  getSession().getPivotIndexQuery( clusterName,mainPivotName,pivotWithKeys,indexPaths,whereItem,pivotDirections,indexDirections,start,limit );
 
       return retval;
 
