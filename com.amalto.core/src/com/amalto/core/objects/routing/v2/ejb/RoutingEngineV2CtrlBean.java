@@ -267,25 +267,37 @@ public class RoutingEngineV2CtrlBean implements SessionBean, TimedObject {
 				condition=condition.replaceAll("Or|or", "||");
 				condition=condition.replaceAll("Not|not", "!");
 				String compileCondition=new String (condition);
-				Pattern p=Pattern.compile("C([0-9]+)", Pattern.CASE_INSENSITIVE);
-				Matcher m=p.matcher(condition);
+//				Pattern p=Pattern.compile("C([0-9]+)", Pattern.CASE_INSENSITIVE);
+//				Matcher m=p.matcher(condition);
 				Collection<RoutingRuleExpressionPOJO> routingExpressions = routingRule.getRoutingExpressions();
 				List<RoutingRuleExpressionPOJO> list =new ArrayList<RoutingRuleExpressionPOJO>();	
 				list.addAll(routingExpressions);
 				Interpreter ntp = new Interpreter();
 				try {
-					while(m.find()){
-						String g=m.group();
-						String n=g.replaceAll("C|c", "");
-						Integer index=Integer.valueOf(n);
-						RoutingRuleExpressionPOJO rrePOJO =list.get(index);
-						if(rrePOJO!=null){
-							if (itemPOJO==null) {
-								itemPOJO = itemCtrl.getItem(itemPOJOPK);
-							}						
-							ntp.set(g, ruleExpressionMatches(itemPOJO, rrePOJO));							
+					for(RoutingRuleExpressionPOJO pojo: routingExpressions){
+						if(pojo.getName()!=null && pojo.getName().trim().length()>0){
+							Pattern p1=Pattern.compile(pojo.getName(), Pattern.CASE_INSENSITIVE);
+							Matcher m1=p1.matcher(condition);
+							while(m1.find()){
+								if (itemPOJO==null) {
+									itemPOJO = itemCtrl.getItem(itemPOJOPK);
+								}
+								ntp.set(m1.group(), ruleExpressionMatches(itemPOJO, pojo));	
+							}
 						}
 					}
+//					while(m.find()){
+//						String g=m.group();
+//						String n=g.replaceAll("C|c", "");
+//						Integer index=Integer.valueOf(n);
+//						RoutingRuleExpressionPOJO rrePOJO =list.get(index);
+//						if(rrePOJO!=null){
+//							if (itemPOJO==null) {
+//								itemPOJO = itemCtrl.getItem(itemPOJOPK);
+//							}						
+//							ntp.set(g, ruleExpressionMatches(itemPOJO, rrePOJO));							
+//						}
+//					}
 					//compile
 			          ntp.eval("truth = "+ compileCondition+";");
 			          boolean truth = ((Boolean)ntp.get("truth")).booleanValue();
