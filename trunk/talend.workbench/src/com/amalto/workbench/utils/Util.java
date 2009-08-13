@@ -71,8 +71,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import com.amalto.workbench.MDMWorbenchPlugin;
-import com.amalto.workbench.editors.ViewMainPage;
-import com.amalto.workbench.models.Line;
+import com.amalto.workbench.editors.RoutingRuleMainPage;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.webservices.WSComponent;
@@ -84,6 +83,8 @@ import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSGetViewPKs;
 import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
+import com.amalto.workbench.webservices.WSRoutingRuleExpression;
+import com.amalto.workbench.webservices.WSRoutingRuleOperator;
 import com.amalto.workbench.webservices.WSStringPredicate;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniversePK;
@@ -1361,7 +1362,63 @@ public class Util {
 		list.add(predicate);		
     	return list.toArray(new String[list.size()]);
     }
-    
+
+    public static String[] convertRouteCondition(WSRoutingRuleExpression wc){
+    	List<String> list=new ArrayList<String>();
+    	list.add(wc.getXpath());
+    	String operator ="";
+		if (wc.getWsOperator().equals(WSRoutingRuleOperator.CONTAINS)) operator="Contains";
+		else if (wc.getWsOperator().equals(WSRoutingRuleOperator.EQUALS)) operator="=";
+		else if (wc.getWsOperator().equals(WSRoutingRuleOperator.GREATER_THAN)) operator=">";
+		else if (wc.getWsOperator().equals(WSRoutingRuleOperator.GREATER_THAN_OR_EQUAL)) operator=">=";
+		else if (wc.getWsOperator().equals(WSRoutingRuleOperator.MATCHES)) operator="Matches";
+		else if (wc.getWsOperator().equals(WSRoutingRuleOperator.LOWER_THAN)) operator="<";
+		else if (wc.getWsOperator().equals(WSRoutingRuleOperator.LOWER_THAN_OR_EQUAL)) operator="<=";
+		else if (wc.getWsOperator().equals(WSRoutingRuleOperator.NOT_EQUALS)) operator="!=";
+		else if (wc.getWsOperator().equals(WSRoutingRuleOperator.STARTSWITH)) operator="Starts With";
+		else if (wc.getWsOperator().equals(WSRoutingRuleOperator.IS_NULL)) operator="Is Null";
+		else if (wc.getWsOperator().equals(WSRoutingRuleOperator.IS_NOT_NULL)) operator="Is Not Null";
+		list.add(operator);
+		list.add(wc.getValue());
+		list.add(wc.getName()==null?"":wc.getName());	
+    	return list.toArray(new String[list.size()]);
+    }
+    public static WSRoutingRuleExpression convertLineRoute(String[] values){
+    	WSRoutingRuleExpression wc=new WSRoutingRuleExpression();
+
+		wc.setXpath(values[0]);
+
+		WSRoutingRuleOperator operator = null;
+		if (values[1].equals("Contains"))
+			operator = WSRoutingRuleOperator.CONTAINS;
+		else if (values[1].equals(
+				"Matches"))
+			operator = WSRoutingRuleOperator.MATCHES;
+		else if (values[1].equals("="))
+			operator = WSRoutingRuleOperator.EQUALS;
+		else if (values[1].equals(">"))
+			operator = WSRoutingRuleOperator.GREATER_THAN;
+		else if (values[1].equals(">="))
+			operator = WSRoutingRuleOperator.GREATER_THAN_OR_EQUAL;
+		else if (values[1].equals("<"))
+			operator = WSRoutingRuleOperator.LOWER_THAN;
+		else if (values[1].equals("<="))
+			operator = WSRoutingRuleOperator.LOWER_THAN_OR_EQUAL;
+		else if (values[1].equals("!="))
+			operator = WSRoutingRuleOperator.NOT_EQUALS;
+		else if (values[1].equals(
+				"Starts With"))
+			operator = WSRoutingRuleOperator.STARTSWITH;
+		else if (values[1].equals(
+				"Is Null"))
+			operator = WSRoutingRuleOperator.IS_NULL;
+		else if (values[1].equals("Is Not Null"))
+			operator = WSRoutingRuleOperator.IS_NOT_NULL;
+		wc.setWsOperator(operator);
+		wc.setValue(values[2]);
+		wc.setName(values[3]);
+    	return wc;
+    }
     public static WSWhereCondition convertLine(String[] values){
     	WSWhereCondition wc=new WSWhereCondition();
 

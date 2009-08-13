@@ -56,35 +56,13 @@ public class TisTableViewer extends ComplexTableViewer{
 			FormToolkit toolkit, Composite parent) {
 		super(columns, toolkit, parent);		
 	}
+	
 	@Override
 	protected void createViewer() {
-	       Table table =new Table(mainComposite,SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER|SWT.FULL_SELECTION);
-	        viewer = new TableViewer(table);
-	        table.setLayoutData(    
-	                new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-	        );
-	        ((GridData)viewer.getControl().getLayoutData()).heightHint=80;
-	        
-	        //table.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-	        for(ComplexTableViewerColumn column:columns){
-	        	TableColumn tableColumn=new TableColumn(table, SWT.CENTER);
-	        	tableColumn.setText(column.getName());
-	        	if (column.getColumnWidth() > 0) {
-					tableColumn.setWidth(column.getColumnWidth());
-				} else {
-					tableColumn.setWidth(200);
-					tableColumn.pack();
-				}
-	        }  
-	        
-	        table.setHeaderVisible(true);
-	        table.setLinesVisible(true);
-	        table.addListener(SWT.MeasureItem, new Listener() {
-	            public void handleEvent(Event event) {
-	               event.height = event.gc.getFontMetrics().getHeight() + 10;
-	            }
-	         });
+			super.createTable();
+			GridData gd=new GridData(SWT.FILL,SWT.FILL,true,true,1,1);
+	        table.setLayoutData( gd );
+	        gd.heightHint=80;
 	       // Up Down Delete button group
 	        Composite stepUpDownComposite = toolkit.createComposite(mainComposite,SWT.NONE);
 	        stepUpDownComposite.setLayoutData(
