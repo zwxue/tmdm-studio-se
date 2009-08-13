@@ -92,7 +92,7 @@
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="key" type="xsd:string"/>
-						<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="value" type="xsd:anyType"/>
+						<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="value" type="tns:WSStringArray"/>
 					</xsd:sequence>
 				</xsd:complexType>
 			</xsd:element>
@@ -919,6 +919,26 @@
 		</xsd:sequence>		
 	</xsd:complexType>
 	<xsd:element name="WSXPathsSearch" type="tns:WSXPathsSearch"/>
+	
+	<xsd:complexType name="WSGetItemsPivotIndex">
+		<xsd:annotation>
+			<xsd:documentation>
+				Get items hierarchical tree according to pivots
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="clusterName" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="mainPivotName" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="pivotWithKeys" type="tns:WSLinkedHashMap"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="indexPaths" type="tns:WSStringArray"/>
+			<xsd:element minOccurs="0" maxOccurs="1"  nillable="true" name="whereItem" type="tns:WSWhereItem"/>
+			<xsd:element minOccurs="0" maxOccurs="1"  nillable="true" name="pivotDirections" type="tns:WSStringArray"/>
+			<xsd:element minOccurs="0" maxOccurs="1"  nillable="true" name="indexDirections" type="tns:WSStringArray"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="start" type="xsd:int"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="limit" type="xsd:int"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="WSGetItemsPivotIndex" type="tns:WSGetItemsPivotIndex"/>
 	
 	<xsd:complexType name="WSCount">
 		<xsd:annotation>
