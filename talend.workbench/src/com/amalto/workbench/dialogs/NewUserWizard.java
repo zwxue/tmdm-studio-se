@@ -58,28 +58,7 @@ public class NewUserWizard extends Wizard {
 		this.xobject = xobject;
 		this.view = view;
 	}
-	public boolean canFinish(){
-		//System.out.println(isFinish);
-		return isFinish;
-	 }
-	 
-	public boolean exist(String userName){
-		boolean isExist = false;
-		XtentisPort port = null;
-		try {
-			port = Util.getPort(xobject);
-			if (port.existsRole(new WSExistsRole(new WSRolePK((String) userName))).is_true()) 
-				isExist = true;
-			else
-				isExist = false;
-		} catch (XtentisException e) {
-			e.printStackTrace();
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-		return isExist;
-	}
-	
+
 	@Override
 	public boolean performFinish() {
 		String userName = page1.getUserName();
@@ -119,8 +98,7 @@ public class NewUserWizard extends Wizard {
 	public void xmlParseSpecification(WSRole role, boolean isAdmin) {
 
 		try {
-			DocumentBuilderFactory factory = DocumentBuilderFactory
-					.newInstance();
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document document;
 			if (isAdmin)
@@ -130,9 +108,6 @@ public class NewUserWizard extends Wizard {
 			NodeList nodelist = document.getElementsByTagName("typeName");
 
 			int size = nodelist.getLength();
-
-			// WSRoleSpecification[] wsSpecifications = new
-			// WSRoleSpecification[size];
 			ArrayList<WSRoleSpecification> wsSpecifications = new ArrayList<WSRoleSpecification>();
 			for (int i = 0; i < size; i++) {
 				Node node = nodelist.item(i);// get the number i node
@@ -151,8 +126,6 @@ public class NewUserWizard extends Wizard {
 				wsSpecification.setObjectType(typevalue);
 
 				NodeList instances = node.getChildNodes();
-				// WSRoleSpecificationInstance[] wsInstances = new
-				// WSRoleSpecificationInstance[instances.getLength()];
 				ArrayList<WSRoleSpecificationInstance> wsInstances = new ArrayList<WSRoleSpecificationInstance>();
 				for (int j = 0; j < instances.getLength(); j++) {
 					
@@ -206,7 +179,6 @@ public class NewUserWizard extends Wizard {
 			setTitle("Role Name");
 			setDescription("Please enter a name for the new Role");
 			setPageComplete(false);
-			//setNeedsProgressMonitor(true);
 		}
 
 		public void createControl(Composite parent) {
@@ -234,7 +206,6 @@ public class NewUserWizard extends Wizard {
 						setPageComplete(true);
 					}
 				}
-					
 			});
 			warningLabel = new Label(composite,SWT.NONE);
 			warningLabel.setText(isValid(null));
@@ -291,7 +262,6 @@ public class NewUserWizard extends Wizard {
 				tipLabel.setVisible(true);
 				tipLabel.setText(" If the Admin is selected,\n All of the DataCluster,Menu,View,Role,Routing Rule and Data Model can be see.");
 				isAdmin = true;
-//				System.out.println("Adim Role\ntest enter");
 			}
 
 			public void focusLost(FocusEvent e) {
@@ -306,18 +276,13 @@ public class NewUserWizard extends Wizard {
 					setPageComplete(true);
 					tipLabel.setText(" If the User is selected,\n Part of the DataCluster,Menu,View and all of the other items can be seen.");
 					isAdmin = false;
-//					System.out.println("FocusListener : normal User");
 				}
 
 				public void focusLost(FocusEvent e) {
 					tipLabel.setText("");
 				}
-
-		
-				
 			});
 			tipLabel = new Label(composite,SWT.NONE);
-			//tipLabel.setText("Adim Role\ntest enter");
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 			gd.widthHint = 150;
 			gd.heightHint = 50;
@@ -325,7 +290,6 @@ public class NewUserWizard extends Wizard {
 			setControl(composite);
 			
 		}
-
 	}
 	
 	public String isValid(String newText) {
@@ -338,5 +302,24 @@ public class NewUserWizard extends Wizard {
 			return "The Role "+newText +" already exist";
 		return null;
 	}
-		
+	public boolean canFinish(){
+		return isFinish;
+	 }
+	 
+	public boolean exist(String userName){
+		boolean isExist = false;
+		XtentisPort port = null;
+		try {
+			port = Util.getPort(xobject);
+			if (port.existsRole(new WSExistsRole(new WSRolePK((String) userName))).is_true()) 
+				isExist = true;
+			else
+				isExist = false;
+		} catch (XtentisException e) {
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		return isExist;
+	}	
 }
