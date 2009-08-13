@@ -96,7 +96,7 @@ public class NewUserWizard extends Wizard {
 			newInstance = new TreeObject((String) userName, xfolder
 					.getServerRoot(), TreeObject.ROLE, new WSRolePK(
 					(String) userName), role);
-			LocalTreeObjectRepository.getInstance().merge(newInstance);
+			LocalTreeObjectRepository.getInstance().mergeNewTreeObject(newInstance);
 			XObjectEditor editpart;
 
 			editpart = (XObjectEditor) view.getSite().getWorkbenchWindow()
