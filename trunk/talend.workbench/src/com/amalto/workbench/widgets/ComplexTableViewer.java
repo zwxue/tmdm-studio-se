@@ -618,7 +618,7 @@ public class ComplexTableViewer {
 		}
 		@Override
 		protected Control createControl(Composite parent) {			
-			xpath= new XpathWidget(parent, mainPage);
+			xpath= new XpathWidget(parent, mainPage,false);
 			((GridData)xpath.getComposite().getChildren()[0].getLayoutData()).heightHint=15;
 			((GridData)xpath.getComposite().getChildren()[1].getLayoutData()).heightHint=15;
 			return xpath.getComposite();
