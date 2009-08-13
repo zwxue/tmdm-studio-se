@@ -1205,6 +1205,45 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
 			throw new RemoteException((e.getCause() == null ? e.getLocalizedMessage() : e.getCause().getLocalizedMessage()));
 		}
 	}
+	
+	private LinkedHashMap WS2VO(WSLinkedHashMap wsLinkedHashMap) throws Exception{
+		LinkedHashMap vo = new LinkedHashMap();
+		WSGetItemsPivotIndexPivotWithKeysTypedContentEntry[] typedContentEntries=wsLinkedHashMap.getTypedContentEntry();
+		for (int i = 0; i < typedContentEntries.length; i++) {
+			WSGetItemsPivotIndexPivotWithKeysTypedContentEntry typedContentEntry=typedContentEntries[i];
+			String key=typedContentEntry.getKey();
+			String[] value=typedContentEntry.getValue().getStrings();
+			vo.put(key, value);
+		}
+		return vo;
+	}
+	
+	/**
+	 * @ejb.interface-method view-type = "service-endpoint"
+	 * @ejb.permission 
+	 * 	role-name = "authenticated"
+	 * 	view-type = "service-endpoint"
+	 */
+	public WSStringArray getItemsPivotIndex(WSGetItemsPivotIndex wsGetItemsPivotIndex) throws RemoteException {
+		try {
+			Collection res = Util.getItemCtrl2Local().getItemsPivotIndex(
+					wsGetItemsPivotIndex.getClusterName(), 
+					wsGetItemsPivotIndex.getMainPivotName(),
+					WS2VO(wsGetItemsPivotIndex.getPivotWithKeys()), 
+					wsGetItemsPivotIndex.getIndexPaths().getStrings(),
+					WS2VO(wsGetItemsPivotIndex.getWhereItem()), 
+					wsGetItemsPivotIndex.getPivotDirections()==null?null:wsGetItemsPivotIndex.getPivotDirections().getStrings(),
+					wsGetItemsPivotIndex.getIndexDirections()==null?null:wsGetItemsPivotIndex.getIndexDirections().getStrings(), 
+					wsGetItemsPivotIndex.getStart(), 
+					wsGetItemsPivotIndex.getLimit()
+			);
+			return new WSStringArray((String[])res.toArray(new String[res.size()]));
+		} catch (XtentisException e) {
+			throw(new RemoteException(e.getLocalizedMessage()));			
+		} catch (Exception e) {
+			throw new RemoteException((e.getCause() == null ? e.getLocalizedMessage() : e.getCause().getLocalizedMessage()));
+		}
+	}
 
 	/**
 	 * @ejb.interface-method view-type = "service-endpoint"

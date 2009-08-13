@@ -74,6 +74,8 @@ public interface XtentisPort extends java.rmi.Remote {
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSStringArray xPathsSearch(com.amalto.workbench.webservices.WSXPathsSearch wsXPathsSearch) throws 
          java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSStringArray getItemsPivotIndex(com.amalto.workbench.webservices.WSGetItemsPivotIndex wsGetItemsPivotIndex) throws 
+         java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSString count(com.amalto.workbench.webservices.WSCount wsCount) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSStringArray quickSearch(com.amalto.workbench.webservices.WSQuickSearch wsQuickSearch) throws 

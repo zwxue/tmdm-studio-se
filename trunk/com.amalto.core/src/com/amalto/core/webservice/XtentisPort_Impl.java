@@ -205,6 +205,12 @@ public class XtentisPort_Impl implements com.amalto.core.webservice.XtentisPort,
         com.amalto.core.webservice.WSStringArray _retVal = null;
         return _retVal;
     }
+    public com.amalto.core.webservice.WSStringArray getItemsPivotIndex(com.amalto.core.webservice.WSGetItemsPivotIndex wsGetItemsPivotIndex) throws 
+         java.rmi.RemoteException {
+        
+        com.amalto.core.webservice.WSStringArray _retVal = null;
+        return _retVal;
+    }
     public com.amalto.core.webservice.WSString count(com.amalto.core.webservice.WSCount wsCount) throws 
          java.rmi.RemoteException {
         
