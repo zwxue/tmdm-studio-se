@@ -503,9 +503,14 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 			role.setName(wsRole.getName());
 			role.setDescription(wsRole.getDescription()==null ? "" : wsRole.getDescription());
 			HashMap<String,Role.Specification> specifications = new HashMap<String, Role.Specification>();
+			//don't delete the "//System.out.println(" in this if 
 			if (wsRole.getSpecification()!=null) {
+				
 				for (int i = 0; i < wsRole.getSpecification().length; i++) {
 					WSRoleSpecification wsSpecification= wsRole.getSpecification()[i];
+					
+					//System.out.println("<typeName isAdmin=\""+wsSpecification.isAdmin()+"\" name =\""+wsSpecification.getObjectType()+"\">");
+					
 					Role.Specification specification = (new Role()).new Specification();
 					specification.setAdmin(wsSpecification.isAdmin());
 					HashMap<String, Role.Specification.Instance> instances = new HashMap<String, Role.Specification.Instance>();
@@ -516,8 +521,10 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 							instance.setWritable(wsInstance.isWritable());
 							instance.setParameters(new LinkedHashSet<String>(Arrays.asList(wsInstance.getParameter())));
 							instances.put(wsInstance.getInstanceName(),instance);
+							//System.out.println("	"+"<instance isWritable=\""+wsInstance.isWritable()+"\">"+wsInstance.getInstanceName()+"</instance> ");
 						}
 					}
+					//System.out.println("</typeName>");
 					specification.setInstances(instances);
 					specifications.put(wsSpecification.getObjectType(), specification);
 				}

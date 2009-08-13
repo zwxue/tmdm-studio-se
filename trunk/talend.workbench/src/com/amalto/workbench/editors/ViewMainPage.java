@@ -490,9 +490,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 								toAddViewableList.add(0,id);
 							}
 						}
-						
 					}
-					
 					//show verify report
 					if(toAddViewableList.size()>0){
 						
