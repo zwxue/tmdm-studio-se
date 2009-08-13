@@ -267,7 +267,9 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             }
 
             //default parameters button 
-            defultParameterBtn = toolkit.createButton(subPanel, "Help", SWT.PUSH);
+            defultParameterBtn = toolkit.createButton(subPanel, "", SWT.PUSH);
+            defultParameterBtn.setImage(ImageCache.getCreatedImage(EImage.HELP_CONTENTS.getPath()));
+            defultParameterBtn.setToolTipText("Help...");
             defultParameterBtn.setLayoutData( new GridData(SWT.FILL,SWT.FILL,false,true,1,1));
             defultParameterBtn.addSelectionListener(new SelectionListener() {
             	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
