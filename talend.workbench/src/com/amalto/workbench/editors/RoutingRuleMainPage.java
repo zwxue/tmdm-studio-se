@@ -58,10 +58,12 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.dialogs.PluginDetailsDialog;
 import com.amalto.workbench.dialogs.XpathSelectDialog;
+import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.EImage;
+import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.Version;
@@ -73,8 +75,11 @@ import com.amalto.workbench.webservices.WSServiceGetDocument;
 import com.amalto.workbench.webservices.WSServicesList;
 import com.amalto.workbench.webservices.WSServicesListItem;
 import com.amalto.workbench.webservices.WSString;
+import com.amalto.workbench.webservices.WSWhereCondition;
 import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.ConditionWidget;
+import com.amalto.workbench.widgets.TisTableViewer;
 import com.amalto.workbench.widgets.XpathWidget;
 
 public class RoutingRuleMainPage extends AMainPageV2 {
@@ -84,7 +89,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 	protected Button isSynchronousButton;
 	protected Combo serviceNameCombo;
 	protected Text serviceParametersText;
-	protected ListViewer routingExpressionsViewer;
+	//protected ListViewer routingExpressionsViewer;
 	protected XpathWidget xpathWidget;
 	protected XpathWidget xpathWidget1;
 	protected Button xpathButton;
@@ -103,6 +108,14 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 	private String dataModelName;
 	private Text conditionText;
 	
+    private ComplexTableViewerColumn[] conditionsColumns= new ComplexTableViewerColumn[]{
+    		new ComplexTableViewerColumn("XPath", false, "newXPath", "newXPath", "",ComplexTableViewerColumn.XPATH_STYLE,new String[] {},0),
+    		new ComplexTableViewerColumn("Operator", false, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,IConstants.ROUTE_CONDITION_OPERATORS,0),
+    		new ComplexTableViewerColumn("Value", false, "", ""),
+    		new ComplexTableViewerColumn("Condition Id", false, "", "",true)
+    };
+    private TisTableViewer conditionViewer;
+    
     public String getDataModelName() {
 		return dataModelName;
 	}
@@ -129,10 +142,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
       		if(treeParent==null){//if it is a new page,treeParent should be ROUTING_RULE
       			treeParent = this.getXObject().getServerRoot().findServerFolder(TreeObject.ROUTING_RULE);
       			} 
-        } catch (Exception e) {/*no versioning support on old cores*/}
-       
-        	
-        
+        } catch (Exception e) {/*no versioning support on old cores*/}                   
     }
 
 	protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
@@ -297,19 +307,6 @@ public class RoutingRuleMainPage extends AMainPageV2 {
         			dialog.open();
             	}
             });
-            /*
-            serviceNameText = toolkit.createText(charComposite, "",SWT.BORDER|SWT.SINGLE);
-            serviceNameText.setLayoutData(    
-                    new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING,SWT.FILL,false,false,1,1)
-            );
-            ((GridData)serviceNameText.getLayoutData()).widthHint = 300;
-            serviceNameText.addModifyListener(new ModifyListener() {
-            	public void modifyText(ModifyEvent e) {
-            		if (refreshing) return;
-            		markDirty();
-            	}
-            });
-            */ 
             
             //Service Parameters
             Label serviceParametersLabel = toolkit.createLabel(charComposite,  "Service Parameters", SWT.NULL);
@@ -334,187 +331,16 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             Composite routingExpressionsGroup = this.getNewSectionComposite("Routing Rule xPath Expressions");
             routingExpressionsGroup.setLayout(new GridLayout(1,true));
             
-            //Object Combo and is Admin Button
-            Composite routingExpressionsComposite = toolkit.createComposite(routingExpressionsGroup, SWT.NULL);
-            routingExpressionsComposite.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-            );
-            routingExpressionsComposite.setLayout(new GridLayout(4,false));
+           
+            conditionsColumns[0].setColumnWidth(200);
+            conditionsColumns[1].setColumnWidth(150);
+            conditionsColumns[2].setColumnWidth(120);
+            conditionsColumns[3].setColumnWidth(120);
+            conditionViewer=new TisTableViewer(Arrays.asList(conditionsColumns),toolkit,routingExpressionsGroup);
+            conditionViewer.setMainPage(this);
+            conditionViewer.create();
+ 
             
-            //header line
-            Label blankLabel = toolkit.createLabel(routingExpressionsComposite,  "", SWT.NULL);
-            blankLabel.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
-            );
-            Label xPathLabel = toolkit.createLabel(routingExpressionsComposite,  "       xPath(*)", SWT.NULL);
-            xPathLabel.setForeground(new Color(null, 255,0,0));
-            xPathLabel.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
-            );
-            Label operatorLabel = toolkit.createLabel(routingExpressionsComposite,  "Operator", SWT.NULL);
-            operatorLabel.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
-            );
-            Label rightValueLabel = toolkit.createLabel(routingExpressionsComposite,  "Value(*)", SWT.NULL);
-            rightValueLabel.setForeground(new Color(null, 255,0,0));
-            rightValueLabel.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
-            );
-            
-            //second line
-            
-            //add button
-            Button addButton = toolkit.createButton(routingExpressionsComposite,"Add",SWT.PUSH | SWT.TRAIL);
-            addButton.setLayoutData(
-                    new GridData(SWT.LEFT,SWT.FILL,false,true,1,1)
-            );
-            addButton.addSelectionListener(new SelectionListener() {
-            	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
-            	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-            		addRoutingRuleExpression();
-            		dataModelName=xpathWidget.getDataModelName();
-            	};
-            });
-            //xPathWidget
-            xpathWidget = new XpathWidget("...",treeParent, toolkit, routingExpressionsComposite,this,true,false,dataModelName);
-            //operator
-            operatorCombo = new Combo(routingExpressionsComposite,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
-            operatorCombo.setLayoutData(
-                    new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
-            );
-            operatorCombo.add("Contains");
-            operatorCombo.add("Matches");
-            operatorCombo.add("Starts With");
-            operatorCombo.add("=");
-            operatorCombo.add("!=");
-            operatorCombo.add(">");
-            operatorCombo.add(">=");
-            operatorCombo.add("<");
-            operatorCombo.add("<=");
-            operatorCombo.add("Is Null");
-            operatorCombo.add("Is Not Null");
-            operatorCombo.select(0);
-            operatorCombo.addSelectionListener(new SelectionListener() {
-            	public void widgetDefaultSelected(SelectionEvent e) {}
-            	public void widgetSelected(SelectionEvent e) {
-            	}
-            });
-            
-            rightValueText = toolkit.createText(routingExpressionsComposite, "",SWT.BORDER|SWT.SINGLE);
-            rightValueText.setLayoutData(    
-                    new GridData(SWT.FILL,SWT.CENTER,true,true,1,1)
-            );
-            rightValueText.addKeyListener(new KeyListener() {
-				public void keyPressed(KeyEvent e) {}
-				public void keyReleased(KeyEvent e) {
-					if ((e.stateMask==0) && (e.character == SWT.CR)){
-	            		addRoutingRuleExpression();
-					}
-				}
-            });
-            
-            
-            routingExpressionsViewer = new ListViewer(routingExpressionsComposite,SWT.BORDER | SWT.MULTI);
-            routingExpressionsViewer.getControl().setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,true,true,5,1)
-            );
-            ((GridData)routingExpressionsViewer.getControl().getLayoutData()).minimumHeight = 100;
-            routingExpressionsViewer.setContentProvider(new IStructuredContentProvider() {
-				public void dispose() {}
-				public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {}
-				public Object[] getElements(Object inputElement) {
-					return 
-						((WSRoutingRule) inputElement).getWsRoutingRuleExpressions() == null ? 
-								new WSRoutingRuleExpression[0] :
-								((WSRoutingRule) inputElement).getWsRoutingRuleExpressions();
-				}
-            });
-            routingExpressionsViewer.setLabelProvider(new ILabelProvider() {
-				public Image getImage(Object element) {return null;}
-				public String getText(Object element) {
-					WSRoutingRuleExpression rre = (WSRoutingRuleExpression) element;
-					String text = rre.getXpath()+" ";
-					if (rre.getWsOperator().equals(WSRoutingRuleOperator.CONTAINS)) text+="Contains";
-					else if (rre.getWsOperator().equals(WSRoutingRuleOperator.MATCHES)) text+="Matches";
-					else if (rre.getWsOperator().equals(WSRoutingRuleOperator.STARTSWITH)) text+="Starts With";
-					else if (rre.getWsOperator().equals(WSRoutingRuleOperator.EQUALS)) text+="=";
-					else if (rre.getWsOperator().equals(WSRoutingRuleOperator.GREATER_THAN)) text+=">";
-					else if (rre.getWsOperator().equals(WSRoutingRuleOperator.GREATER_THAN_OR_EQUAL)) text+=">=";
-					else if (rre.getWsOperator().equals(WSRoutingRuleOperator.LOWER_THAN)) text+="<";
-					else if (rre.getWsOperator().equals(WSRoutingRuleOperator.LOWER_THAN_OR_EQUAL)) text+="<=";
-					else if (rre.getWsOperator().equals(WSRoutingRuleOperator.NOT_EQUALS)) text+="!=";
-					else if (rre.getWsOperator().equals(WSRoutingRuleOperator.IS_NULL)) text+="Is Null";
-					else if (rre.getWsOperator().equals(WSRoutingRuleOperator.IS_NOT_NULL)) text+="Is Not Null";
-					text+=" ";
-					text+="\"" + rre.getValue() + "\"";
-					return text;
-				}
-				public void addListener(ILabelProviderListener listener) {}
-				public void dispose() {}
-				public boolean isLabelProperty(Object element, String property) {return false;}
-				public void removeListener(ILabelProviderListener listener) {}
-            });
-            routingExpressionsViewer.addDoubleClickListener(new IDoubleClickListener(){
-
-				public void doubleClick(DoubleClickEvent event) {
-					int index=routingExpressionsViewer.getList().getSelectionIndex();
-					if(index!=-1){
-						String condition=conditionText.getText()+" C"+index;
-						conditionText.setText(condition);
-						conditionText.setFocus();
-						markDirty();
-					}
-				}            	
-            });
-            //+ x button
-            Composite xComposite = toolkit.createComposite(routingExpressionsGroup, SWT.NULL);
-            xComposite.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-            );
-            xComposite.setLayout(new GridLayout(2,false));
-            Button btnAdd=toolkit.createButton(xComposite, "", SWT.PUSH);
-            btnAdd.setLayoutData(
-                    new GridData(SWT.LEFT,SWT.FILL,false,true,1,1)
-            );
-            btnAdd.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
-            btnAdd.setToolTipText("Add the selected item to condition");
-            btnAdd.addSelectionListener(new SelectionListener(){
-
-				public void widgetDefaultSelected(SelectionEvent e) {					
-					
-				}
-
-				public void widgetSelected(SelectionEvent e) {
-					int index=routingExpressionsViewer.getList().getSelectionIndex();
-					if(index!=-1){
-						String condition=conditionText.getText()+" C"+index;
-						conditionText.setText(condition);
-						conditionText.forceFocus();
-						markDirty();
-					}
-				}            	
-            });
-            
-            Button minusButton=toolkit.createButton(xComposite, "", SWT.PUSH);
-            minusButton.setLayoutData(
-                    new GridData(SWT.LEFT,SWT.FILL,false,true,1,1)
-            );
-            minusButton.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
-            minusButton.setToolTipText("Remove the selected item from list");
-            minusButton.addSelectionListener(new SelectionListener(){
-
-				public void widgetDefaultSelected(SelectionEvent e) {					
-					
-				}
-
-				public void widgetSelected(SelectionEvent e) {
-					int index=routingExpressionsViewer.getList().getSelectionIndex();
-					if(index!=-1){
-						routingExpressionsViewer.getList().remove(index);
-						markDirty();
-					}
-				}            	
-            });
             //and or not condition
             ConditionWidget conditionWidget=new ConditionWidget(routingExpressionsGroup,toolkit,this);
             conditionText=conditionWidget.getConditionText();
@@ -530,7 +356,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
            /* DragSource wcSource = new DragSource(routingExpressionsViewer.getControl(),DND.DROP_MOVE);
             wcSource.setTransfer(new Transfer[]{TextTransfer.getInstance()});
             wcSource.addDragListener(new WCDragSourceListener());*/
-            wrap.Wrap(this, routingExpressionsViewer);
+            wrap.Wrap(this, conditionViewer);
             
                         
             //make the Page window a DropTarget - we need to dispose it
@@ -547,28 +373,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
     }//createCharacteristicsContent
 
-    public void update(Observable o, Object arg)
-    {
-    	if (arg != null && arg == routingExpressionsViewer)
-    	{
-    		deleteItems(arg);
-    	}
-    }
-    
-    private void deleteItems(Object view)
-    {
-		WSRoutingRule wsObject = (WSRoutingRule) (RoutingRuleMainPage.this.getXObject().getWsObject());
-		IStructuredSelection selection = (IStructuredSelection)routingExpressionsViewer.getSelection();
-		java.util.List list = Arrays.asList(selection.toArray());
-        if (list.size() == 0)return;
-		ArrayList<WSRoutingRuleExpression> rreList = new ArrayList<WSRoutingRuleExpression>(Arrays.asList(wsObject.getWsRoutingRuleExpressions()));
 
-		rreList.removeAll(list);
-		wsObject.setWsRoutingRuleExpressions(rreList.toArray(new WSRoutingRuleExpression[rreList.size()]));
-		routingExpressionsViewer.setInput(wsObject);
-		markDirty();
-		
-    }
     
 	protected void refreshData() {
 		try {
@@ -585,7 +390,18 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			serviceParametersText.setText(wsRoutingRule.getParameters()==null? "" : wsRoutingRule.getParameters());
 			objectTypeText.setText(wsRoutingRule.getConcept());
 			//xpathWidget1.setText(wsRoutingRule.getConcept());
-			routingExpressionsViewer.setInput(wsRoutingRule);
+			
+            java.util.List<Line> lines=new ArrayList<Line>();
+            
+            for(WSRoutingRuleExpression wc:wsRoutingRule.getWsRoutingRuleExpressions()){
+				Line line=new Line(
+						conditionsColumns,
+						Util.convertRouteCondition(wc)
+					);
+				lines.add(line);
+            }
+            conditionViewer.getViewer().setInput(lines);
+            
 			if(wsRoutingRule.getCondition()!=null)
 			conditionText.setText(wsRoutingRule.getCondition());
 			this.refreshing = false;
@@ -606,14 +422,23 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			WSRoutingRule ws = (WSRoutingRule) (getXObject().getWsObject());
 			ws.setDescription(descriptionText.getText());
 			ws.setConcept(objectTypeText.getText());
-			//ws.setConcept(xpathWidget1.getText());
-			//ws.setServiceJNDI(serviceNameText.getText().contains("/") ? serviceNameText.getText() : "amalto/local/service/"+serviceNameText.getText());
-//			if(serviceNameCombo.getText()==null||serviceNameCombo.getText().length()==0){
-//				MessageDialog.openError(this.getSite().getShell(), "Error Service JNDI Name", "Service JNDI Name cannot be null");
-//			}
+
 			ws.setServiceJNDI(serviceNameCombo.getText().contains("/") ? serviceNameCombo.getText() : "amalto/local/service/"+serviceNameCombo.getText());
 			ws.setParameters("".equals(serviceParametersText.getText())? null : serviceParametersText.getText());
 			ws.setSynchronous(isSynchronousButton.getSelection());
+			
+			java.util.List<Line> lines=(java.util.List<Line>)conditionViewer.getViewer().getInput();
+			java.util.List<WSRoutingRuleExpression> wclist=new ArrayList<WSRoutingRuleExpression>();
+			for(Line item: lines){
+				String[] values=new String[]{item.keyValues.get(0).value,
+						item.keyValues.get(1).value,
+						item.keyValues.get(2).value,
+						item.keyValues.get(3).value};
+				WSRoutingRuleExpression wc =Util.convertLineRoute(values);
+				wclist.add(wc);
+			}
+			ws.setWsRoutingRuleExpressions(wclist.toArray(new WSRoutingRuleExpression[wclist.size()]));
+			
 			//WsRoutingRuleExpressions refreshed by viewer
 			ws.setCondition(conditionText.getText());
 			this.comitting = false;
@@ -626,72 +451,6 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 	
 	
 	
-	protected void addRoutingRuleExpression() {
-		if (xpathWidget.getText().trim().equals("")
-				|| rightValueText.getText().equals("")) {
-			return;
-		}
-  		markDirty();
-		
-//		if(!"".equals(this.xpathWidget.getText())&&!this.xpathWidget.getText().equals(null))
-//			rre.setXpath(this.xpathWidget.getText());
-		WSRoutingRule wsObject = (WSRoutingRule)RoutingRuleMainPage.this.getXObject().getWsObject();
-		ArrayList<WSRoutingRuleExpression> wcList = new ArrayList<WSRoutingRuleExpression>(Arrays.asList(wsObject.getWsRoutingRuleExpressions()));
-		String[] items = this.xpathWidget.getText().split("\\&");
-		
-			for(int i = 0;i<items.length;i++){
-				WSRoutingRuleExpression rre = new WSRoutingRuleExpression();
-				rre.setXpath(items[i]);
-				this.xpathWidget.setText("");
-
-				WSRoutingRuleOperator operator=null;
-				if (RoutingRuleMainPage.this.operatorCombo.getText().equals("Contains")) operator = WSRoutingRuleOperator.CONTAINS;
-				else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("Matches")) operator = WSRoutingRuleOperator.MATCHES;
-				else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("=")) operator = WSRoutingRuleOperator.EQUALS;
-				else if (RoutingRuleMainPage.this.operatorCombo.getText().equals(">")) operator = WSRoutingRuleOperator.GREATER_THAN;
-				else if (RoutingRuleMainPage.this.operatorCombo.getText().equals(">=")) operator = WSRoutingRuleOperator.GREATER_THAN_OR_EQUAL;
-				else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("<")) operator = WSRoutingRuleOperator.LOWER_THAN;
-				else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("<=")) operator = WSRoutingRuleOperator.LOWER_THAN_OR_EQUAL;
-				else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("!=")) operator = WSRoutingRuleOperator.NOT_EQUALS;
-				else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("Starts With")) operator = WSRoutingRuleOperator.STARTSWITH;
-				else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("Is Null")) operator = WSRoutingRuleOperator.IS_NULL;
-				else if (RoutingRuleMainPage.this.operatorCombo.getText().equals("Is Not Null")) operator = WSRoutingRuleOperator.IS_NOT_NULL;
-				rre.setWsOperator(operator);
-				if (
-						(	operator.equals(WSRoutingRuleOperator.IS_NULL) || 
-							operator.equals(WSRoutingRuleOperator.IS_NOT_NULL)
-						)
-				) 
-					rre.setValue("");
-				else
-					rre.setValue(rightValueText.getText());
-				
-				if(wcList.size()==0){
-					wcList.add(rre);
-				}
-				else{
-					boolean exist = false;
-					WSRoutingRuleExpression wsrre;
-					for(Iterator it = wcList.iterator();it.hasNext();){
-						wsrre = (WSRoutingRuleExpression)it.next();
-						if(equals(wsrre, rre))
-							exist = true;
-					}//for(Iterator
-					if(!exist)
-					wcList.add(rre);
-				}//else{
-				
-			}//for
-			wsObject.setWsRoutingRuleExpressions(wcList.toArray(new WSRoutingRuleExpression[wcList.size()]));
-			//RoutingRuleMainPage.this.routingExpressionsViewer.refresh();
-			routingExpressionsViewer.setInput(wsObject);
-			this.rightValueText.setText("");
-	}//addRoutingRuleExpression
-
-		
-	protected void createActions() {
-	}
-
 
 	public void textChanged(TextEvent event) {
 		markDirty();
@@ -771,54 +530,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 		
 	}
 	
-	/**
-	 * Where Condition Drag
-	 *
-	 */	
-	class WCDragSourceListener implements DragSourceListener {
 
-		public void dragFinished(DragSourceEvent event) {
-			WSRoutingRule wsObject = (WSRoutingRule) (RoutingRuleMainPage.this.getXObject().getWsObject());
-			IStructuredSelection selection = (IStructuredSelection)RoutingRuleMainPage.this.routingExpressionsViewer.getSelection();
-			if (selection.getFirstElement()!=null) {
-				WSRoutingRuleExpression wc = (WSRoutingRuleExpression) selection.getFirstElement();
-				ArrayList<WSRoutingRuleExpression> wcList = new ArrayList<WSRoutingRuleExpression>(Arrays.asList(wsObject.getWsRoutingRuleExpressions()));
-				wcList.remove(wc);
-				wsObject.setWsRoutingRuleExpressions(wcList.toArray(new WSRoutingRuleExpression[wcList.size()]));
-				RoutingRuleMainPage.this.routingExpressionsViewer.refresh();
-				RoutingRuleMainPage.this.markDirty();
-			}
-		}
-
-		public void dragSetData(DragSourceEvent event) {
-			IStructuredSelection selection = (IStructuredSelection)RoutingRuleMainPage.this.routingExpressionsViewer.getSelection();
-			if (selection.getFirstElement()!=null) {
-					event.data =  selection.getFirstElement();
-			}
-		}
-
-		public void dragStart(DragSourceEvent event) {
-			IStructuredSelection selection = (IStructuredSelection)RoutingRuleMainPage.this.routingExpressionsViewer.getSelection();
-			event.doit = (selection.getFirstElement()!=null);
-		}
-
-
-	}
-	  public boolean equals(WSRoutingRuleExpression obj1,WSRoutingRuleExpression obj2) {
-		if (	obj1.getValue().equals(obj2.getValue())
-				&& obj1.getXpath().equals(obj2.getXpath())
-				&& obj1.getWsOperator().getValue().equals(obj2.getWsOperator().getValue()))
-			return true;
-		else
-			return false;
-	}
-	
-//		public void doSave(IProgressMonitor monitor) throws Exception{
-//			if(serviceNameCombo.getText()==null||serviceNameCombo.getText().length()==0){
-//				MessageDialog.openError(this.getSite().getShell(), "Error Service JNDI Name", "Service JNDI Name cannot be null");
-//					throw new Exception( "Service JNDI Name cannot be null");
-//			}
-//		}
 	  
 	@Override
 	public boolean beforeDoSave() {
@@ -828,6 +540,12 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 		}
 		else
 			return true;
+	}
+
+	@Override
+	protected void createActions() {
+		// TODO Auto-generated method stub
+		
 	}	
 
 }

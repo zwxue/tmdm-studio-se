@@ -87,10 +87,10 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 	private String viewName=null;
 
 	private String dataModelName = null;
-    ComplexTableViewerColumn[] conditionsColumns= new ComplexTableViewerColumn[]{
-    		new ComplexTableViewerColumn("XPath", false, "newXPath", "", "",ComplexTableViewerColumn.XPATH_STYLE,new String[] {},0),
-    		new ComplexTableViewerColumn("Operator", false, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,IConstants.OPERATORS,0),
-    		new ComplexTableViewerColumn("Value", true, "", ""),
+    private ComplexTableViewerColumn[] conditionsColumns= new ComplexTableViewerColumn[]{
+    		new ComplexTableViewerColumn("XPath", false, "newXPath", "newXPath", "",ComplexTableViewerColumn.XPATH_STYLE,new String[] {},0),
+    		new ComplexTableViewerColumn("Operator", false, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,IConstants.VIEW_CONDITION_OPERATORS,0),
+    		new ComplexTableViewerColumn("Value", false, "", ""),
     		new ComplexTableViewerColumn("Predicate", true, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,IConstants.PREDICATES,0),
     };
 	private TisTableViewer conditionViewer;
@@ -142,7 +142,9 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
                         
             
             
-            Button addVBEButton = toolkit.createButton(vbeComposite,"Add",SWT.PUSH | SWT.CENTER);
+            Button addVBEButton = toolkit.createButton(vbeComposite,"",SWT.PUSH);
+            addVBEButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
+            addVBEButton.setToolTipText("Add");
             addVBEButton.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
             );
@@ -172,8 +174,6 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             
             xpathWidget0 = new XpathWidget("...",treeParent, toolkit, vbeComposite, this,true,true,dataModelName);
            
-
-            
             viewableBEsList = new List(vbeComposite,SWT.MULTI | SWT.V_SCROLL | SWT.BORDER);
             viewableBEsList.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,true,true,3,1)
@@ -255,8 +255,9 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             searchableLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
             );
-            Button addSBEButton = toolkit.createButton(sbeComposite,"Add",SWT.PUSH | SWT.TRAIL);
-            
+            Button addSBEButton = toolkit.createButton(sbeComposite,"",SWT.PUSH);
+            addSBEButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
+            addSBEButton.setToolTipText("Add");
             xpathWidget1 = new XpathWidget("...",treeParent, toolkit, sbeComposite, (AMainPageV2)this,true,false,dataModelName);
             
             addSBEButton.setLayoutData(

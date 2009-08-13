@@ -33,6 +33,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -45,6 +46,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
+import com.amalto.workbench.utils.EImage;
+import com.amalto.workbench.utils.ImageCache;
 
 /**
  * This table viewer has:
@@ -72,6 +75,7 @@ public class ComplexTableViewer {
 	protected static String ERROR_ITEMALREADYEXISTS_TITLE   = "Warning";
 	//mainPage can be null
 	protected AMainPageV2 mainPage;
+	protected Table table;
 	
 	public AMainPageV2 getMainPage() {
 		return mainPage;
@@ -168,6 +172,14 @@ public class ComplexTableViewer {
 		                new GridData(SWT.FILL,SWT.FILL,false,false,1,1)
 		        );
 	        }
+        	if(!column.isNillable()){
+        		label.setText(label.getText()+"(*)");		
+        		label.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+        	}	        	
+        	if(column.isUnique()){
+        		label.setText(label.getText()+"(U)");			 
+        		label.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLUE));
+        	}
 	        i++;
 		}
 	}
@@ -214,10 +226,12 @@ public class ComplexTableViewer {
 		}
 
 
-        addButton = toolkit.createButton(mainComposite,"Add",SWT.PUSH | SWT.CENTER);
+        addButton = toolkit.createButton(mainComposite,"",SWT.PUSH | SWT.CENTER);
         addButton.setLayoutData(
                 new GridData(SWT.FILL,SWT.BOTTOM,false,false,1,1)
         );
+        addButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
+        addButton.setToolTipText("Add");
         addButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
         	@SuppressWarnings("unchecked")
@@ -290,35 +304,43 @@ public class ComplexTableViewer {
 	protected void add() {
    		
 	}
-	
-	protected void createViewer(){
-        Table table =new Table(mainComposite,SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER|SWT.FULL_SELECTION);
-        viewer = new TableViewer(table);
-        table.setLayoutData(    
-                new GridData(SWT.FILL,SWT.FILL,true,true,columns.size(),1)
-        );
-        ((GridData)viewer.getControl().getLayoutData()).heightHint=60;
-        
-        //table.setLayoutData(new GridData(GridData.FILL_BOTH));
+	protected void createTable(){
+	        table =new Table(mainComposite,SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER|SWT.FULL_SELECTION);
+	        viewer = new TableViewer(table);
+	        
+	        //table.setLayoutData(new GridData(GridData.FILL_BOTH));
+	        table.setToolTipText("Column with * is required, column with U is unique!");
+	        for(ComplexTableViewerColumn column:columns){
+	        	TableColumn tableColumn=new TableColumn(table, SWT.CENTER);
+	        	tableColumn.setText(column.getName());
+	        	if(!column.isNillable()){
+	        		tableColumn.setImage(ImageCache.getCreatedImage(EImage.WILDCARD.getPath()));		        		
+	        	}	        	
+	        	if(column.isUnique()){
+	        		tableColumn.setImage(ImageCache.getCreatedImage(EImage.UNIQUE.getPath()));		        		
+	        	}
+	        	if (column.getColumnWidth() > 0) {
+					tableColumn.setWidth(column.getColumnWidth());
+				} else {
+					tableColumn.setWidth(200);
+					tableColumn.pack();
+				}
+	        }  
+	        
+	        table.setHeaderVisible(true);
+	        table.setLinesVisible(true);
+	        table.addListener(SWT.MeasureItem, new Listener() {
+	            public void handleEvent(Event event) {
+	               event.height = event.gc.getFontMetrics().getHeight() + 10;
+	            }
+	         });
 
-        for(ComplexTableViewerColumn column:columns){
-        	TableColumn tableColumn=new TableColumn(table, SWT.CENTER);
-        	tableColumn.setText(column.getName());
-        	if (column.getColumnWidth() > 0) {
-				tableColumn.setWidth(column.getColumnWidth());
-			} else {
-				tableColumn.setWidth(200);
-				tableColumn.pack();
-			}
-        }  
-        
-        table.setHeaderVisible(true);
-        table.setLinesVisible(true);
-        table.addListener(SWT.MeasureItem, new Listener() {
-            public void handleEvent(Event event) {
-               event.height = event.gc.getFontMetrics().getHeight() + 10;
-            }
-         });
+	}
+	protected void createViewer(){
+		createTable();
+		GridData gd=new GridData(SWT.FILL,SWT.FILL,true,true,columns.size(),1);
+        table.setLayoutData( gd );
+        gd.heightHint=80;
        // Up Down Delete button group
         Composite stepUpDownComposite = toolkit.createComposite(mainComposite,SWT.NONE);
         stepUpDownComposite.setLayoutData(
@@ -326,10 +348,12 @@ public class ComplexTableViewer {
         );
         stepUpDownComposite.setLayout(new GridLayout(1,false));
         
-        upButton = toolkit.createButton(stepUpDownComposite,"Up",SWT.PUSH | SWT.CENTER);
+        upButton = toolkit.createButton(stepUpDownComposite,"",SWT.PUSH | SWT.CENTER);
         upButton.setLayoutData(
                 new GridData(SWT.FILL,SWT.FILL,false,false,1,1)
         );
+        upButton.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
+        upButton.setToolTipText("Move down the selected item");
         upButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
         	@SuppressWarnings("unchecked")
@@ -354,10 +378,12 @@ public class ComplexTableViewer {
         		}
         	};
         });
-        downButton = toolkit.createButton(stepUpDownComposite,"Down",SWT.PUSH | SWT.CENTER);
+        downButton = toolkit.createButton(stepUpDownComposite,"",SWT.PUSH | SWT.CENTER);
         downButton.setLayoutData(
                 new GridData(SWT.FILL,SWT.FILL,false,false,1,1)
         );
+        downButton.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
+        downButton.setToolTipText("Move down the selected item");
         downButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
         	@SuppressWarnings("unchecked")
@@ -382,10 +408,12 @@ public class ComplexTableViewer {
         		}
         	};
         });
-        deleteButton = toolkit.createButton(stepUpDownComposite,"Delete",SWT.PUSH | SWT.CENTER);
+        deleteButton = toolkit.createButton(stepUpDownComposite,"",SWT.PUSH | SWT.CENTER);
         deleteButton.setLayoutData(
                 new GridData(SWT.FILL,SWT.FILL,false,false,1,1)
         );
+        deleteButton.setToolTipText("Delete the selected item");
+        deleteButton.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
         deleteButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
         	@SuppressWarnings("unchecked")
@@ -469,6 +497,9 @@ public class ComplexTableViewer {
 			@SuppressWarnings("unchecked")
 			public void modify(Object element, String property, Object value)
         	{
+				if(value instanceof Integer){
+					if(Integer.valueOf(value.toString())==-1) return;
+				}
 				// modify the text  and combo cell value 
 				TableItem item = (TableItem) element;
 				Line line = (Line) item.getData();
