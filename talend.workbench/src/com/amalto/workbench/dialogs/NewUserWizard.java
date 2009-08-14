@@ -65,12 +65,14 @@ public class NewUserWizard extends Wizard {
 		TreeObject newInstance = null;
 		TreeParent xfolder = (xobject.isXObject()) ? xobject.getParent()
 				: (TreeParent) xobject;
-		try {
+		try {			
 			WSRole role = new WSRole((String) userName, "", null);
 			if (page2.isAdmin) {
 				xmlParseSpecification(role, true);
+				role.setDescription("[EN:Administrator]");
 			} else {
 				xmlParseSpecification(role, false);
+				role.setDescription("[EN:Normal User]");
 			}
 			newInstance = new TreeObject((String) userName,
 					xfolder.getServerRoot(),
