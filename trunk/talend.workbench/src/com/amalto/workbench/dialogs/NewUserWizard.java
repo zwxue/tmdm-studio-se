@@ -74,9 +74,12 @@ public class NewUserWizard extends Wizard {
 			} else {
 				xmlParseSpecification(role, false);
 			}
-			newInstance = new TreeObject((String) userName, xfolder
-					.getServerRoot(), TreeObject.ROLE, new WSRolePK(
-					(String) userName), role);
+			newInstance = new TreeObject((String) userName,
+					xfolder.getServerRoot(),
+					TreeObject.ROLE, 
+					new WSRolePK((String) userName),
+					role
+					);
 			LocalTreeObjectRepository.getInstance().mergeNewTreeObject(newInstance);
 			XObjectEditor editpart;
 
@@ -191,7 +194,6 @@ public class NewUserWizard extends Wizard {
 		public void createControl(Composite parent) {
 			Composite composite = new Composite(parent, SWT.NULL);
 			composite.setLayout(new GridLayout(1, false));
-//			
 			tipLabel = new Label(composite,SWT.NONE);
 			tipLabel.setText("Enter a name for the Role:");
 			GridData gd = new GridData(GridData.FILL_HORIZONTAL);
