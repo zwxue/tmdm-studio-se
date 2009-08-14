@@ -22,9 +22,9 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.NewConceptOrElementDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.image.EImage;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
-import com.amalto.workbench.utils.EImage;
-import com.amalto.workbench.utils.ImageCache;
 
 public class XSDNewElementAction extends UndoAction implements SelectionListener{
 

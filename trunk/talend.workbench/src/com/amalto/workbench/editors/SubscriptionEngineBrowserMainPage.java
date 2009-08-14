@@ -67,10 +67,10 @@ import org.vafada.swtcalendar.SWTCalendarListener;
 
 import com.amalto.workbench.dialogs.CalendarDialog;
 import com.amalto.workbench.dialogs.DOMViewDialog;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
-import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModelPK;

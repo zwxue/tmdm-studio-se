@@ -18,11 +18,11 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
 
 import com.amalto.workbench.dialogs.LoginDialog;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XtentisServerObjectsRetriever;
 import com.amalto.workbench.utils.IConstants;
-import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.views.ServerView;
 

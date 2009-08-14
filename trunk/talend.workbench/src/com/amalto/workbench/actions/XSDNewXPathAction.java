@@ -17,8 +17,8 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.SelectFieldDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.utils.EImage;
-import com.amalto.workbench.utils.ImageCache;
+import com.amalto.workbench.image.EImage;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 
 public class XSDNewXPathAction extends UndoAction{
