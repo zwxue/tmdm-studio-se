@@ -12,6 +12,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
 import com.amalto.workbench.actions.AServerViewAction;
+import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.image.OverlayImageProvider;
 import com.amalto.workbench.models.TreeObject;
@@ -88,7 +89,7 @@ public class ServerTreeLabelProvider extends LabelProvider implements IColorProv
 			else if (object.getType() == TreeObject.DOCUMENT)
 				return ImageCache.getCreatedImage( "icons/documents.gif");			
 			else if (object.getType() == TreeObject.SUBSCRIPTION_ENGINE)
-				return ImageCache.getCreatedImage( "icons/routing_rule.gif");
+				return ImageCache.getCreatedImage( EImage.SUBSCRIPTION_ENGINE.getPath());
 			else if (object.getType() == TreeObject.UNIVERSE)
 				return ImageCache.getCreatedImage( "icons/unique.gif");		
 			else if (object.getType() == TreeObject.SYNCHRONIZATIONPLAN)
