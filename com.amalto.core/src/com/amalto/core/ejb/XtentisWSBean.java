@@ -2124,6 +2124,7 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
 		}
 		s.setWsRoutingRuleExpressions(routingExpressions);
 		s.setCondition(pojo.getCondition());
+		s.setDeactive(pojo.isDeActive());
 		return s;
 	}
 	
@@ -2146,6 +2147,7 @@ public class XtentisWSBean implements SessionBean, XtentisPort {
 	    }
 	    pojo.setRoutingExpressions(l);
 	    pojo.setCondition(ws.getCondition());
+	    pojo.setDeActive(ws.getDeactive());
 		return pojo;
 	}	
 
