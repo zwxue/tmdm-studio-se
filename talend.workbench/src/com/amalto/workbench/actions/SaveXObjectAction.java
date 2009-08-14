@@ -11,12 +11,12 @@ import org.eclipse.swt.widgets.Event;
 
 import com.amalto.workbench.dialogs.ErrorExceptionDialog;
 import com.amalto.workbench.editors.XObjectEditor;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.IConstants;
-import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataCluster;

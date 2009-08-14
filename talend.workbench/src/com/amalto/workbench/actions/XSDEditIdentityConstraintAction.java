@@ -16,7 +16,7 @@ import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDSchema;
 
 import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.utils.ImageCache;
+import com.amalto.workbench.image.ImageCache;
 
 public class XSDEditIdentityConstraintAction extends UndoAction{
 

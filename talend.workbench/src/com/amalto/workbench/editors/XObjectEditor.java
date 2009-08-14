@@ -18,13 +18,15 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 
 import com.amalto.workbench.actions.SaveXObjectAction;
+import com.amalto.workbench.actions.ServerRefreshAction;
 import com.amalto.workbench.editors.xmleditor.XMLEditor;
 import com.amalto.workbench.editors.xmleditor.XMLEditorInput;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.IConstants;
-import com.amalto.workbench.utils.ImageCache;
+import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSDataModel;
 
 public class XObjectEditor extends FormEditor implements IXObjectModelListener{	
@@ -296,4 +298,5 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 		return xmlEditor;
 	}
     
+
 }

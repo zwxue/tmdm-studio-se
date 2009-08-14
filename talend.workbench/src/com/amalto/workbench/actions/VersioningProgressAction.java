@@ -11,7 +11,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 
-import com.amalto.workbench.utils.ImageCache;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.BackgroundJobStatusType;
 import com.amalto.workbench.webservices.WSBackgroundJob;

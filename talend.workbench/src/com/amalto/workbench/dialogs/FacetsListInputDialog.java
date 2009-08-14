@@ -20,8 +20,8 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.amalto.workbench.utils.EImage;
-import com.amalto.workbench.utils.ImageCache;
+import com.amalto.workbench.image.EImage;
+import com.amalto.workbench.image.ImageCache;
 
 public class FacetsListInputDialog extends Dialog {
 

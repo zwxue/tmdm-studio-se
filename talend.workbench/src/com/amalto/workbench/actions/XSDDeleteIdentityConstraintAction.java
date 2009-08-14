@@ -9,7 +9,7 @@ import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 
 import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.utils.ImageCache;
+import com.amalto.workbench.image.ImageCache;
 
 public class XSDDeleteIdentityConstraintAction extends UndoAction {
 
