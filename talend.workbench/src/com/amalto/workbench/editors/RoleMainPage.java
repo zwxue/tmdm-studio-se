@@ -65,6 +65,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.exolab.castor.xml.Marshaller;
 import org.w3c.dom.Element;
 
+import com.amalto.workbench.image.EImage;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.RoleMenuParameters;
 import com.amalto.workbench.utils.RoleWhereCondition;
@@ -254,7 +256,9 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
             );
             instanceAccessCombo.select(0);
             
-            Button addInstanceButton = toolkit.createButton(instancesComposite,"Add",SWT.PUSH | SWT.TRAIL);
+            Button addInstanceButton = toolkit.createButton(instancesComposite,"",SWT.PUSH );
+            addInstanceButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
+            addInstanceButton.setToolTipText("Add");
             addInstanceButton.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
             );
@@ -749,7 +753,9 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
         wcPredicateCombo.add("Exactly");
         wcPredicateCombo.add("Not");
         
-        Button wcButton =toolkit.createButton(composite,"Add",SWT.PUSH | SWT.TRAIL);
+        Button wcButton =toolkit.createButton(composite,"",SWT.PUSH );
+        wcButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
+        wcButton.setToolTipText("Add");
         wcButton.setLayoutData(
                 new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
         );
