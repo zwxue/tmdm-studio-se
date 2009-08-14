@@ -26,7 +26,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import com.amalto.workbench.utils.ImageCache;
+import com.amalto.workbench.image.ImageCache;
 
 public class QueryParametersDialog extends Dialog {
 

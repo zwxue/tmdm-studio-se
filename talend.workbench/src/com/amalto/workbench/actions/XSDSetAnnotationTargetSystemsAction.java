@@ -14,7 +14,7 @@ import org.eclipse.xsd.XSDComponent;
 
 import com.amalto.workbench.dialogs.AnnotationOrderedListsDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.utils.ImageCache;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDSetAnnotationTargetSystemsAction extends UndoAction{

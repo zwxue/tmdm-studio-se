@@ -22,11 +22,11 @@ import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.editors.RoleMainPage.Role;
 import com.amalto.workbench.editors.RoleMainPage.Role.Specification;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.IConstants;
-import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
@@ -390,7 +390,8 @@ public class NewXObjectAction extends Action{
                     		"",
                     		"",
                     		new WSRoutingRuleExpression[0],
-                    		null                    		
+                    		null,                    		
+                    		false
                     );
                     newInstance = new TreeObject(
                                     (String)key,

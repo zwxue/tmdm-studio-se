@@ -38,7 +38,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.amalto.workbench.utils.ImageCache;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 
 public class DOMViewDialog extends Dialog {

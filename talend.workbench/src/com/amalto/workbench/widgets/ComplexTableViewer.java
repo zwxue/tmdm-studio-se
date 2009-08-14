@@ -44,10 +44,10 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.editors.AMainPageV2;
+import com.amalto.workbench.image.EImage;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
-import com.amalto.workbench.utils.EImage;
-import com.amalto.workbench.utils.ImageCache;
 
 /**
  * This table viewer has:
