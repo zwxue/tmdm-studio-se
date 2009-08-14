@@ -189,7 +189,7 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener{
 		else if (object.getType() == TreeObject.DOCUMENT)
 			return ImageCache.getImage( EImage.DOCUMENTS.getPath()).createImage();			
 		else if (object.getType() == TreeObject.SUBSCRIPTION_ENGINE)
-			return ImageCache.getImage( EImage.ROUTING_RULE.getPath()).createImage();
+			return ImageCache.getImage( EImage.SUBSCRIPTION_ENGINE.getPath()).createImage();
 		
 		return ImageCache.getImage( EImage.ERROR.getPath()).createImage();
     }
