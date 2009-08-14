@@ -17,6 +17,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.amalto.workbench.editors.AMainPageV2;
+import com.amalto.workbench.image.EImage;
+import com.amalto.workbench.image.ImageCache;
 
 public class SimpleXpathInputDialog extends Dialog {
 
@@ -73,7 +75,7 @@ public class SimpleXpathInputDialog extends Dialog {
 		
 		Button xpathButton = new Button(composite,SWT.PUSH | SWT.CENTER);
 		xpathButton.setLayoutData(new GridData(SWT.FILL,SWT.FILL,false,true,1,1));
-		xpathButton.setText("...");
+		xpathButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
 		xpathButton.setToolTipText("Select xpath");
 		xpathButton.addSelectionListener(new SelectionListener(){
 

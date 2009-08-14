@@ -12,6 +12,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.amalto.workbench.image.EImage;
+import com.amalto.workbench.image.ImageCache;
+
 public class FileSelectWidget {
 	FormToolkit factory=new WidgetFactory();
 	
@@ -47,7 +50,8 @@ public class FileSelectWidget {
 		gd=new GridData(SWT.FILL,SWT.CENTER,true,true,1,1);		
 		text.setLayoutData(gd);
 		text.setText("                                                           ");		
-		Button button=factory.createButton(parent, "...", SWT.PUSH);
+		Button button=factory.createButton(parent, "", SWT.PUSH);
+		button.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
 		gd=new GridData(SWT.LEFT,SWT.FILL,false,true,1,1);
 		button.setLayoutData(gd);
 		button.setToolTipText("Select one file path...");

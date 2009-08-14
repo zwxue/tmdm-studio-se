@@ -22,6 +22,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.dialogs.AnnotationLanguageLabelsDialog;
 import com.amalto.workbench.editors.AMainPageV2;
+import com.amalto.workbench.image.EImage;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 
 /**
@@ -57,9 +59,10 @@ public class DescAnnotationComposite implements  SelectionListener{
         descriptionLabel.setLayoutData(
                 new GridData(SWT.FILL,SWT.CENTER,false,true,1,1));
         
-		annotationButton = toolkit.createButton(descAntionHolder, buttonName, SWT.PUSH);
+		annotationButton = toolkit.createButton(descAntionHolder, "", SWT.PUSH);
 		annotationButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		annotationButton.addSelectionListener(this);
+		annotationButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
 		annotationButton.setToolTipText("Set the Descriptions");
 		
 		descriptionText = toolkit.createText(descAntionHolder, "",SWT.BORDER|SWT.MULTI);

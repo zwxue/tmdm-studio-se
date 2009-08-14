@@ -21,6 +21,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPartSite;
 
+import com.amalto.workbench.image.EImage;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeParent;
 
 public class ViewInputDialog extends Dialog implements  SelectionListener{
@@ -157,7 +159,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
 //        XpathSelectDialog(Shell parentShell,TreeParent parent,String title,IWorkbenchPartSite site,boolean isMulti,String dataModelName)
       
     	   openDLG = new Button(composite,SWT.NONE);
-           openDLG.setText("...");
+    	   openDLG.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
            openDLG.addSelectionListener(this);
            openDLG.setLayoutData(new GridData(SWT.RIGHT,SWT.CENTER,false,false,1,1));
            openDLG.setVisible(isBtnShow);
