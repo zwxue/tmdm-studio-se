@@ -149,24 +149,25 @@ YAHOO.extend(amalto.itemsbrowser.ItemNode, YAHOO.widget.Node, {
 
 			html[html.length] = '<div style="display:inline"><div style="width:180;float:left;font-size:13px">'+itemData.name+' '+mandatory+' '+descInfo+'</div>';
 			if(itemData.typeName!=null&&(itemData.typeName=="date"||itemData.typeName=="dateTime")){//DATE			
-			   html[html.length] = input +'	<span style="cursor: pointer;" onclick="javascript:amalto.itemsbrowser.ItemsBrowser.showDatePicker(\''+itemData.nodeId+'\','+treeIndex+',\''+itemData.typeName+'\')"><img src="img/genericUI/date-picker.gif"/></span>'+'</div>';
+			   html[html.length] = input +'<span style="cursor:pointer;padding-left:4px;" onclick="javascript:amalto.itemsbrowser.ItemsBrowser.showDatePicker(\''+itemData.nodeId+'\','+treeIndex+',\''+itemData.typeName+'\')"><img src="img/genericUI/date-picker.gif"/></span>'+'</div>';
 			}else if(itemData.typeName!=null&&(itemData.typeName=="PICTURE")){//PICTURE
+				   html[html.length] = input;
 				   //show picture
 				   if(value.length>0){
 				 		html[html.length] = '<span style="cursor: pointer;"> '+	' <img alt="Picture" id="showPicture" src="'+ itemData.value+ '"/></span>';	
 				 	}else{				 		
-				 		html[html.length] = '<span style="cursor: pointer;"> '+	' <img alt="Picture" id="showPicture" src=""/></span>';	
+				 		html[html.length] = '<span style="cursor: pointer;"> '+	' <img alt="Picture" id="showPicture" src="img/genericUI/no_image.gif"/></span>';	
 				 	}					
 					//remove picture
-					html[html.length]='<span style="cursor: pointer;" onclick="amalto.itemsbrowser.ItemsBrowser.removePicture(\''+itemData.nodeId+'\','+treeIndex+')">' +
-					' <img alt="Remove the picture" src="img/genericUI/delete.gif"/></span>';									
-				    html[html.length] =input+ '<span style="cursor: pointer;" onclick="javascript:amalto.itemsbrowser.ItemsBrowser.showUploadFile(\''+itemData.nodeId+'\','+treeIndex+',\''+itemData.typeName+'\')"><img alt="Select a picture" src="img/genericUI/image_add.png"/></span>'+'</div>';
+					html[html.length]='<span style="cursor:pointer;padding-left:4px;" onclick="amalto.itemsbrowser.ItemsBrowser.removePicture(\''+itemData.nodeId+'\','+treeIndex+')">' +
+					'<img alt="Remove the picture" src="img/genericUI/clear-icon.gif"/></span>';									
+				    html[html.length] ='<span style="cursor:pointer;padding-left:4px;" onclick="javascript:amalto.itemsbrowser.ItemsBrowser.showUploadFile(\''+itemData.nodeId+'\','+treeIndex+',\''+itemData.typeName+'\')"><img alt="Select a picture" src="img/genericUI/image_add.png"/></span>'+'</div>';
 			}else{
 			  html[html.length] = input +'</div>';
 			}
 			
-			html[html.length] = '	<span id="'+itemData.nodeId+'OpenDetails" onclick="amalto.itemsbrowser.ItemsBrowser.displayXsdDetails(\''+itemData.nodeId+'\')" >';
-			html[html.length] = '		<img src="img/genericUI/open-detail2.gif"/></span>' ;
+			html[html.length] = '<span id="'+itemData.nodeId+'OpenDetails" style="cursor:pointer;padding-left:4px;" onclick="amalto.itemsbrowser.ItemsBrowser.displayXsdDetails(\''+itemData.nodeId+'\')" >';
+			html[html.length] = '<img src="img/genericUI/open-detail2.gif"/></span>' ;
 			html[html.length] = 		cloneNodeImg+' '+removeNodeImg+' '+foreignKeyImg;
 			html[html.length] = '	<div class="detailLabel" id="'+itemData.nodeId+'XsdDetails" style="display:none">';
 			html[html.length] = '		XML tag : '+itemData.xmlTag+'<br/> ' ;
