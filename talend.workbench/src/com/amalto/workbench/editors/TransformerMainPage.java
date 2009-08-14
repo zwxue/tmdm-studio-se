@@ -34,6 +34,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.dnd.DND;
@@ -65,6 +66,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -73,6 +75,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.amalto.workbench.dialogs.PluginDetailsDialog;
 import com.amalto.workbench.dialogs.ProcessResultsDialog;
 import com.amalto.workbench.dialogs.SetupTransformerInputVariablesDialog;
+import com.amalto.workbench.dialogs.VariableDefinitionDialog;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.Line;
@@ -834,8 +837,9 @@ public class TransformerMainPage extends AMainPageV2 {
 	}
 
 	public void dispose() {
-		parametersTextViewer.getUndoManager().disconnect();
 		super.dispose();
+		if (parametersTextViewer.getUndoManager() != null)
+		  parametersTextViewer.getUndoManager().disconnect();
 		windowTarget.dispose();
 	}
 	@Override
@@ -864,6 +868,8 @@ public class TransformerMainPage extends AMainPageV2 {
 		WSTransformerProcessStep processStep;
 		private TableViewer inputViewer;
 		private TableViewer outputViewer;
+		
+		private KeyListener variableListener;
 		
 		Set<String> availableVariables=new HashSet<String>();
 		public TransformerStepWidget(FormToolkit toolkit,Composite parent){
@@ -999,6 +1005,7 @@ public class TransformerMainPage extends AMainPageV2 {
 			
 			LabelCombo inputV=new LabelCombo(toolkit,inputComposite,"Input Variables",SWT.BORDER,1);		
 			inputVariables=inputV.getCombo();
+			inputVariables.addKeyListener(variableListener);
 			
 	        inputLinkButton = toolkit.createButton(inputComposite,"",SWT.PUSH | SWT.CENTER);
 	        inputLinkButton.setImage(ImageCache.getCreatedImage(EImage.SYNCED.getPath()));
@@ -1084,6 +1091,7 @@ public class TransformerMainPage extends AMainPageV2 {
 	        });
 			LabelCombo outputV=new LabelCombo(toolkit,outputComposite,"Output Variables",SWT.BORDER,1);		
 			outputVariables=outputV.getCombo();
+			outputVariables.addKeyListener(variableListener);
 			
 			//create table
 			java.util.List<String> columns=new ArrayList<String>();
@@ -1227,6 +1235,40 @@ public class TransformerMainPage extends AMainPageV2 {
 	                new GridData(SWT.FILL,SWT.RIGHT,true,true,4,1)
 	        );		
 			mainComposite.setLayout(new GridLayout(3,false));	
+			
+			variableListener = new KeyListener()
+			{
+				public void keyPressed(KeyEvent e)
+				{
+	        		if (e.keyCode == '/' && e.stateMask ==
+	        			SWT.ALT) {
+	        			
+	        			VariableDefinitionDialog dlg = new VariableDefinitionDialog(
+								mainComposite.getShell(),
+								TransformerMainPage.this.getPartName(),
+								e.widget == inputVariables ? true : false,
+								pluginsCombo.getText());
+						dlg.setBlockOnOpen(true);
+						dlg.open();
+						if (dlg.getReturnCode() == Window.OK)
+						{
+							Widget wdg = e.widget;
+							if (wdg instanceof CCombo) {
+								CCombo combo = (CCombo) wdg;
+								if (!Arrays.asList(combo.getItems()).contains(
+										dlg.outPutVariable())) {
+									combo.add(dlg.outPutVariable());
+									TransformerMainPage.this.markDirty();
+								}
+							}
+							dlg.close();
+						}
+	        		}
+				}
+				
+				public void keyReleased(KeyEvent e) {
+				}
+			};
 			
 			createInput();
 			createPlugin();				
