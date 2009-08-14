@@ -8,7 +8,7 @@ import java.util.Map;
  *
  */
 public enum EImage {
-	DEFAULT("icons/talend-picto-small.gif"),
+	DEFAULT("icons/talend-picto.gif"),
 	
 	ACTIVITY_CATEGORY("icons/activity_category.gif"),
 	ACTIVITY("icons/activity.gif"),
