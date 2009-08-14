@@ -264,6 +264,7 @@ Ext.extend(amalto.updatereport.UpdateReportPanel, Ext.Panel, {
 					border : false
 				}],
 				region : "north",
+				bodyStyle:'padding:5px',
 				buttons : [{
 					handler : function(button, event) {
 						this.onResetBtnClick(button, event);
