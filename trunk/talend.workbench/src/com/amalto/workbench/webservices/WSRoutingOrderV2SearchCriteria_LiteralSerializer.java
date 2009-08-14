@@ -5,18 +5,22 @@
 
 package com.amalto.workbench.webservices;
 
-import com.sun.xml.rpc.encoding.*;
-import com.sun.xml.rpc.encoding.xsd.XSDConstants;
-import com.sun.xml.rpc.encoding.literal.*;
-import com.sun.xml.rpc.encoding.literal.DetailFragmentDeserializer;
-import com.sun.xml.rpc.encoding.simpletype.*;
-import com.sun.xml.rpc.encoding.soap.SOAPConstants;
-import com.sun.xml.rpc.encoding.soap.SOAP12Constants;
-import com.sun.xml.rpc.streaming.*;
-import com.sun.xml.rpc.wsdl.document.schema.SchemaConstants;
-import javax.xml.namespace.QName;
 import java.util.List;
-import java.util.ArrayList;
+
+import javax.xml.namespace.QName;
+
+import com.sun.xml.rpc.encoding.CombinedSerializer;
+import com.sun.xml.rpc.encoding.DeserializationException;
+import com.sun.xml.rpc.encoding.Initializable;
+import com.sun.xml.rpc.encoding.InternalTypeMappingRegistry;
+import com.sun.xml.rpc.encoding.SOAPDeserializationContext;
+import com.sun.xml.rpc.encoding.SOAPSerializationContext;
+import com.sun.xml.rpc.encoding.SerializationException;
+import com.sun.xml.rpc.encoding.literal.LiteralObjectSerializerBase;
+import com.sun.xml.rpc.streaming.XMLReader;
+import com.sun.xml.rpc.streaming.XMLReaderUtil;
+import com.sun.xml.rpc.streaming.XMLWriter;
+import com.sun.xml.rpc.wsdl.document.schema.SchemaConstants;
 
 public class WSRoutingOrderV2SearchCriteria_LiteralSerializer extends LiteralObjectSerializerBase implements Initializable  {
     private static final QName ns1_status_QNAME = new QName("", "status");

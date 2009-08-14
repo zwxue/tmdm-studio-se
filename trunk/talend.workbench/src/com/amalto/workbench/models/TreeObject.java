@@ -2,7 +2,6 @@ package com.amalto.workbench.models;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.core.runtime.IAdaptable;
 

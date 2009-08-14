@@ -6,8 +6,8 @@
 package com.amalto.workbench.webservices;
 
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 public class WSSynchronizationItemStatus {
     private java.lang.String value;
