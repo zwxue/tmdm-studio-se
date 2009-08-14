@@ -33,6 +33,8 @@ public class WSRoutingRule_LiteralSerializer extends LiteralObjectSerializerBase
     private static final QName ns2_WSRoutingRuleExpression_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingRuleExpression");
     private CombinedSerializer ns2_myWSRoutingRuleExpression_LiteralSerializer;
     private static final QName ns1_condition_QNAME = new QName("", "condition");
+    private static final QName ns1_deactive_QNAME = new QName("", "deactive");
+    private CombinedSerializer ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer;
     
     public WSRoutingRule_LiteralSerializer(QName type, String encodingStyle) {
         this(type, encodingStyle, false);
@@ -46,6 +48,7 @@ public class WSRoutingRule_LiteralSerializer extends LiteralObjectSerializerBase
         ns3_myns3_string__java_lang_String_String_Serializer = (CombinedSerializer)registry.getSerializer("", java.lang.String.class, ns3_string_TYPE_QNAME);
         ns3_myns3__boolean__boolean_Boolean_Serializer = (CombinedSerializer)registry.getSerializer("", boolean.class, ns3_boolean_TYPE_QNAME);
         ns2_myWSRoutingRuleExpression_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.webapp.util.webservices.WSRoutingRuleExpression.class, ns2_WSRoutingRuleExpression_TYPE_QNAME);
+        ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer = (CombinedSerializer)registry.getSerializer("", java.lang.Boolean.class, ns3_boolean_TYPE_QNAME);
     }
     
     public Object doDeserialize(XMLReader reader,
@@ -172,6 +175,14 @@ public class WSRoutingRule_LiteralSerializer extends LiteralObjectSerializerBase
                 reader.nextElementContent();
             }
         }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_deactive_QNAME)) {
+                member = ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer.deserialize(ns1_deactive_QNAME, reader, context);
+                instance.setDeactive((java.lang.Boolean)member);
+                reader.nextElementContent();
+            }
+        }
         
         XMLReaderUtil.verifyReaderState(reader, XMLReader.END);
         return (Object)instance;
@@ -205,5 +216,6 @@ public class WSRoutingRule_LiteralSerializer extends LiteralObjectSerializerBase
             }
         }
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getCondition(), ns1_condition_QNAME, null, writer, context);
+        ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer.serialize(instance.getDeactive(), ns1_deactive_QNAME, null, writer, context);
     }
 }
