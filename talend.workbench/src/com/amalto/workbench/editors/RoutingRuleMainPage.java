@@ -139,10 +139,12 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             //description
             Label descriptionLabel = toolkit.createLabel(charComposite, "Description", SWT.NULL);
             descriptionLabel.setLayoutData(
-                    new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
+            		 new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
             );
             descriptionText = toolkit.createText(charComposite, "",SWT.BORDER|SWT.SINGLE);
-
+            descriptionText.setLayoutData(
+            		new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+            );
             descriptionText.addModifyListener(new ModifyListener() {
             	public void modifyText(ModifyEvent e) {
             		if (refreshing) return;
@@ -151,16 +153,21 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             }); 
             
             //objectType
+
+            
+            Label objectTypeLabel = toolkit.createLabel(charComposite, "Concept", SWT.NULL);
+            objectTypeLabel.setLayoutData(
+                    new GridData(SWT.BEGINNING,SWT.CENTER,false,true,1,1)
+            );
             Composite typeComposite = toolkit.createComposite(charComposite);
             typeComposite.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
+                    new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
             );
-            typeComposite.setLayout(new GridLayout(3,false));
+            GridLayout layout=new GridLayout(2, false);
+            layout.marginLeft=0;
+            layout.marginWidth=0;
+            typeComposite.setLayout(layout);
             
-            Label objectTypeLabel = toolkit.createLabel(typeComposite, "Concept         ", SWT.NULL);
-            objectTypeLabel.setLayoutData(
-                    new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
-            );
             objectTypeText =  toolkit.createText(typeComposite, "",SWT.BORDER|SWT.SINGLE);
             objectTypeText.setLayoutData(
                     new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING,SWT.CENTER,false,false,1,1)
