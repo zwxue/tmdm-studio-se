@@ -19,7 +19,7 @@ public class RoutingRulePOJO extends ObjectPOJO{
     private String serviceJNDI;
     private String parameters;
     private String condition;
-    
+    private boolean deActive;
 
     public RoutingRulePOJO() {}
     
@@ -29,7 +29,7 @@ public class RoutingRulePOJO extends ObjectPOJO{
 	}
 
 
-	public RoutingRulePOJO(String name, String description, ArrayList<RoutingRuleExpressionPOJO> routingExpressions, boolean synchronous, String concept, String serviceJNDI, String parameters,String condition) {
+	public RoutingRulePOJO(String name, String description, ArrayList<RoutingRuleExpressionPOJO> routingExpressions, boolean synchronous, String concept, String serviceJNDI, String parameters,String condition,boolean deActive) {
 		super();
 		this.name = name;
 		this.description = description;
@@ -39,9 +39,18 @@ public class RoutingRulePOJO extends ObjectPOJO{
 		this.serviceJNDI = serviceJNDI;
 		this.parameters = parameters;
 		this.condition=condition;
+		this.deActive=deActive;
 	}
 	
 	
+
+	public boolean isDeActive() {
+		return deActive;
+	}
+
+	public void setDeActive(boolean deActive) {
+		this.deActive = deActive;
+	}
 
 	public String getCondition() {
 		return condition;

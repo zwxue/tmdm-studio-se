@@ -228,7 +228,10 @@ public class RoutingEngineV2CtrlBean implements SessionBean, TimedObject {
 		for (Iterator<RoutingRulePOJOPK> iter = routingRulePOJOPKs.iterator(); iter.hasNext(); ) {
 			RoutingRulePOJOPK routingRulePOJOPK = iter.next();
 			RoutingRulePOJO routingRule = routingRuleCtrl.getRoutingRule(routingRulePOJOPK);
-			
+			if(routingRule.isDeActive()){
+				org.apache.log4j.Logger.getLogger(this.getClass()).info(routingRule.getName()+" deactived ,skip it!");
+				continue;
+			}
 			//check integrity of Routing Rule
 			if (!serviceJndiList.contains(routingRule.getServiceJNDI())){
 				org.apache.log4j.Logger.getLogger(this.getClass()).info("Unable to lookup \""+routingRule.getServiceJNDI()+"\", this service not bound!");
