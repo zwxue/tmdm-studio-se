@@ -209,7 +209,7 @@ public class NewUserWizard extends Wizard {
 						setPageComplete(false);
 					}
 					else{
-						//warningLabel.setText("");
+						setErrorMessage(errmsg);
 						userName = name;
 						setPageComplete(true);
 					}
