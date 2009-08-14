@@ -20,8 +20,6 @@ import com.amalto.workbench.dialogs.ViewInputDialog;
 import com.amalto.workbench.editors.AMainPage;
 import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.editors.XObjectEditor;
-import com.amalto.workbench.editors.RoleMainPage.Role;
-import com.amalto.workbench.editors.RoleMainPage.Role.Specification;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;

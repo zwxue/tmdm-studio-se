@@ -71,7 +71,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import com.amalto.workbench.MDMWorbenchPlugin;
-import com.amalto.workbench.editors.RoutingRuleMainPage;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.webservices.WSComponent;

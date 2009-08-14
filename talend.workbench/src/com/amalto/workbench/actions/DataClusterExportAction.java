@@ -4,7 +4,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IWorkbenchPage;
 
 import com.amalto.workbench.dialogs.DataClusterExportDialog;

@@ -42,7 +42,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.amalto.workbench.actions.ServerRefreshAction;
 import com.amalto.workbench.dialogs.PluginDetailsDialog;
 import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.image.EImage;

@@ -43,7 +43,6 @@ import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDeleteView;
 import com.amalto.workbench.webservices.WSGetRole;
 import com.amalto.workbench.webservices.WSGetView;

@@ -1,6 +1,5 @@
 package com.amalto.workbench.actions;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.eclipse.core.runtime.IStatus;

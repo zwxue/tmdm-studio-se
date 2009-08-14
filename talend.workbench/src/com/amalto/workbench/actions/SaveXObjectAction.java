@@ -2,10 +2,7 @@ package com.amalto.workbench.actions;
 
 import java.net.URL;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Event;
 
@@ -17,7 +14,6 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.IConstants;
-import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataModel;
