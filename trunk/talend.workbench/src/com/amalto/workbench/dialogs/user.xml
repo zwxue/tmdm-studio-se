@@ -2,17 +2,39 @@
 <?eclipse version="3.0"?>
 <Role>
 
+<typeName isAdmin="true" name ="Routing Order V2 Active">
+</typeName>
+<typeName isAdmin="false" name ="Routing Engine V2">
+</typeName>
 <typeName isAdmin="false" name ="Routing Rule">
 	<instance isWritable="false">.*</instance> 
 </typeName>
-
+<typeName isAdmin="true" name ="Transformer Plugin">
+</typeName>
 <typeName isAdmin="false" name ="Data Cluster">
 	<instance isWritable="true">UpdateReport</instance> 
 	<instance isWritable="true">Order</instance> 
 	<instance isWritable="false">Reporting</instance> 
 	<instance isWritable="true">PROVISIONING</instance> 
 </typeName>
-
+<typeName isAdmin="true" name ="Transformer">
+</typeName>
+<typeName isAdmin="true" name ="Transformer V2">
+</typeName>
+<typeName isAdmin="true" name ="Routing Order V2 Failed">
+</typeName>
+<typeName isAdmin="false" name ="Stored Procedure">
+</typeName>
+<typeName isAdmin="true" name ="Routing Order V2 Completed">
+</typeName>
+<typeName isAdmin="true" name ="Synchronization Plan">
+</typeName>
+<typeName isAdmin="false" name ="Configuration Info">
+</typeName>
+<typeName isAdmin="true" name ="Transformer Plugin V2">
+</typeName>
+<typeName isAdmin="false" name ="Service">
+</typeName>
 <typeName isAdmin="false" name ="View">
 	<instance isWritable="false">Browse_items_Country</instance> 
 	<instance isWritable="true">MDM Reporting View</instance> 
@@ -39,10 +61,12 @@
 	<instance isWritable="false">Reporting</instance> 
 	<instance isWritable="true">PROVISIONING</instance> 
 </typeName>
-
+<typeName isAdmin="true" name ="Synchronization Conflict">
+</typeName>
 <typeName isAdmin="false" name ="Role">
 	<instance isWritable="false">.*</instance> 
 </typeName>
-
+<typeName isAdmin="false" name ="Background Job">
+</typeName>
 
 </Role>
