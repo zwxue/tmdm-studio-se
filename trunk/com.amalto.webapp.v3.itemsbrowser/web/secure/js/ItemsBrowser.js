@@ -1532,7 +1532,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 				    DWRUtil.setValue(inputText,'');
 				    updateNode(nodeId,treeIndex);
 				    if($('showPicture'))
-				       $('showPicture').src='';		            
+				       $('showPicture').src='img/genericUI/no_image.gif';		            
 		           window.hide();
 		        },    
 		       failure: function(form, action){  
@@ -1571,7 +1571,8 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	     items: [{    
 	        xtype: 'textfield',    
 	        fieldLabel: FILE_NAME[language],    
-	        name: 'imageFile',    
+	        name: 'imageFile',
+	        height:20,
 	        inputType: 'file'//file type
 	      }]
         
@@ -1593,7 +1594,7 @@ amalto.itemsbrowser.ItemsBrowser = function () {
 	        uploadFilePanel.getForm().submit({    
 		        success: function(uploadFilePanel, action){
 		           var text=action.response.responseText;
-		           var url='/imageserver/'+eval('('+text+')').message+"?width=150&height=150&preserveAspectRatio=true";		
+		           var url='/imageserver/'+eval('('+text+')').message+"?width=150&height=90&preserveAspectRatio=true";		
 		           var inputText=nodeId+"Value";	
 				    DWRUtil.setValue(inputText,url);
 				    updateNode(nodeId,treeIndex);		           
