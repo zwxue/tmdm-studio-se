@@ -1260,6 +1260,15 @@ public class TransformerMainPage extends AMainPageV2 {
 									combo.add(dlg.outPutVariable());
 									TransformerMainPage.this.markDirty();
 								}
+								
+								for (int idx = 0; idx < combo.getItems().length; idx++)
+								{
+									if (dlg.outPutVariable().equals(combo.getItem(idx)))
+									{
+										combo.select(idx);
+										break;
+									}
+								}
 							}
 							dlg.close();
 						}
