@@ -1,7 +1,6 @@
 package com.amalto.workbench.editors;
 
 import java.io.StringWriter;
-import java.net.SocketException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;

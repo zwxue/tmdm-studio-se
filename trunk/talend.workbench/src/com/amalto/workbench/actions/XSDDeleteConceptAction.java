@@ -9,8 +9,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.xsd.XSDElementDeclaration;
-import org.eclipse.xsd.XSDParticle;
-import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDTypeDefinition;
 
 import com.amalto.workbench.editors.DataModelMainPage;

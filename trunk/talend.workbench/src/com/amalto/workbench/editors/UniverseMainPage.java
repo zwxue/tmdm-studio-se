@@ -39,7 +39,6 @@ import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniverseItemsRevisionIDs;
 import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
 import com.amalto.workbench.webservices.XtentisPort;
-import com.amalto.workbench.widgets.ComplexTableViewer;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.LabelCombo;
 import com.amalto.workbench.widgets.LabelText;

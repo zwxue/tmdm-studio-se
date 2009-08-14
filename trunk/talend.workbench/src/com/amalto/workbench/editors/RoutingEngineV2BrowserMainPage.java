@@ -63,10 +63,7 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.exolab.castor.xml.Marshaller;
-import org.vafada.swtcalendar.SWTCalendarEvent;
-import org.vafada.swtcalendar.SWTCalendarListener;
 
-import com.amalto.workbench.dialogs.CalendarDialog;
 import com.amalto.workbench.dialogs.DOMViewDialog;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;

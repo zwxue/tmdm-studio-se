@@ -24,9 +24,8 @@ import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XtentisServerObjectsRetriever;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
-import com.amalto.workbench.views.ServerView;
-
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.views.ServerView;
 
 public class ServerLoginAction extends Action implements SelectionListener{
 
