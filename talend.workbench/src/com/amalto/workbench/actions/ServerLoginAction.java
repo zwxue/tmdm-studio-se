@@ -18,6 +18,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
 
 import com.amalto.workbench.dialogs.LoginDialog;
+import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
@@ -45,8 +46,7 @@ public class ServerLoginAction extends Action implements SelectionListener{
 	public void run() {
 		try {
 			super.run();
-			dialog = new LoginDialog(this,view.getSite().getShell(),IConstants.TALEND+" Login");
-			dialog.setDefaultImage(ImageCache.getImage( "icons/talend-picto-small.gif").createImage());
+			dialog = new LoginDialog(this,view.getSite().getShell(),IConstants.TALEND+" Login");			
 			dialog.setBlockOnOpen(true);		
 			dialog.open();
 		} catch (Exception e) {
