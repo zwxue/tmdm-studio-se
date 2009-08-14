@@ -8,19 +8,9 @@ package com.amalto.workbench.editors;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Observable;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.TextEvent;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ListViewer;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
@@ -32,16 +22,12 @@ import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -56,26 +42,26 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.amalto.workbench.actions.ServerRefreshAction;
 import com.amalto.workbench.dialogs.PluginDetailsDialog;
 import com.amalto.workbench.dialogs.XpathSelectDialog;
+import com.amalto.workbench.image.EImage;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
-import com.amalto.workbench.utils.EImage;
 import com.amalto.workbench.utils.IConstants;
-import com.amalto.workbench.utils.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.Version;
+import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSGetServicesList;
 import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRuleExpression;
-import com.amalto.workbench.webservices.WSRoutingRuleOperator;
 import com.amalto.workbench.webservices.WSServiceGetDocument;
 import com.amalto.workbench.webservices.WSServicesList;
 import com.amalto.workbench.webservices.WSServicesListItem;
 import com.amalto.workbench.webservices.WSString;
-import com.amalto.workbench.webservices.WSWhereCondition;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.ConditionWidget;
@@ -115,6 +101,8 @@ public class RoutingRuleMainPage extends AMainPageV2 {
     		new ComplexTableViewerColumn("Condition Id", false, "", "",true)
     };
     private TisTableViewer conditionViewer;
+	private Button deactiveButton;
+
     
     public String getDataModelName() {
 		return dataModelName;
@@ -155,9 +143,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
                     new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
             );
             descriptionText = toolkit.createText(charComposite, "",SWT.BORDER|SWT.SINGLE);
-            descriptionText.setLayoutData(    
-                    new GridData(SWT.FILL,SWT.FILL,true,false,1,1)
-            );
+
             descriptionText.addModifyListener(new ModifyListener() {
             	public void modifyText(ModifyEvent e) {
             		if (refreshing) return;
@@ -188,8 +174,9 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             		markDirty();
             	}
             });
-            xpathButton = toolkit.createButton(typeComposite,"...", SWT.PUSH);
-            xpathButton.setToolTipText("select a concept");
+            xpathButton = toolkit.createButton(typeComposite,"", SWT.PUSH);
+            xpathButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
+            xpathButton.setToolTipText("Select a concept");
             xpathButton.addSelectionListener(new SelectionListener(){
 
 				public void widgetDefaultSelected(SelectionEvent e) {
@@ -219,7 +206,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             //issynchronous Button
             isSynchronousButton = toolkit.createButton(charComposite, "Execute Synchronously", SWT.CHECK);
             isSynchronousButton.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,false,true,2,1)
+                    new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
             );
             isSynchronousButton.addMouseListener(new MouseListener() {
             	public void mouseUp(MouseEvent e) {
@@ -228,15 +215,29 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             	}
             	public void mouseDoubleClick(MouseEvent e) {}
             	public void mouseDown(MouseEvent e) {}
-            });
-            
+            });       
+            deactiveButton = toolkit.createButton(charComposite, "Deactive", SWT.CHECK);
+            deactiveButton.setLayoutData(
+                    new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+            );
+            deactiveButton.addMouseListener(new MouseListener() {
+            	public void mouseUp(MouseEvent e) {
+             		//mark for need to save
+            		markDirty();
+            	}
+            	public void mouseDoubleClick(MouseEvent e) {}
+            	public void mouseDown(MouseEvent e) {}
+            });  
+            //Routing Expressions            
+            Composite serviceGroup = this.getNewSectionComposite("Service");
+            serviceGroup.setLayout(new GridLayout(2,false));            
             //Service Name
-            Label serviceNameLabel = toolkit.createLabel(charComposite,  "Service JNDI Name", SWT.NULL);
+            Label serviceNameLabel = toolkit.createLabel(serviceGroup,  "Service JNDI Name", SWT.NULL);
             serviceNameLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
             );
             
-            Composite subPanel = toolkit.createComposite(charComposite);
+            Composite subPanel = toolkit.createComposite(serviceGroup);
             subPanel.setLayoutData( new GridData(SWT.LEFT,SWT.CENTER,false,true,1,1));
             subPanel.setLayout(new GridLayout(2,false));
             serviceNameCombo = new Combo(subPanel, SWT.DROP_DOWN|SWT.SINGLE|SWT.READ_ONLY);
@@ -311,16 +312,16 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             });
             
             //Service Parameters
-            Label serviceParametersLabel = toolkit.createLabel(charComposite,  "Service Parameters", SWT.NULL);
+            Label serviceParametersLabel = toolkit.createLabel(serviceGroup,  "Service Parameters", SWT.NULL);
             serviceParametersLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,true,2,1)
             );
-            serviceParametersText = toolkit.createText(charComposite, "",SWT.BORDER|SWT.MULTI|SWT.V_SCROLL);
+            serviceParametersText = toolkit.createText(serviceGroup, "",SWT.BORDER|SWT.MULTI|SWT.V_SCROLL);
             serviceParametersText.setLayoutData(    
                     new GridData(SWT.FILL,SWT.FILL,true,false,2,1)
             );
             ((GridData)serviceParametersText.getLayoutData()).widthHint = 200;
-            ((GridData)serviceParametersText.getLayoutData()).heightHint = 80;
+            ((GridData)serviceParametersText.getLayoutData()).heightHint = 120;
             serviceParametersText.addModifyListener(new ModifyListener() {
             	public void modifyText(ModifyEvent e) {
             		if (refreshing) return;
@@ -387,6 +388,8 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			WSRoutingRule wsRoutingRule = (WSRoutingRule) (getXObject().getWsObject());    				
 			descriptionText.setText(wsRoutingRule.getDescription());
 			isSynchronousButton.setSelection(wsRoutingRule.isSynchronous());
+			if(wsRoutingRule.getDeactive()!=null)
+			deactiveButton.setSelection(wsRoutingRule.getDeactive());
 			//serviceNameText.setText(wsRoutingRule.getServiceJNDI().replaceFirst("amalto/local/service/", ""));
 			serviceNameCombo.setText(wsRoutingRule.getServiceJNDI().replaceFirst("amalto/local/service/", ""));
 			serviceParametersText.setText(wsRoutingRule.getParameters()==null? "" : wsRoutingRule.getParameters());
@@ -408,6 +411,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			conditionText.setText(wsRoutingRule.getCondition());
 			this.refreshing = false;
 
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page", "Error refreshing the page: "+e.getLocalizedMessage());
@@ -428,7 +432,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			ws.setServiceJNDI(serviceNameCombo.getText().contains("/") ? serviceNameCombo.getText() : "amalto/local/service/"+serviceNameCombo.getText());
 			ws.setParameters("".equals(serviceParametersText.getText())? null : serviceParametersText.getText());
 			ws.setSynchronous(isSynchronousButton.getSelection());
-			
+			ws.setDeactive(deactiveButton.getSelection());
 			java.util.List<Line> lines=(java.util.List<Line>)conditionViewer.getViewer().getInput();
 			java.util.List<WSRoutingRuleExpression> wclist=new ArrayList<WSRoutingRuleExpression>();
 			for(Line item: lines){
@@ -444,7 +448,10 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			//WsRoutingRuleExpressions refreshed by viewer
 			ws.setCondition(conditionText.getText());
 			this.comitting = false;
-			
+			//refresh serverview
+			ServerView view= ServerView.show();
+			view.getViewer().refresh();
+			//new ServerRefreshAction(view,getXObject().getServerRoot()).run();
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page", "Error comitting the page: "+e.getLocalizedMessage());

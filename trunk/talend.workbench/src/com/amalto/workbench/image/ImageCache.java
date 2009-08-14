@@ -1,4 +1,4 @@
-package com.amalto.workbench.utils;
+package com.amalto.workbench.image;
 
 import java.util.Iterator;
 import java.util.Map;

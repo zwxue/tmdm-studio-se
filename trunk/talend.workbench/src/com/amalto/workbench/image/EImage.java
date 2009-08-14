@@ -1,4 +1,4 @@
-package com.amalto.workbench.utils;
+package com.amalto.workbench.image;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -239,6 +239,7 @@ public enum EImage {
 	RUNLAST_CO("icons/runlast_co.gif"),
 	STOP("icons/stop.gif"),
 	SUSPEND("icons/suspend_co.gif"),
+	DOTS_BUTTON("icons/dots_button.gif"),
 	ZAP("icons/zap.gif");
 	EImage(String path){
 		this.path=path;

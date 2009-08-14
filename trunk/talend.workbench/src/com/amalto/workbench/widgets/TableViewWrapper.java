@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Menu;
 
 import com.amalto.workbench.editors.AMainPageV2;
-import com.amalto.workbench.utils.ImageCache;
+import com.amalto.workbench.image.ImageCache;
 
 public class TableViewWrapper {
 	private java.util.List<ObserverMetaData> ObserverList = new ArrayList<ObserverMetaData>();

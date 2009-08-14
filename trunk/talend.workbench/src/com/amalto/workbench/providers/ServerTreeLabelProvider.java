@@ -1,6 +1,8 @@
 package com.amalto.workbench.providers;
 
 
+import java.rmi.RemoteException;
+
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -10,12 +12,17 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
 import com.amalto.workbench.actions.AServerViewAction;
+import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.image.OverlayImageProvider;
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.ESystemDefaultObjects;
+import com.amalto.workbench.utils.EXObjectStatus;
 import com.amalto.workbench.utils.FontUtils;
-import com.amalto.workbench.utils.ImageCache;
-import com.amalto.workbench.utils.LocalTreeObjectRepository;
+import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.webservices.WSGetRoutingRule;
+import com.amalto.workbench.webservices.WSRoutingRule;
+import com.amalto.workbench.webservices.WSRoutingRulePK;
 
 public class ServerTreeLabelProvider extends LabelProvider implements IColorProvider,IFontProvider{
 	
@@ -55,7 +62,27 @@ public class ServerTreeLabelProvider extends LabelProvider implements IColorProv
 			else if (object.getType() == TreeObject.STORED_PROCEDURE)
 				return ImageCache.getCreatedImage( "icons/stored_procedure.gif");
 			else if (object.getType() == TreeObject.ROUTING_RULE)
-				return ImageCache.getCreatedImage( "icons/routing_rule.gif");
+			{
+				Image img= ImageCache.getCreatedImage( "icons/routing_rule.gif");
+				if(object.isXObject()){
+					WSRoutingRule ws = (WSRoutingRule) (object.getWsObject());
+					try {
+						if(ws==null)
+						ws=Util.getPort(object).getRoutingRule(new WSGetRoutingRule(new WSRoutingRulePK(object.getDisplayName())));
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (XtentisException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					if(ws!=null && ws.getDeactive()!=null && ws.getDeactive().booleanValue()){
+						img=OverlayImageProvider.getImageWithStatus(img, EXObjectStatus.DEACTIVE);
+					}				
+				}
+				return img;
+			}
 			else if (object.getType() == TreeObject.VIEW)
 				return ImageCache.getCreatedImage( "icons/view.gif");
 			else if (object.getType() == TreeObject.DOCUMENT)

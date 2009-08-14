@@ -17,7 +17,6 @@ Eclipse-AutoStart: true
 Bundle-ClassPath: com.amalto.workbench.jar,
  META-INF/lib/activation.jar,
  META-INF/lib/commons-beanutils.jar,
- META-INF/lib/commons-collections.jar,
  META-INF/lib/commons-digester.jar,
  META-INF/lib/commons-httpclient-2.0.2.jar,
  META-INF/lib/commons-logging.jar,
@@ -50,4 +49,5 @@ Bundle-ClassPath: com.amalto.workbench.jar,
  META-INF/lib/xercesSamples.jar,
  META-INF/lib/xml-apis.jar,
  META-INF/lib/dom4j-1.6.1.jar,
- META-INF/lib/jaxen-1.1-beta-6.jar
+ META-INF/lib/jaxen-1.1-beta-6.jar,
+ META-INF/lib/commons-collections-3.2.jar

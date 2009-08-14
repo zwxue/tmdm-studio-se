@@ -19,6 +19,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.editors.AMainPageV2;
+import com.amalto.workbench.image.EImage;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeParent;
 
 public class XpathWidget implements  SelectionListener{
@@ -47,7 +49,7 @@ public class XpathWidget implements  SelectionListener{
 		this.dataModelName = dataModelName;
 	}
 	public XpathWidget(Composite parent,AMainPageV2 page, boolean isMulti){		
-		this("...",page.getXObject().getParent(),null,parent,page,false,false,"");
+		this("",page.getXObject().getParent(),null,parent,page,false,false,"");
 		this.isMulti=isMulti;
 	}
 	public XpathWidget(String buttonName,TreeParent treeParent,
@@ -77,9 +79,9 @@ public class XpathWidget implements  SelectionListener{
 			}
 		};
 		if(isButtonLeft){
-			annotationButton = toolkit.createButton(xpathAntionHolder, buttonName,SWT.PUSH);
+			annotationButton = toolkit.createButton(xpathAntionHolder, "",SWT.PUSH);
 			annotationButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,false, false, 1, 1));
-			annotationButton.addSelectionListener(this);
+			annotationButton.addSelectionListener(this);			
 			if(readOnly){
 				descriptionText = toolkit.createText(xpathAntionHolder, "", SWT.BORDER| SWT.MULTI|SWT.LEFT|SWT.READ_ONLY);
 			}else{
@@ -102,6 +104,7 @@ public class XpathWidget implements  SelectionListener{
 			annotationButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,false, false, 1, 1));
 			annotationButton.addSelectionListener(this);
 		}
+		annotationButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
 		annotationButton.setToolTipText("Select xpath");
 	}
 	
