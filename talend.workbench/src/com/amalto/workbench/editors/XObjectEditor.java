@@ -20,6 +20,7 @@ import org.eclipse.ui.forms.editor.IFormPage;
 import com.amalto.workbench.actions.SaveXObjectAction;
 import com.amalto.workbench.editors.xmleditor.XMLEditor;
 import com.amalto.workbench.editors.xmleditor.XMLEditorInput;
+import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
@@ -282,7 +283,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 		else if (object.getType() == TreeObject.DOCUMENT)
 			return ImageCache.getImage( "icons/documents.gif").createImage();			
 		else if (object.getType() == TreeObject.SUBSCRIPTION_ENGINE)
-			return ImageCache.getImage( "icons/routing_rule.gif").createImage();
+			return ImageCache.getImage( EImage.SUBSCRIPTION_ENGINE.getPath()).createImage();
 		else if (object.getType() == TreeObject.SYNCHRONIZATIONPLAN)
 			return ImageCache.getImage( "icons/catchuprelease_rls.gif").createImage();
 		else if (object.getType() == TreeObject.UNIVERSE)

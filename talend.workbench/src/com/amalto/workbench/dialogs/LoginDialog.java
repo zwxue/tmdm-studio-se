@@ -19,6 +19,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.amalto.workbench.image.EImage;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 
 public class LoginDialog extends Dialog {
@@ -48,6 +50,7 @@ public class LoginDialog extends Dialog {
 		super(parentShell);
 		this.caller = caller;
 		this.title = title;
+		setDefaultImage(ImageCache.getCreatedImage(EImage.TALEND_PICTO.getPath()));
 	}
 
 
