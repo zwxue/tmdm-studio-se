@@ -347,7 +347,7 @@ public class SynchronizationMainPage extends AMainPageV2{
         
 		
 		//TIS Server Section          
-        Composite TISGroup = this.getNewSectionComposite("TIS Server");
+        Composite TISGroup = this.getNewSectionComposite("TIS Server",ExpandableComposite.TWISTIE);
         TISGroup.setLayout(new GridLayout(1,true));
         Composite TISComposite = toolkit.createComposite(TISGroup, SWT.BORDER);
         TISComposite.setLayoutData(
