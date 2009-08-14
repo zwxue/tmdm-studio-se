@@ -150,6 +150,9 @@ public class ComplexTableViewer {
 		List<String> values=new ArrayList<String>();
 		for(ComplexTableViewerColumn column:columns){
 			String text = column.getNillValue();
+			if(column.isCombo() && column.getComboValues().length>0){
+				text= column.getComboValues()[0];
+			}
 			values.add(text);
 		}
 		return values.toArray(new String[values.size()]);
