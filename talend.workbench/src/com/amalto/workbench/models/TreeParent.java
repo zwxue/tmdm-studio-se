@@ -2,8 +2,6 @@ package com.amalto.workbench.models;
 
 import java.util.ArrayList;
 
-import com.amalto.workbench.utils.LocalTreeObjectRepository;
-
 public class TreeParent extends TreeObject {
 
 	private ArrayList children;

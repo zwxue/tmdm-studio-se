@@ -15,10 +15,8 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Event;
 
 import com.amalto.workbench.image.ImageCache;
-import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.IConstants;
-import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.views.ServerView;
@@ -423,7 +421,8 @@ public class PasteXObjectAction extends Action{
 			           				originalRoutingRule.getServiceJNDI(),
 			           				originalRoutingRule.getParameters(),
 			           				originalRoutingRule.getWsRoutingRuleExpressions(),
-			           				originalRoutingRule.getCondition()
+			           				originalRoutingRule.getCondition(),
+			           				originalRoutingRule.getDeactive()
 			           		);
 			           		//write the new model
 			           		destPort.putRoutingRule(new WSPutRoutingRule(newRoutingRule));
