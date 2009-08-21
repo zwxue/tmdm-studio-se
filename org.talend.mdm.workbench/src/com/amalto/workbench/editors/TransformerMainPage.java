@@ -83,6 +83,7 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.providers.XObjectEditorInput;
+import com.amalto.workbench.utils.EInputTemplate;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WidgetUtils;
 import com.amalto.workbench.utils.XtentisException;
@@ -1152,6 +1153,9 @@ public class TransformerMainPage extends AMainPageV2 {
 						refreshCombo();	
 						inputViewer.setInput(new ArrayList<WSTransformerVariablesMapping>());
 						outputViewer.setInput(new ArrayList<WSTransformerVariablesMapping>());
+						String jndi = pluginsCombo.getText();
+						String document = EInputTemplate.getXtentisObjexts().get(jndi).getContent();
+						parametersTextViewer.setDocument(new Document(document));
 					}	            	
 	            });
 	            //feed the combo once
