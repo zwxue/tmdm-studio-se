@@ -40,18 +40,20 @@ public class VariableDefinitionDialog extends Dialog{
 	private static String SMART_VIEW_TRANSFORMER = "Smart_view";
 	private static String BEFORE_SAVING_TRANSFORMER = "beforeSaving";
 	
-	private static final String VARIABLE_DEFAULT = "DEFAULT";
-	private static final String VARIABLE_OUTPUT_OF_BEFORESAVINGTRANFORMER = "OUTPUT_OF_BEFORESAVINGTRANFORMER";
-	private static final String VARIABLE_OUTPUT_TO_ITEMDISPATCHERSERVICE = "OUTPUT_TO_ITEMDISPATCHERSERVICE";
-	private static final String VARIABLE_OUTPUT_FOR_SMARTVIEW = "OUTPUT_FOR_SMARTVIEW";
+	private static final String VARIABLE_DEFAULT = "VARIABLE_DEFAULT";
+	private static final String VARIABLE_OUTPUT_OF_BEFORESAVINGTRANFORMER = "VARIABLE_OUTPUT_OF_BEFORESAVINGTRANFORMER";
+	private static final String VARIABLE_OUTPUT_FOR_SMARTVIEW = "VARIABLE_OUTPUT_FOR_SMARTVIEW";
+	private static final String VARIABLE_OUTPUT_TO_ITEMDISPATCHERSERVICE = "VARIABLE_OUTPUT_TO_ITEMDISPATCHERSERVICE";
+	private static final String VARIABLE_OUTPUT_TO_JDBCSERVICE = "VARIABLE_OUTPUT_TO_JDBCSERVICE";
 	
 	private static HashMap<String, String> descriptionMap = new HashMap<String, String>();
 	static
 	{
 		descriptionMap.put(VARIABLE_DEFAULT, ITransformerConstants.VARIABLE_DEFAULT);
-		descriptionMap.put(VARIABLE_OUTPUT_OF_BEFORESAVINGTRANFORMER, ITransformerConstants.VARIABLE_OUTPUT_OF_BEFORESAVINGTRANFORMER);
-		descriptionMap.put(VARIABLE_OUTPUT_TO_ITEMDISPATCHERSERVICE, ITransformerConstants.VARIABLE_OUTPUT_TO_ITEMDISPATCHERSERVICE);
+		descriptionMap.put(VARIABLE_OUTPUT_OF_BEFORESAVINGTRANFORMER, ITransformerConstants.VARIABLE_OUTPUT_OF_BEFORESAVINGTRANFORMER);		
 		descriptionMap.put(VARIABLE_OUTPUT_FOR_SMARTVIEW, ITransformerConstants.VARIABLE_OUTPUT_FOR_SMARTVIEW);
+		descriptionMap.put(VARIABLE_OUTPUT_TO_ITEMDISPATCHERSERVICE, ITransformerConstants.VARIABLE_OUTPUT_TO_ITEMDISPATCHERSERVICE);
+		descriptionMap.put(VARIABLE_OUTPUT_TO_JDBCSERVICE, ITransformerConstants.VARIABLE_OUTPUT_TO_JDBCSERVICE);
 	}
 	
 	public VariableDefinitionDialog(Shell shell, String type, boolean input, String plugin)
@@ -76,7 +78,14 @@ public class VariableDefinitionDialog extends Dialog{
 			else
 			{
 				inputList.add(VARIABLE_OUTPUT_OF_BEFORESAVINGTRANFORMER);
-				inputList.add(VARIABLE_OUTPUT_TO_ITEMDISPATCHERSERVICE);	
+			}
+		}else{
+			if (input)
+				inputList.add(VARIABLE_DEFAULT);
+			else
+			{
+				inputList.add(VARIABLE_OUTPUT_TO_ITEMDISPATCHERSERVICE);
+				inputList.add(VARIABLE_OUTPUT_TO_JDBCSERVICE);
 			}
 		}
 	}
@@ -124,7 +133,8 @@ public class VariableDefinitionDialog extends Dialog{
         	public void addListener(ILabelProviderListener listener) {}
         	public void removeListener(ILabelProviderListener listener) {}
         	public String getColumnText(Object element, int columnIndex) {
-        		return element.toString().toLowerCase();
+        		//return element.toString().toLowerCase();
+        		return element.toString();
         	}
         	public Image getColumnImage(Object element, int columnIndex) {return null;}
         });
