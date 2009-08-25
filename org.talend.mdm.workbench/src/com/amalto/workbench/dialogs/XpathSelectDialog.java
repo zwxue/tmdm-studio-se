@@ -49,6 +49,7 @@ import com.amalto.workbench.providers.XPathTreeContentProvider;
 import com.amalto.workbench.providers.XSDTreeLabelProvider;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSGetDataModel;
@@ -130,8 +131,11 @@ public class XpathSelectDialog extends Dialog {
 		dg.widthHint=400;
 		dataModelCombo = new Combo(composite,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
 		dataModelCombo.setLayoutData(dg);
-		
+		if(this.parent==null){
+			this.parent=(TreeParent)ServerView.show().getRoot().getChildren()[0];
+		}
 		final TreeParent tree = this.parent.findServerFolder(TreeObject.DATA_MODEL);
+		
 //		TreeObject[] trees = tree.getChildren();
 //		ArrayList <String> systemDataModelValues  = new ArrayList<String>();
 //		for (int i = 0; i < trees.length; i++) //add all the DataModels to systemDataModelValues
