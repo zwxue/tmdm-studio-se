@@ -7,6 +7,8 @@
 package com.amalto.workbench.editors;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -24,8 +26,10 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.IConstants;
+import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataModel;
 
 public class XObjectEditor extends FormEditor implements IXObjectModelListener{	
@@ -171,7 +175,21 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 	
 	private void updateTitle() {
     	IEditorInput input = this.getEditorInput();
-    	setPartName(input.getName());
+    	TreeObject xobject = (TreeObject)((XObjectEditorInput)this.getEditorInput()).getModel();
+    	TreeParent parent= xobject.findServerFolder(xobject.getType());
+    	String revision="";
+    	if(parent !=null){
+    		Pattern p=Pattern.compile("\\[.*\\]");
+    		Matcher m=p.matcher(parent.getDisplayName());
+    		while(m.find()){
+    			revision=m.group();
+    			break;
+    		}
+    	}
+    	if(revision.length()>0)
+    		setPartName(input.getName() + " "+revision);
+    	else
+    		setPartName(input.getName());
     	setContentDescription("");
     }
 

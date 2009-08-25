@@ -178,7 +178,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
         
         Button addLabelButton = new Button(composite,SWT.PUSH);
         addLabelButton.setLayoutData(
-                new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+                new GridData(SWT.FILL,SWT.FILL,false,false,1,1)
         );
         //addLabelButton.setText("Set");
         addLabelButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));

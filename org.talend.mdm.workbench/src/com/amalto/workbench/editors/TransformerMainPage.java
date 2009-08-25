@@ -738,7 +738,7 @@ public class TransformerMainPage extends AMainPageV2 {
 				Arrays.asList(wsTransformer.getProcessSteps())
 		);
 		list.remove(index);
-		currentPlugin = -1;
+		currentPlugin = stepsList.getSelectionIndex();
 		wsTransformer.setProcessSteps(list.toArray(new WSTransformerProcessStep[list.size()]));
 		TransformerMainPage.this.comitting= false;
 		markDirty();
@@ -816,8 +816,11 @@ public class TransformerMainPage extends AMainPageV2 {
 			}
 
 			stepsList.select(currentPlugin);
-			
-			refreshStep(stepsList.getSelectionIndex());
+			if(stepsList.getItemCount()>0 && stepsList.getSelectionIndex()==-1){
+				refreshStep(0);
+			}else{
+				refreshStep(stepsList.getSelectionIndex());
+			}
 
             this.refreshing = false;
 
@@ -848,7 +851,11 @@ public class TransformerMainPage extends AMainPageV2 {
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		super.doSave(monitor);
-		stepsList.setSelection(currentPlugin);
+		if(stepsList.getItemCount()>0 && currentPlugin ==-1){
+			refreshStep(0);
+		}else{
+			refreshStep(currentPlugin);
+		}
 		parametersTextViewer.getUndoManager().disconnect();
 	}
 	
@@ -1067,7 +1074,7 @@ public class TransformerMainPage extends AMainPageV2 {
 	        outputLinkButton = toolkit.createButton(outputComposite,"",SWT.PUSH | SWT.CENTER);
 	        outputLinkButton.setImage(ImageCache.getCreatedImage(EImage.SYNCED.getPath()));
 	        outputLinkButton.setToolTipText("Link");
-	        outputLinkButton.setToolTipText("Add a link for output Variables and Transformer Plugin's output Parameters");
+	        outputLinkButton.setToolTipText("Add a link for output Variables and output Parameters");
 	        outputLinkButton.setLayoutData(
 	                new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
 	        );
@@ -1125,25 +1132,25 @@ public class TransformerMainPage extends AMainPageV2 {
 	            jndiLabel.setLayoutData(
 	                    new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
 	            );
-	            pluginsCombo = new CCombo(specsComposite, SWT.DROP_DOWN|SWT.BORDER);
-	            pluginsCombo.addModifyListener(new ModifyListener() {
-	            	public void modifyText(ModifyEvent e) {
-	            		if (TransformerMainPage.this.refreshing) return;
-	            		String jndi = pluginsCombo.getText();
-	            		//update the description
-	            		String description = pluginDescriptions.get(jndi);
-	            		pluginDescription.setText(description == null ? "" : description);
-	            		if (stepsList.getSelectionIndex()==-1) return;
-	            		//commit as we go
-	            		//TransformerMainPage.this.comitting= true;	            		
-	            		if (! jndi.contains("/")) jndi=TRANSFORMER_PLUGIN+jndi;
-	            		//((WSTransformerV2)getXObject().getWsObject())
-	            		transformer.getProcessSteps()[stepsList.getSelectionIndex()]
-	            			                  	.setPluginJNDI(jndi);
-	            		TransformerMainPage.this.comitting= false;
-	            		markDirty();
-	            	}	            	
-	            });
+	            pluginsCombo = new CCombo(specsComposite, SWT.BORDER|SWT.READ_ONLY);
+//	            pluginsCombo.addModifyListener(new ModifyListener() {
+//	            	public void modifyText(ModifyEvent e) {
+//	            		if (TransformerMainPage.this.refreshing) return;
+//	            		String jndi = pluginsCombo.getText();
+//	            		//update the description
+//	            		String description = pluginDescriptions.get(jndi);
+//	            		pluginDescription.setText(description == null ? "" : description);
+//	            		if (stepsList.getSelectionIndex()==-1) return;
+//	            		//commit as we go
+//	            		//TransformerMainPage.this.comitting= true;	            		
+//	            		if (! jndi.contains("/")) jndi=TRANSFORMER_PLUGIN+jndi;
+//	            		//((WSTransformerV2)getXObject().getWsObject())
+//	            		transformer.getProcessSteps()[stepsList.getSelectionIndex()]
+//	            			                  	.setPluginJNDI(jndi);
+//	            		TransformerMainPage.this.comitting= false;
+//	            		markDirty();
+//	            	}	            	
+//	            });
 	            
 	            pluginsCombo.addSelectionListener(new SelectionAdapter(){
 					public void widgetSelected(SelectionEvent e) {	
@@ -1151,6 +1158,8 @@ public class TransformerMainPage extends AMainPageV2 {
 							return;
 						}
 						refreshCombo();	
+						if(stepsList.getSelectionIndex()>=0 && stepsList.getSelectionIndex()< transformer.getProcessSteps().length)
+						transformer.getProcessSteps()[stepsList.getSelectionIndex()].setPluginJNDI(TRANSFORMER_PLUGIN+pluginsCombo.getText());
 						inputViewer.setInput(new ArrayList<WSTransformerVariablesMapping>());
 						outputViewer.setInput(new ArrayList<WSTransformerVariablesMapping>());
 						String jndi = pluginsCombo.getText();
@@ -1293,7 +1302,7 @@ public class TransformerMainPage extends AMainPageV2 {
 			{
 				public void mouseEnter(MouseEvent e) {
 					((Text) e.getSource())
-							.setToolTipText("please click 'ALT + /' to pop up Variable Dialog to select variable value");
+							.setToolTipText("please click 'ALT + /' to pop up Variable Dialog");
 				}
 			};
 			
