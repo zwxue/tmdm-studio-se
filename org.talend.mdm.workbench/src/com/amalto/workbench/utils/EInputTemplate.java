@@ -25,7 +25,16 @@ public enum EInputTemplate {
 	ROUTE("route",""),
 	TISCALL("tisCall","<configuration>\n\t\t<url>?</url>\n\t\t<contextParam>\n\t\t\t<name>?</name>\n\t\t\t<value>?</value>\n\t\t</contextParam>\n\t\t<contextParam>\n\t\t\t<name>?</name>\n\t\t\t<value>?</value>\n\t\t</contextParam>\n\t\t<contextParam>\n\t\t\t<name>?</name>\n\t\t\t<value>?</value>\n\t\t</contextParam>\n\t\t<username>?</username>\n\t\t<password>?</password>\n\t\t<conceptMapping>\n\t\t\t<concept>?</concept>\n\t\t\t<fields>?</fields>\n\t\t</conceptMapping>\n</configuration>\n\n\n"),
 	XPATH("xpath","<parameters>\n\t\t<xPath>?</xPath>\n\t\t<contentType>?</contentType>\n</parameters>"),
-	XSLT("xslt","<Country\n\t\t\txrefCluster='?' \n\t\t\txrefIn='?' \n\t\t\txrefOut='?'\n\t>\n\t\t\t<xsl:value-of select='?'/>\n</Country>\n\n");
+	XSLT("xslt","<Country\n\t\t\txrefCluster='?' \n\t\t\txrefIn='?' \n\t\t\txrefOut='?'\n\t>\n\t\t\t<xsl:value-of select='?'/>\n</Country>\n\n"),
+	
+	//calltransformer, dumptoconsole, itemdispatcher, jdbc, logging, loggingsmtp, svn
+	CALLTRANSFORMER("calltransformer","transformer=?"),
+	DUMPTOCONSOLE("dumptoconsole",""),
+	ITEMDISPATCHER("itemdispatcher","<parameters>\n\t<transformer>\n\t\t<allInOne>?</allInOne>\n\t\t<assignTo>?</assignTo>\n\t</transformer>\n</parameters>"),
+	JDBC("jdbc","<parameters>\n\t<driverClassName>?</driverClassName>\n\t<url>?</url>\n\t<username>?</username>\n\t<password>?</password>\n\t<transformer>?</transformer>\n</parameters>"),
+	LOGGING("logging",""),
+	LOGGINGSMTP("loggingsmtp","<parameters>\n\t<from>?</from>\n\t<to>?</to>\n\t<cc>?</cc>\n\t<bcc>?</bcc>\n\t<logFileName>?</logFileName>\n\t<subjectprefix>?</transformer>\n\t<logfilename>?</logfilename>\n\t<transformer>?</transformer>\n</parameters>"),
+	SVN("svn","");
 	
 	
 	String name;
