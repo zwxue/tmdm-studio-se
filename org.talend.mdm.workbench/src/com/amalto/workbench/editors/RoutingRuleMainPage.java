@@ -51,6 +51,7 @@ import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
+import com.amalto.workbench.utils.EInputTemplate;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
@@ -254,6 +255,13 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             serviceNameCombo.addModifyListener(new ModifyListener() {
             	public void modifyText(ModifyEvent e) {
             		if (refreshing) return;
+            		String serviceName = serviceNameCombo.getText();
+            		String helpPara="";
+            		if(!"".equals(serviceName)&&!serviceName.equals(null))
+            			helpPara = EInputTemplate.getXtentisObjexts().get(serviceName).getContent();
+            		else
+            			helpPara = "";
+            		serviceParametersText.setText(helpPara);
             		markDirty();
             	}
             }); 
@@ -328,6 +336,16 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             );
             ((GridData)serviceParametersText.getLayoutData()).widthHint = 200;
             ((GridData)serviceParametersText.getLayoutData()).heightHint = 120;
+            if("".equals(serviceParametersText.getText())||serviceParametersText.getText().equals(null)){
+            	String para = serviceNameCombo.getText();
+            	String helpPara ="";
+            	if(!"".equals(para)&&!para.equals(null))
+            		helpPara = EInputTemplate.getXtentisObjexts().get(para).getContent();
+        		else
+        			helpPara = "";
+        		serviceParametersText.setText(helpPara);
+            }
+            	
             serviceParametersText.addModifyListener(new ModifyListener() {
             	public void modifyText(ModifyEvent e) {
             		if (refreshing) return;
