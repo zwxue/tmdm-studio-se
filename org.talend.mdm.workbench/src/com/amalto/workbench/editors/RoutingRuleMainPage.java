@@ -336,15 +336,15 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             );
             ((GridData)serviceParametersText.getLayoutData()).widthHint = 200;
             ((GridData)serviceParametersText.getLayoutData()).heightHint = 120;
-            if("".equals(serviceParametersText.getText())||serviceParametersText.getText().equals(null)){
-            	String para = serviceNameCombo.getText();
-            	String helpPara ="";
-            	if(!"".equals(para)&&!para.equals(null))
-            		helpPara = EInputTemplate.getXtentisObjexts().get(para).getContent();
-        		else
-        			helpPara = "";
-        		serviceParametersText.setText(helpPara);
-            }
+//            if("".equals(serviceParametersText.getText())||serviceParametersText.getText().equals(null)){
+//            	String para = serviceNameCombo.getText();
+//            	String helpPara ="";
+//            	if(!"".equals(para)&&!para.equals(null))
+//            		helpPara = EInputTemplate.getXtentisObjexts().get(para).getContent();
+//        		else
+//        			helpPara = "";
+//        		serviceParametersText.setText(helpPara);
+//            }
             	
             serviceParametersText.addModifyListener(new ModifyListener() {
             	public void modifyText(ModifyEvent e) {
