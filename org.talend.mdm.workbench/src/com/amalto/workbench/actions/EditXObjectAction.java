@@ -1,6 +1,8 @@
 package com.amalto.workbench.actions;
 
 import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -11,6 +13,7 @@ import org.eclipse.ui.IWorkbenchPage;
 
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
@@ -138,14 +141,23 @@ public class EditXObjectAction extends Action{
             }//switch
             
             if (page==null) this.page = view.getSite().getWorkbenchWindow().getActivePage();
-//            String universe = "";
-//            if(xobject.getType()!=TreeObject.DATA_CLUSTER&&xobject.getType()!=TreeObject.UNIVERSE){
-//            	universe = xobject.getServerRoot().getUniverse();
-//            	if("".equals(universe))
-//            		universe = " [HEAD]";
-//            }
+            //add by ymli (revision)
+            String revision="";
+            if(xobject.getType()!=TreeObject.DATA_CLUSTER&&xobject.getType()!=TreeObject.UNIVERSE){
+            	TreeParent parent= xobject.findServerFolder(xobject.getType());
+            	
+            	if(parent !=null){
+            		Pattern p=Pattern.compile("\\[.*\\]");
+            		Matcher m=p.matcher(parent.getDisplayName());
+            		while(m.find()){
+            			revision=m.group();
+            			break;
+            		}
+            	}
+            }
+            
        		this.page.openEditor(
-                    new XObjectEditorInput(xobject,xobject.getDisplayName()),
+                    new XObjectEditorInput(xobject,xobject.getDisplayName()+revision),
                     "com.amalto.workbench.editors.XObjectEditor"
            	);
        

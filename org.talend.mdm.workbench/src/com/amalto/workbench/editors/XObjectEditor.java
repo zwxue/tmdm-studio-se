@@ -175,21 +175,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 	
 	private void updateTitle() {
     	IEditorInput input = this.getEditorInput();
-    	TreeObject xobject = (TreeObject)((XObjectEditorInput)this.getEditorInput()).getModel();
-    	TreeParent parent= xobject.findServerFolder(xobject.getType());
-    	String revision="";
-    	if(parent !=null){
-    		Pattern p=Pattern.compile("\\[.*\\]");
-    		Matcher m=p.matcher(parent.getDisplayName());
-    		while(m.find()){
-    			revision=m.group();
-    			break;
-    		}
-    	}
-    	if(revision.length()>0)
-    		setPartName(input.getName() + " "+revision);
-    	else
-    		setPartName(input.getName());
+    	setPartName(input.getName());
     	setContentDescription("");
     }
 
