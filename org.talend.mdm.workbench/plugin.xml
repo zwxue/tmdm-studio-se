@@ -13,7 +13,8 @@
             class="com.amalto.workbench.views.ServerView"
             icon="icons/talend-picto-small.gif"
             id="org.talend.openmdm.workbench.views.ServerView"
-            name="Talend Open MDM Server View">
+            name="MDM Server View">
+            <!--name="Talend Open MDM Server View"-->
       </view>
    </extension>
    <extension
