@@ -522,23 +522,23 @@ public class NewXObjectAction extends Action{
             
             LocalTreeObjectRepository.getInstance().mergeNewTreeObject(newInstance);
             
-            String revision="";
-            if(newInstance.getType()!=TreeObject.DATA_CLUSTER&&newInstance.getType()!=TreeObject.UNIVERSE){
-            	TreeParent parent= newInstance.findServerFolder(newInstance.getType());
-            	
-            	if(parent !=null){
-            		Pattern p=Pattern.compile("\\[.*\\]");
-            		Matcher m=p.matcher(parent.getDisplayName());
-            		while(m.find()){
-            			revision=m.group();
-            			break;
-            		}
-            	}
-            }
+//            String revision="";
+//            if(newInstance.getType()!=TreeObject.DATA_CLUSTER&&newInstance.getType()!=TreeObject.UNIVERSE){
+//            	TreeParent parent= newInstance.findServerFolder(newInstance.getType());
+//            	
+//            	if(parent !=null){
+//            		Pattern p=Pattern.compile("\\[.*\\]");
+//            		Matcher m=p.matcher(parent.getDisplayName());
+//            		while(m.find()){
+//            			revision=m.group();
+//            			break;
+//            		}
+//            	}
+//            }
             
             
             XObjectEditor editpart=(XObjectEditor)view.getSite().getWorkbenchWindow().getActivePage().openEditor(
-                    new XObjectEditorInput(newInstance,newInstance.getDisplayName()+revision),
+                    new XObjectEditorInput(newInstance,newInstance.getDisplayName()),
                     "com.amalto.workbench.editors.XObjectEditor"
            	);
             

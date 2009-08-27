@@ -1512,4 +1512,21 @@ public class Util {
 
     	return wc;
     }
+    
+    public static String getRevision(TreeObject xobject){
+        String revision="";
+        if(xobject.getType()!=TreeObject.DATA_CLUSTER&&xobject.getType()!=TreeObject.UNIVERSE){
+        	TreeParent parent= xobject.findServerFolder(xobject.getType());
+        	
+        	if(parent !=null){
+        		Pattern p=Pattern.compile("\\[.*\\]");
+        		Matcher m=p.matcher(parent.getDisplayName());
+        		while(m.find()){
+        			revision=m.group();
+        			break;
+        		}
+        	}
+        }
+        return revision;
+    }
 }

@@ -100,6 +100,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
         		editor,
         		ViewMainPage.class.getName(),
         		"View "+((XObjectEditorInput)editor.getEditorInput()).getName()
+        		+Util.getRevision((TreeObject)((XObjectEditorInput)editor.getEditorInput()).getModel())
         );     
        this.treeParent = this.getXObject().getParent();
        this.viewName = ((XObjectEditorInput)editor.getEditorInput()).getName();

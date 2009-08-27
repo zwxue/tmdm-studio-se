@@ -82,6 +82,7 @@ import com.amalto.workbench.dialogs.VariableDefinitionDialog;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.Line;
+import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.EInputTemplate;
 import com.amalto.workbench.utils.Util;
@@ -171,6 +172,7 @@ public class TransformerMainPage extends AMainPageV2 {
         		editor,
         		TransformerMainPage.class.getName(),
         		"Transformer "+((XObjectEditorInput)editor.getEditorInput()).getName()
+        		+Util.getRevision((TreeObject)((XObjectEditorInput)editor.getEditorInput()).getModel())
         );
         //get Version information
         try {

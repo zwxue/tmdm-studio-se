@@ -84,6 +84,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener{
         		editor,
         		StoredProcedureMainPage.class.getName(),
         		"Stored Procedure "+((XObjectEditorInput)editor.getEditorInput()).getName()
+        		+Util.getRevision((TreeObject)((XObjectEditorInput)editor.getEditorInput()).getModel())
         );        
     }
 

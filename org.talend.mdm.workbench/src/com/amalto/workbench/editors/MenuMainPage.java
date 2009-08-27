@@ -57,7 +57,9 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.dialogs.MenuEntryDialog;
 import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
+import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuEntry;
 import com.amalto.workbench.webservices.WSMenuMenuEntriesDescriptions;
@@ -84,6 +86,7 @@ public class MenuMainPage extends AMainPageV2 {
         		editor,
         		MenuMainPage.class.getName(),
         		"Menu "+((XObjectEditorInput)editor.getEditorInput()).getName()
+        		+Util.getRevision((TreeObject)((XObjectEditorInput)editor.getEditorInput()).getModel())
         );        
     }
 
