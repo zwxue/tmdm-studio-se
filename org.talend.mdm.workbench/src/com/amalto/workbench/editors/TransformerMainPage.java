@@ -821,7 +821,7 @@ public class TransformerMainPage extends AMainPageV2 {
 			}else{
 				refreshStep(stepsList.getSelectionIndex());
 			}
-
+			stepsList.forceFocus();
             this.refreshing = false;
 
 		} catch (Exception e) {

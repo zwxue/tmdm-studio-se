@@ -23,7 +23,7 @@ public enum EInputTemplate {
 	REGEXP("regexp","<parameters>\n\t\t<regexp>?</regexp>\n\t\t<contentType>?</contentType>\n\t\t<resultPattern><![CDATA[\n\t\t\t\t<result>?</result>\n\t\t]]></resultPattern>\n</parameters>"),
 	REPLACE("replace","<parameters>\n\t\t<regexp>?</regexp>\n\t\t<contentType>?</contentType>\n\t\t<replacement>?</replacement>\n</parameters>"),
 	ROUTE("route",""),
-	TISCALL("tisCall","<configuration>\n\t\t<url>?</url>\n\t\t<contextParam>\n\t\t\t<name>?</name>\n\t\t\t<value>?</value>\n\t\t</contextParam>\n\t\t<contextParam>\n\t\t\t<name>?</name>\n\t\t\t<value>?</value>\n\t\t</contextParam>\n\t\t<contextParam>\n\t\t\t<name>?</name>\n\t\t\t<value>?</value>\n\t\t</contextParam>\n\t\t<username>?</username>\n\t\t<password>?</password>\n\t\t<conceptMapping>\n\t\t\t<concept>?</concept>\n\t\t\t<fields>?</fields>\n\t\t</conceptMapping>\n</configuration>\n\n\n"),
+	TISCALL("callJob","<configuration>\n\t\t<url>?</url>\n\t\t<contextParam>\n\t\t\t<name>?</name>\n\t\t\t<value>?</value>\n\t\t</contextParam>\n\t\t<contextParam>\n\t\t\t<name>?</name>\n\t\t\t<value>?</value>\n\t\t</contextParam>\n\t\t<contextParam>\n\t\t\t<name>?</name>\n\t\t\t<value>?</value>\n\t\t</contextParam>\n\t\t<username>?</username>\n\t\t<password>?</password>\n\t\t<conceptMapping>\n\t\t\t<concept>?</concept>\n\t\t\t<fields>?</fields>\n\t\t</conceptMapping>\n</configuration>\n\n\n"),
 	XPATH("xpath","<parameters>\n\t\t<xPath>?</xPath>\n\t\t<contentType>?</contentType>\n</parameters>"),
 	XSLT("xslt","<Country\n\t\t\txrefCluster='?' \n\t\t\txrefIn='?' \n\t\t\txrefOut='?'\n\t>\n\t\t\t<xsl:value-of select='?'/>\n</Country>\n\n"),
 	
