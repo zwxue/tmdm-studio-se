@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.jface.action.Action;
@@ -521,8 +522,23 @@ public class NewXObjectAction extends Action{
             
             LocalTreeObjectRepository.getInstance().mergeNewTreeObject(newInstance);
             
+            String revision="";
+            if(newInstance.getType()!=TreeObject.DATA_CLUSTER&&newInstance.getType()!=TreeObject.UNIVERSE){
+            	TreeParent parent= newInstance.findServerFolder(newInstance.getType());
+            	
+            	if(parent !=null){
+            		Pattern p=Pattern.compile("\\[.*\\]");
+            		Matcher m=p.matcher(parent.getDisplayName());
+            		while(m.find()){
+            			revision=m.group();
+            			break;
+            		}
+            	}
+            }
+            
+            
             XObjectEditor editpart=(XObjectEditor)view.getSite().getWorkbenchWindow().getActivePage().openEditor(
-                    new XObjectEditorInput(newInstance,newInstance.getDisplayName()),
+                    new XObjectEditorInput(newInstance,newInstance.getDisplayName()+revision),
                     "com.amalto.workbench.editors.XObjectEditor"
            	);
             
