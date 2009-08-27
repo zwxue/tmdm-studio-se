@@ -116,7 +116,8 @@ public class RoutingRuleMainPage extends AMainPageV2 {
         super(
         		editor,
         		RoutingRuleMainPage.class.getName(),
-        		"RoutingRule "+((XObjectEditorInput)editor.getEditorInput()).getName()
+        		"RoutingRule "+((XObjectEditorInput)editor.getEditorInput()).getName()+
+        		Util.getRevision((TreeObject)((XObjectEditorInput)editor.getEditorInput()).getModel())
         );
         //get Version information
         try {

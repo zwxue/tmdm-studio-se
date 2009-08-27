@@ -142,22 +142,22 @@ public class EditXObjectAction extends Action{
             
             if (page==null) this.page = view.getSite().getWorkbenchWindow().getActivePage();
             //add by ymli (revision)
-            String revision="";
-            if(xobject.getType()!=TreeObject.DATA_CLUSTER&&xobject.getType()!=TreeObject.UNIVERSE){
-            	TreeParent parent= xobject.findServerFolder(xobject.getType());
-            	
-            	if(parent !=null){
-            		Pattern p=Pattern.compile("\\[.*\\]");
-            		Matcher m=p.matcher(parent.getDisplayName());
-            		while(m.find()){
-            			revision=m.group();
-            			break;
-            		}
-            	}
-            }
+//            String revision="";
+//            if(xobject.getType()!=TreeObject.DATA_CLUSTER&&xobject.getType()!=TreeObject.UNIVERSE){
+//            	TreeParent parent= xobject.findServerFolder(xobject.getType());
+//            	
+//            	if(parent !=null){
+//            		Pattern p=Pattern.compile("\\[.*\\]");
+//            		Matcher m=p.matcher(parent.getDisplayName());
+//            		while(m.find()){
+//            			revision=m.group();
+//            			break;
+//            		}
+//            	}
+//            }
             
        		this.page.openEditor(
-                    new XObjectEditorInput(xobject,xobject.getDisplayName()+revision),
+                    new XObjectEditorInput(xobject,xobject.getDisplayName()),
                     "com.amalto.workbench.editors.XObjectEditor"
            	);
        

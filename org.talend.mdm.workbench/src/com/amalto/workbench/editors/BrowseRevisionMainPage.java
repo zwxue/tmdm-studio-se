@@ -25,6 +25,7 @@ import com.amalto.workbench.actions.EditXObjectAction;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectBrowserInput;
+import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
@@ -46,7 +47,6 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
 				"Revision Browser "
 						+ ((XObjectBrowserInput) editor.getEditorInput())
 								.getName().replaceAll("\\[.*\\]", "").trim());
-
 		BrowseRevisionMainPage.this.getXObject().fireEvent(TreeParent.UNIVERSE,
 				object, null);
 

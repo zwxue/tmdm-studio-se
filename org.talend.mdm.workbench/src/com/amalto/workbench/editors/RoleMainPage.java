@@ -67,6 +67,7 @@ import org.w3c.dom.Element;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.RoleMenuParameters;
 import com.amalto.workbench.utils.RoleWhereCondition;
@@ -123,6 +124,7 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
         		editor,
         		RoleMainPage.class.getName(),
         		"Role "+((XObjectEditorInput)editor.getEditorInput()).getName()
+        		+Util.getRevision((TreeObject)((XObjectEditorInput)editor.getEditorInput()).getModel())
         );  
         roleName = ((XObjectEditorInput)editor.getEditorInput()).getName();
     }

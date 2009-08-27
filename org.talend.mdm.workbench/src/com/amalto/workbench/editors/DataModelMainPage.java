@@ -128,6 +128,7 @@ import com.amalto.workbench.dialogs.ErrorExceptionDialog;
 import com.amalto.workbench.editors.xmleditor.XMLEditor;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.ISchemaContentProvider;
 import com.amalto.workbench.providers.TypesContentProvider;
 import com.amalto.workbench.providers.TypesLabelProvider;
@@ -209,7 +210,9 @@ public class DataModelMainPage extends AMainPageV2 {
 	XObjectEditor editor;
 	public DataModelMainPage(FormEditor editor) {
 		super(editor, DataModelMainPage.class.getName(), "Data Model "
-				+ ((XObjectEditorInput) editor.getEditorInput()).getName());
+				+ ((XObjectEditorInput) editor.getEditorInput()).getName()
+				+Util.getRevision((TreeObject)((XObjectEditorInput)editor.getEditorInput()).getModel())
+				);
 		this.dataModelName =((XObjectEditorInput) editor.getEditorInput()).getName();
 		this.editor=(XObjectEditor)editor;
 	}

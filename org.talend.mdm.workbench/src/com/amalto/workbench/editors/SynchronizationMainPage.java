@@ -35,9 +35,11 @@ import org.exolab.castor.xml.Marshaller;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.Line;
+import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.BusinessPortHelper;
 import com.amalto.workbench.utils.FontUtils;
+import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSGetConceptsInDataCluster;
 import com.amalto.workbench.webservices.WSGetObjectsForSynchronizationPlans;
@@ -112,6 +114,7 @@ public class SynchronizationMainPage extends AMainPageV2{
         		editor,
         		SynchronizationMainPage.class.getName(),
         		"SynchronizationPlan "+((XObjectEditorInput)editor.getEditorInput()).getName()
+        		+Util.getRevision((TreeObject)((XObjectEditorInput)editor.getEditorInput()).getModel())
         );        
 	}
 
