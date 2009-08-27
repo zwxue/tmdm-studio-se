@@ -5,6 +5,9 @@ public interface IConstants {
 	static final String[] VIEW_CONDITION_OPERATORS={"Contains","Contains Text Of","Starts With","Strict Contains","=","!=",">",">=","<","<="};
 	static final String[] ROUTE_CONDITION_OPERATORS={"Contains","Matches","Starts With","Is Null","Is Not Null","=","!=",">",">=","<","<="};
 	
+	/*Operate  Type*/
+	static final String[] OPERATE_TYPES={"UPDATE","CREATE","DELETE"};
+	
 	static final String[] PREDICATES={"","Or","And","Strict And","Exactly","Not"};
 	/**
 	 * The default universe name
