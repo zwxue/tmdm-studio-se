@@ -109,7 +109,7 @@ public class UniverseMainPage extends AMainPageV2{
         //Items Section          
         Composite itemsGroup = this.getNewSectionComposite("Concept Revision ID");
         itemsGroup.setLayout(new GridLayout(2,false));
-		defaultReversionIDText =new LabelText(itemsGroup,"Default Revision ID");       
+		defaultReversionIDText =new LabelText(toolkit,itemsGroup,"Default Revision ID");       
 		defaultReversionIDText.getText().addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent e) {
         		if (refreshing) return;
@@ -117,11 +117,7 @@ public class UniverseMainPage extends AMainPageV2{
         		markDirty();
         	}
         });
-//        Composite itemsComposite = toolkit.createComposite(itemsGroup, SWT.NULL);
-//        itemsComposite.setLayoutData(
-//                new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
-//        );       
-//        itemsComposite.setLayout(new GridLayout(1,true));
+
         
         TisTableViewer itemsViewer=new TisTableViewer(Arrays.asList(columns),toolkit,itemsGroup);
         itemsViewer.create();

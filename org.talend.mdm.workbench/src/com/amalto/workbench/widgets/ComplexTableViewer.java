@@ -2,7 +2,6 @@ package com.amalto.workbench.widgets;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -514,20 +513,9 @@ public class ComplexTableViewer {
 				}
 				KeyValue kv = line.keyValues.get(columnIndex);
 				boolean noChange = kv.value.equals(value.toString());
-				kv = new KeyValue(property, value.toString());
-				Line copyLine = line.clone();
-				copyLine.keyValues.set(columnIndex, kv);
-				List<Line> items = (List<Line>) viewer.getInput();
-				Collections.sort(items);
-				int pos = Collections.binarySearch(items, copyLine);
-				if (pos >= 0 && !copyLine.equals(line)) {
-					MessageDialog.openInformation(null,
-							ERROR_ITEMALREADYEXISTS_TITLE,
-							ERROR_ITEMALREADYEXISTS_CONTENT);
-					return;
-				}
-				line.keyValues.set(columnIndex, kv);
-				viewer.update(line, null);
+				kv.value =value.toString();
+
+				viewer.refresh();
 				if (!noChange)
 				{
 					markDirty();
@@ -546,7 +534,7 @@ public class ComplexTableViewer {
 				for (KeyValue keyvalue : line.keyValues) {
 					if (property.equals(keyvalue.key)) {
 						if (keyvalue.value.equals("")) {
-							keyvalue.value = columns.get(columnIndex)
+							return columns.get(columnIndex)
 									.getNillDisplay();
 						}
 						return keyvalue.value;
@@ -638,6 +626,10 @@ public class ComplexTableViewer {
         createViewer();        
 	}
 	
+	public void setHeight(int height){
+		GridData gd=(GridData)table.getLayoutData();
+		gd.heightHint=height;
+	}
 	
 	public Composite getMainComposite() {
 		return mainComposite;

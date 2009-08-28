@@ -10,7 +10,7 @@ import com.amalto.workbench.widgets.ComplexTableViewerColumn;
  * @author aiming
  *
  */
-public class Line implements Comparable<Object>, Cloneable{
+public class Line implements  Cloneable{
 	/**
 	 * key is the TableColumn name, value is the  column's value
 	 */
@@ -24,65 +24,15 @@ public class Line implements Comparable<Object>, Cloneable{
 		this.keyValues=keyValues;
 	}
 	
-    public int compareTo(Object o)
-    {
-    	Line other = (Line)o;
-    	int index = 0;
-    	
-    	for(KeyValue kv: this.keyValues)
-    	{
-    		int comp = kv.value.compareTo(other.keyValues.get(index).value);
-    		if (comp != 0)
-    		{
-    			return comp;
-    		}
-    		index++;
-    	}
-    	
-    	return 0;
-    }
-    
 
-    public boolean equals(Object obj)
-    {
-    	if (!(obj instanceof Line))
-    	{
-    		return false;
-    	}
-    	
-    	Line other = (Line)obj;
-    	int index = 0;
-    	
-    	for(KeyValue kv: this.keyValues)
-    	{
-    		if (!kv.value.equals(other.keyValues.get(index).value))
-    		{
-    			return false;
-    		}
-    		index++;
-    	}
-    	
-    	return true;
-    }
-    
-    public int hashCode()
-    {
-    	int result = 53;
-    	
-    	for (KeyValue kv: keyValues)
-    	{
-    		result += 61 * result + kv.value.hashCode();
-    	}
-    	
-    	return result;
-    }
-    
+        
     public Line clone()
     {
     	List<KeyValue> copyKeyValues = new ArrayList<KeyValue>();
     	for (KeyValue kv: keyValues)
     	{
-    		copyKeyValues.add(kv);
+    		KeyValue kkvv=new KeyValue(kv.key,kv.value);
+    		copyKeyValues.add(kkvv);
     	}
     	return new Line(copyKeyValues);
     }

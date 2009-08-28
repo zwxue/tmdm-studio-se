@@ -116,7 +116,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
             descriptionLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
-            searchText = toolkit.createText(composite, "*",SWT.BORDER|SWT.SINGLE);
+            searchText = toolkit.createText(composite, "*",SWT.BORDER|SWT.MULTI);
             searchText.setLayoutData(    
                     new GridData(SWT.FILL,SWT.FILL,true,false,2,1)
             );
@@ -185,8 +185,8 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
     		
     		searchText.setFocus();
             //adapt body add mouse/focus listener for child
-    		WidgetFactory factory=new WidgetFactory();
-    		factory.adapt(managedForm.getForm().getBody());
+    		//WidgetFactory factory=new WidgetFactory();
+    		//factory.adapt(managedForm.getForm().getBody());
         } catch (Exception e) {
             e.printStackTrace();
         }	

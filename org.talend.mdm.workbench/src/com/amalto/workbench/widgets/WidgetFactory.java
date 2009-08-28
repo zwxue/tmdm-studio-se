@@ -19,8 +19,9 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -38,6 +39,41 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
  * 
  */
 public class WidgetFactory extends FormToolkit {
+    public  FocusListener focusListener = new FocusListener( ) {
+        public void focusGained(FocusEvent e) {
+            Control control = (Control) e.widget;
+            if (control instanceof Composite) {
+                Composite parent = (Composite) control;
+                setChildFocus(parent);
+            } else {
+                if(control instanceof Text){
+                	((Text)control).selectAll();
+                	//System.out.println(((Text)control).getText() + " focusGained");
+                }
+                if(control instanceof StyledText){
+                	((StyledText)control).selectAll();
+                }
+            }
+        }
+        
+        public void focusLost(FocusEvent e) {
+            Control control = (Control) e.widget;
+            if (control instanceof Composite) {
+                Composite parent = (Composite) control;
+                setChildFocus(parent);
+            } else {
+                    if(control instanceof Text){
+                    	Text t=(Text)control;
+                    	t.clearSelection();
+                    	//System.out.println(t.getText() + " focusLost");
+                    }
+                    if(control instanceof StyledText){
+                    	StyledText t=(StyledText)control;                    	
+                    	t.setSelection(0, 0);	                    		
+                    }
+            }
+        }        
+    };
 
     /**
      * private constructor.
@@ -92,33 +128,16 @@ public class WidgetFactory extends FormToolkit {
     @Override
     public void adapt(Composite composite) {
         composite.setBackground(getColors().getBackground());
-        MouseAdapter listener = new MouseAdapter() {
 
-            public void mouseDown(MouseEvent e) {
-                Control control = (Control) e.widget;
-                if (control instanceof Composite) {
-                    Composite parent = (Composite) control;
-                    setChildFocus(parent);
-                } else {
-                	if(control.isFocusControl()){
-	                    //control.setFocus();
-	                    if(control instanceof Text){
-	                    	((Text)control).selectAll();
-	                    }
-	                    if(control instanceof StyledText){
-	                    	((StyledText)control).selectAll();
-	                    }
-                	}
-                }
-            }
-        };
-        addChildListener(composite,listener);
-        composite.addMouseListener(listener);
-        composite.getParent().addMouseListener(listener);
+        // add a focus listener
+        
+        addChildListener(composite,focusListener);
+//        composite.addFocusListener(focusListener);
+//        composite.getParent().addFocusListener(focusListener);
         composite.setMenu(composite.getParent().getMenu());
     }
     
-    private void addChildListener(Composite parent, MouseAdapter listener){
+    private void addChildListener(Composite parent, FocusListener listener){
         if (parent == null) {
            return;
         }
@@ -126,7 +145,7 @@ public class WidgetFactory extends FormToolkit {
             if ((control instanceof Combo) || (control instanceof Button)) {
                 continue;
             } else if ((control instanceof Text) || (control instanceof StyledText)) {
-                control.addMouseListener(listener);                
+                control.addFocusListener(listener);         
             } else {
                 if (control instanceof Composite) {
                     addChildListener((Composite) control, listener);

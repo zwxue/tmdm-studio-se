@@ -42,7 +42,7 @@ public abstract class AMainPage extends AFormPage implements ModifyListener{
 
         try {
         	
-            FormToolkit toolkit = managedForm.getToolkit();
+            FormToolkit toolkit = new WidgetFactory();//managedForm.getToolkit();
             
             final ScrolledForm form = managedForm.getForm();
             TableWrapLayout formLayout = new TableWrapLayout();
@@ -88,8 +88,8 @@ public abstract class AMainPage extends AFormPage implements ModifyListener{
             createCharacteristicsContent(toolkit, charComposite);
             
             //adapt body add mouse/focus listener for child
-    		WidgetFactory factory=new WidgetFactory();
-    		factory.adapt(form.getBody());
+    		//WidgetFactory factory=new WidgetFactory();
+            toolkit.adapt(form.getBody());
     		
         } catch (Exception e) {
             e.printStackTrace();

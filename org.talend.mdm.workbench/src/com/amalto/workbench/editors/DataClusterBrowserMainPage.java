@@ -112,7 +112,14 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	protected boolean[] ascending = {true,false,false};
 	private static int DEFAULT_VIEWER_HEIGHT = 500;
 	
-	//protected String previousDataModel=null;
+	KeyListener keylistener= new KeyListener() {
+		public void keyPressed(KeyEvent e) {}
+		public void keyReleased(KeyEvent e) {
+			if ((e.stateMask==0) && (e.character == SWT.CR)) {
+				DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(true));
+			}
+		}//keyReleased
+	};
 		
     public DataClusterBrowserMainPage(FormEditor editor) {
         super(
@@ -134,7 +141,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         	managedForm.getForm().setText(this.getTitle());
         	
         	//get the toolkit
-        	FormToolkit toolkit = managedForm.getToolkit();
+        	FormToolkit toolkit = new WidgetFactory();//managedForm.getToolkit();
         	
         	//get the body
         	Composite composite = managedForm.getForm().getBody();
@@ -170,37 +177,19 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             
             CalendarSelectWidget toCalendar=new CalendarSelectWidget(toolkit,composite,false);
             toText=toCalendar.getText();
-            toText.addKeyListener(
-            		new KeyListener() {
-            			public void keyPressed(KeyEvent e) {}
-            			public void keyReleased(KeyEvent e) {
-        					if ((e.stateMask==0) && (e.character == SWT.CR)) {
-        						DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(true));
-        					}
-            			}//keyReleased
-            		}//keyListener
-            );
+            toText.addKeyListener( keylistener           );
 
 
         	Label conceptLabel = toolkit.createLabel(composite, "Concept", SWT.NULL);
             conceptLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
-            conceptCombo = new Combo(composite,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
+            conceptCombo = new Combo(composite,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.MULTI);
             conceptCombo.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
             ((GridData) conceptCombo.getLayoutData()).widthHint = 180;
-            conceptCombo.addKeyListener(
-            		new KeyListener() {
-            			public void keyPressed(KeyEvent e) {}
-            			public void keyReleased(KeyEvent e) {
-        					if ((e.stateMask==0) && (e.character == SWT.CR)) {
-        						DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(true));
-        					}
-            			}//keyReleased
-            		}//keyListener
-            );
+            conceptCombo.addKeyListener( keylistener           );
             
             //search
         	Button bSearch = toolkit.createButton(composite, "", SWT.CENTER);
@@ -225,20 +214,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             keyLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
-            keyText = toolkit.createText(composite, "",SWT.BORDER|SWT.SINGLE);
+            keyText = toolkit.createText(composite, "",SWT.BORDER|SWT.MULTI);
             keyText.setLayoutData(    
                     new GridData(SWT.FILL,SWT.CENTER,false,false,5,1)
             );
-            keyText.addKeyListener(
-            		new KeyListener() {
-            			public void keyPressed(KeyEvent e) {}
-            			public void keyReleased(KeyEvent e) {
-        					if ((e.stateMask==0) && (e.character == SWT.CR)) {
-        						DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(true));
-        					}
-            			}//keyReleased
-            		}//keyListener
-            );        	
+            keyText.addKeyListener( keylistener           );
 
             
             
@@ -249,21 +229,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             descriptionLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
-            searchText = toolkit.createText(composite, "",SWT.BORDER|SWT.SINGLE);
+            searchText = toolkit.createText(composite, "",SWT.BORDER|SWT.MULTI);
             searchText.setLayoutData(    
                     new GridData(SWT.FILL,SWT.FILL,true,false,2,1)
             );
 //         searchText.addModifyListener(this);
-            searchText.addKeyListener(
-            		new KeyListener() {
-            			public void keyPressed(KeyEvent e) {}
-            			public void keyReleased(KeyEvent e) {
-        					if ((e.stateMask==0) && (e.character == SWT.CR)) {
-        						DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(true));
-        					}
-            			}//keyReleased
-            		}//keyListener
-            );
+            searchText.addKeyListener( keylistener           );
             
             
             final Table table = createTable(composite);
@@ -303,8 +274,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
     		
     		searchText.setFocus();
             //adapt body add mouse/focus listener for child
-    		WidgetFactory factory=new WidgetFactory();
-    		factory.adapt(managedForm.getForm().getBody());
+    		//WidgetFactory factory=new WidgetFactory();
+    		toolkit.adapt(composite);
+    		
         } catch (Exception e) {
             e.printStackTrace();
         }	
@@ -365,12 +337,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 					table.setSortColumn(column);
 					table.setSortDirection(SWT.UP);
 				}
-				
-					
-//					column.setImage(ImageCache.getCreatedImage("icons/view_menu_down.gif"));//============
-//				else
-//					column.setImage(ImageCache.getCreatedImage("icons/view_menu_up.gif"));//============
-			}
+				}
 		});
 
 		// 2nd column
