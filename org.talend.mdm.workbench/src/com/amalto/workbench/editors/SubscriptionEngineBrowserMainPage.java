@@ -232,7 +232,7 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
             queueLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
-            queueCombo = new Combo(firstLineComposite,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
+            queueCombo = new Combo(firstLineComposite,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.MULTI);
             queueCombo.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
@@ -275,7 +275,7 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
             idLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
-            idText = toolkit.createText(secondLineComposite, "",SWT.BORDER|SWT.SINGLE);
+            idText = toolkit.createText(secondLineComposite, "",SWT.BORDER|SWT.MULTI);
             idText.setLayoutData(    
                     new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
             );
@@ -294,7 +294,7 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
         	documentTypeLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
-            documentTypeText = toolkit.createText(secondLineComposite, "",SWT.BORDER|SWT.SINGLE);
+            documentTypeText = toolkit.createText(secondLineComposite, "",SWT.BORDER|SWT.MULTI);
             documentTypeText.setLayoutData(    
                     new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
             );
@@ -314,7 +314,7 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
             serviceLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
-            serviceText = toolkit.createText(secondLineComposite, "",SWT.BORDER|SWT.SINGLE);
+            serviceText = toolkit.createText(secondLineComposite, "",SWT.BORDER|SWT.MULTI);
             serviceText.setLayoutData(    
                     new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
             );

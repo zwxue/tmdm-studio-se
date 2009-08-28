@@ -5,6 +5,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 /**
  * 
@@ -14,17 +15,17 @@ import org.eclipse.swt.widgets.Text;
 public class LabelText {
 	protected Label label;
 	protected Text text;
-	WidgetFactory factory =new WidgetFactory();
-	public LabelText(Composite parent, final String labelName){
-       label = factory.createLabel(parent, labelName, SWT.NULL);
+	//WidgetFactory factory =new WidgetFactory();
+	public LabelText(FormToolkit toolkit,Composite parent, final String labelName){
+       label = toolkit.createLabel(parent, labelName, SWT.NULL);
        label.setLayoutData(
                 new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
         );
-        text = factory.createText(parent, "",SWT.BORDER);
+        text = toolkit.createText(parent, "",SWT.BORDER|SWT.MULTI);
         text.setLayoutData(    
                 new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
         );		
-        factory.adapt(parent);
+        //text.addFocusListener(factory.focusListener);
 	}
 	public Label getLabel() {
 		return label;

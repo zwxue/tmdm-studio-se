@@ -2,23 +2,18 @@ package com.amalto.workbench.widgets;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -27,11 +22,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.image.EImage;
@@ -111,7 +103,7 @@ public class TisTableViewer extends ComplexTableViewer{
 	        });
 	        deleteButton.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
 	        upButton = toolkit.createButton(stepUpDownComposite,"",SWT.PUSH | SWT.CENTER);
-	        upButton.setToolTipText("move up the selected item");
+	        upButton.setToolTipText("Move up the selected item");
 	        upButton.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
 	        upButton.setLayoutData(
 	                new GridData(SWT.FILL,SWT.FILL,false,false,1,1)
@@ -187,7 +179,7 @@ public class TisTableViewer extends ComplexTableViewer{
 	        		if(index >=0 && index <=viewer.getTable().getItemCount()-1 ){
 	        			List<Line> items=(List<Line>)viewer.getInput();
 	        			Line line= items.get(index);
-	        			copyLine=line;
+	        			copyLine=line.clone();
 	        			pastButton.setEnabled(copyLine!=null);
 	        		}					
 				}	        	
@@ -208,7 +200,7 @@ public class TisTableViewer extends ComplexTableViewer{
 	        				mainPage.setComitting(true);
 	        			}
 	        			List<Line> items=(List<Line>)viewer.getInput();
-	        			items.add(viewer.getTable().getItemCount(),copyLine);
+	        			items.add(copyLine);
 	        			//viewer.setInput(items);
 	        			viewer.refresh();
 	        			//TODO
@@ -301,20 +293,8 @@ public class TisTableViewer extends ComplexTableViewer{
 						}
 						KeyValue kv = line.keyValues.get(columnIndex);
 						boolean noChange = kv.value.equals(value.toString());
-						kv = new KeyValue(property, value.toString());
-						Line copyLine = line.clone();
-						copyLine.keyValues.set(columnIndex, kv);
-						List<Line> items = (List<Line>) viewer.getInput();
-						Collections.sort(items);
-						int pos = Collections.binarySearch(items, copyLine);
-						if (pos >= 0 && !copyLine.equals(line)) {
-							MessageDialog.openInformation(null,
-									ERROR_ITEMALREADYEXISTS_TITLE,
-									ERROR_ITEMALREADYEXISTS_CONTENT);
-							return;
-						}
-						line.keyValues.set(columnIndex, kv);
-						viewer.update(line, null);
+						kv.value =value.toString();
+						viewer.refresh();
 						if (!noChange)
 						{
 							markDirty();
@@ -334,7 +314,7 @@ public class TisTableViewer extends ComplexTableViewer{
 					for (KeyValue keyvalue : line.keyValues) {
 						if (property.equals(keyvalue.key)) {
 							if (keyvalue.value.equals("")) {
-								keyvalue.value = columns.get(columnIndex)
+								return columns.get(columnIndex)
 										.getNillDisplay();
 							}
 							return keyvalue.value;
@@ -350,47 +330,7 @@ public class TisTableViewer extends ComplexTableViewer{
 
 	        });
 
-	        viewer.addSelectionChangedListener(new ISelectionChangedListener(){
-
-				public void selectionChanged(SelectionChangedEvent event) {
-					// TODO Auto-generated method stub
-	    			Line line = (Line)((IStructuredSelection)event.getSelection()).getFirstElement();
-	    			
-	    			for(int columnIndex=0; columnIndex<columns.size(); columnIndex++){
-	    				if(line==null){
-	    					Control control=columns.get(columnIndex).getControl();
-	    					if(control instanceof Text){
-	    						((Text)control).setText("");
-	    					}
-	    					if(control instanceof CCombo){
-	    						((CCombo)control).select(0);
-	    					}
-	    					if(control instanceof Combo){
-	    						((CCombo)control).select(0);
-	    					}  					
-	    				}else{
-			       			for(KeyValue keyvalue:line.keyValues){
-			    				if(keyvalue.key.equals(columns.get(columnIndex).getName())){
-			    					String val = keyvalue.value; 
-			    					Control control=columns.get(columnIndex).getControl();
-			    					if(control instanceof Text){
-			    						((Text)control).setText(val);
-			    					}
-			    					if(control instanceof CCombo){
-			    						((CCombo)control).setText(val);
-			    					}
-			    					if(control instanceof Combo){
-			    						((CCombo)control).setText(val);
-			    					}
-			    				}
-			    			}
-	    				}
-	    			}
-				}
-	        	
-	        });
-	        
-	        
+	        	        
 	        //display for Delete Key events to delete an instance
 	        viewer.getTable().addKeyListener(new KeyListener() {
 	        	public void keyPressed(KeyEvent e) {}

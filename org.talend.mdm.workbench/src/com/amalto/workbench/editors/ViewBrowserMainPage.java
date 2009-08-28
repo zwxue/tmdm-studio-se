@@ -185,7 +185,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             );
             ((GridData)dataClusterCombo.getLayoutData()).minimumWidth = 100; 
             
-            searchText = toolkit.createText(resultsGroup, "",SWT.BORDER|SWT.SINGLE);
+            searchText = toolkit.createText(resultsGroup, "",SWT.BORDER|SWT.MULTI);
             searchText.setLayoutData(    
                     new GridData(SWT.FILL,SWT.CENTER,true,false,1,1)
             );

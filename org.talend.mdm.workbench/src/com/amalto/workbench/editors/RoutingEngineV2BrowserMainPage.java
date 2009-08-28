@@ -241,7 +241,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             statusLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
-            statusCombo = new Combo(firstLineComposite,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
+            statusCombo = new Combo(firstLineComposite,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.MULTI);
             statusCombo.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
@@ -287,7 +287,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
             //DocumentType
-            documentTypeText = toolkit.createText(searchLineComposite, "",SWT.BORDER|SWT.SINGLE);
+            documentTypeText = toolkit.createText(searchLineComposite, "",SWT.BORDER|SWT.MULTI);
             documentTypeText.setLayoutData(    
                     new GridData(SWT.FILL,SWT.FILL,false,false,1,1)
             );
@@ -308,7 +308,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
             //ID
-            idText = toolkit.createText(searchLineComposite, "",SWT.BORDER|SWT.SINGLE);
+            idText = toolkit.createText(searchLineComposite, "",SWT.BORDER|SWT.MULTI);
             idText.setLayoutData(    
                     new GridData(SWT.FILL,SWT.FILL,true,false,1,1)
             );
@@ -329,7 +329,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
             //service
-            serviceCombo = new Combo(searchLineComposite,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
+            serviceCombo = new Combo(searchLineComposite,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.MULTI);
             serviceCombo.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
@@ -363,7 +363,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
             //anyField
-            anyFieldText = toolkit.createText(searchLineComposite, "",SWT.BORDER|SWT.SINGLE);
+            anyFieldText = toolkit.createText(searchLineComposite, "",SWT.BORDER|SWT.MULTI);
             anyFieldText.setLayoutData(    
                     new GridData(SWT.FILL,SWT.FILL,true,false,1,1)
             );
@@ -413,8 +413,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
     		managedForm.reflow(true); //nothing will show on the form if not called
  
             //adapt body add mouse/focus listener for child
-    		WidgetFactory factory=new WidgetFactory();
-    		factory.adapt(managedForm.getForm().getBody());
+    		//WidgetFactory factory=new WidgetFactory();
+    		//factory.adapt(managedForm.getForm().getBody());
     		
         } catch (Exception e) {
             e.printStackTrace();

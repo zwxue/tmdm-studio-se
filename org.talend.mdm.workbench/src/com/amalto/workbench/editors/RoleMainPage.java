@@ -700,7 +700,7 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
         );
         composite.setLayout(new GridLayout(5,false));
                 
-        wcLeftText = toolkit.createText(composite, "",SWT.BORDER|SWT.SINGLE);
+        wcLeftText = toolkit.createText(composite, "",SWT.BORDER|SWT.MULTI);
         wcLeftText.setLayoutData(    
                 new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
         );

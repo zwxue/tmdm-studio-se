@@ -143,7 +143,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             descriptionLabel.setLayoutData(
             		 new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
             );
-            descriptionText = toolkit.createText(charComposite, "",SWT.BORDER|SWT.SINGLE);
+            descriptionText = toolkit.createText(charComposite, "",SWT.BORDER|SWT.MULTI);
             descriptionText.setLayoutData(
             		new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
             );
@@ -170,7 +170,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             layout.marginWidth=0;
             typeComposite.setLayout(layout);
             
-            objectTypeText =  toolkit.createText(typeComposite, "",SWT.BORDER|SWT.SINGLE);
+            objectTypeText =  toolkit.createText(typeComposite, "",SWT.BORDER|SWT.MULTI);
             objectTypeText.setLayoutData(
                     new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING,SWT.CENTER,false,false,1,1)
             );

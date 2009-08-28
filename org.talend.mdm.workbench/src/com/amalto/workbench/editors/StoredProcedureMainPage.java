@@ -101,7 +101,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener{
             		new GridData(SWT.BEGINNING,SWT.CENTER,false,false,1,1)
             );
             
-            descriptionText = toolkit.createText(charComposite, "",SWT.BORDER);
+            descriptionText = toolkit.createText(charComposite, "",SWT.BORDER|SWT.MULTI);
             descriptionText.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
             );

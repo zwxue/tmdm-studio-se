@@ -35,7 +35,7 @@ public class CalendarSelectWidget {
     	//from
 
        
-    	text = toolkit.createText(composite, "",SWT.BORDER|SWT.SINGLE);
+    	text = toolkit.createText(composite, "",SWT.BORDER|SWT.MULTI);
         text.setLayoutData(    
                 new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
         );

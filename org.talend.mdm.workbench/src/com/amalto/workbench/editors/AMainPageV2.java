@@ -138,7 +138,7 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
 	    	form.setText(this.getTitle());
 	    	
 	    	//get the toolkit
-	    	FormToolkit toolkit = managedForm.getToolkit();
+	    	FormToolkit toolkit = new WidgetFactory();//managedForm.getToolkit();
 	    		    	
 	    	//This part is meant to track dirty states
 	    	topFormPart = new TopFormPart();
@@ -147,8 +147,8 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
             createCharacteristicsContent(toolkit, topFormPart.getComposite());
            
             //adapt body add mouse/focus listener for child
-    		WidgetFactory factory=new WidgetFactory();
-    		factory.adapt(form.getBody());
+    		//WidgetFactory factory=new WidgetFactory();
+            toolkit.adapt(form.getBody());
         } catch (Exception e) {
             e.printStackTrace();
         }
