@@ -147,7 +147,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             addVBEButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
             addVBEButton.setToolTipText("Add");
             addVBEButton.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+                    new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
             addVBEButton.addSelectionListener(new SelectionListener() {
 				public void widgetDefaultSelected(
@@ -205,8 +205,9 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             Button upVBEButton = toolkit.createButton(vbeUpDownComposite,"",SWT.PUSH | SWT.CENTER);
             upVBEButton.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
             upVBEButton.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+                    new GridData(SWT.FILL,SWT.FILL,false,false,1,1)
             );
+            upVBEButton.setToolTipText("Move up the selected item");
             upVBEButton.addSelectionListener(new SelectionListener() {
             	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
             	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -224,8 +225,9 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             Button downVBEButton = toolkit.createButton(vbeUpDownComposite,"",SWT.PUSH | SWT.CENTER);
             downVBEButton.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
             downVBEButton.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+                    new GridData(SWT.FILL,SWT.FILL,false,false,1,1)
             );
+            downVBEButton.setToolTipText("Move down the selected item");
             downVBEButton.addSelectionListener(new SelectionListener() {
             	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
             	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -262,7 +264,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             xpathWidget1 = new XpathWidget("...",treeParent, toolkit, sbeComposite, (AMainPageV2)this,true,false,dataModelName);
             
             addSBEButton.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+                    new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
             addSBEButton.addSelectionListener(new SelectionListener() {
             	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
