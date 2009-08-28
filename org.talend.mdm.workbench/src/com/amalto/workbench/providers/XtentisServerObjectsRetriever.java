@@ -353,6 +353,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 					monitor.subTask("Loading Universes");
 					for (int i = 0; i < universePKs.length; i++) {
 						String id =universePKs[i].getPk();
+						if (!id.startsWith("UNIVERSE-REVISION")) {
 						TreeObject obj = new TreeObject(
 								id,
 								serverRoot,
@@ -361,6 +362,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 								null   //no storage to save space
 						);
 						Universes.addChild(obj);
+					 }
 					}
 				}
 				monitor.worked(1);
