@@ -378,13 +378,17 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	  } 
 
 	}
+	protected TreeViewer createTreeViewer(Composite parent){
+		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+		return viewer;
+	}
 	/**
 	 * This is a callback that will allow us to create the viewer and initialize
 	 * it.
 	 */
 	public void createPartControl(Composite parent) {
-		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		
+		viewer= createTreeViewer(parent);
 		drillDownAdapter = new DrillDownAdapter(viewer);
 		 contentProvider=new ServerTreeContentProvider(this.getSite(),
 				new TreeParent("INVISIBLE ROOT", null, TreeObject._ROOT_, null,
