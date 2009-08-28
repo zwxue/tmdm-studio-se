@@ -70,13 +70,15 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
     private  Label label;
     private Button transformeButton;
     private Button smartViewButton;
+    private Button beforeSavingButton;
     private TreeParent treeParent;
     private IWorkbenchPartSite site;
     private  XpathSelectDialog dlg;
     private Composite composite;    
-    private boolean smartViewSelected=true;
+   private boolean smartViewSelected=true;
     private boolean isTransfor = false;
     private static String Smart_view="Smart_view_";
+    private static String beforeSaving = "beforeSaving_";
     boolean isBtnShow=true;
     
     
@@ -124,6 +126,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
                 IDialogConstants.CANCEL_LABEL, false);
         //do this here because setting the text will set enablement on the ok
         // button
+        okButton.setEnabled(false);
     }
     
     /*
@@ -220,6 +223,23 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
     				smartViewSelected = true;
     				openDLG.setVisible(true);
     			}
+    			
+    		});
+    		
+    		beforeSavingButton = new Button(radioGroup,SWT.RADIO);
+    		beforeSavingButton.setText("create beforeSaving transformer");
+    		beforeSavingButton.setLayoutData(
+    				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+    		);
+    		beforeSavingButton.addSelectionListener(new SelectionListener(){
+
+				public void widgetDefaultSelected(SelectionEvent e) {}
+
+				public void widgetSelected(SelectionEvent e) {
+					text.setText(beforeSaving);
+					label.setText("The pattern should be beforeSaving_<ConceptName>");
+					openDLG.setVisible(true);
+				}
     			
     		});
         }else{
