@@ -293,29 +293,35 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		else
 			parent = remoteObj.getParent();
 		
-		ArrayList<TreeObject> subDdnList = new ArrayList<TreeObject>();
+		// only for transfer
+		ArrayList<TreeObject> subDdnList = new ArrayList<TreeObject>(); 
 		
 		if (parent != null) {
-			java.util.List<TreeObject> list = Arrays.asList(parent
-					.getChildren());
 			for (TreeObject xobj : dndTreeObjs) {
-				for (TreeObject another : list) {
-					if (another.getDisplayName().equals(xobj.getDisplayName()) && (another.getType() == xobj.getType())) {
+				if (xobj.getServerRoot().getDisplayName().equals(remoteObj.getServerRoot().getDisplayName()))
+				{
+					if (xobj.getParent() != remoteObj.getParent() && remoteObj.isXObject())
+					{
 						subDdnList.add(xobj);
 					}
-				}	
+					else if (xobj.getParent() != remoteObj && remoteObj instanceof TreeParent)
+					{
+						subDdnList.add(xobj);
+					}
+				}
 			}
 			dndTreeObjs.removeAll(subDdnList);
 		}
 		
-		transformCatalog(remoteObj);
-		dndTreeObjs.clear();
-		dndTreeObjs.addAll(subDdnList);
+		transformCatalog(remoteObj, subDdnList);
 		
 		if (!dndTreeObjs.isEmpty()) {
 			WorkbenchClipboard.getWorkbenchClipboard().get().clear();
 			WorkbenchClipboard.getWorkbenchClipboard().get().addAll(dndTreeObjs);
 			((PasteXObjectAction)pasteAction).setXtentisPort(remoteObj);
+			((PasteXObjectAction) pasteAction)
+					.setParent(remoteObj instanceof TreeParent ? (TreeParent) remoteObj
+							: remoteObj.getParent());
 			pasteAction.run();
 		}
 	}
@@ -329,12 +335,12 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		}
 	}
 	
-	private void transformCatalog(TreeObject remoteObj)
+	private void transformCatalog(TreeObject remoteObj, ArrayList<TreeObject> transferList)
 	{
 		boolean transform = false;
 		TreeParent catalog = remoteObj instanceof TreeParent ? (TreeParent) remoteObj
 				: remoteObj.getParent();
-		for (TreeObject theObj : dndTreeObjs)
+		for (TreeObject theObj : transferList)
 		{
 			theObj.getParent().removeChild(theObj);
 			catalog.addChild(theObj);
@@ -557,7 +563,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				}
 		
 			default:
-				if (!xobject.isXObject() && xobject.getDisplayName().equalsIgnoreCase(EXtentisObjects.DataCluster.getDisplayName())) {
+				if (!xobject.isXObject() && xobject.getType() != TreeObject.CATEGORY_FOLDER) {
 					manager.add(exportAction);
 					manager.add(importAction);
 				}
