@@ -6,8 +6,8 @@
 package com.amalto.workbench.webservices;
 
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.HashMap;
 
 public class WSWhereOperator {
     private java.lang.String value;
