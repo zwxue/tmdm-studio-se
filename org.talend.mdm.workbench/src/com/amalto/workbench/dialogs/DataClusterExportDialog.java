@@ -25,8 +25,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.models.TreeParent;
-import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.widgets.FileSelectWidget;
