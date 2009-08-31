@@ -763,8 +763,8 @@ public class SynchronizationMainPage extends AMainPageV2{
 				for(Line line: entry.getValue()){
 					syncs[i]=new WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations();
 					syncs[i].setInstancePattern(line.keyValues.get(0).value);
-					syncs[i].setLocalRevisionID(line.keyValues.get(1).value);
-					syncs[i].setRemoteRevisionID(line.keyValues.get(2).value);
+					syncs[i].setLocalRevisionID(line.keyValues.get(1).value.replaceAll("\\[HEAD\\]|HEAD", ""));
+					syncs[i].setRemoteRevisionID(line.keyValues.get(2).value.replaceAll("\\[HEAD\\]|HEAD", ""));
 					syncs[i].setAlgorithm(line.keyValues.get(3).value);
 					i++;
 				}
@@ -781,10 +781,10 @@ public class SynchronizationMainPage extends AMainPageV2{
 				itemSyncs[i]=new WSSynchronizationPlanItemsSynchronizations();
 				itemSyncs[i].setLocalCluster(line.keyValues.get(0).value);
 				itemSyncs[i].setConceptName(line.keyValues.get(1).value);
-				itemSyncs[i].setLocalRevisionID(line.keyValues.get(2).value);
+				itemSyncs[i].setLocalRevisionID(line.keyValues.get(2).value.replaceAll("\\[HEAD\\]|HEAD", ""));
 				itemSyncs[i].setIdsPattern(line.keyValues.get(3).value);
 				itemSyncs[i].setRemoteCluster(line.keyValues.get(4).value);
-				itemSyncs[i].setRemoteRevisionID(line.keyValues.get(5).value);
+				itemSyncs[i].setRemoteRevisionID(line.keyValues.get(5).value.replaceAll("\\[HEAD\\]|HEAD", ""));
 				itemSyncs[i].setAlgorithm(line.keyValues.get(6).value);				
 			}
 			ws.setItemsSynchronizations(itemSyncs);
