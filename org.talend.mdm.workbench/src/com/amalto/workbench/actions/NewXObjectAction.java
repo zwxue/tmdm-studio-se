@@ -76,7 +76,7 @@ import com.amalto.workbench.webservices.XtentisPort;
 public class NewXObjectAction extends Action{
 
 	private ServerView view = null;
-	
+	private String title="";
 	
 	public NewXObjectAction(ServerView view) {
 		super();
@@ -96,6 +96,55 @@ public class NewXObjectAction extends Action{
 
             //get New Key
        		Object key  = null;
+       		switch(xfolder.getType()){
+          	case TreeObject.SOURCE:
+           		title = "New Source";
+           		break;
+           	case TreeObject.DESTINATION:
+           		title = "New Destination";
+           		break;
+           	case TreeObject.DATA_MODEL:
+           		title = "New Data Model";
+           		break;
+           	case TreeObject.INBOUND_ADAPTOR:    
+           		title = "New Inbound Adaptor";
+           		break;
+           	case TreeObject.INBOUND_PLUGIN:
+           		title = "New Inbound Plugin";
+           		break;
+           	case TreeObject.OUTBOUND_ADAPTOR:  
+           		title = "New Outbound Adaptor";
+           		break;
+           	case TreeObject.OUTBOUND_PLUGIN:
+           		title = "New OutBound plugin";
+           		break;
+           	case TreeObject.DATA_CLUSTER:
+           		title = "New Data Cluster";
+           		break;
+           	case TreeObject.STORED_PROCEDURE:
+           		title = "New Stored Procedure";
+           		break;
+           //	case TreeObject.ROLE:
+           	case TreeObject.ROUTING_RULE:
+           		title = "New Routing Rule";
+           		break;
+           	case TreeObject.MENU:
+           		title = "New Menu";
+           		break;
+           	case TreeObject.UNIVERSE:
+           		title = "New Universe";
+           		break;
+           	case TreeObject.SYNCHRONIZATIONPLAN:
+           		title = "New Synchronization Plan";
+           		break;
+           	case TreeObject.TRANSFORMER:
+           		title = "New Transformer";
+           		break;
+           	case TreeObject.VIEW:
+           		title = "New View";
+           		break;
+           	default:return;	
+       		}
 
        		//(Shell parentShell, String dialogTitle, String dialogMessage, String initialValue, IInputValidator validator)
             switch(xfolder.getType()) {
@@ -104,7 +153,7 @@ public class NewXObjectAction extends Action{
         					view.getSite(),
         					(TreeParent)view.getRoot().getChildren()[0].findServerFolder(TreeObject.TRANSFORMER),
         					view.getSite().getShell(),
-	           				"New "+IConstants.TALEND+" Object Instance",	           				
+	           				title,//"New "+IConstants.TALEND+" Object Instance",	           				
 	           				"Enter a Name for the New Instance                                                                                  ",
 	           				"Smart_view_",
 	           				new IInputValidator() {
@@ -148,7 +197,7 @@ public class NewXObjectAction extends Action{
         					view.getSite(),
         					(TreeParent)view.getRoot().getChildren()[0].findServerFolder(TreeObject.TRANSFORMER),
         					view.getSite().getShell(),
-	           				"New "+IConstants.TALEND+" Object Instance",
+	           				title,//"New "+IConstants.TALEND+" Object Instance",
 	           				"Enter a Name for the New Instance",
 	           				"Browse_items_",
 	           				new IInputValidator() {
@@ -187,7 +236,7 @@ public class NewXObjectAction extends Action{
 	           	case TreeObject.SYNCHRONIZATIONPLAN:
 	           		InputDialog id1 = new InputDialog(
 	           				view.getSite().getShell(),
-	           				"New "+IConstants.TALEND+" Object Instance",
+	           				title,//"New "+IConstants.TALEND+" Object Instance",
 	           				"Enter a Name for the New Instance",
 	           				null,
 	           				new IInputValidator() {
