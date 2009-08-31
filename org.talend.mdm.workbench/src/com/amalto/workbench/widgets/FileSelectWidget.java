@@ -46,7 +46,7 @@ public class FileSelectWidget {
 		GridData gd=new GridData(SWT.LEFT,SWT.TOP,true,true,1,1);
 		Label label=factory.createLabel(parent, this.label,SWT.NONE);
 		label.setLayoutData(gd);
-		text=factory.createText(parent, "",SWT.READ_ONLY|SWT.BORDER);
+		text=factory.createText(parent, "",SWT.MULTI|SWT.BORDER);
 		gd=new GridData(SWT.FILL,SWT.CENTER,true,true,1,1);		
 		text.setLayoutData(gd);
 		text.setText("                                                           ");		

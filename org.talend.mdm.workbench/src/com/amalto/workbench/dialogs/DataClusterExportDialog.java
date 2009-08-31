@@ -146,7 +146,7 @@ public class DataClusterExportDialog extends Dialog{
 		}		
 		dataCluster=comboDataCluster.getCombo().getText();
 		dataCluster = xpathMap.get(dataCluster);
-		filename=fw.getText().getText();
+		filename=fw.getText().getText().trim();
 		Job job=new Job("Export Data Clusters : " + dataCluster+" ..."){
 			@Override
 			public IStatus run(IProgressMonitor monitor) {	
