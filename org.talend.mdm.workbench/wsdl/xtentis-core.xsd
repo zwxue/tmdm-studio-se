@@ -121,7 +121,21 @@
 			</xsd:element>
 		</xsd:sequence>		
 	</xsd:complexType>
-	<xsd:element name="WSTypedContentMap" type="tns:WSTypedContentMap"/>		
+	<xsd:element name="WSTypedContentMap" type="tns:WSTypedContentMap"/>	
+	
+	<xsd:complexType name="WSConceptRevisionMap">
+		<xsd:sequence>
+			<xsd:element minOccurs="0" maxOccurs="unbounded" name="mapEntry">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element minOccurs="1" maxOccurs="1" name="concept"  nillable="false" type="xsd:string"/>
+						<xsd:element minOccurs="1" maxOccurs="1" name="revision"  nillable="false" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSConceptRevisionMap" type="tns:WSConceptRevisionMap"/>
 
 	<!-- *****************************************************
 		MANAGEMENT
@@ -492,7 +506,14 @@
 	<xsd:element name="WSDataClusterPKArray" type = "tns:WSDataClusterPKArray"/>
 
 	<!-- Operations -->
-
+	<xsd:complexType name="WSPutDBDataCluster">
+						
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="revisionID" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="name" type="xsd:string"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSPutDBDataCluster" type="tns:WSPutDBDataCluster"/>
 	<xsd:complexType name="WSPutDataCluster">
 		<xsd:annotation>
 			<xsd:documentation>
@@ -518,7 +539,13 @@
 		</xsd:sequence>		
 	</xsd:complexType>
 	<xsd:element name="WSExistsDataCluster" type="tns:WSExistsDataCluster"/>
-	
+		<xsd:complexType name="WSExistsDBDataCluster">
+		<xsd:sequence>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="true" name="revisionID" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="name" type="xsd:string"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSExistsDBDataCluster" type="tns:WSExistsDBDataCluster"/>
 	<xsd:complexType name="WSDeleteDataCluster">
 		<xsd:sequence>
 			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="wsDataClusterPK" type="tns:WSDataClusterPK"/>
@@ -544,7 +571,7 @@
 		</xsd:sequence>		
 	</xsd:complexType>
 	<xsd:element name="WSGetConceptsInDataCluster" type="tns:WSGetConceptsInDataCluster"/>
-
+	
 
 	<!-- *****************************************************
 		              W H E R E    E L E M E N T S
