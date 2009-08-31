@@ -200,6 +200,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
     				smartViewSelected = false;
     				openDLG.setVisible(false);
     				parent.layout(true);
+    				value = "";
     			}
     			
     		});
@@ -222,6 +223,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
     				label.setText("Enter a name follow the pattern:Smart_view_<ConceptName>_<language ISO code>");
     				smartViewSelected = true;
     				openDLG.setVisible(true);
+    				value=Smart_view;
     			}
     			
     		});
@@ -239,6 +241,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
 					text.setText(beforeSaving);
 					label.setText("The pattern should be beforeSaving_<ConceptName>");
 					openDLG.setVisible(true);
+					value = beforeSaving;
 				}
     			
     		});
