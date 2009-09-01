@@ -6,9 +6,11 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
+import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.views.ServerView;
@@ -54,7 +56,7 @@ public class CopyXObjectAction extends Action{
 				TreeObject xobject = iter.next();
 				
 	            if (!xobject.isXObject()) continue;
-	            
+	            if (XSystemObjects.isXSystemObject(xobject.getType(), xobject.getDisplayName()))continue;
 	            WorkbenchClipboard.getWorkbenchClipboard().add(xobject);
 
 	            /*

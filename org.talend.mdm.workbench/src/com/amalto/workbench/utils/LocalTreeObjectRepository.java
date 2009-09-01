@@ -44,6 +44,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	private static String COLLAPSE_VALUE = "false";
 	
 	private static int XTENTIS_LEVEL = 4;
+	private static int MODEL_LEVEL = 3;
 	
 	private Element catalogTreeObj = null;
 	private TreeItem itemFocus = null;
@@ -217,11 +218,21 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	{
 		if (parent.getParent() == null && parent.getDisplayName().equals("INVISIBLE ROOT"))
 			return;
+		String xpath = getXPathForTreeObject(child);
+		List<Element> models = doc.selectNodes(xpath);
+		if (!models.isEmpty() && child instanceof TreeParent)
+		{
+			Element model = models.get(0);
+			if (isAEXtentisObjects(model) == MODEL_LEVEL) {
+				checkUpAllCategoryForModel((TreeParent) child);
+			}
+		}
+		
 		String catalog = synchronizeWithElem(child, (TreeParent)parent, true);
 		Element elemFolder = getParentElement(parent);
 		if (elemFolder != null)
 		{
-			String xpath = "child::*[name()='" + filterOutBlank(child.getDisplayName()) + "' and text()='" + child.getType() + "']";
+			xpath = "child::*[name()='" + filterOutBlank(child.getDisplayName()) + "' and text()='" + child.getType() + "']";
 			List<Element> list = elemFolder.selectNodes(xpath);
 			if (list.isEmpty() && catalog.equals(""))
 			{
@@ -454,6 +465,45 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
         return catalogPath;
 	}
 	
+	private void checkUpAllCategoryForModel(TreeParent model)
+	{
+		String xpath = "//" + model.getServerRoot().getUser().getUsername()
+				+ "/" + filterOutBlank(model.getDisplayName())
+				+ "//child::*[text() = '" + TreeObject.CATEGORY_FOLDER + "']";
+		String xpathForModel = getXPathForTreeObject(model);
+		List<Element> elems = doc.selectNodes(xpathForModel);
+		Element modelElem = elems.get(0);
+		elems = doc.selectNodes(xpath);
+		for (Element elem: elems)
+		{
+			Element spec = elem;
+			ArrayList<Element> hierarchicalList = new ArrayList<Element>();
+			while(spec != modelElem)
+			{
+				hierarchicalList.add(spec);
+				spec = spec.getParent();
+			}
+			Collections.reverse(hierarchicalList);
+			TreeParent modelCpy = model;
+            while(!hierarchicalList.isEmpty())
+            {
+            	spec = hierarchicalList.remove(0);
+            	TreeObject to =  modelCpy.findObject(Integer.parseInt(spec.getText()), spec.getName());
+            	if (to == null)
+            	{
+					TreeParent catalog = new TreeParent(spec.getName(), modelCpy
+							.getServerRoot(), TreeObject.CATEGORY_FOLDER, null,
+							null);
+					modelCpy.addChild(catalog);
+					modelCpy = catalog;
+            	}
+            	else
+            	{
+            		modelCpy = (TreeParent) to;
+            	}
+            }
+		}
+	}
 	
 	private void checkUpCatalogHavingNoChildren(TreeObject theObj, TreeParent folder)
 	{
