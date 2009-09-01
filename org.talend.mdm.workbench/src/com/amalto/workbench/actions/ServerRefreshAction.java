@@ -53,9 +53,9 @@ public class ServerRefreshAction extends Action {
                 	serverRoot.getUser().getUniverse()
                 );
             
+			LocalTreeObjectRepository.getInstance().switchOnListening();
             retriever.run(new NullProgressMonitor());
 			ServerRefreshAction.this.serverRoot.synchronizeWith(retriever.getServerRoot());
-			LocalTreeObjectRepository.getInstance().switchOnListening();
 			ServerView.show().getViewer().refresh();
 //			Job refreshJob = new ServerRefreshJob(server,serverRoot.getUsername(),serverRoot.getPassword(),serverRoot.getUser().getUniverse()); 
 //            refreshJob.setPriority(Job.INTERACTIVE);

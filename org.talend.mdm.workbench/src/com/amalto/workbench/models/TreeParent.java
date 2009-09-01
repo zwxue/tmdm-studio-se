@@ -111,6 +111,9 @@ public class TreeParent extends TreeObject {
 		for (int i = 0; i < allchildren.length; i++) {
 			if (allchildren[i] instanceof TreeParent) {
 				obj= ((TreeParent)allchildren[i]).findObject(type, name);
+				if ((allchildren[i].getType() == type)
+					&&(allchildren[i].getDisplayName().equals(name)))
+					return allchildren[i];
 			}
 			else if (	(allchildren[i].getType() == type)
 					&&(allchildren[i].getDisplayName().equals(name)))

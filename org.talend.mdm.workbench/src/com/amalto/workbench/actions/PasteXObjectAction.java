@@ -190,13 +190,8 @@ public class PasteXObjectAction extends Action{
 			           		);
 			           		//write the new model
 			           		destPort.putDataModel(new WSPutDataModel(newDataModel));
-			           		TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ?  parent.getServerRoot(): xobject.getServerRoot(), xobject.getType(), newKey, null);
-			           		if (parent != null)
-			           			parent.addChild(newObj);
-			           		else if (xobject.getParent().findObject(
-								newObj.getType(), newObj.getDisplayName()) == null) {
-							xobject.getParent().addChild(newObj);
-						    }
+			           		TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ?  parent.getServerRoot(): selected.getServerRoot(), xobject.getType(), newKey, null);
+			           		newTreeObject(newObj, selected);
 			           		  
 			           		list.remove(xobject);
 			           		iter = list.iterator();
@@ -246,12 +241,8 @@ public class PasteXObjectAction extends Action{
 			           		//write the new model
 			           		destPort.putView(new WSPutView(newView));
 			           		TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ?  parent.getServerRoot(): xobject.getServerRoot(), xobject.getType(), newKey, null);
-			           		if (parent != null)
-			           			parent.addChild(newObj);
-			           		else if (xobject.getParent().findObject(
-								newObj.getType(), newObj.getDisplayName()) == null) {
-							xobject.getParent().addChild(newObj);
-						    }
+			           		newTreeObject(newObj, selected);
+			           		
 			           		list.remove(xobject);
 			           		iter = list.iterator();
 			           		} break;
@@ -298,12 +289,8 @@ public class PasteXObjectAction extends Action{
 			           		//write the new model
 			           		destPort.putDataCluster(new WSPutDataCluster(newDataCluster));
 			           		TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ?  parent.getServerRoot(): xobject.getServerRoot(), xobject.getType(), newKey, null);
-			           		if (parent != null)
-			           			parent.addChild(newObj);
-			           		else if (xobject.getParent().findObject(
-								newObj.getType(), newObj.getDisplayName()) == null) {
-							xobject.getParent().addChild(newObj);
-						    }
+			           		newTreeObject(newObj, selected);
+			           		
 			           		list.remove(xobject);
 			           		iter = list.iterator();
 			           		} break;
@@ -350,12 +337,8 @@ public class PasteXObjectAction extends Action{
 			           		//write the new model
 			           		destPort.putStoredProcedure(new WSPutStoredProcedure(newStoredProcedure));
 			           		TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ?  parent.getServerRoot(): xobject.getServerRoot(), xobject.getType(), newKey, null);
-			           		if (parent != null)
-			           			parent.addChild(newObj);
-			           		else if (xobject.getParent().findObject(
-								newObj.getType(), newObj.getDisplayName()) == null) {
-							xobject.getParent().addChild(newObj);
-						    }
+			           		newTreeObject(newObj, selected);
+			           		
 			           		list.remove(xobject);
 			           		iter = list.iterator();
 			           		} break;
@@ -402,12 +385,8 @@ public class PasteXObjectAction extends Action{
 			           		//write the new model
 			           		destPort.putRole(new WSPutRole(newRole));
 			           		TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ?  parent.getServerRoot(): xobject.getServerRoot(), xobject.getType(), newKey, null);
-			           		if (parent != null)
-			           			parent.addChild(newObj);
-			           		else if (xobject.getParent().findObject(
-								newObj.getType(), newObj.getDisplayName()) == null) {
-							xobject.getParent().addChild(newObj);
-						    }
+			           		newTreeObject(newObj, selected);
+			           		
 			           		list.remove(xobject);
 			           		iter = list.iterator();
 			           		} break;	  	           		
@@ -460,12 +439,8 @@ public class PasteXObjectAction extends Action{
 			           		//write the new model
 			           		destPort.putRoutingRule(new WSPutRoutingRule(newRoutingRule));
 			           		TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ?  parent.getServerRoot(): xobject.getServerRoot(), xobject.getType(), newKey, null);
-			           		if (parent != null)
-			           			parent.addChild(newObj);
-			           		else if (xobject.getParent().findObject(
-								newObj.getType(), newObj.getDisplayName()) == null) {
-							xobject.getParent().addChild(newObj);
-						    }
+			           		newTreeObject(newObj, selected);
+			           		
 			           		list.remove(xobject);
 			           		iter = list.iterator();
 			           		} break;	  	           		
@@ -512,12 +487,8 @@ public class PasteXObjectAction extends Action{
 			           		//write the new model
 			           		destPort.putTransformerV2(new WSPutTransformerV2(newTransformer));
 			           		TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ?  parent.getServerRoot(): xobject.getServerRoot(), xobject.getType(), newKey, null);
-			           		if (parent != null)
-			           			parent.addChild(newObj);
-			           		else if (xobject.getParent().findObject(
-								newObj.getType(), newObj.getDisplayName()) == null) {
-							xobject.getParent().addChild(newObj);
-						    }
+			           		newTreeObject(newObj, selected);
+			           		
 			           		list.remove(xobject);
 			           		iter = list.iterator();
 			           		} break;
@@ -564,12 +535,8 @@ public class PasteXObjectAction extends Action{
 			           		//write the new model
 			           		destPort.putMenu(new WSPutMenu(newMenu));
 			           		TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ?  parent.getServerRoot(): xobject.getServerRoot(), xobject.getType(), newKey, null);
-			           		if (parent != null)
-			           			parent.addChild(newObj);
-			           		else if (xobject.getParent().findObject(
-								newObj.getType(), newObj.getDisplayName()) == null) {
-							xobject.getParent().addChild(newObj);
-						    }
+			           		newTreeObject(newObj, selected);
+			           		
 			           		list.remove(xobject);
 			           		iter = list.iterator();
 			           		} break;
@@ -619,12 +586,8 @@ public class PasteXObjectAction extends Action{
 			           		//write the new model
 			           		destPort.putUniverse(new WSPutUniverse(newUniverse));
 			           		TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ?  parent.getServerRoot(): xobject.getServerRoot(), xobject.getType(), newKey, null);
-			           		if (parent != null)
-			           			parent.addChild(newObj);
-			           		else if (xobject.getParent().findObject(
-								newObj.getType(), newObj.getDisplayName()) == null) {
-							xobject.getParent().addChild(newObj);
-						    }
+			           		newTreeObject(newObj, selected);
+			           		
 			           		list.remove(xobject);
 			           		iter = list.iterator();
 			           		} break;
@@ -681,12 +644,8 @@ public class PasteXObjectAction extends Action{
 			           		//write the new model
 			           		destPort.putSynchronizationPlan(new WSPutSynchronizationPlan(newSynchronizationPlan));
 			           		TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ?  parent.getServerRoot(): xobject.getServerRoot(), xobject.getType(), newKey, null);
-			           		if (parent != null)
-			           			parent.addChild(newObj);
-			           		else if (xobject.getParent().findObject(
-								newObj.getType(), newObj.getDisplayName()) == null) {
-							xobject.getParent().addChild(newObj);
-						    }
+			           		newTreeObject(newObj, selected);
+			           		
 			           		list.remove(xobject);
 			           		iter = list.iterator();
 			           		} break;
@@ -717,6 +676,30 @@ public class PasteXObjectAction extends Action{
 			parent = null;
 		}
 	}
+	
+	private void newTreeObject(TreeObject newObj, TreeObject selected)
+	{
+   		if (parent != null)
+   			parent.addChild(newObj);
+   		else
+   		{
+   			if (selected instanceof TreeParent)
+   			{
+       			 if (((TreeParent)selected).findObject(newObj.getType(), newObj.getDisplayName()) == null)
+       			 {
+       				 ((TreeParent)selected).addChild(newObj);
+				 }
+   			}
+   			else
+   			{
+   				if(selected.getParent().findObject(newObj.getType(), newObj.getDisplayName()) == null)
+   				{
+   					selected.getParent().addChild(newObj);
+   				}
+   			}
+   		}
+	}
+	
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}
