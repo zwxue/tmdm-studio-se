@@ -547,21 +547,16 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			case TreeObject.SUBSCRIPTION_ENGINE:
 				manager.add(browseViewAction);
 				break;
-			case TreeObject.ROLE:
-				if (xobject instanceof TreeParent)
-				   manager.add(newUserActon);
-//				if (xobject.getDisplayName()!=null&&xobject.getDisplayName().equals(ESystemDefaultObjects.DC_MDMITEMSTRASH.getName())) {
-//					break;
-//				}	
-			case TreeObject.VIEW:
-				
+
 			case TreeObject.DATA_CLUSTER:
 				if (xobject.isXObject()) {
 					manager.add(exportAction);
 					manager.add(importAction);
 					manager.add(browseViewAction);
 				}
-		
+			case TreeObject.ROLE:
+								
+			case TreeObject.VIEW:				
 			default:
 				if (!xobject.isXObject() && xobject.getType() != TreeObject.CATEGORY_FOLDER) {
 					manager.add(exportAction);
@@ -575,7 +570,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			    {
 			    	manager.add(newXObjectAction);	
 			    }
-			    else if (type == TreeObject.ROLE && xobject.getType() == TreeObject.CATEGORY_FOLDER)
+			    else if (type == TreeObject.ROLE && (xobject.getType() == TreeObject.CATEGORY_FOLDER || xobject instanceof TreeParent))
 			    {
 			    	manager.add(newUserActon);
 			    }
