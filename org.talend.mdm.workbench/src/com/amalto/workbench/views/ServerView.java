@@ -46,6 +46,7 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
+import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 
 import com.amalto.workbench.actions.AServerViewAction;
 import com.amalto.workbench.actions.BrowseRevisionAction;
@@ -538,8 +539,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				manager.add(serverRefreshAction);
 				if (!WorkbenchClipboard.getWorkbenchClipboard().isEmpty())
 					manager.add(pasteAction);
-//				if ("admin".equalsIgnoreCase(xobject.getUsername()))
-//					manager.add(serverInitAction);
+
 				break;
 			case TreeObject._ACTION_:
 				manager.add((Action) xobject.getWsObject());
@@ -578,7 +578,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				if(Util.hasUniverse(xobject))
 					manager.add(browseRevisionAction);
 			    
-				if (xobject.isXObject()) {
+				if (xobject.isXObject() && !XSystemObjects.isExist(xobject.getType(), xobject.getDisplayName())) {
 					manager.add(editXObjectAction);
 					manager.add(deleteXObjectAction);
 					manager.add(copyAction);
@@ -586,8 +586,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				else if (LocalTreeObjectRepository.getInstance().isInSystemCatalog(xobject) == false){
 					manager.add(NewCategoryAction);
 				}
-//				if (hasVersioning)
-//					manager.add(versionAction);
+
 				if (!WorkbenchClipboard.getWorkbenchClipboard().isEmpty())
 					manager.add(pasteAction);
 			}
