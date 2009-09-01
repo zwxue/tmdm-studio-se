@@ -81,6 +81,7 @@ public class XpathSelectDialog extends Dialog {
 		this.parent = parent;
 		this.site = site;
 		this.isMulti=isMulti;
+		if(dataModelName!=null)
 		this.dataModelName =dataModelName;//default dataModel
 	}
 
