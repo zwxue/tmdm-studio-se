@@ -726,7 +726,7 @@ public class SubscriptionEngineBrowserMainPage extends AMainPage implements IXOb
 	        							new WSPutItem(
 	        									(WSDataClusterPK)getXObject().getWsKey(),
 	        									d.getXML(),
-	        									"".equals(d.getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName())
+	        									"".equals(d.getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()),false
 	        							)
 	        					);
         					}catch (Exception e) {

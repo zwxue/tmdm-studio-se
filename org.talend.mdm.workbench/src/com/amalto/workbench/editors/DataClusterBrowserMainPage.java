@@ -728,7 +728,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	        							new WSPutItem(
 	        									(WSDataClusterPK)getXObject().getWsKey(),
 	        									d.getXML(),
-	        									"".equals(d.getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName())
+	        									"".equals(d.getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()),
+	        											false
 	        							)
 	        					);
 	        					//previousDataModel = d.getDataModelName();
@@ -1095,7 +1096,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	        							new WSPutItem(
 	        									(WSDataClusterPK)getXObject().getWsKey(),
 	        									d.getXML(),
-	        									"".equals(d.getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName())
+	        									"".equals(d.getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()),false
 	        							)
 	        					);
         					}catch (Exception e) {
