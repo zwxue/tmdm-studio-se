@@ -446,7 +446,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 				String concept=entry.getConcept();
 				String revision=entry.getRevision();
 				if(revision==null||revision.equals(""))revision="[HEAD]";
-				concepts[i]=concept+" "+revision;
+				concepts[i]=concept+" "+"["+revision+"]";
 			}
 			
 			conceptCombo.removeAll();
