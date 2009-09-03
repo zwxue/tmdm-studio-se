@@ -185,8 +185,8 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
     		
     		searchText.setFocus();
             //adapt body add mouse/focus listener for child
-    		//WidgetFactory factory=new WidgetFactory();
-    		//factory.adapt(managedForm.getForm().getBody());
+    		WidgetFactory factory=new WidgetFactory();
+    		factory.adapt(managedForm.getForm().getBody());
         } catch (Exception e) {
             e.printStackTrace();
         }	

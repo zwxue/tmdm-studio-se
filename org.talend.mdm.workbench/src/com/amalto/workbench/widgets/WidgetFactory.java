@@ -21,6 +21,8 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
@@ -74,7 +76,15 @@ public class WidgetFactory extends FormToolkit {
             }
         }        
     };
+    
+    public static TraverseListener textTraverseListener=new TraverseListener(){
 
+		public void keyTraversed(TraverseEvent e) {
+			if(e.detail == SWT.TRAVERSE_TAB_NEXT){
+				e.doit=true;
+			}			
+		}    	
+    };
     /**
      * private constructor.
      */
@@ -145,7 +155,8 @@ public class WidgetFactory extends FormToolkit {
             if ((control instanceof Combo) || (control instanceof Button)) {
                 continue;
             } else if ((control instanceof Text) || (control instanceof StyledText)) {
-                control.addFocusListener(listener);         
+                control.addFocusListener(listener); 
+                control.addTraverseListener(textTraverseListener);
             } else {
                 if (control instanceof Composite) {
                     addChildListener((Composite) control, listener);
