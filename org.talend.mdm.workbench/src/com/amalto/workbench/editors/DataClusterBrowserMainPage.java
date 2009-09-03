@@ -11,7 +11,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -74,12 +73,14 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.webservices.WSConceptRevisionMapMapEntry;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSDeleteItem;
 import com.amalto.workbench.webservices.WSDropItem;
-import com.amalto.workbench.webservices.WSGetConceptsInDataCluster;
+import com.amalto.workbench.webservices.WSGetConceptsInDataClusterWithRevisions;
+import com.amalto.workbench.webservices.WSGetCurrentUniverse;
 import com.amalto.workbench.webservices.WSGetDataCluster;
 import com.amalto.workbench.webservices.WSGetItem;
 import com.amalto.workbench.webservices.WSGetItemPKsByCriteria;
@@ -91,6 +92,7 @@ import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 import com.amalto.workbench.webservices.WSRouteItemV2;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniverseItemsRevisionIDs;
+import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.CalendarSelectWidget;
 import com.amalto.workbench.widgets.WidgetFactory;
@@ -420,14 +422,32 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 				cluster = (WSDataCluster)getXObject().getWsObject();
 			}
 			
-			String[] concepts = port.getConceptsInDataCluster(
-					new WSGetConceptsInDataCluster(
-							new WSDataClusterPK(cluster.getName())
+//			String[] concepts = port.getConceptsInDataCluster(
+//					new WSGetConceptsInDataCluster(
+//							new WSDataClusterPK(cluster.getName())
+//					)
+//			).getStrings();
+//			Arrays.sort(concepts);
+//			//add revision ID for concepts
+//			addRevisionID(concepts);
+			
+			WSUniverse currentUniverse=port.getCurrentUniverse(new WSGetCurrentUniverse());
+			String currentUniverseName=currentUniverse.getName();
+			if(currentUniverseName!=null&&currentUniverseName.equals("[HEAD]"))currentUniverseName="";
+			WSConceptRevisionMapMapEntry[] wsConceptRevisionMapMapEntries = port.getConceptsInDataClusterWithRevisions(
+					new WSGetConceptsInDataClusterWithRevisions(
+							new WSDataClusterPK(cluster.getName()),new WSUniversePK(currentUniverseName)
 					)
-			).getStrings();
-			Arrays.sort(concepts);
-			//add revision ID for concepts
-			addRevisionID(concepts);
+			).getMapEntry();
+			
+			String[] concepts=new String[wsConceptRevisionMapMapEntries.length];
+			for (int i = 0; i < wsConceptRevisionMapMapEntries.length; i++) {
+				WSConceptRevisionMapMapEntry entry=wsConceptRevisionMapMapEntries[i];
+				String concept=entry.getConcept();
+				String revision=entry.getRevision();
+				if(revision==null||revision.equals(""))revision="[HEAD]";
+				concepts[i]=concept+" "+revision;
+			}
 			
 			conceptCombo.removeAll();
 			conceptCombo.add("*");
