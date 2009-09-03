@@ -413,8 +413,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
     		managedForm.reflow(true); //nothing will show on the form if not called
  
             //adapt body add mouse/focus listener for child
-    		//WidgetFactory factory=new WidgetFactory();
-    		//factory.adapt(managedForm.getForm().getBody());
+    		WidgetFactory factory=new WidgetFactory();
+    		factory.adapt(managedForm.getForm().getBody());
     		
         } catch (Exception e) {
             e.printStackTrace();
