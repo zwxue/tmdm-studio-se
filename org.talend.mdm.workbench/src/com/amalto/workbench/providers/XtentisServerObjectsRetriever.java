@@ -75,12 +75,12 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			
 			String displayName=endpointaddress;
 			//fetch version info
-			try {
-				WSVersion version = port.getComponentVersion(new WSGetComponentVersion(WSComponent.DataManager,null));				
-				displayName += " (v"+version.getMajor()+"."+version.getMinor()+"."+version.getRevision()+"_"+version.getBuild()+")";	
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+//			try {
+//				WSVersion version = port.getComponentVersion(new WSGetComponentVersion(WSComponent.DataManager,null));				
+//				displayName += " (v"+version.getMajor()+"."+version.getMinor()+"."+version.getRevision()+"_"+version.getBuild()+")";	
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
 			WSUniverse wUuniverse=null;
 			wUuniverse=port.getCurrentUniverse(new WSGetCurrentUniverse());
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");		
