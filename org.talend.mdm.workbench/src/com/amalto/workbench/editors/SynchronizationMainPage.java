@@ -27,6 +27,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -98,15 +99,20 @@ public class SynchronizationMainPage extends AMainPageV2{
 	protected Timer timer;
 	
 	protected LabelText remoteSystemNameText;
-	protected LabelText remoteSystemPasswordText;
+	//protected LabelText remoteSystemPasswordText;
 	protected LabelText remoteSystemUsernameText;
 	protected LabelText remoteSystemURLText;
 
 	protected LabelText tisURLText;
 	protected LabelText tisUsernameText;
-	protected LabelText tisPasswordText;
+	//protected LabelText tisPasswordText;
 	protected LabelText tisParametersText;
+	
+	protected Label Tislabel;
+	protected Text Tistext;
 
+	protected Label Remotelabel;
+	protected Text Remotetext;
 	
 	private Map<String,ComplexTableViewer> xtentisViewers=new HashMap<String, ComplexTableViewer>();
 	public SynchronizationMainPage(FormEditor editor) {
@@ -338,14 +344,31 @@ public class SynchronizationMainPage extends AMainPageV2{
         	}
         });
 		
-		remoteSystemPasswordText =new LabelText(toolkit,remoteMDMComposite,"Password");        
-		remoteSystemPasswordText.getText().addModifyListener(new ModifyListener() {
+//		remoteSystemPasswordText =new LabelText(toolkit,remoteMDMComposite,"Password");        
+//		remoteSystemPasswordText.getText().addModifyListener(new ModifyListener() {
+//        	public void modifyText(ModifyEvent e) {
+//        		if (refreshing) return;
+//        		syncPlan.remoteSystemPassword=remoteSystemPasswordText.getText().getText();
+//        		markDirty();
+//        	}
+//        });		
+        
+		Remotelabel = toolkit.createLabel(remoteMDMComposite, "Password", SWT.NULL);
+		Remotelabel.setLayoutData(
+                new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
+        );
+        Remotetext = toolkit.createText(remoteMDMComposite, "",SWT.BORDER|SWT.PASSWORD);
+        Remotetext.setLayoutData(    
+                new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+        );	
+        Remotetext.addModifyListener(new ModifyListener(){
         	public void modifyText(ModifyEvent e) {
         		if (refreshing) return;
-        		syncPlan.remoteSystemPassword=remoteSystemPasswordText.getText().getText();
+        		syncPlan.remoteSystemPassword=Remotetext.getText();
         		markDirty();
         	}
-        });		
+        });
+        
         
 		
 		//TIS Server Section          
@@ -376,14 +399,35 @@ public class SynchronizationMainPage extends AMainPageV2{
         	}
         });
 		
-		tisPasswordText =new LabelText(toolkit,TISComposite,"Password");        
-		tisPasswordText.getText().addModifyListener(new ModifyListener() {
-        	public void modifyText(ModifyEvent e) {
-        		if (refreshing) return;
-        		syncPlan.tisPassword=tisPasswordText.getText().getText();
-        		markDirty();
-        	}
-        });		
+//		tisPasswordText =new LabelText(toolkit,TISComposite,"Password");
+//		
+//		tisPasswordText.getText().addModifyListener(new ModifyListener() {
+//        	public void modifyText(ModifyEvent e) {
+//        		if (refreshing) return;
+//        		syncPlan.tisPassword=tisPasswordText.getText().getText();
+//        		markDirty();
+//        	}
+//        });		
+		
+		
+			Tislabel = toolkit.createLabel(TISComposite, "Password", SWT.NULL);
+	        Tislabel.setLayoutData(
+	                new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
+	        );
+	        Tistext = toolkit.createText(TISComposite, "",SWT.BORDER|SWT.PASSWORD);
+	        Tistext.setLayoutData(    
+	                new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+	        );	
+		
+	        Tistext.addModifyListener(new ModifyListener(){
+	        	public void modifyText(ModifyEvent e) {
+	        		if (refreshing) return;
+	        		syncPlan.tisPassword = Tistext.getText();
+	        		markDirty();
+	        	}
+	        });
+		
+		
 		
 		tisParametersText =new LabelText(toolkit,TISComposite,"Parameters");        
 		tisParametersText.getText().addModifyListener(new ModifyListener() {
@@ -627,11 +671,17 @@ public class SynchronizationMainPage extends AMainPageV2{
             remoteSystemURLText.getText().setText(syncPlan.getRemoteSystemURL()==null?"":syncPlan.getRemoteSystemURL());
             remoteSystemNameText.getText().setText(syncPlan.getRemoteSystemName()==null?"":syncPlan.getRemoteSystemName());
             remoteSystemUsernameText.getText().setText(syncPlan.getRemoteSystemUsername()==null?"":syncPlan.getRemoteSystemUsername());
-            remoteSystemPasswordText.getText().setText(syncPlan.getRemoteSystemPassword()==null?"":syncPlan.getRemoteSystemPassword());
-
+            
+//          remoteSystemPasswordText.getText().setText(syncPlan.getRemoteSystemPassword()==null?"":syncPlan.getRemoteSystemPassword());
+            Remotetext.setText(syncPlan.getRemoteSystemPassword()==null?"":syncPlan.getRemoteSystemPassword());
+            
+            
             tisURLText.getText().setText(syncPlan.getTisURL()==null?"":syncPlan.getTisURL());
             tisUsernameText.getText().setText(syncPlan.getTisUsername()==null?"":syncPlan.getTisUsername());
-            tisPasswordText.getText().setText(syncPlan.getTisPassword()==null?"":syncPlan.getTisPassword());
+            
+//            tisPasswordText.getText().setText(syncPlan.getTisPassword()==null?"":syncPlan.getTisPassword());
+            Tistext.setText(syncPlan.getTisPassword()==null?"":syncPlan.getTisPassword());
+            
             tisParametersText.getText().setText(syncPlan.getTisParameters()==null?"":syncPlan.getTisParameters());
 
             //refresh the item tableviewer
