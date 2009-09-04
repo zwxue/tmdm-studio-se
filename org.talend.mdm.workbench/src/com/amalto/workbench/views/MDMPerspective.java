@@ -9,7 +9,7 @@ public class MDMPerspective implements IPerspectiveFactory {
 
 	public void createInitialLayout(IPageLayout layout) {
         // leftTopLayout
-        IFolderLayout leftTopLayout = layout.createFolder("navigatorLayout", IPageLayout.LEFT, new Float(0.32), IPageLayout.ID_EDITOR_AREA);
+        IFolderLayout leftTopLayout = layout.createFolder("navigatorLayout", IPageLayout.LEFT, new Float(0.30), IPageLayout.ID_EDITOR_AREA);
         leftTopLayout.addView(ServerView.VIEW_ID);
         
 		layout.setEditorAreaVisible(true);

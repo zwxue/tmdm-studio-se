@@ -279,7 +279,7 @@ public class XpathSelectDialog extends Dialog {
 		return xpath;
 	}
 
-	public String getDataModelName() {
+	public static String getDataModelName() {
 		return dataModelName;
 	}
 
