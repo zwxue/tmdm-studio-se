@@ -36,6 +36,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
@@ -110,40 +111,38 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             /viewable Business Elements
             ****/
             
-            Composite viewablehGroup  = this.getNewSectionComposite("viewable Business Elements");
+            Composite viewablehGroup  = this.getNewSectionComposite("Viewable Business Elements");
             viewablehGroup.setLayout(new GridLayout(2,false));
-            viewableElementColumns[0].setColumnWidth(200);
+            viewableElementColumns[0].setColumnWidth(220);
             viewableViewer = new TisTableViewer(Arrays.asList(viewableElementColumns),toolkit,viewablehGroup);
             viewableViewer.setMainPage(this);
             viewableViewer.create();
-            wrap.Wrap(this, viewableViewer);
+            viewableViewer.setHeight(110);
+            //wrap.Wrap(this, viewableViewer);
             
             
             Composite searchGroup  = this.getNewSectionComposite("Searchable Business Elements");
             searchGroup.setLayout(new GridLayout(2,false));
-            searchableElementColumns[0].setColumnWidth(200);
+            searchableElementColumns[0].setColumnWidth(220);
             searchableViewer = new TisTableViewer(Arrays.asList(searchableElementColumns),toolkit,searchGroup);
             searchableViewer.setMainPage(this);
             searchableViewer.create();
-            wrap.Wrap(this, searchableViewer);
+            searchableViewer.setHeight(110);
+            //wrap.Wrap(this, searchableViewer);
             
             
             //Where Conditions
             Composite wcGroup = this.getNewSectionComposite("Where Conditions");
-            wcGroup.setLayout(new GridLayout(5,false));
+            wcGroup.setLayout(new GridLayout(2,false));
             conditionsColumns[0].setColumnWidth(200);
             conditionsColumns[1].setColumnWidth(150);
             conditionsColumns[3].setColumnWidth(120);
             conditionViewer=new TisTableViewer(Arrays.asList(conditionsColumns),toolkit,wcGroup);
             conditionViewer.setMainPage(this);
             conditionViewer.create();
-            
-            
-            /*DragSource wcSource = new DragSource(wcListViewer.getControl(),DND.DROP_MOVE);
-            wcSource.setTransfer(new Transfer[]{TextTransfer.getInstance()});
-            wcSource.addDragListener(new WCDragSourceListener());*/
-            
-            wrap.Wrap(this, conditionViewer);
+            conditionViewer.setHeight(110);
+                      
+            //wrap.Wrap(this, conditionViewer);
             
             refreshData();
 
@@ -189,8 +188,6 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
                  }
             }
             searchableViewer.getViewer().setInput(slines);
-            
-            
             
             java.util.List<Line> lines=new ArrayList<Line>();
             for(WSWhereCondition wc:wsObject.getWhereConditions()){
@@ -243,9 +240,6 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 			
 	    	WSView wsObject = (WSView) (getWsViewObject());
 			wsObject.setDescription(desAntionComposite.getText());
-			//wsObject.setViewableBusinessElements(viewableBEsList.getItems());
-			//wsObject.setSearchableBusinessElements(searchableBEsList.getItems());
-			//wsObject.setWhereConditions() //automatically refreshed by the viewer
 			
 			java.util.List<Line> vlines = (java.util.List<Line>) viewableViewer.getViewer().getInput();
 			String[] vvs = new String[vlines.size()];
@@ -292,7 +286,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 		super.doSave(monitor);
 		if(this.viewName!=null&&this.viewName.length()>0){
 			if(viewName.matches("Browse_items.*")){
-				
+				lastDataModelName=XpathSelectDialog.getDataModelName();
 				String concept = viewName.replaceAll("Browse_items_","").replaceAll("#.*","");
 				if(concept!=null&&concept.length()>0&&lastDataModelName!=null&&lastDataModelName.length()>0){
 					
@@ -482,7 +476,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 				for (Iterator<String> iter = toAddViewableList.iterator(); iter.hasNext(); ) {
 					String[] keyPath = new String[]{iter.next()};
 					Line line = new Line(viewableElementColumns,keyPath);
-					viewableBEsList.getViewer().add(line);
+					java.util.List<Line> vlines = (java.util.List<Line>) viewableViewer.getViewer().getInput();
+					vlines.add(line);					
 					commit();
 					monitor.worked(1);
 				}//for

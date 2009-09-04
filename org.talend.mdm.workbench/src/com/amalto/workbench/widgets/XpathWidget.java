@@ -13,6 +13,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -33,8 +34,7 @@ public class XpathWidget implements  SelectionListener{
     private String dlgTitle;
     protected TreeParent treeParent;
     protected XpathSelectDialog xpathSelectDialog;
-    private boolean isButtonLeft;
-    private Map appendInfo;
+
     private boolean readOnly=false;
     private Composite parent;
     private IWorkbenchPartSite site;
@@ -54,9 +54,7 @@ public class XpathWidget implements  SelectionListener{
 	}
 	public XpathWidget(String buttonName,TreeParent treeParent,
 			FormToolkit toolkit, Composite parent, AMainPageV2 dialog,boolean isButtonLeft,boolean readOnly, String dataModelName) {
-//		if(treeParent==null){
-//			treeParent = 
-//		}
+
 		this.parent = parent;
 		this.treeParent = treeParent;
 		if(toolkit==null)
@@ -64,8 +62,14 @@ public class XpathWidget implements  SelectionListener{
 		
 		xpathAntionHolder = toolkit.createComposite(parent);
 		xpathAntionHolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1));
-		xpathAntionHolder.setLayout(new GridLayout(2, false));
-		this.isButtonLeft = isButtonLeft;
+		GridLayout layout=new GridLayout(2, false);
+		layout.marginWidth=0;
+		layout.marginLeft=0;
+		layout.marginTop=0;
+		layout.marginHeight=0;
+		layout.marginBottom=0;
+		xpathAntionHolder.setLayout(layout);
+
 
 		dlgTitle = "Select Xpath";
 		accommodation = dialog;
@@ -105,7 +109,7 @@ public class XpathWidget implements  SelectionListener{
 			annotationButton.addSelectionListener(this);
 		}
 		annotationButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
-		annotationButton.setToolTipText("Select xpath");
+		annotationButton.setToolTipText("Select Xpath");
 	}
 	
 	
@@ -147,7 +151,6 @@ public class XpathWidget implements  SelectionListener{
 		if (dlg.getReturnCode() == Window.OK)  {
 			descriptionText.setText(dlg.getXpath());
 			dataModelName = dlg.getDataModelName();
-			putAppendInfo("dmn", dlg.getDataModelName());
 			dlg.close();
 		}
 	}
@@ -161,16 +164,7 @@ public class XpathWidget implements  SelectionListener{
 	public void setText(String text){
 		descriptionText.setText(text);
 	}
-	
-	public void putAppendInfo(String key,Object value) {
-		if(appendInfo==null)appendInfo=new HashMap();
-		appendInfo.put(key, value);
-	}
-	
-	public Object getAppendInfo(String key) {
-		if(appendInfo==null)return null;
-		return appendInfo.get(key);
-	}
+
 	public boolean isReadOnly() {
 		return readOnly;
 	}
