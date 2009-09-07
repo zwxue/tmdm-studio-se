@@ -183,7 +183,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
     		radioGroup.setText("select one type");
         	
     		transformeButton = new Button(radioGroup,SWT.RADIO);
-    		transformeButton.setText("create transformer");
+    		transformeButton.setText("create common transformer");
     		transformeButton.setLayoutData(
     				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
     		);
@@ -206,7 +206,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
     		});
     		transformeButton.setSelection(true);
     		smartViewButton  = new Button(radioGroup,SWT.RADIO);
-    		smartViewButton.setText("create smart view");
+    		smartViewButton.setText("create smartView transformer");
     		smartViewButton.setLayoutData(
     				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
     		);
