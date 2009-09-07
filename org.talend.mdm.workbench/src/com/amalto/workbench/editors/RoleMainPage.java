@@ -79,6 +79,7 @@ import com.amalto.workbench.webservices.WSGetMenuPKs;
 import com.amalto.workbench.webservices.WSGetRolePKs;
 import com.amalto.workbench.webservices.WSGetRoutingRulePKs;
 import com.amalto.workbench.webservices.WSGetTransformerPKs;
+import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSGetViewPKs;
 import com.amalto.workbench.webservices.WSMenuPK;
 import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
@@ -91,6 +92,7 @@ import com.amalto.workbench.webservices.WSRoleSpecificationInstance;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSTransformerPK;
+import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.DescAnnotationComposite;
@@ -1161,7 +1163,16 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 					}
 				}
 				
-			}			
+			}
+			else if ("Universe".equals(objectTypesCombo.getText())){
+				WSUniversePK[] pks = port.getUniversePKs(new WSGetUniversePKs(".*")).getWsUniversePK();
+				if (pks!=null) {
+					for (int i = 0; i < pks.length; i++) {
+						if (pks[i].getPk().equals("UNIVERSE-REVISION"))continue;
+						instanceNameCombo.add(pks[i].getPk());
+					}
+				}
+			}
 		}catch (XtentisException e) {
 			throw(e);
 		} catch (Exception e) {
