@@ -15,6 +15,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.progress.UIJob;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -105,7 +106,17 @@ public class DataClusterImportAction extends Action{
 							return Status.CANCEL_STATUS;
 						}finally{
 							monitor.subTask("Refreshing server ..." );
-							new ServerRefreshAction(view,xobject.getServerRoot()).run();
+							new UIJob("Refreshing server"){
+
+								@Override
+								public IStatus runInUIThread(
+										IProgressMonitor monitor) {
+									new ServerRefreshAction(view,xobject.getServerRoot()).run();
+									return Status.OK_STATUS;
+								}
+								
+							}.schedule();
+							
 						}
 					}			
 				};

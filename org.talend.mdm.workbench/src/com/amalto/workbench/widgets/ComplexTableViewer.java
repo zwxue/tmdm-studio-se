@@ -22,8 +22,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -647,6 +651,27 @@ public class ComplexTableViewer {
 			xpath= new XpathWidget(parent, mainPage,false);
 			((GridData)xpath.getComposite().getChildren()[0].getLayoutData()).heightHint=15;
 			((GridData)xpath.getComposite().getChildren()[1].getLayoutData()).heightHint=15;
+			if(parent instanceof Table){
+				
+				((Table) parent).addMouseListener(new MouseListener(){
+
+					public void mouseDoubleClick(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					public void mouseDown(MouseEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					public void mouseUp(MouseEvent e) {
+						// TODO Auto-generated method stub
+						deactive();
+					}
+					
+				});
+			}
 			return xpath.getComposite();
 		}
 
@@ -659,9 +684,13 @@ public class ComplexTableViewer {
 		@Override
 		protected void doSetFocus() {
 			// TODO Auto-generated method stub
-			
+			xpath.getTextWidget().setFocus();
 		}
-
+		public void deactive(){
+			if(isActivated()){
+				super.focusLost();				
+			}
+		}
 		@Override
 		protected void doSetValue(Object value) {
 			// TODO Auto-generated method stub

@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -60,7 +62,7 @@ public class XpathWidget implements  SelectionListener{
 		if(toolkit==null)
 			toolkit = new FormToolkit(parent.getDisplay());
 		
-		xpathAntionHolder = toolkit.createComposite(parent);
+		xpathAntionHolder = toolkit.createComposite(parent,SWT.NO_FOCUS);
 		xpathAntionHolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1));
 		GridLayout layout=new GridLayout(2, false);
 		layout.marginWidth=0;
@@ -110,6 +112,7 @@ public class XpathWidget implements  SelectionListener{
 		}
 		annotationButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
 		annotationButton.setToolTipText("Select Xpath");
+
 	}
 	
 	
@@ -171,6 +174,8 @@ public class XpathWidget implements  SelectionListener{
 	public void setReadOnly(boolean readOnly) {
 		this.readOnly = readOnly;
 	}
-	
+	public Text getTextWidget(){
+		return descriptionText;
+	}
 	
 }
