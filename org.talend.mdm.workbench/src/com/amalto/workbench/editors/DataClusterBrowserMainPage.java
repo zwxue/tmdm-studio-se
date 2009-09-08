@@ -445,7 +445,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 				WSConceptRevisionMapMapEntry entry=wsConceptRevisionMapMapEntries[i];
 				String concept=entry.getConcept();
 				String revision=entry.getRevision();
-				if(revision==null||revision.equals(""))revision="[HEAD]";
+				if(revision==null||revision.equals(""))revision="HEAD";
 				concepts[i]=concept+" "+"["+revision+"]";
 			}
 			
