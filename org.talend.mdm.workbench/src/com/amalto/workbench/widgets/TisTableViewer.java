@@ -78,7 +78,9 @@ public class TisTableViewer extends ComplexTableViewer{
 	        		Line line =new Line(columns.toArray(new ComplexTableViewerColumn[columns.size()]),getInitValues());
 	        		list.add(line);	        		
 	        		//update the instances viewer
+	        		viewer.setSelection(null);
 	        		viewer.refresh();
+	        		viewer.getTable().select(viewer.getTable().getItemCount()-1);
 	        		markDirty();
 	         	};
 	        });		
@@ -97,6 +99,8 @@ public class TisTableViewer extends ComplexTableViewer{
 	        			List<Line> items=(List<Line>)viewer.getInput();
 	        			items.remove(index);
 	        			viewer.refresh();
+	        			int pos= index-1;
+	        			if(pos>=0) viewer.getTable().select(pos);
 	        			markDirty();
 	        		}
 	        	};
