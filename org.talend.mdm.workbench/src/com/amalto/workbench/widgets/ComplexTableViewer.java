@@ -300,8 +300,10 @@ public class ComplexTableViewer {
         		Line line =new Line(columns.toArray(new ComplexTableViewerColumn[columns.size()]),getTextValues());
         		list.add(line);
         		//update the instances viewer
-        		viewer.refresh();
         		markDirty();
+        		viewer.setSelection(null);
+        		viewer.refresh();
+        		viewer.getTable().select(viewer.getTable().getItemCount()-1);
          	};
         });		
 	}
@@ -337,7 +339,7 @@ public class ComplexTableViewer {
 	        table.setLinesVisible(true);
 	        table.addListener(SWT.MeasureItem, new Listener() {
 	            public void handleEvent(Event event) {
-	               event.height = event.gc.getFontMetrics().getHeight() + 10;
+	               event.height = event.gc.getFontMetrics().getHeight() + 5;
 	            }
 	         });
 
@@ -429,6 +431,8 @@ public class ComplexTableViewer {
         			List<Line> items=(List<Line>)viewer.getInput();
         			items.remove(index);
         			viewer.refresh();
+        			int pos= index-1;
+        			if(pos>=0) viewer.getTable().select(pos);
         			markDirty();
         		}
         	};
