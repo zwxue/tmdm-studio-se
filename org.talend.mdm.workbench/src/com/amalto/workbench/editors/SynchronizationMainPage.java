@@ -370,7 +370,7 @@ public class SynchronizationMainPage extends AMainPageV2{
         });
         
         
-		
+	/**	
 		//TIS Server Section          
         Composite TISGroup = this.getNewSectionComposite("TIS Server",ExpandableComposite.TWISTIE);
         TISGroup.setLayout(new GridLayout(1,true));
@@ -437,7 +437,8 @@ public class SynchronizationMainPage extends AMainPageV2{
         		markDirty();
         	}
         });		
-		
+**/		
+        
         //Items Section          
         Composite itemsGroup = this.getNewSectionComposite("Items SynchronizationPlan");
         itemsGroup.setLayout(new GridLayout(1,true));
@@ -615,10 +616,10 @@ public class SynchronizationMainPage extends AMainPageV2{
 			syncPlan.setRemoteSystemUsername(ws.getRemoteSystemUsername());
 			syncPlan.setRemoteSystemPassword(ws.getRemoteSystemPassword());
 			
-			syncPlan.setTisURL(ws.getTisURL());
-			syncPlan.setTisUsername(ws.getTisUsername());
-			syncPlan.setTisPassword(ws.getTisPassword());
-			syncPlan.setTisParameters(ws.getTisParameters());
+//			syncPlan.setTisURL(ws.getTisURL());
+//			syncPlan.setTisUsername(ws.getTisUsername());
+//			syncPlan.setTisPassword(ws.getTisPassword());
+//			syncPlan.setTisParameters(ws.getTisParameters());
 			
 			//xtentisObjects
 			Map<String, List<Line>> xtentisMap=new HashMap<String, List<Line>>();
@@ -676,13 +677,13 @@ public class SynchronizationMainPage extends AMainPageV2{
             Remotetext.setText(syncPlan.getRemoteSystemPassword()==null?"":syncPlan.getRemoteSystemPassword());
             
             
-            tisURLText.getText().setText(syncPlan.getTisURL()==null?"":syncPlan.getTisURL());
-            tisUsernameText.getText().setText(syncPlan.getTisUsername()==null?"":syncPlan.getTisUsername());
-            
-//            tisPasswordText.getText().setText(syncPlan.getTisPassword()==null?"":syncPlan.getTisPassword());
-            Tistext.setText(syncPlan.getTisPassword()==null?"":syncPlan.getTisPassword());
-            
-            tisParametersText.getText().setText(syncPlan.getTisParameters()==null?"":syncPlan.getTisParameters());
+//            tisURLText.getText().setText(syncPlan.getTisURL()==null?"":syncPlan.getTisURL());
+//            tisUsernameText.getText().setText(syncPlan.getTisUsername()==null?"":syncPlan.getTisUsername());
+//            
+////            tisPasswordText.getText().setText(syncPlan.getTisPassword()==null?"":syncPlan.getTisPassword());
+//            Tistext.setText(syncPlan.getTisPassword()==null?"":syncPlan.getTisPassword());
+//            
+//            tisParametersText.getText().setText(syncPlan.getTisParameters()==null?"":syncPlan.getTisParameters());
 
             //refresh the item tableviewer
             instancesViewer.setInput(syncPlan.getItemsList());
@@ -795,10 +796,10 @@ public class SynchronizationMainPage extends AMainPageV2{
 			ws.setRemoteSystemUsername(syncPlan.getRemoteSystemUsername());
 			ws.setRemoteSystemPassword(syncPlan.getRemoteSystemPassword());
 
-			ws.setTisURL(syncPlan.getTisURL());
-			ws.setTisUsername(syncPlan.getTisUsername());
-			ws.setTisPassword(syncPlan.getTisPassword());
-			ws.setTisParameters(syncPlan.getTisParameters());
+//			ws.setTisURL(syncPlan.getTisURL());
+//			ws.setTisUsername(syncPlan.getTisUsername());
+//			ws.setTisPassword(syncPlan.getTisPassword());
+//			ws.setTisParameters(syncPlan.getTisParameters());
 			
 			//xtentisobjects
 			Map<String, List<Line>> xtentisobjects =syncPlan.getXtentisObjectsList();
@@ -859,10 +860,10 @@ public class SynchronizationMainPage extends AMainPageV2{
 		protected String remoteSystemName=null;
 	    protected String remoteSystemUsername=null;
 	    protected String remoteSystemPassword;
-		protected String tisURL=null;
-		protected String tisParameters=null;
-	    protected String tisUsername=null;
-	    protected String tisPassword;
+//		protected String tisURL=null;
+//		protected String tisParameters=null;
+//	    protected String tisUsername=null;
+//	    protected String tisPassword;
 	    protected Map<String,List<Line>> xtentisObjectsList=new HashMap<String,List<Line>>();
 	    protected List<Line> itemsList=new ArrayList<Line>();
 	    
@@ -906,37 +907,7 @@ public class SynchronizationMainPage extends AMainPageV2{
 			this.remoteSystemPassword = password;
 		}
 
-		public String getTisURL() {
-        	return tisURL;
-        }
-
-		public void setTisURL(String tisURL) {
-        	this.tisURL = tisURL;
-        }
-
-		public String getTisParameters() {
-        	return tisParameters;
-        }
-
-		public void setTisParameters(String tisParameters) {
-        	this.tisParameters = tisParameters;
-        }
-
-		public String getTisUsername() {
-        	return tisUsername;
-        }
-
-		public void setTisUsername(String tisUsername) {
-        	this.tisUsername = tisUsername;
-        }
-
-		public String getTisPassword() {
-        	return tisPassword;
-        }
-
-		public void setTisPassword(String tisPassword) {
-        	this.tisPassword = tisPassword;
-        }
+		
 
 		public Map<String, List<Line>> getXtentisObjectsList() {
 			return xtentisObjectsList;
