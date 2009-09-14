@@ -1,6 +1,8 @@
 package com.amalto.workbench.editors;
 
 import java.io.StringWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +28,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -41,6 +44,7 @@ import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.BusinessPortHelper;
 import com.amalto.workbench.utils.FontUtils;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSGetConceptsInDataCluster;
 import com.amalto.workbench.webservices.WSGetObjectsForSynchronizationPlans;
@@ -57,6 +61,7 @@ import com.amalto.workbench.webservices.WSSynchronizationPlanStatus;
 import com.amalto.workbench.webservices.WSSynchronizationPlanStatusCode;
 import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizations;
 import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations;
+import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.ComplexTableViewer;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.LabelText;
@@ -113,6 +118,9 @@ public class SynchronizationMainPage extends AMainPageV2{
 
 	protected Label Remotelabel;
 	protected Text Remotetext;
+	
+	protected Button checkButton;
+	protected Label checkLabel;
 	
 	private Map<String,ComplexTableViewer> xtentisViewers=new HashMap<String, ComplexTableViewer>();
 	public SynchronizationMainPage(FormEditor editor) {
@@ -369,7 +377,40 @@ public class SynchronizationMainPage extends AMainPageV2{
         	}
         });
         
-        
+        checkButton=toolkit.createButton(remoteMDMComposite, "Check", SWT.NULL);
+        checkButton.setLayoutData(    
+                new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+        );
+        checkButton.addSelectionListener(new SelectionListener(){
+
+			public void widgetDefaultSelected(SelectionEvent e) {
+				
+			}
+
+			public void widgetSelected(SelectionEvent e) {
+				//PING
+				try {
+					XtentisPort remotePort=Util.getPort(new URL(syncPlan.remoteSystemURL), null, syncPlan.remoteSystemUsername, syncPlan.remoteSystemPassword);
+					remotePort.ping(new WSPing("check"));
+					checkLabel.setText("Connection successful");
+					checkLabel.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_GREEN));
+				} catch (MalformedURLException e0) {
+					checkLabel.setText(e0.getLocalizedMessage());
+					checkLabel.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+				} catch (XtentisException e1) {
+					checkLabel.setText(e1.getLocalizedMessage());
+					checkLabel.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+				} catch (RemoteException e2) {
+					checkLabel.setText(e2.getLocalizedMessage());
+					checkLabel.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+				}
+			}
+        	
+        });
+        checkLabel = toolkit.createLabel(remoteMDMComposite, "", SWT.NULL);
+        checkLabel.setLayoutData(
+                new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
+        );
 	/**	
 		//TIS Server Section          
         Composite TISGroup = this.getNewSectionComposite("TIS Server",ExpandableComposite.TWISTIE);
