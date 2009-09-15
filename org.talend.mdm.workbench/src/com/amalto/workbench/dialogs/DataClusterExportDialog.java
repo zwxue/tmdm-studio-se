@@ -79,6 +79,9 @@ public class DataClusterExportDialog extends Dialog{
         	if (matcher.matches()) {
 				xobject = matcher.group(1).replace(" ", "");
 				revision = matcher.group(3);
+				if(xobject.equalsIgnoreCase("Transformer")){
+					xobject="TransformerV2";
+				}
 				if (revision.equals(IConstants.HEAD)) {
 					xpath = "amaltoOBJECTS" + xobject;
 				} else {
