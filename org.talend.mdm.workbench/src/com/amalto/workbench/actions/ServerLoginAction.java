@@ -1,5 +1,6 @@
 package com.amalto.workbench.actions;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -18,7 +19,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
 
 import com.amalto.workbench.dialogs.LoginDialog;
-import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
@@ -98,8 +98,14 @@ public class ServerLoginAction extends Action implements SelectionListener{
 			
 			
 			try {//add the memory of universe and server
-				properties.load(new FileInputStream(f));
-
+				//check if the file is exist of not,if not,create
+				File  dirFile = new File(f);
+		        boolean bFile   = dirFile.exists();
+		        if(!bFile)
+		        	if(dirFile.createNewFile())
+		        		properties.load(new FileInputStream(f));
+		        	else return;
+		        	
 				int index = 0;
 				endpoints = Arrays.asList(new String[]{Util.default_endpoint_address});
 				if (properties.getProperty("endpoints")!=null)	 
