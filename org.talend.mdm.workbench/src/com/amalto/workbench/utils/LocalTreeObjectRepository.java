@@ -17,6 +17,7 @@ import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.swt.widgets.Tree;
@@ -84,9 +85,32 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			if (forceDelete())
+			{
+				MessageDialog.openError(
+						null, 
+						"parsing error",
+						"An exception occured in parsing the configuration document, all category information will lost"       						
+					);
+				startUp(vw, ur);
+			}
+			
 		}
 	}
 	
+    protected boolean forceDelete()
+    {
+    	File configFile = new File(config);
+        boolean result = false;
+        int tryCount = 0;
+        while(!result && tryCount++ <10)
+        {
+            System.gc();
+            result = configFile.delete();
+        }
+        return result;
+    }
+    
 	private String getXPathForElem(Element elem)
 	{
 		List<String> xpathList = new ArrayList<String>();
