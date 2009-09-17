@@ -314,4 +314,6 @@ public interface XtentisPort extends java.rmi.Remote {
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSDroppedItemPK removeDroppedItem(com.amalto.workbench.webservices.WSRemoveDroppedItem wsRemoveDroppedItem) throws 
          java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSMDMConfig getMDMConfiguration() throws 
+         java.rmi.RemoteException;
 }
