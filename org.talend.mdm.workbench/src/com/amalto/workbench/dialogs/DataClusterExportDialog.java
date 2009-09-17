@@ -155,7 +155,7 @@ public class DataClusterExportDialog extends Dialog{
 			public IStatus run(IProgressMonitor monitor) {	
 				try{					
 					monitor.beginTask("Export Data Clusters : " + dataCluster+" ...", IProgressMonitor.UNKNOWN);
-					Util.exportDataCluster(dataCluster, filename,server, monitor);
+					Util.exportDataCluster(xObject, dataCluster, filename,server, monitor);
 					monitor.done();
 					return Status.OK_STATUS;
 				}catch(Exception e){

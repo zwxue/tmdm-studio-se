@@ -86,7 +86,7 @@ public class DataClusterImportAction extends Action{
 							String dataCluster=f.getParentFile().getName();
 
 							monitor.beginTask("Import data cluster " + dataCluster +" ..." ,IProgressMonitor.UNKNOWN);
-							Util.importDataCluster(filename,server,monitor);
+							Util.importDataCluster(xobject, filename,server,monitor);
 							
 							//create datacluster
 							if(!"db".equalsIgnoreCase(dataCluster)){

@@ -82,6 +82,7 @@ import com.amalto.workbench.webservices.WSGetComponentVersion;
 import com.amalto.workbench.webservices.WSGetUniverse;
 import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSGetViewPKs;
+import com.amalto.workbench.webservices.WSMDMConfig;
 import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 import com.amalto.workbench.webservices.WSRoutingRuleExpression;
@@ -1174,11 +1175,19 @@ public class Util {
      * @param monitor
      * @throws Exception
      */
-    public static void importDataCluster(String filename, String server,IProgressMonitor monitor) throws Exception{
+    public static void importDataCluster(TreeObject xobject, String filename, String server,IProgressMonitor monitor) throws Exception{
+    	
+		XtentisPort port = Util.getPort(
+				new URL(xobject.getEndpointAddress()),
+				xobject.getUniverse(),
+				xobject.getUsername(),
+				xobject.getPassword()
+		);
+		WSMDMConfig config = port.getMDMConfiguration();
 		List<String> list=new ArrayList<String>();
 		String home=getExistHome();
 		String path=new File(home+"/start.jar").getAbsolutePath();		
-		String cmd="java -Xms128m -Xmx512m -Dfile.encoding=UTF-8 -jar "+path+" backup -u "+IConstants.EXIST_ADMIN+" -p "+IConstants.EXIST_ADMIN_PASSWD;
+		String cmd="java -Xms128m -Xmx512m -Dfile.encoding=UTF-8 -jar "+path+" backup -u "+config.getUserName()+" -p "+config.getPassword();
 		String[] cmds=cmd.split("\\s");
 		list.addAll(Arrays.asList(cmds));
 		list.add("-r");
@@ -1205,14 +1214,22 @@ public class Util {
      * @param monitor
      * @throws Exception
      */
-    public static void exportDataCluster(String datacluster, String filename,String server,IProgressMonitor monitor) throws Exception{
+    public static void exportDataCluster(TreeObject xobject, String datacluster, String filename,String server,IProgressMonitor monitor) throws Exception{
+		XtentisPort port = Util.getPort(
+				new URL(xobject.getEndpointAddress()),
+				xobject.getUniverse(),
+				xobject.getUsername(),
+				xobject.getPassword()
+		);
+		WSMDMConfig config = port.getMDMConfiguration();
+		
     	if("ALL".equalsIgnoreCase(datacluster)){
     		datacluster="";
     	}
 		List<String> list=new ArrayList<String>();
 		String home=getExistHome();
 		String path=new File(home+"/start.jar").getAbsolutePath();		
-		String cmd="java -Xms128m -Xmx512m -Dfile.encoding=UTF-8 -jar "+path+" backup -u "+IConstants.EXIST_ADMIN+" -p "+IConstants.EXIST_ADMIN_PASSWD+" -b /db/"+datacluster;
+		String cmd="java -Xms128m -Xmx512m -Dfile.encoding=UTF-8 -jar "+path+" backup -u "+config.getUserName()+" -p "+config.getPassword()+" -b /db/"+datacluster;
 		//String cmd="java -Xms128m -Xmx512m -Dfile.encoding=UTF-8 org.exist.start.Main backup -u "+IConstants.EXIST_ADMIN+" -p "+IConstants.EXIST_ADMIN_PASSWD+" -b /db/"+datacluster;
 		String[] cmds=cmd.split("\\s");
 		list.addAll(Arrays.asList(cmds));
