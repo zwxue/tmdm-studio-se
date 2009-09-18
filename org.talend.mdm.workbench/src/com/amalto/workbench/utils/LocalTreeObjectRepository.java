@@ -87,7 +87,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 			e.printStackTrace();
 			if (forceDelete())
 			{
-				MessageDialog.openError(
+				MessageDialog.openWarning(
 						null, 
 						"parsing error",
 						"An exception occured in parsing the configuration document, all category information will lost"       						
