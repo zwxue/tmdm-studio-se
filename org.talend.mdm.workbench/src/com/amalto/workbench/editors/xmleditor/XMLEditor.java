@@ -32,10 +32,13 @@ public class XMLEditor extends TextEditor {
 	}
 	
 	public void createPartControl(Composite parent) {
-		super.createPartControl(parent);
-		initializeKeyPress((SourceViewer)getSourceViewer());
+		super.createPartControl(parent);		
+		//initializeKeyPress((SourceViewer)getSourceViewer());		
 	}
-	
+	/**
+	 * @deprecated
+	 * @param viewer
+	 */
 	private void initializeKeyPress(final SourceViewer viewer)
 	{		
 		StyledText styledText = viewer.getTextWidget();
@@ -61,6 +64,17 @@ public class XMLEditor extends TextEditor {
 	public boolean isEditable() {
 		return true;
 	}	
+	
+	@Override
+	public boolean isEditorInputModifiable() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	@Override
+	public boolean isSaveOnCloseNeeded() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 	@Override
 	public void doSave(IProgressMonitor progressMonitor) {		
     	WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
