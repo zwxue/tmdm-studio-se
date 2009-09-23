@@ -85,13 +85,13 @@ rem Add -server to the JVM options, if supported
 if not errorlevel == 1 (set JAVA_OPTS=%JAVA_OPTS% -server)
 
 rem JVM memory allocation pool parameters. Modify as appropriate.
-set JAVA_OPTS=%JAVA_OPTS% -Xms512m -Xmx1024m
+set JAVA_OPTS=%JAVA_OPTS% -Xms512m -Xmx1024m -XX:MaxPermSize=256m
 
 rem With Sun JVMs reduce the RMI GCs to once per hour
 set JAVA_OPTS=%JAVA_OPTS% -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000
 
 rem JPDA options. Uncomment and modify as appropriate to enable remote debugging.
-set JAVA_OPTS=-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=y %JAVA_OPTS%
+rem JAVA_OPTS=-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=y %JAVA_OPTS%
 
 rem Setup the java endorsed dirs
 set JBOSS_ENDORSED_DIRS=%JBOSS_HOME%\lib\endorsed
