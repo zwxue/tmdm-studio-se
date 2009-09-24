@@ -18,6 +18,12 @@ import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
+/**
+ * 
+ * @author fliu
+ * this class is for set Multilingual facet error messages attached to facets in the schema 
+ * please refer to bugID: 0009157
+ */
 public class XSDSetFacetMessageAction extends UndoAction{
 	protected AnnotationLanguageLabelsDialog dlg = null;
 	protected String dataModelName;
