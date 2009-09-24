@@ -621,6 +621,7 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 	}
 		
 	private void updateParemeters() {
+		if(conditionViewer==null) return;
 		java.util.List<Line> lines=(java.util.List<Line>)conditionViewer.getViewer().getInput();
 		java.util.List<RoleWhereCondition> rcList=new ArrayList<RoleWhereCondition>();
 		for(Line item: lines){
