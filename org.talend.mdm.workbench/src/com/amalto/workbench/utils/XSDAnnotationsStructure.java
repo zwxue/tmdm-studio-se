@@ -484,6 +484,11 @@ public class XSDAnnotationsStructure {
 	/*************************************************************
 	 * Multilingual facet error messages 
 	 *************************************************************/
+	/**
+	 * author: fliu, 
+	 * set Multilingual facet error messages attached to facets in the schema 
+	 * please refer to bug 0009157
+	 */
 	public boolean setFactMessage(LinkedHashMap<String, String> facts) {
 		Iterator<String> isos = Util.iso2lang.keySet().iterator();
 		while(isos.hasNext())
@@ -504,6 +509,11 @@ public class XSDAnnotationsStructure {
 		return true;
 	}
 	
+	/**
+	 * author: fliu, 
+	 * get Multilingual facet error messages attached to facets in the schema 
+	 * please refer to bug 0009157
+	 */
 	public LinkedHashMap<String, String>  getFactMessage()
 	{
 		LinkedHashMap<String, String> descriptionsMap = new LinkedHashMap<String, String>();

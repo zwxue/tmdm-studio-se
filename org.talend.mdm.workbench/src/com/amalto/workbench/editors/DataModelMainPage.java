@@ -1127,6 +1127,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			manager.add(newIdentityConstraintAction);
 			// Annotations
 			setAnnotationActions2(manager);
+			// add by fliu, see bugID:0009157
 			if (((XSDElementDeclaration)obj).getTypeDefinition() instanceof XSDSimpleTypeDefinition)
 			{
 				manager.add(setFacetMsgAction);
@@ -1156,6 +1157,7 @@ public class DataModelMainPage extends AMainPageV2 {
 					// Xpath
 					manager.add(new Separator());
 					manager.add(getXPathAction);
+					// add by fliu, see bugID:0009157
 					if (((XSDElementDeclaration)term).getTypeDefinition() instanceof XSDSimpleTypeDefinition)
 					{
 						manager.add(setFacetMsgAction);
