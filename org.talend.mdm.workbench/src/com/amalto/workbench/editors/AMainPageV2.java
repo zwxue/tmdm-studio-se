@@ -6,6 +6,8 @@
  */
 package com.amalto.workbench.editors;
 
+import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
@@ -39,10 +41,18 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
+import com.amalto.workbench.models.Line;
+import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.webservices.WSGetView;
+import com.amalto.workbench.webservices.WSView;
+import com.amalto.workbench.webservices.WSViewPK;
+import com.amalto.workbench.webservices.WSWhereCondition;
 import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.TableViewWrapper;
+import com.amalto.workbench.widgets.TisTableViewer;
 import com.amalto.workbench.widgets.WidgetFactory;
 
 
@@ -50,9 +60,14 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
 
 	protected boolean comitting;
 	protected boolean refreshing;
-	
+    protected ComplexTableViewerColumn[] conditionsColumns= new ComplexTableViewerColumn[]{
+    		new ComplexTableViewerColumn("XPath", false, "newXPath", "newXPath", "",ComplexTableViewerColumn.XPATH_STYLE,new String[] {},0),
+    		new ComplexTableViewerColumn("Operator", false, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,IConstants.VIEW_CONDITION_OPERATORS,0),
+    		new ComplexTableViewerColumn("Value", false, "", ""),
+    		new ComplexTableViewerColumn("Predicate", true, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,IConstants.PREDICATES,0),
+    };
 	protected TableViewWrapper wrap = new TableViewWrapper();;
-	
+	protected TisTableViewer conditionViewer;
 	public boolean isComitting() {
 		return comitting;
 	}
@@ -328,4 +343,5 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
 		}
 		return null;
 	}
+
 }

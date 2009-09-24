@@ -1424,7 +1424,14 @@ public class Util {
 		list.add(predicate);		
     	return list.toArray(new String[list.size()]);
     }
-
+    public static String[] convertRoleWhereCondition(RoleWhereCondition rc){
+    	List<String> list=new ArrayList<String>();
+    	list.add(rc.getLeftPath());
+    	list.add(rc.getOperator());
+		list.add(rc.getRightValueOrPath());
+		list.add(rc.getPredicate());		
+    	return list.toArray(new String[list.size()]);
+    }
     public static String[] convertRouteCondition(WSRoutingRuleExpression wc){
     	List<String> list=new ArrayList<String>();
     	list.add(wc.getXpath());
@@ -1546,4 +1553,15 @@ public class Util {
         }
         return revision;
     }
+
+	public static RoleWhereCondition convertLineToRC(String[] values) {
+		RoleWhereCondition rc=new RoleWhereCondition();
+		if(values.length==4){
+			rc.setLeftPath(values[0]);
+			rc.setOperator(values[1]);
+			rc.setRightValueOrPath(values[2]);
+			rc.setPredicate(values[3]);
+		}
+		return rc;
+	}
 }

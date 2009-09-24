@@ -22,13 +22,11 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -36,14 +34,9 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.DragSource;
-import org.eclipse.swt.dnd.DragSourceEvent;
-import org.eclipse.swt.dnd.DragSourceListener;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseEvent;
@@ -67,6 +60,7 @@ import org.w3c.dom.Element;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.RoleMenuParameters;
@@ -94,8 +88,10 @@ import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSTransformerPK;
 import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSViewPK;
+import com.amalto.workbench.webservices.WSWhereCondition;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.DescAnnotationComposite;
+import com.amalto.workbench.widgets.TisTableViewer;
 
 public class RoleMainPage extends AMainPageV2 implements Observer{
 
@@ -433,7 +429,7 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
             paramsLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
             );
-            paramsClientComposite = toolkit.createComposite(paramsContainerComposite, SWT.BORDER);
+            paramsClientComposite = toolkit.createComposite(paramsContainerComposite, SWT.NULL);
             paramsClientComposite.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
             );
@@ -450,7 +446,7 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 
     public void update(Observable o, Object arg)
     {
-    	if (arg != null && (arg == instancesViewer || arg == wcListViewer)) {
+    	if (arg != null && (arg == instancesViewer)) {
 			deleteItems(arg);
 		}
     }
@@ -461,23 +457,25 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 		if (instancesViewer == view) {
 			list = ((IStructuredSelection) instancesViewer.getSelection())
 					.toList();
-		} else if (wcListViewer != null) {
-			IStructuredSelection selections = (IStructuredSelection) wcListViewer
-					.getSelection();
-			list = Arrays.asList(selections.toArray());
-			String instanceName = ((InstanceLine)((IStructuredSelection)instancesViewer.getSelection()).getFirstElement()).getInstanceName();
-			ArrayList<RoleWhereCondition> wcList = (ArrayList<RoleWhereCondition>)wcListViewer.getInput();
-			wcList.removeAll(list);
-			LinkedHashSet<String> parameters = new LinkedHashSet<String>();
-			for (Iterator iter = wcList.iterator(); iter.hasNext(); ) {
-				RoleWhereCondition rwc = (RoleWhereCondition) iter.next();
-				parameters.add(rwc.toString());
-			}
-			role
-				.getSpecifications().get(objectTypesCombo.getText())
-					.getInstances().get(instanceName)
-						.setParameters(parameters);
-			wcListViewer.refresh();
+			//CHECK: remove the listener for the former listViewer, but it need to be checked. 
+			
+//		} else if (wcListViewer != null) {
+//			IStructuredSelection selections = (IStructuredSelection) wcListViewer
+//					.getSelection();
+//			list = Arrays.asList(selections.toArray());
+//			String instanceName = ((InstanceLine)((IStructuredSelection)instancesViewer.getSelection()).getFirstElement()).getInstanceName();
+//			ArrayList<RoleWhereCondition> wcList = (ArrayList<RoleWhereCondition>)wcListViewer.getInput();
+//			wcList.removeAll(list);
+//			LinkedHashSet<String> parameters = new LinkedHashSet<String>();
+//			for (Iterator iter = wcList.iterator(); iter.hasNext(); ) {
+//				RoleWhereCondition rwc = (RoleWhereCondition) iter.next();
+//				parameters.add(rwc.toString());
+//			}
+//			role
+//				.getSpecifications().get(objectTypesCombo.getText())
+//					.getInstances().get(instanceName)
+//						.setParameters(parameters);
+//			wcListViewer.refresh();
 		}
     	
 
@@ -581,6 +579,7 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 			
 			this.comitting = true;
 			
+			updateParemeters();
 			WSRole ws = (WSRole) (getXObject().getWsObject());
 			ws.setDescription(desAntionComposite.getText());
 			ws.setName(role.getName());
@@ -610,6 +609,9 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 			}
 			ws.setSpecification(wsSpecifications.toArray(new WSRoleSpecification[wsSpecifications.size()]));
 			
+			
+
+
 			this.comitting = false;
 			
 		} catch (Exception e) {
@@ -618,6 +620,31 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 		}    	
 	}
 		
+	private void updateParemeters() {
+		java.util.List<Line> lines=(java.util.List<Line>)conditionViewer.getViewer().getInput();
+		java.util.List<RoleWhereCondition> rcList=new ArrayList<RoleWhereCondition>();
+		for(Line item: lines){
+			String[] values=new String[]{item.keyValues.get(0).value,
+					item.keyValues.get(1).value,
+					item.keyValues.get(2).value,
+					item.keyValues.get(3).value};
+			RoleWhereCondition rc =Util.convertLineToRC(values);
+			rcList.add(rc);
+		}
+
+		LinkedHashSet<String> parameters = new LinkedHashSet<String>();
+		for (Iterator iter = rcList.iterator(); iter.hasNext(); ) {
+			RoleWhereCondition rc = (RoleWhereCondition) iter.next();
+			parameters.add(rc.toString());
+		}
+		String instanceName = ((InstanceLine)((IStructuredSelection)instancesViewer.getSelection()).getFirstElement()).getInstanceName();
+		role
+			.getSpecifications().get(objectTypesCombo.getText())
+					.getInstances().get(instanceName)
+						.setParameters(parameters);
+		
+	}
+
 	protected void createActions() {
 	}
 
@@ -649,7 +676,7 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 	protected Text wcRightText;
 	protected Combo wcOperatorCombo;
 	protected Combo wcPredicateCombo;
-	protected ListViewer wcListViewer;
+//	protected ListViewer wcListViewer;
 	private Composite wcComposite = null;
 	
 	protected void showViewParameters(String instanceName) {
@@ -665,14 +692,14 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 	private void refreshViewParameters(String instanceName) {
 		paramsLabel.setText("Additional xPath Filters For View "+instanceName);
 	
-		wcLeftText.setText("");
-		wcOperatorCombo.select(0);
-		wcRightText.setText("");
-		wcPredicateCombo.setEnabled(true);
-		wcPredicateCombo.select(0);
-		
-		wcListViewer.setInput(new ArrayList<RoleWhereCondition>());
-		wcListViewer.refresh();
+//		wcLeftText.setText("");
+//		wcOperatorCombo.select(0);
+//		wcRightText.setText("");
+//		wcPredicateCombo.setEnabled(true);
+//		wcPredicateCombo.select(0);
+//		
+//		wcListViewer.setInput(new ArrayList<RoleWhereCondition>());
+//		wcListViewer.refresh();
 	
 		//retrieve the parameters of the instance
 		HashSet<String> parameters = 
@@ -681,19 +708,48 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 					.getParameters();
 		
 		//build the list
-		ArrayList<RoleWhereCondition> wcList = new ArrayList<RoleWhereCondition>();
+//		ArrayList<RoleWhereCondition> wcList = new ArrayList<RoleWhereCondition>();
+//		for (Iterator iter = parameters.iterator(); iter.hasNext(); ) {
+//			String marshalledWC = (String) iter.next();
+////			System.out.println("Unmarshalling: "+marshalledWC);
+//			wcList.add(RoleWhereCondition.parse(marshalledWC));
+//		}
+//		//refresh the whole thing
+//		wcListViewer.setInput(wcList);
+		
+		
+		java.util.List<Line> lines=new ArrayList<Line>();
 		for (Iterator iter = parameters.iterator(); iter.hasNext(); ) {
 			String marshalledWC = (String) iter.next();
 //			System.out.println("Unmarshalling: "+marshalledWC);
-			wcList.add(RoleWhereCondition.parse(marshalledWC));
+			Line line=new Line(
+					conditionsColumns,
+					Util.convertRoleWhereCondition(RoleWhereCondition.parse(marshalledWC)));
+			lines.add(line);
 		}
-		//refresh the whole thing
-		wcListViewer.setInput(wcList);
 		
+		//refresh the whole thing
+        conditionViewer.getViewer().setInput(lines);
 	}
 	
 	
 	private Composite getViewParametersComposite() {
+        FormToolkit toolkit =  this.getManagedForm().getToolkit();
+        
+        Composite composite = toolkit.createComposite(paramsClientComposite, SWT.BORDER);
+        composite.setLayout(new GridLayout(2,false));
+        conditionsColumns[0].setColumnWidth(200);
+        conditionsColumns[1].setColumnWidth(150);
+        conditionsColumns[3].setColumnWidth(120);
+        conditionViewer=new TisTableViewer(Arrays.asList(conditionsColumns),this.getManagedForm().getToolkit(),composite);
+        conditionViewer.setMainPage(this);
+        conditionViewer.create();
+        conditionViewer.setHeight(110);
+        return composite;
+		
+		//CHECK:maybe this method needs to be implemented some place else;
+		/*
+				
         FormToolkit toolkit =  this.getManagedForm().getToolkit();
         
         Composite composite = toolkit.createComposite(paramsClientComposite, SWT.BORDER);
@@ -810,7 +866,7 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 
         wrap.Wrap(RoleMainPage.this, wcListViewer);
         return composite;
-	}
+	*/}
 	
 	
 	protected void addWhereCondition() {
@@ -822,7 +878,7 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 		wc.setPredicate(wcPredicateCombo.getText());
 		
 		//we remarshall everything for simplicity
-		ArrayList<RoleWhereCondition> wcList = (ArrayList<RoleWhereCondition>)wcListViewer.getInput();
+		ArrayList<RoleWhereCondition> wcList = (ArrayList<RoleWhereCondition>) conditionViewer.getViewer().getInput();
 		wcList.add(wc);
 	
 		//Process the list
@@ -840,7 +896,7 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 						.setParameters(parameters);
 
 		//refresh
-		wcListViewer.setInput(wcList); //force refresh
+		 conditionViewer.getViewer().setInput(wcList); //force refresh
 		markDirty();	
 	}
 	
@@ -850,8 +906,9 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 	/**
 	 * Where Condition Drag
 	 *
-	 */	
-	class WCDragSourceListener implements DragSourceListener {
+	 */
+	//CHECK:This inner class removed.
+/*	class WCDragSourceListener implements DragSourceListener {
 
 		public void dragFinished(DragSourceEvent event) {
 			IStructuredSelection selection = (IStructuredSelection)RoleMainPage.this.wcListViewer.getSelection();
@@ -889,7 +946,7 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 		}
 
 
-	}
+	}*/
 
 	
 	

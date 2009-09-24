@@ -78,13 +78,13 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 	private TisTableViewer searchableViewer;
 	
 	
-    private ComplexTableViewerColumn[] conditionsColumns= new ComplexTableViewerColumn[]{
+/*    private ComplexTableViewerColumn[] conditionsColumns= new ComplexTableViewerColumn[]{
     		new ComplexTableViewerColumn("XPath", false, "newXPath", "newXPath", "",ComplexTableViewerColumn.XPATH_STYLE,new String[] {},0),
     		new ComplexTableViewerColumn("Operator", false, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,IConstants.VIEW_CONDITION_OPERATORS,0),
     		new ComplexTableViewerColumn("Value", false, "", ""),
     		new ComplexTableViewerColumn("Predicate", true, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,IConstants.PREDICATES,0),
-    };
-	private TisTableViewer conditionViewer;
+    };*/
+//	private TisTableViewer conditionViewer;
 	
     
     public ViewMainPage(FormEditor editor) {
@@ -141,8 +141,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             conditionViewer.setMainPage(this);
             conditionViewer.create();
             conditionViewer.setHeight(110);
-                      
-            //wrap.Wrap(this, conditionViewer);
+            
+//            wrap.Wrap(this, conditionViewer);
             
             refreshData();
 
