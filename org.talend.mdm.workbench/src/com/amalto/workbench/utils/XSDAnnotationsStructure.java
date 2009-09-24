@@ -481,7 +481,44 @@ public class XSDAnnotationsStructure {
 		return targetSystems;
 	}
 	
+	/*************************************************************
+	 * Multilingual facet error messages 
+	 *************************************************************/
+	public boolean setFactMessage(LinkedHashMap<String, String> facts) {
+		Iterator<String> isos = Util.iso2lang.keySet().iterator();
+		while(isos.hasNext())
+		{
+			String lang = isos.next();
+			removeAppInfos("X_Facet_" + lang.toUpperCase());
+		}
+		
+		Iterator<String> isoIter = facts.keySet().iterator();
+		while(isoIter.hasNext())
+		{
+			String iso = isoIter.next();
+			removeAppInfos("X_Facet_" + iso.toUpperCase());
+			addAppInfo("X_Facet_" + iso.toUpperCase(), facts.get(iso));
+		}
+		
+		hasChanged = true;
+		return true;
+	}
 	
+	public LinkedHashMap<String, String>  getFactMessage()
+	{
+		LinkedHashMap<String, String> descriptionsMap = new LinkedHashMap<String, String>();
+		Iterator<String> isoIter = Util.iso2lang.keySet().iterator();
+		while(isoIter.hasNext())
+		{
+			String iso = isoIter.next().toUpperCase();
+			String prefix = "X_Facet_" + iso;
+			String infoValue = getAppInfoValue(prefix);
+			if (infoValue != null)
+				descriptionsMap.put(iso.toLowerCase(), infoValue);
+		}
+		
+		return descriptionsMap;
+	}
 	/****************************************************************************
 	 *           APPINFO UTILITIES
 	 ****************************************************************************/

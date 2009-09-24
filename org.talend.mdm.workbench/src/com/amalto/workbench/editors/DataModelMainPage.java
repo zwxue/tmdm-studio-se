@@ -123,6 +123,7 @@ import com.amalto.workbench.actions.XSDSetAnnotationSchematronAction;
 import com.amalto.workbench.actions.XSDSetAnnotationSourceSystemAction;
 import com.amalto.workbench.actions.XSDSetAnnotationTargetSystemsAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
+import com.amalto.workbench.actions.XSDSetFacetMessageAction;
 import com.amalto.workbench.dialogs.DataModelFilterDialog;
 import com.amalto.workbench.dialogs.ErrorExceptionDialog;
 import com.amalto.workbench.editors.xmleditor.XMLEditor;
@@ -184,6 +185,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	private XSDNewComplexTypeDefinition  newComplexTypeAction = null;
 	private XSDNewSimpleTypeDefinition  newSimpleTypeAction = null;
 	private XSDEditComplexTypeAction   editComplexTypeAction = null;
+	private XSDSetFacetMessageAction    setFacetMsgAction = null;
 	private ObjectUndoContext undoContext;
 	private MenuManager menuMgr;
 	private String dataModelName;
@@ -888,6 +890,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		this.newSimpleTypeAction = new XSDNewSimpleTypeDefinition(this);
 		
 		this.editComplexTypeAction = new XSDEditComplexTypeAction(this);
+		this.setFacetMsgAction = new XSDSetFacetMessageAction(this);
 		deleteConceptWrapAction.regisDelAction(XSDElementDeclarationImpl.class, deleteConceptAction);
 		deleteConceptWrapAction.regisDelAction(XSDParticleImpl.class, deleteParticleAction);
 		deleteConceptWrapAction.regisDelAction(XSDIdentityConstraintDefinitionImpl.class, deleteIdentityConstraintAction);
@@ -1124,6 +1127,10 @@ public class DataModelMainPage extends AMainPageV2 {
 			manager.add(newIdentityConstraintAction);
 			// Annotations
 			setAnnotationActions2(manager);
+			if (((XSDElementDeclaration)obj).getTypeDefinition() instanceof XSDSimpleTypeDefinition)
+			{
+				manager.add(setFacetMsgAction);
+			}
 		}
 		
 
@@ -1149,6 +1156,10 @@ public class DataModelMainPage extends AMainPageV2 {
 					// Xpath
 					manager.add(new Separator());
 					manager.add(getXPathAction);
+					if (((XSDElementDeclaration)term).getTypeDefinition() instanceof XSDSimpleTypeDefinition)
+					{
+						manager.add(setFacetMsgAction);
+					}
 				}
 			}
 		}
