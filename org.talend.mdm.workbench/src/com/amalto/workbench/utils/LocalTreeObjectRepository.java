@@ -518,7 +518,10 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 					TreeParent catalog = new TreeParent(spec.getName(), modelCpy
 							.getServerRoot(), TreeObject.CATEGORY_FOLDER, null,
 							null);
+					boolean cpyInternalCheck = internalCheck;
+					internalCheck = true;
 					modelCpy.addChild(catalog);
+					internalCheck = cpyInternalCheck;
 					modelCpy = catalog;
             	}
             	else
