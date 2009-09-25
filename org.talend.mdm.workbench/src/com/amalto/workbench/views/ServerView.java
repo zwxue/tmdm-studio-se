@@ -478,6 +478,11 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         		}
         		else if(e.keyCode == 'v' && e.stateMask ==
         			SWT.CTRL){
+        			//modifier:fiu see bug 0008905
+        			TreeObject xobject = (TreeObject) ((IStructuredSelection) viewer
+        					.getSelection()).getFirstElement();
+        			((PasteXObjectAction)pasteAction).setXtentisPort(xobject);
+        			((PasteXObjectAction)pasteAction).setParent(xobject instanceof TreeParent ? (TreeParent)xobject : xobject.getParent());
         			pasteAction.run();
         		}
         		else if (e.keyCode == SWT.DEL){
@@ -588,7 +593,15 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				}
 
 				if (!WorkbenchClipboard.getWorkbenchClipboard().isEmpty())
+				{
+					//modifier:fiu see bug 0008905
+        			TreeObject remoteObj = (TreeObject) ((IStructuredSelection) viewer
+        					.getSelection()).getFirstElement();
+        			((PasteXObjectAction)pasteAction).setXtentisPort(remoteObj);
+        			((PasteXObjectAction)pasteAction).setParent(remoteObj instanceof TreeParent ? (TreeParent)remoteObj: remoteObj.getParent());
 					manager.add(pasteAction);
+				}
+
 			}
 		}
 		manager.add(new Separator());
