@@ -58,7 +58,7 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction{
        		}
        		
        		
-       		struc.setForeignKey("".equals(sxid.getXpath()) ? null : sxid.getXpath());
+       		struc.setForeignKey("".equals(sxid.getXpath()) ? null : sxid.getXpath().replaceAll("'|\"", ""));
        		
        		if (struc.hasChanged()) {
        			page.refresh();
