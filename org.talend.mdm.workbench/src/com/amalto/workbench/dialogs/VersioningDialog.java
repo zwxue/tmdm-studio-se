@@ -2,9 +2,6 @@ package com.amalto.workbench.dialogs;
 
 import java.util.ArrayList;
 
-import org.eclipse.jface.action.IMenuListener;
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -27,17 +24,18 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.amalto.workbench.actions.VersioningProgressAction;
 import com.amalto.workbench.webservices.WSBackgroundJobPK;
+import com.amalto.workbench.webservices.WSItemPK;
 import com.amalto.workbench.webservices.WSVersioningGetObjectsHistory;
 import com.amalto.workbench.webservices.WSVersioningHistoryEntry;
 import com.amalto.workbench.webservices.WSVersioningObjectsHistory;
 import com.amalto.workbench.webservices.WSVersioningObjectsHistoryObjects;
 import com.amalto.workbench.webservices.WSVersioningRestoreObjects;
+import com.amalto.workbench.webservices.WSVersioningTagItems;
 import com.amalto.workbench.webservices.WSVersioningTagObjects;
 import com.amalto.workbench.webservices.XtentisPort;
 
@@ -49,20 +47,30 @@ public class VersioningDialog extends Dialog {
 	protected boolean isItems = false;
 	private String objectType = null;
 	private String[] instances = null;
-	
+	private WSItemPK[] wsItemPKs = null;
+
 	protected Text tagText;
 	protected Text commentText;
 	protected Group restoreGroup; 
 	protected TableViewer tagsViewer;
+	
+	private boolean enableRestore = false;
 
 	/**
 	 */
 	public VersioningDialog(Shell shell, XtentisPort port, String objectType, String[] instances) {
 		super(shell);
 		this.port = port;
-		this.isItems = false;
 		this.objectType = objectType;
 		this.instances = instances;
+		this.isItems = false;
+	}
+	
+	public VersioningDialog(Shell shell, XtentisPort port, WSItemPK[] wsItemPKs) {
+		super(shell);
+		this.port = port;
+		this.wsItemPKs = wsItemPKs;
+		this.isItems = true;
 	}
 
 	protected Control createDialogArea(Composite parent) {
@@ -131,7 +139,6 @@ public class VersioningDialog extends Dialog {
 			tagButton.addSelectionListener(new SelectionListener() {
 				public void widgetDefaultSelected(SelectionEvent e) {}
 				public void widgetSelected(SelectionEvent e) {
-					if (!isItems)
 						tagResources();
 				}				
 			});
@@ -173,7 +180,6 @@ public class VersioningDialog extends Dialog {
             });
             tagsViewer.addDoubleClickListener(new IDoubleClickListener() {
             	public void doubleClick(DoubleClickEvent event) {
-            		if (! isItems)
             			restoreResources();
 	            }
             });
@@ -190,7 +196,7 @@ public class VersioningDialog extends Dialog {
 			});
 
 			
-			hookContextMenu();
+			//hookContextMenu();
 
 			refreshData();
 			
@@ -208,7 +214,32 @@ public class VersioningDialog extends Dialog {
 		
 	private void refreshData() {
 		//decide whether to diplay or not the restore dialog
-		boolean enableRestore = false;
+		
+		if(!initHistoryTableView())return;
+		
+		if (enableRestore) {
+			restoreGroup.setEnabled(true);
+		}
+		
+	}
+	
+	protected void createButtonsForButtonBar(Composite parent) {
+		createButton(parent, BUTTON_CANCEL, "Cancel",true);
+	}
+
+
+	protected void buttonPressed(int buttonId) {
+		switch (buttonId) {
+		case BUTTON_CANCEL:
+			this.close();
+		}
+	}
+	
+	/***********************************************
+	 * Search Documents
+	 ***********************************************/
+
+	private boolean initHistoryTableView() {
 		WSVersioningObjectsHistory histories = null;
 		if (isItems) {
 			//TODO
@@ -229,8 +260,9 @@ public class VersioningDialog extends Dialog {
 							this.getShell(), 
 							"Versioning Error", 
 							"Unable to retrieve the history of objects "+objectType
+							+"\nCaused by: "+e.getLocalizedMessage()
 					);
-					return;
+					return false;
 				}				
 			} else if (instances.length ==1 ) {
 				try {
@@ -247,8 +279,9 @@ public class VersioningDialog extends Dialog {
 							this.getShell(), 
 							"Versioning Error", 
 							"Unable to retrieve the history of object "+objectType+" instance "+instances[0]
+							+"\nCaused by: "+e.getLocalizedMessage()                                                                             
 					);
-					return;
+					return false;
 				}
 			}
 		}// if is Items
@@ -265,32 +298,10 @@ public class VersioningDialog extends Dialog {
 				enableRestore = true;
 			}
 		}
-		
-		if (enableRestore) {
-			restoreGroup.setEnabled(true);
-		}
+		return true;
 		
 	}
-
 	
-	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, BUTTON_CANCEL, "Cancel",true);
-	}
-
-
-
-	protected void buttonPressed(int buttonId) {
-		switch (buttonId) {
-		case BUTTON_CANCEL:
-			this.close();
-		}
-	}
-	
-	
-	/***********************************************
-	 * Search Documents
-	 *
-	 ***********************************************/
 	
 	public void tagResources() {
 		
@@ -304,28 +315,54 @@ public class VersioningDialog extends Dialog {
 			return;
 		}
 
-		try {
-	        WSBackgroundJobPK jobPK =
-		        this.port.versioningTagObjects(new WSVersioningTagObjects(
-		        		null,
-		        		tagText.getText(),
-		        		commentText.getText(),
-		        		this.objectType,
-		        		this.instances
-		        ));
-	        
-	        new VersioningProgressAction(this.getShell(),this.port,jobPK).run();
-	        
-	        refreshData();
-	        
-		} catch (Exception exx) {
-			exx.printStackTrace();
-			MessageDialog.openError(
-					VersioningDialog.this.getShell(),
-					"Error", 
-					"Unable to retrieve the documents list: "+exx.getLocalizedMessage()
-			);
+		if(isItems){
+			
+			try {
+		        WSBackgroundJobPK jobPK =
+			        this.port.versioningTagItems(new WSVersioningTagItems(
+			        		null,
+			        		tagText.getText(),
+			        		commentText.getText(),
+			        		this.wsItemPKs
+			        ));
+		        
+		        new VersioningProgressAction(this.getShell(),this.port,jobPK).run();
+		         
+			} catch (Exception exx) {
+				exx.printStackTrace();
+				MessageDialog.openError(
+						VersioningDialog.this.getShell(),
+						"Error", 
+						"Unable to tag the documents : "+exx.getLocalizedMessage()
+				);
+			}
+			
+		}else{
+			
+			try {
+		        WSBackgroundJobPK jobPK =
+			        this.port.versioningTagObjects(new WSVersioningTagObjects(
+			        		null,
+			        		tagText.getText(),
+			        		commentText.getText(),
+			        		this.objectType,
+			        		this.instances
+			        ));
+		        
+		        new VersioningProgressAction(this.getShell(),this.port,jobPK).run();
+		         
+			} catch (Exception exx) {
+				exx.printStackTrace();
+				MessageDialog.openError(
+						VersioningDialog.this.getShell(),
+						"Error", 
+						"Unable to tag the documents : "+exx.getLocalizedMessage()
+				);
+			}
+			
 		}
+		
+		refreshData();
 	}
 	
 	public void restoreResources() {
@@ -347,7 +384,7 @@ public class VersioningDialog extends Dialog {
 			MessageDialog.openError(
 					VersioningDialog.this.getShell(),
 					"Error", 
-					"Unable to retrieve the documents list: "+exx.getLocalizedMessage()
+					"Unable to restore the documents : "+exx.getLocalizedMessage()
 			);
 		}
 	}
@@ -357,36 +394,28 @@ public class VersioningDialog extends Dialog {
 		return tagsViewer;
 	}
 		
-	
-	
-	
-	/**************************
-	 * 
-	 * ListViewer  CONTEXT MENU
-	 */
-	
-	private void hookContextMenu() {
-		MenuManager menuMgr = new MenuManager("#PopupMenu");
-		menuMgr.setRemoveAllWhenShown(true);
-		menuMgr.addMenuListener(new IMenuListener() {
-			public void menuAboutToShow(IMenuManager manager) {
-				VersioningDialog.this.fillContextMenu(manager);
-			}
-		});
-		Menu menu = menuMgr.createContextMenu(tagsViewer.getControl());
-		tagsViewer.getControl().setMenu(menu);
-		//getSite().registerContextMenu(menuMgr, viewer);
-	}
-	protected void fillContextMenu(IMenuManager manager) {
+//	/**************************
+//	* ListViewer  CONTEXT MENU
+//	***************************/
+//	
+//	private void hookContextMenu() {
+//		MenuManager menuMgr = new MenuManager("#PopupMenu");
+//		menuMgr.setRemoveAllWhenShown(true);
+//		menuMgr.addMenuListener(new IMenuListener() {
+//			public void menuAboutToShow(IMenuManager manager) {
+//				VersioningDialog.this.fillContextMenu(manager);
+//			}
+//		});
+//		Menu menu = menuMgr.createContextMenu(tagsViewer.getControl());
+//		tagsViewer.getControl().setMenu(menu);
+//		//getSite().registerContextMenu(menuMgr, viewer);
+//	}
+//	protected void fillContextMenu(IMenuManager manager) {
 //        if (!tagsViewer.getSelection().isEmpty()) {
 //        	manager.add(new ProjectDocumentAction(serverView,this));
 //        	manager.add(new DeleteDocumentAction(serverView,this));
 //        }
 //        manager.add(new NewDocumentAction(serverView,this));
-	}
-	
-	
-	
-
+//	}
 
 }
