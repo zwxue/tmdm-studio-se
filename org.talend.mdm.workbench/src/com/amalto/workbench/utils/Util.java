@@ -1395,7 +1395,26 @@ public class Util {
 	       	default:
 	       		return false;
         }
-    }	
+    }
+    
+    public static boolean hasTags(TreeObject xobject){
+    	if(xobject.isXObject()) return true;
+        switch(xobject.getType()) {
+            case TreeObject.DATA_CLUSTER: //is necessary
+	    	case TreeObject.DATA_MODEL:
+	       	case TreeObject.VIEW:	           	  
+	       	case TreeObject.MENU:
+	       	case TreeObject.ROLE:
+	       	case TreeObject.ROUTING_RULE:
+	       	case TreeObject.SYNCHRONIZATIONPLAN:
+	       	case TreeObject.STORED_PROCEDURE:
+	       	case TreeObject.TRANSFORMER:
+	       	case TreeObject.UNIVERSE: //is necessary
+	       		return true;
+	       	default:
+	       		return false;
+        }
+    }
     
     public static String[] convertWhereCondition(WSWhereCondition wc){
     	List<String> list=new ArrayList<String>();

@@ -65,6 +65,7 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.amalto.workbench.actions.VersioningXObjectAction;
 import com.amalto.workbench.dialogs.DOMViewDialog;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -72,6 +73,7 @@ import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.utils.IConstants;
+import com.amalto.workbench.utils.LineItem;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSConceptRevisionMapMapEntry;
 import com.amalto.workbench.webservices.WSDataCluster;
@@ -551,7 +553,15 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 							DataClusterBrowserMainPage.this.getSite().getShell(),
 							DataClusterBrowserMainPage.this.resultsViewer
 					)
-			);
+			    );
+				manager.appendToGroup(
+						IWorkbenchActionConstants.MB_ADDITIONS,
+						new VersioningXObjectAction(
+								DataClusterBrowserMainPage.this.getSite().getShell(),
+								DataClusterBrowserMainPage.this.resultsViewer,
+								getXObject()
+						)
+				);
 			}
 		});
 		Menu menu = menuMgr.createContextMenu(resultsViewer.getControl());
@@ -1377,46 +1387,5 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 		
 	}
 	
-	
-	
-	/***************************************************************
-	 * A Line Item Bean
-	 * @author bgrieder
-	 *
-	 ***************************************************************/
-	class LineItem {
-		private long time;
-		private String concept;
-		private String[] ids;
-		
-		
-		public LineItem(long time, String concept, String[] ids) {
-			super();
-			this.time = time;
-			this.concept = concept;
-			this.ids = ids;
-		}
-		
-		public String getConcept() {
-			return concept;
-		}
-		public void setConcept(String concept) {
-			this.concept = concept;
-		}
-		public String[] getIds() {
-			return ids;
-		}
-		public void setIds(String[] ids) {
-			this.ids = ids;
-		}
-		public long getTime() {
-			return time;
-		}
-		public void setTime(long time) {
-			this.time = time;
-		}
-		
-		
-	}
 
 }

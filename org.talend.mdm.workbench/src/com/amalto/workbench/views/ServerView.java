@@ -4,7 +4,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 
 import org.eclipse.jface.action.Action;
@@ -21,7 +20,6 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
@@ -62,6 +60,7 @@ import com.amalto.workbench.actions.NewXObjectAction;
 import com.amalto.workbench.actions.PasteXObjectAction;
 import com.amalto.workbench.actions.ServerLoginAction;
 import com.amalto.workbench.actions.ServerRefreshAction;
+import com.amalto.workbench.actions.VersioningXObjectAction;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
@@ -70,7 +69,6 @@ import com.amalto.workbench.models.TreeObjectTransfer;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.ServerTreeContentProvider;
 import com.amalto.workbench.providers.ServerTreeLabelProvider;
-import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.Util;
@@ -106,7 +104,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	protected Action browseViewAction;
 	protected Action copyAction;
 	protected Action pasteAction;
-	//protected Action versionAction;
+	protected Action versionAction;
 	protected Action exportAction;
 	protected Action NewCategoryAction;
 	
@@ -582,6 +580,9 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			    
 				if(Util.hasUniverse(xobject))
 					manager.add(browseRevisionAction);
+				
+				if(Util.hasTags(xobject))
+					manager.add(versionAction);
 			    
 				if (xobject.isXObject() && !XSystemObjects.isExist(xobject.getType(), xobject.getDisplayName())) {
 					manager.add(editXObjectAction);
@@ -670,7 +671,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		exportAction=new DataClusterExportAction(this);
 		importAction=new DataClusterImportAction(this);
 		NewCategoryAction = new NewCategoryAction(this);
-		//versionAction = new VersioningXObjectAction(this);
+		versionAction = new VersioningXObjectAction(this);
 		newUserActon = new NewUserAction(this);
 	}
 
