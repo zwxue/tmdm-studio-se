@@ -31,6 +31,7 @@ import com.amalto.workbench.webservices.WSDeleteSynchronizationPlan;
 import com.amalto.workbench.webservices.WSDeleteTransformerV2;
 import com.amalto.workbench.webservices.WSDeleteUniverse;
 import com.amalto.workbench.webservices.WSDeleteView;
+import com.amalto.workbench.webservices.WSGetCurrentUniverse;
 import com.amalto.workbench.webservices.WSGetRole;
 import com.amalto.workbench.webservices.WSGetRolePKs;
 import com.amalto.workbench.webservices.WSMenuPK;
@@ -43,7 +44,9 @@ import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
 import com.amalto.workbench.webservices.WSTransformerV2PK;
+import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniversePK;
+import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
 
@@ -187,7 +190,9 @@ public class DeleteXObjectAction extends Action{
 	
 	private void deleteSpecificationFromAttachedRole(XtentisPort port, TreeObject xobject, String objectType) throws RemoteException
 	{
+		String revision = retrieveRevisionID(port, objectType);
    		WSRolePK[] pks = port.getRolePKs(new WSGetRolePKs(".*")).getWsRolePK();
+   		if (pks == null) return;
    		for (WSRolePK pk : pks) {
 			WSGetRole getRole = new WSGetRole();
 			getRole.setWsRolePK(new WSRolePK(pk.getPk()));
@@ -204,6 +209,9 @@ public class DeleteXObjectAction extends Action{
 						}
 					}
 					if (newSpecInstanceLst.size() < specInstance.length) {
+						String revisionForRole = retrieveRevisionID(port, "Role");
+						if (revisionForRole == null || revision == null || !revisionForRole.equals(revision))
+							break;
 						spec.setInstance(newSpecInstanceLst
 								.toArray(new WSRoleSpecificationInstance[] {}));
 						WSPutRole putRole = new WSPutRole();
@@ -214,6 +222,27 @@ public class DeleteXObjectAction extends Action{
 				}
 			}
 		}
+	}
+	
+	/**
+	 * add by fliu, please see bug 0009262
+	 * @param port
+	 * @param xtentisName
+	 * @return
+	 * @throws RemoteException
+	 */
+	private String retrieveRevisionID(XtentisPort port, String xtentisName)throws RemoteException
+	{
+		WSUniverse wUuniverse=port.getCurrentUniverse(new WSGetCurrentUniverse());
+		WSUniverseXtentisObjectsRevisionIDs[] ids=wUuniverse.getXtentisObjectsRevisionIDs();
+		for(WSUniverseXtentisObjectsRevisionIDs id: ids){
+			if(id.getXtentisObjectName().equals(xtentisName)){
+				return id.getRevisionID().replaceAll("\\[", "").replaceAll("\\]", "");
+			}
+		}
+		if (wUuniverse.getName().equals("[HEAD]"))
+			return wUuniverse.getName();
+		return null;
 	}
 	
 	public void runWithEvent(Event event) {
