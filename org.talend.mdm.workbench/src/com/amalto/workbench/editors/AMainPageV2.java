@@ -82,20 +82,9 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
 	}
 
 	private TopFormPart topFormPart = null;
-	public boolean version_greater_than_2_17_0=false;
 	
     public AMainPageV2(FormEditor editor,String id, String title) {
     	super(editor,id, title);        
-    	Version ver;
-		try {
-			ver = Util.getVersion(getXObject());
-			version_greater_than_2_17_0 = (
-					(ver.getMajor()>2) ||
-					((ver.getMajor()==2)&&(ver.getMinor()>=17))
-			);
-		} catch (XtentisException e) {
-			e.printStackTrace();
-		}
     	
     }
 
