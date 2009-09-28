@@ -79,12 +79,18 @@ public class XMLEditor extends TextEditor {
 	public void doSave(IProgressMonitor progressMonitor) {		
     	WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
     	IDocument doc=((XMLEditorInput)this.getEditorInput()).getDocument();
-		wsObject.setXsdSchema(doc.get());
+		//aiming added remove 'targetNamespace' attr, for it will cause xsd validate error, the xsd is invalid
+    	String schema= doc.get();
+		schema=schema.replaceAll("targetNamespace\\s*=\\s*\"[^\"]*\"", "");
+		//end    	
+		wsObject.setXsdSchema(schema);
 		
 		SaveXObjectAction action=new SaveXObjectAction(editor);
 		action.run();
 		state=action.getState();
 		super.doSave(progressMonitor);		
+		
+		refresh();		
 	}
 	
 	public void refresh(TreeObject xobject){
