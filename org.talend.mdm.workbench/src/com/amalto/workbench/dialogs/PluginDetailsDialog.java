@@ -31,16 +31,20 @@ public class PluginDetailsDialog extends Dialog {
 //	private String parametersSchema;
 
 	private Collection<Listener> listeners = new ArrayList<Listener>();
+
+private String templetName;
 	
 	public PluginDetailsDialog(
 			Shell parentShell, 
 			String description,
 			String documentation,
-			String parametersSchema
+			String parametersSchema,
+			String templetName
 			) {
 		super(parentShell);
 		this.description = description;
 		this.documentation = documentation;
+		this.templetName=templetName;
 //		this.parametersSchema = parametersSchema;
 		setShellStyle(getShellStyle() | SWT.RESIZE | SWT.MAX);
 	}
@@ -104,7 +108,7 @@ public class PluginDetailsDialog extends Dialog {
                     new GridData(SWT.LEFT,SWT.CENTER,false,false,1,1)
             );
             documentationLabel.setFont(FontUtils.getBoldFont(documentationLabel.getFont()));
-            documentationLabel.setText("Documentation");
+            documentationLabel.setText(templetName);
 
             Text docValue = new Text(descriptionC, SWT.WRAP | SWT.READ_ONLY|SWT.V_SCROLL);
             docValue.setLayoutData(
