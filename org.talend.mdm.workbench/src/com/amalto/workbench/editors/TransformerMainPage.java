@@ -1227,7 +1227,8 @@ public class TransformerMainPage extends AMainPageV2 {
 	        					getSite().getShell(),
 	        					details.getDescription(),
 	        					details.getDocumentation(),
-	        					details.getParametersSchema()
+	        					details.getParametersSchema(),
+	        					"Documentation"
 	        			);
 	        			dialog.addListener(new Listener() {
 	        				public void handleEvent(Event event) {dialog.close();}

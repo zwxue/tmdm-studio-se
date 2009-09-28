@@ -314,7 +314,8 @@ public class RoutingRuleMainPage extends AMainPageV2 {
         					getSite().getShell(),
         					desc,
         					doc,
-        					null
+        					null,
+        					"Documentation"
         			);
         			dialog.addListener(new Listener() {
         				public void handleEvent(Event event) {dialog.close();}
