@@ -23,6 +23,9 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.talend.mdm.commmon.util.core.ICoreConstants;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import com.amalto.workbench.dialogs.PluginDetailsDialog;
 import com.amalto.workbench.image.EImage;
@@ -30,11 +33,13 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSGetServicesList;
+import com.amalto.workbench.webservices.WSPutVersioningSystemConfiguration;
 import com.amalto.workbench.webservices.WSServiceGetDocument;
 import com.amalto.workbench.webservices.WSServicePutConfiguration;
 import com.amalto.workbench.webservices.WSServicesList;
 import com.amalto.workbench.webservices.WSServicesListItem;
 import com.amalto.workbench.webservices.WSString;
+import com.amalto.workbench.webservices.WSVersioningSystemConfiguration;
 import com.amalto.workbench.webservices.XtentisPort;
 
 /**
@@ -203,22 +208,36 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 		ws.setJndiName(serviceNameCombo.getText().contains("/") ? serviceNameCombo.getText() : "amalto/local/service/"+serviceNameCombo.getText());
 		ws.setConfiguration(serviceConfigurationsText.getText());
 		try {
-			if(!"".equalsIgnoreCase(ws.getJndiName())&&!"".equalsIgnoreCase(ws.getConfiguration()))
+			if(!"".equalsIgnoreCase(ws.getJndiName())&&!"".equalsIgnoreCase(ws.getConfiguration())){				
 				port.putServiceConfiguration(ws);
-		} catch (RemoteException e1) {
+				//there maybe several svn settings, so we need to put it on VersionSystem
+				if(serviceNameCombo.getText().equalsIgnoreCase("svn")){					
+					port.putVersioningSystemConfiguration(getDefaultSvn(serviceConfigurationsText.getText()));
+				}
+			}
+		} catch (Exception e1) {
 			e1.printStackTrace();
-		}
-	
+		}	
 	}
-
+	
+	private WSPutVersioningSystemConfiguration getDefaultSvn(String svnConfig)throws Exception{
+		Node e=Util.parse(svnConfig).getDocumentElement();
+		String url=Util.getFirstTextNode(e, "./url");
+		String username=Util.getFirstTextNode(e, "./username");
+		String password=Util.getFirstTextNode(e, "./password");
+		WSPutVersioningSystemConfiguration conf=new WSPutVersioningSystemConfiguration(new WSVersioningSystemConfiguration(
+		ICoreConstants.DEFAULT_SVN,ICoreConstants.DEFAULT_SVN,
+		url,username,password
+		));
+		return conf;
+	}
+	
 	@Override
 	protected void commit() {
-//		if(refreshing) return;
-//		this.comitting = true;
+		if(refreshing) return;
+		this.comitting = true;
 		saveChanges();
-//		this.comitting = false;
-//		ServerView view= ServerView.show();
-//		view.getViewer().refresh();
+		this.comitting = false;		
 	}
 
 	@Override

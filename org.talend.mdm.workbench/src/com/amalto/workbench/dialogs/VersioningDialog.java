@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.talend.mdm.commmon.util.core.ICoreConstants;
 
 import com.amalto.workbench.actions.VersioningProgressAction;
 import com.amalto.workbench.webservices.WSBackgroundJobPK;
@@ -249,7 +250,7 @@ public class VersioningDialog extends Dialog {
 				try {
 					histories = port.versioningGetObjectsHistory(
 							new WSVersioningGetObjectsHistory(
-									null,
+									ICoreConstants.DEFAULT_SVN,
 									objectType,
 									instances
 							)
@@ -268,7 +269,7 @@ public class VersioningDialog extends Dialog {
 				try {
 					histories = port.versioningGetObjectsHistory(
 							new WSVersioningGetObjectsHistory(
-									null,
+									ICoreConstants.DEFAULT_SVN,
 									objectType,
 									instances
 							)
@@ -320,7 +321,7 @@ public class VersioningDialog extends Dialog {
 			try {
 		        WSBackgroundJobPK jobPK =
 			        this.port.versioningTagItems(new WSVersioningTagItems(
-			        		null,
+			        		ICoreConstants.DEFAULT_SVN,
 			        		tagText.getText(),
 			        		commentText.getText(),
 			        		this.wsItemPKs
@@ -342,7 +343,7 @@ public class VersioningDialog extends Dialog {
 			try {
 		        WSBackgroundJobPK jobPK =
 			        this.port.versioningTagObjects(new WSVersioningTagObjects(
-			        		null,
+			        		ICoreConstants.DEFAULT_SVN,
 			        		tagText.getText(),
 			        		commentText.getText(),
 			        		this.objectType,
@@ -371,7 +372,7 @@ public class VersioningDialog extends Dialog {
 		try {
 	        WSBackgroundJobPK jobPK = 
 		        this.port.versioningRestoreObjects(new WSVersioningRestoreObjects(
-		        		null,
+		        		ICoreConstants.DEFAULT_SVN,
 		        		entry.getTag(),
 		        		this.objectType,
 		        		this.instances 
