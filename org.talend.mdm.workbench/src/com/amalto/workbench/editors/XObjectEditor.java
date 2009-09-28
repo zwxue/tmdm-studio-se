@@ -245,7 +245,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 
     
     protected void pageChange(int newPageIndex) {
-    	AFormPage page = (AFormPage)formPages.get(0);
+    	AFormPage page = (AFormPage)formPages.get(newPageIndex);
     	boolean isdirty=page.isDirty();
         super.pageChange(newPageIndex);
                 
@@ -256,13 +256,15 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
     }
 
 	private void linkDirty(Object page, boolean dirty) {
-		if(page instanceof DataModelMainPage && dirty){
-        	
-        	if(findPage(DataModelMainPage.class.getName())!=null){
-        		DataModelMainPage mainPage = (DataModelMainPage)findPage(DataModelMainPage.class.getName());
-        		mainPage.markDirtyWithoutCommit();
-        	}			        	
-        }
+		if(dirty){
+			if(page instanceof DataModelMainPage ){
+	        	
+	        	if(findPage(DataModelMainPage.class.getName())!=null){
+	        		DataModelMainPage mainPage = (DataModelMainPage)findPage(DataModelMainPage.class.getName());
+	        		mainPage.markDirtyWithoutCommit();
+	        	}			        	
+	        }
+		}
 	}
 
     @Override

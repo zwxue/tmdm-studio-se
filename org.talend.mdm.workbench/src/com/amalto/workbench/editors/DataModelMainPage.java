@@ -830,6 +830,9 @@ public class DataModelMainPage extends AMainPageV2 {
 					: descriptionText.getText());
 			String schema = ((XSDTreeContentProvider) viewer
 					.getContentProvider()).getXSDSchemaAsString();
+			//aiming added remove 'targetNamespace' attr, for it will cause xsd validate error, the xsd is invalid
+			schema=schema.replaceAll("targetNamespace\\s*=\\s*\"[^\"]*\"", "");
+			//end
 			wsObject.setXsdSchema(schema);
 			
 			XMLEditor xmleditor=((XObjectEditor)getEditor()).getXmlEditor();
