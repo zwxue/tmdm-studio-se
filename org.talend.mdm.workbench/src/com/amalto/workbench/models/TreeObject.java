@@ -36,6 +36,7 @@ public class TreeObject implements IAdaptable {
 	public final static int SYNCHRONIZATIONPLAN=19;
 	public final static int TRANSFORMER_PLUGIN=20;
 	public final static int CATEGORY_FOLDER = 21;
+	public final static int SERVICE_CONFIGURATION=22;
 	
 	public final static int _ACTION_ = 100;
 	public final static int _WIZARD_ = 101;
@@ -136,7 +137,7 @@ public class TreeObject implements IAdaptable {
 		return isXObject;
 	}
 
-	protected void setXObject(boolean isXObject) {
+	public void setXObject(boolean isXObject) {
 		this.isXObject = isXObject;
 	}
 	

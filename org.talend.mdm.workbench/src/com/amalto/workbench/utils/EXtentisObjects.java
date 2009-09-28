@@ -22,8 +22,9 @@ public enum EXtentisObjects {
 	Menu("Menu","Menu",TreeObject.MENU,true),                      
     SubscriptionEngine("Subscription Engine","Subscription Engine",TreeObject.SUBSCRIPTION_ENGINE),    
 	Universe("Universe","Universe",TreeObject.UNIVERSE),                  
-	SynchronizationPlan("Synchronization Plan","Synchronization Plan",TreeObject.SYNCHRONIZATIONPLAN,true);       
-
+	SynchronizationPlan("Synchronization Plan","Synchronization Plan",TreeObject.SYNCHRONIZATIONPLAN,true),      
+	ServiceConfiguration("Service Configuration","Service Configuration",TreeObject.SERVICE_CONFIGURATION);
+	
 	private String displayName;
 	private String name;	
 	private int type;
