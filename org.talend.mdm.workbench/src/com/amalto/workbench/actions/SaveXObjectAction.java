@@ -6,6 +6,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Event;
 
+import sun.misc.ServiceConfigurationError;
+
 import com.amalto.workbench.dialogs.ErrorExceptionDialog;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.image.ImageCache;
@@ -30,6 +32,7 @@ import com.amalto.workbench.webservices.WSPutUniverse;
 import com.amalto.workbench.webservices.WSPutView;
 import com.amalto.workbench.webservices.WSRole;
 import com.amalto.workbench.webservices.WSRoutingRule;
+import com.amalto.workbench.webservices.WSServicePutConfiguration;
 import com.amalto.workbench.webservices.WSStoredProcedure;
 import com.amalto.workbench.webservices.WSSynchronizationPlan;
 import com.amalto.workbench.webservices.WSTransformerV2;
@@ -99,6 +102,8 @@ public class SaveXObjectAction extends Action{
 
 	          	case TreeObject.SYNCHRONIZATIONPLAN:
 	           		port.putSynchronizationPlan(new WSPutSynchronizationPlan((WSSynchronizationPlan)newWsObject));
+	           		break;   
+	          	case TreeObject.SERVICE_CONFIGURATION:
 	           		break;   
 	          	default:
 	           		MessageDialog.openError(this.editor.getSite().getShell(), "Error", "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());

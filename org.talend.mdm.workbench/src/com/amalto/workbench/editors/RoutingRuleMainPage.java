@@ -88,7 +88,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 	protected boolean comitting = false;
 	
 	protected	TreeParent treeParent;
-	protected boolean version_greater_than_2_17_0 = false;
+//	protected boolean version_greater_than_2_17_0 = false;
 	
 	private static String ROUTE_SERVICE = "amalto/local/service/";
 	private String dataModelName;
@@ -120,18 +120,18 @@ public class RoutingRuleMainPage extends AMainPageV2 {
         		Util.getRevision((TreeObject)((XObjectEditorInput)editor.getEditorInput()).getModel())
         );
         //get Version information
-        try {
-        	Version ver = Util.getVersion(getXObject());
-        	version_greater_than_2_17_0 = (
-        			(ver.getMajor()>2) ||
-        			((ver.getMajor()==2)&&(ver.getMinor()>=17))
-        	);
+//        try {
+//        	Version ver = Util.getVersion(getXObject());
+//        	version_greater_than_2_17_0 = (
+//        			(ver.getMajor()>2) ||
+//        			((ver.getMajor()==2)&&(ver.getMinor()>=17))
+//        	);
         	
         	 treeParent = this.getXObject().getParent();
       		if(treeParent==null){//if it is a new page,treeParent should be ROUTING_RULE
       			treeParent = this.getXObject().getServerRoot().findServerFolder(TreeObject.ROUTING_RULE);
       			} 
-        } catch (Exception e) {/*no versioning support on old cores*/}                   
+//        } catch (Exception e) {/*no versioning support on old cores*/}                   
     }
 
 	protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {

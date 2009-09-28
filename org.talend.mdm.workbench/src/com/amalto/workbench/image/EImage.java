@@ -240,7 +240,8 @@ public enum EImage {
 	STOP("icons/stop.gif"),
 	SUSPEND("icons/suspend_co.gif"),
 	DOTS_BUTTON("icons/dots_button.gif"),
-	ZAP("icons/zap.gif");
+	ZAP("icons/zap.gif"),
+	SERVICE_CONFIGURATION("icons/config.gif");
 	EImage(String path){
 		this.path=path;
 		

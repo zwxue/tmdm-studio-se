@@ -550,7 +550,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			case TreeObject.SUBSCRIPTION_ENGINE:
 				manager.add(browseViewAction);
 				break;
-
+			case TreeObject.SERVICE_CONFIGURATION:
+				break;
 			case TreeObject.DATA_CLUSTER:
 				if (xobject.isXObject()) {
 					manager.add(exportAction);

@@ -5,6 +5,7 @@ import java.net.URL;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.swt.widgets.Tree;
 
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
@@ -272,6 +273,16 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			monitor.worked(1);
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
 			
+			//Service Configuration
+			TreeObject serviceConfiguration=new TreeObject(
+					EXtentisObjects.ServiceConfiguration.getDisplayName(),
+					serverRoot,
+					TreeObject.SERVICE_CONFIGURATION,
+					null,
+					null);
+			//serviceConfiguration.setXObject(false);
+			monitor.worked(1);
+			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
 			
 //			Transformers
 			WSTransformerV2PK[] transformerPKs = null;
@@ -407,6 +418,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			serverRoot.addChild(engine);
 			serverRoot.addChild(Universes);
 			serverRoot.addChild(synchronizationPlans);
+			serverRoot.addChild(serviceConfiguration);
 			if (hasTransformers)serverRoot.addChild(transformers);
 			if (hasRoles) serverRoot.addChild(roles);
 			if (hasRoutingRules) serverRoot.addChild(rules);

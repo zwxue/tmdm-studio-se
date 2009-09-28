@@ -38,6 +38,8 @@ import com.amalto.workbench.webservices.WSRole;
 import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
+import com.amalto.workbench.webservices.WSServiceGetConfiguration;
+import com.amalto.workbench.webservices.WSServicePutConfiguration;
 import com.amalto.workbench.webservices.WSStoredProcedure;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSSynchronizationPlan;
@@ -134,6 +136,8 @@ public class EditXObjectAction extends Action{
 	           	case TreeObject.SYNCHRONIZATIONPLAN:
 	           		WSSynchronizationPlan wsSynchronizationPlan = port.getSynchronizationPlan(new WSGetSynchronizationPlan((WSSynchronizationPlanPK)xobject.getWsKey())); 
 	           		xobject.setWsObject(wsSynchronizationPlan);
+	           		break;
+	           	case TreeObject.SERVICE_CONFIGURATION:
 	           		break;
 	           	default:
 	           		MessageDialog.openError(view.getSite().getShell(), "Error", "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());

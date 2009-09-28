@@ -6,8 +6,6 @@
  */
 package com.amalto.workbench.editors;
 
-import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
@@ -40,15 +38,11 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
+import org.talend.mdm.commmon.util.workbench.Version;
 
-import com.amalto.workbench.models.Line;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSGetView;
-import com.amalto.workbench.webservices.WSView;
-import com.amalto.workbench.webservices.WSViewPK;
-import com.amalto.workbench.webservices.WSWhereCondition;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.TableViewWrapper;
@@ -88,9 +82,21 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
 	}
 
 	private TopFormPart topFormPart = null;
+	public boolean version_greater_than_2_17_0=false;
 	
     public AMainPageV2(FormEditor editor,String id, String title) {
-        super(editor,id, title);        
+    	super(editor,id, title);        
+    	Version ver;
+		try {
+			ver = Util.getVersion(getXObject());
+			version_greater_than_2_17_0 = (
+					(ver.getMajor()>2) ||
+					((ver.getMajor()==2)&&(ver.getMinor()>=17))
+			);
+		} catch (XtentisException e) {
+			e.printStackTrace();
+		}
+    	
     }
 
     public void update(Observable o, Object arg)

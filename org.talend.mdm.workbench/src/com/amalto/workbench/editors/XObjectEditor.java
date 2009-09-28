@@ -109,6 +109,9 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 	           	case TreeObject.SYNCHRONIZATIONPLAN:	           		
 	           		addPage(new SynchronizationMainPage(this));
 	           		break;
+	           	case TreeObject.SERVICE_CONFIGURATION:
+	           		addPage(new  ServiceConfigrationMainPage(this));
+	           		break;
 	           	default:
 	           		MessageDialog.openError(this.getSite().getShell(), "Error", "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
 	           		return;
@@ -292,6 +295,8 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 			return ImageCache.getImage( "icons/catchuprelease_rls.gif").createImage();
 		else if (object.getType() == TreeObject.UNIVERSE)
 			return ImageCache.getImage( "icons/unique.gif").createImage();
+		else if (object.getType() == TreeObject.SERVICE_CONFIGURATION)
+			return ImageCache.getImage( EImage.SERVICE_CONFIGURATION.getPath()).createImage();
 		
 		return ImageCache.getImage( "icons/error.gif").createImage();
     }

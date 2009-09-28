@@ -90,6 +90,8 @@ public class ServerTreeLabelProvider extends LabelProvider implements IColorProv
 				return ImageCache.getCreatedImage( "icons/documents.gif");			
 			else if (object.getType() == TreeObject.SUBSCRIPTION_ENGINE)
 				return ImageCache.getCreatedImage( EImage.SUBSCRIPTION_ENGINE.getPath());
+			else if (object.getType() == TreeObject.SERVICE_CONFIGURATION)
+				return ImageCache.getCreatedImage( EImage.SERVICE_CONFIGURATION.getPath());
 			else if (object.getType() == TreeObject.UNIVERSE)
 				return ImageCache.getCreatedImage( "icons/unique.gif");		
 			else if (object.getType() == TreeObject.SYNCHRONIZATIONPLAN)
