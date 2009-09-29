@@ -245,7 +245,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 
     
     protected void pageChange(int newPageIndex) {
-    	AFormPage page = (AFormPage)formPages.get(newPageIndex);
+    	AFormPage page = (AFormPage)formPages.get(0);
     	boolean isdirty=page.isDirty();
         super.pageChange(newPageIndex);
                 
