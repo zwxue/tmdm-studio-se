@@ -559,7 +559,26 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 						new VersioningXObjectAction(
 								DataClusterBrowserMainPage.this.getSite().getShell(),
 								DataClusterBrowserMainPage.this.resultsViewer,
-								getXObject()
+								getXObject(),
+								VersioningXObjectAction.ACTION_TYPE_COMMIT
+						)
+				);
+				manager.appendToGroup(
+						IWorkbenchActionConstants.MB_ADDITIONS,
+						new VersioningXObjectAction(
+								DataClusterBrowserMainPage.this.getSite().getShell(),
+								DataClusterBrowserMainPage.this.resultsViewer,
+								getXObject(),
+								VersioningXObjectAction.ACTION_TYPE_HISTORY
+						)
+				);
+				manager.appendToGroup(
+						IWorkbenchActionConstants.MB_ADDITIONS,
+						new VersioningXObjectAction(
+								DataClusterBrowserMainPage.this.getSite().getShell(),
+								DataClusterBrowserMainPage.this.resultsViewer,
+								getXObject(),
+								VersioningXObjectAction.ACTION_TYPE_VERSIONS
 						)
 				);
 			}

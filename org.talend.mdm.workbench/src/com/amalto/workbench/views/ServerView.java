@@ -674,7 +674,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		exportAction=new DataClusterExportAction(this);
 		importAction=new DataClusterImportAction(this);
 		NewCategoryAction = new NewCategoryAction(this);
-		versionAction = new VersioningXObjectAction(this);
+		versionAction = new VersioningXObjectAction(this,VersioningXObjectAction.ACTION_TYPE_VERSIONS);
 		newUserActon = new NewUserAction(this);
 	}
 

@@ -30,15 +30,18 @@ import org.eclipse.swt.widgets.Text;
 import com.amalto.workbench.actions.VersioningProgressAction;
 import com.amalto.workbench.webservices.WSBackgroundJobPK;
 import com.amalto.workbench.webservices.WSItemPK;
+import com.amalto.workbench.webservices.WSVersioningGetItemsVersions;
 import com.amalto.workbench.webservices.WSVersioningGetObjectsVersions;
 import com.amalto.workbench.webservices.WSVersioningHistoryEntry;
+import com.amalto.workbench.webservices.WSVersioningItemsVersions;
+import com.amalto.workbench.webservices.WSVersioningItemsVersionsItems;
 import com.amalto.workbench.webservices.WSVersioningObjectsVersions;
 import com.amalto.workbench.webservices.WSVersioningObjectsVersionsObjects;
+import com.amalto.workbench.webservices.WSVersioningRestoreItems;
 import com.amalto.workbench.webservices.WSVersioningRestoreObjects;
 import com.amalto.workbench.webservices.WSVersioningTagItems;
 import com.amalto.workbench.webservices.WSVersioningTagObjects;
 import com.amalto.workbench.webservices.XtentisPort;
-import com.amalto.workbench.widgets.VersionTagWidget;
 
 public class VersioningDialog extends Dialog {
 
@@ -82,7 +85,14 @@ public class VersioningDialog extends Dialog {
 
 			String resourcesName= "";
 			if (isItems) {
-				//TODO
+				resourcesName = "Item";
+				if (wsItemPKs!=null) {
+					if (wsItemPKs.length == 1) {
+						resourcesName+="  "+getItemPKUniqueID(wsItemPKs[0]);
+					} else {
+						resourcesName+=" [multiple]";
+					}
+				}
 			} else {
 				resourcesName = objectType;
 				if (instances!=null) {
@@ -93,18 +103,73 @@ public class VersioningDialog extends Dialog {
 					}
 				}
 			}
-			VersionTagWidget vwidget= new VersionTagWidget(parent,resourcesName );
 			
+			Composite composite = (Composite) super.createDialogArea(parent);
+			GridLayout layout = (GridLayout)composite.getLayout();
+			layout.numColumns = 1;
+			
+			
+			Group tagGroup = new Group(composite,SWT.SHADOW_NONE);
+			tagGroup.setLayout(new GridLayout(2,false));
+			tagGroup.setLayoutData(
+					new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+			);
+			tagGroup.setText("Tag "+resourcesName);
 
-			Button tagButton=vwidget.getTagButton();
+			Label tagLabel = new Label(tagGroup, SWT.NONE);
+			tagLabel.setLayoutData(
+					new GridData(SWT.LEFT,SWT.FILL,false,false,1,1)
+			);
+			tagLabel.setText("Tag");
+
+			tagText = new Text(tagGroup, SWT.BORDER);
+			tagText.setLayoutData(
+					new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+			);
+			tagText.setText("");
+
+			Label commentLabel = new Label(tagGroup, SWT.NONE);
+			commentLabel.setLayoutData(
+					new GridData(SWT.LEFT,SWT.FILL,false,false,1,1)
+			);
+			commentLabel.setText("Comment");
+
+			commentText = new Text(tagGroup, SWT.MULTI | SWT.WRAP | SWT.BORDER | SWT.V_SCROLL);
+			commentText.setLayoutData(
+					new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+			);
+			commentText.setText("");
+			((GridData)commentText.getLayoutData()).widthHint=250;
+			((GridData)commentText.getLayoutData()).heightHint=25;
+
+			
+			Button tagButton = new Button(tagGroup,SWT.PUSH);
+			tagButton.setLayoutData(
+					new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
+			);
+			tagButton.setText("OK");
 			tagButton.addSelectionListener(new SelectionListener() {
 				public void widgetDefaultSelected(SelectionEvent e) {}
 				public void widgetSelected(SelectionEvent e) {
 						tagResources();
 				}				
 			});
-
-			tagsViewer=vwidget.getTagsViewer();
+							
+			restoreGroup = new Group(composite,SWT.SHADOW_NONE);
+			restoreGroup.setLayout(new GridLayout(1,true));
+			restoreGroup.setLayoutData(
+					new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+			);
+			restoreGroup.setText("Restore "+resourcesName);
+			restoreGroup.setEnabled(false);
+			
+			
+            tagsViewer = new TableViewer(restoreGroup);
+            tagsViewer.getControl().setLayoutData(    
+                    new GridData(SWT.FILL,SWT.FILL,true,true,4,1)
+            );
+            ((GridData)tagsViewer.getControl().getLayoutData()).heightHint=150;
+            tagsViewer.setContentProvider(new ArrayContentProvider());
             tagsViewer.setLabelProvider(new ITableLabelProvider() {
             	public String getColumnText(Object element, int columnIndex) {
 					WSVersioningHistoryEntry entry = (WSVersioningHistoryEntry) element;
@@ -131,7 +196,12 @@ public class VersioningDialog extends Dialog {
 	            }
             });
 
-            Button restoreButton=vwidget.getRestoreButton();
+			
+			Button restoreButton = new Button(restoreGroup,SWT.PUSH);
+			restoreButton.setLayoutData(
+					new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+			);
+			restoreButton.setText("Restore");
 			restoreButton.addSelectionListener(new SelectionListener() {
 				public void widgetDefaultSelected(SelectionEvent e) {}
 				public void widgetSelected(SelectionEvent e) {restoreResources();}				
@@ -142,7 +212,7 @@ public class VersioningDialog extends Dialog {
 
 			refreshData();
 			
-		    return vwidget.getComposite();
+		    return composite;
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(
@@ -182,14 +252,40 @@ public class VersioningDialog extends Dialog {
 	 ***********************************************/
 
 	private boolean initHistoryTableView() {
-		WSVersioningObjectsVersions histories = null;
+		WSVersioningObjectsVersions objectsHistories = null;
+		WSVersioningItemsVersions itemsHistories = null;
 		if (isItems) {
-			//TODO
+			
+			if(wsItemPKs==null){
+				return false;
+			}else if (wsItemPKs.length ==1 ) {
+				try {
+					itemsHistories = port.versioningGetItemsVersions(
+							new WSVersioningGetItemsVersions(
+									null,
+									wsItemPKs
+							)
+					);
+				} catch (Exception e) {
+					e.printStackTrace();
+					MessageDialog.openError(
+							this.getShell(), 
+							"Versioning Error", 
+							"Unable to retrieve the versions of items "+objectType
+							+"\nCaused by: "+e.getLocalizedMessage()
+					);
+					return false;
+				}
+			}else {
+				//TODO muti-objects
+			}
+			
 		} else {
+			
 			if (instances == null) {
 
 				try {
-					histories = port.versioningGetObjectsVersions(
+					objectsHistories = port.versioningGetObjectsVersions(
 							new WSVersioningGetObjectsVersions(
 									null,
 									objectType,
@@ -201,14 +297,14 @@ public class VersioningDialog extends Dialog {
 					MessageDialog.openError(
 							this.getShell(), 
 							"Versioning Error", 
-							"Unable to retrieve the history of objects "+objectType
+							"Unable to retrieve the versions of objects "+objectType
 							+"\nCaused by: "+e.getLocalizedMessage()
 					);
 					return false;
 				}				
 			} else if (instances.length ==1 ) {
 				try {
-					histories = port.versioningGetObjectsVersions(
+					objectsHistories = port.versioningGetObjectsVersions(
 							new WSVersioningGetObjectsVersions(
 									null,
 									objectType,
@@ -229,18 +325,30 @@ public class VersioningDialog extends Dialog {
 			//TODO muti-objects
 		}// if is Items
 		
-		if (histories !=null) {
-			WSVersioningObjectsVersionsObjects history = histories.getObjects()[0];
-			ArrayList<WSVersioningHistoryEntry> entries = new ArrayList<WSVersioningHistoryEntry>();
-			for (int i = 0; i < history.getWsVersionEntries().length; i++) {
-				entries.add(history.getWsVersionEntries()[i]);
-			}
-			if (entries.size()>0) {
-				tagsViewer.setInput(entries.toArray(new WSVersioningHistoryEntry[entries.size()]));
-				tagsViewer.setSelection(new StructuredSelection(entries.get(0)));
-				enableRestore = true;
+		ArrayList<WSVersioningHistoryEntry> entries = new ArrayList<WSVersioningHistoryEntry>();
+		if (!isItems&&objectsHistories !=null) {
+			WSVersioningObjectsVersionsObjects history = objectsHistories.getObjects()[0];
+			if(history.getWsVersionEntries()!=null){
+				for (int i = 0; i < history.getWsVersionEntries().length; i++) {
+					entries.add(history.getWsVersionEntries()[i]);
+				}
 			}
 		}
+		if (isItems&&itemsHistories !=null) {
+			WSVersioningItemsVersionsItems history = itemsHistories.getItems()[0];
+			if(history.getWsVersionEntries()!=null){
+				for (int i = 0; i < history.getWsVersionEntries().length; i++) {
+					entries.add(history.getWsVersionEntries()[i]);
+				}
+			}
+		}
+		
+		if (entries.size()>0) {
+			tagsViewer.setInput(entries.toArray(new WSVersioningHistoryEntry[entries.size()]));
+			tagsViewer.setSelection(new StructuredSelection(entries.get(0)));
+			enableRestore = true;
+		}
+		
 		return true;
 		
 	}
@@ -311,31 +419,62 @@ public class VersioningDialog extends Dialog {
 	public void restoreResources() {
 		WSVersioningHistoryEntry entry = (WSVersioningHistoryEntry) ((IStructuredSelection)tagsViewer.getSelection()).getFirstElement();
 		if (entry == null) return;
-		try {
-	        WSBackgroundJobPK jobPK = 
-		        this.port.versioningRestoreObjects(new WSVersioningRestoreObjects(
-		        		null,
-		        		entry.getTag(),
-		        		this.objectType,
-		        		this.instances 
-		    ));
-	        
-	        new VersioningProgressAction(this.getShell(),this.port,jobPK).run();
+		if(isItems){
+			try {
+		        WSBackgroundJobPK jobPK = 
+			        this.port.versioningRestoreItems(new WSVersioningRestoreItems(
+			        		null,
+			        		entry.getTag(),
+			        		commentText.getText(),
+			        		this.wsItemPKs 
+			    ));
+		        
+		        new VersioningProgressAction(this.getShell(),this.port,jobPK).run();
 
-		} catch (Exception exx) {
-			exx.printStackTrace();
-			MessageDialog.openError(
-					VersioningDialog.this.getShell(),
-					"Error", 
-					"Unable to restore the documents : "+exx.getLocalizedMessage()
-			);
+			} catch (Exception exx) {
+				exx.printStackTrace();
+				MessageDialog.openError(
+						VersioningDialog.this.getShell(),
+						"Error", 
+						"Unable to restore the documents : "+exx.getLocalizedMessage()
+				);
+			}
+		}else{
+			try {
+		        WSBackgroundJobPK jobPK = 
+			        this.port.versioningRestoreObjects(new WSVersioningRestoreObjects(
+			        		null,
+			        		entry.getTag(),
+			        		this.objectType,
+			        		this.instances 
+			    ));
+		        
+		        new VersioningProgressAction(this.getShell(),this.port,jobPK).run();
+
+			} catch (Exception exx) {
+				exx.printStackTrace();
+				MessageDialog.openError(
+						VersioningDialog.this.getShell(),
+						"Error", 
+						"Unable to restore the documents : "+exx.getLocalizedMessage()
+				);
+			}
 		}
+		
 	}
 	
 	
 	public StructuredViewer getTagsViewer() {
 		return tagsViewer;
 	}
+	
+	private String getItemPKUniqueID(WSItemPK wsItemPK) {
+    	String fname = wsItemPK.getWsDataClusterPK().getPk()+"."+wsItemPK.getConceptName();
+    	for (int i = 0; i < wsItemPK.getIds().length; i++) {
+    		fname+="."+(wsItemPK.getIds()[i]==null? "" : wsItemPK.getIds()[i].trim()); //trim added due to exist bu triming the ids
+		}
+    	return fname;
+	  }
 		
 //	/**************************
 //	* ListViewer  CONTEXT MENU
