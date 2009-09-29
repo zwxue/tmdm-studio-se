@@ -1069,6 +1069,7 @@ public class DataModelMainPage extends AMainPageV2 {
 
 		if (obj instanceof XSDAnnotation && selectedObjs.length == 1) {
 			setAnnotationActions(manager);
+			
 		}
 
 		deleteConceptWrapAction.regisExtraClassToDel(XSDComplexTypeDefinitionImpl.class);
@@ -1249,7 +1250,6 @@ public class DataModelMainPage extends AMainPageV2 {
 		manager.add(setAnnotationSchematronAction);
 		manager.add(setAnnotationSourceSystemAction);
 		manager.add(setAnnotationTargetSystemsAction);
-		manager.add(setFacetMsgAction);
 		//manager.add(setAnnotationDocumentationAction);
 	}
 	
