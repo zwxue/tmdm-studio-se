@@ -18,20 +18,20 @@ import javax.xml.namespace.QName;
 import java.util.List;
 import java.util.ArrayList;
 
-public class WSVersioningObjectsHistoryObjects_LiteralSerializer extends LiteralObjectSerializerBase implements Initializable  {
+public class WSVersioningObjectsVersionsObjects_LiteralSerializer extends LiteralObjectSerializerBase implements Initializable  {
     private static final QName ns1_type_QNAME = new QName("", "type");
     private static final QName ns3_string_TYPE_QNAME = SchemaConstants.QNAME_TYPE_STRING;
     private CombinedSerializer ns3_myns3_string__java_lang_String_String_Serializer;
     private static final QName ns1_name_QNAME = new QName("", "name");
-    private static final QName ns1_wsHistoryEntries_QNAME = new QName("", "wsHistoryEntries");
+    private static final QName ns1_wsVersionEntries_QNAME = new QName("", "wsVersionEntries");
     private static final QName ns2_WSVersioningHistoryEntry_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningHistoryEntry");
     private CombinedSerializer ns2_myWSVersioningHistoryEntry_LiteralSerializer;
     
-    public WSVersioningObjectsHistoryObjects_LiteralSerializer(QName type, String encodingStyle) {
+    public WSVersioningObjectsVersionsObjects_LiteralSerializer(QName type, String encodingStyle) {
         this(type, encodingStyle, false);
     }
     
-    public WSVersioningObjectsHistoryObjects_LiteralSerializer(QName type, String encodingStyle, boolean encodeType) {
+    public WSVersioningObjectsVersionsObjects_LiteralSerializer(QName type, String encodingStyle, boolean encodeType) {
         super(type, true, encodingStyle, encodeType);
     }
     
@@ -42,7 +42,7 @@ public class WSVersioningObjectsHistoryObjects_LiteralSerializer extends Literal
     
     public Object doDeserialize(XMLReader reader,
         SOAPDeserializationContext context) throws Exception {
-        com.amalto.workbench.webservices.WSVersioningObjectsHistoryObjects instance = new com.amalto.workbench.webservices.WSVersioningObjectsHistoryObjects();
+        com.amalto.workbench.webservices.WSVersioningObjectsVersionsObjects instance = new com.amalto.workbench.webservices.WSVersioningObjectsVersionsObjects();
         Object member=null;
         QName elementName;
         List values;
@@ -79,12 +79,12 @@ public class WSVersioningObjectsHistoryObjects_LiteralSerializer extends Literal
             throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
         }
         elementName = reader.getName();
-        if ((reader.getState() == XMLReader.START) && (elementName.equals(ns1_wsHistoryEntries_QNAME))) {
+        if ((reader.getState() == XMLReader.START) && (elementName.equals(ns1_wsVersionEntries_QNAME))) {
             values = new ArrayList();
             for(;;) {
                 elementName = reader.getName();
-                if ((reader.getState() == XMLReader.START) && (elementName.equals(ns1_wsHistoryEntries_QNAME))) {
-                    value = ns2_myWSVersioningHistoryEntry_LiteralSerializer.deserialize(ns1_wsHistoryEntries_QNAME, reader, context);
+                if ((reader.getState() == XMLReader.START) && (elementName.equals(ns1_wsVersionEntries_QNAME))) {
+                    value = ns2_myWSVersioningHistoryEntry_LiteralSerializer.deserialize(ns1_wsVersionEntries_QNAME, reader, context);
                     if (value == null) {
                         throw new DeserializationException("literal.unexpectedNull");
                     }
@@ -96,10 +96,10 @@ public class WSVersioningObjectsHistoryObjects_LiteralSerializer extends Literal
             }
             member = new com.amalto.workbench.webservices.WSVersioningHistoryEntry[values.size()];
             member = values.toArray((Object[]) member);
-            instance.setWsHistoryEntries((com.amalto.workbench.webservices.WSVersioningHistoryEntry[])member);
+            instance.setWsVersionEntries((com.amalto.workbench.webservices.WSVersioningHistoryEntry[])member);
         }
         else {
-            instance.setWsHistoryEntries(new com.amalto.workbench.webservices.WSVersioningHistoryEntry[0]);
+            instance.setWsVersionEntries(new com.amalto.workbench.webservices.WSVersioningHistoryEntry[0]);
         }
         
         XMLReaderUtil.verifyReaderState(reader, XMLReader.END);
@@ -107,20 +107,20 @@ public class WSVersioningObjectsHistoryObjects_LiteralSerializer extends Literal
     }
     
     public void doSerializeAttributes(Object obj, XMLWriter writer, SOAPSerializationContext context) throws Exception {
-        com.amalto.workbench.webservices.WSVersioningObjectsHistoryObjects instance = (com.amalto.workbench.webservices.WSVersioningObjectsHistoryObjects)obj;
+        com.amalto.workbench.webservices.WSVersioningObjectsVersionsObjects instance = (com.amalto.workbench.webservices.WSVersioningObjectsVersionsObjects)obj;
         
     }
     public void doSerialize(Object obj, XMLWriter writer, SOAPSerializationContext context) throws Exception {
-        com.amalto.workbench.webservices.WSVersioningObjectsHistoryObjects instance = (com.amalto.workbench.webservices.WSVersioningObjectsHistoryObjects)obj;
+        com.amalto.workbench.webservices.WSVersioningObjectsVersionsObjects instance = (com.amalto.workbench.webservices.WSVersioningObjectsVersionsObjects)obj;
         
         if (instance.getType() == null) {
             throw new SerializationException("literal.unexpectedNull");
         }
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getType(), ns1_type_QNAME, null, writer, context);
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getName(), ns1_name_QNAME, null, writer, context);
-        if (instance.getWsHistoryEntries() != null) {
-            for (int i = 0; i < instance.getWsHistoryEntries().length; ++i) {
-                ns2_myWSVersioningHistoryEntry_LiteralSerializer.serialize(instance.getWsHistoryEntries()[i], ns1_wsHistoryEntries_QNAME, null, writer, context);
+        if (instance.getWsVersionEntries() != null) {
+            for (int i = 0; i < instance.getWsVersionEntries().length; ++i) {
+                ns2_myWSVersioningHistoryEntry_LiteralSerializer.serialize(instance.getWsVersionEntries()[i], ns1_wsVersionEntries_QNAME, null, writer, context);
             }
         }
     }

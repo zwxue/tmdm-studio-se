@@ -26,15 +26,14 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.talend.mdm.commmon.util.core.ICoreConstants;
 
 import com.amalto.workbench.actions.VersioningProgressAction;
 import com.amalto.workbench.webservices.WSBackgroundJobPK;
 import com.amalto.workbench.webservices.WSItemPK;
-import com.amalto.workbench.webservices.WSVersioningGetObjectsHistory;
+import com.amalto.workbench.webservices.WSVersioningGetObjectsVersions;
 import com.amalto.workbench.webservices.WSVersioningHistoryEntry;
-import com.amalto.workbench.webservices.WSVersioningObjectsHistory;
-import com.amalto.workbench.webservices.WSVersioningObjectsHistoryObjects;
+import com.amalto.workbench.webservices.WSVersioningObjectsVersions;
+import com.amalto.workbench.webservices.WSVersioningObjectsVersionsObjects;
 import com.amalto.workbench.webservices.WSVersioningRestoreObjects;
 import com.amalto.workbench.webservices.WSVersioningTagItems;
 import com.amalto.workbench.webservices.WSVersioningTagObjects;
@@ -241,16 +240,16 @@ public class VersioningDialog extends Dialog {
 	 ***********************************************/
 
 	private boolean initHistoryTableView() {
-		WSVersioningObjectsHistory histories = null;
+		WSVersioningObjectsVersions histories = null;
 		if (isItems) {
 			//TODO
 		} else {
 			if (instances == null) {
 
 				try {
-					histories = port.versioningGetObjectsHistory(
-							new WSVersioningGetObjectsHistory(
-									ICoreConstants.DEFAULT_SVN,
+					histories = port.versioningGetObjectsVersions(
+							new WSVersioningGetObjectsVersions(
+									null,
 									objectType,
 									instances
 							)
@@ -267,9 +266,9 @@ public class VersioningDialog extends Dialog {
 				}				
 			} else if (instances.length ==1 ) {
 				try {
-					histories = port.versioningGetObjectsHistory(
-							new WSVersioningGetObjectsHistory(
-									ICoreConstants.DEFAULT_SVN,
+					histories = port.versioningGetObjectsVersions(
+							new WSVersioningGetObjectsVersions(
+									null,
 									objectType,
 									instances
 							)
@@ -285,13 +284,14 @@ public class VersioningDialog extends Dialog {
 					return false;
 				}
 			}
+			//TODO muti-objects
 		}// if is Items
 		
 		if (histories !=null) {
-			WSVersioningObjectsHistoryObjects history = histories.getObjects()[0];
+			WSVersioningObjectsVersionsObjects history = histories.getObjects()[0];
 			ArrayList<WSVersioningHistoryEntry> entries = new ArrayList<WSVersioningHistoryEntry>();
-			for (int i = 0; i < history.getWsHistoryEntries().length; i++) {
-				entries.add(history.getWsHistoryEntries()[i]);
+			for (int i = 0; i < history.getWsVersionEntries().length; i++) {
+				entries.add(history.getWsVersionEntries()[i]);
 			}
 			if (entries.size()>0) {
 				tagsViewer.setInput(entries.toArray(new WSVersioningHistoryEntry[entries.size()]));
@@ -321,7 +321,7 @@ public class VersioningDialog extends Dialog {
 			try {
 		        WSBackgroundJobPK jobPK =
 			        this.port.versioningTagItems(new WSVersioningTagItems(
-			        		ICoreConstants.DEFAULT_SVN,
+			        		null,
 			        		tagText.getText(),
 			        		commentText.getText(),
 			        		this.wsItemPKs
@@ -343,7 +343,7 @@ public class VersioningDialog extends Dialog {
 			try {
 		        WSBackgroundJobPK jobPK =
 			        this.port.versioningTagObjects(new WSVersioningTagObjects(
-			        		ICoreConstants.DEFAULT_SVN,
+			        		null,
 			        		tagText.getText(),
 			        		commentText.getText(),
 			        		this.objectType,
@@ -372,7 +372,7 @@ public class VersioningDialog extends Dialog {
 		try {
 	        WSBackgroundJobPK jobPK = 
 		        this.port.versioningRestoreObjects(new WSVersioningRestoreObjects(
-		        		ICoreConstants.DEFAULT_SVN,
+		        		null,
 		        		entry.getTag(),
 		        		this.objectType,
 		        		this.instances 

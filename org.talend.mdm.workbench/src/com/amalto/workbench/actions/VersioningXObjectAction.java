@@ -102,13 +102,19 @@ public class VersioningXObjectAction extends Action{
 				for (;selectedIterator.hasNext();) {
 					TreeObject treeObject = (TreeObject) selectedIterator.next();
 					Integer treeObjectType = new Integer(treeObject.getType());
+					//first time
 					if(selectedObjectsMap.get(treeObjectType)==null){
 						List<TreeObject> list=new ArrayList<TreeObject>();
 						if(treeObject.isXObject())list.add(treeObject);
 						selectedObjectsMap.put(treeObjectType, list);
+					//more times	
 					}else{
 						List<TreeObject> list=selectedObjectsMap.get(treeObjectType);
-						if(treeObject.isXObject())list.add(treeObject);
+						if(treeObject.isXObject()){
+							if(list.size()>=1)list.add(treeObject);
+						}else{
+							list=new ArrayList<TreeObject>();
+						}
 						selectedObjectsMap.put(treeObjectType, list);
 					}	
 				}

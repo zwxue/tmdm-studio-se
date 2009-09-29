@@ -6,14 +6,14 @@
 package com.amalto.workbench.webservices;
 
 
-public class WSVersioningItemsHistoryObjects {
+public class WSVersioningItemHistory {
     protected com.amalto.workbench.webservices.WSItemPK wsItemPK;
     protected com.amalto.workbench.webservices.WSVersioningHistoryEntry[] wsHistoryEntries;
     
-    public WSVersioningItemsHistoryObjects() {
+    public WSVersioningItemHistory() {
     }
     
-    public WSVersioningItemsHistoryObjects(com.amalto.workbench.webservices.WSItemPK wsItemPK, com.amalto.workbench.webservices.WSVersioningHistoryEntry[] wsHistoryEntries) {
+    public WSVersioningItemHistory(com.amalto.workbench.webservices.WSItemPK wsItemPK, com.amalto.workbench.webservices.WSVersioningHistoryEntry[] wsHistoryEntries) {
         this.wsItemPK = wsItemPK;
         this.wsHistoryEntries = wsHistoryEntries;
     }
