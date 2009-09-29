@@ -116,7 +116,8 @@ public class UniverseVersionTreeViewer {
                    
                 } else if (moveButton.getText().equals(">>")) { //$NON-NLS-1$
                     sash.setWeights(new int[] { 20, 2, 21 });
-                    moveButton.setText("<<"); //$NON-NLS-1$                    
+                    moveButton.setText("<<"); //$NON-NLS-1$    
+                    moveButton.setToolTipText("Hide server tree"); //$NON-NLS-1$
                 }
             }
         });
