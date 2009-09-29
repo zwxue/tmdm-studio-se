@@ -13,6 +13,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 
+import com.amalto.workbench.dialogs.UniverseVersioningDialog;
 import com.amalto.workbench.dialogs.VersioningDialog;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -94,7 +95,17 @@ public class VersioningXObjectAction extends Action{
 			if(!isItems){
 				sampleXObject=(TreeObject) selection.getFirstElement();
 			}
-			
+			//is server object
+			if(sampleXObject!=null && sampleXObject.getType()== TreeObject._SERVER_){
+				UniverseVersioningDialog dialog = new UniverseVersioningDialog(
+						shell, 
+						selection
+				);
+				
+				dialog.setBlockOnOpen(true);
+				dialog.open();
+				return;
+			}
 			if(!isItems){
 				
 				//classified tree objects

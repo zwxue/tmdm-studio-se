@@ -1095,7 +1095,19 @@ public class Util {
 		}
 		return objs;
 	}
-    
+	public static List<TreeObject> getChildrenObj(TreeParent xObject){
+		List<TreeObject> objs=new ArrayList<TreeObject>();
+		for( TreeObject obj:xObject.getChildren()){
+			if(obj instanceof TreeParent){
+				TreeParent parent=(TreeParent)obj;
+				objs.addAll(getChildrenObj(parent));
+			}else{
+				if(obj.isXObject())
+				objs.add(obj);
+			}
+		}
+		return objs;
+	}   
     public static List<String> getChildElementNames(Node node) throws Exception{
     	List<String> childNames=new ArrayList<String>();
     	//is simple type
@@ -1583,4 +1595,6 @@ public class Util {
 		}
 		return rc;
 	}
+	
+	
 }

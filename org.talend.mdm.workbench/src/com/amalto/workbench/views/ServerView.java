@@ -540,6 +540,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				manager.add(loginAction);
 				manager.add(logoutAction);
 				manager.add(serverRefreshAction);
+				//add versioning
+				manager.add(versionAction);
 				if (!WorkbenchClipboard.getWorkbenchClipboard().isEmpty())
 					manager.add(pasteAction);
 
