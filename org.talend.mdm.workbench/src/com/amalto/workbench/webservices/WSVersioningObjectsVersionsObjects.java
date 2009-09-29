@@ -6,18 +6,18 @@
 package com.amalto.workbench.webservices;
 
 
-public class WSVersioningObjectsHistoryObjects {
+public class WSVersioningObjectsVersionsObjects {
     protected java.lang.String type;
     protected java.lang.String name;
-    protected com.amalto.workbench.webservices.WSVersioningHistoryEntry[] wsHistoryEntries;
+    protected com.amalto.workbench.webservices.WSVersioningHistoryEntry[] wsVersionEntries;
     
-    public WSVersioningObjectsHistoryObjects() {
+    public WSVersioningObjectsVersionsObjects() {
     }
     
-    public WSVersioningObjectsHistoryObjects(java.lang.String type, java.lang.String name, com.amalto.workbench.webservices.WSVersioningHistoryEntry[] wsHistoryEntries) {
+    public WSVersioningObjectsVersionsObjects(java.lang.String type, java.lang.String name, com.amalto.workbench.webservices.WSVersioningHistoryEntry[] wsVersionEntries) {
         this.type = type;
         this.name = name;
-        this.wsHistoryEntries = wsHistoryEntries;
+        this.wsVersionEntries = wsVersionEntries;
     }
     
     public java.lang.String getType() {
@@ -36,11 +36,11 @@ public class WSVersioningObjectsHistoryObjects {
         this.name = name;
     }
     
-    public com.amalto.workbench.webservices.WSVersioningHistoryEntry[] getWsHistoryEntries() {
-        return wsHistoryEntries;
+    public com.amalto.workbench.webservices.WSVersioningHistoryEntry[] getWsVersionEntries() {
+        return wsVersionEntries;
     }
     
-    public void setWsHistoryEntries(com.amalto.workbench.webservices.WSVersioningHistoryEntry[] wsHistoryEntries) {
-        this.wsHistoryEntries = wsHistoryEntries;
+    public void setWsVersionEntries(com.amalto.workbench.webservices.WSVersioningHistoryEntry[] wsVersionEntries) {
+        this.wsVersionEntries = wsVersionEntries;
     }
 }

@@ -206,9 +206,15 @@ public interface XtentisPort extends java.rmi.Remote {
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSMenuPK deleteMenu(com.amalto.workbench.webservices.WSDeleteMenu wsMenuDelete) throws 
          java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSVersioningObjectsHistory versioningGetObjectsHistory(com.amalto.workbench.webservices.WSVersioningGetObjectsHistory wsVersioningGetObjectsHistory) throws 
+    public com.amalto.workbench.webservices.WSBackgroundJobPK versioningCommitItems(com.amalto.workbench.webservices.WSVersioningCommitItems wsVersioningCommitItems) throws 
          java.rmi.RemoteException;
-    public com.amalto.workbench.webservices.WSVersioningItemsHistory versioningGetItemsHistory(com.amalto.workbench.webservices.WSVersioningGetItemsHistory wsVersioningGetItemsHistory) throws 
+    public com.amalto.workbench.webservices.WSBoolean versioningRestoreItemByRevision(com.amalto.workbench.webservices.WSVersioningRestoreItemByRevision wsVersioningRestoreItemByRevision) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSVersioningItemHistory versioningGetItemHistory(com.amalto.workbench.webservices.WSVersioningGetItemHistory wsVersioningGetItemHistory) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSVersioningItemsVersions versioningGetItemsVersions(com.amalto.workbench.webservices.WSVersioningGetItemsVersions wsVersioningGetItemsVersions) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSVersioningObjectsVersions versioningGetObjectsVersions(com.amalto.workbench.webservices.WSVersioningGetObjectsVersions wsVersioningGetObjectsVersions) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSVersioningSystemConfiguration getVersioningSystemConfiguration(com.amalto.workbench.webservices.WSGetVersioningSystemConfiguration wsGetVersioningSystemConfiguration) throws 
          java.rmi.RemoteException;

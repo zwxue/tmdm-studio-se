@@ -6,18 +6,16 @@
 package com.amalto.workbench.webservices;
 
 
-public class WSVersioningGetObjectsHistory {
+public class WSVersioningGetItemsVersions {
     protected java.lang.String versioningSystemName;
-    protected java.lang.String type;
-    protected java.lang.String[] names;
+    protected com.amalto.workbench.webservices.WSItemPK[] wsItemPKs;
     
-    public WSVersioningGetObjectsHistory() {
+    public WSVersioningGetItemsVersions() {
     }
     
-    public WSVersioningGetObjectsHistory(java.lang.String versioningSystemName, java.lang.String type, java.lang.String[] names) {
+    public WSVersioningGetItemsVersions(java.lang.String versioningSystemName, com.amalto.workbench.webservices.WSItemPK[] wsItemPKs) {
         this.versioningSystemName = versioningSystemName;
-        this.type = type;
-        this.names = names;
+        this.wsItemPKs = wsItemPKs;
     }
     
     public java.lang.String getVersioningSystemName() {
@@ -28,19 +26,11 @@ public class WSVersioningGetObjectsHistory {
         this.versioningSystemName = versioningSystemName;
     }
     
-    public java.lang.String getType() {
-        return type;
+    public com.amalto.workbench.webservices.WSItemPK[] getWsItemPKs() {
+        return wsItemPKs;
     }
     
-    public void setType(java.lang.String type) {
-        this.type = type;
-    }
-    
-    public java.lang.String[] getNames() {
-        return names;
-    }
-    
-    public void setNames(java.lang.String[] names) {
-        this.names = names;
+    public void setWsItemPKs(com.amalto.workbench.webservices.WSItemPK[] wsItemPKs) {
+        this.wsItemPKs = wsItemPKs;
     }
 }

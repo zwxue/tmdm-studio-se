@@ -18,26 +18,26 @@ import javax.xml.namespace.QName;
 import java.util.List;
 import java.util.ArrayList;
 
-public class WSVersioningItemsHistory_LiteralSerializer extends LiteralObjectSerializerBase implements Initializable  {
+public class WSVersioningObjectsVersions_LiteralSerializer extends LiteralObjectSerializerBase implements Initializable  {
     private static final QName ns1_objects_QNAME = new QName("", "objects");
-    private static final QName ns2_WSVersioningItemsHistory$2d$objects_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningItemsHistory-objects");
-    private CombinedSerializer ns2_myWSVersioningItemsHistoryObjects_LiteralSerializer;
+    private static final QName ns2_WSVersioningObjectsVersions$2d$objects_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningObjectsVersions-objects");
+    private CombinedSerializer ns2_myWSVersioningObjectsVersionsObjects_LiteralSerializer;
     
-    public WSVersioningItemsHistory_LiteralSerializer(QName type, String encodingStyle) {
+    public WSVersioningObjectsVersions_LiteralSerializer(QName type, String encodingStyle) {
         this(type, encodingStyle, false);
     }
     
-    public WSVersioningItemsHistory_LiteralSerializer(QName type, String encodingStyle, boolean encodeType) {
+    public WSVersioningObjectsVersions_LiteralSerializer(QName type, String encodingStyle, boolean encodeType) {
         super(type, true, encodingStyle, encodeType);
     }
     
     public void initialize(InternalTypeMappingRegistry registry) throws Exception {
-        ns2_myWSVersioningItemsHistoryObjects_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSVersioningItemsHistoryObjects.class, ns2_WSVersioningItemsHistory$2d$objects_TYPE_QNAME);
+        ns2_myWSVersioningObjectsVersionsObjects_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSVersioningObjectsVersionsObjects.class, ns2_WSVersioningObjectsVersions$2d$objects_TYPE_QNAME);
     }
     
     public Object doDeserialize(XMLReader reader,
         SOAPDeserializationContext context) throws Exception {
-        com.amalto.workbench.webservices.WSVersioningItemsHistory instance = new com.amalto.workbench.webservices.WSVersioningItemsHistory();
+        com.amalto.workbench.webservices.WSVersioningObjectsVersions instance = new com.amalto.workbench.webservices.WSVersioningObjectsVersions();
         Object member=null;
         QName elementName;
         List values;
@@ -50,7 +50,7 @@ public class WSVersioningItemsHistory_LiteralSerializer extends LiteralObjectSer
             for(;;) {
                 elementName = reader.getName();
                 if ((reader.getState() == XMLReader.START) && (elementName.equals(ns1_objects_QNAME))) {
-                    value = ns2_myWSVersioningItemsHistoryObjects_LiteralSerializer.deserialize(ns1_objects_QNAME, reader, context);
+                    value = ns2_myWSVersioningObjectsVersionsObjects_LiteralSerializer.deserialize(ns1_objects_QNAME, reader, context);
                     if (value == null) {
                         throw new DeserializationException("literal.unexpectedNull");
                     }
@@ -60,9 +60,9 @@ public class WSVersioningItemsHistory_LiteralSerializer extends LiteralObjectSer
                     break;
                 }
             }
-            member = new com.amalto.workbench.webservices.WSVersioningItemsHistoryObjects[values.size()];
+            member = new com.amalto.workbench.webservices.WSVersioningObjectsVersionsObjects[values.size()];
             member = values.toArray((Object[]) member);
-            instance.setObjects((com.amalto.workbench.webservices.WSVersioningItemsHistoryObjects[])member);
+            instance.setObjects((com.amalto.workbench.webservices.WSVersioningObjectsVersionsObjects[])member);
         }
         else if(!(reader.getState() == XMLReader.END)) {
             throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
@@ -73,15 +73,15 @@ public class WSVersioningItemsHistory_LiteralSerializer extends LiteralObjectSer
     }
     
     public void doSerializeAttributes(Object obj, XMLWriter writer, SOAPSerializationContext context) throws Exception {
-        com.amalto.workbench.webservices.WSVersioningItemsHistory instance = (com.amalto.workbench.webservices.WSVersioningItemsHistory)obj;
+        com.amalto.workbench.webservices.WSVersioningObjectsVersions instance = (com.amalto.workbench.webservices.WSVersioningObjectsVersions)obj;
         
     }
     public void doSerialize(Object obj, XMLWriter writer, SOAPSerializationContext context) throws Exception {
-        com.amalto.workbench.webservices.WSVersioningItemsHistory instance = (com.amalto.workbench.webservices.WSVersioningItemsHistory)obj;
+        com.amalto.workbench.webservices.WSVersioningObjectsVersions instance = (com.amalto.workbench.webservices.WSVersioningObjectsVersions)obj;
         
         if (instance.getObjects() != null) {
             for (int i = 0; i < instance.getObjects().length; ++i) {
-                ns2_myWSVersioningItemsHistoryObjects_LiteralSerializer.serialize(instance.getObjects()[i], ns1_objects_QNAME, null, writer, context);
+                ns2_myWSVersioningObjectsVersionsObjects_LiteralSerializer.serialize(instance.getObjects()[i], ns1_objects_QNAME, null, writer, context);
             }
         }
     }

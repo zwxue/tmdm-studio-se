@@ -18,28 +18,30 @@ import javax.xml.namespace.QName;
 import java.util.List;
 import java.util.ArrayList;
 
-public class WSVersioningGetObjectsHistory_LiteralSerializer extends LiteralObjectSerializerBase implements Initializable  {
+public class WSVersioningGetItemsVersions_LiteralSerializer extends LiteralObjectSerializerBase implements Initializable  {
     private static final QName ns1_versioningSystemName_QNAME = new QName("", "versioningSystemName");
     private static final QName ns3_string_TYPE_QNAME = SchemaConstants.QNAME_TYPE_STRING;
     private CombinedSerializer ns3_myns3_string__java_lang_String_String_Serializer;
-    private static final QName ns1_type_QNAME = new QName("", "type");
-    private static final QName ns1_names_QNAME = new QName("", "names");
+    private static final QName ns1_wsItemPKs_QNAME = new QName("", "wsItemPKs");
+    private static final QName ns2_WSItemPK_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSItemPK");
+    private CombinedSerializer ns2_myWSItemPK_LiteralSerializer;
     
-    public WSVersioningGetObjectsHistory_LiteralSerializer(QName type, String encodingStyle) {
+    public WSVersioningGetItemsVersions_LiteralSerializer(QName type, String encodingStyle) {
         this(type, encodingStyle, false);
     }
     
-    public WSVersioningGetObjectsHistory_LiteralSerializer(QName type, String encodingStyle, boolean encodeType) {
+    public WSVersioningGetItemsVersions_LiteralSerializer(QName type, String encodingStyle, boolean encodeType) {
         super(type, true, encodingStyle, encodeType);
     }
     
     public void initialize(InternalTypeMappingRegistry registry) throws Exception {
         ns3_myns3_string__java_lang_String_String_Serializer = (CombinedSerializer)registry.getSerializer("", java.lang.String.class, ns3_string_TYPE_QNAME);
+        ns2_myWSItemPK_LiteralSerializer = (CombinedSerializer)registry.getSerializer("", com.amalto.workbench.webservices.WSItemPK.class, ns2_WSItemPK_TYPE_QNAME);
     }
     
     public Object doDeserialize(XMLReader reader,
         SOAPDeserializationContext context) throws Exception {
-        com.amalto.workbench.webservices.WSVersioningGetObjectsHistory instance = new com.amalto.workbench.webservices.WSVersioningGetObjectsHistory();
+        com.amalto.workbench.webservices.WSVersioningGetItemsVersions instance = new com.amalto.workbench.webservices.WSVersioningGetItemsVersions();
         Object member=null;
         QName elementName;
         List values;
@@ -60,28 +62,12 @@ public class WSVersioningGetObjectsHistory_LiteralSerializer extends LiteralObje
             throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
         }
         elementName = reader.getName();
-        if (reader.getState() == XMLReader.START) {
-            if (elementName.equals(ns1_type_QNAME)) {
-                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_type_QNAME, reader, context);
-                if (member == null) {
-                    throw new DeserializationException("literal.unexpectedNull");
-                }
-                instance.setType((java.lang.String)member);
-                reader.nextElementContent();
-            } else {
-                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_type_QNAME, reader.getName() });
-            }
-        }
-        else {
-            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
-        }
-        elementName = reader.getName();
-        if ((reader.getState() == XMLReader.START) && (elementName.equals(ns1_names_QNAME))) {
+        if ((reader.getState() == XMLReader.START) && (elementName.equals(ns1_wsItemPKs_QNAME))) {
             values = new ArrayList();
             for(;;) {
                 elementName = reader.getName();
-                if ((reader.getState() == XMLReader.START) && (elementName.equals(ns1_names_QNAME))) {
-                    value = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_names_QNAME, reader, context);
+                if ((reader.getState() == XMLReader.START) && (elementName.equals(ns1_wsItemPKs_QNAME))) {
+                    value = ns2_myWSItemPK_LiteralSerializer.deserialize(ns1_wsItemPKs_QNAME, reader, context);
                     if (value == null) {
                         throw new DeserializationException("literal.unexpectedNull");
                     }
@@ -91,12 +77,12 @@ public class WSVersioningGetObjectsHistory_LiteralSerializer extends LiteralObje
                     break;
                 }
             }
-            member = new java.lang.String[values.size()];
+            member = new com.amalto.workbench.webservices.WSItemPK[values.size()];
             member = values.toArray((Object[]) member);
-            instance.setNames((java.lang.String[])member);
+            instance.setWsItemPKs((com.amalto.workbench.webservices.WSItemPK[])member);
         }
-        else {
-            instance.setNames(new java.lang.String[0]);
+        else if(!(reader.getState() == XMLReader.END)) {
+            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
         }
         
         XMLReaderUtil.verifyReaderState(reader, XMLReader.END);
@@ -104,20 +90,16 @@ public class WSVersioningGetObjectsHistory_LiteralSerializer extends LiteralObje
     }
     
     public void doSerializeAttributes(Object obj, XMLWriter writer, SOAPSerializationContext context) throws Exception {
-        com.amalto.workbench.webservices.WSVersioningGetObjectsHistory instance = (com.amalto.workbench.webservices.WSVersioningGetObjectsHistory)obj;
+        com.amalto.workbench.webservices.WSVersioningGetItemsVersions instance = (com.amalto.workbench.webservices.WSVersioningGetItemsVersions)obj;
         
     }
     public void doSerialize(Object obj, XMLWriter writer, SOAPSerializationContext context) throws Exception {
-        com.amalto.workbench.webservices.WSVersioningGetObjectsHistory instance = (com.amalto.workbench.webservices.WSVersioningGetObjectsHistory)obj;
+        com.amalto.workbench.webservices.WSVersioningGetItemsVersions instance = (com.amalto.workbench.webservices.WSVersioningGetItemsVersions)obj;
         
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getVersioningSystemName(), ns1_versioningSystemName_QNAME, null, writer, context);
-        if (instance.getType() == null) {
-            throw new SerializationException("literal.unexpectedNull");
-        }
-        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getType(), ns1_type_QNAME, null, writer, context);
-        if (instance.getNames() != null) {
-            for (int i = 0; i < instance.getNames().length; ++i) {
-                ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getNames()[i], ns1_names_QNAME, null, writer, context);
+        if (instance.getWsItemPKs() != null) {
+            for (int i = 0; i < instance.getWsItemPKs().length; ++i) {
+                ns2_myWSItemPK_LiteralSerializer.serialize(instance.getWsItemPKs()[i], ns1_wsItemPKs_QNAME, null, writer, context);
             }
         }
     }
