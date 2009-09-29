@@ -7,14 +7,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 
-import com.amalto.workbench.dialogs.UniverseVersioningDialog;
+import com.amalto.workbench.dialogs.VersioningCommitDialog;
 import com.amalto.workbench.dialogs.VersioningDialog;
+import com.amalto.workbench.dialogs.VersioningHistoryDialog;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.IConstants;
@@ -23,7 +25,6 @@ import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModelPK;
-import com.amalto.workbench.webservices.WSDropItem;
 import com.amalto.workbench.webservices.WSItemPK;
 import com.amalto.workbench.webservices.WSMenuPK;
 import com.amalto.workbench.webservices.WSRolePK;
@@ -35,20 +36,25 @@ import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSViewPK;
 
 public class VersioningXObjectAction extends Action{
+	
+	public final static int ACTION_TYPE_VERSIONS = 1 << 1;
+	public final static int ACTION_TYPE_HISTORY = 1 << 2;
+	public final static int ACTION_TYPE_COMMIT = 1 << 3;
 
 	private Shell shell = null;
 	private Viewer viewer = null;
 	private TreeObject sampleXObject=null;
 	private boolean isItems=false;
+	private int actionType;
 	
 	/**
 	 * @param serverView
 	 * 
 	 * used for objects
 	 */
-	public VersioningXObjectAction(ServerView serverView) {
+	public VersioningXObjectAction(ServerView serverView, int actionType) {
 
-		this(serverView.getSite().getShell(),serverView.getViewer());
+		this(serverView.getSite().getShell(),serverView.getViewer(),actionType);
 		this.isItems=false;
 	}
 	
@@ -59,20 +65,43 @@ public class VersioningXObjectAction extends Action{
 	 * 
 	 * used for items
 	 */
-	public VersioningXObjectAction(Shell shell,Viewer viewer,TreeObject xObject) {
+	public VersioningXObjectAction(Shell shell,Viewer viewer,TreeObject xObject, int actionType) {
 
-		this(shell,viewer);
+		this(shell,viewer,actionType);
 		this.sampleXObject=xObject;
 		this.isItems=true;
 	}
 	
-	protected VersioningXObjectAction(Shell shell,Viewer viewer) {
+	protected VersioningXObjectAction(Shell shell,Viewer viewer, int actionType) {
 		super();
 		this.shell=shell;
 		this.viewer = viewer;
-		setImageDescriptor(ImageCache.getImage( "icons/versioning.gif"));
-		setText("Versioning");
-		setToolTipText("Manages the versioning of this item");
+		this.actionType = actionType;
+		setActionProfile(actionType);
+		
+	}
+
+	private void setActionProfile(int actionType) {
+		
+		switch (actionType) {
+		case ACTION_TYPE_VERSIONS:
+			setImageDescriptor(ImageCache.getImage( "icons/versioning.gif"));
+			setText("Versioning");
+			setToolTipText("Manages the versioning of the Object/Item(s)");
+			break;
+		case ACTION_TYPE_HISTORY:
+			setImageDescriptor(ImageCache.getImage( "icons/versioning.gif"));
+			setText("Show History");
+			setToolTipText("Show history of this item");
+			break;
+		case ACTION_TYPE_COMMIT:
+			setImageDescriptor(ImageCache.getImage( "icons/versioning.gif"));
+			setText("Commit");
+			setToolTipText("Commit the item(s)");
+			break;
+		default:
+			break;
+		}
 	}
 	
 	public void run() {
@@ -95,17 +124,7 @@ public class VersioningXObjectAction extends Action{
 			if(!isItems){
 				sampleXObject=(TreeObject) selection.getFirstElement();
 			}
-			//is server object
-			if(sampleXObject!=null && sampleXObject.getType()== TreeObject._SERVER_){
-				UniverseVersioningDialog dialog = new UniverseVersioningDialog(
-						shell, 
-						selection
-				);
-				
-				dialog.setBlockOnOpen(true);
-				dialog.open();
-				return;
-			}
+			
 			if(!isItems){
 				
 				//classified tree objects
@@ -166,7 +185,7 @@ public class VersioningXObjectAction extends Action{
 				}
 				  
 		        //open dialog
-				if(sampleXObject!=null){
+				if(actionType==VersioningXObjectAction.ACTION_TYPE_VERSIONS&&sampleXObject!=null){
 					VersioningDialog dialog = new VersioningDialog(
 							shell, 
 							Util.getPort(sampleXObject),
@@ -195,14 +214,44 @@ public class VersioningXObjectAction extends Action{
 				
 				//open dialog
 				if(sampleXObject!=null){
-					VersioningDialog dialog = new VersioningDialog(
-							shell, 
-							Util.getPort(sampleXObject),
-							wsItemPKs
-					);
+					Dialog	dialog = null;
 					
-					dialog.setBlockOnOpen(true);
-					dialog.open();
+					switch (actionType) {
+					case VersioningXObjectAction.ACTION_TYPE_VERSIONS:
+						dialog = new VersioningDialog(
+								shell, 
+								Util.getPort(sampleXObject),
+								wsItemPKs
+						);
+						break;
+					case VersioningXObjectAction.ACTION_TYPE_HISTORY:
+						dialog = new VersioningHistoryDialog(
+								shell, 
+								Util.getPort(sampleXObject),
+								wsItemPKs
+						);
+						break;
+					case VersioningXObjectAction.ACTION_TYPE_COMMIT:
+						dialog = new VersioningCommitDialog(
+								shell, 
+								Util.getPort(sampleXObject),
+								wsItemPKs
+						);
+						break;
+					default:
+						MessageDialog.openWarning(
+								shell, 
+								"Sorry", 
+								"The Action-Type is not supported by Talend MDM. "
+						);
+						break;
+					}
+					
+					if(dialog!=null){
+						dialog.setBlockOnOpen(true);
+						dialog.open();
+					}
+					
 				}
 				
 			}
