@@ -134,7 +134,7 @@ public class UniverseVersionTreeViewer {
         GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).hint(400, 200).applyTo(itemComposite);
 
         Label label = new Label(itemComposite, SWT.NONE);
-        label.setText("Select Items");
+        label.setText("Select Items to Tag");
         GridDataFactory.swtDefaults().span(2, 1).applyTo(label);
 
         createTreeViewer(itemComposite);
