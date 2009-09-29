@@ -30,7 +30,7 @@ public class XSDSetFacetMessageAction extends UndoAction{
 	public XSDSetFacetMessageAction(DataModelMainPage page) {
 		super(page);
 		setImageDescriptor(ImageCache.getImage( "icons/annotation.gif"));
-		setText("Set the Fact Message");
+		setText("Set the facet message");
 		setToolTipText("Set multilingual facet error messages  for the content of this element");
 	}
 	

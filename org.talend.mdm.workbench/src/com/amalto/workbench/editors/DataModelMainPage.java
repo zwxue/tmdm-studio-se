@@ -1127,15 +1127,16 @@ public class DataModelMainPage extends AMainPageV2 {
 			manager.add(new Separator());
 			manager.add(changeToComplexTypeAction);
 			manager.add(changeToSimpleTypeAction);
-			manager.add(new Separator());
-			manager.add(newIdentityConstraintAction);
-			// Annotations
-			setAnnotationActions2(manager);
 			// add by fliu, see bugID:0009157
 			if (((XSDElementDeclaration)obj).getTypeDefinition() instanceof XSDSimpleTypeDefinition)
 			{
 				manager.add(setFacetMsgAction);
 			}
+			manager.add(new Separator());
+			manager.add(newIdentityConstraintAction);
+			// Annotations
+			setAnnotationActions2(manager);
+			
 		}
 		
 
@@ -1153,19 +1154,21 @@ public class DataModelMainPage extends AMainPageV2 {
 				manager.add(new Separator());
 				manager.add(changeToComplexTypeAction);
 				manager.add(changeToSimpleTypeAction);
+				// add by fliu, see bugID:0009157
+				
 				manager.add(new Separator());
 				//manager.add(newIdentityConstraintAction);
 				if (term instanceof XSDElementDeclaration) {
 					// Annotations
 					setAnnotationActions(manager);
-					// Xpath
-					manager.add(new Separator());
-					manager.add(getXPathAction);
-					// add by fliu, see bugID:0009157
 					if (((XSDElementDeclaration)term).getTypeDefinition() instanceof XSDSimpleTypeDefinition)
 					{
 						manager.add(setFacetMsgAction);
 					}
+					// Xpath
+					manager.add(new Separator());
+					manager.add(getXPathAction);
+					
 				}
 			}
 		}
@@ -1246,6 +1249,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		manager.add(setAnnotationSchematronAction);
 		manager.add(setAnnotationSourceSystemAction);
 		manager.add(setAnnotationTargetSystemsAction);
+		manager.add(setFacetMsgAction);
 		//manager.add(setAnnotationDocumentationAction);
 	}
 	
