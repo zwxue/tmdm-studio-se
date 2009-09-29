@@ -38,6 +38,7 @@ import com.amalto.workbench.webservices.WSVersioningRestoreObjects;
 import com.amalto.workbench.webservices.WSVersioningTagItems;
 import com.amalto.workbench.webservices.WSVersioningTagObjects;
 import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.widgets.VersionTagWidget;
 
 public class VersioningDialog extends Dialog {
 
@@ -92,72 +93,18 @@ public class VersioningDialog extends Dialog {
 					}
 				}
 			}
+			VersionTagWidget vwidget= new VersionTagWidget(parent,resourcesName );
 			
-			Composite composite = (Composite) super.createDialogArea(parent);
-			GridLayout layout = (GridLayout)composite.getLayout();
-			layout.numColumns = 1;
-			
-			
-			Group tagGroup = new Group(composite,SWT.SHADOW_NONE);
-			tagGroup.setLayout(new GridLayout(2,false));
-			tagGroup.setLayoutData(
-					new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-			);
-			tagGroup.setText("Tag "+resourcesName);
 
-			Label tagLabel = new Label(tagGroup, SWT.NONE);
-			tagLabel.setLayoutData(
-					new GridData(SWT.LEFT,SWT.FILL,false,false,1,1)
-			);
-			tagLabel.setText("Tag");
-
-			tagText = new Text(tagGroup, SWT.NONE);
-			tagText.setLayoutData(
-					new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-			);
-			tagText.setText("");
-
-			Label commentLabel = new Label(tagGroup, SWT.NONE);
-			commentLabel.setLayoutData(
-					new GridData(SWT.LEFT,SWT.FILL,false,false,1,1)
-			);
-			commentLabel.setText("Comment");
-
-			commentText = new Text(tagGroup, SWT.NONE);
-			commentText.setLayoutData(
-					new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-			);
-			commentText.setText("");
-			((GridData)commentText.getLayoutData()).widthHint=250;
-
-			
-			Button tagButton = new Button(tagGroup,SWT.PUSH);
-			tagButton.setLayoutData(
-					new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
-			);
-			tagButton.setText("OK");
+			Button tagButton=vwidget.getTagButton();
 			tagButton.addSelectionListener(new SelectionListener() {
 				public void widgetDefaultSelected(SelectionEvent e) {}
 				public void widgetSelected(SelectionEvent e) {
 						tagResources();
 				}				
 			});
-							
-			restoreGroup = new Group(composite,SWT.SHADOW_NONE);
-			restoreGroup.setLayout(new GridLayout(1,true));
-			restoreGroup.setLayoutData(
-					new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-			);
-			restoreGroup.setText("Restore "+resourcesName);
-			restoreGroup.setEnabled(false);
-			
-			
-            tagsViewer = new TableViewer(restoreGroup);
-            tagsViewer.getControl().setLayoutData(    
-                    new GridData(SWT.FILL,SWT.FILL,true,true,4,1)
-            );
-            ((GridData)tagsViewer.getControl().getLayoutData()).heightHint=150;
-            tagsViewer.setContentProvider(new ArrayContentProvider());
+
+			tagsViewer=vwidget.getTagsViewer();
             tagsViewer.setLabelProvider(new ITableLabelProvider() {
             	public String getColumnText(Object element, int columnIndex) {
 					WSVersioningHistoryEntry entry = (WSVersioningHistoryEntry) element;
@@ -184,12 +131,7 @@ public class VersioningDialog extends Dialog {
 	            }
             });
 
-			
-			Button restoreButton = new Button(restoreGroup,SWT.PUSH);
-			restoreButton.setLayoutData(
-					new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-			);
-			restoreButton.setText("Restore");
+            Button restoreButton=vwidget.getRestoreButton();
 			restoreButton.addSelectionListener(new SelectionListener() {
 				public void widgetDefaultSelected(SelectionEvent e) {}
 				public void widgetSelected(SelectionEvent e) {restoreResources();}				
@@ -200,7 +142,7 @@ public class VersioningDialog extends Dialog {
 
 			refreshData();
 			
-		    return composite;
+		    return vwidget.getComposite();
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(
