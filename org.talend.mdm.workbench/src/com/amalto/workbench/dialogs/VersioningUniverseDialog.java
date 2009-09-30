@@ -17,7 +17,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
-import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.webservices.WSGetCurrentUniverse;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSVersioningHistoryEntry;
@@ -49,29 +48,36 @@ public class VersioningUniverseDialog extends Dialog {
 			treeViewer.setTagSelectionListener(new SelectionListener() {
 				public void widgetDefaultSelected(SelectionEvent e) {}
 				public void widgetSelected(SelectionEvent e) {
-					if ("".equals(treeViewer.getTagText())) {
-						MessageDialog.openError(VersioningUniverseDialog.this.getShell(), "Error", "Please enter a tag value");
-						return;
-					}
-
-					if ("".equals(treeViewer.getComment())) {
-						MessageDialog.openError(VersioningUniverseDialog.this.getShell(), "Error", "Please enter a comment");
-						return;
-					}
+					MessageDialog.openError(
+							VersioningUniverseDialog.this.getShell(),
+							"Sorry", 
+							"Not supported yet! "
+					);
+					return;
 					
-					TreeObject[]  checkNodes=treeViewer.getCheckNodes();
-					System.out.println("Tag universe");
+//					if ("".equals(treeViewer.getTagText())) {
+//						MessageDialog.openError(VersioningUniverseDialog.this.getShell(), "Error", "Please enter a tag value");
+//						return;
+//					}
+//
+//					if ("".equals(treeViewer.getComment())) {
+//						MessageDialog.openError(VersioningUniverseDialog.this.getShell(), "Error", "Please enter a comment");
+//						return;
+//					}
+//					
+//					TreeObject[]  checkNodes=treeViewer.getCheckNodes();
+					//TODO: Tag universe
 				}				
 			});
 			treeViewer.setRestoreSelectionListener(new SelectionListener() {
 				public void widgetDefaultSelected(SelectionEvent e) {}
 				public void widgetSelected(SelectionEvent e) {
-					System.out.println("Restore universe");
+					//TODO: Restore universe
 				}				
 			});
 			treeViewer.setTagsViewerDoubleClickListener(new IDoubleClickListener() {
 	        	public void doubleClick(DoubleClickEvent event) {
-	        		System.out.println("Viewer double click");
+	        		//TODO: Restore universe
 	            }
             });
 			treeViewer.setHisEntries(initData());
@@ -90,15 +96,16 @@ public class VersioningUniverseDialog extends Dialog {
 	}
 
 	private ArrayList<WSVersioningHistoryEntry> initData() {
-		System.out.println("Init history universes in svn ");
+		//TODO: Init history universes in svn
 		ArrayList<WSVersioningHistoryEntry> history = new ArrayList<WSVersioningHistoryEntry>();
-		WSVersioningHistoryEntry wsVersioningHistoryEntry=new WSVersioningHistoryEntry();
-		wsVersioningHistoryEntry.setTag("Test Tag");
-		wsVersioningHistoryEntry.setRevision(null);
-		wsVersioningHistoryEntry.setDate("2009-09-30");
-		wsVersioningHistoryEntry.setAuthor("hshu");
-		wsVersioningHistoryEntry.setComments("test");
-		history.add(wsVersioningHistoryEntry);
+//		//test
+//		WSVersioningHistoryEntry wsVersioningHistoryEntry=new WSVersioningHistoryEntry();
+//		wsVersioningHistoryEntry.setTag("Test Tag");
+//		wsVersioningHistoryEntry.setRevision(null);
+//		wsVersioningHistoryEntry.setDate("2009-09-30");
+//		wsVersioningHistoryEntry.setAuthor("hshu");
+//		wsVersioningHistoryEntry.setComments("test");
+//		history.add(wsVersioningHistoryEntry);
 		return history;
 	}
 	

@@ -199,7 +199,7 @@ public class VersioningXObjectAction extends Action{
 					case VersioningXObjectAction.ACTION_TYPE_VERSIONS:
 						dialog = new VersioningDialog(
 								shell, 
-								Util.getPort(sampleXObject),
+								sampleXObject,
 								type,
 								instances
 						);
