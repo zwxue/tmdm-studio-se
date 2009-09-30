@@ -10,11 +10,11 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.amalto.workbench.widgets.UniverseVersionTreeViewer;
 
-public class UniverseVersioningDialog extends Dialog {
+public class VersioningUniverseDialog extends Dialog {
 	private IStructuredSelection sel;
 	private UniverseVersionTreeViewer treeViewer;
 	
-	public UniverseVersioningDialog(Shell parentShell,IStructuredSelection selection) {
+	public VersioningUniverseDialog(Shell parentShell,IStructuredSelection selection) {
 		
 		super(parentShell);
 		this.sel=selection;
