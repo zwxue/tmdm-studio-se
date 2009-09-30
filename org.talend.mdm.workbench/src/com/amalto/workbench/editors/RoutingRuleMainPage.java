@@ -332,7 +332,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             serviceParametersLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,true,2,1)
             );
-            serviceParametersText = toolkit.createText(serviceGroup, "",SWT.BORDER|SWT.MULTI|SWT.V_SCROLL);
+            serviceParametersText = toolkit.createText(serviceGroup, "",SWT.BORDER|SWT.MULTI|SWT.V_SCROLL|SWT.WRAP);
             serviceParametersText.setLayoutData(    
                     new GridData(SWT.FILL,SWT.FILL,true,false,2,1)
             );

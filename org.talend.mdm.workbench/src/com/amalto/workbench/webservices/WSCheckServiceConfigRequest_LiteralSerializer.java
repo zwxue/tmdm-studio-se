@@ -22,6 +22,7 @@ public class WSCheckServiceConfigRequest_LiteralSerializer extends LiteralObject
     private static final QName ns1_jndiName_QNAME = new QName("", "jndiName");
     private static final QName ns3_string_TYPE_QNAME = SchemaConstants.QNAME_TYPE_STRING;
     private CombinedSerializer ns3_myns3_string__java_lang_String_String_Serializer;
+    private static final QName ns1_conf_QNAME = new QName("", "conf");
     
     public WSCheckServiceConfigRequest_LiteralSerializer(QName type, String encodingStyle) {
         this(type, encodingStyle, false);
@@ -57,6 +58,19 @@ public class WSCheckServiceConfigRequest_LiteralSerializer extends LiteralObject
         else {
             throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
         }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_conf_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_conf_QNAME, reader, context);
+                instance.setConf((java.lang.String)member);
+                reader.nextElementContent();
+            } else {
+                throw new DeserializationException("literal.unexpectedElementName", new Object[] { ns1_conf_QNAME, reader.getName() });
+            }
+        }
+        else {
+            throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
+        }
         
         XMLReaderUtil.verifyReaderState(reader, XMLReader.END);
         return (Object)instance;
@@ -70,5 +84,6 @@ public class WSCheckServiceConfigRequest_LiteralSerializer extends LiteralObject
         com.amalto.workbench.webservices.WSCheckServiceConfigRequest instance = (com.amalto.workbench.webservices.WSCheckServiceConfigRequest)obj;
         
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getJndiName(), ns1_jndiName_QNAME, null, writer, context);
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getConf(), ns1_conf_QNAME, null, writer, context);
     }
 }
