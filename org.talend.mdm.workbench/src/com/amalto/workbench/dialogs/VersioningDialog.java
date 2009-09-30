@@ -27,7 +27,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.amalto.workbench.actions.ServerRefreshAction;
 import com.amalto.workbench.actions.VersioningProgressAction;
+import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSBackgroundJobPK;
 import com.amalto.workbench.webservices.WSItemPK;
 import com.amalto.workbench.webservices.WSVersioningGetItemsVersions;
@@ -47,6 +52,7 @@ public class VersioningDialog extends Dialog {
 
 	private final static int BUTTON_CANCEL = 11;
 	
+	private TreeObject selectedXObject=null;
 	private XtentisPort port=null;
 	protected boolean isItems = false;
 	private String objectType = null;
@@ -62,9 +68,14 @@ public class VersioningDialog extends Dialog {
 
 	/**
 	 */
-	public VersioningDialog(Shell shell, XtentisPort port, String objectType, String[] instances) {
+	public VersioningDialog(Shell shell, TreeObject selectedXObject, String objectType, String[] instances) {
 		super(shell);
-		this.port = port;
+		this.selectedXObject = selectedXObject;
+		try {
+			this.port=Util.getPort(selectedXObject);
+		} catch (XtentisException e) {
+			e.printStackTrace();
+		}
 		this.objectType = objectType;
 		this.instances = instances;
 		this.isItems = false;
@@ -459,6 +470,9 @@ public class VersioningDialog extends Dialog {
 						"Unable to restore the documents : "+exx.getLocalizedMessage()
 				);
 			}
+			ServerRefreshAction serverRefreshAction=new ServerRefreshAction(ServerView.show(),this.selectedXObject.getServerRoot());
+			serverRefreshAction.run();
+			
 		}
 		
 	}
