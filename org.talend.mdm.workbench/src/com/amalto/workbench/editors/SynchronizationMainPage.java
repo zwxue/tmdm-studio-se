@@ -393,7 +393,7 @@ public class SynchronizationMainPage extends AMainPageV2{
 					XtentisPort remotePort=Util.getPort(new URL(syncPlan.remoteSystemURL), null, syncPlan.remoteSystemUsername, syncPlan.remoteSystemPassword);
 					remotePort.ping(new WSPing("check"));
 					checkLabel.setText("Connection successful");
-					checkLabel.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_GREEN));
+					checkLabel.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLUE));
 				} catch (MalformedURLException e0) {
 					checkLabel.setText(e0.getLocalizedMessage());
 					checkLabel.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));

@@ -99,6 +99,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 									serviceName.trim()));
 							serviceConfigurationsText.setText(document
 									.getConfigure());
+							errorLabel.setText("");
 						}
 				} catch (RemoteException e1) {
 					e1.printStackTrace();
@@ -117,6 +118,8 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 				}
 				Arrays.sort(sortedList);
 				for (int i = 0; i < sortedList.length; i++) {
+					WSServiceGetDocument document= port.getServiceDocument(new WSString(sortedList[i].trim()));
+					if(document.getConfigureSchema()==null || document.getConfigureSchema().length()==0)continue;
 					serviceNameCombo.add(sortedList[i]);
 				}
 				//serviceNameCombo.add("");
@@ -176,7 +179,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         serviceConfigurationsLabel.setLayoutData(
                 new GridData(SWT.FILL,SWT.CENTER,false,true,2,1)
         );
-        serviceConfigurationsText = toolkit.createText(serviceGroup, "",SWT.BORDER|SWT.MULTI|SWT.V_SCROLL);
+        serviceConfigurationsText = toolkit.createText(serviceGroup, "",SWT.BORDER|SWT.MULTI|SWT.V_SCROLL|SWT.WRAP);
         
         serviceConfigurationsText.setLayoutData(    
                 new GridData(SWT.FILL,SWT.FILL,true,false,2,1)
@@ -198,26 +201,24 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 				String msg="";
 				boolean isok=false;
 				try {
-					WSCheckServiceConfigResponse result= port.checkServiceConfiguration(new WSCheckServiceConfigRequest(serviceNameCombo.getText().trim()));
+					WSCheckServiceConfigResponse result= port.checkServiceConfiguration(new WSCheckServiceConfigRequest(serviceNameCombo.getText().trim(),serviceConfigurationsText.getText()));
 					isok=result.getCheckResult();
 					if(isok){
 						msg="Connection sucessfully!";
 					}else{
-						msg="Connection failed!";
+						msg="Connection failed, please check your url, username and password";
 					}
 				} catch (RemoteException e1) {					
 					e1.printStackTrace();
 					msg=e1.getLocalizedMessage();
 				}
-				errorLabel.setForeground(isok?errorLabel.getDisplay().getSystemColor(SWT.COLOR_GREEN):errorLabel.getDisplay().getSystemColor(SWT.COLOR_RED));
+				errorLabel.setForeground(isok?errorLabel.getDisplay().getSystemColor(SWT.COLOR_BLUE):errorLabel.getDisplay().getSystemColor(SWT.COLOR_RED));
 				errorLabel.setText(msg);
-			}});
-         toolkit.createLabel(serviceGroup,  "", SWT.NONE).setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false));
-         
-        errorLabel=toolkit.createText(serviceGroup, "");
-        errorLabel.setLayoutData(    
-                new GridData(SWT.FILL,SWT.FILL,true,true,2,2)
-        );
+			}});        
+        errorLabel=new Text(serviceGroup,SWT.WRAP);
+        GridData gd=new GridData(SWT.FILL,SWT.FILL,true,true,1,2);
+        //gd.heightHint=200;
+        errorLabel.setLayoutData(  gd );
 //        errorLabel.setImage(ImageCache.getImage( EImage.WARNING_CO.getPath()).createImage());
 //        errorLabel.setVisible(false);
 	}
