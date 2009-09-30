@@ -24,7 +24,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.talend.mdm.commmon.util.core.ICoreConstants;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import com.amalto.workbench.dialogs.PluginDetailsDialog;
@@ -32,6 +31,9 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.webservices.WSBoolean;
+import com.amalto.workbench.webservices.WSCheckServiceConfigRequest;
+import com.amalto.workbench.webservices.WSCheckServiceConfigResponse;
 import com.amalto.workbench.webservices.WSGetServicesList;
 import com.amalto.workbench.webservices.WSPutVersioningSystemConfiguration;
 import com.amalto.workbench.webservices.WSServiceGetDocument;
@@ -56,7 +58,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 	protected WSServiceGetDocument document;
 	private boolean refreshing=false;
 	private WSServicePutConfiguration ws=new WSServicePutConfiguration();
-	private Label errorLabel;
+	private Text errorLabel;
 
 	public ServiceConfigrationMainPage(FormEditor editor) {
         super(
@@ -137,7 +139,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         		//WSRoutingRule wsObject = (WSRoutingRule) (getXObject().getWsObject());
         		try {
 //					XtentisPort port=Util.getPort(getXObject());
-//					WSServiceGetDocument document= port.getServiceDocument(new WSString(serviceNameCombo.getText().trim()));
+					WSServiceGetDocument document= port.getServiceDocument(new WSString(serviceNameCombo.getText().trim()));
 		
         			desc=document.getDescription();
 					doc=document.getDefaultConfig();
@@ -192,13 +194,29 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         checkButton.addSelectionListener(new SelectionAdapter(){
 
 			public void widgetSelected(SelectionEvent e) {
-				//TODO: add check here.
+				if(serviceNameCombo.getText().trim().length()==0)return;
+				String msg="";
+				boolean isok=false;
+				try {
+					WSCheckServiceConfigResponse result= port.checkServiceConfiguration(new WSCheckServiceConfigRequest(serviceNameCombo.getText().trim()));
+					isok=result.getCheckResult();
+					if(isok){
+						msg="Connection sucessfully!";
+					}else{
+						msg="Connection failed!";
+					}
+				} catch (RemoteException e1) {					
+					e1.printStackTrace();
+					msg=e1.getLocalizedMessage();
+				}
+				errorLabel.setForeground(isok?errorLabel.getDisplay().getSystemColor(SWT.COLOR_GREEN):errorLabel.getDisplay().getSystemColor(SWT.COLOR_RED));
+				errorLabel.setText(msg);
 			}});
          toolkit.createLabel(serviceGroup,  "", SWT.NONE).setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false));
          
-        errorLabel=toolkit.createLabel(serviceGroup, "", SWT.NONE);
+        errorLabel=toolkit.createText(serviceGroup, "");
         errorLabel.setLayoutData(    
-                new GridData(SWT.FILL,SWT.FILL,false,true,2,1)
+                new GridData(SWT.FILL,SWT.FILL,true,true,2,2)
         );
 //        errorLabel.setImage(ImageCache.getImage( EImage.WARNING_CO.getPath()).createImage());
 //        errorLabel.setVisible(false);
