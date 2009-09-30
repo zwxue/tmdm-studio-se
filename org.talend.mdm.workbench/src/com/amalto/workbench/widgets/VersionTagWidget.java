@@ -1,10 +1,15 @@
 package com.amalto.workbench.widgets;
 
+import java.util.ArrayList;
+
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -24,9 +29,12 @@ public class VersionTagWidget {
 	private TableViewer tagsViewer;
 	private Composite composite;
 	private Button restoreButton;
+	private Group restoreGroup;
 
-	public VersionTagWidget(Composite parent, String resourcesName){
-		 composite = new Composite(parent, SWT.NONE);
+	public VersionTagWidget(Composite parent, String resourcesName ,String defaultTagText,boolean isTagEditable,
+			                SelectionListener tagSelectionListener, SelectionListener restoreSelectionListener,IDoubleClickListener tagsViewerDoubleClickListener,
+			                ArrayList<WSVersioningHistoryEntry> hisEntries){
+		composite = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 1;		
 		composite.setLayout(layout);
@@ -43,11 +51,13 @@ public class VersionTagWidget {
 		);
 		tagLabel.setText("Tag");
 
-		tagText = new Text(tagGroup, SWT.NONE);
+		tagText = new Text(tagGroup, SWT.BORDER);
 		tagText.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 		);
-		tagText.setText("");
+		if(defaultTagText==null)defaultTagText="";
+		tagText.setText(defaultTagText);
+		tagText.setEditable(isTagEditable);
 
 		Label commentLabel = new Label(tagGroup, SWT.NONE);
 		commentLabel.setLayoutData(
@@ -55,21 +65,24 @@ public class VersionTagWidget {
 		);
 		commentLabel.setText("Comment");
 
-		commentText = new Text(tagGroup, SWT.NONE);
+		commentText = new Text(tagGroup, SWT.MULTI | SWT.WRAP | SWT.BORDER | SWT.V_SCROLL);
 		commentText.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 		);
 		commentText.setText("");
-		((GridData)commentText.getLayoutData()).widthHint=250;
+		((GridData)commentText.getLayoutData()).widthHint=230;
+		((GridData)commentText.getLayoutData()).heightHint=25;
+		commentText.forceFocus();
 
 		
-	     tagButton = new Button(tagGroup,SWT.PUSH);
+	    tagButton = new Button(tagGroup,SWT.PUSH);
 		tagButton.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
 		);
-		tagButton.setText("OK");
+		tagButton.setText("Tag");
+		tagButton.addSelectionListener(tagSelectionListener);
 						
-		Group restoreGroup = new Group(composite,SWT.SHADOW_NONE);
+		restoreGroup = new Group(composite,SWT.SHADOW_NONE);
 		restoreGroup.setLayout(new GridLayout(1,true));
 		restoreGroup.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
@@ -94,7 +107,6 @@ public class VersionTagWidget {
 						entry.getAuthor()+"]";
         	}
         	public Image getColumnImage(Object element, int columnIndex) {
-        		// TODO Auto-generated method stub
         		return null;
         	}
         	public void addListener(ILabelProviderListener listener) {}
@@ -104,6 +116,7 @@ public class VersionTagWidget {
         	}
         	public void removeListener(ILabelProviderListener listener) {}
         });
+        tagsViewer.addDoubleClickListener(tagsViewerDoubleClickListener);
 
 
 		
@@ -112,6 +125,20 @@ public class VersionTagWidget {
 				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 		);
 		restoreButton.setText("Restore");
+		restoreButton.addSelectionListener(restoreSelectionListener);
+		
+		refreshData(hisEntries);
+	}
+	
+	private void refreshData(ArrayList<WSVersioningHistoryEntry> hisEntries) {
+	
+		
+		if (hisEntries!=null&&hisEntries.size()>0) {
+			tagsViewer.setInput(hisEntries.toArray(new WSVersioningHistoryEntry[hisEntries.size()]));
+			tagsViewer.setSelection(new StructuredSelection(hisEntries.get(0)));
+			restoreGroup.setEnabled(true);
+		}
+		
 	}
 
 	public Button getRestoreButton() {
@@ -161,6 +188,6 @@ public class VersionTagWidget {
 	public void setTagsViewer(TableViewer tagsViewer) {
 		this.tagsViewer = tagsViewer;
 	}
-	
+
 	
 }

@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Shell;
 import com.amalto.workbench.dialogs.VersioningCommitDialog;
 import com.amalto.workbench.dialogs.VersioningDialog;
 import com.amalto.workbench.dialogs.VersioningHistoryDialog;
+import com.amalto.workbench.dialogs.VersioningUniverseDialog;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.IConstants;
@@ -40,6 +41,7 @@ public class VersioningXObjectAction extends Action{
 	public final static int ACTION_TYPE_VERSIONS = 1 << 1;
 	public final static int ACTION_TYPE_HISTORY = 1 << 2;
 	public final static int ACTION_TYPE_COMMIT = 1 << 3;
+	public final static int ACTION_TYPE_TAGUNIVERSE = 1 << 4;
 
 	private Shell shell = null;
 	private Viewer viewer = null;
@@ -85,6 +87,11 @@ public class VersioningXObjectAction extends Action{
 		
 		switch (actionType) {
 		case ACTION_TYPE_VERSIONS:
+			setImageDescriptor(ImageCache.getImage( "icons/versioning.gif"));
+			setText("Versioning");
+			setToolTipText("Manages the versioning of the Object/Item(s)");
+			break;
+		case ACTION_TYPE_TAGUNIVERSE:
 			setImageDescriptor(ImageCache.getImage( "icons/versioning.gif"));
 			setText("Versioning");
 			setToolTipText("Manages the versioning of the Object/Item(s)");
@@ -185,16 +192,38 @@ public class VersioningXObjectAction extends Action{
 				}
 				  
 		        //open dialog
-				if(actionType==VersioningXObjectAction.ACTION_TYPE_VERSIONS&&sampleXObject!=null){
-					VersioningDialog dialog = new VersioningDialog(
-							shell, 
-							Util.getPort(sampleXObject),
-							type,
-							instances
-					);
+				if(sampleXObject!=null){
+					Dialog	dialog = null;
 					
-					dialog.setBlockOnOpen(true);
-					dialog.open();
+					switch (actionType) {
+					case VersioningXObjectAction.ACTION_TYPE_VERSIONS:
+						dialog = new VersioningDialog(
+								shell, 
+								Util.getPort(sampleXObject),
+								type,
+								instances
+						);
+						break;
+					case VersioningXObjectAction.ACTION_TYPE_TAGUNIVERSE:
+						dialog = new VersioningUniverseDialog(
+								shell,
+								Util.getPort(sampleXObject),
+								selection
+						);
+						break;
+					default:
+						MessageDialog.openWarning(
+								shell, 
+								"Sorry", 
+								"The Action-Type is not supported by Talend MDM. "
+						);
+						break;
+					}
+					
+					if(dialog!=null){
+						dialog.setBlockOnOpen(true);
+						dialog.open();
+					}
 				}
 				
 			}else{
@@ -271,6 +300,9 @@ public class VersioningXObjectAction extends Action{
 	private String determineTypeByTreeObjectType(int xobjectType) {
 		String type = null;
 		switch (xobjectType) {
+		    case TreeObject._SERVER_ :
+		    	type="Root";
+				break;
 			/*
 			case TreeObject.INBOUND_ADAPTOR :
 				type =  "Inbound Adaptor";

@@ -105,6 +105,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	protected Action copyAction;
 	protected Action pasteAction;
 	protected Action versionAction;
+	protected Action versionUniverseAction;
 	protected Action exportAction;
 	protected Action NewCategoryAction;
 	
@@ -541,7 +542,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				manager.add(logoutAction);
 				manager.add(serverRefreshAction);
 				//add versioning
-				manager.add(versionAction);
+				manager.add(versionUniverseAction);
 				if (!WorkbenchClipboard.getWorkbenchClipboard().isEmpty())
 					manager.add(pasteAction);
 
@@ -675,6 +676,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		importAction=new DataClusterImportAction(this);
 		NewCategoryAction = new NewCategoryAction(this);
 		versionAction = new VersioningXObjectAction(this,VersioningXObjectAction.ACTION_TYPE_VERSIONS);
+		versionUniverseAction = new VersioningXObjectAction(this,VersioningXObjectAction.ACTION_TYPE_TAGUNIVERSE);
 		newUserActon = new NewUserAction(this);
 	}
 
