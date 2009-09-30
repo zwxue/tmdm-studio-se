@@ -8,6 +8,7 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -16,6 +17,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -33,6 +35,7 @@ import com.amalto.workbench.providers.ServerTreeContentProvider;
 import com.amalto.workbench.providers.ServerTreeLabelProvider;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
+import com.amalto.workbench.webservices.WSVersioningHistoryEntry;
 
 
 /**
@@ -56,10 +59,23 @@ public class UniverseVersionTreeViewer {
     private Button moveButton;
 
 	private TreeParent serverRoot;
+	
+	private String defaultTagText;
+	
+	private boolean isTagEditable;
+	
+	private VersionTagWidget vwidget;
+	
+	private SelectionListener tagSelectionListener;
+	private SelectionListener restoreSelectionListener;
+	private IDoubleClickListener tagsViewerDoubleClickListener;
+	private ArrayList<WSVersioningHistoryEntry> hisEntries;
 
-    public UniverseVersionTreeViewer(IStructuredSelection selection) {
+    public UniverseVersionTreeViewer(IStructuredSelection selection,String defaultTagText, boolean isTagEditable) {
         this.selection = selection;
         serverRoot=  (TreeParent)selection.getFirstElement();
+        this.defaultTagText = defaultTagText;
+        this.isTagEditable = isTagEditable;
     }
 
     public SashForm createContents(Composite parent) {
@@ -84,7 +100,7 @@ public class UniverseVersionTreeViewer {
         buttonComposite.setLayout(layout);
 
         moveButton = new Button(buttonComposite, SWT.PUSH);
-        moveButton.setText(">>"); //$NON-NLS-1$
+        moveButton.setText("<<"); //$NON-NLS-1$
         moveButton.setToolTipText("Show server tree"); //$NON-NLS-1$
 
         final GridData layoutData = new GridData();
@@ -101,10 +117,11 @@ public class UniverseVersionTreeViewer {
         layout.marginLeft=0;
         layout.marginRight=0;
         versionComposite.setLayout(layout);
-        VersionTagWidget vwidget=new VersionTagWidget(versionComposite,"");
+        vwidget=new VersionTagWidget(versionComposite,"Universe",defaultTagText,isTagEditable,
+        		                     tagSelectionListener,restoreSelectionListener,tagsViewerDoubleClickListener,
+        		                     this.hisEntries);
         
-        
-        sash.setWeights(new int[] { 0, 1, 23 });
+        sash.setWeights(new int[] { 20, 2, 21 });
         // add listner
         moveButton.addSelectionListener(new SelectionAdapter() {
 
@@ -299,8 +316,54 @@ public class UniverseVersionTreeViewer {
         });
         // setButtonLayoutData(collapseBtn);
     }
+    
+    
 
-    /**
+    public SelectionListener getTagSelectionListener() {
+		return tagSelectionListener;
+	}
+
+	public void setTagSelectionListener(SelectionListener tagSelectionListener) {
+		this.tagSelectionListener = tagSelectionListener;
+	}
+
+	public SelectionListener getRestoreSelectionListener() {
+		return restoreSelectionListener;
+	}
+
+	public void setRestoreSelectionListener(
+			SelectionListener restoreSelectionListener) {
+		this.restoreSelectionListener = restoreSelectionListener;
+	}
+
+	public IDoubleClickListener getTagsViewerDoubleClickListener() {
+		return tagsViewerDoubleClickListener;
+	}
+
+	public void setTagsViewerDoubleClickListener(
+			IDoubleClickListener tagsViewerDoubleClickListener) {
+		this.tagsViewerDoubleClickListener = tagsViewerDoubleClickListener;
+	}
+	
+	public void setHisEntries(ArrayList<WSVersioningHistoryEntry> hisEntries) {
+		
+		this.hisEntries=hisEntries;
+
+	}
+	
+	public String getComment() {
+		
+		return vwidget.getCommentText().getText().trim();
+
+	}
+	
+    public String getTagText() {
+		
+		return vwidget.getTagText().getText().trim();
+
+	}
+
+	/**
      * 
      * A repository view with checkbox on the left.
      */

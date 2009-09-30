@@ -237,7 +237,7 @@ public class FilteredCheckboxTree extends Composite {
             filterComposite.setLayoutData(new GridData(SWT.FILL, SWT.BEGINNING, true, false));
         }
 
-        treeComposite = new Composite(this, SWT.NONE);
+        treeComposite = new Composite(this, SWT.BORDER);
         GridLayout treeCompositeLayout = new GridLayout();
         treeCompositeLayout.marginHeight = 0;
         treeCompositeLayout.marginWidth = 0;
