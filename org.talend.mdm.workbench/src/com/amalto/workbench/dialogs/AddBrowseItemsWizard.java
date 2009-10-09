@@ -141,7 +141,7 @@ public class AddBrowseItemsWizard extends Wizard{
 				}
             	view.setSearchableBusinessElements(keys.toArray(new String[]{}));
             	view.setViewableBusinessElements(keys.toArray(new String[]{}));
-            	view.setDescription("[EN:" + decl.getName() + "]");
+            	view.setDescription("[EN:" + decl.getName() + "][FR:" + decl.getName() + "]");
             	wrap.setWsView(view);
             	
             	
