@@ -358,6 +358,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             conditionsColumns[3].setColumnWidth(120);
             conditionViewer=new TisTableViewer(Arrays.asList(conditionsColumns),toolkit,routingExpressionsGroup);
             conditionViewer.setMainPage(this);
+            conditionViewer.setAddMulti(true);
             conditionViewer.create();
             conditionViewer.setHeight(110);
             
