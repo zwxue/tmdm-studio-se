@@ -744,6 +744,7 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
         conditionsColumns[3].setColumnWidth(120);
         conditionViewer=new TisTableViewer(Arrays.asList(conditionsColumns),this.getManagedForm().getToolkit(),composite);
         conditionViewer.setMainPage(this);
+        conditionViewer.setAddMulti(true);
         conditionViewer.create();
         conditionViewer.setHeight(110);
         return composite;

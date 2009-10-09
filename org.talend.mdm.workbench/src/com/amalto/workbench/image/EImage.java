@@ -13,6 +13,7 @@ public enum EImage {
 	ACTIVITY_CATEGORY("icons/activity_category.gif"),
 	ACTIVITY("icons/activity.gif"),
 	ADD_OBJ("icons/add_obj.gif"),
+	ADDMULTI_OBJ("icons/add.gif"),
 	ADDTSK_TSK("icons/addtsk_tsk.gif"),
 	ANNOTATION("icons/annotation.gif"),
 	APPINFO("icons/appinfo.gif"),

@@ -116,6 +116,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             viewableElementColumns[0].setColumnWidth(220);
             viewableViewer = new TisTableViewer(Arrays.asList(viewableElementColumns),toolkit,viewablehGroup);
             viewableViewer.setMainPage(this);
+            viewableViewer.setAddMulti(true);
             viewableViewer.create();
             viewableViewer.setHeight(110);
             //wrap.Wrap(this, viewableViewer);
@@ -126,7 +127,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             searchableElementColumns[0].setColumnWidth(220);
             searchableViewer = new TisTableViewer(Arrays.asList(searchableElementColumns),toolkit,searchGroup);
             searchableViewer.setMainPage(this);
-            searchableViewer.create();
+            searchableViewer.setAddMulti(true);
+            searchableViewer.create();            
             searchableViewer.setHeight(110);
             //wrap.Wrap(this, searchableViewer);
             
@@ -139,6 +141,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             conditionsColumns[3].setColumnWidth(120);
             conditionViewer=new TisTableViewer(Arrays.asList(conditionsColumns),toolkit,wcGroup);
             conditionViewer.setMainPage(this);
+            conditionViewer.setAddMulti(true);
             conditionViewer.create();
             conditionViewer.setHeight(110);
             

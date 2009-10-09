@@ -13,6 +13,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
@@ -26,6 +27,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.KeyValue;
@@ -39,6 +41,21 @@ public class TisTableViewer extends ComplexTableViewer{
 	protected Line copyLine;
 	private Button copyButton;
 	private Button pastButton;
+	private boolean addMulti;// 'addAll' and 'deleteAll' button will be added if this field is not null
+	
+	
+
+	public boolean isAddMulti() {
+		return addMulti;
+	}
+
+	public void setAddMulti(boolean addMulti) {
+		this.addMulti = addMulti;
+	}
+
+	private XpathSelectDialog xpathDialog;
+
+
 	public TisTableViewer(List<ComplexTableViewerColumn> columns,
 			FormToolkit toolkit, Composite parent) {
 		super(columns, toolkit, parent);		
@@ -84,7 +101,49 @@ public class TisTableViewer extends ComplexTableViewer{
 	        		markDirty();
 	         	};
 	        });		
-
+	        //Add Multi
+	        if(isAddMulti()){
+		        Button addAllButton=toolkit.createButton(stepUpDownComposite,"",SWT.PUSH | SWT.CENTER);
+		        addAllButton.setLayoutData(
+		                new GridData(SWT.FILL,SWT.FILL,false,false,1,1)
+		        );
+		        addAllButton.setToolTipText("Add multiple");
+		        addAllButton.setImage(ImageCache.getCreatedImage(EImage.ADDMULTI_OBJ.getPath()));
+		        addAllButton.addSelectionListener(new SelectionListener() {
+		        	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
+		        	@SuppressWarnings("unchecked")
+					public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+		        		if(xpathDialog==null){
+			        		xpathDialog = new XpathSelectDialog(
+			        				table.getShell(),
+			        				mainPage.getXObject().getParent(),"Select Multiple XPaths",
+			        				mainPage.getSite(),
+									true,
+									null								
+							);
+		        		}
+		        		xpathDialog.setBlockOnOpen(true);
+		        		xpathDialog.open();
+		        		
+		        		if (xpathDialog.getReturnCode() == Window.OK)  {
+		        			String[] xpaths=xpathDialog.getXpath().split("&");
+		        			for(String xpath: xpaths){
+			        		//check uniqueness by concatenating all the values
+			        		List<Line> list=(List<Line>)getViewer().getInput();
+			        		//Update the model
+			        		Line line =new Line(columns.toArray(new ComplexTableViewerColumn[columns.size()]),getLineValues(xpath,0));
+			        		list.add(line);	 
+		        			}
+			        		//update the instances viewer
+			        		viewer.setSelection(null);
+			        		viewer.refresh();
+			        		viewer.getTable().select(viewer.getTable().getItemCount()-1);
+		        			
+			        		markDirty();
+		        		}
+		         	};
+		        });			        	
+	        }
 	        deleteButton = toolkit.createButton(stepUpDownComposite,"",SWT.PUSH | SWT.CENTER);
 	        deleteButton.setToolTipText("Delete the selected item");
 	        deleteButton.setLayoutData(
@@ -106,6 +165,24 @@ public class TisTableViewer extends ComplexTableViewer{
 	        	};
 	        });
 	        deleteButton.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
+	        //delete all
+	        Button deleteAllButton = toolkit.createButton(stepUpDownComposite,"",SWT.PUSH | SWT.CENTER);
+	        deleteAllButton.setToolTipText("Delete all items");
+	        deleteAllButton.setLayoutData(
+	                new GridData(SWT.FILL,SWT.FILL,false,false,1,1)
+	        );
+	        deleteAllButton.addSelectionListener(new SelectionListener() {
+	        	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
+	        	@SuppressWarnings("unchecked")
+				public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+	        			List<Line> items=(List<Line>)viewer.getInput();
+	        			items.clear();
+	        			viewer.refresh();
+	        			markDirty();	        		
+	        	};
+	        });
+	        deleteAllButton.setImage(ImageCache.getCreatedImage(EImage.PROGRESS_REMALL.getPath()));
+	        
 	        upButton = toolkit.createButton(stepUpDownComposite,"",SWT.PUSH | SWT.CENTER);
 	        upButton.setToolTipText("Move up the selected item");
 	        upButton.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
@@ -368,5 +445,22 @@ public class TisTableViewer extends ComplexTableViewer{
 		mainComposite.setLayout(layout);
 		
 		createViewer();
+	}	
+	
+	protected String[] getLineValues(String fieldValue, int fieldIndex){
+		List<String> values=new ArrayList<String>();
+		for(int i=0; i<columns.size(); i++){
+			ComplexTableViewerColumn column=columns.get(i);
+			if(fieldIndex == i){
+				values.add(fieldValue);
+				continue;
+			}
+			String text = column.getNillValue();
+			if(column.isCombo() && column.getComboValues().length>0){
+				text= column.getComboValues()[0];
+			}		
+			values.add(text);
+		}
+		return values.toArray(new String[values.size()]);
 	}	
 }
