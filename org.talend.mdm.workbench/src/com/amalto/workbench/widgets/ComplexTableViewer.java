@@ -670,8 +670,9 @@ public class ComplexTableViewer {
 					}
 
 					public void mouseUp(MouseEvent e) {
-						// TODO Auto-generated method stub
-						deactive();
+						if(!isMouseInControl(e)){
+							deactive();
+						}
 					}
 					
 				});
@@ -679,6 +680,14 @@ public class ComplexTableViewer {
 			return xpath.getComposite();
 		}
 
+		boolean isMouseInControl(MouseEvent e){
+			if(e.widget instanceof Table){
+				if(xpath.getComposite().getBounds().contains(e.x,e.y)){
+					return true;
+				}
+			}
+			return false;
+		}
 		@Override
 		protected Object doGetValue() {
 			// TODO Auto-generated method stub
