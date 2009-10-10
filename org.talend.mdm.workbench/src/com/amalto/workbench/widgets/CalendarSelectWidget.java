@@ -44,7 +44,7 @@ public class CalendarSelectWidget {
 	        Calendar c= Calendar.getInstance();
 	        long yesterday = c.getTimeInMillis() - (1000*60*60*24);
 	        c.setTimeInMillis(yesterday);
-	        text.setText(sdf.format(c.getTime()));
+//	        text.setText(sdf.format(c.getTime()));
 	        text.pack();
         }
 
