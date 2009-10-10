@@ -89,7 +89,7 @@ public class LoginDialog extends Dialog {
 		endpointsCombo.setLayoutData(
 			new GridData(SWT.FILL,SWT.CENTER,true,false,1,1)
 		);
-		((GridData)endpointsCombo.getLayoutData()).widthHint = 300;
+		((GridData)endpointsCombo.getLayoutData()).widthHint = 400;
 		for (Iterator<String> iter = endpoints.iterator(); iter.hasNext(); ) {
 			String host = iter.next();
 			endpointsCombo.add(host);	
@@ -103,7 +103,7 @@ public class LoginDialog extends Dialog {
 		);
 		usernameLabel.setText("Username");
 
-		usernameText = new Text(composite, SWT.NONE);
+		usernameText = new Text(composite, SWT.BORDER);
 		usernameText.setLayoutData(
 			new GridData(SWT.FILL,SWT.CENTER,true,false,1,1)
 		);
@@ -115,7 +115,7 @@ public class LoginDialog extends Dialog {
 		);
 		passwordLabel.setText("Password");
 
-		passwordText = new Text(composite, SWT.PASSWORD);
+		passwordText = new Text(composite, SWT.PASSWORD|SWT.BORDER);
 		passwordText.setLayoutData(
 			new GridData(SWT.FILL,SWT.CENTER,true,false,1,1)
 		);
