@@ -162,7 +162,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
     					desc,
     					doc,
     					null,
-    					"Service Config"
+    					"Default Service Configuration"
     			);
     			dialog.addListener(new Listener() {
     				public void handleEvent(Event event) {dialog.close();}
