@@ -63,5 +63,13 @@
             name="Master Data Management">
       </perspective>
    </extension>
-
+   <!-- add the following to let MDM perspective to be show in TIS/TDQ -->
+  <extension
+         point="org.talend.core.talendperspectives">
+      <TalendPerspective
+            refPerspectiveId="org.talend.mdm.perspective"
+            talendPerspectiveId="org.talend.mdm.perspective">
+      </TalendPerspective>
+   </extension>
+   
 </plugin>
