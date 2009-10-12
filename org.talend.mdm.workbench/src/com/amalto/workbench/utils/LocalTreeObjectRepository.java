@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.dom4j.Attribute;
@@ -35,6 +36,7 @@ import com.amalto.workbench.views.ServerView;
 public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeViewerListener{
 	private Document doc;
 	private ServerView view;
+	private String url;
 	private boolean internalCheck = false;
 	
 	private static String config = System.getProperty("user.dir")+"/.treeObjectConfig.xml";
@@ -65,7 +67,8 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	public void startUp(ServerView vw, String ur)
 	{
 		 view = vw;
-		  
+		 url = ur;
+		 
 		 try {
 			  File configFile = new File(config);
 			  if (!configFile.exists())
@@ -85,20 +88,13 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			if (forceDelete())
-			{
-				MessageDialog.openWarning(
-						null, 
-						"parsing error",
-						"An exception occured in parsing the configuration document, all category information will lost"       						
-					);
+			if (forceDelete()) {
 				startUp(vw, ur);
 			}
-			
 		}
 	}
 	
-    protected boolean forceDelete()
+    private boolean forceDelete()
     {
     	File configFile = new File(config);
         boolean result = false;
@@ -108,6 +104,16 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
             System.gc();
             result = configFile.delete();
         }
+        
+        if (result)
+        {
+			MessageDialog.openWarning(
+					null, 
+					"parsing error",
+					"An exception occured in parsing the configuration document, all category information will lost"       						
+				);
+        }
+        
         return result;
     }
     
@@ -138,13 +144,21 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	{
 		if (internalCheck) return;
 		
-		switch (type) {
-		case IXObjectModelListener.ADD:
-			addChild(parent, child);
-			break;
-		case IXObjectModelListener.DELETE:
-			removeChild(parent, child);
-			break;
+		try
+		{
+			switch (type) {
+			case IXObjectModelListener.ADD:
+				addChild(parent, child);
+				break;
+			case IXObjectModelListener.DELETE:
+				removeChild(parent, child);
+				break;
+			}
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			startUp(view, url);
 		}
 	}
 	
@@ -180,13 +194,34 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 
 	}
 	
+	private String convertSpecCharToDigital(String res)
+	{
+		String cpy = "", trail = ".";
+		Pattern mask = Pattern.compile("[\\W]+");
+		for (int id = 0; id < res.length(); id++)
+		{
+			String slip = "" + res.charAt(id);
+			Matcher matcher = mask.matcher(slip);
+			if (matcher.find())
+			{
+				cpy += "" + (int)res.charAt(id);
+				trail += (int)res.charAt(id);
+			}
+			else
+				cpy +=slip;
+		}
+
+
+		return cpy + (trail.length() > 1 ? trail : "");
+	}
+	
 	private String filterOutBlank(String input)
 	{
-		Pattern BLANK = Pattern.compile("([\\s]+)");
-		String res = BLANK.matcher(input).replaceAll("");
+		Pattern mask = Pattern.compile("([\\s]+)");
+		String res = mask.matcher(input).replaceAll("");
 		res = res.replaceAll("\\[\\w+\\]", "");
 		
-		return 	res;	
+		return 	convertSpecCharToDigital(res);	
 	}
 	
     private Element getParentElement(TreeObject treeObj)
