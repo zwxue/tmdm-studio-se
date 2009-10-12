@@ -30,9 +30,10 @@ import com.amalto.workbench.webservices.WSGetItemsPivotIndexPivotWithKeysTypedCo
 import com.amalto.workbench.webservices.WSLinkedHashMap;
 import com.amalto.workbench.webservices.WSStringArray;
 import com.amalto.workbench.webservices.WSUniverse;
-import com.amalto.workbench.webservices.WSVersioningHistoryEntry;
-import com.amalto.workbench.webservices.WSVersioningTagObjects;
+import com.amalto.workbench.webservices.WSVersioningGetUniverseVersions;
 import com.amalto.workbench.webservices.WSVersioningTagUniverse;
+import com.amalto.workbench.webservices.WSVersioningUniverseVersions;
+import com.amalto.workbench.webservices.WSVersioningUniverseVersionsTagStructure;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.UniverseVersionTreeViewer;
 
@@ -100,6 +101,8 @@ public class VersioningUniverseDialog extends Dialog {
 						);
 					}
 					
+					treeViewer.refreshHistoryTable(getHistoryData());
+					
 				}
 								
 			});
@@ -114,7 +117,7 @@ public class VersioningUniverseDialog extends Dialog {
 	        		//TODO: Restore universe
 	            }
             });
-			treeViewer.setHisEntries(initData());
+			treeViewer.setHisEntries(getHistoryData());
 			treeViewer.createContents(composite);
 			
 		    return composite;
@@ -129,17 +132,24 @@ public class VersioningUniverseDialog extends Dialog {
 		}
 	}
 
-	private ArrayList<WSVersioningHistoryEntry> initData() {
-		//TODO: Init history universes in svn
-		ArrayList<WSVersioningHistoryEntry> history = new ArrayList<WSVersioningHistoryEntry>();
-//		//test
-//		WSVersioningHistoryEntry wsVersioningHistoryEntry=new WSVersioningHistoryEntry();
-//		wsVersioningHistoryEntry.setTag("Test Tag");
-//		wsVersioningHistoryEntry.setRevision(null);
-//		wsVersioningHistoryEntry.setDate("2009-09-30");
-//		wsVersioningHistoryEntry.setAuthor("hshu");
-//		wsVersioningHistoryEntry.setComments("test");
-//		history.add(wsVersioningHistoryEntry);
+	private ArrayList<WSVersioningUniverseVersionsTagStructure> getHistoryData() {
+		//Init history universes in svn
+		ArrayList<WSVersioningUniverseVersionsTagStructure> history = new ArrayList<WSVersioningUniverseVersionsTagStructure>();
+		try {
+			WSVersioningUniverseVersions universeVersions = port.versioningGetUniverseVersions(new WSVersioningGetUniverseVersions(null));
+			WSVersioningUniverseVersionsTagStructure[] tagsStructure = universeVersions.getTagStructure();
+			
+			if(tagsStructure!=null&&tagsStructure.length>0){
+				for (int i = 0; i < tagsStructure.length; i++) {
+					WSVersioningUniverseVersionsTagStructure tagStructure=tagsStructure[i];
+					history.add(tagStructure);
+				}
+			}
+			
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+
 		return history;
 	}
 	

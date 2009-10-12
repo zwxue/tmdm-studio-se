@@ -35,7 +35,7 @@ import com.amalto.workbench.providers.ServerTreeContentProvider;
 import com.amalto.workbench.providers.ServerTreeLabelProvider;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
-import com.amalto.workbench.webservices.WSVersioningHistoryEntry;
+import com.amalto.workbench.webservices.WSVersioningUniverseVersionsTagStructure;
 
 
 /**
@@ -69,7 +69,7 @@ public class UniverseVersionTreeViewer {
 	private SelectionListener tagSelectionListener;
 	private SelectionListener restoreSelectionListener;
 	private IDoubleClickListener tagsViewerDoubleClickListener;
-	private ArrayList<WSVersioningHistoryEntry> hisEntries;
+	private ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries;
 
     public UniverseVersionTreeViewer(IStructuredSelection selection,String defaultTagText, boolean isTagEditable) {
         this.selection = selection;
@@ -82,7 +82,7 @@ public class UniverseVersionTreeViewer {
         // Splitter
         final GridData data = new GridData();
         data.heightHint = 400;
-        data.widthHint = 680;
+        data.widthHint = 700;
         sash = new SashForm(parent, SWT.HORIZONTAL | SWT.SMOOTH);
         sash.setLayoutData(data);
 
@@ -345,7 +345,7 @@ public class UniverseVersionTreeViewer {
 		this.tagsViewerDoubleClickListener = tagsViewerDoubleClickListener;
 	}
 	
-	public void setHisEntries(ArrayList<WSVersioningHistoryEntry> hisEntries) {
+	public void setHisEntries(ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries) {
 		
 		this.hisEntries=hisEntries;
 
@@ -361,6 +361,10 @@ public class UniverseVersionTreeViewer {
 		
 		return vwidget.getTagText().getText().trim();
 
+	}
+    
+    public void refreshHistoryTable(ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries) {
+    	this.vwidget.refreshData(hisEntries);
 	}
 
 	/**
