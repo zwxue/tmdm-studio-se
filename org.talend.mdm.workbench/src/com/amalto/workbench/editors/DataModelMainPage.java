@@ -147,7 +147,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	protected TreeViewer viewer;
 	protected DrillDownAdapter drillDownAdapter;
 
-	private XSDNewConceptAction newConceptAction = null;
+//	private XSDNewConceptAction newConceptAction = null;
 	private XSDDeleteConceptAction deleteConceptAction = null;
 	private XSDDeleteConceptWrapAction deleteConceptWrapAction = null;
 	private XSDNewBrowseItemViewAction newBrowseItemAction = null;
@@ -847,7 +847,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	}
 
 	protected void createActions() {
-		this.newConceptAction = new XSDNewConceptAction(this);
+//		this.newConceptAction = new XSDNewConceptAction(this);
 		this.deleteConceptAction = new XSDDeleteConceptAction(this);
 		this.newBrowseItemAction = new XSDNewBrowseItemViewAction(this);
 		this.deleteConceptWrapAction = new XSDDeleteConceptWrapAction(this);
@@ -904,10 +904,10 @@ public class DataModelMainPage extends AMainPageV2 {
 		deleteConceptWrapAction.regisDelAction(XSDSimpleTypeDefinitionImpl.class, deleteTypeDefinition);
 	}
 
-    private int isTopElement(Object decl) {
-		if (!(decl instanceof XSDElementDeclaration)) {
-			return 2;
-		}
+    private int getElementType(Object decl) {
+//		if (!(decl instanceof XSDElementDeclaration)) {
+//			return 2;
+//		}
 
 		if (Util.getParent(decl) == decl) {
 			if (Util.checkConcept((XSDElementDeclaration) decl)) {
@@ -915,8 +915,20 @@ public class DataModelMainPage extends AMainPageV2 {
 			}
 			return 1;
 		}
-
-		return 2;
+		if(decl instanceof XSDComplexTypeDefinition)
+			return 2;
+		if(decl instanceof XSDIdentityConstraintDefinition)
+			return 3;
+		if(decl instanceof XSDXPathDefinition)
+			return 4;
+		if(decl instanceof XSDSimpleTypeDefinition &&!((XSDSimpleTypeDefinition)decl).getSchema().getSchemaForSchemaNamespace().equals((
+				(XSDSimpleTypeDefinition) decl).getTargetNamespace()))
+			return 5;
+		if(decl instanceof XSDAnnotation)
+			return 6;
+		if(decl instanceof XSDParticle)
+			return 7;
+		return -1;
 	}
     
 	private void hookDoubleClickAction()
@@ -925,11 +937,35 @@ public class DataModelMainPage extends AMainPageV2 {
 			public void doubleClick(DoubleClickEvent event) {
 				IStructuredSelection selection = ((IStructuredSelection) viewer
 						.getSelection());
-				int elem = isTopElement(selection.getFirstElement());
-				if (elem == 0) {
-					editConceptAction.run();
-				} else if (elem == 1) {
-					editElementAction.run();
+				int elem = getElementType(selection.getFirstElement());
+				switch (elem){
+					case 0:
+						editConceptAction.run();
+						break;
+					case 1:
+						editElementAction.run();
+						break;
+					case 2:
+						newComplexTypeAction.run();
+						break;
+					case 3:
+						editIdentityConstraintAction.run();
+						break;
+					case 4:
+						editXPathAction.run();
+						break;
+					case 5:
+						changeBaseTypeAction.run();
+						break;
+					case 6:
+						setAnnotationDescriptionsAction.run();
+						break;
+					case 7:
+						editParticleAction.run();
+						break;
+					case -1:
+						if(drillDownAdapter.canGoInto()==true)
+							drillDownAdapter.goInto();				
 				}
 			}
 		});
