@@ -23,6 +23,7 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.LineItem;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.VersionUtil;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModelPK;
@@ -170,7 +171,7 @@ public class VersioningXObjectAction extends Action{
 				
 				//get type
 				String type=null;
-				if(sampleXObject!=null)type=determineTypeByTreeObjectType(sampleXObject.getType());
+				if(sampleXObject!=null)type=VersionUtil.determineTypeByTreeObjectType(sampleXObject.getType());
 				if (type==null) {
 					MessageDialog.openWarning(
 							shell, 
@@ -187,7 +188,7 @@ public class VersioningXObjectAction extends Action{
 				if(treeObjects.size()>0){
 					instances=new String[treeObjects.size()];
 					for (int i = 0; i < treeObjects.size(); i++) {
-						instances[i]=determineInstanceByTreeObjectType(sampleXObject.getType(),treeObjects.get(i));
+						instances[i]=VersionUtil.determineInstanceByTreeObjectType(sampleXObject.getType(),treeObjects.get(i));
 					}
 				}
 				  
@@ -294,144 +295,6 @@ public class VersioningXObjectAction extends Action{
 					"An error occured trying to version the "+IConstants.TALEND+" object: "+e.getLocalizedMessage()
 			);
 		}		
-	}
-	
-
-	private String determineTypeByTreeObjectType(int xobjectType) {
-		String type = null;
-		switch (xobjectType) {
-		    case TreeObject._SERVER_ :
-		    	type="Root";
-				break;
-			/*
-			case TreeObject.INBOUND_ADAPTOR :
-				type =  "Inbound Adaptor";
-				break;
-			case TreeObject.INBOUND_PLUGIN:
-				type =  "Inbound Plugin";
-				break;
-			case TreeObject.DESTINATION :
-				type =  "Destination";
-				break;
-			case TreeObject.OUTBOUND_ADAPTOR:
-				type =  "Outbound Adaptor";
-				break;
-			case TreeObject.OUTBOUND_PLUGIN:
-				type =  "Outbound Plugin";
-				break;
-			case TreeObject.DOCUMENT:
-				type =  "Document";
-				break;
-			case TreeObject.ITEM:
-				type =  "Item";
-			*/
-			case TreeObject.VIEW:
-				type =  "View";
-				break;
-			case TreeObject.DATA_MODEL:
-				type =  "Data Model";
-				break;
-			/*
-			case TreeObject.SOURCE:
-				type =  "Source";
-				break;
-			*/
-			case TreeObject.DATA_CLUSTER:
-				type =  "Data Cluster";
-				break;
-			case TreeObject.SUBSCRIPTION_ENGINE:
-				type =  "Routing Orders";
-				break;
-			case TreeObject.ROLE:
-				type =  "Role";
-				break;
-			case TreeObject.STORED_PROCEDURE:
-				type =  "Stored Procedure";	
-				break;
-			case TreeObject.TRANSFORMER:
-				type =  "Transformer V2";
-				break;
-			case TreeObject.MENU:
-				type =  "Menu";
-				break;
-			case TreeObject.ROUTING_RULE:
-				type =  "Routing Rule";	
-				break;
-			case TreeObject.UNIVERSE:
-				type="Universe";
-				break;
-			case TreeObject.SYNCHRONIZATIONPLAN:
-				type="Synchronization Plan";
-				break;
-		}
-		return type;
-	}
-	
-	private String determineInstanceByTreeObjectType(int xobjectType,TreeObject xobject) {
-		String instance = null;
-		switch (xobjectType) {
-			/*
-			case TreeObject.INBOUND_ADAPTOR :
-				instance = (xobject.isXObject() ? ((WSInboundAdaptorPK)xobject.getWsKey()).getPk() : null);
-				break;
-			case TreeObject.INBOUND_PLUGIN:
-				instance = (xobject.isXObject() ? ((WSInboundPluginPK)xobject.getWsKey()).getPk() : null);
-				break;
-			case TreeObject.DESTINATION :
-				instance = (xobject.isXObject() ? ((WSDestinationPK)xobject.getWsKey()).getPk() : null);
-				break;
-			case TreeObject.OUTBOUND_ADAPTOR:
-				instance = (xobject.isXObject() ? ((WSOutboundAdaptorPK)xobject.getWsKey()).getPk() : null);
-				break;
-			case TreeObject.OUTBOUND_PLUGIN:
-				instance = (xobject.isXObject() ? ((WSOutboundPluginPK)xobject.getWsKey()).getPk() : null);
-				break;
-			case TreeObject.DOCUMENT:
-				instance = (xobject.isXObject() ? ((WSDocumentPK)xobject.getWsKey()).getPk() : null);
-				break;
-			case TreeObject.ITEM:
-				instance = (xobject.isXObject() ? ((WSItemPK)xobject.getWsKey()).getPk() : null);
-			*/
-			case TreeObject.VIEW:
-				instance = (xobject.isXObject() ? ((WSViewPK)xobject.getWsKey()).getPk() : null);
-				break;
-			case TreeObject.DATA_MODEL:
-				instance = (xobject.isXObject() ? ((WSDataModelPK)xobject.getWsKey()).getPk() : null);
-				break;
-			/*
-			case TreeObject.SOURCE:
-				instance = (xobject.isXObject() ? ((WSSourcePK)xobject.getWsKey()).getPk() : null);
-				break;
-			*/
-			case TreeObject.DATA_CLUSTER:
-				instance = (xobject.isXObject() ? ((WSDataClusterPK)xobject.getWsKey()).getPk() : null);
-				break;
-			case TreeObject.SUBSCRIPTION_ENGINE:
-				instance = null;
-				break;
-			case TreeObject.ROLE:
-				instance = (xobject.isXObject() ? ((WSRolePK)xobject.getWsKey()).getPk() : null);
-				break;
-			case TreeObject.STORED_PROCEDURE:	
-				instance = (xobject.isXObject() ? ((WSStoredProcedurePK)xobject.getWsKey()).getPk() : null);
-				break;
-			case TreeObject.TRANSFORMER:
-				instance = (xobject.isXObject() ? ((WSTransformerV2PK)xobject.getWsKey()).getPk() : null);
-				break;
-			case TreeObject.MENU:	
-				instance = (xobject.isXObject() ? ((WSMenuPK)xobject.getWsKey()).getPk() : null);
-				break;
-			case TreeObject.ROUTING_RULE:	
-				instance = (xobject.isXObject() ? ((WSRoutingRulePK)xobject.getWsKey()).getPk() : null);
-				break;
-			case TreeObject.UNIVERSE:
-				instance = (xobject.isXObject() ? ((WSUniversePK)xobject.getWsKey()).getPk() : null);
-				break;
-			case TreeObject.SYNCHRONIZATIONPLAN:
-				instance = (xobject.isXObject() ? ((WSSynchronizationPlanPK)xobject.getWsKey()).getPk() : null);
-				break;
-		}
-		return instance;
 	}
 	
 	public void runWithEvent(Event event) {

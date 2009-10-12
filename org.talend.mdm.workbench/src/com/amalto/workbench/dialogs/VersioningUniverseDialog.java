@@ -4,6 +4,10 @@ import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -17,9 +21,18 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
+import com.amalto.workbench.actions.VersioningProgressAction;
+import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.VersionUtil;
+import com.amalto.workbench.webservices.WSBackgroundJobPK;
 import com.amalto.workbench.webservices.WSGetCurrentUniverse;
+import com.amalto.workbench.webservices.WSGetItemsPivotIndexPivotWithKeysTypedContentEntry;
+import com.amalto.workbench.webservices.WSLinkedHashMap;
+import com.amalto.workbench.webservices.WSStringArray;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSVersioningHistoryEntry;
+import com.amalto.workbench.webservices.WSVersioningTagObjects;
+import com.amalto.workbench.webservices.WSVersioningTagUniverse;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.UniverseVersionTreeViewer;
 
@@ -48,26 +61,47 @@ public class VersioningUniverseDialog extends Dialog {
 			treeViewer.setTagSelectionListener(new SelectionListener() {
 				public void widgetDefaultSelected(SelectionEvent e) {}
 				public void widgetSelected(SelectionEvent e) {
-					MessageDialog.openError(
-							VersioningUniverseDialog.this.getShell(),
-							"Sorry", 
-							"Not supported yet! "
-					);
-					return;
 					
-//					if ("".equals(treeViewer.getTagText())) {
-//						MessageDialog.openError(VersioningUniverseDialog.this.getShell(), "Error", "Please enter a tag value");
-//						return;
-//					}
-//
-//					if ("".equals(treeViewer.getComment())) {
-//						MessageDialog.openError(VersioningUniverseDialog.this.getShell(), "Error", "Please enter a comment");
-//						return;
-//					}
-//					
-//					TreeObject[]  checkNodes=treeViewer.getCheckNodes();
-					//TODO: Tag universe
-				}				
+					if ("".equals(treeViewer.getTagText())) {
+						MessageDialog.openError(VersioningUniverseDialog.this.getShell(), "Error", "Please enter a tag value");
+						return;
+					}
+
+					if ("".equals(treeViewer.getComment())) {
+						MessageDialog.openError(VersioningUniverseDialog.this.getShell(), "Error", "Please enter a comment");
+						return;
+					}
+					
+					
+					TreeObject[]  checkNodes=treeViewer.getCheckNodes();
+					WSLinkedHashMap typeInstances=null;
+					
+					typeInstances = getTypeInstancesFromTreeObjects(checkNodes,typeInstances);
+					
+					
+					//Tag universe
+					try {
+				        WSBackgroundJobPK jobPK =
+				        	port.versioningTagUniverse(new WSVersioningTagUniverse(
+									null,
+									treeViewer.getTagText(),
+									treeViewer.getComment(),
+									typeInstances
+									));
+				        
+				        new VersioningProgressAction(VersioningUniverseDialog.this.getShell(),port,jobPK).run();
+				         
+					} catch (Exception exx) {
+						exx.printStackTrace();
+						MessageDialog.openError(
+								VersioningUniverseDialog.this.getShell(),
+								"Error", 
+								"Unable to tag the documents : "+exx.getLocalizedMessage()
+						);
+					}
+					
+				}
+								
 			});
 			treeViewer.setRestoreSelectionListener(new SelectionListener() {
 				public void widgetDefaultSelected(SelectionEvent e) {}
@@ -118,7 +152,7 @@ public class VersioningUniverseDialog extends Dialog {
 			
 			//timestamp
 			Date dateNow=new Date();
-			SimpleDateFormat  dateFormat=new SimpleDateFormat ("yyyyMMdd");
+			SimpleDateFormat  dateFormat=new SimpleDateFormat ("yyyyMMddHHmmss");
 		    String dateNowStr=dateFormat.format(dateNow);
 			tagName+="_"+dateNowStr;
 			
@@ -128,5 +162,41 @@ public class VersioningUniverseDialog extends Dialog {
         return tagName;
 	}
 	
+	private WSLinkedHashMap getTypeInstancesFromTreeObjects(
+			TreeObject[] checkNodes, WSLinkedHashMap typeInstances) {
+		Map<String, List> classifiedMap=new HashMap<String, List>();
+		if(checkNodes.length>0){
+			for (int i = 0; i < checkNodes.length; i++) {
+				
+				TreeObject checkNode=checkNodes[i];
+				String type=VersionUtil.determineTypeByTreeObjectType(checkNode.getType());
+				String instance=VersionUtil.determineInstanceByTreeObjectType(checkNode.getType(), checkNode);
+				
+				if(classifiedMap.get(type)==null){
+					List<String> instances=new ArrayList<String>();
+					instances.add(instance);
+					classifiedMap.put(type,instances);
+				}else{
+					List<String> instances=classifiedMap.get(type);
+					instances.add(instance);
+				}
+			}
+		}
+	    
+		if(classifiedMap.size()>0){
+			WSGetItemsPivotIndexPivotWithKeysTypedContentEntry[] typedContentEntries=new WSGetItemsPivotIndexPivotWithKeysTypedContentEntry[classifiedMap.size()];
+			int i=0;
+			for (Iterator iterator = classifiedMap.keySet().iterator(); iterator.hasNext();i++) {
+				String type = (String) iterator.next();
+				List<String> instancesList=classifiedMap.get(type);
+				String[] instances = instancesList.toArray(new String[instancesList.size()]);
+				WSGetItemsPivotIndexPivotWithKeysTypedContentEntry typedContentEntry=new WSGetItemsPivotIndexPivotWithKeysTypedContentEntry(type,new WSStringArray(instances));
+				typedContentEntries[i]=typedContentEntry;
+			}
+			
+			typeInstances=new WSLinkedHashMap(typedContentEntries);
+		}
+		return typeInstances;
+	}
 	
 }
