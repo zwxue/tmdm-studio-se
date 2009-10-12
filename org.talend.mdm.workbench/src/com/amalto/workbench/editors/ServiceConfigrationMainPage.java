@@ -253,10 +253,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 	
 	@Override
 	protected void commit() {
-		if(refreshing) return;
-		this.comitting = true;
 		saveChanges();
-		this.comitting = false;		
 	}
 
 	@Override
