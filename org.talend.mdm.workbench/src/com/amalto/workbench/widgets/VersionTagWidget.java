@@ -19,8 +19,14 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.amalto.workbench.webservices.WSVersioningHistoryEntry;
+import com.amalto.workbench.webservices.WSVersioningUniverseVersionsTagStructure;
 
+/**
+ * @author Starkey
+ * 
+ * Now it is used for universe only
+ *
+ */
 public class VersionTagWidget {
 
 	private Text tagText;
@@ -33,8 +39,8 @@ public class VersionTagWidget {
 
 	public VersionTagWidget(Composite parent, String resourcesName ,String defaultTagText,boolean isTagEditable,
 			                SelectionListener tagSelectionListener, SelectionListener restoreSelectionListener,IDoubleClickListener tagsViewerDoubleClickListener,
-			                ArrayList<WSVersioningHistoryEntry> hisEntries){
-		composite = new Composite(parent, SWT.NONE);
+			                ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries){
+		composite = new Composite(parent, SWT.FILL);
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 1;		
 		composite.setLayout(layout);
@@ -70,7 +76,7 @@ public class VersionTagWidget {
 				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 		);
 		commentText.setText("");
-		((GridData)commentText.getLayoutData()).widthHint=230;
+		((GridData)commentText.getLayoutData()).widthHint=250;
 		((GridData)commentText.getLayoutData()).heightHint=25;
 		commentText.forceFocus();
 
@@ -96,15 +102,16 @@ public class VersionTagWidget {
                 new GridData(SWT.FILL,SWT.FILL,true,true,4,1)
         );
         ((GridData)tagsViewer.getControl().getLayoutData()).heightHint=150;
+        ((GridData)tagsViewer.getControl().getLayoutData()).widthHint=250;
         tagsViewer.setContentProvider(new ArrayContentProvider());
         tagsViewer.setLabelProvider(new ITableLabelProvider() {
         	public String getColumnText(Object element, int columnIndex) {
-				WSVersioningHistoryEntry entry = (WSVersioningHistoryEntry) element;
+        		WSVersioningUniverseVersionsTagStructure entry = (WSVersioningUniverseVersionsTagStructure) element;
 				return
-						entry.getTag()+" - "+
-						entry.getComments()+"  ["+
-						entry.getDate()+" "+
-						entry.getAuthor()+"]";
+						entry.getTagName()+" - "+
+						entry.getLastComment()+"  ["+
+						entry.getLastDate()+" "+
+						entry.getLastAuthor()+"]";
         	}
         	public Image getColumnImage(Object element, int columnIndex) {
         		return null;
@@ -130,11 +137,11 @@ public class VersionTagWidget {
 		refreshData(hisEntries);
 	}
 	
-	private void refreshData(ArrayList<WSVersioningHistoryEntry> hisEntries) {
+	public void refreshData(ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries) {
 	
 		
 		if (hisEntries!=null&&hisEntries.size()>0) {
-			tagsViewer.setInput(hisEntries.toArray(new WSVersioningHistoryEntry[hisEntries.size()]));
+			tagsViewer.setInput(hisEntries.toArray(new WSVersioningUniverseVersionsTagStructure[hisEntries.size()]));
 			tagsViewer.setSelection(new StructuredSelection(hisEntries.get(0)));
 			restoreGroup.setEnabled(true);
 		}
