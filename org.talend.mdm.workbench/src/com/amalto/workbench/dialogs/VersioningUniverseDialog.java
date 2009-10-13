@@ -21,9 +21,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
+import com.amalto.workbench.actions.ServerRefreshAction;
 import com.amalto.workbench.actions.VersioningProgressAction;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.VersionUtil;
+import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSBackgroundJobPK;
 import com.amalto.workbench.webservices.WSGetCurrentUniverse;
 import com.amalto.workbench.webservices.WSGetItemsPivotIndexPivotWithKeysTypedContentEntry;
@@ -31,6 +33,7 @@ import com.amalto.workbench.webservices.WSLinkedHashMap;
 import com.amalto.workbench.webservices.WSStringArray;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSVersioningGetUniverseVersions;
+import com.amalto.workbench.webservices.WSVersioningRestoreUniverse;
 import com.amalto.workbench.webservices.WSVersioningTagUniverse;
 import com.amalto.workbench.webservices.WSVersioningUniverseVersions;
 import com.amalto.workbench.webservices.WSVersioningUniverseVersionsTagStructure;
@@ -41,13 +44,14 @@ public class VersioningUniverseDialog extends Dialog {
 	private IStructuredSelection sel;
 	private UniverseVersionTreeViewer treeViewer;
 	private XtentisPort port;
+	private TreeObject selectedXObject;
 	
-	public VersioningUniverseDialog(Shell parentShell,XtentisPort port,IStructuredSelection selection) {
+	public VersioningUniverseDialog(Shell parentShell,XtentisPort port,IStructuredSelection selection,TreeObject sampleXObject) {
 		
 		super(parentShell);
 		this.sel=selection;
 		this.port=port;
-		
+		this.selectedXObject=sampleXObject;
 	}
 	
 	protected Control createDialogArea(Composite parent) {
@@ -101,7 +105,11 @@ public class VersioningUniverseDialog extends Dialog {
 						);
 					}
 					
-					treeViewer.refreshHistoryTable(getHistoryData());
+					try {
+						treeViewer.refreshHistoryTable(getHistoryData());
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 					
 				}
 								
@@ -109,12 +117,56 @@ public class VersioningUniverseDialog extends Dialog {
 			treeViewer.setRestoreSelectionListener(new SelectionListener() {
 				public void widgetDefaultSelected(SelectionEvent e) {}
 				public void widgetSelected(SelectionEvent e) {
-					//TODO: Restore universe
+					//Restore universe
+					WSVersioningUniverseVersionsTagStructure entry = (WSVersioningUniverseVersionsTagStructure) ((IStructuredSelection)treeViewer.getTagsViewer().getSelection()).getFirstElement();
+					if (entry == null) return;
+					try {
+				        WSBackgroundJobPK jobPK = 
+					        port.versioningRestoreUniverse(new WSVersioningRestoreUniverse(
+					        		null,
+					        		entry.getTagName(),
+					        		entry.getClusters().getStrings()
+					    ));
+				        
+				        new VersioningProgressAction(VersioningUniverseDialog.this.getShell(),port,jobPK).run();
+
+					} catch (Exception exx) {
+						exx.printStackTrace();
+						MessageDialog.openError(
+								VersioningUniverseDialog.this.getShell(),
+								"Error", 
+								"Unable to restore the documents : "+exx.getLocalizedMessage()
+						);
+					}
+					ServerRefreshAction serverRefreshAction=new ServerRefreshAction(ServerView.show(),VersioningUniverseDialog.this.selectedXObject.getServerRoot());
+					serverRefreshAction.run();
 				}				
 			});
 			treeViewer.setTagsViewerDoubleClickListener(new IDoubleClickListener() {
 	        	public void doubleClick(DoubleClickEvent event) {
-	        		//TODO: Restore universe
+	        		//Restore universe
+					WSVersioningUniverseVersionsTagStructure entry = (WSVersioningUniverseVersionsTagStructure) ((IStructuredSelection)treeViewer.getTagsViewer().getSelection()).getFirstElement();
+					if (entry == null) return;
+					try {
+				        WSBackgroundJobPK jobPK = 
+					        port.versioningRestoreUniverse(new WSVersioningRestoreUniverse(
+					        		null,
+					        		entry.getTagName(),
+					        		entry.getClusters().getStrings()
+					    ));
+				        
+				        new VersioningProgressAction(VersioningUniverseDialog.this.getShell(),port,jobPK).run();
+
+					} catch (Exception exx) {
+						exx.printStackTrace();
+						MessageDialog.openError(
+								VersioningUniverseDialog.this.getShell(),
+								"Error", 
+								"Unable to restore the documents : "+exx.getLocalizedMessage()
+						);
+					}
+					ServerRefreshAction serverRefreshAction=new ServerRefreshAction(ServerView.show(),VersioningUniverseDialog.this.selectedXObject.getServerRoot());
+					serverRefreshAction.run();
 	            }
             });
 			treeViewer.setHisEntries(getHistoryData());
@@ -132,7 +184,7 @@ public class VersioningUniverseDialog extends Dialog {
 		}
 	}
 
-	private ArrayList<WSVersioningUniverseVersionsTagStructure> getHistoryData() {
+	private ArrayList<WSVersioningUniverseVersionsTagStructure> getHistoryData() throws Exception{
 		//Init history universes in svn
 		ArrayList<WSVersioningUniverseVersionsTagStructure> history = new ArrayList<WSVersioningUniverseVersionsTagStructure>();
 		try {
@@ -147,7 +199,7 @@ public class VersioningUniverseDialog extends Dialog {
 			}
 			
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			throw new Exception(e);
 		}
 
 		return history;

@@ -10,6 +10,7 @@ import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -365,6 +366,12 @@ public class UniverseVersionTreeViewer {
     
     public void refreshHistoryTable(ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries) {
     	this.vwidget.refreshData(hisEntries);
+	}
+    
+    public TableViewer getTagsViewer() {
+    	
+    	return this.vwidget.getTagsViewer();
+
 	}
 
 	/**
