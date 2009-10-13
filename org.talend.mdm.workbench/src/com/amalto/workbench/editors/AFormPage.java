@@ -6,6 +6,7 @@
  */
 package com.amalto.workbench.editors;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
@@ -41,7 +42,12 @@ public abstract class AFormPage extends FormPage {
 			refreshData();
 		this.refreshing = false;
 	}
-
+	
+	@Override
+	public void doSave(IProgressMonitor monitor) {
+		commit();
+		super.doSave(monitor);
+	}
 	/**
 	 * Refresh the form with the model content
 	 * 

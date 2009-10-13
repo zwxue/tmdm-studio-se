@@ -190,7 +190,8 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         serviceConfigurationsText.addModifyListener(new ModifyListener() {
         	public void modifyText(ModifyEvent e) {
         		if (refreshing) return;
-        		markDirty();
+        		//markDirty();
+        		ServiceConfigrationMainPage.this.markDirtyWithoutCommit();
         	}
         }); 
         checkButton=toolkit.createButton(serviceGroup, "Check", SWT.NONE);
@@ -241,12 +242,14 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 	
 	private WSPutVersioningSystemConfiguration getDefaultSvn(String svnConfig)throws Exception{
 		Node e=Util.parse(svnConfig).getDocumentElement();
+		String jndi=serviceNameCombo.getText().contains("/") ? serviceNameCombo.getText() : "amalto/local/service/"+serviceNameCombo.getText();
 		String url=Util.getFirstTextNode(e, "./url");
 		String username=Util.getFirstTextNode(e, "./username");
 		String password=Util.getFirstTextNode(e, "./password");
+		String autocommit=Util.getFirstTextNode(e, "./autocommit");
 		WSPutVersioningSystemConfiguration conf=new WSPutVersioningSystemConfiguration(new WSVersioningSystemConfiguration(
 		ICoreConstants.DEFAULT_SVN,ICoreConstants.DEFAULT_SVN,
-		url,username,password
+		url,username,password,autocommit,jndi
 		));
 		return conf;
 	}
