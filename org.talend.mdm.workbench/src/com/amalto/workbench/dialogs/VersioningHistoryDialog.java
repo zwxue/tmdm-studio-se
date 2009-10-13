@@ -134,7 +134,7 @@ public class VersioningHistoryDialog extends Dialog {
 			});
 
 			
-			hookContextMenu();
+			//hookContextMenu();
 
 			refreshData();
 			
