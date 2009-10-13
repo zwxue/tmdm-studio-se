@@ -209,7 +209,8 @@ public class VersioningXObjectAction extends Action{
 						dialog = new VersioningUniverseDialog(
 								shell,
 								Util.getPort(sampleXObject),
-								selection
+								selection,
+								sampleXObject
 						);
 						break;
 					default:
