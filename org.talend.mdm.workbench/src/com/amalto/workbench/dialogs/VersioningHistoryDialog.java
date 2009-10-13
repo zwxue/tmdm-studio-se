@@ -2,6 +2,9 @@ package com.amalto.workbench.dialogs;
 
 import java.util.ArrayList;
 
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -22,8 +25,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 
+import com.amalto.workbench.actions.VersioningCompareAction;
 import com.amalto.workbench.webservices.WSBoolean;
 import com.amalto.workbench.webservices.WSItemPK;
 import com.amalto.workbench.webservices.WSVersioningGetItemHistory;
@@ -129,7 +134,7 @@ public class VersioningHistoryDialog extends Dialog {
 			});
 
 			
-			//hookContextMenu();
+			hookContextMenu();
 
 			refreshData();
 			
@@ -272,5 +277,27 @@ public class VersioningHistoryDialog extends Dialog {
     	return fname;
 	  }
 		
+	
+	/**************************
+	* ListViewer  CONTEXT MENU
+	***************************/
+	
+	private void hookContextMenu() {
+		MenuManager menuMgr = new MenuManager("#PopupMenu");
+		menuMgr.setRemoveAllWhenShown(true);
+		menuMgr.addMenuListener(new IMenuListener() {
+			public void menuAboutToShow(IMenuManager manager) {
+				VersioningHistoryDialog.this.fillContextMenu(manager);
+			}
+		});
+		Menu menu = menuMgr.createContextMenu(revisionsViewer.getControl());
+		revisionsViewer.getControl().setMenu(menu);
+		//getSite().registerContextMenu(menuMgr, viewer);
+	}
+	
+	protected void fillContextMenu(IMenuManager manager) {
+		//TODO: to be supported
+		manager.add(new VersioningCompareAction());
+	}
 
 }
