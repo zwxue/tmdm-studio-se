@@ -39,6 +39,7 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -137,6 +138,7 @@ import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.providers.XSDTreeLabelProvider;
 import com.amalto.workbench.utils.DataModelFilter;
+import com.amalto.workbench.utils.FontUtils;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataModel;
 
@@ -460,10 +462,10 @@ public class DataModelMainPage extends AMainPageV2 {
 					}
 				}
 	        });
-			Label xsdLabel = toolkit.createLabel(mainComposite, "Schema",
-					SWT.NULL);
-			xsdLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
-					true, 2, 1));
+//			Label xsdLabel = toolkit.createLabel(mainComposite, "Schema",
+//					SWT.NULL);
+//			xsdLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
+//					true, 2, 1));
 			// get the XSDSchema
 			xsdSchema = getXSDSchema(wsObject.getXsdSchema());
 			createSash(mainComposite);
@@ -499,12 +501,33 @@ public class DataModelMainPage extends AMainPageV2 {
 
 	}// createCharacteristicsContent
 	
-	private void createSchemaTree(Composite parent){
-		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL
-				| SWT.V_SCROLL);
-		viewer.getControl().setLayoutData(
-				new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+	private void createSchemaTreeComp(Composite parent){
 		
+		
+//		SashForm schemaSash=new SashForm(parent,SWT.VERTICAL);
+//		new Label(schemaSash,SWT.BORDER).setText("Data-Model:Order");
+//		new Label(schemaSash,SWT.NONE).setText("Define the Order data-model");
+		
+		Composite schemaSash=new Composite(parent,SWT.NONE);
+		schemaSash.setLayout(new GridLayout());
+		schemaSash.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
+		schemaSash.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		Label title=new Label(schemaSash,SWT.VERTICAL);
+		title.setText("Data-model:Order");
+		title.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		title.setFont(FontUtils.getBoldFont(title.getFont()));
+		
+		Label des=new Label(schemaSash,SWT.VERTICAL);
+		des.setText("    Define the Order data-model");
+		des.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		
+		
+		viewer = new TreeViewer(schemaSash, SWT.MULTI | SWT.H_SCROLL
+				| SWT.V_SCROLL);
+		viewer.getControl().setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
+//		viewer.getControl().setLayoutData(
+//				new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+//		
 		drillDownAdapter = new DrillDownAdapter(viewer);
 		provider = new XSDTreeContentProvider(
 				this.getSite(), xsdSchema);
@@ -690,27 +713,44 @@ public class DataModelMainPage extends AMainPageV2 {
 	}
    public SashForm createSash(Composite parent) {
         // Splitter	   
-        sash = new SashForm(parent, SWT.HORIZONTAL | SWT.SMOOTH);
+        sash = new SashForm(parent, SWT.HORIZONTAL );
         sash.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
         ((GridData) sash.getLayoutData()).heightHint = 1000;
         GridLayout layout = new GridLayout();
         sash.setLayout(layout);
-        sash.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+//        sash.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
         // create schema tree
-        createSchemaTree(sash);
+        createSchemaTreeComp(sash);
         // create button
-        createButton();
+//        createButton();
         //create type tree
-        createTypeTree(sash);
+        createTypeTreeComp(sash);
         //init 
-        sash.setWeights(new int[]{28, 1, 0});
+        sash.setWeights(new int[]{50,50});
         return sash;
     }
-	private void createTypeTree(Composite parent){
-		typesViewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL
+	private void createTypeTreeComp(Composite parent){
+		Composite TypeSash=new Composite(parent,SWT.NONE);
+		TypeSash.setLayout(new GridLayout());
+		TypeSash.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
+		TypeSash.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		Label title=new Label(TypeSash,SWT.VERTICAL);
+		title.setText("Reusable types");
+		title.setFont(FontUtils.getBoldFont(title.getFont()));
+	       
+		title.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		Label des=new Label(TypeSash,SWT.VERTICAL);
+		des.setText("    Define the types reusable in Order");
+		des.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+	
+
+		
+		
+	 	typesViewer = new TreeViewer(TypeSash, SWT.MULTI | SWT.H_SCROLL
 				| SWT.V_SCROLL);
-		typesViewer.getControl().setLayoutData(
-				new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		typesViewer.getControl().setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
+//		typesViewer.getControl().setLayoutData(
+//				new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
 		typesDrillDownAdapter = new DrillDownAdapter(viewer);
 		typesProvider = new TypesContentProvider(
