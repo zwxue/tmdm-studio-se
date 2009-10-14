@@ -354,7 +354,8 @@ public class TransformerMainPage extends AMainPageV2 {
             		//((WSTransformerV2)getXObject().getWsObject())
             		transformer.setDescription(descriptionText.getText());
             		TransformerMainPage.this.comitting= false;
-            		markDirty();
+            		//markDirty();
+            		markDirtyWithoutCommit();
             	}
             });
             

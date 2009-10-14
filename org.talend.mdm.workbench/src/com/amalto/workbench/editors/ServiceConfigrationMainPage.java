@@ -191,7 +191,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         	public void modifyText(ModifyEvent e) {
         		if (refreshing) return;
         		//markDirty();
-        		ServiceConfigrationMainPage.this.markDirtyWithoutCommit();
+        		markDirtyWithoutCommit();
         	}
         }); 
         checkButton=toolkit.createButton(serviceGroup, "Check", SWT.NONE);

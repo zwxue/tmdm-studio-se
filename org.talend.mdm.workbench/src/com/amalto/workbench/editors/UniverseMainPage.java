@@ -97,7 +97,8 @@ public class UniverseMainPage extends AMainPageV2{
         	public void modifyText(ModifyEvent e) {
         		if (refreshing) return;
         		universe.setDescription(descriptionText.getText());
-        		markDirty();
+        		//markDirty();
+        		markDirtyWithoutCommit();
         	}
         }); 
         
@@ -114,7 +115,8 @@ public class UniverseMainPage extends AMainPageV2{
         	public void modifyText(ModifyEvent e) {
         		if (refreshing) return;
         		universe.setDefaultReversionID(defaultReversionIDText.getText().getText().trim());
-        		markDirty();
+        		//markDirty();
+        		markDirtyWithoutCommit();
         	}
         });
 

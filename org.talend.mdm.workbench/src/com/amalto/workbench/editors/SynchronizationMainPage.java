@@ -150,7 +150,8 @@ public class SynchronizationMainPage extends AMainPageV2{
         	public void modifyText(ModifyEvent e) {
         		if (refreshing) return;
         		syncPlan.description=descriptionText.getText().getText();
-        		markDirty();
+        		//markDirty();
+        		markDirtyWithoutCommit();
         	}
         });
 		

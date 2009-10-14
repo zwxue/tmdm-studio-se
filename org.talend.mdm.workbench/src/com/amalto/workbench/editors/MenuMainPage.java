@@ -109,7 +109,7 @@ public class MenuMainPage extends AMainPageV2 {
             		//commit as we go
             		WSMenu wsMenu = ((WSMenu)getXObject().getWsObject());
             		wsMenu.setDescription(descriptionText.getText());
-            		markDirty();
+            		markDirtyWithoutCommit();
             	}
             }); 
             

@@ -342,7 +342,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             serviceParametersText.addModifyListener(new ModifyListener() {
             	public void modifyText(ModifyEvent e) {
             		if (refreshing) return;
-            		markDirty();
+            		markDirtyWithoutCommit();
             	}
             }); 
 
