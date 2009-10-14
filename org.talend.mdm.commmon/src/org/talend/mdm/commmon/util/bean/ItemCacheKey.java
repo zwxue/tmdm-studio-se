@@ -1,4 +1,4 @@
-package com.amalto.core.util;
+package org.talend.mdm.commmon.util.bean;
 
 import java.util.Hashtable;
 
@@ -6,12 +6,11 @@ public class ItemCacheKey {
 	String revisionID;
 	String uniqueID;
 	String dataClusterID;
-	public ItemCacheKey(String rID,String uniqueID,String dataClusterID){		
-		this.revisionID=rID;
+	public ItemCacheKey(String revisionID,String uniqueID,String dataClusterID){		
 		
 		this.uniqueID=uniqueID;
-		this.dataClusterID=dataClusterID;
-		this.revisionID= this.revisionID==null?"":this.revisionID;
+		this.dataClusterID=dataClusterID==null?"__ROOT__":dataClusterID;
+		this.revisionID= (revisionID == null) || "".equals(revisionID)?"__HEAD__":revisionID;
 	}
 	
 	public String getRevisionID() {
@@ -47,6 +46,10 @@ public class ItemCacheKey {
 		return 10;
 	}
 	
+	@Override
+	public String toString() {
+		return revisionID+"."+dataClusterID+"."+uniqueID;
+	}
 	public static void main(String[] args) {
 		Hashtable<ItemCacheKey, String> hash=new Hashtable<ItemCacheKey, String>();
 		ItemCacheKey key1=new ItemCacheKey("11",null,"33");
