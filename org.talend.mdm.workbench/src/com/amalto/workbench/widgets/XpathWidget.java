@@ -79,7 +79,8 @@ public class XpathWidget implements  SelectionListener{
 			public void modifyText(ModifyEvent e) {
 				if (descriptionValue != null
 						&& !descriptionValue.equals(descriptionText.getText())) {
-					accommodation.markDirty();
+					//accommodation.markDirty();
+					accommodation.markDirtyWithoutCommit();
 				}
 				descriptionValue = descriptionText.getText();
 			}

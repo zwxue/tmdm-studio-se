@@ -273,6 +273,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener{
 	
 	public void textChanged(TextEvent event) {
 		if (this.refreshing) return;
+		//markDirty();
 		markDirty();
 	}
 		
