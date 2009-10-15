@@ -39,6 +39,7 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -516,14 +517,17 @@ public class DataModelMainPage extends AMainPageV2 {
 		title.setText("Data-model:Order");
 		title.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		title.setFont(FontUtils.getBoldFont(title.getFont()));
+		Color blue =new Color(schemaSash.getDisplay(),0,0,255);
+		title.setForeground(blue); 
+		title.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		
 		Label des=new Label(schemaSash,SWT.VERTICAL);
-		des.setText("    Define the Order data-model");
+		des.setText("Define the Order data-model");
 		des.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		
 		
 		viewer = new TreeViewer(schemaSash, SWT.MULTI | SWT.H_SCROLL
-				| SWT.V_SCROLL);
+				| SWT.V_SCROLL|SWT.BORDER);
 		viewer.getControl().setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
 //		viewer.getControl().setLayoutData(
 //				new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -737,17 +741,19 @@ public class DataModelMainPage extends AMainPageV2 {
 		Label title=new Label(TypeSash,SWT.VERTICAL);
 		title.setText("Reusable types");
 		title.setFont(FontUtils.getBoldFont(title.getFont()));
-	       
+		Color blue = new Color(TypeSash.getDisplay(), 0 , 0 , 255 );
+		title.setForeground(blue); 
 		title.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		
 		Label des=new Label(TypeSash,SWT.VERTICAL);
-		des.setText("    Define the types reusable in Order");
+		des.setText("Define the types reusable in Order");
 		des.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 	
 
 		
 		
 	 	typesViewer = new TreeViewer(TypeSash, SWT.MULTI | SWT.H_SCROLL
-				| SWT.V_SCROLL);
+				| SWT.V_SCROLL|SWT.BORDER);
 		typesViewer.getControl().setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
 //		typesViewer.getControl().setLayoutData(
 //				new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
