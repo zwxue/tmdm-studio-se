@@ -213,11 +213,13 @@ public class DataModelMainPage extends AMainPageV2 {
 	private MenuManager typesMenuMgr;
 	boolean isSchemaSelected=true;
 	XObjectEditor editor;
+	private String modelName="";
 	public DataModelMainPage(FormEditor editor) {
 		super(editor, DataModelMainPage.class.getName(), "Data Model "
 				+ ((XObjectEditorInput) editor.getEditorInput()).getName()
 				+Util.getRevision((TreeObject)((XObjectEditorInput)editor.getEditorInput()).getModel())
 				);
+		modelName=((XObjectEditorInput) editor.getEditorInput()).getName();
 		this.dataModelName =((XObjectEditorInput) editor.getEditorInput()).getName();
 		this.editor=(XObjectEditor)editor;
 	}
@@ -514,7 +516,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		schemaSash.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
 		schemaSash.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		Label title=new Label(schemaSash,SWT.VERTICAL);
-		title.setText("Data-model: Order");
+		title.setText("Data-model: "+modelName);
 		title.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		title.setFont(FontUtils.getBoldFont(title.getFont()));
 		Color blue =new Color(schemaSash.getDisplay(),0,0,255);
@@ -522,7 +524,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		title.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		
 		Label des=new Label(schemaSash,SWT.VERTICAL);
-		des.setText("Define the Order data-model");
+		des.setText("Define the "+modelName+" data-model");
 		des.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		
 		
@@ -678,7 +680,8 @@ public class DataModelMainPage extends AMainPageV2 {
          }
 		this.markDirty();
 	}
-	private void createButton(){
+	//remove this button
+/*	private void createButton(){
         Composite buttonComposite = toolkit.createComposite(sash);
         GridLayout layout=new GridLayout();
         layout.marginLeft=0;
@@ -714,7 +717,7 @@ public class DataModelMainPage extends AMainPageV2 {
             }
         });
 		
-	}
+	}*/
    public SashForm createSash(Composite parent) {
         // Splitter	   
         sash = new SashForm(parent, SWT.HORIZONTAL );
@@ -746,7 +749,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		title.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		
 		Label des=new Label(TypeSash,SWT.VERTICAL);
-		des.setText("Define the types reusable in Order");
+		des.setText("Define the types reusable in "+modelName);
 		des.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 	
 
