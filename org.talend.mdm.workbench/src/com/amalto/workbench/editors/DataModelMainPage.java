@@ -514,7 +514,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		schemaSash.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
 		schemaSash.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		Label title=new Label(schemaSash,SWT.VERTICAL);
-		title.setText("Data-model:Order");
+		title.setText("Data-model: Order");
 		title.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		title.setFont(FontUtils.getBoldFont(title.getFont()));
 		Color blue =new Color(schemaSash.getDisplay(),0,0,255);
