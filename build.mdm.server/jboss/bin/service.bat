@@ -74,7 +74,7 @@ if not errorlevel 1 (
 )
 echo Y > .r.lock
 jbosssvc.exe -p 1 "Starting %SVCDISP%" > run.log
-call run.bat < .r.lock >> run.log 2>&1
+call run.bat -b 0.0.0.0 < .r.lock >> run.log 2>&1
 jbosssvc.exe -p 1 "Shutdown %SVCDISP% service" >> run.log
 del .r.lock
 goto cmdEnd
@@ -103,7 +103,7 @@ jbosssvc.exe -s 1
 if exist ".r.lock" goto waitRun
 echo Y > .r.lock
 jbosssvc.exe -p 1 "Restarting %SVCDISP%" >> run.log
-call run.bat < .r.lock >> run.log 2>&1
+call run.bat -b 0.0.0.0 < .r.lock >> run.log 2>&1
 jbosssvc.exe -p 1 "Shutdown %SVCDISP% service" >> run.log
 del .r.lock
 goto cmdEnd
