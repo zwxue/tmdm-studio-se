@@ -833,8 +833,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 			this.shell = shell;
 			this.viewer = viewer;
 			setImageDescriptor(ImageCache.getImage( EImage.SYNCH.getPath()));
-			setText("Compare Item with Svn[HEAD]");
-			setToolTipText("Compare Item with svn[HEAD]");
+			setText("Compare with Lastest Revision");
+			setToolTipText("Compare with Lastest Revision");
 		}
 		
 		public void run() {
@@ -842,6 +842,14 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 				super.run();
 				
 				IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
+				int selectSize=selection.size();
+				if(selectSize==0){
+					MessageDialog.openWarning(null, "Warning", "Please select an item at least! ");
+					return;
+				}else if(selectSize>1){
+					MessageDialog.openWarning(null, "Warning", "This operation can not be supported for muti-item(s)! ");
+					return;
+				}
 				LineItem li = (LineItem) selection.getFirstElement();
 				
 				WSItem wsItem=Util.getPort(getXObject()).getItem(
@@ -853,20 +861,23 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 								)
 						)
 				);
+				
 				String xml = wsItem.getContent();		
 				WSString svnContent=null;
 				try{
 					svnContent=Util.getPort(getXObject()).versioningGetItemContent(new WSVersioningGetItemContent(ICoreConstants.DEFAULT_SVN,
-							new WSItemPK(wsItem.getWsDataClusterPK(),wsItem.getConceptName(),wsItem.getIds()),""
+							new WSItemPK(wsItem.getWsDataClusterPK(),wsItem.getConceptName(),wsItem.getIds()),"-1"
 					));	
 				}catch (Exception e) {
-					MessageDialog.openInformation(null, "Warning", "There is no item in HEAD revision of svn");
+					MessageDialog.openWarning(null, "Warning", e.getLocalizedMessage());
 					return;
 				}
+				
 				String itemcontent=Util.getItemContent(svnContent.getValue());
 				if(itemcontent!=null){
 					CompareManager.getInstance().compareTwoStream(xml, itemcontent);
 				}
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 				MessageDialog.openError(

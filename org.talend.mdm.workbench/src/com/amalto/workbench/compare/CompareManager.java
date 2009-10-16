@@ -1,5 +1,6 @@
 package com.amalto.workbench.compare;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 
 import org.eclipse.compare.CompareConfiguration;
@@ -51,10 +52,25 @@ public class CompareManager {
 		 
 		CompareConfiguration cc=new CompareConfiguration();
 		cc.setLeftEditable(true);
+		//cc.setLeftLabel("db");
 		ResourceCompareInput input=new ResourceCompareInput(cc);
 		StructuredSelection sel=new StructuredSelection(new IFile[]{leftF,rightF});
 		input.setSelection(sel, null);
 		CompareUI.openCompareEditor(input);
 
+	}
+	
+	public String getLeftContent() throws Exception{
+		  IProject prj=createProject("comparewithsvn");
+		  IFile leftF=prj.getFile("left");
+		  if(!leftF.exists()) return null;
+		  byte[] buf=new byte[1024];
+		  StringBuffer sb=new StringBuffer();
+		  BufferedInputStream in=new BufferedInputStream(leftF.getContents());
+		  while(in.read(buf) >0){
+		   sb.append(new String(buf));
+		   in.read(buf);
+		  }
+		  return sb.toString();
 	}
 }
