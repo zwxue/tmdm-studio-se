@@ -226,7 +226,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 						}
 						xmlEditor.refresh();
 					}
-					activePage.refreshPage();
+//					activePage.refreshPage();
 					
 					/*
 			    	for (int i = formPages.size()-1; i >=0 ; i--) {
