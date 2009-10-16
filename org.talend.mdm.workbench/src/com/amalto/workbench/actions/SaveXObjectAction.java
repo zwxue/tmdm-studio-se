@@ -5,6 +5,7 @@ import java.net.URL;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Event;
+import org.talend.mdm.commmon.util.core.CommonUtil;
 
 import sun.misc.ServiceConfigurationError;
 
@@ -132,7 +133,7 @@ public class SaveXObjectAction extends Action{
 			ErrorExceptionDialog.openError(
 					this.editor.getSite().getShell(), 
 					"Error Occured on Saving", 
-					"An error occured trying to save the "+IConstants.TALEND+" object instance: "+e.getLocalizedMessage()
+					CommonUtil.getErrMsgFromException(e)
 					);
 			state=1;
 		}		

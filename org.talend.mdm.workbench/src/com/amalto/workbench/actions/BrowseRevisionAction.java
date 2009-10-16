@@ -1,10 +1,10 @@
 package com.amalto.workbench.actions;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
+import com.amalto.workbench.dialogs.ErrorExceptionDialog;
 import com.amalto.workbench.editors.XObjectRevisionBrowser;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -38,7 +38,7 @@ public class BrowseRevisionAction extends Action {
        
 		} catch (Exception e) {
 			e.printStackTrace();
-			MessageDialog.openError(
+			ErrorExceptionDialog.openError(
 					server.getSite().getShell(),
 					"Error", 
 					"An error occured trying to open the view browser: "+e.getLocalizedMessage()
