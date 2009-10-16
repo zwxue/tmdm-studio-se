@@ -1596,5 +1596,19 @@ public class Util {
 		return rc;
 	}
 	
+	private static Pattern pLoad = Pattern.compile(".*?(<c>.*?</t>).*?(<p>(.*)</p>|<p/>).*",Pattern.DOTALL);
+	
+	public static String getItemContent(String xmlstring){
+        Matcher m = null;
+        m = pLoad.matcher(xmlstring);
+        if (m.matches()) {        	
+        	if(m.group(2)==null||m.group(2).equals("<p/>")){
+        		return "";
+        	}else{
+        		return m.group(3);
+        	}
+        }
+        return null;
+	}
 	
 }

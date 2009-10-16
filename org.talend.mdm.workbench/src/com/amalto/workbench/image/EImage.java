@@ -25,6 +25,7 @@ public enum EImage {
 	BKMRK_NAV("icons/bkmrk_nav.gif"),
 	BKMRK_TSK("icons/bkmrk_tsk.gif"),
 	BLANK("icons/blank.gif"),
+	SYNCH("icons/synch.gif"),
 	CATCHUP_RLS("icons/catchup_rls.gif"),
 	CATCHUPRELEASE_RLS("icons/catchuprelease_rls.gif"),
 	CHANGE_OBJ("icons/change_obj.gif"),
