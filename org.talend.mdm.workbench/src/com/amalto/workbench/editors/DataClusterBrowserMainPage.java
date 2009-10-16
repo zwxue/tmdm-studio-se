@@ -64,8 +64,10 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.talend.mdm.commmon.util.core.ICoreConstants;
 
 import com.amalto.workbench.actions.VersioningXObjectAction;
+import com.amalto.workbench.compare.CompareManager;
 import com.amalto.workbench.dialogs.DOMViewDialog;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -92,9 +94,11 @@ import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults;
 import com.amalto.workbench.webservices.WSPutItem;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 import com.amalto.workbench.webservices.WSRouteItemV2;
+import com.amalto.workbench.webservices.WSString;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniverseItemsRevisionIDs;
 import com.amalto.workbench.webservices.WSUniversePK;
+import com.amalto.workbench.webservices.WSVersioningGetItemContent;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.CalendarSelectWidget;
 import com.amalto.workbench.widgets.WidgetFactory;
@@ -581,6 +585,14 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 								VersioningXObjectAction.ACTION_TYPE_VERSIONS
 						)
 				);
+				//compare item with svn
+				manager.appendToGroup(
+						IWorkbenchActionConstants.MB_ADDITIONS,
+						new CompareItemWithSvnAction(
+								DataClusterBrowserMainPage.this.getSite().getShell(),
+								DataClusterBrowserMainPage.this.resultsViewer
+						)
+				);
 			}
 		});
 		Menu menu = menuMgr.createContextMenu(resultsViewer.getControl());
@@ -709,15 +721,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 		refreshData();
 	}	
 	
-
-	
-	/***************************************************************
-	 * Edit Item Action
-	 * @author bgrieder
-	 *
-	 ***************************************************************/
 	class EditItemAction extends Action{
-
 		protected Shell shell = null;
 		protected Viewer viewer;
 		
@@ -727,7 +731,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 			this.viewer = viewer;
 			setImageDescriptor(ImageCache.getImage( "icons/edit_obj.gif"));
 			setText("Edit Item");
-			setToolTipText("View as a DOM Tree or edit the XML source");
+			setToolTipText("View as a DOM Tree or edit the XML source");			
 		}
 		
 		public void run() {
@@ -812,6 +816,66 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 			super.runWithEvent(event);
 		}
 
+	}
+
+	
+	/***************************************************************
+	 * Compare item with svn
+	 *TODO 1.object compare 2. item/object save
+	 ***************************************************************/
+	class CompareItemWithSvnAction extends Action{
+
+		protected Shell shell = null;
+		protected Viewer viewer;
+		
+		public CompareItemWithSvnAction(Shell shell, Viewer viewer) {
+			super();
+			this.shell = shell;
+			this.viewer = viewer;
+			setImageDescriptor(ImageCache.getImage( EImage.SYNCH.getPath()));
+			setText("Compare Item with Svn[HEAD]");
+			setToolTipText("Compare Item with svn[HEAD]");
+		}
+		
+		public void run() {
+			try {
+				super.run();
+				
+				IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
+				LineItem li = (LineItem) selection.getFirstElement();
+				
+				WSItem wsItem=Util.getPort(getXObject()).getItem(
+						new WSGetItem(
+								new WSItemPK(
+										(WSDataClusterPK)getXObject().getWsKey(),
+										li.getConcept().trim(),
+										li.getIds()
+								)
+						)
+				);
+				String xml = wsItem.getContent();		
+				WSString svnContent=null;
+				try{
+					svnContent=Util.getPort(getXObject()).versioningGetItemContent(new WSVersioningGetItemContent(ICoreConstants.DEFAULT_SVN,
+							new WSItemPK(wsItem.getWsDataClusterPK(),wsItem.getConceptName(),wsItem.getIds()),""
+					));	
+				}catch (Exception e) {
+					MessageDialog.openInformation(null, "Warning", "There is no item in HEAD revision of svn");
+					return;
+				}
+				String itemcontent=Util.getItemContent(svnContent.getValue());
+				if(itemcontent!=null){
+					CompareManager.getInstance().compareTwoStream(xml, itemcontent);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				MessageDialog.openError(
+						shell,
+						"Error", 
+						"An error occured trying to compare item with svn: "+e.getLocalizedMessage()
+				);
+			}		
+		}
 	}
 	
 	
