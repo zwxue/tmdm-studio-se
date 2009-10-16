@@ -12,12 +12,13 @@ import java.util.Properties;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
+import org.talend.mdm.commmon.util.core.CommonUtil;
 
+import com.amalto.workbench.dialogs.ErrorExceptionDialog;
 import com.amalto.workbench.dialogs.LoginDialog;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -166,10 +167,10 @@ public class ServerLoginAction extends Action implements SelectionListener{
 			return;
 		} catch (InvocationTargetException ite) {
 			ite.printStackTrace();
-			MessageDialog.openError(
+			ErrorExceptionDialog.openError(
 					dialog.getShell(),
 					"Error", 
-					"Could not start login process "+ite.getCause().getLocalizedMessage()
+					CommonUtil.getErrMsgFromException(ite.getCause())
 			);
 		}
         

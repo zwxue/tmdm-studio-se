@@ -80,6 +80,7 @@ import org.eclipse.xsd.impl.XSDParticleImpl;
 import org.eclipse.xsd.impl.XSDSchemaImpl;
 import org.eclipse.xsd.impl.XSDSimpleTypeDefinitionImpl;
 import org.eclipse.xsd.impl.XSDXPathDefinitionImpl;
+import org.talend.mdm.commmon.util.core.CommonUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -890,8 +891,8 @@ public class DataModelMainPage extends AMainPageV2 {
 		} catch (Exception e) {
 			e.printStackTrace();
 			ErrorExceptionDialog.openError(this.getSite().getShell(),
-					"Error committing the page", "Error committing the page: "
-							+ e.getLocalizedMessage());
+					"Error committing the page", 
+							CommonUtil.getErrMsgFromException(e));
 		}
 	}
 

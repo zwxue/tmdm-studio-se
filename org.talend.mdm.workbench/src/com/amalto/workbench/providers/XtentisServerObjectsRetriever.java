@@ -432,7 +432,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 		} catch (Exception e) {
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
 			e.printStackTrace();
-			throw new InvocationTargetException(new XtentisException("Could not login: "+e.getLocalizedMessage()));
+			throw new InvocationTargetException(new XtentisException(e.getLocalizedMessage()));
 		}		
 	}//run
 	
