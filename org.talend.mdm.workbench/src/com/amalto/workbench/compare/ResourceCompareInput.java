@@ -12,7 +12,6 @@
 package com.amalto.workbench.compare;
 
 import java.lang.reflect.InvocationTargetException;
-import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,9 +19,6 @@ import org.eclipse.compare.CompareConfiguration;
 import org.eclipse.compare.CompareEditorInput;
 import org.eclipse.compare.ITypedElement;
 import org.eclipse.compare.ZipFileStructureCreator;
-
-
-
 import org.eclipse.compare.structuremergeviewer.DiffNode;
 import org.eclipse.compare.structuremergeviewer.DiffTreeViewer;
 import org.eclipse.compare.structuremergeviewer.Differencer;
@@ -45,7 +41,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.Window;
-import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -55,6 +50,12 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+
+import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XmlUtil;
+import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSPutItem;
 
 
 /**
@@ -74,6 +75,7 @@ public class ResourceCompareInput extends CompareEditorInput {
 	private IResource fRightResource;
 	private DiffTreeViewer fDiffViewer;
 	private IAction fOpenAction;
+	private CompareHeadInfo compareHeadInfo;
 	
 	class MyDiffNode extends DiffNode {
 		
@@ -217,6 +219,15 @@ public class ResourceCompareInput extends CompareEditorInput {
 						pickAncestor(i);
 			}
 		};
+	}
+	
+	
+	public CompareHeadInfo getCompareHeadInfo() {
+		return compareHeadInfo;
+	}
+
+	public void setCompareHeadInfo(CompareHeadInfo compareHeadInfo) {
+		this.compareHeadInfo = compareHeadInfo;
 	}
 
 	// If the compare is three-way, this method asks the user which resource
@@ -407,6 +418,11 @@ public class ResourceCompareInput extends CompareEditorInput {
 		return n;
 	}
 	
+	@Override
+	public boolean isSaveNeeded() {
+		return true;
+	}
+	
 	public void saveChanges(IProgressMonitor pm) throws CoreException {
 		super.saveChanges(pm);
 		if (fRoot instanceof DiffNode) {
@@ -423,7 +439,7 @@ public class ResourceCompareInput extends CompareEditorInput {
 	/*
 	 * Recursively walks the diff tree and commits all changes.
 	 */
-	private static void commit(IProgressMonitor pm, DiffNode node) throws CoreException {
+	private void commit(IProgressMonitor pm, DiffNode node) throws CoreException {
 		
 		if (node instanceof MyDiffNode)		
 			((MyDiffNode)node).clearDirty();
@@ -444,8 +460,39 @@ public class ResourceCompareInput extends CompareEditorInput {
 					commit(pm, (DiffNode) element);
 			}
 		}
+		
+		commitToDB();
 	}
 	
+	private void commitToDB() {
+		try {
+			String toCommitContent=CompareManager.getInstance().getLeftContent();
+			toCommitContent=XmlUtil.formatCompact(toCommitContent, "UTF-8");
+			if(this.compareHeadInfo.isItem()){
+				Util.getPort(compareHeadInfo.getXobject()).putItem(
+						new WSPutItem(
+								(WSDataClusterPK)compareHeadInfo.getXobject().getWsKey(),
+								toCommitContent,
+								"".equals(compareHeadInfo.getDataModelName()) ? null : new WSDataModelPK(compareHeadInfo.getDataModelName()),
+								false
+						)
+				);
+			}else{
+				//TODO add support for Object(s)
+				
+			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			MessageDialog.openError(
+					null,
+					"Error", 
+					"An error occured trying to commit: "+e.getLocalizedMessage()
+			);
+		}
+
+	}
 	/* (non Javadoc)
 	 * see IAdaptable.getAdapter
 	 */
