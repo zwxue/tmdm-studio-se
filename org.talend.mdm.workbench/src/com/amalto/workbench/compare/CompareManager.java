@@ -15,6 +15,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.StructuredSelection;
 
+import com.amalto.workbench.utils.XmlUtil;
+
 public class CompareManager {
 	static CompareManager instance=new CompareManager();
 	public static CompareManager getInstance(){
@@ -39,8 +41,18 @@ public class CompareManager {
         return prj;
 	}
 	
-	public void compareTwoStream(String left, String right) throws Exception{
+	public void compareTwoStream(String left, String right,boolean format,CompareHeadInfo compareHeadInfo) throws Exception{
+		compareTwoStream(left,right,format,compareHeadInfo,null,null);
+	}
+	
+	public void compareTwoStream(String left, String right,boolean format,CompareHeadInfo compareHeadInfo,String leftLabel, String rightLabel) throws Exception{
 		 if(left==null || right==null) return;
+		 
+		 if(format){
+			 left=XmlUtil.formatCompletely(left, "UTF-8");
+			 right=XmlUtil.formatCompletely(right, "UTF-8");
+		 }
+		 
 		 //prepare the two resources
 		 IProject prj=createProject("comparewithsvn");
 		 IFile leftF=prj.getFile("left");
@@ -52,10 +64,15 @@ public class CompareManager {
 		 
 		CompareConfiguration cc=new CompareConfiguration();
 		cc.setLeftEditable(true);
-		//cc.setLeftLabel("db");
+		cc.setRightEditable(false);
+		if(leftLabel==null)leftLabel="";
+		cc.setLeftLabel(leftLabel);
+		if(rightLabel==null)rightLabel="";
+		cc.setRightLabel(rightLabel);
 		ResourceCompareInput input=new ResourceCompareInput(cc);
 		StructuredSelection sel=new StructuredSelection(new IFile[]{leftF,rightF});
 		input.setSelection(sel, null);
+		input.setCompareHeadInfo(compareHeadInfo);
 		CompareUI.openCompareEditor(input);
 
 	}
@@ -71,6 +88,6 @@ public class CompareManager {
 		   sb.append(new String(buf));
 		   in.read(buf);
 		  }
-		  return sb.toString();
+		  return sb.toString().trim();
 	}
 }

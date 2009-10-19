@@ -67,6 +67,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.talend.mdm.commmon.util.core.ICoreConstants;
 
 import com.amalto.workbench.actions.VersioningXObjectAction;
+import com.amalto.workbench.compare.CompareHeadInfo;
 import com.amalto.workbench.compare.CompareManager;
 import com.amalto.workbench.dialogs.DOMViewDialog;
 import com.amalto.workbench.image.EImage;
@@ -588,7 +589,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 				//compare item with svn
 				manager.appendToGroup(
 						IWorkbenchActionConstants.MB_ADDITIONS,
-						new CompareItemWithSvnAction(
+						new CompareItemWithLatestRevisionAction(
 								DataClusterBrowserMainPage.this.getSite().getShell(),
 								DataClusterBrowserMainPage.this.resultsViewer
 						)
@@ -823,18 +824,18 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	 * Compare item with svn
 	 *TODO 1.object compare 2. item/object save
 	 ***************************************************************/
-	class CompareItemWithSvnAction extends Action{
+	class CompareItemWithLatestRevisionAction extends Action{
 
 		protected Shell shell = null;
 		protected Viewer viewer;
 		
-		public CompareItemWithSvnAction(Shell shell, Viewer viewer) {
+		public CompareItemWithLatestRevisionAction(Shell shell, Viewer viewer) {
 			super();
 			this.shell = shell;
 			this.viewer = viewer;
 			setImageDescriptor(ImageCache.getImage( EImage.SYNCH.getPath()));
-			setText("Compare with Lastest Revision");
-			setToolTipText("Compare with Lastest Revision");
+			setText("Compare with latest Revision");
+			setToolTipText("Compare with latest Revision");
 		}
 		
 		public void run() {
@@ -875,7 +876,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 				
 				String itemcontent=Util.getItemContent(svnContent.getValue());
 				if(itemcontent!=null){
-					CompareManager.getInstance().compareTwoStream(xml, itemcontent);
+					CompareHeadInfo compareHeadInfo=new CompareHeadInfo(getXObject());
+					compareHeadInfo.setItem(true);
+					compareHeadInfo.setDataModelName(wsItem.getDataModelName());
+					CompareManager.getInstance().compareTwoStream(xml,itemcontent,true,compareHeadInfo,"Local Content","Lastest Revision");
 				}
 				
 			} catch (Exception e) {
