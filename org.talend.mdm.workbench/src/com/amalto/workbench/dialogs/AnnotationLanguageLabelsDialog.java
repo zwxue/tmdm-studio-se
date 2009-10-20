@@ -132,7 +132,7 @@ public class AnnotationLanguageLabelsDialog extends Dialog {
         
         descriptionsViewer = new TableViewer(composite,SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER|SWT.FULL_SELECTION);
         descriptionsViewer.getControl().setLayoutData(    
-                new GridData(SWT.FILL,SWT.FILL,true,true,3,1)
+                new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
         );
         ((GridData)descriptionsViewer.getControl().getLayoutData()).heightHint=100;
         // Set up the underlying table
@@ -150,7 +150,18 @@ public class AnnotationLanguageLabelsDialog extends Dialog {
         table.setHeaderVisible(true);
         table.setLinesVisible(true);
        
-
+        Button delLabelButton = new Button(composite,SWT.PUSH);
+        delLabelButton.setLayoutData(
+                new GridData(SWT.NONE,SWT.NONE,false,false,1,1)
+        );
+        delLabelButton.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
+        delLabelButton.setToolTipText("Del");
+        delLabelButton.addSelectionListener(new SelectionListener() {
+        	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
+        	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+        		deleteItem();
+        	};
+        });
         // Create the cell editors --> We actually discard those later: not natural for an user
         CellEditor[] editors = new CellEditor[2];
         editors[0] = new ComboBoxCellEditor(table, Util.lang2iso.keySet().toArray(new String[]{}), SWT.READ_ONLY);
@@ -271,11 +282,7 @@ public class AnnotationLanguageLabelsDialog extends Dialog {
         	public void keyReleased(KeyEvent e) {
 //        		System.out.println("Table keyReleased() ");
         		if ((e.stateMask==0) && (e.character == SWT.DEL) && (descriptionsViewer.getSelection()!=null)) {
-        			DescriptionLine line = (DescriptionLine)((IStructuredSelection)descriptionsViewer.getSelection()).getFirstElement();
-        			String isoCode = Util.lang2iso.get(line.getLanguage());
-        			LinkedHashMap<String, String> descs = (LinkedHashMap<String, String>)descriptionsViewer.getInput(); 
-        			descs.remove(isoCode);
-        			descriptionsViewer.refresh();
+        			deleteItem();
         		}
         	}
         });
@@ -288,6 +295,14 @@ public class AnnotationLanguageLabelsDialog extends Dialog {
 	    return composite;
 	}
 
+	private void deleteItem()
+	{
+		DescriptionLine line = (DescriptionLine)((IStructuredSelection)descriptionsViewer.getSelection()).getFirstElement();
+		String isoCode = Util.lang2iso.get(line.getLanguage());
+		LinkedHashMap<String, String> descs = (LinkedHashMap<String, String>)descriptionsViewer.getInput(); 
+		descs.remove(isoCode);
+		descriptionsViewer.refresh();
+	}
 	
 	protected void createButtonsForButtonBar(Composite parent) {
 		super.createButtonsForButtonBar(parent);
