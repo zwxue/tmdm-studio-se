@@ -88,7 +88,6 @@ import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSTransformerPK;
 import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSViewPK;
-import com.amalto.workbench.webservices.WSWhereCondition;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.DescAnnotationComposite;
 import com.amalto.workbench.widgets.TisTableViewer;
@@ -1162,82 +1161,109 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 			markDirty();
 	}
 	 
+	protected void sortAndInstanceNameCombo(String[] items){
+		Arrays.sort(items,String.CASE_INSENSITIVE_ORDER);
+		instanceNameCombo.setItems(items);
+	}
+	
 	protected void feedInstanceNameCombo() throws Exception{
 		try {
 			XtentisPort port = Util.getPort(getXObject());
 			if ("Data Model".equals(objectTypesCombo.getText())) {
 				WSDataModelPK[] pks = port.getDataModelPKs(new WSRegexDataModelPKs(".*")).getWsDataModelPKs();
 				if (pks!=null) {
+					String[] items = new String[pks.length];
 					for (int i = 0; i < pks.length; i++) {
-						instanceNameCombo.add(pks[i].getPk());
+						items[i] = pks[i].getPk();
 					}
+					sortAndInstanceNameCombo(items);
 				}
 			} else if ("Data Cluster".equals(objectTypesCombo.getText())) {
 				WSDataClusterPK[] pks = port.getDataClusterPKs(new WSRegexDataClusterPKs(".*")).getWsDataClusterPKs();
 				if (pks!=null) {
+					String[] items = new String[pks.length];
 					for (int i = 0; i < pks.length; i++) {
-						instanceNameCombo.add(pks[i].getPk());
+						items[i] = pks[i].getPk();
 					}
+					sortAndInstanceNameCombo(items);
 				}
 			} else if ("Role".equals(objectTypesCombo.getText())) {
 				WSRolePK[] pks = port.getRolePKs(new WSGetRolePKs(".*")).getWsRolePK();
 				if (pks!=null) {
+					String[] items = new String[pks.length];
 					for (int i = 0; i < pks.length; i++) {
-						instanceNameCombo.add(pks[i].getPk());
+						items[i] = pks[i].getPk();
 					}
+					sortAndInstanceNameCombo(items);
 				}
 			} else if ("Menu".equals(objectTypesCombo.getText())) {
 				WSMenuPK[] pks = port.getMenuPKs(new WSGetMenuPKs(".*")).getWsMenuPK();
 				if (pks!=null) {
+					String[] items = new String[pks.length];
 					for (int i = 0; i < pks.length; i++) {
-						instanceNameCombo.add(pks[i].getPk());
+						items[i] = pks[i].getPk();
 					}
+					sortAndInstanceNameCombo(items);
 				}
 			} else if ("Routing Rule".equals(objectTypesCombo.getText())) {
 				WSRoutingRulePK[] pks = port.getRoutingRulePKs(new WSGetRoutingRulePKs(".*")).getWsRoutingRulePKs();
 				if (pks!=null) {
+					String[] items = new String[pks.length];
 					for (int i = 0; i < pks.length; i++) {
-						instanceNameCombo.add(pks[i].getPk());
+						items[i] = pks[i].getPk();
 					}
+					sortAndInstanceNameCombo(items);
 				}
 			} else if ("Stored Procedure".equals(objectTypesCombo.getText())) {
 				WSStoredProcedurePK[] pks = port.getStoredProcedurePKs(new WSRegexStoredProcedure(".*")).getWsStoredProcedurePK();
 				if (pks!=null) {
+					String[] items = new String[pks.length];
 					for (int i = 0; i < pks.length; i++) {
-						instanceNameCombo.add(pks[i].getPk());
+						items[i] = pks[i].getPk();
 					}
+					sortAndInstanceNameCombo(items);
 				}
 			} else if ("View".equals(objectTypesCombo.getText())) {
 				WSViewPK[] pks = port.getViewPKs(new WSGetViewPKs(".*")).getWsViewPK();
 				if (pks!=null) {
+					String[] items = new String[pks.length];
 					for (int i = 0; i < pks.length; i++) {
-						instanceNameCombo.add(pks[i].getPk());
+						items[i] = pks[i].getPk();
 					}
+					sortAndInstanceNameCombo(items);
 				}
 			} else if ("Transformer".equals(objectTypesCombo.getText())) {
 				WSTransformerPK[] pks = port.getTransformerPKs(new WSGetTransformerPKs(".*")).getWsTransformerPK();
 				if (pks!=null) {
+					String[] items = new String[pks.length];
 					for (int i = 0; i < pks.length; i++) {
-						instanceNameCombo.add(pks[i].getPk());
+						items[i] = pks[i].getPk();
 					}
+					sortAndInstanceNameCombo(items);
 				}
 				
 			}
 			else if ("Universe".equals(objectTypesCombo.getText())){
 				WSUniversePK[] pks = port.getUniversePKs(new WSGetUniversePKs(".*")).getWsUniversePK();
 				if (pks!=null) {
+					String[] items = new String[pks.length];
 					for (int i = 0; i < pks.length; i++) {
 						if (pks[i].getPk().equals("UNIVERSE-REVISION"))continue;
-						instanceNameCombo.add(pks[i].getPk());
+						items[i] = pks[i].getPk();
 					}
+					sortAndInstanceNameCombo(items);
 				}
 			}
+			
 		}catch (XtentisException e) {
 			throw(e);
 		} catch (Exception e) {
 			throw new XtentisException("Unable to find the instances of object "+objectTypesCombo.getText()+": "+e.getClass().getName()+": "+e.getMessage());
 		}
 	}
+	
+	
+	
 	
 //	/****************************************************************************
 //	 *   DND
