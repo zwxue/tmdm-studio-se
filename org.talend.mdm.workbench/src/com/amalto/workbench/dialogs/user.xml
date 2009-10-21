@@ -13,7 +13,6 @@
 </typeName>
 <typeName isAdmin="false" name ="Data Cluster">
 	<instance isWritable="true">UpdateReport</instance> 
-	<instance isWritable="true">Order</instance> 
 	<instance isWritable="false">Reporting</instance> 
 	<instance isWritable="true">PROVISIONING</instance> 
 </typeName>
@@ -36,13 +35,6 @@
 <typeName isAdmin="false" name ="Service">
 </typeName>
 <typeName isAdmin="false" name ="View">
-	<instance isWritable="false">Browse_items_Country</instance> 
-	<instance isWritable="true">MDM Reporting View</instance> 
-	<instance isWritable="false">Xtentis MDM Reporting</instance> 
-	<instance isWritable="false">Browse_items_Shipper</instance> 
-	<instance isWritable="false">Browse_items_Customer</instance> 
-	<instance isWritable="false">Browse_items_Person</instance> 
-	<instance isWritable="false">Browse_items_BusinessUnit</instance> 
 	<instance isWritable="true">Browse_items_.*</instance> 
 </typeName>
 <typeName isAdmin="false" name ="Menu">
@@ -55,11 +47,10 @@
 	<instance isWritable="false">ItemsTrash</instance> 
 </typeName>
 <typeName isAdmin="false" name ="Data Model">
-	<instance isWritable="true">CONF</instance> 
+	<instance isWritable="false">CONF</instance> 
 	<instance isWritable="false">UpdateReport</instance> 
-	<instance isWritable="false">Order</instance> 
 	<instance isWritable="false">Reporting</instance> 
-	<instance isWritable="true">PROVISIONING</instance> 
+	<instance isWritable="false">PROVISIONING</instance> 
 </typeName>
 <typeName isAdmin="true" name ="Synchronization Conflict">
 </typeName>
