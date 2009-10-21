@@ -31,6 +31,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.dnd.DND;
@@ -41,6 +42,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
@@ -58,6 +60,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.exolab.castor.xml.Marshaller;
 import org.w3c.dom.Element;
 
+import com.amalto.workbench.editors.RoleMainPage.Role.Specification.Instance;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.Line;
@@ -115,6 +118,7 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 	
 	protected Role role;
 	protected String roleName;
+	protected HashMap<String, Instance> inputList;
 	
     public RoleMainPage(FormEditor editor) {
         super(
@@ -174,7 +178,8 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
         					try {feedInstanceNameCombo();} catch (Exception ex){ex.printStackTrace();};
         					//instanceNameText.setText("");
         					instanceAccessCombo.select(0);
-        					instancesViewer.setInput(specification.getInstances());
+        					inputList=specification.getInstances();
+        					instancesViewer.setInput(inputList);
         				}
         				//blank parameters
         				paramsContainerComposite.setVisible(false);
@@ -207,7 +212,8 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 					instancesComposite.setVisible(! isAdminButton.getSelection());
 					specification.setAdmin(isAdminButton.getSelection());
     				if (! isAdminButton.getSelection()) {
-    					instancesViewer.setInput(specification.getInstances());
+    					inputList=specification.getInstances();
+    					instancesViewer.setInput(inputList);
     					instancesViewer.setSelection(null);
     				}
     				//blank params
@@ -312,8 +318,30 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
             
             //table.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-            new TableColumn(table, SWT.LEFT).setText(INSTANCE_NAME);
-            new TableColumn(table, SWT.CENTER).setText(INSTANCE_ACCESS);
+            TableColumn nameCol = new TableColumn(table, SWT.LEFT);
+            nameCol.setText(INSTANCE_NAME);
+            
+            nameCol.addSelectionListener(new SelectionAdapter() {
+                boolean sortType = true;
+                public void widgetSelected(SelectionEvent e) {
+                  sortType = !sortType;
+               
+                  instancesViewer.setSorter( sortType? new InstanceSorter(InstanceSorter.NAME) : new InstanceSorter(-InstanceSorter.NAME));
+                }
+              });    
+//            new TableColumn(table, SWT.CENTER).setText(INSTANCE_ACCESS);
+            
+            TableColumn accessCol = new TableColumn(table, SWT.LEFT);
+            accessCol.setText(INSTANCE_ACCESS);
+            
+            accessCol.addSelectionListener(new SelectionAdapter() {
+                boolean sortType = true;
+                public void widgetSelected(SelectionEvent e) {
+                  sortType = !sortType;
+               
+                  instancesViewer.setSorter( sortType? new InstanceSorter(InstanceSorter.ACCESS) : new InstanceSorter(-InstanceSorter.ACCESS));
+                }
+              });    
             table.getColumn(0).setWidth(200);
             table.getColumn(1).setWidth(200);
             for (int i = 2, n = table.getColumnCount(); i < n; i++) {
@@ -722,10 +750,12 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 		for (Iterator iter = parameters.iterator(); iter.hasNext(); ) {
 			String marshalledWC = (String) iter.next();
 //			System.out.println("Unmarshalling: "+marshalledWC);
-			Line line=new Line(
-					conditionsColumns,
-					Util.convertRoleWhereCondition(RoleWhereCondition.parse(marshalledWC)));
-			lines.add(line);
+			if(marshalledWC!=null){
+				Line line = new Line(conditionsColumns, Util
+						.convertRoleWhereCondition(RoleWhereCondition
+								.parse(marshalledWC)));
+				lines.add(line);
+			}
 		}
 		
 		//refresh the whole thing
@@ -1435,7 +1465,6 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 		}
 	}
 	
-	
 	/*
 	 * read a file in the plugin package
 	 * 
@@ -1469,5 +1498,40 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
         return fullPath;
     }
     */
+	private class InstanceSorter extends ViewerSorter {
+
+		private static final int NAME = 1;
+		private static final int ACCESS = 2;
+
+
+		private int sortType;
+
+		public InstanceSorter(int sortType) {
+			this.sortType = sortType;
+		}
+
+		public int compare(Viewer viewer, Object obj1, Object obj2) {
+			InstanceLine o1 = (InstanceLine) obj1;
+			InstanceLine o2 = (InstanceLine) obj2;
+			switch (sortType) {
+			case NAME: {
+
+				return o1.getInstanceName().compareTo(o2.getInstanceName());
+			}
+			case -NAME: {
+
+				return o2.getInstanceName().compareTo(o1.getInstanceName());
+			}
+			case ACCESS: {
+
+				return Boolean.toString(o1.isWritable).compareTo(Boolean.toString(o2.isWritable));
+			}
+			case -ACCESS: {
+				return Boolean.toString(o2.isWritable).compareTo(Boolean.toString(o1.isWritable));
+			}
+			}
+			return 0;
+		}
+	}
 	
 }
