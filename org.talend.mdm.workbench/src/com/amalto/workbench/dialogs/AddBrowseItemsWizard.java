@@ -146,7 +146,7 @@ public class AddBrowseItemsWizard extends Wizard{
             	view.setViewableBusinessElements(keys.toArray(new String[]{}));
             	StringBuffer desc=new StringBuffer();
             	for (String lan :  labels.keySet()) {
-            		desc.append("["+lan.toUpperCase()+":" + decl.getName() + "]");
+            		desc.append("["+lan.toUpperCase()+":" +labels.get(lan) + "]");
 				}
             	view.setDescription(desc.toString());
             	wrap.setWsView(view);
