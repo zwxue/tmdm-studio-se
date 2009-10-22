@@ -73,7 +73,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 		
 			
         //Routing Expressions            
-        Composite serviceGroup = this.getNewSectionComposite("");
+        Composite serviceGroup = this.getNewSectionComposite("Services List");
         serviceGroup.setLayout(new GridLayout(2,false));            
         //Service Name
         Label serviceNameLabel = toolkit.createLabel(serviceGroup,  "Service", SWT.NULL);
