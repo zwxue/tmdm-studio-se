@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -64,6 +65,7 @@ public class AddBrowseItemsWizard extends Wizard{
 	private XtentisPort port;
 	private List<XSDElementDeclaration> declList = null;
 	private Map<String, List<Line>>  browseItemToRoles = new HashMap<String , List<Line>>();
+	private LinkedHashMap<String, String> labels;
 	private static String INSTANCE_NAME = "Browse Item View";
 	private static String BROWSE_ITEMS = "Browse_items_";
 	
@@ -72,11 +74,12 @@ public class AddBrowseItemsWizard extends Wizard{
 		new ComplexTableViewerColumn("Access", false, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,new String[] {},0)
 		};
 	
-	public AddBrowseItemsWizard(AMainPageV2 launchPage, List<XSDElementDeclaration> list) {
+	public AddBrowseItemsWizard(AMainPageV2 launchPage, List<XSDElementDeclaration> list, LinkedHashMap<String, String> labels) {
 		super();
-		setWindowTitle("Generate default Browse items views");
+		setWindowTitle("Generate Browse items views with the labels");
 		page = launchPage;
 		declList = list;
+		this.labels=labels;
 		for (XSDElementDeclaration dl : declList) {
 			browseItemToRoles.put(BROWSE_ITEMS + dl.getName(), new ArrayList<Line>());
 		}
@@ -141,7 +144,11 @@ public class AddBrowseItemsWizard extends Wizard{
 				}
             	view.setSearchableBusinessElements(keys.toArray(new String[]{}));
             	view.setViewableBusinessElements(keys.toArray(new String[]{}));
-            	view.setDescription("[EN:" + decl.getName() + "][FR:" + decl.getName() + "]");
+            	StringBuffer desc=new StringBuffer();
+            	for (String lan :  labels.keySet()) {
+            		desc.append("["+lan.toUpperCase()+":" + decl.getName() + "]");
+				}
+            	view.setDescription(desc.toString());
             	wrap.setWsView(view);
             	
             	
