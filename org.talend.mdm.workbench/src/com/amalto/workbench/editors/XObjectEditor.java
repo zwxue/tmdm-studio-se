@@ -34,7 +34,7 @@ import com.amalto.workbench.webservices.WSDataModel;
 
 public class XObjectEditor extends FormEditor implements IXObjectModelListener{	
 	
-	private ArrayList<IFormPage> formPages = new ArrayList<IFormPage>();
+	public ArrayList<IFormPage> formPages = new ArrayList<IFormPage>();
 	private TreeObject initialXObject = null;  //backup
 	
 	protected boolean saveInProgress = false;
@@ -250,7 +250,8 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
         super.pageChange(newPageIndex);
                 
     	if(xmlEditor!=null )xmlEditor.refresh();
-    	if(xmlEditor.isDirty()) page.refreshPage();
+    	if(xmlEditor.isDirty()||xmlEditor.isModified())
+    		page.refreshPage();
     	linkDirty(page, isdirty);   
                           
     }
