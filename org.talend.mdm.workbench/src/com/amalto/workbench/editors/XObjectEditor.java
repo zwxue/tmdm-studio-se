@@ -250,7 +250,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
         super.pageChange(newPageIndex);
                 
     	if(xmlEditor!=null )xmlEditor.refresh();
-    	page.refreshPage();
+    	if(xmlEditor.isDirty()) page.refreshPage();
     	linkDirty(page, isdirty);   
                           
     }
