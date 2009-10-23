@@ -22,6 +22,16 @@ public class XMLEditor extends TextEditor {
 	private ColorManager colorManager;
 	XObjectEditor editor;
 	int state=-1;
+	private boolean modified=false;
+
+	public boolean isModified() {
+		return modified;
+	}
+
+	public void setModified(boolean modified) {
+		this.modified = modified;
+	}
+
 	public XMLEditor(XObjectEditor editor,TreeObject xobject) {
 		super();
 		this.xobject=xobject;
@@ -85,7 +95,7 @@ public class XMLEditor extends TextEditor {
 		schema=schema.replaceAll("xmlns\\s*=\\s*\"[^\"]*\"", "");
 		//end    	
 		wsObject.setXsdSchema(schema);
-		
+		setModified(true);
 		SaveXObjectAction action=new SaveXObjectAction(editor);
 		action.run();
 		state=action.getState();
