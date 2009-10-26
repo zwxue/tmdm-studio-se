@@ -128,7 +128,7 @@ public class XpathSelectDialog extends Dialog {
 		GridData dg= new GridData(SWT.FILL,SWT.FILL,false,true,1,1);
 		datamoelsLabel.setLayoutData(dg);
 		datamoelsLabel.setText("Data Models:");
-		dg= new GridData(SWT.FILL,SWT.FILL,true,true,2,1);
+		dg= new GridData(SWT.FILL,SWT.FILL,true,true,1,1);
 		dg.widthHint=400;
 		dataModelCombo = new Combo(composite,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
 		dataModelCombo.setLayoutData(dg);
