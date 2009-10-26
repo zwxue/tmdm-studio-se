@@ -30,6 +30,8 @@ public class XpathWidget implements  SelectionListener{
 	
 	private Composite xpathAntionHolder;
 	private Button annotationButton;
+
+
 	private Text descriptionText;
 	private String descriptionValue;
 	private AMainPageV2 accommodation;
@@ -156,6 +158,7 @@ public class XpathWidget implements  SelectionListener{
 			descriptionText.setText(dlg.getXpath());
 			dataModelName = dlg.getDataModelName();
 			dlg.close();
+			setOutFocus();
 		}
 	}
 	public Composite getComposite()
@@ -177,6 +180,15 @@ public class XpathWidget implements  SelectionListener{
 	}
 	public Text getTextWidget(){
 		return descriptionText;
+	}
+
+	public void setOutFocus(){
+		descriptionText.setFocus();
+		descriptionText.setText(descriptionText.getText());
+		int start = descriptionText.getText().length();
+		int end = descriptionText.getSelection().y;
+		descriptionText.setSelection(start);
+		
 	}
 	
 }
