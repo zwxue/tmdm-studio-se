@@ -12,9 +12,13 @@ import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.xsd.XSDAnnotation;
+import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDEnumerationFacet;
 import org.eclipse.xsd.XSDFractionDigitsFacet;
 import org.eclipse.xsd.XSDLengthFacet;
@@ -57,8 +61,19 @@ public class XSDEditFacetAction extends UndoAction{
 	public IStatus doAction() {
 		try {
 			
-			ISelection selection = page.getTreeViewer().getSelection();
-			std = (XSDSimpleTypeDefinition)((IStructuredSelection)selection).getFirstElement();
+			IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
+			
+            XSDComponent xSDCom=null;
+            if(selection.getFirstElement() instanceof XSDSimpleTypeDefinition)
+            	std = (XSDSimpleTypeDefinition)selection.getFirstElement();
+            else{
+            	TreePath tPath=((TreeSelection)selection).getPaths()[0];
+            	for (int i = 0; i < tPath.getSegmentCount(); i++) {
+					if(tPath.getSegment(i) instanceof XSDSimpleTypeDefinition)
+						std =(XSDSimpleTypeDefinition)(tPath.getSegment(i));
+            	}
+            }
+//			std = (XSDSimpleTypeDefinition)((IStructuredSelection)selection).getFirstElement();
 				/**
 				 * totalDigits, fractionDigits, maxInclusive, maxExclusive, minInclusive, minExclusive		
 				 */

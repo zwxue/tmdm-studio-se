@@ -4,10 +4,13 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComponent;
 
 import com.amalto.workbench.dialogs.SimpleXpathInputDialog;
@@ -30,10 +33,21 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction{
 	
 	public IStatus doAction() {
 		try {
-            IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
-            XSDAnnotationsStructure struc = new XSDAnnotationsStructure((XSDComponent)selection.getFirstElement());
+            IStructuredSelection selection = (TreeSelection)page.getTreeViewer().getSelection();
+            XSDComponent xSDCom=null;
+            if(selection.getFirstElement() instanceof XSDAnnotation)
+            	xSDCom = (XSDAnnotation)selection.getFirstElement();
+            else{
+            	TreePath tPath=((TreeSelection)selection).getPaths()[0];
+            	for (int i = 0; i < tPath.getSegmentCount(); i++) {
+					if(tPath.getSegment(i) instanceof XSDAnnotation)
+						xSDCom =(XSDAnnotation)(tPath.getSegment(i));
+            	}
+            }
+ 		   XSDAnnotationsStructure struc =new XSDAnnotationsStructure(xSDCom);
+            
             if (struc.getAnnotation() == null) {
-            	throw new RuntimeException("Unable to edit an annotation for object of type "+selection.getFirstElement().getClass().getName());
+            	throw new RuntimeException("Unable to edit an annotation for object of type "+xSDCom.getClass().getName());
             }
             
        		
@@ -62,7 +76,7 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction{
        		
        		if (struc.hasChanged()) {
        			page.refresh();
-       			page.getTreeViewer().expandToLevel(selection.getFirstElement(), 2);
+       			page.getTreeViewer().expandToLevel(xSDCom, 2);
        			page.markDirty();
        		}
        		

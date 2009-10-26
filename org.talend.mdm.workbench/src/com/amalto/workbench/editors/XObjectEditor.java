@@ -309,5 +309,8 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 		return xmlEditor;
 	}
     
-
+	public int getCurrentPage() {
+		// TODO Auto-generated method stub
+		return super.getCurrentPage();
+	}
 }

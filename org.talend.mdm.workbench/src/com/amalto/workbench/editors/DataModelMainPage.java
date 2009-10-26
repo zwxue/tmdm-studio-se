@@ -61,15 +61,27 @@ import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDConcreteComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
+import org.eclipse.xsd.XSDEnumerationFacet;
 import org.eclipse.xsd.XSDFacet;
+import org.eclipse.xsd.XSDFractionDigitsFacet;
 import org.eclipse.xsd.XSDIdentityConstraintCategory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
+import org.eclipse.xsd.XSDLengthFacet;
+import org.eclipse.xsd.XSDMaxExclusiveFacet;
+import org.eclipse.xsd.XSDMaxInclusiveFacet;
+import org.eclipse.xsd.XSDMaxLengthFacet;
+import org.eclipse.xsd.XSDMinExclusiveFacet;
+import org.eclipse.xsd.XSDMinInclusiveFacet;
+import org.eclipse.xsd.XSDMinLengthFacet;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
+import org.eclipse.xsd.XSDPatternFacet;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTerm;
+import org.eclipse.xsd.XSDTotalDigitsFacet;
 import org.eclipse.xsd.XSDTypeDefinition;
+import org.eclipse.xsd.XSDWhiteSpaceFacet;
 import org.eclipse.xsd.XSDWildcard;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
@@ -864,7 +876,8 @@ public class DataModelMainPage extends AMainPageV2 {
 			typesViewer.setInput(getSite());
 			
 			//refresh xmleditor
-			if(getEditor().getXmlEditor()!=null)getEditor().getXmlEditor().refresh(getXObject());
+			if(getEditor().getXmlEditor()!=null&&getEditor().getCurrentPage() ==1)
+				getEditor().getXmlEditor().refresh(getXObject());
 		} catch (Exception e) {
 			e.printStackTrace();
 			ErrorExceptionDialog.openError(this.getSite().getShell(),
@@ -971,13 +984,68 @@ public class DataModelMainPage extends AMainPageV2 {
 			return 3;
 		if(decl instanceof XSDXPathDefinition)
 			return 4;
-		if(decl instanceof XSDSimpleTypeDefinition &&!((XSDSimpleTypeDefinition)decl).getSchema().getSchemaForSchemaNamespace().equals((
-				(XSDSimpleTypeDefinition) decl).getTargetNamespace()))
+//		if(decl instanceof XSDSimpleTypeDefinition &&!((XSDSimpleTypeDefinition)decl).getSchema().getSchemaForSchemaNamespace().equals((
+//				(XSDSimpleTypeDefinition) decl).getTargetNamespace()))
+		if(decl instanceof XSDSimpleTypeDefinition)
 			return 5;
 		if(decl instanceof XSDAnnotation)
 			return 6;
 		if(decl instanceof XSDParticle)
 			return 7;
+		if(decl instanceof XSDWhiteSpaceFacet)
+			return 201;
+		if(decl instanceof XSDLengthFacet)
+			return 202;
+		if(decl instanceof XSDMinLengthFacet)
+			return 203;
+		if(decl instanceof XSDMaxLengthFacet)
+			return 204;
+		if(decl instanceof XSDTotalDigitsFacet)
+			return 205;
+		if(decl instanceof XSDFractionDigitsFacet)
+			return 206;
+		if(decl instanceof XSDMaxInclusiveFacet)
+			return 207;
+		if(decl instanceof XSDMaxExclusiveFacet)
+			return 208;
+		if(decl instanceof XSDMinInclusiveFacet)
+			return 209;
+		if(decl instanceof XSDMinExclusiveFacet)
+			return 210;
+		if(decl instanceof XSDPatternFacet)
+			return 211;
+		if(decl instanceof XSDEnumerationFacet)
+			return 212;
+		if(decl instanceof Element)
+			{	Element e = (Element) decl;
+			if (e.getLocalName().equals("appinfo")) {
+			}
+				String source = e.getAttribute("source");
+				if (source!=null) {
+					if (source.startsWith("X_Label_")) {
+						return 101;
+					} else if (source.equals("X_ForeignKey")) {
+						return 102;
+					} else if (source.equals("X_ForeignKeyInfo")) {
+						return 103;
+					} else if (source.equals("X_SourceSystem")) {
+						return 104;
+					} else if (source.equals("X_TargetSystem")) {
+						return 105;
+					} else if (source.startsWith("X_Description_")) {
+						return 106;
+					} else if (source.equals("X_Write")) {
+						return 107;
+					} else if (source.equals("X_Hide")) {
+						return 108;
+					} else if (source.equals("X_Schematron")) {
+						return 109;
+					} else if (source.startsWith("X_Facet_")) {
+						return 110;
+					}
+				} 
+			
+			}
 		return -1;
 	}
     
@@ -1013,12 +1081,84 @@ public class DataModelMainPage extends AMainPageV2 {
 					case 7:
 						editParticleAction.run();
 						break;
+					case 201:
+//						new XSDEditFacetAction(viewer,"whiteSpace").run();
+						initxsdEditFacetAction("whiteSpace");
+						break;
+					case 202:
+						initxsdEditFacetAction("length");
+						break;
+					case 203:
+						initxsdEditFacetAction("minLength");
+						break;
+					case 204:
+						initxsdEditFacetAction("maxLength");
+						break;
+					case 205:
+						initxsdEditFacetAction("totalDigits");
+						break;
+					case 206:
+						initxsdEditFacetAction("fractionDigits");
+						break;
+					case 207:
+						initxsdEditFacetAction("maxInclusive");
+						break;
+					case 208:
+						initxsdEditFacetAction("maxExclusive");
+						break;
+					case 209:
+						initxsdEditFacetAction("minInclusive");
+						break;
+					case 210:
+						initxsdEditFacetAction("minExclusive");
+						break;
+					case 211:
+						initxsdEditFacetAction("pattern");
+						break;
+					case 212:
+						initxsdEditFacetAction("enumeration");
+						break;
+					case 101:
+						setAnnotationLabelAction.run();
+						break;
+					case 102:
+						setAnnotationForeignKeyAction.run();
+						break;
+					case 103:
+						setAnnotationForeignKeyInfoAction.run();
+						break;
+					case 104:
+						setAnnotationSourceSystemAction.run();
+						break;
+					case 105:
+						setAnnotationTargetSystemsAction.run();
+						break;
+					case 106:
+						setAnnotationDescriptionsAction.run();
+						break;
+					case 107:
+						setAnnotationWriteAction.run();
+						break;
+					case 108:
+						setAnnotationHiddenAction.run();
+						break;
+					case 109:
+						setAnnotationSchematronAction.run();
+						break;
+					case 110:
+						setFacetMsgAction.run();
+						break;
 					case -1:
 						if(drillDownAdapter.canGoInto()==true)
 							drillDownAdapter.goInto();				
 				}
 			}
 		});
+	}
+
+	protected void initxsdEditFacetAction(String element) {
+		new XSDEditFacetAction(this,element).run();
+		
 	}
 
 	private void hookContextMenu() {
