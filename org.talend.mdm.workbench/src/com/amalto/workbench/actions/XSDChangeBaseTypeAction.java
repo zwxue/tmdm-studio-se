@@ -42,7 +42,7 @@ public class XSDChangeBaseTypeAction extends UndoAction implements SelectionList
 			XSDSimpleTypeDefinition typedef = (XSDSimpleTypeDefinition)selection.getFirstElement();
 						
 			//Cannot change the simple type definition of built in type
-			if (schema.getSchemaForSchemaNamespace().equals(typedef.getTargetNamespace())) return Status.CANCEL_STATUS;
+//			if (schema.getSchemaForSchemaNamespace().equals(typedef.getTargetNamespace())) return Status.CANCEL_STATUS;
 			
 			//build list of custom types and built in types
 			ArrayList customTypes = new ArrayList();
