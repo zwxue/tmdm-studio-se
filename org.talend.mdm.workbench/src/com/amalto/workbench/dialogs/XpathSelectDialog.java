@@ -2,8 +2,6 @@ package com.amalto.workbench.dialogs;
 
 import java.awt.Panel;
 import java.io.StringReader;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.List;
 
