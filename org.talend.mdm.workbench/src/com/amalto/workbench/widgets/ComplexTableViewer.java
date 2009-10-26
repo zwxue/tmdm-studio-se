@@ -8,6 +8,7 @@ import java.util.List;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.jface.viewers.ICellEditorListener;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -20,6 +21,8 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -45,6 +48,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.internal.handlers.SelectAllHandler;
 
 import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.image.EImage;
@@ -647,6 +651,9 @@ public class ComplexTableViewer {
 	class XpathCellEditor extends CellEditor{
 
 		XpathWidget xpath;
+		public XpathWidget getXpath() {
+			return xpath;
+		}
 		public XpathCellEditor(Composite parent){
 			super(parent);
 		}
@@ -676,6 +683,25 @@ public class ComplexTableViewer {
 					}
 					
 				});
+				
+				xpath.getTextWidget().addKeyListener(new KeyListener(){
+
+					public void keyPressed(KeyEvent e) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					public void keyReleased(KeyEvent e) {
+						// TODO Auto-generated method stub
+					if(e.character==SWT.CR){
+						xpath.setText(xpath.getText());
+						deactive();	 
+						}
+					}
+					
+				});
+				
+				
 			}
 			return xpath.getComposite();
 		}
