@@ -6,6 +6,7 @@ package com.amalto.workbench.editors;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 
+import org.dom4j.DocumentException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -31,7 +32,7 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.webservices.WSBoolean;
+import com.amalto.workbench.utils.XmlUtil;
 import com.amalto.workbench.webservices.WSCheckServiceConfigRequest;
 import com.amalto.workbench.webservices.WSCheckServiceConfigResponse;
 import com.amalto.workbench.webservices.WSGetServicesList;
@@ -97,8 +98,8 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         			if (serviceName != null && !"".equals(serviceName)) {
 							document = port.getServiceDocument(new WSString(
 									serviceName.trim()));
-							serviceConfigurationsText.setText(document
-									.getConfigure());
+							String documentConfigure=ServiceConfigrationMainPage.this.formartXml(document.getConfigure());
+							serviceConfigurationsText.setText(documentConfigure);
 							errorLabel.setText("");
 						}
 				} catch (RemoteException e1) {
@@ -157,6 +158,8 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         	
         	private void showUpDialog(String desc,String doc)
         	{
+        		//doc = ServiceConfigrationMainPage.this.formartXml(doc);
+					
     			final PluginDetailsDialog dialog = new PluginDetailsDialog(
     					getSite().getShell(),
     					desc,
@@ -172,6 +175,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
     			dialog.setBlockOnOpen(true);
     			dialog.open();
         	}
+			
         });
         
         //Service Parameters
@@ -222,6 +226,18 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         errorLabel.setLayoutData(  gd );
 //        errorLabel.setImage(ImageCache.getImage( EImage.WARNING_CO.getPath()).createImage());
 //        errorLabel.setVisible(false);
+	}
+	
+	private String formartXml(String doc) {
+		//format output
+		if(doc!=null&&doc.length()>0){
+			try {
+				doc=XmlUtil.formatPretty(doc, "UTF-8");
+			} catch (DocumentException e) {
+				e.printStackTrace();
+			}
+		}
+		return doc;
 	}
 
 	protected void saveChanges() {
