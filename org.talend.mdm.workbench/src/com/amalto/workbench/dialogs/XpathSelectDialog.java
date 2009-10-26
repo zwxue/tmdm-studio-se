@@ -63,7 +63,7 @@ public class XpathSelectDialog extends Dialog {
 	private String title = "Select Xpath";
 	protected TreeParent parent;
 	protected Combo dataModelCombo ;
-	protected TreeObject xobject;
+	//protected TreeObject xobject;
 	protected DrillDownAdapter drillDownAdapter;
 	protected IWorkbenchPartSite site ;
 	protected Panel panel;
@@ -177,29 +177,27 @@ public class XpathSelectDialog extends Dialog {
 
 		domViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 		((GridData) domViewer.getControl().getLayoutData()).heightHint = 400;
-		((GridData) domViewer.getControl().getLayoutData()).widthHint = 200;
+		((GridData) domViewer.getControl().getLayoutData()).widthHint = 400;
 		return composite;
 	}
 	
 	private void changeDomTree(final TreeParent pObject) {
 		String modelDisplay = dataModelCombo.getText();
 		this.dataModelName = modelDisplay;
-//		this.selectedDataModelName = modelDisplay;
-		xobject = pObject.findObject(TreeObject.DATA_MODEL, modelDisplay);
+        //this.selectedDataModelName = modelDisplay;
+		//xobject = pObject.findObject(TreeObject.DATA_MODEL, modelDisplay);
 		XtentisPort port = null;
 		try {
-			port = Util.getPort(new URL(xobject.getEndpointAddress()), xobject
-					.getUniverse(), xobject.getUsername(), xobject
-					.getPassword());
-		} catch (MalformedURLException e3) {
-			e3.printStackTrace();
+			port = Util.getPort(pObject);
 		} catch (XtentisException e3) {
+			e3.printStackTrace();
+		} catch (Exception e3) {
 			e3.printStackTrace();
 		}
 		WSDataModel wsDataModel = null;
 		try {
 			wsDataModel = port.getDataModel(new WSGetDataModel(
-					(WSDataModelPK) xobject.getWsKey()));
+					new WSDataModelPK(dataModelName)));
 		} catch (RemoteException e2) {
 			e2.printStackTrace();
 		}
