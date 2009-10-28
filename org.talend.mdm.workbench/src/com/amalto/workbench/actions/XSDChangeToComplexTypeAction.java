@@ -89,6 +89,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 					else if(tPath.getSegment(i) instanceof XSDParticle)
 						decl = (XSDElementDeclaration) ((XSDParticle) tPath.getSegment(i)).getTerm();
 				}
+				checkConcept();
 			} 
 			// fliu
 			// add declNew to support convert action invoked from new concept/new element menu, in this case 
@@ -100,14 +101,8 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
                 	decl = declNew;
                 }
     			//check if concept or "just" element
-    			EList l = decl.getIdentityConstraintDefinitions();
-    			for (Iterator iter = l.iterator(); iter.hasNext(); ) {
-    				XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) iter.next();
-    				if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
-    					isConcept=true;
-    					break;
-    				}
-    			}
+                checkConcept();
+
             } else {
 //            	if(selection.getFirstElement() instanceof XSDParticle )
             	if (selection.getFirstElement() != null) {
@@ -317,6 +312,18 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 		return Status.OK_STATUS;
 	}
 	
+	private void checkConcept() {
+		EList l = decl.getIdentityConstraintDefinitions();
+		for (Iterator iter = l.iterator(); iter.hasNext(); ) {
+			XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) iter.next();
+			if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) {
+				isConcept=true;
+				break;
+			}
+		}
+		
+	}
+
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}
