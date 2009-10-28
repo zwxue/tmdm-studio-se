@@ -83,21 +83,26 @@ public class DataClusterImportAction extends Action{
 						try{
 							//import datacluster data
 							File f=new File(filename);
+							//Means folder name can not be changed?
 							String dataCluster=f.getParentFile().getName();
 
 							monitor.beginTask("Import data cluster " + dataCluster +" ..." ,IProgressMonitor.UNKNOWN);
 							Util.importDataCluster(xobject, filename,server,monitor);
 							
 							//create datacluster
+							//Does cluster name need URL encode?
 							if(!"db".equalsIgnoreCase(dataCluster)){
 								
-								monitor.subTask("Creating data cluster " + dataCluster +" ..." );
-								WSDataCluster dc = new WSDataCluster(
-										(String)dataCluster,
-										"",
-										""												//vocabulary
-								);
-								Util.getPort(xobject).putDataCluster(new WSPutDataCluster(dc));
+								if (!dataCluster.startsWith("amaltoOBJECTS")) {
+									
+									monitor.subTask("Creating data cluster " + dataCluster +" ..." );
+									WSDataCluster dc = new WSDataCluster(
+											(String)dataCluster,
+											"",
+											""												//vocabulary
+									);
+									Util.getPort(xobject).putDataCluster(new WSPutDataCluster(dc));
+								}
 							}
 							monitor.done();							
 							return Status.OK_STATUS;
