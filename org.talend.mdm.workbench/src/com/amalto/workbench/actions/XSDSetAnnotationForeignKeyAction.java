@@ -12,6 +12,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComponent;
+import org.w3c.dom.Element;
 
 import com.amalto.workbench.dialogs.SimpleXpathInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
@@ -35,18 +36,18 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction{
 		try {
             IStructuredSelection selection = (TreeSelection)page.getTreeViewer().getSelection();
             XSDComponent xSDCom=null;
-            if(selection.getFirstElement() instanceof XSDAnnotation)
-            	xSDCom = (XSDAnnotation)selection.getFirstElement();
-            else{
-            	TreePath tPath=((TreeSelection)selection).getPaths()[0];
-            	for (int i = 0; i < tPath.getSegmentCount(); i++) {
-					if(tPath.getSegment(i) instanceof XSDAnnotation)
-						xSDCom =(XSDAnnotation)(tPath.getSegment(i));
-            	}
-            }
- 		   XSDAnnotationsStructure struc =new XSDAnnotationsStructure(xSDCom);
-            
-            if (struc.getAnnotation() == null) {
+            if (selection.getFirstElement() instanceof Element) {
+				TreePath tPath = ((TreeSelection) selection).getPaths()[0];
+				for (int i = 0; i < tPath.getSegmentCount(); i++) {
+					if (tPath.getSegment(i) instanceof XSDAnnotation)
+						xSDCom = (XSDAnnotation) (tPath.getSegment(i));
+				}
+			} else
+            xSDCom = (XSDComponent)selection.getFirstElement();
+            XSDAnnotationsStructure struc=null;
+			if(xSDCom!=null)
+            		    struc =new XSDAnnotationsStructure(xSDCom);
+            if (struc==null||struc.getAnnotation() == null) {
             	throw new RuntimeException("Unable to edit an annotation for object of type "+xSDCom.getClass().getName());
             }
             

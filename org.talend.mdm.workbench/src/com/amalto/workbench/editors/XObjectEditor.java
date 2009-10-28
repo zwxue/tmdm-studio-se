@@ -251,8 +251,10 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
                 
     	if (xmlEditor != null) {
 			xmlEditor.refresh();
-			if (xmlEditor.isDirty() || xmlEditor.isModified())
+			if (xmlEditor.isDirty() || xmlEditor.isModified()) {
 				page.refreshPage();
+				xmlEditor.setModified(false);
+			}
 		}
     	linkDirty(page, isdirty);   
                           

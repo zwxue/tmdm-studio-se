@@ -22,17 +22,21 @@ public class ComplexTypeInputDialog extends Dialog {
 	private ConceptComposite conceptPanel = null;
 	
 	List<XSDComplexTypeDefinition> types;
+
+	private boolean isXSDModelGroup=false;
 	/**
 	 * @param parentShell
+	 * @param isXSDModelGroup 
 	 */
 	public ComplexTypeInputDialog(
 			SelectionListener caller, 
 			Shell parentShell ,
-			List<XSDComplexTypeDefinition> types
+			List<XSDComplexTypeDefinition> types, boolean isXSDModelGroup
 			) {
 		super(parentShell);
 		this.caller = caller;
 		this.types=types;
+		this.isXSDModelGroup=isXSDModelGroup;
 	}
 
 	
@@ -46,7 +50,10 @@ public class ComplexTypeInputDialog extends Dialog {
 			parent.getShell().setText("Create a Complex Type");
 			conceptPanel = new ConceptComposite(composite, false,types, true);
 		} else {
-			parent.getShell().setText("Change To Complex Type");
+			if(isXSDModelGroup)
+				parent.getShell().setText("Change Sub-Element Group");
+			else
+				parent.getShell().setText("Change To Complex Type");
 			conceptPanel = new ConceptComposite(composite, false,types, false);
 		}
 

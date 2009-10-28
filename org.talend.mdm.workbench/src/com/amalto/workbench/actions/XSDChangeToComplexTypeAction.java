@@ -9,10 +9,14 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
+import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDCompositor;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDFactory;
@@ -25,11 +29,13 @@ import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
+import org.w3c.dom.Element;
 
 import com.amalto.workbench.dialogs.ComplexTypeInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDChangeToComplexTypeAction extends UndoAction implements SelectionListener{
 
@@ -42,11 +48,16 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 	boolean isChoice = false;
 	boolean isAll = false;
 	
-	boolean showDlg = true; 
-	public XSDChangeToComplexTypeAction(DataModelMainPage page) {
+	boolean showDlg = true;
+	private boolean isXSDModelGroup=false; 
+	public XSDChangeToComplexTypeAction(DataModelMainPage page,boolean isXSDModelGroup) {
 		super(page);
+		this.isXSDModelGroup=isXSDModelGroup;
 		setImageDescriptor(ImageCache.getImage( "icons/change_to_complex.gif"));
-		setText("Change to a Complex Type");
+		if(isXSDModelGroup)
+			setText("Change Sub-Element Group");
+		else
+			setText("Change to a Complex Type");
 		setToolTipText("Make an Element a Complex Element or change the type of current Complex Element");
 		setDescription(getToolTipText());
 	}
@@ -54,7 +65,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 	public XSDChangeToComplexTypeAction(DataModelMainPage page, XSDElementDeclaration dec,
 			String name, boolean choice, boolean all) {
 		
-		this(page);
+		this(page,false);
 		
 		declNew = dec;
 		showDlg = false;
@@ -69,10 +80,20 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 		try {
             IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
             isConcept=false;
+            
+            if (selection.getFirstElement() instanceof XSDModelGroup) {
+				TreePath tPath = ((TreeSelection) selection).getPaths()[0];
+				for (int i = 0; i < tPath.getSegmentCount(); i++) {
+					if (tPath.getSegment(i) instanceof XSDElementDeclaration)
+						decl = (XSDElementDeclaration) tPath.getSegment(i);
+					else if(tPath.getSegment(i) instanceof XSDParticle)
+						decl = (XSDElementDeclaration) ((XSDParticle) tPath.getSegment(i)).getTerm();
+				}
+			} 
 			// fliu
 			// add declNew to support convert action invoked from new concept/new element menu, in this case 
 			// declNew is the new created one not the selected one in tree vew
-            if (selection.getFirstElement() instanceof XSDElementDeclaration || declNew != null) {
+            else if (selection.getFirstElement() instanceof XSDElementDeclaration || declNew != null) {
             	decl = (XSDElementDeclaration) selection.getFirstElement();
                 if (declNew != null)
                 {
@@ -88,6 +109,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
     				}
     			}
             } else {
+//            	if(selection.getFirstElement() instanceof XSDParticle )
             	if (selection.getFirstElement() != null) {
 					// a sub element
 					decl = (XSDElementDeclaration) ((XSDParticle) selection
@@ -101,7 +123,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
        		if (showDlg) {
        			
 				dialog = new ComplexTypeInputDialog(this, page.getSite()
-						.getShell(),Util.getComplexTypes(decl.getSchema()));
+						.getShell(),Util.getComplexTypes(decl.getSchema()),isXSDModelGroup);
 
 				dialog.setBlockOnOpen(true);
 				int ret = dialog.open();

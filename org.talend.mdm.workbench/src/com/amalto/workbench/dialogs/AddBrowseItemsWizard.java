@@ -44,6 +44,7 @@ import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XSDAnnotationsStructure;
 import com.amalto.workbench.webservices.WSDeleteView;
 import com.amalto.workbench.webservices.WSGetRole;
 import com.amalto.workbench.webservices.WSGetView;
@@ -65,7 +66,7 @@ public class AddBrowseItemsWizard extends Wizard{
 	private XtentisPort port;
 	private List<XSDElementDeclaration> declList = null;
 	private Map<String, List<Line>>  browseItemToRoles = new HashMap<String , List<Line>>();
-	private LinkedHashMap<String, String> labels;
+	private LinkedHashMap<String, String> labels=new LinkedHashMap<String, String>();
 	private static String INSTANCE_NAME = "Browse Item View";
 	private static String BROWSE_ITEMS = "Browse_items_";
 	
@@ -74,12 +75,11 @@ public class AddBrowseItemsWizard extends Wizard{
 		new ComplexTableViewerColumn("Access", false, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,new String[] {},0)
 		};
 	
-	public AddBrowseItemsWizard(AMainPageV2 launchPage, List<XSDElementDeclaration> list, LinkedHashMap<String, String> labels) {
+	public AddBrowseItemsWizard(AMainPageV2 launchPage, List<XSDElementDeclaration> list) {
 		super();
 		setWindowTitle("Generate Browse items views with the labels");
 		page = launchPage;
 		declList = list;
-		this.labels=labels;
 		for (XSDElementDeclaration dl : declList) {
 			browseItemToRoles.put(BROWSE_ITEMS + dl.getName(), new ArrayList<Line>());
 		}
@@ -145,6 +145,9 @@ public class AddBrowseItemsWizard extends Wizard{
             	view.setSearchableBusinessElements(keys.toArray(new String[]{}));
             	view.setViewableBusinessElements(keys.toArray(new String[]{}));
             	StringBuffer desc=new StringBuffer();
+            	labels=new XSDAnnotationsStructure(decl.getAnnotation()).getLabels();
+            	if(labels.size()==0)
+            		labels.put("EN", decl.getName());
             	for (String lan :  labels.keySet()) {
             		desc.append("["+lan.toUpperCase()+":" +labels.get(lan) + "]");
 				}
