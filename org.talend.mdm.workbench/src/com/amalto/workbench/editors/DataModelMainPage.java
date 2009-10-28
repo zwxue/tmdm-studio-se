@@ -197,6 +197,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	private XSDSetAnnotationSchematronAction setAnnotationSchematronAction;
 	private XSDSetAnnotationSourceSystemAction setAnnotationSourceSystemAction = null;
 	private XSDSetAnnotationDocumentationAction setAnnotationDocumentationAction = null;
+	private XSDChangeToComplexTypeAction changeSubElementGroupAction=null;
 	private XSDDeleteTypeDefinition   deleteTypeDefinition = null;
 	private XSDNewComplexTypeDefinition  newComplexTypeAction = null;
 	private XSDNewSimpleTypeDefinition  newSimpleTypeAction = null;
@@ -916,7 +917,8 @@ public class DataModelMainPage extends AMainPageV2 {
 		this.deleteConceptWrapAction = new XSDDeleteConceptWrapAction(this);
 		this.newElementAction = new XSDNewElementAction(this);
 		this.deleteElementAction = new XSDDeleteElementAction(this);
-		this.changeToComplexTypeAction = new XSDChangeToComplexTypeAction(this);
+		this.changeToComplexTypeAction = new XSDChangeToComplexTypeAction(this,false);
+		this.changeSubElementGroupAction = new XSDChangeToComplexTypeAction(this,true);
 		this.deleteParticleAction = new XSDDeleteParticleAction(this);
 		this.newParticleFromTypeAction = new XSDNewParticleFromTypeAction(this);
 		this.newParticleFromParticleAction = new XSDNewParticleFromParticleAction(
@@ -992,6 +994,8 @@ public class DataModelMainPage extends AMainPageV2 {
 			return 6;
 		if(decl instanceof XSDParticle)
 			return 7;
+		if(decl instanceof XSDModelGroup)
+			return 8;
 		if(decl instanceof XSDWhiteSpaceFacet)
 			return 201;
 		if(decl instanceof XSDLengthFacet)
@@ -1080,6 +1084,9 @@ public class DataModelMainPage extends AMainPageV2 {
 						break;
 					case 7:
 						editParticleAction.run();
+						break;
+					case 8:
+						changeSubElementGroupAction.run();
 						break;
 					case 201:
 //						new XSDEditFacetAction(viewer,"whiteSpace").run();
@@ -1223,7 +1230,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			// Annotations
 			setAnnotationActions2(manager);
 		}
-		
+
 
 		if (obj instanceof XSDParticle && selectedObjs.length == 1) {
 			XSDTerm term = ((XSDParticle) obj).getTerm();
@@ -1365,7 +1372,9 @@ public class DataModelMainPage extends AMainPageV2 {
 			setAnnotationActions2(manager);
 			
 		}
-		
+		if(obj instanceof XSDModelGroup){
+			manager.add(changeSubElementGroupAction);
+		}
 
 		if (obj instanceof XSDParticle && selectedObjs.length == 1) {
 			XSDTerm term = ((XSDParticle) obj).getTerm();
@@ -1552,7 +1561,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		//commit();
 		super.markDirty();
 		XMLEditor xmleditor=((XObjectEditor)getEditor()).getXmlEditor();
-		if(xmleditor!=null && xmleditor.isDirty())
+		if(xmleditor!=null && getEditor().isDirty())
 			xmleditor.markDirty();
 		/*
 		 * try { String schema =

@@ -47,9 +47,7 @@ public class XSDNewBrowseItemViewAction extends Action{
 		        		declList.add(declaration);
 			}
 		}
-		AddBrowseItemsWizard wizard = new AddBrowseItemsWizard(page, declList,
-				new XSDAnnotationsStructure((XSDComponent) selection
-						.getFirstElement()).getLabels());
+		AddBrowseItemsWizard wizard = new AddBrowseItemsWizard(page, declList);
 		WizardDialog dialog = new WizardDialog(page.getSite().getShell(),
 				wizard);
 		dialog.open(); 
