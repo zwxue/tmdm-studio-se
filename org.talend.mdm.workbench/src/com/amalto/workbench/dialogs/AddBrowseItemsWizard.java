@@ -145,8 +145,9 @@ public class AddBrowseItemsWizard extends Wizard{
             	view.setSearchableBusinessElements(keys.toArray(new String[]{}));
             	view.setViewableBusinessElements(keys.toArray(new String[]{}));
             	StringBuffer desc=new StringBuffer();
-            	labels=new XSDAnnotationsStructure(decl.getAnnotation()).getLabels();
-            	if(labels.size()==0)
+            	if(decl.getAnnotation()!=null)
+            		labels=new XSDAnnotationsStructure(decl.getAnnotation()).getLabels();
+            	if(labels==null||labels.size()==0)
             		labels.put("EN", decl.getName());
             	for (String lan :  labels.keySet()) {
             		desc.append("["+lan.toUpperCase()+":" +labels.get(lan) + "]");
