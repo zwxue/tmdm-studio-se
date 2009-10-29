@@ -327,7 +327,7 @@ public class XSDAnnotationsStructure {
 							XSDParticle o=(XSDParticle)obj;
 							//String name=Util.getFirstTextNode(o.getElement(), "@name");
 							String type=Util.getFirstTextNode(o.getElement(), "@type");
-							if(EUUIDCustomType.allTypes().contains(type))
+							if(EUUIDCustomType.AUTO_INCREMENT.equals(type) || EUUIDCustomType.UUID.equals(type))
 							{
 								objList.remove(obj);
 								objs = objList.toArray();
