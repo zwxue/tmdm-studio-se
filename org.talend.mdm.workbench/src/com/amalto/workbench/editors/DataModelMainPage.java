@@ -40,7 +40,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -137,6 +136,8 @@ import com.amalto.workbench.actions.XSDSetAnnotationLabelAction;
 import com.amalto.workbench.actions.XSDSetAnnotationSchematronAction;
 import com.amalto.workbench.actions.XSDSetAnnotationSourceSystemAction;
 import com.amalto.workbench.actions.XSDSetAnnotationTargetSystemsAction;
+import com.amalto.workbench.actions.XSDSetAnnotationWrapHiddenAction;
+import com.amalto.workbench.actions.XSDSetAnnotationWrapWriteAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
 import com.amalto.workbench.actions.XSDSetFacetMessageAction;
 import com.amalto.workbench.dialogs.DataModelFilterDialog;
@@ -188,10 +189,13 @@ public class DataModelMainPage extends AMainPageV2 {
 	private XSDChangeBaseTypeAction changeBaseTypeAction = null;
 	private XSDGetXPathAction getXPathAction = null;
 	private XSDSetAnnotationForeignKeyAction setAnnotationForeignKeyAction = null;
+	private XSDSetAnnotationWrapWriteAction setAnnotationWrapWriteAction = null;
+	
 	private XSDSetAnnotationForeignKeyInfoAction setAnnotationForeignKeyInfoAction = null;
 	private XSDSetAnnotationLabelAction setAnnotationLabelAction = null;
 	private XSDSetAnnotationDescriptionsAction setAnnotationDescriptionsAction = null;
 	private XSDSetAnnotationHiddenAction setAnnotationHiddenAction = null;
+	private XSDSetAnnotationWrapHiddenAction setAnnotationWrapHiddenAction = null;
 	private XSDSetAnnotationWriteAction setAnnotationWriteAction = null;
 	private XSDSetAnnotationTargetSystemsAction setAnnotationTargetSystemsAction = null;
 	private XSDSetAnnotationSchematronAction setAnnotationSchematronAction;
@@ -947,7 +951,10 @@ public class DataModelMainPage extends AMainPageV2 {
 		this.setAnnotationForeignKeyInfoAction = new XSDSetAnnotationForeignKeyInfoAction(
 				this,dataModelName);
 		this.setAnnotationWriteAction = new XSDSetAnnotationWriteAction(this);
+		this.setAnnotationWrapWriteAction = new XSDSetAnnotationWrapWriteAction(this);
 		this.setAnnotationHiddenAction = new XSDSetAnnotationHiddenAction(this,dataModelName);
+		this.setAnnotationWrapHiddenAction = new XSDSetAnnotationWrapHiddenAction(this,dataModelName);
+		
 		this.setAnnotationTargetSystemsAction = new XSDSetAnnotationTargetSystemsAction(this,dataModelName);
 		this.setAnnotationSchematronAction = new XSDSetAnnotationSchematronAction(this,dataModelName);
 		this.setAnnotationSourceSystemAction = new XSDSetAnnotationSourceSystemAction(
@@ -1316,6 +1323,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		if (selectedObjs.length > 1
 				&& deleteConceptWrapAction.outPutDeleteActions() != null) {
 			manager.add(deleteConceptWrapAction.outPutDeleteActions());
+			
 			if (deleteConceptWrapAction.checkOutAllConcept(selectedObjs))
 				manager.add(newBrowseItemAction);
 		}
@@ -1463,10 +1471,19 @@ public class DataModelMainPage extends AMainPageV2 {
 		if (selectedObjs.length > 1
 				&& deleteConceptWrapAction.outPutDeleteActions() != null) {
 			manager.add(deleteConceptWrapAction.outPutDeleteActions());
+			
 			if (deleteConceptWrapAction.checkOutAllConcept(selectedObjs))
 				manager.add(newBrowseItemAction);
+			
+			
+			
 		}
-		
+		//add by ymli. fix bug 0009771
+		if(selectedObjs.length > 1 && setAnnotationWrapWriteAction.checkInWriteType(selectedObjs)){
+			manager.add(new Separator());
+			manager.add(setAnnotationWrapWriteAction);
+			manager.add(setAnnotationWrapHiddenAction);
+		}
 		manager.add(new Separator());
 
 		drillDownAdapter.addNavigationActions(manager);
