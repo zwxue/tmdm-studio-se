@@ -1,12 +1,6 @@
 package com.amalto.workbench.widgets;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -15,7 +9,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -184,9 +177,9 @@ public class XpathWidget implements  SelectionListener{
 
 	public void setOutFocus(){
 		descriptionText.setFocus();
-		descriptionText.setText(descriptionText.getText());
+		descriptionText.setText(descriptionText.getText().trim());
 		int start = descriptionText.getText().length();
-		int end = descriptionText.getSelection().y;
+		//int end = descriptionText.getSelection().y;
 		descriptionText.setSelection(start);
 		
 	}
