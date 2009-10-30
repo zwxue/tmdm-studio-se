@@ -66,7 +66,6 @@ public class AddBrowseItemsWizard extends Wizard{
 	private XtentisPort port;
 	private List<XSDElementDeclaration> declList = null;
 	private Map<String, List<Line>>  browseItemToRoles = new HashMap<String , List<Line>>();
-	private LinkedHashMap<String, String> labels=new LinkedHashMap<String, String>();
 	private static String INSTANCE_NAME = "Browse Item View";
 	private static String BROWSE_ITEMS = "Browse_items_";
 	
@@ -145,9 +144,10 @@ public class AddBrowseItemsWizard extends Wizard{
             	view.setSearchableBusinessElements(keys.toArray(new String[]{}));
             	view.setViewableBusinessElements(keys.toArray(new String[]{}));
             	StringBuffer desc=new StringBuffer();
-            	if(decl.getAnnotation()!=null)
+            	LinkedHashMap<String, String> labels = new LinkedHashMap<String, String>();
+				if(decl.getAnnotation()!=null)
             		labels=new XSDAnnotationsStructure(decl.getAnnotation()).getLabels();
-            	if(labels==null||labels.size()==0)
+            	if(labels.size()==0)
             		labels.put("EN", decl.getName());
             	for (String lan :  labels.keySet()) {
             		desc.append("["+lan.toUpperCase()+":" +labels.get(lan) + "]");
