@@ -600,10 +600,6 @@ public class DataModelMainPage extends AMainPageV2 {
 	            }
 			}
 			}
-		
-			if(struc.hasChanged())
-				isChange=true;
-		
 	}
 
 	private void setLabel(XSDAnnotationsStructure struc, String labelValue, boolean isAdd) {
@@ -617,6 +613,8 @@ public class DataModelMainPage extends AMainPageV2 {
         	 if(struc.getLabels().containsKey(labelKey))
         		 struc.removeLabel(labelKey);
          }
+			if(struc.hasChanged())
+				isChange=true;
 	}
 
 	private void createSchemaTreeComp(Composite parent){
