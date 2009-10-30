@@ -49,6 +49,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.xsd.XSDComplexTypeContent;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintCategory;
@@ -1610,5 +1611,69 @@ public class Util {
         }
         return null;
 	}
-	
+	public static ArrayList<Object> getComplexTypeDefinitionChildren(XSDComplexTypeDefinition complexTypeDefinition) {
+//		System.out.println("getComplexTypeDefinitionChildren "+complexTypeDefinition+": "+complexTypeDefinition.getContent());
+		
+//		System.out.println(
+//				"getComplexTypeDefinitionChildren BASE TYPE "+
+//				complexTypeDefinition.getBaseTypeDefinition().getName()+" : "+
+//				complexTypeDefinition.getDerivationMethod().getName()
+//		);
+		
+		XSDComplexTypeContent xsdComplexTypeContent = complexTypeDefinition.getContent();
+		ArrayList<Object> list = new ArrayList<Object>();
+		
+		//Now determine whether ref. If ref look at the base Type definition
+		if  (xsdComplexTypeContent == null) {
+			XSDTypeDefinition typeDefinition = complexTypeDefinition.getBaseTypeDefinition();
+			//if a simple type return the simple type
+			if (typeDefinition instanceof XSDSimpleTypeDefinition) {
+				list.add(typeDefinition);
+				return list;
+			} else {
+			}
+			//it is a complex Type
+			xsdComplexTypeContent = ((XSDComplexTypeDefinition)typeDefinition).getContent();
+		}
+
+		//check if we are extending a complex Definition	
+		if ("extension".equals(complexTypeDefinition.getDerivationMethod().getName())) {
+			if (complexTypeDefinition.getBaseTypeDefinition() instanceof XSDComplexTypeDefinition) {
+				list.addAll(getComplexTypeDefinitionChildren((XSDComplexTypeDefinition)complexTypeDefinition.getBaseTypeDefinition()));
+			}
+		}
+		
+		//Attributes
+		if (complexTypeDefinition.getAttributeContents()!=null)
+			list.addAll(complexTypeDefinition.getAttributeContents());
+		
+		//Annotations
+		if (complexTypeDefinition.getAnnotations()!=null)
+			list.addAll(complexTypeDefinition.getAnnotations());
+			
+		//now check what we have in the content
+			
+		//simple type return the simple type
+		if (xsdComplexTypeContent instanceof XSDSimpleTypeDefinition) {
+			list.add(xsdComplexTypeContent);
+			return list;
+		}
+		
+		//xsd Particle: we have a model group
+		if (xsdComplexTypeContent instanceof XSDParticle) { 
+//				System.out.println("Model Group?: "+((XSDParticle)xsdComplexTypeContent).getTerm());
+				if (((XSDParticle)xsdComplexTypeContent).getTerm() instanceof XSDModelGroup) {
+					//return the model group
+					list.add(((XSDParticle)xsdComplexTypeContent).getTerm());
+					return list;
+				} else {  //wild card or element declaration '?)
+					list.add(((XSDParticle)xsdComplexTypeContent).getTerm());
+					return list;						
+				}
+		}
+		
+		//what else could it be ?
+		list.add(xsdComplexTypeContent);
+		return list;
+	}	
 }

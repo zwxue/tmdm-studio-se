@@ -7,9 +7,12 @@
 package com.amalto.workbench.editors;
 
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -43,6 +46,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
@@ -58,6 +62,7 @@ import org.eclipse.ui.operations.UndoRedoActionGroup;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
+import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDConcreteComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDEnumerationFacet;
@@ -155,12 +160,15 @@ import com.amalto.workbench.providers.XSDTreeLabelProvider;
 import com.amalto.workbench.utils.DataModelFilter;
 import com.amalto.workbench.utils.FontUtils;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XSDAnnotationsStructure;
 import com.amalto.workbench.webservices.WSDataModel;
 
 public class DataModelMainPage extends AMainPageV2 {
 
 	protected Text descriptionText;
-	protected Button importXSDBtn, exportBtn,sortUPBtn,sortDownBtn,filterBtn,expandBtn,foldBtn,expandSelBtn,sortNaturalBtn ;
+	protected Button importXSDBtn, exportBtn,sortUPBtn,sortDownBtn,filterBtn,expandBtn,foldBtn,expandSelBtn,sortNaturalBtn,addLanBtn,deleteLanbtn;
+	private   Label langeuageLabel;
+	private   Combo languageCombo;
 	protected TreeViewer viewer;
 	protected DrillDownAdapter drillDownAdapter;
 
@@ -232,6 +240,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	boolean isSchemaSelected=true;
 	XObjectEditor editor;
 	private String modelName="";
+	private boolean isChange=false;
 	public DataModelMainPage(FormEditor editor) {
 		super(editor, DataModelMainPage.class.getName(), "Data Model "
 				+ ((XObjectEditorInput) editor.getEditorInput()).getName()
@@ -273,7 +282,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			btnCmp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 					false, 2, 1));
 			GridLayout gLayout=new GridLayout();
-			gLayout.numColumns=8;
+			gLayout.numColumns=12;
 			gLayout.horizontalSpacing=20;
 			btnCmp.setLayout(gLayout);
 			
@@ -346,7 +355,35 @@ public class DataModelMainPage extends AMainPageV2 {
 						viewer.refresh();
 				}
 			});
+			langeuageLabel=toolkit.createLabel(btnCmp, "Language:");
+			languageCombo=new Combo(btnCmp, SWT.NONE);
+			addLanBtn= toolkit.createButton(btnCmp, "ADD", SWT.NONE);
+			deleteLanbtn= toolkit.createButton(btnCmp, "REMOVE", SWT.NONE);
 			
+	        Set<String> languages = Util.lang2iso.keySet();
+	        for (Iterator iter = languages.iterator(); iter.hasNext(); ) {
+				String language = (String) iter.next();
+				languageCombo.add(language);
+			}
+	        languageCombo.select(0);
+	        addLanBtn.addSelectionListener(new SelectionAdapter(){
+				public void widgetSelected(SelectionEvent e) {
+					addOrDelLanguage(true);
+				}});
+	        deleteLanbtn.addSelectionListener(new SelectionAdapter(){
+	        	public void widgetSelected(SelectionEvent e) {
+	        		addOrDelLanguage(false);
+	        	}});
+			
+			
+			langeuageLabel.setLayoutData(new GridData(SWT.RIGHT_TO_LEFT, SWT.FILL, false,
+					false, 1, 1));
+			languageCombo.setLayoutData(new GridData(SWT.RIGHT_TO_LEFT, SWT.FILL, false,
+					false, 1, 1));
+			addLanBtn.setLayoutData(new GridData(SWT.RIGHT_TO_LEFT, SWT.FILL, false,
+					false, 1, 1));
+			deleteLanbtn.setLayoutData(new GridData(SWT.RIGHT_TO_LEFT, SWT.FILL, false,
+					false, 1, 1));
 			importXSDBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
 					false, 1, 1));
 			exportBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
@@ -522,6 +559,66 @@ public class DataModelMainPage extends AMainPageV2 {
 
 	}// createCharacteristicsContent
 	
+	protected void addOrDelLanguage(boolean isAdd) {
+		TreeItem[] items=viewer.getTree().getItems();
+		
+		addLabelForTheItem(items,isAdd);
+		if (isChange) {
+			this.markDirty();
+			this.refresh();
+//	 				this.getTreeViewer().expandToLevel(xSDCom, 2);
+		}
+			
+	}
+
+	private void addLabelForTheItem(TreeItem[] items,boolean isAdd) {
+		XSDComponent xSDCom = null;
+		XSDAnnotationsStructure struc = null;
+		for (int i = 0; i < items.length; i++) {
+			TreeItem item=items[i];
+			String labelValue = null;
+			if(item.getData() instanceof XSDElementDeclaration){
+	            xSDCom = (XSDElementDeclaration)item.getData();
+	            struc =new XSDAnnotationsStructure(xSDCom);
+	            labelValue=((XSDElementDeclaration)xSDCom).getName();
+	            setLabel(struc,labelValue,isAdd);
+	            
+	            if(((XSDElementDeclaration)xSDCom).getTypeDefinition() instanceof XSDComplexTypeDefinition){
+	            	List childrenList=Util.getComplexTypeDefinitionChildren((XSDComplexTypeDefinition)((XSDElementDeclaration)xSDCom).getTypeDefinition());
+	            	for (int j = 0; j < childrenList.size(); j++) {
+	            		List<XSDParticle> particles = new ArrayList<XSDParticle>();
+	            		if(childrenList.get(j) instanceof XSDModelGroup)
+	            			particles=((XSDModelGroup)childrenList.get(j)).getParticles();
+	            		for (int k = 0; k < particles.size(); k++) {
+	            			xSDCom=	particles.get(k);
+	        	            struc =new XSDAnnotationsStructure(xSDCom);
+	        	            labelValue=((XSDElementDeclaration)((XSDParticle)xSDCom).getContent()).getName();
+	        	            setLabel(struc,labelValue,isAdd);
+	            		}
+	            		
+	            	}
+	            }
+			}
+			}
+		
+			if(struc.hasChanged())
+				isChange=true;
+		
+	}
+
+	private void setLabel(XSDAnnotationsStructure struc, String labelValue, boolean isAdd) {
+		
+         String labelKey=Util.lang2iso.get(languageCombo.getText());
+         if(isAdd){
+        	 if(!struc.getLabels().containsKey(labelKey))
+        		 struc.setLabel(labelKey, labelValue);
+        	 }
+         else{
+        	 if(struc.getLabels().containsKey(labelKey))
+        		 struc.removeLabel(labelKey);
+         }
+	}
+
 	private void createSchemaTreeComp(Composite parent){
 		
 		
