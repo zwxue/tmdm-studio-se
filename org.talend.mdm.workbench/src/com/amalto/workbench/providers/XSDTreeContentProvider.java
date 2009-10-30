@@ -216,7 +216,7 @@ public class XSDTreeContentProvider implements IStructuredContentProvider, ITree
 			//handle extensions and restrictions directly
 			XSDTypeDefinition typeDefinition = ((XSDElementDeclaration)parent).getTypeDefinition();
 			if (typeDefinition instanceof XSDComplexTypeDefinition) {
-				list.addAll(getComplexTypeDefinitionChildren((XSDComplexTypeDefinition)typeDefinition));
+				list.addAll(Util.getComplexTypeDefinitionChildren((XSDComplexTypeDefinition)typeDefinition));
 			} else {
 				list.add(((XSDElementDeclaration)parent).getTypeDefinition());	
 			}
@@ -300,7 +300,7 @@ public class XSDTreeContentProvider implements IStructuredContentProvider, ITree
 			ArrayList<Object> list = new ArrayList<Object>();
 			
 			if (typeDef instanceof XSDComplexTypeDefinition) {
-				list.addAll(getComplexTypeDefinitionChildren((XSDComplexTypeDefinition)typeDef));
+				list.addAll(Util.getComplexTypeDefinitionChildren((XSDComplexTypeDefinition)typeDef));
 			} else {
 				list.add(typeDef);
 			}
@@ -327,71 +327,7 @@ public class XSDTreeContentProvider implements IStructuredContentProvider, ITree
 
 	}
 	
-	private ArrayList<Object> getComplexTypeDefinitionChildren(XSDComplexTypeDefinition complexTypeDefinition) {
-//		System.out.println("getComplexTypeDefinitionChildren "+complexTypeDefinition+": "+complexTypeDefinition.getContent());
-		
-//		System.out.println(
-//				"getComplexTypeDefinitionChildren BASE TYPE "+
-//				complexTypeDefinition.getBaseTypeDefinition().getName()+" : "+
-//				complexTypeDefinition.getDerivationMethod().getName()
-//		);
-		
-		XSDComplexTypeContent xsdComplexTypeContent = complexTypeDefinition.getContent();
-		ArrayList<Object> list = new ArrayList<Object>();
-		
-		//Now determine whether ref. If ref look at the base Type definition
-		if  (xsdComplexTypeContent == null) {
-			XSDTypeDefinition typeDefinition = complexTypeDefinition.getBaseTypeDefinition();
-			//if a simple type return the simple type
-			if (typeDefinition instanceof XSDSimpleTypeDefinition) {
-				list.add(typeDefinition);
-				return list;
-			} else {
-			}
-			//it is a complex Type
-			xsdComplexTypeContent = ((XSDComplexTypeDefinition)typeDefinition).getContent();
-		}
 
-		//check if we are extending a complex Definition	
-		if ("extension".equals(complexTypeDefinition.getDerivationMethod().getName())) {
-			if (complexTypeDefinition.getBaseTypeDefinition() instanceof XSDComplexTypeDefinition) {
-				list.addAll(getComplexTypeDefinitionChildren((XSDComplexTypeDefinition)complexTypeDefinition.getBaseTypeDefinition()));
-			}
-		}
-		
-		//Attributes
-		if (complexTypeDefinition.getAttributeContents()!=null)
-			list.addAll(complexTypeDefinition.getAttributeContents());
-		
-		//Annotations
-		if (complexTypeDefinition.getAnnotations()!=null)
-			list.addAll(complexTypeDefinition.getAnnotations());
-			
-		//now check what we have in the content
-			
-		//simple type return the simple type
-		if (xsdComplexTypeContent instanceof XSDSimpleTypeDefinition) {
-			list.add(xsdComplexTypeContent);
-			return list;
-		}
-		
-		//xsd Particle: we have a model group
-		if (xsdComplexTypeContent instanceof XSDParticle) { 
-//				System.out.println("Model Group?: "+((XSDParticle)xsdComplexTypeContent).getTerm());
-				if (((XSDParticle)xsdComplexTypeContent).getTerm() instanceof XSDModelGroup) {
-					//return the model group
-					list.add(((XSDParticle)xsdComplexTypeContent).getTerm());
-					return list;
-				} else {  //wild card or element declaration '?)
-					list.add(((XSDParticle)xsdComplexTypeContent).getTerm());
-					return list;						
-				}
-		}
-		
-		//what else could it be ?
-		list.add(xsdComplexTypeContent);
-		return list;
-	}
 	
 	public boolean hasChildren(Object parent) {
 		//System.out.println("has Children "+parent.getClass().getName());
