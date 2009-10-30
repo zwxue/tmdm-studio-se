@@ -90,7 +90,7 @@ import com.amalto.workbench.webservices.XtentisPort;
  */
 public class ServerView extends ViewPart implements IXObjectModelListener {
 	
-	public static final String VIEW_ID="org.talend.openmdm.workbench.views.ServerView";
+	public static final String VIEW_ID="org.talend.mdm.workbench.views.ServerView";
 	
 	protected TreeViewer viewer;
 	protected DrillDownAdapter drillDownAdapter;

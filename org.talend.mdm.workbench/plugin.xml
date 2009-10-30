@@ -5,7 +5,7 @@
    <extension
          point="org.eclipse.ui.views">
       <category
-            name="Talend Open MDM Workbench"
+            name="Talend MDM Workbench"
             id="org.talend.mdm.workbench">
       </category>
       <view
@@ -13,23 +13,10 @@
             category="org.talend.mdm.workbench"
             class="com.amalto.workbench.views.ServerView"
             icon="icons/talend-picto-small.gif"
-            id="org.talend.openmdm.workbench.views.ServerView"
+            id="org.talend.mdm.workbench.views.ServerView"
             name="MDM Server View">
-            <!--name="Talend Open MDM Server View"-->
+            <!--name="Talend MDM Server View"-->
       </view>
-   </extension>
-   <extension
-         point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension
-            targetID="org.eclipse.ui.resourcePerspective">
-         <view
-               closeable="false"
-               id="com.amalto.workbench.views.ServerView"
-               ratio="0.5"
-               relationship="right"
-               relative="org.eclipse.ui.views.TaskList">
-         </view>
-      </perspectiveExtension>
    </extension>
    <extension
          point="org.eclipse.ui.editors">
@@ -71,5 +58,74 @@
             talendPerspectiveId="org.talend.mdm.perspective">
       </TalendPerspective>
    </extension>
+  <extension
+        point="org.eclipse.ui.intro">
+     <intro
+           class="org.eclipse.ui.intro.config.CustomizableIntroPart"
+           id="org.talend.mdm.workbench.intro">
+     </intro>
+     <introProductBinding
+           introId="org.talend.mdm.workbench.intro"
+           productId="org.talend.mdm.workbench.product">
+     </introProductBinding>
+  </extension>
+  <extension
+        point="org.eclipse.ui.intro.config">
+     <config
+           content="introContent.xml"
+           id="org.talend.mdm.workbench.introConfigId"
+           introId="org.talend.mdm.workbench.intro">
+        <presentation
+              home-page-id="root">
+           <implementation
+                 kind="html"
+                 os="win32,linux,macosx"
+                 style="content/shared.css">
+           </implementation>
+        </presentation>
+     </config>
+  </extension>
+  <extension
+        id="product"
+        point="org.eclipse.core.runtime.products">
+     <product
+           application="org.eclipse.ui.ide.workbench"
+           name="Master Data Management">
+        <property
+              name="appName"
+              value="Master Data Management">
+        </property>
+        <property
+              name="aboutImage"
+              value="icons/talend-picto-small.gif">
+        </property>
+        <property
+              name="aboutText"
+              value="Master Data Management">
+        </property>
+        <property
+              name="windowImages"
+              value="icons/appli_16x16.gif,icons/appli_32x32.gif,icons/appli_48x48.gif">
+        </property>
+        <property
+              name="startupForegroundColor"
+              value="FFFFFF">
+        </property>
+        <property
+              name="startupMessageRect"
+              value="7,252,445,20">
+        </property>
+        <property
+              name="startupProgressRect"
+              value="5,275,445,15">
+        </property>
+        <property
+              name="preferenceCustomization"
+              value="plugin_customization.ini">
+        </property>
+     </product>
+  </extension>
+
+
    
 </plugin>
