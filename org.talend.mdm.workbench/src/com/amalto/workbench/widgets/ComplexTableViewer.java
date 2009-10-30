@@ -683,7 +683,7 @@ public class ComplexTableViewer {
 					}
 					
 				});
-				
+				//add by ymli, fix bug 0009441
 				xpath.getTextWidget().addKeyListener(new KeyListener(){
 
 					public void keyPressed(KeyEvent e) {
@@ -694,7 +694,7 @@ public class ComplexTableViewer {
 					public void keyReleased(KeyEvent e) {
 						// TODO Auto-generated method stub
 					if(e.character==SWT.CR){
-						xpath.setText(xpath.getText());
+						xpath.setText(xpath.getText().trim());
 						deactive();	 
 						}
 					}
@@ -733,7 +733,7 @@ public class ComplexTableViewer {
 		@Override
 		protected void doSetValue(Object value) {
 			// TODO Auto-generated method stub
-			xpath.setText(value.toString());
+			xpath.setText(value.toString().trim());
 		}
 		
 	}	
