@@ -14,7 +14,7 @@ public interface IConstants {
 	 */
 	static final String HEAD="HEAD";
 	
-	static final String TALEND="Talend Open MDM";
+	static final String TALEND="Talend MDM Studio";
 	
 	//static final String TALEND_MDM="Talend MDM";
 	/**

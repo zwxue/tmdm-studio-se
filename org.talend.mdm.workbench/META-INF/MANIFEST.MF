@@ -16,7 +16,8 @@ Require-Bundle: org.eclipse.ui,
  org.talend.mdm.commmon;bundle-version="1.0.0",
  org.eclipse.core.resources;bundle-version="3.4.0",
  org.eclipse.compare;bundle-version="3.4.0",
- org.eclipse.ui.intro
+ org.eclipse.ui.intro,
+ org.eclipse.ui.ide;bundle-version="3.4.0"
 Eclipse-AutoStart: true
 Bundle-ClassPath: com.amalto.workbench.jar,
  META-INF/lib/activation.jar,
@@ -54,4 +55,5 @@ Bundle-ClassPath: com.amalto.workbench.jar,
  META-INF/lib/xml-apis.jar,
  META-INF/lib/dom4j-1.6.1.jar,
  META-INF/lib/jaxen-1.1-beta-6.jar,
- META-INF/lib/commons-collections-3.2.jar
+ META-INF/lib/commons-collections-3.2.jar,
+ META-INF/lib/z.commons-lang-2.1.jar

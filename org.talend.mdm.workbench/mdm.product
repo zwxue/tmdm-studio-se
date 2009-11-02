@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.4"?>
 
-<product name="Master Data Management" id="org.talend.mdm.workbench.product" application="org.eclipse.ui.ide.workbench" version="3.2M1" useFeatures="false">
+<product name="%productName" id="org.talend.mdm.workbench.product" application="org.talend.mdm.workbench.application" version="3.2.0M1" useFeatures="false">
 
    <aboutInfo>
-      <image path="/org.talend.mdm.workbench/icons/talend-picto-small.gif"/>
+      <image path="icons/talend-picto-small.gif"/>
       <text>
-         Master Data Management
+         %productBlurb
       </text>
    </aboutInfo>
 
@@ -17,13 +17,14 @@
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
-   <windowImages i16="/org.talend.mdm.workbench/icons/appli_16x16.gif" i32="/org.talend.mdm.workbench/icons/appli_32x32.gif" i48="/org.talend.mdm.workbench/icons/appli_48x48.gif"/>
+   <windowImages i16="icons/appli_16x16.gif" i32="icons/appli_32x32.gif" i48="icons/appli_48x48.gif"/>
 
    <splash
+      location="org.talend.mdm.workbench"
       startupProgressRect="7,490,445,15"
       startupMessageRect="7,510,445,20"
       startupForegroundColor="0080C0" />
-   <launcher name="Master Data Management">
+   <launcher name="TalendMDMStudio">
       <solaris/>
       <win useIco="true">
          <ico path="/org.talend.mdm.workbench/designer.ico"/>
@@ -31,7 +32,7 @@
       </win>
    </launcher>
 
-   <intro introId="org.talend.mdm.workbench.intro"/>
+   <intro introId="org.talend.mdm.intro"/>
 
    <vm>
    </vm>
@@ -39,13 +40,22 @@
    <plugins>
       <plugin id="com.ibm.icu"/>
       <plugin id="com.spket.swt" fragment="true"/>
+      <plugin id="org.eclipse.compare"/>
       <plugin id="org.eclipse.core.commands"/>
       <plugin id="org.eclipse.core.contenttype"/>
       <plugin id="org.eclipse.core.databinding"/>
       <plugin id="org.eclipse.core.expressions"/>
+      <plugin id="org.eclipse.core.filebuffers"/>
+      <plugin id="org.eclipse.core.filesystem"/>
+      <plugin id="org.eclipse.core.filesystem.win32.x86" fragment="true"/>
       <plugin id="org.eclipse.core.jobs"/>
+      <plugin id="org.eclipse.core.resources"/>
+      <plugin id="org.eclipse.core.resources.compatibility" fragment="true"/>
+      <plugin id="org.eclipse.core.resources.win32.x86" fragment="true"/>
       <plugin id="org.eclipse.core.runtime"/>
       <plugin id="org.eclipse.core.runtime.compatibility.registry" fragment="true"/>
+      <plugin id="org.eclipse.emf.common"/>
+      <plugin id="org.eclipse.emf.ecore"/>
       <plugin id="org.eclipse.equinox.app"/>
       <plugin id="org.eclipse.equinox.common"/>
       <plugin id="org.eclipse.equinox.preferences"/>
@@ -53,13 +63,21 @@
       <plugin id="org.eclipse.help"/>
       <plugin id="org.eclipse.jface"/>
       <plugin id="org.eclipse.jface.databinding"/>
+      <plugin id="org.eclipse.jface.text"/>
       <plugin id="org.eclipse.osgi"/>
       <plugin id="org.eclipse.swt"/>
       <plugin id="org.eclipse.swt.win32.win32.x86" fragment="true"/>
+      <plugin id="org.eclipse.text"/>
       <plugin id="org.eclipse.ui"/>
+      <plugin id="org.eclipse.ui.editors"/>
       <plugin id="org.eclipse.ui.forms"/>
+      <plugin id="org.eclipse.ui.ide"/>
       <plugin id="org.eclipse.ui.intro"/>
+      <plugin id="org.eclipse.ui.views"/>
+      <plugin id="org.eclipse.ui.win32" fragment="true"/>
       <plugin id="org.eclipse.ui.workbench"/>
+      <plugin id="org.eclipse.ui.workbench.texteditor"/>
+      <plugin id="org.eclipse.xsd"/>
       <plugin id="org.talend.mdm.commmon"/>
       <plugin id="org.talend.mdm.workbench"/>
    </plugins>
