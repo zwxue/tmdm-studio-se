@@ -41,11 +41,9 @@ public class CompareManager {
         return prj;
 	}
 	
-	public void compareTwoStream(String left, String right,boolean format,CompareHeadInfo compareHeadInfo) throws Exception{
-		compareTwoStream(left,right,format,compareHeadInfo,null,null);
-	}
 	
-	public void compareTwoStream(String left, String right,boolean format,CompareHeadInfo compareHeadInfo,String leftLabel, String rightLabel) throws Exception{
+	
+	public void compareTwoStream(String left, String right,boolean format,CompareHeadInfo compareHeadInfo,String leftLabel, String rightLabel,boolean leftEditable,boolean rightEditable) throws Exception{
 		 if(left==null || right==null) return;
 		 
 		 if(format){
@@ -63,8 +61,8 @@ public class CompareManager {
 		 rightF.setContents(new ByteArrayInputStream(right.getBytes()), IFile.FORCE, null);
 		 
 		CompareConfiguration cc=new CompareConfiguration();
-		cc.setLeftEditable(true);
-		cc.setRightEditable(false);
+		cc.setLeftEditable(leftEditable);
+		cc.setRightEditable(rightEditable);
 		if(leftLabel==null)leftLabel="";
 		cc.setLeftLabel(leftLabel);
 		if(rightLabel==null)rightLabel="";

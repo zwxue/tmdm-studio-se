@@ -586,6 +586,14 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 								VersioningXObjectAction.ACTION_TYPE_VERSIONS
 						)
 				);
+				//compare item with each other
+				manager.appendToGroup(
+						IWorkbenchActionConstants.MB_ADDITIONS,
+						new CompareItemWithEachOtherAction(
+								DataClusterBrowserMainPage.this.getSite().getShell(),
+								DataClusterBrowserMainPage.this.resultsViewer
+						)
+				);
 				//compare item with svn
 				manager.appendToGroup(
 						IWorkbenchActionConstants.MB_ADDITIONS,
@@ -594,6 +602,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 								DataClusterBrowserMainPage.this.resultsViewer
 						)
 				);
+				
 			}
 		});
 		Menu menu = menuMgr.createContextMenu(resultsViewer.getControl());
@@ -818,6 +827,93 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 		}
 
 	}
+	
+	/***************************************************************
+	 * Compare item with each other
+	 ***************************************************************/
+	class CompareItemWithEachOtherAction extends Action{
+
+		protected Shell shell = null;
+		protected Viewer viewer;
+		
+		public CompareItemWithEachOtherAction(Shell shell, Viewer viewer) {
+			super();
+			this.shell = shell;
+			this.viewer = viewer;
+			setImageDescriptor(ImageCache.getImage( EImage.SYNCH.getPath()));
+			setText("Compare With Each Other");
+			setToolTipText("Compare With Each Other");
+		}
+		
+		public void run() {
+			
+			try {
+				super.run();
+				
+				IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
+				int selectSize=selection.size();
+				if(selectSize!=2){
+					MessageDialog.openWarning(null, "Warning", "Please select two items to compare! ");
+					return;
+				}
+				
+				List<LineItem> liList = selection.toList();
+				
+				LineItem leftLineItem = liList.get(0);
+				LineItem rightLineItem = liList.get(1);
+				
+				//left
+				WSItemPK leftWSItemPK=new WSItemPK(
+						(WSDataClusterPK)getXObject().getWsKey(),
+						 leftLineItem.getConcept().trim(),
+						 leftLineItem.getIds()
+				);
+				WSItem leftWSItem=Util.getPort(getXObject()).getItem(
+						new WSGetItem(
+						 leftWSItemPK	
+						)
+				);
+				String leftItemXmlContent=leftWSItem.getContent();
+				
+				//right
+				WSItemPK rightWSItemPK=new WSItemPK(
+						(WSDataClusterPK)getXObject().getWsKey(),
+						rightLineItem.getConcept().trim(),
+						rightLineItem.getIds()
+				);
+				WSItem rightWSItem=Util.getPort(getXObject()).getItem(
+						new WSGetItem(
+						  rightWSItemPK	
+						)
+				);
+				String rightItemXmlContent=rightWSItem.getContent();
+				
+				if(leftItemXmlContent!=null&&rightItemXmlContent!=null){
+					CompareHeadInfo compareHeadInfo=new CompareHeadInfo(getXObject());
+					compareHeadInfo.setItem(true);
+					compareHeadInfo.setDataModelName(leftWSItem.getDataModelName());
+					CompareManager.getInstance().compareTwoStream(
+							leftItemXmlContent,
+							rightItemXmlContent,
+							true,
+							compareHeadInfo,
+							leftWSItemPK.getConceptName()+"."+Util.joinStrings(leftWSItemPK.getIds(), "."),
+							rightWSItemPK.getConceptName()+"."+Util.joinStrings(rightWSItemPK.getIds(), "."),
+					        true,
+					        false
+					);
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				MessageDialog.openError(
+						shell,
+						"Error", 
+						"An error occured trying to compare items with each other: "+e.getLocalizedMessage()
+				);
+			}		
+		}
+	}
 
 	
 	/***************************************************************
@@ -834,8 +930,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 			this.shell = shell;
 			this.viewer = viewer;
 			setImageDescriptor(ImageCache.getImage( EImage.SYNCH.getPath()));
-			setText("Compare with latest Revision");
-			setToolTipText("Compare with latest Revision");
+			setText("Compare With Latest Revision");
+			setToolTipText("Compare With Latest Revision");
 		}
 		
 		public void run() {
@@ -879,7 +975,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 					CompareHeadInfo compareHeadInfo=new CompareHeadInfo(getXObject());
 					compareHeadInfo.setItem(true);
 					compareHeadInfo.setDataModelName(wsItem.getDataModelName());
-					CompareManager.getInstance().compareTwoStream(xml,itemcontent,true,compareHeadInfo,"Local Content","Lastest Revision");
+					CompareManager.getInstance().compareTwoStream(xml,itemcontent,true,compareHeadInfo,"Local Content","Lastest Revision",true,false);
 				}
 				
 			} catch (Exception e) {

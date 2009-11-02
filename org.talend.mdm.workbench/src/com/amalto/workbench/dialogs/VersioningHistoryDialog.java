@@ -29,19 +29,20 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 
 import com.amalto.workbench.actions.VersioningCompareAction;
+import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSBoolean;
 import com.amalto.workbench.webservices.WSItemPK;
 import com.amalto.workbench.webservices.WSVersioningGetItemHistory;
 import com.amalto.workbench.webservices.WSVersioningHistoryEntry;
 import com.amalto.workbench.webservices.WSVersioningItemHistory;
 import com.amalto.workbench.webservices.WSVersioningRestoreItemByRevision;
-import com.amalto.workbench.webservices.XtentisPort;
 
 public class VersioningHistoryDialog extends Dialog {
 
 	private final static int BUTTON_CANCEL = 11;
 	
-	private XtentisPort port=null;
+	private TreeObject xobject=null;
 	protected boolean isItems = false;
 	private WSItemPK[] wsItemPKs = null;
 
@@ -50,9 +51,9 @@ public class VersioningHistoryDialog extends Dialog {
 	
 	private boolean enableRestore = false;
 	
-	public VersioningHistoryDialog(Shell shell, XtentisPort port, WSItemPK[] wsItemPKs) {
+	public VersioningHistoryDialog(Shell shell, TreeObject xobject, WSItemPK[] wsItemPKs) {
 		super(shell);
-		this.port = port;
+		this.xobject = xobject;
 		this.wsItemPKs = wsItemPKs;
 		this.isItems = true;
 	}
@@ -134,7 +135,7 @@ public class VersioningHistoryDialog extends Dialog {
 			});
 
 			
-			//hookContextMenu();
+			hookContextMenu();
 
 			refreshData();
 			
@@ -185,7 +186,7 @@ public class VersioningHistoryDialog extends Dialog {
 				return false;
 			}else if (wsItemPKs.length ==1 ) {
 				try {
-					itemHistories = port.versioningGetItemHistory(
+					itemHistories = Util.getPort(xobject).versioningGetItemHistory(
 							new WSVersioningGetItemHistory(
 									null,
 									wsItemPKs[0]
@@ -239,7 +240,7 @@ public class VersioningHistoryDialog extends Dialog {
 		if(isItems){
 			try {
 		    
-				 WSBoolean rtn=this.port.versioningRestoreItemByRevision(new WSVersioningRestoreItemByRevision(
+				 WSBoolean rtn=Util.getPort(xobject).versioningRestoreItemByRevision(new WSVersioningRestoreItemByRevision(
 			        		null,
 			        		this.wsItemPKs[0],
 			        		entry.getRevision()
@@ -296,8 +297,11 @@ public class VersioningHistoryDialog extends Dialog {
 	}
 	
 	protected void fillContextMenu(IMenuManager manager) {
-		//TODO: to be supported
-		manager.add(new VersioningCompareAction());
+		if(isItems&&(wsItemPKs.length>0)){
+			manager.add(new VersioningCompareAction(VersioningHistoryDialog.this.getShell(),revisionsViewer,xobject,wsItemPKs[0]));	
+		}else{
+			//TODO suport Object
+		}
 	}
 
 }
