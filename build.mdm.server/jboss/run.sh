@@ -1,5 +1,2 @@
-#!/bin/sh
+bin/run.sh -b 0.0.0.0
 
-cd bin
-./run.sh -b 0.0.0.0
-cd -
