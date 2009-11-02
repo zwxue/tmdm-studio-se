@@ -26,16 +26,7 @@ import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.VersionUtil;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSDataClusterPK;
-import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSItemPK;
-import com.amalto.workbench.webservices.WSMenuPK;
-import com.amalto.workbench.webservices.WSRolePK;
-import com.amalto.workbench.webservices.WSRoutingRulePK;
-import com.amalto.workbench.webservices.WSStoredProcedurePK;
-import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
-import com.amalto.workbench.webservices.WSTransformerV2PK;
-import com.amalto.workbench.webservices.WSUniversePK;
-import com.amalto.workbench.webservices.WSViewPK;
 
 public class VersioningXObjectAction extends Action{
 	
@@ -258,7 +249,7 @@ public class VersioningXObjectAction extends Action{
 					case VersioningXObjectAction.ACTION_TYPE_HISTORY:
 						dialog = new VersioningHistoryDialog(
 								shell, 
-								Util.getPort(sampleXObject),
+								sampleXObject,
 								wsItemPKs
 						);
 						break;

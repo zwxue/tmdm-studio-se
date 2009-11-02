@@ -75,7 +75,7 @@ public class ResourceCompareInput extends CompareEditorInput {
 	private IResource fRightResource;
 	private DiffTreeViewer fDiffViewer;
 	private IAction fOpenAction;
-	private CompareHeadInfo compareHeadInfo;
+	private CompareHeadInfo compareHeadInfo;//if head info not equal null, then we need save changes
 	
 	class MyDiffNode extends DiffNode {
 		
@@ -420,6 +420,7 @@ public class ResourceCompareInput extends CompareEditorInput {
 	
 	@Override
 	public boolean isSaveNeeded() {
+		if(compareHeadInfo==null)return false;
 		return true;
 	}
 	
@@ -461,10 +462,11 @@ public class ResourceCompareInput extends CompareEditorInput {
 			}
 		}
 		
-		commitToDB();
+		if(this.compareHeadInfo!=null)commitToDB();
 	}
 	
 	private void commitToDB() {
+		
 		try {
 			String toCommitContent=CompareManager.getInstance().getLeftContent();
 			toCommitContent=XmlUtil.formatCompact(toCommitContent, "UTF-8");
@@ -481,7 +483,7 @@ public class ResourceCompareInput extends CompareEditorInput {
 				//TODO add support for Object(s)
 				
 			}
-			
+
 			
 		} catch (Exception e) {
 			e.printStackTrace();
