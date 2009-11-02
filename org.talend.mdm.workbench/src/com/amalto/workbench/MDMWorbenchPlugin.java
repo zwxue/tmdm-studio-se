@@ -9,7 +9,7 @@ import org.osgi.framework.BundleContext;
  */
 public class MDMWorbenchPlugin extends AbstractUIPlugin {
 	
-	public static final String ID="org.talend.openmdm.workbench";
+	public static final String ID="org.talend.mdm.workbench";
 
 	//The shared instance.
 	private static MDMWorbenchPlugin plugin;
