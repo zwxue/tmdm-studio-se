@@ -9,7 +9,7 @@
             id="org.talend.mdm.workbench">
       </category>
       <view
-            allowMultiple="false"
+            allowMultiple="true"
             category="org.talend.mdm.workbench"
             class="com.amalto.workbench.views.ServerView"
             icon="icons/talend-picto-small.gif"
@@ -44,10 +44,10 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             class="com.amalto.workbench.views.MDMPerspective"
-            fixed="true"
+            fixed="false"
             icon="icons/talend-picto-small.gif"
             id="org.talend.mdm.perspective"
-            name="Master Data Management">
+            name="Talend MDM Studio">
       </perspective>
    </extension>
    <!-- add the following to let MDM perspective to be show in TIS/TDQ -->
@@ -55,45 +55,18 @@
          point="org.talend.core.talendperspectives">
       <TalendPerspective
             refPerspectiveId="org.talend.mdm.perspective"
-            talendPerspectiveId="org.talend.mdm.perspective">
+            talendPerspectiveId="org.talend.mdm.tis.perspective">
       </TalendPerspective>
    </extension>
-  <extension
-        point="org.eclipse.ui.intro">
-     <intro
-           class="org.eclipse.ui.intro.config.CustomizableIntroPart"
-           id="org.talend.mdm.workbench.intro">
-     </intro>
-     <introProductBinding
-           introId="org.talend.mdm.workbench.intro"
-           productId="org.talend.mdm.workbench.product">
-     </introProductBinding>
-  </extension>
-  <extension
-        point="org.eclipse.ui.intro.config">
-     <config
-           content="introContent.xml"
-           id="org.talend.mdm.workbench.introConfigId"
-           introId="org.talend.mdm.workbench.intro">
-        <presentation
-              home-page-id="root">
-           <implementation
-                 kind="html"
-                 os="win32,linux,macosx"
-                 style="content/shared.css">
-           </implementation>
-        </presentation>
-     </config>
-  </extension>
   <extension
         id="product"
         point="org.eclipse.core.runtime.products">
      <product
-           application="org.eclipse.ui.ide.workbench"
-           name="Master Data Management">
+           application="org.talend.mdm.workbench.application"
+           name="%productName">
         <property
               name="appName"
-              value="Master Data Management">
+              value="%productName">
         </property>
         <property
               name="aboutImage"
@@ -101,7 +74,7 @@
         </property>
         <property
               name="aboutText"
-              value="Master Data Management">
+              value="%productBlurb">
         </property>
         <property
               name="windowImages"
@@ -109,15 +82,15 @@
         </property>
         <property
               name="startupForegroundColor"
-              value="FFFFFF">
+              value="0080C0">
         </property>
         <property
               name="startupMessageRect"
-              value="7,252,445,20">
+              value="7,510,445,20">
         </property>
         <property
               name="startupProgressRect"
-              value="5,275,445,15">
+              value="7,490,445,15">
         </property>
         <property
               name="preferenceCustomization"
@@ -125,7 +98,43 @@
         </property>
      </product>
   </extension>
+  <extension
+        id="application"
+        point="org.eclipse.core.runtime.applications">
+     <application
+           icon="icons/talend-picto-small.gif">
+        <run
+              class="com.amalto.workbench.rcp.Application">
+        </run>
+     </application>
+  </extension>
 
-
+   <extension
+         point="org.eclipse.ui.intro.config">
+      <config
+            introId="org.talend.mdm.intro"
+            content="introContent.xml"
+            id="org.talend.mdm.configId">
+         <presentation
+               home-page-id="root">
+            <implementation
+                  kind="html"
+                  os="win32,linux,macosx">
+            </implementation>
+         </presentation>
+      </config>
+   </extension>
+      <extension
+         point="org.eclipse.ui.intro">
+      <intro
+            class="org.eclipse.ui.intro.config.CustomizableIntroPart"
+            icon="icons/talend-picto-small.gif"
+            id="org.talend.mdm.intro">
+      </intro>
+      <introProductBinding
+            introId="org.talend.mdm.intro"
+            productId="org.talend.mdm.workbench.product">
+      </introProductBinding>
+   </extension>
    
 </plugin>
