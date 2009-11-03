@@ -17,6 +17,8 @@ import java.util.Set;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+
+
 import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.action.IMenuListener;
@@ -49,6 +51,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Text;
@@ -241,6 +244,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	XObjectEditor editor;
 	private String modelName="";
 	private boolean isChange=false;
+	private Group addLanGroup;
 	public DataModelMainPage(FormEditor editor) {
 		super(editor, DataModelMainPage.class.getName(), "Data Model "
 				+ ((XObjectEditorInput) editor.getEditorInput()).getName()
@@ -282,7 +286,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			btnCmp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 					false, 2, 1));
 			GridLayout gLayout=new GridLayout();
-			gLayout.numColumns=12;
+			gLayout.numColumns=9;
 			gLayout.horizontalSpacing=20;
 			btnCmp.setLayout(gLayout);
 			
@@ -355,11 +359,21 @@ public class DataModelMainPage extends AMainPageV2 {
 						viewer.refresh();
 				}
 			});
-			langeuageLabel=toolkit.createLabel(btnCmp, "Language:");
-			languageCombo=new Combo(btnCmp, SWT.NONE);
-			addLanBtn= toolkit.createButton(btnCmp, "ADD", SWT.NONE);
-			deleteLanbtn= toolkit.createButton(btnCmp, "REMOVE", SWT.NONE);
 			
+			addLanGroup=new Group(btnCmp, SWT.NONE);
+			addLanGroup.setText("Language Operation");
+			addLanGroup.setToolTipText("Add or remove languages in all concepts and elements for the current data model");
+			addLanGroup.setBackground(btnCmp.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+			addLanGroup.setLayout(new GridLayout(4,false));
+			
+			langeuageLabel=toolkit.createLabel(addLanGroup, "Language:");
+			languageCombo=new Combo(addLanGroup, SWT.NONE);
+			addLanBtn= toolkit.createButton(addLanGroup, "", SWT.NONE);
+			addLanBtn.setImage(ImageCache.getCreatedImage(EImage.ADD_LANGUAGE.getPath()));
+			addLanBtn.setToolTipText("ADD...");
+			deleteLanbtn= toolkit.createButton(addLanGroup, "", SWT.NONE);
+			deleteLanbtn.setImage(ImageCache.getCreatedImage(EImage.REMOVE_LANGUAGE.getPath()));
+			deleteLanbtn.setToolTipText("REMOVE...");
 	        Set<String> languages = Util.lang2iso.keySet();
 	        for (Iterator iter = languages.iterator(); iter.hasNext(); ) {
 				String language = (String) iter.next();
@@ -630,7 +644,6 @@ public class DataModelMainPage extends AMainPageV2 {
 		schemaSash.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		Label title=new Label(schemaSash,SWT.VERTICAL);
 		title.setText("Data-model: "+modelName);
-		title.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		title.setFont(FontUtils.getBoldFont(title.getFont()));
 		Color blue =new Color(schemaSash.getDisplay(),0,0,255);
 		title.setForeground(blue); 
