@@ -12,7 +12,6 @@ public enum EImage {
 	
 	ACTIVITY_CATEGORY("icons/activity_category.gif"),
 	ACTIVITY("icons/activity.gif"),
-	ADD_LANGUAGE("icons/add_language.ico"),
 	ADD_OBJ("icons/add_obj.gif"),
 	ADDMULTI_OBJ("icons/add.gif"),
 	ADDTSK_TSK("icons/addtsk_tsk.gif"),
@@ -244,8 +243,8 @@ public enum EImage {
 	SUSPEND("icons/suspend_co.gif"),
 	DOTS_BUTTON("icons/dots_button.gif"),
 	ZAP("icons/zap.gif"),
-	SERVICE_CONFIGURATION("icons/config.gif"), 
-	REMOVE_LANGUAGE("icons/remove_language.ico");
+	SERVICE_CONFIGURATION("icons/config.gif");
+
 	EImage(String path){
 		this.path=path;
 		

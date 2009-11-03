@@ -361,19 +361,19 @@ public class DataModelMainPage extends AMainPageV2 {
 			});
 			
 			addLanGroup=new Group(btnCmp, SWT.NONE);
-			addLanGroup.setText("Language Operation");
+			addLanGroup.setText("Label Operation");
 			addLanGroup.setToolTipText("Add or remove languages in all concepts and elements for the current data model");
 			addLanGroup.setBackground(btnCmp.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 			addLanGroup.setLayout(new GridLayout(4,false));
 			
 			langeuageLabel=toolkit.createLabel(addLanGroup, "Language:");
-			languageCombo=new Combo(addLanGroup, SWT.NONE);
+			languageCombo=new Combo(addLanGroup, SWT.READ_ONLY);
 			addLanBtn= toolkit.createButton(addLanGroup, "", SWT.NONE);
-			addLanBtn.setImage(ImageCache.getCreatedImage(EImage.ADD_LANGUAGE.getPath()));
-			addLanBtn.setToolTipText("ADD...");
+			addLanBtn.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
+			addLanBtn.setToolTipText("Add...");
 			deleteLanbtn= toolkit.createButton(addLanGroup, "", SWT.NONE);
-			deleteLanbtn.setImage(ImageCache.getCreatedImage(EImage.REMOVE_LANGUAGE.getPath()));
-			deleteLanbtn.setToolTipText("REMOVE...");
+			deleteLanbtn.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
+			deleteLanbtn.setToolTipText("Remove...");
 	        Set<String> languages = Util.lang2iso.keySet();
 	        for (Iterator iter = languages.iterator(); iter.hasNext(); ) {
 				String language = (String) iter.next();
@@ -390,30 +390,30 @@ public class DataModelMainPage extends AMainPageV2 {
 	        	}});
 			
 			
-			langeuageLabel.setLayoutData(new GridData(SWT.RIGHT_TO_LEFT, SWT.FILL, false,
+			langeuageLabel.setLayoutData(new GridData(SWT.RIGHT_TO_LEFT, SWT.CENTER, false,
 					false, 1, 1));
-			languageCombo.setLayoutData(new GridData(SWT.RIGHT_TO_LEFT, SWT.FILL, false,
+			languageCombo.setLayoutData(new GridData(SWT.RIGHT_TO_LEFT, SWT.CENTER, false,
 					false, 1, 1));
-			addLanBtn.setLayoutData(new GridData(SWT.RIGHT_TO_LEFT, SWT.FILL, false,
+			addLanBtn.setLayoutData(new GridData(SWT.RIGHT_TO_LEFT, SWT.CENTER, false,
 					false, 1, 1));
-			deleteLanbtn.setLayoutData(new GridData(SWT.RIGHT_TO_LEFT, SWT.FILL, false,
+			deleteLanbtn.setLayoutData(new GridData(SWT.RIGHT_TO_LEFT, SWT.CENTER, false,
 					false, 1, 1));
-			importXSDBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
+			importXSDBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 					false, 1, 1));
-			exportBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
+			exportBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 					false, 1, 1));
-			filterBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
+			filterBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 					false, 1, 1));			
 			
-			expandBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
+			expandBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 					false, 1, 1));	
-			foldBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
+			foldBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 					false, 1, 1));	
-			expandSelBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
+			expandSelBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 					false, 1, 1));	
-			sortUPBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
+			sortUPBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 					false, 1, 1));	
-			sortDownBtn.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
+			sortDownBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 					false, 1, 1));	
 			
 			
