@@ -48,12 +48,13 @@
     <!-- Use Log4J ChainSaw to see those messages with:                 -->
     <!--   java -Dchainsaw.port=4560 org.apache.log4j.chainsaw.Main     -->
     <!-- NOTE: update RemoteHost to your host -->
+    <!--
     <appender name="ChainSawPDS" class="org.apache.log4j.net.SocketAppender">
         <param name="Port" value="4560"/>
         <param name="RemoteHost" value="localhost"/>
         <param name="LocationInfo" value="true"/>
     </appender>
-
+	-->
    <appender name="LoggingEvents" class="org.apache.log4j.net.SocketAppender">
 	    <param name="Port" value="4561"/>
 	    <param name="RemoteHost" value="localhost"/>
