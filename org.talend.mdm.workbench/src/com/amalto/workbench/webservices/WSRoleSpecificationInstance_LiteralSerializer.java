@@ -25,6 +25,8 @@ public class WSRoleSpecificationInstance_LiteralSerializer extends LiteralObject
     private static final QName ns1_writable_QNAME = new QName("", "writable");
     private static final QName ns3_boolean_TYPE_QNAME = SchemaConstants.QNAME_TYPE_BOOLEAN;
     private CombinedSerializer ns3_myns3__boolean__boolean_Boolean_Serializer;
+    private static final QName ns1_readonly_QNAME = new QName("", "readonly");
+    private CombinedSerializer ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer;
     private static final QName ns1_parameter_QNAME = new QName("", "parameter");
     
     public WSRoleSpecificationInstance_LiteralSerializer(QName type, String encodingStyle) {
@@ -38,6 +40,7 @@ public class WSRoleSpecificationInstance_LiteralSerializer extends LiteralObject
     public void initialize(InternalTypeMappingRegistry registry) throws Exception {
         ns3_myns3_string__java_lang_String_String_Serializer = (CombinedSerializer)registry.getSerializer("", java.lang.String.class, ns3_string_TYPE_QNAME);
         ns3_myns3__boolean__boolean_Boolean_Serializer = (CombinedSerializer)registry.getSerializer("", boolean.class, ns3_boolean_TYPE_QNAME);
+        ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer = (CombinedSerializer)registry.getSerializer("", java.lang.Boolean.class, ns3_boolean_TYPE_QNAME);
     }
     
     public Object doDeserialize(XMLReader reader,
@@ -82,6 +85,17 @@ public class WSRoleSpecificationInstance_LiteralSerializer extends LiteralObject
             throw new DeserializationException("literal.expectedElementName", reader.getName().toString());
         }
         elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_readonly_QNAME)) {
+                member = ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer.deserialize(ns1_readonly_QNAME, reader, context);
+                if (member == null) {
+                    throw new DeserializationException("literal.unexpectedNull");
+                }
+                instance.setReadonly((java.lang.Boolean)member);
+                reader.nextElementContent();
+            }
+        }
+        elementName = reader.getName();
         if ((reader.getState() == XMLReader.START) && (elementName.equals(ns1_parameter_QNAME))) {
             values = new ArrayList();
             for(;;) {
@@ -124,6 +138,9 @@ public class WSRoleSpecificationInstance_LiteralSerializer extends LiteralObject
             throw new SerializationException("literal.unexpectedNull");
         }
         ns3_myns3__boolean__boolean_Boolean_Serializer.serialize(new Boolean(instance.isWritable()), ns1_writable_QNAME, null, writer, context);
+        if (instance.getReadonly() != null) {
+            ns3_myns3__boolean__java_lang_Boolean_Boolean_Serializer.serialize(instance.getReadonly(), ns1_readonly_QNAME, null, writer, context);
+        }
         if (instance.getParameter() != null) {
             for (int i = 0; i < instance.getParameter().length; ++i) {
                 ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getParameter()[i], ns1_parameter_QNAME, null, writer, context);
