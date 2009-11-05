@@ -623,6 +623,7 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 					WSRoleSpecificationInstance wsInstance = new WSRoleSpecificationInstance(
 							id,
 							instance.isWritable(),
+							false,
 							instance.getParameters().toArray(new String[instance.getParameters().size()])
 					);
 					wsInstances.add(wsInstance);
