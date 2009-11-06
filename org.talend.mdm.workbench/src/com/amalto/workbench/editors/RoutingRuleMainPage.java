@@ -357,6 +357,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             conditionsColumns[2].setColumnWidth(120);
             conditionsColumns[3].setColumnWidth(120);
             conditionViewer=new TisTableViewer(Arrays.asList(conditionsColumns),toolkit,routingExpressionsGroup);
+
             conditionViewer.setMainPage(this);
             conditionViewer.setAddMulti(true);
             conditionViewer.create();
@@ -428,7 +429,9 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			if(wsRoutingRule.getCondition()!=null)
 			conditionText.setText(wsRoutingRule.getCondition());
 			this.refreshing = false;
-
+            if(objectTypeText.getText().length()>0 && !objectTypeText.getText().equals("*")){           	
+            	conditionViewer.setConceptName(objectTypeText.getText());
+            }
 			
 		} catch (Exception e) {
 			e.printStackTrace();

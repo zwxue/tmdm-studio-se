@@ -47,10 +47,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.xsd.XSDComplexTypeContent;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
+import org.eclipse.xsd.XSDConcreteComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintCategory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
@@ -1676,4 +1679,39 @@ public class Util {
 		list.add(xsdComplexTypeContent);
 		return list;
 	}	
+	
+	public static List<String> getConcepts(XSDSchema schema){
+		EList xsdElementDeclarations = schema.getElementDeclarations();
+		List<String> list=new ArrayList<String>();
+		for(XSDElementDeclaration el: (XSDElementDeclaration[])xsdElementDeclarations.toArray(new XSDElementDeclaration[xsdElementDeclarations.size()] )){
+			if(!el.getIdentityConstraintDefinitions().isEmpty()){
+				list.add(el.getName());
+			}
+		}
+		return list;
+	}
+
+	/**
+	 * Returns and XSDSchema Object from an xsd
+	 * 
+	 * @param schema
+	 * @return
+	 * @throws Exception
+	 */
+	public static XSDSchema getXSDSchema(String schema) throws Exception {
+	    DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+		documentBuilderFactory.setNamespaceAware(true);
+		documentBuilderFactory.setValidating(false);
+		InputSource source = new InputSource(new StringReader(schema));
+		DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+		Document document = documentBuilder.parse(source);
+		XSDSchema xsdSchema=null;
+
+		xsdSchema = XSDSchemaImpl.createSchema(document
+					.getDocumentElement());
+				
+		return xsdSchema;
+	}
+	
+
 }

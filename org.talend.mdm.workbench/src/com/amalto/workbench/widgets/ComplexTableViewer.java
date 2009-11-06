@@ -50,6 +50,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.internal.handlers.SelectAllHandler;
 
+import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -83,7 +84,20 @@ public class ComplexTableViewer {
 	//mainPage can be null
 	protected AMainPageV2 mainPage;
 	protected Table table;
-	
+	protected String conceptName;
+	protected XpathWidget xpath;
+	protected XpathSelectDialog xpathDialog;
+	public String getConceptName() {
+		return conceptName;
+	}
+
+	public void setConceptName(String conceptName) {
+		this.conceptName = conceptName;
+		if(xpath!=null){
+			xpath.setConceptName(conceptName);
+		}
+		if(xpathDialog!=null)xpathDialog.setConceptName(conceptName);
+	}	
 	public AMainPageV2 getMainPage() {
 		return mainPage;
 	}
@@ -650,7 +664,6 @@ public class ComplexTableViewer {
 
 	class XpathCellEditor extends CellEditor{
 
-		XpathWidget xpath;
 		public XpathWidget getXpath() {
 			return xpath;
 		}
@@ -660,6 +673,7 @@ public class ComplexTableViewer {
 		@Override
 		protected Control createControl(Composite parent) {			
 			xpath= new XpathWidget(parent, mainPage,false);
+			xpath.setConceptName(conceptName);
 			((GridData)xpath.getComposite().getChildren()[0].getLayoutData()).heightHint=15;
 			((GridData)xpath.getComposite().getChildren()[1].getLayoutData()).heightHint=15;
 			if(parent instanceof Table){
