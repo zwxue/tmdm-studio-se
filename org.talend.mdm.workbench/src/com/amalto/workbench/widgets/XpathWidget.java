@@ -38,6 +38,19 @@ public class XpathWidget implements  SelectionListener{
     private String dataModelName;
 
     boolean isMulti=true;
+    
+    private String conceptName;
+    
+    
+	public String getConceptName() {
+		return conceptName;
+	}
+
+	public void setConceptName(String conceptName) {
+		this.conceptName = conceptName;
+		if(dlg!=null)dlg.setConceptName(conceptName);
+	}
+
 	public String getDataModelName() {
 		return dataModelName;
 	}
@@ -130,6 +143,7 @@ public class XpathWidget implements  SelectionListener{
 						dataModelName
 						
 				);
+				dlg.setConceptName(conceptName);
 			}
 		}
 		else{
@@ -141,6 +155,7 @@ public class XpathWidget implements  SelectionListener{
 						false,
 						dataModelName
 				);
+				dlg.setConceptName(conceptName);
 			}
 		}
 	

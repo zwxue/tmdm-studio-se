@@ -1,6 +1,7 @@
 package com.amalto.workbench.providers;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.ui.IWorkbenchPartSite;
@@ -20,7 +21,14 @@ import org.eclipse.xsd.XSDWildcard;
 import org.w3c.dom.Element;
 
 public class XPathTreeContentProvider extends XSDTreeContentProvider {
+	private String conceptName;
 	
+	public String getConceptName() {
+		return conceptName;
+	}
+	public void setConceptName(String conceptName) {
+		this.conceptName = conceptName;
+	}
 	public XPathTreeContentProvider(IWorkbenchPartSite site,
 			XSDSchema invisibleRoot) {
 		super(site, invisibleRoot);
@@ -30,6 +38,15 @@ public class XPathTreeContentProvider extends XSDTreeContentProvider {
 	public Object[] getChildren(Object parent) {
 		if (parent instanceof XSDSchema) {
 			EList xsdElementDeclarations = xsdSchema.getElementDeclarations();
+			List<XSDElementDeclaration> list =new ArrayList<XSDElementDeclaration>();
+			if(conceptName!=null){
+				for(XSDElementDeclaration el: (XSDElementDeclaration[])xsdElementDeclarations.toArray(new XSDElementDeclaration[xsdElementDeclarations.size()] )){
+					if(el.getName().matches(conceptName)){
+						list.add(el);
+					}
+				}
+				return list.toArray(new XSDElementDeclaration[list.size()] );
+			}
 			return xsdElementDeclarations.toArray(new XSDElementDeclaration[xsdElementDeclarations.size()] );
 		}
 		

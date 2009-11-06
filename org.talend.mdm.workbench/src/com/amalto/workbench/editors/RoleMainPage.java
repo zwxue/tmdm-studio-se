@@ -712,6 +712,7 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 //		System.out.println("showViewParameters() "+instanceName);
 		if (wcComposite==null)
 			wcComposite = getViewParametersComposite();
+		
 		((StackLayout)paramsClientComposite.getLayout()).topControl = wcComposite;
 		paramsContainerComposite.setVisible(true);
 		this.getManagedForm().reflow(true);
@@ -721,31 +722,12 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 	private void refreshViewParameters(String instanceName) {
 		paramsLabel.setText("Additional xPath Filters For View "+instanceName);
 	
-//		wcLeftText.setText("");
-//		wcOperatorCombo.select(0);
-//		wcRightText.setText("");
-//		wcPredicateCombo.setEnabled(true);
-//		wcPredicateCombo.select(0);
-//		
-//		wcListViewer.setInput(new ArrayList<RoleWhereCondition>());
-//		wcListViewer.refresh();
 	
 		//retrieve the parameters of the instance
 		HashSet<String> parameters = 
 			role.getSpecifications().get(objectTypesCombo.getText())
 				.getInstances().get(instanceName)
 					.getParameters();
-		
-		//build the list
-//		ArrayList<RoleWhereCondition> wcList = new ArrayList<RoleWhereCondition>();
-//		for (Iterator iter = parameters.iterator(); iter.hasNext(); ) {
-//			String marshalledWC = (String) iter.next();
-////			System.out.println("Unmarshalling: "+marshalledWC);
-//			wcList.add(RoleWhereCondition.parse(marshalledWC));
-//		}
-//		//refresh the whole thing
-//		wcListViewer.setInput(wcList);
-		
 		
 		java.util.List<Line> lines=new ArrayList<Line>();
 		for (Iterator iter = parameters.iterator(); iter.hasNext(); ) {
@@ -760,6 +742,8 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 		}
 		
 		//refresh the whole thing
+		String concept = instanceName.replaceAll("Browse_items_","").replaceAll("#.*","");
+		conditionViewer.setConceptName(concept);
         conditionViewer.getViewer().setInput(lines);
 	}
 	
@@ -778,127 +762,7 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
         conditionViewer.create();
         conditionViewer.setHeight(110);
         return composite;
-		
-		//CHECK:maybe this method needs to be implemented some place else;
-		/*
-				
-        FormToolkit toolkit =  this.getManagedForm().getToolkit();
-        
-        Composite composite = toolkit.createComposite(paramsClientComposite, SWT.BORDER);
-        composite.setLayoutData(
-                new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-        );
-        composite.setLayout(new GridLayout(5,false));
-                
-        wcLeftText = toolkit.createText(composite, "",SWT.BORDER|SWT.MULTI);
-        wcLeftText.setLayoutData(    
-                new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-        );
-        wcOperatorCombo = new Combo(composite,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
-        wcOperatorCombo.setLayoutData(
-                new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
-        );
-        wcOperatorCombo.add("Contains");
-        wcOperatorCombo.add("Contains Text Of");
-        wcOperatorCombo.add("Starts With");
-        wcOperatorCombo.add("Strict Contains");
-        wcOperatorCombo.add("=");
-        wcOperatorCombo.add("!=");
-        wcOperatorCombo.add(">");
-        wcOperatorCombo.add(">=");
-        wcOperatorCombo.add("<");
-        wcOperatorCombo.add("<=");
-        wcOperatorCombo.add("No Operator");
-        wcOperatorCombo.select(0);
-        wcOperatorCombo.addSelectionListener(new SelectionListener() {
-        	public void widgetDefaultSelected(SelectionEvent e) {}
-        	public void widgetSelected(SelectionEvent e) {
-        		if ("Contains".equals(wcOperatorCombo.getText())) {
-        			wcPredicateCombo.setEnabled(true);
-        		} else {
-        			wcPredicateCombo.select(0);
-        			wcPredicateCombo.setEnabled(false);
-        		}
-        	}
-        });
-        
-        wcRightText = toolkit.createText(composite, "",SWT.BORDER|SWT.SINGLE);
-        wcRightText.setLayoutData(    
-                new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-        );
-        wcRightText.addKeyListener(new KeyListener() {
-			public void keyPressed(KeyEvent e) {}
-			public void keyReleased(KeyEvent e) {
-				if ((e.stateMask==0) && (e.character == SWT.CR)){
-            		addWhereCondition();
-				}
-			}
-        });
-        wcPredicateCombo = new Combo(composite,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
-        wcPredicateCombo.setLayoutData(
-                new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
-        );
-        wcPredicateCombo.add("");
-        wcPredicateCombo.add("Or");
-        wcPredicateCombo.add("And");
-        wcPredicateCombo.add("Strict And");
-        wcPredicateCombo.add("Exactly");
-        wcPredicateCombo.add("Not");
-        
-        Button wcButton =toolkit.createButton(composite,"",SWT.PUSH );
-        wcButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
-        wcButton.setToolTipText("Add");
-        wcButton.setLayoutData(
-                new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
-        );
-        wcButton.addSelectionListener(new SelectionListener() {
-        	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
-        	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-        		addWhereCondition();
-        	};
-        });        
-        
-        wcListViewer = new ListViewer(composite,SWT.BORDER | SWT.MULTI);
-        wcListViewer.getControl().setLayoutData(
-                new GridData(SWT.FILL,SWT.FILL,true,true,5,1)
-        );
-        ((GridData)wcListViewer.getControl().getLayoutData()).minimumHeight = 100;
-        wcListViewer.setContentProvider(new IStructuredContentProvider() {
-			public void dispose() {}
-			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {}
-			public Object[] getElements(Object inputElement) {
-				ArrayList<RoleWhereCondition> wcList = (ArrayList<RoleWhereCondition>)inputElement;
-				return wcList.toArray(new RoleWhereCondition[wcList.size()]);
-			}
-        });
-        wcListViewer.setLabelProvider(new ILabelProvider() {
-			public Image getImage(Object element) {return null;}
-			public String getText(Object element) {
-//				System.out.println("ELEMENT "+element.getClass().getName());
-				RoleWhereCondition wc = (RoleWhereCondition) element;
-				String text = wc.getLeftPath()+" ";
-				text+=wc.getOperator();
-				text+=" ";
-				if (!wc.getOperator().equals("Join")) text+="\"";
-				text+=wc.getRightValueOrPath();
-				if (!wc.getOperator().equals("Join")) text+="\"";
-				text+=" ";
-				if ((wc.getPredicate()!=null) && (!"".equals(wc.getPredicate())))
-					text+="["+wc.getPredicate()+"]";
-				return text;
-			}
-			public void addListener(ILabelProviderListener listener) {}
-			public void dispose() {}
-			public boolean isLabelProperty(Object element, String property) {return false;}
-			public void removeListener(ILabelProviderListener listener) {}
-        });
-        DragSource wcSource = new DragSource(wcListViewer.getControl(),DND.DROP_MOVE);
-        wcSource.setTransfer(new Transfer[]{TextTransfer.getInstance()});
-        wcSource.addDragListener(new WCDragSourceListener());
-
-        wrap.Wrap(RoleMainPage.this, wcListViewer);
-        return composite;
-	*/}
+	}
 	
 	
 	protected void addWhereCondition() {
@@ -934,55 +798,7 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
 	
 
 	
-	
-	/**
-	 * Where Condition Drag
-	 *
-	 */
-	//CHECK:This inner class removed.
-/*	class WCDragSourceListener implements DragSourceListener {
 
-		public void dragFinished(DragSourceEvent event) {
-			IStructuredSelection selection = (IStructuredSelection)RoleMainPage.this.wcListViewer.getSelection();
-			if (selection.getFirstElement()!=null) {
-				RoleWhereCondition wc = (RoleWhereCondition) selection.getFirstElement();
-				//Update the underlying role
-				String instanceName = ((InstanceLine)((IStructuredSelection)instancesViewer.getSelection()).getFirstElement()).getInstanceName();
-				ArrayList<RoleWhereCondition> wcList = (ArrayList<RoleWhereCondition>)wcListViewer.getInput();
-				wcList.remove(wc);
-				//update underlying role
-				LinkedHashSet<String> parameters = new LinkedHashSet<String>();
-				for (Iterator iter = wcList.iterator(); iter.hasNext(); ) {
-					RoleWhereCondition rwc = (RoleWhereCondition) iter.next();
-					parameters.add(rwc.toString());
-				}
-				role
-					.getSpecifications().get(objectTypesCombo.getText())
-						.getInstances().get(instanceName)
-							.setParameters(parameters);
-				wcListViewer.refresh();
-				markDirty();
-			}
-		}
-
-		public void dragSetData(DragSourceEvent event) {
-			IStructuredSelection selection = (IStructuredSelection)RoleMainPage.this.wcListViewer.getSelection();
-			if (selection.getFirstElement()!=null) {
-					event.data =  selection.getFirstElement();
-			}
-		}
-
-		public void dragStart(DragSourceEvent event) {
-			IStructuredSelection selection = (IStructuredSelection)RoleMainPage.this.wcListViewer.getSelection();
-			event.doit = (selection.getFirstElement()!=null);
-		}
-
-
-	}*/
-
-	
-	
-	
 	/****************************************************************************
 	 *   MENUS
 	 ****************************************************************************/

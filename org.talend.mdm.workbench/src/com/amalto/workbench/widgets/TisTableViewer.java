@@ -42,8 +42,7 @@ public class TisTableViewer extends ComplexTableViewer{
 	private Button copyButton;
 	private Button pastButton;
 	private boolean addMulti;// 'addAll' and 'deleteAll' button will be added if this field is not null
-	
-	
+
 
 	public boolean isAddMulti() {
 		return addMulti;
@@ -53,7 +52,7 @@ public class TisTableViewer extends ComplexTableViewer{
 		this.addMulti = addMulti;
 	}
 
-	private XpathSelectDialog xpathDialog;
+
 
 
 	public TisTableViewer(List<ComplexTableViewerColumn> columns,
@@ -107,7 +106,7 @@ public class TisTableViewer extends ComplexTableViewer{
 		        addAllButton.setLayoutData(
 		                new GridData(SWT.FILL,SWT.FILL,false,false,1,1)
 		        );
-		        addAllButton.setToolTipText("Add multiple");
+		        addAllButton.setToolTipText("Add Multiple");
 		        addAllButton.setImage(ImageCache.getCreatedImage(EImage.ADDMULTI_OBJ.getPath()));
 		        addAllButton.addSelectionListener(new SelectionListener() {
 		        	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
@@ -121,6 +120,7 @@ public class TisTableViewer extends ComplexTableViewer{
 									true,
 									null								
 							);
+			        		xpathDialog.setConceptName(conceptName);
 		        		}
 		        		xpathDialog.setBlockOnOpen(true);
 		        		xpathDialog.open();
@@ -153,15 +153,17 @@ public class TisTableViewer extends ComplexTableViewer{
 	        	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
 	        	@SuppressWarnings("unchecked")
 				public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-	        		int index =viewer.getTable().getSelectionIndex();
-	        		if(index >=0 && index < viewer.getTable().getItemCount() ){
-	        			List<Line> items=(List<Line>)viewer.getInput();
-	        			items.remove(index);
-	        			viewer.refresh();
-	        			int pos= index-1;
-	        			if(pos>=0) viewer.getTable().select(pos);
-	        			markDirty();
+	        		TableItem[] items =viewer.getTable().getSelection();
+	        		for(int i=0; i<items.length; i++){	        			
+	        			viewer.remove(items[i].getData());
 	        		}
+	        		List<Line> input=new ArrayList<Line>();
+	        		for(TableItem item: viewer.getTable().getItems()){
+	        			input.add((Line)item.getData());
+	        		}
+	        		viewer.setInput(input);
+	        		
+	        		markDirty();
 	        	};
 	        });
 	        deleteButton.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));

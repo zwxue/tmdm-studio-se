@@ -64,7 +64,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 	private boolean comitting = false;
 	private String lastDataModelName = null;
 	private String viewName=null;
-
+	private String concept;
 	
 	private ComplexTableViewerColumn[] viewableElementColumns = new ComplexTableViewerColumn[]{
 			new ComplexTableViewerColumn("XPath", false, "newXPath", "newXPath", "",ComplexTableViewerColumn.XPATH_STYLE,new String[] {},0)
@@ -115,6 +115,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             viewablehGroup.setLayout(new GridLayout(2,false));
             viewableElementColumns[0].setColumnWidth(220);
             viewableViewer = new TisTableViewer(Arrays.asList(viewableElementColumns),toolkit,viewablehGroup);
+            concept = viewName.replaceAll("Browse_items_","").replaceAll("#.*","");
+            viewableViewer.setConceptName(concept);
             viewableViewer.setMainPage(this);
             viewableViewer.setAddMulti(true);
             viewableViewer.create();
@@ -126,6 +128,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             searchGroup.setLayout(new GridLayout(2,false));
             searchableElementColumns[0].setColumnWidth(220);
             searchableViewer = new TisTableViewer(Arrays.asList(searchableElementColumns),toolkit,searchGroup);
+            searchableViewer.setConceptName(concept);
             searchableViewer.setMainPage(this);
             searchableViewer.setAddMulti(true);
             searchableViewer.create();            
@@ -140,6 +143,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             conditionsColumns[1].setColumnWidth(150);
             conditionsColumns[3].setColumnWidth(120);
             conditionViewer=new TisTableViewer(Arrays.asList(conditionsColumns),toolkit,wcGroup);
+            conditionViewer.setConceptName(concept);
             conditionViewer.setMainPage(this);
             conditionViewer.setAddMulti(true);
             conditionViewer.create();

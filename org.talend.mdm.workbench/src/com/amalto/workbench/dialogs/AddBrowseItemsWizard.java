@@ -191,6 +191,7 @@ public class AddBrowseItemsWizard extends Wizard{
     				WSRoleSpecificationInstance[] specInstance = spec.getInstance();
     				WSRoleSpecificationInstance  newInstance = new WSRoleSpecificationInstance();
     				newInstance.setInstanceName(browseItem);
+    				newInstance.setReadonly(false);
     				newInstance.setWritable(keyValues.get(1).value.equals("Read Only") ? false : true);
     				WSRoleSpecificationInstance[] newSpecInstance = new WSRoleSpecificationInstance[specInstance.length + 1];
     				System.arraycopy(specInstance, 0, newSpecInstance, 0, specInstance.length);

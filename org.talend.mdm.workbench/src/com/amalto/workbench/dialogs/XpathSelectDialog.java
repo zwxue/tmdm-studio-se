@@ -3,6 +3,7 @@ package com.amalto.workbench.dialogs;
 import java.awt.Panel;
 import java.io.StringReader;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -17,6 +18,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -71,8 +73,8 @@ public class XpathSelectDialog extends Dialog {
 	protected static String dataModelName;
 	private String xpath="";
 	private boolean isMulti=true;
-	
-	
+	protected String conceptName;
+	private XSDSchema xsdSchema;
 	public XpathSelectDialog(Shell parentShell,TreeParent parent,String title,IWorkbenchPartSite site,boolean isMulti,String dataModelName) {
 		super(parentShell);
 		this.title = title;
@@ -84,7 +86,7 @@ public class XpathSelectDialog extends Dialog {
 	}
 
 	private  String getXpath(StructuredSelection sel){
-		getOKButton().setEnabled(false);
+
 		String path ="";
 		String totalXpath="";
             TreeItem item;
@@ -97,12 +99,10 @@ public class XpathSelectDialog extends Dialog {
             	do {
                 	 component = (XSDConcreteComponent)item.getData();
                 	if (component instanceof XSDParticle) {
-                		getOKButton().setEnabled(true);
                 		if (((XSDParticle)component).getTerm() instanceof XSDElementDeclaration)
                 			path = "/"+((XSDElementDeclaration)((XSDParticle)component).getTerm()).getName()+path;
                 	} else if (component instanceof XSDElementDeclaration) {
                 			path=((XSDElementDeclaration)component).getName()+path;
-                			getOKButton().setEnabled(true);
                 	}
                 	item = item.getParentItem();
                 	
@@ -135,14 +135,27 @@ public class XpathSelectDialog extends Dialog {
 		}
 		final TreeParent tree = this.parent.findServerFolder(TreeObject.DATA_MODEL);
 		
-//		TreeObject[] trees = tree.getChildren();
-//		ArrayList <String> systemDataModelValues  = new ArrayList<String>();
-//		for (int i = 0; i < trees.length; i++) //add all the DataModels to systemDataModelValues
-//			systemDataModelValues.add(((TreeObject)trees[i]).getDisplayName()) ;
+
 		List<String> systemDataModelValues=Util.getChildren(this.parent.getServerRoot(), TreeObject.DATA_MODEL);
 		
-		//systemDataModelValues.removeAll(ESystemDefaultObjects.getValueByType(TreeObject.DATA_MODEL));// remove the System
-		dataModelCombo.setItems(systemDataModelValues.toArray(new String[systemDataModelValues.size()]));
+		//filter the datamodel according to conceptName
+		List<String> avaiList=new ArrayList<String>();
+		avaiList.addAll(systemDataModelValues);
+		if(conceptName!=null && !conceptName.contains("*")){
+			for(String datamodel: systemDataModelValues){
+				try {
+					WSDataModel dm=Util.getPort(this.parent).getDataModel(new WSGetDataModel(new WSDataModelPK(datamodel)));
+					if(dm!=null){
+						if(!Util.getConcepts(Util.getXSDSchema(dm.getXsdSchema())).contains(conceptName)){
+							avaiList.remove(datamodel);
+						}
+					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				} 
+			}
+		}
+		dataModelCombo.setItems(avaiList.toArray(new String[avaiList.size()]));
 		dataModelCombo.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(
 					org.eclipse.swt.events.SelectionEvent e) {}
@@ -165,7 +178,7 @@ public class XpathSelectDialog extends Dialog {
 			domViewer = new TreeViewer(composite, SWT.H_SCROLL | SWT.V_SCROLL
 					| SWT.BORDER);
 		}
-		int index = systemDataModelValues.indexOf(dataModelName);
+		int index = avaiList.indexOf(dataModelName);
 		if (index < 0)
 			dataModelCombo.select(0);
 		else
@@ -181,6 +194,7 @@ public class XpathSelectDialog extends Dialog {
 	
 	private void changeDomTree(final TreeParent pObject) {
 		String modelDisplay = dataModelCombo.getText();
+		if(modelDisplay.length()==0) return;
 		this.dataModelName = modelDisplay;
         //this.selectedDataModelName = modelDisplay;
 		//xobject = pObject.findObject(TreeObject.DATA_MODEL, modelDisplay);
@@ -200,7 +214,8 @@ public class XpathSelectDialog extends Dialog {
 			e2.printStackTrace();
 		}
 		try {
-			XSDSchema xsdSchema = getXSDSchema(wsDataModel.getXsdSchema());
+			XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
+			
 			provideViwerContent(xsdSchema);
 		} catch (Exception e1) {
 			e1.printStackTrace();
@@ -208,22 +223,16 @@ public class XpathSelectDialog extends Dialog {
 	}// changeDomTree(
 	
 
-	private XSDSchema getXSDSchema(String schema) throws Exception{
-   		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-		documentBuilderFactory.setNamespaceAware(true);
-		documentBuilderFactory.setValidating(false);
-		InputSource source = new InputSource(new StringReader(schema));
-		DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-		Document document = documentBuilder.parse(source);
-		return XSDSchemaImpl.createSchema(document.getDocumentElement());		
-	}
 	
 	
 	  protected void provideViwerContent(XSDSchema xsdSchema) {
+		 this.xsdSchema=xsdSchema;
 		drillDownAdapter = new DrillDownAdapter(domViewer);
 		domViewer.setLabelProvider(new XSDTreeLabelProvider());
-		domViewer.setContentProvider(new XPathTreeContentProvider(this.site,
-				xsdSchema));
+		XPathTreeContentProvider  provider=new XPathTreeContentProvider(this.site,
+				xsdSchema);
+		provider.setConceptName(this.conceptName);
+		domViewer.setContentProvider(provider);
 
 		domViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent e) {
@@ -231,6 +240,7 @@ public class XpathSelectDialog extends Dialog {
 						.getSelection();
 				xpath = getXpath(sel);
 				xpathText.setText(xpath);
+				getButton(IDialogConstants.OK_ID).setEnabled(xpath.length()>0);
 			}
 		});
 		domViewer.getControl().setLayoutData(
@@ -277,6 +287,14 @@ public class XpathSelectDialog extends Dialog {
 
 	public static String getDataModelName() {
 		return dataModelName;
+	}
+
+	public String getConceptName() {
+		return conceptName;
+	}
+
+	public void setConceptName(String conceptName) {
+		this.conceptName = conceptName;
 	}
 
 }
