@@ -43,7 +43,7 @@ import com.amalto.workbench.webservices.WSVersioningUniverseVersionsTagStructure
  * @author achen
  * DOC achen class global comment. Detailled comment
  */
-public class UniverseVersionTreeViewer {
+public class RepositoryCheckTreeViewer {
 
     private FilteredCheckboxTree filteredCheckboxTree;
 
@@ -61,6 +61,7 @@ public class UniverseVersionTreeViewer {
 
 	private TreeParent serverRoot;
 	
+	private List<TreeObject> checkItems;
 	private String defaultTagText;
 	
 	private boolean isTagEditable;
@@ -72,13 +73,18 @@ public class UniverseVersionTreeViewer {
 	private IDoubleClickListener tagsViewerDoubleClickListener;
 	private ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries;
 
-    public UniverseVersionTreeViewer(IStructuredSelection selection,String defaultTagText, boolean isTagEditable) {
+    public RepositoryCheckTreeViewer(IStructuredSelection selection,String defaultTagText, boolean isTagEditable) {
         this.selection = selection;
-        serverRoot=  (TreeParent)selection.getFirstElement();
+        serverRoot=  ((TreeParent)selection.getFirstElement()).getServerRoot();
+        checkItems=selection.toList();
         this.defaultTagText = defaultTagText;
         this.isTagEditable = isTagEditable;
     }
-
+    public RepositoryCheckTreeViewer(IStructuredSelection selection){
+    	this.selection=selection;
+    	 serverRoot=  ((TreeParent)selection.getFirstElement()).getServerRoot();
+    	 checkItems=selection.toList();
+    }
     public SashForm createContents(Composite parent) {
         // Splitter
         final GridData data = new GridData();
@@ -142,7 +148,7 @@ public class UniverseVersionTreeViewer {
 
         return sash;
     }
-    
+    Label itemLabel=null;
     /**
      * 
      * @param workArea
@@ -152,9 +158,9 @@ public class UniverseVersionTreeViewer {
         GridLayoutFactory.swtDefaults().numColumns(2).applyTo(itemComposite);
         GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).hint(400, 200).applyTo(itemComposite);
 
-        Label label = new Label(itemComposite, SWT.NONE);
-        label.setText("Select Items to Tag");
-        GridDataFactory.swtDefaults().span(2, 1).applyTo(label);
+        itemLabel = new Label(itemComposite, SWT.NONE);
+        itemLabel.setText("Select Items to Tag");
+        GridDataFactory.swtDefaults().span(2, 1).applyTo(itemLabel);
 
         createTreeViewer(itemComposite);
 
@@ -165,13 +171,19 @@ public class UniverseVersionTreeViewer {
 
 
         // if user has select some items in repository view, mark them as checked
-        if (!selection.isEmpty()) {        	       	
-            repositoryNodes.addAll(Util.getChildrenObj(serverRoot));
-            ((CheckboxTreeViewer) viewer).setCheckedElements(repositoryNodes.toArray());         
+        for(TreeObject obj: checkItems){
+        	if(obj instanceof TreeParent)
+        		repositoryNodes.addAll(Util.getChildrenObj((TreeParent)obj));
+        	else
+        		repositoryNodes.add(obj);
         }
+        ((CheckboxTreeViewer) viewer).setCheckedElements(repositoryNodes.toArray());         
         return itemComposite;
     }
-
+    
+    public void setItemText(String text){
+    	itemLabel.setText(text);
+    }
     
     private void expandParent(TreeViewer viewer, TreeObject node) {
         TreeParent parent = node.getParent();

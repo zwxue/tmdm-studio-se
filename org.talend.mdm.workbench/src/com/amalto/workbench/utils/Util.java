@@ -1117,9 +1117,11 @@ public class Util {
 	}
 	public static List<TreeObject> getChildrenObj(TreeParent xObject){
 		List<TreeObject> objs=new ArrayList<TreeObject>();
+		if(xObject.getChildren()!=null)
 		for( TreeObject obj:xObject.getChildren()){
 			if(obj instanceof TreeParent){
 				TreeParent parent=(TreeParent)obj;
+				if(parent!=null)
 				objs.addAll(getChildrenObj(parent));
 			}else{
 				if(obj.isXObject())
@@ -1480,7 +1482,7 @@ public class Util {
    			return complexs;
     }
     /**
-     * 
+     * @deprecated don't use exist backup see ImportItemWizard
      * @param filename
      * @param server
      * @param monitor
@@ -1518,7 +1520,7 @@ public class Util {
     }
     
     /**
-     * 
+     * @deprecated don't use exist backup see ExportItemWizard
      * @param datacluster
      * @param filename
      * @param server

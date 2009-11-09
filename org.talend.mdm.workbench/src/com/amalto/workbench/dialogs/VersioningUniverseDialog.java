@@ -38,11 +38,11 @@ import com.amalto.workbench.webservices.WSVersioningTagUniverse;
 import com.amalto.workbench.webservices.WSVersioningUniverseVersions;
 import com.amalto.workbench.webservices.WSVersioningUniverseVersionsTagStructure;
 import com.amalto.workbench.webservices.XtentisPort;
-import com.amalto.workbench.widgets.UniverseVersionTreeViewer;
+import com.amalto.workbench.widgets.RepositoryCheckTreeViewer;
 
 public class VersioningUniverseDialog extends Dialog {
 	private IStructuredSelection sel;
-	private UniverseVersionTreeViewer treeViewer;
+	private RepositoryCheckTreeViewer treeViewer;
 	private XtentisPort port;
 	private TreeObject selectedXObject;
 	
@@ -62,7 +62,7 @@ public class VersioningUniverseDialog extends Dialog {
 			Composite composite = (Composite) super.createDialogArea(parent);
 			GridLayout layout = (GridLayout)composite.getLayout();
 			layout.numColumns=1;
-			treeViewer =new UniverseVersionTreeViewer(sel,getDefautTag(),false);
+			treeViewer =new RepositoryCheckTreeViewer(sel,getDefautTag(),false);
 			treeViewer.setTagSelectionListener(new SelectionListener() {
 				public void widgetDefaultSelected(SelectionEvent e) {}
 				public void widgetSelected(SelectionEvent e) {
