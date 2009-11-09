@@ -1343,15 +1343,7 @@ public class Util {
     	    	}
     	    }
 		    xsdSchema.updateElement();
-
-    		Document document =  xsdSchema.getDocument();
-    		try {
-				String schema = Util.nodeToString(document);
-				System.out.println(schema);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+		    
 		return xsdSchema;
     }
     
