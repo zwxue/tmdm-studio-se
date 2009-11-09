@@ -11,7 +11,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDAttributeGroupDefinition;
-import org.eclipse.xsd.XSDComplexTypeContent;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
@@ -26,6 +25,7 @@ import org.eclipse.xsd.XSDWildcard;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.DataModelFilter;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
@@ -34,7 +34,8 @@ public class XSDTreeContentProvider implements IStructuredContentProvider, ITree
 	protected XSDSchema xsdSchema;
 	IWorkbenchPartSite site = null;
 	DataModelFilter filter;
-	public XSDTreeContentProvider(IWorkbenchPartSite site, XSDSchema invisibleRoot ) {
+	TreeObject treeObj;
+	public XSDTreeContentProvider(IWorkbenchPartSite site, XSDSchema invisibleRoot, TreeObject treeObject) {
 		this.site = site;
 		this.xsdSchema = invisibleRoot;
 	}
@@ -79,9 +80,9 @@ public class XSDTreeContentProvider implements IStructuredContentProvider, ITree
 						list.add(el);
 					}					
 				}
-				return list.toArray(new XSDElementDeclaration[list.size()]);
+				return filterOutDuplicatedElems(list);
 			}
-			return xsdElementDeclarations.toArray(new XSDElementDeclaration[xsdElementDeclarations.size()] );
+			return filterOutDuplicatedElems(xsdElementDeclarations);
 		}
 		
 		if (parent instanceof XSDAttributeGroupDefinition) {
@@ -191,6 +192,7 @@ public class XSDTreeContentProvider implements IStructuredContentProvider, ITree
 			if (std.getVariety().equals(XSDVariety.ATOMIC_LITERAL)) {
 				ArrayList list = new ArrayList();
 				//add Base Type if not a pre-defined type
+				if (std != null && std.getSchema() != null && std.getSchema().getSchemaForSchema() != null)
 				if (! std.getSchema().getSchemaForSchema().getTypeDefinitions().contains(std))
 					list.add(std.getBaseTypeDefinition());
 				list.addAll(std.getFacetContents());
@@ -310,7 +312,15 @@ public class XSDTreeContentProvider implements IStructuredContentProvider, ITree
 				
 			}else{
 				if (annotation!=null) {
-					list.add(annotation);
+					if(!Util.IsAImporedElement(particle, xsdSchema))
+					{
+						if (particle.getTerm() instanceof XSDElementDeclaration)
+						{
+							XSDTypeDefinition type = ((XSDElementDeclaration)particle.getTerm()).getTypeDefinition();
+							if(!Util.IsAImporedElement(type, xsdSchema))
+							  list.add(annotation);
+						}
+					}
 				}
 			}
 			return list.toArray(new Object[list.size()]);
@@ -329,6 +339,40 @@ public class XSDTreeContentProvider implements IStructuredContentProvider, ITree
 	
 
 	
+	private Object [] filterOutDuplicatedElems(List<XSDElementDeclaration> xsdElementDeclarations)
+	{
+		List<XSDElementDeclaration> list = new ArrayList<XSDElementDeclaration>();
+		for(XSDElementDeclaration el: (XSDElementDeclaration[])xsdElementDeclarations.toArray(new XSDElementDeclaration[xsdElementDeclarations.size()] )){
+			boolean exist = false;
+			for(XSDElementDeclaration xsdEl: list)
+			{
+				if (xsdEl.getName().equals(el.getName())
+						&& xsdEl.getTargetNamespace() != null
+						&& el.getTargetNamespace() != null
+						&& xsdEl.getTargetNamespace().equals(
+								el.getTargetNamespace()))
+				{
+					exist = true;
+					break;
+				}
+				else if (xsdEl.getName().equals(el.getName())
+						&& xsdEl.getTargetNamespace() == null
+						&& el.getTargetNamespace() == null)
+				{
+					exist = true;
+					break;
+				}
+			}
+			if (!exist)
+			{
+				list.add(el);	
+			}			
+		}
+		
+
+		return list.toArray(new Object[]{});
+	}
+	
 	public boolean hasChildren(Object parent) {
 		//System.out.println("has Children "+parent.getClass().getName());
 		return getChildren(parent).length >0;
@@ -340,7 +384,7 @@ public class XSDTreeContentProvider implements IStructuredContentProvider, ITree
 	
 	public void setXsdSchema(String xsd)
 	{
-		xsdSchema = Util.createXsdSchema(xsd);
+		xsdSchema = Util.createXsdSchema(xsd, treeObj);
 	}
 	public void setXsdSchema(XSDSchema xsdSchema){
 		this.xsdSchema=xsdSchema;

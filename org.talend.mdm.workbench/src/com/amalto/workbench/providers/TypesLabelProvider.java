@@ -42,7 +42,8 @@ public class TypesLabelProvider extends LabelProvider {
 			String name = ((XSDElementDeclaration)obj).getName();
 			if (((XSDElementDeclaration)obj).isAbstract())
 				name+= "   (abstract)";
-			return name;
+			String tail = ((XSDElementDeclaration)obj).getTargetNamespace() == null ? ""  : " : " + ((XSDElementDeclaration)obj).getTargetNamespace();
+			return name + tail;
 		}
 		
 		if (obj instanceof XSDParticle) {
@@ -404,8 +405,8 @@ public class TypesLabelProvider extends LabelProvider {
 	public String getComplexTypeDefinition(XSDComplexTypeDefinition definition){
 		String s="";
 		s=definition.getName();
-		
-		return s;
+		String tail = definition.getTargetNamespace() == null ? ""  : " : " + definition.getTargetNamespace();
+		return s + tail;
 	}
 	
 	/**
@@ -455,6 +456,7 @@ public class TypesLabelProvider extends LabelProvider {
 		} else {
 			s+= "***";
 		}
-		return s;
+		String tail = xsdSimpleTypeDefinition.getTargetNamespace() == null ? ""  : " : " + xsdSimpleTypeDefinition.getTargetNamespace();
+		return s + tail;
 	}
 }

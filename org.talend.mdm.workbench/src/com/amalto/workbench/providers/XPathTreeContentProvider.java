@@ -20,6 +20,8 @@ import org.eclipse.xsd.XSDVariety;
 import org.eclipse.xsd.XSDWildcard;
 import org.w3c.dom.Element;
 
+import com.amalto.workbench.models.TreeObject;
+
 public class XPathTreeContentProvider extends XSDTreeContentProvider {
 	private String conceptName;
 	
@@ -30,24 +32,15 @@ public class XPathTreeContentProvider extends XSDTreeContentProvider {
 		this.conceptName = conceptName;
 	}
 	public XPathTreeContentProvider(IWorkbenchPartSite site,
-			XSDSchema invisibleRoot) {
-		super(site, invisibleRoot);
+			XSDSchema invisibleRoot, TreeObject treeObject) {
+		super(site, invisibleRoot, treeObject);
 		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public Object[] getChildren(Object parent) {
 		if (parent instanceof XSDSchema) {
 			EList xsdElementDeclarations = xsdSchema.getElementDeclarations();
-			List<XSDElementDeclaration> list =new ArrayList<XSDElementDeclaration>();
-			if(conceptName!=null){
-				for(XSDElementDeclaration el: (XSDElementDeclaration[])xsdElementDeclarations.toArray(new XSDElementDeclaration[xsdElementDeclarations.size()] )){
-					if(el.getName().matches(conceptName)){
-						list.add(el);
-					}
-				}
-				return list.toArray(new XSDElementDeclaration[list.size()] );
-			}
-			return xsdElementDeclarations.toArray(new XSDElementDeclaration[xsdElementDeclarations.size()] );
+			return filterOutDuplicatedElems(xsdElementDeclarations);
 		}
 		
 		if (parent instanceof XSDAttributeGroupDefinition) {
@@ -314,4 +307,30 @@ public class XPathTreeContentProvider extends XSDTreeContentProvider {
 		return list;
 	}
 	
+	private Object [] filterOutDuplicatedElems(List<XSDElementDeclaration> xsdElementDeclarations)
+	{
+		List<XSDElementDeclaration> list = new ArrayList<XSDElementDeclaration>();
+		for(XSDElementDeclaration el: (XSDElementDeclaration[])xsdElementDeclarations.toArray(new XSDElementDeclaration[xsdElementDeclarations.size()] )){
+			boolean exist = false;
+			for(XSDElementDeclaration xsdEl: list)
+			{
+				if (xsdEl.getName().equals(el.getName())
+						&& xsdEl.getTargetNamespace() != null
+						&& el.getTargetNamespace() != null
+						&& xsdEl.getTargetNamespace().equals(
+								el.getTargetNamespace()))
+				{
+					exist = true;
+					break;
+				}
+			}
+			if (!exist)
+			{
+				list.add(el);	
+			}			
+		}
+		
+
+		return list.toArray(new Object[]{});
+	}
 }

@@ -2,6 +2,8 @@ package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -144,14 +146,38 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 			//check if already exist
        		if (!anonymous) {
        			EList list = schema.getTypeDefinitions();
+       			String ns = "";
+       			if(typeName.lastIndexOf(" : ") != -1)
+       			{
+       				ns = typeName.substring(typeName.lastIndexOf(" : ") + 3);
+       				typeName = typeName.substring(0, typeName.lastIndexOf(" : "));
+       			}
 				for (Iterator iter = list.iterator(); iter.hasNext(); ) {
 					XSDTypeDefinition td = (XSDTypeDefinition) iter.next();
 					if ((td.getName().equals(typeName) && (td instanceof XSDComplexTypeDefinition))) {
-						alreadyExists = true;
-						complexType = (XSDComplexTypeDefinition)td;
-						break;
+						if((td.getTargetNamespace() != null && td.getTargetNamespace().equals(ns)) || td.getTargetNamespace() == null)
+						{
+							alreadyExists = true;
+							complexType = (XSDComplexTypeDefinition)td;
+							break;
+						}
 					}
 				}
+//				ArrayList<XSDTypeDefinition> types = Util.getImportedTypeDefinitionChildren(schema);
+//				for (XSDTypeDefinition type: types)
+//				{
+//					if ((type.getName().equals(typeName) && (type instanceof XSDComplexTypeDefinition))) {
+//						alreadyExists = true;
+//						Pattern mask = Pattern.compile("(.*?):(.*?)");
+//						Matcher matcher = mask.matcher(typeName);
+//						if (matcher.matches())
+//						{
+//							type.setName(matcher.group(2));
+//						}
+//						complexType = (XSDComplexTypeDefinition)type;
+//						break;
+//					}
+//				}
        		}
        		
        		//Create if does not exist

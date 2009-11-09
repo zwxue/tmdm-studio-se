@@ -215,8 +215,9 @@ public class XpathSelectDialog extends Dialog {
 		}
 		try {
 			XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
-			
-			provideViwerContent(xsdSchema);
+			String schema = Util.nodeToString(xsdSchema.getDocument());
+			XSDSchema xsd= Util.createXsdSchema(schema, pObject);
+			provideViwerContent(xsd);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
@@ -230,7 +231,7 @@ public class XpathSelectDialog extends Dialog {
 		drillDownAdapter = new DrillDownAdapter(domViewer);
 		domViewer.setLabelProvider(new XSDTreeLabelProvider());
 		XPathTreeContentProvider  provider=new XPathTreeContentProvider(this.site,
-				xsdSchema);
+				xsdSchema, parent);
 		provider.setConceptName(this.conceptName);
 		domViewer.setContentProvider(provider);
 

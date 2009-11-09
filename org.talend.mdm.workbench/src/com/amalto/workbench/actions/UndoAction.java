@@ -74,6 +74,7 @@ public  class UndoAction extends Action {
 			
 			//refresh xml editor
 			page.getEditor().getXmlEditor().refresh(page.getXObject());
+			page.reConfigureXSDSchema();
 		} catch (ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -181,7 +182,7 @@ public  class UndoAction extends Action {
 	
 	private void refresh(String content)
 	{
-		XSDSchema xsd= Util.createXsdSchema(content);
+		XSDSchema xsd= Util.createXsdSchema(content, page.getXObject());
         page.setXsdSchema(xsd);
    		page.refresh();
    		page.markDirty();	

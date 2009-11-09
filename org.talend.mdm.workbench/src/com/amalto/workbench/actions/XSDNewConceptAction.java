@@ -20,11 +20,13 @@ import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
+import org.w3c.dom.Document;
 
 import com.amalto.workbench.dialogs.NewConceptOrElementDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.utils.Util;
 
 
 public class XSDNewConceptAction extends UndoAction implements SelectionListener{
@@ -46,7 +48,7 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
 			for (Iterator iter =  schema.getTypeDefinitions().iterator(); iter.hasNext(); ) {
 				XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
 				if (type instanceof XSDSimpleTypeDefinition)
-					customTypes.add(type.getName());
+					customTypes.add(type.getName() + (type.getTargetNamespace() != null ? " : " + type.getTargetNamespace() : ""));
 			}
 			ArrayList builtInTypes = new ArrayList();
 			for (Iterator iter =  schema.getSchemaForSchema().getTypeDefinitions().iterator(); iter.hasNext(); ) {
@@ -99,7 +101,6 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
        		decl = factory.createXSDElementDeclaration();
        		decl.setName(dlg.getTypeName());
        		decl.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));
-       		
        		XSDIdentityConstraintDefinition uniqueKey = factory.createXSDIdentityConstraintDefinition();
        		uniqueKey.setIdentityConstraintCategory(XSDIdentityConstraintCategory.UNIQUE_LITERAL);
        		uniqueKey.setName(dlg.getTypeName());
