@@ -177,7 +177,7 @@ public class XSDDeleteConceptWrapAction extends UndoAction{
 		clearDelData();
 		for (Object del: toDels)
 		{
-			if (((XSDConcreteComponent)del).getSchema().getTargetNamespace() == null)
+			if (((XSDConcreteComponent)del).getSchema().getTargetNamespace() == null && !Util.IsAImporedElement((XSDConcreteComponent)del, page.reConfigureXSDSchema(false)))
 			   delObjs.add((XSDConcreteComponent)del);
 			else
 			{

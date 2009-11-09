@@ -1925,15 +1925,20 @@ public class DataModelMainPage extends AMainPageV2 {
 		return super.isDirty();
 	}
 	
-	public void reConfigureXSDSchema()
+	public XSDSchema reConfigureXSDSchema(boolean force)
 	{
-		try {
-			String schema = ((XSDTreeContentProvider) viewer
-					.getContentProvider()).getXSDSchemaAsString();
-			xsdSchema = Util.createXsdSchema(schema, getXObject());
-		} catch (Exception e) {
-			e.printStackTrace();
+		if(force)
+		{
+			try {
+				String schema = ((XSDTreeContentProvider) viewer
+						.getContentProvider()).getXSDSchemaAsString();
+				xsdSchema = Util.createXsdSchema(schema, getXObject());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
+		
+		return xsdSchema;
 	}
 	
 	/**
