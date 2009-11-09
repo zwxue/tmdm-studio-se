@@ -704,7 +704,6 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	 			);
 			}
             
-	 		
 	 		return res;
 		} catch (Exception e) {
 			e.printStackTrace();
