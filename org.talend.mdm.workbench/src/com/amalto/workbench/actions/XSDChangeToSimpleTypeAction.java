@@ -145,11 +145,43 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
 			} else {
 				//check if concept already exists
 				if(typeName !=null&&typeName.length()>0){
-					XSDSimpleTypeDefinition std = schema.resolveSimpleTypeDefinition(typeName);
-					if (!schema.getTypeDefinitions().contains(std)) {
+					XSDSimpleTypeDefinition std = null;
+					String ns = "";
+					if(typeName.lastIndexOf(" : ") != -1)
+					{
+						ns = typeName.substring(typeName.lastIndexOf(" : ") + 3);
+						typeName = typeName.substring(0, typeName.lastIndexOf(" : "));
+					}
+					for (XSDTypeDefinition typeDef : schema.getTypeDefinitions())
+					{
+						if(typeDef instanceof XSDSimpleTypeDefinition)
+						{
+							if(typeDef.getName().equals(typeName))
+							{
+								if(!ns.equals(""))
+								{
+									if(typeDef.getTargetNamespace() != null && typeDef.getTargetNamespace().equals(ns))
+									{
+										std = (XSDSimpleTypeDefinition)typeDef;
+										break;
+									}
+								}
+								else if(ns.equals("") && typeDef.getTargetNamespace() == null)
+								{
+									std = (XSDSimpleTypeDefinition)typeDef;
+									break;
+								}
+
+
+							}
+						}
+					}
+					if (std == null) {
+						std = schema.resolveSimpleTypeDefinition(typeName);
 						std.setBaseTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));
 						schema.getContents().add(std);
 					}
+
 					decl.setTypeDefinition(std);
 				}
 				else{

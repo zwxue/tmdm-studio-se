@@ -12,6 +12,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -45,18 +46,28 @@ import org.apache.commons.httpclient.methods.MultipartPostMethod;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComplexTypeContent;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDConcreteComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintCategory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
+import org.eclipse.xsd.XSDImport;
+import org.eclipse.xsd.XSDInclude;
 import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
@@ -65,7 +76,10 @@ import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
+import org.eclipse.xsd.impl.XSDImportImpl;
+import org.eclipse.xsd.impl.XSDIncludeImpl;
 import org.eclipse.xsd.impl.XSDSchemaImpl;
+import org.eclipse.xsd.util.XSDSchemaLocator;
 import org.osgi.framework.Bundle;
 import org.talend.mdm.commmon.util.workbench.Version;
 import org.talend.mdm.commmon.util.workbench.ZipToFile;
@@ -75,6 +89,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+
+import sun.misc.BASE64Encoder;
 
 import com.amalto.workbench.MDMWorbenchPlugin;
 import com.amalto.workbench.models.TreeObject;
@@ -1156,32 +1172,311 @@ public class Util {
     	return childNames;
     }
     
-    public static XSDSchema createXsdSchema(String xsd){
-	    DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-		documentBuilderFactory.setNamespaceAware(true);
-		documentBuilderFactory.setValidating(false);
-		InputSource source = new InputSource(new StringReader(xsd));
-		DocumentBuilder documentBuilder;
-		Document document = null;
-		try {
-			documentBuilder = documentBuilderFactory.newDocumentBuilder();
-			 document = documentBuilder.parse(source);
-		}catch (Exception e) {
-			// TODO Auto-generated catch block
+    public static boolean IsAImporedElement(XSDConcreteComponent component, XSDSchema schema)
+    {
+    	if(component == null) return true;
+    	
+    	List<String> buffer = new ArrayList<String>();
+    	buffer = retrieveXSDComponentPath(component, schema, buffer);
+    	String path = "";
+        for (int i = buffer.size() -1; i >= 0; i--)
+        {
+        	if(path.lastIndexOf(buffer.get(i)) == -1)
+        	  path += buffer.get(i);
+        }
+    	try {
+			NodeList l = Util.getNodeList(schema.getDocument(), path);
+			if(l.getLength() > 0 && component.getSchema().getTargetNamespace() == null)
+				return false;
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		return XSDSchemaImpl.createSchema(document.getDocumentElement());
+		if(component instanceof XSDSimpleTypeDefinition)
+		{
+			final String UUID = "//xsd:simpleType[@name='UUID']/xsd:restriction[@base='xsd:string']";
+			final String PICTURE = "//xsd:simpleType[@name='PICTURE']/xsd:restriction[@base='xsd:string']";
+			final String AUTOINCMT = "//xsd:simpleType[@name='AUTO_INCREMENT']/xsd:restriction[@base='xsd:string']";
+			if(!path.equals(UUID) && !path.equals(PICTURE) && !path.equals(AUTOINCMT))
+				return false;
+		}
+		return true;
+    }
+
+    public static List<String> retrieveXSDComponentPath(XSDConcreteComponent component, XSDSchema schema, List<String> buffer)
+    {
+    	String name = null;
+    	String elemType = "element";
+    	if(component instanceof XSDElementDeclaration)
+    	{
+    		XSDElementDeclaration decl = (XSDElementDeclaration)component;
+    		name = decl.getName();
+    		buffer.add("//xsd:element[@name='" + name +  "']");
+    		if(decl.getContainer() instanceof XSDSchemaImpl)
+    			return buffer;
+    		else return retrieveXSDComponentPath(decl.getContainer(), schema, buffer);
+    	}
+    	else if(component instanceof XSDParticle)
+    	{
+    		XSDParticle particle = (XSDParticle)component;
+    		XSDTerm term = (XSDTerm)particle.getTerm();
+            if (term instanceof XSDElementDeclaration)
+            {
+            	name = ((XSDElementDeclaration)term).getName();
+                buffer.add("//xsd:element[@name='" + name +  "']");
+            	return  retrieveXSDComponentPath(particle.getContainer(), schema, buffer);
+            }
+            else
+            	retrieveXSDComponentPath(particle.getContainer(), schema, buffer);
+    	}
+    	else if(component instanceof XSDComplexTypeDefinition)
+    	{
+    		XSDComplexTypeDefinition type = (XSDComplexTypeDefinition)component;
+    		name = type.getName();
+    		buffer.add("//xsd:complexType" + (name != null? "[@name='" + name +  "']" : ""));
+    		if(type.getContainer() instanceof XSDSchemaImpl)
+    			return buffer;
+    		return retrieveXSDComponentPath(type.getContainer(), schema, buffer);
+    	}
+    	else if(component instanceof XSDSimpleTypeDefinition)
+    	{
+    		XSDSimpleTypeDefinition type = (XSDSimpleTypeDefinition)component;
+    		name = type.getName();
+    		String primitiveName = type.getPrimitiveTypeDefinition().getName();
+    		buffer.add("//xsd:simpleType[@name='" + name + "']" + "/xsd:restriction[@base='" + "xsd:" + primitiveName +  "']");
+    		if(type.getContainer() instanceof XSDSchemaImpl)
+    			return buffer;
+    		return retrieveXSDComponentPath(type.getContainer(), schema, buffer);
+    	}
+    	else if(component instanceof XSDModelGroup)
+    	{
+    		XSDModelGroup group = (XSDModelGroup)component;
+    		String literal = group.getCompositor().getLiteral();
+    		buffer.add("//xsd:" + literal);
+    		return retrieveXSDComponentPath(group.getContainer(), schema, buffer); 
+    	}
+    	else if(component instanceof XSDIdentityConstraintDefinition)
+    	{
+    		XSDIdentityConstraintDefinition identify = (XSDIdentityConstraintDefinition)component;
+    		XSDConcreteComponent c = identify.getContainer();
+    		buffer.add("//xsd:unique[@name='" + identify.getName() + "']");
+    		return  retrieveXSDComponentPath(c, schema, buffer);
+    	}
+    	else if(component instanceof XSDXPathDefinition)
+    	{
+    		XSDXPathDefinition path = (XSDXPathDefinition)component;
+    		buffer.add("//xsd:field[@xpath='" + path.getValue() + "']");
+    		return retrieveXSDComponentPath(path.getContainer(), schema, buffer);
+    	}
+    	else if(component instanceof XSDAnnotation)
+    	{
+    		XSDAnnotation annon = (XSDAnnotation)component;
+    		buffer.add("//XSDAnnotation");
+    		return retrieveXSDComponentPath(annon.getContainer(), schema, buffer);
+    	}
+    	else
+    		return buffer;
+    	
+    	return buffer;
+    }
+    
+    public static String getResponseFromURL(String url, TreeObject treeObj)
+    {
+        BASE64Encoder encoder = new BASE64Encoder();
+        StringBuffer buffer = new StringBuffer();
+        String credentials = encoder.encode(new String(treeObj.getServerRoot().getUsername() + ":" + treeObj.getServerRoot().getPassword()).getBytes());
+        
+        try {
+				URL urlCn = new URL(url);
+				URLConnection conn = urlCn.openConnection();
+				conn.setAllowUserInteraction(true);
+				conn.setDoOutput(true);
+				conn.setDoInput(true);
+	            conn.setRequestProperty("Authorization", "Basic " + credentials);
+	            conn.setRequestProperty("Expect", "100-continue"); 
+	
+	            InputStreamReader doc = 
+	                new InputStreamReader(conn.getInputStream());
+	            BufferedReader reader = new BufferedReader(doc);
+	            String line = reader.readLine();
+	            while(line != null)
+	            {
+	            	buffer.append(line);
+	            	line = reader.readLine();
+	            }
+		    } catch (Exception e) {
+			e.printStackTrace();
+		    }
+		    
+		  return buffer.toString();
+    }
+    
+    public static XSDSchema createXsdSchema(String xsd, TreeObject treeObj){
+    	    List<XSDImport> imports = new ArrayList<XSDImport>();
+    	    XSDSchema xsdSchema = Util.getXSDSchema(xsd, imports, treeObj, false);
+    	    Map<String, String> nsMap = xsdSchema.getQNamePrefixToNamespaceMap();
+    	    int imp = 0;
+    	    for (XSDImport xsdImport: imports)
+    	    {
+    	    	String ns = xsdImport.getNamespace();
+    	    	if (ns.equals(""))continue;
+    	    	int last = ns.lastIndexOf("/");
+    	    	nsMap.put(ns.substring(last+1).replaceAll("[\\W]", ""), ns);
+    	    	boolean exist = false;
+    	    	for (XSDSchemaContent cnt: xsdSchema.getContents())
+    	    	{
+    	    		if (cnt instanceof XSDImportImpl)
+    	    		{
+    	    			XSDImportImpl cntImpl = (XSDImportImpl)cnt;
+    	    			if(cntImpl.getNamespace().equals(xsdImport.getNamespace()))
+    	    			{
+    	    				exist = true;
+    	    				break;
+    	    			}
+    	    		}
+    	    	}
+    	    	if (!exist)
+    	    	{
+        	    	xsdSchema.getContents().add(imp++,xsdImport);
+    	    	}
+    	    }
+		    xsdSchema.updateElement();
+
+    		Document document =  xsdSchema.getDocument();
+    		try {
+				String schema = Util.nodeToString(document);
+				System.out.println(schema);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		return xsdSchema;
+    }
+    
+    private static void importSchema(XSDSchema xsdSchema, List<XSDImport> imports)
+    {
+	    EList<XSDSchemaContent> list = xsdSchema.getContents();
+	    for (XSDSchemaContent schemaCnt : list) {
+			if (schemaCnt instanceof XSDImport) {
+				XSDImportImpl xsdImpl = (XSDImportImpl) schemaCnt;
+				if (xsdImpl.getNamespace() == null || xsdImpl.getNamespace().trim().equals(""))
+				{
+					URI fileURI = URI.createFileURI(xsdImpl.getSchemaLocation());
+					xsdImpl.setNamespace(fileURI.toFileString().replaceAll("[\\W]", ""));
+				}
+				((XSDImportImpl) schemaCnt).importSchema();
+				imports.add(((XSDImportImpl) schemaCnt));
+			}
+			else if(schemaCnt instanceof XSDInclude)
+			{
+				XSDIncludeImpl xsdInclude = (XSDIncludeImpl)schemaCnt;
+				((XSDSchemaImpl)xsdSchema).included(xsdInclude);
+			}
+		}
+    }
+    
+    private static XSDSchema getXSDSchema(String rawData, final List<XSDImport>imports , final TreeObject treeObj, boolean uri)
+    {
+    	final String xsdFileName = System.getProperty("user.dir")+"/.xsdModel.xml";
+    	URI fileURI = URI.createFileURI(xsdFileName);
+	    DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+		documentBuilderFactory.setNamespaceAware(true);
+		documentBuilderFactory.setValidating(false);
+		DocumentBuilder documentBuilder;
+		XSDSchema schema = null;
+		InputSource source = null;
+		Document document = null;
+		try {
+			documentBuilder = documentBuilderFactory.newDocumentBuilder();
+			if (uri) {
+				File file = new File(rawData);
+				if (file.isFile())
+				   source = new InputSource(new FileInputStream(file));
+				else
+					source = new InputSource(new StringReader(Util.getResponseFromURL(rawData, treeObj)));
+			} else {
+				source = new InputSource(new StringReader(rawData));
+			}
+
+			document = documentBuilder.parse(source);
+			schema = XSDSchemaImpl.createSchema(document
+					.getDocumentElement());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	    ResourceSet resourceSet = new ResourceSetImpl();
+	    Resource resource = resourceSet.createResource(fileURI);
+	    resourceSet.getAdapterFactories().add
+	    (
+		    new AdapterFactoryImpl()
+		    {
+		       class SchemaLocator extends AdapterImpl implements XSDSchemaLocator
+		       {
+		         public XSDSchema locateSchema(XSDSchema xsdSchema, String namespaceURI,  String rawSchemaLocationURI, String resolvedSchemaLocation)
+		         {
+		        	 XSDSchema schema = Util.getXSDSchema(rawSchemaLocationURI, imports, treeObj, true);
+		        	 schema.setTargetNamespace(namespaceURI) ;
+				     schema.setElement(schema.getDocument().getDocumentElement());
+		        	 return schema;
+		         }
+
+		         public boolean isAdatperForType(Object type)
+		         {
+		           return type == XSDSchemaLocator.class;
+		         }
+		       }
+
+		       protected SchemaLocator schemaLocator = new SchemaLocator();
+
+		       public boolean isFactoryForType(Object type)
+		       {
+		         return type == XSDSchemaLocator.class;
+		       }
+
+		       public Adapter adaptNew(Notifier target, Object type)
+		       {
+		         return schemaLocator;
+		       }
+		    }
+	   );
+	   schema.setSchemaLocation(fileURI.toString());
+	    //set the schema for schema QName prefix to "xsd"
+	   schema.setSchemaForSchemaQNamePrefix("xsd");
+	   
+	    //Add the root schema to the resource that was created above
+	    resource.getContents().add(schema);
+	    importSchema(schema, imports);
+	    schema.setElement(document.getDocumentElement());
+       return schema; 
     }
     
     public static List<XSDComplexTypeDefinition> getComplexTypes(XSDSchema xsd){
-			EList<XSDTypeDefinition> types=xsd.getTypeDefinitions();
+    	    EList<XSDTypeDefinition> contents = xsd.getTypeDefinitions();
    			List<XSDComplexTypeDefinition> complexs=new ArrayList<XSDComplexTypeDefinition>();
-   			for(XSDTypeDefinition type: types){
+   			for(XSDTypeDefinition type: contents){
    				if(type instanceof XSDComplexTypeDefinition){
-   					complexs.add((XSDComplexTypeDefinition)type);
+   					boolean exist = false;
+   					for(XSDComplexTypeDefinition xsdEl: complexs)
+   					{
+   						if (xsdEl.getName().equals(type.getName())
+   								&& xsdEl.getTargetNamespace() != null
+   								&& type.getTargetNamespace() != null
+   								&& xsdEl.getTargetNamespace().equals(
+   										type.getTargetNamespace()))
+   						{
+   							exist = true;
+   							break;
+   						}
+   					}
+   					if (!exist)
+   					{
+   	   					complexs.add((XSDComplexTypeDefinition)type);
+   					}		
    				}
    			}
+   			
    			return complexs;
     }
     /**

@@ -176,7 +176,16 @@ public class XSDDeleteConceptWrapAction extends UndoAction{
 	private void wrapDelObj(Object[] toDels) {
 		clearDelData();
 		for (Object del: toDels)
-			delObjs.add((XSDConcreteComponent)del);
+		{
+			if (((XSDConcreteComponent)del).getSchema().getTargetNamespace() == null)
+			   delObjs.add((XSDConcreteComponent)del);
+			else
+			{
+				delObjs.clear();
+				break;
+			}
+		}
+
 		if (delObjs != null)
 		{
 			refreshAction();
@@ -259,6 +268,7 @@ public class XSDDeleteConceptWrapAction extends UndoAction{
 	
 	private void refreshAction()
 	{
+		if (delObjs.isEmpty())return;
 		XSDConcreteComponent comp = (XSDConcreteComponent)delObjs.get(0);
 		if (checkInSameClassType(delObjs.toArray(), comp.getClass()))
 			setText(clsAction.get(comp.getClass()).getText() + (delObjs.size() > 1 ? "s" : ""));

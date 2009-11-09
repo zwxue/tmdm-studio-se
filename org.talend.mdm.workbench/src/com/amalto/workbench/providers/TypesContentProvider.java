@@ -26,6 +26,7 @@ import org.eclipse.xsd.XSDWildcard;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.DataModelFilter;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
@@ -34,9 +35,12 @@ public class TypesContentProvider implements IStructuredContentProvider, ITreeCo
 	protected XSDSchema xsdSchema;
 	IWorkbenchPartSite site = null;
 	DataModelFilter filter;
-	public TypesContentProvider(IWorkbenchPartSite site, XSDSchema invisibleRoot ) {
+	TreeObject treeObj;
+	
+	public TypesContentProvider(IWorkbenchPartSite site, XSDSchema invisibleRoot, TreeObject treeObject) {
 		this.site=site;
 		this.xsdSchema = invisibleRoot;
+		this.treeObj = treeObject;
 	}
 	
 	public void inputChanged(Viewer v, Object oldInput, Object newInput) {
@@ -76,13 +80,43 @@ public class TypesContentProvider implements IStructuredContentProvider, ITreeCo
 			
 				for(XSDTypeDefinition el: (XSDTypeDefinition[])xsdElementDeclarations.toArray(new XSDTypeDefinition[xsdElementDeclarations.size()] )){
 					//if( el instanceof XSDComplexTypeDefinition){
-						list.add(el);
+					   boolean exist = false;
+					    for (XSDTypeDefinition type: list)
+					    {
+					    	if (type.getName().equals(el.getName())
+							&& type.getTargetNamespace() != null
+							&& el.getTargetNamespace() != null
+							&& type.getTargetNamespace().equals(
+									el.getTargetNamespace()))
+					    	{
+					    		exist = true;
+					    		break;
+					    	}
+					    	else if (type.getName().equals(el.getName())
+							&& type.getTargetNamespace() == null
+							&& el.getTargetNamespace() == null)
+					    	{
+					    		exist = true;
+					    		break;
+					    	}
+					    }
+					    if (!exist)
+					    {
+					    	list.add(el);
+					    }
+
 					//}					
 				}
+//				for (XSDSchemaContent xsdComp : xsdSchema.getContents()) {
+//				if (xsdComp instanceof XSDImport) {
+//					list.addAll(Util.getImportedTypeDefinitionChildren((XSDImport)xsdComp));
+//				}
+//			}
 				return list.toArray(new XSDTypeDefinition[list.size()]);
 			
 			//return xsdElementDeclarations.toArray(new XSDTypeDefinition[xsdElementDeclarations.size()] );
 		}
+				
 		
 		if (parent instanceof XSDAttributeGroupDefinition) {
 			XSDAttributeGroupDefinition attributeGroupDefinition = (XSDAttributeGroupDefinition) parent;
@@ -107,8 +141,9 @@ public class TypesContentProvider implements IStructuredContentProvider, ITreeCo
 				if (std.getVariety().equals(XSDVariety.ATOMIC_LITERAL)) {
 					ArrayList list = new ArrayList();
 					//add Base Type if not a pre-defined type
-					if (! std.getSchema().getSchemaForSchema().getTypeDefinitions().contains(std))
-						list.add(std.getBaseTypeDefinition());
+					if (std != null && std.getSchema() != null && std.getSchema().getSchemaForSchema() != null)
+					   if (! std.getSchema().getSchemaForSchema().getTypeDefinitions().contains(std))
+						  list.add(std.getBaseTypeDefinition());
 					list.addAll(std.getFacetContents());
 					return list.toArray(new Object[list.size()]);
 				}
@@ -295,6 +330,7 @@ public class TypesContentProvider implements IStructuredContentProvider, ITreeCo
 
 	}
 	
+
 	private ArrayList<Object> getComplexTypeDefinitionChildren(XSDComplexTypeDefinition complexTypeDefinition) {
 //		System.out.println("getComplexTypeDefinitionChildren "+complexTypeDefinition+": "+complexTypeDefinition.getContent());
 		
@@ -372,7 +408,7 @@ public class TypesContentProvider implements IStructuredContentProvider, ITreeCo
 	
 	public void setXsdSchema(String xsd)
 	{
-		xsdSchema = Util.createXsdSchema(xsd);
+		xsdSchema = Util.createXsdSchema(xsd, treeObj);
 	}
 	
 	public void setXsdSchema(XSDSchema xsdSchema){

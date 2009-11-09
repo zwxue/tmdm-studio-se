@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -28,7 +29,7 @@ public class ConceptComposite {
 	private Label typeNameLabel = null;
 	
 	private Composite container = null;
-
+    
 	public  ConceptComposite(Composite parent, boolean encloseTextField,List<XSDComplexTypeDefinition> types, boolean newComplex) {
 		
 		GridLayout layout = (GridLayout)parent.getLayout();
@@ -36,7 +37,7 @@ public class ConceptComposite {
 		//layout.verticalSpacing = 10;
 		List<String> typeNames=new ArrayList<String>();
 		for(XSDComplexTypeDefinition type: types){
-			typeNames.add(type.getName());
+			typeNames.add(type.getName() +  (type.getTargetNamespace() != null ? " : " + type.getTargetNamespace() : ""));
 		}
 		typeNameLabel = new Label(parent, SWT.NONE);
 		typeNameLabel.setLayoutData(
@@ -52,7 +53,11 @@ public class ConceptComposite {
 				new GridData(SWT.FILL,SWT.FILL,false,true,2,1)
 		);
 		typeNameText.setItems(typeNames.toArray(new String[typeNames.size()]));
-
+		typeNameText.addSelectionListener(new SelectionListener() {
+        	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
+        	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+        	};
+        });
 		Group radioGroup = new Group(parent,SWT.SHADOW_NONE);
 		radioGroup.setText(encloseTextField ? "" : "Sub-Elements Group");
 		radioGroup.setLayoutData(

@@ -6,18 +6,24 @@
  */
 package com.amalto.workbench.editors;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
-
 
 import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.emf.common.util.EList;
@@ -36,6 +42,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.KeyEvent;
@@ -70,9 +77,12 @@ import org.eclipse.xsd.XSDConcreteComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDEnumerationFacet;
 import org.eclipse.xsd.XSDFacet;
+import org.eclipse.xsd.XSDFactory;
 import org.eclipse.xsd.XSDFractionDigitsFacet;
 import org.eclipse.xsd.XSDIdentityConstraintCategory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
+import org.eclipse.xsd.XSDImport;
+import org.eclipse.xsd.XSDInclude;
 import org.eclipse.xsd.XSDLengthFacet;
 import org.eclipse.xsd.XSDMaxExclusiveFacet;
 import org.eclipse.xsd.XSDMaxInclusiveFacet;
@@ -84,6 +94,7 @@ import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDPatternFacet;
 import org.eclipse.xsd.XSDSchema;
+import org.eclipse.xsd.XSDSchemaContent;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTotalDigitsFacet;
@@ -96,7 +107,6 @@ import org.eclipse.xsd.impl.XSDComplexTypeDefinitionImpl;
 import org.eclipse.xsd.impl.XSDElementDeclarationImpl;
 import org.eclipse.xsd.impl.XSDIdentityConstraintDefinitionImpl;
 import org.eclipse.xsd.impl.XSDParticleImpl;
-import org.eclipse.xsd.impl.XSDSchemaImpl;
 import org.eclipse.xsd.impl.XSDSimpleTypeDefinitionImpl;
 import org.eclipse.xsd.impl.XSDXPathDefinitionImpl;
 import org.talend.mdm.commmon.util.core.CommonUtil;
@@ -150,6 +160,7 @@ import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
 import com.amalto.workbench.actions.XSDSetFacetMessageAction;
 import com.amalto.workbench.dialogs.DataModelFilterDialog;
 import com.amalto.workbench.dialogs.ErrorExceptionDialog;
+import com.amalto.workbench.dialogs.SelectImportedModulesDialog;
 import com.amalto.workbench.editors.xmleditor.XMLEditor;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -169,7 +180,7 @@ import com.amalto.workbench.webservices.WSDataModel;
 public class DataModelMainPage extends AMainPageV2 {
 
 	protected Text descriptionText;
-	protected Button importXSDBtn, exportBtn,sortUPBtn,sortDownBtn,filterBtn,expandBtn,foldBtn,expandSelBtn,sortNaturalBtn,addLanBtn,deleteLanbtn;
+	protected Button importXSDBtn, exportBtn,sortUPBtn,sortDownBtn,filterBtn,expandBtn,foldBtn,expandSelBtn,sortNaturalBtn,addLanBtn,deleteLanbtn, importSchemaNsBtn;
 	private   Label langeuageLabel;
 	private   Combo languageCombo;
 	protected TreeViewer viewer;
@@ -286,7 +297,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			btnCmp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 					false, 2, 1));
 			GridLayout gLayout=new GridLayout();
-			gLayout.numColumns=9;
+			gLayout.numColumns=10;
 			gLayout.horizontalSpacing=20;
 			btnCmp.setLayout(gLayout);
 			
@@ -360,6 +371,10 @@ public class DataModelMainPage extends AMainPageV2 {
 				}
 			});
 			
+			importSchemaNsBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
+			importSchemaNsBtn.setImage(ImageCache.getCreatedImage(EImage.CHECKIN_ACTION.getPath()));
+			importSchemaNsBtn.setToolTipText("import/include specific Schema Namespace ...");
+			
 			addLanGroup=new Group(btnCmp, SWT.NONE);
 			addLanGroup.setText("Label Operation");
 			addLanGroup.setToolTipText("Add or remove languages in all concepts and elements for the current data model");
@@ -415,7 +430,8 @@ public class DataModelMainPage extends AMainPageV2 {
 					false, 1, 1));	
 			sortDownBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 					false, 1, 1));	
-			
+			importSchemaNsBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
+					false, 1, 1));
 			
 			filterBtn.addSelectionListener(new SelectionAdapter(){				
 
@@ -453,6 +469,8 @@ public class DataModelMainPage extends AMainPageV2 {
 								.lastIndexOf("."));
 						if (inputType.equals(".xsd")) {
 							xsd = Util.getXML(xmlFile);
+							xsdSchema = Util.createXsdSchema(xsd, getXObject());
+							xsd = Util.nodeToString(xsdSchema.getDocument());
 						} else {
 							XSDDriver d = new XSDDriver();
 							infer = d
@@ -534,6 +552,143 @@ public class DataModelMainPage extends AMainPageV2 {
 					}
 				}
 	        });
+			
+
+			importSchemaNsBtn.addSelectionListener(new SelectionAdapter(){
+				public void widgetSelected(SelectionEvent e){
+					SelectImportedModulesDialog dlg = new SelectImportedModulesDialog(getSite().getShell(),getXObject(), "Import xsd schema modules");
+					dlg.create();
+					dlg.setBlockOnOpen(true);
+					dlg.open();
+					if(dlg.getReturnCode() == Window.OK)
+					{
+						Pattern httpUrl = Pattern.compile("(http|https|ftp):(\\//|\\\\)(.*):(.*)");
+						List<String> list = dlg.getImportedXSDList();
+						try
+						{
+							for(String fileName : list)
+							{
+								Matcher match = httpUrl.matcher(fileName);
+								if (match.matches()) {
+									importSchemaWithURL(fileName);
+								} else {
+									importSchemaFromFile(fileName);
+								}
+							}
+							
+							markDirty();
+							refreshData();
+							MessageDialog.openInformation(getSite().getShell(),
+									"Import XSDSchema", "The operation for importing XSDSchema completed successfully!");
+						}
+						catch(Exception ex)
+						{
+							MessageDialog.openError(getSite().getShell(),
+							          "Error", "The operation for importing XSDSchema failed!");
+						}
+					}
+				}
+				
+				private void importSchemaWithURL(String url)
+				{
+					 String response = Util.getResponseFromURL(url, getXObject());
+					 InputSource source = new InputSource(new StringReader(response));
+					 importSchema(source, url);
+				}
+				
+				private void importSchemaFromFile(String fileName)
+				{
+					String inputType = fileName.substring(fileName.lastIndexOf("."));
+					if (!inputType.equals(".xsd"))return;
+					File file = new File(fileName);
+					try {
+						InputSource source = new InputSource(new FileInputStream(file));
+						importSchema(source, file.getAbsolutePath());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				
+				private void importSchema(InputSource source, String uri)
+				{
+					String ns = "";
+				    DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+					documentBuilderFactory.setNamespaceAware(true);
+					documentBuilderFactory.setValidating(false);
+					try {
+						DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+						Document document = documentBuilder.parse(source);
+						ns = document.getDocumentElement().getAttribute("targetNamespace");
+						if(xsdSchema == null)
+						   xsdSchema = getXSDSchema(Util.nodeToString(document));
+						else
+						{
+							WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
+							xsdSchema = Util.createXsdSchema(wsObject.getXsdSchema(), getXObject());
+						}
+						for (int i = 0; i < xsdSchema.getContents().size(); i++)
+						{
+							XSDSchemaContent xsdComp = xsdSchema.getContents().get(i);
+							if(ns != null && !ns.equals(""))
+							{
+								// import xsdschema
+								if (xsdComp instanceof XSDImport && ((XSDImport)xsdComp).getNamespace().equals(ns))
+								{								
+									xsdSchema.getContents().remove(i);
+									for (Map.Entry entry: xsdSchema.getQNamePrefixToNamespaceMap().entrySet())
+									{
+										if (entry.getValue().equals(((XSDImport)xsdComp).getNamespace()))
+										{
+											xsdSchema.getQNamePrefixToNamespaceMap().remove(entry.getKey());
+											break;
+										}
+									}
+									break;
+								}
+							}
+							else
+							{
+								// include xsdschema
+								if(xsdComp instanceof XSDInclude)
+								{
+									String xsdLocation = ((XSDInclude)xsdComp).getSchemaLocation();
+									if (xsdLocation.equals(uri))
+									{
+										xsdSchema.getContents().remove(i);
+										break;
+									}
+								}
+							}
+						}
+						
+						if(ns != null && !ns.equals(""))
+						{
+			    	    	int last = ns.lastIndexOf("/");
+			    	    	xsdSchema.getQNamePrefixToNamespaceMap().put(ns.substring(last+1).replaceAll("[\\W]", ""), ns);
+						    XSDImport xsdImport = XSDFactory.eINSTANCE.createXSDImport();
+						    xsdImport.setNamespace(ns);
+						    xsdImport.setSchemaLocation(uri);
+						    xsdSchema.getContents().add(0, xsdImport);
+						}
+						else
+						{
+							XSDInclude xsdInclude = XSDFactory.eINSTANCE.createXSDInclude();
+							xsdInclude.setSchemaLocation(uri);
+							xsdSchema.getContents().add(0, xsdInclude);
+						}
+						
+					    
+						String xsd = Util.nodeToString(xsdSchema.getDocument());
+						xsdSchema = Util.createXsdSchema(xsd, getXObject());
+						setXsdSchema(xsdSchema);
+						WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
+						wsObject.setXsdSchema(xsd);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			
 //			Label xsdLabel = toolkit.createLabel(mainComposite, "Schema",
 //					SWT.NULL);
 //			xsdLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
@@ -662,7 +817,7 @@ public class DataModelMainPage extends AMainPageV2 {
 //		
 		drillDownAdapter = new DrillDownAdapter(viewer);
 		provider = new XSDTreeContentProvider(
-				this.getSite(), xsdSchema);
+				this.getSite(), xsdSchema, getXObject());
 		viewer.setContentProvider(provider);
 		
 		viewer.addSelectionChangedListener(new ISelectionChangedListener(){
@@ -889,7 +1044,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		
 		typesDrillDownAdapter = new DrillDownAdapter(viewer);
 		typesProvider = new TypesContentProvider(
-				this.getSite(), xsdSchema);
+				this.getSite(), xsdSchema, getXObject());
 		typesViewer.setContentProvider(typesProvider);
 		
 		typesViewer.addSelectionChangedListener(new ISelectionChangedListener(){
@@ -979,7 +1134,11 @@ public class DataModelMainPage extends AMainPageV2 {
 					.getDescription();
 			if (!s.equals(descriptionText.getText()))
 				descriptionText.setText(s);
-			XSDSchema xsd= Util.createXsdSchema(wsObject.getXsdSchema());
+			String schema = wsObject.getXsdSchema();
+			//aiming added remove 'targetNamespace', 'xmlns' attr, for it will cause xsd validate error, the xsd is invalid
+			schema=schema.replaceAll("targetNamespace\\s*=\\s*\"[^\"]*\"", "");
+			schema=schema.replaceAll("xmlns\\s*=\\s*\"[^\"]*\"", "");
+			XSDSchema xsd= Util.createXsdSchema(wsObject.getXsdSchema(), getXObject());
 			provider.setXsdSchema(xsd);
 			((XSDTreeContentProvider)viewer.getContentProvider()).setFilter(dataModelFilter);			
 			//viewer.setAutoExpandLevel(3);
@@ -1320,34 +1479,42 @@ public class DataModelMainPage extends AMainPageV2 {
 		
         Object[] selectedObjs = selection.toArray();
 		Object obj = selection.getFirstElement();
-
+		String ns = null;
+		
 		// Element Declaration
 		if (obj instanceof XSDElementDeclaration && selectedObjs.length == 1) {
 			// check if concept or "just" element
 			XSDElementDeclaration decl = (XSDElementDeclaration) obj;
 			boolean isConcept = Util.checkConcept(decl);
-			if (isConcept) {
-				manager.add(editConceptAction);
-				manager.add(deleteConceptAction);
-				manager.add(newBrowseItemAction);
-			} else {
-				manager.add(editElementAction);
-				manager.add(deleteElementAction);
+			ns = decl.getTargetNamespace();
+			if (ns == null && !Util.IsAImporedElement(decl, xsdSchema))
+			{
+				if (isConcept) {
+					manager.add(editConceptAction);
+					manager.add(deleteConceptAction);
+					manager.add(newBrowseItemAction);
+				} else{
+					manager.add(editElementAction);
+					manager.add(deleteElementAction);
+				}
+				manager.add(new Separator());
+				manager.add(new XSDNewConceptAction(this));
+				manager.add(newElementAction);
+				manager.add(new Separator());
+				manager.add(changeToComplexTypeAction);
+				manager.add(changeToSimpleTypeAction);
+				manager.add(new Separator());
+				manager.add(newIdentityConstraintAction);
 			}
-			manager.add(new Separator());
-			manager.add(new XSDNewConceptAction(this));
-			manager.add(newElementAction);
-			manager.add(new Separator());
-			manager.add(changeToComplexTypeAction);
-			manager.add(changeToSimpleTypeAction);
-			manager.add(new Separator());
-			manager.add(newIdentityConstraintAction);
-			// Annotations
-			setAnnotationActions2(manager);
+			else
+			{
+				manager.add(newElementAction);
+			}
 		}
 
 
-		if (obj instanceof XSDParticle && selectedObjs.length == 1) {
+		if (obj instanceof XSDParticle && selectedObjs.length == 1
+				&& ((XSDParticle) obj).getSchema().getTargetNamespace() == null && !Util.IsAImporedElement((XSDParticle)obj, xsdSchema)) {
 			XSDTerm term = ((XSDParticle) obj).getTerm();
 			if (!(term instanceof XSDWildcard)) {
 				manager.add(editParticleAction);
@@ -1375,15 +1542,22 @@ public class DataModelMainPage extends AMainPageV2 {
 
 		
 		if (obj instanceof XSDComplexTypeDefinition && selectedObjs.length == 1) {
+			ns = ((XSDComplexTypeDefinition)obj).getTargetNamespace();
 			manager.add(newComplexTypeAction);
 			manager.add(newSimpleTypeAction);
-			manager.add(newParticleFromTypeAction);
-			manager.add(deleteTypeDefinition);
-			manager.add(editComplexTypeAction);
+
+			if (ns == null && !Util.IsAImporedElement((XSDComplexTypeDefinition)obj, xsdSchema))
+			{
+				manager.add(newParticleFromTypeAction);
+				manager.add(deleteTypeDefinition);
+				manager.add(editComplexTypeAction);
+			}
 		}
 
 		
-		if (obj instanceof XSDIdentityConstraintDefinition && selectedObjs.length == 1) {
+		if (obj instanceof XSDIdentityConstraintDefinition
+				&& selectedObjs.length == 1
+				&& ((XSDIdentityConstraintDefinition) obj).getTargetNamespace() == null) {
 			manager.add(editIdentityConstraintAction);
 			manager.add(deleteIdentityConstraintAction);
 			manager.add(newIdentityConstraintAction);
@@ -1392,7 +1566,9 @@ public class DataModelMainPage extends AMainPageV2 {
 		}
 		
 		
-		if (obj instanceof XSDXPathDefinition && selectedObjs.length == 1) {
+		if (obj instanceof XSDXPathDefinition
+				&& selectedObjs.length == 1
+				&& ((XSDXPathDefinition) obj).getSchema().getTargetNamespace() == null) {
 			manager.add(editXPathAction);
 			manager.add(newXPathAction);
 			XSDXPathDefinition xpath = (XSDXPathDefinition) obj;
@@ -1402,21 +1578,26 @@ public class DataModelMainPage extends AMainPageV2 {
 
 		if (obj instanceof XSDSimpleTypeDefinition && selectedObjs.length == 1) {
 			XSDSimpleTypeDefinition typedef = (XSDSimpleTypeDefinition) obj;
-			manager.add(changeBaseTypeAction);
-			manager.add(deleteTypeDefinition);
-			manager.add(new Separator());
-			if (!typedef.getSchema().getSchemaForSchemaNamespace().equals(typedef.getTargetNamespace())) {
-				EList list = typedef.getBaseTypeDefinition().getValidFacets();
-				//list.remove("whiteSpace");
-				for (Iterator iter = list.iterator(); iter.hasNext();) {
-					String element = (String) iter.next();
-					manager.add(new XSDEditFacetAction(this, element));
-				}
+			if (typedef.getTargetNamespace() == null && !Util.IsAImporedElement(typedef, xsdSchema))
+			{
+				manager.add(changeBaseTypeAction);
+				manager.add(deleteTypeDefinition);
+				manager.add(new Separator());
+				if (!typedef.getSchema().getSchemaForSchemaNamespace().equals(typedef.getTargetNamespace())) {
+					EList list = typedef.getBaseTypeDefinition().getValidFacets();
+					//list.remove("whiteSpace");
+					for (Iterator iter = list.iterator(); iter.hasNext();) {
+						String element = (String) iter.next();
+						manager.add(new XSDEditFacetAction(this, element));
+					}
+				}	
 			}
 		}
 
 		if (obj instanceof XSDAnnotation && selectedObjs.length == 1) {
-			setAnnotationActions(manager);
+			XSDAnnotation annotn = (XSDAnnotation)obj;
+			if(annotn.getSchema().getTargetNamespace() == null && !Util.IsAImporedElement(annotn, xsdSchema))
+			   setAnnotationActions(manager);
 			
 		}
 
@@ -1463,76 +1644,110 @@ public class DataModelMainPage extends AMainPageV2 {
 			// check if concept or "just" element
 			XSDElementDeclaration decl = (XSDElementDeclaration) obj;
 			boolean isConcept = Util.checkConcept(decl);
-			if (isConcept) {
-				manager.add(editConceptAction);
-				manager.add(deleteConceptAction);
-				manager.add(newBrowseItemAction);
-			} else {
-				manager.add(editElementAction);
-				manager.add(deleteElementAction);
-			}
-			manager.add(new Separator());
-			manager.add(new XSDNewConceptAction(this));
-			manager.add(newElementAction);
-			manager.add(new Separator());
-			manager.add(changeToComplexTypeAction);
-			manager.add(changeToSimpleTypeAction);
-			// add by fliu, see bugID:0009157
-			if (((XSDElementDeclaration)obj).getTypeDefinition() instanceof XSDSimpleTypeDefinition)
+			if(decl.getTargetNamespace() == null && !Util.IsAImporedElement(decl, xsdSchema) && !Util.IsAImporedElement(decl.getTypeDefinition(), xsdSchema))
 			{
-				manager.add(setFacetMsgAction);
-			}
-			manager.add(new Separator());
-			manager.add(newIdentityConstraintAction);
-			// Annotations
-			setAnnotationActions2(manager);
-			
-		}
-		if(obj instanceof XSDModelGroup){
-			manager.add(changeSubElementGroupAction);
-		}
-
-		if (obj instanceof XSDParticle && selectedObjs.length == 1) {
-			XSDTerm term = ((XSDParticle) obj).getTerm();
-			if (!(term instanceof XSDWildcard)) {
-				manager.add(editParticleAction);
-				//manager.add(newGroupFromParticleAction);
-				manager.add(newParticleFromParticleAction);
-				if (term instanceof XSDModelGroup) {
-					manager.add(newParticleFromTypeAction);
-					manager.add(newGroupFromTypeAction);
+				if (isConcept) {
+					manager.add(editConceptAction);
+					manager.add(deleteConceptAction);
+					manager.add(newBrowseItemAction);
+				} else {
+					manager.add(editElementAction);
+					manager.add(deleteElementAction);
 				}
-				manager.add(deleteParticleAction);
+				manager.add(new Separator());
+				manager.add(new XSDNewConceptAction(this));
+				manager.add(newElementAction);
 				manager.add(new Separator());
 				manager.add(changeToComplexTypeAction);
 				manager.add(changeToSimpleTypeAction);
 				// add by fliu, see bugID:0009157
-				
-				manager.add(new Separator());
-				//manager.add(newIdentityConstraintAction);
-				if (term instanceof XSDElementDeclaration) {
-					// Annotations
-					setAnnotationActions(manager);
-					if (((XSDElementDeclaration)term).getTypeDefinition() instanceof XSDSimpleTypeDefinition)
-					{
-						manager.add(setFacetMsgAction);
-					}
-					// Xpath
-					manager.add(new Separator());
-					manager.add(getXPathAction);
-					
+				if (((XSDElementDeclaration)obj).getTypeDefinition() instanceof XSDSimpleTypeDefinition)
+				{
+					manager.add(setFacetMsgAction);
 				}
+				manager.add(new Separator());
+				manager.add(newIdentityConstraintAction);
+			}
+			else
+			{
+				if (isConcept)
+				{
+					manager.add(newBrowseItemAction);
+				}
+				manager.add(new XSDNewConceptAction(this));
+				manager.add(newElementAction);
+			}
+			
+			// Annotations
+			if (decl.getTargetNamespace() == null
+					&& !Util.IsAImporedElement(decl, xsdSchema)
+					&& !Util.IsAImporedElement(decl.getTypeDefinition(),
+							xsdSchema))
+			   setAnnotationActions2(manager);
+		}
+		
+		if(obj instanceof XSDModelGroup && !Util.IsAImporedElement((XSDModelGroup)obj, xsdSchema)){
+			manager.add(changeSubElementGroupAction);
+		}
+
+
+		if (obj instanceof XSDParticle && selectedObjs.length == 1) {
+			XSDTerm term = ((XSDParticle) obj).getTerm();
+			if (!(term instanceof XSDWildcard)
+					&& term.getSchema().getTargetNamespace() == null) {
+				if(term instanceof XSDElementDeclaration)
+				{
+					if(!Util.IsAImporedElement((XSDElementDeclaration)term, xsdSchema))
+					{
+						manager.add(editParticleAction);
+						//manager.add(newGroupFromParticleAction);
+						manager.add(newParticleFromParticleAction);
+						if (term instanceof XSDModelGroup) {
+							manager.add(newParticleFromTypeAction);
+							manager.add(newGroupFromTypeAction);
+						}
+						manager.add(deleteParticleAction);
+						manager.add(new Separator());
+						manager.add(changeToComplexTypeAction);
+						manager.add(changeToSimpleTypeAction);
+						// add by fliu, see bugID:0009157
+						
+						manager.add(new Separator());
+						//manager.add(newIdentityConstraintAction);
+						if (term instanceof XSDElementDeclaration) {
+							// Annotations
+							XSDTypeDefinition type = ((XSDElementDeclaration)term).getTypeDefinition();
+							if(!Util.IsAImporedElement(type, xsdSchema))
+							   setAnnotationActions(manager);
+							if (((XSDElementDeclaration)term).getTypeDefinition() instanceof XSDSimpleTypeDefinition)
+							{
+								manager.add(setFacetMsgAction);
+							}
+							// Xpath
+							manager.add(new Separator());
+							manager.add(getXPathAction);
+							
+						}
+					}
+				}
+
 			}
 		}
 
 		
-		if (obj instanceof XSDComplexTypeDefinition && selectedObjs.length == 1) {
+		if (obj instanceof XSDComplexTypeDefinition
+				&& selectedObjs.length == 1
+				&& ((XSDComplexTypeDefinition) obj).getTargetNamespace() == null && !Util.IsAImporedElement((XSDParticle)obj, xsdSchema)) {
 			manager.add(newParticleFromTypeAction);
 			manager.add(newGroupFromTypeAction);
 		}
 
 		
-		if (obj instanceof XSDIdentityConstraintDefinition && selectedObjs.length == 1) {
+		if (obj instanceof XSDIdentityConstraintDefinition
+				&& selectedObjs.length == 1
+				&& ((XSDIdentityConstraintDefinition) obj).getTargetNamespace() == null
+				&& !Util.IsAImporedElement(
+						(XSDIdentityConstraintDefinition) obj, xsdSchema)) {
 			manager.add(editIdentityConstraintAction);
 			manager.add(deleteIdentityConstraintAction);
 			manager.add(newIdentityConstraintAction);
@@ -1541,7 +1756,10 @@ public class DataModelMainPage extends AMainPageV2 {
 		}
 		
 		
-		if (obj instanceof XSDXPathDefinition && selectedObjs.length == 1) {
+		if (obj instanceof XSDXPathDefinition
+				&& selectedObjs.length == 1
+				&& ((XSDXPathDefinition) obj).getSchema().getTargetNamespace() == null
+				&& !Util.IsAImporedElement((XSDXPathDefinition) obj, xsdSchema)) {
 			manager.add(editXPathAction);
 			manager.add(newXPathAction);
 			XSDXPathDefinition xpath = (XSDXPathDefinition) obj;
@@ -1549,7 +1767,8 @@ public class DataModelMainPage extends AMainPageV2 {
 				manager.add(deleteXPathAction);
 		}
 
-		if (obj instanceof XSDSimpleTypeDefinition && selectedObjs.length == 1) {
+		if (obj instanceof XSDSimpleTypeDefinition && selectedObjs.length == 1
+				&& ((XSDSimpleTypeDefinition) obj).getTargetNamespace() == null && !Util.IsAImporedElement((XSDSimpleTypeDefinition) obj, xsdSchema)) {
 			XSDSimpleTypeDefinition typedef = (XSDSimpleTypeDefinition) obj;
 
 			if (!typedef.getSchema().getSchemaForSchemaNamespace().equals(
@@ -1565,7 +1784,9 @@ public class DataModelMainPage extends AMainPageV2 {
 			}
 		}
 
-		if (obj instanceof XSDAnnotation && selectedObjs.length == 1) {
+		if (obj instanceof XSDAnnotation
+				&& selectedObjs.length == 1
+				&& ((XSDAnnotation) obj).getSchema().getTargetNamespace() == null) {
 			setAnnotationActions(manager);
 		}
 
@@ -1640,8 +1861,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		Document document = documentBuilder.parse(source);
 		
 		if (xsdSchema == null) {
-			xsdSchema = XSDSchemaImpl.createSchema(document
-					.getDocumentElement());
+			xsdSchema = Util.createXsdSchema(schema, getXObject());
 		} else {
 			xsdSchema.setDocument(document);
 		}
@@ -1704,6 +1924,18 @@ public class DataModelMainPage extends AMainPageV2 {
 		handler.update();
 		return super.isDirty();
 	}
+	
+	public void reConfigureXSDSchema()
+	{
+		try {
+			String schema = ((XSDTreeContentProvider) viewer
+					.getContentProvider()).getXSDSchemaAsString();
+			xsdSchema = Util.createXsdSchema(schema, getXObject());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * @author achen
 	 */

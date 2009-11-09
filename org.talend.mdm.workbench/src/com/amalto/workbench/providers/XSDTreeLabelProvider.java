@@ -26,6 +26,7 @@ import org.eclipse.xsd.XSDVariety;
 import org.eclipse.xsd.XSDWildcard;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
+import org.eclipse.xsd.impl.XSDSchemaImpl;
 import org.eclipse.xsd.util.XSDConstants;
 import org.w3c.dom.Element;
 
@@ -43,7 +44,10 @@ public class XSDTreeLabelProvider extends LabelProvider {
 			String name = ((XSDElementDeclaration)obj).getName();
 			if (((XSDElementDeclaration)obj).isAbstract())
 				name+= "   (abstract)";
-			return name;
+			String tail = ((XSDElementDeclaration) obj).getTargetNamespace() != null ? " : " + ((XSDElementDeclaration) obj)
+					.getTargetNamespace()
+					: "";
+			return name + tail;
 		}
 		
 		if (obj instanceof XSDParticle) {
@@ -108,7 +112,8 @@ public class XSDTreeLabelProvider extends LabelProvider {
 				name+= (particle.getMaxOccurs() == -1) ? "many" : ""+particle.getMaxOccurs();
 				name+="]";
 			}
-			return name;
+			String tail = particle.getSchema().getTargetNamespace() == null ? ""  : " : " + particle.getSchema().getTargetNamespace();
+			return name + tail;
 
 		}
 		
@@ -456,7 +461,10 @@ public class XSDTreeLabelProvider extends LabelProvider {
 		} else {
 			s+= "***";
 		}
-		return s;
+		String tail = xsdSimpleTypeDefinition.getTargetNamespace() == null ? ""  :  xsdSimpleTypeDefinition.getTargetNamespace();
+		if(tail.equals(XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001) || tail.equals(XSDConstants.SCHEMA_FOR_SCHEMA_URI_1999))
+			tail = "";
+		return s + tail;
 	}
 	
 }
