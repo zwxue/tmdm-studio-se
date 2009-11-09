@@ -40,7 +40,21 @@ public class TreeObject implements IAdaptable {
 	
 	public final static int _ACTION_ = 100;
 	public final static int _WIZARD_ = 101;
-
+	
+	public final static int DATA_CLUSTER_CONTENTS=23;
+	//export folder name
+	public final static String DATACLUSTER_="datacluster";
+	public final static String DATACLUSTER_COTENTS="dataclusterContents";
+	public final static String DATAMODEL_="datamodel";
+	public final static String MENU_="menu";
+	public final static String ROLE_="role";
+	public final static String ROUTINGRULE_="routingrule";
+	public final static String STOREDPROCEDURE_="storedprocedure";
+	public final static String SYNCHRONIZATIONPLAN_="synchronizationplan";
+	public final static String TRANSFORMER_="transformer";
+	public final static String UNIVERSE_="universe";
+	public final static String VIEW_="view";
+	
 	private String displayName;  
 	private TreeParent parent;
 	private TreeParent serverRoot;

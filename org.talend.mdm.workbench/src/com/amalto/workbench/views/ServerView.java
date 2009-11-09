@@ -50,8 +50,6 @@ import com.amalto.workbench.actions.AServerViewAction;
 import com.amalto.workbench.actions.BrowseRevisionAction;
 import com.amalto.workbench.actions.BrowseViewAction;
 import com.amalto.workbench.actions.CopyXObjectAction;
-import com.amalto.workbench.actions.DataClusterExportAction;
-import com.amalto.workbench.actions.DataClusterImportAction;
 import com.amalto.workbench.actions.DeleteXObjectAction;
 import com.amalto.workbench.actions.EditXObjectAction;
 import com.amalto.workbench.actions.NewCategoryAction;
@@ -61,6 +59,8 @@ import com.amalto.workbench.actions.PasteXObjectAction;
 import com.amalto.workbench.actions.ServerLoginAction;
 import com.amalto.workbench.actions.ServerRefreshAction;
 import com.amalto.workbench.actions.VersioningXObjectAction;
+import com.amalto.workbench.export.ExportItemsAction;
+import com.amalto.workbench.export.ImportItemsAction;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
@@ -118,7 +118,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	private ArrayList<TreeObject> dndTreeObjs = new ArrayList<TreeObject>();
     private int dragType = -1;
 
-	private DataClusterImportAction importAction;
+	private ImportItemsAction importAction;
 
 
 	private BrowseRevisionAction browseRevisionAction;
@@ -672,8 +672,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		copyAction = new CopyXObjectAction(this);
 		pasteAction = new PasteXObjectAction(this);
 		
-		exportAction=new DataClusterExportAction(this);
-		importAction=new DataClusterImportAction(this);
+		exportAction=new ExportItemsAction(this);
+		importAction=new ImportItemsAction(this);
 		NewCategoryAction = new NewCategoryAction(this);
 		versionAction = new VersioningXObjectAction(this,VersioningXObjectAction.ACTION_TYPE_VERSIONS);
 		versionUniverseAction = new VersioningXObjectAction(this,VersioningXObjectAction.ACTION_TYPE_TAGUNIVERSE);
