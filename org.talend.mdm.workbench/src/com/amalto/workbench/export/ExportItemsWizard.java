@@ -141,6 +141,7 @@ public class ExportItemsWizard extends Wizard {
 		
 		if(objs.length==0) return;
 		monitor.beginTask("Export items...", IProgressMonitor.UNKNOWN);
+		Exports eps=new Exports();
 		List<ExportItem> exports=new ArrayList<ExportItem>();
 		XtentisPort port= Util.getPort(objs[0]);
 		for(TreeObject obj: objs){
@@ -384,8 +385,9 @@ public class ExportItemsWizard extends Wizard {
 			}			
 		}
 		// store the content xml
+		eps.setItems(exports.toArray(new ExportItem[exports.size()]));
 		StringWriter sw = new StringWriter();
-		Marshaller.marshal(exports, sw);
+		Marshaller.marshal(eps, sw);
 		writeString(sw.toString(), "exportitems.xml");
 		monitor.done();
 	}
