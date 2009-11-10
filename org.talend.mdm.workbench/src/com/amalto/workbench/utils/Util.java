@@ -1463,6 +1463,11 @@ public class Util {
    							exist = true;
    							break;
    						}
+   						else if(xsdEl.getTargetNamespace() == null && type.getTargetNamespace() == null && xsdEl.getName().equals(type.getName()))
+   						{
+   							exist = true;
+   							break;
+   						}
    					}
    					if (!exist)
    					{
