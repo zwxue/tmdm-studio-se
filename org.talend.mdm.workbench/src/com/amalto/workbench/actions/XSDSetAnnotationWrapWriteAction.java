@@ -16,6 +16,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComponent;
+import org.eclipse.xsd.XSDConcreteComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
@@ -24,6 +25,7 @@ import org.w3c.dom.Element;
 import com.amalto.workbench.dialogs.AnnotationOrderedListsDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 /**
  * set  the Roles with Write Access when selections is multiple
@@ -119,6 +121,8 @@ public class XSDSetAnnotationWrapWriteAction extends UndoAction {
 					|| obj instanceof XSDParticle
 					|| obj instanceof XSDAnnotation
 					|| obj instanceof XSDSimpleTypeDefinition) {
+				if(Util.IsAImporedElement((XSDConcreteComponent)obj, page.reConfigureXSDSchema(false)))
+						return false;
 				continue;
 			}
 			

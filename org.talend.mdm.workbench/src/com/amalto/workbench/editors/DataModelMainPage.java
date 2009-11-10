@@ -6,19 +6,17 @@
  */
 package com.amalto.workbench.editors;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.io.StringReader;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -562,30 +560,46 @@ public class DataModelMainPage extends AMainPageV2 {
 					dlg.open();
 					if(dlg.getReturnCode() == Window.OK)
 					{
-						Pattern httpUrl = Pattern.compile("(http|https|ftp):(\\//|\\\\)(.*):(.*)");
-						List<String> list = dlg.getImportedXSDList();
-						try
-						{
-							for(String fileName : list)
-							{
-								Matcher match = httpUrl.matcher(fileName);
-								if (match.matches()) {
-									importSchemaWithURL(fileName);
-								} else {
-									importSchemaFromFile(fileName);
-								}
+						final List<String> list = dlg.getImportedXSDList();
+						TimerTask task = new TimerTask() {
+							public void run() {
+								getSite().getShell().getDisplay().syncExec(new Runnable() {
+
+									public void run() {
+                                       performImport(list);
+									}
+								});
 							}
-							
-							markDirty();
-							refreshData();
-							MessageDialog.openInformation(getSite().getShell(),
-									"Import XSDSchema", "The operation for importing XSDSchema completed successfully!");
-						}
-						catch(Exception ex)
+						};
+						Timer timer = new Timer(true);
+						timer.schedule(task, 0);
+					}
+				}
+				
+				private void performImport(List<String> list)
+				{
+					Pattern httpUrl = Pattern.compile("(http|https|ftp):(\\//|\\\\)(.*):(.*)");
+					try
+					{
+						for(String fileName : list)
 						{
-							MessageDialog.openError(getSite().getShell(),
-							          "Error", "The operation for importing XSDSchema failed!");
+							Matcher match = httpUrl.matcher(fileName);
+							if (match.matches()) {
+								importSchemaWithURL(fileName);
+							} else {
+								importSchemaFromFile(fileName);
+							}
 						}
+						
+						markDirty();
+						refreshData();
+						MessageDialog.openInformation(getSite().getShell(),
+								"Import XSDSchema", "The operation for importing XSDSchema completed successfully!");
+					}
+					catch(Exception ex)
+					{
+						MessageDialog.openError(getSite().getShell(),
+						          "Error", "The operation for importing XSDSchema failed!");
 					}
 				}
 				
