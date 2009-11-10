@@ -419,7 +419,7 @@ public class TypesLabelProvider extends LabelProvider {
 		String s = "";
 		if (xsdSimpleTypeDefinition == null) {
 		} else if (xsdSimpleTypeDefinition.getEffectiveEnumerationFacet() != null) {
-			List value = xsdSimpleTypeDefinition.getEffectiveEnumerationFacet().getValue();
+			/*List value = xsdSimpleTypeDefinition.getEffectiveEnumerationFacet().getValue();
 			if (value.size() > 1) {
 				s+= "(";
 			}
@@ -432,7 +432,8 @@ public class TypesLabelProvider extends LabelProvider {
 			}
 			if (value.size() > 1) {
 				s+= ")";
-			}
+			}*/
+			s+= xsdSimpleTypeDefinition.getName();
 		} else if (xsdSimpleTypeDefinition.getElement() != null && xsdSimpleTypeDefinition.getElement().hasAttribute(XSDConstants.ID_ATTRIBUTE)) {
 			s+= xsdSimpleTypeDefinition.getName();
 		} else if ((XSDVariety.UNION_LITERAL == xsdSimpleTypeDefinition.getVariety()) | (XSDVariety.LIST_LITERAL == xsdSimpleTypeDefinition.getVariety())) {
