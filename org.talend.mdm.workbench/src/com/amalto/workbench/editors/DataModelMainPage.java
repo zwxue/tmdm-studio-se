@@ -468,6 +468,7 @@ public class DataModelMainPage extends AMainPageV2 {
 						if (inputType.equals(".xsd")) {
 							xsd = Util.getXML(xmlFile);
 							xsdSchema = Util.createXsdSchema(xsd, getXObject());
+							xsdSchema.setTargetNamespace(null);
 							xsd = Util.nodeToString(xsdSchema.getDocument());
 						} else {
 							XSDDriver d = new XSDDriver();
@@ -563,7 +564,7 @@ public class DataModelMainPage extends AMainPageV2 {
 						final List<String> list = dlg.getImportedXSDList();
 						TimerTask task = new TimerTask() {
 							public void run() {
-								getSite().getShell().getDisplay().syncExec(new Runnable() {
+								getSite().getShell().getDisplay().asyncExec(new Runnable() {
 
 									public void run() {
                                        performImport(list);
