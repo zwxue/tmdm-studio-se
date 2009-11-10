@@ -1263,6 +1263,12 @@ public class DataModelMainPage extends AMainPageV2 {
 //			return 2;
 //		}
 
+    	if(decl instanceof XSDComponent)
+    	{
+    		if(Util.IsAImporedElement((XSDComponent)decl, xsdSchema))
+    			return -1;
+    	}
+    	
 		if (Util.getParent(decl) == decl) {
 			if (Util.checkConcept((XSDElementDeclaration) decl)) {
 				return 0;
@@ -1659,7 +1665,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			// check if concept or "just" element
 			XSDElementDeclaration decl = (XSDElementDeclaration) obj;
 			boolean isConcept = Util.checkConcept(decl);
-			if(decl.getTargetNamespace() == null && !Util.IsAImporedElement(decl, xsdSchema) && !Util.IsAImporedElement(decl.getTypeDefinition(), xsdSchema))
+			if(decl.getTargetNamespace() == null && !Util.IsAImporedElement(decl, xsdSchema))
 			{
 				if (isConcept) {
 					manager.add(editConceptAction);
@@ -1896,6 +1902,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	{
 		((ISchemaContentProvider)viewer.getContentProvider()).setXsdSchema(xsd);
 		((ISchemaContentProvider)typesViewer.getContentProvider()).setXsdSchema(xsd);
+		xsdSchema = xsd;
 	}
 	
 	public ISchemaContentProvider getSchemaContentProvider() {

@@ -56,7 +56,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.xsd.XSDAnnotation;
@@ -1188,7 +1187,7 @@ public class Util {
         }
     	try {
 			NodeList l = Util.getNodeList(schema.getDocument(), path);
-			if(l.getLength() > 0 && component.getSchema().getTargetNamespace() == null)
+			if(l.getLength() > 0 && component.getSchema() != null && component.getSchema().getTargetNamespace() == null)
 				return false;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1244,7 +1243,7 @@ public class Util {
     	{
     		XSDSimpleTypeDefinition type = (XSDSimpleTypeDefinition)component;
     		name = type.getName();
-    		String primitiveName = type.getPrimitiveTypeDefinition().getName();
+    		String primitiveName = type.getPrimitiveTypeDefinition() != null ? type.getPrimitiveTypeDefinition().getName() : "string";
     		buffer.add("//xsd:simpleType[@name='" + name + "']" + "/xsd:restriction[@base='" + "xsd:" + primitiveName +  "']");
     		if(type.getContainer() instanceof XSDSchemaImpl)
     			return buffer;
