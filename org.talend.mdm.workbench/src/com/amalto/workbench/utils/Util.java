@@ -822,6 +822,9 @@ public class Util {
 		return customTypes;
     }
     
+    
+    
+    
     public static List<String> getAllSchemaSimpleDataType(XSDSchema schema)
     {
     	List<String> builtInTypes = new ArrayList<String>();
@@ -872,6 +875,66 @@ public class Util {
         
         return null;
     }
+    
+    public static void getForeignKeyofParcle(Set<String> list, XSDAnnotation annotation) {
+			if (annotation != null) {
+				
+				List<Element> annotList =  annotation.getApplicationInformation();
+				for (int k = 0; k < annotList.size(); k++) {
+					if ("appinfo".equals(annotList.get(k).getLocalName())) {
+						Node source = annotList.get(k).getAttributes().getNamedItem("source");
+						if (source == null)continue;
+						String appinfoSource = annotList.get(k).getAttributes().getNamedItem("source").getNodeValue();
+						if ("X_ForeignKey".equals(appinfoSource)) 
+							list.add(annotList.get(k).getFirstChild().getNodeValue());
+					}
+
+				}
+			}
+	}
+    
+    
+    public static void getforeignKeyOfElement(Set<String> list, XSDElementDeclaration element) {
+		if (element.getAnnotation() != null) {
+			getForeignKeyofParcle(list, element.getAnnotation());
+		}
+		if (element.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+			XSDComplexTypeContent fromcomplexType = ((XSDComplexTypeDefinition) element.getTypeDefinition()).getContent();
+			if (fromcomplexType instanceof XSDParticle) {
+
+				XSDParticle particle = (XSDParticle) fromcomplexType;
+
+				if (((XSDParticle) particle).getTerm() instanceof XSDModelGroup) {
+
+					XSDModelGroup modelGroup = ((XSDModelGroup) particle.getTerm());
+					EList fromlist = modelGroup.getContents();
+
+					for (XSDParticle el : (XSDParticle[]) fromlist.toArray(new XSDParticle[fromlist.size()])) {
+						XSDTerm term = el.getTerm();
+						if (term instanceof XSDElementDeclaration) {
+							XSDAnnotation annotation = ((XSDElementDeclaration) term).getAnnotation();
+							
+							if(annotation!=null){
+								getForeignKeyofParcle(list,annotation);
+							}
+							getforeignKeyOfElement(list, (XSDElementDeclaration) term) ;
+						}
+					}
+				}
+			}
+		}
+
+	}
+    public static Set<String> getForeingKeyInSchema(Set<String> list,XSDSchema schema){
+    	EList<XSDSchemaContent> contents = schema.getContents();
+    	for(XSDSchemaContent content : contents){
+    		if(content instanceof XSDElementDeclaration)
+    			getforeignKeyOfElement(list, (XSDElementDeclaration)content);
+    	}
+    	
+    	return list;
+    }
+    
     
     public static Object getParent(Object son)
     {
