@@ -10,6 +10,7 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDComponent;
+import org.eclipse.xsd.XSDConcreteComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDFactory;
 import org.eclipse.xsd.XSDModelGroup;
@@ -20,8 +21,6 @@ import org.talend.mdm.commmon.util.core.EUUIDCustomType;
 import org.talend.mdm.commmon.util.core.ICoreConstants;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-
-import com.sun.xml.rpc.processor.util.StringUtils;
 
 public class XSDAnnotationsStructure {
 	
@@ -320,24 +319,45 @@ public class XSDAnnotationsStructure {
 					if (obj instanceof XSDAnnotation
 							|| obj instanceof XSDElementDeclaration
 							|| obj instanceof XSDParticle) {
-						XSDAnnotationsStructure annotion = new XSDAnnotationsStructure(
-								(XSDComponent) obj);
-						//see 7993, if UUID/AUTO_INCREMENT ,should not add write access 
-						if(obj instanceof XSDParticle){
-							XSDParticle o=(XSDParticle)obj;
-							//String name=Util.getFirstTextNode(o.getElement(), "@name");
-							String type=Util.getFirstTextNode(o.getElement(), "@type");
-							if(EUUIDCustomType.AUTO_INCREMENT.equals(type) || EUUIDCustomType.UUID.equals(type))
+						boolean isImported = false;
+
+						if(obj instanceof XSDParticle)
+						{
+							XSDParticle particle = (XSDParticle)obj;
+							if(particle.getTerm() instanceof XSDElementDeclaration)
 							{
-								objList.remove(obj);
-								objs = objList.toArray();
-								continue;
+								XSDElementDeclaration decl = (XSDElementDeclaration)particle.getTerm();
+								if(Util.IsAImporedElement(decl.getType(), ((XSDConcreteComponent)obj).getSchema()))
+									isImported = true;
 							}
 						}
-						annotion.removeAppInfos(roleName);  //X_Write
-						for (Iterator iter = roles.iterator(); iter.hasNext();) {
-							String role = (String) iter.next();
-							annotion.addAppInfo(roleName, role);
+						else if(obj instanceof XSDElementDeclaration)
+						{
+							XSDElementDeclaration decl = (XSDElementDeclaration)obj;
+							if(Util.IsAImporedElement(decl.getType(), ((XSDConcreteComponent)obj).getSchema()))
+								isImported = true;
+						}
+						if(!isImported)
+						{
+							XSDAnnotationsStructure annotion = new XSDAnnotationsStructure(
+									(XSDComponent) obj);
+							//see 7993, if UUID/AUTO_INCREMENT ,should not add write access 
+							if(obj instanceof XSDParticle){
+								XSDParticle o=(XSDParticle)obj;
+								//String name=Util.getFirstTextNode(o.getElement(), "@name");
+								String type=Util.getFirstTextNode(o.getElement(), "@type");
+								if(EUUIDCustomType.AUTO_INCREMENT.equals(type) || EUUIDCustomType.UUID.equals(type))
+								{
+									objList.remove(obj);
+									objs = objList.toArray();
+									continue;
+								}
+							}
+							annotion.removeAppInfos(roleName);  //X_Write
+							for (Iterator iter = roles.iterator(); iter.hasNext();) {
+								String role = (String) iter.next();
+								annotion.addAppInfo(roleName, role);
+							}
 						}
 					}
 					objList.remove(obj);
@@ -348,6 +368,8 @@ public class XSDAnnotationsStructure {
 			return setAccessRole(roles, roleName);
 		}
 		else {
+			if(Util.IsAImporedElement(declaration, declaration.getSchema()))
+				return false;
 			return setAccessRole(roles, roleName);
 		}
 	}

@@ -312,15 +312,7 @@ public class XSDTreeContentProvider implements IStructuredContentProvider, ITree
 				
 			}else{
 				if (annotation!=null) {
-					if(!Util.IsAImporedElement(particle, xsdSchema))
-					{
-						if (particle.getTerm() instanceof XSDElementDeclaration)
-						{
-							XSDTypeDefinition type = ((XSDElementDeclaration)particle.getTerm()).getTypeDefinition();
-							if(!Util.IsAImporedElement(type, xsdSchema))
-							  list.add(annotation);
-						}
-					}
+					list.add(annotation);
 				}
 			}
 			return list.toArray(new Object[list.size()]);
