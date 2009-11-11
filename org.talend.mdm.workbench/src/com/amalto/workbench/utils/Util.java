@@ -876,6 +876,7 @@ public class Util {
         return null;
     }
     
+
     public static void getForeignKeyofParcle(Set<String> list, XSDAnnotation annotation) {
 			if (annotation != null) {
 				
@@ -885,8 +886,12 @@ public class Util {
 						Node source = annotList.get(k).getAttributes().getNamedItem("source");
 						if (source == null)continue;
 						String appinfoSource = annotList.get(k).getAttributes().getNamedItem("source").getNodeValue();
-						if ("X_ForeignKey".equals(appinfoSource)) 
-							list.add(annotList.get(k).getFirstChild().getNodeValue());
+						if ("X_ForeignKey".equals(appinfoSource)){
+							String path = annotList.get(k).getFirstChild().getNodeValue();
+					    		list.add(getConceptFromPath(path));
+					    		
+						}
+							
 					}
 
 				}
