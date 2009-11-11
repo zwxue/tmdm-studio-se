@@ -65,7 +65,6 @@ public class XSDDeleteConceptAction extends UndoAction{
 						"The Concept : " + decl.getName() + " is referring to other Elements");
             	return Status.CANCEL_STATUS;
             }
-            	
             ArrayList<Object> objList = new ArrayList<Object>();
     		IStructuredContentProvider provider = (IStructuredContentProvider) page
 			.getTreeViewer().getContentProvider();
