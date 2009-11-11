@@ -1,6 +1,9 @@
 package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -41,6 +44,9 @@ public class XSDDeleteConceptAction extends UndoAction{
 	
 	public IStatus doAction() {
 		try {
+			
+			
+			
             ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXSDSchemaAsString();
             // xsdElem is to support the multiple delete action on key press,
 			// which each delete action on concept must be explicit passed a xsdElem to
@@ -50,6 +56,16 @@ public class XSDDeleteConceptAction extends UndoAction{
                 ISelection selection = page.getTreeViewer().getSelection();
                 decl = (XSDElementDeclaration)((IStructuredSelection)selection).getFirstElement();
             }
+            //add by ymli. fix buy 0010029
+            Set<String> list = new  HashSet<String>();
+			Util.getForeingKeyInSchema(list, schema);
+            if(list.contains(decl.getName())){
+            	MessageDialog
+				.openWarning(page.getSite().getShell(), "Warnning",
+						"The Concept : " + decl.getName() + " is referring to other Elements");
+            	return Status.CANCEL_STATUS;
+            }
+            	
             ArrayList<Object> objList = new ArrayList<Object>();
     		IStructuredContentProvider provider = (IStructuredContentProvider) page
 			.getTreeViewer().getContentProvider();
@@ -57,7 +73,7 @@ public class XSDDeleteConceptAction extends UndoAction{
             Util.deleteReference(decl, objs);
             //backup current Type Definition
             XSDTypeDefinition current = decl.getTypeDefinition();
-            System.out.println(schema.contains(xsdElem));
+           // System.out.println(schema.contains(xsdElem));
             //remove declaration
             schema.getContents().remove(decl);
     		
