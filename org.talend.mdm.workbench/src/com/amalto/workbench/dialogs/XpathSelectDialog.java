@@ -146,7 +146,10 @@ public class XpathSelectDialog extends Dialog {
 				try {
 					WSDataModel dm=Util.getPort(this.parent).getDataModel(new WSGetDataModel(new WSDataModelPK(datamodel)));
 					if(dm!=null){
-						if(!Util.getConcepts(Util.getXSDSchema(dm.getXsdSchema())).contains(conceptName)){
+						XSDSchema xsdSchema = Util.getXSDSchema(dm.getXsdSchema());
+						String schema = Util.nodeToString(xsdSchema.getDocument());
+						XSDSchema xsd= Util.createXsdSchema(schema, this.parent);
+						if(!Util.getConcepts(xsd).contains(conceptName)){
 							avaiList.remove(datamodel);
 						}
 					}
