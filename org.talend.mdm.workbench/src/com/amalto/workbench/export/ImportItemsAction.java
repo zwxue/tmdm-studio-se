@@ -1,30 +1,15 @@
 package com.amalto.workbench.export;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.progress.UIJob;
 
-import com.amalto.workbench.actions.ServerRefreshAction;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
-import com.amalto.workbench.webservices.WSDataCluster;
-import com.amalto.workbench.webservices.WSPutDataCluster;
 
 public class ImportItemsAction extends Action{
 	private ServerView view = null;
@@ -54,16 +39,24 @@ public class ImportItemsAction extends Action{
 	}
 	
 	public void run() {
-		try {
+//		try {
 			super.run();
+			ISelection selection=null;
 			if (this.view != null) { //called from ServerView
-				ISelection selection = view.getViewer().getSelection();
+				selection = view.getViewer().getSelection();
 				xobject = (TreeObject)((IStructuredSelection)selection).getFirstElement();
-			}
-            
+			}	  
+			
+			
+			ImportItemsWizard wizard=new ImportItemsWizard((IStructuredSelection)selection,view);
+			WizardDialog dialog = new WizardDialog(view.getSite().getShell(),
+					wizard);
+			dialog.create();
+			dialog.getShell().setText("Import Objects");
+			dialog.open(); 
             //if (!xobject.isXObject()) return;
 
-			FileDialog fileDialog = new FileDialog (view.getSite().getShell(), SWT.OPEN);				
+			/*FileDialog fileDialog = new FileDialog (view.getSite().getShell(), SWT.OPEN);				
 			//fileDialog.setFilterNames(new String[]{"__contents__.xml"});
 			fileDialog.setText("Please select file to import");
 			fileDialog.setFilterExtensions(new String[]{"__contents__.xml"});
@@ -137,7 +130,6 @@ public class ImportItemsAction extends Action{
 					"An error occured trying to Import Data Cluster: "+e.getLocalizedMessage()
 			);
 		}finally{
-			
-		}		
+		}		*/
 	}
 }
