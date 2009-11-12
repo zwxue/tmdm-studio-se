@@ -711,7 +711,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			// get the XSDSchema
 			xsdSchema = getXSDSchema(wsObject.getXsdSchema());
 			createSash(mainComposite);
-
+	        reConfigureXSDSchema(true);
 			hookContextMenu();
 
 			hookDoubleClickAction();
@@ -1161,7 +1161,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			//refresh types
 			typesProvider.setXsdSchema(xsd);
 			typesViewer.setInput(getSite());
-			
+			reConfigureXSDSchema(true);
 			//refresh xmleditor
 			if(getEditor().getXmlEditor()!=null&&getEditor().getCurrentPage() ==1)
 				getEditor().getXmlEditor().refresh(getXObject());
@@ -1951,15 +1951,43 @@ public class DataModelMainPage extends AMainPageV2 {
 	{
 		if(force)
 		{
+			boolean refresh = false;
 			try {
 				String schema = ((XSDTreeContentProvider) viewer
 						.getContentProvider()).getXSDSchemaAsString();
 				xsdSchema = Util.createXsdSchema(schema, getXObject());
+				 EList<XSDElementDeclaration> decls = xsdSchema.getElementDeclarations();
+				for(XSDElementDeclaration decl: decls)
+				{
+					EList<XSDTypeDefinition> types= xsdSchema.getTypeDefinitions();
+					XSDTypeDefinition newType = decl.getAnonymousTypeDefinition();
+					if(newType != null)
+					{
+						XSDTypeDefinition clone =  (XSDTypeDefinition)newType.cloneConcreteComponent(true, false);
+						clone.setName(decl.getName() + "Type");
+						clone.updateElement(); 
+		       			decl.setTypeDefinition(clone);
+						xsdSchema.getContents().add(clone);
+						refresh = true;
+					}
+					decl.updateElement();
+				}
+				
+
+				if(refresh)
+				{
+					WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
+					wsObject.setXsdSchema(Util.nodeToString(xsdSchema.getDocument().getDocumentElement()));
+					XMLEditor xmleditor=((XObjectEditor)getEditor()).getXmlEditor();
+					xmleditor.refresh(getXObject());
+					setXsdSchema(xsdSchema);
+				    refresh();
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return xsdSchema;
 	}
 	

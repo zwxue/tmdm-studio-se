@@ -70,11 +70,12 @@ public  class UndoAction extends Action {
 	public void run() {
 		try {			
 			operation.addContext(page.getUndoContext());
-			getOperationHistory().execute(operation, null, null);		
+			IStatus status = getOperationHistory().execute(operation, null, null);		
 			
 			//refresh xml editor
 			page.getEditor().getXmlEditor().refresh(page.getXObject());
-			page.reConfigureXSDSchema(true);
+			if(status == Status.OK_STATUS)
+			  page.reConfigureXSDSchema(true);
 		} catch (ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
