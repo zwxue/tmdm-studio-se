@@ -32,7 +32,6 @@ import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataClusterPKArray;
 import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
-import com.amalto.workbench.webservices.WSDataModelPKArray;
 import com.amalto.workbench.webservices.WSGetDataCluster;
 import com.amalto.workbench.webservices.WSGetDataModel;
 import com.amalto.workbench.webservices.WSGetItem;
@@ -40,7 +39,6 @@ import com.amalto.workbench.webservices.WSGetItemPKsByCriteria;
 import com.amalto.workbench.webservices.WSGetMenu;
 import com.amalto.workbench.webservices.WSGetMenuPKs;
 import com.amalto.workbench.webservices.WSGetRole;
-import com.amalto.workbench.webservices.WSGetRolePKs;
 import com.amalto.workbench.webservices.WSGetRoutingRule;
 import com.amalto.workbench.webservices.WSGetRoutingRulePKs;
 import com.amalto.workbench.webservices.WSGetStoredProcedure;
@@ -58,11 +56,9 @@ import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuPK;
 import com.amalto.workbench.webservices.WSMenuPKArray;
 import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
-import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 import com.amalto.workbench.webservices.WSRegexStoredProcedure;
 import com.amalto.workbench.webservices.WSRole;
 import com.amalto.workbench.webservices.WSRolePK;
-import com.amalto.workbench.webservices.WSRolePKArray;
 import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSRoutingRulePKArray;
@@ -75,6 +71,7 @@ import com.amalto.workbench.webservices.WSSynchronizationPlanPKArray;
 import com.amalto.workbench.webservices.WSTransformer;
 import com.amalto.workbench.webservices.WSTransformerPK;
 import com.amalto.workbench.webservices.WSTransformerPKArray;
+import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSUniversePKArray;
@@ -148,28 +145,30 @@ public class ExportItemsWizard extends Wizard {
 			if(obj.getType() == TreeObject.DATA_CLUSTER){
 				monitor.subTask("Export Data Cluster...");
 				ExportItem exportItem=new ExportItem();
-				exportItem.setName(TreeObject.DATACLUSTER_);
+				
 				exportItem.setType(TreeObject.DATA_CLUSTER);
 				List<String> items=new ArrayList<String>();
 				//dataclusters
-				WSDataClusterPKArray array=port.getDataClusterPKs(new WSRegexDataClusterPKs(""));
-				for(WSDataClusterPK pk:array.getWsDataClusterPKs()){					
+//				WSDataClusterPKArray array=port.getDataClusterPKs(new WSRegexDataClusterPKs(""));
+//				for(WSDataClusterPK pk:array.getWsDataClusterPKs()){					
+				WSDataClusterPK pk =(WSDataClusterPK)obj.getWsKey();
+				exportItem.setName(pk.getPk());
 					WSDataCluster cluster=port.getDataCluster(new WSGetDataCluster(pk));
 		        	//Marshal
 		    		StringWriter sw = new StringWriter();
 		    		Marshaller.marshal(cluster, sw);
 		    		writeString(sw.toString(), TreeObject.DATACLUSTER_+"/"+cluster.getName());
 		    		items.add(TreeObject.DATACLUSTER_+"/"+cluster.getName());
-				}
+//				}
 				exportItem.setItems(items.toArray(new String[items.size()]));
 				exports.add(exportItem);
 				monitor.worked(1);
 				//datacluster contents
-				for(WSDataClusterPK pk:array.getWsDataClusterPKs()){
+//				for(WSDataClusterPK pk:array.getWsDataClusterPKs()){
 					monitor.subTask("Export Data Cluster "+ pk.getPk()+" ...");
 					ExportItem exportItem1=new ExportItem();
-					exportItem1.setName(TreeObject.DATACLUSTER_);
-					exportItem1.setType(TreeObject.DATA_CLUSTER);
+					exportItem1.setName(pk.getPk());
+					exportItem1.setType(TreeObject.DATA_CLUSTER_CONTENTS);
 					List<String> items1=new ArrayList<String>();
 		            WSItemPKsByCriteriaResponseResults[] results =
 			            port.getItemPKsByCriteria(new WSGetItemPKsByCriteria(
@@ -188,20 +187,20 @@ public class ExportItemsWizard extends Wizard {
 		            	WSItem wsitem=port.getItem(new WSGetItem(item.getWsItemPK()));
 		            	
 		            	//Marshal
-		            	StringWriter sw = new StringWriter();
-		            	Marshaller.marshal(wsitem, sw);
+		            	StringWriter sw1 = new StringWriter();
+		            	Marshaller.marshal(wsitem, sw1);
 
 		            	String uniqueId=pk.getPk()+"."+wsitem.getConceptName()+".";
 		            	for(String id: wsitem.getIds()){
 		            		uniqueId=uniqueId+"."+id;
 		            	}		            	
-		            	writeString(sw.toString(), TreeObject.DATACLUSTER_COTENTS+"/"+pk.getPk()+"/"+uniqueId);
-		            	items1.add(TreeObject.DATACLUSTER_+"/"+pk.getPk()+"/"+uniqueId);
+		            	writeString(sw1.toString(), TreeObject.DATACLUSTER_COTENTS+"/"+pk.getPk()+"/"+uniqueId);
+		            	items1.add(TreeObject.DATACLUSTER_COTENTS+"/"+pk.getPk()+"/"+uniqueId);
 		            }
 					exportItem1.setItems(items1.toArray(new String[items1.size()]));
 					exports.add(exportItem1);
 					monitor.worked(1);
-				}
+//				}
 			}
 			if(obj.getType() == TreeObject.DATA_MODEL){
 				monitor.subTask("Export Data Model...");
@@ -210,15 +209,14 @@ public class ExportItemsWizard extends Wizard {
 				exportItem.setType(TreeObject.DATA_MODEL);
 				List<String> items=new ArrayList<String>();
 				//datamodels
-				WSDataModelPKArray array=port.getDataModelPKs(new WSRegexDataModelPKs(""));
-				for(WSDataModelPK pk:array.getWsDataModelPKs()){					
-					WSDataModel Model=port.getDataModel(new WSGetDataModel(pk));
-		        	//Marshal
-		    		StringWriter sw = new StringWriter();
-		    		Marshaller.marshal(Model, sw);
-		    		writeString(sw.toString(), TreeObject.DATAMODEL_+"/"+Model.getName());
-		    		items.add(TreeObject.DATAMODEL_+"/"+Model.getName());
-				}
+					
+				WSDataModel model=port.getDataModel(new WSGetDataModel((WSDataModelPK)obj.getWsKey()));
+	        	//Marshal
+	    		StringWriter sw = new StringWriter();
+	    		Marshaller.marshal(model, sw);
+	    		writeString(sw.toString(), TreeObject.DATAMODEL_+"/"+model.getName());
+	    		items.add(TreeObject.DATAMODEL_+"/"+model.getName());
+				
 				exportItem.setItems(items.toArray(new String[items.size()]));
 				exports.add(exportItem);
 				monitor.worked(1);
@@ -230,16 +228,14 @@ public class ExportItemsWizard extends Wizard {
 				exportItem.setType(TreeObject.MENU);
 				List<String> items=new ArrayList<String>();
 				//menu
-				WSMenuPKArray array=port.getMenuPKs(new WSGetMenuPKs(""));
-				for(WSMenuPK pk:array.getWsMenuPK()){					
-					WSMenu Model=port.getMenu(new WSGetMenu(pk));
+					WSMenu model=port.getMenu(new WSGetMenu((WSMenuPK)obj.getWsKey()));
 		        	//Marshal
 		    		StringWriter sw = new StringWriter();
-		    		Marshaller.marshal(Model, sw);
-		    		writeString(sw.toString(), TreeObject.MENU_+"/"+Model.getName());
-		    		items.add(TreeObject.MENU_+"/"+Model.getName());
-				}
-				exportItem.setItems(items.toArray(new String[items.size()]));
+		    		Marshaller.marshal(model, sw);
+		    		writeString(sw.toString(), TreeObject.MENU_+"/"+model.getName());
+		    		items.add(TreeObject.MENU_+"/"+model.getName());
+
+		    	exportItem.setItems(items.toArray(new String[items.size()]));
 				exports.add(exportItem);
 				monitor.worked(1);
 			}	
@@ -249,16 +245,15 @@ public class ExportItemsWizard extends Wizard {
 				exportItem.setName(TreeObject.ROLE_);
 				exportItem.setType(TreeObject.ROLE);
 				List<String> items=new ArrayList<String>();
-				//menu
-				WSRolePKArray array=port.getRolePKs(new WSGetRolePKs(""));
-				for(WSRolePK pk:array.getWsRolePK()){					
-					WSRole role=port.getRole(new WSGetRole(pk));
+		
+				//role
+					WSRole role=port.getRole(new WSGetRole((WSRolePK)obj.getWsKey()));
 		        	//Marshal
 		    		StringWriter sw = new StringWriter();
 		    		Marshaller.marshal(role, sw);
 		    		writeString(sw.toString(), TreeObject.ROLE_+"/"+role.getName());
 		    		items.add(TreeObject.ROLE_+"/"+role.getName());
-				}
+			
 				exportItem.setItems(items.toArray(new String[items.size()]));
 				exports.add(exportItem);
 				monitor.worked(1);
@@ -269,16 +264,13 @@ public class ExportItemsWizard extends Wizard {
 				exportItem.setName(TreeObject.ROUTINGRULE_);
 				exportItem.setType(TreeObject.ROUTING_RULE);
 				List<String> items=new ArrayList<String>();
-				//menu
-				WSRoutingRulePKArray array=port.getRoutingRulePKs(new WSGetRoutingRulePKs(""));
-				for(WSRoutingRulePK pk:array.getWsRoutingRulePKs()){					
-					WSRoutingRule RoutingRule=port.getRoutingRule(new WSGetRoutingRule(pk));
+				//routing rule
+					WSRoutingRule RoutingRule=port.getRoutingRule(new WSGetRoutingRule((WSRoutingRulePK)obj.getWsKey()));
 		        	//Marshal
 		    		StringWriter sw = new StringWriter();
 		    		Marshaller.marshal(RoutingRule, sw);
 		    		writeString(sw.toString(), TreeObject.ROUTINGRULE_+"/"+RoutingRule.getName());
 		    		items.add(TreeObject.ROUTINGRULE_+"/"+RoutingRule.getName());
-				}
 				exportItem.setItems(items.toArray(new String[items.size()]));
 				exports.add(exportItem);
 				monitor.worked(1);
@@ -289,17 +281,15 @@ public class ExportItemsWizard extends Wizard {
 				exportItem.setName(TreeObject.STOREDPROCEDURE_);
 				exportItem.setType(TreeObject.STORED_PROCEDURE);
 				List<String> items=new ArrayList<String>();
-				//menu
-				WSStoredProcedurePKArray array=port.getStoredProcedurePKs(new WSRegexStoredProcedure(""));
-				for(WSStoredProcedurePK pk:array.getWsStoredProcedurePK()){					
-					WSStoredProcedure StoredProcedure=port.getStoredProcedure(new WSGetStoredProcedure(pk));
+				//stored procedure
+					WSStoredProcedure StoredProcedure=port.getStoredProcedure(new WSGetStoredProcedure((WSStoredProcedurePK)obj.getWsKey()));
 		        	//Marshal
 		    		StringWriter sw = new StringWriter();
 		    		Marshaller.marshal(StoredProcedure, sw);
 		    		writeString(sw.toString(), TreeObject.STOREDPROCEDURE_+"/"+StoredProcedure.getName());
 		    		items.add(TreeObject.STOREDPROCEDURE_+"/"+StoredProcedure.getName());
-				}
-				exportItem.setItems(items.toArray(new String[items.size()]));
+
+		    	exportItem.setItems(items.toArray(new String[items.size()]));
 				exports.add(exportItem);
 				monitor.worked(1);
 			}
@@ -309,16 +299,14 @@ public class ExportItemsWizard extends Wizard {
 				exportItem.setName(TreeObject.SYNCHRONIZATIONPLAN_);
 				exportItem.setType(TreeObject.SYNCHRONIZATIONPLAN);
 				List<String> items=new ArrayList<String>();
-				//menu
-				WSSynchronizationPlanPKArray array=port.getSynchronizationPlanPKs(new WSGetSynchronizationPlanPKs(""));
-				for(WSSynchronizationPlanPK pk:array.getWsSynchronizationPlanPK()){					
-					WSSynchronizationPlan SynchronizationPlan=port.getSynchronizationPlan(new WSGetSynchronizationPlan(pk));
+				//Synchronizationplan
+					WSSynchronizationPlan SynchronizationPlan=port.getSynchronizationPlan(new WSGetSynchronizationPlan((WSSynchronizationPlanPK)obj.getWsKey()));
 		        	//Marshal
 		    		StringWriter sw = new StringWriter();
 		    		Marshaller.marshal(SynchronizationPlan, sw);
 		    		writeString(sw.toString(), TreeObject.SYNCHRONIZATIONPLAN_+"/"+SynchronizationPlan.getName());
 		    		items.add(TreeObject.SYNCHRONIZATIONPLAN_+"/"+SynchronizationPlan.getName());
-				}
+				
 				exportItem.setItems(items.toArray(new String[items.size()]));
 				exports.add(exportItem);
 				monitor.worked(1);
@@ -329,16 +317,15 @@ public class ExportItemsWizard extends Wizard {
 				exportItem.setName(TreeObject.TRANSFORMER_);
 				exportItem.setType(TreeObject.TRANSFORMER);
 				List<String> items=new ArrayList<String>();
-				//menu
-				WSTransformerPKArray array=port.getTransformerPKs(new WSGetTransformerPKs(""));
-				for(WSTransformerPK pk:array.getWsTransformerPK()){					
-					WSTransformer Transformer=port.getTransformer(new WSGetTransformer(pk));
+				//transformer
+				//TODO:check the pk
+				WSTransformer transformer=port.getTransformer(new WSGetTransformer(new WSTransformerPK(((WSTransformerV2PK)obj.getWsKey()).getPk())));
 		        	//Marshal
 		    		StringWriter sw = new StringWriter();
-		    		Marshaller.marshal(Transformer, sw);
-		    		writeString(sw.toString(), TreeObject.TRANSFORMER_+"/"+Transformer.getName());
-		    		items.add(TreeObject.TRANSFORMER_+"/"+Transformer.getName());
-				}
+		    		Marshaller.marshal(transformer, sw);
+		    		writeString(sw.toString(), TreeObject.TRANSFORMER_+"/"+transformer.getName());
+		    		items.add(TreeObject.TRANSFORMER_+"/"+transformer.getName());
+				
 				exportItem.setItems(items.toArray(new String[items.size()]));
 				exports.add(exportItem);
 				monitor.worked(1);
@@ -349,16 +336,14 @@ public class ExportItemsWizard extends Wizard {
 				exportItem.setName(TreeObject.UNIVERSE_);
 				exportItem.setType(TreeObject.UNIVERSE);
 				List<String> items=new ArrayList<String>();
-				//menu
-				WSUniversePKArray array=port.getUniversePKs(new WSGetUniversePKs(""));
-				for(WSUniversePK pk:array.getWsUniversePK()){					
-					WSUniverse Universe=port.getUniverse(new WSGetUniverse(pk));
+				//universe
+					WSUniverse universe=port.getUniverse(new WSGetUniverse((WSUniversePK)obj.getWsKey()));
 		        	//Marshal
 		    		StringWriter sw = new StringWriter();
-		    		Marshaller.marshal(Universe, sw);
-		    		writeString(sw.toString(), TreeObject.UNIVERSE_+"/"+Universe.getName());
-		    		items.add(TreeObject.UNIVERSE_+"/"+Universe.getName());
-				}
+		    		Marshaller.marshal(universe, sw);
+		    		writeString(sw.toString(), TreeObject.UNIVERSE_+"/"+universe.getName());
+		    		items.add(TreeObject.UNIVERSE_+"/"+universe.getName());
+				
 				exportItem.setItems(items.toArray(new String[items.size()]));
 				exports.add(exportItem);
 				monitor.worked(1);
@@ -369,16 +354,14 @@ public class ExportItemsWizard extends Wizard {
 				exportItem.setName(TreeObject.VIEW_);
 				exportItem.setType(TreeObject.VIEW);
 				List<String> items=new ArrayList<String>();
-				//menu
-				WSViewPKArray array=port.getViewPKs(new WSGetViewPKs(""));
-				for(WSViewPK pk:array.getWsViewPK()){					
-					WSView View=port.getView(new WSGetView(pk));
+				//view
+					WSView View=port.getView(new WSGetView((WSViewPK)obj.getWsKey()));
 		        	//Marshal
 		    		StringWriter sw = new StringWriter();
 		    		Marshaller.marshal(View, sw);
 		    		writeString(sw.toString(), TreeObject.VIEW_+"/"+View.getName());
 		    		items.add(TreeObject.VIEW_+"/"+View.getName());
-				}
+				
 				exportItem.setItems(items.toArray(new String[items.size()]));
 				exports.add(exportItem);
 				monitor.worked(1);
