@@ -557,15 +557,15 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				break;
 			case TreeObject.DATA_CLUSTER:
 				if (xobject.isXObject()) {
-					manager.add(exportAction);
-					manager.add(importAction);
+//					manager.add(exportAction);
+//					manager.add(importAction);
 					manager.add(browseViewAction);
 				}
 			case TreeObject.ROLE:
 								
 			case TreeObject.VIEW:				
 			default:
-				if (!xobject.isXObject() && xobject.getType() != TreeObject.CATEGORY_FOLDER) {
+				if ( xobject.getType() != TreeObject.CATEGORY_FOLDER) {
 					manager.add(exportAction);
 					manager.add(importAction);
 				}

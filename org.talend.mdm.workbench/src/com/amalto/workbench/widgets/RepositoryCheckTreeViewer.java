@@ -74,15 +74,15 @@ public class RepositoryCheckTreeViewer {
 	private ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries;
 
     public RepositoryCheckTreeViewer(IStructuredSelection selection,String defaultTagText, boolean isTagEditable) {
-        this.selection = selection;
-        serverRoot=  ((TreeParent)selection.getFirstElement()).getServerRoot();
+    	this.selection=selection;
+    		serverRoot=  ((TreeObject)selection.getFirstElement()).getServerRoot();
         checkItems=selection.toList();
         this.defaultTagText = defaultTagText;
         this.isTagEditable = isTagEditable;
     }
     public RepositoryCheckTreeViewer(IStructuredSelection selection){
     	this.selection=selection;
-    	 serverRoot=  ((TreeParent)selection.getFirstElement()).getServerRoot();
+    	 serverRoot=  ((TreeObject)selection.getFirstElement()).getServerRoot();
     	 checkItems=selection.toList();
     }
     public SashForm createContents(Composite parent) {
