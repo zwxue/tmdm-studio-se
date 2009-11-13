@@ -13,6 +13,7 @@ import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.rmi.RemoteException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -96,8 +97,10 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.webservices.WSComponent;
 import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSGetComponentVersion;
+import com.amalto.workbench.webservices.WSGetDataModel;
 import com.amalto.workbench.webservices.WSGetUniverse;
 import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSGetViewPKs;
@@ -822,9 +825,6 @@ public class Util {
 		return customTypes;
     }
     
-    
-    
-    
     public static List<String> getAllSchemaSimpleDataType(XSDSchema schema)
     {
     	List<String> builtInTypes = new ArrayList<String>();
@@ -898,7 +898,12 @@ public class Util {
 			}
 	}
     
-    
+    /**
+     * set the list with  foreign concept name of in the element
+     * @author ymli
+     * @param list
+     * @param element
+     */
     public static void getforeignKeyOfElement(Set<String> list, XSDElementDeclaration element) {
 		if (element.getAnnotation() != null) {
 			getForeignKeyofParcle(list, element.getAnnotation());
@@ -930,6 +935,42 @@ public class Util {
 		}
 
 	}
+    /**
+     * set the list with all the foreign concepty name in the parent 
+     * @author ymli
+     * @param list
+     * @param parent
+     * @throws Exception
+     */
+    public static void getForeingKeyInDataModel(Set<String> list,TreeParent parent) throws Exception{
+    	TreeObject[] children = parent.getChildren();
+    	WSDataModel wsDataModel = null;
+    	XtentisPort port = null;
+		try {
+			port = Util.getPort(parent);
+		} catch (XtentisException e) {
+			e.printStackTrace();
+		}
+    	for(TreeObject object:children){
+    		if(object instanceof TreeParent){
+    			getForeingKeyInDataModel(list, (TreeParent)object);
+    			continue;
+    		}
+    	wsDataModel =port.getDataModel(new WSGetDataModel(
+				new WSDataModelPK(object.getDisplayName())));
+    	XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
+		String schema = Util.nodeToString(xsdSchema.getDocument());
+		XSDSchema xsd= Util.createXsdSchema(schema, object);
+		getForeingKeyInSchema(list,xsd);
+    }
+    }
+    /**
+     * set the list with foreign concept names in the schema
+     * @author ymli
+     * @param list
+     * @param schema
+     * @return
+     */
     public static Set<String> getForeingKeyInSchema(Set<String> list,XSDSchema schema){
     	EList<XSDSchemaContent> contents = schema.getContents();
     	for(XSDSchemaContent content : contents){
@@ -939,6 +980,22 @@ public class Util {
     	
     	return list;
     }
+    /**
+     * the all the typeDefinition in the schema
+     * @author ymli
+     * @param schema
+     * @return
+     */
+    public static HashMap<String, XSDTypeDefinition> getTypeDefinition(XSDSchema schema){
+    	HashMap<String, XSDTypeDefinition> map = new HashMap<String, XSDTypeDefinition>();
+    	for(XSDSchemaContent content : schema.getContents()){
+    		if(content instanceof XSDTypeDefinition){
+    			map.put(((XSDTypeDefinition) content).getName(), (XSDTypeDefinition) content);
+    		}
+    	}
+    	return map;
+    }
+    
     
     
     public static Object getParent(Object son)
@@ -1003,7 +1060,6 @@ public class Util {
 	}
 	
     public static Object[] getAllObject(Object elem, ArrayList<Object> objList, IStructuredContentProvider provider) {
-
 		Object[] elems = provider.getElements(elem);
 		for (Object obj : elems) {
 			if (!objList.contains(obj)) {

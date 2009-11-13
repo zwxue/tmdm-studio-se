@@ -57,8 +57,9 @@ public class XSDDeleteConceptAction extends UndoAction{
                 decl = (XSDElementDeclaration)((IStructuredSelection)selection).getFirstElement();
             }
             //add by ymli. fix buy 0010029
+            page.getXObject().getParent();
             Set<String> list = new  HashSet<String>();
-			Util.getForeingKeyInSchema(list, schema);
+            Util.getForeingKeyInDataModel(list,page.getXObject().getParent());
             if(list.contains(decl.getName())){
             	MessageDialog
 				.openWarning(page.getSite().getShell(), "Warnning",
