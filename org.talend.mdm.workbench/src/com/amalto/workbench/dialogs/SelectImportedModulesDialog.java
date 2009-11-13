@@ -2,9 +2,12 @@ package com.amalto.workbench.dialogs;
 
 
 import java.io.Serializable;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -17,7 +20,6 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -36,6 +38,10 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.xsd.XSDSchema;
+import org.eclipse.xsd.XSDSchemaContent;
+import org.eclipse.xsd.impl.XSDImportImpl;
+import org.eclipse.xsd.impl.XSDIncludeImpl;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -50,9 +56,11 @@ public class SelectImportedModulesDialog extends Dialog{
     private TableViewer tableViewer;
     private List<XSDDesc> xsdDescList = new ArrayList<XSDDesc>();
     private List<String> xsdImpList = new ArrayList<String>();
+    private List<String> toDelList = new ArrayList<String>();
     
     private Shell shell;
     private TreeObject treeObject;
+    private XSDSchema xsdSchema;
     
     private Button delLabelButton;
     
@@ -62,11 +70,12 @@ public class SelectImportedModulesDialog extends Dialog{
 	
 	private static final String LOCAL_MDM_URL = "http://localhost:8080/pubcomponent/secure/dataModels/";
 	
-	public SelectImportedModulesDialog(Shell parentShell,TreeObject treeObj, String title) {
+	public SelectImportedModulesDialog(Shell parentShell,XSDSchema schema, TreeObject treeObj, String title) {
 		super(parentShell);
 		this.shell = parentShell;
 		this.treeObject = treeObj;
 		this.title=title;
+		this.xsdSchema = schema;
 	}
 	
 	protected Control createDialogArea(Composite parent) {
@@ -109,16 +118,8 @@ public class SelectImportedModulesDialog extends Dialog{
 		tableViewer.addSelectionChangedListener(new ISelectionChangedListener(){
             public void selectionChanged(SelectionChangedEvent event)
             {
-            	xsdImpList.clear();
             	IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-            	Iterator iter = selection.iterator();
-            	while(iter.hasNext())
-            	{
-            		XSDDesc des = (XSDDesc)iter.next();
-            		xsdImpList.add(des.getURL());
-            	}
             	delLabelButton.setEnabled(!selection.isEmpty());
-            	getButton(IDialogConstants.OK_ID).setEnabled(!selection.isEmpty());
             }
         }
         );
@@ -146,6 +147,7 @@ public class SelectImportedModulesDialog extends Dialog{
     			
     			XSDDesc xsdDesc = buildUp(filename, LOCAL, 0);
     			include(xsdDesc);
+    			getButton(IDialogConstants.OK_ID).setEnabled(true);
     			tableViewer.refresh();
         	}
 		});
@@ -154,7 +156,7 @@ public class SelectImportedModulesDialog extends Dialog{
 		addXSDFromWebSite.setLayoutData(
                 new GridData(SWT.FILL,SWT.NONE,false,false,1,1)
         );
-		addXSDFromWebSite.setText("Add xsd from Local MDM site");
+		addXSDFromWebSite.setText("Add xsd from Data Models");
 		addXSDFromWebSite.setToolTipText("Add xsd schema from the URL of Web site");
 		addXSDFromWebSite.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
@@ -169,6 +171,7 @@ public class SelectImportedModulesDialog extends Dialog{
             			XSDDesc xsdDesc = buildUp(LOCAL_MDM_URL + url, MDM_WEB, 1);
             			include(xsdDesc);
         			}
+        			getButton(IDialogConstants.OK_ID).setEnabled(true);
         			tableViewer.refresh();
         		}
         	}
@@ -203,6 +206,7 @@ public class SelectImportedModulesDialog extends Dialog{
            		}
     			XSDDesc xsdDesc = buildUp(id.getValue(), OTHER_WEB, 2);
     			include(xsdDesc);
+    			getButton(IDialogConstants.OK_ID).setEnabled(true);
     			tableViewer.refresh();
         	}
 		});
@@ -220,13 +224,63 @@ public class SelectImportedModulesDialog extends Dialog{
     			for (Iterator<XSDDesc> iter = selection.iterator(); iter.hasNext(); ) {
     				XSDDesc desc = (XSDDesc)iter.next();
     				xsdDescList.remove(desc);
+    				toDelList.add(desc.getURL());
     			}
+    			getButton(IDialogConstants.OK_ID).setEnabled(true);
     			tableViewer.refresh();
         	};
         });
         
+        countImportListInSchema();
+        
         tableViewer.setInput(xsdDescList);
 		return composite;
+	}
+	
+	private void countImportListInSchema()
+	{
+		xsdDescList.clear();
+		try
+		{
+	    	for (XSDSchemaContent cnt: xsdSchema.getContents())
+	    	{
+	    		String schemaLocation = "";
+	    		if (cnt instanceof XSDImportImpl)
+	    		{
+	    			XSDImportImpl imp = (XSDImportImpl)cnt;
+	    			schemaLocation = imp.getSchemaLocation();
+	    		}
+	    		else if(cnt instanceof XSDIncludeImpl)
+	    		{
+	    			XSDIncludeImpl incu = (XSDIncludeImpl)cnt;
+	    			schemaLocation = incu.getSchemaLocation();
+	    		}
+	    		else
+	    			continue;
+	    		Pattern httpUrl = Pattern.compile("(http|https|ftp):(\\//|\\\\)(.*):(.*)");
+	    		Matcher match = httpUrl.matcher(schemaLocation);
+	    		if(match.matches())
+	    		{
+	    			InetAddress addr = InetAddress.getLocalHost();
+	    			String ip = match.group(3);
+	    			boolean local = ip.equals(addr.getHostAddress())
+							|| ip.equals("localhost") || ip.equals("127.0.0.1");
+	    			Image img = local ? MDM_WEB : OTHER_WEB;
+	    			int type = local ? 1 : 2;
+	    			XSDDesc xsdDesc = buildUp(schemaLocation, img, type);
+	    			xsdDescList.add(xsdDesc);
+	    		}
+	    		else if(!schemaLocation.equals(""))
+	    		{
+	    			XSDDesc xsdDesc = buildUp(schemaLocation, LOCAL, 0);
+	    			xsdDescList.add(xsdDesc);
+	    		}
+	    	}
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
 	}
 	
 	private void include(XSDDesc xsdDesc)
@@ -254,7 +308,23 @@ public class SelectImportedModulesDialog extends Dialog{
 	
 	public List<String> getImportedXSDList()
 	{
+		for(XSDDesc des: xsdDescList)
+		{
+			xsdImpList.add(des.getURL());
+		}
 		return xsdImpList;
+	}
+	
+	public List<String> getToDelXSDList()
+	{
+		for(String xsd: xsdImpList)
+		{
+			if(toDelList.contains(xsd))
+			{
+				toDelList.remove(xsd);
+			}
+		}
+		return toDelList;
 	}
 	
 	private static class XSDSchemaLabelProvider extends StyledCellLabelProvider {

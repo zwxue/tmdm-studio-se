@@ -151,6 +151,8 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
 		}
 		getButton(IDialogConstants.OK_ID).setEnabled(true);
 		infoLabel.setText("");
+		conceptPanel.setText(typeNameText.getText() + "Type");
+		
 	}
 	
 	private void maskTypeWidgets() {

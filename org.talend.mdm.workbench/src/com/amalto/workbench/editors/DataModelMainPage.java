@@ -72,6 +72,8 @@ import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDConcreteComponent;
+import org.eclipse.xsd.XSDDiagnostic;
+import org.eclipse.xsd.XSDDiagnosticSeverity;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDEnumerationFacet;
 import org.eclipse.xsd.XSDFacet;
@@ -93,6 +95,7 @@ import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDPatternFacet;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSchemaContent;
+import org.eclipse.xsd.XSDSchemaDirective;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTotalDigitsFacet;
@@ -104,6 +107,8 @@ import org.eclipse.xsd.XSDXPathVariety;
 import org.eclipse.xsd.impl.XSDComplexTypeDefinitionImpl;
 import org.eclipse.xsd.impl.XSDElementDeclarationImpl;
 import org.eclipse.xsd.impl.XSDIdentityConstraintDefinitionImpl;
+import org.eclipse.xsd.impl.XSDImportImpl;
+import org.eclipse.xsd.impl.XSDIncludeImpl;
 import org.eclipse.xsd.impl.XSDParticleImpl;
 import org.eclipse.xsd.impl.XSDSimpleTypeDefinitionImpl;
 import org.eclipse.xsd.impl.XSDXPathDefinitionImpl;
@@ -555,19 +560,65 @@ public class DataModelMainPage extends AMainPageV2 {
 
 			importSchemaNsBtn.addSelectionListener(new SelectionAdapter(){
 				public void widgetSelected(SelectionEvent e){
-					SelectImportedModulesDialog dlg = new SelectImportedModulesDialog(getSite().getShell(),getXObject(), "Import xsd schema modules");
+					SelectImportedModulesDialog dlg = new SelectImportedModulesDialog(getSite().getShell(), xsdSchema, getXObject(), "Import xsd schema modules");
 					dlg.create();
 					dlg.setBlockOnOpen(true);
 					dlg.open();
 					if(dlg.getReturnCode() == Window.OK)
 					{
 						final List<String> list = dlg.getImportedXSDList();
+						final List<String> dels = dlg.getToDelXSDList();
 						TimerTask task = new TimerTask() {
 							public void run() {
 								getSite().getShell().getDisplay().asyncExec(new Runnable() {
 
 									public void run() {
-                                       performImport(list);
+									XSDSchema schemaCpy = null;
+										try
+										{
+										   schemaCpy = Util.createXsdSchema(Util.nodeToString(xsdSchema.getDocument()), getXObject());
+										   xsdSchema.clearDiagnostics();
+	                                       performImport(list);
+	                                       performDeletion(dels);
+	                                       xsdSchema.validate();
+	               						   EList<XSDDiagnostic> diagnoses = xsdSchema.getAllDiagnostics();
+                                           String error = "";
+		            						for(int i = 0; i < diagnoses.size(); i++)
+		            						{
+		            							XSDDiagnostic dia = diagnoses.get(i);
+		            							XSDDiagnosticSeverity servity = dia.getSeverity();
+		            							if(servity == XSDDiagnosticSeverity.ERROR_LITERAL || servity == XSDDiagnosticSeverity.FATAL_LITERAL)
+		            							{
+		            								error += dia.getMessage() + "\n";
+		            							}
+		            						}
+		            						if(!error.equals(""))
+		            						{
+		            							throw new IllegalAccessException(error);
+		            						}
+	              						    markDirty();
+	              						    refreshData();
+	              						    // below code is to refill the tree view with xsdScham including one xsd schma which contains the other xsd , 
+	              						    // and in the case of deleting the included xsd
+	              						    setXsdSchema(xsdSchema);
+	              						    commit();
+	              						    refreshData();
+	                					    MessageDialog.openInformation(getSite().getShell(),
+	                								"Import XSDSchema", "The operation for importing XSDSchema completed successfully!");
+											}
+										catch(Exception ex)
+										{
+											String detail = "";
+											if(ex.getMessage()!= null && !ex.getMessage().equals(""))
+											{
+												detail += " , due to" + "\n" + ex.getMessage();
+											}
+										    setXsdSchema(schemaCpy);
+										    commit();
+											refresh();
+											MessageDialog.openError(getSite().getShell(),
+											          "Error", "The operation for importing XSDSchema failed" + detail);
+										}
 									}
 								});
 							}
@@ -577,30 +628,83 @@ public class DataModelMainPage extends AMainPageV2 {
 					}
 				}
 				
+				private void performDeletion(List<String> toDels)
+				{
+					List<XSDSchemaContent> impToDels = new ArrayList<XSDSchemaContent>();
+					List<String> nsToDels = new ArrayList<String>();
+					for(String delName: toDels)
+					{
+						EList<XSDSchemaContent> list = xsdSchema.getContents();
+						for (XSDSchemaContent cnt: list)
+					    {
+				    		if (cnt instanceof XSDImportImpl)
+				    		{
+				    			XSDImportImpl imp = (XSDImportImpl)cnt;
+				    			String ns = imp.getNamespace();
+				    			String loct = imp.getSchemaLocation();
+				    			if(loct.equals(delName))
+				    			{
+					    			Iterator<Map.Entry<String, String>> iter = xsdSchema.getQNamePrefixToNamespaceMap().entrySet().iterator();
+					    			while(iter.hasNext())
+					    			{
+					    				Map.Entry<String, String> entry = (Map.Entry<String, String>)iter.next();
+					    				if(entry.getValue().equalsIgnoreCase(ns))
+					    				{
+					    					nsToDels.add(entry.getKey());
+					    					impToDels.add(cnt);
+					    					break;
+					    				}
+					    			}
+				    			}
+				    		}
+				    		else if(cnt instanceof XSDIncludeImpl)
+				    		{
+				    			XSDIncludeImpl inude = (XSDIncludeImpl)cnt;
+				    			if(inude.getSchemaLocation().equals(delName))
+				    			{
+				    				impToDels.add(cnt);	
+				    			}
+				    		}
+					    }
+					}
+					if(!impToDels.isEmpty() && xsdSchema.getContents().containsAll(impToDels))
+					{
+						EList<XSDSchemaDirective> ls = xsdSchema.getReferencingDirectives();
+						XSDSchema as = xsdSchema;
+						Map<String, String> map = xsdSchema.getQNamePrefixToNamespaceMap();
+						for(String ns: nsToDels)
+						{
+							map.remove(ns);
+						}
+						xsdSchema.getContents().removeAll(impToDels);
+						xsdSchema.updateElement();
+
+						try {
+							setXsdSchema(xsdSchema);
+//							WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
+//							wsObject.setXsdSchema(Util.nodeToString(xsdSchema.getDocument().getDocumentElement()));
+//							XMLEditor xmleditor=((XObjectEditor)getEditor()).getXmlEditor();
+//							xmleditor.refresh(getXObject());
+//							refresh();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+					
+				}
+				
 				private void performImport(List<String> list)
 				{
 					Pattern httpUrl = Pattern.compile("(http|https|ftp):(\\//|\\\\)(.*):(.*)");
-					try
+
+					for(String fileName : list)
 					{
-						for(String fileName : list)
-						{
-							Matcher match = httpUrl.matcher(fileName);
-							if (match.matches()) {
-								importSchemaWithURL(fileName);
-							} else {
-								importSchemaFromFile(fileName);
-							}
+						Matcher match = httpUrl.matcher(fileName);
+						if (match.matches()) {
+							importSchemaWithURL(fileName);
+						} else {
+							importSchemaFromFile(fileName);
 						}
-						
-						markDirty();
-						refreshData();
-						MessageDialog.openInformation(getSite().getShell(),
-								"Import XSDSchema", "The operation for importing XSDSchema completed successfully!");
-					}
-					catch(Exception ex)
-					{
-						MessageDialog.openError(getSite().getShell(),
-						          "Error", "The operation for importing XSDSchema failed!");
 					}
 				}
 				
@@ -1951,38 +2055,10 @@ public class DataModelMainPage extends AMainPageV2 {
 	{
 		if(force)
 		{
-			boolean refresh = false;
 			try {
 				String schema = ((XSDTreeContentProvider) viewer
 						.getContentProvider()).getXSDSchemaAsString();
 				xsdSchema = Util.createXsdSchema(schema, getXObject());
-				 EList<XSDElementDeclaration> decls = xsdSchema.getElementDeclarations();
-				for(XSDElementDeclaration decl: decls)
-				{
-					EList<XSDTypeDefinition> types= xsdSchema.getTypeDefinitions();
-					XSDTypeDefinition newType = decl.getAnonymousTypeDefinition();
-					if(newType != null)
-					{
-						XSDTypeDefinition clone =  (XSDTypeDefinition)newType.cloneConcreteComponent(true, false);
-						clone.setName(decl.getName() + "Type");
-						clone.updateElement(); 
-		       			decl.setTypeDefinition(clone);
-						xsdSchema.getContents().add(clone);
-						refresh = true;
-					}
-					decl.updateElement();
-				}
-				
-
-				if(refresh)
-				{
-					WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
-					wsObject.setXsdSchema(Util.nodeToString(xsdSchema.getDocument().getDocumentElement()));
-					XMLEditor xmleditor=((XObjectEditor)getEditor()).getXmlEditor();
-					xmleditor.refresh(getXObject());
-					setXsdSchema(xsdSchema);
-				    refresh();
-				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
