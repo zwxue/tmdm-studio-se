@@ -39,7 +39,7 @@ public class ImportItemsAction extends Action{
 	}
 	
 	public void run() {
-//		try {
+
 			super.run();
 			ISelection selection=null;
 			if (this.view != null) { //called from ServerView
@@ -54,82 +54,6 @@ public class ImportItemsAction extends Action{
 			dialog.create();
 			dialog.getShell().setText("Import Objects");
 			dialog.open(); 
-            //if (!xobject.isXObject()) return;
 
-			/*FileDialog fileDialog = new FileDialog (view.getSite().getShell(), SWT.OPEN);				
-			//fileDialog.setFilterNames(new String[]{"__contents__.xml"});
-			fileDialog.setText("Please select file to import");
-			fileDialog.setFilterExtensions(new String[]{"__contents__.xml"});
-			filename=fileDialog.open();
-			if(filename!=null && new File(filename).exists()){
-				String url=xobject.getServerRoot().getEndpointAddress();
-				server=null;
-				try {
-					 server= new URL(url).getHost();
-				} catch (MalformedURLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}		
-				
-				Job job=new Job("Import data cluster ..."){
-					@Override
-					public IStatus run(IProgressMonitor monitor) {	
-						try{
-							//import datacluster data
-							File f=new File(filename);
-							//Means folder name can not be changed?
-							String dataCluster=f.getParentFile().getName();
-
-							monitor.beginTask("Import data cluster " + dataCluster +" ..." ,IProgressMonitor.UNKNOWN);
-							Util.importDataCluster(xobject, filename,server,monitor);
-							
-							//create datacluster
-							//Does cluster name need URL encode?
-							if(!"db".equalsIgnoreCase(dataCluster)){
-								
-								if (!dataCluster.startsWith("amaltoOBJECTS")) {
-									
-									monitor.subTask("Creating data cluster " + dataCluster +" ..." );
-									WSDataCluster dc = new WSDataCluster(
-											(String)dataCluster,
-											"",
-											""												//vocabulary
-									);
-									Util.getPort(xobject).putDataCluster(new WSPutDataCluster(dc));
-								}
-							}
-							monitor.done();							
-							return Status.OK_STATUS;
-						}catch(Exception e){
-							e.printStackTrace();
-							return Status.CANCEL_STATUS;
-						}finally{
-							monitor.subTask("Refreshing server ..." );
-							new UIJob("Refreshing server"){
-
-								@Override
-								public IStatus runInUIThread(
-										IProgressMonitor monitor) {
-									new ServerRefreshAction(view,xobject.getServerRoot()).run();
-									return Status.OK_STATUS;
-								}
-								
-							}.schedule();
-							
-						}
-					}			
-				};
-				job.setPriority(Job.INTERACTIVE);
-				job.schedule();				
-			}
-		}catch (Exception e) {
-			e.printStackTrace();
-			MessageDialog.openError(
-					view.getSite().getShell(),
-					"Error", 
-					"An error occured trying to Import Data Cluster: "+e.getLocalizedMessage()
-			);
-		}finally{
-		}		*/
 	}
 }
