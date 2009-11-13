@@ -2,10 +2,7 @@ package com.amalto.workbench.export;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.zip.ZipFile;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -39,7 +36,6 @@ import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSItem;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuPK;
-import com.amalto.workbench.webservices.WSPutDBDataCluster;
 import com.amalto.workbench.webservices.WSPutDataCluster;
 import com.amalto.workbench.webservices.WSPutDataModel;
 import com.amalto.workbench.webservices.WSPutItem;
@@ -90,11 +86,6 @@ public class ImportItemsWizard extends Wizard{
 	public boolean performFinish() {
 		if(zipBtn.getSelection()){
 			zipfile=zip.getText().getText();
-/*			String[] dirArray=	zipfile.split("/");
-			StringBuffer unzipdir=new StringBuffer();
-				for (int i = 0; i < dirArray.length-1; i++) {
-					unzipdir.append(dirArray[i]);
-				}*/
 			importFolder=  System.getProperty("user.dir")+"/temp";
 			try {
 				ZipToFile.unZipFile(zipfile, importFolder);
@@ -107,7 +98,6 @@ public class ImportItemsWizard extends Wizard{
 		}
 		
 		serverRoot = ((TreeObject)sel.getFirstElement()).getServerRoot();
-//		final TreeObject[] objs=treeViewer.getCheckNodes();
 		Job job=new Job("Import Objects ..."){
 			@Override
 			public IStatus run(IProgressMonitor monitor) {	
@@ -120,14 +110,6 @@ public class ImportItemsWizard extends Wizard{
 					e.printStackTrace();
 					return Status.CANCEL_STATUS;
 				}finally{
-/*					if(zipfile!=null){						
-						try {
-							ZipToFile.zipFile(importFolder, zipfile);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-						ZipToFile.deleteDirectory(new File(importFolder));
-					}*/
 					new UIJob("Refreshing server"){
 
 						@Override
@@ -146,18 +128,15 @@ public class ImportItemsWizard extends Wizard{
 		};
 		job.setPriority(Job.INTERACTIVE);
 		job.schedule();
-/*		 ServerTreeContentProvider contentProvider = new ServerTreeContentProvider(view.getSite(),
-					new TreeParent("INVISIBLE ROOT", null, TreeObject._ROOT_, null,
-							null));
-		 view.setTreeContentProvider(contentProvider);*/
-//		TreeParent invisibleRoot = view.getTreeContentProvider().getInvisibleRoot();
 
 		return true;
 	}
 	
-	public void doImport(FileReader reader,IProgressMonitor monitor) throws Exception{
-		Exports exports=(Exports)Unmarshaller.unmarshal(
-				Exports.class,reader);
+	public void doImport(FileReader reader,IProgressMonitor monitor){
+		Exports exports;
+		try {
+			exports = (Exports)Unmarshaller.unmarshal(
+					Exports.class,reader);
 		
 		monitor.beginTask("Import Objects...", IProgressMonitor.UNKNOWN);
 		TreeObject ojb=null;
@@ -165,11 +144,13 @@ public class ImportItemsWizard extends Wizard{
 		
 	
 		for(ExportItem item: exports.getItems()){
-
-			//datacluster
-			if(item.getType() == TreeObject.DATA_CLUSTER){
+			String[] subItems;
+			switch(item.getType()){
+			
+			case 	TreeObject.DATA_CLUSTER:
+				//datacluster
 				monitor.subTask("Import Data Cluster...");
-				String[] subItems=item.getItems();
+				subItems=item.getItems();
 				for (String subItem : subItems) {
 					reader=new FileReader(importFolder+"/"+subItem);
 					WSDataCluster model=(WSDataCluster)Unmarshaller.unmarshal(WSDataCluster.class,reader);
@@ -177,27 +158,31 @@ public class ImportItemsWizard extends Wizard{
 					objList.add(ojb);
 					port.putDataCluster(new WSPutDataCluster(model));
 				}
-			}
+				break;
 				//dataclusters contents			
-			if(item.getType() == TreeObject.DATA_CLUSTER_CONTENTS){
+			case 	TreeObject.DATA_CLUSTER_CONTENTS:
 				
-				String[] subItems=item.getItems();
+				subItems=item.getItems();
 				for (String subItem : subItems) {
 					reader=new FileReader(importFolder+"/"+subItem);
 					
 					
 					WSItem wsItem = (WSItem) Unmarshaller.unmarshal(
 							WSItem.class, reader);
-					port.putItem(new WSPutItem(wsItem.getWsDataClusterPK(),wsItem.getContent(),wsItem.getDataModelName()==null?null:new WSDataModelPK(wsItem.getDataModelName()),true));
+					if(wsItem.getDataModelName()==null){
+//						port.synchronizationPutItemXML(new WSSynchronizationPutItemXML(null,wsItem.getContent()));
+					}else{
+						port.putItem(new WSPutItem(wsItem.getWsDataClusterPK(),wsItem.getContent(),new WSDataModelPK(wsItem.getDataModelName()),true));						
+					}
 					
 					ojb=new TreeObject(subItem,serverRoot,item.getType(), new WSDataClusterPK(subItem),"");
 					objList.add(ojb);
 				}
 
-			}
-			if(item.getType() == TreeObject.DATA_MODEL){
+					break;
+			case 	 TreeObject.DATA_MODEL:
 				monitor.subTask("Import Data Model...");
-				String[] subItems=item.getItems();
+				subItems=item.getItems();
 				for (String subItem : subItems) {
 					reader=new FileReader(importFolder+"/"+subItem);
 					WSDataModel model=(WSDataModel)Unmarshaller.unmarshal(WSDataModel.class,reader);
@@ -206,10 +191,10 @@ public class ImportItemsWizard extends Wizard{
 					port.putDataModel(new WSPutDataModel(model));
 				}
 				monitor.worked(1);
-			}
-			if(item.getType() == TreeObject.MENU){
+				break;
+			case 	 TreeObject.MENU:
 				monitor.subTask("Import Menu...");
-				String[] subItems=item.getItems();
+				subItems=item.getItems();
 				for (String subItem : subItems) {
 					reader=new FileReader(importFolder+"/"+subItem);
 					WSMenu memu=(WSMenu)Unmarshaller.unmarshal(WSMenu.class,reader);
@@ -218,10 +203,10 @@ public class ImportItemsWizard extends Wizard{
 					port.putMenu(new WSPutMenu(memu));
 				}
 				monitor.worked(1);
-			}	
-			if(item.getType() == TreeObject.ROLE){
+				break;	
+			case 	TreeObject.ROLE:
 				monitor.subTask("Import Role...");
-				String[] subItems=item.getItems();
+				subItems=item.getItems();
 				for (String subItem : subItems) {
 					reader=new FileReader(importFolder+"/"+subItem);
 					WSRole role=(WSRole)Unmarshaller.unmarshal(WSRole.class,reader);
@@ -230,10 +215,10 @@ public class ImportItemsWizard extends Wizard{
 					port.putRole(new WSPutRole(role));
 				}
 				monitor.worked(1);
-			}	
-			if(item.getType() == TreeObject.ROUTING_RULE){
+				break;	
+			case 	TreeObject.ROUTING_RULE:
 				monitor.subTask("Import Routing Rule...");
-				String[] subItems=item.getItems();
+				subItems=item.getItems();
 				for (String subItem : subItems) {
 					reader=new FileReader(importFolder+"/"+subItem);
 					WSRoutingRule routingRule=(WSRoutingRule)Unmarshaller.unmarshal(WSRoutingRule.class,reader);
@@ -243,10 +228,10 @@ public class ImportItemsWizard extends Wizard{
 				}
 
 				monitor.worked(1);
-			}	
-			if(item.getType() == TreeObject.STORED_PROCEDURE){
+				break;	
+			case 	TreeObject.STORED_PROCEDURE:
 				monitor.subTask("Import Stored Procedure...");
-				String[] subItems=item.getItems();
+				subItems=item.getItems();
 				for (String subItem : subItems) {
 					reader=new FileReader(importFolder+"/"+subItem);
 					WSStoredProcedure model=(WSStoredProcedure)Unmarshaller.unmarshal(WSStoredProcedure.class,reader);
@@ -256,10 +241,10 @@ public class ImportItemsWizard extends Wizard{
 				}
 
 				monitor.worked(1);
-			}
-			if(item.getType() == TreeObject.SYNCHRONIZATIONPLAN){
+				break;
+			case   TreeObject.SYNCHRONIZATIONPLAN:
 				monitor.subTask("Import Synchronization Plan...");
-				String[] subItems=item.getItems();
+				subItems=item.getItems();
 				for (String subItem : subItems) {
 					reader=new FileReader(importFolder+"/"+subItem);
 					WSSynchronizationPlan model=(WSSynchronizationPlan)Unmarshaller.unmarshal(WSSynchronizationPlan.class,reader);
@@ -269,10 +254,10 @@ public class ImportItemsWizard extends Wizard{
 				}
 
 				monitor.worked(1);
-			}
-			if(item.getType() == TreeObject.TRANSFORMER){
+				break;
+			case	TreeObject.TRANSFORMER:
 				monitor.subTask("Import Transformer...");
-				String[] subItems=item.getItems();
+				subItems=item.getItems();
 				for (String subItem : subItems) {
 					reader=new FileReader(importFolder+"/"+subItem);
 					WSTransformer model=(WSTransformer)Unmarshaller.unmarshal(WSTransformer.class,reader);
@@ -282,10 +267,10 @@ public class ImportItemsWizard extends Wizard{
 				}
 
 				monitor.worked(1);
-			}
-			if(item.getType() == TreeObject.UNIVERSE){
+				break;
+			case  TreeObject.UNIVERSE:
 				monitor.subTask("Import Universe...");
-				String[] subItems=item.getItems();
+				subItems=item.getItems();
 				for (String subItem : subItems) {
 					reader=new FileReader(importFolder+"/"+subItem);
 					WSUniverse model=(WSUniverse)Unmarshaller.unmarshal(WSUniverse.class,reader);
@@ -295,10 +280,10 @@ public class ImportItemsWizard extends Wizard{
 				}
 
 				monitor.worked(1);
-			}	
-			if(item.getType() == TreeObject.VIEW){
+				break;
+			case TreeObject.VIEW:
 				monitor.subTask("Import View...");
-				String[] subItems=item.getItems();
+				subItems=item.getItems();
 				for (String subItem : subItems) {
 					reader=new FileReader(importFolder+"/"+subItem);
 					WSView model=(WSView)Unmarshaller.unmarshal(WSView.class,reader);
@@ -308,10 +293,13 @@ public class ImportItemsWizard extends Wizard{
 				}
 
 				monitor.worked(1);
-			}			
+				break;
+			}
 		}
-
 		monitor.done();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	
