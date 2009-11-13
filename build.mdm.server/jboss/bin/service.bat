@@ -20,8 +20,8 @@ REM VERSION, VERSION_MAJOR and VERSION_MINOR are populated
 REM during the build with ant filter.
 REM
 set SVCNAME=openMDM
-set SVCDISP=Talend Open MDM Server
-set SVCDESC=Talend Open MDM Server 3.1.3 GA/Platform: Windows x86
+set SVCDISP=Talend MDM Server
+set SVCDESC=Talend MDM Server GA/Platform: Windows x86
 set NOPAUSE=Y
 
 REM Suppress killing service on logoff event
