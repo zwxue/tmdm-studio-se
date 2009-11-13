@@ -98,6 +98,10 @@ public class ConceptComposite {
 		return typeNameText.getText();
 	}
 	
+	public void setText(String text)
+	{
+		typeNameText.setText(text);
+	}
 	
 	public void setFocus()
 	{

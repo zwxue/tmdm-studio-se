@@ -1446,7 +1446,8 @@ public class Util {
     	    	String ns = xsdImport.getNamespace();
     	    	if (ns.equals(""))continue;
     	    	int last = ns.lastIndexOf("/");
-    	    	nsMap.put(ns.substring(last+1).replaceAll("[\\W]", ""), ns);
+    	    	if(!nsMap.containsValue(ns))
+    	    	   nsMap.put(ns.substring(last+1).replaceAll("[\\W]", ""), ns);
     	    	boolean exist = false;
     	    	for (XSDSchemaContent cnt: xsdSchema.getContents())
     	    	{

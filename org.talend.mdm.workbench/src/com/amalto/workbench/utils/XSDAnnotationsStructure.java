@@ -327,14 +327,14 @@ public class XSDAnnotationsStructure {
 							if(particle.getTerm() instanceof XSDElementDeclaration)
 							{
 								XSDElementDeclaration decl = (XSDElementDeclaration)particle.getTerm();
-								if(Util.IsAImporedElement(decl.getType(), ((XSDConcreteComponent)obj).getSchema()))
+								if(Util.IsAImporedElement(decl, ((XSDConcreteComponent)obj).getSchema()))
 									isImported = true;
 							}
 						}
 						else if(obj instanceof XSDElementDeclaration)
 						{
 							XSDElementDeclaration decl = (XSDElementDeclaration)obj;
-							if(Util.IsAImporedElement(decl.getType(), ((XSDConcreteComponent)obj).getSchema()))
+							if(Util.IsAImporedElement(decl, ((XSDConcreteComponent)obj).getSchema()))
 								isImported = true;
 						}
 						if(!isImported)
