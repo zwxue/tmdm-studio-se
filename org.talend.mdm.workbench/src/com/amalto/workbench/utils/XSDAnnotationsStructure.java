@@ -294,27 +294,27 @@ public class XSDAnnotationsStructure {
 			{
 				Object[] objCpys = objs;
 				for (Object obj : objCpys) {
-					if (obj instanceof XSDModelGroup)
-					{
-						XSDModelGroup modelGp = (XSDModelGroup)obj;
-						if (modelGp.getContainer() instanceof XSDParticle)
-						{
-							XSDParticle partle = (XSDParticle)modelGp.getContainer();
-							if (partle.getContainer() instanceof XSDComplexTypeDefinition)
-							{
-								XSDComplexTypeDefinition typeElem = (XSDComplexTypeDefinition)partle.getContainer();
-								if (typeElem != null && typeElem.getName() != null && !typeElem.getName().equals(""))
-								{
-									ArrayList<Object> subObjList = new ArrayList<Object>();
-									Util.getAllObject(obj, subObjList, provider);
-									objList.removeAll(subObjList);
-									objList.remove(obj);
-				                    objs = objList.toArray();
-				                    break;
-								}
-							}
-						}
-					}
+//					if (obj instanceof XSDModelGroup)
+//					{
+//						XSDModelGroup modelGp = (XSDModelGroup)obj;
+//						if (modelGp.getContainer() instanceof XSDParticle)
+//						{
+//							XSDParticle partle = (XSDParticle)modelGp.getContainer();
+//							if (partle.getContainer() instanceof XSDComplexTypeDefinition)
+//							{
+//								XSDComplexTypeDefinition typeElem = (XSDComplexTypeDefinition)partle.getContainer();
+//								if (typeElem != null && typeElem.getName() != null && !typeElem.getName().equals(""))
+//								{
+//									ArrayList<Object> subObjList = new ArrayList<Object>();
+//									Util.getAllObject(obj, subObjList, provider);
+//									objList.removeAll(subObjList);
+//									objList.remove(obj);
+//				                    objs = objList.toArray();
+//				                    break;
+//								}
+//							}
+//						}
+//					}
 					
 					if (obj instanceof XSDAnnotation
 							|| obj instanceof XSDElementDeclaration
