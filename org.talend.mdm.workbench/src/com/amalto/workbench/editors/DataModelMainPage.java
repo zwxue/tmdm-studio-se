@@ -608,6 +608,7 @@ public class DataModelMainPage extends AMainPageV2 {
 											}
 										catch(Exception ex)
 										{
+											ex.printStackTrace();
 											String detail = "";
 											if(ex.getMessage()!= null && !ex.getMessage().equals(""))
 											{
@@ -663,32 +664,27 @@ public class DataModelMainPage extends AMainPageV2 {
 				    			if(inude.getSchemaLocation().equals(delName))
 				    			{
 				    				impToDels.add(cnt);	
+				    				break;
 				    			}
 				    		}
 					    }
 					}
 					if(!impToDels.isEmpty() && xsdSchema.getContents().containsAll(impToDels))
 					{
-						EList<XSDSchemaDirective> ls = xsdSchema.getReferencingDirectives();
-						XSDSchema as = xsdSchema;
+						xsdSchema.updateElement();
+						xsdSchema.getReferencingDirectives().clear();
 						Map<String, String> map = xsdSchema.getQNamePrefixToNamespaceMap();
 						for(String ns: nsToDels)
 						{
 							map.remove(ns);
 						}
-						xsdSchema.getContents().removeAll(impToDels);
-						xsdSchema.updateElement();
-
-						try {
-							setXsdSchema(xsdSchema);
-//							WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
-//							wsObject.setXsdSchema(Util.nodeToString(xsdSchema.getDocument().getDocumentElement()));
-//							XMLEditor xmleditor=((XObjectEditor)getEditor()).getXmlEditor();
-//							xmleditor.refresh(getXObject());
-//							refresh();
-						} catch (Exception e) {
-							e.printStackTrace();
+						for(XSDSchemaContent cnt: impToDels)
+						{
+							xsdSchema.getContents().remove(cnt);
 						}
+						
+						xsdSchema.updateElement();
+						setXsdSchema(xsdSchema);
 					}
 					
 				}
@@ -745,6 +741,7 @@ public class DataModelMainPage extends AMainPageV2 {
 							WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
 							xsdSchema = Util.createXsdSchema(wsObject.getXsdSchema(), getXObject());
 						}
+						boolean exist = false;
 						for (int i = 0; i < xsdSchema.getContents().size(); i++)
 						{
 							XSDSchemaContent xsdComp = xsdSchema.getContents().get(i);
@@ -753,12 +750,11 @@ public class DataModelMainPage extends AMainPageV2 {
 								// import xsdschema
 								if (xsdComp instanceof XSDImport && ((XSDImport)xsdComp).getNamespace().equals(ns))
 								{								
-									xsdSchema.getContents().remove(i);
 									for (Map.Entry entry: xsdSchema.getQNamePrefixToNamespaceMap().entrySet())
 									{
 										if (entry.getValue().equals(((XSDImport)xsdComp).getNamespace()))
 										{
-											xsdSchema.getQNamePrefixToNamespaceMap().remove(entry.getKey());
+											exist = true;
 											break;
 										}
 									}
@@ -773,35 +769,37 @@ public class DataModelMainPage extends AMainPageV2 {
 									String xsdLocation = ((XSDInclude)xsdComp).getSchemaLocation();
 									if (xsdLocation.equals(uri))
 									{
-										xsdSchema.getContents().remove(i);
+										exist = true;
 										break;
 									}
 								}
 							}
 						}
 						
-						if(ns != null && !ns.equals(""))
+						if(!exist)
 						{
-			    	    	int last = ns.lastIndexOf("/");
-			    	    	xsdSchema.getQNamePrefixToNamespaceMap().put(ns.substring(last+1).replaceAll("[\\W]", ""), ns);
-						    XSDImport xsdImport = XSDFactory.eINSTANCE.createXSDImport();
-						    xsdImport.setNamespace(ns);
-						    xsdImport.setSchemaLocation(uri);
-						    xsdSchema.getContents().add(0, xsdImport);
-						}
-						else
-						{
-							XSDInclude xsdInclude = XSDFactory.eINSTANCE.createXSDInclude();
-							xsdInclude.setSchemaLocation(uri);
-							xsdSchema.getContents().add(0, xsdInclude);
+							if(ns != null && !ns.equals(""))
+							{
+				    	    	int last = ns.lastIndexOf("/");
+				    	    	xsdSchema.getQNamePrefixToNamespaceMap().put(ns.substring(last+1).replaceAll("[\\W]", ""), ns);
+							    XSDImport xsdImport = XSDFactory.eINSTANCE.createXSDImport();
+							    xsdImport.setNamespace(ns);
+							    xsdImport.setSchemaLocation(uri);
+							    xsdSchema.getContents().add(0, xsdImport);
+							}
+							else
+							{
+								XSDInclude xsdInclude = XSDFactory.eINSTANCE.createXSDInclude();
+								xsdInclude.setSchemaLocation(uri);
+								xsdSchema.getContents().add(0, xsdInclude);
+							}
+							String xsd = Util.nodeToString(xsdSchema.getDocument());
+							xsdSchema = Util.createXsdSchema(xsd, getXObject());
+							setXsdSchema(xsdSchema);
+							WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
+							wsObject.setXsdSchema(xsd);
 						}
 						
-					    
-						String xsd = Util.nodeToString(xsdSchema.getDocument());
-						xsdSchema = Util.createXsdSchema(xsd, getXObject());
-						setXsdSchema(xsdSchema);
-						WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
-						wsObject.setXsdSchema(xsd);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
