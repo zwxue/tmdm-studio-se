@@ -122,6 +122,7 @@ import org.xml.sax.InputSource;
 import com.amalto.workbench.actions.XSDChangeBaseTypeAction;
 import com.amalto.workbench.actions.XSDChangeToComplexTypeAction;
 import com.amalto.workbench.actions.XSDChangeToSimpleTypeAction;
+import com.amalto.workbench.actions.XSDCopyConceptAction;
 import com.amalto.workbench.actions.XSDDeleteConceptAction;
 import com.amalto.workbench.actions.XSDDeleteConceptWrapAction;
 import com.amalto.workbench.actions.XSDDeleteElementAction;
@@ -148,6 +149,7 @@ import com.amalto.workbench.actions.XSDNewParticleFromParticleAction;
 import com.amalto.workbench.actions.XSDNewParticleFromTypeAction;
 import com.amalto.workbench.actions.XSDNewSimpleTypeDefinition;
 import com.amalto.workbench.actions.XSDNewXPathAction;
+import com.amalto.workbench.actions.XSDPasteConceptAction;
 import com.amalto.workbench.actions.XSDSetAnnotationDescriptionsAction;
 import com.amalto.workbench.actions.XSDSetAnnotationDocumentationAction;
 import com.amalto.workbench.actions.XSDSetAnnotationForeignKeyAction;
@@ -203,6 +205,10 @@ public class DataModelMainPage extends AMainPageV2 {
 	private XSDNewGroupFromParticleAction newGroupFromParticleAction = null;
 	private XSDEditParticleAction editParticleAction = null;
 	private XSDEditConceptAction editConceptAction = null;
+	
+	private XSDCopyConceptAction copyConceptAction = null;
+	private XSDPasteConceptAction pasteConceptAction = null;
+	
 	private XSDEditElementAction editElementAction = null;
 	private XSDDeleteIdentityConstraintAction deleteIdentityConstraintAction = null;
 	private XSDEditIdentityConstraintAction editIdentityConstraintAction = null;
@@ -1246,7 +1252,6 @@ public class DataModelMainPage extends AMainPageV2 {
 
 			WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
 			String s;
-
 			s = wsObject.getDescription() == null ? "" : wsObject
 					.getDescription();
 			if (!s.equals(descriptionText.getText()))
@@ -1287,7 +1292,6 @@ public class DataModelMainPage extends AMainPageV2 {
 			schema=schema.replaceAll("xmlns\\s*=\\s*\"[^\"]*\"", "");
 			//end
 			wsObject.setXsdSchema(schema);
-			
 			XMLEditor xmleditor=((XObjectEditor)getEditor()).getXmlEditor();
 			xmleditor.refresh(getXObject());
 		} catch (Exception e) {
@@ -1338,6 +1342,9 @@ public class DataModelMainPage extends AMainPageV2 {
 		this.setAnnotationWrapWriteAction = new XSDSetAnnotationWrapWriteAction(this);
 		this.setAnnotationHiddenAction = new XSDSetAnnotationHiddenAction(this,dataModelName);
 		this.setAnnotationWrapHiddenAction = new XSDSetAnnotationWrapHiddenAction(this,dataModelName);
+		
+		this.copyConceptAction = new XSDCopyConceptAction(this);
+		this.pasteConceptAction = new XSDPasteConceptAction(this);
 		
 		this.setAnnotationTargetSystemsAction = new XSDSetAnnotationTargetSystemsAction(this,dataModelName);
 		this.setAnnotationSchematronAction = new XSDSetAnnotationSchematronAction(this,dataModelName);
@@ -1756,6 +1763,9 @@ public class DataModelMainPage extends AMainPageV2 {
 		if ((selection == null) || (selection.getFirstElement() == null)) {
 			manager.add(new XSDNewConceptAction(this));
 			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+			//add by ymli, fix bug 0009770
+			if(pasteConceptAction.checkInPasteType())
+				manager.add(pasteConceptAction);
 			return;
 		}
 		
@@ -1930,6 +1940,13 @@ public class DataModelMainPage extends AMainPageV2 {
 			
 			
 		}
+		//add by ymli. fix bug 0009770 add the copy of concepts
+		if(copyConceptAction.checkInCopyType(selectedObjs)){
+			manager.add(copyConceptAction);
+		}
+		if(pasteConceptAction.checkInPasteType())
+			manager.add(pasteConceptAction);
+		
 		//add by ymli. fix bug 0009771
 		if(selectedObjs.length > 1 && setAnnotationWrapWriteAction.checkInWriteType(selectedObjs)){
 			manager.add(new Separator());
