@@ -31,7 +31,8 @@
 </typeName>
 <typeName isAdmin="false" name ="Configuration Info">
 </typeName>
-
+<typeName isAdmin="true" name ="Item">
+</typeName>
 <typeName isAdmin="false" name ="Service">
 </typeName>
 <typeName isAdmin="false" name ="View">

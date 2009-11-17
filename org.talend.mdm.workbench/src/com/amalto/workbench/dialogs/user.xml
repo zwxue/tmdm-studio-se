@@ -34,6 +34,8 @@
 </typeName>
 <typeName isAdmin="false" name ="Service">
 </typeName>
+<typeName isAdmin="true" name ="Item">
+</typeName>
 <typeName isAdmin="false" name ="View">
 	<instance isWritable="true">Browse_items_.*</instance> 
 </typeName>
