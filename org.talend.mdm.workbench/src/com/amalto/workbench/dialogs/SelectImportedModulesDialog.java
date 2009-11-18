@@ -68,7 +68,7 @@ public class SelectImportedModulesDialog extends Dialog{
 	private static final Image MDM_WEB= ImageCache.getCreatedImage(EImage.SERVERNOTRUNNING.getPath());
 	private static final Image OTHER_WEB = ImageCache.getCreatedImage(EImage.SERVERNAVIGATOR.getPath());
 	
-	private static final String LOCAL_MDM_URL = "http://localhost:8080/pubcomponent/secure/dataModelTypes/";
+	private static final String LOCAL_MDM_URL = "http://localhost:8080/pubcomponent/secure/dataModelsTypes/";
 	
 	public SelectImportedModulesDialog(Shell parentShell,XSDSchema schema, TreeObject treeObj, String title) {
 		super(parentShell);
