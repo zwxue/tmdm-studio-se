@@ -19,7 +19,7 @@ public class XSDCopyConceptAction extends Action {
 		super();
 		this.page = page;
 		setImageDescriptor(ImageCache.getImage(EImage.COPY.getPath()));
-		setText("Copy");
+		setText("Copy Concept");
 		setToolTipText("Copy Concept/Concepts");
 	}
 

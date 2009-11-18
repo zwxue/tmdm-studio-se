@@ -1,6 +1,5 @@
 package com.amalto.workbench.actions;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,7 +17,6 @@ import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.window.Window;
-import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComplexTypeContent;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
@@ -29,7 +27,6 @@ import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTypeDefinition;
-import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 
 import com.amalto.workbench.editors.DataModelMainPage;
@@ -50,7 +47,7 @@ public class XSDPasteConceptAction extends UndoAction {
 		super(page);
 		this.page = page;
 		setImageDescriptor(ImageCache.getImage(EImage.PASTE.getPath()));
-		setText("Paste");
+		setText("Paste Concept");
 		setToolTipText("Paste Concept/Concepts");
 	}
 	public IStatus doAction() {
@@ -206,6 +203,11 @@ public class XSDPasteConceptAction extends UndoAction {
 		}
 		if (fromElem.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
 			XSDComplexTypeContent fromcomplexType = ((XSDComplexTypeDefinition) fromElem.getTypeDefinition()).getContent();
+			//if the concept is a complex type itself. copy the complex type also,
+			//in this situation,if not copy the complex type, the type change to simple type
+			if( this.typeList.containsKey(toElem.getTypeDefinition().getName()))
+				this.copyTypeSet.add(this.typeList.get(toElem.getTypeDefinition().getName()));
+
 			if(toElem.getTypeDefinition() instanceof XSDComplexTypeDefinition){
 			XSDComplexTypeContent tocomplexType = ((XSDComplexTypeDefinition) toElem.getTypeDefinition()).getContent();
 			if (fromcomplexType instanceof XSDParticle) {
