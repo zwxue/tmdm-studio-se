@@ -9,6 +9,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDFactory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
@@ -63,7 +64,7 @@ public class XSDNewXPathAction extends UndoAction{
 //       				}
 //       		);
             
-            List<String> childNames = Util.getChildElementNames(icd.getContainer().getElement());
+            List<String> childNames = Util.getChildElementNames((XSDElementDeclaration)icd.getContainer());
             SelectFieldDialog id=new SelectFieldDialog(page.getSite().getShell(),"Select one field",childNames,null);
             id.create();            
        		id.setBlockOnOpen(true);

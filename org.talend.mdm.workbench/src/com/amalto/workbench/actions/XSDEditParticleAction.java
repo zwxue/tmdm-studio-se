@@ -23,6 +23,7 @@ import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.util.XSDConstants;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
+import org.w3c.dom.Element;
 
 import com.amalto.workbench.dialogs.BusinessElementInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
@@ -66,7 +67,7 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
 			ArrayList<String> elementDeclarations = new ArrayList<String>();
 			for (Iterator iter = eDecls.iterator(); iter.hasNext(); ) {
 				XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
-				elementDeclarations.add(d.getQName());
+				elementDeclarations.add(d.getQName() + (d.getTargetNamespace() != null ? " : " + d.getTargetNamespace() : ""));
 			}
 			elementDeclarations.add("");
 			
@@ -102,7 +103,7 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
        		//find reference
        		XSDElementDeclaration newRef = null;
        		if (! "".equals(refName.trim())) {
-       			newRef = Util.findReference(refName, decl);
+       			newRef = Util.findReference(refName, schema);
 				if (newRef==null) {
 					MessageDialog.openError(
 							this.page.getSite().getShell(), 
@@ -123,6 +124,10 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
 
        		if (newRef!=null) {
        			decl.setResolvedElementDeclaration(newRef);
+       			decl.setTypeDefinition(null);
+       			Element elem = decl.getElement();
+       			if(elem.getAttributes().getNamedItem("type") != null)
+       			    elem.getAttributes().removeNamedItem("type");
        			decl.updateElement();
        		} else if (ref!=null) {
        			//fliu

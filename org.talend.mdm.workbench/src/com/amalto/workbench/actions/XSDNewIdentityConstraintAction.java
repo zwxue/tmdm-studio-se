@@ -85,7 +85,7 @@ public class XSDNewIdentityConstraintAction extends UndoAction implements Select
             	MessageDialog.openError(this.page.getSite().getShell(),"Error", "huhhh: "+selection.getFirstElement().getClass().getName());
                 return Status.CANCEL_STATUS;
             }           
-            childNames = Util.getChildElementNames(decl.getElement());
+            childNames = Util.getChildElementNames(decl);
             dialog = new IdentityConstraintInputDialog(this,page.getSite().getShell(),"Add a new Key",childNames,decl.getName());
             dialog.setBlockOnOpen(true);
        		int ret = dialog.open();

@@ -13,7 +13,6 @@ import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.rmi.RemoteException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -78,6 +77,7 @@ import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.impl.XSDImportImpl;
 import org.eclipse.xsd.impl.XSDIncludeImpl;
+import org.eclipse.xsd.impl.XSDParticleImpl;
 import org.eclipse.xsd.impl.XSDSchemaImpl;
 import org.eclipse.xsd.util.XSDSchemaLocator;
 import org.osgi.framework.Bundle;
@@ -1167,9 +1167,12 @@ public class Util {
 	}
     
     public static XSDElementDeclaration findReference(String refName,
-			XSDElementDeclaration elem) {
-		EList eDecls = elem.getSchema().getElementDeclarations();
-
+			XSDSchema schema) {
+		EList eDecls = schema.getElementDeclarations();
+        if(refName.indexOf(" : ") != -1)
+        {
+        	refName = refName.substring(0, refName.indexOf(" : "));
+        }
 		for (Iterator iter = eDecls.iterator(); iter.hasNext();) {
 			XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
 			if (d.getQName().equals(refName)) {
@@ -1253,47 +1256,31 @@ public class Util {
 		}
 		return objs;
 	}   
-    public static List<String> getChildElementNames(Node node) throws Exception{
+    public static List<String> getChildElementNames(XSDElementDeclaration decl) throws Exception{
     	List<String> childNames=new ArrayList<String>();
-    	//is simple type
-    	if(Util.getNodeList(
-				node,
-				"xsd:complexType"
-		).getLength()==0){
-    		node.getChildNodes();
-    		return childNames;
+
+    	XSDTypeDefinition type = decl.getTypeDefinition();
+    	if(type instanceof XSDComplexTypeDefinition)
+    	{
+    		XSDComplexTypeDefinition cmpType = (XSDComplexTypeDefinition)type;
+    		if (cmpType.getContent() instanceof XSDParticle)
+    		{
+    			XSDParticleImpl particle = (XSDParticleImpl)cmpType.getContent();
+    			if(particle.getTerm() instanceof XSDModelGroup)
+    			{
+    				XSDModelGroup group = (XSDModelGroup)particle.getTerm();
+    				EList<XSDParticle> particles = group.getParticles();
+    				for (XSDParticle part: particles)
+    				{
+    					if(part.getTerm() instanceof XSDElementDeclaration)
+    					{
+    						XSDElementDeclaration el = (XSDElementDeclaration)part.getTerm();
+    						childNames.add(el.getName());
+    					}
+    				}
+    			}
+    		}
     	}
-    	//check complex is sequence/all/choice?    	
-   		NodeList seqlist=Util.getNodeList(
-				node,
-				"xsd:complexType//xsd:sequence"
-		);
-		String xpath="";
-		if(seqlist.getLength()>0){
-			xpath="xsd:complexType//xsd:sequence/xsd:element";
-		}
-		NodeList alllist=Util.getNodeList(
-				node,
-				"xsd:complexType//xsd:all"
-		);
-		if(alllist.getLength()>0){
-			xpath="xsd:complexType//xsd:all/xsd:element";
-		}
-		NodeList choicelist=Util.getNodeList(
-				node,
-				"xsd:complexType//xsd:choice"
-		);
-		if(choicelist.getLength()>0){
-			xpath="xsd:complexType//xsd:choice/xsd:element";
-		}
-		//get child element name list
-    	NodeList list=Util.getNodeList(node, xpath);     	
-    	for(int i=0; i<list.getLength(); i++){
-    		String name=Util.getFirstTextNode(list.item(i), "@name");
-    		if(name!=null)
-    		childNames.add(name);
-    	}
-    	
     	return childNames;
     }
     
@@ -1345,14 +1332,25 @@ public class Util {
     	{
     		XSDParticle particle = (XSDParticle)component;
     		XSDTerm term = (XSDTerm)particle.getTerm();
-            if (term instanceof XSDElementDeclaration)
+            if (term instanceof XSDElementDeclaration && !(((XSDElementDeclaration)term).getContainer() instanceof XSDParticle))
             {
+            	String prefix = null;
+            	String ns = ((XSDElementDeclaration)term).getTargetNamespace();
+            	Iterator<Map.Entry<String, String>> iter = schema.getQNamePrefixToNamespaceMap().entrySet().iterator();
+            	while(iter.hasNext() && ns != null)
+            	{
+            		Map.Entry<String, String> entry = (Map.Entry<String, String>)iter.next();
+            		if(entry.getValue().equals(ns))
+            			prefix = entry.getKey();
+            	}
             	name = ((XSDElementDeclaration)term).getName();
-                buffer.add("//xsd:element[@name='" + name +  "']");
+                buffer.add("//xsd:element[@name='" + name +  "' or @ref='" + (prefix != null ? (prefix + ":" + name) : name) + "']");
             	return  retrieveXSDComponentPath(particle.getContainer(), schema, buffer);
             }
             else
+            {
             	retrieveXSDComponentPath(particle.getContainer(), schema, buffer);
+            }
     	}
     	else if(component instanceof XSDComplexTypeDefinition)
     	{
@@ -1396,7 +1394,7 @@ public class Util {
     	else if(component instanceof XSDAnnotation)
     	{
     		XSDAnnotation annon = (XSDAnnotation)component;
-    		buffer.add("//XSDAnnotation");
+    		buffer.add("//xsd:annotation");
     		return retrieveXSDComponentPath(annon.getContainer(), schema, buffer);
     	}
     	else

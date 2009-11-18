@@ -66,7 +66,7 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
 			ArrayList<String> elementDeclarations = new ArrayList<String>();
 			for (Iterator iter = eDecls.iterator(); iter.hasNext(); ) {
 				XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
-				elementDeclarations.add(d.getQName());
+				elementDeclarations.add(d.getQName() + (d.getTargetNamespace() != null ? " : " + d.getTargetNamespace() : ""));
 			}
 			elementDeclarations.add("");
 			
@@ -83,7 +83,7 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
        		decl.setName(this.elementName);
        		if (!refName.equals(""))
        		{
-       			XSDElementDeclaration ref = Util.findReference(refName, schema.getElementDeclarations().get(0));
+       			XSDElementDeclaration ref = Util.findReference(refName, schema);
        			if (ref != null)
        			{
        				decl.setResolvedElementDeclaration(ref);
@@ -99,7 +99,7 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
        		particle.setMinOccurs(this.minOccurs);
        		particle.setMaxOccurs(this.maxOccurs);
        		
-       		group.getContents().add(index+1,particle);
+       		group.getContents().add(group.getContents().size(),particle);
        		group.updateElement();
        		
        		page.refresh();

@@ -1826,11 +1826,10 @@ public class DataModelMainPage extends AMainPageV2 {
 
 		if (obj instanceof XSDParticle && selectedObjs.length == 1) {
 			XSDTerm term = ((XSDParticle) obj).getTerm();
-			if (!(term instanceof XSDWildcard)
-					&& term.getSchema().getTargetNamespace() == null) {
+			if (!(term instanceof XSDWildcard)) {
 				if(term instanceof XSDElementDeclaration)
 				{
-					if(!Util.IsAImporedElement((XSDElementDeclaration)term, xsdSchema))
+					if(!Util.IsAImporedElement((XSDParticle)obj, xsdSchema))
 					{
 						manager.add(editParticleAction);
 						//manager.add(newGroupFromParticleAction);
@@ -1920,7 +1919,11 @@ public class DataModelMainPage extends AMainPageV2 {
 		if (obj instanceof XSDAnnotation
 				&& selectedObjs.length == 1
 				&& ((XSDAnnotation) obj).getSchema().getTargetNamespace() == null) {
-			setAnnotationActions(manager);
+			if(!Util.IsAImporedElement((XSDAnnotation)obj, xsdSchema))
+			{
+				setAnnotationActions(manager);
+			}
+
 		}
 
 		
