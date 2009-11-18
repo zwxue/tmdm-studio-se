@@ -95,7 +95,6 @@ import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDPatternFacet;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSchemaContent;
-import org.eclipse.xsd.XSDSchemaDirective;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTotalDigitsFacet;
@@ -1604,6 +1603,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		if ((selection == null) || (selection.getFirstElement() == null)) {
 			manager.add(newComplexTypeAction);
 			manager.add(newSimpleTypeAction);
+			
 			return;
 		}
 		
@@ -1627,6 +1627,9 @@ public class DataModelMainPage extends AMainPageV2 {
 					manager.add(editElementAction);
 					manager.add(deleteElementAction);
 				}
+				
+				
+				
 				manager.add(new Separator());
 				manager.add(new XSDNewConceptAction(this));
 				manager.add(newElementAction);
@@ -1661,6 +1664,8 @@ public class DataModelMainPage extends AMainPageV2 {
 				manager.add(new Separator());
 				//manager.add(newIdentityConstraintAction);
 				if (term instanceof XSDElementDeclaration) {
+					
+					
 					// Annotations
 					setAnnotationActions(manager);
 					// Xpath
@@ -1747,6 +1752,11 @@ public class DataModelMainPage extends AMainPageV2 {
 				manager.add(newBrowseItemAction);
 		}
 		
+		/*if(copyConceptAction.checkInCopyType(selectedObjs))
+			manager.add(copyConceptAction);
+		if(pasteConceptAction.checkInPasteType())
+			manager.add(pasteConceptAction);*/
+		
 		manager.add(new Separator());
 
 		typesDrillDownAdapter.addNavigationActions(manager);
@@ -1764,8 +1774,10 @@ public class DataModelMainPage extends AMainPageV2 {
 			manager.add(new XSDNewConceptAction(this));
 			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 			//add by ymli, fix bug 0009770
-			if(pasteConceptAction.checkInPasteType())
+			if(pasteConceptAction.checkInPasteType()){
+				manager.add(new Separator());
 				manager.add(pasteConceptAction);
+				}
 			return;
 		}
 		
@@ -1775,6 +1787,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		// Element Declaration
 		if (obj instanceof XSDElementDeclaration && selectedObjs.length == 1) {
 			// check if concept or "just" element
+			
 			XSDElementDeclaration decl = (XSDElementDeclaration) obj;
 			boolean isConcept = Util.checkConcept(decl);
 			if(decl.getTargetNamespace() == null && !Util.IsAImporedElement(decl, xsdSchema))
@@ -1787,6 +1800,16 @@ public class DataModelMainPage extends AMainPageV2 {
 					manager.add(editElementAction);
 					manager.add(deleteElementAction);
 				}
+				
+				//add by ymli. fix bug 0009770 add the copy of concepts
+				if(copyConceptAction.checkInCopyType(selectedObjs)){
+					manager.add(new Separator());
+					manager.add(copyConceptAction);
+				}
+				if(pasteConceptAction.checkInPasteType())
+					manager.add(pasteConceptAction);
+				
+				
 				manager.add(new Separator());
 				manager.add(new XSDNewConceptAction(this));
 				manager.add(newElementAction);
@@ -1939,17 +1962,18 @@ public class DataModelMainPage extends AMainPageV2 {
 			
 			if (deleteConceptWrapAction.checkOutAllConcept(selectedObjs))
 				manager.add(newBrowseItemAction);
+				
 			
-			
+			if(copyConceptAction.checkInCopyType(selectedObjs))	{
+				manager.add(new Separator());
+				manager.add(copyConceptAction);
+			}
+				
+			if(pasteConceptAction.checkInPasteType())
+				manager.add(pasteConceptAction);
 			
 		}
-		//add by ymli. fix bug 0009770 add the copy of concepts
-		if(copyConceptAction.checkInCopyType(selectedObjs)){
-			manager.add(copyConceptAction);
-		}
-		if(pasteConceptAction.checkInPasteType())
-			manager.add(pasteConceptAction);
-		
+				
 		//add by ymli. fix bug 0009771
 		if(selectedObjs.length > 1 && setAnnotationWrapWriteAction.checkInWriteType(selectedObjs)){
 			manager.add(new Separator());
