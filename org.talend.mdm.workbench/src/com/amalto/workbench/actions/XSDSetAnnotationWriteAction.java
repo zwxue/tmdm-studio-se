@@ -46,6 +46,7 @@ public class XSDSetAnnotationWriteAction extends UndoAction {
 			} else
             xSDCom = (XSDComponent)selection.getFirstElement();
  		   XSDAnnotationsStructure struc =new XSDAnnotationsStructure(xSDCom);
+ 		   struc.setXSDSchema(schema);
 //			IStructuredSelection selection = (IStructuredSelection) page
 //					.getTreeViewer().getSelection();
 //			XSDAnnotationsStructure struc = new XSDAnnotationsStructure(

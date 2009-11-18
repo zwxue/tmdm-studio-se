@@ -8,13 +8,12 @@ import java.util.TreeMap;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.xsd.XSDAnnotation;
-import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDConcreteComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDFactory;
-import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
+import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 import org.talend.mdm.commmon.util.core.EUUIDCustomType;
@@ -27,7 +26,7 @@ public class XSDAnnotationsStructure {
 	boolean hasChanged = false;
 	XSDAnnotation annotation;
 	XSDElementDeclaration declaration;
-	
+	XSDSchema schema;
 	/**
 	 * "Clever" Constructor that finds or creates annotations of an XSDComponent object
 	 * @param component
@@ -327,16 +326,23 @@ public class XSDAnnotationsStructure {
 							if(particle.getTerm() instanceof XSDElementDeclaration)
 							{
 								XSDElementDeclaration decl = (XSDElementDeclaration)particle.getTerm();
-								if(Util.IsAImporedElement(decl, ((XSDConcreteComponent)obj).getSchema()))
+								if(Util.IsAImporedElement(particle, schema != null ? schema : ((XSDConcreteComponent)obj).getSchema()))
 									isImported = true;
 							}
 						}
 						else if(obj instanceof XSDElementDeclaration)
 						{
 							XSDElementDeclaration decl = (XSDElementDeclaration)obj;
-							if(Util.IsAImporedElement(decl, ((XSDConcreteComponent)obj).getSchema()))
+							if(Util.IsAImporedElement(decl, schema != null ? schema : ((XSDConcreteComponent)obj).getSchema()))
 								isImported = true;
 						}
+						else if(obj instanceof XSDAnnotation)
+						{
+							XSDAnnotation anno = (XSDAnnotation)obj;
+							if(Util.IsAImporedElement(anno.getContainer(), schema != null ? schema : ((XSDConcreteComponent)obj).getSchema()))
+								isImported = true;
+						}
+						
 						if(!isImported)
 						{
 							XSDAnnotationsStructure annotion = new XSDAnnotationsStructure(
@@ -703,7 +709,10 @@ public class XSDAnnotationsStructure {
 	}
 
 	
-	
+	public void setXSDSchema(XSDSchema schma)
+	{
+		schema = schma;
+	}
 	
 	
 }
