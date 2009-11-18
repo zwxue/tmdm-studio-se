@@ -23,7 +23,9 @@ public class ServerTreeContentProvider implements IStructuredContentProvider, IT
 	
 	public void dispose() {
 	}
-	
+	public void setRoot(TreeParent root){
+		invisibleRoot=root;
+	}
 	public Object[] getElements(Object parent) {
 		if (parent.equals(site)) {
 			//if (invisibleRoot==null) return viewer.

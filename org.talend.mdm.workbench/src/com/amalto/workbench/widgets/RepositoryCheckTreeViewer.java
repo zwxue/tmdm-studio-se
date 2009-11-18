@@ -85,6 +85,10 @@ public class RepositoryCheckTreeViewer {
     	 serverRoot=  ((TreeObject)selection.getFirstElement()).getServerRoot();
     	 checkItems=selection.toList();
     }
+    public void setCheckItems(List<TreeObject> list){
+    	checkItems=list;
+    	refresh();
+    }
     public SashForm createContents(Composite parent) {
         // Splitter
         final GridData data = new GridData();
@@ -149,6 +153,8 @@ public class RepositoryCheckTreeViewer {
         return sash;
     }
     Label itemLabel=null;
+
+	private TreeViewer viewer;
     /**
      * 
      * @param workArea
@@ -156,7 +162,7 @@ public class RepositoryCheckTreeViewer {
     public Composite createItemList(Composite workArea) {
         Group itemComposite = new Group(workArea, 0);
         GridLayoutFactory.swtDefaults().numColumns(2).applyTo(itemComposite);
-        GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).hint(400, 200).applyTo(itemComposite);
+        GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).hint(400, 300).applyTo(itemComposite);
 
         itemLabel = new Label(itemComposite, SWT.NONE);
         itemLabel.setText("Select Items to Tag");
@@ -167,9 +173,13 @@ public class RepositoryCheckTreeViewer {
         createSelectionButton(itemComposite);
 
         // force loading all nodes
-        TreeViewer viewer = exportItemsTreeViewer.getViewer();
+        viewer = exportItemsTreeViewer.getViewer();
 
 
+        refresh();
+        return itemComposite;
+    }
+    public void refresh(){
         // if user has select some items in repository view, mark them as checked
         for(TreeObject obj: checkItems){
         	if(obj instanceof TreeParent)
@@ -177,15 +187,20 @@ public class RepositoryCheckTreeViewer {
         	else
         		repositoryNodes.add(obj);
         }
-        ((CheckboxTreeViewer) viewer).setCheckedElements(repositoryNodes.toArray());         
-        return itemComposite;
+        ((CheckboxTreeViewer) viewer).setCheckedElements(repositoryNodes.toArray());      	
     }
     
     public void setItemText(String text){
     	itemLabel.setText(text);
     }
     
-    private void expandParent(TreeViewer viewer, TreeObject node) {
+    public TreeViewer getViewer() {
+		return viewer;
+	}
+	public void setViewer(TreeViewer viewer) {
+		this.viewer = viewer;
+	}
+	private void expandParent(TreeViewer viewer, TreeObject node) {
         TreeParent parent = node.getParent();
         if (parent != null) {
             expandParent(viewer, parent);
@@ -204,11 +219,16 @@ public class RepositoryCheckTreeViewer {
         }
         return (TreeObject[]) ret.toArray(new TreeObject[0]);
     }
-
+    private ServerTreeContentProvider contentProvider;
+    public void setRoot(TreeParent root){
+    	contentProvider.setRoot(root);
+    }
     private void createTreeViewer(Composite itemComposite) {
         filteredCheckboxTree = new FilteredCheckboxTree(itemComposite, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI) {
 
-            @Override
+           
+
+			@Override
             protected CheckboxTreeViewer doCreateTreeViewer(Composite parent, int style) {
                 exportItemsTreeViewer = new CheckboxRepositoryView();
                 try {
@@ -217,7 +237,7 @@ public class RepositoryCheckTreeViewer {
                      e.printStackTrace();
                 }
                 exportItemsTreeViewer.createPartControl(parent);
-                ServerTreeContentProvider contentProvider=new ServerTreeContentProvider(repositoryView.getSite(),
+                contentProvider=new ServerTreeContentProvider(repositoryView.getSite(),
                 		serverRoot);
                 exportItemsTreeViewer.getViewer().setContentProvider(contentProvider);
                 exportItemsTreeViewer.getViewer().setLabelProvider(new ServerTreeLabelProvider());

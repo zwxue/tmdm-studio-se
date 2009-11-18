@@ -67,7 +67,17 @@ public class TreeObject implements IAdaptable {
 	private UserInfo user;
 	protected ArrayList<IXObjectModelListener> listeners = null; //at root level only
 	
+	
+	private String[] items; //export items
+	
+	public String[] getItems() {
+		return items;
+	}
 
+	public void setItems(String[] items) {
+		this.items = items;
+	}
+	public TreeObject(){}
 	/**
 	 * @param displayName
 	 * @param serverRoot
@@ -117,7 +127,7 @@ public class TreeObject implements IAdaptable {
 		this.type = type;
 	}
 	public TreeParent getServerRoot() {
-		if (this.serverRoot == null) return (TreeParent)this; //we are the server root
+		if (this.serverRoot == null && this instanceof TreeParent) return (TreeParent)this; //we are the server root
 		return serverRoot;
 	}
 	public void setServerRoot(TreeParent serverRoot) {
@@ -245,44 +255,6 @@ public class TreeObject implements IAdaptable {
 			return obj.getName();
 		else
 			return UNKNOWN;
-//		switch (type) {
-//			case INBOUND_ADAPTOR :
-//				return "Inbound Adaptor";
-//			case INBOUND_PLUGIN:
-//				return "Inbound Plugin";
-//			case DESTINATION :
-//				return "Destination";
-//			case OUTBOUND_ADAPTOR:
-//				return "Outbound Adaptor";
-//			case OUTBOUND_PLUGIN:
-//				return "Outbound Plugin";
-//			case DOCUMENT:
-//				return "Document";
-//			case ITEM:
-//				return "Item";
-//			case VIEW:
-//				return "View";
-//			case DATA_MODEL:
-//				return "Data Model";
-//			case SOURCE:
-//				return "Source";
-//			case DATA_CLUSTER:
-//				return "Data Cluster";
-//			case SUBSCRIPTION_ENGINE:
-//				return "Subscription Engine";
-//			case ROLE:
-//				return "Role";
-//			case STORED_PROCEDURE:
-//				return "Stored Procedure";	
-//			case TRANSFORMER:
-//				return "Transfomer";
-//			case MENU:
-//				return "Menu";	
-//			case UNIVERSE:
-//				return "Universe";
-//			case SYNCHRONIZATIONPLAN:
-//				return "Synchronization Plan";
-//		}
 	}
 		
 }

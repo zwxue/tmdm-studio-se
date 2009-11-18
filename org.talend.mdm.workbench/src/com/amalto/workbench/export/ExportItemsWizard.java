@@ -91,7 +91,7 @@ public class ExportItemsWizard extends Wizard {
 			exportFolder=folder.getText().getText();
 		}
 		final TreeObject[] objs=treeViewer.getCheckNodes();
-		Job job=new Job("Export Items ..."){
+		Job job=new Job("Export ..."){
 			@Override
 			public IStatus run(IProgressMonitor monitor) {	
 				try{					
@@ -120,29 +120,28 @@ public class ExportItemsWizard extends Wizard {
 	public void doexport(TreeObject[] objs,IProgressMonitor monitor) {
 		
 		if(objs.length==0) return;
-		monitor.beginTask("Export items...", IProgressMonitor.UNKNOWN);
+		monitor.beginTask("Export ...", IProgressMonitor.UNKNOWN);
 		Exports eps=new Exports();
-		List<ExportItem> exports=new ArrayList<ExportItem>();
+		List<TreeObject> exports=new ArrayList<TreeObject>();
 		XtentisPort port;
 		try {
 			port = Util.getPort(objs[0]);
 		for(TreeObject obj: objs){
 			
-			ExportItem exportItem=new ExportItem();
+
 			StringWriter sw;
 			ArrayList<String> items;
 			switch(obj.getType()){
 //			if(obj.getType() == TreeObject.DATA_CLUSTER){
 			case TreeObject.DATA_CLUSTER:
-				monitor.subTask("Export Data Cluster...");
+				monitor.subTask(" Data Cluster...");
 				
-				exportItem.setType(TreeObject.DATA_CLUSTER);
+
 				items=new ArrayList<String>();
 				//dataclusters
-//				WSDataClusterPKArray array=port.getDataClusterPKs(new WSRegexDataClusterPKs(""));
-//				for(WSDataClusterPK pk:array.getWsDataClusterPKs()){					
+				
 				WSDataClusterPK pk =(WSDataClusterPK)obj.getWsKey();
-				exportItem.setName(pk.getPk());
+
 					WSDataCluster cluster=port.getDataCluster(new WSGetDataCluster(pk));
 		        	//Marshal
 		    		 sw = new StringWriter();
@@ -150,15 +149,13 @@ public class ExportItemsWizard extends Wizard {
 		    		writeString(sw.toString(), TreeObject.DATACLUSTER_+"/"+cluster.getName());
 		    		items.add(TreeObject.DATACLUSTER_+"/"+cluster.getName());
 //				}
-				exportItem.setItems(items.toArray(new String[items.size()]));
-				exports.add(exportItem);
+				obj.setItems(items.toArray(new String[items.size()]));
+				exports.add(obj);
 				monitor.worked(1);
 				//datacluster contents
 //				for(WSDataClusterPK pk:array.getWsDataClusterPKs()){
-					monitor.subTask("Export Data Cluster "+ pk.getPk()+" ...");
-					ExportItem exportItem1=new ExportItem();
-					exportItem1.setName(pk.getPk());
-					exportItem1.setType(TreeObject.DATA_CLUSTER_CONTENTS);
+					monitor.subTask(" Data Cluster "+ pk.getPk()+" ...");
+
 					List<String> items1=new ArrayList<String>();
 		            WSItemPKsByCriteriaResponseResults[] results =
 			            port.getItemPKsByCriteria(new WSGetItemPKsByCriteria(
@@ -187,16 +184,16 @@ public class ExportItemsWizard extends Wizard {
 		            	writeString(sw1.toString(), TreeObject.DATACLUSTER_COTENTS+"/"+pk.getPk()+"/"+uniqueId);
 		            	items1.add(TreeObject.DATACLUSTER_COTENTS+"/"+pk.getPk()+"/"+uniqueId);
 		            }
-					exportItem1.setItems(items1.toArray(new String[items1.size()]));
-					exports.add(exportItem1);
+		            TreeObject obj1=new TreeObject("",null, TreeObject.DATA_CLUSTER_CONTENTS,null,null);
+		            obj1.setItems(items1.toArray(new String[items1.size()]));
+					exports.add(obj1);
+
 					monitor.worked(1);
 					break;
 //			}
 			case TreeObject.DATA_MODEL:
-				monitor.subTask("Export Data Model...");
-//				ExportItem exportItem=new ExportItem();
-				exportItem.setName(TreeObject.DATAMODEL_);
-				exportItem.setType(TreeObject.DATA_MODEL);
+				monitor.subTask(" Data Model...");
+
 				 items=new ArrayList<String>();
 				//datamodels
 					
@@ -205,16 +202,15 @@ public class ExportItemsWizard extends Wizard {
 	    		Marshaller.marshal(model, sw);
 	    		writeString(sw.toString(), TreeObject.DATAMODEL_+"/"+model.getName());
 	    		items.add(TreeObject.DATAMODEL_+"/"+model.getName());
-				
-				exportItem.setItems(items.toArray(new String[items.size()]));
-				exports.add(exportItem);
+				obj.setItems(items.toArray(new String[items.size()]));
+				exports.add(obj);
+
 				monitor.worked(1);
 				break;
 			case  	TreeObject.MENU:
-				monitor.subTask("Export Menu...");
+				monitor.subTask(" Menu...");
 //				ExportItem exportItem=new ExportItem();
-				exportItem.setName(TreeObject.MENU_);
-				exportItem.setType(TreeObject.MENU);
+
 				items=new ArrayList<String>();
 				//menu
 					WSMenu menu=port.getMenu(new WSGetMenu((WSMenuPK)obj.getWsKey()));
@@ -224,15 +220,15 @@ public class ExportItemsWizard extends Wizard {
 		    		writeString(sw.toString(), TreeObject.MENU_+"/"+menu.getName());
 		    		items.add(TreeObject.MENU_+"/"+menu.getName());
 
-		    	exportItem.setItems(items.toArray(new String[items.size()]));
-				exports.add(exportItem);
+					obj.setItems(items.toArray(new String[items.size()]));
+					exports.add(obj);
+
 				monitor.worked(1);
 				break;
 			case 	TreeObject.ROLE:
-				monitor.subTask("Export Role...");
+				monitor.subTask(" Role...");
 //				ExportItem exportItem=new ExportItem();
-				exportItem.setName(TreeObject.ROLE_);
-				exportItem.setType(TreeObject.ROLE);
+
 				 items=new ArrayList<String>();
 		
 				//role
@@ -243,15 +239,15 @@ public class ExportItemsWizard extends Wizard {
 		    		writeString(sw.toString(), TreeObject.ROLE_+"/"+role.getName());
 		    		items.add(TreeObject.ROLE_+"/"+role.getName());
 			
-				exportItem.setItems(items.toArray(new String[items.size()]));
-				exports.add(exportItem);
+					obj.setItems(items.toArray(new String[items.size()]));
+					exports.add(obj);
+
 				monitor.worked(1);
 				break;
 			case	TreeObject.ROUTING_RULE:
-				monitor.subTask("Export Routing Rule...");
+				monitor.subTask(" Routing Rule...");
 //				ExportItem exportItem=new ExportItem();
-				exportItem.setName(TreeObject.ROUTINGRULE_);
-				exportItem.setType(TreeObject.ROUTING_RULE);
+
 				items=new ArrayList<String>();
 				//routing rule
 					WSRoutingRule RoutingRule=port.getRoutingRule(new WSGetRoutingRule((WSRoutingRulePK)obj.getWsKey()));
@@ -260,15 +256,14 @@ public class ExportItemsWizard extends Wizard {
 		    		Marshaller.marshal(RoutingRule, sw);
 		    		writeString(sw.toString(), TreeObject.ROUTINGRULE_+"/"+RoutingRule.getName());
 		    		items.add(TreeObject.ROUTINGRULE_+"/"+RoutingRule.getName());
-				exportItem.setItems(items.toArray(new String[items.size()]));
-				exports.add(exportItem);
+					obj.setItems(items.toArray(new String[items.size()]));
+					exports.add(obj);
+
 				monitor.worked(1);
 				break;
 			case	TreeObject.STORED_PROCEDURE:
-				monitor.subTask("Export Stored Procedure...");
-				exportItem=new ExportItem();
-				exportItem.setName(TreeObject.STOREDPROCEDURE_);
-				exportItem.setType(TreeObject.STORED_PROCEDURE);
+				monitor.subTask(" Stored Procedure...");
+
 				items=new ArrayList<String>();
 				//stored procedure
 					WSStoredProcedure StoredProcedure=port.getStoredProcedure(new WSGetStoredProcedure((WSStoredProcedurePK)obj.getWsKey()));
@@ -278,15 +273,14 @@ public class ExportItemsWizard extends Wizard {
 		    		writeString(sw.toString(), TreeObject.STOREDPROCEDURE_+"/"+StoredProcedure.getName());
 		    		items.add(TreeObject.STOREDPROCEDURE_+"/"+StoredProcedure.getName());
 
-		    	exportItem.setItems(items.toArray(new String[items.size()]));
-				exports.add(exportItem);
+					obj.setItems(items.toArray(new String[items.size()]));
+					exports.add(obj);
+
 				monitor.worked(1);
 				break;
 			case TreeObject.SYNCHRONIZATIONPLAN:
-				monitor.subTask("Export Synchronization Plan...");
-				exportItem=new ExportItem();
-				exportItem.setName(TreeObject.SYNCHRONIZATIONPLAN_);
-				exportItem.setType(TreeObject.SYNCHRONIZATIONPLAN);
+				monitor.subTask(" Synchronization Plan...");
+
 				items=new ArrayList<String>();
 				//Synchronizationplan
 					WSSynchronizationPlan SynchronizationPlan=port.getSynchronizationPlan(new WSGetSynchronizationPlan((WSSynchronizationPlanPK)obj.getWsKey()));
@@ -296,15 +290,14 @@ public class ExportItemsWizard extends Wizard {
 		    		writeString(sw.toString(), TreeObject.SYNCHRONIZATIONPLAN_+"/"+SynchronizationPlan.getName());
 		    		items.add(TreeObject.SYNCHRONIZATIONPLAN_+"/"+SynchronizationPlan.getName());
 				
-				exportItem.setItems(items.toArray(new String[items.size()]));
-				exports.add(exportItem);
+					obj.setItems(items.toArray(new String[items.size()]));
+					exports.add(obj);
+
 				monitor.worked(1);
 				break;
 			case TreeObject.TRANSFORMER:
-				monitor.subTask("Export Transformer...");
-				exportItem=new ExportItem();
-				exportItem.setName(TreeObject.TRANSFORMER_);
-				exportItem.setType(TreeObject.TRANSFORMER);
+				monitor.subTask(" Transformer...");
+
 				items=new ArrayList<String>();
 				//transformer
 				//TODO:check the pk
@@ -315,15 +308,14 @@ public class ExportItemsWizard extends Wizard {
 		    		writeString(sw.toString(), TreeObject.TRANSFORMER_+"/"+transformer.getName());
 		    		items.add(TreeObject.TRANSFORMER_+"/"+transformer.getName());
 				
-				exportItem.setItems(items.toArray(new String[items.size()]));
-				exports.add(exportItem);
+					obj.setItems(items.toArray(new String[items.size()]));
+					exports.add(obj);
+
 				monitor.worked(1);
 				break;
 			case TreeObject.UNIVERSE:
-				monitor.subTask("Export Universe...");
-				exportItem=new ExportItem();
-				exportItem.setName(TreeObject.UNIVERSE_);
-				exportItem.setType(TreeObject.UNIVERSE);
+				monitor.subTask(" Universe...");
+
 				items=new ArrayList<String>();
 				//universe
 					WSUniverse universe=port.getUniverse(new WSGetUniverse((WSUniversePK)obj.getWsKey()));
@@ -333,15 +325,14 @@ public class ExportItemsWizard extends Wizard {
 		    		writeString(sw.toString(), TreeObject.UNIVERSE_+"/"+universe.getName());
 		    		items.add(TreeObject.UNIVERSE_+"/"+universe.getName());
 				
-				exportItem.setItems(items.toArray(new String[items.size()]));
-				exports.add(exportItem);
+					obj.setItems(items.toArray(new String[items.size()]));
+					exports.add(obj);
+
 				monitor.worked(1);
 				break;
 			case TreeObject.VIEW:
-				monitor.subTask("Export View...");
-				exportItem=new ExportItem();
-				exportItem.setName(TreeObject.VIEW_);
-				exportItem.setType(TreeObject.VIEW);
+				monitor.subTask(" View...");
+
 				items=new ArrayList<String>();
 				//view
 					WSView View=port.getView(new WSGetView((WSViewPK)obj.getWsKey()));
@@ -351,19 +342,22 @@ public class ExportItemsWizard extends Wizard {
 		    		writeString(sw.toString(), TreeObject.VIEW_+"/"+View.getName());
 		    		items.add(TreeObject.VIEW_+"/"+View.getName());
 				
-				exportItem.setItems(items.toArray(new String[items.size()]));
-				exports.add(exportItem);
+					obj.setItems(items.toArray(new String[items.size()]));
+					exports.add(obj);
+
 				monitor.worked(1);
 			}
 		}
 		// store the content xml
-		eps.setItems(exports.toArray(new ExportItem[exports.size()]));
+		eps.setItems(exports.toArray(new TreeObject[exports.size()]));
 		StringWriter sw = new StringWriter();
+		try{
 		Marshaller.marshal(eps, sw);
 		writeString(sw.toString(), "exportitems.xml");
+		}catch(Exception e){}
 		monitor.done();
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 		}
 	}
 	
