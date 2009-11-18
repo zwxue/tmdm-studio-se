@@ -68,7 +68,7 @@ public class SelectImportedModulesDialog extends Dialog{
 	private static final Image MDM_WEB= ImageCache.getCreatedImage(EImage.SERVERNOTRUNNING.getPath());
 	private static final Image OTHER_WEB = ImageCache.getCreatedImage(EImage.SERVERNAVIGATOR.getPath());
 	
-	private static final String LOCAL_MDM_URL = "http://localhost:8080/pubcomponent/secure/dataModels/";
+	private static final String LOCAL_MDM_URL = "http://localhost:8080/pubcomponent/secure/dataModelTypes/";
 	
 	public SelectImportedModulesDialog(Shell parentShell,XSDSchema schema, TreeObject treeObj, String title) {
 		super(parentShell);
@@ -156,8 +156,8 @@ public class SelectImportedModulesDialog extends Dialog{
 		addXSDFromWebSite.setLayoutData(
                 new GridData(SWT.FILL,SWT.NONE,false,false,1,1)
         );
-		addXSDFromWebSite.setText("Add xsd from Data Models");
-		addXSDFromWebSite.setToolTipText("Add xsd schema from the URL of Web site");
+		addXSDFromWebSite.setText("Add Types from Data Models");
+		addXSDFromWebSite.setToolTipText("Add xsd schema from the data model types");
 		addXSDFromWebSite.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
         	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
