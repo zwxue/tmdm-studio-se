@@ -450,7 +450,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 					internalCheck = !fireEvent;
 					return DEFAULT_CATALOG;
 				}
-				
+				if(theObj.getServerRoot()!=null){
 	        	String xpath = "//"
 					+ theObj.getServerRoot().getUser().getUsername() + "/" + filterOutBlank(folder.getDisplayName()) 
 					+ "//child::*[name() = 'System']";
@@ -504,6 +504,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 					    }
 					    
 					}
+				}
 				}
 				catalogPath = DEFAULT_CATALOG;
 			}
@@ -569,7 +570,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	
 	private void checkUpCatalogHavingNoChildren(TreeObject theObj, TreeParent folder)
 	{
-		if (folder.getServerRoot() == folder) return;
+		if (folder.getServerRoot() == folder || theObj.getServerRoot()==null) return;
 		
 		String xpath = "//" + theObj.getServerRoot().getUser().getUsername()
 		+ "/" + filterOutBlank(folder.getDisplayName())

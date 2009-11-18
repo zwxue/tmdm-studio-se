@@ -8,6 +8,7 @@ public class UserInfo {
 	private String serverUrl;
 	private String universe;	
 	private WSUniverse wsUuniverse;
+	public UserInfo(){}
 	public String getUsername() {
 		return username;
 	}

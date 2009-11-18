@@ -1,13 +1,15 @@
 package com.amalto.workbench.export;
 
-public class Exports {
-	private ExportItem[] items;
+import com.amalto.workbench.models.TreeObject;
 
-	public ExportItem[] getItems() {
+public class Exports {
+	private TreeObject[] items;
+
+	public TreeObject[] getItems() {
 		return items;
 	}
 
-	public void setItems(ExportItem[] items) {
+	public void setItems(TreeObject[] items) {
 		this.items = items;
 	}
 	
