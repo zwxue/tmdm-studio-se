@@ -36,106 +36,124 @@ import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSDataModel;
 
 public class XSDPasteConceptAction extends UndoAction {
 	private DataModelMainPage page;
 	ArrayList<XSDElementDeclaration> conceptList = new ArrayList<XSDElementDeclaration>();
+	
 	Set<XSDTypeDefinition> copyTypeSet = new HashSet<XSDTypeDefinition>();
 	HashMap<String, XSDTypeDefinition> typeList = new HashMap<String, XSDTypeDefinition>();
-	public XSDPasteConceptAction(DataModelMainPage page) {
+	String displayName = "Paste Concept";
+	public XSDPasteConceptAction(DataModelMainPage page,boolean multi) {
 		super(page);
 		this.page = page;
+		if(multi)
+			displayName = "Paste Concepts";
 		setImageDescriptor(ImageCache.getImage(EImage.PASTE.getPath()));
-		setText("Paste Concept");
+		setText(displayName);
 		setToolTipText("Paste Concept/Concepts");
 	}
 	public IStatus doAction() {
-		
+
 		try {
-			
+
 			conceptList = WorkbenchClipboard.getWorkbenchClipboard().getConcepts();
+			
 			XSDFactory factory = XSDFactory.eINSTANCE;
 			if (!conceptList.isEmpty()) {
-				typeList = Util.getTypeDefinition(conceptList.get(0).getSchema());
+				List<String> concepts = new ArrayList<String>();
+				int index = 0;
 				for (Iterator it = conceptList.iterator(); it.hasNext();) {
+					
+					if(conceptList.get(index).getSchema()!=null){
+						concepts = Util.getConcepts(conceptList.get(index).getSchema());
+						typeList = Util.getTypeDefinition(conceptList.get(index).getSchema());
+					}
+					index++;
 					Object concept = it.next();
+
 					if (concept instanceof XSDElementDeclaration) {
-						XSDElementDeclaration new_copy_concept =  factory.createXSDElementDeclaration();;
-						XSDElementDeclaration copy_concept = (XSDElementDeclaration) concept;					
-						new_copy_concept = (XSDElementDeclaration) copy_concept.cloneConcreteComponent(true, false);
-						InputDialog id = new InputDialog(
-			       				page.getSite().getShell(),
-			       				"Copy Element",
-			       				"Enter a new Name for the Element",
-			       				"Copy_of_"+ copy_concept.getName(),
-			       				new IInputValidator() {
-			       					public String isValid(String newText) {
-			       						if ((newText==null) || "".equals(newText)) return "The Concept Name cannot be empty";
-			       						EList list = schema.getElementDeclarations();
-			       						for (Iterator iter = list.iterator(); iter.hasNext(); ) {
-											XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
-											if (d.getName().equals(newText)) return "This Concept already exists";
-										}
-			       						return null;
-			       					};
-			       				}
-			       		);
-			            
-			       		id.setBlockOnOpen(true);
-			       		int ret = id.open();
-			       		if (ret == Window.CANCEL) {
-							return Status.CANCEL_STATUS;
+						if (concepts.contains(((XSDElementDeclaration) concept).getName())) {
+							XSDElementDeclaration copy_concept = (XSDElementDeclaration) concept;
+
+							XSDElementDeclaration new_copy_concept = factory.createXSDElementDeclaration();;
+
+							new_copy_concept = (XSDElementDeclaration) copy_concept.cloneConcreteComponent(true, false);
+							InputDialog id = new InputDialog(page.getSite().getShell(), 
+									"Copy Element",
+									"Enter a new Name for the Element",
+									"Copy_of_" + copy_concept.getName(),
+									new IInputValidator() {
+										public String isValid(String newText) {
+											if ((newText == null)|| "".equals(newText))
+												return "The Concept Name cannot be empty";
+											EList list = schema.getElementDeclarations();
+											for (Iterator iter = list.iterator(); iter.hasNext();) {
+												XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
+												if (d.getName().equals(newText))
+													return "This Concept already exists";
+											}
+											return null;
+										};
+									});
+
+							id.setBlockOnOpen(true);
+							int ret = id.open();
+							if (ret == Window.CANCEL) {
+								return Status.CANCEL_STATUS;
+							}
+
+							new_copy_concept.setName(id.getValue());
+							for (int i = 0; i < new_copy_concept.getIdentityConstraintDefinitions().size(); i++) {
+								String name = new_copy_concept.getIdentityConstraintDefinitions().get(i).getName().replaceAll(copy_concept.getName(),new_copy_concept.getName());
+								new_copy_concept.getIdentityConstraintDefinitions().get(i).setName(name);
+							}
+							new_copy_concept.updateElement();
+							schema.getContents().add(new_copy_concept);
+							addAnnotationForXSDElementDeclaration(copy_concept,new_copy_concept);
+
+							// System.out.println("@@@  copy_concept:"+Util.
+							// nodeToString(copy_concept.getElement()));
+
+							//System.out.println("@@@:"+Util.nodeToString(schema
+							// .getDocument()));
 						}
-						
-						
-						new_copy_concept.setName(id.getValue());
-						for(int i = 0;i<new_copy_concept.getIdentityConstraintDefinitions().size();i++){
-							String name =new_copy_concept.getIdentityConstraintDefinitions().get(i).getName().replaceAll(copy_concept.getName(), new_copy_concept.getName());
-							new_copy_concept.getIdentityConstraintDefinitions().get(i).setName(name);
-						}
-						new_copy_concept.updateElement();
-						 schema.getContents().add(new_copy_concept);
-						addAnnotationForXSDElementDeclaration(copy_concept,new_copy_concept);
-						
-						 //System.out.println("@@@  copy_concept:"+Util.nodeToString(copy_concept.getElement()));
-						
-						// System.out.println("@@@:"+Util.nodeToString(schema.getDocument()));
 					}
 				}
 				HashMap<String, XSDTypeDefinition> typeDef = Util.getTypeDefinition(schema);
-				for(XSDTypeDefinition type:copyTypeSet){
-					if(typeDef.containsKey(type.getName()))
+				for (XSDTypeDefinition type : copyTypeSet) {
+					if (typeDef.containsKey(type.getName()))
 						continue;
 					XSDTypeDefinition typedefinitionClone = null;
-					if(type instanceof XSDComplexTypeDefinition){
+					if (type instanceof XSDComplexTypeDefinition) {
 						typedefinitionClone = factory.createXSDComplexTypeDefinition();
 						typedefinitionClone = (XSDComplexTypeDefinition) type.cloneConcreteComponent(true, false);
-						schema.getContents().add((XSDComplexTypeDefinition)typedefinitionClone);
-						addAnnotationForComplexType((XSDComplexTypeDefinition)type,(XSDComplexTypeDefinition)typedefinitionClone);
-					}
-					else if(type instanceof XSDSimpleTypeDefinition){
-						schema.getContents().add((XSDSimpleTypeDefinition) type.cloneConcreteComponent(true, false));
+						schema.getContents().add((XSDComplexTypeDefinition) typedefinitionClone);
+						addAnnotationForComplexType((XSDComplexTypeDefinition) type,(XSDComplexTypeDefinition) typedefinitionClone);
+					} else if (type instanceof XSDSimpleTypeDefinition) {schema.getContents().add((XSDSimpleTypeDefinition) type.cloneConcreteComponent(true, false));
 					}
 				}
 				schema.getElement();
-				WSDataModel wsObject = (WSDataModel) (page.getXObject().getWsObject());
-				wsObject.getXsdSchema();//.setXsdSchema(Util.nodeToString(schema.getDocument()));
-				
-				
-				/*String schema1 = ((XSDTreeContentProvider) page.getViewer()
-						.getContentProvider()).getXSDSchemaAsString();
-				wsObject.setXsdSchema(schema1);
-				XMLEditor xmleditor=((XObjectEditor)page.getEditor()).getXmlEditor();
-				xmleditor.refresh(page.getXObject());*/
+				// WSDataModel wsObject = (WSDataModel)
+				// (page.getXObject().getWsObject());
+				// wsObject.getXsdSchema();//.setXsdSchema(Util.nodeToString(
+				// schema.getDocument()));
+
+				/*
+				 * String schema1 = ((XSDTreeContentProvider) page.getViewer()
+				 * .getContentProvider()).getXSDSchemaAsString();
+				 * wsObject.setXsdSchema(schema1); XMLEditor
+				 * xmleditor=((XObjectEditor)page.getEditor()).getXmlEditor();
+				 * xmleditor.refresh(page.getXObject());
+				 */
 				page.markDirty();
 				page.refresh();
-				//page.refreshData();
-				
+				// page.refreshData();
+
 				getOperationHistory();
 				WorkbenchClipboard.getWorkbenchClipboard().conceptsReset();
 				typeList.clear();
-				
+
 				return Status.OK_STATUS;
 			}
 			return Status.CANCEL_STATUS;
@@ -149,9 +167,21 @@ public class XSDPasteConceptAction extends UndoAction {
 		return Status.OK_STATUS;
 	}
 	public boolean checkInPasteType(){
+		/*if(WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size()>1)
+			this.displayName = "Paste Concepts";*/
 		if(WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size()<=0)
 			return false;
-		return true;
+		conceptList = WorkbenchClipboard.getWorkbenchClipboard().getConcepts();
+		int t = 0;
+		for(XSDElementDeclaration ele:conceptList){
+			if(conceptList.get(t).getSchema()!=null){
+				List<String> concepts = Util.getConcepts(conceptList.get(t).getSchema());
+					if(concepts.contains(ele.getName()))
+						return true;
+				}
+			t++;
+						}
+		return false;
 	}
 	
 	public void addAnnotationForComplexType(XSDComplexTypeDefinition fromType,

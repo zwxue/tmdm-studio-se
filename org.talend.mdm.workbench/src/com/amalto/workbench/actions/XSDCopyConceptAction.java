@@ -14,13 +14,15 @@ import com.amalto.workbench.utils.WorkbenchClipboard;
 
 public class XSDCopyConceptAction extends Action {
 	private DataModelMainPage page;
-
-	public XSDCopyConceptAction(DataModelMainPage page) {
+	private  String displayName = "Copy Concept";
+	public XSDCopyConceptAction(DataModelMainPage page,boolean multi) {
 		super();
+		if(multi)
+			displayName = "Copy Concepts";
 		this.page = page;
 		setImageDescriptor(ImageCache.getImage(EImage.COPY.getPath()));
-		setText("Copy Concept");
-		setToolTipText("Copy Concept/Concepts");
+		setText(displayName);
+		setToolTipText(displayName);
 	}
 
 	//public IStatus doAction() {
@@ -46,7 +48,11 @@ public class XSDCopyConceptAction extends Action {
 		}
 		//return true;
 	}
-	public boolean checkInCopyType(Object[] selectedObjs){
+	
+	
+	public static boolean checkInCopyType(Object[] selectedObjs){
+		/*if(selectedObjs.length>1)
+			displayName = "Copy Concepts";*/
 		for (Object obj : selectedObjs) {
 			if (obj instanceof XSDElementDeclaration)
 				continue;

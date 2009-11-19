@@ -178,6 +178,7 @@ import com.amalto.workbench.providers.XSDTreeLabelProvider;
 import com.amalto.workbench.utils.DataModelFilter;
 import com.amalto.workbench.utils.FontUtils;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 import com.amalto.workbench.webservices.WSDataModel;
 
@@ -205,8 +206,8 @@ public class DataModelMainPage extends AMainPageV2 {
 	private XSDEditParticleAction editParticleAction = null;
 	private XSDEditConceptAction editConceptAction = null;
 	
-	private XSDCopyConceptAction copyConceptAction = null;
-	private XSDPasteConceptAction pasteConceptAction = null;
+	//private XSDCopyConceptAction copyConceptAction = null;
+	//private XSDPasteConceptAction pasteConceptAction = null;
 	
 	private XSDEditElementAction editElementAction = null;
 	private XSDDeleteIdentityConstraintAction deleteIdentityConstraintAction = null;
@@ -1342,8 +1343,8 @@ public class DataModelMainPage extends AMainPageV2 {
 		this.setAnnotationHiddenAction = new XSDSetAnnotationHiddenAction(this,dataModelName);
 		this.setAnnotationWrapHiddenAction = new XSDSetAnnotationWrapHiddenAction(this,dataModelName);
 		
-		this.copyConceptAction = new XSDCopyConceptAction(this);
-		this.pasteConceptAction = new XSDPasteConceptAction(this);
+		//this.copyConceptAction = new XSDCopyConceptAction(this);
+		//this.pasteConceptAction = new XSDPasteConceptAction(this);
 		
 		this.setAnnotationTargetSystemsAction = new XSDSetAnnotationTargetSystemsAction(this,dataModelName);
 		this.setAnnotationSchematronAction = new XSDSetAnnotationSchematronAction(this,dataModelName);
@@ -1774,6 +1775,12 @@ public class DataModelMainPage extends AMainPageV2 {
 			manager.add(new XSDNewConceptAction(this));
 			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 			//add by ymli, fix bug 0009770
+			boolean isMulti = false;
+			if(WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size()>1)
+				isMulti = true;
+			
+				
+			XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this,isMulti);
 			if(pasteConceptAction.checkInPasteType()){
 				manager.add(new Separator());
 				manager.add(pasteConceptAction);
@@ -1802,10 +1809,15 @@ public class DataModelMainPage extends AMainPageV2 {
 				}
 				
 				//add by ymli. fix bug 0009770 add the copy of concepts
+				XSDCopyConceptAction copyConceptAction = new XSDCopyConceptAction(this,false);
 				if(copyConceptAction.checkInCopyType(selectedObjs)){
 					manager.add(new Separator());
 					manager.add(copyConceptAction);
 				}
+				boolean isMulti = false;
+				if(WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size()>1)
+					isMulti = true;
+				XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this,isMulti);
 				if(pasteConceptAction.checkInPasteType())
 					manager.add(pasteConceptAction);
 				
@@ -1849,10 +1861,11 @@ public class DataModelMainPage extends AMainPageV2 {
 
 		if (obj instanceof XSDParticle && selectedObjs.length == 1) {
 			XSDTerm term = ((XSDParticle) obj).getTerm();
-			if (!(term instanceof XSDWildcard)) {
+			if (!(term instanceof XSDWildcard)
+					&& term.getSchema().getTargetNamespace() == null) {
 				if(term instanceof XSDElementDeclaration)
 				{
-					if(!Util.IsAImporedElement((XSDParticle)obj, xsdSchema))
+					if(!Util.IsAImporedElement((XSDElementDeclaration)term, xsdSchema))
 					{
 						manager.add(editParticleAction);
 						//manager.add(newGroupFromParticleAction);
@@ -1942,11 +1955,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		if (obj instanceof XSDAnnotation
 				&& selectedObjs.length == 1
 				&& ((XSDAnnotation) obj).getSchema().getTargetNamespace() == null) {
-			if(!Util.IsAImporedElement((XSDAnnotation)obj, xsdSchema))
-			{
-				setAnnotationActions(manager);
-			}
-
+			setAnnotationActions(manager);
 		}
 
 		
@@ -1963,12 +1972,17 @@ public class DataModelMainPage extends AMainPageV2 {
 			if (deleteConceptWrapAction.checkOutAllConcept(selectedObjs))
 				manager.add(newBrowseItemAction);
 				
-			
+			XSDCopyConceptAction copyConceptAction = new XSDCopyConceptAction(this,true);
 			if(copyConceptAction.checkInCopyType(selectedObjs))	{
 				manager.add(new Separator());
 				manager.add(copyConceptAction);
 			}
+			boolean isMulti = false;
+			if(WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size()>1)
+				isMulti = true;
+			
 				
+			XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this,isMulti);
 			if(pasteConceptAction.checkInPasteType())
 				manager.add(pasteConceptAction);
 			
