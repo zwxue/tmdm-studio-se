@@ -248,6 +248,18 @@ public class TreeObject implements IAdaptable {
 		return getServerRoot().getWsKey().toString();
 	}
 	
+	public String getEndpointIpAddress() {
+		
+		String portAddress=getEndpointAddress();
+		
+		if(portAddress!=null){
+			int cutPos=portAddress.indexOf("/talend/TalendPort");
+			if(cutPos!=-1)return portAddress.substring(0, cutPos);
+		}
+		
+		return portAddress;
+	}
+	
 	
 	public static String getTypeName(int type) {
 		EXtentisObjects obj=EXtentisObjects.getXtentisObjexts().get(String.valueOf(type));

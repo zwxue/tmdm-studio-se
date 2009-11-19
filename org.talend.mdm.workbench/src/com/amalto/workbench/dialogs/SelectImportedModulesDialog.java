@@ -68,7 +68,7 @@ public class SelectImportedModulesDialog extends Dialog{
 	private static final Image MDM_WEB= ImageCache.getCreatedImage(EImage.SERVERNOTRUNNING.getPath());
 	private static final Image OTHER_WEB = ImageCache.getCreatedImage(EImage.SERVERNAVIGATOR.getPath());
 	
-	private static final String LOCAL_MDM_URL = "http://localhost:8080/pubcomponent/secure/dataModelsTypes/";
+	private String LOCAL_MDM_URL = null;
 	
 	public SelectImportedModulesDialog(Shell parentShell,XSDSchema schema, TreeObject treeObj, String title) {
 		super(parentShell);
@@ -76,6 +76,11 @@ public class SelectImportedModulesDialog extends Dialog{
 		this.treeObject = treeObj;
 		this.title=title;
 		this.xsdSchema = schema;
+		
+		String endpointIpAddress=treeObject.getEndpointIpAddress();
+		if(endpointIpAddress!=null&&endpointIpAddress.length()>0){
+			LOCAL_MDM_URL=endpointIpAddress+"/pubcomponent/secure/dataModelsTypes/";
+		}
 	}
 	
 	protected Control createDialogArea(Composite parent) {
