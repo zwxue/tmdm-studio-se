@@ -4,6 +4,7 @@ public interface IConstants {
 	/*Conditions operator*/
 	static final String[] VIEW_CONDITION_OPERATORS={"Contains","Contains Text Of","Starts With","Strict Contains","=","!=",">",">=","<","<="};
 	static final String[] ROUTE_CONDITION_OPERATORS={"Contains","Matches","Starts With","Is Null","Is Not Null","=","!=",">",">=","<","<="};
+	static final String[] SCHEMATRON_TYPES={"assert","report"};
 	
 	/*Operate  Type*/
 	static final String[] OPERATE_TYPES={"UPDATE","CREATE","DELETE"};

@@ -49,36 +49,63 @@ public class DescAnnotationComposite implements  SelectionListener{
     private static final String REGEXP_METACHARACTERS = "\\[([\\w]+)[\\s]*:[\\s]*([^]]*)\\]";  
     private static final Pattern DESC_PATTERN = Pattern.compile(REGEXP_METACHARACTERS);
     
-	public DescAnnotationComposite(String labelName, String buttonName, FormToolkit toolkit, Composite parent, AMainPageV2 dialog)
+	public DescAnnotationComposite(String labelName, String buttonName, FormToolkit toolkit, Composite parent, AMainPageV2 dialog, boolean isBtnRight)
 	{
 		descAntionHolder = toolkit.createComposite(parent);
 		descAntionHolder.setLayoutData( new GridData(SWT.FILL,SWT.RIGHT,true,true,2,1));
-		descAntionHolder.setLayout(new GridLayout(3,false));
-		
-		Label descriptionLabel = toolkit.createLabel(descAntionHolder, labelName, SWT.NULL);
-        descriptionLabel.setLayoutData(
-                new GridData(SWT.FILL,SWT.CENTER,false,true,1,1));
-        
-		annotationButton = toolkit.createButton(descAntionHolder, "", SWT.PUSH);
-		annotationButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		annotationButton.addSelectionListener(this);
-		annotationButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
-		annotationButton.setToolTipText("Set the Descriptions");
-		
-		descriptionText = toolkit.createText(descAntionHolder, "",SWT.BORDER|SWT.MULTI);
-        descriptionText.setLayoutData(    
-                 new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-         );
-        descriptionText.addModifyListener(new ModifyListener() {
-        	public void modifyText(ModifyEvent e) {
-        		if (descriptionValue != null && !descriptionValue.equals(descriptionText.getText())) {
-					accommodation.markDirty();
-				}
-        		descriptionValue = descriptionText.getText();
-        		fillDataStore(descriptionText.getText());
-        	}
-        }); 
-        
+		GridLayout layout=new GridLayout(3, false);
+		layout.marginWidth=0;
+		layout.marginLeft=0;
+		layout.marginTop=0;
+		layout.marginHeight=0;
+		layout.marginBottom=0;
+		descAntionHolder.setLayout(layout);	
+		if(labelName!=null && labelName.length()>0){
+			Label descriptionLabel = toolkit.createLabel(descAntionHolder, labelName, SWT.NULL);
+	        descriptionLabel.setLayoutData(
+	                new GridData(SWT.FILL,SWT.CENTER,false,true,1,1));
+		}
+		if(isBtnRight){			
+			descriptionText = toolkit.createText(descAntionHolder, "",SWT.BORDER|SWT.MULTI);
+	        descriptionText.setLayoutData(    
+	                 new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+	         );
+	        descriptionText.addModifyListener(new ModifyListener() {
+	        	public void modifyText(ModifyEvent e) {
+	        		if (descriptionValue != null && !descriptionValue.equals(descriptionText.getText())) {
+						accommodation.markDirty();
+					}
+	        		descriptionValue = descriptionText.getText();
+	        		fillDataStore(descriptionText.getText());
+	        	}
+	        }); 
+			annotationButton = toolkit.createButton(descAntionHolder, "", SWT.PUSH);
+			annotationButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+			annotationButton.addSelectionListener(this);
+			annotationButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
+			annotationButton.setToolTipText("Set the Descriptions");
+	        
+		}else{
+			annotationButton = toolkit.createButton(descAntionHolder, "", SWT.PUSH);
+			annotationButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+			annotationButton.addSelectionListener(this);
+			annotationButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
+			annotationButton.setToolTipText("Set the Descriptions");
+			
+			descriptionText = toolkit.createText(descAntionHolder, "",SWT.BORDER|SWT.MULTI);
+	        descriptionText.setLayoutData(    
+	                 new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+	         );
+	        descriptionText.addModifyListener(new ModifyListener() {
+	        	public void modifyText(ModifyEvent e) {
+	        		if (descriptionValue != null && !descriptionValue.equals(descriptionText.getText())) {
+						accommodation.markDirty();
+					}
+	        		descriptionValue = descriptionText.getText();
+	        		fillDataStore(descriptionText.getText());
+	        	}
+	        }); 			
+		}
         accommodation = dialog;
         dlgTitle = "Set the Descriptions";
 	}
@@ -122,7 +149,9 @@ public class DescAnnotationComposite implements  SelectionListener{
 	{
 		return descriptionText.getText();
 	}
-	
+	public Text getTextWidget(){
+		return descriptionText;
+	}
 	public void widgetSelected(SelectionEvent e)
 	{
         AnnotationLanguageLabelsDialog dlg = new AnnotationLanguageLabelsDialog(

@@ -101,7 +101,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 	protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
 		
         try {
-        	desAntionComposite = new DescAnnotationComposite("Description" ," ...", toolkit, charComposite, (AMainPageV2)this);
+        	desAntionComposite = new DescAnnotationComposite("Description" ," ...", toolkit, charComposite, (AMainPageV2)this,false);
             //make the Page window a DropTarget - we need to dispose it
             windowTarget = new DropTarget(this.getPartControl(), DND.DROP_MOVE);
             windowTarget.setTransfer(new Transfer[]{TextTransfer.getInstance()});

@@ -30,6 +30,7 @@ import org.eclipse.xsd.impl.XSDSchemaImpl;
 import org.eclipse.xsd.util.XSDConstants;
 import org.w3c.dom.Element;
 
+import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 
@@ -199,7 +200,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
 							return source.substring(2, 7)+"_Msg_"+source.substring(8)+": "+ e.getChildNodes().item(0).getNodeValue();
 						   //made schematron show:Schematron: schematron
 						} else if(source.equals("X_Schematron")){
-							return source.substring(2)+": "+ e.getChildNodes().item(0).getNodeValue();	
+							return "Validation Rule: "+ e.getChildNodes().item(0).getNodeValue();	
 							//end
 						} else {
 							return source+": "+Util.nodeToString((Element)obj);
@@ -393,7 +394,9 @@ public class XSDTreeLabelProvider extends LabelProvider {
 							return ImageCache.getCreatedImage( "icons/writable.gif");
 						} else if (source.equals("X_Hide")) {
 							return ImageCache.getCreatedImage( "icons/hideable.gif");
-						} else {
+						} else if (source.equals("X_Schematron")) {
+							return ImageCache.getCreatedImage( EImage.ROUTINE.getPath());
+						}else {
 							return ImageCache.getCreatedImage( "icons/documentation.gif");
 						}
 					} else {
