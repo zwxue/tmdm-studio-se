@@ -135,7 +135,7 @@ public class RoleMainPage extends AMainPageV2 implements Observer{
         try {
         	                     
             //description
-        	desAntionComposite = new DescAnnotationComposite("Description" ," ...", toolkit, charComposite, (AMainPageV2)this);
+        	desAntionComposite = new DescAnnotationComposite("Description" ," ...", toolkit, charComposite, (AMainPageV2)this,false);
         	desAntionComposite.setAnnotationDialogTitle("Set the Description of the Role");
             //make the Page window a DropTarget - we need to dispose it
             windowTarget = new DropTarget(this.getPartControl(), DND.DROP_MOVE);

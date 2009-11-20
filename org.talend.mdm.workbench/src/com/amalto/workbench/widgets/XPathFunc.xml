@@ -1,0 +1,12 @@
+<!-- Xpath Function Help for Validation Rule Expression-->
+<xpath>
+	<category name="Numeric">
+		<function name="number" help="Returns the numeric value of the argument. The argument could be a boolean, string, or node-set Example: number('100') Result: 100"/>
+		<function name="abs" help="Returns the absolute value of the argument Example: abs(3.14) Result: 3.14 Example: abs(-3.14) Result: 3.14"/>
+		<function name="ceiling" help="Returns the smallest integer that is greater than the number argument Example: ceiling(3.14) Result: 4"/>
+	</category>
+	<category name="Strings">
+		<function name="string" help="Returns the string value of the argument. The argument could be a number, boolean, or node-set Example: string(314) Result: '314'"/>		
+	</category>	
+	
+</xpath>

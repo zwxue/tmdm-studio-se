@@ -7,6 +7,8 @@ public class ComplexTableViewerColumn {
 	public static final int TEXT_STYLE=0;
 	public static final int COMBO_STYLE=1;
 	public static final int XPATH_STYLE=2;
+	public static final int VALIDATIONRULE_STYLE=3;
+	public static final int MULTIMESSAGE_STYLE=4;
 	
 	String name;
 	boolean isNillable = false;
@@ -122,6 +124,12 @@ public class ComplexTableViewerColumn {
 	}
 	public boolean isText(){
 		return this.style==TEXT_STYLE;
+	}
+	public boolean isValidationRule(){
+		return this.style==VALIDATIONRULE_STYLE;
+	}
+	public boolean isMultiMessage(){
+		return this.style==MULTIMESSAGE_STYLE;
 	}
 	public String[] getComboValues() {
     	return comboValues;

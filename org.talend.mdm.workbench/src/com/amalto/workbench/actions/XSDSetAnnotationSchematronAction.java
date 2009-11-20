@@ -9,13 +9,13 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComponent;
+import org.eclipse.xsd.XSDElementDeclaration;
 import org.w3c.dom.Element;
 
-import com.amalto.workbench.dialogs.AnnotationOrderedListsDialog;
+import com.amalto.workbench.dialogs.ValidationRuleDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
@@ -23,14 +23,14 @@ import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDSetAnnotationSchematronAction extends UndoAction{
 
-	protected AnnotationOrderedListsDialog dlg = null;
+	protected ValidationRuleDialog dlg = null;
 	protected String dataModelName;
 	
 	public XSDSetAnnotationSchematronAction(DataModelMainPage page,String dataModelName) {
 		super(page);
 		setImageDescriptor(ImageCache.getImage( "icons/annotation.gif"));
-		setText("Set the Schematron Pattern");
-		setToolTipText("Set the Schematron Pattern");
+		setText("Set the Validation Rule");
+		setToolTipText("Set the Validation Rule");
 		this.dataModelName = dataModelName;
 	}
 	
@@ -55,28 +55,37 @@ public class XSDSetAnnotationSchematronAction extends UndoAction{
             	throw new RuntimeException("Unable to edit an annotation for object of type "+xSDCom.getClass().getName());
             }
             
-            dlg = new AnnotationOrderedListsDialog(
-            		new ArrayList(struc.getSchematrons().values()),
-            		new SelectionListener() {
-            			public void widgetDefaultSelected(SelectionEvent e) {}
-            			public void widgetSelected(SelectionEvent e) {
-            				dlg.close();
-            			}
-            		},
-       				page.getSite().getShell(),
-       				"Set the Schematron Pattern",
-       				"Set the Schematron Pattern",
-       				page,
-       				AnnotationOrderedListsDialog.AnnotationSchematron_ActionType,
-       				dataModelName 
-       		);
-            
+//            dlg = new AnnotationOrderedListsDialog(
+//            		new ArrayList(struc.getSchematrons().values()),
+//            		new SelectionListener() {
+//            			public void widgetDefaultSelected(SelectionEvent e) {}
+//            			public void widgetSelected(SelectionEvent e) {
+//            				dlg.close();
+//            			}
+//            		},
+//       				page.getSite().getShell(),
+//       				"Set the Validation Rule",
+//       				"Set the Validation Rule",
+//       				page,
+//       				AnnotationOrderedListsDialog.AnnotationSchematron_ActionType,
+//       				dataModelName 
+//       		);
+            String conceptName=null;
+            if(xSDCom instanceof XSDAnnotation){
+            	conceptName=xSDCom.getContainer().getElement().getAttributes().getNamedItem("name").getNodeValue();
+            }
+            if(xSDCom instanceof XSDElementDeclaration){
+            	conceptName=xSDCom.getElement().getAttributes().getNamedItem("name").getNodeValue();
+            }
+            dlg=new ValidationRuleDialog(page.getSite().getShell(),"Set the Validation Rules",new ArrayList(struc.getSchematrons().values()),page,conceptName);            
        		dlg.setBlockOnOpen(true);
+       		dlg.create();
+       		dlg.getShell().setSize(new Point(850,270));
        		int ret = dlg.open();
        		if (ret == Window.CANCEL) {
                 return Status.CANCEL_STATUS;
        		}
-      		struc.setSchematrons(dlg.getXPaths());
+      		struc.setSchematrons(dlg.getRules());
        		       		
        		if (struc.hasChanged()) {
        			page.refresh();
@@ -90,7 +99,7 @@ public class XSDSetAnnotationSchematronAction extends UndoAction{
 			MessageDialog.openError(
 					page.getSite().getShell(),
 					"Error", 
-					"An error occured trying to set the Schematron Pattern: "+e.getLocalizedMessage()
+					"An error occured trying to set the Validation Rule: "+e.getLocalizedMessage()
 			);
             return Status.CANCEL_STATUS;
 		}

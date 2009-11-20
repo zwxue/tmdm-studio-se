@@ -32,6 +32,8 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
+import com.amalto.workbench.widgets.ComplexTableViewer.MultiMessageEditor;
+import com.amalto.workbench.widgets.ComplexTableViewer.ValidationRuleEditor;
 /**
  * 
  * @author achen
@@ -304,7 +306,11 @@ public class TisTableViewer extends ComplexTableViewer{
 	        		editors[i] = new ComboBoxCellEditor(table, ((ComplexTableViewerColumn)columns.get(i)).getComboValues(), SWT.READ_ONLY);	
 	        	}else if(columns.get(i).isXPATH()){
 	        		editors[i]= new XpathCellEditor(table);
-	        	}	        
+	        	}else if(columns.get(i).isMultiMessage()){
+	        		editors[i]= new MultiMessageEditor(table);
+		        }else if(columns.get(i).isValidationRule()){
+		    		editors[i]= new ValidationRuleEditor(table);
+		    	}        		        
 	        }
 	        viewer.setCellEditors(editors);
 	        

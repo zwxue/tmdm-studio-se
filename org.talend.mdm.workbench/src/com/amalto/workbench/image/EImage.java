@@ -243,6 +243,7 @@ public enum EImage {
 	SUSPEND("icons/suspend_co.gif"),
 	DOTS_BUTTON("icons/dots_button.gif"),
 	ZAP("icons/zap.gif"),
+	ROUTINE("icons/routine.gif"),
 	SERVICE_CONFIGURATION("icons/config.gif");
 
 	EImage(String path){

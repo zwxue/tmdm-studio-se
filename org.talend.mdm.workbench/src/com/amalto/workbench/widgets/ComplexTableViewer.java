@@ -8,7 +8,6 @@ import java.util.List;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
-import org.eclipse.jface.viewers.ICellEditorListener;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -21,16 +20,12 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -48,7 +43,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.internal.handlers.SelectAllHandler;
 
 import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.editors.AMainPageV2;
@@ -86,7 +80,9 @@ public class ComplexTableViewer {
 	protected Table table;
 	protected String conceptName;
 	protected XpathWidget xpath;
+	protected DescAnnotationComposite multiMsg;	
 	protected XpathSelectDialog xpathDialog;
+	protected ValidationRuleWidget validationRule;	
 	public String getConceptName() {
 		return conceptName;
 	}
@@ -468,7 +464,11 @@ public class ComplexTableViewer {
         		editors[i] = new ComboBoxCellEditor(table, ((ComplexTableViewerColumn)columns.get(i)).getComboValues(), SWT.READ_ONLY);	
         	}else if(columns.get(i).isXPATH()){
         		editors[i]= new XpathCellEditor(table);
-        	}	        
+        	}else if(columns.get(i).isMultiMessage()){
+        		editors[i]= new MultiMessageEditor(table);        		
+	        }else if(columns.get(i).isValidationRule()){
+	    		editors[i]= new ValidationRuleEditor(table);
+	    	}        	
         }
         viewer.setCellEditors(editors);
         
@@ -656,12 +656,151 @@ public class ComplexTableViewer {
 		GridData gd=(GridData)table.getLayoutData();
 		gd.heightHint=height;
 	}
-	
+	public void setWidth(int width){
+		GridData gd=(GridData)table.getLayoutData();
+		gd.widthHint=width;
+	}
 	public Composite getMainComposite() {
 		return mainComposite;
 	}
+	class ValidationRuleEditor extends CellEditor{	
+		
+		public ValidationRuleEditor(Composite parent){
+			super(parent);
+		}
+		@Override
+		protected Control createControl(Composite parent) {	
+			validationRule=new ValidationRuleWidget(parent);
+			
+			((GridData)validationRule.getComposite().getChildren()[0].getLayoutData()).heightHint=15;
+			((GridData)validationRule.getComposite().getChildren()[1].getLayoutData()).heightHint=15;
+			if(parent instanceof Table){				
+				((Table) parent).addMouseListener(new MouseListener(){
+					public void mouseDoubleClick(MouseEvent e) {
+					}
 
+					public void mouseDown(MouseEvent e) {
+					}
+					public void mouseUp(MouseEvent e) {
+						if(!isMouseInControl(e)){
+							deactive();
+						}
+					}					
+				});
+				validationRule.getTextWidget().addKeyListener(new KeyListener(){
+					public void keyPressed(KeyEvent e) {
+					}
+					public void keyReleased(KeyEvent e) {
+						// TODO Auto-generated method stub
+					if(e.character==SWT.CR){
+						validationRule.setText(validationRule.getText().trim());
+						deactive();	 
+						}
+					}					
+				});
+			}
+			return validationRule.getComposite();
+		}
 
+		boolean isMouseInControl(MouseEvent e){
+			if(e.widget instanceof Table){
+				if(validationRule.getComposite().getBounds().contains(e.x,e.y)){
+					return true;
+				}
+			}
+			return false;
+		}
+		@Override
+		protected Object doGetValue() {
+			return validationRule.getText();
+		}
+
+		@Override
+		protected void doSetFocus() {
+			validationRule.getTextWidget().setFocus();
+		}
+		public void deactive(){
+			if(isActivated()){
+				super.focusLost();				
+			}
+		}
+		@Override
+		protected void doSetValue(Object value) {
+			validationRule.setText(value.toString().trim());
+		}
+		
+	}
+	
+	class MultiMessageEditor extends CellEditor{	
+		public MultiMessageEditor(Composite parent){
+			super(parent);
+		}
+		@Override
+		protected Control createControl(Composite parent) {	
+			 multiMsg=new DescAnnotationComposite(null,null,toolkit,parent,mainPage,true);
+			
+			((GridData)multiMsg.getComposite().getChildren()[0].getLayoutData()).heightHint=15;
+			((GridData)multiMsg.getComposite().getChildren()[1].getLayoutData()).heightHint=15;
+			if(parent instanceof Table){				
+				((Table) parent).addMouseListener(new MouseListener(){
+					public void mouseDoubleClick(MouseEvent e) {
+					}
+
+					public void mouseDown(MouseEvent e) {
+					}
+					public void mouseUp(MouseEvent e) {
+						if(!isMouseInControl(e)){
+							deactive();
+						}
+					}					
+				});
+				//add by ymli, fix bug 0009441
+				multiMsg.getTextWidget().addKeyListener(new KeyListener(){
+					public void keyPressed(KeyEvent e) {
+					}
+					public void keyReleased(KeyEvent e) {
+						// TODO Auto-generated method stub
+					if(e.character==SWT.CR){
+						multiMsg.setText(multiMsg.getText().trim());
+						deactive();	 
+						}
+					}					
+				});
+			}
+			return multiMsg.getComposite();
+		}
+
+		boolean isMouseInControl(MouseEvent e){
+			if(e.widget instanceof Table){
+				if(multiMsg.getComposite().getBounds().contains(e.x,e.y)){
+					return true;
+				}
+			}
+			return false;
+		}
+		@Override
+		protected Object doGetValue() {
+			// TODO Auto-generated method stub
+			return multiMsg.getText();
+		}
+
+		@Override
+		protected void doSetFocus() {
+			// TODO Auto-generated method stub
+			multiMsg.getTextWidget().setFocus();
+		}
+		public void deactive(){
+			if(isActivated()){
+				super.focusLost();				
+			}
+		}
+		@Override
+		protected void doSetValue(Object value) {
+			// TODO Auto-generated method stub
+			multiMsg.setText(value.toString().trim());
+		}
+		
+	}
 	class XpathCellEditor extends CellEditor{
 
 		public XpathWidget getXpath() {
