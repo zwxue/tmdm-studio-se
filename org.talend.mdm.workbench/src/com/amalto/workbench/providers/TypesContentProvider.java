@@ -408,7 +408,11 @@ public class TypesContentProvider implements IStructuredContentProvider, ITreeCo
 	
 	public void setXsdSchema(String xsd)
 	{
-		xsdSchema = Util.createXsdSchema(xsd, treeObj);
+		try {
+			xsdSchema = Util.createXsdSchema(xsd, treeObj);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void setXsdSchema(XSDSchema xsdSchema){

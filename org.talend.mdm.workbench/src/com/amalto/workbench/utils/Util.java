@@ -1403,40 +1403,41 @@ public class Util {
     	return buffer;
     }
     
-    public static String getResponseFromURL(String url, TreeObject treeObj)
+    public static String getResponseFromURL(String url, TreeObject treeObj) throws Exception
     {
         BASE64Encoder encoder = new BASE64Encoder();
         StringBuffer buffer = new StringBuffer();
         String credentials = encoder.encode(new String(treeObj.getServerRoot().getUsername() + ":" + treeObj.getServerRoot().getPassword()).getBytes());
         
-        try {
-				URL urlCn = new URL(url);
-				URLConnection conn = urlCn.openConnection();
-				conn.setAllowUserInteraction(true);
-				conn.setDoOutput(true);
-				conn.setDoInput(true);
-	            conn.setRequestProperty("Authorization", "Basic " + credentials);
-	            conn.setRequestProperty("Expect", "100-continue"); 
-	
-	            InputStreamReader doc = 
-	                new InputStreamReader(conn.getInputStream());
-	            BufferedReader reader = new BufferedReader(doc);
-	            String line = reader.readLine();
-	            while(line != null)
-	            {
-	            	buffer.append(line);
-	            	line = reader.readLine();
-	            }
-		    } catch (Exception e) {
-			e.printStackTrace();
-		    }
-		    
-		  return buffer.toString();
+		URL urlCn = new URL(url);
+		URLConnection conn = urlCn.openConnection();
+		conn.setAllowUserInteraction(true);
+		conn.setDoOutput(true);
+		conn.setDoInput(true);
+        conn.setRequestProperty("Authorization", "Basic " + credentials);
+        conn.setRequestProperty("Expect", "100-continue"); 
+
+        InputStreamReader doc = 
+            new InputStreamReader(conn.getInputStream());
+        BufferedReader reader = new BufferedReader(doc);
+        String line = reader.readLine();
+        while(line != null)
+        {
+        	buffer.append(line);
+        	line = reader.readLine();
+        }
+	            
+	    return buffer.toString();
     }
     
-    public static XSDSchema createXsdSchema(String xsd, TreeObject treeObj){
+    public static XSDSchema createXsdSchema(String xsd, TreeObject treeObj) throws Exception{
     	    List<XSDImport> imports = new ArrayList<XSDImport>();
-    	    XSDSchema xsdSchema = Util.getXSDSchema(xsd, imports, treeObj, false);
+    	    List<Exception> exceptons = new ArrayList<Exception>();
+    	    XSDSchema xsdSchema = Util.getXSDSchema(xsd, imports, treeObj, false, exceptons);
+    	    if(exceptons.size() > 0)
+    	    {
+    	    	throw exceptons.get(0);
+    	    }
     	    Map<String, String> nsMap = xsdSchema.getQNamePrefixToNamespaceMap();
     	    int imp = 0;
     	    for (XSDImport xsdImport: imports)
@@ -1491,7 +1492,7 @@ public class Util {
 		}
     }
     
-    private static XSDSchema getXSDSchema(String rawData, final List<XSDImport>imports , final TreeObject treeObj, boolean uri)
+    private static XSDSchema getXSDSchema(String rawData, final List<XSDImport>imports , final TreeObject treeObj, boolean uri, final List<Exception> exceptions) throws Exception
     {
     	final String xsdFileName = System.getProperty("user.dir")+"/.xsdModel.xml";
     	URI fileURI = URI.createFileURI(xsdFileName);
@@ -1502,25 +1503,21 @@ public class Util {
 		XSDSchema schema = null;
 		InputSource source = null;
 		Document document = null;
-		try {
-			documentBuilder = documentBuilderFactory.newDocumentBuilder();
-			if (uri) {
-				File file = new File(rawData);
-				if (file.isFile())
-				   source = new InputSource(new FileInputStream(file));
-				else
-					source = new InputSource(new StringReader(Util.getResponseFromURL(rawData, treeObj)));
-			} else {
-				source = new InputSource(new StringReader(rawData));
-			}
-
-			document = documentBuilder.parse(source);
-			schema = XSDSchemaImpl.createSchema(document
-					.getDocumentElement());
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+		
+		documentBuilder = documentBuilderFactory.newDocumentBuilder();
+		if (uri) {
+			File file = new File(rawData);
+			if (file.isFile())
+			   source = new InputSource(new FileInputStream(file));
+			else
+				source = new InputSource(new StringReader(Util.getResponseFromURL(rawData, treeObj)));
+		} else {
+			source = new InputSource(new StringReader(rawData));
 		}
+
+		document = documentBuilder.parse(source);
+		schema = XSDSchemaImpl.createSchema(document
+				.getDocumentElement());
 		
 	    ResourceSet resourceSet = new ResourceSetImpl();
 	    Resource resource = resourceSet.createResource(fileURI);
@@ -1532,7 +1529,13 @@ public class Util {
 		       {
 		         public XSDSchema locateSchema(XSDSchema xsdSchema, String namespaceURI,  String rawSchemaLocationURI, String resolvedSchemaLocation)
 		         {
-		        	 XSDSchema schema = Util.getXSDSchema(rawSchemaLocationURI, imports, treeObj, true);
+		        	 XSDSchema schema;
+					try {
+						schema = Util.getXSDSchema(rawSchemaLocationURI, imports, treeObj, true, exceptions);
+					} catch (Exception e) {
+						exceptions.add(e);
+						return null;
+					}
 		        	 schema.setTargetNamespace(namespaceURI) ;
 				     schema.setElement(schema.getDocument().getDocumentElement());
 		        	 return schema;
