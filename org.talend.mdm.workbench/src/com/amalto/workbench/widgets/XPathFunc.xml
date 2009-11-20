@@ -1,12 +1,65 @@
 <!-- Xpath Function Help for Validation Rule Expression-->
 <xpath>
 	<category name="Numeric">
-		<function name="number" help="Returns the numeric value of the argument. The argument could be a boolean, string, or node-set Example: number('100') Result: 100"/>
-		<function name="abs" help="Returns the absolute value of the argument Example: abs(3.14) Result: 3.14 Example: abs(-3.14) Result: 3.14"/>
-		<function name="ceiling" help="Returns the smallest integer that is greater than the number argument Example: ceiling(3.14) Result: 4"/>
+		<function name="number(arg)" help="Returns the numeric value of the argument. The argument could be a boolean, string, or node-set Example: number('100') Result: 100"/>
+		<function name="abs(num)" help="Returns the absolute value of the argument Example: abs(3.14) Result: 3.14 Example: abs(-3.14) Result: 3.14"/>
+		<function name="ceiling(num)" help="Returns the smallest integer that is greater than the number argument Example: ceiling(3.14) Result: 4"/>
+		<function name="floor(num)" help="Returns the largest integer that is not greater than the number argument Example: floor(3.14) Result: 3"/>
+		<function name="round(num)" help="Rounds the number argument to the nearest integer Example: round(3.14) Result: 3"/>
+		<function name="round-half-to-even()" help="Example: round-half-to-even(0.5) Result: 0 Example: round-half-to-even(1.5) Result: 2 Example: round-half-to-even(2.5) Result: 2"/>		
 	</category>
 	<category name="Strings">
-		<function name="string" help="Returns the string value of the argument. The argument could be a number, boolean, or node-set Example: string(314) Result: '314'"/>		
+		<function name="string(arg)" help="Returns the string value of the argument. The argument could be a number, boolean, or node-set Example: string(314) Result: '314'"/>		
+		<function name="codepoints-to-string(int,int,...)" help="Returns a string from a sequence of code points Example: codepoints-to-string(84, 104, 233, 114, 232, 115, 101) Result: 'Thérèse' "/>
+		<function name="string-to-codepoints(string)" help="Returns a sequence of code points from a string Example: string-to-codepoints('Thérèse') Result: 84, 104, 233, 114, 232, 115, 101"/>
+		<function name="codepoint-equal(comp1,comp2)" help="Returns true if the value of comp1 is equal to the value of comp2, according to the Unicode code point collation (http://www.w3.org/2005/02/xpath-functions/collation/codepoint), otherwise it returns false"/>
+		<function name="compare(comp1,comp2)" help="Returns -1 if comp1 is less than comp2, 0 if comp1 is equal to comp2, or 1 if comp1 is greater than comp2 (according to the rules of the collation that is used) Example: compare('ghi', 'ghi') Result: 0"/>
+		<function name="concat(string,string,...)" help="Returns the concatenation of the strings Example: concat('XPath ','is ','FUN!') Result: 'XPath is FUN!'"/>
+		<function name="string-join((string,string,...),sep)" help="Returns a string created by concatenating the string arguments and using the sep argument as the separator Example: string-join(('We', 'are', 'having', 'fun!'), ' ') Result: ' We are having fun! ' Example: string-join(('We', 'are', 'having', 'fun!')) Result: 'Wearehavingfun!' Example:string-join((), 'sep') Result: ''"/>
+		<function name="substring(string,start,len)" help="Returns the substring from the start position to the specified length. Index of the first character is 1. If length is omitted it returns the substring from the start position to the end Example: substring('Beatles',1,4) Result: 'Beat' Example: substring('Beatles',2) Result: 'eatles'"/>
+		<function name="string-length(string)" help="Returns the length of the specified string. If there is no string argument it returns the length of the string value of the current node Example: string-length('Beatles') Result: 7"/>
+		<function name="normalize-space(string)" help="Removes leading and trailing spaces from the specified string, and replaces all internal sequences of white space with one and returns the result. If there is no string argument it does the same on the current node Example: normalize-space(' The   XML ') Result: 'The XML'"/>
+		<function name="upper-case(string)" help="Converts the string argument to upper-case   Example: upper-case('The XML') Result: 'THE XML'"/>
+		<function name="lower-case(string)" help="Converts the string argument to lower-case  Example: lower-case('The XML') Result: 'the xml'"/>
+		<function name="translate(string1,string2,string3)" help="Converts string1 by replacing the characters in string2 with the characters in string3 Example: translate('12:30','30','45') Result: '12:45' Example: translate('12:30','03','54') Result: '12:45' Example: translate('12:30','0123','abcd') Result: 'bc:da'"/>
+		<function name="escape-uri(stringURI,esc-res)" help="Example: escape-uri('http://example.com/test#car', true()) Result: 'http%3A%2F%2Fexample.com%2Ftest#car' Example: escape-uri('http://example.com/test#car', false()) Result: 'http://example.com/test#car' Example: escape-uri ('http://example.com/~bébé', false()) Result: 'http://example.com/~b%C3%A9b%C3%A9'"/>
+		<function name="contains(string1,string2)" help="Returns true if string1 contains string2, otherwise it returns false Example: contains('XML','XM') Result: true"/>
+		<function name="starts-with(string1,string2)" help="Converts the string argument to lower-case  Example: lower-case('The XML') Result: 'the xml'"/>
+		<function name="ends-with(string1,string2)" help="Returns true if string1 ends with string2, otherwise it returns false Example: ends-with('XML','X') Result: false"/>
+		<function name="substring-before(string1,string2)" help="Returns the start of string1 before string2 occurs in it Example: substring-before('12/10','/') Result: '12'"/>
+		<function name="substring-after(string1,string2)" help="Returns the remainder of string1 after string2 occurs in it Example: substring-after('12/10','/') Result: '10'"/>
+		<function name="matches(string,pattern)" help="Returns true if the string argument matches the pattern, otherwise, it returns false Example: matches('Merano', 'ran') Result: true"/>
+		<function name="replace(string,pattern,replace)" help="Returns a string that is created by replacing the given pattern with the replace argument Example: replace('Bella Italia', 'l', '*') Result: 'Be**a Ita*ia' Example: replace('Bella Italia', 'l', '') Result: 'Bea Itaia'"/>
+		<function name="tokenize(string,pattern)" help="Example: tokenize('XPath is fun', '\s+') Result: ('XPath', 'is', 'fun')"/>		
 	</category>	
-	
+	<category name="Boolean">
+		<function name="boolean(arg)" help="Returns a boolean value for a number, string, or node-set"/>
+		<function name="not(arg)" help="The argument is first reduced to a boolean value by applying the boolean() function. Returns true if the boolean value is false, and false if the boolean value is true Example: not(true()) Result: false"/>
+		<function name="true()" help="Returns the boolean value true Example: true() Result: true"/>
+		<function name="false()" help="Returns the boolean value false Example: false() Result: false"/>		
+	</category>
+	<catrgory name="Durations, Dates and Times">
+		
+	</catrgory>
+	<catrgory name="QNames">
+		
+	</catrgory>	
+	<catrgory name="Nodes">
+		
+	</catrgory>	
+	<catrgory name="Sequences">
+		
+	</catrgory>		
+	<catrgory name="Equals">
+		
+	</catrgory>	
+		<catrgory name="Aggregate">
+		
+	</catrgory>	
+		<catrgory name="Generate Sequences">
+		
+	</catrgory>	
+		<catrgory name="Context ">
+		
+	</catrgory>	
 </xpath>

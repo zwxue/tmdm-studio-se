@@ -220,7 +220,7 @@ public class SchematronExpressBuilder {
 		gd1.heightHint=200;
 		categoryG.setLayoutData(gd1);
 		categoryG.setLayout(getLayout(1));
-		categoryList=new List(categoryG,SWT.BORDER);
+		categoryList=new List(categoryG,SWT.BORDER|SWT.V_SCROLL);
 		categoryList.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,1,1));
 		for(XPathFunc c: categories){
 			categoryList.add(c.getCategory());
@@ -255,8 +255,10 @@ public class SchematronExpressBuilder {
 		Group functionG=new Group(com,SWT.NONE);
 		functionG.setText("Functions");
 		functionG.setLayout(getLayout(1));
-		functionG.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,1,1));
-		funcList=new List(functionG,SWT.BORDER);
+		GridData gd3=new GridData(SWT.FILL,SWT.FILL,true,true,1,1);
+		gd3.widthHint=200;		
+		functionG.setLayoutData(gd3);
+		funcList=new List(functionG,SWT.BORDER|SWT.V_SCROLL);
 		funcList.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,1,1));
 		funcList.addSelectionListener(new SelectionListener(){
 
@@ -281,7 +283,9 @@ public class SchematronExpressBuilder {
 		helpG.setLayout(getLayout(1));
 		helpG.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,1,1));
 		helpTxt=new StyledText(helpG,SWT.BORDER|SWT.WRAP);
-		helpTxt.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,1,1));
+		GridData gd4=new GridData(SWT.FILL,SWT.FILL,true,true,1,1);
+		gd4.widthHint=210;			
+		helpTxt.setLayoutData(gd4);
 	}
 	public StyledText getTextWidget(){
 		return sourceViewer.getTextWidget();
