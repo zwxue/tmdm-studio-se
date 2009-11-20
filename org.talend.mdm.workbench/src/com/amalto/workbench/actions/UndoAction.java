@@ -183,7 +183,13 @@ public  class UndoAction extends Action {
 	
 	private void refresh(String content)
 	{
-		XSDSchema xsd= Util.createXsdSchema(content, page.getXObject());
+		XSDSchema xsd;
+		try {
+			xsd = Util.createXsdSchema(content, page.getXObject());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
         page.setXsdSchema(xsd);
    		page.refresh();
    		page.markDirty();	

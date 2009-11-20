@@ -1,8 +1,10 @@
 package com.amalto.workbench.dialogs;
 
 
+import java.io.File;
 import java.io.Serializable;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -149,7 +151,13 @@ public class SelectImportedModulesDialog extends Dialog{
     			String filename = fd.open();
 
     			if (filename == null) return;
-    			
+    			File file = new File(filename);
+    			try {
+					System.out.println(file.toURL());
+				} catch (MalformedURLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
     			XSDDesc xsdDesc = buildUp(filename, LOCAL, 0);
     			include(xsdDesc);
     			getButton(IDialogConstants.OK_ID).setEnabled(true);
@@ -173,7 +181,7 @@ public class SelectImportedModulesDialog extends Dialog{
         			List<String> urls = dlg.getMDMDataModelUrls();
         			for(String url: urls)
         			{
-            			XSDDesc xsdDesc = buildUp(LOCAL_MDM_URL + url, MDM_WEB, 1);
+            			XSDDesc xsdDesc = buildUp(LOCAL_MDM_URL + url + "/types", MDM_WEB, 1);
             			include(xsdDesc);
         			}
         			getButton(IDialogConstants.OK_ID).setEnabled(true);

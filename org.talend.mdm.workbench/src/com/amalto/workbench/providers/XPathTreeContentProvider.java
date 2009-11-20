@@ -326,7 +326,8 @@ public class XPathTreeContentProvider extends XSDTreeContentProvider {
 			}
 			if (!exist)
 			{
-				list.add(el);	
+				if((conceptName != null && el.getName().equals(conceptName)) || conceptName == null)
+					   list.add(el);
 			}			
 		}
 		

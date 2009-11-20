@@ -695,7 +695,7 @@ public class DataModelMainPage extends AMainPageV2 {
 					
 				}
 				
-				private void performImport(List<String> list)
+				private void performImport(List<String> list) throws Exception
 				{
 					Pattern httpUrl = Pattern.compile("(http|https|ftp):(\\//|\\\\)(.*):(.*)");
 
@@ -710,105 +710,98 @@ public class DataModelMainPage extends AMainPageV2 {
 					}
 				}
 				
-				private void importSchemaWithURL(String url)
+				private void importSchemaWithURL(String url) throws Exception
 				{
 					 String response = Util.getResponseFromURL(url, getXObject());
 					 InputSource source = new InputSource(new StringReader(response));
 					 importSchema(source, url);
 				}
 				
-				private void importSchemaFromFile(String fileName)
+				private void importSchemaFromFile(String fileName) throws Exception
 				{
 					String inputType = fileName.substring(fileName.lastIndexOf("."));
 					if (!inputType.equals(".xsd"))return;
 					File file = new File(fileName);
-					try {
-						InputSource source = new InputSource(new FileInputStream(file));
-						importSchema(source, file.getAbsolutePath());
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					
+					InputSource source = new InputSource(new FileInputStream(file));
+					importSchema(source, file.getAbsolutePath());
 				}
 				
-				private void importSchema(InputSource source, String uri)
+				private void importSchema(InputSource source, String uri) throws Exception
 				{
 					String ns = "";
 				    DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 					documentBuilderFactory.setNamespaceAware(true);
 					documentBuilderFactory.setValidating(false);
-					try {
-						DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-						Document document = documentBuilder.parse(source);
-						ns = document.getDocumentElement().getAttribute("targetNamespace");
-						if(xsdSchema == null)
-						   xsdSchema = getXSDSchema(Util.nodeToString(document));
-						else
+					
+					DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+					Document document = documentBuilder.parse(source);
+					ns = document.getDocumentElement().getAttribute("targetNamespace");
+					if(xsdSchema == null)
+					   xsdSchema = getXSDSchema(Util.nodeToString(document));
+					else
+					{
+						WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
+						xsdSchema = Util.createXsdSchema(wsObject.getXsdSchema(), getXObject());
+					}
+					boolean exist = false;
+					for (int i = 0; i < xsdSchema.getContents().size(); i++)
+					{
+						XSDSchemaContent xsdComp = xsdSchema.getContents().get(i);
+						if(ns != null && !ns.equals(""))
 						{
-							WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
-							xsdSchema = Util.createXsdSchema(wsObject.getXsdSchema(), getXObject());
-						}
-						boolean exist = false;
-						for (int i = 0; i < xsdSchema.getContents().size(); i++)
-						{
-							XSDSchemaContent xsdComp = xsdSchema.getContents().get(i);
-							if(ns != null && !ns.equals(""))
-							{
-								// import xsdschema
-								if (xsdComp instanceof XSDImport && ((XSDImport)xsdComp).getNamespace().equals(ns))
-								{								
-									for (Map.Entry entry: xsdSchema.getQNamePrefixToNamespaceMap().entrySet())
-									{
-										if (entry.getValue().equals(((XSDImport)xsdComp).getNamespace()))
-										{
-											exist = true;
-											break;
-										}
-									}
-									break;
-								}
-							}
-							else
-							{
-								// include xsdschema
-								if(xsdComp instanceof XSDInclude)
+							// import xsdschema
+							if (xsdComp instanceof XSDImport && ((XSDImport)xsdComp).getNamespace().equals(ns))
+							{								
+								for (Map.Entry entry: xsdSchema.getQNamePrefixToNamespaceMap().entrySet())
 								{
-									String xsdLocation = ((XSDInclude)xsdComp).getSchemaLocation();
-									if (xsdLocation.equals(uri))
+									if (entry.getValue().equals(((XSDImport)xsdComp).getNamespace()))
 									{
 										exist = true;
 										break;
 									}
 								}
+								break;
 							}
 						}
-						
-						if(!exist)
+						else
 						{
-							if(ns != null && !ns.equals(""))
+							// include xsdschema
+							if(xsdComp instanceof XSDInclude)
 							{
-				    	    	int last = ns.lastIndexOf("/");
-				    	    	xsdSchema.getQNamePrefixToNamespaceMap().put(ns.substring(last+1).replaceAll("[\\W]", ""), ns);
-							    XSDImport xsdImport = XSDFactory.eINSTANCE.createXSDImport();
-							    xsdImport.setNamespace(ns);
-							    xsdImport.setSchemaLocation(uri);
-							    xsdSchema.getContents().add(0, xsdImport);
+								String xsdLocation = ((XSDInclude)xsdComp).getSchemaLocation();
+								if (xsdLocation.equals(uri))
+								{
+									exist = true;
+									break;
+								}
 							}
-							else
-							{
-								XSDInclude xsdInclude = XSDFactory.eINSTANCE.createXSDInclude();
-								xsdInclude.setSchemaLocation(uri);
-								xsdSchema.getContents().add(0, xsdInclude);
-							}
-							String xsd = Util.nodeToString(xsdSchema.getDocument());
-							xsdSchema = Util.createXsdSchema(xsd, getXObject());
-							setXsdSchema(xsdSchema);
-							WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
-							wsObject.setXsdSchema(xsd);
 						}
-						
-					} catch (Exception e) {
-						e.printStackTrace();
 					}
+					
+					if(!exist)
+					{
+						if(ns != null && !ns.equals(""))
+						{
+			    	    	int last = ns.lastIndexOf("/");
+			    	    	xsdSchema.getQNamePrefixToNamespaceMap().put(ns.substring(last+1).replaceAll("[\\W]", ""), ns);
+						    XSDImport xsdImport = XSDFactory.eINSTANCE.createXSDImport();
+						    xsdImport.setNamespace(ns);
+						    xsdImport.setSchemaLocation(uri);
+						    xsdSchema.getContents().add(0, xsdImport);
+						}
+						else
+						{
+							XSDInclude xsdInclude = XSDFactory.eINSTANCE.createXSDInclude();
+							xsdInclude.setSchemaLocation(uri);
+							xsdSchema.getContents().add(0, xsdInclude);
+						}
+						String xsd = Util.nodeToString(xsdSchema.getDocument());
+						xsdSchema = Util.createXsdSchema(xsd, getXObject());
+						setXsdSchema(xsdSchema);
+						WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
+						wsObject.setXsdSchema(xsd);
+					}	
 				}
 			});
 			
@@ -819,7 +812,6 @@ public class DataModelMainPage extends AMainPageV2 {
 			// get the XSDSchema
 			xsdSchema = getXSDSchema(wsObject.getXsdSchema());
 			createSash(mainComposite);
-	        reConfigureXSDSchema(true);
 			hookContextMenu();
 
 			hookDoubleClickAction();
