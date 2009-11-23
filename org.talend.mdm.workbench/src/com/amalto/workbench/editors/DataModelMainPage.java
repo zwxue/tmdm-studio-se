@@ -122,6 +122,7 @@ import com.amalto.workbench.actions.XSDChangeBaseTypeAction;
 import com.amalto.workbench.actions.XSDChangeToComplexTypeAction;
 import com.amalto.workbench.actions.XSDChangeToSimpleTypeAction;
 import com.amalto.workbench.actions.XSDCopyConceptAction;
+import com.amalto.workbench.actions.XSDDeleteValidationRulesAction;
 import com.amalto.workbench.actions.XSDDeleteConceptAction;
 import com.amalto.workbench.actions.XSDDeleteConceptWrapAction;
 import com.amalto.workbench.actions.XSDDeleteElementAction;
@@ -197,6 +198,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	private XSDNewBrowseItemViewAction newBrowseItemAction = null;
 	private XSDNewElementAction newElementAction = null;
 	private XSDDeleteElementAction deleteElementAction = null;
+	private XSDDeleteValidationRulesAction deleteValidationRule=null;
 	private XSDChangeToComplexTypeAction changeToComplexTypeAction = null;
 	private XSDDeleteParticleAction deleteParticleAction = null;
 	private XSDNewParticleFromTypeAction newParticleFromTypeAction = null;
@@ -1301,6 +1303,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		this.deleteConceptWrapAction = new XSDDeleteConceptWrapAction(this);
 		this.newElementAction = new XSDNewElementAction(this);
 		this.deleteElementAction = new XSDDeleteElementAction(this);
+		this.deleteValidationRule=new XSDDeleteValidationRulesAction(this);
 		this.changeToComplexTypeAction = new XSDChangeToComplexTypeAction(this,false);
 		this.changeSubElementGroupAction = new XSDChangeToComplexTypeAction(this,true);
 		this.deleteParticleAction = new XSDDeleteParticleAction(this);
@@ -1949,7 +1952,6 @@ public class DataModelMainPage extends AMainPageV2 {
 				&& ((XSDAnnotation) obj).getSchema().getTargetNamespace() == null) {
 			setAnnotationActions(manager);
 		}
-
 		
 		if (selectedObjs.length > 1
 				&& deleteConceptWrapAction.checkInDeletableType(selectedObjs)) {
@@ -2005,6 +2007,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		manager.add(setAnnotationSourceSystemAction);
 		manager.add(setAnnotationTargetSystemsAction);
 		//manager.add(setAnnotationDocumentationAction);
+		manager.add(deleteValidationRule);
 	}
 	
 	private void setAnnotationActions2(IMenuManager manager) {
@@ -2016,6 +2019,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		manager.add(setAnnotationSourceSystemAction);
 		manager.add(setAnnotationSchematronAction);
 		//manager.add(setAnnotationDocumentationAction);
+		manager.add(deleteValidationRule);
 	}
 
 	/**

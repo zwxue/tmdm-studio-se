@@ -79,6 +79,15 @@ public class ComplexTableViewer {
 	protected AMainPageV2 mainPage;
 	protected Table table;
 	protected String conceptName;
+	protected boolean context;
+
+	public boolean isContext() {
+		return context;
+	}
+
+	public void setContext(boolean context) {
+		this.context = context;
+	}
 	protected XpathWidget xpath;
 	protected DescAnnotationComposite multiMsg;	
 	protected XpathSelectDialog xpathDialog;
@@ -94,6 +103,10 @@ public class ComplexTableViewer {
 		}
 		if(xpathDialog!=null)xpathDialog.setConceptName(conceptName);
 	}	
+	
+	
+
+
 	public AMainPageV2 getMainPage() {
 		return mainPage;
 	}
@@ -670,8 +683,8 @@ public class ComplexTableViewer {
 		}
 		@Override
 		protected Control createControl(Composite parent) {	
-			validationRule=new ValidationRuleWidget(parent);
-			
+			validationRule=new ValidationRuleWidget(parent,conceptName);
+
 			((GridData)validationRule.getComposite().getChildren()[0].getLayoutData()).heightHint=15;
 			((GridData)validationRule.getComposite().getChildren()[1].getLayoutData()).heightHint=15;
 			if(parent instanceof Table){				
@@ -712,6 +725,7 @@ public class ComplexTableViewer {
 		}
 		@Override
 		protected Object doGetValue() {
+			XpathSelectDialog.setContext(null);
 			return validationRule.getText();
 		}
 
@@ -723,10 +737,17 @@ public class ComplexTableViewer {
 			if(isActivated()){
 				super.focusLost();				
 			}
+			XpathSelectDialog.setContext(null);
 		}
 		@Override
 		protected void doSetValue(Object value) {
 			validationRule.setText(value.toString().trim());
+			if(viewer.getTable().getSelection().length>0){
+				Line line=(Line)viewer.getTable().getSelection()[0].getData();
+				String context=line.keyValues.get(1).value;
+				XpathSelectDialog.setContext(context);
+			}				
+			
 		}
 		
 	}
@@ -870,6 +891,7 @@ public class ComplexTableViewer {
 		@Override
 		protected Object doGetValue() {
 			// TODO Auto-generated method stub
+			if(context)XpathSelectDialog.setContext(null);
 			return xpath.getText();
 		}
 
@@ -886,6 +908,11 @@ public class ComplexTableViewer {
 		@Override
 		protected void doSetValue(Object value) {
 			// TODO Auto-generated method stub
+			if(context && viewer.getTable().getSelection().length>0){
+				Line line=(Line)viewer.getTable().getSelection()[0].getData();
+				String context=line.keyValues.get(1).value;
+				XpathSelectDialog.setContext(context);
+			}	
 			xpath.setText(value.toString().trim());
 		}
 		

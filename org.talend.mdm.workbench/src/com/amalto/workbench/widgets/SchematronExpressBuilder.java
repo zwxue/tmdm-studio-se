@@ -9,6 +9,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.jface.text.source.VerticalRuler;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -24,9 +25,11 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.XPathFunc;
 import com.amalto.workbench.utils.WidgetUtils;
+import com.amalto.workbench.views.ServerView;
 
 public class SchematronExpressBuilder {
 	Composite parent;
@@ -38,9 +41,12 @@ public class SchematronExpressBuilder {
 	XPathFunc curfc;
 	private List funcList;
 	private StyledText helpTxt;
-	public SchematronExpressBuilder(Composite parent,String value){
+	String conceptName;
+	String concept;
+	public SchematronExpressBuilder(Composite parent,String value,String conceptName){
 		this.parent=parent;
 		this.value=value;
+		this.conceptName=conceptName;
 		try {
 			parseFunxml();
 		} catch (Exception e) {
@@ -98,7 +104,7 @@ public class SchematronExpressBuilder {
 		//expression
 		Group expressG=new Group(com,SWT.NONE);
 		expressG.setText("Expression");
-		expressG.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,2,2));
+		expressG.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,3,2));
 		expressG.setLayout(getLayout(1));
 		//top button group
 		Composite topCom=new Composite(expressG,0);
@@ -135,7 +141,11 @@ public class SchematronExpressBuilder {
 			btn.addSelectionListener(new SelectionAdapter(){
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					getTextWidget().setText(getText() + btn.getText());
+					if(btn.getText().equals("/")){
+						getTextWidget().setText(getText() + "div()");
+					}else{
+						getTextWidget().setText(getText() + btn.getText());
+					}
 				}
 			});
 		}
@@ -176,7 +186,7 @@ public class SchematronExpressBuilder {
 		}		
 
 		Composite com4=new Composite(bottomCom,0);
-		com4.setLayout(getLayout(2));
+		com4.setLayout(getLayout(3));
 		String[] strs4={")","("};
 		for(int i=0; i<strs4.length; i++){
 			final Button btn=new Button(com4,SWT.PUSH);
@@ -188,30 +198,50 @@ public class SchematronExpressBuilder {
 				}
 			});
 		}
-		
-		//test
-		Group testG=new Group(com,SWT.NONE);
-		testG.setText("Test");
-		GridData gd2=new GridData(SWT.FILL,SWT.FILL,true,true,1,2);
-		gd2.widthHint=190;
-		testG.setLayoutData(gd2);
-		testG.setLayout(getLayout(2));
-		Button btnStartTest=new Button(testG,SWT.PUSH);
-		btnStartTest.setText("Start Test");
-		btnStartTest.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,1,1));
-		
-		Button btnCleartTest=new Button(testG,SWT.PUSH);
-		btnCleartTest.setText("Clear");
-		btnCleartTest.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,1,1));
-		
-		testResult=new StyledText(testG,SWT.V_SCROLL|SWT.BORDER);
-		testResult.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,2,3));
-		btnCleartTest.addSelectionListener(new SelectionAdapter(){
-			@Override
+		Button xpathButton=new Button(com4, SWT.PUSH);
+		xpathButton.setText("xpath");
+		xpathButton.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent e) {
-				testResult.setText("");
+				XpathSelectDialog dlg = new XpathSelectDialog(
+						parent.getShell(),
+						null,"Select Xpath ...",
+						ServerView.show().getSite(),
+						false,
+						null
+				);
+				dlg.setConceptName(conceptName);
+//				dlg.setContext(context);
+		        dlg.setBlockOnOpen(true);
+				dlg.open();
+				
+				if (dlg.getReturnCode() == Window.OK)  {
+					getTextWidget().setText(getText() + dlg.getXpath());
+				}
 			}
 		});
+//		//test
+//		Group testG=new Group(com,SWT.NONE);
+//		testG.setText("Test");
+//		GridData gd2=new GridData(SWT.FILL,SWT.FILL,true,true,1,2);
+//		gd2.widthHint=190;
+//		testG.setLayoutData(gd2);
+//		testG.setLayout(getLayout(2));
+//		Button btnStartTest=new Button(testG,SWT.PUSH);
+//		btnStartTest.setText("Start Test");
+//		btnStartTest.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,1,1));
+//		
+//		Button btnCleartTest=new Button(testG,SWT.PUSH);
+//		btnCleartTest.setText("Clear");
+//		btnCleartTest.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,1,1));
+//		
+//		testResult=new StyledText(testG,SWT.V_SCROLL|SWT.BORDER);
+//		testResult.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,2,3));
+//		btnCleartTest.addSelectionListener(new SelectionAdapter(){
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				testResult.setText("");
+//			}
+//		});
 		
 		//categories
 		Group categoryG=new Group(com,SWT.NONE);
@@ -263,7 +293,7 @@ public class SchematronExpressBuilder {
 		funcList.addSelectionListener(new SelectionListener(){
 
 			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
+				getTextWidget().setText(getText()+funcList.getItem(funcList.getSelectionIndex()));
 				
 			}
 
@@ -276,7 +306,7 @@ public class SchematronExpressBuilder {
 					}
 				}				
 			}			
-		});
+		});		
 		//help
 		Group helpG=new Group(com,SWT.NONE);
 		helpG.setText("Help");

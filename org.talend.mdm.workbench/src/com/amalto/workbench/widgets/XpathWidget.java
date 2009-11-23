@@ -40,8 +40,16 @@ public class XpathWidget implements  SelectionListener{
     boolean isMulti=true;
     
     private String conceptName;
+    private String context;
     
-    
+	public String getContext() {
+		return context;
+	}
+
+	public void setContext(String context) {
+		this.context = context;
+	}
+
 	public String getConceptName() {
 		return conceptName;
 	}
