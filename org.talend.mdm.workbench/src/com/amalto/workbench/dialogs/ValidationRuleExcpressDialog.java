@@ -12,17 +12,19 @@ public class ValidationRuleExcpressDialog extends Dialog {
 	private SchematronExpressBuilder builder;
 	String value;
 	String express;
-	public ValidationRuleExcpressDialog(Shell parentShell,String title,String value) {
+	String conceptName;
+	public ValidationRuleExcpressDialog(Shell parentShell,String title,String value,String conceptName) {
 		super(parentShell);
 		this.title=title;
 		this.value=value;
+		this.conceptName=conceptName;
 	}
 	
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		parent.getShell().setText(this.title);		
 		Composite composite = (Composite) super.createDialogArea(parent);
-		builder=new SchematronExpressBuilder(composite,value);
+		builder=new SchematronExpressBuilder(composite,value,conceptName);
 		return composite;
 	}
 	@Override

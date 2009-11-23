@@ -68,7 +68,9 @@ public class XpathSelectDialog extends Dialog {
 	private String xpath="";
 	private boolean isMulti=true;
 	protected String conceptName;
+	protected static String context;
 	private XSDSchema xsdSchema;
+	
 	public XpathSelectDialog(Shell parentShell,TreeParent parent,String title,IWorkbenchPartSite site,boolean isMulti,String dataModelName) {
 		super(parentShell);
 		this.title = title;
@@ -107,6 +109,17 @@ public class XpathSelectDialog extends Dialog {
             		totalXpath +="&"+path;
             	path="";
             }//for(i=0
+            if(context!=null && conceptName!=null){
+	
+				if(totalXpath.equals(conceptName)){
+					totalXpath=totalXpath.replaceAll(conceptName, "/");
+				}else{
+					totalXpath=totalXpath.replaceAll(conceptName+"/", "");
+				}
+				if(totalXpath.equals(context)){
+					totalXpath=".";
+				}
+            }
            return totalXpath;     
         }
 		
@@ -293,6 +306,14 @@ public class XpathSelectDialog extends Dialog {
 
 	public void setConceptName(String conceptName) {
 		this.conceptName = conceptName;
+	}
+
+	public static String getContext() {
+		return context;
+	}
+
+	public static void setContext(String c) {
+		context = c;
 	}
 
 }

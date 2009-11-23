@@ -23,8 +23,10 @@ public class ValidationRuleWidget {
 	private Button button;
 	private Text text;
 	ValidationRuleExcpressDialog dlg;
-	public ValidationRuleWidget(Composite parent){
+	String conceptName;
+	public ValidationRuleWidget(Composite parent,String conceptName){
 		this.parent=parent;
+		this.conceptName=conceptName;
 		create();
 	}
 	private void create(){
@@ -47,10 +49,11 @@ public class ValidationRuleWidget {
 		button.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if(dlg==null) dlg=new ValidationRuleExcpressDialog(composite.getShell(),"Build Validation Rule Expression ", text.getText());
+				
+				dlg=new ValidationRuleExcpressDialog(composite.getShell(),"Build Validation Rule Expression ", text.getText(),conceptName);
 	       		dlg.setBlockOnOpen(true);
 	       		dlg.create();
-	       		dlg.getShell().setSize(new Point(670,560));
+	       		dlg.getShell().setSize(new Point(560,560));
 	       		int ret = dlg.open();
 	       		if (ret == Window.OK) {
 	                text.setText(dlg.getExpression());
