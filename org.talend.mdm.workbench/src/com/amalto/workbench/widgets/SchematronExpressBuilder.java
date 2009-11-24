@@ -215,7 +215,10 @@ public class SchematronExpressBuilder {
 				dlg.open();
 				
 				if (dlg.getReturnCode() == Window.OK)  {
-					getTextWidget().setText(getText() + dlg.getXpath());
+					if(getTextWidget().getSelectionText().length()>0)
+						getTextWidget().setText(getText().replace(getTextWidget().getSelectionText(), dlg.getXpath()));
+					else
+						getTextWidget().setText(getText()+dlg.getXpath());
 				}
 			}
 		});
@@ -248,6 +251,7 @@ public class SchematronExpressBuilder {
 		categoryG.setText("Categories");
 		GridData gd1=new GridData(SWT.FILL,SWT.FILL,true,true,1,1);
 		gd1.heightHint=200;
+		gd1.widthHint=140;
 		categoryG.setLayoutData(gd1);
 		categoryG.setLayout(getLayout(1));
 		categoryList=new List(categoryG,SWT.BORDER|SWT.V_SCROLL);
@@ -286,7 +290,7 @@ public class SchematronExpressBuilder {
 		functionG.setText("Functions");
 		functionG.setLayout(getLayout(1));
 		GridData gd3=new GridData(SWT.FILL,SWT.FILL,true,true,1,1);
-		gd3.widthHint=200;		
+		gd3.widthHint=220;		
 		functionG.setLayoutData(gd3);
 		funcList=new List(functionG,SWT.BORDER|SWT.V_SCROLL);
 		funcList.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,1,1));

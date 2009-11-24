@@ -676,7 +676,7 @@ public class ComplexTableViewer {
 	public Composite getMainComposite() {
 		return mainComposite;
 	}
-	class ValidationRuleEditor extends CellEditor{	
+	class ValidationRuleEditor extends CellEditor implements ICellEditor{	
 		
 		public ValidationRuleEditor(Composite parent){
 			super(parent);
@@ -752,7 +752,7 @@ public class ComplexTableViewer {
 		
 	}
 	
-	class MultiMessageEditor extends CellEditor{	
+	class MultiMessageEditor extends CellEditor implements ICellEditor{	
 		public MultiMessageEditor(Composite parent){
 			super(parent);
 		}
@@ -822,7 +822,7 @@ public class ComplexTableViewer {
 		}
 		
 	}
-	class XpathCellEditor extends CellEditor{
+	class XpathCellEditor extends CellEditor implements ICellEditor{
 
 		public XpathWidget getXpath() {
 			return xpath;
