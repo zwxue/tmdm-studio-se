@@ -109,12 +109,9 @@
 		
 		
 	</category>
-	<category name="Equals, Union, Intersection and Except ">
-		<function name="deep-equal(param1,param2,collation)"  help="Returns true if param1 and param2 are deep-equal to each other, otherwise it returns false"/>
-		
-	</category>
+
 	
-	<category name="Equals, Union, Intersection and Except">
+	<category name="Equals">
 		
 		<function name="deep-equal(param1,param2,collation)"  help="Returns true if param1 and param2 are deep-equal to each other, otherwise it returns false"/>
 		
