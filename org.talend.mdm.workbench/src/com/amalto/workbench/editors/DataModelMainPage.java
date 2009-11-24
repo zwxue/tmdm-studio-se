@@ -604,6 +604,9 @@ public class DataModelMainPage extends AMainPageV2 {
 		            						{
 		            							throw new IllegalAccessException(error);
 		            						}
+		            						
+		            						validateElementation();
+		            						
 	              						    markDirty();
 	              						    refreshData();
 	              						    // below code is to refill the tree view with xsdScham including one xsd schma which contains the other xsd , 
@@ -611,6 +614,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	              						    setXsdSchema(xsdSchema);
 	              						    commit();
 	              						    refreshData();
+	              						    XSDSchema mc = xsdSchema;
 	                					    MessageDialog.openInformation(getSite().getShell(),
 	                								"Import XSDSchema", "The operation for importing XSDSchema completed successfully!");
 											}
@@ -634,6 +638,20 @@ public class DataModelMainPage extends AMainPageV2 {
 						};
 						Timer timer = new Timer(true);
 						timer.schedule(task, 0);
+					}
+				}
+				
+				private void validateElementation() throws IllegalAccessException
+				{
+					HashMap<String , Boolean> elemCntMap = new HashMap<String, Boolean>();
+					EList<XSDElementDeclaration> elems = xsdSchema.getElementDeclarations();
+					for (XSDElementDeclaration elem : elems)
+					{
+						if(elemCntMap.get(elem.getName()) == Boolean.TRUE)
+						{
+							throw new IllegalAccessException("XSD: The Element may not have duplicate name " + elem.getName());
+						}
+						elemCntMap.put(elem.getName(), Boolean.TRUE);
 					}
 				}
 				
