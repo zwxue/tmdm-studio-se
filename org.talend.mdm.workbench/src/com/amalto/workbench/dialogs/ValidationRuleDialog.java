@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -16,6 +17,7 @@ import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
+import com.amalto.workbench.widgets.ICellEditor;
 import com.amalto.workbench.widgets.TisTableViewer;
 import com.amalto.workbench.widgets.WidgetFactory;
 
@@ -90,8 +92,17 @@ public class ValidationRuleDialog extends Dialog {
 	}
 	@Override
 	protected void okPressed() {
+		deactiveAllCellEditors();
 		getValidationRules();
 		super.okPressed();
+	}
+	private void deactiveAllCellEditors(){
+		CellEditor[] editors=viewer.getViewer().getCellEditors();
+		for(CellEditor editor: editors){
+			if( editor instanceof ICellEditor){
+				((ICellEditor)editor).deactive();
+			}
+		}
 	}
 	private List<String> getValidationRules(){
 		TableItem[] items=viewer.getViewer().getTable().getItems();
