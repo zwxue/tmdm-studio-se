@@ -1433,11 +1433,17 @@ public class Util {
     public static XSDSchema createXsdSchema(String xsd, TreeObject treeObj) throws Exception{
     	    List<XSDImport> imports = new ArrayList<XSDImport>();
     	    List<Exception> exceptons = new ArrayList<Exception>();
-    	    XSDSchema xsdSchema = Util.getXSDSchema(xsd, imports, treeObj, false, exceptons);
+    	    Map<String,Integer> schemaMonitor = new HashMap<String, Integer>();
+    	    XSDSchema xsdSchema = Util.getXSDSchema(xsd, imports, treeObj, false, exceptons, schemaMonitor);
     	    if(exceptons.size() > 0)
     	    {
     	    	throw exceptons.get(0);
     	    }
+    	    else if(schemaMonitor.containsValue(new Integer(-1)))
+    	    {
+    	    	throw new Exception("The xsd schemas imported or included slump into endless reference circulation");
+    	    }
+    	    
     	    Map<String, String> nsMap = xsdSchema.getQNamePrefixToNamespaceMap();
     	    int imp = 0;
     	    for (XSDImport xsdImport: imports)
@@ -1470,7 +1476,7 @@ public class Util {
 		return xsdSchema;
     }
     
-    private static void importSchema(XSDSchema xsdSchema, List<XSDImport> imports)
+    private static void importSchema(XSDSchema xsdSchema, List<XSDImport> imports, Map<String, Integer> schemaMonitor)
     {
 	    EList<XSDSchemaContent> list = xsdSchema.getContents();
 	    for (XSDSchemaContent schemaCnt : list) {
@@ -1492,7 +1498,10 @@ public class Util {
 		}
     }
     
-    private static XSDSchema getXSDSchema(String rawData, final List<XSDImport>imports , final TreeObject treeObj, boolean uri, final List<Exception> exceptions) throws Exception
+    private static XSDSchema getXSDSchema(String rawData,
+			final List<XSDImport> imports, final TreeObject treeObj,
+			boolean uri, final List<Exception> exceptions,
+			final Map<String, Integer> schemaMonitor) throws Exception
     {
     	final String xsdFileName = System.getProperty("user.dir")+"/.xsdModel.xml";
     	URI fileURI = URI.createFileURI(xsdFileName);
@@ -1529,9 +1538,22 @@ public class Util {
 		       {
 		         public XSDSchema locateSchema(XSDSchema xsdSchema, String namespaceURI,  String rawSchemaLocationURI, String resolvedSchemaLocation)
 		         {
-		        	 XSDSchema schema;
+		        	XSDSchema schema;
+		        	Integer rawCnt = schemaMonitor.get(rawSchemaLocationURI);
+		        	if (rawCnt == null) {
+						rawCnt = 0;
+					}
+		        	else
+		        		rawCnt++;
+		        	schemaMonitor.put(rawSchemaLocationURI, rawCnt);
+		        	if(rawCnt >= 50)
+		        	{
+		        		schemaMonitor.put(rawSchemaLocationURI, -1);
+		        		return null;
+		        	}
+
 					try {
-						schema = Util.getXSDSchema(rawSchemaLocationURI, imports, treeObj, true, exceptions);
+						schema = Util.getXSDSchema(rawSchemaLocationURI, imports, treeObj, true, exceptions, schemaMonitor);
 					} catch (Exception e) {
 						exceptions.add(e);
 						return null;
@@ -1566,7 +1588,14 @@ public class Util {
 	   
 	    //Add the root schema to the resource that was created above
 	    resource.getContents().add(schema);
-	    importSchema(schema, imports);
+	    Iterator<Integer> iter = schemaMonitor.values().iterator();
+        while(iter.hasNext())
+        {
+        	Integer it = (Integer)iter.next();
+        	if(it.intValue() == -1)
+        		return schema;
+        }
+	    importSchema(schema, imports, schemaMonitor);
 	    schema.setElement(document.getDocumentElement());
        return schema; 
     }
