@@ -113,7 +113,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
 				name+= (particle.getMaxOccurs() == -1) ? "many" : ""+particle.getMaxOccurs();
 				name+="]";
 			}
-			String tail = particle.getSchema().getTargetNamespace() == null ? ""  :  particle.getSchema().getTargetNamespace();
+			String tail = particle.getSchema().getTargetNamespace() == null ? ""  :  " : " + particle.getSchema().getTargetNamespace();
 			return name + tail;
 
 		}
