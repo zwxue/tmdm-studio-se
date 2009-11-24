@@ -2,6 +2,8 @@ package com.amalto.workbench.providers;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -11,6 +13,7 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.IConstants;
+import com.amalto.workbench.utils.ResourcesUtil;
 import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
@@ -42,6 +45,7 @@ import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
 import com.amalto.workbench.webservices.WSVersion;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
+import com.sun.xml.rpc.processor.util.CanonicalModelWriter.GetNameComparator;
 
 public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
@@ -53,7 +57,6 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
     private TreeParent serverRoot;
 	
     private boolean isExistUniverse=true;
-    
 	public XtentisServerObjectsRetriever(String endpointaddress, String username, String password, String universe) {
 		this.endpointaddress = endpointaddress;
 		this.username = username;
@@ -105,7 +108,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
 			serverRoot.setUser(user);
 			
-			
+			String uriPre=serverRoot.getEndpointIpAddress();
 			//Data Models
 			TreeParent models = new TreeParent(EXtentisObjects.DataMODEL.getDisplayName(),serverRoot,TreeObject.DATA_MODEL,null,null);			
 			//WSDataModel[] xdm = port.getDataModels(new WSRegexDataModels("*")).getWsDataModels();
@@ -126,6 +129,136 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 					}
 				}
 			}
+			monitor.worked(1);
+			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
+			
+			//Custom Type
+			TreeParent customType = new TreeParent(EXtentisObjects.CustomType.getDisplayName(),serverRoot,TreeObject.CUSTOM_TYPE,null,null);			
+			//WSDataModel[] xdm = port.getDataModels(new WSRegexDataModels("*")).getWsDataModels();
+//TODO:rhou
+			/*			WSDataModelPK[] xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs();
+			if (xdmPKs != null) {
+				monitor.subTask("Loading Data Models");
+				for (int i = 0; i < xdmPKs.length; i++) {
+					String name = xdmPKs[i].getPk();
+					if (!name.startsWith("XMLSCHEMA")) {
+						TreeObject obj = new TreeObject(
+								name,
+								serverRoot,
+								TreeObject.DATA_MODEL,
+								xdmPKs[i],
+								null   //no storage to save space
+						);
+						custpmType.addChild(obj);
+					}
+				}
+			}*/
+			monitor.worked(1);
+			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
+			
+			
+			//Resources
+				//add data models
+			TreeParent resources = new TreeParent(EXtentisObjects.Resources.getDisplayName(),serverRoot,TreeObject.RESOURCES,null,null);			
+			if (xdmPKs != null) {
+					TreeParent datamodelResources =	new TreeParent(
+									EXtentisObjects.DataMODELRESOURCE.getDisplayName(),
+									serverRoot,
+									TreeObject.DATA_MODEL_RESOURCE,
+									null,
+									null   //no storage to save space
+							 );
+							 resources.addChild(datamodelResources);
+				monitor.subTask("Loading Resources for Data Models");
+				for (int i = 0; i < xdmPKs.length; i++) {
+					String name = xdmPKs[i].getPk();
+					if (!name.startsWith("XMLSCHEMA")) {
+							TreeObject obj = new TreeObject(
+									name,
+									serverRoot,
+									TreeObject.DATA_MODEL_RESOURCE,
+									xdmPKs[i],
+									null   //no storage to save space
+							);
+							datamodelResources.addChild(obj);
+					}
+				}
+			}
+				//add datamodeltypes
+			if (xdmPKs != null) {
+					TreeParent datamodelTypesResources =	new TreeParent(
+									EXtentisObjects.DataMODELTYPESRESOURCE.getDisplayName(),
+									serverRoot,
+									TreeObject.DATA_MODEL_TYPES_RESOURCE,
+									null,
+									null   //no storage to save space
+							 );
+							 resources.addChild(datamodelTypesResources);
+				monitor.subTask("Loading Resources for Data Model Types");
+				for (int i = 0; i < xdmPKs.length; i++) {
+					String name = xdmPKs[i].getPk();
+					if (!name.startsWith("XMLSCHEMA")) {
+							TreeObject obj = new TreeObject(
+									name,
+									serverRoot,
+									TreeObject.DATA_MODEL_TYPES_RESOURCE,
+									xdmPKs[i],
+									null   //no storage to save space
+							);
+							datamodelTypesResources.addChild(obj);
+					}
+				}
+			}
+			
+			//add custom types
+				TreeParent customTypesResources =	new TreeParent(
+						EXtentisObjects.CUSTOMTYPESRESOURCE.getDisplayName(),
+						serverRoot,
+						TreeObject.CUSTOM_TYPES_RESOURCE,
+						null,
+						null   //no storage to save space
+				);
+				resources.addChild(customTypesResources);
+				monitor.subTask("Loading Resources for Custom Types");
+				List<String> cusNameList=ResourcesUtil.getResourcesNameListFromURI(uriPre+TreeObject.CUSTOM_TYPES_URI);
+//				List<String> cusNameList=new ArrayList<String>();
+				for (int i = 0; i < cusNameList.size(); i++) {
+					String name = cusNameList.get(i);
+					if (!name.startsWith("XMLSCHEMA")) {
+						TreeObject obj = new TreeObject(
+								name,
+								serverRoot,
+								TreeObject.CUSTOM_TYPES_RESOURCE,
+								xdmPKs[i],
+								null   //no storage to save space
+						);
+						customTypesResources.addChild(obj);
+					}
+				}
+			//add pictures
+					TreeParent picturesResources =	new TreeParent(
+									EXtentisObjects.PICTURESRESOURCE.getDisplayName(),
+									serverRoot,
+									TreeObject.PICTURES_RESOURCE,
+									null,
+									null   //no storage to save space
+							 );
+							 resources.addChild(picturesResources);
+				monitor.subTask("Loading Resources for Pictures");
+				List<String> picNameList=ResourcesUtil.getResourcesNameListFromURI(uriPre+TreeObject.PICTURES_URI);
+//				List<String> picNameList=new ArrayList<String>();
+				for (int i = 0; i < picNameList.size(); i++) {
+					String name = picNameList.get(i);
+							TreeObject obj = new TreeObject(
+									name,
+									serverRoot,
+									TreeObject.PICTURES_RESOURCE,
+									null,
+									null   //no storage to save space
+							);
+							picturesResources.addChild(obj);
+				}
+			
 			monitor.worked(1);
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
 			
@@ -283,7 +416,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			//serviceConfiguration.setXObject(false);
 			monitor.worked(1);
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-			
+
 //			Transformers
 			WSTransformerV2PK[] transformerPKs = null;
 			boolean hasTransformers = true;
@@ -419,6 +552,8 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			serverRoot.addChild(Universes);
 			serverRoot.addChild(synchronizationPlans);
 			serverRoot.addChild(serviceConfiguration);
+			serverRoot.addChild(resources);
+			serverRoot.addChild(customType);
 			if (hasTransformers)serverRoot.addChild(transformers);
 			if (hasRoles) serverRoot.addChild(roles);
 			if (hasRoutingRules) serverRoot.addChild(rules);

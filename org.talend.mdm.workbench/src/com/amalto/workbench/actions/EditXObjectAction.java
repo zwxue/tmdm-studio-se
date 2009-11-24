@@ -139,6 +139,13 @@ public class EditXObjectAction extends Action{
 	           		break;
 	           	case TreeObject.SERVICE_CONFIGURATION:
 	           		break;
+	           	case TreeObject.RESOURCES:
+	           	case TreeObject.CUSTOM_TYPE:
+				case TreeObject.DATA_MODEL_RESOURCE:	
+				case TreeObject.DATA_MODEL_TYPES_RESOURCE:	
+				case TreeObject.CUSTOM_TYPES_RESOURCE:	
+				case TreeObject.PICTURES_RESOURCE:	
+	           		break;
 	           	default:
 	           		MessageDialog.openError(view.getSite().getShell(), "Error", "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
 	           		return;

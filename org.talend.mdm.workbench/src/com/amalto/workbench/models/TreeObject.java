@@ -37,6 +37,12 @@ public class TreeObject implements IAdaptable {
 	public final static int TRANSFORMER_PLUGIN=20;
 	public final static int CATEGORY_FOLDER = 21;
 	public final static int SERVICE_CONFIGURATION=22;
+	public final static int RESOURCES=23;
+	public final static int DATA_MODEL_RESOURCE=24;
+	public final static int DATA_MODEL_TYPES_RESOURCE=25;
+	public final static int CUSTOM_TYPES_RESOURCE= 26;
+	public final static int PICTURES_RESOURCE = 27;
+	public final static int CUSTOM_TYPE = 28;
 	
 	public final static int _ACTION_ = 100;
 	public final static int _WIZARD_ = 101;
@@ -46,6 +52,8 @@ public class TreeObject implements IAdaptable {
 	public final static String DATACLUSTER_="datacluster";
 	public final static String DATACLUSTER_COTENTS="dataclusterContents";
 	public final static String DATAMODEL_="datamodel";
+	public final static String DATAMODELTYPES_="datamodelTypes";
+	public final static String PICTURES_="pictures";
 	public final static String MENU_="menu";
 	public final static String ROLE_="role";
 	public final static String ROUTINGRULE_="routingrule";
@@ -54,6 +62,11 @@ public class TreeObject implements IAdaptable {
 	public final static String TRANSFORMER_="transformer";
 	public final static String UNIVERSE_="universe";
 	public final static String VIEW_="view";
+	public final static String DATAMODEL_URI="/pubcomponent/secure/dataModels/";
+	public final static String DATAMODELTYPES_URI="/pubcomponent/secure/datamodelTypesSets/";
+	public final static String CUSTOM_TYPES_URI="/pubcomponent/secure/customTypesSets/";
+	public final static String PICTURES_URI="/pubcomponent/secure/pictures/";
+
 	
 	private String displayName;  
 	private TreeParent parent;
@@ -247,7 +260,6 @@ public class TreeObject implements IAdaptable {
 	public String getEndpointAddress() {
 		return getServerRoot().getWsKey().toString();
 	}
-	
 	public String getEndpointIpAddress() {
 		
 		String portAddress=getEndpointAddress();
@@ -259,7 +271,32 @@ public class TreeObject implements IAdaptable {
 		
 		return portAddress;
 	}
+	public String getEndpointHost() {
+		
+		String portAddress=getEndpointAddress();
+		
+		if(portAddress!=null){
+			int startPos=portAddress.indexOf("://");
+			int endPos=portAddress.indexOf(":",startPos);
+			if(endPos!=-1&&startPos!=-1)
+				return portAddress.substring(startPos, endPos);
+		}
+		
+		return portAddress;
+	}
 	
+	public String getEndpointPort() {
+		
+		String portAddress=getEndpointAddress();
+		
+		if(portAddress!=null){
+			String[] splitString=portAddress.split(":",2);
+			if(splitString[2]!=null)
+				return splitString[2].substring(0, splitString[2].indexOf("/"));
+		}
+		
+		return portAddress;
+	}	
 	
 	public static String getTypeName(int type) {
 		EXtentisObjects obj=EXtentisObjects.getXtentisObjexts().get(String.valueOf(type));

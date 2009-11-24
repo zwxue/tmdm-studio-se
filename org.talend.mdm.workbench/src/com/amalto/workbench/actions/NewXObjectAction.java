@@ -106,6 +106,12 @@ public class NewXObjectAction extends Action{
            	case TreeObject.DATA_MODEL:
            		title = "New Data Model";
            		break;
+           	case TreeObject.RESOURCES:
+           		title = "New Resource";
+           		break;
+           	case TreeObject.CUSTOM_TYPE:
+           		title = "New Custom Type";
+           		break;
            	case TreeObject.INBOUND_ADAPTOR:    
            		title = "New Inbound Adaptor";
            		break;
@@ -219,6 +225,7 @@ public class NewXObjectAction extends Action{
 	           		key  = tid.getValue();
 	           		break;
 	           	case TreeObject.SOURCE:
+	           	case TreeObject.CUSTOM_TYPE:
 	           	case TreeObject.DESTINATION:
 	           	case TreeObject.DATA_MODEL:
 	           	case TreeObject.INBOUND_ADAPTOR:         		
@@ -273,7 +280,7 @@ public class NewXObjectAction extends Action{
 
 	           	case TreeObject.DATA_MODEL: {
 	           		//check if already exists
-           			if (port.existsDataModel(new WSExistsDataModel(new WSDataModelPK((String)key))).is_true()) {;
+           			if (port.existsDataModel(new WSExistsDataModel(new WSDataModelPK((String)key))).is_true()) {
            				MessageDialog.openError(this.view.getSite().getShell(),"Error Creating Instance","Data Model "+(String)key+" already exists");
            				return;
            			}
@@ -563,12 +570,26 @@ public class NewXObjectAction extends Action{
                                     synchronizationPlan
                     );                  
                     break;  }      
-                
+                case TreeObject.CUSTOM_TYPE: {
+                    //check if already exists
+                    if(port.existsUniverse(new WSExistsUniverse(new WSUniversePK((String)key))).is_true()){
+                        MessageDialog.openError(this.view.getSite().getShell(),"Error Creating Instance","Universe "+(String)key+" already exists");
+                        return;
+                    }
+                    //add
+                    newInstance = new TreeObject(
+                                    (String)key,
+                                    xfolder.getServerRoot(),
+                                    TreeObject.CUSTOM_TYPE,
+                                    null,
+                                    null
+                    );                  
+                    break;  }  
 	           	default:
 	           		//server
 	           		return;
             }//switch
-            
+            {
             LocalTreeObjectRepository.getInstance().mergeNewTreeObject(newInstance);
             
 //            String revision="";
@@ -603,7 +624,7 @@ public class NewXObjectAction extends Action{
              */
             if(editpart.getSelectedPage() instanceof AMainPage)
             	((AMainPage)editpart.getSelectedPage()).markDirty();
-            
+           }  
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(
@@ -613,6 +634,7 @@ public class NewXObjectAction extends Action{
 			);
 		}		
 	}
+
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}
