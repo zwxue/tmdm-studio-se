@@ -564,7 +564,13 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					manager.add(browseViewAction);
 				}
 			case TreeObject.ROLE:
-								
+			case TreeObject.RESOURCES:	
+			case TreeObject.DATA_MODEL_RESOURCE:	
+			case TreeObject.DATA_MODEL_TYPES_RESOURCE:	
+			case TreeObject.CUSTOM_TYPES_RESOURCE:	
+			case TreeObject.PICTURES_RESOURCE:	
+			case TreeObject.CUSTOM_TYPE:	
+				
 			case TreeObject.VIEW:				
 			default:
 				if ( xobject.getType() != TreeObject.CATEGORY_FOLDER) {

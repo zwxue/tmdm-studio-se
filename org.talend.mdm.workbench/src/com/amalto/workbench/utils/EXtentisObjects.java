@@ -13,6 +13,10 @@ import com.amalto.workbench.models.TreeObject;
 public enum EXtentisObjects {
 	DataCluster("Data Cluster","Data Cluster",TreeObject.DATA_CLUSTER,false),              
 	DataMODEL("Data Model","Data Model",TreeObject.DATA_MODEL,true),                
+	DataMODELRESOURCE("Data Model","Data Model",TreeObject.DATA_MODEL_RESOURCE,true),                
+	DataMODELTYPESRESOURCE("Data Model Type","Data Model Type",TreeObject.DATA_MODEL_TYPES_RESOURCE,true),                
+	CUSTOMTYPESRESOURCE("Custom Type","Custom Type",TreeObject.CUSTOM_TYPES_RESOURCE),                
+	PICTURESRESOURCE("Pictures","Pictures",TreeObject.PICTURES_RESOURCE),                
 	Role("Role","Role",TreeObject.ROLE,true),                      
 	RoutingRule("Routing Rule","Routing Rule",TreeObject.ROUTING_RULE,true),                                 
 	StoredProcedure("Stored Procedure","Stored Procedure",TreeObject.STORED_PROCEDURE,true),                  
@@ -23,7 +27,9 @@ public enum EXtentisObjects {
     SubscriptionEngine("Subscription Engine","Subscription Engine",TreeObject.SUBSCRIPTION_ENGINE),    
 	Universe("Universe","Universe",TreeObject.UNIVERSE),                  
 	SynchronizationPlan("Synchronization Plan","Synchronization Plan",TreeObject.SYNCHRONIZATIONPLAN,true),      
-	ServiceConfiguration("Service Configuration","Service Configuration",TreeObject.SERVICE_CONFIGURATION);
+	ServiceConfiguration("Service Configuration","Service Configuration",TreeObject.SERVICE_CONFIGURATION),
+	Resources("Resources","Resources",TreeObject.RESOURCES),
+	CustomType("Custom Type","Custom Type",TreeObject.CUSTOM_TYPE);
 	
 	private String displayName;
 	private String name;	
