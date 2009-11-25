@@ -210,8 +210,20 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 			else
 				cpy +=slip;
 		}
-
-
+        
+		mask = Pattern.compile("[\\d]+");
+        String chead = "" + cpy.charAt(0);
+        Matcher match = mask.matcher(chead);
+        if(match.find())
+        {
+        	int var = (int)'a' + Integer.parseInt(chead);
+        	chead = (char)var + "";
+        	if(cpy.length() > 1)
+        	   cpy = chead + cpy.substring(1, cpy.length());
+        	else
+        	   cpy = chead;
+        	cpy += chead;
+        }
 		return cpy + (trail.length() > 1 ? trail : "");
 	}
 	
@@ -726,7 +738,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	{
 		if (catalogTreeObj != null)
 		{
-			catalogTreeObj.addElement(newTreeObject.getDisplayName()).setText(newTreeObject.getType() + "");
+			catalogTreeObj.addElement(filterOutBlank(newTreeObject.getDisplayName())).setText(newTreeObject.getType() + "");
 			saveDocument(doc);
 		}
 		
