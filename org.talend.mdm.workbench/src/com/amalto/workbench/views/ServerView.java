@@ -58,6 +58,7 @@ import com.amalto.workbench.actions.NewXObjectAction;
 import com.amalto.workbench.actions.PasteXObjectAction;
 import com.amalto.workbench.actions.ServerLoginAction;
 import com.amalto.workbench.actions.ServerRefreshAction;
+import com.amalto.workbench.actions.UploadCustomTypeAction;
 import com.amalto.workbench.actions.VersioningXObjectAction;
 import com.amalto.workbench.export.ExportItemsAction;
 import com.amalto.workbench.export.ImportItemsAction;
@@ -107,8 +108,9 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	protected Action versionAction;
 	protected Action versionUniverseAction;
 	protected Action exportAction;
-	protected Action NewCategoryAction;
-	
+	protected Action importAction;
+	protected Action newCategoryAction;
+	protected Action uploadCustomTypeAction;
 	//test for NewUserAction 
 	protected NewUserAction newUserActon;
 	
@@ -118,7 +120,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	private ArrayList<TreeObject> dndTreeObjs = new ArrayList<TreeObject>();
     private int dragType = -1;
 
-	private ImportItemsAction importAction;
 
 
 	private BrowseRevisionAction browseRevisionAction;
@@ -555,8 +556,17 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			case TreeObject.SUBSCRIPTION_ENGINE:
 				manager.add(browseViewAction);
 				break;
-			case TreeObject.SERVICE_CONFIGURATION:
+			case TreeObject.CUSTOM_TYPE:
+			case TreeObject.CUSTOM_TYPES_RESOURCE:	
+				manager.add(uploadCustomTypeAction);
 				break;
+			case TreeObject.SERVICE_CONFIGURATION:
+			case TreeObject.RESOURCES:	
+			case TreeObject.DATA_MODEL_RESOURCE:	
+			case TreeObject.DATA_MODEL_TYPES_RESOURCE:	
+			case TreeObject.PICTURES_RESOURCE:
+				break;
+				
 			case TreeObject.DATA_CLUSTER:
 				if (xobject.isXObject()) {
 //					manager.add(exportAction);
@@ -564,13 +574,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					manager.add(browseViewAction);
 				}
 			case TreeObject.ROLE:
-			case TreeObject.RESOURCES:	
-			case TreeObject.DATA_MODEL_RESOURCE:	
-			case TreeObject.DATA_MODEL_TYPES_RESOURCE:	
-			case TreeObject.CUSTOM_TYPES_RESOURCE:	
-			case TreeObject.PICTURES_RESOURCE:	
-			case TreeObject.CUSTOM_TYPE:	
-				
 			case TreeObject.VIEW:				
 			default:
 				if ( xobject.getType() != TreeObject.CATEGORY_FOLDER) {
@@ -583,6 +586,11 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 						xobject)
 						&& type != TreeObject.ROLE)
 			    {
+					if (xobject.getType() != TreeObject.RESOURCES
+							&& xobject.getType() != TreeObject.DATA_MODEL_RESOURCE
+							&& xobject.getType() != TreeObject.DATA_MODEL_TYPES_RESOURCE
+							&& xobject.getType() != TreeObject.CUSTOM_TYPES_RESOURCE
+							&& xobject.getType() != TreeObject.PICTURES_RESOURCE)
 			    	manager.add(newXObjectAction);	
 			    }
 			    else if (type == TreeObject.ROLE && (xobject.getType() == TreeObject.CATEGORY_FOLDER || xobject instanceof TreeParent))
@@ -602,7 +610,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					manager.add(copyAction);
 				}
 				else if (LocalTreeObjectRepository.getInstance().isInSystemCatalog(xobject) == false){
-					manager.add(NewCategoryAction);
+					manager.add(newCategoryAction);
 				}
 
 				if (!WorkbenchClipboard.getWorkbenchClipboard().isEmpty())
@@ -682,7 +690,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		
 		exportAction=new ExportItemsAction(this);
 		importAction=new ImportItemsAction(this);
-		NewCategoryAction = new NewCategoryAction(this);
+		uploadCustomTypeAction=new UploadCustomTypeAction(this);
+		newCategoryAction = new NewCategoryAction(this);
 		versionAction = new VersioningXObjectAction(this,VersioningXObjectAction.ACTION_TYPE_VERSIONS);
 		versionUniverseAction = new VersioningXObjectAction(this,VersioningXObjectAction.ACTION_TYPE_TAGUNIVERSE);
 		newUserActon = new NewUserAction(this);
