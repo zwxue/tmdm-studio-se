@@ -61,6 +61,7 @@ public class XSDChangeBaseTypeAction extends UndoAction implements SelectionList
 			dialog = new SimpleTypeInputDialog(
 					this,
 					page.getSite().getShell(),
+					schema,
 					"Change Base Type",
 					customTypes,
 					builtInTypes

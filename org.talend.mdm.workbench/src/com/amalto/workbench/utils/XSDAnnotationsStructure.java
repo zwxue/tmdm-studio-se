@@ -16,6 +16,7 @@ import org.eclipse.xsd.XSDFactory;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDTerm;
+import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 import org.talend.mdm.commmon.util.core.EUUIDCustomType;
 import org.talend.mdm.commmon.util.core.ICoreConstants;
@@ -327,8 +328,12 @@ public class XSDAnnotationsStructure {
 							if(particle.getTerm() instanceof XSDElementDeclaration)
 							{
 								XSDElementDeclaration decl = (XSDElementDeclaration)particle.getTerm();
-								if(Util.IsAImporedElement(particle, schema != null ? schema : ((XSDConcreteComponent)obj).getSchema()))
-									isImported = true;
+								if(Util.IsAImporedElement(decl, schema != null ? schema : ((XSDConcreteComponent)obj).getSchema()))
+								{
+									XSDTypeDefinition typeDef = decl.getTypeDefinition();
+									if(Util.IsAImporedElement(typeDef, schema != null ? schema : ((XSDConcreteComponent)obj).getSchema()))
+									   isImported = true;
+								}
 							}
 						}
 						else if(obj instanceof XSDElementDeclaration)

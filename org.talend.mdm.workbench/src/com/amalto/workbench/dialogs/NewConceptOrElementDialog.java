@@ -19,8 +19,11 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDSchema;
+import org.eclipse.xsd.XSDSimpleTypeDefinition;
+import org.eclipse.xsd.XSDTypeDefinition;
 
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.widgets.ConceptComposite;
@@ -37,8 +40,8 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
 	private Label infoLabel = null;
 	private Button complexTypeBtn , simpleTypeBtn;
 	
-	protected List customTypes=null;
-	protected List builtInTypes=null;
+	protected List<String> customTypes=null;
+	protected List<String> builtInTypes=null;
 	
 	private SelectionListener caller = null;
 	private String typeName = "";
@@ -104,6 +107,9 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
 				new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
 		);
 
+		conceptPanel.getTypeCombo().addModifyListener(this);
+		elemPanel.getTypeCombo().addModifyListener(this);
+		
 		maskTypeWidgets();
 		
 		return composite;
@@ -125,6 +131,11 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
 	
 	public void modifyText(ModifyEvent e)
 	{
+		if(e != null && e.widget == typeNameText)
+		{
+			conceptPanel.setText(typeNameText.getText() + "Type");
+		}
+		
 		if (typeNameText.getText().trim().equals(""))
 		{
 			infoLabel.setText("The Element Name cannot be empty or blank");
@@ -148,11 +159,50 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
 					return;
 				}
 			}
+			
+			if ((e != null && e.widget == conceptPanel.getTypeCombo())
+					|| (e == null && conceptPanel.getTypeCombo().isEnabled()))
+			{
+				validateType(conceptPanel.getText(), false);
+				return;
+			}
+			else if ((e != null && e.widget == elemPanel.getTypeCombo())
+					|| (e == null && elemPanel.getTypeCombo().isEnabled()))
+			{
+				validateType(elemPanel.getText(), true);
+				return;
+			}
 		}
 		getButton(IDialogConstants.OK_ID).setEnabled(true);
 		infoLabel.setText("");
-		conceptPanel.setText(typeNameText.getText() + "Type");
+	}
+	
+	
+	private void validateType(String typeName, boolean forConcept)
+	{
+		getButton(IDialogConstants.OK_ID).setEnabled(true);
+		infoLabel.setText("");
 		
+		for(XSDTypeDefinition specType : schema.getTypeDefinitions())
+		{
+			if(forConcept && specType instanceof XSDSimpleTypeDefinition)
+				continue;
+			else if(!forConcept && specType instanceof XSDComplexTypeDefinition)
+				continue;
+			
+			String typeToCompare = typeName;
+			int delimiter = typeToCompare.indexOf(" : ");
+			if(delimiter != -1)
+			{
+				typeToCompare = typeToCompare.substring(0, delimiter);
+			}
+			if(typeToCompare.equals(specType.getName()))
+			{
+				infoLabel.setText("The same Type name already exists");
+				getButton(IDialogConstants.OK_ID).setEnabled(false);
+				return;
+			}
+		}
 	}
 	
 	private void maskTypeWidgets() {

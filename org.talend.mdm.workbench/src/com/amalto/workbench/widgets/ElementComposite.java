@@ -158,6 +158,11 @@ public class ElementComposite {
 		typeCombo.setFocus();
 	}
 	
+	public CCombo getTypeCombo()
+	{
+		return typeCombo;
+	}
+	
 	public Composite getComposite()
 	{
 		return container;

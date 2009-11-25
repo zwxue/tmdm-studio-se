@@ -3,8 +3,11 @@ package com.amalto.workbench.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -27,7 +30,7 @@ public class ConceptComposite {
 	private Button choiceButton = null;
 	private Button allButton = null;
 	private Label typeNameLabel = null;
-	
+	private Label messageLabel = null;
 	private Composite container = null;
     
 	public  ConceptComposite(Composite parent, boolean encloseTextField,List<XSDComplexTypeDefinition> types, boolean newComplex) {
@@ -35,7 +38,7 @@ public class ConceptComposite {
 		GridLayout layout = (GridLayout)parent.getLayout();
 		layout.numColumns = 2;
 		//layout.verticalSpacing = 10;
-		List<String> typeNames=new ArrayList<String>();
+		final List<String> typeNames=new ArrayList<String>();
 		for(XSDComplexTypeDefinition type: types){
 			typeNames.add(type.getName() +  (type.getTargetNamespace() != null ? " : " + type.getTargetNamespace() : ""));
 		}
@@ -58,6 +61,7 @@ public class ConceptComposite {
         	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
         	};
         });
+		
 		Group radioGroup = new Group(parent,SWT.SHADOW_NONE);
 		radioGroup.setText(encloseTextField ? "" : "Sub-Elements Group");
 		radioGroup.setLayoutData(
@@ -90,6 +94,11 @@ public class ConceptComposite {
 		);
 
 		allButton.setSelection(true);
+		
+		messageLabel = new Label(parent, SWT.NONE);
+		messageLabel.setLayoutData(
+				new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
+		);
 		container = parent;
 	}
 	
@@ -108,6 +117,11 @@ public class ConceptComposite {
 		typeNameText.setFocus();
 	}
 	
+	public void setMessage(String msg)
+	{
+		messageLabel.setText(msg);
+	}
+	
 	public boolean isSequence() {
 		return sequenceButton.getSelection();
 	}
@@ -123,6 +137,11 @@ public class ConceptComposite {
 	public Composite getComposite()
 	{
 		return container;
+	}
+	
+	public CCombo getTypeCombo()
+	{
+		return typeNameText;
 	}
 	
 	public void setSelectAllWidgets(boolean selected)

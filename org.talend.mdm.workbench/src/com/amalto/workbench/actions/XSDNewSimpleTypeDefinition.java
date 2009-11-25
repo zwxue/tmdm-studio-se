@@ -51,7 +51,7 @@ public class XSDNewSimpleTypeDefinition extends UndoAction implements SelectionL
 				builtInTypes.add(type.getName());
 		}
 
-		dialog = new SimpleTypeInputDialog(this, page.getSite().getShell(),"New Simple Type", customTypes,builtInTypes);
+		dialog = new SimpleTypeInputDialog(this, page.getSite().getShell(), schema, "New Simple Type", customTypes,builtInTypes);
 		dialog.setBlockOnOpen(true);
 		int ret = dialog.open();
 		if (ret == Dialog.CANCEL) {
