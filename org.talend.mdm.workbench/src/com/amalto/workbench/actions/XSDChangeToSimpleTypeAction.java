@@ -96,6 +96,7 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
 				dialog = new SimpleTypeInputDialog(
 						this,
 						page.getSite().getShell(),
+						schema,
 						"Make Simple Type",
 						customTypes,
 						builtInTypes
@@ -158,21 +159,8 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
 						{
 							if(typeDef.getName().equals(typeName))
 							{
-								if(!ns.equals(""))
-								{
-									if(typeDef.getTargetNamespace() != null && typeDef.getTargetNamespace().equals(ns))
-									{
-										std = (XSDSimpleTypeDefinition)typeDef;
-										break;
-									}
-								}
-								else if(ns.equals("") && typeDef.getTargetNamespace() == null)
-								{
-									std = (XSDSimpleTypeDefinition)typeDef;
-									break;
-								}
-
-
+								std = (XSDSimpleTypeDefinition)typeDef;
+								break;
 							}
 						}
 					}

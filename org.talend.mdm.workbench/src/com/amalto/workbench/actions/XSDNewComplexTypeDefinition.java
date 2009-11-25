@@ -41,8 +41,15 @@ public class XSDNewComplexTypeDefinition extends UndoAction implements Selection
 	
 	public IStatus doAction() {
 		
-		List<XSDComplexTypeDefinition> empty = new ArrayList<XSDComplexTypeDefinition>();
-		dialog = new ComplexTypeInputDialog(this, page.getSite().getShell(), empty,false);
+		List<XSDComplexTypeDefinition> list = new ArrayList<XSDComplexTypeDefinition>();
+		EList<XSDTypeDefinition> types = schema.getTypeDefinitions();
+		for(XSDTypeDefinition type : types)
+		{
+			if(type instanceof XSDComplexTypeDefinition)
+				list.add((XSDComplexTypeDefinition)type);
+		}
+		
+		dialog = new ComplexTypeInputDialog(this, page.getSite().getShell(), schema, list, false);
 		dialog.setBlockOnOpen(true);
 		int ret = dialog.open();
 		if (ret == Dialog.CANCEL) {

@@ -120,7 +120,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
        		if (showDlg) {
        			
 				dialog = new ComplexTypeInputDialog(this, page.getSite()
-						.getShell(),Util.getComplexTypes(decl.getSchema()),isXSDModelGroup);
+						.getShell(), schema, Util.getComplexTypes(decl.getSchema()),isXSDModelGroup);
 
 				dialog.setBlockOnOpen(true);
 				int ret = dialog.open();
@@ -155,12 +155,9 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 				for (Iterator iter = list.iterator(); iter.hasNext(); ) {
 					XSDTypeDefinition td = (XSDTypeDefinition) iter.next();
 					if ((td.getName().equals(typeName) && (td instanceof XSDComplexTypeDefinition))) {
-						if((td.getTargetNamespace() != null && td.getTargetNamespace().equals(ns)) || td.getTargetNamespace() == null)
-						{
 							alreadyExists = true;
 							complexType = (XSDComplexTypeDefinition)td;
 							break;
-						}
 					}
 				}
 //				ArrayList<XSDTypeDefinition> types = Util.getImportedTypeDefinitionChildren(schema);
