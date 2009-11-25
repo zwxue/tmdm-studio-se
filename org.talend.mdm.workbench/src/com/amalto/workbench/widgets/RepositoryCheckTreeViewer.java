@@ -285,7 +285,7 @@ public class RepositoryCheckTreeViewer {
         if (node == null) {
             return false;
         }
-        if(node.getType() == TreeObject.SUBSCRIPTION_ENGINE || node.getType() == TreeObject.SERVICE_CONFIGURATION){
+        if(node.getType() == TreeObject.SUBSCRIPTION_ENGINE || node.getType() == TreeObject.SERVICE_CONFIGURATION||node.getType() == TreeObject.RESOURCES ){
         	return false;
         }
 

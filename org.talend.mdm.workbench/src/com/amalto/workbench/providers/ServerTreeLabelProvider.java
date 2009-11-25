@@ -54,10 +54,11 @@ public class ServerTreeLabelProvider extends LabelProvider implements IColorProv
 				return ImageCache.getCreatedImage( "icons/data_cluster.gif");
 			else if (object.getType() == TreeObject.DATA_MODEL)
 				return ImageCache.getCreatedImage( "icons/data_model.gif");
-			else if (object.getType() == TreeObject.RESOURCES)
-				return ImageCache.getCreatedImage(EImage.SERVERNOTRUNNING.getPath());
-			//TODO rhou
-			else if (object.getType() == TreeObject.CUSTOM_TYPE)
+			else if (object.getType() == TreeObject.RESOURCES
+				|| object.getType() == TreeObject.DATA_MODEL_RESOURCE
+				|| object.getType() == TreeObject.DATA_MODEL_TYPES_RESOURCE
+				|| object.getType() == TreeObject.CUSTOM_TYPES_RESOURCE
+				|| object.getType() == TreeObject.PICTURES_RESOURCE)
 				return ImageCache.getCreatedImage(EImage.SERVERNOTRUNNING.getPath());
 			else if (object.getType() == TreeObject.MENU)
 				return ImageCache.getCreatedImage( "icons/menu.gif");

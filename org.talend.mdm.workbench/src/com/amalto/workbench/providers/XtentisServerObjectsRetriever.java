@@ -133,9 +133,9 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
 			
 			//Custom Type
-			TreeParent customType = new TreeParent(EXtentisObjects.CustomType.getDisplayName(),serverRoot,TreeObject.CUSTOM_TYPE,null,null);			
+//			TreeParent customType = new TreeParent(EXtentisObjects.CustomType.getDisplayName(),serverRoot,TreeObject.CUSTOM_TYPE,null,null);			
 			//WSDataModel[] xdm = port.getDataModels(new WSRegexDataModels("*")).getWsDataModels();
-//TODO:rhou
+
 			/*			WSDataModelPK[] xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs();
 			if (xdmPKs != null) {
 				monitor.subTask("Loading Data Models");
@@ -153,8 +153,8 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 					}
 				}
 			}*/
-			monitor.worked(1);
-			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
+//			monitor.worked(1);
+//			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
 			
 			
 			//Resources
@@ -553,7 +553,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			serverRoot.addChild(synchronizationPlans);
 			serverRoot.addChild(serviceConfiguration);
 			serverRoot.addChild(resources);
-			serverRoot.addChild(customType);
+//			serverRoot.addChild(customType);
 			if (hasTransformers)serverRoot.addChild(transformers);
 			if (hasRoles) serverRoot.addChild(roles);
 			if (hasRoutingRules) serverRoot.addChild(rules);
