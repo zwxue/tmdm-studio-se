@@ -211,7 +211,7 @@ public class NewXObjectAction extends Action{
 	           						if ((newText==null) || "".equals(newText)) 
 	           							return "The Name cannot be empty";
 	           						if(!Pattern.matches("\\w*(\\s*|#|\\w+)+\\w+", newText)){
-	           							return "The name cannot contains invalid character!";
+	           							return "The name cannot contain invalid character!";
 	           						}
 	           						return null;
 	           					};
@@ -251,7 +251,7 @@ public class NewXObjectAction extends Action{
 	           						if ((newText==null) || "".equals(newText)) 
 	           							return "The Name cannot be empty";
 	           						if(!Pattern.matches("\\w*(\\s*|#|\\w+)+\\w+", newText)){
-	           							return "The name cannot contains invalid character!";
+	           							return "The name cannot contain invalid character!";
 	           						}
 	           						return null;
 	           					};

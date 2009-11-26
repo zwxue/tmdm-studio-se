@@ -25,7 +25,6 @@ private ServerView view=null;
 public UploadCustomTypeAction(ServerView view) {
 	super();
 	this.view = view;
-		
 	setImageDescriptor(ImageCache.getImage(EImage.SEARCH.getPath()));
 	setText("Upload");
 	setToolTipText("Upload Custom Type");
@@ -34,9 +33,10 @@ public UploadCustomTypeAction(ServerView view) {
 		public void run() {
 
 		super.run();
+		ISelection selection = view.getViewer().getSelection();
+		TreeObject xobject = (TreeObject)((IStructuredSelection)selection).getFirstElement();	
 		
-		
-		UploadCustomTypeDialog dialog=new UploadCustomTypeDialog(view.getSite().getShell());
+		UploadCustomTypeDialog dialog=new UploadCustomTypeDialog(xobject.getServerRoot(), view.getSite().getShell(),xobject.getEndpointIpAddress());
 		dialog.setBlockOnOpen(true);
 		dialog.open();
 }

@@ -2,29 +2,24 @@ package com.amalto.workbench.dialogs;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.resource.StringConverter;
-import org.eclipse.jface.window.IShellProvider;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbenchPartSite;
 
-import com.amalto.workbench.image.EImage;
-import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.models.IXObjectModelListener;
+import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
+import com.amalto.workbench.utils.ResourcesUtil;
 import com.amalto.workbench.widgets.FileSelectWidget;
 
 public class UploadCustomTypeDialog extends Dialog{
@@ -39,10 +34,6 @@ public class UploadCustomTypeDialog extends Dialog{
      */
     private String message;
 
-    /**
-     * The input value; the empty string by default.
-     */
-    private String value = "";//$NON-NLS-1$
 
     private Button okButton;
 
@@ -55,29 +46,41 @@ public class UploadCustomTypeDialog extends Dialog{
     /**
      * Error message string.
      */
-    private String errorMessage="Custom type file path can not be empty";
+    private String errorMessage="Custom type name and file path can not be empty";
     
     private  Label label;
     boolean isBtnShow=true;
 
 	private FileSelectWidget fileSelect;
+
+	private String uripre="http://localhost:8080";
+
+	private Text nameText;
+
+	private TreeParent root;
+
     
-    
-	public UploadCustomTypeDialog(Shell parentShell) {
-        super(parentShell);
-    }//ViewInputDialog(
-	
-	
-    public void setBtnShow(boolean isBtnShow) {
+    public UploadCustomTypeDialog(TreeParent root, Shell shell,
+			String endpointIpAddress) {
+        super(shell);
+        this.uripre=uripre;
+        this.root=root;
+	}
+
+
+	public void setBtnShow(boolean isBtnShow) {
 		this.isBtnShow = isBtnShow;
 	}
 
 
 	protected void buttonPressed(int buttonId) {
         if (buttonId == IDialogConstants.OK_ID) {
-            value = "";
-        } else {
-            value = null;
+           try {
+			ResourcesUtil.postResourcesFromFile(nameText.getText(), fileSelect.getText().getText(),uripre+TreeObject.CUSTOM_TYPES_URI);
+			root.fireEvent(IXObjectModelListener.NEED_REFRESH, null, root);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
         }
         super.buttonPressed(buttonId);
     }
@@ -106,10 +109,27 @@ public class UploadCustomTypeDialog extends Dialog{
 		parent.getShell().setText("Upload Custom Type");
 		Composite composite = (Composite) super.createDialogArea(parent);
 		composite.setLayout(new GridLayout(2,false));
-		new Label(composite,SWT.NONE).setText("Path");  
+		Label nameLabel=new Label(composite,SWT.NONE);
+		nameLabel.setText("Custom Type Name");
+		nameLabel.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
+				false, 1, 1));
+		
+		nameText=new Text(composite,SWT.SINGLE|SWT.BORDER);
+		nameText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
+				false, 1, 1));
+		Label pathLabel=new Label(composite,SWT.NONE);
+		pathLabel.setText("File Path");
+		pathLabel.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
+				false, 1, 1));
 		fileSelect=new FileSelectWidget(composite,"",new String[]{"*.xsd"}, "",true);
 		fileSelect.getCmp().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-					false, 1, 1));		
+					false, 1, 1));
+		
+		nameText.addModifyListener(new ModifyListener(){
+			
+			public void modifyText(ModifyEvent e) {
+				validateInput();
+			}});
 		fileSelect.getText().addModifyListener(new ModifyListener(){
 
 			public void modifyText(ModifyEvent e) {
@@ -141,13 +161,10 @@ public class UploadCustomTypeDialog extends Dialog{
         return okButton;
     }
  
-    public String getValue() {
-        return value;
-    }
 
     protected void validateInput() {
-    if(fileSelect.getText().getText().equalsIgnoreCase(""))
-        setErrorMessage("Custom type file path can not be empty");
+    if(nameText.getText().equalsIgnoreCase("")|| fileSelect.getText().getText().equalsIgnoreCase(""))
+        setErrorMessage("Custom type name and file path can not be empty");
     else
     	setErrorMessage("");
 	Control button = getButton(IDialogConstants.OK_ID);
@@ -175,7 +192,13 @@ public class UploadCustomTypeDialog extends Dialog{
 
 
  
-
+public static void main(String[] args) {
+	Display display=Display.getDefault();
+	Shell shell =new Shell(display);
+	UploadCustomTypeDialog upDia=new UploadCustomTypeDialog(null,shell,"http://localhost:8080");
+	upDia.setBlockOnOpen(true);
+	upDia.open();
+}
     
  
 

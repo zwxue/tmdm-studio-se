@@ -229,7 +229,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 								name,
 								serverRoot,
 								TreeObject.CUSTOM_TYPES_RESOURCE,
-								xdmPKs[i],
+								null,
 								null   //no storage to save space
 						);
 						customTypesResources.addChild(obj);
