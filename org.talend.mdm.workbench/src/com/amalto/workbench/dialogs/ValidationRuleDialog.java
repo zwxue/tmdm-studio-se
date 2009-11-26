@@ -8,14 +8,21 @@ import java.util.regex.Pattern;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
+import org.w3c.dom.Element;
 
 import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.utils.IConstants;
+import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.ICellEditor;
 import com.amalto.workbench.widgets.TisTableViewer;
@@ -25,12 +32,14 @@ public class ValidationRuleDialog extends Dialog {
 	String title;
 	private TisTableViewer viewer;
 	AMainPageV2 page;
-	List<String> rules;
+	String pattern;
 	private ComplexTableViewerColumn[] columns;
 	String conceptName;
-	public ValidationRuleDialog(Shell parentShell,String title,List<String> rules,AMainPageV2 page,String conceptName) {		
+	String name="";
+	private Text text;
+	public ValidationRuleDialog(Shell parentShell,String title,String pattern,AMainPageV2 page,String conceptName) {		
 		super(parentShell);
-		this.rules=rules;
+		this.pattern=pattern;
 		this.page=page;
 		this.title=title;
 		this.conceptName=conceptName;
@@ -39,6 +48,16 @@ public class ValidationRuleDialog extends Dialog {
 	protected Control createDialogArea(Composite parent) {
 		parent.getShell().setText(this.title);		
 		Composite composite = (Composite) super.createDialogArea(parent);
+		composite.setLayout(new GridLayout(2,false));
+		Label label=new Label(composite,SWT.NONE);
+		label.setText("Name:");
+		label.setLayoutData(
+                new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
+        ); 
+		text=new Text(composite,SWT.BORDER);		
+		text.setLayoutData(
+                new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
+        ); 		
 	    columns= new ComplexTableViewerColumn[]{
 	    		new ComplexTableViewerColumn("Type", false, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,IConstants.SCHEMATRON_TYPES,0),
 	    		new ComplexTableViewerColumn("Context XPath", false, "newXPath", "newXPath", "",ComplexTableViewerColumn.XPATH_STYLE,new String[] {},0),
@@ -56,42 +75,53 @@ public class ValidationRuleDialog extends Dialog {
 	    viewer.create();
 	    viewer.getViewer().setInput(parseRules());
 	    viewer.setHeight(110);
-	    viewer.setWidth(400);
+	    viewer.setWidth(800);
+	    viewer.getMainComposite().setLayoutData( new GridData(SWT.FILL,SWT.FILL,true,true,2,3));
 		return composite;
 	}
 	@Override
 	protected boolean isResizable() {
 		return true;
 	}
-	private List<Line> parseRules(){
+	private List<Line> parseRules() {
 		List<Line> lines=new ArrayList<Line>();
-		for(String rule:rules){
 
 			String context="";
 			String type="";
 			String express="";
 			String msg="";
-			Matcher m=Pattern.compile("<rule context=\"(.*?)\">",Pattern.CANON_EQ).matcher(rule);
+			Element e=null;
+			try {
+				e = Util.parse(pattern).getDocumentElement();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			if(e.getAttributes().getNamedItem("name")!=null)name=e.getAttributes().getNamedItem("name").getTextContent();
+			text.setText("Product Type".equals(name)?"":name);
+
+			Matcher m=Pattern.compile("<rule context=\"(.*?)\">",Pattern.CANON_EQ).matcher(pattern);
 			
 			if(m.find()){
 				context=m.group(1).trim();
 			}
-			m=Pattern.compile("<(\\w+?) test=\"(.*?)\">").matcher(rule);
+			m=Pattern.compile("<(\\w+?) test=\"(.*?)\">").matcher(pattern);
 			if(m.find()){
 				type=m.group(1).trim();
 				express=m.group(2).trim();
 			}
-			m=Pattern.compile("<"+type+".*?>(.*?)</"+type+">").matcher(rule);
+			m=Pattern.compile("<"+type+".*?>(.*?)</"+type+">").matcher(pattern);
 			if(m.find()){
 				msg=m.group(1).trim();
 			}
 			Line l=new Line(columns, new String[]{type,context,express,msg});
 			lines.add(l);
-		}
+	
 		return lines;
 	}
 	@Override
 	protected void okPressed() {
+		name=text.getText();
 		deactiveAllCellEditors();
 		getValidationRules();
 		super.okPressed();
@@ -104,14 +134,14 @@ public class ValidationRuleDialog extends Dialog {
 			}
 		}
 	}
-	private List<String> getValidationRules(){
+	private String getValidationRules(){
 		TableItem[] items=viewer.getViewer().getTable().getItems();
-		rules=new ArrayList<String>();
+		//List<String> rules=new ArrayList<String>();
+		StringBuffer sb =new StringBuffer();
 		if(items.length > 0){
+			sb=sb.append("<pattern "+ "name=\""+text.getText()+"\" >\n");
 			for(TableItem item:items){
 				Line line=(Line)item.getData();
-				StringBuffer sb =new StringBuffer();
-				sb=sb.append("<pattern >\n");
 				sb=sb.append("<rule context=\"");
 				
 				String type=line.keyValues.get(0).value;			
@@ -130,13 +160,17 @@ public class ValidationRuleDialog extends Dialog {
 				sb=sb.append(msg);
 				sb=sb.append("</"+type.toLowerCase()+">");
 				sb=sb.append("</rule>\n");
-				sb=sb.append("</pattern>\n");
-				rules.add(sb.toString());
 			}
+			sb=sb.append("</pattern>\n");
+			//rules.add(sb.toString());
 		}
-		return rules;
+		return pattern=sb.toString();
 	}
-	public List<String> getRules(){
-		return rules;
+	public String getPattern() {
+		return pattern;
+	}
+	
+	public String getName(){
+		return name;
 	}
 }

@@ -2,6 +2,8 @@ package com.amalto.workbench.widgets;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -93,6 +95,16 @@ public class SchematronExpressBuilder {
 					keylist.add(kv);
 				}
 			}
+			Collections.sort(keylist, new Comparator<KeyValue>(){
+
+				public int compare(KeyValue o1, KeyValue o2) {
+					if(o1!=null && o2!=null){
+						return o1.key.compareTo(o2.key);
+					}
+					return 0;
+				}
+				
+			});
 			xpathFunc.setFuncs(keylist);
 			categories.add(xpathFunc);
 		}
@@ -134,18 +146,16 @@ public class SchematronExpressBuilder {
 		
 		Composite com1=new Composite(bottomCom,0);
 		com1.setLayout(getLayout(4));
-		String[] strs1={"+","-","*","/"};
+		String[] strs1={"+","-","*","div"};
 		for(String str:strs1){
 			final Button btn=new Button(com1,SWT.PUSH);
 			btn.setText(str);
 			btn.addSelectionListener(new SelectionAdapter(){
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					if(btn.getText().equals("/")){
-						getTextWidget().setText(getText() + "div()");
-					}else{
-						getTextWidget().setText(getText() + btn.getText());
-					}
+
+					getTextWidget().setText(getText() + btn.getText());
+					
 				}
 			});
 		}
@@ -159,28 +169,24 @@ public class SchematronExpressBuilder {
 			btn.addSelectionListener(new SelectionAdapter(){
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					if(btn.getText().equals("<")){
-						getTextWidget().setText(getText() + "&lt;");						
-					}else{						
-						getTextWidget().setText(getText() + btn.getText());
-					}
+					
+					getTextWidget().setText(getText() + btn.getText());
+					
 				}
 			});
 		}		
 		
 		Composite com3=new Composite(bottomCom,0);
 		com3.setLayout(getLayout(4));
-		String[] strs3={"and","or","not"};
+		String[] strs3={"and","or"};
 		for(int i=0; i<strs3.length; i++){
 			final Button btn=new Button(com3,SWT.PUSH);
-			if(i==0)btn.setData("&&");
-			if(i==1)btn.setData("||");
-			if(i==2)btn.setData("!");
+
 			btn.setText(strs3[i]);
 			btn.addSelectionListener(new SelectionAdapter(){
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					getTextWidget().setText(getText() + btn.getData());
+					getTextWidget().setText(getText() + btn.getText());
 				}
 			});
 		}		
