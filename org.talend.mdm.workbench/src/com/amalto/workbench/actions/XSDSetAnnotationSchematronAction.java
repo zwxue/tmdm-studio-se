@@ -77,21 +77,29 @@ public class XSDSetAnnotationSchematronAction extends UndoAction{
             if(xSDCom instanceof XSDElementDeclaration){
             	conceptName=xSDCom.getElement().getAttributes().getNamedItem("name").getNodeValue();
             }
-            dlg=new ValidationRuleDialog(page.getSite().getShell(),"Set the Validation Rules",new ArrayList(struc.getSchematrons().values()),page,conceptName);            
+            if (!(selection.getFirstElement() instanceof Element)) {
+            	return Status.CANCEL_STATUS;
+            }
+            Element e= (Element)selection.getFirstElement();
+            if(!"X_Schematron".equals(e.getAttribute("source"))) return Status.CANCEL_STATUS;
+            
+            dlg=new ValidationRuleDialog(page.getSite().getShell(),"Set the Validation Rules",e.getFirstChild().getTextContent(),page,conceptName);            
        		dlg.setBlockOnOpen(true);
        		dlg.create();
-       		dlg.getShell().setSize(new Point(850,270));
+       		//dlg.getShell().setSize(new Point(850,270));
        		int ret = dlg.open();
        		if (ret == Window.CANCEL) {
                 return Status.CANCEL_STATUS;
        		}
-      		struc.setSchematrons(dlg.getRules());
+       		e.getFirstChild().setTextContent(dlg.getPattern());
+       		e.getFirstChild().setUserData("pattern_name", dlg.getName(), null);
+      		//struc.setSchematron(0,dlg.getPattern());
        		       		
-       		if (struc.hasChanged()) {
+       		//if (struc.hasChanged()) {
        			page.refresh();
        			page.getTreeViewer().expandToLevel(xSDCom, 2);
        			page.markDirty();
-       		}
+       		//}
        		
        
 		} catch (Exception e) {

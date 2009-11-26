@@ -53,10 +53,10 @@ public class ValidationRuleWidget {
 				dlg=new ValidationRuleExcpressDialog(composite.getShell(),"Build Validation Rule Expression ", text.getText(),conceptName);
 	       		dlg.setBlockOnOpen(true);
 	       		dlg.create();
-	       		dlg.getShell().setSize(new Point(640,560));
+	       		//dlg.getShell().setSize(new Point(640,560));
 	       		int ret = dlg.open();
 	       		if (ret == Window.OK) {
-	                text.setText(dlg.getExpression());
+	                text.setText(dlg.getExpression().replaceAll("<", "&lt;"));
 	       		}
 			}
 		});

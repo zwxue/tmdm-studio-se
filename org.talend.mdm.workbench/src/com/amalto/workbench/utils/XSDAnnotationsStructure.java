@@ -1,6 +1,7 @@
 package com.amalto.workbench.utils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -485,7 +486,7 @@ public class XSDAnnotationsStructure {
 	/*************************************************************
 	 * Schematron Rule
 	 *************************************************************/
-	public boolean setSchematrons(List<String> systems) {
+	public boolean setSchematrons(Collection<String> systems) {
 		removeAppInfos(ICoreConstants.X_Schematron);
 		for (Iterator iter = systems.iterator(); iter.hasNext(); ) {
 			String role = (String) iter.next();
@@ -499,7 +500,9 @@ public class XSDAnnotationsStructure {
 	public boolean setSchematron(int num, String system) {
 		TreeMap< String, String> infos = getSchematrons();
 		infos.put(ICoreConstants.X_Schematron+"_"+num, system);
-		return setForeignKeyInfos(new ArrayList(infos.values()));
+		setSchematrons(infos.values());
+		//return setForeignKeyInfos(new ArrayList(infos.values()));
+		return true;
 	}
 
 	public TreeMap<String, String> getSchematrons() {
