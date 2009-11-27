@@ -200,7 +200,12 @@ public class XSDTreeLabelProvider extends LabelProvider {
 							return source.substring(2, 7)+"_Msg_"+source.substring(8)+": "+ e.getChildNodes().item(0).getNodeValue();
 						   //made schematron show:Schematron: schematron
 						} else if(source.equals("X_Schematron")){
+							
 							 String pattern=(String)e.getFirstChild().getUserData("pattern_name");
+							 if(pattern==null){
+								 Element el=Util.parse(e.getChildNodes().item(0).getNodeValue()).getDocumentElement();	
+								 if(el.getAttributes().getNamedItem("name")!=null)pattern=el.getAttributes().getNamedItem("name").getTextContent();
+							 }
 							return "Validation Rule: " + (pattern==null?"":pattern);//e.getChildNodes().item(0).getNodeValue();	
 							//end
 						} else {

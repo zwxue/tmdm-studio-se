@@ -3,8 +3,6 @@ package com.amalto.workbench.dialogs;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CellEditor;
@@ -18,6 +16,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.models.Line;
@@ -99,23 +99,31 @@ public class ValidationRuleDialog extends Dialog {
 			}
 			if(e.getAttributes().getNamedItem("name")!=null)name=e.getAttributes().getNamedItem("name").getTextContent();
 			text.setText("Product Type".equals(name)?"":name);
+			NodeList rulelist=e.getElementsByTagName("rule");
+			for(int i=0; i<rulelist.getLength(); i++){
+				Node r=rulelist.item(i);
+				context=r.getAttributes().getNamedItem("context").getTextContent();
+				type=r.getChildNodes().item(0).getNodeName();
+				express=r.getChildNodes().item(0).getAttributes().getNamedItem("test").getTextContent();
+				msg= r.getChildNodes().item(0).getTextContent();
+				Line l=new Line(columns, new String[]{type,context,express,msg});
+				lines.add(l);				
+			}
+//			Matcher m=Pattern.compile("<rule context=\"(.*?)\">",Pattern.CANON_EQ).matcher(pattern);
+//			
+//			while(m.find()){
+//				context=m.group(1).trim();
+//			}
+//			m=Pattern.compile("<(\\w+?) test=\"(.*?)\">").matcher(pattern);
+//			if(m.find()){
+//				type=m.group(1).trim();
+//				express=m.group(2).trim();
+//			}
+//			m=Pattern.compile("<"+type+".*?>(.*?)</"+type+">").matcher(pattern);
+//			if(m.find()){
+//				msg=m.group(1).trim();
+//			}
 
-			Matcher m=Pattern.compile("<rule context=\"(.*?)\">",Pattern.CANON_EQ).matcher(pattern);
-			
-			if(m.find()){
-				context=m.group(1).trim();
-			}
-			m=Pattern.compile("<(\\w+?) test=\"(.*?)\">").matcher(pattern);
-			if(m.find()){
-				type=m.group(1).trim();
-				express=m.group(2).trim();
-			}
-			m=Pattern.compile("<"+type+".*?>(.*?)</"+type+">").matcher(pattern);
-			if(m.find()){
-				msg=m.group(1).trim();
-			}
-			Line l=new Line(columns, new String[]{type,context,express,msg});
-			lines.add(l);
 	
 		return lines;
 	}
