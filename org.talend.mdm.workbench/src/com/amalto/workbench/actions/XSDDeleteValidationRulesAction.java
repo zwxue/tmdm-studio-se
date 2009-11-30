@@ -49,7 +49,7 @@ public class XSDDeleteValidationRulesAction extends UndoAction{
 	
 	public IStatus doAction() {
 		try {
-			if(!MessageDialog.openConfirm(null, "Confirm", "Are you sure want to delete all Validataion Rules?")){
+			if(!MessageDialog.openConfirm(null, "Confirm", "Are you sure you want to delete all Validataion Rules?")){
 				return Status.CANCEL_STATUS;
 			}
             // xsdElem is to support the multiple delete action on key press,
