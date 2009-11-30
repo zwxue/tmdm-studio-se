@@ -79,7 +79,9 @@ public class XSDSetAnnotationSchematronAction extends UndoAction{
             	if(input.getReturnCode() == InputDialog.OK){
             		String pattern="<pattern name=\""+ input.getValue() +"\" />";
             		struc.addSchematron(pattern);
-            		page.markDirty();
+           			page.refresh();
+           			page.getTreeViewer().expandToLevel(xSDCom, 2);
+           			page.markDirty();
             		return Status.OK_STATUS;
             	}
             }
