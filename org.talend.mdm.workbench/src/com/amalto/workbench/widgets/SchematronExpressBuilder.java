@@ -8,6 +8,7 @@ import java.util.Comparator;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.jface.text.source.VerticalRuler;
@@ -17,6 +18,7 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -65,7 +67,15 @@ public class SchematronExpressBuilder {
 		layout.marginRight=0;
 		return layout;
 	}
-	
+	private void insertText(String text){
+        Point sel = sourceViewer.getSelectedRange();
+        try {
+        	sourceViewer.getDocument().replace(sel.x, sel.y, text);
+            sourceViewer.setSelectedRange(sel.x + text.length(), sel.y);
+        } catch (BadLocationException e1) {
+            e1.printStackTrace();
+        }		
+	}
 	private void parseFunxml() throws Exception{
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
@@ -154,8 +164,8 @@ public class SchematronExpressBuilder {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 
-					getTextWidget().setText(getText() + btn.getText());
-					
+					//getTextWidget().setText(getText() + btn.getText());
+					insertText(btn.getText());
 				}
 			});
 		}
@@ -170,7 +180,8 @@ public class SchematronExpressBuilder {
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					
-					getTextWidget().setText(getText() + btn.getText());
+					//getTextWidget().setText(getText() + btn.getText());
+					insertText(btn.getText());
 					
 				}
 			});
@@ -186,7 +197,8 @@ public class SchematronExpressBuilder {
 			btn.addSelectionListener(new SelectionAdapter(){
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					getTextWidget().setText(getText() + btn.getText());
+					//getTextWidget().setText(getText() + btn.getText());
+					insertText(btn.getText());
 				}
 			});
 		}		
@@ -200,7 +212,8 @@ public class SchematronExpressBuilder {
 			btn.addSelectionListener(new SelectionAdapter(){
 				@Override
 				public void widgetSelected(SelectionEvent e) {
-					getTextWidget().setText(getText() + btn.getText());
+					//getTextWidget().setText(getText() + btn.getText());
+					insertText(btn.getText());
 				}
 			});
 		}
@@ -224,7 +237,8 @@ public class SchematronExpressBuilder {
 					if(getTextWidget().getSelectionText().length()>0)
 						getTextWidget().setText(getText().replace(getTextWidget().getSelectionText(), dlg.getXpath()));
 					else
-						getTextWidget().setText(getText()+dlg.getXpath());
+						//getTextWidget().setText(getText()+dlg.getXpath());
+						insertText(dlg.getXpath());
 				}
 			}
 		});
