@@ -17,13 +17,14 @@ public class TreeObjectTransfer extends ByteArrayTransfer{
 	public static TreeObjectTransfer getInstance () {
 		return _instance;
 	}
+	private TreeObject[] treeObjs;
 	
 	public void javaToNative (Object object, TransferData transferData) {
 		if (!checkType(object) || !isSupportedType(transferData)) {
 			DND.error(DND.ERROR_INVALID_DATA);
 		}
 		
-		TreeObject[] treeObjs = (TreeObject[])object;
+		treeObjs = (TreeObject[])object;
 		ByteArrayOutputStream byteS = new ByteArrayOutputStream();
 		DataOutputStream writeOut = new DataOutputStream(byteS);
 		
@@ -46,8 +47,8 @@ public class TreeObjectTransfer extends ByteArrayTransfer{
 			
 		byte[] buffer = (byte[])super.nativeToJava(transferData);
 		if (buffer == null) return null;
-		
-		return null;
+		if(treeObjs!=null) return treeObjs;
+		return transferData;
 	}
 	
 	protected String[] getTypeNames(){

@@ -95,7 +95,7 @@ private static String getXMLString(String uri) {
     	for (Iterator iterator = document.getRootElement().elementIterator("entry"); iterator.hasNext();) {
 			Element element = (Element) iterator.next();
 			Element nameElement=element.element("name");
-			Element uriElement=element.element("name");
+			Element uriElement=element.element("uri");
 			if(nameElement!=null&&uriElement!=null){
 				contentMap.put(nameElement.getStringValue(),uriElement.getStringValue());
 			}
