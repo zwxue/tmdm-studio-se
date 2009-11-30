@@ -36,8 +36,8 @@ public class LabelText {
 	public Text getText() {
 		return text;
 	}
-	public void setText(Text text) {
-		this.text = text;
+	public void setText(String text) {
+		this.text.setText(text);
 	}
 	
 }

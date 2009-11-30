@@ -32,7 +32,7 @@ public class FileSelectWidget {
 		this.label=label;
 		this.filename=filename;
 		this.fileExtents=fileExtents;
-		this.parent=new Composite(parent,0);
+		this.parent=factory.createComposite(parent,0);
 		GridLayout layout=new GridLayout();
 		layout.numColumns=3;
 		this.parent.setLayout(layout);
@@ -45,14 +45,18 @@ public class FileSelectWidget {
 	}
 
 	private void create(){
-		GridData gd=new GridData(SWT.LEFT,SWT.TOP,true,true,1,1);
+		GridData gd=new GridData(SWT.RIGHT,SWT.TOP,true,true,1,1);
 		if(label.length()>0){
-		Label label=new Label(parent, SWT.NONE);
+		Label label=factory.createLabel(parent, this.label);
 		label.setText(this.label);
 		label.setLayoutData(gd);
 		}
 		text=factory.createText(parent, "",SWT.MULTI|SWT.BORDER);
-		gd=new GridData(SWT.FILL,SWT.FILL,true,true,2,1);		
+		if(label.length()>0){
+			gd=new GridData(SWT.FILL,SWT.FILL,true,true,1,1);
+		}else{
+			gd=new GridData(SWT.FILL,SWT.FILL,true,true,2,1);
+		}
 		text.setLayoutData(gd);
 		text.setText("");		
 		button=new Button(parent, SWT.PUSH);

@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.Map.Entry;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.xsd.XSDAnnotation;
@@ -508,6 +509,16 @@ public class XSDAnnotationsStructure {
 		TreeMap< String, String> infos = getSchematrons();
 		infos.put(ICoreConstants.X_Schematron+"_"+(infos.size()+1), pattern);
 		setSchematrons(infos.values());
+	}
+	public void removeSchematron(String pattern){
+		TreeMap< String, String> infos = getSchematrons();
+		for(Entry<String, String>entry: infos.entrySet()){
+			if(pattern.equals(entry.getValue())){
+				infos.remove(entry.getKey());
+				break;
+			}
+		}
+		
 	}
 	public TreeMap<String, String> getSchematrons() {
 		TreeMap<String, String> targetSystems = new TreeMap<String, String>();
