@@ -504,7 +504,11 @@ public class XSDAnnotationsStructure {
 		//return setForeignKeyInfos(new ArrayList(infos.values()));
 		return true;
 	}
-
+	public void addSchematron(String pattern){
+		TreeMap< String, String> infos = getSchematrons();
+		infos.put(ICoreConstants.X_Schematron+"_"+(infos.size()+1), pattern);
+		setSchematrons(infos.values());
+	}
 	public TreeMap<String, String> getSchematrons() {
 		TreeMap<String, String> targetSystems = new TreeMap<String, String>();
 		LinkedHashMap<String, String> appInfos = getAppInfos(ICoreConstants.X_Schematron);

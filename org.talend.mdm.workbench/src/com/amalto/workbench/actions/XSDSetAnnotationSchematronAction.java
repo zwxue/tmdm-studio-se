@@ -1,15 +1,13 @@
 package com.amalto.workbench.actions;
 
-import java.util.ArrayList;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
@@ -76,6 +74,14 @@ public class XSDSetAnnotationSchematronAction extends UndoAction{
             }
             if(xSDCom instanceof XSDElementDeclaration){
             	conceptName=xSDCom.getElement().getAttributes().getNamedItem("name").getNodeValue();
+            	InputDialog input=new InputDialog(null,"Add a Validation Rule","Validation Rule Name:","",null);
+            	input.open();
+            	if(input.getReturnCode() == InputDialog.OK){
+            		String pattern="<pattern name=\""+ input.getValue() +"\" />";
+            		struc.addSchematron(pattern);
+            		page.markDirty();
+            		return Status.OK_STATUS;
+            	}
             }
             if (!(selection.getFirstElement() instanceof Element)) {
             	return Status.CANCEL_STATUS;
