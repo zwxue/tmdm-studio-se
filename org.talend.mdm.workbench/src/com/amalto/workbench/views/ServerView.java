@@ -167,6 +167,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					dndTreeObjs.add(xobject);
 					if ((dragType != -1 && dragType != xobject.getType())
 							|| xobject.getType() == TreeObject.CATEGORY_FOLDER
+							|| xobject.getParent().getType() == TreeObject.RESOURCES
 							|| (LocalTreeObjectRepository.getInstance().isInSystemCatalog(xobject))
 							|| (xobject.getServerRoot() == xobject.getParent())) {
 						event.doit = false;
@@ -256,6 +257,10 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			int xtentisType = LocalTreeObjectRepository.getInstance().receiveUnCertainTreeObjectType(treeObj);
 			if ((treeObj.getType() != dragType && treeObj.getType() != TreeObject.CATEGORY_FOLDER)
 					|| dragType == TreeObject.CATEGORY_FOLDER
+					|| dragType == TreeObject.DATA_MODEL_RESOURCE
+					|| dragType == TreeObject.DATA_MODEL_TYPES_RESOURCE
+					|| dragType == TreeObject.CUSTOM_TYPES_RESOURCE
+					|| dragType == TreeObject.PICTURES_RESOURCE
 					|| (treeObj.getType() == TreeObject.CATEGORY_FOLDER && xtentisType != dragType)
 					|| (treeObj.getType() == TreeObject.CATEGORY_FOLDER
 							&& treeObj.getParent().getType() == dragType && treeObj
@@ -293,7 +298,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			parent = (TreeParent)remoteObj;
 		else
 			parent = remoteObj.getParent();
-		
+		if(parent.getParent().getType()==TreeObject.RESOURCES)return;
 		// only for transfer
 		ArrayList<TreeObject> subDdnList = new ArrayList<TreeObject>(); 
 		

@@ -43,6 +43,10 @@ import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetAdapter;
+import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseAdapter;
@@ -122,13 +126,13 @@ import com.amalto.workbench.actions.XSDChangeBaseTypeAction;
 import com.amalto.workbench.actions.XSDChangeToComplexTypeAction;
 import com.amalto.workbench.actions.XSDChangeToSimpleTypeAction;
 import com.amalto.workbench.actions.XSDCopyConceptAction;
-import com.amalto.workbench.actions.XSDDeleteValidationRulesAction;
 import com.amalto.workbench.actions.XSDDeleteConceptAction;
 import com.amalto.workbench.actions.XSDDeleteConceptWrapAction;
 import com.amalto.workbench.actions.XSDDeleteElementAction;
 import com.amalto.workbench.actions.XSDDeleteIdentityConstraintAction;
 import com.amalto.workbench.actions.XSDDeleteParticleAction;
 import com.amalto.workbench.actions.XSDDeleteTypeDefinition;
+import com.amalto.workbench.actions.XSDDeleteValidationRulesAction;
 import com.amalto.workbench.actions.XSDDeleteXPathAction;
 import com.amalto.workbench.actions.XSDEditComplexTypeAction;
 import com.amalto.workbench.actions.XSDEditConceptAction;
@@ -170,6 +174,7 @@ import com.amalto.workbench.editors.xmleditor.XMLEditor;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.models.TreeObjectTransfer;
 import com.amalto.workbench.providers.ISchemaContentProvider;
 import com.amalto.workbench.providers.TypesContentProvider;
 import com.amalto.workbench.providers.TypesLabelProvider;
@@ -178,6 +183,7 @@ import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.providers.XSDTreeLabelProvider;
 import com.amalto.workbench.utils.DataModelFilter;
 import com.amalto.workbench.utils.FontUtils;
+import com.amalto.workbench.utils.ResourcesUtil;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
@@ -267,6 +273,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	private String modelName="";
 	private boolean isChange=false;
 	private Group addLanGroup;
+	protected String uriPre="http://localhost:8080";
 	public DataModelMainPage(FormEditor editor) {
 		super(editor, DataModelMainPage.class.getName(), "Data Model "
 				+ ((XObjectEditorInput) editor.getEditorInput()).getName()
@@ -574,255 +581,10 @@ public class DataModelMainPage extends AMainPageV2 {
 					dlg.open();
 					if(dlg.getReturnCode() == Window.OK)
 					{
-						final List<String> list = dlg.getImportedXSDList();
-						final List<String> dels = dlg.getToDelXSDList();
-						TimerTask task = new TimerTask() {
-							public void run() {
-								getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
-									public void run() {
-									XSDSchema schemaCpy = null;
-										try
-										{
-										   schemaCpy = Util.createXsdSchema(Util.nodeToString(xsdSchema.getDocument()), getXObject());
-										   xsdSchema.clearDiagnostics();
-	                                       performImport(list);
-	                                       performDeletion(dels);
-	                                       xsdSchema.validate();
-	               						   EList<XSDDiagnostic> diagnoses = xsdSchema.getAllDiagnostics();
-                                           String error = "";
-		            						for(int i = 0; i < diagnoses.size(); i++)
-		            						{
-		            							XSDDiagnostic dia = diagnoses.get(i);
-		            							XSDDiagnosticSeverity servity = dia.getSeverity();
-		            							if(servity == XSDDiagnosticSeverity.ERROR_LITERAL || servity == XSDDiagnosticSeverity.FATAL_LITERAL)
-		            							{
-		            								error += dia.getMessage() + "\n";
-		            							}
-		            						}
-		            						if(!error.equals(""))
-		            						{
-		            							throw new IllegalAccessException(error);
-		            						}
-		            						
-		            						validateElementation();
-		            						
-	              						    markDirty();
-	              						    refreshData();
-	              						    // below code is to refill the tree view with xsdScham including one xsd schma which contains the other xsd , 
-	              						    // and in the case of deleting the included xsd
-	              						    setXsdSchema(xsdSchema);
-	              						    commit();
-	              						    refreshData();
-	              						    XSDSchema mc = xsdSchema;
-	                					    MessageDialog.openInformation(getSite().getShell(),
-	                								"Import XSDSchema", "The operation for importing XSDSchema completed successfully!");
-											}
-										catch(Exception ex)
-										{
-											ex.printStackTrace();
-											String detail = "";
-											if(ex.getMessage()!= null && !ex.getMessage().equals(""))
-											{
-												detail += " , due to" + "\n" + ex.getMessage();
-											}
-										    setXsdSchema(schemaCpy);
-										    commit();
-											refresh();
-											MessageDialog.openError(getSite().getShell(),
-											          "Error", "The operation for importing XSDSchema failed" + detail);
-										}
-									}
-								});
-							}
-						};
-						Timer timer = new Timer(true);
-						timer.schedule(task, 0);
+						doImportSchema(dlg.getImportedXSDList(),dlg.getToDelXSDList());
 					}
 				}
 				
-				private void validateElementation() throws IllegalAccessException
-				{
-					HashMap<String , Boolean> elemCntMap = new HashMap<String, Boolean>();
-					EList<XSDElementDeclaration> elems = xsdSchema.getElementDeclarations();
-					for (XSDElementDeclaration elem : elems)
-					{
-						if(elemCntMap.get(elem.getName()) == Boolean.TRUE)
-						{
-							throw new IllegalAccessException("XSD: The Element may not have duplicate name " + elem.getName());
-						}
-						elemCntMap.put(elem.getName(), Boolean.TRUE);
-					}
-				}
-				
-				private void performDeletion(List<String> toDels)
-				{
-					List<XSDSchemaContent> impToDels = new ArrayList<XSDSchemaContent>();
-					List<String> nsToDels = new ArrayList<String>();
-					for(String delName: toDels)
-					{
-						EList<XSDSchemaContent> list = xsdSchema.getContents();
-						for (XSDSchemaContent cnt: list)
-					    {
-				    		if (cnt instanceof XSDImportImpl)
-				    		{
-				    			XSDImportImpl imp = (XSDImportImpl)cnt;
-				    			String ns = imp.getNamespace();
-				    			String loct = imp.getSchemaLocation();
-				    			if(loct.equals(delName))
-				    			{
-					    			Iterator<Map.Entry<String, String>> iter = xsdSchema.getQNamePrefixToNamespaceMap().entrySet().iterator();
-					    			while(iter.hasNext())
-					    			{
-					    				Map.Entry<String, String> entry = (Map.Entry<String, String>)iter.next();
-					    				if(entry.getValue().equalsIgnoreCase(ns))
-					    				{
-					    					nsToDels.add(entry.getKey());
-					    					impToDels.add(cnt);
-					    					break;
-					    				}
-					    			}
-				    			}
-				    		}
-				    		else if(cnt instanceof XSDIncludeImpl)
-				    		{
-				    			XSDIncludeImpl inude = (XSDIncludeImpl)cnt;
-				    			if(inude.getSchemaLocation().equals(delName))
-				    			{
-				    				impToDels.add(cnt);	
-				    				break;
-				    			}
-				    		}
-					    }
-					}
-					if(!impToDels.isEmpty() && xsdSchema.getContents().containsAll(impToDels))
-					{
-						xsdSchema.updateElement();
-						xsdSchema.getReferencingDirectives().clear();
-						Map<String, String> map = xsdSchema.getQNamePrefixToNamespaceMap();
-						for(String ns: nsToDels)
-						{
-							map.remove(ns);
-						}
-						for(XSDSchemaContent cnt: impToDels)
-						{
-							xsdSchema.getContents().remove(cnt);
-						}
-						
-						xsdSchema.updateElement();
-						setXsdSchema(xsdSchema);
-					}
-					
-				}
-				
-				private void performImport(List<String> list) throws Exception
-				{
-					Pattern httpUrl = Pattern.compile("(http|https|ftp):(\\//|\\\\)(.*):(.*)");
-
-					for(String fileName : list)
-					{
-						Matcher match = httpUrl.matcher(fileName);
-						if (match.matches()) {
-							importSchemaWithURL(fileName);
-						} else {
-							importSchemaFromFile(fileName);
-						}
-					}
-				}
-				
-				private void importSchemaWithURL(String url) throws Exception
-				{
-					 String response = Util.getResponseFromURL(url, getXObject());
-					 InputSource source = new InputSource(new StringReader(response));
-					 importSchema(source, url);
-				}
-				
-				private void importSchemaFromFile(String fileName) throws Exception
-				{
-					String inputType = fileName.substring(fileName.lastIndexOf("."));
-					if (!inputType.equals(".xsd"))return;
-					File file = new File(fileName);
-					
-					InputSource source = new InputSource(new FileInputStream(file));
-					importSchema(source, file.getAbsolutePath());
-				}
-				
-				private void importSchema(InputSource source, String uri) throws Exception
-				{
-					String ns = "";
-				    DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-					documentBuilderFactory.setNamespaceAware(true);
-					documentBuilderFactory.setValidating(false);
-					
-					DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-					Document document = documentBuilder.parse(source);
-					ns = document.getDocumentElement().getAttribute("targetNamespace");
-					if(xsdSchema == null)
-					   xsdSchema = getXSDSchema(Util.nodeToString(document));
-					else
-					{
-						WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
-						xsdSchema = Util.createXsdSchema(wsObject.getXsdSchema(), getXObject());
-					}
-					boolean exist = false;
-					for (int i = 0; i < xsdSchema.getContents().size(); i++)
-					{
-						XSDSchemaContent xsdComp = xsdSchema.getContents().get(i);
-						if(ns != null && !ns.equals(""))
-						{
-							// import xsdschema
-							if (xsdComp instanceof XSDImport && ((XSDImport)xsdComp).getNamespace().equals(ns))
-							{								
-								for (Map.Entry entry: xsdSchema.getQNamePrefixToNamespaceMap().entrySet())
-								{
-									if (entry.getValue().equals(((XSDImport)xsdComp).getNamespace()))
-									{
-										exist = true;
-										break;
-									}
-								}
-								break;
-							}
-						}
-						else
-						{
-							// include xsdschema
-							if(xsdComp instanceof XSDInclude)
-							{
-								String xsdLocation = ((XSDInclude)xsdComp).getSchemaLocation();
-								if (xsdLocation.equals(uri))
-								{
-									exist = true;
-									break;
-								}
-							}
-						}
-					}
-					
-					if(!exist)
-					{
-						if(ns != null && !ns.equals(""))
-						{
-			    	    	int last = ns.lastIndexOf("/");
-			    	    	xsdSchema.getQNamePrefixToNamespaceMap().put(ns.substring(last+1).replaceAll("[\\W]", ""), ns);
-						    XSDImport xsdImport = XSDFactory.eINSTANCE.createXSDImport();
-						    xsdImport.setNamespace(ns);
-						    xsdImport.setSchemaLocation(uri);
-						    xsdSchema.getContents().add(0, xsdImport);
-						}
-						else
-						{
-							XSDInclude xsdInclude = XSDFactory.eINSTANCE.createXSDInclude();
-							xsdInclude.setSchemaLocation(uri);
-							xsdSchema.getContents().add(0, xsdInclude);
-						}
-						String xsd = Util.nodeToString(xsdSchema.getDocument());
-						xsdSchema = Util.createXsdSchema(xsd, getXObject());
-						setXsdSchema(xsdSchema);
-						WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
-						wsObject.setXsdSchema(xsd);
-					}	
-				}
 			});
 			
 //			Label xsdLabel = toolkit.createLabel(mainComposite, "Schema",
@@ -832,6 +594,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			// get the XSDSchema
 			xsdSchema = getXSDSchema(wsObject.getXsdSchema());
 			createSash(mainComposite);
+			createCompDropTarget();
 			hookContextMenu();
 
 			hookDoubleClickAction();
@@ -863,6 +626,75 @@ public class DataModelMainPage extends AMainPageV2 {
 
 	}// createCharacteristicsContent
 	
+	protected void doImportSchema(final List<String> addList,final List<String> delList) {
+//		final List<String> addList = dlg.getImportedXSDList();
+//		final List<String> delList = dlg.getToDelXSDList();
+		TimerTask task = new TimerTask() {
+			public void run() {
+				getSite().getShell().getDisplay().asyncExec(new Runnable() {
+
+					public void run() {
+					XSDSchema schemaCpy = null;
+						try
+						{
+						   schemaCpy = Util.createXsdSchema(Util.nodeToString(xsdSchema.getDocument()), getXObject());
+						   xsdSchema.clearDiagnostics();
+                           performImport(addList);
+                           performDeletion(delList);
+                           xsdSchema.validate();
+   						   EList<XSDDiagnostic> diagnoses = xsdSchema.getAllDiagnostics();
+                           String error = "";
+    						for(int i = 0; i < diagnoses.size(); i++)
+    						{
+    							XSDDiagnostic dia = diagnoses.get(i);
+    							XSDDiagnosticSeverity servity = dia.getSeverity();
+    							if(servity == XSDDiagnosticSeverity.ERROR_LITERAL || servity == XSDDiagnosticSeverity.FATAL_LITERAL)
+    							{
+    								error += dia.getMessage() + "\n";
+    							}
+    						}
+    						if(!error.equals(""))
+    						{
+    							throw new IllegalAccessException(error);
+    						}
+    						
+    						validateElementation();
+    						
+  						    markDirty();
+  						    refreshData();
+  						    // below code is to refill the tree view with xsdScham including one xsd schma which contains the other xsd , 
+  						    // and in the case of deleting the included xsd
+  						    setXsdSchema(xsdSchema);
+  						    commit();
+  						    refreshData();
+  						    XSDSchema mc = xsdSchema;
+    					    MessageDialog.openInformation(getSite().getShell(),
+    								"Import XSDSchema", "The operation for importing XSDSchema completed successfully!");
+							}
+						catch(Exception ex)
+						{
+							ex.printStackTrace();
+							String detail = "";
+							if(ex.getMessage()!= null && !ex.getMessage().equals(""))
+							{
+								detail += " , due to" + "\n" + ex.getMessage();
+							}
+						    setXsdSchema(schemaCpy);
+						    commit();
+							refresh();
+							MessageDialog.openError(getSite().getShell(),
+							          "Error", "The operation for importing XSDSchema failed" + detail);
+						}
+					}
+				});
+			}
+		};
+		Timer timer = new Timer(true);
+		timer.schedule(task, 0);
+	
+		
+	}
+
 	protected void addOrDelLanguage(boolean isAdd) {
 		TreeItem[] items=viewer.getTree().getItems();
 		
@@ -928,7 +760,7 @@ public class DataModelMainPage extends AMainPageV2 {
 //		new Label(schemaSash,SWT.BORDER).setText("Data-Model:Order");
 //		new Label(schemaSash,SWT.NONE).setText("Define the Order data-model");
 		
-		Composite schemaSash=new Composite(parent,SWT.NONE);
+		Composite schemaSash = new Composite(parent,SWT.NONE);
 		schemaSash.setLayout(new GridLayout());
 		schemaSash.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
 		schemaSash.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
@@ -2213,6 +2045,232 @@ public class DataModelMainPage extends AMainPageV2 {
 		}
 	}
 	
+	private void createCompDropTarget() {
+		DropTarget dropTarget = new DropTarget(sash,  DND.DROP_MOVE|DND.DROP_LINK);
+//		dropTarget.setTransfer(new ByteArrayTransfer[] { });
+		dropTarget.setTransfer(new TreeObjectTransfer[] { TreeObjectTransfer.getInstance() });
+		dropTarget.addDropListener(new DropTargetAdapter() {
+
+			public void dragEnter(DropTargetEvent event) {
+			}
+			public void dragLeave(DropTargetEvent event) {
+			}
+			public void dragOver(DropTargetEvent event) {
+				event.feedback |= DND.FEEDBACK_EXPAND | DND.FEEDBACK_SCROLL;
+			}
+			
+			public void drop(DropTargetEvent event) {
+				List<String> nameList=new ArrayList<String>();
+				if (dropTargetValidate(event,nameList)){
+					if(MessageDialog.openConfirm(sash.getShell(), "Confirm", "Do you want to include or import schema?")){
+					HashMap<String, String> customTypesMap = ResourcesUtil.getResourcesMapFromURI(uriPre+TreeObject.CUSTOM_TYPES_URI);
+					List<String> customTypeList=new ArrayList<String>(); 
+					for (String key : nameList) {
+						customTypeList.add(customTypesMap.get(key));
+					}
+					doImportSchema(customTypeList,new ArrayList<String>());
+				}
+			}
+			}
+		});
+		
+	}
+	private boolean dropTargetValidate(DropTargetEvent event, List<String> customTypeNamelist) {
+		if (event.data == null) return false;
+		Object obj = event.data;
+		if (obj instanceof TreeObject[])
+		{	
+			uriPre=((TreeObject[])obj)[0].getServerRoot().getEndpointIpAddress();
+			for (TreeObject ob : (TreeObject[]) obj) {
+					if (ob.getType()==TreeObject.CUSTOM_TYPES_RESOURCE)
+						customTypeNamelist.add(ob.getDisplayName());
+					else
+						return false;
+				}
+				return true;
+		}
+		return false;
+	}
+	private void validateElementation() throws IllegalAccessException
+	{
+		HashMap<String , Boolean> elemCntMap = new HashMap<String, Boolean>();
+		EList<XSDElementDeclaration> elems = xsdSchema.getElementDeclarations();
+		for (XSDElementDeclaration elem : elems)
+		{
+			if(elemCntMap.get(elem.getName()) == Boolean.TRUE)
+			{
+				throw new IllegalAccessException("XSD: The Element may not have duplicate name " + elem.getName());
+			}
+			elemCntMap.put(elem.getName(), Boolean.TRUE);
+		}
+	}
 	
+	private void performDeletion(List<String> toDels)
+	{
+		List<XSDSchemaContent> impToDels = new ArrayList<XSDSchemaContent>();
+		List<String> nsToDels = new ArrayList<String>();
+		for(String delName: toDels)
+		{
+			EList<XSDSchemaContent> list = xsdSchema.getContents();
+			for (XSDSchemaContent cnt: list)
+		    {
+	    		if (cnt instanceof XSDImportImpl)
+	    		{
+	    			XSDImportImpl imp = (XSDImportImpl)cnt;
+	    			String ns = imp.getNamespace();
+	    			String loct = imp.getSchemaLocation();
+	    			if(loct.equals(delName))
+	    			{
+		    			Iterator<Map.Entry<String, String>> iter = xsdSchema.getQNamePrefixToNamespaceMap().entrySet().iterator();
+		    			while(iter.hasNext())
+		    			{
+		    				Map.Entry<String, String> entry = (Map.Entry<String, String>)iter.next();
+		    				if(entry.getValue().equalsIgnoreCase(ns))
+		    				{
+		    					nsToDels.add(entry.getKey());
+		    					impToDels.add(cnt);
+		    					break;
+		    				}
+		    			}
+	    			}
+	    		}
+	    		else if(cnt instanceof XSDIncludeImpl)
+	    		{
+	    			XSDIncludeImpl inude = (XSDIncludeImpl)cnt;
+	    			if(inude.getSchemaLocation().equals(delName))
+	    			{
+	    				impToDels.add(cnt);	
+	    				break;
+	    			}
+	    		}
+		    }
+		}
+		if(!impToDels.isEmpty() && xsdSchema.getContents().containsAll(impToDels))
+		{
+			xsdSchema.updateElement();
+			xsdSchema.getReferencingDirectives().clear();
+			Map<String, String> map = xsdSchema.getQNamePrefixToNamespaceMap();
+			for(String ns: nsToDels)
+			{
+				map.remove(ns);
+			}
+			for(XSDSchemaContent cnt: impToDels)
+			{
+				xsdSchema.getContents().remove(cnt);
+			}
+			
+			xsdSchema.updateElement();
+			setXsdSchema(xsdSchema);
+		}
+		
+	}
 	
+	private void performImport(List<String> list) throws Exception
+	{
+		Pattern httpUrl = Pattern.compile("(http|https|ftp):(\\//|\\\\)(.*):(.*)");
+
+		for(String fileName : list)
+		{
+			Matcher match = httpUrl.matcher(fileName);
+			if (match.matches()) {
+				importSchemaWithURL(fileName);
+			} else {
+				importSchemaFromFile(fileName);
+			}
+		}
+	}
+	
+	private void importSchemaWithURL(String url) throws Exception
+	{
+		 String response = Util.getResponseFromURL(url, getXObject());
+		 InputSource source = new InputSource(new StringReader(response));
+		 importSchema(source, url);
+	}
+	
+	private void importSchemaFromFile(String fileName) throws Exception
+	{
+		String inputType = fileName.substring(fileName.lastIndexOf("."));
+		if (!inputType.equals(".xsd"))return;
+		File file = new File(fileName);
+		
+		InputSource source = new InputSource(new FileInputStream(file));
+		importSchema(source, file.getAbsolutePath());
+	}
+	
+	private void importSchema(InputSource source, String uri) throws Exception
+	{
+		String ns = "";
+	    DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+		documentBuilderFactory.setNamespaceAware(true);
+		documentBuilderFactory.setValidating(false);
+		
+		DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+		Document document = documentBuilder.parse(source);
+		ns = document.getDocumentElement().getAttribute("targetNamespace");
+		if(xsdSchema == null)
+		   xsdSchema = getXSDSchema(Util.nodeToString(document));
+		else
+		{
+			WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
+			xsdSchema = Util.createXsdSchema(wsObject.getXsdSchema(), getXObject());
+		}
+		boolean exist = false;
+		for (int i = 0; i < xsdSchema.getContents().size(); i++)
+		{
+			XSDSchemaContent xsdComp = xsdSchema.getContents().get(i);
+			if(ns != null && !ns.equals(""))
+			{
+				// import xsdschema
+				if (xsdComp instanceof XSDImport && ((XSDImport)xsdComp).getNamespace().equals(ns))
+				{								
+					for (Map.Entry entry: xsdSchema.getQNamePrefixToNamespaceMap().entrySet())
+					{
+						if (entry.getValue().equals(((XSDImport)xsdComp).getNamespace()))
+						{
+							exist = true;
+							break;
+						}
+					}
+					break;
+				}
+			}
+			else
+			{
+				// include xsdschema
+				if(xsdComp instanceof XSDInclude)
+				{
+					String xsdLocation = ((XSDInclude)xsdComp).getSchemaLocation();
+					if (xsdLocation.equals(uri))
+					{
+						exist = true;
+						break;
+					}
+				}
+			}
+		}
+		
+		if(!exist)
+		{
+			if(ns != null && !ns.equals(""))
+			{
+    	    	int last = ns.lastIndexOf("/");
+    	    	xsdSchema.getQNamePrefixToNamespaceMap().put(ns.substring(last+1).replaceAll("[\\W]", ""), ns);
+			    XSDImport xsdImport = XSDFactory.eINSTANCE.createXSDImport();
+			    xsdImport.setNamespace(ns);
+			    xsdImport.setSchemaLocation(uri);
+			    xsdSchema.getContents().add(0, xsdImport);
+			}
+			else
+			{
+				XSDInclude xsdInclude = XSDFactory.eINSTANCE.createXSDInclude();
+				xsdInclude.setSchemaLocation(uri);
+				xsdSchema.getContents().add(0, xsdInclude);
+			}
+			String xsd = Util.nodeToString(xsdSchema.getDocument());
+			xsdSchema = Util.createXsdSchema(xsd, getXObject());
+			setXsdSchema(xsdSchema);
+			WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
+			wsObject.setXsdSchema(xsd);
+		}	
+	}
 }
