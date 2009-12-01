@@ -50,15 +50,15 @@ public class WorkflowDefaultTransformerGenerateWizard extends Wizard {
 		WSTransformerVariablesMapping[] input=new WSTransformerVariablesMapping[1];
 		input[0]=new WSTransformerVariablesMapping("_DEFAULT_","xml",null);
 		WSTransformerVariablesMapping[] output=new WSTransformerVariablesMapping[1];
-		output[0]=new WSTransformerVariablesMapping("item_primary_key","text",null);
+		output[0]=new WSTransformerVariablesMapping("item_pk","text",null);
 		
-		steps[0]=new WSTransformerProcessStep("amalto/local/transformer/plugin/xslt","getItemPK","<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"1.0\"> <xsl:output method=\"xml\" indent=\"yes\" omit-xml-declaration=\"yes\" /> <xsl:template match=\"/\" priority=\"1\">\n"+
-"<item-pOJOPK><concept-name><xsl:copy-of select='Update/Concept'/></concept-name><ids><xsl:copy-of select='Update/Key'/></ids><data-cluster-pOJOPK><ids><xsl:copy-of select='Update/DataCluster'/></ids></data-cluster-pOJOPK></item-pOJOPK>\n"+
-"</xsl:template> </xsl:stylesheet>\n",input,output,false);
+		steps[0]=new WSTransformerProcessStep("amalto/local/transformer/plugin/xslt","Generate the XSLT step to generate the item pk from an update report","<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"1.0\"> <xsl:output method=\"xml\" indent=\"yes\" omit-xml-declaration=\"yes\" /> <xsl:template match=\"/\" priority=\"1\">\n"+
+				"<item-pOJOPK><concept-name><xsl:value-of select='Update/Concept'/></concept-name><ids><xsl:value-of select='Update/Key'/></ids><data-cluster-pOJOPK><ids><xsl:value-of select='Update/DataCluster'/></ids></data-cluster-pOJOPK></item-pOJOPK>\n"+
+				"</xsl:template> </xsl:stylesheet>\n",input,output,false);
 		
 		//step 2
 		input=new WSTransformerVariablesMapping[1];
-		input[0]=new WSTransformerVariablesMapping("item_primary_key","item_primary_key",null);
+		input[0]=new WSTransformerVariablesMapping("item_pk","item_primary_key",null);
 		output=new WSTransformerVariablesMapping[1];
 		output[0]=new WSTransformerVariablesMapping("output","execution_result",null);
 		String parameter="<parameters>\n";
@@ -82,10 +82,10 @@ public class WorkflowDefaultTransformerGenerateWizard extends Wizard {
 		//get the whole parameters
 		parameter=parameter+process+variableext.getText();		
 		parameter=parameter+"</parameters>";
-		steps[1]=new WSTransformerProcessStep("amalto/local/transformer/plugin/workflowtrigger","workflowtrigger",parameter,input,output,false);	
+		steps[1]=new WSTransformerProcessStep("amalto/local/transformer/plugin/workflowtrigger","Generate the workflowtrigger step",parameter,input,output,false);	
 		
-		transformer.setName("default_workflow_process_"+xobject.getDisplayName()+"_transformer");
-		transformer.setDescription("default workflow process "+xobject.getDisplayName()+" transformer");
+		transformer.setName("Default_WorkflowProcess_"+xobject.getDisplayName()+"_transformer");
+		transformer.setDescription("Default Workflow Process "+xobject.getDisplayName()+" transformer");
 		transformer.setProcessSteps(steps);
 		
 		Util.getPort(xobject).putTransformerV2(new WSPutTransformerV2(transformer));

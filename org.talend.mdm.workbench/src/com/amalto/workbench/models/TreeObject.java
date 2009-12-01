@@ -2,6 +2,8 @@ package com.amalto.workbench.models;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IAdaptable;
 
@@ -276,14 +278,14 @@ public class TreeObject implements IAdaptable {
 		return portAddress;
 	}
 	public String getEndpointHost() {
-		
+
 		String portAddress=getEndpointAddress();
-		
+
 		if(portAddress!=null){
 			int startPos=portAddress.indexOf("://");
-			int endPos=portAddress.indexOf(":",startPos);
+			int endPos=portAddress.lastIndexOf(":");
 			if(endPos!=-1&&startPos!=-1)
-				return portAddress.substring(startPos, endPos);
+				return portAddress.substring(startPos+3, endPos);
 		}
 		
 		return portAddress;
@@ -292,14 +294,14 @@ public class TreeObject implements IAdaptable {
 	public String getEndpointPort() {
 		
 		String portAddress=getEndpointAddress();
-		
-		if(portAddress!=null){
-			String[] splitString=portAddress.split(":",2);
-			if(splitString[2]!=null)
-				return splitString[2].substring(0, splitString[2].indexOf("/"));
+		Pattern p=Pattern.compile(":(\\d+?)/");
+		Matcher m=p.matcher(portAddress);
+		if(m.find()){
+			return m.group(1);
+		}else{
+			return "8080";
 		}
 		
-		return portAddress;
 	}	
 	
 	public static String getTypeName(int type) {
