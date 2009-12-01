@@ -71,7 +71,7 @@ public class ValidationRuleDialog extends Dialog {
 	    viewer=new TisTableViewer(Arrays.asList(columns),new WidgetFactory(),composite);
 	    viewer.setMainPage(page);
 	    viewer.setConceptName(conceptName);
-	    viewer.setContext(true);
+	    viewer.setContext(false);
 	    viewer.create();
 	    viewer.getViewer().setInput(parseRules());
 	    viewer.setHeight(110);
@@ -104,25 +104,12 @@ public class ValidationRuleDialog extends Dialog {
 				Node r=rulelist.item(i);
 				context=r.getAttributes().getNamedItem("context").getTextContent();
 				type=r.getChildNodes().item(0).getNodeName();
-				express=r.getChildNodes().item(0).getAttributes().getNamedItem("test").getTextContent();
+				express=r.getChildNodes().item(0).getAttributes().getNamedItem("test").getTextContent();			
 				msg= r.getChildNodes().item(0).getTextContent();
 				Line l=new Line(columns, new String[]{type,context,express,msg});
 				lines.add(l);				
 			}
-//			Matcher m=Pattern.compile("<rule context=\"(.*?)\">",Pattern.CANON_EQ).matcher(pattern);
-//			
-//			while(m.find()){
-//				context=m.group(1).trim();
-//			}
-//			m=Pattern.compile("<(\\w+?) test=\"(.*?)\">").matcher(pattern);
-//			if(m.find()){
-//				type=m.group(1).trim();
-//				express=m.group(2).trim();
-//			}
-//			m=Pattern.compile("<"+type+".*?>(.*?)</"+type+">").matcher(pattern);
-//			if(m.find()){
-//				msg=m.group(1).trim();
-//			}
+
 
 	
 		return lines;
@@ -155,6 +142,7 @@ public class ValidationRuleDialog extends Dialog {
 				String type=line.keyValues.get(0).value;			
 				String context=line.keyValues.get(1).value;
 				String express=line.keyValues.get(2).value;
+				express=express.replaceAll("<", "&lt;");
 				String msg=line.keyValues.get(3).value;
 				if(conceptName!=null){
 					if(context.equals(conceptName)){

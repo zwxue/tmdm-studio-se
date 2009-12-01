@@ -38,70 +38,57 @@ public class XSDSetAnnotationSchematronAction extends UndoAction{
             schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
             IStructuredSelection selection = (TreeSelection)page.getTreeViewer().getSelection();
             XSDComponent xSDCom=null;
+
+            String conceptName=null;
+          
             if (selection.getFirstElement() instanceof Element) {
 				TreePath tPath = ((TreeSelection) selection).getPaths()[0];
 				for (int i = 0; i < tPath.getSegmentCount(); i++) {
 					if (tPath.getSegment(i) instanceof XSDAnnotation)
 						xSDCom = (XSDAnnotation) (tPath.getSegment(i));
 				}
-			} else
-            xSDCom = (XSDComponent)selection.getFirstElement();
-            		   XSDAnnotationsStructure struc =new XSDAnnotationsStructure(xSDCom);
-//            IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
-//            XSDAnnotationsStructure struc = new XSDAnnotationsStructure((XSDComponent)selection.getFirstElement());
-            if (struc.getAnnotation() == null) {
-            	throw new RuntimeException("Unable to edit an annotation for object of type "+xSDCom.getClass().getName());
-            }
-            
-//            dlg = new AnnotationOrderedListsDialog(
-//            		new ArrayList(struc.getSchematrons().values()),
-//            		new SelectionListener() {
-//            			public void widgetDefaultSelected(SelectionEvent e) {}
-//            			public void widgetSelected(SelectionEvent e) {
-//            				dlg.close();
-//            			}
-//            		},
-//       				page.getSite().getShell(),
-//       				"Set the Validation Rule",
-//       				"Set the Validation Rule",
-//       				page,
-//       				AnnotationOrderedListsDialog.AnnotationSchematron_ActionType,
-//       				dataModelName 
-//       		);
-            String conceptName=null;
-            if(xSDCom instanceof XSDAnnotation){
-            	conceptName=xSDCom.getContainer().getElement().getAttributes().getNamedItem("name").getNodeValue();
-            }
-            if(xSDCom instanceof XSDElementDeclaration){
-            	conceptName=xSDCom.getElement().getAttributes().getNamedItem("name").getNodeValue();
-            	InputDialog input=new InputDialog(null,"Add a Validation Rule","Validation Rule Name:","",null);
-            	input.open();
-            	if(input.getReturnCode() == InputDialog.OK){
-            		String pattern="<pattern name=\""+ input.getValue() +"\" />";
-            		struc.addSchematron(pattern);
-           			page.refresh();
-           			page.getTreeViewer().expandToLevel(xSDCom, 2);
-           			page.markDirty();
-            		return Status.OK_STATUS;
-            	}
-            }
-            if (!(selection.getFirstElement() instanceof Element)) {
-            	return Status.CANCEL_STATUS;
-            }
-            Element e= (Element)selection.getFirstElement();
-            if(!"X_Schematron".equals(e.getAttribute("source"))) return Status.CANCEL_STATUS;
-            
-            dlg=new ValidationRuleDialog(page.getSite().getShell(),"Set the Validation Rules",e.getFirstChild().getTextContent(),page,conceptName);            
-       		dlg.setBlockOnOpen(true);
-       		dlg.create();
-       		//dlg.getShell().setSize(new Point(850,270));
-       		int ret = dlg.open();
-       		if (ret == Window.CANCEL) {
-                return Status.CANCEL_STATUS;
-       		}
-       		e.getFirstChild().setTextContent(dlg.getPattern());
-       		e.getFirstChild().setUserData("pattern_name", dlg.getName(), null);
-      		//struc.setSchematron(0,dlg.getPattern());
+				conceptName=xSDCom.getContainer().getElement().getAttributes().getNamedItem("name").getNodeValue();
+	           Element e= (Element)selection.getFirstElement();
+	            if(!"X_Schematron".equals(e.getAttribute("source"))) return Status.CANCEL_STATUS;
+	            
+	            dlg=new ValidationRuleDialog(page.getSite().getShell(),"Set the Validation Rules",e.getFirstChild().getTextContent(),page,conceptName);            
+	       		dlg.setBlockOnOpen(true);
+	       		dlg.create();
+	       		//dlg.getShell().setSize(new Point(850,270));
+	       		int ret = dlg.open();
+	       		if (ret == Window.CANCEL) {
+	                return Status.CANCEL_STATUS;
+	       		}
+	       		e.getFirstChild().setTextContent(dlg.getPattern());
+	       		e.getFirstChild().setUserData("pattern_name", dlg.getName(), null);
+				
+			} else{
+	            xSDCom = (XSDComponent)selection.getFirstElement();
+	            		   XSDAnnotationsStructure struc =new XSDAnnotationsStructure(xSDCom);
+	            if (struc.getAnnotation() == null) {
+	            	throw new RuntimeException("Unable to edit an annotation for object of type "+xSDCom.getClass().getName());
+	            }
+	            
+	
+	            if(xSDCom instanceof XSDElementDeclaration){
+	            	conceptName=xSDCom.getElement().getAttributes().getNamedItem("name").getNodeValue();
+	            }
+	            if(xSDCom instanceof XSDAnnotation || xSDCom instanceof XSDElementDeclaration){
+	            	InputDialog input=new InputDialog(null,"Add a Validation Rule","Validation Rule Name:","",null);
+	            	input.open();
+	            	if(input.getReturnCode() == InputDialog.OK){
+	            		String pattern="<pattern name=\""+ input.getValue() +"\" />";
+	            		struc.addSchematron(pattern);
+	           			page.refresh();
+	           			page.getTreeViewer().expandToLevel(xSDCom, 2);
+	           			page.markDirty();
+	            		return Status.OK_STATUS;
+	            	}         
+	            	return Status.CANCEL_STATUS;
+	            }
+			}
+
+       		//struc.setSchematron(0,dlg.getPattern());
        		       		
        		//if (struc.hasChanged()) {
        			page.refresh();

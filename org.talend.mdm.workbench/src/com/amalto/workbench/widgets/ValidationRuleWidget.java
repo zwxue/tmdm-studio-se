@@ -56,7 +56,7 @@ public class ValidationRuleWidget {
 	       		//dlg.getShell().setSize(new Point(640,560));
 	       		int ret = dlg.open();
 	       		if (ret == Window.OK) {
-	                text.setText(dlg.getExpression().replaceAll("<", "&lt;"));
+	                text.setText(dlg.getExpression());
 	       		}
 			}
 		});

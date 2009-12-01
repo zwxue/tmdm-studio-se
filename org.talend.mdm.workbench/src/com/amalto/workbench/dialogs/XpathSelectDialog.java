@@ -116,8 +116,11 @@ public class XpathSelectDialog extends Dialog {
 				}else{
 					totalXpath=totalXpath.replaceAll(conceptName+"/", "");
 				}
-				if(totalXpath.equals(context)){
+				if(totalXpath.equals(context)|| totalXpath.equals(context.replaceAll(conceptName+"/", ""))){
 					totalXpath=".";
+				}
+				if(totalXpath.indexOf('/')==-1 && !totalXpath.equals(".") && !"/".equals(totalXpath) && !"/".equals(context)){
+					totalXpath="../"+totalXpath;
 				}
             }
            return totalXpath;     
