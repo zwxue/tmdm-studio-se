@@ -417,6 +417,27 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			monitor.worked(1);
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
 
+			//Work flow
+			TreeParent workflow=new TreeParent(
+					EXtentisObjects.Workflow.getDisplayName(),
+					serverRoot,
+					TreeObject.WORKFLOW,
+					null,
+					null);
+
+			monitor.worked(1);
+			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");	
+
+			//Job registry
+			TreeParent jobregistry=new TreeParent(
+					EXtentisObjects.JobRegistry.getDisplayName(),
+					serverRoot,
+					TreeObject.JOB_REGISTRY,
+					null,
+					null);
+
+			monitor.worked(1);
+			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");	
 //			Transformers
 			WSTransformerV2PK[] transformerPKs = null;
 			boolean hasTransformers = true;
@@ -552,7 +573,9 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			serverRoot.addChild(Universes);
 			serverRoot.addChild(synchronizationPlans);
 			serverRoot.addChild(serviceConfiguration);
+			serverRoot.addChild(workflow);
 			serverRoot.addChild(resources);
+			serverRoot.addChild(jobregistry);
 //			serverRoot.addChild(customType);
 			if (hasTransformers)serverRoot.addChild(transformers);
 			if (hasRoles) serverRoot.addChild(roles);
