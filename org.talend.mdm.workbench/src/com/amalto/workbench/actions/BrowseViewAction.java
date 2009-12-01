@@ -17,7 +17,7 @@ public class BrowseViewAction extends Action{
 
 	private ServerView server = null;
 
-				
+	private TreeObject selObj;			
 	public BrowseViewAction(ServerView serverView) {
 		super();
 		this.server = serverView;
@@ -26,13 +26,19 @@ public class BrowseViewAction extends Action{
 		setText("Browse");
 		setToolTipText("Browse Content");
 	}
-	
+	public void setObject(TreeObject obj){
+		this.selObj=obj;
+	}
 	public void run() {
 		try {
 			super.run();
-			
-	        ISelection selection = this.server.getViewer().getSelection();
-	        TreeObject xobject = (TreeObject)((IStructuredSelection)selection).getFirstElement();
+			TreeObject xobject=null;
+			if(selObj==null){
+		        ISelection selection = this.server.getViewer().getSelection();
+		        xobject = (TreeObject)((IStructuredSelection)selection).getFirstElement();
+			}else{
+				xobject=selObj;
+			}
 			
        		server.getSite().getWorkbenchWindow().getActivePage().openEditor(
                     new XObjectBrowserInput(xobject,xobject.getDisplayName()),

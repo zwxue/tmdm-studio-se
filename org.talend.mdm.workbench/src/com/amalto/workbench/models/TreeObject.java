@@ -43,6 +43,10 @@ public class TreeObject implements IAdaptable {
 	public final static int CUSTOM_TYPES_RESOURCE= 26;
 	public final static int PICTURES_RESOURCE = 27;
 	public final static int CUSTOM_TYPE = 28;
+	public final static int WORKFLOW=29;
+	public final static int WORKFLOW_PROCESS=30;
+	public final static int JOB_REGISTRY=31;
+	public final static int JOB=32;
 	
 	public final static int _ACTION_ = 100;
 	public final static int _WIZARD_ = 101;

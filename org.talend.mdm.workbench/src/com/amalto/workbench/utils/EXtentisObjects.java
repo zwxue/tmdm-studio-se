@@ -28,6 +28,8 @@ public enum EXtentisObjects {
 	Universe("Universe","Universe",TreeObject.UNIVERSE),                  
 	SynchronizationPlan("Synchronization Plan","Synchronization Plan",TreeObject.SYNCHRONIZATIONPLAN,true),      
 	ServiceConfiguration("Service Configuration","Service Configuration",TreeObject.SERVICE_CONFIGURATION),
+	Workflow("Workflow Processes","Workflow Processes",TreeObject.WORKFLOW),
+	JobRegistry("Job Registry","Job Registry",TreeObject.JOB_REGISTRY),
 	Resources("Resources","Resources",TreeObject.RESOURCES),
 	CustomType("Custom Type","Custom Type",TreeObject.CUSTOM_TYPE);
 	
