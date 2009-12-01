@@ -1729,8 +1729,9 @@ public class DataModelMainPage extends AMainPageV2 {
 						if (term instanceof XSDElementDeclaration) {
 							// Annotations
 							XSDTypeDefinition type = ((XSDElementDeclaration)term).getTypeDefinition();
-							if(!Util.IsAImporedElement(type, xsdSchema))
+							if(!Util.IsAImporedElement(type, xsdSchema)){								
 							   setAnnotationActions(manager);
+							}
 							if (((XSDElementDeclaration)term).getTypeDefinition() instanceof XSDSimpleTypeDefinition)
 							{
 								manager.add(setFacetMsgAction);
@@ -1799,11 +1800,13 @@ public class DataModelMainPage extends AMainPageV2 {
 		if (obj instanceof XSDAnnotation
 				&& selectedObjs.length == 1) {
 			
-			if(((XSDAnnotation)obj).getSchema().getTargetNamespace() == null && !Util.IsAImporedElement((XSDAnnotation)obj, xsdSchema))
+			if(((XSDAnnotation)obj).getSchema().getTargetNamespace() == null && !Util.IsAImporedElement((XSDAnnotation)obj, xsdSchema)){
 				setAnnotationActions(manager);
-			else if(!Util.IsAImporedElement((XSDAnnotation)obj, xsdSchema))
+				manager.add(setAnnotationSchematronAction);
+			}else if(!Util.IsAImporedElement((XSDAnnotation)obj, xsdSchema))
 			{
 				setAnnotationActions(manager);
+				manager.add(setAnnotationSchematronAction);
 			}
 		}
 		
@@ -1857,10 +1860,9 @@ public class DataModelMainPage extends AMainPageV2 {
 		manager.add(setAnnotationForeignKeyInfoAction);
 		manager.add(setAnnotationWriteAction);
 		manager.add(setAnnotationHiddenAction);
-		manager.add(setAnnotationSchematronAction);
+		//manager.add(setAnnotationSchematronAction);
 		manager.add(setAnnotationSourceSystemAction);
 		manager.add(setAnnotationTargetSystemsAction);
-		//manager.add(setAnnotationDocumentationAction);
 		manager.add(deleteValidationRule);
 	}
 	
