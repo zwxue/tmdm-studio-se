@@ -117,6 +117,7 @@ public class ValidationRuleDialog extends Dialog {
 	@Override
 	protected void okPressed() {
 		name=text.getText();
+		XpathSelectDialog.setContext(null);
 		deactiveAllCellEditors();
 		getValidationRules();
 		super.okPressed();
