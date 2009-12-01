@@ -50,6 +50,7 @@ import com.amalto.workbench.actions.AServerViewAction;
 import com.amalto.workbench.actions.BrowseRevisionAction;
 import com.amalto.workbench.actions.BrowseViewAction;
 import com.amalto.workbench.actions.CopyXObjectAction;
+import com.amalto.workbench.actions.DeleteJobAction;
 import com.amalto.workbench.actions.DeleteWorkflowProcessAction;
 import com.amalto.workbench.actions.DeleteXObjectAction;
 import com.amalto.workbench.actions.EditXObjectAction;
@@ -135,6 +136,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	private GenerateWorkflowDefaultTransformerAction defaultworkflowTransformeraction;
 	//job
 	private ImportTISJobAction importjobaction;
+	private DeleteJobAction deleteJobAction;
 	private GenerateJobDefaultTransformerAction defaultjobtransformeraction;
 	/**********************************************************************************
 	 * The VIEW
@@ -598,6 +600,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				manager.add(defaultworkflowTransformeraction);
 				break;
 			case TreeObject.JOB:				
+				manager.add(deleteJobAction);
 				manager.add(defaultjobtransformeraction);
 				break;
 			case TreeObject.JOB_REGISTRY:
@@ -723,6 +726,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		defaultworkflowTransformeraction=new GenerateWorkflowDefaultTransformerAction(this);
 		//job
 		importjobaction=new ImportTISJobAction(this);
+		deleteJobAction=new DeleteJobAction(this);
 		defaultjobtransformeraction=new GenerateJobDefaultTransformerAction(this);
 		
 		exportAction=new ExportItemsAction(this);
