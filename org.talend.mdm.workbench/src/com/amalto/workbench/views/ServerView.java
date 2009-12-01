@@ -50,8 +50,13 @@ import com.amalto.workbench.actions.AServerViewAction;
 import com.amalto.workbench.actions.BrowseRevisionAction;
 import com.amalto.workbench.actions.BrowseViewAction;
 import com.amalto.workbench.actions.CopyXObjectAction;
+import com.amalto.workbench.actions.DeleteWorkflowProcessAction;
 import com.amalto.workbench.actions.DeleteXObjectAction;
 import com.amalto.workbench.actions.EditXObjectAction;
+import com.amalto.workbench.actions.GenerateJobDefaultTransformerAction;
+import com.amalto.workbench.actions.GenerateWorkflowDefaultTransformerAction;
+import com.amalto.workbench.actions.ImportTISJobAction;
+import com.amalto.workbench.actions.ImportWorkflowProcessAction;
 import com.amalto.workbench.actions.NewCategoryAction;
 import com.amalto.workbench.actions.NewUserAction;
 import com.amalto.workbench.actions.NewXObjectAction;
@@ -123,6 +128,14 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
 
 	private BrowseRevisionAction browseRevisionAction;
+	
+	//workflow
+	private ImportWorkflowProcessAction workflowAction;
+	private DeleteWorkflowProcessAction deleteWorkflowProcessAction;
+	private GenerateWorkflowDefaultTransformerAction defaultworkflowTransformeraction;
+	//job
+	private ImportTISJobAction importjobaction;
+	private GenerateJobDefaultTransformerAction defaultjobtransformeraction;
 	/**********************************************************************************
 	 * The VIEW
 	 * 
@@ -570,14 +583,26 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			case TreeObject.DATA_MODEL_RESOURCE:	
 			case TreeObject.DATA_MODEL_TYPES_RESOURCE:	
 			case TreeObject.PICTURES_RESOURCE:
-				break;
-				
+				break;				
 			case TreeObject.DATA_CLUSTER:
 				if (xobject.isXObject()) {
 //					manager.add(exportAction);
 //					manager.add(importAction);
 					manager.add(browseViewAction);
 				}
+			case TreeObject.WORKFLOW:
+				manager.add(workflowAction);
+				break;
+			case TreeObject.WORKFLOW_PROCESS:
+				manager.add(deleteWorkflowProcessAction);
+				manager.add(defaultworkflowTransformeraction);
+				break;
+			case TreeObject.JOB:				
+				manager.add(defaultjobtransformeraction);
+				break;
+			case TreeObject.JOB_REGISTRY:
+				manager.add(importjobaction);
+				break;
 			case TreeObject.ROLE:
 			case TreeObject.VIEW:				
 			default:
@@ -692,6 +717,13 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		browseViewAction = new BrowseViewAction(this);
 		copyAction = new CopyXObjectAction(this);
 		pasteAction = new PasteXObjectAction(this);
+		//workflow
+		workflowAction=new ImportWorkflowProcessAction(this);
+		deleteWorkflowProcessAction=new DeleteWorkflowProcessAction(this);
+		defaultworkflowTransformeraction=new GenerateWorkflowDefaultTransformerAction(this);
+		//job
+		importjobaction=new ImportTISJobAction(this);
+		defaultjobtransformeraction=new GenerateJobDefaultTransformerAction(this);
 		
 		exportAction=new ExportItemsAction(this);
 		importAction=new ImportItemsAction(this);
@@ -722,7 +754,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					}
 					return;
 				}// if action
-				if (xo.getType() == TreeObject.SUBSCRIPTION_ENGINE||xo.getType()==TreeObject.DATA_CLUSTER)
+				if(xo.getType()== TreeObject.WORKFLOW) return;
+				if (xo.getType() == TreeObject.SUBSCRIPTION_ENGINE||xo.getType()==TreeObject.DATA_CLUSTER || xo.getType()== TreeObject.WORKFLOW_PROCESS)
 					browseViewAction.run();
 				else
 					editXObjectAction.run();
