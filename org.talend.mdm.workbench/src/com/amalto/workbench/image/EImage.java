@@ -244,6 +244,8 @@ public enum EImage {
 	DOTS_BUTTON("icons/dots_button.gif"),
 	ZAP("icons/zap.gif"),
 	ROUTINE("icons/routine.gif"),
+	PROCESS("icons/process.png"),
+	JOB("icons/process_icon.gif"),	
 	SERVICE_CONFIGURATION("icons/config.gif");
 
 	EImage(String path){
