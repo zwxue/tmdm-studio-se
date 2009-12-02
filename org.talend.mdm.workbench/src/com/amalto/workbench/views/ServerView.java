@@ -569,7 +569,21 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				if (!WorkbenchClipboard.getWorkbenchClipboard().isEmpty())
 					manager.add(pasteAction);
 
+				break;				
+			case TreeObject.WORKFLOW:
+				manager.add(workflowAction);
 				break;
+			case TreeObject.WORKFLOW_PROCESS:
+				manager.add(deleteWorkflowProcessAction);
+				manager.add(defaultworkflowTransformeraction);
+				break;
+			case TreeObject.JOB:				
+				manager.add(deleteJobAction);
+				manager.add(defaultjobtransformeraction);
+				break;
+			case TreeObject.JOB_REGISTRY:
+				manager.add(importjobaction);
+				break;				
 			case TreeObject._ACTION_:
 				manager.add((Action) xobject.getWsObject());
 				break;
@@ -591,21 +605,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 //					manager.add(exportAction);
 //					manager.add(importAction);
 					manager.add(browseViewAction);
-				}
-			case TreeObject.WORKFLOW:
-				manager.add(workflowAction);
-				break;
-			case TreeObject.WORKFLOW_PROCESS:
-				manager.add(deleteWorkflowProcessAction);
-				manager.add(defaultworkflowTransformeraction);
-				break;
-			case TreeObject.JOB:				
-				manager.add(deleteJobAction);
-				manager.add(defaultjobtransformeraction);
-				break;
-			case TreeObject.JOB_REGISTRY:
-				manager.add(importjobaction);
-				break;
+				}			
 			case TreeObject.ROLE:
 			case TreeObject.VIEW:				
 			default:
