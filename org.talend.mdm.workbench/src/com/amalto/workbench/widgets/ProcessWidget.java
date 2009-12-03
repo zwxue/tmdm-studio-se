@@ -1,7 +1,9 @@
 package com.amalto.workbench.widgets;
 
+import java.rmi.RemoteException;
 import java.util.Map;
 
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -20,6 +22,10 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.webservices.WSProcessTaskInstance;
+import com.amalto.workbench.webservices.WSProcessTaskInstanceArray;
+import com.amalto.workbench.webservices.WSWorkflowGetTaskList;
+import com.amalto.workbench.webservices.XtentisPort;
 
 public class ProcessWidget {
 	FormToolkit toolkit;
@@ -30,11 +36,14 @@ public class ProcessWidget {
 	private Button delButton;
 	String name;
 	ProcessList plist;
-	public ProcessWidget(FormToolkit toolkit, Composite composite, String name, ProcessList plist){
+	TableViewer viewer;
+	XtentisPort port;
+	public ProcessWidget(FormToolkit toolkit, Composite composite, String name, ProcessList plist,TableViewer viewer){
 		this.toolkit= toolkit;
 		this.parent=toolkit.createComposite(composite,0);
 		this.name=name;
 		this.plist=plist;
+		this.viewer=viewer;
 		GridLayout layout=new GridLayout();
 		layout.numColumns=7;
 		layout.marginBottom=0;
@@ -44,6 +53,14 @@ public class ProcessWidget {
 		create();
 	}
 	
+	public TableViewer getViewer() {
+		return viewer;
+	}
+
+	public void setViewer(TableViewer viewer) {
+		this.viewer = viewer;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -64,7 +81,17 @@ public class ProcessWidget {
 	public void setDelButton(Button delButton) {
 		this.delButton = delButton;
 	}
+	
+	public XtentisPort getPort() {
+		return port;
+	}
+
+	public void setPort(XtentisPort port) {
+		this.port = port;
+	}
+
 	public void setSelection(String name){
+		
 		for(Map.Entry<String, ProcessWidget> entry: plist.map.entrySet()){
 			if(name.equals(entry.getKey())){
 				setBackground(parent.getShell().getDisplay().getSystemColor(SWT.COLOR_LIST_SELECTION));
@@ -72,7 +99,15 @@ public class ProcessWidget {
 				entry.getValue().setBackground(parent.getParent().getBackground());
 			}
 		}
-
+		WSProcessTaskInstanceArray tasklist;
+		try {
+			tasklist = port.workflowGetTaskList(new WSWorkflowGetTaskList(name));
+			WSProcessTaskInstance[] tasks=tasklist.getWstaskinstance();
+			viewer.setInput(tasks);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	private void setBackground(Color color){
 		Control[] childs=parent.getChildren();
@@ -85,19 +120,27 @@ public class ProcessWidget {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			setSelection(name);
+			//test
+			if(e.widget instanceof Button){
+				Button btn=(Button)e.widget;
+				statusLabel.setText(btn.getToolTipText());
+			}
 		}
 	};
+	
+	private Button process;
+	private Label statusLabel;
 	private void create(){
-		Button process=toolkit.createButton(parent, name, SWT.TOGGLE);
+		process=toolkit.createButton(parent, name, SWT.TOGGLE);
 		GridData gd=new GridData(SWT.LEFT,SWT.CENTER,false,false,1,1);
 		gd.widthHint=140;
 		process.setLayoutData(gd);
-		process.addSelectionListener(listener);
-		Label statusLabel=toolkit.createLabel(parent, "Status:");
-		Label description=toolkit.createLabel(parent, "RUNNING");
+		//process.addSelectionListener(listener);
+		Label label=toolkit.createLabel(parent, "Status:");
+		statusLabel=toolkit.createLabel(parent, "RUNNING");
 		gd=new GridData(SWT.FILL,SWT.CENTER,false,true,1,1);
 		gd.widthHint=300;		
-		description.setLayoutData(gd);
+		statusLabel.setLayoutData(gd);
         //start/stop/suspend/resume
         startButton = toolkit.createButton(parent, "", SWT.TOGGLE);
         startButton.setImage(ImageCache.getCreatedImage(EImage.RUN_EXC.getPath()));
@@ -158,7 +201,7 @@ public class ProcessWidget {
 			}
         	
         });
-        description.addMouseListener(new MouseListener(){
+        statusLabel.addMouseListener(new MouseListener(){
 
 			public void mouseDoubleClick(MouseEvent e) {
 				// TODO Auto-generated method stub
@@ -210,6 +253,22 @@ public class ProcessWidget {
 	}
 	public void setStopButton(Button stopButton) {
 		this.stopButton = stopButton;
+	}
+
+	public Button getProcess() {
+		return process;
+	}
+
+	public void setProcess(Button process) {
+		this.process = process;
+	}
+
+	public Label getStatusLabel() {
+		return statusLabel;
+	}
+
+	public void setStatusLabel(Label statusLabel) {
+		this.statusLabel = statusLabel;
 	}
 	
 }

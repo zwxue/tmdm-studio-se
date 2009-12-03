@@ -38,6 +38,6 @@ public class ValidationRuleExcpressDialog extends Dialog {
 	}
 	@Override
 	protected boolean isResizable() {
-		return true;
+		return false;
 	}
 }

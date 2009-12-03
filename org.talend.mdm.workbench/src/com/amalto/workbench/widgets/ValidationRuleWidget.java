@@ -4,12 +4,13 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.dialogs.ValidationRuleExcpressDialog;
@@ -49,11 +50,12 @@ public class ValidationRuleWidget {
 		button.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				
-				dlg=new ValidationRuleExcpressDialog(composite.getShell(),"Build Validation Rule Expression ", text.getText(),conceptName);
-	       		dlg.setBlockOnOpen(true);
+				Shell shell=new Shell(composite.getDisplay(),SWT.BORDER);
+				dlg=new ValidationRuleExcpressDialog(shell,"Build Validation Rule Expression ", text.getText(),conceptName);
 	       		dlg.create();
-	       		//dlg.getShell().setSize(new Point(640,560));
+	       		dlg.getShell().setMaximized(false);
+	       		//dlg.getShell().setSize(new Point(640,560));	       		
+	       		dlg.setBlockOnOpen(true);
 	       		int ret = dlg.open();
 	       		if (ret == Window.OK) {
 	                text.setText(dlg.getExpression());

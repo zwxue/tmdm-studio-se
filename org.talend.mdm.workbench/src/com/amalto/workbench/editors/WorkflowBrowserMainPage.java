@@ -1,6 +1,9 @@
 package com.amalto.workbench.editors;
 
+import java.net.URL;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -9,37 +12,45 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.models.IXObjectModelListener;
-import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
+import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.webservices.WSProcessInstance;
+import com.amalto.workbench.webservices.WSProcessInstanceArray;
+import com.amalto.workbench.webservices.WSProcessTaskInstance;
+import com.amalto.workbench.webservices.WSProcessTaskInstanceArray;
+import com.amalto.workbench.webservices.WSWorkflowGetProcessInstances;
+import com.amalto.workbench.webservices.WSWorkflowGetTaskList;
+import com.amalto.workbench.webservices.WSWorkflowProcessDefinitionUUID;
+import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.ProcessList;
 import com.amalto.workbench.widgets.ProcessWidget;
-import com.amalto.workbench.widgets.WidgetFactory;
 
 public class WorkflowBrowserMainPage extends AMainPage implements IXObjectModelListener {
 	private Table table;
 	private TableViewer viewer;
 	private FormToolkit toolkit;
-	private Composite processCom;
+	private Group processCom;
 
 	private ScrolledComposite ccrollComposite;
 	private ProcessList plist;
+	private TreeObject xobject;
+	private XtentisPort port;
 	public WorkflowBrowserMainPage(FormEditor editor) {
         super(
         		editor,
@@ -64,27 +75,7 @@ public class WorkflowBrowserMainPage extends AMainPage implements IXObjectModelL
         	Composite composite = managedForm.getForm().getBody();
         	composite.setLayout(new GridLayout(1,false));
         	
-        	Composite creatComposite=toolkit.createComposite(composite);
-        	creatComposite.setLayoutData(    
-        			new GridData(SWT.FILL,SWT.CENTER,true,false,1,1)
-        	);
-        	creatComposite.setLayout(new GridLayout(3,false));
-        	
-        	Label label=toolkit.createLabel(creatComposite, "Instance Name");
-        	final Text text=toolkit.createText(creatComposite, ""); 
-        	GridData gd11=new GridData(SWT.FILL,SWT.CENTER,false,false,1,1);
-        	gd11.widthHint=200;
-        	text.setLayoutData(gd11); 
-        	Button creatBtn=toolkit.createButton(creatComposite, "Create Instance", SWT.PUSH);
-        	creatBtn.addSelectionListener(new SelectionAdapter(){
-        		@Override
-        		public void widgetSelected(SelectionEvent e) {
-        			if(text.getText().length()>0){
-	        			ProcessWidget pw=plist.add(text.getText());
-	        			
-        			}
-        		}
-        	});
+
         	Composite separator = toolkit.createCompositeSeparator(composite);
         	separator.setLayoutData(    
         			new GridData(SWT.FILL,SWT.CENTER,true,false,1,1)
@@ -92,9 +83,11 @@ public class WorkflowBrowserMainPage extends AMainPage implements IXObjectModelL
         	((GridData)separator.getLayoutData()).heightHint = 2;     
         	
         	//process instances list
-		    ccrollComposite = new ScrolledComposite(composite, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);		    		       	
+		    ccrollComposite = new ScrolledComposite(composite,  SWT.H_SCROLL | SWT.V_SCROLL);		    		       	
 		    ccrollComposite.setLayoutData(new GridData(SWT.FILL,SWT.CENTER,true,false,1,1));        	
-        	processCom=toolkit.createComposite(ccrollComposite);
+        	processCom=new Group(ccrollComposite,0);//toolkit.createComposite(ccrollComposite);
+        	processCom.setText("Process Instance List");
+        	processCom.setBackground(processCom.getShell().getDisplay().getSystemColor(SWT.COLOR_WHITE));
         	processCom.setLayout(new GridLayout(1,false));
         	GridData gd=new GridData(SWT.FILL,SWT.CENTER,true,true,1,1);
         	gd.heightHint=150;
@@ -103,8 +96,42 @@ public class WorkflowBrowserMainPage extends AMainPage implements IXObjectModelL
         	ccrollComposite.setExpandHorizontal(true);
         	ccrollComposite.setExpandVertical(true);
         	ccrollComposite.setMinSize(400,4*31);
-        	plist=new ProcessList(toolkit, processCom, ccrollComposite);
-        	
+        	plist=new ProcessList(toolkit, processCom, ccrollComposite,viewer);
+        	xobject=getXObject();
+			port = Util.getPort(
+					new URL(xobject.getEndpointAddress()),
+					xobject.getUniverse(),
+					xobject.getUsername(),
+					xobject.getPassword()
+			);	  
+			WSWorkflowProcessDefinitionUUID uuid= (WSWorkflowProcessDefinitionUUID)xobject.getWsKey();
+
+			WSProcessInstanceArray array=port.workflowGetProcessInstances(new WSWorkflowGetProcessInstances(uuid));
+//			//test code
+//			List<WSProcessInstance> list=new ArrayList<WSProcessInstance>();
+//			for(int i=0; i<2; i++){
+//				WSProcessInstance wsprocess=new WSProcessInstance("name"+i,"RUNNING");
+//				list.add(wsprocess);
+//			}
+//			array.setInstance(list.toArray(new WSProcessInstance[list.size()]));
+//			//end
+			if(array!=null && array.getInstance()!=null){
+				for(final WSProcessInstance instance:array.getInstance()){
+					final ProcessWidget pw=plist.add(instance.getName());
+					pw.setPort(port);
+					pw.getStatusLabel().setText(instance.getState());
+					pw.getProcess().addSelectionListener(new SelectionListener(){
+
+						public void widgetDefaultSelected(SelectionEvent e) {
+
+						}
+						public void widgetSelected(SelectionEvent e) {							
+								pw.setSelection(pw.getName());		
+								
+						}						
+					});
+				}
+			}        				
         	//process Tasks 
         	Label label1=toolkit.createLabel(composite, "Process Tasks:");
         	label1.setLayoutData(    
@@ -112,7 +139,7 @@ public class WorkflowBrowserMainPage extends AMainPage implements IXObjectModelL
         	);
         	String[] columns={"Task","Status","Candidates"};
         	createTable(composite,columns);
-		
+        	plist.setViewer(viewer);
         } catch (Exception e) {
             e.printStackTrace();
         }	
@@ -142,8 +169,10 @@ public class WorkflowBrowserMainPage extends AMainPage implements IXObjectModelL
         	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {}
         	@SuppressWarnings("unchecked")
 			public Object[] getElements(Object inputElement) {
-        		ArrayList<Line> lines = (ArrayList<Line>)inputElement;
-        		return lines.toArray(new Line[lines.size()]);
+        		if(inputElement instanceof WSProcessTaskInstance[])
+        			return (WSProcessTaskInstance[]) inputElement;
+        		else
+        			return new Object[0];
         	}
         });
         
@@ -156,8 +185,18 @@ public class WorkflowBrowserMainPage extends AMainPage implements IXObjectModelL
 			}
 
 			public String getColumnText(Object element, int columnIndex) {
-				// TODO Auto-generated method stub
-				return null;
+				WSProcessTaskInstance task=(WSProcessTaskInstance)element;
+				switch(columnIndex){
+				case 0:
+					return task.getUuid()==null?"":task.getUuid();
+				case 1:
+					return task.getStatus()==null?"":task.getStatus();
+				case 2:
+					return task.getCandidates()==null?"":task.getCandidates();
+				default:
+						return "";
+				}
+
 			}
 
 			public void addListener(ILabelProviderListener listener) {

@@ -2,12 +2,10 @@ package com.amalto.workbench.providers;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.swt.widgets.Tree;
 
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
@@ -17,10 +15,8 @@ import com.amalto.workbench.utils.ResourcesUtil;
 import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSComponent;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModelPK;
-import com.amalto.workbench.webservices.WSGetComponentVersion;
 import com.amalto.workbench.webservices.WSGetCurrentUniverse;
 import com.amalto.workbench.webservices.WSGetMenuPKs;
 import com.amalto.workbench.webservices.WSGetRolePKs;
@@ -42,10 +38,11 @@ import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
-import com.amalto.workbench.webservices.WSVersion;
 import com.amalto.workbench.webservices.WSViewPK;
+import com.amalto.workbench.webservices.WSWorkflowGetProcessDefinitions;
+import com.amalto.workbench.webservices.WSWorkflowProcessDefinitionUUID;
+import com.amalto.workbench.webservices.WSWorkflowProcessDefinitionUUIDArray;
 import com.amalto.workbench.webservices.XtentisPort;
-import com.sun.xml.rpc.processor.util.CanonicalModelWriter.GetNameComparator;
 
 public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
@@ -424,7 +421,19 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 					TreeObject.WORKFLOW,
 					null,
 					null);
-
+			WSWorkflowProcessDefinitionUUIDArray array=port.workflowGetProcessDefinitions(new WSWorkflowGetProcessDefinitions(".*"));
+			if(array!=null){
+				for (WSWorkflowProcessDefinitionUUID id:array.getWsWorkflowProcessDefinitions()){
+					TreeObject obj = new TreeObject(
+							id.getProcessName()+"_"+id.getProcessVersion(),
+							serverRoot,
+							TreeObject.WORKFLOW_PROCESS,
+							id,
+							null   //no storage to save space
+					);
+					workflow.addChild(obj);
+				}
+			}
 			monitor.worked(1);
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");	
 
