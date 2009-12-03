@@ -43,8 +43,7 @@ public class GenerateWorkflowDefaultTransformerAction extends Action{
     	   WorkflowDefaultTransformerGenerateWizard wizard = new WorkflowDefaultTransformerGenerateWizard(xobject,server);
 			wizard.setWindowTitle("Generate workflow default transformer");
 			WizardDialog dialog = new WizardDialog(server.getSite().getShell(), wizard);
-			dialog.open();			
-			
+			dialog.open();						
        }catch(Exception e){
     	   
        }

@@ -14,6 +14,8 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
+import com.amalto.workbench.webservices.WSWorkflowProcessDefinitionUUID;
+import com.amalto.workbench.webservices.WSWorkflowUnDeploy;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class DeleteWorkflowProcessAction extends Action{
@@ -47,9 +49,12 @@ public class DeleteWorkflowProcessAction extends Action{
 					xobject.getPassword()
 			);		
 			xobject.getParent().removeChild(xobject);
-
+			WSWorkflowProcessDefinitionUUID uuid=(WSWorkflowProcessDefinitionUUID)xobject.getWsKey();
+			port.workflowUnDeploy(new WSWorkflowUnDeploy(uuid));
+			//refresh server tree
+			new ServerRefreshAction(server).run();
        }catch(Exception e){
-    	   
+    	   e.printStackTrace();
        }
 	}
 }

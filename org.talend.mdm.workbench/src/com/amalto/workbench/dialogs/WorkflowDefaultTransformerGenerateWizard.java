@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.w3c.dom.Element;
 
+import com.amalto.workbench.actions.ServerRefreshAction;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
@@ -26,6 +27,7 @@ import com.amalto.workbench.webservices.WSString;
 import com.amalto.workbench.webservices.WSTransformerProcessStep;
 import com.amalto.workbench.webservices.WSTransformerV2;
 import com.amalto.workbench.webservices.WSTransformerVariablesMapping;
+import com.amalto.workbench.webservices.WSWorkflowProcessDefinitionUUID;
 
 public class WorkflowDefaultTransformerGenerateWizard extends Wizard {
 	private TreeObject xobject;
@@ -76,16 +78,17 @@ public class WorkflowDefaultTransformerGenerateWizard extends Wizard {
 			configuration=configuration+"<apiType>"+apiType+"</apiType>\n";
 		}
 		parameter=parameter+configuration+"\n";
+		WSWorkflowProcessDefinitionUUID uuid=(WSWorkflowProcessDefinitionUUID)xobject.getWsKey();
 		//get process id
-		String process="<processId>"+ xobject.getDisplayName()+ "</processId>";
-		process=process+"<processVersion>2.0</processVersion>\n";
+		String process="<processId>"+ uuid.getProcessName()+ "</processId>";
+		process=process+"<processVersion>"+uuid.getProcessVersion()+"</processVersion>\n";
 		//get the whole parameters
 		parameter=parameter+process+variableext.getText();		
 		parameter=parameter+"</parameters>";
 		steps[1]=new WSTransformerProcessStep("amalto/local/transformer/plugin/workflowtrigger","Generate the workflowtrigger step",parameter,input,output,false);	
 		
-		transformer.setName("Default_WorkflowProcess_"+xobject.getDisplayName()+"_transformer");
-		transformer.setDescription("Default Workflow Process "+xobject.getDisplayName()+" transformer");
+		transformer.setName("Default_WorkflowProcess_"+uuid.getProcessName()+"_transformer");
+		transformer.setDescription("Default Workflow Process "+uuid.getProcessName()+" transformer");
 		transformer.setProcessSteps(steps);
 		
 		Util.getPort(xobject).putTransformerV2(new WSPutTransformerV2(transformer));
@@ -93,6 +96,8 @@ public class WorkflowDefaultTransformerGenerateWizard extends Wizard {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		//refresh server tree
+		new ServerRefreshAction(view).run();
 		return true;
 	}
 	public boolean canFinish(){
