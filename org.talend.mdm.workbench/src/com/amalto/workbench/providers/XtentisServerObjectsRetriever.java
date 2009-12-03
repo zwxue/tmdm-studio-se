@@ -422,7 +422,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 					null,
 					null);
 			WSWorkflowProcessDefinitionUUIDArray array=port.workflowGetProcessDefinitions(new WSWorkflowGetProcessDefinitions(".*"));
-			if(array!=null){
+			if(array!=null && array.getWsWorkflowProcessDefinitions()!=null){
 				for (WSWorkflowProcessDefinitionUUID id:array.getWsWorkflowProcessDefinitions()){
 					TreeObject obj = new TreeObject(
 							id.getProcessName()+"_"+id.getProcessVersion(),
