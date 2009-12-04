@@ -38,6 +38,7 @@ public class WSRoutingOrderV2_LiteralSerializer extends LiteralObjectSerializerB
     private static final QName ns1_serviceParameters_QNAME = new QName("", "serviceParameters");
     private static final QName ns1_message_QNAME = new QName("", "message");
     private static final QName ns1_bindingUniverseName_QNAME = new QName("", "bindingUniverseName");
+    private static final QName ns1_bindingUserToken_QNAME = new QName("", "bindingUserToken");
     
     public WSRoutingOrderV2_LiteralSerializer(QName type, String encodingStyle) {
         this(type, encodingStyle, false);
@@ -226,6 +227,17 @@ public class WSRoutingOrderV2_LiteralSerializer extends LiteralObjectSerializerB
                 reader.nextElementContent();
             }
         }
+        elementName = reader.getName();
+        if (reader.getState() == XMLReader.START) {
+            if (elementName.equals(ns1_bindingUserToken_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_bindingUserToken_QNAME, reader, context);
+                if (member == null) {
+                    throw new DeserializationException("literal.unexpectedNull");
+                }
+                instance.setBindingUserToken((java.lang.String)member);
+                reader.nextElementContent();
+            }
+        }
         
         XMLReaderUtil.verifyReaderState(reader, XMLReader.END);
         return (Object)instance;
@@ -276,6 +288,9 @@ public class WSRoutingOrderV2_LiteralSerializer extends LiteralObjectSerializerB
         }
         if (instance.getBindingUniverseName() != null) {
             ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getBindingUniverseName(), ns1_bindingUniverseName_QNAME, null, writer, context);
+        }
+        if (instance.getBindingUserToken() != null) {
+            ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getBindingUserToken(), ns1_bindingUserToken_QNAME, null, writer, context);
         }
     }
 }
