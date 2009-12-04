@@ -25,6 +25,8 @@ import com.amalto.workbench.webservices.WSGetSynchronizationPlanPKs;
 import com.amalto.workbench.webservices.WSGetTransformerV2PKs;
 import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSGetViewPKs;
+import com.amalto.workbench.webservices.WSMDMJob;
+import com.amalto.workbench.webservices.WSMDMNULL;
 import com.amalto.workbench.webservices.WSMenuPK;
 import com.amalto.workbench.webservices.WSPing;
 import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
@@ -285,6 +287,28 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			monitor.worked(1);
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
 			
+			
+			//Job
+			TreeParent jobs = new TreeParent(EXtentisObjects.JobRegistry.getDisplayName(),serverRoot,TreeObject.JOB_REGISTRY,null,null);
+			WSMDMJob[] jobPKs = port.getMDMJob(new WSMDMNULL()).getWsMDMJob();
+			if (jobPKs!=null) {
+				monitor.subTask("Loading Jobs");
+				for (int i = 0; i < jobPKs.length; i++) {
+					String name = jobPKs[i].getJobName()+"_"+jobPKs[i].getJobVersion();
+					TreeObject obj = new TreeObject(
+							name,
+							serverRoot,
+							TreeObject.JOB,
+							new WSViewPK(name),
+							null   //no storage to save space
+					);
+					jobs.addChild(obj);
+				}
+			}
+			monitor.worked(1);
+			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
+			
+			
 
 
 			//Views
@@ -437,7 +461,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			monitor.worked(1);
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");	
 
-			//Job registry
+			/*//Job registry
 			TreeParent jobregistry=new TreeParent(
 					EXtentisObjects.JobRegistry.getDisplayName(),
 					serverRoot,
@@ -446,7 +470,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 					null);
 
 			monitor.worked(1);
-			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");	
+			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");*/	
 //			Transformers
 			WSTransformerV2PK[] transformerPKs = null;
 			boolean hasTransformers = true;
@@ -576,6 +600,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
 			serverRoot.addChild(models);
 			serverRoot.addChild(dataClusters);
+			serverRoot.addChild(jobs);
 			serverRoot.addChild(views);
 			serverRoot.addChild(storedProcedures);
 			serverRoot.addChild(engine);
@@ -584,7 +609,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			serverRoot.addChild(serviceConfiguration);
 			serverRoot.addChild(workflow);
 			serverRoot.addChild(resources);
-			serverRoot.addChild(jobregistry);
+			//serverRoot.addChild(jobregistry);
 //			serverRoot.addChild(customType);
 			if (hasTransformers)serverRoot.addChild(transformers);
 			if (hasRoles) serverRoot.addChild(roles);

@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -304,11 +305,14 @@ public final class XmlUtil {
 	
 //	//test
 //	public static void main(String[] args) {
-//		String xml="<Country>\n  <name>China1</name>\n  <continent>Asian123</continent>\n</Country>";
-//		try {
-//			System.out.println(XmlUtil.formatCompact(xml, "UTF-8"));
-//		} catch (DocumentException e) {
-//			e.printStackTrace();
+//		for (int i = 0; i < args.length; i++) {
+//			String xml = "<Country>\n  <name>China1</name>\n  <continent>Asian123</continent>\n</Country>";
+//			// Pattern tt = Pattern.compile("<\?xml\sversion=\"1.0\"\sencoding=\"UTF-8\"\?>");
+//			try {
+//				System.out.println(XmlUtil.formatCompact(xml, "UTF-8"));
+//			} catch (DocumentException e) {
+//				e.printStackTrace();
+//			}
 //		}
 //	}
 }

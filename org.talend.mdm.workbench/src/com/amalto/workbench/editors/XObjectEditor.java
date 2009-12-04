@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.Document;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -78,6 +79,9 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 	           		this.setPageText(1, "Schema");
 
 	           		break;
+	           	case TreeObject.JOB:
+	           		addPage(new JobMainPage(this));
+	           		
 	           	case TreeObject.INBOUND_PLUGIN:
 	           		break;
 	           	case TreeObject.OUTBOUND_PLUGIN:
@@ -314,6 +318,9 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 			return ImageCache.getImage( "icons/unique.gif").createImage();
 		else if (object.getType() == TreeObject.SERVICE_CONFIGURATION)
 			return ImageCache.getImage( EImage.SERVICE_CONFIGURATION.getPath()).createImage();
+		
+		else if(object.getType()==TreeObject.JOB)
+			return ImageCache.getImage(EImage.JOB.getPath()).createImage();
 		
 		return ImageCache.getImage( "icons/error.gif").createImage();
     }

@@ -1,8 +1,6 @@
 package com.amalto.workbench.actions;
 
 import java.net.URL;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -13,7 +11,6 @@ import org.eclipse.ui.IWorkbenchPage;
 
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
@@ -38,8 +35,6 @@ import com.amalto.workbench.webservices.WSRole;
 import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
-import com.amalto.workbench.webservices.WSServiceGetConfiguration;
-import com.amalto.workbench.webservices.WSServicePutConfiguration;
 import com.amalto.workbench.webservices.WSStoredProcedure;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSSynchronizationPlan;
@@ -114,7 +109,7 @@ public class EditXObjectAction extends Action{
 	           		xobject.setWsObject(wsStoredProcedure);
 	           		break;	  
 	           	case TreeObject.ROLE:
-	           		WSRole wsRole = port.getRole(new WSGetRole((WSRolePK)xobject.getWsKey())	); 
+	           		WSRole wsRole = port.getRole(new WSGetRole((WSRolePK)xobject.getWsKey())); 
 	           		xobject.setWsObject(wsRole);
 	           		break;	  	           		
 	           	case TreeObject.ROUTING_RULE:
@@ -137,8 +132,19 @@ public class EditXObjectAction extends Action{
 	           		WSSynchronizationPlan wsSynchronizationPlan = port.getSynchronizationPlan(new WSGetSynchronizationPlan((WSSynchronizationPlanPK)xobject.getWsKey())); 
 	           		xobject.setWsObject(wsSynchronizationPlan);
 	           		break;
+	           		
+	        	case TreeObject.JOB_REGISTRY:
+	        		//System.out.println("JOB_REGISTRY "+ xobject.getDisplayName());
+	           		break;
+	        	case TreeObject .JOB:
+	        		
+	        		//System.out.println("JOB "+ xobject.getDisplayName()+" "+xobject.getWsKey());
+	        		xobject.setWsObject(xobject.getDisplayName());
+	        		break;
+	           		
 	           	case TreeObject.SERVICE_CONFIGURATION:
 	           		break;
+	           
 	           	case TreeObject.RESOURCES:
 	           	case TreeObject.CUSTOM_TYPE:
 				case TreeObject.DATA_MODEL_RESOURCE:	

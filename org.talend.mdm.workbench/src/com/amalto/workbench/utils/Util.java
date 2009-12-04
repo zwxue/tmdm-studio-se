@@ -657,7 +657,7 @@ public class Util {
 	 *      
 	 *      Multi-Part Form Post
 	 *********************************************************************/
-    public static String uploadFileToAppServer(String URL, String localFilename, String username, String password)  throws XtentisException{
+    public static String uploadFileToAppServer(String URL,JobInfo info,String localFilename, String username, String password)  throws XtentisException{
         System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
         System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
         /*
@@ -675,8 +675,10 @@ public class Util {
             client.setConnectionTimeout(60000);
             client.getState().setAuthenticationPreemptive(true);
             client.getState().setCredentials(null,null, new UsernamePasswordCredentials(username,password));
-        
-            mppost.addParameter(localFilename,new File(localFilename));
+            if(info!=null)
+            	//mppost.addParameter(localFilename,new File(localFilename));
+            //else
+                mppost.addParameter(info.getJobname()+"_"+info.getJobversion()+".war",new File(localFilename));
             
             client.executeMethod(mppost);
             if (mppost.getStatusCode() != HttpStatus.SC_OK) {

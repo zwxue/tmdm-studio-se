@@ -56,7 +56,7 @@ public class ImportWorkflowProcessAction extends Action{
 				//after deployed
 				String endpointaddress=xobject.getEndpointAddress();
 				String uploadURL = new URL(endpointaddress).getProtocol()+"://"+new URL(endpointaddress).getHost()+":"+new URL(endpointaddress).getPort()+"/datamanager/uploadFile";
-				String remoteFile = Util.uploadFileToAppServer(uploadURL, name,"admin","talend");
+				String remoteFile = Util.uploadFileToAppServer(uploadURL,null, name,"admin","talend");
 				//port.workflowgetGetProcessInstances(new WSWorkflowProcessDefinitionUUID("",""));
 				WSWorkflowProcessDefinitionUUID uuid=port.workflowDeploy(new WSWorkflowDeploy(remoteFile));
 				TreeObject obj = new TreeObject(
