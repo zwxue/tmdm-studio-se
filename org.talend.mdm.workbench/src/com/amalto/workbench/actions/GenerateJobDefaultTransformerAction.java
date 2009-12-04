@@ -10,6 +10,7 @@ import com.amalto.workbench.dialogs.WorkflowDefaultTransformerGenerateWizard;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.JobInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSPutTransformerV2;
@@ -72,8 +73,9 @@ public class GenerateJobDefaultTransformerAction extends Action{
 		output=new WSTransformerVariablesMapping[1];
 		output[0]=new WSTransformerVariablesMapping("output","result",null);
 		String server="http://"+xobject.getEndpointHost()+":"+xobject.getEndpointPort();
-		String jobname=xobject.getDisplayName();
-		String jobversion="0.1";
+		JobInfo info=(JobInfo)xobject.getWsKey();
+		String jobname=info.getJobname();;
+		String jobversion=info.getJobversion();
 		parameter="<configuration>\n"+
 		"<url>"+server+"/"+jobname+"_"+jobversion+"/services/"+jobname+"</url>\n"+
 		"<contextParam>\n"+
@@ -83,8 +85,8 @@ public class GenerateJobDefaultTransformerAction extends Action{
 		"</configuration>\n";
 		steps[2]=new WSTransformerProcessStep("amalto/local/transformer/plugin/callJob","Generate the job call",parameter,input,output,false);
 		
-		transformer.setName("default_TISJob_"+xobject.getDisplayName()+"_transformer");
-		transformer.setDescription("default tis job"+xobject.getDisplayName()+" transformer");
+		transformer.setName("default_TISJob_"+jobname+"_transformer");
+		transformer.setDescription("default tis job"+jobname+" transformer");
 		transformer.setProcessSteps(steps);
 		
 		Util.getPort(xobject).putTransformerV2(new WSPutTransformerV2(transformer));

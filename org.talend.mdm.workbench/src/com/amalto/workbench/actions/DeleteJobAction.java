@@ -9,8 +9,10 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.JobInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
+import com.amalto.workbench.webservices.WSDELMDMJob;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class DeleteJobAction extends Action{
@@ -44,7 +46,20 @@ public class DeleteJobAction extends Action{
 					xobject.getPassword()
 			);		
 			xobject.getParent().removeChild(xobject);
-
+			String filename= xobject.getDisplayName();//TODO
+			
+			
+			String jobname = filename.substring(0,filename.lastIndexOf("_"));
+			String version = filename.substring(filename.lastIndexOf("_")+1);
+			JobInfo info = new JobInfo(jobname,version);
+			port.deleteMDMJob(new WSDELMDMJob(jobname,version));
+			
+			String endpointaddress=xobject.getEndpointAddress();
+			//String filename= xobject.getDisplayName();//TODO
+			String uploadURL = new URL(endpointaddress).getProtocol()+"://"+new URL(endpointaddress).getHost()+":"+new URL(endpointaddress).getPort()+"/datamanager/uploadFile?deletefile="+filename;
+			
+		
+			String remoteFile = Util.uploadFileToAppServer(uploadURL,null, filename,"admin","talend");	
        }catch(Exception e){
     	   
        }
