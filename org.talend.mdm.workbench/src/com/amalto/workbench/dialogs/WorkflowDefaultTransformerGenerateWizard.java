@@ -97,7 +97,7 @@ public class WorkflowDefaultTransformerGenerateWizard extends Wizard {
 			e.printStackTrace();
 		}
 		//refresh server tree
-		new ServerRefreshAction(view).run();
+		new ServerRefreshAction(view,xobject.getServerRoot()).run();
 		return true;
 	}
 	public boolean canFinish(){

@@ -52,7 +52,7 @@ public class DeleteWorkflowProcessAction extends Action{
 			WSWorkflowProcessDefinitionUUID uuid=(WSWorkflowProcessDefinitionUUID)xobject.getWsKey();
 			port.workflowUnDeploy(new WSWorkflowUnDeploy(uuid));
 			//refresh server tree
-			new ServerRefreshAction(server).run();
+			new ServerRefreshAction(server,xobject.getServerRoot()).run();
        }catch(Exception e){
     	   e.printStackTrace();
        }

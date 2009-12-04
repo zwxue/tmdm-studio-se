@@ -72,7 +72,7 @@ public class ImportWorkflowProcessAction extends Action{
 				action.run();				
 				
 				//refresh server tree
-				new ServerRefreshAction(server).run();
+				new ServerRefreshAction(server,xobject.getServerRoot()).run();
 			}
        }catch(Exception e){
     	   e.printStackTrace();
