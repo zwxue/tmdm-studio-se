@@ -66,18 +66,18 @@ public class WorkflowDefaultTransformerGenerateWizard extends Wizard {
 		String parameter="<parameters>\n";
 		
 		//get workflowtrigger config
-		WSString config=Util.getPort(xobject).getServiceConfiguration(new WSServiceGetConfiguration("amalto/local/transformer/plugin/workflowtrigger",""));
-		String configuration=config.getValue()==null?"":config.getValue();
-		if(configuration.length()>0){
-			Element e=Util.parse(configuration).getDocumentElement();
-			String initialContextFactory=Util.getFirstTextNode(e, "initialContextFactory");
-			String providerURL=Util.getFirstTextNode(e, "providerURL");
-			String apiType=Util.getFirstTextNode(e, "apiType");
-			configuration="<initialContextFactory>"+initialContextFactory+"</initialContextFactory>\n";
-			configuration=configuration+"<providerURL>"+providerURL+"</providerURL>\n";
-			configuration=configuration+"<apiType>"+apiType+"</apiType>\n";
-		}
-		parameter=parameter+configuration+"\n";
+//		WSString config=Util.getPort(xobject).getServiceConfiguration(new WSServiceGetConfiguration("amalto/local/service/workflow",""));
+//		String configuration=config.getValue()==null?"":config.getValue();
+//		if(configuration.length()>0){
+//			Element e=Util.parse(configuration).getDocumentElement();
+//			String initialContextFactory=Util.getFirstTextNode(e, "initial-context-factory");
+//			String providerURL=Util.getFirstTextNode(e, "provider-uRL");
+//			String apiType=Util.getFirstTextNode(e, "api-type");
+//			configuration="<initialContextFactory>"+initialContextFactory+"</initialContextFactory>\n";
+//			configuration=configuration+"<providerURL>"+providerURL+"</providerURL>\n";
+//			configuration=configuration+"<apiType>"+apiType+"</apiType>\n";
+//		}
+//		parameter=parameter+configuration+"\n";
 		WSWorkflowProcessDefinitionUUID uuid=(WSWorkflowProcessDefinitionUUID)xobject.getWsKey();
 		//get process id
 		String process="<processId>"+ uuid.getProcessName()+ "</processId>";

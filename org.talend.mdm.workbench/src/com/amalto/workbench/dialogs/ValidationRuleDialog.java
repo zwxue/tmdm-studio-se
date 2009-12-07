@@ -85,7 +85,7 @@ public class ValidationRuleDialog extends Dialog {
 	}
 	private List<Line> parseRules() {
 		List<Line> lines=new ArrayList<Line>();
-
+			pattern= pattern.replaceAll("\\r\\n|\\n", "");
 			String context="";
 			String type="";
 			String express="";
@@ -103,9 +103,15 @@ public class ValidationRuleDialog extends Dialog {
 			for(int i=0; i<rulelist.getLength(); i++){
 				Node r=rulelist.item(i);
 				context=r.getAttributes().getNamedItem("context").getTextContent();
-				type=r.getChildNodes().item(0).getNodeName();
-				express=r.getChildNodes().item(0).getAttributes().getNamedItem("test").getTextContent();			
-				msg= r.getChildNodes().item(0).getTextContent();
+				for( int j=0; j<r.getChildNodes().getLength(); j++){
+					if( r.getChildNodes().item(j).getNodeType()== Node.ELEMENT_NODE){
+						type=r.getChildNodes().item(j).getNodeName();
+						express=r.getChildNodes().item(j).getAttributes().getNamedItem("test").getTextContent();		
+						msg= r.getChildNodes().item(j).getTextContent();
+						break;
+					}
+				}
+					
 				Line l=new Line(columns, new String[]{type,context,express,msg});
 				lines.add(l);				
 			}
