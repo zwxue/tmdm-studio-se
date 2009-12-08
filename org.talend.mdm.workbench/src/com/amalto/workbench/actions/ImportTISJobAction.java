@@ -3,14 +3,12 @@ package com.amalto.workbench.actions;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -21,7 +19,6 @@ import org.eclipse.swt.widgets.FileDialog;
 
 import com.amalto.workbench.editors.AMainPage;
 import com.amalto.workbench.editors.AMainPageV2;
-import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -36,7 +33,6 @@ import com.amalto.workbench.webservices.WSMDMJobArray;
 import com.amalto.workbench.webservices.WSMDMNULL;
 import com.amalto.workbench.webservices.WSPUTMDMJob;
 import com.amalto.workbench.webservices.XtentisPort;
-import com.sun.xml.rpc.processor.model.Message;
 
 public class ImportTISJobAction extends Action{
 
@@ -152,29 +148,23 @@ public class ImportTISJobAction extends Action{
 				String jobName="";
 				String jobVersion="";
 				while((z=in.getNextEntry())!=null){
-					
 					String dirName = z.getName();
-					
+					//get job version
+					if(dirName.matches(".*?undeploy.wsdd")){
+						jobName = new File(dirName).getParentFile().getName();
+						if(jobName.matches(".*?_(\\d*_\\d*)")){
+						Pattern p = Pattern.compile(".*?_(\\d*_\\d*)");
+						Matcher m = p.matcher(jobName);
+						if(m.matches()){
+							jobVersion = m.group(m.groupCount());
+						}
+					}
+					}
 					//get job name
-					if(dirName.matches("(.*?).wsdl")){
+					if(dirName.matches(".*?.wsdl")){
 						jobName = new File(dirName).getName();
 						jobName = jobName.substring(0,jobName.lastIndexOf("."));
-						
 					}
-					//get job version
-					if(dirName.matches("(.*?)undeploy.wsdd")){
-						jobName = new File(dirName).getParentFile().getName();
-						Pattern p = Pattern.compile("(.*?)(\\d*_\\d*)");
-						Matcher m = p.matcher(jobName);
-					//	System.out.println(jobName);
-
-						int index = m.groupCount();
-						//System.out.println(m.group(1));
-						jobVersion = m.group(index);
-						jobVersion = jobVersion.replaceAll("_", ".");
-					}
-						
-					
 					
 					/*if(z.isDirectory()){
 						dirName = dirName.substring(1,dirName.length()-1);
@@ -205,7 +195,7 @@ public class ImportTISJobAction extends Action{
 					}*/
 				}
 				jobInfo.setJobname(jobName);
-				jobInfo.setJobversion(jobVersion);
+				jobInfo.setJobversion(jobVersion.replaceAll("_", "."));
 			}catch(FileNotFoundException e){
 				e.printStackTrace();
 			}
