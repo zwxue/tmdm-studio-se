@@ -126,6 +126,7 @@ import com.amalto.workbench.actions.XSDChangeBaseTypeAction;
 import com.amalto.workbench.actions.XSDChangeToComplexTypeAction;
 import com.amalto.workbench.actions.XSDChangeToSimpleTypeAction;
 import com.amalto.workbench.actions.XSDCopyConceptAction;
+import com.amalto.workbench.actions.XSDDeleteAnnotationSchematronAction;
 import com.amalto.workbench.actions.XSDDeleteConceptAction;
 import com.amalto.workbench.actions.XSDDeleteConceptWrapAction;
 import com.amalto.workbench.actions.XSDDeleteElementAction;
@@ -274,6 +275,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	private boolean isChange=false;
 	private Group addLanGroup;
 	protected String uriPre="http://localhost:8080";
+	private XSDDeleteAnnotationSchematronAction deleteAnnotationSchematronAction;
 	public DataModelMainPage(FormEditor editor) {
 		super(editor, DataModelMainPage.class.getName(), "Data Model "
 				+ ((XObjectEditorInput) editor.getEditorInput()).getName()
@@ -1193,6 +1195,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		
 		this.setAnnotationTargetSystemsAction = new XSDSetAnnotationTargetSystemsAction(this,dataModelName);
 		this.setAnnotationSchematronAction = new XSDSetAnnotationSchematronAction(this,dataModelName);
+		this.deleteAnnotationSchematronAction = new XSDDeleteAnnotationSchematronAction(this,dataModelName);
 		this.setAnnotationSourceSystemAction = new XSDSetAnnotationSourceSystemAction(
 				this);
 		this.setAnnotationDocumentationAction = new XSDSetAnnotationDocumentationAction(
@@ -1597,7 +1600,13 @@ public class DataModelMainPage extends AMainPageV2 {
 			if (deleteConceptWrapAction.checkOutAllConcept(selectedObjs))
 				manager.add(newBrowseItemAction);
 		}
-		
+		//delete schematron annotation
+		if( obj instanceof Element){
+			Element e= (Element)obj;
+			if("X_Schematron".equals(e.getAttribute("source"))){
+				manager.add(deleteAnnotationSchematronAction);
+			} 
+		}
 		/*if(copyConceptAction.checkInCopyType(selectedObjs))
 			manager.add(copyConceptAction);
 		if(pasteConceptAction.checkInPasteType())
@@ -1845,6 +1854,13 @@ public class DataModelMainPage extends AMainPageV2 {
 			manager.add(setAnnotationWrapWriteAction);
 			manager.add(setAnnotationWrapHiddenAction);
 		}
+		//delete schematron annotation
+		if( obj instanceof Element){
+			Element e= (Element)obj;
+			if("X_Schematron".equals(e.getAttribute("source"))){
+				manager.add(deleteAnnotationSchematronAction);
+			} 
+		}		
 		manager.add(new Separator());
 
 		drillDownAdapter.addNavigationActions(manager);
