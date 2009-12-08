@@ -107,10 +107,10 @@ public class JobMainPage extends AMainPage implements IXObjectModelListener {
 	
 	public void checkServiceStatus() {
 		try {//
-			String result = "";
-			String URLPath = "http://localhost:8080/"+this.jobName+"/services/"+this.jobName.substring(0,this.jobName.lastIndexOf("_"));
+			String URLPath ="http://"+getXObject().getEndpointHost()+":"+getXObject().getEndpointPort()+"/"+this.jobName+"/services/"+this.jobName.substring(0,this.jobName.lastIndexOf("_"));
 			HttpClient client = new HttpClient();
 			HttpMethod method = new GetMethod(URLPath);
+			
 			client.executeMethod(method);
 			//System.out.println(method.getStatusLine().toString());
 			
@@ -118,7 +118,7 @@ public class JobMainPage extends AMainPage implements IXObjectModelListener {
 	        	statusLabel.setText("Ready");
 	        else
 				statusLabel.setText("Fail");
-
+	        method.releaseConnection();
 		}catch (Exception e) {
 			
 		e.printStackTrace();
