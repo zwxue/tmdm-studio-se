@@ -156,7 +156,7 @@ public class ProcessFileThruTransformerAction extends Action{
 				 ******************************************/
 				monitor.subTask("Uploading File: "+localfile);		
 				String uploadURL = new URL(endpointaddress).getProtocol()+"://"+new URL(endpointaddress).getHost()+":"+new URL(endpointaddress).getPort()+"/datamanager/uploadFile";
-				String remoteFile = Util.uploadFileToAppServer(uploadURL,null, localfile,username,password);
+				String remoteFile = Util.uploadFileToAppServer(uploadURL, localfile,username,password);
 				
 				monitor.worked(1);
 								

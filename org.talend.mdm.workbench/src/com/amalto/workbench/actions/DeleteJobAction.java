@@ -51,7 +51,8 @@ public class DeleteJobAction extends Action{
 			
 			String jobname = filename.substring(0,filename.lastIndexOf("_"));
 			String version = filename.substring(filename.lastIndexOf("_")+1);
-			JobInfo info = new JobInfo(jobname,version);
+			//JobInfo info = new JobInfo(jobname,version);
+			//delete file in db
 			port.deleteMDMJob(new WSDELMDMJob(jobname,version));
 			
 			String endpointaddress=xobject.getEndpointAddress();
@@ -59,7 +60,7 @@ public class DeleteJobAction extends Action{
 			String uploadURL = new URL(endpointaddress).getProtocol()+"://"+new URL(endpointaddress).getHost()+":"+new URL(endpointaddress).getPort()+"/datamanager/uploadFile?deletefile="+filename;
 			
 		
-			String remoteFile = Util.uploadFileToAppServer(uploadURL,null, filename,"admin","talend");	
+			String remoteFile = Util.uploadFileToAppServer(uploadURL, filename,"admin","talend");	
        }catch(Exception e){
     	   
        }

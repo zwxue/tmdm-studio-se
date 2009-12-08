@@ -1,13 +1,18 @@
 package com.amalto.workbench.actions;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -16,6 +21,7 @@ import org.eclipse.swt.widgets.FileDialog;
 
 import com.amalto.workbench.editors.AMainPage;
 import com.amalto.workbench.editors.AMainPageV2;
+import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -26,14 +32,16 @@ import com.amalto.workbench.utils.JobInfo;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
+import com.amalto.workbench.webservices.WSMDMJobArray;
+import com.amalto.workbench.webservices.WSMDMNULL;
 import com.amalto.workbench.webservices.WSPUTMDMJob;
 import com.amalto.workbench.webservices.XtentisPort;
+import com.sun.xml.rpc.processor.model.Message;
 
 public class ImportTISJobAction extends Action{
 
 	private ServerView server = null;
 	private TreeParent xobject;
-
 				
 	public ImportTISJobAction(ServerView serverView) {
 		super();
@@ -66,9 +74,19 @@ public class ImportTISJobAction extends Action{
 	        
 			if(name!=null){
 				JobInfo info=getJobInfo(name);
+				WSMDMJobArray array = port.getMDMJob(new WSMDMNULL());
+				if(checkExist(array,info)){
+					MessageDialog
+					.openWarning(this.server.getSite().getShell(), "Warnning",
+							"This Job already exist!");
+	            	return;
+			}
+					
+					
+				String fileName = info.getJobname()+"_"+info.getJobversion()+".war";
 				String endpointaddress=xobject.getEndpointAddress();
-				String uploadURL = new URL(endpointaddress).getProtocol()+"://"+new URL(endpointaddress).getHost()+":"+new URL(endpointaddress).getPort()+"/datamanager/uploadFile?deployjob=true";
-				String remoteFile = Util.uploadFileToAppServer(uploadURL,info, name,"admin","talend");	
+				String uploadURL = new URL(endpointaddress).getProtocol()+"://"+new URL(endpointaddress).getHost()+":"+new URL(endpointaddress).getPort()+"/datamanager/uploadFile?deployjob="+fileName;
+				String remoteFile = Util.uploadFileToAppServer(uploadURL, name,"admin","talend");	
 				//TODO
 				//save to db
 				port.putMDMJob(new WSPUTMDMJob(info.getJobname(),info.getJobversion()));
@@ -124,7 +142,7 @@ public class ImportTISJobAction extends Action{
 			
 			ZipEntry z = null;
 			
-			String name = fileName.substring(fileName.lastIndexOf("\\")==-1?0:fileName.lastIndexOf("\\")+1);
+			//String name = fileName.substring(fileName.lastIndexOf("\\")==-1?0:fileName.lastIndexOf("\\")+1);
 			/*String tmpPath = "C:\\opt\\jboss\\server\\default\\deploy\\"+name;
 			File file = new File(tmpPath);
 			if(!file.exists()){
@@ -132,19 +150,32 @@ public class ImportTISJobAction extends Action{
 			}*/
 			try{
 				String jobName="";
+				String jobVersion="";
 				while((z=in.getNextEntry())!=null){
 					
 					String dirName = z.getName();
 					
-				
-					if(dirName.matches("WEB-INF/items/new_project/process/(.*?)\\.item")){
-						jobName = dirName.substring(dirName.lastIndexOf("/")+1,dirName.lastIndexOf("."));
-						jobInfo.setJobname(jobName.substring(0,jobName.lastIndexOf("_")));
-						jobInfo.setJobversion(jobName.substring(jobName.lastIndexOf("_")+1));
-						return jobInfo ;
+					//get job name
+					if(dirName.matches("(.*?).wsdl")){
+						jobName = new File(dirName).getName();
+						jobName = jobName.substring(0,jobName.lastIndexOf("."));
 						
 					}
+					//get job version
+					if(dirName.matches("(.*?)undeploy.wsdd")){
+						jobName = new File(dirName).getParentFile().getName();
+						Pattern p = Pattern.compile("(.*?)(\\d*_\\d*)");
+						Matcher m = p.matcher(jobName);
+					//	System.out.println(jobName);
+
+						int index = m.groupCount();
+						//System.out.println(m.group(1));
+						jobVersion = m.group(index);
+						jobVersion = jobVersion.replaceAll("_", ".");
+					}
 						
+					
+					
 					/*if(z.isDirectory()){
 						dirName = dirName.substring(1,dirName.length()-1);
 						File f = new File(tmpPath +"\\"+dirName);
@@ -173,25 +204,30 @@ public class ImportTISJobAction extends Action{
 						out.close();
 					}*/
 				}
-			}catch (Exception e) {
+				jobInfo.setJobname(jobName);
+				jobInfo.setJobversion(jobVersion);
+			}catch(FileNotFoundException e){
 				e.printStackTrace();
-			} 
+			}
 			finally{
-				try {
-					in.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				in.close();
+			}
+		}
+			catch(Exception e){
+				e.printStackTrace();
 			}
 			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		
-		}
 		return jobInfo;
 	}
+	//if the Job exist, return true,else return false
+	public boolean checkExist(WSMDMJobArray array, JobInfo jobInfo){
+		for(int i=0;i<array.getWsMDMJob().length;i++){
+			if(array.getWsMDMJob()[i].getJobName().equals(jobInfo.getJobname())&&array.getWsMDMJob()[i].getJobVersion().equals(jobInfo.getJobversion()))
+				return true;
+		}
+		return false;
+	}
+	
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}

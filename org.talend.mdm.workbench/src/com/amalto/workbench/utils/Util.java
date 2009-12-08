@@ -657,7 +657,7 @@ public class Util {
 	 *      
 	 *      Multi-Part Form Post
 	 *********************************************************************/
-    public static String uploadFileToAppServer(String URL,JobInfo info,String localFilename, String username, String password)  throws XtentisException{
+    public static String uploadFileToAppServer(String URL,String localFilename, String username, String password)  throws XtentisException{
         System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
         System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
         /*
@@ -669,16 +669,20 @@ public class Util {
         HttpClient client = new HttpClient();
         MultipartPostMethod mppost = new MultipartPostMethod(URL);
         String response = null;
-        
+        String fileName = localFilename;
         try {
-        	    
+        	  
             client.setConnectionTimeout(60000);
             client.getState().setAuthenticationPreemptive(true);
             client.getState().setCredentials(null,null, new UsernamePasswordCredentials(username,password));
-            if(info!=null)
-            	//mppost.addParameter(localFilename,new File(localFilename));
-            //else
-                mppost.addParameter(info.getJobname()+"_"+info.getJobversion()+".war",new File(localFilename));
+           //if delete a job, mppost will not addParameter, otherwise there is an exception.
+			if (URL.indexOf("deletefile") == -1) {
+				if (URL.indexOf("deployjob") != -1) {
+					fileName = URL.substring(URL.indexOf("=") + 1);
+				}
+				mppost.addParameter(fileName, new File(localFilename));
+			}
+                //mppost.addParameter(info.getJobname()+"_"+info.getJobversion()+".war",new File(localFilename));
             
             client.executeMethod(mppost);
             if (mppost.getStatusCode() != HttpStatus.SC_OK) {
