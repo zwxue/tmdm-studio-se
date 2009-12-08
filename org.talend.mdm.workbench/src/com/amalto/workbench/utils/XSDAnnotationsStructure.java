@@ -518,7 +518,7 @@ public class XSDAnnotationsStructure {
 				break;
 			}
 		}
-		
+		setSchematrons(infos.values());
 	}
 	public TreeMap<String, String> getSchematrons() {
 		TreeMap<String, String> targetSystems = new TreeMap<String, String>();
