@@ -74,7 +74,7 @@ public class ImportTISJobAction extends Action{
 				if(checkExist(array,info)){
 					MessageDialog
 					.openWarning(this.server.getSite().getShell(), "Warnning",
-							"This Job already exist!");
+							"This Job already exists!");
 	            	return;
 			}
 					
