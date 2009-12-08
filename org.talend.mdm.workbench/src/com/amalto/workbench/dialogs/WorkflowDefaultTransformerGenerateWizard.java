@@ -159,7 +159,7 @@ public class WorkflowDefaultTransformerGenerateWizard extends Wizard {
 	        			for(String xpath:xpaths){
 	        				StringBuffer sb=new StringBuffer();
 	        				sb=sb.append("<variable><scope>process</scope>");
-	        				String name="MDM_"+xpath.replaceAll("/", "_");
+	        				String name=""+xpath.replaceAll("/", "_");
 	        				sb=sb.append("<name>"+ name+"</name>");
 	        				sb.append("<type>String</type><fromItem>true</fromItem>");
 	        				sb.append("<xpath>"+xpath+"</xpath>");
