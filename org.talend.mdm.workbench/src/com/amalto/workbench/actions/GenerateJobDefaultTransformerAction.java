@@ -1,5 +1,8 @@
 package com.amalto.workbench.actions;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -19,6 +22,7 @@ import com.amalto.workbench.webservices.WSString;
 import com.amalto.workbench.webservices.WSTransformerProcessStep;
 import com.amalto.workbench.webservices.WSTransformerV2;
 import com.amalto.workbench.webservices.WSTransformerVariablesMapping;
+import com.amalto.workbench.webservices.WSViewPK;
 
 public class GenerateJobDefaultTransformerAction extends Action{
 
@@ -73,8 +77,25 @@ public class GenerateJobDefaultTransformerAction extends Action{
 		output=new WSTransformerVariablesMapping[1];
 		output[0]=new WSTransformerVariablesMapping("output","result",null);
 		String server="http://"+xobject.getEndpointHost()+":"+xobject.getEndpointPort();
-		JobInfo info=(JobInfo)xobject.getWsKey();
-		String jobname=info.getJobname();;
+		
+		JobInfo info = new JobInfo("", "");
+		//add ymli
+		//if the xobject is generated just now. the xobject.getWsKey() is instance of JobInfo;
+		// if it already exists when login workbench, the  xobject.getWsKey() is instance of WSViewPK.
+		if (xobject.getWsKey() instanceof WSViewPK) {
+					String jobName = ((WSViewPK) xobject.getWsKey()).getPk();
+					if (jobName.matches("(.*?)_(\\d*.\\d*)")) {
+						Pattern p = Pattern.compile("(.*?)_(\\d*.\\d*)");
+						Matcher m = p.matcher(jobName);
+						if (m.matches()) {
+							info.setJobversion(m.group(m.groupCount()));
+							info.setJobname(m.group(m.groupCount() - 1));
+						}
+					}
+				}
+		else
+			info=(JobInfo)xobject.getWsKey();
+		String jobname=info.getJobname();
 		String jobversion=info.getJobversion();
 		parameter="<configuration>\n"+
 		"<url>"+server+"/"+jobname+"_"+jobversion+"/services/"+jobname+"</url>\n"+
@@ -96,8 +117,11 @@ public class GenerateJobDefaultTransformerAction extends Action{
 		}
     	   
        }catch(Exception e){
-    	   
-       }
+    	//add ymli. To refresh the view; fix the bug:0010322  
+       } finally{
+      		server.forceAllSiteToRefresh();
+      	}
+      
 	}
 
 }
