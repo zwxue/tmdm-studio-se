@@ -119,17 +119,7 @@ public class WorkflowBrowserMainPage extends AMainPage implements IXObjectModelL
 				for(final WSProcessInstance instance:array.getInstance()){
 					final ProcessWidget pw=plist.add(instance.getName());
 					pw.setPort(port);
-					pw.getStatusLabel().setText(instance.getState());
-					pw.getProcess().addSelectionListener(new SelectionListener(){
-
-						public void widgetDefaultSelected(SelectionEvent e) {
-
-						}
-						public void widgetSelected(SelectionEvent e) {							
-								pw.setSelection(pw.getName());		
-								
-						}						
-					});
+					pw.getStatusLabel().setText(instance.getState());					
 				}
 			}        				
         	//process Tasks 
@@ -149,13 +139,18 @@ public class WorkflowBrowserMainPage extends AMainPage implements IXObjectModelL
 		table =new Table(com,SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER|SWT.FULL_SELECTION);
 		
 		viewer = new TableViewer(table);
-        
+        int i=0;
         for(String column:columns){
         	TableColumn tableColumn=new TableColumn(table, SWT.CENTER);
         	tableColumn.setText(column);
-        	
-			tableColumn.setWidth(200);
-			tableColumn.pack();			
+        	if(i==0)
+        		tableColumn.setWidth(300);
+        	else if(i==1)
+        		tableColumn.setWidth(100);
+        	else if(i==2)
+        		tableColumn.setWidth(300);
+			//tableColumn.pack();			
+			i++;
         }          
         table.setHeaderVisible(true);
         table.setLinesVisible(true);
