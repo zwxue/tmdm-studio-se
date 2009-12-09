@@ -9,6 +9,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -25,6 +26,8 @@ public class ValidationRuleWidget {
 	private Text text;
 	ValidationRuleExcpressDialog dlg;
 	String conceptName;
+	private GridData textGD;
+	TableColumn column;
 	public ValidationRuleWidget(Composite parent,String conceptName){
 		this.parent=parent;
 		this.conceptName=conceptName;
@@ -32,7 +35,7 @@ public class ValidationRuleWidget {
 	}
 	private void create(){
 		composite = toolkit.createComposite(parent,SWT.NO_FOCUS);
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1));
+		//composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1));
 		GridLayout layout=new GridLayout(2, false);
 		layout.marginWidth=0;
 		layout.marginLeft=0;
@@ -42,8 +45,8 @@ public class ValidationRuleWidget {
 		composite.setLayout(layout);
 		
 		text = toolkit.createText(composite, "", SWT.BORDER| SWT.MULTI|SWT.LEFT);		
-		text.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1));
-		
+		textGD=new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1);
+		text.setLayoutData(textGD);
 		button = toolkit.createButton(composite, "",SWT.PUSH);
 		button.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,false, false, 1, 1));
 		
@@ -63,7 +66,7 @@ public class ValidationRuleWidget {
 			}
 		});
 		button.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
-		button.setToolTipText("Build Validation Rule Expression");		
+		button.setToolTipText("Build Validation Rule Expression");					
 	}
 	
 	public Composite getComposite(){
@@ -77,5 +80,18 @@ public class ValidationRuleWidget {
 	}
 	public void setText(String txt){
 		text.setText(txt);
+	}
+	public TableColumn getColumn() {
+		return column;
+	}
+	public void setColumn(TableColumn column) {
+		this.column = column;
+		resetWidth();
+	}
+	
+	public void resetWidth(){
+		if(column!=null){
+			textGD.widthHint=column.getWidth()-35;
+		}
 	}
 }

@@ -150,6 +150,7 @@ public class ComplexTableViewer {
 			}
 		}
     	return null;
+    	
     }
 	
 	
@@ -478,9 +479,11 @@ public class ComplexTableViewer {
         	}else if(columns.get(i).isXPATH()){
         		editors[i]= new XpathCellEditor(table);
         	}else if(columns.get(i).isMultiMessage()){
-        		editors[i]= new MultiMessageEditor(table);        		
+        		editors[i]= new MultiMessageEditor(table);
+        		multiMsg.setColumn(table.getColumn(i));
 	        }else if(columns.get(i).isValidationRule()){
 	    		editors[i]= new ValidationRuleEditor(table);
+	    		validationRule.setColumn(table.getColumn(i));
 	    	}        	
         }
         viewer.setCellEditors(editors);
