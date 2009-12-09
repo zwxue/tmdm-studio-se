@@ -16,6 +16,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -46,6 +47,8 @@ public class DescAnnotationComposite implements  SelectionListener{
     private String dlgTitle;
     
     private LinkedHashMap<String, String> dataStore = new LinkedHashMap<String, String>();
+	private TableColumn column;
+	private GridData textGD;
     private static final String REGEXP_METACHARACTERS = "\\[([\\w]+)[\\s]*:[\\s]*([^]]*)\\]";  
     private static final Pattern DESC_PATTERN = Pattern.compile(REGEXP_METACHARACTERS);
     
@@ -67,9 +70,9 @@ public class DescAnnotationComposite implements  SelectionListener{
 		}
 		if(isBtnRight){			
 			descriptionText = toolkit.createText(descAntionHolder, "",SWT.BORDER|SWT.MULTI);
-	        descriptionText.setLayoutData(    
-	                 new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-	         );
+			textGD=new GridData(SWT.FILL,SWT.FILL,true,true,1,1);
+	        descriptionText.setLayoutData(textGD);           
+	         
 	        descriptionText.addModifyListener(new ModifyListener() {
 	        	public void modifyText(ModifyEvent e) {
 	        		if (descriptionValue != null && !descriptionValue.equals(descriptionText.getText())) {
@@ -93,9 +96,8 @@ public class DescAnnotationComposite implements  SelectionListener{
 			annotationButton.setToolTipText("Set the Descriptions");
 			
 			descriptionText = toolkit.createText(descAntionHolder, "",SWT.BORDER|SWT.MULTI);
-	        descriptionText.setLayoutData(    
-	                 new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-	         );
+			textGD=new GridData(SWT.FILL,SWT.FILL,true,true,1,1);
+	        descriptionText.setLayoutData(textGD);
 	        descriptionText.addModifyListener(new ModifyListener() {
 	        	public void modifyText(ModifyEvent e) {
 	        		if (descriptionValue != null && !descriptionValue.equals(descriptionText.getText())) {
@@ -208,4 +210,17 @@ public class DescAnnotationComposite implements  SelectionListener{
 		}
 		public void widgetDefaultSelected(SelectionEvent e) {};
 	}
+	public TableColumn getColumn() {
+		return column;
+	}
+	public void setColumn(TableColumn column) {
+		this.column = column;
+		resetWidth();
+	}
+	
+	public void resetWidth(){
+		if(column!=null){
+			textGD.widthHint=column.getWidth()-35;
+		}
+	}	
 }
