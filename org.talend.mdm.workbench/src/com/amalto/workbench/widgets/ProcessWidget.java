@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -123,17 +124,22 @@ public class ProcessWidget {
 			//test
 			if(e.widget instanceof Button){
 				Button btn=(Button)e.widget;
-				statusLabel.setText(btn.getToolTipText());
+				statusLabel.setText(btn.getToolTipText().toUpperCase()+"ED");
 			}
 		}
 	};
-	
-	private Button process;
+	MouseListener mouseListener=new MouseAdapter(){
+		@Override
+		public void mouseUp(MouseEvent e) {
+			setSelection(name);
+		}
+	};
+	private Label process;
 	private Label statusLabel;
 	private void create(){
-		process=toolkit.createButton(parent, name, SWT.TOGGLE);
+		process=toolkit.createLabel(parent, name);
 		GridData gd=new GridData(SWT.LEFT,SWT.CENTER,false,false,1,1);
-		gd.widthHint=140;
+		gd.widthHint=240;
 		process.setLayoutData(gd);
 		//process.addSelectionListener(listener);
 		Label label=toolkit.createLabel(parent, "Status:");
@@ -183,58 +189,12 @@ public class ProcessWidget {
         startButton.addSelectionListener(listener);
         stopButton.addSelectionListener(listener);	
         suspendButton.addSelectionListener(listener);
-        statusLabel.addMouseListener(new MouseListener(){
-
-			public void mouseDoubleClick(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void mouseDown(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void mouseUp(MouseEvent e) {
-				setSelection(name);
-				
-			}
-        	
-        });
-        statusLabel.addMouseListener(new MouseListener(){
-
-			public void mouseDoubleClick(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void mouseDown(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void mouseUp(MouseEvent e) {
-				setSelection(name);
-				
-			}        	
-        });              
-        parent.addMouseListener(new MouseListener(){
-
-			public void mouseDoubleClick(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void mouseDown(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void mouseUp(MouseEvent e) {
-				setSelection(name);
-				
-			}        	
-        });              
+        
+        label.addMouseListener(mouseListener);
+        process.addMouseListener(mouseListener);
+        statusLabel.addMouseListener(mouseListener);
+        statusLabel.addMouseListener(mouseListener);              
+        parent.addMouseListener(mouseListener);              
 	}
 	public Button getSuspendButton() {
 		return suspendButton;
@@ -255,11 +215,11 @@ public class ProcessWidget {
 		this.stopButton = stopButton;
 	}
 
-	public Button getProcess() {
+	public Label getProcess() {
 		return process;
 	}
 
-	public void setProcess(Button process) {
+	public void setProcess(Label process) {
 		this.process = process;
 	}
 
