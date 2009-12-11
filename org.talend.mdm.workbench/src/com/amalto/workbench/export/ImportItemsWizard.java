@@ -157,7 +157,7 @@ public class ImportItemsWizard extends Wizard{
                 serverRoot.getWsKey(),
                 serverRoot.getWsObject());		
 		reserverRoot.setUser(serverRoot.getUser());  
-		serverRoot=reserverRoot;
+//		serverRoot=reserverRoot;
 		TreeParent clusters = new TreeParent(EXtentisObjects.DataCluster.getDisplayName(),reserverRoot,TreeObject.DATA_CLUSTER,null,null);
 		TreeParent models = new TreeParent(EXtentisObjects.DataMODEL.getDisplayName(),reserverRoot,TreeObject.DATA_MODEL,null,null);
 		TreeParent menus = new TreeParent(EXtentisObjects.Menu.getDisplayName(),reserverRoot,TreeObject.MENU,null,null);
