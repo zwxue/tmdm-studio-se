@@ -66,6 +66,7 @@ public class UniverseMainPage extends AMainPageV2{
 	//protected Map<String,LabelText> xtentisObjectsLabelTexts=new HashMap<String,LabelText>();
 	protected Map<String,LabelCombo> xtentisObjectsLabelCombos=new HashMap<String,LabelCombo>();
 	LabelText defaultReversionIDText;
+	private TisTableViewer itemsViewer;
 	
 	public UniverseMainPage(FormEditor editor) {
         super(
@@ -121,7 +122,7 @@ public class UniverseMainPage extends AMainPageV2{
         });
 
         
-        TisTableViewer itemsViewer=new TisTableViewer(Arrays.asList(columns),toolkit,itemsGroup);
+        itemsViewer=new TisTableViewer(Arrays.asList(columns),toolkit,itemsGroup);
         itemsViewer.create();
         itemsViewer.setMainPage(this);
         instancesViewer=itemsViewer.getViewer();
@@ -308,7 +309,8 @@ public class UniverseMainPage extends AMainPageV2{
 			}
 			ws.setXtentisObjectsRevisionIDs(xtentisObjectsRevisionIDs.toArray(new WSUniverseXtentisObjectsRevisionIDs[xtentisObjectsRevisionIDs.size()] ));
 			List<WSUniverseItemsRevisionIDs> itemIds=new ArrayList<WSUniverseItemsRevisionIDs>();
-			for(Line line: universe.getItemsList()){				
+			java.util.List<Line> lines=(java.util.List<Line>)itemsViewer.getViewer().getInput();
+			for(Line line: lines){				
 				itemIds.add(new WSUniverseItemsRevisionIDs(line.keyValues.get(0).value,line.keyValues.get(1).value));
 			}
 			ws.setItemsRevisionIDs(itemIds.toArray(new WSUniverseItemsRevisionIDs[itemIds.size()]));
