@@ -257,6 +257,14 @@
       <priority value="INFO"/>
    </category>
    
+<!-- Limit hibernate used by Bonita which is very verbose -->
+
+   <category name="org.hibernate">
+
+      <priority value="WARN"/>
+
+   </category>
+   
    <!-- Decrease the priority threshold for the org.jboss.varia category
    <category name="org.jboss.varia">
      <priority value="DEBUG"/>
@@ -352,8 +360,6 @@
    <root>
       <appender-ref ref="CONSOLE"/>
       <appender-ref ref="FILE"/>
-	  <appender-ref ref="ChainSawPDS"/>
-	  <appender-ref ref="LoggingEvents"/>
    </root>
 
 </log4j:configuration>
