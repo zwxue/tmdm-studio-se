@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.4"?>
 
-<product name="%productName" id="org.talend.mdm.workbench.product" application="org.talend.mdm.workbench.application" version="3.2.0M1" useFeatures="false">
+<product name="%productName" id="org.talend.mdm.workbench.product" application="org.talend.mdm.workbench.application" version="3.2.0M2" useFeatures="false">
 
    <aboutInfo>
       <image path="icons/talend-picto-small.gif"/>
