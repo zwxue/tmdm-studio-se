@@ -360,6 +360,11 @@
    <root>
       <appender-ref ref="CONSOLE"/>
       <appender-ref ref="FILE"/>
+      <!-- remove chainsaw
+           <appender-ref ref="ChainSawPDS"/>
+	   -->
+       appender-ref ref="LoggingEvents"/>
+
    </root>
 
 </log4j:configuration>
