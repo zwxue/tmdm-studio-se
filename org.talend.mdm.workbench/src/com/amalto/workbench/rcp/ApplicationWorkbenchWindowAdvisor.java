@@ -27,6 +27,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
         configurer.setShowPerspectiveBar(true);
         configurer.configureEditorAreaDropListener(new EditorAreaDropAdapter(configurer.getWindow()));
 
-        configurer.setTitle("Talend MDM Studio (3.2.0M1)");
+        //configurer.setTitle("Talend MDM Studio (3.2.0M2)");
     }
 }
