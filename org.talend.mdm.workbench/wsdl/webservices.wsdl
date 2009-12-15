@@ -1283,6 +1283,14 @@
 	<message name="deleteMDMJobResponse">
 	    <part name="deleteMDMJobResponse" element="tns:WSBoolean"></part>
 	</message>
+	
+	<message name="workflowDeleteProcessInstancesRequest">
+	    <part name="deleteWolkflowRequest" element="tns:WSWorkflowDeleteProcessInstancesRequest"></part>
+	</message>
+	<message name="workflowDeleteProcessInstancesResponse">
+		<part name="deleteWolkflowResponse" element="tns:WSBoolean"></part>
+	</message>
+	
 	<!-- *****************************************************
 		              P O R T		
 		              
@@ -2070,7 +2078,12 @@
 		<operation name="deleteMDMJob">
 		   <input message="tns:deleteMDMJobRequest"/>
 		   <output message="tns:deleteMDMJobResponse"/>
-		</operation>							
+		</operation>	
+		
+		<operation name="workflowDeleteProcessInstances">
+            <input message="tns:workflowDeleteProcessInstancesRequest"/>
+			<output message="tns:workflowDeleteProcessInstancesResponse"/>
+		</operation>						
 	</portType>
 	
 
@@ -3053,7 +3066,13 @@
 		    <soap:operation/>
 			<input><soap:body use="literal"/></input>
 			<output><soap:body use="literal"/></output>
-		</operation>			
+		</operation>	
+		<operation name="workflowDeleteProcessInstances">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>
+				
 	</binding>
 		
 	

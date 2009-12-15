@@ -93,5 +93,16 @@
 			<xsd:element maxOccurs="unbounded" minOccurs="1" name="instance" nillable="false" type="tns:WSProcessInstance"/>
 		</xsd:sequence>		
 	</xsd:complexType>
-	<xsd:element name="WSProcessInstanceArray" type="tns:WSProcessInstanceArray"/>				
+	<xsd:element name="WSProcessInstanceArray" type="tns:WSProcessInstanceArray"/>	
+	
+	
+		
+	<xsd:complexType name="WSWorkflowDeleteProcessInstancesRequest">
+		<xsd:all>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="processName" type="xsd:string"/>
+		</xsd:all>		
+	</xsd:complexType>
+	<xsd:element name="WSWorkflowDeleteProcessInstancesRequest" type="tns:WSWorkflowDeleteProcessInstancesRequest"/>
+	
+	
 </xsd:schema>
