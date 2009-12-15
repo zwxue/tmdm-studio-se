@@ -18,6 +18,8 @@ import org.eclipse.ui.forms.editor.IFormPage;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 import org.talend.mdm.commmon.util.workbench.Version;
 
+import com.amalto.workbench.availablemodel.AvailableModelUtil;
+import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
@@ -49,7 +51,12 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener{
         	
         	//register model listener in order to close the browser when object is removed
         	xobject.addListener(this);
-        	
+			//available models
+			java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
+			for(IAvailableModel model: availablemodels){
+				model.addPage(xobject,this);
+			}
+			
             switch(xobject.getType()) {
 	           	case TreeObject.VIEW:
 	           		addPage(new  ViewBrowserMainPage(this));
@@ -60,27 +67,7 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener{
 	           			break;
 					}
 	           		addPage(new DataClusterBrowserMainPage(this));
-	           		break;	    
-	           	case TreeObject.SUBSCRIPTION_ENGINE:
-	           		boolean version_greater_2_19_0 = false;
-					try {	
-						Version ver = Util.getVersion(xobject);
-						version_greater_2_19_0 = (ver.getMajor()>2) || ((ver.getMajor()==2)&&(ver.getMinor()>=19));
-					} catch (XtentisException e) {}
-	           		if (version_greater_2_19_0)
-	           			addPage(new  RoutingEngineV2BrowserMainPage(this));
-	           		else
-	           			addPage(new  SubscriptionEngineBrowserMainPage(this));
-	           		break;
-	           	case TreeObject.WORKFLOW_PROCESS:
-	           		addPage(new WorkflowBrowserMainPage(this));
-	           		break;
-	           	case TreeObject.JOB:
-	           		//TODO
-	           		break;
-	           	default:
-	           		MessageDialog.openError(this.getSite().getShell(), "Error", "Unsupported "+IConstants.TALEND+" Object Type: "+xobject.getType());
-	           		return;
+	           		break;	    	           
             }//switch
         } catch (PartInitException e) {
             MessageDialog.openError(this.getSite().getShell(), "Error", "Unable to open the editor :"+e.getLocalizedMessage());
