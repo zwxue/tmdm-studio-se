@@ -7,6 +7,8 @@ import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
+import com.amalto.workbench.availablemodel.AvailableModelUtil;
+import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.EXtentisObjects;
@@ -41,9 +43,6 @@ import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
 import com.amalto.workbench.webservices.WSViewPK;
-import com.amalto.workbench.webservices.WSWorkflowGetProcessDefinitions;
-import com.amalto.workbench.webservices.WSWorkflowProcessDefinitionUUID;
-import com.amalto.workbench.webservices.WSWorkflowProcessDefinitionUUIDArray;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
@@ -108,6 +107,12 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			serverRoot.setUser(user);
 			
 			String uriPre=serverRoot.getEndpointIpAddress();
+			
+			//available models
+			List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
+			for(IAvailableModel model: availablemodels){
+				model.addTreeObjects(port,monitor, serverRoot);
+			}
 			//Data Models
 			TreeParent models = new TreeParent(EXtentisObjects.DataMODEL.getDisplayName(),serverRoot,TreeObject.DATA_MODEL,null,null);			
 			//WSDataModel[] xdm = port.getDataModels(new WSRegexDataModels("*")).getWsDataModels();
@@ -288,25 +293,25 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
 			
 			
-			//Job
-			TreeParent jobs = new TreeParent(EXtentisObjects.JobRegistry.getDisplayName(),serverRoot,TreeObject.JOB_REGISTRY,null,null);
-			WSMDMJob[] jobPKs = port.getMDMJob(new WSMDMNULL()).getWsMDMJob();
-			if (jobPKs!=null) {
-				monitor.subTask("Loading Jobs");
-				for (int i = 0; i < jobPKs.length; i++) {
-					String name = jobPKs[i].getJobName()+"_"+jobPKs[i].getJobVersion();
-					TreeObject obj = new TreeObject(
-							name,
-							serverRoot,
-							TreeObject.JOB,
-							new WSViewPK(name),
-							null   //no storage to save space
-					);
-					jobs.addChild(obj);
-				}
-			}
-			monitor.worked(1);
-			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
+//			//Job
+//			TreeParent jobs = new TreeParent(EXtentisObjects.JobRegistry.getDisplayName(),serverRoot,TreeObject.JOB_REGISTRY,null,null);
+//			WSMDMJob[] jobPKs = port.getMDMJob(new WSMDMNULL()).getWsMDMJob();
+//			if (jobPKs!=null) {
+//				monitor.subTask("Loading Jobs");
+//				for (int i = 0; i < jobPKs.length; i++) {
+//					String name = jobPKs[i].getJobName()+"_"+jobPKs[i].getJobVersion();
+//					TreeObject obj = new TreeObject(
+//							name,
+//							serverRoot,
+//							TreeObject.JOB,
+//							new WSViewPK(name),
+//							null   //no storage to save space
+//					);
+//					jobs.addChild(obj);
+//				}
+//			}
+//			monitor.worked(1);
+//			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
 			
 			
 
@@ -353,79 +358,79 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
 			
 //			Roles
-			WSRolePK[] rolePKs = null;
-			boolean hasRoles = true;
-			try {
-				rolePKs = port.getRolePKs(new WSGetRolePKs("*")).getWsRolePK();
-			} catch (Exception e) {
-				System.out.println("NO ROLES");
-				// This server does not handle roles (pre 2.13)
-				hasRoles = false;
-			}
-			TreeParent roles = null;
-			if (hasRoles) {
-				roles = new TreeParent(EXtentisObjects.Role.getDisplayName(),serverRoot,TreeObject.ROLE,null,null);
-				if (rolePKs!=null) {
-					monitor.subTask("Loading Roles");
-					for (int i = 0; i < rolePKs.length; i++) {
-						String name =rolePKs[i].getPk();
-						TreeObject obj = new TreeObject(
-								name,
-								serverRoot,
-								TreeObject.ROLE,
-								new WSRolePK(name),
-								null   //no storage to save space
-						);
-						roles.addChild(obj);
-					}
-				}
-				monitor.worked(1);
-				if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-			}
+//			WSRolePK[] rolePKs = null;
+//			boolean hasRoles = true;
+//			try {
+//				rolePKs = port.getRolePKs(new WSGetRolePKs("*")).getWsRolePK();
+//			} catch (Exception e) {
+//				System.out.println("NO ROLES");
+//				// This server does not handle roles (pre 2.13)
+//				hasRoles = false;
+//			}
+//			TreeParent roles = null;
+//			if (hasRoles) {
+//				roles = new TreeParent(EXtentisObjects.Role.getDisplayName(),serverRoot,TreeObject.ROLE,null,null);
+//				if (rolePKs!=null) {
+//					monitor.subTask("Loading Roles");
+//					for (int i = 0; i < rolePKs.length; i++) {
+//						String name =rolePKs[i].getPk();
+//						TreeObject obj = new TreeObject(
+//								name,
+//								serverRoot,
+//								TreeObject.ROLE,
+//								new WSRolePK(name),
+//								null   //no storage to save space
+//						);
+//						roles.addChild(obj);
+//					}
+//				}
+//				monitor.worked(1);
+//				if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
+//			}
 			
 
 //			Routing Rules
-			WSRoutingRulePK[] routingRulePKs = null;
-			boolean hasRoutingRules = true;
-			try {
-				routingRulePKs = port.getRoutingRulePKs(new WSGetRoutingRulePKs("")).getWsRoutingRulePKs();
-			} catch (Exception e) {
-				System.out.println("NO ROUTING RULES");
-				// This server does not handle roles (pre 2.13)
-				hasRoutingRules = false;
-			}
-			TreeParent rules = null;
-			if (hasRoutingRules) {
-				rules = new TreeParent(EXtentisObjects.RoutingRule.getDisplayName(),serverRoot,TreeObject.ROUTING_RULE,null,null);
-				if (routingRulePKs!=null) {
-					monitor.subTask("Loading Routing Rules");
-					for (int i = 0; i < routingRulePKs.length; i++) {
-						String id =routingRulePKs[i].getPk();
-						TreeObject obj = new TreeObject(
-								id,
-								serverRoot,
-								TreeObject.ROUTING_RULE,
-								new WSRoutingRulePK(id),
-								null   //no storage to save space
-						);
-						rules.addChild(obj);
-					}
-				}
-				monitor.worked(1);
-				if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-			}
+//			WSRoutingRulePK[] routingRulePKs = null;
+//			boolean hasRoutingRules = true;
+//			try {
+//				routingRulePKs = port.getRoutingRulePKs(new WSGetRoutingRulePKs("")).getWsRoutingRulePKs();
+//			} catch (Exception e) {
+//				System.out.println("NO ROUTING RULES");
+//				// This server does not handle roles (pre 2.13)
+//				hasRoutingRules = false;
+//			}
+//			TreeParent rules = null;
+//			if (hasRoutingRules) {
+//				rules = new TreeParent(EXtentisObjects.RoutingRule.getDisplayName(),serverRoot,TreeObject.ROUTING_RULE,null,null);
+//				if (routingRulePKs!=null) {
+//					monitor.subTask("Loading Routing Rules");
+//					for (int i = 0; i < routingRulePKs.length; i++) {
+//						String id =routingRulePKs[i].getPk();
+//						TreeObject obj = new TreeObject(
+//								id,
+//								serverRoot,
+//								TreeObject.ROUTING_RULE,
+//								new WSRoutingRulePK(id),
+//								null   //no storage to save space
+//						);
+//						rules.addChild(obj);
+//					}
+//				}
+//				monitor.worked(1);
+//				if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
+//			}
 
 			
 			//Subscription Engine
-			TreeObject  engine = new TreeObject(
-					EXtentisObjects.SubscriptionEngine.getDisplayName(),
-					serverRoot,
-					TreeObject.SUBSCRIPTION_ENGINE,
-					null,
-					null
-			);
-			monitor.worked(1);
-			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
+//			TreeObject  engine = new TreeObject(
+//					EXtentisObjects.SubscriptionEngine.getDisplayName(),
+//					serverRoot,
+//					TreeObject.SUBSCRIPTION_ENGINE,
+//					null,
+//					null
+//			);
+//			monitor.worked(1);
+//			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
 			
 			//Service Configuration
 			TreeObject serviceConfiguration=new TreeObject(
@@ -439,26 +444,26 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
 
 			//Work flow
-			TreeParent workflow=new TreeParent(
-					EXtentisObjects.Workflow.getDisplayName(),
-					serverRoot,
-					TreeObject.WORKFLOW,
-					null,
-					null);
-			WSWorkflowProcessDefinitionUUIDArray array=port.workflowGetProcessDefinitions(new WSWorkflowGetProcessDefinitions(".*"));
-			if(array!=null && array.getWsWorkflowProcessDefinitions()!=null){
-				for (WSWorkflowProcessDefinitionUUID id:array.getWsWorkflowProcessDefinitions()){
-					TreeObject obj = new TreeObject(
-							id.getProcessName()+"_"+id.getProcessVersion(),
-							serverRoot,
-							TreeObject.WORKFLOW_PROCESS,
-							id,
-							null   //no storage to save space
-					);
-					workflow.addChild(obj);
-				}
-			}
-			monitor.worked(1);
+//			TreeParent workflow=new TreeParent(
+//					EXtentisObjects.Workflow.getDisplayName(),
+//					serverRoot,
+//					TreeObject.WORKFLOW,
+//					null,
+//					null);
+//			WSWorkflowProcessDefinitionUUIDArray array=port.workflowGetProcessDefinitions(new WSWorkflowGetProcessDefinitions(".*"));
+//			if(array!=null && array.getWsWorkflowProcessDefinitions()!=null){
+//				for (WSWorkflowProcessDefinitionUUID id:array.getWsWorkflowProcessDefinitions()){
+//					TreeObject obj = new TreeObject(
+//							id.getProcessName()+"_"+id.getProcessVersion(),
+//							serverRoot,
+//							TreeObject.WORKFLOW_PROCESS,
+//							id,
+//							null   //no storage to save space
+//					);
+//					workflow.addChild(obj);
+//				}
+//			}
+//			monitor.worked(1);
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");	
 
 			/*//Job registry
@@ -472,36 +477,36 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			monitor.worked(1);
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");*/	
 //			Transformers
-			WSTransformerV2PK[] transformerPKs = null;
-			boolean hasTransformers = true;
-			try {
-				
-				transformerPKs = port.getTransformerV2PKs(new WSGetTransformerV2PKs("")).getWsTransformerV2PK();
-			} catch (Exception e) {
-				System.out.println("No Transformers");
-				// This server IS old
-				hasTransformers = false;
-			}
-			TreeParent transformers = null;
-			if (hasTransformers) {
-				transformers = new TreeParent(EXtentisObjects.Transformer.getDisplayName(),serverRoot,TreeObject.TRANSFORMER,null,null);
-				if (transformerPKs!=null) {
-					monitor.subTask("Loading Transfomers");
-					for (int i = 0; i < transformerPKs.length; i++) {
-						String id =transformerPKs[i].getPk();
-						TreeObject obj = new TreeObject(
-								id,
-								serverRoot,
-								TreeObject.TRANSFORMER,
-								new WSTransformerV2PK(id),
-								null   //no storage to save space
-						);
-						transformers.addChild(obj);
-					}
-				}
-				monitor.worked(1);
-				if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-			}
+//			WSTransformerV2PK[] transformerPKs = null;
+//			boolean hasTransformers = true;
+//			try {
+//				
+//				transformerPKs = port.getTransformerV2PKs(new WSGetTransformerV2PKs("")).getWsTransformerV2PK();
+//			} catch (Exception e) {
+//				System.out.println("No Transformers");
+//				// This server IS old
+//				hasTransformers = false;
+//			}
+//			TreeParent transformers = null;
+//			if (hasTransformers) {
+//				transformers = new TreeParent(EXtentisObjects.Transformer.getDisplayName(),serverRoot,TreeObject.TRANSFORMER,null,null);
+//				if (transformerPKs!=null) {
+//					monitor.subTask("Loading Transfomers");
+//					for (int i = 0; i < transformerPKs.length; i++) {
+//						String id =transformerPKs[i].getPk();
+//						TreeObject obj = new TreeObject(
+//								id,
+//								serverRoot,
+//								TreeObject.TRANSFORMER,
+//								new WSTransformerV2PK(id),
+//								null   //no storage to save space
+//						);
+//						transformers.addChild(obj);
+//					}
+//				}
+//				monitor.worked(1);
+//				if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
+//			}
 			
 //			Menus
 			WSMenuPK[] menuPKs = null;
@@ -535,85 +540,85 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			}
 
 //			Universe
-			WSUniversePK[] universePKs = null;
-			//boolean hasUniverses = true;
-			try {
-				universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();
-			} catch (Exception e) {
-				System.out.println("No Universes");
-				// This server IS old
-				//hasUniverses = false;
-			}
-			TreeParent Universes = null;
-			//if (hasUniverses) {
-				Universes = new TreeParent(EXtentisObjects.Universe.getDisplayName(),serverRoot,TreeObject.UNIVERSE,null,null);
-				if (universePKs!=null) {
-					monitor.subTask("Loading Universes");
-					for (int i = 0; i < universePKs.length; i++) {
-						String id =universePKs[i].getPk();
-						if (!id.startsWith("UNIVERSE-REVISION")) {
-						TreeObject obj = new TreeObject(
-								id,
-								serverRoot,
-								TreeObject.UNIVERSE,
-								new WSUniversePK(id),
-								null   //no storage to save space
-						);
-						Universes.addChild(obj);
-					 }
-					}
-				}
-				monitor.worked(1);
-				if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-			//}
+//			WSUniversePK[] universePKs = null;
+//			//boolean hasUniverses = true;
+//			try {
+//				universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();
+//			} catch (Exception e) {
+//				System.out.println("No Universes");
+//				// This server IS old
+//				//hasUniverses = false;
+//			}
+//			TreeParent Universes = null;
+//			//if (hasUniverses) {
+//				Universes = new TreeParent(EXtentisObjects.Universe.getDisplayName(),serverRoot,TreeObject.UNIVERSE,null,null);
+//				if (universePKs!=null) {
+//					monitor.subTask("Loading Universes");
+//					for (int i = 0; i < universePKs.length; i++) {
+//						String id =universePKs[i].getPk();
+//						if (!id.startsWith("UNIVERSE-REVISION")) {
+//						TreeObject obj = new TreeObject(
+//								id,
+//								serverRoot,
+//								TreeObject.UNIVERSE,
+//								new WSUniversePK(id),
+//								null   //no storage to save space
+//						);
+//						Universes.addChild(obj);
+//					 }
+//					}
+//				}
+//				monitor.worked(1);
+//				if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
+//			//}
 				
 //				SynchronizationPlan
-				WSSynchronizationPlanPK[] SynchronizationPlanPKs = null;
-				//boolean hasSynchronizationPlans = true;
-				try {
-					SynchronizationPlanPKs = port.getSynchronizationPlanPKs(new WSGetSynchronizationPlanPKs("*")).getWsSynchronizationPlanPK();
-				} catch (Exception e) {
-					System.out.println("No SynchronizationPlans");
-					// This server IS old
-					//hasSynchronizationPlans = false;
-				}
-				TreeParent synchronizationPlans = null;
-				//if (hasSynchronizationPlans) {
-				synchronizationPlans = new TreeParent(EXtentisObjects.SynchronizationPlan.getDisplayName(),serverRoot,TreeObject.SYNCHRONIZATIONPLAN,null,null);
-					if (SynchronizationPlanPKs!=null) {
-						monitor.subTask("Loading SynchronizationPlans");
-						for (int i = 0; i < SynchronizationPlanPKs.length; i++) {
-							String id =SynchronizationPlanPKs[i].getPk();
-							TreeObject obj = new TreeObject(
-									id,
-									serverRoot,
-									TreeObject.SYNCHRONIZATIONPLAN,
-									new WSSynchronizationPlanPK(id),
-									null   //no storage to save space
-							);
-							synchronizationPlans.addChild(obj);
-						}
-					}
-					monitor.worked(1);
-					if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
+//				WSSynchronizationPlanPK[] SynchronizationPlanPKs = null;
+//				//boolean hasSynchronizationPlans = true;
+//				try {
+//					SynchronizationPlanPKs = port.getSynchronizationPlanPKs(new WSGetSynchronizationPlanPKs("*")).getWsSynchronizationPlanPK();
+//				} catch (Exception e) {
+//					System.out.println("No SynchronizationPlans");
+//					// This server IS old
+//					//hasSynchronizationPlans = false;
+//				}
+//				TreeParent synchronizationPlans = null;
+//				//if (hasSynchronizationPlans) {
+//				synchronizationPlans = new TreeParent(EXtentisObjects.SynchronizationPlan.getDisplayName(),serverRoot,TreeObject.SYNCHRONIZATIONPLAN,null,null);
+//					if (SynchronizationPlanPKs!=null) {
+//						monitor.subTask("Loading SynchronizationPlans");
+//						for (int i = 0; i < SynchronizationPlanPKs.length; i++) {
+//							String id =SynchronizationPlanPKs[i].getPk();
+//							TreeObject obj = new TreeObject(
+//									id,
+//									serverRoot,
+//									TreeObject.SYNCHRONIZATIONPLAN,
+//									new WSSynchronizationPlanPK(id),
+//									null   //no storage to save space
+//							);
+//							synchronizationPlans.addChild(obj);
+//						}
+//					}
+//					monitor.worked(1);
+//					if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
 				//}
 
 			serverRoot.addChild(models);
 			serverRoot.addChild(dataClusters);
-			serverRoot.addChild(jobs);
+			//serverRoot.addChild(jobs);
 			serverRoot.addChild(views);
 			serverRoot.addChild(storedProcedures);
-			serverRoot.addChild(engine);
-			serverRoot.addChild(Universes);
-			serverRoot.addChild(synchronizationPlans);
+			//serverRoot.addChild(engine);
+			//serverRoot.addChild(Universes);
+			//serverRoot.addChild(synchronizationPlans);
 			serverRoot.addChild(serviceConfiguration);
-			serverRoot.addChild(workflow);
+			//serverRoot.addChild(workflow);
 			serverRoot.addChild(resources);
 			//serverRoot.addChild(jobregistry);
 //			serverRoot.addChild(customType);
-			if (hasTransformers)serverRoot.addChild(transformers);
-			if (hasRoles) serverRoot.addChild(roles);
-			if (hasRoutingRules) serverRoot.addChild(rules);
+			//if (hasTransformers)serverRoot.addChild(transformers);
+			//if (hasRoles) serverRoot.addChild(roles);
+			//if (hasRoutingRules) serverRoot.addChild(rules);
 			if (hasMenus) serverRoot.addChild(menus);
 			
 
