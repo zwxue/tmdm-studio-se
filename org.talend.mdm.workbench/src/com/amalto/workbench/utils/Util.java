@@ -1593,8 +1593,8 @@ public class Util {
 	   schema.setSchemaForSchemaQNamePrefix("xsd");
 	   
 	    //Add the root schema to the resource that was created above
-	   if(schema.getElement().getTextContent().length()!=0)
-	      resource.getContents().add(schema);
+//	   if(schema.getElement().getTextContent().length()!=0)
+//	      resource.getContents().add(schema);
 	    Iterator<Integer> iter = schemaMonitor.values().iterator();
         while(iter.hasNext())
         {
