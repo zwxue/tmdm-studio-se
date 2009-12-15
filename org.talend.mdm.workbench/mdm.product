@@ -96,6 +96,7 @@
       <plugin id="org.eclipse.xsd"/>
       <plugin id="org.talend.mdm.commmon"/>
       <plugin id="org.talend.mdm.workbench"/>
+      <plugin id="org.talend.mdm.workbench.enterprice"/>
    </plugins>
 
 
