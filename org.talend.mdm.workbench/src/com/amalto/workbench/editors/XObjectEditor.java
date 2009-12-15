@@ -21,6 +21,8 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 
 import com.amalto.workbench.actions.SaveXObjectAction;
+import com.amalto.workbench.availablemodel.AvailableModelUtil;
+import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.editors.xmleditor.XMLEditor;
 import com.amalto.workbench.editors.xmleditor.XMLEditorInput;
 import com.amalto.workbench.image.EImage;
@@ -66,7 +68,11 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
         	
         	//register model listener
         	xobject.addListener(this);
-        	
+			//available models
+			java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
+			for(IAvailableModel model: availablemodels){
+				model.addPage(xobject,this);
+			}
             switch(xobject.getType()) {
 	           	case TreeObject.DATA_MODEL:
 	           		addPage(new DataModelMainPage(this));
@@ -79,8 +85,6 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 	           		this.setPageText(1, "Schema");
 
 	           		break;
-	           	case TreeObject.JOB:
-	           		addPage(new JobMainPage(this));
 	           		
 	           	case TreeObject.INBOUND_PLUGIN:
 	           		break;

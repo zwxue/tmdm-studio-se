@@ -54,10 +54,6 @@ import com.amalto.workbench.actions.DeleteJobAction;
 import com.amalto.workbench.actions.DeleteWorkflowProcessAction;
 import com.amalto.workbench.actions.DeleteXObjectAction;
 import com.amalto.workbench.actions.EditXObjectAction;
-import com.amalto.workbench.actions.GenerateJobDefaultTransformerAction;
-import com.amalto.workbench.actions.GenerateWorkflowDefaultTransformerAction;
-import com.amalto.workbench.actions.ImportTISJobAction;
-import com.amalto.workbench.actions.ImportWorkflowProcessAction;
 import com.amalto.workbench.actions.NewCategoryAction;
 import com.amalto.workbench.actions.NewUserAction;
 import com.amalto.workbench.actions.NewXObjectAction;
@@ -66,6 +62,8 @@ import com.amalto.workbench.actions.ServerLoginAction;
 import com.amalto.workbench.actions.ServerRefreshAction;
 import com.amalto.workbench.actions.UploadCustomTypeAction;
 import com.amalto.workbench.actions.VersioningXObjectAction;
+import com.amalto.workbench.availablemodel.AvailableModelUtil;
+import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.export.ExportItemsAction;
 import com.amalto.workbench.export.ImportItemsAction;
 import com.amalto.workbench.image.EImage;
@@ -131,13 +129,13 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	private BrowseRevisionAction browseRevisionAction;
 	
 	//workflow
-	private ImportWorkflowProcessAction workflowAction;
+
 	private DeleteWorkflowProcessAction deleteWorkflowProcessAction;
-	private GenerateWorkflowDefaultTransformerAction defaultworkflowTransformeraction;
+
 	//job
-	private ImportTISJobAction importjobaction;
+
 	private DeleteJobAction deleteJobAction;
-	private GenerateJobDefaultTransformerAction defaultjobtransformeraction;
+
 	/**********************************************************************************
 	 * The VIEW
 	 * 
@@ -557,6 +555,12 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		if (xobject == null) {
 			manager.add(loginAction);
 		} else {
+			//available models
+			java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
+			for(IAvailableModel model: availablemodels){
+				model.fillContextMenu(xobject, manager);
+			}
+			
 			switch (xobject.getType()) {
 			case TreeObject._SERVER_:
 				manager.add(loginAction);
@@ -570,20 +574,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					manager.add(pasteAction);
 
 				break;				
-			case TreeObject.WORKFLOW:
-				manager.add(workflowAction);
-				break;
-			case TreeObject.WORKFLOW_PROCESS:
-				manager.add(deleteWorkflowProcessAction);
-				manager.add(defaultworkflowTransformeraction);
-				break;
-			case TreeObject.JOB:				
-				manager.add(deleteJobAction);
-				manager.add(defaultjobtransformeraction);
-				break;
-			case TreeObject.JOB_REGISTRY:
-				manager.add(importjobaction);
-				break;				
+			
 			case TreeObject._ACTION_:
 				manager.add((Action) xobject.getWsObject());
 				break;
@@ -602,8 +593,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				break;				
 			case TreeObject.DATA_CLUSTER:
 				if (xobject.isXObject()) {
-//					manager.add(exportAction);
-//					manager.add(importAction);
 					manager.add(browseViewAction);
 				}			
 			case TreeObject.ROLE:
@@ -617,7 +606,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			    int type = LocalTreeObjectRepository.getInstance().receiveUnCertainTreeObjectType(xobject);
 			    if (!LocalTreeObjectRepository.getInstance().isInSystemCatalog(
 						xobject)
-						&& type != TreeObject.ROLE)
+						&& type != TreeObject.ROLE && xobject.getType()!=TreeObject.WORKFLOW_PROCESS && xobject.getType()!=TreeObject.JOB
+						&& xobject.getType()!=TreeObject.WORKFLOW && xobject.getType()!=TreeObject.JOB_REGISTRY)
 			    {
 					if (xobject.getType() != TreeObject.RESOURCES
 							&& xobject.getType() != TreeObject.DATA_MODEL_RESOURCE
@@ -634,10 +624,10 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				if(Util.hasUniverse(xobject))
 					manager.add(browseRevisionAction);
 				
-				if(Util.hasTags(xobject))
+				if(xobject.getType()!=TreeObject.WORKFLOW_PROCESS && xobject.getType()!=TreeObject.JOB && Util.hasTags(xobject))
 					manager.add(versionAction);
 			    
-				if (xobject.isXObject() && !XSystemObjects.isExist(xobject.getType(), xobject.getDisplayName())) {
+				if (xobject.getType()!=TreeObject.WORKFLOW_PROCESS && xobject.getType()!=TreeObject.JOB && xobject.isXObject() && !XSystemObjects.isExist(xobject.getType(), xobject.getDisplayName())) {
 					manager.add(editXObjectAction);
 					manager.add(deleteXObjectAction);
 					manager.add(copyAction);
@@ -721,13 +711,13 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		copyAction = new CopyXObjectAction(this);
 		pasteAction = new PasteXObjectAction(this);
 		//workflow
-		workflowAction=new ImportWorkflowProcessAction(this);
+
 		deleteWorkflowProcessAction=new DeleteWorkflowProcessAction(this);
-		defaultworkflowTransformeraction=new GenerateWorkflowDefaultTransformerAction(this);
+
 		//job
-		importjobaction=new ImportTISJobAction(this);
+
 		deleteJobAction=new DeleteJobAction(this);
-		defaultjobtransformeraction=new GenerateJobDefaultTransformerAction(this);
+
 		
 		exportAction=new ExportItemsAction(this);
 		importAction=new ImportItemsAction(this);
