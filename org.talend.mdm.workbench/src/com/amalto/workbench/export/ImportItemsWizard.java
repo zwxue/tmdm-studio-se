@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -75,6 +76,7 @@ public class ImportItemsWizard extends Wizard{
 	private String zipfile;
 	private ServerView view;
 	private ArrayList<TreeObject> objList =new ArrayList<TreeObject>();
+	private Hashtable<String,String[]> dataClusterContent=new Hashtable<String,String[]>();
 	private TreeParent serverRoot;
 	
 	public ImportItemsWizard(IStructuredSelection sel,ServerView view){
@@ -210,7 +212,14 @@ public class ImportItemsWizard extends Wizard{
 				break;
 			case TreeObject.VIEW:
 				views.addChild(obj);
-				break;				
+				break;	
+			default:
+				if(obj.getItems().length>0){
+					for (int i = 0; i < obj.getItems().length; i++) {
+						if(obj.getItems()[i].split("/")[1]!=null)
+							dataClusterContent.put(obj.getItems()[i].split("/")[1], obj.getItems());
+					}
+				}
 			}			
 		}		
 		treeViewer.setRoot(reserverRoot);
@@ -242,6 +251,7 @@ public class ImportItemsWizard extends Wizard{
 					reader=new FileReader(importFolder+"/"+subItem);
 					WSDataCluster model=(WSDataCluster)Unmarshaller.unmarshal(WSDataCluster.class,reader);
 					port.putDataCluster(new WSPutDataCluster(model));
+					importClusterContents(item,port);
 				}
 				break;
 				//dataclusters contents			
@@ -371,6 +381,29 @@ public class ImportItemsWizard extends Wizard{
 	}
 	
 	
+	private void importClusterContents(TreeObject item, XtentisPort port) {
+		if(dataClusterContent.containsKey(item.getDisplayName()))
+		{
+			FileReader reader;
+			try {
+				String[] paths=dataClusterContent.get(item.getDisplayName());
+				for (int i = 0; i < paths.length; i++) {
+					String path=paths[i];
+					reader = new FileReader(importFolder+"/"+path);
+					WSItem wsItem = (WSItem) Unmarshaller.unmarshal(
+							WSItem.class, reader);
+					if(wsItem.getDataModelName()==null){
+//				port.synchronizationPutItemXML(new WSSynchronizationPutItemXML(null,wsItem.getContent()));
+					}else{
+						port.putItem(new WSPutItem(wsItem.getWsDataClusterPK(),wsItem.getContent(),new WSDataModelPK(wsItem.getDataModelName()),true));
+					}	
+					
+				}
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
 	@Override
 	public void addPages() {
 		addPage(new SelectItemsPage());
