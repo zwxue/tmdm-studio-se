@@ -1,9 +1,6 @@
 package com.amalto.workbench.editors;
 
 import java.net.URL;
-import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -12,8 +9,6 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -33,9 +28,7 @@ import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSProcessInstance;
 import com.amalto.workbench.webservices.WSProcessInstanceArray;
 import com.amalto.workbench.webservices.WSProcessTaskInstance;
-import com.amalto.workbench.webservices.WSProcessTaskInstanceArray;
 import com.amalto.workbench.webservices.WSWorkflowGetProcessInstances;
-import com.amalto.workbench.webservices.WSWorkflowGetTaskList;
 import com.amalto.workbench.webservices.WSWorkflowProcessDefinitionUUID;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.ProcessList;
@@ -96,17 +89,20 @@ public class WorkflowBrowserMainPage extends AMainPage implements IXObjectModelL
         	ccrollComposite.setExpandHorizontal(true);
         	ccrollComposite.setExpandVertical(true);
         	ccrollComposite.setMinSize(400,4*31);
-        	plist=new ProcessList(toolkit, processCom, ccrollComposite,viewer);
+        	
         	xobject=getXObject();
 			port = Util.getPort(
 					new URL(xobject.getEndpointAddress()),
 					xobject.getUniverse(),
 					xobject.getUsername(),
 					xobject.getPassword()
-			);	  
+			);	
+			plist=new ProcessList(port,toolkit, processCom, ccrollComposite,viewer);
 			WSWorkflowProcessDefinitionUUID uuid= (WSWorkflowProcessDefinitionUUID)xobject.getWsKey();
+			
 
 			WSProcessInstanceArray array=port.workflowGetProcessInstances(new WSWorkflowGetProcessInstances(uuid));
+			//port.workflowDeleteProcessInstances(new WSWorkflowDeleteProcessInstancesRequest(uuid.getProcessName(),uuid.getProcessVersion()));
 //			//test code
 //			List<WSProcessInstance> list=new ArrayList<WSProcessInstance>();
 //			for(int i=0; i<2; i++){

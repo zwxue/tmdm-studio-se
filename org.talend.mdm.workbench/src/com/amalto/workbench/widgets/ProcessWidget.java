@@ -16,9 +16,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.image.EImage;
@@ -31,9 +29,9 @@ import com.amalto.workbench.webservices.XtentisPort;
 public class ProcessWidget {
 	FormToolkit toolkit;
 	private Composite parent;
-	private Button suspendButton;
-	private Button startButton;
-	private Button stopButton;
+	//private Button suspendButton;
+	//private Button startButton;
+	//private Button stopButton;
 	private Button delButton;
 	String name;
 	ProcessList plist;
@@ -148,7 +146,7 @@ public class ProcessWidget {
 		gd.widthHint=300;		
 		statusLabel.setLayoutData(gd);
         //start/stop/suspend/resume
-        startButton = toolkit.createButton(parent, "", SWT.TOGGLE);
+       /* startButton = toolkit.createButton(parent, "", SWT.TOGGLE);
         startButton.setImage(ImageCache.getCreatedImage(EImage.RUN_EXC.getPath()));
         startButton.setToolTipText("Start");
         startButton.setLayoutData(
@@ -179,16 +177,16 @@ public class ProcessWidget {
             		suspendButton.redraw();
             	}
         	};
-        });    		
+        });  */  		
         delButton = toolkit.createButton(parent, "",  SWT.TOGGLE);
         delButton.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
         delButton.setToolTipText("Delete");
         delButton.setLayoutData(
                 new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
         );
-        startButton.addSelectionListener(listener);
+        /*startButton.addSelectionListener(listener);
         stopButton.addSelectionListener(listener);	
-        suspendButton.addSelectionListener(listener);
+        suspendButton.addSelectionListener(listener);*/
         
         label.addMouseListener(mouseListener);
         process.addMouseListener(mouseListener);
@@ -196,7 +194,7 @@ public class ProcessWidget {
         statusLabel.addMouseListener(mouseListener);              
         parent.addMouseListener(mouseListener);              
 	}
-	public Button getSuspendButton() {
+/*	public Button getSuspendButton() {
 		return suspendButton;
 	}
 	public void setSuspendButton(Button suspendButton) {
@@ -213,7 +211,7 @@ public class ProcessWidget {
 	}
 	public void setStopButton(Button stopButton) {
 		this.stopButton = stopButton;
-	}
+	}*/
 
 	public Label getProcess() {
 		return process;

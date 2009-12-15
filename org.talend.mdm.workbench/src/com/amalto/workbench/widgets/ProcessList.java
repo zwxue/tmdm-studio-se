@@ -1,5 +1,6 @@
 package com.amalto.workbench.widgets;
 
+import java.rmi.RemoteException;
 import java.util.HashMap;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -10,8 +11,12 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.amalto.workbench.webservices.WSWorkflowDeleteProcessInstancesRequest;
+import com.amalto.workbench.webservices.XtentisPort;
+
 public class ProcessList {
 	int processNum;
+	private XtentisPort port;
 	ProcessWidget cur;
 	HashMap<String,ProcessWidget> map=new HashMap<String, ProcessWidget>();
 
@@ -19,7 +24,8 @@ public class ProcessList {
 	private Composite parent;
 	private ScrolledComposite ccrollComposite;
 	TableViewer viewer;
-	public ProcessList(FormToolkit toolkit, Composite composite,ScrolledComposite ccrollComposite,TableViewer viewer){
+	public ProcessList(XtentisPort port,FormToolkit toolkit, Composite composite,ScrolledComposite ccrollComposite,TableViewer viewer){
+		this.port = port;
 		this.toolkit= toolkit;
 		this.parent=composite;
 		this.ccrollComposite=ccrollComposite;
@@ -43,6 +49,13 @@ public class ProcessList {
 		return pw;
 	}
 	public ProcessWidget delete(String name ){
+		
+		try {
+			port.workflowDeleteProcessInstances(new WSWorkflowDeleteProcessInstancesRequest(name));
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		ProcessWidget pw=map.remove(name);
 		Composite com=pw.getComposite().getParent();
 		pw.getComposite().dispose();
