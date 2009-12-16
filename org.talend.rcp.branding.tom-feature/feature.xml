@@ -14,12 +14,7 @@
    <license url="http://www.talend.com/tos/terms-conditions/index.php">
       [Enter License Description here.]
    </license>
-   <url>
-      <update label="TOS Talend update site for milestones" url="http://talendforge.org/core/updatesite/testing/"/>
-   </url>
-   <includes
-         id="org.talend.tos-feature"
-         version="0.0.0"/>
+
    <plugin
          id="org.talend.rcp.branding.tom"
          download-size="0"
