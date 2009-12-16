@@ -6,10 +6,10 @@
         point="org.eclipse.core.runtime.products">
      <product
            application="org.talend.rcp.branding.tom.application"
-           name="%productName">
+           name="%productName1">
         <property
               name="appName"
-              value="%productName">
+              value="%productName1">
         </property>
         <property
               name="aboutImage"
@@ -55,14 +55,15 @@
    <extension
          point="org.eclipse.ui.intro.config">
       <config
-            introId="org.talend.mdm.intro"
             content="introContent.xml"
-            id="org.talend.mdm.configId">
+            id="org.talend.rcp.branding.tom.introConfigId"
+            introId="org.talend.rcp.branding.tom.intro">
          <presentation
                home-page-id="root">
             <implementation
                   kind="html"
-                  os="win32,linux,macosx">
+                  os="win32,linux,macosx"
+                  style="content/shared.css">
             </implementation>
          </presentation>
       </config>
@@ -72,10 +73,10 @@
       <intro
             class="org.eclipse.ui.intro.config.CustomizableIntroPart"
             icon="icons/talend-picto-small.gif"
-            id="org.talend.mdm.intro">
+            id="org.talend.rcp.branding.tom.intro">
       </intro>
       <introProductBinding
-            introId="org.talend.mdm.intro"
+            introId="org.talend.rcp.branding.tom.intro"
             productId="org.talend.rcp.branding.tom.product">
       </introProductBinding>
    </extension>

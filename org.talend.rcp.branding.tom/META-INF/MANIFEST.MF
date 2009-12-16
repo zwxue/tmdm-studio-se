@@ -6,7 +6,8 @@ Bundle-Version: 3.2.0.qualifier
 Bundle-Activator: org.talend.rcp.branding.tom.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.talend.mdm.workbench
+ org.talend.mdm.workbench,
+ org.eclipse.ui.intro
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: META-INF/lib/z.commons-lang-2.1.jar,
