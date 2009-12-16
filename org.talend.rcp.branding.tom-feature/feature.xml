@@ -17,7 +17,9 @@
    <license url="http://www.talend.com/tos/terms-conditions/index.php">
       [Enter License Description here.]
    </license>
-
+<includes
+         id="org.talend.tom-feature"
+         version="0.0.0"/>
    <plugin
          id="org.talend.rcp.branding.tom"
          download-size="0"
