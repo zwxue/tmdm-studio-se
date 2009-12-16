@@ -95,6 +95,7 @@
       <plugin id="org.talend.mdm.commmon"/>
       <plugin id="org.talend.mdm.workbench"/>
       <plugin id="org.talend.mdm.workbench.enterprise"/>
+      <plugin id="org.talend.rcp.branding.tom"/>
    </plugins>
 
 </product>
