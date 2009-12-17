@@ -71,6 +71,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
     private Button transformeButton;
     private Button smartViewButton;
     private Button beforeSavingButton;
+    private Button beforeDeletingButton;
     private TreeParent treeParent;
     private IWorkbenchPartSite site;
     private  XpathSelectDialog dlg;
@@ -79,6 +80,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
     private boolean isTransfor = false;
     private static String Smart_view="Smart_view_";
     private static String beforeSaving = "beforeSaving_";
+    private static String beforeDeleting = "beforeDeleting_";
     boolean isBtnShow=true;
     
     
@@ -242,6 +244,24 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
 					label.setText("The pattern should be beforeSaving_<ConceptName>");
 					openDLG.setVisible(true);
 					value = beforeSaving;
+				}
+    			
+    		});
+    		
+    		beforeDeletingButton = new Button(radioGroup,SWT.RADIO);
+    		beforeDeletingButton.setText("create beforeDeleting transformer");
+    		beforeDeletingButton.setLayoutData(
+    				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+    		);
+    		beforeDeletingButton.addSelectionListener(new SelectionListener(){
+
+				public void widgetDefaultSelected(SelectionEvent e) {}
+
+				public void widgetSelected(SelectionEvent e) {
+					text.setText(beforeDeleting);
+					label.setText("The pattern should be beforeDeleting_<ConceptName>");
+					openDLG.setVisible(true);
+					value = beforeDeleting;
 				}
     			
     		});
