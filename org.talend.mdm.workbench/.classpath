@@ -18,8 +18,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JAXB"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/commons-httpclient"/>
-	<classpathentry kind="lib" path="/org.talend.mdm.ext.publish.component/libs/com.noelios.restlet.ext.servlet_2.5.jar" sourcepath="F:/Src/OpenSourceProject/restlet/restlet-1.1.6/src"/>
-	<classpathentry kind="lib" path="/org.talend.mdm.ext.publish.component/libs/com.noelios.restlet.jar" sourcepath="F:/Src/OpenSourceProject/restlet/restlet-1.1.6/src"/>
 	<classpathentry kind="lib" path="META-INF/lib/apache-mime4j-0.6.jar"/>
 	<classpathentry kind="lib" path="META-INF/lib/commons-codec-1.3.jar"/>
 	<classpathentry kind="lib" path="META-INF/lib/commons-logging-1.1.1.jar"/>

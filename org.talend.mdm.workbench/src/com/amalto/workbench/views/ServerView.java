@@ -50,8 +50,6 @@ import com.amalto.workbench.actions.AServerViewAction;
 import com.amalto.workbench.actions.BrowseRevisionAction;
 import com.amalto.workbench.actions.BrowseViewAction;
 import com.amalto.workbench.actions.CopyXObjectAction;
-import com.amalto.workbench.actions.DeleteJobAction;
-import com.amalto.workbench.actions.DeleteWorkflowProcessAction;
 import com.amalto.workbench.actions.DeleteXObjectAction;
 import com.amalto.workbench.actions.EditXObjectAction;
 import com.amalto.workbench.actions.NewCategoryAction;
@@ -128,13 +126,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
 	private BrowseRevisionAction browseRevisionAction;
 	
-	//workflow
-
-	private DeleteWorkflowProcessAction deleteWorkflowProcessAction;
-
-	//job
-
-	private DeleteJobAction deleteJobAction;
 
 	/**********************************************************************************
 	 * The VIEW
@@ -710,14 +701,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		browseViewAction = new BrowseViewAction(this);
 		copyAction = new CopyXObjectAction(this);
 		pasteAction = new PasteXObjectAction(this);
-		//workflow
-
-		deleteWorkflowProcessAction=new DeleteWorkflowProcessAction(this);
-
-		//job
-
-		deleteJobAction=new DeleteJobAction(this);
-
 		
 		exportAction=new ExportItemsAction(this);
 		importAction=new ImportItemsAction(this);
