@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?pde version="3.4"?>
+<?pde version="3.5"?>
 
-<product name="%productName" id="org.talend.rcp.branding.tom.product" application="org.talend.rcp.branding.tom.application" version="3.2.0M2" useFeatures="false">
+<product name="Talend MDM Studio" id="org.talend.rcp.branding.tom.product" application="org.talend.rcp.branding.tom.application" version="3.2.0M2" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
       <image path="icons/talend-picto-small.gif"/>
@@ -39,11 +39,13 @@
 
    <plugins>
       <plugin id="com.ibm.icu"/>
-      <plugin id="com.spket.swt" fragment="true"/>
       <plugin id="org.eclipse.compare"/>
+      <plugin id="org.eclipse.compare.core"/>
       <plugin id="org.eclipse.core.commands"/>
       <plugin id="org.eclipse.core.contenttype"/>
       <plugin id="org.eclipse.core.databinding"/>
+      <plugin id="org.eclipse.core.databinding.observable"/>
+      <plugin id="org.eclipse.core.databinding.property"/>
       <plugin id="org.eclipse.core.expressions"/>
       <plugin id="org.eclipse.core.filebuffers"/>
       <plugin id="org.eclipse.core.filesystem"/>
@@ -68,6 +70,7 @@
       <plugin id="org.eclipse.equinox.p2.jarprocessor"/>
       <plugin id="org.eclipse.equinox.p2.metadata"/>
       <plugin id="org.eclipse.equinox.p2.metadata.repository"/>
+      <plugin id="org.eclipse.equinox.p2.repository"/>
       <plugin id="org.eclipse.equinox.preferences"/>
       <plugin id="org.eclipse.equinox.registry"/>
       <plugin id="org.eclipse.equinox.security"/>
@@ -96,5 +99,6 @@
       <plugin id="org.talend.mdm.workbench.enterprise"/>
       <plugin id="org.talend.rcp.branding.tom"/>
    </plugins>
+
 
 </product>

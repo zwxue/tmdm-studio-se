@@ -6,10 +6,10 @@
         point="org.eclipse.core.runtime.products">
      <product
            application="org.talend.rcp.branding.tom.application"
-           name="%productName1">
+           name="Talend MDM Studio">
         <property
               name="appName"
-              value="%productName1">
+              value="Talend MDM Studio">
         </property>
         <property
               name="aboutImage"
