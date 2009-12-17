@@ -163,12 +163,6 @@ public class DeleteXObjectAction extends Action{
 		          	case TreeObject.CATEGORY_FOLDER:
 		          	    // do nothing over here
 		          		break;
-		          	case TreeObject.WORKFLOW_PROCESS:
-		          		new DeleteWorkflowProcessAction(ServerView.show()).run();
-		          		break;
-		          	case TreeObject.JOB:
-		          		new DeleteJobAction(ServerView.show()).run();
-		          		break;
 		          	default:
 		           		MessageDialog.openError(view.getSite().getShell(), "Error", "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
 		           		return;
