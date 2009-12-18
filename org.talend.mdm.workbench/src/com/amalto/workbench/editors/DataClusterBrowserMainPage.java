@@ -66,7 +66,8 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.talend.mdm.commmon.util.core.ICoreConstants;
 
-import com.amalto.workbench.actions.VersioningXObjectAction;
+import com.amalto.workbench.availablemodel.AvailableModelUtil;
+import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.compare.CompareHeadInfo;
 import com.amalto.workbench.compare.CompareManager;
 import com.amalto.workbench.dialogs.DOMViewDialog;
@@ -305,6 +306,18 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 		getManagedForm().reflow(true);
 	}
 	
+	public TableViewer getResultsViewer() {
+		return resultsViewer;
+	}
+
+
+
+	public void setResultsViewer(TableViewer resultsViewer) {
+		this.resultsViewer = resultsViewer;
+	}
+
+
+
 	/**
 	 * Create the Table
 	 */
@@ -559,49 +572,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 							DataClusterBrowserMainPage.this.resultsViewer
 					)
 			    );
-				manager.appendToGroup(
-						IWorkbenchActionConstants.MB_ADDITIONS,
-						new VersioningXObjectAction(
-								DataClusterBrowserMainPage.this.getSite().getShell(),
-								DataClusterBrowserMainPage.this.resultsViewer,
-								getXObject(),
-								VersioningXObjectAction.ACTION_TYPE_COMMIT
-						)
-				);
-				manager.appendToGroup(
-						IWorkbenchActionConstants.MB_ADDITIONS,
-						new VersioningXObjectAction(
-								DataClusterBrowserMainPage.this.getSite().getShell(),
-								DataClusterBrowserMainPage.this.resultsViewer,
-								getXObject(),
-								VersioningXObjectAction.ACTION_TYPE_HISTORY
-						)
-				);
-				manager.appendToGroup(
-						IWorkbenchActionConstants.MB_ADDITIONS,
-						new VersioningXObjectAction(
-								DataClusterBrowserMainPage.this.getSite().getShell(),
-								DataClusterBrowserMainPage.this.resultsViewer,
-								getXObject(),
-								VersioningXObjectAction.ACTION_TYPE_VERSIONS
-						)
-				);
-				//compare item with each other
-				manager.appendToGroup(
-						IWorkbenchActionConstants.MB_ADDITIONS,
-						new CompareItemWithEachOtherAction(
-								DataClusterBrowserMainPage.this.getSite().getShell(),
-								DataClusterBrowserMainPage.this.resultsViewer
-						)
-				);
-				//compare item with svn
-				manager.appendToGroup(
-						IWorkbenchActionConstants.MB_ADDITIONS,
-						new CompareItemWithLatestRevisionAction(
-								DataClusterBrowserMainPage.this.getSite().getShell(),
-								DataClusterBrowserMainPage.this.resultsViewer
-						)
-				);
+				//available models
+				java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
+				for(IAvailableModel model: availablemodels){
+					model.menuAboutToShow(manager, DataClusterBrowserMainPage.this);
+				}
 				
 			}
 		});
@@ -830,7 +805,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	/***************************************************************
 	 * Compare item with each other
 	 ***************************************************************/
-	class CompareItemWithEachOtherAction extends Action{
+	public class CompareItemWithEachOtherAction extends Action{
 
 		protected Shell shell = null;
 		protected Viewer viewer;
@@ -919,7 +894,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	 * Compare item with svn
 	 *TODO 1.object compare 2. item/object save
 	 ***************************************************************/
-	class CompareItemWithLatestRevisionAction extends Action{
+	public class CompareItemWithLatestRevisionAction extends Action{
 
 		protected Shell shell = null;
 		protected Viewer viewer;

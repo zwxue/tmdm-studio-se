@@ -59,7 +59,6 @@ import com.amalto.workbench.actions.PasteXObjectAction;
 import com.amalto.workbench.actions.ServerLoginAction;
 import com.amalto.workbench.actions.ServerRefreshAction;
 import com.amalto.workbench.actions.UploadCustomTypeAction;
-import com.amalto.workbench.actions.VersioningXObjectAction;
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.export.ExportItemsAction;
@@ -107,8 +106,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	protected Action browseViewAction;
 	protected Action copyAction;
 	protected Action pasteAction;
-	protected Action versionAction;
-	protected Action versionUniverseAction;
+
+
 	protected Action exportAction;
 	protected Action importAction;
 	protected Action newCategoryAction;
@@ -559,8 +558,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				manager.add(serverRefreshAction);
 				manager.add(importAction);
 				manager.add(exportAction);
-				//add versioning
-				manager.add(versionUniverseAction);
+
 				if (!WorkbenchClipboard.getWorkbenchClipboard().isEmpty())
 					manager.add(pasteAction);
 
@@ -615,8 +613,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				if(Util.hasUniverse(xobject))
 					manager.add(browseRevisionAction);
 				
-				if(xobject.getType()!=TreeObject.WORKFLOW_PROCESS && xobject.getType()!=TreeObject.JOB && Util.hasTags(xobject))
-					manager.add(versionAction);
+//				if(xobject.getType()!=TreeObject.WORKFLOW_PROCESS && xobject.getType()!=TreeObject.JOB && Util.hasTags(xobject))
+//					manager.add(versionAction);
 			    
 				if (xobject.getType()!=TreeObject.WORKFLOW_PROCESS && xobject.getType()!=TreeObject.JOB && xobject.isXObject() && !XSystemObjects.isExist(xobject.getType(), xobject.getDisplayName())) {
 					manager.add(editXObjectAction);
@@ -706,8 +704,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		importAction=new ImportItemsAction(this);
 		uploadCustomTypeAction=new UploadCustomTypeAction(this);
 		newCategoryAction = new NewCategoryAction(this);
-		versionAction = new VersioningXObjectAction(this,VersioningXObjectAction.ACTION_TYPE_VERSIONS);
-		versionUniverseAction = new VersioningXObjectAction(this,VersioningXObjectAction.ACTION_TYPE_TAGUNIVERSE);
 		newUserActon = new NewUserAction(this);
 	}
 

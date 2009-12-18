@@ -3,6 +3,7 @@ package com.amalto.workbench.availablemodel;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IMenuManager;
 
+import com.amalto.workbench.editors.DataClusterBrowserMainPage;
 import com.amalto.workbench.editors.XObjectBrowser;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.models.TreeObject;
@@ -36,4 +37,10 @@ public interface IAvailableModel {
 	 * @param editor
 	 */
 	void addPage(TreeObject xobject,XObjectEditor editor);
+	
+	/**
+	 * Browse datacluster menuAboutToShow
+	 * @param manager
+	 */
+	void menuAboutToShow(IMenuManager manager, DataClusterBrowserMainPage page);
 }

@@ -301,7 +301,7 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
 		}
 	}
 	
-	protected class DCDropTargetListener implements DropTargetListener {
+	public class DCDropTargetListener implements DropTargetListener {
 
 		public void dragEnter(DropTargetEvent event) {
 			//priority to copy
