@@ -1,4 +1,4 @@
-package com.amalto.workbench.dialogs;
+package org.talend.mdm.workbench.enterprice.dialog;
 
 import java.util.ArrayList;
 
@@ -27,8 +27,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
+import org.talend.mdm.workbench.enterprice.actions.VersioningCompareAction;
 
-import com.amalto.workbench.actions.VersioningCompareAction;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSBoolean;

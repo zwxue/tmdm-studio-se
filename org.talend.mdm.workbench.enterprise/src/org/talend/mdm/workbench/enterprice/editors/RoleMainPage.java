@@ -4,7 +4,7 @@
  * To change the template for this generated file go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-package com.amalto.workbench.editors;
+package org.talend.mdm.workbench.enterprice.editors;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -58,9 +58,10 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.exolab.castor.xml.Marshaller;
+import org.talend.mdm.workbench.enterprice.editors.RoleMainPage.Role.Specification.Instance;
 import org.w3c.dom.Element;
 
-import com.amalto.workbench.editors.RoleMainPage.Role.Specification.Instance;
+import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.Line;

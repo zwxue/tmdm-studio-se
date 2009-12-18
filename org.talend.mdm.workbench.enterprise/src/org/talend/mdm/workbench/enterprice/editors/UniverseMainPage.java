@@ -1,4 +1,4 @@
-package com.amalto.workbench.editors;
+package org.talend.mdm.workbench.enterprice.editors;
 
 import java.io.StringWriter;
 import java.rmi.RemoteException;
@@ -28,7 +28,9 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.exolab.castor.xml.Marshaller;
+import org.talend.mdm.workbench.enterprice.editors.RoutingRuleMainPage.DCDropTargetListener;
 
+import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.providers.XObjectEditorInput;

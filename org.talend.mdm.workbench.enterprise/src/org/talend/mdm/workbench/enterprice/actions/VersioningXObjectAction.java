@@ -1,4 +1,4 @@
-package com.amalto.workbench.actions;
+package org.talend.mdm.workbench.enterprice.actions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,11 +13,11 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
+import org.talend.mdm.workbench.enterprice.dialog.VersioningCommitDialog;
+import org.talend.mdm.workbench.enterprice.dialog.VersioningDialog;
+import org.talend.mdm.workbench.enterprice.dialog.VersioningHistoryDialog;
+import org.talend.mdm.workbench.enterprice.dialog.VersioningUniverseDialog;
 
-import com.amalto.workbench.dialogs.VersioningCommitDialog;
-import com.amalto.workbench.dialogs.VersioningDialog;
-import com.amalto.workbench.dialogs.VersioningHistoryDialog;
-import com.amalto.workbench.dialogs.VersioningUniverseDialog;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.IConstants;

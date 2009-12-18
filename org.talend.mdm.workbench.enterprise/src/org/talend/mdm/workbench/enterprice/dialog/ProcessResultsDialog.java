@@ -1,4 +1,4 @@
-package com.amalto.workbench.dialogs;
+package org.talend.mdm.workbench.enterprice.dialog;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -24,8 +24,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.editors.text.TextSourceViewerConfiguration;
+import org.talend.mdm.workbench.enterprice.editors.TransformerMainPage;
 
-import com.amalto.workbench.editors.TransformerMainPage;
 import com.amalto.workbench.webservices.WSExtractedContent;
 
 public class ProcessResultsDialog extends Dialog {

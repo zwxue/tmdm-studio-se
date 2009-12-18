@@ -1,4 +1,4 @@
-package com.amalto.workbench.actions;
+package org.talend.mdm.workbench.enterprice.actions;
 
 import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;

@@ -1,4 +1,4 @@
-package com.amalto.workbench.dialogs;
+package org.talend.mdm.workbench.enterprice.dialog;
 
 import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
@@ -20,9 +20,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.talend.mdm.workbench.enterprice.actions.VersioningProgressAction;
 
 import com.amalto.workbench.actions.ServerRefreshAction;
-import com.amalto.workbench.actions.VersioningProgressAction;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.VersionUtil;
 import com.amalto.workbench.views.ServerView;

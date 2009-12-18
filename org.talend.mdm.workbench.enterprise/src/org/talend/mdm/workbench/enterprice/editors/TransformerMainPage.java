@@ -4,7 +4,8 @@
  * To change the template for this generated file go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-package com.amalto.workbench.editors;
+package org.talend.mdm.workbench.enterprice.editors;
+
 
 import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
@@ -73,12 +74,12 @@ import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
-import org.talend.mdm.commmon.util.workbench.Version;
+import org.talend.mdm.workbench.enterprice.dialog.ProcessResultsDialog;
+import org.talend.mdm.workbench.enterprice.dialog.SetupTransformerInputVariablesDialog;
 
 import com.amalto.workbench.dialogs.PluginDetailsDialog;
-import com.amalto.workbench.dialogs.ProcessResultsDialog;
-import com.amalto.workbench.dialogs.SetupTransformerInputVariablesDialog;
 import com.amalto.workbench.dialogs.VariableDefinitionDialog;
+import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.Line;
@@ -149,9 +150,7 @@ public class TransformerMainPage extends AMainPageV2 {
 	protected String filePath;
 	
 	protected int currentPlugin = -1; 
-	
-	protected boolean version_greater_2_16_0 = false;
-	protected boolean version_greater_2_17_0 =false;
+
 	
 	protected TreeMap<String, String> pluginDescriptions = new TreeMap<String, String>();
 	
@@ -174,18 +173,7 @@ public class TransformerMainPage extends AMainPageV2 {
         		"Transformer "+((XObjectEditorInput)editor.getEditorInput()).getName()
         		+Util.getRevision((TreeObject)((XObjectEditorInput)editor.getEditorInput()).getModel())
         );
-        //get Version information
-        try {
-        	Version ver = Util.getVersion(getXObject());
-        	version_greater_2_16_0 = (
-        			(ver.getMajor()>2) ||
-        			((ver.getMajor()==2)&&(ver.getMinor()>=16))
-        	);
-        	version_greater_2_17_0 = (
-        			(ver.getMajor()>2) ||
-        			((ver.getMajor()==2)&&(ver.getMinor()>=17))
-        	);
-        } catch (Exception e) {/*no versioning support on old cores*/}
+
     }
     
     public java.util.List<Line> getCacheList() {
@@ -636,7 +624,8 @@ public class TransformerMainPage extends AMainPageV2 {
 	        		transformer.getProcessSteps()[stepsList.getSelectionIndex()].setParameters(parametersTextViewer.getDocument().get());
 	        		TransformerMainPage.this.comitting= false;
 	        		markDirty();            		
-	        	};
+	        	}
+
 	        });          
             refreshData();
 

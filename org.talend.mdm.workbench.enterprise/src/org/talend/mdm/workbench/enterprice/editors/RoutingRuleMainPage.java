@@ -4,13 +4,13 @@
  * To change the template for this generated file go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-package com.amalto.workbench.editors;
+package org.talend.mdm.workbench.enterprice.editors;
 
+import java.awt.event.TextEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
@@ -41,10 +41,10 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.talend.mdm.commmon.util.workbench.Version;
 
 import com.amalto.workbench.dialogs.PluginDetailsDialog;
 import com.amalto.workbench.dialogs.XpathSelectDialog;
+import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.Line;
@@ -121,12 +121,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
         );
         //get Version information
         try {
-        	Version ver = Util.getVersion(getXObject());
-        	version_greater_than_2_17_0 = (
-        			(ver.getMajor()>2) ||
-        			((ver.getMajor()==2)&&(ver.getMinor()>=17))
-        	);
-        	
+
         	 treeParent = this.getXObject().getParent();
       		if(treeParent==null){//if it is a new page,treeParent should be ROUTING_RULE
       			treeParent = this.getXObject().getServerRoot().findServerFolder(TreeObject.ROUTING_RULE);

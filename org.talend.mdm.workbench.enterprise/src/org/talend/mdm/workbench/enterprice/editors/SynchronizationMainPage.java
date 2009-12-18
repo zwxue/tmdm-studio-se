@@ -1,4 +1,4 @@
-package com.amalto.workbench.editors;
+package org.talend.mdm.workbench.enterprice.editors;
 
 import java.io.StringWriter;
 import java.net.MalformedURLException;
@@ -35,7 +35,9 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.exolab.castor.xml.Marshaller;
+import org.talend.mdm.workbench.enterprice.editors.RoutingRuleMainPage.DCDropTargetListener;
 
+import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.Line;

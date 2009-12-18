@@ -1,4 +1,4 @@
-package com.amalto.workbench.dialogs;
+package org.talend.mdm.workbench.enterprice.dialog;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,8 +20,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.talend.mdm.workbench.enterprice.editors.TransformerMainPage;
 
-import com.amalto.workbench.editors.TransformerMainPage;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.EContentType;

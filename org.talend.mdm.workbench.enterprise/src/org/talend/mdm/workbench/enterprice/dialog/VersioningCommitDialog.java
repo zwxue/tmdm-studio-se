@@ -1,4 +1,4 @@
-package com.amalto.workbench.dialogs;
+package org.talend.mdm.workbench.enterprice.dialog;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -18,8 +18,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.talend.mdm.workbench.enterprice.actions.VersioningProgressAction;
 
-import com.amalto.workbench.actions.VersioningProgressAction;
 import com.amalto.workbench.webservices.WSBackgroundJobPK;
 import com.amalto.workbench.webservices.WSItemPK;
 import com.amalto.workbench.webservices.WSVersioningCommitItems;

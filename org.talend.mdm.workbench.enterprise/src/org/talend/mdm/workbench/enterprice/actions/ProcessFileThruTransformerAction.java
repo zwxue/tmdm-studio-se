@@ -1,4 +1,4 @@
-package com.amalto.workbench.actions;
+package org.talend.mdm.workbench.enterprice.actions;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
@@ -16,8 +16,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Event;
+import org.talend.mdm.workbench.enterprice.dialog.ProcessResultsDialog;
 
-import com.amalto.workbench.dialogs.ProcessResultsDialog;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;

@@ -1,4 +1,4 @@
-package com.amalto.workbench.dialogs;
+package org.talend.mdm.workbench.enterprice.dialog;
 
 import java.util.ArrayList;
 
@@ -26,9 +26,9 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.talend.mdm.workbench.enterprice.actions.VersioningProgressAction;
 
 import com.amalto.workbench.actions.ServerRefreshAction;
-import com.amalto.workbench.actions.VersioningProgressAction;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;

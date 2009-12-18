@@ -99,23 +99,9 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 	           	case TreeObject.STORED_PROCEDURE:
                     addPage(new StoredProcedureMainPage(this));
 	           		break;	
-	           	case TreeObject.ROLE:
-                    addPage(new RoleMainPage(this));
-	           		break;		           		
-	           	case TreeObject.ROUTING_RULE:
-                    addPage(new RoutingRuleMainPage(this));
-	           		break;
-	           	case TreeObject.TRANSFORMER:
-                    addPage(new TransformerMainPage(this));
-	           		break;	
+	           			           
 	           	case TreeObject.MENU:
                     addPage(new MenuMainPage(this));
-	           		break;
-	           	case TreeObject.UNIVERSE:
-	           		addPage(new UniverseMainPage(this));	           		
-	           		break;
-	           	case TreeObject.SYNCHRONIZATIONPLAN:	           		
-	           		addPage(new SynchronizationMainPage(this));
 	           		break;
 	           	case TreeObject.SERVICE_CONFIGURATION:
 	           		addPage(new  ServiceConfigrationMainPage(this));
