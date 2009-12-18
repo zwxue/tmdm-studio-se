@@ -9,7 +9,6 @@ Require-Bundle: org.eclipse.ui,
  org.talend.mdm.workbench,
  org.eclipse.ui.intro
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: META-INF/lib/z.commons-lang-2.1.jar,
  .
 Bundle-Vendor: .Talend SA.
