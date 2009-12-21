@@ -1,4 +1,4 @@
-package com.amalto.workbench.actions;
+package org.talend.mdm.workbench.enterprice.actions;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -13,6 +13,7 @@ import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.w3c.dom.Element;
 
+import com.amalto.workbench.actions.UndoAction;
 import com.amalto.workbench.dialogs.ValidationRuleDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.ImageCache;

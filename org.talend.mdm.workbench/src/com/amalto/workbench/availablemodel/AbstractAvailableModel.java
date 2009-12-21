@@ -4,6 +4,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IMenuManager;
 
 import com.amalto.workbench.editors.DataClusterBrowserMainPage;
+import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.XObjectBrowser;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.models.TreeObject;
@@ -38,6 +39,13 @@ public class AbstractAvailableModel implements IAvailableModel {
 		// TODO Auto-generated method stub
 		
 	}
+	public void fillContextMenu(Object obj, IMenuManager manager,DataModelMainPage page,String dataModelName) {
+		// TODO Auto-generated method stub
 
+	}
 
+	public void doubleClickOnElement(int type,DataModelMainPage page,String dataModelName) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -126,14 +126,12 @@ import com.amalto.workbench.actions.XSDChangeBaseTypeAction;
 import com.amalto.workbench.actions.XSDChangeToComplexTypeAction;
 import com.amalto.workbench.actions.XSDChangeToSimpleTypeAction;
 import com.amalto.workbench.actions.XSDCopyConceptAction;
-import com.amalto.workbench.actions.XSDDeleteAnnotationSchematronAction;
 import com.amalto.workbench.actions.XSDDeleteConceptAction;
 import com.amalto.workbench.actions.XSDDeleteConceptWrapAction;
 import com.amalto.workbench.actions.XSDDeleteElementAction;
 import com.amalto.workbench.actions.XSDDeleteIdentityConstraintAction;
 import com.amalto.workbench.actions.XSDDeleteParticleAction;
 import com.amalto.workbench.actions.XSDDeleteTypeDefinition;
-import com.amalto.workbench.actions.XSDDeleteValidationRulesAction;
 import com.amalto.workbench.actions.XSDDeleteXPathAction;
 import com.amalto.workbench.actions.XSDEditComplexTypeAction;
 import com.amalto.workbench.actions.XSDEditConceptAction;
@@ -161,13 +159,14 @@ import com.amalto.workbench.actions.XSDSetAnnotationForeignKeyAction;
 import com.amalto.workbench.actions.XSDSetAnnotationForeignKeyInfoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationHiddenAction;
 import com.amalto.workbench.actions.XSDSetAnnotationLabelAction;
-import com.amalto.workbench.actions.XSDSetAnnotationSchematronAction;
 import com.amalto.workbench.actions.XSDSetAnnotationSourceSystemAction;
 import com.amalto.workbench.actions.XSDSetAnnotationTargetSystemsAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWrapHiddenAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWrapWriteAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
 import com.amalto.workbench.actions.XSDSetFacetMessageAction;
+import com.amalto.workbench.availablemodel.AvailableModelUtil;
+import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.dialogs.DataModelFilterDialog;
 import com.amalto.workbench.dialogs.ErrorExceptionDialog;
 import com.amalto.workbench.dialogs.SelectImportedModulesDialog;
@@ -205,7 +204,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	private XSDNewBrowseItemViewAction newBrowseItemAction = null;
 	private XSDNewElementAction newElementAction = null;
 	private XSDDeleteElementAction deleteElementAction = null;
-	private XSDDeleteValidationRulesAction deleteValidationRule=null;
+	//private XSDDeleteValidationRulesAction deleteValidationRule=null;
 	private XSDChangeToComplexTypeAction changeToComplexTypeAction = null;
 	private XSDDeleteParticleAction deleteParticleAction = null;
 	private XSDNewParticleFromTypeAction newParticleFromTypeAction = null;
@@ -238,7 +237,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	private XSDSetAnnotationWrapHiddenAction setAnnotationWrapHiddenAction = null;
 	private XSDSetAnnotationWriteAction setAnnotationWriteAction = null;
 	private XSDSetAnnotationTargetSystemsAction setAnnotationTargetSystemsAction = null;
-	private XSDSetAnnotationSchematronAction setAnnotationSchematronAction;
+	//private XSDSetAnnotationSchematronAction setAnnotationSchematronAction;
 	private XSDSetAnnotationSourceSystemAction setAnnotationSourceSystemAction = null;
 	private XSDSetAnnotationDocumentationAction setAnnotationDocumentationAction = null;
 	private XSDChangeToComplexTypeAction changeSubElementGroupAction=null;
@@ -275,7 +274,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	private boolean isChange=false;
 	private Group addLanGroup;
 	protected String uriPre="http://localhost:8080";
-	private XSDDeleteAnnotationSchematronAction deleteAnnotationSchematronAction;
+	//private XSDDeleteAnnotationSchematronAction deleteAnnotationSchematronAction;
 	public DataModelMainPage(FormEditor editor) {
 		super(editor, DataModelMainPage.class.getName(), "Data Model "
 				+ ((XObjectEditorInput) editor.getEditorInput()).getName()
@@ -1155,7 +1154,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		this.deleteConceptWrapAction = new XSDDeleteConceptWrapAction(this);
 		this.newElementAction = new XSDNewElementAction(this);
 		this.deleteElementAction = new XSDDeleteElementAction(this);
-		this.deleteValidationRule=new XSDDeleteValidationRulesAction(this);
+		//this.deleteValidationRule=new XSDDeleteValidationRulesAction(this);
 		this.changeToComplexTypeAction = new XSDChangeToComplexTypeAction(this,false);
 		this.changeSubElementGroupAction = new XSDChangeToComplexTypeAction(this,true);
 		this.deleteParticleAction = new XSDDeleteParticleAction(this);
@@ -1194,8 +1193,8 @@ public class DataModelMainPage extends AMainPageV2 {
 		//this.pasteConceptAction = new XSDPasteConceptAction(this);
 		
 		this.setAnnotationTargetSystemsAction = new XSDSetAnnotationTargetSystemsAction(this,dataModelName);
-		this.setAnnotationSchematronAction = new XSDSetAnnotationSchematronAction(this,dataModelName);
-		this.deleteAnnotationSchematronAction = new XSDDeleteAnnotationSchematronAction(this,dataModelName);
+		//this.setAnnotationSchematronAction = new XSDSetAnnotationSchematronAction(this,dataModelName);
+		//this.deleteAnnotationSchematronAction = new XSDDeleteAnnotationSchematronAction(this,dataModelName);
 		this.setAnnotationSourceSystemAction = new XSDSetAnnotationSourceSystemAction(
 				this);
 		this.setAnnotationDocumentationAction = new XSDSetAnnotationDocumentationAction(
@@ -1312,6 +1311,11 @@ public class DataModelMainPage extends AMainPageV2 {
 				IStructuredSelection selection = ((IStructuredSelection) viewer
 						.getSelection());
 				int elem = getElementType(selection.getFirstElement());
+				//available models
+				java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
+				for(IAvailableModel model: availablemodels){
+					model.doubleClickOnElement(elem, DataModelMainPage.this, dataModelName);
+				}				
 				switch (elem){
 					case 0:
 						editConceptAction.run();
@@ -1400,10 +1404,7 @@ public class DataModelMainPage extends AMainPageV2 {
 						break;
 					case 108:
 						setAnnotationHiddenAction.run();
-						break;
-					case 109:
-						setAnnotationSchematronAction.run();
-						break;
+						break;					
 					case 110:
 						setFacetMsgAction.run();
 						break;
@@ -1600,13 +1601,12 @@ public class DataModelMainPage extends AMainPageV2 {
 			if (deleteConceptWrapAction.checkOutAllConcept(selectedObjs))
 				manager.add(newBrowseItemAction);
 		}
-		//delete schematron annotation
-		if( obj instanceof Element){
-			Element e= (Element)obj;
-			if("X_Schematron".equals(e.getAttribute("source"))){
-				manager.add(deleteAnnotationSchematronAction);
-			} 
+		//available models
+		java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
+		for(IAvailableModel model: availablemodels){
+			model.fillContextMenu(obj, manager, this, dataModelName);
 		}
+		
 		/*if(copyConceptAction.checkInCopyType(selectedObjs))
 			manager.add(copyConceptAction);
 		if(pasteConceptAction.checkInPasteType())
@@ -1811,11 +1811,19 @@ public class DataModelMainPage extends AMainPageV2 {
 			
 			if(((XSDAnnotation)obj).getSchema().getTargetNamespace() == null && !Util.IsAImporedElement((XSDAnnotation)obj, xsdSchema)){
 				setAnnotationActions(manager);
-				manager.add(setAnnotationSchematronAction);
+				//available models
+				java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
+				for(IAvailableModel model: availablemodels){
+					model.fillContextMenu(obj, manager, this, dataModelName);
+				}
 			}else if(!Util.IsAImporedElement((XSDAnnotation)obj, xsdSchema))
 			{
 				setAnnotationActions(manager);
-				manager.add(setAnnotationSchematronAction);
+				//available models
+				java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
+				for(IAvailableModel model: availablemodels){
+					model.fillContextMenu(obj, manager, this, dataModelName);
+				}
 			}
 		}
 		
@@ -1854,12 +1862,10 @@ public class DataModelMainPage extends AMainPageV2 {
 			manager.add(setAnnotationWrapWriteAction);
 			manager.add(setAnnotationWrapHiddenAction);
 		}
-		//delete schematron annotation
-		if( obj instanceof Element){
-			Element e= (Element)obj;
-			if("X_Schematron".equals(e.getAttribute("source"))){
-				manager.add(deleteAnnotationSchematronAction);
-			} 
+		//available models
+		java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
+		for(IAvailableModel model: availablemodels){
+			model.fillContextMenu(obj, manager, this, dataModelName);
 		}		
 		manager.add(new Separator());
 
@@ -1879,7 +1885,12 @@ public class DataModelMainPage extends AMainPageV2 {
 		//manager.add(setAnnotationSchematronAction);
 		manager.add(setAnnotationSourceSystemAction);
 		manager.add(setAnnotationTargetSystemsAction);
-		manager.add(deleteValidationRule);
+		//manager.add(deleteValidationRule);
+		//available models
+		java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
+		for(IAvailableModel model: availablemodels){
+			model.fillContextMenu(null, manager, this, dataModelName);
+		}
 	}
 	
 	private void setAnnotationActions2(IMenuManager manager) {
@@ -1889,9 +1900,14 @@ public class DataModelMainPage extends AMainPageV2 {
 		manager.add(setAnnotationHiddenAction);
 		manager.add(setAnnotationTargetSystemsAction);
 		manager.add(setAnnotationSourceSystemAction);
-		manager.add(setAnnotationSchematronAction);
+		//manager.add(setAnnotationSchematronAction);
 		//manager.add(setAnnotationDocumentationAction);
-		manager.add(deleteValidationRule);
+		//manager.add(deleteValidationRule);
+		//available models
+		java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
+		for(IAvailableModel model: availablemodels){
+			model.fillContextMenu(null, manager, this, dataModelName);
+		}
 	}
 
 	/**

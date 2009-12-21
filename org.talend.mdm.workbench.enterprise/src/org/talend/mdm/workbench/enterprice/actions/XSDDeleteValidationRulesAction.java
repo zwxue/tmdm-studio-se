@@ -1,4 +1,4 @@
-package com.amalto.workbench.actions;
+package org.talend.mdm.workbench.enterprice.actions;
 
 import java.util.ArrayList;
 
@@ -6,17 +6,15 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
-import org.eclipse.xsd.XSDTypeDefinition;
 
+import com.amalto.workbench.actions.UndoAction;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
-import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDDeleteValidationRulesAction extends UndoAction{
