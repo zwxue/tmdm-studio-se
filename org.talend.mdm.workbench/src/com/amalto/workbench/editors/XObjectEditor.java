@@ -117,7 +117,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 //			 		addPage(new  CustomTypeMainPage(this));
 					break;
 	           	default:
-	           		MessageDialog.openError(this.getSite().getShell(), "Error", "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
+	           		//MessageDialog.openError(this.getSite().getShell(), "Error", "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
 	           		return;
             }//switch
         } catch (PartInitException e) {
