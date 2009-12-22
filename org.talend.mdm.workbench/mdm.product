@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="%productName" id="org.talend.mdm.workbench.product" application="org.talend.mdm.workbench.application" version="3.2.0M2" useFeatures="false" includeLaunchers="true">
+<product name="%productName" id="org.talend.mdm.workbench.product" application="org.talend.mdm.workbench.application" version="3.2.0" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
       <image path="icons/talend-picto-small.gif"/>
@@ -96,7 +96,7 @@
       <plugin id="org.eclipse.xsd"/>
       <plugin id="org.talend.mdm.commmon"/>
       <plugin id="org.talend.mdm.workbench"/>
-      <plugin id="org.talend.mdm.workbench.enterprice"/>
+      <plugin id="org.talend.mdm.workbench.enterprice" fragment=""/>
    </plugins>
 
 
