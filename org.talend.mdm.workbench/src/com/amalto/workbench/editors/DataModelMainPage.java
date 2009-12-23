@@ -1297,6 +1297,8 @@ public class DataModelMainPage extends AMainPageV2 {
 						return 109;
 					} else if (source.startsWith("X_Facet_")) {
 						return 110;
+					}else if (source.startsWith("X_Workflow")) {
+						return 111;
 					}
 				} 
 			
@@ -1811,19 +1813,11 @@ public class DataModelMainPage extends AMainPageV2 {
 			
 			if(((XSDAnnotation)obj).getSchema().getTargetNamespace() == null && !Util.IsAImporedElement((XSDAnnotation)obj, xsdSchema)){
 				setAnnotationActions(manager);
-				//available models
-				java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
-				for(IAvailableModel model: availablemodels){
-					model.fillContextMenu(obj, manager, this, dataModelName);
-				}
+
 			}else if(!Util.IsAImporedElement((XSDAnnotation)obj, xsdSchema))
 			{
 				setAnnotationActions(manager);
-				//available models
-				java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
-				for(IAvailableModel model: availablemodels){
-					model.fillContextMenu(obj, manager, this, dataModelName);
-				}
+
 			}
 		}
 		
