@@ -483,7 +483,6 @@ public class XSDAnnotationsStructure {
 		}
 		return targetSystems;
 	}
-	
 	/*************************************************************
 	 * Schematron Rule
 	 *************************************************************/
@@ -523,6 +522,55 @@ public class XSDAnnotationsStructure {
 	public TreeMap<String, String> getSchematrons() {
 		TreeMap<String, String> targetSystems = new TreeMap<String, String>();
 		LinkedHashMap<String, String> appInfos = getAppInfos(ICoreConstants.X_Schematron);
+		Set<String> keys = appInfos.keySet();
+		for (Iterator iter = keys.iterator(); iter.hasNext(); ) {
+			String key = (String) iter.next();
+			String v=appInfos.get(key);
+			if(v ==null || v.trim().length()==0) continue;
+			targetSystems.put(key, appInfos.get(key));
+		}
+		return targetSystems;
+	}
+	
+	/*************************************************************
+	 * Workflow
+	 *************************************************************/
+	public boolean setWorkflows(Collection<String> systems) {
+		removeAppInfos(ICoreConstants.X_Workflow);
+		for (Iterator iter = systems.iterator(); iter.hasNext(); ) {
+			String role = (String) iter.next();
+			
+			addAppInfo(ICoreConstants.X_Workflow, role);
+		}
+		hasChanged = true;
+		return true;
+	}
+	
+	public boolean setWorkflow(int num, String system) {
+		TreeMap< String, String> infos = getSchematrons();
+		infos.put(ICoreConstants.X_Workflow+"_"+num, system);
+		setSchematrons(infos.values());
+		//return setForeignKeyInfos(new ArrayList(infos.values()));
+		return true;
+	}
+	public void addWorkflow(String pattern){
+		TreeMap< String, String> infos = getSchematrons();
+		infos.put(ICoreConstants.X_Workflow+"_"+(infos.size()+1), pattern);
+		setSchematrons(infos.values());
+	}
+	public void removeWorkflow(String pattern){
+		TreeMap< String, String> infos = getSchematrons();
+		for(Entry<String, String>entry: infos.entrySet()){
+			if(pattern.equals(entry.getValue())){
+				infos.remove(entry.getKey());
+				break;
+			}
+		}
+		setSchematrons(infos.values());
+	}
+	public TreeMap<String, String> getWorkflows() {
+		TreeMap<String, String> targetSystems = new TreeMap<String, String>();
+		LinkedHashMap<String, String> appInfos = getAppInfos(ICoreConstants.X_Workflow);
 		Set<String> keys = appInfos.keySet();
 		for (Iterator iter = keys.iterator(); iter.hasNext(); ) {
 			String key = (String) iter.next();

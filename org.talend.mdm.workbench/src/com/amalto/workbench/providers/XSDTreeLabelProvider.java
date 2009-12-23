@@ -68,20 +68,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
 					String ctdName = ((XSDComplexTypeDefinition)xsdParticle.getContainer()).getName();
 					name = (ctdName != null ? ctdName : "");
 				}
-				/*
-				int type = ((XSDModelGroup)xsdTerm).getCompositor().getValue();
-				switch (type) {
-					case XSDCompositor.ALL:
-						name= "";
-						break;
-					case XSDCompositor.CHOICE:
-						name= "";
-						break;
-					case XSDCompositor.SEQUENCE:
-						name= "";
-						break;				
-				}
-				*/
+
 			} else {
 				name = "[Any]";
 			}
@@ -117,25 +104,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
 			return name + tail;
 
 		}
-		
-		/*
-		if (obj instanceof XSDComplexTypeDefinition) {
-			
-			XSDComplexTypeDefinition ctd =  (XSDComplexTypeDefinition)obj;
-			
-			if (ctd.getContent()==null) {
-				if (ctd.getDerivationMethod().equals(XSDDerivationMethod.EXTENSION_LITERAL)) {
-					return "ext ["+ctd.getBaseTypeDefinition().getName()+"]["+ctd.getBaseTypeDefinition()+"]";
-				} else {
-					return "res ["+ctd.getBaseTypeDefinition().getName()+"]["+ctd.getBaseTypeDefinition()+"]";
-				}
-			} else {			
-				String name = ((XSDComplexTypeDefinition)obj).getName(); 
-				return (name == null ? "" : name);
-			}
-		}
-		*/
-		
+
 		if (obj instanceof XSDFacet) {
 			return 	((XSDFacet)obj).getFacetName()+
 							": "+((XSDFacet)obj).getLexicalValue();
@@ -193,6 +162,8 @@ public class XSDTreeLabelProvider extends LabelProvider {
 							return Util.iso2lang.get(source.substring(14).toLowerCase())+" Description: "+e.getChildNodes().item(0).getNodeValue();
 						} else if (source.equals("X_Write")) {
 							return "Writable By : "+e.getChildNodes().item(0).getNodeValue();
+						} else if (source.equals("X_Workflow")) {
+							return "Workflow access : "+e.getChildNodes().item(0).getNodeValue();							
 						} else if (source.equals("X_Hide")) {
 							return "Hidden to : "+e.getChildNodes().item(0).getNodeValue();
 							//add by ymli; bugId 0009157
@@ -238,9 +209,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
 	
 	
 	public Image getImage(Object obj) {
-		
-//		System.out.println("getImage "+obj.getClass().getName());
-		
+
 		if (obj instanceof XSDElementDeclaration) {
 			//top declaration
 			XSDElementDeclaration decl = (XSDElementDeclaration)obj;
@@ -402,6 +371,8 @@ public class XSDTreeLabelProvider extends LabelProvider {
 							return ImageCache.getCreatedImage( "icons/hideable.gif");
 						} else if (source.equals("X_Schematron")) {
 							return ImageCache.getCreatedImage( EImage.ROUTINE.getPath());
+						}else if (source.equals("X_Workflow")) {
+							return ImageCache.getCreatedImage( EImage.PROCESS.getPath());
 						}else {
 							return ImageCache.getCreatedImage( "icons/documentation.gif");
 						}
