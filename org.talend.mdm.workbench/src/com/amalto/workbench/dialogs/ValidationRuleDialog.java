@@ -160,7 +160,7 @@ public class ValidationRuleDialog extends Dialog {
 				}
 				sb=sb.append(context).append("\">");
 				sb=sb.append("<"+ type.toLowerCase() + " test=\"" + express+"\">");
-				sb=sb.append(msg);
+				sb=sb.append("<![CDATA[" + msg + "]]>");
 				sb=sb.append("</"+type.toLowerCase()+">");
 				sb=sb.append("</rule>\n");
 			}
