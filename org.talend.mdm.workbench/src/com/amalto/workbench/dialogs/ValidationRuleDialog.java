@@ -150,6 +150,8 @@ public class ValidationRuleDialog extends Dialog {
 				String context=line.keyValues.get(1).value;
 				String express=line.keyValues.get(2).value;
 				express=express.replaceAll("<", "&lt;");
+				express = express.replaceAll("\"", "&quot;");
+				express = express.replaceAll("\'", "&apos;");
 				String msg=line.keyValues.get(3).value;
 				if(conceptName!=null){
 					if(context.equals(conceptName)){
