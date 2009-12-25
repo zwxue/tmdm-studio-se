@@ -44,6 +44,7 @@ public class ServerRefreshAction extends Action {
 				serverRoot = (TreeParent)((IStructuredSelection)view.getViewer().getSelection()).getFirstElement();
 			else
 				serverRoot = forcedRoot;
+			if(serverRoot==null) return;
 			server = (String)serverRoot.getWsKey();  //we are at server root
 			
             XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(

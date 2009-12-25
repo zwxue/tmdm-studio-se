@@ -7,10 +7,18 @@
 package com.amalto.workbench.editors;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.Separator;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
 
+import com.amalto.workbench.actions.RefreshCurrentEditorAction;
+import com.amalto.workbench.image.EImage;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 
@@ -29,8 +37,24 @@ public abstract class AFormPage extends FormPage {
 	protected void createFormContent(IManagedForm managedForm) {
 		super.createFormContent(managedForm);
 		managedForm.getForm().setText(this.getTitle());
-		createActions();
+		createActions();		
 	}
+	@Override
+	public void createPartControl(Composite parent) {
+		// TODO Auto-generated method stub
+		super.createPartControl(parent);
+		contributeToActionBars();
+	}
+	private void contributeToActionBars() {
+		
+		IActionBars bars = getEditorSite().getActionBars();		
+		IToolBarManager toolBarManager=bars.getToolBarManager();
+		if(toolBarManager.find("RefreshCurrentEditorAction")==null){			
+			toolBarManager.add(new RefreshCurrentEditorAction());
+			toolBarManager.add(new Separator());
+		}
+	}
+	
 
 	/**
 	 * Called by The main Editor
