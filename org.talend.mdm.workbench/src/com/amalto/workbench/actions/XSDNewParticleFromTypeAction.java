@@ -55,7 +55,7 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
                 return Status.CANCEL_STATUS;
             }
   
-            dialog = new BusinessElementInputDialog(this,page.getSite().getShell(),"Add a new Business Element");
+            dialog = new BusinessElementInputDialog(this,page.getSite().getShell(),"Add a new Business Element",false);
             dialog.setBlockOnOpen(true);
        		int ret = dialog.open();
        		if (ret == Dialog.CANCEL){

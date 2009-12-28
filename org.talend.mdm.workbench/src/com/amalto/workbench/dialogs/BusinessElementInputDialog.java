@@ -11,6 +11,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -25,21 +26,33 @@ public class BusinessElementInputDialog extends Dialog {
 	private Text minOccursText=null;
 	private Text maxOccursText=null;
 	private Collection<String> elementDeclarations = null;
+	protected Button checkBox;
 
 	private String elementName="";
 	private String refName="";
 	private int minOccurs=0;
 	private int maxOccurs=1;
+	private boolean isNew = false;
 	
 	private SelectionListener caller = null;
 	private String title = "";
 	
+	//fix 0010248
+	private boolean inherit = true;
+
+	public boolean isInherit() {
+		return inherit;
+	}
+
+	public void setInherit(boolean inherit) {
+		this.inherit = inherit;
+	}
 
 	/**
 	 * @param parentShell
 	 */
-	public BusinessElementInputDialog(SelectionListener caller, Shell parentShell, String title) {
-		this(caller,parentShell,title,"","",new ArrayList<String>(),0,1);
+	public BusinessElementInputDialog(SelectionListener caller, Shell parentShell, String title,boolean isNew) {
+		this(caller,parentShell,title,"","",new ArrayList<String>(),0,1,isNew);
 	}
 
 	/**
@@ -53,7 +66,8 @@ public class BusinessElementInputDialog extends Dialog {
 			String refName,
 			Collection<String> decls,
 			int minOccurs,
-			int maxOccurs) {
+			int maxOccurs,
+			boolean isNew) {
 		super(parentShell);
 		this.caller = caller;
 		this.title = title;
@@ -62,6 +76,7 @@ public class BusinessElementInputDialog extends Dialog {
 		this.elementDeclarations = decls;
 		this.minOccurs = minOccurs;
 		this.maxOccurs = maxOccurs;
+		this.isNew = isNew;
 	}
 
 	
@@ -159,7 +174,19 @@ public class BusinessElementInputDialog extends Dialog {
 				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 		);
 		maxOccursText.setText(getMaxOccurs()== -1 ? "" : ""+getMaxOccurs());
-		
+		if(isNew){
+		checkBox = new Button(composite, SWT.CHECK);
+		checkBox.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
+				true, 2, 1));
+		checkBox.addSelectionListener(new SelectionListener() {
+        	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
+        	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+        		inherit = checkBox.getSelection();
+        	};
+        });
+		checkBox.setSelection(inherit);
+		checkBox.setText(" Inherit the security annotations");
+		}
 	    return composite;
 	}
 
