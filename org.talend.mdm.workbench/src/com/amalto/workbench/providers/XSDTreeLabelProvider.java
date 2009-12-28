@@ -165,7 +165,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
 						} else if (source.equals("X_Workflow")) {
 							return "Workflow access : "+e.getChildNodes().item(0).getNodeValue();							
 						} else if (source.equals("X_Hide")) {
-							return "Hidden to : "+e.getChildNodes().item(0).getNodeValue();
+							return "No Access to : "+e.getChildNodes().item(0).getNodeValue();
 							//add by ymli; bugId 0009157
 						} else if(source.startsWith("X_Facet")){
 							return source.substring(2, 7)+"_Msg_"+source.substring(8)+": "+ e.getChildNodes().item(0).getNodeValue();

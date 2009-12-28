@@ -66,7 +66,7 @@ public class DataModelFilterDialog extends Dialog {
 		btnWrite.setLayoutData(new GridData(SWT.FILL,SWT.CENTER,false,false,1,1));
 		btnWrite.setSelection(dataModelFilter.isWriteAccess());
 		
-		btnHidden=toolkit.createButton(composite, "Hide access", SWT.RADIO);
+		btnHidden=toolkit.createButton(composite, "No access", SWT.RADIO);
 		btnHidden.setLayoutData(new GridData(SWT.FILL,SWT.CENTER,false,false,1,1));
 		btnHidden.setSelection(dataModelFilter.isHiddenAccess());
 		return composite;

@@ -34,7 +34,7 @@ public class XSDSetAnnotationWrapNoAction extends UndoAction {
 	public XSDSetAnnotationWrapNoAction(DataModelMainPage page,String dataModelName) {
 		super(page);
 		setImageDescriptor(ImageCache.getImage("icons/annotation.gif"));
-		setText("Set the Roles with No Accesses");
+		setText("Set the Roles with No Access");
 		setToolTipText("Set the Roles That Cannot See This Filed");
 		this.dataModelName = dataModelName;
 	}
