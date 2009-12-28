@@ -157,11 +157,11 @@ import com.amalto.workbench.actions.XSDSetAnnotationDescriptionsAction;
 import com.amalto.workbench.actions.XSDSetAnnotationDocumentationAction;
 import com.amalto.workbench.actions.XSDSetAnnotationForeignKeyAction;
 import com.amalto.workbench.actions.XSDSetAnnotationForeignKeyInfoAction;
-import com.amalto.workbench.actions.XSDSetAnnotationHiddenAction;
+import com.amalto.workbench.actions.XSDSetAnnotationNoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationLabelAction;
 import com.amalto.workbench.actions.XSDSetAnnotationSourceSystemAction;
 import com.amalto.workbench.actions.XSDSetAnnotationTargetSystemsAction;
-import com.amalto.workbench.actions.XSDSetAnnotationWrapHiddenAction;
+import com.amalto.workbench.actions.XSDSetAnnotationWrapNoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWrapWriteAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
 import com.amalto.workbench.actions.XSDSetFacetMessageAction;
@@ -233,8 +233,8 @@ public class DataModelMainPage extends AMainPageV2 {
 	private XSDSetAnnotationForeignKeyInfoAction setAnnotationForeignKeyInfoAction = null;
 	private XSDSetAnnotationLabelAction setAnnotationLabelAction = null;
 	private XSDSetAnnotationDescriptionsAction setAnnotationDescriptionsAction = null;
-	private XSDSetAnnotationHiddenAction setAnnotationHiddenAction = null;
-	private XSDSetAnnotationWrapHiddenAction setAnnotationWrapHiddenAction = null;
+	private XSDSetAnnotationNoAction setAnnotationNoAction = null;
+	private XSDSetAnnotationWrapNoAction setAnnotationWrapNoAction = null;
 	private XSDSetAnnotationWriteAction setAnnotationWriteAction = null;
 	private XSDSetAnnotationTargetSystemsAction setAnnotationTargetSystemsAction = null;
 	//private XSDSetAnnotationSchematronAction setAnnotationSchematronAction;
@@ -1186,8 +1186,8 @@ public class DataModelMainPage extends AMainPageV2 {
 				this,dataModelName);
 		this.setAnnotationWriteAction = new XSDSetAnnotationWriteAction(this);
 		this.setAnnotationWrapWriteAction = new XSDSetAnnotationWrapWriteAction(this);
-		this.setAnnotationHiddenAction = new XSDSetAnnotationHiddenAction(this,dataModelName);
-		this.setAnnotationWrapHiddenAction = new XSDSetAnnotationWrapHiddenAction(this,dataModelName);
+		this.setAnnotationNoAction = new XSDSetAnnotationNoAction(this,dataModelName);
+		this.setAnnotationWrapNoAction = new XSDSetAnnotationWrapNoAction(this,dataModelName);
 		
 		//this.copyConceptAction = new XSDCopyConceptAction(this);
 		//this.pasteConceptAction = new XSDPasteConceptAction(this);
@@ -1405,7 +1405,7 @@ public class DataModelMainPage extends AMainPageV2 {
 						setAnnotationWriteAction.run();
 						break;
 					case 108:
-						setAnnotationHiddenAction.run();
+						setAnnotationNoAction.run();
 						break;					
 					case 110:
 						setFacetMsgAction.run();
@@ -1854,7 +1854,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		if(selectedObjs.length > 1 && setAnnotationWrapWriteAction.checkInWriteType(selectedObjs)){
 			manager.add(new Separator());
 			manager.add(setAnnotationWrapWriteAction);
-			manager.add(setAnnotationWrapHiddenAction);
+			manager.add(setAnnotationWrapNoAction);
 		}
 		//available models
 		java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
@@ -1875,7 +1875,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		manager.add(setAnnotationForeignKeyAction);
 		manager.add(setAnnotationForeignKeyInfoAction);
 		manager.add(setAnnotationWriteAction);
-		manager.add(setAnnotationHiddenAction);
+		manager.add(setAnnotationNoAction);
 		//manager.add(setAnnotationSchematronAction);
 		manager.add(setAnnotationSourceSystemAction);
 		manager.add(setAnnotationTargetSystemsAction);
@@ -1891,7 +1891,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		manager.add(setAnnotationLabelAction);
 		manager.add(setAnnotationDescriptionsAction);
 		manager.add(setAnnotationWriteAction);
-		manager.add(setAnnotationHiddenAction);
+		manager.add(setAnnotationNoAction);
 		manager.add(setAnnotationTargetSystemsAction);
 		manager.add(setAnnotationSourceSystemAction);
 		//manager.add(setAnnotationSchematronAction);

@@ -26,15 +26,15 @@ import com.amalto.workbench.utils.XSDAnnotationsStructure;
  * set the Roles with Hidden Accesses when selections is multiple
  * @author liyanmei
  */
-public class XSDSetAnnotationWrapHiddenAction extends UndoAction {
+public class XSDSetAnnotationWrapNoAction extends UndoAction {
 	protected AnnotationOrderedListsDialog dlg = null;
 	protected String dataModelName;
 	protected boolean isChanged = false;
 
-	public XSDSetAnnotationWrapHiddenAction(DataModelMainPage page,String dataModelName) {
+	public XSDSetAnnotationWrapNoAction(DataModelMainPage page,String dataModelName) {
 		super(page);
 		setImageDescriptor(ImageCache.getImage("icons/annotation.gif"));
-		setText("Set the Roles with Hidden Accesses");
+		setText("Set the Roles with No Accesses");
 		setToolTipText("Set the Roles That Cannot See This Filed");
 		this.dataModelName = dataModelName;
 	}
@@ -99,7 +99,7 @@ public class XSDSetAnnotationWrapHiddenAction extends UndoAction {
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(page.getSite().getShell(), "Error",
-					"An error occured trying to set the Hidden Access: "
+					"An error occured trying to set the No Access: "
 							+ e.getLocalizedMessage());
 			return Status.CANCEL_STATUS;
 		}

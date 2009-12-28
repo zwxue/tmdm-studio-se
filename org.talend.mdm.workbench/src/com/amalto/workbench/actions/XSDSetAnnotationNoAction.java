@@ -23,15 +23,15 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
-public class XSDSetAnnotationHiddenAction extends UndoAction{
+public class XSDSetAnnotationNoAction extends UndoAction{
 
 	protected AnnotationOrderedListsDialog dlg = null;
 	protected String dataModelName;
 	
-	public XSDSetAnnotationHiddenAction(DataModelMainPage page,String dataModelName) {
+	public XSDSetAnnotationNoAction(DataModelMainPage page,String dataModelName) {
 		super(page);
 		setImageDescriptor(ImageCache.getImage( "icons/annotation.gif"));
-		setText("Set the Roles with Hidden Accesses");
+		setText("Set the Roles with No Accesses");
 		setToolTipText("Set the Roles That Cannot See This Filed");
 		this.dataModelName = dataModelName;
 	}
@@ -96,7 +96,7 @@ public class XSDSetAnnotationHiddenAction extends UndoAction{
 			MessageDialog.openError(
 					page.getSite().getShell(),
 					"Error", 
-					"An error occured trying to set the Hidden Access: "+e.getLocalizedMessage()
+					"An error occured trying to set the No Access: "+e.getLocalizedMessage()
 			);
             return Status.CANCEL_STATUS;
 		}
