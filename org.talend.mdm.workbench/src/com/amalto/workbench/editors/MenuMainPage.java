@@ -106,9 +106,7 @@ public class MenuMainPage extends AMainPageV2 {
             descriptionText.addModifyListener(new ModifyListener() {
             	public void modifyText(ModifyEvent e) {
             		if (refreshing) return;
-            		//commit as we go
-            		WSMenu wsMenu = ((WSMenu)getXObject().getWsObject());
-            		wsMenu.setDescription(descriptionText.getText());
+
             		markDirtyWithoutCommit();
             	}
             }); 
@@ -219,7 +217,7 @@ public class MenuMainPage extends AMainPageV2 {
     		getSite().registerContextMenu(menuTreeMgr, menuTree);
     	
               
-            refreshData();
+           refreshData();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -254,7 +252,9 @@ public class MenuMainPage extends AMainPageV2 {
 			
 			this.comitting = true;
 			
-			//COMMIT AS WE GO
+    		//commit as we go
+    		WSMenu wsMenu = ((WSMenu)getXObject().getWsObject());
+    		wsMenu.setDescription(descriptionText.getText());
 			
 			this.comitting = false;
 			
