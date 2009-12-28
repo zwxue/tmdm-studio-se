@@ -190,7 +190,7 @@ public class TypesLabelProvider extends LabelProvider {
 						} else if (source.equals("X_Write")) {
 							return "Writable By : "+e.getChildNodes().item(0).getNodeValue();
 						} else if (source.equals("X_Hide")) {
-							return "Hidden to : "+e.getChildNodes().item(0).getNodeValue();
+							return "No Access to : "+e.getChildNodes().item(0).getNodeValue();
 						} else {
 							return source+": "+Util.nodeToString((Element)obj);
 						}
