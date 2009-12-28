@@ -92,7 +92,8 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
             		ref==null ? null : ref.getQName(),
         			elementDeclarations,
             		selParticle.getMinOccurs(),
-            		selParticle.getMaxOccurs()
+            		selParticle.getMaxOccurs(),
+            		false
             );
             dialog.setBlockOnOpen(true);
        		int ret = dialog.open();
