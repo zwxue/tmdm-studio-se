@@ -2167,6 +2167,8 @@ public class Util {
 				
 		return xsdSchema;
 	}
-	
-
+	private static String ENTERPRISE_ID="org.talend.mdm.workbench.enterprise";
+	public static boolean IsEnterPrise(){
+		return Platform.getBundle(ENTERPRISE_ID)!=null;
+	}
 }

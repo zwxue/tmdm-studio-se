@@ -24,7 +24,7 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 
 public class LoginDialog extends Dialog {
-
+	
 	private static String f = System.getProperty("user.dir")+"/.mdmworkbench.conf";
 	
 	private Properties properties = new Properties();
@@ -119,25 +119,25 @@ public class LoginDialog extends Dialog {
 		passwordText.setLayoutData(
 			new GridData(SWT.FILL,SWT.CENTER,true,false,1,1)
 		);
-		
+		//check Enterprise
+		if(Util.IsEnterPrise()){
 		//universe
 		Label universeLabel = new Label(composite, SWT.NONE);
 		universeLabel.setLayoutData(
 			new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
 		);
 		universeLabel.setText("Universe");
-
-		universeCombo = new Combo(composite, SWT.NONE);
-		universeCombo.setLayoutData(
-			new GridData(SWT.FILL,SWT.CENTER,true,false,1,1)
-		);
-		((GridData)universeCombo.getLayoutData()).widthHint = 300;
-		for (Iterator<String> iter = universes.iterator(); iter.hasNext(); ) {
-			String host = iter.next();
-			universeCombo.add(host);	
+			universeCombo = new Combo(composite, SWT.NONE);
+			universeCombo.setLayoutData(
+				new GridData(SWT.FILL,SWT.CENTER,true,false,1,1)
+			);
+			((GridData)universeCombo.getLayoutData()).widthHint = 300;
+			for (Iterator<String> iter = universes.iterator(); iter.hasNext(); ) {
+				String host = iter.next();
+				universeCombo.add(host);	
+			}
+			universeCombo.select(0);
 		}
-		universeCombo.select(0);
-		
 	    return composite;
 	}
 
@@ -207,9 +207,11 @@ public class LoginDialog extends Dialog {
 	}
 
 	public String getUniverse() {
-		return universeCombo.getText();
+		if(Util.IsEnterPrise()){
+			return universeCombo.getText();
+		}
+		else{
+			return "";
+		}			
 	}
-
-	
-
 }
