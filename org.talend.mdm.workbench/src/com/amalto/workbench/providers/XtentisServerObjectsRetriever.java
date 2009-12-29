@@ -114,9 +114,11 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 				model.addTreeObjects(port,monitor, serverRoot);
 			}
 			//Data Models
-			TreeParent models = new TreeParent(EXtentisObjects.DataMODEL.getDisplayName(),serverRoot,TreeObject.DATA_MODEL,null,null);			
-			//WSDataModel[] xdm = port.getDataModels(new WSRegexDataModels("*")).getWsDataModels();
-			WSDataModelPK[] xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs();
+			TreeParent models = new TreeParent(EXtentisObjects.DataMODEL.getDisplayName(),serverRoot,TreeObject.DATA_MODEL,null,null);						
+			WSDataModelPK[] xdmPKs = null;
+			try{
+				xdmPKs=port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs();
+			}catch(Exception e){e.printStackTrace();}
 			if (xdmPKs != null) {
 				monitor.subTask("Loading Data Models");
 				for (int i = 0; i < xdmPKs.length; i++) {
@@ -136,34 +138,11 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			monitor.worked(1);
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
 			
-			//Custom Type
-//			TreeParent customType = new TreeParent(EXtentisObjects.CustomType.getDisplayName(),serverRoot,TreeObject.CUSTOM_TYPE,null,null);			
-			//WSDataModel[] xdm = port.getDataModels(new WSRegexDataModels("*")).getWsDataModels();
-
-			/*			WSDataModelPK[] xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs();
-			if (xdmPKs != null) {
-				monitor.subTask("Loading Data Models");
-				for (int i = 0; i < xdmPKs.length; i++) {
-					String name = xdmPKs[i].getPk();
-					if (!name.startsWith("XMLSCHEMA")) {
-						TreeObject obj = new TreeObject(
-								name,
-								serverRoot,
-								TreeObject.DATA_MODEL,
-								xdmPKs[i],
-								null   //no storage to save space
-						);
-						custpmType.addChild(obj);
-					}
-				}
-			}*/
-//			monitor.worked(1);
-//			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-			
-			
 			//Resources
 				//add data models
-			TreeParent resources = new TreeParent(EXtentisObjects.Resources.getDisplayName(),serverRoot,TreeObject.RESOURCES,null,null);			
+			TreeParent resources = null;
+			try{
+				resources=new TreeParent(EXtentisObjects.Resources.getDisplayName(),serverRoot,TreeObject.RESOURCES,null,null);			
 			if (xdmPKs != null) {
 					TreeParent datamodelResources =	new TreeParent(
 									EXtentisObjects.DataMODELRESOURCE.getDisplayName(),
@@ -250,7 +229,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 							 resources.addChild(picturesResources);
 				monitor.subTask("Loading Resources for Pictures");
 				List<String> picNameList=ResourcesUtil.getResourcesNameListFromURI(uriPre+TreeObject.PICTURES_URI);
-//				List<String> picNameList=new ArrayList<String>();
+
 				for (int i = 0; i < picNameList.size(); i++) {
 					String name = picNameList.get(i);
 							TreeObject obj = new TreeObject(
@@ -265,11 +244,13 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			
 			monitor.worked(1);
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-			
+			}catch(Exception e){e.printStackTrace();}
 			//DataClusters
-			TreeParent dataClusters = new TreeParent(EXtentisObjects.DataCluster.getDisplayName(),serverRoot,TreeObject.DATA_CLUSTER,null,null);
-			//WSDataCluster[] xdc = port.getDataClusters(new WSRegexDataClusters("*")).getWsDataClusters();
-			WSDataClusterPK[] xdcPKs = port.getDataClusterPKs(new WSRegexDataClusterPKs("")).getWsDataClusterPKs();
+			TreeParent dataClusters = new TreeParent(EXtentisObjects.DataCluster.getDisplayName(),serverRoot,TreeObject.DATA_CLUSTER,null,null);			
+			WSDataClusterPK[] xdcPKs = null;
+			try{
+				xdcPKs=port.getDataClusterPKs(new WSRegexDataClusterPKs("")).getWsDataClusterPKs();			
+			}catch(Exception e){e.printStackTrace();}
 			if (xdcPKs != null) {
 				monitor.subTask("Loading Data Clusters");
 				for (int i = 0; i < xdcPKs.length; i++) {
@@ -291,34 +272,13 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			}
 			monitor.worked(1);
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-			
-			
-//			//Job
-//			TreeParent jobs = new TreeParent(EXtentisObjects.JobRegistry.getDisplayName(),serverRoot,TreeObject.JOB_REGISTRY,null,null);
-//			WSMDMJob[] jobPKs = port.getMDMJob(new WSMDMNULL()).getWsMDMJob();
-//			if (jobPKs!=null) {
-//				monitor.subTask("Loading Jobs");
-//				for (int i = 0; i < jobPKs.length; i++) {
-//					String name = jobPKs[i].getJobName()+"_"+jobPKs[i].getJobVersion();
-//					TreeObject obj = new TreeObject(
-//							name,
-//							serverRoot,
-//							TreeObject.JOB,
-//							new WSViewPK(name),
-//							null   //no storage to save space
-//					);
-//					jobs.addChild(obj);
-//				}
-//			}
-//			monitor.worked(1);
-//			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-			
-			
-
 
 			//Views
 			TreeParent views = new TreeParent(EXtentisObjects.View.getDisplayName(),serverRoot,TreeObject.VIEW,null,null);
-			WSViewPK[] viewPKs = port.getViewPKs((new WSGetViewPKs(""))).getWsViewPK();
+			WSViewPK[] viewPKs = null;
+			try{
+				viewPKs=port.getViewPKs((new WSGetViewPKs(""))).getWsViewPK();
+			}catch(Exception e){e.printStackTrace();}
 			if (viewPKs!=null) {
 				monitor.subTask("Loading Views");
 				for (int i = 0; i < viewPKs.length; i++) {
@@ -336,10 +296,12 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			monitor.worked(1);
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
 			
-
 			//Stored Procedures
 			TreeParent storedProcedures = new TreeParent(EXtentisObjects.StoredProcedure.getDisplayName(),serverRoot,TreeObject.STORED_PROCEDURE,null,null);
-			WSStoredProcedurePK[] spk = port.getStoredProcedurePKs(new WSRegexStoredProcedure("")).getWsStoredProcedurePK();
+			WSStoredProcedurePK[] spk = null;
+			try{
+				spk=port.getStoredProcedurePKs(new WSRegexStoredProcedure("")).getWsStoredProcedurePK();
+			}catch(Exception e){e.printStackTrace();}
 			if (spk!=null) {
 				monitor.subTask("Loading Stored Procedures");
 				for (int i = 0; i < spk.length; i++) {
@@ -357,81 +319,6 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			monitor.worked(1);
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
 			
-//			Roles
-//			WSRolePK[] rolePKs = null;
-//			boolean hasRoles = true;
-//			try {
-//				rolePKs = port.getRolePKs(new WSGetRolePKs("*")).getWsRolePK();
-//			} catch (Exception e) {
-//				System.out.println("NO ROLES");
-//				// This server does not handle roles (pre 2.13)
-//				hasRoles = false;
-//			}
-//			TreeParent roles = null;
-//			if (hasRoles) {
-//				roles = new TreeParent(EXtentisObjects.Role.getDisplayName(),serverRoot,TreeObject.ROLE,null,null);
-//				if (rolePKs!=null) {
-//					monitor.subTask("Loading Roles");
-//					for (int i = 0; i < rolePKs.length; i++) {
-//						String name =rolePKs[i].getPk();
-//						TreeObject obj = new TreeObject(
-//								name,
-//								serverRoot,
-//								TreeObject.ROLE,
-//								new WSRolePK(name),
-//								null   //no storage to save space
-//						);
-//						roles.addChild(obj);
-//					}
-//				}
-//				monitor.worked(1);
-//				if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-//			}
-			
-
-//			Routing Rules
-//			WSRoutingRulePK[] routingRulePKs = null;
-//			boolean hasRoutingRules = true;
-//			try {
-//				routingRulePKs = port.getRoutingRulePKs(new WSGetRoutingRulePKs("")).getWsRoutingRulePKs();
-//			} catch (Exception e) {
-//				System.out.println("NO ROUTING RULES");
-//				// This server does not handle roles (pre 2.13)
-//				hasRoutingRules = false;
-//			}
-//			TreeParent rules = null;
-//			if (hasRoutingRules) {
-//				rules = new TreeParent(EXtentisObjects.RoutingRule.getDisplayName(),serverRoot,TreeObject.ROUTING_RULE,null,null);
-//				if (routingRulePKs!=null) {
-//					monitor.subTask("Loading Routing Rules");
-//					for (int i = 0; i < routingRulePKs.length; i++) {
-//						String id =routingRulePKs[i].getPk();
-//						TreeObject obj = new TreeObject(
-//								id,
-//								serverRoot,
-//								TreeObject.ROUTING_RULE,
-//								new WSRoutingRulePK(id),
-//								null   //no storage to save space
-//						);
-//						rules.addChild(obj);
-//					}
-//				}
-//				monitor.worked(1);
-//				if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-//			}
-
-			
-			//Subscription Engine
-//			TreeObject  engine = new TreeObject(
-//					EXtentisObjects.SubscriptionEngine.getDisplayName(),
-//					serverRoot,
-//					TreeObject.SUBSCRIPTION_ENGINE,
-//					null,
-//					null
-//			);
-//			monitor.worked(1);
-//			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-			
 			//Service Configuration
 			TreeObject serviceConfiguration=new TreeObject(
 					EXtentisObjects.ServiceConfiguration.getDisplayName(),
@@ -442,71 +329,6 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			//serviceConfiguration.setXObject(false);
 			monitor.worked(1);
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-
-			//Work flow
-//			TreeParent workflow=new TreeParent(
-//					EXtentisObjects.Workflow.getDisplayName(),
-//					serverRoot,
-//					TreeObject.WORKFLOW,
-//					null,
-//					null);
-//			WSWorkflowProcessDefinitionUUIDArray array=port.workflowGetProcessDefinitions(new WSWorkflowGetProcessDefinitions(".*"));
-//			if(array!=null && array.getWsWorkflowProcessDefinitions()!=null){
-//				for (WSWorkflowProcessDefinitionUUID id:array.getWsWorkflowProcessDefinitions()){
-//					TreeObject obj = new TreeObject(
-//							id.getProcessName()+"_"+id.getProcessVersion(),
-//							serverRoot,
-//							TreeObject.WORKFLOW_PROCESS,
-//							id,
-//							null   //no storage to save space
-//					);
-//					workflow.addChild(obj);
-//				}
-//			}
-//			monitor.worked(1);
-			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");	
-
-			/*//Job registry
-			TreeParent jobregistry=new TreeParent(
-					EXtentisObjects.JobRegistry.getDisplayName(),
-					serverRoot,
-					TreeObject.JOB_REGISTRY,
-					null,
-					null);
-
-			monitor.worked(1);
-			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");*/	
-//			Transformers
-//			WSTransformerV2PK[] transformerPKs = null;
-//			boolean hasTransformers = true;
-//			try {
-//				
-//				transformerPKs = port.getTransformerV2PKs(new WSGetTransformerV2PKs("")).getWsTransformerV2PK();
-//			} catch (Exception e) {
-//				System.out.println("No Transformers");
-//				// This server IS old
-//				hasTransformers = false;
-//			}
-//			TreeParent transformers = null;
-//			if (hasTransformers) {
-//				transformers = new TreeParent(EXtentisObjects.Transformer.getDisplayName(),serverRoot,TreeObject.TRANSFORMER,null,null);
-//				if (transformerPKs!=null) {
-//					monitor.subTask("Loading Transfomers");
-//					for (int i = 0; i < transformerPKs.length; i++) {
-//						String id =transformerPKs[i].getPk();
-//						TreeObject obj = new TreeObject(
-//								id,
-//								serverRoot,
-//								TreeObject.TRANSFORMER,
-//								new WSTransformerV2PK(id),
-//								null   //no storage to save space
-//						);
-//						transformers.addChild(obj);
-//					}
-//				}
-//				monitor.worked(1);
-//				if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-//			}
 			
 //			Menus
 			WSMenuPK[] menuPKs = null;
@@ -539,90 +361,18 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 				if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
 			}
 
-//			Universe
-//			WSUniversePK[] universePKs = null;
-//			//boolean hasUniverses = true;
-//			try {
-//				universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();
-//			} catch (Exception e) {
-//				System.out.println("No Universes");
-//				// This server IS old
-//				//hasUniverses = false;
-//			}
-//			TreeParent Universes = null;
-//			//if (hasUniverses) {
-//				Universes = new TreeParent(EXtentisObjects.Universe.getDisplayName(),serverRoot,TreeObject.UNIVERSE,null,null);
-//				if (universePKs!=null) {
-//					monitor.subTask("Loading Universes");
-//					for (int i = 0; i < universePKs.length; i++) {
-//						String id =universePKs[i].getPk();
-//						if (!id.startsWith("UNIVERSE-REVISION")) {
-//						TreeObject obj = new TreeObject(
-//								id,
-//								serverRoot,
-//								TreeObject.UNIVERSE,
-//								new WSUniversePK(id),
-//								null   //no storage to save space
-//						);
-//						Universes.addChild(obj);
-//					 }
-//					}
-//				}
-//				monitor.worked(1);
-//				if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-//			//}
-				
-//				SynchronizationPlan
-//				WSSynchronizationPlanPK[] SynchronizationPlanPKs = null;
-//				//boolean hasSynchronizationPlans = true;
-//				try {
-//					SynchronizationPlanPKs = port.getSynchronizationPlanPKs(new WSGetSynchronizationPlanPKs("*")).getWsSynchronizationPlanPK();
-//				} catch (Exception e) {
-//					System.out.println("No SynchronizationPlans");
-//					// This server IS old
-//					//hasSynchronizationPlans = false;
-//				}
-//				TreeParent synchronizationPlans = null;
-//				//if (hasSynchronizationPlans) {
-//				synchronizationPlans = new TreeParent(EXtentisObjects.SynchronizationPlan.getDisplayName(),serverRoot,TreeObject.SYNCHRONIZATIONPLAN,null,null);
-//					if (SynchronizationPlanPKs!=null) {
-//						monitor.subTask("Loading SynchronizationPlans");
-//						for (int i = 0; i < SynchronizationPlanPKs.length; i++) {
-//							String id =SynchronizationPlanPKs[i].getPk();
-//							TreeObject obj = new TreeObject(
-//									id,
-//									serverRoot,
-//									TreeObject.SYNCHRONIZATIONPLAN,
-//									new WSSynchronizationPlanPK(id),
-//									null   //no storage to save space
-//							);
-//							synchronizationPlans.addChild(obj);
-//						}
-//					}
-//					monitor.worked(1);
-//					if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-				//}
-
 			serverRoot.addChild(models);
 			serverRoot.addChild(dataClusters);
-			//serverRoot.addChild(jobs);
+			
 			serverRoot.addChild(views);
 			serverRoot.addChild(storedProcedures);
-			//serverRoot.addChild(engine);
-			//serverRoot.addChild(Universes);
-			//serverRoot.addChild(synchronizationPlans);
+						
 			serverRoot.addChild(serviceConfiguration);
 			//serverRoot.addChild(workflow);
 			serverRoot.addChild(resources);
-			//serverRoot.addChild(jobregistry);
-//			serverRoot.addChild(customType);
-			//if (hasTransformers)serverRoot.addChild(transformers);
-			//if (hasRoles) serverRoot.addChild(roles);
-			//if (hasRoutingRules) serverRoot.addChild(rules);
-			if (hasMenus) serverRoot.addChild(menus);
-			
 
-			
+			if (hasMenus) serverRoot.addChild(menus);
+
 			addRevision(wUuniverse);
 			
 			monitor.done();			
