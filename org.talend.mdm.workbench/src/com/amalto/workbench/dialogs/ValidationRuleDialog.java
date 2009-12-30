@@ -140,8 +140,9 @@ public class ValidationRuleDialog extends Dialog {
 		TableItem[] items=viewer.getViewer().getTable().getItems();
 		//List<String> rules=new ArrayList<String>();
 		StringBuffer sb =new StringBuffer();
-		if(items.length > 0){
-			sb=sb.append("<pattern "+ "name=\""+text.getText()+"\" >\n");
+		sb=sb.append("<pattern "+ "name=\""+text.getText()+"\" >\n");
+		
+		if(items.length > 0) {
 			for(TableItem item:items){
 				Line line=(Line)item.getData();
 				sb=sb.append("<rule context=\"");
@@ -166,9 +167,11 @@ public class ValidationRuleDialog extends Dialog {
 				sb=sb.append("</"+type.toLowerCase()+">");
 				sb=sb.append("</rule>\n");
 			}
-			sb=sb.append("</pattern>\n");
 			//rules.add(sb.toString());
 		}
+		
+		sb=sb.append("</pattern>\n");
+		
 		return pattern=sb.toString();
 	}
 	public String getPattern() {
