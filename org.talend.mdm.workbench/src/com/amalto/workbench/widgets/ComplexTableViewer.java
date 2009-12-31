@@ -748,7 +748,7 @@ public class ComplexTableViewer {
 			if(viewer.getTable().getSelection().length>0){
 				Line line=(Line)viewer.getTable().getSelection()[0].getData();
 				String context=line.keyValues.get(1).value;
-				XpathSelectDialog.setContext(context);
+				XpathSelectDialog.setContext("newXPath".equalsIgnoreCase(context)?null:context);
 			}				
 			
 		}
@@ -914,7 +914,7 @@ public class ComplexTableViewer {
 			if(context && viewer.getTable().getSelection().length>0){
 				Line line=(Line)viewer.getTable().getSelection()[0].getData();
 				String context=line.keyValues.get(1).value;
-				XpathSelectDialog.setContext(context);
+				XpathSelectDialog.setContext("newXPath".equalsIgnoreCase(context)?null:context);
 			}	
 			xpath.setText(value.toString().trim());
 		}
