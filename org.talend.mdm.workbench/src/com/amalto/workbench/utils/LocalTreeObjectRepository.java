@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.StringWriter;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -45,7 +47,9 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	private static String EXPAND_NAME = "Expand";
 	private static String EXPAND_VALUE = "true";
 	private static String COLLAPSE_VALUE = "false";
+	
 	private static String UNIVERSE = "Universe";
+	private static String URL = "Url";
 	
 	private static int XTENTIS_LEVEL = 4;
 	private static int MODEL_LEVEL = 3;
@@ -86,6 +90,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 				  SAXReader saxReader = new SAXReader();
 				  doc = saxReader.read(configFile);
 			  }
+			  doUpgrade();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -93,6 +98,27 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 				startUp(vw, ur);
 			}
 		}
+	}
+	
+	private void doUpgrade()
+	{
+		String path = "//child::*[text() = '" + TreeObject.CATEGORY_FOLDER  + "' and count(@Universe) = 0 and count(@Url) = 0" + "]";
+		List<Element> categorys = doc.selectNodes(path);
+
+		for (Element elem: categorys)
+		{
+			Attribute attr = elem.attribute(UNIVERSE);
+			if(attr == null)
+			{
+				elem.addAttribute(UNIVERSE, "HEAD");
+			}
+			attr = elem.attribute(URL);
+			if(attr == null)
+			{
+				elem.addAttribute(URL, UnifyUrl(url));
+			}
+		}
+		saveDocument(doc);
 	}
 	
     private boolean forceDelete()
@@ -304,19 +330,26 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		Element elemFolder = getParentElement(parent);
 		if (elemFolder != null)
 		{
-			xpath = "child::*[name()='" + filterOutBlank(child.getDisplayName()) + "' and text()='" + child.getType() + "']";
-			List<Element> list = elemFolder.selectNodes(xpath);
+			String xpathTail = "";
+			String xpathTailOther =  "']";
+			xpath = "child::*[name()='"
+					+ filterOutBlank(child.getDisplayName()) + "' and text()='"
+					+ child.getType();
+			if(child.getType() == TreeObject.CATEGORY_FOLDER)
+			{
+				xpathTail = "' and @Universe='"
+					+ getUniverseFromTreeObject(child) + "' and @Url='"
+					+ getURLFromTreeObject(child);
+			}
+			List<Element> list = elemFolder.selectNodes(xpath + xpathTail + xpathTailOther);
 			if (list.isEmpty() && catalog.equals(""))
 			{
 				Element childElem = elemFolder.addElement(filterOutBlank(child.getDisplayName()));
 				childElem.setText(child.getType() + "");
 				if (child.getType() == TreeObject.CATEGORY_FOLDER)
 				{
-					childElem.addAttribute(EXPAND_NAME, COLLAPSE_VALUE);
-					if("".equals(child.getUniverse())||"HEAD".equals(child.getUniverse()))
-						childElem.addAttribute(UNIVERSE,"HEAD");
-					else
-						childElem.addAttribute(UNIVERSE, child.getUniverse());
+					childElem.addAttribute(UNIVERSE, getUniverseFromTreeObject(child));
+					childElem.addAttribute(URL, getURLFromTreeObject(child));
 				}
 			}
 		}
@@ -364,9 +397,16 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 			xpathVar += "/" + xpathList.get(idx);
 		}
 		
-		xpathVar += "[text() = '" + theObj.getType() + "']";
+		String xpathTail = "[text() = '" + theObj.getType() + "']";
 		
-		return xpathVar;
+		if(theObj.getType() == TreeObject.CATEGORY_FOLDER)
+		{
+			xpathTail = "[text() = '" + theObj.getType() + "' and @Universe='"
+			+ getUniverseFromTreeObject(theObj) + "' and @Url='"
+			+ getURLFromTreeObject(theObj) + "']";
+		}
+		
+		return xpathVar + xpathTail;
 	}
 	
 	
@@ -388,6 +428,42 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		recurseTreeObjectForXPath(theObj.getParent() != null ? theObj.getParent() : theObj.getServerRoot(), list);
 	}
 	
+	private String getUniverseFromTreeObject(TreeObject theObj)
+	{
+		String universe = "".equals(theObj.getUniverse())?"HEAD":theObj.getUniverse();
+		return universe;
+	}
+	
+	private String getURLFromTreeObject(TreeObject theObj)
+	{
+		String url = theObj.getServerRoot().getUser().getServerUrl();
+		//http://localhost:8080/talend/TalendPort
+		return UnifyUrl(url);
+	}
+	
+	private String UnifyUrl(String url)
+	{
+		Pattern mask = Pattern.compile("http://(.*?):(.*)");
+		Matcher matcher = mask.matcher(url); 
+		if(matcher.find())
+		{
+			String ip = matcher.group(1);
+			String ipAlias = "";
+			String hostName = "";
+			try {
+				InetAddress addr = InetAddress.getLocalHost();
+				ipAlias=addr.getHostAddress().toString();
+				hostName = addr.getHostName().toString();
+				if(ip.equals("127.0.0.1") || ip.equals(ipAlias) || ip.equals(hostName) || ip.equals("localhost"))
+				{
+					url = "http://" + ipAlias + ":" +  matcher.group(2);
+				}
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			}
+		}
+		return url;
+	}
 	private String synchronizeWithElem(TreeObject theObj, TreeParent folder, boolean fireEvent)
 	{
 		internalCheck = fireEvent;
@@ -421,7 +497,9 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 							null);				
 					subFolder.addChild(category);
 			   		category.setServerRoot(folder.getServerRoot());
-			   		addAttributeToCategoryElem(category, EXPAND_NAME, COLLAPSE_VALUE);
+			   		addAttributeToCategoryElem(category, UNIVERSE, getUniverseFromTreeObject(folder));
+			   		addAttributeToCategoryElem(category, URL, getURLFromTreeObject(folder));
+			   		saveDocument(doc);
 			   		subFolder = category;
 				}
 			}
@@ -470,7 +548,10 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 				if(theObj.getServerRoot()!=null){
 	        	String xpath = "//"
 					+ theObj.getServerRoot().getUser().getUsername() + "/" + filterOutBlank(folder.getDisplayName()) 
-					+ "//child::*[name() = 'System']";
+					+ "//child::*[name() = 'System' and @Universe='"
+							+ getUniverseFromTreeObject(theObj)
+							+ "' and @Url='" + getURLFromTreeObject(theObj)
+							+ "']";
 	        	
 				if (systemCatalog == null)
 				{
@@ -488,11 +569,11 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 						Element elemFolder = getParentElement(folder);
 						Element elemSystem = elemFolder.addElement(systemCatalog.getDisplayName());
 						elemSystem.setText(TreeObject.CATEGORY_FOLDER + "");
-						elemSystem.addAttribute(EXPAND_NAME, COLLAPSE_VALUE);
+						elemSystem.addAttribute(UNIVERSE, getUniverseFromTreeObject(folder));
+						elemSystem.addAttribute(URL, getURLFromTreeObject(folder));
 						Element childElem = elemSystem.addElement(filterOutBlank(theObj.getDisplayName()));
 						childElem.setText(theObj.getType() + "");
 						
-						addAttributeToCategoryElem(systemCatalog, EXPAND_NAME, COLLAPSE_VALUE);
 						saveDocument(doc);
 	        	    }
 				}
@@ -546,7 +627,9 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	{
 		String xpath = "//" + model.getServerRoot().getUser().getUsername()
 				+ "/" + filterOutBlank(model.getDisplayName())
-				+ "//child::*[text() = '" + TreeObject.CATEGORY_FOLDER + "']";
+				+ "//child::*[text() = '" + TreeObject.CATEGORY_FOLDER + "' and @Universe='"
+				+ getUniverseFromTreeObject(model) + "' and @Url='"
+				+ getURLFromTreeObject(model) + "']";
 		String xpathForModel = getXPathForTreeObject(model);
 		List<Element> elems = doc.selectNodes(xpathForModel);
 		Element modelElem = elems.get(0);
@@ -554,7 +637,6 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		for (Element elem: elems)
 		{
 			String universe = "".equals(model.getUniverse())?"HEAD":model.getUniverse();
-			if(elem.attribute(this.UNIVERSE)==null||elem.attribute(this.UNIVERSE)!=null && elem.attribute(this.UNIVERSE).getValue().equals(universe)){
 			Element spec = elem;
 			ArrayList<Element> hierarchicalList = new ArrayList<Element>();
 			while(spec != modelElem)
@@ -584,7 +666,6 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
             		modelCpy = (TreeParent) to;
             	}
             }
-		}
 	}
 	}
 	private void checkUpCatalogHavingNoChildren(TreeObject theObj, TreeParent folder)
@@ -593,7 +674,9 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		
 		String xpath = "//" + theObj.getServerRoot().getUser().getUsername()
 		+ "/" + filterOutBlank(folder.getDisplayName())
-		+ "//child::*[text() = '" + TreeObject.CATEGORY_FOLDER
+		+ "//child::*[text() = '" + TreeObject.CATEGORY_FOLDER + "' and @Universe='"
+		+ getUniverseFromTreeObject(theObj) + "' and @Url='"
+		+ getURLFromTreeObject(theObj) 
 		+ "' and count(child::*) = 0]";
 		
 
@@ -602,7 +685,6 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		for (Element elem: elems)
 		{
 			String universe = "".equals(folder.getUniverse())?"HEAD":folder.getUniverse();
-			if(elem.attribute(this.UNIVERSE)==null||elem.attribute(this.UNIVERSE)!=null&& elem.attribute(this.UNIVERSE).getValue().equals(universe)){
 			String xpaths = getXPathForElem(elem);
 			int modelPos = xpaths.indexOf(filterOutBlank(folder.getDisplayName()));
 			if (modelPos == -1)
@@ -644,8 +726,6 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 					xpaths = "";
 
 			}
-
-		}
 	}
 	
 	}
@@ -655,11 +735,14 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		try
 		{
 			String modelName = getXPathForTreeObject(folder);
-			String universe = "".equals(folder.getUniverse())?"HEAD":folder.getUniverse();
-			
-			String xpath = modelName + "//child::*[text() = '" + TreeObject.CATEGORY_FOLDER + "']//child::*";
+			String universe = getUniverseFromTreeObject(theObj);
+			String url = getURLFromTreeObject(theObj);
+
+			String xpath = modelName + "//child::*[text() = '"
+					+ TreeObject.CATEGORY_FOLDER + "' and @Universe='"
+					+ universe + "' and @Url='" + url + "']//child::*";
+
 			List<Element> elems = doc.selectNodes(xpath);
-			boolean isUniverse=true;
 			for (Element elem : elems)
 			{
 				if (elem.getName().equals(filterOutBlank(theObj.getDisplayName()))
@@ -679,7 +762,8 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		catch(Exception ex)
 		{
 			return null;
-		}	
+		}
+		
 		return null;
 	}
 	
@@ -793,10 +877,11 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
     {
    		Element elem = locateCategoryElement(category);
    		Attribute attr = elem.attribute(attrName);
-   		if (attr == null)
+   		if (attr != null)
    		{
-   			elem.addAttribute(attrName, defaultAttrValue);
+   			elem.remove(attr);
    		}
+		elem.addAttribute(attrName, defaultAttrValue);
     }
     
     private Element locateCategoryElement(TreeParent category) {
@@ -806,7 +891,9 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		String xpath = "//" + category.getServerRoot().getUser().getUsername()
 				+ "//" + filterOutBlank(category.getParent().getDisplayName())
 				+ "//child::*/.[text() = '" + TreeObject.CATEGORY_FOLDER
-				+ "' and name()='" + category.getDisplayName() + "']";
+				+ "' and name()='" + category.getDisplayName()
+				+ "' and @Universe ='" + getUniverseFromTreeObject(category)
+				+ "' and @Url = '" + getURLFromTreeObject(category) + "']";
 
 		List<Element> elms = doc.selectNodes(xpath);
 

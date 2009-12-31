@@ -81,7 +81,7 @@ public class ServerLoginAction extends Action implements SelectionListener{
 		
 		//Remove authenticator dialog
 		Authenticator.setDefault(null);
-        LocalTreeObjectRepository.getInstance().startUp(view, username);
+        LocalTreeObjectRepository.getInstance().startUp(view, server);
         LocalTreeObjectRepository.getInstance().switchOnListening();
         
 		try {
