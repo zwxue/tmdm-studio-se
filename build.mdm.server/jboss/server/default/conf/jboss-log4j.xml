@@ -55,12 +55,15 @@
         <param name="LocationInfo" value="true"/>
     </appender>
 	-->
+	
+   <!-- MDM Logging service -->
+   <!--
    <appender name="LoggingEvents" class="org.apache.log4j.net.SocketAppender">
 	    <param name="Port" value="4561"/>
 	    <param name="RemoteHost" value="localhost"/>
 	    <param name="LocationInfo" value="true"/>
     </appender>
-
+	-->
 
    <!-- A size based file rolling appender
    <appender name="FILE" class="org.jboss.logging.appender.RollingFileAppender">
@@ -360,10 +363,10 @@
    <root>
       <appender-ref ref="CONSOLE"/>
       <appender-ref ref="FILE"/>
-      <!-- remove chainsaw
-           <appender-ref ref="ChainSawPDS"/>
-	   -->
-       appender-ref ref="LoggingEvents"/>
+      <!-- disable chainsaw -->
+      <!--<appender-ref ref="ChainSawPDS"/>-->
+      <!-- disable MDM logging service -->
+	  <!--<appender-ref ref="LoggingEvents"/>-->
 
    </root>
 
