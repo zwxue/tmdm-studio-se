@@ -7,6 +7,8 @@ import java.util.List;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -77,6 +79,12 @@ public class ValidationRuleDialog extends Dialog {
 	    viewer.setHeight(110);
 	    viewer.setWidth(800);
 	    viewer.getMainComposite().setLayoutData( new GridData(SWT.FILL,SWT.FILL,true,true,2,3));
+	    parent.getShell().addDisposeListener(new DisposeListener() {
+			
+			public void widgetDisposed(DisposeEvent e) {
+				XpathSelectDialog.setContext(null);				
+			}
+		});
 		return composite;
 	}
 	@Override
@@ -135,6 +143,11 @@ public class ValidationRuleDialog extends Dialog {
 				((ICellEditor)editor).deactive();
 			}
 		}
+	}
+	@Override
+	protected void cancelPressed() {		
+		super.cancelPressed();
+		XpathSelectDialog.setContext(null);
 	}
 	private String getValidationRules(){
 		TableItem[] items=viewer.getViewer().getTable().getItems();

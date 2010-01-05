@@ -743,14 +743,13 @@ public class ComplexTableViewer {
 			XpathSelectDialog.setContext(null);
 		}
 		@Override
-		protected void doSetValue(Object value) {
-			validationRule.setText(value.toString().trim());
+		protected void doSetValue(Object value) {	
+			validationRule.setText(value.toString());	
 			if(viewer.getTable().getSelection().length>0){
 				Line line=(Line)viewer.getTable().getSelection()[0].getData();
 				String context=line.keyValues.get(1).value;
 				XpathSelectDialog.setContext("newXPath".equalsIgnoreCase(context)?null:context);
-			}				
-			
+			}							
 		}
 		
 	}
@@ -910,12 +909,12 @@ public class ComplexTableViewer {
 		}
 		@Override
 		protected void doSetValue(Object value) {
-			// TODO Auto-generated method stub
-			if(context && viewer.getTable().getSelection().length>0){
-				Line line=(Line)viewer.getTable().getSelection()[0].getData();
-				String context=line.keyValues.get(1).value;
-				XpathSelectDialog.setContext("newXPath".equalsIgnoreCase(context)?null:context);
-			}	
+//			// TODO Auto-generated method stub
+//			if(context && viewer.getTable().getSelection().length>0){
+//				Line line=(Line)viewer.getTable().getSelection()[0].getData();
+//				String context=line.keyValues.get(1).value;
+//				XpathSelectDialog.setContext("newXPath".equalsIgnoreCase(context)?null:context);
+//			}	
 			xpath.setText(value.toString().trim());
 		}
 		
