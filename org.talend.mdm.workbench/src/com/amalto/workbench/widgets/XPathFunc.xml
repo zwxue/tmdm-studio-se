@@ -1,0 +1,197 @@
+<!-- Xpath Function Help for Validation Rule Expression-->
+<xpath>
+	<category name="Numeric">
+		<function name="number(arg)" help="Returns the numeric value of the argument. The argument could be a boolean, string, or node-set Example: number(&quot;100&quot;) Result: 100"/>
+		<function name="abs(num)" help="Returns the absolute value of the argument Example: abs(3.14) Result: 3.14 Example: abs(-3.14) Result: 3.14"/>
+		<function name="ceiling(num)" help="Returns the smallest integer that is greater than the number argument Example: ceiling(3.14) Result: 4"/>
+		<function name="floor(num)" help="Returns the largest integer that is not greater than the number argument Example: floor(3.14) Result: 3"/>
+		<function name="round(num)" help="Rounds the number argument to the nearest integer Example: round(3.14) Result: 3"/>
+		<function name="round-half-to-even()" help="Example: round-half-to-even(0.5) Result: 0 Example: round-half-to-even(1.5) Result: 2 Example: round-half-to-even(2.5) Result: 2"/>		
+	</category>
+	<category name="Strings">
+		<function name="string(arg)" help="Returns the string value of the argument. The argument could be a number, boolean, or node-set Example: string(314) Result: &quot;314&quot;"/>		
+		<function name="codepoints-to-string(int,int,...)" help="Returns a string from a sequence of code points Example: codepoints-to-string(84, 104, 233, 114, 232, 115, 101) Result: &quot;Thérèse&quot; "/>
+		<function name="string-to-codepoints(string)" help="Returns a sequence of code points from a string Example: string-to-codepoints(&quot;Thérèse&quot;) Result: 84, 104, 233, 114, 232, 115, 101"/>
+		<function name="codepoint-equal(comp1,comp2)" help="Returns true if the value of comp1 is equal to the value of comp2, according to the Unicode code point collation (http://www.w3.org/2005/02/xpath-functions/collation/codepoint), otherwise it returns false"/>
+		<function name="compare(comp1,comp2)" help="Returns -1 if comp1 is less than comp2, 0 if comp1 is equal to comp2, or 1 if comp1 is greater than comp2 (according to the rules of the collation that is used) Example: compare(&quot;ghi&quot;, &quot;ghi&quot;) Result: 0"/>
+		<function name="concat(string,string,...)" help="Returns the concatenation of the strings Example: concat(&quot;XPath &quot;,&quot;is &quot;,&quot;FUN!&quot;) Result: &quot;XPath is FUN!&quot;"/>
+		<function name="string-join((string,string,...),sep)" help="Returns a string created by concatenating the string arguments and using the sep argument as the separator Example: string-join((&quot;We&quot;, &quot;are&quot;, &quot;having&quot;, &quot;fun!&quot;), &quot; &quot;) Result: &quot; We are having fun! &quot; Example: string-join((&quot;We&quot;, &quot;are&quot;, &quot;having&quot;, &quot;fun!&quot;)) Result: &quot;Wearehavingfun!&quot; Example:string-join((), &quot;sep&quot;) Result: &quot;&quot;"/>
+		<function name="substring(string,start,len)" help="Returns the substring from the start position to the specified length. Index of the first character is 1. If length is omitted it returns the substring from the start position to the end Example: substring(&quot;Beatles&quot;,1,4) Result: &quot;Beat&quot; Example: substring(&quot;Beatles&quot;,2) Result: &quot;eatles&quot;"/>
+		<function name="string-length(string)" help="Returns the length of the specified string. If there is no string argument it returns the length of the string value of the current node Example: string-length(&quot;Beatles&quot;) Result: 7"/>
+		<function name="normalize-space(string)" help="Removes leading and trailing spaces from the specified string, and replaces all internal sequences of white space with one and returns the result. If there is no string argument it does the same on the current node Example: normalize-space(&quot; The   XML &quot;) Result: &quot;The XML&quot;"/>
+		<function name="upper-case(string)" help="Converts the string argument to upper-case   Example: upper-case(&quot;The XML&quot;) Result: &quot;THE XML&quot;"/>
+		<function name="lower-case(string)" help="Converts the string argument to lower-case  Example: lower-case(&quot;The XML&quot;) Result: &quot;the xml&quot;"/>
+		<function name="translate(string1,string2,string3)" help="Converts string1 by replacing the characters in string2 with the characters in string3 Example: translate(&quot;12:30&quot;,&quot;30&quot;,&quot;45&quot;) Result: &quot;12:45&quot; Example: translate(&quot;12:30&quot;,&quot;03&quot;,&quot;54&quot;) Result: &quot;12:45&quot; Example: translate(&quot;12:30&quot;,&quot;0123&quot;,&quot;abcd&quot;) Result: &quot;bc:da&quot;"/>
+		<function name="escape-uri(stringURI,esc-res)" help="Example: escape-uri(&quot;http://example.com/test#car&quot;, true()) Result: &quot;http%3A%2F%2Fexample.com%2Ftest#car&quot; Example: escape-uri(&quot;http://example.com/test#car&quot;, false()) Result: &quot;http://example.com/test#car&quot; Example: escape-uri (&quot;http://example.com/~bébé&quot;, false()) Result: &quot;http://example.com/~b%C3%A9b%C3%A9&quot;"/>
+		<function name="contains(string1,string2)" help="Returns true if string1 contains string2, otherwise it returns false Example: contains(&quot;XML&quot;,&quot;XM&quot;) Result: true"/>
+		<function name="starts-with(string1,string2)" help="Converts the string argument to lower-case  Example: lower-case(&quot;The XML&quot;) Result: &quot;the xml&quot;"/>
+		<function name="ends-with(string1,string2)" help="Returns true if string1 ends with string2, otherwise it returns false Example: ends-with(&quot;XML&quot;,&quot;X&quot;) Result: false"/>
+		<function name="substring-before(string1,string2)" help="Returns the start of string1 before string2 occurs in it Example: substring-before(&quot;12/10&quot;,&quot;/&quot;) Result: &quot;12&quot;"/>
+		<function name="substring-after(string1,string2)" help="Returns the remainder of string1 after string2 occurs in it Example: substring-after(&quot;12/10&quot;,&quot;/&quot;) Result: &quot;10&quot;"/>
+		<function name="matches(string,pattern)" help="Returns true if the string argument matches the pattern, otherwise, it returns false Example: matches(&quot;Merano&quot;, &quot;ran&quot;) Result: true"/>
+		<function name="replace(string,pattern,replace)" help="Returns a string that is created by replacing the given pattern with the replace argument Example: replace(&quot;Bella Italia&quot;, &quot;l&quot;, &quot;*&quot;) Result: &quot;Be**a Ita*ia&quot; Example: replace(&quot;Bella Italia&quot;, &quot;l&quot;, &quot;&quot;) Result: &quot;Bea Itaia&quot;"/>
+		<function name="tokenize(string,pattern)" help="Example: tokenize(&quot;XPath is fun&quot;, &quot;\s+&quot;) Result: (&quot;XPath&quot;, &quot;is&quot;, &quot;fun&quot;)"/>		
+	</category>	
+	<category name="Boolean">
+		<function name="boolean(arg)" help="Returns a boolean value for a number, string, or node-set"/>
+		<function name="not(arg)" help="The argument is first reduced to a boolean value by applying the boolean() function. Returns true if the boolean value is false, and false if the boolean value is true Example: not(true()) Result: false"/>
+		<function name="true()" help="Returns the boolean value true Example: true() Result: true"/>
+		<function name="false()" help="Returns the boolean value false Example: false() Result: false"/>		
+	</category>
+	<category name="anyURI">
+		<function name="resolve-uri(relative,base)" help=""/>
+	</category>
+	
+	<catrgory name="Durations, Dates and Times">
+		<function name="dateTime(date,time)" help="Converts the arguments to a date and a time"/>
+		<function name="years-from-duration(datetimedur)" help="Returns an integer that represents the years component in the canonical lexical representation of the value of the argument"/>
+		<function name="months-from-duration(datetimedur)" help="Returns an integer that represents the months component in the canonical lexical representation of the value of the argument"/>
+		<function name="days-from-duration(datetimedur)" help="Returns an integer that represents the days component in the canonical lexical representation of the value of the argument"/>
+		<function name="hours-from-duration(datetimedur)" help="Returns an integer that represents the hours component in the canonical lexical representation of the value of the argument"/>
+		<function name="minutes-from-duration(datetimedur)" help="Returns an integer that represents the minutes component in the canonical lexical representation of the value of the argument"/>
+		<function name="seconds-from-duration(datetimedur)" help="Returns a decimal that represents the seconds component in the canonical lexical representation of the value of the argument"/>
+		<function name="year-from-dateTime(datetime)" help="Returns an integer that represents the year component in the localized value of the argument. Example: year-from-dateTime(xs:dateTime(&quot;2005-01-10T12:30-04:10&quot;))Result: 2005"/>
+		<function name="month-from-dateTime(datetime)" help="Returns an integer that represents the month component in the localized value of the argument. Example: month-from-dateTime(xs:dateTime(&quot;2005-01-10T12:30-04:10&quot;))Result: 01"/>
+		<function name="day-from-dateTime(datetime)" help="Returns an integer that represents the day component in the localized value of the argument. Example: day-from-dateTime(xs:dateTime(&quot;2005-01-10T12:30-04:10&quot;))Result: 10"/>
+		<function name="hours-from-dateTime(datetime)" help="Returns an integer that represents the hours component in the localized value of the argument. Example: hours-from-dateTime(xs:dateTime(&quot;2005-01-10T12:30-04:10&quot;))Result: 12"/>
+		<function name="minutes-from-dateTime(datetime)" help="Returns an integer that represents the minutes component in the localized value of the argument. Example: minutes-from-dateTime(xs:dateTime(&quot;2005-01-10T12:30-04:10&quot;))Result: 30"/>
+		<function name="seconds-from-dateTime(datetime)" help="Returns a decimal that represents the seconds component in the localized value of the argument.Example: seconds-from-dateTime(xs:dateTime(&quot;2005-01-10T12:30:00-04:10&quot;))Result: 0"/>
+		<function name="timezone-from-dateTime(datetime)" help="Returns the time zone component of the argument if any"/>
+		<function name="year-from-date(date)" help="Returns an integer that represents the year in the localized value of the argument. Example: year-from-date(xs:date(&quot;2005-04-23&quot;)),Result: 2005"/>
+		<function name="month-from-date(date)" help="Returns an integer that represents the month in the localized value of the argument. Example: month-from-date(xs:date(&quot;2005-04-23&quot;)),Result: 4"/>
+		<function name="day-from-date(date)" help="Returns an integer that represents the day in the localized value of the argument. Example: day-from-date(xs:date(&quot;2005-04-23&quot;)),Result: 23"/>
+		<function name="timezone-from-date(date)" help="Returns the time zone component of the argument if any"/>
+		<function name="hours-from-time(time)" help="Returns an integer that represents the hours component in the localized value of the argument. Example: hours-from-time(xs:time(&quot;10:22:00&quot;)), Result: 10"/>
+		<function name="minutes-from-time(time)" help="Returns an integer that represents the minutes component in the localized value of the argument. Example: minutes-from-time(xs:time(&quot;10:22:00&quot;)) Result: 22"/>
+		<function name="seconds-from-time(time)" help="Returns an integer that represents the seconds component in the localized value of the argument. Example: seconds-from-time(xs:time(&quot;10:22:00&quot;)) Result: 0"/>
+		<function name="timezone-from-time(time)" help="Returns the time zone component of the argument if any"/>
+		<function name="adjust-dateTime-to-timezone(datetime,timezone)" help="If the timezone argument is empty, it returns a dateTime without a timezone. Otherwise, it returns a dateTime with a timezone"/>
+		<function name="adjust-date-to-timezone(date,timezone)" help="If the timezone argument is empty, it returns a date without a timezone. Otherwise, it returns a date with a timezone"/>
+		<function name="adjust-time-to-timezone(time,timezone)" help="If the timezone argument is empty, it returns a time without a timezone. Otherwise, it returns a time with a timezone"/>
+		
+	</catrgory>
+	<category name="QNames">
+		<function name="QName()" help=""/>
+		<function name="local-name-from-QName()" help=""/>
+		<function name="namespace-uri-from-QName()" help=""/>
+		<function name="namespace-uri-for-prefix()" help=""/>
+		<function name="in-scope-prefixes()" help=""/>
+		<function name="resolve-QName()" help=""/>
+	</category>
+	
+	<category name="Nodes">
+		<function name="name()" help="Returns the name of the current node or the first node in the specified node set"/>
+		<function name="name(nodeset)" help="Returns the name of the current node or the first node in the specified node set"/>
+		<function name="local-name()" help="Returns the name of the current node or the first node in the specified node set - without the namespace prefix"/>
+		<function name="local-name(nodeset)" help="Returns the name of the current node or the first node in the specified node set - without the namespace prefix"/>
+		<function name="namespace-uri()" help="Returns the namespace URI of the current node or the first node in the specified node set"/>
+		<function name="namespace-uri(nodeset)" help="Returns the namespace URI of the current node or the first node in the specified node set"/>
+		<function name="lang(lang)" help="Returns true if the language of the current node matches the language of the specified language. Example: Lang(&quot;en&quot;) is true for  &lt;p xml:lang=&quot;en&quot;>...&lt;/p&gt; Example: Lang(&quot;de&quot;) is false for &lt;p xml:lang=&quot;en&quot;>...&lt;/p&gt;"/>
+		<function name="root()" help="Returns the root of the tree to which the current node or the specified belongs. This will usually be a document node"/>
+		<function name="root(node)" help="Returns the root of the tree to which the current node or the specified belongs. This will usually be a document node"/>
+	</category>
+	
+	<category name="Sequences">
+		<function name="index-of((item,item,...),searchitem)" help="Returns the positions within the sequence of items that are equal to the searchitem argument. Example: index-of ((15, 40, 25, 40, 10), 40) Result: (2, 4) Example: index-of ((&quot;a&quot;, &quot;dog&quot;, &quot;and&quot;, &quot;a&quot;, &quot;duck&quot;), &quot;a&quot;) Result (1, 4) Example: index-of ((15, 40, 25, 40, 10), 18) Result: ()"/>
+		<function name="fn:remove((item,item,...),position)" help="Returns a new sequence constructed from the value of the item arguments - with the item specified by the position argument removed. Example: remove((&quot;ab&quot;, &quot;cd&quot;, &quot;ef&quot;), 0. Result: (&quot;ab&quot;, &quot;cd&quot;, &quot;ef&quot;)"/>
+		<function name="empty(item,item,...)" help="Returns true if the value of the arguments IS an empty sequence, otherwise it returns false. Example: empty(remove((&quot;ab&quot;, &quot;cd&quot;), 1)) Result: false"/>
+		<function name="exists(item,item,...)" help="Returns true if the value of the arguments IS NOT an empty sequence, otherwise it returns falseExample: exists(remove((&quot;ab&quot;), 1)) Result: false"/>
+		<function name="distinct-values((item,item,...),collation)" help="Returns only distinct (different) values. Example: distinct-values((1, 2, 3, 1, 2)) Result: (1, 2, 3)"/>
+		<function name="insert-before((item,item,...),pos,inserts)" help="Returns a new sequence constructed from the value of the item arguments - with the value of the inserts argument inserted in the position specified by the pos argument. Example: insert-before((&quot;ab&quot;, &quot;cd&quot;), 0, &quot;gh&quot;) Result: (&quot;gh&quot;, &quot;ab&quot;, &quot;cd&quot;); Example: insert-before((&quot;ab&quot;, &quot;cd&quot;), 1, &quot;gh&quot;) Result: (&quot;gh&quot;, &quot;ab&quot;, &quot;cd&quot;); Example: insert-before((&quot;ab&quot;, &quot;cd&quot;), 2, &quot;gh&quot;) Result: (&quot;ab&quot;, &quot;gh&quot;, &quot;cd&quot;); Example: insert-before((&quot;ab&quot;, &quot;cd&quot;), 5, &quot;gh&quot;) Result: (&quot;ab&quot;, &quot;cd&quot;, &quot;gh&quot;)"/>
+		<function name="reverse((item,item,...))" help="Returns the reversed order of the items specified. Example: reverse((&quot;ab&quot;, &quot;cd&quot;, &quot;ef&quot;)) Result: (&quot;ef&quot;, &quot;cd&quot;, &quot;ab&quot;); Example: reverse((&quot;ab&quot;)) Result: (&quot;ab&quot;)"/>
+		<function name="subsequence((item,item,...),start,len)" help="Returns a sequence of items from the position specified by the start argument and continuing for the number of items specified by the len argument. The first item is located at position 1. Example: subsequence(($item1, $item2, $item3,...), 3) Result: ($item3, ...); Example: subsequence(($item1, $item2, $item3, ...), 2, 2) Result: ($item2, $item3)"/>
+		<function name="unordered((item,item,...))" help="Returns the items in an implementation dependent order"/>
+	</category>
+	<category name="Test the Cardinality of Sequences ">
+		<function name="zero-or-one(item,item,...)"  help="Returns the argument if it contains zero or one items, otherwise it raises an error"/>
+		<function name="one-or-more(item,item,...)"  help="Returns the argument if it contains one or more items, otherwise it raises an error"/>
+		<function name="exactly-one(item,item,...)"  help="Returns the argument if it contains exactly one item, otherwise it raises an error"/>
+		
+		
+	</category>
+
+	
+	<category name="Equals">
+		
+		<function name="deep-equal(param1,param2,collation)"  help="Returns true if param1 and param2 are deep-equal to each other, otherwise it returns false"/>
+		
+	</category>
+	<category name="Aggregate ">
+		<function name="count((item,item,...))"  help="Returns the count of nodes"/>
+		<function name="avg((arg,arg,...))"  help="Returns the average of the argument values. Example: avg((1,2,3) Result: 2"/>
+		<function name="max((arg,arg,...))"  help="Returns the argument that is greater than the others. Example: max((1,2,3)) Result: 3; Example: max((&quot;a&quot;, &quot;k&quot;)) Result: &quot;k&quot;"/>
+		<function name="min((arg,arg,...))"  help="Returns the argument that is less than the others. Example: min((1,2,3)) Result: 1; Example: min((&quot;a&quot;, &quot;k&quot;)) Result: &quot;a&quot;"/>
+		<function name="sum(arg,arg,...)"  help="Returns the sum of the numeric value of each node in the specified node-set"/>
+		<function name=""  help=""/>
+	</category>
+	<category name="Generate Sequences ">
+		<function name="id((string,string,...),node)"  help=" 	Returns a sequence of element nodes that have an ID value equal to the value of one or more of the values specified in the string argument"/>
+		<function name="idref((string,string,...),node)"  help="Returns a sequence of element or attribute nodes that have an IDREF value equal to the value of one or more of the values specified in the string argument"/>
+		<function name="doc(URI)"  help=""/>
+		<function name="doc-available(URI)"  help="Returns true if the doc() function returns a document node, otherwise it returns false"/>
+		<function name="collection()"  help=""/>
+		<function name="collection(string)"  help=""/>
+	</category>
+	
+	<category name="Context">
+		<function name="position()"  help="Returns the index position of the node that is currently being processed. Example: //book[position()&gt;=3] Result: Selects the first three book elements"/>
+		<function name="last()"  help="Returns the number of items in the processed node list. Example: //book[last()] Result: Selects the last book element"/>
+		<function name="current-dateTime()"  help="Returns the current dateTime (with timezone)"/>
+		<function name="current-date()"  help="Returns the current date (with timezone)"/>
+		<function name="current-time()"  help="Returns the current date (with timezone)"/>
+		<function name="implicit-timezone()"  help="Returns the value of the implicit timezone"/>
+		<function name="default-collation()"  help="Returns the value of the default collation"/>
+		<function name="static-base-uri()"  help="Returns the value of the base-uri"/>
+	</category>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+</xpath>
