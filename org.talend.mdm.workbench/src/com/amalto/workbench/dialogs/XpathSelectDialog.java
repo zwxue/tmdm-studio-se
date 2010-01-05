@@ -119,7 +119,7 @@ public class XpathSelectDialog extends Dialog {
 				if(totalXpath.equals(context)|| totalXpath.equals(context.replaceAll(conceptName+"/", ""))){
 					totalXpath=".";
 				}
-				if(totalXpath.indexOf('/')==-1 && !totalXpath.equals(".") && !"/".equals(totalXpath) && !"/".equals(context)){
+				if(totalXpath.indexOf('/')==-1 && !totalXpath.equals(".") && !"/".equals(totalXpath) && !"/".equals(context) && !context.equals(conceptName)){
 					totalXpath="../"+totalXpath;
 				}
             }
