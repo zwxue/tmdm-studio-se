@@ -1,12 +1,12 @@
 package com.amalto.workbench.export;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
-import java.util.ArrayList;
+import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.Hashtable;
-import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -26,7 +26,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.progress.UIJob;
+import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.Unmarshaller;
+import org.exolab.castor.xml.ValidationException;
 import org.talend.mdm.commmon.util.workbench.ZipToFile;
 
 import com.amalto.workbench.actions.ServerRefreshAction;
@@ -34,6 +36,7 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataModel;
@@ -56,10 +59,13 @@ import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRuleExpression;
 import com.amalto.workbench.webservices.WSRoutingRuleOperator;
 import com.amalto.workbench.webservices.WSStoredProcedure;
+import com.amalto.workbench.webservices.WSStringPredicate;
 import com.amalto.workbench.webservices.WSSynchronizationPlan;
 import com.amalto.workbench.webservices.WSTransformer;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSView;
+import com.amalto.workbench.webservices.WSWhereCondition;
+import com.amalto.workbench.webservices.WSWhereOperator;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.FileSelectWidget;
 import com.amalto.workbench.widgets.RepositoryCheckTreeViewer;
@@ -75,7 +81,7 @@ public class ImportItemsWizard extends Wizard{
 	private FileSelectWidget  zip;
 	private String zipfile;
 	private ServerView view;
-	private ArrayList<TreeObject> objList =new ArrayList<TreeObject>();
+//	private ArrayList<TreeObject> objList =new ArrayList<TreeObject>();
 	private Hashtable<String,String[]> dataClusterContent=new Hashtable<String,String[]>();
 	private TreeParent serverRoot;
 	
@@ -148,7 +154,7 @@ public class ImportItemsWizard extends Wizard{
 		}
 		try{
 		FileReader reader= new FileReader(importFolder+"/exportitems.xml");
-		List<TreeObject> list =new ArrayList<TreeObject>();
+//		List<TreeObject> list =new ArrayList<TreeObject>();
 		Exports exports = (Exports)Unmarshaller.unmarshal(
 				Exports.class,reader);
 		//new server root
@@ -234,11 +240,16 @@ public class ImportItemsWizard extends Wizard{
 	}
 	public void doImport(TreeObject[] objs,IProgressMonitor monitor){
 
-		try{
 		monitor.beginTask("Import ...", IProgressMonitor.UNKNOWN);
-		XtentisPort port= Util.getPort((TreeObject)sel.getFirstElement());
+		XtentisPort port = null;
+		try {
+			port = Util.getPort((TreeObject)sel.getFirstElement());
+		} catch (XtentisException e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+		}
 		
-		Reader reader;
+		Reader reader = null;
 		for(TreeObject item: objs){
 			String[] subItems;
 			switch(item.getType()){
@@ -248,9 +259,28 @@ public class ImportItemsWizard extends Wizard{
 				monitor.subTask(" Data Cluster...");
 				subItems=item.getItems();
 				for (String subItem : subItems) {
-					reader=new FileReader(importFolder+"/"+subItem);
-					WSDataCluster model=(WSDataCluster)Unmarshaller.unmarshal(WSDataCluster.class,reader);
-					port.putDataCluster(new WSPutDataCluster(model));
+					try {
+						reader=new FileReader(importFolder+"/"+subItem);
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					WSDataCluster model = new WSDataCluster();
+					try {
+						model = (WSDataCluster)Unmarshaller.unmarshal(WSDataCluster.class,reader);
+					} catch (MarshalException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (ValidationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					try {
+						port.putDataCluster(new WSPutDataCluster(model));
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					importClusterContents(item,port);
 				}
 				break;
@@ -259,9 +289,23 @@ public class ImportItemsWizard extends Wizard{
 				
 				subItems=item.getItems();
 				for (String subItem : subItems) {
-					reader=new FileReader(importFolder+"/"+subItem);
-					WSItem wsItem = (WSItem) Unmarshaller.unmarshal(
-							WSItem.class, reader);
+					try {
+						reader=new FileReader(importFolder+"/"+subItem);
+					} catch (FileNotFoundException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					WSItem wsItem =new WSItem();
+					try {
+						wsItem = (WSItem) Unmarshaller.unmarshal(
+								WSItem.class, reader);
+					} catch (MarshalException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (ValidationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					if(wsItem.getDataModelName()==null){
 //						port.synchronizationPutItemXML(new WSSynchronizationPutItemXML(null,wsItem.getContent()));
 					}else{
@@ -276,9 +320,28 @@ public class ImportItemsWizard extends Wizard{
 				monitor.subTask(" Data Model...");
 				subItems=item.getItems();
 				for (String subItem : subItems) {
-					reader=new FileReader(importFolder+"/"+subItem);
-					WSDataModel model=(WSDataModel)Unmarshaller.unmarshal(WSDataModel.class,reader);
-					port.putDataModel(new WSPutDataModel(model));
+					try {
+						reader=new FileReader(importFolder+"/"+subItem);
+					} catch (FileNotFoundException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					WSDataModel model=new WSDataModel();
+					try {
+						model = (WSDataModel)Unmarshaller.unmarshal(WSDataModel.class,reader);
+					} catch (MarshalException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (ValidationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					try {
+						port.putDataModel(new WSPutDataModel(model));
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				monitor.worked(1);
 				break;
@@ -286,9 +349,28 @@ public class ImportItemsWizard extends Wizard{
 				monitor.subTask(" Menu...");
 				subItems=item.getItems();
 				for (String subItem : subItems) {
-					reader=new FileReader(importFolder+"/"+subItem);
-					WSMenu memu=(WSMenu)Unmarshaller.unmarshal(WSMenu.class,reader);
-					port.putMenu(new WSPutMenu(memu));
+					try {
+						reader=new FileReader(importFolder+"/"+subItem);
+					} catch (FileNotFoundException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					WSMenu memu=new WSMenu();
+					try {
+						memu = (WSMenu)Unmarshaller.unmarshal(WSMenu.class,reader);
+					} catch (MarshalException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (ValidationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					try {
+						port.putMenu(new WSPutMenu(memu));
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				monitor.worked(1);
 				break;	
@@ -296,9 +378,28 @@ public class ImportItemsWizard extends Wizard{
 				monitor.subTask(" Role...");
 				subItems=item.getItems();
 				for (String subItem : subItems) {
-					reader=new FileReader(importFolder+"/"+subItem);
-					WSRole role=(WSRole)Unmarshaller.unmarshal(WSRole.class,reader);
-					port.putRole(new WSPutRole(role));
+					try {
+						reader=new FileReader(importFolder+"/"+subItem);
+					} catch (FileNotFoundException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					WSRole role=new WSRole();
+					try {
+						role = (WSRole)Unmarshaller.unmarshal(WSRole.class,reader);
+					} catch (MarshalException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (ValidationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					try {
+						port.putRole(new WSPutRole(role));
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				monitor.worked(1);
 				break;	
@@ -306,13 +407,32 @@ public class ImportItemsWizard extends Wizard{
 				monitor.subTask(" Routing Rule...");
 				subItems=item.getItems();
 				for (String subItem : subItems) {
-					reader=new FileReader(importFolder+"/"+subItem);
-					WSRoutingRule routingRule=(WSRoutingRule)Unmarshaller.unmarshal(WSRoutingRule.class,reader);
+					try {
+						reader=new FileReader(importFolder+"/"+subItem);
+					} catch (FileNotFoundException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					WSRoutingRule routingRule=new WSRoutingRule();
+					try {
+						routingRule = (WSRoutingRule)Unmarshaller.unmarshal(WSRoutingRule.class,reader);
+					} catch (MarshalException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (ValidationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					if(routingRule.getWsRoutingRuleExpressions()!=null)
 					for(WSRoutingRuleExpression rule:routingRule.getWsRoutingRuleExpressions()){
 						if(rule.getWsOperator()==null)rule.setWsOperator(WSRoutingRuleOperator.CONTAINS);
 					}
-					port.putRoutingRule(new WSPutRoutingRule(routingRule));
+					try {
+						port.putRoutingRule(new WSPutRoutingRule(routingRule));
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 
 				monitor.worked(1);
@@ -321,9 +441,28 @@ public class ImportItemsWizard extends Wizard{
 				monitor.subTask(" Stored Procedure...");
 				subItems=item.getItems();
 				for (String subItem : subItems) {
-					reader=new FileReader(importFolder+"/"+subItem);
-					WSStoredProcedure model=(WSStoredProcedure)Unmarshaller.unmarshal(WSStoredProcedure.class,reader);					
-					port.putStoredProcedure(new WSPutStoredProcedure(model));
+					try {
+						reader=new FileReader(importFolder+"/"+subItem);
+					} catch (FileNotFoundException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					WSStoredProcedure model=new WSStoredProcedure();
+					try {
+						model = (WSStoredProcedure)Unmarshaller.unmarshal(WSStoredProcedure.class,reader);
+					} catch (MarshalException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (ValidationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}					
+					try {
+						port.putStoredProcedure(new WSPutStoredProcedure(model));
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 
 				monitor.worked(1);
@@ -332,9 +471,28 @@ public class ImportItemsWizard extends Wizard{
 				monitor.subTask(" Synchronization Plan...");
 				subItems=item.getItems();
 				for (String subItem : subItems) {
-					reader=new FileReader(importFolder+"/"+subItem);
-					WSSynchronizationPlan model=(WSSynchronizationPlan)Unmarshaller.unmarshal(WSSynchronizationPlan.class,reader);
-					port.putSynchronizationPlan(new WSPutSynchronizationPlan(model));
+					try {
+						reader=new FileReader(importFolder+"/"+subItem);
+					} catch (FileNotFoundException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					WSSynchronizationPlan model=new WSSynchronizationPlan();
+					try {
+						model = (WSSynchronizationPlan)Unmarshaller.unmarshal(WSSynchronizationPlan.class,reader);
+					} catch (MarshalException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (ValidationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					try {
+						port.putSynchronizationPlan(new WSPutSynchronizationPlan(model));
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 
 				monitor.worked(1);
@@ -343,9 +501,28 @@ public class ImportItemsWizard extends Wizard{
 				monitor.subTask(" Transformer...");
 				subItems=item.getItems();
 				for (String subItem : subItems) {
-					reader=new FileReader(importFolder+"/"+subItem);
-					WSTransformer model=(WSTransformer)Unmarshaller.unmarshal(WSTransformer.class,reader);
-					port.putTransformer(new WSPutTransformer(model));
+					try {
+						reader=new FileReader(importFolder+"/"+subItem);
+					} catch (FileNotFoundException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					WSTransformer model=new WSTransformer();
+					try {
+						model = (WSTransformer)Unmarshaller.unmarshal(WSTransformer.class,reader);
+					} catch (MarshalException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (ValidationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					try {
+						port.putTransformer(new WSPutTransformer(model));
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 
 				monitor.worked(1);
@@ -354,9 +531,28 @@ public class ImportItemsWizard extends Wizard{
 				monitor.subTask(" Universe...");
 				subItems=item.getItems();
 				for (String subItem : subItems) {
-					reader=new FileReader(importFolder+"/"+subItem);
-					WSUniverse model=(WSUniverse)Unmarshaller.unmarshal(WSUniverse.class,reader);
-					port.putUniverse(new WSPutUniverse(model));
+					try {
+						reader=new FileReader(importFolder+"/"+subItem);
+					} catch (FileNotFoundException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					WSUniverse model=new WSUniverse();
+					try {
+						model = (WSUniverse)Unmarshaller.unmarshal(WSUniverse.class,reader);
+					} catch (MarshalException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (ValidationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					try {
+						port.putUniverse(new WSPutUniverse(model));
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 
 				monitor.worked(1);
@@ -365,9 +561,38 @@ public class ImportItemsWizard extends Wizard{
 				monitor.subTask(" View...");
 				subItems=item.getItems();
 				for (String subItem : subItems) {
-					reader=new FileReader(importFolder+"/"+subItem);
-					WSView model=(WSView)Unmarshaller.unmarshal(WSView.class,reader);
-					port.putView(new WSPutView(model));
+					try {
+						reader=new FileReader(importFolder+"/"+subItem);
+					} catch (FileNotFoundException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					WSView model=new WSView();
+					try {
+						model = (WSView)Unmarshaller.unmarshal(WSView.class,reader);
+					} catch (MarshalException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (ValidationException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					//TODO: because the operator and stringPredicate can not be export,so if there is any where condition
+					//	      now it will add the default operator and string predicate for all the where conditions automatically.
+					//        maybe it needs to be modified later.
+					for (WSWhereCondition ws : model.getWhereConditions()) {
+						if(ws.getOperator()==null)
+							ws.setOperator(WSWhereOperator.CONTAINS);
+						if(ws.getStringPredicate()==null)
+							ws.setStringPredicate(WSStringPredicate.NONE);
+					}
+					
+					try {
+						port.putView(new WSPutView(model));
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 
 				monitor.worked(1);
@@ -375,9 +600,6 @@ public class ImportItemsWizard extends Wizard{
 			}
 		}
 		monitor.done();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 	
 	
