@@ -273,7 +273,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	private String modelName="";
 	private boolean isChange=false;
 	private Group addLanGroup;
-	protected String uriPre="http://localhost:8080";
+	protected String uriPre;
 	//private XSDDeleteAnnotationSchematronAction deleteAnnotationSchematronAction;
 	public DataModelMainPage(FormEditor editor) {
 		super(editor, DataModelMainPage.class.getName(), "Data Model "
