@@ -53,7 +53,7 @@ public class UploadCustomTypeDialog extends Dialog{
 
 	private FileSelectWidget fileSelect;
 
-	private String uripre="http://localhost:8080";
+	private String uripre="";
 
 	private Text nameText;
 
@@ -63,8 +63,8 @@ public class UploadCustomTypeDialog extends Dialog{
     public UploadCustomTypeDialog(TreeParent root, Shell shell,
 			String endpointIpAddress) {
         super(shell);
-        this.uripre=uripre;
         this.root=root;
+        this.uripre=root.getEndpointIpAddress();
 	}
 
 
