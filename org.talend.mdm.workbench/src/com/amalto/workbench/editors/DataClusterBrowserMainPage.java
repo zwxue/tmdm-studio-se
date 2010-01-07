@@ -452,7 +452,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 //			addRevisionID(concepts);
 			
 			WSUniverse currentUniverse=port.getCurrentUniverse(new WSGetCurrentUniverse());
-			String currentUniverseName=currentUniverse.getName();
+			String currentUniverseName="";
+			if(currentUniverse!=null)
+				currentUniverseName=currentUniverse.getName();
 			if(currentUniverseName!=null&&currentUniverseName.equals("[HEAD]"))currentUniverseName="";
 			WSConceptRevisionMapMapEntry[] wsConceptRevisionMapMapEntries = port.getConceptsInDataClusterWithRevisions(
 					new WSGetConceptsInDataClusterWithRevisions(

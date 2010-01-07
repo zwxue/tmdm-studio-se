@@ -16,7 +16,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.IFormPage;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
-import org.talend.mdm.commmon.util.workbench.Version;
 
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
@@ -25,9 +24,6 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectBrowserInput;
-import com.amalto.workbench.utils.IConstants;
-import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.utils.XtentisException;
 
 
 public class XObjectBrowser extends FormEditor implements IXObjectModelListener{	
@@ -67,7 +63,16 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener{
 	           			break;
 					}
 	           		addPage(new DataClusterBrowserMainPage(this));
-	           		break;	    	           
+	           		break;	  
+	           	case TreeObject.SUBSCRIPTION_ENGINE:
+	           		try {
+	    				addPage(new RoutingEngineV2BrowserMainPage(this));
+	    			} catch (PartInitException e) {
+	    				// TODO Auto-generated catch block
+	    				e.printStackTrace();
+	    			}
+	           		break;
+	    			           		
             }//switch
         } catch (PartInitException e) {
             MessageDialog.openError(this.getSite().getShell(), "Error", "Unable to open the editor :"+e.getLocalizedMessage());

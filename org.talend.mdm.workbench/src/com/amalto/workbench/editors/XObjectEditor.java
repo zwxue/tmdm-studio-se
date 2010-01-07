@@ -7,14 +7,11 @@
 package com.amalto.workbench.editors;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.Document;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -29,10 +26,7 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
-import com.amalto.workbench.utils.IConstants;
-import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataModel;
 
 public class XObjectEditor extends FormEditor implements IXObjectModelListener{	
@@ -116,6 +110,23 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 				case TreeObject.CUSTOM_TYPE:
 //			 		addPage(new  CustomTypeMainPage(this));
 					break;
+				case TreeObject.ROUTING_RULE:
+			        try {
+						addPage(new RoutingRuleMainPage(this));
+					} catch (PartInitException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			   		break;
+				case TreeObject.TRANSFORMER:
+					try {
+						addPage(new TransformerMainPage(this));
+					} catch (PartInitException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			   		break;	
+											
 	           	default:
 	           		//MessageDialog.openError(this.getSite().getShell(), "Error", "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
 	           		return;

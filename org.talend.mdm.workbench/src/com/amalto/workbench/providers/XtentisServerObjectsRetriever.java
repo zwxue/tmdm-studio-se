@@ -272,7 +272,76 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			}
 			monitor.worked(1);
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-
+			//routing rule
+			WSRoutingRulePK[] routingRulePKs = null;
+			boolean hasRoutingRules = true;
+			try {
+				routingRulePKs = port.getRoutingRulePKs(new WSGetRoutingRulePKs("")).getWsRoutingRulePKs();
+			} catch (Exception e) {
+				System.out.println("NO ROUTING RULES");
+				hasRoutingRules = false;
+			}
+			TreeParent rules = null;
+			if (hasRoutingRules) {
+				rules = new TreeParent(EXtentisObjects.RoutingRule.getDisplayName(),serverRoot,TreeObject.ROUTING_RULE,null,null);
+				if (routingRulePKs!=null) {
+					monitor.subTask("Loading Routing Rules");
+					for (int i = 0; i < routingRulePKs.length; i++) {
+						String id =routingRulePKs[i].getPk();
+						TreeObject obj = new TreeObject(
+								id,
+								serverRoot,
+								TreeObject.ROUTING_RULE,
+								new WSRoutingRulePK(id),
+								null   //no storage to save space
+						);
+						rules.addChild(obj);
+					}
+				}
+				serverRoot.addChild(rules);
+				monitor.worked(1);
+			}
+			//subscript engine
+			TreeObject  engine = new TreeObject(
+					EXtentisObjects.SubscriptionEngine.getDisplayName(),
+					serverRoot,
+					TreeObject.SUBSCRIPTION_ENGINE,
+					null,
+					null
+			);
+			serverRoot.addChild(engine);
+			
+			//transformer
+			WSTransformerV2PK[] transformerPKs = null;
+			boolean hasTransformers = true;
+			try {
+				
+				transformerPKs = port.getTransformerV2PKs(new WSGetTransformerV2PKs("")).getWsTransformerV2PK();
+			} catch (Exception e) {
+				System.out.println("No Transformers");
+				// This server IS old
+				hasTransformers = false;
+			}
+			TreeParent transformers = null;
+			if (hasTransformers) {
+				transformers = new TreeParent(EXtentisObjects.Transformer.getDisplayName(),serverRoot,TreeObject.TRANSFORMER,null,null);
+				if (transformerPKs!=null) {
+					monitor.subTask("Loading Transfomers");
+					for (int i = 0; i < transformerPKs.length; i++) {
+						String id =transformerPKs[i].getPk();
+						TreeObject obj = new TreeObject(
+								id,
+								serverRoot,
+								TreeObject.TRANSFORMER,
+								new WSTransformerV2PK(id),
+								null   //no storage to save space
+						);
+						transformers.addChild(obj);
+					}
+				}
+				serverRoot.addChild(transformers);
+				monitor.worked(1);
+			}
 			//Views
 			TreeParent views = new TreeParent(EXtentisObjects.View.getDisplayName(),serverRoot,TreeObject.VIEW,null,null);
 			WSViewPK[] viewPKs = null;
@@ -372,7 +441,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			serverRoot.addChild(resources);
 
 			if (hasMenus) serverRoot.addChild(menus);
-
+			
 			addRevision(wUuniverse);
 			
 			monitor.done();			
@@ -388,7 +457,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 	 * @param universe
 	 */
 	private void addRevision(WSUniverse universe){
-
+		if(universe==null) return;
 		WSUniverseXtentisObjectsRevisionIDs[] ids=universe.getXtentisObjectsRevisionIDs();
 		for(TreeObject node: serverRoot.getChildren()){
 			EXtentisObjects object=EXtentisObjects.getXtentisObjexts().get(String.valueOf(node.getType()));
