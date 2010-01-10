@@ -111,7 +111,7 @@ public class HierarchicalDWR {
 			boolean flag = false;
 			for (Iterator iterator = collection.iterator(); iterator.hasNext();) {
 				String concept = (String) iterator.next();
-				if (comboItemBean.getText().equals(concept)) {
+				if (comboItemBean.getValue().equals(concept)) {
 					flag = !flag;
 				}
 			}
@@ -144,16 +144,17 @@ public class HierarchicalDWR {
 				new WSGetViewPKs("Browse_items.*")).getWsViewPK();
 		String[] names = new String[wsViewsPK.length];
 		TreeMap<String, String> views = new TreeMap<String, String>();
-		Pattern p = Pattern.compile(".*\\[" + language.toUpperCase()
-				+ ":(.*?)\\].*", Pattern.DOTALL);
+//		Pattern p = Pattern.compile(".*\\[" + language.toUpperCase()
+//				+ ":(.*?)\\].*", Pattern.DOTALL);
 		for (int i = 0; i < wsViewsPK.length; i++) {
 			WSView wsview = Util.getPort().getView(new WSGetView(wsViewsPK[i]));
 			String concept = wsview.getName().replaceAll("Browse_items_", "")
 					.replaceAll("#.*", "");
 			names[i] = wsViewsPK[i].getPk();
 			if (bc.contains(concept)) {
-				views.put(wsview.getName(), p.matcher(wsview.getDescription())
-						.replaceAll("$1"));
+//				views.put(wsview.getName(), p.matcher(wsview.getDescription())
+//						.replaceAll("$1"));
+				views.put(wsview.getName(), concept); // ctoum 2010-01-10
 			}
 		}
 		return CommonDWR.getMapSortedByValue(views);
