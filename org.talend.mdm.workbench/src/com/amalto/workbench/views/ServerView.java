@@ -529,15 +529,11 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	protected void fillContextMenu(IMenuManager manager) {
 		TreeObject xobject = (TreeObject) ((IStructuredSelection) viewer
 				.getSelection()).getFirstElement();
-
-		boolean hasVersioning = false;
 		try {
 			XtentisPort port = Util.getPort(xobject);
 			if (port == null)
 				return;
-			WSVersioningInfo info = port
-					.versioningGetInfo(new WSVersioningGetInfo(null));
-			hasVersioning = info.isEnabled();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
