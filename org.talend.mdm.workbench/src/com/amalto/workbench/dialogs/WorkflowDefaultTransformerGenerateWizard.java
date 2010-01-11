@@ -54,9 +54,10 @@ public class WorkflowDefaultTransformerGenerateWizard extends Wizard {
 		WSTransformerVariablesMapping[] output=new WSTransformerVariablesMapping[1];
 		output[0]=new WSTransformerVariablesMapping("item_pk","text",null);
 		
-		steps[0]=new WSTransformerProcessStep("amalto/local/transformer/plugin/xslt","Generate the XSLT step to generate the item pk from an update report","<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"1.0\"> <xsl:output method=\"xml\" indent=\"yes\" omit-xml-declaration=\"yes\" /> <xsl:template match=\"/\" priority=\"1\">\n"+
+		steps[0]=new WSTransformerProcessStep("amalto/local/transformer/plugin/xslt","Generate the item pk from the update report","<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"1.0\"> <xsl:output method=\"xml\" indent=\"yes\" omit-xml-declaration=\"yes\" /> <xsl:template match=\"/\" priority=\"1\">\n"+
 				"<item-pOJOPK><concept-name><xsl:value-of select='Update/Concept'/></concept-name><ids><xsl:value-of select='Update/Key'/></ids><data-cluster-pOJOPK><ids><xsl:value-of select='Update/DataCluster'/></ids></data-cluster-pOJOPK></item-pOJOPK>\n"+
 				"</xsl:template> </xsl:stylesheet>\n",input,output,false);
+		//Generate the XSLT step to generate the item pk from an update report
 		
 		//step 2
 		input=new WSTransformerVariablesMapping[1];
@@ -85,7 +86,8 @@ public class WorkflowDefaultTransformerGenerateWizard extends Wizard {
 		//get the whole parameters
 		parameter=parameter+process+variableext.getText();		
 		parameter=parameter+"</parameters>";
-		steps[1]=new WSTransformerProcessStep("amalto/local/transformer/plugin/workflowtrigger","Generate the workflowtrigger step",parameter,input,output,false);	
+		steps[1]=new WSTransformerProcessStep("amalto/local/transformer/plugin/workflowtrigger","Invoke the workflow process",parameter,input,output,false);	
+		//Generate the workflowtrigger step    
 		
 		transformer.setName("Default_WorkflowProcess_"+uuid.getProcessName()+"_"+uuid.getProcessVersion()+"_transformer");
 		transformer.setDescription(transformer.getName());
