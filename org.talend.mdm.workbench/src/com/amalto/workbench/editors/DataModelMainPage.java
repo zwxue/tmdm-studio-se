@@ -1405,7 +1405,9 @@ public class DataModelMainPage extends AMainPageV2 {
 						setAnnotationWriteAction.run();
 						break;
 					case 108:
-						setAnnotationNoAction.run();
+						if(Util.IsEnterPrise()) {
+							setAnnotationNoAction.run();
+						}
 						break;					
 					case 110:
 						setFacetMsgAction.run();
@@ -1851,10 +1853,12 @@ public class DataModelMainPage extends AMainPageV2 {
 		}
 				
 		//add by ymli. fix bug 0009771
-		if(selectedObjs.length > 1 && setAnnotationWrapWriteAction.checkInWriteType(selectedObjs)){
-			manager.add(new Separator());
-			manager.add(setAnnotationWrapWriteAction);
-			manager.add(setAnnotationWrapNoAction);
+		if(Util.IsEnterPrise()) {
+			if(selectedObjs.length > 1 && setAnnotationWrapWriteAction.checkInWriteType(selectedObjs)){
+				manager.add(new Separator());
+				manager.add(setAnnotationWrapWriteAction);
+				manager.add(setAnnotationWrapNoAction);
+			}
 		}
 		//available models
 		java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
@@ -1874,8 +1878,10 @@ public class DataModelMainPage extends AMainPageV2 {
 		manager.add(setAnnotationDescriptionsAction);
 		manager.add(setAnnotationForeignKeyAction);
 		manager.add(setAnnotationForeignKeyInfoAction);
+		if(Util.IsEnterPrise()) {
 		manager.add(setAnnotationWriteAction);
 		manager.add(setAnnotationNoAction);
+		}
 		//manager.add(setAnnotationSchematronAction);
 		manager.add(setAnnotationSourceSystemAction);
 		manager.add(setAnnotationTargetSystemsAction);
@@ -1890,8 +1896,10 @@ public class DataModelMainPage extends AMainPageV2 {
 	private void setAnnotationActions2(IMenuManager manager) {
 		manager.add(setAnnotationLabelAction);
 		manager.add(setAnnotationDescriptionsAction);
+		if(Util.IsEnterPrise()) {
 		manager.add(setAnnotationWriteAction);
 		manager.add(setAnnotationNoAction);
+		}
 		manager.add(setAnnotationTargetSystemsAction);
 		manager.add(setAnnotationSourceSystemAction);
 		//manager.add(setAnnotationSchematronAction);

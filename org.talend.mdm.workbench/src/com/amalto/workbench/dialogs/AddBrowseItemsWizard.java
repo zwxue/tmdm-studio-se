@@ -331,7 +331,7 @@ public class AddBrowseItemsWizard extends Wizard{
               browseViewer.setInput(declList);
               browseViewer.setColumnProperties(new String[]{INSTANCE_NAME});
 	          browseViewer.refresh();
-
+	          if(Util.IsEnterPrise()) {
 	          Label infoLabel = new Label(composite, SWT.NONE);
 	          infoLabel.setText("Role Access definition");
 	          ComplexTableViewerColumn ruleColumn = roleConfigurationColumns[0];
@@ -348,23 +348,29 @@ public class AddBrowseItemsWizard extends Wizard{
 	          complexTableViewer.setKeyColumns(new ComplexTableViewerColumn[]{roleConfigurationColumns[0]});
 	          complexTableViewer.create();
 	          complexTableViewer.getViewer().setInput(new ArrayList<Line> ());
+	          
 	          UpdateComplexViewButton(false);
+	          }
 	          setControl(composite);
 		  }
 		  
 		  private void UpdateComplexViewButton(boolean enabled)
 		  {
+			  if(complexTableViewer!=null) {
 	          complexTableViewer.getAddButton().setEnabled(enabled);
 	          complexTableViewer.getUpButton().setEnabled(enabled);
 	          complexTableViewer.getDownButton().setEnabled(enabled);
 	          complexTableViewer.getDeleteButton().setEnabled(enabled);
+			  }
 		  }
 		  
 		  private void refreshRoleView(String browseItem)
 		  {
+			  if(complexTableViewer!=null) {
 			  List<Line> roles = browseItemToRoles.get(browseItem);
 			  complexTableViewer.getViewer().setInput(roles);
 			  complexTableViewer.getViewer().refresh();
+			  }
 		  }
 		  
 	}
