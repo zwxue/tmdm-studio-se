@@ -15,7 +15,7 @@
           target: all              
          ================================= -->
 	<target name="all" depends="version,package,undeploy,deploy" description="--> Hierarchical WebApp">
-		<eclipse.refreshLocal resource="/org.talend.mdm.webapp.hierarchical"/>
+		<!--eclipse.refreshLocal resource="/org.talend.mdm.webapp.hierarchical"/-->
 	</target>
 	
    	<target name="version"  description="Maintain build.date property">
