@@ -580,13 +580,14 @@ public class ImportItemsWizard extends Wizard{
 					//TODO: because the operator and stringPredicate can not be export,so if there is any where condition
 					//	      now it will add the default operator and string predicate for all the where conditions automatically.
 					//        maybe it needs to be modified later.
+					if(model.getWhereConditions()!=null){
 					for (WSWhereCondition ws : model.getWhereConditions()) {
 						if(ws.getOperator()==null)
 							ws.setOperator(WSWhereOperator.CONTAINS);
 						if(ws.getStringPredicate()==null)
 							ws.setStringPredicate(WSStringPredicate.NONE);
 					}
-					
+					}
 					try {
 						port.putView(new WSPutView(model));
 					} catch (RemoteException e) {
