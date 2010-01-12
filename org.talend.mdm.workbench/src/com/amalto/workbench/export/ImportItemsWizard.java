@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.Reader;
 import java.rmi.RemoteException;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Hashtable;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -238,368 +239,262 @@ public class ImportItemsWizard extends Wizard{
 		}catch(Exception e){}
 		
 	}
+	
 	public void doImport(TreeObject[] objs,IProgressMonitor monitor){
-
 		monitor.beginTask("Import ...", IProgressMonitor.UNKNOWN);
 		XtentisPort port = null;
-		try {
-			port = Util.getPort((TreeObject)sel.getFirstElement());
-		} catch (XtentisException e3) {
-			// TODO Auto-generated catch block
-			e3.printStackTrace();
-		}
-		
 		Reader reader = null;
-		for(TreeObject item: objs){
+		
+		try {
+		   port = Util.getPort((TreeObject)sel.getFirstElement());
+		} 
+		catch(XtentisException e3) {
+		   e3.printStackTrace();
+		}
+
+		//sort the objs for first import data_model.
+		Arrays.sort(objs, new Comparator<Object>() {
+		   public int compare(Object o1, Object o2) {
+		      return ((TreeObject) o1).getType() - ((TreeObject) o2).getType();
+           }
+		});
+		
+		for(TreeObject item : objs){
 			String[] subItems;
 			switch(item.getType()){
 			
-			case 	TreeObject.DATA_CLUSTER:
+			case TreeObject.DATA_CLUSTER:
 				//datacluster
 				monitor.subTask(" Data Cluster...");
-				subItems=item.getItems();
+				subItems = item.getItems();
+				
 				for (String subItem : subItems) {
 					try {
-						reader=new FileReader(importFolder+"/"+subItem);
-					} catch (FileNotFoundException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					WSDataCluster model = new WSDataCluster();
-					try {
-						model = (WSDataCluster)Unmarshaller.unmarshal(WSDataCluster.class,reader);
-					} catch (MarshalException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (ValidationException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					try {
+						reader = new FileReader(importFolder+"/" + subItem);
+						WSDataCluster model = new WSDataCluster();
+						model = (WSDataCluster)Unmarshaller.
+						   unmarshal(WSDataCluster.class, reader);
 						port.putDataCluster(new WSPutDataCluster(model));
-					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					} 
+					catch (Exception e1) {
+					   e1.printStackTrace();
 					}
+					
 					importClusterContents(item,port);
 				}
+				
 				break;
 				//dataclusters contents			
-			case 	TreeObject.DATA_CLUSTER_CONTENTS:
-				
-				subItems=item.getItems();
-				for (String subItem : subItems) {
-					try {
-						reader=new FileReader(importFolder+"/"+subItem);
-					} catch (FileNotFoundException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
-					WSItem wsItem =new WSItem();
-					try {
-						wsItem = (WSItem) Unmarshaller.unmarshal(
-								WSItem.class, reader);
-					} catch (MarshalException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (ValidationException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					if(wsItem.getDataModelName()==null){
-//						port.synchronizationPutItemXML(new WSSynchronizationPutItemXML(null,wsItem.getContent()));
-					}else{
-						try{
-						port.putItem(new WSPutItem(wsItem.getWsDataClusterPK(),wsItem.getContent(),new WSDataModelPK(wsItem.getDataModelName()),true));
-						}catch(Exception e){}
-					}
+			case TreeObject.DATA_CLUSTER_CONTENTS:
+				subItems = item.getItems();
+
+				for(String subItem : subItems) {
+				   try {
+				      reader = new FileReader(importFolder+"/" + subItem);
+		              WSItem wsItem = new WSItem();
+		              wsItem = (WSItem) Unmarshaller.unmarshal(WSItem.class, reader);
+		                
+		              if(wsItem != null) {
+		                 port.putItem(new WSPutItem(wsItem.getWsDataClusterPK(),wsItem.getContent(),new WSDataModelPK(wsItem.getDataModelName()),true));
+		              }
+				   } 
+				   catch (Exception e2) {
+				      e2.printStackTrace();
+				   }
 				}
 
-					break;
-			case 	 TreeObject.DATA_MODEL:
+				break;
+			case TreeObject.DATA_MODEL:
 				monitor.subTask(" Data Model...");
 				subItems=item.getItems();
-				for (String subItem : subItems) {
-					try {
-						reader=new FileReader(importFolder+"/"+subItem);
-					} catch (FileNotFoundException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
-					WSDataModel model=new WSDataModel();
-					try {
-						model = (WSDataModel)Unmarshaller.unmarshal(WSDataModel.class,reader);
-					} catch (MarshalException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (ValidationException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					try {
-						port.putDataModel(new WSPutDataModel(model));
-					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+				
+				for(String subItem : subItems) {
+				   try {
+				      reader = new FileReader(importFolder+"/" + subItem);
+				      WSDataModel model = new WSDataModel();
+				      model = (WSDataModel)Unmarshaller.
+				         unmarshal(WSDataModel.class,reader);
+				      port.putDataModel(new WSPutDataModel(model));
+				   } 
+				   catch (Exception e2) {
+				      e2.printStackTrace();
+				   }
 				}
+				
 				monitor.worked(1);
 				break;
-			case 	 TreeObject.MENU:
+			case TreeObject.MENU:
 				monitor.subTask(" Menu...");
-				subItems=item.getItems();
-				for (String subItem : subItems) {
+				subItems = item.getItems();
+				
+				for(String subItem : subItems) {
 					try {
-						reader=new FileReader(importFolder+"/"+subItem);
-					} catch (FileNotFoundException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
-					WSMenu memu=new WSMenu();
-					try {
-						memu = (WSMenu)Unmarshaller.unmarshal(WSMenu.class,reader);
-					} catch (MarshalException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (ValidationException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					try {
-						port.putMenu(new WSPutMenu(memu));
-					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+   					   reader = new FileReader(importFolder+"/" + subItem);
+   					   WSMenu memu=new WSMenu();
+   					   memu = (WSMenu)Unmarshaller.unmarshal(WSMenu.class, reader);
+   					   port.putMenu(new WSPutMenu(memu));
+					} 
+					catch (Exception e2) {
+					   e2.printStackTrace();
 					}
 				}
+				
 				monitor.worked(1);
 				break;	
-			case 	TreeObject.ROLE:
+			case TreeObject.ROLE:
 				monitor.subTask(" Role...");
-				subItems=item.getItems();
-				for (String subItem : subItems) {
+				subItems = item.getItems();
+				
+				for(String subItem : subItems) {
 					try {
-						reader=new FileReader(importFolder+"/"+subItem);
-					} catch (FileNotFoundException e2) {
-						// TODO Auto-generated catch block
+   					   reader = new FileReader(importFolder+"/" + subItem);
+   					   WSRole role = new WSRole();
+   					   role = (WSRole)Unmarshaller.unmarshal(WSRole.class, reader);
+   					   port.putRole(new WSPutRole(role));
+					} catch (Exception e2) {
 						e2.printStackTrace();
 					}
-					WSRole role=new WSRole();
-					try {
-						role = (WSRole)Unmarshaller.unmarshal(WSRole.class,reader);
-					} catch (MarshalException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (ValidationException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					try {
-						port.putRole(new WSPutRole(role));
-					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 				}
+
 				monitor.worked(1);
 				break;	
-			case 	TreeObject.ROUTING_RULE:
+			case TreeObject.ROUTING_RULE:
 				monitor.subTask(" Routing Rule...");
-				subItems=item.getItems();
-				for (String subItem : subItems) {
+				subItems = item.getItems();
+				
+				for(String subItem : subItems) {
 					try {
-						reader=new FileReader(importFolder+"/"+subItem);
-					} catch (FileNotFoundException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
+					   reader = new FileReader(importFolder+"/" + subItem);
+					   WSRoutingRule routingRule = new WSRoutingRule();
+					   routingRule = (WSRoutingRule)Unmarshaller.unmarshal(WSRoutingRule.class,reader);
+					
+					   if(routingRule.getWsRoutingRuleExpressions() != null) {
+	                      for(WSRoutingRuleExpression rule : routingRule.getWsRoutingRuleExpressions()){
+	                         if(rule.getWsOperator() == null)rule.setWsOperator(WSRoutingRuleOperator.CONTAINS);
+	                      }
+					   }
+					
+					   port.putRoutingRule(new WSPutRoutingRule(routingRule));
 					}
-					WSRoutingRule routingRule=new WSRoutingRule();
-					try {
-						routingRule = (WSRoutingRule)Unmarshaller.unmarshal(WSRoutingRule.class,reader);
-					} catch (MarshalException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (ValidationException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					if(routingRule.getWsRoutingRuleExpressions()!=null)
-					for(WSRoutingRuleExpression rule:routingRule.getWsRoutingRuleExpressions()){
-						if(rule.getWsOperator()==null)rule.setWsOperator(WSRoutingRuleOperator.CONTAINS);
-					}
-					try {
-						port.putRoutingRule(new WSPutRoutingRule(routingRule));
-					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					catch(Exception e2) {
+					   e2.printStackTrace();
 					}
 				}
 
 				monitor.worked(1);
 				break;	
-			case 	TreeObject.STORED_PROCEDURE:
+			case TreeObject.STORED_PROCEDURE:
 				monitor.subTask(" Stored Procedure...");
-				subItems=item.getItems();
-				for (String subItem : subItems) {
+				subItems = item.getItems();
+				
+				for(String subItem : subItems) {
 					try {
-						reader=new FileReader(importFolder+"/"+subItem);
-					} catch (FileNotFoundException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
+					   reader = new FileReader(importFolder+"/" + subItem);
+					   WSStoredProcedure model=new WSStoredProcedure();
+					   model = (WSStoredProcedure)Unmarshaller.unmarshal(WSStoredProcedure.class,reader);
+					   port.putStoredProcedure(new WSPutStoredProcedure(model));
+					
 					}
-					WSStoredProcedure model=new WSStoredProcedure();
-					try {
-						model = (WSStoredProcedure)Unmarshaller.unmarshal(WSStoredProcedure.class,reader);
-					} catch (MarshalException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (ValidationException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}					
-					try {
-						port.putStoredProcedure(new WSPutStoredProcedure(model));
-					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					catch(Exception e2) {
+					   e2.printStackTrace();
 					}
 				}
 
 				monitor.worked(1);
 				break;
-			case   TreeObject.SYNCHRONIZATIONPLAN:
+			case TreeObject.SYNCHRONIZATIONPLAN:
 				monitor.subTask(" Synchronization Plan...");
-				subItems=item.getItems();
-				for (String subItem : subItems) {
-					try {
-						reader=new FileReader(importFolder+"/"+subItem);
-					} catch (FileNotFoundException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
-					WSSynchronizationPlan model=new WSSynchronizationPlan();
-					try {
-						model = (WSSynchronizationPlan)Unmarshaller.unmarshal(WSSynchronizationPlan.class,reader);
-					} catch (MarshalException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (ValidationException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					try {
-						port.putSynchronizationPlan(new WSPutSynchronizationPlan(model));
-					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+				subItems = item.getItems();
+				
+				for(String subItem : subItems) {
+				   try {
+				      reader = new FileReader(importFolder+"/" + subItem);
+				      WSSynchronizationPlan model = new WSSynchronizationPlan();
+				      model = (WSSynchronizationPlan)Unmarshaller.
+				         unmarshal(WSSynchronizationPlan.class, reader);
+				      port.putSynchronizationPlan(new WSPutSynchronizationPlan(model));
+				   } 
+				   catch(Exception e2) {
+            	      e2.printStackTrace();
+				   }
 				}
 
 				monitor.worked(1);
 				break;
-			case	TreeObject.TRANSFORMER:
+			case TreeObject.TRANSFORMER:
 				monitor.subTask(" Transformer...");
-				subItems=item.getItems();
-				for (String subItem : subItems) {
-					try {
-						reader=new FileReader(importFolder+"/"+subItem);
-					} catch (FileNotFoundException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
-					WSTransformer model=new WSTransformer();
-					try {
-						model = (WSTransformer)Unmarshaller.unmarshal(WSTransformer.class,reader);
-					} catch (MarshalException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (ValidationException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					try {
-						port.putTransformer(new WSPutTransformer(model));
-					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+				subItems = item.getItems();
+				
+				for(String subItem : subItems) {
+				   try {
+				      reader = new FileReader(importFolder+"/" + subItem);
+				      WSTransformer model = new WSTransformer();
+				      model = (WSTransformer)Unmarshaller.
+				         unmarshal(WSTransformer.class,reader);
+				      port.putTransformer(new WSPutTransformer(model));
+				   } 
+				   catch(Exception e2) {
+				      e2.printStackTrace();
+				   }
 				}
 
 				monitor.worked(1);
 				break;
 			case  TreeObject.UNIVERSE:
 				monitor.subTask(" Universe...");
-				subItems=item.getItems();
-				for (String subItem : subItems) {
-					try {
-						reader=new FileReader(importFolder+"/"+subItem);
-					} catch (FileNotFoundException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
-					WSUniverse model=new WSUniverse();
-					try {
-						model = (WSUniverse)Unmarshaller.unmarshal(WSUniverse.class,reader);
-					} catch (MarshalException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (ValidationException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					try {
-						port.putUniverse(new WSPutUniverse(model));
-					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+				subItems = item.getItems();
+				
+				for(String subItem : subItems) {
+				   try {
+				      reader = new FileReader(importFolder+"/" + subItem);
+				      WSUniverse model = new WSUniverse();
+				      model = (WSUniverse)Unmarshaller.unmarshal(WSUniverse.class, reader);
+				      port.putUniverse(new WSPutUniverse(model));
+				   } 
+				   catch(Exception e2) {
+				      e2.printStackTrace();
+				   }
 				}
 
 				monitor.worked(1);
 				break;
 			case TreeObject.VIEW:
 				monitor.subTask(" View...");
-				subItems=item.getItems();
-				for (String subItem : subItems) {
-					try {
-						reader=new FileReader(importFolder+"/"+subItem);
-					} catch (FileNotFoundException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
-					WSView model=new WSView();
-					try {
-						model = (WSView)Unmarshaller.unmarshal(WSView.class,reader);
-					} catch (MarshalException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (ValidationException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					//TODO: because the operator and stringPredicate can not be export,so if there is any where condition
-					//	      now it will add the default operator and string predicate for all the where conditions automatically.
-					//        maybe it needs to be modified later.
-					if(model.getWhereConditions()!=null){
-					for (WSWhereCondition ws : model.getWhereConditions()) {
-						if(ws.getOperator()==null)
-							ws.setOperator(WSWhereOperator.CONTAINS);
-						if(ws.getStringPredicate()==null)
-							ws.setStringPredicate(WSStringPredicate.NONE);
-					}
-					}
-					try {
-						port.putView(new WSPutView(model));
-					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+				subItems = item.getItems();
+
+				for(String subItem : subItems) {
+				   try {
+				      reader = new FileReader(importFolder+"/" + subItem);
+				      WSView model = new WSView();
+				      model = (WSView)Unmarshaller.unmarshal(WSView.class, reader);
+				      
+				      //TODO: because the operator and stringPredicate can not be export,so if there is any where condition
+	                  // now it will add the default operator and string predicate for all the where conditions automatically.
+	                  // maybe it needs to be modified later.
+	                  if(model.getWhereConditions() != null){
+	                     for(WSWhereCondition ws : model.getWhereConditions()) {
+	                        if(ws.getOperator() == null) {
+	                           ws.setOperator(WSWhereOperator.CONTAINS);
+	                        }
+	                        
+	                        if(ws.getStringPredicate() == null) {
+	                           ws.setStringPredicate(WSStringPredicate.NONE);
+	                        }
+	                     }
+	                  }
+	                  
+	                  port.putView(new WSPutView(model));
+				   } 
+				   catch(Exception e2) {
+				      e2.printStackTrace();
+				   }
 				}
 
 				monitor.worked(1);
 				break;
 			}
 		}
+		
 		monitor.done();
 	}
 	
