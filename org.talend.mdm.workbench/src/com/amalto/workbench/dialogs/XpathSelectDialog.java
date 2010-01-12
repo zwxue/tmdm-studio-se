@@ -64,6 +64,7 @@ public class XpathSelectDialog extends Dialog {
 	protected Text xpathText;
 	protected Button add;
 	protected SelectionListener listener;
+	//TODO:check This two static String and there related static methods may cause some problems.
 	protected static String dataModelName;
 	private String xpath="";
 	private boolean isMulti=true;

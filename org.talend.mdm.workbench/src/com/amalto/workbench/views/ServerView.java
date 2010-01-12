@@ -58,7 +58,6 @@ import com.amalto.workbench.actions.NewXObjectAction;
 import com.amalto.workbench.actions.PasteXObjectAction;
 import com.amalto.workbench.actions.ServerLoginAction;
 import com.amalto.workbench.actions.ServerRefreshAction;
-import com.amalto.workbench.actions.UploadCustomTypeAction;
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.export.ExportItemsAction;
@@ -111,7 +110,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	protected Action exportAction;
 	protected Action importAction;
 	protected Action newCategoryAction;
-	protected Action uploadCustomTypeAction;
 	//test for NewUserAction 
 	protected NewUserAction newUserActon;
 	
@@ -568,7 +566,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				break;
 			case TreeObject.CUSTOM_TYPE:
 			case TreeObject.CUSTOM_TYPES_RESOURCE:	
-				manager.add(uploadCustomTypeAction);
+//				manager.add(uploadCustomTypeAction);
 				break;
 			case TreeObject.SERVICE_CONFIGURATION:
 			case TreeObject.RESOURCES:	
@@ -700,7 +698,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		
 		exportAction=new ExportItemsAction(this);
 		importAction=new ImportItemsAction(this);
-		uploadCustomTypeAction=new UploadCustomTypeAction(this);
 		newCategoryAction = new NewCategoryAction(this);
 		newUserActon = new NewUserAction(this);
 	}

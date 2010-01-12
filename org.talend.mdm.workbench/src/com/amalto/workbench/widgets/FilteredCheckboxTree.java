@@ -316,12 +316,12 @@ public class FilteredCheckboxTree extends Composite {
      * @return the first matching TreeItem
      */
     private TreeItem getFirstMatchingItem(TreeItem[] items) {
-        for (int i = 0; i < items.length; i++) {
-            if (patternFilter.isLeafMatch(treeViewer, items[i].getData())
-                    && patternFilter.isElementSelectable(items[i].getData())) {
-                return items[i];
+        for (TreeItem treeItem : items) {
+            if (patternFilter.isLeafMatch(treeViewer, treeItem.getData())
+                    && patternFilter.isElementSelectable(treeItem.getData())) {
+                return treeItem;
             }
-            return getFirstMatchingItem(items[i].getItems());
+            return getFirstMatchingItem(treeItem.getItems());
         }
         return null;
     }

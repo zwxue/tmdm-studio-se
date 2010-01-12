@@ -100,13 +100,13 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 	           	case TreeObject.SERVICE_CONFIGURATION:
 	           		addPage(new  ServiceConfigrationMainPage(this));
 	           		break;
-	           	case TreeObject.RESOURCES:
+/*	           	case TreeObject.RESOURCES:
 				case TreeObject.DATA_MODEL_RESOURCE:	
 				case TreeObject.DATA_MODEL_TYPES_RESOURCE:	
 				case TreeObject.CUSTOM_TYPES_RESOURCE:	
 				case TreeObject.PICTURES_RESOURCE:	
 	           		addPage(new  ResourceMainPage(this));
-	           		break;
+	           		break;*/
 				case TreeObject.CUSTOM_TYPE:
 //			 		addPage(new  CustomTypeMainPage(this));
 					break;

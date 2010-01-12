@@ -106,7 +106,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
 			serverRoot.setUser(user);
 			
-			String uriPre=serverRoot.getEndpointIpAddress();
+//			String uriPre=serverRoot.getEndpointIpAddress();
 			
 			//available models
 			List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
@@ -138,7 +138,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			monitor.worked(1);
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
 			
-			//Resources
+			/*//Resources
 				//add data models
 			TreeParent resources = null;
 			try{
@@ -244,7 +244,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			
 			monitor.worked(1);
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-			}catch(Exception e){e.printStackTrace();}
+			}catch(Exception e){e.printStackTrace();}*/
 			//DataClusters
 			TreeParent dataClusters = new TreeParent(EXtentisObjects.DataCluster.getDisplayName(),serverRoot,TreeObject.DATA_CLUSTER,null,null);			
 			WSDataClusterPK[] xdcPKs = null;
@@ -438,7 +438,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 						
 			serverRoot.addChild(serviceConfiguration);
 			//serverRoot.addChild(workflow);
-			serverRoot.addChild(resources);
+//			serverRoot.addChild(resources);
 
 			if (hasMenus) serverRoot.addChild(menus);
 			
