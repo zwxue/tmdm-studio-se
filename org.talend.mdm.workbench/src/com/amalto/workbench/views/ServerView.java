@@ -592,11 +592,11 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				}
 			    int type = LocalTreeObjectRepository.getInstance().receiveUnCertainTreeObjectType(xobject);
 			    if (!LocalTreeObjectRepository.getInstance().isInSystemCatalog(
-						xobject)
-						&& type != TreeObject.ROLE && xobject.getType()!=TreeObject.WORKFLOW_PROCESS && xobject.getType()!=TreeObject.JOB
+						xobject)&& xobject.getType()!=TreeObject.WORKFLOW_PROCESS && xobject.getType()!=TreeObject.JOB
 						&& xobject.getType()!=TreeObject.WORKFLOW && xobject.getType()!=TreeObject.JOB_REGISTRY)
 			    {
-					if (xobject.getType() != TreeObject.RESOURCES
+					if ( type != TreeObject.ROLE 
+							&& xobject.getType() != TreeObject.RESOURCES
 							&& xobject.getType() != TreeObject.DATA_MODEL_RESOURCE
 							&& xobject.getType() != TreeObject.DATA_MODEL_TYPES_RESOURCE
 							&& xobject.getType() != TreeObject.CUSTOM_TYPES_RESOURCE
@@ -605,9 +605,10 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					if(!(xobject instanceof TreeParent))
 						manager.add(renameXObjectAction);
 			    }
-			    else if (type == TreeObject.ROLE && (xobject.getType() == TreeObject.CATEGORY_FOLDER || xobject instanceof TreeParent))
+			    if (type == TreeObject.ROLE && (xobject.getType() == TreeObject.CATEGORY_FOLDER || xobject instanceof TreeParent))
 			    {
 			    	manager.add(newUserActon);
+			    	
 			    }
 			    
 				if(Util.hasUniverse(xobject))
