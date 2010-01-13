@@ -54,11 +54,11 @@
       <intro
             class="org.eclipse.ui.intro.config.CustomizableIntroPart"
             icon="platform:/plugin/org.talend.rcp/icons/appli_16x16.png"
-            id="org.talend.rcp.branding.tdqenterprise.intro">
+            id="org.talend.rcp.branding.tementerprise.intro">
       </intro>
       <introProductBinding
-            introId="org.talend.rcp.branding.tdqenterprise.intro"
-            productId="org.talend.rcp.branding.tdqenterprise.product">
+            introId="org.talend.rcp.branding.tementerprise.intro"
+            productId="org.talend.rcp.branding.tementerprise.product">
       </introProductBinding>
    </extension>
       <extension
