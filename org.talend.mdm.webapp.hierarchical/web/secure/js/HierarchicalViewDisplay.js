@@ -677,8 +677,9 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 				DWREngine.setAsync(false); 
 		        HierarchicalViewInterface.getDataObjectNameFromHierarchicalTreeCriterion(function(_dataObject){dataObjectName=_dataObject;});
 				DWREngine.setAsync(true);
-						
-				amalto.itemsbrowser.ItemsBrowser.editItemDetails(node.id,dataObjectName,function(){
+				var idArray = new Array(1); 
+				idArray[0]=node.id;
+				amalto.itemsbrowser.ItemsBrowser.editItemDetails(idArray,dataObjectName,function(){
 					this.doRefreshAfterEdit()
 				}.createDelegate(this));
 		}
