@@ -1137,6 +1137,30 @@ public class DataModelMainPage extends AMainPageV2 {
 			schema=schema.replaceAll("xmlns\\s*=\\s*\"[^\"]*\"", "");
 			//end
 			wsObject.setXsdSchema(schema);
+			
+			//fliu added '<xsd:import namespace="http://www.w3.org/2001/XMLSchema"/>', which is meant to make xsdSchema compatible with allNNI and other new simple Types
+		    XSDImport xsdImport = XSDFactory.eINSTANCE.createXSDImport();
+		    xsdImport.setNamespace("http://www.w3.org/2001/XMLSchema");
+		    XSDSchema xsdschema =Util.createXsdSchema(schema, getXObject());
+		    EList<XSDSchemaContent> elist = xsdschema.getContents();
+		    for (XSDSchemaContent cnt: elist)
+		    {
+		    	if(cnt instanceof XSDImport)
+		    	{
+		    		XSDImport imp = (XSDImport)cnt;
+		    		if(imp.getNamespace().equals("http://www.w3.org/2001/XMLSchema"))
+		    		{
+		    			xsdImport = null;
+		    			break;
+		    		}
+		    	}
+		    }
+		    if(xsdImport != null)
+		    {
+		    	xsdschema.getContents().add(0, xsdImport);	
+		    	wsObject.setXsdSchema(Util.nodeToString(xsdschema.getDocument()));
+		    }
+
 			XMLEditor xmleditor=((XObjectEditor)getEditor()).getXmlEditor();
 			xmleditor.refresh(getXObject());
 		} catch (Exception e) {
