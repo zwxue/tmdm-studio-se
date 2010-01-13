@@ -289,7 +289,11 @@ public class RepositoryCheckTreeViewer {
         		||node.getType() == TreeObject.JOB || node.getType() == TreeObject.JOB_REGISTRY){
         	return false;
         }
-
+        if(!Util.IsEnterPrise()){
+        	if(node.getType() == TreeObject.ROLE || node.getType() == TreeObject.UNIVERSE){
+            	return false;
+            }
+        }
         return true;
     }
 

@@ -1,10 +1,7 @@
 package com.amalto.workbench.actions;
 
-import java.net.URL;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -17,38 +14,8 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
-import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.TreeObjectUtil;
 import com.amalto.workbench.views.ServerView;
-import com.amalto.workbench.webservices.WSDataClusterPK;
-import com.amalto.workbench.webservices.WSDataModelPK;
-import com.amalto.workbench.webservices.WSDeleteDataCluster;
-import com.amalto.workbench.webservices.WSDeleteDataModel;
-import com.amalto.workbench.webservices.WSDeleteMenu;
-import com.amalto.workbench.webservices.WSDeleteRole;
-import com.amalto.workbench.webservices.WSDeleteRoutingRule;
-import com.amalto.workbench.webservices.WSDeleteStoredProcedure;
-import com.amalto.workbench.webservices.WSDeleteSynchronizationPlan;
-import com.amalto.workbench.webservices.WSDeleteTransformerV2;
-import com.amalto.workbench.webservices.WSDeleteUniverse;
-import com.amalto.workbench.webservices.WSDeleteView;
-import com.amalto.workbench.webservices.WSGetCurrentUniverse;
-import com.amalto.workbench.webservices.WSGetRole;
-import com.amalto.workbench.webservices.WSGetRolePKs;
-import com.amalto.workbench.webservices.WSMenuPK;
-import com.amalto.workbench.webservices.WSPutRole;
-import com.amalto.workbench.webservices.WSRole;
-import com.amalto.workbench.webservices.WSRolePK;
-import com.amalto.workbench.webservices.WSRoleSpecification;
-import com.amalto.workbench.webservices.WSRoleSpecificationInstance;
-import com.amalto.workbench.webservices.WSRoutingRulePK;
-import com.amalto.workbench.webservices.WSStoredProcedurePK;
-import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
-import com.amalto.workbench.webservices.WSTransformerV2PK;
-import com.amalto.workbench.webservices.WSUniverse;
-import com.amalto.workbench.webservices.WSUniversePK;
-import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
-import com.amalto.workbench.webservices.WSViewPK;
-import com.amalto.workbench.webservices.XtentisPort;
 
 public class DeleteXObjectAction extends Action{
 
@@ -115,9 +82,9 @@ public class DeleteXObjectAction extends Action{
 
 			for (Iterator<TreeObject> iter = toDelList.iterator(); iter.hasNext(); ) {
 				TreeObject xobject = iter.next();
-	                        
+				TreeObjectUtil.deleteTreeObject(xobject, view);       
 	//          Access to server and get port
-				XtentisPort port = Util.getPort(
+/*				XtentisPort port = Util.getPort(
 						new URL(xobject.getEndpointAddress()),
 						xobject.getUniverse(),
 						xobject.getUsername(),
@@ -167,7 +134,7 @@ public class DeleteXObjectAction extends Action{
 		           		MessageDialog.openError(view.getSite().getShell(), "Error", "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
 		           		return;
 	            }//switch
-	            
+*/	            
 	            if (xobject.getParent() != null)
 	       		  xobject.getParent().removeChild(xobject);
 	       		view.getViewer().refresh();
@@ -188,62 +155,7 @@ public class DeleteXObjectAction extends Action{
 		}		
 	}
 	
-	private void deleteSpecificationFromAttachedRole(XtentisPort port, TreeObject xobject, String objectType) throws RemoteException
-	{
-		String revision = retrieveRevisionID(port, objectType);
-   		WSRolePK[] pks = port.getRolePKs(new WSGetRolePKs(".*")).getWsRolePK();
-   		if (pks == null) return;
-   		for (WSRolePK pk : pks) {
-			WSGetRole getRole = new WSGetRole();
-			getRole.setWsRolePK(new WSRolePK(pk.getPk()));
-			WSRole role = port.getRole(getRole);
-			for (WSRoleSpecification spec : role.getSpecification()) {
-				if (spec.getObjectType().equals(objectType)) {
-					WSRoleSpecificationInstance[] specInstance = spec
-							.getInstance();
-					List<WSRoleSpecificationInstance> newSpecInstanceLst = new ArrayList<WSRoleSpecificationInstance>();
-					for (WSRoleSpecificationInstance specIns : specInstance) {
-						if (!specIns.getInstanceName().equals(
-								xobject.getDisplayName())) {
-							newSpecInstanceLst.add(specIns);
-						}
-					}
-					if (newSpecInstanceLst.size() < specInstance.length) {
-						String revisionForRole = retrieveRevisionID(port, "Role");
-						if (revisionForRole == null || revision == null || !revisionForRole.equals(revision))
-							break;
-						spec.setInstance(newSpecInstanceLst
-								.toArray(new WSRoleSpecificationInstance[] {}));
-						WSPutRole putRole = new WSPutRole();
-						putRole.setWsRole(role);
-						port.putRole(putRole);
-						break;
-					}
-				}
-			}
-		}
-	}
 	
-	/**
-	 * add by fliu, please see bug 0009262
-	 * @param port
-	 * @param xtentisName
-	 * @return
-	 * @throws RemoteException
-	 */
-	private String retrieveRevisionID(XtentisPort port, String xtentisName)throws RemoteException
-	{
-		WSUniverse wUuniverse=port.getCurrentUniverse(new WSGetCurrentUniverse());
-		WSUniverseXtentisObjectsRevisionIDs[] ids=wUuniverse.getXtentisObjectsRevisionIDs();
-		for(WSUniverseXtentisObjectsRevisionIDs id: ids){
-			if(id.getXtentisObjectName().equals(xtentisName)){
-				return id.getRevisionID().replaceAll("\\[", "").replaceAll("\\]", "");
-			}
-		}
-		if (wUuniverse.getName().equals("[HEAD]"))
-			return wUuniverse.getName();
-		return null;
-	}
 	
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);

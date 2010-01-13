@@ -246,8 +246,8 @@ public enum EImage {
 	ROUTINE("icons/routine.gif"),
 	PROCESS("icons/process.png"),
 	JOB("icons/process_icon.gif"),	
-	SERVICE_CONFIGURATION("icons/config.gif");
-
+	SERVICE_CONFIGURATION("icons/config.gif"),
+	RENAME("icons/rename.gif");
 	EImage(String path){
 		this.path=path;
 		

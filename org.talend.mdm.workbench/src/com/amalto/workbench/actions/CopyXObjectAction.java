@@ -8,6 +8,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 
+import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.EXtentisObjects;
@@ -36,7 +37,7 @@ public class CopyXObjectAction extends Action{
 	}
 	
 	private void setDetails() {
-		setImageDescriptor(ImageCache.getImage( "icons/copy.gif"));
+		setImageDescriptor(ImageCache.getImage(EImage.COPY.getPath()));
 		setText("Copy");
 		setToolTipText("Copy this instance of the "+IConstants.TALEND+" Object");		
 	}

@@ -56,6 +56,7 @@ import com.amalto.workbench.actions.NewCategoryAction;
 import com.amalto.workbench.actions.NewUserAction;
 import com.amalto.workbench.actions.NewXObjectAction;
 import com.amalto.workbench.actions.PasteXObjectAction;
+import com.amalto.workbench.actions.RenameXObjectAction;
 import com.amalto.workbench.actions.ServerLoginAction;
 import com.amalto.workbench.actions.ServerRefreshAction;
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
@@ -98,6 +99,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	protected Action loginAction;
 	protected Action logoutAction;
 	protected Action newXObjectAction;
+	protected Action renameXObjectAction;
 	protected Action editXObjectAction;
 	protected Action deleteXObjectAction;
 	protected Action serverRefreshAction;
@@ -600,6 +602,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 							&& xobject.getType() != TreeObject.CUSTOM_TYPES_RESOURCE
 							&& xobject.getType() != TreeObject.PICTURES_RESOURCE)
 			    	manager.add(newXObjectAction);	
+					if(!(xobject instanceof TreeParent))
+						manager.add(renameXObjectAction);
 			    }
 			    else if (type == TreeObject.ROLE && (xobject.getType() == TreeObject.CATEGORY_FOLDER || xobject instanceof TreeParent))
 			    {
@@ -688,6 +692,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
 		editXObjectAction = new EditXObjectAction(this);
 		newXObjectAction = new NewXObjectAction(this);
+		renameXObjectAction=new RenameXObjectAction(this);
 		browseRevisionAction = new BrowseRevisionAction(this);
 		deleteXObjectAction = new DeleteXObjectAction(this);
 		serverRefreshAction = new ServerRefreshAction(this);
