@@ -8,6 +8,7 @@ import java.util.List;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 
 import com.amalto.workbench.models.TreeObject;
@@ -430,9 +431,11 @@ public class TreeObjectUtil {
    					};
    				}
    		);
-   		id.open();
    		id.setBlockOnOpen(true);
-		return id.getValue();
+   		if(id.open()==Window.OK)
+   			return id.getValue();
+		else 
+			return null;
 		
 	}
 	public static void deleteTreeObject(TreeObject xobject,ServerView view) throws Exception{
