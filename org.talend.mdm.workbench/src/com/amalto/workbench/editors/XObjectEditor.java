@@ -153,6 +153,12 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
     public void doSave(IProgressMonitor monitor) {
 
 			this.saveInProgress = true;
+			//For the XMLEditor(the schema editor for the data model),it should be saved and then just refresh the data model page and do nothing else if there are some changes.
+		if (xmlEditor != null&&this.getCurrentPage()==1) {
+			xmlEditor.doSave(monitor);
+			((AFormPage) (formPages.get(0))).refreshPage();
+			return;
+		}
 			int numPages = formPages.size();
 			monitor.beginTask("Saving " + this.getEditorInput().getName(),
 					numPages + 1);
