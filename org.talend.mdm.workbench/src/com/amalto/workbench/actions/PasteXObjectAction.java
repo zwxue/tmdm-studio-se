@@ -14,6 +14,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Event;
 
+import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
@@ -95,7 +96,7 @@ public class PasteXObjectAction extends Action{
 	}
 	
 	private void setDetails() {
-		setImageDescriptor(ImageCache.getImage( "icons/paste.gif"));
+		setImageDescriptor(ImageCache.getImage(EImage.PASTE.getPath()));
 		setText("Paste");
 		setToolTipText("Paste this instance of the "+IConstants.TALEND+" Object");		
 	}

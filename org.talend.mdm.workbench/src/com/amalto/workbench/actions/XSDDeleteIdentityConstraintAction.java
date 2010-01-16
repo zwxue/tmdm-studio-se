@@ -9,6 +9,7 @@ import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
 public class XSDDeleteIdentityConstraintAction extends UndoAction {
@@ -17,7 +18,7 @@ public class XSDDeleteIdentityConstraintAction extends UndoAction {
 	
 	public XSDDeleteIdentityConstraintAction(DataModelMainPage page) {
 		super(page);
-		setImageDescriptor(ImageCache.getImage( "icons/delete_obj.gif"));
+		setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
 		setText("Delete Key");
 		setToolTipText("Delete a Key");
 	}

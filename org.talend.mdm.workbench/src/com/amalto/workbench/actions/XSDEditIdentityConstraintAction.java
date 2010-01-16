@@ -16,6 +16,7 @@ import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDSchema;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
 public class XSDEditIdentityConstraintAction extends UndoAction{
@@ -24,7 +25,7 @@ public class XSDEditIdentityConstraintAction extends UndoAction{
 	
 	public XSDEditIdentityConstraintAction(DataModelMainPage page) {
 		super(page);
-		setImageDescriptor(ImageCache.getImage( "icons/edit_obj.gif"));
+		setImageDescriptor(ImageCache.getImage(EImage.EDIT_OBJ.getPath()));
 		setText("Edit Key");
 		setToolTipText("Edit a Key");
 	}

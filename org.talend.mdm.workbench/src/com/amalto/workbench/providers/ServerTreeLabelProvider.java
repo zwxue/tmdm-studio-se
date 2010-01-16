@@ -51,36 +51,34 @@ public class ServerTreeLabelProvider extends LabelProvider implements IColorProv
 			if (object.getType() == TreeObject._SERVER_)
 				return ImageCache.getCreatedImage( "icons/talend-picto-small.gif");
 			else if (object.getType() == TreeObject.DATA_CLUSTER)
-				return ImageCache.getCreatedImage( "icons/data_cluster.gif");
+				return ImageCache.getCreatedImage( EImage.DATA_CLUSTER.getPath());
 			else if (object.getType() == TreeObject.DATA_MODEL)
-				return ImageCache.getCreatedImage( "icons/data_model.gif");
+				return ImageCache.getCreatedImage( EImage.DATA_MODEL.getPath());
 			else if (object.getType() == TreeObject.RESOURCES
 				|| object.getType() == TreeObject.DATA_MODEL_RESOURCE
 				|| object.getType() == TreeObject.DATA_MODEL_TYPES_RESOURCE
 				|| object.getType() == TreeObject.CUSTOM_TYPES_RESOURCE
 				|| object.getType() == TreeObject.PICTURES_RESOURCE)
-				return ImageCache.getCreatedImage(EImage.SERVERNOTRUNNING.getPath());
+				return ImageCache.getCreatedImage(EImage.RESOURCES.getPath());
 			else if (object.getType() == TreeObject.MENU)
-				return ImageCache.getCreatedImage( "icons/menu.gif");
+				return ImageCache.getCreatedImage( EImage.MENU.getPath());
 			else if (object.getType() == TreeObject.TRANSFORMER)
-				return ImageCache.getCreatedImage( "icons/transformer.gif");
+				return ImageCache.getCreatedImage( EImage.TRANSFORMER.getPath());
 			else if (object.getType() == TreeObject.ROLE)
-				return ImageCache.getCreatedImage( "icons/role.gif");
+				return ImageCache.getCreatedImage( EImage.ROLE.getPath());
 			else if (object.getType() == TreeObject.STORED_PROCEDURE)
-				return ImageCache.getCreatedImage( "icons/stored_procedure.gif");
+				return ImageCache.getCreatedImage( EImage.STORED_PROCEDURE.getPath());
 			else if (object.getType() == TreeObject.ROUTING_RULE)
 			{
-				Image img= ImageCache.getCreatedImage( "icons/routing_rule.gif");
+				Image img= ImageCache.getCreatedImage( EImage.ROUTING_RULE.getPath());
 				if(object.isXObject()){
 					WSRoutingRule ws = (WSRoutingRule) (object.getWsObject());
 					try {
 						if(ws==null)
 						ws=Util.getPort(object).getRoutingRule(new WSGetRoutingRule(new WSRoutingRulePK(object.getDisplayName())));
 					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (XtentisException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					
@@ -91,21 +89,21 @@ public class ServerTreeLabelProvider extends LabelProvider implements IColorProv
 				return img;
 			}
 			else if (object.getType() == TreeObject.VIEW)
-				return ImageCache.getCreatedImage( "icons/view.gif");
+				return ImageCache.getCreatedImage( EImage.VIEW.getPath());
 			else if (object.getType() == TreeObject.DOCUMENT)
-				return ImageCache.getCreatedImage( "icons/documents.gif");			
+				return ImageCache.getCreatedImage( EImage.DOCUMENTS.getPath());			
 			else if (object.getType() == TreeObject.SUBSCRIPTION_ENGINE)
 				return ImageCache.getCreatedImage( EImage.SUBSCRIPTION_ENGINE.getPath());
 			else if (object.getType() == TreeObject.WORKFLOW || object.getType() == TreeObject.WORKFLOW_PROCESS)
-				return ImageCache.getCreatedImage( EImage.PROCESS.getPath());
+				return ImageCache.getCreatedImage( EImage.WORKFLOW_PROCESS.getPath());
 			else if (object.getType() == TreeObject.JOB_REGISTRY || object.getType() == TreeObject.JOB)
 				return ImageCache.getCreatedImage( EImage.JOB.getPath());			
 			else if (object.getType() == TreeObject.SERVICE_CONFIGURATION)
 				return ImageCache.getCreatedImage( EImage.SERVICE_CONFIGURATION.getPath());
 			else if (object.getType() == TreeObject.UNIVERSE)
-				return ImageCache.getCreatedImage( "icons/unique.gif");		
+				return ImageCache.getCreatedImage( EImage.UNIVERSE.getPath());		
 			else if (object.getType() == TreeObject.SYNCHRONIZATIONPLAN)
-				return ImageCache.getCreatedImage( "icons/catchuprelease_rls.gif");	
+				return ImageCache.getCreatedImage( EImage.SYNCHRONIZATIONPLAN.getPath());	
 			else if (object.getType() == TreeObject.CATEGORY_FOLDER)
 				return ImageCache.getCreatedImage( "icons/folder.gif");
 			

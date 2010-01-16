@@ -9,6 +9,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 
+import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
@@ -25,7 +26,7 @@ public class DeleteXObjectAction extends Action{
 	public DeleteXObjectAction(ServerView view) {
 		super();
 		this.view = view;
-		setImageDescriptor(ImageCache.getImage( "icons/delete_obj.gif"));
+		setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
 		setText("Delete");
 		setToolTipText("Delete this instance of the "+IConstants.TALEND+" Object");
 	}

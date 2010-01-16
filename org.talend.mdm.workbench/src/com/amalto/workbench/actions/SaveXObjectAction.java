@@ -11,6 +11,7 @@ import sun.misc.ServiceConfigurationError;
 
 import com.amalto.workbench.dialogs.ErrorExceptionDialog;
 import com.amalto.workbench.editors.XObjectEditor;
+import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
@@ -51,7 +52,7 @@ public class SaveXObjectAction extends Action{
 		super();
 		this.editor = editor;
 		//this.initialXObject = initialXObject;
-		setImageDescriptor(ImageCache.getImage( "icons/save_edit.gif"));
+		setImageDescriptor(ImageCache.getImage(EImage.SAVE_EDIT.getPath()));
 	}
 	
 	public void run() {

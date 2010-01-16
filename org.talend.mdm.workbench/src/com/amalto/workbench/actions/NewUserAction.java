@@ -6,6 +6,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 
 import com.amalto.workbench.dialogs.NewUserWizard;
+import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
@@ -16,7 +17,7 @@ public class NewUserAction extends Action {
 	public NewUserAction(ServerView view){
 		super();
 		this.view = view;
-		setImageDescriptor(ImageCache.getImage( "icons/add_obj.gif"));
+		setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
 		setText("New Role");
 		setToolTipText("Create a new Role");
 	}

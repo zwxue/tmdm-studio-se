@@ -20,6 +20,7 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.SimpleTypeInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
 public class XSDChangeBaseTypeAction extends UndoAction implements SelectionListener{
@@ -30,7 +31,7 @@ public class XSDChangeBaseTypeAction extends UndoAction implements SelectionList
 	
 	public XSDChangeBaseTypeAction(DataModelMainPage page) {
 		super(page);
-		setImageDescriptor(ImageCache.getImage( "icons/change_to_simple.gif"));
+		setImageDescriptor(ImageCache.getImage(EImage.CHANGE_TO_SIMPLE.getPath()));
 		setText("Change Base Type");
 		setToolTipText("Change the Base Type of the Element Simple Type");
 		setDescription(getToolTipText());

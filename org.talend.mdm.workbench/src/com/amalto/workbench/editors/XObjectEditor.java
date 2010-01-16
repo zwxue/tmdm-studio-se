@@ -300,29 +300,29 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 		if (object.getType() == TreeObject._SERVER_)
 			return ImageCache.getImage( "icons/talend-picto-small.gif").createImage();
 		else if (object.getType() == TreeObject.DATA_CLUSTER)
-			return ImageCache.getImage( "icons/data_cluster.gif").createImage();
+			return ImageCache.getImage( EImage.DATA_CLUSTER.getPath()).createImage();
 		else if (object.getType() == TreeObject.DATA_MODEL)
-			return ImageCache.getImage( "icons/data_model.gif").createImage();
+			return ImageCache.getImage( EImage.DATA_MODEL.getPath()).createImage();
 		else if (object.getType() == TreeObject.MENU)
-			return ImageCache.getImage( "icons/menu.gif").createImage();
+			return ImageCache.getImage( EImage.MENU.getPath()).createImage();
 		else if (object.getType() == TreeObject.TRANSFORMER)
-			return ImageCache.getImage( "icons/transformer.gif").createImage();
+			return ImageCache.getImage( EImage.TRANSFORMER.getPath()).createImage();
 		else if (object.getType() == TreeObject.ROLE)
-			return ImageCache.getImage( "icons/role.gif").createImage();
+			return ImageCache.getImage( EImage.ROLE.getPath()).createImage();
 		else if (object.getType() == TreeObject.STORED_PROCEDURE)
-			return ImageCache.getImage( "icons/stored_procedure.gif").createImage();
+			return ImageCache.getImage( EImage.STORED_PROCEDURE.getPath()).createImage();
 		else if (object.getType() == TreeObject.ROUTING_RULE)
-			return ImageCache.getImage( "icons/routing_rule.gif").createImage();
+			return ImageCache.getImage( EImage.ROUTING_RULE.getPath()).createImage();
 		else if (object.getType() == TreeObject.VIEW)
-			return ImageCache.getImage( "icons/view.gif").createImage();
+			return ImageCache.getImage( EImage.VIEW.getPath()).createImage();
 		else if (object.getType() == TreeObject.DOCUMENT)
-			return ImageCache.getImage( "icons/documents.gif").createImage();			
+			return ImageCache.getImage( EImage.DOCUMENTS.getPath()).createImage();			
 		else if (object.getType() == TreeObject.SUBSCRIPTION_ENGINE)
 			return ImageCache.getImage( EImage.SUBSCRIPTION_ENGINE.getPath()).createImage();
 		else if (object.getType() == TreeObject.SYNCHRONIZATIONPLAN)
-			return ImageCache.getImage( "icons/catchuprelease_rls.gif").createImage();
+			return ImageCache.getImage( EImage.SYNCHRONIZATIONPLAN.getPath()).createImage();
 		else if (object.getType() == TreeObject.UNIVERSE)
-			return ImageCache.getImage( "icons/unique.gif").createImage();
+			return ImageCache.getImage( EImage.UNIVERSE.getPath()).createImage();
 		else if (object.getType() == TreeObject.SERVICE_CONFIGURATION)
 			return ImageCache.getImage( EImage.SERVICE_CONFIGURATION.getPath()).createImage();
 		

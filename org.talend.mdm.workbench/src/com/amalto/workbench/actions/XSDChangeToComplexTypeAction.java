@@ -35,6 +35,7 @@ import org.w3c.dom.Element;
 
 import com.amalto.workbench.dialogs.ComplexTypeInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
@@ -55,7 +56,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 	public XSDChangeToComplexTypeAction(DataModelMainPage page,boolean isXSDModelGroup) {
 		super(page);
 		this.isXSDModelGroup=isXSDModelGroup;
-		setImageDescriptor(ImageCache.getImage( "icons/change_to_complex.gif"));
+		setImageDescriptor(ImageCache.getImage(EImage.CHANGE_TO_COMPLEX.getPath()));
 		if(isXSDModelGroup)
 			setText("Change Sub-Element Group");
 		else

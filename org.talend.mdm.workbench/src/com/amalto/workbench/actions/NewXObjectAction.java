@@ -21,6 +21,7 @@ import com.amalto.workbench.dialogs.ViewInputDialog;
 import com.amalto.workbench.editors.AMainPage;
 import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.editors.XObjectEditor;
+import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
@@ -81,7 +82,7 @@ public class NewXObjectAction extends Action{
 	public NewXObjectAction(ServerView view) {
 		super();
 		this.view = view;
-		setImageDescriptor(ImageCache.getImage( "icons/add_obj.gif"));
+		setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
 		setText("New");
 		setToolTipText("Create a new instance of an "+IConstants.TALEND+" Object");
 	}

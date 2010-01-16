@@ -19,6 +19,7 @@ import org.w3c.dom.Element;
 
 import com.amalto.workbench.dialogs.AnnotationLanguageLabelsDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
@@ -33,7 +34,7 @@ public class XSDSetFacetMessageAction extends UndoAction{
 	protected String dataModelName;
 	public XSDSetFacetMessageAction(DataModelMainPage page) {
 		super(page);
-		setImageDescriptor(ImageCache.getImage( "icons/annotation.gif"));
+		setImageDescriptor(ImageCache.getImage( EImage.ANNOTATION.getPath()));
 		setText("Set the facet message");
 		setToolTipText("Set multilingual facet error messages  for the content of this element");
 	}

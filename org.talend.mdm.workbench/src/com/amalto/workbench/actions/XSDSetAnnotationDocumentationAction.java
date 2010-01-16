@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDComponent;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
@@ -18,7 +19,7 @@ public class XSDSetAnnotationDocumentationAction extends UndoAction{
 	
 	public XSDSetAnnotationDocumentationAction(DataModelMainPage page) {
 		super(page);
-		setImageDescriptor(ImageCache.getImage( "icons/annotation.gif"));
+		setImageDescriptor(ImageCache.getImage( EImage.ANNOTATION.getPath()));
 		setText("Set the Documentation");
 		setToolTipText("Set the Documentation for this element");
 	}

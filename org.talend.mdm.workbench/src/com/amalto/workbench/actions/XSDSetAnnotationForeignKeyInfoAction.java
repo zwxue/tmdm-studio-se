@@ -18,6 +18,7 @@ import org.w3c.dom.Element;
 
 import com.amalto.workbench.dialogs.AnnotationOrderedListsDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
@@ -28,7 +29,7 @@ public class XSDSetAnnotationForeignKeyInfoAction extends UndoAction{
 	
 	public XSDSetAnnotationForeignKeyInfoAction(DataModelMainPage page,String dataModelName) {
 		super(page);
-		setImageDescriptor(ImageCache.getImage( "icons/annotation.gif"));
+		setImageDescriptor(ImageCache.getImage( EImage.KEYINFO.getPath()));
 		setText("Set the Foreign Key Infos");
 		setToolTipText("Set the Foreign Key Infos");
 		this.dataModelName = dataModelName;

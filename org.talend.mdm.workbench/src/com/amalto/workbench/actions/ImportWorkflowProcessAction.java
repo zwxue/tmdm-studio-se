@@ -29,7 +29,7 @@ public class ImportWorkflowProcessAction extends Action{
 		super();
 		this.server = serverView;
 			
-		setImageDescriptor(ImageCache.getImage(EImage.PROCESS.getPath()));
+		setImageDescriptor(ImageCache.getImage(EImage.WORKFLOW_PROCESS.getPath()));
 		setText("Import a Process Archive");
 		setToolTipText("Import a Process Archive");
 	}

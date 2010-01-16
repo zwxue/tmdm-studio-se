@@ -15,6 +15,7 @@ import org.eclipse.xsd.XSDComponent;
 import org.w3c.dom.Element;
 
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
@@ -22,7 +23,7 @@ public class XSDSetAnnotationSourceSystemAction extends UndoAction{
 	
 	public XSDSetAnnotationSourceSystemAction(DataModelMainPage page) {
 		super(page);
-		setImageDescriptor(ImageCache.getImage( "icons/annotation.gif"));
+		setImageDescriptor(ImageCache.getImage( EImage.ANNOTATION.getPath()));
 		setText("Set the Source System");
 		setToolTipText("Set the Source System name for the content of this element");
 	}

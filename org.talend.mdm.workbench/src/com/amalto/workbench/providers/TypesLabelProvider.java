@@ -29,6 +29,7 @@ import org.eclipse.xsd.XSDXPathVariety;
 import org.eclipse.xsd.util.XSDConstants;
 import org.w3c.dom.Element;
 
+import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 
@@ -239,9 +240,9 @@ public class TypesLabelProvider extends LabelProvider {
 			}
 			//display approprite image
 			if (isConcept) {
-				return ImageCache.getCreatedImage( "icons/concept.gif");
+				return ImageCache.getCreatedImage( EImage.CONCEPT.getPath());
 			} else {
-				return ImageCache.getCreatedImage( "icons/element_only.gif");
+				return ImageCache.getCreatedImage( EImage.ELEMENT_ONLY.getPath());
 				/*
 				if (decl.getTypeDefinition() instanceof XSDComplexTypeDefinition)
 					return PlatformUI.getWorkbench().getSharedImages().getCreatedImage(ISharedImages.IMG_OBJ_FOLDER);
@@ -257,7 +258,7 @@ public class TypesLabelProvider extends LabelProvider {
 			if (xsdTerm instanceof XSDElementDeclaration) {
 				//get Type of Parent Group
 				if (Util.getKeyInfo((XSDElementDeclaration)xsdTerm) != null)
-					return ImageCache.getCreatedImage( "icons/key.gif");
+					return ImageCache.getCreatedImage( EImage.PRIMARYKEY.getPath());
 				XSDConcreteComponent xsdConcreteComponent =  xsdParticle.getContainer();
 				if (xsdConcreteComponent instanceof XSDModelGroup) {
 					if (((XSDModelGroup)xsdConcreteComponent).getCompositor() == XSDCompositor.CHOICE_LITERAL)
@@ -268,11 +269,11 @@ public class TypesLabelProvider extends LabelProvider {
 				int type = ((XSDModelGroup)xsdTerm).getCompositor().getValue();
 				switch (type) {
 					case XSDCompositor.ALL:
-						return ImageCache.getCreatedImage( "icons/complex_all.gif");
+						return ImageCache.getCreatedImage( EImage.COMPLEXTYPE.getPath());
 					case XSDCompositor.CHOICE:
-						return ImageCache.getCreatedImage( "icons/complex_choice.gif");
+						return ImageCache.getCreatedImage( EImage.COMPLEX_CHOICE.getPath());
 					case XSDCompositor.SEQUENCE:
-						return ImageCache.getCreatedImage( "icons/complex_sequence.gif");				
+						return ImageCache.getCreatedImage( EImage.COMPLEX_SEQUENCE.getPath());				
 				}
 			} else if (xsdTerm instanceof XSDWildcard) {
 				return ImageCache.getCreatedImage( "icons/wildcard.gif");
@@ -283,7 +284,7 @@ public class TypesLabelProvider extends LabelProvider {
 		}
 		
 		if (obj instanceof XSDSimpleTypeDefinition) {
-			return ImageCache.getCreatedImage( "icons/type_definition.gif");
+			return ImageCache.getCreatedImage( EImage.SIMPLETYPE.getPath());
 		}
 		
 		/*
@@ -312,11 +313,11 @@ public class TypesLabelProvider extends LabelProvider {
 			int type = ((XSDModelGroup)obj).getCompositor().getValue();
 			switch (type) {
 				case XSDCompositor.ALL:
-					return ImageCache.getCreatedImage( "icons/complex_all.gif");
+					return ImageCache.getCreatedImage( EImage.COMPLEXTYPE.getPath());
 				case XSDCompositor.CHOICE:
-					return ImageCache.getCreatedImage( "icons/complex_choice.gif");
+					return ImageCache.getCreatedImage( EImage.COMPLEX_CHOICE.getPath());
 				case XSDCompositor.SEQUENCE:
-					return ImageCache.getCreatedImage( "icons/complex_sequence.gif");
+					return ImageCache.getCreatedImage( EImage.COMPLEX_SEQUENCE.getPath());
 			}
 		}
 
@@ -329,8 +330,8 @@ public class TypesLabelProvider extends LabelProvider {
 		if (obj instanceof XSDIdentityConstraintDefinition) {
 			XSDIdentityConstraintDefinition identity = (XSDIdentityConstraintDefinition) obj;
 			if (identity.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL))
-				return ImageCache.getCreatedImage( "icons/unique.gif");
-			return ImageCache.getCreatedImage( "icons/key.gif");
+				return ImageCache.getCreatedImage( EImage.UNIQUE.getPath());
+			return ImageCache.getCreatedImage( EImage.PRIMARYKEY.getPath());
 		}
 
 		if (obj instanceof XSDXPathDefinition) {
@@ -347,7 +348,7 @@ public class TypesLabelProvider extends LabelProvider {
 		if (obj instanceof XSDAttributeUse) {
 			XSDAttributeUse att = (XSDAttributeUse) obj;
 			if ("xmlns".equals(att.getAttributeDeclaration().getTargetNamespace())) {
-				return ImageCache.getCreatedImage( "icons/annotation.gif");
+				return ImageCache.getCreatedImage( EImage.ANNOTATION.getPath());
 			}
 			if (att.getUse().equals(XSDAttributeUseCategory.REQUIRED_LITERAL))
 				return ImageCache.getCreatedImage( "icons/attribute_mandatory.gif");
@@ -356,41 +357,41 @@ public class TypesLabelProvider extends LabelProvider {
 		}
 
 		if (obj instanceof XSDAnnotation) {
-			return ImageCache.getCreatedImage( "icons/annotation.gif");
+			return ImageCache.getCreatedImage( EImage.ANNOTATION.getPath());
 		}
 
 		if (obj instanceof Element) {
 			try {
 				Element e = (Element) obj;
 				if (e.getLocalName().equals("documentation")) { 
-					return ImageCache.getCreatedImage( "icons/documentation.gif");
+					return ImageCache.getCreatedImage( EImage.DOCUMENTATION.getPath());
 				} else  if (e.getLocalName().equals("appinfo")) {
 					String source = e.getAttribute("source");
 					if (source!=null) {
 						if (source.startsWith("X_Label_")) {
-							return ImageCache.getCreatedImage( "icons/label.gif");
+							return ImageCache.getCreatedImage( EImage.LABEL.getPath());
 						} else if (source.equals("X_ForeignKey")) {
-							return ImageCache.getCreatedImage( "icons/key.gif");
+							return ImageCache.getCreatedImage( EImage.KEY.getPath());
 						} else if (source.equals("X_ForeignKeyInfo")) {
-							return ImageCache.getCreatedImage( "icons/info.gif");
+							return ImageCache.getCreatedImage( EImage.KEYINFO.getPath());
 						} else if (source.equals("X_SourceSystem")) {
 							return ImageCache.getCreatedImage( "icons/sourcesystem.gif");
 						} else if (source.equals("X_TargetSystem")) {
 							return ImageCache.getCreatedImage( "icons/targetsystem.gif");
 						} else if (source.startsWith("X_Description_")) {
-							return ImageCache.getCreatedImage( "icons/documentation.gif");
+							return ImageCache.getCreatedImage( EImage.DOCUMENTATION.getPath());
 						} else if (source.equals("X_Write")) {
-							return ImageCache.getCreatedImage( "icons/writable.gif");
+							return ImageCache.getCreatedImage( EImage.SECURITYANNOTATION.getPath());
 						} else if (source.equals("X_Hide")) {
-							return ImageCache.getCreatedImage( "icons/hideable.gif");
+							return ImageCache.getCreatedImage( EImage.SECURITYANNOTATION.getPath());
 						} else {
-							return ImageCache.getCreatedImage( "icons/documentation.gif");
+							return ImageCache.getCreatedImage( EImage.DOCUMENTATION.getPath());
 						}
 					} else {
-						return ImageCache.getCreatedImage( "icons/documentation.gif");
+						return ImageCache.getCreatedImage( EImage.DOCUMENTATION.getPath());
 					}
 				} else {
-					return ImageCache.getCreatedImage( "icons/documentation.gif");
+					return ImageCache.getCreatedImage( EImage.DOCUMENTATION.getPath());
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

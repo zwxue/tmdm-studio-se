@@ -27,6 +27,7 @@ import org.w3c.dom.Element;
 
 import com.amalto.workbench.dialogs.BusinessElementInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
+import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.utils.Util;
@@ -42,7 +43,7 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
 	
 	public XSDEditParticleAction(DataModelMainPage page) {
 		super(page);
-		setImageDescriptor(ImageCache.getImage( "icons/edit_obj.gif"));
+		setImageDescriptor(ImageCache.getImage(EImage.EDIT_OBJ.getPath()));
 		setText("Edit Element");
 		setToolTipText("Edit the Business Element Name and Cardinality.");
 	}
