@@ -262,14 +262,19 @@ public class TypesLabelProvider extends LabelProvider {
 				XSDConcreteComponent xsdConcreteComponent =  xsdParticle.getContainer();
 				if (xsdConcreteComponent instanceof XSDModelGroup) {
 					if (((XSDModelGroup)xsdConcreteComponent).getCompositor() == XSDCompositor.CHOICE_LITERAL)
-						return ImageCache.getCreatedImage( "icons/elements_obj_choice.gif");
-					return ImageCache.getCreatedImage( "icons/elements_obj_sequence.gif");
+						return ImageCache.getCreatedImage( EImage.ELEMENTS_OBJ_CHOICE.getPath());
+					else if (((XSDModelGroup)xsdConcreteComponent).getCompositor() == XSDCompositor.SEQUENCE_LITERAL)
+						return ImageCache.getCreatedImage( EImage.ELEMENTS_OBJ_SEQUENCE.getPath());
 				}
+				if(((XSDElementDeclaration) xsdTerm).getAnonymousTypeDefinition() instanceof XSDComplexTypeDefinition)
+					return ImageCache.getCreatedImage( EImage.COMPLEXTYPE.getPath());
+				else 
+					return ImageCache.getCreatedImage( EImage.SIMPLETYPE.getPath());
 			} else if (xsdTerm instanceof XSDModelGroup) {
 				int type = ((XSDModelGroup)xsdTerm).getCompositor().getValue();
 				switch (type) {
 					case XSDCompositor.ALL:
-						return ImageCache.getCreatedImage( EImage.COMPLEXTYPE.getPath());
+						return ImageCache.getCreatedImage( EImage.COMPLEX_ALL.getPath());
 					case XSDCompositor.CHOICE:
 						return ImageCache.getCreatedImage( EImage.COMPLEX_CHOICE.getPath());
 					case XSDCompositor.SEQUENCE:
@@ -313,7 +318,7 @@ public class TypesLabelProvider extends LabelProvider {
 			int type = ((XSDModelGroup)obj).getCompositor().getValue();
 			switch (type) {
 				case XSDCompositor.ALL:
-					return ImageCache.getCreatedImage( EImage.COMPLEXTYPE.getPath());
+					return ImageCache.getCreatedImage( EImage.COMPLEX_ALL.getPath());
 				case XSDCompositor.CHOICE:
 					return ImageCache.getCreatedImage( EImage.COMPLEX_CHOICE.getPath());
 				case XSDCompositor.SEQUENCE:

@@ -250,12 +250,12 @@ public class XSDTreeLabelProvider extends LabelProvider {
 				if (xsdConcreteComponent instanceof XSDModelGroup) {
 					if (((XSDModelGroup)xsdConcreteComponent).getCompositor() == XSDCompositor.CHOICE_LITERAL)
 						return ImageCache.getCreatedImage( EImage.ELEMENTS_OBJ_CHOICE.getPath());
-					if (((XSDModelGroup)xsdConcreteComponent).getCompositor() == XSDCompositor.CHOICE_LITERAL)
+					else if (((XSDModelGroup)xsdConcreteComponent).getCompositor() == XSDCompositor.SEQUENCE_LITERAL)
 						return ImageCache.getCreatedImage( EImage.ELEMENTS_OBJ_SEQUENCE.getPath());
 				}
 				if(((XSDElementDeclaration) xsdTerm).getAnonymousTypeDefinition() instanceof XSDComplexTypeDefinition)
 					return ImageCache.getCreatedImage( EImage.COMPLEXTYPE.getPath());
-				else if(((XSDElementDeclaration) xsdTerm).getAnonymousTypeDefinition() instanceof XSDSimpleTypeDefinition)
+				else 
 					return ImageCache.getCreatedImage( EImage.SIMPLETYPE.getPath());
 				
 			} else if (xsdTerm instanceof XSDModelGroup) {
