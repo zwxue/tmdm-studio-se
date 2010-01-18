@@ -233,9 +233,9 @@ public class AddBrowseItemsWizard extends Wizard{
 	    private  TableViewer browseViewer;
 		private ComplexTableViewer complexTableViewer;
 		public ConfigureRolePage() {
-			super("Configure Browse items views with the Roles available");
-		    setTitle("Configure Browse items views with the Roles available");
-		    setDescription("Please associate the Browse items views and the available role accesses");
+			super("Configure Browse items views");
+		    setTitle("Configure Browse items views");
+		    setDescription("Please configure the Browse items views");
 
 		    // Page isn't complete until an e-mail address has been added
 		    setPageComplete(true);
