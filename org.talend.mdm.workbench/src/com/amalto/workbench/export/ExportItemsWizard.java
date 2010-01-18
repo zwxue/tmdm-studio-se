@@ -226,6 +226,7 @@ public class ExportItemsWizard extends Wizard {
 				monitor.worked(1);
 				break;
 			case 	TreeObject.ROLE:
+				if(Util.IsEnterPrise()){
 				monitor.subTask(" Role...");
 //				ExportItem exportItem=new ExportItem();
 
@@ -243,6 +244,7 @@ public class ExportItemsWizard extends Wizard {
 					exports.add(obj);
 
 				monitor.worked(1);
+				}
 				break;
 			case	TreeObject.ROUTING_RULE:
 				monitor.subTask(" Routing Rule...");
@@ -279,6 +281,7 @@ public class ExportItemsWizard extends Wizard {
 				monitor.worked(1);
 				break;
 			case TreeObject.SYNCHRONIZATIONPLAN:
+				if(Util.IsEnterPrise()){
 				monitor.subTask(" Synchronization Plan...");
 
 				items=new ArrayList<String>();
@@ -294,6 +297,7 @@ public class ExportItemsWizard extends Wizard {
 					exports.add(obj);
 
 				monitor.worked(1);
+				}
 				break;
 			case TreeObject.TRANSFORMER:
 				monitor.subTask(" Transformer...");
@@ -314,6 +318,7 @@ public class ExportItemsWizard extends Wizard {
 				monitor.worked(1);
 				break;
 			case TreeObject.UNIVERSE:
+				if(Util.IsEnterPrise()){
 				monitor.subTask(" Universe...");
 
 				items=new ArrayList<String>();
@@ -329,6 +334,7 @@ public class ExportItemsWizard extends Wizard {
 					exports.add(obj);
 
 				monitor.worked(1);
+				}
 				break;
 			case TreeObject.VIEW:
 				monitor.subTask(" View...");

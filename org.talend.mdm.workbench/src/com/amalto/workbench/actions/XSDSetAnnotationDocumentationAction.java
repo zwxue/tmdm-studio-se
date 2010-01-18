@@ -19,7 +19,7 @@ public class XSDSetAnnotationDocumentationAction extends UndoAction{
 	
 	public XSDSetAnnotationDocumentationAction(DataModelMainPage page) {
 		super(page);
-		setImageDescriptor(ImageCache.getImage( EImage.ANNOTATION.getPath()));
+		setImageDescriptor(ImageCache.getImage( EImage.DOCUMENTATION.getPath()));
 		setText("Set the Documentation");
 		setToolTipText("Set the Documentation for this element");
 	}

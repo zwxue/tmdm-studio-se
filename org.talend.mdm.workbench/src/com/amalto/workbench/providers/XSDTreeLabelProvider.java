@@ -22,6 +22,7 @@ import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDParticleContent;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTerm;
+import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDVariety;
 import org.eclipse.xsd.XSDWildcard;
 import org.eclipse.xsd.XSDXPathDefinition;
@@ -239,6 +240,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
 		
 		if (obj instanceof XSDParticle) {
 			XSDParticle xsdParticle = (XSDParticle)obj;
+
 			XSDTerm xsdTerm = xsdParticle.getTerm();
 			if (xsdTerm instanceof XSDElementDeclaration) {
 				//get Type of Parent Group
@@ -247,14 +249,20 @@ public class XSDTreeLabelProvider extends LabelProvider {
 				XSDConcreteComponent xsdConcreteComponent =  xsdParticle.getContainer();
 				if (xsdConcreteComponent instanceof XSDModelGroup) {
 					if (((XSDModelGroup)xsdConcreteComponent).getCompositor() == XSDCompositor.CHOICE_LITERAL)
-						return ImageCache.getCreatedImage( "icons/elements_obj_choice.gif");
-					return ImageCache.getCreatedImage( "icons/elements_obj_sequence.gif");
+						return ImageCache.getCreatedImage( EImage.ELEMENTS_OBJ_CHOICE.getPath());
+					if (((XSDModelGroup)xsdConcreteComponent).getCompositor() == XSDCompositor.CHOICE_LITERAL)
+						return ImageCache.getCreatedImage( EImage.ELEMENTS_OBJ_SEQUENCE.getPath());
 				}
+				if(((XSDElementDeclaration) xsdTerm).getAnonymousTypeDefinition() instanceof XSDComplexTypeDefinition)
+					return ImageCache.getCreatedImage( EImage.COMPLEXTYPE.getPath());
+				else if(((XSDElementDeclaration) xsdTerm).getAnonymousTypeDefinition() instanceof XSDSimpleTypeDefinition)
+					return ImageCache.getCreatedImage( EImage.SIMPLETYPE.getPath());
+				
 			} else if (xsdTerm instanceof XSDModelGroup) {
 				int type = ((XSDModelGroup)xsdTerm).getCompositor().getValue();
 				switch (type) {
 					case XSDCompositor.ALL:
-						return ImageCache.getCreatedImage( EImage.COMPLEXTYPE.getPath());
+						return ImageCache.getCreatedImage( EImage.COMPLEX_ALL.getPath());
 					case XSDCompositor.CHOICE:
 						return ImageCache.getCreatedImage( EImage.COMPLEX_CHOICE.getPath());
 					case XSDCompositor.SEQUENCE:
@@ -265,11 +273,11 @@ public class XSDTreeLabelProvider extends LabelProvider {
 			} else {
 				System.out.println("ERROR XSD Term "+xsdTerm.getClass().getName());
 				return ImageCache.getCreatedImage( "icons/error.gif");
-			}			
+			}	
 		}
 		
 		if (obj instanceof XSDSimpleTypeDefinition) {
-			return ImageCache.getCreatedImage( EImage.SIMPLETYPE.getPath());
+			return ImageCache.getCreatedImage( EImage.TYPE_DEFINITION.getPath());
 		}
 		
 		/*
@@ -298,7 +306,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
 			int type = ((XSDModelGroup)obj).getCompositor().getValue();
 			switch (type) {
 				case XSDCompositor.ALL:
-					return ImageCache.getCreatedImage( EImage.COMPLEXTYPE.getPath());
+					return ImageCache.getCreatedImage( EImage.COMPLEX_ALL.getPath());
 				case XSDCompositor.CHOICE:
 					return ImageCache.getCreatedImage( EImage.COMPLEX_CHOICE.getPath());
 				case XSDCompositor.SEQUENCE:
@@ -360,9 +368,9 @@ public class XSDTreeLabelProvider extends LabelProvider {
 						} else if (source.equals("X_ForeignKeyInfo")) {
 							return ImageCache.getCreatedImage( EImage.KEYINFO.getPath());
 						} else if (source.equals("X_SourceSystem")) {
-							return ImageCache.getCreatedImage( "icons/sourcesystem.gif");
+							return ImageCache.getCreatedImage( EImage.SOURCESYSTEM.getPath());
 						} else if (source.equals("X_TargetSystem")) {
-							return ImageCache.getCreatedImage( "icons/targetsystem.gif");
+							return ImageCache.getCreatedImage( EImage.TARGETSYSTEM.getPath());
 						} else if (source.startsWith("X_Description_")) {
 							return ImageCache.getCreatedImage( EImage.DOCUMENTATION.getPath());
 						} else if (source.equals("X_Write")) {

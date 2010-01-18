@@ -342,6 +342,7 @@ public class ImportItemsWizard extends Wizard{
 				monitor.worked(1);
 				break;	
 			case TreeObject.ROLE:
+				if(Util.IsEnterPrise()){
 				monitor.subTask(" Role...");
 				subItems = item.getItems();
 				
@@ -356,7 +357,7 @@ public class ImportItemsWizard extends Wizard{
 					}
 				}
 
-				monitor.worked(1);
+				monitor.worked(1);}
 				break;	
 			case TreeObject.ROUTING_RULE:
 				monitor.subTask(" Routing Rule...");
@@ -403,6 +404,7 @@ public class ImportItemsWizard extends Wizard{
 				monitor.worked(1);
 				break;
 			case TreeObject.SYNCHRONIZATIONPLAN:
+				if(Util.IsEnterPrise()){
 				monitor.subTask(" Synchronization Plan...");
 				subItems = item.getItems();
 				
@@ -419,7 +421,7 @@ public class ImportItemsWizard extends Wizard{
 				   }
 				}
 
-				monitor.worked(1);
+				monitor.worked(1);}
 				break;
 			case TreeObject.TRANSFORMER:
 				monitor.subTask(" Transformer...");
@@ -441,6 +443,7 @@ public class ImportItemsWizard extends Wizard{
 				monitor.worked(1);
 				break;
 			case  TreeObject.UNIVERSE:
+				if(Util.IsEnterPrise()){
 				monitor.subTask(" Universe...");
 				subItems = item.getItems();
 				
@@ -456,7 +459,7 @@ public class ImportItemsWizard extends Wizard{
 				   }
 				}
 
-				monitor.worked(1);
+				monitor.worked(1);}
 				break;
 			case TreeObject.VIEW:
 				monitor.subTask(" View...");

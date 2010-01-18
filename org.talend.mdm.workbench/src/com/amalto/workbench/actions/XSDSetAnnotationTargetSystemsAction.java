@@ -29,7 +29,7 @@ public class XSDSetAnnotationTargetSystemsAction extends UndoAction{
 	
 	public XSDSetAnnotationTargetSystemsAction(DataModelMainPage page,String dataModelName) {
 		super(page);
-		setImageDescriptor(ImageCache.getImage( EImage.ANNOTATION.getPath()));
+		setImageDescriptor(ImageCache.getImage( EImage.TARGETSYSTEM.getPath()));
 		setText("Set the Target Systems");
 		setToolTipText("Set the the Target Systems for the content of this element");
 		this.dataModelName = dataModelName;

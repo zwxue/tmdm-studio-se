@@ -284,7 +284,7 @@ public class TypesLabelProvider extends LabelProvider {
 		}
 		
 		if (obj instanceof XSDSimpleTypeDefinition) {
-			return ImageCache.getCreatedImage( EImage.SIMPLETYPE.getPath());
+			return ImageCache.getCreatedImage( EImage.TYPE_DEFINITION.getPath());
 		}
 		
 		/*
@@ -375,9 +375,9 @@ public class TypesLabelProvider extends LabelProvider {
 						} else if (source.equals("X_ForeignKeyInfo")) {
 							return ImageCache.getCreatedImage( EImage.KEYINFO.getPath());
 						} else if (source.equals("X_SourceSystem")) {
-							return ImageCache.getCreatedImage( "icons/sourcesystem.gif");
+							return ImageCache.getCreatedImage( EImage.SOURCESYSTEM.getPath());
 						} else if (source.equals("X_TargetSystem")) {
-							return ImageCache.getCreatedImage( "icons/targetsystem.gif");
+							return ImageCache.getCreatedImage( EImage.TARGETSYSTEM.getPath());
 						} else if (source.startsWith("X_Description_")) {
 							return ImageCache.getCreatedImage( EImage.DOCUMENTATION.getPath());
 						} else if (source.equals("X_Write")) {

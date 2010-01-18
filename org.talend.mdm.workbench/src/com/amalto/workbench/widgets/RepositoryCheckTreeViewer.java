@@ -290,7 +290,7 @@ public class RepositoryCheckTreeViewer {
         	return false;
         }
         if(!Util.IsEnterPrise()){
-        	if(node.getType() == TreeObject.ROLE || node.getType() == TreeObject.UNIVERSE){
+        	if(node.getType() == TreeObject.ROLE || node.getType() == TreeObject.UNIVERSE||node.getType() == TreeObject.SYNCHRONIZATIONPLAN){
             	return false;
             }
         }

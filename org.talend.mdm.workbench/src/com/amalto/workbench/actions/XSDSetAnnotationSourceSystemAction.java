@@ -23,7 +23,7 @@ public class XSDSetAnnotationSourceSystemAction extends UndoAction{
 	
 	public XSDSetAnnotationSourceSystemAction(DataModelMainPage page) {
 		super(page);
-		setImageDescriptor(ImageCache.getImage( EImage.ANNOTATION.getPath()));
+		setImageDescriptor(ImageCache.getImage( EImage.SOURCESYSTEM.getPath()));
 		setText("Set the Source System");
 		setToolTipText("Set the Source System name for the content of this element");
 	}

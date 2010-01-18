@@ -325,7 +325,12 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 			return ImageCache.getImage( EImage.UNIVERSE.getPath()).createImage();
 		else if (object.getType() == TreeObject.SERVICE_CONFIGURATION)
 			return ImageCache.getImage( EImage.SERVICE_CONFIGURATION.getPath()).createImage();
-		
+		else if (object.getType() == TreeObject.RESOURCES
+				|| object.getType() == TreeObject.DATA_MODEL_RESOURCE
+				|| object.getType() == TreeObject.DATA_MODEL_TYPES_RESOURCE
+				|| object.getType() == TreeObject.CUSTOM_TYPES_RESOURCE
+				|| object.getType() == TreeObject.PICTURES_RESOURCE)
+			return ImageCache.getCreatedImage(EImage.RESOURCES.getPath());
 		else if(object.getType()==TreeObject.JOB)
 			return ImageCache.getImage(EImage.JOB.getPath()).createImage();
 		
