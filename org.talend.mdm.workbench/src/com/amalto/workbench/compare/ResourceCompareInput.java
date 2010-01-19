@@ -167,6 +167,7 @@ public class ResourceCompareInput extends CompareEditorInput {
 				super.fillContextMenu(manager);
 			}
 		};
+		fDiffViewer.getControl();
 		return fDiffViewer;
 	}
 
@@ -421,7 +422,10 @@ public class ResourceCompareInput extends CompareEditorInput {
 	@Override
 	public boolean isSaveNeeded() {
 		if(compareHeadInfo==null)return false;
-		return false;//TODO maybe need change later
+		if(fRoot instanceof MyDiffNode) {
+			return ((MyDiffNode)fRoot).fDirty;
+		}
+		return false;		
 	}
 	
 	public void saveChanges(IProgressMonitor pm) throws CoreException {
@@ -433,6 +437,9 @@ public class ResourceCompareInput extends CompareEditorInput {
 				if (fDiffViewer != null)
 					fDiffViewer.refresh();				
 				setDirty(false);
+				if(fRoot instanceof MyDiffNode) {
+				((MyDiffNode)fRoot).fDirty=false;
+				}
 			}
 		}
 	}
