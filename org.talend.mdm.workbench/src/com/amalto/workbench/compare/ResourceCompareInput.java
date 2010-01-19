@@ -421,7 +421,7 @@ public class ResourceCompareInput extends CompareEditorInput {
 	@Override
 	public boolean isSaveNeeded() {
 		if(compareHeadInfo==null)return false;
-		return true;
+		return false;//TODO maybe need change later
 	}
 	
 	public void saveChanges(IProgressMonitor pm) throws CoreException {
