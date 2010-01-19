@@ -574,6 +574,14 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 							DataClusterBrowserMainPage.this.resultsViewer
 					)
 			    );
+				//compare item with each other
+				manager.appendToGroup(
+						IWorkbenchActionConstants.MB_ADDITIONS,
+						new CompareItemWithEachOtherAction(
+								getSite().getShell(),
+								getResultsViewer()
+						)
+				);				
 				//available models
 				java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
 				for(IAvailableModel model: availablemodels){
