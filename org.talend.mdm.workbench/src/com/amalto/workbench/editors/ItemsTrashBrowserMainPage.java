@@ -134,7 +134,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
             
             //search
         	Button bSearch = toolkit.createButton(composite, "", SWT.CENTER);
-        	bSearch.setImage(ImageCache.getCreatedImage(EImage.SEARCH.getPath()));
+        	bSearch.setImage(ImageCache.getCreatedImage(EImage.BROWSE.getPath()));
         	bSearch.setToolTipText("Search");
             bSearch.setLayoutData(
                     new GridData(SWT.NONE,SWT.CENTER,false,false,1,1)

@@ -263,7 +263,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             
             //to
         	Button bSearch = toolkit.createButton(firstLineComposite, "", SWT.CENTER);
-        	bSearch.setImage(ImageCache.getCreatedImage(EImage.SEARCH.getPath()));
+        	bSearch.setImage(ImageCache.getCreatedImage(EImage.BROWSE.getPath()));
         	bSearch.setToolTipText("Search");
             bSearch.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)

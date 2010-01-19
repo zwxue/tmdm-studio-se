@@ -79,13 +79,13 @@ public class TisTableViewer extends ComplexTableViewer{
 	        layout.marginHeight=0;	        
 	        stepUpDownComposite.setLayout(layout);
 	        //
-	        addButton=toolkit.createButton(stepUpDownComposite,"",SWT.PUSH | SWT.CENTER);
-	        addButton.setLayoutData(
+	        addNewXpathButton=toolkit.createButton(stepUpDownComposite,"",SWT.PUSH | SWT.CENTER);
+	        addNewXpathButton.setLayoutData(
 	                new GridData(SWT.FILL,SWT.FILL,false,false,1,1)
 	        );
-	        addButton.setToolTipText("Add");
-	        addButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
-	        addButton.addSelectionListener(new SelectionListener() {
+	        addNewXpathButton.setToolTipText("Add");
+	        addNewXpathButton.setImage(ImageCache.getCreatedImage(EImage.ADD_NEWXPATH.getPath()));
+	        addNewXpathButton.addSelectionListener(new SelectionListener() {
 	        	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
 	        	@SuppressWarnings("unchecked")
 				public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -104,13 +104,13 @@ public class TisTableViewer extends ComplexTableViewer{
 	        });		
 	        //Add Multi
 	        if(isAddMulti()){
-		        Button addAllButton=toolkit.createButton(stepUpDownComposite,"",SWT.PUSH | SWT.CENTER);
-		        addAllButton.setLayoutData(
+		        Button selNewPathButton=toolkit.createButton(stepUpDownComposite,"",SWT.PUSH | SWT.CENTER);
+		        selNewPathButton.setLayoutData(
 		                new GridData(SWT.FILL,SWT.FILL,false,false,1,1)
 		        );
-		        addAllButton.setToolTipText("Add Multiple");
-		        addAllButton.setImage(ImageCache.getCreatedImage(EImage.ADDMULTI_OBJ.getPath()));
-		        addAllButton.addSelectionListener(new SelectionListener() {
+		        selNewPathButton.setToolTipText("Add Multiple");
+		        selNewPathButton.setImage(ImageCache.getCreatedImage(EImage.SELECT_NEWXPATH.getPath()));
+		        selNewPathButton.addSelectionListener(new SelectionListener() {
 		        	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
 		        	@SuppressWarnings("unchecked")
 					public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {

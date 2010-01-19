@@ -192,7 +192,7 @@ import com.amalto.workbench.webservices.WSDataModel;
 public class DataModelMainPage extends AMainPageV2 {
 
 	protected Text descriptionText;
-	protected Button importXSDBtn, exportBtn,sortUPBtn,sortDownBtn,filterBtn,expandBtn,foldBtn,expandSelBtn,sortNaturalBtn,addLanBtn,deleteLanbtn, importSchemaNsBtn;
+	protected Button importXSDBtn, exportBtn,sortUPBtn,sortDownBtn,filterBtn,expandBtn,collapseBtn,expandSelBtn,sortNaturalBtn,addLanBtn,deleteLanbtn, importSchemaNsBtn;
 	private   Label langeuageLabel;
 	private   Combo languageCombo;
 	protected TreeViewer viewer;
@@ -335,7 +335,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			//add by lym
 			
 			expandBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
-			expandBtn.setImage(ImageCache.getCreatedImage(EImage.FLDR_OBJ.getPath()));
+			expandBtn.setImage(ImageCache.getCreatedImage(EImage.EXPAND.getPath()));
 			expandBtn.setToolTipText("Expand...");
 			expandBtn.addSelectionListener(new SelectionAdapter(){
 				public void widgetSelected(SelectionEvent e) {
@@ -348,10 +348,10 @@ public class DataModelMainPage extends AMainPageV2 {
 				}
 			});
 			
-			foldBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
-			foldBtn.setImage(ImageCache.getCreatedImage(EImage.COMPRESSED_FOLDER_OBJ.getPath()));
-			foldBtn.setToolTipText("Collapse...");
-			foldBtn.addSelectionListener(new SelectionAdapter(){
+			collapseBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
+			collapseBtn.setImage(ImageCache.getCreatedImage(EImage.COLLAPSE.getPath()));
+			collapseBtn.setToolTipText("Collapse...");
+			collapseBtn.addSelectionListener(new SelectionAdapter(){
 				public void widgetSelected(SelectionEvent e) {
 					Iterator it = sel.iterator();
 					while(it.hasNext()){
@@ -441,7 +441,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			
 			expandBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 					false, 1, 1));	
-			foldBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
+			collapseBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 					false, 1, 1));	
 			expandSelBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 					false, 1, 1));	

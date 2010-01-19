@@ -34,7 +34,7 @@ public class XSDSetFacetMessageAction extends UndoAction{
 	protected String dataModelName;
 	public XSDSetFacetMessageAction(DataModelMainPage page) {
 		super(page);
-		setImageDescriptor(ImageCache.getImage( EImage.ANNOTATION.getPath()));
+		setImageDescriptor(ImageCache.getImage( EImage.DOCUMENTATION.getPath()));
 		setText("Set the facet message");
 		setToolTipText("Set multilingual facet error messages  for the content of this element");
 	}
@@ -75,8 +75,8 @@ public class XSDSetFacetMessageAction extends UndoAction{
        		if (ret == Window.CANCEL){
                 return Status.CANCEL_STATUS;
        		}
-       		LinkedHashMap<String, String> descriptions = dlg.getDescriptionsMap();
-       		struc.setFactMessage(descriptions);
+       		LinkedHashMap<String, String> facets = dlg.getDescriptionsMap();
+       		struc.setFactMessage(facets);
        		
        		if (struc.hasChanged()) {
        			page.refresh();

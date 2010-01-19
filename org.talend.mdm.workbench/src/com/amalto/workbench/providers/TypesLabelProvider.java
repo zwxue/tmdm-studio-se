@@ -261,17 +261,18 @@ public class TypesLabelProvider extends LabelProvider {
 					return ImageCache.getCreatedImage( EImage.PRIMARYKEY.getPath());
 				XSDConcreteComponent xsdConcreteComponent =  xsdParticle.getContainer();
 				if (xsdConcreteComponent instanceof XSDModelGroup) {
-					if (((XSDModelGroup)xsdConcreteComponent).getCompositor() == XSDCompositor.CHOICE_LITERAL)
+/*					if (((XSDModelGroup)xsdConcreteComponent).getCompositor() == XSDCompositor.CHOICE_LITERAL)
 						return ImageCache.getCreatedImage( EImage.ELEMENTS_OBJ_CHOICE.getPath());
 					else if (((XSDModelGroup)xsdConcreteComponent).getCompositor() == XSDCompositor.SEQUENCE_LITERAL)
-						return ImageCache.getCreatedImage( EImage.ELEMENTS_OBJ_SEQUENCE.getPath());
+						return ImageCache.getCreatedImage( EImage.ELEMENTS_OBJ_SEQUENCE.getPath());*/
+					return ImageCache.getCreatedImage( EImage.SCHEMAELEMENT.getPath());
 				}
-				if(((XSDElementDeclaration) xsdTerm).getAnonymousTypeDefinition() instanceof XSDComplexTypeDefinition)
+/*				if(((XSDElementDeclaration) xsdTerm).getAnonymousTypeDefinition() instanceof XSDComplexTypeDefinition)
 					return ImageCache.getCreatedImage( EImage.COMPLEXTYPE.getPath());
 				else 
-					return ImageCache.getCreatedImage( EImage.SIMPLETYPE.getPath());
+					return ImageCache.getCreatedImage( EImage.SIMPLETYPE.getPath());*/
 			} else if (xsdTerm instanceof XSDModelGroup) {
-				int type = ((XSDModelGroup)xsdTerm).getCompositor().getValue();
+/*				int type = ((XSDModelGroup)xsdTerm).getCompositor().getValue();
 				switch (type) {
 					case XSDCompositor.ALL:
 						return ImageCache.getCreatedImage( EImage.COMPLEX_ALL.getPath());
@@ -279,7 +280,8 @@ public class TypesLabelProvider extends LabelProvider {
 						return ImageCache.getCreatedImage( EImage.COMPLEX_CHOICE.getPath());
 					case XSDCompositor.SEQUENCE:
 						return ImageCache.getCreatedImage( EImage.COMPLEX_SEQUENCE.getPath());				
-				}
+				}*/
+				return ImageCache.getCreatedImage( EImage.COMPLEXTYPE.getPath());
 			} else if (xsdTerm instanceof XSDWildcard) {
 				return ImageCache.getCreatedImage( "icons/wildcard.gif");
 			} else {
@@ -289,7 +291,7 @@ public class TypesLabelProvider extends LabelProvider {
 		}
 		
 		if (obj instanceof XSDSimpleTypeDefinition) {
-			return ImageCache.getCreatedImage( EImage.TYPE_DEFINITION.getPath());
+			return ImageCache.getCreatedImage( EImage.SIMPLETYPE.getPath());
 		}
 		
 		/*
@@ -315,7 +317,7 @@ public class TypesLabelProvider extends LabelProvider {
 		}
 		*/
 		if (obj instanceof XSDModelGroup) {
-			int type = ((XSDModelGroup)obj).getCompositor().getValue();
+/*			int type = ((XSDModelGroup)obj).getCompositor().getValue();
 			switch (type) {
 				case XSDCompositor.ALL:
 					return ImageCache.getCreatedImage( EImage.COMPLEX_ALL.getPath());
@@ -323,7 +325,8 @@ public class TypesLabelProvider extends LabelProvider {
 					return ImageCache.getCreatedImage( EImage.COMPLEX_CHOICE.getPath());
 				case XSDCompositor.SEQUENCE:
 					return ImageCache.getCreatedImage( EImage.COMPLEX_SEQUENCE.getPath());
-			}
+			}*/
+			return ImageCache.getCreatedImage( EImage.COMPLEXTYPE.getPath());
 		}
 
 		
@@ -335,7 +338,7 @@ public class TypesLabelProvider extends LabelProvider {
 		if (obj instanceof XSDIdentityConstraintDefinition) {
 			XSDIdentityConstraintDefinition identity = (XSDIdentityConstraintDefinition) obj;
 			if (identity.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL))
-				return ImageCache.getCreatedImage( EImage.UNIQUE.getPath());
+				return ImageCache.getCreatedImage( EImage.KEYS.getPath());
 			return ImageCache.getCreatedImage( EImage.PRIMARYKEY.getPath());
 		}
 

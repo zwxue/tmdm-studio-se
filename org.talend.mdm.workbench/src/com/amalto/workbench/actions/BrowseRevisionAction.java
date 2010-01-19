@@ -19,7 +19,7 @@ public class BrowseRevisionAction extends Action {
 	public BrowseRevisionAction(ServerView serverView) {
 		super();
 		this.server = serverView;			
-		setImageDescriptor(ImageCache.getImage(EImage.SEARCH.getPath()));
+		setImageDescriptor(ImageCache.getImage(EImage.BROWSE.getPath()));
 		setText("Browse Revision");
 		setToolTipText("Browse revision");
 	}

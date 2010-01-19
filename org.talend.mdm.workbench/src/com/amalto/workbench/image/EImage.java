@@ -12,6 +12,8 @@ public enum EImage {
 	
 	ACTIVITY_CATEGORY("icons/activity_category.gif"),
 	ACTIVITY("icons/activity.gif"),
+	ADD_NEWXPATH("icons/add_newXPath.png"),
+	SELECT_NEWXPATH("icons/select_newXPath.png"),
 	ADD_OBJ("icons/add_obj.gif"),
 	ADDMULTI_OBJ("icons/add.gif"),
 	ADDTSK_TSK("icons/addtsk_tsk.gif"),
@@ -64,7 +66,7 @@ public enum EImage {
 	DOCUMENTS("icons/documents.gif"),
 	EDIT_OBJ("icons/edit_obj.gif"),
 	EDIT("icons/edit.gif"),
-	ELEMENT_ONLY("icons/schema_element.png"),
+	ELEMENT_ONLY("icons/element_only.gif"),
 	ELEMENTS_ONLE_ADD("icons/elements_obj_+.gif"),
 	ELEMENTS_OBJ_CHOICE("icons/elements_obj_choice.gif"),
 	ELEMENTS_OBJ_SEQUENCE("icons/elements_obj_sequence.gif"),
@@ -174,6 +176,7 @@ public enum EImage {
 	SAVEALL_EDIT("icons/saveall_edit.gif"),
 	SAVEAS_EDIT("icons/saveas_edit.gif"),
 	SEARCH("icons/search.gif"),
+	BROWSE("icons/browse.png"),
 	SELECTED_MODE("icons/selected_mode.gif"),
 	SELECTOR("icons/selector.gif"),
 	SERVER("icons/server.gif"),
@@ -250,13 +253,17 @@ public enum EImage {
 	SERVICE_CONFIGURATION("icons/service_config.png"),
 	WORKFLOW_PROCESS("icons/workflow_process.png"),
 	UNIVERSE("icons/universe.png"),
-	RENAME("icons/rename.gif"),
+	RENAME("icons/rename.png"),
 	RESOURCES("icons/resources.png"),
 	PRIMARYKEY("icons/primarykey.png"),
 	SECURITYANNOTATION("icons/securityannotation.png"),
 	SIMPLETYPE("icons/simple_type.png"),
 	COMPLEXTYPE("icons/complex_type.png"), 
-	KEYINFO("icons/info.gif");
+	KEYINFO("icons/info.gif"),
+	SCHEMAELEMENT("icons/schema_element.png"),
+	EXPAND("icons/expand.png"),
+	COLLAPSE("icons/collapse.png"),
+	KEYS("icons/keys.png");
 	EImage(String path){
 		this.path=path;
 		

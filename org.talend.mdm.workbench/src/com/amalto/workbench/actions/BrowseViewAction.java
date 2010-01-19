@@ -22,7 +22,7 @@ public class BrowseViewAction extends Action{
 		super();
 		this.server = serverView;
 			
-		setImageDescriptor(ImageCache.getImage(EImage.SEARCH.getPath()));
+		setImageDescriptor(ImageCache.getImage(EImage.BROWSE.getPath()));
 		setText("Browse");
 		setToolTipText("Browse Content");
 	}

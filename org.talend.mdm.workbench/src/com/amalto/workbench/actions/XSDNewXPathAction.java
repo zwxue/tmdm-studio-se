@@ -28,7 +28,7 @@ public class XSDNewXPathAction extends UndoAction{
 	
 	public XSDNewXPathAction(DataModelMainPage page) {
 		super(page);
-		setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
+		setImageDescriptor(ImageCache.getImage(EImage.ADD_NEWXPATH.getPath()));
 		setText("New Field");
 		setToolTipText("Create a new Field");
 	}
