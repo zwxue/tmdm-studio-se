@@ -498,37 +498,40 @@ public class TreeObjectUtil {
 				}
 	private static void deleteSpecificationFromAttachedRole(XtentisPort port, TreeObject xobject, String objectType) throws RemoteException
 	{
-		String revision = retrieveRevisionID(port, objectType);
-   		WSRolePK[] pks = port.getRolePKs(new WSGetRolePKs(".*")).getWsRolePK();
-   		if (pks == null) return;
-   		for (WSRolePK pk : pks) {
-			WSGetRole getRole = new WSGetRole();
-			getRole.setWsRolePK(new WSRolePK(pk.getPk()));
-			WSRole role = port.getRole(getRole);
-			for (WSRoleSpecification spec : role.getSpecification()) {
-				if (spec.getObjectType().equals(objectType)) {
-					WSRoleSpecificationInstance[] specInstance = spec
-							.getInstance();
-					List<WSRoleSpecificationInstance> newSpecInstanceLst = new ArrayList<WSRoleSpecificationInstance>();
-					for (WSRoleSpecificationInstance specIns : specInstance) {
-						if (!specIns.getInstanceName().equals(
-								xobject.getDisplayName())) {
-							newSpecInstanceLst.add(specIns);
+		if(Util.IsEnterPrise()){
+			String revision = retrieveRevisionID(port, objectType);
+	   		WSRolePK[] pks = port.getRolePKs(new WSGetRolePKs(".*")).getWsRolePK();
+	   		if (pks == null) return;
+	   		for (WSRolePK pk : pks) {
+				WSGetRole getRole = new WSGetRole();
+				getRole.setWsRolePK(new WSRolePK(pk.getPk()));
+				WSRole role = port.getRole(getRole);
+				for (WSRoleSpecification spec : role.getSpecification()) {
+					if (spec.getObjectType().equals(objectType)) {
+						WSRoleSpecificationInstance[] specInstance = spec
+								.getInstance();
+						List<WSRoleSpecificationInstance> newSpecInstanceLst = new ArrayList<WSRoleSpecificationInstance>();
+						for (WSRoleSpecificationInstance specIns : specInstance) {
+							if (!specIns.getInstanceName().equals(
+									xobject.getDisplayName())) {
+								newSpecInstanceLst.add(specIns);
+							}
 						}
-					}
-					if (newSpecInstanceLst.size() < specInstance.length) {
-						String revisionForRole = retrieveRevisionID(port, "Role");
-						if (revisionForRole == null || revision == null || !revisionForRole.equals(revision))
+						if (newSpecInstanceLst.size() < specInstance.length) {
+							String revisionForRole = retrieveRevisionID(port, "Role");
+							if (revisionForRole == null || revision == null || !revisionForRole.equals(revision))
+								break;
+							spec.setInstance(newSpecInstanceLst
+									.toArray(new WSRoleSpecificationInstance[] {}));
+							WSPutRole putRole = new WSPutRole();
+							putRole.setWsRole(role);
+							port.putRole(putRole);
 							break;
-						spec.setInstance(newSpecInstanceLst
-								.toArray(new WSRoleSpecificationInstance[] {}));
-						WSPutRole putRole = new WSPutRole();
-						putRole.setWsRole(role);
-						port.putRole(putRole);
-						break;
+						}
 					}
 				}
 			}
+		
 		}
 	}
 	/**
@@ -543,7 +546,7 @@ public class TreeObjectUtil {
 		WSUniverse wUuniverse=port.getCurrentUniverse(new WSGetCurrentUniverse());
 		WSUniverseXtentisObjectsRevisionIDs[] ids=wUuniverse.getXtentisObjectsRevisionIDs();
 		for(WSUniverseXtentisObjectsRevisionIDs id: ids){
-			if(id.getXtentisObjectName().equals(xtentisName)){
+			if(id.getXtentisObjectName().equals(xtentisName) && Util.IsEnterPrise()){
 				return id.getRevisionID().replaceAll("\\[", "").replaceAll("\\]", "");
 			}
 		}
