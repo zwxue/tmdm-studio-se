@@ -427,7 +427,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
 				s+= ")";
 			
 			}*/
-			s+=xsdSimpleTypeDefinition.getName();
+			s+=xsdSimpleTypeDefinition.getName() != null ? xsdSimpleTypeDefinition.getName() : "";
 		} else if (xsdSimpleTypeDefinition.getElement() != null && xsdSimpleTypeDefinition.getElement().hasAttribute(XSDConstants.ID_ATTRIBUTE)) {
 			s+= xsdSimpleTypeDefinition.getName();
 		} else if ((XSDVariety.UNION_LITERAL == xsdSimpleTypeDefinition.getVariety()) | (XSDVariety.LIST_LITERAL == xsdSimpleTypeDefinition.getVariety())) {
@@ -449,7 +449,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
 			// s+= xsdSimpleTypeDefinition.getEffectivePatternFacet().getLexicalValue());
 			s+= "a restricted xpath expression";
 		} else {
-			s+= "***";
+			s+= "";
 		}
 		String tail = xsdSimpleTypeDefinition.getTargetNamespace() == null ? ""  :  xsdSimpleTypeDefinition.getTargetNamespace();
 		if(tail.equals(XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001) || tail.equals(XSDConstants.SCHEMA_FOR_SCHEMA_URI_1999))
