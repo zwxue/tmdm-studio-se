@@ -18,7 +18,7 @@
    </license>
 
    <url>
-      <update label="TDQ Talend update site for stables" url="http://www.talend.com/tdqenterprise/updatesite/stable/"/>
+      <update label="TEM Talend update site for stables" url="http://www.talend.com/tementerprise/updatesite/stable/"/>
    </url>
 
    <includes

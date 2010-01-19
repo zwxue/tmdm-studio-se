@@ -10,15 +10,15 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.rcp.branding.tdqenterprise;
+package org.talend.rcp.branding.tementerprise;
 
 import org.talend.core.ui.branding.DefaultBrandingConfiguration;
-import org.talend.rcp.branding.tdqenterprise.i18n.Messages;
+import org.talend.rcp.branding.tementerprise.i18n.Messages;
 
 /**
  * hcheng class global comment. Detailled comment
  */
-public class TDQEEBrandingConfiguration extends DefaultBrandingConfiguration {
+public class TEMEEBrandingConfiguration extends DefaultBrandingConfiguration {
 
     @Override
     public String getTISProductNameForWelcome() {

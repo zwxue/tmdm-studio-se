@@ -73,7 +73,7 @@
       <extension
             point="org.talend.core.service">
          <Service
-               class="org.talend.rcp.branding.tdqenterprise.TQDBrandingService"
+               class="org.talend.rcp.branding.tementerprise.TEMBrandingService"
                serviceId="org.talend.core.ui.branding.IBrandingService"/>
       </extension>
 </plugin>

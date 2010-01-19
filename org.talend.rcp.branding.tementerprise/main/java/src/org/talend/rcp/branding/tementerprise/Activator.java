@@ -1,4 +1,4 @@
-package org.talend.rcp.branding.tdqenterprise;
+package org.talend.rcp.branding.tementerprise;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -7,7 +7,7 @@ import org.osgi.framework.BundleContext;
 public class Activator extends AbstractUIPlugin {
 
     // The plug-in ID
-    public static final String PLUGIN_ID = "org.talend.rcp.branding.tdqenterprise";
+    public static final String PLUGIN_ID = "org.talend.rcp.branding.tementerprise";
 
     // The shared instance
     private static Activator plugin;

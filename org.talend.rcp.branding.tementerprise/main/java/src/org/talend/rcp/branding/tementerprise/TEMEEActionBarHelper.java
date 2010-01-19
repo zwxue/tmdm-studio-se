@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.rcp.branding.tdqenterprise;
+package org.talend.rcp.branding.tementerprise;
 
 import org.eclipse.jface.preference.IPreferenceNode;
 import org.talend.core.ui.branding.IActionBarHelper;
@@ -19,7 +19,7 @@ import org.talend.datacleansing.core.ui.intro.ActionBarBuildHelper;
 /**
  *hcheng class global comment. Detailled comment
  */
-public class TDQEEActionBarHelper extends ActionBarBuildHelper implements IActionBarHelper {
+public class TEMEEActionBarHelper extends ActionBarBuildHelper implements IActionBarHelper {
 
     @Override
     public void postWindowOpen() {

@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.rcp.branding.tdqenterprise;
+package org.talend.rcp.branding.tementerprise;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,13 +22,13 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.osgi.framework.Bundle;
 import org.talend.core.ui.branding.IBrandingConfiguration;
 import org.talend.core.ui.branding.IBrandingService;
-import org.talend.rcp.branding.tdqenterprise.i18n.Messages;
+import org.talend.rcp.branding.tementerprise.i18n.Messages;
 
 /**
  * DOC smallet class global comment. Detailled comment <br/>
  * 
  */
-public class TQDBrandingService implements IBrandingService {
+public class TEMBrandingService implements IBrandingService {
 
     protected IBrandingConfiguration brandingConfigure;
 
@@ -65,8 +65,8 @@ public class TQDBrandingService implements IBrandingService {
      */
     public IBrandingConfiguration getBrandingConfiguration() {
         if (brandingConfigure == null) {
-            brandingConfigure = new TDQEEBrandingConfiguration();
-            brandingConfigure.setHelper(new TDQEEActionBarHelper());
+            brandingConfigure = new TEMEEBrandingConfiguration();
+            brandingConfigure.setHelper(new TEMEEActionBarHelper());
         }
         return brandingConfigure;
     }

@@ -15,4 +15,4 @@ Require-Bundle: org.eclipse.ui,
  org.talend.commons,
  org.talend.datacleansing.core.ui
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: org.talend.rcp.branding.tdqenterprise.Activator
+Bundle-Activator: org.talend.rcp.branding.tementerprise.Activator
