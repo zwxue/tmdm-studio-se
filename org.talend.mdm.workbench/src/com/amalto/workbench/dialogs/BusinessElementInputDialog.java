@@ -19,6 +19,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.amalto.workbench.utils.Util;
+
 public class BusinessElementInputDialog extends Dialog {
 
 	private Text elementNameText=null;
@@ -174,19 +176,21 @@ public class BusinessElementInputDialog extends Dialog {
 				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 		);
 		maxOccursText.setText(getMaxOccurs()== -1 ? "" : ""+getMaxOccurs());
-		if(isNew){
-		checkBox = new Button(composite, SWT.CHECK);
-		checkBox.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
-				true, 2, 1));
-		checkBox.addSelectionListener(new SelectionListener() {
-        	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
-        	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-        		inherit = checkBox.getSelection();
-        	};
-        });
-		checkBox.setSelection(inherit);
-		checkBox.setText(" Inherit the security annotations");
+		
+		if(isNew && Util.IsEnterPrise()){
+      	   checkBox = new Button(composite, SWT.CHECK);
+      	   checkBox.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true, 2, 1));
+		   checkBox.addSelectionListener(new SelectionListener() {
+        	  public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
+        	  public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+        	     inherit = checkBox.getSelection();
+        	  };
+           });
+      	
+		   checkBox.setSelection(inherit);
+      	   checkBox.setText(" Inherit the security annotations");
 		}
+		
 	    return composite;
 	}
 
