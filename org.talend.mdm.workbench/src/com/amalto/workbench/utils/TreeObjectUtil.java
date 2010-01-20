@@ -99,7 +99,7 @@ public class TreeObjectUtil {
 			           		WSDataModelPK key = (WSDataModelPK)object.getWsKey();
 			           		WSDataModelPK newKey =  new WSDataModelPK(key.getPk());
 			           		if (destPort.existsDataModel(new WSExistsDataModel((WSDataModelPK)object.getWsKey())).is_true()) {
-			           		String newName=	getNewName(view.getSite().getShell(), key.getPk(),destPort);
+			           		String newName=	getNewName(view.getSite().getShell(), key.getPk(),destPort,object.getType());
 			           		if(newName==null)
 			           			return false;
 			           		newKey = new WSDataModelPK(newName); 
@@ -128,7 +128,7 @@ public class TreeObjectUtil {
 			           		WSViewPK key = (WSViewPK)object.getWsKey();
 			           		WSViewPK newKey = new WSViewPK(key.getPk());
 			           		if (destPort.existsView(new WSExistsView((WSViewPK)object.getWsKey())).is_true()) {
-				           		String newName=	getNewName(view.getSite().getShell(), key.getPk(),destPort);
+				           		String newName=	getNewName(view.getSite().getShell(), key.getPk(),destPort,object.getType());
 				           		if(newName==null)
 				           			return false;
 					           		newKey = new WSViewPK(newName); 
@@ -158,7 +158,7 @@ public class TreeObjectUtil {
 			           		WSDataClusterPK key = (WSDataClusterPK)object.getWsKey();
 			           		WSDataClusterPK newKey =  new WSDataClusterPK(key.getPk());
 			           		if (destPort.existsDataCluster(new WSExistsDataCluster((WSDataClusterPK)object.getWsKey())).is_true()) {
-				           		String newName=	getNewName(view.getSite().getShell(), key.getPk(),destPort);
+				           		String newName=	getNewName(view.getSite().getShell(), key.getPk(),destPort,object.getType());
 				           		if(newName==null)
 				           			return false;
 					           		newKey = new WSDataClusterPK(newName); 
@@ -186,7 +186,7 @@ public class TreeObjectUtil {
 			           		WSStoredProcedurePK key = (WSStoredProcedurePK)object.getWsKey();
 			           		WSStoredProcedurePK newKey =  new WSStoredProcedurePK(key.getPk());
 			           		if (destPort.existsStoredProcedure(new WSExistsStoredProcedure((WSStoredProcedurePK)object.getWsKey())).is_true()) {
-				           		String newName=	getNewName(view.getSite().getShell(), key.getPk(),destPort);
+				           		String newName=	getNewName(view.getSite().getShell(), key.getPk(),destPort,object.getType());
 				           		if(newName==null)
 				           			return false;
 					           		newKey = new WSStoredProcedurePK(newName); 
@@ -214,7 +214,7 @@ public class TreeObjectUtil {
 			           		WSRolePK key = (WSRolePK)object.getWsKey();
 			           		WSRolePK newKey =  new WSRolePK(key.getPk());
 			           		if (destPort.existsRole(new WSExistsRole((WSRolePK)object.getWsKey())).is_true()) {
-				           		String newName=	getNewName(view.getSite().getShell(), key.getPk(),destPort);
+				           		String newName=	getNewName(view.getSite().getShell(), key.getPk(),destPort,object.getType());
 				           		if(newName==null)
 				           			return false;
 					           		newKey = new WSRolePK(newName); 
@@ -242,7 +242,7 @@ public class TreeObjectUtil {
 			           		WSRoutingRulePK key = (WSRoutingRulePK)object.getWsKey();
 			           		WSRoutingRulePK newKey =  new WSRoutingRulePK(key.getPk());
 			           		if (destPort.existsRoutingRule(new WSExistsRoutingRule( (WSRoutingRulePK)object.getWsKey())).is_true()) {
-				           		String newName=	getNewName(view.getSite().getShell(), key.getPk(),destPort);
+				           		String newName=	getNewName(view.getSite().getShell(), key.getPk(),destPort,object.getType());
 				           		if(newName==null)
 				           			return false;
 					           		newKey = new WSRoutingRulePK(newName); 
@@ -276,7 +276,7 @@ public class TreeObjectUtil {
 			           		WSTransformerV2PK key = (WSTransformerV2PK)object.getWsKey();
 			           		WSTransformerV2PK newKey =new WSTransformerV2PK(key.getPk());
 			           		if (destPort.existsTransformerV2(new WSExistsTransformerV2((WSTransformerV2PK)object.getWsKey())).is_true()) {
-				           		String newName=	getNewName(view.getSite().getShell(), key.getPk(),destPort);
+				           		String newName=	getNewName(view.getSite().getShell(), key.getPk(),destPort,object.getType());
 				           		if(newName==null)
 				           			return false;
 					           		newKey = new WSTransformerV2PK(newName); 
@@ -304,7 +304,7 @@ public class TreeObjectUtil {
 			           		WSMenuPK key = (WSMenuPK)object.getWsKey();
 			           		WSMenuPK newKey = new WSMenuPK(key.getPk());
 			           		if (destPort.existsMenu(new WSExistsMenu((WSMenuPK)object.getWsKey())).is_true()) {
-				           		String newName=	getNewName(view.getSite().getShell(), key.getPk(),destPort);
+				           		String newName=	getNewName(view.getSite().getShell(), key.getPk(),destPort,object.getType());
 				           		if(newName==null)
 				           			return false;
 					           		newKey = new WSMenuPK(newName); 
@@ -332,7 +332,7 @@ public class TreeObjectUtil {
 			           		WSUniversePK key = (WSUniversePK)object.getWsKey();
 			           		WSUniversePK newKey =  new WSUniversePK(key.getPk());
 			           		if (destPort.existsUniverse(new WSExistsUniverse((WSUniversePK)object.getWsKey())).is_true()) {
-				           		String newName=	getNewName(view.getSite().getShell(), key.getPk(),destPort);
+				           		String newName=	getNewName(view.getSite().getShell(), key.getPk(),destPort,object.getType());
 				           		if(newName==null)
 				           			return false;
 					           		newKey = new WSUniversePK(newName); 
@@ -363,7 +363,7 @@ public class TreeObjectUtil {
 			           		WSSynchronizationPlanPK key = (WSSynchronizationPlanPK)object.getWsKey();
 			           		WSSynchronizationPlanPK newKey = new WSSynchronizationPlanPK(key.getPk());
 			           		if (destPort.existsSynchronizationPlan(new WSExistsSynchronizationPlan( (WSSynchronizationPlanPK)object.getWsKey())).is_true()) {
-				           		String newName=	getNewName(view.getSite().getShell(), key.getPk(),destPort);
+				           		String newName=	getNewName(view.getSite().getShell(), key.getPk(),destPort,object.getType());
 				           		if(newName==null)
 				           			return false;
 				           		newKey = new WSSynchronizationPlanPK(newName); 
@@ -403,7 +403,7 @@ public class TreeObjectUtil {
 					return true;
 			           
 	}
-	private static String getNewName(Shell shell,String displayName,final XtentisPort destPort) {
+	private static String getNewName(Shell shell,String displayName,final XtentisPort destPort, final int type) {
 		InputDialog id;
    		id = new InputDialog(shell,
    				"Rename",
@@ -413,16 +413,17 @@ public class TreeObjectUtil {
    					public String isValid(String newText) {
    						if ((newText==null) || "".equals(newText)) return "The name cannot be empty";
    						try {
-							if(destPort.existsDataModel(new WSExistsDataModel(new WSDataModelPK(newText))).is_true()
-								||destPort.existsView(new WSExistsView(new WSViewPK(newText))).is_true()
-								||destPort.existsDataCluster(new WSExistsDataCluster(new WSDataClusterPK(newText))).is_true()
-								||destPort.existsStoredProcedure(new WSExistsStoredProcedure(new WSStoredProcedurePK(newText))).is_true()
-								||destPort.existsRole(new WSExistsRole(new WSRolePK(newText))).is_true()
-								||destPort.existsRoutingRule(new WSExistsRoutingRule(new WSRoutingRulePK(newText))).is_true()
-								||destPort.existsTransformerV2(new WSExistsTransformerV2(new WSTransformerV2PK(newText))).is_true()
-								||destPort.existsMenu(new WSExistsMenu(new WSMenuPK(newText))).is_true()
-								||destPort.existsUniverse(new WSExistsUniverse(new WSUniversePK(newText))).is_true()
-								||destPort.existsSynchronizationPlan(new WSExistsSynchronizationPlan(new WSSynchronizationPlanPK(newText))).is_true())
+							if((type==TreeObject.DATA_MODEL&& destPort.existsDataModel(new WSExistsDataModel(new WSDataModelPK(newText))).is_true())
+								||(type==TreeObject.VIEW&&destPort.existsView(new WSExistsView(new WSViewPK(newText))).is_true())
+								||(type==TreeObject.DATA_CLUSTER&&destPort.existsDataCluster(new WSExistsDataCluster(new WSDataClusterPK(newText))).is_true())
+								||(type==TreeObject.STORED_PROCEDURE&&destPort.existsStoredProcedure(new WSExistsStoredProcedure(new WSStoredProcedurePK(newText))).is_true())
+								||(type==TreeObject.ROUTING_RULE&&destPort.existsRoutingRule(new WSExistsRoutingRule(new WSRoutingRulePK(newText))).is_true())
+								||(type==TreeObject.TRANSFORMER&&destPort.existsTransformerV2(new WSExistsTransformerV2(new WSTransformerV2PK(newText))).is_true())
+								||(type==TreeObject.MENU&&destPort.existsMenu(new WSExistsMenu(new WSMenuPK(newText))).is_true()))
+								return "The name already exists";
+							if(Util.IsEnterPrise()&&((type==TreeObject.ROLE&&destPort.existsRole(new WSExistsRole(new WSRolePK(newText))).is_true())
+									||(type==TreeObject.UNIVERSE&&destPort.existsUniverse(new WSExistsUniverse(new WSUniversePK(newText))).is_true())
+									||(type==TreeObject.SYNCHRONIZATIONPLAN&&destPort.existsSynchronizationPlan(new WSExistsSynchronizationPlan(new WSSynchronizationPlanPK(newText))).is_true())))
 								return "The name already exists";
 						} catch (RemoteException e) {
 							e.printStackTrace();

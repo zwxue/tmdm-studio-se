@@ -86,7 +86,7 @@ public class XSDEditConceptAction extends UndoAction{
        	           		
        		page.refresh();
        		page.markDirty();
-       		page.refreshPage();
+//       		page.refreshPage();
        
 		} catch (Exception e) {
 			e.printStackTrace();
