@@ -579,7 +579,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			case TreeObject.DATA_CLUSTER:
 				if (xobject.isXObject()) {
 					manager.add(browseViewAction);
-				}			
+				}
+				break;
 			case TreeObject.ROLE:
 			case TreeObject.VIEW:				
 			default:
@@ -729,7 +730,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					return;
 				}// if action
 				if(xo.getType()== TreeObject.WORKFLOW) return;
-				if (xo.getType() == TreeObject.SUBSCRIPTION_ENGINE||xo.getType()==TreeObject.DATA_CLUSTER || xo.getType()== TreeObject.WORKFLOW_PROCESS)
+				if (xo.getType() == TreeObject.SUBSCRIPTION_ENGINE||(xo.getType()==TreeObject.DATA_CLUSTER&&xo.isXObject() )|| xo.getType()== TreeObject.WORKFLOW_PROCESS)
 					browseViewAction.run();
 				else
 					editXObjectAction.run();
