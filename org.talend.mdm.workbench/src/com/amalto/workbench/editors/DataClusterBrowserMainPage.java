@@ -210,8 +210,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             );
             bSearch.addListener(SWT.Selection, new Listener() {
                 public void handleEvent(Event event) {
-					DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(true));
-					readjustViewerHeight();
+                	doSearch();
             	};
             });    
             
@@ -292,6 +291,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         }	
 	}//createFormContent
 	
+	private void doSearch()
+	{
+		DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(true));
+		readjustViewerHeight();
+	}
 	/**
 	 *  readjust the viewer height
 	 */
@@ -1322,7 +1326,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         		
         		d.setBlockOnOpen(true);
         		d.open();
-        		
+        		DataClusterBrowserMainPage.this.doSearch();
 	       
 			} catch (Exception e) {
 				e.printStackTrace();
