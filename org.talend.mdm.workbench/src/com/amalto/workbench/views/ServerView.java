@@ -580,7 +580,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				if (xobject.isXObject()) {
 					manager.add(browseViewAction);
 				}
-				break;
+				
 			case TreeObject.ROLE:
 			case TreeObject.VIEW:				
 			default:
