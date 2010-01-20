@@ -458,30 +458,35 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 	 */
 	private void addRevision(WSUniverse universe){
 		if(universe==null) return;
-		WSUniverseXtentisObjectsRevisionIDs[] ids=universe.getXtentisObjectsRevisionIDs();
-		for(TreeObject node: serverRoot.getChildren()){
-			EXtentisObjects object=EXtentisObjects.getXtentisObjexts().get(String.valueOf(node.getType()));
-			if(object==null || !object.isRevision()){
-				continue;
-			}
-			boolean isSet=false;
-			for(WSUniverseXtentisObjectsRevisionIDs id: ids){					
-				if(id.getXtentisObjectName().equals(object.getName())){
-					if(id.getRevisionID()!=null && id.getRevisionID().length()>0){
-						node.setDisplayName(node.getDisplayName() + " ["+id.getRevisionID().replaceAll("\\[", "").replaceAll("\\]", "").trim() +"]");
-					}else{
-						node.setDisplayName(node.getDisplayName() + " ["+IConstants.HEAD+"]");
-					}
-					isSet=true;
-					break;
+		if(Util.IsEnterPrise()) {
+			WSUniverseXtentisObjectsRevisionIDs[] ids=universe.getXtentisObjectsRevisionIDs();
+			for(TreeObject node: serverRoot.getChildren()){
+				EXtentisObjects object=EXtentisObjects.getXtentisObjexts().get(String.valueOf(node.getType()));
+				if(object==null || !object.isRevision()){
+					continue;
 				}
-			}
-			if(!isSet){
-				node.setDisplayName(node.getDisplayName() + " ["+IConstants.HEAD+"]");
-			}
-		}	
-		String name = serverRoot.getDisplayName()+" ["+universe.getName().replaceAll("\\[", "").replaceAll("\\]", "").trim()+"]" +" " +username;
-		serverRoot.setDisplayName(name);		
+				boolean isSet=false;
+				for(WSUniverseXtentisObjectsRevisionIDs id: ids){					
+					if(id.getXtentisObjectName().equals(object.getName())){
+						if(id.getRevisionID()!=null && id.getRevisionID().length()>0){
+							node.setDisplayName(node.getDisplayName() + " ["+id.getRevisionID().replaceAll("\\[", "").replaceAll("\\]", "").trim() +"]");
+						}else{
+							node.setDisplayName(node.getDisplayName() + " ["+IConstants.HEAD+"]");
+						}
+						isSet=true;
+						break;
+					}
+				}
+				if(!isSet){
+					node.setDisplayName(node.getDisplayName() + " ["+IConstants.HEAD+"]");
+				}
+			}	
+			String name = serverRoot.getDisplayName()+" ["+universe.getName().replaceAll("\\[", "").replaceAll("\\]", "").trim()+"]" +" " +username;
+			serverRoot.setDisplayName(name);		
+		}else {
+			String name = serverRoot.getDisplayName()+" " +username;
+			serverRoot.setDisplayName(name);					
+		}
 	}
     public TreeParent getServerRoot() {
         return serverRoot;
