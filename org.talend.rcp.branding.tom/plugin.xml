@@ -6,14 +6,14 @@
         point="org.eclipse.core.runtime.products">
      <product
            application="org.talend.rcp.branding.tom.application"
-           name="Talend MDM Studio">
+           name="%productName">
         <property
               name="appName"
-              value="Talend MDM Studio">
+              value="%productName">
         </property>
         <property
               name="aboutImage"
-              value="icons/talend-picto-small.gif">
+              value="icons/about.gif">
         </property>
         <property
               name="aboutText"
@@ -25,15 +25,15 @@
         </property>
         <property
               name="startupForegroundColor"
-              value="0080C0">
+              value="FFFFFF">
         </property>
         <property
               name="startupMessageRect"
-              value="7,510,445,20">
+              value="7,232,420,20">
         </property>
         <property
               name="startupProgressRect"
-              value="7,490,445,15">
+              value="7,212,420,15">
         </property>
         <property
               name="preferenceCustomization"
@@ -45,7 +45,7 @@
         id="application"
         point="org.eclipse.core.runtime.applications">
      <application
-           icon="icons/talend-picto-small.gif">
+           icon="icons/appli_16x16.gif">
         <run
               class="com.amalto.workbench.rcp.Application">
         </run>
@@ -72,7 +72,7 @@
          point="org.eclipse.ui.intro">
       <intro
             class="org.eclipse.ui.intro.config.CustomizableIntroPart"
-            icon="icons/talend-picto-small.gif"
+            icon="icons/appli_16x16.gif"
             id="org.talend.rcp.branding.tom.intro">
       </intro>
       <introProductBinding
