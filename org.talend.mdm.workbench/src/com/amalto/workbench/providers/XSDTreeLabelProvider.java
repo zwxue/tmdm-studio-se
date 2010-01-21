@@ -430,10 +430,10 @@ public class XSDTreeLabelProvider extends LabelProvider {
 				s+= ")";
 			
 			}*/
-			s+=xsdSimpleTypeDefinition.getName() != null ? xsdSimpleTypeDefinition.getName() : "";
+			s+=xsdSimpleTypeDefinition.getName() != null ? xsdSimpleTypeDefinition.getName() : xsdSimpleTypeDefinition.getBaseTypeDefinition().getName();
 		} else if (xsdSimpleTypeDefinition.getElement() != null && xsdSimpleTypeDefinition.getElement().hasAttribute(XSDConstants.ID_ATTRIBUTE)) {
 			s+= xsdSimpleTypeDefinition.getName();
-		} else if ((XSDVariety.UNION_LITERAL == xsdSimpleTypeDefinition.getVariety()) | (XSDVariety.LIST_LITERAL == xsdSimpleTypeDefinition.getVariety())) {
+		} else if ((XSDVariety.UNION_LITERAL == xsdSimpleTypeDefinition.getVariety()) || (XSDVariety.LIST_LITERAL == xsdSimpleTypeDefinition.getVariety())) {
 			s+= "(";
 			for (Iterator members = xsdSimpleTypeDefinition.getMemberTypeDefinitions().iterator(); members.hasNext();) {
 				XSDSimpleTypeDefinition memberTypeDefinition = (XSDSimpleTypeDefinition) members.next();
@@ -443,6 +443,10 @@ public class XSDTreeLabelProvider extends LabelProvider {
 				}
 			}
 			s+= ")";
+			if(xsdSimpleTypeDefinition.getMemberTypeDefinitions().isEmpty())
+			{
+				s = xsdSimpleTypeDefinition.getVariety() + "";
+			}
 		} else if ((XSDVariety.UNION_LITERAL == xsdSimpleTypeDefinition.getVariety()) | (XSDVariety.LIST_LITERAL == xsdSimpleTypeDefinition.getVariety())) {
 			s+= "List of ";
 			s+= getSimpleTypeDefinition(xsdSimpleTypeDefinition.getItemTypeDefinition());
