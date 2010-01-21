@@ -588,7 +588,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					manager.add(exportAction);
 					manager.add(importAction);
 				}
-				if ( xobject.getType() == TreeObject.VIEW){
+				if ( xobject.getType() == TreeObject.VIEW && xobject.isXObject()){
 					manager.add(browseViewAction);
 				}
 			    int type = LocalTreeObjectRepository.getInstance().receiveUnCertainTreeObjectType(xobject);
