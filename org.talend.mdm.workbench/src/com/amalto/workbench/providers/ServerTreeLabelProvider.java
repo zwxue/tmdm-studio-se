@@ -76,11 +76,7 @@ public class ServerTreeLabelProvider extends LabelProvider implements IColorProv
 					try {
 						if(ws==null)
 						ws=Util.getPort(object).getRoutingRule(new WSGetRoutingRule(new WSRoutingRulePK(object.getDisplayName())));
-					} catch (RemoteException e) {
-						e.printStackTrace();
-					} catch (XtentisException e) {
-						e.printStackTrace();
-					}
+					} catch(Exception e) {}
 					
 					if(ws!=null && ws.getDeactive()!=null && ws.getDeactive().booleanValue()){
 						img=OverlayImageProvider.getImageWithStatus(img, EXObjectStatus.DEACTIVE);
