@@ -32,7 +32,8 @@ public class FileSelectWidget {
 		this.label=label;
 		this.filename=filename;
 		this.fileExtents=fileExtents;
-		this.parent=factory.createComposite(parent,0);
+//		this.parent=factory.createComposite(parent,0);
+		this.parent=parent;
 		GridLayout layout=new GridLayout();
 		layout.numColumns=3;
 		this.parent.setLayout(layout);
@@ -52,17 +53,18 @@ public class FileSelectWidget {
 		label.setLayoutData(gd);
 		}
 		text=factory.createText(parent, "",SWT.MULTI|SWT.BORDER);
-		if(label.length()>0){
+		gd=new GridData(SWT.FILL,SWT.TOP,true,false,1,1);
+/*		if(label.length()>0){
 			gd=new GridData(SWT.FILL,SWT.FILL,true,true,1,1);
 		}else{
 			gd=new GridData(SWT.FILL,SWT.FILL,true,true,2,1);
-		}
+		}*/
 		text.setLayoutData(gd);
 		text.setText("");		
 		button=new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
-		gd=new GridData(SWT.LEFT,SWT.FILL,false,true,1,1);
+		gd=new GridData(SWT.RIGHT,SWT.TOP,false,false,1,1);
 		button.setLayoutData(gd);
 		button.setToolTipText("Browse...");
 		
