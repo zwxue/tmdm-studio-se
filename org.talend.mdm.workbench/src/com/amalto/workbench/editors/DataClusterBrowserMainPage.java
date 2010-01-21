@@ -738,7 +738,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 				
 				IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
 				LineItem li = (LineItem) selection.getFirstElement();
-				
+				if(li==null) return ;
 				WSItem wsItem=Util.getPort(getXObject()).getItem(
 						new WSGetItem(
 								new WSItemPK(
