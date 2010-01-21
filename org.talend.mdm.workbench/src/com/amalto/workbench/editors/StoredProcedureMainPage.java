@@ -131,7 +131,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener{
             resultsGroup.setLayout(new GridLayout(4, false));
             
             //data cluster
-            Hyperlink dataClusterLink = toolkit.createHyperlink(resultsGroup, "Data Cluster",SWT.NULL);
+            Hyperlink dataClusterLink = toolkit.createHyperlink(resultsGroup, "Data Container",SWT.NULL);
             dataClusterLink.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
             );         
@@ -229,7 +229,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener{
         	MessageDialog.openError(
         			StoredProcedureMainPage.this.getSite().getShell(),
         			"Error",
-        			"Unable to get the list of data clusters:\n"+
+        			"Unable to get the list of Data Containers:\n"+
         			ex.getClass().getName()+": "+ex.getLocalizedMessage()
         	);
         	this.refreshing = false;
@@ -242,7 +242,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener{
         	MessageDialog.openError(
         			this.getSite().getShell(), 
         			"Error", 
-        			"Please create Data Clusters before editing an Inbound Adaptor");
+        			"Please create Data Containers before editing an Inbound Adaptor");
         	return;
         }
         dataClusterCombo.add("[ALL]");

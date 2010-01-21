@@ -81,7 +81,7 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
 		universeComposite.setLayout(new GridLayout(1, true));
 
 		Label universeLabel = toolkit
-				.createLabel(universeComposite, "Universe");
+				.createLabel(universeComposite, "Version");
 		universeLabel.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER,
 				false, true, 1, 1));
 		universeList = new org.eclipse.swt.widgets.List(universeComposite,
@@ -172,7 +172,7 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
 					TreeObject[] objects = parent.getChildren();
 					TreeObject[] subObjects;
 					for (int i = 0; i < objects.length; i++) {
-						if (objects[i].getDisplayName().equals("Universe")) {
+						if (objects[i].getDisplayName().equals("Version")) {
 							subObjects = ((TreeParent) objects[i]).getChildren();
 							for (int j = 0; j < subObjects.length; j++) {
 								if (subObjects[j].getDisplayName().endsWith(universeList.getSelection()[0])) {
@@ -269,7 +269,7 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
 			String name = getXObject().getDisplayName().replaceAll("\\[.*\\]",
 					"");
 			List<String> revisions;
-			if (name.trim().equals("Transformer"))
+			if (name.trim().equals("Process"))
 				revisions = map.get("Transformer V2");
 			else
 				revisions = map.get(name.trim());

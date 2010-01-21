@@ -51,14 +51,14 @@ public class ExportItemsDialog extends Dialog{
 	}
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		parent.getShell().setText("Data Cluster Export");
+		parent.getShell().setText("Data Container Export");
 		Composite composite = (Composite) super.createDialogArea(parent);
 		composite.setBackground(composite.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		GridLayout layout = (GridLayout)composite.getLayout();
 		layout.numColumns = 1;
         
 		Matcher matcher;
-		final String dataCluster = "Data Cluster";
+		final String dataCluster = "Data Container";
 		final String all = "ALL";
 		String xobjectName = "";
 		xobjectName = xObject.getDisplayName();
@@ -84,7 +84,7 @@ public class ExportItemsDialog extends Dialog{
         	if (matcher.matches()) {
 				xobject = matcher.group(1).replace(" ", "");
 				revision = matcher.group(3);
-				if(xobject.equalsIgnoreCase("Transformer")){
+				if(xobject.equalsIgnoreCase("Process")){
 					xobject="TransformerV2";
 				}
 				if (revision.equals(IConstants.HEAD)) {
@@ -92,7 +92,7 @@ public class ExportItemsDialog extends Dialog{
 				} else {
 					xpath = "R-" + revision + "/" + "amaltoOBJECTS" + xobject;
 				}
-			} else if (treeObj.getDisplayName().equals("Universe")) {
+			} else if (treeObj.getDisplayName().equals("Version")) {
 				xobject = treeObj.getDisplayName();
 				xpath = "amaltoOBJECTS" + treeObj.getDisplayName();
 			}
@@ -135,7 +135,7 @@ public class ExportItemsDialog extends Dialog{
 	protected void okPressed() {
 		///db/CONF -d c:/CONF.zip";
 		if(comboDataCluster.getCombo().getText().trim().length()==0){
-			MessageDialog.openError(null, "Error", "Data Cluster should not be null!");
+			MessageDialog.openError(null, "Error", "Data Container should not be null!");
 			comboDataCluster.getCombo().setFocus();
 			return;
 		}
@@ -155,11 +155,11 @@ public class ExportItemsDialog extends Dialog{
 		dataCluster=comboDataCluster.getCombo().getText();
 		dataCluster = xpathMap.get(dataCluster);
 		filename=fw.getText().getText().trim();
-		Job job=new Job("Export Data Clusters : " + dataCluster+" ..."){
+		Job job=new Job("Export Data Containers : " + dataCluster+" ..."){
 			@Override
 			public IStatus run(IProgressMonitor monitor) {	
 				try{					
-					monitor.beginTask("Export Data Clusters : " + dataCluster+" ...", IProgressMonitor.UNKNOWN);
+					monitor.beginTask("Export Data Containers : " + dataCluster+" ...", IProgressMonitor.UNKNOWN);
 					Util.exportDataCluster(xObject, dataCluster, filename,server, monitor);
 					monitor.done();
 					return Status.OK_STATUS;

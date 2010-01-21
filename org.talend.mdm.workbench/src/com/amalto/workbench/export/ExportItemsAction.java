@@ -61,7 +61,7 @@ public class ExportItemsAction extends Action {
 			MessageDialog.openError(
 					view.getSite().getShell(),
 					"Error", 
-					"An error occured trying to Export Data Cluster: "+e.getLocalizedMessage()
+					"An error occured trying to Export Data Container: "+e.getLocalizedMessage()
 			);
 		}		
 	}

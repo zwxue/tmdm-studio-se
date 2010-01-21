@@ -135,7 +135,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         super(
         		editor,
         		DataClusterBrowserMainPage.class.getName(),
-        		"Data Cluster Browser " +((XObjectBrowserInput)editor.getEditorInput()).getName()
+        		"Data Container Browser " +((XObjectBrowserInput)editor.getEditorInput()).getName()
         );        
         //listen to events
         ((XObjectBrowserInput)editor.getEditorInput()).addListener(this);
@@ -1381,7 +1381,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 				if (! MessageDialog.openConfirm(
 						this.shell, 
 						"Confirm Deletion", 
-						"Are you sure you want to route the selected "+(lineItems.size()>1?lineItems.size()+" ":"")+"item(s) using the Subscription Engine?")
+						"Are you sure you want to route the selected "+(lineItems.size()>1?lineItems.size()+" ":"")+"item(s) using the Event Manager?")
 					)	return;
 
 				//Instantiate the Monitor with actual deletes

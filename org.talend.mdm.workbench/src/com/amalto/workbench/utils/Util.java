@@ -401,7 +401,7 @@ public class Util {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new XtentisException(
-					"Unable to retrieve all Data Cluster Names"
+					"Unable to retrieve all Data Container Names"
 					+": "+e.getLocalizedMessage());
 		}
 	}

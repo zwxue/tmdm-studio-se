@@ -309,7 +309,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             	MessageDialog.openError(
             			this.getSite().getShell(), 
             			"Error", 
-            			"Please create Data Clusters before browsing views");
+            			"Please create Data Containers before browsing views");
             	return;
             }
             for (int  i = 0; i < dataClusterPKs.length; i++) {

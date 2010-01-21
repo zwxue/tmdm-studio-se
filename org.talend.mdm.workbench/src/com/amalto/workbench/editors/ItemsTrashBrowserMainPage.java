@@ -83,7 +83,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
         super(
         		editor,
         		ItemsTrashBrowserMainPage.class.getName(),
-        		"Data Cluster Browser " +((XObjectBrowserInput)editor.getEditorInput()).getName()
+        		"Data Container Browser " +((XObjectBrowserInput)editor.getEditorInput()).getName()
         );        
         //listen to events
         ((XObjectBrowserInput)editor.getEditorInput()).addListener(this);
@@ -212,7 +212,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
 		// 1st column 
 		final TableColumn column = new TableColumn(table, SWT.LEFT, 0);		
-		column.setText("Data Cluster");
+		column.setText("Data Container");
 		column.setWidth(150);
 		column.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {

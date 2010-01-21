@@ -50,7 +50,7 @@ public class DataClusterMainPage extends AMainPageV2 implements ITextListener{
         super(
         		editor,
         		DataClusterMainPage.class.getName(),
-        		"Data Cluster "+((XObjectEditorInput)editor.getEditorInput()).getName()
+        		"Data Container "+((XObjectEditorInput)editor.getEditorInput()).getName()
         );        
     }
 

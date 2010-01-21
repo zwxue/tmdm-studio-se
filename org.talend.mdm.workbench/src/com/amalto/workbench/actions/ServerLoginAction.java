@@ -138,7 +138,7 @@ public class ServerLoginAction extends Action implements SelectionListener{
 			
 			
             if(!retriever.isExistUniverse()){
-            	//MessageDialog.openError(view.getViewer().getControl().getShell(), "Wrong universe", "Can't find the universe,please try again!");
+            	//MessageDialog.openError(view.getViewer().getControl().getShell(), "Wrong universe", "Can't find the Version,please try again!");
             	return;
             }
             TreeParent serverRoot = retriever.getServerRoot();

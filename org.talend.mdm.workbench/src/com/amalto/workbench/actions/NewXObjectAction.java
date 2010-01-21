@@ -126,26 +126,26 @@ public class NewXObjectAction extends Action{
            		title = "New OutBound plugin";
            		break;
            	case TreeObject.DATA_CLUSTER:
-           		title = "New Data Cluster";
+           		title = "New Data Container";
            		break;
            	case TreeObject.STORED_PROCEDURE:
            		title = "New Stored Procedure";
            		break;
            //	case TreeObject.ROLE:
            	case TreeObject.ROUTING_RULE:
-           		title = "New Routing Rule";
+           		title = "New Trigger";
            		break;
            	case TreeObject.MENU:
            		title = "New Menu";
            		break;
            	case TreeObject.UNIVERSE:
-           		title = "New Universe";
+           		title = "New Version";
            		break;
            	case TreeObject.SYNCHRONIZATIONPLAN:
            		title = "New Synchronization Plan";
            		break;
            	case TreeObject.TRANSFORMER:
-           		title = "New Transformer";
+           		title = "New Process";
            		break;
            	case TreeObject.VIEW:
            		title = "New View";
@@ -346,7 +346,7 @@ public class NewXObjectAction extends Action{
 	                	MessageDialog.openError(
 	                			view.getSite().getShell(), 
 	                			"Error", 
-	                			"Please create a Data Cluster for Items before editing a View");
+	                			"Please create a Data Container for Items before editing a View");
 	                	return;
 	                }
 	           		WSView wsview = new WSView(
@@ -369,7 +369,7 @@ public class NewXObjectAction extends Action{
                 case TreeObject.DATA_CLUSTER: {
                     //check if already exists
                     if (port.existsDataCluster(new WSExistsDataCluster(new WSDataClusterPK((String)key))).is_true()) {
-                        MessageDialog.openError(this.view.getSite().getShell(),"Error Creating Instance","Data Cluster "+(String)key+" already exists");
+                        MessageDialog.openError(this.view.getSite().getShell(),"Error Creating Instance","Data Container "+(String)key+" already exists");
                         return;
                     }
                     //add
@@ -434,7 +434,7 @@ public class NewXObjectAction extends Action{
                 case TreeObject.ROUTING_RULE: {
                     //check if already exists
                     if (port.existsRoutingRule(new WSExistsRoutingRule(new WSRoutingRulePK((String)key))).is_true()){
-                        MessageDialog.openError(this.view.getSite().getShell(),"Error Creating Instance","Routing Rule "+(String)key+" already exists");
+                        MessageDialog.openError(this.view.getSite().getShell(),"Error Creating Instance","Trigger "+(String)key+" already exists");
                         return;
                     }
                     //add
@@ -461,7 +461,7 @@ public class NewXObjectAction extends Action{
                 case TreeObject.TRANSFORMER: {
                     //check if already exists
                     if (port.existsTransformerV2(new WSExistsTransformerV2(new WSTransformerV2PK((String)key))).is_true()){
-                        MessageDialog.openError(this.view.getSite().getShell(),"Error Creating Instance","Transformer "+(String)key+" already exists");
+                        MessageDialog.openError(this.view.getSite().getShell(),"Error Creating Instance","Process "+(String)key+" already exists");
                         return;
                     }
                     //add
@@ -512,7 +512,7 @@ public class NewXObjectAction extends Action{
                 case TreeObject.UNIVERSE: {
                     //check if already exists
                     if(port.existsUniverse(new WSExistsUniverse(new WSUniversePK((String)key))).is_true()){
-                        MessageDialog.openError(this.view.getSite().getShell(),"Error Creating Instance","Universe "+(String)key+" already exists");
+                        MessageDialog.openError(this.view.getSite().getShell(),"Error Creating Instance","Version "+(String)key+" already exists");
                         return;
                     }
                     //add
@@ -574,7 +574,7 @@ public class NewXObjectAction extends Action{
                 case TreeObject.CUSTOM_TYPE: {
                     //check if already exists
                     if(port.existsUniverse(new WSExistsUniverse(new WSUniversePK((String)key))).is_true()){
-                        MessageDialog.openError(this.view.getSite().getShell(),"Error Creating Instance","Universe "+(String)key+" already exists");
+                        MessageDialog.openError(this.view.getSite().getShell(),"Error Creating Instance","Version "+(String)key+" already exists");
                         return;
                     }
                     //add

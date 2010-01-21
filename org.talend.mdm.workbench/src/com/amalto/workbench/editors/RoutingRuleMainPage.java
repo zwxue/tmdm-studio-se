@@ -115,7 +115,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
         super(
         		editor,
         		RoutingRuleMainPage.class.getName(),
-        		"RoutingRule "+((XObjectEditorInput)editor.getEditorInput()).getName()+
+        		"Trigger "+((XObjectEditorInput)editor.getEditorInput()).getName()+
         		Util.getRevision((TreeObject)((XObjectEditorInput)editor.getEditorInput()).getModel())
         );
         //get Version information
@@ -342,7 +342,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
             
             //Routing Expressions            
-            Composite routingExpressionsGroup = this.getNewSectionComposite("Routing Rule xPath Expressions");
+            Composite routingExpressionsGroup = this.getNewSectionComposite("Trigger xPath Expressions");
             routingExpressionsGroup.setLayout(new GridLayout(1,true));
             
            

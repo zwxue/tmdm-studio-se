@@ -275,7 +275,7 @@ public class NewUserWizard extends Wizard {
 					isFinish = true;
 					setPageComplete(true);
 					tipLabel.setVisible(true);
-					tipLabel.setText("Administrator can operate all of the DataCluster,Menu,View,Role,Routing Rule and \nData Model etc. He can setup normal user's access right.");
+					tipLabel.setText("Administrator can operate all of the Data Container, Menu, View, Role, Trigger and \nData Model etc. He/she can setup normal user's access right.");
 					isAdmin = true;
 					
 				}
@@ -292,7 +292,7 @@ public class NewUserWizard extends Wizard {
 				public void widgetSelected(SelectionEvent e) {
 					isFinish = true;
 					setPageComplete(true);
-					tipLabel.setText("Normal User can operate part of the DataCluster,Menu,View,Role,Routing Rule and \nData Model etc.");
+					tipLabel.setText("Normal user can operate part of the Data Container, Menu, View, Role, Trigger and \nData Model etc.");
 					isAdmin = false;
 					
 				}

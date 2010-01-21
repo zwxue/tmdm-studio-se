@@ -86,10 +86,10 @@ public class WorkflowDefaultTransformerGenerateWizard extends Wizard {
 		//get the whole parameters
 		parameter=parameter+process+variableext.getText();		
 		parameter=parameter+"</parameters>";
-		steps[1]=new WSTransformerProcessStep("amalto/local/transformer/plugin/workflowtrigger","Invoke the workflow process",parameter,input,output,false);	
+		steps[1]=new WSTransformerProcessStep("amalto/local/transformer/plugin/workflowtrigger","Invoke the workflow",parameter,input,output,false);	
 		//Generate the workflowtrigger step    
 		
-		transformer.setName("Default_WorkflowProcess_"+uuid.getProcessName()+"_"+uuid.getProcessVersion()+"_transformer");
+		transformer.setName("StartWorkflow_"+uuid.getProcessName()+"_"+uuid.getProcessVersion());
 		transformer.setDescription(transformer.getName());
 		transformer.setProcessSteps(steps);
 		

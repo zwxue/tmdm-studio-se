@@ -134,7 +134,7 @@ public class ExportItemsWizard extends Wizard {
 			switch(obj.getType()){
 //			if(obj.getType() == TreeObject.DATA_CLUSTER){
 			case TreeObject.DATA_CLUSTER:
-				monitor.subTask(" Data Cluster...");
+				monitor.subTask(" Data Container...");
 				
 
 				items=new ArrayList<String>();
@@ -154,7 +154,7 @@ public class ExportItemsWizard extends Wizard {
 				monitor.worked(1);
 				//datacluster contents
 //				for(WSDataClusterPK pk:array.getWsDataClusterPKs()){
-					monitor.subTask(" Data Cluster "+ pk.getPk()+" ...");
+					monitor.subTask(" Data Container "+ pk.getPk()+" ...");
 
 					List<String> items1=new ArrayList<String>();
 		            WSItemPKsByCriteriaResponseResults[] results =
@@ -247,7 +247,7 @@ public class ExportItemsWizard extends Wizard {
 				}
 				break;
 			case	TreeObject.ROUTING_RULE:
-				monitor.subTask(" Routing Rule...");
+				monitor.subTask(" Trigger...");
 //				ExportItem exportItem=new ExportItem();
 
 				items=new ArrayList<String>();
@@ -300,7 +300,7 @@ public class ExportItemsWizard extends Wizard {
 				}
 				break;
 			case TreeObject.TRANSFORMER:
-				monitor.subTask(" Transformer...");
+				monitor.subTask(" Process...");
 
 				items=new ArrayList<String>();
 				//transformer
@@ -319,7 +319,7 @@ public class ExportItemsWizard extends Wizard {
 				break;
 			case TreeObject.UNIVERSE:
 				if(Util.IsEnterPrise()){
-				monitor.subTask(" Universe...");
+				monitor.subTask(" Version...");
 
 				items=new ArrayList<String>();
 				//universe

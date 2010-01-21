@@ -169,7 +169,7 @@ public class TransformerMainPage extends AMainPageV2 {
         super(
         		editor,
         		TransformerMainPage.class.getName(),
-        		"Transformer "+((XObjectEditorInput)editor.getEditorInput()).getName()
+        		"Process "+((XObjectEditorInput)editor.getEditorInput()).getName()
         		+Util.getRevision((TreeObject)((XObjectEditorInput)editor.getEditorInput()).getModel())
         );
 
@@ -362,12 +362,12 @@ public class TransformerMainPage extends AMainPageV2 {
             			WSTransformerProcessStep[] steps = //((WSTransformerV2)getXObject().getWsObject())
             			transformer.getProcessSteps();
             			if ((steps==null) || (steps.length == 0)) {
-            				MessageDialog.openError(TransformerMainPage.this.getSite().getShell(), "Unable to process a file", "The transformer must have at least one step!");
+            				MessageDialog.openError(TransformerMainPage.this.getSite().getShell(), "Unable to process a file", "The Process must have at least one step!");
             				return;
             			}
             			//perform save
             			if (TransformerMainPage.this.getEditor().isDirty()) {
-            				if (MessageDialog.openConfirm(TransformerMainPage.this.getSite().getShell(), "Executing the Transformer", "The Transformer was changed and will be executed using the saved version.\nSave the transformer before executing it?"))
+            				if (MessageDialog.openConfirm(TransformerMainPage.this.getSite().getShell(), "Executing the Transformer", "The Transformer was changed and will be executed using the saved version.\nSave the Process before executing it?"))
             					TransformerMainPage.this.getEditor().doSave(new NullProgressMonitor());
             			}
             			//Open form Dialog	   
@@ -379,7 +379,7 @@ public class TransformerMainPage extends AMainPageV2 {
 	            				TransformerMainPage.this
 	            			);
 	            			transformerDialog.create();
-	            			transformerDialog.getShell().setText("Setup Transformer's input variables");
+	            			transformerDialog.getShell().setText("Setup Process's input variables");
             			}
             			transformerDialog.open();
 
@@ -1013,7 +1013,7 @@ public class TransformerMainPage extends AMainPageV2 {
 	        inputLinkButton = toolkit.createButton(inputComposite,"",SWT.PUSH | SWT.CENTER);
 	        inputLinkButton.setImage(ImageCache.getCreatedImage(EImage.SYNCED.getPath()));
 	        inputLinkButton.setToolTipText("Link");
-	        inputLinkButton.setToolTipText("Add a link for Input Variables and Transformer Plugin's Input Parameters");
+	        inputLinkButton.setToolTipText("Add a link for Input Variables and Process Plugin's Input Parameters");
 	        inputLinkButton.setLayoutData(
 	                new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
 	        );

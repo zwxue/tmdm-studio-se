@@ -148,7 +148,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             statusComposite.setLayout(new GridLayout(5,false));
         	
 //        	status
-            Label descriptionLabel = toolkit.createLabel(statusComposite, "Subscription Engine Status: ", SWT.NULL);
+            Label descriptionLabel = toolkit.createLabel(statusComposite, "Event Manager Status: ", SWT.NULL);
             descriptionLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
             );

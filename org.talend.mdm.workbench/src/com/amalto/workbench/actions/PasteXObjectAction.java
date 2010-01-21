@@ -254,7 +254,7 @@ public class PasteXObjectAction extends Action{
 				           		InputDialog id = new InputDialog(
 				           				view.getSite().getShell(),
 				           				"Pasting instance "+key.getPk(),
-				           				"A Data Cluster with the name \""+(latestValue!= null ? newKey.getPk(): key.getPk())+"\" already exists.\nEnter a new name if you do not want to overwriite the existing object",
+				           				"A Data Container with the name \""+(latestValue!= null ? newKey.getPk(): key.getPk())+"\" already exists.\nEnter a new name if you do not want to overwriite the existing object",
 				           				"Copy of "+(selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "": xobject.getEndpointAddress().split(":")[0]+" ")+key.getPk(),
 				           				new IInputValidator() {
 				           					public String isValid(String newText) {
@@ -398,7 +398,7 @@ public class PasteXObjectAction extends Action{
 				           		InputDialog id = new InputDialog(
 				           				view.getSite().getShell(),
 				           				"Pasting instance "+key.getPk(),
-				           				"A Routing Rule with the name \""+(latestValue!= null ? newKey.getPk(): key.getPk())+"\" already exists.\nEnter a new name if you do not want to overwriite the existing object",
+				           				"A Trigger with the name \""+(latestValue!= null ? newKey.getPk(): key.getPk())+"\" already exists.\nEnter a new name if you do not want to overwriite the existing object",
 				           				"Copy of "+(selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "": xobject.getEndpointAddress().split(":")[0]+" ")+key.getPk(),
 				           				new IInputValidator() {
 				           					public String isValid(String newText) {
@@ -452,7 +452,7 @@ public class PasteXObjectAction extends Action{
 				           		InputDialog id = new InputDialog(
 				           				view.getSite().getShell(),
 				           				"Pasting instance "+key.getPk(),
-				           				"A Transformer with the name \""+ (latestValue!= null ? newKey.getPk(): key.getPk())+"\" already exists.\nEnter a new name if you do not want to overwriite the existing object",
+				           				"A Process with the name \""+ (latestValue!= null ? newKey.getPk(): key.getPk())+"\" already exists.\nEnter a new name if you do not want to overwriite the existing object",
 				           				"Copy of "+(selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "": xobject.getEndpointAddress().split(":")[0]+" ")+key.getPk(),
 				           				new IInputValidator() {
 				           					public String isValid(String newText) {
@@ -549,7 +549,7 @@ public class PasteXObjectAction extends Action{
 				           		InputDialog id = new InputDialog(
 				           				view.getSite().getShell(),
 				           				"Pasting instance "+key.getPk(),
-				           				"A Universe with the name \""+ (latestValue!= null ? newKey.getPk(): key.getPk())+"\" already exists.\nEnter a new name if you do not want to overwriite the existing object",
+				           				"A Version with the name \""+ (latestValue!= null ? newKey.getPk(): key.getPk())+"\" already exists.\nEnter a new name if you do not want to overwriite the existing object",
 				           				"Copy of "+(selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "": xobject.getEndpointAddress().split(":")[0]+" ")+key.getPk(),
 				           				new IInputValidator() {
 				           					public String isValid(String newText) {

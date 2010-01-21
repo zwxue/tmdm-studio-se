@@ -30,8 +30,8 @@ public class XSDNewBrowseItemViewAction extends Action{
 
 		this.page = page;
 		setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
-		setText("Generate Browse items views with the labels");
-		setToolTipText("Generate Browse items views with the labels");
+		setText("Generate default Browse Items Views");
+		setToolTipText("Generate default Browse Items Views");
 	}
 	
 	public void run() {

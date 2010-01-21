@@ -252,7 +252,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 				xdcPKs=port.getDataClusterPKs(new WSRegexDataClusterPKs("")).getWsDataClusterPKs();			
 			}catch(Exception e){e.printStackTrace();}
 			if (xdcPKs != null) {
-				monitor.subTask("Loading Data Clusters");
+				monitor.subTask("Loading Data Containers");
 				for (int i = 0; i < xdcPKs.length; i++) {
 					String name = xdcPKs[i].getPk();
 					if (! (
@@ -285,7 +285,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			if (hasRoutingRules) {
 				rules = new TreeParent(EXtentisObjects.RoutingRule.getDisplayName(),serverRoot,TreeObject.ROUTING_RULE,null,null);
 				if (routingRulePKs!=null) {
-					monitor.subTask("Loading Routing Rules");
+					monitor.subTask("Loading Triggers");
 					for (int i = 0; i < routingRulePKs.length; i++) {
 						String id =routingRulePKs[i].getPk();
 						TreeObject obj = new TreeObject(

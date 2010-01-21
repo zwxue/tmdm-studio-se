@@ -265,7 +265,7 @@ public class ImportItemsWizard extends Wizard{
 			
 			case TreeObject.DATA_CLUSTER:
 				//datacluster
-				monitor.subTask(" Data Cluster...");
+				monitor.subTask(" Data Container...");
 				subItems = item.getItems();
 				
 				for (String subItem : subItems) {
@@ -360,7 +360,7 @@ public class ImportItemsWizard extends Wizard{
 				monitor.worked(1);}
 				break;	
 			case TreeObject.ROUTING_RULE:
-				monitor.subTask(" Routing Rule...");
+				monitor.subTask(" Trigger...");
 				subItems = item.getItems();
 				
 				for(String subItem : subItems) {
@@ -424,7 +424,7 @@ public class ImportItemsWizard extends Wizard{
 				monitor.worked(1);}
 				break;
 			case TreeObject.TRANSFORMER:
-				monitor.subTask(" Transformer...");
+				monitor.subTask(" Process...");
 				subItems = item.getItems();
 				
 				for(String subItem : subItems) {
@@ -444,7 +444,7 @@ public class ImportItemsWizard extends Wizard{
 				break;
 			case  TreeObject.UNIVERSE:
 				if(Util.IsEnterPrise()){
-				monitor.subTask(" Universe...");
+				monitor.subTask(" Version...");
 				subItems = item.getItems();
 				
 				for(String subItem : subItems) {

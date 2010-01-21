@@ -90,7 +90,7 @@ public class ProjectDecisionDialog extends Dialog {
 	        dataClustersLabel.setLayoutData(
 	                new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
 	        );   
-	        dataClustersLabel.setText( "Data Clusters");
+	        dataClustersLabel.setText( "Data Containers");
 	
 	        dataClustersCombo = new Combo(composite,SWT.DROP_DOWN);
 	        dataClustersCombo.setLayoutData(

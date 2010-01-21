@@ -76,7 +76,7 @@ public class AddBrowseItemsWizard extends Wizard{
 	
 	public AddBrowseItemsWizard(AMainPageV2 launchPage, List<XSDElementDeclaration> list) {
 		super();
-		setWindowTitle("Generate Browse items views with the labels");
+		setWindowTitle("Generate default Browse Items Views");
 		page = launchPage;
 		declList = list;
 		for (XSDElementDeclaration dl : declList) {
