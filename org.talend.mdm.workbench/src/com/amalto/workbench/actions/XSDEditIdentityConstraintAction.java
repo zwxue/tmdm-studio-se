@@ -45,7 +45,7 @@ public class XSDEditIdentityConstraintAction extends UndoAction{
        				oldName,
        				new IInputValidator() {
        					public String isValid(String newText) {
-       						if ((newText==null) || "".equals(newText)) return "The Concept Name cannot be empty";
+       						if ((newText==null) || "".equals(newText)) return "The Entity Name cannot be empty";
        						XSDSchema schema = XSDEditIdentityConstraintAction.this.constraint.getSchema();
        						EList list = schema.getIdentityConstraintDefinitions();
        						for (Iterator iter = list.iterator(); iter.hasNext(); ) {
@@ -74,7 +74,7 @@ public class XSDEditIdentityConstraintAction extends UndoAction{
 			MessageDialog.openError(
 					page.getSite().getShell(),
 					"Error", 
-					"An error occured trying to edit a Concept: "+e.getLocalizedMessage()
+					"An error occured trying to edit an Entity: "+e.getLocalizedMessage()
 			);
             return Status.CANCEL_STATUS;
 		}

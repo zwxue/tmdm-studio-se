@@ -14,11 +14,11 @@ import com.amalto.workbench.utils.WorkbenchClipboard;
 
 public class XSDCopyConceptAction extends Action {
 	private DataModelMainPage page;
-	private  String displayName = "Copy Concept";
+	private  String displayName = "Copy Entity";
 	public XSDCopyConceptAction(DataModelMainPage page,boolean multi) {
 		super();
 		if(multi)
-			displayName = "Copy Concepts";
+			displayName = "Copy Entities";
 		this.page = page;
 		setImageDescriptor(ImageCache.getImage(EImage.COPY.getPath()));
 		setText(displayName);
@@ -42,7 +42,7 @@ public class XSDCopyConceptAction extends Action {
 			MessageDialog.openError(
 					page.getSite().getShell(),
 					"Error", 
-					"An error occured trying to copy Concept: "+e.getLocalizedMessage()
+					"An error occured trying to copy Entity: "+e.getLocalizedMessage()
 			);
 
 		}
@@ -52,7 +52,7 @@ public class XSDCopyConceptAction extends Action {
 	
 	public static boolean checkInCopyType(Object[] selectedObjs){
 		/*if(selectedObjs.length>1)
-			displayName = "Copy Concepts";*/
+			displayName = "Copy Entities";*/
 		for (Object obj : selectedObjs) {
 			if (obj instanceof XSDElementDeclaration)
 				continue;

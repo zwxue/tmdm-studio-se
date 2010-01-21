@@ -29,8 +29,8 @@ public class XSDDeleteConceptAction extends UndoAction{
 		super(page);
 		//this.page = page;
 		setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
-		setText("Delete Concept");
-		setToolTipText("Delete a Business Concept");
+		setText("Delete Entity");
+		setToolTipText("Delete an Entity");
 	}
 	
 	public void run(Object toDel)
@@ -63,7 +63,7 @@ public class XSDDeleteConceptAction extends UndoAction{
             if(list.contains(decl.getName())){
             	MessageDialog
 				.openWarning(page.getSite().getShell(), "Warnning",
-						"The Concept : " + decl.getName() + " is referring to other Elements");
+						"The Entity : " + decl.getName() + " is referring to other Elements");
             	return Status.CANCEL_STATUS;
             }
             ArrayList<Object> objList = new ArrayList<Object>();
@@ -95,7 +95,7 @@ public class XSDDeleteConceptAction extends UndoAction{
 			MessageDialog.openError(
 					page.getSite().getShell(),
 					"Error", 
-					"An error occured trying to remove Concept: "+e.getLocalizedMessage()
+					"An error occured trying to remove Entity: "+e.getLocalizedMessage()
 			);
 			
 			return Status.CANCEL_STATUS;

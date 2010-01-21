@@ -154,7 +154,7 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
 			for (Iterator iter = list.iterator(); iter.hasNext(); ) {
 				XSDElementDeclaration decl = (XSDElementDeclaration) iter.next();
 				if (decl.getName().equals(typeNameText.getText())){
-					infoLabel.setText("This Element/Concept already exists");
+					infoLabel.setText("This Element/Entity already exists");
 					getButton(IDialogConstants.OK_ID).setEnabled(false);
 					return;
 				}

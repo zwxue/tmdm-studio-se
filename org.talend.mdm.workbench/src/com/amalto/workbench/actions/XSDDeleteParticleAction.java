@@ -105,7 +105,7 @@ public class XSDDeleteParticleAction extends UndoAction{
 			MessageDialog.openError(
 					page.getSite().getShell(),
 					"Error", 
-					"An error occured trying to remove Concept: "+e.getLocalizedMessage()
+					"An error occured trying to remove Entity: "+e.getLocalizedMessage()
 			);
             return Status.CANCEL_STATUS;
 		}

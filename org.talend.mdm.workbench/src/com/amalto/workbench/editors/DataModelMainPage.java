@@ -396,7 +396,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			
 			addLanGroup=new Group(btnCmp, SWT.NONE);
 			addLanGroup.setText("Label Operation");
-			addLanGroup.setToolTipText("Add or remove languages in all concepts and elements for the current data model");
+			addLanGroup.setToolTipText("Add or remove languages in all Entities and elements for the current data model");
 			addLanGroup.setBackground(btnCmp.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 			addLanGroup.setLayout(new GridLayout(4,false));
 			

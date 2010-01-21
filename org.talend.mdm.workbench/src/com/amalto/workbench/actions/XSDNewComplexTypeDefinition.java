@@ -35,7 +35,7 @@ public class XSDNewComplexTypeDefinition extends UndoAction implements Selection
 		super(page);
 		setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
 		setText("Create a Complex Type");
-		setToolTipText("Create a new Complex Type which can be referred to by Elements or Concepts");
+		setToolTipText("Create a new Complex Type which can be referred to by Elements or Entities");
 		setDescription(getToolTipText());
 	}
 	

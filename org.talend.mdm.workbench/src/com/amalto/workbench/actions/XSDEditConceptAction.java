@@ -27,8 +27,8 @@ public class XSDEditConceptAction extends UndoAction{
 	public XSDEditConceptAction(DataModelMainPage page) {
 		super(page);
 		setImageDescriptor(ImageCache.getImage(EImage.EDIT_OBJ.getPath()));
-		setText("Edit Concept");
-		setToolTipText("Edit a Business Concept");
+		setText("Edit Entity");
+		setToolTipText("Edit an Entity");
 	}
 	
 	public IStatus doAction() {
@@ -43,16 +43,16 @@ public class XSDEditConceptAction extends UndoAction{
             
        		InputDialog id = new InputDialog(
        				page.getSite().getShell(),
-       				"Edit Concept",
-       				"Enter a new Name for the Concept",
+       				"Edit Entity",
+       				"Enter a new Name for the Entity",
        				oldName,
        				new IInputValidator() {
        					public String isValid(String newText) {
-       						if ((newText==null) || "".equals(newText)) return "The Concept Name cannot be empty";
+       						if ((newText==null) || "".equals(newText)) return "The Entity Name cannot be empty";
        						EList list = schema.getElementDeclarations();
        						for (Iterator iter = list.iterator(); iter.hasNext(); ) {
 								XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
-								if (d.getName().equals(newText)) return "This Concept already exists";
+								if (d.getName().equals(newText)) return "This Entity already exists";
 							}
        						return null;
        					};
@@ -93,7 +93,7 @@ public class XSDEditConceptAction extends UndoAction{
 			MessageDialog.openError(
 					page.getSite().getShell(),
 					"Error", 
-					"An error occured trying to edit a Concept: "+e.getLocalizedMessage()
+					"An error occured trying to edit an Entity: "+e.getLocalizedMessage()
 			);
             return Status.CANCEL_STATUS;
 		}

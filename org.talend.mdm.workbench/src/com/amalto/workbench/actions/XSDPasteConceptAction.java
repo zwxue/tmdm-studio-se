@@ -43,15 +43,15 @@ public class XSDPasteConceptAction extends UndoAction {
 	
 	Set<XSDTypeDefinition> copyTypeSet = new HashSet<XSDTypeDefinition>();
 	HashMap<String, XSDTypeDefinition> typeList = new HashMap<String, XSDTypeDefinition>();
-	String displayName = "Paste Concept";
+	String displayName = "Paste Entity";
 	public XSDPasteConceptAction(DataModelMainPage page,boolean multi) {
 		super(page);
 		this.page = page;
 		if(multi)
-			displayName = "Paste Concepts";
+			displayName = "Paste Entities";
 		setImageDescriptor(ImageCache.getImage(EImage.PASTE.getPath()));
 		setText(displayName);
-		setToolTipText("Paste Concept/Concepts");
+		setToolTipText("Paste one or more Entities");
 	}
 	public IStatus doAction() {
 
@@ -86,12 +86,12 @@ public class XSDPasteConceptAction extends UndoAction {
 									new IInputValidator() {
 										public String isValid(String newText) {
 											if ((newText == null)|| "".equals(newText))
-												return "The Concept Name cannot be empty";
+												return "The Entity Name cannot be empty";
 											EList list = schema.getElementDeclarations();
 											for (Iterator iter = list.iterator(); iter.hasNext();) {
 												XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
 												if (d.getName().equals(newText))
-													return "This Concept already exists";
+													return "This Entity already exists";
 											}
 											return null;
 										};
@@ -160,7 +160,7 @@ public class XSDPasteConceptAction extends UndoAction {
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(page.getSite().getShell(), "Error",
-					"An error occured trying to Paste Concept: "
+					"An error occured trying to Paste Entity: "
 							+ e.getLocalizedMessage());
 
 		}
@@ -168,7 +168,7 @@ public class XSDPasteConceptAction extends UndoAction {
 	}
 	public boolean checkInPasteType(){
 		/*if(WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size()>1)
-			this.displayName = "Paste Concepts";*/
+			this.displayName = "Paste Entities";*/
 		if(WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size()<=0)
 			return false;
 		conceptList = WorkbenchClipboard.getWorkbenchClipboard().getConcepts();
@@ -269,7 +269,7 @@ public class XSDPasteConceptAction extends UndoAction {
 									addAnnotion(struc, fromannotation);
 								}
 								else{
-									MessageDialog.openInformation(page.getSite().getShell(), "Warning", "The Concept of "+fromElem.getName()+" has a foreign key");
+									MessageDialog.openInformation(page.getSite().getShell(), "Warning", "The Entity: "+fromElem.getName()+" is pointed to by a foreign key.");
 									return;
 								}
 									
@@ -355,7 +355,7 @@ public class XSDPasteConceptAction extends UndoAction {
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(this.page.getSite().getShell(), "Error",
-					"An error occured trying to pasty Concepts: "
+					"An error occured trying to paste Entities: "
 							+ e.getLocalizedMessage());
 		}
 		return infor;

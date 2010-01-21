@@ -24,7 +24,7 @@ public class XSDEditComplexTypeAction extends UndoAction{
 		super(page);
 		setImageDescriptor(ImageCache.getImage(EImage.EDIT_OBJ.getPath()));
 		setText("Edit a Complex Type");
-		setToolTipText("Edit a Complex Type which can be referred to by Elements or Concepts");
+		setToolTipText("Edit a Complex Type which can be referred to by Elements or Entities");
 		setDescription(getToolTipText());
 	}
 	
@@ -39,7 +39,7 @@ public class XSDEditComplexTypeAction extends UndoAction{
        		InputDialog id = new InputDialog(
        				page.getSite().getShell(),
        				"Edit Complex Type",
-       				"Enter a new Name for the Concept",
+       				"Enter a new Name for the Entity",
        				oldName,
        				new IInputValidator() {
        					public String isValid(String newText) {
@@ -75,7 +75,7 @@ public class XSDEditComplexTypeAction extends UndoAction{
 			MessageDialog.openError(
 					page.getSite().getShell(),
 					"Error", 
-					"An error occured trying to edit a Concept: "+e.getLocalizedMessage()
+					"An error occured trying to edit an Entity: "+e.getLocalizedMessage()
 			);
             return Status.CANCEL_STATUS;
 		}

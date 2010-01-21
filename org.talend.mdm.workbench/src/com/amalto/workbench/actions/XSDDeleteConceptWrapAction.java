@@ -163,7 +163,7 @@ public class XSDDeleteConceptWrapAction extends UndoAction{
 			MessageDialog.openError(
 					page.getSite().getShell(),
 					"Error", 
-					"An error occured trying to remove Concept: "+e.getLocalizedMessage()
+					"An error occured trying to remove Entity: "+e.getLocalizedMessage()
 			);
 			
 			return (results.indexOf(Status.OK_STATUS)>= 0 ? Status.OK_STATUS : Status.CANCEL_STATUS);
@@ -274,7 +274,7 @@ public class XSDDeleteConceptWrapAction extends UndoAction{
 			setText(clsAction.get(comp.getClass()).getText() + (delObjs.size() > 1 ? "s" : ""));
 		else
 			setText("Delete Objects");
-		setToolTipText("Delete Business Concepts");
+		setToolTipText("Delete Entities");
 	}
 	
 	private void clearDelData() {

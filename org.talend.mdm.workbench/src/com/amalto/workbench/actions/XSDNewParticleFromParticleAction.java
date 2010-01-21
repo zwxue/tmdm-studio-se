@@ -192,7 +192,7 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(this.page.getSite().getShell(), "Error",
-					"An error occured trying to pasty Concepts: "
+					"An error occured trying to paste Entities: "
 							+ e.getLocalizedMessage());
 		}
 		return infor;

@@ -48,11 +48,11 @@ public class XSDEditElementAction extends UndoAction{
        				oldName,
        				new IInputValidator() {
        					public String isValid(String newText) {
-       						if ((newText==null) || "".equals(newText)) return "The Concept Name cannot be empty";
+       						if ((newText==null) || "".equals(newText)) return "The Entity Name cannot be empty";
        						EList list = schema.getElementDeclarations();
        						for (Iterator iter = list.iterator(); iter.hasNext(); ) {
 								XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
-								if (d.getName().equals(newText)) return "This Concept already exists";
+								if (d.getName().equals(newText)) return "This Entity already exists";
 							}
        						return null;
        					};

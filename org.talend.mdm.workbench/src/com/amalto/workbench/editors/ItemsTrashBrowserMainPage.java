@@ -235,7 +235,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
 		// 2nd column
 		final TableColumn column1 = new TableColumn(table, SWT.LEFT, 1);
-		column1.setText("Concept");
+		column1.setText("Entity");
 		column1.setWidth(150);
 		// Add listener to column so tasks are sorted by description when clicked 
 		column1.addSelectionListener(new SelectionListener() {

@@ -59,7 +59,7 @@ public class XSDDeleteIdentityConstraintAction extends UndoAction {
                 MessageDialog.openError(
                 		this.page.getSite().getShell(),
                 		"Error",
-                		"Concepts must have an unique key"
+                		"Entities must have an unique key"
                 ); 
                 return;            	
             }
@@ -76,7 +76,7 @@ public class XSDDeleteIdentityConstraintAction extends UndoAction {
 			MessageDialog.openError(
 					page.getSite().getShell(),
 					"Error", 
-					"An error occured trying to remove Concept: "+e.getLocalizedMessage()
+					"An error occured trying to remove Entity: "+e.getLocalizedMessage()
 			);
             return Status.CANCEL_STATUS;
 		}

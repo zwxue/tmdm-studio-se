@@ -168,7 +168,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
            openDLG.addSelectionListener(this);
            openDLG.setLayoutData(new GridData(SWT.RIGHT,SWT.CENTER,false,false,1,1));
            openDLG.setVisible(isBtnShow);
-           openDLG.setToolTipText("Select one Concept");
+           openDLG.setToolTipText("Select one Entity");
         
         errorMessageText = new Text(composite, SWT.READ_ONLY | SWT.WRAP);
         errorMessageText.setLayoutData(new GridData(SWT.FILL,SWT.TOP,false,false,2,1));
@@ -222,7 +222,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
 
     			public void widgetSelected(SelectionEvent e) {
     				text.setText(Smart_view);
-    				label.setText("Enter a name that follows: Smart_view_<ConceptName>_<language ISO code>");
+    				label.setText("Enter a name that follows: Smart_view_<EntityName>_<language ISO code>");
     				smartViewSelected = true;
     				openDLG.setVisible(true);
     				value=Smart_view;
@@ -241,7 +241,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
 
 				public void widgetSelected(SelectionEvent e) {
 					text.setText(beforeSaving);
-					label.setText("Enter a name that follows: beforeSaving_<ConceptName>");
+					label.setText("Enter a name that follows: beforeSaving_<EntityName>");
 					openDLG.setVisible(true);
 					value = beforeSaving;
 				}
@@ -259,7 +259,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
 
 				public void widgetSelected(SelectionEvent e) {
 					text.setText(beforeDeleting);
-					label.setText("Enter a name that follows: beforeDeleting_<ConceptName>");
+					label.setText("Enter a name that follows: beforeDeleting_<EntityName>");
 					openDLG.setVisible(true);
 					value = beforeDeleting;
 				}
@@ -327,7 +327,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
 	public void widgetSelected(SelectionEvent e) {
 		dlg = new XpathSelectDialog(
 				composite.getShell(),
-				treeParent,"Select one Concept",
+				treeParent,"Select one Entity",
 				site,
 				false,
 				null

@@ -38,8 +38,8 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
 		super(page);
 		this.page = page;
 		setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
-		setText("New Concept");
-		setToolTipText("Create a new Business Concept");
+		setText("New Entity");
+		setToolTipText("Create a new Entity");
 	}
 	
 	public IStatus doAction(){
@@ -58,7 +58,7 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
 			}
 			
        		NewConceptOrElementDialog id = new NewConceptOrElementDialog(this,
-					page.getSite().getShell(), schema, "New Concept", customTypes, builtInTypes);
+					page.getSite().getShell(), schema, "New Entity", customTypes, builtInTypes);
        		
        		id.setBlockOnOpen(true);
        		id.open();
@@ -71,7 +71,7 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
 			MessageDialog.openError(
 					page.getSite().getShell(),
 					"Error", 
-					"An error occured trying to create a new Concept: "+e.getLocalizedMessage()
+					"An error occured trying to create a new Entity: "+e.getLocalizedMessage()
 			);
             return Status.CANCEL_STATUS;
 		}		

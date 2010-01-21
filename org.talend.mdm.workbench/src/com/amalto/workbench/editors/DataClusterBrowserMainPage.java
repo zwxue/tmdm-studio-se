@@ -190,7 +190,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             toText.addKeyListener( keylistener           );
 
 
-        	Label conceptLabel = toolkit.createLabel(composite, "Concept", SWT.NULL);
+        	Label conceptLabel = toolkit.createLabel(composite, "Entity", SWT.NULL);
             conceptLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
             );
@@ -369,7 +369,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 		// 2nd column
 		final TableColumn column1 = new TableColumn(table, SWT.LEFT, 1);
 //		 table.setSortColumn(column1);
-		column1.setText("Concept");
+		column1.setText("Entity");
 		column1.setWidth(150);
 		// Add listener to column so tasks are sorted by description when clicked 
 		column1.addSelectionListener(new SelectionListener() {

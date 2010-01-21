@@ -151,7 +151,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             //objectType
 
             
-            Label objectTypeLabel = toolkit.createLabel(charComposite, "Concept", SWT.NULL);
+            Label objectTypeLabel = toolkit.createLabel(charComposite, "Entity", SWT.NULL);
             objectTypeLabel.setLayoutData(
                     new GridData(SWT.BEGINNING,SWT.CENTER,false,true,1,1)
             );
@@ -178,7 +178,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             });
             xpathButton = toolkit.createButton(typeComposite,"", SWT.PUSH);
             xpathButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
-            xpathButton.setToolTipText("Select a concept");
+            xpathButton.setToolTipText("Select an Entity");
             xpathButton.addSelectionListener(new SelectionListener(){
 
 				public void widgetDefaultSelected(SelectionEvent e) {
@@ -189,7 +189,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 				public void widgetSelected(SelectionEvent e) {
 					// TODO Auto-generated method stub
 					XpathSelectDialog xpathDialog;
-					xpathDialog = new XpathSelectDialog(getSite().getShell(),treeParent,"Select Concept",getSite(),false,dataModelName);
+					xpathDialog = new XpathSelectDialog(getSite().getShell(),treeParent,"Select Entity",getSite(),false,dataModelName);
 					xpathDialog.setBlockOnOpen(true);
 					xpathDialog.open();
 					if (xpathDialog.getReturnCode() == Window.OK)  {
