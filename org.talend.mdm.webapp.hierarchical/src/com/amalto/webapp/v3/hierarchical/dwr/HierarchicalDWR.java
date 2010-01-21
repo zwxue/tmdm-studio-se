@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.regex.Pattern;
 
 import org.directwebremoting.WebContext;
 import org.directwebremoting.WebContextFactory;
@@ -434,7 +433,7 @@ public class HierarchicalDWR {
 		WSWhereCondition wc4 = new WSWhereCondition(
 				"hierarchical-report/shared",
 				WSWhereOperator.EQUALS,"true",
-				WSStringPredicate.NONE,false
+				WSStringPredicate.OR,false
 				);
 		
 		WSWhereOr or=new WSWhereOr(new WSWhereItem[] {new WSWhereItem(wc3,null,null),new WSWhereItem(wc4,null,null)});
