@@ -65,7 +65,7 @@ public class ComplexTableViewer {
 	protected FormToolkit toolkit;
 	
 	protected Composite mainComposite;
-	protected Button addNewXpathButton;
+	protected Button addButton;
 	protected TableViewer viewer;
 	protected Button downButton;
 	protected Button upButton;
@@ -123,7 +123,7 @@ public class ComplexTableViewer {
 		this.editable = editable;
 	}
 	public Button getAddButton() {
-		return addNewXpathButton;
+		return addButton;
 	}
 	public TableViewer getViewer() {
 		return viewer;
@@ -260,13 +260,13 @@ public class ComplexTableViewer {
 		}
 
 
-        addNewXpathButton = toolkit.createButton(mainComposite,"",SWT.PUSH | SWT.CENTER);
-        addNewXpathButton.setLayoutData(
+        addButton = toolkit.createButton(mainComposite,"",SWT.PUSH | SWT.CENTER);
+        addButton.setLayoutData(
                 new GridData(SWT.FILL,SWT.BOTTOM,false,false,1,1)
         );
-        addNewXpathButton.setImage(ImageCache.getCreatedImage(EImage.ADD_NEWXPATH.getPath()));
-        addNewXpathButton.setToolTipText("Add");
-        addNewXpathButton.addSelectionListener(new SelectionListener() {
+        addButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
+        addButton.setToolTipText("Add");
+        addButton.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
         	@SuppressWarnings("unchecked")
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {

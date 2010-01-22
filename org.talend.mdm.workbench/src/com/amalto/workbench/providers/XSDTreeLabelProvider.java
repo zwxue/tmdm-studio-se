@@ -1,8 +1,6 @@
 package com.amalto.workbench.providers;
 
 import java.util.Iterator;
-import java.util.List;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -11,7 +9,6 @@ import org.eclipse.xsd.XSDAttributeGroupDefinition;
 import org.eclipse.xsd.XSDAttributeUse;
 import org.eclipse.xsd.XSDAttributeUseCategory;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
-import org.eclipse.xsd.XSDCompositor;
 import org.eclipse.xsd.XSDConcreteComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDFacet;
@@ -22,12 +19,10 @@ import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDParticleContent;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTerm;
-import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDVariety;
 import org.eclipse.xsd.XSDWildcard;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
-import org.eclipse.xsd.impl.XSDSchemaImpl;
 import org.eclipse.xsd.util.XSDConstants;
 import org.w3c.dom.Element;
 
@@ -281,7 +276,9 @@ public class XSDTreeLabelProvider extends LabelProvider {
 		if (obj instanceof XSDSimpleTypeDefinition) {
 			return ImageCache.getCreatedImage( EImage.SIMPLETYPE.getPath());
 		}
-		
+		else if (obj instanceof XSDComplexTypeDefinition) {
+			return ImageCache.getCreatedImage( EImage.COMPLEXTYPE.getPath());
+		}
 		/*
 		if (obj instanceof XSDComplexTypeDefinition) {
 			XSDComplexTypeDefinition ctd = (XSDComplexTypeDefinition) obj;
@@ -327,7 +324,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
 			XSDIdentityConstraintDefinition identity = (XSDIdentityConstraintDefinition) obj;
 			if (identity.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL))
 				return ImageCache.getCreatedImage( EImage.KEYS.getPath());
-			return ImageCache.getCreatedImage( EImage.KEY.getPath());
+			return ImageCache.getCreatedImage( EImage.PRIMARYKEY.getPath());
 		}
 
 		if (obj instanceof XSDXPathDefinition) {

@@ -71,6 +71,7 @@ public class ValidationRuleDialog extends Dialog {
 	    columns[2].setColumnWidth(300);	   
 	    columns[3].setColumnWidth(300);
 	    viewer=new TisTableViewer(Arrays.asList(columns),new WidgetFactory(),composite);
+	    viewer.setXpath(true);
 	    viewer.setMainPage(page);
 	    viewer.setConceptName(conceptName);
 	    viewer.setContext(true);

@@ -44,7 +44,7 @@ public class TisTableViewer extends ComplexTableViewer{
 	private Button copyButton;
 	private Button pastButton;
 	private boolean addMulti;// 'addAll' and 'deleteAll' button will be added if this field is not null
-
+	private boolean isXpath;
 
 	public boolean isAddMulti() {
 		return addMulti;
@@ -56,6 +56,14 @@ public class TisTableViewer extends ComplexTableViewer{
 
 
 
+
+	public boolean isXpath() {
+		return isXpath;
+	}
+
+	public void setXpath(boolean isXpath) {
+		this.isXpath = isXpath;
+	}
 
 	public TisTableViewer(List<ComplexTableViewerColumn> columns,
 			FormToolkit toolkit, Composite parent) {
@@ -79,13 +87,17 @@ public class TisTableViewer extends ComplexTableViewer{
 	        layout.marginHeight=0;	        
 	        stepUpDownComposite.setLayout(layout);
 	        //
-	        addNewXpathButton=toolkit.createButton(stepUpDownComposite,"",SWT.PUSH | SWT.CENTER);
-	        addNewXpathButton.setLayoutData(
+	        addButton=toolkit.createButton(stepUpDownComposite,"",SWT.PUSH | SWT.CENTER);
+	        addButton.setLayoutData(
 	                new GridData(SWT.FILL,SWT.FILL,false,false,1,1)
 	        );
-	        addNewXpathButton.setToolTipText("Add");
-	        addNewXpathButton.setImage(ImageCache.getCreatedImage(EImage.ADD_NEWXPATH.getPath()));
-	        addNewXpathButton.addSelectionListener(new SelectionListener() {
+	        addButton.setToolTipText("Add");
+	        if(isXpath()){	        	
+	        	addButton.setImage(ImageCache.getCreatedImage(EImage.ADD_NEWXPATH.getPath()));
+	        }else{
+	        	addButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
+	        }
+	        addButton.addSelectionListener(new SelectionListener() {
 	        	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
 	        	@SuppressWarnings("unchecked")
 				public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {

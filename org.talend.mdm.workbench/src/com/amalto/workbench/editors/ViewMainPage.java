@@ -115,6 +115,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             viewablehGroup.setLayout(new GridLayout(2,false));
             viewableElementColumns[0].setColumnWidth(220);
             viewableViewer = new TisTableViewer(Arrays.asList(viewableElementColumns),toolkit,viewablehGroup);
+            viewableViewer.setXpath(true);
             concept = viewName.replaceAll("Browse_items_","").replaceAll("#.*","");
             viewableViewer.setConceptName(concept);
             viewableViewer.setMainPage(this);
@@ -128,6 +129,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             searchGroup.setLayout(new GridLayout(2,false));
             searchableElementColumns[0].setColumnWidth(220);
             searchableViewer = new TisTableViewer(Arrays.asList(searchableElementColumns),toolkit,searchGroup);
+            searchableViewer.setXpath(true);
             searchableViewer.setConceptName(concept);
             searchableViewer.setMainPage(this);
             searchableViewer.setAddMulti(true);
@@ -143,6 +145,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             conditionsColumns[1].setColumnWidth(150);
             conditionsColumns[3].setColumnWidth(120);
             conditionViewer=new TisTableViewer(Arrays.asList(conditionsColumns),toolkit,wcGroup);
+            conditionViewer.setXpath(true);
             conditionViewer.setConceptName(concept);
             conditionViewer.setMainPage(this);
             conditionViewer.setAddMulti(true);

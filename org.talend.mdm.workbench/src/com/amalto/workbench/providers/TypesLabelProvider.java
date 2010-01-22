@@ -292,6 +292,9 @@ public class TypesLabelProvider extends LabelProvider {
 		
 		if (obj instanceof XSDSimpleTypeDefinition) {
 			return ImageCache.getCreatedImage( EImage.SIMPLETYPE.getPath());
+		}		
+		else if (obj instanceof XSDComplexTypeDefinition) {
+			return ImageCache.getCreatedImage( EImage.COMPLEXTYPE.getPath());
 		}
 		
 		/*
@@ -332,7 +335,7 @@ public class TypesLabelProvider extends LabelProvider {
 		
 		
 		if (obj instanceof XSDFacet) {
-			return ImageCache.getCreatedImage( "icons/facet.gif");
+			return ImageCache.getCreatedImage( EImage.FACET.getPath());
 		}
 		
 		if (obj instanceof XSDIdentityConstraintDefinition) {
