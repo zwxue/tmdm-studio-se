@@ -394,7 +394,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 					name : "isSharedRecordField",
 					value : ""
 				}, {
-					fieldLabel : "Data Object",
+					fieldLabel : "Entity",
 					editable : false,
 					xtype : "combo",
 					id : "dataObjectCmp",
@@ -426,7 +426,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
                                'beforequery' : function(queryEvent) {
                                	                     var dataObjectLabel=DWRUtil.getValue('dataObjectCmp');
 											    	 if(dataObjectLabel==''){
-											    	    	Ext.MessageBox.alert('Sorry', "Please select a 'Data Object' First! ");
+											    	    	Ext.MessageBox.alert('Sorry', "Please select a 'Entity' First! ");
 											                return false;
 											    	   }
                                                     },
@@ -456,7 +456,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
                                'beforequery' : function(queryEvent) {
                                	                     var dataObjectLabel=DWRUtil.getValue('dataObjectCmp');
 											    	 if(dataObjectLabel==''){
-											    	    	Ext.MessageBox.alert('Sorry', "Please select a 'Data Object' First! ");
+											    	    	Ext.MessageBox.alert('Sorry', "Please select a 'Entity' First! ");
 											                return false;
 											    	   }
                                                     }
@@ -768,7 +768,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
     	var pivotLabel=DWRUtil.getValue('pivotCmp');
     	var titleLabel=DWRUtil.getValue('titleFieldCmp');
     	var invalidFields="";
-    	if(dataObjectLabel=='')invalidFields+="'Data Object' ";
+    	if(dataObjectLabel=='')invalidFields+="'Entity' ";
     	if(pivotLabel=='')invalidFields+="'Pivot' ";
     	if(titleLabel=='')invalidFields+="'Title Field' ";
     	if(invalidFields!=""){
