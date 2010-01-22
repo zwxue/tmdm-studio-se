@@ -163,12 +163,6 @@ public class AddBrowseItemsWizard extends Wizard{
             	delView.setWsViewPK(viewPk);
             	WSGetView getView = new WSGetView();
             	getView.setWsViewPK(viewPk);
-            	try {
-					port.getView(getView);
-					port.deleteView(delView);
-				} catch (RemoteException ex) {
-				}
-
     			port.putView(wrap);
     		}
     	}
