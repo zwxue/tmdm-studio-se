@@ -1813,8 +1813,8 @@ public class Util {
     	List<String> list = new ArrayList<String>();
     	String objectName =objectName1;
 		WSUniversePK[] universePKs = null;
-		if(objectName1.equals("Transformer"))
-			objectName ="Transformer V2";
+		objectName=EXtentisObjects.getXtentisObjectName(objectName1);
+		if(objectName!=null) {
 		try {
 			universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();
 			for(WSUniversePK pk: universePKs){
@@ -1827,6 +1827,7 @@ public class Util {
 			}
 		} catch (Exception e) {
 			System.out.println("No Universes");
+		}
 		}
     	return list;
     }

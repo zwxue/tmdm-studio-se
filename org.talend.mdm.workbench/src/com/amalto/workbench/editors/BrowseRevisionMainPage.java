@@ -267,13 +267,13 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
 					getXObject().getUsername(), getXObject().getPassword());
 			Map<String, List<String>> map = Util.getUniverseMap(port);
 			String name = getXObject().getDisplayName().replaceAll("\\[.*\\]",
-					"");
+					"").trim();
 			List<String> revisions;
 			if (name.trim().equals("Process"))
 				revisions = map.get("Transformer V2");
 			else
 				revisions = map.get(name.trim());
-			if (revisions.contains(""))
+			if (revisions!=null && revisions.contains(""))
 				revisions.remove("");
 			if (revisions != null) {
 				revisionIDList.setItems(revisions.toArray(new String[revisions

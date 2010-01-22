@@ -94,4 +94,20 @@ public enum EXtentisObjects {
 		}
 		return map;
 	}
+	public static String getXtentisObjectName(String displayname) {
+		for(int i=0; i<values().length; i++){
+			if(values()[i].displayName.equals(displayname)) {
+				return values()[i].name;
+			}
+		}
+		return "";
+	}
+	public static String getXtentisObjectDisplayName(String name) {
+		for(int i=0; i<values().length; i++){
+			if(values()[i].displayName.equals(name)) {
+				return values()[i].name;
+			}
+		}
+		return "";
+	}	
 }
