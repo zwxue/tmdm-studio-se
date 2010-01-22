@@ -37,7 +37,7 @@ public class XMLEditor extends TextEditor {
 		this.xobject=xobject;
 		this.editor=editor;
 		colorManager = new ColorManager();
-//		setSourceViewerConfiguration(new XMLConfiguration(colorManager));
+		setSourceViewerConfiguration(new XMLConfiguration(colorManager));
 		setDocumentProvider(new XMLDocumentProvider());
 	}
 	
