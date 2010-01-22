@@ -346,7 +346,7 @@ public class NewXObjectAction extends Action{
 	                	MessageDialog.openError(
 	                			view.getSite().getShell(), 
 	                			"Error", 
-	                			"Please create a Data Container for Items before editing a View");
+	                			"Please create a Data Container for Records before editing a View");
 	                	return;
 	                }
 	           		WSView wsview = new WSView(

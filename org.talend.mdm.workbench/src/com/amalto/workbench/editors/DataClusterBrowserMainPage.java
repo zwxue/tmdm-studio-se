@@ -728,7 +728,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 			this.shell = shell;
 			this.viewer = viewer;
 			setImageDescriptor(ImageCache.getImage( "icons/edit_obj.gif"));
-			setText("Edit Item");
+			setText("Edit Record");
 			setToolTipText("View as a DOM Tree or edit the XML source");			
 		}
 		
@@ -787,8 +787,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         					}catch (Exception e) {
         						MessageDialog.openError(
         								shell,
-        								"Error saving the Item", 
-        								"An error occured trying save the Item:\n\n "+e.getLocalizedMessage()
+        								"Error saving the Record", 
+        								"An error occured trying save the Record:\n\n "+e.getLocalizedMessage()
         						);
         						return;
         					}
@@ -841,7 +841,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 				IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
 				int selectSize=selection.size();
 				if(selectSize!=2){
-					MessageDialog.openWarning(null, "Warning", "Please select two items to compare! ");
+					MessageDialog.openWarning(null, "Warning", "Please select two Records to compare! ");
 					return;
 				}
 				
@@ -932,7 +932,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 					MessageDialog.openWarning(null, "Warning", "Please select an item at least! ");
 					return;
 				}else if(selectSize>1){
-					MessageDialog.openWarning(null, "Warning", "This operation can not be supported for muti-item(s)! ");
+					MessageDialog.openWarning(null, "Warning", "This operation can not be supported for muti-Record(s)! ");
 					return;
 				}
 				LineItem li = (LineItem) selection.getFirstElement();
@@ -971,7 +971,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 				MessageDialog.openError(
 						shell,
 						"Error", 
-						"An error occured trying to compare item with svn: "+e.getLocalizedMessage()
+						"An error occured trying to compare Record with svn: "+e.getLocalizedMessage()
 				);
 			}		
 		}
@@ -998,11 +998,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 			
 			IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
 			if (selection.size()==1)
-				setText("Logically delete the selected item");
+				setText("Logically delete the selected Record");
 			else
-				setText("Logically delete these "+selection.size()+" Items");
+				setText("Logically delete these "+selection.size()+" Records");
 			
-			setToolTipText("Logically delete the Selected Item"+(selection.size()>1? "s":""));
+			setToolTipText("Logically delete the Selected Record"+(selection.size()>1? "s":""));
 		}
 		
 		public void run() {
@@ -1018,7 +1018,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 				InputDialog id = new InputDialog(
 						this.shell,
 	       				"Confirm Deletion",
-	       				"Are you sure you want to drop the selected "+lineItems.size()+" items to items-trash?\nSet Part-Path:",
+	       				"Are you sure you want to drop the selected "+lineItems.size()+" items to Records-trash?\nSet Part-Path:",
 	       				"/",
 	       				new IInputValidator() {
 	       					public String isValid(String newText) {
@@ -1054,7 +1054,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 				MessageDialog.openError(
 						shell,
 						"Error", 
-						"An error occured trying to delete the items: "+e.getLocalizedMessage()
+						"An error occured trying to delete the Records: "+e.getLocalizedMessage()
 				);
 			}		
 		}
@@ -1079,7 +1079,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 				try {
-					monitor.beginTask("Deleting items", lineItems.size());
+					monitor.beginTask("Deleting Records", lineItems.size());
 					
 					XtentisPort port = Util.getPort(xObject);
 				
@@ -1088,13 +1088,13 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 					for (Iterator<LineItem> iter = lineItems.iterator(); iter.hasNext(); ) {
 						LineItem lineItem = iter.next();
 						String itemID = ((WSDataClusterPK)xObject.getWsKey()).getPk()+"."+lineItem.getConcept()+"."+Util.joinStrings(lineItem.getIds(), ".");
-						monitor.subTask("Processing item "+(i++)+": "+itemID);
+						monitor.subTask("Processing Record "+(i++)+": "+itemID);
 						if (monitor.isCanceled())  {
 							MessageDialog.openWarning(
 									this.parentShell,
 									"User canceled the logically delete",
-									"The logical-deletes was canceled by the user on item "+i+"\n"+
-									"Some items may have not been logically deleted"
+									"The logical-deletes was canceled by the user on Record "+i+"\n"+
+									"Some Records may have not been logically deleted"
 							);
 							return;
 						}
@@ -1116,7 +1116,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 					MessageDialog.openError(
 							shell,
 							"Error logically Deleting", 
-							"An error occured trying to logically delete the items:\n\n"+e.getLocalizedMessage()
+							"An error occured trying to logically delete the Records:\n\n"+e.getLocalizedMessage()
 					);
 				}//try				
 				
@@ -1137,11 +1137,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 			setImageDescriptor(ImageCache.getImage( "icons/delete_obj.gif"));
 			IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
 			if (selection.size()==1)
-				setText("Physically delete the selected item");
+				setText("Physically delete the selected Record");
 			else
-				setText("Physically delete these "+selection.size()+" Items");
+				setText("Physically delete these "+selection.size()+" Records");
 			 
-			setToolTipText("Physically delete the selected Item"+(selection.size()>1? "s":""));
+			setToolTipText("Physically delete the selected Record"+(selection.size()>1? "s":""));
 		}
 		
 		public void run() {
@@ -1157,7 +1157,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 				if (! MessageDialog.openConfirm(
 						this.shell, 
 						"Confirm Deletion", 
-						"Are you sure you want to delete the selected "+lineItems.size()+" items?")
+						"Are you sure you want to delete the selected "+lineItems.size()+" Records?")
 					)	return;
 
 				//Instantiate the Monitor with actual deletes
@@ -1181,7 +1181,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 				MessageDialog.openError(
 						shell,
 						"Error", 
-						"An error occured trying to delete the items: "+e.getLocalizedMessage()
+						"An error occured trying to delete the Records: "+e.getLocalizedMessage()
 				);
 			}		
 		}
@@ -1204,7 +1204,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 				try {
-					monitor.beginTask("Deleting items", lineItems.size());
+					monitor.beginTask("Deleting Records", lineItems.size());
 					
 					XtentisPort port = Util.getPort(getXObject());
 					
@@ -1212,13 +1212,13 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 					for (Iterator<LineItem> iter = lineItems.iterator(); iter.hasNext(); ) {
 						LineItem lineItem = iter.next();
 						String itemID = ((WSDataClusterPK)getXObject().getWsKey()).getPk()+"."+lineItem.getConcept()+"."+Util.joinStrings(lineItem.getIds(), ".");
-						monitor.subTask("Processing item "+(i++)+": "+itemID);
+						monitor.subTask("Processing Record "+(i++)+": "+itemID);
 						if (monitor.isCanceled())  {
 							MessageDialog.openWarning(
 									this.parentShell,
 									"User Canceled the delete",
-									"The deletes werz canceled by the user on item "+i+"\n"+
-									"Some Items may have not been deleted"
+									"The deletes werz canceled by the user on Record "+i+"\n"+
+									"Some Records may have not been deleted"
 							);
 							return;
 						}
@@ -1240,7 +1240,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 					MessageDialog.openError(
 							shell,
 							"Error Deleting", 
-							"An error occured trying to delete the items:\n\n "+e.getLocalizedMessage()
+							"An error occured trying to delete the Records:\n\n "+e.getLocalizedMessage()
 					);
 				}//try				
 				
@@ -1266,8 +1266,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 			this.shell = shell;
 			this.viewer = viewer;
 			setImageDescriptor(ImageCache.getImage( "icons/add_obj.gif"));
-			setText("New Item");
-			setToolTipText("Add a new Item");
+			setText("New Record");
+			setToolTipText("Add a new Record");
 		}
 		
 		public void run() {
@@ -1314,8 +1314,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         					}catch (Exception e) {
         						MessageDialog.openError(
         								shell,
-        								"Error saving the Item", 
-        								"An error occured trying save the Item:\n\n "+e.getLocalizedMessage()
+        								"Error saving the Record", 
+        								"An error occured trying save the Record:\n\n "+e.getLocalizedMessage()
         						);
         						return;
         					}
@@ -1362,10 +1362,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 			setImageDescriptor(ImageCache.getImage( "icons/execute.gif"));
 			IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
 			if (selection.size()==1)
-				setText("Route the selected item");
+				setText("Route the selected Record");
 			else
-				setText("Route these "+selection.size()+" Items");
-			setToolTipText("Route the Selected Item"+(selection.size()>1? "s":""));
+				setText("Route these "+selection.size()+" Records");
+			setToolTipText("Route the Selected Record"+(selection.size()>1? "s":""));
 		}
 		
 		public void run() {
@@ -1381,7 +1381,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 				if (! MessageDialog.openConfirm(
 						this.shell, 
 						"Confirm Deletion", 
-						"Are you sure you want to route the selected "+(lineItems.size()>1?lineItems.size()+" ":"")+"item(s) using the Event Manager?")
+						"Are you sure you want to route the selected "+(lineItems.size()>1?lineItems.size()+" ":"")+"Record(s) using the Event Manager?")
 					)	return;
 
 				//Instantiate the Monitor with actual deletes
@@ -1403,7 +1403,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 				MessageDialog.openError(
 						shell,
 						"Error", 
-						"An error occured trying route the items: "+e.getLocalizedMessage()
+						"An error occured trying route the Records: "+e.getLocalizedMessage()
 				);
 			}		
 		}
@@ -1425,7 +1425,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 			}
 
 			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-				monitor.beginTask("Deleting items", lineItems.size());
+				monitor.beginTask("Deleting Records", lineItems.size());
 				XtentisPort port = null;
 				try {
 					port = Util.getPort(getXObject());
@@ -1434,7 +1434,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 					MessageDialog.openError(
 							shell,
 							"Error Routing", 
-							"An error occured trying to route the items:\n\n "+e.getLocalizedMessage()
+							"An error occured trying to route the Records:\n\n "+e.getLocalizedMessage()
 					);
 				}//try				
 					
@@ -1442,13 +1442,13 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 				for (Iterator<LineItem> iter = lineItems.iterator(); iter.hasNext(); ) {
 					LineItem lineItem = iter.next();
 					String itemID = ((WSDataClusterPK)getXObject().getWsKey()).getPk()+"."+lineItem.getConcept()+"."+Util.joinStrings(lineItem.getIds(), ".");
-					monitor.subTask("Processing item "+(i++)+" - "+itemID);
+					monitor.subTask("Processing Record "+(i++)+" - "+itemID);
 					if (monitor.isCanceled())  {
 						MessageDialog.openWarning(
 								this.parentShell,
 								"User Canceled the Routing",
-								"The submissions were canceled by the user on item "+i+"\n"+
-								"Some Items may have not been routed"
+								"The submissions were canceled by the user on Record "+i+"\n"+
+								"Some Records may have not been routed"
 						);
 						return;
 					}

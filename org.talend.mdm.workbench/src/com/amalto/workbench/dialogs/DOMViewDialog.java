@@ -184,7 +184,7 @@ public class DOMViewDialog extends Dialog {
 					
 			TabItem tiDOM = new TabItem(tabFolder,SWT.NULL);
 			tiDOM.setText("Tree");
-			tiDOM.setToolTipText("Display the item as a DOM Tree");
+			tiDOM.setToolTipText("Display the Record as a DOM Tree");
 						
     		domViewer = new TreeViewer(tabFolder, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
             domViewer.getControl().setLayoutData(    
@@ -205,7 +205,7 @@ public class DOMViewDialog extends Dialog {
     		
 			TabItem tiSource = new TabItem(tabFolder,SWT.NULL);
 			tiSource.setText("Source");
-			tiSource.setToolTipText("Display the XML source of the item");
+			tiSource.setToolTipText("Display the XML source of the Record");
     		
     		org.eclipse.jface.text.Document doc = new org.eclipse.jface.text.Document(Util.nodeToString(node));
     		sourceViewer = new SourceViewer(tabFolder,new VerticalRuler(5),SWT.H_SCROLL | SWT.V_SCROLL);

@@ -501,7 +501,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 			this.shell = shell;
 			this.viewer = viewer;
 			setImageDescriptor(ImageCache.getImage( "icons/edit_obj.gif"));
-			setText("Display Dropped Item");
+			setText("Display Dropped Record");
 			setToolTipText("View a DOM Tree of the XML source");
 		}
 		
@@ -541,7 +541,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 				
 				String userName=wsDroppedItem.getInsertionUserName()==null?"undefine":wsDroppedItem.getInsertionUserName();
 				String droppedTime=wsDroppedItem.getInsertionTime()==null?"undefine":sdf.format(wsDroppedItem.getInsertionTime());
-				String desc="This item was dropped by "+userName+" on "+droppedTime;
+				String desc="This Record was dropped by "+userName+" on "+droppedTime;
 				
         		final DOMViewDialog d =  new DOMViewDialog(
         				ItemsTrashBrowserMainPage.this.getSite().getShell(),
@@ -595,8 +595,8 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 			this.shell = shell;
 			this.viewer = viewer;
 			setImageDescriptor(ImageCache.getImage( "icons/add_obj.gif"));
-			setText("Restore the dropped item");
-			setToolTipText("Restore the dropped item");
+			setText("Restore the dropped Record");
+			setToolTipText("Restore the dropped Record");
 		}
 		
 		public void run() {
@@ -632,7 +632,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 				MessageDialog.openError(
 						shell,
 						"Error", 
-						"An error occured trying to restore the selected dropped item:\n\n"+e.getLocalizedMessage()
+						"An error occured trying to restore the selected dropped Record:\n\n"+e.getLocalizedMessage()
 				);
 			}		
 		}
@@ -658,8 +658,8 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 			this.viewer = viewer;
 			setImageDescriptor(ImageCache.getImage( "icons/delete_obj.gif"));
 			IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
-			setText("Remove the dropped item");
-			setToolTipText("Remove the dropped item");
+			setText("Remove the dropped Record");
+			setToolTipText("Remove the dropped Record");
 		}
 		
 		public void run() {
@@ -696,7 +696,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 				MessageDialog.openError(
 						shell,
 						"Error", 
-						"An error occured trying to delete the items: "+e.getLocalizedMessage()
+						"An error occured trying to delete the Records: "+e.getLocalizedMessage()
 				);
 			}		
 		}

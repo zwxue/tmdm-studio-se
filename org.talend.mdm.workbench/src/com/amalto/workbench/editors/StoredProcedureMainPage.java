@@ -356,7 +356,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener{
             					currentParameters.toArray(new String[currentParameters.size()])
             				)
             		).getStrings();
-            		resultsLabel.setText("Procedure returned "+results.length+" items.");
+            		resultsLabel.setText("Procedure returned "+results.length+" Records.");
             		resultsViewer.setInput(results);
         		} catch (Exception ex) {
         			MessageDialog.openError(
