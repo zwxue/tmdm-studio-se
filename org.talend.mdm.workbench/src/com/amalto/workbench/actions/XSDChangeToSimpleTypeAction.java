@@ -21,6 +21,7 @@ import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
+import org.eclipse.xsd.util.XSDConstants;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.SimpleTypeInputDialog;
@@ -83,7 +84,12 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
 			for (Iterator iter =  schema.getTypeDefinitions().iterator(); iter.hasNext(); ) {
 				XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
 				if (type instanceof XSDSimpleTypeDefinition)
+				{
+					if(type.getTargetNamespace() != null && !type
+							.getTargetNamespace().equals(XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001)
+					|| type.getTargetNamespace() == null)
 					customTypes.add(type.getName());
+				}
 			}
 			ArrayList builtInTypes = new ArrayList();
 			for (Iterator iter =  schema.getSchemaForSchema().getTypeDefinitions().iterator(); iter.hasNext(); ) {

@@ -3,6 +3,8 @@ package com.amalto.workbench.editors.xmleditor;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextDoubleClickStrategy;
 import org.eclipse.jface.text.TextAttribute;
+import org.eclipse.jface.text.formatter.ContentFormatter;
+import org.eclipse.jface.text.formatter.IContentFormatter;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
@@ -76,4 +78,11 @@ public class XMLConfiguration extends SourceViewerConfiguration {
 		return reconciler;
 	}
 
+	public IContentFormatter getContentFormatter(ISourceViewer sourceViewer)    
+	{
+	    ContentFormatter formatter = new ContentFormatter();    
+ 
+	   
+	    return formatter;
+	}
 }

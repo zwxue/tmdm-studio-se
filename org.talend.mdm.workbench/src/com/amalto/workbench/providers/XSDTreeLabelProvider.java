@@ -458,6 +458,8 @@ public class XSDTreeLabelProvider extends LabelProvider {
 		String tail = xsdSimpleTypeDefinition.getTargetNamespace() == null ? ""  :  xsdSimpleTypeDefinition.getTargetNamespace();
 		if(tail.equals(XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001) || tail.equals(XSDConstants.SCHEMA_FOR_SCHEMA_URI_1999))
 			tail = "";
+		else if(!tail.equals(""))
+			tail = " : " + tail;
 		return s + tail;
 	}
 	

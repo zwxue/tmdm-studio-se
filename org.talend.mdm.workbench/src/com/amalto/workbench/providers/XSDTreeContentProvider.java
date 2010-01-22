@@ -22,6 +22,7 @@ import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDVariety;
 import org.eclipse.xsd.XSDWildcard;
+import org.eclipse.xsd.util.XSDConstants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -355,7 +356,11 @@ public class XSDTreeContentProvider implements IStructuredContentProvider, ITree
 					break;
 				}
 			}
-			if (!exist)
+			if (!exist
+					&& (el.getTargetNamespace() != null && !el
+							.getTargetNamespace().equals(
+									XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001))
+					|| el.getTargetNamespace() == null)
 			{
 				list.add(el);	
 			}			

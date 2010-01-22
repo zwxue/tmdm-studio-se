@@ -56,6 +56,8 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.xsd.XSDAnnotation;
@@ -79,6 +81,7 @@ import org.eclipse.xsd.impl.XSDImportImpl;
 import org.eclipse.xsd.impl.XSDIncludeImpl;
 import org.eclipse.xsd.impl.XSDParticleImpl;
 import org.eclipse.xsd.impl.XSDSchemaImpl;
+import org.eclipse.xsd.util.XSDConstants;
 import org.eclipse.xsd.util.XSDSchemaLocator;
 import org.osgi.framework.Bundle;
 import org.talend.mdm.commmon.util.workbench.Version;
@@ -1003,7 +1006,6 @@ public class Util {
     }
     
     
-    
     public static Object getParent(Object son)
     {
     	if (!((son instanceof XSDElementDeclaration) || (son instanceof XSDParticle))) {
@@ -1302,26 +1304,20 @@ public class Util {
         	if(path.lastIndexOf(buffer.get(i)) == -1)
         	  path += buffer.get(i);
         }
+
     	try {
 			NodeList l = Util.getNodeList(schema.getDocument(), path);
-			if(l.getLength() > 0 && component.getSchema() != null && component.getSchema().getTargetNamespace() == null)
+			if(l.getLength() > 0)
 				return false;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		if(component instanceof XSDSimpleTypeDefinition)
-		{
-			final String UUID = "//xsd:simpleType[@name='UUID']/xsd:restriction[@base='xsd:string']";
-			final String PICTURE = "//xsd:simpleType[@name='PICTURE']/xsd:restriction[@base='xsd:string']";
-			final String AUTOINCMT = "//xsd:simpleType[@name='AUTO_INCREMENT']/xsd:restriction[@base='xsd:string']";
-			if(!path.equals(UUID) && !path.equals(PICTURE) && !path.equals(AUTOINCMT))
-				return false;
-		}
+
 		return true;
     }
 
-    public static List<String> retrieveXSDComponentPath(XSDConcreteComponent component, XSDSchema schema, List<String> buffer)
+    public static List<String> retrieveXSDComponentPath(Object component, XSDSchema schema, List<String> buffer)
     {
     	String name = null;
     	String elemType = "element";
@@ -1369,13 +1365,12 @@ public class Util {
     	}
     	else if(component instanceof XSDSimpleTypeDefinition)
     	{
-    		XSDSimpleTypeDefinition type = (XSDSimpleTypeDefinition)component;
-    		name = type.getName();
-    		String primitiveName = type.getPrimitiveTypeDefinition() != null ? type.getPrimitiveTypeDefinition().getName() : "string";
-    		buffer.add("//xsd:simpleType[@name='" + name + "']" + "/xsd:restriction[@base='" + "xsd:" + primitiveName +  "']");
-    		if(type.getContainer() instanceof XSDSchemaImpl)
-    			return buffer;
-    		return retrieveXSDComponentPath(type.getContainer(), schema, buffer);
+//    		TreePath tPath=((TreeSelection)selection).getPaths()[0];
+//    		Object elem = tPath.getSegment(0);
+//    		return retrieveXSDComponentPath(elem, schema, buffer, selection);
+    		String typeName = ((XSDSimpleTypeDefinition)component).getName();
+    		buffer.add("//xsd:simpleType[@name='" + typeName +  "']");
+    		return buffer;
     	}
     	else if(component instanceof XSDModelGroup)
     	{
@@ -1493,6 +1488,8 @@ public class Util {
 					URI fileURI = URI.createFileURI(xsdImpl.getSchemaLocation());
 					xsdImpl.setNamespace(fileURI.toFileString().replaceAll("[\\W]", ""));
 				}
+				if(xsdImpl.getSchemaLocation() == null)
+					continue;
 				((XSDImportImpl) schemaCnt).importSchema();
 				imports.add(((XSDImportImpl) schemaCnt));
 			}
@@ -1594,7 +1591,7 @@ public class Util {
 	   
 	    //Add the root schema to the resource that was created above
 //	   if(schema.getElement().getTextContent().length()!=0)
-//	      resource.getContents().add(schema);
+	    resource.getContents().add(schema);
 	    Iterator<Integer> iter = schemaMonitor.values().iterator();
         while(iter.hasNext())
         {
@@ -1630,7 +1627,10 @@ public class Util {
    							break;
    						}
    					}
-   					if (!exist)
+   					if (!exist && (type.getTargetNamespace() != null && !type
+							.getTargetNamespace().equals(
+									XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001))
+					|| type.getTargetNamespace() == null)
    					{
    	   					complexs.add((XSDComplexTypeDefinition)type);
    					}		

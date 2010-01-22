@@ -270,23 +270,26 @@ public class SelectImportedModulesDialog extends Dialog{
 	    		}
 	    		else
 	    			continue;
-	    		Pattern httpUrl = Pattern.compile("(http|https|ftp):(\\//|\\\\)(.*):(.*)");
-	    		Matcher match = httpUrl.matcher(schemaLocation);
-	    		if(match.matches())
+	    		if(schemaLocation != null)
 	    		{
-	    			InetAddress addr = InetAddress.getLocalHost();
-	    			String ip = match.group(3);
-	    			boolean local = ip.equals(addr.getHostAddress())
-							|| ip.equals("localhost") || ip.equals("127.0.0.1");
-	    			Image img = local ? MDM_WEB : OTHER_WEB;
-	    			int type = local ? 1 : 2;
-	    			XSDDesc xsdDesc = buildUp(schemaLocation, img, type);
-	    			xsdDescList.add(xsdDesc);
-	    		}
-	    		else if(!schemaLocation.equals(""))
-	    		{
-	    			XSDDesc xsdDesc = buildUp(schemaLocation, LOCAL, 0);
-	    			xsdDescList.add(xsdDesc);
+		    		Pattern httpUrl = Pattern.compile("(http|https|ftp):(\\//|\\\\)(.*):(.*)");
+		    		Matcher match = httpUrl.matcher(schemaLocation);
+		    		if(match.matches())
+		    		{
+		    			InetAddress addr = InetAddress.getLocalHost();
+		    			String ip = match.group(3);
+		    			boolean local = ip.equals(addr.getHostAddress())
+								|| ip.equals("localhost") || ip.equals("127.0.0.1");
+		    			Image img = local ? MDM_WEB : OTHER_WEB;
+		    			int type = local ? 1 : 2;
+		    			XSDDesc xsdDesc = buildUp(schemaLocation, img, type);
+		    			xsdDescList.add(xsdDesc);
+		    		}
+		    		else if(!schemaLocation.equals(""))
+		    		{
+		    			XSDDesc xsdDesc = buildUp(schemaLocation, LOCAL, 0);
+		    			xsdDescList.add(xsdDesc);
+		    		}
 	    		}
 	    	}
 		}

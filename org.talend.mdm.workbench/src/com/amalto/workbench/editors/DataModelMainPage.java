@@ -37,6 +37,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
@@ -157,8 +158,8 @@ import com.amalto.workbench.actions.XSDSetAnnotationDescriptionsAction;
 import com.amalto.workbench.actions.XSDSetAnnotationDocumentationAction;
 import com.amalto.workbench.actions.XSDSetAnnotationForeignKeyAction;
 import com.amalto.workbench.actions.XSDSetAnnotationForeignKeyInfoAction;
-import com.amalto.workbench.actions.XSDSetAnnotationNoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationLabelAction;
+import com.amalto.workbench.actions.XSDSetAnnotationNoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationSourceSystemAction;
 import com.amalto.workbench.actions.XSDSetAnnotationTargetSystemsAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWrapNoAction;
@@ -642,27 +643,10 @@ public class DataModelMainPage extends AMainPageV2 {
 						   xsdSchema.clearDiagnostics();
                            performImport(addList);
                            performDeletion(delList);
-                           xsdSchema.validate();
-   						   EList<XSDDiagnostic> diagnoses = xsdSchema.getAllDiagnostics();
-                           String error = "";
-    						for(int i = 0; i < diagnoses.size(); i++)
-    						{
-    							XSDDiagnostic dia = diagnoses.get(i);
-    							XSDDiagnosticSeverity servity = dia.getSeverity();
-    							if(servity == XSDDiagnosticSeverity.ERROR_LITERAL || servity == XSDDiagnosticSeverity.FATAL_LITERAL)
-    							{
-    								error += dia.getMessage() + "\n";
-    							}
-    						}
-    						if(!error.equals(""))
-    						{
-    							throw new IllegalAccessException(error);
-    						}
-    						
-    						validateElementation();
+                           validateSchema();
     						
   						    markDirty();
-  						    refreshData();
+//  						    refreshData();
   						    // below code is to refill the tree view with xsdScham including one xsd schma which contains the other xsd , 
   						    // and in the case of deleting the included xsd
   						    setXsdSchema(xsdSchema);
@@ -696,6 +680,29 @@ public class DataModelMainPage extends AMainPageV2 {
 		
 	}
 
+	public void validateSchema() throws IllegalAccessException
+	{
+        xsdSchema.validate();
+		   EList<XSDDiagnostic> diagnoses = xsdSchema.getAllDiagnostics();
+        String error = "";
+			for(int i = 0; i < diagnoses.size(); i++)
+			{
+				XSDDiagnostic dia = diagnoses.get(i);
+				XSDDiagnosticSeverity servity = dia.getSeverity();
+				if(servity == XSDDiagnosticSeverity.ERROR_LITERAL || servity == XSDDiagnosticSeverity.FATAL_LITERAL)
+				{
+					error += dia.getMessage() + "\n";
+				}
+			} 
+			if(!error.equals(""))
+			{
+				throw new IllegalAccessException(error);
+			}
+			
+			validateType();
+			validateElementation();
+	}
+	
 	protected void addOrDelLanguage(boolean isAdd) {
 		TreeItem[] items=viewer.getTree().getItems();
 		
@@ -1591,7 +1598,7 @@ public class DataModelMainPage extends AMainPageV2 {
 
 		if (obj instanceof XSDSimpleTypeDefinition && selectedObjs.length == 1) {
 			XSDSimpleTypeDefinition typedef = (XSDSimpleTypeDefinition) obj;
-			if (typedef.getTargetNamespace() == null && !Util.IsAImporedElement(typedef, xsdSchema))
+			if (!Util.IsAImporedElement(typedef, xsdSchema))
 			{
 				manager.add(changeBaseTypeAction);
 				manager.add(deleteTypeDefinition);
@@ -1817,12 +1824,11 @@ public class DataModelMainPage extends AMainPageV2 {
 				manager.add(deleteXPathAction);
 		}
 
-		if (obj instanceof XSDSimpleTypeDefinition && selectedObjs.length == 1
-				&& ((XSDSimpleTypeDefinition) obj).getTargetNamespace() == null && !Util.IsAImporedElement((XSDSimpleTypeDefinition) obj, xsdSchema)) {
+		if (obj instanceof XSDSimpleTypeDefinition && selectedObjs.length == 1 && !Util.IsAImporedElement((XSDSimpleTypeDefinition) obj, xsdSchema)) {
 			XSDSimpleTypeDefinition typedef = (XSDSimpleTypeDefinition) obj;
 
-			if (!typedef.getSchema().getSchemaForSchemaNamespace().equals(
-					typedef.getTargetNamespace())) {
+//			if (!typedef.getSchema().getSchemaForSchemaNamespace().equals(
+//					typedef.getTargetNamespace())) {
 				manager.add(changeBaseTypeAction);
 				manager.add(new Separator());
 				EList list = typedef.getBaseTypeDefinition().getValidFacets();
@@ -1831,7 +1837,7 @@ public class DataModelMainPage extends AMainPageV2 {
 					manager.add(new XSDEditFacetAction(this, element));
 				}
 
-			}
+//			}
 		}
 
 		if (obj instanceof XSDAnnotation
@@ -2165,6 +2171,26 @@ public class DataModelMainPage extends AMainPageV2 {
 		}
 	}
 	
+	private void validateType() throws IllegalAccessException
+	{
+		HashMap<String, Boolean> typeCntMap = new HashMap<String, Boolean>();
+		EList<XSDTypeDefinition> types = xsdSchema.getTypeDefinitions();
+		String tail = "";
+		for(XSDTypeDefinition type : types)
+		{
+			if (type instanceof XSDComplexTypeDefinition) {
+				tail = "complex";
+			} else {
+				tail = "simple";
+			}
+			if(typeCntMap.get(type.getName() + tail) == Boolean.TRUE)
+			{
+				throw new IllegalAccessException("XSD: The " + tail + " type may not have duplicate name " + type.getName());
+			}
+			typeCntMap.put(type.getName() + tail, Boolean.TRUE);
+		}
+	}
+	
 	private void performDeletion(List<String> toDels)
 	{
 		List<XSDSchemaContent> impToDels = new ArrayList<XSDSchemaContent>();
@@ -2179,6 +2205,10 @@ public class DataModelMainPage extends AMainPageV2 {
 	    			XSDImportImpl imp = (XSDImportImpl)cnt;
 	    			String ns = imp.getNamespace();
 	    			String loct = imp.getSchemaLocation();
+	    			if(ns == null || loct == null)
+	    			{
+	    				continue;
+	    			}
 	    			if(loct.equals(delName))
 	    			{
 		    			Iterator<Map.Entry<String, String>> iter = xsdSchema.getQNamePrefixToNamespaceMap().entrySet().iterator();
