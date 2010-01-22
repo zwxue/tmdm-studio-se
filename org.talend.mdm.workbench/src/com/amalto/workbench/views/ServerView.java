@@ -612,7 +612,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			    	
 			    }
 			    
-				if(Util.hasUniverse(xobject))
+				if(Util.IsEnterPrise() && Util.hasUniverse(xobject))
 					manager.add(browseRevisionAction);
 				
 //				if(xobject.getType()!=TreeObject.WORKFLOW_PROCESS && xobject.getType()!=TreeObject.JOB && Util.hasTags(xobject))
