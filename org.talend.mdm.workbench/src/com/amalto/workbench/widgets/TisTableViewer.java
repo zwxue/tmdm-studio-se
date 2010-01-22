@@ -167,16 +167,12 @@ public class TisTableViewer extends ComplexTableViewer{
 	        	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
 	        	@SuppressWarnings("unchecked")
 				public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+	        		List<Line> input=(List<Line>)viewer.getInput();
 	        		TableItem[] items =viewer.getTable().getSelection();
 	        		for(int i=0; i<items.length; i++){	        			
-	        			viewer.remove(items[i].getData());
+	        			input.remove(items[i].getData());
 	        		}
-	        		List<Line> input=new ArrayList<Line>();
-	        		for(TableItem item: viewer.getTable().getItems()){
-	        			input.add((Line)item.getData());
-	        		}
-	        		viewer.setInput(input);
-	        		
+	        		viewer.setInput(input);	        		
 	        		markDirty();
 	        	};
 	        });
