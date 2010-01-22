@@ -63,7 +63,7 @@ public class VersionUtil {
 				type =  "Data Cluster";
 				break;
 			case TreeObject.SUBSCRIPTION_ENGINE:
-				type =  "Routing Orders";
+			    type = "Routing Engine V2";
 				break;
 			case TreeObject.ROLE:
 				type =  "Role";
