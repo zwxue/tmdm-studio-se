@@ -1018,7 +1018,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 				InputDialog id = new InputDialog(
 						this.shell,
 	       				"Confirm Deletion",
-	       				"Are you sure you want to drop the selected "+lineItems.size()+" items to Records-trash?\nSet Part-Path:",
+	       				"Are you sure you want to send the selected "+lineItems.size()+" Records to trash?\nSet Part-Path:",
 	       				"/",
 	       				new IInputValidator() {
 	       					public String isValid(String newText) {
