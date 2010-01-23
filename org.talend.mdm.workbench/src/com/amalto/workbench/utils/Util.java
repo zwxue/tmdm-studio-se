@@ -56,8 +56,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.TreePath;
-import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.xsd.XSDAnnotation;
@@ -1423,7 +1421,10 @@ public class Util {
     	    List<Exception> exceptons = new ArrayList<Exception>();
     	    Map<String,Integer> schemaMonitor = new HashMap<String, Integer>();
     	    Document doc = Util.parse(xsd);
-            if(Util.getNodeList(doc, "./xsd:import").getLength() == 0)
+    	    //no import or include using old getXsdschema()
+    		if (Util.getNodeList(doc.getDocumentElement(),"//xsd:import").getLength() ==0
+			|| Util.getNodeList(doc.getDocumentElement(),
+					"//xsd:include").getLength() ==0)
             {
              return Util.getXSDSchema(xsd);
             }
