@@ -100,14 +100,14 @@ public enum EXtentisObjects {
 				return values()[i].name;
 			}
 		}
-		return "";
+		return null;
 	}
 	public static String getXtentisObjectDisplayName(String name) {
 		for(int i=0; i<values().length; i++){
-			if(values()[i].displayName.equals(name)) {
-				return values()[i].name;
+			if(values()[i].name.equals(name)) {
+				return values()[i].displayName;
 			}
 		}
-		return "";
+		return null;
 	}	
 }

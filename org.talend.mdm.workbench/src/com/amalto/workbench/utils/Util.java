@@ -2157,4 +2157,15 @@ public class Util {
 	public static boolean IsEnterPrise(){
 		return Platform.getBundle(ENTERPRISE_ID)!=null;
 	}
+	public static String getNewLabelString(String oldString) {
+		String newLabel=null;
+		newLabel=EXtentisObjects.getXtentisObjectDisplayName(oldString);
+		if("Routing Engine V2".equals(oldString)) {
+			newLabel=EXtentisObjects.SubscriptionEngine.getDisplayName();
+		}
+		if(newLabel==null)
+			return oldString;
+		else
+			return newLabel;
+	}
 }
