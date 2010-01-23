@@ -1575,7 +1575,15 @@ public class Util {
 	   schema.setSchemaLocation(fileURI.toString());
 	    //set the schema for schema QName prefix to "xsd"
 	   schema.setSchemaForSchemaQNamePrefix("xsd");
-	   resource.getContents().add(schema);
+	   // catch up the NPE to make sure data model can still run in case of unknown conflict
+	   try
+	   {
+	      resource.getContents().add(schema);
+	   }
+	   catch(Exception ex)
+	   {
+		   ex.printStackTrace();
+	   }
 	    //Add the root schema to the resource that was created above
 	    Iterator<Integer> iter = schemaMonitor.values().iterator();
         while(iter.hasNext())
