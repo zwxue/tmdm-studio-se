@@ -164,32 +164,32 @@ public class SelectImportedModulesDialog extends Dialog{
     			tableViewer.refresh();
         	}
 		});
-		
-		Button addXSDFromWebSite = new Button(compositeBtn,SWT.PUSH | SWT.FILL);
-		addXSDFromWebSite.setLayoutData(
-                new GridData(SWT.FILL,SWT.NONE,false,false,1,1)
-        );
-		addXSDFromWebSite.setText("Add Types from Data Models");
-		addXSDFromWebSite.setToolTipText("Add xsd schema from the data model types");
-		addXSDFromWebSite.addSelectionListener(new SelectionListener() {
-        	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
-        	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-        		MDMXSDSchemaEntryDialog dlg = new MDMXSDSchemaEntryDialog(shell.getShell(), "Select XSD Schema from MDM Web Site");
-        		dlg.setBlockOnOpen(true);
-        		dlg.open();
-        		if (dlg.getReturnCode() == Window.OK)  {
-        			List<String> urls = dlg.getMDMDataModelUrls();
-        			for(String url: urls)
-        			{
-            			XSDDesc xsdDesc = buildUp(LOCAL_MDM_URL + url + "/types", MDM_WEB, 1);
-            			include(xsdDesc);
-        			}
-        			getButton(IDialogConstants.OK_ID).setEnabled(true);
-        			tableViewer.refresh();
-        		}
-        	}
-		});
-		
+		if(Util.IsEnterPrise()) {
+			Button addXSDFromWebSite = new Button(compositeBtn,SWT.PUSH | SWT.FILL);
+			addXSDFromWebSite.setLayoutData(
+	                new GridData(SWT.FILL,SWT.NONE,false,false,1,1)
+	        );
+			addXSDFromWebSite.setText("Add Types from Data Models");
+			addXSDFromWebSite.setToolTipText("Add xsd schema from the data model types");
+			addXSDFromWebSite.addSelectionListener(new SelectionListener() {
+	        	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
+	        	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+	        		MDMXSDSchemaEntryDialog dlg = new MDMXSDSchemaEntryDialog(shell.getShell(), "Select XSD Schema from MDM Web Site");
+	        		dlg.setBlockOnOpen(true);
+	        		dlg.open();
+	        		if (dlg.getReturnCode() == Window.OK)  {
+	        			List<String> urls = dlg.getMDMDataModelUrls();
+	        			for(String url: urls)
+	        			{
+	            			XSDDesc xsdDesc = buildUp(LOCAL_MDM_URL + url + "/types", MDM_WEB, 1);
+	            			include(xsdDesc);
+	        			}
+	        			getButton(IDialogConstants.OK_ID).setEnabled(true);
+	        			tableViewer.refresh();
+	        		}
+	        	}
+			});
+		}
 		Button addXSDFromInputDlg = new Button(compositeBtn,SWT.PUSH | SWT.FILL);
 		addXSDFromInputDlg.setLayoutData(
                 new GridData(SWT.FILL,SWT.NONE,false,false,1,1)

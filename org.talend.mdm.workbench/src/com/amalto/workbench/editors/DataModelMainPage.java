@@ -193,7 +193,7 @@ import com.amalto.workbench.webservices.WSDataModel;
 public class DataModelMainPage extends AMainPageV2 {
 
 	protected Text descriptionText;
-	protected Button importXSDBtn, exportBtn,sortUPBtn,sortDownBtn,filterBtn,expandBtn,collapseBtn,expandSelBtn,sortNaturalBtn,addLanBtn,deleteLanbtn, importSchemaNsBtn;
+	protected Button importXSDBtn, exportBtn,sortUPBtn,sortDownBtn,expandBtn,collapseBtn,expandSelBtn,sortNaturalBtn,addLanBtn,deleteLanbtn, importSchemaNsBtn;
 	private   Label langeuageLabel;
 	private   Combo languageCombo;
 	protected TreeViewer viewer;
@@ -328,13 +328,30 @@ public class DataModelMainPage extends AMainPageV2 {
 			exportBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
 			exportBtn.setImage(ImageCache.getCreatedImage(EImage.EXPORT.getPath()));
 			exportBtn.setToolTipText("Export...");
-
-			filterBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
-			filterBtn.setImage(ImageCache.getCreatedImage(EImage.FILTER_PS.getPath()));
-			filterBtn.setToolTipText("Filter...");
 			
-			//add by lym
-			
+			if(Util.IsEnterPrise()) {
+				Button filterBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
+				filterBtn.setImage(ImageCache.getCreatedImage(EImage.FILTER_PS.getPath()));
+				filterBtn.setToolTipText("Filter...");
+				filterBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
+						false, 1, 1));	
+				filterBtn.addSelectionListener(new SelectionAdapter(){				
+	
+					public void widgetSelected(SelectionEvent e) {
+						if(dataModelFilterDialog==null){
+							dataModelFilter=new DataModelFilter("",false,false,false,true);
+							dataModelFilterDialog=new DataModelFilterDialog(getSite().getShell(),getXObject(),dataModelFilter);
+						}					 
+						 if(dataModelFilterDialog.open()== Dialog.OK){	
+							 ((XSDTreeContentProvider)viewer.getContentProvider()).setFilter(dataModelFilter);						 
+							 viewer.setInput(getSite());
+							 
+	//						 ((TypesContentProvider)typesViewer.getContentProvider()).setFilter(dataModelFilter);						 
+	//						 typesViewer.setInput(getSite());
+						 }
+					}
+				});
+			}
 			expandBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
 			expandBtn.setImage(ImageCache.getCreatedImage(EImage.EXPAND.getPath()));
 			expandBtn.setToolTipText("Expand...");
@@ -437,8 +454,7 @@ public class DataModelMainPage extends AMainPageV2 {
 					false, 1, 1));
 			exportBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 					false, 1, 1));
-			filterBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
-					false, 1, 1));			
+		
 			
 			expandBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 					false, 1, 1));	
@@ -453,22 +469,6 @@ public class DataModelMainPage extends AMainPageV2 {
 			importSchemaNsBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 					false, 1, 1));
 			
-			filterBtn.addSelectionListener(new SelectionAdapter(){				
-
-				public void widgetSelected(SelectionEvent e) {
-					if(dataModelFilterDialog==null){
-						dataModelFilter=new DataModelFilter("",false,false,false,true);
-						dataModelFilterDialog=new DataModelFilterDialog(getSite().getShell(),getXObject(),dataModelFilter);
-					}					 
-					 if(dataModelFilterDialog.open()== Dialog.OK){	
-						 ((XSDTreeContentProvider)viewer.getContentProvider()).setFilter(dataModelFilter);						 
-						 viewer.setInput(getSite());
-						 
-//						 ((TypesContentProvider)typesViewer.getContentProvider()).setFilter(dataModelFilter);						 
-//						 typesViewer.setInput(getSite());
-					 }
-				}
-			});
 			importXSDBtn.addSelectionListener(new SelectionAdapter(){
 	        	@Override
 	        	public void widgetSelected(SelectionEvent e) {
