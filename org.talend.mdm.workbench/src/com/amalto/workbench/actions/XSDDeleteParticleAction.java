@@ -29,7 +29,7 @@ public class XSDDeleteParticleAction extends UndoAction{
 		super(page);
 		setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
 		setText("Delete Element");
-		setToolTipText("Delete a Business Elementt");
+		setToolTipText("Delete a Business Element");
 	}
 	
 	public void run(Object toDel)

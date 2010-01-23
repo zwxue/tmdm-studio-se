@@ -67,8 +67,7 @@ public class XSDEditComplexTypeAction extends UndoAction{
        		
        		Util.updateComplexType(page.getSite(), decl, provider);
        		page.refresh();
-       		page.markDirty();
-       		page.refreshPage();
+       		page.markDirty();       		
        
 		} catch (Exception e) {
 			e.printStackTrace();

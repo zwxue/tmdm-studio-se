@@ -56,7 +56,7 @@ public class XSDDeleteTypeDefinition extends  UndoAction{
 			XSDSimpleTypeDefinition simpleType = (XSDSimpleTypeDefinition)selection.getFirstElement();
 			if(xsdSimpType!=null)
 				simpleType = xsdSimpType;
-			boolean find = Util.findElementsUsingType(objList, null, simpleType.getName());
+			boolean find = Util.findElementsUsingType(objList,simpleType);
 			if(find){
 				MessageDialog
 				.openWarning(page.getSite().getShell(), "Warnning",
@@ -73,7 +73,7 @@ public class XSDDeleteTypeDefinition extends  UndoAction{
 				complxType = xsdCmpexType;
 			}
 
-			boolean find = Util.findElementsUsingType(objList, null, complxType.getName());
+			boolean find = Util.findElementsUsingType(objList, complxType);
 			if (find)
 			{
 				MessageDialog

@@ -739,25 +739,19 @@ public class Util {
      * 
      * @param objList
      *            collection set to search for elemDecls
-     * @param namespace
-     *            for the type used
      * @param localName
      *            for the type used
      * @return Boolean  indicate any XSDElementDeclarations is found or not
      */
-    public static boolean findElementsUsingType(ArrayList<Object> objList, String namespace, String localName)   {
-    	if (null == localName)  	{
-    		throw new IllegalArgumentException("findElementsUsingType called with null localName");
-    	}
-    	
-    	
-    	// A handy convenience method quickly gets all
+    public static boolean findElementsUsingType(ArrayList<Object> objList, XSDTypeDefinition localTypedef)   {
+   	// A handy convenience method quickly gets all
     	// elementDeclarations within our schema; note that
     	// whether or not this returns types in included,
     	// imported, or redefined schemas is subject to change
     	
     	for (Iterator<Object> iter = objList.iterator(); iter.hasNext(); /* no-op */)  	{
     		Object obj = iter.next();
+    		if(obj==localTypedef) continue;
     		if (obj instanceof XSDElementDeclaration || obj instanceof XSDTypeDefinition)
     		{
     			XSDTypeDefinition typedef = null;
@@ -778,19 +772,12 @@ public class Util {
 					typedef = (XSDTypeDefinition) obj;
 				}
 
-	    		
-	    		// Ask this type and walk the baseTypes from this
-	    		// typedef seeing if any of them match the requested one
-//	    		if (typedef.hasNameAndTargetNamespace(localName, namespace)
-//	    				|| isTypeDerivedFrom(typedef, namespace, localName))
-//	    		{
-//	    			// We found it, return the element and continue
-//	    			return true;
-//	    		}
-    			
 	    		if (typedef instanceof XSDComplexTypeDefinition)
 	    		{
 	    			XSDComplexTypeDefinition type = (XSDComplexTypeDefinition)typedef;
+	    			if(type.getName().equals(localTypedef.getName()) && (localTypedef instanceof XSDComplexTypeDefinition)) {
+	    				return true;
+	    			}
 					if (type.getContent() instanceof XSDParticle) {
 						XSDParticle particle = (XSDParticle) type.getContent();
 						if (particle.getTerm() instanceof XSDModelGroup) {
@@ -802,7 +789,7 @@ public class Util {
 									XSDTypeDefinition typeDef = ((XSDElementDeclaration) pt.getContent()).getTypeDefinition();
 									if (typeDef != null && typeDef.getName() != null)
 									{
-										if ((localName.equals(typeDef.getName()))) {
+										if ((localTypedef.getName().equals(typeDef.getName()))) {
 											  return true;
 											}
 									}
@@ -815,14 +802,14 @@ public class Util {
 	    		{
 	    			XSDSimpleTypeDefinition type = (XSDSimpleTypeDefinition)typedef;
 	    			XSDSimpleTypeDefinition baseType = type.getBaseTypeDefinition();
-	    			if (baseType != null && baseType.getName().equals(localName))return true;
+	    			if (baseType != null && baseType.getName().equals(localTypedef.getName()))return true;
 	    		}
     		}
     	}
     	
         return false;
     }
-    
+ 
     public static List<String> getAllCustomSimpleDataType(XSDSchema schema)
     {
 		ArrayList customTypes = new ArrayList();
