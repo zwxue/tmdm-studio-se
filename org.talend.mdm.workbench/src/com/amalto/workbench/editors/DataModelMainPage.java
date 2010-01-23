@@ -473,7 +473,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	        	@Override
 	        	public void widgetSelected(SelectionEvent e) {
 	    			FileDialog fd = new FileDialog(getSite().getShell(),SWT.OPEN);
-	    			fd.setFilterExtensions(new String[]{"*.xml","*.dtd", "*.xsd"});
+	    			fd.setFilterExtensions(new String[]{"*.xsd","*.dtd","*.xml"});
 	    			fd.setText("Select the XML definition for XML Schema");
 	    			String filename = fd.open();
 	    			if (filename == null) return;
