@@ -1575,7 +1575,7 @@ public class Util {
 	   schema.setSchemaLocation(fileURI.toString());
 	    //set the schema for schema QName prefix to "xsd"
 	   schema.setSchemaForSchemaQNamePrefix("xsd");
-	   
+	   resource.getContents().add(schema);
 	    //Add the root schema to the resource that was created above
 	    Iterator<Integer> iter = schemaMonitor.values().iterator();
         while(iter.hasNext())
