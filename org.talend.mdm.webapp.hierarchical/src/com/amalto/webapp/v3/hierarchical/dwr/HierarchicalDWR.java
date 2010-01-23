@@ -159,7 +159,7 @@ public class HierarchicalDWR {
 		return CommonDWR.getMapSortedByValue(views);
 	}
 
-    public ListRange getPossiblePivotsList(int start, int limit,String sort,String dir,String regex){
+    public ListRange getPossiblePivotsList(int start, int limit,String sort,String dir,String regex) throws Exception{
 
 		ListRange listRange = new ListRange();
 		
@@ -183,7 +183,7 @@ public class HierarchicalDWR {
     	
     }
 	
-	public ListRange getTitleList(int start, int limit,String sort,String dir,String regex) {
+	public ListRange getTitleList(int start, int limit,String sort,String dir,String regex) throws Exception {
         ListRange listRange = new ListRange();
 		
 		if(regex==null||regex.length()==0)return listRange;

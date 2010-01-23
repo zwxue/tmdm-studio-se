@@ -31,7 +31,7 @@ public class HierarchicalUtil {
 	
 	public static final String HIERARCHICAL_TREE_UPDATEHISTORY="com.amalto.webapp.v3.hierarchical.bean.UpdateHistory";
 
-	public static Map<String, String> getBusinessConcepts(String language) {
+	public static Map<String, String> getBusinessConcepts(String language)throws Exception {
 		TreeMap<String, String> map = new TreeMap<String, String>();
 
 		try {
@@ -46,15 +46,14 @@ public class HierarchicalUtil {
 						dataModelPK, bc[i], language));
 			}
 		} catch (Exception e2) {
-			e2.printStackTrace();
-			return null;
+			throw e2;
 		}
 
 		return map;
 	}
 
 	public static LinkedHashMap<String, String> getPossiblePivots(
-			String businessConcept, String language) {
+			String businessConcept, String language)throws Exception {
 
 		LinkedHashMap<String, String> possiblePivots = new LinkedHashMap<String, String>();
 		try {
@@ -93,8 +92,7 @@ public class HierarchicalUtil {
 
 			}
 		} catch (Exception e1) {
-			e1.printStackTrace();
-			return null;
+			throw e1;
 		}
 
 		return possiblePivots;
@@ -112,7 +110,7 @@ public class HierarchicalUtil {
 	}
 
 	public static HashMap<String, String> getTitleList(String businessConcept,
-			String language) {
+			String language) throws Exception{
 		HashMap<String, String> xpathToLabel = new HashMap<String, String>();
 		try {
 			Configuration config = Configuration.getInstance();
@@ -122,8 +120,7 @@ public class HierarchicalUtil {
 					businessConcept, language, false);
 			xpathToLabel.remove(businessConcept);
 		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+			throw e;
 		}
 		return xpathToLabel;
 	}
