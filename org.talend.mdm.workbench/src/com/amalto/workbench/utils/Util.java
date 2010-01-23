@@ -1422,6 +1422,11 @@ public class Util {
     	    List<XSDImport> imports = new ArrayList<XSDImport>();
     	    List<Exception> exceptons = new ArrayList<Exception>();
     	    Map<String,Integer> schemaMonitor = new HashMap<String, Integer>();
+    	    Document doc = Util.parse(xsd);
+            if(Util.getNodeList(doc, "./xsd:import").getLength() == 0)
+            {
+             return Util.getXSDSchema(xsd);
+            }
     	    XSDSchema xsdSchema = Util.getXSDSchema(xsd, imports, treeObj, false, exceptons, schemaMonitor);
     	    if(exceptons.size() > 0)
     	    {
