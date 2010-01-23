@@ -1,10 +1,7 @@
 package com.amalto.workbench.editors.xmleditor;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.StringReader;
 import java.io.StringWriter;
-
 import org.dom4j.Document;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
