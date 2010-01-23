@@ -775,7 +775,7 @@ public class Util {
 	    		if (typedef instanceof XSDComplexTypeDefinition)
 	    		{
 	    			XSDComplexTypeDefinition type = (XSDComplexTypeDefinition)typedef;
-	    			if(type.getName().equals(localTypedef.getName()) && (localTypedef instanceof XSDComplexTypeDefinition)) {
+	    			if(localTypedef.getName().equals(type.getName()) && (localTypedef instanceof XSDComplexTypeDefinition)) {
 	    				return true;
 	    			}
 					if (type.getContent() instanceof XSDParticle) {
