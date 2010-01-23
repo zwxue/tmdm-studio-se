@@ -253,7 +253,8 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             		String serviceName = serviceNameCombo.getText();
             		String helpPara="";
             		if(!"".equals(serviceName)&&!serviceName.equals(null))
-            			helpPara = EInputTemplate.getXtentisObjexts().get(serviceName).getContent();
+            			if(EInputTemplate.getXtentisObjexts().get(serviceName)!=null)
+            				helpPara = EInputTemplate.getXtentisObjexts().get(serviceName).getContent();
             		else
             			helpPara = "";
             		serviceParametersText.setText(helpPara);
