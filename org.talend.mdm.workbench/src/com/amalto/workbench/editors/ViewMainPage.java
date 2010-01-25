@@ -116,7 +116,9 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             viewableElementColumns[0].setColumnWidth(220);
             viewableViewer = new TisTableViewer(Arrays.asList(viewableElementColumns),toolkit,viewablehGroup);
             viewableViewer.setXpath(true);
-            concept = viewName.replaceAll("Browse_items_","").replaceAll("#.*","");
+            if(viewName.startsWith("Browse_items_")) {
+            	concept = viewName.replaceAll("Browse_items_","").replaceAll("#.*","");
+            }
             viewableViewer.setConceptName(concept);
             viewableViewer.setMainPage(this);
             viewableViewer.setAddMulti(true);
