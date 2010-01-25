@@ -1,5 +1,7 @@
 package com.amalto.workbench.rcp;
 
+import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.IWorkbenchConfigurer;
@@ -7,6 +9,13 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 
+import sun.management.ManagementFactory;
+
+import com.amalto.workbench.MDMWorbenchPlugin;
+import com.amalto.workbench.Messages;
+import com.amalto.workbench.register.RegisterManagement;
+import com.amalto.workbench.register.RegisterWizard;
+import com.amalto.workbench.register.RegisterWizardDialog;
 import com.amalto.workbench.views.MDMPerspective;
 
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
@@ -30,4 +39,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
         PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.DOCK_PERSPECTIVE_BAR,
                 IWorkbenchPreferenceConstants.TOP_RIGHT);
     }	
+    @Override
+    public void postStartup() {
+     }
 }

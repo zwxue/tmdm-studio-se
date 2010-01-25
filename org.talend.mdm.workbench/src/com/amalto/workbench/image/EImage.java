@@ -263,6 +263,7 @@ public enum EImage {
 	SCHEMAELEMENT("icons/schema_element.png"),
 	EXPAND("icons/expand.png"),
 	COLLAPSE("icons/collapse.png"),
+	REGISTER_WIZ("icons/register_wiz.png"), //$NON-NLS-1$
 	KEYS("icons/keys.png");
 	EImage(String path){
 		this.path=path;
