@@ -72,15 +72,15 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
         
         this.filterOperationStore = new Ext.data.Store({
           proxy: new Ext.data.MemoryProxy([
-                ['CONTAINS','contains the word(s)'],
-                ['EQUALS','is equal to'],
-                ['NOT_EQUALS','is not equal to'],
-                ['GREATER_THAN','is greater than'],
-                ['GREATER_THAN_OR_EQUAL','is greater or equals'],
-                ['LOWER_THAN','is lower than'],
-                ['LOWER_THAN_OR_EQUAL','is lower or equals'],
-                ['STARTSWITH','contains a word starting with'],
-                ['STRICTCONTAINS','contains the sentence']
+                ['CONTAINS',amalto.hierarchical.HierarchicalViewLocal.get("Filter_Operation_CONTAINS")],
+                ['EQUALS',amalto.hierarchical.HierarchicalViewLocal.get("Filter_Operation_EQUALS")],
+                ['NOT_EQUALS',amalto.hierarchical.HierarchicalViewLocal.get("Filter_Operation_NOT_EQUALS")],
+                ['GREATER_THAN',amalto.hierarchical.HierarchicalViewLocal.get("Filter_Operation_GREATER_THAN")],
+                ['GREATER_THAN_OR_EQUAL',amalto.hierarchical.HierarchicalViewLocal.get("Filter_Operation_GREATER_THAN_OR_EQUAL")],
+                ['LOWER_THAN',amalto.hierarchical.HierarchicalViewLocal.get("Filter_Operation_LOWER_THAN")],
+                ['LOWER_THAN_OR_EQUAL',amalto.hierarchical.HierarchicalViewLocal.get("Filter_Operation_LOWER_THAN_OR_EQUAL")],
+                ['STARTSWITH',amalto.hierarchical.HierarchicalViewLocal.get("Filter_Operation_STARTSWITH")],
+                ['STRICTCONTAINS',amalto.hierarchical.HierarchicalViewLocal.get("Filter_Operation_STRICTCONTAINS")]
           ]),
           reader: new Ext.data.ArrayReader({}, [
               {name: 'value',mapping: 0, type: 'string'},
@@ -121,7 +121,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 				handler : function(button, event) {
 					this.onAddFilterClick(button, event);
 				}.createDelegate(this),
-				text : "Add Filter"
+				text : amalto.hierarchical.HierarchicalViewLocal.get("Button_Add_Filter")
 			}]),
 			listeners:
    	   	        {
@@ -131,7 +131,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
    	   	        },
 			columns : [{
 				hidden : false,
-				header : "Field",
+				header : amalto.hierarchical.HierarchicalViewLocal.get("Search_Field_Filters_Column_Field"),
 				dataIndex : "Field",
 				sortable : true,
 				editor:new Ext.form.ComboBox({
@@ -142,7 +142,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 				})
 			}, {
 				hidden : false,
-				header : "Operator",
+				header : amalto.hierarchical.HierarchicalViewLocal.get("Search_Field_Filters_Column_Operator"),
 				dataIndex : "Operator",
 				sortable : true,
 				editor:new Ext.form.ComboBox({
@@ -154,13 +154,13 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 				width:165
 			}, {
 				hidden : false,
-				header : "Value",
+				header : amalto.hierarchical.HierarchicalViewLocal.get("Search_Field_Filters_Column_Value"),
 				dataIndex : "Value",
 				sortable : true,
 				editor:new Ext.form.TextField()
 			}, {
 			    hidden : false,
-				header : "Delete",
+				header : amalto.hierarchical.HierarchicalViewLocal.get("Search_Field_Filters_Column_Delete"),
 				dataIndex : "Delete",
 				sortable : true, 
 				renderer:this.deleteFiterRenderer,
@@ -182,7 +182,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 				}),
 				root : this.hierarchicalTreeRoot=new Ext.tree.AsyncTreeNode({
 					expandable : true,
-					text : "Root",
+					text : amalto.hierarchical.HierarchicalViewLocal.get("Tree_Root_Default_Name"),
 					draggable : false,
 					allowDrop : false,
 					id : "0"
@@ -222,7 +222,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 													  //make dirty
 				            	                      amalto.hierarchical.HierarchicalView.makeDirty();	
 													}else{
-													  Ext.MessageBox.alert('Sorry', "This change has not affected the actual data item! ");
+													  Ext.MessageBox.alert(amalto.hierarchical.HierarchicalViewLocal.get("Messagebox_Error"), amalto.hierarchical.HierarchicalViewLocal.get("Message_Record_Changes_False"));
 													}
 												});
 				            	              }
@@ -233,18 +233,18 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 					handler : function(button, event) {
 						this.onSaveChangesClick(button, event);
 					}.createDelegate(this),
-					text : "Save Changes"
+					text : amalto.hierarchical.HierarchicalViewLocal.get("Button_Save_Changes")
 				},{
 				    xtype : "tbspacer"
 			    },{
 					handler : function(button, event) {
 						this.onCancelChangesClick(button, event);
 					}.createDelegate(this),
-					text : "Cancel Changes"
+					text : amalto.hierarchical.HierarchicalViewLocal.get("Button_Cancel_Changes")
 				}]),
 				tbar : new Ext.Toolbar([
 				{
-					text : "Sort Order",
+					text : amalto.hierarchical.HierarchicalViewLocal.get("Button_Sort_Order"),
 				    //xtype : "tbsplit",
 					//iconCls: 'bmenu',  // <-- icon
 					handler : function(button, event) {
@@ -252,15 +252,15 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 					}.createDelegate(this),
 				    menu: new Ext.menu.Menu({
 						        items: [
-						            '<b class="menu-title">Choose Field</b>',
+						            '<b class="menu-title">'+amalto.hierarchical.HierarchicalViewLocal.get("Sort_Choose_Field")+'</b>',
 						            this.sortOrderField1 = new Ext.menu.Item({
 						                text: 'Field1',
 						                menu: {
 						                    items: [
 						                        // stick any markup in a menu
-						                        '<b class="menu-title">Choose Order</b>',
+						                        '<b class="menu-title">'+amalto.hierarchical.HierarchicalViewLocal.get("Sort_Choose_Order")+'</b>',
 						                        this.sortOrderField1Ascending = new Ext.menu.CheckItem({
-						                            text: 'Ascending',
+						                            text: amalto.hierarchical.HierarchicalViewLocal.get("Sort_Ascending"),
 						                            checked: true,
 						                            group: 'field1',
 						                            checkHandler: function(item,checked) {
@@ -268,7 +268,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 													}.createDelegate(this)
 						                        }), 
 						                        this.sortOrderField1Descending = new Ext.menu.CheckItem({
-						                            text: 'Descending',
+						                            text: amalto.hierarchical.HierarchicalViewLocal.get("Sort_Descending"),
 						                            checked: false,
 						                            group: 'field1',
 						                            checkHandler: function(item,checked) {
@@ -283,9 +283,9 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 						                menu: {
 						                    items: [
 						                        // stick any markup in a menu
-						                        '<b class="menu-title">Choose Order</b>',
+						                        '<b class="menu-title">'+amalto.hierarchical.HierarchicalViewLocal.get("Sort_Choose_Order")+'</b>',
 						                        this.sortOrderField2Ascending = new Ext.menu.CheckItem({
-						                            text: 'Ascending',
+						                            text: amalto.hierarchical.HierarchicalViewLocal.get("Sort_Ascending"),
 						                            checked: true,
 						                            group: 'field2',
 						                            checkHandler: function(item,checked) {
@@ -293,7 +293,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 													}.createDelegate(this)
 						                        }), 
 						                        this.sortOrderField2Descending = new Ext.menu.CheckItem({
-						                            text: 'Descending',
+						                            text: amalto.hierarchical.HierarchicalViewLocal.get("Sort_Descending"),
 						                            checked: false,
 						                            group: 'field2',
 						                            checkHandler: function(item,checked) {
@@ -308,9 +308,9 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 						                menu: {
 						                    items: [
 						                        // stick any markup in a menu
-						                        '<b class="menu-title">Choose Order</b>',
+						                        '<b class="menu-title">'+amalto.hierarchical.HierarchicalViewLocal.get("Sort_Choose_Order")+'</b>',
 						                        this.sortOrderField3Ascending = new Ext.menu.CheckItem({
-						                            text: 'Ascending',
+						                            text: amalto.hierarchical.HierarchicalViewLocal.get("Sort_Ascending"),
 						                            checked: true,
 						                            group: 'field3',
 						                            checkHandler: function(item,checked) {
@@ -318,7 +318,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 													}.createDelegate(this)
 						                        }), 
 						                        this.sortOrderField3Descending = new Ext.menu.CheckItem({
-						                            text: 'Descending',
+						                            text: amalto.hierarchical.HierarchicalViewLocal.get("Sort_Descending"),
 						                            checked: false,
 						                            group: 'field3',
 						                            checkHandler: function(item,checked) {
@@ -343,7 +343,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 				},{
 				    xtype : "tbspacer"
 			    },{
-					text : "Number of records (-1 = no limit):",
+					text : amalto.hierarchical.HierarchicalViewLocal.get("Records_MAX_SIZE"),
 					xtype : "tbtext"
 				}, {
 					name : "maxSizeText",
@@ -371,7 +371,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 
 		Ext.apply(this, {
 			id : "hierarchicalViewDisplay",
-			title : "Hierarchical View Display",
+			title : amalto.hierarchical.HierarchicalViewLocal.get("Hierarchical_View_Title"),
 			layout : "border",
 			closable: true,
 			items : [{
@@ -382,7 +382,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 				collapsible : true,
 				collapseFirst : false,
 				autoScroll: true,
-				title : "Search Panel",
+				title : amalto.hierarchical.HierarchicalViewLocal.get("Search_Panel_Title"),
 				layout : "form",
 				items : [
 				{
@@ -394,7 +394,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 					name : "isSharedRecordField",
 					value : ""
 				}, {
-					fieldLabel : "Entity",
+					fieldLabel : amalto.hierarchical.HierarchicalViewLocal.get("Search_Field_Entity"),
 					editable : false,
 					xtype : "combo",
 					id : "dataObjectCmp",
@@ -411,7 +411,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
                                                      }.createDelegate(this)
                                 }
 				}, {
-					fieldLabel : "Pivot",
+					fieldLabel : amalto.hierarchical.HierarchicalViewLocal.get("Search_Field_Pivot"),
 					editable : false,
 					xtype : "combo",
 					id : "pivotCmp",
@@ -426,7 +426,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
                                'beforequery' : function(queryEvent) {
                                	                     var dataObjectLabel=DWRUtil.getValue('dataObjectCmp');
 											    	 if(dataObjectLabel==''){
-											    	    	Ext.MessageBox.alert('Sorry', "Please select a 'Entity' First! ");
+											    	    	Ext.MessageBox.alert(amalto.hierarchical.HierarchicalViewLocal.get("Messagebox_Error"), amalto.hierarchical.HierarchicalViewLocal.get("Message_Missing_Entity"));
 											                return false;
 											    	   }
                                                     },
@@ -441,7 +441,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
                                                     }
                                 }
 				}, {
-					fieldLabel : "Title Field",
+					fieldLabel : amalto.hierarchical.HierarchicalViewLocal.get("Search_Field_Title"),
 					editable : false,
 					xtype : "combo",
 					name : "titleFieldCmp",
@@ -456,13 +456,13 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
                                'beforequery' : function(queryEvent) {
                                	                     var dataObjectLabel=DWRUtil.getValue('dataObjectCmp');
 											    	 if(dataObjectLabel==''){
-											    	    	Ext.MessageBox.alert('Sorry', "Please select a 'Entity' First! ");
+											    	    	Ext.MessageBox.alert(amalto.hierarchical.HierarchicalViewLocal.get("Messagebox_Error"), amalto.hierarchical.HierarchicalViewLocal.get("Message_Missing_Entity"));
 											                return false;
 											    	   }
                                                     }
                                 }
 				}, {
-					fieldLabel : "Filters",
+					fieldLabel : amalto.hierarchical.HierarchicalViewLocal.get("Search_Field_Filters"),
 					isFormField:true,
 					layout : "column",
 					items : [this.editorGridPanel1],
@@ -474,17 +474,17 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 					handler : function(button, event) {
 						this.onSearchClick();
 					}.createDelegate(this),
-					text : "Search"
+					text : amalto.hierarchical.HierarchicalViewLocal.get("Button_Search")
 				},{
 					handler : function(button, event) {
 						this.onSaveReportClick();
 					}.createDelegate(this),
-					text : "Save Report"
+					text : amalto.hierarchical.HierarchicalViewLocal.get("Button_Save_Report")
 				},{
 					handler : function(button, event) {
 						this.onLoadReportClick();
 					}.createDelegate(this),
-					text : "Load Report"
+					text : amalto.hierarchical.HierarchicalViewLocal.get("Button_Load_Report")
 				}],
 				buttonAlign : "left",
 				bodyStyle:'padding:5px'
@@ -500,21 +500,21 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
          var orderExprText=DWRUtil.getValue('orderExprText');
          var orderExprArray=this.orderExprText2Array(orderExprText);
          if(item.group=='field1'){
-         	if(item.text=='Ascending'){
+         	if(item.text==amalto.hierarchical.HierarchicalViewLocal.get("Sort_Ascending")){
          		orderExprArray[0]='ASC';
-         	}else if(item.text=='Descending'){
+         	}else if(item.text==amalto.hierarchical.HierarchicalViewLocal.get("Sort_Descending")){
          		orderExprArray[0]='DESC';
          	}
          }else if(item.group=='field2'){
-         	if(item.text=='Ascending'){
+         	if(item.text==amalto.hierarchical.HierarchicalViewLocal.get("Sort_Ascending")){
          		orderExprArray[1]='ASC';
-         	}else if(item.text=='Descending'){
+         	}else if(item.text==amalto.hierarchical.HierarchicalViewLocal.get("Sort_Descending")){
          		orderExprArray[1]='DESC';
          	}	
          }else if(item.group=='field3'){
-         	if(item.text=='Ascending'){
+         	if(item.text==amalto.hierarchical.HierarchicalViewLocal.get("Sort_Ascending")){
          		orderExprArray[2]='ASC';
-         	}else if(item.text=='Descending'){
+         	}else if(item.text==amalto.hierarchical.HierarchicalViewLocal.get("Sort_Descending")){
          		orderExprArray[2]='DESC';
          	}
          }
@@ -731,7 +731,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 
     	var titleFieldLabel=DWRUtil.getValue('titleFieldCmp');
     	if(titleFieldLabel==''){
-				Ext.MessageBox.alert('Sorry', "Please select a 'Title Field' First! ");
+				Ext.MessageBox.alert(amalto.hierarchical.HierarchicalViewLocal.get("Messagebox_Error"), amalto.hierarchical.HierarchicalViewLocal.get("Message_Missing_Title"));
 				return false;
 		}
 		var titleFieldValue=Ext.getCmp('titleFieldCmp').value;
@@ -768,11 +768,11 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
     	var pivotLabel=DWRUtil.getValue('pivotCmp');
     	var titleLabel=DWRUtil.getValue('titleFieldCmp');
     	var invalidFields="";
-    	if(dataObjectLabel=='')invalidFields+="'Entity' ";
-    	if(pivotLabel=='')invalidFields+="'Pivot' ";
-    	if(titleLabel=='')invalidFields+="'Title Field' ";
+    	if(dataObjectLabel=='')invalidFields+="'"+amalto.hierarchical.HierarchicalViewLocal.get("Search_Field_Entity")+"' ";
+    	if(pivotLabel=='')invalidFields+="'"+amalto.hierarchical.HierarchicalViewLocal.get("Search_Field_Pivot")+"' ";
+    	if(titleLabel=='')invalidFields+="'"+amalto.hierarchical.HierarchicalViewLocal.get("Search_Field_Title")+"' ";
     	if(invalidFields!=""){
-    		Ext.MessageBox.alert('Sorry', "Please input "+invalidFields+"first! ");
+    		Ext.MessageBox.alert(amalto.hierarchical.HierarchicalViewLocal.get("Messagebox_Error"), amalto.hierarchical.HierarchicalViewLocal.get("Messagebox_Prompt_Begin")+invalidFields+amalto.hierarchical.HierarchicalViewLocal.get("Messagebox_Prompt_End"));
 		    return false;
     	}
     	//parse
@@ -810,7 +810,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 			if(dataObjectLabel=='')passValidate=false;
 			if(!passValidate){
 				//Ext.MessageBox.alert('Sorry', "Please create a new report or load a alreay exist report first! ");
-				alert("Please create a new report or load a alreay exist report first! ");
+				alert(amalto.hierarchical.HierarchicalViewLocal.get("Messagebox_Report_Empty"));
 				return;
 			}
 			
@@ -866,7 +866,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
     	
     	var reportName = DWRUtil.getValue('hierarchicalReportName');
 		if(reportName==''){
-		        alert("Report Name can't be empty! ");
+		        alert(amalto.hierarchical.HierarchicalViewLocal.get("Messagebox_Report_Name_Empty"));
 		        return;
 		}
 		var isSharedReport = DWRUtil.getValue('hierarchicalReportShared');
@@ -899,11 +899,11 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
     	if(state==true){
     	    	this.saveReportWindow.hide();
 				this.saveReportWindow.destroy();
-				Ext.MessageBox.alert('Info', "The hierarchical-report has been saved successfully! ");
+				Ext.MessageBox.alert(amalto.hierarchical.HierarchicalViewLocal.get("Messagebox_Info"), amalto.hierarchical.HierarchicalViewLocal.get("Messagebox_Report_Save_Success"));
     	    }else{
     	    	this.saveReportWindow.hide();
 				this.saveReportWindow.destroy();
-    	    	Ext.MessageBox.alert('Sorry', "Saved a hierarchical-report failed! ");
+    	    	Ext.MessageBox.alert(amalto.hierarchical.HierarchicalViewLocal.get("Messagebox_Error"), amalto.hierarchical.HierarchicalViewLocal.get("Messagebox_Report_Save_Fail"));
     	    }
     },
     
@@ -931,7 +931,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 			     xtype : "form",
 			     items : [{
 			     	name : "loadedHierarchicalReportNames",
-					fieldLabel : "Reports",
+					fieldLabel : amalto.hierarchical.HierarchicalViewLocal.get("Reports_Title"),
 					xtype : "combo",
 					store: new Ext.data.Store({
 										proxy: new Ext.data.SimpleDWRProxy(HierarchicalViewInterface.getReportsName),
@@ -952,7 +952,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 		    });
 		    
 		    this.loadReportWindow = new Ext.Window({
-		        title: "Load Report",
+		        title: amalto.hierarchical.HierarchicalViewLocal.get("Load_Report_Title"),
 		        width: 320,
 		        height:110,
 		        layout: 'fit',
@@ -962,7 +962,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 		        items: loadReportPanel,
 		        modal:true,
 			    buttons: [{
-		            text: "Load",
+		            text: amalto.hierarchical.HierarchicalViewLocal.get("Load_Report_Button"),
 		            handler: function(){
 							       this.onLoadReportWindowExecuteClick();
 						        }.createDelegate(this)
@@ -1058,15 +1058,15 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 					
 					hierarchicalViewEditPanel.initData();	
 	    	    }else{
-	    	    	Ext.MessageBox.alert('Sorry', "Please get a 'Result Set' First! ");
+	    	    	Ext.MessageBox.alert(amalto.hierarchical.HierarchicalViewLocal.get("Messagebox_Error"), amalto.hierarchical.HierarchicalViewLocal.get("Message_No_Result_Set"));
 	    	    }
         });
     },
     
     onSaveChangesClick: function(button, event){
     	Ext.MessageBox.show({
-           msg: 'Saving your data, please wait...',
-           progressText: 'Saving...',
+           msg: amalto.hierarchical.HierarchicalViewLocal.get("Messagebox_Progress_Saving_Content"),
+           progressText: amalto.hierarchical.HierarchicalViewLocal.get("Messagebox_Progress_Saving_Title"),
            width:300,
            wait:true,
            waitConfig: {interval:200}
@@ -1078,10 +1078,10 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 		           amalto.hierarchical.HierarchicalView.cleanDirty();
 		           
 	    		   Ext.MessageBox.hide();
-		    	   Ext.MessageBox.alert('Status', data);
+		    	   Ext.MessageBox.alert(amalto.hierarchical.HierarchicalViewLocal.get("Messagebox_Status"), data);
 	        },
 	        errorHandler:function(errorString, exception) {  
-	              alert('Exception:'+ errorString);
+	              alert(amalto.hierarchical.HierarchicalViewLocal.get("Messagebox_Exception")+':'+ errorString);
 	              Ext.MessageBox.hide();
 	        }
         });

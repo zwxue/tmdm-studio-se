@@ -7,6 +7,8 @@ amalto.namespace("amalto.hierarchical");
 
 amalto.hierarchical.HierarchicalView = function () {
 	
+	loadResource("/hierarchical/secure/js/HierarchicalViewLocal.js", "amalto.hierarchical.HierarchicalViewLocal" );
+	
     loadResource("/hierarchical/secure/js/HierarchicalViewDisplay.js", "");
     
     loadResource("/hierarchical/secure/js/MultiSelectTreePanel.js", "");
@@ -16,6 +18,7 @@ amalto.hierarchical.HierarchicalView = function () {
 		hierarchicalViewDisplayPanel = tabPanel.getItem('hierarchicalViewDisplay');
 		
 		if(hierarchicalViewDisplayPanel == undefined){
+			amalto.hierarchical.HierarchicalViewLocal.init();
 			hierarchicalViewDisplayPanel=new amalto.hierarchical.HierarchicalViewDisplay();			
 			tabPanel.add(hierarchicalViewDisplayPanel);
 		}
