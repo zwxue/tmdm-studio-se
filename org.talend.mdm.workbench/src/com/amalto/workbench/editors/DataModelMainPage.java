@@ -1614,12 +1614,12 @@ public class DataModelMainPage extends AMainPageV2 {
 			}
 		}
 
-		if (obj instanceof XSDAnnotation && selectedObjs.length == 1) {
-			XSDAnnotation annotn = (XSDAnnotation)obj;
-			if(annotn.getSchema().getTargetNamespace() == null && !Util.IsAImporedElement(annotn, xsdSchema))
-			   setAnnotationActions(manager);
-			
-		}
+//		if (obj instanceof XSDAnnotation && selectedObjs.length == 1) {
+//			XSDAnnotation annotn = (XSDAnnotation)obj;
+//			if(annotn.getSchema().getTargetNamespace() == null && !Util.IsAImporedElement(annotn, xsdSchema))
+//			   setAnnotationActions(manager);
+//			
+//		}
 
 		deleteConceptWrapAction.regisExtraClassToDel(XSDComplexTypeDefinitionImpl.class);
 		
