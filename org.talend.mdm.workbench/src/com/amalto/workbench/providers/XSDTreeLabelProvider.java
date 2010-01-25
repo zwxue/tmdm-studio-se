@@ -323,7 +323,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
 		if (obj instanceof XSDIdentityConstraintDefinition) {
 			XSDIdentityConstraintDefinition identity = (XSDIdentityConstraintDefinition) obj;
 			if (identity.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL))
-				return ImageCache.getCreatedImage( EImage.KEYS.getPath());
+				return ImageCache.getCreatedImage( EImage.UNIQUE.getPath());
 			return ImageCache.getCreatedImage( EImage.PRIMARYKEY.getPath());
 		}
 
@@ -364,7 +364,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
 						if (source.startsWith("X_Label_")) {
 							return ImageCache.getCreatedImage( EImage.LABEL.getPath());
 						} else if (source.equals("X_ForeignKey")) {
-							return ImageCache.getCreatedImage( EImage.KEY.getPath());
+							return ImageCache.getCreatedImage( EImage.PRIMARYKEY.getPath());
 						} else if (source.equals("X_ForeignKeyInfo")) {
 							return ImageCache.getCreatedImage( EImage.KEYINFO.getPath());
 						} else if (source.equals("X_SourceSystem")) {

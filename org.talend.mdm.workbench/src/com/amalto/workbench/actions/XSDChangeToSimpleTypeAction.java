@@ -41,7 +41,7 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
 	
 	public XSDChangeToSimpleTypeAction(DataModelMainPage page) {
 		super(page);
-		setImageDescriptor(ImageCache.getImage(EImage.CHANGE_TO_SIMPLE.getPath()));
+		setImageDescriptor(ImageCache.getImage(EImage.SIMPLETYPE.getPath()));
 		setText("Change to a Simple Type");
 		setToolTipText("Make Element a Simple Element or change the current Simple Type");
 		setDescription(getToolTipText());

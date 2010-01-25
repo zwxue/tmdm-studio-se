@@ -353,7 +353,7 @@ public class ComplexTableViewer {
 	        		tableColumn.setImage(ImageCache.getCreatedImage(EImage.WILDCARD.getPath()));		        		
 	        	}	        	
 	        	if(column.isUnique()){
-	        		tableColumn.setImage(ImageCache.getCreatedImage(EImage.KEYS.getPath()));		        		
+	        		tableColumn.setImage(ImageCache.getCreatedImage(EImage.UNIQUE.getPath()));		        		
 	        	}
 	        	if (column.getColumnWidth() > 0) {
 					tableColumn.setWidth(column.getColumnWidth());

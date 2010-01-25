@@ -56,7 +56,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 	public XSDChangeToComplexTypeAction(DataModelMainPage page,boolean isXSDModelGroup) {
 		super(page);
 		this.isXSDModelGroup=isXSDModelGroup;
-		setImageDescriptor(ImageCache.getImage(EImage.CHANGE_TO_COMPLEX.getPath()));
+		setImageDescriptor(ImageCache.getImage(EImage.COMPLEXTYPE.getPath()));
 		if(isXSDModelGroup)
 			setText("Change Sub-Element Group");
 		else

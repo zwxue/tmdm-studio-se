@@ -23,7 +23,7 @@ public class XSDGetXPathAction extends UndoAction{
 	
 	public XSDGetXPathAction(DataModelMainPage page) {
 		super(page);
-		setImageDescriptor(ImageCache.getImage(EImage.XPATH.getPath()));
+		setImageDescriptor(ImageCache.getImage(EImage.COPY.getPath()));
 		setText("Copy XPath");
 		setToolTipText("Copy the XPath");
 	}
