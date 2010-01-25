@@ -1422,12 +1422,12 @@ public class Util {
     	    Map<String,Integer> schemaMonitor = new HashMap<String, Integer>();
     	    Document doc = Util.parse(xsd);
     	    //no import or include using old getXsdschema()
-    		if (Util.getNodeList(doc.getDocumentElement(),"//xsd:import").getLength() ==0
-			|| Util.getNodeList(doc.getDocumentElement(),
-					"//xsd:include").getLength() ==0)
-            {
-             return Util.getXSDSchema(xsd);
-            }
+//    		if (Util.getNodeList(doc.getDocumentElement(),"//xsd:import").getLength() ==0
+//			|| Util.getNodeList(doc.getDocumentElement(),
+//					"//xsd:include").getLength() ==0)
+//            {
+//             return Util.getXSDSchema(xsd);
+//            }
     	    XSDSchema xsdSchema = Util.getXSDSchema(xsd, imports, treeObj, false, exceptons, schemaMonitor);
     	    if(exceptons.size() > 0)
     	    {
@@ -1510,6 +1510,7 @@ public class Util {
 		Document document = null;
 		
 		documentBuilder = documentBuilderFactory.newDocumentBuilder();
+		if(rawData == null) return XSDSchemaImpl.getSchemaForSchema("http://www.w3.org/2001/XMLSchema");
 		if (uri) {
 			File file = new File(rawData);
 			if (file.isFile())
@@ -1552,7 +1553,7 @@ public class Util {
 						schema = Util.getXSDSchema(rawSchemaLocationURI, imports, treeObj, true, exceptions, schemaMonitor);
 					} catch (Exception e) {
 						exceptions.add(e);
-						return null;
+						return XSDSchemaImpl.getSchemaForSchema(namespaceURI);
 					}
 		        	 schema.setTargetNamespace(namespaceURI) ;
 				     schema.setElement(schema.getDocument().getDocumentElement());
