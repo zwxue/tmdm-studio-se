@@ -341,7 +341,7 @@ public class TypesLabelProvider extends LabelProvider {
 		if (obj instanceof XSDIdentityConstraintDefinition) {
 			XSDIdentityConstraintDefinition identity = (XSDIdentityConstraintDefinition) obj;
 			if (identity.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL))
-				return ImageCache.getCreatedImage( EImage.UNIQUE.getPath());
+				return ImageCache.getCreatedImage( EImage.KEYS.getPath());
 			return ImageCache.getCreatedImage( EImage.PRIMARYKEY.getPath());
 		}
 
