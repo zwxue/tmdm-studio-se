@@ -711,6 +711,13 @@ public class DataModelMainPage extends AMainPageV2 {
 			this.markDirty();
 			this.refresh();
 //	 				this.getTreeViewer().expandToLevel(xSDCom, 2);
+			this.commit();
+			try {
+				WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
+				xsdSchema = getXSDSchema(wsObject.getXsdSchema());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 			
 	}
@@ -1842,11 +1849,11 @@ public class DataModelMainPage extends AMainPageV2 {
 
 		if (obj instanceof XSDAnnotation
 				&& selectedObjs.length == 1) {
-			
 			if(((XSDAnnotation)obj).getSchema().getTargetNamespace() == null && !Util.IsAImporedElement((XSDAnnotation)obj, xsdSchema)){
 				setAnnotationActions(manager);
 
-			}else if(!Util.IsAImporedElement((XSDAnnotation)obj, xsdSchema))
+			}
+			else if(!Util.IsAImporedElement((XSDAnnotation)obj, xsdSchema))
 			{
 				setAnnotationActions(manager);
 
