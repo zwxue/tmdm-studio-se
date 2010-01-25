@@ -1773,9 +1773,9 @@ public class DataModelMainPage extends AMainPageV2 {
 						if (term instanceof XSDElementDeclaration) {
 							// Annotations
 							XSDTypeDefinition type = ((XSDElementDeclaration)term).getTypeDefinition();
-							if(!Util.IsAImporedElement(type, xsdSchema)){								
+//							if(!Util.IsAImporedElement(type, xsdSchema)){								
 							   setAnnotationActions(manager);
-							}
+//							}
 							if (((XSDElementDeclaration)term).getTypeDefinition() instanceof XSDSimpleTypeDefinition)
 							{
 								manager.add(setFacetMsgAction);
