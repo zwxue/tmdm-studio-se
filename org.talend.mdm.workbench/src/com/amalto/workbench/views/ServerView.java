@@ -53,7 +53,6 @@ import com.amalto.workbench.actions.CopyXObjectAction;
 import com.amalto.workbench.actions.DeleteXObjectAction;
 import com.amalto.workbench.actions.EditXObjectAction;
 import com.amalto.workbench.actions.NewCategoryAction;
-import com.amalto.workbench.actions.NewUserAction;
 import com.amalto.workbench.actions.NewXObjectAction;
 import com.amalto.workbench.actions.PasteXObjectAction;
 import com.amalto.workbench.actions.RenameXObjectAction;
@@ -80,8 +79,6 @@ import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSGetDataCluster;
 import com.amalto.workbench.webservices.WSLogout;
-import com.amalto.workbench.webservices.WSVersioningGetInfo;
-import com.amalto.workbench.webservices.WSVersioningInfo;
 import com.amalto.workbench.webservices.XtentisPort;
 
 /**
@@ -113,7 +110,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	protected Action importAction;
 	protected Action newCategoryAction;
 	//test for NewUserAction 
-	protected NewUserAction newUserActon;
 	
 	
 	private ServerTreeContentProvider contentProvider;
@@ -606,11 +602,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					if(!(xobject instanceof TreeParent))
 						manager.add(renameXObjectAction);
 			    }
-			    if (type == TreeObject.ROLE && (xobject.getType() == TreeObject.CATEGORY_FOLDER || xobject instanceof TreeParent))
-			    {
-			    	manager.add(newUserActon);
-			    	
-			    }
+
 			    
 				if(Util.IsEnterPrise() && Util.hasUniverse(xobject))
 					manager.add(browseRevisionAction);
@@ -706,7 +698,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		exportAction=new ExportItemsAction(this);
 		importAction=new ImportItemsAction(this);
 		newCategoryAction = new NewCategoryAction(this);
-		newUserActon = new NewUserAction(this);
+
 	}
 
 	private void hookDoubleClickAction() {
