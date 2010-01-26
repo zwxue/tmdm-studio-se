@@ -80,4 +80,11 @@
             productId="org.talend.rcp.branding.tom.product">
       </introProductBinding>
    </extension>
+      <extension
+            point="org.talend.mdm.workbench.service">
+         <Service
+               class="org.talend.rcp.branding.tom.TomBrandingService"
+               serviceId="com.amalto.workbench.service.branding.IBrandingService">
+         </Service>
+      </extension>
 </plugin>
