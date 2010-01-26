@@ -17,6 +17,8 @@ import org.eclipse.jface.wizard.Wizard;
 import com.amalto.workbench.Messages;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.service.GlobalServiceRegister;
+import com.amalto.workbench.service.branding.IBrandingService;
 
 
 /**
@@ -57,8 +59,9 @@ public class RegisterWizard extends Wizard {
     public void addPages() {
         mainPage = new RegisterWizardPage();
         addPage(mainPage);
-
-        setWindowTitle(Messages.getString("RegisterWizard.windowTitle", "Talend MDM")); //$NON-NLS-1$
+        IBrandingService brandingService = (IBrandingService) GlobalServiceRegister.getDefault().getService(
+                IBrandingService.class);
+        setWindowTitle(Messages.getString("RegisterWizard.windowTitle", brandingService.getFullProductName())); //$NON-NLS-1$
         setDefaultPageImageDescriptor(ImageCache.getImage(EImage.REGISTER_WIZ.getPath()));
     }
 

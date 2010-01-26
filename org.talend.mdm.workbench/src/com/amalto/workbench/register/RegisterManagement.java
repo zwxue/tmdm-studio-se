@@ -18,6 +18,8 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.PlatformUI;
 
 import com.amalto.workbench.register.proxy.RegisterUserPortTypeProxy;
+import com.amalto.workbench.service.GlobalServiceRegister;
+import com.amalto.workbench.service.branding.IBrandingService;
 
 
 /**
@@ -54,8 +56,9 @@ public class RegisterManagement {
         RegisterUserPortTypeProxy proxy = new RegisterUserPortTypeProxy();
         proxy.setEndpoint("http://www.talend.com/TalendRegisterWS/registerws.php"); //$NON-NLS-1$
         try {
-     
-            result = proxy.registerUserWithAllUserInformations(email, country, designerVersion, "TMDMCE", projectLanguage, osName, osVersion, javaVersion, totalMemory + "", memRAM //$NON-NLS-1$
+        	IBrandingService brandingService = (IBrandingService) GlobalServiceRegister.getDefault().getService(
+                       IBrandingService.class);
+            result = proxy.registerUserWithAllUserInformations(email, country, designerVersion, brandingService.getShortProductName(), projectLanguage, osName, osVersion, javaVersion, totalMemory + "", memRAM //$NON-NLS-1$
                     + "", nbProc + ""); //$NON-NLS-1$ //$NON-NLS-2$
             if (result) {
                 PlatformUI.getPreferenceStore().setValue("REGISTRATION_DONE", 1); //$NON-NLS-1$

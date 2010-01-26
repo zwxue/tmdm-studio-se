@@ -36,6 +36,8 @@ import org.eclipse.swt.widgets.Text;
 
 import com.amalto.workbench.MDMWorbenchPlugin;
 import com.amalto.workbench.Messages;
+import com.amalto.workbench.service.GlobalServiceRegister;
+import com.amalto.workbench.service.branding.IBrandingService;
 
 
 /**
@@ -46,11 +48,11 @@ import com.amalto.workbench.Messages;
  */
 public class RegisterWizardPage extends WizardPage {
 	public static final String MAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*(\\.[_A-Za-z0-9-]+)"; //$NON-NLS-1$
-    /**
+	   /**
      * 
      */
     private static final String DESCRIPTION = Messages.getString("RegisterWizardPage.description", //$NON-NLS-1$
-            "Talend MDM"); //$NON-NLS-1$
+            ((IBrandingService) GlobalServiceRegister.getDefault().getService(IBrandingService.class)).getFullProductName()); //$NON-NLS-1$
 
     /** EMail field. */
     private Text emailText;
@@ -236,8 +238,10 @@ public class RegisterWizardPage extends WizardPage {
         Label legalInfos = new Label(localComposite, SWT.WRAP);
         gd = new GridData(GridData.FILL_BOTH);
         legalInfos.setLayoutData(gd);
-        legalInfos.setText(Messages.getString("RegisterWizardPage.legalinfos", "Talend")); //$NON-NLS-1$
-    }
+        IBrandingService brandingService = (IBrandingService) GlobalServiceRegister.getDefault().getService(
+                IBrandingService.class);
+        legalInfos.setText(Messages.getString("RegisterWizardPage.legalinfos", brandingService.getCorporationName())); //$NON-NLS-1$
+        }
 
     protected void createHttpProxy(Composite composite, int columnSpan) {
         Group group = new Group(composite, SWT.NONE);
