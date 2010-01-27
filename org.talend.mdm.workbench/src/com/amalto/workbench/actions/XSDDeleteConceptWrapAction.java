@@ -75,12 +75,19 @@ public class XSDDeleteConceptWrapAction extends UndoAction{
 				int backPos = elemDesc.indexOf(" ");
 
 				if (delObjs.size() > 1)
+				{
 					deleteLabel += elemDesc.substring(0, backPos)
 							+ " these "
 							+ delObjs.size() + " "
 							+ (!sameType ? "Objects" : elemDesc
-									.substring(backPos + 1)
-									+ "s");
+									.substring(backPos + 1));
+					if(deleteLabel.endsWith("y"))
+					{
+						deleteLabel = deleteLabel.substring(0, deleteLabel.length()-1) + "ies";
+					}
+					else
+						deleteLabel = deleteLabel + "s";
+				}
 				else
 					deleteLabel += elemDesc.substring(0, backPos)
 							+ " the selected "
