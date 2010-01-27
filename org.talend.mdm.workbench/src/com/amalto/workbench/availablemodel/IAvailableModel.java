@@ -20,6 +20,7 @@ public interface IAvailableModel {
 	 */
 	void addTreeObjects(XtentisPort port,IProgressMonitor monitor,TreeParent serverRoot);
 	
+	void deleteTreeObject(XtentisPort port,TreeObject xobject);
 	/**
 	 * Fill the context menu when right click the object in the server tree
 	 * @param xobject

@@ -52,7 +52,13 @@ public class TreeParent extends TreeObject {
             this.removeChild(allchildren[i]);
         }
     }
-	
+	public boolean containsChild(TreeObject child) {
+		TreeObject[] allchildren = this.getChildren();
+        for (int i = 0; i < allchildren.length; i++) {
+            if(allchildren[i].getDisplayName().equals(child.getDisplayName())) return true;
+        }
+        return false;
+	}
 	public TreeObject [] getChildren() {
 		return (TreeObject [])children.toArray(new TreeObject[children.size()]);
 	}

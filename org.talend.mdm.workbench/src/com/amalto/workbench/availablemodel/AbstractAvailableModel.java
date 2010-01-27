@@ -48,4 +48,9 @@ public class AbstractAvailableModel implements IAvailableModel {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public void deleteTreeObject(XtentisPort port,TreeObject xobject) {
+		// TODO Auto-generated method stub
+		
+	}
 }

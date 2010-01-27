@@ -11,6 +11,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 
+import com.amalto.workbench.availablemodel.AvailableModelUtil;
+import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.views.ServerView;
@@ -448,7 +450,11 @@ public class TreeObjectUtil {
 							xobject.getUsername(),
 							xobject.getPassword()
 					);
-		              
+					//available models
+					java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
+					for(IAvailableModel model: availablemodels){
+						model.deleteTreeObject(port, xobject);
+					}		              
 		            switch(xobject.getType()) {
 		            
 			           	case TreeObject.DATA_MODEL:
@@ -465,10 +471,7 @@ public class TreeObjectUtil {
 			           		break;      
 			          	case TreeObject.STORED_PROCEDURE:
 			           		port.deleteStoredProcedure(new WSDeleteStoredProcedure((WSStoredProcedurePK)xobject.getWsKey()));
-			           		break;  
-			          	case TreeObject.ROLE:
-			           		port.deleteRole(new WSDeleteRole((WSRolePK)xobject.getWsKey()));
-			           		break;  
+			           		break;   
 			          	case TreeObject.ROUTING_RULE:
 			           		port.deleteRoutingRule(new WSDeleteRoutingRule((WSRoutingRulePK)xobject.getWsKey()));
 			           		break;  
@@ -479,17 +482,11 @@ public class TreeObjectUtil {
 			           		port.deleteMenu(new WSDeleteMenu((WSMenuPK)xobject.getWsKey()));
 			           		deleteSpecificationFromAttachedRole(port, xobject, "Menu");
 			           		break;  	 
-			          	case TreeObject.UNIVERSE:
-			           		port.deleteUniverse(new WSDeleteUniverse((WSUniversePK)xobject.getWsKey()));
-			           		break;  
-			          	case TreeObject.SYNCHRONIZATIONPLAN:
-			           		port.deleteSynchronizationPlan(new WSDeleteSynchronizationPlan((WSSynchronizationPlanPK)xobject.getWsKey()));
-			           		break;
 			          	case TreeObject.CATEGORY_FOLDER:
 			          	    // do nothing over here
 			          		break;
 			          	default:
-			           		MessageDialog.openError(view.getSite().getShell(), "Error", "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
+			           		//MessageDialog.openError(view.getSite().getShell(), "Error", "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
 			           		return;
 		            }//switch
 		            
