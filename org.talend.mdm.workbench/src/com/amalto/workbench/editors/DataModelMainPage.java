@@ -682,6 +682,8 @@ public class DataModelMainPage extends AMainPageV2 {
 
 	public void validateSchema() throws IllegalAccessException
 	{
+		final String maxoccurs_omit = "XSD: The value '1' of attribute 'maxOccurs' must be one of  as constrained by 'http://www.w3.org/2001/XMLSchema#maxOccurs_._type'";
+		
         xsdSchema.validate();
 		   EList<XSDDiagnostic> diagnoses = xsdSchema.getAllDiagnostics();
         String error = "";
@@ -691,7 +693,10 @@ public class DataModelMainPage extends AMainPageV2 {
 				XSDDiagnosticSeverity servity = dia.getSeverity();
 				if(servity == XSDDiagnosticSeverity.ERROR_LITERAL || servity == XSDDiagnosticSeverity.FATAL_LITERAL)
 				{
-					error += dia.getMessage() + "\n";
+					if(!dia.getMessage().equals(maxoccurs_omit))
+					{
+						error += dia.getMessage() + "\n";
+					}
 				}
 			} 
 			if(!error.equals(""))
