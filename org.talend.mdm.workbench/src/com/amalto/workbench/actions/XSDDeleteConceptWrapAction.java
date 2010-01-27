@@ -177,7 +177,9 @@ public class XSDDeleteConceptWrapAction extends UndoAction{
 		clearDelData();
 		for (Object del: toDels)
 		{
-			if (((XSDConcreteComponent)del).getSchema().getTargetNamespace() == null && !Util.IsAImporedElement((XSDConcreteComponent)del, page.reConfigureXSDSchema(false)))
+			if (((XSDConcreteComponent) del).getSchema().getTargetNamespace() == null
+					&& !Util.IsAImporedElement((XSDConcreteComponent) del, page
+							.reConfigureXSDSchema(false)))
 			   delObjs.add((XSDConcreteComponent)del);
 			else
 			{
@@ -271,7 +273,19 @@ public class XSDDeleteConceptWrapAction extends UndoAction{
 		if (delObjs.isEmpty())return;
 		XSDConcreteComponent comp = (XSDConcreteComponent)delObjs.get(0);
 		if (checkInSameClassType(delObjs.toArray(), comp.getClass()))
-			setText(clsAction.get(comp.getClass()).getText() + (delObjs.size() > 1 ? "s" : ""));
+		{
+			String actionTxt = clsAction.get(comp.getClass()).getText();
+			if(delObjs.size() > 1)
+			{
+				if(actionTxt.endsWith("y"))
+				{
+					actionTxt = actionTxt.substring(0, actionTxt.length()-1) + "ies";
+				}
+				else
+					actionTxt = actionTxt + "s";
+			}
+			setText(actionTxt);
+		}
 		else
 			setText("Delete Objects");
 		setToolTipText("Delete Entities");
@@ -323,6 +337,17 @@ public class XSDDeleteConceptWrapAction extends UndoAction{
 		return true;
 	}
 	
+	public boolean checkInAllElementType(Object[] selects)
+	{
+		if(selects.length == 0)return false;
+		for(Object obj : selects)
+		{
+			if(!(obj instanceof XSDElementDeclaration))
+				return false;
+		}
+		
+		return true;
+	}
 	
 	public boolean checkOutAllConcept(Object[] selections)
 	{
