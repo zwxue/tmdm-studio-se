@@ -18,6 +18,7 @@ import org.eclipse.xsd.XSDTerm;
 import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDVariety;
 import org.eclipse.xsd.XSDWildcard;
+import org.eclipse.xsd.util.XSDConstants;
 import org.w3c.dom.Element;
 
 import com.amalto.workbench.models.TreeObject;
@@ -322,16 +323,26 @@ public class XPathTreeContentProvider extends XSDTreeContentProvider {
 				{
 					exist = true;
 					break;
+				}else if (xsdEl.getName().equals(el.getName())
+						&& xsdEl.getTargetNamespace() == null
+						&& el.getTargetNamespace() == null)
+				{
+					exist = true;
+					break;
 				}
 			}
 			if (!exist)
 			{
-				if((conceptName != null && el.getName().equals(conceptName)) || conceptName == null)
+				if((conceptName != null && el.getName().equals(conceptName)) || (conceptName == null && (el.getTargetNamespace() != null && !el
+						.getTargetNamespace().equals(
+								XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001))
+				|| el.getTargetNamespace() == null))
 					   list.add(el);
+				
 			}			
 		}
 		
 
-		return list.toArray(new Object[]{});
+		return list.toArray();
 	}
 }
