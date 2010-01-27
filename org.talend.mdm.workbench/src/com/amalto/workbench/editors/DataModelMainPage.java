@@ -1743,7 +1743,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			// Annotations
 			if (decl.getTargetNamespace() == null
 					&& !Util.IsAImporedElement(decl, xsdSchema)
-					&& !Util.IsAImporedElement(decl.getTypeDefinition(),
+					|| !Util.IsAImporedElement(decl.getTypeDefinition(),
 							xsdSchema))
 			   setAnnotationActions2(manager);
 		}
