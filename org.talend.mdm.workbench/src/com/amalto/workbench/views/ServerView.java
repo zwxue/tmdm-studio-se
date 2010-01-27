@@ -617,6 +617,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				}
 				else if (LocalTreeObjectRepository.getInstance().isInSystemCatalog(xobject) == false){
 					manager.add(newCategoryAction);
+					manager.add(deleteXObjectAction);
 				}
 
 				if (!WorkbenchClipboard.getWorkbenchClipboard().isEmpty())

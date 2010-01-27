@@ -1863,13 +1863,13 @@ public class DataModelMainPage extends AMainPageV2 {
 			deleteConceptWrapAction.prepareToDelSelectedItems(selection, viewer);
 		}
 		
-
+		if (selectedObjs.length > 1 && deleteConceptWrapAction.checkInAllElementType(selectedObjs)) {
+			manager.add(newBrowseItemAction);
+		}
+		
 		if (selectedObjs.length > 1
 				&& deleteConceptWrapAction.outPutDeleteActions() != null) {
 			manager.add(deleteConceptWrapAction.outPutDeleteActions());
-			
-			if (deleteConceptWrapAction.checkOutAllConcept(selectedObjs))
-				manager.add(newBrowseItemAction);
 				
 			XSDCopyConceptAction copyConceptAction = new XSDCopyConceptAction(this,true);
 			if(copyConceptAction.checkInCopyType(selectedObjs))	{
@@ -1886,6 +1886,7 @@ public class DataModelMainPage extends AMainPageV2 {
 				manager.add(pasteConceptAction);
 			
 		}
+		
 				
 		//add by ymli. fix bug 0009771
 		if(Util.IsEnterPrise()) {
