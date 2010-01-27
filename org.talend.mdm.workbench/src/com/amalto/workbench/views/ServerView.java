@@ -615,11 +615,13 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					manager.add(deleteXObjectAction);
 					manager.add(copyAction);
 				}
-				else if (xobject.getType() == TreeObject.CATEGORY_FOLDER && LocalTreeObjectRepository.getInstance().isInSystemCatalog(xobject) == false){
+				else if (LocalTreeObjectRepository.getInstance().isInSystemCatalog(xobject) == false){
 					manager.add(newCategoryAction);
-					manager.add(deleteXObjectAction);
 				}
 
+				if (xobject.getType() == TreeObject.CATEGORY_FOLDER && LocalTreeObjectRepository.getInstance().isInSystemCatalog(xobject) == false){
+					manager.add(deleteXObjectAction);
+				}
 				if (!WorkbenchClipboard.getWorkbenchClipboard().isEmpty())
 				{
 					//modifier:fiu see bug 0008905
