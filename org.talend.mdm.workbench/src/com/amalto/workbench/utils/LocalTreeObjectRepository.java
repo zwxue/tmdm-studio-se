@@ -726,7 +726,8 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 					xpaths = "";
 
 			}
-	}
+			subFolder = folder;
+	   }
 	
 	}
 	private ArrayList<String> checkUpCatalogRepositoryForTreeObject(TreeObject theObj, TreeObject folder)
