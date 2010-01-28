@@ -101,12 +101,9 @@ public class ElementComposite {
 
 		customButton.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
+            	if(customButton.getSelection()) {
             	typeCombo.removeAll();
             	Set<String> alltypes=new HashSet<String>();
-            	for (Iterator iter = customTypes.iterator(); iter.hasNext(); ) {
-					String name = (String) iter.next();
-					alltypes.add(name);
-				}
             	//add uuid type aiming
             	Set<String> uuidtypes=EUUIDCustomType.allTypes();
             	alltypes.addAll(uuidtypes);
@@ -114,11 +111,13 @@ public class ElementComposite {
             	typeCombo.indexOf("");
             	typeCombo.setEditable(true);
             	tipLabel.setText("Leave blank for anonymous");
+            	}
             }
         });
 		
 		builtInButton.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
+            	if(builtInButton.getSelection()) {
             	typeCombo.removeAll();
             	for (Iterator iter = builtInTypes.iterator(); iter.hasNext(); ) {
 					String name = (String) iter.next();
@@ -127,6 +126,7 @@ public class ElementComposite {
             	typeCombo.select(0);
             	typeCombo.setEditable(false);
             	tipLabel.setText("");
+            	}
             }
         });
 		
