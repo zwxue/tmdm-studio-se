@@ -287,7 +287,7 @@ public class XSDAnnotationsStructure {
 	 *           WRITE ACCESS
 	 * @throws XtentisException 
 	 ****************************************************************************/
-	public boolean setAccessRole(ArrayList<String> roles, boolean recursive, IStructuredContentProvider provider, String roleName) throws XtentisException
+	public boolean setAccessRole(Collection<String> roles, boolean recursive, IStructuredContentProvider provider, String access) throws XtentisException
 	{
 		if (recursive) {
 			ArrayList<Object> objList = new ArrayList<Object>();
@@ -367,10 +367,10 @@ public class XSDAnnotationsStructure {
 									continue;
 								}
 							}
-							annotion.removeAppInfos(roleName);  //X_Write
+							annotion.removeAppInfos(access);  //X_Write
 							for (Iterator iter = roles.iterator(); iter.hasNext();) {
 								String role = (String) iter.next();
-								annotion.addAppInfo(roleName, role);
+								annotion.addAppInfo(access, role);
 							}
 						}
 					}
@@ -379,22 +379,22 @@ public class XSDAnnotationsStructure {
 				}
 			}
 			
-			return setAccessRole(roles, roleName);
+			return setAccessRole(roles, access);
 		}
 		else {
 			if(Util.IsAImporedElement(declaration, declaration.getSchema()))
 				return false;
-			return setAccessRole(roles, roleName);
+			return setAccessRole(roles, access);
 		}
 	}
 
 	
-	private boolean setAccessRole(ArrayList<String> roles, String roleName)
+	private boolean setAccessRole(Collection<String> roles, String access)
 	{
-		removeAppInfos(roleName);  //X_Write   X_Hide
+		removeAppInfos(access);  //X_Write   X_Hide
 		for (Iterator iter = roles.iterator(); iter.hasNext();) {
 			String role = (String) iter.next();
-			addAppInfo(roleName, role);
+			addAppInfo(access, role);
 		}
 		
 		hasChanged = true;

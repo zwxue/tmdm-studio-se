@@ -237,10 +237,10 @@ public class DataModelMainPage extends AMainPageV2 {
 	private XSDSetAnnotationNoAction setAnnotationNoAction = null;
 	private XSDSetAnnotationWrapNoAction setAnnotationWrapNoAction = null;
 	private XSDSetAnnotationWriteAction setAnnotationWriteAction = null;
-	private XSDSetAnnotationTargetSystemsAction setAnnotationTargetSystemsAction = null;
+	//private XSDSetAnnotationTargetSystemsAction setAnnotationTargetSystemsAction = null;
 	//private XSDSetAnnotationSchematronAction setAnnotationSchematronAction;
-	private XSDSetAnnotationSourceSystemAction setAnnotationSourceSystemAction = null;
-	private XSDSetAnnotationDocumentationAction setAnnotationDocumentationAction = null;
+	//private XSDSetAnnotationSourceSystemAction setAnnotationSourceSystemAction = null;
+	//private XSDSetAnnotationDocumentationAction setAnnotationDocumentationAction = null;
 	private XSDChangeToComplexTypeAction changeSubElementGroupAction=null;
 	private XSDDeleteTypeDefinition   deleteTypeDefinition = null;
 	private XSDNewComplexTypeDefinition  newComplexTypeAction = null;
@@ -1228,13 +1228,13 @@ public class DataModelMainPage extends AMainPageV2 {
 		//this.copyConceptAction = new XSDCopyConceptAction(this);
 		//this.pasteConceptAction = new XSDPasteConceptAction(this);
 		
-		this.setAnnotationTargetSystemsAction = new XSDSetAnnotationTargetSystemsAction(this,dataModelName);
+		//this.setAnnotationTargetSystemsAction = new XSDSetAnnotationTargetSystemsAction(this,dataModelName);
 		//this.setAnnotationSchematronAction = new XSDSetAnnotationSchematronAction(this,dataModelName);
 		//this.deleteAnnotationSchematronAction = new XSDDeleteAnnotationSchematronAction(this,dataModelName);
-		this.setAnnotationSourceSystemAction = new XSDSetAnnotationSourceSystemAction(
-				this);
-		this.setAnnotationDocumentationAction = new XSDSetAnnotationDocumentationAction(
-				this);
+		//this.setAnnotationSourceSystemAction = new XSDSetAnnotationSourceSystemAction(
+		//		this);
+		//this.setAnnotationDocumentationAction = new XSDSetAnnotationDocumentationAction(
+		//		this);
 		this.deleteTypeDefinition = new XSDDeleteTypeDefinition(this);
 		this.newComplexTypeAction = new XSDNewComplexTypeDefinition(this);
 		this.newSimpleTypeAction = new XSDNewSimpleTypeDefinition(this);
@@ -1429,10 +1429,10 @@ public class DataModelMainPage extends AMainPageV2 {
 						setAnnotationForeignKeyInfoAction.run();
 						break;
 					case 104:
-						setAnnotationSourceSystemAction.run();
+						//setAnnotationSourceSystemAction.run();
 						break;
 					case 105:
-						setAnnotationTargetSystemsAction.run();
+						//setAnnotationTargetSystemsAction.run();
 						break;
 					case 106:
 						setAnnotationDescriptionsAction.run();
@@ -1557,7 +1557,7 @@ public class DataModelMainPage extends AMainPageV2 {
 					
 					
 					// Annotations
-					setAnnotationActions(manager);
+					setAnnotationActions(obj,manager);
 					// Xpath
 					manager.add(new Separator());
 					manager.add(getXPathAction);
@@ -1640,11 +1640,6 @@ public class DataModelMainPage extends AMainPageV2 {
 			
 			if (deleteConceptWrapAction.checkOutAllConcept(selectedObjs))
 				manager.add(newBrowseItemAction);
-		}
-		//available models
-		java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
-		for(IAvailableModel model: availablemodels){
-			model.fillContextMenu(obj, manager, this, dataModelName);
 		}
 		
 		/*if(copyConceptAction.checkInCopyType(selectedObjs))
@@ -1745,7 +1740,7 @@ public class DataModelMainPage extends AMainPageV2 {
 					&& !Util.IsAImporedElement(decl, xsdSchema)
 					|| !Util.IsAImporedElement(decl.getTypeDefinition(),
 							xsdSchema))
-			   setAnnotationActions2(manager);
+			   setAnnotationActions2(obj,manager);
 		}
 		
 		if(obj instanceof XSDModelGroup && !Util.IsAImporedElement((XSDModelGroup)obj, xsdSchema)){
@@ -1779,8 +1774,8 @@ public class DataModelMainPage extends AMainPageV2 {
 							// Annotations
 							XSDTypeDefinition type = ((XSDElementDeclaration)term).getTypeDefinition();
 //							if(!Util.IsAImporedElement(type, xsdSchema)){								
-							   setAnnotationActions(manager);
-//							}
+							   setAnnotationActions(obj,manager);
+//							}							
 							if (((XSDElementDeclaration)term).getTypeDefinition() instanceof XSDSimpleTypeDefinition)
 							{
 								manager.add(setFacetMsgAction);
@@ -1792,7 +1787,6 @@ public class DataModelMainPage extends AMainPageV2 {
 						}
 					}
 				}
-
 			}
 		}
 
@@ -1900,7 +1894,8 @@ public class DataModelMainPage extends AMainPageV2 {
 		java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
 		for(IAvailableModel model: availablemodels){
 			model.fillContextMenu(obj, manager, this, dataModelName);
-		}		
+		}
+		
 		manager.add(new Separator());
 
 		drillDownAdapter.addNavigationActions(manager);
@@ -1909,7 +1904,7 @@ public class DataModelMainPage extends AMainPageV2 {
 
 	}
 
-	private void setAnnotationActions(IMenuManager manager) {
+	private void setAnnotationActions(Object obj,IMenuManager manager) {
 		manager.add(setAnnotationLabelAction);
 		manager.add(setAnnotationDescriptionsAction);
 		manager.add(setAnnotationForeignKeyAction);
@@ -1918,34 +1913,34 @@ public class DataModelMainPage extends AMainPageV2 {
 		manager.add(setAnnotationWriteAction);
 		manager.add(setAnnotationNoAction);
 		}
-		//manager.add(setAnnotationSchematronAction);
-		manager.add(setAnnotationSourceSystemAction);
-		manager.add(setAnnotationTargetSystemsAction);
-		//manager.add(deleteValidationRule);
 		//available models
 		java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
 		for(IAvailableModel model: availablemodels){
-			model.fillContextMenu(null, manager, this, dataModelName);
+			model.fillContextMenu(obj, manager, this, dataModelName);
 		}
+		//manager.add(setAnnotationSchematronAction);
+		//manager.add(setAnnotationSourceSystemAction);
+		//manager.add(setAnnotationTargetSystemsAction);
+		//manager.add(deleteValidationRule);
 	}
 	
-	private void setAnnotationActions2(IMenuManager manager) {
+	private void setAnnotationActions2(Object obj,IMenuManager manager) {
 		manager.add(setAnnotationLabelAction);
 		manager.add(setAnnotationDescriptionsAction);
 		if(Util.IsEnterPrise()) {
 		manager.add(setAnnotationWriteAction);
 		manager.add(setAnnotationNoAction);
 		}
-		manager.add(setAnnotationTargetSystemsAction);
-		manager.add(setAnnotationSourceSystemAction);
-		//manager.add(setAnnotationSchematronAction);
-		//manager.add(setAnnotationDocumentationAction);
-		//manager.add(deleteValidationRule);
 		//available models
 		java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
 		for(IAvailableModel model: availablemodels){
-			model.fillContextMenu(null, manager, this, dataModelName);
+			model.fillContextMenu(obj, manager, this, dataModelName);
 		}
+		//manager.add(setAnnotationTargetSystemsAction);
+		//manager.add(setAnnotationSourceSystemAction);
+		//manager.add(setAnnotationSchematronAction);
+		//manager.add(setAnnotationDocumentationAction);
+		//manager.add(deleteValidationRule);
 	}
 
 	/**
