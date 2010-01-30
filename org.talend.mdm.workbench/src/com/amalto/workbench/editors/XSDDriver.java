@@ -2,9 +2,11 @@ package com.amalto.workbench.editors;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.List;
 import java.util.Vector;
 
@@ -157,10 +159,11 @@ public class XSDDriver {
   
   public File outputXSD(String src, String fileName)
   {
-      File file = new File(fileName);
+	  File file = new File(fileName);
 	  try {
 			FileWriter writer = new FileWriter(file);
 			writer.write(src);
+			//System.out.println("OutputStreamWriter: "+writer.getEncoding());
 			writer.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -170,6 +173,24 @@ public class XSDDriver {
 		
 		return file;
   }
+  
+  public String outputXSD_UTF_8(String src, String fileName)
+  {
+    // File file = new File(fileName);
+	  try {
+		  	OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(fileName),DEFAULT_OUTPUT_ENCODING);
+		  	out.write(src);
+		  	//System.out.println("OutputStreamWriter: "+out.getEncoding());
+		  	out.flush();
+		  	out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		return "SUCCESS";
+  }
+  
   // Deletes all files and subdirectories under path
   public static boolean delete(File file)
   {

@@ -37,7 +37,6 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
@@ -564,7 +563,8 @@ public class DataModelMainPage extends AMainPageV2 {
 	        	private void inferXsdFromDataModule(String xmlFile) {
 					WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());  
                     XSDDriver d = new XSDDriver();
-                    if (d.outputXSD(wsObject.getXsdSchema(), xmlFile) != null) {
+                    //if (d.outputXSD(wsObject.getXsdSchema(), xmlFile) != null) {
+                    if (d.outputXSD_UTF_8(wsObject.getXsdSchema(), xmlFile) != null) {
 						MessageDialog.openInformation(getSite().getShell(),
 								"Export XSD", "The operation for Exporting XSD completed successfully!");
 					} else {
