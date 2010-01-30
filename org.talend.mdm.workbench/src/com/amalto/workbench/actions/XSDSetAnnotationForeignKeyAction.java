@@ -1,6 +1,7 @@
 package com.amalto.workbench.actions;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -35,6 +36,16 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction{
 	
 	public IStatus doAction() {
 		try {
+			
+			//add by ymli. fix the bug:0010293
+			if(page.isDirty()){
+				//MessageDialog.openWarning(page.getSite().getShell(), "Worning", "Please save the Data Model first!");
+				boolean save = MessageDialog.openConfirm(page.getSite().getShell(), "Save Resource", "'"+page.getXObject().getDisplayName()+"' has been modified. Save changes?");
+				if(save)
+					page.getEditor().doSave(new NullProgressMonitor());
+				else
+					return Status.CANCEL_STATUS;
+			}
             IStructuredSelection selection = (TreeSelection)page.getTreeViewer().getSelection();
             XSDComponent xSDCom=null;
             if (selection.getFirstElement() instanceof Element) {

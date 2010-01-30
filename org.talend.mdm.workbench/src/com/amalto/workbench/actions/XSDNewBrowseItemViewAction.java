@@ -3,22 +3,19 @@ package com.amalto.workbench.actions;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.xsd.XSDAnnotation;
-import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
-import org.eclipse.xsd.XSDFactory;
-import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.dialogs.AddBrowseItemsWizard;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDNewBrowseItemViewAction extends Action{
 	
@@ -35,6 +32,14 @@ public class XSDNewBrowseItemViewAction extends Action{
 	}
 	
 	public void run() {
+			if(page.isDirty()){
+			//MessageDialog.openWarning(page.getSite().getShell(), "Worning", "Please save the Data Model first!");
+			boolean save = MessageDialog.openConfirm(page.getSite().getShell(), "Save Resource", "'"+page.getXObject().getDisplayName()+"' has been modified. Save changes?");
+			if(save)
+				page.getEditor().doSave(new NullProgressMonitor());
+			else
+				return;
+		}
 		IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
 		declList.clear();
 		List list = selection.toList();
