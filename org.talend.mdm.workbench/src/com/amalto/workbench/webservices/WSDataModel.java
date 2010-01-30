@@ -5,7 +5,6 @@
 
 package com.amalto.workbench.webservices;
 
-import com.amalto.workbench.editors.xmleditor.XMLEditorUtil;
 
 
 public class WSDataModel {
@@ -39,7 +38,7 @@ public class WSDataModel {
     }
     
     public java.lang.String getXsdSchema() {
-        return XMLEditorUtil.formatXsdSource(xsdSchema);
+        return xsdSchema;
     }
     
     public void setXsdSchema(java.lang.String xsdSchema) {
