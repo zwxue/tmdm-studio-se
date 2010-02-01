@@ -90,6 +90,7 @@ import com.amalto.workbench.webservices.WSGetCurrentUniverse;
 import com.amalto.workbench.webservices.WSGetDataCluster;
 import com.amalto.workbench.webservices.WSGetItem;
 import com.amalto.workbench.webservices.WSGetItemPKsByCriteria;
+import com.amalto.workbench.webservices.WSGetItemPKsByFullCriteria;
 import com.amalto.workbench.webservices.WSItem;
 import com.amalto.workbench.webservices.WSItemPK;
 import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults;
@@ -111,6 +112,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 	
 	protected static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
 	
+	protected Button checkFTSearchButton;
 	protected Text searchText;
 	protected Text fromText;
 	protected Text toText;
@@ -240,10 +242,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             );
             searchText = toolkit.createText(composite, "",SWT.BORDER|SWT.MULTI);
             searchText.setLayoutData(    
-                    new GridData(SWT.FILL,SWT.FILL,true,false,2,1)
+                    new GridData(SWT.FILL,SWT.FILL,true,false,1,1)
             );
 //         searchText.addModifyListener(this);
             searchText.addKeyListener( keylistener           );
+            
+            checkFTSearchButton =toolkit.createButton(composite, "Use Full Text Search", SWT.CHECK);
             
             
             final Table table = createTable(composite);
@@ -662,21 +666,39 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             String keys = keyText.getText();
             if ("*".equals(keys) | "".equals(keys)) keys = null;
             
+            boolean useFTSearch = checkFTSearchButton.getSelection();
             String search = searchText.getText();
             if ("*".equals(search) | "".equals(search)) search = null;
 
-            WSItemPKsByCriteriaResponseResults[] results =
-	            port.getItemPKsByCriteria(new WSGetItemPKsByCriteria(
-	            		(WSDataClusterPK)getXObject().getWsKey(),
-	            		concept,
-	            		search,
-	            		keys,
-	            		from,
-	            		to,
-	            		0,
-	            		Integer.MAX_VALUE
-	            	)
-	            ).getResults();
+//            WSItemPKsByCriteriaResponseResults[] results =
+//	            port.getItemPKsByCriteria(new WSGetItemPKsByCriteria(
+//	            		(WSDataClusterPK)getXObject().getWsKey(),
+//	            		concept,
+//	            		search,
+//	            		keys,
+//	            		from,
+//	            		to,
+//	            		0,
+//	            		Integer.MAX_VALUE
+//	            	)
+//	            ).getResults();
+            
+          WSItemPKsByCriteriaResponseResults[] results =
+            port.getItemPKsByFullCriteria(
+            new WSGetItemPKsByFullCriteria(	
+            	new WSGetItemPKsByCriteria(
+            		(WSDataClusterPK)getXObject().getWsKey(),
+            		concept,
+            		search,
+            		keys,
+            		from,
+            		to,
+            		0,
+            		Integer.MAX_VALUE
+            	),
+            	useFTSearch
+             )	
+            ).getResults();
             
             if (showResultInfo&&(results==null)) {
             	MessageDialog.openInformation(this.getSite().getShell(), "Info", "Sorry, no result. ");
