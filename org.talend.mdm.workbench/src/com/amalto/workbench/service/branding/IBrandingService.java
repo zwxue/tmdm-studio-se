@@ -37,5 +37,5 @@ public interface IBrandingService extends IService {
 
     public URL getLicenseFile() throws IOException;
 
-
+    public IBrandingConfiguration getBrandingConfiguration();
 }

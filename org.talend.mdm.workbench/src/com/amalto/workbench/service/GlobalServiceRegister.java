@@ -75,7 +75,7 @@ public class GlobalServiceRegister {
         for (int i = 0; i < configurationElements.length; i++) {
             IConfigurationElement element = configurationElements[i];
             String id = element.getAttribute("serviceId"); //$NON-NLS-1$
-
+            element.getAttribute("class");
             if (!key.endsWith(id)) {
                 continue;
             }
@@ -85,7 +85,7 @@ public class GlobalServiceRegister {
                     return (IService) service;
                 }
             } catch (CoreException e) {
-               
+               e.printStackTrace();
             }
         }
         return null;

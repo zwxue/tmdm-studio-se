@@ -14,9 +14,12 @@ import sun.management.ManagementFactory;
 
 import com.amalto.workbench.MDMWorbenchPlugin;
 import com.amalto.workbench.Messages;
+import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.register.RegisterManagement;
 import com.amalto.workbench.register.RegisterWizard;
 import com.amalto.workbench.register.RegisterWizardDialog;
+import com.amalto.workbench.service.GlobalServiceRegister;
+import com.amalto.workbench.service.branding.IBrandingService;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
@@ -29,6 +32,9 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
     }
     
     public void preWindowOpen() {
+    	//scan availabelmodel extention point
+    	AvailableModelUtil.getAvailableModels();
+    	
         IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
         
         configurer.setInitialSize(new Point(1200, 950));
@@ -84,6 +90,9 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
         	e.printStackTrace();
             // Do nothing : registration web service error is not a problem
         }
+        IBrandingService service = (IBrandingService) GlobalServiceRegister.getDefault().getService(IBrandingService.class);
+        getWindowConfigurer()
+                .setTitle(getWindowConfigurer().getTitle() + service.getBrandingConfiguration().getAdditionalTitle());
 
     }
 }

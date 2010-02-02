@@ -22,6 +22,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.osgi.framework.Bundle;
 import org.talend.rcp.branding.tom.i18n.Messages;
 
+import com.amalto.workbench.service.branding.DefaultBrandingConfiguraton;
+import com.amalto.workbench.service.branding.IBrandingConfiguration;
 import com.amalto.workbench.service.branding.IBrandingService;
 
 /**
@@ -55,4 +57,8 @@ public class TomBrandingService implements IBrandingService {
         final URL url = FileLocator.toFileURL(FileLocator.find(b, new Path("resources/license.txt"), null)); //$NON-NLS-1$
         return url;
     }
+	public IBrandingConfiguration getBrandingConfiguration() {
+		return new DefaultBrandingConfiguraton();
+	}
+    
 }
