@@ -601,6 +601,7 @@
 			<xsd:enumeration value="LOWER_THAN"/>
 			<xsd:enumeration value="LOWER_THAN_OR_EQUAL"/>
 			<xsd:enumeration value="NO_OPERATOR"/>
+			<xsd:enumeration value="FULLTEXTSEARCH"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 
@@ -849,6 +850,19 @@
 	</xsd:complexType>
 	<xsd:element name="WSGetItemPKsByCriteria" type="tns:WSGetItemPKsByCriteria"/>
 	
+	<xsd:complexType name="WSGetItemPKsByFullCriteria">
+        <xsd:annotation>
+            <xsd:documentation>
+                Returns items based on criteria
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="1" name="wsGetItemPKsByCriteria" nillable="false" type="tns:WSGetItemPKsByCriteria"/>
+            <xsd:element maxOccurs="1" minOccurs="1" name="useFTSearch" nillable="false" type="xsd:boolean"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="WSGetItemPKsByFullCriteria" type="tns:WSGetItemPKsByFullCriteria"/>
+	
 	<xsd:complexType name="WSItemPKsByCriteriaResponse">
 		<xsd:annotation>
 			<xsd:documentation>
@@ -1056,6 +1070,19 @@
 		</xsd:sequence>		
 	</xsd:complexType>
 	<xsd:element name="WSPutItemWithReport" type="tns:WSPutItemWithReport"/>
+	
+	<xsd:complexType name="WSPutItemWithCustomReport">
+		<xsd:annotation>
+			<xsd:documentation>
+				Puts an item in the xml storage with custom update report
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element maxOccurs="1" minOccurs="1" name="wsPutItemWithReport" nillable="false" type="tns:WSPutItemWithReport"/>
+			<xsd:element maxOccurs="1" minOccurs="1" name="user" nillable="true" type="xsd:string"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSPutItemWithCustomReport" type="tns:WSPutItemWithCustomReport"/>
 	
 	<xsd:complexType name="WSPutItemWithReportArray">
 		<xsd:sequence>
@@ -1655,7 +1682,7 @@
 	   </xsd:sequence>	
 	</xsd:complexType>
 	<xsd:element name="WSCheckServiceConfigResponse" type="tns:WSCheckServiceConfigResponse"/>
-	
+
 		<xsd:complexType name="WSMDMNULL">
 	   <xsd:sequence>
 	      <xsd:element maxOccurs="0" minOccurs="0" name="mdmjob" nillable="true" type="xsd:string"/>

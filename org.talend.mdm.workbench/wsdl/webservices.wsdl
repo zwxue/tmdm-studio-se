@@ -321,6 +321,13 @@
 		<part name="wsItemPKsByCriteriaResponse" element="tns:WSItemPKsByCriteriaResponse"/>
 	</message>
 	
+	<message name="getItemPKsByFullCriteriaRequest">
+        <part name="wsGetItemPKsByFullCriteria" element="tns:WSGetItemPKsByFullCriteria"/>
+    </message>
+    <message name="getItemPKsByFullCriteriaResponse">
+        <part name="wsItemPKsByFullCriteriaResponse" element="tns:WSItemPKsByCriteriaResponse"/>
+    </message>
+	
 	<message name="viewSearchRequest">
 		<part name="wsViewSearch" element="tns:WSViewSearch"/>
 	</message>
@@ -370,6 +377,12 @@
 		<part name="wsPutItemWithReport" element="tns:WSPutItemWithReport"/>
 	</message>
 	<message name="putItemWithReportResponse">
+		<part name="wsItemPK" element="tns:WSItemPK"/>
+	</message>
+	<message name="putItemWithCustomReportRequest">
+		<part name="wsPutItemWithCustomReport" element="tns:WSPutItemWithCustomReport"/>
+	</message>
+	<message name="putItemWithCustomReportResponse">
 		<part name="wsItemPK" element="tns:WSItemPK"/>
 	</message>
 	<message name="putItemWithReportArrayRequest">
@@ -1261,9 +1274,18 @@
 	</message>
 	<message name="workflowGetProcessInstancesResponse">
 		<part name="processlist" element="tns:WSProcessInstanceArray"></part>
-	</message>	
+	</message>
 	
-    <message name="getMDMJobRequest">
+	
+	<message name="workflowDeleteProcessInstancesRequest">
+	    <part name="deleteWolkflowRequest" element="tns:WSWorkflowDeleteProcessInstancesRequest"></part>
+	</message>
+	<message name="workflowDeleteProcessInstancesResponse">
+		<part name="deleteWolkflowResponse" element="tns:WSBoolean"></part>
+	</message>
+	
+	
+	<message name="getMDMJobRequest">
 	  <part name="mdmJobRequest" element="tns:WSMDMNULL"></part>
 	</message>
 	<message name="getMDMJobResponse">
@@ -1282,15 +1304,7 @@
 	</message>
 	<message name="deleteMDMJobResponse">
 	    <part name="deleteMDMJobResponse" element="tns:WSBoolean"></part>
-	</message>
-	
-	<message name="workflowDeleteProcessInstancesRequest">
-	    <part name="deleteWolkflowRequest" element="tns:WSWorkflowDeleteProcessInstancesRequest"></part>
-	</message>
-	<message name="workflowDeleteProcessInstancesResponse">
-		<part name="deleteWolkflowResponse" element="tns:WSBoolean"></part>
-	</message>
-	
+	</message>		
 	<!-- *****************************************************
 		              P O R T		
 		              
@@ -1464,7 +1478,11 @@
 		<operation name="getItemPKsByCriteria">
 			<input message="tns:getItemPKsByCriteriaRequest"/>
 			<output message="tns:getItemPKsByCriteriaResponse"/>
-		</operation>				
+		</operation>
+		<operation name="getItemPKsByFullCriteria">
+            <input message="tns:getItemPKsByFullCriteriaRequest"/>
+            <output message="tns:getItemPKsByFullCriteriaResponse"/>
+        </operation>				
 		<operation name="viewSearch">
 			<input message="tns:viewSearchRequest"/>
 			<output message="tns:viewSearchResponse"/>
@@ -1498,6 +1516,10 @@
 		<operation name="putItemWithReport">
 			<input message="tns:putItemWithReportRequest"/>
 			<output message="tns:putItemWithReportResponse"/>
+		</operation>
+		<operation name="putItemWithCustomReport">
+			<input message="tns:putItemWithCustomReportRequest"/>
+			<output message="tns:putItemWithCustomReportResponse"/>
 		</operation>
 		<operation name="putItemWithReportArray">
 			<input message="tns:putItemWithReportArrayRequest"/>
@@ -2067,6 +2089,11 @@
 			<output message="tns:workflowGetProcessInstancesResponse"/>
 		</operation>
 		
+		<operation name="workflowDeleteProcessInstances">
+            <input message="tns:workflowDeleteProcessInstancesRequest"/>
+			<output message="tns:workflowDeleteProcessInstancesResponse"/>
+		</operation>
+		
 		<operation name="getMDMJob">
 		    <input message="tns:getMDMJobRequest"/>
 		    <output message="tns:getMDMJobResponse"/>
@@ -2078,12 +2105,7 @@
 		<operation name="deleteMDMJob">
 		   <input message="tns:deleteMDMJobRequest"/>
 		   <output message="tns:deleteMDMJobResponse"/>
-		</operation>	
-		
-		<operation name="workflowDeleteProcessInstances">
-            <input message="tns:workflowDeleteProcessInstancesRequest"/>
-			<output message="tns:workflowDeleteProcessInstancesResponse"/>
-		</operation>						
+		</operation>							
 	</portType>
 	
 
@@ -2302,6 +2324,11 @@
 			<input><soap:body use="literal"/></input>
 			<output><soap:body use="literal"/></output>
 		</operation>
+		<operation name="getItemPKsByFullCriteria">
+            <soap:operation/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+        </operation>
 		<operation name="viewSearch">
 			<soap:operation/>
 			<input><soap:body use="literal"/></input>
@@ -2348,6 +2375,11 @@
 		</operation>
 		
 		<operation name="putItemWithReport">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>
+		<operation name="putItemWithCustomReport">
 			<soap:operation/>
 			<input><soap:body use="literal"/></input>
 			<output><soap:body use="literal"/></output>
@@ -3048,8 +3080,15 @@
 			<soap:operation/>
 			<input><soap:body use="literal"/></input>
 			<output><soap:body use="literal"/></output>
-		</operation>		
-
+		</operation>
+		
+		
+		<operation name="workflowDeleteProcessInstances">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>
+		
 		<operation name="getMDMJob">
 	        <soap:operation/>
 			<input><soap:body use="literal"/></input>
@@ -3066,13 +3105,7 @@
 		    <soap:operation/>
 			<input><soap:body use="literal"/></input>
 			<output><soap:body use="literal"/></output>
-		</operation>	
-		<operation name="workflowDeleteProcessInstances">
-			<soap:operation/>
-			<input><soap:body use="literal"/></input>
-			<output><soap:body use="literal"/></output>
-		</operation>
-				
+		</operation>					
 	</binding>
 		
 	
