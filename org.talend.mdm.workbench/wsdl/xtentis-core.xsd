@@ -1710,6 +1710,7 @@
 	   <xsd:sequence>
 	      <xsd:element maxOccurs="1" minOccurs="1" name="jobName" nillable="true" type="xsd:string"/>
 	      <xsd:element maxOccurs="1" minOccurs="1" name="jobVersion" nillable="true" type="xsd:string"/>
+	      <xsd:element maxOccurs="1" minOccurs="1" name="suffix" nillable="true" type="xsd:string"/>
 	   </xsd:sequence>	
 	</xsd:complexType>
 	<xsd:element name="WSMDMJob" type="tns:WSMDMJob"/>
