@@ -175,6 +175,24 @@ public class SelectImportedModulesDialog extends Dialog{
 	        	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
 	        	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 	        		MDMXSDSchemaEntryDialog dlg = new MDMXSDSchemaEntryDialog(shell.getShell(), "Select XSD Schema from MDM Web Site");
+	                try {
+	                	ArrayList<String> schemaList = new ArrayList<String>();
+	                	XtentisPort port = Util.getPort(treeObject);
+	        			WSDataModelPK[] xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs();
+	        			if (xdmPKs != null) {
+	        				for (int i = 0; i < xdmPKs.length; i++) {
+	        					String name = xdmPKs[i].getPk();
+	        					if (!name.startsWith("XMLSCHEMA")) {
+	        						schemaList.add(name);
+	        					}
+	        				}
+	        				dlg.create();
+	        				dlg.retrieveDataModels(schemaList);
+	        			}
+	    			} catch (Exception es) {
+	    				es.printStackTrace();
+	    				return;
+	    			}
 	        		dlg.setBlockOnOpen(true);
 	        		dlg.open();
 	        		if (dlg.getReturnCode() == Window.OK)  {
@@ -415,119 +433,5 @@ public class SelectImportedModulesDialog extends Dialog{
 	  {
 		  return _type;
 	  }
-	}
-
-	private class MDMXSDSchemaEntryDialog extends Dialog
-	{
-		private String title;
-		private ListViewer wcListViewer; 
-		private List<String> urls = new ArrayList<String>();
-		private List<String> importedUrls = new ArrayList<String>();
-		
-		public MDMXSDSchemaEntryDialog(Shell parentShell,String title) {
-			super(parentShell);
-			this.title=title;
-		}
-		
-		protected Control createDialogArea(Composite parent) {
-			parent.getShell().setText(this.title);
-			
-			Composite composite = (Composite) super.createDialogArea(parent);
-			GridLayout layout = (GridLayout)composite.getLayout();
-			layout.numColumns = 1;
-			
-            wcListViewer = new ListViewer(composite,SWT.BORDER | SWT.MULTI);
-            wcListViewer.getControl().setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
-            );
-            ((GridData)wcListViewer.getControl().getLayoutData()).minimumHeight = 200;
-
-            wcListViewer.setContentProvider(new IStructuredContentProvider() {
-				public void dispose() {}
-				public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {}
-				public Object[] getElements(Object inputElement) {
-					return ((ArrayList)inputElement).toArray(new String[]{});
-				}
-            });
-            
-            wcListViewer.addSelectionChangedListener(new ISelectionChangedListener(){
-                public void selectionChanged(SelectionChangedEvent event)
-                {
-                	importedUrls.clear();
-                	IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-                	Iterator iter = selection.iterator();
-                	while(iter.hasNext())
-                	{
-                		String url = (String)iter.next();
-                		importedUrls.add(url);
-                	}
-                	getButton(IDialogConstants.OK_ID).setEnabled(!selection.isEmpty());
-                }
-            }
-            );
-            wcListViewer.setLabelProvider(new ILabelProvider() {
-				public void addListener(ILabelProviderListener listener) {}
-				public void dispose() {}
-				public boolean isLabelProperty(Object element, String property) {return false;}
-				public void removeListener(ILabelProviderListener listener) {}
-				public Image getImage(Object element) {return null;}
-				public String getText(Object element) {
-					return element.toString();
-				}			
-			})	;
-            
-            wcListViewer.setSorter(new ViewerSorter());
-            wcListViewer.setInput(urls);
-            retrieveDataModels();
-            
-            return composite;
-		}
-		
-		@Override
-		protected void okPressed() {
-			setReturnCode(OK);
-			getButton(IDialogConstants.OK_ID).setData("dialog",MDMXSDSchemaEntryDialog.this);
-			//no close let Action Handler handle it
-			super.okPressed();
-		}
-		 @Override
-		protected void cancelPressed() {
-			setReturnCode(CANCEL);
-			getButton(IDialogConstants.CANCEL_ID).setData("dialog",MDMXSDSchemaEntryDialog.this);
-			//no close let Action Handler handle it
-			super.cancelPressed();
-		}
-		 
-		protected Control createButtonBar(Composite parent) {
-			Control control = super.createButtonBar(parent);
-			getButton(IDialogConstants.OK_ID).setEnabled(false);
-			
-			return control;
-		}
-		
-		public List<String> getMDMDataModelUrls()
-		{
-			return importedUrls;
-		}
-		
-		private void retrieveDataModels()
-		{
-            try {
-            	XtentisPort port = Util.getPort(treeObject);
-    			WSDataModelPK[] xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs();
-    			if (xdmPKs != null) {
-    				for (int i = 0; i < xdmPKs.length; i++) {
-    					String name = xdmPKs[i].getPk();
-    					if (!name.startsWith("XMLSCHEMA")) {
-    						urls.add(name);
-    					}
-    				}
-    			wcListViewer.refresh();
-    			}
-			} catch (Exception e) {
-				e.printStackTrace();
-				urls.clear();
-			}
-		}
 	}
 }

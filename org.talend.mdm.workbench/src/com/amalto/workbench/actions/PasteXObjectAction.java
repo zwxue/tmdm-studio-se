@@ -17,6 +17,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.amalto.workbench.dialogs.MDMXSDSchemaEntryDialog;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -25,6 +26,7 @@ import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.views.ServerView;
+import com.amalto.workbench.webservices.WSConceptRevisionMapMapEntry;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModel;
@@ -39,6 +41,7 @@ import com.amalto.workbench.webservices.WSExistsSynchronizationPlan;
 import com.amalto.workbench.webservices.WSExistsTransformerV2;
 import com.amalto.workbench.webservices.WSExistsUniverse;
 import com.amalto.workbench.webservices.WSExistsView;
+import com.amalto.workbench.webservices.WSGetConceptsInDataClusterWithRevisions;
 import com.amalto.workbench.webservices.WSGetDataCluster;
 import com.amalto.workbench.webservices.WSGetDataModel;
 import com.amalto.workbench.webservices.WSGetItemPKsByCriteria;
@@ -711,14 +714,7 @@ public class PasteXObjectAction extends Action{
 	}
 	
 	private void copyXObjectContent(String oldXObjectPk, String newXObjectPk, String revisionID, int xobjectType)
-	{
-		if (! MessageDialog.openConfirm(
-        		this.view.getSite().getShell(),
-        		"Copy " + "content",
-        		"Are you sure you want to copy "+ oldXObjectPk + "'s content"  +"?"
-        )) return;
-		
-		
+	{			
 		switch(xobjectType)
 		{
 		case TreeObject.DATA_CLUSTER :
@@ -739,21 +735,44 @@ public class PasteXObjectAction extends Action{
 				      	false
 				       )	
 				      ).getResults();
-				for (WSItemPKsByCriteriaResponseResults result : results)
-				{
-					WSSynchronizationGetItemXML getItemXML = new WSSynchronizationGetItemXML(revisionID, result.getWsItemPK());
-					WSString xmlForm = destPort.synchronizationGetItemXML(getItemXML);
-					Document doc = Util.parse(xmlForm.getValue());
-					NodeList clusterNameList = Util.getNodeList(doc, "/ii/c");
-					for (int i = 0; i < clusterNameList.getLength(); i++)
-					{
-						Node node = clusterNameList.item(i);
-						node.setTextContent(newXObjectPk);
-					}
-					
-					WSSynchronizationPutItemXML putItemXML = new WSSynchronizationPutItemXML(revisionID, Util.nodeToString(doc));
-					destPort.synchronizationPutItemXML(putItemXML);
+				
+				ArrayList<String> conceptList = new ArrayList<String>();
+				WSConceptRevisionMapMapEntry[] wsConceptRevisionMapMapEntries = destPort.getConceptsInDataClusterWithRevisions(
+						new WSGetConceptsInDataClusterWithRevisions(
+								new WSDataClusterPK(oldXObjectPk),new WSUniversePK(revisionID)
+						)
+				).getMapEntry();
+				
+				for (WSConceptRevisionMapMapEntry entry : wsConceptRevisionMapMapEntries) {
+					conceptList.add(entry.getConcept());
 				}
+				
+				MDMXSDSchemaEntryDialog dlg = new MDMXSDSchemaEntryDialog(this.view.getSite().getShell(), "Select Concepts to be copied");
+				dlg.create();
+				dlg.setOKButton(true);
+				dlg.retrieveDataModels(conceptList);
+        		dlg.setBlockOnOpen(true);
+        		dlg.open();
+        		
+        		if (dlg.getReturnCode() == Window.OK)  {
+    				for (WSItemPKsByCriteriaResponseResults result : results)
+    				{
+    					if(dlg.getMDMDataModelUrls().contains(result.getWsItemPK().getConceptName()))
+    					{
+        					WSSynchronizationGetItemXML getItemXML = new WSSynchronizationGetItemXML(revisionID, result.getWsItemPK());
+        					WSString xmlForm = destPort.synchronizationGetItemXML(getItemXML);
+        					Document doc = Util.parse(xmlForm.getValue());
+        					NodeList clusterNameList = Util.getNodeList(doc, "/ii/c");
+    						for (int i = 0; i < clusterNameList.getLength(); i++) {
+    							Node node = clusterNameList.item(i);
+    							node.setTextContent(newXObjectPk);
+    						}
+        					
+        					WSSynchronizationPutItemXML putItemXML = new WSSynchronizationPutItemXML(revisionID, Util.nodeToString(doc));
+        					destPort.synchronizationPutItemXML(putItemXML);	
+    					}
+    				}
+        		}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
