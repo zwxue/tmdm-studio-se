@@ -43,6 +43,9 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.methods.MultipartPostMethod;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
@@ -2183,4 +2186,21 @@ public class Util {
 		else
 			return newLabel;
 	}
+	
+	public static String formatXsdSource(String xsdSource) {
+		try {
+			SAXReader reader = new SAXReader();
+			org.dom4j.Document document = reader.read(new StringReader(xsdSource));
+			StringWriter writer = new StringWriter();
+			OutputFormat format = OutputFormat.createPrettyPrint();
+			format.setEncoding("UTF-8");
+			XMLWriter xmlwriter = new XMLWriter(writer, format);
+			xmlwriter.write(document);
+			return writer.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return xsdSource;
+
+	}	
 }

@@ -15,6 +15,7 @@ import org.eclipse.ui.editors.text.TextEditor;
 import com.amalto.workbench.actions.SaveXObjectAction;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataModel;
 
 public class XMLEditor extends TextEditor {
@@ -89,12 +90,12 @@ public class XMLEditor extends TextEditor {
 	public void doSave(IProgressMonitor progressMonitor) {		
     	WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
     	IDocument doc=((XMLEditorInput)this.getEditorInput()).getDocument();
-		//aiming added remove 'targetNamespace','xmlns' attr, for it will cause xsd validate error, the xsd is invalid
+//		//aiming added remove 'targetNamespace','xmlns' attr, for it will cause xsd validate error, the xsd is invalid
     	String schema= doc.get();
-		schema=schema.replaceAll("targetNamespace\\s*=\\s*\"[^\"]*\"", "");
-		schema=schema.replaceAll("xmlns\\s*=\\s*\"[^\"]*\"", "");
-		//end    	
-		wsObject.setXsdSchema(schema);
+//		schema=schema.replaceAll("targetNamespace\\s*=\\s*\"[^\"]*\"", "");
+//		schema=schema.replaceAll("xmlns\\s*=\\s*\"[^\"]*\"", "");
+//		//end    	
+		wsObject.setXsdSchema(Util.formatXsdSource(schema));
 		setModified(true);
 		SaveXObjectAction action=new SaveXObjectAction(editor);
 		action.run();
@@ -108,7 +109,7 @@ public class XMLEditor extends TextEditor {
 		state=-1;
 		this.xobject=xobject;
 		WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());    	        
-        Document doc = new Document(wsObject.getXsdSchema());
+        Document doc = new Document(Util.formatXsdSource(wsObject.getXsdSchema()));
         setInput(new XMLEditorInput(doc));        
 	}
 	

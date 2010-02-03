@@ -27,6 +27,7 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
+import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataModel;
 
 public class XObjectEditor extends FormEditor implements IXObjectModelListener{	
@@ -73,7 +74,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 
                     //addPage(new DataModelEditorPage(this));
 	           		WSDataModel wsObject = (WSDataModel) (xobject.getWsObject()); 
-	           		Document doc = new Document(wsObject.getXsdSchema());
+	           		Document doc = new Document(Util.formatXsdSource(wsObject.getXsdSchema()));
 	           		xmlEditor=new XMLEditor(this, xobject);
 	           		addPage(xmlEditor, new XMLEditorInput(doc));	           		
 	           		this.setPageText(1, "Schema");
