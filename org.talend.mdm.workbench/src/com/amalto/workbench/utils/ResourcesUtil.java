@@ -1,7 +1,9 @@
 package com.amalto.workbench.utils;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -29,6 +31,8 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+
+import sun.misc.BASE64Encoder;
 
 public class ResourcesUtil {
 	
@@ -138,6 +142,28 @@ private static String getXMLString(String uri) {
 		fr.close();
 		
 	}
+	public static void postPicFromFile(String typeName,String pathName,String uriPre) throws Exception  {
+		String content=readFileAsString(pathName);
+		String uri=uriPre+"/imageserver/secure/ImageUploadServlet";
+//		String uri=uriPre+picURI;
+		postResourcesFromContentString(content,uri,typeName);
+	}
+	 private static String readFileAsString(String fileName) throws Exception {  
+		             FileInputStream fis = new FileInputStream(fileName);  
+		             BufferedInputStream in = new BufferedInputStream(fis);  
+		             byte buffer[] = new byte[256];  
+		             StringBuffer picStr=new StringBuffer();  
+		             BASE64Encoder base64=new BASE64Encoder();  
+		             while (in.read(buffer)>= 0){  
+		                 picStr.append(base64.encode(buffer));  
+		             }  
+		             fis.close();  
+		             fis=null;  
+		             in.close();  
+		             in=null;  
+		             buffer=null;  
+		             return picStr.toString();  
+		         }  
 	public static void postResourcesFromContentString(String content,String uri,String typeName)  throws Exception{
 		System.out.println(content);
 		HttpPost httppost = new HttpPost(uri);
@@ -159,7 +185,6 @@ private static String getXMLString(String uri) {
 	    HttpResponse response = httpclient.execute(httppost);
 	    HttpEntity entity = response.getEntity();
 
-	        entity = response.getEntity();                                                             
 	        try{
 	            Header[] headers = response.getAllHeaders();                    
 	            String responseString = null;

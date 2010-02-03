@@ -39,14 +39,20 @@ import org.eclipse.swt.widgets.Text;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.models.IXObjectModelListener;
+import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.utils.ResourcesUtil;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSMenuEntry;
 import com.amalto.workbench.webservices.WSMenuMenuEntriesDescriptions;
+import com.amalto.workbench.widgets.FileSelectWidget;
 
 public class MenuEntryDialog extends Dialog {
 	
 	private Text idText=null;
 	private Text contextText=null;
+	private FileSelectWidget iconPathText;
+
 	private Text applicationNameText=null;
 	
 	protected Composite descriptionsComposite;
@@ -59,17 +65,19 @@ public class MenuEntryDialog extends Dialog {
 	private SelectionListener caller = null;
 	private String title = "";
 	private boolean isChanged = true;
-	
-	
+	private String uripre="";	
+
+
 
 	/**
 	 * @param parentShell
 	 */
-	public MenuEntryDialog(WSMenuEntry wsMenuEntry, SelectionListener caller, Shell parentShell, String title) {
+	public MenuEntryDialog(WSMenuEntry wsMenuEntry, SelectionListener caller, Shell parentShell, String title,String uripre) {
 		super(parentShell);
 		this.wsMenuEntry = wsMenuEntry;
 		this.caller = caller;
 		this.title = title;
+		this.uripre=uripre;
 		//feed the descritions hashmap used by the labels Table
 		WSMenuMenuEntriesDescriptions[] descriptions = wsMenuEntry.getDescriptions();
 		if (descriptions!=null) {
@@ -78,12 +86,13 @@ public class MenuEntryDialog extends Dialog {
 			}
 		}
 	}
-	public MenuEntryDialog(WSMenuEntry wsMenuEntry, SelectionListener caller, Shell parentShell, String title,boolean isChanged) {
+	public MenuEntryDialog(WSMenuEntry wsMenuEntry, SelectionListener caller, Shell parentShell, String title,boolean isChanged,String uripre) {
 		super(parentShell);
 		this.wsMenuEntry = wsMenuEntry;
 		this.caller = caller;
 		this.title = title;
 		this.isChanged = isChanged;
+		this.uripre=uripre;
 		//feed the descritions hashmap used by the labels Table
 		WSMenuMenuEntriesDescriptions[] descriptions = wsMenuEntry.getDescriptions();
 		if (descriptions!=null) {
@@ -118,7 +127,7 @@ public class MenuEntryDialog extends Dialog {
         }
 		
 		idText.setLayoutData(
-				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+				new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
 		);
 		((GridData)idText.getLayoutData()).widthHint = 300;
 		idText.setDoubleClickEnabled(false);
@@ -132,10 +141,11 @@ public class MenuEntryDialog extends Dialog {
 
 		contextText = new Text(composite, SWT.NONE);
 		contextText.setLayoutData(
-				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
+				new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
 		);
 		contextText.setDoubleClickEnabled(false);
 
+		
 		Label applicationNameLabel = new Label(composite, SWT.NONE);
 		applicationNameLabel.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
@@ -144,13 +154,19 @@ public class MenuEntryDialog extends Dialog {
 
 		applicationNameText = new Text(composite, SWT.NONE);
 		applicationNameText.setLayoutData(
+				new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
+		);
+		Label iconPathLabel = new Label(composite, SWT.NONE);
+		iconPathLabel.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
 		);
+		iconPathLabel.setText("Icon Path");
+		iconPathText =new FileSelectWidget(composite,"",new String[]{"*.png","*.gif","*.jpg"}, "",true);
 		
 		//Labels
         descriptionsComposite = new Composite(composite, SWT.BORDER);
         descriptionsComposite.setLayoutData(
-                new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
+                new GridData(SWT.FILL,SWT.FILL,true,true,3,1)
         );
         descriptionsComposite.setLayout(new GridLayout(3,false));
 
@@ -332,6 +348,7 @@ public class MenuEntryDialog extends Dialog {
 			idText.setText(wsMenuEntry.getId() == null ? "" : wsMenuEntry.getId());
 			contextText.setText(wsMenuEntry.getContext() == null ? "" : wsMenuEntry.getContext());
 			applicationNameText.setText(wsMenuEntry.getApplication() == null ? "" : wsMenuEntry.getApplication());
+			iconPathText.setFilename(wsMenuEntry.getIcon()== null ? "" : wsMenuEntry.getIcon());
 			descriptionsViewer.setInput(descriptionsMap);
 		}
 		
@@ -352,6 +369,31 @@ public class MenuEntryDialog extends Dialog {
 	protected void okPressed() {
 		setReturnCode(OK);
 		getButton(IDialogConstants.OK_ID).setData("dialog",MenuEntryDialog.this);
+		try {
+			String icon = "";
+//			if(!wsMenuEntry.getIcon().equalsIgnoreCase(getIconPathText().getText())){
+			if (wsMenuEntry.getIcon() != null){
+				if(!wsMenuEntry.getIcon().equalsIgnoreCase(getIconPathText().getText())){
+					Util.uploadImageFile(uripre +"/imageserver/secure/ImageDeleteServlet?uri="+wsMenuEntry.getIcon(), "", "admin",
+						"talend");
+				if(!"".equalsIgnoreCase(getIconPathText().getText()))
+					icon=Util.uploadImageFile(
+						uripre + "/imageserver/secure/ImageUploadServlet",
+						getIconPathText().getText(),
+							"admin", "talend");
+				getIconPathText().setText(icon);
+				}}
+			else if (!"".equalsIgnoreCase(getIconPathText().getText()))
+				icon=Util.uploadImageFile(
+						uripre + "/imageserver/secure/ImageUploadServlet",
+						getIconPathText().getText(),
+							"admin", "talend");
+				getIconPathText().setText(icon);
+//			ResourcesUtil.postPicFromFile(getIdText().getText(), getIconPathText().getText(),uripre);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		//no close let Action Handler handle it
 	}
 	 @Override
@@ -371,6 +413,10 @@ public class MenuEntryDialog extends Dialog {
 		return applicationNameText;
 	}
 
+	public Text getIconPathText() {
+		return iconPathText.getText();
+	}
+
 	public Text getContextText() {
 		return contextText;
 	}
@@ -382,8 +428,6 @@ public class MenuEntryDialog extends Dialog {
 	public TableViewer getDescriptionsTableViewer() {
 		return descriptionsViewer;
 	}
-	
-	
 	/**************************************************************************************************
 	 * A table viewer line
 	 ***************************************************************************************************/

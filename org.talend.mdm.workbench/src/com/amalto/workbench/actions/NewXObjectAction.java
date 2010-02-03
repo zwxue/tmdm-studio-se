@@ -497,6 +497,7 @@ public class NewXObjectAction extends Action{
                     				},
                     				null,
                     				null,
+                    				null,
                     				null
                     			)
                     		}

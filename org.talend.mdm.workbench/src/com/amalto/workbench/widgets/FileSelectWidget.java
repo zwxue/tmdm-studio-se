@@ -46,7 +46,7 @@ public class FileSelectWidget {
 	}
 
 	private void create(){
-		GridData gd=new GridData(SWT.RIGHT,SWT.TOP,true,true,1,1);
+		GridData gd=new GridData(SWT.LEFT,SWT.TOP,false,true,1,1);
 		if(label.length()>0){
 		Label label=factory.createLabel(parent, this.label);
 		label.setText(this.label);
@@ -60,7 +60,7 @@ public class FileSelectWidget {
 			gd=new GridData(SWT.FILL,SWT.FILL,true,true,2,1);
 		}*/
 		text.setLayoutData(gd);
-		text.setText("");		
+		text.setText(filename);		
 		button=new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
@@ -107,7 +107,7 @@ public class FileSelectWidget {
 		button.setEnabled(flag);
 	}
 	public void setFilename(String filename) {
-		this.filename = filename;
+		text.setText(filename);
 	}
 	
 	public Composite getCmp(){

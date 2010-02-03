@@ -79,6 +79,7 @@ public class MenuMainPage extends AMainPageV2 {
 	
 	protected boolean refreshing = false;
 	protected boolean comitting = false;
+	private String uripre;
 	
 	
     public MenuMainPage(FormEditor editor) {
@@ -88,6 +89,7 @@ public class MenuMainPage extends AMainPageV2 {
         		"Menu "+((XObjectEditorInput)editor.getEditorInput()).getName()
         		+Util.getRevision((TreeObject)((XObjectEditorInput)editor.getEditorInput()).getModel())
         );        
+        uripre=((TreeObject)((XObjectEditorInput) editor.getEditorInput()).getModel()).getEndpointIpAddress();
     }
 
 	protected void createCharacteristicsContent(FormToolkit toolkit, Composite mainComposite) {
@@ -348,6 +350,7 @@ public class MenuMainPage extends AMainPageV2 {
 	        	treeEntry.getWsMenuEntry().setId(id);
 	        	treeEntry.getWsMenuEntry().setContext("".equals(dlg.getContextText().getText()) ? null : dlg.getContextText().getText());
 	        	treeEntry.getWsMenuEntry().setApplication("".equals(dlg.getApplicationNameText().getText()) ? null : dlg.getApplicationNameText().getText());
+	        	treeEntry.getWsMenuEntry().setIcon("".equals(dlg.getIconPathText().getText()) ? null : dlg.getIconPathText().getText());
 	        	WSMenuMenuEntriesDescriptions[] wsDescriptions = new WSMenuMenuEntriesDescriptions[descriptions.size()];
 	        	Set<String> isoCodes = descriptions.keySet();
 	        	int i=0;
@@ -393,7 +396,7 @@ public class MenuMainPage extends AMainPageV2 {
 							treeEntry.getWsMenuEntry(),
 							new MenuEntryDialogSelectionListener(viewer,treeEntry),
 							this.viewer.getControl().getShell(),
-							"Edit the Menu Entry "+treeEntry.getWsMenuEntry().getId(),false
+							"Edit the Menu Entry "+treeEntry.getWsMenuEntry().getId(),false,uripre
 					);
 					dlg.setBlockOnOpen(true);
 					dlg.open();
@@ -431,7 +434,7 @@ public class MenuMainPage extends AMainPageV2 {
 						position = 0;
 						treeEntry = new TreeEntry(
 							currentEntry,
-							new WSMenuEntry("",null,"","",null)
+							new WSMenuEntry("",null,"","","",null)
 						);
 						label = "Add a sub menu entry to "+currentEntry.getWsMenuEntry().getId();
 						break;
@@ -439,7 +442,7 @@ public class MenuMainPage extends AMainPageV2 {
 						position = findSubMenuPosition(currentEntry);
 						treeEntry = new TreeEntry(
 							currentEntry.getParentTreeEntry(),
-							new WSMenuEntry("",null,"","",null)
+							new WSMenuEntry("",null,"","","",null)
 						);
 						label = "Add a menu entry before this entry";
 						break;
@@ -447,7 +450,7 @@ public class MenuMainPage extends AMainPageV2 {
 						position = findSubMenuPosition(currentEntry);
 						treeEntry = new TreeEntry(
 							currentEntry.getParentTreeEntry(),
-							new WSMenuEntry("",null,"","",null)
+							new WSMenuEntry("",null,"","","",null)
 						);
 						label = "Add a menu entry after this entry";
 						break;
@@ -465,7 +468,7 @@ public class MenuMainPage extends AMainPageV2 {
 							new WSMenuEntry(),
 							new MenuEntryDialogSelectionListener(viewer,treeEntry),
 							this.viewer.getControl().getShell(),
-							"New Menu Entry "
+							"New Menu Entry ",uripre
 					);
 					dlg.setBlockOnOpen(true);
 					dlg.open();

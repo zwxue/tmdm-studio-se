@@ -218,7 +218,7 @@ public enum EImage {
 	THIN_VIEW_MENU("icons/thin_view_menu.GIF"),
 	TOOLBAR("icons/toolbar.gif"),
 	TRANSFORMER("icons/transformer.png"),
-	TRASH("icons/trash.gif"),
+//	TRASH("icons/trash.gif"),
 	TREE_MODE("icons/tree_mode.gif"),
 	TREE_OBJECT("icons/tree_object.gif"),
 	TYPE_DEFINITION("icons/type_definition.gif"),
@@ -264,7 +264,17 @@ public enum EImage {
 	EXPAND("icons/expand.png"),
 	COLLAPSE("icons/collapse.png"),
 	REGISTER_WIZ("icons/register_wiz.png"), //$NON-NLS-1$
-	KEYS("icons/keys.png");
+	KEYS("icons/keys.png"),
+	BROWSE_MENU("icons/browse_menu.png"),
+	CROSSREF("icons/crossref.png"),
+	HIER_VIEW("icons/hier_view.gif"),
+	MANAGE_USERS("icons/manage_users.png"),
+	REPORTING("icons/reporting.png"),
+	SYNCHRO_ITEM("icons/synchro_item.png"),
+	SYNCHRONIZE("icons/synchronize.png"),
+	TRASH("icons/trash.png"),
+	UPDATEREPORT("icons/updatereport.png"),
+	WORKFLOWTASKS("icons/workflowtasks.png");
 	EImage(String path){
 		this.path=path;
 		

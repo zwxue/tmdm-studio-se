@@ -60,6 +60,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComplexTypeContent;
@@ -97,6 +98,8 @@ import org.xml.sax.InputSource;
 import sun.misc.BASE64Encoder;
 
 import com.amalto.workbench.MDMWorbenchPlugin;
+import com.amalto.workbench.image.EImage;
+import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.webservices.WSComponent;
@@ -695,6 +698,44 @@ public class Util {
             response = mppost.getResponseBodyAsString();
             mppost.releaseConnection();
             return response;
+        } catch (Exception e) {
+            mppost.releaseConnection();        	
+        	e.printStackTrace();
+        	throw new XtentisException(e.getClass().getName()+": "+e.getLocalizedMessage());
+        }
+    }
+    
+    
+    public static String uploadImageFile(String URL,String localFilename, String username, String password)  throws XtentisException{
+        System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
+        System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
+        /*
+        System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.commons.httpclient", "debug");
+        System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire.header", "debug");
+        System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire.content", "debug");
+        */
+        
+        HttpClient client = new HttpClient();
+        MultipartPostMethod mppost = new MultipartPostMethod(URL);
+        String response = null;
+        try {
+        	  
+            client.setConnectionTimeout(60000);
+            client.getState().setAuthenticationPreemptive(true);
+            client.getState().setCredentials(null,null, new UsernamePasswordCredentials(username,password));
+            if(!"".equalsIgnoreCase(localFilename))
+				mppost.addParameter("imageFile", new File(localFilename));
+            
+            client.executeMethod(mppost);
+            if (mppost.getStatusCode() != HttpStatus.SC_OK) {
+            	throw new XtentisException("Server sent error: "+mppost.getStatusCode()+": "+mppost.getStatusText()); 
+            }
+            response = mppost.getResponseBodyAsString();
+            mppost.releaseConnection();
+            if(response.contains("upload"))
+            	return response.substring(response.indexOf("upload"), response.indexOf("}")-1);
+            else 
+            	return "";
         } catch (Exception e) {
             mppost.releaseConnection();        	
         	e.printStackTrace();
@@ -2186,7 +2227,36 @@ public class Util {
 		else
 			return newLabel;
 	}
-	
+	public static Image getMenuImage(String menuName){
+		String menu= EImage.MENU.getPath();
+		if(menuName.startsWith("Browse"))
+			menu=EImage.BROWSE_MENU.getPath();
+		else if(menuName.equalsIgnoreCase("Cross Referencing"))
+			menu=EImage.CROSSREF.getPath();
+		else if(menuName.equalsIgnoreCase("Hierarchical View"))
+			menu=EImage.HIER_VIEW.getPath();
+		else if(menuName.equalsIgnoreCase("ItemsTrash"))
+			menu=EImage.TRASH.getPath();
+		else if(menuName.equalsIgnoreCase("logging"))
+			menu=EImage.MENU.getPath();
+		else if(menuName.equalsIgnoreCase("Manage users"))
+			menu=EImage.MANAGE_USERS.getPath();
+		else if(menuName.equalsIgnoreCase("Reporting"))
+			menu=EImage.REPORTING.getPath();
+		else if(menuName.equalsIgnoreCase("Service Schedule"))
+			menu=EImage.MENU.getPath();
+		else if(menuName.equalsIgnoreCase("SynchronizationAction"))
+			menu=EImage.SYNCHRONIZE.getPath();
+		else if(menuName.equalsIgnoreCase("SynchronizationItem"))
+			menu=EImage.SYNCHRO_ITEM.getPath();
+		else if(menuName.equalsIgnoreCase("Universe Manager"))
+			menu=EImage.UNIVERSE.getPath();
+		else if(menuName.equalsIgnoreCase("UpdateReport"))
+			menu=EImage.UPDATEREPORT.getPath();
+		else if(menuName.equalsIgnoreCase("WorkflowTasks"))
+			menu=EImage.WORKFLOWTASKS.getPath();
+		return	ImageCache.getImage(menu).createImage();
+	}
 	public static String formatXsdSource(String xsdSource) {
 		try {
 			SAXReader reader = new SAXReader();
