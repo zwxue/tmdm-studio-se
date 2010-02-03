@@ -13,6 +13,9 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Event;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -38,6 +41,8 @@ import com.amalto.workbench.webservices.WSExistsUniverse;
 import com.amalto.workbench.webservices.WSExistsView;
 import com.amalto.workbench.webservices.WSGetDataCluster;
 import com.amalto.workbench.webservices.WSGetDataModel;
+import com.amalto.workbench.webservices.WSGetItemPKsByCriteria;
+import com.amalto.workbench.webservices.WSGetItemPKsByFullCriteria;
 import com.amalto.workbench.webservices.WSGetMenu;
 import com.amalto.workbench.webservices.WSGetRole;
 import com.amalto.workbench.webservices.WSGetRoutingRule;
@@ -46,6 +51,7 @@ import com.amalto.workbench.webservices.WSGetSynchronizationPlan;
 import com.amalto.workbench.webservices.WSGetTransformerV2;
 import com.amalto.workbench.webservices.WSGetUniverse;
 import com.amalto.workbench.webservices.WSGetView;
+import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuPK;
 import com.amalto.workbench.webservices.WSPutDataCluster;
@@ -64,8 +70,11 @@ import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSStoredProcedure;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
+import com.amalto.workbench.webservices.WSString;
+import com.amalto.workbench.webservices.WSSynchronizationGetItemXML;
 import com.amalto.workbench.webservices.WSSynchronizationPlan;
 import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
+import com.amalto.workbench.webservices.WSSynchronizationPutItemXML;
 import com.amalto.workbench.webservices.WSTransformerV2;
 import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.WSUniverse;
@@ -291,7 +300,7 @@ public class PasteXObjectAction extends Action{
 			           		destPort.putDataCluster(new WSPutDataCluster(newDataCluster));
 			           		TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ?  parent.getServerRoot(): xobject.getServerRoot(), xobject.getType(), newKey, null);
 			           		newTreeObject(newObj, selected);
-			           		
+			           		copyXObjectContent(((WSDataClusterPK)xobject.getWsKey()).getPk(), newKey.getPk(), newObj.getUniverse(), TreeObject.DATA_CLUSTER);
 			           		list.remove(xobject);
 			           		iter = list.iterator();
 			           		} break;
@@ -699,6 +708,60 @@ public class PasteXObjectAction extends Action{
    				}
    			}
    		}
+	}
+	
+	private void copyXObjectContent(String oldXObjectPk, String newXObjectPk, String revisionID, int xobjectType)
+	{
+		if (! MessageDialog.openConfirm(
+        		this.view.getSite().getShell(),
+        		"Copy " + "content",
+        		"Are you sure you want to copy "+ oldXObjectPk + "'s content"  +"?"
+        )) return;
+		
+		
+		switch(xobjectType)
+		{
+		case TreeObject.DATA_CLUSTER :
+	          try {
+				WSItemPKsByCriteriaResponseResults[] results =
+					  destPort.getItemPKsByFullCriteria(
+				      new WSGetItemPKsByFullCriteria(	
+				      	new WSGetItemPKsByCriteria(
+				      		new WSDataClusterPK(oldXObjectPk),
+				      		null,
+				      		null,
+				      		null,
+				      		(long)-1,
+				      		(long)-1,
+				      		0,
+				      		Integer.MAX_VALUE
+				      	),
+				      	false
+				       )	
+				      ).getResults();
+				for (WSItemPKsByCriteriaResponseResults result : results)
+				{
+					WSSynchronizationGetItemXML getItemXML = new WSSynchronizationGetItemXML(revisionID, result.getWsItemPK());
+					WSString xmlForm = destPort.synchronizationGetItemXML(getItemXML);
+					Document doc = Util.parse(xmlForm.getValue());
+					NodeList clusterNameList = Util.getNodeList(doc, "/ii/c");
+					for (int i = 0; i < clusterNameList.getLength(); i++)
+					{
+						Node node = clusterNameList.item(i);
+						node.setTextContent(newXObjectPk);
+					}
+					
+					WSSynchronizationPutItemXML putItemXML = new WSSynchronizationPutItemXML(revisionID, Util.nodeToString(doc));
+					destPort.synchronizationPutItemXML(putItemXML);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		break;
+		default:
+		}
+		
 	}
 	
 	public void runWithEvent(Event event) {
