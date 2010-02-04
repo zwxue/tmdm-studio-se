@@ -749,8 +749,8 @@ public class PasteXObjectAction extends Action{
 				
 				MDMXSDSchemaEntryDialog dlg = new MDMXSDSchemaEntryDialog(this.view.getSite().getShell(), "Select Concepts to be copied");
 				dlg.create();
+				dlg.retrieveDataModels(conceptList, true);
 				dlg.setOKButton(true);
-				dlg.retrieveDataModels(conceptList);
         		dlg.setBlockOnOpen(true);
         		dlg.open();
         		

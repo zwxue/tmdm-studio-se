@@ -187,7 +187,7 @@ public class SelectImportedModulesDialog extends Dialog{
 	        					}
 	        				}
 	        				dlg.create();
-	        				dlg.retrieveDataModels(schemaList);
+	        				dlg.retrieveDataModels(schemaList, false);
 	        			}
 	    			} catch (Exception es) {
 	    				es.printStackTrace();

@@ -86,7 +86,6 @@ public class MDMXSDSchemaEntryDialog extends Dialog
         
         wcListViewer.setSorter(new ViewerSorter());
         wcListViewer.setInput(urls);
-
         return composite;
 	}
 	
@@ -122,9 +121,14 @@ public class MDMXSDSchemaEntryDialog extends Dialog
 		getButton(IDialogConstants.OK_ID).setEnabled(enabled);
 	}
 	
-	public void retrieveDataModels(ArrayList<String> objs)
+	public void retrieveDataModels(ArrayList<String> objs, boolean selectAll)
 	{
 		urls.addAll(objs);
 	    wcListViewer.refresh();
+	    if(selectAll)
+	    {
+	        wcListViewer.getList().selectAll();
+	        importedUrls.addAll(objs);
+	    }
 	}
 }
