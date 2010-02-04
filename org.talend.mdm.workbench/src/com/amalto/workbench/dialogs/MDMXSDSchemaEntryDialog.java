@@ -1,7 +1,6 @@
 package com.amalto.workbench.dialogs;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,6 +33,7 @@ public class MDMXSDSchemaEntryDialog extends Dialog
 	
 	public MDMXSDSchemaEntryDialog(Shell parentShell,String title) {
 		super(parentShell);
+		setShellStyle(this.getShellStyle() | SWT.RESIZE);
 		this.title=title;
 	}
 	
@@ -44,7 +44,7 @@ public class MDMXSDSchemaEntryDialog extends Dialog
 		GridLayout layout = (GridLayout)composite.getLayout();
 		layout.numColumns = 1;
 		
-        wcListViewer = new ListViewer(composite,SWT.BORDER | SWT.MULTI);
+        wcListViewer = new ListViewer(composite,SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL |SWT.FULL_SELECTION);
         wcListViewer.getControl().setLayoutData(
                 new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
         );
@@ -86,7 +86,7 @@ public class MDMXSDSchemaEntryDialog extends Dialog
         
         wcListViewer.setSorter(new ViewerSorter());
         wcListViewer.setInput(urls);
-        
+
         return composite;
 	}
 	
