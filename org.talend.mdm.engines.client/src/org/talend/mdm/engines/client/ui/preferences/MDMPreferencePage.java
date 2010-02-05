@@ -23,14 +23,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.talend.commons.exception.ExceptionHandler;
-import org.talend.core.model.properties.SpagoBiServer;
 import org.talend.mdm.engines.client.Activator;
 import org.talend.mdm.engines.client.i18n.Messages;
 
 /**
- * Preference for the SpagoBiServer values.
+ * Preference for the MDMServer values.
  * 
- * $Id: SpagoBiPreferencePage.java 2738 2007-04-26 13:12:27Z cantoine $
+ * $Id: MDMPreferencePage.java 2738 2007-04-26 13:12:27Z cantoine $
  * 
  */
 public class MDMPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
@@ -44,9 +43,9 @@ public class MDMPreferencePage extends FieldEditorPreferencePage implements IWor
     private Composite parent;
 
     /**
-     * SpagoBiPreferencePage.
+     * MDMPreferencePage.
      * 
-     * $Id: SpagoBiPreferencePage.java 2738 2007-04-26 13:12:27Z cantoine $
+     * $Id: MDMPreferencePage.java 2738 2007-04-26 13:12:27Z cantoine $
      * 
      */
 
@@ -69,10 +68,10 @@ public class MDMPreferencePage extends FieldEditorPreferencePage implements IWor
     protected void createFieldEditors() {
         parent = getFieldEditorParent();
 
-        spagoBiCheckButton = new CheckBoxFieldEditor(MDMPreferenceInitializer.SPAGO_STATUS, Messages
-                .getString("SpagoBiPreferencePage.spagoBiCheckButton"), parent); //$NON-NLS-1$
-        editor = new MDMServerEditor(SpagoBiServer.SPAGOBI_SERVER, Messages
-                .getString("SpagoBiPreferencePage.technicalStatusLabel"), parent); //$NON-NLS-1$
+        spagoBiCheckButton = new CheckBoxFieldEditor(MDMPreferenceInitializer.MDM_STATUS, Messages
+                .getString("MDMPreferencePage.spagoBiCheckButton"), parent); //$NON-NLS-1$
+        editor = new MDMServerEditor(MDMPreferenceInitializer.MDM_SERVER, Messages
+                .getString("MDMPreferencePage.technicalStatusLabel"), parent); //$NON-NLS-1$
         addField(editor);
 
         updateEnableStateFromPreferences();
@@ -84,7 +83,7 @@ public class MDMPreferencePage extends FieldEditorPreferencePage implements IWor
 
             public void widgetSelected(SelectionEvent e) {
                 IPreferenceStore preferenceStore = getPreferenceStore();
-                preferenceStore.setValue(MDMPreferenceInitializer.SPAGO_STATUS, ((Button) e.getSource()).getSelection());
+                preferenceStore.setValue(MDMPreferenceInitializer.MDM_STATUS, ((Button) e.getSource()).getSelection());
                 updateEnableStateFromDisplay();
             }
         };
@@ -98,7 +97,7 @@ public class MDMPreferencePage extends FieldEditorPreferencePage implements IWor
 
     private void updateEnableStateFromPreferences() {
         IPreferenceStore preferenceStore = getPreferenceStore();
-        boolean spago = preferenceStore.getBoolean(MDMPreferenceInitializer.SPAGO_STATUS);
+        boolean spago = preferenceStore.getBoolean(MDMPreferenceInitializer.MDM_STATUS);
         spagoBiCheckButton.getCheckbox().setSelection(spago);
         editor.setEnabled(spago, parent);
     }

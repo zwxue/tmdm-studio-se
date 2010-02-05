@@ -72,7 +72,7 @@ public final class DeployOnMDMAction extends AContextualAction {
     }
 
     public boolean isVisible() {
-        return isEnabled() && Activator.getDefault().getPreferenceStore().getBoolean(MDMPreferenceInitializer.SPAGO_STATUS);
+        return isEnabled() && Activator.getDefault().getPreferenceStore().getBoolean(MDMPreferenceInitializer.MDM_STATUS);
     }
 
     public DeployOnMDMAction() {

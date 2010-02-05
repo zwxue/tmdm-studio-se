@@ -24,7 +24,9 @@ import org.talend.mdm.engines.client.Activator;
  */
 public class MDMPreferenceInitializer extends AbstractPreferenceInitializer {
 
-    public static final String SPAGO_STATUS = "SpagoBiPreferencePage.spagoBiCheckButton"; //$NON-NLS-1$
+    public static final String MDM_STATUS = "MDMPreferencePage.spagoBiCheckButton"; //$NON-NLS-1$
+
+    public static final String MDM_SERVER = "org.talend.repository.properties.mdmserver"; //$NON-NLS-1$
 
     /*
      * (non-Javadoc)
@@ -34,7 +36,7 @@ public class MDMPreferenceInitializer extends AbstractPreferenceInitializer {
     @Override
     public void initializeDefaultPreferences() {
         IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-        store.setDefault(SPAGO_STATUS, false);
+        store.setDefault(MDM_STATUS, false);
     }
 
 }

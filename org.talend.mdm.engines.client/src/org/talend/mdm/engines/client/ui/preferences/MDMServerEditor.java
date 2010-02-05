@@ -34,13 +34,13 @@ import org.talend.mdm.engines.client.ui.wizards.MDMServerHelper;
 /**
  * DOC cantoine class global comment. Detailled comment <br/>
  * 
- * $Id: SpagoBiServerEditor.java 2738 2007-04-27 13:12:27Z cantoine $
+ * $Id: MDMServerEditor.java 2738 2007-04-27 13:12:27Z cantoine $
  * 
  */
 public class MDMServerEditor extends TableEditor {
 
     /**
-     * DOC tguiu SpagoBiServerEditor constructor comment.
+     * DOC tguiu MDMServerEditor constructor comment.
      * 
      * @param name
      * @param labelText
@@ -58,15 +58,15 @@ public class MDMServerEditor extends TableEditor {
         contextTable.setHeaderVisible(true);
 
         TableColumn shortDescription = new TableColumn(contextTable, SWT.NONE);
-        shortDescription.setText(Messages.getString("SpagoBiServerEditor.descriptionColumnTitle")); //$NON-NLS-1$
+        shortDescription.setText(Messages.getString("MDMServerEditor.descriptionColumnTitle")); //$NON-NLS-1$
         shortDescription.setWidth(150);
 
         TableColumn host = new TableColumn(contextTable, SWT.NONE);
-        host.setText(Messages.getString("SpagoBiServerEditor.hostColumnTitle")); //$NON-NLS-1$
+        host.setText(Messages.getString("MDMServerEditor.hostColumnTitle")); //$NON-NLS-1$
         host.setWidth(150);
 
         TableColumn engineName = new TableColumn(contextTable, SWT.NONE);
-        engineName.setText(Messages.getString("SpagoBiServerDialog.port")); //$NON-NLS-1$
+        engineName.setText(Messages.getString("MDMServerDialog.port")); //$NON-NLS-1$
         engineName.setWidth(150);
 
         return contextTable;
@@ -146,11 +146,11 @@ public class MDMServerEditor extends TableEditor {
     @Override
     protected String getExistingInputObject(String obj) {
         Shell shell = Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell();
-        // SpagoBiServerDialog dialog = new SpagoBiServerDialog(shell, computeCodeList(),
-        // SpagoBiServerHelper.getEngineName(obj),
-        // SpagoBiServerHelper.getShortDescription(obj), SpagoBiServerHelper.getHost(obj),
-        // SpagoBiServerHelper.getPort(obj),
-        // SpagoBiServerHelper.getLogin(obj), SpagoBiServerHelper.getPassword(obj), SpagoBiServerHelper
+        // MDMServerDialog dialog = new MDMServerDialog(shell, computeCodeList(),
+        // MDMServerHelper.getEngineName(obj),
+        // MDMServerHelper.getShortDescription(obj), MDMServerHelper.getHost(obj),
+        // MDMServerHelper.getPort(obj),
+        // MDMServerHelper.getLogin(obj), MDMServerHelper.getPassword(obj), MDMServerHelper
         // .getApplicationContext(obj));
         MDMServerDialog dialog = new MDMServerDialog(shell, computeCodeList(), MDMServerHelper.getShortDescription(obj),
                 MDMServerHelper.getHost(obj), MDMServerHelper.getPort(obj), MDMServerHelper.getLogin(obj), MDMServerHelper

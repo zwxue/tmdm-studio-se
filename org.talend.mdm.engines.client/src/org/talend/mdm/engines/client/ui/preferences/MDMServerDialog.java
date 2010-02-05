@@ -33,7 +33,7 @@ import org.talend.mdm.engines.client.i18n.Messages;
 /**
  * DOC cantoine class global comment. Detailled comment <br/>
  * 
- * $Id: SpagoBiServerDialog.java 2738 2007-03-28 13:12:27Z cantoine $
+ * $Id: MDMServerDialog.java 2738 2007-03-28 13:12:27Z cantoine $
  * 
  */
 public class MDMServerDialog extends Dialog {
@@ -78,7 +78,7 @@ public class MDMServerDialog extends Dialog {
         creation = true;
     }
 
-    // public SpagoBiServerDialog(Shell parentShell, List existingServers, String initialEngine, String
+    // public MDMServerDialog(Shell parentShell, List existingServers, String initialEngine, String
     // initialDescription,
     // String initialHost, String initialLogin, String initialPassword, String initialPort, String initialContext) {
     public MDMServerDialog(Shell parentShell, List existingServers, String initialDescription, String initialHost,
@@ -120,9 +120,9 @@ public class MDMServerDialog extends Dialog {
     protected void configureShell(Shell shell) {
         super.configureShell(shell);
         if (creation) {
-            shell.setText(Messages.getString("SpagoBiServerDialog.shellText.createNewServer")); //$NON-NLS-1$
+            shell.setText(Messages.getString("MDMServerDialog.shellText.createNewServer")); //$NON-NLS-1$
         } else {
-            shell.setText(Messages.getString("SpagoBiServerDialog.shellText.editServer")); //$NON-NLS-1$
+            shell.setText(Messages.getString("MDMServerDialog.shellText.editServer")); //$NON-NLS-1$
         }
     }
 
@@ -169,7 +169,7 @@ public class MDMServerDialog extends Dialog {
         layout.numColumns = 3;
         composite.setLayout(layout);
         // Label engineNameLabel = new Label(composite, SWT.None);
-        //        engineNameLabel.setText(Messages.getString("SpagoBiServerDialog.engineNameText")); //$NON-NLS-1$
+        //        engineNameLabel.setText(Messages.getString("MDMServerDialog.engineNameText")); //$NON-NLS-1$
         // // GridData data = new GridData(GridData.GRAB_VERTICAL | GridData.HORIZONTAL_ALIGN_FILL |
         // // GridData.VERTICAL_ALIGN_CENTER);
         // // engineNameLabel.setLayoutData(data);
@@ -190,7 +190,7 @@ public class MDMServerDialog extends Dialog {
         // shortDescriptionLabel.setLayoutData(data);
 
         shortDescriptionLabel = new Label(composite, SWT.WRAP);
-        shortDescriptionLabel.setText(Messages.getString("SpagoBiServerDialog.shortDescription")); //$NON-NLS-1$
+        shortDescriptionLabel.setText(Messages.getString("MDMServerDialog.shortDescription")); //$NON-NLS-1$
         shortDescriptionLabel.setFont(parent.getFont());
         shortDescriptionText = new Text(composite, SWT.SINGLE | SWT.BORDER);
         shortDescriptionText.setLayoutData(data1);
@@ -206,7 +206,7 @@ public class MDMServerDialog extends Dialog {
         // hostLabel.setLayoutData(data);
 
         hostLabel = new Label(composite, SWT.WRAP);
-        hostLabel.setText(Messages.getString("SpagoBiServerDialog.host")); //$NON-NLS-1$
+        hostLabel.setText(Messages.getString("MDMServerDialog.host")); //$NON-NLS-1$
         hostLabel.setFont(parent.getFont());
         hostText = new Text(composite, SWT.SINGLE | SWT.BORDER);
         hostText.setLayoutData(data1);
@@ -222,7 +222,7 @@ public class MDMServerDialog extends Dialog {
         // portLabel.setLayoutData(data);
 
         portLabel = new Label(composite, SWT.WRAP);
-        portLabel.setText(Messages.getString("SpagoBiServerDialog.port")); //$NON-NLS-1$
+        portLabel.setText(Messages.getString("MDMServerDialog.port")); //$NON-NLS-1$
         portLabel.setFont(parent.getFont());
         portText = new Text(composite, SWT.SINGLE | SWT.BORDER);
         portText.setLayoutData(data1);
@@ -238,7 +238,7 @@ public class MDMServerDialog extends Dialog {
         // loginLabel.setLayoutData(data);
 
         loginLabel = new Label(composite, SWT.WRAP);
-        loginLabel.setText(Messages.getString("SpagoBiServerDialog.login")); //$NON-NLS-1$
+        loginLabel.setText(Messages.getString("MDMServerDialog.login")); //$NON-NLS-1$
         loginLabel.setFont(parent.getFont());
         loginText = new Text(composite, SWT.SINGLE | SWT.BORDER);
         loginText.setLayoutData(data1);
@@ -254,7 +254,7 @@ public class MDMServerDialog extends Dialog {
         // passwordLabel.setLayoutData(data);
 
         passwordLabel = new Label(composite, SWT.WRAP);
-        passwordLabel.setText(Messages.getString("SpagoBiServerDialog.password")); //$NON-NLS-1$
+        passwordLabel.setText(Messages.getString("MDMServerDialog.password")); //$NON-NLS-1$
         passwordLabel.setFont(parent.getFont());
         passwordText = new Text(composite, SWT.SINGLE | SWT.BORDER | SWT.PASSWORD);
         passwordText.setLayoutData(data1);
@@ -270,7 +270,7 @@ public class MDMServerDialog extends Dialog {
         // applicationContextLabel.setLayoutData(data);
         //
         // applicationContextLabel = new Label(composite, SWT.WRAP);
-        // applicationContextLabel.setText(Messages.getString("SpagoBiServerDialog.applicationContext")); //$NON-NLS-1$
+        // applicationContextLabel.setText(Messages.getString("MDMServerDialog.applicationContext")); //$NON-NLS-1$
         // applicationContextLabel.setFont(parent.getFont());
         // applicationContextText = new Text(composite, SWT.SINGLE | SWT.BORDER);
         // applicationContextText.addModifyListener(new ModifyListener() {

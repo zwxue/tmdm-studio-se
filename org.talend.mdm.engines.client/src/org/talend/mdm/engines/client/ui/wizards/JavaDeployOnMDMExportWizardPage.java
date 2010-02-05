@@ -27,7 +27,7 @@ import org.talend.repository.model.ProxyRepositoryFactory;
 /**
  * Publish SpagoBI Export Wizard. <br/>
  * 
- * @referto WizardArchiveFileResourceExportPage1 $Id: JavaPublishOnSpagoExportWizardPage.java 1 2007-04-27 12:00:07
+ * @referto WizardArchiveFileResourceExportPage1 $Id: JavaDeployOnMDMExportWizardPage.java 1 2007-04-27 12:00:07
  * cantoine
  * 
  */
@@ -59,7 +59,7 @@ public class JavaDeployOnMDMExportWizardPage extends DeployOnMDMExportWizardPage
      * @param selection the selection
      */
     public JavaDeployOnMDMExportWizardPage(IStructuredSelection selection) {
-        super("JavaPublishOnSpagoExportPage1", selection); //$NON-NLS-1$
+        super("JavaDeployOnMDMExportPage1", selection); //$NON-NLS-1$
     }
 
     /**

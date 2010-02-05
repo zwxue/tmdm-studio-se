@@ -34,7 +34,7 @@ import org.talend.mdm.engines.client.i18n.Messages;
 /**
  * Publish SpagoBI export wizard. <br/>
  * 
- * $Id: PublishOnSpagoExportWizard.java 1 2007-04-27 11:30:00 cantoine
+ * $Id: DeployOnMDMExportWizard.java 1 2007-04-27 11:30:00 cantoine
  * 
  */
 public class DeployOnMDMExportWizard extends Wizard implements IExportWizard {
@@ -49,9 +49,9 @@ public class DeployOnMDMExportWizard extends Wizard implements IExportWizard {
     public DeployOnMDMExportWizard() {
         AbstractUIPlugin plugin = (AbstractUIPlugin) Platform.getPlugin(PlatformUI.PLUGIN_ID);
         IDialogSettings workbenchSettings = plugin.getDialogSettings();
-        IDialogSettings section = workbenchSettings.getSection("PublishOnSpagoExportWizard"); //$NON-NLS-1$
+        IDialogSettings section = workbenchSettings.getSection("DeployOnMDMExportWizard"); //$NON-NLS-1$
         if (section == null) {
-            section = workbenchSettings.addNewSection("PublishOnSpagoExportWizard"); //$NON-NLS-1$
+            section = workbenchSettings.addNewSection("DeployOnMDMExportWizard"); //$NON-NLS-1$
             section.put(PerlDeployOnMDMExportWizardPage.STORE_SHELL_LAUNCHER_ID, true);
             section.put(PerlDeployOnMDMExportWizardPage.STORE_SYSTEM_ROUTINE_ID, true);
             section.put(PerlDeployOnMDMExportWizardPage.STORE_USER_ROUTINE_ID, true);
@@ -98,7 +98,7 @@ public class DeployOnMDMExportWizard extends Wizard implements IExportWizard {
             this.selection = new StructuredSelection(selectedResources);
         }
 
-        setWindowTitle(Messages.getString("PublishOnSpagoExportWizard.publishJob")); //$NON-NLS-1$
+        setWindowTitle(Messages.getString("DeployOnMDMExportWizard.publishJob")); //$NON-NLS-1$
         setDefaultPageImageDescriptor(IDEWorkbenchPlugin.getIDEImageDescriptor("wizban/exportzip_wiz.png"));//$NON-NLS-1$
         setNeedsProgressMonitor(true);
     }

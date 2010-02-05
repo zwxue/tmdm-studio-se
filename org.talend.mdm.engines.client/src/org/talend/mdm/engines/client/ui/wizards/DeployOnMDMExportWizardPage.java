@@ -69,7 +69,7 @@ import org.talend.repository.ui.wizards.exportjob.scriptsmanager.JobScriptsManag
 /**
  * Page of the Job Scripts Export Wizard. <br/>
  * 
- * $Id: PublishOnSpagoExportWizardPage.java 1 2007-04-26 11:29:00 cantoine
+ * $Id: DeployOnMDMExportWizardPage.java 1 2007-04-26 11:29:00 cantoine
  * 
  */
 public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResourceExportPage1 {
@@ -162,7 +162,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      */
     public DeployOnMDMExportWizardPage(IStructuredSelection selection) {
         this("publishOnSpagoExportPage1", selection); //$NON-NLS-1$
-        setDescription(Messages.getString("PublishOnSpagoExportWizardPage.publishJob")); //$NON-NLS-1$
+        setDescription(Messages.getString("DeployOnMDMExportWizardPage.publishJob")); //$NON-NLS-1$
         setTitle(DataTransferMessages.ArchiveExport_exportTitle);
     }
 
@@ -254,7 +254,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         types.add("Automonus Job (Zip)");
         serverSpagoBi = new LabelledCombo(
                 optionsGroup,
-                Messages.getString("PublishOnSpagoExportWizardPage.SpagoBI.Server"), Messages.getString("PublishOnSpagoExportWizardPage.SpecifyServer.PublishJob"), listEngine); //$NON-NLS-1$ //$NON-NLS-2$
+                Messages.getString("DeployOnMDMExportWizardPage.SpagoBI.Server"), Messages.getString("DeployOnMDMExportWizardPage.SpecifyServer.PublishJob"), listEngine); //$NON-NLS-1$ //$NON-NLS-2$
         serverSpagoBi.select(0);
 
         exportTypeCombo = new LabelledCombo(optionsGroup, "Export type:", "Export type", types); //$NON-NLS-1$ //$NON-NLS-2$
@@ -370,8 +370,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         }
         if (!canExport) {
             MessageDialog.openInformation(getContainer().getShell(), Messages
-                    .getString("PublishOnSpagoExportWizardPage.publishResourceError"), //$NON-NLS-1$
-                    Messages.getString("PublishOnSpagoExportWizardPage.chooseResource")); //$NON-NLS-1$
+                    .getString("DeployOnMDMExportWizardPage.publishResourceError"), //$NON-NLS-1$
+                    Messages.getString("DeployOnMDMExportWizardPage.chooseResource")); //$NON-NLS-1$
             return false;
         }
 
@@ -676,7 +676,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         GridLayout layout = new GridLayout();
         optionsGroup.setLayout(layout);
         optionsGroup.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
-        optionsGroup.setText(Messages.getString("PublishOnSpagoExportWizardPage.Settings")); //$NON-NLS-1$
+        optionsGroup.setText(Messages.getString("DeployOnMDMExportWizardPage.Settings")); //$NON-NLS-1$
         optionsGroup.setFont(parent.getFont());
         createOptionsGroupButtons(optionsGroup);
 
