@@ -720,10 +720,9 @@ public class PasteXObjectAction extends Action{
 		case TreeObject.DATA_CLUSTER :
 	          try {
 				WSItemPKsByCriteriaResponseResults[] results =
-					  destPort.getItemPKsByFullCriteria(
-				      new WSGetItemPKsByFullCriteria(	
-				      	new WSGetItemPKsByCriteria(
-				      		new WSDataClusterPK(oldXObjectPk),
+					  destPort.getItemPKsByCriteria(
+				      new WSGetItemPKsByCriteria(	
+				      	    new WSDataClusterPK(oldXObjectPk),
 				      		null,
 				      		null,
 				      		null,
@@ -731,8 +730,6 @@ public class PasteXObjectAction extends Action{
 				      		(long)-1,
 				      		0,
 				      		Integer.MAX_VALUE
-				      	),
-				      	false
 				       )	
 				      ).getResults();
 				
