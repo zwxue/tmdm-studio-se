@@ -2,17 +2,20 @@ package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.ui.IWorkbenchPage;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
+import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.TreeObjectUtil;
@@ -36,7 +39,7 @@ public class DeleteXObjectAction extends Action{
 			super.run();
 			IStructuredSelection selection = (IStructuredSelection)view.getViewer().getSelection();
 			//add the node here
-			
+			IWorkbenchPage page = view.getSite().getWorkbenchWindow().getActivePage();
 			ArrayList<TreeObject> toDelList = new ArrayList<TreeObject>();
 			
 			if(selection.isEmpty()){
@@ -45,6 +48,8 @@ public class DeleteXObjectAction extends Action{
 			else{
 				int size = selection.size();
 				String s = new String();
+				boolean hasopendEditor = false;
+				List<String> opendViewer = new ArrayList<String>();
 				
 				if(size>1)
 					s="Instances";
@@ -54,20 +59,40 @@ public class DeleteXObjectAction extends Action{
 				for (Iterator<TreeObject> iter = selection.iterator(); iter.hasNext(); ) {
 					TreeObject xobject = iter.next();
 					
-		            if ((!xobject.isXObject() && xobject.getType() != TreeObject.CATEGORY_FOLDER)
-							|| (xobject.getType() == TreeObject.CATEGORY_FOLDER
-							&& xobject.getDisplayName().equals("System")))
-						continue;
-		            else if (xobject.getType() == TreeObject.CATEGORY_FOLDER && !xobject.getDisplayName().equals("System"))
-		            {
-		            	TreeParent parent = (TreeParent)xobject;
-		            	LocalTreeObjectRepository.getInstance().receiveAllOffsprings(parent, toDelList);
-		            	toDelList.add(xobject);
-		            }
-		            else if(!XSystemObjects.isExist(xobject.getType(), xobject.getDisplayName())){
-		            	toDelList.add(xobject);
-		            }//if there are items which are not default, isnotdefault is true
+					if(page.findEditor(new XObjectEditorInput(xobject, xobject.getDisplayName())) != null) {
+					   hasopendEditor = true;
+					   opendViewer.add(xobject.getDisplayName());
+					}
+					
+	            if ((!xobject.isXObject() && xobject.getType() != TreeObject.CATEGORY_FOLDER)
+						|| (xobject.getType() == TreeObject.CATEGORY_FOLDER
+						&& xobject.getDisplayName().equals("System")))
+					continue;
+	            else if (xobject.getType() == TreeObject.CATEGORY_FOLDER && !xobject.getDisplayName().equals("System"))
+	            {
+	            	TreeParent parent = (TreeParent)xobject;
+	            	LocalTreeObjectRepository.getInstance().receiveAllOffsprings(parent, toDelList);
+	            	toDelList.add(xobject);
+	            }
+	            else if(!XSystemObjects.isExist(xobject.getType(), xobject.getDisplayName())){
+	            	toDelList.add(xobject);
+	            }//if there are items which are not default, isnotdefault is true
 				}
+				
+				if(hasopendEditor) {
+				   String msg = "";
+				   
+				   for(String viewer : opendViewer) {
+				      msg += viewer + " ";
+				   }
+				   
+				   msg += "opened, please first closing!";
+               MessageDialog.openError(this.view.getSite().getShell(),
+                                       IConstants.TALEND + " Error",
+                                       msg);
+               return;
+            }
+				
 				if(toDelList.size() > 0){
 					if (! MessageDialog.openConfirm(
 		            		this.view.getSite().getShell(),
@@ -76,8 +101,6 @@ public class DeleteXObjectAction extends Action{
 		            )) return;
 					
 				}//if the isnotdefault is true,open this dialog
-				
-				
 			}//end of if(selection...)
 
 
