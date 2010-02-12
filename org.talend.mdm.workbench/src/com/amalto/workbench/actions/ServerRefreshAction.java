@@ -34,7 +34,7 @@ public class ServerRefreshAction extends Action {
 		this.view = view;
 		setImageDescriptor(ImageCache.getImage( EImage.REFRESH.getPath()));
 		setText("Refresh");
-		setToolTipText("Refresh the "+IConstants.TALEND+" Server Objects");
+		setToolTipText("Refresh the "+IConstants.TALEND+" Server Object(s)");
 	}
 	
 	public void run() {
