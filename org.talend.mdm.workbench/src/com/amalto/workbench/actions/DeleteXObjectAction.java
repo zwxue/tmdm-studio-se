@@ -60,12 +60,10 @@ public class DeleteXObjectAction extends Action{
 				
 				for(Iterator<TreeObject> iter = selection.iterator(); iter.hasNext();) {
 					TreeObject xobject = iter.next();
-					boolean isbrowseView = xobject.getType() == TreeObject.SUBSCRIPTION_ENGINE || 
-					   (xobject.getType() == TreeObject.DATA_CLUSTER && xobject.isXObject()) || xobject.getType() == TreeObject.WORKFLOW_PROCESS;
-					IEditorInput input = isbrowseView ? new XObjectBrowserInput(xobject, xobject.getDisplayName()) : 
-					   new XObjectEditorInput(xobject, xobject.getDisplayName());
-					
-					if(page.findEditor(input) != null) {
+					IEditorInput xobjectBrowserViewinput = new XObjectBrowserInput(xobject, xobject.getDisplayName()); 
+					IEditorInput xobjectEditorinput = new XObjectEditorInput(xobject, xobject.getDisplayName());
+
+					if(page.findEditor(xobjectBrowserViewinput) != null || page.findEditor(xobjectEditorinput) != null) {
 					   hasopendEditor = true;
 					   opendViewer.add(xobject.getDisplayName());
 					}
