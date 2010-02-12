@@ -8,6 +8,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 
@@ -15,6 +16,7 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
+import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
@@ -56,10 +58,14 @@ public class DeleteXObjectAction extends Action{
 				else
 					s="Instance";
 				
-				for (Iterator<TreeObject> iter = selection.iterator(); iter.hasNext(); ) {
+				for(Iterator<TreeObject> iter = selection.iterator(); iter.hasNext();) {
 					TreeObject xobject = iter.next();
+					boolean isbrowseView = xobject.getType() == TreeObject.SUBSCRIPTION_ENGINE || 
+					   (xobject.getType() == TreeObject.DATA_CLUSTER && xobject.isXObject()) || xobject.getType() == TreeObject.WORKFLOW_PROCESS;
+					IEditorInput input = isbrowseView ? new XObjectBrowserInput(xobject, xobject.getDisplayName()) : 
+					   new XObjectEditorInput(xobject, xobject.getDisplayName());
 					
-					if(page.findEditor(new XObjectEditorInput(xobject, xobject.getDisplayName())) != null) {
+					if(page.findEditor(input) != null) {
 					   hasopendEditor = true;
 					   opendViewer.add(xobject.getDisplayName());
 					}
