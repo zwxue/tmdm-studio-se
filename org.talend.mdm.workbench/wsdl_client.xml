@@ -30,7 +30,7 @@
 		
 	</target>
     <target name="copy.modified.wsfile">
-        <move todir="src/com/amalto.workbench/webservices">
+        <move todir="src/com/amalto/workbench/webservices">
              <fileset dir="modified">                
              </fileset>
          </move>
