@@ -9,6 +9,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 
@@ -50,8 +51,7 @@ public class DeleteXObjectAction extends Action{
 			else{
 				int size = selection.size();
 				String s = new String();
-				boolean hasopendEditor = false;
-				List<String> opendViewer = new ArrayList<String>();
+				List<IEditorPart> opendViewer = new ArrayList<IEditorPart>();
 				
 				if(size>1)
 					s="Instances";
@@ -63,9 +63,11 @@ public class DeleteXObjectAction extends Action{
 					IEditorInput xobjectBrowserViewinput = new XObjectBrowserInput(xobject, xobject.getDisplayName()); 
 					IEditorInput xobjectEditorinput = new XObjectEditorInput(xobject, xobject.getDisplayName());
 
-					if(page.findEditor(xobjectBrowserViewinput) != null || page.findEditor(xobjectEditorinput) != null) {
-					   hasopendEditor = true;
-					   opendViewer.add(xobject.getDisplayName());
+					if(page.findEditor(xobjectBrowserViewinput) != null) {					  
+					   opendViewer.add(page.findEditor(xobjectBrowserViewinput));
+					}
+					if(page.findEditor(xobjectEditorinput) != null) {					  
+						   opendViewer.add(page.findEditor(xobjectEditorinput));
 					}
 					
 	            if ((!xobject.isXObject() && xobject.getType() != TreeObject.CATEGORY_FOLDER)
@@ -83,19 +85,11 @@ public class DeleteXObjectAction extends Action{
 	            }//if there are items which are not default, isnotdefault is true
 				}
 				
-				if(hasopendEditor) {
-				   String msg = "";
-				   
-				   for(String viewer : opendViewer) {
-				      msg += viewer + " ";
+				if(opendViewer.size()>0) {
+				   for(IEditorPart editorpart:opendViewer ) {
+						page.closeEditor(editorpart, false);
 				   }
-				   
-				   msg += "opened, please first closing!";
-               MessageDialog.openError(this.view.getSite().getShell(),
-                                       IConstants.TALEND + " Error",
-                                       msg);
-               return;
-            }
+				}
 				
 				if(toDelList.size() > 0){
 					if (! MessageDialog.openConfirm(
