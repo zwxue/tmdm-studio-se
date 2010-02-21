@@ -30,9 +30,10 @@
 		<antcall target="copy.modified.wsfile"></antcall>
 	</target>
     <target name="copy.modified.wsfile">
-        <move todir="src/com/amalto/workbench/webservices">
-             <fileset dir="modified">                
+        <copy todir="src/com/amalto/workbench/webservices" overwrite="true">
+             <fileset dir="modified">    
+                <include name="**/*.java"/>
              </fileset>
-         </move>
+         </copy>
     </target>
 </project>
