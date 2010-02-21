@@ -136,6 +136,8 @@ public class AddBrowseItemsWizard extends Wizard{
             		 for (XSDXPathDefinition path: xpathList)
             		 {
                  		String key = decl.getName();
+                 		//remove 
+                 		 key=key.replaceFirst("#.*", "");
             			 key += "/" + path.getValue();
             			 keys.add(key);
             		 }
