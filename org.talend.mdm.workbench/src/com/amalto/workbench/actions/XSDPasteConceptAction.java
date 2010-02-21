@@ -61,19 +61,20 @@ public class XSDPasteConceptAction extends UndoAction {
 			
 			XSDFactory factory = XSDFactory.eINSTANCE;
 			if (!conceptList.isEmpty()) {
-				List<String> concepts = new ArrayList<String>();
+				//List<String> concepts = new ArrayList<String>();
 				int index = 0;
 				for (Iterator it = conceptList.iterator(); it.hasNext();) {
 					
 					if(conceptList.get(index).getSchema()!=null){
-						concepts = Util.getConcepts(conceptList.get(index).getSchema());
+						//concepts = Util.getConcepts(conceptList.get(index).getSchema());
 						typeList = Util.getTypeDefinition(conceptList.get(index).getSchema());
 					}
 					index++;
 					Object concept = it.next();
 
 					if (concept instanceof XSDElementDeclaration) {
-						if (concepts.contains(((XSDElementDeclaration) concept).getName())) {
+						//edit by ymli,fix the bug:0011523. let the element(simple or complex) can be pasted
+						//if (concepts.contains(((XSDElementDeclaration) concept).getName())) {
 							XSDElementDeclaration copy_concept = (XSDElementDeclaration) concept;
 
 							XSDElementDeclaration new_copy_concept = factory.createXSDElementDeclaration();;
@@ -117,7 +118,7 @@ public class XSDPasteConceptAction extends UndoAction {
 
 							//System.out.println("@@@:"+Util.nodeToString(schema
 							// .getDocument()));
-						}
+						//}
 					}
 				}
 				HashMap<String, XSDTypeDefinition> typeDef = Util.getTypeDefinition(schema);
@@ -171,7 +172,8 @@ public class XSDPasteConceptAction extends UndoAction {
 			this.displayName = "Paste Entities";*/
 		if(WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size()<=0)
 			return false;
-		conceptList = WorkbenchClipboard.getWorkbenchClipboard().getConcepts();
+		//edit by ymli,fix the bug:0011523. let the element(simple or complex) can be pasted
+		/*conceptList = WorkbenchClipboard.getWorkbenchClipboard().getConcepts();
 		int t = 0;
 		for(XSDElementDeclaration ele:conceptList){
 			if(conceptList.get(t).getSchema()!=null){
@@ -180,8 +182,9 @@ public class XSDPasteConceptAction extends UndoAction {
 						return true;
 				}
 			t++;
-						}
-		return false;
+						}*/
+		else
+			return true;
 	}
 	
 	public void addAnnotationForComplexType(XSDComplexTypeDefinition fromType,
