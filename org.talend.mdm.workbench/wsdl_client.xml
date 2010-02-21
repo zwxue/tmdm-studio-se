@@ -27,7 +27,7 @@
 			<arg line="${config.xml}"/>									
 		</exec>	
 		<eclipse.refreshLocal resource="${basedir}"/>
-		
+		<antcall target="copy.modified.wsfile"></antcall>
 	</target>
     <target name="copy.modified.wsfile">
         <move todir="src/com/amalto/workbench/webservices">
