@@ -131,7 +131,8 @@ public class XSDPasteConceptAction extends UndoAction {
 						typedefinitionClone = (XSDComplexTypeDefinition) type.cloneConcreteComponent(true, false);
 						schema.getContents().add((XSDComplexTypeDefinition) typedefinitionClone);
 						addAnnotationForComplexType((XSDComplexTypeDefinition) type,(XSDComplexTypeDefinition) typedefinitionClone);
-					} else if (type instanceof XSDSimpleTypeDefinition) {schema.getContents().add((XSDSimpleTypeDefinition) type.cloneConcreteComponent(true, false));
+					} else if (type instanceof XSDSimpleTypeDefinition) {
+						schema.getContents().add((XSDSimpleTypeDefinition) type.cloneConcreteComponent(true, false));
 					}
 				}
 				schema.getElement();
@@ -187,8 +188,7 @@ public class XSDPasteConceptAction extends UndoAction {
 			return true;
 	}
 	
-	public void addAnnotationForComplexType(XSDComplexTypeDefinition fromType,
-			XSDComplexTypeDefinition toType) {
+	public void addAnnotationForComplexType(XSDComplexTypeDefinition fromType,XSDComplexTypeDefinition toType) {
 		XSDComplexTypeContent tocomplexType = toType.getContent();
 		XSDComplexTypeContent fromcomplexType = fromType.getContent();
 		if (fromcomplexType instanceof XSDParticle) {
@@ -285,6 +285,11 @@ public class XSDPasteConceptAction extends UndoAction {
 				}
 			}
 		}
+		}
+		else{
+			String simpleType = fromElem.getTypeDefinition().getName();
+			if(this.typeList.containsKey(simpleType))
+				this.copyTypeSet.add(fromElem.getTypeDefinition());
 		}
 	}
 	
