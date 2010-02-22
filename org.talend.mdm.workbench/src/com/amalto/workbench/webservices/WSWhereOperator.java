@@ -51,11 +51,13 @@ public class WSWhereOperator {
     public static final WSWhereOperator NO_OPERATOR = new WSWhereOperator(_NO_OPERATOR);
     public static final WSWhereOperator FULLTEXTSEARCH = new WSWhereOperator(_FULLTEXTSEARCH);
     
-    protected WSWhereOperator(java.lang.String value) {
+    public WSWhereOperator(java.lang.String value) {
         this.value = value;
         valueMap.put(this.toString(), this);
     }
-    
+    public WSWhereOperator() {
+    	
+    }
     public java.lang.String getValue() {
         return value;
     }
