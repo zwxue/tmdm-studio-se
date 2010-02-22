@@ -81,8 +81,9 @@ public class ServerLoginAction extends Action implements SelectionListener{
 		
 		//Remove authenticator dialog
 		Authenticator.setDefault(null);
-        LocalTreeObjectRepository.getInstance().startUp(view, server);
+        LocalTreeObjectRepository.getInstance().startUp(view, server, username, password);
         LocalTreeObjectRepository.getInstance().switchOnListening();
+        LocalTreeObjectRepository.getInstance().setLazySaveStrategy(true);
         
 		try {
             XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(

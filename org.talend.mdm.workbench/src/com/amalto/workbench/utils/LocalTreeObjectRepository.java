@@ -1,25 +1,23 @@
 package com.amalto.workbench.utils;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.StringWriter;
+import java.io.StringReader;
 import java.net.InetAddress;
+import java.net.URL;
 import java.net.UnknownHostException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.dom4j.Attribute;
 import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.TreeExpansionEvent;
@@ -34,11 +32,11 @@ import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.views.ServerView;
+import com.amalto.workbench.webservices.WSCategoryData;
+import com.amalto.workbench.webservices.XtentisPort;
 
 public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeViewerListener{
-	private Document doc;
 	private ServerView view;
-	private String url;
 	private boolean internalCheck = false;
 	
 	private static String config = System.getProperty("user.dir")+"/.treeObjectConfig.xml";
@@ -57,6 +55,9 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	private Element catalogTreeObj = null;
 	private TreeItem itemFocus = null;
 	
+    private boolean lazySave = true;
+    private static HashMap<String, Credential> credentials = new HashMap<String, Credential>();
+    
 	private static LocalTreeObjectRepository repository = null;
 	
     synchronized public static LocalTreeObjectRepository getInstance()
@@ -69,39 +70,48 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
         return repository;
     }
 	
-	public void startUp(ServerView vw, String ur)
+    private class Credential
+    {
+    	public String user;
+    	public String pwd;
+    	public Document doc;
+    	public XtentisPort port;
+    	
+    	public Credential(String user, String pwd, Document doc)
+    	{
+    		this.user = user;
+    		this.pwd = pwd;
+    		this.doc = doc;
+    	}
+    }
+    
+	public void startUp(ServerView vw, String ur, String user, String pwd)
 	{
 		 view = vw;
-		 url = ur;
 		 
 		 try {
-			  File configFile = new File(config);
-			  if (!configFile.exists())
-			  {
-				  doc = DocumentHelper.createDocument();
-				  doc.addElement("root");
-		          XMLWriter writer = new XMLWriter(new FileWriter(configFile), OutputFormat.createPrettyPrint());
-		          writer.write(doc);
-		          writer.flush();
-		          writer.close();
-			  }
-			  else
-			  {				  
-				  SAXReader saxReader = new SAXReader();
-				  doc = saxReader.read(configFile);
-			  }
-			  doUpgrade();
+			XtentisPort port = Util.getPort(new URL(UnifyUrl(ur)), "", user, pwd);
+			WSCategoryData category = port.getMDMCategory(null);
+			SAXReader saxReader = new SAXReader();
+			Document doc = saxReader.read(new StringReader(category.getCategorySchema()));
+			Credential credal = new Credential(user, pwd, doc);
+			credal.port = port;
+			credal.doc = doc;
+			credentials.put(UnifyUrl(ur), credal);
+			
+			doUpgrade(UnifyUrl(ur));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			if (forceDelete()) {
-				startUp(vw, ur);
+				startUp(vw, ur, user, pwd);
 			}
 		}
 	}
 	
-	private void doUpgrade()
+	private void doUpgrade(String url)
 	{
+		Document doc = credentials.get(url).doc;
 		String path = "//child::*[text() = '" + TreeObject.CATEGORY_FOLDER  + "' and count(@Universe) = 0 and count(@Url) = 0" + "]";
 		List<Element> categorys = doc.selectNodes(path);
 
@@ -118,7 +128,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 				elem.addAttribute(URL, UnifyUrl(url));
 			}
 		}
-		saveDocument(doc);
+		saveDocument(url);
 	}
 	
     private boolean forceDelete()
@@ -185,12 +195,14 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		catch(Exception ex)
 		{
 			ex.printStackTrace();
-			startUp(view, url);
+			String url = UnifyUrl(UnifyUrl(parent.getServerRoot().getWsKey().toString()));
+			startUp(view, url, credentials.get(url).user, credentials.get(url).pwd);
 		}
 	}
 	
-	private Element getTopElementWithUser(String user)
+	private Element getTopElementWithUser(String user, String ip)
 	{
+		Document doc = credentials.get(ip).doc;
 		List<Element> userRoots = doc.selectNodes(rootPath + "/" + user);
 		Element elementUser;
 		if (userRoots.isEmpty()) {
@@ -203,22 +215,23 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		return elementUser;
 	}
 	
-	private void saveDocument(Document doc)
+	private void saveDocument(TreeObject parent)
 	{
-        File configFile = new File(config);
-        StringWriter w = new StringWriter();
-        XMLWriter writer = new XMLWriter(w);
-        
+		if (lazySave)return;
+		
+		String url = UnifyUrl(parent.getServerRoot().getWsKey().toString());
+		saveDocument(url);
+	}
+	
+	private void saveDocument(String url)
+	{
+		XtentisPort port = credentials.get(url).port;
+		Document doc = credentials.get(url).doc;
         try {
-			writer.setOutputStream(new FileOutputStream(configFile));
-	        writer.write(doc);
-	        writer.flush();
-	        writer.close();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			port.getMDMCategory(new WSCategoryData(doc.asXML()));
+		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
-
 	}
 	
 	private String convertSpecCharToDigital(String res)
@@ -269,7 +282,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		
 		Element elemFolder = null;
 		String xpath = getXPathForTreeObject(treeObj);
-
+        Document doc = credentials.get(UnifyUrl(treeObj.getServerRoot().getWsKey().toString())).doc;
 		if (doc.selectNodes(xpath).isEmpty()) {
 			xpath = xpath.replaceAll("\\[.*\\]", "");
 			if (doc.selectNodes(xpath).isEmpty())
@@ -279,7 +292,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 				Element elemTop = null;
 				if (doc.selectNodes(xpath).isEmpty())
 				{
-					elemTop = getTopElementWithUser(treeObj.getServerRoot().getUser().getUsername());
+					elemTop = getTopElementWithUser(treeObj.getServerRoot().getUser().getUsername(), UnifyUrl(treeObj.getServerRoot().getWsKey().toString()));
 				}
 				else
 				{
@@ -298,30 +311,18 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		
 		return elemFolder;
     }
-    
-    private String dump()
-    {
-    	try {
-			return Util.nodeToString((Node)doc);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return "";
-    }
-    
-    
+        
 	private void addChild(TreeObject parent, TreeObject child)
 	{
 		if (parent.getParent() == null && parent.getDisplayName().equals("INVISIBLE ROOT"))
 			return;
 		String xpath = getXPathForTreeObject(child);
+		Document doc =  credentials.get(UnifyUrl(parent.getServerRoot().getWsKey().toString())).doc;
 		List<Element> models = doc.selectNodes(xpath);
 		if (!models.isEmpty() && child instanceof TreeParent)
 		{
 			Element model = models.get(0);
-			if (isAEXtentisObjects(model) == MODEL_LEVEL) {
+			if (isAEXtentisObjects(model, child) == MODEL_LEVEL) {
 				checkUpAllCategoryForModel((TreeParent) child);
 			}
 		}
@@ -353,7 +354,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 				}
 			}
 		}
-		saveDocument(doc);
+		saveDocument(parent);
 	}
 	
 	private void removeChild(TreeObject parent, TreeObject child) 
@@ -367,7 +368,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		if (!list.isEmpty())
 		  elemFolder.remove(list.get(0));
 		
-		saveDocument(doc);
+		saveDocument(parent);
 	}
 	
 	
@@ -499,7 +500,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 			   		category.setServerRoot(folder.getServerRoot());
 			   		addAttributeToCategoryElem(category, UNIVERSE, getUniverseFromTreeObject(folder));
 			   		addAttributeToCategoryElem(category, URL, getURLFromTreeObject(folder));
-			   		saveDocument(doc);
+			   		saveDocument(folder);
 			   		subFolder = category;
 				}
 			}
@@ -553,6 +554,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 							+ "' and @Url='" + getURLFromTreeObject(theObj)
 							+ "']";
 	        	
+				Document doc = credentials.get(UnifyUrl(folder.getServerRoot().getWsKey().toString())).doc;
 				if (systemCatalog == null)
 				{
 	        	    List<Element> elems = doc.selectNodes(xpath);
@@ -574,7 +576,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 						Element childElem = elemSystem.addElement(filterOutBlank(theObj.getDisplayName()));
 						childElem.setText(theObj.getType() + "");
 						
-						saveDocument(doc);
+						saveDocument(folder);
 	        	    }
 				}
 				else
@@ -598,7 +600,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 					    if (!elems.isEmpty())
 					    {
 					    	elems.get(0).addElement(filterOutBlank(theObj.getDisplayName())).setText(theObj.getType() + "");
-					    	saveDocument(doc);
+					    	saveDocument(folder);
 					    }
 					    
 					}
@@ -630,6 +632,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 				+ "//child::*[text() = '" + TreeObject.CATEGORY_FOLDER + "' and @Universe='"
 				+ getUniverseFromTreeObject(model) + "' and @Url='"
 				+ getURLFromTreeObject(model) + "']";
+		Document doc = credentials.get(UnifyUrl(model.getServerRoot().getWsKey().toString())).doc;
 		String xpathForModel = getXPathForTreeObject(model);
 		List<Element> elems = doc.selectNodes(xpathForModel);
 		Element modelElem = elems.get(0);
@@ -649,7 +652,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
             while(!hierarchicalList.isEmpty())
             {
             	spec = hierarchicalList.remove(0);
-            	TreeObject to =  modelCpy.findObject(Integer.parseInt(spec.getText()), spec.getName());
+            	TreeObject to =  modelCpy.findObject(Integer.parseInt(spec.getText().trim()), spec.getName());
             	if (to == null)
             	{
 					TreeParent catalog = new TreeParent(spec.getName(), modelCpy
@@ -679,7 +682,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		+ getURLFromTreeObject(theObj) 
 		+ "' and count(child::*) = 0]";
 		
-
+		Document doc = credentials.get(UnifyUrl(folder.getServerRoot().getWsKey().toString())).doc;
 		TreeParent subFolder = folder;
 		List<Element> elems = doc.selectNodes(xpath);
 		for (Element elem: elems)
@@ -743,6 +746,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 					+ TreeObject.CATEGORY_FOLDER + "' and @Universe='"
 					+ universe + "' and @Url='" + url + "']//child::*";
 
+			Document doc = credentials.get(getURLFromTreeObject(folder)).doc;
 			List<Element> elems = doc.selectNodes(xpath);
 			for (Element elem : elems)
 			{
@@ -750,7 +754,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 						&& elem.getData().toString().equals(theObj.getType() + ""))
 				{
 					ArrayList<String> path = new ArrayList<String>();
-					while (isAEXtentisObjects(elem) > XTENTIS_LEVEL)
+					while (isAEXtentisObjects(elem, theObj) > XTENTIS_LEVEL)
 					{
 						path.add(elem.getParent().getName());
 						elem = elem.getParent();
@@ -768,29 +772,30 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		return null;
 	}
 	
-	private int isAEXtentisObjects(Element elemXobj)
+	private int isAEXtentisObjects(Element elemXobj, TreeObject treeObj)
 	{
 		if (elemXobj == null)
 			return 0;
-		
+		Document doc = credentials.get(UnifyUrl(treeObj.getServerRoot().getWsKey().toString())).doc;
 		if (elemXobj == doc.getRootElement())
 		     return 1;
 
-		return 1 + isAEXtentisObjects(elemXobj.getParent());
+		return 1 + isAEXtentisObjects(elemXobj.getParent(), treeObj);
 	}
 	
 	public int receiveUnCertainTreeObjectType(TreeObject xobj)
 	{
 		String path = this.getXPathForTreeObject(xobj);
+		Document doc = credentials.get(UnifyUrl(xobj.getServerRoot().getWsKey().toString())).doc;
 		List<Element> elems = doc.selectNodes(path);
 		if (!elems.isEmpty())
 		{
 			Element elem = elems.get(0);
-			while (isAEXtentisObjects(elem) >= XTENTIS_LEVEL)
+			while (isAEXtentisObjects(elem, xobj) >= XTENTIS_LEVEL)
 			{
 				elem = elem.getParent();
 			}
-			return Integer.parseInt(elem.getText());
+			return Integer.parseInt(elem.getText().trim());
 		}
 		else
 			return -1;
@@ -811,6 +816,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
         if (treeObject.getType() == TreeObject.CATEGORY_FOLDER)
         {
         	String xpath = getXPathForTreeObject(treeObject);
+    		Document doc = credentials.get(UnifyUrl(treeObject.getServerRoot().getWsKey().toString())).doc;
         	List<Element> elems = doc.selectNodes(xpath);
         	if (!elems.isEmpty())
         	{
@@ -835,7 +841,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		if (catalogTreeObj != null)
 		{
 			catalogTreeObj.addElement(filterOutBlank(newTreeObject.getDisplayName())).setText(newTreeObject.getType() + "");
-			saveDocument(doc);
+			saveDocument(newTreeObject);
 		}
 		
 		catalogTreeObj = null;
@@ -847,12 +853,13 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		{
 			if (xobject.getType() == TreeObject.CATEGORY_FOLDER && xobject.getDisplayName().equals("System"))
 			{
+				Document doc = credentials.get(UnifyUrl(xobject.getServerRoot().getWsKey().toString())).doc;
 				String path = this.getXPathForTreeObject(xobject);
 				List<Element> elems = doc.selectNodes(path);
 				if (!elems.isEmpty())
 				{
 					Element elem = elems.get(0);
-					if (isAEXtentisObjects(elem) == XTENTIS_LEVEL) {
+					if (isAEXtentisObjects(elem, xobject) == XTENTIS_LEVEL) {
 						return true;
 					}
 				}
@@ -896,6 +903,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 				+ "' and @Universe ='" + getUniverseFromTreeObject(category)
 				+ "' and @Url = '" + getURLFromTreeObject(category) + "']";
 
+		Document doc = credentials.get(UnifyUrl(category.getServerRoot().getWsKey().toString())).doc;
 		List<Element> elms = doc.selectNodes(xpath);
 
 		return !elms.isEmpty() ? elms.get(0) : null;
@@ -917,7 +925,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		        if (elemCategory != null)
 		        {
 		        	elemCategory.attribute(EXPAND_NAME).setValue(expand ? EXPAND_VALUE : COLLAPSE_VALUE);
-		        	saveDocument(doc);
+		        	saveDocument(parent);
 		        }
 
 			}
@@ -1035,7 +1043,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 			}
 		}
     	
-    	saveDocument(doc);
+    	saveDocument(root);
     }
     
 	public void receiveAllOffsprings(TreeParent parent, ArrayList<TreeObject>list)
@@ -1048,5 +1056,10 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 				receiveAllOffsprings((TreeParent)obj, list);
 			}
 		}
+	}
+	
+	public void setLazySaveStrategy(boolean lazy)
+	{
+		lazySave = lazy;
 	}
 }

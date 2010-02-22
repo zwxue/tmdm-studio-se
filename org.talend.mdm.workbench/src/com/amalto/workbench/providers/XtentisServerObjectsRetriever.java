@@ -13,6 +13,7 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.IConstants;
+import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.ResourcesUtil;
 import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
@@ -443,6 +444,8 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			if (hasMenus) serverRoot.addChild(menus);
 			
 			addRevision(wUuniverse);
+			
+			LocalTreeObjectRepository.getInstance().setLazySaveStrategy(false);
 			
 			monitor.done();			
 		} catch (Exception e) {

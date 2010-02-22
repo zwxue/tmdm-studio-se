@@ -354,4 +354,6 @@ public interface XtentisPort extends java.rmi.Remote {
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSBoolean deleteMDMJob(com.amalto.workbench.webservices.WSDELMDMJob deleteMDMJobRequest) throws 
          java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSCategoryData getMDMCategory(com.amalto.workbench.webservices.WSCategoryData wsCategoryDataRequest) throws 
+         java.rmi.RemoteException;
 }
