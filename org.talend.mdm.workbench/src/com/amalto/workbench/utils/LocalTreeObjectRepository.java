@@ -1058,8 +1058,9 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		}
 	}
 	
-	public void setLazySaveStrategy(boolean lazy)
+	public void setLazySaveStrategy(boolean lazy, TreeParent parent)
 	{
 		lazySave = lazy;
+		saveDocument(parent);
 	}
 }
