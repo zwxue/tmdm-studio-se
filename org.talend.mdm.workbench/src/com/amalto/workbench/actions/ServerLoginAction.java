@@ -83,7 +83,7 @@ public class ServerLoginAction extends Action implements SelectionListener{
 		Authenticator.setDefault(null);
         LocalTreeObjectRepository.getInstance().startUp(view, server, username, password);
         LocalTreeObjectRepository.getInstance().switchOnListening();
-        LocalTreeObjectRepository.getInstance().setLazySaveStrategy(true);
+        LocalTreeObjectRepository.getInstance().setLazySaveStrategy(true, null);
         
 		try {
             XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(
