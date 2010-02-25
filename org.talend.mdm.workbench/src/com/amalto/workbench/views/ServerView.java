@@ -924,6 +924,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		
 		//Remove authenticator dialog
 		Authenticator.setDefault(null);
+		
         LocalTreeObjectRepository.getInstance().startUp(this, url, username, password);
         LocalTreeObjectRepository.getInstance().switchOnListening();
         LocalTreeObjectRepository.getInstance().setLazySaveStrategy(true, null);
@@ -1004,7 +1005,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             }
             if (!found) 
             	invisibleRoot.addChild(serverRoot);
-           
+            
+            LocalTreeObjectRepository.getInstance().setLazySaveStrategy(false, serverRoot);
             getViewer().refresh();
 //            getViewer().expandToLevel(serverRoot,1);
 		} catch (InterruptedException ie){

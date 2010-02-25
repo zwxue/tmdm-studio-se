@@ -445,8 +445,6 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			
 			addRevision(wUuniverse);
 			
-			LocalTreeObjectRepository.getInstance().setLazySaveStrategy(false, serverRoot);
-			
 			monitor.done();			
 		} catch (Exception e) {
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");

@@ -38,6 +38,7 @@ import com.amalto.workbench.webservices.XtentisPort;
 public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeViewerListener{
 	private ServerView view;
 	private boolean internalCheck = false;
+	private ArrayList<String> accommodations = new ArrayList<String>();
 	
 	private static String config = System.getProperty("user.dir")+"/.treeObjectConfig.xml";
 	private static String rootPath = "/root";
@@ -90,11 +91,16 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		 view = vw;
 		 
 		 try {
-			XtentisPort port = Util.getPort(new URL(UnifyUrl(ur)), "", user, pwd);
+			XtentisPort port = Util.getPort(new URL(ur), "", user, pwd);
 			WSCategoryData category = port.getMDMCategory(null);
 			SAXReader saxReader = new SAXReader();
 			Document doc = saxReader.read(new StringReader(category.getCategorySchema()));
-			Credential credal = new Credential(user, pwd, doc);
+			Credential credal = credentials.get(UnifyUrl(ur));
+			if(credal == null)
+			{
+				credal	= new Credential(user, pwd, doc);
+			}
+
 			credal.port = port;
 			credal.doc = doc;
 			credentials.put(UnifyUrl(ur), credal);
@@ -217,7 +223,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	
 	private void saveDocument(TreeObject parent)
 	{
-		if (lazySave)return;
+		if (lazySave || parent == null)return;
 		
 		String url = UnifyUrl(parent.getServerRoot().getWsKey().toString());
 		saveDocument(url);
@@ -675,7 +681,20 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	{
 		if (folder.getServerRoot() == folder || theObj.getServerRoot()==null) return;
 		
-		String xpath = "//" + theObj.getServerRoot().getUser().getUsername()
+		String accmds = "";
+		for (String accmd: accommodations)
+		{
+			if(accmd == accommodations.get(0))
+			{
+				accmds = "/";
+			}
+			accmds += accmd;
+			if(accmd != accommodations.get(accommodations.size() -1))
+			{
+				accmds +=  "//";
+			}
+		}
+		String xpath = "//" + theObj.getServerRoot().getUser().getUsername() + accmds 
 		+ "/" + filterOutBlank(folder.getDisplayName())
 		+ "//child::*[text() = '" + TreeObject.CATEGORY_FOLDER + "' and @Universe='"
 		+ getUniverseFromTreeObject(theObj) + "' and @Url='"
@@ -1062,5 +1081,15 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	{
 		lazySave = lazy;
 		saveDocument(parent);
+	}
+	
+	public void addAccommodation(String name)
+	{
+		accommodations.add(name);
+	}
+	
+	public void clearAccommodation()
+	{
+		accommodations.clear();
 	}
 }
