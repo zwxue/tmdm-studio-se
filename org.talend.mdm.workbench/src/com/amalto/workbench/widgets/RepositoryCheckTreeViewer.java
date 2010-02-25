@@ -432,6 +432,8 @@ public class RepositoryCheckTreeViewer {
             super.createPartControl(parent);
             
         }
-
+        @Override
+        public void initView() {
+        }
     }
 }

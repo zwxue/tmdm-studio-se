@@ -1,11 +1,22 @@
 package com.amalto.workbench.views;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.net.Authenticator;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -13,6 +24,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -44,6 +56,7 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
+import org.talend.mdm.commmon.util.core.CommonUtil;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 
 import com.amalto.workbench.actions.AServerViewAction;
@@ -60,6 +73,7 @@ import com.amalto.workbench.actions.ServerLoginAction;
 import com.amalto.workbench.actions.ServerRefreshAction;
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
+import com.amalto.workbench.dialogs.ErrorExceptionDialog;
 import com.amalto.workbench.export.ExportItemsAction;
 import com.amalto.workbench.export.ImportItemsAction;
 import com.amalto.workbench.image.EImage;
@@ -70,8 +84,10 @@ import com.amalto.workbench.models.TreeObjectTransfer;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.ServerTreeContentProvider;
 import com.amalto.workbench.providers.ServerTreeLabelProvider;
+import com.amalto.workbench.providers.XtentisServerObjectsRetriever;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
+import com.amalto.workbench.utils.PasswordUtil;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.utils.XtentisException;
@@ -80,6 +96,7 @@ import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSGetDataCluster;
 import com.amalto.workbench.webservices.WSLogout;
 import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.widgets.RepositoryCheckTreeViewer;
 
 /**
  * The view allowing administration of the "+IConstants.TALEND+" Server
@@ -116,10 +133,11 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
 	private ArrayList<TreeObject> dndTreeObjs = new ArrayList<TreeObject>();
     private int dragType = -1;
-
+	private static String f = System.getProperty("user.dir")+"/mdm_workbench_config.xml";
 
 
 	private BrowseRevisionAction browseRevisionAction;
+
 	
 
 	/**********************************************************************************
@@ -465,6 +483,59 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		hookKeyPressAction();
 		contributeToActionBars();
 		hookKeyboard();
+		initView();
+	}
+
+	public void initView() {
+        SAXReader reader = new SAXReader();
+
+        OutputFormat format = OutputFormat.createPrettyPrint();
+        format.setEncoding("GBK");
+        File file = new File(f);
+        if (file.exists()) {
+			Document logininfoDocument = null;
+			try {
+				logininfoDocument = reader.read(file);
+			} catch (DocumentException e) {
+				e.printStackTrace();
+			}
+            Element root = logininfoDocument.getRootElement();
+//            boolean bl = false;
+            for (Iterator i = root.elementIterator("properties"); i.hasNext();) {
+                Element server = (Element) i.next();
+                String url =server.selectSingleNode("url").getText();
+                String user =server.selectSingleNode("user").getText();
+                String password =PasswordUtil.decryptPassword(server.selectSingleNode("password").getText());
+                String universe =server.selectSingleNode("universe").getText();
+                if(!("".equalsIgnoreCase(url)||"".equalsIgnoreCase(user)||"".equalsIgnoreCase(password)))
+                	initServerTree(url, user, password, universe);
+            }
+        }
+//		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//		DocumentBuilder builder;
+//
+//			try {
+//				builder = factory.newDocumentBuilder();
+//				if(!new File(f).exists())
+//					return;
+//				else
+//					logininfoDocument = builder.parse(new File(f));
+//				} catch (SAXException e) {
+//					e.printStackTrace();
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				} catch (ParserConfigurationException e) {
+//				e.printStackTrace();
+//			}
+//				NodeList properties = logininfoDocument.getElementsByTagName("properties");
+//				for (int i = 0; i < properties.getLength(); i++) {
+//					Node server = properties.item(i);
+//					NodeList serverInfo = server.getChildNodes();
+//					for (int j = 0; j < serverInfo.getLength(); j++) {
+//						serverInfo.item(j).getNodeName();
+//						
+//					}
+//				}
 	}
 
 	/**
@@ -679,6 +750,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 								}
 							}
 						});
+				deleteReserved(endpointAddress,username);
 			}
 		};
 
@@ -701,8 +773,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		exportAction=new ExportItemsAction(this);
 		importAction=new ImportItemsAction(this);
 		newCategoryAction = new NewCategoryAction(this);
-
 	}
+
 
 	private void hookDoubleClickAction() {
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
@@ -829,5 +901,154 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		
 		super.dispose();
 	}
+	
+	public void initServerTreeParent(String url,String username,String password,String universe) {
+		TreeParent serverRoot = new TreeParent(
+				url,
+                null,
+                TreeObject._SERVER_,
+                url,
+                ("".equals(universe)? "" : universe+"/")+username+":"+(password==null?"":password)
+        );     
+        TreeParent invisibleRoot =getTreeContentProvider().getInvisibleRoot();
+        serverRoot.addChild(new TreeObject());
+        invisibleRoot.addChild(serverRoot);
+        getViewer().refresh();
+	}
+	public void initServerTree(String url,String username,String password,String universe) {
+//		Properties properties = new Properties();
+//		Collection<String> endpoints;
+//		Collection<String> universes;
+//		String endpointsString=url;
+//		String universeString = universe;
+		
+		//Remove authenticator dialog
+		Authenticator.setDefault(null);
+        LocalTreeObjectRepository.getInstance().startUp(this, url, username, password);
+        LocalTreeObjectRepository.getInstance().switchOnListening();
+        LocalTreeObjectRepository.getInstance().setLazySaveStrategy(true, null);
+        
+		try {
+            XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(
+            	url,
+            	username,
+            	password,
+            	universe
+            );
+			new ProgressMonitorDialog(this.getSite().getShell()).run(
+					true, 
+					true, 
+					retriever
+			);
+			
+			
+/*			try {//add the memory of universe and server
+				//check if the file is exist of not,if not,create
+				File  dirFile = new File(f);
+		        boolean bFile   = dirFile.exists();
+		        if(!bFile)
+		        	if(dirFile.createNewFile())
+		        		properties.load(new FileInputStream(f));
+		        	else return;
+		        	
+				int index = 0;
+				endpoints = Arrays.asList(new String[]{Util.default_endpoint_address});
+				if (properties.getProperty("endpoints")!=null)	 
+					endpoints = Arrays.asList(properties.getProperty("endpoints").split(","));
+				if (properties.getProperty("universes")!=null)	 
+					universes=Arrays.asList(properties.getProperty("universes").split(","));
+				for (Iterator<String> iter = endpoints.iterator(); iter.hasNext();) {
+					String endpoint = iter.next();
+					if (!endpoint.equals(url))
+						endpointsString += "," + endpoint;
+					if (++index == 10)
+						break;
+				}
+				properties.setProperty("endpoints", endpointsString);
+				index = 0;
+				universes = Arrays.asList(new String[]{""});
+				for (Iterator<String> iter = universes.iterator(); iter.hasNext(); ) {
+					universe = iter.next();
+					if (! universe.equals(url)) universeString+=","+universe;
+					if (++index == 5) break;
+				}
+				properties.setProperty("universes", universeString);
+				
+				properties.store(new FileOutputStream(f), null);
+			} catch (Exception e1) {
+			}*/
+			
+			
+			
+			
+//            if(!retriever.isExistUniverse()){
+//            	//MessageDialog.openError(view.getViewer().getControl().getShell(), "Wrong universe", "Can't find the Version,please try again!");
+//            	return;
+//            }
+            TreeParent	serverRoot = retriever.getServerRoot();
+            TreeParent invisibleRoot =getTreeContentProvider().getInvisibleRoot();
+            TreeObject[] serverRoots = invisibleRoot.getChildren();
+            
+            boolean found = false;
+            for (int i = 0; i < serverRoots.length; i++) {
+            	//aiming add root displayName as unique ID of each server
+            	if(serverRoots[i].getDisplayName().equals(serverRoot.getDisplayName())){
+	                if (serverRoots[i].getWsKey().equals(serverRoot.getWsKey())) {
+	                    //server & universe already exists --> synchronize
+	                	if(serverRoots[i].getUser().getUniverse().equalsIgnoreCase(serverRoot.getUser().getUniverse())){
+		                    found = true;
+		                    ((TreeParent)serverRoots[i]).synchronizeWith(serverRoot);
+	                	}
+	                }
+            	}
+            }
+            if (!found) 
+            	invisibleRoot.addChild(serverRoot);
+           
+            getViewer().refresh();
+//            getViewer().expandToLevel(serverRoot,1);
+		} catch (InterruptedException ie){
+			return;
+		} catch (InvocationTargetException ite) {
+			ite.printStackTrace();
+			ErrorExceptionDialog.openError(
+					this.getSite().getShell(),
+					"Error", 
+					CommonUtil.getErrMsgFromException(ite.getCause())
+			);
+		}	
+	}
 
+	private void deleteReserved(String url, String user) {
+		SAXReader reader = new SAXReader();
+
+		OutputFormat format = OutputFormat.createPrettyPrint();
+		format.setEncoding("GBK");
+		File file = new File(f);
+		if (file.exists()) {
+			Document logininfoDocument = null;
+			try {
+				logininfoDocument = reader.read(file);
+			} catch (DocumentException e) {
+				e.printStackTrace();
+			}
+			Element root = logininfoDocument.getRootElement();
+			deleteServer(root, url, user);
+			try {
+				XMLWriter writer = new XMLWriter(new FileWriter(f));
+				writer.write(logininfoDocument);
+				writer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	private void deleteServer(Element root,String url,String user) {
+		 java.util.List properties = root.elements("properties");
+		for (Iterator iterator = properties.iterator(); iterator.hasNext();) {
+			Element ele = (Element) iterator.next();
+			if(ele.element("url").getText().equals(url)&&ele.element("user").getText().equals(user))
+				root.remove(ele);
+		}
+	}
 }
