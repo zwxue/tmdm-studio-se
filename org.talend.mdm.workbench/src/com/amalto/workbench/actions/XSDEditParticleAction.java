@@ -156,6 +156,11 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
        			}
        		}
        		
+       		if(Util.changeElementTypeToSequence(decl, maxOccurs) == Status.CANCEL_STATUS)
+       		{
+       			return Status.CANCEL_STATUS;
+       		}
+       		
        		selParticle.setMinOccurs(this.minOccurs);
        		selParticle.setMaxOccurs(this.maxOccurs);
        		selParticle.updateElement();

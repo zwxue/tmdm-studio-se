@@ -48,7 +48,9 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
@@ -58,6 +60,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.graphics.Image;
@@ -65,6 +68,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComplexTypeContent;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
+import org.eclipse.xsd.XSDCompositor;
 import org.eclipse.xsd.XSDConcreteComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintCategory;
@@ -81,6 +85,7 @@ import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.impl.XSDImportImpl;
 import org.eclipse.xsd.impl.XSDIncludeImpl;
+import org.eclipse.xsd.impl.XSDModelGroupImpl;
 import org.eclipse.xsd.impl.XSDParticleImpl;
 import org.eclipse.xsd.impl.XSDSchemaImpl;
 import org.eclipse.xsd.util.XSDConstants;
@@ -1321,6 +1326,29 @@ public class Util {
     	return childNames;
     }
     
+    public static IStatus changeElementTypeToSequence(XSDElementDeclaration decl, int maxOccurs)
+    {
+		XSDElementDeclaration parent = (XSDElementDeclaration)Util.getParent(decl);
+		XSDComplexTypeDefinition compx = (XSDComplexTypeDefinition)parent.getTypeDefinition();
+		XSDParticleImpl partCnt = (XSDParticleImpl)compx.getContent();
+		XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl)partCnt.getTerm();
+		
+   		if(maxOccurs > 1 && mdlGrp.getCompositor() != XSDCompositor.SEQUENCE_LITERAL)
+   		{
+   			// change the parent element to xsd:sequence
+			if (!MessageDialog.openConfirm(null,
+					"Change to sequence type", "The complex type will be changed to sequence in response to the maxOccurs value change")) {
+				return Status.CANCEL_STATUS;
+			}
+
+			mdlGrp.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
+			partCnt.getElement().getAttributeNode("maxOccurs").setNodeValue("unbounded");
+			partCnt.setMinOccurs(0);
+   			parent.updateElement();
+   		}
+   		
+   	    return Status.OK_STATUS;
+    }
     public static boolean IsAImporedElement(XSDConcreteComponent component, XSDSchema schema)
     {
     	if(component == null) return true;

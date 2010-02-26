@@ -19,7 +19,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDAnnotation;
-import org.eclipse.xsd.XSDConcreteComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDFactory;
 import org.eclipse.xsd.XSDModelGroup;
@@ -86,6 +85,12 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
        		int ret = dialog.open();
        		if (ret == Dialog.CANCEL){
                 return Status.CANCEL_STATUS;
+       		}
+       		
+       		XSDElementDeclaration elem = (XSDElementDeclaration) selParticle.getContent();
+       		if(Util.changeElementTypeToSequence(elem, maxOccurs) == Status.CANCEL_STATUS)
+       		{
+       			return Status.CANCEL_STATUS;
        		}
        		
        		XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
