@@ -276,7 +276,9 @@ private boolean checkServer(Element root) {
 		List properties = root.elements("properties");
 		for (Iterator iterator = properties.iterator(); iterator.hasNext();) {
 			Element ele = (Element) iterator.next();
-			if(ele.element("url").getText().equals(endpointsCombo.getText())&&ele.element("user").getText().equals(userText.getText()))
+			if (ele.element("url").getText().equals(endpointsCombo.getText())
+					&& ele.element("user").getText().equals(userText.getText())
+					&& ele.element("universe").getText().equals(universeCombo.getText()))
 				return true;
 		}
 	return false;

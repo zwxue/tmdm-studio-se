@@ -750,7 +750,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 								}
 							}
 						});
-				deleteReserved(endpointAddress,username);
+				deleteReserved(endpointAddress,username,universe);
 			}
 		};
 
@@ -1021,7 +1021,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		}	
 	}
 
-	private void deleteReserved(String url, String user) {
+	private void deleteReserved(String url, String user, String universe) {
 		SAXReader reader = new SAXReader();
 
 		OutputFormat format = OutputFormat.createPrettyPrint();
@@ -1035,7 +1035,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				e.printStackTrace();
 			}
 			Element root = logininfoDocument.getRootElement();
-			deleteServer(root, url, user);
+			deleteServer(root, url, user,universe);
 			try {
 				XMLWriter writer = new XMLWriter(new FileWriter(f));
 				writer.write(logininfoDocument);
@@ -1045,11 +1045,11 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			}
 		}
 	}
-	private void deleteServer(Element root,String url,String user) {
+	private void deleteServer(Element root,String url,String user, String universe) {
 		 java.util.List properties = root.elements("properties");
 		for (Iterator iterator = properties.iterator(); iterator.hasNext();) {
 			Element ele = (Element) iterator.next();
-			if(ele.element("url").getText().equals(url)&&ele.element("user").getText().equals(user))
+			if(ele.element("url").getText().equals(url)&&ele.element("user").getText().equals(user)&&ele.element("universe").getText().equals(universe))
 				root.remove(ele);
 		}
 	}
