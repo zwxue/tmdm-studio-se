@@ -1328,12 +1328,17 @@ public class Util {
     
     public static IStatus changeElementTypeToSequence(XSDElementDeclaration decl, int maxOccurs)
     {
+    	if(maxOccurs < -1)
+    	{
+    		MessageDialog.openError(null, "error", "max occurance value should be greater than -1");
+    		return Status.CANCEL_STATUS;
+    	}
 		XSDElementDeclaration parent = (XSDElementDeclaration)Util.getParent(decl);
 		XSDComplexTypeDefinition compx = (XSDComplexTypeDefinition)parent.getTypeDefinition();
 		XSDParticleImpl partCnt = (XSDParticleImpl)compx.getContent();
 		XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl)partCnt.getTerm();
 		
-   		if(maxOccurs > 1 && mdlGrp.getCompositor() != XSDCompositor.SEQUENCE_LITERAL)
+   		if((maxOccurs >= 1 || maxOccurs == -1) && mdlGrp.getCompositor() != XSDCompositor.SEQUENCE_LITERAL)
    		{
    			// change the parent element to xsd:sequence
 			if (!MessageDialog.openConfirm(null,

@@ -162,7 +162,21 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
        		}
        		
        		selParticle.setMinOccurs(this.minOccurs);
-       		selParticle.setMaxOccurs(this.maxOccurs);
+       		if(maxOccurs > -1)
+       		{
+           		selParticle.setMaxOccurs(this.maxOccurs);
+       		}
+       		else
+       		{
+       			if(selParticle.getElement().getAttributeNode("maxOccurs") != null)
+       				selParticle.getElement().getAttributeNode("maxOccurs").setNodeValue("unbounded");
+       			else
+       			{
+       				selParticle.getElement().setAttribute("maxOccurs", "unbounded");
+       			}
+       		}
+       			
+
        		selParticle.updateElement();
             
        		page.refresh();

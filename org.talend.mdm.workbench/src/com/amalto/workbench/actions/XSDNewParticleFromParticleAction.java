@@ -113,7 +113,19 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
        		XSDParticle particle = factory.createXSDParticle();
        		particle.setContent(decl);
        		particle.setMinOccurs(this.minOccurs);
-       		particle.setMaxOccurs(this.maxOccurs);
+       		if(maxOccurs > -1)
+       		{
+       			particle.setMaxOccurs(this.maxOccurs);
+       		}
+       		else
+       		{
+       			if(particle.getElement().getAttributeNode("maxOccurs") != null)
+       				particle.getElement().getAttributeNode("maxOccurs").setNodeValue("unbounded");
+       			else
+       			{
+       				particle.getElement().setAttribute("maxOccurs", "unbounded");
+       			}
+       		}
        		group.getContents().add(group.getContents().size(),particle);
        		group.updateElement();
        		
