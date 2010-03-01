@@ -119,6 +119,9 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
        		}
        		else
        		{
+       			particle.setMaxOccurs(this.maxOccurs);
+           		group.getContents().add(group.getContents().size(),particle);
+           		group.updateElement();
        			if(particle.getElement().getAttributeNode("maxOccurs") != null)
        				particle.getElement().getAttributeNode("maxOccurs").setNodeValue("unbounded");
        			else
@@ -126,8 +129,12 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
        				particle.getElement().setAttribute("maxOccurs", "unbounded");
        			}
        		}
-       		group.getContents().add(group.getContents().size(),particle);
-       		group.updateElement();
+       		if(maxOccurs > -1)
+       		{
+           		group.getContents().add(group.getContents().size(),particle);
+           		group.updateElement();
+       		}
+
        		
        	//fix 0010248. add annotion from parent
        		

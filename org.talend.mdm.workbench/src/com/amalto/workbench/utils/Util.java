@@ -1338,7 +1338,7 @@ public class Util {
 		XSDParticleImpl partCnt = (XSDParticleImpl)compx.getContent();
 		XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl)partCnt.getTerm();
 		
-   		if((maxOccurs >= 1 || maxOccurs == -1) && mdlGrp.getCompositor() != XSDCompositor.SEQUENCE_LITERAL)
+   		if((maxOccurs > 1 || maxOccurs == -1) && mdlGrp.getCompositor() != XSDCompositor.SEQUENCE_LITERAL)
    		{
    			// change the parent element to xsd:sequence
 			if (!MessageDialog.openConfirm(null,
