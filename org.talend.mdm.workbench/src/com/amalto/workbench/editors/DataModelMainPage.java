@@ -1822,8 +1822,8 @@ public class DataModelMainPage extends AMainPageV2 {
 			if (xpath.getVariety().equals(XSDXPathVariety.FIELD_LITERAL))
 				manager.add(deleteXPathAction);
 		}
-
-		if (obj instanceof XSDSimpleTypeDefinition && selectedObjs.length == 1 && !Util.IsAImporedElement((XSDSimpleTypeDefinition) obj, xsdSchema)) {
+// for the anonymous simpleType
+		if (obj instanceof XSDSimpleTypeDefinition && selectedObjs.length == 1 && (!Util.IsAImporedElement((XSDSimpleTypeDefinition) obj, xsdSchema)||((XSDSimpleTypeDefinition) obj).getName()==null)) {
 			XSDSimpleTypeDefinition typedef = (XSDSimpleTypeDefinition) obj;
 
 //			if (!typedef.getSchema().getSchemaForSchemaNamespace().equals(
