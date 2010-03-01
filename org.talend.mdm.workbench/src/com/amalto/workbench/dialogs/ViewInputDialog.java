@@ -72,6 +72,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
     private Button smartViewButton;
     private Button beforeSavingButton;
     private Button beforeDeletingButton;
+    private Button runnableProcessButton;
     private TreeParent treeParent;
     private IWorkbenchPartSite site;
     private  XpathSelectDialog dlg;
@@ -81,6 +82,7 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
     private static String Smart_view="Smart_view_";
     private static String beforeSaving = "beforeSaving_";
     private static String beforeDeleting = "beforeDeleting_";
+    private static String runnableProcess = "Runnable_";
     boolean isBtnShow=true;
     
     
@@ -262,6 +264,24 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
 					label.setText("Enter a name that follows: beforeDeleting_<EntityName>");
 					openDLG.setVisible(true);
 					value = beforeDeleting;
+				}
+    			
+    		});
+    		
+    		runnableProcessButton = new Button(radioGroup,SWT.RADIO);
+    		runnableProcessButton.setText("Create a Runable Process");
+    		runnableProcessButton.setLayoutData(
+    				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
+    		);
+    		runnableProcessButton.addSelectionListener(new SelectionListener(){
+
+				public void widgetDefaultSelected(SelectionEvent e) {}
+
+				public void widgetSelected(SelectionEvent e) {
+					text.setText(runnableProcess);
+					label.setText("Enter a name that follows: Runnable_<EntityName>");
+					openDLG.setVisible(true);
+					value = runnableProcess;
 				}
     			
     		});
