@@ -382,6 +382,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		if (!list.isEmpty())
 		  elemFolder.remove(list.get(0));
 		
+		synchronizeWithElem(child, (TreeParent)parent, true);
 		saveDocument(parent);
 	}
 	
@@ -795,7 +796,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	}
 	private ArrayList<String> checkUpCatalogRepositoryForTreeObject(TreeObject theObj, TreeObject folder)
 	{
-		if (theObj.getType() == 0) return null;
+		if (theObj.getType() == 0 || theObj.getType() == TreeObject.CATEGORY_FOLDER) return null;
 		try
 		{
 			String modelName = getXPathForTreeObject(folder);
