@@ -2,6 +2,8 @@ package com.amalto.workbench.models;
 
 import java.util.ArrayList;
 
+import com.amalto.workbench.utils.LocalTreeObjectRepository;
+
 public class TreeParent extends TreeObject {
 
 	private ArrayList children;
@@ -30,6 +32,7 @@ public class TreeParent extends TreeObject {
 			child.setParent(this);
 			child.fireEvent(IXObjectModelListener.ADD, this, child);
 		}
+		LocalTreeObjectRepository.getInstance().correctDisplayNameForCategory(child);
 	}
 	
 	public void removeChild(TreeObject child) {

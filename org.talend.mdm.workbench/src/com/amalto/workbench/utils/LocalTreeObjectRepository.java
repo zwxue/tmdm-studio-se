@@ -49,6 +49,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	
 	private static String UNIVERSE = "Universe";
 	private static String URL = "Url";
+	private static String REALNAME = "Name";
 	
 	private static int XTENTIS_LEVEL = 4;
 	private static int MODEL_LEVEL = 3;
@@ -270,6 +271,8 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
         	   cpy = chead;
         	cpy += chead;
         }
+        if(!res.equals(cpy))
+        	cpy += "qwer1ty2ui4o";
 		return cpy + (trail.length() > 1 ? trail : "");
 	}
 	
@@ -322,6 +325,10 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	{
 		if (parent.getParent() == null && parent.getDisplayName().equals("INVISIBLE ROOT"))
 			return;
+		if(child.getDisplayName().equals("myTest"))
+		{
+			System.out.println();
+		}
 		String xpath = getXPathForTreeObject(child);
 		Document doc =  credentials.get(UnifyUrl(parent.getServerRoot().getWsKey().toString())).doc;
 		List<Element> models = doc.selectNodes(xpath);
@@ -357,6 +364,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 				{
 					childElem.addAttribute(UNIVERSE, getUniverseFromTreeObject(child));
 					childElem.addAttribute(URL, getURLFromTreeObject(child));
+					childElem.addAttribute(REALNAME, child.getDisplayName());
 				}
 			}
 		}
@@ -377,6 +385,27 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		saveDocument(parent);
 	}
 	
+	
+	public void correctDisplayNameForCategory(TreeObject category)
+	{
+		if(category.getType() != TreeObject.CATEGORY_FOLDER)
+		{
+			return;
+		}
+		
+		String xpath = getXPathForTreeObject(category);
+		Document doc = credentials.get(UnifyUrl(category.getServerRoot().getWsKey().toString())).doc;
+		List<Element> elems = doc.selectNodes(xpath);
+		if(elems.size() > 0)
+		{
+			Element elem = elems.get(0);
+			String value = elem.attributeValue(REALNAME);
+			if(value != null)
+			{
+				category.setDisplayName(value);
+			}
+		}
+	}
 	
 	public void synchronizeWithDoc(TreeParent root)
 	{
@@ -658,7 +687,12 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
             while(!hierarchicalList.isEmpty())
             {
             	spec = hierarchicalList.remove(0);
-            	TreeObject to =  modelCpy.findObject(Integer.parseInt(spec.getText().trim()), spec.getName());
+            	String elemName = spec.getName();
+            	if(spec.attributeValue(REALNAME) != null)
+            	{
+            		elemName = spec.attributeValue(REALNAME);
+            	}
+            	TreeObject to =  modelCpy.findObject(Integer.parseInt(spec.getText().trim()), elemName);
             	if (to == null)
             	{
 					TreeParent catalog = new TreeParent(spec.getName(), modelCpy
@@ -716,13 +750,20 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 			}
 			xpaths = xpaths.substring(modelPos + filterOutBlank(folder.getDisplayName()).length() + 1);
 			modelPos = xpaths.indexOf("/");
+			String xpathTrack = getXPathForElem(elem).substring(0, getXPathForElem(elem).indexOf(xpaths) -1);
 			while(modelPos != -1 || (!xpaths.equals("") && modelPos == -1))
 			{
 				String nodeName = modelPos != -1 ? xpaths.substring(0, modelPos) : xpaths;
+				xpathTrack += "/" + nodeName;
+				List<Element> parnts = doc.selectNodes(xpathTrack);
+				if(parnts.size() > 0 && parnts.get(0).attributeValue(REALNAME) != null)
+				{
+					nodeName = parnts.get(0).attributeValue(REALNAME);
+				}
 				boolean catalogExist = false;
 				for (TreeObject child: subFolder.getChildren())
 				{
-					if (nodeName.equals(filterOutBlank(child.getDisplayName()))
+					if (nodeName.equals(child.getDisplayName())
 							&& child.getType() == TreeObject.CATEGORY_FOLDER)
 					{
 						catalogExist = true;
@@ -775,7 +816,12 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 					ArrayList<String> path = new ArrayList<String>();
 					while (isAEXtentisObjects(elem, theObj) > XTENTIS_LEVEL)
 					{
-						path.add(elem.getParent().getName());
+						String elemName = elem.getParent().getName();
+						if(elem.getParent().attributeValue(REALNAME) != null)
+						{
+							elemName = elem.getParent().attributeValue(REALNAME);
+						}
+						path.add(elemName);
 						elem = elem.getParent();
 					}
                     Collections.reverse(path);
@@ -918,7 +964,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		String xpath = "//" + category.getServerRoot().getUser().getUsername()
 				+ "//" + filterOutBlank(category.getParent().getDisplayName())
 				+ "//child::*/.[text() = '" + TreeObject.CATEGORY_FOLDER
-				+ "' and name()='" + category.getDisplayName()
+				+ "' and name()='" + filterOutBlank(category.getDisplayName())
 				+ "' and @Universe ='" + getUniverseFromTreeObject(category)
 				+ "' and @Url = '" + getURLFromTreeObject(category) + "']";
 
