@@ -684,7 +684,7 @@ public class PasteXObjectAction extends Action{
 		}	finally {
 			keyTrackMap.clear();
 			//refresh view
-			view.forceAllSiteToRefresh();
+			//view.forceAllSiteToRefresh();
 			destPort = null;
 			parent = null;
 		}

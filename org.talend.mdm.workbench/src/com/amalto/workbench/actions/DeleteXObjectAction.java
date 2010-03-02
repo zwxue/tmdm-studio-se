@@ -105,65 +105,13 @@ public class DeleteXObjectAction extends Action{
 			for (Iterator<TreeObject> iter = toDelList.iterator(); iter.hasNext(); ) {
 				TreeObject xobject = iter.next();
 				TreeObjectUtil.deleteTreeObject(xobject, view);       
-	//          Access to server and get port
-/*				XtentisPort port = Util.getPort(
-						new URL(xobject.getEndpointAddress()),
-						xobject.getUniverse(),
-						xobject.getUsername(),
-						xobject.getPassword()
-				);
-	              
-	            switch(xobject.getType()) {
-	            
-		           	case TreeObject.DATA_MODEL:
-		           		port.deleteDataModel(new WSDeleteDataModel((WSDataModelPK)xobject.getWsKey()));
-		           		deleteSpecificationFromAttachedRole(port, xobject, "Data Model");
-		           		break;
-		          	case TreeObject.VIEW:
-		           		port.deleteView(new WSDeleteView((WSViewPK)xobject.getWsKey()));
-		           		deleteSpecificationFromAttachedRole(port, xobject, "View");
-		           		break;           		
-		          	case TreeObject.DATA_CLUSTER:
-		           		port.deleteDataCluster(new WSDeleteDataCluster((WSDataClusterPK)xobject.getWsKey()));
-		           		deleteSpecificationFromAttachedRole(port, xobject, "Data Cluster");
-		           		break;      
-		          	case TreeObject.STORED_PROCEDURE:
-		           		port.deleteStoredProcedure(new WSDeleteStoredProcedure((WSStoredProcedurePK)xobject.getWsKey()));
-		           		break;  
-		          	case TreeObject.ROLE:
-		           		port.deleteRole(new WSDeleteRole((WSRolePK)xobject.getWsKey()));
-		           		break;  
-		          	case TreeObject.ROUTING_RULE:
-		           		port.deleteRoutingRule(new WSDeleteRoutingRule((WSRoutingRulePK)xobject.getWsKey()));
-		           		break;  
-		          	case TreeObject.TRANSFORMER:
-		           		port.deleteTransformerV2(new WSDeleteTransformerV2((WSTransformerV2PK)xobject.getWsKey()));
-		           		break;
-		          	case TreeObject.MENU:
-		           		port.deleteMenu(new WSDeleteMenu((WSMenuPK)xobject.getWsKey()));
-		           		deleteSpecificationFromAttachedRole(port, xobject, "Menu");
-		           		break;  	 
-		          	case TreeObject.UNIVERSE:
-		           		port.deleteUniverse(new WSDeleteUniverse((WSUniversePK)xobject.getWsKey()));
-		           		break;  
-		          	case TreeObject.SYNCHRONIZATIONPLAN:
-		           		port.deleteSynchronizationPlan(new WSDeleteSynchronizationPlan((WSSynchronizationPlanPK)xobject.getWsKey()));
-		           		break;
-		          	case TreeObject.CATEGORY_FOLDER:
-		          	    // do nothing over here
-		          		break;
-		          	default:
-		           		MessageDialog.openError(view.getSite().getShell(), "Error", "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
-		           		return;
-	            }//switch
-*/	            
+
 	            if (xobject.getParent() != null)
 	       		  xobject.getParent().removeChild(xobject);
-	       		view.getViewer().refresh();
+	           
 			}//for
-			
-       		//view.getSite().getWorkbenchWindow().get
-                   
+			 //view.getViewer().refresh();
+			                   
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(
@@ -173,7 +121,7 @@ public class DeleteXObjectAction extends Action{
 			);
 		}finally {
 			//refresh view
-			view.forceAllSiteToRefresh();
+			//view.forceAllSiteToRefresh();
 		}		
 	}
 	

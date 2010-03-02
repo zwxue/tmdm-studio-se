@@ -121,7 +121,7 @@ public class SaveXObjectAction extends Action{
             	}
             	xobject.fireEvent(IXObjectModelListener.SAVE, xobject.getParent(), xobject);
                 //new object notify the server root that it needs a refresh (actually not needed for this but a good time to do it)
-                xobject.getServerRoot().fireEvent(IXObjectModelListener.NEED_REFRESH, null, xobject.getServerRoot());
+                //xobject.getServerRoot().fireEvent(IXObjectModelListener.NEED_REFRESH, null, xobject.getServerRoot());
             } else {
                 //existing object saved
                 xobject.fireEvent(IXObjectModelListener.SAVE, xobject.getParent(), xobject);
