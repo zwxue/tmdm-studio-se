@@ -491,7 +491,11 @@ public class TreeObjectUtil {
 		            }//switch
 		            
 		            if (xobject.getParent() != null)
-		       		  xobject.getParent().removeChild(xobject);
+		            {
+		            	LocalTreeObjectRepository.getInstance().switchOffSynchronize();
+		            	xobject.getParent().removeChild(xobject);
+		            	LocalTreeObjectRepository.getInstance().swithOnSynchronize();
+		            }
 		       		view.getViewer().refresh();
 				}
 	private static void deleteSpecificationFromAttachedRole(XtentisPort port, TreeObject xobject, String objectType) throws RemoteException
