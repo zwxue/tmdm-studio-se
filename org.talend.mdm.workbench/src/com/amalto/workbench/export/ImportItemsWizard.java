@@ -41,16 +41,16 @@ import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
-import com.amalto.workbench.webservices.WSGetDataCluster;
-import com.amalto.workbench.webservices.WSGetDataModel;
-import com.amalto.workbench.webservices.WSGetMenu;
-import com.amalto.workbench.webservices.WSGetRole;
-import com.amalto.workbench.webservices.WSGetRoutingRule;
-import com.amalto.workbench.webservices.WSGetStoredProcedure;
-import com.amalto.workbench.webservices.WSGetSynchronizationPlan;
-import com.amalto.workbench.webservices.WSGetTransformer;
-import com.amalto.workbench.webservices.WSGetUniverse;
-import com.amalto.workbench.webservices.WSGetView;
+import com.amalto.workbench.webservices.WSExistsDataCluster;
+import com.amalto.workbench.webservices.WSExistsDataModel;
+import com.amalto.workbench.webservices.WSExistsMenu;
+import com.amalto.workbench.webservices.WSExistsRole;
+import com.amalto.workbench.webservices.WSExistsRoutingRule;
+import com.amalto.workbench.webservices.WSExistsStoredProcedure;
+import com.amalto.workbench.webservices.WSExistsSynchronizationPlan;
+import com.amalto.workbench.webservices.WSExistsTransformer;
+import com.amalto.workbench.webservices.WSExistsUniverse;
+import com.amalto.workbench.webservices.WSExistsView;
 import com.amalto.workbench.webservices.WSItem;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuPK;
@@ -217,8 +217,8 @@ public class ImportItemsWizard extends Wizard{
 			obj.setServerRoot(reserverRoot);
 			switch(obj.getType()){
 			case 	TreeObject.DATA_CLUSTER:
-					if (port.getDataCluster(new WSGetDataCluster(
-							new WSDataClusterPK(obj.getDisplayName()))) != null) {
+					if (port.existsDataCluster(new WSExistsDataCluster(
+							new WSDataClusterPK(obj.getDisplayName()))).is_true()) {
 						if (!isOverrideAll) {
 							int result = isOveride(obj.getDisplayName());
 							if (result == IDialogConstants.CANCEL_ID) {
@@ -236,8 +236,8 @@ public class ImportItemsWizard extends Wizard{
 				clusters.addChild(obj);
 				break;
 			case TreeObject.DATA_MODEL:
-				if (port.getDataModel(new WSGetDataModel(
-						new WSDataModelPK(obj.getDisplayName()))) != null) {
+				if (port.existsDataModel(new WSExistsDataModel(
+						new WSDataModelPK(obj.getDisplayName()))).is_true()) {
 					if (!isOverrideAll) {
 						int result = isOveride(obj.getDisplayName());
 						if (result == IDialogConstants.CANCEL_ID) {
@@ -255,8 +255,8 @@ public class ImportItemsWizard extends Wizard{
 				models.addChild(obj);
 				break;
 			case TreeObject.MENU:
-				if (port.getMenu(new WSGetMenu(
-						new WSMenuPK(obj.getDisplayName()))) != null) {
+				if (port.existsMenu(new WSExistsMenu(
+						new WSMenuPK(obj.getDisplayName()))).is_true()) {
 					if (!isOverrideAll) {
 						int result = isOveride(obj.getDisplayName());
 						if (result == IDialogConstants.CANCEL_ID) {
@@ -274,8 +274,8 @@ public class ImportItemsWizard extends Wizard{
 				menus.addChild(obj);
 				break;
 			case TreeObject.ROLE:
-				if (port.getRole(new WSGetRole(
-						new WSRolePK(obj.getDisplayName()))) != null) {
+				if (port.existsRole(new WSExistsRole(
+						new WSRolePK(obj.getDisplayName()))).is_true()) {
 					if (!isOverrideAll) {
 						int result = isOveride(obj.getDisplayName());
 						if (result == IDialogConstants.CANCEL_ID) {
@@ -293,8 +293,8 @@ public class ImportItemsWizard extends Wizard{
 				roles.addChild(obj);
 				break;
 			case TreeObject.ROUTING_RULE:
-				if (port.getRoutingRule(new WSGetRoutingRule(
-						new WSRoutingRulePK(obj.getDisplayName()))) != null) {
+				if (port.existsRoutingRule(new WSExistsRoutingRule(
+						new WSRoutingRulePK(obj.getDisplayName()))).is_true()) {
 					if (!isOverrideAll) {
 						int result = isOveride(obj.getDisplayName());
 						if (result == IDialogConstants.CANCEL_ID) {
@@ -312,8 +312,8 @@ public class ImportItemsWizard extends Wizard{
 				routingrules.addChild(obj);
 				break;
 			case TreeObject.STORED_PROCEDURE:
-				if (port.getStoredProcedure(new WSGetStoredProcedure(
-						new WSStoredProcedurePK(obj.getDisplayName()))) != null) {
+				if (port.existsStoredProcedure(new WSExistsStoredProcedure(
+						new WSStoredProcedurePK(obj.getDisplayName()))).is_true()) {
 					if (!isOverrideAll) {
 						int result = isOveride(obj.getDisplayName());
 						if (result == IDialogConstants.CANCEL_ID) {
@@ -331,8 +331,8 @@ public class ImportItemsWizard extends Wizard{
 				storeprocedures.addChild(obj);
 				break;
 			case TreeObject.SYNCHRONIZATIONPLAN:
-				if (port.getSynchronizationPlan(new WSGetSynchronizationPlan(
-						new WSSynchronizationPlanPK(obj.getDisplayName()))) != null) {
+				if (port.existsSynchronizationPlan(new WSExistsSynchronizationPlan(
+						new WSSynchronizationPlanPK(obj.getDisplayName()))).is_true()) {
 					if (!isOverrideAll) {
 						int result = isOveride(obj.getDisplayName());
 						if (result == IDialogConstants.CANCEL_ID) {
@@ -350,8 +350,8 @@ public class ImportItemsWizard extends Wizard{
 				syncplans.addChild(obj);
 				break;
 			case TreeObject.TRANSFORMER:
-				if (port.getTransformer(new WSGetTransformer(
-						new WSTransformerPK(obj.getDisplayName()))) != null) {
+				if (port.existsTransformer(new WSExistsTransformer(
+						new WSTransformerPK(obj.getDisplayName()))).is_true()) {
 					if (!isOverrideAll) {
 						int result = isOveride(obj.getDisplayName());
 						if (result == IDialogConstants.CANCEL_ID) {
@@ -369,8 +369,8 @@ public class ImportItemsWizard extends Wizard{
 				transformers.addChild(obj);
 				break;
 			case TreeObject.UNIVERSE:
-				if (port.getUniverse(new WSGetUniverse(
-						new WSUniversePK(obj.getDisplayName()))) != null) {
+				if (port.existsUniverse(new WSExistsUniverse(
+						new WSUniversePK(obj.getDisplayName()))).is_true()) {
 					if (!isOverrideAll) {
 						int result = isOveride(obj.getDisplayName());
 						if (result == IDialogConstants.CANCEL_ID) {
@@ -388,8 +388,8 @@ public class ImportItemsWizard extends Wizard{
 				universes.addChild(obj);
 				break;
 			case TreeObject.VIEW:
-				if (port.getView(new WSGetView(
-						new WSViewPK(obj.getDisplayName()))) != null) {
+				if (port.existsView(new WSExistsView(
+						new WSViewPK(obj.getDisplayName()))).is_true()) {
 					if (!isOverrideAll) {
 						int result = isOveride(obj.getDisplayName());
 						if (result == IDialogConstants.CANCEL_ID) {
