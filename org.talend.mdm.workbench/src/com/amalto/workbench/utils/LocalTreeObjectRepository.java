@@ -42,7 +42,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	private ArrayList<String> accommodations = new ArrayList<String>();
 	
 	private static String config = System.getProperty("user.dir")+"/.treeObjectConfig.xml";
-	private static String rootPath = "/root";
+	private static String rootPath = "/category";
 	private static String DEFAULT_CATALOG = "System";
 	private static String EXPAND_NAME = "Expand";
 	private static String EXPAND_VALUE = "true";
@@ -91,9 +91,9 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	public void startUp(ServerView vw, String ur, String user, String pwd)
 	{
 		 view = vw;
-		 
+		 XtentisPort port = null;
 		 try {
-			XtentisPort port = Util.getPort(new URL(ur), "", user, pwd);
+			port = Util.getPort(new URL(ur), "", user, pwd);
 			WSCategoryData category = port.getMDMCategory(null);
 			SAXReader saxReader = new SAXReader();
 			Document doc = saxReader.read(new StringReader(category.getCategorySchema()));
@@ -109,11 +109,17 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 			
 			doUpgrade(UnifyUrl(ur));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			if (forceDelete()) {
-				startUp(vw, ur, user, pwd);
+			String empty = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+			empty +="<category/>";
+			WSCategoryData newData = new WSCategoryData();
+			newData.setCategorySchema(empty);
+			try {
+				port.getMDMCategory(newData);
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
 			}
+			
 		}
 	}
 	
