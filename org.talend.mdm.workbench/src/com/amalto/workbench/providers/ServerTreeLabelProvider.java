@@ -49,7 +49,7 @@ public class ServerTreeLabelProvider extends LabelProvider implements IColorProv
 		//if (obj instanceof TreeParent) {
 			TreeObject  object = (TreeObject)obj;
 			if (object.getType() == TreeObject._SERVER_)
-				return ImageCache.getCreatedImage( "icons/talend-picto-small.gif");
+				return ImageCache.getCreatedImage( EImage.DEFAULT.getPath());
 			else if (object.getType() == TreeObject.DATA_CLUSTER)
 				return ImageCache.getCreatedImage( EImage.DATA_CLUSTER.getPath());
 			else if (object.getType() == TreeObject.DATA_MODEL)

@@ -203,7 +203,7 @@ public enum EImage {
 	SYNCED("icons/synced.gif"),
 	SYNCH_PARTICIPANTS("icons/synch_participants.gif"),
 	TALEND_PICTO_SMALL("icons/appli_16x16.gif"),
-	TALEND_PICTO("icons/talend-picto.gif"),
+	TALEND_PICTO("icons/appli_16x16.gif"),
 	TARGETSYSTEM("icons/targetsystem.gif"),
 	TASKMRK_TSK("icons/taskmrk_tsk.gif"),
 	TASKS_TSK("icons/tasks_tsk.gif"),
