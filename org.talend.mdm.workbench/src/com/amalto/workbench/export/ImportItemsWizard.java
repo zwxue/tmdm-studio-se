@@ -1,10 +1,8 @@
 package com.amalto.workbench.export;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
-import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Hashtable;
@@ -13,6 +11,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -27,9 +27,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.progress.UIJob;
-import org.exolab.castor.xml.MarshalException;
 import org.exolab.castor.xml.Unmarshaller;
-import org.exolab.castor.xml.ValidationException;
 import org.talend.mdm.commmon.util.workbench.ZipToFile;
 
 import com.amalto.workbench.actions.ServerRefreshAction;
@@ -40,10 +38,22 @@ import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSDataCluster;
+import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
+import com.amalto.workbench.webservices.WSGetDataCluster;
+import com.amalto.workbench.webservices.WSGetDataModel;
+import com.amalto.workbench.webservices.WSGetMenu;
+import com.amalto.workbench.webservices.WSGetRole;
+import com.amalto.workbench.webservices.WSGetRoutingRule;
+import com.amalto.workbench.webservices.WSGetStoredProcedure;
+import com.amalto.workbench.webservices.WSGetSynchronizationPlan;
+import com.amalto.workbench.webservices.WSGetTransformer;
+import com.amalto.workbench.webservices.WSGetUniverse;
+import com.amalto.workbench.webservices.WSGetView;
 import com.amalto.workbench.webservices.WSItem;
 import com.amalto.workbench.webservices.WSMenu;
+import com.amalto.workbench.webservices.WSMenuPK;
 import com.amalto.workbench.webservices.WSPutDataCluster;
 import com.amalto.workbench.webservices.WSPutDataModel;
 import com.amalto.workbench.webservices.WSPutItem;
@@ -56,15 +66,22 @@ import com.amalto.workbench.webservices.WSPutTransformer;
 import com.amalto.workbench.webservices.WSPutUniverse;
 import com.amalto.workbench.webservices.WSPutView;
 import com.amalto.workbench.webservices.WSRole;
+import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRuleExpression;
 import com.amalto.workbench.webservices.WSRoutingRuleOperator;
+import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSStoredProcedure;
+import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSStringPredicate;
 import com.amalto.workbench.webservices.WSSynchronizationPlan;
+import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
 import com.amalto.workbench.webservices.WSTransformer;
+import com.amalto.workbench.webservices.WSTransformerPK;
 import com.amalto.workbench.webservices.WSUniverse;
+import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSView;
+import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.WSWhereCondition;
 import com.amalto.workbench.webservices.WSWhereOperator;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -82,14 +99,21 @@ public class ImportItemsWizard extends Wizard{
 	private FileSelectWidget  zip;
 	private String zipfile;
 	private ServerView view;
-//	private ArrayList<TreeObject> objList =new ArrayList<TreeObject>();
+//	private List<TreeObject> objList =new ArrayList<TreeObject>();
 	private Hashtable<String,String[]> dataClusterContent=new Hashtable<String,String[]>();
 	private TreeParent serverRoot;
+	private XtentisPort port=null;
 	
 	public ImportItemsWizard(IStructuredSelection sel,ServerView view){
 		this.sel=sel;
 		this.view=view;
 		serverRoot = ((TreeObject)sel.getFirstElement()).getServerRoot();
+		try {
+			   port = Util.getPort((TreeObject)sel.getFirstElement());
+			} 
+			catch(XtentisException e3) {
+			   e3.printStackTrace();
+			}
 	}
 	@Override
 	public boolean performFinish() {
@@ -187,37 +211,199 @@ public class ImportItemsWizard extends Wizard{
 		reserverRoot.addChild(transformers);
 		reserverRoot.addChild(universes);
 		reserverRoot.addChild(views);
+		boolean isOverrideAll=false;
+
 		for(TreeObject obj: exports.getItems()){
 			obj.setServerRoot(reserverRoot);
 			switch(obj.getType()){
 			case 	TreeObject.DATA_CLUSTER:
+					if (port.getDataCluster(new WSGetDataCluster(
+							new WSDataClusterPK(obj.getDisplayName()))) != null) {
+						if (!isOverrideAll) {
+							int result = isOveride(obj.getDisplayName());
+							if (result == IDialogConstants.CANCEL_ID) {
+								return;
+							}
+							if (result == IDialogConstants.YES_TO_ALL_ID) {
+								isOverrideAll = true;
+							}
+							if (result == IDialogConstants.NO_ID) {
+								break;
+							}
+
+						}
+					}
 				clusters.addChild(obj);
 				break;
 			case TreeObject.DATA_MODEL:
+				if (port.getDataModel(new WSGetDataModel(
+						new WSDataModelPK(obj.getDisplayName()))) != null) {
+					if (!isOverrideAll) {
+						int result = isOveride(obj.getDisplayName());
+						if (result == IDialogConstants.CANCEL_ID) {
+							return;
+						}
+						if (result == IDialogConstants.YES_TO_ALL_ID) {
+							isOverrideAll = true;
+						}
+						if (result == IDialogConstants.NO_ID) {
+							break;
+						}
+
+					}
+				}
 				models.addChild(obj);
 				break;
 			case TreeObject.MENU:
+				if (port.getMenu(new WSGetMenu(
+						new WSMenuPK(obj.getDisplayName()))) != null) {
+					if (!isOverrideAll) {
+						int result = isOveride(obj.getDisplayName());
+						if (result == IDialogConstants.CANCEL_ID) {
+							return;
+						}
+						if (result == IDialogConstants.YES_TO_ALL_ID) {
+							isOverrideAll = true;
+						}
+						if (result == IDialogConstants.NO_ID) {
+							break;
+						}
+
+					}
+				}
 				menus.addChild(obj);
 				break;
 			case TreeObject.ROLE:
+				if (port.getRole(new WSGetRole(
+						new WSRolePK(obj.getDisplayName()))) != null) {
+					if (!isOverrideAll) {
+						int result = isOveride(obj.getDisplayName());
+						if (result == IDialogConstants.CANCEL_ID) {
+							return;
+						}
+						if (result == IDialogConstants.YES_TO_ALL_ID) {
+							isOverrideAll = true;
+						}
+						if (result == IDialogConstants.NO_ID) {
+							break;
+						}
+
+					}
+				}
 				roles.addChild(obj);
 				break;
 			case TreeObject.ROUTING_RULE:
+				if (port.getRoutingRule(new WSGetRoutingRule(
+						new WSRoutingRulePK(obj.getDisplayName()))) != null) {
+					if (!isOverrideAll) {
+						int result = isOveride(obj.getDisplayName());
+						if (result == IDialogConstants.CANCEL_ID) {
+							return;
+						}
+						if (result == IDialogConstants.YES_TO_ALL_ID) {
+							isOverrideAll = true;
+						}
+						if (result == IDialogConstants.NO_ID) {
+							break;
+						}
+
+					}
+				}
 				routingrules.addChild(obj);
 				break;
 			case TreeObject.STORED_PROCEDURE:
+				if (port.getStoredProcedure(new WSGetStoredProcedure(
+						new WSStoredProcedurePK(obj.getDisplayName()))) != null) {
+					if (!isOverrideAll) {
+						int result = isOveride(obj.getDisplayName());
+						if (result == IDialogConstants.CANCEL_ID) {
+							return;
+						}
+						if (result == IDialogConstants.YES_TO_ALL_ID) {
+							isOverrideAll = true;
+						}
+						if (result == IDialogConstants.NO_ID) {
+							break;
+						}
+
+					}
+				}
 				storeprocedures.addChild(obj);
 				break;
 			case TreeObject.SYNCHRONIZATIONPLAN:
+				if (port.getSynchronizationPlan(new WSGetSynchronizationPlan(
+						new WSSynchronizationPlanPK(obj.getDisplayName()))) != null) {
+					if (!isOverrideAll) {
+						int result = isOveride(obj.getDisplayName());
+						if (result == IDialogConstants.CANCEL_ID) {
+							return;
+						}
+						if (result == IDialogConstants.YES_TO_ALL_ID) {
+							isOverrideAll = true;
+						}
+						if (result == IDialogConstants.NO_ID) {
+							break;
+						}
+
+					}
+				}
 				syncplans.addChild(obj);
 				break;
 			case TreeObject.TRANSFORMER:
+				if (port.getTransformer(new WSGetTransformer(
+						new WSTransformerPK(obj.getDisplayName()))) != null) {
+					if (!isOverrideAll) {
+						int result = isOveride(obj.getDisplayName());
+						if (result == IDialogConstants.CANCEL_ID) {
+							return;
+						}
+						if (result == IDialogConstants.YES_TO_ALL_ID) {
+							isOverrideAll = true;
+						}
+						if (result == IDialogConstants.NO_ID) {
+							break;
+						}
+
+					}
+				}
 				transformers.addChild(obj);
 				break;
 			case TreeObject.UNIVERSE:
+				if (port.getUniverse(new WSGetUniverse(
+						new WSUniversePK(obj.getDisplayName()))) != null) {
+					if (!isOverrideAll) {
+						int result = isOveride(obj.getDisplayName());
+						if (result == IDialogConstants.CANCEL_ID) {
+							return;
+						}
+						if (result == IDialogConstants.YES_TO_ALL_ID) {
+							isOverrideAll = true;
+						}
+						if (result == IDialogConstants.NO_ID) {
+							break;
+						}
+
+					}
+				}
 				universes.addChild(obj);
 				break;
 			case TreeObject.VIEW:
+				if (port.getView(new WSGetView(
+						new WSViewPK(obj.getDisplayName()))) != null) {
+					if (!isOverrideAll) {
+						int result = isOveride(obj.getDisplayName());
+						if (result == IDialogConstants.CANCEL_ID) {
+							return;
+						}
+						if (result == IDialogConstants.YES_TO_ALL_ID) {
+							isOverrideAll = true;
+						}
+						if (result == IDialogConstants.NO_ID) {
+							break;
+						}
+
+					}
+				}
 				views.addChild(obj);
 				break;	
 			default:
@@ -240,18 +426,33 @@ public class ImportItemsWizard extends Wizard{
 		
 	}
 	
+	private int isOveride(String name) {
+
+		final MessageDialog dialog = new MessageDialog(view.getSite()
+				.getShell(), "Treeobject overwrite confirm", null,
+				"There is already a tree object named " + name
+						+ ".Confirm overwriting?", MessageDialog.QUESTION,
+				new String[] { IDialogConstants.YES_LABEL,
+						IDialogConstants.YES_TO_ALL_LABEL,
+						IDialogConstants.NO_LABEL,
+						IDialogConstants.CANCEL_LABEL }, 0);
+		dialog.open();
+		int result = dialog.getReturnCode();
+		if (result == 0) {
+			return IDialogConstants.YES_ID;
+		}
+		if (result == 1) {
+			return IDialogConstants.YES_TO_ALL_ID;
+		}
+		if (result == 2) {
+			return IDialogConstants.NO_ID;
+		}
+		return IDialogConstants.CANCEL_ID;
+
+	}
 	public void doImport(TreeObject[] objs,IProgressMonitor monitor){
 		monitor.beginTask("Import ...", IProgressMonitor.UNKNOWN);
-		XtentisPort port = null;
 		Reader reader = null;
-		
-		try {
-		   port = Util.getPort((TreeObject)sel.getFirstElement());
-		} 
-		catch(XtentisException e3) {
-		   e3.printStackTrace();
-		}
-
 		//sort the objs for first import data_model.
 		Arrays.sort(objs, new Comparator<Object>() {
 		   public int compare(Object o1, Object o2) {
@@ -604,9 +805,9 @@ public class ImportItemsWizard extends Wizard{
 					}					  
 				  });	
 			  zip.getText().addListener(SWT.Modify, new PageListener(this));
-			  zip.getButton().addListener(SWT.Selection, new PageListener(this));
+//			  zip.getButton().addListener(SWT.Selection, new PageListener(this));
 			  folder.getText().addListener(SWT.Modify, new PageListener(this));
-			  folder.getButton().addListener(SWT.Selection, new PageListener(this));
+//			  folder.getButton().addListener(SWT.Selection, new PageListener(this));
 			  //create viewer
 			  treeViewer =new RepositoryCheckTreeViewer(sel);
 			  Composite itemcom=treeViewer.createItemList(composite);
