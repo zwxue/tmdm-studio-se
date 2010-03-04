@@ -14,7 +14,7 @@
             allowMultiple="true"
             category="org.talend.mdm.workbench"
             class="com.amalto.workbench.views.ServerView"
-            icon="icons/talend-picto-small.gif"
+            icon="icons/appli_16x16.gif"
             id="org.talend.mdm.workbench.views.ServerView"
             name="MDM Server">
             <!--name="Talend MDM Server View"-->
@@ -25,19 +25,19 @@
       <editor
             class="com.amalto.workbench.editors.XObjectEditor"
             default="false"
-            icon="icons/talend-picto-small.gif"
+            icon="icons/appli_16x16.gif"
             id="com.amalto.workbench.editors.XObjectEditor"
             name="com.amalto.workbench.editors.XObjectEditor"/>
       <editor
             class="com.amalto.workbench.editors.XObjectBrowser"
             default="false"
-            icon="icons/talend-picto-small.gif"
+            icon="icons/appli_16x16.gif"
             id="com.amalto.workbench.editors.XObjectBrowser"
             name="com.amalto.workbench.editors.XObjectBrowser"/>
       <editor
             class="com.amalto.workbench.editors.XObjectRevisionBrowser"
             default="false"
-            icon="icons/talend-picto-small.gif"
+            icon="icons/appli_16x16.gif"
             id="com.amalto.workbench.editors.XObjectRevisionBrowser"
             name="com.amalto.workbench.editors.XObjectRevisionBrowser">
       </editor>
@@ -47,7 +47,7 @@
       <perspective
             class="com.amalto.workbench.views.MDMPerspective"
             fixed="false"
-            icon="icons/talend-picto-small.gif"
+            icon="icons/appli_16x16.gif"
             id="org.talend.mdm.perspective"
             name="MDM">
       </perspective>

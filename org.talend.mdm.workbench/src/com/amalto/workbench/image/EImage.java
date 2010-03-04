@@ -8,7 +8,7 @@ import java.util.Map;
  *
  */
 public enum EImage {
-	DEFAULT("icons/talend-picto.gif"),
+	DEFAULT("icons/appli_16x16.gif"),
 	
 	ACTIVITY_CATEGORY("icons/activity_category.gif"),
 	ACTIVITY("icons/activity.gif"),
@@ -202,7 +202,7 @@ public enum EImage {
 	SUBSCRIPTION_ENGINE("icons/sub_engine.png"),
 	SYNCED("icons/synced.gif"),
 	SYNCH_PARTICIPANTS("icons/synch_participants.gif"),
-	TALEND_PICTO_SMALL("icons/talend-picto-small.gif"),
+	TALEND_PICTO_SMALL("icons/appli_16x16.gif"),
 	TALEND_PICTO("icons/talend-picto.gif"),
 	TARGETSYSTEM("icons/targetsystem.gif"),
 	TASKMRK_TSK("icons/taskmrk_tsk.gif"),
