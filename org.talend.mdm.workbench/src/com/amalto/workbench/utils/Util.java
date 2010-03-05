@@ -1076,15 +1076,68 @@ public class Util {
 							if (((XSDElementDeclaration) pt.getContent()) == elem) {
 								return decl;
 							}
-
-						}
+							XSDElementDeclaration spec = findOutSpecialSonElement((XSDElementDeclaration) pt.getContent(), elem);
+							if(spec != null)
+								return spec;
 					}
 				}
 			}
 		}
-		return null;
+      }
+	 return null;
     }
     
+    private static XSDElementDeclaration findOutSpecialSonElement(XSDElementDeclaration parent, XSDElementDeclaration son)
+    {
+    	ArrayList<XSDElementDeclaration> particleElemList = findOutAllSonElements((XSDElementDeclaration)parent);
+    	XSDElementDeclaration specialParent = null;
+		for (XSDElementDeclaration e: particleElemList)
+		{
+			if(e == son)
+			{
+				specialParent = parent;
+			}
+		}
+		
+		if(specialParent == null)
+		{
+			for (XSDElementDeclaration e: particleElemList)
+			{
+				specialParent = findOutSpecialSonElement(e, son);
+				if(specialParent != null)
+					break;
+			}
+		}
+		
+		return specialParent;
+    }
+    
+    private static ArrayList<XSDElementDeclaration> findOutAllSonElements(XSDElementDeclaration decl)
+    {
+    	ArrayList<XSDElementDeclaration> holder = new ArrayList<XSDElementDeclaration>();
+    	if(decl.getTypeDefinition() instanceof XSDComplexTypeDefinition)
+    	{
+			XSDComplexTypeDefinition type = (XSDComplexTypeDefinition) decl.getTypeDefinition();
+			if(type.getContent() instanceof XSDParticle)
+			{
+				XSDParticle particle = (XSDParticle) type.getContent();
+				if (particle.getTerm() instanceof XSDModelGroup) {
+					XSDModelGroup group = (XSDModelGroup) particle
+							.getTerm();
+					EList<XSDParticle> elist = group.getContents();
+					for (XSDParticle pt : elist) {
+						if(pt.getContent() instanceof XSDElementDeclaration)
+						{
+							XSDElementDeclaration elem = (XSDElementDeclaration)pt.getContent();
+							holder.add(elem);
+						}
+					}
+				}
+			}
+    	}
+    	
+    	return holder;
+    }
     
 	public static boolean checkConcept(XSDElementDeclaration decl) {
 		boolean isConcept = false;
