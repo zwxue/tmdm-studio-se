@@ -24,6 +24,7 @@ import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.widgets.Widget;
+import org.talend.mdm.commmon.util.core.ICoreConstants;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 import org.w3c.dom.Node;
 
@@ -42,7 +43,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	private ArrayList<String> accommodations = new ArrayList<String>();
 	
 	private static String config = System.getProperty("user.dir")+"/.treeObjectConfig.xml";
-	private static String rootPath = "/category";
+	private static String rootPath = "/" + ICoreConstants.DEFAULT_CATEGORY_ROOT;
 	private static String DEFAULT_CATALOG = "System";
 	private static String EXPAND_NAME = "Expand";
 	private static String EXPAND_VALUE = "true";
@@ -466,7 +467,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		} else if (theObj instanceof TreeParent
 				&& theObj.getServerRoot() == theObj) {
 			list.add(theObj.getUser().getUsername());
-			list.add("root");
+			list.add(ICoreConstants.DEFAULT_CATEGORY_ROOT );
 			return;
 		} else {
 			list.add(filterOutBlank(theObj.getDisplayName()));
