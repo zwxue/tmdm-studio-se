@@ -43,6 +43,7 @@ import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 import com.amalto.workbench.webservices.WSDeleteView;
@@ -90,8 +91,8 @@ public class AddBrowseItemsWizard extends Wizard{
 	
 	public boolean performFinish() {
 		if (saveConfiguration()) {
-			page.getXObject().fireEvent(IXObjectModelListener.NEED_REFRESH,
-					null, page.getXObject().getParent().getParent());
+//			page.getXObject().fireEvent(IXObjectModelListener.NEED_REFRESH,
+//					null, page.getXObject().getParent().getParent());
 			return true;
 		}
 		
@@ -166,6 +167,17 @@ public class AddBrowseItemsWizard extends Wizard{
             	WSGetView getView = new WSGetView();
             	getView.setWsViewPK(viewPk);
     			port.putView(wrap);
+    			//add node in the root 
+    			TreeParent root=page.getXObject().getServerRoot();
+				TreeObject obj = new TreeObject(
+						browseItem,
+						root,
+						TreeObject.VIEW,
+						viewPk,
+						null   //no storage to save space
+				);    			
+           		TreeParent folder = obj.findServerFolder(obj.getType());
+        		folder.addChild(obj);
     		}
     	}
     }
