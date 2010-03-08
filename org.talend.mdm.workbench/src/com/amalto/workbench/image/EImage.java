@@ -117,6 +117,7 @@ public enum EImage {
 	INFO("icons/info.gif"),
 	JBOSSHOMETAB("icons/jbosshometab.gif"),
 	KEY("icons/key.gif"),
+	KEYS("icons/keys.png"),
 	LABEL("icons/label.png"),
 	LAYOUT_CO("icons/layout_co.gif"),
 	LINKTO_HELP("icons/linkto_help.gif"),
@@ -264,7 +265,6 @@ public enum EImage {
 	EXPAND("icons/expand.png"),
 	COLLAPSE("icons/collapse.png"),
 	REGISTER_WIZ("icons/register_wiz.png"), //$NON-NLS-1$
-	KEYS("icons/keys.png"),
 	BROWSE_MENU("icons/browse_menu.png"),
 	CROSSREF("icons/crossref.png"),
 	HIER_VIEW("icons/hier_view.gif"),
