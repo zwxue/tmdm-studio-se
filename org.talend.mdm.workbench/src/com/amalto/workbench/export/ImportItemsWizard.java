@@ -220,7 +220,7 @@ public class ImportItemsWizard extends Wizard{
 					if (port.existsDataCluster(new WSExistsDataCluster(
 							new WSDataClusterPK(obj.getDisplayName()))).is_true()) {
 						if (!isOverrideAll) {
-							int result = isOveride(obj.getDisplayName());
+							int result = isOveride(obj.getDisplayName(),TreeObject.DATACONTAINER);
 							if (result == IDialogConstants.CANCEL_ID) {
 								return;
 							}
@@ -239,7 +239,7 @@ public class ImportItemsWizard extends Wizard{
 				if (port.existsDataModel(new WSExistsDataModel(
 						new WSDataModelPK(obj.getDisplayName()))).is_true()) {
 					if (!isOverrideAll) {
-						int result = isOveride(obj.getDisplayName());
+						int result = isOveride(obj.getDisplayName(),TreeObject.DATAMODEL_);
 						if (result == IDialogConstants.CANCEL_ID) {
 							return;
 						}
@@ -258,7 +258,7 @@ public class ImportItemsWizard extends Wizard{
 				if (port.existsMenu(new WSExistsMenu(
 						new WSMenuPK(obj.getDisplayName()))).is_true()) {
 					if (!isOverrideAll) {
-						int result = isOveride(obj.getDisplayName());
+						int result = isOveride(obj.getDisplayName(),TreeObject.MENU_);
 						if (result == IDialogConstants.CANCEL_ID) {
 							return;
 						}
@@ -277,7 +277,7 @@ public class ImportItemsWizard extends Wizard{
 				if (port.existsRole(new WSExistsRole(
 						new WSRolePK(obj.getDisplayName()))).is_true()) {
 					if (!isOverrideAll) {
-						int result = isOveride(obj.getDisplayName());
+						int result = isOveride(obj.getDisplayName(),TreeObject.ROLE_);
 						if (result == IDialogConstants.CANCEL_ID) {
 							return;
 						}
@@ -296,7 +296,7 @@ public class ImportItemsWizard extends Wizard{
 				if (port.existsRoutingRule(new WSExistsRoutingRule(
 						new WSRoutingRulePK(obj.getDisplayName()))).is_true()) {
 					if (!isOverrideAll) {
-						int result = isOveride(obj.getDisplayName());
+						int result = isOveride(obj.getDisplayName(),TreeObject.ROUTINGRULE_);
 						if (result == IDialogConstants.CANCEL_ID) {
 							return;
 						}
@@ -315,7 +315,7 @@ public class ImportItemsWizard extends Wizard{
 				if (port.existsStoredProcedure(new WSExistsStoredProcedure(
 						new WSStoredProcedurePK(obj.getDisplayName()))).is_true()) {
 					if (!isOverrideAll) {
-						int result = isOveride(obj.getDisplayName());
+						int result = isOveride(obj.getDisplayName(),TreeObject.STOREDPROCEDURE_);
 						if (result == IDialogConstants.CANCEL_ID) {
 							return;
 						}
@@ -334,7 +334,7 @@ public class ImportItemsWizard extends Wizard{
 				if (port.existsSynchronizationPlan(new WSExistsSynchronizationPlan(
 						new WSSynchronizationPlanPK(obj.getDisplayName()))).is_true()) {
 					if (!isOverrideAll) {
-						int result = isOveride(obj.getDisplayName());
+						int result = isOveride(obj.getDisplayName(),TreeObject.SYNCHRONIZATIONPLAN_);
 						if (result == IDialogConstants.CANCEL_ID) {
 							return;
 						}
@@ -353,7 +353,7 @@ public class ImportItemsWizard extends Wizard{
 				if (port.existsTransformer(new WSExistsTransformer(
 						new WSTransformerPK(obj.getDisplayName()))).is_true()) {
 					if (!isOverrideAll) {
-						int result = isOveride(obj.getDisplayName());
+						int result = isOveride(obj.getDisplayName(),TreeObject.TRANSFORMER_);
 						if (result == IDialogConstants.CANCEL_ID) {
 							return;
 						}
@@ -372,7 +372,7 @@ public class ImportItemsWizard extends Wizard{
 				if (port.existsUniverse(new WSExistsUniverse(
 						new WSUniversePK(obj.getDisplayName()))).is_true()) {
 					if (!isOverrideAll) {
-						int result = isOveride(obj.getDisplayName());
+						int result = isOveride(obj.getDisplayName(),TreeObject.UNIVERSE_);
 						if (result == IDialogConstants.CANCEL_ID) {
 							return;
 						}
@@ -391,7 +391,7 @@ public class ImportItemsWizard extends Wizard{
 				if (port.existsView(new WSExistsView(
 						new WSViewPK(obj.getDisplayName()))).is_true()) {
 					if (!isOverrideAll) {
-						int result = isOveride(obj.getDisplayName());
+						int result = isOveride(obj.getDisplayName(),TreeObject.VIEW_);
 						if (result == IDialogConstants.CANCEL_ID) {
 							return;
 						}
@@ -426,11 +426,11 @@ public class ImportItemsWizard extends Wizard{
 		
 	}
 	
-	private int isOveride(String name) {
+	private int isOveride(String name, String obTypeName) {
 
 		final MessageDialog dialog = new MessageDialog(view.getSite()
 				.getShell(), "Treeobject overwrite confirm", null,
-				"There is already a tree object named " + name
+				"There is already a "+obTypeName+" named " + name
 						+ ".Confirm overwriting?", MessageDialog.QUESTION,
 				new String[] { IDialogConstants.YES_LABEL,
 						IDialogConstants.YES_TO_ALL_LABEL,

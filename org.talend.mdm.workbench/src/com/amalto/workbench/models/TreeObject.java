@@ -55,8 +55,8 @@ public class TreeObject implements IAdaptable {
 	
 	public final static int DATA_CLUSTER_CONTENTS=23;
 	//export folder name
-	public final static String DATACLUSTER_="datacluster";
-	public final static String DATACLUSTER_COTENTS="dataclusterContents";
+	public final static String DATACONTAINER="datacontainer";
+	public final static String DATACONTAINER_COTENTS="datacontainerContents";
 	public final static String DATAMODEL_="datamodel";
 	public final static String DATAMODELTYPES_="datamodelTypes";
 	public final static String PICTURES_="pictures";

@@ -146,8 +146,8 @@ public class ExportItemsWizard extends Wizard {
 		        	//Marshal
 		    		 sw = new StringWriter();
 		    		Marshaller.marshal(cluster, sw);
-		    		writeString(sw.toString(), TreeObject.DATACLUSTER_+"/"+cluster.getName());
-		    		items.add(TreeObject.DATACLUSTER_+"/"+cluster.getName());
+		    		writeString(sw.toString(), TreeObject.DATACONTAINER+"/"+cluster.getName());
+		    		items.add(TreeObject.DATACONTAINER+"/"+cluster.getName());
 //				}
 				obj.setItems(items.toArray(new String[items.size()]));
 				exports.add(obj);
@@ -181,8 +181,8 @@ public class ExportItemsWizard extends Wizard {
 		            	for(String id: wsitem.getIds()){
 		            		uniqueId=uniqueId+"."+id;
 		            	}		            	
-		            	writeString(sw1.toString(), TreeObject.DATACLUSTER_COTENTS+"/"+pk.getPk()+"/"+uniqueId);
-		            	items1.add(TreeObject.DATACLUSTER_COTENTS+"/"+pk.getPk()+"/"+uniqueId);
+		            	writeString(sw1.toString(), TreeObject.DATACONTAINER_COTENTS+"/"+pk.getPk()+"/"+uniqueId);
+		            	items1.add(TreeObject.DATACONTAINER_COTENTS+"/"+pk.getPk()+"/"+uniqueId);
 		            }
 		            TreeObject obj1=new TreeObject("",null, TreeObject.DATA_CLUSTER_CONTENTS,null,null);
 		            obj1.setItems(items1.toArray(new String[items1.size()]));
