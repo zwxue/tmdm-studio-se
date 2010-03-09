@@ -23,7 +23,10 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
+import org.eclipse.jface.text.DocumentEvent;
+import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.text.TextViewer;
@@ -38,12 +41,15 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.HelpEvent;
+import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
@@ -53,6 +59,7 @@ import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
@@ -60,6 +67,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
@@ -77,6 +85,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.amalto.workbench.dialogs.PluginDetailsDialog;
 import com.amalto.workbench.dialogs.ProcessResultsDialog;
+import com.amalto.workbench.dialogs.ResourceSelectDialog;
 import com.amalto.workbench.dialogs.SetupTransformerInputVariablesDialog;
 import com.amalto.workbench.dialogs.VariableDefinitionDialog;
 import com.amalto.workbench.image.EImage;
@@ -88,6 +97,7 @@ import com.amalto.workbench.utils.EInputTemplate;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WidgetUtils;
 import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.BackgroundJobStatusType;
 import com.amalto.workbench.webservices.WSBackgroundJob;
 import com.amalto.workbench.webservices.WSBackgroundJobPK;
@@ -136,6 +146,7 @@ public class TransformerMainPage extends AMainPageV2 {
 	
 	protected Text pluginDescription;
 	protected TextViewer parametersTextViewer;
+	
 	
 	SetupTransformerInputVariablesDialog transformerDialog =null;
 	
@@ -625,14 +636,52 @@ public class TransformerMainPage extends AMainPageV2 {
 	        		markDirty();            		
 	        	}
 
-	        });          
-            refreshData();
+	        });  
+	        //add by ymli.fix the bug:0011830. We can reuse the same ctrl+space in process configs.
+	        parametersTextViewer.getTextWidget().addKeyListener(new KeyListener() {
+				public void keyReleased(KeyEvent event) {
+					System.out.println(event.stateMask == SWT.CTRL);
+					System.out.println("event.stateMask:"+ event.stateMask);
+					System.out.println("event.keyCode:" + event.keyCode);
+					int start = parametersTextViewer.getSelectedRange().x;
+					int end =parametersTextViewer.getSelectedRange().y;
+					int length = parametersTextViewer.getDocument().get().length();
+					//char code = event.character;
+					if (event.stateMask == SWT.CTRL && event.keyCode==17){
+					//if (event.keyCode == SWT.F2){
+						try {
+							ResourceSelectDialog dialog = new ResourceSelectDialog(
+									getSite().getShell(), null,
+									"Select a resource node",
+									ServerView.show().getSite());
+							dialog.setBlockOnOpen(true);
+							dialog.open();
+							String xpath = dialog.getXpath();
+							String textHead = parametersTextViewer.getDocument().get(0, start);
+							String textEnd = parametersTextViewer.getDocument().get(start+end,length-start-end);
+							parametersTextViewer.setDocument(new Document(textHead+ xpath + textEnd));
+							parametersTextViewer.setSelectedRange(start,xpath.length());
+							markDirtyWithoutCommit();
+						} catch (BadLocationException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				
+				@Override
+				public void keyPressed(KeyEvent event) {
+					// TODO Auto-generated method stub
+	
+				}
+					
+			});
+			refreshData();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-    }
+	}
     protected void performSelect(int index){		
 		currentPlugin = index;
 		if (index>=0) {
