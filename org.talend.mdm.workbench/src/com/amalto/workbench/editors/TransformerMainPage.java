@@ -656,7 +656,7 @@ public class TransformerMainPage extends AMainPageV2 {
 									ServerView.show().getSite());
 							dialog.setBlockOnOpen(true);
 							dialog.open();
-							if(dialog.getReturnCode() == Window.OK){
+							if(dialog.getReturnCode() == Window.OK ){
 								String xpath = dialog.getXpath();
 								String textHead = parametersTextViewer.getDocument().get(0, start);
 								String textEnd = parametersTextViewer.getDocument().get(start+end,length-start-end);

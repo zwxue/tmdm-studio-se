@@ -364,7 +364,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 								ServerView.show().getSite());
 						dialog.setBlockOnOpen(true);
 						dialog.open();
-						if (dialog.getReturnCode() == Window.OK) {
+						if (dialog.getReturnCode() == Window.OK ) {
 							String xpath = dialog.getXpath();
 							String textHead = serviceParametersText.getText(0,start - 1);
 							String textEnd = serviceParametersText.getText(end,serviceParametersText.getText().length());
