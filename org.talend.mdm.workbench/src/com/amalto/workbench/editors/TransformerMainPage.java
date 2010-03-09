@@ -640,9 +640,9 @@ public class TransformerMainPage extends AMainPageV2 {
 	        //add by ymli.fix the bug:0011830. We can reuse the same ctrl+space in process configs.
 	        parametersTextViewer.getTextWidget().addKeyListener(new KeyListener() {
 				public void keyReleased(KeyEvent event) {
-					System.out.println(event.stateMask == SWT.CTRL);
+					/*System.out.println(event.stateMask == SWT.CTRL);
 					System.out.println("event.stateMask:"+ event.stateMask);
-					System.out.println("event.keyCode:" + event.keyCode);
+					System.out.println("event.keyCode:" + event.keyCode);*/
 					int start = parametersTextViewer.getSelectedRange().x;
 					int end =parametersTextViewer.getSelectedRange().y;
 					int length = parametersTextViewer.getDocument().get().length();
@@ -656,12 +656,14 @@ public class TransformerMainPage extends AMainPageV2 {
 									ServerView.show().getSite());
 							dialog.setBlockOnOpen(true);
 							dialog.open();
-							String xpath = dialog.getXpath();
-							String textHead = parametersTextViewer.getDocument().get(0, start);
-							String textEnd = parametersTextViewer.getDocument().get(start+end,length-start-end);
-							parametersTextViewer.setDocument(new Document(textHead+ xpath + textEnd));
-							parametersTextViewer.setSelectedRange(start,xpath.length());
-							markDirtyWithoutCommit();
+							if(dialog.getReturnCode() == Window.OK){
+								String xpath = dialog.getXpath();
+								String textHead = parametersTextViewer.getDocument().get(0, start);
+								String textEnd = parametersTextViewer.getDocument().get(start+end,length-start-end);
+								parametersTextViewer.setDocument(new Document(textHead+ xpath + textEnd));
+								parametersTextViewer.setSelectedRange(start,xpath.length());
+								markDirtyWithoutCommit();
+							}
 						} catch (BadLocationException e) {
 							e.printStackTrace();
 						}

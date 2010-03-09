@@ -344,35 +344,37 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             	}
             }); 
             //add by ymli.fix the bug:0011830. We can reuse the same ctrl+space in trigger configs.
-            serviceParametersText.addKeyListener(new KeyListener() {
-				
+			serviceParametersText.addKeyListener(new KeyListener() {
+
 				public void keyReleased(KeyEvent event) {
-					/*System.out.println(event.stateMask == SWT.CTRL );
-					System.out.println("eevent.stateMask:"+event.stateMask);
-					System.out.println("event.keyCode:"+event.keyCode);*/
-					//System.out.println("SWT.CTRL:"+SWT.CTRL);
+					/*
+					 * System.out.println(event.stateMask == SWT.CTRL );
+					 * System.out.println("eevent.stateMask:"+event.stateMask);
+					 * System.out.println("event.keyCode:"+event.keyCode);
+					 */
+					// System.out.println("SWT.CTRL:"+SWT.CTRL);
 					int start = serviceParametersText.getSelection().x;
 					int end = serviceParametersText.getSelection().y;
-					if(event.stateMask == SWT.CTRL && event.keyCode==17){
-					//if(event.keyCode == SWT.F2){
-							ResourceSelectDialog dialog = new ResourceSelectDialog(
-									getSite().getShell(),
-									treeParent.getParent(),
-									"Select a resource node",
-									ServerView.show().getSite()
-							);
-							dialog.setBlockOnOpen(true);
-							dialog.open();
+					if (event.stateMask == SWT.CTRL && event.keyCode == 17) {
+						// if(event.keyCode == SWT.F2){
+						ResourceSelectDialog dialog = new ResourceSelectDialog(
+								getSite().getShell(),
+								treeParent.getParent(),
+								"Select a resource node", 
+								ServerView.show().getSite());
+						dialog.setBlockOnOpen(true);
+						dialog.open();
+						if (dialog.getReturnCode() == Window.OK) {
 							String xpath = dialog.getXpath();
-							String textHead =serviceParametersText.getText(0,start-1);
-							String textEnd = serviceParametersText.getText(end, serviceParametersText.getText().length());
-							serviceParametersText.setText(textHead+xpath+textEnd);
-							serviceParametersText.setSelection(start,start+xpath.length());
+							String textHead = serviceParametersText.getText(0,start - 1);
+							String textEnd = serviceParametersText.getText(end,serviceParametersText.getText().length());
+							serviceParametersText.setText(textHead + xpath+ textEnd);
+							serviceParametersText.setSelection(start, start+ xpath.length());
 							markDirtyWithoutCommit();
+						}
 					}
 				}
-		
-				
+
 				@Override
 				public void keyPressed(KeyEvent e) {
 				}
