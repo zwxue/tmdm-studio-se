@@ -1,6 +1,8 @@
 package com.amalto.webapp.v3.hierarchical.util;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -8,16 +10,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.amalto.webapp.core.bean.ComboItemBean;
 import com.amalto.webapp.core.bean.Configuration;
+import com.amalto.webapp.core.bean.ListRange;
 import com.amalto.webapp.core.dwr.CommonDWR;
 import com.amalto.webapp.core.util.Util;
 import com.amalto.webapp.util.webservices.WSDataModelPK;
 import com.amalto.webapp.util.webservices.WSGetBusinessConcepts;
 import com.amalto.webapp.util.webservices.WSGetItemsPivotIndex;
 import com.amalto.webapp.util.webservices.WSGetItemsPivotIndexPivotWithKeysTypedContentEntry;
+import com.amalto.webapp.util.webservices.WSGetView;
+import com.amalto.webapp.util.webservices.WSGetViewPKs;
 import com.amalto.webapp.util.webservices.WSLinkedHashMap;
 import com.amalto.webapp.util.webservices.WSStringArray;
 import com.amalto.webapp.util.webservices.WSStringPredicate;
+import com.amalto.webapp.util.webservices.WSView;
+import com.amalto.webapp.util.webservices.WSViewPK;
 import com.amalto.webapp.util.webservices.WSWhereAnd;
 import com.amalto.webapp.util.webservices.WSWhereCondition;
 import com.amalto.webapp.util.webservices.WSWhereItem;
@@ -337,6 +345,72 @@ public class HierarchicalUtil {
 		//equip
 		criterion.setLimit(limit);
 		
+	}
+	
+	// remove the concept which user can not access from ListRange
+	public static void synchronizeConecptList(ListRange listRange,
+			Map<String, String> map) {
+		Object[] ObjectArray = listRange.getData();
+		ArrayList<ComboItemBean> comboItemBeanList = new ArrayList<ComboItemBean>();
+		for (int i = 0; i < ObjectArray.length; i++) {
+			ComboItemBean comboItemBean = (ComboItemBean) ObjectArray[i];
+			comboItemBeanList.add(comboItemBean);
+		}
+		Collection collection = map.values();
+		int x = comboItemBeanList.size();
+		ArrayList<ComboItemBean> removeList = new ArrayList<ComboItemBean>();
+		for (int i = 0; i < x; i++) {
+			ComboItemBean comboItemBean = comboItemBeanList.get(i);
+			boolean flag = false;
+			for (Iterator iterator = collection.iterator(); iterator.hasNext();) {
+				String concept = (String) iterator.next();
+				if (comboItemBean.getValue().equals(concept)) {
+					flag = !flag;
+				}
+			}
+			if (!flag) {
+				removeList.add(comboItemBean);
+			}
+		}
+		for (Iterator iterator = removeList.iterator(); iterator.hasNext();) {
+			ComboItemBean comboItemBean = (ComboItemBean) iterator.next();
+			comboItemBeanList.remove(comboItemBean);
+		}
+		ObjectArray = comboItemBeanList.toArray();
+		listRange.setData(ObjectArray);
+
+	}
+
+	// get the concept which user can access
+	public static Map<String, String> getViewsList(String language)
+			throws RemoteException, Exception {
+		Configuration config = Configuration.getInstance(true);
+		String model = config.getModel();
+		String[] businessConcept = Util.getPort().getBusinessConcepts(
+				new WSGetBusinessConcepts(new WSDataModelPK(model)))
+				.getStrings();
+		ArrayList<String> bc = new ArrayList<String>();
+		for (int i = 0; i < businessConcept.length; i++) {
+			bc.add(businessConcept[i]);
+		}
+		WSViewPK[] wsViewsPK = Util.getPort().getViewPKs(
+				new WSGetViewPKs("Browse_items.*")).getWsViewPK();
+		String[] names = new String[wsViewsPK.length];
+		TreeMap<String, String> views = new TreeMap<String, String>();
+//		Pattern p = Pattern.compile(".*\\[" + language.toUpperCase()
+//				+ ":(.*?)\\].*", Pattern.DOTALL);
+		for (int i = 0; i < wsViewsPK.length; i++) {
+			WSView wsview = Util.getPort().getView(new WSGetView(wsViewsPK[i]));
+			String concept = wsview.getName().replaceAll("Browse_items_", "")
+					.replaceAll("#.*", "");
+			names[i] = wsViewsPK[i].getPk();
+			if (bc.contains(concept)) {
+//				views.put(wsview.getName(), p.matcher(wsview.getDescription())
+//						.replaceAll("$1"));
+				views.put(wsview.getName(), concept); // ctoum 2010-01-10
+			}
+		}
+		return CommonDWR.getMapSortedByValue(views);
 	}
 		
 

@@ -23,6 +23,17 @@
         <display-name>HierarchicalTreeLoadServlet</display-name>
         <servlet-class>com.amalto.webapp.v3.hierarchical.servlet.HierarchicalTreeLoadServlet</servlet-class>
     </servlet>
+    
+    <servlet>
+        <servlet-name>DerivedHierarchyTreeLoadServlet</servlet-name>
+        <display-name>DerivedHierarchyTreeLoadServlet</display-name>
+        <servlet-class>com.amalto.webapp.v3.hierarchical.servlet.DerivedHierarchyTreeLoadServlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>DerivedHierarchyTreeLoadServlet</servlet-name>
+        <url-pattern>/secure/DerivedHierarchyTreeLoadServlet</url-pattern>
+    </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>HierarchicalTreeLoadServlet</servlet-name>

@@ -82,8 +82,8 @@ public class HierarchicalDWR {
 			}
 			listRange.setData(comboItem.toArray());
 			listRange.setTotalSize(comboItem.size());
-			Map<String, String> map = this.getViewsList(language);
-			this.synchronizeConecptList(listRange, map);
+			Map<String, String> map = HierarchicalUtil.getViewsList(language);
+			HierarchicalUtil.synchronizeConecptList(listRange, map);
 			return listRange;
 		} catch (Exception e) {
 			String err = "Unable to get Data Objects List! ";
@@ -93,71 +93,7 @@ public class HierarchicalDWR {
 		}
 	}
 
-	// remove the concept which user can not access from ListRange
-	private void synchronizeConecptList(ListRange listRange,
-			Map<String, String> map) {
-		Object[] ObjectArray = listRange.getData();
-		ArrayList<ComboItemBean> comboItemBeanList = new ArrayList<ComboItemBean>();
-		for (int i = 0; i < ObjectArray.length; i++) {
-			ComboItemBean comboItemBean = (ComboItemBean) ObjectArray[i];
-			comboItemBeanList.add(comboItemBean);
-		}
-		Collection collection = map.values();
-		int x = comboItemBeanList.size();
-		ArrayList<ComboItemBean> removeList = new ArrayList<ComboItemBean>();
-		for (int i = 0; i < x; i++) {
-			ComboItemBean comboItemBean = comboItemBeanList.get(i);
-			boolean flag = false;
-			for (Iterator iterator = collection.iterator(); iterator.hasNext();) {
-				String concept = (String) iterator.next();
-				if (comboItemBean.getValue().equals(concept)) {
-					flag = !flag;
-				}
-			}
-			if (!flag) {
-				removeList.add(comboItemBean);
-			}
-		}
-		for (Iterator iterator = removeList.iterator(); iterator.hasNext();) {
-			ComboItemBean comboItemBean = (ComboItemBean) iterator.next();
-			comboItemBeanList.remove(comboItemBean);
-		}
-		ObjectArray = comboItemBeanList.toArray();
-		listRange.setData(ObjectArray);
-
-	}
-
-	// get the concept which user can access
-	private Map<String, String> getViewsList(String language)
-			throws RemoteException, Exception {
-		Configuration config = Configuration.getInstance(true);
-		String model = config.getModel();
-		String[] businessConcept = Util.getPort().getBusinessConcepts(
-				new WSGetBusinessConcepts(new WSDataModelPK(model)))
-				.getStrings();
-		ArrayList<String> bc = new ArrayList<String>();
-		for (int i = 0; i < businessConcept.length; i++) {
-			bc.add(businessConcept[i]);
-		}
-		WSViewPK[] wsViewsPK = Util.getPort().getViewPKs(
-				new WSGetViewPKs("Browse_items.*")).getWsViewPK();
-		String[] names = new String[wsViewsPK.length];
-		TreeMap<String, String> views = new TreeMap<String, String>();
-//		Pattern p = Pattern.compile(".*\\[" + language.toUpperCase()
-//				+ ":(.*?)\\].*", Pattern.DOTALL);
-		for (int i = 0; i < wsViewsPK.length; i++) {
-			WSView wsview = Util.getPort().getView(new WSGetView(wsViewsPK[i]));
-			String concept = wsview.getName().replaceAll("Browse_items_", "")
-					.replaceAll("#.*", "");
-			names[i] = wsViewsPK[i].getPk();
-			if (bc.contains(concept)) {
-//				views.put(wsview.getName(), p.matcher(wsview.getDescription())
-//						.replaceAll("$1"));
-				views.put(wsview.getName(), concept); // ctoum 2010-01-10
-			}
-		}
-		return CommonDWR.getMapSortedByValue(views);
-	}
+	
 
     public ListRange getPossiblePivotsList(int start, int limit,String sort,String dir,String regex) throws Exception{
 
