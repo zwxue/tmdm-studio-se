@@ -52,8 +52,10 @@ import org.talend.core.prefs.ITalendCorePrefConstants;
 import org.talend.designer.runprocess.IProcessor;
 import org.talend.designer.runprocess.ProcessorException;
 import org.talend.designer.runprocess.ProcessorUtilities;
+import org.talend.mdm.engines.client.Activator;
 import org.talend.mdm.engines.client.i18n.Messages;
 import org.talend.mdm.engines.client.proxy.ProxyUtil;
+import org.talend.mdm.engines.client.ui.preferences.MDMPreferenceInitializer;
 import org.talend.mdm.engines.client.ui.preferences.MDMPreferencePage;
 import org.talend.repository.documentation.ArchiveFileExportOperationFullPath;
 import org.talend.repository.documentation.ExportFileResource;
@@ -237,8 +239,10 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         // ProxyRepositoryFactory proxyRepositoryFactory = ProxyRepositoryFactory.getInstance();
         // try {
         // listServerSapgo = proxyRepositoryFactory.getSpagoBiServer();
-        listServerSapgo = MDMServerHelper.parse(new MDMPreferencePage().getPreferenceStore().getString(
-                SpagoBiServer.SPAGOBI_SERVER));
+
+        listServerSapgo = MDMServerHelper.parse(Activator.getDefault().getPreferenceStore().getString(
+                MDMPreferenceInitializer.MDM_SERVER));
+
         if (listServerSapgo != null && !listServerSapgo.isEmpty()) {
             Iterator<SpagoBiServer> iterator = listServerSapgo.iterator();
             while (iterator.hasNext()) {
@@ -246,6 +250,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                 listEngine.add(spagoBiServer.getShortDescription());
             }
         }
+
         // } catch (PersistenceException e) {
         // displayErrorDialog(e.getMessage());
         // }
@@ -435,7 +440,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         List<SpagoBiServer> listServerSapgo = null;
 
         listServerSapgo = MDMServerHelper.parse(new MDMPreferencePage().getPreferenceStore().getString(
-                SpagoBiServer.SPAGOBI_SERVER));
+                MDMPreferenceInitializer.MDM_SERVER));
         if (listServerSapgo != null && !listServerSapgo.isEmpty()) {
             Iterator<SpagoBiServer> iterator = listServerSapgo.iterator();
             while (iterator.hasNext()) {
