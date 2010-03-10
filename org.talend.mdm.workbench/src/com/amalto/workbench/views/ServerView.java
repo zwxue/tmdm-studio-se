@@ -51,8 +51,10 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
@@ -74,6 +76,8 @@ import com.amalto.workbench.actions.ServerRefreshAction;
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.dialogs.ErrorExceptionDialog;
+import com.amalto.workbench.editors.XObjectBrowser;
+import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.export.ExportItemsAction;
 import com.amalto.workbench.export.ImportItemsAction;
 import com.amalto.workbench.image.EImage;
@@ -84,6 +88,7 @@ import com.amalto.workbench.models.TreeObjectTransfer;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.ServerTreeContentProvider;
 import com.amalto.workbench.providers.ServerTreeLabelProvider;
+import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.providers.XtentisServerObjectsRetriever;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
@@ -96,7 +101,6 @@ import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSGetDataCluster;
 import com.amalto.workbench.webservices.WSLogout;
 import com.amalto.workbench.webservices.XtentisPort;
-import com.amalto.workbench.widgets.RepositoryCheckTreeViewer;
 
 /**
  * The view allowing administration of the "+IConstants.TALEND+" Server
@@ -734,6 +738,25 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				TreeParent root = serverRoot.getParent();
 
 				LocalTreeObjectRepository.getInstance().switchOffListening();
+				//add by ymli; fix the bug:0011948: 
+				//All the tabs related to an MDM server connection should go away when loging out 
+				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+				int length = page.getEditors().length;
+				String version = "";
+				int j = 0;
+				 for(int i = 0;i<length;i++){
+					 IEditorPart part = page.getEditors()[i-j];
+					if(part instanceof XObjectBrowser)
+						version = ((TreeObject)((XObjectBrowserInput) part.getEditorInput()).getModel()).getUniverse();
+					 else if(part instanceof XObjectEditor)
+						 version = ((XObjectEditor)part).getInitialXObject().getServerRoot().getUniverse();
+					 if(serverRoot.getUniverse().equals(version)){
+						 page.closeEditor(part, false);
+						 j++;
+					 }
+					 }
+		            
+				 
 				serverRoot.getParent().removeChild(serverRoot);
 				ServerView.this.viewer.refresh();
 				
