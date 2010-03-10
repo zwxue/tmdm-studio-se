@@ -70,4 +70,8 @@ public class TEMBrandingService implements IBrandingService {
         }
         return brandingConfigure;
     }
+
+    public String getAcronym() {
+        return "tme";
+    }
 }
