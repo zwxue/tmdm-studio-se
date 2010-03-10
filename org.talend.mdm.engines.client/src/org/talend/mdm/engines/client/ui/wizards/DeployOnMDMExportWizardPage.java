@@ -56,7 +56,6 @@ import org.talend.mdm.engines.client.Activator;
 import org.talend.mdm.engines.client.i18n.Messages;
 import org.talend.mdm.engines.client.proxy.ProxyUtil;
 import org.talend.mdm.engines.client.ui.preferences.MDMPreferenceInitializer;
-import org.talend.mdm.engines.client.ui.preferences.MDMPreferencePage;
 import org.talend.repository.documentation.ArchiveFileExportOperationFullPath;
 import org.talend.repository.documentation.ExportFileResource;
 import org.talend.repository.model.RepositoryNode;
@@ -439,7 +438,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
         List<SpagoBiServer> listServerSapgo = null;
 
-        listServerSapgo = MDMServerHelper.parse(new MDMPreferencePage().getPreferenceStore().getString(
+        listServerSapgo = MDMServerHelper.parse(Activator.getDefault().getPreferenceStore().getString(
                 MDMPreferenceInitializer.MDM_SERVER));
         if (listServerSapgo != null && !listServerSapgo.isEmpty()) {
             Iterator<SpagoBiServer> iterator = listServerSapgo.iterator();
