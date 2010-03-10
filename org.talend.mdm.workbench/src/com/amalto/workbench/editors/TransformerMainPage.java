@@ -669,8 +669,7 @@ public class TransformerMainPage extends AMainPageV2 {
 						}
 					}
 				}
-				
-				@Override
+								
 				public void keyPressed(KeyEvent event) {
 					// TODO Auto-generated method stub
 	

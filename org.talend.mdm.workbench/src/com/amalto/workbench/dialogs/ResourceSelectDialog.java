@@ -226,7 +226,7 @@ public class ResourceSelectDialog extends Dialog {
 				changeDomTree(tree);
 				domViewer.refresh(tree);
 			}
-			@Override
+			
 			public void widgetDefaultSelected(SelectionEvent e) {
 			}
 		});
