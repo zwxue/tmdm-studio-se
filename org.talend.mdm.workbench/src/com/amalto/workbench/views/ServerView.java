@@ -30,7 +30,9 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
@@ -93,13 +95,16 @@ import com.amalto.workbench.providers.XtentisServerObjectsRetriever;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.PasswordUtil;
+import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSGetCurrentUniverse;
 import com.amalto.workbench.webservices.WSGetDataCluster;
 import com.amalto.workbench.webservices.WSLogout;
+import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.XtentisPort;
 
 /**
@@ -170,7 +175,14 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     public TreeParent getRoot(){
     	return contentProvider.getInvisibleRoot();
     }
-    
+    public XtentisPort getPort(){
+    	try {
+			return Util.getPort(contentProvider.getInvisibleRoot().getServerRoot());
+		} catch (XtentisException e) {
+			e.printStackTrace();
+		}
+		return null;
+    }
     
     private DragSource createTreeDragSource(){
 		DragSource dragSource = new DragSource(viewer.getTree(), DND.DROP_MOVE | DND.DROP_COPY);
@@ -483,6 +495,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		createTreeDropTarget();
 		makeActions();
 		hookContextMenu();
+		hookTreeAction();
 		hookDoubleClickAction();
 		hookKeyPressAction();
 		contributeToActionBars();
@@ -512,7 +525,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                 String password =PasswordUtil.decryptPassword(server.selectSingleNode("password").getText());
                 String universe =server.selectSingleNode("universe").getText();
                 if(!("".equalsIgnoreCase(url)||"".equalsIgnoreCase(user)||"".equalsIgnoreCase(password)))
-                	initServerTree(url, user, password, universe);
+                	initServerTreeParent(url, user, password, universe);
+//                	initServerTree(url, user, password, universe);
             }
         }
 //		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -819,6 +833,24 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					}
 					return;
 				}// if action
+				if (xo.getType() == TreeObject._SERVER_) {
+					if(xo.getServerRoot().getChildren().length==0){
+					String universe = "";
+					String username = "";
+					String password = "";
+					if (xo.getWsObject().toString().contains("/")) {
+						universe = xo.getWsObject().toString().split("/")[0];
+						username = xo.getWsObject().toString().split("/")[1]
+								.split(":")[0];
+						password = xo.getWsObject().toString().split("/")[1]
+								.split(":")[1];
+					} else {
+						username = xo.getWsObject().toString().split(":")[0];
+						password = xo.getWsObject().toString().split(":")[1];
+					}
+					initServerTree(xo.getWsKey().toString(), username, password, universe);
+					xo.getServerRoot().getParent().removeChild(xo.getServerRoot());
+				}}
 				if(xo.getType()== TreeObject.WORKFLOW) return;
 				if (xo.getType() == TreeObject.SUBSCRIPTION_ENGINE||(xo.getType()==TreeObject.DATA_CLUSTER&&xo.isXObject() )|| xo.getType()== TreeObject.WORKFLOW_PROCESS)
 					browseViewAction.run();
@@ -827,7 +859,20 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			}
 		});
 	}
-
+	private void hookTreeAction() {
+		viewer.addTreeListener(new ITreeViewerListener() {
+			
+			@Override
+			public void treeExpanded(TreeExpansionEvent event) {
+				
+			}
+			
+			@Override
+			public void treeCollapsed(TreeExpansionEvent event) {
+				
+			}
+		});
+	}
 	private void hookKeyPressAction() {
 		viewer.getTree().addKeyListener(new KeyListener() {
 
@@ -932,10 +977,35 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                 TreeObject._SERVER_,
                 url,
                 ("".equals(universe)? "" : universe+"/")+username+":"+(password==null?"":password)
-        );     
+        ); 
+		UserInfo user=new UserInfo();
+		WSUniverse wUuniverse=null;
+		XtentisPort port;
+		try {
+			port = Util.getPort(new URL(url), universe, username, password);
+			wUuniverse=port.getCurrentUniverse(new WSGetCurrentUniverse());
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (XtentisException e) {
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}		
+		user.setUsername(username);
+		user.setPassword(password);
+		user.setServerUrl(url);
+		user.setUniverse(universe);
+		user.setWsUuniverse(wUuniverse);
+
+		serverRoot.setUser(user);
+		if("".equalsIgnoreCase(universe))
+			universe="HEAD";
+		serverRoot.setDisplayName(url+" ["+universe+"]  "+username);
+		TreeObject obj=new TreeObject("11", serverRoot, TreeObject._UNVISIBLE, serverRoot.getWsKey(), serverRoot.getWsObject());
+//		serverRoot.addChild(obj)
         TreeParent invisibleRoot =getTreeContentProvider().getInvisibleRoot();
-        serverRoot.addChild(new TreeObject());
         invisibleRoot.addChild(serverRoot);
+        
         getViewer().refresh();
 	}
 	public void initServerTree(String url,String username,String password,String universe) {
@@ -1009,7 +1079,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 //            	//MessageDialog.openError(view.getViewer().getControl().getShell(), "Wrong universe", "Can't find the Version,please try again!");
 //            	return;
 //            }
-            TreeParent	serverRoot = retriever.getServerRoot();
+				TreeParent serverRoot = retriever.getServerRoot();
             TreeParent invisibleRoot =getTreeContentProvider().getInvisibleRoot();
             TreeObject[] serverRoots = invisibleRoot.getChildren();
             

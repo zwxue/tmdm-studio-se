@@ -35,6 +35,7 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.PasswordUtil;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.webservices.WSUniversePK;
 
 public class LoginDialog extends Dialog {
 	
@@ -56,15 +57,17 @@ public class LoginDialog extends Dialog {
 	private Group authenticationGroup;
 
 	private Document logininfoDocument;
+	private WSUniversePK[] universes;
 
 
 	/**
 	 * @param parentShell
 	 */
-	public LoginDialog(SelectionListener caller, Shell parentShell, String title) {
+	public LoginDialog(SelectionListener caller, Shell parentShell, String title,WSUniversePK[] universes) {
 		super(parentShell);
 		this.caller = caller;
 		this.title = title;
+		this.universes=universes;
 		setDefaultImage(ImageCache.getCreatedImage(EImage.TALEND_PICTO.getPath()));
 	}
 
@@ -184,10 +187,12 @@ public class LoginDialog extends Dialog {
 				new GridData(SWT.FILL,SWT.CENTER,true,false,1,1)
 			);
 			((GridData)universeCombo.getLayoutData()).widthHint = 300;
-//			for (Iterator<String> iter = universes.iterator(); iter.hasNext(); ) {
-//				String host = iter.next();
-//				universeCombo.add(host);	
-//			}
+			if(universes!=null)
+			for (int i = 0; i < universes.length; i++) {
+				String host = universes[i].getPk();
+				universeCombo.add(host);	
+				
+			}
 			universeCombo.select(0);
 		}
 	   return composite;

@@ -50,6 +50,7 @@ public class TreeObject implements IAdaptable {
 	public final static int JOB_REGISTRY=31;
 	public final static int JOB=32;
 	
+	public final static int _UNVISIBLE=99; //for first login use
 	public final static int _ACTION_ = 100;
 	public final static int _WIZARD_ = 101;
 	
@@ -146,7 +147,13 @@ public class TreeObject implements IAdaptable {
 		this.type = type;
 	}
 	public TreeParent getServerRoot() {
-		if (this.serverRoot == null && this instanceof TreeParent) return (TreeParent)this; //we are the server root
+		if (this.serverRoot == null){
+			if(this.type==TreeObject._SERVER_)
+				return (TreeParent)this; //we are the server root
+			else if(this.type==TreeObject._ROOT_)
+				if(((TreeParent)this).getChildren().length>0)
+					return (TreeParent) ((TreeParent)this).getChildren()[0]; //we are the root
+		}
 		return serverRoot;
 	}
 	public void setServerRoot(TreeParent serverRoot) {

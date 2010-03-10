@@ -81,7 +81,7 @@ public class EditXObjectAction extends Action{
 				xobject = (TreeObject)((IStructuredSelection)selection).getFirstElement();
 			}
             
-            if (!xobject.isXObject()) return;
+            if (xobject==null||!xobject.isXObject()) return;
             
 //          Access to server and get port
 			XtentisPort port = Util.getPort(

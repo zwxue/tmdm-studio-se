@@ -1,5 +1,7 @@
 package com.amalto.workbench.actions;
 
+import java.rmi.RemoteException;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.events.SelectionEvent;
@@ -10,11 +12,15 @@ import com.amalto.workbench.dialogs.LoginDialog;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.views.ServerView;
+import com.amalto.workbench.webservices.WSGetUniversePKs;
+import com.amalto.workbench.webservices.WSUniversePK;
+import com.amalto.workbench.webservices.XtentisPort;
 
 public class ServerLoginAction extends Action implements SelectionListener{
 
 	private LoginDialog dialog = null;
 	private ServerView view = null;
+	private WSUniversePK[] universes;
 	
 	
 	public ServerLoginAction(ServerView view) {
@@ -30,7 +36,16 @@ public class ServerLoginAction extends Action implements SelectionListener{
 	public void run() {
 		try {
 			super.run();
-			dialog = new LoginDialog(this,view.getSite().getShell(),IConstants.TALEND+" Login");			
+			WSUniversePK[] universePKs = null;
+			try {
+				XtentisPort port = view.getPort();
+				if(port!=null)
+					universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+			universes=universePKs;
+			dialog = new LoginDialog(this,view.getSite().getShell(),IConstants.TALEND+" Login",universes);			
 			dialog.setBlockOnOpen(true);		
 			dialog.open();
 		} catch (Exception e) {
