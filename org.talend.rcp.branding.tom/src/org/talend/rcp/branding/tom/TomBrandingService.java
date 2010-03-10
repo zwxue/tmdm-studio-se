@@ -57,8 +57,14 @@ public class TomBrandingService implements IBrandingService {
         final URL url = FileLocator.toFileURL(FileLocator.find(b, new Path("resources/license.txt"), null)); //$NON-NLS-1$
         return url;
     }
-	public IBrandingConfiguration getBrandingConfiguration() {
-		return new DefaultBrandingConfiguraton();
-	}
-    
+
+    public IBrandingConfiguration getBrandingConfiguration() {
+        return new DefaultBrandingConfiguraton();
+    }
+
+    @Override
+    public String getAcronym() {
+        return "tmc";
+    }
+
 }
