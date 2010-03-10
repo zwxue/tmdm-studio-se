@@ -12,15 +12,20 @@
 // ============================================================================
 package com.amalto.workbench.register;
 
+import java.io.IOException;
+import java.math.BigInteger;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.rmi.RemoteException;
 
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.browser.IWebBrowser;
 
 import com.amalto.workbench.register.proxy.RegisterUserPortTypeProxy;
 import com.amalto.workbench.service.GlobalServiceRegister;
 import com.amalto.workbench.service.branding.IBrandingService;
-
 
 /**
  * DOC mhirt class global comment. Detailled comment <br/>
@@ -35,10 +40,10 @@ public class RegisterManagement {
     // REGISTRATION_DONE = 1 : registration OK
     private static final double REGISTRATION_DONE = 2;
 
-    public static boolean register(String email, String country, boolean isProxyEnabled, String proxyHost,
-            String proxyPort, String designerVersion, String projectLanguage, String osName, String osVersion,
-            String javaVersion, long totalMemory, Long memRAM, int nbProc) throws Exception {
-        boolean result = false;
+    public static boolean register(String email, String country, boolean isProxyEnabled, String proxyHost, String proxyPort,
+            String designerVersion, String projectLanguage, String osName, String osVersion, String javaVersion,
+            long totalMemory, Long memRAM, int nbProc) throws Exception {
+        BigInteger result = BigInteger.valueOf(-1);
 
         // if proxy is enabled
         if (isProxyEnabled) {
@@ -56,18 +61,47 @@ public class RegisterManagement {
         RegisterUserPortTypeProxy proxy = new RegisterUserPortTypeProxy();
         proxy.setEndpoint("http://www.talend.com/TalendRegisterWS/registerws.php"); //$NON-NLS-1$
         try {
-        	IBrandingService brandingService = (IBrandingService) GlobalServiceRegister.getDefault().getService(
-                       IBrandingService.class);
-            result = proxy.registerUserWithAllUserInformations(email, country, designerVersion, brandingService.getShortProductName(), projectLanguage, osName, osVersion, javaVersion, totalMemory + "", memRAM //$NON-NLS-1$
+            IBrandingService brandingService = (IBrandingService) GlobalServiceRegister.getDefault().getService(
+                    IBrandingService.class);
+            result = proxy.registerUserWithAllUserInformationsAndReturnId(email, country, designerVersion, brandingService
+                    .getShortProductName(), projectLanguage, osName, osVersion, javaVersion, totalMemory + "", memRAM //$NON-NLS-1$
                     + "", nbProc + ""); //$NON-NLS-1$ //$NON-NLS-2$
-            if (result) {
+            if (result.signum() > 0) {
                 PlatformUI.getPreferenceStore().setValue("REGISTRATION_DONE", 1); //$NON-NLS-1$
+                validateRegistration(brandingService.getAcronym(), result.longValue());
             }
         } catch (RemoteException e) {
             decrementTry();
             throw (e);
         }
-        return result;
+        return result.signum() > 0;
+    }
+
+    public static void validateRegistration(String acronym, long registNumber) throws Exception {
+        URL registURL = null;
+        try {
+            registURL = new URL("http://www.talend.com/designer_post_reg.php?prd=" + acronym + "&cid=" + registNumber);
+            PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(registURL);
+        } catch (PartInitException e) {
+            // if no default browser (like on linux), try to open directly with firefox.
+            try {
+                Runtime.getRuntime().exec("firefox " + registURL.toString());
+            } catch (IOException e2) {
+                if (PlatformUI.getWorkbench().getBrowserSupport().isInternalWebBrowserAvailable()) {
+                    IWebBrowser browser;
+                    try {
+                        browser = PlatformUI.getWorkbench().getBrowserSupport().createBrowser("registrationId");
+                        browser.openURL(registURL);
+                    } catch (PartInitException e1) {
+                        throw e1;
+                    }
+                } else {
+                    throw e;
+                }
+            }
+        } catch (MalformedURLException e) {
+            throw e;
+        }
     }
 
     /**

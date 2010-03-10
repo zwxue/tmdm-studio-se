@@ -12,6 +12,9 @@
 // ============================================================================
 package com.amalto.workbench.register.proxy;
 
+import java.math.BigInteger;
+import java.rmi.RemoteException;
+
 /**
  * DOC mhirt class global comment. Detailled comment <br/>
  * 
@@ -36,8 +39,7 @@ public class RegisterUserPortTypeProxy implements IRegisterUserPortType {
      */
     private void initRegisterUserPortTypeProxy() {
         try {
-            registerUserPortType = (new RegisterUserLocator())
-                    .getRegisterUserPort();
+            registerUserPortType = (new RegisterUserLocator()).getRegisterUserPort();
             if (registerUserPortType != null) {
                 if (endpoint != null) {
                     ((javax.xml.rpc.Stub) registerUserPortType)._setProperty("javax.xml.rpc.service.endpoint.address", //$NON-NLS-1$
@@ -69,8 +71,7 @@ public class RegisterUserPortTypeProxy implements IRegisterUserPortType {
     public void setEndpoint(String endpoint) {
         this.endpoint = endpoint;
         if (registerUserPortType != null) {
-            ((javax.xml.rpc.Stub) registerUserPortType)
-                    ._setProperty("javax.xml.rpc.service.endpoint.address", endpoint); //$NON-NLS-1$
+            ((javax.xml.rpc.Stub) registerUserPortType)._setProperty("javax.xml.rpc.service.endpoint.address", endpoint); //$NON-NLS-1$
         }
     }
 
@@ -89,7 +90,7 @@ public class RegisterUserPortTypeProxy implements IRegisterUserPortType {
     /*
      * (non-Javadoc)
      * 
-     * @see IRegisterUserPortType#registerUser(java.lang.String,
+     * @see org.talend.repository.registeruser.proxy.IRegisterUserPortType#registerUser(java.lang.String,
      * java.lang.String, java.lang.String)
      */
     public boolean registerUser(java.lang.String email, java.lang.String country, java.lang.String designerversion)
@@ -103,7 +104,7 @@ public class RegisterUserPortTypeProxy implements IRegisterUserPortType {
     /*
      * (non-Javadoc)
      * 
-     * @see IRegisterUserPortType#registerUserWithProductName(java.lang.String,
+     * @see org.talend.repository.registeruser.proxy.IRegisterUserPortType#registerUserWithProductName(java.lang.String,
      * java.lang.String, java.lang.String, java.lang.String)
      */
     public boolean registerUserWithProductName(java.lang.String email, java.lang.String country,
@@ -117,19 +118,36 @@ public class RegisterUserPortTypeProxy implements IRegisterUserPortType {
     /*
      * (non-Javadoc)
      * 
-     * @see IRegisterUserPortType#registerUserWithAllUserInformations(java.lang.String,
-     * java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String,
-     * java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+     * @see
+     * org.talend.repository.registeruser.proxy.IRegisterUserPortType#registerUserWithAllUserInformations(java.lang.
+     * String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String,
+     * java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
      */
     public boolean registerUserWithAllUserInformations(java.lang.String email, java.lang.String country,
             java.lang.String designerversion, java.lang.String productname, java.lang.String projectLanguage,
-            java.lang.String osName, java.lang.String osVersion, java.lang.String javaVersion,
-            java.lang.String totalMemory, java.lang.String memRAM, java.lang.String nbProc)
-            throws java.rmi.RemoteException {
+            java.lang.String osName, java.lang.String osVersion, java.lang.String javaVersion, java.lang.String totalMemory,
+            java.lang.String memRAM, java.lang.String nbProc) throws java.rmi.RemoteException {
         if (registerUserPortType == null) {
             initRegisterUserPortTypeProxy();
         }
         return registerUserPortType.registerUserWithAllUserInformations(email, country, designerversion, productname,
+                projectLanguage, osName, osVersion, javaVersion, totalMemory, memRAM, nbProc);
+    }
+
+    public UserRegistration[] listUsers() throws RemoteException {
+        if (registerUserPortType == null) {
+            initRegisterUserPortTypeProxy();
+        }
+        return registerUserPortType.listUsers();
+    }
+
+    public BigInteger registerUserWithAllUserInformationsAndReturnId(String email, String country, String designerversion,
+            String productname, String projectLanguage, String osName, String osVersion, String javaVersion, String totalMemory,
+            String memRAM, String nbProc) throws RemoteException {
+        if (registerUserPortType == null) {
+            initRegisterUserPortTypeProxy();
+        }
+        return registerUserPortType.registerUserWithAllUserInformationsAndReturnId(email, country, designerversion, productname,
                 projectLanguage, osName, osVersion, javaVersion, totalMemory, memRAM, nbProc);
     }
 }

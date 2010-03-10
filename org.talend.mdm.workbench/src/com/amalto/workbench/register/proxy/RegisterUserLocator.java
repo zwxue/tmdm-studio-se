@@ -16,8 +16,7 @@ package com.amalto.workbench.register.proxy;
  * DOC mhirt class global comment. Detailled comment <br/>
  * 
  */
-public class RegisterUserLocator extends org.apache.axis.client.Service implements
-        IRegisterUser {
+public class RegisterUserLocator extends org.apache.axis.client.Service implements IRegisterUser {
 
     public RegisterUserLocator() {
     }
@@ -26,8 +25,7 @@ public class RegisterUserLocator extends org.apache.axis.client.Service implemen
         super(config);
     }
 
-    public RegisterUserLocator(java.lang.String wsdlLoc, javax.xml.namespace.QName sName)
-            throws javax.xml.rpc.ServiceException {
+    public RegisterUserLocator(java.lang.String wsdlLoc, javax.xml.namespace.QName sName) throws javax.xml.rpc.ServiceException {
         super(wsdlLoc, sName);
     }
 
@@ -64,8 +62,7 @@ public class RegisterUserLocator extends org.apache.axis.client.Service implemen
      * 
      * @see IRegisterUser#getRegisterUserPort()
      */
-    public IRegisterUserPortType getRegisterUserPort()
-            throws javax.xml.rpc.ServiceException {
+    public IRegisterUserPortType getRegisterUserPort() throws javax.xml.rpc.ServiceException {
         java.net.URL endpoint;
         try {
             endpoint = new java.net.URL(registerUserPortAddress);
@@ -78,13 +75,11 @@ public class RegisterUserLocator extends org.apache.axis.client.Service implemen
     /*
      * (non-Javadoc)
      * 
-     * @see IRegisterUser#getRegisterUserPort(java.net.URL)
+     * @see org.talend.repository.registeruser.proxy.IRegisterUser#getRegisterUserPort(java.net.URL)
      */
-    public IRegisterUserPortType getRegisterUserPort(java.net.URL portAddress)
-            throws javax.xml.rpc.ServiceException {
+    public IRegisterUserPortType getRegisterUserPort(java.net.URL portAddress) throws javax.xml.rpc.ServiceException {
         try {
-            RegisterUserBindingStub stub = new RegisterUserBindingStub(
-                    portAddress, this);
+            RegisterUserBindingStub stub = new RegisterUserBindingStub(portAddress, this);
             stub.setPortName(getRegisterUserPortWSDDServiceName());
             return stub;
         } catch (org.apache.axis.AxisFault e) {
@@ -108,10 +103,8 @@ public class RegisterUserLocator extends org.apache.axis.client.Service implemen
     @Override
     public java.rmi.Remote getPort(Class serviceEndpointInterface) throws javax.xml.rpc.ServiceException {
         try {
-            if (IRegisterUserPortType.class
-                    .isAssignableFrom(serviceEndpointInterface)) {
-                RegisterUserBindingStub stub = new RegisterUserBindingStub(
-                        new java.net.URL(registerUserPortAddress), this);
+            if (IRegisterUserPortType.class.isAssignableFrom(serviceEndpointInterface)) {
+                RegisterUserBindingStub stub = new RegisterUserBindingStub(new java.net.URL(registerUserPortAddress), this);
                 stub.setPortName(getRegisterUserPortWSDDServiceName());
                 return stub;
             }
@@ -171,8 +164,7 @@ public class RegisterUserLocator extends org.apache.axis.client.Service implemen
     /**
      * Set the endpoint address for the specified port name.
      */
-    public void setEndpointAddress(java.lang.String portName, java.lang.String address)
-            throws javax.xml.rpc.ServiceException {
+    public void setEndpointAddress(java.lang.String portName, java.lang.String address) throws javax.xml.rpc.ServiceException {
 
         if ("RegisterUserPort".equals(portName)) { //$NON-NLS-1$
             setRegisterUserPortEndpointAddress(address);

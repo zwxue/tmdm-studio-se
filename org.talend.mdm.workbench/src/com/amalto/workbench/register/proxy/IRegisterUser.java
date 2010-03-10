@@ -31,8 +31,7 @@ public interface IRegisterUser extends javax.xml.rpc.Service {
      * @return
      * @throws javax.xml.rpc.ServiceException
      */
-    public IRegisterUserPortType getRegisterUserPort()
-            throws javax.xml.rpc.ServiceException;
+    public IRegisterUserPortType getRegisterUserPort() throws javax.xml.rpc.ServiceException;
 
     /**
      * DOC mhirt Comment method "getRegisterUserPort".
@@ -41,6 +40,5 @@ public interface IRegisterUser extends javax.xml.rpc.Service {
      * @return
      * @throws javax.xml.rpc.ServiceException
      */
-    public IRegisterUserPortType getRegisterUserPort(java.net.URL portAddress)
-            throws javax.xml.rpc.ServiceException;
+    public IRegisterUserPortType getRegisterUserPort(java.net.URL portAddress) throws javax.xml.rpc.ServiceException;
 }
