@@ -25,7 +25,7 @@
 		<function name="fn:escapeUri(stringURI,esc-res)" help="Example: escape-uri(&quot;http://example.com/test#car&quot;, true()) Result: &quot;http%3A%2F%2Fexample.com%2Ftest#car&quot; Example: escape-uri(&quot;http://example.com/test#car&quot;, false()) Result: &quot;http://example.com/test#car&quot; Example: escape-uri (&quot;http://example.com/~bébé&quot;, false()) Result: &quot;http://example.com/~b%C3%A9b%C3%A9&quot;"/>
 		<function name="fn:contains(string1,string2)" help="Returns true if string1 contains string2, otherwise it returns false Example: contains(&quot;XML&quot;,&quot;XM&quot;) Result: true"/>
 		<function name="fn:startsWith(string1,string2)" help="Converts the string argument to lower-case  Example: lower-case(&quot;The XML&quot;) Result: &quot;the xml&quot;"/>
-		<function name="fn:endsWith(string1,string2)" help="Returns true if string1 ends with string2, otherwise it returns false Example: ends-with(&quot;XML&quot;,&quot;X&quot;) Result: false"/>
+		<function name="fn:ends-With(string1,string2)" help="Returns true if string1 ends with string2, otherwise it returns false Example: ends-with(&quot;XML&quot;,&quot;X&quot;) Result: false"/>
 		<function name="fn:substringBefore(string1,string2)" help="Returns the start of string1 before string2 occurs in it Example: substring-before(&quot;12/10&quot;,&quot;/&quot;) Result: &quot;12&quot;"/>
 		<function name="fn:substringAfter(string1,string2)" help="Returns the remainder of string1 after string2 occurs in it Example: substring-after(&quot;12/10&quot;,&quot;/&quot;) Result: &quot;10&quot;"/>
 		<function name="fn:matches(string,pattern)" help="Returns true if the string argument matches the pattern, otherwise, it returns false Example: matches(&quot;Merano&quot;, &quot;ran&quot;) Result: true"/>
@@ -33,79 +33,79 @@
 		<function name="fn:tokenize(string,pattern)" help="Example: tokenize(&quot;XPath is fun&quot;, &quot;\s+&quot;) Result: (&quot;XPath&quot;, &quot;is&quot;, &quot;fun&quot;)"/>		
 	</category>	
 	<category name="Boolean">
-		<function name="boolean(arg)" help="Returns a boolean value for a number, string, or node-set"/>
-		<function name="not(arg)" help="The argument is first reduced to a boolean value by applying the boolean() function. Returns true if the boolean value is false, and false if the boolean value is true Example: not(true()) Result: false"/>
-		<function name="true()" help="Returns the boolean value true Example: true() Result: true"/>
-		<function name="false()" help="Returns the boolean value false Example: false() Result: false"/>		
+		<function name="fn:getBoolean(arg)" help="Returns a boolean value for a number, string, or node-set"/>
+		<function name="fn:not(arg)" help="The argument is first reduced to a boolean value by applying the boolean() function. Returns true if the boolean value is false, and false if the boolean value is true Example: not(true()) Result: false"/>
+		<function name="fn:getTrue()" help="Returns the boolean value true Example: true() Result: true"/>
+		<function name="fn:getFalse()" help="Returns the boolean value false Example: false() Result: false"/>		
 	</category>
 	<category name="anyURI">
-		<function name="resolve-uri(relative,base)" help=""/>
+		<function name="fn:resolveUri(relative,base)" help=""/>
 	</category>
 	
 	<catrgory name="Durations, Dates and Times">
-		<function name="dateTime(date,time)" help="Converts the arguments to a date and a time"/>
-		<function name="years-from-duration(datetimedur)" help="Returns an integer that represents the years component in the canonical lexical representation of the value of the argument"/>
-		<function name="months-from-duration(datetimedur)" help="Returns an integer that represents the months component in the canonical lexical representation of the value of the argument"/>
-		<function name="days-from-duration(datetimedur)" help="Returns an integer that represents the days component in the canonical lexical representation of the value of the argument"/>
-		<function name="hours-from-duration(datetimedur)" help="Returns an integer that represents the hours component in the canonical lexical representation of the value of the argument"/>
-		<function name="minutes-from-duration(datetimedur)" help="Returns an integer that represents the minutes component in the canonical lexical representation of the value of the argument"/>
-		<function name="seconds-from-duration(datetimedur)" help="Returns a decimal that represents the seconds component in the canonical lexical representation of the value of the argument"/>
-		<function name="year-from-dateTime(datetime)" help="Returns an integer that represents the year component in the localized value of the argument. Example: year-from-dateTime(xs:dateTime(&quot;2005-01-10T12:30-04:10&quot;))Result: 2005"/>
-		<function name="month-from-dateTime(datetime)" help="Returns an integer that represents the month component in the localized value of the argument. Example: month-from-dateTime(xs:dateTime(&quot;2005-01-10T12:30-04:10&quot;))Result: 01"/>
-		<function name="day-from-dateTime(datetime)" help="Returns an integer that represents the day component in the localized value of the argument. Example: day-from-dateTime(xs:dateTime(&quot;2005-01-10T12:30-04:10&quot;))Result: 10"/>
-		<function name="hours-from-dateTime(datetime)" help="Returns an integer that represents the hours component in the localized value of the argument. Example: hours-from-dateTime(xs:dateTime(&quot;2005-01-10T12:30-04:10&quot;))Result: 12"/>
-		<function name="minutes-from-dateTime(datetime)" help="Returns an integer that represents the minutes component in the localized value of the argument. Example: minutes-from-dateTime(xs:dateTime(&quot;2005-01-10T12:30-04:10&quot;))Result: 30"/>
-		<function name="seconds-from-dateTime(datetime)" help="Returns a decimal that represents the seconds component in the localized value of the argument.Example: seconds-from-dateTime(xs:dateTime(&quot;2005-01-10T12:30:00-04:10&quot;))Result: 0"/>
-		<function name="timezone-from-dateTime(datetime)" help="Returns the time zone component of the argument if any"/>
-		<function name="year-from-date(date)" help="Returns an integer that represents the year in the localized value of the argument. Example: year-from-date(xs:date(&quot;2005-04-23&quot;)),Result: 2005"/>
-		<function name="month-from-date(date)" help="Returns an integer that represents the month in the localized value of the argument. Example: month-from-date(xs:date(&quot;2005-04-23&quot;)),Result: 4"/>
-		<function name="day-from-date(date)" help="Returns an integer that represents the day in the localized value of the argument. Example: day-from-date(xs:date(&quot;2005-04-23&quot;)),Result: 23"/>
-		<function name="timezone-from-date(date)" help="Returns the time zone component of the argument if any"/>
-		<function name="hours-from-time(time)" help="Returns an integer that represents the hours component in the localized value of the argument. Example: hours-from-time(xs:time(&quot;10:22:00&quot;)), Result: 10"/>
-		<function name="minutes-from-time(time)" help="Returns an integer that represents the minutes component in the localized value of the argument. Example: minutes-from-time(xs:time(&quot;10:22:00&quot;)) Result: 22"/>
-		<function name="seconds-from-time(time)" help="Returns an integer that represents the seconds component in the localized value of the argument. Example: seconds-from-time(xs:time(&quot;10:22:00&quot;)) Result: 0"/>
-		<function name="timezone-from-time(time)" help="Returns the time zone component of the argument if any"/>
-		<function name="adjust-dateTime-to-timezone(datetime,timezone)" help="If the timezone argument is empty, it returns a dateTime without a timezone. Otherwise, it returns a dateTime with a timezone"/>
-		<function name="adjust-date-to-timezone(date,timezone)" help="If the timezone argument is empty, it returns a date without a timezone. Otherwise, it returns a date with a timezone"/>
-		<function name="adjust-time-to-timezone(time,timezone)" help="If the timezone argument is empty, it returns a time without a timezone. Otherwise, it returns a time with a timezone"/>
+		<function name="fn:dateTime(date,time)" help="Converts the arguments to a date and a time"/>
+		<function name="fn:yearsFromDuration(datetimedur)" help="Returns an integer that represents the years component in the canonical lexical representation of the value of the argument"/>
+		<function name="fn:monthsFromDuration(datetimedur)" help="Returns an integer that represents the months component in the canonical lexical representation of the value of the argument"/>
+		<function name="fn:daysFromDuration(datetimedur)" help="Returns an integer that represents the days component in the canonical lexical representation of the value of the argument"/>
+		<function name="fn:hoursFromDuration(datetimedur)" help="Returns an integer that represents the hours component in the canonical lexical representation of the value of the argument"/>
+		<function name="fn:minutesFromDuration(datetimedur)" help="Returns an integer that represents the minutes component in the canonical lexical representation of the value of the argument"/>
+		<function name="fn:secondsFromDuration(datetimedur)" help="Returns a decimal that represents the seconds component in the canonical lexical representation of the value of the argument"/>
+		<function name="fn:yearFromDateTime(datetime)" help="Returns an integer that represents the year component in the localized value of the argument. Example: year-from-dateTime(xs:dateTime(&quot;2005-01-10T12:30-04:10&quot;))Result: 2005"/>
+		<function name="fn:monthFromDateTime(datetime)" help="Returns an integer that represents the month component in the localized value of the argument. Example: month-from-dateTime(xs:dateTime(&quot;2005-01-10T12:30-04:10&quot;))Result: 01"/>
+		<function name="fn:dayFromDateTime(datetime)" help="Returns an integer that represents the day component in the localized value of the argument. Example: day-from-dateTime(xs:dateTime(&quot;2005-01-10T12:30-04:10&quot;))Result: 10"/>
+		<function name="fn:hoursFromDateTime(datetime)" help="Returns an integer that represents the hours component in the localized value of the argument. Example: hours-from-dateTime(xs:dateTime(&quot;2005-01-10T12:30-04:10&quot;))Result: 12"/>
+		<function name="fn:minutesFromDateTime(datetime)" help="Returns an integer that represents the minutes component in the localized value of the argument. Example: minutes-from-dateTime(xs:dateTime(&quot;2005-01-10T12:30-04:10&quot;))Result: 30"/>
+		<function name="fn:secondsFromDateTime(datetime)" help="Returns a decimal that represents the seconds component in the localized value of the argument.Example: seconds-from-dateTime(xs:dateTime(&quot;2005-01-10T12:30:00-04:10&quot;))Result: 0"/>
+		<function name="fn:timezoneFromDateTime(datetime)" help="Returns the time zone component of the argument if any"/>
+		<function name="fn:yearFromDate(date)" help="Returns an integer that represents the year in the localized value of the argument. Example: year-from-date(xs:date(&quot;2005-04-23&quot;)),Result: 2005"/>
+		<function name="fn:monthFromDate(date)" help="Returns an integer that represents the month in the localized value of the argument. Example: month-from-date(xs:date(&quot;2005-04-23&quot;)),Result: 4"/>
+		<function name="fn:dayFromDate(date)" help="Returns an integer that represents the day in the localized value of the argument. Example: day-from-date(xs:date(&quot;2005-04-23&quot;)),Result: 23"/>
+		<function name="fn:timezoneFromDate(date)" help="Returns the time zone component of the argument if any"/>
+		<function name="fn:hoursFromTime(time)" help="Returns an integer that represents the hours component in the localized value of the argument. Example: hours-from-time(xs:time(&quot;10:22:00&quot;)), Result: 10"/>
+		<function name="fn:minutesFromTime(time)" help="Returns an integer that represents the minutes component in the localized value of the argument. Example: minutes-from-time(xs:time(&quot;10:22:00&quot;)) Result: 22"/>
+		<function name="fn:secondsFromTime(time)" help="Returns an integer that represents the seconds component in the localized value of the argument. Example: seconds-from-time(xs:time(&quot;10:22:00&quot;)) Result: 0"/>
+		<function name="fn:timezoneFromTime(time)" help="Returns the time zone component of the argument if any"/>
+		<function name="fn:adjustDateTimeToTimezone(datetime,timezone)" help="If the timezone argument is empty, it returns a dateTime without a timezone. Otherwise, it returns a dateTime with a timezone"/>
+		<function name="fn:adjustDateToTimezone(date,timezone)" help="If the timezone argument is empty, it returns a date without a timezone. Otherwise, it returns a date with a timezone"/>
+		<function name="fn:adjustTimeToTimezone(time,timezone)" help="If the timezone argument is empty, it returns a time without a timezone. Otherwise, it returns a time with a timezone"/>
 		
 	</catrgory>
 	<category name="QNames">
 		<function name="QName()" help=""/>
-		<function name="local-name-from-QName()" help=""/>
-		<function name="namespace-uri-from-QName()" help=""/>
-		<function name="namespace-uri-for-prefix()" help=""/>
-		<function name="in-scope-prefixes()" help=""/>
-		<function name="resolve-QName()" help=""/>
+		<function name="fn:localNameFromQName()" help=""/>
+		<function name="fn:namespaceUriFromQName()" help=""/>
+		<function name="fn:namespaceUriForPrefix()" help=""/>
+		<function name="fn:inScopePrefixes()" help=""/>
+		<function name="fn:resolveQName()" help=""/>
 	</category>
 	
 	<category name="Nodes">
-		<function name="name()" help="Returns the name of the current node or the first node in the specified node set"/>
-		<function name="name(nodeset)" help="Returns the name of the current node or the first node in the specified node set"/>
-		<function name="local-name()" help="Returns the name of the current node or the first node in the specified node set - without the namespace prefix"/>
-		<function name="local-name(nodeset)" help="Returns the name of the current node or the first node in the specified node set - without the namespace prefix"/>
-		<function name="namespace-uri()" help="Returns the namespace URI of the current node or the first node in the specified node set"/>
-		<function name="namespace-uri(nodeset)" help="Returns the namespace URI of the current node or the first node in the specified node set"/>
-		<function name="lang(lang)" help="Returns true if the language of the current node matches the language of the specified language. Example: Lang(&quot;en&quot;) is true for  &lt;p xml:lang=&quot;en&quot;>...&lt;/p&gt; Example: Lang(&quot;de&quot;) is false for &lt;p xml:lang=&quot;en&quot;>...&lt;/p&gt;"/>
-		<function name="root()" help="Returns the root of the tree to which the current node or the specified belongs. This will usually be a document node"/>
-		<function name="root(node)" help="Returns the root of the tree to which the current node or the specified belongs. This will usually be a document node"/>
+		<function name="fn:name()" help="Returns the name of the current node or the first node in the specified node set"/>
+		<function name="fn:name(nodeset)" help="Returns the name of the current node or the first node in the specified node set"/>
+		<function name="fn:localName()" help="Returns the name of the current node or the first node in the specified node set - without the namespace prefix"/>
+		<function name="fn:localName(nodeset)" help="Returns the name of the current node or the first node in the specified node set - without the namespace prefix"/>
+		<function name="fn:namespaceUri()" help="Returns the namespace URI of the current node or the first node in the specified node set"/>
+		<function name="fn:namespaceUri(nodeset)" help="Returns the namespace URI of the current node or the first node in the specified node set"/>
+		<function name="fn:lang(lang)" help="Returns true if the language of the current node matches the language of the specified language. Example: Lang(&quot;en&quot;) is true for  &lt;p xml:lang=&quot;en&quot;>...&lt;/p&gt; Example: Lang(&quot;de&quot;) is false for &lt;p xml:lang=&quot;en&quot;>...&lt;/p&gt;"/>
+		<function name="fn:root()" help="Returns the root of the tree to which the current node or the specified belongs. This will usually be a document node"/>
+		<function name="fn:root(node)" help="Returns the root of the tree to which the current node or the specified belongs. This will usually be a document node"/>
 	</category>
 	
 	<category name="Sequences">
-		<function name="index-of((item,item,...),searchitem)" help="Returns the positions within the sequence of items that are equal to the searchitem argument. Example: index-of ((15, 40, 25, 40, 10), 40) Result: (2, 4) Example: index-of ((&quot;a&quot;, &quot;dog&quot;, &quot;and&quot;, &quot;a&quot;, &quot;duck&quot;), &quot;a&quot;) Result (1, 4) Example: index-of ((15, 40, 25, 40, 10), 18) Result: ()"/>
+		<function name="fn:indexOf((item,item,...),searchitem)" help="Returns the positions within the sequence of items that are equal to the searchitem argument. Example: index-of ((15, 40, 25, 40, 10), 40) Result: (2, 4) Example: index-of ((&quot;a&quot;, &quot;dog&quot;, &quot;and&quot;, &quot;a&quot;, &quot;duck&quot;), &quot;a&quot;) Result (1, 4) Example: index-of ((15, 40, 25, 40, 10), 18) Result: ()"/>
 		<function name="fn:remove((item,item,...),position)" help="Returns a new sequence constructed from the value of the item arguments - with the item specified by the position argument removed. Example: remove((&quot;ab&quot;, &quot;cd&quot;, &quot;ef&quot;), 0. Result: (&quot;ab&quot;, &quot;cd&quot;, &quot;ef&quot;)"/>
-		<function name="empty(item,item,...)" help="Returns true if the value of the arguments IS an empty sequence, otherwise it returns false. Example: empty(remove((&quot;ab&quot;, &quot;cd&quot;), 1)) Result: false"/>
-		<function name="exists(item,item,...)" help="Returns true if the value of the arguments IS NOT an empty sequence, otherwise it returns falseExample: exists(remove((&quot;ab&quot;), 1)) Result: false"/>
-		<function name="distinct-values((item,item,...),collation)" help="Returns only distinct (different) values. Example: distinct-values((1, 2, 3, 1, 2)) Result: (1, 2, 3)"/>
-		<function name="insert-before((item,item,...),pos,inserts)" help="Returns a new sequence constructed from the value of the item arguments - with the value of the inserts argument inserted in the position specified by the pos argument. Example: insert-before((&quot;ab&quot;, &quot;cd&quot;), 0, &quot;gh&quot;) Result: (&quot;gh&quot;, &quot;ab&quot;, &quot;cd&quot;); Example: insert-before((&quot;ab&quot;, &quot;cd&quot;), 1, &quot;gh&quot;) Result: (&quot;gh&quot;, &quot;ab&quot;, &quot;cd&quot;); Example: insert-before((&quot;ab&quot;, &quot;cd&quot;), 2, &quot;gh&quot;) Result: (&quot;ab&quot;, &quot;gh&quot;, &quot;cd&quot;); Example: insert-before((&quot;ab&quot;, &quot;cd&quot;), 5, &quot;gh&quot;) Result: (&quot;ab&quot;, &quot;cd&quot;, &quot;gh&quot;)"/>
-		<function name="reverse((item,item,...))" help="Returns the reversed order of the items specified. Example: reverse((&quot;ab&quot;, &quot;cd&quot;, &quot;ef&quot;)) Result: (&quot;ef&quot;, &quot;cd&quot;, &quot;ab&quot;); Example: reverse((&quot;ab&quot;)) Result: (&quot;ab&quot;)"/>
-		<function name="subsequence((item,item,...),start,len)" help="Returns a sequence of items from the position specified by the start argument and continuing for the number of items specified by the len argument. The first item is located at position 1. Example: subsequence(($item1, $item2, $item3,...), 3) Result: ($item3, ...); Example: subsequence(($item1, $item2, $item3, ...), 2, 2) Result: ($item2, $item3)"/>
-		<function name="unordered((item,item,...))" help="Returns the items in an implementation dependent order"/>
+		<function name="fn:empty(item,item,...)" help="Returns true if the value of the arguments IS an empty sequence, otherwise it returns false. Example: empty(remove((&quot;ab&quot;, &quot;cd&quot;), 1)) Result: false"/>
+		<function name="fn:exists(item,item,...)" help="Returns true if the value of the arguments IS NOT an empty sequence, otherwise it returns falseExample: exists(remove((&quot;ab&quot;), 1)) Result: false"/>
+		<function name="fn:distinctValues((item,item,...),collation)" help="Returns only distinct (different) values. Example: distinct-values((1, 2, 3, 1, 2)) Result: (1, 2, 3)"/>
+		<function name="fn:insertBefore((item,item,...),pos,inserts)" help="Returns a new sequence constructed from the value of the item arguments - with the value of the inserts argument inserted in the position specified by the pos argument. Example: insert-before((&quot;ab&quot;, &quot;cd&quot;), 0, &quot;gh&quot;) Result: (&quot;gh&quot;, &quot;ab&quot;, &quot;cd&quot;); Example: insert-before((&quot;ab&quot;, &quot;cd&quot;), 1, &quot;gh&quot;) Result: (&quot;gh&quot;, &quot;ab&quot;, &quot;cd&quot;); Example: insert-before((&quot;ab&quot;, &quot;cd&quot;), 2, &quot;gh&quot;) Result: (&quot;ab&quot;, &quot;gh&quot;, &quot;cd&quot;); Example: insert-before((&quot;ab&quot;, &quot;cd&quot;), 5, &quot;gh&quot;) Result: (&quot;ab&quot;, &quot;cd&quot;, &quot;gh&quot;)"/>
+		<function name="fn:reverse((item,item,...))" help="Returns the reversed order of the items specified. Example: reverse((&quot;ab&quot;, &quot;cd&quot;, &quot;ef&quot;)) Result: (&quot;ef&quot;, &quot;cd&quot;, &quot;ab&quot;); Example: reverse((&quot;ab&quot;)) Result: (&quot;ab&quot;)"/>
+		<function name="fn:subsequence((item,item,...),start,len)" help="Returns a sequence of items from the position specified by the start argument and continuing for the number of items specified by the len argument. The first item is located at position 1. Example: subsequence(($item1, $item2, $item3,...), 3) Result: ($item3, ...); Example: subsequence(($item1, $item2, $item3, ...), 2, 2) Result: ($item2, $item3)"/>
+		<function name="fn:unordered((item,item,...))" help="Returns the items in an implementation dependent order"/>
 	</category>
 	<category name="Test the Cardinality of Sequences ">
-		<function name="zero-or-one(item,item,...)"  help="Returns the argument if it contains zero or one items, otherwise it raises an error"/>
-		<function name="one-or-more(item,item,...)"  help="Returns the argument if it contains one or more items, otherwise it raises an error"/>
-		<function name="exactly-one(item,item,...)"  help="Returns the argument if it contains exactly one item, otherwise it raises an error"/>
+		<function name="fn:zeroOrOne(item,item,...)"  help="Returns the argument if it contains zero or one items, otherwise it raises an error"/>
+		<function name="fn:oneOrMore(item,item,...)"  help="Returns the argument if it contains one or more items, otherwise it raises an error"/>
+		<function name="fn:exactlyOne(item,item,...)"  help="Returns the argument if it contains exactly one item, otherwise it raises an error"/>
 		
 		
 	</category>
@@ -113,34 +113,34 @@
 	
 	<category name="Equals">
 		
-		<function name="deep-equal(param1,param2,collation)"  help="Returns true if param1 and param2 are deep-equal to each other, otherwise it returns false"/>
+		<function name="fn:deepEqual(param1,param2,collation)"  help="Returns true if param1 and param2 are deep-equal to each other, otherwise it returns false"/>
 		
 	</category>
 	<category name="Aggregate ">
-		<function name="count((item,item,...))"  help="Returns the count of nodes"/>
-		<function name="avg((arg,arg,...))"  help="Returns the average of the argument values. Example: avg((1,2,3) Result: 2"/>
-		<function name="max((arg,arg,...))"  help="Returns the argument that is greater than the others. Example: max((1,2,3)) Result: 3; Example: max((&quot;a&quot;, &quot;k&quot;)) Result: &quot;k&quot;"/>
-		<function name="min((arg,arg,...))"  help="Returns the argument that is less than the others. Example: min((1,2,3)) Result: 1; Example: min((&quot;a&quot;, &quot;k&quot;)) Result: &quot;a&quot;"/>
-		<function name="sum(arg,arg,...)"  help="Returns the sum of the numeric value of each node in the specified node-set"/>
+		<function name="fn:count((item,item,...))"  help="Returns the count of nodes"/>
+		<function name="fn:avg((arg,arg,...))"  help="Returns the average of the argument values. Example: avg((1,2,3) Result: 2"/>
+		<function name="fn:max((arg,arg,...))"  help="Returns the argument that is greater than the others. Example: max((1,2,3)) Result: 3; Example: max((&quot;a&quot;, &quot;k&quot;)) Result: &quot;k&quot;"/>
+		<function name="fn:min((arg,arg,...))"  help="Returns the argument that is less than the others. Example: min((1,2,3)) Result: 1; Example: min((&quot;a&quot;, &quot;k&quot;)) Result: &quot;a&quot;"/>
+		<function name="fn:sum(arg,arg,...)"  help="Returns the sum of the numeric value of each node in the specified node-set"/>
 		<function name=""  help=""/>
 	</category>
 	<category name="Generate Sequences ">
-		<function name="id((string,string,...),node)"  help=" 	Returns a sequence of element nodes that have an ID value equal to the value of one or more of the values specified in the string argument"/>
-		<function name="idref((string,string,...),node)"  help="Returns a sequence of element or attribute nodes that have an IDREF value equal to the value of one or more of the values specified in the string argument"/>
-		<function name="doc(URI)"  help=""/>
-		<function name="doc-available(URI)"  help="Returns true if the doc() function returns a document node, otherwise it returns false"/>
-		<function name="collection()"  help=""/>
-		<function name="collection(string)"  help=""/>
+		<function name="fn:id((string,string,...),node)"  help=" 	Returns a sequence of element nodes that have an ID value equal to the value of one or more of the values specified in the string argument"/>
+		<function name="fn:idref((string,string,...),node)"  help="Returns a sequence of element or attribute nodes that have an IDREF value equal to the value of one or more of the values specified in the string argument"/>
+		<function name="fn:doc(URI)"  help=""/>
+		<function name="fn:docAvailable(URI)"  help="Returns true if the doc() function returns a document node, otherwise it returns false"/>
+		<function name="fn:collection()"  help=""/>
+		<function name="fn:collection(string)"  help=""/>
 	</category>
 	
 	<category name="Context">
-		<function name="position()"  help="Returns the index position of the node that is currently being processed. Example: //book[position()&gt;=3] Result: Selects the first three book elements"/>
-		<function name="last()"  help="Returns the number of items in the processed node list. Example: //book[last()] Result: Selects the last book element"/>
-		<function name="current-dateTime()"  help="Returns the current dateTime (with timezone)"/>
-		<function name="current-date()"  help="Returns the current date (with timezone)"/>
-		<function name="current-time()"  help="Returns the current date (with timezone)"/>
-		<function name="implicit-timezone()"  help="Returns the value of the implicit timezone"/>
-		<function name="default-collation()"  help="Returns the value of the default collation"/>
-		<function name="static-base-uri()"  help="Returns the value of the base-uri"/>
+		<function name="fn:position()"  help="Returns the index position of the node that is currently being processed. Example: //book[position()&gt;=3] Result: Selects the first three book elements"/>
+		<function name="fn:last()"  help="Returns the number of items in the processed node list. Example: //book[last()] Result: Selects the last book element"/>
+		<function name="fn:currentDateTime()"  help="Returns the current dateTime (with timezone)"/>
+		<function name="fn:currentDate()"  help="Returns the current date (with timezone)"/>
+		<function name="fn:currentTime()"  help="Returns the current date (with timezone)"/>
+		<function name="fn:implicitTimezone()"  help="Returns the value of the implicit timezone"/>
+		<function name="fn:defaultCollation()"  help="Returns the value of the default collation"/>
+		<function name="fn:staticBaseUri()"  help="Returns the value of the base-uri"/>
 	</category>
 </xpath>
