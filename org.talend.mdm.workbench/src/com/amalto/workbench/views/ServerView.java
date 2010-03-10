@@ -752,6 +752,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				TreeParent root = serverRoot.getParent();
 
 				LocalTreeObjectRepository.getInstance().switchOffListening();
+				LocalTreeObjectRepository.getInstance().setLazySaveStrategy(false, (TreeParent)serverRoot);
 				//add by ymli; fix the bug:0011948: 
 				//All the tabs related to an MDM server connection should go away when loging out 
 				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();

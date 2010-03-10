@@ -26,7 +26,6 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.widgets.Widget;
 import org.talend.mdm.commmon.util.core.ICoreConstants;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
-import org.w3c.dom.Node;
 
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
@@ -80,6 +79,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
     	public String pwd;
     	public Document doc;
     	public XtentisPort port;
+    	public boolean  state;
     	
     	public Credential(String user, String pwd, Document doc)
     	{
@@ -93,35 +93,44 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	{
 		 view = vw;
 		 XtentisPort port = null;
+		 Document doc = null;
+		 SAXReader saxReader = new SAXReader();
 		 try {
 			port = Util.getPort(new URL(ur), "", user, pwd);
 			WSCategoryData category = port.getMDMCategory(null);
-			SAXReader saxReader = new SAXReader();
-			Document doc = saxReader.read(new StringReader(category.getCategorySchema()));
-			Credential credal = credentials.get(UnifyUrl(ur));
-			if(credal == null)
-			{
-				credal	= new Credential(user, pwd, doc);
-			}
-
-			credal.port = port;
-			credal.doc = doc;
-			credentials.put(UnifyUrl(ur), credal);
-			
+			doc = saxReader.read(new StringReader(category.getCategorySchema()));
+			saveCredential(ur, user, pwd, doc, port, true);
 			doUpgrade(UnifyUrl(ur));
 		} catch (Exception e) {
 			e.printStackTrace();
 			String empty = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-			empty +="<category/>";
+			empty +="<" + ICoreConstants.DEFAULT_CATEGORY_ROOT + "/>";
 			WSCategoryData newData = new WSCategoryData();
 			newData.setCategorySchema(empty);
 			try {
-				port.getMDMCategory(newData);
-			} catch (RemoteException e1) {
-				e1.printStackTrace();
+				newData = port.getMDMCategory(newData);
+				doc =  saxReader.read(new StringReader(newData.getCategorySchema()));
+				saveCredential(ur, user, pwd, doc, port, true);
+			} catch (Exception e1) {
+				saveCredential(ur, user, pwd, doc, port, false);
 			}
 			
 		}
+	}
+	
+	private void saveCredential(String ur, String user, String pwd, Document doc, XtentisPort port, boolean stat)
+	{
+		Credential credal = credentials.get(UnifyUrl(ur));
+		if(credal == null)
+		{
+			credal	= new Credential(user, pwd, doc);
+		}
+		
+		credal.port = port;
+		if(credal.doc == null)
+		  credal.doc = doc;
+		credal.state = stat;
+		credentials.put(UnifyUrl(ur), credal);
 	}
 	
 	private void doUpgrade(String url)
@@ -195,6 +204,8 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	public void handleEvent(int type, TreeObject parent, TreeObject child)
 	{
 		if (internalCheck) return;
+		String url = UnifyUrl(child.getServerRoot().getWsKey().toString());
+		if(credentials.get(url).state == false)return;
 		
 		try
 		{
@@ -210,8 +221,6 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		catch(Exception ex)
 		{
 			ex.printStackTrace();
-			String url = UnifyUrl(UnifyUrl(parent.getServerRoot().getWsKey().toString()));
-			startUp(view, url, credentials.get(url).user, credentials.get(url).pwd);
 		}
 	}
 	
@@ -333,10 +342,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	{
 		if (parent.getParent() == null && parent.getDisplayName().equals("INVISIBLE ROOT"))
 			return;
-		if(child.getDisplayName().equals("myTest"))
-		{
-			System.out.println();
-		}
+
 		String xpath = getXPathForTreeObject(child);
 		Document doc =  credentials.get(UnifyUrl(parent.getServerRoot().getWsKey().toString())).doc;
 		List<Element> models = doc.selectNodes(xpath);
@@ -512,6 +518,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		}
 		return url;
 	}
+	
 	private String synchronizeWithElem(TreeObject theObj, TreeParent folder, boolean fireEvent)
 	{
 		internalCheck = fireEvent;
