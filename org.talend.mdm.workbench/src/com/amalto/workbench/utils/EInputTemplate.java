@@ -28,7 +28,7 @@ public enum EInputTemplate {
 	XSLT("xslt","<Country\n\t\t\txrefCluster='?' \n\t\t\txrefIn='?' \n\t\t\txrefOut='?'\n\t>\n\t\t\t<xsl:value-of select='?'/>\n</Country>\n\n"),
 	
 	//calltransformer, dumptoconsole, itemdispatcher, jdbc, logging, loggingsmtp, svn
-	CALLTRANSFORMER("calltransformer","transformer=?"),
+	CALLTRANSFORMER("callprocess","process=?"),
 	DUMPTOCONSOLE("dumptoconsole",""),
 	ITEMDISPATCHER("itemdispatcher","<parameters>\n\t<transformer>\n\t\t<allInOne>?</allInOne>\n\t\t<assignTo>?</assignTo>\n\t</transformer>\n</parameters>"),
 	JDBC("jdbc","<parameters>\n\t<driverClassName>?</driverClassName>\n\t<url>?</url>\n\t<username>?</username>\n\t<password>?</password>\n\t<transformer>?</transformer>\n</parameters>"),
