@@ -205,7 +205,9 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	{
 		if (internalCheck) return;
 		String url = UnifyUrl(child.getServerRoot().getWsKey().toString());
-		if(credentials.get(url).state == false)return;
+		Credential cre = credentials.get(url);
+		if(cre!=null)
+			if(cre.state == false)return;
 		
 		try
 		{
