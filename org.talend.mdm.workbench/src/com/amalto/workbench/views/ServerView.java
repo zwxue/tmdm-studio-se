@@ -495,7 +495,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		createTreeDropTarget();
 		makeActions();
 		hookContextMenu();
-		hookTreeAction();
 		hookDoubleClickAction();
 		hookKeyPressAction();
 		contributeToActionBars();
@@ -857,20 +856,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					browseViewAction.run();
 				else
 					editXObjectAction.run();
-			}
-		});
-	}
-	private void hookTreeAction() {
-		viewer.addTreeListener(new ITreeViewerListener() {
-			
-			@Override
-			public void treeExpanded(TreeExpansionEvent event) {
-				
-			}
-			
-			@Override
-			public void treeCollapsed(TreeExpansionEvent event) {
-				
 			}
 		});
 	}
