@@ -757,14 +757,18 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 				int length = page.getEditors().length;
 				String version = "";
+				String tabEndpointAddress="";
 				int j = 0;
 				 for(int i = 0;i<length;i++){
 					 IEditorPart part = page.getEditors()[i-j];
-					if(part instanceof XObjectBrowser)
+					if(part instanceof XObjectBrowser){
 						version = ((TreeObject)((XObjectBrowserInput) part.getEditorInput()).getModel()).getUniverse();
-					 else if(part instanceof XObjectEditor)
+						tabEndpointAddress = ((TreeObject)((XObjectBrowserInput) part.getEditorInput()).getModel()).getEndpointAddress();
+						}
+					 else if(part instanceof XObjectEditor){
 						 version = ((XObjectEditor)part).getInitialXObject().getServerRoot().getUniverse();
-					 if(serverRoot.getUniverse().equals(version)){
+						 tabEndpointAddress = ((XObjectEditor)part).getInitialXObject().getServerRoot().getEndpointAddress();					 }
+					 if(serverRoot.getUniverse().equals(version)&& endpointAddress.equals(tabEndpointAddress)){
 						 page.closeEditor(part, false);
 						 j++;
 					 }
