@@ -379,18 +379,20 @@ public class ExportItemsWizard extends Wizard {
 		}
 	}
 	
-	private  void writeString(String outputStr,String filename)throws Exception{
-		File f=new File(exportFolder+"/"+filename);
-		if(!f.getParentFile().getParentFile().exists()){
-			f.getParentFile().getParentFile().mkdir();
-		}		
-		if(!f.getParentFile().exists()){
-			f.getParentFile().mkdir();
-		}
-		FileWriter fo=new FileWriter(exportFolder+"/"+filename);
-		fo.write(outputStr);
-		fo.flush();
-		fo.close();
+	private  void writeString(String outputStr,String filename){
+		try {
+			File f=new File(exportFolder+"/"+filename);
+			if(!f.getParentFile().getParentFile().exists()){
+				f.getParentFile().getParentFile().mkdir();
+			}		
+			if(!f.getParentFile().exists()){
+				f.getParentFile().mkdir();
+			}
+			FileWriter fo=new FileWriter(exportFolder+"/"+filename);
+			fo.write(outputStr);
+			fo.flush();
+			fo.close();
+		}catch(Exception e) {e.printStackTrace();}
 	}
 	
 	@Override
