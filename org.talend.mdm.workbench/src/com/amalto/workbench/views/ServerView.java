@@ -685,7 +685,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 							&& xobject.getType() != TreeObject.DATA_MODEL_RESOURCE
 							&& xobject.getType() != TreeObject.DATA_MODEL_TYPES_RESOURCE
 							&& xobject.getType() != TreeObject.CUSTOM_TYPES_RESOURCE
-							&& xobject.getType() != TreeObject.PICTURES_RESOURCE)
+							&& xobject.getType() != TreeObject.PICTURES_RESOURCE
+							&& xobject.getType()!=TreeObject.EVENT_MANAGEMENT)
 			    	manager.add(newXObjectAction);	
 					if(!(xobject instanceof TreeParent))
 						manager.add(renameXObjectAction);
@@ -703,7 +704,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					manager.add(deleteXObjectAction);
 					manager.add(copyAction);
 				}
-				else if (LocalTreeObjectRepository.getInstance().isInSystemCatalog(xobject) == false){
+				else if (xobject.getType()!=TreeObject.EVENT_MANAGEMENT && LocalTreeObjectRepository.getInstance().isInSystemCatalog(xobject) == false){
 					manager.add(newCategoryAction);
 				}
 

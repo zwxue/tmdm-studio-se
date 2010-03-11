@@ -49,6 +49,7 @@ public class TreeObject implements IAdaptable {
 	public final static int WORKFLOW_PROCESS=30;
 	public final static int JOB_REGISTRY=31;
 	public final static int JOB=32;
+	public final static int EVENT_MANAGEMENT=33;
 	
 	public final static int _UNVISIBLE=99; //for first login use
 	public final static int _ACTION_ = 100;

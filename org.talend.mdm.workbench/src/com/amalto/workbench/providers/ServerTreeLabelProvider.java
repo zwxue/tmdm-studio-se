@@ -1,8 +1,6 @@
 package com.amalto.workbench.providers;
 
 
-import java.rmi.RemoteException;
-
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -20,7 +18,6 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.EXObjectStatus;
 import com.amalto.workbench.utils.FontUtils;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSGetRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
@@ -90,6 +87,8 @@ public class ServerTreeLabelProvider extends LabelProvider implements IColorProv
 				return ImageCache.getCreatedImage( EImage.DOCUMENTS.getPath());			
 			else if (object.getType() == TreeObject.SUBSCRIPTION_ENGINE)
 				return ImageCache.getCreatedImage( EImage.SUBSCRIPTION_ENGINE.getPath());
+			else if (object.getType() == TreeObject.EVENT_MANAGEMENT)
+				return ImageCache.getCreatedImage( EImage.SUBSCRIPTION_ENGINE.getPath());			
 			else if (object.getType() == TreeObject.WORKFLOW || object.getType() == TreeObject.WORKFLOW_PROCESS)
 				return ImageCache.getCreatedImage( EImage.WORKFLOW_PROCESS.getPath());
 			else if (object.getType() == TreeObject.JOB_REGISTRY || object.getType() == TreeObject.JOB)
@@ -102,29 +101,8 @@ public class ServerTreeLabelProvider extends LabelProvider implements IColorProv
 				return ImageCache.getCreatedImage( EImage.SYNCHRONIZATIONPLAN.getPath());	
 			else if (object.getType() == TreeObject.CATEGORY_FOLDER)
 				return ImageCache.getCreatedImage( "icons/folder.gif");
-			
-					
-			
-				
-			//return PlatformUI.getWorkbench().getSharedImages().getCreatedImage(ISharedImages.IMG_OBJ_ELEMENT);
-
-			
-			return ImageCache.getCreatedImage( "icons/phased_out.gif");
-		//}
-			
-		/*
-		if (((TreeObject)obj).getType() == TreeObject._ACTION_) {
-            Class actionClass = (Class)((TreeObject)obj).getWsKey();
-            try {
-                AServerViewAction action = (AServerViewAction)actionClass.newInstance();
-                return action.getCreatedImageDescriptor();
-            } catch (Exception ex) {
-                return null;
-            }
-        }
-	
-        return PlatformUI.getWorkbench().getSharedImages().getCreatedImage(ISharedImages.IMG_OBJ_ELEMENT);
-        */       
+								
+			return ImageCache.getCreatedImage( "icons/phased_out.gif");   
 		
    }
 	public Color getBackground(Object element) {

@@ -166,35 +166,9 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			}
 			monitor.worked(1);
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-			//routing rule
-			WSRoutingRulePK[] routingRulePKs = null;
-			boolean hasRoutingRules = true;
-			try {
-				routingRulePKs = port.getRoutingRulePKs(new WSGetRoutingRulePKs("")).getWsRoutingRulePKs();
-			} catch (Exception e) {
-				System.out.println("NO ROUTING RULES");
-				hasRoutingRules = false;
-			}
-			TreeParent rules = null;
-			if (hasRoutingRules) {
-				rules = new TreeParent(EXtentisObjects.RoutingRule.getDisplayName(),serverRoot,TreeObject.ROUTING_RULE,null,null);
-				if (routingRulePKs!=null) {
-					monitor.subTask("Loading Triggers");
-					for (int i = 0; i < routingRulePKs.length; i++) {
-						String id =routingRulePKs[i].getPk();
-						TreeObject obj = new TreeObject(
-								id,
-								serverRoot,
-								TreeObject.ROUTING_RULE,
-								new WSRoutingRulePK(id),
-								null   //no storage to save space
-						);
-						rules.addChild(obj);
-					}
-				}
-				serverRoot.addChild(rules);
-				monitor.worked(1);
-			}
+			//event management
+			TreeParent eventManagement=new TreeParent(EXtentisObjects.EventManagement.getDisplayName(), serverRoot, TreeObject.EVENT_MANAGEMENT, null, null);
+			
 			//subscript engine
 			TreeObject  engine = new TreeObject(
 					EXtentisObjects.SubscriptionEngine.getDisplayName(),
@@ -203,39 +177,63 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 					null,
 					null
 			);
-			serverRoot.addChild(engine);
-			
+			eventManagement.addChild(engine);
+
 			//transformer
 			WSTransformerV2PK[] transformerPKs = null;
-			boolean hasTransformers = true;
-			try {
-				
+			try {				
 				transformerPKs = port.getTransformerV2PKs(new WSGetTransformerV2PKs("")).getWsTransformerV2PK();
 			} catch (Exception e) {
 				System.out.println("No Transformers");
-				// This server IS old
-				hasTransformers = false;
 			}
 			TreeParent transformers = null;
-			if (hasTransformers) {
-				transformers = new TreeParent(EXtentisObjects.Transformer.getDisplayName(),serverRoot,TreeObject.TRANSFORMER,null,null);
-				if (transformerPKs!=null) {
-					monitor.subTask("Loading Transfomers");
-					for (int i = 0; i < transformerPKs.length; i++) {
-						String id =transformerPKs[i].getPk();
-						TreeObject obj = new TreeObject(
-								id,
-								serverRoot,
-								TreeObject.TRANSFORMER,
-								new WSTransformerV2PK(id),
-								null   //no storage to save space
-						);
-						transformers.addChild(obj);
-					}
+			transformers = new TreeParent(EXtentisObjects.Transformer.getDisplayName(),serverRoot,TreeObject.TRANSFORMER,null,null);
+			if (transformerPKs!=null) {
+				monitor.subTask("Loading Transfomers");
+				for (int i = 0; i < transformerPKs.length; i++) {
+					String id =transformerPKs[i].getPk();
+					TreeObject obj = new TreeObject(
+							id,
+							serverRoot,
+							TreeObject.TRANSFORMER,
+							new WSTransformerV2PK(id),
+							null   //no storage to save space
+					);
+					transformers.addChild(obj);
 				}
-				serverRoot.addChild(transformers);
-				monitor.worked(1);
 			}
+			eventManagement.addChild(transformers);
+			monitor.worked(1);		
+			
+			//routing rule
+			WSRoutingRulePK[] routingRulePKs = null;
+			try {
+				routingRulePKs = port.getRoutingRulePKs(new WSGetRoutingRulePKs("")).getWsRoutingRulePKs();
+			} catch (Exception e) {
+				System.out.println("NO ROUTING RULES");
+			}
+			TreeParent rules = null;
+			rules = new TreeParent(EXtentisObjects.RoutingRule.getDisplayName(),serverRoot,TreeObject.ROUTING_RULE,null,null);
+			if (routingRulePKs!=null) {
+				monitor.subTask("Loading Triggers");
+				for (int i = 0; i < routingRulePKs.length; i++) {
+					String id =routingRulePKs[i].getPk();
+					TreeObject obj = new TreeObject(
+							id,
+							serverRoot,
+							TreeObject.ROUTING_RULE,
+							new WSRoutingRulePK(id),
+							null   //no storage to save space
+					);
+					rules.addChild(obj);
+				}
+			}
+			eventManagement.addChild(rules);
+			monitor.worked(1);
+			
+			//add event management to serverRoot
+			serverRoot.addChild(eventManagement);
+			
 			//Views
 			TreeParent views = new TreeParent(EXtentisObjects.View.getDisplayName(),serverRoot,TreeObject.VIEW,null,null);
 			WSViewPK[] viewPKs = null;

@@ -31,6 +31,7 @@ public enum EXtentisObjects {
 	Workflow("Workflow","Workflow Processes",TreeObject.WORKFLOW),
 	JobRegistry("Job Registry","Job Registry",TreeObject.JOB_REGISTRY),
 	Resources("Resources","Resources",TreeObject.RESOURCES),
+	EventManagement("Event Management","Event Management",TreeObject.EVENT_MANAGEMENT),
 	CustomType("Custom Type","Custom Type",TreeObject.CUSTOM_TYPE);
 	
 	private String displayName;
