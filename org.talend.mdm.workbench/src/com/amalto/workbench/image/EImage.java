@@ -201,6 +201,7 @@ public enum EImage {
 	STORED_PROCEDURE("icons/stored_procedure.gif"),
 	SUBMENU("icons/submenu.gif"),
 	SUBSCRIPTION_ENGINE("icons/sub_engine.png"),
+	EVENTM_ANAGEMENT("icons/Events_management.png"),
 	SYNCED("icons/synced.gif"),
 	SYNCH_PARTICIPANTS("icons/synch_participants.gif"),
 	TALEND_PICTO_SMALL("icons/appli_16x16.gif"),
