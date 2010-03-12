@@ -40,24 +40,23 @@ public class ServerLoginAction extends Action implements SelectionListener{
 	public void run() {
 		try {
 			super.run();
-			try {
+//			try {
 				universes=new ArrayList<WSUniversePK>();
 				WSUniversePK[] universePKs = null;
 				XtentisPort port = view.getPort();
 				if(port!=null){
-					WSUniversePK[] temp=null;
 //					for (Iterator iterator = ports.iterator(); iterator
 //							.hasNext();) {
 //						XtentisPort port = (XtentisPort) iterator.next();
-						universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();
+//						universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();
 						
-						if(universes.size()>0)
+						if(universes.size()>0&&universePKs!=null)
 							CollectionUtils.addAll(universes, universePKs);
 //					}
 					}
-			} catch (RemoteException e) {
-				e.printStackTrace();
-			}
+//			} catch (RemoteException e) {
+//				e.printStackTrace();
+//			}
 			dialog = new LoginDialog(this,view.getSite().getShell(),IConstants.TALEND+" Login",universes);			
 			dialog.setBlockOnOpen(true);		
 			dialog.open();
