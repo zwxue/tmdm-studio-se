@@ -429,9 +429,9 @@ public class ImportItemsWizard extends Wizard{
 	private int isOveride(String name, String obTypeName) {
 
 		final MessageDialog dialog = new MessageDialog(view.getSite()
-				.getShell(), "Treeobject overwrite confirm", null,
+				.getShell(), "Confirm Overwrite", null,
 				"There is already a "+obTypeName+" named " + name
-						+ ".Confirm overwriting?", MessageDialog.QUESTION,
+						+ ". Do you really want to overwrite it with the new one when the export runs?", MessageDialog.QUESTION,
 				new String[] { IDialogConstants.YES_LABEL,
 						IDialogConstants.YES_TO_ALL_LABEL,
 						IDialogConstants.NO_LABEL,
