@@ -24,7 +24,7 @@ public class ServerLoginAction extends Action implements SelectionListener{
 
 	private LoginDialog dialog = null;
 	private ServerView view = null;
-	private List<WSUniversePK> universes;
+	private List<WSUniversePK> universes=new ArrayList<WSUniversePK>(); ;
 	
 	
 	public ServerLoginAction(ServerView view) {
@@ -50,7 +50,9 @@ public class ServerLoginAction extends Action implements SelectionListener{
 							.hasNext();) {
 						XtentisPort port = (XtentisPort) iterator.next();
 						universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();
-						CollectionUtils.addAll(universes, universePKs);
+						
+						if(universes.size()>0)
+							CollectionUtils.addAll(universes, universePKs);
 					}
 					}
 			} catch (RemoteException e) {
