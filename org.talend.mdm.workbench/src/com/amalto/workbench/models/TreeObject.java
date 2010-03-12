@@ -241,11 +241,19 @@ public class TreeObject implements IAdaptable {
 	
 	public TreeParent findServerFolder(int objectType) {
 		if (this.getServerRoot() == null) return null;
+		
 		TreeObject[] children = this.getServerRoot().getChildren();
 		for (int i = 0; i < children.length; i++) {
 			if (children[i] instanceof TreeParent) 
 				if (children[i].getType() == objectType)
 					return (TreeParent)children[i];
+		}
+		if(objectType == TRANSFORMER || objectType == ROUTING_RULE) {
+			TreeParent parent=findServerFolder(EVENT_MANAGEMENT);
+			children=parent.getChildren();
+			for(TreeObject obj: children) {
+				if(obj.getType()== objectType) return (TreeParent)obj;
+			}
 		}
 		return null;
 	}
