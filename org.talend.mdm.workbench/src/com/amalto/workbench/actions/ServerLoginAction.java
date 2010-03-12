@@ -1,7 +1,11 @@
 package com.amalto.workbench.actions;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.events.SelectionEvent;
@@ -20,7 +24,7 @@ public class ServerLoginAction extends Action implements SelectionListener{
 
 	private LoginDialog dialog = null;
 	private ServerView view = null;
-	private WSUniversePK[] universes;
+	private List<WSUniversePK> universes;
 	
 	
 	public ServerLoginAction(ServerView view) {
@@ -36,15 +40,22 @@ public class ServerLoginAction extends Action implements SelectionListener{
 	public void run() {
 		try {
 			super.run();
-			WSUniversePK[] universePKs = null;
 			try {
-				XtentisPort port = view.getPort();
-				if(port!=null)
-					universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();
+				universes=new ArrayList<WSUniversePK>();
+				WSUniversePK[] universePKs = null;
+				List<XtentisPort> ports = view.getPorts();
+				if(ports!=null){
+					WSUniversePK[] temp=null;
+					for (Iterator iterator = ports.iterator(); iterator
+							.hasNext();) {
+						XtentisPort port = (XtentisPort) iterator.next();
+						universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();
+						CollectionUtils.addAll(universes, universePKs);
+					}
+					}
 			} catch (RemoteException e) {
 				e.printStackTrace();
 			}
-			universes=universePKs;
 			dialog = new LoginDialog(this,view.getSite().getShell(),IConstants.TALEND+" Login",universes);			
 			dialog.setBlockOnOpen(true);		
 			dialog.open();

@@ -57,13 +57,13 @@ public class LoginDialog extends Dialog {
 	private Group authenticationGroup;
 
 	private Document logininfoDocument;
-	private WSUniversePK[] universes;
+	private List<WSUniversePK> universes;
 
 
 	/**
 	 * @param parentShell
 	 */
-	public LoginDialog(SelectionListener caller, Shell parentShell, String title,WSUniversePK[] universes) {
+	public LoginDialog(SelectionListener caller, Shell parentShell, String title,List<WSUniversePK> universes) {
 		super(parentShell);
 		this.caller = caller;
 		this.title = title;
@@ -188,8 +188,8 @@ public class LoginDialog extends Dialog {
 			);
 			((GridData)universeCombo.getLayoutData()).widthHint = 300;
 			if(universes!=null)
-			for (int i = 0; i < universes.length; i++) {
-				String host = universes[i].getPk();
+			for (int i = 0; i < universes.size(); i++) {
+				String host = universes.get(i).getPk();
 				universeCombo.add(host);	
 				
 			}
