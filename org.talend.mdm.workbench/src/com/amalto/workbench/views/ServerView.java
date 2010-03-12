@@ -175,17 +175,18 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     public TreeParent getRoot(){
     	return contentProvider.getInvisibleRoot();
     }
-    public java.util.List<XtentisPort> getPorts(){
+    public XtentisPort getPort(){
     	java.util.List<XtentisPort> ports = new ArrayList<XtentisPort>();
+    	XtentisPort port=null;
     	try {
-    		TreeObject[] servers = contentProvider.getInvisibleRoot().getChildren();
-			for (TreeObject server : servers) {
-				ports.add(Util.getPort(server));
-			}
+    	port = Util.getPort(contentProvider.getInvisibleRoot().getServerRoot());
+////			for (TreeObject server : servers) {
+//				ports.add(Util.getPort(servers));
+//			}
 		} catch (XtentisException e) {
 			e.printStackTrace();
 		}
-		return ports;
+		return port;
     }
     
     private DragSource createTreeDragSource(){
@@ -974,23 +975,23 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                 ("".equals(universe)? "" : universe+"/")+username+":"+(password==null?"":password)
         ); 
 		UserInfo user=new UserInfo();
-//		WSUniverse wUuniverse=null;
+		WSUniverse wUuniverse=null;
 		XtentisPort port;
 		try {
 			port = Util.getPort(new URL(url), universe, username, password);
-//			wUuniverse=port.getCurrentUniverse(new WSGetCurrentUniverse());
+			wUuniverse=port.getCurrentUniverse(new WSGetCurrentUniverse());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (XtentisException e) {
 			e.printStackTrace();
-//		} catch (RemoteException e) {
-//			e.printStackTrace();
+		} catch (RemoteException e) {
+			e.printStackTrace();
 		}		
 		user.setUsername(username);
 		user.setPassword(password);
 		user.setServerUrl(url);
 		user.setUniverse(universe);
-//		user.setWsUuniverse(wUuniverse);
+		user.setWsUuniverse(wUuniverse);
 
 		serverRoot.setUser(user);
 		if("".equalsIgnoreCase(universe))

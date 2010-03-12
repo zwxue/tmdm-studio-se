@@ -43,17 +43,17 @@ public class ServerLoginAction extends Action implements SelectionListener{
 			try {
 				universes=new ArrayList<WSUniversePK>();
 				WSUniversePK[] universePKs = null;
-				List<XtentisPort> ports = view.getPorts();
-				if(ports!=null){
+				XtentisPort port = view.getPort();
+				if(port!=null){
 					WSUniversePK[] temp=null;
-					for (Iterator iterator = ports.iterator(); iterator
-							.hasNext();) {
-						XtentisPort port = (XtentisPort) iterator.next();
+//					for (Iterator iterator = ports.iterator(); iterator
+//							.hasNext();) {
+//						XtentisPort port = (XtentisPort) iterator.next();
 						universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();
 						
 						if(universes.size()>0)
 							CollectionUtils.addAll(universes, universePKs);
-					}
+//					}
 					}
 			} catch (RemoteException e) {
 				e.printStackTrace();
