@@ -1,6 +1,5 @@
 package com.amalto.workbench.actions;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -40,23 +39,19 @@ public class ServerLoginAction extends Action implements SelectionListener{
 	public void run() {
 		try {
 			super.run();
-//			try {
 				universes=new ArrayList<WSUniversePK>();
 				WSUniversePK[] universePKs = null;
-				XtentisPort port = view.getPort();
-				if(port!=null){
-//					for (Iterator iterator = ports.iterator(); iterator
-//							.hasNext();) {
-//						XtentisPort port = (XtentisPort) iterator.next();
-//						universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();
+				List<XtentisPort> ports = view.getPorts();
+				if(ports!=null){
+					for (Iterator iterator = ports.iterator(); iterator
+							.hasNext();) {
+						XtentisPort port = (XtentisPort) iterator.next();
+						universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();
 						
-						if(universes.size()>0&&universePKs!=null)
+						if(universePKs!=null&&universePKs.length>0)
 							CollectionUtils.addAll(universes, universePKs);
-//					}
 					}
-//			} catch (RemoteException e) {
-//				e.printStackTrace();
-//			}
+					}
 			dialog = new LoginDialog(this,view.getSite().getShell(),IConstants.TALEND+" Login",universes);			
 			dialog.setBlockOnOpen(true);		
 			dialog.open();

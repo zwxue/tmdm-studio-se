@@ -14,6 +14,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -40,8 +41,9 @@ import com.amalto.workbench.webservices.WSUniversePK;
 public class LoginDialog extends Dialog {
 	
 //	private static String f = System.getProperty("user.dir")+"/.mdmworkbench.conf";
-	private static String f = System.getProperty("user.dir")+"/mdm_workbench_config.xml";
-//	private Properties properties = new Properties();
+//	private static String f = System.getProperty("user.dir")+"/mdm_workbench_config.xml";
+	private static String f = Platform.getInstanceLocation().getURL().getPath()+"/mdm_workbench_config.xml"; 
+
 	private Collection<String> endpoints;
 
 //	private Collection<String> universes;

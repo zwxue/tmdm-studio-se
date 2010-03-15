@@ -17,6 +17,7 @@ import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -30,9 +31,7 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
@@ -142,8 +141,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
 	private ArrayList<TreeObject> dndTreeObjs = new ArrayList<TreeObject>();
     private int dragType = -1;
-	private static String f = System.getProperty("user.dir")+"/mdm_workbench_config.xml";
-
+//	private static String f = System.getProperty("user.dir")+"/mdm_workbench_config.xml";
+	private static String f = Platform.getInstanceLocation().getURL().getPath()+"/mdm_workbench_config.xml"; 
 
 	private BrowseRevisionAction browseRevisionAction;
 
@@ -175,18 +174,18 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     public TreeParent getRoot(){
     	return contentProvider.getInvisibleRoot();
     }
-    public XtentisPort getPort(){
+    public java.util.List<XtentisPort> getPorts(){
     	java.util.List<XtentisPort> ports = new ArrayList<XtentisPort>();
     	XtentisPort port=null;
     	try {
-    	port = Util.getPort(contentProvider.getInvisibleRoot().getServerRoot());
-////			for (TreeObject server : servers) {
-//				ports.add(Util.getPort(servers));
-//			}
+    		TreeObject[] servers = contentProvider.getInvisibleRoot().getChildren();
+			for (TreeObject server : servers) {
+				ports.add(Util.getPort(server));
+			}
 		} catch (XtentisException e) {
 			e.printStackTrace();
 		}
-		return port;
+		return ports;
     }
     
     private DragSource createTreeDragSource(){
