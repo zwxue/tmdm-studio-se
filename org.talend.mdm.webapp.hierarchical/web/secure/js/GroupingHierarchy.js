@@ -5,13 +5,11 @@
  
 amalto.namespace("amalto.hierarchical");
 
-amalto.hierarchical.HierarchicalView = function () {
+amalto.hierarchical.GroupingHierarchy = function () {
 	
 	loadResource("/hierarchical/secure/js/HierarchicalViewLocal.js", "amalto.hierarchical.HierarchicalViewLocal" );
 	
     loadResource("/hierarchical/secure/js/HierarchicalViewDisplay.js", "");
-    
-    loadResource("/hierarchical/secure/js/MultiSelectTreePanel.js", "");
     
     function initUIAndData(){
 		var tabPanel = amalto.core.getTabPanel();

@@ -13,7 +13,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 	initUIComponents : function() {
 	   
 	   this.dataObjectStore = new Ext.data.Store({
-         proxy: new Ext.data.DWRProxy(HierarchicalViewInterface.getDataObjectsList , true),
+         proxy: new Ext.data.DWRProxy(GroupingHierarchyInterface.getDataObjectsList , true),
          reader:new Ext.data.ListRangeReader({
               totalProperty: 'totalSize',
               id: 'value',
@@ -33,7 +33,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
         
         
         this.possiblePivotsStore = new Ext.data.Store({
-         proxy: new Ext.data.DWRProxy(HierarchicalViewInterface.getPossiblePivotsList , true),
+         proxy: new Ext.data.DWRProxy(GroupingHierarchyInterface.getPossiblePivotsList , true),
          reader:new Ext.data.ListRangeReader({
               totalProperty: 'totalSize',
               id: 'value',
@@ -52,7 +52,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
         );
         
         this.titleStore = new Ext.data.Store({
-         proxy: new Ext.data.DWRProxy(HierarchicalViewInterface.getTitleList , true),
+         proxy: new Ext.data.DWRProxy(GroupingHierarchyInterface.getTitleList , true),
          reader:new Ext.data.ListRangeReader({
               totalProperty: 'totalSize',
               id: 'value',
@@ -217,10 +217,10 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 						            	            xpathArray[index]=xpath;
 				            	                 }
 				            	                 
-						            	        HierarchicalViewInterface.recordChanges(keysArray,xpathArray,newText,function(status){
+						            	        GroupingHierarchyInterface.recordChanges(keysArray,xpathArray,newText,function(status){
 													if(status==true){
 													  //make dirty
-				            	                      amalto.hierarchical.HierarchicalView.makeDirty();	
+				            	                      amalto.hierarchical.GroupingHierarchy.makeDirty();	
 													}else{
 													  Ext.MessageBox.alert(amalto.hierarchical.HierarchicalViewLocal.get("Messagebox_Error"), amalto.hierarchical.HierarchicalViewLocal.get("Message_Record_Changes_False"));
 													}
@@ -647,7 +647,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 	
 	initData : function(){
 		
-		HierarchicalViewInterface.resetHierarchicalTreeCriterion(function(){
+		GroupingHierarchyInterface.resetHierarchicalTreeCriterion(function(){
 	    	   //nothing
         });
 	},
@@ -675,7 +675,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 				
 				var dataObjectName='';
 				DWREngine.setAsync(false); 
-		        HierarchicalViewInterface.getDataObjectNameFromHierarchicalTreeCriterion(function(_dataObject){dataObjectName=_dataObject;});
+		        GroupingHierarchyInterface.getDataObjectNameFromHierarchicalTreeCriterion(function(_dataObject){dataObjectName=_dataObject;});
 				DWREngine.setAsync(true);
 				var idArray = new Array(1); 
 				idArray[0]=node.id;
@@ -795,7 +795,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
     	var orderExprText=DWRUtil.getValue('orderExprText');
     	var maxSizeText=DWRUtil.getValue('maxSizeText');
     	
-    	HierarchicalViewInterface.updateHierarchicalTreeCriterionAndUpdateHistory(dataObjectValue,pivotValue,titleValue,foa,orderExprText,maxSizeText,function(status){
+    	GroupingHierarchyInterface.updateHierarchicalTreeCriterionAndUpdateHistory(dataObjectValue,pivotValue,titleValue,foa,orderExprText,maxSizeText,function(status){
     		    //alert(status);
 	    	    this.reloadHierarchicalTree(status);
         }.createDelegate(this));
@@ -890,7 +890,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
     	var orderExprText=DWRUtil.getValue('orderExprText');
     	var maxSizeText=DWRUtil.getValue('maxSizeText');
     	
-    	HierarchicalViewInterface.saveHierarchicalReport(reportName,isSharedReport,dataObjectValue,pivotValue,titleValue,foa,orderExprText,maxSizeText,function(state){
+    	GroupingHierarchyInterface.saveHierarchicalReport(reportName,isSharedReport,dataObjectValue,pivotValue,titleValue,foa,orderExprText,maxSizeText,function(state){
     	    this.onSavedHierarchicalReport(state,reportName,isSharedReport);
 		}.createDelegate(this));
     },
@@ -934,7 +934,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 					fieldLabel : amalto.hierarchical.HierarchicalViewLocal.get("Reports_Title"),
 					xtype : "combo",
 					store: new Ext.data.Store({
-										proxy: new Ext.data.SimpleDWRProxy(HierarchicalViewInterface.getReportsName),
+										proxy: new Ext.data.SimpleDWRProxy(GroupingHierarchyInterface.getReportsName),
 							        	reader: new Ext.data.MapReader()
 									}),
 					displayField: 'value',
@@ -980,7 +980,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
     		this.loadReportWindow.hide();
 			this.loadReportWindow.destroy();
     	}else{
-    		HierarchicalViewInterface.getReport(reportName,function(data){
+    		GroupingHierarchyInterface.getReport(reportName,function(data){
                  this.onHierarchicalGetReport(data);
 		   }.createDelegate(this));
     	}	
@@ -1042,7 +1042,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
     
     onEditClick: function(button, event){
     	
-    	HierarchicalViewInterface.checkHierarchicalTreeCriterion(function(data){
+    	GroupingHierarchyInterface.checkHierarchicalTreeCriterion(function(data){
 	    	    if(data==true){
 	    	    	var tabPanel = amalto.core.getTabPanel();
 					var hierarchicalViewEditPanel = tabPanel.getItem('HierarchicalViewEdit');
@@ -1072,10 +1072,10 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
            waitConfig: {interval:200}
         });
         
-    	HierarchicalViewInterface.saveChanges({
+    	GroupingHierarchyInterface.saveChanges({
 	    	callback:function(data){
 	    		   //clean dirty
-		           amalto.hierarchical.HierarchicalView.cleanDirty();
+		           amalto.hierarchical.GroupingHierarchy.cleanDirty();
 		           
 	    		   Ext.MessageBox.hide();
 		    	   Ext.MessageBox.alert(amalto.hierarchical.HierarchicalViewLocal.get("Messagebox_Status"), data);
@@ -1091,6 +1091,6 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
     onCancelChangesClick: function(button, event){
         this.reloadHierarchicalTree(true);
         //clean dirty
-		amalto.hierarchical.HierarchicalView.cleanDirty();
+		amalto.hierarchical.GroupingHierarchy.cleanDirty();
     }
 });

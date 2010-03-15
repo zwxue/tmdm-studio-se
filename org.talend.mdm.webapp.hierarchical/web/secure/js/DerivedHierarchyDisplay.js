@@ -56,7 +56,7 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
 		
 		Ext.apply(this, {
             id : "derivedHierarchyDisplay",
-            title : "Browse Derived Hierarchy",
+            title : "Derived Hierarchy",
             layout : "border",
             closable: true,
             items : [new Ext.Panel({

@@ -3,7 +3,7 @@
 <dwr>
 	<allow>
 		
-		<create creator="new" javascript="HierarchicalViewInterface">
+		<create creator="new" javascript="GroupingHierarchyInterface">
 			<param name="class" value="com.amalto.webapp.v3.hierarchical.dwr.HierarchicalDWR" />
 		</create>
 		

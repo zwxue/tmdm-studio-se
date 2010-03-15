@@ -18,7 +18,7 @@ amalto.hierarchical.HierarchicalViewLocal=function(){
 			 ********************************************************************/
 			 
 	    	locale_en= {
-	    		  'Hierarchical_View_Title':'Hierarchical View Display',
+	    		  'Hierarchical_View_Title':'Grouping Hierarchy',
 	    		  'Search_Panel_Title':'Search Panel',
 	    		  'Search_Field_Entity':'Entity',
 	    		  'Search_Field_Pivot':'Pivot',
@@ -72,7 +72,7 @@ amalto.hierarchical.HierarchicalViewLocal=function(){
                  };
                  
             locale_fr= {     
-            	  'Hierarchical_View_Title':'Vue hiérarchique',
+            	  'Hierarchical_View_Title':'Groupement Hierarchy',
   	    		  'Search_Panel_Title':'Critères de recherche',
   	    		  'Search_Field_Entity':'Entité',
   	    		  'Search_Field_Pivot':'Pivot',
