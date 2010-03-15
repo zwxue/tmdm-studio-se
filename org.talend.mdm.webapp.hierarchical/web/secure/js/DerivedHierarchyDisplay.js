@@ -249,7 +249,7 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
         if(rtnSize>0){
           this.addCriteria('hierarchyItemsCriteria'+this.lastPivotPanelNum,this.lastPivotPanelNum);          
         }else{
-             Ext.MessageBox.alert('Sorry', 'There is no derived pivot exist! ');
+             Ext.MessageBox.alert('Sorry', 'There is no eligible pivot from this entity. ');
              return;
         }
     	
