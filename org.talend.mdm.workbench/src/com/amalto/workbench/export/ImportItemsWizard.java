@@ -51,6 +51,7 @@ import com.amalto.workbench.webservices.WSExistsSynchronizationPlan;
 import com.amalto.workbench.webservices.WSExistsTransformer;
 import com.amalto.workbench.webservices.WSExistsUniverse;
 import com.amalto.workbench.webservices.WSExistsView;
+import com.amalto.workbench.webservices.WSInitData;
 import com.amalto.workbench.webservices.WSItem;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuPK;
@@ -137,6 +138,8 @@ public class ImportItemsWizard extends Wizard{
 				try{			
 					
 					doImport(objs,monitor);
+					//run initMDM to call backend migration task
+					port.initMDM(new WSInitData());
 					return Status.OK_STATUS;
 				}catch(Exception e){
 					e.printStackTrace();
