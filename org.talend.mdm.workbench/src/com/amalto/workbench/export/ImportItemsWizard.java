@@ -139,7 +139,7 @@ public class ImportItemsWizard extends Wizard{
 					
 					doImport(objs,monitor);
 					//run initMDM to call backend migration task
-					port.initMDM(new WSInitData());
+					port.initMDM(null);
 					return Status.OK_STATUS;
 				}catch(Exception e){
 					e.printStackTrace();
