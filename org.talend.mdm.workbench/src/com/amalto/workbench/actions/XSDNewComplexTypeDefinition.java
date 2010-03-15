@@ -49,7 +49,7 @@ public class XSDNewComplexTypeDefinition extends UndoAction implements Selection
 				list.add((XSDComplexTypeDefinition)type);
 		}
 		
-		dialog = new ComplexTypeInputDialog(this, page.getSite().getShell(), schema, list, false);
+		dialog = new ComplexTypeInputDialog(this, page.getSite().getShell(), schema,null, list, false);
 		dialog.setBlockOnOpen(true);
 		int ret = dialog.open();
 		if (ret == Dialog.CANCEL) {

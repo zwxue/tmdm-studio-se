@@ -11,9 +11,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
+import org.eclipse.xsd.XSDCompositor;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTypeDefinition;
+import org.eclipse.xsd.impl.XSDModelGroupImpl;
+import org.eclipse.xsd.impl.XSDParticleImpl;
 
 import com.amalto.workbench.actions.XSDChangeToComplexTypeAction;
 import com.amalto.workbench.actions.XSDNewComplexTypeDefinition;
@@ -23,7 +26,7 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener{
 	
 	private SelectionListener caller = null;
 	
-	private String typeName = null;
+	private String typeName = "";
 
 	private ConceptComposite conceptPanel = null;
 	
@@ -32,6 +35,9 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener{
 	private XSDSchema xsdSchema;
 	
 	private boolean isXSDModelGroup=false;
+
+	private XSDCompositor typeComposite;
+
 	/**
 	 * @param parentShell
 	 * @param isXSDModelGroup 
@@ -40,6 +46,7 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener{
 			SelectionListener caller, 
 			Shell parentShell ,
 			XSDSchema schema,
+			XSDTypeDefinition typeDefinition,
 			List<XSDComplexTypeDefinition> types, boolean isXSDModelGroup
 			) {
 		super(parentShell);
@@ -47,6 +54,17 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener{
 		this.types=types;
 		this.isXSDModelGroup=isXSDModelGroup;
 		xsdSchema = schema;
+		if(typeDefinition!=null){
+			if (typeDefinition instanceof XSDComplexTypeDefinition) {
+				if(typeDefinition.getName()!=null)
+					this.typeName=typeDefinition.getName();
+				XSDComplexTypeDefinition complexType = (XSDComplexTypeDefinition) typeDefinition;
+				XSDParticleImpl partCnt = (XSDParticleImpl) complexType
+						.getContent();
+				XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
+				typeComposite=mdlGrp.getCompositor();
+			}
+		}
 	}
 
 	
@@ -65,6 +83,15 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener{
 			else
 				parent.getShell().setText("Change To Complex Type");
 			conceptPanel = new ConceptComposite(composite, false,types, false);
+			conceptPanel.setText(typeName);
+			if (typeComposite != null) {
+				if (typeComposite.equals(XSDCompositor.ALL_LITERAL))
+					conceptPanel.setAll();
+				else if (typeComposite.equals(XSDCompositor.CHOICE_LITERAL))
+					conceptPanel.setChoice();
+				if (typeComposite.equals(XSDCompositor.SEQUENCE_LITERAL))
+					conceptPanel.setSequence();
+			}
 		}
 		conceptPanel.getTypeCombo().addModifyListener(this);
 	    return conceptPanel.getComposite();

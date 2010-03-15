@@ -2,8 +2,6 @@ package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -16,9 +14,7 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
-import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDCompositor;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDFactory;
@@ -30,15 +26,15 @@ import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
+import org.eclipse.xsd.impl.XSDModelGroupImpl;
+import org.eclipse.xsd.impl.XSDParticleImpl;
 import org.eclipse.xsd.util.XSDSchemaBuildingTools;
-import org.w3c.dom.Element;
 
 import com.amalto.workbench.dialogs.ComplexTypeInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDChangeToComplexTypeAction extends UndoAction implements SelectionListener{
 
@@ -121,7 +117,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
        		if (showDlg) {
        			
 				dialog = new ComplexTypeInputDialog(this, page.getSite()
-						.getShell(), schema, Util.getComplexTypes(decl.getSchema()),isXSDModelGroup);
+						.getShell(), schema,decl.getTypeDefinition(), Util.getComplexTypes(decl.getSchema()),isXSDModelGroup);
 
 				dialog.setBlockOnOpen(true);
 				int ret = dialog.open();
@@ -145,6 +141,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 			XSDElementDeclaration subElement = null;
 			
 			//check if already exist
+			XSDElementDeclaration parent = (XSDElementDeclaration)Util.getParent(decl);
        		if (!anonymous) {
        			EList list = schema.getTypeDefinitions();
        			String ns = "";
@@ -161,6 +158,38 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 							break;
 					}
 				}
+				}
+	       		else{
+	       			complexType = (XSDComplexTypeDefinition)parent.getTypeDefinition();
+	       			if(complexType.getName()==null)
+	       			{
+	       			alreadyExists = true;
+	       		}
+	       			}
+			if (complexType != null) {
+				XSDParticleImpl partCnt = (XSDParticleImpl) complexType
+						.getContent();
+				XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt
+						.getTerm();
+				if (isChoice)
+					mdlGrp.setCompositor(XSDCompositor.CHOICE_LITERAL);
+				else if (isAll) {
+					mdlGrp.setCompositor(XSDCompositor.ALL_LITERAL);
+					partCnt.setMaxOccurs(1);
+				} else {
+					mdlGrp.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
+					partCnt.getElement().getAttributeNode("maxOccurs")
+							.setNodeValue("unbounded");
+				}
+				partCnt.setMinOccurs(1);
+				parent.updateElement();
+			}
+			if(decl.getTypeDefinition() instanceof XSDSimpleTypeDefinition)
+				alreadyExists = false;
+//   			partCnt.setMaxOccurs(1);
+   			
+   			
+   			
 //				ArrayList<XSDTypeDefinition> types = Util.getImportedTypeDefinitionChildren(schema);
 //				for (XSDTypeDefinition type: types)
 //				{
@@ -176,7 +205,6 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 //						break;
 //					}
 //				}
-       		}
        		
        		//Create if does not exist
        		if (!alreadyExists) {

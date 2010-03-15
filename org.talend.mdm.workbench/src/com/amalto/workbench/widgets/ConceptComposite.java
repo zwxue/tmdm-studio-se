@@ -92,7 +92,6 @@ public class ConceptComposite {
 		choiceButton.setLayoutData(
 				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
 		);
-
 		allButton.setSelection(true);
 		
 		messageLabel = new Label(parent, SWT.NONE);
@@ -126,12 +125,30 @@ public class ConceptComposite {
 		return sequenceButton.getSelection();
 	}
 	
+	public void setSequence(){
+		choiceButton.setSelection(false);
+		allButton.setSelection(false);
+		sequenceButton.setSelection(true);
+	}
+	
 	public boolean isChoice() {
 		return choiceButton.getSelection();
 	}
 	
+	public void setChoice(){
+		choiceButton.setSelection(true);
+		allButton.setSelection(false);
+		sequenceButton.setSelection(false);
+	}
+	
 	public boolean isAll() {
 		return allButton.getSelection();
+	}
+	
+	public void setAll(){
+		choiceButton.setSelection(false);
+		allButton.setSelection(true);
+		sequenceButton.setSelection(false);
 	}
 	
 	public Composite getComposite()
