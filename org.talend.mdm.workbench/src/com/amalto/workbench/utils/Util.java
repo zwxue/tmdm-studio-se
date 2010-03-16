@@ -4,10 +4,15 @@
  */
 package com.amalto.workbench.utils;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
@@ -1893,7 +1898,25 @@ public class Util {
 		
 		return strEntry;
 	}
-    
+    public static void copyFile(String source, String dest) {
+    	 byte[] buf = new byte[1024];
+        OutputStream os=null;
+        InputStream is=null;
+		try {
+			os = new BufferedOutputStream(new FileOutputStream(dest));
+			is = new BufferedInputStream(new FileInputStream(source));
+			int readLen = 0;
+			while ((readLen = is.read(buf, 0, 1024)) != -1) {
+				os.write(buf, 0, readLen);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+	        if(is!=null)try{is.close();}catch(Exception e) {};
+	        if(os!=null)try{os.close();}catch(Exception e) {};    	
+		}
+    }
     //key is the objectname, value is revisionids
     public static Map<String, List<String>> getUniverseMap(XtentisPort port){
     	Map<String, List<String>> map=new HashMap<String, List<String>>();
