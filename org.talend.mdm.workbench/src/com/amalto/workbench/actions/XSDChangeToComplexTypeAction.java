@@ -160,11 +160,12 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 				}
 				}
 	       		else{
-	       			complexType = (XSDComplexTypeDefinition)parent.getTypeDefinition();
-	       			if(complexType.getName()==null)
-	       			{
-	       			alreadyExists = true;
-	       		}
+				if (parent.getTypeDefinition() instanceof XSDComplexTypeDefinition)
+					complexType = (XSDComplexTypeDefinition) parent
+							.getTypeDefinition();
+				if (complexType != null && complexType.getName() == null) {
+					alreadyExists = true;
+				}
 	       			}
 			if (complexType != null) {
 				XSDParticleImpl partCnt = (XSDParticleImpl) complexType
@@ -175,13 +176,13 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 					mdlGrp.setCompositor(XSDCompositor.CHOICE_LITERAL);
 				else if (isAll) {
 					mdlGrp.setCompositor(XSDCompositor.ALL_LITERAL);
-					partCnt.setMaxOccurs(1);
+//					partCnt.setMaxOccurs(1);
 				} else {
 					mdlGrp.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
-					partCnt.getElement().getAttributeNode("maxOccurs")
-							.setNodeValue("unbounded");
+//					partCnt.getElement().getAttributeNode("maxOccurs")
+//							.setNodeValue("unbounded");
 				}
-				partCnt.setMinOccurs(1);
+//				partCnt.setMinOccurs(0);
 				parent.updateElement();
 			}
 			if(decl.getTypeDefinition() instanceof XSDSimpleTypeDefinition)
