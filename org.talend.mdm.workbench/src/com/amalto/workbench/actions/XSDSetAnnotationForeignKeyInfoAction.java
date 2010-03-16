@@ -80,7 +80,7 @@ public class XSDSetAnnotationForeignKeyInfoAction extends UndoAction{
        				dataModelName
        				
        		);
-            
+            dlg.setRetrieveFKinfos(struc.getRetrieveFKinfos());
        		dlg.setBlockOnOpen(true);
        		int ret = dlg.open();
        		if (ret == Window.CANCEL) {
@@ -88,7 +88,7 @@ public class XSDSetAnnotationForeignKeyInfoAction extends UndoAction{
        		}
 
        		struc.setForeignKeyInfos(dlg.getXPaths());
-       		
+       		struc.setRetrieveFKinfos(dlg.isRetrieveFKinfos());
        		if (struc.hasChanged()) {
        			page.refresh();
        			page.getTreeViewer().expandToLevel(xSDCom, 2);

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.Map.Entry;
@@ -265,6 +264,24 @@ public class XSDAnnotationsStructure {
 		hasChanged = true;
 		return true;
 	}
+	
+	public boolean setRetrieveFKinfos(boolean retrieveFKinfos) {
+	   removeAppInfos("X_Retrieve_FKinfos");
+      addAppInfo("X_Retrieve_FKinfos", retrieveFKinfos + "");
+      hasChanged = true;
+      return true;
+   }
+	
+	public boolean getRetrieveFKinfos() {
+      LinkedHashMap<String, String> appInfos = getAppInfos("X_Retrieve_FKinfos");
+      Set<String> keys = appInfos.keySet();
+      for (Iterator iter = keys.iterator(); iter.hasNext(); ) {
+         String key = (String) iter.next();
+         return "true".equals(appInfos.get(key));
+      }
+      
+      return true;
+   }
 	
 	public boolean setForeignKeyInfo(int num, String xPath) {
 		TreeMap< String, String> infos = getForeignKeyInfos();

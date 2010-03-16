@@ -1,6 +1,7 @@
 package com.amalto.workbench.providers;
 
 import java.util.Iterator;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -175,6 +176,8 @@ public class XSDTreeLabelProvider extends LabelProvider {
 							 }
 							return "Validation Rule: " + (pattern==null?"":pattern);//e.getChildNodes().item(0).getNodeValue();	
 							//end
+						} else if(source.equals("X_Retrieve_FKinfos")) {
+						   return "X_Retrieve_FKinfos:  "+e.getChildNodes().item(0).getNodeValue();
 						} else {
 							return source+": "+Util.nodeToString((Element)obj);
 						}
@@ -239,7 +242,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
 			XSDTerm xsdTerm = xsdParticle.getTerm();
 			if (xsdTerm instanceof XSDElementDeclaration) {
 				//get Type of Parent Group
-				if (Util.getKeyInfo((XSDElementDeclaration)xsdTerm) != null)
+				if (Util.getKeyInfo(xsdTerm) != null)
 					return ImageCache.getCreatedImage( EImage.PRIMARYKEY.getPath());
 				XSDConcreteComponent xsdConcreteComponent =  xsdParticle.getContainer();
 				if (xsdConcreteComponent instanceof XSDModelGroup) {

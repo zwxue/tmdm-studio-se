@@ -154,13 +154,10 @@ import com.amalto.workbench.actions.XSDNewSimpleTypeDefinition;
 import com.amalto.workbench.actions.XSDNewXPathAction;
 import com.amalto.workbench.actions.XSDPasteConceptAction;
 import com.amalto.workbench.actions.XSDSetAnnotationDescriptionsAction;
-import com.amalto.workbench.actions.XSDSetAnnotationDocumentationAction;
 import com.amalto.workbench.actions.XSDSetAnnotationForeignKeyAction;
 import com.amalto.workbench.actions.XSDSetAnnotationForeignKeyInfoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationLabelAction;
 import com.amalto.workbench.actions.XSDSetAnnotationNoAction;
-import com.amalto.workbench.actions.XSDSetAnnotationSourceSystemAction;
-import com.amalto.workbench.actions.XSDSetAnnotationTargetSystemsAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWrapNoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWrapWriteAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
@@ -608,7 +605,7 @@ public class DataModelMainPage extends AMainPageV2 {
 //					.findPage(DataModelEditorPage.class.getName()));
 //			if (editorPage.isDirty())
 //				this.markDirty();
-			XMLEditor xmleditor=((XObjectEditor)getEditor()).getXmlEditor();
+			XMLEditor xmleditor=(getEditor()).getXmlEditor();
 			if(xmleditor!=null && xmleditor.isDirty())
 				xmleditor.markDirty();
 			//init undo history
@@ -1171,7 +1168,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		    	wsObject.setXsdSchema(Util.nodeToString(xsdschema.getDocument()));
 		    }
 
-			XMLEditor xmleditor=((XObjectEditor)getEditor()).getXmlEditor();
+			XMLEditor xmleditor=(getEditor()).getXmlEditor();
 			xmleditor.refresh(getXObject());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1753,7 +1750,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			if (!(term instanceof XSDWildcard)) {
 				if(term instanceof XSDElementDeclaration)
 				{
-					if(!Util.IsAImporedElement((XSDElementDeclaration)term, xsdSchema) || term.getContainer() instanceof XSDSchema)
+					if(!Util.IsAImporedElement(term, xsdSchema) || term.getContainer() instanceof XSDSchema)
 					{
 						manager.add(editParticleAction);
 						//manager.add(newGroupFromParticleAction);
@@ -2004,7 +2001,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	public void markDirty() {
 		//commit();
 		super.markDirty();
-		XMLEditor xmleditor=((XObjectEditor)getEditor()).getXmlEditor();
+		XMLEditor xmleditor=(getEditor()).getXmlEditor();
 		if(xmleditor!=null && getEditor().isDirty())
 			xmleditor.markDirty();
 		/*
@@ -2215,7 +2212,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		    			Iterator<Map.Entry<String, String>> iter = xsdSchema.getQNamePrefixToNamespaceMap().entrySet().iterator();
 		    			while(iter.hasNext())
 		    			{
-		    				Map.Entry<String, String> entry = (Map.Entry<String, String>)iter.next();
+		    				Map.Entry<String, String> entry = iter.next();
 		    				if(entry.getValue().equalsIgnoreCase(ns))
 		    				{
 		    					nsToDels.add(entry.getKey());

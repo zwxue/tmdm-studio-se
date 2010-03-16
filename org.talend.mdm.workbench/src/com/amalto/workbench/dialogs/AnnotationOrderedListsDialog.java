@@ -59,8 +59,18 @@ public class AnnotationOrderedListsDialog extends Dialog {
 	private String title = "";
 	private String columnName = "";
 	private boolean recursive = true;
+	private boolean retrieveFKinfos = true;
 	
-	private AMainPageV2 parentPage = null;
+	public boolean isRetrieveFKinfos() {
+      return retrieveFKinfos;
+   }
+
+
+   public void setRetrieveFKinfos(boolean retrieveFKinfos) {
+      this.retrieveFKinfos = retrieveFKinfos;
+   }
+
+   private AMainPageV2 parentPage = null;
 	private TreeObject xObject = null;
 	private int actionType;
 	private String dataModelName;
@@ -439,8 +449,22 @@ public class AnnotationOrderedListsDialog extends Dialog {
         });
 
 		textControl.setFocus();
-		
-        if (actionType != AnnotationOrderedListsDialog.AnnotationForeignKeyInfo_ActionType
+		if(actionType == AnnotationOrderedListsDialog.AnnotationForeignKeyInfo_ActionType) {
+		   checkBox = new Button(composite, SWT.CHECK);
+         checkBox.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
+               true, 2, 1));
+         checkBox.addSelectionListener(new SelectionListener() {
+            public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
+            public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+               recursive = checkBox.getSelection();
+               setRetrieveFKinfos(checkBox.getSelection());
+            };
+           });
+         
+         checkBox.setSelection(isRetrieveFKinfos());
+         checkBox.setText("resolve automatically in the Web");
+		}
+		else if (actionType != AnnotationOrderedListsDialog.AnnotationForeignKeyInfo_ActionType
 				&& actionType != AnnotationOrderedListsDialog.AnnotationTargetSystems_ActionType
 				&& actionType != AnnotationOrderedListsDialog.AnnotationSchematron_ActionType) {
 			checkBox = new Button(composite, SWT.CHECK);
