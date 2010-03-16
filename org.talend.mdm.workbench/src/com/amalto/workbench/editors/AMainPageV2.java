@@ -249,7 +249,8 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
 	 */
 	public void markDirty() {
 		topFormPart.markDirty();
-		//commitChanges();
+		//TODO:check this method if there is any other problem.
+		commitChanges();
 	}
 	
 	public void markDirtyWithoutCommit() {
