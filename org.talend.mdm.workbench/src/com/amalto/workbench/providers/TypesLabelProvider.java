@@ -10,6 +10,7 @@ import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDAttributeGroupDefinition;
 import org.eclipse.xsd.XSDAttributeUse;
 import org.eclipse.xsd.XSDAttributeUseCategory;
+import org.eclipse.xsd.XSDComplexTypeContent;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDCompositor;
 import org.eclipse.xsd.XSDConcreteComponent;
@@ -272,7 +273,7 @@ public class TypesLabelProvider extends LabelProvider {
 				else 
 					return ImageCache.getCreatedImage( EImage.SIMPLETYPE.getPath());*/
 			} else if (xsdTerm instanceof XSDModelGroup) {
-/*				int type = ((XSDModelGroup)xsdTerm).getCompositor().getValue();
+				int type = ((XSDModelGroup)xsdTerm).getCompositor().getValue();
 				switch (type) {
 					case XSDCompositor.ALL:
 						return ImageCache.getCreatedImage( EImage.COMPLEX_ALL.getPath());
@@ -280,8 +281,7 @@ public class TypesLabelProvider extends LabelProvider {
 						return ImageCache.getCreatedImage( EImage.COMPLEX_CHOICE.getPath());
 					case XSDCompositor.SEQUENCE:
 						return ImageCache.getCreatedImage( EImage.COMPLEX_SEQUENCE.getPath());				
-				}*/
-				return ImageCache.getCreatedImage( EImage.COMPLEXTYPE.getPath());
+				}
 			} else if (xsdTerm instanceof XSDWildcard) {
 				return ImageCache.getCreatedImage( "icons/wildcard.gif");
 			} else {
@@ -293,11 +293,7 @@ public class TypesLabelProvider extends LabelProvider {
 		if (obj instanceof XSDSimpleTypeDefinition) {
 			return ImageCache.getCreatedImage( EImage.SIMPLETYPE.getPath());
 		}		
-		else if (obj instanceof XSDComplexTypeDefinition) {
-			return ImageCache.getCreatedImage( EImage.COMPLEXTYPE.getPath());
-		}
 		
-		/*
 		if (obj instanceof XSDComplexTypeDefinition) {
 			XSDComplexTypeDefinition ctd = (XSDComplexTypeDefinition) obj;
 			XSDComplexTypeContent ctc = ctd.getContent();
@@ -306,11 +302,11 @@ public class TypesLabelProvider extends LabelProvider {
 					int type = ((XSDModelGroup)((XSDParticle)ctc).getTerm()).getCompositor().getValue();
 					switch (type) {
 						case XSDCompositor.ALL:
-							return ImageCache.getCreatedImage( "icons/complex_all.gif");
+							return ImageCache.getCreatedImage( EImage.COMPLEX_ALL.getPath());
 						case XSDCompositor.CHOICE:
-							return ImageCache.getCreatedImage( "icons/complex_choice.gif");
+							return ImageCache.getCreatedImage( EImage.COMPLEX_CHOICE.getPath());
 						case XSDCompositor.SEQUENCE:
-							return ImageCache.getCreatedImage( "icons/complex_sequence.gif");				
+							return ImageCache.getCreatedImage( EImage.COMPLEX_SEQUENCE.getPath());				
 					}
 				}
 			} else {
@@ -318,9 +314,9 @@ public class TypesLabelProvider extends LabelProvider {
 				return ImageCache.getCreatedImage( "icons/error.gif");
 			}
 		}
-		*/
+
 		if (obj instanceof XSDModelGroup) {
-/*			int type = ((XSDModelGroup)obj).getCompositor().getValue();
+			int type = ((XSDModelGroup)obj).getCompositor().getValue();
 			switch (type) {
 				case XSDCompositor.ALL:
 					return ImageCache.getCreatedImage( EImage.COMPLEX_ALL.getPath());
@@ -328,8 +324,7 @@ public class TypesLabelProvider extends LabelProvider {
 					return ImageCache.getCreatedImage( EImage.COMPLEX_CHOICE.getPath());
 				case XSDCompositor.SEQUENCE:
 					return ImageCache.getCreatedImage( EImage.COMPLEX_SEQUENCE.getPath());
-			}*/
-			return ImageCache.getCreatedImage( EImage.COMPLEXTYPE.getPath());
+			}
 		}
 
 		
