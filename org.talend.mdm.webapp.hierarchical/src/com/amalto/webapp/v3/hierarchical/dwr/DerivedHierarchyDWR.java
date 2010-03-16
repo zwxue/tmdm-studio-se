@@ -8,14 +8,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.directwebremoting.WebContext;
+import org.directwebremoting.WebContextFactory;
+
 import com.amalto.webapp.core.bean.ComboItemBean;
 import com.amalto.webapp.core.bean.Configuration;
 import com.amalto.webapp.core.bean.ListRange;
 import com.amalto.webapp.core.dwr.CommonDWR;
-import com.amalto.webapp.core.util.Util;
-import com.amalto.webapp.core.util.XtentisWebappException;
-import com.amalto.webapp.util.webservices.WSGetChildrenItems;
-import com.amalto.webapp.util.webservices.WSStringArray;
+import com.amalto.webapp.v3.hierarchical.bean.FilterItem;
+import com.amalto.webapp.v3.hierarchical.bean.HierarchicalTreeCriterion;
 import com.amalto.webapp.v3.hierarchical.util.HierarchicalUtil;
 
 public class DerivedHierarchyDWR {
@@ -120,29 +121,44 @@ public class DerivedHierarchyDWR {
 
 	}
 	
-	public String[] testGetResults() {
+	public boolean updateExCriterionForDerivedHerarchy(FilterItem[] filters) {
 		
-		String[] result= {};
-		
-		WSGetChildrenItems wsGetChildrenItems=new WSGetChildrenItems(
-		   "Order",
-		   "City",
-		   new WSStringArray(new String[]{"City/code"}),
-		   "City/country",
-		   "City/name",
-		   "0101"
-		);
-		try {
-			WSStringArray wsStringArray=Util.getPort().getChildrenItems(wsGetChildrenItems);
-			result=wsStringArray.getStrings();
-		} catch (RemoteException e) {
+    	try {
+			WebContext ctx = WebContextFactory.get();
+			
+			ctx.getSession().setAttribute(
+					HierarchicalUtil.DERIVED_HIERARCHY_EXT_CRITERION,filters
+					);
+		} catch (Exception e) {
 			e.printStackTrace();
-		} catch (XtentisWebappException e) {
-			e.printStackTrace();
+			return false;
 		}
-		
-		return result;
-
+		return true;
 	}
+	
+//	public String[] testGetResults() {
+//		
+//		String[] result= {};
+//		
+//		WSGetChildrenItems wsGetChildrenItems=new WSGetChildrenItems(
+//		   "Order",
+//		   "City",
+//		   new WSStringArray(new String[]{"City/code"}),
+//		   "City/country",
+//		   "City/name",
+//		   "0101"
+//		);
+//		try {
+//			WSStringArray wsStringArray=Util.getPort().getChildrenItems(wsGetChildrenItems);
+//			result=wsStringArray.getStrings();
+//		} catch (RemoteException e) {
+//			e.printStackTrace();
+//		} catch (XtentisWebappException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		return result;
+//
+//	}
 
 }

@@ -19,6 +19,12 @@ import com.amalto.webapp.core.util.Util;
 import com.amalto.webapp.core.util.XtentisWebappException;
 import com.amalto.webapp.util.webservices.WSGetChildrenItems;
 import com.amalto.webapp.util.webservices.WSStringArray;
+import com.amalto.webapp.util.webservices.WSStringPredicate;
+import com.amalto.webapp.util.webservices.WSWhereAnd;
+import com.amalto.webapp.util.webservices.WSWhereCondition;
+import com.amalto.webapp.util.webservices.WSWhereItem;
+import com.amalto.webapp.v3.hierarchical.bean.FilterItem;
+import com.amalto.webapp.v3.hierarchical.util.HierarchicalUtil;
 
 public class DerivedHierarchyTreeLoadServlet extends HttpServlet {
 
@@ -41,7 +47,12 @@ public class DerivedHierarchyTreeLoadServlet extends HttpServlet {
 		
 		String endingFlag=req.getParameter("endingFlag");
 		
-		String[] results=getResults(concept,fatherPK, labelXpath, fkXpath);
+		FilterItem[] filters = {};
+		if(req.getSession().getAttribute(HierarchicalUtil.DERIVED_HIERARCHY_EXT_CRITERION)!=null){
+			filters=(FilterItem[]) req.getSession().getAttribute(HierarchicalUtil.DERIVED_HIERARCHY_EXT_CRITERION);
+		}
+		
+		String[] results=getResults(concept,fatherPK, labelXpath, fkXpath,filters);
 		try {
 			String jsonTree = "";
 			ArrayList<JSONObject> rootGroup = new ArrayList<JSONObject>();
@@ -87,11 +98,12 @@ public class DerivedHierarchyTreeLoadServlet extends HttpServlet {
 		return treenode;
 	}
 
-	private String[] getResults(String concept,String fatherId,String labelXpath,String fkXpath) {
+	private String[] getResults(String concept,String fatherId,String labelXpath,String fkXpath,FilterItem[] filters) {
 		
         String[] results= {};
 		
 		try {
+			
 			Configuration configuration=Configuration.loadConfigurationFromDBDirectly();
 			String cluster=configuration.getCluster();
 			String datamodel=configuration.getModel();
@@ -111,8 +123,44 @@ public class DerivedHierarchyTreeLoadServlet extends HttpServlet {
 					   new WSStringArray(PkXpaths),
 					   fkXpath,
 					   labelXpath,
-					   fatherId
+					   fatherId,
+					   null
 					);
+			
+			// filters
+			if (filters == null || filters.length == 0) {
+				wsGetChildrenItems.setWhereItem(null);
+			} else {
+				ArrayList<WSWhereItem> conditions = new ArrayList<WSWhereItem>();
+				for (int i = 0; i < filters.length; i++) {
+					FilterItem filterItem = filters[i];
+					
+					//parse related filter item
+					if(filterItem.getFieldPath()!=null&&filterItem.getFieldPath().length()>0) {
+						if(concept.equals(filterItem.getFieldPath().split("/")[0])) {
+							WSWhereCondition wc = new WSWhereCondition(filterItem
+									.getFieldPath(), HierarchicalUtil.getOperator(filterItem
+									.getOperator()), filterItem.getValue(),
+									WSStringPredicate.NONE, false);
+							WSWhereItem item = new WSWhereItem(wc, null, null);
+							conditions.add(item);
+						}
+					}
+					
+				}
+				
+				if(conditions.size()>0) {
+					WSWhereAnd and = new WSWhereAnd(conditions
+							.toArray(new WSWhereItem[conditions.size()]));
+					WSWhereItem wi = new WSWhereItem(null, and, null);
+					wsGetChildrenItems.setWhereItem(wi);
+				}else {
+					wsGetChildrenItems.setWhereItem(null);
+				}
+				
+			}
+			
+			
 			
 			WSStringArray wsStringArray=Util.getPort().getChildrenItems(wsGetChildrenItems);
 			results=wsStringArray.getStrings();

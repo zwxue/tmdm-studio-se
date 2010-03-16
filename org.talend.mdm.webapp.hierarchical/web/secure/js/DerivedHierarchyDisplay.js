@@ -1,3 +1,8 @@
+/*
+ * @include  "/org.talend.mdm.webapp.openmdm/web/secure/js/widget/FieldsWhereConditionPanel.js"
+ * @include  "/com.amalto.webapp.core/web/secure/js/core.js"
+ */
+
 Ext.namespace('amalto.hierarchical');
 amalto.hierarchical.DerivedHierarchyDisplay = function(config) {
 	Ext.applyIf(this, config);
@@ -73,8 +78,7 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
                         height:200,     
                         split:true,
                         html: '' +
-                        '<div id="hierarchyItemsCriterias"/>',
-                        border: true,
+                        '<div id="hierarchyItemsCriterias"></div><br/><div id="derivedHierarchyWherePanel"></div>',
                         bodyborder: true,
                         buttonAlign : "left",
                         buttons : [{
@@ -85,8 +89,7 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
                             }]
                     }),this.hierarchicalTree]
         });
-        
-        
+               
 
 	},
 	
@@ -116,7 +119,13 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
 			this.displayArray[j]=DWRUtil.getValue('itemsSearchDisplayField'+i);
 			this.fkPathArray[j]=this.parseSearchFKPath(i);
 		}
-       
+		
+		//put criterias 2 session
+		var foa=this.wcEditorGridPanel.getWhereConditions();
+		DWREngine.setAsync(false); 
+        DerivedHierarchyInterface.updateExCriterionForDerivedHerarchy(foa,function(status){});
+        DWREngine.setAsync(true);
+		
 		//reload tree
         this.hierarchicalTree.getRootNode().reload();
         //this.hierarchicalTree.expandAll();
@@ -163,6 +172,7 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
             var endingFlag='0';
             if(node.attributes.level+1==this.pivotArray.length)endingFlag='1';
             this.treeLoader.baseParams.endingFlag=endingFlag;
+            
 		}  
 
     },
@@ -179,6 +189,9 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
     },
 	
     initCriteria : function(){
+    	
+    	
+       
     	//display
     	DWRUtil.setValue('hierarchyItemsCriterias','<span id="hierarchyItemsCriteria1">' +
     	                                     '<span style="padding-left:5px">Pivot: </span>'+
@@ -196,8 +209,54 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
        DerivedHierarchyInterface.getPivotList(function (result){
                 DWRUtil.addOptions('itemsSearchPivotName1',result.data,"value","text");
             },language);
-            
+        
+       //where panel
+       if(this.wcEditorGridPanel==undefined||this.wcEditorGridPanel==null){
+       	   
+           this.wcEditorGridPanel = new amalto.widget.FieldsWhereConditionPanel(
+                {
+                 i18n:language,
+                 validateBeforeAddFilter: function() {
+                    var firstPivot=DWRUtil.getValue('itemsSearchPivotName1');
+                    
+                    if(firstPivot=='-1'){
+                            Ext.MessageBox.alert('Warnning', 'First Pivot can not be empty! ');
+                            return false;
+                    }
+                    
+                    return true;
+                 },
+                 getInitField: function() {
+                    var firstDisplay=DWRUtil.getValue('itemsSearchDisplayField1');
+                    return firstDisplay;
+                 },
+                 getConceptForLoadingFieldStore: function(){
+                    var pivots='';
+                    var currentCounter=$('hierarchyItemsCriterias').children.length;
+                    for (var i = 0; i < currentCounter; i++) {
+                        var thisPivot=DWRUtil.getValue('itemsSearchPivotName'+(i+1));
+                        if(thisPivot!='-1'){
+                        	pivots+=thisPivot;
+                            if(i<currentCounter-1)pivots+=',';
+                        }
+                        
+                    }
+                              
+                    return pivots; 
+                }
+                 
+                });
+                
+           var wcContainer= new Ext.Panel({
+                items : [this.wcEditorGridPanel],
+                border:false,
+                renderTo:"derivedHierarchyWherePanel"
+           });
+       }else{
+       	  this.wcEditorGridPanel.refreshWherePanelStore();
+       }
     },
+    
     
     initStatus : function(){
         

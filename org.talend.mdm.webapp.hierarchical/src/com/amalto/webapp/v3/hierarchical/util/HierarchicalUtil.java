@@ -37,6 +37,8 @@ public class HierarchicalUtil {
 	
 	public static final String HIERARCHICAL_TREE_CRITERION="com.amalto.webapp.v3.hierarchical.bean.HierarchicalTreeCriterion";
 	
+	public static final String DERIVED_HIERARCHY_EXT_CRITERION="com.amalto.webapp.v3.hierarchical.bean.DerivedHierarchyExtCriterion";
+	
 	public static final String HIERARCHICAL_TREE_UPDATEHISTORY="com.amalto.webapp.v3.hierarchical.bean.UpdateHistory";
 
 	public static Map<String, String> getBusinessConcepts(String language)throws Exception {
@@ -257,7 +259,7 @@ public class HierarchicalUtil {
 	 * @param option
 	 * @return
 	 */
-	private static WSWhereOperator getOperator(String option){
+	public static WSWhereOperator getOperator(String option){
 		WSWhereOperator res = null;
 		if (option.equalsIgnoreCase("CONTAINS"))
 			res = WSWhereOperator.CONTAINS;

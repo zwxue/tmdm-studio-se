@@ -70,103 +70,28 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 					}.createDelegate(this)
         );
         
-        this.filterOperationStore = new Ext.data.Store({
-          proxy: new Ext.data.MemoryProxy([
-                ['CONTAINS',amalto.hierarchical.HierarchicalViewLocal.get("Filter_Operation_CONTAINS")],
-                ['EQUALS',amalto.hierarchical.HierarchicalViewLocal.get("Filter_Operation_EQUALS")],
-                ['NOT_EQUALS',amalto.hierarchical.HierarchicalViewLocal.get("Filter_Operation_NOT_EQUALS")],
-                ['GREATER_THAN',amalto.hierarchical.HierarchicalViewLocal.get("Filter_Operation_GREATER_THAN")],
-                ['GREATER_THAN_OR_EQUAL',amalto.hierarchical.HierarchicalViewLocal.get("Filter_Operation_GREATER_THAN_OR_EQUAL")],
-                ['LOWER_THAN',amalto.hierarchical.HierarchicalViewLocal.get("Filter_Operation_LOWER_THAN")],
-                ['LOWER_THAN_OR_EQUAL',amalto.hierarchical.HierarchicalViewLocal.get("Filter_Operation_LOWER_THAN_OR_EQUAL")],
-                ['STARTSWITH',amalto.hierarchical.HierarchicalViewLocal.get("Filter_Operation_STARTSWITH")],
-                ['STRICTCONTAINS',amalto.hierarchical.HierarchicalViewLocal.get("Filter_Operation_STRICTCONTAINS")]
-          ]),
-          reader: new Ext.data.ArrayReader({}, [
-              {name: 'value',mapping: 0, type: 'string'},
-              {name: 'text',mapping: 1}
-          ])
-       });
         
-		this.store1 = new Ext.data.Store({
-			reader : new Ext.data.JsonReader({
-				total : "total",
-				root : "root"
-				//id : "id"
-			}, [{
-				mapping : "Field",
-				name : "Field",
-				type : "string"
-			}, {
-				mapping : "Operator",
-				name : "Operator",
-				type : "string"
-			}, {
-				mapping : "Value",
-				name : "Value",
-				type : "string"
-			}]),
-			proxy : new Ext.data.HttpProxy({})
-		});
-
-		this.editorGridPanel1 = new Ext.grid.EditorGridPanel({
-			store : this.store1,
-			width : 500,
-			height : 100,
-			title : "",
-			selModel : new Ext.grid.RowSelectionModel({}),
-			border : true,
-			clicksToEdit:1,
-			tbar : new Ext.Toolbar([{
-				handler : function(button, event) {
-					this.onAddFilterClick(button, event);
-				}.createDelegate(this),
-				text : amalto.hierarchical.HierarchicalViewLocal.get("Button_Add_Filter")
-			}]),
-			listeners:
-   	   	        {
-		   			cellclick: function(g,rowIndex,columnIndex,e) {
-					     this.onDeleteFilterOperation(g,rowIndex,columnIndex,e);
-				    }.createDelegate(this)		   
-   	   	        },
-			columns : [{
-				hidden : false,
-				header : amalto.hierarchical.HierarchicalViewLocal.get("Search_Field_Filters_Column_Field"),
-				dataIndex : "Field",
-				sortable : true,
-				editor:new Ext.form.ComboBox({
-				   store: this.titleStore,
-				   valueField : "value",
-			       displayField: "text",
-			       editable : false
-				})
-			}, {
-				hidden : false,
-				header : amalto.hierarchical.HierarchicalViewLocal.get("Search_Field_Filters_Column_Operator"),
-				dataIndex : "Operator",
-				sortable : true,
-				editor:new Ext.form.ComboBox({
-				   store: this.filterOperationStore,
-				   valueField : "value",
-			       displayField: "text",
-			       editable : false
-				}),
-				width:165
-			}, {
-				hidden : false,
-				header : amalto.hierarchical.HierarchicalViewLocal.get("Search_Field_Filters_Column_Value"),
-				dataIndex : "Value",
-				sortable : true,
-				editor:new Ext.form.TextField()
-			}, {
-			    hidden : false,
-				header : amalto.hierarchical.HierarchicalViewLocal.get("Search_Field_Filters_Column_Delete"),
-				dataIndex : "Delete",
-				sortable : true, 
-				renderer:this.deleteFiterRenderer,
-				width:80
-			}]
-		});
+		this.editorGridPanel1 = new amalto.widget.FieldsWhereConditionPanel(
+			{
+			 i18n:language,
+		     validateBeforeAddFilter: function() {
+		     	var titleFieldLabel=DWRUtil.getValue('titleFieldCmp');
+                if(titleFieldLabel==''){
+                        Ext.MessageBox.alert(amalto.hierarchical.HierarchicalViewLocal.get("Messagebox_Error"), amalto.hierarchical.HierarchicalViewLocal.get("Message_Missing_Title"));
+                        return false;
+                }
+                
+                return true;
+		     },
+		     getInitField: function() {
+                var titleFieldValue=Ext.getCmp('titleFieldCmp').value;
+                return titleFieldValue;
+             },
+             getConceptForLoadingFieldStore : function(){
+                var dataObjectValue=Ext.getCmp('dataObjectCmp').value;
+                return dataObjectValue;
+             }
+		    });
 				
 		this.hierarchicalTree = new Ext.ux.MultiSelectTreePanel(
 		   {
@@ -651,10 +576,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 	    	   //nothing
         });
 	},
-	
-	deleteFiterRenderer : function(){
-		return "<img src='img/genericUI/trash.gif' style='cursor:pointer' border=\"0\" />";
-	},
+
 	
 	onTreeLeafNodeClick : function(node, e){
 		if(node && node.isLeaf()){
@@ -723,38 +645,9 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
             this.possiblePivotsStore.reload();
             this.titleStore.reload();
             
-            this.store1.removeAll();
-            this.store1.commitChanges();
+            this.editorGridPanel1.refreshWherePanelStore();
     },
     
-    onAddFilterClick : function(button, event){
-
-    	var titleFieldLabel=DWRUtil.getValue('titleFieldCmp');
-    	if(titleFieldLabel==''){
-				Ext.MessageBox.alert(amalto.hierarchical.HierarchicalViewLocal.get("Messagebox_Error"), amalto.hierarchical.HierarchicalViewLocal.get("Message_Missing_Title"));
-				return false;
-		}
-		var titleFieldValue=Ext.getCmp('titleFieldCmp').value;
-    	// access the Record constructor through the grid's store
-        var Filter = this.store1.recordType;
-        var f = new Filter({
-                    Field: titleFieldValue,
-                    Operator: 'CONTAINS',
-                    Value: '.*'
-                });
-                
-        this.editorGridPanel1.stopEditing();
-        this.store1.insert(0, f);
-        this.editorGridPanel1.startEditing(0, 0);
-
-    },
-    
-    onDeleteFilterOperation: function(g,rowIndex,columnIndex,e){
-    	var record = g.getStore().getAt(rowIndex);
-		if(columnIndex==3){	
-		   	this.store1.remove(record);
-		}
-    },
     
     onEnterKeyClick : function(a, e){
     	if(e.getKey() == e.ENTER) {
@@ -779,19 +672,9 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
     	var dataObjectValue=Ext.getCmp('dataObjectCmp').value;
     	var pivotValue=Ext.getCmp('pivotCmp').value;
     	var titleValue=Ext.getCmp('titleFieldCmp').value;
-    	this.store1.commitChanges();
-    	if(this.store1.getCount()>0){
-    		var foa=new Array();
-    		for (var index = 0; index < this.store1.getCount(); index++) {
-    			var record = this.store1.getAt(index);
-    			foa[index]=new Array();
-    			foa[index]={
-    				       'fieldPath':record.data.Field,
-    			           'operator':record.data.Operator,
-    			           'value':record.data.Value
-    			           };
-    		}
-    	}
+    	
+    	var foa=this.editorGridPanel1.getWhereConditions();
+    	
     	var orderExprText=DWRUtil.getValue('orderExprText');
     	var maxSizeText=DWRUtil.getValue('maxSizeText');
     	
@@ -874,19 +757,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
     	var dataObjectValue=Ext.getCmp('dataObjectCmp').value;
     	var pivotValue=Ext.getCmp('pivotCmp').value;
     	var titleValue=Ext.getCmp('titleFieldCmp').value;
-    	this.store1.commitChanges();
-    	if(this.store1.getCount()>0){
-    		var foa=new Array();
-    		for (var index = 0; index < this.store1.getCount(); index++) {
-    			var record = this.store1.getAt(index);
-    			foa[index]=new Array();
-    			foa[index]={
-    				       'fieldPath':record.data.Field,
-    			           'operator':record.data.Operator,
-    			           'value':record.data.Value
-    			           };
-    		}
-    	}
+    	var foa=this.editorGridPanel1.getWhereConditions();
     	var orderExprText=DWRUtil.getValue('orderExprText');
     	var maxSizeText=DWRUtil.getValue('maxSizeText');
     	
@@ -997,21 +868,10 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 	    	       //set filters
 	    	       if(data.filters!=null&&data.filters.filterItems!=null&&data.filters.filterItems.length>0){
 	    	       	  
-	    	       	  this.store1.removeAll();
-                      this.store1.commitChanges();
+                      this.editorGridPanel1.refreshWherePanelStore();
                       
-	    	       	  var Filter = this.store1.recordType;
 	    	       	  var dataFiltersArray=data.filters.filterItems;
-	    	       	  for (var index = 0; index < dataFiltersArray.length; index++) {
-	    	       	  	var getFilterItem=dataFiltersArray[index];
-	    	       	  	var f = new Filter({
-					                    Field: getFilterItem.fieldPath,
-					                    Operator: getFilterItem.operator,
-					                    Value: getFilterItem.value
-					                });
-					    this.store1.insert(index, f);            
-	    	       	  }
-	    	       	  this.store1.commitChanges();
+	    	       	  this.editorGridPanel1.initWherePanelStore(dataFiltersArray);
 	    	       	  
 	    	       }
 	    	       //set addition info

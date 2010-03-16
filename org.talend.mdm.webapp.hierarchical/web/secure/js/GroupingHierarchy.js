@@ -11,6 +11,8 @@ amalto.hierarchical.GroupingHierarchy = function () {
 	
     loadResource("/hierarchical/secure/js/HierarchicalViewDisplay.js", "");
     
+    loadResource("/talendmdm/secure/js/widget/FieldsWhereConditionPanel.js", "");
+    
     function initUIAndData(){
 		var tabPanel = amalto.core.getTabPanel();
 		hierarchicalViewDisplayPanel = tabPanel.getItem('hierarchicalViewDisplay');

@@ -12,6 +12,8 @@ amalto.hierarchical.DerivedHierarchy = function () {
     
     loadResource("/hierarchical/secure/js/MultiSelectTreePanel.js", "");
     
+    loadResource("/talendmdm/secure/js/widget/FieldsWhereConditionPanel.js", "");
+    
     var derivedHierarchyDisplayPanel;
     
     function initUIAndData(){
