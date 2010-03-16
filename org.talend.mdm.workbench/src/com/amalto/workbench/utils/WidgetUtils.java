@@ -1,5 +1,10 @@
 package com.amalto.workbench.utils;
 
+import org.eclipse.jface.bindings.keys.KeyStroke;
+import org.eclipse.jface.bindings.keys.ParseException;
+import org.eclipse.jface.fieldassist.ContentProposalAdapter;
+import org.eclipse.jface.fieldassist.SimpleContentProposalProvider;
+import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.text.ITextOperationTarget;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.text.TextViewerUndoManager;
@@ -8,6 +13,7 @@ import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -76,4 +82,20 @@ public class WidgetUtils {
 		}
 		
 	}
+	
+
+    public static void addContentProposal(Control control,String[] proposals, char[] autoActivationCharacters) {
+        //add content proposal
+
+        KeyStroke keyStroke=null;
+		try {
+			keyStroke = KeyStroke.getInstance("Alt+/");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        ContentProposalAdapter adapter = new ContentProposalAdapter(control,new TextContentAdapter(), new SimpleContentProposalProvider(proposals), keyStroke,
+                autoActivationCharacters);   
+        adapter.setPopupSize(new Point(120,100));
+    }	
 }

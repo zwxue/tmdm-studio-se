@@ -10,7 +10,12 @@ import java.awt.event.TextEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.eclipse.jface.bindings.keys.KeyStroke;
+import org.eclipse.jface.bindings.keys.ParseException;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.fieldassist.ContentProposalAdapter;
+import org.eclipse.jface.fieldassist.SimpleContentProposalProvider;
+import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
@@ -22,6 +27,8 @@ import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
@@ -47,7 +54,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.amalto.workbench.dialogs.PluginDetailsDialog;
 import com.amalto.workbench.dialogs.ResourceSelectDialog;
 import com.amalto.workbench.dialogs.XpathSelectDialog;
-import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.Line;
@@ -57,6 +63,7 @@ import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.EInputTemplate;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.WidgetUtils;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSGetServicesList;
 import com.amalto.workbench.webservices.WSRoutingRule;
@@ -347,11 +354,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			serviceParametersText.addKeyListener(new KeyListener() {
 
 				public void keyReleased(KeyEvent event) {
-					/*
-					 * System.out.println(event.stateMask == SWT.CTRL );
-					 * System.out.println("eevent.stateMask:"+event.stateMask);
-					 * System.out.println("event.keyCode:"+event.keyCode);
-					 */
+
 					// System.out.println("SWT.CTRL:"+SWT.CTRL);
 					int start = serviceParametersText.getSelection().x;
 					int end = serviceParametersText.getSelection().y;
@@ -407,18 +410,14 @@ public class RoutingRuleMainPage extends AMainPageV2 {
     			}
             	
             });
-           /* DragSource wcSource = new DragSource(routingExpressionsViewer.getControl(),DND.DROP_MOVE);
-            wcSource.setTransfer(new Transfer[]{TextTransfer.getInstance()});
-            wcSource.addDragListener(new WCDragSourceListener());*/
+
             wrap.Wrap(this, conditionViewer);
-            
                         
             //make the Page window a DropTarget - we need to dispose it
             windowTarget = new DropTarget(this.getPartControl(), DND.DROP_MOVE);
             windowTarget.setTransfer(new Transfer[]{TextTransfer.getInstance()});
             windowTarget.addDropListener(new DCDropTargetListener());
             
-                        
             refreshData();
 
         } catch (Exception e) {
@@ -426,9 +425,18 @@ public class RoutingRuleMainPage extends AMainPageV2 {
         }
 
     }//createCharacteristicsContent
-
-
-    
+	private void initContentProposal() {
+		//add content proposal to conditions
+		java.util.List<Line> lines=(java.util.List<Line> )conditionViewer.getViewer().getInput();
+		java.util.List<String> proposals=new ArrayList<String>();
+		for(Line line: lines) {
+			String value= line.keyValues.get(3).value;
+			if(value!=null && value.trim().length()>0)
+				proposals.add(value);
+		}
+		WidgetUtils.addContentProposal(conditionText, (String[])proposals.toArray(new String[proposals.size()]), new char[] {' ','('});
+		
+	}
 	protected void refreshData() {
 		try {
 			
@@ -457,14 +465,14 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 				lines.add(line);
             }
             conditionViewer.getViewer().setInput(lines);
-            
+
 			if(wsRoutingRule.getCondition()!=null)
 			conditionText.setText(wsRoutingRule.getCondition());
 			this.refreshing = false;
             if(objectTypeText.getText().length()>0 && !objectTypeText.getText().equals("*")){           	
             	conditionViewer.setConceptName(objectTypeText.getText());
             }
-			
+			initContentProposal();
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page", "Error refreshing the page: "+e.getLocalizedMessage());
@@ -504,36 +512,22 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			//refresh serverview
 			ServerView view= ServerView.show();
 			view.getViewer().refresh();
-			//new ServerRefreshAction(view,getXObject().getServerRoot()).run();
+			initContentProposal();
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page", "Error comitting the page: "+e.getLocalizedMessage());
 		}    	
 	}
-	
-	
-	
 
 	public void textChanged(TextEvent event) {
 		markDirty();
 	}
 
-	/*
-	private void hookContextMenu(TreeViewer viewer) {
-	}
-
-	private void fillContextMenu(IMenuManager manager) {
-	}
-	*/
-	
 	public void dispose() {
 		super.dispose();
 		windowTarget.dispose();
 	}
 	
-
-
-
 	/****************************************************************************
 	 *   DND
 	 ****************************************************************************/
