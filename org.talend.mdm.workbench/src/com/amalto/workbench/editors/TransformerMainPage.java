@@ -122,6 +122,7 @@ import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.WSTransformerVariablesMapping;
 import com.amalto.workbench.webservices.WSTypedContent;
 import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.widgets.DescAnnotationComposite;
 import com.amalto.workbench.widgets.LabelCombo;
 
 public class TransformerMainPage extends AMainPageV2 {
@@ -160,7 +161,7 @@ public class TransformerMainPage extends AMainPageV2 {
 	protected String filePath;
 	
 	protected int currentPlugin = -1; 
-
+	protected DescAnnotationComposite desAntionComposite ;
 	
 	protected TreeMap<String, String> pluginDescriptions = new TreeMap<String, String>();
 	
@@ -333,9 +334,10 @@ public class TransformerMainPage extends AMainPageV2 {
                     new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
             );
             descriptionComposite.setLayout(   new GridLayout(3 ,false ));
-
+            
+            //edit by ymli; fix the bug:0012024 Make Process descriptions multilingual.
             //description
-            Label descriptionLabel = toolkit.createLabel(descriptionComposite, "Description", SWT.NULL);
+           /* Label descriptionLabel = toolkit.createLabel(descriptionComposite, "Description", SWT.NULL);
             descriptionLabel.setLayoutData(
                     new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
             );
@@ -355,8 +357,18 @@ public class TransformerMainPage extends AMainPageV2 {
             		//markDirty();
             		markDirtyWithoutCommit();
             	}
-            });
-            
+            });*/
+            desAntionComposite = new DescAnnotationComposite("Description" ," ...", toolkit, descriptionComposite, (AMainPageV2)this,false);
+            desAntionComposite.getTextWidget().addModifyListener(new ModifyListener() {
+				
+				public void modifyText(ModifyEvent e) {
+					if (refreshing) return;
+            		TransformerMainPage.this.comitting= true;
+            		transformer.setDescription(desAntionComposite.getText());
+            		TransformerMainPage.this.comitting= false;
+            		markDirtyWithoutCommit();
+				}
+			});
             
             //File Process
             Button processButton = toolkit.createButton(descriptionComposite,"",SWT.PUSH);
@@ -844,7 +856,8 @@ public class TransformerMainPage extends AMainPageV2 {
 			
 			WSTransformerV2 wsTransformer = (WSTransformerV2) (getXObject().getWsObject());    	
 			
-			descriptionText.setText(wsTransformer.getDescription() == null ? "" : wsTransformer.getDescription());
+			//descriptionText.setText(wsTransformer.getDescription() == null ? "" : wsTransformer.getDescription());
+			desAntionComposite.getTextWidget().setText(wsTransformer.getDescription() == null ? "" : wsTransformer.getDescription());
 			
 			stepsList.removeAll();
 			WSTransformerProcessStep[] specs =  wsTransformer.getProcessSteps();
