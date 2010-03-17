@@ -11,6 +11,7 @@ amalto.hierarchical.DerivedHierarchyDisplay = function(config) {
 			.call(this);
 };
 Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
+
 	lastPivotPanelNum:1,
 	
 	pivotArray:{},
@@ -108,7 +109,7 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
 			Ext.MessageBox.alert('Warnning', 'Please define a pivot! ');
 			return;
 		}
-		//put criterias 
+		//put criterias
 		
 		this.pivotArray=new Array(this.lastPivotPanelNum);
 		this.displayArray=new Array(this.lastPivotPanelNum);
@@ -172,6 +173,15 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
             var endingFlag='0';
             if(node.attributes.level+1==this.pivotArray.length)endingFlag='1';
             this.treeLoader.baseParams.endingFlag=endingFlag;
+            
+            //recursion check
+            if(this.pivotArray.length>1){
+                 if(this.pivotArray[this.pivotArray.length-1]==this.pivotArray[this.pivotArray.length-2]){
+                    this.treeLoader.baseParams.recursion='1';
+                 }else{
+                 	this.treeLoader.baseParams.recursion='0';
+                 }
+            }
             
 		}  
 
@@ -306,12 +316,27 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
     	
     	var rtnSize=$('itemsSearchFKPath'+ this.lastPivotPanelNum).length;
         if(rtnSize>0){
+          //recursivity check
+          if(this.isUnderRecursionMode()){
+             Ext.MessageBox.alert('Sorry', 'No more pivot can be added, since you are under the recursion mode. ');
+             return;
+          }
           this.addCriteria('hierarchyItemsCriteria'+this.lastPivotPanelNum,this.lastPivotPanelNum);          
         }else{
              Ext.MessageBox.alert('Sorry', 'There is no eligible pivot from this entity. ');
              return;
         }
     	
+    },
+    
+    isUnderRecursionMode: function(){
+    	var supportRecursion=false;
+    	if(this.lastPivotPanelNum>1){
+    		var lastPivot=$('itemsSearchPivotName' + this.lastPivotPanelNum).value;
+            var precedingPivot=$('itemsSearchPivotName' + (this.lastPivotPanelNum-1)).value;
+            if(lastPivot==precedingPivot)supportRecursion=true;  
+        }
+        return supportRecursion;
     },
     
     addCriteria: function(criteriaParent, id){    

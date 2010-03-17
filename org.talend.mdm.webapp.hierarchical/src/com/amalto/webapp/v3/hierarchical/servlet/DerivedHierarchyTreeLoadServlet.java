@@ -39,12 +39,23 @@ public class DerivedHierarchyTreeLoadServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		String fatherPK=req.getParameter("pk");
-		int fatherLevel=Integer.parseInt(req.getParameter("level"));
 		
+		if(fatherPK==null) {
+			outputString(resp, "");
+			return;
+		}
+		
+		String recursion=req.getParameter("recursion");
+		
+        boolean isRecursion=false;
+		if(recursion!=null&&recursion.equals("1")) {
+			isRecursion=true;
+		}
+		
+		int	fatherLevel=Integer.parseInt(req.getParameter("level"));
 		String concept=req.getParameter("nextPivot");
 		String labelXpath=req.getParameter("nextDisplay");
 		String fkXpath=req.getParameter("nextFkPath");
-		
 		String endingFlag=req.getParameter("endingFlag");
 		
 		FilterItem[] filters = {};
@@ -58,16 +69,13 @@ public class DerivedHierarchyTreeLoadServlet extends HttpServlet {
 			ArrayList<JSONObject> rootGroup = new ArrayList<JSONObject>();
 			
 			for (int i = 0; i < results.length; i++) {
-				JSONObject treenode = data2node(results[i],fatherLevel+1,endingFlag);
+				JSONObject treenode = data2node(results[i],fatherLevel+1,endingFlag,isRecursion);
 				rootGroup.add(treenode);
 			}
 			
 			jsonTree=rootGroup.toString();
 			
-			resp.setCharacterEncoding("utf-8");
-			PrintWriter out = resp.getWriter();
-			out.println(jsonTree);
-			out.close();
+			outputString(resp, jsonTree);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -79,7 +87,14 @@ public class DerivedHierarchyTreeLoadServlet extends HttpServlet {
 
 	}
 
-	private JSONObject data2node(String result,int level,String endingFlag) throws Exception {
+	private void outputString(HttpServletResponse resp, String jsonTree)throws IOException {
+		resp.setCharacterEncoding("utf-8");
+		PrintWriter out = resp.getWriter();
+		out.println(jsonTree);
+		out.close();
+	}
+
+	private JSONObject data2node(String result,int level,String endingFlag,boolean isRecursion) throws Exception {
 		
 		Document doc=Util.parse(result);
 		String key=Util.getFirstTextNode(doc, "/result/result-key/");
@@ -89,9 +104,16 @@ public class DerivedHierarchyTreeLoadServlet extends HttpServlet {
 		//treenode.put("id", level+"_"+key);
 		treenode.put("pk", key);
 		treenode.put("text", label);
-		treenode.put("level", level);
-		treenode.put("leaf", endingFlag.equals("1"));
-		//treenode.put("leaf", false);
+		if(!isRecursion) {
+			treenode.put("level", level);
+		}else {
+			treenode.put("level", 1);
+		}
+		if(!isRecursion) {
+			treenode.put("leaf", endingFlag.equals("1"));
+		}else {
+			treenode.put("leaf", false);
+		}
 		treenode.put("draggable", false);
 		treenode.put("allowDrop", false);
 
