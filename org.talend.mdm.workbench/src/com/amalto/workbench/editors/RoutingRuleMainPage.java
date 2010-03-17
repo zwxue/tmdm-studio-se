@@ -10,12 +10,7 @@ import java.awt.event.TextEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.eclipse.jface.bindings.keys.KeyStroke;
-import org.eclipse.jface.bindings.keys.ParseException;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.fieldassist.ContentProposalAdapter;
-import org.eclipse.jface.fieldassist.SimpleContentProposalProvider;
-import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
@@ -27,8 +22,6 @@ import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
@@ -37,6 +30,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -59,6 +53,7 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
+import com.amalto.workbench.proposal.ContentProposalAdapterExtended;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.EInputTemplate;
 import com.amalto.workbench.utils.IConstants;
@@ -66,12 +61,15 @@ import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WidgetUtils;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSGetServicesList;
+import com.amalto.workbench.webservices.WSGetTransformerPKs;
+import com.amalto.workbench.webservices.WSGetTransformerV2PKs;
 import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRuleExpression;
 import com.amalto.workbench.webservices.WSServiceGetDocument;
 import com.amalto.workbench.webservices.WSServicesList;
 import com.amalto.workbench.webservices.WSServicesListItem;
 import com.amalto.workbench.webservices.WSString;
+import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.ConditionWidget;
@@ -154,7 +152,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             descriptionText.addModifyListener(new ModifyListener() {
             	public void modifyText(ModifyEvent e) {
             		if (refreshing) return;
-            		markDirty();
+            		markDirtyWithoutCommit();
             	}
             }); 
             
@@ -183,7 +181,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             objectTypeText.addModifyListener(new ModifyListener() {
             	public void modifyText(ModifyEvent e) {
             		if (refreshing) return;
-            		markDirty();
+            		markDirtyWithoutCommit();
             	}
             });
             xpathButton = toolkit.createButton(typeComposite,"", SWT.PUSH);
@@ -223,7 +221,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             isSynchronousButton.addMouseListener(new MouseListener() {
             	public void mouseUp(MouseEvent e) {
              		//mark for need to save
-            		markDirty();
+            		markDirtyWithoutCommit();
             	}
             	public void mouseDoubleClick(MouseEvent e) {}
             	public void mouseDown(MouseEvent e) {}
@@ -235,7 +233,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             deactiveButton.addMouseListener(new MouseListener() {
             	public void mouseUp(MouseEvent e) {
              		//mark for need to save
-            		markDirty();
+            		markDirtyWithoutCommit();
             	}
             	public void mouseDoubleClick(MouseEvent e) {}
             	public void mouseDown(MouseEvent e) {}
@@ -268,7 +266,8 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             		else
             			helpPara = "";
             		serviceParametersText.setText(helpPara);
-            		markDirty();
+            		markDirtyWithoutCommit();
+            		initParamterProposal(serviceNameCombo.getText());
             	}
             }); 
            
@@ -380,8 +379,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
 				public void keyPressed(KeyEvent e) {
 				}
-			});
-            
+			});			
             //Routing Expressions            
             Composite routingExpressionsGroup = this.getNewSectionComposite("Trigger xPath Expressions");
             routingExpressionsGroup.setLayout(new GridLayout(1,true));
@@ -406,7 +404,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
     			public void modifyText(ModifyEvent e) {
     				// TODO Auto-generated method stub
     				if(!refreshing)
-    				markDirty();
+    				markDirtyWithoutCommit();
     			}
             	
             });
@@ -425,7 +423,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
         }
 
     }//createCharacteristicsContent
-	private void initContentProposal() {
+	private void initConditionProposal() {
 		//add content proposal to conditions
 		java.util.List<Line> lines=(java.util.List<Line> )conditionViewer.getViewer().getInput();
 		java.util.List<String> proposals=new ArrayList<String>();
@@ -434,8 +432,28 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			if(value!=null && value.trim().length()>0)
 				proposals.add(value);
 		}
-		WidgetUtils.addContentProposal(conditionText, (String[])proposals.toArray(new String[proposals.size()]), new char[] {' ','('});
+		ContentProposalAdapterExtended adapter=WidgetUtils.addContentProposal(conditionText, (String[])proposals.toArray(new String[proposals.size()]), new char[] {' ','('});
+        adapter.setPopupSize(new Point(120,100));
 		
+	}
+	private void initParamterProposal(String jndi) {
+		if("callprocess".equals(jndi)) {
+			//add content proposal to paramter
+			WSTransformerV2PK[] transformerPKs = null;
+			try {				
+				transformerPKs = Util.getPort(getXObject()).getTransformerV2PKs(new WSGetTransformerV2PKs("")).getWsTransformerV2PK();
+			} catch (Exception e) {
+				System.out.println("No Transformers");
+			}
+			java.util.List<String> proposals=new ArrayList<String>();
+			if(transformerPKs!=null)
+			for(WSTransformerV2PK pk: transformerPKs) {
+					if(pk.getPk()!=null && pk.getPk().length()>0)
+					proposals.add(pk.getPk());
+			}
+			ContentProposalAdapterExtended adapter=WidgetUtils.addContentProposal(serviceParametersText, (String[])proposals.toArray(new String[proposals.size()]), new char[] {' ','='});
+	        adapter.setPopupSize(new Point(120,100));
+		}		
 	}
 	protected void refreshData() {
 		try {
@@ -472,7 +490,8 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             if(objectTypeText.getText().length()>0 && !objectTypeText.getText().equals("*")){           	
             	conditionViewer.setConceptName(objectTypeText.getText());
             }
-			initContentProposal();
+            initConditionProposal();
+			initParamterProposal(serviceNameCombo.getText());
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page", "Error refreshing the page: "+e.getLocalizedMessage());
@@ -512,7 +531,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			//refresh serverview
 			ServerView view= ServerView.show();
 			view.getViewer().refresh();
-			initContentProposal();
+			initConditionProposal();
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page", "Error comitting the page: "+e.getLocalizedMessage());
@@ -520,7 +539,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 	}
 
 	public void textChanged(TextEvent event) {
-		markDirty();
+		markDirtyWithoutCommit();
 	}
 
 	public void dispose() {
@@ -539,7 +558,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			Control control = ((DragSource)event.widget).getControl();
 			if ((control instanceof List) && ((event.detail & DND.DROP_MOVE) == DND.DROP_MOVE)) {
 				((List)control).remove(selected);
-				RoutingRuleMainPage.this.markDirty();
+				RoutingRuleMainPage.this.markDirtyWithoutCommit();
 			}
 		}
 
@@ -579,7 +598,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 				if (TextTransfer.getInstance().isSupportedType(event.currentDataType)) 
 					if (!Arrays.asList(((List)control).getItems()).contains(event.data)) {
 							((List)control).add((String)event.data);
-							RoutingRuleMainPage.this.markDirty();
+							RoutingRuleMainPage.this.markDirtyWithoutCommit();
 					}
 		}
 		public void dropAccept(DropTargetEvent event) {}
