@@ -33,8 +33,14 @@
 	 id="org.talend.tem_feature"
 	 version="0.0.0"/>
 
-	<plugin
+   <plugin
          id="org.talend.mdm.engines.client"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+         
+   <plugin
+         id="org.bonitasoft.studio.export2mdm"
          download-size="0"
          install-size="0"
          version="0.0.0"/>
