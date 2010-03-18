@@ -18,6 +18,7 @@ import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.DragSourceListener;
 import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.TextTransfer;
@@ -52,6 +53,7 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.models.TreeObjectTransfer;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.proposal.ContentProposalAdapterExtended;
 import com.amalto.workbench.providers.XObjectEditorInput;
@@ -61,7 +63,6 @@ import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WidgetUtils;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSGetServicesList;
-import com.amalto.workbench.webservices.WSGetTransformerPKs;
 import com.amalto.workbench.webservices.WSGetTransformerV2PKs;
 import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRuleExpression;
@@ -415,7 +416,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             windowTarget = new DropTarget(this.getPartControl(), DND.DROP_MOVE);
             windowTarget.setTransfer(new Transfer[]{TextTransfer.getInstance()});
             windowTarget.addDropListener(new DCDropTargetListener());
-            
+            createCompDropTarget(); 
             refreshData();
 
         } catch (Exception e) {
@@ -605,7 +606,30 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 		
 	}
 	
+	private void createCompDropTarget() {
+		DropTarget dropTarget = new DropTarget(serviceParametersText,  DND.DROP_MOVE|DND.DROP_LINK);
+//		dropTarget.setTransfer(new ByteArrayTransfer[] { });
+		dropTarget.setTransfer(new TreeObjectTransfer[] { TreeObjectTransfer.getInstance() });
+		dropTarget.addDropListener(new DropTargetAdapter() {
 
+			public void dragEnter(DropTargetEvent event) {
+			}
+			public void dragLeave(DropTargetEvent event) {
+			}
+			public void dragOver(DropTargetEvent event) {
+				event.feedback |= DND.FEEDBACK_EXPAND | DND.FEEDBACK_SCROLL;
+			}
+			
+			public void drop(DropTargetEvent event) {
+				if (event.data instanceof TreeObject[])
+					if(((TreeObject[])event.data)[0].getType()==TreeObject.TRANSFORMER)
+						serviceParametersText.setText("process="+((TreeObject[])event.data)[0].getDisplayName());	
+					else
+						serviceParametersText.setText(((TreeObject[])event.data)[0].getDisplayName());	
+			}
+		});
+		
+	}
 	  
 	@Override
 	public boolean beforeDoSave() {
