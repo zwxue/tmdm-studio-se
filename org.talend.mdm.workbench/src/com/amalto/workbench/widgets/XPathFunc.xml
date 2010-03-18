@@ -42,7 +42,7 @@
 		<function name="fn:resolveUri(relative,base)" help=""/>
 	</category>
 	
-	<catrgory name="Durations, Dates and Times">
+	<category name="Durations, Dates and Times">
 		<function name="fn:dateTime(date,time)" help="Converts the arguments to a date and a time"/>
 		<function name="fn:yearsFromDuration(datetimedur)" help="Returns an integer that represents the years component in the canonical lexical representation of the value of the argument"/>
 		<function name="fn:monthsFromDuration(datetimedur)" help="Returns an integer that represents the months component in the canonical lexical representation of the value of the argument"/>
@@ -69,7 +69,7 @@
 		<function name="fn:adjustDateToTimezone(date,timezone)" help="If the timezone argument is empty, it returns a date without a timezone. Otherwise, it returns a date with a timezone"/>
 		<function name="fn:adjustTimeToTimezone(time,timezone)" help="If the timezone argument is empty, it returns a time without a timezone. Otherwise, it returns a time with a timezone"/>
 		
-	</catrgory>
+	</category>
 	<category name="QNames">
 		<function name="QName()" help=""/>
 		<function name="fn:localNameFromQName()" help=""/>
