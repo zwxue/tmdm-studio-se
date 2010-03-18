@@ -1217,8 +1217,12 @@ public class TransformerMainPage extends AMainPageV2 {
 						inputViewer.setInput(new ArrayList<WSTransformerVariablesMapping>());
 						outputViewer.setInput(new ArrayList<WSTransformerVariablesMapping>());
 						String jndi = pluginsCombo.getText();
-						String document = EInputTemplate.getXtentisObjexts().get(jndi).getContent();
-						parametersTextViewer.setDocument(new Document(document));
+						if(EInputTemplate.getXtentisObjexts().get(jndi)!=null){
+							String document = EInputTemplate.getXtentisObjexts().get(jndi).getContent();
+							parametersTextViewer.setDocument(new Document(document));
+							}
+						else
+							parametersTextViewer.setDocument(new Document(""));
 					}	            	
 	            });
 	            //feed the combo once
