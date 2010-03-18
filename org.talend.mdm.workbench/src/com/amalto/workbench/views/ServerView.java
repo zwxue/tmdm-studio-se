@@ -1101,6 +1101,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			return;
 		} catch (InvocationTargetException ite) {
 			ite.printStackTrace();
+			deleteReserved(url,username,universe);
 			ErrorExceptionDialog.openError(
 					this.getSite().getShell(),
 					"Error", 

@@ -3,6 +3,7 @@ package com.amalto.workbench.dialogs;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -189,13 +190,17 @@ public class LoginDialog extends Dialog {
 				new GridData(SWT.FILL,SWT.CENTER,true,false,1,1)
 			);
 			((GridData)universeCombo.getLayoutData()).widthHint = 300;
-			if(universes!=null)
+			if(universes!=null){
+	    		java.util.List<String> hostList=new ArrayList<String>();
 			for (int i = 0; i < universes.size(); i++) {
 				String host = universes.get(i).getPk();
-				universeCombo.add(host);	
-				
+				if (!hostList.contains(host)) {
+					universeCombo.add(host);	
+					hostList.add(host);
+				}
+				}
 			}
-			universeCombo.select(0);
+//			universeCombo.select(0);
 		}
 	   return composite;
 	}
