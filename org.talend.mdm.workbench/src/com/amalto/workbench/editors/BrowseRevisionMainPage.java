@@ -26,6 +26,7 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.providers.XObjectEditorInput;
+import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
@@ -47,8 +48,6 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
 				"Revision Browser "
 						+ ((XObjectBrowserInput) editor.getEditorInput())
 								.getName().replaceAll("\\[.*\\]", "").trim());
-		BrowseRevisionMainPage.this.getXObject().fireEvent(TreeParent.UNIVERSE,
-				object, null);
 
 	}
 
@@ -91,26 +90,8 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
 		((GridData) universeList.getLayoutData()).heightHint = 150;
 
 		try {
-			final XtentisPort port = Util.getPort(new URL(getXObject()
-					.getEndpointAddress()), getXObject().getUniverse(),
-					getXObject().getUsername(), getXObject().getPassword());
+			final XtentisPort port = Util.getPort(getXObject());
 
-			// Map<String, List<String>> map=Util.getUniverseMap(port);
-			// String name=getXObject().getDisplayName().replaceAll("\\[.*\\]",
-			// "");
-			// List<String> revisions;
-			// if(name.trim().equals("Transformer"))
-			// revisions = map.get("Transformer V2");
-			// else
-			// revisions=map.get(name.trim());
-			// if(revisions.contains(""))
-			// revisions.remove("");
-			// if(revisions!=null){
-			// revisionIDList.setItems(revisions.toArray(new
-			// String[revisions.size()]));
-			// }
-			// revisionIDList.add(IConstants.HEAD, 0);
-			// universeList.add( IConstants.HEAD, 0);
 			revisionIDList.addSelectionListener(new SelectionListener() {
 
 				public void widgetDefaultSelected(SelectionEvent e) {
@@ -262,17 +243,13 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
 
 		BrowseRevisionMainPage.this.refreshing = true;
 		try {
-			final XtentisPort port = Util.getPort(new URL(getXObject()
-					.getEndpointAddress()), getXObject().getUniverse(),
-					getXObject().getUsername(), getXObject().getPassword());
+			final XtentisPort port = Util.getPort(getXObject());
 			Map<String, List<String>> map = Util.getUniverseMap(port);
-			String name = getXObject().getDisplayName().replaceAll("\\[.*\\]",
+			String displayname = getXObject().getDisplayName().replaceAll("\\[.*\\]",
 					"").trim();
 			List<String> revisions;
-			if (name.trim().equals("Process"))
-				revisions = map.get("Transformer V2");
-			else
-				revisions = map.get(name.trim());
+			String name=EXtentisObjects.getXtentisObjectName(displayname);
+			revisions = map.get(name.trim());
 			if (revisions!=null && revisions.contains(""))
 				revisions.remove("");
 			if (revisions != null) {

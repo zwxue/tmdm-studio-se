@@ -353,6 +353,10 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 		if(Util.IsEnterPrise()) {
 			WSUniverseXtentisObjectsRevisionIDs[] ids=universe.getXtentisObjectsRevisionIDs();
 			for(TreeObject node: serverRoot.getChildren()){
+				if(node.getType()== TreeObject.EVENT_MANAGEMENT) {
+					resetDisplayName((TreeParent)node,ids);
+					continue;
+				}
 				EXtentisObjects object=EXtentisObjects.getXtentisObjexts().get(String.valueOf(node.getType()));
 				if(object==null || !object.isRevision()){
 					continue;
@@ -382,5 +386,28 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 	}
     public TreeParent getServerRoot() {
         return serverRoot;
+    }
+    private void resetDisplayName(TreeParent parent,WSUniverseXtentisObjectsRevisionIDs[] ids) {
+    	for(TreeObject node: parent.getChildren()){
+			EXtentisObjects object=EXtentisObjects.getXtentisObjexts().get(String.valueOf(node.getType()));
+			if(object==null || !object.isRevision()){
+				continue;
+			}
+			boolean isSet=false;
+			for(WSUniverseXtentisObjectsRevisionIDs id: ids){					
+				if(id.getXtentisObjectName().equals(object.getName())){
+					if(id.getRevisionID()!=null && id.getRevisionID().length()>0){
+						node.setDisplayName(node.getDisplayName() + " ["+id.getRevisionID().replaceAll("\\[", "").replaceAll("\\]", "").trim() +"]");
+					}else{
+						node.setDisplayName(node.getDisplayName() + " ["+IConstants.HEAD+"]");
+					}
+					isSet=true;
+					break;
+				}
+			}
+			if(!isSet){
+				node.setDisplayName(node.getDisplayName() + " ["+IConstants.HEAD+"]");
+			}
+		}	
     }
 }
