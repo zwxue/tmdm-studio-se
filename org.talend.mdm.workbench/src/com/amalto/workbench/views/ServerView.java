@@ -692,7 +692,9 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 							&& xobject.getType() != TreeObject.PICTURES_RESOURCE
 							&& xobject.getType()!=TreeObject.EVENT_MANAGEMENT)
 			    	manager.add(newXObjectAction);	
-					if(!(xobject instanceof TreeParent))
+					//edit by ymli; fix the bug:0012191; if the object is DATA_CLUSTER, refused to rename.
+					//if(!(xobject instanceof TreeParent))
+					if(!(xobject instanceof TreeParent)&& xobject.getType()!=TreeObject.DATA_CLUSTER)
 						manager.add(renameXObjectAction);
 			    }
 
