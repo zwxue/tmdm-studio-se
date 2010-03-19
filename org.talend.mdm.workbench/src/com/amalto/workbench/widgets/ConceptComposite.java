@@ -3,11 +3,8 @@ package com.amalto.workbench.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -16,6 +13,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
+import org.eclipse.xsd.XSDCompositor;
+import org.eclipse.xsd.impl.XSDModelGroupImpl;
+import org.eclipse.xsd.impl.XSDParticleImpl;
 
 /**
  * this class is meant to encapsulate all widgets rendering concept 
@@ -33,7 +33,7 @@ public class ConceptComposite {
 	private Label messageLabel = null;
 	private Composite container = null;
     
-	public  ConceptComposite(Composite parent, boolean encloseTextField,List<XSDComplexTypeDefinition> types, boolean newComplex) {
+	public  ConceptComposite(Composite parent, boolean encloseTextField,final List<XSDComplexTypeDefinition> types, boolean newComplex) {
 		
 		GridLayout layout = (GridLayout)parent.getLayout();
 		layout.numColumns = 2;
@@ -59,6 +59,29 @@ public class ConceptComposite {
 		typeNameText.addSelectionListener(new SelectionListener() {
         	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
         	public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+				for (int i = 0; i < types.size(); i++) {
+					XSDComplexTypeDefinition type = types.get(i);
+					XSDParticleImpl partCnt = null;
+					if (typeNames
+							.get(typeNames.indexOf(typeNameText.getText()))
+							.equalsIgnoreCase(type.getName()))
+						partCnt = (XSDParticleImpl) type.getContent();
+					if (partCnt != null) {
+						XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt
+								.getTerm();
+						XSDCompositor typeComposite = mdlGrp.getCompositor();
+						if (typeComposite
+								.equals(XSDCompositor.SEQUENCE_LITERAL))
+							setSequence();
+						else if (typeComposite
+								.equals(XSDCompositor.ALL_LITERAL))
+							setAll();
+						else if (typeComposite
+								.equals(XSDCompositor.CHOICE_LITERAL))
+							setChoice();
+					}
+				}
+
         	};
         });
 		
