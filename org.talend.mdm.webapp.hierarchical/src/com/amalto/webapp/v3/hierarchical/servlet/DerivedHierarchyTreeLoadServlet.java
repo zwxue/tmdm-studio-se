@@ -38,6 +38,8 @@ public class DerivedHierarchyTreeLoadServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
+		
+		
 		String fatherPK=req.getParameter("pk");
 		
 		if(fatherPK==null) {
@@ -45,8 +47,10 @@ public class DerivedHierarchyTreeLoadServlet extends HttpServlet {
 			return;
 		}
 		
-		String recursion=req.getParameter("recursion");
+		String viceVersa=req.getParameter("viceVersa");
+		boolean isViceVersa=(viceVersa!=null&&viceVersa.equals("true"))?true:false;
 		
+		String recursion=req.getParameter("recursion");
         boolean isRecursion=false;
 		if(recursion!=null&&recursion.equals("1")) {
 			isRecursion=true;
@@ -54,22 +58,41 @@ public class DerivedHierarchyTreeLoadServlet extends HttpServlet {
 		
 		int	fatherLevel=Integer.parseInt(req.getParameter("level"));
 		String concept=req.getParameter("nextPivot");
+		if(req.getParameter("nextPivot")!=null&&(req.getParameter("nextPivot").equals("")||req.getParameter("nextPivot").equals("undefined")))concept=null;
+		String concept0=req.getParameter("prePivot");
+		if(req.getParameter("prePivot")!=null&&(req.getParameter("prePivot").equals("")||req.getParameter("prePivot").equals("undefined")))concept0=null;
 		String labelXpath=req.getParameter("nextDisplay");
 		String fkXpath=req.getParameter("nextFkPath");
+		if(req.getParameter("nextFkPath")!=null&&(req.getParameter("nextFkPath").equals("")||req.getParameter("nextFkPath").equals("undefined")))fkXpath=null;
+		String fkXpath0=req.getParameter("preFkPath");
+		if(req.getParameter("preFkPath")!=null&&(req.getParameter("preFkPath").equals("")||req.getParameter("preFkPath").equals("undefined")))fkXpath0=null;
 		String endingFlag=req.getParameter("endingFlag");
 		
 		FilterItem[] filters = {};
 		if(req.getSession().getAttribute(HierarchicalUtil.DERIVED_HIERARCHY_EXT_CRITERION)!=null){
 			filters=(FilterItem[]) req.getSession().getAttribute(HierarchicalUtil.DERIVED_HIERARCHY_EXT_CRITERION);
 		}
+		String[] results= {};
+		if(!isViceVersa) {
+			results=HierarchicalUtil.getResults(concept,fatherPK, labelXpath, fkXpath,filters);
+		}else {
+			Configuration configuration = null;
+			try {
+				configuration = Configuration.loadConfigurationFromDBDirectly();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			String cluster=configuration.getCluster();
+			String datamodel=configuration.getModel();
+			results=HierarchicalUtil.getFatherItem(cluster, datamodel, concept0, fatherPK, fkXpath0, concept, labelXpath, filters);
+		}
 		
-		String[] results=getResults(concept,fatherPK, labelXpath, fkXpath,filters);
 		try {
 			String jsonTree = "";
 			ArrayList<JSONObject> rootGroup = new ArrayList<JSONObject>();
 			
 			for (int i = 0; i < results.length; i++) {
-				JSONObject treenode = data2node(results[i],fatherLevel+1,endingFlag,isRecursion);
+				JSONObject treenode = data2node(results[i],fatherLevel+1,endingFlag,isRecursion,isViceVersa);
 				rootGroup.add(treenode);
 			}
 			
@@ -94,7 +117,7 @@ public class DerivedHierarchyTreeLoadServlet extends HttpServlet {
 		out.close();
 	}
 
-	private JSONObject data2node(String result,int level,String endingFlag,boolean isRecursion) throws Exception {
+	private JSONObject data2node(String result,int level,String endingFlag,boolean isRecursion,boolean isViceVersa) throws Exception {
 		
 		Document doc=Util.parse(result);
 		String key=Util.getFirstTextNode(doc, "/result/result-key/");
@@ -109,10 +132,10 @@ public class DerivedHierarchyTreeLoadServlet extends HttpServlet {
 		}else {
 			treenode.put("level", 1);
 		}
-		if(!isRecursion) {
-			treenode.put("leaf", endingFlag.equals("1"));
-		}else {
+		if(isRecursion||isViceVersa) {
 			treenode.put("leaf", false);
+		}else {
+			treenode.put("leaf", endingFlag.equals("1"));
 		}
 		treenode.put("draggable", false);
 		treenode.put("allowDrop", false);
@@ -120,82 +143,6 @@ public class DerivedHierarchyTreeLoadServlet extends HttpServlet {
 		return treenode;
 	}
 
-	private String[] getResults(String concept,String fatherId,String labelXpath,String fkXpath,FilterItem[] filters) {
-		
-        String[] results= {};
-		
-		try {
-			
-			Configuration configuration=Configuration.loadConfigurationFromDBDirectly();
-			String cluster=configuration.getCluster();
-			String datamodel=configuration.getModel();
-			String[] PkXpaths=CommonDWR.getBusinessConceptKeyPaths(datamodel, concept);
-			if(fkXpath.length()==0)fkXpath=null;
-			
-//			System.out.println(cluster);
-//			System.out.println(concept);
-//			System.out.println(PkXpaths[0]);
-//			System.out.println(fkXpath);
-//			System.out.println(labelXpath);
-//			System.out.println(fatherId);
-			
-			WSGetChildrenItems wsGetChildrenItems=new WSGetChildrenItems(
-					   cluster,
-					   concept,
-					   new WSStringArray(PkXpaths),
-					   fkXpath,
-					   labelXpath,
-					   fatherId,
-					   null
-					);
-			
-			// filters
-			if (filters == null || filters.length == 0) {
-				wsGetChildrenItems.setWhereItem(null);
-			} else {
-				ArrayList<WSWhereItem> conditions = new ArrayList<WSWhereItem>();
-				for (int i = 0; i < filters.length; i++) {
-					FilterItem filterItem = filters[i];
-					
-					//parse related filter item
-					if(filterItem.getFieldPath()!=null&&filterItem.getFieldPath().length()>0) {
-						if(concept.equals(filterItem.getFieldPath().split("/")[0])) {
-							WSWhereCondition wc = new WSWhereCondition(filterItem
-									.getFieldPath(), HierarchicalUtil.getOperator(filterItem
-									.getOperator()), filterItem.getValue(),
-									WSStringPredicate.NONE, false);
-							WSWhereItem item = new WSWhereItem(wc, null, null);
-							conditions.add(item);
-						}
-					}
-					
-				}
-				
-				if(conditions.size()>0) {
-					WSWhereAnd and = new WSWhereAnd(conditions
-							.toArray(new WSWhereItem[conditions.size()]));
-					WSWhereItem wi = new WSWhereItem(null, and, null);
-					wsGetChildrenItems.setWhereItem(wi);
-				}else {
-					wsGetChildrenItems.setWhereItem(null);
-				}
-				
-			}
-			
-			
-			
-			WSStringArray wsStringArray=Util.getPort().getChildrenItems(wsGetChildrenItems);
-			results=wsStringArray.getStrings();
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		} catch (XtentisWebappException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return results;
-		
-	}
+	
 
 }

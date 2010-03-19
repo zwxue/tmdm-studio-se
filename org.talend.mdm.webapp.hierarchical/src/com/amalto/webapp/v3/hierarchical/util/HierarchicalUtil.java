@@ -10,28 +10,39 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
 import com.amalto.webapp.core.bean.ComboItemBean;
 import com.amalto.webapp.core.bean.Configuration;
 import com.amalto.webapp.core.bean.ListRange;
 import com.amalto.webapp.core.dwr.CommonDWR;
 import com.amalto.webapp.core.util.Util;
+import com.amalto.webapp.core.util.XtentisWebappException;
+import com.amalto.webapp.util.webservices.WSDataClusterPK;
 import com.amalto.webapp.util.webservices.WSDataModelPK;
 import com.amalto.webapp.util.webservices.WSGetBusinessConcepts;
+import com.amalto.webapp.util.webservices.WSGetChildrenItems;
+import com.amalto.webapp.util.webservices.WSGetItem;
 import com.amalto.webapp.util.webservices.WSGetItemsPivotIndex;
 import com.amalto.webapp.util.webservices.WSGetItemsPivotIndexPivotWithKeysTypedContentEntry;
 import com.amalto.webapp.util.webservices.WSGetView;
 import com.amalto.webapp.util.webservices.WSGetViewPKs;
+import com.amalto.webapp.util.webservices.WSItem;
+import com.amalto.webapp.util.webservices.WSItemPK;
 import com.amalto.webapp.util.webservices.WSLinkedHashMap;
 import com.amalto.webapp.util.webservices.WSStringArray;
 import com.amalto.webapp.util.webservices.WSStringPredicate;
 import com.amalto.webapp.util.webservices.WSView;
 import com.amalto.webapp.util.webservices.WSViewPK;
+import com.amalto.webapp.util.webservices.WSViewSearch;
 import com.amalto.webapp.util.webservices.WSWhereAnd;
 import com.amalto.webapp.util.webservices.WSWhereCondition;
 import com.amalto.webapp.util.webservices.WSWhereItem;
 import com.amalto.webapp.util.webservices.WSWhereOperator;
 import com.amalto.webapp.v3.hierarchical.bean.FilterItem;
 import com.amalto.webapp.v3.hierarchical.bean.HierarchicalTreeCriterion;
+import com.amalto.webapp.v3.hierarchical.dwr.HierarchicalDWR;
 
 public class HierarchicalUtil {
 	
@@ -414,6 +425,267 @@ public class HierarchicalUtil {
 		}
 		return CommonDWR.getMapSortedByValue(views);
 	}
+	
+	public static String[] getResults(String cluster,String datamodel,String concept,String fatherId,String labelXpath,String fkXpath,FilterItem[] filters) {
+        String[] results= {};
 		
+		try {
+		
+			if(cluster==null||datamodel==null) {
+				Configuration configuration=Configuration.loadConfigurationFromDBDirectly();
+				cluster=configuration.getCluster();
+				datamodel=configuration.getModel();
+			}
+			
+			String[] PkXpaths=CommonDWR.getBusinessConceptKeyPaths(datamodel, concept);
+			if(fkXpath!=null&&fkXpath.length()==0)fkXpath=null;
+			
+//			System.out.println(cluster);
+//			System.out.println(concept);
+//			System.out.println(PkXpaths[0]);
+//			System.out.println(fkXpath);
+//			System.out.println(labelXpath);
+//			System.out.println(fatherId);
+			
+			WSGetChildrenItems wsGetChildrenItems=new WSGetChildrenItems(
+					   cluster,
+					   concept,
+					   new WSStringArray(PkXpaths),
+					   fkXpath,
+					   labelXpath,
+					   fatherId,
+					   null
+					);
+			
+			// filters
+			if (filters == null || filters.length == 0) {
+				wsGetChildrenItems.setWhereItem(null);
+			} else {
+				ArrayList<WSWhereItem> conditions = new ArrayList<WSWhereItem>();
+				for (int i = 0; i < filters.length; i++) {
+					FilterItem filterItem = filters[i];
+					
+					//parse related filter item
+					if(filterItem.getFieldPath()!=null&&filterItem.getFieldPath().length()>0) {
+						if(concept.equals(filterItem.getFieldPath().split("/")[0])) {
+							WSWhereCondition wc = new WSWhereCondition(filterItem
+									.getFieldPath(), HierarchicalUtil.getOperator(filterItem
+									.getOperator()), filterItem.getValue(),
+									WSStringPredicate.NONE, false);
+							WSWhereItem item = new WSWhereItem(wc, null, null);
+							conditions.add(item);
+						}
+					}
+					
+				}
+				
+				if(conditions.size()>0) {
+					WSWhereAnd and = new WSWhereAnd(conditions
+							.toArray(new WSWhereItem[conditions.size()]));
+					WSWhereItem wi = new WSWhereItem(null, and, null);
+					wsGetChildrenItems.setWhereItem(wi);
+				}else {
+					wsGetChildrenItems.setWhereItem(null);
+				}
+				
+			}
+			
+			
+			
+			WSStringArray wsStringArray=Util.getPort().getChildrenItems(wsGetChildrenItems);
+			results=wsStringArray.getStrings();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		} catch (XtentisWebappException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return results;
+	}
+	
+	public static String[] getResults(String concept,String fatherId,String labelXpath,String fkXpath,FilterItem[] filters) {
+		
+        return getResults(null,null,concept,fatherId,labelXpath,fkXpath,filters);
+		
+	}
+	
+	public static String[] getFatherItem(String clusterName,
+			                         String dataModel,
+			                         String sonConcept, 
+			                         String sonIDs,
+			                         String sonRefXpath,
+			                         String fatherConcept,
+			                         String fatherLabelXpath,
+			                         FilterItem[] filters){
+		List<String> finalResult=new ArrayList<String>();
+		//last case
+		if(fatherConcept==null)return new String[]{};
+		//first case
+		if(sonIDs!=null&&sonIDs.equals("-1")) {
+		    return getResults(clusterName, dataModel, fatherConcept, sonIDs, fatherLabelXpath, null, filters);
+		}
+		
+		try {
+			
+			String refValue=null;
+			
+			if(sonIDs!=null&&!sonIDs.equals("-1")) {
+				try {
+					sonIDs=stripIDs(sonIDs);
+					
+					WSItem wsItem=
+					Util.getPort().getItem(new WSGetItem(new WSItemPK(
+							new WSDataClusterPK(clusterName),
+							sonConcept,
+							sonIDs.split("\\.")
+					)));
+					
+					
+					if(wsItem!=null) {
+						
+						refValue=Util.getFirstTextNode(Util.parse(wsItem.getContent()), sonRefXpath);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+			//load father item
+			WSViewSearch wsviewSearch=new WSViewSearch(
+					new WSDataClusterPK(clusterName),
+			        new WSViewPK("Browse_items_" + fatherConcept),
+			        null,
+			        -1,
+			        0,
+			        Integer.MAX_VALUE,
+			        null,
+			        null	
+			);
+			
+			
+			ArrayList<WSWhereItem> conditions = new ArrayList<WSWhereItem>();
+			
+			// set PK condition
+			String[] fatherPkXpaths=CommonDWR.getBusinessConceptKeyPaths(dataModel, fatherConcept);
+			
+//			if(!(sonIDs!=null&&sonIDs.equals("-1"))) {
+			//terminal case
+			if(refValue==null||refValue.length()==0) {
+					WSWhereCondition wcn = new WSWhereCondition(
+							fatherPkXpaths[0], 
+							WSWhereOperator.EQUALS, 
+							"null",
+							WSStringPredicate.NONE, false);
+					WSWhereItem itemn = new WSWhereItem(wcn, null, null);
+					conditions.add(itemn);
+			//normal case		
+			}else {
+					String[] fatherIDs=stripIDs(refValue).split("\\.");
+					if(fatherPkXpaths!=null&&fatherPkXpaths.length>0) {
+						for (int i = 0; i < fatherPkXpaths.length; i++) {
+							WSWhereCondition wcn = new WSWhereCondition(
+									fatherPkXpaths[i], 
+									WSWhereOperator.EQUALS, 
+									fatherIDs[i],
+									WSStringPredicate.NONE, false);
+							WSWhereItem itemn = new WSWhereItem(wcn, null, null);
+							conditions.add(itemn);
+						}
+					}
+			}	
+//			}
+			
+			// filters
+			if (filters == null || filters.length == 0) {
+				
+			} else {
+				
+				for (int i = 0; i < filters.length; i++) {
+					FilterItem filterItem = filters[i];
+					WSWhereCondition wc = new WSWhereCondition(
+							filterItem.getFieldPath(), 
+							getOperator(filterItem.getOperator()), 
+							filterItem.getValue(),
+							WSStringPredicate.NONE, false);
+					WSWhereItem item = new WSWhereItem(wc, null, null);
+					conditions.add(item);
+				}
+				
+			}
+			// set WSWhereItem depending on conditions
+			if(conditions.size()>0) {
+				WSWhereAnd and = new WSWhereAnd(conditions.toArray(new WSWhereItem[conditions.size()]));
+				WSWhereItem wi = new WSWhereItem(null, and, null);
+				wsviewSearch.setWhereItem(wi);
+			}else {
+				wsviewSearch.setWhereItem(null);
+			}
+			
+			//run search
+			WSStringArray result=Util.getPort().viewSearch(wsviewSearch);
+			String[] tmpResults=result.getStrings();
+			
+			//resolve result
+			if(tmpResults.length>1){
+				for (int i = 1; i < tmpResults.length; i++) {
+					
+					String tmpResult=tmpResults[i];
+					//FIXME:about performance during resolution
+					Document tmpResultDoc=Util.parse(tmpResult);
+
+					String labelValue=Util.getFirstTextNode(tmpResultDoc, changeConceptName4Xpath("result",fatherLabelXpath));
+					
+					StringBuffer fatherPkValue=new StringBuffer();
+					boolean useMultiPK=false;
+					if(fatherPkXpaths.length>1)useMultiPK=true;
+					for (int j = 0; j < fatherPkXpaths.length; j++) {
+						String pkValue=Util.getFirstTextNode(tmpResultDoc, changeConceptName4Xpath("result",fatherPkXpaths[j]));
+						if(useMultiPK)fatherPkValue.append("[");
+						fatherPkValue.append(pkValue);
+						if(useMultiPK)fatherPkValue.append("]");
+					}
+					
+					StringBuffer sb=new StringBuffer();
+					sb.append("<result>"); 
+					sb.append("<result-key>").append(fatherPkValue.toString()).append("</result-key>"); 
+					sb.append("<result-label>").append(labelValue).append("</result-label>"); 
+					sb.append("</result>");
+					
+					finalResult.add(sb.toString());
+				}
+			}
+		
+		} catch (Exception e) {
+			String err = "Unable to get Father Item! ";
+			org.apache.log4j.Logger.getLogger(HierarchicalUtil.class).error(err,e);
+			//throw new Exception(e.getLocalizedMessage());
+		}
+		
+		return finalResult.toArray(new String[finalResult.size()]);
+	}
+
+	private static String changeConceptName4Xpath(String newConcept,String xpath) {
+		if(xpath.indexOf("/")!=-1){
+			xpath=newConcept+xpath.substring(xpath.indexOf("/"));
+		}
+		return xpath;
+	}
+	
+	private static String stripIDs(String input) {
+		
+		if(input!=null&&input.length()>0) {
+			input=input.trim();
+			if(input.startsWith("[")&&input.endsWith("]")) {
+				input=input.replaceAll("\\[", ".");
+				input=input.replaceAll("\\]", "");
+				input=input.substring(1);
+			}
+		}
+		
+		return input;
+		
+	}		
 
 }

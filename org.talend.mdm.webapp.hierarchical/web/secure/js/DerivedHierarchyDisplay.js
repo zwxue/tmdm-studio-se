@@ -18,6 +18,11 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
 	displayArray:{},
 	fkPathArray:{},
 	
+	isViceVersa:true,
+	vvPivotArray:{},
+    vvDisplayArray:{},
+    vvFkPathArray:{},
+	
 	initUIComponents : function() {
 		
 		this.treeLoader = new Ext.tree.TreeLoader({
@@ -79,7 +84,7 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
                         height:200,     
                         split:true,
                         html: '' +
-                        '<div id="hierarchyItemsCriterias"></div><br/><div id="derivedHierarchyWherePanel"></div>',
+                        '<div id="hierarchyItemsCriterias"></div><br/><div id="derivedHierarchyWherePanel"></div><br/><div id="moreDHCriteriaPanel"></div>',
                         bodyborder: true,
                         buttonAlign : "left",
                         buttons : [{
@@ -115,10 +120,18 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
 		this.displayArray=new Array(this.lastPivotPanelNum);
 		this.fkPathArray=new Array(this.lastPivotPanelNum);
 		
+		this.vvPivotArray=new Array(this.lastPivotPanelNum);
+        this.vvDisplayArray=new Array(this.lastPivotPanelNum);
+        this.vvFkPathArray=new Array(this.lastPivotPanelNum);
+		
 		for (var i = this.lastPivotPanelNum,j=0; i >0; i--,j++) {
 			this.pivotArray[j]=$('itemsSearchPivotName' + i).value;
 			this.displayArray[j]=DWRUtil.getValue('itemsSearchDisplayField'+i);
 			this.fkPathArray[j]=this.parseSearchFKPath(i);
+			
+			this.vvPivotArray[i-1]=$('itemsSearchPivotName' + i).value;
+            this.vvDisplayArray[i-1]=DWRUtil.getValue('itemsSearchDisplayField'+i);
+            this.vvFkPathArray[i-1]=this.parseSearchFKPath(i);
 		}
 		
 		//put criterias 2 session
@@ -154,45 +167,88 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
 	
 	onBeforeloadTree : function(treeLoader,node){
 		
-		if(this.pivotArray.length>0){
+		var usePivotArray;
+        var useDisplayArray;
+        var useFkPathArray;
+        
+        if(!this.isViceVersa){
+
+        	usePivotArray=this.pivotArray;
+            useDisplayArray=this.displayArray;
+            useFkPathArray=this.fkPathArray;
+            
+        }else{
+            
+        	usePivotArray=this.vvPivotArray;
+            useDisplayArray=this.vvDisplayArray;
+            useFkPathArray=this.vvFkPathArray;
+            
+        }
+		
+		
+		if(usePivotArray.length>0){
 			
-			this.hierarchicalTree.getRootNode().setText(this.pivotArray[this.pivotArray.length-1]);
+			if(!this.isViceVersa){
+			this.hierarchicalTree.getRootNode().setText(usePivotArray[usePivotArray.length-1]);
+			}else{
+			this.hierarchicalTree.getRootNode().setText(usePivotArray[0]);	
+			}
             
             this.treeLoader.baseParams.pk=node.attributes.pk;
             this.treeLoader.baseParams.level=node.attributes.level;
             
-            var nextPivot=this.pivotArray[node.attributes.level];
+            var nextPivot=usePivotArray[node.attributes.level];
             this.treeLoader.baseParams.nextPivot=nextPivot;
+            if(node.attributes.level>0){
+                var prePivot=usePivotArray[node.attributes.level-1];
+                this.treeLoader.baseParams.prePivot=prePivot;
+            }
             
-            var nextDisplay=this.displayArray[node.attributes.level];
+            var nextDisplay=useDisplayArray[node.attributes.level];
             this.treeLoader.baseParams.nextDisplay=nextDisplay;
             
-            var nextFkPath=this.fkPathArray[node.attributes.level];
+            var nextFkPath=useFkPathArray[node.attributes.level];
             this.treeLoader.baseParams.nextFkPath=nextFkPath;
+            if(node.attributes.level>0){
+                var preFkPath=useFkPathArray[node.attributes.level-1];
+                this.treeLoader.baseParams.preFkPath=preFkPath;
+            }
             
             var endingFlag='0';
-            if(node.attributes.level+1==this.pivotArray.length)endingFlag='1';
+            if(node.attributes.level+1==usePivotArray.length)endingFlag='1';
             this.treeLoader.baseParams.endingFlag=endingFlag;
             
             //recursion check
-            if(this.pivotArray.length>1){
-                 if(this.pivotArray[this.pivotArray.length-1]==this.pivotArray[this.pivotArray.length-2]){
+            if(usePivotArray.length>1){
+                 if(usePivotArray[usePivotArray.length-1]==usePivotArray[usePivotArray.length-2]){
                     this.treeLoader.baseParams.recursion='1';
                  }else{
                  	this.treeLoader.baseParams.recursion='0';
                  }
             }
             
+            //viceversa
+            this.treeLoader.baseParams.viceVersa=this.isViceVersa;
 		}  
 
     },
     
     onTreeLeafNodeClick : function(node,e) {
 
-                var dataObjectName=this.pivotArray[node.attributes.level-1];
+                var dataObjectName='';
+                if(!this.isViceVersa)dataObjectName=this.pivotArray[node.attributes.level-1];
+                else dataObjectName=this.vvPivotArray[node.attributes.level-1];
 
                 var idArray = new Array(1); 
                 idArray[0]=node.attributes.pk;
+                
+                //strip[]
+                if(idArray[0].startWith("[")&&idArray[0].endWith("]")){
+                	idArray[0]=idArray[0].replaceAll("\\[",".");
+                	idArray[0]=idArray[0].replaceAll("\\]","");
+                	idArray[0]=idArray[0].substring(1);
+                }
+                
                 amalto.itemsbrowser.ItemsBrowser.editItemDetails(idArray,dataObjectName,function(){
                     this.doRefreshAfterEdit();
                 }.createDelegate(this));
@@ -213,7 +269,26 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
                                              '<span style="padding-left:5px" onClick="amalto.hierarchical.DerivedHierarchy.onRemovePivot();"><img src="img/genericUI/remove-element.gif" style="cursor:pointer"/></span> ' +
                                           '<br/></span>'
                         );
-       
+       //more panel
+       if(this.vvCheckBox==undefined||this.vvCheckBox==null){
+       	   this.vvCheckBox=
+              new Ext.form.Checkbox  ({
+                    xtype : "checkbox",
+                    boxLabel : "Vice versa",
+                    listeners : {
+                        check : {
+                            fn : function(checkbox, checked) {
+                                this.onVVBoxChecked(checkbox, checked);
+                            }.createDelegate(this)
+                        }
+                    },
+                    renderTo:"moreDHCriteriaPanel"
+                    
+            }); 
+       }else{
+       	  this.vvCheckBox.setValue(false);
+       }
+            
        //set pivot
        DWRUtil.addOptions('itemsSearchPivotName1',[{ text:'Select a pivot', value:'-1' }],"value","text");
        DerivedHierarchyInterface.getPivotList(function (result){
@@ -267,12 +342,21 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
        }
     },
     
+    onVVBoxChecked : function(checkbox, checked){
+    	this.isViceVersa=checked;
+    },
     
     initStatus : function(){
         
     	this.pivotArray={};
     	this.displayArray={};
     	this.fkPathArray={};
+    	
+    	this.vvPivotArray={};
+        this.vvDisplayArray={};
+        this.vvFkPathArray={};
+        
+        this.isViceVersa=false;
             
     },
     

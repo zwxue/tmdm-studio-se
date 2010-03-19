@@ -16,7 +16,6 @@ import com.amalto.webapp.core.bean.Configuration;
 import com.amalto.webapp.core.bean.ListRange;
 import com.amalto.webapp.core.dwr.CommonDWR;
 import com.amalto.webapp.v3.hierarchical.bean.FilterItem;
-import com.amalto.webapp.v3.hierarchical.bean.HierarchicalTreeCriterion;
 import com.amalto.webapp.v3.hierarchical.util.HierarchicalUtil;
 
 public class DerivedHierarchyDWR {
@@ -136,29 +135,44 @@ public class DerivedHierarchyDWR {
 		return true;
 	}
 	
-//	public String[] testGetResults() {
-//		
-//		String[] result= {};
-//		
-//		WSGetChildrenItems wsGetChildrenItems=new WSGetChildrenItems(
-//		   "Order",
-//		   "City",
-//		   new WSStringArray(new String[]{"City/code"}),
-//		   "City/country",
-//		   "City/name",
-//		   "0101"
-//		);
-//		try {
-//			WSStringArray wsStringArray=Util.getPort().getChildrenItems(wsGetChildrenItems);
-//			result=wsStringArray.getStrings();
-//		} catch (RemoteException e) {
-//			e.printStackTrace();
-//		} catch (XtentisWebappException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		return result;
-//
-//	}
+	public String[] testGetResults() {
+//		return
+//		HierarchicalUtil.getFatherItem(
+//				   "Order",
+//				   "Order",
+//				   null,
+//				   "-1",
+//				   null,
+//				   "Unit",
+//				   "Unit/name",
+//				   null
+//				);
+		
+		return
+		HierarchicalUtil.getFatherItem(
+				   "Order",
+				   "Order",
+				   "Unit",
+				   "[11][31][21]",
+				   "Unit/group",
+				   "Group",
+				   "Group/name",
+				   null
+				);
+		
+//		return
+//				HierarchicalUtil.getFatherItem(
+//						   "Order",
+//						   "Order",
+//						   "Unit",
+//						   "[15][35][25]",
+//						   "Unit/group",
+//						   "Group",
+//						   "Group/name",
+//						   null
+//						);
+		
+
+	}
 
 }
