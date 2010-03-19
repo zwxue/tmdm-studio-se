@@ -188,6 +188,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			}
 			TreeParent transformers = null;
 			transformers = new TreeParent(EXtentisObjects.Transformer.getDisplayName(),serverRoot,TreeObject.TRANSFORMER,null,null);
+			eventManagement.addChild(transformers);
 			if (transformerPKs!=null) {
 				monitor.subTask("Loading Transfomers");
 				for (int i = 0; i < transformerPKs.length; i++) {
@@ -202,7 +203,6 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 					transformers.addChild(obj);
 				}
 			}
-			eventManagement.addChild(transformers);
 			monitor.worked(1);		
 			
 			//routing rule
@@ -214,6 +214,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			}
 			TreeParent rules = null;
 			rules = new TreeParent(EXtentisObjects.RoutingRule.getDisplayName(),serverRoot,TreeObject.ROUTING_RULE,null,null);
+			eventManagement.addChild(rules);
 			if (routingRulePKs!=null) {
 				monitor.subTask("Loading Triggers");
 				for (int i = 0; i < routingRulePKs.length; i++) {
@@ -228,7 +229,6 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 					rules.addChild(obj);
 				}
 			}
-			eventManagement.addChild(rules);
 			monitor.worked(1);
 			
 			//add event management to serverRoot

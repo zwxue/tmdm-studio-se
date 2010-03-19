@@ -324,10 +324,23 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 				}
 				else
 				{
+					//process and trigger is in special, as they are located in EventManagement which is in the same level as data container and data model 
+					if(treeObj.getType() == TreeObject.TRANSFORMER && treeObj.getParent() == null)
+					{
+						xpath += "/EventManagement[text() = '33']";
+					}
 					elemTop = (Element)doc.selectNodes(xpath).get(0);
 				}
-				elemFolder = elemTop.addElement(filterOutBlank(treeObj.getDisplayName()));
-				elemFolder.setText(treeObj.getType() + "");	
+				String selPath = "./" + filterOutBlank(treeObj.getDisplayName()) + "[text() = '" + treeObj.getType() + "']";
+				if(elemTop.selectNodes(selPath).isEmpty())
+				{
+					elemFolder = elemTop.addElement(filterOutBlank(treeObj.getDisplayName()));
+					elemFolder.setText(treeObj.getType() + "");	
+				}
+				else
+				{
+					elemFolder = (Element)elemTop.selectNodes(selPath).get(0);
+				}
 			}
 		}
 		else
@@ -813,10 +826,13 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 				
 				if (!catalogExist)
 				{
-					TreeParent catalog = new TreeParent(nodeName, folder
-							.getServerRoot(), TreeObject.CATEGORY_FOLDER, null, null);
-					subFolder.addChild(catalog);
-					subFolder = catalog;
+					if(parnts.size() > 0 &&  parnts.get(0).getText().equals(TreeObject.CATEGORY_FOLDER))
+					{
+						TreeParent catalog = new TreeParent(nodeName, folder
+								.getServerRoot(), TreeObject.CATEGORY_FOLDER, null, null);
+						subFolder.addChild(catalog);
+						subFolder = catalog;
+					}
 				}
 				
 				if (xpaths.indexOf("/") != -1)
@@ -891,12 +907,17 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	public int receiveUnCertainTreeObjectType(TreeObject xobj)
 	{
 		String path = this.getXPathForTreeObject(xobj);
+		int level = XTENTIS_LEVEL;
+		if(path.startsWith("/category/admin/EventManagement"))
+		{
+			level = XTENTIS_LEVEL + 1;
+		}
 		Document doc = credentials.get(UnifyUrl(xobj.getServerRoot().getWsKey().toString())).doc;
 		List<Element> elems = doc.selectNodes(path);
 		if (!elems.isEmpty())
 		{
 			Element elem = elems.get(0);
-			while (isAEXtentisObjects(elem, xobj) >= XTENTIS_LEVEL)
+			while (isAEXtentisObjects(elem, xobj) >= level)
 			{
 				elem = elem.getParent();
 			}
