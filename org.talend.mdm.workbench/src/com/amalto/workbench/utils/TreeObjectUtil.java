@@ -485,6 +485,15 @@ public class TreeObjectUtil {
 			          	case TreeObject.CATEGORY_FOLDER:
 			          	    // do nothing over here
 			          		break;
+			          	case TreeObject.ROLE:
+			          		deleteSpecificationFromAttachedRole(port, xobject, "Role");
+			          		break;
+			        	case TreeObject.SYNCHRONIZATIONPLAN:
+			          		deleteSpecificationFromAttachedRole(port, xobject, "Synchronization Plan");
+			          		break;
+			        	case TreeObject.UNIVERSE:
+			          		deleteSpecificationFromAttachedRole(port, xobject, "Universe");
+			          		break;
 			          	default:
 			           		//MessageDialog.openError(view.getSite().getShell(), "Error", "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
 			           		return;
