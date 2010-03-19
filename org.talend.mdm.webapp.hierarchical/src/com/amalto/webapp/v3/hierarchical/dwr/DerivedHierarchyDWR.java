@@ -10,12 +10,26 @@ import java.util.Map;
 
 import org.directwebremoting.WebContext;
 import org.directwebremoting.WebContextFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.amalto.webapp.core.bean.ComboItemBean;
 import com.amalto.webapp.core.bean.Configuration;
 import com.amalto.webapp.core.bean.ListRange;
 import com.amalto.webapp.core.dwr.CommonDWR;
+import com.amalto.webapp.core.util.Util;
+import com.amalto.webapp.util.webservices.WSDataClusterPK;
+import com.amalto.webapp.util.webservices.WSDataModelPK;
+import com.amalto.webapp.util.webservices.WSGetItem;
+import com.amalto.webapp.util.webservices.WSItem;
+import com.amalto.webapp.util.webservices.WSItemPK;
+import com.amalto.webapp.util.webservices.WSPutItem;
+import com.amalto.webapp.util.webservices.WSPutItemWithReport;
+import com.amalto.webapp.v3.hierarchical.bean.DataObjectContext;
 import com.amalto.webapp.v3.hierarchical.bean.FilterItem;
+import com.amalto.webapp.v3.hierarchical.bean.UpdateHistory;
+import com.amalto.webapp.v3.hierarchical.bean.UpdateRecordItem;
 import com.amalto.webapp.v3.hierarchical.util.HierarchicalUtil;
 
 public class DerivedHierarchyDWR {
@@ -135,44 +149,68 @@ public class DerivedHierarchyDWR {
 		return true;
 	}
 	
-	public String[] testGetResults() {
-//		return
-//		HierarchicalUtil.getFatherItem(
-//				   "Order",
-//				   "Order",
-//				   null,
-//				   "-1",
-//				   null,
-//				   "Unit",
-//				   "Unit/name",
-//				   null
-//				);
-		
-		return
-		HierarchicalUtil.getFatherItem(
-				   "Order",
-				   "Order",
-				   "Unit",
-				   "[11][31][21]",
-				   "Unit/group",
-				   "Group",
-				   "Group/name",
-				   null
-				);
-		
-//		return
-//				HierarchicalUtil.getFatherItem(
-//						   "Order",
-//						   "Order",
-//						   "Unit",
-//						   "[15][35][25]",
-//						   "Unit/group",
-//						   "Group",
-//						   "Group/name",
-//						   null
-//						);
-		
+    public boolean recordChanges(String[] keysArray,String[] xpathArray,String newValue) {
+    	
+    	try {
+			WebContext ctx = WebContextFactory.get();
+			UpdateHistory updateHistory = null; 
+			if(ctx.getSession().getAttribute(HierarchicalUtil.DERIVED_HIERARCHY_TREE_UPDATEHISTORY)!=null) {
+				updateHistory=(UpdateHistory)ctx.getSession().getAttribute(HierarchicalUtil.DERIVED_HIERARCHY_TREE_UPDATEHISTORY);
+			}else{
+				updateHistory=new UpdateHistory();
+			}
+			
+			for (int i = 0; i < keysArray.length; i++) {
+				updateHistory.logChange(keysArray[i], xpathArray[i], newValue);
+			}
+			ctx.getSession().setAttribute(HierarchicalUtil.DERIVED_HIERARCHY_TREE_UPDATEHISTORY, updateHistory);
+			org.apache.log4j.Logger.getLogger(DerivedHierarchyDWR.class).debug("The size of Update History is: "+updateHistory.size());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+    	return true;
 
+	}
+    
+    public String saveChanges(String concept) throws Exception {
+    	
+    	try {
+			WebContext ctx = WebContextFactory.get();
+			Configuration configuration = Configuration.getInstance();
+			if(ctx.getSession().getAttribute(HierarchicalUtil.DERIVED_HIERARCHY_TREE_UPDATEHISTORY)==null)return "No Changes! ";
+			UpdateHistory updateHistory = (UpdateHistory) ctx.getSession().getAttribute(HierarchicalUtil.DERIVED_HIERARCHY_TREE_UPDATEHISTORY);
+			if(updateHistory.isEmpty())return "No Changes! ";
+			
+			for (Iterator<UpdateRecordItem> iterator = updateHistory.iterator(); iterator.hasNext();) {
+				UpdateRecordItem updateRecordItem =  iterator.next();
+				
+				//combine to update data
+				String[] keys={updateRecordItem.getKeys()};
+				WSItem wsItem=Util.getPort().getItem(new WSGetItem(new WSItemPK(new WSDataClusterPK(configuration.getCluster()),concept,keys)));
+				Document document = Util.parse(wsItem.getContent());
+				NodeList nlist=Util.getNodeList(document, "/"+updateRecordItem.getXpath());
+				if(nlist!=null&&nlist.getLength()>0){
+					Node targetNode=nlist.item(0);
+					targetNode.setTextContent(updateRecordItem.getNewValue());
+				}
+				String updatedContent=Util.nodeToString(document);
+				//do put
+				WSPutItem wsPutItem=new WSPutItem(new WSDataClusterPK(configuration.getCluster()),updatedContent,new WSDataModelPK(configuration.getModel()),false);
+				WSPutItemWithReport wsPutItemWithReport=new WSPutItemWithReport(wsPutItem,"genericUI",new Boolean(true));
+				Util.getPort().putItemWithReport(wsPutItemWithReport);
+			}
+			
+			ctx.getSession().setAttribute(
+					HierarchicalUtil.DERIVED_HIERARCHY_TREE_UPDATEHISTORY,
+					new UpdateHistory());
+			
+			return "OK";
+		}catch(Exception e){
+			String err= "Unable to update items completely! ";
+			org.apache.log4j.Logger.getLogger(DerivedHierarchyDWR.class).error(err,e);
+			throw new Exception(e.getLocalizedMessage());
+		}
 	}
 
 }

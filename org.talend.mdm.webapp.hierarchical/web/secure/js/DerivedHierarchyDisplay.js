@@ -55,12 +55,28 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
                 }),
                 useArrows: true,
                 rootVisible : true,
-                enableDD: false,
+                enableDD: true,
+                bbar : new Ext.Toolbar([{
+                    handler : function(button, event) {
+                        this.onSaveChangesClick(button, event);
+                    }.createDelegate(this),
+                    text : 'Apply Changes'
+                },{
+                    xtype : "tbspacer"
+                },{
+                    handler : function(button, event) {
+                        this.onCancelChangesClick(button, event);
+                    }.createDelegate(this),
+                    text : 'Cancel Changes'
+                }]),
                 listeners: {
-                            'click': function(node, e){
+                            'dblclick': function(node, e){
                                                             this.onTreeLeafNodeClick(node, e);
-                                                          }.createDelegate(this)
-                            }
+                                                          }.createDelegate(this),
+                            'nodedrop': function(dropEvent){
+                            	               this.onTreeLeafNodeDrop(dropEvent);
+                                            }.createDelegate(this)           
+                           }
                 
            }     
         ); 
@@ -97,6 +113,40 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
         });
                
 
+	},
+	
+	onTreeLeafNodeDrop : function(dropEvent){
+		var nodes=dropEvent.dropNode;
+        var keysArray=new Array(nodes.length);
+        var xpathArray=new Array(nodes.length);
+        var newText='';
+                                                 
+        for (var index = 0; index < nodes.length; index++) {
+              var keys=nodes[index].attributes.pk;
+              var xpath='';
+              if(this.fkPathArray.length>0)xpath=this.fkPathArray[this.fkPathArray.length-1];
+              if(!dropEvent.target.leaf){
+                       newText=dropEvent.target.attributes.pk;
+              }else{
+                  //leaf case
+                  newText=dropEvent.target.parentNode.attributes.pk;
+              }
+                                                         
+              keysArray[index]=keys;
+              xpathArray[index]=xpath;
+         }
+         
+         DWREngine.setAsync(false); 
+         DerivedHierarchyInterface.recordChanges(keysArray,xpathArray,newText,function(status){
+                                                    if(status==true){
+                                                      //make dirty
+                                                      amalto.hierarchical.DerivedHierarchy.makeDirty();    
+                                                    }else{
+                                                      Ext.MessageBox.alert('Error', 'This change has not affected the actual data item! ');
+                                                    }
+                                                });
+         DWREngine.setAsync(true);
+         
 	},
 	
 	onSearchClick : function(){
@@ -213,6 +263,10 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
                 var preFkPath=useFkPathArray[node.attributes.level-1];
                 this.treeLoader.baseParams.preFkPath=preFkPath;
             }
+            
+            var beforeEndingFlag='0';
+            if(node.attributes.level+2==usePivotArray.length)beforeEndingFlag='1';
+            this.treeLoader.baseParams.beforeEndingFlag=beforeEndingFlag;
             
             var endingFlag='0';
             if(node.attributes.level+1==usePivotArray.length)endingFlag='1';
@@ -467,6 +521,37 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
         //alert(this.lastPivotPanelNum);
     },
     
+    onSaveChangesClick: function(button, event){
+        Ext.MessageBox.show({
+           msg: 'Saving your data, please wait...',
+           progressText: 'Saving...',
+           width:300,
+           wait:true,
+           waitConfig: {interval:200}
+        });
+        var dataObject='';
+        if(this.pivotArray.length>0)dataObject=this.pivotArray[this.pivotArray.length-1];
+        DerivedHierarchyInterface.saveChanges(dataObject,{
+            callback:function(data){
+                   //clean dirty
+                   amalto.hierarchical.DerivedHierarchy.cleanDirty();
+                   
+                   Ext.MessageBox.hide();
+                   Ext.MessageBox.alert('Status', data);
+            },
+            errorHandler:function(errorString, exception) {  
+                  alert('Exception:'+ errorString);
+                  Ext.MessageBox.hide();
+            }
+        });
+        
+    },
+    
+    onCancelChangesClick: function(button, event){
+        this.onSearchClick();
+        //clean dirty
+        amalto.hierarchical.DerivedHierarchy.cleanDirty();
+    },
     
 	initData : function() {
 		//this.hierarchicalTree.getRootNode().expand();

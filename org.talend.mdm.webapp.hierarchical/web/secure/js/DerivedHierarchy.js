@@ -33,11 +33,25 @@ amalto.hierarchical.DerivedHierarchy = function () {
 		
     };
     
+    function makeDirty(){
+        var itempanel = amalto.core.getTabPanel().activeTab;
+        if(itempanel){
+            itempanel.isdirty=true;
+        }
+    };
     
+    function cleanDirty(){
+        var itempanel = amalto.core.getTabPanel().activeTab;
+        if(itempanel){
+            itempanel.isdirty=false;
+        }
+    };
 	
  	return {
  		
 		init: function() {initUIAndData();},
+		makeDirty: function() {makeDirty();},
+        cleanDirty: function() {cleanDirty();},
 		onPivotNameChange: function(id) {derivedHierarchyDisplayPanel.doOnPivotNameChange(id);},
 		fillFKStore: function(id) {derivedHierarchyDisplayPanel.doFillFKStore(id);},
 		onAddPivot:function() {derivedHierarchyDisplayPanel.doOnAddPivot();},

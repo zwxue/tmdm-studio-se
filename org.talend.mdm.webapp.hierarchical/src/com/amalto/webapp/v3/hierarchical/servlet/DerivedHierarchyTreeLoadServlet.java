@@ -66,6 +66,7 @@ public class DerivedHierarchyTreeLoadServlet extends HttpServlet {
 		if(req.getParameter("nextFkPath")!=null&&(req.getParameter("nextFkPath").equals("")||req.getParameter("nextFkPath").equals("undefined")))fkXpath=null;
 		String fkXpath0=req.getParameter("preFkPath");
 		if(req.getParameter("preFkPath")!=null&&(req.getParameter("preFkPath").equals("")||req.getParameter("preFkPath").equals("undefined")))fkXpath0=null;
+		String beforeEndingFlag=req.getParameter("beforeEndingFlag");
 		String endingFlag=req.getParameter("endingFlag");
 		
 		FilterItem[] filters = {};
@@ -92,7 +93,7 @@ public class DerivedHierarchyTreeLoadServlet extends HttpServlet {
 			ArrayList<JSONObject> rootGroup = new ArrayList<JSONObject>();
 			
 			for (int i = 0; i < results.length; i++) {
-				JSONObject treenode = data2node(results[i],fatherLevel+1,endingFlag,isRecursion,isViceVersa);
+				JSONObject treenode = data2node(results[i],fatherLevel+1,beforeEndingFlag,endingFlag,isRecursion,isViceVersa);
 				rootGroup.add(treenode);
 			}
 			
@@ -117,7 +118,7 @@ public class DerivedHierarchyTreeLoadServlet extends HttpServlet {
 		out.close();
 	}
 
-	private JSONObject data2node(String result,int level,String endingFlag,boolean isRecursion,boolean isViceVersa) throws Exception {
+	private JSONObject data2node(String result,int level,String beforeEndingFlag,String endingFlag,boolean isRecursion,boolean isViceVersa) throws Exception {
 		
 		Document doc=Util.parse(result);
 		String key=Util.getFirstTextNode(doc, "/result/result-key/");
@@ -132,13 +133,25 @@ public class DerivedHierarchyTreeLoadServlet extends HttpServlet {
 		}else {
 			treenode.put("level", 1);
 		}
+		
+		boolean isLeaf=false;
 		if(isRecursion||isViceVersa) {
-			treenode.put("leaf", false);
+			isLeaf=false;
 		}else {
-			treenode.put("leaf", endingFlag.equals("1"));
+			isLeaf=endingFlag.equals("1");
 		}
-		treenode.put("draggable", false);
-		treenode.put("allowDrop", false);
+		treenode.put("leaf", isLeaf);
+		if(isLeaf){
+			treenode.put("draggable", true);
+			treenode.put("allowDrop", false);
+		}else if(beforeEndingFlag.equals("1")){
+			treenode.put("draggable", false);
+			treenode.put("allowDrop", true);
+		}else {
+			treenode.put("draggable", false);
+			treenode.put("allowDrop", false);
+		}
+		
 
 		return treenode;
 	}

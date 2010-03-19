@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 
 import com.amalto.webapp.core.bean.ComboItemBean;
 import com.amalto.webapp.core.bean.Configuration;
@@ -42,7 +41,6 @@ import com.amalto.webapp.util.webservices.WSWhereItem;
 import com.amalto.webapp.util.webservices.WSWhereOperator;
 import com.amalto.webapp.v3.hierarchical.bean.FilterItem;
 import com.amalto.webapp.v3.hierarchical.bean.HierarchicalTreeCriterion;
-import com.amalto.webapp.v3.hierarchical.dwr.HierarchicalDWR;
 
 public class HierarchicalUtil {
 	
@@ -51,6 +49,8 @@ public class HierarchicalUtil {
 	public static final String DERIVED_HIERARCHY_EXT_CRITERION="com.amalto.webapp.v3.hierarchical.bean.DerivedHierarchyExtCriterion";
 	
 	public static final String HIERARCHICAL_TREE_UPDATEHISTORY="com.amalto.webapp.v3.hierarchical.bean.UpdateHistory";
+	
+	public static final String DERIVED_HIERARCHY_TREE_UPDATEHISTORY="com.amalto.webapp.v3.hierarchical.derived.bean.UpdateHistory";
 
 	public static Map<String, String> getBusinessConcepts(String language)throws Exception {
 		TreeMap<String, String> map = new TreeMap<String, String>();
