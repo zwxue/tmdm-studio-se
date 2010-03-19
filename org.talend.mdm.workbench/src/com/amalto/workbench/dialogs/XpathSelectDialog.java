@@ -169,6 +169,11 @@ public class XpathSelectDialog extends Dialog {
 				} 
 			}
 		}
+		//edit by ymli;fix the bug:0011970:if the conceptName of Browse_items_conceptName doesn't exist in datamodel, all the concept will be show.	
+		if(avaiList.size()==0)
+			avaiList.addAll(systemDataModelValues);
+		
+		
 		dataModelCombo.setItems(avaiList.toArray(new String[avaiList.size()]));
 		dataModelCombo.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(

@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.xsd.XSDSchema;
 
 import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.models.Line;
@@ -44,8 +45,10 @@ import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.WSConceptKey;
+import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSGetBusinessConceptKey;
+import com.amalto.workbench.webservices.WSGetDataModel;
 import com.amalto.workbench.webservices.WSGetView;
 import com.amalto.workbench.webservices.WSView;
 import com.amalto.workbench.webservices.WSViewPK;
@@ -300,7 +303,30 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 			if(viewName.matches("Browse_items.*")){
 				lastDataModelName=XpathSelectDialog.getDataModelName();
 				String concept = viewName.replaceAll("Browse_items_","").replaceAll("#.*","");
-				if(concept!=null&&concept.length()>0&&lastDataModelName!=null&&lastDataModelName.length()>0){
+				
+				//edit by ymli;fix the bug:0011970:if the conceptName of Browse_items_conceptName doesn't exist in datamodel,do not valiate the id.
+				java.util.List<String> systemDataModelValues = Util.getChildren(this.getXObject().getServerRoot(), TreeObject.DATA_MODEL);
+				ArrayList<String> avaiList=new ArrayList<String>();
+				avaiList.addAll(systemDataModelValues);
+				if(concept!=null && !concept.contains("*")){
+					for(String datamodel: systemDataModelValues){
+						try {
+							WSDataModel dm=Util.getPort(this.getXObject()).getDataModel(new WSGetDataModel(new WSDataModelPK(datamodel)));
+							if(dm!=null){
+								XSDSchema xsdSchema = Util.getXSDSchema(dm.getXsdSchema());
+								String schema = Util.nodeToString(xsdSchema.getDocument());
+								XSDSchema xsd= Util.createXsdSchema(schema, this.getXObject().getServerRoot());
+								if(!Util.getConcepts(xsd).contains(concept)){
+									avaiList.remove(datamodel);
+								}
+							}
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						} 
+					}
+				}
+				if(concept!=null&&concept.length()>0&&lastDataModelName!=null&&lastDataModelName.length()>0 && avaiList.size()>0){
+				//if(concept!=null&&concept.length()>0&&lastDataModelName!=null&&lastDataModelName.length()>0){
 					
 					//keys validate
 					java.util.List<String> toAddViewableList=new ArrayList<String>();
