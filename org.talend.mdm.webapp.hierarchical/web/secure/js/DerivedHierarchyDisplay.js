@@ -583,6 +583,8 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
                                              '<span style="padding-left:5px">Display: </span>'+
                                              '<select id="itemsSearchDisplayField{id}"></select>' +
                                              '<select id="itemsSearchFKPath{id}" style="display:none"></select>' +
+                                             '<span style="padding-left:5px" onClick="amalto.hierarchical.DerivedHierarchy.onAddPivot();"><img src="img/genericUI/add-element.gif" style="cursor:pointer"/></span> ' +
+                                             '<span style="padding-left:5px" onClick="amalto.hierarchical.DerivedHierarchy.onRemovePivot();"><img src="img/genericUI/remove-element.gif" style="cursor:pointer"/></span> ' +
                         '<br/></span>'
                         );
         var actulId = parseInt(id) + 1;
