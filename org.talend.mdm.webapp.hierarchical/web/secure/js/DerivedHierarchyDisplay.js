@@ -209,6 +209,9 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
 		
 		if(Ext.get('itemsSearchPivotName' + (id+1))!=null){
 			var usingConcept=$('itemsSearchPivotName' + (id+1)).value;
+			var mySelectedIndex=$('itemsSearchPivotName' + (id+1)).selectedIndex
+			var usingConceptText=$('itemsSearchPivotName' + (id+1)).options[mySelectedIndex].text;
+			if(usingConceptText.indexOf("#")!=-1)usingConcept=usingConceptText;
 			for (var index = 0; index < myoptions.length; index++) {
                if(myoptions[index].value==usingConcept){
                   resultPath=myoptions[index].text;
@@ -427,7 +430,7 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
                 {
                  i18n:language,
                  validateBeforeAddFilter: function() {
-                    var firstPivot=DWRUtil.getValue('itemsSearchPivotName1');
+                    var firstPivot=$('itemsSearchPivotName1').value;
                     
                     if(firstPivot=='-1'){
                             Ext.MessageBox.alert('Warnning', 'First Pivot can not be empty! ');
@@ -444,7 +447,7 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
                     var pivots='';
                     var currentCounter=$('hierarchyItemsCriterias').children.length;
                     for (var i = 0; i < currentCounter; i++) {
-                        var thisPivot=DWRUtil.getValue('itemsSearchPivotName'+(i+1));
+                        var thisPivot=$('itemsSearchPivotName'+(i+1)).value;
                         if(thisPivot!='-1'){
                         	pivots+=thisPivot;
                             if(i<currentCounter-1)pivots+=',';
@@ -535,7 +538,7 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
     
     getFKMapCB: function(result,id){    
         DWRUtil.removeAllOptions('itemsSearchFKPath'+id);
-        DWRUtil.addOptions('itemsSearchFKPath'+id,result,false);
+        DWRUtil.addOptions('itemsSearchFKPath'+id,result,true);
     },
     
     doOnAddPivot: function(){

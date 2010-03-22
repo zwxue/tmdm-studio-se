@@ -69,16 +69,28 @@ public class DerivedHierarchyDWR {
 		
 		List<ComboItemBean> rtnList = new ArrayList<ComboItemBean>();
 		
-        List<String> filterConcepts=Arrays.asList(filterArray);
 		//FIXME:Cache this 	
 		ListRange listRange =getPivotList(language);
-		
 		Object[] comboItems =listRange.getData();
-		for (int i = 0; i < comboItems.length; i++) {
-			ComboItemBean comboItem=(ComboItemBean) comboItems[i];
-			if(filterConcepts.contains(comboItem.getValue())) {
-				rtnList.add(comboItem);
+		
+		for (int j = 0; j < filterArray.length; j++) {
+			int pos=filterArray[j].indexOf("#");
+			
+			String ftConcept=filterArray[j];
+			if(pos!=-1)ftConcept=filterArray[j].substring(0,pos);
+			
+			for (int i = 0; i < comboItems.length; i++) {
+				ComboItemBean comboItem=(ComboItemBean) comboItems[i];
+				if(ftConcept.equals(comboItem.getValue())) {
+					ComboItemBean newComboItem=new ComboItemBean(comboItem.getValue(),comboItem.getText());
+					if(pos!=-1) {
+						newComboItem.setText(filterArray[j]);
+					}
+					rtnList.add(newComboItem);
+					break;
+				}
 			}
+			
 		}
 		
 		return rtnList;
@@ -106,6 +118,7 @@ public class DerivedHierarchyDWR {
 	//FIXME:We should think about more than 2 fk-->1 concept case
 	public Map<String,String> getFKMap(String businessConcept,String language) {
 		Map<String,String> conceptToFXpath=new HashMap<String,String>();
+		Map<String,String> fXpathToConcept=new HashMap<String,String>();
 		
 		try {
 			Configuration config = Configuration.getInstance();
@@ -119,7 +132,24 @@ public class DerivedHierarchyDWR {
 					String concept=cxpath.substring(pos+4);
 					if(concept.indexOf("/")!=-1)concept=concept.substring(0,concept.indexOf("/"));
 					String fXpath=cxpath.substring(0,pos);
-					conceptToFXpath.put(concept,fXpath);
+					
+					if(conceptToFXpath.containsKey(concept)) {
+						String oldFXPath=conceptToFXpath.get(concept);
+						String oldConcept=fXpathToConcept.get(oldFXPath);
+						if(oldConcept.indexOf("#")==-1) {
+							fXpathToConcept.put(oldFXPath, tagConceptSuffix(oldConcept, oldFXPath));
+						}else {
+							
+						}
+						
+						fXpathToConcept.put(fXpath,tagConceptSuffix(concept, fXpath));
+						
+					}else {
+						fXpathToConcept.put(fXpath,concept);
+					}
+					
+					conceptToFXpath.put(concept, fXpath);
+
 				}
 					
 			}
@@ -130,8 +160,16 @@ public class DerivedHierarchyDWR {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return conceptToFXpath;
+		return fXpathToConcept;
 
+	}
+
+	private String tagConceptSuffix(String concept, String fXpath) {
+		String newConceptSufix=fXpath;
+		String[] fXpathArray=fXpath.split("/");
+		if(fXpathArray.length>0)newConceptSufix=fXpathArray[fXpathArray.length-1];
+		String newConcept=concept+"#"+newConceptSufix;
+		return newConcept;
 	}
 	
 	public boolean updateExCriterionForDerivedHerarchy(FilterItem[] filters) {
