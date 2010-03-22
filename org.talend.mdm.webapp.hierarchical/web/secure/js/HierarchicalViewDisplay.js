@@ -99,6 +99,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
 		   	    xtype : "treepanel",
 				region: 'center',
 	    		layout:'fit',
+	    		maskDisabled:true,
 				containerScroll : "true",
 				autoScroll : true,
 				animate : "true",
@@ -657,6 +658,7 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
     
     onSearchClick: function(){
     	//check
+    	this.hierarchicalTree.getEl().mask();
     	var dataObjectLabel=DWRUtil.getValue('dataObjectCmp');
     	var pivotLabel=DWRUtil.getValue('pivotCmp');
     	var titleLabel=DWRUtil.getValue('titleFieldCmp');
@@ -895,8 +897,9 @@ Ext.extend(amalto.hierarchical.HierarchicalViewDisplay, Ext.Panel, {
     	 	    	this.hierarchicalTreeRoot.setText(dataObjectLabel);
     	 	    }
     	 	    //refresh tree
-	    	    this.hierarchicalTree.getRootNode().reload();
+    	 	    this.hierarchicalTree.getRootNode().reload();
 	    	    this.hierarchicalTree.expandAll();
+	    	    this.hierarchicalTree.getEl().unmask(); 
 	     }
     },
     
