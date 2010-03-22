@@ -61,10 +61,13 @@ public class XSDDeleteConceptAction extends UndoAction{
             Set<String> list = new  HashSet<String>();
             Util.getForeingKeyInDataModel(list,page.getXObject().getParent());
             if(list.contains(decl.getName())){
-            	MessageDialog
-				.openWarning(page.getSite().getShell(), "Warnning",
-						"The Entity : " + decl.getName() + " is referring to other Elements");
-            	return Status.CANCEL_STATUS;
+            	boolean confirmed = MessageDialog
+				.openConfirm(page.getSite().getShell(), "Confirm Delete",
+						"The \"" + decl.getName() + "\" Entity is referred to by at least one foreign key. Are you sure you want to proceed?\n" +
+						"\nIf you click OK, this will leave one reference or more to a non-existing Entity.");
+            	if (!confirmed) {
+            		return Status.CANCEL_STATUS;
+            	}
             }
             ArrayList<Object> objList = new ArrayList<Object>();
     		IStructuredContentProvider provider = (IStructuredContentProvider) page

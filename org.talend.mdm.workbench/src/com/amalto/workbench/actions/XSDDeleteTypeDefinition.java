@@ -58,11 +58,14 @@ public class XSDDeleteTypeDefinition extends  UndoAction{
 				simpleType = xsdSimpType;
 			boolean find = Util.findElementsUsingType(objList,simpleType);
 			if(find){
-				MessageDialog
-				.openWarning(page.getSite().getShell(), "Warnning",
-						"The Simple type definition : " + simpleType.getName() + " is referring to other Elements");
-				xsdSimpType = null;
-				return Status.CANCEL_STATUS;
+				boolean confirmed = MessageDialog
+					.openConfirm(page.getSite().getShell(), "Confirm Delete",
+						"The simple-type definition: \"" + simpleType.getName() + "\" is referred to by at least one element. Are you sure you want to proceed?\n" +
+						"\nIf you click OK, this will leave one element or more with an invalid simple-type.");
+				if (!confirmed) {
+					xsdSimpType = null;
+					return Status.CANCEL_STATUS;
+				}
 			}//iif(!list.isEmpty())
 			schema.getContents().remove(simpleType);
 		}//if (selection.getFirstElement()
@@ -76,11 +79,14 @@ public class XSDDeleteTypeDefinition extends  UndoAction{
 			boolean find = Util.findElementsUsingType(objList, complxType);
 			if (find)
 			{
-				MessageDialog
-						.openWarning(page.getSite().getShell(), "Warnning",
-								"The Complex type definition : " + complxType.getName() + " is referring to other Elements");
-				xsdCmpexType = null;
-				return Status.CANCEL_STATUS;
+				boolean confirmed = MessageDialog
+					.openConfirm(page.getSite().getShell(), "Confirm Delete",
+					"The complex-type definition: \"" + complxType.getName() + "\" is referred to by at least one element. Are you sure you want to proceed?\n" +
+					"\nIf you click OK, this will leave one element or more with an invalid complex-type.");
+				if (!confirmed) {
+					xsdCmpexType = null;
+					return Status.CANCEL_STATUS;
+				}
 			}
 			schema.getContents().remove(complxType);
 		}
