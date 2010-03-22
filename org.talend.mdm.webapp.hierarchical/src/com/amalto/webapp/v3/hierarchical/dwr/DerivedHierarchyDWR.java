@@ -149,7 +149,7 @@ public class DerivedHierarchyDWR {
 		return true;
 	}
 	
-    public boolean recordChanges(String[] keysArray,String[] xpathArray,String newValue) {
+    public boolean recordChanges(String[] keysArray,String[] xpathArray,String[] newValueArray) {
     	
     	try {
 			WebContext ctx = WebContextFactory.get();
@@ -161,7 +161,7 @@ public class DerivedHierarchyDWR {
 			}
 			
 			for (int i = 0; i < keysArray.length; i++) {
-				updateHistory.logChange(keysArray[i], xpathArray[i], newValue);
+				updateHistory.logChange(keysArray[i], xpathArray[i], newValueArray[i]);
 			}
 			ctx.getSession().setAttribute(HierarchicalUtil.DERIVED_HIERARCHY_TREE_UPDATEHISTORY, updateHistory);
 			org.apache.log4j.Logger.getLogger(DerivedHierarchyDWR.class).debug("The size of Update History is: "+updateHistory.size());

@@ -14,14 +14,19 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
 
 	lastPivotPanelNum:1,
 	
+	isParent2ChildRelation:true,
+	
+	//means inverse array
 	pivotArray:{},
 	displayArray:{},
 	fkPathArray:{},
 	
-	isViceVersa:true,
+	//means normal array
 	vvPivotArray:{},
     vvDisplayArray:{},
     vvFkPathArray:{},
+    
+    isBelongRelation:false,
 	
 	initUIComponents : function() {
 		
@@ -100,7 +105,7 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
                         height:200,     
                         split:true,
                         html: '' +
-                        '<div id="hierarchyItemsCriterias"></div><br/><div id="derivedHierarchyWherePanel"></div><br/><div id="moreDHCriteriaPanel"></div>',
+                        '<div id="hierarchyPivotPreConfig"></div><br/><div id="hierarchyItemsCriterias"></div><br/><div id="derivedHierarchyWherePanel"></div><br/><div id="moreDHCriteriaPanel"></div>',
                         bodyborder: true,
                         buttonAlign : "left",
                         buttons : [{
@@ -119,17 +124,17 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
 		var nodes=dropEvent.dropNode;
         var keysArray=new Array(nodes.length);
         var xpathArray=new Array(nodes.length);
-        var newText='';
+        var newText=new Array(nodes.length);
                                                  
         for (var index = 0; index < nodes.length; index++) {
               var keys=nodes[index].attributes.pk;
               var xpath='';
               if(this.fkPathArray.length>0)xpath=this.fkPathArray[this.fkPathArray.length-1];
               if(!dropEvent.target.leaf){
-                       newText=dropEvent.target.attributes.pk;
+                  newText[index]=dropEvent.target.attributes.pk;
               }else{
                   //leaf case
-                  newText=dropEvent.target.parentNode.attributes.pk;
+                  newText[index]=dropEvent.target.parentNode.attributes.pk;
               }
                                                          
               keysArray[index]=keys;
@@ -221,14 +226,13 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
         var useDisplayArray;
         var useFkPathArray;
         
-        if(!this.isViceVersa){
-
+        if((!this.isParent2ChildRelation&&!this.isBelongRelation)||(this.isParent2ChildRelation&&this.isBelongRelation)){
         	usePivotArray=this.pivotArray;
             useDisplayArray=this.displayArray;
             useFkPathArray=this.fkPathArray;
             
         }else{
-            
+            //belong
         	usePivotArray=this.vvPivotArray;
             useDisplayArray=this.vvDisplayArray;
             useFkPathArray=this.vvFkPathArray;
@@ -238,9 +242,9 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
 		
 		if(usePivotArray.length>0){
 			
-			if(!this.isViceVersa){
+			if((!this.isParent2ChildRelation&&!this.isBelongRelation)||(this.isParent2ChildRelation&&this.isBelongRelation)){	
 			this.hierarchicalTree.getRootNode().setText(usePivotArray[usePivotArray.length-1]);
-			}else{
+			}else{	
 			this.hierarchicalTree.getRootNode().setText(usePivotArray[0]);	
 			}
             
@@ -281,8 +285,10 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
                  }
             }
             
-            //viceversa
-            this.treeLoader.baseParams.viceVersa=this.isViceVersa;
+            //direction
+            this.treeLoader.baseParams.inverseDirection=this.isParent2ChildRelation;
+            //relation
+            this.treeLoader.baseParams.belongRelation=this.isBelongRelation;
 		}  
 
     },
@@ -290,7 +296,7 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
     onTreeLeafNodeClick : function(node,e) {
 
                 var dataObjectName='';
-                if(!this.isViceVersa)dataObjectName=this.pivotArray[node.attributes.level-1];
+                if((!this.isParent2ChildRelation&&!this.isBelongRelation)||(this.isParent2ChildRelation&&this.isBelongRelation))dataObjectName=this.pivotArray[node.attributes.level-1];
                 else dataObjectName=this.vvPivotArray[node.attributes.level-1];
 
                 var idArray = new Array(1); 
@@ -310,7 +316,48 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
 	
     initCriteria : function(){
     	
-    	
+    	if(this.directionRadioGroup==undefined||this.directionRadioGroup==null){
+           this.directionRadioGroup=
+              new Ext.Panel  (
+                {
+                layout : "table",
+                items : [
+                this.Child2ParentRadio=new Ext.form.Radio(
+                {
+                    xtype : "radio",
+                    name : "Child2ParentRadio",
+                    boxLabel : "Child-Parent",
+                    listeners : {
+                        check : 
+                           function(checkbox, checked) {
+                                this.onDirectionRGChecked(checkbox, checked);
+                            }.createDelegate(this)
+                        
+                    },
+                    checked:true
+                }),
+                this.Parent2ChildRadio=new Ext.form.Radio(
+                {
+                    xtype : "radio",
+                    name : "Parent2ChildRadio",
+                    boxLabel : "Parent-Child",
+                    listeners : {
+                        check : 
+                             function(checkbox, checked) {
+                                this.onDirectionRGChecked(checkbox, checked);
+                             }.createDelegate(this)
+                        
+                    },
+                    checked:false
+                })],
+                border : false,
+                renderTo:"hierarchyPivotPreConfig"
+              }); 
+       }else{
+          this.Child2ParentRadio.setValue(true);
+          this.Parent2ChildRadio.setValue(false);
+          
+       }
        
     	//display
     	DWRUtil.setValue('hierarchyItemsCriterias','<span id="hierarchyItemsCriteria1">' +
@@ -324,23 +371,47 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
                                           '<br/></span>'
                         );
        //more panel
-       if(this.vvCheckBox==undefined||this.vvCheckBox==null){
-       	   this.vvCheckBox=
-              new Ext.form.Checkbox  ({
-                    xtype : "checkbox",
-                    boxLabel : "Vice versa",
+       if(this.relationRadioGroup==undefined||this.relationRadioGroup==null){
+       	   this.relationRadioGroup=
+              new Ext.Panel  (
+                {
+                layout : "table",
+                items : [
+                this.containRadio=new Ext.form.Radio(
+                {
+                    xtype : "radio",
+                    name : "containRadio",
+                    boxLabel : "Contain relation",
                     listeners : {
-                        check : {
-                            fn : function(checkbox, checked) {
-                                this.onVVBoxChecked(checkbox, checked);
+                        check : 
+                           function(checkbox, checked) {
+                                this.onRelationRGChecked(checkbox, checked);
                             }.createDelegate(this)
-                        }
+                        
                     },
-                    renderTo:"moreDHCriteriaPanel"
-                    
-            }); 
+                    checked:true
+                }),
+                this.belongRadio=new Ext.form.Radio(
+                {
+                    xtype : "radio",
+                    name : "belongRadio",
+                    boxLabel : "Belong to relation",
+                    listeners : {
+                        check : 
+                             function(checkbox, checked) {
+                                this.onRelationRGChecked(checkbox, checked);
+                             }.createDelegate(this)
+                        
+                    },
+                    checked:false
+                })],
+                border : false,
+                renderTo:"moreDHCriteriaPanel"
+              }); 
        }else{
-       	  this.vvCheckBox.setValue(false);
+       	  this.containRadio.setValue(true);
+       	  this.belongRadio.setValue(false);
+       	  
        }
             
        //set pivot
@@ -396,8 +467,30 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
        }
     },
     
-    onVVBoxChecked : function(checkbox, checked){
-    	this.isViceVersa=checked;
+    onDirectionRGChecked : function(checkbox, checked){
+        if(checked&&checkbox.name=="Child2ParentRadio"){
+            
+            this.isParent2ChildRelation=false;
+            this.Parent2ChildRadio.setValue(false);
+            
+        }else if(checked&&checkbox.name=="Parent2ChildRadio"){
+            
+            this.isParent2ChildRelation=true;
+            this.Child2ParentRadio.setValue(false);
+        }
+    },
+    
+    onRelationRGChecked : function(checkbox, checked){
+    	if(checked&&checkbox.name=="containRadio"){
+    		
+    		this.isBelongRelation=false;
+    		this.belongRadio.setValue(false);
+    		
+    	}else if(checked&&checkbox.name=="belongRadio"){
+    		
+    		this.isBelongRelation=true;
+    		this.containRadio.setValue(false);
+    	}
     },
     
     initStatus : function(){
@@ -410,7 +503,8 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
         this.vvDisplayArray={};
         this.vvFkPathArray={};
         
-        this.isViceVersa=false;
+        this.isParent2ChildRelation=false;
+        this.isBelongRelation=false;
             
     },
     

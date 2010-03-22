@@ -2,7 +2,6 @@ package com.amalto.webapp.v3.hierarchical.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -13,16 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.w3c.dom.Document;
 
 import com.amalto.webapp.core.bean.Configuration;
-import com.amalto.webapp.core.dwr.CommonDWR;
 import com.amalto.webapp.core.json.JSONObject;
 import com.amalto.webapp.core.util.Util;
-import com.amalto.webapp.core.util.XtentisWebappException;
-import com.amalto.webapp.util.webservices.WSGetChildrenItems;
-import com.amalto.webapp.util.webservices.WSStringArray;
-import com.amalto.webapp.util.webservices.WSStringPredicate;
-import com.amalto.webapp.util.webservices.WSWhereAnd;
-import com.amalto.webapp.util.webservices.WSWhereCondition;
-import com.amalto.webapp.util.webservices.WSWhereItem;
 import com.amalto.webapp.v3.hierarchical.bean.FilterItem;
 import com.amalto.webapp.v3.hierarchical.util.HierarchicalUtil;
 
@@ -47,8 +38,11 @@ public class DerivedHierarchyTreeLoadServlet extends HttpServlet {
 			return;
 		}
 		
-		String viceVersa=req.getParameter("viceVersa");
-		boolean isViceVersa=(viceVersa!=null&&viceVersa.equals("true"))?true:false;
+		String inverseDirection=req.getParameter("inverseDirection");
+		boolean isInverseDirection=(inverseDirection!=null&&inverseDirection.equals("true"))?true:false;
+		
+		String belongRelation=req.getParameter("belongRelation");
+		boolean isBelongRelation=(belongRelation!=null&&belongRelation.equals("true"))?true:false;
 		
 		String recursion=req.getParameter("recursion");
         boolean isRecursion=false;
@@ -74,7 +68,7 @@ public class DerivedHierarchyTreeLoadServlet extends HttpServlet {
 			filters=(FilterItem[]) req.getSession().getAttribute(HierarchicalUtil.DERIVED_HIERARCHY_EXT_CRITERION);
 		}
 		String[] results= {};
-		if(!isViceVersa) {
+		if((!isInverseDirection&&!isBelongRelation)||(isInverseDirection&&isBelongRelation)){
 			results=HierarchicalUtil.getResults(concept,fatherPK, labelXpath, fkXpath,filters);
 		}else {
 			Configuration configuration = null;
@@ -93,7 +87,7 @@ public class DerivedHierarchyTreeLoadServlet extends HttpServlet {
 			ArrayList<JSONObject> rootGroup = new ArrayList<JSONObject>();
 			
 			for (int i = 0; i < results.length; i++) {
-				JSONObject treenode = data2node(results[i],fatherLevel+1,beforeEndingFlag,endingFlag,isRecursion,isViceVersa);
+				JSONObject treenode = data2node(results[i],fatherLevel+1,beforeEndingFlag,endingFlag,isRecursion,isInverseDirection,isBelongRelation);
 				rootGroup.add(treenode);
 			}
 			
@@ -118,7 +112,7 @@ public class DerivedHierarchyTreeLoadServlet extends HttpServlet {
 		out.close();
 	}
 
-	private JSONObject data2node(String result,int level,String beforeEndingFlag,String endingFlag,boolean isRecursion,boolean isViceVersa) throws Exception {
+	private JSONObject data2node(String result,int level,String beforeEndingFlag,String endingFlag,boolean isRecursion,boolean isInverseDirection,boolean isBelongRelation) throws Exception {
 		
 		Document doc=Util.parse(result);
 		String key=Util.getFirstTextNode(doc, "/result/result-key/");
@@ -135,7 +129,7 @@ public class DerivedHierarchyTreeLoadServlet extends HttpServlet {
 		}
 		
 		boolean isLeaf=false;
-		if(isRecursion||isViceVersa) {
+		if(isRecursion||(!isInverseDirection&&isBelongRelation)||(isInverseDirection&&isBelongRelation)) {
 			isLeaf=false;
 		}else {
 			isLeaf=endingFlag.equals("1");

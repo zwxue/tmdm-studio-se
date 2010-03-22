@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.amalto.webapp.core.bean.ComboItemBean;
 import com.amalto.webapp.core.bean.Configuration;
@@ -39,6 +41,7 @@ import com.amalto.webapp.util.webservices.WSWhereAnd;
 import com.amalto.webapp.util.webservices.WSWhereCondition;
 import com.amalto.webapp.util.webservices.WSWhereItem;
 import com.amalto.webapp.util.webservices.WSWhereOperator;
+import com.amalto.webapp.util.webservices.WSWhereOr;
 import com.amalto.webapp.v3.hierarchical.bean.FilterItem;
 import com.amalto.webapp.v3.hierarchical.bean.HierarchicalTreeCriterion;
 
@@ -529,7 +532,7 @@ public class HierarchicalUtil {
 		
 		try {
 			
-			String refValue=null;
+			String[] refValues=null;
 			
 			if(sonIDs!=null&&!sonIDs.equals("-1")) {
 				try {
@@ -545,7 +548,13 @@ public class HierarchicalUtil {
 					
 					if(wsItem!=null) {
 						
-						refValue=Util.getFirstTextNode(Util.parse(wsItem.getContent()), sonRefXpath);
+						NodeList getNodes=Util.getNodeList(Util.parse(wsItem.getContent()), "/"+sonRefXpath);
+						refValues=new String[getNodes.getLength()];
+						for (int i = 0; i < getNodes.getLength(); i++) {
+							Node node=getNodes.item(i);
+							refValues[i]=node.getTextContent();
+						}
+						
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -570,9 +579,8 @@ public class HierarchicalUtil {
 			// set PK condition
 			String[] fatherPkXpaths=CommonDWR.getBusinessConceptKeyPaths(dataModel, fatherConcept);
 			
-//			if(!(sonIDs!=null&&sonIDs.equals("-1"))) {
 			//terminal case
-			if(refValue==null||refValue.length()==0) {
+			if(refValues==null||refValues.length==0) {
 					WSWhereCondition wcn = new WSWhereCondition(
 							fatherPkXpaths[0], 
 							WSWhereOperator.EQUALS, 
@@ -582,6 +590,10 @@ public class HierarchicalUtil {
 					conditions.add(itemn);
 			//normal case		
 			}else {
+				ArrayList<WSWhereItem> subconditions = new ArrayList<WSWhereItem>();
+				for (int m = 0; m < refValues.length; m++) {
+					String refValue=refValues[m];
+					
 					String[] fatherIDs=stripIDs(refValue).split("\\.");
 					if(fatherPkXpaths!=null&&fatherPkXpaths.length>0) {
 						for (int i = 0; i < fatherPkXpaths.length; i++) {
@@ -589,13 +601,15 @@ public class HierarchicalUtil {
 									fatherPkXpaths[i], 
 									WSWhereOperator.EQUALS, 
 									fatherIDs[i],
-									WSStringPredicate.NONE, false);
-							WSWhereItem itemn = new WSWhereItem(wcn, null, null);
-							conditions.add(itemn);
+									WSStringPredicate.OR, false);
+							subconditions.add(new WSWhereItem(wcn, null, null));
 						}
 					}
+				}//end for
+				WSWhereOr or = new WSWhereOr(subconditions.toArray(new WSWhereItem[subconditions.size()]));
+				WSWhereItem itemn = new WSWhereItem(null, null, or);
+				conditions.add(itemn);	
 			}	
-//			}
 			
 			// filters
 			if (filters == null || filters.length == 0) {
