@@ -1,6 +1,7 @@
 package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -11,6 +12,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
+import org.eclipse.xsd.XSDTypeDefinition;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.EImage;
@@ -52,8 +54,14 @@ public class XSDDeleteTypeDefinition extends  UndoAction{
 		Util.getAllObject(page.getSite(), objList, (IStructuredContentProvider)page.getSchemaContentProvider());
 		Util.getAllObject(page.getSite(), objList, (IStructuredContentProvider)page.getTypeContentProvider());
 		
-		if (selection.getFirstElement() instanceof XSDSimpleTypeDefinition) {
-			XSDSimpleTypeDefinition simpleType = (XSDSimpleTypeDefinition)selection.getFirstElement();
+		//edit by ymli; fix the bug:0012228. Made the multiple types can be deleted.
+		for (Iterator<XSDTypeDefinition> iter = selection.iterator(); iter.hasNext(); ) {
+			
+			XSDTypeDefinition type = iter.next();
+		//if (selection.getFirstElement() instanceof XSDSimpleTypeDefinition) {
+			if(type instanceof XSDSimpleTypeDefinition) {
+			//XSDSimpleTypeDefinition simpleType = (XSDSimpleTypeDefinition)selection.getFirstElement();
+			XSDSimpleTypeDefinition simpleType = (XSDSimpleTypeDefinition)type;
 			if(xsdSimpType!=null)
 				simpleType = xsdSimpType;
 			boolean find = Util.findElementsUsingType(objList,simpleType);
@@ -71,7 +79,8 @@ public class XSDDeleteTypeDefinition extends  UndoAction{
 		}//if (selection.getFirstElement()
 		else{
 
-			XSDComplexTypeDefinition complxType = (XSDComplexTypeDefinition)selection.getFirstElement();
+			//XSDComplexTypeDefinition complxType = (XSDComplexTypeDefinition)selection.getFirstElement();
+			XSDComplexTypeDefinition complxType = (XSDComplexTypeDefinition)type;
 			if (xsdCmpexType != null) {
 				complxType = xsdCmpexType;
 			}
@@ -91,7 +100,7 @@ public class XSDDeleteTypeDefinition extends  UndoAction{
 			schema.getContents().remove(complxType);
 		}
 
-		
+		}
 		xsdCmpexType = null;
 		page.refresh();
 		page.markDirty();
@@ -110,4 +119,15 @@ public class XSDDeleteTypeDefinition extends  UndoAction{
 		this.xsdSimpType = xsdSimpType;
 	}
     
+    public boolean isTypeDefinition(Object[] selectedObjs){
+    	boolean typeDefinition = true;
+    	for (Object obj : selectedObjs) {
+			if (!(obj instanceof XSDSimpleTypeDefinition) &&  !(obj instanceof XSDComplexTypeDefinition))
+				{
+				typeDefinition = false;
+				break;
+				}
+		}
+    	return typeDefinition;
+    }
 }

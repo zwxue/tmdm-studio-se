@@ -1638,6 +1638,9 @@ public class DataModelMainPage extends AMainPageV2 {
 			if (deleteConceptWrapAction.checkOutAllConcept(selectedObjs))
 				manager.add(newBrowseItemAction);
 		}
+		//add by ymli; fix the bug:0012228. Made the multiple types can be deleted.
+		if(selectedObjs.length > 1 && deleteTypeDefinition.isTypeDefinition(selectedObjs))
+			manager.add(deleteTypeDefinition);
 		
 		/*if(copyConceptAction.checkInCopyType(selectedObjs))
 			manager.add(copyConceptAction);
