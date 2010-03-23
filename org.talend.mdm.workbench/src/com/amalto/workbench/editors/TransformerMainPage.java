@@ -25,8 +25,6 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
-import org.eclipse.jface.text.DocumentEvent;
-import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.text.TextViewer;
@@ -41,15 +39,14 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetAdapter;
+import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.events.HelpEvent;
-import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
@@ -59,7 +56,6 @@ import org.eclipse.swt.events.MouseTrackAdapter;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
@@ -67,7 +63,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
@@ -92,6 +87,7 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.models.TreeObjectTransfer;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.EInputTemplate;
 import com.amalto.workbench.utils.Util;
@@ -133,7 +129,7 @@ public class TransformerMainPage extends AMainPageV2 {
 	
 	public final static String TRANSFORMER_PLUGIN="amalto/local/transformer/plugin/";
 	
-	protected Text descriptionText;
+//	protected Text descriptionText;
 	
 	//protected Text inputText;
 	protected Text stepText;
@@ -688,6 +684,7 @@ public class TransformerMainPage extends AMainPageV2 {
 				}
 					
 			});
+	        createCompDropTarget();
 			refreshData();
 
 		} catch (Exception e) {
@@ -1370,5 +1367,25 @@ public class TransformerMainPage extends AMainPageV2 {
 			createOutput();
 		}
 	}
+	private void createCompDropTarget() {
+		DropTarget dropTarget = new DropTarget(parametersTextViewer.getTextWidget(),  DND.DROP_MOVE|DND.DROP_LINK);
+//		dropTarget.setTransfer(new ByteArrayTransfer[] { });
+		dropTarget.setTransfer(new TreeObjectTransfer[] { TreeObjectTransfer.getInstance() });
+		dropTarget.addDropListener(new DropTargetAdapter() {
 
+			public void dragEnter(DropTargetEvent event) {
+			}
+			public void dragLeave(DropTargetEvent event) {
+			}
+			public void dragOver(DropTargetEvent event) {
+				event.feedback |= DND.FEEDBACK_EXPAND | DND.FEEDBACK_SCROLL;
+			}
+			
+			public void drop(DropTargetEvent event) {
+				if (event.data instanceof TreeObject[])
+						parametersTextViewer.getTextWidget().setText(parametersTextViewer.getTextWidget().getText()+((TreeObject[])event.data)[0].getDisplayName());	
+			}
+		});
+		
+	}
 }

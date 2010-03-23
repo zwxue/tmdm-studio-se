@@ -156,7 +156,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             		markDirtyWithoutCommit();
             	}
             }); 
-            
+            Util.createCompDropTarget(descriptionText);
             //objectType
 
             
@@ -623,9 +623,9 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			public void drop(DropTargetEvent event) {
 				if (event.data instanceof TreeObject[])
 					if(((TreeObject[])event.data)[0].getType()==TreeObject.TRANSFORMER)
-						serviceParametersText.setText("process="+((TreeObject[])event.data)[0].getDisplayName());	
+						serviceParametersText.setText(serviceParametersText.getText().replace("?","")+ ((TreeObject[])event.data)[0].getDisplayName());	
 					else
-						serviceParametersText.setText(((TreeObject[])event.data)[0].getDisplayName());	
+						serviceParametersText.setText(serviceParametersText.getText()+((TreeObject[])event.data)[0].getDisplayName());	
 			}
 		});
 		

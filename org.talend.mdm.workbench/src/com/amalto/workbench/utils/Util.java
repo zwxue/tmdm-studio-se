@@ -68,8 +68,13 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetAdapter;
+import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComplexTypeContent;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
@@ -111,6 +116,7 @@ import com.amalto.workbench.MDMWorbenchPlugin;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.models.TreeObjectTransfer;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.webservices.WSComponent;
 import com.amalto.workbench.webservices.WSDataClusterPK;
@@ -2382,4 +2388,25 @@ public class Util {
 		return xsdSource;
 
 	}	
+//add this method for the text drop action of all the texts available.	
+	public static void createCompDropTarget(final Text text) {
+		DropTarget dropTarget = new DropTarget(text,  DND.DROP_MOVE|DND.DROP_LINK);
+		dropTarget.setTransfer(new TreeObjectTransfer[] { TreeObjectTransfer.getInstance() });
+		dropTarget.addDropListener(new DropTargetAdapter() {
+
+			public void dragEnter(DropTargetEvent event) {
+			}
+			public void dragLeave(DropTargetEvent event) {
+			}
+			public void dragOver(DropTargetEvent event) {
+				event.feedback |= DND.FEEDBACK_EXPAND | DND.FEEDBACK_SCROLL;
+			}
+			
+			public void drop(DropTargetEvent event) {
+				if (event.data instanceof TreeObject[])
+					text.setText(text.getText()+((TreeObject[])event.data)[0].getDisplayName());	
+			}
+		});
+		
+	}
 }

@@ -7,6 +7,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.amalto.workbench.utils.Util;
+
 /**
  * 
  * @author aiming
@@ -26,6 +28,7 @@ public class LabelText {
                 new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
         );		
         //text.addFocusListener(factory.focusListener);
+        Util.createCompDropTarget(text);
 	}
 	public Label getLabel() {
 		return label;

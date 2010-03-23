@@ -112,7 +112,7 @@ public class MenuMainPage extends AMainPageV2 {
             		markDirtyWithoutCommit();
             	}
             }); 
-            
+            Util.createCompDropTarget(descriptionText);
             //make the Page window a DropTarget - we need to dispose it
             windowTarget = new DropTarget(this.getPartControl(), DND.DROP_MOVE);
             windowTarget.setTransfer(new Transfer[]{TextTransfer.getInstance()});

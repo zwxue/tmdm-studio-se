@@ -108,6 +108,7 @@ public class DescAnnotationComposite implements  SelectionListener{
 	        	}
 	        }); 			
 		}
+		Util.createCompDropTarget(descriptionText);
         accommodation = dialog;
         dlgTitle = "Set the Descriptions";
 	}
