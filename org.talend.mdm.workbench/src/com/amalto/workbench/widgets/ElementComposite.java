@@ -108,6 +108,10 @@ public class ElementComposite {
             	Set<String> uuidtypes=EUUIDCustomType.allTypes();
             	alltypes.addAll(uuidtypes);
             	typeCombo.setItems(alltypes.toArray(new String[alltypes.size()]));
+            	for (Iterator iter = customTypes.iterator(); iter.hasNext(); ) {
+					String name = (String) iter.next();
+					typeCombo.add(name);
+				}
             	typeCombo.indexOf("");
             	typeCombo.setEditable(true);
             	tipLabel.setText("Leave blank for anonymous");
