@@ -1569,7 +1569,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			if (ns == null && !Util.IsAImporedElement((XSDComplexTypeDefinition)obj, xsdSchema))
 			{
 				manager.add(newParticleFromTypeAction);
-				manager.add(deleteTypeDefinition);
+				//manager.add(deleteTypeDefinition);
 				manager.add(editComplexTypeAction);
 			}
 		}
@@ -1603,7 +1603,7 @@ public class DataModelMainPage extends AMainPageV2 {
 				manager.add(newComplexTypeAction);
 				manager.add(newSimpleTypeAction);				
 				manager.add(changeBaseTypeAction);
-				manager.add(deleteTypeDefinition);
+				//manager.add(deleteTypeDefinition);
 				manager.add(new Separator());
 				if (!typedef.getSchema().getSchemaForSchemaNamespace().equals(typedef.getTargetNamespace())) {
 					EList list = typedef.getBaseTypeDefinition().getValidFacets();
@@ -1639,9 +1639,13 @@ public class DataModelMainPage extends AMainPageV2 {
 				manager.add(newBrowseItemAction);
 		}
 		//add by ymli; fix the bug:0012228. Made the multiple types can be deleted.
-		if(selectedObjs.length > 1 && deleteTypeDefinition.isTypeDefinition(selectedObjs))
-			manager.add(deleteTypeDefinition);
-		
+		XSDDeleteTypeDefinition deleteTypeDefinition1;
+		if(selectedObjs.length >1)
+			deleteTypeDefinition1 = new XSDDeleteTypeDefinition(this, true);
+		else	
+			deleteTypeDefinition1 = new XSDDeleteTypeDefinition(this, false);
+			if(selectedObjs.length >= 1 && deleteTypeDefinition1.isTypeDefinition(selectedObjs))
+				manager.add(deleteTypeDefinition1);
 		/*if(copyConceptAction.checkInCopyType(selectedObjs))
 			manager.add(copyConceptAction);
 		if(pasteConceptAction.checkInPasteType())

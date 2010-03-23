@@ -33,7 +33,16 @@ public class XSDDeleteTypeDefinition extends  UndoAction{
 		setToolTipText("Remove a type definition from the XSD Schema context");
 		setDescription(getToolTipText());
 	}
-	
+	public XSDDeleteTypeDefinition(DataModelMainPage page,boolean isMulti) {
+		super(page);
+		setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
+		if(isMulti)
+			setText("Delete type definitions");
+		else
+			setText("Delete type definition");
+		setToolTipText("Remove a type definition from the XSD Schema context");
+		setDescription(getToolTipText());
+	}
 	public void run(Object toDel)
 	{
 		if (!(toDel instanceof XSDComplexTypeDefinition||toDel instanceof XSDSimpleTypeDefinition)) {
@@ -121,13 +130,19 @@ public class XSDDeleteTypeDefinition extends  UndoAction{
     
     public boolean isTypeDefinition(Object[] selectedObjs){
     	boolean typeDefinition = true;
+    	boolean isAllComplexType = false;
     	for (Object obj : selectedObjs) {
 			if (!(obj instanceof XSDSimpleTypeDefinition) &&  !(obj instanceof XSDComplexTypeDefinition))
 				{
 				typeDefinition = false;
 				break;
 				}
+			else if(!(obj instanceof XSDComplexTypeDefinition))
+				isAllComplexType = true;
+				
 		}
-    	return typeDefinition;
+    	if(selectedObjs.length==1)
+    		isAllComplexType = true;
+    	return typeDefinition && isAllComplexType;
     }
 }
