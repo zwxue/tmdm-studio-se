@@ -142,10 +142,8 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
               xpathArray[index]=xpath;
           }
         }else{
-        	for (var index = 0; index < nodes.length; index++) {
-        		var node=nodes[index];
-        		alert(node.parent);
-        	}
+        	//TODO:add drag&&drop support for parent 2 child mode
+        	alert("Not supported yet! ");
         }
         
          
