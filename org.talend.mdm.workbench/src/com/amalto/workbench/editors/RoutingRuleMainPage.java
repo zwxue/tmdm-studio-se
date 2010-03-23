@@ -415,8 +415,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             //make the Page window a DropTarget - we need to dispose it
             windowTarget = new DropTarget(this.getPartControl(), DND.DROP_MOVE);
             windowTarget.setTransfer(new Transfer[]{TextTransfer.getInstance()});
-            windowTarget.addDropListener(new DCDropTargetListener());
-            createCompDropTarget(); 
+            windowTarget.addDropListener(new DCDropTargetListener());            
             refreshData();
 
         } catch (Exception e) {
