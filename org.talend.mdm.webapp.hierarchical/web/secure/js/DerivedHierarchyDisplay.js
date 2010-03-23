@@ -105,7 +105,7 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
                         height:200,     
                         split:true,
                         html: '' +
-                        '<div id="hierarchyPivotPreConfig"></div><br/><div id="hierarchyItemsCriterias"></div><br/><div id="derivedHierarchyWherePanel"></div><br/><div id="moreDHCriteriaPanel"></div>',
+                        '<div id="hierarchyPivotPreConfig"></div><br/><div id="hierarchyItemsCriterias"></div><br/><div id="moreDHCriteriaPanel"></div><br/><div id="derivedHierarchyWherePanel"></div>',
                         bodyborder: true,
                         buttonAlign : "left",
                         buttons : [{
@@ -323,7 +323,7 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
            this.directionRadioGroup=
               new Ext.Panel  (
                 {
-                layout : "table",
+                layout : "column",
                 items : [
                 this.Child2ParentRadio=new Ext.form.Radio(
                 {
@@ -339,6 +339,10 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
                     },
                     checked:true
                 }),
+                {
+                    html : "&nbsp;",
+                    xtype : "label"
+                },
                 this.Parent2ChildRadio=new Ext.form.Radio(
                 {
                     xtype : "radio",
@@ -378,7 +382,7 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
        	   this.relationRadioGroup=
               new Ext.Panel  (
                 {
-                layout : "table",
+                layout : "column",
                 items : [
                 this.containRadio=new Ext.form.Radio(
                 {
@@ -394,6 +398,10 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
                     },
                     checked:true
                 }),
+                {
+                    html : "&nbsp;",
+                    xtype : "label"
+                },
                 this.belongRadio=new Ext.form.Radio(
                 {
                     xtype : "radio",
@@ -463,6 +471,7 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
            var wcContainer= new Ext.Panel({
                 items : [this.wcEditorGridPanel],
                 border:false,
+                height:105,
                 renderTo:"derivedHierarchyWherePanel"
            });
        }else{
