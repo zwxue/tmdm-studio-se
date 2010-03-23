@@ -125,8 +125,9 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
         var keysArray=new Array(nodes.length);
         var xpathArray=new Array(nodes.length);
         var newText=new Array(nodes.length);
-                                                 
-        for (var index = 0; index < nodes.length; index++) {
+        
+        if(!this.isParent2ChildRelation){
+        	for (var index = 0; index < nodes.length; index++) {
               var keys=nodes[index].attributes.pk;
               var xpath='';
               if(this.fkPathArray.length>0)xpath=this.fkPathArray[this.fkPathArray.length-1];
@@ -139,7 +140,14 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
                                                          
               keysArray[index]=keys;
               xpathArray[index]=xpath;
-         }
+          }
+        }else{
+        	for (var index = 0; index < nodes.length; index++) {
+        		var node=nodes[index];
+        		alert(node.parent);
+        	}
+        }
+        
          
          DWREngine.setAsync(false); 
          DerivedHierarchyInterface.recordChanges(keysArray,xpathArray,newText,function(status){
@@ -369,9 +377,9 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
     	//display
     	DWRUtil.setValue('hierarchyItemsCriterias','<span id="hierarchyItemsCriteria1">' +
     	                                     '<span style="padding-left:5px">Pivot: </span>'+
-    			                             '<select id="itemsSearchPivotName1" onChange="amalto.hierarchical.DerivedHierarchy.onPivotNameChange(\'1\');amalto.hierarchical.DerivedHierarchy.fillFKStore(\'1\');"></select>' +
+    			                             '<select id="itemsSearchPivotName1" style="width:250px" onChange="amalto.hierarchical.DerivedHierarchy.onPivotNameChange(\'1\');amalto.hierarchical.DerivedHierarchy.fillFKStore(\'1\');"></select>' +
     			                             '<span style="padding-left:5px">Display: </span>'+
-                                             '<select id="itemsSearchDisplayField1"></select>' +
+                                             '<select id="itemsSearchDisplayField1" style="width:250px"></select>' +
                                              '<select id="itemsSearchFKPath1" style="display:none"></select>' +
                                              '<span style="padding-left:5px" onClick="amalto.hierarchical.DerivedHierarchy.onAddPivot();"><img src="img/genericUI/add-element.gif" style="cursor:pointer"/></span> ' +
                                              '<span style="padding-left:5px" onClick="amalto.hierarchical.DerivedHierarchy.onRemovePivot();"><img src="img/genericUI/remove-element.gif" style="cursor:pointer"/></span> ' +
@@ -588,9 +596,9 @@ Ext.extend(amalto.hierarchical.DerivedHierarchyDisplay, Ext.Panel, {
         var tpl = new Ext.DomHelper.Template(
                         '<span id="hierarchyItemsCriteria{id}">' +
                                              '<span style="padding-left:5px">Pivot: </span>'+
-                                             '<select id="itemsSearchPivotName{id}" onChange="amalto.hierarchical.DerivedHierarchy.onPivotNameChange(\'{id}\');amalto.hierarchical.DerivedHierarchy.fillFKStore(\'{id}\');"></select>' +
+                                             '<select id="itemsSearchPivotName{id}" style="width:250px" onChange="amalto.hierarchical.DerivedHierarchy.onPivotNameChange(\'{id}\');amalto.hierarchical.DerivedHierarchy.fillFKStore(\'{id}\');"></select>' +
                                              '<span style="padding-left:5px">Display: </span>'+
-                                             '<select id="itemsSearchDisplayField{id}"></select>' +
+                                             '<select id="itemsSearchDisplayField{id}" style="width:250px"></select>' +
                                              '<select id="itemsSearchFKPath{id}" style="display:none"></select>' +
                                              '<span style="padding-left:5px" onClick="amalto.hierarchical.DerivedHierarchy.onAddPivot();"><img src="img/genericUI/add-element.gif" style="cursor:pointer"/></span> ' +
                                              '<span style="padding-left:5px" onClick="amalto.hierarchical.DerivedHierarchy.onRemovePivot();"><img src="img/genericUI/remove-element.gif" style="cursor:pointer"/></span> ' +
