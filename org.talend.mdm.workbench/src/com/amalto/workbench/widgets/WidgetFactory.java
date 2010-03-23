@@ -35,6 +35,8 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.amalto.workbench.utils.Util;
+
 
 /**
  * DOC nrousseau class global comment. Detailled comment <br/> adapted from the TabbedPropertySheetWidgetFactory
@@ -285,7 +287,21 @@ public class WidgetFactory extends FormToolkit {
     public CLabel createCLabel(Composite parent, String text) {
         return createCLabel(parent, text, SWT.NONE);
     }
+    
 
+    public Text createText(Composite parent, String value) {
+    	// TODO Auto-generated method stub
+    	Text t=super.createText(parent, value);
+    	Util.createCompDropTarget(t);
+    	return t;
+    }
+
+    public Text createText(Composite parent, String value, int style) {
+    	// TODO Auto-generated method stub
+    	Text t=super.createText(parent, value, style);
+    	Util.createCompDropTarget(t);
+    	return t;
+    }
     /**
      * Creates a label as a part of the form.
      * 

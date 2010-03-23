@@ -107,7 +107,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener{
             );
             descriptionText.setText(wsStoredProcedure.getDescription()==null ? "" : wsStoredProcedure.getDescription());
             descriptionText.addModifyListener(this);
-            Util.createCompDropTarget(descriptionText);
+//            Util.createCompDropTarget(descriptionText);
             //Procedure
             Group storedProcedureGroup = new Group(charComposite,SWT.SHADOW_NONE);
             storedProcedureGroup.setText("Procedure");

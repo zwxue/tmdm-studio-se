@@ -28,7 +28,7 @@ public class LabelText {
                 new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
         );		
         //text.addFocusListener(factory.focusListener);
-        Util.createCompDropTarget(text);
+//        Util.createCompDropTarget(text);
 	}
 	public Label getLabel() {
 		return label;

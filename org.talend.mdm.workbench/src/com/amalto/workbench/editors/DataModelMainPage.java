@@ -308,7 +308,7 @@ public class DataModelMainPage extends AMainPageV2 {
 					: wsObject.getDescription());
 			((GridData) descriptionText.getLayoutData()).minimumHeight = 30;
 			descriptionText.addModifyListener(this);
-			Util.createCompDropTarget(descriptionText);
+//			Util.createCompDropTarget(descriptionText);
 			Composite btnCmp=toolkit.createComposite(mainComposite);
 			btnCmp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 					false, 2, 1));

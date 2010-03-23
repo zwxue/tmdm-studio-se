@@ -156,7 +156,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             		markDirtyWithoutCommit();
             	}
             }); 
-            Util.createCompDropTarget(descriptionText);
+//            Util.createCompDropTarget(descriptionText);
             //objectType
 
             
