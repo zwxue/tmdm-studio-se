@@ -327,6 +327,14 @@ public class TreeObject implements IAdaptable {
 		else
 			return UNKNOWN;
 	}
-		
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof TreeObject) {
+			TreeObject o= (TreeObject) obj;
+			return o.getDisplayName().equals(getDisplayName());
+		}
+		return false;
+	}
 }
 

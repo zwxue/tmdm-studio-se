@@ -183,22 +183,6 @@ public class NewXObjectAction extends Action{
         			break;
         			
         		case TreeObject.VIEW:
-//        			InputDialog id = new InputDialog(
-//	           				view.getSite().getShell(),
-//	           				"New "+IConstants.TALEND+" Object Instance",
-//	           				"The view name should follow the pattern: Browse_items_<EntityName>[#For your purpose]",
-//	           				"Browse_items_",
-//	           				new IInputValidator() {
-//	           					public String isValid(String newText) {
-//	           						if ((newText==null) || "".equals(newText)) 
-//	           							return "The Name cannot be empty";
-//	           						if(!Pattern.matches("\\w*(\\s*|#|\\w+)+\\w+", newText)){
-//	           							return "The name cannot contains invalid character!";
-//	           						}
-//	           						return null;
-//	           					};
-//	           				}
-//	           		);
         			
         			ViewInputDialog tid = new ViewInputDialog(
         					view.getSite(),
@@ -251,7 +235,7 @@ public class NewXObjectAction extends Action{
 	           					public String isValid(String newText) {
 	           						if ((newText==null) || "".equals(newText)) 
 	           							return "The Name cannot be empty";
-	           						if(!Pattern.matches("\\w*(\\s*|#|\\w+)+\\w+", newText)){
+	           						if(!Pattern.matches("\\w*(\\s*|#|\\.|\\w+)+\\w+", newText)){
 	           							return "The name cannot contain invalid character!";
 	           						}
 	           						return null;
