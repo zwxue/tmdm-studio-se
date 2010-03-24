@@ -141,7 +141,14 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 			XSDElementDeclaration subElement = null;
 			
 			//check if already exist
-			XSDElementDeclaration parent = (XSDElementDeclaration)Util.getParent(decl);
+			//add by ymli; fix the bug:0012278;
+			XSDElementDeclaration parent=null;
+			 
+			if(Util.getParent(decl) instanceof XSDElementDeclaration)
+			parent = (XSDElementDeclaration)Util.getParent(decl);
+			else if(Util.getParent(decl) instanceof XSDComplexTypeDefinition)
+				complexType = (XSDComplexTypeDefinition)Util.getParent(decl);
+				
        		if (!anonymous) {
        			EList list = schema.getTypeDefinitions();
        			String ns = "";
@@ -160,9 +167,9 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 				}
 				}
 	       		else{
-				if (parent.getTypeDefinition() instanceof XSDComplexTypeDefinition)
-					complexType = (XSDComplexTypeDefinition) parent
-							.getTypeDefinition();
+				if (parent !=null && parent.getTypeDefinition() instanceof XSDComplexTypeDefinition)
+					complexType = (XSDComplexTypeDefinition) parent.getTypeDefinition();
+									
 				if (complexType != null && complexType.getName() == null) {
 					alreadyExists = true;
 				}
@@ -183,7 +190,10 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 //							.setNodeValue("unbounded");
 				}
 //				partCnt.setMinOccurs(0);
-				parent.updateElement();
+				if(parent!=null)
+					parent.updateElement();
+				else
+					complexType.updateElement();
 			}
 			if(decl.getTypeDefinition() instanceof XSDSimpleTypeDefinition)
 				alreadyExists = false;

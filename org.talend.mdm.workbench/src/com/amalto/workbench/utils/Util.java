@@ -1068,19 +1068,18 @@ public class Util {
 		ArrayList<Object> list = new ArrayList<Object>();
 		for (XSDSchemaContent top : parentList) {
 			list.clear();
-			if (!(top instanceof XSDElementDeclaration)) {
+			if (!(top instanceof XSDElementDeclaration)&& !(top instanceof XSDComplexTypeDefinition)) {
 				continue;
 			}
-			XSDElementDeclaration decl = (XSDElementDeclaration) top;
+			if(top instanceof XSDElementDeclaration ){
+				XSDElementDeclaration decl = (XSDElementDeclaration) top;
 			if (decl == son) return decl;
 			if (decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
-				XSDComplexTypeDefinition type = (XSDComplexTypeDefinition) decl
-						.getTypeDefinition();
+				XSDComplexTypeDefinition type = (XSDComplexTypeDefinition) decl.getTypeDefinition();
 				if (type.getContent() instanceof XSDParticle) {
 					XSDParticle particle = (XSDParticle) type.getContent();
 					if (particle.getTerm() instanceof XSDModelGroup) {
-						XSDModelGroup group = (XSDModelGroup) particle
-								.getTerm();
+						XSDModelGroup group = (XSDModelGroup) particle.getTerm();
 						EList<XSDParticle> elist = group.getContents();
 						for (XSDParticle pt : elist) {
 							if(pt.getContent() instanceof XSDElementDeclaration)
@@ -1094,6 +1093,26 @@ public class Util {
 				}
 			}
 		}
+			}
+			else{
+				XSDComplexTypeDefinition type = (XSDComplexTypeDefinition)top;
+				if(type.getContent() instanceof XSDParticle){
+					XSDParticle particle = (XSDParticle) type.getContent();
+					if (particle.getTerm() instanceof XSDModelGroup) {
+						XSDModelGroup group = (XSDModelGroup) particle.getTerm();
+						EList<XSDParticle> elist = group.getContents();
+						for (XSDParticle pt : elist) {
+							if(pt.getContent() instanceof XSDElementDeclaration)
+							if (((XSDElementDeclaration) pt.getContent()) == elem) {
+								return top;
+							}
+							XSDElementDeclaration spec = findOutSpecialSonElement((XSDElementDeclaration) pt.getContent(), elem);
+							if(spec != null)
+								return spec;
+						}
+					}
+				}
+			}
       }
 	 return null;
     }
@@ -1397,6 +1416,7 @@ public class Util {
     		MessageDialog.openError(null, "error", "max occurance value should be greater than -1");
     		return Status.CANCEL_STATUS;
     	}
+    	if(Util.getParent(decl) instanceof XSDElementDeclaration){
 		XSDElementDeclaration parent = (XSDElementDeclaration)Util.getParent(decl);
 		XSDComplexTypeDefinition compx = (XSDComplexTypeDefinition)parent.getTypeDefinition();
 		XSDParticleImpl partCnt = (XSDParticleImpl)compx.getContent();
@@ -1416,7 +1436,29 @@ public class Util {
    			parent.updateElement();
    		}
    		
-   	    return Status.OK_STATUS;
+    	}
+    	//add by ymli; fix the bug:0012278;
+    	else{
+    		if(Util.getParent(decl) instanceof XSDComplexTypeDefinition){
+    			XSDComplexTypeDefinition compx = (XSDComplexTypeDefinition)Util.getParent(decl);
+    			XSDParticleImpl partCnt = (XSDParticleImpl)compx.getContent();
+    			XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl)partCnt.getTerm();
+    			if((maxOccurs > 1 || maxOccurs == -1) && mdlGrp.getCompositor() != XSDCompositor.SEQUENCE_LITERAL)
+    	   		{
+    	   			// change the parent element to xsd:sequence
+    				if (!MessageDialog.openConfirm(null,
+    						"Change to sequence type", "The complex type will be changed to sequence in response to the maxOccurs value change")) {
+    					return Status.CANCEL_STATUS;
+    				}
+
+    				mdlGrp.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
+    				partCnt.getElement().getAttributeNode("maxOccurs").setNodeValue("unbounded");
+    				partCnt.setMinOccurs(0);
+    				compx.updateElement();
+    	   		}
+    		}
+    	}
+    	return Status.OK_STATUS;
     }
     public static boolean IsAImporedElement(XSDConcreteComponent component, XSDSchema schema)
     {
