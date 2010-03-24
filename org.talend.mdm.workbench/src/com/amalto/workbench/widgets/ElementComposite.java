@@ -110,7 +110,8 @@ public class ElementComposite {
             	typeCombo.setItems(alltypes.toArray(new String[alltypes.size()]));
             	for (Iterator iter = customTypes.iterator(); iter.hasNext(); ) {
 					String name = (String) iter.next();
-					typeCombo.add(name);
+					if(!uuidtypes.contains(name))
+						typeCombo.add(name);
 				}
             	typeCombo.indexOf("");
             	typeCombo.setEditable(true);
