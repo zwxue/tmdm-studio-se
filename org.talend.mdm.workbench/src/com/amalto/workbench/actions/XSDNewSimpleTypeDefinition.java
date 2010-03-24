@@ -38,12 +38,12 @@ public class XSDNewSimpleTypeDefinition extends UndoAction implements SelectionL
 		
 		List<String> customTypes = new ArrayList<String>();
 		List<String> builtInTypes = new ArrayList<String>();
-		
-		for (Iterator iter =  schema.getTypeDefinitions().iterator(); iter.hasNext(); ) {
+		//These types are not supposed to show in the custom list box when create a simple type. 
+/*		for (Iterator iter =  schema.getTypeDefinitions().iterator(); iter.hasNext(); ) {
 			XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
 			if (type instanceof XSDSimpleTypeDefinition)
 				customTypes.add(type.getName());
-		}
+		}*/
 		
 		for (Iterator iter =  schema.getSchemaForSchema().getTypeDefinitions().iterator(); iter.hasNext(); ) {
 			XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
