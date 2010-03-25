@@ -102,12 +102,16 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
     			//check if concept or "just" element
                 checkConcept();
 
-            } else {
-//            	if(selection.getFirstElement() instanceof XSDParticle )
-            	if (selection.getFirstElement() != null) {
-					// a sub element
+            } else if(selection.getFirstElement() instanceof XSDParticle ){
+					//if it's a particle,it should change the element of its content 
 					decl = (XSDElementDeclaration) ((XSDParticle) selection
-							.getFirstElement()).getTerm();
+							.getFirstElement()).getContent();
+            	} else {
+//            	if(selection.getFirstElement() instanceof XSDParticle )
+            		if (selection.getFirstElement() != null) {
+            			// a sub element
+            			decl = (XSDElementDeclaration) ((XSDParticle) selection
+            					.getFirstElement()).getTerm();
 				}
             }
             
@@ -165,6 +169,28 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 							break;
 					}
 				}
+				if (complexType != null) {
+					XSDParticleImpl partCnt = (XSDParticleImpl) complexType
+					.getContent();
+					XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt
+					.getTerm();
+					if (isChoice)
+						mdlGrp.setCompositor(XSDCompositor.CHOICE_LITERAL);
+					else if (isAll) {
+						mdlGrp.setCompositor(XSDCompositor.ALL_LITERAL);
+//					partCnt.setMaxOccurs(1);
+					} else {
+						mdlGrp.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
+//					partCnt.getElement().getAttributeNode("maxOccurs")
+//							.setNodeValue("unbounded");
+					}
+//				partCnt.setMinOccurs(0);
+					if(parent!=null)
+						parent.updateElement();
+					else
+						complexType.updateElement();
+				}
+				
 				}
 	       		else{
 				if (parent !=null && parent.getTypeDefinition() instanceof XSDComplexTypeDefinition)
@@ -175,28 +201,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 				}
 				if(decl.getTypeDefinition() instanceof XSDSimpleTypeDefinition)
 					alreadyExists = false;
-	       			}
-			if (complexType != null) {
-				XSDParticleImpl partCnt = (XSDParticleImpl) complexType
-						.getContent();
-				XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt
-						.getTerm();
-				if (isChoice)
-					mdlGrp.setCompositor(XSDCompositor.CHOICE_LITERAL);
-				else if (isAll) {
-					mdlGrp.setCompositor(XSDCompositor.ALL_LITERAL);
-//					partCnt.setMaxOccurs(1);
-				} else {
-					mdlGrp.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
-//					partCnt.getElement().getAttributeNode("maxOccurs")
-//							.setNodeValue("unbounded");
-				}
-//				partCnt.setMinOccurs(0);
-				if(parent!=null)
-					parent.updateElement();
-				else
-					complexType.updateElement();
-			}
+	       		}
 //   			partCnt.setMaxOccurs(1);
    			
    			
