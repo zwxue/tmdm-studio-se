@@ -19,6 +19,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDAnnotation;
+import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDFactory;
 import org.eclipse.xsd.XSDModelGroup;
@@ -140,18 +141,25 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
        		
 			if (dialog.isInherit()) {
 				XSDTerm totm = particle.getTerm();
-				XSDElementDeclaration concept = (XSDElementDeclaration) Util.getParent(selParticle);
+				XSDElementDeclaration concept = null;
+				if(Util.getParent(selParticle) instanceof XSDElementDeclaration)
+					concept = (XSDElementDeclaration) Util.getParent(selParticle);
+				else if(Util.getParent(selParticle) instanceof XSDComplexTypeDefinition){
+					if (selParticle instanceof XSDParticle) 
+						concept = (XSDElementDeclaration) ((XSDParticle) selParticle).getContent();
+					 else if (selParticle instanceof XSDElementDeclaration) 
+						concept= (XSDElementDeclaration) selParticle;
+				}
 				XSDAnnotation fromannotation = null;
 				if (concept != null)
 					fromannotation = concept.getAnnotation();
 				if (fromannotation != null) {
 					XSDAnnotationsStructure struc = new XSDAnnotationsStructure(totm);
-					if (((XSDElementDeclaration) totm).getType() != null) {
+					if (((XSDElementDeclaration) totm).getType() != null) 
 						addAnnotion(struc, fromannotation);
-					}
 				}
-			}
 			
+			}
 			
        		page.refresh();
        		page.getTreeViewer().setSelection(new StructuredSelection(particle),true);
