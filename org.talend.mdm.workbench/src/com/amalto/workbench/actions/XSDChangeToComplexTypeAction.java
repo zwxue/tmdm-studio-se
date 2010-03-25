@@ -173,6 +173,8 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 				if (complexType != null && complexType.getName() == null) {
 					alreadyExists = true;
 				}
+				if(decl.getTypeDefinition() instanceof XSDSimpleTypeDefinition)
+					alreadyExists = false;
 	       			}
 			if (complexType != null) {
 				XSDParticleImpl partCnt = (XSDParticleImpl) complexType
@@ -195,8 +197,6 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 				else
 					complexType.updateElement();
 			}
-			if(decl.getTypeDefinition() instanceof XSDSimpleTypeDefinition)
-				alreadyExists = false;
 //   			partCnt.setMaxOccurs(1);
    			
    			
