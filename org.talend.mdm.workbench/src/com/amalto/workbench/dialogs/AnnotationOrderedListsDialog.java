@@ -59,7 +59,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
 	private String title = "";
 	private String columnName = "";
 	private boolean recursive = true;
-	private boolean retrieveFKinfos = true;
+	private boolean retrieveFKinfos = false;
 	
 	public boolean isRetrieveFKinfos() {
       return retrieveFKinfos;

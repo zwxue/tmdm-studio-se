@@ -280,7 +280,7 @@ public class XSDAnnotationsStructure {
          return "true".equals(appInfos.get(key));
       }
       
-      return true;
+      return false;
    }
 	
 	public boolean setForeignKeyInfo(int num, String xPath) {
