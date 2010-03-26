@@ -2,6 +2,7 @@ package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -80,8 +81,8 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
             IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
             isConcept=false;
             
+            TreePath tPath = ((TreeSelection) selection).getPaths()[0];
             if (selection.getFirstElement() instanceof XSDModelGroup) {
-				TreePath tPath = ((TreeSelection) selection).getPaths()[0];
 				for (int i = 0; i < tPath.getSegmentCount(); i++) {
 					if (tPath.getSegment(i) instanceof XSDElementDeclaration)
 						decl = (XSDElementDeclaration) tPath.getSegment(i);
@@ -117,11 +118,25 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
             
        		///save current Type Definition
        		//XSDTypeDefinition current = decl.getTypeDefinition();      		
-           
        		if (showDlg) {
-       			
+       			List<XSDComplexTypeDefinition> types = Util.getComplexTypes(decl.getSchema());
+				for (int i = 0; i < tPath.getSegmentCount(); i++) {
+					if (tPath.getSegment(i) instanceof XSDElementDeclaration){
+						XSDTypeDefinition type = (((XSDElementDeclaration) tPath
+								.getSegment(i)).getTypeDefinition());
+						if(!type.equals(decl.getTypeDefinition()))
+							types.remove(type);
+						}
+					if (tPath.getSegment(i) instanceof XSDParticle){
+						XSDTypeDefinition type = ((XSDElementDeclaration) (((XSDParticle) tPath
+								.getSegment(i)).getTerm()))
+								.getTypeDefinition();
+						if(!type.equals(decl.getTypeDefinition()))
+							types.remove(type);
+					}
+				}
 				dialog = new ComplexTypeInputDialog(this, page.getSite()
-						.getShell(), schema,decl.getTypeDefinition(), Util.getComplexTypes(decl.getSchema()),isXSDModelGroup);
+						.getShell(), schema,decl.getTypeDefinition(), types,isXSDModelGroup);
 
 				dialog.setBlockOnOpen(true);
 				int ret = dialog.open();
@@ -169,33 +184,12 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 							break;
 					}
 				}
-				if (complexType != null) {
-					XSDParticleImpl partCnt = (XSDParticleImpl) complexType
-					.getContent();
-					XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt
-					.getTerm();
-					if (isChoice)
-						mdlGrp.setCompositor(XSDCompositor.CHOICE_LITERAL);
-					else if (isAll) {
-						mdlGrp.setCompositor(XSDCompositor.ALL_LITERAL);
-//					partCnt.setMaxOccurs(1);
-					} else {
-						mdlGrp.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
-//					partCnt.getElement().getAttributeNode("maxOccurs")
-//							.setNodeValue("unbounded");
-					}
-//				partCnt.setMinOccurs(0);
-					if(parent!=null)
-						parent.updateElement();
-					else
-						complexType.updateElement();
-				}
 				
 				}
 	       		else{
-				if (parent !=null && parent.getTypeDefinition() instanceof XSDComplexTypeDefinition)
-					complexType = (XSDComplexTypeDefinition) parent.getTypeDefinition();
-									
+				if (parent !=null && decl.getTypeDefinition() instanceof XSDComplexTypeDefinition)
+//					complexType = (XSDComplexTypeDefinition) parent.getTypeDefinition();
+					complexType = (XSDComplexTypeDefinition) decl.getTypeDefinition();
 				if (complexType != null && complexType.getName() == null) {
 					alreadyExists = true;
 				}
@@ -205,6 +199,27 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 //   			partCnt.setMaxOccurs(1);
    			
    			
+       		if (complexType != null) {
+       			XSDParticleImpl partCnt = (XSDParticleImpl) complexType
+       			.getContent();
+       			XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt
+       			.getTerm();
+       			if (isChoice)
+       				mdlGrp.setCompositor(XSDCompositor.CHOICE_LITERAL);
+       			else if (isAll) {
+       				mdlGrp.setCompositor(XSDCompositor.ALL_LITERAL);
+//					partCnt.setMaxOccurs(1);
+       			} else {
+       				mdlGrp.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
+//					partCnt.getElement().getAttributeNode("maxOccurs")
+//							.setNodeValue("unbounded");
+       			}
+//				partCnt.setMinOccurs(0);
+       			if(parent!=null)
+       				parent.updateElement();
+       			else
+       				complexType.updateElement();
+       		}
    			
 //				ArrayList<XSDTypeDefinition> types = Util.getImportedTypeDefinitionChildren(schema);
 //				for (XSDTypeDefinition type: types)
