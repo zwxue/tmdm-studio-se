@@ -80,8 +80,9 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 		try {
             IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
             isConcept=false;
-            
-            TreePath tPath = ((TreeSelection) selection).getPaths()[0];
+            TreePath tPath=null;
+			if(((TreeSelection) selection).getPaths().length>0)
+            	tPath = ((TreeSelection) selection).getPaths()[0];
             if (selection.getFirstElement() instanceof XSDModelGroup) {
 				for (int i = 0; i < tPath.getSegmentCount(); i++) {
 					if (tPath.getSegment(i) instanceof XSDElementDeclaration)
@@ -120,6 +121,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
        		//XSDTypeDefinition current = decl.getTypeDefinition();      		
        		if (showDlg) {
        			List<XSDComplexTypeDefinition> types = Util.getComplexTypes(decl.getSchema());
+       			if(tPath!=null)
 				for (int i = 0; i < tPath.getSegmentCount(); i++) {
 					if (tPath.getSegment(i) instanceof XSDElementDeclaration){
 						XSDTypeDefinition type = (((XSDElementDeclaration) tPath
