@@ -310,7 +310,8 @@ private void addServer(Element root) {
 	if(savePasswordButton.getSelection()==true){
 		password.setText(PasswordUtil.encryptPassword(passwordText.getText()));
 	}
-	universe.setText(universeCombo.getText());		
+	if(Util.IsEnterPrise())
+		universe.setText(universeCombo.getText());		
 	}
 
 
