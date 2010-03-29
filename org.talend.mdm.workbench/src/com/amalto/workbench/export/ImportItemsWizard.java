@@ -44,8 +44,17 @@ import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSExistsDataCluster;
 import com.amalto.workbench.webservices.WSExistsDataModel;
+import com.amalto.workbench.webservices.WSExistsMenu;
+import com.amalto.workbench.webservices.WSExistsRole;
+import com.amalto.workbench.webservices.WSExistsRoutingRule;
+import com.amalto.workbench.webservices.WSExistsStoredProcedure;
+import com.amalto.workbench.webservices.WSExistsSynchronizationPlan;
+import com.amalto.workbench.webservices.WSExistsTransformer;
+import com.amalto.workbench.webservices.WSExistsUniverse;
+import com.amalto.workbench.webservices.WSExistsView;
 import com.amalto.workbench.webservices.WSItem;
 import com.amalto.workbench.webservices.WSMenu;
+import com.amalto.workbench.webservices.WSMenuPK;
 import com.amalto.workbench.webservices.WSPutDataCluster;
 import com.amalto.workbench.webservices.WSPutDataModel;
 import com.amalto.workbench.webservices.WSPutItem;
@@ -58,15 +67,22 @@ import com.amalto.workbench.webservices.WSPutTransformer;
 import com.amalto.workbench.webservices.WSPutUniverse;
 import com.amalto.workbench.webservices.WSPutView;
 import com.amalto.workbench.webservices.WSRole;
+import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRuleExpression;
 import com.amalto.workbench.webservices.WSRoutingRuleOperator;
+import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSStoredProcedure;
+import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSStringPredicate;
 import com.amalto.workbench.webservices.WSSynchronizationPlan;
+import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
 import com.amalto.workbench.webservices.WSTransformer;
+import com.amalto.workbench.webservices.WSTransformerPK;
 import com.amalto.workbench.webservices.WSUniverse;
+import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSView;
+import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.WSWhereCondition;
 import com.amalto.workbench.webservices.WSWhereOperator;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -396,8 +412,8 @@ public class ImportItemsWizard extends Wizard{
    					   reader = new FileReader(importFolder+"/" + subItem);
    					   WSMenu memu=new WSMenu();
    					   memu = (WSMenu)Unmarshaller.unmarshal(WSMenu.class, reader);
-						if (port.existsDataModel(new WSExistsDataModel(
-								new WSDataModelPK(memu.getName()))).is_true()) {
+						if (port.existsMenu(new WSExistsMenu(
+								new WSMenuPK(memu.getName()))).is_true()) {
 							if (!isOverrideAll) {
 								int result = isOveride(memu.getName(),TreeObject.MENU_);
 								if (result == IDialogConstants.CANCEL_ID) {
@@ -431,8 +447,8 @@ public class ImportItemsWizard extends Wizard{
    					   reader = new FileReader(importFolder+"/" + subItem);
    					   WSRole role = new WSRole();
    					   role = (WSRole)Unmarshaller.unmarshal(WSRole.class, reader);
-						if (port.existsDataModel(new WSExistsDataModel(
-								new WSDataModelPK(role.getName()))).is_true()) {
+						if (port.existsRole(new WSExistsRole(
+								new WSRolePK(role.getName()))).is_true()) {
 							if (!isOverrideAll) {
 								int result = isOveride(role.getName(),TreeObject.ROLE_);
 								if (result == IDialogConstants.CANCEL_ID) {
@@ -470,8 +486,8 @@ public class ImportItemsWizard extends Wizard{
 	                         if(rule.getWsOperator() == null)rule.setWsOperator(WSRoutingRuleOperator.CONTAINS);
 	                      }
 					   }
-						if (port.existsDataModel(new WSExistsDataModel(
-								new WSDataModelPK(routingRule.getName()))).is_true()) {
+						if (port.existsRoutingRule(new WSExistsRoutingRule(
+								new WSRoutingRulePK(routingRule.getName()))).is_true()) {
 							if (!isOverrideAll) {
 								int result = isOveride(routingRule.getName(),TreeObject.ROUTINGRULE_);
 								if (result == IDialogConstants.CANCEL_ID) {
@@ -504,8 +520,8 @@ public class ImportItemsWizard extends Wizard{
 					   reader = new FileReader(importFolder+"/" + subItem);
 					   WSStoredProcedure model=new WSStoredProcedure();
 					   model = (WSStoredProcedure)Unmarshaller.unmarshal(WSStoredProcedure.class,reader);
-						if (port.existsDataModel(new WSExistsDataModel(
-								new WSDataModelPK(model.getName()))).is_true()) {
+						if (port.existsStoredProcedure(new WSExistsStoredProcedure(
+								new WSStoredProcedurePK(model.getName()))).is_true()) {
 							if (!isOverrideAll) {
 								int result = isOveride(model.getName(),TreeObject.STOREDPROCEDURE_);
 								if (result == IDialogConstants.CANCEL_ID) {
@@ -541,8 +557,8 @@ public class ImportItemsWizard extends Wizard{
 				      WSSynchronizationPlan model = new WSSynchronizationPlan();
 				      model = (WSSynchronizationPlan)Unmarshaller.
 				         unmarshal(WSSynchronizationPlan.class, reader);
-						if (port.existsDataModel(new WSExistsDataModel(
-								new WSDataModelPK(model.getName()))).is_true()) {
+						if (port.existsSynchronizationPlan(new WSExistsSynchronizationPlan(
+								new WSSynchronizationPlanPK(model.getName()))).is_true()) {
 							if (!isOverrideAll) {
 								int result = isOveride(model.getName(),TreeObject.SYNCHRONIZATIONPLAN_);
 								if (result == IDialogConstants.CANCEL_ID) {
@@ -576,8 +592,8 @@ public class ImportItemsWizard extends Wizard{
 				      WSTransformer model = new WSTransformer();
 				      model = (WSTransformer)Unmarshaller.
 				         unmarshal(WSTransformer.class,reader);
-						if (port.existsDataModel(new WSExistsDataModel(
-								new WSDataModelPK(model.getName()))).is_true()) {
+						if (port.existsTransformer(new WSExistsTransformer(
+								new WSTransformerPK(model.getName()))).is_true()) {
 							if (!isOverrideAll) {
 								int result = isOveride(model.getName(),TreeObject.TRANSFORMER_);
 								if (result == IDialogConstants.CANCEL_ID) {
@@ -611,8 +627,8 @@ public class ImportItemsWizard extends Wizard{
 				      reader = new FileReader(importFolder+"/" + subItem);
 				      WSUniverse model = new WSUniverse();
 				      model = (WSUniverse)Unmarshaller.unmarshal(WSUniverse.class, reader);
-						if (port.existsDataModel(new WSExistsDataModel(
-								new WSDataModelPK(model.getName()))).is_true()) {
+						if (port.existsUniverse(new WSExistsUniverse(
+								new WSUniversePK(model.getName()))).is_true()) {
 							if (!isOverrideAll) {
 								int result = isOveride(model.getName(),TreeObject.UNIVERSE_);
 								if (result == IDialogConstants.CANCEL_ID) {
@@ -660,8 +676,8 @@ public class ImportItemsWizard extends Wizard{
 	                        }
 	                     }
 	                  }
-						if (port.existsDataModel(new WSExistsDataModel(
-								new WSDataModelPK(model.getName()))).is_true()) {
+						if (port.existsView(new WSExistsView(
+								new WSViewPK(model.getName()))).is_true()) {
 							if (!isOverrideAll) {
 								int result = isOveride(model.getName(),TreeObject.VIEW_);
 								if (result == IDialogConstants.CANCEL_ID) {
