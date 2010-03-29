@@ -62,7 +62,6 @@ public class TomBrandingService implements IBrandingService {
         return new DefaultBrandingConfiguraton();
     }
 
-    @Override
     public String getAcronym() {
         return "tmc";
     }
