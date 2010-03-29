@@ -1228,6 +1228,173 @@ public class ContentProposalAdapterExtended {
 
     }
 
+    class ProposalListener implements Listener{
+
+
+        public void handleEvent(Event e) {
+            if (!isEnabled) {
+                return;
+            }
+
+            switch (e.type) {
+            case SWT.Traverse:
+            case SWT.KeyDown:
+
+                // needed because in Text widget, cursor position is changed between keydown and keyup events in
+                // Text widget,
+                // so when keyup, popup.getTargetControlListener().handleEvent(e) is effectivly called
+            case SWT.KeyUp:
+                if (DEBUG) {
+                    StringBuffer sb;
+                    if (e.type == SWT.Traverse) {
+                        sb = new StringBuffer("Traverse"); //$NON-NLS-1$
+                    } else {
+                        sb = new StringBuffer("KeyDown"); //$NON-NLS-1$
+                    }
+                    sb.append(" received by adapter"); //$NON-NLS-1$
+                    dump(sb.toString(), e);
+                }
+                // If the popup is open, it gets first shot at the
+                // keystroke and should set the doit flags appropriately.
+                if (popup != null) {
+                    popup.getTargetControlListener().handleEvent(e);
+                    if (DEBUG) {
+                        StringBuffer sb;
+                        if (e.type == SWT.Traverse) {
+                            sb = new StringBuffer("Traverse"); //$NON-NLS-1$
+                        } else {
+                            sb = new StringBuffer("KeyDown"); //$NON-NLS-1$
+                        }
+                        sb.append(" after being handled by popup"); //$NON-NLS-1$
+                        dump(sb.toString(), e);
+                    }
+
+                    return;
+                }
+
+                // We were only listening to traverse events for the popup
+                if (e.type == SWT.Traverse) {
+                    return;
+                }
+
+                if (e.type == SWT.KeyDown) {
+
+                    // The popup is not open. We are looking at keydown events
+                    // for a trigger to open the popup.
+                    if (triggerKeyStroke != null) {
+                        // Either there are no modifiers for the trigger and we
+                        // check the character field...
+                        if ((triggerKeyStroke.getModifierKeys() == KeyStroke.NO_KEY && triggerKeyStroke.getNaturalKey() == e.character)
+                                ||
+                                // ...or there are modifiers, in which case the
+                                // keycode and state must match
+                                (triggerKeyStroke.getNaturalKey() == e.keyCode && ((triggerKeyStroke.getModifierKeys() & e.stateMask) == triggerKeyStroke
+                                        .getModifierKeys()))) {
+                            // We never propagate the keystroke for an explicit
+                            // keystroke invocation of the popup
+                            e.doit = false;
+                            openProposalPopup();
+                            return;
+                        }
+                    }
+                    /*
+                     * The triggering keystroke was not invoked. Check for autoactivation characters.
+                     */
+                    if (e.character != 0) {
+                        boolean autoActivated = false;
+                        // Auto-activation characters were specified. Check
+                        // them.
+                        if (autoActivateString != null) {
+                            if (autoActivateString.indexOf(e.character) >= 0) {
+                                autoActivated = true;
+                            }
+                            // Auto-activation characters were not specified. If
+                            // there was no key stroke specified, assume
+                            // activation for alphanumeric characters.
+                        } else if (triggerKeyStroke == null && Character.isLetterOrDigit(e.character)) {
+                            autoActivated = true;
+                        }
+                        /*
+                         * When autoactivating, we check the autoactivation delay.
+                         */
+                        if (autoActivated) {
+                            e.doit = propagateKeys;
+
+                            if (autoActivationDelay > 0) {
+                                Runnable runnable = new Runnable() {
+
+                                    public void run() {
+                                        receivedKeyDown = false;
+                                        try {
+                                            Thread.sleep(autoActivationDelay);
+                                        } catch (InterruptedException e) {
+                                            // nothing
+                                        }
+                                        if (!isValid() || receivedKeyDown) {
+                                            return;
+                                        }
+                                        getControl().getDisplay().syncExec(new Runnable() {
+
+                                            public void run() {
+                                                openProposalPopup();
+                                            }
+                                        });
+                                    }
+                                };
+                                Thread t = new Thread(runnable);
+                                t.start();
+                            } else {
+                                // Since we do not sleep, we must open the popup
+                                // in an async exec. This is necessary because
+                                // the cursor position and other important info
+                                // changes as a result of this event occurring.
+                                getControl().getDisplay().asyncExec(new Runnable() {
+
+                                    public void run() {
+                                        if (isValid()) {
+                                            openProposalPopup();
+                                        }
+                                    }
+                                });
+                            }
+
+                        } else {
+                            // No autoactivation occurred, so record the key down
+                            // as a means to interrupt any autoactivation that is
+                            // pending.
+                            receivedKeyDown = true;
+                        }
+                    }
+                }
+                break;
+
+            default:
+                break;
+            }
+        }
+
+        /**
+         * Dump the given events to "standard" output.
+         * 
+         * @param who who is dumping the event
+         * @param e the event
+         */
+        private void dump(String who, Event e) {
+            StringBuffer sb = new StringBuffer("--- [ContentProposalAdapter]\n"); //$NON-NLS-1$
+            sb.append(who);
+            sb.append(" - e: keyCode=" + e.keyCode + hex(e.keyCode)); //$NON-NLS-1$
+            sb.append("; character=" + e.character + hex(e.character)); //$NON-NLS-1$
+            sb.append("; stateMask=" + e.stateMask + hex(e.stateMask)); //$NON-NLS-1$
+            sb.append("; doit=" + e.doit); //$NON-NLS-1$
+            sb.append("; detail=" + e.detail + hex(e.detail)); //$NON-NLS-1$
+            sb.append("; widget=" + e.widget); //$NON-NLS-1$
+            System.out.println(sb);
+        }
+
+        private String hex(int i) {
+            return "[0x" + Integer.toHexString(i) + ']'; //$NON-NLS-1$
+        }    	
+    }
     /**
      * Flag that controls the printing of debug info.
      */
@@ -1359,7 +1526,7 @@ public class ContentProposalAdapterExtended {
     /*
      * The listener we install on the control.
      */
-    private Listener controlListener;
+    private static Listener controlListener;
 
     /*
      * The list of listeners who wish to be notified when something significant happens with the proposals.
@@ -1667,7 +1834,7 @@ public class ContentProposalAdapterExtended {
     public void addContentProposalListener(IContentProposalListener listener) {
         proposalListeners.add(listener);
     }
-
+    
     /*
      * Add our listener to the control. Debug information to be left in until this support is stable on all platforms.
      */
@@ -1679,172 +1846,23 @@ public class ContentProposalAdapterExtended {
         if (controlListener != null) {
             return;
         }
-        controlListener = new Listener() {
-
-            public void handleEvent(Event e) {
-                if (!isEnabled) {
-                    return;
-                }
-
-                switch (e.type) {
-                case SWT.Traverse:
-                case SWT.KeyDown:
-
-                    // needed because in Text widget, cursor position is changed between keydown and keyup events in
-                    // Text widget,
-                    // so when keyup, popup.getTargetControlListener().handleEvent(e) is effectivly called
-                case SWT.KeyUp:
-                    if (DEBUG) {
-                        StringBuffer sb;
-                        if (e.type == SWT.Traverse) {
-                            sb = new StringBuffer("Traverse"); //$NON-NLS-1$
-                        } else {
-                            sb = new StringBuffer("KeyDown"); //$NON-NLS-1$
-                        }
-                        sb.append(" received by adapter"); //$NON-NLS-1$
-                        dump(sb.toString(), e);
-                    }
-                    // If the popup is open, it gets first shot at the
-                    // keystroke and should set the doit flags appropriately.
-                    if (popup != null) {
-                        popup.getTargetControlListener().handleEvent(e);
-                        if (DEBUG) {
-                            StringBuffer sb;
-                            if (e.type == SWT.Traverse) {
-                                sb = new StringBuffer("Traverse"); //$NON-NLS-1$
-                            } else {
-                                sb = new StringBuffer("KeyDown"); //$NON-NLS-1$
-                            }
-                            sb.append(" after being handled by popup"); //$NON-NLS-1$
-                            dump(sb.toString(), e);
-                        }
-
-                        return;
-                    }
-
-                    // We were only listening to traverse events for the popup
-                    if (e.type == SWT.Traverse) {
-                        return;
-                    }
-
-                    if (e.type == SWT.KeyDown) {
-
-                        // The popup is not open. We are looking at keydown events
-                        // for a trigger to open the popup.
-                        if (triggerKeyStroke != null) {
-                            // Either there are no modifiers for the trigger and we
-                            // check the character field...
-                            if ((triggerKeyStroke.getModifierKeys() == KeyStroke.NO_KEY && triggerKeyStroke.getNaturalKey() == e.character)
-                                    ||
-                                    // ...or there are modifiers, in which case the
-                                    // keycode and state must match
-                                    (triggerKeyStroke.getNaturalKey() == e.keyCode && ((triggerKeyStroke.getModifierKeys() & e.stateMask) == triggerKeyStroke
-                                            .getModifierKeys()))) {
-                                // We never propagate the keystroke for an explicit
-                                // keystroke invocation of the popup
-                                e.doit = false;
-                                openProposalPopup();
-                                return;
-                            }
-                        }
-                        /*
-                         * The triggering keystroke was not invoked. Check for autoactivation characters.
-                         */
-                        if (e.character != 0) {
-                            boolean autoActivated = false;
-                            // Auto-activation characters were specified. Check
-                            // them.
-                            if (autoActivateString != null) {
-                                if (autoActivateString.indexOf(e.character) >= 0) {
-                                    autoActivated = true;
-                                }
-                                // Auto-activation characters were not specified. If
-                                // there was no key stroke specified, assume
-                                // activation for alphanumeric characters.
-                            } else if (triggerKeyStroke == null && Character.isLetterOrDigit(e.character)) {
-                                autoActivated = true;
-                            }
-                            /*
-                             * When autoactivating, we check the autoactivation delay.
-                             */
-                            if (autoActivated) {
-                                e.doit = propagateKeys;
-
-                                if (autoActivationDelay > 0) {
-                                    Runnable runnable = new Runnable() {
-
-                                        public void run() {
-                                            receivedKeyDown = false;
-                                            try {
-                                                Thread.sleep(autoActivationDelay);
-                                            } catch (InterruptedException e) {
-                                                // nothing
-                                            }
-                                            if (!isValid() || receivedKeyDown) {
-                                                return;
-                                            }
-                                            getControl().getDisplay().syncExec(new Runnable() {
-
-                                                public void run() {
-                                                    openProposalPopup();
-                                                }
-                                            });
-                                        }
-                                    };
-                                    Thread t = new Thread(runnable);
-                                    t.start();
-                                } else {
-                                    // Since we do not sleep, we must open the popup
-                                    // in an async exec. This is necessary because
-                                    // the cursor position and other important info
-                                    // changes as a result of this event occurring.
-                                    getControl().getDisplay().asyncExec(new Runnable() {
-
-                                        public void run() {
-                                            if (isValid()) {
-                                                openProposalPopup();
-                                            }
-                                        }
-                                    });
-                                }
-
-                            } else {
-                                // No autoactivation occurred, so record the key down
-                                // as a means to interrupt any autoactivation that is
-                                // pending.
-                                receivedKeyDown = true;
-                            }
-                        }
-                    }
-                    break;
-
-                default:
-                    break;
-                }
-            }
-
-            /**
-             * Dump the given events to "standard" output.
-             * 
-             * @param who who is dumping the event
-             * @param e the event
-             */
-            private void dump(String who, Event e) {
-                StringBuffer sb = new StringBuffer("--- [ContentProposalAdapter]\n"); //$NON-NLS-1$
-                sb.append(who);
-                sb.append(" - e: keyCode=" + e.keyCode + hex(e.keyCode)); //$NON-NLS-1$
-                sb.append("; character=" + e.character + hex(e.character)); //$NON-NLS-1$
-                sb.append("; stateMask=" + e.stateMask + hex(e.stateMask)); //$NON-NLS-1$
-                sb.append("; doit=" + e.doit); //$NON-NLS-1$
-                sb.append("; detail=" + e.detail + hex(e.detail)); //$NON-NLS-1$
-                sb.append("; widget=" + e.widget); //$NON-NLS-1$
-                System.out.println(sb);
-            }
-
-            private String hex(int i) {
-                return "[0x" + Integer.toHexString(i) + ']'; //$NON-NLS-1$
-            }
-        };
+        controlListener = new ProposalListener();
+        
+        Listener[] listeners=control.getListeners(SWT.KeyDown);
+        for(Listener lis:listeners) {
+        	if(lis instanceof ProposalListener)
+        	control.removeListener(SWT.KeyDown, lis);
+        }
+        listeners=control.getListeners(SWT.KeyUp);
+        for(Listener lis:listeners) {
+        	if(lis instanceof ProposalListener)
+        	control.removeListener(SWT.KeyUp, lis);
+        }
+        listeners=control.getListeners(SWT.Traverse);
+        for(Listener lis:listeners) {
+        	if(lis instanceof ProposalListener)
+        	control.removeListener(SWT.Traverse, lis);
+        }
         control.addListener(SWT.KeyDown, controlListener);
         control.addListener(SWT.KeyUp, controlListener);
         control.addListener(SWT.Traverse, controlListener);
@@ -1893,7 +1911,7 @@ public class ContentProposalAdapterExtended {
 
         // Remove the selected text before applying proposal. See bug 0004266: Replace value with context value using
         // CTRL+Space.
-        removeSelectedText();
+        removeSelectedText();       
         switch (proposalAcceptanceStyle) {
         case (PROPOSAL_REPLACE):
             setControlContent(proposal.getContent(), proposal.getCursorPosition());

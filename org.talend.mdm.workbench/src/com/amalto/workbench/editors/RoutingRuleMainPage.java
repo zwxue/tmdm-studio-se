@@ -23,6 +23,8 @@ import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.ModifyEvent;
@@ -110,7 +112,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
     };
     private TisTableViewer conditionViewer;
 	private Button deactiveButton;
-
+	ContentProposalAdapterExtended adapter;
     
     public String getDataModelName() {
 		return dataModelName;
@@ -417,7 +419,16 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             windowTarget.setTransfer(new Transfer[]{TextTransfer.getInstance()});
             windowTarget.addDropListener(new DCDropTargetListener());            
             refreshData();
-
+            conditionText.addFocusListener(new FocusListener() {
+				
+				public void focusLost(FocusEvent e) {					
+					//adapter.resetPosition();
+				}
+				
+				public void focusGained(FocusEvent e) {					
+					initConditionProposal();
+				}
+			});
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -432,7 +443,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			if(value!=null && value.trim().length()>0)
 				proposals.add(value);
 		}
-		ContentProposalAdapterExtended adapter=WidgetUtils.addContentProposal(conditionText, (String[])proposals.toArray(new String[proposals.size()]), new char[] {' ','('});
+		adapter=WidgetUtils.addContentProposal(conditionText, (String[])proposals.toArray(new String[proposals.size()]), new char[] {' ','('});
         adapter.setPopupSize(new Point(120,100));
 		
 	}
@@ -490,7 +501,6 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             if(objectTypeText.getText().length()>0 && !objectTypeText.getText().equals("*")){           	
             	conditionViewer.setConceptName(objectTypeText.getText());
             }
-            initConditionProposal();
 			initParamterProposal(serviceNameCombo.getText());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -531,7 +541,6 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			//refresh serverview
 			ServerView view= ServerView.show();
 			view.getViewer().refresh();
-			//initConditionProposal();
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page", "Error comitting the page: "+e.getLocalizedMessage());
