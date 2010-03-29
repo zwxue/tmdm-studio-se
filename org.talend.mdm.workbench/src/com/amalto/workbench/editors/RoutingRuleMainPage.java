@@ -531,7 +531,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			//refresh serverview
 			ServerView view= ServerView.show();
 			view.getViewer().refresh();
-			initConditionProposal();
+			//initConditionProposal();
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page", "Error comitting the page: "+e.getLocalizedMessage());
