@@ -11,9 +11,7 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.ObjectRetriever;
 import com.amalto.workbench.models.TreeParent;
-import com.amalto.workbench.providers.XtentisServerObjectsRetriever;
 import com.amalto.workbench.utils.IConstants;
-import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.views.ServerView;
 import com.sun.org.apache.xpath.internal.objects.XObject;
 
@@ -52,11 +50,11 @@ public class RefreshXObjectAction extends Action {
 		LocalTreeObjectRepository.getInstance().setLazySaveStrategy(true,xobject);*/
 
 		
-			retriever.run(new NullProgressMonitor());
+		retriever.run(new NullProgressMonitor());
 		
 
-		//RefreshXObjectAction.this.serverObject.synchronizeWith(retriever.getServerRoot());
-		ServerView.show().getViewer().refresh(xobject);
+		//RefreshXObjectAction.this.xobject.synchronizeWith();
+		//ServerView.show().getViewer().refresh(xobject);
 		} catch (InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
