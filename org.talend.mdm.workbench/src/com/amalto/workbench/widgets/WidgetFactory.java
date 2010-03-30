@@ -292,7 +292,6 @@ public class WidgetFactory extends FormToolkit {
     public Text createText(Composite parent, String value) {
     	// TODO Auto-generated method stub
     	Text t=super.createText(parent, value);
-    	Util.createCompDropTarget(t);
     	return t;
     }
 
