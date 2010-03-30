@@ -765,17 +765,20 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				int length = page.getEditors().length;
 				String version = "";
 				String tabEndpointAddress="";
+				String unserName = null;
 				int j = 0;
 				 for(int i = 0;i<length;i++){
 					 IEditorPart part = page.getEditors()[i-j];
 					if(part instanceof XObjectBrowser){
 						version = ((TreeObject)((XObjectBrowserInput) part.getEditorInput()).getModel()).getUniverse();
 						tabEndpointAddress = ((TreeObject)((XObjectBrowserInput) part.getEditorInput()).getModel()).getEndpointAddress();
+						unserName =  ((TreeObject)((XObjectBrowserInput) part.getEditorInput()).getModel()).getUsername();
 						}
 					 else if(part instanceof XObjectEditor){
 						 version = ((XObjectEditor)part).getInitialXObject().getServerRoot().getUniverse();
-						 tabEndpointAddress = ((XObjectEditor)part).getInitialXObject().getServerRoot().getEndpointAddress();					 }
-					 if(serverRoot.getUniverse().equals(version)&& endpointAddress.equals(tabEndpointAddress)){
+						 tabEndpointAddress = ((XObjectEditor)part).getInitialXObject().getServerRoot().getEndpointAddress();	
+						 unserName =  ((XObjectEditor)part).getInitialXObject().getServerRoot().getUsername();}
+					 if(serverRoot.getUniverse().equals(version)&& endpointAddress.equals(tabEndpointAddress)&& serverRoot.getUsername().equals(unserName)){
 						 page.closeEditor(part, false);
 						 j++;
 					 }
