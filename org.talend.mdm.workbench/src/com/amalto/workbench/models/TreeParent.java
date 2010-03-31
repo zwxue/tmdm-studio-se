@@ -28,12 +28,7 @@ public class TreeParent extends TreeObject {
 	
 	public void addChild(TreeObject child) {
 		if(child!=null ){
-			for (int i = 0; i < children.size(); i++) {
-				if (children.get(i) == child) {
-					children.remove(child);
-					break;
-				}
-			}
+			children.remove(child);
 			children.add(child);
 			child.setParent(this);
 			child.fireEvent(IXObjectModelListener.ADD, this, child);
