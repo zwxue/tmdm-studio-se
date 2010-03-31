@@ -43,18 +43,10 @@ public class TreeParent extends TreeObject {
 				((TreeParent)child).removeChild(subchildren[i]);
 			}
         }		
-		for (int i = 0; i < children.size(); i++)
-		{
-			if(children.get(i) == child)
-			{
-				children.remove(i);
-				child.setParent(null);
-				this.fireEvent(IXObjectModelListener.DELETE, this, child);
-				break;
-			}
-		}
-
-		
+		children.remove(child);
+		child.setParent(null);
+		this.fireEvent(IXObjectModelListener.DELETE, this, child);
+	
 	}
     
     public void removeChildren() {
