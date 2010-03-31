@@ -1,9 +1,14 @@
 package com.amalto.workbench.actions;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -11,7 +16,9 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.progress.UIJob;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
+import org.talend.mdm.commmon.util.workbench.ZipToFile;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -43,7 +50,7 @@ public class DeleteXObjectAction extends Action{
 			IStructuredSelection selection = (IStructuredSelection)view.getViewer().getSelection();
 			//add the node here
 			IWorkbenchPage page = view.getSite().getWorkbenchWindow().getActivePage();
-			ArrayList<TreeObject> toDelList = new ArrayList<TreeObject>();
+			final ArrayList<TreeObject> toDelList = new ArrayList<TreeObject>();
 			
 			if(selection.isEmpty()){
 				return;
@@ -101,15 +108,22 @@ public class DeleteXObjectAction extends Action{
 				}//if the isnotdefault is true,open this dialog
 			}//end of if(selection...)
 
-
-			for (Iterator<TreeObject> iter = toDelList.iterator(); iter.hasNext(); ) {
-				TreeObject xobject = iter.next();
-				TreeObjectUtil.deleteTreeObject(xobject, view);       
-
-	            if (xobject.getParent() != null)
-	       		  xobject.getParent().removeChild(xobject);
-	           
-			}//for
+			UIJob job=new UIJob("delete Objects ..."){
+				@Override
+				public IStatus runInUIThread(IProgressMonitor monitor) {	
+					try{			
+						 deleteTreeObject(toDelList);
+						return Status.OK_STATUS;
+					}catch(Exception e){
+						e.printStackTrace();
+						return Status.CANCEL_STATUS;
+					}
+				}			
+			};
+			job.setPriority(Job.SHORT);
+			job.schedule();
+			
+             //for
 			 //view.getViewer().refresh();
 			                   
 		} catch (Exception e) {
@@ -126,7 +140,17 @@ public class DeleteXObjectAction extends Action{
 	}
 	
 	
-	
+	private void deleteTreeObject(ArrayList<TreeObject> toDelList) throws Exception
+	{
+		for (Iterator<TreeObject> iter = toDelList.iterator(); iter.hasNext(); ) {
+			TreeObject xobject = iter.next();
+			TreeObjectUtil.deleteTreeObject(xobject, view);       
+
+            if (xobject.getParent() != null)
+       		  xobject.getParent().removeChild(xobject);
+           
+		}
+	}
 	public void runWithEvent(Event event) {
 		super.runWithEvent(event);
 	}

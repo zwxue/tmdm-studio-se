@@ -27,8 +27,13 @@ public class TreeParent extends TreeObject {
 	}
 	
 	public void addChild(TreeObject child) {
-		if(child!=null ){			
-			children.remove(child);
+		if(child!=null ){
+			for (int i = 0; i < children.size(); i++) {
+				if (children.get(i) == child) {
+					children.remove(child);
+					break;
+				}
+			}
 			children.add(child);
 			child.setParent(this);
 			child.fireEvent(IXObjectModelListener.ADD, this, child);
@@ -43,10 +48,17 @@ public class TreeParent extends TreeObject {
 				((TreeParent)child).removeChild(subchildren[i]);
 			}
         }		
-		
-		children.remove(child);
-		child.setParent(null);
-		this.fireEvent(IXObjectModelListener.DELETE, this, child);
+		for (int i = 0; i < children.size(); i++)
+		{
+			if(children.get(i) == child)
+			{
+				children.remove(i);
+				child.setParent(null);
+				this.fireEvent(IXObjectModelListener.DELETE, this, child);
+				break;
+			}
+		}
+
 		
 	}
     
@@ -59,7 +71,9 @@ public class TreeParent extends TreeObject {
 	public boolean containsChild(TreeObject child) {
 		TreeObject[] allchildren = this.getChildren();
         for (int i = 0; i < allchildren.length; i++) {
-            if(allchildren[i].getDisplayName().equals(child.getDisplayName())) return true;
+			if (allchildren[i].getDisplayName().equals(child.getDisplayName())
+					&& allchildren[i].getType() == child.getType())
+				return true;
         }
         return false;
 	}
@@ -82,6 +96,7 @@ public class TreeParent extends TreeObject {
                 if (
                         targetChildren[j].getDisplayName().equals(thisChildren[i].getDisplayName())
                         &&  targetChildren[j].getClass().equals(thisChildren[i].getClass())
+                        && targetChildren[j].getType() == thisChildren[i].getType()
                     ) {
                     targetChild = targetChildren[j];
                     break;
@@ -101,6 +116,7 @@ public class TreeParent extends TreeObject {
                 if (
                         targetChildren[j].getDisplayName().equals(thisChildren[i].getDisplayName())
                         &&  targetChildren[j].getClass().equals(thisChildren[i].getClass())
+                        && targetChildren[j].getType() == thisChildren[i].getType()
                     ) {
                     found = true;
                     break;
