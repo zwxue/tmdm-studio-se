@@ -3,6 +3,7 @@ package com.amalto.workbench.utils;
 import java.util.ArrayList;
 
 import org.eclipse.xsd.XSDElementDeclaration;
+import org.eclipse.xsd.XSDParticle;
 
 import com.amalto.workbench.models.TreeObject;
 
@@ -51,6 +52,25 @@ public class WorkbenchClipboard {
 	//add by ymli, fix bug 0009770, add the clip for concept
 	ArrayList<XSDElementDeclaration> conceptList = new ArrayList<XSDElementDeclaration>();
 	
+	ArrayList<XSDParticle> particleList = new ArrayList<XSDParticle>();
+	
+	public ArrayList<XSDParticle> getParticles() {
+		return particleList;
+	}
+
+	public void setParticles(ArrayList<XSDParticle> particleList) {
+		this.particleList = particleList;
+	}
+	
+	public void add(XSDParticle particle){
+		this.particleList.add(particle);
+	}
+	
+	public void particlesReset(){
+		this.particleList = new ArrayList<XSDParticle>();
+	}
+	
+
 	public void add(XSDElementDeclaration concept){
 		this.conceptList.add(concept);
 	}

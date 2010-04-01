@@ -122,6 +122,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+//import com.amalto.workbench.actions.CopyXObjectAction;
+import com.amalto.workbench.actions.PasteXObjectAction;
 import com.amalto.workbench.actions.XSDChangeBaseTypeAction;
 import com.amalto.workbench.actions.XSDChangeToComplexTypeAction;
 import com.amalto.workbench.actions.XSDChangeToSimpleTypeAction;
@@ -1668,12 +1670,13 @@ public class DataModelMainPage extends AMainPageV2 {
 			manager.add(new XSDNewConceptAction(this));
 			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 			//add by ymli, fix bug 0009770
-			boolean isMulti = false;
-			if(WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size()>1)
-				isMulti = true;
+			String title = "";
+			if(WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size()==1)
+				title = "Paste Entity";
+			else if(WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size()>1)
+				title = "Paste Entities";
 			
-				
-			XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this,isMulti);
+			XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this,title);
 			if(pasteConceptAction.checkInPasteType()){
 				manager.add(new Separator());
 				manager.add(pasteConceptAction);
@@ -1702,15 +1705,27 @@ public class DataModelMainPage extends AMainPageV2 {
 				}
 				
 				//add by ymli. fix bug 0009770 add the copy of concepts
-				XSDCopyConceptAction copyConceptAction = new XSDCopyConceptAction(this,false);
-				if(copyConceptAction.checkInCopyType(selectedObjs)){
+				XSDCopyConceptAction copyConceptAction = new XSDCopyConceptAction(this,"Copy Entity");
+				if(Util.checkInCopy(selectedObjs)){
 					manager.add(new Separator());
 					manager.add(copyConceptAction);
+					
+					
 				}
-				boolean isMulti = false;
+				/*boolean isMulti = false;
 				if(WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size()>1)
-					isMulti = true;
-				XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this,isMulti);
+					isMulti = true;*/
+				String title = "";
+				if(WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size()>1)
+					title = "Paste Entities";
+				else if(WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size()==1)
+					title = "Paste Entity";
+				else if(WorkbenchClipboard.getWorkbenchClipboard().getParticles().size()>1)
+					title = "Paste Elements";
+				else if(WorkbenchClipboard.getWorkbenchClipboard().getParticles().size()==1)
+					title = "Paste Element";
+				
+				XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this,title);
 				if(pasteConceptAction.checkInPasteType())
 					manager.add(pasteConceptAction);
 				
@@ -1767,6 +1782,10 @@ public class DataModelMainPage extends AMainPageV2 {
 							manager.add(newGroupFromTypeAction);
 						}
 						manager.add(deleteParticleAction);
+						//edit by ymli. fix the bug:0011523
+						XSDCopyConceptAction copyConceptAction = new XSDCopyConceptAction(this,"Copy Element");
+						manager.add(copyConceptAction);
+						
 						manager.add(new Separator());
 						manager.add(changeToComplexTypeAction);
 						manager.add(changeToSimpleTypeAction);
@@ -1868,20 +1887,26 @@ public class DataModelMainPage extends AMainPageV2 {
 		if (selectedObjs.length > 1
 				&& deleteConceptWrapAction.outPutDeleteActions() != null) {
 			manager.add(deleteConceptWrapAction.outPutDeleteActions());
-				
-			XSDCopyConceptAction copyConceptAction = new XSDCopyConceptAction(this,true);
-			if(copyConceptAction.checkInCopyType(selectedObjs))	{
+			String title = "";	
+			if(Util.checkInCopyTypeElement(selectedObjs))
+				title = "Copy Entities";
+			else if(Util.checkInCOpyTypeParticle(selectedObjs))
+				title = "Copy Elements";
+			XSDCopyConceptAction copyConceptAction = new XSDCopyConceptAction(this,title);
+			//XSDPasteConceptAction pastyConceptAction = new XSDPasteConceptAction(this,true);
+			if(Util.checkInCopy(selectedObjs))	{
 				manager.add(new Separator());
 				manager.add(copyConceptAction);
+				//manager.add(pastyConceptAction);
 			}
-			boolean isMulti = false;
+			/*boolean isMulti = false;
 			if(WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size()>1)
 				isMulti = true;
 			
 				
-			XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this,isMulti);
+			XSDPasteConceptAction pasteConceptAction = new XSDPasteConceptAction(this,"paste");
 			if(pasteConceptAction.checkInPasteType())
-				manager.add(pasteConceptAction);
+				manager.add(pasteConceptAction);*/
 			
 		}
 		

@@ -16,6 +16,7 @@ import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComplexTypeContent;
@@ -44,11 +45,11 @@ public class XSDPasteConceptAction extends UndoAction {
 	Set<XSDTypeDefinition> copyTypeSet = new HashSet<XSDTypeDefinition>();
 	HashMap<String, XSDTypeDefinition> typeList = new HashMap<String, XSDTypeDefinition>();
 	String displayName = "Paste Entity";
-	public XSDPasteConceptAction(DataModelMainPage page,boolean multi) {
+	public XSDPasteConceptAction(DataModelMainPage page,String title) {
 		super(page);
 		this.page = page;
-		if(multi)
-			displayName = "Paste Entities";
+		
+		displayName = title;
 		setImageDescriptor(ImageCache.getImage(EImage.PASTE.getPath()));
 		setText(displayName);
 		setToolTipText("Paste one or more Entities");
@@ -148,6 +149,9 @@ public class XSDPasteConceptAction extends UndoAction {
 				 * xmleditor=((XObjectEditor)page.getEditor()).getXmlEditor();
 				 * xmleditor.refresh(page.getXObject());
 				 */
+				
+				
+				
 				page.markDirty();
 				page.refresh();
 				// page.refreshData();
@@ -157,8 +161,18 @@ public class XSDPasteConceptAction extends UndoAction {
 				typeList.clear();
 
 				return Status.OK_STATUS;
+			}else if(WorkbenchClipboard.getWorkbenchClipboard().getParticles().size()>0){
+				copyElements();
+				WorkbenchClipboard.getWorkbenchClipboard().particlesReset();
+				page.markDirty();
+				page.refresh();
+				// page.refreshData();
+
+				getOperationHistory();
+				return Status.OK_STATUS;
 			}
-			return Status.CANCEL_STATUS;
+			else
+				return Status.CANCEL_STATUS;
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(page.getSite().getShell(), "Error",
@@ -171,7 +185,8 @@ public class XSDPasteConceptAction extends UndoAction {
 	public boolean checkInPasteType(){
 		/*if(WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size()>1)
 			this.displayName = "Paste Entities";*/
-		if(WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size()<=0)
+		if(WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size()<=0 && 
+				WorkbenchClipboard.getWorkbenchClipboard().getParticles().size()<=0)
 			return false;
 		//edit by ymli,fix the bug:0011523. let the element(simple or complex) can be pasted
 		/*conceptList = WorkbenchClipboard.getWorkbenchClipboard().getConcepts();
@@ -232,7 +247,6 @@ public class XSDPasteConceptAction extends UndoAction {
 			//toElem.setAnnotation(cloneXSDAnnotation(toElem.getAnnotation(),fromElem.getAnnotation()));
 			XSDAnnotationsStructure struc =new XSDAnnotationsStructure(toElem);
 			addAnnotion(struc, fromElem.getAnnotation());
-			
 		}
 		if (fromElem.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
 			XSDComplexTypeContent fromcomplexType = ((XSDComplexTypeDefinition) fromElem.getTypeDefinition()).getContent();
@@ -310,8 +324,7 @@ public class XSDPasteConceptAction extends UndoAction {
 	}
 	
 	public Map cloneXSDAnnotation(XSDAnnotation oldAnn) {
-		XSDAnnotation xsdannotation = XSDFactory.eINSTANCE
-				.createXSDAnnotation();
+		XSDAnnotation xsdannotation = XSDFactory.eINSTANCE.createXSDAnnotation();
 		Map infor = new HashMap<String, List>();
 		try {
 			/*
@@ -336,8 +349,7 @@ public class XSDPasteConceptAction extends UndoAction {
 						typeList.add(oldElem.getFirstChild().getNodeValue());
 						infor.put(type, typeList);
 					} else {
-						((List) infor.get(type)).add(oldElem.getFirstChild()
-								.getNodeValue());
+						((List) infor.get(type)).add(oldElem.getFirstChild().getNodeValue());
 					}
 				}
 				/*xsdannotation.getApplicationInformation().addAll(listAppInfo);
@@ -369,5 +381,56 @@ public class XSDPasteConceptAction extends UndoAction {
 		return infor;
 	}
 	
+	//edit by ymli; fix the bug:0011523: pasty partcles to the element
+	public void copyElements() {
+		ArrayList<XSDParticle> particles = WorkbenchClipboard.getWorkbenchClipboard().getParticles();
+		IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
+		XSDElementDeclaration element = (XSDElementDeclaration) selection.getFirstElement();
+		if (element.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+			XSDComplexTypeContent content = ((XSDComplexTypeDefinition) element.getTypeDefinition()).getContent();
+			if (content instanceof XSDParticle) {
+				XSDParticle partile = (XSDParticle) content;
+				if (((XSDParticle) partile).getTerm() instanceof XSDModelGroup) {
+					XSDModelGroup toGroup = ((XSDModelGroup) partile.getTerm());
+					for (XSDParticle particle : particles) {
+						//if the is particle with the same name, donot copy it.
+						if(isExist(toGroup, particle)){
+							MessageDialog.openError(this.page.getSite().getShell(), "warning","The Element '" +
+									((XSDElementDeclaration)particle.getTerm()).getName() +"' already exsists!");
+							continue;
+						}
+						
+						XSDParticle newParticle = (XSDParticle) particle.cloneConcreteComponent(true, false);
+						toGroup.getContents().add(newParticle);
+						toGroup.updateElement();
+						if (newParticle.getContent() instanceof XSDElementDeclaration) {
+							if (((XSDElementDeclaration) newParticle.getContent()).getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+								addAnnotationForComplexType(
+										(XSDComplexTypeDefinition) ((XSDElementDeclaration) particle.getContent()).getTypeDefinition(),
+										(XSDComplexTypeDefinition) ((XSDElementDeclaration) newParticle.getContent()).getTypeDefinition());
+							}
+
+							XSDAnnotationsStructure struc1 = new XSDAnnotationsStructure(newParticle.getTerm());
+							addAnnotion(struc1,((XSDElementDeclaration) particle.getTerm()).getAnnotation());
+
+						}
+
+					}
+				}
+			}
+		}
+	}
 	
+	
+	public boolean isExist(XSDModelGroup toGroup,XSDParticle particle){
+		for(XSDParticle paticleContent:toGroup.getContents()){
+			if(paticleContent.getTerm() instanceof XSDElementDeclaration){
+				String contentName = ((XSDElementDeclaration)paticleContent.getTerm()).getName();
+				String copyParticleName = ((XSDElementDeclaration)particle.getTerm()).getName();
+				if(contentName.equals(copyParticleName))
+					return true;
+			}
+		}
+		return false;
+	}
 }

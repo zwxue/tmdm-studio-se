@@ -2451,4 +2451,33 @@ public class Util {
 		});
 		
 	}
+	
+	
+	public static boolean checkInCOpyTypeParticle(Object[] selectedObjs){
+		for (Object obj : selectedObjs) {
+			if (obj instanceof XSDParticle)
+				continue;
+			else 
+				return false;
+		}
+
+		return true;
+	}
+	
+	public static boolean checkInCopyTypeElement(Object[] selectedObjs){
+		/*if(selectedObjs.length>1)
+			displayName = "Copy Entities";*/
+		for (Object obj : selectedObjs) {
+			if (obj instanceof XSDElementDeclaration)
+				continue;
+			else 
+				return false;
+		}
+
+		return true;
+	}
+	
+	public static boolean checkInCopy(Object[] selectedObjs){
+		return checkInCopyTypeElement(selectedObjs)||checkInCOpyTypeParticle(selectedObjs);
+	}
 }
