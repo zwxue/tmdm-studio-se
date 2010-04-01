@@ -17,6 +17,7 @@ import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
@@ -46,6 +47,9 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.TreeEvent;
+import org.eclipse.swt.events.TreeListener;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.List;
@@ -495,6 +499,24 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			}
 
 		});
+  		viewer.getTree().addTreeListener(new TreeListener() {
+			
+			public void treeExpanded(TreeEvent event) {
+				if (event.item.getData() instanceof TreeParent
+						&& ((TreeParent) event.item.getData()).getType() == TreeObject._SERVER_
+						&& ((TreeParent) event.item.getData()).getChildrenList()
+						.size() == 1) {
+//					((TreeParent) event.item.getData()).getChildrenList().clear();
+					initServer((TreeParent) event.item.getData());
+				}
+				
+			}
+			
+			public void treeCollapsed(TreeEvent e) {
+				
+			}
+		});
+			
 		createTreeDragSource();
 		createTreeDropTarget();
 		makeActions();
@@ -504,6 +526,18 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		contributeToActionBars();
 		hookKeyboard();
 		initView();
+	}
+
+	protected void initServer(TreeParent server) {
+		Cursor wait = new Cursor(getViewSite().getShell().getDisplay(),
+				SWT.CURSOR_WAIT);
+		viewer.getControl().setCursor(wait);
+
+		new ServerRefreshAction(this, server).run();
+		viewer.expandToLevel(server, 1);
+
+		viewer.getControl().setCursor(
+				new Cursor(getViewSite().getShell().getDisplay(), SWT.CURSOR_ARROW));
 	}
 
 	public void initView() {
@@ -848,23 +882,9 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					return;
 				}// if action
 				if (xo.getType() == TreeObject._SERVER_) {
-					if(xo.getServerRoot().getChildren().length==0){
-					String universe = "";
-					String username = "";
-					String password = "";
-					if (xo.getWsObject().toString().contains("/")) {
-						universe = xo.getWsObject().toString().split("/")[0];
-						username = xo.getWsObject().toString().split("/")[1]
-								.split(":")[0];
-						password = xo.getWsObject().toString().split("/")[1]
-								.split(":")[1];
-					} else {
-						username = xo.getWsObject().toString().split(":")[0];
-						password = xo.getWsObject().toString().split(":")[1];
+					if (((TreeParent) xo).getChildrenList().size() == 1)
+						initServer((TreeParent) xo);
 					}
-					initServerTree(xo.getWsKey().toString(), username, password, universe);
-					xo.getServerRoot().getParent().removeChild(xo.getServerRoot());
-				}}
 				if(xo.getType()== TreeObject.WORKFLOW) return;
 				if (xo.getType() == TreeObject.SUBSCRIPTION_ENGINE||(xo.getType()==TreeObject.DATA_CLUSTER&&xo.isXObject() )|| xo.getType()== TreeObject.WORKFLOW_PROCESS)
 					browseViewAction.run();
@@ -873,6 +893,27 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			}
 		});
 	}
+	
+	
+	protected void initServerContent(TreeObject xo) {
+			String universe = "";
+			String username = "";
+			String password = "";
+			if (xo.getWsObject().toString().contains("/")) {
+				universe = xo.getWsObject().toString().split("/")[0];
+				username = xo.getWsObject().toString().split("/")[1]
+						.split(":")[0];
+				password = xo.getWsObject().toString().split("/")[1]
+						.split(":")[1];
+			} else {
+				username = xo.getWsObject().toString().split(":")[0];
+				password = xo.getWsObject().toString().split(":")[1];
+			}
+			initServerTree(xo.getWsKey().toString(), username, password, universe);
+			xo.getServerRoot().getParent().removeChild(xo.getServerRoot());
+		
+	}
+
 	private void hookKeyPressAction() {
 		viewer.getTree().addKeyListener(new KeyListener() {
 
@@ -1000,13 +1041,15 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		serverRoot.setUser(user);
 		if("".equalsIgnoreCase(universe))
 			universe="HEAD";
-		serverRoot.setDisplayName(url+" ["+universe+"]  "+username);
-		TreeObject obj=new TreeObject("11", serverRoot, TreeObject._UNVISIBLE, serverRoot.getWsKey(), serverRoot.getWsObject());
-//		serverRoot.addChild(obj)
+		serverRoot.setDisplayName(url+" ["+universe+"] "+username);
+		TreeObject obj=new TreeObject("Pending...", serverRoot, TreeObject._INVISIBLE,null, null);
+		ArrayList list=new ArrayList(){};
+		list.add(obj);
+		serverRoot.setChildren(list);
         TreeParent invisibleRoot =getTreeContentProvider().getInvisibleRoot();
         invisibleRoot.addChild(serverRoot);
         
-        getViewer().refresh();
+//        getViewer().refresh();
 	}
 	public void initServerTree(String url,String username,String password,String universe) {
 //		Properties properties = new Properties();
@@ -1086,7 +1129,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             boolean found = false;
             for (int i = 0; i < serverRoots.length; i++) {
             	//aiming add root displayName as unique ID of each server
-            	if(serverRoots[i].getDisplayName().equals(serverRoot.getDisplayName())){
+            	if(serverRoots[i].getDisplayName().equalsIgnoreCase(serverRoot.getDisplayName())){
 	                if (serverRoots[i].getWsKey().equals(serverRoot.getWsKey())) {
 	                    //server & universe already exists --> synchronize
 	                	if(serverRoots[i].getUser().getUniverse().equalsIgnoreCase(serverRoot.getUser().getUniverse())){

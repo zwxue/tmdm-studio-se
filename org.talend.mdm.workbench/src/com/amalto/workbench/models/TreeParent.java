@@ -8,6 +8,7 @@ public class TreeParent extends TreeObject {
 
 	private ArrayList children;
 	
+
 	public TreeParent(
 			String displayName, 
 			TreeParent serverRoot, 
@@ -68,6 +69,12 @@ public class TreeParent extends TreeObject {
 		return (TreeObject [])children.toArray(new TreeObject[children.size()]);
 	}
 	
+	public void setChildren(ArrayList children) {
+		this.children = children;
+	}
+	public ArrayList getChildrenList() {
+		return children;
+	}
 	public boolean hasChildren() {
 		return children.size()>0;
 	}

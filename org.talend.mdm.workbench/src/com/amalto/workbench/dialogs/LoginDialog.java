@@ -285,14 +285,16 @@ public class LoginDialog extends Dialog {
 	}
 	
 private boolean checkServer(Element root) {
-		List properties = root.elements("properties");
-		for (Iterator iterator = properties.iterator(); iterator.hasNext();) {
-			Element ele = (Element) iterator.next();
-			if (ele.element("url").getText().equals(endpointsCombo.getText())
-					&& ele.element("user").getText().equals(userText.getText())
-					&& ele.element("universe").getText().equals(universeCombo.getText()))
+	List properties = root.elements("properties");
+	for (Iterator iterator = properties.iterator(); iterator.hasNext();) {
+		Element ele = (Element) iterator.next();
+		if (ele.element("url").getText().equals(endpointsCombo.getText())
+				&& ele.element("user").getText().equals(userText.getText())
+				&& ele.element("password").getText().equals(passwordText.getText())
+				&& ele.element("universe").getText().equals(
+						universeCombo.getText()))
 				return true;
-		}
+	}
 	return false;
 	}
 
@@ -307,9 +309,10 @@ private void addServer(Element root) {
 
 	url.setText(endpointsCombo.getText());
 	user.setText(userText.getText());
-	if(savePasswordButton.getSelection()==true){
+	if(savePasswordButton.getSelection()==true)
 		password.setText(PasswordUtil.encryptPassword(passwordText.getText()));
-	}
+	else
+		root.remove(prop);
 	if(Util.IsEnterPrise())
 		universe.setText(universeCombo.getText());		
 	}

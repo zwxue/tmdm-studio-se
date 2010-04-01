@@ -53,7 +53,7 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
 	private XSDSchema schema;
 	
 	public NewConceptOrElementDialog(SelectionListener caller,
-			Shell parentShell, XSDSchema sa, String title, List customTypes, List builtInTypes) {
+			Shell parentShell, XSDSchema sa, String title, List<String> customTypes, List<String> builtInTypes) {
 		super(parentShell);
 		this.caller = caller;
 		this.title = title;
