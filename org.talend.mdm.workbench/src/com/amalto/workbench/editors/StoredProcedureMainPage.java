@@ -32,6 +32,10 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetAdapter;
+import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Image;
@@ -58,6 +62,7 @@ import com.amalto.workbench.dialogs.QueryParametersDialog;
 import com.amalto.workbench.dialogs.TextViewDialog;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.models.TreeObjectTransfer;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
@@ -126,7 +131,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener{
              * Execute Stored Procedure
              ************************************************************/
             
-            
+            createCompDropTarget();
             Composite resultsGroup = this.getNewSectionComposite("Execute Procedure");
             resultsGroup.setLayout(new GridLayout(4, false));
             
@@ -470,6 +475,25 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener{
 
 	}
 
+	private void createCompDropTarget() {
+		DropTarget dropTarget = new DropTarget(procedureViewer.getTextWidget(),  DND.DROP_MOVE|DND.DROP_LINK);
+		dropTarget.setTransfer(new TreeObjectTransfer[] { TreeObjectTransfer.getInstance() });
+		dropTarget.addDropListener(new DropTargetAdapter() {
 
+			public void dragEnter(DropTargetEvent event) {
+			}
+			public void dragLeave(DropTargetEvent event) {
+			}
+			public void dragOver(DropTargetEvent event) {
+				event.feedback |= DND.FEEDBACK_EXPAND | DND.FEEDBACK_SCROLL;
+			}
+			
+			public void drop(DropTargetEvent event) {
+				if (event.data instanceof TreeObject[])
+					procedureViewer.getTextWidget().setText(procedureViewer.getTextWidget().getText()+((TreeObject[])event.data)[0].getDisplayName());	
+			}
+		});
+		
+	}
 
 }
