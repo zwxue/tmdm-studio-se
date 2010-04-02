@@ -395,10 +395,15 @@ public class XSDPasteConceptAction extends UndoAction {
 					for (XSDParticle particle : particles) {
 						//if the is particle with the same name, donot copy it.
 						if(isExist(toGroup, particle)){
-							MessageDialog.openError(this.page.getSite().getShell(), "warning","The Element '" +
-									((XSDElementDeclaration)particle.getTerm()).getName() +"' already exsists!");
-							continue;
+							boolean ifOverwrite = MessageDialog.openConfirm(this.page.getSite().getShell(), "confirm","The Element '" +
+									((XSDElementDeclaration)particle.getTerm()).getName() +"' already exsists,do you want to overwrite it?");
+							if(ifOverwrite){
+								reomveElement(toGroup, particle);
+							}
+							else
+								continue;
 						}
+						
 						
 						XSDParticle newParticle = (XSDParticle) particle.cloneConcreteComponent(true, false);
 						toGroup.getContents().add(newParticle);
@@ -433,4 +438,18 @@ public class XSDPasteConceptAction extends UndoAction {
 		}
 		return false;
 	}
+	public void reomveElement(XSDModelGroup toGroup,XSDParticle particle){
+		for(XSDParticle paticleContent:toGroup.getContents()){
+			if(paticleContent.getTerm() instanceof XSDElementDeclaration){
+				String contentName = ((XSDElementDeclaration)paticleContent.getTerm()).getName();
+				String copyParticleName = ((XSDElementDeclaration)particle.getTerm()).getName();
+				if(contentName.equals(copyParticleName)){
+					toGroup.getContents().remove(paticleContent);
+					toGroup.updateElement();
+					return;
+				}
+			}
+		}
+	}
+	
 }
