@@ -721,33 +721,43 @@ public class DataModelMainPage extends AMainPageV2 {
 
 	private void addLabelForTheItem(TreeItem[] items,boolean isAdd) {
 		XSDComponent xSDCom = null;
-		XSDAnnotationsStructure struc = null;
 		for (int i = 0; i < items.length; i++) {
 			TreeItem item=items[i];
+			XSDAnnotationsStructure struc = null;
 			String labelValue = null;
 			if(item.getData() instanceof XSDElementDeclaration){
 	            xSDCom = (XSDElementDeclaration)item.getData();
 	            struc =new XSDAnnotationsStructure(xSDCom);
 	            labelValue=((XSDElementDeclaration)xSDCom).getName();
 	            setLabel(struc,labelValue,isAdd);
-	            
-	            if(((XSDElementDeclaration)xSDCom).getTypeDefinition() instanceof XSDComplexTypeDefinition){
-	            	List childrenList=Util.getComplexTypeDefinitionChildren((XSDComplexTypeDefinition)((XSDElementDeclaration)xSDCom).getTypeDefinition());
-	            	for (int j = 0; j < childrenList.size(); j++) {
-	            		List<XSDParticle> particles = new ArrayList<XSDParticle>();
-	            		if(childrenList.get(j) instanceof XSDModelGroup)
-	            			particles=((XSDModelGroup)childrenList.get(j)).getParticles();
-	            		for (int k = 0; k < particles.size(); k++) {
-	            			xSDCom=	particles.get(k);
-	        	            struc =new XSDAnnotationsStructure(xSDCom);
-	        	            labelValue=((XSDElementDeclaration)((XSDParticle)xSDCom).getContent()).getName();
-	        	            setLabel(struc,labelValue,isAdd);
-	            		}
-	            		
-	            	}
-	            }
+	            setLabelForElement((XSDElementDeclaration)xSDCom,isAdd);
+
 			}
 			}
+	}
+
+	private void setLabelForElement(XSDElementDeclaration xSDEle,boolean isAdd) {
+        if(((XSDElementDeclaration)xSDEle).getTypeDefinition() instanceof XSDComplexTypeDefinition){
+			XSDAnnotationsStructure struc = null;
+			String labelValue = null;
+        	List childrenList=Util.getComplexTypeDefinitionChildren((XSDComplexTypeDefinition)((XSDElementDeclaration)xSDEle).getTypeDefinition());
+        	for (int j = 0; j < childrenList.size(); j++) {
+        		List<XSDParticle> particles = new ArrayList<XSDParticle>();
+        		if(childrenList.get(j) instanceof XSDModelGroup)
+        			particles=((XSDModelGroup)childrenList.get(j)).getParticles();
+        		for (int k = 0; k < particles.size(); k++) {
+        			XSDParticle xSDCom = particles.get(k);
+    	            struc =new XSDAnnotationsStructure(xSDCom);
+    	            if(((XSDParticle)xSDCom).getContent() instanceof XSDElementDeclaration){
+    	            	labelValue=((XSDElementDeclaration)((XSDParticle)xSDCom).getContent()).getName();
+    	            	setLabel(struc,labelValue,isAdd);
+    	            	setLabelForElement((XSDElementDeclaration)((XSDParticle)xSDCom).getContent(),isAdd);
+    	            	}
+        		}
+        		
+        	}
+        }
+		
 	}
 
 	private void setLabel(XSDAnnotationsStructure struc, String labelValue, boolean isAdd) {
