@@ -3,16 +3,19 @@ package org.talend.mdm.enterprise.test;
 import java.rmi.RemoteException;
 
 import urn_com_amalto_xtentis_webservice.WSBoolean;
+import urn_com_amalto_xtentis_webservice.WSDataClusterPK;
 import urn_com_amalto_xtentis_webservice.WSDeleteSynchronizationItem;
 import urn_com_amalto_xtentis_webservice.WSExistsSynchronizationItem;
 import urn_com_amalto_xtentis_webservice.WSGetSynchronizationItem;
 import urn_com_amalto_xtentis_webservice.WSGetSynchronizationItemPKs;
+import urn_com_amalto_xtentis_webservice.WSItemPK;
 import urn_com_amalto_xtentis_webservice.WSProcessInstance;
 import urn_com_amalto_xtentis_webservice.WSProcessTaskInstance;
 import urn_com_amalto_xtentis_webservice.WSPutSynchronizationItem;
 import urn_com_amalto_xtentis_webservice.WSResolveSynchronizationItem;
 import urn_com_amalto_xtentis_webservice.WSSynchronizationItem;
 import urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK;
+import urn_com_amalto_xtentis_webservice.WSSynchronizationItemStatus;
 import urn_com_amalto_xtentis_webservice.WSWorkflowDeleteProcessInstancesRequest;
 import urn_com_amalto_xtentis_webservice.WSWorkflowDeploy;
 import urn_com_amalto_xtentis_webservice.WSWorkflowGetProcessDefinitions;
@@ -22,8 +25,31 @@ import urn_com_amalto_xtentis_webservice.WSWorkflowProcessDefinitionUUID;
 import urn_com_amalto_xtentis_webservice.WSWorkflowUnDeploy;
 
 public class SynchronizationItemWebserviceTestCase extends WebserviceTestCase {
-	private static final String FILENAME = "c:/exportitems.xml";
+	private static final String FILENAME = "c:/MyCustomerProcess_2.4.bar";
 
+	public void testPutSynchronizationItem() {
+		try {
+			WSPutSynchronizationItem wsPutSynchronizationItem = new WSPutSynchronizationItem();
+			WSSynchronizationItem wsSynchronizationItem=new WSSynchronizationItem();
+			wsSynchronizationItem.setLastRunPlan("");
+			wsSynchronizationItem.setLocalRevisionID("");
+			wsSynchronizationItem.setRemoteInstances(null);
+			wsSynchronizationItem.setResolvedProjection("");
+			wsSynchronizationItem.setStatus(WSSynchronizationItemStatus.EXECUTED);
+			WSItemPK wsItemPK=new WSItemPK();
+			wsItemPK.setConceptName("Country");
+			wsItemPK.setWsDataClusterPK(new WSDataClusterPK("Order"));
+			String[] ids={"001","002"};
+			wsItemPK.setIds(ids);
+			wsSynchronizationItem.setWsItemPK(wsItemPK);
+			wsPutSynchronizationItem.setWsSynchronizationItem(wsSynchronizationItem);
+			WSSynchronizationItemPK wsSynchronizationItemPK = defaultPort
+					.putSynchronizationItem(wsPutSynchronizationItem);
+			System.out.println(wsSynchronizationItemPK.getIds());
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+	}
 	public void testGetSynchronizationItemPKs() {
 		WSGetSynchronizationItemPKs regex = new WSGetSynchronizationItemPKs(
 				".*");
@@ -74,28 +100,6 @@ public class SynchronizationItemWebserviceTestCase extends WebserviceTestCase {
 			e.printStackTrace();
 		}
 
-	}
-
-	public void testPutSynchronizationItem() {
-		try {
-			WSPutSynchronizationItem wsPutSynchronizationItem = new WSPutSynchronizationItem();
-			WSGetSynchronizationItem wsGetSynchronizationItem = new WSGetSynchronizationItem();
-			WSGetSynchronizationItemPKs regex = new WSGetSynchronizationItemPKs(
-					".*");
-			WSSynchronizationItemPK[] wsSynchronizationItemPKArray = defaultPort
-					.getSynchronizationItemPKs(regex);
-			wsGetSynchronizationItem
-					.setWsSynchronizationItemPK(wsSynchronizationItemPKArray[0]);
-			WSSynchronizationItem wsSynchronizationItem = defaultPort
-					.getSynchronizationItem(wsGetSynchronizationItem);
-			wsPutSynchronizationItem
-					.setWsSynchronizationItem(wsSynchronizationItem);
-			WSSynchronizationItemPK wsSynchronizationItemPK = defaultPort
-					.putSynchronizationItem(wsPutSynchronizationItem);
-			assertNotNull(wsSynchronizationItemPK);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public void testResolveSynchronizationItem() {
@@ -170,6 +174,61 @@ public class SynchronizationItemWebserviceTestCase extends WebserviceTestCase {
 
 	}
 
+	
+
+	public void testWorkflowGetTaskList() {
+		WSWorkflowGetTaskList tasklist = new WSWorkflowGetTaskList();
+		// TODO
+		tasklist.setProcessinstanceuuid("MyCustomerProcess_2.4");
+		try {
+			WSProcessTaskInstance[] wsProcessTaskInstanceArray = defaultPort
+					.workflowGetTaskList(tasklist);
+			for (int i = 0; i < wsProcessTaskInstanceArray.length; i++) {
+				System.out.println(wsProcessTaskInstanceArray[i].getName());
+			}
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+
+	public void testWorkflowDeleteProcessInstances() {
+		try {
+			WSWorkflowDeleteProcessInstancesRequest deleteWolkflowRequest = new WSWorkflowDeleteProcessInstancesRequest();
+			WSWorkflowGetTaskList tasklist = new WSWorkflowGetTaskList();
+			// TODO
+			tasklist.setProcessinstanceuuid("MyCustomerProcess_2.4");
+
+			WSProcessTaskInstance[] wsProcessTaskInstanceArray = defaultPort
+					.workflowGetTaskList(tasklist);
+			deleteWolkflowRequest.setProcessName(wsProcessTaskInstanceArray[0]
+					.getName());
+			WSBoolean wsBoolean = defaultPort
+					.workflowDeleteProcessInstances(deleteWolkflowRequest);
+			System.out.println(wsBoolean.is_true());
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+
+	}
+	public void testDeleteSynchronizationItem() {
+		try {
+			WSDeleteSynchronizationItem wsSynchronizationItemDelete = new WSDeleteSynchronizationItem();
+			WSGetSynchronizationItemPKs regex = new WSGetSynchronizationItemPKs(
+					".*");
+			WSSynchronizationItemPK[] wsSynchronizationItemPKArray = defaultPort
+					.getSynchronizationItemPKs(regex);
+			wsSynchronizationItemDelete
+					.setWsSynchronizationItemPK(wsSynchronizationItemPKArray[0]);
+			WSSynchronizationItemPK wsSynchronizationItemPK = defaultPort
+					.deleteSynchronizationItem(wsSynchronizationItemDelete);
+			System.out.println(wsSynchronizationItemPK.getIds());
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+
+	}
 	public void testWorkflowUnDeploy() {
 		try {
 			WSWorkflowDeploy wsWorkflowDeploy = new WSWorkflowDeploy();
@@ -188,58 +247,5 @@ public class SynchronizationItemWebserviceTestCase extends WebserviceTestCase {
 		}
 
 	}
-
-	public void testWorkflowGetTaskList() {
-		WSWorkflowGetTaskList tasklist = new WSWorkflowGetTaskList();
-		// TODO
-		tasklist.setProcessinstanceuuid("beforeSaving_Country");
-		try {
-			WSProcessTaskInstance[] wsProcessTaskInstanceArray = defaultPort
-					.workflowGetTaskList(tasklist);
-			for (int i = 0; i < wsProcessTaskInstanceArray.length; i++) {
-				System.out.println(wsProcessTaskInstanceArray[i].getName());
-			}
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	public void testWorkflowDeleteProcessInstances() {
-		try {
-			WSWorkflowDeleteProcessInstancesRequest deleteWolkflowRequest = new WSWorkflowDeleteProcessInstancesRequest();
-			WSWorkflowGetTaskList tasklist = new WSWorkflowGetTaskList();
-			// TODO
-			tasklist.setProcessinstanceuuid("beforeSaving_Country");
-
-			WSProcessTaskInstance[] wsProcessTaskInstanceArray = defaultPort
-					.workflowGetTaskList(tasklist);
-			deleteWolkflowRequest.setProcessName(wsProcessTaskInstanceArray[0]
-					.getName());
-			WSBoolean wsBoolean = defaultPort
-					.workflowDeleteProcessInstances(deleteWolkflowRequest);
-			System.out.println(wsBoolean.is_true());
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	public void testDeleteSynchronizationItem() {
-		try {
-			WSDeleteSynchronizationItem wsSynchronizationItemDelete = new WSDeleteSynchronizationItem();
-			WSGetSynchronizationItemPKs regex = new WSGetSynchronizationItemPKs(
-					".*");
-			WSSynchronizationItemPK[] wsSynchronizationItemPKArray = defaultPort
-					.getSynchronizationItemPKs(regex);
-			wsSynchronizationItemDelete
-					.setWsSynchronizationItemPK(wsSynchronizationItemPKArray[0]);
-			WSSynchronizationItemPK wsSynchronizationItemPK = defaultPort
-					.deleteSynchronizationItem(wsSynchronizationItemDelete);
-			System.out.println(wsSynchronizationItemPK.getIds());
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-
-	}
+	
 }

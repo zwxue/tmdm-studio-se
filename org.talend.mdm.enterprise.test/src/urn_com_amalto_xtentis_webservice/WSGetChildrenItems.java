@@ -24,6 +24,8 @@ public class WSGetChildrenItems  implements java.io.Serializable {
 
     private java.lang.String fatherPK;
 
+    private urn_com_amalto_xtentis_webservice.WSWhereItem whereItem;
+
     public WSGetChildrenItems() {
     }
 
@@ -33,13 +35,15 @@ public class WSGetChildrenItems  implements java.io.Serializable {
            java.lang.String[] PKXpaths,
            java.lang.String FKXpath,
            java.lang.String labelXpath,
-           java.lang.String fatherPK) {
+           java.lang.String fatherPK,
+           urn_com_amalto_xtentis_webservice.WSWhereItem whereItem) {
            this.clusterName = clusterName;
            this.conceptName = conceptName;
            this.PKXpaths = PKXpaths;
            this.FKXpath = FKXpath;
            this.labelXpath = labelXpath;
            this.fatherPK = fatherPK;
+           this.whereItem = whereItem;
     }
 
 
@@ -162,6 +166,26 @@ public class WSGetChildrenItems  implements java.io.Serializable {
         this.fatherPK = fatherPK;
     }
 
+
+    /**
+     * Gets the whereItem value for this WSGetChildrenItems.
+     * 
+     * @return whereItem
+     */
+    public urn_com_amalto_xtentis_webservice.WSWhereItem getWhereItem() {
+        return whereItem;
+    }
+
+
+    /**
+     * Sets the whereItem value for this WSGetChildrenItems.
+     * 
+     * @param whereItem
+     */
+    public void setWhereItem(urn_com_amalto_xtentis_webservice.WSWhereItem whereItem) {
+        this.whereItem = whereItem;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof WSGetChildrenItems)) return false;
@@ -191,7 +215,10 @@ public class WSGetChildrenItems  implements java.io.Serializable {
               this.labelXpath.equals(other.getLabelXpath()))) &&
             ((this.fatherPK==null && other.getFatherPK()==null) || 
              (this.fatherPK!=null &&
-              this.fatherPK.equals(other.getFatherPK())));
+              this.fatherPK.equals(other.getFatherPK()))) &&
+            ((this.whereItem==null && other.getWhereItem()==null) || 
+             (this.whereItem!=null &&
+              this.whereItem.equals(other.getWhereItem())));
         __equalsCalc = null;
         return _equals;
     }
@@ -228,6 +255,9 @@ public class WSGetChildrenItems  implements java.io.Serializable {
         }
         if (getFatherPK() != null) {
             _hashCode += getFatherPK().hashCode();
+        }
+        if (getWhereItem() != null) {
+            _hashCode += getWhereItem().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -275,6 +305,13 @@ public class WSGetChildrenItems  implements java.io.Serializable {
         elemField.setFieldName("fatherPK");
         elemField.setXmlName(new javax.xml.namespace.QName("", "fatherPK"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setMinOccurs(0);
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("whereItem");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "whereItem"));
+        elemField.setXmlType(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSWhereItem"));
         elemField.setMinOccurs(0);
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

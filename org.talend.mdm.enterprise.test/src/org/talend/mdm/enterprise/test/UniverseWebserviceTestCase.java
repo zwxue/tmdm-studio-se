@@ -47,13 +47,16 @@ public class UniverseWebserviceTestCase extends WebserviceTestCase {
 	public void testGetUniverse() {
 		try {
 			WSGetUniverse wsGetUniverse = new WSGetUniverse();
-			WSGetUniversePKs regex = new WSGetUniversePKs();
-			regex.setRegex(".*");
-			WSUniversePK[] wsUniversePKArray = defaultPort
-					.getUniversePKs(regex);
-			wsGetUniverse.setWsUniversePK(wsUniversePKArray[0]);
-			WSUniverse wsUniverse = defaultPort.getUniverse(wsGetUniverse);
-			System.out.println(wsUniverse.getName());
+			WSGetCurrentUniverse wsGetCurrentUniverse = new WSGetCurrentUniverse();
+			wsGetCurrentUniverse.setDummy("");
+			WSUniverse wsUniverse = defaultPort
+					.getCurrentUniverse(wsGetCurrentUniverse);
+			WSUniversePK wsUniversePK = new WSUniversePK();
+			wsUniversePK.setPk(wsUniverse.getName());
+			wsGetUniverse.setWsUniversePK(wsUniversePK);
+			WSUniverse wsUniverseResult = defaultPort
+					.getUniverse(wsGetUniverse);
+			System.out.println(wsUniverseResult.getName());
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -63,11 +66,13 @@ public class UniverseWebserviceTestCase extends WebserviceTestCase {
 	public void testExistsUniverse() {
 		try {
 			WSExistsUniverse wsExistsUniverse = new WSExistsUniverse();
-			WSGetUniversePKs regex = new WSGetUniversePKs();
-			regex.setRegex(".*");
-			WSUniversePK[] wsUniversePKArray = defaultPort
-					.getUniversePKs(regex);
-			wsExistsUniverse.setWsUniversePK(wsUniversePKArray[0]);
+			WSGetCurrentUniverse wsGetCurrentUniverse = new WSGetCurrentUniverse();
+			wsGetCurrentUniverse.setDummy("");
+			WSUniverse wsUniverse = defaultPort
+					.getCurrentUniverse(wsGetCurrentUniverse);
+			WSUniversePK wsUniversePK = new WSUniversePK();
+			wsUniversePK.setPk(wsUniverse.getName());
+			wsExistsUniverse.setWsUniversePK(wsUniversePK);
 			WSBoolean wsBoolean = defaultPort.existsUniverse(wsExistsUniverse);
 			System.out.println(wsBoolean.is_true());
 		} catch (RemoteException e) {
@@ -95,18 +100,16 @@ public class UniverseWebserviceTestCase extends WebserviceTestCase {
 
 	public void testPutUniverse() {
 		try {
-			WSGetUniverse wsGetUniverse = new WSGetUniverse();
-			WSGetUniversePKs regex = new WSGetUniversePKs();
-			regex.setRegex(".*");
-			WSUniversePK[] wsUniversePKArray = defaultPort
-					.getUniversePKs(regex);
-			wsGetUniverse.setWsUniversePK(wsUniversePKArray[0]);
-			WSUniverse wsUniverse = defaultPort.getUniverse(wsGetUniverse);
-			wsUniverse.setName(wsUniverse.getName() + "_new");
-			WSPutUniverse wsPutUniverse = new WSPutUniverse();
+			WSGetCurrentUniverse wsGetCurrentUniverse = new WSGetCurrentUniverse();
+			wsGetCurrentUniverse.setDummy("");
+			WSUniverse wsUniverse = defaultPort
+					.getCurrentUniverse(wsGetCurrentUniverse);
+			
+			WSPutUniverse wsPutUniverse=new WSPutUniverse();
+			wsUniverse.setName(wsUniverse.getName()+"2");
 			wsPutUniverse.setWsUniverse(wsUniverse);
-			WSUniversePK wsUniversePK = defaultPort.putUniverse(wsPutUniverse);
-			System.out.println(wsUniversePK.getPk());
+			WSUniversePK wsUniversePKResult = defaultPort.putUniverse(wsPutUniverse);
+			System.out.println(wsUniversePKResult.getPk());
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -128,14 +131,16 @@ public class UniverseWebserviceTestCase extends WebserviceTestCase {
 	public void testDeleteUniverse() {
 		try {
 			WSDeleteUniverse wsUniverseDelete = new WSDeleteUniverse();
-			WSGetUniversePKs regex = new WSGetUniversePKs();
-			regex.setRegex(".*");
-			WSUniversePK[] wsUniversePKArray = defaultPort
-					.getUniversePKs(regex);
-			wsUniverseDelete.setWsUniversePK(wsUniversePKArray[0]);
-			WSUniversePK wsUniversePK = defaultPort
+			WSGetCurrentUniverse wsGetCurrentUniverse = new WSGetCurrentUniverse();
+			wsGetCurrentUniverse.setDummy("");
+			WSUniverse wsUniverse = defaultPort
+					.getCurrentUniverse(wsGetCurrentUniverse);
+			WSUniversePK wsUniversePK = new WSUniversePK();
+			wsUniversePK.setPk(wsUniverse.getName()+"2");
+			wsUniverseDelete.setWsUniversePK(wsUniversePK);
+			WSUniversePK wsUniversePKReturn = defaultPort
 					.deleteUniverse(wsUniverseDelete);
-			System.out.println(wsUniversePK.getPk());
+			System.out.println(wsUniversePKReturn.getPk());
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}

@@ -25,6 +25,24 @@ import urn_com_amalto_xtentis_webservice.WSSynchronizationPutObjectXML;
 
 public class SynchronizationPlanWebserviceTestCase extends WebserviceTestCase {
 
+	public void testPutSynchronizationPlan() {
+		try {
+			WSPutSynchronizationPlan wsPutSynchronizationPlan = new WSPutSynchronizationPlan();
+			WSSynchronizationPlan wsSynchronizationPlan=new WSSynchronizationPlan();
+			wsSynchronizationPlan.setDescription("description");
+			wsSynchronizationPlan.setName("name");
+			wsSynchronizationPlan.setRemoteSystemName("remoteSystemName");
+			wsSynchronizationPlan.setRemoteSystemPassword("remoteSystemPassword");
+			wsSynchronizationPlan.setRemoteSystemURL("remoteSystemURL");
+			wsPutSynchronizationPlan.setWsSynchronizationPlan(wsSynchronizationPlan);
+			WSSynchronizationPlanPK wsSynchronizationPlanPK = defaultPort
+					.putSynchronizationPlan(wsPutSynchronizationPlan);
+			System.out.println(wsSynchronizationPlanPK.getPk());
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+
+	}
 	public void testGetSynchronizationPlanPKs() {
 		WSGetSynchronizationPlanPKs regex = new WSGetSynchronizationPlanPKs(
 				".*");
@@ -76,30 +94,7 @@ public class SynchronizationPlanWebserviceTestCase extends WebserviceTestCase {
 
 	}
 
-	public void testPutSynchronizationPlan() {
-		try {
-			WSPutSynchronizationPlan wsPutSynchronizationPlan = new WSPutSynchronizationPlan();
-			WSGetSynchronizationPlanPKs regex = new WSGetSynchronizationPlanPKs(
-					".*");
-			WSGetSynchronizationPlan wsGetSynchronizationPlan = new WSGetSynchronizationPlan();
-			WSSynchronizationPlanPK[] wsSynchronizationPlanPKArray = defaultPort
-					.getSynchronizationPlanPKs(regex);
-			wsGetSynchronizationPlan
-					.setWsSynchronizationPlanPK(wsSynchronizationPlanPKArray[0]);
-			WSSynchronizationPlan wsSynchronizationPlan = defaultPort
-					.getSynchronizationPlan(wsGetSynchronizationPlan);
-			wsSynchronizationPlan
-					.setName(wsSynchronizationPlan.getName() + "2");
-			wsPutSynchronizationPlan
-					.setWsSynchronizationPlan(wsSynchronizationPlan);
-			WSSynchronizationPlanPK wsSynchronizationPlanPK = defaultPort
-					.putSynchronizationPlan(wsPutSynchronizationPlan);
-			System.out.println(wsSynchronizationPlanPK.getPk());
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
 
-	}
 
 	public void testGetObjectsForSynchronizationPlans() {
 		try {
