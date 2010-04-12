@@ -72,10 +72,10 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			monitor.beginTask("Loading "+IConstants.TALEND+" Server Objects", "admin".equals(username)? 12 : 9);
 			//Access to server and get port
 			XtentisPort port = Util.getPort(new URL(endpointaddress), universe, username, password);
-			port.ping(new WSPing("Hello MDM!"));
+			port.ping(new WSPing("Studio"));//viewer user can't use studio
+			
 			monitor.worked(1);
-			
-			
+						
 			String displayName=endpointaddress;
 			//fetch version info
 //			try {
