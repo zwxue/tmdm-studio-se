@@ -5,19 +5,26 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.eclipse.core.runtime.IProduct;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
+import org.osgi.framework.Version;
 
 import com.amalto.workbench.dialogs.LoginDialog;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
+import com.amalto.workbench.webservices.WSComponent;
+import com.amalto.workbench.webservices.WSGetComponentVersion;
 import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSUniversePK;
+import com.amalto.workbench.webservices.WSVersion;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class ServerLoginAction extends Action implements SelectionListener{
@@ -80,11 +87,41 @@ public class ServerLoginAction extends Action implements SelectionListener{
 		String password = dialog.getPasswordText();
 		String universe=dialog.getUniverse();
 		dialog.close();
+		if(checkOnVersionCompatibility(username, password, universe) == false)
+		{
+			MessageDialog.openError(
+					null,
+					"Error", 
+					"The version of WorkBench is not compatible with that of the server being uploaded"
+			);
+			return;
+		}
 		view.initServerTree(url, username, password, universe);
         
 	}
 
+    private boolean checkOnVersionCompatibility(String username, String password, String universe)
+    {
+    	IProduct product = Platform.getProduct();
+        Version version = product.getDefiningBundle().getVersion();
 
+        try {
+			XtentisPort port = Util.getPort(universe, username, password);
+			WSVersion wsVersion = port.getComponentVersion(new WSGetComponentVersion(WSComponent.DataManager,null));
+			if(version.getMajor() != wsVersion.getMajor() || version.getMinor() != wsVersion.getMinor())return false;
+			if(version.getMicro() == 0)
+			{
+				// major version compare
+				if(wsVersion.getRevision() != 0)
+					return false;
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return true;
+    }
+    
 	public void widgetDefaultSelected(SelectionEvent e) {
 	}
 
