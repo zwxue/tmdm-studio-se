@@ -35,6 +35,7 @@ import com.amalto.workbench.utils.Util;
 public class XSDEditParticleAction extends UndoAction implements SelectionListener{
 
 	private BusinessElementInputDialog dialog = null;
+	private XSDParticle selParticle = null;
 	
 	private String  elementName;
 	private String  refName;
@@ -51,7 +52,7 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
 	public IStatus doAction() {
 		try {
             IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
-            XSDParticle selParticle = (XSDParticle) selection.getFirstElement();
+            selParticle = (XSDParticle) selection.getFirstElement();
             
             if (!(selParticle.getTerm() instanceof XSDElementDeclaration)) return Status.CANCEL_STATUS;
 
@@ -210,6 +211,25 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
 		refName = dialog.getRefName();
 		minOccurs = dialog.getMinOccurs();
 		maxOccurs = dialog.getMaxOccurs();
+		
+		
+		//check that this element does not already exist
+        XSDModelGroup group = (XSDModelGroup) selParticle.getContainer();
+        //get position of the selected particle in the container
+        for (Iterator iter = group.getContents().iterator(); iter.hasNext(); ) {
+			XSDParticle p = (XSDParticle) iter.next();
+			if (p.getTerm() instanceof XSDElementDeclaration) {
+				XSDElementDeclaration thisDecl = (XSDElementDeclaration) p.getTerm();
+				if (thisDecl.getName().equals(elementName)) {
+					MessageDialog.openError(
+							page.getSite().getShell(),
+							"Error", 
+							"The Business Element "+elementName+" already exists."
+					);
+					return;
+				}
+			}
+		}//for
 		dialog.close();		
 	}
 	
