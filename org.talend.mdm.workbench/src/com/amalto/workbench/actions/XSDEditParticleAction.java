@@ -41,6 +41,7 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
 	private String  refName;
 	private int minOccurs;
 	private int maxOccurs;
+	private String initEleName;
 	
 	public XSDEditParticleAction(DataModelMainPage page) {
 		super(page);
@@ -85,7 +86,7 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
             	keyPath = (XSDXPathDefinition)keyInfo.get(1);
             	identify.getFields().remove(keyPath);
             }
-
+            initEleName=decl.getName();
             dialog = new BusinessElementInputDialog(
             		this,
             		page.getSite().getShell(),
@@ -220,7 +221,7 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
 			XSDParticle p = (XSDParticle) iter.next();
 			if (p.getTerm() instanceof XSDElementDeclaration) {
 				XSDElementDeclaration thisDecl = (XSDElementDeclaration) p.getTerm();
-				if (thisDecl.getName().equals(elementName)) {
+				if (thisDecl.getName().equals(elementName)&&!initEleName.equalsIgnoreCase(elementName)) {
 					MessageDialog.openError(
 							page.getSite().getShell(),
 							"Error", 
