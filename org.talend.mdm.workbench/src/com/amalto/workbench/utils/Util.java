@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PropertyResourceBundle;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -52,6 +53,7 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IProduct;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
@@ -2480,4 +2482,41 @@ public class Util {
 	public static boolean checkInCopy(Object[] selectedObjs){
 		return checkInCopyTypeElement(selectedObjs)||checkInCOpyTypeParticle(selectedObjs);
 	}
+	
+    public static String checkOnVersionCompatibility(String username, String password, String universe)
+    {
+    	IProduct product = Platform.getProduct();
+    	String versionComp = "";
+        try {
+        	URL resourceURL = product.getDefiningBundle().getResource("/about.mappings");
+        	PropertyResourceBundle bundle = new PropertyResourceBundle(resourceURL.openStream());
+        	String studioVersion = bundle.getString("1").trim();
+        	Pattern vsnPtn = Pattern.compile("^(\\d+)\\.(\\d+)(\\.)*(\\d*)$");
+        	Matcher match = vsnPtn.matcher(studioVersion);
+        	if(!match.find())
+        	{
+        		return null;
+        	}
+        	versionComp = "the version number of mdm studio is " + studioVersion + " ";
+        	
+        	int major =  Integer.parseInt(match.group(1));
+        	int minor = Integer.parseInt(match.group(2));
+        	int micro = match.group(4) != null && !match.group(4).equals("") ? Integer.parseInt(match.group(4)) : 0;
+			XtentisPort port = Util.getPort(universe, username, password);
+			WSVersion wsVersion = port.getComponentVersion(new WSGetComponentVersion(WSComponent.DataManager,null));
+			versionComp += " while the server's version number is " + wsVersion.getMajor() + "." + wsVersion.getMinor() + "." + wsVersion.getRevision();
+			if(major != wsVersion.getMajor() || minor != wsVersion.getMinor())return versionComp;
+			if(micro == 0)
+			{
+				// major version compare
+				if(wsVersion.getRevision() != 0)
+					return versionComp;
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return e.toString();
+		}
+    	return null;
+    }
 }
