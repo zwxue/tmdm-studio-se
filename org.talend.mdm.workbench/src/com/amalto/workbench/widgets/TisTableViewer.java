@@ -2,6 +2,8 @@ package com.amalto.workbench.widgets;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.jface.viewers.CellEditor;
@@ -15,6 +17,8 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -32,15 +36,16 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
-import com.amalto.workbench.widgets.ComplexTableViewer.MultiMessageEditor;
-import com.amalto.workbench.widgets.ComplexTableViewer.ValidationRuleEditor;
+import com.amalto.workbench.utils.WorkbenchClipboard;
 /**
  * 
  * @author achen
  *
  */
 public class TisTableViewer extends ComplexTableViewer{
-	protected Line copyLine;
+	protected List<Line> copyLines=new ArrayList<Line>();
+	//static List<Button> pastBtns=new ArrayList<Button>(); //records all paste Buttons
+	static HashMap<String, HashSet<Button>> pastBtns=new HashMap<String, HashSet<Button>>();
 	private Button copyButton;
 	private Button pastButton;
 	private boolean addMulti;// 'addAll' and 'deleteAll' button will be added if this field is not null
@@ -268,13 +273,26 @@ public class TisTableViewer extends ComplexTableViewer{
 					
 				}
 				public void widgetSelected(SelectionEvent e) {
-	        		int index =viewer.getTable().getSelectionIndex();
-	        		if(index >=0 && index <=viewer.getTable().getItemCount()-1 ){
-	        			List<Line> items=(List<Line>)viewer.getInput();
-	        			Line line= items.get(index);
-	        			copyLine=line.clone();
-	        			pastButton.setEnabled(copyLine!=null);
-	        		}					
+	        		int[] indexs =viewer.getTable().getSelectionIndices();
+	        		copyLines.clear();
+		        	for( int index: indexs) {
+		        		if(index >=0 && index <=viewer.getTable().getItemCount()-1 ){
+		        			List<Line> items=(List<Line>)viewer.getInput();
+		        			Line line= items.get(index);
+		        			Line copyLine=line.clone();
+		        			copyLines.add(copyLine);
+		        		}
+	        		}
+		        	if(indexs.length>0) {
+		        		//enable all paste buttons
+		        		HashSet<Button> btns=pastBtns.get(String.valueOf(columns.size()));
+		        		if(btns!=null)
+		        		for(Button btn:btns) {
+		        			if(btn!=null)btn.setEnabled(true);
+		        		}
+		        		//add to workbenchclipboard
+		        		WorkbenchClipboard.getWorkbenchClipboard().setLines(copyLines);
+		        	}
 				}	        	
 	        });
 	        pastButton = toolkit.createButton(stepUpDownComposite,"",SWT.PUSH | SWT.CENTER);
@@ -288,21 +306,32 @@ public class TisTableViewer extends ComplexTableViewer{
 	        	public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {};
 	        	@SuppressWarnings("unchecked")
 				public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-	        			if(copyLine==null)return;
+	        			//if(copyLines.size()==0 || WorkbenchClipboard.getWorkbenchClipboard().getLines().size()==0)return;
 	        			if(mainPage!=null){
 	        				mainPage.setComitting(true);
 	        			}
+	        			boolean dirty=false;
 	        			List<Line> items=(List<Line>)viewer.getInput();
-	        			items.add(copyLine);
-	        			//viewer.setInput(items);
+
+	        			if( WorkbenchClipboard.getWorkbenchClipboard().getLines().size()>0) {
+	        				items.addAll( WorkbenchClipboard.getWorkbenchClipboard().getLines());
+	        				dirty=true;
+	        			}
 	        			viewer.refresh();
 	        			//TODO
 	        			if(mainPage!=null){
 	        				mainPage.setComitting(false);
 	        			}
+	        			if(dirty)
 		            	markDirty();       			        		
 	        	};
 	        });
+	        HashSet<Button> btns=pastBtns.get(String.valueOf(columns.size()));
+	        if(btns==null) {
+	        	btns=new HashSet<Button>();
+	        	pastBtns.put(String.valueOf(columns.size()), btns);
+	        }
+	        btns.add(pastButton);
 	        // Create the cell editors --> We actually discard those later: not natural for an user
 	        CellEditor[] editors = new CellEditor[columns.size()];	        
 	        for(int i=0; i< columns.size(); i++){
@@ -448,6 +477,14 @@ public class TisTableViewer extends ComplexTableViewer{
 	        		}
 	        	}
 	        });			
+	        //add dispose listener
+	        viewer.getTable().addDisposeListener(new DisposeListener() {
+				
+				public void widgetDisposed(DisposeEvent e) {	
+					HashSet<Button> btns=pastBtns.get(String.valueOf(columns.size()));
+					btns.remove(pastButton);
+				}
+			});
 	}
 	
 	@Override
@@ -480,5 +517,14 @@ public class TisTableViewer extends ComplexTableViewer{
 			values.add(text);
 		}
 		return values.toArray(new String[values.size()]);
+	}	
+	
+	protected String getColumnsKey() {
+		StringBuffer sb=new StringBuffer();
+		for(int i=0; i<columns.size(); i++){
+			ComplexTableViewerColumn column=columns.get(i);
+			sb=sb.append(column.name).append("#");
+		}
+		return sb.toString();
 	}	
 }

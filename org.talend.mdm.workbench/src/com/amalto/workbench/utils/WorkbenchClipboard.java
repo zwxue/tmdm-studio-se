@@ -1,10 +1,12 @@
 package com.amalto.workbench.utils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDParticle;
 
+import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
 
 public class WorkbenchClipboard {
@@ -85,4 +87,16 @@ public class WorkbenchClipboard {
 		this.conceptList = conceptList;
 	}
 	
+	//Line
+	List<Line> lineList=new ArrayList<Line>();
+	public void setLines(List<Line> lineList) {
+		resetLines();
+		this.lineList.addAll(lineList);
+	}
+	public List<Line> getLines(){
+		return this.lineList;
+	}
+	public void resetLines() {
+		lineList.clear();
+	}
 }
