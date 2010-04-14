@@ -1,6 +1,7 @@
 package com.amalto.workbench.utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.xsd.XSDElementDeclaration;
@@ -88,15 +89,18 @@ public class WorkbenchClipboard {
 	}
 	
 	//Line
-	List<Line> lineList=new ArrayList<Line>();
-	public void setLines(List<Line> lineList) {
-		resetLines();
-		this.lineList.addAll(lineList);
+	HashMap<String,List<Line>> lineList=new HashMap<String, List<Line>>();
+	public void setLines(String key, List<Line> lines) {
+		List<Line> l=lineList.get(key);
+		if(l==null) {
+			l=new ArrayList<Line>();
+			lineList.put(key, l);
+		}
+		l.clear();
+		l.addAll(lines);
+		
 	}
-	public List<Line> getLines(){
-		return this.lineList;
-	}
-	public void resetLines() {
-		lineList.clear();
+	public List<Line> getLines(String key){
+		return this.lineList.get(key);
 	}
 }

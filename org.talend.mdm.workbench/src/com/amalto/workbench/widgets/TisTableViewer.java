@@ -262,7 +262,7 @@ public class TisTableViewer extends ComplexTableViewer{
 	        });
 
 	        copyButton = toolkit.createButton(stepUpDownComposite,"",SWT.PUSH | SWT.CENTER);
-	        copyButton.setToolTipText("Copy the selected item");
+	        copyButton.setToolTipText("Copy the selected items");
 	        copyButton.setImage(ImageCache.getCreatedImage(EImage.COPY.getPath()));
 	        copyButton.setLayoutData(
 	                new GridData(SWT.FILL,SWT.FILL,false,false,1,1)
@@ -291,7 +291,7 @@ public class TisTableViewer extends ComplexTableViewer{
 		        			if(btn!=null)btn.setEnabled(true);
 		        		}
 		        		//add to workbenchclipboard
-		        		WorkbenchClipboard.getWorkbenchClipboard().setLines(copyLines);
+		        		WorkbenchClipboard.getWorkbenchClipboard().setLines(String.valueOf(columns.size()),copyLines);
 		        	}
 				}	        	
 	        });
@@ -312,9 +312,9 @@ public class TisTableViewer extends ComplexTableViewer{
 	        			}
 	        			boolean dirty=false;
 	        			List<Line> items=(List<Line>)viewer.getInput();
-
-	        			if( WorkbenchClipboard.getWorkbenchClipboard().getLines().size()>0) {
-	        				items.addAll( WorkbenchClipboard.getWorkbenchClipboard().getLines());
+	        			List<Line> cacheLine= WorkbenchClipboard.getWorkbenchClipboard().getLines(String.valueOf(columns.size()));
+	        			if( cacheLine.size()>0) {
+	        				items.addAll(cacheLine);
 	        				dirty=true;
 	        			}
 	        			viewer.refresh();
