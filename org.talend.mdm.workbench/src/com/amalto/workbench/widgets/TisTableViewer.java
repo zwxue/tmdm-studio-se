@@ -37,6 +37,7 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.KeyValue;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.utils.WorkbenchClipboard;
+import com.amalto.workbench.views.ServerView;
 /**
  * 
  * @author achen
@@ -50,7 +51,7 @@ public class TisTableViewer extends ComplexTableViewer{
 	private Button pastButton;
 	private boolean addMulti;// 'addAll' and 'deleteAll' button will be added if this field is not null
 	private boolean isXpath;
-
+	
 	public boolean isAddMulti() {
 		return addMulti;
 	}
@@ -134,8 +135,8 @@ public class TisTableViewer extends ComplexTableViewer{
 		        		if(xpathDialog==null){
 			        		xpathDialog = new XpathSelectDialog(
 			        				table.getShell(),
-			        				mainPage.getXObject().getParent(),"Select Multiple XPaths",
-			        				mainPage.getSite(),
+			        				null,"Select Multiple XPaths",
+			        				ServerView.show().getSite(),
 									true,
 									null								
 							);

@@ -70,6 +70,10 @@ public class XpathWidget implements  SelectionListener{
 		this("",page.getXObject().getParent(),null,parent,page,false,false,"");
 		this.isMulti=isMulti;
 	}
+	public XpathWidget(Composite parent, boolean isMulti){		
+		this("",null,null,parent,null,false,false,"");
+		this.isMulti=isMulti;
+	}	
 	public XpathWidget(String buttonName,TreeParent treeParent,
 			FormToolkit toolkit, Composite parent, AMainPageV2 dialog,boolean isButtonLeft,boolean readOnly, String dataModelName) {
 
@@ -113,7 +117,6 @@ public class XpathWidget implements  SelectionListener{
 			descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,true, 1, 1));
 			descriptionText.addModifyListener(listenr);
 			
-
 		}
 		else{
 			if(readOnly){

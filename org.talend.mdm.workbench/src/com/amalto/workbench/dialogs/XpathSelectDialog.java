@@ -80,6 +80,7 @@ public class XpathSelectDialog extends Dialog {
 		this.isMulti=isMulti;
 		if(dataModelName!=null)
 		this.dataModelName =dataModelName;//default dataModel
+		if(this.site==null) this.site=ServerView.show().getSite();
 	}
 
 	private  String getXpath(StructuredSelection sel){

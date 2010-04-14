@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
@@ -60,6 +61,9 @@ import com.amalto.workbench.models.Line;
  *
  */
 public class ComplexTableViewer {
+	//ITableModifyListener
+	ListenerList modifyList=new ListenerList();
+	
 	protected List<ComplexTableViewerColumn> columns;
 	protected Composite parent;
 	protected FormToolkit toolkit;
@@ -191,6 +195,12 @@ public class ComplexTableViewer {
 	protected void markDirty(){
 		if(mainPage!=null){
 			mainPage.markDirty();
+		}
+		//fire table modify listener
+		for( Object obj:modifyList.getListeners()) {
+			if(obj instanceof ITableModifyListener) {
+				((ITableModifyListener)obj).handleEvent((List<Line>)getViewer().getInput());
+			}
 		}
 	}
 	protected void createLabels(){
@@ -834,7 +844,10 @@ public class ComplexTableViewer {
 		}
 		@Override
 		protected Control createControl(Composite parent) {			
-			xpath= new XpathWidget(parent, mainPage,false);
+			if(mainPage!=null)
+				xpath= new XpathWidget(parent, mainPage,false);
+			else
+				xpath= new XpathWidget(parent,false);
 			xpath.setConceptName(conceptName);
 			((GridData)xpath.getComposite().getChildren()[0].getLayoutData()).heightHint=15;
 			((GridData)xpath.getComposite().getChildren()[1].getLayoutData()).heightHint=15;
@@ -919,5 +932,11 @@ public class ComplexTableViewer {
 		}
 		
 	}	
+	public void addTableModifyListener(ITableModifyListener listener) {
+		modifyList.add(listener);
+	}
+	public void removeTableModifyListener(ITableModifyListener listener) {
+		modifyList.remove(listener);
+	}
 }
 
