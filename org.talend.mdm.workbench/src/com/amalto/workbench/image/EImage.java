@@ -173,6 +173,7 @@ public enum EImage {
 	ROLE("icons/role.gif"),
 	ROUTING_RULE("icons/routing_rule.png"),
 	SAMPLE("icons/sample.gif"),
+	SANDGLASS("icons/sandglass.gif"),
 	SAVE_EDIT("icons/save_edit.gif"),
 	SAVEALL_EDIT("icons/saveall_edit.gif"),
 	SAVEAS_EDIT("icons/saveas_edit.gif"),

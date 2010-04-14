@@ -17,8 +17,12 @@ import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -63,6 +67,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.progress.UIJob;
 import org.talend.mdm.commmon.util.core.CommonUtil;
 import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 
@@ -529,15 +534,44 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	}
 
 	protected void initServer(TreeParent server) {
-		Cursor wait = new Cursor(getViewSite().getShell().getDisplay(),
-				SWT.CURSOR_WAIT);
+		
+		
+		Cursor wait = new Cursor(getViewSite().getShell().getDisplay(),SWT.CURSOR_WAIT);
 		viewer.getControl().setCursor(wait);
-
-		new ServerRefreshAction(this, server).run();
+		
+		//add by ymli; fix the bug:0012600.made the refresh as a job run underground
+		refreshServerRoot(this,server);
+		
+		
 		viewer.expandToLevel(server, 1);
-
 		viewer.getControl().setCursor(
 				new Cursor(getViewSite().getShell().getDisplay(), SWT.CURSOR_ARROW));
+	}
+	/**
+	 * @author ymli; fix the bug:0012600. made the refresh as a job run underground
+	 * @param view
+	 * @param serverRoot
+	 * @return
+	 */
+	public boolean refreshServerRoot(final ServerView view,final TreeParent serverRoot) {
+		// TODO Auto-generated method stub
+		UIJob job=new UIJob("Pending ..."){
+			@Override
+			public IStatus runInUIThread(IProgressMonitor monitor) {	
+				try{			
+					new ServerRefreshAction(view, serverRoot).run();
+					return Status.OK_STATUS;
+				}catch(Exception e){
+					e.printStackTrace();
+					return Status.CANCEL_STATUS;
+				}
+			}			
+		};
+		job.setPriority(Job.LONG);
+		job.schedule();
+
+		return true;
+		
 	}
 
 	public void initView() {
