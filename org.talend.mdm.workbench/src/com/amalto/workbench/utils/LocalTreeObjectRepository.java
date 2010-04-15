@@ -359,7 +359,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	{
 		if (parent.getParent() == null && parent.getDisplayName().equals("INVISIBLE ROOT"))
 			return;
-
+        
 		String xpath = getXPathForTreeObject(child);
 		Document doc =  credentials.get(UnifyUrl(parent.getServerRoot().getWsKey().toString())).doc;
 		List<Element> models = doc.selectNodes(xpath);
@@ -387,7 +387,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 					+ getURLFromTreeObject(child);
 			}
 			List<Element> list = elemFolder.selectNodes(xpath + xpathTail + xpathTailOther);
-			if (list.isEmpty() && catalog.equals(""))
+			if (list.isEmpty() && (catalog.equals("") || catalog == null))
 			{
 				Element childElem = elemFolder.addElement(filterOutBlank(child.getDisplayName()));
 				childElem.setText(child.getType() + "");
@@ -962,7 +962,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 			}
 		}
 		
-		if(orgSize == objs.size())
+		if(orgSize == objs.size() && orgSize != elems.size())
 		{
 			objs.addAll(objs.size(), catalogs);
 		}
