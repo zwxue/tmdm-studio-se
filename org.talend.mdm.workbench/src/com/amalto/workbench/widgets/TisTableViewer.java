@@ -44,7 +44,7 @@ import com.amalto.workbench.views.ServerView;
  *
  */
 public class TisTableViewer extends ComplexTableViewer{
-	protected List<Line> copyLines=new ArrayList<Line>();
+	//protected List<Line> copyLines=new ArrayList<Line>();
 	//static List<Button> pastBtns=new ArrayList<Button>(); //records all paste Buttons
 	static HashMap<String, HashSet<Button>> pastBtns=new HashMap<String, HashSet<Button>>();
 	private Button copyButton;
@@ -275,7 +275,7 @@ public class TisTableViewer extends ComplexTableViewer{
 				}
 				public void widgetSelected(SelectionEvent e) {
 	        		int[] indexs =viewer.getTable().getSelectionIndices();
-	        		copyLines.clear();
+	        		List<Line> copyLines=new ArrayList<Line>();
 		        	for( int index: indexs) {
 		        		if(index >=0 && index <=viewer.getTable().getItemCount()-1 ){
 		        			List<Line> items=(List<Line>)viewer.getInput();
@@ -314,8 +314,12 @@ public class TisTableViewer extends ComplexTableViewer{
 	        			boolean dirty=false;
 	        			List<Line> items=(List<Line>)viewer.getInput();
 	        			List<Line> cacheLine= WorkbenchClipboard.getWorkbenchClipboard().getLines(String.valueOf(columns.size()));
+	        			List<Line> coloneLine=new ArrayList<Line>();
+	        			for(Line l:cacheLine) {
+	        				coloneLine.add(l.clone());
+	        			}
 	        			if( cacheLine.size()>0) {
-	        				items.addAll(cacheLine);
+	        				items.addAll(coloneLine);
 	        				dirty=true;
 	        			}
 	        			viewer.refresh();
