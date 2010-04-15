@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -546,8 +548,8 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 			TreeParent category = null;
 			for (String catalogName: catalogs)
 			{
-				if (catalogName.equals(filterOutBlank(folder.getDisplayName())))
-					continue;
+//				if (catalogName.equals(filterOutBlank(folder.getDisplayName())))
+//					continue;
 				category = null;
 				for (TreeObject child: subFolder.getChildren())
 				{
@@ -654,7 +656,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 					
 					for (TreeObject xbj: systemCatalog.getChildren())
 					{
-						if (xbj.getDisplayName().equals(filterOutBlank(theObj.getDisplayName())) && xbj.getType() == theObj.getType())
+						if (xbj.getDisplayName().equals(theObj.getDisplayName()) && xbj.getType() == theObj.getType())
 						{
 							exist = true;
 							break;
@@ -726,10 +728,10 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
             	{
             		elemName = spec.attributeValue(REALNAME);
             	}
-            	TreeObject to =  modelCpy.findObject(Integer.parseInt(spec.getText().trim()), elemName);
+            	TreeObject to =  findObject(modelCpy, Integer.parseInt(spec.getText().trim()), elemName);
             	if (to == null)
             	{
-					TreeParent catalog = new TreeParent(spec.getName(), modelCpy
+					TreeParent catalog = new TreeParent(elemName, modelCpy
 							.getServerRoot(), TreeObject.CATEGORY_FOLDER, null,
 							null);
 					boolean cpyInternalCheck = internalCheck;
@@ -745,6 +747,25 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
             }
 	}
 	}
+	
+	private TreeObject findObject(TreeObject xobj, int type, String name)
+	{
+		if(!(xobj instanceof TreeParent))
+		{
+			return null;
+		}
+		
+		TreeParent parent = (TreeParent)xobj;
+		for(TreeObject child :parent.getChildren())
+		{
+		  if(child.getType() == type && filterOutBlank(child.getDisplayName()).equals(filterOutBlank(name)))
+		  {
+			  return child;
+		  }
+		}
+		return null;
+	}
+	
 	private void checkUpCatalogHavingNoChildren(TreeObject theObj, TreeParent folder)
 	{
 		if (folder.getServerRoot() == folder || theObj.getServerRoot()==null) return;
@@ -861,15 +882,23 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 			String xpath = modelName + "//child::*[text() = '"
 					+ TreeObject.CATEGORY_FOLDER + "' and @Universe='"
 					+ universe + "' and @Url='" + url + "']//child::*";
-
+           
 			Document doc = credentials.get(getURLFromTreeObject(folder)).doc;
 			List<Element> elems = doc.selectNodes(xpath);
 			for (Element elem : elems)
 			{
+				String xpathElem = getXPathForElem(elem);
+				String xpathObj = getXPathForTreeObject(theObj);
+				int squarebk = xpathObj.indexOf("[");
+				if(squarebk != -1)
+				{
+					xpathObj = xpathObj.substring(0, squarebk);
+				}
 				if (elem.getName().equals(filterOutBlank(theObj.getDisplayName()))
 						&& elem.getData().toString().equals(theObj.getType() + ""))
 				{
 					ArrayList<String> path = new ArrayList<String>();
+					HashMap<Integer, String> slice = new HashMap<Integer, String>();
 					while (isAEXtentisObjects(elem, theObj) > XTENTIS_LEVEL)
 					{
 						String elemName = elem.getParent().getName();
@@ -877,10 +906,36 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 						{
 							elemName = elem.getParent().attributeValue(REALNAME);
 						}
-						path.add(elemName);
+						if(elem.getText() != null && StringUtils.trim(elem.getParent().getText()).equals(TreeObject.CATEGORY_FOLDER + ""))
+						{
+							 path.add(elem.getParent().getName());
+							 if(elem.getParent().attributeValue(REALNAME) != null)
+							 {
+								 slice.put(path.size()-1, elem.getParent().attributeValue(REALNAME));
+							 }
+						}
+
 						elem = elem.getParent();
 					}
+					
+					ArrayList<String> pathCpy = new ArrayList<String>(path);
                     Collections.reverse(path);
+                    if(!isEqualString(xpathElem, xpathObj, path))
+                    {
+                    	path = null;
+                    }
+                    if(path != null)
+                    {
+                    	for (int i = 0; i < pathCpy.size(); i++)
+                    	{
+                    		if(slice.get(i) != null)
+                    		{
+                    			pathCpy.set(i, slice.get(i));
+                    		}
+                    	}
+                    	Collections.reverse(pathCpy);
+                    	path = pathCpy;
+                    }
 					return path;
 				}
 			}
@@ -891,6 +946,28 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		}
 		
 		return null;
+	}
+	
+	private boolean isEqualString(String xpathElem, String xpathObj, ArrayList<String> catalogs)
+	{
+		ArrayList<String> elems = new ArrayList<String>(Arrays.asList(xpathElem.split("/")));
+		ArrayList<String> objs  = new ArrayList<String>(Arrays.asList(xpathObj.split("/")));
+        int orgSize = objs.size();
+		for (int i = 0; i < objs.size(); i++)
+		{
+			if(!objs.get(i).equals(elems.get(i)))
+			{
+				objs.addAll(i, catalogs);
+				break;
+			}
+		}
+		
+		if(orgSize == objs.size())
+		{
+			objs.addAll(objs.size(), catalogs);
+		}
+		
+       return CollectionUtils.isEqualCollection(elems, objs);
 	}
 	
 	private int isAEXtentisObjects(Element elemXobj, TreeObject treeObj)

@@ -60,7 +60,7 @@ public class ServerRefreshAction extends Action {
             retriever.run(new NullProgressMonitor());
 			ServerRefreshAction.this.serverRoot.synchronizeWith(retriever.getServerRoot());
 			ServerView.show().getViewer().refresh();
-
+			LocalTreeObjectRepository.getInstance().setLazySaveStrategy(false, serverRoot);
 //			Job refreshJob = new ServerRefreshJob(server,serverRoot.getUsername(),serverRoot.getPassword(),serverRoot.getUser().getUniverse()); 
 //            refreshJob.setPriority(Job.INTERACTIVE);
 //			refreshJob.schedule();
