@@ -142,12 +142,13 @@ private static String getXMLString(String uri) {
 		fr.close();
 		
 	}
-	public static void postPicFromFile(String typeName,String pathName,String uriPre) throws Exception  {
+	//it does not work,there is already a method "uploadImageFile" in Util, developer can use that method to upload a image file.
+/*	public static void postPicFromFile(String typeName,String pathName,String uriPre) throws Exception  {
 		String content=readFileAsString(pathName);
-		String uri=uriPre+"/imageserver/secure/ImageUploadServlet";
+		String uri=uriPre+"imageserver/secure/ImageUploadServlet";
 //		String uri=uriPre+picURI;
 		postResourcesFromContentString(content,uri,typeName);
-	}
+	}*/
 	 private static String readFileAsString(String fileName) throws Exception {  
 		             FileInputStream fis = new FileInputStream(fileName);  
 		             BufferedInputStream in = new BufferedInputStream(fis);  

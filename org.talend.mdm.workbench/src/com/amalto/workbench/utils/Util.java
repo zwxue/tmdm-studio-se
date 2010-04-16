@@ -2501,12 +2501,12 @@ public class Util {
         	
         	int major =  Integer.parseInt(match.group(1));
         	int minor = Integer.parseInt(match.group(2));
-        	int micro = match.group(4) != null && !match.group(4).equals("") ? Integer.parseInt(match.group(4)) : 0;
+        	int rev = match.group(4) != null && !match.group(4).equals("") ? Integer.parseInt(match.group(4)) : 0;
 			XtentisPort port = Util.getPort(universe, username, password);
 			WSVersion wsVersion = port.getComponentVersion(new WSGetComponentVersion(WSComponent.DataManager,null));
 			versionComp += " while the server's version number is " + wsVersion.getMajor() + "." + wsVersion.getMinor() + "." + wsVersion.getRevision();
 			if(major != wsVersion.getMajor() || minor != wsVersion.getMinor())return versionComp;
-			if(micro == 0)
+			if(rev == 0)
 			{
 				// major version compare
 				if(wsVersion.getRevision() != 0)

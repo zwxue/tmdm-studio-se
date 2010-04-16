@@ -1,12 +1,15 @@
 package com.amalto.workbench.export;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.StringWriter;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -27,6 +30,8 @@ import org.exolab.castor.xml.Marshaller;
 import org.talend.mdm.commmon.util.workbench.ZipToFile;
 
 import com.amalto.workbench.models.TreeObject;
+import com.amalto.workbench.providers.XObjectEditorInput;
+import com.amalto.workbench.utils.ResourcesUtil;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
@@ -230,6 +235,30 @@ public class ExportItemsWizard extends Wizard {
 
 				monitor.worked(1);
 				break;
+			case  	TreeObject.PICTURES_RESOURCE:
+				monitor.subTask(" Picture...");
+//				ExportItem exportItem=new ExportItem();
+				
+				items=new ArrayList<String>();
+				//picture
+				String picUrl=obj.getEndpointIpAddress()+ResourcesUtil.getResourcesMapFromURI(
+						obj.getEndpointIpAddress() + TreeObject.PICTURES_URI)
+	        			.get(obj.getDisplayName());
+		         HttpClient client = new HttpClient();  
+		         GetMethod get = new GetMethod(picUrl);  
+		         client.executeMethod(get);  
+				//Marshal
+				sw = new StringWriter();
+				Marshaller.marshal(get.getResponseBody(), sw);
+				encodedID = URLEncoder.encode(obj.getDisplayName(),"UTF-8");
+				writeByte(get.getResponseBody(), TreeObject.PICTURES_+"/"+encodedID);
+				items.add(TreeObject.PICTURES_+"/"+encodedID);
+				
+				obj.setItems(items.toArray(new String[items.size()]));
+				exports.add(obj);
+				
+				monitor.worked(1);
+				break;
 			case 	TreeObject.ROLE:
 				if(Util.IsEnterPrise()){
 				monitor.subTask(" Role...");
@@ -394,7 +423,20 @@ public class ExportItemsWizard extends Wizard {
 			fo.close();
 		}catch(Exception e) {e.printStackTrace();}
 	}
-	
+	private  void writeByte(byte[] bs,String filename){
+		try {
+			File f=new File(exportFolder+"/"+filename);
+			if(!f.getParentFile().getParentFile().exists()){
+				f.getParentFile().getParentFile().mkdir();
+			}		
+			if(!f.getParentFile().exists()){
+				f.getParentFile().mkdir();
+			}
+	         FileOutputStream output = new FileOutputStream(f);  
+	         output.write(bs);  
+	         output.close();  
+		}catch(Exception e) {e.printStackTrace();}
+	}	
 	@Override
 	public void addPages() {
 		// TODO Auto-generated method stub

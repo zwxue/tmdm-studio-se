@@ -19,7 +19,6 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
@@ -543,6 +542,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		refreshServerRoot(this,server);
 		
 		
+//		initServerContent(server);
 		viewer.expandToLevel(server, 1);
 		viewer.getControl().setCursor(
 				new Cursor(getViewSite().getShell().getDisplay(), SWT.CURSOR_ARROW));
@@ -730,8 +730,11 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			case TreeObject.RESOURCES:	
 			case TreeObject.DATA_MODEL_RESOURCE:	
 			case TreeObject.DATA_MODEL_TYPES_RESOURCE:	
-			case TreeObject.PICTURES_RESOURCE:
 				break;				
+			case TreeObject.PICTURES_RESOURCE:
+					manager.add(exportAction);
+					manager.add(importAction);
+				break;
 			case TreeObject.DATA_CLUSTER:
 				if (xobject.isXObject()) {
 					manager.add(browseViewAction);
@@ -944,8 +947,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				password = xo.getWsObject().toString().split(":")[1];
 			}
 			initServerTree(xo.getWsKey().toString(), username, password, universe);
-			xo.getServerRoot().getParent().removeChild(xo.getServerRoot());
-		
+//			xo.getServerRoot().getParent().removeChild(xo.getServerRoot());
+			viewer.expandToLevel(xo, 1);
 	}
 
 	private void hookKeyPressAction() {

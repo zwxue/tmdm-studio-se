@@ -202,6 +202,7 @@ public class ImportItemsWizard extends Wizard{
 		TreeParent storeprocedures = new TreeParent(EXtentisObjects.StoredProcedure.getDisplayName(),reserverRoot,TreeObject.STORED_PROCEDURE,null,null);
 		TreeParent syncplans = new TreeParent(EXtentisObjects.SynchronizationPlan.getDisplayName(),reserverRoot,TreeObject.SYNCHRONIZATIONPLAN,null,null);
 		TreeParent transformers = new TreeParent(EXtentisObjects.Transformer.getDisplayName(),reserverRoot,TreeObject.TRANSFORMER,null,null);
+		TreeParent pictures = new TreeParent(EXtentisObjects.PICTURESRESOURCE.getDisplayName(),reserverRoot,TreeObject.PICTURES_RESOURCE,null,null);
 		TreeParent universes = new TreeParent(EXtentisObjects.Universe.getDisplayName(),reserverRoot,TreeObject.UNIVERSE,null,null);
 		TreeParent views = new TreeParent(EXtentisObjects.View.getDisplayName(),reserverRoot,TreeObject.VIEW,null,null);
 		reserverRoot.addChild(clusters);
@@ -212,6 +213,7 @@ public class ImportItemsWizard extends Wizard{
 		reserverRoot.addChild(storeprocedures);
 		reserverRoot.addChild(syncplans);
 		reserverRoot.addChild(transformers);
+		reserverRoot.addChild(pictures);
 		reserverRoot.addChild(universes);
 		reserverRoot.addChild(views);
 		boolean isOverrideAll=false;
@@ -242,6 +244,9 @@ public class ImportItemsWizard extends Wizard{
 				break;
 			case TreeObject.TRANSFORMER:
 				transformers.addChild(obj);
+				break;
+			case TreeObject.PICTURES_RESOURCE:
+				pictures.addChild(obj);
 				break;
 			case TreeObject.UNIVERSE:
 				universes.addChild(obj);
@@ -581,6 +586,32 @@ public class ImportItemsWizard extends Wizard{
 				}
 
 				monitor.worked(1);}
+				break;
+			case TreeObject.PICTURES_RESOURCE:
+				subItems = item.getItems();
+
+				for(String subItem : subItems) {
+				   try {
+					   String name=subItem.substring(subItem.indexOf("/"))+1;
+//					   ResourcesUtil.postPicFromFile(name,importFolder+"/" + subItem, serverRoot.getEndpointIpAddress()+TreeObject.PICTURES_URI);
+						Util.uploadImageFile(serverRoot.getEndpointIpAddress()
+								+ "/imageserver/secure/ImageUploadServlet",
+								importFolder + "/" + subItem, serverRoot
+										.getUsername(), serverRoot
+										.getPassword());
+//				      reader = new FileReader(importFolder+"/" + subItem);
+//		              WSItem wsItem = new WSItem();
+//		              wsItem = (WSItem) Unmarshaller.unmarshal(WSItem.class, reader);
+//		                
+//		              if(wsItem != null) {
+//		                 port.putItem(new WSPutItem(wsItem.getWsDataClusterPK(),wsItem.getContent(),new WSDataModelPK(wsItem.getDataModelName()),true));
+//		              }
+				   } 
+				   catch (Exception e2) {
+				      e2.printStackTrace();
+				   }
+				}
+
 				break;
 			case TreeObject.TRANSFORMER:
 				monitor.subTask(" Process...");

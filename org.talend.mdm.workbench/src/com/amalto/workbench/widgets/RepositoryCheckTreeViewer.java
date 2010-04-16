@@ -285,8 +285,12 @@ public class RepositoryCheckTreeViewer {
         if (node == null) {
             return false;
         }
-        if(node.getType() == TreeObject.SUBSCRIPTION_ENGINE || node.getType() == TreeObject.SERVICE_CONFIGURATION||node.getType() == TreeObject.RESOURCES ||node.getType() == TreeObject.WORKFLOW||node.getType() == TreeObject.WORKFLOW_PROCESS
-        		||node.getType() == TreeObject.JOB || node.getType() == TreeObject.JOB_REGISTRY){
+        //remove the filter for resource to provide the function to import and export resources.
+		if (node.getType() == TreeObject.SUBSCRIPTION_ENGINE
+				|| node.getType() == TreeObject.SERVICE_CONFIGURATION
+				|| node.getType() == TreeObject.WORKFLOW
+				|| node.getType() == TreeObject.WORKFLOW_PROCESS
+   		||node.getType() == TreeObject.JOB || node.getType() == TreeObject.JOB_REGISTRY){
         	return false;
         }
         if(!Util.IsEnterPrise()){
