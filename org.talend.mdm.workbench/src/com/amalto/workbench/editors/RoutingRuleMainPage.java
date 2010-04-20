@@ -400,7 +400,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             conditionViewer.setHeight(110);
             
             //and or not condition
-            ConditionWidget conditionWidget=new ConditionWidget(routingExpressionsGroup,toolkit,this);
+            ConditionWidget conditionWidget=new ConditionWidget(routingExpressionsGroup,treeParent,toolkit,this);
             conditionText=conditionWidget.getConditionText();
             conditionText.addModifyListener(new ModifyListener(){
 
