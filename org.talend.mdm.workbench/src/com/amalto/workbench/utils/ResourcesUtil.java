@@ -6,12 +6,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -60,7 +64,21 @@ try {
     
     
 
-    
+public static InputStream getFile(String uri) {
+    HttpClient client = new HttpClient();  
+    GetMethod get = new GetMethod(uri);  
+    try {
+		client.executeMethod(get);
+		return get.getResponseBodyAsStream();
+	} catch (HttpException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} 
+	return null;
+}    
     
 private static String getXMLString(String uri) {
     DefaultHttpClient httpclient = new DefaultHttpClient();
@@ -72,7 +90,7 @@ private static String getXMLString(String uri) {
     HttpGet httpget = new HttpGet(uri);
     
     System.out.println("executing request" + httpget.getRequestLine());
-
+    
     // Create a response handler
     ResponseHandler<String> responseHandler = new BasicResponseHandler();
     String responseBody ="";

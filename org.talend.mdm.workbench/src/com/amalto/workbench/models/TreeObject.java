@@ -74,7 +74,7 @@ public class TreeObject implements IAdaptable {
 	public final static String DATAMODELTYPES_URI="/pubcomponent/secure/dataModelsTypes/";
 	public final static String CUSTOM_TYPES_URI="/pubcomponent/secure/customTypesSets/";
 	public final static String PICTURES_URI="/pubcomponent/secure/pictures/";
-
+	public final static String BARFILE_URI="/pubcomponent/secure/barFile/";
 	
 	private String displayName;  
 	private TreeParent parent;
