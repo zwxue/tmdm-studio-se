@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,6 +19,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -42,6 +44,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	private boolean internalCheck = false;
 	private boolean synchronize = false;
 	private ArrayList<String> accommodations = new ArrayList<String>();
+	private HashMap<String, Element> outPutSchemas = new HashMap<String, Element>();
 	
 	private static String config = System.getProperty("user.dir")+"/.treeObjectConfig.xml";
 	private static String rootPath = "/" + ICoreConstants.DEFAULT_CATEGORY_ROOT;
@@ -306,7 +309,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		return 	convertSpecCharToDigital(res);	
 	}
 	
-    private Element getParentElement(TreeObject treeObj)
+    public Element getParentElement(TreeObject treeObj)
     {
 		if (!(treeObj instanceof TreeParent))return null;
 		
@@ -1285,5 +1288,365 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	public void clearAccommodation()
 	{
 		accommodations.clear();
+	}
+	
+	private Element parseElements(String schema)
+	{
+		 SAXReader saxReader = new SAXReader();
+		 try {
+			Document doc = saxReader.read(new StringReader(schema));
+			return doc.getRootElement();
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	public void setImportCategory(String[] schemas, TreeParent serverRoot)
+	{
+		Document orgDoc =  credentials.get(UnifyUrl(serverRoot.getServerRoot().getWsKey().toString())).doc;
+		String user =  credentials.get(UnifyUrl(serverRoot.getServerRoot().getWsKey().toString())).user;
+		String xpathPrefix = "/category/" + user;
+		String xmlPrefix = "<category><" + user + ">*</"+ user + "></category>";
+		if(schemas == null) // old version, skip the import
+			return;
+		for(String schema : schemas)
+		{
+			Element root = parseElements(xmlPrefix.replace("*", schema));
+			Element subRoot = parseElements(schema);
+			String xpathForCategory = "//descendant::*[text()='" + TreeObject.CATEGORY_FOLDER + "']";
+			List<Element> elementList = subRoot.selectNodes(xpathForCategory);
+			List<String> categoryXpathForCurDoc = new ArrayList<String>(); 
+			List<String> categoryXpathForOrgDoc = new ArrayList<String>();
+			
+			for (Element element : elementList)
+			{
+				List<String> categoryHierarchicals = parseXpathForElement(element, subRoot);
+				String xpathForOrgCategory = xpathPrefix + "/" + subRoot.getName();
+				for (String categoryHierarchical : categoryHierarchicals)
+				{
+					xpathForOrgCategory += "/" + categoryHierarchical;
+				}
+				if(!categoryXpathForOrgDoc.contains(xpathForOrgCategory))
+				   categoryXpathForOrgDoc.add(xpathForOrgCategory);
+			}
+			xpathForCategory = xpathPrefix + "/" + subRoot.getName() + "//descendant::*[text()='" + TreeObject.CATEGORY_FOLDER + "']";
+			//	String xpathForOrgCategory = xpathPrefix + "/" + subRoot.getName() + "//descendant::" + element.getName() + "[text()='" + element.getTextTrim() + "']";
+			String topElemXpath = xpathPrefix + "/" + subRoot.getName();
+			Element topElem = pingElement(topElemXpath, orgDoc.getRootElement());
+			elementList = orgDoc.getRootElement().selectNodes(xpathForCategory);
+			for (Element elem : elementList)
+			{
+				List<String> categoryHierarchicals = parseXpathForElement(elem, topElem);
+				String xpathForOrgCategory = xpathPrefix  +  "/" + subRoot.getName();
+				for (String categoryHierarchical : categoryHierarchicals)
+				{
+					xpathForOrgCategory += "/" + categoryHierarchical;
+				}
+				if(!categoryXpathForCurDoc.contains(xpathForOrgCategory))
+				 categoryXpathForCurDoc.add(xpathForOrgCategory);
+			}
+			
+			for (String categoryHierarchical : categoryXpathForOrgDoc)
+			{
+				createOrReplaceCategory(categoryHierarchical, categoryXpathForCurDoc, root, orgDoc.getRootElement(), serverRoot);
+			}
+			
+			System.out.println(orgDoc.asXML());
+			
+		}
+	}
+	
+	
+	private void createOrReplaceCategory(String categoryHierarchical, List<String> categoryXpathForCurDoc, Element srcElem, Element tgtElem, TreeParent serverRoot)
+	{
+		if(categoryXpathForCurDoc.contains(categoryHierarchical))
+		{
+			//transfer all elements under the imported category to corresponding pos of org doc
+			transferElementsWithCategoryPath(categoryHierarchical, srcElem, tgtElem);
+		}
+		else
+		{
+			String match = "";
+			for (String categoryXpath : categoryXpathForCurDoc)
+			{
+				if(categoryXpath.startsWith(categoryHierarchical))
+				{
+					//transfer all elements under the imported category to corresponding pos of org doc
+					transferElementsWithCategoryPath(categoryHierarchical, srcElem, tgtElem);
+				}
+				else if(categoryHierarchical.startsWith(categoryXpath))
+				{
+					match = categoryXpath;
+				}
+			}
+			
+			if(match.length() >= 0)
+			{
+				//create category according to the given xpath
+				createCategoryForOrgDoc(categoryHierarchical, srcElem, tgtElem);
+			}
+		}
+	}
+	
+	private void createCategoryForOrgDoc(String categoryToCreate, Element srcElem, Element tgtElem)
+	{
+		String[] xpathSnippetsToCreate = categoryToCreate.split("/");
+		int categoryBeginPos = 3;
+		if(xpathSnippetsToCreate[3].equals("EventManagement"))
+		{
+			categoryBeginPos = 4;
+		}
+		
+		int pos = categoryToCreate.indexOf("/" + xpathSnippetsToCreate[categoryBeginPos]);
+		String categoryXpath = categoryToCreate.substring(0, pos + xpathSnippetsToCreate[categoryBeginPos].length() + 1);
+		Element subParentElem = pingElement(categoryXpath, tgtElem);
+		for (int i = categoryBeginPos + 1; i < xpathSnippetsToCreate.length ; i++)
+		{
+			String categoryXpathSnippet = "child::" + xpathSnippetsToCreate[i] + "[text()='" + TreeObject.CATEGORY_FOLDER + "']";
+			Element newCategory = pingElement(categoryXpathSnippet, subParentElem);
+			if(newCategory == null)
+			{
+				Element existedCategory = pingElement(categoryXpath + "/" + categoryXpathSnippet , srcElem);
+				newCategory = subParentElem.addElement(xpathSnippetsToCreate[i]);
+				newCategory.setText(TreeObject.CATEGORY_FOLDER + "");
+				newCategory.addAttribute(UNIVERSE, existedCategory.attributeValue(UNIVERSE));
+				newCategory.addAttribute(URL, existedCategory.attributeValue(URL));
+				newCategory.addAttribute(REALNAME, existedCategory.attributeValue(REALNAME));
+			}
+			categoryXpath += "/" + xpathSnippetsToCreate[i];
+			subParentElem = newCategory;
+		}
+
+		transferElementsWithCategoryPath(categoryToCreate, srcElem, tgtElem);
+	}
+	
+	private Element drillUpForDevisionElement(Element elem)
+	{
+		Element parent = elem.getParent();
+		while(parent != null && !parent.getTextTrim().equals(elem.getTextTrim()) && !(parent.getTextTrim().equals("0")))
+		{
+			parent = parent.getParent();
+		}
+		
+		return parent;
+	}
+	
+	private void transferElementsWithCategoryPath(String categoryXpath, Element srcElemRoot, Element targtElemRoot)
+	{
+		categoryXpath += "[text()='" + TreeObject.CATEGORY_FOLDER + "']";
+		//clear up the context of targtElemRoot firstly
+		Element elemCategoryInTagt = pingElement(categoryXpath, targtElemRoot);
+		List elems = elemCategoryInTagt.content();
+		List xobjects = new ArrayList();
+		for (Object obj : elems)
+		{
+			if(obj instanceof Element)
+			{
+				Element elem = (Element)obj;
+				if(!elem.getTextTrim().equals(TreeObject.CATEGORY_FOLDER + ""))
+				{
+					Element division = drillUpForDevisionElement(elem);
+					division.addElement(elem.getName()).setText(elem.getTextTrim());
+					xobjects.add(elem);
+				}
+			}
+		}
+		
+		elemCategoryInTagt.content().removeAll(xobjects);
+		
+		Element elemCategoryInSrc = pingElement(categoryXpath, srcElemRoot);
+		elems = elemCategoryInSrc.content();
+		for (Object obj : elems)
+		{
+			if(obj instanceof Element)
+			{
+				Element elem = (Element)obj;
+				if(!elem.getTextTrim().equals(TreeObject.CATEGORY_FOLDER + ""))
+				{
+					String xpath = ".//descendant::" + elem.getName() + "[text()='" + elem.getTextTrim() + "']";
+					Element elemExist = pingElement(xpath, targtElemRoot);
+					if(elemExist != null)
+					{
+						Element parentExist = elemExist.getParent();
+						parentExist.remove(elemExist);
+					}
+					elemExist = pingElement(categoryXpath, targtElemRoot);
+					Element newElem = elemExist.addElement(elem.getName());
+					newElem.setText(elem.getTextTrim());
+				}
+			}
+
+		}
+	}
+	
+	private Element pingElement(String xpath, Element root)
+	{
+		List<Element> elems = root.selectNodes(xpath);
+		if(elems.size() > 0)
+		{
+			return elems.get(0);
+		}
+		return null;
+	}
+	
+	private List<String> parseXpathForElement(Element elem, Element subRoot)
+	{
+		List<String> list = new ArrayList<String>();
+		while(elem != subRoot)
+		{
+			if(elem.attributeValue("name") != null)
+				list.add(elem.attributeValue("name"));
+			else
+				list.add(elem.getName());
+			
+			elem = elem.getParent();
+		}
+		
+		Collections.reverse(list);
+		return list;
+	}
+	
+	public void parseElementForOutput(TreeObject[] xobjs)
+	{
+		for (TreeObject xobj : xobjs)
+		{
+			TreeObject subParent = xobj;
+			while(subParent.getParent().getType() != 0)
+			{
+				subParent = subParent.getParent();
+			}
+			Element modelElem = getParentElement(subParent);
+			
+			if(!outPutSchemas.containsKey(modelElem.getName()))
+			{
+				Element copyElem = (Element)modelElem.clone();
+				copyElem.clearContent();
+				outPutSchemas.put(modelElem.getName(), copyElem);
+			}
+			
+			
+			subParent = xobj;
+			TreeObject categorySubRoot = null;
+			while(subParent.getParent().getType() == TreeObject.CATEGORY_FOLDER)
+			{
+				categorySubRoot = subParent.getParent();
+				subParent = subParent.getParent();
+			}
+			
+			Element divisionElem = null;
+			Element copyModelElem = outPutSchemas.get(modelElem.getName());
+			Document doc =  credentials.get(UnifyUrl(xobj.getServerRoot().getWsKey().toString())).doc;
+			String division = xobj.getType() == TreeObject.TRANSFORMER ? "Process" : "Trigger";
+			String xpathForDivision = ".//child::" + division + "[text()='" + xobj.getType() + "']";
+			
+			if(categorySubRoot != null)
+			{
+				Element categoryElem = getParentElement(categorySubRoot);
+				if(categoryElem.getParent() != modelElem)
+				{
+					divisionElem = pingElement(xpathForDivision, (Element)copyModelElem);
+					if(divisionElem == null)
+					{
+						divisionElem = copyModelElem.addElement(categoryElem.getParent().getName());
+						divisionElem.setText(categoryElem.getParent().getTextTrim());
+					}
+				}
+				else
+					divisionElem = copyModelElem;
+
+				Element categoryElementClone = (Element)categoryElem.clone();
+				String xpath = ".//child::" + categoryElem.getName() + "[text()='" + TreeObject.CATEGORY_FOLDER + "']";
+				if(divisionElem.selectNodes(xpath).size() == 0)
+					divisionElem.add(categoryElementClone);
+			}
+			else
+			{
+				// individual xobject
+				Element xobjElem = pingElement(getXPathForTreeObject(xobj), doc.getRootElement()) ;
+				Element parentElem = xobjElem.getParent();
+				if(parentElem == modelElem)
+				{
+					parentElem = copyModelElem;
+				}
+				else
+				{
+					divisionElem = pingElement(xpathForDivision, (Element)copyModelElem);
+					if(divisionElem == null)
+					{
+						divisionElem = copyModelElem.addElement(parentElem.getName());
+						divisionElem.setText(parentElem.getTextTrim());
+					}
+				}
+
+				String xpath = ".//child::" + xobjElem.getName() + "[text()='" + xobjElem.getTextTrim() + "']";
+				if(divisionElem != null && pingElement(xpath, divisionElem) == null)
+					divisionElem.add((Element)xobjElem.clone());
+			}
+		}
+
+		// filter those excluded from xobjects out of categorys
+		String xpath = ".//descendant::*[text() ='" + TreeObject.CATEGORY_FOLDER + "']";
+		Iterator<Element> iter = outPutSchemas.values().iterator();
+		while(iter.hasNext())
+		{
+			Element divisionElement = iter.next();
+			List<Element> categorys = divisionElement.selectNodes(xpath);
+			
+			if(categorys != null)
+			{
+				for (Element categoryElems : categorys)
+				{
+					List objs = categoryElems.content();
+					List<Element> elemToDel = new ArrayList<Element>();
+					for (Object obj : objs)
+					{
+						if(obj instanceof Element)
+						{
+							Element categoryElement = (Element)obj;
+							if(categoryElement.getTextTrim().equals(TreeObject.CATEGORY_FOLDER + ""))
+								continue;
+		                    boolean match = false;
+							for (TreeObject xobj : xobjs)
+							{
+								if (filterOutBlank(xobj.getDisplayName()).equals(
+										categoryElement.getName())
+										&& categoryElement.getTextTrim().equals(
+												xobj.getType() + ""))
+								{
+									match = true;
+									break;
+								}
+							}
+							if(!match)
+							{
+								elemToDel.add(categoryElement);
+							}
+						}
+					}
+					
+					for (Element del : elemToDel)
+					{
+						categoryElems.remove(del);
+					}
+				}
+			}
+
+		}
+
+	}
+	
+	public String[] outPutSchemas()
+	{
+		ArrayList<String> schemas = new ArrayList<String>();
+		Iterator<Element> iter = outPutSchemas.values().iterator();
+		while(iter.hasNext())
+		{
+			schemas.add(iter.next().asXML());
+		}
+		
+		outPutSchemas.clear();
+		return schemas.toArray(new String[schemas.size()]);
 	}
 }

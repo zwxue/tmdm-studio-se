@@ -30,7 +30,7 @@ import org.exolab.castor.xml.Marshaller;
 import org.talend.mdm.commmon.util.workbench.ZipToFile;
 
 import com.amalto.workbench.models.TreeObject;
-import com.amalto.workbench.providers.XObjectEditorInput;
+import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.ResourcesUtil;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataCluster;
@@ -129,12 +129,15 @@ public class ExportItemsWizard extends Wizard {
 		monitor.beginTask("Export ...", IProgressMonitor.UNKNOWN);
 		Exports eps=new Exports();
 		List<TreeObject> exports=new ArrayList<TreeObject>();
+		List<String> schemas = new ArrayList<String>();
 		XtentisPort port;
 		try {
 			port = Util.getPort(objs[0]);
+			
+		LocalTreeObjectRepository.getInstance().parseElementForOutput(objs);
+		
 		for(TreeObject obj: objs){
 			
-
 			StringWriter sw;
 			ArrayList<String> items;
 			switch(obj.getType()){
@@ -397,6 +400,7 @@ public class ExportItemsWizard extends Wizard {
 		}
 		// store the content xml
 		eps.setItems(exports.toArray(new TreeObject[exports.size()]));
+		eps.setSchemas(LocalTreeObjectRepository.getInstance().outPutSchemas());
 		StringWriter sw = new StringWriter();
 		try{
 		Marshaller.marshal(eps, sw);
@@ -404,7 +408,7 @@ public class ExportItemsWizard extends Wizard {
 		}catch(Exception e){}
 		monitor.done();
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		}
 	}
 	

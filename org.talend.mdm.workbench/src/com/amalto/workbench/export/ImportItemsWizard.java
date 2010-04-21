@@ -35,6 +35,7 @@ import com.amalto.workbench.actions.ServerRefreshAction;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.EXtentisObjects;
+import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.views.ServerView;
@@ -185,6 +186,7 @@ public class ImportItemsWizard extends Wizard{
 //		List<TreeObject> list =new ArrayList<TreeObject>();
 		Exports exports = (Exports)Unmarshaller.unmarshal(
 				Exports.class,reader);
+		LocalTreeObjectRepository.getInstance().setImportCategory(exports.getSchemas(), serverRoot);
 		//new server root
 		TreeParent	reserverRoot = new TreeParent(
                 serverRoot.getDisplayName(),
@@ -270,7 +272,9 @@ public class ImportItemsWizard extends Wizard{
 		gd.heightHint=300;
 		treeViewer.getViewer().getControl().getParent().layout(true);
 		treeViewer.getViewer().getControl().getShell().layout(true);
-		}catch(Exception e){}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		
 	}
 	
