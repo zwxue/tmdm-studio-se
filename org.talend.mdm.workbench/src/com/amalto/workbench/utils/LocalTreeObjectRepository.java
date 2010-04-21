@@ -1351,10 +1351,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 			for (String categoryHierarchical : categoryXpathForOrgDoc)
 			{
 				createOrReplaceCategory(categoryHierarchical, categoryXpathForCurDoc, root, orgDoc.getRootElement(), serverRoot);
-			}
-			
-			System.out.println(orgDoc.asXML());
-			
+			}			
 		}
 	}
 	
