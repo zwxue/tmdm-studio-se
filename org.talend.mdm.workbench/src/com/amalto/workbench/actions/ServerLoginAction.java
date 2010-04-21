@@ -82,7 +82,7 @@ public class ServerLoginAction extends Action implements SelectionListener{
 		String universe=dialog.getUniverse();
 		dialog.close();
 
-		if(Util.IsEnterPrise())
+		//if(Util.IsEnterPrise())
 		{
 			String cmp = Util.checkOnVersionCompatibility(username, password, universe);
 			if(cmp != null)

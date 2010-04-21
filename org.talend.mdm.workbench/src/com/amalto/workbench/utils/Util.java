@@ -2497,14 +2497,14 @@ public class Util {
         	{
         		return null;
         	}
-        	versionComp = "the version number of mdm studio is " + studioVersion + " ";
+        	versionComp = "MDM studio & MDM server is not compatible. The MDM studio is " + studioVersion + " ";
         	
         	int major =  Integer.parseInt(match.group(1));
         	int minor = Integer.parseInt(match.group(2));
         	int rev = match.group(4) != null && !match.group(4).equals("") ? Integer.parseInt(match.group(4)) : 0;
 			XtentisPort port = Util.getPort(universe, username, password);
 			WSVersion wsVersion = port.getComponentVersion(new WSGetComponentVersion(WSComponent.DataManager,null));
-			versionComp += " while the server's version number is " + wsVersion.getMajor() + "." + wsVersion.getMinor() + "." + wsVersion.getRevision();
+			versionComp += " while the MDM server is " + wsVersion.getMajor() + "." + wsVersion.getMinor() + "." + wsVersion.getRevision();
 			if(major != wsVersion.getMajor() || minor != wsVersion.getMinor())return versionComp;
 			if(rev == 0)
 			{
