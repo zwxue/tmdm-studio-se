@@ -188,6 +188,7 @@ public class ImportItemsWizard extends Wizard{
 				Exports.class,reader);
 		LocalTreeObjectRepository.getInstance().setImportCategory(exports.getSchemas(), serverRoot);
 		//new server root
+		LocalTreeObjectRepository.getInstance().switchOffListening();
 		TreeParent	reserverRoot = new TreeParent(
                 serverRoot.getDisplayName(),
                 null,
@@ -264,7 +265,8 @@ public class ImportItemsWizard extends Wizard{
 					}
 				}
 			}			
-		}		
+		}	
+		LocalTreeObjectRepository.getInstance().switchOnListening();
 		treeViewer.setRoot(reserverRoot);
 		treeViewer.getViewer().setInput(view.getSite());
 		treeViewer.setCheckItems(Arrays.asList(exports.getItems()));
