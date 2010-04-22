@@ -67,7 +67,7 @@
          point="org.eclipse.core.runtime.applications">
       <application>
          <run
-               class="org.talend.datacleansing.core.ui.intro.Application">
+               class="org.talend.rcp.intro.Application">
          </run>
       </application>
    </extension>
