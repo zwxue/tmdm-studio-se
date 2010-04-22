@@ -1526,7 +1526,7 @@ public class ContentProposalAdapterExtended {
     /*
      * The listener we install on the control.
      */
-    private static Listener controlListener;
+    private  Listener controlListener;
 
     /*
      * The list of listeners who wish to be notified when something significant happens with the proposals.

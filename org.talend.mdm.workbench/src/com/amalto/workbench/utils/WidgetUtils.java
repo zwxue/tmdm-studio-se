@@ -87,13 +87,6 @@ public class WidgetUtils {
     public static ContentProposalAdapterExtended addContentProposal(Control control,String[] proposals, char[] autoActivationCharacters) {
         //add content proposal
 
-        KeyStroke keyStroke=null;
-		try {
-			keyStroke = KeyStroke.getInstance("Ctrl+Space");
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		ContentProposalAdapterExtended adapter=ProposalUtils.getCommonProposal(control, new SimpleContentProposalProvider(proposals),autoActivationCharacters);
 //        ContentProposalAdapter adapter = new ContentProposalAdapter(control,new TextContentAdapter(), new SimpleContentProposalProvider(proposals), keyStroke,
 //                autoActivationCharacters);   
