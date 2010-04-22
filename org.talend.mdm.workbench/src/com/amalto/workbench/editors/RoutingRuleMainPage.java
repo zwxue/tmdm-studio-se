@@ -63,6 +63,7 @@ import com.amalto.workbench.utils.EInputTemplate;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WidgetUtils;
+import com.amalto.workbench.utils.XmlUtil;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSGetServicesList;
 import com.amalto.workbench.webservices.WSGetTransformerV2PKs;
@@ -268,7 +269,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             				helpPara = EInputTemplate.getXtentisObjexts().get(serviceName).getContent();
             		else
             			helpPara = "";
-            		serviceParametersText.setText(helpPara);
+            		serviceParametersText.setText(XmlUtil.formatXmlSource(helpPara));
             		markDirtyWithoutCommit();
             		initParamterProposal(serviceNameCombo.getText());
             	}
