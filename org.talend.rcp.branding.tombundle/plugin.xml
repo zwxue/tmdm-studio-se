@@ -77,4 +77,15 @@
                class="org.talend.rcp.branding.tombundle.TOMBundleBrandingService"
                serviceId="org.talend.core.ui.branding.IBrandingService"/>
       </extension>
+      <extension
+         point="org.talend.core.talendperspectives">
+         <TalendPerspective
+            refPerspectiveId="org.talend.dataprofiler.DataProfilingPerspective"
+            talendPerspectiveId="org.talend.rcp.DQPerspective">
+         </TalendPerspective>
+         <TalendPerspective
+            refPerspectiveId="net.sourceforge.sqlexplorer.plugin.perspectives.SQLExplorerPluginPerspective"
+            talendPerspectiveId="org.talend.rcp.DQExplorePerspective">
+         </TalendPerspective>
+      </extension>
 </plugin>
