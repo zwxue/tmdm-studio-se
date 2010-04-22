@@ -64,6 +64,7 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.RefreshAction;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
@@ -79,6 +80,7 @@ import com.amalto.workbench.actions.EditXObjectAction;
 import com.amalto.workbench.actions.NewCategoryAction;
 import com.amalto.workbench.actions.NewXObjectAction;
 import com.amalto.workbench.actions.PasteXObjectAction;
+import com.amalto.workbench.actions.RefreshCurrentEditorAction;
 import com.amalto.workbench.actions.RenameXObjectAction;
 import com.amalto.workbench.actions.ServerLoginAction;
 import com.amalto.workbench.actions.ServerRefreshAction;
@@ -808,7 +810,9 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
 	private void fillLocalToolBar(IToolBarManager manager) {
 		manager.add(loginAction);
-		// manager.add(logoutAction);
+		manager.add(new Separator());
+		manager.add(new RefreshCurrentEditorAction());
+		manager.add(new Separator());
 		manager.add(new Separator());
 		drillDownAdapter.addNavigationActions(manager);
 	}
