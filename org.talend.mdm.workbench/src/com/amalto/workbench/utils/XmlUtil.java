@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -281,6 +282,25 @@ public final class XmlUtil {
 
 		System.out.println(text);
 	}
+	
+	public static String formatXmlSource(String xmlSource) {
+		try {
+			SAXReader reader = new SAXReader();
+			Document document = reader.read(new StringReader(xmlSource));
+			StringWriter writer = new StringWriter();
+			OutputFormat format = OutputFormat.createPrettyPrint();
+			format.setEncoding("UTF-8");
+			format.setIndentSize(4);
+			format.setSuppressDeclaration(true);
+			XMLWriter xmlwriter = new XMLWriter(writer, format);
+			xmlwriter.write(document);
+			return writer.toString();
+		} catch (Exception e) {
+			
+		}
+		return xmlSource;
+
+	}	
 
 	public static Document styleDocument(Document document, String stylesheet)
 			throws Exception {

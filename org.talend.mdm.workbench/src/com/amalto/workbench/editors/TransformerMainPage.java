@@ -92,6 +92,7 @@ import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.EInputTemplate;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WidgetUtils;
+import com.amalto.workbench.utils.XmlUtil;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.BackgroundJobStatusType;
@@ -754,7 +755,7 @@ public class TransformerMainPage extends AMainPageV2 {
 		stepText.setText("");
 		parametersTextViewer.setDocument(
 				new Document(
-						transformer.getProcessSteps()[index].getParameters()
+						XmlUtil.formatXmlSource(transformer.getProcessSteps()[index].getParameters())
 				)
 		);
 		stepWidget.setProcessStep(transformer.getProcessSteps()[index], index);
