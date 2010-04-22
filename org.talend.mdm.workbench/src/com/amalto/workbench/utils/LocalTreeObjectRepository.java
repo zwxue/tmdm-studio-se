@@ -362,7 +362,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	{
 		if (parent.getParent() == null && parent.getDisplayName().equals("INVISIBLE ROOT"))
 			return;
-        
+		
 		String xpath = getXPathForTreeObject(child);
 		Document doc =  credentials.get(UnifyUrl(parent.getServerRoot().getWsKey().toString())).doc;
 		List<Element> models = doc.selectNodes(xpath);
@@ -1382,12 +1382,12 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 			if(match.length() >= 0)
 			{
 				//create category according to the given xpath
-				createCategoryForOrgDoc(categoryHierarchical, srcElem, tgtElem);
+				createCategoryForOrgDoc(categoryHierarchical, srcElem, tgtElem, serverRoot);
 			}
 		}
 	}
 	
-	private void createCategoryForOrgDoc(String categoryToCreate, Element srcElem, Element tgtElem)
+	private void createCategoryForOrgDoc(String categoryToCreate, Element srcElem, Element tgtElem, TreeParent serverRoot)
 	{
 		String[] xpathSnippetsToCreate = categoryToCreate.split("/");
 		int categoryBeginPos = 3;
@@ -1408,8 +1408,8 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 				Element existedCategory = pingElement(categoryXpath + "/" + categoryXpathSnippet , srcElem);
 				newCategory = subParentElem.addElement(xpathSnippetsToCreate[i]);
 				newCategory.setText(TreeObject.CATEGORY_FOLDER + "");
-				newCategory.addAttribute(UNIVERSE, existedCategory.attributeValue(UNIVERSE));
-				newCategory.addAttribute(URL, existedCategory.attributeValue(URL));
+				newCategory.addAttribute(UNIVERSE, getUniverseFromTreeObject(serverRoot));
+				newCategory.addAttribute(URL, getURLFromTreeObject(serverRoot));
 				newCategory.addAttribute(REALNAME, existedCategory.attributeValue(REALNAME));
 			}
 			categoryXpath += "/" + xpathSnippetsToCreate[i];
