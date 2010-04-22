@@ -1353,6 +1353,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 				createOrReplaceCategory(categoryHierarchical, categoryXpathForCurDoc, root, orgDoc.getRootElement(), serverRoot);
 			}			
 		}
+		
 	}
 	
 	
@@ -1463,15 +1464,29 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 				if(!elem.getTextTrim().equals(TreeObject.CATEGORY_FOLDER + ""))
 				{
 					String xpath = ".//descendant::" + elem.getName() + "[text()='" + elem.getTextTrim() + "']";
-					Element elemExist = pingElement(xpath, targtElemRoot);
-					if(elemExist != null)
+					List<Element> es = targtElemRoot.selectNodes(xpath);
+					Element newElem = null;
+					for (Element elemExist : es)
 					{
-						Element parentExist = elemExist.getParent();
-						parentExist.remove(elemExist);
+						if (elemExist.getParent() != null
+								&& elemExist.getParent().getTextTrim().equals(
+										TreeObject.EVENT_MANAGEMENT + ""))
+							continue;
+						if(elemExist != null)
+						{
+							Element parentExist = elemExist.getParent();
+							parentExist.remove(elemExist);
+						}
+						elemExist = pingElement(categoryXpath, targtElemRoot);
+						newElem = elemExist.addElement(elem.getName());
+						newElem.setText(elem.getTextTrim());
 					}
-					elemExist = pingElement(categoryXpath, targtElemRoot);
-					Element newElem = elemExist.addElement(elem.getName());
-					newElem.setText(elem.getTextTrim());
+					if(es.size() == 0 || (es.size() > 0 && newElem == null))
+					{
+						Element elemExist = pingElement(categoryXpath, targtElemRoot);
+						newElem = elemExist.addElement(elem.getName());
+						newElem.setText(elem.getTextTrim());
+					}
 				}
 			}
 
@@ -1554,7 +1569,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 					divisionElem = copyModelElem;
 
 				Element categoryElementClone = (Element)categoryElem.clone();
-				String xpath = ".//child::" + categoryElem.getName() + "[text()='" + TreeObject.CATEGORY_FOLDER + "']";
+				String xpath = "./child::" + categoryElem.getName() + "[text()='" + TreeObject.CATEGORY_FOLDER + "']";
 				if(divisionElem.selectNodes(xpath).size() == 0)
 					divisionElem.add(categoryElementClone);
 			}
@@ -1631,7 +1646,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 			}
 
 		}
-
+      System.out.println("d");
 	}
 	
 	public String[] outPutSchemas()

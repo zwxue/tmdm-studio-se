@@ -188,7 +188,6 @@ public class ImportItemsWizard extends Wizard{
 				Exports.class,reader);
 		LocalTreeObjectRepository.getInstance().setImportCategory(exports.getSchemas(), serverRoot);
 		//new server root
-		LocalTreeObjectRepository.getInstance().switchOffListening();
 		TreeParent	reserverRoot = new TreeParent(
                 serverRoot.getDisplayName(),
                 null,
@@ -201,6 +200,7 @@ public class ImportItemsWizard extends Wizard{
 		TreeParent models = new TreeParent(EXtentisObjects.DataMODEL.getDisplayName(),reserverRoot,TreeObject.DATA_MODEL,null,null);
 		TreeParent menus = new TreeParent(EXtentisObjects.Menu.getDisplayName(),reserverRoot,TreeObject.MENU,null,null);
 		TreeParent roles = new TreeParent(EXtentisObjects.Role.getDisplayName(),reserverRoot,TreeObject.ROLE,null,null);
+		TreeParent eventManager = new TreeParent(EXtentisObjects.EventManagement.getDisplayName(), reserverRoot, TreeObject.EVENT_MANAGEMENT, null, null);
 		TreeParent routingrules = new TreeParent(EXtentisObjects.RoutingRule.getDisplayName(),reserverRoot,TreeObject.ROUTING_RULE,null,null);
 		TreeParent storeprocedures = new TreeParent(EXtentisObjects.StoredProcedure.getDisplayName(),reserverRoot,TreeObject.STORED_PROCEDURE,null,null);
 		TreeParent syncplans = new TreeParent(EXtentisObjects.SynchronizationPlan.getDisplayName(),reserverRoot,TreeObject.SYNCHRONIZATIONPLAN,null,null);
@@ -212,10 +212,12 @@ public class ImportItemsWizard extends Wizard{
 		reserverRoot.addChild(models);
 		reserverRoot.addChild(menus);
 		reserverRoot.addChild(roles);
-		reserverRoot.addChild(routingrules);
+		
 		reserverRoot.addChild(storeprocedures);
 		reserverRoot.addChild(syncplans);
-		reserverRoot.addChild(transformers);
+		eventManager.addChild(transformers);
+		eventManager.addChild(routingrules);
+		reserverRoot.addChild(eventManager);
 		reserverRoot.addChild(pictures);
 		reserverRoot.addChild(universes);
 		reserverRoot.addChild(views);
@@ -266,7 +268,7 @@ public class ImportItemsWizard extends Wizard{
 				}
 			}			
 		}	
-		LocalTreeObjectRepository.getInstance().switchOnListening();
+
 		treeViewer.setRoot(reserverRoot);
 		treeViewer.getViewer().setInput(view.getSite());
 		treeViewer.setCheckItems(Arrays.asList(exports.getItems()));
