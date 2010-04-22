@@ -89,7 +89,7 @@ public class WidgetUtils {
 
         KeyStroke keyStroke=null;
 		try {
-			keyStroke = KeyStroke.getInstance("Ctrl+Space");
+			keyStroke = KeyStroke.getInstance("Alt+/");
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

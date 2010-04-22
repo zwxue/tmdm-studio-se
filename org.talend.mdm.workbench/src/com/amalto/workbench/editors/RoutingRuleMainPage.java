@@ -401,7 +401,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             conditionViewer.setHeight(110);
             
             //and or not condition
-            ConditionWidget conditionWidget=new ConditionWidget(routingExpressionsGroup,treeParent,toolkit,this);
+            ConditionWidget conditionWidget=new ConditionWidget(routingExpressionsGroup,toolkit,this);
             conditionText=conditionWidget.getConditionText();
             conditionText.addModifyListener(new ModifyListener(){
 
@@ -503,6 +503,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             	conditionViewer.setConceptName(objectTypeText.getText());
             }
 			initParamterProposal(serviceNameCombo.getText());
+			//initConditionProposal();
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page", "Error refreshing the page: "+e.getLocalizedMessage());
