@@ -1,31 +1,22 @@
 package com.amalto.workbench.widgets;
 
-import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.Document;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.amalto.workbench.dialogs.ResourceSelectDialog;
 import com.amalto.workbench.editors.AMainPageV2;
-import com.amalto.workbench.models.TreeParent;
-import com.amalto.workbench.views.ServerView;
 
 public class ConditionWidget {
 	private Text conditionText;
 	private AMainPageV2 page;
-	public ConditionWidget(Composite parent,final TreeParent treeParent, FormToolkit toolkit,AMainPageV2 page){
+	public ConditionWidget(Composite parent,FormToolkit toolkit,AMainPageV2 page){
 		this.page=page;
         Group conditionComposite = new Group(parent,SWT.NONE);
         conditionComposite.setBackground(parent.getBackground());
@@ -38,29 +29,6 @@ public class ConditionWidget {
         conditionText= toolkit.createText(conditionComposite, "",SWT.BORDER|SWT.WRAP|SWT.V_SCROLL);
         conditionText.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,2,3));
 
-        conditionText.addKeyListener(new KeyListener() {
-				public void keyReleased(KeyEvent event) {
-
-					if (event.stateMask == SWT.CTRL && event.keyCode == 17) {
-						// if(event.keyCode == SWT.F2){
-						ResourceSelectDialog dialog = new ResourceSelectDialog(
-								conditionText.getShell(),
-								treeParent.getParent(),
-								"Select a resource node", 
-								ServerView.show().getSite());
-						dialog.setBlockOnOpen(true);
-						dialog.open();
-						if (dialog.getReturnCode() == Window.OK ) {
-							String xpath = dialog.getXpath();
-							conditionText.setText(conditionText.getText() + xpath);
-//							markDirtyWithoutCommit();
-						}
-					}
-				}
-
-				public void keyPressed(KeyEvent e) {
-				}
-			});		
         Composite conditionBtnComposite = toolkit.createComposite(conditionComposite, SWT.NULL);
         conditionBtnComposite.setLayoutData(
                 new GridData(SWT.RIGHT,SWT.FILL,false,true,1,1)
