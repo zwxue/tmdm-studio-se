@@ -30,10 +30,13 @@ public class ImageCache {
 	}
 	
 	public static Image getCreatedImage(String path){
-		if(null!=registry.get(path))
+		Image img=registry.get(path);
+		if(null!=img)
+			return img;
+		else{			
+			registry.put(path, MDMWorbenchPlugin.getImageDescriptor(path));
 			return registry.get(path);
-		else{
-			return registry.get("icons/talend-picto-small.gif");
+			//return registry.get("icons/appli_16x16.gif");
 		}
 	}
 }

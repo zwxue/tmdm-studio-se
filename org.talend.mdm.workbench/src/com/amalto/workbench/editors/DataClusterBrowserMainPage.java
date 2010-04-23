@@ -104,9 +104,11 @@ import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSVersioningGetItemContent;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.CalendarSelectWidget;
+import com.amalto.workbench.widgets.IPagingListener;
+import com.amalto.workbench.widgets.PageingToolBar;
 import com.amalto.workbench.widgets.WidgetFactory;
 
-public class DataClusterBrowserMainPage extends AMainPage implements IXObjectModelListener {
+public class DataClusterBrowserMainPage extends AMainPage implements IXObjectModelListener,IPagingListener {
 
 //	private boolean refreshing;
 	
@@ -132,6 +134,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 			}
 		}//keyReleased
 	};
+
+	private PageingToolBar pageToolBar;
 		
     public DataClusterBrowserMainPage(FormEditor editor) {
         super(
@@ -212,7 +216,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             );
             bSearch.addListener(SWT.Selection, new Listener() {
                 public void handleEvent(Event event) {
-                	doSearch();
+                	pageToolBar.reset();
+                	doSearch();                	
             	};
             });    
             
@@ -249,7 +254,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             
             checkFTSearchButton =toolkit.createButton(composite, "Use Full Text Search", SWT.CHECK);
             
-            
+            //pagetoolbar
+            pageToolBar=new PageingToolBar(composite);
+            pageToolBar.getComposite().setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,9,1));
+            pageToolBar.getComposite().setVisible(false);
+            pageToolBar.setPageingListener(this);
             final Table table = createTable(composite);
             
             resultsViewer = new TableViewer(table);
@@ -295,9 +304,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         }	
 	}//createFormContent
 	
-	private void doSearch()
-	{
+	public void doSearch()
+	{		
 		DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(true));
+		pageToolBar.getComposite().setVisible(true);
+		pageToolBar.getComposite().layout(true);
+		pageToolBar.getComposite().getParent().layout(true);
 		readjustViewerHeight();
 	}
 	/**
@@ -670,19 +682,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             String search = searchText.getText();
             if ("*".equals(search) | "".equals(search)) search = null;
 
-//            WSItemPKsByCriteriaResponseResults[] results =
-//	            port.getItemPKsByCriteria(new WSGetItemPKsByCriteria(
-//	            		(WSDataClusterPK)getXObject().getWsKey(),
-//	            		concept,
-//	            		search,
-//	            		keys,
-//	            		from,
-//	            		to,
-//	            		0,
-//	            		Integer.MAX_VALUE
-//	            	)
-//	            ).getResults();
-            
+          int start= pageToolBar.getStart();
+          int limit=pageToolBar.getLimit();
           WSItemPKsByCriteriaResponseResults[] results =
             port.getItemPKsByFullCriteria(
             new WSGetItemPKsByFullCriteria(	
@@ -693,29 +694,35 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             		keys,
             		from,
             		to,
-            		0,
-            		Integer.MAX_VALUE
+            		start,
+            		limit
             	),
             	useFTSearch
              )	
             ).getResults();
             
-            if (showResultInfo&&(results==null)) {
+            if (showResultInfo&&(results.length==1)) {
             	MessageDialog.openInformation(this.getSite().getShell(), "Info", "Sorry, no result. ");
             	return new LineItem[0];
             }
-            if(results==null)return new LineItem[0];
-            
-            LineItem[] res = new LineItem[results.length];
+            if(results.length==1)return new LineItem[0];
+            int totalSize=0;
+            List<LineItem> ress=new ArrayList<LineItem>();
 	 		for (int i = 0; i < results.length; i++) {
-	 			res[i] = new LineItem(
-	 					results[i].getDate(),
-	 					results[i].getWsItemPK().getConceptName(),
-	 					results[i].getWsItemPK().getIds()
-	 			);
+			   if(i == 0) {
+				      totalSize = Integer.parseInt(Util.parse(results[i].getWsItemPK().getConceptName()).
+				         getDocumentElement().getTextContent());
+				      continue;
+			   } 			
+			   ress.add( new LineItem(
+ 					results[i].getDate(),
+ 					results[i].getWsItemPK().getConceptName(),
+ 					results[i].getWsItemPK().getIds()
+ 			));
 			}
-            
-	 		return res;
+            pageToolBar.setTotalsize(totalSize);
+            pageToolBar.refreshUI();
+	 		return (LineItem[])ress.toArray(new LineItem[ress.size()]);
 		} catch (Exception e) {
 			e.printStackTrace();
 			if (	(e.getLocalizedMessage()!=null) &&

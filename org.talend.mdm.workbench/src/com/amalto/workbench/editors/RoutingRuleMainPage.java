@@ -481,7 +481,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 			deactiveButton.setSelection(wsRoutingRule.getDeactive());
 			//serviceNameText.setText(wsRoutingRule.getServiceJNDI().replaceFirst("amalto/local/service/", ""));
 			serviceNameCombo.setText(wsRoutingRule.getServiceJNDI().replaceFirst("amalto/local/service/", ""));
-			serviceParametersText.setText(wsRoutingRule.getParameters()==null? "" : wsRoutingRule.getParameters());
+			serviceParametersText.setText(wsRoutingRule.getParameters()==null? "" : XmlUtil.formatXmlSource(wsRoutingRule.getParameters()));
 			objectTypeText.setText(wsRoutingRule.getConcept());
 			//xpathWidget1.setText(wsRoutingRule.getConcept());
 			
