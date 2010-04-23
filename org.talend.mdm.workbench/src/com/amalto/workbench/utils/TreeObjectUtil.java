@@ -456,43 +456,45 @@ public class TreeObjectUtil {
 						model.deleteTreeObject(port, xobject);
 					}		              
 		            switch(xobject.getType()) {
-		            
+		           //replace the object types with the name which is got from the EXtentisObjects. 
 			           	case TreeObject.DATA_MODEL:
 			           		port.deleteDataModel(new WSDeleteDataModel((WSDataModelPK)xobject.getWsKey()));
-			           		deleteSpecificationFromAttachedRole(port, xobject, "Data Model");
+			           		deleteSpecificationFromAttachedRole(port, xobject, EXtentisObjects.DataMODEL.getName());
 			           		break;
 			          	case TreeObject.VIEW:
 			           		port.deleteView(new WSDeleteView((WSViewPK)xobject.getWsKey()));
-			           		deleteSpecificationFromAttachedRole(port, xobject, "View");
+			           		deleteSpecificationFromAttachedRole(port, xobject, EXtentisObjects.View.getName());
 			           		break;           		
 			          	case TreeObject.DATA_CLUSTER:
 			           		port.deleteDataCluster(new WSDeleteDataCluster((WSDataClusterPK)xobject.getWsKey()));
-			           		deleteSpecificationFromAttachedRole(port, xobject, "Data Cluster");
+			           		deleteSpecificationFromAttachedRole(port, xobject, EXtentisObjects.DataCluster.getName());
 			           		break;      
 			          	case TreeObject.STORED_PROCEDURE:
 			           		port.deleteStoredProcedure(new WSDeleteStoredProcedure((WSStoredProcedurePK)xobject.getWsKey()));
 			           		break;   
 			          	case TreeObject.ROUTING_RULE:
 			           		port.deleteRoutingRule(new WSDeleteRoutingRule((WSRoutingRulePK)xobject.getWsKey()));
+			           		deleteSpecificationFromAttachedRole(port, xobject, EXtentisObjects.RoutingRule.getName());
 			           		break;  
 			          	case TreeObject.TRANSFORMER:
 			           		port.deleteTransformerV2(new WSDeleteTransformerV2((WSTransformerV2PK)xobject.getWsKey()));
+			        		deleteSpecificationFromAttachedRole(port, xobject, EXtentisObjects.Transformer.getName());
 			           		break;
 			          	case TreeObject.MENU:
 			           		port.deleteMenu(new WSDeleteMenu((WSMenuPK)xobject.getWsKey()));
-			           		deleteSpecificationFromAttachedRole(port, xobject, "Menu");
+			           		deleteSpecificationFromAttachedRole(port, xobject, EXtentisObjects.Menu.getName());
 			           		break;  	 
 			          	case TreeObject.CATEGORY_FOLDER:
 			          	    // do nothing over here
 			          		break;
 			          	case TreeObject.ROLE:
-			          		deleteSpecificationFromAttachedRole(port, xobject, "Role");
+			          		deleteSpecificationFromAttachedRole(port, xobject, EXtentisObjects.Role.getName());
 			          		break;
 			        	case TreeObject.SYNCHRONIZATIONPLAN:
-			          		deleteSpecificationFromAttachedRole(port, xobject, "Synchronization Plan");
+			          		deleteSpecificationFromAttachedRole(port, xobject, EXtentisObjects.SynchronizationPlan.getName());
 			          		break;
 			        	case TreeObject.UNIVERSE:
-			          		deleteSpecificationFromAttachedRole(port, xobject, "Universe");
+			          		deleteSpecificationFromAttachedRole(port, xobject, EXtentisObjects.Universe.getName());
 			          		break;
 			          	default:
 			           		//MessageDialog.openError(view.getSite().getShell(), "Error", "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
