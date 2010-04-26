@@ -52,7 +52,8 @@ public class PageingToolBar {
 	}
 	public void setTotalsize(int totalsize) {
 		this.totalsize = totalsize;
-		totalpage= totalsize/pagesize+1;
+		
+		totalpage= totalsize%pagesize==0?totalsize/pagesize:totalsize/pagesize+1;
 	}
 	public void reset() {
 		pagesize=20;
@@ -66,7 +67,7 @@ public class PageingToolBar {
 		this.page=page;
 		this.pagesize=pagesize;
 		this.totalsize=totalsize;
-		totalpage= totalsize/pagesize+1;
+		totalpage= totalsize%pagesize==0?totalsize/pagesize:totalsize/pagesize+1;
 		create();
 	}
 	KeyListener keylistener=new KeyListener() {
