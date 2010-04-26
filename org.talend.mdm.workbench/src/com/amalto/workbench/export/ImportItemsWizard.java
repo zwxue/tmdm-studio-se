@@ -168,6 +168,11 @@ public class ImportItemsWizard extends Wizard{
 		return true;
 	}
 	
+    public boolean performCancel() {
+    	LocalTreeObjectRepository.getInstance().cancelMergeImportCategory(serverRoot);
+        return super.performCancel();
+    }
+    
 	public void parse() {
 		if(zipBtn.getSelection()){
 			zipfile=zip.getText().getText();
@@ -183,10 +188,9 @@ public class ImportItemsWizard extends Wizard{
 		}
 		try{
 		FileReader reader= new FileReader(importFolder+"/exportitems.xml");
-//		List<TreeObject> list =new ArrayList<TreeObject>();
 		Exports exports = (Exports)Unmarshaller.unmarshal(
 				Exports.class,reader);
-		LocalTreeObjectRepository.getInstance().setImportCategory(exports.getSchemas(), serverRoot);
+		LocalTreeObjectRepository.getInstance().makeUpDocWithImportCategory(exports.getSchemas(), serverRoot);
 		//new server root
 		TreeParent	reserverRoot = new TreeParent(
                 serverRoot.getDisplayName(),
@@ -276,6 +280,7 @@ public class ImportItemsWizard extends Wizard{
 		gd.heightHint=300;
 		treeViewer.getViewer().getControl().getParent().layout(true);
 		treeViewer.getViewer().getControl().getShell().layout(true);
+		LocalTreeObjectRepository.getInstance().setOriginalXobjectsToImport(treeViewer.getCheckNodes());
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -315,6 +320,7 @@ public class ImportItemsWizard extends Wizard{
 		      return ((TreeObject) o1).getType() - ((TreeObject) o2).getType();
            }
 		});
+		LocalTreeObjectRepository.getInstance().mergeImportCategory(objs, serverRoot);
 		boolean isOverrideAll=false;
 		Display dis = Display.getCurrent();
 		for(TreeObject item : objs){

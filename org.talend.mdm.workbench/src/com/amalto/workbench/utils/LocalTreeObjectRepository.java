@@ -8,6 +8,7 @@ import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,6 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
@@ -63,6 +65,9 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	private Element catalogTreeObj = null;
 	private TreeItem itemFocus = null;
 	
+	private Document spareDoc = null;
+	private TreeObject[] originalImportXobjects = null;
+	private String[] importCategories = null;
     private boolean lazySave = true;
     private static HashMap<String, Credential> credentials = new HashMap<String, Credential>();
     
@@ -1303,10 +1308,77 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		return null;
 	}
 	
-	public void setImportCategory(String[] schemas, TreeParent serverRoot)
+	public void makeUpDocWithImportCategory(String[] schemas, TreeParent serverRoot)
 	{
 		Document orgDoc =  credentials.get(UnifyUrl(serverRoot.getServerRoot().getWsKey().toString())).doc;
-		String user =  credentials.get(UnifyUrl(serverRoot.getServerRoot().getWsKey().toString())).user;
+		//spareDoc is meant to show the category when import digloag is launched
+		spareDoc = (Document)orgDoc.clone();
+		for (String schema : schemas)
+		{
+			Element subRoot = parseElements(schema);
+			String subRootXquery = "descendant::" + subRoot.getName() + "[text()='" + subRoot.getTextTrim() + "']";
+			Element division = pingElement(subRootXquery, spareDoc.getRootElement());
+			if(division == null || division.getParent() == null)return;
+			Element divisionParent = division.getParent();
+			divisionParent.remove(division);
+			divisionParent.add((Element)subRoot.clone());
+		}
+		
+		String url = getURLFromTreeObject(serverRoot);
+		String Universe = getUniverseFromTreeObject(serverRoot);
+		String urlXquery = "descendant::*[@Url != '" + url + "']";
+		List<Element> elems = spareDoc.selectNodes(urlXquery);
+		for (Element elem : elems)
+		{
+			elem.attributeValue("Url", url);
+			elem.attributeValue("Universe", Universe);
+		}
+		credentials.get(UnifyUrl(serverRoot.getServerRoot().getWsKey().toString())).doc = spareDoc;
+		spareDoc = orgDoc;
+		importCategories = schemas;
+	}
+	
+	public void setOriginalXobjectsToImport(TreeObject[] originalXobjects)
+	{
+		originalImportXobjects = originalXobjects;
+	}
+	
+	public void mergeImportCategory(TreeObject[] xobjectsToImport, TreeParent serverRoot)
+	{
+		if(xobjectsToImport.length == 0)return;
+		
+		Collection dels = CollectionUtils.subtract(Arrays.asList(originalImportXobjects), Arrays.asList(xobjectsToImport));
+		ArrayList<TreeObject> delList = new ArrayList<TreeObject>(dels);
+	    ArrayList<String> xpaths = new ArrayList<String>();
+	    
+		for (TreeObject del : delList)
+		{
+			String xpath = this.getXPathForTreeObject(del);
+			xpath.replaceFirst("/"
+					+ del.getServerRoot().getUser().getUsername(), "/"
+					+ serverRoot.getUser().getUsername());
+			xpaths.add(xpath);
+		}
+		
+		mergeImportCategory(importCategories, serverRoot, xpaths);
+	}
+	
+	
+	public void cancelMergeImportCategory(TreeParent serverRoot)
+	{
+		if(spareDoc != null)
+		{
+			credentials.get(UnifyUrl(serverRoot.getServerRoot().getWsKey().toString())).doc = spareDoc;
+			originalImportXobjects = null;
+			importCategories = null;
+			spareDoc = null;
+		}
+	}
+	
+	private void mergeImportCategory(String[] schemas, TreeParent serverRoot, ArrayList<String> xpathsToDel)
+	{
+		Document orgDoc = spareDoc;
+		String user =  serverRoot.getServerRoot().getUser().getUsername();
 		String xpathPrefix = "/category/" + user;
 		String xmlPrefix = "<category><" + user + ">*</"+ user + "></category>";
 		if(schemas == null) // old version, skip the import
@@ -1315,6 +1387,35 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		{
 			Element root = parseElements(xmlPrefix.replace("*", schema));
 			Element subRoot = parseElements(schema);
+			
+			//delete all unselected xobjects from orgDoc
+			for (String xpathToDel : xpathsToDel)
+			{
+				Element elemToDel = pingElement(xpathToDel, root);
+				if(elemToDel != null)
+				{
+					Element parent = elemToDel.getParent();
+					if(parent != null)
+					{
+						parent.remove(elemToDel);
+					}
+				}
+			}
+			String universe = this.getUniverseFromTreeObject(serverRoot);
+			//check out all categories having none child, and delete them if available
+			String xpathForCategoriesWithNoneChild = "//child::*[count(child::*) = 0 and text()='" + TreeObject.CATEGORY_FOLDER + "' and @Universe = '" + universe + "']";
+			Element categoryToDel = pingElement(xpathForCategoriesWithNoneChild, root);
+			while(categoryToDel != null)
+			{
+				Element categoryParent = categoryToDel.getParent();
+				if(categoryParent != null)
+				{
+					categoryParent.remove(categoryToDel);
+				}
+				categoryToDel = pingElement(xpathForCategoriesWithNoneChild, root);
+			}
+			
+			subRoot = this.pingElement(xpathPrefix + "/" + subRoot.getName(), root);
 			String xpathForCategory = "//descendant::*[text()='" + TreeObject.CATEGORY_FOLDER + "']";
 			List<Element> elementList = subRoot.selectNodes(xpathForCategory);
 			List<String> categoryXpathForCurDoc = new ArrayList<String>(); 
@@ -1351,11 +1452,11 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 			for (String categoryHierarchical : categoryXpathForOrgDoc)
 			{
 				createOrReplaceCategory(categoryHierarchical, categoryXpathForCurDoc, root, orgDoc.getRootElement(), serverRoot);
-			}			
+			}
 		}
-		
+		// success
+		credentials.get(UnifyUrl(serverRoot.getServerRoot().getWsKey().toString())).doc = orgDoc;
 	}
-	
 	
 	private void createOrReplaceCategory(String categoryHierarchical, List<String> categoryXpathForCurDoc, Element srcElem, Element tgtElem, TreeParent serverRoot)
 	{
@@ -1535,6 +1636,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 			{
 				Element copyElem = (Element)modelElem.clone();
 				copyElem.clearContent();
+				copyElem.setText(modelElem.getTextTrim());
 				outPutSchemas.put(modelElem.getName(), copyElem);
 			}
 			
@@ -1644,9 +1746,15 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 					}
 				}
 			}
-
 		}
-      System.out.println("d");
+		
+		ArrayList<String> schemas = new ArrayList<String>();
+		Iterator<Element> iterd = outPutSchemas.values().iterator();
+		while(iterd.hasNext())
+		{
+			schemas.add(iterd.next().asXML());
+		}
+		System.out.println();
 	}
 	
 	public String[] outPutSchemas()
@@ -1657,7 +1765,6 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		{
 			schemas.add(iter.next().asXML());
 		}
-		
 		outPutSchemas.clear();
 		return schemas.toArray(new String[schemas.size()]);
 	}
