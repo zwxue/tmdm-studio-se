@@ -111,10 +111,12 @@ public class PageingToolBar {
 		return comp;
 	}
 	private void create() {
-		comp=toolkit.createComposite(parent);		
+		comp=toolkit.createComposite(parent);
 		GridLayout layout=new GridLayout(15, false);	
 		layout.marginBottom=0;
 		layout.marginTop=0;
+		layout.marginHeight=0;
+		layout.marginWidth=0;
 		comp.setLayout(layout);
 		//firstpage
 		GridData gd=new GridData();
