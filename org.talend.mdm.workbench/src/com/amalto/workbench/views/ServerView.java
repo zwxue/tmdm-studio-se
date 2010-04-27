@@ -33,9 +33,7 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
@@ -53,18 +51,21 @@ import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.TreeEvent;
 import org.eclipse.swt.events.TreeListener;
 import org.eclipse.swt.graphics.Cursor;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.actions.RefreshAction;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
@@ -468,13 +469,11 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		}
 		);
 		viewer.setInput(getViewSite());
-		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-			public void selectionChanged(SelectionChangedEvent event) {
-
-				TreeObject xobject = (TreeObject) ((IStructuredSelection) viewer
-						.getSelection()).getFirstElement();
-
+		viewer.getTree().addListener (SWT.MouseHover, new Listener() {
+			public void handleEvent(Event event) {
+				viewer.getControl().setToolTipText("");
+				TreeItem item = viewer.getTree().getItem (new Point (event.x, event.y));
+				TreeObject xobject = (TreeObject)item.getData();
 				if (xobject!=null && xobject.getType() == TreeObject.DATA_CLUSTER && xobject.isXObject()) {
 
 					try {
@@ -501,10 +500,11 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					}
 
 				}
-
+				else
+					viewer.getControl().setToolTipText("");
 			}
-
 		});
+
   		viewer.getTree().addTreeListener(new TreeListener() {
 			
 			public void treeExpanded(TreeEvent event) {
