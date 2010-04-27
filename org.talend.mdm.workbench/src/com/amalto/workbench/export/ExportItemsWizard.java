@@ -1,8 +1,11 @@
 package com.amalto.workbench.export;
 
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -10,6 +13,12 @@ import java.util.List;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -396,7 +405,40 @@ public class ExportItemsWizard extends Wizard {
 					exports.add(obj);
 
 				monitor.worked(1);
+				
+				break;
+			//add by ymli;fix the bug:0012771
+			case TreeObject.WORKFLOW_PROCESS:
+				monitor.subTask("WORKFLOW_PROCESS...");
+				items=new ArrayList<String>();
+				String workflowURL=obj.getEndpointIpAddress()+TreeObject.BARFILE_URI + obj.getDisplayName();
+				
+		         
+				DefaultHttpClient httpclient = new DefaultHttpClient();
+
+		        httpclient.getCredentialsProvider().setCredentials(
+		                new AuthScope("localhost", 8080), 
+		                new UsernamePasswordCredentials("admin", "talend"));
+		        
+		        HttpGet httpget = new HttpGet(workflowURL);
+		        
+		        System.out.println("executing request" + httpget.getRequestLine());
+		        HttpResponse response = httpclient.execute(httpget);
+		        HttpEntity entity = response.getEntity();
+		        //entity.getContent();
+
+				//Marshal
+				encodedID = URLEncoder.encode(obj.getDisplayName(),"UTF-8");
+				writeInputStream(entity.getContent(), TreeObject.BARFILE_PATH+encodedID+".bar");
+				
+				
+				items.add(TreeObject.BARFILE_PATH+encodedID+".bar");
+				obj.setItems(items.toArray(new String[items.size()]));
+				exports.add(obj);
+				
+				monitor.worked(1);
 			}
+			
 		}
 		// store the content xml
 		eps.setItems(exports.toArray(new TreeObject[exports.size()]));
@@ -410,6 +452,28 @@ public class ExportItemsWizard extends Wizard {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	//add by ymli;fix the bug:0012771
+	private  void writeInputStream(InputStream inputSteam,String filename){
+		try {
+			File f=new File(exportFolder+"/"+filename);
+			if(!f.getParentFile().getParentFile().exists()){
+				f.getParentFile().getParentFile().mkdir();
+			}		
+			if(!f.getParentFile().exists()){
+				f.getParentFile().mkdir();
+			} 
+			
+			FileOutputStream output = new FileOutputStream(f);  
+			BufferedInputStream is=new BufferedInputStream(new DataInputStream(inputSteam));
+			
+			 int data=is.read();  
+			 while(data!=-1){  
+				 output.write(data);  
+				 data=is.read();  
+			 }  
+			 output.close();
+		}catch(Exception e) {e.printStackTrace();}
 	}
 	
 	private  void writeString(String outputStr,String filename){
