@@ -111,8 +111,10 @@ public class PageingToolBar {
 		return comp;
 	}
 	private void create() {
-		comp=toolkit.createComposite(parent);
-		GridLayout layout=new GridLayout(15, false);		
+		comp=toolkit.createComposite(parent);		
+		GridLayout layout=new GridLayout(15, false);	
+		layout.marginBottom=0;
+		layout.marginTop=0;
 		comp.setLayout(layout);
 		//firstpage
 		GridData gd=new GridData();
@@ -186,7 +188,7 @@ public class PageingToolBar {
 		
 		//display items
 		displayItems =toolkit.createLabel(comp, "");
-		gd=new GridData(SWT.RIGHT,SWT.TOP,true,true);
+		gd=new GridData(SWT.RIGHT,SWT.CENTER,true,true);
 		displayItems.setLayoutData(gd);
 		
 		//add sellistener

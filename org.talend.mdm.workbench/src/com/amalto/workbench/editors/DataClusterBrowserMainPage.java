@@ -256,7 +256,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             
             //pagetoolbar
             pageToolBar=new PageingToolBar(composite);
-            pageToolBar.getComposite().setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,9,1));
+            pageToolBar.getComposite().setLayoutData(new GridData(SWT.FILL,SWT.TOP,true,false,9,1));
             pageToolBar.getComposite().setVisible(false);
             pageToolBar.setPageingListener(this);
             final Table table = createTable(composite);
