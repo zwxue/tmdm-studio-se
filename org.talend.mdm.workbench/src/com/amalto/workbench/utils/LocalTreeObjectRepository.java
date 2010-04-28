@@ -1313,26 +1313,31 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		Document orgDoc =  credentials.get(UnifyUrl(serverRoot.getServerRoot().getWsKey().toString())).doc;
 		//spareDoc is meant to show the category when import digloag is launched
 		spareDoc = (Document)orgDoc.clone();
-		for (String schema : schemas)
+		if(schemas != null)
 		{
-			Element subRoot = parseElements(schema);
-			String subRootXquery = "descendant::" + subRoot.getName() + "[text()='" + subRoot.getTextTrim() + "']";
-			Element division = pingElement(subRootXquery, spareDoc.getRootElement());
-			if(division == null || division.getParent() == null)return;
-			Element divisionParent = division.getParent();
-			divisionParent.remove(division);
-			divisionParent.add((Element)subRoot.clone());
+			for (String schema : schemas)
+			{
+				Element subRoot = parseElements(schema);
+				String subRootXquery = "descendant::" + subRoot.getName() + "[text()='" + subRoot.getTextTrim() + "']";
+				Element division = pingElement(subRootXquery, spareDoc.getRootElement());
+				if(division == null || division.getParent() == null)return;
+				Element divisionParent = division.getParent();
+				divisionParent.remove(division);
+				divisionParent.add((Element)subRoot.clone());
+			}
+			
+			String url = getURLFromTreeObject(serverRoot);
+			String Universe = getUniverseFromTreeObject(serverRoot);
+			String urlXquery = "descendant::*[@Url != '" + url + "']";
+			List<Element> elems = spareDoc.selectNodes(urlXquery);
+			for (Element elem : elems)
+			{
+				elem.attributeValue("Url", url);
+				elem.attributeValue("Universe", Universe);
+			}
 		}
 		
-		String url = getURLFromTreeObject(serverRoot);
-		String Universe = getUniverseFromTreeObject(serverRoot);
-		String urlXquery = "descendant::*[@Url != '" + url + "']";
-		List<Element> elems = spareDoc.selectNodes(urlXquery);
-		for (Element elem : elems)
-		{
-			elem.attributeValue("Url", url);
-			elem.attributeValue("Universe", Universe);
-		}
+
 		credentials.get(UnifyUrl(serverRoot.getServerRoot().getWsKey().toString())).doc = spareDoc;
 		spareDoc = orgDoc;
 		importCategories = schemas;
