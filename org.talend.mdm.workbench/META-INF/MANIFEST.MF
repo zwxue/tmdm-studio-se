@@ -67,7 +67,8 @@ Bundle-ClassPath: com.amalto.workbench.jar,
  META-INF/lib/jaxrpc.jar,
  META-INF/lib/commons-discovery-0.2.jar,
  META-INF/lib/wsdl4j-1.5.1.jar,
- META-INF/lib/jakarta-oro-2.0.8.jar
+ META-INF/lib/jakarta-oro-2.0.8.jar,
+ META-INF/lib/commons-io-1.4.jar
 Export-Package: com.amalto.workbench,
  com.amalto.workbench.actions,
  com.amalto.workbench.availablemodel,

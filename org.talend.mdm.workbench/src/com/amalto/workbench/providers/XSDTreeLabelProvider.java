@@ -90,7 +90,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
 			//return the name of the complex type definition
 			XSDParticle particle = (XSDParticle)(((XSDModelGroup)obj).getContainer());
 			String name = ((XSDComplexTypeDefinition)particle.getContainer()).getName();
-			if (name==null) name = "";
+			if (name==null) name = "anonymous type ";
 			//return the occurence
 			if (! ((particle.getMinOccurs() == 1) && (particle.getMaxOccurs() == 1))) {			
 				name+="  [";

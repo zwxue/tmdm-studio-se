@@ -9,6 +9,7 @@ package com.amalto.workbench.editors;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.StringReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,6 +24,7 @@ import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.commons.io.IOUtils;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.action.IMenuListener;
@@ -122,8 +124,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-//import com.amalto.workbench.actions.CopyXObjectAction;
-import com.amalto.workbench.actions.PasteXObjectAction;
 import com.amalto.workbench.actions.XSDChangeBaseTypeAction;
 import com.amalto.workbench.actions.XSDChangeToComplexTypeAction;
 import com.amalto.workbench.actions.XSDChangeToSimpleTypeAction;
@@ -2297,7 +2297,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	
 	private void performImport(List<String> list) throws Exception
 	{
-		Pattern httpUrl = Pattern.compile("(http|https|ftp):(\\//|\\\\)(.*):(.*)");
+		Pattern httpUrl = Pattern.compile("(http|https|ftp):(\\//|\\\\)(.*)(\\:)+(.*)");
 
 		for(String fileName : list)
 		{
@@ -2319,12 +2319,28 @@ public class DataModelMainPage extends AMainPageV2 {
 	
 	private void importSchemaFromFile(String fileName) throws Exception
 	{
-		String inputType = fileName.substring(fileName.lastIndexOf("."));
-		if (!inputType.equals(".xsd"))return;
-		File file = new File(fileName);
+		InputSource source = null;
+		Pattern httpUrl = Pattern.compile("^(http|https|ftp):(\\//|\\\\)(.*)(\\.)+(xsd)$");
+		Matcher match = httpUrl.matcher(fileName);
+		if(match.matches())
+		{
+			URL url = new URL(fileName);
+			String urlContent = IOUtils.toString(url.openConnection().getInputStream());
+			urlContent = urlContent.replaceAll("<!DOCTYPE(.*?)>", "");
+			source = new InputSource(IOUtils.toInputStream(urlContent));
+			importSchema(source, fileName);
+		}
+		else
+		{
+			String inputType = fileName.substring(fileName.lastIndexOf("."));
+			if (!inputType.equals(".xsd"))return;
+			File file = new File(fileName);
+			
+			source = new InputSource(new FileInputStream(file));	
+			importSchema(source, file.getAbsolutePath());
+		}
+
 		
-		InputSource source = new InputSource(new FileInputStream(file));
-		importSchema(source, file.getAbsolutePath());
 	}
 	
 	private void importSchema(InputSource source, String uri) throws Exception

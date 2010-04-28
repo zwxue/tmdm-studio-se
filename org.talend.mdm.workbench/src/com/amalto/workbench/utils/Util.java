@@ -49,6 +49,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.methods.MultipartPostMethod;
+import org.apache.commons.io.IOUtils;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
@@ -1108,9 +1109,12 @@ public class Util {
 							if (((XSDElementDeclaration) pt.getContent()) == elem) {
 								return top;
 							}
-							XSDElementDeclaration spec = findOutSpecialSonElement((XSDElementDeclaration) pt.getContent(), elem);
-							if(spec != null)
-								return spec;
+							if(pt.getContent() instanceof XSDElementDeclaration)
+							{
+								XSDElementDeclaration spec = findOutSpecialSonElement((XSDElementDeclaration) pt.getContent(), elem);
+								if(spec != null)
+									return spec;
+							}
 						}
 					}
 				}
@@ -1120,7 +1124,7 @@ public class Util {
     }
     
     private static XSDElementDeclaration findOutSpecialSonElement(XSDElementDeclaration parent, XSDElementDeclaration son)
-    {
+    {	
     	ArrayList<XSDElementDeclaration> particleElemList = findOutAllSonElements((XSDElementDeclaration)parent);
     	XSDElementDeclaration specialParent = null;
 		for (XSDElementDeclaration e: particleElemList)
@@ -1631,7 +1635,17 @@ public class Util {
     	    	if (ns.equals(""))continue;
     	    	int last = ns.lastIndexOf("/");
     	    	if(!nsMap.containsValue(ns))
-    	    	   nsMap.put(ns.substring(last+1).replaceAll("[\\W]", ""), ns);
+    	    	{
+    	    		if(ns.equals("http://www.w3.org/XML/1998/namespace"))
+    	    		{
+    	    			nsMap.put("xml", ns);
+    	    		}
+    	    		else
+    	    		{
+    	    			nsMap.put(ns.substring(last+1).replaceAll("[\\W]", ""), ns);
+    	    		}
+    	    	}
+    	    	   
     	    	boolean exist = false;
     	    	for (XSDSchemaContent cnt: xsdSchema.getContents())
     	    	{
@@ -1696,9 +1710,17 @@ public class Util {
 		
 		documentBuilder = documentBuilderFactory.newDocumentBuilder();
 		if(rawData == null) return XSDSchemaImpl.getSchemaForSchema("http://www.w3.org/2001/XMLSchema");
+		if(rawData.equals("http://www.w3.org/2001/03/xml.xsd"))
+		{
+			URL url = new java.net.URI("http://www.w3.org/2001/03/xml.xsd").toURL();
+	        uri = false;
+	        rawData = IOUtils.toString(url.openConnection().getInputStream());
+	        rawData = rawData.replaceAll("<!DOCTYPE(.*?)>", "");
+		}
+			
 		if (uri) {
 			File file = new File(rawData);
-			if (file.isFile())
+			if (file.exists())
 			   source = new InputSource(new FileInputStream(file));
 			else
 				source = new InputSource(new StringReader(Util.getResponseFromURL(rawData, treeObj)));
