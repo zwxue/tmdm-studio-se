@@ -27,13 +27,19 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.UIJob;
 import org.exolab.castor.xml.Unmarshaller;
 import org.talend.mdm.commmon.util.workbench.ZipToFile;
 
 import com.amalto.workbench.actions.ServerRefreshAction;
+import com.amalto.workbench.editors.XObjectBrowser;
+import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
+import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.Util;
@@ -119,6 +125,7 @@ public class ImportItemsWizard extends Wizard{
 	}
 	@Override
 	public boolean performFinish() {
+		closeOpenEditors();
 		if(zipBtn.getSelection()){
 			zipfile=zip.getText().getText();
 			importFolder=  System.getProperty("user.dir")+"/temp";
@@ -168,7 +175,32 @@ public class ImportItemsWizard extends Wizard{
 		return true;
 	}
 	
-    public boolean performCancel() {
+    private void closeOpenEditors() {
+		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		int length = page.getEditors().length;
+		String version = "";
+		String tabEndpointAddress="";
+		String unserName = null;
+		int j = 0;
+		 for(int i = 0;i<length;i++){
+			 IEditorPart part = page.getEditors()[i-j];
+			if(part instanceof XObjectBrowser){
+				version = ((TreeObject)((XObjectBrowserInput) part.getEditorInput()).getModel()).getUniverse();
+				tabEndpointAddress = ((TreeObject)((XObjectBrowserInput) part.getEditorInput()).getModel()).getEndpointAddress();
+				unserName =  ((TreeObject)((XObjectBrowserInput) part.getEditorInput()).getModel()).getUsername();
+				}
+			 else if(part instanceof XObjectEditor){
+				 version = ((XObjectEditor)part).getInitialXObject().getServerRoot().getUniverse();
+				 tabEndpointAddress = ((XObjectEditor)part).getInitialXObject().getServerRoot().getEndpointAddress();	
+				 unserName =  ((XObjectEditor)part).getInitialXObject().getServerRoot().getUsername();}
+			 if(serverRoot.getUniverse().equals(version)&& serverRoot.getEndpointAddress().equals(tabEndpointAddress)&& serverRoot.getUsername().equals(unserName)){
+				 page.closeEditor(part, false);
+				 j++;
+			 }
+			 }
+		
+	}
+	public boolean performCancel() {
     	LocalTreeObjectRepository.getInstance().cancelMergeImportCategory(serverRoot);
         return super.performCancel();
     }
