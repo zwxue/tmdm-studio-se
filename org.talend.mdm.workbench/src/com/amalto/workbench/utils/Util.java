@@ -2535,9 +2535,7 @@ public class Util {
 					return versionComp;
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return e.toString();
+
 		}
     	return null;
     }
