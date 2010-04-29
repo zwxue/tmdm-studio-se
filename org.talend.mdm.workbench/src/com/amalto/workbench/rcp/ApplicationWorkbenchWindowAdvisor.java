@@ -32,8 +32,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
     }
     
     public void preWindowOpen() {
-    	//scan availabelmodel extention point
-    	AvailableModelUtil.getAvailableModels();
+    	
     	
         IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
         
