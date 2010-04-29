@@ -3,6 +3,7 @@ package com.amalto.workbench.export;
 import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Hashtable;
@@ -32,9 +33,11 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.UIJob;
 import org.exolab.castor.xml.Unmarshaller;
+import org.talend.mdm.commmon.util.core.CommonUtil;
 import org.talend.mdm.commmon.util.workbench.ZipToFile;
 
 import com.amalto.workbench.actions.ServerRefreshAction;
+import com.amalto.workbench.dialogs.ErrorExceptionDialog;
 import com.amalto.workbench.editors.XObjectBrowser;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.models.TreeObject;
@@ -92,6 +95,8 @@ import com.amalto.workbench.webservices.WSView;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.WSWhereCondition;
 import com.amalto.workbench.webservices.WSWhereOperator;
+import com.amalto.workbench.webservices.WSWorkflowDeploy;
+import com.amalto.workbench.webservices.WSWorkflowProcessDefinitionUUID;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.FileSelectWidget;
 import com.amalto.workbench.widgets.RepositoryCheckTreeViewer;
@@ -242,6 +247,8 @@ public class ImportItemsWizard extends Wizard{
 		TreeParent syncplans = new TreeParent(EXtentisObjects.SynchronizationPlan.getDisplayName(),reserverRoot,TreeObject.SYNCHRONIZATIONPLAN,null,null);
 		TreeParent transformers = new TreeParent(EXtentisObjects.Transformer.getDisplayName(),reserverRoot,TreeObject.TRANSFORMER,null,null);
 		TreeParent pictures = new TreeParent(EXtentisObjects.PICTURESRESOURCE.getDisplayName(),reserverRoot,TreeObject.PICTURES_RESOURCE,null,null);
+		//add by ymli
+		TreeParent workflow = new TreeParent(EXtentisObjects.Workflow.getDisplayName(),reserverRoot, TreeObject.WORKFLOW, null, null);
 		TreeParent universes = new TreeParent(EXtentisObjects.Universe.getDisplayName(),reserverRoot,TreeObject.UNIVERSE,null,null);
 		TreeParent views = new TreeParent(EXtentisObjects.View.getDisplayName(),reserverRoot,TreeObject.VIEW,null,null);
 		reserverRoot.addChild(clusters);
@@ -255,6 +262,7 @@ public class ImportItemsWizard extends Wizard{
 		eventManager.addChild(routingrules);
 		reserverRoot.addChild(eventManager);
 		reserverRoot.addChild(pictures);
+		reserverRoot.addChild(workflow);
 		reserverRoot.addChild(universes);
 		reserverRoot.addChild(views);
 		boolean isOverrideAll=false;
@@ -289,6 +297,8 @@ public class ImportItemsWizard extends Wizard{
 			case TreeObject.PICTURES_RESOURCE:
 				pictures.addChild(obj);
 				break;
+			case TreeObject.WORKFLOW_PROCESS:
+				workflow.addChild(obj);
 			case TreeObject.UNIVERSE:
 				universes.addChild(obj);
 				break;
@@ -659,6 +669,45 @@ public class ImportItemsWizard extends Wizard{
 				}
 
 				break;
+		
+			//add by ymli. fix the bug:0012882: Allow workflow bars to be imported
+			case TreeObject.WORKFLOW_PROCESS:
+				monitor.subTask("Workflow...");
+				subItems = item.getItems();
+				TreeParent parent = new TreeParent(null, null, TreeObject.WORKFLOW, null, null);
+				for(int i = 0;i<serverRoot.getChildren().length;i++){
+					parent = (TreeParent) item.getServerRoot().getChildren()[i];
+					if(parent.getType() == TreeObject.WORKFLOW){
+						//parent.addChild(obj);
+						break;
+					}
+				}
+				for(String subItem : subItems) {
+					try{
+						reader = new FileReader(importFolder+"/" + subItem);
+						String endpointaddress=item.getEndpointAddress();
+						String uploadURL = new URL(endpointaddress).getProtocol()+"://"+new URL(endpointaddress).getHost()+":"+new URL(endpointaddress).getPort()+"/datamanager/uploadFile";
+						String remoteFile = Util.uploadFileToAppServer(uploadURL,importFolder+"/"+ subItem,"admin","talend");
+						WSWorkflowProcessDefinitionUUID uuid=port.workflowDeploy(new WSWorkflowDeploy(remoteFile));
+						TreeObject obj = new TreeObject(
+								uuid.getProcessName()+"_"+uuid.getProcessVersion(),
+								item.getServerRoot(),
+								TreeObject.WORKFLOW_PROCESS,
+								uuid,
+								null   //no storage to save space
+						);
+						parent.addChild(obj);
+						
+					}catch(Exception e){
+						e.printStackTrace();
+						ErrorExceptionDialog.openError(view.getSite().getShell(),
+								"Error committing the page", 
+										CommonUtil.getErrMsgFromException(e));
+					
+					}
+				}
+				break;
+				
 			case TreeObject.TRANSFORMER:
 				monitor.subTask(" Process...");
 				subItems = item.getItems();
