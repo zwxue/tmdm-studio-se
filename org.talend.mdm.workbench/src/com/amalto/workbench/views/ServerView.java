@@ -469,7 +469,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 		}
 		);
 		viewer.setInput(getViewSite());
-		viewer.getTree().addListener (SWT.MouseHover, new Listener() {
+		//remove mousehover listener for the server tree.
+/*		viewer.getTree().addListener (SWT.MouseHover, new Listener() {
 			public void handleEvent(Event event) {
 				viewer.getControl().setToolTipText("");
 				TreeItem item = viewer.getTree().getItem (new Point (event.x, event.y));
@@ -503,7 +504,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				else
 					viewer.getControl().setToolTipText("");
 			}
-		});
+		});*/
 
   		viewer.getTree().addTreeListener(new TreeListener() {
 			
