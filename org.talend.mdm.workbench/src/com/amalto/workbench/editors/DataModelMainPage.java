@@ -1160,8 +1160,12 @@ public class DataModelMainPage extends AMainPageV2 {
 			//fliu added '<xsd:import namespace="http://www.w3.org/2001/XMLSchema"/>', which is meant to make xsdSchema compatible with allNNI and other new simple Types
 		    XSDImport xsdImport = XSDFactory.eINSTANCE.createXSDImport();
 		    xsdImport.setNamespace("http://www.w3.org/2001/XMLSchema");
-		    XSDSchema xsdschema =Util.createXsdSchema(schema, getXObject());
-		    EList<XSDSchemaContent> elist = xsdschema.getContents();
+		    if(xsdSchema == null)
+		    {
+		    	xsdSchema =Util.createXsdSchema(schema, getXObject());
+		    }
+
+		    EList<XSDSchemaContent> elist = xsdSchema.getContents();
 		    for (XSDSchemaContent cnt: elist)
 		    {
 		    	if(cnt instanceof XSDImport)
@@ -1176,8 +1180,8 @@ public class DataModelMainPage extends AMainPageV2 {
 		    }
 		    if(xsdImport != null)
 		    {
-		    	xsdschema.getContents().add(0, xsdImport);	
-		    	wsObject.setXsdSchema(Util.nodeToString(xsdschema.getDocument()));
+		    	xsdSchema.getContents().add(0, xsdImport);	
+		    	wsObject.setXsdSchema(Util.nodeToString(xsdSchema.getDocument()));
 		    }
 
 			XMLEditor xmleditor=(getEditor()).getXmlEditor();

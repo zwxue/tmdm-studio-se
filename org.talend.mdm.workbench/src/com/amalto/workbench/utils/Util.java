@@ -50,6 +50,8 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.methods.MultipartPostMethod;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
@@ -1089,7 +1091,8 @@ public class Util {
 							if (((XSDElementDeclaration) pt.getContent()) == elem) {
 								return decl;
 							}
-							XSDElementDeclaration spec = findOutSpecialSonElement((XSDElementDeclaration) pt.getContent(), elem);
+							ArrayList<String> complexTypes = new ArrayList<String>();
+							XSDElementDeclaration spec = findOutSpecialSonElement((XSDElementDeclaration) pt.getContent(), elem, complexTypes);
 							if(spec != null)
 								return spec;
 					}
@@ -1111,7 +1114,8 @@ public class Util {
 							}
 							if(pt.getContent() instanceof XSDElementDeclaration)
 							{
-								XSDElementDeclaration spec = findOutSpecialSonElement((XSDElementDeclaration) pt.getContent(), elem);
+								ArrayList<String> complexTypes = new ArrayList<String>();
+								XSDElementDeclaration spec = findOutSpecialSonElement((XSDElementDeclaration) pt.getContent(), elem, complexTypes);
 								if(spec != null)
 									return spec;
 							}
@@ -1123,9 +1127,9 @@ public class Util {
 	 return null;
     }
     
-    private static XSDElementDeclaration findOutSpecialSonElement(XSDElementDeclaration parent, XSDElementDeclaration son)
+    private static XSDElementDeclaration findOutSpecialSonElement(XSDElementDeclaration parent, XSDElementDeclaration son, ArrayList<String> complexTypes)
     {	
-    	ArrayList<XSDElementDeclaration> particleElemList = findOutAllSonElements((XSDElementDeclaration)parent);
+    	ArrayList<XSDElementDeclaration> particleElemList = findOutAllSonElements((XSDElementDeclaration)parent, complexTypes);
     	XSDElementDeclaration specialParent = null;
 		for (XSDElementDeclaration e: particleElemList)
 		{
@@ -1139,7 +1143,7 @@ public class Util {
 		{
 			for (XSDElementDeclaration e: particleElemList)
 			{
-				specialParent = findOutSpecialSonElement(e, son);
+				specialParent = findOutSpecialSonElement(e, son, complexTypes);
 				if(specialParent != null)
 					break;
 			}
@@ -1148,12 +1152,15 @@ public class Util {
 		return specialParent;
     }
     
-    private static ArrayList<XSDElementDeclaration> findOutAllSonElements(XSDElementDeclaration decl)
+    private static ArrayList<XSDElementDeclaration> findOutAllSonElements(XSDElementDeclaration decl, ArrayList<String> complexTypes)
     {
     	ArrayList<XSDElementDeclaration> holder = new ArrayList<XSDElementDeclaration>();
     	if(decl.getTypeDefinition() instanceof XSDComplexTypeDefinition)
     	{
 			XSDComplexTypeDefinition type = (XSDComplexTypeDefinition) decl.getTypeDefinition();
+			String typeDesc = type.getTargetNamespace() + " : " + type.getName();
+			if(complexTypes.indexOf(typeDesc) != -1)
+				return holder;
 			if(type.getContent() instanceof XSDParticle)
 			{
 				XSDParticle particle = (XSDParticle) type.getContent();
@@ -1161,10 +1168,26 @@ public class Util {
 					XSDModelGroup group = (XSDModelGroup) particle
 							.getTerm();
 					EList<XSDParticle> elist = group.getContents();
+					boolean addComplexType = false;
 					for (XSDParticle pt : elist) {
 						if(pt.getContent() instanceof XSDElementDeclaration)
 						{
 							XSDElementDeclaration elem = (XSDElementDeclaration)pt.getContent();
+							if(!addComplexType)
+							{
+								complexTypes.add(typeDesc);
+								addComplexType = true;
+							}
+							if(StringUtils.equals(elem.getName(), decl.getName()))
+							{
+								if(ObjectUtils.equals(elem.getType(), decl.getType()))
+								{
+									if(StringUtils.equals(elem.getTargetNamespace(), decl.getTargetNamespace()))
+									{
+										continue;
+									}
+								}
+							}
 							holder.add(elem);
 						}
 					}
@@ -1193,6 +1216,7 @@ public class Util {
     public static Object[] getAllObject(Object elem, ArrayList<Object> objList, IStructuredContentProvider provider) {
 		Object[] elems = provider.getElements(elem);
 		for (Object obj : elems) {
+			if(obj == null)continue;
 			if (!objList.contains(obj)) {
 				objList.add(obj);
 				getAllObject(obj, objList, provider);
