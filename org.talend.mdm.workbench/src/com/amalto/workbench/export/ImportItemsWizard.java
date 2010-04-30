@@ -10,6 +10,7 @@ import java.util.Hashtable;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -199,11 +200,24 @@ public class ImportItemsWizard extends Wizard{
 				 tabEndpointAddress = ((XObjectEditor)part).getInitialXObject().getServerRoot().getEndpointAddress();	
 				 unserName =  ((XObjectEditor)part).getInitialXObject().getServerRoot().getUsername();}
 			 if(serverRoot.getUniverse().equals(version)&& serverRoot.getEndpointAddress().equals(tabEndpointAddress)&& serverRoot.getUsername().equals(unserName)){
+				if(part.isDirty()&&isSaveModifiedEditor(part.getTitle()))
+					part.doSave(new NullProgressMonitor());
 				 page.closeEditor(part, false);
 				 j++;
 			 }
 			 }
 		
+	}
+	private boolean isSaveModifiedEditor(String editorName) {
+		final MessageDialog dialog = new MessageDialog(view.getSite()
+				.getShell(), "Save Resource", null, "'" + editorName
+				+ "' has been modified. Save changes?", MessageDialog.QUESTION,
+				new String[] { IDialogConstants.YES_LABEL,
+						IDialogConstants.NO_LABEL }, 0);
+		dialog.open();
+		if (dialog.getReturnCode() == 0)
+			return true;
+		return false;
 	}
 	public boolean performCancel() {
     	LocalTreeObjectRepository.getInstance().cancelMergeImportCategory(serverRoot);
