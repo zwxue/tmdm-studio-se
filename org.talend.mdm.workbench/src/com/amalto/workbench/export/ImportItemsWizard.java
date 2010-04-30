@@ -313,6 +313,7 @@ public class ImportItemsWizard extends Wizard{
 				break;
 			case TreeObject.WORKFLOW_PROCESS:
 				workflow.addChild(obj);
+				break;
 			case TreeObject.UNIVERSE:
 				universes.addChild(obj);
 				break;
