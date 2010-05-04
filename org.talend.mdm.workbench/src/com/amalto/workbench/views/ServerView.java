@@ -701,10 +701,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			manager.add(loginAction);
 		} else {
 			//available models
-			java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
-			for(IAvailableModel model: availablemodels){
-				model.fillContextMenu(xobject, manager);
-			}
+		
 			
 			switch (xobject.getType()) {
 			case TreeObject._SERVER_:
@@ -801,6 +798,11 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					manager.add(pasteAction);
 				}
 
+			}
+			
+			java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
+			for(IAvailableModel model: availablemodels){
+				model.fillContextMenu(xobject, manager);
 			}
 		}
 		manager.add(new Separator());
