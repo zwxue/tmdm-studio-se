@@ -1,24 +1,12 @@
 package com.amalto.workbench.export;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -40,7 +28,6 @@ import org.talend.mdm.commmon.util.workbench.ZipToFile;
 
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
-import com.amalto.workbench.utils.ResourcesUtil;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
@@ -138,15 +125,15 @@ public class ExportItemsWizard extends Wizard {
 		monitor.beginTask("Export ...", IProgressMonitor.UNKNOWN);
 		Exports eps=new Exports();
 		List<TreeObject> exports=new ArrayList<TreeObject>();
-		List<String> schemas = new ArrayList<String>();
 		XtentisPort port;
 		try {
 			port = Util.getPort(objs[0]);
-			
-		LocalTreeObjectRepository.getInstance().parseElementForOutput(objs);
-		
+			try{
+				LocalTreeObjectRepository.getInstance().parseElementForOutput(objs);
+			}catch(Exception e){}
 		for(TreeObject obj: objs){
 			
+
 			StringWriter sw;
 			ArrayList<String> items;
 			switch(obj.getType()){
@@ -159,22 +146,24 @@ public class ExportItemsWizard extends Wizard {
 				//dataclusters
 				
 				WSDataClusterPK pk =(WSDataClusterPK)obj.getWsKey();
-
+				String encodedID=null;
+				try{
 					WSDataCluster cluster=port.getDataCluster(new WSGetDataCluster(pk));
 		        	//Marshal
 		    		 sw = new StringWriter();
 		    		Marshaller.marshal(cluster, sw);
-		    		String encodedID = URLEncoder.encode(cluster.getName(),"UTF-8");
+		    		encodedID = URLEncoder.encode(cluster.getName(),"UTF-8");
 		    		writeString(sw.toString(), TreeObject.DATACONTAINER+"/"+encodedID);
 		    		items.add(TreeObject.DATACONTAINER+"/"+encodedID);
-//				}
-				obj.setItems(items.toArray(new String[items.size()]));
-				exports.add(obj);
+
+					obj.setItems(items.toArray(new String[items.size()]));
+					exports.add(obj);
+				}catch(Exception e){}
 				monitor.worked(1);
 				//datacluster contents
 //				for(WSDataClusterPK pk:array.getWsDataClusterPKs()){
 					monitor.subTask(" Data Container "+ pk.getPk()+" ...");
-
+					try{
 					List<String> items1=new ArrayList<String>();
 		            WSItemPKsByCriteriaResponseResults[] results =
 			            port.getItemPKsByCriteria(new WSGetItemPKsByCriteria(
@@ -190,6 +179,7 @@ public class ExportItemsWizard extends Wizard {
 			            ).getResults();
 		            if(results==null) continue;
 		            for(WSItemPKsByCriteriaResponseResults item: results ){
+		            	if(item.getWsItemPK().getIds()==null) continue;
 		            	WSItem wsitem=port.getItem(new WSGetItem(item.getWsItemPK()));
 		            	
 		            	//Marshal
@@ -207,7 +197,7 @@ public class ExportItemsWizard extends Wizard {
 		            TreeObject obj1=new TreeObject("",null, TreeObject.DATA_CLUSTER_CONTENTS,null,null);
 		            obj1.setItems(items1.toArray(new String[items1.size()]));
 					exports.add(obj1);
-
+					}catch(Exception e){}
 					monitor.worked(1);
 					break;
 //			}
@@ -216,24 +206,25 @@ public class ExportItemsWizard extends Wizard {
 
 				 items=new ArrayList<String>();
 				//datamodels
-					
-				WSDataModel model=port.getDataModel(new WSGetDataModel((WSDataModelPK)obj.getWsKey()));
-	        	 sw = new StringWriter();
-	    		Marshaller.marshal(model, sw);
-	    		encodedID = URLEncoder.encode(model.getName(),"UTF-8");
-	    		writeString(sw.toString(), TreeObject.DATAMODEL_+"/"+encodedID);
-	    		items.add(TreeObject.DATAMODEL_+"/"+encodedID);
-				obj.setItems(items.toArray(new String[items.size()]));
-				exports.add(obj);
-
+				try{	
+					WSDataModel model=port.getDataModel(new WSGetDataModel((WSDataModelPK)obj.getWsKey()));
+		        	 sw = new StringWriter();
+		    		Marshaller.marshal(model, sw);
+		    		encodedID = URLEncoder.encode(model.getName(),"UTF-8");
+		    		writeString(sw.toString(), TreeObject.DATAMODEL_+"/"+encodedID);
+		    		items.add(TreeObject.DATAMODEL_+"/"+encodedID);
+					obj.setItems(items.toArray(new String[items.size()]));
+					exports.add(obj);	
+				}catch(Exception e){}
 				monitor.worked(1);
 				break;
 			case  	TreeObject.MENU:
 				monitor.subTask(" Menu...");
 //				ExportItem exportItem=new ExportItem();
-
+				
 				items=new ArrayList<String>();
 				//menu
+				try{
 					WSMenu menu=port.getMenu(new WSGetMenu((WSMenuPK)obj.getWsKey()));
 		        	//Marshal
 		    		sw = new StringWriter();
@@ -244,31 +235,7 @@ public class ExportItemsWizard extends Wizard {
 
 					obj.setItems(items.toArray(new String[items.size()]));
 					exports.add(obj);
-
-				monitor.worked(1);
-				break;
-			case  	TreeObject.PICTURES_RESOURCE:
-				monitor.subTask(" Picture...");
-//				ExportItem exportItem=new ExportItem();
-				
-				items=new ArrayList<String>();
-				//picture
-				String picUrl=obj.getEndpointIpAddress()+ResourcesUtil.getResourcesMapFromURI(
-						obj.getEndpointIpAddress() + TreeObject.PICTURES_URI)
-	        			.get(obj.getDisplayName());
-		         HttpClient client = new HttpClient();  
-		         GetMethod get = new GetMethod(picUrl);  
-		         client.executeMethod(get);  
-				//Marshal
-				sw = new StringWriter();
-				Marshaller.marshal(get.getResponseBody(), sw);
-				encodedID = URLEncoder.encode(obj.getDisplayName(),"UTF-8");
-				writeByte(get.getResponseBody(), TreeObject.PICTURES_+"/"+encodedID);
-				items.add(TreeObject.PICTURES_+"/"+encodedID);
-				
-				obj.setItems(items.toArray(new String[items.size()]));
-				exports.add(obj);
-				
+				}catch(Exception e){}
 				monitor.worked(1);
 				break;
 			case 	TreeObject.ROLE:
@@ -279,6 +246,7 @@ public class ExportItemsWizard extends Wizard {
 				 items=new ArrayList<String>();
 		
 				//role
+				 try{
 					WSRole role=port.getRole(new WSGetRole((WSRolePK)obj.getWsKey()));
 		        	//Marshal
 		    		sw = new StringWriter();
@@ -289,7 +257,7 @@ public class ExportItemsWizard extends Wizard {
 			
 					obj.setItems(items.toArray(new String[items.size()]));
 					exports.add(obj);
-
+				 }catch(Exception e){}
 				monitor.worked(1);
 				}
 				break;
@@ -299,6 +267,7 @@ public class ExportItemsWizard extends Wizard {
 
 				items=new ArrayList<String>();
 				//routing rule
+				try{
 					WSRoutingRule RoutingRule=port.getRoutingRule(new WSGetRoutingRule((WSRoutingRulePK)obj.getWsKey()));
 		        	//Marshal
 		    		sw = new StringWriter();
@@ -308,7 +277,7 @@ public class ExportItemsWizard extends Wizard {
 		    		items.add(TreeObject.ROUTINGRULE_+"/"+encodedID);
 					obj.setItems(items.toArray(new String[items.size()]));
 					exports.add(obj);
-
+				}catch(Exception e){}
 				monitor.worked(1);
 				break;
 			case	TreeObject.STORED_PROCEDURE:
@@ -316,6 +285,7 @@ public class ExportItemsWizard extends Wizard {
 
 				items=new ArrayList<String>();
 				//stored procedure
+				try{
 					WSStoredProcedure StoredProcedure=port.getStoredProcedure(new WSGetStoredProcedure((WSStoredProcedurePK)obj.getWsKey()));
 		        	//Marshal
 					sw = new StringWriter();
@@ -326,7 +296,7 @@ public class ExportItemsWizard extends Wizard {
 
 					obj.setItems(items.toArray(new String[items.size()]));
 					exports.add(obj);
-
+				}catch(Exception e){}
 				monitor.worked(1);
 				break;
 			case TreeObject.SYNCHRONIZATIONPLAN:
@@ -335,6 +305,7 @@ public class ExportItemsWizard extends Wizard {
 
 				items=new ArrayList<String>();
 				//Synchronizationplan
+				try{
 					WSSynchronizationPlan SynchronizationPlan=port.getSynchronizationPlan(new WSGetSynchronizationPlan((WSSynchronizationPlanPK)obj.getWsKey()));
 		        	//Marshal
 		    		sw = new StringWriter();
@@ -345,7 +316,7 @@ public class ExportItemsWizard extends Wizard {
 				
 					obj.setItems(items.toArray(new String[items.size()]));
 					exports.add(obj);
-
+				}catch(Exception e){}
 				monitor.worked(1);
 				}
 				break;
@@ -355,6 +326,7 @@ public class ExportItemsWizard extends Wizard {
 				items=new ArrayList<String>();
 				//transformer
 				//TODO:check the pk
+				try{
 				WSTransformer transformer=port.getTransformer(new WSGetTransformer(new WSTransformerPK(((WSTransformerV2PK)obj.getWsKey()).getPk())));
 		        	//Marshal
 		    		sw = new StringWriter();
@@ -365,7 +337,7 @@ public class ExportItemsWizard extends Wizard {
 				
 					obj.setItems(items.toArray(new String[items.size()]));
 					exports.add(obj);
-
+				}catch(Exception e){}
 				monitor.worked(1);
 				break;
 			case TreeObject.UNIVERSE:
@@ -374,6 +346,7 @@ public class ExportItemsWizard extends Wizard {
 
 				items=new ArrayList<String>();
 				//universe
+				try{
 					WSUniverse universe=port.getUniverse(new WSGetUniverse((WSUniversePK)obj.getWsKey()));
 		        	//Marshal
 		    		sw = new StringWriter();
@@ -384,7 +357,7 @@ public class ExportItemsWizard extends Wizard {
 				
 					obj.setItems(items.toArray(new String[items.size()]));
 					exports.add(obj);
-
+				}catch(Exception e){}
 				monitor.worked(1);
 				}
 				break;
@@ -393,6 +366,7 @@ public class ExportItemsWizard extends Wizard {
 
 				items=new ArrayList<String>();
 				//view
+				try{
 					WSView View=port.getView(new WSGetView((WSViewPK)obj.getWsKey()));
 		        	//Marshal
 		    		sw = new StringWriter();
@@ -403,42 +377,9 @@ public class ExportItemsWizard extends Wizard {
 				
 					obj.setItems(items.toArray(new String[items.size()]));
 					exports.add(obj);
-
-				monitor.worked(1);
-				
-				break;
-			//add by ymli;fix the bug:0012771
-			case TreeObject.WORKFLOW_PROCESS:
-				monitor.subTask("WORKFLOW_PROCESS...");
-				items=new ArrayList<String>();
-				String workflowURL=obj.getEndpointIpAddress()+TreeObject.BARFILE_URI + obj.getDisplayName();
-				
-		         
-				DefaultHttpClient httpclient = new DefaultHttpClient();
-
-		        httpclient.getCredentialsProvider().setCredentials(
-		                new AuthScope("localhost", 8080), 
-		                new UsernamePasswordCredentials("admin", "talend"));
-		        
-		        HttpGet httpget = new HttpGet(workflowURL);
-		        
-		        System.out.println("executing request" + httpget.getRequestLine());
-		        HttpResponse response = httpclient.execute(httpget);
-		        HttpEntity entity = response.getEntity();
-		        //entity.getContent();
-
-				//Marshal
-				encodedID = URLEncoder.encode(obj.getDisplayName(),"UTF-8");
-				writeInputStream(entity.getContent(), TreeObject.BARFILE_PATH+encodedID+".bar");
-				
-				
-				items.add(TreeObject.BARFILE_PATH+encodedID+".bar");
-				obj.setItems(items.toArray(new String[items.size()]));
-				exports.add(obj);
-				
+				}catch(Exception e){}
 				monitor.worked(1);
 			}
-			
 		}
 		// store the content xml
 		eps.setItems(exports.toArray(new TreeObject[exports.size()]));
@@ -450,30 +391,8 @@ public class ExportItemsWizard extends Wizard {
 		}catch(Exception e){}
 		monitor.done();
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 		}
-	}
-	//add by ymli;fix the bug:0012771
-	private  void writeInputStream(InputStream inputSteam,String filename){
-		try {
-			File f=new File(exportFolder+"/"+filename);
-			if(!f.getParentFile().getParentFile().exists()){
-				f.getParentFile().getParentFile().mkdir();
-			}		
-			if(!f.getParentFile().exists()){
-				f.getParentFile().mkdir();
-			} 
-			
-			FileOutputStream output = new FileOutputStream(f);  
-			BufferedInputStream is=new BufferedInputStream(new DataInputStream(inputSteam));
-			
-			 int data=is.read();  
-			 while(data!=-1){  
-				 output.write(data);  
-				 data=is.read();  
-			 }  
-			 output.close();
-		}catch(Exception e) {e.printStackTrace();}
 	}
 	
 	private  void writeString(String outputStr,String filename){
@@ -491,20 +410,7 @@ public class ExportItemsWizard extends Wizard {
 			fo.close();
 		}catch(Exception e) {e.printStackTrace();}
 	}
-	private  void writeByte(byte[] bs,String filename){
-		try {
-			File f=new File(exportFolder+"/"+filename);
-			if(!f.getParentFile().getParentFile().exists()){
-				f.getParentFile().getParentFile().mkdir();
-			}		
-			if(!f.getParentFile().exists()){
-				f.getParentFile().mkdir();
-			}
-	         FileOutputStream output = new FileOutputStream(f);  
-	         output.write(bs);  
-	         output.close();  
-		}catch(Exception e) {e.printStackTrace();}
-	}	
+	
 	@Override
 	public void addPages() {
 		// TODO Auto-generated method stub
