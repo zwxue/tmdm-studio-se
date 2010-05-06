@@ -241,7 +241,9 @@ public class ImportItemsWizard extends Wizard{
 		FileReader reader= new FileReader(importFolder+"/exportitems.xml");
 		Exports exports = (Exports)Unmarshaller.unmarshal(
 				Exports.class,reader);
-		LocalTreeObjectRepository.getInstance().makeUpDocWithImportCategory(exports.getSchemas(), serverRoot);
+		try {
+			LocalTreeObjectRepository.getInstance().makeUpDocWithImportCategory(exports.getSchemas(), serverRoot);
+		}catch(Exception e) {}
 		//new server root
 		TreeParent	reserverRoot = new TreeParent(
                 serverRoot.getDisplayName(),
@@ -337,7 +339,9 @@ public class ImportItemsWizard extends Wizard{
 		gd.heightHint=300;
 		treeViewer.getViewer().getControl().getParent().layout(true);
 		treeViewer.getViewer().getControl().getShell().layout(true);
+		try {
 		LocalTreeObjectRepository.getInstance().setOriginalXobjectsToImport(treeViewer.getCheckNodes());
+		}catch(Exception e) {}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
