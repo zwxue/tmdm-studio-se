@@ -127,7 +127,13 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 						e.printStackTrace();
 					}
 			   		break;	
-											
+		       	case TreeObject.JOB:
+		       		try {
+						addPage(new JobMainPage(this));
+					} catch (PartInitException e) {
+						e.printStackTrace();
+					}
+		       		break;							
 	           	default:
 	           		//MessageDialog.openError(this.getSite().getShell(), "Error", "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
 	           		return;

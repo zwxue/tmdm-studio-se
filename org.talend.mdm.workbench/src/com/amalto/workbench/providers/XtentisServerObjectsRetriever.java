@@ -319,8 +319,28 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 					}
 				}
 				monitor.worked(1);
+				
 				if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
 			}
+			//move Job from EE to CE.
+			//Job
+			TreeParent jobs = new TreeParent(EXtentisObjects.JobRegistry.getDisplayName(),serverRoot,TreeObject.JOB_REGISTRY,null,null);
+			WSMDMJob[] jobPKs = port.getMDMJob(new WSMDMNULL()).getWsMDMJob();
+			if (jobPKs!=null) {
+				monitor.subTask("Loading Jobs");
+				for (int i = 0; i < jobPKs.length; i++) {
+					String name = jobPKs[i].getJobName()+"_"+jobPKs[i].getJobVersion()+jobPKs[i].getSuffix();
+					TreeObject obj = new TreeObject(
+							name,
+							serverRoot,
+							TreeObject.JOB,
+							new WSViewPK(name),
+							null   //no storage to save space
+					);
+					jobs.addChild(obj);
+				}
+			}
+			monitor.worked(1);
 
 			serverRoot.addChild(models);
 			serverRoot.addChild(dataClusters);
@@ -329,6 +349,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			serverRoot.addChild(storedProcedures);
 						
 			serverRoot.addChild(serviceConfiguration);
+			serverRoot.addChild(jobs);
 			//serverRoot.addChild(workflow);
 //			serverRoot.addChild(resources);
 

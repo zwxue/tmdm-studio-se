@@ -51,15 +51,11 @@ import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.TreeEvent;
 import org.eclipse.swt.events.TreeListener;
 import org.eclipse.swt.graphics.Cursor;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.List;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewPart;
@@ -76,12 +72,17 @@ import com.amalto.workbench.actions.AServerViewAction;
 import com.amalto.workbench.actions.BrowseRevisionAction;
 import com.amalto.workbench.actions.BrowseViewAction;
 import com.amalto.workbench.actions.CopyXObjectAction;
+import com.amalto.workbench.actions.DeleteJobAction;
 import com.amalto.workbench.actions.DeleteXObjectAction;
 import com.amalto.workbench.actions.EditXObjectAction;
+import com.amalto.workbench.actions.GenerateJobDefaultTransformerAction;
+import com.amalto.workbench.actions.GenerateJobDefaultTriggerAction;
+import com.amalto.workbench.actions.ImportTISJobAction;
 import com.amalto.workbench.actions.NewCategoryAction;
 import com.amalto.workbench.actions.NewXObjectAction;
 import com.amalto.workbench.actions.PasteXObjectAction;
 import com.amalto.workbench.actions.RefreshCurrentEditorAction;
+import com.amalto.workbench.actions.RefreshXObjectAction;
 import com.amalto.workbench.actions.RenameXObjectAction;
 import com.amalto.workbench.actions.ServerLoginAction;
 import com.amalto.workbench.actions.ServerRefreshAction;
@@ -109,10 +110,7 @@ import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSDataCluster;
-import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSGetCurrentUniverse;
-import com.amalto.workbench.webservices.WSGetDataCluster;
 import com.amalto.workbench.webservices.WSLogout;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.XtentisPort;
@@ -749,6 +747,15 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 				}
 				if ( xobject.getType() == TreeObject.VIEW && xobject.isXObject()){
 					manager.add(browseViewAction);
+				}
+				if( xobject.getType() == TreeObject.JOB_REGISTRY){
+					manager.add(new ImportTISJobAction());
+					manager.add(new RefreshXObjectAction(ServerView.show()));
+				}
+				if( xobject.getType() == TreeObject.JOB){
+					manager.add(new DeleteJobAction());
+					manager.add(new GenerateJobDefaultTransformerAction());
+					manager.add(new GenerateJobDefaultTriggerAction());
 				}
 			    int type = LocalTreeObjectRepository.getInstance().receiveUnCertainTreeObjectType(xobject);
 			    if (!LocalTreeObjectRepository.getInstance().isInSystemCatalog(
