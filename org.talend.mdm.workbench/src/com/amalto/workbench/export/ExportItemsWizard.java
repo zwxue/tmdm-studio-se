@@ -198,7 +198,7 @@ public class ExportItemsWizard extends Wizard {
 		            	StringWriter sw1 = new StringWriter();
 		            	Marshaller.marshal(wsitem, sw1);
 
-		            	String uniqueId=pk.getPk()+"."+wsitem.getConceptName()+".";
+		            	String uniqueId=pk.getPk()+"."+wsitem.getConceptName();
 		            	for(String id: wsitem.getIds()){
 		            		uniqueId=uniqueId+"."+id;
 		            	}		            	
