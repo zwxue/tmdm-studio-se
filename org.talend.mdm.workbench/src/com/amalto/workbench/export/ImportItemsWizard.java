@@ -323,7 +323,7 @@ public class ImportItemsWizard extends Wizard{
 				views.addChild(obj);
 				break;	
 			default:
-				if(obj.getItems().length>0){
+				if(obj.getItems()!=null && obj.getItems().length>0){
 					for (int i = 0; i < obj.getItems().length; i++) {
 						if(obj.getItems()[i].split("/")[1]!=null)
 							dataClusterContent.put(obj.getItems()[i].split("/")[1], obj.getItems());
