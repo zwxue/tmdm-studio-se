@@ -49,6 +49,7 @@ import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.views.ServerView;
+import com.amalto.workbench.webservices.WSAutoIncrement;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModel;
@@ -244,6 +245,12 @@ public class ImportItemsWizard extends Wizard{
 		try {
 			LocalTreeObjectRepository.getInstance().makeUpDocWithImportCategory(exports.getSchemas(), serverRoot);
 		}catch(Exception e) {}
+		//import autoincrement
+		if(exports.getAutoIncrement()!=null) {
+			try {
+			port.getAutoIncrement(new WSAutoIncrement(exports.getAutoIncrement()));
+			}catch(Exception e) {}
+		}
 		//new server root
 		TreeParent	reserverRoot = new TreeParent(
                 serverRoot.getDisplayName(),
@@ -667,20 +674,11 @@ public class ImportItemsWizard extends Wizard{
 
 				for(String subItem : subItems) {
 				   try {
-					   String name=subItem.substring(subItem.indexOf("/"))+1;
-//					   ResourcesUtil.postPicFromFile(name,importFolder+"/" + subItem, serverRoot.getEndpointIpAddress()+TreeObject.PICTURES_URI);
 						Util.uploadImageFile(serverRoot.getEndpointIpAddress()
 								+ "/imageserver/secure/ImageUploadServlet",
 								importFolder + "/" + subItem, serverRoot
 										.getUsername(), serverRoot
 										.getPassword());
-//				      reader = new FileReader(importFolder+"/" + subItem);
-//		              WSItem wsItem = new WSItem();
-//		              wsItem = (WSItem) Unmarshaller.unmarshal(WSItem.class, reader);
-//		                
-//		              if(wsItem != null) {
-//		                 port.putItem(new WSPutItem(wsItem.getWsDataClusterPK(),wsItem.getContent(),new WSDataModelPK(wsItem.getDataModelName()),true));
-//		              }
 				   } 
 				   catch (Exception e2) {
 				      e2.printStackTrace();
@@ -867,7 +865,7 @@ public class ImportItemsWizard extends Wizard{
 					if(wsItem.getDataModelName()==null){
 //				port.synchronizationPutItemXML(new WSSynchronizationPutItemXML(null,wsItem.getContent()));
 					}else{
-						port.putItem(new WSPutItem(wsItem.getWsDataClusterPK(),wsItem.getContent(),new WSDataModelPK(wsItem.getDataModelName()),true));
+						port.putItem(new WSPutItem(wsItem.getWsDataClusterPK(),wsItem.getContent(),new WSDataModelPK(wsItem.getDataModelName()),false));
 					}	
 					
 				}

@@ -977,6 +977,24 @@
 	</xsd:complexType>
 	<xsd:element name="WSGetItemsPivotIndex" type="tns:WSGetItemsPivotIndex"/>
 	
+	<xsd:complexType name="WSGetChildrenItems">
+        <xsd:annotation>
+            <xsd:documentation>
+                Get children items
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="1" name="clusterName" nillable="false" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="1" name="conceptName" nillable="false" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="1" name="PKXpaths" nillable="false" type="tns:WSStringArray"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="FKXpath" nillable="true" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="1" name="labelXpath" nillable="false" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="fatherPK" nillable="true" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="whereItem" nillable="true" type="tns:WSWhereItem"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="WSGetChildrenItems" type="tns:WSGetChildrenItems"/>
+	
 	<xsd:complexType name="WSCount">
 		<xsd:annotation>
 			<xsd:documentation>
@@ -1034,6 +1052,29 @@
 	</xsd:complexType>
 	<xsd:element name="WSPutItem" type="tns:WSPutItem"/>
 	
+    <xsd:complexType name="WSPutItemByOperatorType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Puts an item in the xml storage.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="1" name="wsDataClusterPK" nillable="false" type="tns:WSDataClusterPK"/>
+            <xsd:element maxOccurs="1" minOccurs="1" name="xmlString" nillable="false" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="1" name="wsDataModelPK" nillable="false" type="tns:WSDataModelPK"/>
+            <xsd:element maxOccurs="1" minOccurs="1" name="operatortype" nillable="false" type="tns:WSOperatorType"/>
+        </xsd:sequence>     
+    </xsd:complexType>
+    <xsd:element name="WSPutItemByOperatorType" type="tns:WSPutItemByOperatorType"/>
+
+    <xsd:simpleType name="WSOperatorType">
+        <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:enumeration value="UPDATE"/>
+            <xsd:enumeration value="INSERT"/>
+            <xsd:enumeration value="DELETE"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:element name="WSOperatorType" type="tns:WSOperatorType"/>    	
 	<xsd:complexType name="WSPutItemArray">
 		<xsd:sequence>
 			<xsd:element maxOccurs="unbounded" minOccurs="1" name="wsPutItem" nillable="true" type="tns:WSPutItem"/>
@@ -1729,4 +1770,40 @@
         </xsd:sequence>     
     </xsd:complexType>
     <xsd:element name="WSCategoryData" type="tns:WSCategoryData"/>
+ 
+     <xsd:complexType name="WSAutoIncrement">
+        <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="1" name="autoincrement" nillable="false" type="xsd:string"/>
+        </xsd:sequence>     
+    </xsd:complexType>
+    <xsd:element name="WSAutoIncrement" type="tns:WSAutoIncrement"/>  
+       
+    <!-- License -->
+    <xsd:complexType name="WSLicense">
+        <xsd:all>
+            <xsd:element maxOccurs="1" minOccurs="1" name="license" nillable="false" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="1" name="customerCompany" nillable="false" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="1" name="token" nillable="false" type="xsd:string"/>
+        </xsd:all>     
+    </xsd:complexType>
+    <xsd:element name="WSLicense" type="tns:WSLicense"/>    
+    
+    <xsd:complexType name="WSLicensePK">
+        <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="1" name="pk" nillable="false" type="xsd:string"/>
+        </xsd:sequence>     
+    </xsd:complexType>          
+    <xsd:element name="WSLicensePK" type="tns:WSLicensePK"/>
+    
+    <xsd:complexType name="WSPutLicense">
+        <xsd:annotation>
+            <xsd:documentation>
+                Creates - updates a data model
+            </xsd:documentation>
+        </xsd:annotation>       
+        <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="1" name="wsLicense" nillable="false" type="tns:WSLicense"/>
+        </xsd:sequence>     
+    </xsd:complexType>
+    <xsd:element name="WSPutLicense" type="tns:WSPutLicense"/>
 </xsd:schema>

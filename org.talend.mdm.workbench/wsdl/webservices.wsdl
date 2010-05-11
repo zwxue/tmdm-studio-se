@@ -346,6 +346,12 @@
 	<message name="getItemsPivotIndexResponse">
 		<part name="results" element="tns:WSStringArray"/>
 	</message>
+	<message name="getChildrenItemsRequest">
+        <part name="wsGetChildrenItems" element="tns:WSGetChildrenItems"/>
+    </message>
+    <message name="getChildrenItemsResponse">
+        <part name="results" element="tns:WSStringArray"/>
+    </message>
 	<message name="countRequest">
 		<part name="wsCount" element="tns:WSCount"/>
 	</message>
@@ -359,6 +365,18 @@
 		<part name="results" element="tns:WSStringArray"/>
 	</message>
 	
+	<!-- License -->
+    <message name="putLicenseRequest">
+        <part name="putLicense" element="tns:WSPutLicense"/>
+    </message>
+    <message name="putLicenseResponse">
+        <part name="license" element="tns:WSLicensePK"/>
+    </message>
+    
+    <message name="getLicenseRequest"></message>
+    <message name="getLicenseResponse">
+        <part name="license" element="tns:WSLicense"/>
+    </message>
 
 	<!-- ************************ PUT ITEM *************************** -->
 	<message name="putItemRequest">
@@ -367,6 +385,13 @@
 	<message name="putItemResponse">
 		<part name="wsItemPK" element="tns:WSItemPK"/>
 	</message>
+    <message name="putItemByOperatorTypeRequest">
+        <part name="putItemByOperatorType" element="tns:WSPutItemByOperatorType"/>
+    </message>
+    <message name="putItemByOperatorTypeResponse">
+        <part name="wsItemPK" element="tns:WSItemPK"/>
+    </message>
+    	
 	<message name="putItemArrayRequest">
 		<part name="wsPutItemArray" element="tns:WSPutItemArray"/>
 	</message>
@@ -1312,7 +1337,12 @@
     <message name="getMDMCategoryResponse">
        <part name="wsCategoryDataResponse" element="tns:WSCategoryData"/>
     </message>
-    		
+     <message name="getAutoIncrementRequest">
+       <part name="wsAutoIncrementRequest" element="tns:WSAutoIncrement"/>
+    </message>
+    <message name="getAutoIncrementResponse">
+       <part name="wsAutoIncrementResponse" element="tns:WSAutoIncrement"/>
+    </message>    		
 	<!-- *****************************************************
 		              P O R T		
 		              
@@ -1503,6 +1533,10 @@
 			<input message="tns:getItemsPivotIndexRequest"/>
 			<output message="tns:getItemsPivotIndexResponse"/>
 		</operation>
+		<operation name="getChildrenItems">
+            <input message="tns:getChildrenItemsRequest"/>
+            <output message="tns:getChildrenItemsResponse"/>
+        </operation>
 		<operation name="count">
 			<input message="tns:countRequest"/>
 			<output message="tns:countResponse"/>
@@ -1517,6 +1551,18 @@
 			<input message="tns:putItemRequest"/>
 			<output message="tns:putItemResponse"/>
 		</operation>
+        <operation name="putItemByOperatorType">
+            <input message="tns:putItemByOperatorTypeRequest"/>
+            <output message="tns:putItemByOperatorTypeResponse"/>
+        </operation>
+        <operation name="putLicense">
+            <input message="tns:putLicenseRequest"/>
+            <output message="tns:putLicenseResponse"/>
+        </operation>    
+         <operation name="getLicense">
+            <input message="tns:getLicenseRequest"/>
+            <output message="tns:getLicenseResponse"/>
+        </operation>		
 		<operation name="putItemArray">
 			<input message="tns:putItemArrayRequest"/>
 			<output message="tns:putItemArrayResponse"/>
@@ -2114,10 +2160,15 @@
 		   <input message="tns:deleteMDMJobRequest"/>
 		   <output message="tns:deleteMDMJobResponse"/>
 		</operation>
+
          <operation name="getMDMCategory">
             <input message="tns:getMDMCategoryRequest"/>
             <output message="tns:getMDMCategoryResponse"></output>
-        </operation>							
+        </operation>	
+         <operation name="getAutoIncrement">
+            <input message="tns:getAutoIncrementRequest"/>
+            <output message="tns:getAutoIncrementResponse"></output>
+        </operation>         						
 	</portType>
 	
 
@@ -2356,6 +2407,11 @@
 			<input><soap:body use="literal"/></input>
 			<output><soap:body use="literal"/></output>
 		</operation>
+		<operation name="getChildrenItems">
+            <soap:operation/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+        </operation>
 		<operation name="count">
 			<soap:operation/>
 			<input><soap:body use="literal"/></input>
@@ -2375,6 +2431,21 @@
 			<input><soap:body use="literal"/></input>
 			<output><soap:body use="literal"/></output>
 		</operation>
+        <operation name="putItemByOperatorType">
+            <soap:operation/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+        </operation>
+        <operation name="putLicense">
+            <soap:operation/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+        </operation>    
+        <operation name="getLicense">
+            <soap:operation/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+        </operation>		
 		<operation name="putItemArray">
 			<soap:operation/>
 			<input><soap:body use="literal"/></input>
@@ -3118,13 +3189,19 @@
 			<input><soap:body use="literal"/></input>
 			<output><soap:body use="literal"/></output>
 		</operation>
+		
         <operation name="getMDMCategory">
             <soap:operation/>
             <input><soap:body use="literal"/></input>
             <output><soap:body use="literal"/></output>
-        </operation>					
+        </operation>
+          <operation name="getAutoIncrement">
+            <soap:operation/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+        </operation>        					
 	</binding>
-		
+
 	
 	<service name="XtentisService">
 		<port binding="tns:XtentisBinding" name="XtentisPort">

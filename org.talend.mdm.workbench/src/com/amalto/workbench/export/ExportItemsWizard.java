@@ -39,6 +39,7 @@ import org.talend.mdm.commmon.util.workbench.ZipToFile;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.webservices.WSAutoIncrement;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModel;
@@ -420,6 +421,13 @@ public class ExportItemsWizard extends Wizard {
 		// store the content xml
 		eps.setItems(exports.toArray(new TreeObject[exports.size()]));
 		eps.setSchemas(LocalTreeObjectRepository.getInstance().outPutSchemas());
+		//export autoincrement
+		try {
+			WSAutoIncrement auto=port.getAutoIncrement(null);
+			if(auto!=null && auto.getAutoincrement()!=null) {
+				eps.setAutoIncrement(auto.getAutoincrement());
+			}
+		}catch(Exception e) {}
 		StringWriter sw = new StringWriter();
 		try{
 		Marshaller.marshal(eps, sw);
