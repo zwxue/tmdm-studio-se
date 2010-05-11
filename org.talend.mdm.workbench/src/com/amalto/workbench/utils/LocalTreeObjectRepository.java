@@ -1387,7 +1387,10 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		String xpathPrefix = "/category/" + user;
 		String xmlPrefix = "<category><" + user + ">*</"+ user + "></category>";
 		if(schemas == null) // old version, skip the import
+		{
+			credentials.get(UnifyUrl(serverRoot.getServerRoot().getWsKey().toString())).doc = orgDoc;
 			return;
+		}
 		for(String schema : schemas)
 		{
 			Element root = parseElements(xmlPrefix.replace("*", schema));
