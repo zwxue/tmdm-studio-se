@@ -85,7 +85,6 @@ public class WSGetCurrentUniverse  implements java.io.Serializable {
         elemField.setFieldName("dummy");
         elemField.setXmlName(new javax.xml.namespace.QName("", "dummy"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
-        elemField.setMinOccurs(0);
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
     }

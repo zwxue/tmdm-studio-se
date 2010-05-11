@@ -12,14 +12,18 @@ public class WSLicense  implements java.io.Serializable {
 
     private java.lang.String customerCompany;
 
+    private java.lang.String token;
+
     public WSLicense() {
     }
 
     public WSLicense(
            java.lang.String license,
-           java.lang.String customerCompany) {
+           java.lang.String customerCompany,
+           java.lang.String token) {
            this.license = license;
            this.customerCompany = customerCompany;
+           this.token = token;
     }
 
 
@@ -62,6 +66,26 @@ public class WSLicense  implements java.io.Serializable {
         this.customerCompany = customerCompany;
     }
 
+
+    /**
+     * Gets the token value for this WSLicense.
+     * 
+     * @return token
+     */
+    public java.lang.String getToken() {
+        return token;
+    }
+
+
+    /**
+     * Sets the token value for this WSLicense.
+     * 
+     * @param token
+     */
+    public void setToken(java.lang.String token) {
+        this.token = token;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof WSLicense)) return false;
@@ -79,7 +103,10 @@ public class WSLicense  implements java.io.Serializable {
               this.license.equals(other.getLicense()))) &&
             ((this.customerCompany==null && other.getCustomerCompany()==null) || 
              (this.customerCompany!=null &&
-              this.customerCompany.equals(other.getCustomerCompany())));
+              this.customerCompany.equals(other.getCustomerCompany()))) &&
+            ((this.token==null && other.getToken()==null) || 
+             (this.token!=null &&
+              this.token.equals(other.getToken())));
         __equalsCalc = null;
         return _equals;
     }
@@ -96,6 +123,9 @@ public class WSLicense  implements java.io.Serializable {
         }
         if (getCustomerCompany() != null) {
             _hashCode += getCustomerCompany().hashCode();
+        }
+        if (getToken() != null) {
+            _hashCode += getToken().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -116,6 +146,12 @@ public class WSLicense  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("customerCompany");
         elemField.setXmlName(new javax.xml.namespace.QName("", "customerCompany"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("token");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "token"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(false);
         typeDesc.addFieldDesc(elemField);

@@ -45,7 +45,7 @@ public class SynchronizationItemWebserviceTestCase extends WebserviceTestCase {
 			wsPutSynchronizationItem.setWsSynchronizationItem(wsSynchronizationItem);
 			WSSynchronizationItemPK wsSynchronizationItemPK = defaultPort
 					.putSynchronizationItem(wsPutSynchronizationItem);
-			System.out.println(wsSynchronizationItemPK.getIds());
+			assertNotNull(wsSynchronizationItemPK);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -56,9 +56,7 @@ public class SynchronizationItemWebserviceTestCase extends WebserviceTestCase {
 		try {
 			WSSynchronizationItemPK[] wsSynchronizationItemPKArray = defaultPort
 					.getSynchronizationItemPKs(regex);
-			for (int i = 0; i < wsSynchronizationItemPKArray.length; i++) {
-				System.out.println(wsSynchronizationItemPKArray[i]);
-			}
+			assertNotNull(wsSynchronizationItemPKArray);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -76,7 +74,7 @@ public class SynchronizationItemWebserviceTestCase extends WebserviceTestCase {
 					.setWsSynchronizationItemPK(wsSynchronizationItemPKArray[0]);
 			WSSynchronizationItem wsSynchronizationItem = defaultPort
 					.getSynchronizationItem(wsGetSynchronizationItem);
-			System.out.println(wsSynchronizationItem.getLocalRevisionID());
+			assertNotNull(wsSynchronizationItem);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -95,7 +93,7 @@ public class SynchronizationItemWebserviceTestCase extends WebserviceTestCase {
 					.setWsSynchronizationItemPK(wsSynchronizationItemPKArray[0]);
 			WSBoolean wsBoolean = defaultPort
 					.existsSynchronizationItem(wsExistsSynchronizationItem);
-			System.out.println(wsBoolean.is_true());
+			assertTrue(wsBoolean.is_true());
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -113,7 +111,7 @@ public class SynchronizationItemWebserviceTestCase extends WebserviceTestCase {
 					.setWsSynchronizationItemPK(wsSynchronizationItemPKArray[0]);
 			WSSynchronizationItem wsSynchronizationItem = defaultPort
 					.resolveSynchronizationItem(wsResolveSynchronizationItem);
-			System.out.println(wsSynchronizationItem.getLastRunPlan());
+			assertNotNull(wsSynchronizationItem);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -126,10 +124,7 @@ public class SynchronizationItemWebserviceTestCase extends WebserviceTestCase {
 		try {
 			WSWorkflowProcessDefinitionUUID[] wsWorkflowProcessDefinitionUUIDArray = defaultPort
 					.workflowGetProcessDefinitions(wsWorkflowGetProcessDefinitions);
-			for (int i = 0; i < wsWorkflowProcessDefinitionUUIDArray.length; i++) {
-				System.out.println(wsWorkflowProcessDefinitionUUIDArray[i]
-						.getProcessName());
-			}
+			assertNotNull(wsWorkflowProcessDefinitionUUIDArray);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -144,8 +139,7 @@ public class SynchronizationItemWebserviceTestCase extends WebserviceTestCase {
 		try {
 			WSWorkflowProcessDefinitionUUID wsWorkflowProcessDefinitionUUID = defaultPort
 					.workflowDeploy(wsWorkflowDeploy);
-			System.out
-					.println(wsWorkflowProcessDefinitionUUID.getProcessName());
+			assertNotNull(wsWorkflowProcessDefinitionUUID);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -165,9 +159,7 @@ public class SynchronizationItemWebserviceTestCase extends WebserviceTestCase {
 			instance.setUuid(wsWorkflowProcessDefinitionUUID);
 			WSProcessInstance[] wsProcessInstanceArray = defaultPort
 					.workflowGetProcessInstances(instance);
-			for (int i = 0; i < wsProcessInstanceArray.length; i++) {
-				System.out.println(wsProcessInstanceArray[i].getName());
-			}
+			assertNotNull(wsProcessInstanceArray);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -183,9 +175,7 @@ public class SynchronizationItemWebserviceTestCase extends WebserviceTestCase {
 		try {
 			WSProcessTaskInstance[] wsProcessTaskInstanceArray = defaultPort
 					.workflowGetTaskList(tasklist);
-			for (int i = 0; i < wsProcessTaskInstanceArray.length; i++) {
-				System.out.println(wsProcessTaskInstanceArray[i].getName());
-			}
+			assertNotNull(wsProcessTaskInstanceArray);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -206,7 +196,7 @@ public class SynchronizationItemWebserviceTestCase extends WebserviceTestCase {
 					.getName());
 			WSBoolean wsBoolean = defaultPort
 					.workflowDeleteProcessInstances(deleteWolkflowRequest);
-			System.out.println(wsBoolean.is_true());
+			assertTrue(wsBoolean.is_true());
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -241,7 +231,7 @@ public class SynchronizationItemWebserviceTestCase extends WebserviceTestCase {
 			WSWorkflowUnDeploy undeploy = new WSWorkflowUnDeploy();
 			undeploy.setUuid(wsWorkflowProcessDefinitionUUID);
 			WSBoolean wsBoolean = defaultPort.workflowUnDeploy(undeploy);
-			System.out.println(wsBoolean.is_true());
+			assertTrue(wsBoolean.is_true());
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}

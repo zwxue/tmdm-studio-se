@@ -22,7 +22,7 @@ public class UniverseWebserviceTestCase extends WebserviceTestCase {
 		try {
 			WSUniverse wsUniverse = defaultPort
 					.getCurrentUniverse(wsGetCurrentUniverse);
-			System.out.println(wsUniverse);
+			assertNotNull(wsUniverse);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -35,9 +35,7 @@ public class UniverseWebserviceTestCase extends WebserviceTestCase {
 		try {
 			WSUniversePK[] wsUniversePKArray = defaultPort
 					.getUniversePKs(regex);
-			for (int i = 0; i < wsUniversePKArray.length; i++) {
-				System.out.println(wsUniversePKArray[i].getPk());
-			}
+			assertNotNull(wsUniversePKArray);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -56,7 +54,7 @@ public class UniverseWebserviceTestCase extends WebserviceTestCase {
 			wsGetUniverse.setWsUniversePK(wsUniversePK);
 			WSUniverse wsUniverseResult = defaultPort
 					.getUniverse(wsGetUniverse);
-			System.out.println(wsUniverseResult.getName());
+			assertNotNull(wsUniverseResult);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -74,7 +72,7 @@ public class UniverseWebserviceTestCase extends WebserviceTestCase {
 			wsUniversePK.setPk(wsUniverse.getName());
 			wsExistsUniverse.setWsUniversePK(wsUniversePK);
 			WSBoolean wsBoolean = defaultPort.existsUniverse(wsExistsUniverse);
-			System.out.println(wsBoolean.is_true());
+			assertTrue(wsBoolean.is_true());
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -89,9 +87,7 @@ public class UniverseWebserviceTestCase extends WebserviceTestCase {
 		try {
 			WSUniversePK[] wsUniversePKArray = defaultPort
 					.getUniverseByRevision(wsGetUniverseByRevision);
-			for (int i = 0; i < wsUniversePKArray.length; i++) {
-				System.out.println(wsUniversePKArray[i]);
-			}
+			assertNotNull(wsUniversePKArray);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -109,7 +105,7 @@ public class UniverseWebserviceTestCase extends WebserviceTestCase {
 			wsUniverse.setName(wsUniverse.getName()+"2");
 			wsPutUniverse.setWsUniverse(wsUniverse);
 			WSUniversePK wsUniversePKResult = defaultPort.putUniverse(wsPutUniverse);
-			System.out.println(wsUniversePKResult.getPk());
+			assertNotNull(wsUniversePKResult);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -119,9 +115,7 @@ public class UniverseWebserviceTestCase extends WebserviceTestCase {
 	public void testGetObjectsForUniverses() {
 		try {
 			String[] strings = defaultPort.getObjectsForUniverses(null);
-			for (int i = 0; i < strings.length; i++) {
-				System.out.println(strings[i]);
-			}
+			assertNotNull(strings);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -140,7 +134,7 @@ public class UniverseWebserviceTestCase extends WebserviceTestCase {
 			wsUniverseDelete.setWsUniversePK(wsUniversePK);
 			WSUniversePK wsUniversePKReturn = defaultPort
 					.deleteUniverse(wsUniverseDelete);
-			System.out.println(wsUniversePKReturn.getPk());
+			assertNotNull(wsUniversePKReturn);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}

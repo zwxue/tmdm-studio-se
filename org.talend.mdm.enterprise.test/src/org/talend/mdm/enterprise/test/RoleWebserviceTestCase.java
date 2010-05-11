@@ -18,9 +18,7 @@ public class RoleWebserviceTestCase extends WebserviceTestCase {
 		regex.setRegex(".*");
 		try {
 			WSRolePK[] wsRolePKArray = defaultPort.getRolePKs(regex);
-			for (int i = 0; i < wsRolePKArray.length; i++) {
-				System.out.println(wsRolePKArray[i]);
-			}
+			assertNotNull(wsRolePKArray);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -36,7 +34,7 @@ public class RoleWebserviceTestCase extends WebserviceTestCase {
 			WSGetRole wsGetRole = new WSGetRole();
 			wsGetRole.setWsRolePK(wsRolePKArray[0]);
 			WSRole wsRole = defaultPort.getRole(wsGetRole);
-			System.out.println(wsRole.getName());
+			assertNotNull(wsRole);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -52,7 +50,7 @@ public class RoleWebserviceTestCase extends WebserviceTestCase {
 
 			wsExistsRole.setWsRolePK(wsRolePKArray[0]);
 			WSBoolean wsBoolean = defaultPort.existsRole(wsExistsRole);
-			System.out.println(wsBoolean.is_true());
+			assertTrue(wsBoolean.is_true());
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -72,7 +70,7 @@ public class RoleWebserviceTestCase extends WebserviceTestCase {
 			wsRole.setName(wsRole.getName() + "_new");
 			wsPutRole.setWsRole(wsRole);
 			WSRolePK wsRolePK = defaultPort.putRole(wsPutRole);
-			System.out.println(wsRolePK.getPk());
+			assertNotNull(wsRolePK);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -82,9 +80,7 @@ public class RoleWebserviceTestCase extends WebserviceTestCase {
 	public void testGetObjectsForRoles() {
 		try {
 			String[] strings = defaultPort.getObjectsForRoles(null);
-			for (int i = 0; i < strings.length; i++) {
-				System.out.println(strings[i]);
-			}
+			assertNotNull(strings);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -108,7 +104,7 @@ public class RoleWebserviceTestCase extends WebserviceTestCase {
 			WSDeleteRole wsRoleDelete = new WSDeleteRole();
 			wsRoleDelete.setWsRolePK(wsRolePK);
 			WSRolePK wsRolePKReturn = defaultPort.deleteRole(wsRoleDelete);
-			System.out.println(wsRolePKReturn.getPk());
+			assertNotNull(wsRolePKReturn);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}

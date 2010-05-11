@@ -20,9 +20,7 @@ public class JOBWebserviceTestCase extends WebserviceTestCase {
 
 		try {
 			WSMDMJob[] wsMDMJobArray = defaultPort.getMDMJob(null);
-			for (int i = 0; i < wsMDMJobArray.length; i++) {
-				System.out.println(wsMDMJobArray[i].getJobName());
-			}
+			assertNotNull(wsMDMJobArray);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -36,7 +34,7 @@ public class JOBWebserviceTestCase extends WebserviceTestCase {
 			wsPUTMDMJob.setJobName(wsMDMJobArray[0].getJobName() + "2");
 			wsPUTMDMJob.setJobVersion(wsMDMJobArray[0].getJobVersion() + "2");
 			WSBoolean wsBoolean = defaultPort.putMDMJob(wsPUTMDMJob);
-			System.out.println(wsBoolean.is_true());
+			assertTrue(wsBoolean.is_true());
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -55,7 +53,7 @@ public class JOBWebserviceTestCase extends WebserviceTestCase {
 		try {
 			WSItemPK wsItemPK = defaultPort
 					.putItemByOperatorType(wsPutItemByOperatorType);
-			System.out.println(wsItemPK.getConceptName());
+			assertNotNull(wsItemPK);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -69,7 +67,7 @@ public class JOBWebserviceTestCase extends WebserviceTestCase {
 			wsDELMDMJob.setJobName(wsMDMJobArray[0].getJobName());
 			wsDELMDMJob.setJobVersion(wsMDMJobArray[0].getJobVersion());
 			WSBoolean wsBoolean = defaultPort.deleteMDMJob(wsDELMDMJob);
-			System.out.println(wsBoolean.is_true());
+			assertNotNull(wsBoolean.is_true());
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}

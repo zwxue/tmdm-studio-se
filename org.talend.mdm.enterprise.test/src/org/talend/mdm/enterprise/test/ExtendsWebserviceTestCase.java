@@ -16,7 +16,7 @@ public class ExtendsWebserviceTestCase extends WebserviceTestCase {
 		putLicense.setWsLicense(wsLicense);
 		try {
 			WSLicensePK wsLicensePK = defaultPort.putLicense(putLicense);
-			System.out.println(wsLicensePK.getPk());
+			assertNotNull(wsLicensePK);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -24,7 +24,7 @@ public class ExtendsWebserviceTestCase extends WebserviceTestCase {
 
 	public void testGetLicense() {
 		try {
-			System.out.println(defaultPort.getLicense().getLicense());
+			assertNotNull(defaultPort.getLicense());
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}

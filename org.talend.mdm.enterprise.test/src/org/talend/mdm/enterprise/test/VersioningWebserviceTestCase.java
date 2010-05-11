@@ -51,7 +51,7 @@ public class VersioningWebserviceTestCase extends WebserviceTestCase {
 		try {
 			WSBackgroundJobPK wsBackgroundJobPK = defaultPort
 					.versioningCommitItems(wsVersioningCommitItems);
-			System.out.println(wsBackgroundJobPK.getPk());
+			assertNotNull(wsBackgroundJobPK);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -74,7 +74,7 @@ public class VersioningWebserviceTestCase extends WebserviceTestCase {
 		try {
 			WSBoolean wsBoolean = defaultPort
 					.versioningRestoreItemByRevision(wsVersioningRestoreItemByRevision);
-			System.out.println(wsBoolean.is_true());
+			assertTrue(wsBoolean.is_true());
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -120,7 +120,7 @@ public class VersioningWebserviceTestCase extends WebserviceTestCase {
 		try {
 			WSVersioningItemsVersionsItems[] wsVersioningItemsVersions = defaultPort
 					.versioningGetItemsVersions(wsVersioningGetItemsVersions);
-			System.out.println(wsVersioningItemsVersions.length);
+			assertNotNull(wsVersioningItemsVersions);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -142,7 +142,7 @@ public class VersioningWebserviceTestCase extends WebserviceTestCase {
 		try {
 			WSString wsString = defaultPort
 					.versioningGetItemContent(wsVersioningGetItemContent);
-			System.out.println(wsString.getValue());
+			assertNotNull(wsString);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -156,10 +156,7 @@ public class VersioningWebserviceTestCase extends WebserviceTestCase {
 		try {
 			WSVersioningObjectsVersionsObjects[] wsersioningObjectsVersionsObjects = defaultPort
 					.versioningGetObjectsVersions(wsVersioningGetObjectsVersions);
-			for (int i = 0; i < wsersioningObjectsVersionsObjects.length; i++) {
-				System.out.println(wsersioningObjectsVersionsObjects[0]
-						.getName());
-			}
+			assertNotNull(wsersioningObjectsVersionsObjects);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -172,10 +169,7 @@ public class VersioningWebserviceTestCase extends WebserviceTestCase {
 		try {
 			WSVersioningUniverseVersionsTagStructure[] wsVersioningUniverseVersionsTagStructures = defaultPort
 					.versioningGetUniverseVersions(wsVersioningGetUniverseVersions);
-			for (int i = 0; i < wsVersioningUniverseVersionsTagStructures.length; i++) {
-				System.out.println(wsVersioningUniverseVersionsTagStructures[i]
-						.getTagName());
-			}
+			assertNotNull(wsVersioningUniverseVersionsTagStructures);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -201,7 +195,7 @@ public class VersioningWebserviceTestCase extends WebserviceTestCase {
 		try {
 			WSBackgroundJobPK wsBackgroundJobPK = defaultPort
 					.versioningRestoreItems(wsVersioningRestoreItems);
-			System.out.println(wsBackgroundJobPK.getPk());
+			assertNotNull(wsBackgroundJobPK);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -217,7 +211,7 @@ public class VersioningWebserviceTestCase extends WebserviceTestCase {
 		try {
 			WSBackgroundJobPK wsBackgroundJobPK = defaultPort
 					.versioningRestoreObjects(wsVersioningRestoreObjects);
-			System.out.println(wsBackgroundJobPK.getPk());
+			assertNotNull(wsBackgroundJobPK);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -235,7 +229,7 @@ public class VersioningWebserviceTestCase extends WebserviceTestCase {
 					.setEncodedClusterNames(encodedClusterNames);
 			WSBackgroundJobPK wsBackgroundJobPK = defaultPort
 					.versioningRestoreUniverse(wsVersioningRestoreUniverse);
-			System.out.println(wsBackgroundJobPK.getPk());
+			assertNotNull(wsBackgroundJobPK);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (RemoteException e) {
@@ -279,7 +273,7 @@ public class VersioningWebserviceTestCase extends WebserviceTestCase {
 		try {
 			WSBackgroundJobPK wsBackgroundJobPK = defaultPort
 					.versioningTagObjects(wsVersioningTagObjects);
-			System.out.println(wsBackgroundJobPK.getPk());
+			assertNotNull(wsBackgroundJobPK);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -300,7 +294,7 @@ public class VersioningWebserviceTestCase extends WebserviceTestCase {
 		try {
 			WSBackgroundJobPK wsBackgroundJobPK = defaultPort
 					.versioningTagUniverse(wsVersioningTagUniverse);
-			System.out.println(wsBackgroundJobPK.getPk());
+			assertNotNull(wsBackgroundJobPK);
 		} catch (RemoteException e) {
 
 			e.printStackTrace();
@@ -314,7 +308,7 @@ public class VersioningWebserviceTestCase extends WebserviceTestCase {
 		try {
 			WSVersioningInfo wsVersioningInfo = defaultPort
 					.versioningGetInfo(wsVersioningGetInfo);
-			System.out.println(wsVersioningInfo.getDescription());
+			assertNotNull(wsVersioningInfo);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -327,7 +321,7 @@ public class VersioningWebserviceTestCase extends WebserviceTestCase {
 		try {
 			WSVersioningSystemConfiguration wsVersioningSystemConfiguration = defaultPort
 					.getVersioningSystemConfiguration(wsGetVersioningSystemConfiguration);
-			System.out.println(wsVersioningSystemConfiguration.getName());
+			assertNotNull(wsVersioningSystemConfiguration);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -346,7 +340,7 @@ public class VersioningWebserviceTestCase extends WebserviceTestCase {
 					.setVersioningSystemConfiguration(wsVersioningSystemConfiguration);
 			WSString wsString = defaultPort
 					.putVersioningSystemConfiguration(wsPutVersioningSystemConfiguration);
-			System.out.println(wsString.getValue());
+			assertNotNull(wsString);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}

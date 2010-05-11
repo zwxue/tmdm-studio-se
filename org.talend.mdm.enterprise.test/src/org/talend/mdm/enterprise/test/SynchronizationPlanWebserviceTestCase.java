@@ -37,7 +37,7 @@ public class SynchronizationPlanWebserviceTestCase extends WebserviceTestCase {
 			wsPutSynchronizationPlan.setWsSynchronizationPlan(wsSynchronizationPlan);
 			WSSynchronizationPlanPK wsSynchronizationPlanPK = defaultPort
 					.putSynchronizationPlan(wsPutSynchronizationPlan);
-			System.out.println(wsSynchronizationPlanPK.getPk());
+			assertNotNull(wsSynchronizationPlanPK);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -49,9 +49,7 @@ public class SynchronizationPlanWebserviceTestCase extends WebserviceTestCase {
 		try {
 			WSSynchronizationPlanPK[] wsSynchronizationPlanPKArray = defaultPort
 					.getSynchronizationPlanPKs(regex);
-			for (int i = 0; i < wsSynchronizationPlanPKArray.length; i++) {
-				System.out.println(wsSynchronizationPlanPKArray[i].getPk());
-			}
+			assertNotNull(wsSynchronizationPlanPKArray);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -69,7 +67,7 @@ public class SynchronizationPlanWebserviceTestCase extends WebserviceTestCase {
 					.setWsSynchronizationPlanPK(wsSynchronizationPlanPKArray[0]);
 			WSSynchronizationPlan wsSynchronizationPlan = defaultPort
 					.getSynchronizationPlan(wsGetSynchronizationPlan);
-			System.out.println(wsSynchronizationPlan.getName());
+			assertNotNull(wsSynchronizationPlan);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -87,7 +85,7 @@ public class SynchronizationPlanWebserviceTestCase extends WebserviceTestCase {
 					.setWsSynchronizationPlanPK(wsSynchronizationPlanPKArray[0]);
 			WSBoolean wsBoolean = defaultPort
 					.existsSynchronizationPlan(wsExistsSynchronizationPlan);
-			System.out.println(wsBoolean);
+			assertTrue(wsBoolean.is_true());
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -100,9 +98,7 @@ public class SynchronizationPlanWebserviceTestCase extends WebserviceTestCase {
 		try {
 			String[] strings = defaultPort
 					.getObjectsForSynchronizationPlans(null);
-			for (int i = 0; i < strings.length; i++) {
-				System.out.println(strings[i]);
-			}
+			assertNotNull(strings);
 
 		} catch (RemoteException e) {
 			e.printStackTrace();
@@ -114,9 +110,7 @@ public class SynchronizationPlanWebserviceTestCase extends WebserviceTestCase {
 		try {
 			String[] strings = defaultPort
 					.getSynchronizationPlanObjectsAlgorithms(null);
-			for (int i = 0; i < strings.length; i++) {
-				System.out.println(strings[i]);
-			}
+			assertNotNull(strings);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -128,9 +122,7 @@ public class SynchronizationPlanWebserviceTestCase extends WebserviceTestCase {
 		try {
 			String[] strings = defaultPort
 					.getSynchronizationPlanItemsAlgorithms(null);
-			for (int i = 0; i < strings.length; i++) {
-				System.out.println(strings[i]);
-			}
+			assertNotNull(strings);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -151,7 +143,7 @@ public class SynchronizationPlanWebserviceTestCase extends WebserviceTestCase {
 					.setWsSynchronizationPlanPK(wsSynchronizationPlanPKArray[0]);
 			WSSynchronizationPlanStatus wsSynchronizationPlanStatus = defaultPort
 					.synchronizationPlanAction(wsSynchronizationPlanAction);
-			System.out.println(wsSynchronizationPlanStatus.getStatusMessage());
+			assertNotNull(wsSynchronizationPlanStatus);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -180,9 +172,7 @@ public class SynchronizationPlanWebserviceTestCase extends WebserviceTestCase {
 			wsSynchronizationGetUnsynchronizedObjectsIDs.setRevisionID("r1");
 			String[] strings = defaultPort
 					.synchronizationGetUnsynchronizedObjectsIDs(wsSynchronizationGetUnsynchronizedObjectsIDs);
-			for (int i = 0; i < strings.length; i++) {
-				System.out.println(strings[i]);
-			}
+			assertNotNull(strings);
 
 		} catch (RemoteException e) {
 			e.printStackTrace();
@@ -198,7 +188,7 @@ public class SynchronizationPlanWebserviceTestCase extends WebserviceTestCase {
 		try {
 			WSString str = defaultPort
 					.synchronizationGetObjectXML(wsSynchronizationGetObjectXML);
-			System.out.println(str);
+			assertNotNull(str);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -222,7 +212,7 @@ public class SynchronizationPlanWebserviceTestCase extends WebserviceTestCase {
 			wsSynchronizationPutObjectXML.setXml(str.getValue());
 			WSString wsString = defaultPort
 					.synchronizationPutObjectXML(wsSynchronizationPutObjectXML);
-			System.out.println(wsString.getValue());
+			assertNotNull(wsString);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -250,9 +240,7 @@ public class SynchronizationPlanWebserviceTestCase extends WebserviceTestCase {
 					.setSynchronizationPlanName(wsSynchronizationPlan.getName());
 			WSItemPK[] wsItemPKArray = defaultPort
 					.synchronizationGetUnsynchronizedItemPKs(wsSynchronizationGetUnsynchronizedItemPKs);
-			for (int i = 0; i < wsItemPKArray.length; i++) {
-				System.out.println(wsItemPKArray[i].getConceptName());
-			}
+			assertNotNull(wsItemPKArray);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -271,7 +259,7 @@ public class SynchronizationPlanWebserviceTestCase extends WebserviceTestCase {
 		try {
 			WSString wsString = defaultPort
 					.synchronizationGetItemXML(wsSynchronizationGetItemXML);
-			System.out.println(wsString.getValue());
+			assertNotNull(wsString);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -292,7 +280,7 @@ public class SynchronizationPlanWebserviceTestCase extends WebserviceTestCase {
 			wsSynchronizationPutItemXML.setXml(xml.getValue());
 			WSItemPK wsItemPK = defaultPort
 					.synchronizationPutItemXML(wsSynchronizationPutItemXML);
-			System.out.println(wsItemPK.getConceptName());
+			assertNotNull(wsItemPK);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -312,7 +300,7 @@ public class SynchronizationPlanWebserviceTestCase extends WebserviceTestCase {
 					.setWsSynchronizationPlanPK(wsSynchronizationPlanPKArray[0]);
 			WSSynchronizationPlanPK wsSynchronizationPlanPK = defaultPort
 					.deleteSynchronizationPlan(wsSynchronizationPlanDelete);
-			System.out.println(wsSynchronizationPlanPK.getPk());
+			assertNotNull(wsSynchronizationPlanPK);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
