@@ -16,7 +16,6 @@ import javax.ejb.SessionBean;
 import com.amalto.core.ejb.ItemPOJOPK;
 import com.amalto.core.ejb.ServiceCtrlBean;
 import com.amalto.core.util.XtentisException;
-import com.amalto.core.util.license.TokenGetter;
 import com.amalto.webapp.core.util.license.LicenseUtil;
 
 /**
@@ -180,13 +179,11 @@ public class AutoValidationBean extends ServiceCtrlBean  implements SessionBean{
 	 public Serializable fetchFromOutbound(String command, String parameters,String schedulePlanID) throws XtentisException {
 		 try {
 			 final URL url = new URL("http://www.talend.com/api/get_tis_validation_token.php?msg=");
-			 String license = LicenseUtil.getInstance().getLicense();
-			 String newCompany = LicenseUtil.getInstance().getCompanyName();
 			 URLConnection httpURLConnection = url.openConnection();
 			 httpURLConnection.setDoOutput(true);
 			 OutputStreamWriter writer = new OutputStreamWriter(httpURLConnection.getOutputStream());
 		
-			 final String x = URLEncoder.encode(new TokenGetter().getValidationRequest(license, newCompany), "UTF8");
+			 final String x = URLEncoder.encode(LicenseUtil.getInstance().getTokenData(), "UTF8");
 			 writer.write("msg=" + x);
 			 writer.flush();
 			 InputStream in = httpURLConnection.getInputStream();
