@@ -40,6 +40,7 @@ import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
@@ -71,6 +72,8 @@ import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.compare.CompareHeadInfo;
 import com.amalto.workbench.compare.CompareManager;
 import com.amalto.workbench.dialogs.DOMViewDialog;
+import com.amalto.workbench.dialogs.DataModelSelectDialog;
+import com.amalto.workbench.dialogs.ResourceSelectDialog;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
@@ -79,15 +82,19 @@ import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.LineItem;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSConceptRevisionMapMapEntry;
+import com.amalto.workbench.webservices.WSCount;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
+import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSDeleteItem;
 import com.amalto.workbench.webservices.WSDropItem;
 import com.amalto.workbench.webservices.WSGetConceptsInDataClusterWithRevisions;
 import com.amalto.workbench.webservices.WSGetCurrentUniverse;
 import com.amalto.workbench.webservices.WSGetDataCluster;
+import com.amalto.workbench.webservices.WSGetDataModel;
 import com.amalto.workbench.webservices.WSGetItem;
 import com.amalto.workbench.webservices.WSGetItemPKsByCriteria;
 import com.amalto.workbench.webservices.WSGetItemPKsByFullCriteria;
@@ -97,7 +104,9 @@ import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults;
 import com.amalto.workbench.webservices.WSPutItem;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 import com.amalto.workbench.webservices.WSRouteItemV2;
+import com.amalto.workbench.webservices.WSRunQuery;
 import com.amalto.workbench.webservices.WSString;
+import com.amalto.workbench.webservices.WSStringArray;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniverseItemsRevisionIDs;
 import com.amalto.workbench.webservices.WSUniversePK;
@@ -476,30 +485,80 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 			if(currentUniverse!=null)
 				currentUniverseName=currentUniverse.getName();
 			if(currentUniverseName!=null&&currentUniverseName.equals("[HEAD]"))currentUniverseName="";
-			WSConceptRevisionMapMapEntry[] wsConceptRevisionMapMapEntries = port.getConceptsInDataClusterWithRevisions(
-					new WSGetConceptsInDataClusterWithRevisions(
-							new WSDataClusterPK(cluster.getName()),new WSUniversePK(currentUniverseName)
-					)
-			).getMapEntry();
 			
-			String[] concepts=new String[wsConceptRevisionMapMapEntries.length];
-			for (int i = 0; i < wsConceptRevisionMapMapEntries.length; i++) {
-				WSConceptRevisionMapMapEntry entry=wsConceptRevisionMapMapEntries[i];
-				String concept=entry.getConcept();
-				String revision=entry.getRevision();
-				if(revision==null||revision.equals(""))revision="HEAD";
-				concepts[i]=concept+" "+"["+revision+"]";
-			}
 			
-			conceptCombo.removeAll();
-			conceptCombo.add("*");
-			for (int i = 0; i < concepts.length; i++) {
-				conceptCombo.add(concepts[i]);
+			//add by myli; fix the bug:0013077: if the data is too much, just get the entities from the model instead of from the container. 
+			String[] concepts ;
+			//long beforeTime = System .currentTimeMillis();
+
+			WSStringArray array=port.runQuery(new WSRunQuery(null, new WSDataClusterPK(cluster.getName()), "count(/ii/n)", null));
+			//WSString count2  = port.count(new WSCount(new WSDataClusterPK(cluster.getName()), "*", null, 100));
+			long count=Long.valueOf(array.getStrings()[0]);
+			//long count=Long.parseLong(count2.getValue());
+			/*long afterTime = System .currentTimeMillis();
+			System.out.println("before" + beforeTime);
+			System.out.println("after" + afterTime);
+			System.out.println("cost Time of count 500K"+(beforeTime-afterTime));*/
+			if (count > 100000) {
+			//if (false) {
+				DataModelSelectDialog dialog = new DataModelSelectDialog(getSite().getShell());
+				dialog.setBlockOnOpen(true);
+				dialog.open();
+				if (dialog.getReturnCode() == Window.OK) {
+					String xpath = dialog.getXpath();
+					WSDataModel dm = Util.getPort(this.getXObject()).getDataModel(new WSGetDataModel(new WSDataModelPK(xpath)));
+					if (dm == null)return;
+					concepts = new String[Util.getConcepts(Util.getXSDSchema(dm.getXsdSchema())).size()];
+					Util.getConcepts(Util.getXSDSchema(dm.getXsdSchema())).toArray(concepts);
+					TreeObject object = null;
+					for (int i = 0; i < this.getXObject().getServerRoot().getChildren().length; i++) {
+						object = this.getXObject().getServerRoot().getChildren()[i];
+						if (object.getType() == TreeObject.DATA_MODEL)
+							break;
+					}
+					String revision = "";
+					if (object != null)
+						revision = object.getDisplayName().substring(object.getDisplayName().indexOf("[") + 1,object.getDisplayName().indexOf("]"));
+					for (int i = 0; i < concepts.length; i++) {
+						String concept = concepts[i];
+						if (revision == null || revision.equals(""))revision = "HEAD";
+						concepts[i] = concept + " " + "[" + revision + "]";
+					}
+					conceptCombo.removeAll();
+					conceptCombo.add("*");
+					for (int i = 0; i < concepts.length; i++)
+						conceptCombo.add(concepts[i]);
+					//System.out.println(count.getValue());
+				}
+			} else {
+				//long beforeTime1 = System .currentTimeMillis();
+				WSConceptRevisionMapMapEntry[] wsConceptRevisionMapMapEntries = port
+						.getConceptsInDataClusterWithRevisions(
+								new WSGetConceptsInDataClusterWithRevisions(
+										new WSDataClusterPK(cluster.getName()),
+										new WSUniversePK(currentUniverseName)))
+						.getMapEntry();
+				long afterTime1 = System .currentTimeMillis();
+				/*System.out.println("before"+beforeTime1);
+				System.out.println("after"+afterTime1);
+				System.out.println("cost Time of read 100K"+(beforeTime1-afterTime1));*/
+				concepts = new String[wsConceptRevisionMapMapEntries.length];
+				for (int i = 0; i < wsConceptRevisionMapMapEntries.length; i++) {
+					WSConceptRevisionMapMapEntry entry = wsConceptRevisionMapMapEntries[i];
+					String concept = entry.getConcept();
+					String revision = entry.getRevision();
+					if (revision == null || revision.equals(""))
+						revision = "HEAD";
+					concepts[i] = concept + " " + "[" + revision + "]";
+				}
+				conceptCombo.removeAll();
+				conceptCombo.add("*");
+				for (int i = 0; i < concepts.length; i++) {
+					conceptCombo.add(concepts[i]);
+				}
 			}
 			conceptCombo.select(0);
-			
     		searchText.setFocus();
- 
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page", "Error refreshing the page: "+e.getLocalizedMessage());
