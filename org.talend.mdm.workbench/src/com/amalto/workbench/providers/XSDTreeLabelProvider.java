@@ -179,7 +179,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
 							return "Validation Rule: " + (pattern==null?"":pattern);//e.getChildNodes().item(0).getNodeValue();	
 							//end
 						} else if(source.equals("X_Retrieve_FKinfos")) {
-						   return "X_Retrieve_FKinfos:  "+e.getChildNodes().item(0).getNodeValue();
+						   return "Foreign Key resolution:  "+e.getChildNodes().item(0).getNodeValue();
 						} else {
 							return source+": "+Util.nodeToString((Element)obj);
 						}
@@ -367,6 +367,9 @@ public class XSDTreeLabelProvider extends LabelProvider {
 						} else if (source.equals("X_ForeignKey")) {
 							return ImageCache.getCreatedImage( EImage.PRIMARYKEY.getPath());
 						} else if (source.equals("X_ForeignKeyInfo")) {
+							return ImageCache.getCreatedImage( EImage.KEYINFO.getPath());
+							//fix bug 0013194 by rhou.
+						} else if (source.equals("X_Retrieve_FKinfos")) {
 							return ImageCache.getCreatedImage( EImage.KEYINFO.getPath());
 						} else if (source.equals("X_SourceSystem")) {
 							return ImageCache.getCreatedImage( EImage.SOURCESYSTEM.getPath());
