@@ -134,7 +134,8 @@ public class FKFilterDialog extends Dialog {
 				String[] values = cria.split("\\s");
 				List<String> list=new ArrayList<String>();
 				list.addAll(Arrays.asList(values));
-				if(list.size()==3) {
+				int num=4-list.size();
+				for(int i=0; i<num; i++) {
 					list.add("");
 				}
 				Line line =new Line(columns,list.toArray(new String[list.size()]));
