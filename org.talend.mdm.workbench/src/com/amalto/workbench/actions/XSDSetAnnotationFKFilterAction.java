@@ -28,7 +28,7 @@ public class XSDSetAnnotationFKFilterAction extends UndoAction {
 	
 	public XSDSetAnnotationFKFilterAction(DataModelMainPage page,String dataModelName) {
 		super(page);
-		setImageDescriptor(ImageCache.getImage( EImage.PRIMARYKEY.getPath()));
+		setImageDescriptor(ImageCache.getImage( EImage.FILTER_PS.getPath()));
 		setText("Set the Foreign Key Filter");
 		setToolTipText("Set the Foreign Key Filter");
 		this.dataModelName = dataModelName;
