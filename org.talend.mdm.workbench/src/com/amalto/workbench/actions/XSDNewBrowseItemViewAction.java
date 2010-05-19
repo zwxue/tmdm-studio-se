@@ -36,7 +36,7 @@ public class XSDNewBrowseItemViewAction extends Action{
 			//MessageDialog.openWarning(page.getSite().getShell(), "Worning", "Please save the Data Model first!");
 			boolean save = MessageDialog.openConfirm(page.getSite().getShell(), "Save Resource", "'"+page.getXObject().getDisplayName()+"' has been modified. Save changes?");
 			if(save)
-				page.getEditor().doSave(new NullProgressMonitor());
+				page.doSave(new NullProgressMonitor());
 			else
 				return;
 		}

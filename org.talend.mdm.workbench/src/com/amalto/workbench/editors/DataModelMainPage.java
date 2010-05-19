@@ -156,6 +156,7 @@ import com.amalto.workbench.actions.XSDNewSimpleTypeDefinition;
 import com.amalto.workbench.actions.XSDNewXPathAction;
 import com.amalto.workbench.actions.XSDPasteConceptAction;
 import com.amalto.workbench.actions.XSDSetAnnotationDescriptionsAction;
+import com.amalto.workbench.actions.XSDSetAnnotationFKFilterAction;
 import com.amalto.workbench.actions.XSDSetAnnotationForeignKeyAction;
 import com.amalto.workbench.actions.XSDSetAnnotationForeignKeyInfoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationLabelAction;
@@ -227,6 +228,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	private XSDChangeBaseTypeAction changeBaseTypeAction = null;
 	private XSDGetXPathAction getXPathAction = null;
 	private XSDSetAnnotationForeignKeyAction setAnnotationForeignKeyAction = null;
+	private XSDSetAnnotationFKFilterAction setAnnotationFKFilterAction = null;
 	private XSDSetAnnotationWrapWriteAction setAnnotationWrapWriteAction = null;
 	
 	private XSDSetAnnotationForeignKeyInfoAction setAnnotationForeignKeyInfoAction = null;
@@ -1229,6 +1231,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		this.setAnnotationLabelAction = new XSDSetAnnotationLabelAction(this);
 		this.setAnnotationDescriptionsAction = new XSDSetAnnotationDescriptionsAction(this);
 		this.setAnnotationForeignKeyAction = new XSDSetAnnotationForeignKeyAction(this,dataModelName);
+		this.setAnnotationFKFilterAction=new XSDSetAnnotationFKFilterAction(this, dataModelName);
 		this.setAnnotationForeignKeyInfoAction = new XSDSetAnnotationForeignKeyInfoAction(
 				this,dataModelName);
 		this.setAnnotationWriteAction = new XSDSetAnnotationWriteAction(this);
@@ -1347,6 +1350,9 @@ public class DataModelMainPage extends AMainPageV2 {
 					}else if (source.startsWith("X_Workflow")) {
 						return 111;
 					}
+					else if (source.startsWith("X_ForeignKey_Filter")) {
+						return 112;
+					}
 				} 
 			
 			}
@@ -1439,6 +1445,9 @@ public class DataModelMainPage extends AMainPageV2 {
 					case 103:
 						setAnnotationForeignKeyInfoAction.run();
 						break;
+					case 112:
+						setAnnotationFKFilterAction.run();
+						break;						
 					case 104:
 						//setAnnotationSourceSystemAction.run();
 						break;
@@ -1951,6 +1960,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		manager.add(setAnnotationLabelAction);
 		manager.add(setAnnotationDescriptionsAction);
 		manager.add(setAnnotationForeignKeyAction);
+		manager.add(setAnnotationFKFilterAction);
 		manager.add(setAnnotationForeignKeyInfoAction);
 		if(Util.IsEnterPrise()) {
 		manager.add(setAnnotationWriteAction);

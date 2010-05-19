@@ -42,7 +42,7 @@ public class XSDSetAnnotationForeignKeyInfoAction extends UndoAction{
 			if(page.isDirty()){
 				boolean save = MessageDialog.openConfirm(page.getSite().getShell(), "Save Resource", "'"+page.getXObject().getDisplayName()+"' has been modified. Save changes?");
 				if(save)
-					page.getEditor().doSave(new NullProgressMonitor());
+					page.doSave(new NullProgressMonitor());
 				else
 					return Status.CANCEL_STATUS;
 			}

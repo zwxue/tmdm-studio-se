@@ -336,7 +336,7 @@ public class XPathTreeContentProvider extends XSDTreeContentProvider {
 				if((conceptName != null && el.getName().equals(conceptName)) || (conceptName == null && (el.getTargetNamespace() != null && !el
 						.getTargetNamespace().equals(
 								XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001))
-				|| el.getTargetNamespace() == null))
+				|| (conceptName == null && el.getTargetNamespace() == null)))
 					   list.add(el);
 				
 			}			

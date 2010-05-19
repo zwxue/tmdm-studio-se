@@ -237,6 +237,19 @@ public class XSDAnnotationsStructure {
 		}
 		return descriptions;
 	}
+	/****************************************************************************
+	 *           FK Filter
+	 ****************************************************************************/
+
+	public boolean setFKFilter(String xPath) {
+		boolean somethingChanged = setAppInfo("X_ForeignKey_Filter",xPath, true);
+		hasChanged = hasChanged |  somethingChanged;
+		return somethingChanged;
+	}
+
+	public String getFKFilter() {
+		return getAppInfoValue("X_ForeignKey_Filter");
+	}
 	
 	/****************************************************************************
 	 *           FOREIGN KEY
@@ -713,7 +726,7 @@ public class XSDAnnotationsStructure {
 
 
 	private boolean setAppInfo(String type, String value, boolean overwrite) {
-		if (value == null) {
+		if (value == null || value.length()==0) {
 			boolean wasRemoved = removeAppInfos(type);
 			hasChanged = hasChanged | wasRemoved;
 			return wasRemoved;
