@@ -63,7 +63,7 @@ public class FKFilterDialog extends Dialog {
 	    viewer.create();
 	    viewer.getViewer().setInput(parseRules());
 	    viewer.setHeight(140);
-	    viewer.setWidth(600);
+	    viewer.setWidth(620);
 	    viewer.getMainComposite().setLayoutData( new GridData(SWT.FILL,SWT.FILL,true,true,2,3));
 	    parent.getShell().addDisposeListener(new DisposeListener() {
 			
