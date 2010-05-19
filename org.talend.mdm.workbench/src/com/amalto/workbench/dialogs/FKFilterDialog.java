@@ -132,7 +132,12 @@ public class FKFilterDialog extends Dialog {
 			for (String cria: criterias)
 			{
 				String[] values = cria.split("\\s");
-				Line line =new Line(columns,values);
+				List<String> list=new ArrayList<String>();
+				list.addAll(Arrays.asList(values));
+				if(list.size()==3) {
+					list.add("");
+				}
+				Line line =new Line(columns,list.toArray(new String[list.size()]));
 				lines.add(line);
 			}
 		}
