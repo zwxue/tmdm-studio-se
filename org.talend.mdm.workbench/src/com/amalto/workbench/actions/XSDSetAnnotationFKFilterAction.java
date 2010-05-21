@@ -61,7 +61,7 @@ public class XSDSetAnnotationFKFilterAction extends UndoAction {
             	conceptName=xSDCom.getElement().getAttributes().getNamedItem("name").getNodeValue();
             }
 			if(xSDCom instanceof XSDParticle) {
-				conceptName=getConceptName(xSDCom);
+				//conceptName=getConceptName(xSDCom);
 			}
             XSDAnnotationsStructure struc=null;
 			if(xSDCom!=null)
