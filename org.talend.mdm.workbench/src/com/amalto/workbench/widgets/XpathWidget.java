@@ -5,6 +5,8 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -132,6 +134,15 @@ public class XpathWidget implements  SelectionListener{
 		}
 		annotationButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
 		annotationButton.setToolTipText("Select Xpath");
+		
+		descriptionText.addVerifyListener(new VerifyListener() {
+			   
+			   public void verifyText(VerifyEvent e) {
+			    if(e.keyCode==SWT.CR || e.keyCode==SWT.LF) {
+			     e.doit=false;
+			    }
+			   }
+	    });
 
 	}
 	
