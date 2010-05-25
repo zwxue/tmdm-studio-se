@@ -1,8 +1,8 @@
 package com.amalto.workbench.actions;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
 
@@ -51,50 +51,18 @@ public class ServerRefreshAction extends Action {
                 	server,
                 	serverRoot.getUsername(),
                 	serverRoot.getPassword(),
-                	serverRoot.getUser().getUniverse()
+                	serverRoot.getUser().getUniverse(),
+                	view
                 );
-            LocalTreeObjectRepository.getInstance().startUp(view, server, serverRoot.getUser().getUsername(), serverRoot.getUser().getPassword());
-			LocalTreeObjectRepository.getInstance().switchOnListening();
-			LocalTreeObjectRepository.getInstance().setLazySaveStrategy(true, serverRoot);
 			
-            retriever.run(new NullProgressMonitor());
+			new ProgressMonitorDialog(view.getSite().getShell()).run(
+					true, 
+					true, 
+					retriever
+			);
 			ServerRefreshAction.this.serverRoot.synchronizeWith(retriever.getServerRoot());
 			ServerView.show().getViewer().refresh();
 			LocalTreeObjectRepository.getInstance().setLazySaveStrategy(false, serverRoot);
-//			Job refreshJob = new ServerRefreshJob(server,serverRoot.getUsername(),serverRoot.getPassword(),serverRoot.getUser().getUniverse()); 
-//            refreshJob.setPriority(Job.INTERACTIVE);
-//			refreshJob.schedule();
-//            refreshJob.addJobChangeListener(new IJobChangeListener() {
-//                public void aboutToRun(IJobChangeEvent event) {
-//                    //view.getViewer().getControl().setEnabled(false);
-//                }
-//                public void awake(IJobChangeEvent event) {}
-//                public void done(IJobChangeEvent event) {
-//                    if (event.getResult().equals(Status.OK_STATUS)) {
-//                        //view.getViewer().getControl().setEnabled(true);
-//                        ServerRefreshJob job = (ServerRefreshJob)event.getJob();
-//                        ServerRefreshAction.this.newRoot = job.getServerRoot();
-//                        ServerRefreshAction.this.view.getViewer().getControl().getDisplay().asyncExec(new Runnable() {
-//							public void run() {
-//								ServerRefreshAction.this.serverRoot.synchronizeWith(ServerRefreshAction.this.newRoot);
-//								LocalTreeObjectRepository.getInstance().switchOnListening();
-//							}
-//                        });
-//                        
-//                        //ServerRefreshAction.this.view.getViewer().refresh();
-//                        //ServerRefreshAction.this.view.getViewer().expandToLevel(serverRoot, 1);
-//                    } else {
-//                        MessageDialog.openError(
-//                                view.getSite().getShell(), 
-//                                "Error", 
-//                                "The refresh of the "+IConstants.TALEND+" Server "+(String)ServerRefreshAction.this.serverRoot.getWsKey()+" failed!"
-//                         );
-//                    }
-//                }
-//                public void running(IJobChangeEvent event) {}
-//                public void scheduled(IJobChangeEvent event) {}
-//                public void sleeping(IJobChangeEvent event) {}
-//            });
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog.openError(view.getSite().getShell(), "Error", "Error while refreshing the "+IConstants.TALEND+" Server Objects: "+e.getLocalizedMessage());

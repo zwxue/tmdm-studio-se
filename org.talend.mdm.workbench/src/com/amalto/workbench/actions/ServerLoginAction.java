@@ -82,19 +82,18 @@ public class ServerLoginAction extends Action implements SelectionListener{
 		String universe=dialog.getUniverse();
 		dialog.close();
 
-		//if(Util.IsEnterPrise())
+
+		String cmp = Util.checkOnVersionCompatibility(username, password, universe);
+		if(cmp != null)
 		{
-			String cmp = Util.checkOnVersionCompatibility(username, password, universe);
-			if(cmp != null)
-			{
-				MessageDialog.openError(
-						null,
-						"Error", 
-						"The version of mdm studio is not compatible with that of server : \n" + cmp
-				);
-				return;
-			}
+			MessageDialog.openError(
+					null,
+					"Error", 
+					"The version of mdm studio is not compatible with that of server : \n" + cmp
+			);
+			return;
 		}
+
 		view.initServerTree(url, username, password, universe);
         
 	}

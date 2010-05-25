@@ -168,7 +168,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	public ServerView() {
 	}
 
-    public static ServerView show() {
+    public static ServerView show() {    	
         IViewPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(VIEW_ID);
         if (part == null) {
             try {
@@ -1101,25 +1101,17 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 //        getViewer().refresh();
 	}
 	public void initServerTree(String url,String username,String password,String universe) {
-//		Properties properties = new Properties();
-//		Collection<String> endpoints;
-//		Collection<String> universes;
-//		String endpointsString=url;
-//		String universeString = universe;
 		
 		//Remove authenticator dialog
 		Authenticator.setDefault(null);
-		
-        LocalTreeObjectRepository.getInstance().startUp(this, url, username, password);
-        LocalTreeObjectRepository.getInstance().switchOnListening();
-        LocalTreeObjectRepository.getInstance().setLazySaveStrategy(true, null);
-        
+		       
 		try {
             XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(
             	url,
             	username,
             	password,
-            	universe
+            	universe,
+            	this
             );
 			new ProgressMonitorDialog(this.getSite().getShell()).run(
 					true, 
@@ -1127,51 +1119,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					retriever
 			);
 			
-			
-/*			try {//add the memory of universe and server
-				//check if the file is exist of not,if not,create
-				File  dirFile = new File(f);
-		        boolean bFile   = dirFile.exists();
-		        if(!bFile)
-		        	if(dirFile.createNewFile())
-		        		properties.load(new FileInputStream(f));
-		        	else return;
-		        	
-				int index = 0;
-				endpoints = Arrays.asList(new String[]{Util.default_endpoint_address});
-				if (properties.getProperty("endpoints")!=null)	 
-					endpoints = Arrays.asList(properties.getProperty("endpoints").split(","));
-				if (properties.getProperty("universes")!=null)	 
-					universes=Arrays.asList(properties.getProperty("universes").split(","));
-				for (Iterator<String> iter = endpoints.iterator(); iter.hasNext();) {
-					String endpoint = iter.next();
-					if (!endpoint.equals(url))
-						endpointsString += "," + endpoint;
-					if (++index == 10)
-						break;
-				}
-				properties.setProperty("endpoints", endpointsString);
-				index = 0;
-				universes = Arrays.asList(new String[]{""});
-				for (Iterator<String> iter = universes.iterator(); iter.hasNext(); ) {
-					universe = iter.next();
-					if (! universe.equals(url)) universeString+=","+universe;
-					if (++index == 5) break;
-				}
-				properties.setProperty("universes", universeString);
-				
-				properties.store(new FileOutputStream(f), null);
-			} catch (Exception e1) {
-			}*/
-			
-			
-			
-			
-//            if(!retriever.isExistUniverse()){
-//            	//MessageDialog.openError(view.getViewer().getControl().getShell(), "Wrong universe", "Can't find the Version,please try again!");
-//            	return;
-//            }
-				TreeParent serverRoot = retriever.getServerRoot();
+
+			TreeParent serverRoot = retriever.getServerRoot();
             TreeParent invisibleRoot =getTreeContentProvider().getInvisibleRoot();
             TreeObject[] serverRoots = invisibleRoot.getChildren();
             
@@ -1193,7 +1142,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             
             LocalTreeObjectRepository.getInstance().setLazySaveStrategy(false, serverRoot);
             getViewer().refresh();
-//            getViewer().expandToLevel(serverRoot,1);
+            getViewer().expandToLevel(serverRoot,1);
 		} catch (InterruptedException ie){
 			return;
 		} catch (InvocationTargetException ite) {

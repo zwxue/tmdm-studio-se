@@ -14,19 +14,16 @@ import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
-import com.amalto.workbench.utils.ResourcesUtil;
 import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSGetCurrentUniverse;
 import com.amalto.workbench.webservices.WSGetMenuPKs;
-import com.amalto.workbench.webservices.WSGetRolePKs;
 import com.amalto.workbench.webservices.WSGetRoutingRulePKs;
-import com.amalto.workbench.webservices.WSGetSynchronizationPlanPKs;
 import com.amalto.workbench.webservices.WSGetTransformerV2PKs;
-import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSGetViewPKs;
 import com.amalto.workbench.webservices.WSMDMJob;
 import com.amalto.workbench.webservices.WSMDMNULL;
@@ -35,20 +32,17 @@ import com.amalto.workbench.webservices.WSPing;
 import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 import com.amalto.workbench.webservices.WSRegexStoredProcedure;
-import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.WSRoutingRulePK;
 import com.amalto.workbench.webservices.WSStoredProcedurePK;
-import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
 import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.WSUniverse;
-import com.amalto.workbench.webservices.WSUniversePK;
 import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
-	//ServerView view;
+	ServerView view;
 	private String endpointaddress;
 	private String username;
 	private String password;
@@ -56,11 +50,12 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
     private TreeParent serverRoot;
 	
     private boolean isExistUniverse=true;
-	public XtentisServerObjectsRetriever(String endpointaddress, String username, String password, String universe) {
+	public XtentisServerObjectsRetriever(String endpointaddress, String username, String password, String universe, ServerView view) {
 		this.endpointaddress = endpointaddress;
 		this.username = username;
 		this.password = password;
 		this.universe=universe;
+		this.view=view;
 	}
 	
 	public boolean isExistUniverse() {
@@ -70,13 +65,29 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 	public synchronized void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 		try {
 			monitor.beginTask("Loading "+IConstants.TALEND+" Server Objects", "admin".equals(username)? 12 : 9);
+			//server
+			String displayName=endpointaddress;
+			serverRoot = new TreeParent(
+                    displayName,
+                    null,
+                    TreeObject._SERVER_,
+                    endpointaddress,
+                    ("".equals(universe)? "" : universe+"/")+username+":"+(password==null?"":password)
+            );  
+			
+			//init load category
+			monitor.subTask("load category...");
+            LocalTreeObjectRepository.getInstance().startUp(view, endpointaddress, username, password);
+			LocalTreeObjectRepository.getInstance().switchOnListening();
+			LocalTreeObjectRepository.getInstance().setLazySaveStrategy(true, serverRoot);			
+			monitor.worked(1);
 			//Access to server and get port
 			XtentisPort port = Util.getPort(new URL(endpointaddress), universe, username, password);
 			port.ping(new WSPing("Studio"));//viewer user can't use studio
 			
 			monitor.worked(1);
 						
-			String displayName=endpointaddress;
+			
 			//fetch version info
 //			try {
 //				WSVersion version = port.getComponentVersion(new WSGetComponentVersion(WSComponent.DataManager,null));				
@@ -87,15 +98,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 			WSUniverse wUuniverse=null;
 			wUuniverse=port.getCurrentUniverse(new WSGetCurrentUniverse());
 			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");		
-		
-			//server
-			serverRoot = new TreeParent(
-                    displayName,
-                    null,
-                    TreeObject._SERVER_,
-                    endpointaddress,
-                    ("".equals(universe)? "" : universe+"/")+username+":"+(password==null?"":password)
-            );       
+		     
 			
 			monitor.subTask("Accessing server....");
 			UserInfo user=new UserInfo();
