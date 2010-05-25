@@ -5,8 +5,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.events.VerifyEvent;
-import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -134,15 +132,6 @@ public class XpathWidget implements  SelectionListener{
 		}
 		annotationButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
 		annotationButton.setToolTipText("Select Xpath");
-		
-		descriptionText.addVerifyListener(new VerifyListener() {
-			   
-			   public void verifyText(VerifyEvent e) {
-			    if(e.keyCode==SWT.CR || e.keyCode==SWT.LF) {
-			     e.doit=false;
-			    }
-			   }
-	    });
 
 	}
 	
@@ -196,10 +185,10 @@ public class XpathWidget implements  SelectionListener{
 		return xpathAntionHolder;
 	}
 	public String getText(){
-		return descriptionText.getText();
+		return descriptionText.getText().replaceAll("\\s*|(\\r\\n)*|\n*", "").trim();
 	}
 	public void setText(String text){
-		descriptionText.setText(text);
+		descriptionText.setText(text.replaceAll("\\s*|(\\r\\n)*|\n*", "").trim());
 	}
 
 	public boolean isReadOnly() {
