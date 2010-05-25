@@ -288,7 +288,7 @@ public class ImportItemsWizard extends Wizard{
 		reserverRoot.addChild(workflow);
 		reserverRoot.addChild(universes);
 		reserverRoot.addChild(views);
-		boolean isOverrideAll=false;
+
 
 		for(TreeObject obj: exports.getItems()){
 			obj.setServerRoot(reserverRoot);
@@ -390,7 +390,7 @@ public class ImportItemsWizard extends Wizard{
 		});
 		LocalTreeObjectRepository.getInstance().mergeImportCategory(objs, serverRoot);
 		boolean isOverrideAll=false;
-		Display dis = Display.getCurrent();
+
 		for(TreeObject item : objs){
 			String[] subItems;
 			switch(item.getType()){
@@ -404,7 +404,6 @@ public class ImportItemsWizard extends Wizard{
 					try {
 						reader = new FileReader(importFolder+"/" + subItem);
 						WSDataCluster model = new WSDataCluster();
-						final String dataClusterName=model.getName();
 						model = (WSDataCluster)Unmarshaller.
 						   unmarshal(WSDataCluster.class, reader);
 						if (port.existsDataCluster(
@@ -855,9 +854,9 @@ public class ImportItemsWizard extends Wizard{
 		if(dataClusterContent.containsKey(item.getDisplayName()))
 		{
 			FileReader reader;
-			try {
 				String[] paths=dataClusterContent.get(item.getDisplayName());
 				for (int i = 0; i < paths.length; i++) {
+					try {
 					String path=paths[i];
 					reader = new FileReader(importFolder+"/"+path);
 					WSItem wsItem = (WSItem) Unmarshaller.unmarshal(
@@ -868,10 +867,10 @@ public class ImportItemsWizard extends Wizard{
 						port.putItem(new WSPutItem(wsItem.getWsDataClusterPK(),wsItem.getContent(),new WSDataModelPK(wsItem.getDataModelName()),false));
 					}	
 					
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 				}
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
 		}
 	}
 	@Override
