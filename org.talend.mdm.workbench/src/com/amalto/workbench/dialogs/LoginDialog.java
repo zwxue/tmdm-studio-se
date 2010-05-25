@@ -329,21 +329,21 @@ private void addServer(Element root) {
 	
 
 	public String getPasswordText() {
-		return passwordText.getText();
+		return passwordText.getText().trim();
 	}
 
 
 	public String getUsernameText() {
-		return userText.getText();
+		return userText.getText().trim();
 	}
 	
 	public String getServer() {
-		return endpointsCombo.getText();
+		return endpointsCombo.getText().trim();
 	}
 
 	public String getUniverse() {
 		if(Util.IsEnterPrise()){
-			return universeCombo.getText();
+			return universeCombo.getText().trim();
 		}
 		else{
 			return "";

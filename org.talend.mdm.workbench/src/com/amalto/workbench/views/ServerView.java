@@ -534,19 +534,10 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 	}
 
 	protected void initServer(TreeParent server) {
-		
-		
-		Cursor wait = new Cursor(getViewSite().getShell().getDisplay(),SWT.CURSOR_WAIT);
-		viewer.getControl().setCursor(wait);
-		
+				
 		//add by ymli; fix the bug:0012600.made the refresh as a job run underground
 		refreshServerRoot(this,server);
 		
-		
-//		initServerContent(server);
-		viewer.expandToLevel(server, 1);
-		viewer.getControl().setCursor(
-				new Cursor(getViewSite().getShell().getDisplay(), SWT.CURSOR_ARROW));
 	}
 	/**
 	 * @author ymli; fix the bug:0012600. made the refresh as a job run underground
@@ -560,7 +551,14 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 			@Override
 			public IStatus runInUIThread(IProgressMonitor monitor) {	
 				try{			
+					
+					Cursor wait = new Cursor(getViewSite().getShell().getDisplay(),SWT.CURSOR_WAIT);
+					viewer.getControl().setCursor(wait);					
 					new ServerRefreshAction(view, serverRoot).run();
+					viewer.expandToLevel(serverRoot, 1);
+					viewer.getControl().setCursor(
+							new Cursor(getViewSite().getShell().getDisplay(), SWT.CURSOR_ARROW));
+					
 					return Status.OK_STATUS;
 				}catch(Exception e){
 					e.printStackTrace();
