@@ -1157,6 +1157,8 @@ public class DataModelMainPage extends AMainPageV2 {
 			schema=schema.replaceAll("targetNamespace\\s*=\\s*\"[^\"]*\"", "");
 			schema=schema.replaceAll("xmlns\\s*=\\s*\"[^\"]*\"", "");
 			//end
+			//convert base type
+			schema=Util.convertBaseType(schema);
 			wsObject.setXsdSchema(schema);
 			
 			//fliu added '<xsd:import namespace="http://www.w3.org/2001/XMLSchema"/>', which is meant to make xsdSchema compatible with allNNI and other new simple Types

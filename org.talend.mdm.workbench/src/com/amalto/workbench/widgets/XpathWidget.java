@@ -185,10 +185,10 @@ public class XpathWidget implements  SelectionListener{
 		return xpathAntionHolder;
 	}
 	public String getText(){
-		return descriptionText.getText().replaceAll("\\s*|(\r\n)*|\n*", "").trim();
+		return descriptionText.getText().replaceAll("\\s+", "").trim();
 	}
 	public void setText(String text){
-		descriptionText.setText(text.replaceAll("\\s*|(\r\n)*|\n*", "").trim());
+		descriptionText.setText(text.replaceAll("\\s+", "").trim());
 	}
 
 	public boolean isReadOnly() {
