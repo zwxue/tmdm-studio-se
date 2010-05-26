@@ -1777,33 +1777,4 @@
         </xsd:sequence>     
     </xsd:complexType>
     <xsd:element name="WSAutoIncrement" type="tns:WSAutoIncrement"/>  
-       
-    <!-- License -->
-    <xsd:complexType name="WSLicense">
-        <xsd:all>
-            <xsd:element maxOccurs="1" minOccurs="1" name="license" nillable="false" type="xsd:string"/>
-            <xsd:element maxOccurs="1" minOccurs="1" name="customerCompany" nillable="false" type="xsd:string"/>
-            <xsd:element maxOccurs="1" minOccurs="1" name="token" nillable="false" type="xsd:string"/>
-        </xsd:all>     
-    </xsd:complexType>
-    <xsd:element name="WSLicense" type="tns:WSLicense"/>    
-    
-    <xsd:complexType name="WSLicensePK">
-        <xsd:sequence>
-            <xsd:element maxOccurs="1" minOccurs="1" name="pk" nillable="false" type="xsd:string"/>
-        </xsd:sequence>     
-    </xsd:complexType>          
-    <xsd:element name="WSLicensePK" type="tns:WSLicensePK"/>
-    
-    <xsd:complexType name="WSPutLicense">
-        <xsd:annotation>
-            <xsd:documentation>
-                Creates - updates a data model
-            </xsd:documentation>
-        </xsd:annotation>       
-        <xsd:sequence>
-            <xsd:element maxOccurs="1" minOccurs="1" name="wsLicense" nillable="false" type="tns:WSLicense"/>
-        </xsd:sequence>     
-    </xsd:complexType>
-    <xsd:element name="WSPutLicense" type="tns:WSPutLicense"/>
 </xsd:schema>

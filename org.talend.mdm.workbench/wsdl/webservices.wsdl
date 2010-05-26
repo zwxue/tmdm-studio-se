@@ -365,19 +365,6 @@
 		<part name="results" element="tns:WSStringArray"/>
 	</message>
 	
-	<!-- License -->
-    <message name="putLicenseRequest">
-        <part name="putLicense" element="tns:WSPutLicense"/>
-    </message>
-    <message name="putLicenseResponse">
-        <part name="license" element="tns:WSLicensePK"/>
-    </message>
-    
-    <message name="getLicenseRequest"></message>
-    <message name="getLicenseResponse">
-        <part name="license" element="tns:WSLicense"/>
-    </message>
-
 	<!-- ************************ PUT ITEM *************************** -->
 	<message name="putItemRequest">
 		<part name="wsPutItem" element="tns:WSPutItem"/>
@@ -1555,14 +1542,6 @@
             <input message="tns:putItemByOperatorTypeRequest"/>
             <output message="tns:putItemByOperatorTypeResponse"/>
         </operation>
-        <operation name="putLicense">
-            <input message="tns:putLicenseRequest"/>
-            <output message="tns:putLicenseResponse"/>
-        </operation>    
-         <operation name="getLicense">
-            <input message="tns:getLicenseRequest"/>
-            <output message="tns:getLicenseResponse"/>
-        </operation>		
 		<operation name="putItemArray">
 			<input message="tns:putItemArrayRequest"/>
 			<output message="tns:putItemArrayResponse"/>
@@ -2436,16 +2415,6 @@
             <input><soap:body use="literal"/></input>
             <output><soap:body use="literal"/></output>
         </operation>
-        <operation name="putLicense">
-            <soap:operation/>
-            <input><soap:body use="literal"/></input>
-            <output><soap:body use="literal"/></output>
-        </operation>    
-        <operation name="getLicense">
-            <soap:operation/>
-            <input><soap:body use="literal"/></input>
-            <output><soap:body use="literal"/></output>
-        </operation>		
 		<operation name="putItemArray">
 			<soap:operation/>
 			<input><soap:body use="literal"/></input>
