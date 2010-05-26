@@ -1156,11 +1156,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			//aiming added remove 'targetNamespace', 'xmlns' attr, for it will cause xsd validate error, the xsd is invalid
 			schema=schema.replaceAll("targetNamespace\\s*=\\s*\"[^\"]*\"", "");
 			schema=schema.replaceAll("xmlns\\s*=\\s*\"[^\"]*\"", "");
-			//end
-			//convert base type
-			schema=Util.convertBaseType(schema);
-			wsObject.setXsdSchema(schema);
-			
+			//end			
 			//fliu added '<xsd:import namespace="http://www.w3.org/2001/XMLSchema"/>', which is meant to make xsdSchema compatible with allNNI and other new simple Types
 		    XSDImport xsdImport = XSDFactory.eINSTANCE.createXSDImport();
 		    xsdImport.setNamespace("http://www.w3.org/2001/XMLSchema");
@@ -1187,7 +1183,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		    	xsdSchema.getContents().add(0, xsdImport);	
 		    	wsObject.setXsdSchema(Util.nodeToString(xsdSchema.getDocument()));
 		    }
-
+		    validateSchema();
 			XMLEditor xmleditor=(getEditor()).getXmlEditor();
 			xmleditor.refresh(getXObject());
 		} catch (Exception e) {
