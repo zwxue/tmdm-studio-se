@@ -8,7 +8,7 @@
 package urn_com_amalto_xtentis_webservice;
 
 public class WSResolveSynchronizationItem  implements java.io.Serializable {
-    private urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK wsSynchronizationItemPK;
+    private java.lang.String[] wsSynchronizationItemPK;
 
     private java.lang.String newProjection;
 
@@ -16,7 +16,7 @@ public class WSResolveSynchronizationItem  implements java.io.Serializable {
     }
 
     public WSResolveSynchronizationItem(
-           urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK wsSynchronizationItemPK,
+           java.lang.String[] wsSynchronizationItemPK,
            java.lang.String newProjection) {
            this.wsSynchronizationItemPK = wsSynchronizationItemPK;
            this.newProjection = newProjection;
@@ -28,7 +28,7 @@ public class WSResolveSynchronizationItem  implements java.io.Serializable {
      * 
      * @return wsSynchronizationItemPK
      */
-    public urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK getWsSynchronizationItemPK() {
+    public java.lang.String[] getWsSynchronizationItemPK() {
         return wsSynchronizationItemPK;
     }
 
@@ -38,7 +38,7 @@ public class WSResolveSynchronizationItem  implements java.io.Serializable {
      * 
      * @param wsSynchronizationItemPK
      */
-    public void setWsSynchronizationItemPK(urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK wsSynchronizationItemPK) {
+    public void setWsSynchronizationItemPK(java.lang.String[] wsSynchronizationItemPK) {
         this.wsSynchronizationItemPK = wsSynchronizationItemPK;
     }
 
@@ -76,7 +76,7 @@ public class WSResolveSynchronizationItem  implements java.io.Serializable {
         _equals = true && 
             ((this.wsSynchronizationItemPK==null && other.getWsSynchronizationItemPK()==null) || 
              (this.wsSynchronizationItemPK!=null &&
-              this.wsSynchronizationItemPK.equals(other.getWsSynchronizationItemPK()))) &&
+              java.util.Arrays.equals(this.wsSynchronizationItemPK, other.getWsSynchronizationItemPK()))) &&
             ((this.newProjection==null && other.getNewProjection()==null) || 
              (this.newProjection!=null &&
               this.newProjection.equals(other.getNewProjection())));
@@ -92,7 +92,15 @@ public class WSResolveSynchronizationItem  implements java.io.Serializable {
         __hashCodeCalc = true;
         int _hashCode = 1;
         if (getWsSynchronizationItemPK() != null) {
-            _hashCode += getWsSynchronizationItemPK().hashCode();
+            for (int i=0;
+                 i<java.lang.reflect.Array.getLength(getWsSynchronizationItemPK());
+                 i++) {
+                java.lang.Object obj = java.lang.reflect.Array.get(getWsSynchronizationItemPK(), i);
+                if (obj != null &&
+                    !obj.getClass().isArray()) {
+                    _hashCode += obj.hashCode();
+                }
+            }
         }
         if (getNewProjection() != null) {
             _hashCode += getNewProjection().hashCode();
@@ -110,8 +118,9 @@ public class WSResolveSynchronizationItem  implements java.io.Serializable {
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("wsSynchronizationItemPK");
         elemField.setXmlName(new javax.xml.namespace.QName("", "wsSynchronizationItemPK"));
-        elemField.setXmlType(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationItemPK"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(false);
+        elemField.setItemQName(new javax.xml.namespace.QName("", "ids"));
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("newProjection");
