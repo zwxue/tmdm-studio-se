@@ -16,7 +16,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
     static org.apache.axis.description.OperationDesc [] _operations;
 
     static {
-        _operations = new org.apache.axis.description.OperationDesc[179];
+        _operations = new org.apache.axis.description.OperationDesc[178];
         _initOperationDesc1();
         _initOperationDesc2();
         _initOperationDesc3();
@@ -575,26 +575,6 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         _operations[43] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
-        oper.setName("putLicense");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSPutLicense"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSPutLicense"), urn_com_amalto_xtentis_webservice.WSPutLicense.class, false, false);
-        oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSLicensePK"));
-        oper.setReturnClass(urn_com_amalto_xtentis_webservice.WSLicensePK.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSLicensePK"));
-        oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
-        oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[44] = oper;
-
-        oper = new org.apache.axis.description.OperationDesc();
-        oper.setName("getLicense");
-        oper.setReturnType(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSLicense"));
-        oper.setReturnClass(urn_com_amalto_xtentis_webservice.WSLicense.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSLicense"));
-        oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
-        oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[45] = oper;
-
-        oper = new org.apache.axis.description.OperationDesc();
         oper.setName("putItemArray");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSPutItemArray"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSPutItemArray"), urn_com_amalto_xtentis_webservice.WSPutItem[].class, false, false);
         param.setItemQName(new javax.xml.namespace.QName("", "wsPutItem"));
@@ -606,7 +586,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "wsItemPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[46] = oper;
+        _operations[44] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("putItemWithReportArray");
@@ -620,7 +600,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "wsItemPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[47] = oper;
+        _operations[45] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("putItemWithReport");
@@ -631,7 +611,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSItemPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[48] = oper;
+        _operations[46] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("putItemWithCustomReport");
@@ -642,13 +622,8 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSItemPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[49] = oper;
+        _operations[47] = oper;
 
-    }
-
-    private static void _initOperationDesc6(){
-        org.apache.axis.description.OperationDesc oper;
-        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("extractUsingTransformer");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSExtractUsingTransformer"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSExtractUsingTransformer"), urn_com_amalto_xtentis_webservice.WSExtractUsingTransformer.class, false, false);
@@ -660,7 +635,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "typedContentEntry"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[50] = oper;
+        _operations[48] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("extractUsingTransformerThruView");
@@ -673,8 +648,13 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "typedContentEntry"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[51] = oper;
+        _operations[49] = oper;
 
+    }
+
+    private static void _initOperationDesc6(){
+        org.apache.axis.description.OperationDesc oper;
+        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("deleteItem");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSDeleteItem"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSDeleteItem"), urn_com_amalto_xtentis_webservice.WSDeleteItem.class, false, false);
@@ -684,7 +664,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSItemPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[52] = oper;
+        _operations[50] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("deleteItems");
@@ -695,7 +675,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSInt"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[53] = oper;
+        _operations[51] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("dropItem");
@@ -706,7 +686,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSDroppedItemPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[54] = oper;
+        _operations[52] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("runQuery");
@@ -719,7 +699,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "strings"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[55] = oper;
+        _operations[53] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("connectorInteraction");
@@ -730,7 +710,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSConnectorInteractionResponse"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[56] = oper;
+        _operations[54] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getRoutingRulePKs");
@@ -743,7 +723,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "wsRoutingRulePKs"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[57] = oper;
+        _operations[55] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getRoutingRule");
@@ -754,7 +734,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSRoutingRule"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[58] = oper;
+        _operations[56] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("existsRoutingRule");
@@ -765,13 +745,8 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBoolean"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[59] = oper;
+        _operations[57] = oper;
 
-    }
-
-    private static void _initOperationDesc7(){
-        org.apache.axis.description.OperationDesc oper;
-        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("putRoutingRule");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSPutRoutingRule"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSPutRoutingRule"), urn_com_amalto_xtentis_webservice.WSPutRoutingRule.class, false, false);
@@ -781,7 +756,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSRoutingRulePK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[60] = oper;
+        _operations[58] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("deleteRoutingRule");
@@ -792,8 +767,13 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSRoutingRulePK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[61] = oper;
+        _operations[59] = oper;
 
+    }
+
+    private static void _initOperationDesc7(){
+        org.apache.axis.description.OperationDesc oper;
+        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("serviceAction");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSServiceAction"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSServiceAction"), urn_com_amalto_xtentis_webservice.WSServiceAction.class, false, false);
@@ -803,7 +783,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSString"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[62] = oper;
+        _operations[60] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getServiceConfiguration");
@@ -814,7 +794,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSString"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[63] = oper;
+        _operations[61] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("putServiceConfiguration");
@@ -825,7 +805,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSString"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[64] = oper;
+        _operations[62] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getServicesList");
@@ -838,7 +818,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "Item"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[65] = oper;
+        _operations[63] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getServiceDocument");
@@ -849,7 +829,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSServiceGetDocument"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[66] = oper;
+        _operations[64] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getStoredProcedure");
@@ -860,7 +840,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSStoredProcedure"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[67] = oper;
+        _operations[65] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("existsStoredProcedure");
@@ -871,7 +851,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBoolean"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[68] = oper;
+        _operations[66] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getStoredProcedurePKs");
@@ -884,13 +864,8 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "wsStoredProcedurePK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[69] = oper;
+        _operations[67] = oper;
 
-    }
-
-    private static void _initOperationDesc8(){
-        org.apache.axis.description.OperationDesc oper;
-        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("putStoredProcedure");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSPutStoredProcedure"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSPutStoredProcedure"), urn_com_amalto_xtentis_webservice.WSPutStoredProcedure.class, false, false);
@@ -900,7 +875,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSStoredProcedurePK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[70] = oper;
+        _operations[68] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("deleteStoredProcedure");
@@ -911,8 +886,13 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSStoredProcedurePK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[71] = oper;
+        _operations[69] = oper;
 
+    }
+
+    private static void _initOperationDesc8(){
+        org.apache.axis.description.OperationDesc oper;
+        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("executeStoredProcedure");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSExecuteStoredProcedure"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSExecuteStoredProcedure"), urn_com_amalto_xtentis_webservice.WSExecuteStoredProcedure.class, false, false);
@@ -924,7 +904,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "strings"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[72] = oper;
+        _operations[70] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getTransformer");
@@ -935,7 +915,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSTransformer"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[73] = oper;
+        _operations[71] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("existsTransformer");
@@ -946,7 +926,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBoolean"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[74] = oper;
+        _operations[72] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getTransformerPKs");
@@ -959,7 +939,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "wsTransformerPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[75] = oper;
+        _operations[73] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("putTransformer");
@@ -970,7 +950,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSTransformerPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[76] = oper;
+        _operations[74] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("deleteTransformer");
@@ -981,7 +961,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSTransformerPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[77] = oper;
+        _operations[75] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("processBytesUsingTransformer");
@@ -994,7 +974,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "typedContentEntry"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[78] = oper;
+        _operations[76] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("processFileUsingTransformer");
@@ -1007,13 +987,8 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "typedContentEntry"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[79] = oper;
+        _operations[77] = oper;
 
-    }
-
-    private static void _initOperationDesc9(){
-        org.apache.axis.description.OperationDesc oper;
-        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("processBytesUsingTransformerAsBackgroundJob");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSProcessBytesUsingTransformerAsBackgroundJob"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSProcessBytesUsingTransformerAsBackgroundJob"), urn_com_amalto_xtentis_webservice.WSProcessBytesUsingTransformerAsBackgroundJob.class, false, false);
@@ -1023,7 +998,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[80] = oper;
+        _operations[78] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("processFileUsingTransformerAsBackgroundJob");
@@ -1034,8 +1009,13 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[81] = oper;
+        _operations[79] = oper;
 
+    }
+
+    private static void _initOperationDesc9(){
+        org.apache.axis.description.OperationDesc oper;
+        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getTransformerV2");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSGetTransformerV2"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSGetTransformerV2"), urn_com_amalto_xtentis_webservice.WSGetTransformerV2.class, false, false);
@@ -1045,7 +1025,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSTransformerV2"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[82] = oper;
+        _operations[80] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("existsTransformerV2");
@@ -1056,7 +1036,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBoolean"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[83] = oper;
+        _operations[81] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getTransformerV2PKs");
@@ -1069,7 +1049,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "wsTransformerV2PK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[84] = oper;
+        _operations[82] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("putTransformerV2");
@@ -1080,7 +1060,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSTransformerV2PK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[85] = oper;
+        _operations[83] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("deleteTransformerV2");
@@ -1091,7 +1071,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSTransformerV2PK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[86] = oper;
+        _operations[84] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("executeTransformerV2");
@@ -1102,7 +1082,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSTransformerContext"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[87] = oper;
+        _operations[85] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("executeTransformerV2AsJob");
@@ -1113,7 +1093,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[88] = oper;
+        _operations[86] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("extractThroughTransformerV2");
@@ -1124,13 +1104,8 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSTransformerContext"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[89] = oper;
+        _operations[87] = oper;
 
-    }
-
-    private static void _initOperationDesc10(){
-        org.apache.axis.description.OperationDesc oper;
-        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("existsTransformerPluginV2");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSExistsTransformerPluginV2"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSExistsTransformerPluginV2"), urn_com_amalto_xtentis_webservice.WSExistsTransformerPluginV2.class, false, false);
@@ -1140,7 +1115,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBoolean"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[90] = oper;
+        _operations[88] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getTransformerPluginV2Configuration");
@@ -1151,8 +1126,13 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSString"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[91] = oper;
+        _operations[89] = oper;
 
+    }
+
+    private static void _initOperationDesc10(){
+        org.apache.axis.description.OperationDesc oper;
+        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("putTransformerPluginV2Configuration");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginV2PutConfiguration"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginV2PutConfiguration"), urn_com_amalto_xtentis_webservice.WSTransformerPluginV2PutConfiguration.class, false, false);
@@ -1162,7 +1142,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSString"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[92] = oper;
+        _operations[90] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getTransformerPluginV2Details");
@@ -1173,7 +1153,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginV2Details"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[93] = oper;
+        _operations[91] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getTransformerPluginV2sList");
@@ -1186,7 +1166,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "Item"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[94] = oper;
+        _operations[92] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getRole");
@@ -1197,7 +1177,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSRole"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[95] = oper;
+        _operations[93] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("existsRole");
@@ -1208,7 +1188,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBoolean"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[96] = oper;
+        _operations[94] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getRolePKs");
@@ -1221,7 +1201,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "wsRolePK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[97] = oper;
+        _operations[95] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("putRole");
@@ -1232,7 +1212,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSRolePK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[98] = oper;
+        _operations[96] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("deleteRole");
@@ -1243,13 +1223,8 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSRolePK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[99] = oper;
+        _operations[97] = oper;
 
-    }
-
-    private static void _initOperationDesc11(){
-        org.apache.axis.description.OperationDesc oper;
-        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getObjectsForRoles");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSGetObjectsForRoles"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSGetObjectsForRoles"), java.lang.String[].class, false, false);
@@ -1262,7 +1237,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "strings"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[100] = oper;
+        _operations[98] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getMenu");
@@ -1273,8 +1248,13 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSMenu"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[101] = oper;
+        _operations[99] = oper;
 
+    }
+
+    private static void _initOperationDesc11(){
+        org.apache.axis.description.OperationDesc oper;
+        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("existsMenu");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSExistsMenu"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSExistsMenu"), urn_com_amalto_xtentis_webservice.WSExistsMenu.class, false, false);
@@ -1284,7 +1264,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBoolean"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[102] = oper;
+        _operations[100] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getMenuPKs");
@@ -1297,7 +1277,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "wsMenuPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[103] = oper;
+        _operations[101] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("putMenu");
@@ -1308,7 +1288,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSMenuPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[104] = oper;
+        _operations[102] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("deleteMenu");
@@ -1319,7 +1299,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSMenuPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[105] = oper;
+        _operations[103] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("versioningCommitItems");
@@ -1330,7 +1310,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[106] = oper;
+        _operations[104] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("versioningRestoreItemByRevision");
@@ -1341,7 +1321,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBoolean"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[107] = oper;
+        _operations[105] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("versioningGetItemHistory");
@@ -1352,7 +1332,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSVersioningItemHistory"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[108] = oper;
+        _operations[106] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("versioningGetItemsVersions");
@@ -1365,13 +1345,8 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "items"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[109] = oper;
+        _operations[107] = oper;
 
-    }
-
-    private static void _initOperationDesc12(){
-        org.apache.axis.description.OperationDesc oper;
-        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("versioningGetItemContent");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSVersioningGetItemContent"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSVersioningGetItemContent"), urn_com_amalto_xtentis_webservice.WSVersioningGetItemContent.class, false, false);
@@ -1381,7 +1356,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSString"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[110] = oper;
+        _operations[108] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("versioningGetObjectsVersions");
@@ -1394,8 +1369,13 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "objects"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[111] = oper;
+        _operations[109] = oper;
 
+    }
+
+    private static void _initOperationDesc12(){
+        org.apache.axis.description.OperationDesc oper;
+        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("versioningGetUniverseVersions");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSVersioningGetUniverseVersions"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSVersioningGetUniverseVersions"), urn_com_amalto_xtentis_webservice.WSVersioningGetUniverseVersions.class, false, false);
@@ -1407,7 +1387,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "tagStructure"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[112] = oper;
+        _operations[110] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getVersioningSystemConfiguration");
@@ -1418,7 +1398,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSVersioningSystemConfiguration"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[113] = oper;
+        _operations[111] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("putVersioningSystemConfiguration");
@@ -1429,7 +1409,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSString"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[114] = oper;
+        _operations[112] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("versioningGetInfo");
@@ -1440,7 +1420,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSVersioningInfo"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[115] = oper;
+        _operations[113] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("versioningTagObjects");
@@ -1451,7 +1431,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[116] = oper;
+        _operations[114] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("versioningTagUniverse");
@@ -1462,7 +1442,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[117] = oper;
+        _operations[115] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("versioningTagItems");
@@ -1473,11 +1453,33 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[118] = oper;
+        _operations[116] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("versioningRestoreObjects");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSVersioningRestoreObjects"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSVersioningRestoreObjects"), urn_com_amalto_xtentis_webservice.WSVersioningRestoreObjects.class, false, false);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPK"));
+        oper.setReturnClass(urn_com_amalto_xtentis_webservice.WSBackgroundJobPK.class);
+        oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPK"));
+        oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
+        oper.setUse(org.apache.axis.constants.Use.LITERAL);
+        _operations[117] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("versioningRestoreUniverse");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSVersioningRestoreUniverse"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSVersioningRestoreUniverse"), urn_com_amalto_xtentis_webservice.WSVersioningRestoreUniverse.class, false, false);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPK"));
+        oper.setReturnClass(urn_com_amalto_xtentis_webservice.WSBackgroundJobPK.class);
+        oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPK"));
+        oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
+        oper.setUse(org.apache.axis.constants.Use.LITERAL);
+        _operations[118] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("versioningRestoreItems");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSVersioningRestoreItems"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSVersioningRestoreItems"), urn_com_amalto_xtentis_webservice.WSVersioningRestoreItems.class, false, false);
         oper.addParameter(param);
         oper.setReturnType(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPK"));
         oper.setReturnClass(urn_com_amalto_xtentis_webservice.WSBackgroundJobPK.class);
@@ -1492,28 +1494,6 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         org.apache.axis.description.OperationDesc oper;
         org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
-        oper.setName("versioningRestoreUniverse");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSVersioningRestoreUniverse"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSVersioningRestoreUniverse"), urn_com_amalto_xtentis_webservice.WSVersioningRestoreUniverse.class, false, false);
-        oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPK"));
-        oper.setReturnClass(urn_com_amalto_xtentis_webservice.WSBackgroundJobPK.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPK"));
-        oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
-        oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[120] = oper;
-
-        oper = new org.apache.axis.description.OperationDesc();
-        oper.setName("versioningRestoreItems");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSVersioningRestoreItems"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSVersioningRestoreItems"), urn_com_amalto_xtentis_webservice.WSVersioningRestoreItems.class, false, false);
-        oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPK"));
-        oper.setReturnClass(urn_com_amalto_xtentis_webservice.WSBackgroundJobPK.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPK"));
-        oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
-        oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[121] = oper;
-
-        oper = new org.apache.axis.description.OperationDesc();
         oper.setName("findBackgroundJobPKs");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSFindBackgroundJobPKs"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSFindBackgroundJobPKs"), urn_com_amalto_xtentis_webservice.WSFindBackgroundJobPKs.class, false, false);
         oper.addParameter(param);
@@ -1524,7 +1504,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "wsBackgroundJobPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[122] = oper;
+        _operations[120] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getBackgroundJob");
@@ -1535,7 +1515,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJob"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[123] = oper;
+        _operations[121] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("putBackgroundJob");
@@ -1546,7 +1526,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[124] = oper;
+        _operations[122] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getRoutingOrderV2");
@@ -1557,7 +1537,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderV2"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[125] = oper;
+        _operations[123] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("existsRoutingOrderV2");
@@ -1568,7 +1548,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderV2"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[126] = oper;
+        _operations[124] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("deleteRoutingOrderV2");
@@ -1579,7 +1559,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderV2PK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[127] = oper;
+        _operations[125] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("executeRoutingOrderV2Asynchronously");
@@ -1590,7 +1570,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderV2PK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[128] = oper;
+        _operations[126] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("executeRoutingOrderV2Synchronously");
@@ -1601,13 +1581,8 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSString"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[129] = oper;
+        _operations[127] = oper;
 
-    }
-
-    private static void _initOperationDesc14(){
-        org.apache.axis.description.OperationDesc oper;
-        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getRoutingOrderV2PKsByCriteria");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSGetRoutingOrderV2PKsByCriteria"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSGetRoutingOrderV2PKsByCriteria"), urn_com_amalto_xtentis_webservice.WSGetRoutingOrderV2PKsByCriteria.class, false, false);
@@ -1619,7 +1594,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "wsRoutingOrder"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[130] = oper;
+        _operations[128] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getRoutingOrderV2sByCriteria");
@@ -1632,8 +1607,13 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "wsRoutingOrder"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[131] = oper;
+        _operations[129] = oper;
 
+    }
+
+    private static void _initOperationDesc14(){
+        org.apache.axis.description.OperationDesc oper;
+        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("routeItemV2");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSRouteItemV2"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSRouteItemV2"), urn_com_amalto_xtentis_webservice.WSRouteItemV2.class, false, false);
@@ -1645,7 +1625,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "wsRoutingRulePKs"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[132] = oper;
+        _operations[130] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("routingEngineV2Action");
@@ -1656,7 +1636,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSRoutingEngineV2Status"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[133] = oper;
+        _operations[131] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getUniverse");
@@ -1667,7 +1647,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSUniverse"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[134] = oper;
+        _operations[132] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("existsUniverse");
@@ -1678,7 +1658,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBoolean"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[135] = oper;
+        _operations[133] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getUniversePKs");
@@ -1691,7 +1671,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "wsUniversePK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[136] = oper;
+        _operations[134] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getUniverseByRevision");
@@ -1704,7 +1684,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "wsUniversePK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[137] = oper;
+        _operations[135] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("putUniverse");
@@ -1715,7 +1695,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSUniversePK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[138] = oper;
+        _operations[136] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("deleteUniverse");
@@ -1726,13 +1706,8 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSUniversePK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[139] = oper;
+        _operations[137] = oper;
 
-    }
-
-    private static void _initOperationDesc15(){
-        org.apache.axis.description.OperationDesc oper;
-        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getObjectsForUniverses");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSGetObjectsForUniverses"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSGetObjectsForUniverses"), java.lang.String[].class, false, false);
@@ -1745,7 +1720,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "strings"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[140] = oper;
+        _operations[138] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getCurrentUniverse");
@@ -1756,8 +1731,13 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSUniverse"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[141] = oper;
+        _operations[139] = oper;
 
+    }
+
+    private static void _initOperationDesc15(){
+        org.apache.axis.description.OperationDesc oper;
+        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getSynchronizationPlan");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSGetSynchronizationPlan"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSGetSynchronizationPlan"), urn_com_amalto_xtentis_webservice.WSGetSynchronizationPlan.class, false, false);
@@ -1767,7 +1747,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlan"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[142] = oper;
+        _operations[140] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("existsSynchronizationPlan");
@@ -1778,7 +1758,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBoolean"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[143] = oper;
+        _operations[141] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getSynchronizationPlanPKs");
@@ -1791,7 +1771,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "wsSynchronizationPlanPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[144] = oper;
+        _operations[142] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("putSynchronizationPlan");
@@ -1802,7 +1782,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlanPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[145] = oper;
+        _operations[143] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("deleteSynchronizationPlan");
@@ -1813,7 +1793,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlanPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[146] = oper;
+        _operations[144] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getObjectsForSynchronizationPlans");
@@ -1827,7 +1807,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "strings"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[147] = oper;
+        _operations[145] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getSynchronizationPlanObjectsAlgorithms");
@@ -1841,12 +1821,36 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "strings"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[148] = oper;
+        _operations[146] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getSynchronizationPlanItemsAlgorithms");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSGetSynchronizationPlanItemsAlgorithms"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSGetSynchronizationPlanItemsAlgorithms"), java.lang.String[].class, false, false);
         param.setItemQName(new javax.xml.namespace.QName("", "algorithm"));
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSStringArray"));
+        oper.setReturnClass(java.lang.String[].class);
+        oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSStringArray"));
+        param = oper.getReturnParamDesc();
+        param.setItemQName(new javax.xml.namespace.QName("", "strings"));
+        oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
+        oper.setUse(org.apache.axis.constants.Use.LITERAL);
+        _operations[147] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("synchronizationPlanAction");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlanAction"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlanAction"), urn_com_amalto_xtentis_webservice.WSSynchronizationPlanAction.class, false, false);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlanStatus"));
+        oper.setReturnClass(urn_com_amalto_xtentis_webservice.WSSynchronizationPlanStatus.class);
+        oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlanStatus"));
+        oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
+        oper.setUse(org.apache.axis.constants.Use.LITERAL);
+        _operations[148] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("synchronizationGetUnsynchronizedObjectsIDs");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationGetUnsynchronizedObjectsIDs"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationGetUnsynchronizedObjectsIDs"), urn_com_amalto_xtentis_webservice.WSSynchronizationGetUnsynchronizedObjectsIDs.class, false, false);
         oper.addParameter(param);
         oper.setReturnType(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSStringArray"));
         oper.setReturnClass(java.lang.String[].class);
@@ -1863,30 +1867,6 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         org.apache.axis.description.OperationDesc oper;
         org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
-        oper.setName("synchronizationPlanAction");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlanAction"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlanAction"), urn_com_amalto_xtentis_webservice.WSSynchronizationPlanAction.class, false, false);
-        oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlanStatus"));
-        oper.setReturnClass(urn_com_amalto_xtentis_webservice.WSSynchronizationPlanStatus.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationPlanStatus"));
-        oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
-        oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[150] = oper;
-
-        oper = new org.apache.axis.description.OperationDesc();
-        oper.setName("synchronizationGetUnsynchronizedObjectsIDs");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationGetUnsynchronizedObjectsIDs"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationGetUnsynchronizedObjectsIDs"), urn_com_amalto_xtentis_webservice.WSSynchronizationGetUnsynchronizedObjectsIDs.class, false, false);
-        oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSStringArray"));
-        oper.setReturnClass(java.lang.String[].class);
-        oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSStringArray"));
-        param = oper.getReturnParamDesc();
-        param.setItemQName(new javax.xml.namespace.QName("", "strings"));
-        oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
-        oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[151] = oper;
-
-        oper = new org.apache.axis.description.OperationDesc();
         oper.setName("synchronizationGetObjectXML");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationGetObjectXML"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationGetObjectXML"), urn_com_amalto_xtentis_webservice.WSSynchronizationGetObjectXML.class, false, false);
         oper.addParameter(param);
@@ -1895,7 +1875,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSString"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[152] = oper;
+        _operations[150] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("synchronizationPutObjectXML");
@@ -1906,7 +1886,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSString"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[153] = oper;
+        _operations[151] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("synchronizationGetUnsynchronizedItemPKs");
@@ -1919,7 +1899,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "wsItemPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[154] = oper;
+        _operations[152] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("synchronizationGetItemXML");
@@ -1930,7 +1910,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSString"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[155] = oper;
+        _operations[153] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("synchronizationPutItemXML");
@@ -1941,7 +1921,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSItemPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[156] = oper;
+        _operations[154] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getSynchronizationItem");
@@ -1952,7 +1932,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationItem"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[157] = oper;
+        _operations[155] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("existsSynchronizationItem");
@@ -1963,17 +1943,43 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBoolean"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[158] = oper;
+        _operations[156] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getSynchronizationItemPKs");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSGetSynchronizationItemPKs"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSGetSynchronizationItemPKs"), urn_com_amalto_xtentis_webservice.WSGetSynchronizationItemPKs.class, false, false);
         oper.addParameter(param);
         oper.setReturnType(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationItemPKArray"));
-        oper.setReturnClass(urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK[].class);
+        oper.setReturnClass(java.lang.String[][].class);
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationItemPKArray"));
         param = oper.getReturnParamDesc();
         param.setItemQName(new javax.xml.namespace.QName("", "wsSynchronizationItemPK"));
+        oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
+        oper.setUse(org.apache.axis.constants.Use.LITERAL);
+        _operations[157] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("putSynchronizationItem");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSPutSynchronizationItem"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSPutSynchronizationItem"), urn_com_amalto_xtentis_webservice.WSPutSynchronizationItem.class, false, false);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationItemPK"));
+        oper.setReturnClass(java.lang.String[].class);
+        oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationItemPK"));
+        param = oper.getReturnParamDesc();
+        param.setItemQName(new javax.xml.namespace.QName("", "ids"));
+        oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
+        oper.setUse(org.apache.axis.constants.Use.LITERAL);
+        _operations[158] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("deleteSynchronizationItem");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSDeleteSynchronizationItem"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSDeleteSynchronizationItem"), urn_com_amalto_xtentis_webservice.WSDeleteSynchronizationItem.class, false, false);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationItemPK"));
+        oper.setReturnClass(java.lang.String[].class);
+        oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationItemPK"));
+        param = oper.getReturnParamDesc();
+        param.setItemQName(new javax.xml.namespace.QName("", "ids"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
         _operations[159] = oper;
@@ -1984,28 +1990,6 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         org.apache.axis.description.OperationDesc oper;
         org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
-        oper.setName("putSynchronizationItem");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSPutSynchronizationItem"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSPutSynchronizationItem"), urn_com_amalto_xtentis_webservice.WSPutSynchronizationItem.class, false, false);
-        oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationItemPK"));
-        oper.setReturnClass(urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationItemPK"));
-        oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
-        oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[160] = oper;
-
-        oper = new org.apache.axis.description.OperationDesc();
-        oper.setName("deleteSynchronizationItem");
-        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSDeleteSynchronizationItem"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSDeleteSynchronizationItem"), urn_com_amalto_xtentis_webservice.WSDeleteSynchronizationItem.class, false, false);
-        oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationItemPK"));
-        oper.setReturnClass(urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK.class);
-        oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationItemPK"));
-        oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
-        oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[161] = oper;
-
-        oper = new org.apache.axis.description.OperationDesc();
         oper.setName("resolveSynchronizationItem");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSResolveSynchronizationItem"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSResolveSynchronizationItem"), urn_com_amalto_xtentis_webservice.WSResolveSynchronizationItem.class, false, false);
         oper.addParameter(param);
@@ -2014,7 +1998,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationItem"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[162] = oper;
+        _operations[160] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("recoverDroppedItem");
@@ -2025,7 +2009,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSItemPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[163] = oper;
+        _operations[161] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("findAllDroppedItemsPKs");
@@ -2038,7 +2022,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "wsDroppedItemPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[164] = oper;
+        _operations[162] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("loadDroppedItem");
@@ -2049,7 +2033,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSDroppedItem"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[165] = oper;
+        _operations[163] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("removeDroppedItem");
@@ -2060,7 +2044,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSDroppedItemPK"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[166] = oper;
+        _operations[164] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getMDMConfiguration");
@@ -2069,7 +2053,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSMDMConfig"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[167] = oper;
+        _operations[165] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("checkServiceConfiguration");
@@ -2080,7 +2064,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSCheckServiceConfigResponse"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[168] = oper;
+        _operations[166] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("workflowGetProcessDefinitions");
@@ -2093,13 +2077,8 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "wsWorkflowProcessDefinitions"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[169] = oper;
+        _operations[167] = oper;
 
-    }
-
-    private static void _initOperationDesc18(){
-        org.apache.axis.description.OperationDesc oper;
-        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("workflowDeploy");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSWorkflowDeploy"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSWorkflowDeploy"), urn_com_amalto_xtentis_webservice.WSWorkflowDeploy.class, false, false);
@@ -2109,7 +2088,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSWorkflowProcessDefinitionUUID"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[170] = oper;
+        _operations[168] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("workflowUnDeploy");
@@ -2120,8 +2099,13 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBoolean"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[171] = oper;
+        _operations[169] = oper;
 
+    }
+
+    private static void _initOperationDesc18(){
+        org.apache.axis.description.OperationDesc oper;
+        org.apache.axis.description.ParameterDesc param;
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("workflowGetTaskList");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSWorkflowGetTaskList"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSWorkflowGetTaskList"), urn_com_amalto_xtentis_webservice.WSWorkflowGetTaskList.class, false, false);
@@ -2133,7 +2117,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "wstaskinstance"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[172] = oper;
+        _operations[170] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("workflowGetProcessInstances");
@@ -2146,7 +2130,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "instance"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[173] = oper;
+        _operations[171] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("workflowDeleteProcessInstances");
@@ -2157,7 +2141,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBoolean"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[174] = oper;
+        _operations[172] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getMDMJob");
@@ -2171,7 +2155,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         param.setItemQName(new javax.xml.namespace.QName("", "wsMDMJob"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[175] = oper;
+        _operations[173] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("putMDMJob");
@@ -2182,7 +2166,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBoolean"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[176] = oper;
+        _operations[174] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("deleteMDMJob");
@@ -2193,7 +2177,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBoolean"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[177] = oper;
+        _operations[175] = oper;
 
         oper = new org.apache.axis.description.OperationDesc();
         oper.setName("getMDMCategory");
@@ -2204,7 +2188,18 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSCategoryData"));
         oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
-        _operations[178] = oper;
+        _operations[176] = oper;
+
+        oper = new org.apache.axis.description.OperationDesc();
+        oper.setName("getAutoIncrement");
+        param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSAutoIncrement"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSAutoIncrement"), urn_com_amalto_xtentis_webservice.WSAutoIncrement.class, false, false);
+        oper.addParameter(param);
+        oper.setReturnType(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSAutoIncrement"));
+        oper.setReturnClass(urn_com_amalto_xtentis_webservice.WSAutoIncrement.class);
+        oper.setReturnQName(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSAutoIncrement"));
+        oper.setStyle(org.apache.axis.constants.Style.DOCUMENT);
+        oper.setUse(org.apache.axis.constants.Use.LITERAL);
+        _operations[177] = oper;
 
     }
 
@@ -2428,6 +2423,13 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             cachedSerClasses.add(cls);
             cachedSerFactories.add(enumsf);
             cachedDeserFactories.add(enumdf);
+
+            qName = new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSAutoIncrement");
+            cachedSerQNames.add(qName);
+            cls = urn_com_amalto_xtentis_webservice.WSAutoIncrement.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJob");
             cachedSerQNames.add(qName);
@@ -2964,13 +2966,6 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
-            qName = new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConceptKey");
-            cachedSerQNames.add(qName);
-            cls = urn_com_amalto_xtentis_webservice.WSGetBusinessConceptKey.class;
-            cachedSerClasses.add(cls);
-            cachedSerFactories.add(beansf);
-            cachedDeserFactories.add(beandf);
-
     }
     private void addBindings1() {
             java.lang.Class cls;
@@ -2986,6 +2981,13 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
             java.lang.Class simplelistsf = org.apache.axis.encoding.ser.SimpleListSerializerFactory.class;
             java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
+            qName = new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConceptKey");
+            cachedSerQNames.add(qName);
+            cls = urn_com_amalto_xtentis_webservice.WSGetBusinessConceptKey.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
             qName = new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConcepts");
             cachedSerQNames.add(qName);
             cls = urn_com_amalto_xtentis_webservice.WSGetBusinessConcepts.class;
@@ -3399,20 +3401,6 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             cachedSerFactories.add(enumsf);
             cachedDeserFactories.add(enumdf);
 
-            qName = new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSLicense");
-            cachedSerQNames.add(qName);
-            cls = urn_com_amalto_xtentis_webservice.WSLicense.class;
-            cachedSerClasses.add(cls);
-            cachedSerFactories.add(beansf);
-            cachedDeserFactories.add(beandf);
-
-            qName = new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSLicensePK");
-            cachedSerQNames.add(qName);
-            cls = urn_com_amalto_xtentis_webservice.WSLicensePK.class;
-            cachedSerClasses.add(cls);
-            cachedSerFactories.add(beansf);
-            cachedDeserFactories.add(beandf);
-
             qName = new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSLinkedHashMap");
             cachedSerQNames.add(qName);
             cls = urn_com_amalto_xtentis_webservice.WSLinkedHashMapTypedContentEntry[].class;
@@ -3678,13 +3666,6 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
-            qName = new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSPutLicense");
-            cachedSerQNames.add(qName);
-            cls = urn_com_amalto_xtentis_webservice.WSPutLicense.class;
-            cachedSerClasses.add(cls);
-            cachedSerFactories.add(beansf);
-            cachedDeserFactories.add(beandf);
-
             qName = new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSPUTMDMJob");
             cachedSerQNames.add(qName);
             cls = urn_com_amalto_xtentis_webservice.WSPUTMDMJob.class;
@@ -3720,6 +3701,20 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
+            qName = new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSPutSynchronizationItem");
+            cachedSerQNames.add(qName);
+            cls = urn_com_amalto_xtentis_webservice.WSPutSynchronizationItem.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
+            qName = new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSPutSynchronizationPlan");
+            cachedSerQNames.add(qName);
+            cls = urn_com_amalto_xtentis_webservice.WSPutSynchronizationPlan.class;
+            cachedSerClasses.add(cls);
+            cachedSerFactories.add(beansf);
+            cachedDeserFactories.add(beandf);
+
     }
     private void addBindings2() {
             java.lang.Class cls;
@@ -3735,20 +3730,6 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
             java.lang.Class simplelistsf = org.apache.axis.encoding.ser.SimpleListSerializerFactory.class;
             java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
-            qName = new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSPutSynchronizationItem");
-            cachedSerQNames.add(qName);
-            cls = urn_com_amalto_xtentis_webservice.WSPutSynchronizationItem.class;
-            cachedSerClasses.add(cls);
-            cachedSerFactories.add(beansf);
-            cachedDeserFactories.add(beandf);
-
-            qName = new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSPutSynchronizationPlan");
-            cachedSerQNames.add(qName);
-            cls = urn_com_amalto_xtentis_webservice.WSPutSynchronizationPlan.class;
-            cachedSerClasses.add(cls);
-            cachedSerFactories.add(beansf);
-            cachedDeserFactories.add(beandf);
-
             qName = new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSPutTransformer");
             cachedSerQNames.add(qName);
             cls = urn_com_amalto_xtentis_webservice.WSPutTransformer.class;
@@ -4094,14 +4075,16 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
 
             qName = new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationItemPK");
             cachedSerQNames.add(qName);
-            cls = urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK.class;
+            cls = java.lang.String[].class;
             cachedSerClasses.add(cls);
-            cachedSerFactories.add(beansf);
-            cachedDeserFactories.add(beandf);
+            qName = new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string");
+            qName2 = new javax.xml.namespace.QName("", "ids");
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
             qName = new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationItemPKArray");
             cachedSerQNames.add(qName);
-            cls = urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK[].class;
+            cls = java.lang.String[][].class;
             cachedSerClasses.add(cls);
             qName = new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationItemPK");
             qName2 = new javax.xml.namespace.QName("", "wsSynchronizationItemPK");
@@ -4465,21 +4448,6 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
-    }
-    private void addBindings3() {
-            java.lang.Class cls;
-            javax.xml.namespace.QName qName;
-            javax.xml.namespace.QName qName2;
-            java.lang.Class beansf = org.apache.axis.encoding.ser.BeanSerializerFactory.class;
-            java.lang.Class beandf = org.apache.axis.encoding.ser.BeanDeserializerFactory.class;
-            java.lang.Class enumsf = org.apache.axis.encoding.ser.EnumSerializerFactory.class;
-            java.lang.Class enumdf = org.apache.axis.encoding.ser.EnumDeserializerFactory.class;
-            java.lang.Class arraysf = org.apache.axis.encoding.ser.ArraySerializerFactory.class;
-            java.lang.Class arraydf = org.apache.axis.encoding.ser.ArrayDeserializerFactory.class;
-            java.lang.Class simplesf = org.apache.axis.encoding.ser.SimpleSerializerFactory.class;
-            java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
-            java.lang.Class simplelistsf = org.apache.axis.encoding.ser.SimpleListSerializerFactory.class;
-            java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
             qName = new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSVersioningTagUniverse");
             cachedSerQNames.add(qName);
             cls = urn_com_amalto_xtentis_webservice.WSVersioningTagUniverse.class;
@@ -4496,6 +4464,21 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
 
+    }
+    private void addBindings3() {
+            java.lang.Class cls;
+            javax.xml.namespace.QName qName;
+            javax.xml.namespace.QName qName2;
+            java.lang.Class beansf = org.apache.axis.encoding.ser.BeanSerializerFactory.class;
+            java.lang.Class beandf = org.apache.axis.encoding.ser.BeanDeserializerFactory.class;
+            java.lang.Class enumsf = org.apache.axis.encoding.ser.EnumSerializerFactory.class;
+            java.lang.Class enumdf = org.apache.axis.encoding.ser.EnumDeserializerFactory.class;
+            java.lang.Class arraysf = org.apache.axis.encoding.ser.ArraySerializerFactory.class;
+            java.lang.Class arraydf = org.apache.axis.encoding.ser.ArrayDeserializerFactory.class;
+            java.lang.Class simplesf = org.apache.axis.encoding.ser.SimpleSerializerFactory.class;
+            java.lang.Class simpledf = org.apache.axis.encoding.ser.SimpleDeserializerFactory.class;
+            java.lang.Class simplelistsf = org.apache.axis.encoding.ser.SimpleListSerializerFactory.class;
+            java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
             qName = new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSView");
             cachedSerQNames.add(qName);
             cls = urn_com_amalto_xtentis_webservice.WSView.class;
@@ -6104,76 +6087,12 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
 }
     }
 
-    public urn_com_amalto_xtentis_webservice.WSLicensePK putLicense(urn_com_amalto_xtentis_webservice.WSPutLicense putLicense) throws java.rmi.RemoteException {
-        if (super.cachedEndpoint == null) {
-            throw new org.apache.axis.NoEndPointException();
-        }
-        org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[44]);
-        _call.setEncodingStyle(null);
-        _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
-        _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
-        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("", "putLicense"));
-
-        setRequestHeaders(_call);
-        setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {putLicense});
-
-        if (_resp instanceof java.rmi.RemoteException) {
-            throw (java.rmi.RemoteException)_resp;
-        }
-        else {
-            extractAttachments(_call);
-            try {
-                return (urn_com_amalto_xtentis_webservice.WSLicensePK) _resp;
-            } catch (java.lang.Exception _exception) {
-                return (urn_com_amalto_xtentis_webservice.WSLicensePK) org.apache.axis.utils.JavaUtils.convert(_resp, urn_com_amalto_xtentis_webservice.WSLicensePK.class);
-            }
-        }
-  } catch (org.apache.axis.AxisFault axisFaultException) {
-  throw axisFaultException;
-}
-    }
-
-    public urn_com_amalto_xtentis_webservice.WSLicense getLicense() throws java.rmi.RemoteException {
-        if (super.cachedEndpoint == null) {
-            throw new org.apache.axis.NoEndPointException();
-        }
-        org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[45]);
-        _call.setEncodingStyle(null);
-        _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
-        _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
-        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
-        _call.setOperationName(new javax.xml.namespace.QName("", "getLicense"));
-
-        setRequestHeaders(_call);
-        setAttachments(_call);
- try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {});
-
-        if (_resp instanceof java.rmi.RemoteException) {
-            throw (java.rmi.RemoteException)_resp;
-        }
-        else {
-            extractAttachments(_call);
-            try {
-                return (urn_com_amalto_xtentis_webservice.WSLicense) _resp;
-            } catch (java.lang.Exception _exception) {
-                return (urn_com_amalto_xtentis_webservice.WSLicense) org.apache.axis.utils.JavaUtils.convert(_resp, urn_com_amalto_xtentis_webservice.WSLicense.class);
-            }
-        }
-  } catch (org.apache.axis.AxisFault axisFaultException) {
-  throw axisFaultException;
-}
-    }
-
     public urn_com_amalto_xtentis_webservice.WSItemPK[] putItemArray(urn_com_amalto_xtentis_webservice.WSPutItem[] wsPutItemArray) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[46]);
+        _call.setOperation(_operations[44]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6205,7 +6124,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[47]);
+        _call.setOperation(_operations[45]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6237,7 +6156,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[48]);
+        _call.setOperation(_operations[46]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6269,7 +6188,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[49]);
+        _call.setOperation(_operations[47]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6301,7 +6220,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[50]);
+        _call.setOperation(_operations[48]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6333,7 +6252,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[51]);
+        _call.setOperation(_operations[49]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6365,7 +6284,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[52]);
+        _call.setOperation(_operations[50]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6397,7 +6316,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[53]);
+        _call.setOperation(_operations[51]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6429,7 +6348,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[54]);
+        _call.setOperation(_operations[52]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6461,7 +6380,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[55]);
+        _call.setOperation(_operations[53]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6493,7 +6412,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[56]);
+        _call.setOperation(_operations[54]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6525,7 +6444,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[57]);
+        _call.setOperation(_operations[55]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6557,7 +6476,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[58]);
+        _call.setOperation(_operations[56]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6589,7 +6508,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[59]);
+        _call.setOperation(_operations[57]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6621,7 +6540,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[60]);
+        _call.setOperation(_operations[58]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6653,7 +6572,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[61]);
+        _call.setOperation(_operations[59]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6685,7 +6604,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[62]);
+        _call.setOperation(_operations[60]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6717,7 +6636,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[63]);
+        _call.setOperation(_operations[61]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6749,7 +6668,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[64]);
+        _call.setOperation(_operations[62]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6781,7 +6700,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[65]);
+        _call.setOperation(_operations[63]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6813,7 +6732,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[66]);
+        _call.setOperation(_operations[64]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6845,7 +6764,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[67]);
+        _call.setOperation(_operations[65]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6877,7 +6796,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[68]);
+        _call.setOperation(_operations[66]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6909,7 +6828,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[69]);
+        _call.setOperation(_operations[67]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6941,7 +6860,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[70]);
+        _call.setOperation(_operations[68]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -6973,7 +6892,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[71]);
+        _call.setOperation(_operations[69]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7005,7 +6924,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[72]);
+        _call.setOperation(_operations[70]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7037,7 +6956,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[73]);
+        _call.setOperation(_operations[71]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7069,7 +6988,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[74]);
+        _call.setOperation(_operations[72]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7101,7 +7020,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[75]);
+        _call.setOperation(_operations[73]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7133,7 +7052,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[76]);
+        _call.setOperation(_operations[74]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7165,7 +7084,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[77]);
+        _call.setOperation(_operations[75]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7197,7 +7116,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[78]);
+        _call.setOperation(_operations[76]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7229,7 +7148,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[79]);
+        _call.setOperation(_operations[77]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7261,7 +7180,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[80]);
+        _call.setOperation(_operations[78]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7293,7 +7212,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[81]);
+        _call.setOperation(_operations[79]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7325,7 +7244,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[82]);
+        _call.setOperation(_operations[80]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7357,7 +7276,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[83]);
+        _call.setOperation(_operations[81]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7389,7 +7308,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[84]);
+        _call.setOperation(_operations[82]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7421,7 +7340,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[85]);
+        _call.setOperation(_operations[83]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7453,7 +7372,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[86]);
+        _call.setOperation(_operations[84]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7485,7 +7404,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[87]);
+        _call.setOperation(_operations[85]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7517,7 +7436,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[88]);
+        _call.setOperation(_operations[86]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7549,7 +7468,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[89]);
+        _call.setOperation(_operations[87]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7581,7 +7500,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[90]);
+        _call.setOperation(_operations[88]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7613,7 +7532,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[91]);
+        _call.setOperation(_operations[89]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7645,7 +7564,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[92]);
+        _call.setOperation(_operations[90]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7677,7 +7596,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[93]);
+        _call.setOperation(_operations[91]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7709,7 +7628,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[94]);
+        _call.setOperation(_operations[92]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7741,7 +7660,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[95]);
+        _call.setOperation(_operations[93]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7773,7 +7692,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[96]);
+        _call.setOperation(_operations[94]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7805,7 +7724,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[97]);
+        _call.setOperation(_operations[95]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7837,7 +7756,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[98]);
+        _call.setOperation(_operations[96]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7869,7 +7788,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[99]);
+        _call.setOperation(_operations[97]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7901,7 +7820,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[100]);
+        _call.setOperation(_operations[98]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7933,7 +7852,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[101]);
+        _call.setOperation(_operations[99]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7965,7 +7884,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[102]);
+        _call.setOperation(_operations[100]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -7997,7 +7916,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[103]);
+        _call.setOperation(_operations[101]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8029,7 +7948,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[104]);
+        _call.setOperation(_operations[102]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8061,7 +7980,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[105]);
+        _call.setOperation(_operations[103]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8093,7 +8012,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[106]);
+        _call.setOperation(_operations[104]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8125,7 +8044,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[107]);
+        _call.setOperation(_operations[105]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8157,7 +8076,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[108]);
+        _call.setOperation(_operations[106]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8189,7 +8108,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[109]);
+        _call.setOperation(_operations[107]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8221,7 +8140,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[110]);
+        _call.setOperation(_operations[108]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8253,7 +8172,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[111]);
+        _call.setOperation(_operations[109]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8285,7 +8204,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[112]);
+        _call.setOperation(_operations[110]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8317,7 +8236,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[113]);
+        _call.setOperation(_operations[111]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8349,7 +8268,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[114]);
+        _call.setOperation(_operations[112]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8381,7 +8300,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[115]);
+        _call.setOperation(_operations[113]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8413,7 +8332,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[116]);
+        _call.setOperation(_operations[114]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8445,7 +8364,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[117]);
+        _call.setOperation(_operations[115]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8477,7 +8396,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[118]);
+        _call.setOperation(_operations[116]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8509,7 +8428,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[119]);
+        _call.setOperation(_operations[117]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8541,7 +8460,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[120]);
+        _call.setOperation(_operations[118]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8573,7 +8492,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[121]);
+        _call.setOperation(_operations[119]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8605,7 +8524,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[122]);
+        _call.setOperation(_operations[120]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8637,7 +8556,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[123]);
+        _call.setOperation(_operations[121]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8669,7 +8588,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[124]);
+        _call.setOperation(_operations[122]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8701,7 +8620,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[125]);
+        _call.setOperation(_operations[123]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8733,7 +8652,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[126]);
+        _call.setOperation(_operations[124]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8765,7 +8684,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[127]);
+        _call.setOperation(_operations[125]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8797,7 +8716,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[128]);
+        _call.setOperation(_operations[126]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8829,7 +8748,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[129]);
+        _call.setOperation(_operations[127]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8861,7 +8780,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[130]);
+        _call.setOperation(_operations[128]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8893,7 +8812,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[131]);
+        _call.setOperation(_operations[129]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8925,7 +8844,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[132]);
+        _call.setOperation(_operations[130]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8957,7 +8876,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[133]);
+        _call.setOperation(_operations[131]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -8989,7 +8908,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[134]);
+        _call.setOperation(_operations[132]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9021,7 +8940,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[135]);
+        _call.setOperation(_operations[133]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9053,7 +8972,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[136]);
+        _call.setOperation(_operations[134]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9085,7 +9004,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[137]);
+        _call.setOperation(_operations[135]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9117,7 +9036,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[138]);
+        _call.setOperation(_operations[136]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9149,7 +9068,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[139]);
+        _call.setOperation(_operations[137]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9181,7 +9100,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[140]);
+        _call.setOperation(_operations[138]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9213,7 +9132,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[141]);
+        _call.setOperation(_operations[139]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9245,7 +9164,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[142]);
+        _call.setOperation(_operations[140]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9277,7 +9196,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[143]);
+        _call.setOperation(_operations[141]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9309,7 +9228,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[144]);
+        _call.setOperation(_operations[142]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9341,7 +9260,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[145]);
+        _call.setOperation(_operations[143]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9373,7 +9292,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[146]);
+        _call.setOperation(_operations[144]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9405,7 +9324,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[147]);
+        _call.setOperation(_operations[145]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9437,7 +9356,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[148]);
+        _call.setOperation(_operations[146]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9469,7 +9388,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[149]);
+        _call.setOperation(_operations[147]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9501,7 +9420,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[150]);
+        _call.setOperation(_operations[148]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9533,7 +9452,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[151]);
+        _call.setOperation(_operations[149]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9565,7 +9484,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[152]);
+        _call.setOperation(_operations[150]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9597,7 +9516,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[153]);
+        _call.setOperation(_operations[151]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9629,7 +9548,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[154]);
+        _call.setOperation(_operations[152]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9661,7 +9580,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[155]);
+        _call.setOperation(_operations[153]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9693,7 +9612,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[156]);
+        _call.setOperation(_operations[154]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9725,7 +9644,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[157]);
+        _call.setOperation(_operations[155]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9757,7 +9676,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[158]);
+        _call.setOperation(_operations[156]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9784,12 +9703,12 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
 }
     }
 
-    public urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK[] getSynchronizationItemPKs(urn_com_amalto_xtentis_webservice.WSGetSynchronizationItemPKs regex) throws java.rmi.RemoteException {
+    public java.lang.String[][] getSynchronizationItemPKs(urn_com_amalto_xtentis_webservice.WSGetSynchronizationItemPKs regex) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[159]);
+        _call.setOperation(_operations[157]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9806,9 +9725,9 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         else {
             extractAttachments(_call);
             try {
-                return (urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK[]) _resp;
+                return (java.lang.String[][]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK[]) org.apache.axis.utils.JavaUtils.convert(_resp, urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK[].class);
+                return (java.lang.String[][]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.String[][].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -9816,12 +9735,12 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
 }
     }
 
-    public urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK putSynchronizationItem(urn_com_amalto_xtentis_webservice.WSPutSynchronizationItem wsSynchronizationItem) throws java.rmi.RemoteException {
+    public java.lang.String[] putSynchronizationItem(urn_com_amalto_xtentis_webservice.WSPutSynchronizationItem wsSynchronizationItem) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[160]);
+        _call.setOperation(_operations[158]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9838,9 +9757,9 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         else {
             extractAttachments(_call);
             try {
-                return (urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK) _resp;
+                return (java.lang.String[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK) org.apache.axis.utils.JavaUtils.convert(_resp, urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK.class);
+                return (java.lang.String[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.String[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -9848,12 +9767,12 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
 }
     }
 
-    public urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK deleteSynchronizationItem(urn_com_amalto_xtentis_webservice.WSDeleteSynchronizationItem wsSynchronizationItemDelete) throws java.rmi.RemoteException {
+    public java.lang.String[] deleteSynchronizationItem(urn_com_amalto_xtentis_webservice.WSDeleteSynchronizationItem wsSynchronizationItemDelete) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[161]);
+        _call.setOperation(_operations[159]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9870,9 +9789,9 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
         else {
             extractAttachments(_call);
             try {
-                return (urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK) _resp;
+                return (java.lang.String[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK) org.apache.axis.utils.JavaUtils.convert(_resp, urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK.class);
+                return (java.lang.String[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.String[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -9885,7 +9804,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[162]);
+        _call.setOperation(_operations[160]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9917,7 +9836,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[163]);
+        _call.setOperation(_operations[161]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9949,7 +9868,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[164]);
+        _call.setOperation(_operations[162]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -9981,7 +9900,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[165]);
+        _call.setOperation(_operations[163]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -10013,7 +9932,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[166]);
+        _call.setOperation(_operations[164]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -10045,7 +9964,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[167]);
+        _call.setOperation(_operations[165]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -10077,7 +9996,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[168]);
+        _call.setOperation(_operations[166]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -10109,7 +10028,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[169]);
+        _call.setOperation(_operations[167]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -10141,7 +10060,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[170]);
+        _call.setOperation(_operations[168]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -10173,7 +10092,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[171]);
+        _call.setOperation(_operations[169]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -10205,7 +10124,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[172]);
+        _call.setOperation(_operations[170]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -10237,7 +10156,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[173]);
+        _call.setOperation(_operations[171]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -10269,7 +10188,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[174]);
+        _call.setOperation(_operations[172]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -10301,7 +10220,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[175]);
+        _call.setOperation(_operations[173]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -10333,7 +10252,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[176]);
+        _call.setOperation(_operations[174]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -10365,7 +10284,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[177]);
+        _call.setOperation(_operations[175]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -10397,7 +10316,7 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
             throw new org.apache.axis.NoEndPointException();
         }
         org.apache.axis.client.Call _call = createCall();
-        _call.setOperation(_operations[178]);
+        _call.setOperation(_operations[176]);
         _call.setEncodingStyle(null);
         _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
         _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
@@ -10417,6 +10336,38 @@ public class XtentisBindingStub extends org.apache.axis.client.Stub implements u
                 return (urn_com_amalto_xtentis_webservice.WSCategoryData) _resp;
             } catch (java.lang.Exception _exception) {
                 return (urn_com_amalto_xtentis_webservice.WSCategoryData) org.apache.axis.utils.JavaUtils.convert(_resp, urn_com_amalto_xtentis_webservice.WSCategoryData.class);
+            }
+        }
+  } catch (org.apache.axis.AxisFault axisFaultException) {
+  throw axisFaultException;
+}
+    }
+
+    public urn_com_amalto_xtentis_webservice.WSAutoIncrement getAutoIncrement(urn_com_amalto_xtentis_webservice.WSAutoIncrement wsAutoIncrementRequest) throws java.rmi.RemoteException {
+        if (super.cachedEndpoint == null) {
+            throw new org.apache.axis.NoEndPointException();
+        }
+        org.apache.axis.client.Call _call = createCall();
+        _call.setOperation(_operations[177]);
+        _call.setEncodingStyle(null);
+        _call.setProperty(org.apache.axis.client.Call.SEND_TYPE_ATTR, Boolean.FALSE);
+        _call.setProperty(org.apache.axis.AxisEngine.PROP_DOMULTIREFS, Boolean.FALSE);
+        _call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
+        _call.setOperationName(new javax.xml.namespace.QName("", "getAutoIncrement"));
+
+        setRequestHeaders(_call);
+        setAttachments(_call);
+ try {        java.lang.Object _resp = _call.invoke(new java.lang.Object[] {wsAutoIncrementRequest});
+
+        if (_resp instanceof java.rmi.RemoteException) {
+            throw (java.rmi.RemoteException)_resp;
+        }
+        else {
+            extractAttachments(_call);
+            try {
+                return (urn_com_amalto_xtentis_webservice.WSAutoIncrement) _resp;
+            } catch (java.lang.Exception _exception) {
+                return (urn_com_amalto_xtentis_webservice.WSAutoIncrement) org.apache.axis.utils.JavaUtils.convert(_resp, urn_com_amalto_xtentis_webservice.WSAutoIncrement.class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {

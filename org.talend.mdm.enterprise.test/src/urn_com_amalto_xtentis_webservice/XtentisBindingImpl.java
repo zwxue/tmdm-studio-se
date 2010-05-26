@@ -184,14 +184,6 @@ public class XtentisBindingImpl implements urn_com_amalto_xtentis_webservice.Xte
         return null;
     }
 
-    public urn_com_amalto_xtentis_webservice.WSLicensePK putLicense(urn_com_amalto_xtentis_webservice.WSPutLicense putLicense) throws java.rmi.RemoteException {
-        return null;
-    }
-
-    public urn_com_amalto_xtentis_webservice.WSLicense getLicense() throws java.rmi.RemoteException {
-        return null;
-    }
-
     public urn_com_amalto_xtentis_webservice.WSItemPK[] putItemArray(urn_com_amalto_xtentis_webservice.WSPutItem[] wsPutItemArray) throws java.rmi.RemoteException {
         return null;
     }
@@ -644,15 +636,15 @@ public class XtentisBindingImpl implements urn_com_amalto_xtentis_webservice.Xte
         return null;
     }
 
-    public urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK[] getSynchronizationItemPKs(urn_com_amalto_xtentis_webservice.WSGetSynchronizationItemPKs regex) throws java.rmi.RemoteException {
+    public java.lang.String[][] getSynchronizationItemPKs(urn_com_amalto_xtentis_webservice.WSGetSynchronizationItemPKs regex) throws java.rmi.RemoteException {
         return null;
     }
 
-    public urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK putSynchronizationItem(urn_com_amalto_xtentis_webservice.WSPutSynchronizationItem wsSynchronizationItem) throws java.rmi.RemoteException {
+    public java.lang.String[] putSynchronizationItem(urn_com_amalto_xtentis_webservice.WSPutSynchronizationItem wsSynchronizationItem) throws java.rmi.RemoteException {
         return null;
     }
 
-    public urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK deleteSynchronizationItem(urn_com_amalto_xtentis_webservice.WSDeleteSynchronizationItem wsSynchronizationItemDelete) throws java.rmi.RemoteException {
+    public java.lang.String[] deleteSynchronizationItem(urn_com_amalto_xtentis_webservice.WSDeleteSynchronizationItem wsSynchronizationItemDelete) throws java.rmi.RemoteException {
         return null;
     }
 
@@ -721,6 +713,10 @@ public class XtentisBindingImpl implements urn_com_amalto_xtentis_webservice.Xte
     }
 
     public urn_com_amalto_xtentis_webservice.WSCategoryData getMDMCategory(urn_com_amalto_xtentis_webservice.WSCategoryData wsCategoryDataRequest) throws java.rmi.RemoteException {
+        return null;
+    }
+
+    public urn_com_amalto_xtentis_webservice.WSAutoIncrement getAutoIncrement(urn_com_amalto_xtentis_webservice.WSAutoIncrement wsAutoIncrementRequest) throws java.rmi.RemoteException {
         return null;
     }
 

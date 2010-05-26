@@ -515,27 +515,6 @@ public class XtentisBindingSkeleton implements urn_com_amalto_xtentis_webservice
         }
         ((java.util.List)_myOperations.get("putItemByOperatorType")).add(_oper);
         _params = new org.apache.axis.description.ParameterDesc [] {
-            new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSPutLicense"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSPutLicense"), urn_com_amalto_xtentis_webservice.WSPutLicense.class, false, false), 
-        };
-        _oper = new org.apache.axis.description.OperationDesc("putLicense", _params, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSLicensePK"));
-        _oper.setReturnType(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSLicensePK"));
-        _oper.setElementQName(new javax.xml.namespace.QName("", "putLicense"));
-        _myOperationsList.add(_oper);
-        if (_myOperations.get("putLicense") == null) {
-            _myOperations.put("putLicense", new java.util.ArrayList());
-        }
-        ((java.util.List)_myOperations.get("putLicense")).add(_oper);
-        _params = new org.apache.axis.description.ParameterDesc [] {
-        };
-        _oper = new org.apache.axis.description.OperationDesc("getLicense", _params, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSLicense"));
-        _oper.setReturnType(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSLicense"));
-        _oper.setElementQName(new javax.xml.namespace.QName("", "getLicense"));
-        _myOperationsList.add(_oper);
-        if (_myOperations.get("getLicense") == null) {
-            _myOperations.put("getLicense", new java.util.ArrayList());
-        }
-        ((java.util.List)_myOperations.get("getLicense")).add(_oper);
-        _params = new org.apache.axis.description.ParameterDesc [] {
             new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSPutItemArray"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSPutItemArray"), urn_com_amalto_xtentis_webservice.WSPutItem[].class, false, false), 
         };
         _oper = new org.apache.axis.description.OperationDesc("putItemArray", _params, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSItemPKArray"));
@@ -1997,6 +1976,17 @@ public class XtentisBindingSkeleton implements urn_com_amalto_xtentis_webservice
             _myOperations.put("getMDMCategory", new java.util.ArrayList());
         }
         ((java.util.List)_myOperations.get("getMDMCategory")).add(_oper);
+        _params = new org.apache.axis.description.ParameterDesc [] {
+            new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSAutoIncrement"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSAutoIncrement"), urn_com_amalto_xtentis_webservice.WSAutoIncrement.class, false, false), 
+        };
+        _oper = new org.apache.axis.description.OperationDesc("getAutoIncrement", _params, new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSAutoIncrement"));
+        _oper.setReturnType(new javax.xml.namespace.QName("urn-com-amalto-xtentis-webservice", "WSAutoIncrement"));
+        _oper.setElementQName(new javax.xml.namespace.QName("", "getAutoIncrement"));
+        _myOperationsList.add(_oper);
+        if (_myOperations.get("getAutoIncrement") == null) {
+            _myOperations.put("getAutoIncrement", new java.util.ArrayList());
+        }
+        ((java.util.List)_myOperations.get("getAutoIncrement")).add(_oper);
     }
 
     public XtentisBindingSkeleton() {
@@ -2267,18 +2257,6 @@ public class XtentisBindingSkeleton implements urn_com_amalto_xtentis_webservice
     public urn_com_amalto_xtentis_webservice.WSItemPK putItemByOperatorType(urn_com_amalto_xtentis_webservice.WSPutItemByOperatorType putItemByOperatorType) throws java.rmi.RemoteException
     {
         urn_com_amalto_xtentis_webservice.WSItemPK ret = impl.putItemByOperatorType(putItemByOperatorType);
-        return ret;
-    }
-
-    public urn_com_amalto_xtentis_webservice.WSLicensePK putLicense(urn_com_amalto_xtentis_webservice.WSPutLicense putLicense) throws java.rmi.RemoteException
-    {
-        urn_com_amalto_xtentis_webservice.WSLicensePK ret = impl.putLicense(putLicense);
-        return ret;
-    }
-
-    public urn_com_amalto_xtentis_webservice.WSLicense getLicense() throws java.rmi.RemoteException
-    {
-        urn_com_amalto_xtentis_webservice.WSLicense ret = impl.getLicense();
         return ret;
     }
 
@@ -2960,21 +2938,21 @@ public class XtentisBindingSkeleton implements urn_com_amalto_xtentis_webservice
         return ret;
     }
 
-    public urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK[] getSynchronizationItemPKs(urn_com_amalto_xtentis_webservice.WSGetSynchronizationItemPKs regex) throws java.rmi.RemoteException
+    public java.lang.String[][] getSynchronizationItemPKs(urn_com_amalto_xtentis_webservice.WSGetSynchronizationItemPKs regex) throws java.rmi.RemoteException
     {
-        urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK[] ret = impl.getSynchronizationItemPKs(regex);
+        java.lang.String[][] ret = impl.getSynchronizationItemPKs(regex);
         return ret;
     }
 
-    public urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK putSynchronizationItem(urn_com_amalto_xtentis_webservice.WSPutSynchronizationItem wsSynchronizationItem) throws java.rmi.RemoteException
+    public java.lang.String[] putSynchronizationItem(urn_com_amalto_xtentis_webservice.WSPutSynchronizationItem wsSynchronizationItem) throws java.rmi.RemoteException
     {
-        urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK ret = impl.putSynchronizationItem(wsSynchronizationItem);
+        java.lang.String[] ret = impl.putSynchronizationItem(wsSynchronizationItem);
         return ret;
     }
 
-    public urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK deleteSynchronizationItem(urn_com_amalto_xtentis_webservice.WSDeleteSynchronizationItem wsSynchronizationItemDelete) throws java.rmi.RemoteException
+    public java.lang.String[] deleteSynchronizationItem(urn_com_amalto_xtentis_webservice.WSDeleteSynchronizationItem wsSynchronizationItemDelete) throws java.rmi.RemoteException
     {
-        urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK ret = impl.deleteSynchronizationItem(wsSynchronizationItemDelete);
+        java.lang.String[] ret = impl.deleteSynchronizationItem(wsSynchronizationItemDelete);
         return ret;
     }
 
@@ -3077,6 +3055,12 @@ public class XtentisBindingSkeleton implements urn_com_amalto_xtentis_webservice
     public urn_com_amalto_xtentis_webservice.WSCategoryData getMDMCategory(urn_com_amalto_xtentis_webservice.WSCategoryData wsCategoryDataRequest) throws java.rmi.RemoteException
     {
         urn_com_amalto_xtentis_webservice.WSCategoryData ret = impl.getMDMCategory(wsCategoryDataRequest);
+        return ret;
+    }
+
+    public urn_com_amalto_xtentis_webservice.WSAutoIncrement getAutoIncrement(urn_com_amalto_xtentis_webservice.WSAutoIncrement wsAutoIncrementRequest) throws java.rmi.RemoteException
+    {
+        urn_com_amalto_xtentis_webservice.WSAutoIncrement ret = impl.getAutoIncrement(wsAutoIncrementRequest);
         return ret;
     }
 

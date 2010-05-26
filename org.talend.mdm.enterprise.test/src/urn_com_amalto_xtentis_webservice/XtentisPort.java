@@ -52,8 +52,6 @@ public interface XtentisPort extends java.rmi.Remote {
     public java.lang.String[] quickSearch(urn_com_amalto_xtentis_webservice.WSQuickSearch wsQuickSearch) throws java.rmi.RemoteException;
     public urn_com_amalto_xtentis_webservice.WSItemPK putItem(urn_com_amalto_xtentis_webservice.WSPutItem wsPutItem) throws java.rmi.RemoteException;
     public urn_com_amalto_xtentis_webservice.WSItemPK putItemByOperatorType(urn_com_amalto_xtentis_webservice.WSPutItemByOperatorType putItemByOperatorType) throws java.rmi.RemoteException;
-    public urn_com_amalto_xtentis_webservice.WSLicensePK putLicense(urn_com_amalto_xtentis_webservice.WSPutLicense putLicense) throws java.rmi.RemoteException;
-    public urn_com_amalto_xtentis_webservice.WSLicense getLicense() throws java.rmi.RemoteException;
     public urn_com_amalto_xtentis_webservice.WSItemPK[] putItemArray(urn_com_amalto_xtentis_webservice.WSPutItem[] wsPutItemArray) throws java.rmi.RemoteException;
     public urn_com_amalto_xtentis_webservice.WSItemPK putItemWithReport(urn_com_amalto_xtentis_webservice.WSPutItemWithReport wsPutItemWithReport) throws java.rmi.RemoteException;
     public urn_com_amalto_xtentis_webservice.WSItemPK putItemWithCustomReport(urn_com_amalto_xtentis_webservice.WSPutItemWithCustomReport wsPutItemWithCustomReport) throws java.rmi.RemoteException;
@@ -167,9 +165,9 @@ public interface XtentisPort extends java.rmi.Remote {
     public urn_com_amalto_xtentis_webservice.WSItemPK synchronizationPutItemXML(urn_com_amalto_xtentis_webservice.WSSynchronizationPutItemXML wsSynchronizationPutItemXML) throws java.rmi.RemoteException;
     public urn_com_amalto_xtentis_webservice.WSSynchronizationItem getSynchronizationItem(urn_com_amalto_xtentis_webservice.WSGetSynchronizationItem wsGetSynchronizationItem) throws java.rmi.RemoteException;
     public urn_com_amalto_xtentis_webservice.WSBoolean existsSynchronizationItem(urn_com_amalto_xtentis_webservice.WSExistsSynchronizationItem wsExistsSynchronizationItem) throws java.rmi.RemoteException;
-    public urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK[] getSynchronizationItemPKs(urn_com_amalto_xtentis_webservice.WSGetSynchronizationItemPKs regex) throws java.rmi.RemoteException;
-    public urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK putSynchronizationItem(urn_com_amalto_xtentis_webservice.WSPutSynchronizationItem wsSynchronizationItem) throws java.rmi.RemoteException;
-    public urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK deleteSynchronizationItem(urn_com_amalto_xtentis_webservice.WSDeleteSynchronizationItem wsSynchronizationItemDelete) throws java.rmi.RemoteException;
+    public java.lang.String[][] getSynchronizationItemPKs(urn_com_amalto_xtentis_webservice.WSGetSynchronizationItemPKs regex) throws java.rmi.RemoteException;
+    public java.lang.String[] putSynchronizationItem(urn_com_amalto_xtentis_webservice.WSPutSynchronizationItem wsSynchronizationItem) throws java.rmi.RemoteException;
+    public java.lang.String[] deleteSynchronizationItem(urn_com_amalto_xtentis_webservice.WSDeleteSynchronizationItem wsSynchronizationItemDelete) throws java.rmi.RemoteException;
     public urn_com_amalto_xtentis_webservice.WSSynchronizationItem resolveSynchronizationItem(urn_com_amalto_xtentis_webservice.WSResolveSynchronizationItem wsResolveSynchronizationItem) throws java.rmi.RemoteException;
     public urn_com_amalto_xtentis_webservice.WSItemPK recoverDroppedItem(urn_com_amalto_xtentis_webservice.WSRecoverDroppedItem wsRecoverDroppedItem) throws java.rmi.RemoteException;
     public urn_com_amalto_xtentis_webservice.WSDroppedItemPK[] findAllDroppedItemsPKs(urn_com_amalto_xtentis_webservice.WSFindAllDroppedItemsPKs regex) throws java.rmi.RemoteException;
@@ -187,4 +185,5 @@ public interface XtentisPort extends java.rmi.Remote {
     public urn_com_amalto_xtentis_webservice.WSBoolean putMDMJob(urn_com_amalto_xtentis_webservice.WSPUTMDMJob putMDMJobRequest) throws java.rmi.RemoteException;
     public urn_com_amalto_xtentis_webservice.WSBoolean deleteMDMJob(urn_com_amalto_xtentis_webservice.WSDELMDMJob deleteMDMJobRequest) throws java.rmi.RemoteException;
     public urn_com_amalto_xtentis_webservice.WSCategoryData getMDMCategory(urn_com_amalto_xtentis_webservice.WSCategoryData wsCategoryDataRequest) throws java.rmi.RemoteException;
+    public urn_com_amalto_xtentis_webservice.WSAutoIncrement getAutoIncrement(urn_com_amalto_xtentis_webservice.WSAutoIncrement wsAutoIncrementRequest) throws java.rmi.RemoteException;
 }

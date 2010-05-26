@@ -987,51 +987,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test45XtentisPortPutLicense() throws Exception {
-        urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
-        try {
-            binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
-                          new urn_com_amalto_xtentis_webservice.XtentisServiceLocator().getXtentisPort();
-        }
-        catch (javax.xml.rpc.ServiceException jre) {
-            if(jre.getLinkedCause()!=null)
-                jre.getLinkedCause().printStackTrace();
-            throw new junit.framework.AssertionFailedError("JAX-RPC ServiceException caught: " + jre);
-        }
-        assertNotNull("binding is null", binding);
-
-        // Time out after a minute
-        binding.setTimeout(60000);
-
-        // Test operation
-        urn_com_amalto_xtentis_webservice.WSLicensePK value = null;
-        value = binding.putLicense(new urn_com_amalto_xtentis_webservice.WSPutLicense());
-        // TBD - validate results
-    }
-
-    public void test46XtentisPortGetLicense() throws Exception {
-        urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
-        try {
-            binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
-                          new urn_com_amalto_xtentis_webservice.XtentisServiceLocator().getXtentisPort();
-        }
-        catch (javax.xml.rpc.ServiceException jre) {
-            if(jre.getLinkedCause()!=null)
-                jre.getLinkedCause().printStackTrace();
-            throw new junit.framework.AssertionFailedError("JAX-RPC ServiceException caught: " + jre);
-        }
-        assertNotNull("binding is null", binding);
-
-        // Time out after a minute
-        binding.setTimeout(60000);
-
-        // Test operation
-        urn_com_amalto_xtentis_webservice.WSLicense value = null;
-        value = binding.getLicense();
-        // TBD - validate results
-    }
-
-    public void test47XtentisPortPutItemArray() throws Exception {
+    public void test45XtentisPortPutItemArray() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1053,7 +1009,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test48XtentisPortPutItemWithReport() throws Exception {
+    public void test46XtentisPortPutItemWithReport() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1075,7 +1031,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test49XtentisPortPutItemWithCustomReport() throws Exception {
+    public void test47XtentisPortPutItemWithCustomReport() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1097,7 +1053,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test50XtentisPortPutItemWithReportArray() throws Exception {
+    public void test48XtentisPortPutItemWithReportArray() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1119,7 +1075,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test51XtentisPortExtractUsingTransformer() throws Exception {
+    public void test49XtentisPortExtractUsingTransformer() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1141,7 +1097,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test52XtentisPortExtractUsingTransformerThruView() throws Exception {
+    public void test50XtentisPortExtractUsingTransformerThruView() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1163,7 +1119,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test53XtentisPortDeleteItem() throws Exception {
+    public void test51XtentisPortDeleteItem() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1185,7 +1141,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test54XtentisPortDeleteItems() throws Exception {
+    public void test52XtentisPortDeleteItems() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1207,7 +1163,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test55XtentisPortDropItem() throws Exception {
+    public void test53XtentisPortDropItem() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1229,7 +1185,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test56XtentisPortRunQuery() throws Exception {
+    public void test54XtentisPortRunQuery() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1251,7 +1207,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test57XtentisPortConnectorInteraction() throws Exception {
+    public void test55XtentisPortConnectorInteraction() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1273,7 +1229,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test58XtentisPortGetRoutingRulePKs() throws Exception {
+    public void test56XtentisPortGetRoutingRulePKs() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1295,7 +1251,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test59XtentisPortGetRoutingRule() throws Exception {
+    public void test57XtentisPortGetRoutingRule() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1317,7 +1273,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test60XtentisPortExistsRoutingRule() throws Exception {
+    public void test58XtentisPortExistsRoutingRule() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1339,7 +1295,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test61XtentisPortPutRoutingRule() throws Exception {
+    public void test59XtentisPortPutRoutingRule() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1361,7 +1317,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test62XtentisPortDeleteRoutingRule() throws Exception {
+    public void test60XtentisPortDeleteRoutingRule() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1383,7 +1339,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test63XtentisPortServiceAction() throws Exception {
+    public void test61XtentisPortServiceAction() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1405,7 +1361,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test64XtentisPortGetServiceConfiguration() throws Exception {
+    public void test62XtentisPortGetServiceConfiguration() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1427,7 +1383,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test65XtentisPortPutServiceConfiguration() throws Exception {
+    public void test63XtentisPortPutServiceConfiguration() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1449,7 +1405,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test66XtentisPortGetServicesList() throws Exception {
+    public void test64XtentisPortGetServicesList() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1471,7 +1427,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test67XtentisPortGetServiceDocument() throws Exception {
+    public void test65XtentisPortGetServiceDocument() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1493,7 +1449,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test68XtentisPortGetStoredProcedure() throws Exception {
+    public void test66XtentisPortGetStoredProcedure() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1515,7 +1471,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test69XtentisPortExistsStoredProcedure() throws Exception {
+    public void test67XtentisPortExistsStoredProcedure() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1537,7 +1493,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test70XtentisPortGetStoredProcedurePKs() throws Exception {
+    public void test68XtentisPortGetStoredProcedurePKs() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1559,7 +1515,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test71XtentisPortPutStoredProcedure() throws Exception {
+    public void test69XtentisPortPutStoredProcedure() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1581,7 +1537,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test72XtentisPortDeleteStoredProcedure() throws Exception {
+    public void test70XtentisPortDeleteStoredProcedure() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1603,7 +1559,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test73XtentisPortExecuteStoredProcedure() throws Exception {
+    public void test71XtentisPortExecuteStoredProcedure() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1625,7 +1581,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test74XtentisPortGetTransformer() throws Exception {
+    public void test72XtentisPortGetTransformer() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1647,7 +1603,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test75XtentisPortExistsTransformer() throws Exception {
+    public void test73XtentisPortExistsTransformer() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1669,7 +1625,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test76XtentisPortGetTransformerPKs() throws Exception {
+    public void test74XtentisPortGetTransformerPKs() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1691,7 +1647,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test77XtentisPortPutTransformer() throws Exception {
+    public void test75XtentisPortPutTransformer() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1713,7 +1669,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test78XtentisPortDeleteTransformer() throws Exception {
+    public void test76XtentisPortDeleteTransformer() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1735,7 +1691,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test79XtentisPortProcessBytesUsingTransformer() throws Exception {
+    public void test77XtentisPortProcessBytesUsingTransformer() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1757,7 +1713,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test80XtentisPortProcessFileUsingTransformer() throws Exception {
+    public void test78XtentisPortProcessFileUsingTransformer() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1779,7 +1735,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test81XtentisPortProcessBytesUsingTransformerAsBackgroundJob() throws Exception {
+    public void test79XtentisPortProcessBytesUsingTransformerAsBackgroundJob() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1801,7 +1757,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test82XtentisPortProcessFileUsingTransformerAsBackgroundJob() throws Exception {
+    public void test80XtentisPortProcessFileUsingTransformerAsBackgroundJob() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1823,7 +1779,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test83XtentisPortGetTransformerV2() throws Exception {
+    public void test81XtentisPortGetTransformerV2() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1845,7 +1801,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test84XtentisPortExistsTransformerV2() throws Exception {
+    public void test82XtentisPortExistsTransformerV2() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1867,7 +1823,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test85XtentisPortGetTransformerV2PKs() throws Exception {
+    public void test83XtentisPortGetTransformerV2PKs() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1889,7 +1845,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test86XtentisPortPutTransformerV2() throws Exception {
+    public void test84XtentisPortPutTransformerV2() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1911,7 +1867,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test87XtentisPortDeleteTransformerV2() throws Exception {
+    public void test85XtentisPortDeleteTransformerV2() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1933,7 +1889,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test88XtentisPortExecuteTransformerV2() throws Exception {
+    public void test86XtentisPortExecuteTransformerV2() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1955,7 +1911,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test89XtentisPortExecuteTransformerV2AsJob() throws Exception {
+    public void test87XtentisPortExecuteTransformerV2AsJob() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1977,7 +1933,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test90XtentisPortExtractThroughTransformerV2() throws Exception {
+    public void test88XtentisPortExtractThroughTransformerV2() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -1999,7 +1955,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test91XtentisPortExistsTransformerPluginV2() throws Exception {
+    public void test89XtentisPortExistsTransformerPluginV2() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2021,7 +1977,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test92XtentisPortGetTransformerPluginV2Configuration() throws Exception {
+    public void test90XtentisPortGetTransformerPluginV2Configuration() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2043,7 +1999,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test93XtentisPortPutTransformerPluginV2Configuration() throws Exception {
+    public void test91XtentisPortPutTransformerPluginV2Configuration() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2065,7 +2021,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test94XtentisPortGetTransformerPluginV2Details() throws Exception {
+    public void test92XtentisPortGetTransformerPluginV2Details() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2087,7 +2043,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test95XtentisPortGetTransformerPluginV2SList() throws Exception {
+    public void test93XtentisPortGetTransformerPluginV2SList() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2109,7 +2065,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test96XtentisPortGetRole() throws Exception {
+    public void test94XtentisPortGetRole() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2131,7 +2087,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test97XtentisPortExistsRole() throws Exception {
+    public void test95XtentisPortExistsRole() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2153,7 +2109,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test98XtentisPortGetRolePKs() throws Exception {
+    public void test96XtentisPortGetRolePKs() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2175,7 +2131,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test99XtentisPortPutRole() throws Exception {
+    public void test97XtentisPortPutRole() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2197,7 +2153,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test100XtentisPortDeleteRole() throws Exception {
+    public void test98XtentisPortDeleteRole() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2219,7 +2175,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test101XtentisPortGetObjectsForRoles() throws Exception {
+    public void test99XtentisPortGetObjectsForRoles() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2241,7 +2197,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test102XtentisPortGetMenu() throws Exception {
+    public void test100XtentisPortGetMenu() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2263,7 +2219,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test103XtentisPortExistsMenu() throws Exception {
+    public void test101XtentisPortExistsMenu() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2285,7 +2241,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test104XtentisPortGetMenuPKs() throws Exception {
+    public void test102XtentisPortGetMenuPKs() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2307,7 +2263,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test105XtentisPortPutMenu() throws Exception {
+    public void test103XtentisPortPutMenu() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2329,7 +2285,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test106XtentisPortDeleteMenu() throws Exception {
+    public void test104XtentisPortDeleteMenu() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2351,7 +2307,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test107XtentisPortVersioningCommitItems() throws Exception {
+    public void test105XtentisPortVersioningCommitItems() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2373,7 +2329,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test108XtentisPortVersioningRestoreItemByRevision() throws Exception {
+    public void test106XtentisPortVersioningRestoreItemByRevision() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2395,7 +2351,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test109XtentisPortVersioningGetItemHistory() throws Exception {
+    public void test107XtentisPortVersioningGetItemHistory() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2417,7 +2373,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test110XtentisPortVersioningGetItemsVersions() throws Exception {
+    public void test108XtentisPortVersioningGetItemsVersions() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2439,7 +2395,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test111XtentisPortVersioningGetItemContent() throws Exception {
+    public void test109XtentisPortVersioningGetItemContent() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2461,7 +2417,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test112XtentisPortVersioningGetObjectsVersions() throws Exception {
+    public void test110XtentisPortVersioningGetObjectsVersions() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2483,7 +2439,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test113XtentisPortVersioningGetUniverseVersions() throws Exception {
+    public void test111XtentisPortVersioningGetUniverseVersions() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2505,7 +2461,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test114XtentisPortGetVersioningSystemConfiguration() throws Exception {
+    public void test112XtentisPortGetVersioningSystemConfiguration() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2527,7 +2483,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test115XtentisPortPutVersioningSystemConfiguration() throws Exception {
+    public void test113XtentisPortPutVersioningSystemConfiguration() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2549,7 +2505,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test116XtentisPortVersioningGetInfo() throws Exception {
+    public void test114XtentisPortVersioningGetInfo() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2571,7 +2527,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test117XtentisPortVersioningTagObjects() throws Exception {
+    public void test115XtentisPortVersioningTagObjects() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2593,7 +2549,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test118XtentisPortVersioningTagUniverse() throws Exception {
+    public void test116XtentisPortVersioningTagUniverse() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2615,7 +2571,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test119XtentisPortVersioningTagItems() throws Exception {
+    public void test117XtentisPortVersioningTagItems() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2637,7 +2593,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test120XtentisPortVersioningRestoreObjects() throws Exception {
+    public void test118XtentisPortVersioningRestoreObjects() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2659,7 +2615,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test121XtentisPortVersioningRestoreUniverse() throws Exception {
+    public void test119XtentisPortVersioningRestoreUniverse() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2681,7 +2637,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test122XtentisPortVersioningRestoreItems() throws Exception {
+    public void test120XtentisPortVersioningRestoreItems() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2703,7 +2659,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test123XtentisPortFindBackgroundJobPKs() throws Exception {
+    public void test121XtentisPortFindBackgroundJobPKs() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2725,7 +2681,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test124XtentisPortPutBackgroundJob() throws Exception {
+    public void test122XtentisPortPutBackgroundJob() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2747,7 +2703,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test125XtentisPortGetBackgroundJob() throws Exception {
+    public void test123XtentisPortGetBackgroundJob() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2769,7 +2725,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test126XtentisPortGetRoutingOrderV2() throws Exception {
+    public void test124XtentisPortGetRoutingOrderV2() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2791,7 +2747,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test127XtentisPortExistsRoutingOrderV2() throws Exception {
+    public void test125XtentisPortExistsRoutingOrderV2() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2813,7 +2769,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test128XtentisPortDeleteRoutingOrderV2() throws Exception {
+    public void test126XtentisPortDeleteRoutingOrderV2() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2835,7 +2791,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test129XtentisPortExecuteRoutingOrderV2Asynchronously() throws Exception {
+    public void test127XtentisPortExecuteRoutingOrderV2Asynchronously() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2857,7 +2813,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test130XtentisPortExecuteRoutingOrderV2Synchronously() throws Exception {
+    public void test128XtentisPortExecuteRoutingOrderV2Synchronously() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2879,7 +2835,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test131XtentisPortGetRoutingOrderV2PKsByCriteria() throws Exception {
+    public void test129XtentisPortGetRoutingOrderV2PKsByCriteria() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2901,7 +2857,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test132XtentisPortGetRoutingOrderV2SByCriteria() throws Exception {
+    public void test130XtentisPortGetRoutingOrderV2SByCriteria() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2923,7 +2879,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test133XtentisPortRouteItemV2() throws Exception {
+    public void test131XtentisPortRouteItemV2() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2945,7 +2901,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test134XtentisPortRoutingEngineV2Action() throws Exception {
+    public void test132XtentisPortRoutingEngineV2Action() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2967,7 +2923,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test135XtentisPortGetUniverse() throws Exception {
+    public void test133XtentisPortGetUniverse() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -2989,7 +2945,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test136XtentisPortExistsUniverse() throws Exception {
+    public void test134XtentisPortExistsUniverse() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3011,7 +2967,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test137XtentisPortGetUniversePKs() throws Exception {
+    public void test135XtentisPortGetUniversePKs() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3033,7 +2989,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test138XtentisPortPutUniverse() throws Exception {
+    public void test136XtentisPortPutUniverse() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3055,7 +3011,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test139XtentisPortDeleteUniverse() throws Exception {
+    public void test137XtentisPortDeleteUniverse() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3077,7 +3033,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test140XtentisPortGetObjectsForUniverses() throws Exception {
+    public void test138XtentisPortGetObjectsForUniverses() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3099,7 +3055,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test141XtentisPortGetCurrentUniverse() throws Exception {
+    public void test139XtentisPortGetCurrentUniverse() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3121,7 +3077,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test142XtentisPortGetUniverseByRevision() throws Exception {
+    public void test140XtentisPortGetUniverseByRevision() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3143,7 +3099,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test143XtentisPortGetSynchronizationPlan() throws Exception {
+    public void test141XtentisPortGetSynchronizationPlan() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3165,7 +3121,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test144XtentisPortExistsSynchronizationPlan() throws Exception {
+    public void test142XtentisPortExistsSynchronizationPlan() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3187,7 +3143,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test145XtentisPortGetSynchronizationPlanPKs() throws Exception {
+    public void test143XtentisPortGetSynchronizationPlanPKs() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3209,7 +3165,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test146XtentisPortPutSynchronizationPlan() throws Exception {
+    public void test144XtentisPortPutSynchronizationPlan() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3231,7 +3187,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test147XtentisPortDeleteSynchronizationPlan() throws Exception {
+    public void test145XtentisPortDeleteSynchronizationPlan() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3253,7 +3209,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test148XtentisPortGetObjectsForSynchronizationPlans() throws Exception {
+    public void test146XtentisPortGetObjectsForSynchronizationPlans() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3275,7 +3231,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test149XtentisPortGetSynchronizationPlanObjectsAlgorithms() throws Exception {
+    public void test147XtentisPortGetSynchronizationPlanObjectsAlgorithms() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3297,7 +3253,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test150XtentisPortGetSynchronizationPlanItemsAlgorithms() throws Exception {
+    public void test148XtentisPortGetSynchronizationPlanItemsAlgorithms() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3319,7 +3275,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test151XtentisPortSynchronizationPlanAction() throws Exception {
+    public void test149XtentisPortSynchronizationPlanAction() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3341,7 +3297,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test152XtentisPortSynchronizationGetUnsynchronizedObjectsIDs() throws Exception {
+    public void test150XtentisPortSynchronizationGetUnsynchronizedObjectsIDs() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3363,7 +3319,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test153XtentisPortSynchronizationGetObjectXML() throws Exception {
+    public void test151XtentisPortSynchronizationGetObjectXML() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3385,7 +3341,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test154XtentisPortSynchronizationPutObjectXML() throws Exception {
+    public void test152XtentisPortSynchronizationPutObjectXML() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3407,7 +3363,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test155XtentisPortSynchronizationGetUnsynchronizedItemPKs() throws Exception {
+    public void test153XtentisPortSynchronizationGetUnsynchronizedItemPKs() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3429,7 +3385,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test156XtentisPortSynchronizationGetItemXML() throws Exception {
+    public void test154XtentisPortSynchronizationGetItemXML() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3451,7 +3407,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test157XtentisPortSynchronizationPutItemXML() throws Exception {
+    public void test155XtentisPortSynchronizationPutItemXML() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3473,7 +3429,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test158XtentisPortGetSynchronizationItem() throws Exception {
+    public void test156XtentisPortGetSynchronizationItem() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3495,7 +3451,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test159XtentisPortExistsSynchronizationItem() throws Exception {
+    public void test157XtentisPortExistsSynchronizationItem() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3517,7 +3473,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test160XtentisPortGetSynchronizationItemPKs() throws Exception {
+    public void test158XtentisPortGetSynchronizationItemPKs() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3534,12 +3490,12 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         binding.setTimeout(60000);
 
         // Test operation
-        urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK[] value = null;
+        java.lang.String[][] value = null;
         value = binding.getSynchronizationItemPKs(new urn_com_amalto_xtentis_webservice.WSGetSynchronizationItemPKs());
         // TBD - validate results
     }
 
-    public void test161XtentisPortPutSynchronizationItem() throws Exception {
+    public void test159XtentisPortPutSynchronizationItem() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3556,12 +3512,12 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         binding.setTimeout(60000);
 
         // Test operation
-        urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK value = null;
+        java.lang.String[] value = null;
         value = binding.putSynchronizationItem(new urn_com_amalto_xtentis_webservice.WSPutSynchronizationItem());
         // TBD - validate results
     }
 
-    public void test162XtentisPortDeleteSynchronizationItem() throws Exception {
+    public void test160XtentisPortDeleteSynchronizationItem() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3578,12 +3534,12 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         binding.setTimeout(60000);
 
         // Test operation
-        urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK value = null;
+        java.lang.String[] value = null;
         value = binding.deleteSynchronizationItem(new urn_com_amalto_xtentis_webservice.WSDeleteSynchronizationItem());
         // TBD - validate results
     }
 
-    public void test163XtentisPortResolveSynchronizationItem() throws Exception {
+    public void test161XtentisPortResolveSynchronizationItem() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3605,7 +3561,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test164XtentisPortRecoverDroppedItem() throws Exception {
+    public void test162XtentisPortRecoverDroppedItem() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3627,7 +3583,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test165XtentisPortFindAllDroppedItemsPKs() throws Exception {
+    public void test163XtentisPortFindAllDroppedItemsPKs() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3649,7 +3605,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test166XtentisPortLoadDroppedItem() throws Exception {
+    public void test164XtentisPortLoadDroppedItem() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3671,7 +3627,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test167XtentisPortRemoveDroppedItem() throws Exception {
+    public void test165XtentisPortRemoveDroppedItem() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3693,7 +3649,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test168XtentisPortGetMDMConfiguration() throws Exception {
+    public void test166XtentisPortGetMDMConfiguration() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3715,7 +3671,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test169XtentisPortCheckServiceConfiguration() throws Exception {
+    public void test167XtentisPortCheckServiceConfiguration() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3737,7 +3693,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test170XtentisPortWorkflowGetProcessDefinitions() throws Exception {
+    public void test168XtentisPortWorkflowGetProcessDefinitions() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3759,7 +3715,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test171XtentisPortWorkflowDeploy() throws Exception {
+    public void test169XtentisPortWorkflowDeploy() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3781,7 +3737,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test172XtentisPortWorkflowUnDeploy() throws Exception {
+    public void test170XtentisPortWorkflowUnDeploy() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3803,7 +3759,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test173XtentisPortWorkflowGetTaskList() throws Exception {
+    public void test171XtentisPortWorkflowGetTaskList() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3825,7 +3781,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test174XtentisPortWorkflowGetProcessInstances() throws Exception {
+    public void test172XtentisPortWorkflowGetProcessInstances() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3847,7 +3803,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test175XtentisPortWorkflowDeleteProcessInstances() throws Exception {
+    public void test173XtentisPortWorkflowDeleteProcessInstances() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3869,7 +3825,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test176XtentisPortGetMDMJob() throws Exception {
+    public void test174XtentisPortGetMDMJob() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3891,7 +3847,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test177XtentisPortPutMDMJob() throws Exception {
+    public void test175XtentisPortPutMDMJob() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3913,7 +3869,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test178XtentisPortDeleteMDMJob() throws Exception {
+    public void test176XtentisPortDeleteMDMJob() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3935,7 +3891,7 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // TBD - validate results
     }
 
-    public void test179XtentisPortGetMDMCategory() throws Exception {
+    public void test177XtentisPortGetMDMCategory() throws Exception {
         urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
         try {
             binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
@@ -3954,6 +3910,28 @@ public class XtentisServiceTestCase extends junit.framework.TestCase {
         // Test operation
         urn_com_amalto_xtentis_webservice.WSCategoryData value = null;
         value = binding.getMDMCategory(new urn_com_amalto_xtentis_webservice.WSCategoryData());
+        // TBD - validate results
+    }
+
+    public void test178XtentisPortGetAutoIncrement() throws Exception {
+        urn_com_amalto_xtentis_webservice.XtentisBindingStub binding;
+        try {
+            binding = (urn_com_amalto_xtentis_webservice.XtentisBindingStub)
+                          new urn_com_amalto_xtentis_webservice.XtentisServiceLocator().getXtentisPort();
+        }
+        catch (javax.xml.rpc.ServiceException jre) {
+            if(jre.getLinkedCause()!=null)
+                jre.getLinkedCause().printStackTrace();
+            throw new junit.framework.AssertionFailedError("JAX-RPC ServiceException caught: " + jre);
+        }
+        assertNotNull("binding is null", binding);
+
+        // Time out after a minute
+        binding.setTimeout(60000);
+
+        // Test operation
+        urn_com_amalto_xtentis_webservice.WSAutoIncrement value = null;
+        value = binding.getAutoIncrement(new urn_com_amalto_xtentis_webservice.WSAutoIncrement());
         // TBD - validate results
     }
 
