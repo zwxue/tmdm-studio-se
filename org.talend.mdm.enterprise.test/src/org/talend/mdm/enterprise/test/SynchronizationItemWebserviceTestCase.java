@@ -14,7 +14,6 @@ import urn_com_amalto_xtentis_webservice.WSProcessTaskInstance;
 import urn_com_amalto_xtentis_webservice.WSPutSynchronizationItem;
 import urn_com_amalto_xtentis_webservice.WSResolveSynchronizationItem;
 import urn_com_amalto_xtentis_webservice.WSSynchronizationItem;
-import urn_com_amalto_xtentis_webservice.WSSynchronizationItemPK;
 import urn_com_amalto_xtentis_webservice.WSSynchronizationItemStatus;
 import urn_com_amalto_xtentis_webservice.WSWorkflowDeleteProcessInstancesRequest;
 import urn_com_amalto_xtentis_webservice.WSWorkflowDeploy;
@@ -43,7 +42,7 @@ public class SynchronizationItemWebserviceTestCase extends WebserviceTestCase {
 			wsItemPK.setIds(ids);
 			wsSynchronizationItem.setWsItemPK(wsItemPK);
 			wsPutSynchronizationItem.setWsSynchronizationItem(wsSynchronizationItem);
-			WSSynchronizationItemPK wsSynchronizationItemPK = defaultPort
+			String[] wsSynchronizationItemPK = defaultPort
 					.putSynchronizationItem(wsPutSynchronizationItem);
 			assertNotNull(wsSynchronizationItemPK);
 		} catch (RemoteException e) {
@@ -54,7 +53,7 @@ public class SynchronizationItemWebserviceTestCase extends WebserviceTestCase {
 		WSGetSynchronizationItemPKs regex = new WSGetSynchronizationItemPKs(
 				".*");
 		try {
-			WSSynchronizationItemPK[] wsSynchronizationItemPKArray = defaultPort
+			String[][] wsSynchronizationItemPKArray = defaultPort
 					.getSynchronizationItemPKs(regex);
 			assertNotNull(wsSynchronizationItemPKArray);
 		} catch (RemoteException e) {
@@ -68,7 +67,7 @@ public class SynchronizationItemWebserviceTestCase extends WebserviceTestCase {
 			WSGetSynchronizationItem wsGetSynchronizationItem = new WSGetSynchronizationItem();
 			WSGetSynchronizationItemPKs regex = new WSGetSynchronizationItemPKs(
 					".*");
-			WSSynchronizationItemPK[] wsSynchronizationItemPKArray = defaultPort
+			String[][] wsSynchronizationItemPKArray = defaultPort
 					.getSynchronizationItemPKs(regex);
 			wsGetSynchronizationItem
 					.setWsSynchronizationItemPK(wsSynchronizationItemPKArray[0]);
@@ -86,7 +85,7 @@ public class SynchronizationItemWebserviceTestCase extends WebserviceTestCase {
 			WSExistsSynchronizationItem wsExistsSynchronizationItem = new WSExistsSynchronizationItem();
 			WSGetSynchronizationItemPKs regex = new WSGetSynchronizationItemPKs(
 					".*");
-			WSSynchronizationItemPK[] wsSynchronizationItemPKArray = defaultPort
+			String[][] wsSynchronizationItemPKArray = defaultPort
 					.getSynchronizationItemPKs(regex);
 
 			wsExistsSynchronizationItem
@@ -105,7 +104,7 @@ public class SynchronizationItemWebserviceTestCase extends WebserviceTestCase {
 			WSResolveSynchronizationItem wsResolveSynchronizationItem = new WSResolveSynchronizationItem();
 			WSGetSynchronizationItemPKs regex = new WSGetSynchronizationItemPKs(
 					".*");
-			WSSynchronizationItemPK[] wsSynchronizationItemPKArray = defaultPort
+			String[][] wsSynchronizationItemPKArray = defaultPort
 					.getSynchronizationItemPKs(regex);
 			wsResolveSynchronizationItem
 					.setWsSynchronizationItemPK(wsSynchronizationItemPKArray[0]);
@@ -207,13 +206,13 @@ public class SynchronizationItemWebserviceTestCase extends WebserviceTestCase {
 			WSDeleteSynchronizationItem wsSynchronizationItemDelete = new WSDeleteSynchronizationItem();
 			WSGetSynchronizationItemPKs regex = new WSGetSynchronizationItemPKs(
 					".*");
-			WSSynchronizationItemPK[] wsSynchronizationItemPKArray = defaultPort
+			String[][] wsSynchronizationItemPKArray = defaultPort
 					.getSynchronizationItemPKs(regex);
 			wsSynchronizationItemDelete
 					.setWsSynchronizationItemPK(wsSynchronizationItemPKArray[0]);
-			WSSynchronizationItemPK wsSynchronizationItemPK = defaultPort
+			String[] wsSynchronizationItemPK = defaultPort
 					.deleteSynchronizationItem(wsSynchronizationItemDelete);
-			System.out.println(wsSynchronizationItemPK.getIds());
+			System.out.println(wsSynchronizationItemPK);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}

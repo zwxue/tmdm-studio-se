@@ -14,7 +14,6 @@ public class MainTestCase extends MDMTestCase {
 		testSuite.addTestSuite(SynchronizationPlanWebserviceTestCase.class);
 		testSuite.addTestSuite(UniverseWebserviceTestCase.class);
 		testSuite.addTestSuite(VersioningWebserviceTestCase.class);
-		testSuite.addTestSuite(ExtendsWebserviceTestCase.class);
 		junit.textui.TestRunner.run(testSuite);
 	}
 
