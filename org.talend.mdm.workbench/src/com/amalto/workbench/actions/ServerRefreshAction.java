@@ -39,6 +39,14 @@ public class ServerRefreshAction extends Action {
 	
 	public void run() {
 		try {
+			doRun();
+		} catch (Exception e) {
+			e.printStackTrace();
+			MessageDialog.openError(view.getSite().getShell(), "Error", "Error while refreshing the "+IConstants.TALEND+" Server Objects: "+e.getLocalizedMessage());
+		}
+	}
+	public void doRun()throws Exception{
+		try {
 			if (forcedRoot == null)
 				//get it dynamically
 				serverRoot = (TreeParent)((IStructuredSelection)view.getViewer().getSelection()).getFirstElement();
@@ -65,7 +73,7 @@ public class ServerRefreshAction extends Action {
 			LocalTreeObjectRepository.getInstance().setLazySaveStrategy(false, serverRoot);
 		} catch (Exception e) {
 			e.printStackTrace();
-			MessageDialog.openError(view.getSite().getShell(), "Error", "Error while refreshing the "+IConstants.TALEND+" Server Objects: "+e.getLocalizedMessage());
+			throw new Exception("Error while refreshing the "+IConstants.TALEND+" Server Objects: "+e.getLocalizedMessage());			
 		}
 	}
 	public void runWithEvent(Event event) {

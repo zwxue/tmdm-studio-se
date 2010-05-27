@@ -554,15 +554,17 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					
 					Cursor wait = new Cursor(getViewSite().getShell().getDisplay(),SWT.CURSOR_WAIT);
 					viewer.getControl().setCursor(wait);					
-					new ServerRefreshAction(view, serverRoot).run();
+					new ServerRefreshAction(view, serverRoot).doRun();
 					viewer.expandToLevel(serverRoot, 1);
-					viewer.getControl().setCursor(
-							new Cursor(getViewSite().getShell().getDisplay(), SWT.CURSOR_ARROW));
 					
 					return Status.OK_STATUS;
 				}catch(Exception e){
 					e.printStackTrace();
+					viewer.collapseToLevel(serverRoot, 1);
 					return Status.CANCEL_STATUS;
+				}finally {
+					viewer.getControl().setCursor(
+							new Cursor(getViewSite().getShell().getDisplay(), SWT.CURSOR_ARROW));
 				}
 			}			
 		};
