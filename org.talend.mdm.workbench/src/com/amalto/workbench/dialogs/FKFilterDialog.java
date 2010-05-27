@@ -112,7 +112,7 @@ public class FKFilterDialog extends Dialog {
 				String operator=line.keyValues.get(1).value;
 				String value=line.keyValues.get(2).value;
 				String predicate=line.keyValues.get(3).value;
-				sb.append(xpath+" " + operator+ " " + value+" "+predicate +"#");
+				sb.append(xpath+"$$" + operator+ "$$" + value+"$$"+predicate +"#");
 			}
 			//rules.add(sb.toString());
 		}
@@ -131,7 +131,7 @@ public class FKFilterDialog extends Dialog {
 			String[] criterias = criteria.split("#");
 			for (String cria: criterias)
 			{
-				String[] values = cria.split("\\s");
+				String[] values = cria.split("\\$\\$");
 				List<String> list=new ArrayList<String>();
 				list.addAll(Arrays.asList(values));
 				int num=4-list.size();
