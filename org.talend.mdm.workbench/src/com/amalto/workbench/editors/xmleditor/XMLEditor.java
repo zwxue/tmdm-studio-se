@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.editors.text.TextEditor;
 
 import com.amalto.workbench.actions.SaveXObjectAction;
+import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
@@ -88,21 +89,20 @@ public class XMLEditor extends TextEditor {
 	}
 	@Override
 	public void doSave(IProgressMonitor progressMonitor) {		
-    	WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
+    	//WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
     	IDocument doc=((XMLEditorInput)this.getEditorInput()).getDocument();
-//		//aiming added remove 'targetNamespace','xmlns' attr, for it will cause xsd validate error, the xsd is invalid
+
     	String schema= doc.get();
-//		schema=schema.replaceAll("targetNamespace\\s*=\\s*\"[^\"]*\"", "");
-//		schema=schema.replaceAll("xmlns\\s*=\\s*\"[^\"]*\"", "");
-//		//end    	
-		wsObject.setXsdSchema(Util.formatXsdSource(schema));
+
+    	DataModelMainPage page=(DataModelMainPage)editor.formPages.get(0);
+    	page.setXsdSchema(null);
+    	int ret=page.save(schema);
+    	if(ret!=0) return;
 		setModified(true);
 		SaveXObjectAction action=new SaveXObjectAction(editor);
 		action.run();
 		state=action.getState();
 		super.doSave(progressMonitor);		
-		
-			
 	}
 	
 	public void refresh(TreeObject xobject){

@@ -685,8 +685,9 @@ public class DataModelMainPage extends AMainPageV2 {
 	{
 		final String maxoccurs_omit = "XSD: The value '1' of attribute 'maxOccurs' must be one of  as constrained by 'http://www.w3.org/2001/XMLSchema#maxOccurs_._type'";
 		
+		xsdSchema.clearDiagnostics();
         xsdSchema.validate();
-		   EList<XSDDiagnostic> diagnoses = xsdSchema.getAllDiagnostics();
+		EList<XSDDiagnostic> diagnoses = xsdSchema.getAllDiagnostics();
         String error = "";
 			for(int i = 0; i < diagnoses.size(); i++)
 			{
@@ -1146,13 +1147,16 @@ public class DataModelMainPage extends AMainPageV2 {
 		}
 	}
 
-	protected void commit() {
+	public int save(String xsd){
 		try {
 			WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
 			wsObject.setDescription(descriptionText.getText() == null ? ""
 					: descriptionText.getText());
-			String schema = ((XSDTreeContentProvider) viewer
+			String schema = xsd;
+			if(xsd==null){
+				schema=((XSDTreeContentProvider) viewer
 					.getContentProvider()).getXSDSchemaAsString();
+			}
 			//aiming added remove 'targetNamespace', 'xmlns' attr, for it will cause xsd validate error, the xsd is invalid
 			schema=schema.replaceAll("targetNamespace\\s*=\\s*\"[^\"]*\"", "");
 			schema=schema.replaceAll("xmlns\\s*=\\s*\"[^\"]*\"", "");
@@ -1193,7 +1197,12 @@ public class DataModelMainPage extends AMainPageV2 {
 			ErrorExceptionDialog.openError(this.getSite().getShell(),
 					"Error committing the page", 
 							CommonUtil.getErrMsgFromException(e));
-		}
+			return 1;
+		}		
+		return 0;
+	}
+	protected void commit() {
+		save(null);
 	}
 
 	protected void createActions() {
