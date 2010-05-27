@@ -559,7 +559,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 					
 					return Status.OK_STATUS;
 				}catch(Exception e){
-					e.printStackTrace();
+					MessageDialog.openError(view.getSite().getShell(), "Error", e.getLocalizedMessage());
 					viewer.collapseToLevel(serverRoot, 1);
 					return Status.CANCEL_STATUS;
 				}finally {
