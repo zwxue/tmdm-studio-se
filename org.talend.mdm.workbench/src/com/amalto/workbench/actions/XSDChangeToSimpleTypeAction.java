@@ -64,13 +64,12 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
 			// fliu
 			// add declNew to support convert action invoked from new concept/new element menu, in this case 
 			// declNew is the new created one not the selected one in tree vew
-			if (selection.getFirstElement() instanceof XSDElementDeclaration || declNew != null) {
+			if (declNew != null)
+				decl = declNew;
+			else if (selection.getFirstElement() instanceof XSDElementDeclaration ) {
 				isConcept = true;
 				decl = (XSDElementDeclaration) selection.getFirstElement();
-				if (declNew != null)
-				{
-					decl = declNew;
-				}
+
 			} else {
 				isConcept = false;
 				if (selection.getFirstElement() != null) {

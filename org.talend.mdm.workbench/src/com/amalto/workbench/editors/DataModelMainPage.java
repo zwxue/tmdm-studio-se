@@ -1550,7 +1550,7 @@ public class DataModelMainPage extends AMainPageV2 {
 				
 				
 				manager.add(new Separator());
-				manager.add(new XSDNewConceptAction(this));
+//				manager.add(new XSDNewConceptAction(this));
 				manager.add(newElementAction);
 				manager.add(new Separator());
 				manager.add(changeToComplexTypeAction);
@@ -1698,8 +1698,8 @@ public class DataModelMainPage extends AMainPageV2 {
 		IStructuredSelection selection = ((IStructuredSelection) viewer
 				.getSelection());
 
+		manager.add(new XSDNewConceptAction(this));
 		if ((selection == null) || (selection.getFirstElement() == null)) {
-			manager.add(new XSDNewConceptAction(this));
 			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 			//add by ymli, fix bug 0009770
 			String title = "";
@@ -1763,7 +1763,7 @@ public class DataModelMainPage extends AMainPageV2 {
 				
 				
 				manager.add(new Separator());
-				manager.add(new XSDNewConceptAction(this));
+//				manager.add(new XSDNewConceptAction(this));
 				manager.add(newElementAction);
 				manager.add(new Separator());
 				manager.add(changeToComplexTypeAction);
@@ -1782,7 +1782,7 @@ public class DataModelMainPage extends AMainPageV2 {
 				{
 					manager.add(newBrowseItemAction);
 				}
-				manager.add(new XSDNewConceptAction(this));
+//				manager.add(new XSDNewConceptAction(this));
 				manager.add(newElementAction);
 			}
 			

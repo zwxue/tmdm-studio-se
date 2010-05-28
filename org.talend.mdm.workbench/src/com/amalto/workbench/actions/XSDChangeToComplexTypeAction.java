@@ -83,40 +83,39 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
             TreePath tPath=null;
 			if(((TreeSelection) selection).getPaths().length>0)
             	tPath = ((TreeSelection) selection).getPaths()[0];
-            if (selection.getFirstElement() instanceof XSDModelGroup) {
-				for (int i = 0; i < tPath.getSegmentCount(); i++) {
-					if (tPath.getSegment(i) instanceof XSDElementDeclaration)
-						decl = (XSDElementDeclaration) tPath.getSegment(i);
-					else if(tPath.getSegment(i) instanceof XSDParticle)
-						decl = (XSDElementDeclaration) ((XSDParticle) tPath.getSegment(i)).getTerm();
-				}
-				checkConcept();
-			} 
 			// fliu
 			// add declNew to support convert action invoked from new concept/new element menu, in this case 
 			// declNew is the new created one not the selected one in tree vew
-            else if (selection.getFirstElement() instanceof XSDElementDeclaration || declNew != null) {
-            	decl = (XSDElementDeclaration) selection.getFirstElement();
-                if (declNew != null)
-                {
-                	decl = declNew;
-                }
-    			//check if concept or "just" element
-                checkConcept();
-
-            } else if(selection.getFirstElement() instanceof XSDParticle ){
-					//if it's a particle,it should change the element of its content 
-					decl = (XSDElementDeclaration) ((XSDParticle) selection
-							.getFirstElement()).getContent();
-            	} else {
-//            	if(selection.getFirstElement() instanceof XSDParticle )
-            		if (selection.getFirstElement() != null) {
-            			// a sub element
-            			decl = (XSDElementDeclaration) ((XSDParticle) selection
-            					.getFirstElement()).getTerm();
+			if (declNew != null)
+				decl = declNew;
+			else if (selection.getFirstElement() instanceof XSDModelGroup) {
+				for (int i = 0; i < tPath.getSegmentCount(); i++) {
+					if (tPath.getSegment(i) instanceof XSDElementDeclaration)
+						decl = (XSDElementDeclaration) tPath.getSegment(i);
+					else if (tPath.getSegment(i) instanceof XSDParticle)
+						decl = (XSDElementDeclaration) ((XSDParticle) tPath
+								.getSegment(i)).getTerm();
 				}
-            }
-            
+				checkConcept();
+			} else if (selection.getFirstElement() instanceof XSDElementDeclaration) {
+				decl = (XSDElementDeclaration) selection.getFirstElement();
+				// check if concept or "just" element
+				checkConcept();
+
+			} else if (selection.getFirstElement() instanceof XSDParticle) {
+				// if it's a particle,it should change the element of its
+				// content
+				decl = (XSDElementDeclaration) ((XSDParticle) selection
+						.getFirstElement()).getContent();
+			} else {
+				// if(selection.getFirstElement() instanceof XSDParticle )
+				if (selection.getFirstElement() != null) {
+					// a sub element
+					decl = (XSDElementDeclaration) ((XSDParticle) selection
+							.getFirstElement()).getTerm();
+				}
+			}
+
        		///save current Type Definition
        		//XSDTypeDefinition current = decl.getTypeDefinition();      		
        		if (showDlg) {
