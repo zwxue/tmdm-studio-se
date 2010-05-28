@@ -32,6 +32,7 @@ import com.amalto.workbench.dialogs.BusinessElementInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 import com.amalto.workbench.utils.XtentisException;
@@ -77,6 +78,7 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
 			ArrayList<String> elementDeclarations = new ArrayList<String>();
 			for (Iterator iter = eDecls.iterator(); iter.hasNext(); ) {
 				XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
+				if(d.getTargetNamespace() != null && d.getTargetNamespace().equals(IConstants.DEFAULT_NAME_SPACE))continue;
 				elementDeclarations.add(d.getQName() + (d.getTargetNamespace() != null ? " : " + d.getTargetNamespace() : ""));
 			}
 			elementDeclarations.add("");

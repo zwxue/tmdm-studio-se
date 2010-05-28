@@ -30,6 +30,7 @@ import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.XSDTreeContentProvider;
+import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 
 public class XSDEditParticleAction extends UndoAction implements SelectionListener{
@@ -70,6 +71,7 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
 			ArrayList<String> elementDeclarations = new ArrayList<String>();
 			for (Iterator iter = eDecls.iterator(); iter.hasNext(); ) {
 				XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
+				if(d.getTargetNamespace() != null && d.getTargetNamespace().equals(IConstants.DEFAULT_NAME_SPACE))continue;
 				elementDeclarations.add(d.getQName() + (d.getTargetNamespace() != null ? " : " + d.getTargetNamespace() : ""));
 			}
 			elementDeclarations.add("");
