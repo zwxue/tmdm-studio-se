@@ -248,7 +248,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
 			XSDTerm xsdTerm = xsdParticle.getTerm();
 			if (xsdTerm instanceof XSDElementDeclaration) {
 				//get Type of Parent Group
-				if (Util.getKeyInfo(xsdTerm) != null)
+				if (Util.getKeyInfo(xsdTerm) != null&&Util.getKeyInfo(xsdTerm).size()>0)
 					return ImageCache.getCreatedImage( EImage.PRIMARYKEY.getPath());
 				XSDConcreteComponent xsdConcreteComponent =  xsdParticle.getContainer();
 				if (xsdConcreteComponent instanceof XSDModelGroup) {

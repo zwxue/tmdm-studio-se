@@ -911,29 +911,9 @@ public class Util {
 			return null;
 		}
     	
-    	List<Object> list = new ArrayList<Object>();
-    	
-    	Object parent = getParent(key);
-        if (parent != null && parent instanceof XSDElementDeclaration)
-        {
-        	XSDElementDeclaration top = (XSDElementDeclaration)parent;
-        	EList<XSDIdentityConstraintDefinition> idtylist = top.getIdentityConstraintDefinitions();
-        	for (XSDIdentityConstraintDefinition idty : idtylist)
-        	{
-        		EList<XSDXPathDefinition> fields = idty.getFields();
-        		for (XSDXPathDefinition path: fields)
-        		{
-        			if (path.getValue().equals(((XSDElementDeclaration)key).getName()))
-        			{
-        				list.add(idty);
-        				list.add(path);
-        				return list;
-        			}
-        		}
-        	}
-        }
+    	return getTopParent(key);
+ 
         
-        return null;
     }
     
 
@@ -1127,8 +1107,90 @@ public class Util {
       }
 	 return null;
     }
+    public static List<Object> getTopParent(Object son)
+    {
+    	if (!((son instanceof XSDElementDeclaration) || (son instanceof XSDParticle))) {
+    		return null;
+    	}
+    	
+    	XSDElementDeclaration elem = null;
+//    	if (son instanceof XSDParticle) {
+//    		elem = (XSDElementDeclaration) ((XSDParticle) son).getContent();
+//    	} else if (son instanceof XSDElementDeclaration) {
+//    		elem = (XSDElementDeclaration) son;
+//    	}
+    	elem = (XSDElementDeclaration) son;
+    	
+    	EList<XSDSchemaContent> parentList = elem.getSchema().getContents();
+    	ArrayList<Object> list = new ArrayList<Object>();
+    	for (XSDSchemaContent top : parentList) {
+    		list.clear();
+    		if (!(top instanceof XSDElementDeclaration)) {
+    			continue;
+    		}
+    		if(top instanceof XSDElementDeclaration ){
+    			XSDElementDeclaration decl = (XSDElementDeclaration) top;
+//    			if (decl == son) return list;
+    			if (decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+
+    				String	primaryKey=getTopElement(decl,elem,(XSDComplexTypeDefinition)decl.getTypeDefinition());
+    				if(!primaryKey.equalsIgnoreCase("")){
+    		        	EList<XSDIdentityConstraintDefinition> idtylist = decl.getIdentityConstraintDefinitions();
+    		        	for (XSDIdentityConstraintDefinition idty : idtylist)
+    		        	{
+    		        		EList<XSDXPathDefinition> fields = idty.getFields();
+    		        		for (XSDXPathDefinition path: fields)
+    		        		{
+    		        			if ((path.getValue()).equals(primaryKey))
+    		        			{
+    		        				list.add(idty);
+    		        				list.add(path);
+    		        				return list;
+    		        			}
+    		        			System.out.println(path.getValue()+"----"+primaryKey);
+    		        		}
+    		        	}
+//    					return list;
+    				}
+    				}
+    		}
+    	}
+    	return null;
+    }
     
-    private static XSDElementDeclaration findOutSpecialSonElement(XSDElementDeclaration parent, XSDElementDeclaration son, ArrayList<String> complexTypes)
+    private static String getTopElement(XSDElementDeclaration parent,
+			XSDElementDeclaration son, XSDComplexTypeDefinition type) {
+
+		if (type.getContent() instanceof XSDParticle) {
+			XSDParticle particle = (XSDParticle) type.getContent();
+			if (particle.getTerm() instanceof XSDModelGroup) {
+				XSDModelGroup group = (XSDModelGroup) particle.getTerm();
+				EList<XSDParticle> elist = group.getContents();
+				for (XSDParticle pt : elist) {
+					if (pt.getContent() instanceof XSDElementDeclaration) {
+						XSDElementDeclaration ele = (XSDElementDeclaration) pt
+								.getContent();
+						if (ele == son)
+							return ele.getName();
+/*						ArrayList<String> complexTypes = new ArrayList<String>();
+						XSDElementDeclaration spec = findOutSpecialSonElement(
+								(XSDElementDeclaration) pt.getContent(), son,
+								complexTypes);
+						if (spec != null)
+							return spec.getName();*/
+						if (ele.getTypeDefinition() instanceof XSDComplexTypeDefinition)
+							return ele.getName()+"/"+ getTopElement(ele, son,
+									(XSDComplexTypeDefinition) ele
+											.getTypeDefinition());
+					}
+				}
+			}
+		}
+		return "";
+		
+	}
+
+	private static XSDElementDeclaration findOutSpecialSonElement(XSDElementDeclaration parent, XSDElementDeclaration son, ArrayList<String> complexTypes)
     {	
     	ArrayList<XSDElementDeclaration> particleElemList = findOutAllSonElements((XSDElementDeclaration)parent, complexTypes);
     	XSDElementDeclaration specialParent = null;
