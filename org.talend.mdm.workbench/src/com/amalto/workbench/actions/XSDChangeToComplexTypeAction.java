@@ -86,8 +86,10 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 			// fliu
 			// add declNew to support convert action invoked from new concept/new element menu, in this case 
 			// declNew is the new created one not the selected one in tree vew
-			if (declNew != null)
+			if (declNew != null){
 				decl = declNew;
+				checkConcept();
+				}
 			else if (selection.getFirstElement() instanceof XSDModelGroup) {
 				for (int i = 0; i < tPath.getSegmentCount(); i++) {
 					if (tPath.getSegment(i) instanceof XSDElementDeclaration)
