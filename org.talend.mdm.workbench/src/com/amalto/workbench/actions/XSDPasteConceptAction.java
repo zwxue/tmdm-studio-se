@@ -406,8 +406,11 @@ public class XSDPasteConceptAction extends UndoAction {
 						
 						
 						XSDParticle newParticle = (XSDParticle) particle.cloneConcreteComponent(true, false);
+						if(newParticle.getContent() instanceof XSDElementDeclaration&&Util.changeElementTypeToSequence(element , newParticle.getMaxOccurs()) == Status.CANCEL_STATUS)
+							break;
 						toGroup.getContents().add(newParticle);
 						toGroup.updateElement();
+			       		
 						if (newParticle.getContent() instanceof XSDElementDeclaration) {
 							if (((XSDElementDeclaration) newParticle.getContent()).getTypeDefinition() instanceof XSDComplexTypeDefinition) {
 								addAnnotationForComplexType(
