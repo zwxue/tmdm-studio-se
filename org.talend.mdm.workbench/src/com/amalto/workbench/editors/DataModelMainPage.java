@@ -1973,7 +1973,8 @@ public class DataModelMainPage extends AMainPageV2 {
 		manager.add(setAnnotationForeignKeyInfoAction);
 		if(Util.IsEnterPrise()) {
 		manager.add(setAnnotationWriteAction);
-		manager.add(setAnnotationNoAction);
+		if(checkMandatoryElement(obj))
+			manager.add(setAnnotationNoAction);
 		}
 		//available models
 		java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
@@ -1991,7 +1992,8 @@ public class DataModelMainPage extends AMainPageV2 {
 		manager.add(setAnnotationDescriptionsAction);
 		if(Util.IsEnterPrise()) {
 		manager.add(setAnnotationWriteAction);
-		manager.add(setAnnotationNoAction);
+		if(checkMandatoryElement(obj))
+			manager.add(setAnnotationNoAction);
 		}
 		//available models
 		java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
@@ -2004,7 +2006,13 @@ public class DataModelMainPage extends AMainPageV2 {
 		//manager.add(setAnnotationDocumentationAction);
 		//manager.add(deleteValidationRule);
 	}
-
+	private boolean checkMandatoryElement(Object obj) {
+		if(obj instanceof XSDParticle)
+			if(((XSDParticle)obj).getMinOccurs()>0)
+				return false;		
+		return true;
+			
+	}
 	/**
 	 * Returns and XSDSchema Object from an xsd
 	 * 
