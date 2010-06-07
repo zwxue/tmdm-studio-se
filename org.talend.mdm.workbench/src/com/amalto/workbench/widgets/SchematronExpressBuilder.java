@@ -235,7 +235,8 @@ public class SchematronExpressBuilder {
 				
 				if (dlg.getReturnCode() == Window.OK)  {
 					if(getTextWidget().getSelectionText().length()>0)
-						getTextWidget().setText(getText().replace(getTextWidget().getSelectionText(), dlg.getXpath()));
+//						getTextWidget().setText(getText().replace(getTextWidget().getSelectionText(), dlg.getXpath()));
+						getTextWidget().replaceTextRange(getTextWidget().getSelectionRanges()[0],getTextWidget().getSelectionRanges()[1],dlg.getXpath());
 					else
 						//getTextWidget().setText(getText()+dlg.getXpath());
 						insertText(dlg.getXpath());
