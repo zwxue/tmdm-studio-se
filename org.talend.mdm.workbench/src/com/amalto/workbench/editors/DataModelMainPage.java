@@ -26,6 +26,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -1147,6 +1148,11 @@ public class DataModelMainPage extends AMainPageV2 {
 		}
 	}
 
+
+	public void SaveWithForce(IProgressMonitor monitor) {
+		getEditor().doSave(monitor);
+	}
+	
 	public int save(String xsd){
 		try {
 			WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
