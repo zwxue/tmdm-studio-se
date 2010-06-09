@@ -1954,7 +1954,8 @@ public class DataModelMainPage extends AMainPageV2 {
 			if(selectedObjs.length > 1 && setAnnotationWrapWriteAction.checkInWriteType(selectedObjs)){
 				manager.add(new Separator());
 				manager.add(setAnnotationWrapWriteAction);
-				manager.add(setAnnotationWrapNoAction);
+					if(checkMandatoryElement(selectedObjs))
+						manager.add(setAnnotationWrapNoAction);
 			}
 		}
 		//available models
@@ -2016,6 +2017,19 @@ public class DataModelMainPage extends AMainPageV2 {
 		if(obj instanceof XSDParticle)
 			if(((XSDParticle)obj).getMinOccurs()>0)
 				return false;		
+		return true;
+			
+	}
+	private boolean checkMandatoryElement(Object[] objArray) {
+		for (Object obj : objArray) {
+			if(obj instanceof XSDParticle)
+				if(((XSDParticle)obj).getMinOccurs()>0)
+					return false;
+				else 
+					continue;
+					
+			
+		}
 		return true;
 			
 	}
