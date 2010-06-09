@@ -41,7 +41,7 @@ public class XSDSetAnnotationFKFilterAction extends UndoAction {
 				boolean save = MessageDialog.openConfirm(page.getSite().getShell(), "Save Resource", "'"+page.getXObject().getDisplayName()+"' has been modified. Save changes?");
 				
 				if(save)
-					page.doSave(new NullProgressMonitor());
+					page.SaveWithForce(new NullProgressMonitor());
 					
 				else
 					return Status.CANCEL_STATUS;
