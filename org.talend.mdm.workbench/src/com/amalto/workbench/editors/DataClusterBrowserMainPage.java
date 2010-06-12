@@ -490,8 +490,10 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 			//add by myli; fix the bug:0013077: if the data is too much, just get the entities from the model instead of from the container. 
 			String[] concepts ;
 			//long beforeTime = System .currentTimeMillis();
+			
 
-			WSStringArray array=port.runQuery(new WSRunQuery(null, new WSDataClusterPK(cluster.getName()), "count(/ii/n)", null));
+			String query="count(collection('"+cluster.getName()+ "')/ii/n)";
+			WSStringArray array=port.runQuery(new WSRunQuery(null, new WSDataClusterPK(cluster.getName()), query, null));
 			//WSString count2  = port.count(new WSCount(new WSDataClusterPK(cluster.getName()), "*", null, 100));
 			long count=Long.valueOf(array.getStrings()[0]);
 			//long count=Long.parseLong(count2.getValue());
