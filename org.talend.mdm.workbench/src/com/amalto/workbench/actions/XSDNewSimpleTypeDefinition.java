@@ -29,7 +29,7 @@ public class XSDNewSimpleTypeDefinition extends UndoAction implements SelectionL
 	public XSDNewSimpleTypeDefinition(DataModelMainPage page) {
 		super(page);
 		setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
-		setText("Create a Simpe Type");
+		setText("Create a Simple Type");
 		setToolTipText("Create a new simple Type");
 		setDescription(getToolTipText());
 	}

@@ -1638,10 +1638,10 @@ public class DataModelMainPage extends AMainPageV2 {
 
 		if (obj instanceof XSDSimpleTypeDefinition && selectedObjs.length == 1) {
 			XSDSimpleTypeDefinition typedef = (XSDSimpleTypeDefinition) obj;
+			manager.add(newComplexTypeAction);
+			manager.add(newSimpleTypeAction);				
 			if (!Util.IsAImporedElement(typedef, xsdSchema))
 			{
-				manager.add(newComplexTypeAction);
-				manager.add(newSimpleTypeAction);				
 				manager.add(changeBaseTypeAction);
 				//manager.add(deleteTypeDefinition);
 				manager.add(new Separator());

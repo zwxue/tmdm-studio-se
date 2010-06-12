@@ -36,7 +36,7 @@ public class XSDSetAnnotationWrapNoAction extends UndoAction {
 		super(page);
 		setImageDescriptor(ImageCache.getImage( EImage.SECURITYANNOTATION.getPath()));
 		setText("Set the Roles with No Access");
-		setToolTipText("Set the Roles That Cannot See This Filed");
+		setToolTipText("Set the Roles That Cannot See This Field");
 		this.dataModelName = dataModelName;
 	}
 
