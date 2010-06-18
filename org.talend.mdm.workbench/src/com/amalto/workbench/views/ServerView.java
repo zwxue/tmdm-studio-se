@@ -189,7 +189,13 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     	try {
     		TreeObject[] servers = contentProvider.getInvisibleRoot().getChildren();
 			for (TreeObject server : servers) {
-				ports.add(Util.getPort(server));
+				if (server instanceof TreeParent) {
+					if (!(((TreeParent) server).getChildren().length == 1
+							&& ((TreeParent) server).getChildren()[0]
+									.getDisplayName().equalsIgnoreCase(
+											"Pending...")))
+					ports.add(Util.getPort(server));
+				}
 			}
 		} catch (XtentisException e) {
 			e.printStackTrace();
