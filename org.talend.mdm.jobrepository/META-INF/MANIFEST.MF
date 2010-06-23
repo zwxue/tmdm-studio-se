@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Jobrepository
+Bundle-SymbolicName: org.talend.mdm.jobrepository;singleton:=true
+Bundle-Version: 2.2.0.qualifier
+Bundle-Activator: org.talend.mdm.jobrepository.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.talend.mdm.workbench,
+ org.talend.core,
+ org.talend.model,
+ org.talend.mdm.engines.client,
+ org.talend.designer.core,
+ org.talend.commons,
+ org.talend.commons.ui,
+ org.talend.repository
+Bundle-ActivationPolicy: lazy
+Bundle-Vendor: .Talend SA.
