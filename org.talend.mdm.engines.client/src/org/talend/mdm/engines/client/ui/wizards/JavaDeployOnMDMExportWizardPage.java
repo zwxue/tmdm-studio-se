@@ -20,6 +20,7 @@ import org.eclipse.swt.custom.BusyIndicator;
 import org.talend.commons.exception.ExceptionHandler;
 import org.talend.commons.exception.PersistenceException;
 import org.talend.core.model.properties.ProcessItem;
+import org.talend.core.model.properties.SpagoBiServer;
 import org.talend.designer.runprocess.ProcessorException;
 import org.talend.repository.documentation.ExportFileResource;
 import org.talend.repository.model.ProxyRepositoryFactory;
@@ -58,8 +59,8 @@ public class JavaDeployOnMDMExportWizardPage extends DeployOnMDMExportWizardPage
      * 
      * @param selection the selection
      */
-    public JavaDeployOnMDMExportWizardPage(IStructuredSelection selection) {
-        super("JavaDeployOnMDMExportPage1", selection); //$NON-NLS-1$
+    public JavaDeployOnMDMExportWizardPage(IStructuredSelection selection, SpagoBiServer mdmserver) {
+        super("JavaDeployOnMDMExportPage1", selection, mdmserver); //$NON-NLS-1$
     }
 
     /**

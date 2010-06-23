@@ -102,13 +102,16 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     private LabelledCombo exportTypeCombo;
 
+    private SpagoBiServer mdmServer = null;
+
     /**
      * Create an instance of this class.
      * 
      * @param name java.lang.String
      */
-    protected DeployOnMDMExportWizardPage(String name, IStructuredSelection selection) {
+    protected DeployOnMDMExportWizardPage(String name, IStructuredSelection selection, SpagoBiServer mdmserver) {
         super(name, null);
+        this.mdmServer = mdmserver;
         manager = JobScriptsManagerFactory.getInstance().createManagerInstance();
 
         RepositoryNode[] nodes = (RepositoryNode[]) selection.toList().toArray(new RepositoryNode[selection.size()]);
@@ -124,7 +127,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                 if (repositoryObject.getProperty().getItem() instanceof ProcessItem) {
                     ProcessItem processItem = (ProcessItem) repositoryObject.getProperty().getItem();
                     ExportFileResource resource = new ExportFileResource(processItem, processItem.getProperty().getLabel());
-                    resource.setNode(node);
+                    if (mdmserver == null)
+                        resource.setNode(node);
                     jobLabelName = processItem.getProperty().getLabel();
                     jobVersion = processItem.getProperty().getVersion();
                     jobPurposeDescription = processItem.getProperty().getPurpose();
@@ -162,7 +166,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      * @param selection the selection
      */
     public DeployOnMDMExportWizardPage(IStructuredSelection selection) {
-        this("publishOnSpagoExportPage1", selection); //$NON-NLS-1$
+        this("publishOnSpagoExportPage1", selection, null); //$NON-NLS-1$
         setDescription(Messages.getString("DeployOnMDMExportWizardPage.publishJob")); //$NON-NLS-1$
         setTitle(DataTransferMessages.ArchiveExport_exportTitle);
     }
@@ -238,29 +242,26 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         // ProxyRepositoryFactory proxyRepositoryFactory = ProxyRepositoryFactory.getInstance();
         // try {
         // listServerSapgo = proxyRepositoryFactory.getSpagoBiServer();
+        if (mdmServer == null) {
+            listServerSapgo = MDMServerHelper.parse(Activator.getDefault().getPreferenceStore().getString(
+                    MDMPreferenceInitializer.MDM_SERVER));
 
-        listServerSapgo = MDMServerHelper.parse(Activator.getDefault().getPreferenceStore().getString(
-                MDMPreferenceInitializer.MDM_SERVER));
-
-        if (listServerSapgo != null && !listServerSapgo.isEmpty()) {
-            Iterator<SpagoBiServer> iterator = listServerSapgo.iterator();
-            while (iterator.hasNext()) {
-                SpagoBiServer spagoBiServer = iterator.next();
-                listEngine.add(spagoBiServer.getShortDescription());
+            if (listServerSapgo != null && !listServerSapgo.isEmpty()) {
+                Iterator<SpagoBiServer> iterator = listServerSapgo.iterator();
+                while (iterator.hasNext()) {
+                    SpagoBiServer spagoBiServer = iterator.next();
+                    listEngine.add(spagoBiServer.getShortDescription());
+                }
             }
+            serverSpagoBi = new LabelledCombo(
+                    optionsGroup,
+                    Messages.getString("DeployOnMDMExportWizardPage.SpagoBI.Server"), Messages.getString("DeployOnMDMExportWizardPage.SpecifyServer.PublishJob"), listEngine); //$NON-NLS-1$ //$NON-NLS-2$
+            serverSpagoBi.select(0);
         }
 
-        // } catch (PersistenceException e) {
-        // displayErrorDialog(e.getMessage());
-        // }
         List<String> types = new ArrayList<String>();
         types.add("Axis WebService (War)");
         types.add("Automonus Job (Zip)");
-        serverSpagoBi = new LabelledCombo(
-                optionsGroup,
-                Messages.getString("DeployOnMDMExportWizardPage.SpagoBI.Server"), Messages.getString("DeployOnMDMExportWizardPage.SpecifyServer.PublishJob"), listEngine); //$NON-NLS-1$ //$NON-NLS-2$
-        serverSpagoBi.select(0);
-
         exportTypeCombo = new LabelledCombo(optionsGroup, "Export type:", "Export type", types); //$NON-NLS-1$ //$NON-NLS-2$
         exportTypeCombo.select(0);
 
@@ -433,19 +434,21 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
         // retrieve user, password, host, port from selected SpagoBiServer
 
-        String selectedSpagoBiEngineName = serverSpagoBi.getItem(serverSpagoBi.getSelectionIndex());
-        SpagoBiServer spagoBiServer = null;
+        SpagoBiServer spagoBiServer = mdmServer;
+        if (spagoBiServer == null) {
+            String selectedSpagoBiEngineName = serverSpagoBi.getItem(serverSpagoBi.getSelectionIndex());
 
-        List<SpagoBiServer> listServerSapgo = null;
+            List<SpagoBiServer> listServerSapgo = null;
 
-        listServerSapgo = MDMServerHelper.parse(Activator.getDefault().getPreferenceStore().getString(
-                MDMPreferenceInitializer.MDM_SERVER));
-        if (listServerSapgo != null && !listServerSapgo.isEmpty()) {
-            Iterator<SpagoBiServer> iterator = listServerSapgo.iterator();
-            while (iterator.hasNext()) {
-                spagoBiServer = iterator.next();
-                if (spagoBiServer.getShortDescription().equals(selectedSpagoBiEngineName)) {
-                    break;
+            listServerSapgo = MDMServerHelper.parse(Activator.getDefault().getPreferenceStore().getString(
+                    MDMPreferenceInitializer.MDM_SERVER));
+            if (listServerSapgo != null && !listServerSapgo.isEmpty()) {
+                Iterator<SpagoBiServer> iterator = listServerSapgo.iterator();
+                while (iterator.hasNext()) {
+                    spagoBiServer = iterator.next();
+                    if (spagoBiServer.getShortDescription().equals(selectedSpagoBiEngineName)) {
+                        break;
+                    }
                 }
             }
         }
@@ -694,6 +697,14 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     @Override
     protected boolean validateDestinationGroup() {
         return true;
+    }
+
+    public SpagoBiServer getMdmServer() {
+        return this.mdmServer;
+    }
+
+    public void setMdmServer(SpagoBiServer mdmServer) {
+        this.mdmServer = mdmServer;
     }
 
 }

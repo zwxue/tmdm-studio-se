@@ -29,6 +29,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.talend.core.CorePlugin;
 import org.talend.core.context.Context;
 import org.talend.core.context.RepositoryContext;
+import org.talend.core.model.properties.SpagoBiServer;
 import org.talend.mdm.engines.client.i18n.Messages;
 
 /**
@@ -42,6 +43,8 @@ public class DeployOnMDMExportWizard extends Wizard implements IExportWizard {
     private IStructuredSelection selection;
 
     private WizardFileSystemResourceExportPage1 mainPage;
+
+    private SpagoBiServer mdmServer = null;
 
     /**
      * Creates a wizard for exporting workspace resources to a zip file.
@@ -79,12 +82,14 @@ public class DeployOnMDMExportWizard extends Wizard implements IExportWizard {
         switch (((RepositoryContext) CorePlugin.getContext().getProperty(Context.REPOSITORY_CONTEXT_KEY)).getProject()
                 .getLanguage()) {
         case JAVA:
-            mainPage = new JavaDeployOnMDMExportWizardPage(selection);
+            mainPage = new JavaDeployOnMDMExportWizardPage(selection, mdmServer);
+
             break;
         case PERL:
             mainPage = new PerlDeployOnMDMExportWizardPage(selection);
             break;
         }
+
         addPage(mainPage);
     }
 
@@ -108,5 +113,13 @@ public class DeployOnMDMExportWizard extends Wizard implements IExportWizard {
      */
     public boolean performFinish() {
         return mainPage.finish();
+    }
+
+    public SpagoBiServer getMdmServer() {
+        return this.mdmServer;
+    }
+
+    public void setMdmServer(SpagoBiServer mdmServer) {
+        this.mdmServer = mdmServer;
     }
 }
