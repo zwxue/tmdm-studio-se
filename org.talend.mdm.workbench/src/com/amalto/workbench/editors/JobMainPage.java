@@ -139,18 +139,7 @@ public class JobMainPage extends AMainPage implements IXObjectModelListener {
 	}
 	@Override
 	protected void refreshData() {
-		// TODO Auto-generated method stub
-try {
-			
-    		XtentisPort port = Util.getPort(getXObject());
-    		//WSRoutingEngineV2Status wsStatus = port.routingEngineV2Action(new WSRoutingEngineV2Action(WSRoutingEngineV2ActionCode.STATUS));
-    		//WSJobStatus wsjobStatus = port.checkJobStatusAction(new WSJobStatusAction(new Boolean(false) ));
-			//statusLabel.setText(wsjobStatus.getValue());
- 
-		} catch (Exception e) {
-			e.printStackTrace();
-			MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page", "Error refreshing the page: "+e.getLocalizedMessage());
-		}    	
+   	
 	}
 	public void handleEvent(int type, TreeObject parent, TreeObject child) {
 		// TODO Auto-generated method stub

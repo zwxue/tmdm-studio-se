@@ -25,8 +25,6 @@ import com.amalto.workbench.webservices.WSGetMenuPKs;
 import com.amalto.workbench.webservices.WSGetRoutingRulePKs;
 import com.amalto.workbench.webservices.WSGetTransformerV2PKs;
 import com.amalto.workbench.webservices.WSGetViewPKs;
-import com.amalto.workbench.webservices.WSMDMJob;
-import com.amalto.workbench.webservices.WSMDMNULL;
 import com.amalto.workbench.webservices.WSMenuPK;
 import com.amalto.workbench.webservices.WSPing;
 import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
@@ -42,396 +40,390 @@ import com.amalto.workbench.webservices.XtentisPort;
 
 public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
-	ServerView view;
-	private String endpointaddress;
-	private String username;
-	private String password;
-	private String universe;
+    ServerView view;
+
+    private String endpointaddress;
+
+    private String username;
+
+    private String password;
+
+    private String universe;
+
     private TreeParent serverRoot;
-	
-    private boolean isExistUniverse=true;
-	public XtentisServerObjectsRetriever(String endpointaddress, String username, String password, String universe, ServerView view) {
-		this.endpointaddress = endpointaddress;
-		this.username = username;
-		this.password = password;
-		this.universe=universe;
-		this.view=view;
-	}
-	
-	public boolean isExistUniverse() {
-		return isExistUniverse;
-	}
 
-	public synchronized void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-		try {
-			monitor.beginTask("Loading "+IConstants.TALEND+" Server Objects", "admin".equals(username)? 12 : 9);
-			//server
-			String displayName=endpointaddress;
-			serverRoot = new TreeParent(
-                    displayName,
-                    null,
-                    TreeObject._SERVER_,
-                    endpointaddress,
-                    ("".equals(universe)? "" : universe+"/")+username+":"+(password==null?"":password)
-            );  
-			
-			//init load category
-			monitor.subTask("load category...");
+    private boolean isExistUniverse = true;
+
+    public XtentisServerObjectsRetriever(String endpointaddress, String username, String password, String universe,
+            ServerView view) {
+        this.endpointaddress = endpointaddress;
+        this.username = username;
+        this.password = password;
+        this.universe = universe;
+        this.view = view;
+    }
+
+    public boolean isExistUniverse() {
+        return isExistUniverse;
+    }
+
+    public synchronized void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+        try {
+            monitor.beginTask("Loading " + IConstants.TALEND + " Server Objects", "admin".equals(username) ? 12 : 9);
+            // server
+            String displayName = endpointaddress;
+            serverRoot = new TreeParent(displayName, null, TreeObject._SERVER_, endpointaddress, ("".equals(universe) ? ""
+                    : universe + "/")
+                    + username + ":" + (password == null ? "" : password));
+
+            // init load category
+            monitor.subTask("load category...");
             LocalTreeObjectRepository.getInstance().startUp(view, endpointaddress, username, password);
-			LocalTreeObjectRepository.getInstance().switchOnListening();
-			LocalTreeObjectRepository.getInstance().setLazySaveStrategy(true, serverRoot);			
-			monitor.worked(1);
-			//Access to server and get port
-			XtentisPort port = Util.getPort(new URL(endpointaddress), universe, username, password);
-			port.ping(new WSPing("Studio"));//viewer user can't use studio
-			
-			monitor.worked(1);
-						
-			
-			//fetch version info
-//			try {
-//				WSVersion version = port.getComponentVersion(new WSGetComponentVersion(WSComponent.DataManager,null));				
-//				displayName += " (v"+version.getMajor()+"."+version.getMinor()+"."+version.getRevision()+"_"+version.getBuild()+")";	
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-			WSUniverse wUuniverse=null;
-			wUuniverse=port.getCurrentUniverse(new WSGetCurrentUniverse());
-			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");		
-		     
-			
-			monitor.subTask("Accessing server....");
-			UserInfo user=new UserInfo();
-			user.setUsername(username);
-			user.setPassword(password);
-			user.setServerUrl(endpointaddress);
-			user.setUniverse(universe);
-			user.setWsUuniverse(wUuniverse);
+            LocalTreeObjectRepository.getInstance().switchOnListening();
+            LocalTreeObjectRepository.getInstance().setLazySaveStrategy(true, serverRoot);
+            monitor.worked(1);
+            // Access to server and get port
+            XtentisPort port = Util.getPort(new URL(endpointaddress), universe, username, password);
+            port.ping(new WSPing("Studio"));// viewer user can't use studio
 
-			serverRoot.setUser(user);
-			
-//			String uriPre=serverRoot.getEndpointIpAddress();
-			
-			//available models
-			List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
-			for(IAvailableModel model: availablemodels){
-				model.addTreeObjects(port,monitor, serverRoot);
-			}
-			//Data Models
-			TreeParent models = new TreeParent(EXtentisObjects.DataMODEL.getDisplayName(),serverRoot,TreeObject.DATA_MODEL,null,null);						
-			WSDataModelPK[] xdmPKs = null;
-			try{
-				xdmPKs=port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs();
-			}catch(Exception e){e.printStackTrace();}
-			if (xdmPKs != null) {
-				monitor.subTask("Loading Data Models");
-				for (int i = 0; i < xdmPKs.length; i++) {
-					String name = xdmPKs[i].getPk();
-					if (!name.startsWith("XMLSCHEMA")) {
-							TreeObject obj = new TreeObject(
-									name,
-									serverRoot,
-									TreeObject.DATA_MODEL,
-									xdmPKs[i],
-									null   //no storage to save space
-							);
-							models.addChild(obj);
-					}
-				}
-			}
-			monitor.worked(1);
-			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-			
-			//DataClusters
-			TreeParent dataClusters = new TreeParent(EXtentisObjects.DataCluster.getDisplayName(),serverRoot,TreeObject.DATA_CLUSTER,null,null);			
-			WSDataClusterPK[] xdcPKs = null;
-			try{
-				xdcPKs=port.getDataClusterPKs(new WSRegexDataClusterPKs("")).getWsDataClusterPKs();			
-			}catch(Exception e){e.printStackTrace();}
-			if (xdcPKs != null) {
-				monitor.subTask("Loading Data Containers");
-				for (int i = 0; i < xdcPKs.length; i++) {
-					String name = xdcPKs[i].getPk();
-					if (! (
-							"CACHE".equals(name)
-							)
-						) {	//FIXME: Hardcoded CACHE
-						TreeObject obj = new TreeObject(
-								name,
-								serverRoot,
-								TreeObject.DATA_CLUSTER,
-								xdcPKs[i],
-								null   //no storage to save space
-						);
-						dataClusters.addChild(obj);
-					}
-				}
-			}
-			monitor.worked(1);
-			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-			//event management
-			TreeParent eventManagement=new TreeParent(EXtentisObjects.EventManagement.getDisplayName(), serverRoot, TreeObject.EVENT_MANAGEMENT, null, null);
-			
-			//subscript engine
-			TreeObject  engine = new TreeObject(
-					EXtentisObjects.SubscriptionEngine.getDisplayName(),
-					serverRoot,
-					TreeObject.SUBSCRIPTION_ENGINE,
-					null,
-					null
-			);
-			eventManagement.addChild(engine);
+            monitor.worked(1);
 
-			//transformer
-			WSTransformerV2PK[] transformerPKs = null;
-			try {				
-				transformerPKs = port.getTransformerV2PKs(new WSGetTransformerV2PKs("")).getWsTransformerV2PK();
-			} catch (Exception e) {
-				System.out.println("No Transformers");
-			}
-			TreeParent transformers = null;
-			transformers = new TreeParent(EXtentisObjects.Transformer.getDisplayName(),serverRoot,TreeObject.TRANSFORMER,null,null);
-			eventManagement.addChild(transformers);
-			if (transformerPKs!=null) {
-				monitor.subTask("Loading Transfomers");
-				for (int i = 0; i < transformerPKs.length; i++) {
-					String id =transformerPKs[i].getPk();
-					TreeObject obj = new TreeObject(
-							id,
-							serverRoot,
-							TreeObject.TRANSFORMER,
-							new WSTransformerV2PK(id),
-							null   //no storage to save space
-					);
-					transformers.addChild(obj);
-				}
-			}
-			monitor.worked(1);		
-			
-			//routing rule
-			WSRoutingRulePK[] routingRulePKs = null;
-			try {
-				routingRulePKs = port.getRoutingRulePKs(new WSGetRoutingRulePKs("")).getWsRoutingRulePKs();
-			} catch (Exception e) {
-				System.out.println("NO ROUTING RULES");
-			}
-			TreeParent rules = null;
-			rules = new TreeParent(EXtentisObjects.RoutingRule.getDisplayName(),serverRoot,TreeObject.ROUTING_RULE,null,null);
-			eventManagement.addChild(rules);
-			if (routingRulePKs!=null) {
-				monitor.subTask("Loading Triggers");
-				for (int i = 0; i < routingRulePKs.length; i++) {
-					String id =routingRulePKs[i].getPk();
-					TreeObject obj = new TreeObject(
-							id,
-							serverRoot,
-							TreeObject.ROUTING_RULE,
-							new WSRoutingRulePK(id),
-							null   //no storage to save space
-					);
-					rules.addChild(obj);
-				}
-			}
-			monitor.worked(1);
-			
-			//add event management to serverRoot
-			serverRoot.addChild(eventManagement);
-			
-			//Views
-			TreeParent views = new TreeParent(EXtentisObjects.View.getDisplayName(),serverRoot,TreeObject.VIEW,null,null);
-			WSViewPK[] viewPKs = null;
-			try{
-				viewPKs=port.getViewPKs((new WSGetViewPKs(""))).getWsViewPK();
-			}catch(Exception e){e.printStackTrace();}
-			if (viewPKs!=null) {
-				monitor.subTask("Loading Views");
-				for (int i = 0; i < viewPKs.length; i++) {
-					String name = viewPKs[i].getPk();
-					TreeObject obj = new TreeObject(
-							name,
-							serverRoot,
-							TreeObject.VIEW,
-							new WSViewPK(name),
-							null   //no storage to save space
-					);
-					views.addChild(obj);
-				}
-			}
-			monitor.worked(1);
-			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-			
-			//Stored Procedures
-			TreeParent storedProcedures = new TreeParent(EXtentisObjects.StoredProcedure.getDisplayName(),serverRoot,TreeObject.STORED_PROCEDURE,null,null);
-			WSStoredProcedurePK[] spk = null;
-			try{
-				spk=port.getStoredProcedurePKs(new WSRegexStoredProcedure("")).getWsStoredProcedurePK();
-			}catch(Exception e){e.printStackTrace();}
-			if (spk!=null) {
-				monitor.subTask("Loading Stored Procedures");
-				for (int i = 0; i < spk.length; i++) {
-					String name = spk[i].getPk();
-					TreeObject obj = new TreeObject(
-							name,
-							serverRoot,
-							TreeObject.STORED_PROCEDURE,
-							new WSStoredProcedurePK(name),
-							null   //no storage to save space
-					);
-					storedProcedures.addChild(obj);
-				}
-			}
-			monitor.worked(1);
-			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-			
-			//Service Configuration
-			TreeObject serviceConfiguration=new TreeObject(
-					EXtentisObjects.ServiceConfiguration.getDisplayName(),
-					serverRoot,
-					TreeObject.SERVICE_CONFIGURATION,
-					null,
-					null);
-			//serviceConfiguration.setXObject(false);
-			monitor.worked(1);
-			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-			
-//			Menus
-			WSMenuPK[] menuPKs = null;
-			boolean hasMenus = true;
-			try {
-				menuPKs = port.getMenuPKs(new WSGetMenuPKs("*")).getWsMenuPK();
-			} catch (Exception e) {
-				System.out.println("No Menus");
-				// This server IS old
-				hasMenus = false;
-			}
-			TreeParent menus = null;
-			if (hasMenus) {
-				menus = new TreeParent(EXtentisObjects.Menu.getDisplayName(),serverRoot,TreeObject.MENU,null,null);
-				if (menuPKs!=null) {
-					monitor.subTask("Loading Menus");
-					for (int i = 0; i < menuPKs.length; i++) {
-						String id =menuPKs[i].getPk();
-						TreeObject obj = new TreeObject(
-								id,
-								serverRoot,
-								TreeObject.MENU,
-								new WSMenuPK(id),
-								null   //no storage to save space
-						);
-						menus.addChild(obj);
-					}
-				}
-				monitor.worked(1);
-				
-				if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-			}
-			//move Job from EE to CE.
-			//Job
-			TreeParent jobs = new TreeParent(EXtentisObjects.JobRegistry.getDisplayName(),serverRoot,TreeObject.JOB_REGISTRY,null,null);
-			WSMDMJob[] jobPKs = port.getMDMJob(new WSMDMNULL()).getWsMDMJob();
-			if (jobPKs!=null) {
-				monitor.subTask("Loading Jobs");
-				for (int i = 0; i < jobPKs.length; i++) {
-					String name = jobPKs[i].getJobName()+"_"+jobPKs[i].getJobVersion()+jobPKs[i].getSuffix();
-					TreeObject obj = new TreeObject(
-							name,
-							serverRoot,
-							TreeObject.JOB,
-							new WSViewPK(name),
-							null   //no storage to save space
-					);
-					jobs.addChild(obj);
-				}
-			}
-			monitor.worked(1);
+            // fetch version info
+            // try {
+            // WSVersion version = port.getComponentVersion(new WSGetComponentVersion(WSComponent.DataManager,null));
+            // displayName +=
+            // " (v"+version.getMajor()+"."+version.getMinor()+"."+version.getRevision()+"_"+version.getBuild()+")";
+            // } catch (Exception e) {
+            // e.printStackTrace();
+            // }
+            WSUniverse wUuniverse = null;
+            wUuniverse = port.getCurrentUniverse(new WSGetCurrentUniverse());
+            if (monitor.isCanceled())
+                throw new InterruptedException("User Cancel");
 
-			serverRoot.addChild(models);
-			serverRoot.addChild(dataClusters);
-			
-			serverRoot.addChild(views);
-			serverRoot.addChild(storedProcedures);
-						
-			serverRoot.addChild(serviceConfiguration);
-			serverRoot.addChild(jobs);
-			//serverRoot.addChild(workflow);
-//			serverRoot.addChild(resources);
+            monitor.subTask("Accessing server....");
+            UserInfo user = new UserInfo();
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setServerUrl(endpointaddress);
+            user.setUniverse(universe);
+            user.setWsUuniverse(wUuniverse);
 
-			if (hasMenus) serverRoot.addChild(menus);
-			
-			addRevision(wUuniverse);
-			
-			monitor.done();			
-		} catch (Exception e) {
-			if (monitor.isCanceled()) throw new InterruptedException("User Cancel");
-			e.printStackTrace();
-			throw new InvocationTargetException(new XtentisException(e.getLocalizedMessage()));
-		}		
-	}//run
-	
-	/**
-	 * add revisionID to each treeobject
-	 * @param universe
-	 */
-	private void addRevision(WSUniverse universe){
-		if(universe==null) return;
-		if(Util.IsEnterPrise()) {
-			WSUniverseXtentisObjectsRevisionIDs[] ids=universe.getXtentisObjectsRevisionIDs();
-			for(TreeObject node: serverRoot.getChildren()){
-				if(node.getType()== TreeObject.EVENT_MANAGEMENT) {
-					resetDisplayName((TreeParent)node,ids);
-					continue;
-				}
-				EXtentisObjects object=EXtentisObjects.getXtentisObjexts().get(String.valueOf(node.getType()));
-				if(object==null || !object.isRevision()){
-					continue;
-				}
-				boolean isSet=false;
-				for(WSUniverseXtentisObjectsRevisionIDs id: ids){					
-					if(id.getXtentisObjectName().equals(object.getName())){
-						if(id.getRevisionID()!=null && id.getRevisionID().length()>0){
-							node.setDisplayName(node.getDisplayName() + " ["+id.getRevisionID().replaceAll("\\[", "").replaceAll("\\]", "").trim() +"]");
-						}else{
-							node.setDisplayName(node.getDisplayName() + " ["+IConstants.HEAD+"]");
-						}
-						isSet=true;
-						break;
-					}
-				}
-				if(!isSet){
-					node.setDisplayName(node.getDisplayName() + " ["+IConstants.HEAD+"]");
-				}
-			}	
-			String name = serverRoot.getDisplayName()+" ["+universe.getName().replaceAll("\\[", "").replaceAll("\\]", "").trim()+"]" +" " +username;
-			serverRoot.setDisplayName(name);		
-		}else {
-			String name = serverRoot.getDisplayName()+" " +username;
-			serverRoot.setDisplayName(name);					
-		}
-	}
+            serverRoot.setUser(user);
+
+            // String uriPre=serverRoot.getEndpointIpAddress();
+
+            // Data Models
+            TreeParent models = new TreeParent(EXtentisObjects.DataMODEL.getDisplayName(), serverRoot, TreeObject.DATA_MODEL,
+                    null, null);
+            WSDataModelPK[] xdmPKs = null;
+            try {
+                xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (xdmPKs != null) {
+                monitor.subTask("Loading Data Models");
+                for (int i = 0; i < xdmPKs.length; i++) {
+                    String name = xdmPKs[i].getPk();
+                    if (!name.startsWith("XMLSCHEMA")) {
+                        TreeObject obj = new TreeObject(name, serverRoot, TreeObject.DATA_MODEL, xdmPKs[i], null // no
+                        // storage
+                        // to
+                        // save
+                        // space
+                        );
+                        models.addChild(obj);
+                    }
+                }
+            }
+            monitor.worked(1);
+            if (monitor.isCanceled())
+                throw new InterruptedException("User Cancel");
+
+            // DataClusters
+            TreeParent dataClusters = new TreeParent(EXtentisObjects.DataCluster.getDisplayName(), serverRoot,
+                    TreeObject.DATA_CLUSTER, null, null);
+            WSDataClusterPK[] xdcPKs = null;
+            try {
+                xdcPKs = port.getDataClusterPKs(new WSRegexDataClusterPKs("")).getWsDataClusterPKs();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (xdcPKs != null) {
+                monitor.subTask("Loading Data Containers");
+                for (int i = 0; i < xdcPKs.length; i++) {
+                    String name = xdcPKs[i].getPk();
+                    if (!("CACHE".equals(name))) { // FIXME: Hardcoded CACHE
+                        TreeObject obj = new TreeObject(name, serverRoot, TreeObject.DATA_CLUSTER, xdcPKs[i], null // no
+                        // storage
+                        // to
+                        // save
+                        // space
+                        );
+                        dataClusters.addChild(obj);
+                    }
+                }
+            }
+            monitor.worked(1);
+            if (monitor.isCanceled())
+                throw new InterruptedException("User Cancel");
+            // event management
+            TreeParent eventManagement = new TreeParent(EXtentisObjects.EventManagement.getDisplayName(), serverRoot,
+                    TreeObject.EVENT_MANAGEMENT, null, null);
+
+            // subscript engine
+            TreeObject engine = new TreeObject(EXtentisObjects.SubscriptionEngine.getDisplayName(), serverRoot,
+                    TreeObject.SUBSCRIPTION_ENGINE, null, null);
+            eventManagement.addChild(engine);
+
+            // transformer
+            WSTransformerV2PK[] transformerPKs = null;
+            try {
+                transformerPKs = port.getTransformerV2PKs(new WSGetTransformerV2PKs("")).getWsTransformerV2PK();
+            } catch (Exception e) {
+                System.out.println("No Transformers");
+            }
+            TreeParent transformers = null;
+            transformers = new TreeParent(EXtentisObjects.Transformer.getDisplayName(), serverRoot, TreeObject.TRANSFORMER, null,
+                    null);
+            eventManagement.addChild(transformers);
+            if (transformerPKs != null) {
+                monitor.subTask("Loading Transfomers");
+                for (int i = 0; i < transformerPKs.length; i++) {
+                    String id = transformerPKs[i].getPk();
+                    TreeObject obj = new TreeObject(id, serverRoot, TreeObject.TRANSFORMER, new WSTransformerV2PK(id), null // no
+                    // storage
+                    // to
+                    // save
+                    // space
+                    );
+                    transformers.addChild(obj);
+                }
+            }
+            monitor.worked(1);
+
+            // routing rule
+            WSRoutingRulePK[] routingRulePKs = null;
+            try {
+                routingRulePKs = port.getRoutingRulePKs(new WSGetRoutingRulePKs("")).getWsRoutingRulePKs();
+            } catch (Exception e) {
+                System.out.println("NO ROUTING RULES");
+            }
+            TreeParent rules = null;
+            rules = new TreeParent(EXtentisObjects.RoutingRule.getDisplayName(), serverRoot, TreeObject.ROUTING_RULE, null, null);
+            eventManagement.addChild(rules);
+            if (routingRulePKs != null) {
+                monitor.subTask("Loading Triggers");
+                for (int i = 0; i < routingRulePKs.length; i++) {
+                    String id = routingRulePKs[i].getPk();
+                    TreeObject obj = new TreeObject(id, serverRoot, TreeObject.ROUTING_RULE, new WSRoutingRulePK(id), null // no
+                    // storage
+                    // to
+                    // save
+                    // space
+                    );
+                    rules.addChild(obj);
+                }
+            }
+            monitor.worked(1);
+
+            // add event management to serverRoot
+            serverRoot.addChild(eventManagement);
+
+            // Views
+            TreeParent views = new TreeParent(EXtentisObjects.View.getDisplayName(), serverRoot, TreeObject.VIEW, null, null);
+            WSViewPK[] viewPKs = null;
+            try {
+                viewPKs = port.getViewPKs((new WSGetViewPKs(""))).getWsViewPK();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (viewPKs != null) {
+                monitor.subTask("Loading Views");
+                for (int i = 0; i < viewPKs.length; i++) {
+                    String name = viewPKs[i].getPk();
+                    TreeObject obj = new TreeObject(name, serverRoot, TreeObject.VIEW, new WSViewPK(name), null // no
+                    // storage
+                    // to
+                    // save
+                    // space
+                    );
+                    views.addChild(obj);
+                }
+            }
+            monitor.worked(1);
+            if (monitor.isCanceled())
+                throw new InterruptedException("User Cancel");
+
+            // Stored Procedures
+            TreeParent storedProcedures = new TreeParent(EXtentisObjects.StoredProcedure.getDisplayName(), serverRoot,
+                    TreeObject.STORED_PROCEDURE, null, null);
+            WSStoredProcedurePK[] spk = null;
+            try {
+                spk = port.getStoredProcedurePKs(new WSRegexStoredProcedure("")).getWsStoredProcedurePK();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (spk != null) {
+                monitor.subTask("Loading Stored Procedures");
+                for (int i = 0; i < spk.length; i++) {
+                    String name = spk[i].getPk();
+                    TreeObject obj = new TreeObject(name, serverRoot, TreeObject.STORED_PROCEDURE, new WSStoredProcedurePK(name),
+                            null // no storage to save space
+                    );
+                    storedProcedures.addChild(obj);
+                }
+            }
+            monitor.worked(1);
+            if (monitor.isCanceled())
+                throw new InterruptedException("User Cancel");
+
+            // Service Configuration
+            TreeObject serviceConfiguration = new TreeObject(EXtentisObjects.ServiceConfiguration.getDisplayName(), serverRoot,
+                    TreeObject.SERVICE_CONFIGURATION, null, null);
+            // serviceConfiguration.setXObject(false);
+            monitor.worked(1);
+            if (monitor.isCanceled())
+                throw new InterruptedException("User Cancel");
+
+            // Menus
+            WSMenuPK[] menuPKs = null;
+            boolean hasMenus = true;
+            try {
+                menuPKs = port.getMenuPKs(new WSGetMenuPKs("*")).getWsMenuPK();
+            } catch (Exception e) {
+                System.out.println("No Menus");
+                // This server IS old
+                hasMenus = false;
+            }
+            TreeParent menus = null;
+            if (hasMenus) {
+                menus = new TreeParent(EXtentisObjects.Menu.getDisplayName(), serverRoot, TreeObject.MENU, null, null);
+                if (menuPKs != null) {
+                    monitor.subTask("Loading Menus");
+                    for (int i = 0; i < menuPKs.length; i++) {
+                        String id = menuPKs[i].getPk();
+                        TreeObject obj = new TreeObject(id, serverRoot, TreeObject.MENU, new WSMenuPK(id), null // no
+                        // storage
+                        // to
+                        // save
+                        // space
+                        );
+                        menus.addChild(obj);
+                    }
+                }
+                monitor.worked(1);
+
+                if (monitor.isCanceled())
+                    throw new InterruptedException("User Cancel");
+            }
+            // move Job from EE to CE.
+
+            monitor.worked(1);
+
+            serverRoot.addChild(models);
+            serverRoot.addChild(dataClusters);
+
+            serverRoot.addChild(views);
+            serverRoot.addChild(storedProcedures);
+
+            serverRoot.addChild(serviceConfiguration);
+
+            // serverRoot.addChild(workflow);
+            // serverRoot.addChild(resources);
+
+            if (hasMenus)
+                serverRoot.addChild(menus);
+
+            // available models
+            List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
+            for (IAvailableModel model : availablemodels) {
+                model.addTreeObjects(port, monitor, serverRoot);
+            }
+
+            addRevision(wUuniverse);
+
+            monitor.done();
+        } catch (Exception e) {
+            if (monitor.isCanceled())
+                throw new InterruptedException("User Cancel");
+            e.printStackTrace();
+            throw new InvocationTargetException(new XtentisException(e.getLocalizedMessage()));
+        }
+    }// run
+
+    /**
+     * add revisionID to each treeobject
+     * 
+     * @param universe
+     */
+    private void addRevision(WSUniverse universe) {
+        if (universe == null)
+            return;
+        if (Util.IsEnterPrise()) {
+            WSUniverseXtentisObjectsRevisionIDs[] ids = universe.getXtentisObjectsRevisionIDs();
+            for (TreeObject node : serverRoot.getChildren()) {
+                if (node.getType() == TreeObject.EVENT_MANAGEMENT) {
+                    resetDisplayName((TreeParent) node, ids);
+                    continue;
+                }
+                EXtentisObjects object = EXtentisObjects.getXtentisObjexts().get(String.valueOf(node.getType()));
+                if (object == null || !object.isRevision()) {
+                    continue;
+                }
+                boolean isSet = false;
+                for (WSUniverseXtentisObjectsRevisionIDs id : ids) {
+                    if (id.getXtentisObjectName().equals(object.getName())) {
+                        if (id.getRevisionID() != null && id.getRevisionID().length() > 0) {
+                            node.setDisplayName(node.getDisplayName() + " ["
+                                    + id.getRevisionID().replaceAll("\\[", "").replaceAll("\\]", "").trim() + "]");
+                        } else {
+                            node.setDisplayName(node.getDisplayName() + " [" + IConstants.HEAD + "]");
+                        }
+                        isSet = true;
+                        break;
+                    }
+                }
+                if (!isSet) {
+                    node.setDisplayName(node.getDisplayName() + " [" + IConstants.HEAD + "]");
+                }
+            }
+            String name = serverRoot.getDisplayName() + " ["
+                    + universe.getName().replaceAll("\\[", "").replaceAll("\\]", "").trim() + "]" + " " + username;
+            serverRoot.setDisplayName(name);
+        } else {
+            String name = serverRoot.getDisplayName() + " " + username;
+            serverRoot.setDisplayName(name);
+        }
+    }
+
     public TreeParent getServerRoot() {
         return serverRoot;
     }
-    private void resetDisplayName(TreeParent parent,WSUniverseXtentisObjectsRevisionIDs[] ids) {
-    	for(TreeObject node: parent.getChildren()){
-			EXtentisObjects object=EXtentisObjects.getXtentisObjexts().get(String.valueOf(node.getType()));
-			if(object==null || !object.isRevision()){
-				continue;
-			}
-			boolean isSet=false;
-			for(WSUniverseXtentisObjectsRevisionIDs id: ids){					
-				if(id.getXtentisObjectName().equals(object.getName())){
-					if(id.getRevisionID()!=null && id.getRevisionID().length()>0){
-						node.setDisplayName(node.getDisplayName() + " ["+id.getRevisionID().replaceAll("\\[", "").replaceAll("\\]", "").trim() +"]");
-					}else{
-						node.setDisplayName(node.getDisplayName() + " ["+IConstants.HEAD+"]");
-					}
-					isSet=true;
-					break;
-				}
-			}
-			if(!isSet){
-				node.setDisplayName(node.getDisplayName() + " ["+IConstants.HEAD+"]");
-			}
-		}	
+
+    private void resetDisplayName(TreeParent parent, WSUniverseXtentisObjectsRevisionIDs[] ids) {
+        for (TreeObject node : parent.getChildren()) {
+            EXtentisObjects object = EXtentisObjects.getXtentisObjexts().get(String.valueOf(node.getType()));
+            if (object == null || !object.isRevision()) {
+                continue;
+            }
+            boolean isSet = false;
+            for (WSUniverseXtentisObjectsRevisionIDs id : ids) {
+                if (id.getXtentisObjectName().equals(object.getName())) {
+                    if (id.getRevisionID() != null && id.getRevisionID().length() > 0) {
+                        node.setDisplayName(node.getDisplayName() + " ["
+                                + id.getRevisionID().replaceAll("\\[", "").replaceAll("\\]", "").trim() + "]");
+                    } else {
+                        node.setDisplayName(node.getDisplayName() + " [" + IConstants.HEAD + "]");
+                    }
+                    isSet = true;
+                    break;
+                }
+            }
+            if (!isSet) {
+                node.setDisplayName(node.getDisplayName() + " [" + IConstants.HEAD + "]");
+            }
+        }
     }
 }

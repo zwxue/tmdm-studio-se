@@ -60,6 +60,12 @@
             talendPerspectiveId="org.talend.mdm.tis.perspective">
       </TalendPerspective>
    </extension>
+  <extension
+        point="org.talend.mdm.workbench.AvailableModel">
+     <model
+           class="com.amalto.workbench.availablemodel.JobAvailableModel">
+     </model>
+  </extension>
 
    
 </plugin>
