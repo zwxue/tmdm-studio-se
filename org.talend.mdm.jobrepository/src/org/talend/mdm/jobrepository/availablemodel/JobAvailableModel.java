@@ -41,7 +41,7 @@ public class JobAvailableModel extends AbstractAvailableModel {
 
         // TIS JOB
         try {
-            TreeParent tosJob = new TreeParent("TOS Jobs", serverRoot, TreeObject.CATEGORY_FOLDER, null, null);
+            TreeParent tosJob = new TreeParent("TIS Jobs", serverRoot, TreeObject.CATEGORY_FOLDER, null, null);
             for (IRepositoryViewObject o : JobRepositoryUtil.getAllTISRepositoryJobs()) {
                 Item item = o.getProperty().getItem();
                 if (item instanceof ProcessItem) {
