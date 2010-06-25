@@ -11,6 +11,8 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
@@ -38,6 +40,7 @@ import org.talend.mdm.commmon.util.workbench.ZipToFile;
 
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
+import com.amalto.workbench.utils.ResourcesUtil;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSAutoIncrement;
 import com.amalto.workbench.webservices.WSDataCluster;
@@ -116,9 +119,9 @@ public class ExportItemsWizard extends Wizard {
 					e.printStackTrace();
 					return Status.CANCEL_STATUS;
 				}finally{
-					if(zipfile!=null){						
+					if(zipfile!=null&&new File(exportFolder).exists()){						
 						try {
-							ZipToFile.zipFile(exportFolder, zipfile);
+								ZipToFile.zipFile(exportFolder, zipfile);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -249,6 +252,31 @@ public class ExportItemsWizard extends Wizard {
 					obj.setItems(items.toArray(new String[items.size()]));
 					exports.add(obj);
 				}catch(Exception e){}
+				monitor.worked(1);
+				break;
+			case  	TreeObject.PICTURES_RESOURCE:
+				monitor.subTask(" Picture...");
+//				ExportItem exportItem=new ExportItem();
+				
+				items=new ArrayList<String>();
+				//picture
+				 try{
+				String picUrl=obj.getEndpointIpAddress()+ResourcesUtil.getResourcesMapFromURI(
+						obj.getEndpointIpAddress() + TreeObject.PICTURES_URI)
+	        			.get(obj.getDisplayName());
+		         HttpClient client = new HttpClient();  
+		         GetMethod get = new GetMethod(picUrl);  
+		         client.executeMethod(get);  
+				//Marshal
+				sw = new StringWriter();
+				Marshaller.marshal(get.getResponseBody(), sw);
+				encodedID = URLEncoder.encode(obj.getDisplayName(),"UTF-8");
+				writeByte(get.getResponseBody(), TreeObject.PICTURES_+"/"+encodedID);
+				items.add(TreeObject.PICTURES_+"/"+encodedID);
+				
+				obj.setItems(items.toArray(new String[items.size()]));
+				exports.add(obj);
+				 }catch(Exception e){}
 				monitor.worked(1);
 				break;
 			case 	TreeObject.ROLE:
@@ -574,5 +602,18 @@ public class ExportItemsWizard extends Wizard {
 		}
 		
 	}
-
+	private  void writeByte(byte[] bs,String filename){
+		try {
+			File f=new File(exportFolder+"/"+filename);
+			if(!f.getParentFile().getParentFile().exists()){
+				f.getParentFile().getParentFile().mkdir();
+			}		
+			if(!f.getParentFile().exists()){
+				f.getParentFile().mkdir();
+			}
+	         FileOutputStream output = new FileOutputStream(f);  
+	         output.write(bs);  
+	         output.close();  
+		}catch(Exception e) {e.printStackTrace();}
+	}	
 }
