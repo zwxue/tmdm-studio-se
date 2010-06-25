@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.mdm.jobrepository.availablemodel;
 
+import java.util.List;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IMenuManager;
 import org.talend.core.model.properties.Item;
@@ -41,17 +43,20 @@ public class JobAvailableModel extends AbstractAvailableModel {
 
         // TIS JOB
         try {
-            TreeParent tosJob = new TreeParent("TIS Jobs", serverRoot, TreeObject.CATEGORY_FOLDER, null, null);
-            for (IRepositoryViewObject o : JobRepositoryUtil.getAllTISRepositoryJobs()) {
-                Item item = o.getProperty().getItem();
-                if (item instanceof ProcessItem) {
-                    String name = o.getLabel() + "_" + o.getProperty().getVersion();
-                    TreeObject obj = new TreeObject(name, serverRoot, TreeObject.TIS_JOB, o, null);
-                    obj.setWsObject(new OpenJobAction());
-                    tosJob.addChild(obj);
-                }
-            }
-            jobs.addChild(tosJob);
+        	List<IRepositoryViewObject> listJobs=JobRepositoryUtil.getAllTISRepositoryJobs();
+        	if(listJobs!=null && listJobs.size()>0) {
+	            TreeParent tosJob = new TreeParent("TIS Jobs", serverRoot, TreeObject.CATEGORY_FOLDER, null, null);
+	            for (IRepositoryViewObject o : listJobs) {
+	                Item item = o.getProperty().getItem();
+	                if (item instanceof ProcessItem) {
+	                    String name = o.getLabel() + "_" + o.getProperty().getVersion();
+	                    TreeObject obj = new TreeObject(name, serverRoot, TreeObject.TIS_JOB, o, null);
+	                    obj.setWsObject(new OpenJobAction());
+	                    tosJob.addChild(obj);
+	                }
+	            }
+	            jobs.addChild(tosJob);
+        	}
         } catch (Exception e) {
             e.printStackTrace();
         }
