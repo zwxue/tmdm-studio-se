@@ -17,7 +17,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
@@ -261,12 +260,14 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 	
 	private void saveDocument(String url)
 	{
+		if(credentials.get(url)!=null) {
 		XtentisPort port = credentials.get(url).port;
 		Document doc = credentials.get(url).doc;
         try {
 			port.getMDMCategory(new WSCategoryData(doc.asXML()));
 		} catch (RemoteException e) {
 			e.printStackTrace();
+		}
 		}
 	}
 	
