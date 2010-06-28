@@ -263,11 +263,13 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		if(credentials.get(url)!=null) {
 		XtentisPort port = credentials.get(url).port;
 		Document doc = credentials.get(url).doc;
-        try {
-			port.getMDMCategory(new WSCategoryData(doc.asXML()));
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
+		if(doc!=null) {
+	        try {
+				port.getMDMCategory(new WSCategoryData(doc.asXML()));
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
+			}
 		}
 	}
 	
