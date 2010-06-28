@@ -50,7 +50,7 @@ public class XSDEditXPathAction extends UndoAction{
 //       					};
 //       				}
 //       		);
-            List<String> childNames = Util.getChildElementNames((XSDElementDeclaration)icd.getContainer());
+            List<String> childNames = Util.getChildElementNames("",(XSDElementDeclaration)icd.getContainer());
             SelectFieldDialog id=new SelectFieldDialog(page.getSite().getShell(),"Select one field",childNames,xpath.getValue());
             id.create();
        		id.setBlockOnOpen(true);

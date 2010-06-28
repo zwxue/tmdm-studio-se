@@ -1474,7 +1474,7 @@ public class Util {
 		}
 		return objs;
 	}   
-    public static List<String> getChildElementNames(XSDElementDeclaration decl) throws Exception{
+    public static List<String> getChildElementNames(String parentxpath,XSDElementDeclaration decl) throws Exception{
     	List<String> childNames=new ArrayList<String>();
 
     	XSDTypeDefinition type = decl.getTypeDefinition();
@@ -1491,9 +1491,14 @@ public class Util {
     				for (XSDParticle part: particles)
     				{
     					if(part.getTerm() instanceof XSDElementDeclaration)
-    					{
+    					{    						
     						XSDElementDeclaration el = (XSDElementDeclaration)part.getTerm();
-    						childNames.add(el.getName());
+    						if(el.getTypeDefinition() instanceof XSDSimpleTypeDefinition) {
+    							String child=parentxpath.length()==0?el.getName():parentxpath+"/"+el.getName();    							
+    							childNames.add(child);
+    						}else {
+    							childNames.addAll(getChildElementNames(el.getName(),el));
+    						}
     					}
     				}
     			}
