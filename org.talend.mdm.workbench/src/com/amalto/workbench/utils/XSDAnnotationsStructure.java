@@ -659,6 +659,54 @@ public class XSDAnnotationsStructure {
 		
 		return descriptionsMap;
 	}
+	
+	/**
+	 * @author ymli
+	 * set the formats; fix the bug:0013463
+	 * @param fomats
+	 * @return
+	 */
+	public boolean setDisplayFormat(LinkedHashMap<String, String> fomats){
+		Iterator<String> isos = Util.iso2lang.keySet().iterator();
+		while(isos.hasNext())
+		{
+			String lang = isos.next();
+			removeAppInfos("X_Display_Format_" + lang.toUpperCase());
+		}
+		
+		Iterator<String> isoIter = fomats.keySet().iterator();
+		while(isoIter.hasNext())
+		{
+			String iso = isoIter.next();
+			removeAppInfos("X_Display_Format_" + iso.toUpperCase());
+			addAppInfo("X_Display_Format_" + iso.toUpperCase(), fomats.get(iso));
+		}
+		
+		hasChanged = true;
+		return true;
+	}
+	/**
+	 * @author ymli
+	 * get the formats; fix the bug:0013463
+	 * @param fomats
+	 * @return
+	 */
+	public LinkedHashMap<String,String> getDisplayFormat(){
+		LinkedHashMap<String, String> descriptionsMap = new LinkedHashMap<String, String>();
+		Iterator<String> isoIter = Util.iso2lang.keySet().iterator();
+		while(isoIter.hasNext())
+		{
+			String iso = isoIter.next().toUpperCase();
+			String prefix = "X_Display_Format_" + iso;
+			String infoValue = getAppInfoValue(prefix);
+			if (infoValue != null)
+				descriptionsMap.put(iso.toLowerCase(), infoValue);
+		}
+		
+		return descriptionsMap;
+	}
+	
+	
 	/****************************************************************************
 	 *           APPINFO UTILITIES
 	 ****************************************************************************/

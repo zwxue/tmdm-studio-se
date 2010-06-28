@@ -165,6 +165,7 @@ import com.amalto.workbench.actions.XSDSetAnnotationNoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWrapNoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWrapWriteAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
+import com.amalto.workbench.actions.XSDSetAnnotaionDisplayFormatAction;
 import com.amalto.workbench.actions.XSDSetFacetMessageAction;
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
@@ -215,6 +216,8 @@ public class DataModelMainPage extends AMainPageV2 {
 	private XSDEditParticleAction editParticleAction = null;
 	private XSDEditConceptAction editConceptAction = null;
 	
+	
+	
 	//private XSDCopyConceptAction copyConceptAction = null;
 	//private XSDPasteConceptAction pasteConceptAction = null;
 	
@@ -238,6 +241,9 @@ public class DataModelMainPage extends AMainPageV2 {
 	private XSDSetAnnotationNoAction setAnnotationNoAction = null;
 	private XSDSetAnnotationWrapNoAction setAnnotationWrapNoAction = null;
 	private XSDSetAnnotationWriteAction setAnnotationWriteAction = null;
+	
+	private XSDSetAnnotaionDisplayFormatAction setAnnotationDisplayFomatAction = null;
+	
 	//private XSDSetAnnotationTargetSystemsAction setAnnotationTargetSystemsAction = null;
 	//private XSDSetAnnotationSchematronAction setAnnotationSchematronAction;
 	//private XSDSetAnnotationSourceSystemAction setAnnotationSourceSystemAction = null;
@@ -1254,6 +1260,8 @@ public class DataModelMainPage extends AMainPageV2 {
 		this.setAnnotationNoAction = new XSDSetAnnotationNoAction(this,dataModelName);
 		this.setAnnotationWrapNoAction = new XSDSetAnnotationWrapNoAction(this,dataModelName);
 		
+		this.setAnnotationDisplayFomatAction = new XSDSetAnnotaionDisplayFormatAction(this);
+		
 		//this.copyConceptAction = new XSDCopyConceptAction(this);
 		//this.pasteConceptAction = new XSDPasteConceptAction(this);
 		
@@ -1367,6 +1375,9 @@ public class DataModelMainPage extends AMainPageV2 {
 					}
 					else if (source.startsWith("X_ForeignKey_Filter")) {
 						return 112;
+					}
+					else if(source.startsWith("X_Display_Format_")){
+						return 113;
 					}
 				} 
 			
@@ -1482,6 +1493,9 @@ public class DataModelMainPage extends AMainPageV2 {
 						break;					
 					case 110:
 						setFacetMsgAction.run();
+						break;
+					case 113:
+						setAnnotationDisplayFomatAction.run();
 						break;
 					case -1:
 						if(drillDownAdapter.canGoInto()==true)
@@ -1778,6 +1792,7 @@ public class DataModelMainPage extends AMainPageV2 {
 				if (((XSDElementDeclaration)obj).getTypeDefinition() instanceof XSDSimpleTypeDefinition)
 				{
 					manager.add(setFacetMsgAction);
+					manager.add(setAnnotationDisplayFomatAction);
 				}
 				manager.add(new Separator());
 				manager.add(newIdentityConstraintAction);
@@ -1840,6 +1855,7 @@ public class DataModelMainPage extends AMainPageV2 {
 							if (((XSDElementDeclaration)term).getTypeDefinition() instanceof XSDSimpleTypeDefinition)
 							{
 								manager.add(setFacetMsgAction);
+								manager.add(setAnnotationDisplayFomatAction);
 							}
 							// Xpath
 							manager.add(new Separator());

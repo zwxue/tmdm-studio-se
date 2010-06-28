@@ -169,7 +169,11 @@ public class XSDTreeLabelProvider extends LabelProvider {
 						} else if(source.startsWith("X_Facet")){
 							return source.substring(2, 7)+"_Msg_"+source.substring(8)+": "+ e.getChildNodes().item(0).getNodeValue();
 						   //made schematron show:Schematron: schematron
-						} else if(source.equals("X_Schematron")){
+						} 
+						else if(source.startsWith("X_Display_Format_")){
+							return source+": "+e.getChildNodes().item(0).getNodeValue();
+						}
+						else if(source.equals("X_Schematron")){
 							
 							 String pattern=(String)e.getFirstChild().getUserData("pattern_name");
 							 if(pattern==null){
@@ -391,7 +395,11 @@ public class XSDTreeLabelProvider extends LabelProvider {
 							return ImageCache.getCreatedImage( EImage.WORKFLOW_PROCESS.getPath());
 						}if(source.equals("X_ForeignKey_Filter")) {
 						   return ImageCache.getCreatedImage( EImage.FILTER_PS.getPath());
-						}else {
+						}
+						else if(source.startsWith("X_Display_Format_")){
+							return ImageCache.getCreatedImage( EImage.THIN_MIN_VIEW.getPath());
+						}
+						else {
 							return ImageCache.getCreatedImage( EImage.DOCUMENTATION.getPath());
 						}
 					} else {
