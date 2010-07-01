@@ -25,11 +25,7 @@ import com.amalto.workbench.models.TreeObject;
 
 public class XPathTreeContentProvider extends XSDTreeContentProvider {
 	private String conceptName;
-	private XSDElementDeclaration conceptElement;
 	
-	public XSDElementDeclaration getConceptElement() {
-		return conceptElement;
-	}
 	public String getConceptName() {
 		return conceptName;
 	}
@@ -337,11 +333,10 @@ public class XPathTreeContentProvider extends XSDTreeContentProvider {
 			}
 			if (!exist)
 			{
-				if(conceptName!=null && el.getName().equals(conceptName)) {
-					conceptElement=el;
-				}
-				if( ((el.getTargetNamespace() != null && !el.getTargetNamespace().equals(XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001))
-				|| (el.getTargetNamespace() == null)))
+				if((conceptName != null && el.getName().equals(conceptName)) || (conceptName == null && (el.getTargetNamespace() != null && !el
+						.getTargetNamespace().equals(
+								XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001))
+				|| (conceptName == null && el.getTargetNamespace() == null)))
 					   list.add(el);
 				
 			}			
