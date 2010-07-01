@@ -11,6 +11,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
@@ -153,29 +154,33 @@ public class XpathSelectDialog extends Dialog {
 		//filter the datamodel according to conceptName
 		List<String> avaiList=new ArrayList<String>();
 		avaiList.addAll(systemDataModelValues);
+
+		//edit by ymli;fix the bug:0011970:if the conceptName of Browse_items_conceptName doesn't exist in datamodel, all the concept will be show.	
+		if(avaiList.size()==0)
+			avaiList.addAll(systemDataModelValues);
+
 		if(conceptName!=null && !conceptName.contains("*")){
-			for(String datamodel: systemDataModelValues){
+			for(int i=0; i< systemDataModelValues.size(); i++){
+				String datamodel=systemDataModelValues.get(i);
 				try {
 					WSDataModel dm=Util.getPort(this.parent).getDataModel(new WSGetDataModel(new WSDataModelPK(datamodel)));
 					if(dm!=null){
 						XSDSchema xsdSchema = Util.getXSDSchema(dm.getXsdSchema());
 						String schema = Util.nodeToString(xsdSchema.getDocument());
 						XSDSchema xsd= Util.createXsdSchema(schema, this.parent);
-						if(!Util.getConcepts(xsd).contains(conceptName)){
-							avaiList.remove(datamodel);
+						if(Util.getConcepts(xsd).contains(conceptName)){
+							dataModelName=datamodel;
+							break;
 						}
 					}
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				} 
 			}
-		}
-		//edit by ymli;fix the bug:0011970:if the conceptName of Browse_items_conceptName doesn't exist in datamodel, all the concept will be show.	
-		if(avaiList.size()==0)
-			avaiList.addAll(systemDataModelValues);
-		
+		}		
 		
 		dataModelCombo.setItems(avaiList.toArray(new String[avaiList.size()]));
+
 		dataModelCombo.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(
 					org.eclipse.swt.events.SelectionEvent e) {}
@@ -261,7 +266,7 @@ public class XpathSelectDialog extends Dialog {
 						.getSelection();
 				xpath = getXpath(sel);
 				xpathText.setText(xpath);
-				getButton(IDialogConstants.OK_ID).setEnabled(xpath.length()>0);
+				if(getButton(IDialogConstants.OK_ID)!=null)getButton(IDialogConstants.OK_ID).setEnabled(xpath.length()>0);
 			}
 		});
 		domViewer.getControl().setLayoutData(
@@ -294,6 +299,11 @@ public class XpathSelectDialog extends Dialog {
 			}
 		});
 		domViewer.setInput(site);
+		//select the concept elements
+		if(provider.getConceptElement()!=null) {
+			StructuredSelection sel=new StructuredSelection(provider.getConceptElement());
+			domViewer.setSelection(sel);
+		}
 	}
 
 	protected Control createButtonBar(Composite parent) {
