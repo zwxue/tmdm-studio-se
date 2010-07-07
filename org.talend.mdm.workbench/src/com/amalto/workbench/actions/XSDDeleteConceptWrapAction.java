@@ -23,6 +23,7 @@ import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDXPathDefinition;
 import org.eclipse.xsd.XSDXPathVariety;
+import org.eclipse.xsd.impl.XSDElementDeclarationImpl;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.EImage;
@@ -225,6 +226,9 @@ public class XSDDeleteConceptWrapAction extends UndoAction{
 		List lst = new ArrayList();
 
 		for (Object obj : objs) {
+			if (obj instanceof XSDElementDeclarationImpl) {
+				continue;
+			}
 			for (Object objOther : objs) {
 				if (obj == objOther) {
 					continue;
@@ -233,7 +237,8 @@ public class XSDDeleteConceptWrapAction extends UndoAction{
 						new ArrayList());
 				for (Object offspring : offsprings) {
 					if (offspring == obj) {
-						lst.add(obj);
+						if(lst.indexOf(obj) < 0)
+						   lst.add(obj);
 					}
 				}
 			}
