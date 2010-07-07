@@ -1787,7 +1787,9 @@ public class Util {
 			final List<XSDImport> imports, final TreeObject treeObj,
 			boolean uri, final List<Exception> exceptions,
 			final Map<String, Integer> schemaMonitor) throws Exception
-    {
+    {	
+    	FileInputStream fin=null;
+    	try {
     	final String xsdFileName = System.getProperty("user.dir")+"/.xsdModel.xml";
     	URI fileURI = URI.createFileURI(xsdFileName);
 	    DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -1810,8 +1812,10 @@ public class Util {
 			
 		if (uri) {
 			File file = new File(rawData);
-			if (file.exists())
-			   source = new InputSource(new FileInputStream(file));
+			if (file.exists()) {
+				fin=new FileInputStream(file);
+			   source = new InputSource(fin);
+			}
 			else
 				source = new InputSource(new StringReader(Util.getResponseFromURL(rawData, treeObj)));
 		} else {
@@ -1899,6 +1903,9 @@ public class Util {
 	    importSchema(schema, imports, schemaMonitor);
 	    schema.setElement(document.getDocumentElement());
        return schema; 
+    	}finally {
+    		if(fin!=null)fin.close();
+    	}
     }
     
     public static List<XSDComplexTypeDefinition> getComplexTypes(XSDSchema xsd){
