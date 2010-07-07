@@ -457,16 +457,15 @@ public class Util {
 	 *      LOCAL FILE UTILS
 	 *********************************************************************/
 	
-	public static String getXML(String filename) throws Exception{
-	    BufferedReader in = null;
-        in = new BufferedReader(
-        			new InputStreamReader(new FileInputStream(filename), "utf-8")
-        );
-	
-	    String xml="";
-        String line;
-        while ((line=in.readLine())!=null) xml+=line+"\n";
-        return xml;
+	public static String getXML(String filename)throws Exception {
+
+		InputStream in = null;
+		try {
+			in=new FileInputStream(filename);
+			return IOUtils.toString(in);
+		}finally {
+			if(in!=null) in.close();
+		}
     }    
 	
 	public static String getPackageFilePath(Class<? extends Object> c, String filename) {
@@ -1701,7 +1700,6 @@ public class Util {
     	    List<XSDImport> imports = new ArrayList<XSDImport>();
     	    List<Exception> exceptons = new ArrayList<Exception>();
     	    Map<String,Integer> schemaMonitor = new HashMap<String, Integer>();
-    	    Document doc = Util.parse(xsd);
     	    //no import or include using old getXsdschema()
 //    		if (Util.getNodeList(doc.getDocumentElement(),"//xsd:import").getLength() ==0
 //			|| Util.getNodeList(doc.getDocumentElement(),
