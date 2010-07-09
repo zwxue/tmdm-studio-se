@@ -242,7 +242,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	private XSDSetAnnotationWrapNoAction setAnnotationWrapNoAction = null;
 	private XSDSetAnnotationWriteAction setAnnotationWriteAction = null;
 	
-	//private XSDSetAnnotaionDisplayFormatAction setAnnotationDisplayFomatAction = null;
+	private XSDSetAnnotaionDisplayFormatAction setAnnotationDisplayFomatAction = null;
 	
 	//private XSDSetAnnotationTargetSystemsAction setAnnotationTargetSystemsAction = null;
 	//private XSDSetAnnotationSchematronAction setAnnotationSchematronAction;
@@ -1260,7 +1260,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		this.setAnnotationNoAction = new XSDSetAnnotationNoAction(this,dataModelName);
 		this.setAnnotationWrapNoAction = new XSDSetAnnotationWrapNoAction(this,dataModelName);
 		
-		//this.setAnnotationDisplayFomatAction = new XSDSetAnnotaionDisplayFormatAction(this);
+		this.setAnnotationDisplayFomatAction = new XSDSetAnnotaionDisplayFormatAction(this);
 		
 		//this.copyConceptAction = new XSDCopyConceptAction(this);
 		//this.pasteConceptAction = new XSDPasteConceptAction(this);
@@ -1494,9 +1494,9 @@ public class DataModelMainPage extends AMainPageV2 {
 					case 110:
 						setFacetMsgAction.run();
 						break;
-					/*case 113:
+					case 113:
 						setAnnotationDisplayFomatAction.run();
-						break;*/
+						break;
 					case -1:
 						if(drillDownAdapter.canGoInto()==true)
 							drillDownAdapter.goInto();				
@@ -1792,7 +1792,7 @@ public class DataModelMainPage extends AMainPageV2 {
 				if (((XSDElementDeclaration)obj).getTypeDefinition() instanceof XSDSimpleTypeDefinition)
 				{
 					manager.add(setFacetMsgAction);
-					//manager.add(setAnnotationDisplayFomatAction);
+					manager.add(setAnnotationDisplayFomatAction);
 				}
 				manager.add(new Separator());
 				manager.add(newIdentityConstraintAction);
@@ -1855,7 +1855,7 @@ public class DataModelMainPage extends AMainPageV2 {
 							if (((XSDElementDeclaration)term).getTypeDefinition() instanceof XSDSimpleTypeDefinition)
 							{
 								manager.add(setFacetMsgAction);
-								//manager.add(setAnnotationDisplayFomatAction);
+								manager.add(setAnnotationDisplayFomatAction);
 							}
 							// Xpath
 							manager.add(new Separator());
