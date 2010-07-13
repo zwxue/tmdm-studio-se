@@ -78,7 +78,7 @@ public class GenerateJobDefaultTriggerAction extends Action{
 	        		"Trigger that calls the Talend Job: "+filename,
 	        		false,
 	        		"Update",
-	        		"callJob",
+	        		"amalto/local/service/callJob",
 	        		parameter,
 	        		new WSRoutingRuleExpression[] {express1,express2,express3},
 	        		"C1 Or C2 Or C3",                    		
