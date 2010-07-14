@@ -1335,8 +1335,8 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 			List<Element> elems = spareDoc.selectNodes(urlXquery);
 			for (Element elem : elems)
 			{
-				elem.attributeValue("Url", url);
-				elem.attributeValue("Universe", Universe);
+				elem.addAttribute("Url", url);
+				elem.addAttribute("Universe", Universe);
 			}
 		}
 		
