@@ -2218,7 +2218,8 @@ public class Util {
 		else if (wc.getOperator().equals(WSWhereOperator.EQUALS)) operator="=";
 		else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN)) operator=">";
 		else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN_OR_EQUAL)) operator=">=";
-		else if (wc.getOperator().equals(WSWhereOperator.JOIN)) operator="Contains Text Of";
+		else if (wc.getOperator().equals(WSWhereOperator.CONTAINS_TEXT_OF)) operator="Contains Text Of";
+		else if (wc.getOperator().equals(WSWhereOperator.JOIN)) operator="Join With";
 		else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN)) operator="<";
 		else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN_OR_EQUAL)) operator="<=";
 		else if (wc.getOperator().equals(WSWhereOperator.NOT_EQUALS)) operator="!=";
@@ -2311,7 +2312,10 @@ public class Util {
 			operator = WSWhereOperator.CONTAINS;
 		else if (values[1].equals(
 				"Contains Text Of"))
+			operator = WSWhereOperator.CONTAINS_TEXT_OF;
+		else if(values[1].equals("Join With")){
 			operator = WSWhereOperator.JOIN;
+		}
 		else if (values[1].equals("="))
 			operator = WSWhereOperator.EQUALS;
 		else if (values[1].equals(">"))
