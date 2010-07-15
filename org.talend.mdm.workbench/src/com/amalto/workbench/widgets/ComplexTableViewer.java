@@ -92,7 +92,7 @@ public class ComplexTableViewer {
 	public void setContext(boolean context) {
 		this.context = context;
 	}
-	protected XpathWidget xpath;
+	List<XpathWidget> xpaths=new ArrayList<XpathWidget>();
 	protected DescAnnotationComposite multiMsg;	
 	protected XpathSelectDialog xpathDialog;
 	protected ValidationRuleWidget validationRule;	
@@ -102,8 +102,8 @@ public class ComplexTableViewer {
 
 	public void setConceptName(String conceptName) {
 		this.conceptName = conceptName;
-		if(xpath!=null){
-			xpath.setConceptName(conceptName);
+		for(XpathWidget xpath: xpaths) {			
+			xpath.setConceptName(conceptName);			
 		}
 		if(xpathDialog!=null)xpathDialog.setConceptName(conceptName);
 	}	
@@ -835,7 +835,7 @@ public class ComplexTableViewer {
 		
 	}
 	class XpathCellEditor extends CellEditor implements ICellEditor{
-
+		protected XpathWidget xpath;
 		public XpathWidget getXpath() {
 			return xpath;
 		}
@@ -848,6 +848,7 @@ public class ComplexTableViewer {
 				xpath= new XpathWidget(parent, mainPage,false);
 			else
 				xpath= new XpathWidget(parent,false);
+			xpaths.add(xpath);
 			xpath.setConceptName(conceptName);
 			((GridData)xpath.getComposite().getChildren()[0].getLayoutData()).heightHint=15;
 			((GridData)xpath.getComposite().getChildren()[1].getLayoutData()).heightHint=15;

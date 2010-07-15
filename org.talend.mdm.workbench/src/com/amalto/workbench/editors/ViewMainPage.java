@@ -146,8 +146,9 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             //Where Conditions
             Composite wcGroup = this.getNewSectionComposite("Where Conditions");
             wcGroup.setLayout(new GridLayout(2,false));
-            conditionsColumns[0].setColumnWidth(200);
+            conditionsColumns[0].setColumnWidth(250);
             conditionsColumns[1].setColumnWidth(150);
+            conditionsColumns[2].setColumnWidth(250);
             conditionsColumns[3].setColumnWidth(120);
             conditionViewer=new TisTableViewer(Arrays.asList(conditionsColumns),toolkit,wcGroup);
             conditionViewer.setXpath(true);

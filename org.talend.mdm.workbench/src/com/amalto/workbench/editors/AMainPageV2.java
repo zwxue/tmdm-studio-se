@@ -57,7 +57,7 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
     protected ComplexTableViewerColumn[] conditionsColumns= new ComplexTableViewerColumn[]{
     		new ComplexTableViewerColumn("XPath", false, "newXPath", "newXPath", "",ComplexTableViewerColumn.XPATH_STYLE,new String[] {},0),
     		new ComplexTableViewerColumn("Operator", false, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,IConstants.VIEW_CONDITION_OPERATORS,0),
-    		new ComplexTableViewerColumn("Value", false, "", ""),
+    		new ComplexTableViewerColumn("Value", false, "", "", "",ComplexTableViewerColumn.XPATH_STYLE,new String[] {},0),
     		new ComplexTableViewerColumn("Predicate", true, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,IConstants.PREDICATES,0),
     };
 	protected TableViewWrapper wrap = new TableViewWrapper();;
