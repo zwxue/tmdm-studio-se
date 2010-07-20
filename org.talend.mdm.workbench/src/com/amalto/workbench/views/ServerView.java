@@ -74,6 +74,7 @@ import com.amalto.workbench.actions.BrowseViewAction;
 import com.amalto.workbench.actions.CopyXObjectAction;
 import com.amalto.workbench.actions.DeleteJobAction;
 import com.amalto.workbench.actions.DeleteXObjectAction;
+import com.amalto.workbench.actions.DuplicateXObjectAction;
 import com.amalto.workbench.actions.EditXObjectAction;
 import com.amalto.workbench.actions.GenerateJobDefaultTransformerAction;
 import com.amalto.workbench.actions.GenerateJobDefaultTriggerAction;
@@ -149,6 +150,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     protected Action copyAction;
 
     protected Action pasteAction;
+    
+    protected Action duplicateAction;
 
     protected Action exportAction;
 
@@ -767,6 +770,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                     manager.add(editXObjectAction);
                     manager.add(deleteXObjectAction);
                     manager.add(copyAction);
+                    manager.add(duplicateAction);
                 } else if (xobject.getType() != TreeObject.EVENT_MANAGEMENT
                         && LocalTreeObjectRepository.getInstance().isInSystemCatalog(xobject) == false) {
                     manager.add(newCategoryAction);
@@ -884,6 +888,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         browseViewAction = new BrowseViewAction(this);
         copyAction = new CopyXObjectAction(this);
         pasteAction = new PasteXObjectAction(this);
+        duplicateAction = new DuplicateXObjectAction(this);
 
         exportAction = new ExportItemsAction(this);
         importAction = new ImportItemsAction(this);
