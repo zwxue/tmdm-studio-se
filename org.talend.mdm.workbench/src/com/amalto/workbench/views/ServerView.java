@@ -329,7 +329,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                     || dragType == TreeObject.DATA_MODEL_TYPES_RESOURCE
                     || dragType == TreeObject.CUSTOM_TYPES_RESOURCE
                     || dragType == TreeObject.PICTURES_RESOURCE
-                    || (treeObj.getType() == TreeObject.CATEGORY_FOLDER && xtentisType != dragType)
+                    || (treeObj.getType() == TreeObject.CATEGORY_FOLDER && xtentisType != dragType&& !(dragType==TreeObject.JOB||dragType==TreeObject.WORKFLOW_PROCESS))
                     || (treeObj.getType() == TreeObject.CATEGORY_FOLDER && treeObj.getParent().getType() == dragType && treeObj
                             .getDisplayName().equals("System"))
                     || (LocalTreeObjectRepository.getInstance().isInSystemCatalog(treeObj.getParent()))) {
@@ -391,10 +391,10 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     }
 
     public void forceAllSiteToRefresh() {
-        TreeObject[] childs = getTreeContentProvider().getInvisibleRoot().getChildren();
-        for (TreeObject child : childs) {
-            (new ServerRefreshAction(this, child.getServerRoot())).run();
-        }
+//        TreeObject[] childs = getTreeContentProvider().getInvisibleRoot().getChildren();
+//        for (TreeObject child : childs) {
+//            (new ServerRefreshAction(this, child.getServerRoot())).run();
+//        }
     }
 
     private void transformCatalog(TreeObject remoteObj, ArrayList<TreeObject> transferList) {
