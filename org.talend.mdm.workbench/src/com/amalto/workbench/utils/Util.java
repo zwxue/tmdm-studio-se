@@ -2606,7 +2606,7 @@ public class Util {
 		return checkInCopyTypeElement(selectedObjs)||checkInCOpyTypeParticle(selectedObjs);
 	}
 	
-    public static String checkOnVersionCompatibility(String username, String password, String universe)
+    public static String checkOnVersionCompatibility(String url,String username, String password, String universe)
     {
     	IProduct product = Platform.getProduct();
     	String versionComp = "";
@@ -2625,7 +2625,7 @@ public class Util {
         	int major =  Integer.parseInt(match.group(1));
         	int minor = Integer.parseInt(match.group(2));
         	int rev = match.group(4) != null && !match.group(4).equals("") ? Integer.parseInt(match.group(4)) : 0;
-			XtentisPort port = Util.getPort(universe, username, password);
+			XtentisPort port = Util.getPort(new URL(url),universe, username, password);
 			WSVersion wsVersion = port.getComponentVersion(new WSGetComponentVersion(WSComponent.DataManager,null));
 			versionComp += " while the MDM server is " + wsVersion.getMajor() + "." + wsVersion.getMinor() + "." + wsVersion.getRevision();
 			if(major != wsVersion.getMajor() || minor != wsVersion.getMinor())return versionComp;

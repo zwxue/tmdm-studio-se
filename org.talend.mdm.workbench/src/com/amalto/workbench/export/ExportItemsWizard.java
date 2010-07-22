@@ -429,7 +429,7 @@ public class ExportItemsWizard extends Wizard {
 					try {
 						DefaultHttpClient httpclient = new DefaultHttpClient();
 						httpclient.getCredentialsProvider().setCredentials(
-								new AuthScope("localhost", 8080),
+								new AuthScope(obj.getEndpointHost(), Integer.valueOf(obj.getEndpointPort())),
 								new UsernamePasswordCredentials("admin","talend"));
 						HttpGet httpget = new HttpGet(workflowURL);
 						// System.out.println("executing request" + httpget.getRequestLine());

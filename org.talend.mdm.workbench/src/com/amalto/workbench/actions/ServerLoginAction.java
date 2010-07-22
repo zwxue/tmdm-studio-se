@@ -83,7 +83,7 @@ public class ServerLoginAction extends Action implements SelectionListener{
 		dialog.close();
 
 
-		String cmp = Util.checkOnVersionCompatibility(username, password, universe);
+		String cmp = Util.checkOnVersionCompatibility(url,username, password, universe);
 		if(cmp != null)
 		{
 			MessageDialog.openError(
