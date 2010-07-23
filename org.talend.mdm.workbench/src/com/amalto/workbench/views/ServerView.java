@@ -323,13 +323,13 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             if (treeObj.getParent() == null)
                 System.out.println(treeObj.getDisplayName());
             int xtentisType = LocalTreeObjectRepository.getInstance().receiveUnCertainTreeObjectType(treeObj);
-            if ((treeObj.getType() != dragType && treeObj.getType() != TreeObject.CATEGORY_FOLDER&& !(dragType==TreeObject.JOB||dragType==TreeObject.WORKFLOW_PROCESS))
+            if ((treeObj.getType() != dragType && treeObj.getType() != TreeObject.CATEGORY_FOLDER&& !(dragType==TreeObject.JOB||dragType==TreeObject.TIS_JOB||dragType==TreeObject.WORKFLOW_PROCESS))
                     || dragType == TreeObject.CATEGORY_FOLDER
                     || dragType == TreeObject.DATA_MODEL_RESOURCE
                     || dragType == TreeObject.DATA_MODEL_TYPES_RESOURCE
                     || dragType == TreeObject.CUSTOM_TYPES_RESOURCE
                     || dragType == TreeObject.PICTURES_RESOURCE
-                    || (treeObj.getType() == TreeObject.CATEGORY_FOLDER && xtentisType != dragType&& !(dragType==TreeObject.JOB||dragType==TreeObject.WORKFLOW_PROCESS))
+                    || (treeObj.getType() == TreeObject.CATEGORY_FOLDER && xtentisType != dragType&& !(dragType==TreeObject.JOB||dragType==TreeObject.TIS_JOB||dragType==TreeObject.WORKFLOW_PROCESS))
                     || (treeObj.getType() == TreeObject.CATEGORY_FOLDER && treeObj.getParent().getType() == dragType && treeObj
                             .getDisplayName().equals("System"))
                     || (LocalTreeObjectRepository.getInstance().isInSystemCatalog(treeObj.getParent()))) {
