@@ -65,20 +65,20 @@ public class ObjectRetriever implements IRunnableWithProgress {
                 break;
             }
             XtentisPort port = Util.getPort(new URL(endpointaddress), universe, username, password);
-            port.ping(new WSPing("Hello MDM!"));
-            monitor.worked(1);
+//            port.ping(new WSPing("Hello MDM!"));
+//            monitor.worked(1);
 
-            WSUniverse wUuniverse = null;
-            wUuniverse = port.getCurrentUniverse(new WSGetCurrentUniverse());
-            monitor.subTask("Accessing server....");
-
-            UserInfo user = new UserInfo();
-            user.setUsername(username);
-            user.setPassword(password);
-            user.setServerUrl(endpointaddress);
-            user.setUniverse(universe);
-            user.setWsUuniverse(wUuniverse);
-            parentObject.setUser(user);
+//            WSUniverse wUuniverse = null;
+//            wUuniverse = port.getCurrentUniverse(new WSGetCurrentUniverse());
+//            monitor.subTask("Accessing server....");
+//
+//            UserInfo user = new UserInfo();
+//            user.setUsername(username);
+//            user.setPassword(password);
+//            user.setServerUrl(endpointaddress);
+//            user.setUniverse(universe);
+//            user.setWsUuniverse(wUuniverse);
+//            parentObject.setUser(user);
 
             parentObject.getServerRoot().removeChild(parentObject);
             List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
@@ -93,9 +93,7 @@ public class ObjectRetriever implements IRunnableWithProgress {
             e.printStackTrace();
         } catch (XtentisException e) {
             e.printStackTrace();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+        } 
 
     }
 
