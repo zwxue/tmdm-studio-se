@@ -49,12 +49,29 @@ public class TreeParent extends TreeObject {
 		this.fireEvent(IXObjectModelListener.DELETE, this, child);
 	
 	}
+	
+	public void removeChildForUI(TreeObject child) {
+		if (child instanceof TreeParent) {
+			TreeObject[] subchildren = ((TreeParent)child).getChildren();
+			for (int i = 0; i < subchildren.length; i++) {
+				((TreeParent)child).removeChildForUI(subchildren[i]);
+			}
+        }		
+		children.remove(child);
+		child.setParent(null);
+	}
     
     public void removeChildren() {
         TreeObject[] allchildren = this.getChildren();
         for (int i = 0; i < allchildren.length; i++) {
             this.removeChild(allchildren[i]);
         }
+    }
+    public void removeChildrenForUI() {
+    	TreeObject[] allchildren = this.getChildren();
+    	for (int i = 0; i < allchildren.length; i++) {
+    		this.removeChildForUI(allchildren[i]);
+    	}
     }
 	public boolean containsChild(TreeObject child) {
 		TreeObject[] allchildren = this.getChildren();
