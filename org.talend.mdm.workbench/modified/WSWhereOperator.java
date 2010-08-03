@@ -58,6 +58,9 @@ public class WSWhereOperator {
         this.value = value;
         valueMap.put(this.toString(), this);
     }
+    public WSWhereOperator() {
+    	
+    }
     
     public java.lang.String getValue() {
         return value;
