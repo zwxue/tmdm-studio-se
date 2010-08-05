@@ -54,12 +54,13 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
 
 	protected boolean comitting;
 	protected boolean refreshing;
-    protected ComplexTableViewerColumn[] conditionsColumns= new ComplexTableViewerColumn[]{
-    		new ComplexTableViewerColumn("XPath", false, "newXPath", "newXPath", "",ComplexTableViewerColumn.XPATH_STYLE,new String[] {},0),
-    		new ComplexTableViewerColumn("Operator", false, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,IConstants.VIEW_CONDITION_OPERATORS,0),
-    		new ComplexTableViewerColumn("Value", false, "", "", "",ComplexTableViewerColumn.XPATH_STYLE,new String[] {},0),
-    		new ComplexTableViewerColumn("Predicate", true, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,IConstants.PREDICATES,0),
-    };
+	protected boolean isCompositeView=true; 
+  
+	public void setCompositeView(boolean isCompositeView) {
+		this.isCompositeView = isCompositeView;
+	}
+
+	protected ComplexTableViewerColumn[] conditionsColumns;
 	protected TableViewWrapper wrap = new TableViewWrapper();;
 	protected TisTableViewer conditionViewer;
 	public boolean isComitting() {
@@ -85,7 +86,7 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
 	
     public AMainPageV2(FormEditor editor,String id, String title) {
     	super(editor,id, title);        
-    	
+  
     }
 
     public void update(Observable o, Object arg)
@@ -153,7 +154,7 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
 	    	//This part is meant to track dirty states
 	    	topFormPart = new TopFormPart();
 	    	getManagedForm().addPart(topFormPart);
-                        
+//             initCoditionsColumns();           
             createCharacteristicsContent(toolkit, topFormPart.getComposite());
            
             //adapt body add mouse/focus listener for child
@@ -166,7 +167,21 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
     }//createFormContent
 
  
-    /**
+    protected void initCoditionsColumns() {
+      	ComplexTableViewerColumn operatorColumn;
+		if(isCompositeView)
+    		operatorColumn = new ComplexTableViewerColumn("Operator", false, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,IConstants.COMPOSITE_VIEW_CONDITION_OPERATORS,0);
+		else
+			operatorColumn = new ComplexTableViewerColumn("Operator", false, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,IConstants.VIEW_CONDITION_OPERATORS,0);
+    	conditionsColumns= new ComplexTableViewerColumn[]{
+        		new ComplexTableViewerColumn("XPath", false, "newXPath", "newXPath", "",ComplexTableViewerColumn.XPATH_STYLE,new String[] {},0),
+        		operatorColumn,
+        		new ComplexTableViewerColumn("Value", false, "", "", "",ComplexTableViewerColumn.XPATH_STYLE,new String[] {},0),
+        		new ComplexTableViewerColumn("Predicate", true, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,IConstants.PREDICATES,0),};
+	}
+
+
+	/**
      * The composite containing the actual characteristics form
      * By default its layout is GridLayout of 2 columns
      * @param charSection

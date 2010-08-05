@@ -142,6 +142,9 @@ public class ComplexTableViewer {
 		return deleteButton;
 	}
 
+	public void setColumns(List<ComplexTableViewerColumn> columns) {
+		this.columns = columns;
+	}
 	public List<ComplexTableViewerColumn> getColumns() {
     	return columns;
     }
@@ -938,6 +941,26 @@ public class ComplexTableViewer {
 	}
 	public void removeTableModifyListener(ITableModifyListener listener) {
 		modifyList.remove(listener);
+	}
+	public void updateEditoes(CellEditor[] editors) {
+        for(int i=0; i< columns.size(); i++){
+        	if(columns.get(i).isText()){        		
+        		editors[i] = new TextCellEditor(table);        		
+        	}
+        	else if(columns.get(i).isCombo())
+        	{
+        		editors[i] = new ComboBoxCellEditor(table, ((ComplexTableViewerColumn)columns.get(i)).getComboValues(), SWT.READ_ONLY);	
+        	}else if(columns.get(i).isXPATH()){
+        		editors[i]= new XpathCellEditor(table);
+        	}else if(columns.get(i).isMultiMessage()){
+        		editors[i]= new MultiMessageEditor(table);
+        		multiMsg.setColumn(table.getColumn(i));
+	        }else if(columns.get(i).isValidationRule()){
+	    		editors[i]= new ValidationRuleEditor(table);
+	    		validationRule.setColumn(table.getColumn(i));
+	    	}        		        
+        }
+
 	}
 }
 

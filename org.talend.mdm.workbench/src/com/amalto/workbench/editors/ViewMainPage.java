@@ -99,6 +99,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
         );     
 //       this.treeParent = this.getXObject().getParent();
        this.viewName = ((XObjectEditorInput)editor.getEditorInput()).getName();
+
     }
    
 	protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
@@ -144,6 +145,11 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             
             
             //Where Conditions
+            if(viewName.startsWith("Browse_items_"))
+            	setCompositeView(false);
+    		else
+    			setCompositeView(true);
+            initCoditionsColumns();
             Composite wcGroup = this.getNewSectionComposite("Where Conditions");
             wcGroup.setLayout(new GridLayout(2,false));
             conditionsColumns[0].setColumnWidth(250);
