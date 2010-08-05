@@ -3,7 +3,6 @@ package com.amalto.workbench.models;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.rmi.RemoteException;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -12,12 +11,8 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.utils.IConstants;
-import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSGetCurrentUniverse;
-import com.amalto.workbench.webservices.WSPing;
-import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class ObjectRetriever implements IRunnableWithProgress {
@@ -80,10 +75,10 @@ public class ObjectRetriever implements IRunnableWithProgress {
 //            user.setWsUuniverse(wUuniverse);
 //            parentObject.setUser(user);
 
-            parentObject.getServerRoot().removeChild(parentObject);
             List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
             for (IAvailableModel model : availablemodels) {
                 if (model.toString().indexOf(objectName) > 0) {
+                	parentObject.getServerRoot().removeChildFromUI(parentObject);
                     model.addTreeObjects(port, monitor, parentObject.getServerRoot());
                     // break;
                 }

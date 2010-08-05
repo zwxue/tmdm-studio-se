@@ -50,6 +50,18 @@ public class TreeParent extends TreeObject {
 	
 	}
     
+	public void removeChildFromUI(TreeObject child) {
+		if (child instanceof TreeParent) {
+			TreeObject[] subchildren = ((TreeParent)child).getChildren();
+			for (int i = 0; i < subchildren.length; i++) {
+				((TreeParent)child).removeChildFromUI(subchildren[i]);
+			}
+        }		
+		children.remove(child);
+		child.setParent(null);
+		//this.fireEvent(IXObjectModelListener.DELETE, this, child);
+	
+	}	
     public void removeChildren() {
         TreeObject[] allchildren = this.getChildren();
         for (int i = 0; i < allchildren.length; i++) {
