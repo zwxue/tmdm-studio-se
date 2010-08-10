@@ -98,6 +98,7 @@ import com.amalto.workbench.webservices.WSGetDataModel;
 import com.amalto.workbench.webservices.WSGetItem;
 import com.amalto.workbench.webservices.WSGetItemPKsByCriteria;
 import com.amalto.workbench.webservices.WSGetItemPKsByFullCriteria;
+import com.amalto.workbench.webservices.WSIsItemModifiedByOther;
 import com.amalto.workbench.webservices.WSItem;
 import com.amalto.workbench.webservices.WSItemPK;
 import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults;
@@ -825,11 +826,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 		public void run() {
 			try {
 				super.run();
-				
+				final XtentisPort port=Util.getPort(getXObject());
 				IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
 				LineItem li = (LineItem) selection.getFirstElement();
 				if(li==null) return ;
-				WSItem wsItem=Util.getPort(getXObject()).getItem(
+				final WSItem wsItem=port.getItem(
 						new WSGetItem(
 								new WSItemPK(
 										(WSDataClusterPK)getXObject().getWsKey(),
@@ -841,7 +842,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 				String xml = wsItem.getContent();
 				
 				WSDataModelPK[] dmPKs = 
-					Util.getPort(getXObject()).getDataModelPKs(
+					port.getDataModelPKs(
 							new WSRegexDataModelPKs("*")
 					).getWsDataModelPKs();
 				ArrayList<String> dataModels = new ArrayList<String>();
@@ -865,14 +866,29 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         				if (event.button == DOMViewDialog.BUTTON_SAVE) {
         					//attempt to save
         					try {
-	        					Util.getPort(getXObject()).putItem(
-	        							new WSPutItem(
-	        									(WSDataClusterPK)getXObject().getWsKey(),
-	        									d.getXML(),
-	        									"".equals(d.getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()),
-	        											false
-	        							)
-	        					);
+        						//check the item is modified by others?
+        						boolean isModified=port.isItemModifiedByOther(new WSIsItemModifiedByOther(wsItem)).is_true();
+        						if(isModified) {
+        							if(MessageDialog.openConfirm(null,"Confirm", "This object was also modified by somebody else. If you save now, you will overwrite his or her changes. Are you sure you want to do that?")) {        						
+		        						port.putItem(
+			        							new WSPutItem(
+			        									(WSDataClusterPK)getXObject().getWsKey(),
+			        									d.getXML(),
+			        									"".equals(d.getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()),
+			        											false
+			        							)
+			        					);
+        							}
+        						}else {
+        							port.putItem(
+		        							new WSPutItem(
+		        									(WSDataClusterPK)getXObject().getWsKey(),
+		        									d.getXML(),
+		        									"".equals(d.getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()),
+		        											false
+		        							)
+		        					);        							
+        						}
 	        					//previousDataModel = d.getDataModelName();
         					}catch (Exception e) {
         						MessageDialog.openError(
