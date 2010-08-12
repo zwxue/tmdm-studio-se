@@ -1,6 +1,7 @@
 package com.amalto.workbench.export;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.Reader;
 import java.net.URL;
@@ -8,6 +9,9 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Hashtable;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.io.IOUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -20,13 +24,13 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.IEditorPart;
@@ -34,6 +38,8 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.UIJob;
 import org.exolab.castor.xml.Unmarshaller;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.talend.mdm.commmon.util.core.CommonUtil;
 import org.talend.mdm.commmon.util.workbench.ZipToFile;
 
@@ -111,6 +117,8 @@ public class ImportItemsWizard extends Wizard{
 	private FileSelectWidget folder;
 	private Button zipBtn;
 	private Button folderBtn;
+	private Button exchangeSrvBtn;
+	private CCombo exchangeDwnListCbo;
 	private FileSelectWidget  zip;
 	private String zipfile;
 	private ServerView view;
@@ -118,6 +126,8 @@ public class ImportItemsWizard extends Wizard{
 	private Hashtable<String,String[]> dataClusterContent=new Hashtable<String,String[]>();
 	private TreeParent serverRoot;
 	private XtentisPort port=null;
+	
+	private static String EXCHANGE_DOWNLOAD_URL = "http://www.talendforge.org/exchange/mdm/api/get_last_extensions.php";
 	
 	public ImportItemsWizard(IStructuredSelection sel,ServerView view){
 		this.sel=sel;
@@ -904,12 +914,43 @@ public class ImportItemsWizard extends Wizard{
 		public void checkCompleted(){
 			if(folderBtn.getSelection() && folder.getText().getText().length()>0 && new File(folder.getText().getText()).exists()){
 				setPageComplete(true);
+				exchangeDwnListCbo.setText("");
 			}	
 			if(zipBtn.getSelection() && zip.getText().getText().length()>0 && new File(zip.getText().getText()).getParentFile().exists()){
 				setPageComplete(true);
+				exchangeDwnListCbo.setText("");
 			}
 			
+			if(exchangeSrvBtn.getSelection() && exchangeDwnListCbo.getText().length() > 0){
+				setPageComplete(true);
+			}
 		}
+		
+		private void fillInDownloadFromExchange()
+		{
+			exchangeDwnListCbo.removeAll();
+	        HttpClient client = new HttpClient();  
+	        GetMethod get = new GetMethod(EXCHANGE_DOWNLOAD_URL); 
+			try {
+				client.executeMethod(get);
+				String out = get.getResponseBodyAsString();
+				JSONArray jsonArray = new JSONArray(out);
+				for (int i = 0; i < jsonArray.length(); i++)
+				{
+					JSONObject jsonObject = jsonArray.getJSONObject(i);
+					String name = jsonObject.get("name").toString();
+					if(name.equals("Talendshop Demo"))
+					{
+						String url = jsonObject.get("url").toString();
+						exchangeDwnListCbo.add(url, i);
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 
+
+		}
+		
 		public void createControl(Composite parent) {
 			  Composite composite = new Composite(parent, SWT.BORDER);
 			  composite.setLayout(new GridLayout(2,false));
@@ -952,6 +993,70 @@ public class ImportItemsWizard extends Wizard{
 					}					  
 				  });	
 			  zip.getText().addListener(SWT.Modify, new PageListener(this));
+			  
+			  exchangeSrvBtn = new Button(composite,SWT.RADIO);
+			  exchangeSrvBtn.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false,
+						false, 1, 1));
+			  exchangeSrvBtn.setText("import in exchange Server View:");
+			  exchangeSrvBtn.addSelectionListener(new SelectionListener(){
+
+				public void widgetDefaultSelected(SelectionEvent e) {
+					
+				}
+
+				public void widgetSelected(SelectionEvent e) {
+					exchangeDwnListCbo.setEnabled(exchangeSrvBtn.getSelection());
+					fillInDownloadFromExchange();
+					setPageComplete(false);
+				}
+				  
+			  });
+			  
+			  exchangeDwnListCbo = new CCombo(composite,SWT.SINGLE | SWT.BORDER);
+			  exchangeDwnListCbo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
+						false, 1, 1));
+			  exchangeDwnListCbo.addSelectionListener(new SelectionListener(){
+
+				public void widgetDefaultSelected(SelectionEvent e) {}
+
+				public void widgetSelected(SelectionEvent e) {
+					String url = exchangeDwnListCbo.getText();
+			        HttpClient client = new HttpClient();  
+			        GetMethod get = new GetMethod(url);
+			        
+			        try {
+						client.executeMethod(get);
+						importFolder=  System.getProperty("user.dir");
+				        File tempFile = new File(
+				                importFolder + File.separator + "tmp" + System.currentTimeMillis());
+
+                        IOUtils.write(get.getResponseBody(), new FileOutputStream(tempFile));
+						ZipToFile.unZipFile(tempFile.getAbsolutePath(), importFolder);
+						
+				        boolean result = false;
+				        int tryCount = 0;
+				        while(!result && tryCount++ <10)
+				        {
+				            System.gc();
+				            result = tempFile.delete();
+				        }
+						parse();
+						checkCompleted();
+					} catch (Exception e1) {
+						
+						exchangeDwnListCbo.setText("");
+						
+						final MessageDialog dialog = new MessageDialog(view.getSite()
+								.getShell(), "parsing error", null,  e1.getMessage(), MessageDialog.ERROR,
+								new String[] { IDialogConstants.OK_LABEL }, 0);
+						dialog.open();
+					} 
+				}
+				  
+			  });
+			  exchangeDwnListCbo.setEnabled(false);
+			  exchangeDwnListCbo.setEditable(false);
+			  
 //			  zip.getButton().addListener(SWT.Selection, new PageListener(this));
 			  folder.getText().addListener(SWT.Modify, new PageListener(this));
 //			  folder.getButton().addListener(SWT.Selection, new PageListener(this));

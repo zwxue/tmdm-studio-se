@@ -8,6 +8,7 @@ package com.amalto.workbench.editors;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
@@ -24,6 +25,8 @@ import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -33,6 +36,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -119,6 +123,7 @@ import org.eclipse.xsd.impl.XSDParticleImpl;
 import org.eclipse.xsd.impl.XSDSimpleTypeDefinitionImpl;
 import org.eclipse.xsd.impl.XSDXPathDefinitionImpl;
 import org.talend.mdm.commmon.util.core.CommonUtil;
+import org.talend.mdm.commmon.util.workbench.ZipToFile;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -2372,7 +2377,16 @@ public class DataModelMainPage extends AMainPageV2 {
 			if (match.matches()) {
 				importSchemaWithURL(fileName);
 			} else {
-				importSchemaFromFile(fileName);
+				Pattern exchangeUrl = Pattern.compile("(http://talendforge.org/exchange)(.*)");
+				match = exchangeUrl.matcher(fileName);
+				if(match.matches())
+				{
+				   importSchemaFromExchangeServer(fileName);
+				}
+				else
+				{
+					importSchemaFromFile(fileName);
+				}
 			}
 		}
 	}
@@ -2382,6 +2396,46 @@ public class DataModelMainPage extends AMainPageV2 {
 		 String response = Util.getResponseFromURL(url, getXObject());
 		 InputSource source = new InputSource(new StringReader(response));
 		 importSchema(source, url);
+	}
+	
+	private void importSchemaFromExchangeServer(String fileName) throws IllegalAccessException
+	{
+        HttpClient client = new HttpClient();  
+        GetMethod get = new GetMethod("http://talendforge.org/exchange/mdm/download.php?rid=4");
+        try 
+        {
+			client.executeMethod(get);
+			String importFolder=  System.getProperty("user.dir") + File.separator + "tmp";
+	        File tempFile = new File(
+	                importFolder + System.currentTimeMillis());
+	        File tempDir = new File(importFolder);
+	        
+            IOUtils.write(get.getResponseBody(), new FileOutputStream(tempFile));
+			ZipToFile.unZipFile(tempFile.getAbsolutePath(), importFolder);
+			
+	        boolean result = false;
+	        int tryCount = 0;
+	        while(!result && tryCount++ <10)
+	        {
+	            System.gc();
+	            result = tempFile.delete();
+	        }
+	        
+			
+			for (File file :tempDir.listFiles())
+			{
+				importSchemaFromFile(file.getAbsolutePath());
+			}
+
+
+		} catch (Exception e1) {
+			
+			final MessageDialog dialog = new MessageDialog(getSite().getShell()
+					.getShell(), "parsing error", null,  e1.getMessage(), MessageDialog.ERROR,
+					new String[] { IDialogConstants.OK_LABEL }, 0);
+			dialog.open();
+			throw new IllegalAccessException(e1.getMessage());
+		} 
 	}
 	
 	private void importSchemaFromFile(String fileName) throws Exception

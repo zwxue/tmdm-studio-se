@@ -6,21 +6,21 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -29,6 +29,7 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -44,6 +45,8 @@ import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSchemaContent;
 import org.eclipse.xsd.impl.XSDImportImpl;
 import org.eclipse.xsd.impl.XSDIncludeImpl;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -69,6 +72,8 @@ public class SelectImportedModulesDialog extends Dialog{
 	private static final Image LOCAL= ImageCache.getCreatedImage(EImage.SERVER.getPath());
 	private static final Image MDM_WEB= ImageCache.getCreatedImage(EImage.SERVERNOTRUNNING.getPath());
 	private static final Image OTHER_WEB = ImageCache.getCreatedImage(EImage.SERVERNAVIGATOR.getPath());
+	
+	private static String EXCHANGE_DOWNLOAD_URL = "http://www.talendforge.org/exchange/mdm/api/get_last_extensions.php";
 	
 	private String LOCAL_MDM_URL = null;
 	
@@ -208,6 +213,60 @@ public class SelectImportedModulesDialog extends Dialog{
 	        	}
 			});
 		}
+		
+		
+		Button  impXSDFromExchange = new Button(compositeBtn,SWT.PUSH | SWT.FILL);
+		impXSDFromExchange.setLayoutData(
+                new GridData(SWT.FILL,SWT.NONE,false,false,1,1)
+        );
+		impXSDFromExchange.setText("Import xsd schema from exchange server");
+		impXSDFromExchange.setToolTipText("Import xsd schema from exchange server");
+		impXSDFromExchange.addSelectionListener(new SelectionListener() {
+
+			public void widgetDefaultSelected(SelectionEvent e) {}
+
+			public void widgetSelected(SelectionEvent e) {
+				MDMXSDSchemaEntryDialog dlg = new MDMXSDSchemaEntryDialog(shell.getShell(), "import XSD Schema from exchange server");
+            	HashMap<String, String> nameToUrlMap = new HashMap<String, String>();
+                try {
+                	ArrayList<String> schemaList = new ArrayList<String>();
+        	        HttpClient client = new HttpClient();  
+        	        GetMethod get = new GetMethod(EXCHANGE_DOWNLOAD_URL); 
+
+    				client.executeMethod(get);
+    				String out = get.getResponseBodyAsString();
+    				JSONArray jsonArray = new JSONArray(out);
+    				for (int i = 0; i < jsonArray.length(); i++)
+    				{
+    					JSONObject jsonObject = jsonArray.getJSONObject(i);
+    					String name = jsonObject.get("name").toString();
+    					schemaList.add(name);
+    					nameToUrlMap.put(name, jsonObject.get("url").toString());
+    				}
+
+    				dlg.create();
+    				dlg.retrieveDataModels(schemaList, false);
+        			
+    			} catch (Exception es) {
+    				es.printStackTrace();
+    				return;
+    			}
+        		dlg.setBlockOnOpen(true);
+        		dlg.open();
+        		if (dlg.getReturnCode() == Window.OK)  {
+        			List<String> names = dlg.getMDMDataModelUrls();
+        			for(String nm: names)
+        			{
+            			XSDDesc xsdDesc = buildUp(nameToUrlMap.get(nm), MDM_WEB, 1);
+            			include(xsdDesc);
+        			}
+        			getButton(IDialogConstants.OK_ID).setEnabled(true);
+        			tableViewer.refresh();
+        		}
+			}
+			
+		});
+		
 		Button addXSDFromInputDlg = new Button(compositeBtn,SWT.PUSH | SWT.FILL);
 		addXSDFromInputDlg.setLayoutData(
                 new GridData(SWT.FILL,SWT.NONE,false,false,1,1)
