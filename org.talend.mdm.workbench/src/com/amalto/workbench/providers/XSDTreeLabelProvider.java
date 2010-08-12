@@ -186,9 +186,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
 						   return "Foreign Key resolution:  "+e.getChildNodes().item(0).getNodeValue();
 						}if(source.equals("X_ForeignKey_Filter")) {
 						   return "Foreign Key Filter:  "+e.getChildNodes().item(0).getNodeValue();
-						} else if(source.equals("X_Retrieve_FKinfos")) {
-						   return "Foreign Key Filter:  "+e.getChildNodes().item(0).getNodeValue();
-						}else {
+						} else {
 							return source+": "+Util.nodeToString((Element)obj);
 						}
 					} else {
