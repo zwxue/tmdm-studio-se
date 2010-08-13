@@ -22,14 +22,14 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.osgi.framework.Bundle;
 import org.talend.core.ui.branding.DefaultBrandingConfiguration;
 import org.talend.core.ui.branding.IBrandingConfiguration;
-import org.talend.core.ui.branding.IBrandingService;
+import org.talend.core.ui.branding.AbstractBrandingService;
 import org.talend.rcp.branding.tombundle.i18n.Messages;
 
 /**
  * DOC smallet class global comment. Detailled comment <br/>
  * 
  */
-public class TOMBundleBrandingService implements IBrandingService {
+public class TOMBundleBrandingService extends AbstractBrandingService {
 
     protected IBrandingConfiguration brandingConfigure;
 
