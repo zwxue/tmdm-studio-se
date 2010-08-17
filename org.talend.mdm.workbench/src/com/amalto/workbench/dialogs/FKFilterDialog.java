@@ -48,12 +48,12 @@ public class FKFilterDialog extends Dialog {
 		columns= new ComplexTableViewerColumn[]{
 	    		new ComplexTableViewerColumn("XPath", false, "newXPath", "newXPath", "",ComplexTableViewerColumn.XPATH_STYLE,new String[] {},0),
 	    		new ComplexTableViewerColumn("Operator", false, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,IConstants.VIEW_CONDITION_OPERATORS,0),
-	    		new ComplexTableViewerColumn("Value", false, "", ""),
+	    		new ComplexTableViewerColumn("Value", false, "", "", "",ComplexTableViewerColumn.XPATH_STYLE,new String[] {},0),
 	    		new ComplexTableViewerColumn("Predicate", true, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,IConstants.PREDICATES,0),
 	    };
 	    columns[0].setColumnWidth(200);
 	    columns[1].setColumnWidth(140);
-	    columns[2].setColumnWidth(140);	   
+	    columns[2].setColumnWidth(200);	   
 	    columns[3].setColumnWidth(140);
 	    viewer=new TisTableViewer(Arrays.asList(columns),new WidgetFactory(),composite);
 	    viewer.setXpath(true);
@@ -63,7 +63,7 @@ public class FKFilterDialog extends Dialog {
 	    viewer.create();
 	    viewer.getViewer().setInput(parseRules());
 	    viewer.setHeight(140);
-	    viewer.setWidth(620);
+	    viewer.setWidth(680);
 	    viewer.getMainComposite().setLayoutData( new GridData(SWT.FILL,SWT.FILL,true,true,2,3));
 	    parent.getShell().addDisposeListener(new DisposeListener() {
 			
