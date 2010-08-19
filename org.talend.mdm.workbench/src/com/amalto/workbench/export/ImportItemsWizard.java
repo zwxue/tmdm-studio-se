@@ -175,10 +175,11 @@ public class ImportItemsWizard extends Wizard{
 						}
 						
 					}.schedule();
-					//keep the importFolder dir to maintain the data from talend exchange server
-//					if(zipfile!=null){
-//						ZipToFile.deleteDirectory(new File(importFolder));
-//					}
+
+					if(zipfile!=null){
+						importFolder=  System.getProperty("user.dir")+"/temp";
+						ZipToFile.deleteDirectory(new File(importFolder));
+					}
 				}
 			}			
 		};

@@ -2377,16 +2377,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			if (match.matches()) {
 				importSchemaWithURL(fileName);
 			} else {
-				Pattern exchangeUrl = Pattern.compile("(http://talendforge.org/exchange)(.*)");
-				match = exchangeUrl.matcher(fileName);
-				if(match.matches())
-				{
-				   importSchemaFromExchangeServer(fileName);
-				}
-				else
-				{
 					importSchemaFromFile(fileName);
-				}
 			}
 		}
 	}
@@ -2398,45 +2389,6 @@ public class DataModelMainPage extends AMainPageV2 {
 		 importSchema(source, url);
 	}
 	
-	private void importSchemaFromExchangeServer(String fileName) throws IllegalAccessException
-	{
-        HttpClient client = new HttpClient();  
-        GetMethod get = new GetMethod("http://talendforge.org/exchange/mdm/download.php?rid=4");
-        try 
-        {
-			client.executeMethod(get);
-			String importFolder=  System.getProperty("user.dir") + File.separator + "tmp";
-	        File tempFile = new File(
-	                importFolder + System.currentTimeMillis());
-	        File tempDir = new File(importFolder);
-	        
-            IOUtils.write(get.getResponseBody(), new FileOutputStream(tempFile));
-			ZipToFile.unZipFile(tempFile.getAbsolutePath(), importFolder);
-			
-	        boolean result = false;
-	        int tryCount = 0;
-	        while(!result && tryCount++ <10)
-	        {
-	            System.gc();
-	            result = tempFile.delete();
-	        }
-	        
-			
-			for (File file :tempDir.listFiles())
-			{
-				importSchemaFromFile(file.getAbsolutePath());
-			}
-
-
-		} catch (Exception e1) {
-			
-			final MessageDialog dialog = new MessageDialog(getSite().getShell()
-					.getShell(), "parsing error", null,  e1.getMessage(), MessageDialog.ERROR,
-					new String[] { IDialogConstants.OK_LABEL }, 0);
-			dialog.open();
-			throw new IllegalAccessException(e1.getMessage());
-		} 
-	}
 	
 	private void importSchemaFromFile(String fileName) throws Exception
 	{

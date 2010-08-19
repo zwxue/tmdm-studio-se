@@ -250,7 +250,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements  SelectionLis
         try {
 	        GetMethod get = new GetMethod(datum.getString("download_url"));
 			client.executeMethod(get);
-			String downloadFolder = System.getProperty("user.dir") + File.separator + "temp";
+			String downloadFolder = System.getProperty("user.dir") + File.separator + (export ? "temp" : "xsdTemp");
 			String subFolderForTmp = downloadFolder + File.separator + "tmp" + System.currentTimeMillis();
 	        File tempFile = new File(
 	        		subFolderForTmp + File.separator + "tmp" + System.currentTimeMillis());

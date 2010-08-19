@@ -1802,6 +1802,14 @@ public class Util {
 		
 		documentBuilder = documentBuilderFactory.newDocumentBuilder();
 		if(rawData == null) return XSDSchemaImpl.getSchemaForSchema("http://www.w3.org/2001/XMLSchema");
+		if(rawData.endsWith(".xsd") && rawData.indexOf(File.separator) > 0)
+		{
+			File rawFile = new File(rawData);
+			if(!rawFile.exists())
+			{
+				throw new IllegalArgumentException(rawData);
+			}
+		}
 		if(rawData.equals("http://www.w3.org/2001/03/xml.xsd"))
 		{
 			URL url = new java.net.URI("http://www.w3.org/2001/03/xml.xsd").toURL();
