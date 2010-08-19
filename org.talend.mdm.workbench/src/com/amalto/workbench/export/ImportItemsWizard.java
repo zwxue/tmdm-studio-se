@@ -1,7 +1,6 @@
 package com.amalto.workbench.export;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.Reader;
 import java.net.URL;
@@ -9,9 +8,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Hashtable;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.io.IOUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -21,10 +17,10 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -36,15 +32,15 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.progress.UIJob;
 import org.exolab.castor.xml.Unmarshaller;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.talend.mdm.commmon.util.core.CommonUtil;
 import org.talend.mdm.commmon.util.workbench.ZipToFile;
 
 import com.amalto.workbench.actions.ServerRefreshAction;
 import com.amalto.workbench.dialogs.ErrorExceptionDialog;
+import com.amalto.workbench.dialogs.ImportExchangeOptionsDialog;
 import com.amalto.workbench.editors.XObjectBrowser;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.models.TreeObject;
@@ -108,17 +104,17 @@ import com.amalto.workbench.webservices.WSWorkflowProcessDefinitionUUID;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.FileSelectWidget;
 import com.amalto.workbench.widgets.RepositoryCheckTreeViewer;
+import com.amalto.workbench.widgets.WidgetFactory;
 
 public class ImportItemsWizard extends Wizard{
     private IStructuredSelection sel;
 	private RepositoryCheckTreeViewer treeViewer;
 	private String importFolder;
+	private StringBuffer zipFileRepository = new StringBuffer();;
 	
 	private FileSelectWidget folder;
 	private Button zipBtn;
 	private Button folderBtn;
-	private Button exchangeSrvBtn;
-	private CCombo exchangeDwnListCbo;
 	private FileSelectWidget  zip;
 	private String zipfile;
 	private ServerView view;
@@ -127,7 +123,6 @@ public class ImportItemsWizard extends Wizard{
 	private TreeParent serverRoot;
 	private XtentisPort port=null;
 	
-	private static String EXCHANGE_DOWNLOAD_URL = "http://www.talendforge.org/exchange/mdm/api/get_last_extensions.php";
 	
 	public ImportItemsWizard(IStructuredSelection sel,ServerView view){
 		this.sel=sel;
@@ -145,7 +140,7 @@ public class ImportItemsWizard extends Wizard{
 		closeOpenEditors();
 		if(zipBtn.getSelection()){
 			zipfile=zip.getText().getText();
-			importFolder=  System.getProperty("user.dir")+"/temp";
+//			importFolder=  System.getProperty("user.dir")+"/temp";
 			try {
 				ZipToFile.unZipFile(zipfile, importFolder);
 			} catch (Exception e) {
@@ -180,9 +175,10 @@ public class ImportItemsWizard extends Wizard{
 						}
 						
 					}.schedule();
-					if(zipfile!=null){
-						ZipToFile.deleteDirectory(new File(importFolder));
-					}
+					//keep the importFolder dir to maintain the data from talend exchange server
+//					if(zipfile!=null){
+//						ZipToFile.deleteDirectory(new File(importFolder));
+//					}
 				}
 			}			
 		};
@@ -235,10 +231,28 @@ public class ImportItemsWizard extends Wizard{
         return super.performCancel();
     }
     
+	private void checkUpExchangeImport(boolean check)
+	{
+		if(check)
+		{
+			if (!zipFileRepository.toString().equals("")) {
+				int pos = zipFileRepository.toString().lastIndexOf(File.separator);
+				importFolder = zipFileRepository.toString().substring(0, pos);
+			}
+		}
+		else
+		{
+			if(zipFileRepository.length() > 0)
+			   zipFileRepository.delete(0, zipFileRepository.length());
+		}
+
+	}
+	
 	public void parse() {
 		if(zipBtn.getSelection()){
 			zipfile=zip.getText().getText();
-			importFolder=  System.getProperty("user.dir")+"/temp";
+			importFolder=  System.getProperty("user.dir")+ File.separator + "temp" + File.separator + "tmp" + System.currentTimeMillis();
+			checkUpExchangeImport(true);
 			try {
 				ZipToFile.unZipFile(zipfile, importFolder);
 			} catch (Exception e) {
@@ -914,54 +928,27 @@ public class ImportItemsWizard extends Wizard{
 		public void checkCompleted(){
 			if(folderBtn.getSelection() && folder.getText().getText().length()>0 && new File(folder.getText().getText()).exists()){
 				setPageComplete(true);
-				exchangeDwnListCbo.setText("");
 			}	
 			if(zipBtn.getSelection() && zip.getText().getText().length()>0 && new File(zip.getText().getText()).getParentFile().exists()){
 				setPageComplete(true);
-				exchangeDwnListCbo.setText("");
-			}
-			
-			if(exchangeSrvBtn.getSelection() && exchangeDwnListCbo.getText().length() > 0){
-				setPageComplete(true);
-			}
-		}
-		
-		private void fillInDownloadFromExchange()
-		{
-			exchangeDwnListCbo.removeAll();
-	        HttpClient client = new HttpClient();  
-	        GetMethod get = new GetMethod(EXCHANGE_DOWNLOAD_URL); 
-			try {
-				client.executeMethod(get);
-				String out = get.getResponseBodyAsString();
-				JSONArray jsonArray = new JSONArray(out);
-				for (int i = 0; i < jsonArray.length(); i++)
-				{
-					JSONObject jsonObject = jsonArray.getJSONObject(i);
-					String name = jsonObject.get("name").toString();
-					if(name.equals("Talendshop Demo"))
-					{
-						String url = jsonObject.get("url").toString();
-						exchangeDwnListCbo.add(url, i);
-					}
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			} 
-
+			}	
 		}
 		
 		public void createControl(Composite parent) {
 			  Composite composite = new Composite(parent, SWT.BORDER);
-			  composite.setLayout(new GridLayout(2,false));
+			  composite.setLayout(new GridLayout(4,false));
+			  composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
+						true, 1, 1));
+			  setControl(composite);
+
+			  
 			  folderBtn=new Button(composite,SWT.RADIO);
-			  folderBtn.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false,
+			  folderBtn.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 						false, 1, 1));
 			  folderBtn.setText("Select root directory:");
 			  folder=new FileSelectWidget(composite,"",new String[]{"*.*"}, "",false);
-			  folder.getCmp().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-						false, 1, 1));			  
-			  
+//			  folder.getCmp().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
+//						false, 1, 1));	
 			  folderBtn.addSelectionListener(new SelectionListener(){
 
 				public void widgetDefaultSelected(SelectionEvent e) {
@@ -974,13 +961,48 @@ public class ImportItemsWizard extends Wizard{
 				}				  
 			  });
 
+			  
+			  Composite padding = new Composite(composite, SWT.NONE);
+			  padding.setLayout(new GridLayout(1,false));
+			  padding.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true,
+						false, 1, 1));	
+			  
+			  
 			  zipBtn=new Button(composite,SWT.RADIO);
-			  zipBtn.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false,
+			  zipBtn.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 						false, 1, 1));			  
 			  zipBtn.setText("Select archive file:");
 			  zip=new FileSelectWidget(composite,"",new String[]{"*.zip"}, "",true);
-			  zip.getCmp().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-						false, 1, 1));			  
+//			  zip.getCmp().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,   			
+//						false, 1, 1));
+			  ((GridData) zip.getText().getLayoutData()).widthHint = 200;
+
+			  zip.getText().addListener(SWT.Modify, new PageListener(this));
+			  
+			  final Button exchangeBtn = new Button(composite,SWT.PUSH);
+			  exchangeBtn.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true,
+						false, 1, 1));
+			  exchangeBtn.setText("Import from Talend Exchange");
+			  exchangeBtn.setEnabled(false);
+			  exchangeBtn.addSelectionListener(new SelectionListener(){
+
+				public void widgetDefaultSelected(SelectionEvent e) {}
+
+				public void widgetSelected(SelectionEvent e) {
+					// TODO Auto-generated method stub
+					FormToolkit toolkit=new WidgetFactory();
+					ImportExchangeOptionsDialog dlg = new ImportExchangeOptionsDialog(view.getSite().getShell(), toolkit, true, zipFileRepository);
+					dlg.setBlockOnOpen(true);
+					if(dlg.open() == Window.OK)
+					{
+						zip.getText().setText(zipFileRepository.toString());
+						parse();
+						checkUpExchangeImport(false);
+					}
+				}
+				  
+			  });
+			  
 			  zipBtn.addSelectionListener(new SelectionListener(){
 
 					public void widgetDefaultSelected(SelectionEvent e) {
@@ -989,74 +1011,11 @@ public class ImportItemsWizard extends Wizard{
 
 					public void widgetSelected(SelectionEvent e) {					
 						zip.setEnabled(zipBtn.getSelection());
+						exchangeBtn.setEnabled(zipBtn.getSelection());
+						checkUpExchangeImport(false);
 						checkCompleted();
 					}					  
 				  });	
-			  zip.getText().addListener(SWT.Modify, new PageListener(this));
-			  
-			  exchangeSrvBtn = new Button(composite,SWT.RADIO);
-			  exchangeSrvBtn.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false,
-						false, 1, 1));
-			  exchangeSrvBtn.setText("import in exchange Server View:");
-			  exchangeSrvBtn.addSelectionListener(new SelectionListener(){
-
-				public void widgetDefaultSelected(SelectionEvent e) {
-					
-				}
-
-				public void widgetSelected(SelectionEvent e) {
-					exchangeDwnListCbo.setEnabled(exchangeSrvBtn.getSelection());
-					fillInDownloadFromExchange();
-					setPageComplete(false);
-				}
-				  
-			  });
-			  
-			  exchangeDwnListCbo = new CCombo(composite,SWT.SINGLE | SWT.BORDER);
-			  exchangeDwnListCbo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-						false, 1, 1));
-			  exchangeDwnListCbo.addSelectionListener(new SelectionListener(){
-
-				public void widgetDefaultSelected(SelectionEvent e) {}
-
-				public void widgetSelected(SelectionEvent e) {
-					String url = exchangeDwnListCbo.getText();
-			        HttpClient client = new HttpClient();  
-			        GetMethod get = new GetMethod(url);
-			        
-			        try {
-						client.executeMethod(get);
-						importFolder=  System.getProperty("user.dir");
-				        File tempFile = new File(
-				                importFolder + File.separator + "tmp" + System.currentTimeMillis());
-
-                        IOUtils.write(get.getResponseBody(), new FileOutputStream(tempFile));
-						ZipToFile.unZipFile(tempFile.getAbsolutePath(), importFolder);
-						
-				        boolean result = false;
-				        int tryCount = 0;
-				        while(!result && tryCount++ <10)
-				        {
-				            System.gc();
-				            result = tempFile.delete();
-				        }
-						parse();
-						checkCompleted();
-					} catch (Exception e1) {
-						
-						exchangeDwnListCbo.setText("");
-						
-						final MessageDialog dialog = new MessageDialog(view.getSite()
-								.getShell(), "parsing error", null,  e1.getMessage(), MessageDialog.ERROR,
-								new String[] { IDialogConstants.OK_LABEL }, 0);
-						dialog.open();
-					} 
-				}
-				  
-			  });
-			  exchangeDwnListCbo.setEnabled(false);
-			  exchangeDwnListCbo.setEditable(false);
-			  
 //			  zip.getButton().addListener(SWT.Selection, new PageListener(this));
 			  folder.getText().addListener(SWT.Modify, new PageListener(this));
 //			  folder.getButton().addListener(SWT.Selection, new PageListener(this));
@@ -1065,13 +1024,13 @@ public class ImportItemsWizard extends Wizard{
 			  Composite itemcom=treeViewer.createItemList(composite);
 			  treeViewer.getViewer().setInput(null);
 			  itemcom.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-						true, 2,5));
+						true, 4,5));
 			  treeViewer.setItemText("Select items to import:");
 			  
 			  folder.setEnabled(folderBtn.getSelection());
 			  zip.setEnabled(zipBtn.getSelection());
-			  setControl(composite);
-			  GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).hint(420, 300).applyTo(composite);
+
+			  GridDataFactory.swtDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).hint(920, 600).applyTo(composite);
 		}
 		protected void refreshTree() {
 			

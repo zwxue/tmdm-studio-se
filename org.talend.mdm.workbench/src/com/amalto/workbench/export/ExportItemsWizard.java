@@ -546,7 +546,7 @@ public class ExportItemsWizard extends Wizard {
 		}
 		public void createControl(Composite parent) {
 			  Composite composite = new Composite(parent, SWT.BORDER);
-			  composite.setLayout(new GridLayout(2,false));
+			  composite.setLayout(new GridLayout(3,false));
 			  folderBtn=new Button(composite,SWT.RADIO);
 			  folderBtn.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false,
 						false, 1, 1));

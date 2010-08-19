@@ -34,13 +34,17 @@ public class FileSelectWidget {
 		this.fileExtents=fileExtents;
 //		this.parent=factory.createComposite(parent,0);
 		this.parent=parent;
-		GridLayout layout=new GridLayout();
-		layout.numColumns=3;
-		this.parent.setLayout(layout);
+		if(parent.getLayout() == null)
+		{
+			GridLayout layout=new GridLayout();
+			layout.numColumns=3;
+			this.parent.setLayout(layout);
+		}
+
 		this.isFile=isFile;
 		create();
 	}
-
+	
 	public Text getText() {
 		return text;
 	}
@@ -52,8 +56,8 @@ public class FileSelectWidget {
 		label.setText(this.label);
 		label.setLayoutData(gd);
 		}
-		text=factory.createText(parent, "",SWT.MULTI|SWT.BORDER);
-		gd=new GridData(SWT.FILL,SWT.TOP,true,false,1,1);
+		text=factory.createText(parent, "",SWT.SINGLE|SWT.BORDER);
+		gd=new GridData(SWT.FILL,SWT.FILL,true,false,1,1);
 /*		if(label.length()>0){
 			gd=new GridData(SWT.FILL,SWT.FILL,true,true,1,1);
 		}else{

@@ -6,14 +6,12 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -45,8 +43,6 @@ import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSchemaContent;
 import org.eclipse.xsd.impl.XSDImportImpl;
 import org.eclipse.xsd.impl.XSDIncludeImpl;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -226,40 +222,23 @@ public class SelectImportedModulesDialog extends Dialog{
 			public void widgetDefaultSelected(SelectionEvent e) {}
 
 			public void widgetSelected(SelectionEvent e) {
-				MDMXSDSchemaEntryDialog dlg = new MDMXSDSchemaEntryDialog(shell.getShell(), "import XSD Schema from exchange server");
-            	HashMap<String, String> nameToUrlMap = new HashMap<String, String>();
-                try {
-                	ArrayList<String> schemaList = new ArrayList<String>();
-        	        HttpClient client = new HttpClient();  
-        	        GetMethod get = new GetMethod(EXCHANGE_DOWNLOAD_URL); 
-
-    				client.executeMethod(get);
-    				String out = get.getResponseBodyAsString();
-    				JSONArray jsonArray = new JSONArray(out);
-    				for (int i = 0; i < jsonArray.length(); i++)
+				HttpClient client = new HttpClient(); 
+				String importFolder=  System.getProperty("user.dir");
+				StringBuffer repository = new StringBuffer();
+				ImportExchangeOptionsDialog dlg = new ImportExchangeOptionsDialog(shell.getShell(), null, false, repository);
+        		dlg.setBlockOnOpen(true);
+        		int ret = dlg.open();
+        		if (ret == Window.OK)  {
+        			File dir = new File(repository.toString());
+    				for (File file : dir.listFiles())
     				{
-    					JSONObject jsonObject = jsonArray.getJSONObject(i);
-    					String name = jsonObject.get("name").toString();
-    					schemaList.add(name);
-    					nameToUrlMap.put(name, jsonObject.get("url").toString());
+    					if(file.getName().endsWith(".xsd"))
+    					{
+                			XSDDesc xsdDesc = buildUp(file.getAbsolutePath(), MDM_WEB, 1);
+                			include(xsdDesc);
+    					}
     				}
 
-    				dlg.create();
-    				dlg.retrieveDataModels(schemaList, false);
-        			
-    			} catch (Exception es) {
-    				es.printStackTrace();
-    				return;
-    			}
-        		dlg.setBlockOnOpen(true);
-        		dlg.open();
-        		if (dlg.getReturnCode() == Window.OK)  {
-        			List<String> names = dlg.getMDMDataModelUrls();
-        			for(String nm: names)
-        			{
-            			XSDDesc xsdDesc = buildUp(nameToUrlMap.get(nm), MDM_WEB, 1);
-            			include(xsdDesc);
-        			}
         			getButton(IDialogConstants.OK_ID).setEnabled(true);
         			tableViewer.refresh();
         		}

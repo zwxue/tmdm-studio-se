@@ -110,7 +110,7 @@ public class MenuEntryDialog extends Dialog {
 		Composite composite = (Composite) super.createDialogArea(parent);
 		
 		GridLayout layout = (GridLayout)composite.getLayout();
-		layout.numColumns = 2;
+		layout.numColumns = 3;
 		//layout.verticalSpacing = 10;
 		
 		Label idLabel = new Label(composite, SWT.NONE);
