@@ -77,10 +77,12 @@ public class SchematronExpressBuilder {
         }		
 	}
 	private void parseFunxml() throws Exception{
+		InputStream in=null;
+		try {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		org.w3c.dom.Document document;
-		InputStream in=SchematronExpressBuilder.class.getResourceAsStream("XPathFunc.xml");
+		in=SchematronExpressBuilder.class.getResourceAsStream("XPathFunc.xml");
 		document=builder.parse(in);
 		NodeList list=document.getElementsByTagName("category");
 		categories=new ArrayList<XPathFunc>();
@@ -117,6 +119,9 @@ public class SchematronExpressBuilder {
 			});
 			xpathFunc.setFuncs(keylist);
 			categories.add(xpathFunc);
+		}
+		}finally {
+			if(in!=null)in.close();
 		}
 	}
 	

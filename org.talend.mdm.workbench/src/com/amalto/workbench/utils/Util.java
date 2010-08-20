@@ -1671,6 +1671,8 @@ public class Util {
     
     public static String getResponseFromURL(String url, TreeObject treeObj) throws Exception
     {
+    	InputStreamReader doc=null;
+    	try {
         BASE64Encoder encoder = new BASE64Encoder();
         StringBuffer buffer = new StringBuffer();
         String credentials = encoder.encode(new String(treeObj.getServerRoot().getUsername() + ":" + treeObj.getServerRoot().getPassword()).getBytes());
@@ -1683,7 +1685,7 @@ public class Util {
         conn.setRequestProperty("Authorization", "Basic " + credentials);
         conn.setRequestProperty("Expect", "100-continue"); 
 
-        InputStreamReader doc = 
+         doc = 
             new InputStreamReader(conn.getInputStream());
         BufferedReader reader = new BufferedReader(doc);
         String line = reader.readLine();
@@ -1694,6 +1696,9 @@ public class Util {
         }
 	            
 	    return buffer.toString();
+    	}finally {
+    		if(doc!=null)doc.close();
+    	}
     }
     
     public static XSDSchema createXsdSchema(String xsd, TreeObject treeObj) throws Exception{

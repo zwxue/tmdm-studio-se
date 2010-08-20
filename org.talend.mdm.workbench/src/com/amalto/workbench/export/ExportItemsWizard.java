@@ -486,6 +486,7 @@ public class ExportItemsWizard extends Wizard {
 				 data=is.read();  
 			 }  
 			 output.close();
+			 is.close();
 		}catch(Exception e) {e.printStackTrace();}
 	}
 	

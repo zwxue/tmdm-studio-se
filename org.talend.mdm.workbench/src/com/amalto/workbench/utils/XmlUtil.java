@@ -62,9 +62,18 @@ public final class XmlUtil {
 
 	public static Document parse(String fileName) throws DocumentException {
 		InputStream is = null;
+		try {
 		is = XmlUtil.class.getResourceAsStream("/" + fileName);
 		Document document = parse(is);
 		return document;
+		}finally {
+		if(is!=null)
+			try {
+				is.close();
+			} catch (IOException e) {
+				
+			}
+		}
 	}
 
 	public static void iterate(Document document, ElementProcess elementProcess)
