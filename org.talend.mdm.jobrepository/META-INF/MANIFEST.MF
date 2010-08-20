@@ -13,6 +13,7 @@ Require-Bundle: org.eclipse.ui,
  org.talend.designer.core,
  org.talend.commons,
  org.talend.commons.ui,
- org.talend.repository
+ org.talend.repository,
+ org.talend.core.runtime
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: .Talend SA.

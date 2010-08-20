@@ -12,7 +12,9 @@ Require-Bundle: org.eclipse.ui,
  org.talend.repository,
  org.apache.log4j,
  org.eclipse.gmf.runtime.common.ui,
- org.eclipse.ui.ide
+ org.eclipse.ui.ide,
+ org.talend.model,
+ org.talend.core.runtime
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: .Talend SA.
