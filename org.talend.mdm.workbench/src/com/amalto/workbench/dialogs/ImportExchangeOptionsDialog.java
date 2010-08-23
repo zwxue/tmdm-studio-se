@@ -32,7 +32,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.talend.mdm.commmon.util.workbench.ZipToFile;
-
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
@@ -46,6 +45,10 @@ public class ImportExchangeOptionsDialog extends Dialog implements  SelectionLis
 	private boolean export = true;
 	private JSONObject[] dataContent = null;
 	private static String EXCHANGE_DOWNLOAD_URL = "http://talendforge.org/exchange/mdm/api/get_revision_list.php?version=1&categories=";
+	
+	private static String COLUMN_EXTENSION_NAME = "extension_name";
+	private static String COLUMN_REVISION_NAME = "revision_name";
+	private static String COLUMN_URL_NAME = "download_url";
 	
 	public ImportExchangeOptionsDialog(Shell parentShell, FormToolkit toolkit, boolean importOption, StringBuffer zipFileRepository) {
 		super(parentShell);
@@ -111,7 +114,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements  SelectionLis
 				try
 				{
 					JSONObject datum = dataContent[index];
-					item.setText(new String[] {datum.get("name").toString(), datum.get("revision").toString(), datum.get("url").toString()});
+					item.setText(new String[] {datum.get(COLUMN_EXTENSION_NAME).toString(), datum.get(COLUMN_REVISION_NAME).toString(), datum.get(COLUMN_URL_NAME).toString()});
 				}
 				catch(JSONException je)
 				{
@@ -154,14 +157,14 @@ public class ImportExchangeOptionsDialog extends Dialog implements  SelectionLis
     					
 						try {
 							if (currentColumn == column1) {
-								valueA = jsonA.get("name").toString();
-								valueB = jsonB.get("name").toString();
+								valueA = jsonA.get(COLUMN_EXTENSION_NAME).toString();
+								valueB = jsonB.get(COLUMN_EXTENSION_NAME).toString();
 							} else if (currentColumn == column2) {
-								valueA = jsonA.get("revision").toString();
-								valueB = jsonB.get("revision").toString();
+								valueA = jsonA.get(COLUMN_REVISION_NAME).toString();
+								valueB = jsonB.get(COLUMN_REVISION_NAME).toString();
 							} else {
-								valueA = jsonA.get("url").toString();
-								valueB = jsonB.get("url").toString();
+								valueA = jsonA.get(COLUMN_URL_NAME).toString();
+								valueB = jsonB.get(COLUMN_URL_NAME).toString();
 							}
 
 							if (valueA.equals(valueB))
@@ -208,9 +211,9 @@ public class ImportExchangeOptionsDialog extends Dialog implements  SelectionLis
 			for (int i = 0; i < jsonArray.length(); i++)
 			{
 				JSONObject jsonObject = jsonArray.getJSONObject(i);
-				String name = jsonObject.get("extension_name").toString();
-				String revision = jsonObject.getString("revision_name");
-				String download_url = jsonObject.getString("download_url").toString();
+				String name = jsonObject.get(COLUMN_EXTENSION_NAME).toString();
+				String revision = jsonObject.getString(COLUMN_REVISION_NAME);
+				String download_url = jsonObject.getString(COLUMN_URL_NAME).toString();
 		        TableItem item = new TableItem(exchangeDwnTable, SWT.NONE);
 		        item.setText(new String[] {name,  revision, download_url});
 		        dataContent[i] = jsonObject;
@@ -248,7 +251,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements  SelectionLis
         HttpClient client = new HttpClient();  
         JSONObject datum = dataContent[exchangeDwnTable.getSelectionIndex()];
         try {
-	        GetMethod get = new GetMethod(datum.getString("download_url"));
+	        GetMethod get = new GetMethod(datum.getString(COLUMN_URL_NAME));
 			client.executeMethod(get);
 			String downloadFolder = System.getProperty("user.dir") + File.separator + (export ? "temp" : "xsdTemp");
 			String subFolderForTmp = downloadFolder + File.separator + "tmp" + System.currentTimeMillis();
