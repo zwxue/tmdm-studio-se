@@ -263,8 +263,9 @@ public class ImportItemsWizard extends Wizard{
 		if(folderBtn.getSelection()){
 			importFolder=folder.getText().getText();
 		}
+		FileReader reader=null;
 		try{
-		FileReader reader= new FileReader(importFolder+"/exportitems.xml");
+		reader= new FileReader(importFolder+"/exportitems.xml");
 		Exports exports = (Exports)Unmarshaller.unmarshal(
 				Exports.class,reader);
 		try {
@@ -376,7 +377,9 @@ public class ImportItemsWizard extends Wizard{
 		}catch(Exception e) {}
 		}catch(Exception e){
 			e.printStackTrace();
-		}
+		}finally {
+			   try{if(reader!=null)reader.close();}catch(Exception e) {}
+		   }
 		
 	}
 	
@@ -453,7 +456,9 @@ public class ImportItemsWizard extends Wizard{
 					} 
 					catch (Exception e1) {
 					   e1.printStackTrace();
-					}
+					}finally {
+						   try{if(reader!=null)reader.close();}catch(Exception e) {}
+					   }
 					
 					importClusterContents(item,port);
 				}
@@ -475,6 +480,8 @@ public class ImportItemsWizard extends Wizard{
 				   } 
 				   catch (Exception e2) {
 				      e2.printStackTrace();
+				   }finally {
+					   try{if(reader!=null)reader.close();}catch(Exception e) {}
 				   }
 				}
 
@@ -509,6 +516,8 @@ public class ImportItemsWizard extends Wizard{
 				   } 
 				   catch (Exception e2) {
 				      e2.printStackTrace();
+				   }finally {
+					   try{if(reader!=null)reader.close();}catch(Exception e) {}
 				   }
 				}
 				
@@ -543,7 +552,9 @@ public class ImportItemsWizard extends Wizard{
 					} 
 					catch (Exception e2) {
 					   e2.printStackTrace();
-					}
+					}finally {
+						   try{if(reader!=null)reader.close();}catch(Exception e) {}
+					   }
 				}
 				
 				monitor.worked(1);
@@ -577,7 +588,9 @@ public class ImportItemsWizard extends Wizard{
    					   port.putRole(new WSPutRole(role));
 					} catch (Exception e2) {
 						e2.printStackTrace();
-					}
+					}finally {
+						   try{if(reader!=null)reader.close();}catch(Exception e) {}
+					   }
 				}
 
 				monitor.worked(1);}
@@ -617,7 +630,9 @@ public class ImportItemsWizard extends Wizard{
 					}
 					catch(Exception e2) {
 					   e2.printStackTrace();
-					}
+					}finally {
+						   try{if(reader!=null)reader.close();}catch(Exception e) {}
+					   }
 				}
 
 				monitor.worked(1);
@@ -652,7 +667,9 @@ public class ImportItemsWizard extends Wizard{
 					}
 					catch(Exception e2) {
 					   e2.printStackTrace();
-					}
+					}finally {
+						   try{if(reader!=null)reader.close();}catch(Exception e) {}
+					   }
 				}
 
 				monitor.worked(1);
@@ -688,6 +705,8 @@ public class ImportItemsWizard extends Wizard{
 				   } 
 				   catch(Exception e2) {
             	      e2.printStackTrace();
+				   }finally {
+					   try{if(reader!=null)reader.close();}catch(Exception e) {}
 				   }
 				}
 
@@ -745,7 +764,9 @@ public class ImportItemsWizard extends Wizard{
 								"Error committing the page", 
 										CommonUtil.getErrMsgFromException(e));
 					
-					}
+					}finally {
+						   try{if(reader!=null)reader.close();}catch(Exception e) {}
+					   }
 				}
 				break;
 				
@@ -779,6 +800,8 @@ public class ImportItemsWizard extends Wizard{
 				   } 
 				   catch(Exception e2) {
 				      e2.printStackTrace();
+				   }finally {
+					   try{if(reader!=null)reader.close();}catch(Exception e) {}
 				   }
 				}
 
@@ -814,6 +837,8 @@ public class ImportItemsWizard extends Wizard{
 				   } 
 				   catch(Exception e2) {
 				      e2.printStackTrace();
+				   }finally {
+					   try{if(reader!=null)reader.close();}catch(Exception e) {}
 				   }
 				}
 
@@ -863,6 +888,8 @@ public class ImportItemsWizard extends Wizard{
 				   } 
 				   catch(Exception e2) {
 				      e2.printStackTrace();
+				   }finally {
+					   try{if(reader!=null)reader.close();}catch(Exception e) {}
 				   }
 				}
 
@@ -878,7 +905,7 @@ public class ImportItemsWizard extends Wizard{
 	private void importClusterContents(TreeObject item, XtentisPort port) {
 		if(dataClusterContent.containsKey(item.getDisplayName()))
 		{
-			FileReader reader;
+			FileReader reader=null;
 				String[] paths=dataClusterContent.get(item.getDisplayName());
 				for (int i = 0; i < paths.length; i++) {
 					try {
@@ -894,7 +921,9 @@ public class ImportItemsWizard extends Wizard{
 					
 					} catch (Exception e1) {
 						e1.printStackTrace();
-					}
+					}finally {
+						   try{if(reader!=null)reader.close();}catch(Exception e) {}
+					   }
 				}
 		}
 	}
