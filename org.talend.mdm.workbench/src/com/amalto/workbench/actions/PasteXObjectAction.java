@@ -26,6 +26,7 @@ import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.views.ServerView;
+import com.amalto.workbench.webservices.WSBoolean;
 import com.amalto.workbench.webservices.WSConceptRevisionMapMapEntry;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
@@ -45,7 +46,6 @@ import com.amalto.workbench.webservices.WSGetConceptsInDataClusterWithRevisions;
 import com.amalto.workbench.webservices.WSGetDataCluster;
 import com.amalto.workbench.webservices.WSGetDataModel;
 import com.amalto.workbench.webservices.WSGetItemPKsByCriteria;
-import com.amalto.workbench.webservices.WSGetItemPKsByFullCriteria;
 import com.amalto.workbench.webservices.WSGetMenu;
 import com.amalto.workbench.webservices.WSGetRole;
 import com.amalto.workbench.webservices.WSGetRoutingRule;
@@ -249,7 +249,10 @@ public class PasteXObjectAction extends Action{
 			           				originalView.getDescription(),
 			           				originalView.getViewableBusinessElements(),
 			           				originalView.getWhereConditions(),
-			           				originalView.getSearchableBusinessElements()
+			           				originalView.getSearchableBusinessElements(),
+			           				null,
+			           				new WSBoolean(false)
+			           				
 			           		);
 			           		//write the new model
 			           		destPort.putView(new WSPutView(newView));

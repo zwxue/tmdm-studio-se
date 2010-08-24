@@ -30,6 +30,7 @@ import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
+import com.amalto.workbench.webservices.WSBoolean;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModel;
@@ -338,7 +339,9 @@ public class NewXObjectAction extends Action{
 	           				"",
 	           				new String[] {},
 	           				new WSWhereCondition[0],
-	           				new String[] {}
+	           				new String[] {},
+	           				null,
+	           				new WSBoolean(false)
 	           		);
 	           		//port.putView(new WSPutView(view));
 	           		newInstance = new TreeObject(

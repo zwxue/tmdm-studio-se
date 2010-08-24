@@ -16,6 +16,7 @@ import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.views.ServerView;
+import com.amalto.workbench.webservices.WSBoolean;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModel;
@@ -148,7 +149,9 @@ public class TreeObjectUtil {
 			           				originalView.getDescription(),
 			           				originalView.getViewableBusinessElements(),
 			           				originalView.getWhereConditions(),
-			           				originalView.getSearchableBusinessElements()
+			           				originalView.getSearchableBusinessElements(),
+			           				null,
+			           				new WSBoolean(false)
 			           		);
 			           		//write the new model
 			           		destPort.putView(new WSPutView(newView));
