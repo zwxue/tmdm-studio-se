@@ -46,6 +46,7 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
+import com.amalto.workbench.webservices.WSBoolean;
 import com.amalto.workbench.webservices.WSDeleteView;
 import com.amalto.workbench.webservices.WSGetRole;
 import com.amalto.workbench.webservices.WSGetView;
@@ -128,6 +129,8 @@ public class AddBrowseItemsWizard extends Wizard{
     		{
     			XtentisPort port = getXtentisPort();
     			WSView view = new WSView();
+    			view.setIsTransformerActive(new WSBoolean(false));
+    			view.setTransformerPK("");
     			WSPutView wrap = new WSPutView();
     			view.setName(browseItem);
             	EList<XSDIdentityConstraintDefinition> idtylist = decl.getIdentityConstraintDefinitions();
