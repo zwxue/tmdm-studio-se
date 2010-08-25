@@ -52,6 +52,7 @@ import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSAutoIncrement;
+import com.amalto.workbench.webservices.WSBoolean;
 import com.amalto.workbench.webservices.WSDataCluster;
 import com.amalto.workbench.webservices.WSDataClusterPK;
 import com.amalto.workbench.webservices.WSDataModel;
@@ -853,7 +854,8 @@ public class ImportItemsWizard extends Wizard{
 				      reader = new FileReader(importFolder+"/" + subItem);
 				      WSView model = new WSView();
 				      model = (WSView)Unmarshaller.unmarshal(WSView.class, reader);
-				      
+				      if(model.getIsTransformerActive()==null)model.setIsTransformerActive(new WSBoolean(false));
+				      if(model.getTransformerPK()==null)model.setTransformerPK("");
 				      //TODO: because the operator and stringPredicate can not be export,so if there is any where condition
 	                  // now it will add the default operator and string predicate for all the where conditions automatically.
 	                  // maybe it needs to be modified later.
@@ -884,6 +886,7 @@ public class ImportItemsWizard extends Wizard{
 
 							}
 						}
+						
 	                  port.putView(new WSPutView(model));
 				   } 
 				   catch(Exception e2) {
