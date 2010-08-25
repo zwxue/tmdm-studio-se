@@ -8,7 +8,6 @@ package com.amalto.workbench.editors;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
@@ -25,8 +24,6 @@ import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -36,7 +33,6 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -123,13 +119,13 @@ import org.eclipse.xsd.impl.XSDParticleImpl;
 import org.eclipse.xsd.impl.XSDSimpleTypeDefinitionImpl;
 import org.eclipse.xsd.impl.XSDXPathDefinitionImpl;
 import org.talend.mdm.commmon.util.core.CommonUtil;
-import org.talend.mdm.commmon.util.workbench.ZipToFile;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import com.amalto.workbench.actions.XSDAnnotationLookupFieldsAction;
 import com.amalto.workbench.actions.XSDChangeBaseTypeAction;
 import com.amalto.workbench.actions.XSDChangeToComplexTypeAction;
 import com.amalto.workbench.actions.XSDChangeToSimpleTypeAction;
@@ -161,6 +157,7 @@ import com.amalto.workbench.actions.XSDNewParticleFromTypeAction;
 import com.amalto.workbench.actions.XSDNewSimpleTypeDefinition;
 import com.amalto.workbench.actions.XSDNewXPathAction;
 import com.amalto.workbench.actions.XSDPasteConceptAction;
+import com.amalto.workbench.actions.XSDSetAnnotaionDisplayFormatAction;
 import com.amalto.workbench.actions.XSDSetAnnotationDescriptionsAction;
 import com.amalto.workbench.actions.XSDSetAnnotationFKFilterAction;
 import com.amalto.workbench.actions.XSDSetAnnotationForeignKeyAction;
@@ -170,7 +167,6 @@ import com.amalto.workbench.actions.XSDSetAnnotationNoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWrapNoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWrapWriteAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
-import com.amalto.workbench.actions.XSDSetAnnotaionDisplayFormatAction;
 import com.amalto.workbench.actions.XSDSetFacetMessageAction;
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
@@ -246,6 +242,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	private XSDSetAnnotationNoAction setAnnotationNoAction = null;
 	private XSDSetAnnotationWrapNoAction setAnnotationWrapNoAction = null;
 	private XSDSetAnnotationWriteAction setAnnotationWriteAction = null;
+	private XSDAnnotationLookupFieldsAction setAnnotationLookupFieldsAction=null;
 	
 	private XSDSetAnnotaionDisplayFormatAction setAnnotationDisplayFomatAction = null;
 	
@@ -1266,7 +1263,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		this.setAnnotationWrapNoAction = new XSDSetAnnotationWrapNoAction(this,dataModelName);
 		
 		this.setAnnotationDisplayFomatAction = new XSDSetAnnotaionDisplayFormatAction(this);
-		
+		this.setAnnotationLookupFieldsAction=new XSDAnnotationLookupFieldsAction(this);
 		//this.copyConceptAction = new XSDCopyConceptAction(this);
 		//this.pasteConceptAction = new XSDPasteConceptAction(this);
 		
@@ -1383,6 +1380,9 @@ public class DataModelMainPage extends AMainPageV2 {
 					}
 					else if(source.startsWith("X_Display_Format_")){
 						return 113;
+					}
+					else if (source.equals("X_Lookup_Field")) {
+						return 114;
 					}
 				} 
 			
@@ -1502,6 +1502,9 @@ public class DataModelMainPage extends AMainPageV2 {
 					case 113:
 						setAnnotationDisplayFomatAction.run();
 						break;
+					case 114:
+						setAnnotationLookupFieldsAction.run();
+						break;						
 					case -1:
 						if(drillDownAdapter.canGoInto()==true)
 							drillDownAdapter.goInto();				
@@ -1994,16 +1997,23 @@ public class DataModelMainPage extends AMainPageV2 {
 	}
 
 	private void setAnnotationActions(Object obj,IMenuManager manager) {
-		manager.add(setAnnotationLabelAction);
-		manager.add(setAnnotationDescriptionsAction);
-		manager.add(setAnnotationForeignKeyAction);
-		manager.add(setAnnotationFKFilterAction);
-		manager.add(setAnnotationForeignKeyInfoAction);
-		if(Util.IsEnterPrise()) {
-		manager.add(setAnnotationWriteAction);
-		if(checkMandatoryElement(obj))
-			manager.add(setAnnotationNoAction);
+						
+
+		if(obj instanceof XSDElementDeclaration) {
+			manager.add(setAnnotationDescriptionsAction);			
+			manager.add(setAnnotationLookupFieldsAction);
 		}
+		if(obj instanceof XSDParticle) {
+			manager.add(setAnnotationLabelAction);
+			manager.add(setAnnotationForeignKeyAction);
+			manager.add(setAnnotationFKFilterAction);
+			manager.add(setAnnotationForeignKeyInfoAction);
+		}
+		if(Util.IsEnterPrise()) {
+			manager.add(setAnnotationWriteAction);
+			if(checkMandatoryElement(obj))
+				manager.add(setAnnotationNoAction);			
+		}		
 		//available models
 		java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
 		for(IAvailableModel model: availablemodels){
@@ -2016,13 +2026,19 @@ public class DataModelMainPage extends AMainPageV2 {
 	}
 	
 	private void setAnnotationActions2(Object obj,IMenuManager manager) {
-		manager.add(setAnnotationLabelAction);
-		manager.add(setAnnotationDescriptionsAction);
-		if(Util.IsEnterPrise()) {
-		manager.add(setAnnotationWriteAction);
-		if(checkMandatoryElement(obj))
-			manager.add(setAnnotationNoAction);
+		
+		if(obj instanceof XSDElementDeclaration) {
+			manager.add(setAnnotationDescriptionsAction);
+			manager.add(setAnnotationLookupFieldsAction);
 		}
+		manager.add(setAnnotationWriteAction);
+		if(obj instanceof XSDParticle) {
+			manager.add(setAnnotationLabelAction);
+		}
+		if(Util.IsEnterPrise()) {		
+			if(checkMandatoryElement(obj))
+				manager.add(setAnnotationNoAction);
+		}		
 		//available models
 		java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
 		for(IAvailableModel model: availablemodels){

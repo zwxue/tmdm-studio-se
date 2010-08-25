@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -19,6 +20,8 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -38,8 +41,15 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.xsd.XSDAnnotation;
+import org.eclipse.xsd.XSDComponent;
+import org.eclipse.xsd.XSDElementDeclaration;
+import org.eclipse.xsd.XSDIdentityConstraintDefinition;
+import org.eclipse.xsd.XSDParticle;
+import org.w3c.dom.Element;
 
 import com.amalto.workbench.editors.AMainPageV2;
+import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -80,6 +90,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
 	public static final int AnnotationTargetSystems_ActionType=1<<2;
 	public static final int AnnotationWrite_ActionType=1<<3;
 	public static final int AnnotationSchematron_ActionType=1<<4;
+	public static final int AnnotationLookupField_ActionType=1<<5;
 	
 
 	/**
@@ -99,7 +110,34 @@ public class AnnotationOrderedListsDialog extends Dialog {
 		this.actionType = actionType;
 		this.dataModelName = dataModelName;
 	}
-
+	
+	private List<String> getConceptElements() {
+		DataModelMainPage page=(DataModelMainPage) parentPage;
+		IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
+        List<String> childNames=new ArrayList<String>();
+        XSDElementDeclaration decl=null;
+        if (selection.getFirstElement() instanceof XSDElementDeclaration){
+        	decl = (XSDElementDeclaration) selection.getFirstElement();
+        	//childNames = Util.getChildElementNames(decl.getElement());
+        }else if (selection.getFirstElement() instanceof Element) {
+			TreePath tPath = ((TreeSelection) selection).getPaths()[0];
+			XSDComponent xSDCom=null;
+			for (int i = 0; i < tPath.getSegmentCount(); i++) {
+				if (tPath.getSegment(i) instanceof XSDAnnotation) {
+					xSDCom = (XSDAnnotation) (tPath.getSegment(i));
+					break;
+				}
+			}
+			decl=(XSDElementDeclaration)xSDCom.getContainer();     
+		}
+        try {
+			childNames = Util.getChildElementNames(decl.getName(),decl);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return childNames;
+	}
 
 	protected Control createDialogArea(Composite parent) {
 						
@@ -121,6 +159,13 @@ public class AnnotationOrderedListsDialog extends Dialog {
 
 			//roles=Util.getCachedXObjectsNameSet(this.xObject, TreeObject.ROLE);
 			roles=Util.getChildren(this.xObject.getServerRoot(), TreeObject.ROLE);
+			((CCombo)textControl).setItems(roles.toArray(new String[roles.size()]));
+
+		}else if(actionType==AnnotationLookupField_ActionType){
+			textControl = new CCombo(composite,SWT.BORDER|SWT.READ_ONLY);
+
+			//roles=Util.getCachedXObjectsNameSet(this.xObject, TreeObject.ROLE);
+			roles=getConceptElements();
 			((CCombo)textControl).setItems(roles.toArray(new String[roles.size()]));
 
 		}else{
@@ -230,7 +275,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
         // Create the cell editors --> We actually discard those later: not natural for an user
         CellEditor[] editors = new CellEditor[1];
         if (actionType == AnnotationOrderedListsDialog.AnnotationWrite_ActionType
-				|| actionType == AnnotationOrderedListsDialog.AnnotationHidden_ActionType) {
+				|| actionType == AnnotationOrderedListsDialog.AnnotationHidden_ActionType || actionType==AnnotationLookupField_ActionType) {
 			editors[0] = new ComboBoxCellEditor(table, roles
 					.toArray(new String[] {}), SWT.READ_ONLY);
 		}
@@ -290,7 +335,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
         		TableItem item = (TableItem) element;
         		DescriptionLine line = (DescriptionLine) item.getData();
         		String orgValue = line.getLabel();
-        		if(actionType != AnnotationWrite_ActionType && actionType != AnnotationHidden_ActionType){
+        		if(actionType != AnnotationWrite_ActionType && actionType != AnnotationHidden_ActionType && actionType != AnnotationLookupField_ActionType){
         			int targetPos = xPaths.indexOf(value.toString());
         			if (targetPos < 0) {
 						line.setLabel(value.toString());
@@ -298,7 +343,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
 						viewer.update(line, null);
 					} else if (targetPos >= 0 && !value.toString().equals(orgValue)) {
 						MessageDialog.openInformation(null, "Warnning",
-								"The Target System already exists");
+								"The Value already exists");
 					}
         			return;
         		}
@@ -309,7 +354,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
     				int pos = xPaths.indexOf(value.toString());
     				if (pos >= 0 && !(orgValue.equals(value))) {
     					MessageDialog.openInformation(null, "Warnning",
-    							"The Role already exists");
+    							"The Value already exists");
     					return;
     				} else if (pos < 0) {
     					line.setLabel(value.toString());
@@ -322,7 +367,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
         		DescriptionLine line = (DescriptionLine) element;
 				String value = line.getLabel();
 				
-				if(actionType==AnnotationWrite_ActionType||actionType==AnnotationHidden_ActionType){
+				if(actionType==AnnotationWrite_ActionType||actionType==AnnotationHidden_ActionType || actionType==AnnotationLookupField_ActionType){
 					String[] attrs = roles.toArray(new String[]{});
 					return Arrays.asList(attrs).indexOf(value);
 				}
@@ -466,7 +511,8 @@ public class AnnotationOrderedListsDialog extends Dialog {
 		}
 		else if (actionType != AnnotationOrderedListsDialog.AnnotationForeignKeyInfo_ActionType
 				&& actionType != AnnotationOrderedListsDialog.AnnotationTargetSystems_ActionType
-				&& actionType != AnnotationOrderedListsDialog.AnnotationSchematron_ActionType) {
+				&& actionType != AnnotationOrderedListsDialog.AnnotationSchematron_ActionType
+				&& actionType != AnnotationOrderedListsDialog.AnnotationLookupField_ActionType) {
 			checkBox = new Button(composite, SWT.CHECK);
 			checkBox.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
 					true, 2, 1));

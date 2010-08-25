@@ -1496,7 +1496,8 @@ public class Util {
     							String child=parentxpath.length()==0?el.getName():parentxpath+"/"+el.getName();    							
     							childNames.add(child);
     						}else {
-    							childNames.addAll(getChildElementNames(el.getName(),el));
+    							String parent=parentxpath.length()==0?el.getName():parentxpath+"/"+el.getName();
+    							childNames.addAll(getChildElementNames(parent,el));
     						}
     					}
     				}

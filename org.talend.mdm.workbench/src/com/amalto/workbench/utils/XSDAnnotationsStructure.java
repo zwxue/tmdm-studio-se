@@ -349,8 +349,8 @@ public class XSDAnnotationsStructure {
 //						}
 //					}
 					
-					if (obj instanceof XSDAnnotation
-							|| obj instanceof XSDElementDeclaration
+					if (
+							obj instanceof XSDElementDeclaration
 							|| obj instanceof XSDParticle) {
 						boolean isImported = false;
 
@@ -374,12 +374,12 @@ public class XSDAnnotationsStructure {
 							if(Util.IsAImporedElement(decl, schema != null ? schema : ((XSDConcreteComponent)obj).getSchema()))
 								isImported = true;
 						}
-						else if(obj instanceof XSDAnnotation)
-						{
-							XSDAnnotation anno = (XSDAnnotation)obj;
-							if(Util.IsAImporedElement(anno.getContainer(), schema != null ? schema : ((XSDConcreteComponent)obj).getSchema()))
-								isImported = true;
-						}
+//						else if(obj instanceof XSDAnnotation)
+//						{
+//							XSDAnnotation anno = (XSDAnnotation)obj;
+//							if(Util.IsAImporedElement(anno.getContainer(), schema != null ? schema : ((XSDConcreteComponent)obj).getSchema()))
+//								isImported = true;
+//						}
 						
 						if(!isImported)
 						{
@@ -430,12 +430,7 @@ public class XSDAnnotationsStructure {
 		hasChanged = true;
 		return true;
 	}
-	
-	public boolean setWriteAccess(int num, String role) {
-		TreeMap< String, String> infos = getWriteAccesses();
-		infos.put("X_Write_"+num, role);
-		return setForeignKeyInfos(new ArrayList(infos.values()));
-	}
+
 
 	public TreeMap<String, String> getWriteAccesses() {
 		TreeMap<String, String> writeAccesses = new TreeMap<String, String>();
@@ -448,6 +443,16 @@ public class XSDAnnotationsStructure {
 		return writeAccesses;
 	}
 	
+	public TreeMap<String, String> getLookupFields() {
+		TreeMap<String, String> writeAccesses = new TreeMap<String, String>();
+		LinkedHashMap<String, String> appInfos = getAppInfos("X_Lookup_Field");
+		Set<String> keys = appInfos.keySet();
+		for (Iterator iter = keys.iterator(); iter.hasNext(); ) {
+			String key = (String) iter.next();
+			writeAccesses.put(key, appInfos.get(key));
+		}
+		return writeAccesses;
+	}
 	/****************************************************************************
 	 *           HIDDEN ACCESSES
 	 ****************************************************************************/

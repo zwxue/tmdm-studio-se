@@ -18,6 +18,7 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
 import org.eclipse.swt.dnd.DragSourceEvent;
@@ -28,7 +29,13 @@ import org.eclipse.swt.dnd.DropTargetListener;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.List;
@@ -41,15 +48,18 @@ import com.amalto.workbench.dialogs.XpathSelectDialog;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
-import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XtentisException;
+import com.amalto.workbench.webservices.WSBoolean;
 import com.amalto.workbench.webservices.WSConceptKey;
 import com.amalto.workbench.webservices.WSDataModel;
 import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSGetBusinessConceptKey;
 import com.amalto.workbench.webservices.WSGetDataModel;
+import com.amalto.workbench.webservices.WSGetTransformerPKs;
 import com.amalto.workbench.webservices.WSGetView;
+import com.amalto.workbench.webservices.WSTransformerPK;
+import com.amalto.workbench.webservices.WSTransformerPKArray;
 import com.amalto.workbench.webservices.WSView;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.WSWhereCondition;
@@ -79,6 +89,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 			new ComplexTableViewerColumn("XPath", false, "newXPath", "newXPath", "",ComplexTableViewerColumn.XPATH_STYLE,new String[] {},0)
 	};
 	private TisTableViewer searchableViewer;
+	private Button btnRunProcess;
+	private Combo cboProcessList;
 	
 	
 /*    private ComplexTableViewerColumn[] conditionsColumns= new ComplexTableViewerColumn[]{
@@ -106,6 +118,44 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 		
         try {
         	desAntionComposite = new DescAnnotationComposite("Description" ," ...", toolkit, charComposite, (AMainPageV2)this,false);
+        	Composite comp=toolkit.createComposite(charComposite);
+    		GridLayout layout=new GridLayout(2, false);
+    		layout.marginWidth=0;
+    		layout.marginLeft=0;
+    		layout.marginTop=0;
+    		layout.marginHeight=0;
+    		layout.marginBottom=0;
+        	comp.setLayout(layout);
+        	btnRunProcess=toolkit.createButton(comp, "Run the view result through a Process", SWT.CHECK);
+        	btnRunProcess.setLayoutData(new GridData(SWT.LEFT,SWT.TOP,true,true,1,1));
+        	cboProcessList=new Combo(comp, SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
+        	cboProcessList.setLayoutData(new GridData(SWT.LEFT,SWT.TOP,true,true,1,1));
+        	java.util.List<String> pList=new ArrayList<String>();
+        	WSTransformerPKArray array=Util.getPort(getXObject()).getTransformerPKs(new WSGetTransformerPKs(""));        	
+        	for(WSTransformerPK pk:array.getWsTransformerPK()) {
+        		pList.add(pk.getPk());
+        	}
+        	cboProcessList.setItems((String[])pList.toArray(new String[pList.size()]));
+        	
+        	//add listener
+        	btnRunProcess.addSelectionListener(new SelectionListener() {
+				
+				public void widgetSelected(SelectionEvent e) {
+					cboProcessList.setEnabled(btnRunProcess.getSelection());
+					markDirtyWithoutCommit();
+				}
+				
+				public void widgetDefaultSelected(SelectionEvent e) {
+					cboProcessList.setEnabled(btnRunProcess.getSelection());
+					markDirtyWithoutCommit();					
+				}
+			});
+        	cboProcessList.addModifyListener(new ModifyListener() {
+				
+				public void modifyText(ModifyEvent e) {
+					markDirtyWithoutCommit();						
+				}
+			});
             //make the Page window a DropTarget - we need to dispose it
             windowTarget = new DropTarget(this.getPartControl(), DND.DROP_MOVE);
             windowTarget.setTransfer(new Transfer[]{TextTransfer.getInstance()});
@@ -186,6 +236,14 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 			
 			desAntionComposite.setText(wsObject.getDescription()==null ? "" : wsObject.getDescription());
 	    	
+            btnRunProcess.setSelection(wsObject.getIsTransformerActive().is_true());
+            if(btnRunProcess.getSelection()) {
+            	cboProcessList.setEnabled(true);
+            	cboProcessList.setText(wsObject.getTransformerPK());
+            }else {
+            	cboProcessList.setEnabled(false);
+            	cboProcessList.setText("");
+            }
             
             java.util.List<Line> vlines = new ArrayList<Line>();
             String[] vis = wsObject.getViewableBusinessElements();
@@ -262,7 +320,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 			
 	    	WSView wsObject = (WSView) (getWsViewObject());
 			wsObject.setDescription(desAntionComposite.getText());
-			
+			wsObject.setIsTransformerActive(new WSBoolean(btnRunProcess.getSelection()));
+			wsObject.setTransformerPK(cboProcessList.getText());
 			java.util.List<Line> vlines = (java.util.List<Line>) viewableViewer.getViewer().getInput();
 			String[] vvs = new String[vlines.size()];
 			for(int j=0;j<vlines.size();j++){

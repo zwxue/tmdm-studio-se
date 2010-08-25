@@ -161,6 +161,8 @@ public class XSDTreeLabelProvider extends LabelProvider {
 							return Util.iso2lang.get(source.substring(14).toLowerCase())+" Description: "+e.getChildNodes().item(0).getNodeValue();
 						} else if (source.equals("X_Write")) {
 							return "Writable By : "+e.getChildNodes().item(0).getNodeValue();
+						}else if (source.equals("X_Lookup_Field")) {
+							return "Look Field : "+e.getChildNodes().item(0).getNodeValue();
 						} else if (source.equals("X_Workflow")) {
 							return "Workflow access : "+e.getChildNodes().item(0).getNodeValue();							
 						} else if (source.equals("X_Hide")) {
@@ -385,6 +387,8 @@ public class XSDTreeLabelProvider extends LabelProvider {
 							return ImageCache.getCreatedImage( EImage.DOCUMENTATION.getPath());
 						} else if (source.equals("X_Write")) {
 							return ImageCache.getCreatedImage( EImage.SECURITYANNOTATION.getPath());
+						}else if (source.equals("X_Lookup_Field")) {
+							return ImageCache.getCreatedImage( EImage.BROWSE.getPath());
 						} else if (source.equals("X_Hide")) {
 							return ImageCache.getCreatedImage( EImage.SECURITYANNOTATION.getPath());
 						} else if (source.equals("X_Schematron")) {
