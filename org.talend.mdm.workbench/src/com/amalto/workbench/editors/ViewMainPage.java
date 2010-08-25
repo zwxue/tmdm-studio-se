@@ -607,4 +607,15 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 		else
 			return false;
 	}
+	 
+	@Override
+	public boolean beforeDoSave() {
+		if(desAntionComposite.getText().trim().equals(""))
+		{
+			MessageDialog.openError(this.getSite().getShell(), "Error saving", "Description cannot be empty");
+			return false;
+		}
+		
+		return true;
+	}
 }
