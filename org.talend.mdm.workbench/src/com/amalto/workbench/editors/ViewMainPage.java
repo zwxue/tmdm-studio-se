@@ -131,9 +131,11 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
         	cboProcessList=new Combo(comp, SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
         	cboProcessList.setLayoutData(new GridData(SWT.LEFT,SWT.TOP,true,true,1,1));
         	java.util.List<String> pList=new ArrayList<String>();
-        	WSTransformerPKArray array=Util.getPort(getXObject()).getTransformerPKs(new WSGetTransformerPKs(""));        	
-        	for(WSTransformerPK pk:array.getWsTransformerPK()) {
-        		pList.add(pk.getPk());
+        	WSTransformerPKArray array=Util.getPort(getXObject()).getTransformerPKs(new WSGetTransformerPKs(""));  
+        	if(array!=null) {
+	        	for(WSTransformerPK pk:array.getWsTransformerPK()) {
+	        		pList.add(pk.getPk());
+	        	}
         	}
         	cboProcessList.setItems((String[])pList.toArray(new String[pList.size()]));
         	
