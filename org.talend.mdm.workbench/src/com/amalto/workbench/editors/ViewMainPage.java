@@ -132,7 +132,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
         	cboProcessList.setLayoutData(new GridData(SWT.LEFT,SWT.TOP,true,true,1,1));
         	java.util.List<String> pList=new ArrayList<String>();
         	WSTransformerPKArray array=Util.getPort(getXObject()).getTransformerPKs(new WSGetTransformerPKs(""));  
-        	if(array!=null) {
+        	if(array!=null && array.getWsTransformerPK()!=null) {
 	        	for(WSTransformerPK pk:array.getWsTransformerPK()) {
 	        		pList.add(pk.getPk());
 	        	}
