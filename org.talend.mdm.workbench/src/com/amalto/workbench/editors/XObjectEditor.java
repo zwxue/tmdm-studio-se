@@ -7,11 +7,26 @@
 package com.amalto.workbench.editors;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.CoolBarManager;
+import org.eclipse.jface.action.ToolBarContributionItem;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.Document;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.CoolBar;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -38,6 +53,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 	protected boolean saveInProgress = false;
 	
 	protected XMLEditor xmlEditor;
+	private com.amalto.workbench.editors.XObjectEditor.TdEditorToolBar toolBar;
 	/*
      * (non-Javadoc)
      * 
@@ -353,4 +369,139 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener{
 		// TODO Auto-generated method stub
 		return super.getCurrentPage();
 	}
+	
+	   protected Composite createPageContainer(Composite parent) {
+	        GridLayout gridLayout = new GridLayout();
+	        gridLayout.verticalSpacing = 0;
+	        gridLayout.numColumns = 1;
+	        gridLayout.marginWidth = 0;
+	        gridLayout.marginHeight = 0;
+	        parent.setLayout(gridLayout);
+
+	        Composite barComp = new Composite(parent, SWT.NONE);
+	        GridData gdData = new GridData(GridData.FILL_HORIZONTAL);
+	        barComp.setLayoutData(gdData);
+	        barComp.setLayout(new FormLayout());
+
+	        createToolbar(barComp);
+
+	        Composite mainParent = new Composite(parent, SWT.NONE);
+	        GridData gdData1 = new GridData(GridData.FILL_BOTH);
+	        gdData1.grabExcessVerticalSpace = true;
+	        mainParent.setLayoutData(gdData1);
+	        return super.createPageContainer(mainParent);
+	    }
+	    protected void createToolbar(final Composite parent) {
+
+	        toolBar = new TdEditorToolBar(parent);
+
+	        FormData data = new FormData();
+	        data.top = new FormAttachment(0, 0);
+	        data.left = new FormAttachment(0, 0);
+	        data.right = new FormAttachment(100, 0);
+	        toolBar.getToolbarControl().setLayoutData(data);
+
+	        toolBar.addResizeListener(new ControlListener() {
+
+	            public void controlMoved(ControlEvent e) {
+	            }
+
+	            public void controlResized(ControlEvent e) {
+	                parent.getParent().layout(true);
+	                parent.layout(true);
+	            }
+	        });
+	    }
+
+	    /**
+	     * DOC bzhou Comment method "getToolBar".
+	     * 
+	     * @return
+	     */
+	    public TdEditorToolBar getToolBar() {
+	        return toolBar;
+	    }	
+	    
+	    public class TdEditorToolBar {
+
+	        private CoolBar coolBar = null;
+
+	        private CoolBarManager coolBarMgr;
+
+	        private ToolBarManager defaultToolBarMgr;
+
+
+	        private LinkedList<Action> actions = new LinkedList<Action>();
+
+	        public TdEditorToolBar(Composite parent) {
+
+	            // create coolbar
+
+	            coolBar = new CoolBar(parent, SWT.FLAT);
+	            coolBarMgr = new CoolBarManager(coolBar);
+
+	            GridData gid = new GridData();
+	            gid.horizontalAlignment = GridData.FILL;
+	            coolBar.setLayoutData(gid);
+
+	            // initialize default actions
+	            defaultToolBarMgr = new ToolBarManager(SWT.FLAT);
+
+	            actions.add(new RefreshSectionAction());
+
+	            for (Action action : actions) {
+	                defaultToolBarMgr.add(action);
+	            }
+
+	            // add all toolbars to parent coolbar
+	            coolBarMgr.add(new ToolBarContributionItem(defaultToolBarMgr));
+	            coolBarMgr.update(true);
+	        }
+
+	        public void addResizeListener(ControlListener listener) {
+	            coolBar.addControlListener(listener);
+	        }
+
+	        public CoolBar getToolbarControl() {
+	            return coolBar;
+	        }
+
+
+	        public void addActions(Action... actions) {
+	            assert actions != null;
+
+	            if (coolBarMgr != null) {
+	                for (Action action : actions) {
+	                    defaultToolBarMgr.add(action);
+	                }
+
+	                // coolBarMgr.add(new ToolBarContributionItem(defaultToolBarMgr));
+	                defaultToolBarMgr.update(true);
+	                coolBarMgr.update(true);
+	            }
+	        }
+
+
+	        /**
+	         * 
+	         * DOC mzhao TdEditorToolBar class global comment. Detailled comment
+	         */
+	        private class RefreshSectionAction extends Action {
+
+	            public RefreshSectionAction() {
+	                super("Refresh"); //$NON-NLS-1$
+	                setToolTipText("Refresh");
+	                this.setImageDescriptor(ImageCache.getImage(EImage.REFRESH.getPath()));
+	            }
+
+	            @Override
+	            public void run() {
+	            	IFormPage page= formPages.get(getCurrentPage());
+	            	if(page!=null && page instanceof AFormPage) {	            	
+	            		((AFormPage)page).refreshPage();
+	            	}
+	            }
+	        }
+	    }
+	    
 }

@@ -82,6 +82,7 @@ import com.amalto.workbench.actions.ImportTISJobAction;
 import com.amalto.workbench.actions.NewCategoryAction;
 import com.amalto.workbench.actions.NewXObjectAction;
 import com.amalto.workbench.actions.PasteXObjectAction;
+import com.amalto.workbench.actions.RefreshAllServerAction;
 import com.amalto.workbench.actions.RefreshCurrentEditorAction;
 import com.amalto.workbench.actions.RefreshXObjectAction;
 import com.amalto.workbench.actions.RenameXObjectAction;
@@ -144,6 +145,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
     protected Action serverRefreshAction;
 
+    protected Action refreshAllServerAction;
     // protected Action serverInitAction;
     protected Action browseViewAction;
 
@@ -216,7 +218,19 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         }
         return ports;
     }
-
+    public java.util.List<TreeParent> getServers(){
+    	java.util.List<TreeParent> servs = new ArrayList<TreeParent>();
+    	TreeObject[] servers = contentProvider.getInvisibleRoot().getChildren();
+        for (TreeObject server : servers) {
+            if (server instanceof TreeParent) {
+                if (!(((TreeParent) server).getChildren().length == 1 && ((TreeParent) server).getChildren()[0]
+                        .getDisplayName().equalsIgnoreCase("Pending..."))) {
+                	servs.add((TreeParent)server);
+                	}
+            }
+        }
+        return servs;
+    }
     private DragSource createTreeDragSource() {
         DragSource dragSource = new DragSource(viewer.getTree(), DND.DROP_MOVE | DND.DROP_COPY);
         dragSource.setTransfer(new Transfer[] { TreeObjectTransfer.getInstance() });
@@ -807,7 +821,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     private void fillLocalToolBar(IToolBarManager manager) {
         manager.add(loginAction);
         manager.add(new Separator());
-        manager.add(new RefreshCurrentEditorAction());
+        manager.add(refreshAllServerAction);
         manager.add(new Separator());
         manager.add(new Separator());
         drillDownAdapter.addNavigationActions(manager);
@@ -886,6 +900,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         browseRevisionAction = new BrowseRevisionAction(this);
         deleteXObjectAction = new DeleteXObjectAction(this);
         serverRefreshAction = new ServerRefreshAction(this);
+        refreshAllServerAction=new RefreshAllServerAction(this);
         // serverInitAction = new ServerInitAction(this);
         browseViewAction = new BrowseViewAction(this);
         copyAction = new CopyXObjectAction(this);
@@ -895,6 +910,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         exportAction = new ExportItemsAction(this);
         importAction = new ImportItemsAction(this);
         newCategoryAction = new NewCategoryAction(this);
+        
+
     }
 
     private void hookDoubleClickAction() {

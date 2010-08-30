@@ -482,7 +482,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 
 
 	public void textChanged(TextEvent event) {
-		markDirty();
+		markDirtyWithoutCommit();
 	}
 
 	
@@ -508,7 +508,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 			Control control = ((DragSource)event.widget).getControl();
 			if ((control instanceof List) && ((event.detail & DND.DROP_MOVE) == DND.DROP_MOVE)) {
 				((List)control).remove(selected);
-				ViewMainPage.this.markDirty();
+				markDirtyWithoutCommit();
 			}
 		}
 
@@ -548,7 +548,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 				if (TextTransfer.getInstance().isSupportedType(event.currentDataType)) 
 					if (!Arrays.asList(((List)control).getItems()).contains(event.data)) {
 							((List)control).add((String)event.data);
-							ViewMainPage.this.markDirty();
+							ViewMainPage.this.markDirtyWithoutCommit();
 					}
 		}
 		public void dropAccept(DropTargetEvent event) {}

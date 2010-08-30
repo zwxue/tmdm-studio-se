@@ -1,5 +1,4 @@
 /*
- * Created on 27 oct. 2005
  *
  * To change the template for this generated file go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
@@ -364,7 +363,7 @@ public class MenuMainPage extends AMainPageV2 {
 	        	treeEntry.getWsMenuEntry().setDescriptions(wsDescriptions);
 				viewer.setExpandedState(treeEntry, true);
 				viewer.refresh(treeEntry, true);
-				markDirty();
+				markDirtyWithoutCommit();
 	        }
 	        dlg.close();							        
 			
@@ -588,7 +587,7 @@ public class MenuMainPage extends AMainPageV2 {
 					viewer.setExpandedState(treeEntry.getParentTreeEntry(), true);
 					viewer.refresh(treeEntry.getParentTreeEntry(), false);
 					//mark dirty
-					markDirty();
+					markDirtyWithoutCommit();
 				} catch (Exception e) {
 					e.printStackTrace();
 					MessageDialog.openError(
@@ -613,7 +612,7 @@ public class MenuMainPage extends AMainPageV2 {
 			Control control = ((DragSource)event.widget).getControl();
 			if ((control instanceof List) && ((event.detail & DND.DROP_MOVE) == DND.DROP_MOVE)) {
 				((List)control).remove(selected);
-				MenuMainPage.this.markDirty();
+				MenuMainPage.this.markDirtyWithoutCommit();
 			}
 		}
 
@@ -653,7 +652,7 @@ public class MenuMainPage extends AMainPageV2 {
 				if (TextTransfer.getInstance().isSupportedType(event.currentDataType)) 
 					if (!Arrays.asList(((List)control).getItems()).contains(event.data)) {
 							((List)control).add((String)event.data);
-							MenuMainPage.this.markDirty();
+							MenuMainPage.this.markDirtyWithoutCommit();
 					}
 		}
 		public void dropAccept(DropTargetEvent event) {}

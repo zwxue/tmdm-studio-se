@@ -351,7 +351,7 @@ public class TransformerMainPage extends AMainPageV2 {
             		//((WSTransformerV2)getXObject().getWsObject())
             		transformer.setDescription(descriptionText.getText());
             		TransformerMainPage.this.comitting= false;
-            		//markDirty();
+            		//markDirtyWithoutCommit();
             		markDirtyWithoutCommit();
             	}
             });*/
@@ -532,7 +532,7 @@ public class TransformerMainPage extends AMainPageV2 {
 	            		wsTransformer.setProcessSteps(list.toArray(new WSTransformerProcessStep[list.size()]));
 	            		TransformerMainPage.this.comitting= false;
 	            		TransformerMainPage.this.stepsList.forceFocus();
-	            		markDirty();
+	            		markDirtyWithoutCommit();
             		}
             	};
             });
@@ -563,7 +563,7 @@ public class TransformerMainPage extends AMainPageV2 {
 	            		wsTransformer.setProcessSteps(list.toArray(new WSTransformerProcessStep[list.size()]));
 	            		TransformerMainPage.this.comitting= false;
 	            		TransformerMainPage.this.stepsList.forceFocus();
-	            		markDirty();
+	            		markDirtyWithoutCommit();
             		}
             	};
             });
@@ -604,7 +604,7 @@ public class TransformerMainPage extends AMainPageV2 {
 	        	@Override
 	        	public void widgetSelected(SelectionEvent e) {	        		
 	        		WidgetUtils.enable(specsComposite, !disabledButton.getSelection());
-	        		markDirty();
+	        		markDirtyWithoutCommit();
 	        		if(stepsList.getSelectionIndex()>=0)
 	        		transformer.getProcessSteps()[stepsList.getSelectionIndex()].setDisabled(disabledButton.getSelection());
 	        	}
@@ -642,7 +642,7 @@ public class TransformerMainPage extends AMainPageV2 {
 	        		//((WSTransformerV2)getXObject().getWsObject())
 	        		transformer.getProcessSteps()[stepsList.getSelectionIndex()].setParameters(parametersTextViewer.getDocument().get());
 	        		TransformerMainPage.this.comitting= false;
-	        		markDirty();            		
+	        		markDirtyWithoutCommit();            		
 	        	}
 
 	        });  
@@ -732,7 +732,7 @@ public class TransformerMainPage extends AMainPageV2 {
 			TransformerMainPage.this.stepsList.select(index);
 			refreshStep(index);
 			TransformerMainPage.this.stepsList.forceFocus();
-    		markDirty();
+    		markDirtyWithoutCommit();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -792,7 +792,7 @@ public class TransformerMainPage extends AMainPageV2 {
 		currentPlugin = stepsList.getSelectionIndex();
 		wsTransformer.setProcessSteps(list.toArray(new WSTransformerProcessStep[list.size()]));
 		TransformerMainPage.this.comitting= false;
-		markDirty();
+		markDirtyWithoutCommit();
     }
     
 
@@ -842,7 +842,7 @@ public class TransformerMainPage extends AMainPageV2 {
 			//refresh
 			viewer.refresh();
 			//mark for update
-			markDirty();
+			markDirtyWithoutCommit();
     	}
     }
 	protected void refreshData() {
@@ -891,7 +891,7 @@ public class TransformerMainPage extends AMainPageV2 {
 
 
 	public void textChanged(TextEvent event) {
-		markDirty();
+		markDirtyWithoutCommit();
 	}
 
 	public void dispose() {
@@ -1098,7 +1098,7 @@ public class TransformerMainPage extends AMainPageV2 {
         			inputViewer.refresh();
         			if(line.getPipelineVariable()!=null)availableVariables.add(line.getPipelineVariable());
         			outputVariables.setItems(availableVariables.toArray(new String[availableVariables.size()]));
-        			markDirty();
+        			markDirtyWithoutCommit();
 	        	}
 	        });
 			LabelCombo inputP=new LabelCombo(toolkit,inputComposite,"Input Parameters",SWT.BORDER|SWT.READ_ONLY,1);		
@@ -1150,7 +1150,7 @@ public class TransformerMainPage extends AMainPageV2 {
         			outputViewer.refresh();
         			if(line.getPipelineVariable()!=null)availableVariables.add(line.getPipelineVariable());
         			outputVariables.setItems(availableVariables.toArray(new String[availableVariables.size()]));
-        			markDirty();
+        			markDirtyWithoutCommit();
 	        	}
 	        });
 			LabelCombo outputV=new LabelCombo(toolkit,outputComposite,"Output Variables",SWT.BORDER,1);		
@@ -1200,7 +1200,7 @@ public class TransformerMainPage extends AMainPageV2 {
 //	            		transformer.getProcessSteps()[stepsList.getSelectionIndex()]
 //	            			                  	.setPluginJNDI(jndi);
 //	            		TransformerMainPage.this.comitting= false;
-//	            		markDirty();
+//	            		markDirtyWithoutCommit();
 //	            	}	            	
 //	            });
 	            
@@ -1334,7 +1334,7 @@ public class TransformerMainPage extends AMainPageV2 {
 								if (!Arrays.asList(combo.getItems()).contains(
 										dlg.outPutVariable())) {
 									combo.add(dlg.outPutVariable());
-									TransformerMainPage.this.markDirty();
+									TransformerMainPage.this.markDirtyWithoutCommit();
 								}
 								
 								for (int idx = 0; idx < combo.getItems().length; idx++)

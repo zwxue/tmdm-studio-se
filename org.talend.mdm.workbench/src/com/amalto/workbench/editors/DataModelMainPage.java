@@ -521,7 +521,7 @@ public class DataModelMainPage extends AMainPageV2 {
 							wsObj.setXsdSchema(xsd);
 							validateSchema(xsd);
 							refreshData();
-							markDirty();
+							markDirtyWithoutCommit();
 						}
 						else if (infer != 0) {
 							MessageDialog
@@ -617,7 +617,7 @@ public class DataModelMainPage extends AMainPageV2 {
 //			DataModelEditorPage editorPage = ((DataModelEditorPage) getEditor()
 //					.findPage(DataModelEditorPage.class.getName()));
 //			if (editorPage.isDirty())
-//				this.markDirty();
+//				this.markDirtyWithoutCommit();
 			XMLEditor xmleditor=(getEditor()).getXmlEditor();
 			if(xmleditor!=null && xmleditor.isDirty())
 				xmleditor.markDirty();
@@ -655,7 +655,7 @@ public class DataModelMainPage extends AMainPageV2 {
                            performDeletion(delList);
                            validateSchema();
     						
-  						    markDirty();
+  						    markDirtyWithoutCommit();
 //  						    refreshData();
   						    // below code is to refill the tree view with xsdScham including one xsd schma which contains the other xsd , 
   						    // and in the case of deleting the included xsd
@@ -724,7 +724,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		
 		addLabelForTheItem(items,isAdd);
 		if (isChange) {
-			this.markDirty();
+			this.markDirtyWithoutCommit();
 			this.refresh();
 //	 				this.getTreeViewer().expandToLevel(xSDCom, 2);
 		}
@@ -936,7 +936,7 @@ public class DataModelMainPage extends AMainPageV2 {
          	}
          	
          }
-		this.markDirty();
+		this.markDirtyWithoutCommit();
 	}
 	public void stepDown(){
 		 TreeItem item;
@@ -960,7 +960,7 @@ public class DataModelMainPage extends AMainPageV2 {
          	
          	}
          }
-		this.markDirty();
+		this.markDirtyWithoutCommit();
 	}
 	//remove this button
 /*	private void createButton(){
@@ -2124,13 +2124,13 @@ public class DataModelMainPage extends AMainPageV2 {
 	/**
 	 * We need to override the method so that the schema object is serialized
 	 * into xsd an stored in the wsObject via the commit method We also need to
-	 * marDirty both Pages The super.markDirty() method will trigger the
+	 * marDirty both Pages The super.markDirtyWithoutCommit() method will trigger the
 	 * appropriate events to the registered listeners
 	 */
 	@Override
-	public void markDirty() {
+	public void markDirtyWithoutCommit() {
 		//commit();
-		super.markDirty();
+		super.markDirtyWithoutCommit();
 		XMLEditor xmleditor=(getEditor()).getXmlEditor();
 		if(xmleditor!=null && getEditor().isDirty())
 			xmleditor.markDirty();

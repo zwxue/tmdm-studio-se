@@ -256,7 +256,7 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
 	 * Modify Events on the page
 	 */
 	public void modifyText(ModifyEvent e) {
-		markDirty();
+		markDirtyWithoutCommit();
 	}
 	
 	/**

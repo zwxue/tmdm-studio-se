@@ -76,7 +76,7 @@ public class DescAnnotationComposite implements  SelectionListener{
 	        descriptionText.addModifyListener(new ModifyListener() {
 	        	public void modifyText(ModifyEvent e) {
 	        		if (descriptionValue != null && !descriptionValue.equals(descriptionText.getText())) {
-						accommodation.markDirty();
+						accommodation.markDirtyWithoutCommit();
 					}
 	        		descriptionValue = descriptionText.getText();
 	        		fillDataStore(descriptionText.getText());
@@ -101,7 +101,7 @@ public class DescAnnotationComposite implements  SelectionListener{
 	        descriptionText.addModifyListener(new ModifyListener() {
 	        	public void modifyText(ModifyEvent e) {
 	        		if (descriptionValue != null && !descriptionValue.equals(descriptionText.getText())) {
-						accommodation.markDirty();
+						accommodation.markDirtyWithoutCommit();
 					}
 	        		descriptionValue = descriptionText.getText();
 	        		fillDataStore(descriptionText.getText());
@@ -202,7 +202,7 @@ public class DescAnnotationComposite implements  SelectionListener{
 				if (!outPut.equals(descriptionText.getText()))
 				{
 					descriptionText.setText(outPut);
-					accommodation.markDirty();
+					accommodation.markDirtyWithoutCommit();
 				}
 
 	        }
