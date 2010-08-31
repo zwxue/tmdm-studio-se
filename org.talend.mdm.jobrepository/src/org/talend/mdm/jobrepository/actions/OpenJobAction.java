@@ -34,7 +34,7 @@ import org.talend.designer.core.ui.MultiPageTalendEditor;
 import org.talend.designer.core.ui.editor.ProcessEditorInput;
 import org.talend.repository.editor.JobEditorInput;
 import org.talend.repository.model.RepositoryNode;
-import org.talend.repository.model.RepositoryNode.ENodeType;
+import org.talend.repository.model.IRepositoryNode.ENodeType;
 import org.talend.repository.ui.views.RepositoryView;
 
 import com.amalto.workbench.models.TreeObject;
