@@ -6,10 +6,10 @@
         point="org.eclipse.core.runtime.products">
      <product
            application="org.talend.rcp.branding.tom.application"
-           name="%productName">
+           name="Talend MDM Studio">
         <property
               name="appName"
-              value="%productName">
+              value="Talend MDM Studio">
         </property>
         <property
               name="aboutImage"
@@ -29,11 +29,11 @@
         </property>
         <property
               name="startupMessageRect"
-              value="7,208,420,20">
+              value="7,222,430,20">
         </property>
         <property
               name="startupProgressRect"
-              value="7,228,420,15">
+              value="7,202,430,15">
         </property>
         <property
               name="preferenceCustomization"
