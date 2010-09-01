@@ -31,7 +31,7 @@ import org.talend.core.model.properties.SpagoBiServer;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.mdm.engines.client.ui.wizards.DeployOnMDMExportWizard;
 import org.talend.repository.model.RepositoryNode;
-import org.talend.repository.model.RepositoryNode.ENodeType;
+import org.talend.repository.model.IRepositoryNode.ENodeType;
 
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
