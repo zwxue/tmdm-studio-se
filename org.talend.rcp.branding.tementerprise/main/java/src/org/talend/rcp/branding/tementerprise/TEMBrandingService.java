@@ -20,7 +20,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.osgi.framework.Bundle;
-import org.talend.core.ui.branding.AbstractTalendBrandingService;
+import org.talend.core.ui.branding.AbstractBrandingService;
 import org.talend.core.ui.branding.IBrandingConfiguration;
 import org.talend.rcp.branding.tementerprise.i18n.Messages;
 
@@ -28,7 +28,7 @@ import org.talend.rcp.branding.tementerprise.i18n.Messages;
  * DOC smallet class global comment. Detailled comment <br/>
  * 
  */
-public class TEMBrandingService extends AbstractTalendBrandingService {
+public class TEMBrandingService extends AbstractBrandingService {
 
     protected IBrandingConfiguration brandingConfigure;
 
