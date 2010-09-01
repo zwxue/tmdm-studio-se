@@ -7,9 +7,11 @@ package com.amalto.workbench.utils;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -30,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.PropertyResourceBundle;
 import java.util.Set;
-import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -119,6 +120,7 @@ import org.xml.sax.InputSource;
 import sun.misc.BASE64Encoder;
 
 import com.amalto.workbench.MDMWorbenchPlugin;
+import com.amalto.workbench.actions.BrowseViewAction;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -146,6 +148,8 @@ import com.amalto.workbench.webservices.WSVersion;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.WSWhereCondition;
 import com.amalto.workbench.webservices.WSWhereOperator;
+import com.amalto.workbench.webservices.WSWorkflowDeploy;
+import com.amalto.workbench.webservices.WSWorkflowProcessDefinitionUUID;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.webservices.XtentisService_Impl;
 import com.sun.org.apache.xpath.internal.XPathAPI;
@@ -2653,5 +2657,23 @@ public class Util {
 
 		}
     	return null;
+    }
+    public static byte[] getBytesFromFile(File f){
+        if (f == null)  {
+            return null;
+        }
+        try  {
+            FileInputStream stream = new FileInputStream(f);
+            ByteArrayOutputStream out = new ByteArrayOutputStream(1000);
+            byte[] b = new byte[1000];
+            int n;
+            while ((n = stream.read(b)) != -1)
+                out.write(b, 0, n);
+            stream.close();
+            out.close();
+            return out.toByteArray();
+        } catch (IOException e)  {
+        }
+        return null;
     }
 }
