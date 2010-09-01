@@ -28,7 +28,7 @@ import org.talend.rcp.branding.tementerprise.i18n.Messages;
  * DOC smallet class global comment. Detailled comment <br/>
  * 
  */
-public class TEMBrandingService extends AbstractBrandingService {
+public class TEMBrandingService extends AbstractTalendBrandingService {
 
     protected IBrandingConfiguration brandingConfigure;
 
