@@ -618,10 +618,10 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 			return false;
 		}
 		WSView wsObject = (WSView) (getWsViewObject());
-		if(wsObject.getViewableBusinessElements().length==0) {
-			MessageDialog.openError(this.getSite().getShell(), "Error","Viewable Business Elements can't be empty!");
-			return false;
-		}
+//		if(wsObject.getViewableBusinessElements().length==0) {
+//			MessageDialog.openError(this.getSite().getShell(), "Error","Viewable Business Elements can't be empty!");
+//			return false;
+//		}
 		if(wsObject.getSearchableBusinessElements().length==0) {
 			MessageDialog.openError(this.getSite().getShell(), "Error","Searchable Business Elements can't be empty!");
 			return false;
