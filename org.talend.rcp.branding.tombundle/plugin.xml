@@ -72,12 +72,6 @@
       </application>
    </extension>
       <extension
-            point="org.talend.core.service">
-         <Service
-               class="org.talend.rcp.branding.tombundle.TOMBundleBrandingService"
-               serviceId="org.talend.core.ui.branding.IBrandingService"/>
-      </extension>
-      <extension
          point="org.talend.core.talendperspectives">
          <TalendPerspective
             refPerspectiveId="org.talend.dataprofiler.DataProfilingPerspective"
@@ -87,5 +81,12 @@
             refPerspectiveId="net.sourceforge.sqlexplorer.plugin.perspectives.SQLExplorerPluginPerspective"
             talendPerspectiveId="org.talend.rcp.DQExplorePerspective">
          </TalendPerspective>
+      </extension>
+      <extension
+            point="org.talend.core.runtime.service">
+         <Service
+               class="org.talend.rcp.branding.tombundle.TOMBundleBrandingService"
+               serviceId="org.talend.core.ui.branding.IBrandingService">
+         </Service>
       </extension>
 </plugin>
