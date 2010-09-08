@@ -197,9 +197,9 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
             
             
             //Where Conditions
-            if(viewName.startsWith("Browse_items_"))
-            	setCompositeView(false);
-    		else
+//            if(viewName.startsWith("Browse_items_"))
+//            	setCompositeView(false);
+//    		else
     			setCompositeView(true);
             initCoditionsColumns();
             Composite wcGroup = this.getNewSectionComposite("Where Conditions");
