@@ -464,7 +464,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 					proposals.add(pk.getPk());
 			}
 			ContentProposalAdapterExtended adapter=WidgetUtils.addContentProposal(serviceParametersText, (String[])proposals.toArray(new String[proposals.size()]), new char[] {' ','='});
-	        adapter.setPopupSize(new Point(120,100));
+	        adapter.setPopupSize(new Point(300,250));
 		}		
 	}
 	protected void refreshData() {
