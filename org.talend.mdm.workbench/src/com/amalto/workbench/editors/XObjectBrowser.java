@@ -7,10 +7,21 @@
 package com.amalto.workbench.editors;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -19,6 +30,7 @@ import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
+import com.amalto.workbench.editors.TdEditorToolBar;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
@@ -30,6 +42,7 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener{
 	public static String ID="com.amalto.workbench.editors.XObjectBrowser";
 	private ArrayList<IFormPage> formPages = new ArrayList<IFormPage>();
 	private TreeObject initialXObject = null;  //backup
+	private TdEditorToolBar toolBar;
 	
 	/*
      * (non-Javadoc)
@@ -78,8 +91,51 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener{
             MessageDialog.openError(this.getSite().getShell(), "Error", "Unable to open the editor :"+e.getLocalizedMessage());
         }
     }
-    
-    
+    protected void createToolbar(final Composite parent, List<Action> actions) {
+
+        toolBar = new TdEditorToolBar(parent,actions);
+
+        FormData data = new FormData();
+        data.top = new FormAttachment(0, 0);
+        data.left = new FormAttachment(0, 0);
+        data.right = new FormAttachment(100, 0);
+        toolBar.getToolbarControl().setLayoutData(data);
+
+        toolBar.addResizeListener(new ControlListener() {
+
+            public void controlMoved(ControlEvent e) {
+            }
+
+            public void controlResized(ControlEvent e) {
+                parent.getParent().layout(true);
+                parent.layout(true);
+            }
+        });
+    }
+   
+	   protected Composite createPageContainer(Composite parent) {
+	        GridLayout gridLayout = new GridLayout();
+	        gridLayout.verticalSpacing = 0;
+	        gridLayout.numColumns = 1;
+	        gridLayout.marginWidth = 0;
+	        gridLayout.marginHeight = 0;
+	        parent.setLayout(gridLayout);
+
+	        Composite barComp = new Composite(parent, SWT.NONE);
+	        GridData gdData = new GridData(GridData.FILL_HORIZONTAL);
+	        barComp.setLayoutData(gdData);
+	        barComp.setLayout(new FormLayout());
+	        List<Action>actions=new ArrayList<Action>();
+	        actions.add(new RefreshSectionAction());
+	        createToolbar(barComp,actions);
+
+	        Composite mainParent = new Composite(parent, SWT.NONE);
+	        GridData gdData1 = new GridData(GridData.FILL_BOTH);
+	        gdData1.grabExcessVerticalSpace = true;
+	        mainParent.setLayoutData(gdData1);
+	        return super.createPageContainer(mainParent);
+	    }
+   
     //Overloaded - Fixes issues with getEditor()
     public int addPage(IFormPage page) throws PartInitException {
 		formPages.add(page);
@@ -221,5 +277,20 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener{
 			default:
 		}
 	}
-    
+    private class RefreshSectionAction extends Action {
+
+        public RefreshSectionAction() {
+            super("Refresh"); //$NON-NLS-1$
+            setToolTipText("Refresh");
+            this.setImageDescriptor(ImageCache.getImage(EImage.REFRESH.getPath()));
+        }
+
+        @Override
+        public void run() {
+        	IFormPage page= formPages.get(getCurrentPage());
+        	if(page!=null && page instanceof AFormPage) {	            	
+        		((AFormPage)page).refreshPage();
+        	}
+        }
+    }
 }
