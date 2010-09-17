@@ -57,9 +57,11 @@ public class TreeObject implements IAdaptable {
 	public final static int _WIZARD_ = 101;
 	
 	public final static int DATA_CLUSTER_CONTENTS=23;
+
 	//export folder name
 	public final static String DATACONTAINER="datacontainer";
 	public final static String DATACONTAINER_COTENTS="datacontainerContents";
+	
 	public final static String DATAMODEL_="datamodel";
 	public final static String DATAMODELTYPES_="datamodelTypes";
 	public final static String PICTURES_="pictures";
@@ -78,6 +80,9 @@ public class TreeObject implements IAdaptable {
 	public final static String BARFILE_URI="/pubcomponent/secure/barFile/";
 	public final static String BARFILE_PATH = "/workflow/";
 	
+	public final static String DATACONTAINER_BACKUP="datacontainerBackup"; //the collection backup file(zip)
+	public final static String DataclusterBackupFile_URI="/pubcomponent/secure/dataclusterBackupFile/";
+	
 	private String displayName;  
 	private TreeParent parent;
 	private TreeParent serverRoot;
@@ -93,6 +98,16 @@ public class TreeObject implements IAdaptable {
 	
 	private String[] items; //export items
 	
+	private String backupPath; //for datacluster backup file
+	
+	public String getBackupPath() {
+		return backupPath;
+	}
+
+	public void setBackupPath(String backupPath) {
+		this.backupPath = backupPath;
+	}
+
 	public String[] getItems() {
 		return items;
 	}

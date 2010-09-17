@@ -24,7 +24,6 @@ import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -48,8 +47,10 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.MultipartPostMethod;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ObjectUtils;
@@ -59,7 +60,6 @@ import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProduct;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
@@ -119,8 +119,6 @@ import org.xml.sax.InputSource;
 
 import sun.misc.BASE64Encoder;
 
-import com.amalto.workbench.MDMWorbenchPlugin;
-import com.amalto.workbench.actions.BrowseViewAction;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -135,7 +133,6 @@ import com.amalto.workbench.webservices.WSGetDataModel;
 import com.amalto.workbench.webservices.WSGetUniverse;
 import com.amalto.workbench.webservices.WSGetUniversePKs;
 import com.amalto.workbench.webservices.WSGetViewPKs;
-import com.amalto.workbench.webservices.WSMDMConfig;
 import com.amalto.workbench.webservices.WSRegexDataClusterPKs;
 import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 import com.amalto.workbench.webservices.WSRoutingRuleExpression;
@@ -148,8 +145,6 @@ import com.amalto.workbench.webservices.WSVersion;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.WSWhereCondition;
 import com.amalto.workbench.webservices.WSWhereOperator;
-import com.amalto.workbench.webservices.WSWorkflowDeploy;
-import com.amalto.workbench.webservices.WSWorkflowProcessDefinitionUUID;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.webservices.XtentisService_Impl;
 import com.sun.org.apache.xpath.internal.XPathAPI;
@@ -682,9 +677,7 @@ public class Util {
     	return getFirstTextNode(contextNode,xPath,contextNode);
     }
 
-    
-    
-	/*********************************************************************
+ 	/*********************************************************************
 	 *      FILE UPLOAD
 	 *      
 	 *      Multi-Part Form Post
@@ -1961,98 +1954,7 @@ public class Util {
    			
    			return complexs;
     }
-    /**
-     * @deprecated don't use exist backup see ImportItemWizard
-     * @param filename
-     * @param server
-     * @param monitor
-     * @throws Exception
-     */
-    public static void importDataCluster(TreeObject xobject, String filename, String server,IProgressMonitor monitor) throws Exception{
-    	
-		XtentisPort port = Util.getPort(
-				new URL(xobject.getEndpointAddress()),
-				xobject.getUniverse(),
-				xobject.getUsername(),
-				xobject.getPassword()
-		);
-		WSMDMConfig config = port.getMDMConfiguration();
-		List<String> list=new ArrayList<String>();
-		String home=getExistHome();
-		String path=new File(home+"/start.jar").getAbsolutePath();		
-		String cmd="java -Xms128m -Xmx512m -Dfile.encoding=UTF-8 -jar "+path+" backup -u "+config.getUserName()+" -p "+config.getPassword();
-		String[] cmds=cmd.split("\\s");
-		list.addAll(Arrays.asList(cmds));
-		list.add("-r");
-		list.add(filename);
-		//add server
-		String uri="-ouri=xmldb:exist://"+server+":"+IConstants.EXIST_PORT+"/exist/xmlrpc";
-		list.add(uri);
-		//set exist home       
-        if(Platform.getOS().indexOf("win") != -1){//windows
-        	list.add(0,"cmd");
-        	list.add(1,"/c");
-        }
-        
-		//Main.getMain().run(list.toArray(new String[list.size()]));
-		ConsoleSimulator.runCmd(list.toArray(new String[list.size()]), null, home,monitor);
-		//Runtime.getRuntime().exec(list.toArray(new String[list.size()]), null, new File(home));
-    }
-    
-    /**
-     * @deprecated don't use exist backup see ExportItemWizard
-     * @param datacluster
-     * @param filename
-     * @param server
-     * @param monitor
-     * @throws Exception
-     */
-    public static void exportDataCluster(TreeObject xobject, String datacluster, String filename,String server,IProgressMonitor monitor) throws Exception{
-		XtentisPort port = Util.getPort(
-				new URL(xobject.getEndpointAddress()),
-				xobject.getUniverse(),
-				xobject.getUsername(),
-				xobject.getPassword()
-		);
-		WSMDMConfig config = port.getMDMConfiguration();
-		
-    	if("ALL".equalsIgnoreCase(datacluster)){
-    		datacluster="";
-    	}
-		List<String> list=new ArrayList<String>();
-		String home=getExistHome();
-		String path=new File(home+"/start.jar").getAbsolutePath();		
-		String cmd="java -Xms128m -Xmx512m -Dfile.encoding=UTF-8 -jar "+path+" backup -u "+config.getUserName()+" -p "+config.getPassword()+" -b /db/"+datacluster;
-		//String cmd="java -Xms128m -Xmx512m -Dfile.encoding=UTF-8 org.exist.start.Main backup -u "+IConstants.EXIST_ADMIN+" -p "+IConstants.EXIST_ADMIN_PASSWD+" -b /db/"+datacluster;
-		String[] cmds=cmd.split("\\s");
-		list.addAll(Arrays.asList(cmds));
-		list.add("-d");
-		list.add(filename);
-		//add server
-		String uri="-ouri=xmldb:exist://"+server+":"+IConstants.EXIST_PORT+"/exist/xmlrpc";
-		list.add(uri);
-		//set exist home       
-        if(Platform.getOS().indexOf("win") != -1){//windows
-        	list.add(0,"cmd");
-        	list.add(1,"/c");
-        }
-        
-		//Main.getMain().run(list.toArray(new String[list.size()]));
-        ConsoleSimulator.runCmd(list.toArray(new String[list.size()]), null, home,monitor);
-		//Runtime.getRuntime().exec(list.toArray(new String[list.size()]), null, new File(home));
-    }
-    
-    public static String getExistHome()throws Exception{
-    	String home=getRealPath(MDMWorbenchPlugin.ID, "/");
-		System.out.println("plugin jar name ==="+home);
-
-		File tmp=new File(getTmpFolder());
-    	home=new File(home+"/exist").getAbsolutePath();    				
-        System.setProperty("exist.home", home);
-        System.out.println("exist.home==="+home);
-        return home;
-    }    
-    
+     
     public static String getTmpFolder() {
         String tmp = System.getProperty("user.dir") + "/exist"; //$NON-NLS-1$ //$NON-NLS-2$
         tmp = tmp.replace('\\', '/');

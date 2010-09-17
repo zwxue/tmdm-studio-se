@@ -160,7 +160,7 @@ public class ExportItemsDialog extends Dialog{
 			public IStatus run(IProgressMonitor monitor) {	
 				try{					
 					monitor.beginTask("Export Data Containers : " + dataCluster+" ...", IProgressMonitor.UNKNOWN);
-					Util.exportDataCluster(xObject, dataCluster, filename,server, monitor);
+					//Util.exportDataCluster(xObject, dataCluster, filename,server, monitor);
 					monitor.done();
 					return Status.OK_STATUS;
 				}catch(Exception e){

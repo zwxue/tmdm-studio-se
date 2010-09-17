@@ -70,6 +70,7 @@ import com.amalto.workbench.webservices.WSExistsView;
 import com.amalto.workbench.webservices.WSItem;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuPK;
+import com.amalto.workbench.webservices.WSPing;
 import com.amalto.workbench.webservices.WSPutDataCluster;
 import com.amalto.workbench.webservices.WSPutDataModel;
 import com.amalto.workbench.webservices.WSPutItem;
@@ -453,7 +454,7 @@ public class ImportItemsWizard extends Wizard{
 
 							}
 						}
-							port.putDataCluster(new WSPutDataCluster(model));
+						port.putDataCluster(new WSPutDataCluster(model));
 					} 
 					catch (Exception e1) {
 					   e1.printStackTrace();
@@ -462,31 +463,22 @@ public class ImportItemsWizard extends Wizard{
 					   }
 					
 					importClusterContents(item,port);
+					//backup file
+					if(item.getBackupPath()!=null) {						
+					   try {
+					      String file=importFolder+"/" + item.getBackupPath();
+			              //port.ping(new WSPing("Studio_Restore " + file ));
+					      restoreCluster(port, file);
+					   } 
+					   catch (Exception e2) {
+					      e2.printStackTrace();
+					   }finally {
+						   try{if(reader!=null)reader.close();}catch(Exception e) {}
+					   }
+					}
 				}
 				
-				break;
-				//dataclusters contents			
-			case TreeObject.DATA_CLUSTER_CONTENTS:
-				subItems = item.getItems();
-
-				for(String subItem : subItems) {
-				   try {
-				      reader = new FileReader(importFolder+"/" + subItem);
-		              WSItem wsItem = new WSItem();
-		              wsItem = (WSItem) Unmarshaller.unmarshal(WSItem.class, reader);
-		                
-		              if(wsItem != null) {
-		                 port.putItem(new WSPutItem(wsItem.getWsDataClusterPK(),wsItem.getContent(),new WSDataModelPK(wsItem.getDataModelName()),true));
-		              }
-				   } 
-				   catch (Exception e2) {
-				      e2.printStackTrace();
-				   }finally {
-					   try{if(reader!=null)reader.close();}catch(Exception e) {}
-				   }
-				}
-
-				break;
+				break;				
 			case TreeObject.DATA_MODEL:
 				monitor.subTask(" Data Model...");
 				subItems=item.getItems();
@@ -903,8 +895,18 @@ public class ImportItemsWizard extends Wizard{
 		
 		monitor.done();
 	}
-	
-	
+	/**
+	 * this only for exist db
+	 * @param port
+	 * @param filename
+	 * @throws Exception
+	 */
+	private void restoreCluster(XtentisPort port, String filename)throws Exception {
+		String endpointaddress=serverRoot.getEndpointAddress();
+		String uploadURL = new URL(endpointaddress).getProtocol()+"://"+new URL(endpointaddress).getHost()+":"+new URL(endpointaddress).getPort()+"/datamanager/uploadFile";
+		String remoteFile = Util.uploadFileToAppServer(uploadURL,filename,"admin","talend");
+		port.ping(new WSPing("Studio_Restore " + remoteFile ));
+	}
 	private void importClusterContents(TreeObject item, XtentisPort port) {
 		if(dataClusterContent.containsKey(item.getDisplayName()))
 		{
@@ -1070,5 +1072,4 @@ public class ImportItemsWizard extends Wizard{
 		}
 		
 	}
-
 }

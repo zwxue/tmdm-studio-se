@@ -1,18 +1,20 @@
 package com.amalto.workbench.export;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.StringWriter;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
@@ -63,6 +65,7 @@ import com.amalto.workbench.webservices.WSItem;
 import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuPK;
+import com.amalto.workbench.webservices.WSPing;
 import com.amalto.workbench.webservices.WSRole;
 import com.amalto.workbench.webservices.WSRolePK;
 import com.amalto.workbench.webservices.WSRoutingRule;
@@ -86,9 +89,7 @@ public class ExportItemsWizard extends Wizard {
     private IStructuredSelection sel;
 	private RepositoryCheckTreeViewer treeViewer;
 	private String exportFolder;
-	
-	
-	
+		
 	private FileSelectWidget folder;
 	private Button zipBtn;
 	private Button folderBtn;
@@ -153,7 +154,7 @@ public class ExportItemsWizard extends Wizard {
 			StringWriter sw;
 			ArrayList<String> items;
 			switch(obj.getType()){
-//			if(obj.getType() == TreeObject.DATA_CLUSTER){
+
 			case TreeObject.DATA_CLUSTER:
 				monitor.subTask(" Data Container...");
 				
@@ -177,46 +178,17 @@ public class ExportItemsWizard extends Wizard {
 				}catch(Exception e){}
 				monitor.worked(1);
 				//datacluster contents
-//				for(WSDataClusterPK pk:array.getWsDataClusterPKs()){
-					monitor.subTask(" Data Container "+ pk.getPk()+" ...");
-					try{
-					List<String> items1=new ArrayList<String>();
-		            WSItemPKsByCriteriaResponseResults[] results =
-			            port.getItemPKsByCriteria(new WSGetItemPKsByCriteria(
-			            		pk,
-			            		null,
-			            		null,
-			            		null,
-			            		(long)-1,
-			            		(long)-1,
-			            		0,
-			            		Integer.MAX_VALUE
-			            	)
-			            ).getResults();
-		            if(results==null) continue;
-		            for(WSItemPKsByCriteriaResponseResults item: results ){
-		            	if(item.getWsItemPK().getIds()==null) continue;
-		            	WSItem wsitem=port.getItem(new WSGetItem(item.getWsItemPK()));
-		            	
-		            	//Marshal
-		            	StringWriter sw1 = new StringWriter();
-		            	Marshaller.marshal(wsitem, sw1);
 
-		            	String uniqueId=pk.getPk()+"."+wsitem.getConceptName();
-		            	for(String id: wsitem.getIds()){
-		            		uniqueId=uniqueId+"."+id;
-		            	}		            	
-		            	encodedID = URLEncoder.encode(uniqueId,"UTF-8");
-		            	writeString(sw1.toString(), TreeObject.DATACONTAINER_COTENTS+"/"+pk.getPk()+"/"+encodedID);
-		            	items1.add(TreeObject.DATACONTAINER_COTENTS+"/"+pk.getPk()+"/"+encodedID);
-		            }
-		            TreeObject obj1=new TreeObject("",null, TreeObject.DATA_CLUSTER_CONTENTS,null,null);
-		            obj1.setItems(items1.toArray(new String[items1.size()]));
-					exports.add(obj1);
-					}catch(Exception e){}
-					monitor.worked(1);
-					break;
-//			}
+				monitor.subTask(" Data Container "+ pk.getPk()+" ...");
+				if("exist".equals(port.getMDMConfiguration().getXdbID())) {
+					bakcupCluster( obj, port);
+				}else {
+					exportCluster(exports, pk, port);
+				}
+				monitor.worked(1);
+				
+				break;
+
 			case TreeObject.DATA_MODEL:
 				monitor.subTask(" Data Model...");
 
@@ -271,7 +243,7 @@ public class ExportItemsWizard extends Wizard {
 				sw = new StringWriter();
 				Marshaller.marshal(get.getResponseBody(), sw);
 				encodedID = URLEncoder.encode(obj.getDisplayName(),"UTF-8");
-				writeByte(get.getResponseBody(), TreeObject.PICTURES_+"/"+encodedID);
+				writeInputStream(get.getResponseBodyAsStream(), TreeObject.PICTURES_+"/"+encodedID);
 				items.add(TreeObject.PICTURES_+"/"+encodedID);
 				
 				obj.setItems(items.toArray(new String[items.size()]));
@@ -437,8 +409,9 @@ public class ExportItemsWizard extends Wizard {
 						HttpEntity entity = response.getEntity();
 						// entity.getContent();
 						encodedID = URLEncoder.encode(obj.getDisplayName(),"UTF-8");
-						writeInputStream(entity.getContent(),TreeObject.BARFILE_PATH + encodedID + ".bar");
-						items.add(TreeObject.BARFILE_PATH + encodedID + ".bar");
+						String filename=TreeObject.BARFILE_PATH + encodedID + ".bar";
+						writeInputStream(entity.getContent(),filename);
+						items.add(filename);
 						obj.setItems(items.toArray(new String[items.size()]));
 						exports.add(obj);
 					} catch (Exception e) {
@@ -478,15 +451,10 @@ public class ExportItemsWizard extends Wizard {
 			} 
 			
 			FileOutputStream output = new FileOutputStream(f);  
-			BufferedInputStream is=new BufferedInputStream(new DataInputStream(inputSteam));
 			
-			 int data=is.read();  
-			 while(data!=-1){  
-				 output.write(data);  
-				 data=is.read();  
-			 }  
-			 output.close();
-			 is.close();
+			IOUtils.copy(inputSteam, output);
+			output.close();
+			inputSteam.close();
 		}catch(Exception e) {e.printStackTrace();}
 	}
 	
@@ -603,18 +571,96 @@ public class ExportItemsWizard extends Wizard {
 		}
 		
 	}
-	private  void writeByte(byte[] bs,String filename){
+	private void exportCluster(List<TreeObject> exports, WSDataClusterPK pk, XtentisPort port) {
+		String encodedID=null;
+		try{
+			List<String> items1=new ArrayList<String>();
+            WSItemPKsByCriteriaResponseResults[] results =
+	            port.getItemPKsByCriteria(new WSGetItemPKsByCriteria(
+	            		pk,
+	            		null,
+	            		null,
+	            		null,
+	            		(long)-1,
+	            		(long)-1,
+	            		0,
+	            		Integer.MAX_VALUE
+	            	)
+	            ).getResults();
+            if(results==null) return;
+            for(WSItemPKsByCriteriaResponseResults item: results ){
+            	if(item.getWsItemPK().getIds()==null) continue;
+            	WSItem wsitem=port.getItem(new WSGetItem(item.getWsItemPK()));
+            	
+            	//Marshal
+            	StringWriter sw1 = new StringWriter();
+            	Marshaller.marshal(wsitem, sw1);
+
+            	String uniqueId=pk.getPk()+"."+wsitem.getConceptName();
+            	for(String id: wsitem.getIds()){
+            		uniqueId=uniqueId+"."+id;
+            	}		            	
+            	encodedID = URLEncoder.encode(uniqueId,"UTF-8");
+            	writeString(sw1.toString(), TreeObject.DATACONTAINER_COTENTS+"/"+pk.getPk()+"/"+encodedID);
+            	items1.add(TreeObject.DATACONTAINER_COTENTS+"/"+pk.getPk()+"/"+encodedID);
+            }
+            TreeObject obj1=new TreeObject("",null, TreeObject.DATA_CLUSTER_CONTENTS,null,null);
+            obj1.setItems(items1.toArray(new String[items1.size()]));
+			exports.add(obj1);
+			}catch(Exception e){}
+	}
+	private Matcher filter(String name) {
+		Pattern bracket = Pattern.compile("(.*?)(\\s*)\\[(\\w+)\\]");
+		Matcher matcher = bracket.matcher(name);
+		return matcher;
+	}	
+	
+	
+	/**
+	 * this only for exist db
+	 * @param exports
+	 * @param datacluster
+	 * @param port
+	 * @throws Exception
+	 */
+	private void bakcupCluster(TreeObject obj, XtentisPort port)throws Exception {
+		//invoke backend service to backup the datacluster
+		
+		port.ping(new WSPing("Studio_Backup "+obj.getDisplayName()));
+		
+		//download the datacluster zip file 
 		try {
-			File f=new File(exportFolder+"/"+filename);
+			String URL=obj.getEndpointIpAddress()+TreeObject.DataclusterBackupFile_URI + obj.getDisplayName();
+			List<String> items=new ArrayList<String>();
+			DefaultHttpClient httpclient = new DefaultHttpClient();
+			httpclient.getCredentialsProvider().setCredentials(
+					new AuthScope(obj.getEndpointHost(), Integer.valueOf(obj.getEndpointPort())),
+					new UsernamePasswordCredentials("admin","talend"));
+			HttpGet httpget = new HttpGet(URL);
+			// System.out.println("executing request" + httpget.getRequestLine());
+			HttpResponse response = httpclient.execute(httpget);
+			HttpEntity entity = response.getEntity();
+			// entity.getContent();
+			String encodedID = URLEncoder.encode(obj.getDisplayName(),"UTF-8");
+			String path=TreeObject.DATACONTAINER_BACKUP+"/" + encodedID + ".zip";
+			File f=new File(exportFolder+"/"+path);
 			if(!f.getParentFile().getParentFile().exists()){
 				f.getParentFile().getParentFile().mkdir();
 			}		
 			if(!f.getParentFile().exists()){
 				f.getParentFile().mkdir();
 			}
-	         FileOutputStream output = new FileOutputStream(f);  
-	         output.write(bs);  
-	         output.close();  
-		}catch(Exception e) {e.printStackTrace();}
+			OutputStream output=new FileOutputStream(f);
+			IOUtils.copy(entity.getContent(), output);
+
+			items.add(path);			
+            //TreeObject obj1=new TreeObject(obj.getDisplayName(),obj.getServerRoot(), TreeObject.,null,null);
+            obj.setBackupPath(path);
+            output.close();
+			//exports.add(obj);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}	
 }
