@@ -47,7 +47,7 @@ public class FKFilterDialog extends Dialog {
 		
 		columns= new ComplexTableViewerColumn[]{
 	    		new ComplexTableViewerColumn("XPath", false, "newXPath", "newXPath", "",ComplexTableViewerColumn.XPATH_STYLE,new String[] {},0),
-	    		new ComplexTableViewerColumn("Operator", false, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,IConstants.COMPOSITE_VIEW_CONDITION_OPERATORS,0),
+	    		new ComplexTableViewerColumn("Operator", false, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,IConstants.VIEW_CONDITION_OPERATORS,0),
 	    		new ComplexTableViewerColumn("Value", false, "", "", "",ComplexTableViewerColumn.XPATH_STYLE,new String[] {},0),
 	    		new ComplexTableViewerColumn("Predicate", true, "", "", "",ComplexTableViewerColumn.COMBO_STYLE,IConstants.PREDICATES,0),
 	    };
@@ -111,6 +111,7 @@ public class FKFilterDialog extends Dialog {
 				String xpath=line.keyValues.get(0).value;			
 				String operator=line.keyValues.get(1).value;
 				String value=line.keyValues.get(2).value;
+				value=normalizeValue(value);
 				String predicate=line.keyValues.get(3).value;
 				sb.append(xpath+"$$" + operator+ "$$" + value+"$$"+predicate +"#");
 			}
@@ -119,7 +120,15 @@ public class FKFilterDialog extends Dialog {
 				
 		return filter=sb.toString();
 	}
+	
 
+	private String normalizeValue(String value) {
+		if(value!=null&&value.trim().length()>0) {
+			value=value.replaceAll("\"", "&quot;");
+			value=value.replaceAll("'", "&quot;");
+		}
+		return value;
+	}
 	
 	public String getFilter() {
 		return filter;
@@ -137,6 +146,12 @@ public class FKFilterDialog extends Dialog {
 				int num=4-list.size();
 				for(int i=0; i<num; i++) {
 					list.add("");
+				}
+				//filter value
+				if(list.get(2)!=null&&list.get(2).length()>0) {
+					String value=list.get(2);
+					value=value.replaceAll("&quot;","\"");
+					list.set(2, value);
 				}
 				Line line =new Line(columns,list.toArray(new String[list.size()]));
 				lines.add(line);
