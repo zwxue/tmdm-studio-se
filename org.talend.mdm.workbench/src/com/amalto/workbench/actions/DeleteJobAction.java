@@ -1,12 +1,8 @@
 package com.amalto.workbench.actions;
 
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
 import com.amalto.workbench.image.EImage;
@@ -16,9 +12,8 @@ import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
 
 
-public class DeleteJobAction extends Action{
+public class DeleteJobAction extends AbstractAction{
 
-	private ServerView server = ServerView.show();
 				
 	public DeleteJobAction() {
 		super();
@@ -31,6 +26,7 @@ public class DeleteJobAction extends Action{
 		if (this.server == null) { //called from ServerView
 			return;
 		}
+        closePage();
         
 		IStructuredSelection selection = (IStructuredSelection)server.getViewer().getSelection();
 		for(Iterator<TreeObject> iter = selection.iterator(); iter.hasNext();) 
