@@ -100,6 +100,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
     private String jobVersion;
 
+    private String jobPath;
+    
     private LabelledCombo exportTypeCombo;
 
     private SpagoBiServer mdmServer = null;
@@ -132,6 +134,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
                     jobLabelName = processItem.getProperty().getLabel();
                     jobVersion = processItem.getProperty().getVersion();
                     jobPurposeDescription = processItem.getProperty().getPurpose();
+                    jobPath=processItem.getState().getPath();//TODO
                     list.add(resource);
                 }
             }
@@ -461,7 +464,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
         String filename = getDestinationValue();
         String mdmServerUploadURL = "http://" + host + ":" + port + "/datamanager/uploadFile?deployjob="
-                + new File(filename).getName();
+                + new File(filename).getName()+"&jobpath="+jobPath;
         try {
             ProxyUtil.uploadFileToAppServer(mdmServerUploadURL, filename, user, password);
         } catch (Exception e) {
