@@ -21,18 +21,20 @@ public class JobAvailableModel extends AbstractAvailableModel {
         TreeParent jobs = serverRoot.findServerFolder(TreeObject.JOB_REGISTRY);
         if (jobs == null)
             jobs = new TreeParent(EXtentisObjects.JobRegistry.getDisplayName(), serverRoot, TreeObject.JOB_REGISTRY, null, null);
+        TreeParent deployedJob = new TreeParent("Deployed Jobs", serverRoot, TreeObject.CATEGORY_FOLDER, null, null);
         try {
             WSMDMJob[] jobPKs = port.getMDMJob(new WSMDMNULL()).getWsMDMJob();
             if (jobPKs != null) {
                 for (int i = 0; i < jobPKs.length; i++) {
                     String name = jobPKs[i].getJobName() + "_" + jobPKs[i].getJobVersion() + jobPKs[i].getSuffix();
                     TreeObject obj = new TreeObject(name, serverRoot, TreeObject.JOB, name, null);
-                    jobs.addChild(obj);
+                    deployedJob.addChild(obj);
                 }
             }
         } catch (Exception e) {
         }
 
+        jobs.addChild(deployedJob);
         serverRoot.addChild(jobs);
         monitor.worked(1);
     }
