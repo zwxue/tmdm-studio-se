@@ -741,7 +741,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             case TreeObject.ROLE:
             case TreeObject.VIEW:
             default:
-                if (xobject.getType() != TreeObject.CATEGORY_FOLDER) {
+                if (xobject.getType() != TreeObject.CATEGORY_FOLDER&&xobject.getType() != TreeObject.BUILT_IN_CATEGORY_FOLDER) {
                     manager.add(exportAction);
                     manager.add(importAction);
                 }
@@ -766,6 +766,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                             && xobject.getType() != TreeObject.DATA_MODEL_TYPES_RESOURCE
                             && xobject.getType() != TreeObject.CUSTOM_TYPES_RESOURCE
                             && xobject.getType() != TreeObject.PICTURES_RESOURCE
+                            && xobject.getType() != TreeObject.BUILT_IN_CATEGORY_FOLDER
                             && xobject.getType() != TreeObject.EVENT_MANAGEMENT)
                         manager.add(newXObjectAction);
                     // edit by ymli; fix the bug:0012191; if the object is DATA_CLUSTER, refused to rename.
@@ -787,7 +788,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                     manager.add(deleteXObjectAction);
                     manager.add(copyAction);
                     manager.add(duplicateAction);
-                } else if (xobject.getType() != TreeObject.EVENT_MANAGEMENT
+                } else if (xobject.getType() != TreeObject.EVENT_MANAGEMENT&&xobject.getType() != TreeObject.BUILT_IN_CATEGORY_FOLDER
                         && LocalTreeObjectRepository.getInstance().isInSystemCatalog(xobject) == false) {
                     manager.add(newCategoryAction);
                 }

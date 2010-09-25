@@ -21,7 +21,7 @@ public class JobAvailableModel extends AbstractAvailableModel {
         TreeParent jobs = serverRoot.findServerFolder(TreeObject.JOB_REGISTRY);
         if (jobs == null)
             jobs = new TreeParent(EXtentisObjects.JobRegistry.getDisplayName(), serverRoot, TreeObject.JOB_REGISTRY, null, null);
-        TreeParent deployedJob = new TreeParent("Deployed Jobs", serverRoot, TreeObject.CATEGORY_FOLDER, null, null);
+        TreeParent deployedJob = new TreeParent("Deployed Jobs", serverRoot, TreeObject.BUILT_IN_CATEGORY_FOLDER, null, null);
         try {
             WSMDMJob[] jobPKs = port.getMDMJob(new WSMDMNULL()).getWsMDMJob();
             if (jobPKs != null) {

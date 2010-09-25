@@ -38,6 +38,7 @@ public class TreeObject implements IAdaptable {
 	public final static int SYNCHRONIZATIONPLAN=19;
 	public final static int TRANSFORMER_PLUGIN=20;
 	public final static int CATEGORY_FOLDER = 21;
+	public final static int BUILT_IN_CATEGORY_FOLDER = 35;
 	public final static int SERVICE_CONFIGURATION=22;
 	public final static int RESOURCES=23;
 	public final static int DATA_MODEL_RESOURCE=24;

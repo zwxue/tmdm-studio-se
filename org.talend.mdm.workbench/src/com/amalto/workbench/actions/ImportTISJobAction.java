@@ -93,13 +93,18 @@ public class ImportTISJobAction extends Action {
 				String remoteFile = Util.uploadFileToAppServer(uploadURL, name,"admin", "talend");
 
 				// parse file to get jobinfo
+		           TreeObject jobFolder =xobject.findObject(TreeObject.BUILT_IN_CATEGORY_FOLDER, "Deployed Jobs");
+	               if(jobFolder==null)
+	                   jobFolder=new TreeParent("Deployed Jobs", xobject.getServerRoot(), TreeObject.CATEGORY_FOLDER, null, null);
+	               
 				TreeObject obj = new TreeObject(
 						// fileDialog.getFileName(),
 						info.getJobname() + "_" + info.getJobversion()+info.getSuffix(),
 						xobject.getServerRoot(), TreeObject.JOB, info, null 
 				);		
 				if(!xobject.containsChild(obj)) {
-					xobject.addChild(obj);
+				    ((TreeParent)jobFolder).addChild(obj);
+					xobject.addChild(jobFolder);
 				}
 				LocalTreeObjectRepository.getInstance().mergeNewTreeObject(
 						obj);
