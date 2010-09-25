@@ -45,7 +45,7 @@ public class JobAvailableModel extends AbstractAvailableModel {
         try {
         	List<IRepositoryViewObject> listJobs=JobRepositoryUtil.getAllTISRepositoryJobs();
         	if(listJobs!=null && listJobs.size()>0) {
-	            TreeParent tosJob = new TreeParent("Source Jobs", serverRoot, TreeObject.CATEGORY_FOLDER, null, null);
+	            TreeParent tosJob = new TreeParent("Source Jobs", serverRoot, TreeObject.BUILT_IN_CATEGORY_FOLDER, null, null);
 	            for (IRepositoryViewObject o : listJobs) {
 	                Item item = o.getProperty().getItem();
 	                if (item instanceof ProcessItem) {
@@ -79,9 +79,9 @@ public class JobAvailableModel extends AbstractAvailableModel {
     }
 
     private TreeParent addCategory(TreeParent serverRoot,TreeParent parentFolder, String folder) {
-           TreeObject jobFolder =parentFolder.findObject(TreeObject.CATEGORY_FOLDER, folder);
+           TreeObject jobFolder =parentFolder.findObject(TreeObject.BUILT_IN_CATEGORY_FOLDER, folder);
                if(jobFolder==null)
-                   jobFolder=new TreeParent(folder, serverRoot, TreeObject.CATEGORY_FOLDER, null, null);
+                   jobFolder=new TreeParent(folder, serverRoot, TreeObject.BUILT_IN_CATEGORY_FOLDER, null, null);
                parentFolder.addChild(jobFolder);
         return (TreeParent)jobFolder;
     }
