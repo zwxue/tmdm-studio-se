@@ -53,6 +53,7 @@ public enum EImage {
 	CONSOLE_VIEW("icons/console_view.gif"),
 	COPY_EDIT("icons/copy_edit.gif"),
 	COPY("icons/copy.gif"),
+	DUPLICATE("icons/duplicate.png"),
 	CUT_EDIT("icons/cut_edit.gif"),
 	DATA_CLUSTER("icons/datacluster.png"),
 	DATA_MODEL("icons/datamodel.png"),

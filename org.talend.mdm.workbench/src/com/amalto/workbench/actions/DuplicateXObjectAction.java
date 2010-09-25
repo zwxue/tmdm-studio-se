@@ -25,7 +25,7 @@ public class DuplicateXObjectAction extends Action {
 	}
 	
 	private void setDetails() {
-		setImageDescriptor(ImageCache.getImage(EImage.COPY.getPath()));
+		setImageDescriptor(ImageCache.getImage(EImage.DUPLICATE.getPath()));
 		setText("Duplicate");
 		setToolTipText("Duplicate this instance of the "+IConstants.TALEND+" Object");		
 	}
