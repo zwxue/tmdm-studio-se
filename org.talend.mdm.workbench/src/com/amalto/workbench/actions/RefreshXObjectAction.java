@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Event;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.ObjectRetriever;
+import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.views.ServerView;
@@ -19,16 +20,19 @@ public class RefreshXObjectAction extends Action {
 	protected ServerView view = null;
 	protected XObject xobject = null;
 	protected TreeParent serverObject = null;
-	public RefreshXObjectAction(ServerView view) {
+    private TreeObject selection;
+	public RefreshXObjectAction(ServerView view, TreeObject selection) {
 		super();
 		this.view = view;
+		this.selection=selection;
 		setImageDescriptor(ImageCache.getImage( EImage.REFRESH.getPath()));
 		setText("Refresh");
 		setToolTipText("Refresh the "+IConstants.TALEND+" Server Object(s)");
 	}
 	public void run() {
 		try {
-		 TreeParent xobject = (TreeParent) ((IStructuredSelection) view.getViewer().getSelection()).getFirstElement();
+//		 TreeParent xobject = (TreeParent) ((IStructuredSelection) view.getViewer().getSelection()).getFirstElement();
+		TreeParent xobject = (TreeParent)selection;
 		serverObject = xobject.getServerRoot();
 
 		if (xobject == null)

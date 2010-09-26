@@ -750,7 +750,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                 }
                 if (xobject.getType() == TreeObject.JOB_REGISTRY) {
                     manager.add(new ImportTISJobAction());
-                    manager.add(new RefreshXObjectAction(ServerView.show()));
+                    manager.add(new RefreshXObjectAction(ServerView.show(),xobject));
                 }
                 if (xobject.getType() == TreeObject.JOB) {
                     manager.add(new DeleteJobAction());
