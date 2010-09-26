@@ -33,6 +33,7 @@ import org.talend.mdm.engines.client.ui.wizards.DeployOnMDMExportWizard;
 import org.talend.repository.model.RepositoryNode;
 import org.talend.repository.model.IRepositoryNode.ENodeType;
 
+import com.amalto.workbench.actions.RefreshXObjectAction;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.views.ServerView;
@@ -87,6 +88,13 @@ public class DeployJobAction extends Action {
         Shell activeShell = Display.getCurrent().getActiveShell();
         WizardDialog dialog = new WizardDialog(activeShell, publishWizard);
         dialog.open();
+        TreeObject[] objs = serverRoot.getChildren();
+        TreeObject selectedObj=null;
+        for (TreeObject obj : objs) {
+            if(obj.getType()==TreeObject.JOB_REGISTRY)
+                selectedObj=obj;
+        }
+        new RefreshXObjectAction(ServerView.show(),selectedObj).run();
 
     }
 
