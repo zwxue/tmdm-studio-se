@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -13,8 +15,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 
 import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.models.Line;
@@ -25,12 +29,14 @@ import com.amalto.workbench.widgets.TisTableViewer;
 import com.amalto.workbench.widgets.WidgetFactory;
 
 public class FKFilterDialog extends Dialog {
+	private static final String CUSTOM_FILTERS_PREFIX = "$CFFP:";
 	String title;
 	private TisTableViewer viewer;
 	AMainPageV2 page;
 	String filter;
 	private ComplexTableViewerColumn[] columns;
 	String conceptName;
+	Text customFiltersText;
 
 	public FKFilterDialog(Shell parentShell,String title,String filter,AMainPageV2 page,String conceptName) {		
 		super(parentShell);
@@ -61,28 +67,64 @@ public class FKFilterDialog extends Dialog {
 	    //viewer.setConceptName(conceptName);
 	    //viewer.setContext(true);
 	    viewer.create();
-	    viewer.getViewer().setInput(parseRules());
 	    viewer.setHeight(140);
 	    viewer.setWidth(680);
 	    viewer.getMainComposite().setLayoutData( new GridData(SWT.FILL,SWT.FILL,true,true,2,3));
+	    
+	    //the text box of the custom filters
+	    Group customFiltersGroup=new Group(composite, SWT.NONE);
+	    customFiltersGroup.setVisible(true);
+	    customFiltersGroup.setText("Custom filters");
+	    customFiltersGroup.setLayoutData(
+				new GridData(SWT.FILL,SWT.FILL,true,false,2,1)
+			);
+	    customFiltersGroup.setLayout(new GridLayout(1,false));
+	    
+	    customFiltersText = new Text(customFiltersGroup, SWT.MULTI|SWT.BORDER|SWT.WRAP|SWT.V_SCROLL);
+	    customFiltersText.setEditable(true);
+	    GridData customFiltersTextGridData=new GridData(SWT.FILL, SWT.FILL, true, true, 1,1);
+	    customFiltersTextGridData.heightHint=50;
+	    customFiltersText.setLayoutData(customFiltersTextGridData);
+		
 	    parent.getShell().addDisposeListener(new DisposeListener() {
 			
 			public void widgetDisposed(DisposeEvent e) {
 				XpathSelectDialog.setContext(null);				
 			}
 		});
+	    
+	    //init data
+	    parseRules();
+	    
 		return composite;
 	}
 	@Override
 	protected boolean isResizable() {
 		return true;
 	}
-	private List<Line> parseRules() {
-		List<Line> lines=buildLine(filter);
-		return lines;
+	
+	private void parseRules() {
+
+		List<Line> lines=new ArrayList<Line>();
+		if(filter!=null&&filter.length()>0) {
+			if(filter.startsWith(CUSTOM_FILTERS_PREFIX)) {
+				filter=StringEscapeUtils.unescapeXml(filter);
+				customFiltersText.setText(filter.substring(6));
+			}else {
+				lines=buildLine(filter);
+			}
+		}
+		viewer.getViewer().setInput(lines);
 	}
+	
 	@Override
 	protected void okPressed() {
+		
+		TableItem[] items=viewer.getViewer().getTable().getItems();
+		if(items.length>0&&customFiltersText.getText()!=null&&customFiltersText.getText().trim().length()>0) {
+			if(!MessageDialog.openConfirm(null,"Confirm", "Customized filter will override your already configured information, are you sure?"))return;
+		}
+		
 		XpathSelectDialog.setContext(null);
 		deactiveAllCellEditors();
 		resetFilter();
@@ -102,6 +144,13 @@ public class FKFilterDialog extends Dialog {
 		XpathSelectDialog.setContext(null);
 	}
 	private String resetFilter(){
+		
+		if(customFiltersText.getText()!=null&&customFiltersText.getText().trim().length()>0) {
+			filter=CUSTOM_FILTERS_PREFIX+customFiltersText.getText().trim();
+			filter=StringEscapeUtils.escapeXml(filter);
+			return filter;
+		}
+		
 		TableItem[] items=viewer.getViewer().getTable().getItems();
 		StringBuffer sb =new StringBuffer();		
 		if(items.length > 0) {
