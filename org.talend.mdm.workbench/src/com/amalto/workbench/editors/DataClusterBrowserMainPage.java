@@ -8,6 +8,7 @@ package com.amalto.workbench.editors;
 
 
 import java.lang.reflect.InvocationTargetException;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -492,9 +493,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 			String[] concepts ;
 			//long beforeTime = System .currentTimeMillis();
 			
-
-			String query="count(collection('"+cluster.getName()+ "')/ii/n)";
-			WSStringArray array=port.runQuery(new WSRunQuery(null, new WSDataClusterPK(cluster.getName()), query, null));
+			String clusterName= URLEncoder.encode(cluster.getName(),"utf-8");
+			String query="count(collection('"+clusterName+ "')/ii/n)";
+			WSStringArray array=port.runQuery(new WSRunQuery(null, new WSDataClusterPK(clusterName), query, null));
 			//WSString count2  = port.count(new WSCount(new WSDataClusterPK(cluster.getName()), "*", null, 100));
 			long count=Long.valueOf(array.getStrings()[0]);
 			//long count=Long.parseLong(count2.getValue());
@@ -538,7 +539,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 				WSConceptRevisionMapMapEntry[] wsConceptRevisionMapMapEntries = port
 						.getConceptsInDataClusterWithRevisions(
 								new WSGetConceptsInDataClusterWithRevisions(
-										new WSDataClusterPK(cluster.getName()),
+										new WSDataClusterPK(clusterName),
 										new WSUniversePK(currentUniverseName)))
 						.getMapEntry();
 				long afterTime1 = System .currentTimeMillis();
