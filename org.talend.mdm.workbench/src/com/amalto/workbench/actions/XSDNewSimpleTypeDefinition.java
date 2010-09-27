@@ -82,6 +82,7 @@ public class XSDNewSimpleTypeDefinition extends UndoAction implements SelectionL
 	public void widgetSelected(SelectionEvent e) {
 		if (dialog.getReturnCode()==-1) return;
 		typeName = dialog.getTypeName();
+		if(typeName.trim().length()==0) return;
 		builtIn = dialog.isBuiltIn();
 		
 		//if built in, check that the type actually exists
