@@ -2031,11 +2031,12 @@ public class DataModelMainPage extends AMainPageV2 {
 			manager.add(setAnnotationDescriptionsAction);
 			manager.add(setAnnotationLookupFieldsAction);
 		}
-		manager.add(setAnnotationWriteAction);
+
 		if(obj instanceof XSDParticle) {
 			manager.add(setAnnotationLabelAction);
 		}
 		if(Util.IsEnterPrise()) {		
+			manager.add(setAnnotationWriteAction);
 			if(checkMandatoryElement(obj))
 				manager.add(setAnnotationNoAction);
 		}		
