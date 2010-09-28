@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Menu;
 
 import com.amalto.workbench.editors.AMainPageV2;
+import com.amalto.workbench.editors.TransformerMainPage;
 import com.amalto.workbench.image.ImageCache;
 
 public class TableViewWrapper {
@@ -43,13 +44,34 @@ public class TableViewWrapper {
 		}
 		
 		public void run() {
-			observer.notifyObserver();
+			observer.notifyObserver(false);
 		}
 		
 		public void runWithEvent(Event event) {
 			super.runWithEvent(event);
 		}
 
+	}
+	class RenameItemAction extends Action{
+	    
+	    private ObserverMetaData observer;
+	    public RenameItemAction(ObserverMetaData obsv) {
+	        super();
+	        setImageDescriptor(ImageCache.getImage( "icons/rename.png"));
+	        setText("Rename");
+	        setToolTipText("Rename");
+	        
+	        observer = obsv;
+	    }
+	    
+	    public void run() {
+	        observer.notifyObserver(true);
+	    }
+	    
+	    public void runWithEvent(Event event) {
+	        super.runWithEvent(event);
+	    }
+	    
 	}
 
 	class ObserverMetaData  extends Observable{
@@ -65,9 +87,9 @@ public class TableViewWrapper {
 			menuMgr.addMenuListener(new IMenuListener() {
 				public void menuAboutToShow(IMenuManager manager) {
 					//ViewBrowserMainPage.this.fillContextMenu(manager);
-					manager.add(
-							new DeleteItemAction(ObserverMetaData.this)
-					);
+					manager.add(new DeleteItemAction(ObserverMetaData.this));
+					if(observerView instanceof List)
+					    manager.add(new RenameItemAction(ObserverMetaData.this));
 
 				}
 			});
@@ -77,7 +99,7 @@ public class TableViewWrapper {
 	        	public void keyReleased(KeyEvent e) {
 //	        		System.out.println("Table keyReleased() ");
 	        		if ((e.stateMask==0) && (e.character == SWT.DEL) && (observerView != null)) {
-	        			notifyObserver();
+	        			notifyObserver(false);
 	        		}
 	        	}
 	        };
@@ -110,9 +132,11 @@ public class TableViewWrapper {
 			}
 		}
 		
-		public void notifyObserver()
-		{
-			mainPage.update(ObserverMetaData.this, observerView);
+		public void notifyObserver(boolean isRename)
+		{     if(isRename&&mainPage instanceof TransformerMainPage)
+		        ((TransformerMainPage)mainPage).rename(observerView);
+		      else
+		          mainPage.update(ObserverMetaData.this, observerView);
 		}
 		
 	}

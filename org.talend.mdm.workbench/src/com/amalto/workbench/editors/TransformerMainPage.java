@@ -20,6 +20,8 @@ import java.util.TreeMap;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.dialogs.IInputValidator;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -127,8 +129,8 @@ public class TransformerMainPage extends AMainPageV2 {
 	
 	public final static String DEFAULT_VAR = "_DEFAULT_";
 	public final static String DEFAULT_DISPLAY = "{}";
-	
-	public final static String TRANSFORMER_PLUGIN="amalto/local/transformer/plugin/";
+
+    public final static String TRANSFORMER_PLUGIN="amalto/local/transformer/plugin/";
 	
 //	protected Text descriptionText;
 	
@@ -798,17 +800,39 @@ public class TransformerMainPage extends AMainPageV2 {
 
     public void update(Observable o, Object arg)
     {
+        if (arg != null
+                && (arg == stepsList || arg == stepWidget.inputViewer || arg == stepWidget.outputViewer)) {
+            deleteItems(arg);
+        }
+        
+    }
+    public void rename(Object arg)
+    {
     	if (arg != null
 				&& (arg == stepsList || arg == stepWidget.inputViewer || arg == stepWidget.outputViewer)) {
-			deleteItems(arg);
+    	    int index = stepsList.getSelectionIndices()[0];
+    	    String stepName= stepsList.getItem(index);
+    	     InputDialog id = new InputDialog(this.getSite().getShell(),
+    	                "Rename",
+    	                "Please enter a new name",
+    	                stepName,
+    	                new IInputValidator(){
+                            @Override
+                            public String isValid(String newText) {
+                                if ((newText==null) || "".equals(newText)) return "The name cannot be empty";
+                                return null;
+                            }});
+             if(id.open()==Window.OK){
+                 transformer.getProcessSteps()[stepsList.getSelectionIndex()].setDescription(id.getValue());
+                 refreshData();
+             }
 		}
 
     }
     
     private void deleteItems(Object view)
     {
-    	if (view == stepsList)
-    	{
+        if (view != null&& view == stepsList ) {
 			int[] index = stepsList.getSelectionIndices();
 			boolean firstPos = false;
 			for (int i = index.length - 1; i >= 0; i--) {
