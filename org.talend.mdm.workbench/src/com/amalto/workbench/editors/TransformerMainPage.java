@@ -825,6 +825,7 @@ public class TransformerMainPage extends AMainPageV2 {
              if(id.open()==Window.OK){
                  transformer.getProcessSteps()[stepsList.getSelectionIndex()].setDescription(id.getValue());
                  refreshData();
+                 markDirtyWithoutCommit();
              }
 		}
 
