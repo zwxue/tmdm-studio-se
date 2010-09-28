@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.talend.mdm.commmon.util.core.ICoreConstants;
 
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
@@ -37,6 +38,7 @@ import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
 public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
@@ -78,12 +80,14 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
             // init load category
             monitor.subTask("load category...");
-            LocalTreeObjectRepository.getInstance().startUp(view, endpointaddress, username, password);
+            
+            String encodeUser = Base64.encode(new String(username + ICoreConstants.ACCESS_BYSTUDIO).getBytes());
+            LocalTreeObjectRepository.getInstance().startUp(view, endpointaddress, encodeUser, password);
             LocalTreeObjectRepository.getInstance().switchOnListening();
             LocalTreeObjectRepository.getInstance().setLazySaveStrategy(true, serverRoot);
             monitor.worked(1);
             // Access to server and get port
-            XtentisPort port = Util.getPort(new URL(endpointaddress), universe, username, password);
+            XtentisPort port = Util.getPort(new URL(endpointaddress), universe, encodeUser, password);
             port.ping(new WSPing("Studio"));// viewer user can't use studio
 
             monitor.worked(1);

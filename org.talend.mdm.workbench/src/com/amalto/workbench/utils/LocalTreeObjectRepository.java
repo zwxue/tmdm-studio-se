@@ -39,6 +39,7 @@ import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSCategoryData;
 import com.amalto.workbench.webservices.XtentisPort;
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 
 public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeViewerListener{
 	private ServerView view;
@@ -104,11 +105,16 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 		 XtentisPort port = null;
 		 Document doc = null;
 		 SAXReader saxReader = new SAXReader();
+		 String encodeUser = new String(Base64.decode(new String(user)));
+		 if(encodeUser.endsWith(ICoreConstants.ACCESS_BYSTUDIO))
+		 {
+			 encodeUser = encodeUser.substring(0, encodeUser.length() - ICoreConstants.ACCESS_BYSTUDIO.length());
+		 }
 		 try {
 			port = Util.getPort(new URL(ur), "", user, pwd);
 			WSCategoryData category = port.getMDMCategory(null);
 			doc = saxReader.read(new StringReader(category.getCategorySchema()));
-			saveCredential(ur, user, pwd, doc, port, true);
+			saveCredential(ur, encodeUser, pwd, doc, port, true);
 			doUpgrade(UnifyUrl(ur));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -119,9 +125,9 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 			try {
 				newData = port.getMDMCategory(newData);
 				doc =  saxReader.read(new StringReader(newData.getCategorySchema()));
-				saveCredential(ur, user, pwd, doc, port, true);
+				saveCredential(ur, encodeUser, pwd, doc, port, true);
 			} catch (Exception e1) {
-				saveCredential(ur, user, pwd, doc, port, false);
+				saveCredential(ur, encodeUser, pwd, doc, port, false);
 			}
 			
 		}
