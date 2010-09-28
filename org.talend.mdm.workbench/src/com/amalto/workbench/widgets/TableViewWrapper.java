@@ -7,6 +7,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -87,9 +88,11 @@ public class TableViewWrapper {
 			menuMgr.addMenuListener(new IMenuListener() {
 				public void menuAboutToShow(IMenuManager manager) {
 					//ViewBrowserMainPage.this.fillContextMenu(manager);
-					manager.add(new DeleteItemAction(ObserverMetaData.this));
-					if(observerView instanceof List)
+					if(observerView instanceof List){
+				        manager.add(new Separator());
 					    manager.add(new RenameItemAction(ObserverMetaData.this));
+					    }
+					manager.add(new DeleteItemAction(ObserverMetaData.this));
 
 				}
 			});
