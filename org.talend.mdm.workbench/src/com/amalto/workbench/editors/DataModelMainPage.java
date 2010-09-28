@@ -2004,6 +2004,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			manager.add(setAnnotationLookupFieldsAction);
 		}
 		if(obj instanceof XSDParticle) {
+			manager.add(setAnnotationDescriptionsAction);
 			manager.add(setAnnotationLabelAction);
 			manager.add(setAnnotationForeignKeyAction);
 			manager.add(setAnnotationFKFilterAction);
@@ -2033,6 +2034,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		}
 
 		if(obj instanceof XSDParticle) {
+			manager.add(setAnnotationDescriptionsAction);
 			manager.add(setAnnotationLabelAction);
 		}
 		if(Util.IsEnterPrise()) {		
