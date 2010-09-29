@@ -817,7 +817,6 @@ public class TransformerMainPage extends AMainPageV2 {
     	                "Please enter a new name",
     	                stepName,
     	                new IInputValidator(){
-                            @Override
                             public String isValid(String newText) {
                                 if ((newText==null) || "".equals(newText)) return "The name cannot be empty";
                                 return null;
