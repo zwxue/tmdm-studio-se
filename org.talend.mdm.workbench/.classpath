@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry excluding="com/amalto/workbench/dialogs/ViewsListDialog.java|com/amalto/workbench/actions/ViewsListAction.java|com/amalto/workbench/utils/MenuEntry.java|com/amalto/workbench/editors/DataModelEditorPage2.java|com/amalto/workbench/editors/ProcessResultsPage.java|com/amalto/workbench/utils/GlobalUserInfo.java" kind="src" path="src"/>
+	<classpathentry exported="true" kind="lib" path="META-INF/lib/commons-httpclient.jar"/>
+	<classpathentry exported="true" kind="lib" path="META-INF/lib/bulkloadclient.jar" sourcepath="/org.talend.mdm.bulkload.client"/>
 	<classpathentry exported="true" kind="lib" path="META-INF/lib/ezmorph-1.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="META-INF/lib/json-20090211.jar"/>
 	<classpathentry exported="true" kind="lib" path="META-INF/lib/jakarta-oro-2.0.8.jar"/>

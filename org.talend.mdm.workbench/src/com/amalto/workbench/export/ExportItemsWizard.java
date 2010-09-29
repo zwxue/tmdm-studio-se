@@ -180,11 +180,9 @@ public class ExportItemsWizard extends Wizard {
 				//datacluster contents
 
 				monitor.subTask(" Data Container "+ pk.getPk()+" ...");
-				if("exist".equals(port.getMDMConfiguration().getXdbID())) {
-					bakcupCluster( obj, port);
-				}else {
-					exportCluster(exports, pk, port);
-				}
+
+				exportCluster(exports, pk, port);
+
 				monitor.worked(1);
 				
 				break;
@@ -615,52 +613,4 @@ public class ExportItemsWizard extends Wizard {
 		return matcher;
 	}	
 	
-	
-	/**
-	 * this only for exist db
-	 * @param exports
-	 * @param datacluster
-	 * @param port
-	 * @throws Exception
-	 */
-	private void bakcupCluster(TreeObject obj, XtentisPort port)throws Exception {
-		//invoke backend service to backup the datacluster
-		
-		port.ping(new WSPing("Studio_Backup "+obj.getDisplayName()));
-		
-		//download the datacluster zip file 
-		try {
-			String URL=obj.getEndpointIpAddress()+TreeObject.DataclusterBackupFile_URI + obj.getDisplayName();
-			List<String> items=new ArrayList<String>();
-			DefaultHttpClient httpclient = new DefaultHttpClient();
-			httpclient.getCredentialsProvider().setCredentials(
-					new AuthScope(obj.getEndpointHost(), Integer.valueOf(obj.getEndpointPort())),
-					new UsernamePasswordCredentials("admin","talend"));
-			HttpGet httpget = new HttpGet(URL);
-			// System.out.println("executing request" + httpget.getRequestLine());
-			HttpResponse response = httpclient.execute(httpget);
-			HttpEntity entity = response.getEntity();
-			// entity.getContent();
-			String encodedID = URLEncoder.encode(obj.getDisplayName(),"UTF-8");
-			String path=TreeObject.DATACONTAINER_BACKUP+"/" + encodedID + ".zip";
-			File f=new File(exportFolder+"/"+path);
-			if(!f.getParentFile().getParentFile().exists()){
-				f.getParentFile().getParentFile().mkdir();
-			}		
-			if(!f.getParentFile().exists()){
-				f.getParentFile().mkdir();
-			}
-			OutputStream output=new FileOutputStream(f);
-			IOUtils.copy(entity.getContent(), output);
-
-			items.add(path);			
-            //TreeObject obj1=new TreeObject(obj.getDisplayName(),obj.getServerRoot(), TreeObject.,null,null);
-            obj.setBackupPath(path);
-            output.close();
-			//exports.add(obj);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-	}	
 }

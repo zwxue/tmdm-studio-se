@@ -4,9 +4,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -35,6 +40,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.progress.UIJob;
 import org.exolab.castor.xml.Unmarshaller;
+import org.talend.mdm.bulkload.client.BulkloadClient;
+import org.talend.mdm.bulkload.client.BulkloadOptions;
 import org.talend.mdm.commmon.util.core.CommonUtil;
 import org.talend.mdm.commmon.util.workbench.ZipToFile;
 
@@ -70,7 +77,6 @@ import com.amalto.workbench.webservices.WSExistsView;
 import com.amalto.workbench.webservices.WSItem;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuPK;
-import com.amalto.workbench.webservices.WSPing;
 import com.amalto.workbench.webservices.WSPutDataCluster;
 import com.amalto.workbench.webservices.WSPutDataModel;
 import com.amalto.workbench.webservices.WSPutItem;
@@ -463,19 +469,7 @@ public class ImportItemsWizard extends Wizard{
 					   }
 					
 					importClusterContents(item,port);
-					//backup file
-					if(item.getBackupPath()!=null) {						
-					   try {
-					      String file=importFolder+"/" + item.getBackupPath();
-			              //port.ping(new WSPing("Studio_Restore " + file ));
-					      restoreCluster(port, file);
-					   } 
-					   catch (Exception e2) {
-					      e2.printStackTrace();
-					   }finally {
-						   try{if(reader!=null)reader.close();}catch(Exception e) {}
-					   }
-					}
+
 				}
 				
 				break;				
@@ -895,41 +889,47 @@ public class ImportItemsWizard extends Wizard{
 		
 		monitor.done();
 	}
-	/**
-	 * this only for exist db
-	 * @param port
-	 * @param filename
-	 * @throws Exception
-	 */
-	private void restoreCluster(XtentisPort port, String filename)throws Exception {
-		String endpointaddress=serverRoot.getEndpointAddress();
-		String uploadURL = new URL(endpointaddress).getProtocol()+"://"+new URL(endpointaddress).getHost()+":"+new URL(endpointaddress).getPort()+"/datamanager/uploadFile";
-		String remoteFile = Util.uploadFileToAppServer(uploadURL,filename,"admin","talend");
-		port.ping(new WSPing("Studio_Restore " + remoteFile ));
-	}
+
 	private void importClusterContents(TreeObject item, XtentisPort port) {
 		if(dataClusterContent.containsKey(item.getDisplayName()))
 		{
 			FileReader reader=null;
-				String[] paths=dataClusterContent.get(item.getDisplayName());
-				for (int i = 0; i < paths.length; i++) {
-					try {
-					String path=paths[i];
-					reader = new FileReader(importFolder+"/"+path);
-					WSItem wsItem = (WSItem) Unmarshaller.unmarshal(
-							WSItem.class, reader);
-					if(wsItem.getDataModelName()==null){
-//				port.synchronizationPutItemXML(new WSSynchronizationPutItemXML(null,wsItem.getContent()));
-					}else{
-						port.putItem(new WSPutItem(wsItem.getWsDataClusterPK(),wsItem.getContent(),new WSDataModelPK(wsItem.getDataModelName()),false));
-					}	
-					
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}finally {
-						   try{if(reader!=null)reader.close();}catch(Exception e) {}
-					   }
+			String[] paths=dataClusterContent.get(item.getDisplayName());
+			Map<String, List<String>> conceptMap=new HashMap<String, List<String>>();
+			for (int i = 0; i < paths.length; i++) {
+				try {
+				String path=paths[i];
+				reader = new FileReader(importFolder+"/"+path);
+				WSItem wsItem = (WSItem) Unmarshaller.unmarshal(
+						WSItem.class, reader);				
+				String key=wsItem.getWsDataClusterPK().getPk()+"##"+wsItem.getConceptName()+"##"+wsItem.getDataModelName();
+				List<String> list=new ArrayList<String>();
+				if(!conceptMap.containsKey(key)) {
+					conceptMap.put(key, list);
+				}else {
+					list=conceptMap.get(key);
 				}
+				list.add(wsItem.getContent());
+				
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}finally {
+					   try{if(reader!=null)reader.close();}catch(Exception e) {}
+				}
+			}
+			//store the items to db using bulkloadclient
+			String url=item.getEndpointIpAddress()+"/datamanager/loadServlet";
+			for(Entry<String, List<String>> entry: conceptMap.entrySet()){
+				String[] keys=entry.getKey().split("##");
+				String cluster=keys[0];
+				String concept=keys[1];
+				String datamodel=keys[2];
+				BulkloadClient bulkloadClient=new BulkloadClient(url,item.getUsername(),item.getPassword(),null,cluster,concept,datamodel);
+				bulkloadClient.setOptions(new BulkloadOptions(false,false,500));
+				try {
+				bulkloadClient.load(entry.getValue());
+				}catch(Exception e) {e.printStackTrace();}
+			}
 		}
 	}
 	@Override
