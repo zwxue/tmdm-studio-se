@@ -532,7 +532,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         hookDoubleClickAction();
         hookKeyPressAction();
         contributeToActionBars();
-        hookKeyboard();
+//        hookKeyboard();
         initView();
     }
 
@@ -632,31 +632,31 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         // }
     }
 
-    /**
-     * // fliu add keyboard listener into tree to assist ctrl+c, ctrl+v and del
-     */
-    private void hookKeyboard() {
-        viewer.getControl().addKeyListener(new KeyListener() {
-
-            public void keyPressed(KeyEvent e) {
-            }
-
-            public void keyReleased(KeyEvent e) {
-                if (e.keyCode == 'c' && e.stateMask == SWT.CTRL) {
-                    copyAction.run();
-                } else if (e.keyCode == 'v' && e.stateMask == SWT.CTRL) {
-                    // modifier:fiu see bug 0008905
-                    TreeObject xobject = (TreeObject) ((IStructuredSelection) viewer.getSelection()).getFirstElement();
-                    ((PasteXObjectAction) pasteAction).setXtentisPort(xobject);
-                    ((PasteXObjectAction) pasteAction).setParent(xobject instanceof TreeParent ? (TreeParent) xobject : xobject
-                            .getParent());
-                    pasteAction.run();
-                } else if (e.keyCode == SWT.DEL) {
-                    deleteXObjectAction.run();
-                }
-            }
-        });
-    }
+//    /**
+//     * // fliu add keyboard listener into tree to assist ctrl+c, ctrl+v and del
+//     */
+//    private void hookKeyboard() {
+//        viewer.getControl().addKeyListener(new KeyListener() {
+//
+//            public void keyPressed(KeyEvent e) {
+//            }
+//
+//            public void keyReleased(KeyEvent e) {
+//                if (e.keyCode == 'c' && e.stateMask == SWT.CTRL) {
+//                    copyAction.run();
+//                } else if (e.keyCode == 'v' && e.stateMask == SWT.CTRL) {
+//                    // modifier:fiu see bug 0008905
+//                    TreeObject xobject = (TreeObject) ((IStructuredSelection) viewer.getSelection()).getFirstElement();
+//                    ((PasteXObjectAction) pasteAction).setXtentisPort(xobject);
+//                    ((PasteXObjectAction) pasteAction).setParent(xobject instanceof TreeParent ? (TreeParent) xobject : xobject
+//                            .getParent());
+//                    pasteAction.run();
+//                } else if (e.keyCode == SWT.DEL) {
+//                    deleteXObjectAction.run();
+//                }
+//            }
+//        });
+//    }
 
     private void hookContextMenu() {
         MenuManager menuMgr = new MenuManager("#PopupMenu");
@@ -981,16 +981,15 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
                     switch (xo.getType()) {
 
-                    case TreeObject.DATA_MODEL:
-                        if (xo.getParent().getType() == TreeObject.DATA_MODEL) {
-                            deleteXObjectAction.run();
-                        }
+                    case TreeObject.JOB:
+                            new DeleteJobAction().run();
 
                         break;
                     default:
                         // MessageDialog.openError(getSite().getShell(),
                         // "Error", "Unknown " + IConstants.TALEND
                         // + " Object Type: " + xo.getType());
+                        deleteXObjectAction.run();
                         return;
                     }// switch
 
@@ -999,6 +998,20 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             }
 
             public void keyReleased(KeyEvent e) {
+
+                if (e.keyCode == 'c' && e.stateMask == SWT.CTRL) {
+                    copyAction.run();
+                } else if (e.keyCode == 'v' && e.stateMask == SWT.CTRL) {
+                    // modifier:fiu see bug 0008905
+                    TreeObject xobject = (TreeObject) ((IStructuredSelection) viewer.getSelection()).getFirstElement();
+                    ((PasteXObjectAction) pasteAction).setXtentisPort(xobject);
+                    ((PasteXObjectAction) pasteAction).setParent(xobject instanceof TreeParent ? (TreeParent) xobject : xobject
+                            .getParent());
+                    pasteAction.run();
+//                } else if (e.keyCode == SWT.DEL) {
+//                    deleteXObjectAction.run();
+                }
+            
 
             }
 
