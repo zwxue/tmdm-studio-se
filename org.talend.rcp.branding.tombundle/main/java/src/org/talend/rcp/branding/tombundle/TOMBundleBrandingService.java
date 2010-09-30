@@ -66,13 +66,13 @@ public class TOMBundleBrandingService extends AbstractTalendBrandingService {
      */
     public IBrandingConfiguration getBrandingConfiguration() {
         if (brandingConfigure == null) {
-            brandingConfigure = new DefaultBrandingConfiguration();
+            brandingConfigure = new TOMBrandingConfiguration();
         }
         return brandingConfigure;
     }
 
     public String getAcronym() {
-        return "tme";
+        return "tmc";
     }
 
 }
