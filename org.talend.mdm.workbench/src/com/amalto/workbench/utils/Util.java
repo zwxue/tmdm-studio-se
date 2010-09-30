@@ -1272,16 +1272,18 @@ public class Util {
 		return isConcept;
 	}
 	
-    public static Object[] getAllObject(Object elem, ArrayList<Object> objList, IStructuredContentProvider provider) {
+    public static Object[] getAllObject(Object elem, List<Object> objList, IStructuredContentProvider provider) {
 		Object[] elems = provider.getElements(elem);
 		for (Object obj : elems) {
 			if(obj == null)continue;
-			if (!objList.contains(obj)) {
-				objList.add(obj);
-				getAllObject(obj, objList, provider);
-			} else {
-				continue;
-			}
+			if(obj instanceof XSDModelGroup||obj instanceof XSDElementDeclaration
+							|| obj instanceof XSDParticle || obj instanceof XSDTypeDefinition ) {
+				if (!objList.contains(obj)) {
+					objList.add(obj);
+					
+					getAllObject(obj, objList, provider);
+				}
+			} 
 		}
 
 		return objList.toArray();
@@ -1558,28 +1560,93 @@ public class Util {
     public static boolean IsAImporedElement(XSDConcreteComponent component, XSDSchema schema)
     {
     	if(component == null) return true;
-    	
-    	List<String> buffer = new ArrayList<String>();
-    	buffer = retrieveXSDComponentPath(component, schema, buffer);
-    	String path = "";
-        for (int i = buffer.size() -1; i >= 0; i--)
-        {
-        	if(path.lastIndexOf(buffer.get(i)) == -1)
-        	  path += buffer.get(i);
-        }
-
+    	String componentName=getComponentName(component);
+    	if(componentName==null) return true;
     	try {
-			NodeList l = Util.getNodeList(schema.getDocument(), path);
-			if(l.getLength() > 0)
+			String xsd=nodeToString(schema.getDocument().getDocumentElement());
+			if(xsd.indexOf(componentName)!=-1) { 
 				return false;
+			}
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-
+//    	List<String> buffer = new ArrayList<String>();
+//    	buffer = retrieveXSDComponentPath(component, schema, buffer);
+//    	String path = "";
+//        for (int i = buffer.size() -1; i >= 0; i--)
+//        {
+//        	if(path.lastIndexOf(buffer.get(i)) == -1)
+//        	  path += buffer.get(i);
+//        }
+//
+//    	try {
+//			NodeList l = Util.getNodeList(schema.getDocument(), path);
+//			if(l.getLength() > 0)
+//				return false;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}		
 		return true;
     }
+    public static boolean IsAImporedElement(XSDConcreteComponent component, String schema)
+    {
+    	if(component == null) return true;
+    	String componentName=getComponentName(component);
+    	try {
+			String xsd=schema;
+			if(xsd.indexOf(componentName)!=-1) { 
+				return false;
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
+    }
+    private static String getComponentName(Object component) {
+    	if(component instanceof XSDElementDeclaration)
+    	{
+    		XSDElementDeclaration decl = (XSDElementDeclaration)component;
+    		return  "name=\""+decl.getName()+"\"";
+    		
+    	}
+    	else if(component instanceof XSDParticle)
+    	{
+    		XSDParticle particle = (XSDParticle)component;
+    		XSDTerm term = (XSDTerm)particle.getTerm();    	
+            if (term instanceof XSDElementDeclaration && !(((XSDElementDeclaration)term).getContainer() instanceof XSDParticle))
+            {            	
+            	return "name=\""+((XSDElementDeclaration)term).getName()+"\"";                
+            }
+            
+    	}
+    	else if(component instanceof XSDComplexTypeDefinition)
+    	{
+    		XSDComplexTypeDefinition type = (XSDComplexTypeDefinition)component;
+    		return type.getName();
+    		
+    	}
+    	else if(component instanceof XSDSimpleTypeDefinition)
+    	{
 
+    		return "name=\""+((XSDSimpleTypeDefinition)component).getName()+"\"";
+    		
+    	}
+    	
+    	else if(component instanceof XSDIdentityConstraintDefinition)
+    	{
+    		XSDIdentityConstraintDefinition identify = (XSDIdentityConstraintDefinition)component;
+    		XSDConcreteComponent c = identify.getContainer();
+    		return "name=\""+identify.getName()+"\"";
+    	}
+    	else if(component instanceof XSDXPathDefinition)
+    	{
+    		XSDXPathDefinition path = (XSDXPathDefinition)component;
+    		return "xpath=\""+path.getValue()+"\"";
+    	}
+    	return null;
+    }
     public static List<String> retrieveXSDComponentPath(Object component, XSDSchema schema, List<String> buffer)
     {
     	String name = null;

@@ -316,7 +316,7 @@ public class XSDPasteConceptAction extends UndoAction {
 		try {
 			struc.setAccessRole(lists, false, (IStructuredContentProvider) page.getTreeViewer()
 						.getContentProvider(), (String) keys.toArray()[i]);
-		} catch (XtentisException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

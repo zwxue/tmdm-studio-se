@@ -317,8 +317,11 @@ public class XSDAnnotationsStructure {
 	 *           WRITE ACCESS
 	 * @throws XtentisException 
 	 ****************************************************************************/
-	public boolean setAccessRole(Collection<String> roles, boolean recursive, IStructuredContentProvider provider, String access) throws XtentisException
+	public boolean setAccessRole(Collection<String> roles, boolean recursive, IStructuredContentProvider provider, String access) throws Exception
 	{
+		XSDSchema xsd=schema != null ? schema : declaration.getSchema();
+		
+		String xsdString=Util.nodeToString(xsd.getDocument().getDocumentElement());
 		if (recursive) {
 			ArrayList<Object> objList = new ArrayList<Object>();
 			Object[] objs = Util.getAllObject(declaration, objList, provider);
@@ -327,27 +330,6 @@ public class XSDAnnotationsStructure {
 			{
 				Object[] objCpys = objs;
 				for (Object obj : objCpys) {
-//					if (obj instanceof XSDModelGroup)
-//					{
-//						XSDModelGroup modelGp = (XSDModelGroup)obj;
-//						if (modelGp.getContainer() instanceof XSDParticle)
-//						{
-//							XSDParticle partle = (XSDParticle)modelGp.getContainer();
-//							if (partle.getContainer() instanceof XSDComplexTypeDefinition)
-//							{
-//								XSDComplexTypeDefinition typeElem = (XSDComplexTypeDefinition)partle.getContainer();
-//								if (typeElem != null && typeElem.getName() != null && !typeElem.getName().equals(""))
-//								{
-//									ArrayList<Object> subObjList = new ArrayList<Object>();
-//									Util.getAllObject(obj, subObjList, provider);
-//									objList.removeAll(subObjList);
-//									objList.remove(obj);
-//				                    objs = objList.toArray();
-//				                    break;
-//								}
-//							}
-//						}
-//					}
 					
 					if (
 							obj instanceof XSDElementDeclaration
@@ -360,10 +342,10 @@ public class XSDAnnotationsStructure {
 							if(particle.getTerm() instanceof XSDElementDeclaration)
 							{
 								XSDElementDeclaration decl = (XSDElementDeclaration)particle.getTerm();
-								if(Util.IsAImporedElement(decl, schema != null ? schema : ((XSDConcreteComponent)obj).getSchema()))
+								if(Util.IsAImporedElement(decl, xsdString))
 								{
 									XSDTypeDefinition typeDef = decl.getTypeDefinition();
-									if(Util.IsAImporedElement(typeDef, schema != null ? schema : ((XSDConcreteComponent)obj).getSchema()))
+									if(Util.IsAImporedElement(typeDef, xsdString))
 									   isImported = true;
 								}
 							}
@@ -371,7 +353,7 @@ public class XSDAnnotationsStructure {
 						else if(obj instanceof XSDElementDeclaration)
 						{
 							XSDElementDeclaration decl = (XSDElementDeclaration)obj;
-							if(Util.IsAImporedElement(decl, schema != null ? schema : ((XSDConcreteComponent)obj).getSchema()))
+							if(Util.IsAImporedElement(decl, xsdString))
 								isImported = true;
 						}
 //						else if(obj instanceof XSDAnnotation)
@@ -412,7 +394,7 @@ public class XSDAnnotationsStructure {
 			return setAccessRole(roles, access);
 		}
 		else {
-			if(Util.IsAImporedElement(declaration, declaration.getSchema()))
+			if(Util.IsAImporedElement(declaration, xsdString))
 				return false;
 			return setAccessRole(roles, access);
 		}

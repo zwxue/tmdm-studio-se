@@ -194,7 +194,7 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
 		try {
 			struc.setAccessRole(lists, false, (IStructuredContentProvider) page.getTreeViewer()
 						.getContentProvider(), (String) keys.toArray()[i]);
-		} catch (XtentisException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

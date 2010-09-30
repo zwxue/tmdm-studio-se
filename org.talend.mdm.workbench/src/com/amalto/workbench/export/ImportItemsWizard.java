@@ -471,7 +471,7 @@ public class ImportItemsWizard extends Wizard{
 					importClusterContents(item,port);
 
 				}
-				
+				monitor.worked(1);
 				break;				
 			case TreeObject.DATA_MODEL:
 				monitor.subTask(" Data Model...");
