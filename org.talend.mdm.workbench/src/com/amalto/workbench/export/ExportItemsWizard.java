@@ -466,8 +466,8 @@ public class ExportItemsWizard extends Wizard {
 			if(!f.getParentFile().exists()){
 				f.getParentFile().mkdir();
 			}
-			FileWriter fo=new FileWriter(exportFolder+"/"+filename);
-			fo.write(outputStr);
+			FileOutputStream fo=new FileOutputStream(f);
+			IOUtils.write(outputStr, fo, "UTF-8");
 			fo.flush();
 			fo.close();
 		}catch(Exception e) {e.printStackTrace();}
