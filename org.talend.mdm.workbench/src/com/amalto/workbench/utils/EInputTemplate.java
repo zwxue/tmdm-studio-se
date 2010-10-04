@@ -29,7 +29,11 @@ public enum EInputTemplate {
 	TISCALL("callJob","<configuration>\n\t\t<url>?</url>\n\t\t<contextParam>\n\t\t\t<name>?</name>\n\t\t\t<value>?</value>\n\t\t</contextParam>\n\t\t<username>?</username>\n\t\t<password>?</password>\n\t\t<conceptMapping>\n\t\t\t<concept>?</concept>\n\t\t\t<fields>?</fields>\n\t\t</conceptMapping>\n</configuration>\n\n\n"),
 	WORKFLOWTRIGGER("workflowtrigger","<parameters>\n\t\t<processId>?</processId>\n\t\t<processVersion>?</processVersion>\n\t\t<variable>\n\t\t\t<scope>?</scope>\n\t\t\t<name>?</name>\n\t\t\t<type>?</type>\n\t\t\t<fromItem>?</fromItem>\n\t\t\t<xpath>?</xpath>\n\t\t</variable>\n\t\t<variable>\n\t\t\t<scope>?</scope>\n\t\t\t<activityId>?</activityId>\n\t\t\t<name>?</name>\n\t\t\t<type>?</type>\n\t\t\t<fromItem>?</fromItem>\n\t\t\t<value>?</value>\n\t\t</variable>\n\t</parameters>\n\n"),
 	XPATH("xpath","<parameters>\n\t\t<xPath>?</xPath>\n\t\t<contentType>?</contentType>\n</parameters>"),
-	XSLT("xslt","<Country\n\t\t\txrefCluster='?' \n\t\t\txrefIn='?' \n\t\t\txrefOut='?'\n\t>\n\t\t\t<xsl:value-of select='?'/>\n</Country>\n\n"),
+	XSLT("xslt","<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' xmlns:mdm='java:com.amalto.core.plugin.base.xslt.MdmExtension' version='1.0'>  \n" + 
+            "    <xsl:output method='xml' indent='yes' omit-xml-declaration='yes'/>  \n" + 
+            "    <xsl:template match='/' priority='1'> \n\n" + 
+            "    </xsl:template> \n" + 
+            "</xsl:stylesheet>\n"),
 	
 	
 	
