@@ -1,7 +1,9 @@
 package com.amalto.workbench.export;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.util.ArrayList;
@@ -271,9 +273,9 @@ public class ImportItemsWizard extends Wizard{
 		if(folderBtn.getSelection()){
 			importFolder=folder.getText().getText();
 		}
-		FileReader reader=null;
+		InputStreamReader reader=null;
 		try{
-		reader= new FileReader(importFolder+"/exportitems.xml");
+		     reader = new InputStreamReader(new FileInputStream(importFolder+"/exportitems.xml"),"UTF-8");	
 		Exports exports = (Exports)Unmarshaller.unmarshal(
 				Exports.class,reader);
 		try {
