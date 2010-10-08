@@ -1523,7 +1523,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager manager) {
-				DataModelMainPage.this.fillContextMenu(manager);
+				DataModelMainPage.this.fillContextMenu(manager,false);
 			}
 		});
 		Menu menu = menuMgr.createContextMenu(viewer.getControl());
@@ -1536,7 +1536,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		typesMenuMgr.setRemoveAllWhenShown(true);
 		typesMenuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager manager) {
-				DataModelMainPage.this.fillTypesContextMenu(manager);
+				DataModelMainPage.this.fillContextMenu(manager,true);
 			}
 		});
 		Menu menu = typesMenuMgr.createContextMenu(typesViewer.getControl());
@@ -1722,11 +1722,22 @@ public class DataModelMainPage extends AMainPageV2 {
 		deleteConceptWrapAction.clearExtraClassToDel();
 	}
 	
-	protected void fillContextMenu(IMenuManager manager) {
-		IStructuredSelection selection = ((IStructuredSelection) viewer
+	protected void fillContextMenu(IMenuManager manager,boolean isType) {
+	    IStructuredSelection selection;
+        if(!isType)
+	        selection = ((IStructuredSelection) viewer
 				.getSelection());
-
-		manager.add(new XSDNewConceptAction(this));
+	    else
+	        selection = ((IStructuredSelection) typesViewer
+	                .getSelection());
+        if(!isType)
+            manager.add(new XSDNewConceptAction(this));
+        else
+        {
+            manager.add(newComplexTypeAction);
+            manager.add(newSimpleTypeAction);
+        }
+        manager.add(new Separator());
 		if ((selection == null) || (selection.getFirstElement() == null)) {
 			manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 			//add by ymli, fix bug 0009770
@@ -1833,9 +1844,9 @@ public class DataModelMainPage extends AMainPageV2 {
 			if (!(term instanceof XSDWildcard)) {
 				if(term instanceof XSDElementDeclaration)
 				{
+				    manager.add(editParticleAction);
 					if(!Util.IsAImporedElement(term, xsdSchema) || term.getContainer() instanceof XSDSchema)
 					{
-						manager.add(editParticleAction);
 						//manager.add(newGroupFromParticleAction);
 						manager.add(newParticleFromParticleAction);
 						if (term instanceof XSDModelGroup) {
@@ -1878,7 +1889,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		
 		if (obj instanceof XSDComplexTypeDefinition
 				&& selectedObjs.length == 1
-				&& ((XSDComplexTypeDefinition) obj).getTargetNamespace() == null && !Util.IsAImporedElement((XSDParticle)obj, xsdSchema)) {
+				&& ((XSDComplexTypeDefinition) obj).getTargetNamespace() == null && !isType&&!Util.IsAImporedElement((XSDParticle)obj, xsdSchema)) {
 			manager.add(newParticleFromTypeAction);
 			manager.add(newGroupFromTypeAction);
 		}
