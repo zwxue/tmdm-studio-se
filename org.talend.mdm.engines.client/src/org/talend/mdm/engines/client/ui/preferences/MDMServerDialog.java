@@ -82,7 +82,7 @@ public class MDMServerDialog extends Dialog {
     // initialDescription,
     // String initialHost, String initialLogin, String initialPassword, String initialPort, String initialContext) {
     public MDMServerDialog(Shell parentShell, List existingServers, String initialDescription, String initialHost,
-            String initialLogin, String initialPassword, String initialPort) {
+            String initialPort, String initialLogin, String initialPassword) {
         super(parentShell);
         this.existingServers = existingServers == null ? Collections.EMPTY_LIST : existingServers;
 
@@ -200,7 +200,7 @@ public class MDMServerDialog extends Dialog {
                 validateInput();
             }
         });
-
+        
         Label hostLabel = new Label(composite, SWT.WRAP);
         // data = new GridData(GridData.FILL_HORIZONTAL);
         // hostLabel.setLayoutData(data);
@@ -216,7 +216,7 @@ public class MDMServerDialog extends Dialog {
                 validateInput();
             }
         });
-
+        
         Label portLabel = new Label(composite, SWT.WRAP);
         // data = new GridData(GridData.FILL_HORIZONTAL);
         // portLabel.setLayoutData(data);
@@ -232,7 +232,7 @@ public class MDMServerDialog extends Dialog {
                 validateInput();
             }
         });
-
+        
         Label loginLabel = new Label(composite, SWT.WRAP);
         // data = new GridData(GridData.FILL_HORIZONTAL);
         // loginLabel.setLayoutData(data);
@@ -248,7 +248,7 @@ public class MDMServerDialog extends Dialog {
                 validateInput();
             }
         });
-
+        
         Label passwordLabel = new Label(composite, SWT.WRAP);
         // data = new GridData(GridData.FILL_HORIZONTAL);
         // passwordLabel.setLayoutData(data);
@@ -264,7 +264,7 @@ public class MDMServerDialog extends Dialog {
                 validateInput();
             }
         });
-
+       
         // Label applicationContextLabel = new Label(composite, SWT.WRAP);
         // data = new GridData(GridData.FILL_HORIZONTAL);
         // applicationContextLabel.setLayoutData(data);
@@ -285,7 +285,13 @@ public class MDMServerDialog extends Dialog {
         // errorMessageText.setLayoutData(data);
         // errorMessageText.setLayoutData(data);
         errorMessageText.setBackground(errorMessageText.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
-
+        
+        shortDescriptionText.setText(shortDescription);
+        hostText.setText(host);
+        portText.setText(port);
+        loginText.setText(login);
+        passwordText.setText(password);
+        
         applyDialogFont(composite);
         return composite;
     }
