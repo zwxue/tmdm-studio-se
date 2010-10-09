@@ -788,7 +788,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                     manager.add(deleteXObjectAction);
                     manager.add(copyAction);
                     manager.add(duplicateAction);
-                } else if (xobject.getType() != TreeObject.EVENT_MANAGEMENT&&xobject.getType() != TreeObject.JOB_REGISTRY&&xobject.getType() != TreeObject.BUILT_IN_CATEGORY_FOLDER
+                } else if (xobject.getType() != TreeObject.EVENT_MANAGEMENT&&xobject.getType() != TreeObject.JOB_REGISTRY&&xobject.getType() != TreeObject.JOB&&xobject.getType() != TreeObject.BUILT_IN_CATEGORY_FOLDER
                         && LocalTreeObjectRepository.getInstance().isInSystemCatalog(xobject) == false) {
                     manager.add(newCategoryAction);
                 }
