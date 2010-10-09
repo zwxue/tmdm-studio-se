@@ -36,7 +36,16 @@ public class TreeParent extends TreeObject {
 		}
 		LocalTreeObjectRepository.getInstance().correctDisplayNameForCategory(child);
 	}
-	
+    public void addChild(TreeObject child,boolean isMergeCategory) {
+        if(child!=null ){
+            children.remove(child);
+            children.add(child);
+            child.setParent(this);
+            if(isMergeCategory)
+            child.fireEvent(IXObjectModelListener.ADD, this, child);
+        }
+        if(isMergeCategory)LocalTreeObjectRepository.getInstance().correctDisplayNameForCategory(child);
+    }	
 	public void removeChild(TreeObject child) {
 		if (child instanceof TreeParent) {
 			TreeObject[] subchildren = ((TreeParent)child).getChildren();
