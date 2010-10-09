@@ -747,11 +747,14 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
           int start= pageToolBar.getStart();
           int limit=pageToolBar.getLimit();
+          //see 0015909
+          String clusterName= URLEncoder.encode(((WSDataClusterPK)getXObject().getWsKey()).getPk(),"utf-8");
+          WSDataClusterPK clusterPk=new WSDataClusterPK(clusterName);
           WSItemPKsByCriteriaResponseResults[] results =
             port.getItemPKsByFullCriteria(
             new WSGetItemPKsByFullCriteria(	
             	new WSGetItemPKsByCriteria(
-            		(WSDataClusterPK)getXObject().getWsKey(),
+            			clusterPk,
             		concept,
             		search,
             		keys,
