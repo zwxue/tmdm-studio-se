@@ -82,7 +82,7 @@ public class JobAvailableModel extends AbstractAvailableModel {
            TreeObject jobFolder =parentFolder.findObject(TreeObject.BUILT_IN_CATEGORY_FOLDER, folder);
                if(jobFolder==null)
                    jobFolder=new TreeParent(folder, serverRoot, TreeObject.BUILT_IN_CATEGORY_FOLDER, null, null);
-               parentFolder.addChild(jobFolder);
+               parentFolder.addChild(jobFolder,false);
         return (TreeParent)jobFolder;
     }
 
