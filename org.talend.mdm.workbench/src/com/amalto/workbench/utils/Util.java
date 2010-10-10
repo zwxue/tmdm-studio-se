@@ -38,19 +38,20 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.rpc.Stub;
+import javax.xml.rpc.handler.Handler;
+import javax.xml.rpc.handler.HandlerInfo;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.MultipartPostMethod;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ObjectUtils;
@@ -146,6 +147,7 @@ import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.WSWhereCondition;
 import com.amalto.workbench.webservices.WSWhereOperator;
 import com.amalto.workbench.webservices.XtentisPort;
+import com.amalto.workbench.webservices.XtentisService;
 import com.amalto.workbench.webservices.XtentisService_Impl;
 import com.sun.org.apache.xpath.internal.XPathAPI;
 import com.sun.org.apache.xpath.internal.objects.XObject;
@@ -354,7 +356,7 @@ public class Util {
 	}
 	
 //	public static XtentisPort getPort(String endpointAddress, String username, String password) throws XtentisException{
-	public static XtentisPort getPort(URL url, String universe, String username, String password) throws XtentisException{		
+    public static XtentisPort getPort(URL url, String universe, String username, String password) throws XtentisException{		
 
 		try {
 
@@ -369,7 +371,23 @@ public class Util {
 			HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
 			
 			//prepare the Web Services Stub
-			Stub stub = (Stub) (new XtentisService_Impl()).getXtentisPort();
+            XtentisService service = new XtentisService_Impl();
+            Bundle bundle = Platform.getBundle(ENTERPRISE_ID);
+            if (bundle != null) {
+                List<HandlerInfo> handlerChainInfo = new ArrayList<HandlerInfo>();
+                HandlerInfo handlerInfo = new HandlerInfo();
+                Class<?> cls = bundle.loadClass("org.talend.mdm.workbench.enterprice.utils.XtentisHandler"); //$NON-NLS-1$
+                handlerInfo.setHandlerClass(cls);
+                handlerChainInfo.add(handlerInfo);
+                @SuppressWarnings("unchecked")
+                Iterator<QName> portIterator = service.getPorts();
+                while (portIterator.hasNext()) {
+                    QName port = portIterator.next();
+                    service.getHandlerRegistry().setHandlerChain(port, handlerChainInfo);
+                }
+            }
+            
+			Stub stub = (Stub) service.getXtentisPort();
 			stub._setProperty(Stub.ENDPOINT_ADDRESS_PROPERTY, url.toString());
 			if (username!=null) {
 				if (universe != null)
@@ -379,8 +397,7 @@ public class Util {
 				
 			}
 			if (password!=null)
-	        stub._setProperty(Stub.PASSWORD_PROPERTY, password);
-
+	          stub._setProperty(Stub.PASSWORD_PROPERTY, password);
 			
 			return (XtentisPort)stub;
 		} catch (Exception e) {
@@ -2644,5 +2661,17 @@ public class Util {
         } catch (IOException e)  {
         }
         return null;
+    }
+    
+    public static void main(String[] args) {
+        try {
+            URL url = new URL("http://localhost:28080/talend/TalendPort");
+            WSDataClusterPK[] cls= getAllDataClusterPKs(url, null, "admin","talend");
+            for (int i = 0; i < cls.length; i++) {
+                System.out.println(cls[i].getPk());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
