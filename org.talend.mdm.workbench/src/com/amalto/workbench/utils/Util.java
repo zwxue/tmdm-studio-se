@@ -2662,16 +2662,4 @@ public class Util {
         }
         return null;
     }
-    
-    public static void main(String[] args) {
-        try {
-            URL url = new URL("http://localhost:28080/talend/TalendPort");
-            WSDataClusterPK[] cls= getAllDataClusterPKs(url, null, "admin","talend");
-            for (int i = 0; i < cls.length; i++) {
-                System.out.println(cls[i].getPk());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
