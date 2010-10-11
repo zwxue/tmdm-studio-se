@@ -166,17 +166,6 @@ public class LoginDialog extends Dialog {
 			new GridData(SWT.FILL,SWT.CENTER,true,false,1,1)
 		);
 		
-		savePasswordButton = new Button(authenticationGroup, SWT.CHECK);
-		savePasswordButton.setText("Save password");
-		savePasswordButton.setLayoutData(
-				new GridData(SWT.FILL,SWT.CENTER,true,false,2,1)
-		);
-//		Label warnLabel = new Label(authenticationGroup, SWT.CHECK);
-//		warnLabel.setText("Save password");
-//		warnLabel.setLayoutData(
-//				new GridData(SWT.FILL,SWT.CENTER,true,false,2,1)
-//		);
-		
 		//check Enterprise
 		if(Util.IsEnterPrise()){
 		//universe
@@ -202,6 +191,13 @@ public class LoginDialog extends Dialog {
 			}
 //			universeCombo.select(0);
 		}
+		
+		savePasswordButton = new Button(composite, SWT.CHECK);
+		savePasswordButton.setText("Save this MDM Server Location");
+		savePasswordButton.setLayoutData(
+				new GridData(SWT.FILL,SWT.CENTER,true,false,2,1)
+		);
+		
 	   return composite;
 	}
 
