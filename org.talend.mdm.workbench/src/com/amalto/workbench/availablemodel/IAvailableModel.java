@@ -60,4 +60,12 @@ public interface IAvailableModel {
 	 * @param dataModelName
 	 */
 	void doubleClickOnElement(int type,DataModelMainPage page,String dataModelName);
+	
+	/**
+	 * Import the object that was exported
+	 * @param obj
+	 * @param filename
+	 * @return
+	 */
+	void doImport(TreeObject obj,String importFolder);
 }

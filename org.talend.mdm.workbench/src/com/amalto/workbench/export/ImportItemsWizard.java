@@ -45,11 +45,15 @@ import org.exolab.castor.xml.Unmarshaller;
 import org.talend.mdm.bulkload.client.BulkloadClient;
 import org.talend.mdm.bulkload.client.BulkloadOptions;
 import org.talend.mdm.commmon.util.core.CommonUtil;
+import org.talend.mdm.commmon.util.webapp.XSystemObjects;
 import org.talend.mdm.commmon.util.workbench.ZipToFile;
 
 import com.amalto.workbench.actions.ServerRefreshAction;
+import com.amalto.workbench.availablemodel.AvailableModelUtil;
+import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.dialogs.ErrorExceptionDialog;
 import com.amalto.workbench.dialogs.ImportExchangeOptionsDialog;
+import com.amalto.workbench.editors.DataClusterBrowserMainPage;
 import com.amalto.workbench.editors.XObjectBrowser;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.models.TreeObject;
@@ -722,43 +726,15 @@ public class ImportItemsWizard extends Wizard{
 			//add by ymli. fix the bug:0012882: Allow workflow bars to be imported
 			case TreeObject.WORKFLOW_PROCESS:
 				monitor.subTask("Workflow...");
-				subItems = item.getItems();
-				TreeParent parent = new TreeParent(null, null, TreeObject.WORKFLOW, null, null);
-				for(int i = 0;i<serverRoot.getChildren().length;i++){
-					parent = (TreeParent) item.getServerRoot().getChildren()[i];
-					if(parent.getType() == TreeObject.WORKFLOW){
-						//parent.addChild(obj);
-						break;
+				//available models
+				java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
+				for(IAvailableModel model: availablemodels){
+					if(model.toString().indexOf("WorkflowAvailableModel")!=-1) {
+						model.doImport(item, importFolder);
 					}
 				}
-				for(String subItem : subItems) {
-					try{
-						reader = new FileReader(importFolder+"/" + subItem);
-						String endpointaddress=item.getEndpointAddress();
-						String uploadURL = new URL(endpointaddress).getProtocol()+"://"+new URL(endpointaddress).getHost()+":"+new URL(endpointaddress).getPort()+"/datamanager/uploadFile";
-						String remoteFile = Util.uploadFileToAppServer(uploadURL,importFolder+"/"+ subItem,"admin","talend");
-						WSWorkflowProcessDefinitionUUID uuid=port.workflowDeploy(new WSWorkflowDeploy(remoteFile));
-						TreeObject obj = new TreeObject(
-								uuid.getProcessName()+"_"+uuid.getProcessVersion(),
-								item.getServerRoot(),
-								TreeObject.WORKFLOW_PROCESS,
-								uuid,
-								null   //no storage to save space
-						);
-						parent.addChild(obj);
-						
-					}catch(Exception e){
-						e.printStackTrace();
-						ErrorExceptionDialog.openError(view.getSite().getShell(),
-								"Error committing the page", 
-										CommonUtil.getErrMsgFromException(e));
-					
-					}finally {
-						   try{if(reader!=null)reader.close();}catch(Exception e) {}
-					   }
-				}
-				break;
-				
+				monitor.worked(1);
+				break;				
 			case TreeObject.TRANSFORMER:
 				monitor.subTask(" Process...");
 				subItems = item.getItems();

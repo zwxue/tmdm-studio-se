@@ -53,4 +53,7 @@ public class AbstractAvailableModel implements IAvailableModel {
 		// TODO Auto-generated method stub
 		
 	}
+	public void doImport(TreeObject obj,String importFolder) {
+
+	}
 }
