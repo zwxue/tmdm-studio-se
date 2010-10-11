@@ -109,6 +109,7 @@ import org.eclipse.xsd.impl.XSDSchemaImpl;
 import org.eclipse.xsd.util.XSDConstants;
 import org.eclipse.xsd.util.XSDSchemaLocator;
 import org.osgi.framework.Bundle;
+import org.talend.mdm.commmon.util.core.ICoreConstants;
 import org.talend.mdm.commmon.util.workbench.Version;
 import org.talend.mdm.commmon.util.workbench.ZipToFile;
 import org.w3c.dom.DOMImplementation;
@@ -1794,7 +1795,13 @@ public class Util {
 //            {
 //             return Util.getXSDSchema(xsd);
 //            }
-    	    XSDSchema xsdSchema = Util.getXSDSchema(xsd, imports, treeObj, false, exceptons, schemaMonitor);
+    	    // replace  the old roles with the new role scheme
+    	    String xsdCpy = new String(xsd);
+            for (Map.Entry<String, String> pair : ICoreConstants.rolesConvert.oldRoleToNewRoleMap.entrySet())
+            {
+            	xsdCpy = xsdCpy.replaceAll(pair.getKey().toString(), pair.getValue().toString());
+            }
+    	    XSDSchema xsdSchema = Util.getXSDSchema(xsdCpy, imports, treeObj, false, exceptons, schemaMonitor);
     	    if(exceptons.size() > 0)
     	    {
     	    	throw exceptons.get(0);
