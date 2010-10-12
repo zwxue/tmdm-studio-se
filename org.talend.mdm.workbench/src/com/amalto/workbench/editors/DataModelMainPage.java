@@ -1392,125 +1392,8 @@ public class DataModelMainPage extends AMainPageV2 {
     
 	private void hookDoubleClickAction()
 	{
-		viewer.addDoubleClickListener(new IDoubleClickListener() {
-			public void doubleClick(DoubleClickEvent event) {
-				IStructuredSelection selection = ((IStructuredSelection) viewer
-						.getSelection());
-				int elem = getElementType(selection.getFirstElement());
-				//available models
-				java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
-				for(IAvailableModel model: availablemodels){
-					model.doubleClickOnElement(elem, DataModelMainPage.this, dataModelName);
-				}				
-				switch (elem){
-					case 0:
-						editConceptAction.run();
-						break;
-					case 1:
-						editElementAction.run();
-						break;
-					case 2:
-						newComplexTypeAction.run();
-						break;
-					case 3:
-						editIdentityConstraintAction.run();
-						break;
-					case 4:
-						editXPathAction.run();
-						break;
-					case 5:
-						changeBaseTypeAction.run();
-						break;
-					case 6:
-						setAnnotationDescriptionsAction.run();
-						break;
-					case 7:
-						editParticleAction.run();
-						break;
-					case 8:
-						changeSubElementGroupAction.run();
-						break;
-					case 201:
-//						new XSDEditFacetAction(viewer,"whiteSpace").run();
-						initxsdEditFacetAction("whiteSpace");
-						break;
-					case 202:
-						initxsdEditFacetAction("length");
-						break;
-					case 203:
-						initxsdEditFacetAction("minLength");
-						break;
-					case 204:
-						initxsdEditFacetAction("maxLength");
-						break;
-					case 205:
-						initxsdEditFacetAction("totalDigits");
-						break;
-					case 206:
-						initxsdEditFacetAction("fractionDigits");
-						break;
-					case 207:
-						initxsdEditFacetAction("maxInclusive");
-						break;
-					case 208:
-						initxsdEditFacetAction("maxExclusive");
-						break;
-					case 209:
-						initxsdEditFacetAction("minInclusive");
-						break;
-					case 210:
-						initxsdEditFacetAction("minExclusive");
-						break;
-					case 211:
-						initxsdEditFacetAction("pattern");
-						break;
-					case 212:
-						initxsdEditFacetAction("enumeration");
-						break;
-					case 101:
-						setAnnotationLabelAction.run();
-						break;
-					case 102:
-						setAnnotationForeignKeyAction.run();
-						break;
-					case 103:
-						setAnnotationForeignKeyInfoAction.run();
-						break;
-					case 112:
-						setAnnotationFKFilterAction.run();
-						break;						
-					case 104:
-						//setAnnotationSourceSystemAction.run();
-						break;
-					case 105:
-						//setAnnotationTargetSystemsAction.run();
-						break;
-					case 106:
-						setAnnotationDescriptionsAction.run();
-						break;
-					case 107:
-						setAnnotationWriteAction.run();
-						break;
-					case 108:
-						if(Util.IsEnterPrise()) {
-							setAnnotationNoAction.run();
-						}
-						break;					
-					case 110:
-						setFacetMsgAction.run();
-						break;
-					case 113:
-						setAnnotationDisplayFomatAction.run();
-						break;
-					case 114:
-						setAnnotationLookupFieldsAction.run();
-						break;						
-					case -1:
-						if(drillDownAdapter.canGoInto()==true)
-							drillDownAdapter.goInto();				
-				}
-			}
-		});
+		viewer.addDoubleClickListener(new DoubleClickListener(viewer) {});
+		typesViewer.addDoubleClickListener(new DoubleClickListener(typesViewer) {});
 	}
 
 	protected void initxsdEditFacetAction(String element) {
@@ -1552,12 +1435,40 @@ public class DataModelMainPage extends AMainPageV2 {
 	    else
 	        selection = ((IStructuredSelection) typesViewer
 	                .getSelection());
+        
+        Object[] selectedObjs = selection.toArray();
+        Object obj = selection.getFirstElement();
+        
         if(!isType)
             manager.add(new XSDNewConceptAction(this));
         else
         {
             manager.add(newComplexTypeAction);
             manager.add(newSimpleTypeAction);
+            //add by ymli; fix the bug:0012228. Made the multiple types can be deleted.
+            XSDDeleteTypeDefinition deleteTypeDefinition1;
+            if(selectedObjs.length >1)
+                deleteTypeDefinition1 = new XSDDeleteTypeDefinition(this, true);
+            else    
+                deleteTypeDefinition1 = new XSDDeleteTypeDefinition(this, false);
+                if(selectedObjs.length >= 1 && deleteTypeDefinition1.isTypeDefinition(selectedObjs))
+                    manager.add(deleteTypeDefinition1);
+                
+                deleteConceptWrapAction.regisExtraClassToDel(XSDComplexTypeDefinitionImpl.class);
+                
+                if (selectedObjs.length > 1
+                        && deleteConceptWrapAction.checkInDeletableType(selectedObjs)) {
+                    deleteConceptWrapAction.prepareToDelSelectedItems(selection, viewer);
+                }
+                
+
+                if (selectedObjs.length > 1
+                        && deleteConceptWrapAction.outPutDeleteActions() != null) {
+                    manager.add(deleteConceptWrapAction.outPutDeleteActions());
+                    
+                    if (deleteConceptWrapAction.checkOutAllConcept(selectedObjs))
+                        manager.add(newBrowseItemAction);
+                }
         }
         manager.add(new Separator());
 		if ((selection == null) || (selection.getFirstElement() == null)) {
@@ -1577,8 +1488,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			return;
 		}
 		
-        Object[] selectedObjs = selection.toArray();
-		Object obj = selection.getFirstElement();
+
 
 		// Element Declaration
 		if (obj instanceof XSDElementDeclaration && selectedObjs.length == 1) {
@@ -1656,7 +1566,7 @@ public class DataModelMainPage extends AMainPageV2 {
 			   setAnnotationActions2(obj,manager);
 		}
 		
-		if(obj instanceof XSDModelGroup && !Util.IsAImporedElement((XSDModelGroup)obj, xsdSchema)){
+		if(obj instanceof XSDModelGroup ){
 			manager.add(changeSubElementGroupAction);
 		}
 
@@ -1709,12 +1619,23 @@ public class DataModelMainPage extends AMainPageV2 {
 		}
 
 		
-		if (obj instanceof XSDComplexTypeDefinition
-				&& selectedObjs.length == 1
-				&& ((XSDComplexTypeDefinition) obj).getTargetNamespace() == null && !isType&&!Util.IsAImporedElement((XSDParticle)obj, xsdSchema)) {
-			manager.add(newParticleFromTypeAction);
-			manager.add(newGroupFromTypeAction);
-		}
+        if (obj instanceof XSDComplexTypeDefinition
+                && selectedObjs.length == 1
+                && ((XSDComplexTypeDefinition) obj).getTargetNamespace() == null) {
+            if (!isType
+                    && !Util.IsAImporedElement((XSDParticle) obj, xsdSchema)) {
+                manager.add(newParticleFromTypeAction);
+                manager.add(newGroupFromTypeAction);
+            }
+            String ns = ((XSDComplexTypeDefinition) obj).getTargetNamespace();
+            if (ns == null
+                    && !Util.IsAImporedElement((XSDComplexTypeDefinition) obj,
+                            xsdSchema)) {
+//                manager.add(newParticleFromTypeAction);
+                // manager.add(deleteTypeDefinition);
+                manager.add(editComplexTypeAction);
+            }
+        }
 
 		
 		if (obj instanceof XSDIdentityConstraintDefinition
@@ -1793,6 +1714,7 @@ public class DataModelMainPage extends AMainPageV2 {
 				manager.add(new Separator());
 				manager.add(copyConceptAction);
 				//manager.add(pastyConceptAction);
+				
 			}
 			/*boolean isMulti = false;
 			if(WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size()>1)
@@ -1826,7 +1748,7 @@ public class DataModelMainPage extends AMainPageV2 {
 		drillDownAdapter.addNavigationActions(manager);
 		// Other plug-ins can contribute there actions here
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
-
+	    deleteConceptWrapAction.clearExtraClassToDel();
 	}
 
 	private void setAnnotationActions(Object obj,IMenuManager manager) {
@@ -2345,4 +2267,128 @@ public class DataModelMainPage extends AMainPageV2 {
 			wsObject.setXsdSchema(xsd);
 		}	
 	}
+	
+	private class DoubleClickListener implements IDoubleClickListener{
+	    private TreeViewer viewer;
+        public DoubleClickListener(TreeViewer viewer) {
+           this.viewer=viewer;
+        }
+        public void doubleClick(DoubleClickEvent event) {
+            IStructuredSelection selection = ((IStructuredSelection) viewer
+                    .getSelection());
+            int elem = getElementType(selection.getFirstElement());
+            //available models
+            java.util.List<IAvailableModel> availablemodels=AvailableModelUtil.getAvailableModels();
+            for(IAvailableModel model: availablemodels){
+                model.doubleClickOnElement(elem, DataModelMainPage.this, dataModelName);
+            }               
+            switch (elem){
+                case 0:
+                    editConceptAction.run();
+                    break;
+                case 1:
+                    editElementAction.run();
+                    break;
+                case 2:
+                    editComplexTypeAction.run();
+                    break;
+                case 3:
+                    editIdentityConstraintAction.run();
+                    break;
+                case 4:
+                    editXPathAction.run();
+                    break;
+                case 5:
+                    changeBaseTypeAction.run();
+                    break;
+                case 6:
+                    setAnnotationDescriptionsAction.run();
+                    break;
+                case 7:
+                    editParticleAction.run();
+                    break;
+                case 8:
+                    changeSubElementGroupAction.run();
+                    break;
+                case 201:
+//                  new XSDEditFacetAction(viewer,"whiteSpace").run();
+                    initxsdEditFacetAction("whiteSpace");
+                    break;
+                case 202:
+                    initxsdEditFacetAction("length");
+                    break;
+                case 203:
+                    initxsdEditFacetAction("minLength");
+                    break;
+                case 204:
+                    initxsdEditFacetAction("maxLength");
+                    break;
+                case 205:
+                    initxsdEditFacetAction("totalDigits");
+                    break;
+                case 206:
+                    initxsdEditFacetAction("fractionDigits");
+                    break;
+                case 207:
+                    initxsdEditFacetAction("maxInclusive");
+                    break;
+                case 208:
+                    initxsdEditFacetAction("maxExclusive");
+                    break;
+                case 209:
+                    initxsdEditFacetAction("minInclusive");
+                    break;
+                case 210:
+                    initxsdEditFacetAction("minExclusive");
+                    break;
+                case 211:
+                    initxsdEditFacetAction("pattern");
+                    break;
+                case 212:
+                    initxsdEditFacetAction("enumeration");
+                    break;
+                case 101:
+                    setAnnotationLabelAction.run();
+                    break;
+                case 102:
+                    setAnnotationForeignKeyAction.run();
+                    break;
+                case 103:
+                    setAnnotationForeignKeyInfoAction.run();
+                    break;
+                case 112:
+                    setAnnotationFKFilterAction.run();
+                    break;                      
+                case 104:
+                    //setAnnotationSourceSystemAction.run();
+                    break;
+                case 105:
+                    //setAnnotationTargetSystemsAction.run();
+                    break;
+                case 106:
+                    setAnnotationDescriptionsAction.run();
+                    break;
+                case 107:
+                    setAnnotationWriteAction.run();
+                    break;
+                case 108:
+                    if(Util.IsEnterPrise()) {
+                        setAnnotationNoAction.run();
+                    }
+                    break;                  
+                case 110:
+                    setFacetMsgAction.run();
+                    break;
+                case 113:
+                    setAnnotationDisplayFomatAction.run();
+                    break;
+                case 114:
+                    setAnnotationLookupFieldsAction.run();
+                    break;                      
+                case -1:
+                    if(drillDownAdapter.canGoInto()==true)
+                        drillDownAdapter.goInto();              
+            }
+        }
+    }
 }
