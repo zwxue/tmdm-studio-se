@@ -1862,6 +1862,7 @@ public class DataModelMainPage extends AMainPageV2 {
 	private void setAnnotationActions2(Object obj,IMenuManager manager) {
 		
 		if(obj instanceof XSDElementDeclaration) {
+		    manager.add(setAnnotationLabelAction);
 			manager.add(setAnnotationDescriptionsAction);
 			manager.add(setAnnotationLookupFieldsAction);
 		}
