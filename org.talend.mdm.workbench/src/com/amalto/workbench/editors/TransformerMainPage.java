@@ -1230,9 +1230,9 @@ public class TransformerMainPage extends AMainPageV2 {
 	            
 	            pluginsCombo.addSelectionListener(new SelectionAdapter(){
 					public void widgetSelected(SelectionEvent e) {	
-						if(pluginsCombo.getText().equals(currentPluginName)){
-							return;
-						}
+//						if(pluginsCombo.getText().equals(currentPluginName)){
+//							return;
+//						}
 						refreshCombo();	
 						if(stepsList.getSelectionIndex()>=0 && stepsList.getSelectionIndex()< transformer.getProcessSteps().length)
 						transformer.getProcessSteps()[stepsList.getSelectionIndex()].setPluginJNDI(TRANSFORMER_PLUGIN+pluginsCombo.getText());
