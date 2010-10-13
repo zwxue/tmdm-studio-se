@@ -38,12 +38,9 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.rpc.Stub;
-import javax.xml.rpc.handler.Handler;
-import javax.xml.rpc.handler.HandlerInfo;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -372,21 +369,13 @@ public class Util {
 			HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
 			
 			//prepare the Web Services Stub
-            XtentisService service = new XtentisService_Impl();
+            XtentisService service;
             Bundle bundle = Platform.getBundle(ENTERPRISE_ID);
             if (bundle != null) {
-                List<HandlerInfo> handlerChainInfo = new ArrayList<HandlerInfo>();
-                HandlerInfo handlerInfo = new HandlerInfo();
-                Class<?> cls = bundle.loadClass("org.talend.mdm.workbench.enterprice.utils.XtentisHandler"); //$NON-NLS-1$
-                handlerInfo.setHandlerClass(cls);
-                handlerChainInfo.add(handlerInfo);
-                @SuppressWarnings("unchecked")
-                Iterator<QName> portIterator = service.getPorts();
-                while (portIterator.hasNext()) {
-                    QName port = portIterator.next();
-                    service.getHandlerRegistry().setHandlerChain(port, handlerChainInfo);
-                }
-            }
+                Class<?> cls = bundle.loadClass("org.talend.mdm.workbench.enterprice.webservices.XtentisServiceImpl"); //$NON-NLS-1$
+                service = (XtentisService)cls.newInstance();
+            } else
+                service = new XtentisService_Impl();
             
 			Stub stub = (Stub) service.getXtentisPort();
 			stub._setProperty(Stub.ENDPOINT_ADDRESS_PROPERTY, url.toString());
@@ -399,7 +388,7 @@ public class Util {
 			}
 			if (password!=null)
 	          stub._setProperty(Stub.PASSWORD_PROPERTY, password);
-			
+            
 			return (XtentisPort)stub;
 		} catch (Exception e) {
 			e.printStackTrace();
