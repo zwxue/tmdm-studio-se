@@ -19,16 +19,21 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.model.repository.IRepositoryViewObject;
 import org.talend.repository.ProjectManager;
 
+import com.amalto.workbench.utils.PluginChecker;
+
 /**
  * DOC achen class global comment. Detailled comment
  */
 public class JobRepositoryUtil {
 
     public static List<IRepositoryViewObject> getAllTISRepositoryJobs() throws Exception {
-
-        List<IRepositoryViewObject> jobs = CorePlugin.getDefault().getProxyRepositoryFactory().getAll(
-                ProjectManager.getInstance().getCurrentProject(), ERepositoryObjectType.PROCESS);
-        return jobs;
+        if(PluginChecker.isPluginLoaded("org.talend.core.repository") && ProjectManager.getInstance().getCurrentProject()!=null) {
+	        List<IRepositoryViewObject> jobs = CorePlugin.getDefault().getProxyRepositoryFactory().getAll(
+	                ProjectManager.getInstance().getCurrentProject(), ERepositoryObjectType.PROCESS);
+	        return jobs;
+        }else {
+        	return null;
+        }
     }
 
 }
