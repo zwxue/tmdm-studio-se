@@ -65,7 +65,7 @@ public class XpathSelectDialog extends Dialog {
 	protected Button add;
 	protected SelectionListener listener;
 	//TODO:check This two static String and there related static methods may cause some problems.
-	protected static String dataModelName;
+	public  String dataModelName;
 	private String xpath="";
 	private boolean isMulti=true;
 	protected String conceptName;
@@ -148,31 +148,9 @@ public class XpathSelectDialog extends Dialog {
 		final TreeParent tree = this.parent.findServerFolder(TreeObject.DATA_MODEL);
 		
 
-		List<String> systemDataModelValues=Util.getChildren(this.parent.getServerRoot(), TreeObject.DATA_MODEL);
 		
 		//filter the datamodel according to conceptName
-		List<String> avaiList=new ArrayList<String>();
-		avaiList.addAll(systemDataModelValues);
-		if(conceptName!=null && !conceptName.contains("*")){
-			for(String datamodel: systemDataModelValues){
-				try {
-					WSDataModel dm=Util.getPort(this.parent).getDataModel(new WSGetDataModel(new WSDataModelPK(datamodel)));
-					if(dm!=null){
-						XSDSchema xsdSchema = Util.getXSDSchema(dm.getXsdSchema());
-						String schema = Util.nodeToString(xsdSchema.getDocument());
-						XSDSchema xsd= Util.createXsdSchema(schema, this.parent);
-						if(!Util.getConcepts(xsd).contains(conceptName)){
-							avaiList.remove(datamodel);
-						}
-					}
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				} 
-			}
-		}
-		//edit by ymli;fix the bug:0011970:if the conceptName of Browse_items_conceptName doesn't exist in datamodel, all the concept will be show.	
-		if(avaiList.size()==0)
-			avaiList.addAll(systemDataModelValues);
+		List<String> avaiList=Util.getDataModel(this.parent, dataModelName, conceptName);
 		
 		
 		dataModelCombo.setItems(avaiList.toArray(new String[avaiList.size()]));
@@ -234,8 +212,8 @@ public class XpathSelectDialog extends Dialog {
 			e2.printStackTrace();
 		}
 		try {
-			XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
-			String schema = Util.nodeToString(xsdSchema.getDocument());
+			//XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
+			String schema = wsDataModel.getXsdSchema();//Util.nodeToString(xsdSchema.getDocument());
 			XSDSchema xsd= Util.createXsdSchema(schema, pObject);
 			provideViwerContent(xsd);
 		} catch (Exception e1) {
@@ -306,8 +284,12 @@ public class XpathSelectDialog extends Dialog {
 		return xpath;
 	}
 
-	public static String getDataModelName() {
+	public  String getDataModelName() {
 		return dataModelName;
+	}
+
+	public void setDataModelName(String dataModelName) {
+		this.dataModelName = dataModelName;
 	}
 
 	public String getConceptName() {

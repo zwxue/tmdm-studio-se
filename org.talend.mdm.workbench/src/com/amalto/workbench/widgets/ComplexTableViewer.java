@@ -83,6 +83,7 @@ public class ComplexTableViewer {
 	protected AMainPageV2 mainPage;
 	protected Table table;
 	protected String conceptName;
+	protected String datamodelName;
 	protected boolean context;
 
 	public boolean isContext() {
@@ -107,9 +108,16 @@ public class ComplexTableViewer {
 		}
 		if(xpathDialog!=null)xpathDialog.setConceptName(conceptName);
 	}	
-	
-	
+		
 
+	public String getDatamodelName() {
+		return datamodelName;
+	}
+
+	public void setDatamodelName(String datamodelName) {
+		this.datamodelName = datamodelName;
+		if(xpathDialog!=null)xpathDialog.dataModelName=datamodelName;
+	}
 
 	public AMainPageV2 getMainPage() {
 		return mainPage;
@@ -197,7 +205,7 @@ public class ComplexTableViewer {
 	}
 	protected void markDirty(){
 		if(mainPage!=null){
-			mainPage.markDirty();
+			mainPage.markDirtyWithoutCommit();
 		}
 		//fire table modify listener
 		for( Object obj:modifyList.getListeners()) {
@@ -853,6 +861,7 @@ public class ComplexTableViewer {
 				xpath= new XpathWidget(parent,false);
 			xpaths.add(xpath);
 			xpath.setConceptName(conceptName);
+			xpath.setDataModelName(datamodelName);
 			((GridData)xpath.getComposite().getChildren()[0].getLayoutData()).heightHint=15;
 			((GridData)xpath.getComposite().getChildren()[1].getLayoutData()).heightHint=15;
 			if(parent instanceof Table){

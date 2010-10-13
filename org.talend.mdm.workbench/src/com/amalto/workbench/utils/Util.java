@@ -1475,6 +1475,38 @@ public class Util {
 		}
 		return objs;
 	}
+	
+	public static List<String> getDataModel(TreeObject obj,String datamodel,String conceptName) {
+		List<String> systemDataModelValues=Util.getChildren(obj.getServerRoot(), TreeObject.DATA_MODEL);
+		
+		//filter the datamodel according to conceptName
+		List<String> avaiList=new ArrayList<String>();
+		avaiList.addAll(systemDataModelValues);
+		if(datamodel!=null) {
+			avaiList.clear();
+			avaiList.add(datamodel);
+		}
+		else if(conceptName!=null && !conceptName.contains("*")){
+			for(String data: systemDataModelValues){
+				try {
+					WSDataModel dm=Util.getPort(obj).getDataModel(new WSGetDataModel(new WSDataModelPK(data)));
+					if(dm!=null){
+						//XSDSchema xsdSchema = Util.getXSDSchema(dm.getXsdSchema());
+						String schema =dm.getXsdSchema();						
+						Pattern p=Pattern.compile("<xsd:element(.*?)name=\""+conceptName +"\"");
+						if(!p.matcher(schema).find()){
+							avaiList.remove(data);
+						}
+					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				} 
+			}
+		}
+		if(avaiList.size()==0)
+			avaiList.addAll(systemDataModelValues);
+		return avaiList;
+	}
 	public static List<TreeObject> getChildrenObj(TreeParent xObject){
 		List<TreeObject> objs=new ArrayList<TreeObject>();
 		if(xObject.getChildren()!=null)
@@ -2495,6 +2527,7 @@ public class Util {
 	    DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		documentBuilderFactory.setNamespaceAware(true);
 		documentBuilderFactory.setValidating(false);
+		StringReader reader=new StringReader(schema);
 		InputSource source = new InputSource(new StringReader(schema));
 		DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 		Document document = documentBuilder.parse(source);
@@ -2502,7 +2535,7 @@ public class Util {
 
 		xsdSchema = XSDSchemaImpl.createSchema(document
 					.getDocumentElement());
-				
+		reader.close();		
 		return xsdSchema;
 	}
 	private static String ENTERPRISE_ID="org.talend.mdm.workbench.enterprise";
@@ -2559,7 +2592,10 @@ public class Util {
 			format.setEncoding("UTF-8");
 			XMLWriter xmlwriter = new XMLWriter(writer, format);
 			xmlwriter.write(document);
-			return writer.toString();
+			String str= writer.toString();
+			writer.close();
+			xmlwriter.close();
+			return str;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -5,6 +5,7 @@ import java.awt.Panel;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -164,29 +165,9 @@ public class ResourceSelectDialog extends Dialog {
 		}
 		tree = this.parent.findServerFolder(TreeObject.DATA_MODEL);
 		//tree.getParent().getChildren();
-
-		List<String> systemDataModelValues=Util.getChildren(this.parent.getServerRoot(), TreeObject.DATA_MODEL);
 		
 		//filter the datamodel according to conceptName
-		List<String> avaiList=new ArrayList<String>();
-		avaiList.addAll(systemDataModelValues);
-		if(conceptName!=null && !conceptName.contains("*")){
-			for(String datamodel: systemDataModelValues){
-				try {
-					WSDataModel dm=Util.getPort(this.parent).getDataModel(new WSGetDataModel(new WSDataModelPK(datamodel)));
-					if(dm!=null){
-						XSDSchema xsdSchema = Util.getXSDSchema(dm.getXsdSchema());
-						String schema = Util.nodeToString(xsdSchema.getDocument());
-						XSDSchema xsd= Util.createXsdSchema(schema, this.parent);
-						if(!Util.getConcepts(xsd).contains(conceptName)){
-							avaiList.remove(datamodel);
-						}
-					}
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				} 
-			}
-		}
+		List<String> avaiList=Util.getDataModel(this.parent, null, conceptName);
 		dataModelCombo.setItems(avaiList.toArray(new String[avaiList.size()]));
 		dataModelCombo.addSelectionListener(new SelectionListener() {
 			public void widgetDefaultSelected(
@@ -318,8 +299,8 @@ public class ResourceSelectDialog extends Dialog {
 			e2.printStackTrace();
 		}
 		try {
-			XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
-			String schema = Util.nodeToString(xsdSchema.getDocument());
+			//XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
+			String schema = wsDataModel.getXsdSchema();//Util.nodeToString(xsdSchema.getDocument());
 			XSDSchema xsd= Util.createXsdSchema(schema, pObject);
 			provideViwerContent(xsd);
 		} catch (Exception e1) {

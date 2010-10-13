@@ -138,7 +138,7 @@ public class TisTableViewer extends ComplexTableViewer{
 			        				null,"Select Multiple XPaths",
 			        				ServerView.show().getSite(),
 									true,
-									null								
+									getDatamodelName()								
 							);
 			        		xpathDialog.setConceptName(conceptName);
 		        		}
