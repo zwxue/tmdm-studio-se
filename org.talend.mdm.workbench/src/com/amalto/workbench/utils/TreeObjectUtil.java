@@ -207,7 +207,8 @@ public class TreeObjectUtil {
 			           		WSStoredProcedure newStoredProcedure = new WSStoredProcedure(
 			           				newKey.getPk(),
 			           				originalStoredProcedure.getDescription(),
-			           				originalStoredProcedure.getProcedure()
+			           				originalStoredProcedure.getProcedure(),
+			           				originalStoredProcedure.getRefreshCache()
 			           		);
 			           		//write the new model
 			           		destPort.putStoredProcedure(new WSPutStoredProcedure(newStoredProcedure));

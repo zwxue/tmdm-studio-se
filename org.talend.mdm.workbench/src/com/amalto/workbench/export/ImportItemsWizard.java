@@ -639,6 +639,7 @@ public class ImportItemsWizard extends Wizard{
 					   reader = new FileReader(importFolder+"/" + subItem);
 					   WSStoredProcedure model=new WSStoredProcedure();
 					   model = (WSStoredProcedure)Unmarshaller.unmarshal(WSStoredProcedure.class,reader);
+					   if(model.getRefreshCache()==null)model.setRefreshCache(false);
 						if (port.existsStoredProcedure(new WSExistsStoredProcedure(
 								new WSStoredProcedurePK(model.getName()))).is_true()) {
 							if (!isOverrideAll) {

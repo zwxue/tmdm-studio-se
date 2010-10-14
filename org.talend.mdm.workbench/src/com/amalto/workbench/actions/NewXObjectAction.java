@@ -384,7 +384,8 @@ public class NewXObjectAction extends Action{
                     WSStoredProcedure storedProcedure = new WSStoredProcedure(
                     		(String)key,
                     		"",
-                    		""
+                    		"",
+                    		false
                     );
                     newInstance = new TreeObject(
                                     (String)key,

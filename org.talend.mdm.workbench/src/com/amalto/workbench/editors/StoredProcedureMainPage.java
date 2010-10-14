@@ -38,6 +38,8 @@ import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -68,8 +70,12 @@ import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WidgetUtils;
 import com.amalto.workbench.webservices.WSDataClusterPK;
-import com.amalto.workbench.webservices.WSRunQuery;
+import com.amalto.workbench.webservices.WSExecuteStoredProcedure;
+import com.amalto.workbench.webservices.WSPutStoredProcedure;
 import com.amalto.workbench.webservices.WSStoredProcedure;
+import com.amalto.workbench.webservices.WSStoredProcedurePK;
+import com.amalto.workbench.webservices.WSStringArray;
+import com.amalto.workbench.webservices.XtentisPort;
 
 public class StoredProcedureMainPage extends AMainPage implements ITextListener{
 
@@ -83,6 +89,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener{
 	
 	private boolean refreshing = false;
 	private boolean comitting = false;
+	private Button refreshCacheBtn;
 	
     public StoredProcedureMainPage(FormEditor editor) {
         super(
@@ -120,6 +127,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener{
             storedProcedureGroup.setLayoutData(
                     new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
             );
+            
             ((GridData)storedProcedureGroup.getLayoutData()).minimumHeight = 100;
             procedureViewer = new SourceViewer(storedProcedureGroup, new VerticalRuler(10), SWT.V_SCROLL);
             procedureViewer.getControl().setLayoutData(
@@ -127,6 +135,22 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener{
             );
             procedureViewer.addTextListener(this);
             WidgetUtils.initRedoUndo(procedureViewer);
+            refreshCacheBtn=toolkit.createButton(charComposite, "Refresh the cache after execution(recommended for updates)", SWT.CHECK);
+            refreshCacheBtn.setLayoutData(
+                    new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
+            );
+            refreshCacheBtn.addSelectionListener(new SelectionListener() {
+				
+				public void widgetSelected(SelectionEvent e) {
+					markDirty();
+					
+				}
+				
+				public void widgetDefaultSelected(SelectionEvent e) {
+					markDirty();
+					
+				}
+			});
             /************************************************************
              * Execute Stored Procedure
              ************************************************************/
@@ -220,7 +244,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener{
     	
     	Document doc = new Document(wsStoredProcedure.getProcedure());
         procedureViewer.setDocument(doc);
-        
+        refreshCacheBtn.setSelection(wsStoredProcedure.getRefreshCache()!=null&&wsStoredProcedure.getRefreshCache().booleanValue()?true:false);
         dataClusterCombo.removeAll();
         WSDataClusterPK[] dataClusterPKs;
         try {
@@ -267,7 +291,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener{
     	WSStoredProcedure wsStoredProcedure = (WSStoredProcedure) (getXObject().getWsObject());
 		wsStoredProcedure.setDescription(descriptionText.getText());
 		wsStoredProcedure.setProcedure(procedureViewer.getDocument().get());
-		
+		wsStoredProcedure.setRefreshCache(refreshCacheBtn.getSelection());
 		this.comitting = false;
 	}
 
@@ -352,15 +376,21 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener{
 						}
         			}
         			//perform call
-            		String[] results = 
-            		Util.getPort(getXObject()).runQuery(
-            				new WSRunQuery(
-            					null,
-            					dcpk,
-            					proc,
-            					currentParameters.toArray(new String[currentParameters.size()])
-            				)
-            		).getStrings();
+//            		String[] results = 
+//            		Util.getPort(getXObject()).runQuery(
+//            				new WSRunQuery(
+//            					null,
+//            					dcpk,
+//            					proc,
+//            					currentParameters.toArray(new String[currentParameters.size()])
+//            				)
+//            		).getStrings();
+
+            		XtentisPort port=Util.getPort(getXObject());
+            		WSStoredProcedure wsStoredProcedure = (WSStoredProcedure) (getXObject().getWsObject());
+            		port.putStoredProcedure(new WSPutStoredProcedure(wsStoredProcedure));
+            		WSStringArray array=port.executeStoredProcedure(new WSExecuteStoredProcedure(new WSStoredProcedurePK(wsStoredProcedure.getName()),null,dcpk,currentParameters.toArray(new String[currentParameters.size()])));
+            		String[] results=array.getStrings();
             		resultsLabel.setText("Procedure returned "+results.length+" Records.");
             		resultsViewer.setInput(results);
         		} catch (Exception ex) {
