@@ -2100,7 +2100,8 @@ public class Util {
 		return strEntry;
 	}
     public static void copyFile(String source, String dest) {
-    	 byte[] buf = new byte[1024];
+    	if(source.equals(dest)) return;
+    	byte[] buf = new byte[1024];
         OutputStream os=null;
         InputStream is=null;
 		try {
