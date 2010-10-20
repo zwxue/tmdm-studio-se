@@ -564,7 +564,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 					commit();
 					monitor.worked(1);
 				}//for
-				
+				viewableViewer.getViewer().refresh();
 				monitor.done();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -594,12 +594,9 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 			MessageDialog.openError(this.getSite().getShell(), "Error saving", "Description cannot be empty");
 			return false;
 		}
-		WSView wsObject = (WSView) (getWsViewObject());
-//		if(wsObject.getViewableBusinessElements().length==0) {
-//			MessageDialog.openError(this.getSite().getShell(), "Error","Viewable Business Elements can't be empty!");
-//			return false;
-//		}
-		if(wsObject.getSearchableBusinessElements().length==0) {
+
+		java.util.List<Line> input=(java.util.List<Line>)searchableViewer.getViewer().getInput();
+		if(input!=null && input.size()==0) {
 			MessageDialog.openError(this.getSite().getShell(), "Error","Searchable Business Elements can't be empty!");
 			return false;
 		}		
