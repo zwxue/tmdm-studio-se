@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -44,16 +43,13 @@ import org.eclipse.ui.progress.UIJob;
 import org.exolab.castor.xml.Unmarshaller;
 import org.talend.mdm.bulkload.client.BulkloadClient;
 import org.talend.mdm.bulkload.client.BulkloadOptions;
-import org.talend.mdm.commmon.util.core.CommonUtil;
-import org.talend.mdm.commmon.util.webapp.XSystemObjects;
+import org.talend.mdm.commmon.util.core.ICoreConstants;
 import org.talend.mdm.commmon.util.workbench.ZipToFile;
 
 import com.amalto.workbench.actions.ServerRefreshAction;
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
-import com.amalto.workbench.dialogs.ErrorExceptionDialog;
 import com.amalto.workbench.dialogs.ImportExchangeOptionsDialog;
-import com.amalto.workbench.editors.DataClusterBrowserMainPage;
 import com.amalto.workbench.editors.XObjectBrowser;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.models.TreeObject;
@@ -85,7 +81,6 @@ import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuPK;
 import com.amalto.workbench.webservices.WSPutDataCluster;
 import com.amalto.workbench.webservices.WSPutDataModel;
-import com.amalto.workbench.webservices.WSPutItem;
 import com.amalto.workbench.webservices.WSPutMenu;
 import com.amalto.workbench.webservices.WSPutRole;
 import com.amalto.workbench.webservices.WSPutRoutingRule;
@@ -113,8 +108,6 @@ import com.amalto.workbench.webservices.WSView;
 import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.WSWhereCondition;
 import com.amalto.workbench.webservices.WSWhereOperator;
-import com.amalto.workbench.webservices.WSWorkflowDeploy;
-import com.amalto.workbench.webservices.WSWorkflowProcessDefinitionUUID;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.FileSelectWidget;
 import com.amalto.workbench.widgets.RepositoryCheckTreeViewer;
@@ -282,8 +275,28 @@ public class ImportItemsWizard extends Wizard{
 		     reader = new InputStreamReader(new FileInputStream(importFolder+"/exportitems.xml"),"UTF-8");	
 		Exports exports = (Exports)Unmarshaller.unmarshal(
 				Exports.class,reader);
+		String[] orgSchemas = exports.getSchemas();
+		int idx = 0;
+		
+		if(orgSchemas != null)
+		{
+			for (String orgSchema : orgSchemas)
+			{
+				String orgSchemaCpy = new String(orgSchema);
+	            for (Map.Entry<String, String> pair : ICoreConstants.rolesConvert.oldRoleToNewRoleMap.entrySet())
+	            {
+	            	orgSchemaCpy = orgSchemaCpy.replaceAll(pair.getKey().toString(), pair.getValue().toString());
+	            }
+	            if(!orgSchemaCpy.equals(orgSchema))
+	            {
+	            	orgSchemas[idx] = orgSchemaCpy;
+	            }
+	            idx++;
+			}
+		}
+
 		try {
-			LocalTreeObjectRepository.getInstance().makeUpDocWithImportCategory(exports.getSchemas(), serverRoot);
+			LocalTreeObjectRepository.getInstance().makeUpDocWithImportCategory(orgSchemas, serverRoot);
 		}catch(Exception e) {}
 		//import autoincrement
 		if(exports.getAutoIncrement()!=null) {
