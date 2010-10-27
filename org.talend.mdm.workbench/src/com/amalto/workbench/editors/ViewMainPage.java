@@ -594,8 +594,13 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener{
 			MessageDialog.openError(this.getSite().getShell(), "Error saving", "Description cannot be empty");
 			return false;
 		}
-
-		java.util.List<Line> input=(java.util.List<Line>)searchableViewer.getViewer().getInput();
+		java.util.List<Line> input=(java.util.List<Line>)viewableViewer.getViewer().getInput();
+		if(input!=null && input.size()==0) {
+			MessageDialog.openError(this.getSite().getShell(), "Error","Viewable Business Elements can't be empty!");
+			return false;
+		}	
+		
+		input=(java.util.List<Line>)searchableViewer.getViewer().getInput();
 		if(input!=null && input.size()==0) {
 			MessageDialog.openError(this.getSite().getShell(), "Error","Searchable Business Elements can't be empty!");
 			return false;
