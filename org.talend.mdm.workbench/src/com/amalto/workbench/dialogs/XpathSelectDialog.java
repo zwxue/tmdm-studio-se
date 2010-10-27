@@ -15,6 +15,8 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -62,6 +64,7 @@ public class XpathSelectDialog extends Dialog {
 	protected IWorkbenchPartSite site ;
 	protected Panel panel;
 	protected Text xpathText;
+	private Text filterText;
 	protected Button add;
 	protected SelectionListener listener;
 	//TODO:check This two static String and there related static methods may cause some problems.
@@ -71,6 +74,7 @@ public class XpathSelectDialog extends Dialog {
 	protected String conceptName;
 	protected static String context;
 	private XSDSchema xsdSchema;
+    private List<String> avaiList;
 	
 	public XpathSelectDialog(Shell parentShell,TreeParent parent,String title,IWorkbenchPartSite site,boolean isMulti,String dataModelName) {
 		super(parentShell);
@@ -150,7 +154,7 @@ public class XpathSelectDialog extends Dialog {
 
 		
 		//filter the datamodel according to conceptName
-		List<String> avaiList=Util.getDataModel(this.parent, dataModelName, conceptName);
+		avaiList=Util.getDataModel(this.parent, dataModelName, conceptName);
 		
 		
 		dataModelCombo.setItems(avaiList.toArray(new String[avaiList.size()]));
@@ -159,7 +163,7 @@ public class XpathSelectDialog extends Dialog {
 					org.eclipse.swt.events.SelectionEvent e) {}
 
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-				changeDomTree(tree);
+				changeDomTree(tree,"");
 			}
 		});
 		schemaLabel = new Label(composite, SWT.NONE);
@@ -169,6 +173,24 @@ public class XpathSelectDialog extends Dialog {
 		xpathText = new Text(composite, SWT.BORDER);
 		xpathText.setEditable(false);
 		xpathText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,1));
+		
+		//add the filter for the xpath,see bug 0016511: Entity filtering in select multiple xpath dialog:
+		Label filterLabel =new Label(composite, SWT.NONE);
+		filterLabel.setText("Filter");
+		filterLabel.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true, false,1,1));
+		filterText=new Text(composite,SWT.BORDER);
+		filterText.setEditable(true);
+		filterText.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,1,1));
+		if(conceptName!=null)
+		    filterText.setText(conceptName);
+		else
+		    filterText.setText("");
+        filterText.addModifyListener(new ModifyListener() {
+            public void modifyText(ModifyEvent e) {
+                String filter = ((Text) e.widget).getText();
+                changeDomTree(tree,filter);
+            }
+        });
 		if (isMulti) {
 			domViewer = new TreeViewer(composite, SWT.H_SCROLL | SWT.MULTI
 					| SWT.V_SCROLL | SWT.BORDER);
@@ -182,7 +204,7 @@ public class XpathSelectDialog extends Dialog {
 		else
 			dataModelCombo.select(index);
 
-		changeDomTree(tree);
+		changeDomTree(tree,filterText.getText());
 
 		domViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 		((GridData) domViewer.getControl().getLayoutData()).heightHint = 400;
@@ -190,7 +212,7 @@ public class XpathSelectDialog extends Dialog {
 		return composite;
 	}
 	
-	private void changeDomTree(final TreeParent pObject) {
+	private void changeDomTree(final TreeParent pObject,String filter) {
 		String modelDisplay = dataModelCombo.getText();
 		if(modelDisplay.length()==0) return;
 		this.dataModelName = modelDisplay;
@@ -215,7 +237,7 @@ public class XpathSelectDialog extends Dialog {
 			//XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
 			String schema = wsDataModel.getXsdSchema();//Util.nodeToString(xsdSchema.getDocument());
 			XSDSchema xsd= Util.createXsdSchema(schema, pObject);
-			provideViwerContent(xsd);
+			provideViwerContent(xsd,filter);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
@@ -224,13 +246,14 @@ public class XpathSelectDialog extends Dialog {
 
 	
 	
-	  protected void provideViwerContent(XSDSchema xsdSchema) {
+	  protected void provideViwerContent(XSDSchema xsdSchema,String filter) {
 		 this.xsdSchema=xsdSchema;
 		drillDownAdapter = new DrillDownAdapter(domViewer);
 		domViewer.setLabelProvider(new XSDTreeLabelProvider());
 		XPathTreeContentProvider  provider=new XPathTreeContentProvider(this.site,
-				xsdSchema, parent);
-		provider.setConceptName(this.conceptName);
+				xsdSchema, parent,filter);
+		//filter the entity with the filter text but not the concept name.
+//		provider.setConceptName(this.conceptName);
 		domViewer.setContentProvider(provider);
 
 		domViewer.addSelectionChangedListener(new ISelectionChangedListener() {

@@ -25,7 +25,7 @@ import com.amalto.workbench.models.TreeObject;
 
 public class XPathTreeContentProvider extends XSDTreeContentProvider {
 	private String conceptName;
-	
+	private String filter;
 	public String getConceptName() {
 		return conceptName;
 	}
@@ -33,9 +33,9 @@ public class XPathTreeContentProvider extends XSDTreeContentProvider {
 		this.conceptName = conceptName;
 	}
 	public XPathTreeContentProvider(IWorkbenchPartSite site,
-			XSDSchema invisibleRoot, TreeObject treeObject) {
+			XSDSchema invisibleRoot, TreeObject treeObject, String filter) {
 		super(site, invisibleRoot, treeObject);
-		// TODO Auto-generated constructor stub
+		this.filter=filter;
 	}
 	@Override
 	public Object[] getChildren(Object parent) {
@@ -336,8 +336,11 @@ public class XPathTreeContentProvider extends XSDTreeContentProvider {
 				if((conceptName != null && el.getName().equals(conceptName)) || (conceptName == null && (el.getTargetNamespace() != null && !el
 						.getTargetNamespace().equals(
 								XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001))
-				|| (conceptName == null && el.getTargetNamespace() == null)))
+				|| (conceptName == null && el.getTargetNamespace() == null))){
+				    //Add filter for the contentprovider which is used to construct the xpath tree.
+				    if(filter.equalsIgnoreCase("")|| el.getName().toLowerCase().startsWith(filter.toLowerCase()))
 					   list.add(el);
+					   }
 				
 			}			
 		}

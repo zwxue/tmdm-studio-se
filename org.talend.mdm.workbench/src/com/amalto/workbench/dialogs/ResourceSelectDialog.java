@@ -315,7 +315,7 @@ public class ResourceSelectDialog extends Dialog {
 		this.xsdSchema=xsdSchema;
 		//drillDownAdapter = new DrillDownAdapter(domViewer);
 		domViewer.setLabelProvider(new XSDTreeLabelProvider());
-		XPathTreeContentProvider  provider=new XPathTreeContentProvider(this.site,xsdSchema, parent);
+		XPathTreeContentProvider  provider=new XPathTreeContentProvider(this.site,xsdSchema, parent,"");
 		provider.setConceptName(this.conceptName);
 		domViewer.setContentProvider(provider);
 
