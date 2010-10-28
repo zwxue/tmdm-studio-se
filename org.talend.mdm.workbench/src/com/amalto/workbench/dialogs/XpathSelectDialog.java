@@ -167,7 +167,7 @@ public class XpathSelectDialog extends Dialog {
 			}
 		});
 		schemaLabel = new Label(composite, SWT.NONE);
-		schemaLabel.setText("Xpath: ");
+		schemaLabel.setText("Xpath:");
 		schemaLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true,1, 1));
 		((GridData) schemaLabel.getLayoutData()).widthHint = 10;
 		xpathText = new Text(composite, SWT.BORDER);
@@ -176,7 +176,7 @@ public class XpathSelectDialog extends Dialog {
 		
 		//add the filter for the xpath,see bug 0016511: Entity filtering in select multiple xpath dialog:
 		Label filterLabel =new Label(composite, SWT.NONE);
-		filterLabel.setText("Filter");
+		filterLabel.setText("Filter:");
 		filterLabel.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true, false,1,1));
 		filterText=new Text(composite,SWT.BORDER);
 		filterText.setEditable(true);
