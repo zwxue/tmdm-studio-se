@@ -42,7 +42,7 @@ public class StudioTest {
 		bot.textWithLabel("Username").setText("admin");
 		bot.textWithLabel("Password").setText("talend");
 		bot.button("OK").click();
-		bot.sleep(10000);
+		bot.sleep(20*1000);
 		
 	}
 	

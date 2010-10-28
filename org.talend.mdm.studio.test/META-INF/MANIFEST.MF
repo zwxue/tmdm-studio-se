@@ -12,6 +12,9 @@ Require-Bundle: org.eclipse.ui,
  org.hamcrest,
  org.apache.commons.collections,
  org.junit4,
- org.apache.log4j
+ org.apache.log4j,
+ org.talend.mdm.commmon,
+ org.talend.mdm.workbench,
+ org.eclipse.ui.forms
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
