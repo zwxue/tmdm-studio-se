@@ -1654,7 +1654,7 @@ public class Util {
     	{
     		XSDParticle particle = (XSDParticle)component;
     		XSDTerm term = (XSDTerm)particle.getTerm();    	
-            if (term instanceof XSDElementDeclaration && !(((XSDElementDeclaration)term).getContainer() instanceof XSDParticle))
+            if (term instanceof XSDElementDeclaration )
             {            	
             	return "name=\""+((XSDElementDeclaration)term).getName()+"\"";                
             }
