@@ -1691,6 +1691,7 @@ public class DataModelMainPage extends AMainPageV2 {
 //			}
 //		}
 		
+		
 		if (selectedObjs.length > 1
 				&& deleteConceptWrapAction.checkInDeletableType(selectedObjs)) {
 			deleteConceptWrapAction.prepareToDelSelectedItems(selection, viewer);
@@ -1710,12 +1711,18 @@ public class DataModelMainPage extends AMainPageV2 {
 				title = "Copy Elements";
 			XSDCopyConceptAction copyConceptAction = new XSDCopyConceptAction(this,title);
 			//XSDPasteConceptAction pastyConceptAction = new XSDPasteConceptAction(this,true);
+			
 			if(Util.checkInCopy(selectedObjs))	{
-				manager.add(new Separator());
+				//manager.add(new Separator());
 				manager.add(copyConceptAction);
 				//manager.add(pastyConceptAction);
 				
 			}
+			//add by ymli; fix bug:0016645
+			if(selectedObjs.length>1 && isXSDParticles(selectedObjs)){
+				manager.add(newParticleFromParticleAction);
+			}
+			
 			/*boolean isMulti = false;
 			if(WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size()>1)
 				isMulti = true;
@@ -1726,7 +1733,6 @@ public class DataModelMainPage extends AMainPageV2 {
 				manager.add(pasteConceptAction);*/
 			
 		}
-		
 				
 		//add by ymli. fix bug 0009771
 		if(Util.IsEnterPrise()) {
@@ -1829,6 +1835,24 @@ public class DataModelMainPage extends AMainPageV2 {
 		return true;
 			
 	}
+
+
+	/**
+	 * @author ymli
+	 * @param objArray
+	 * check if all the elements of objArray are XSDParticle
+	 * @return 
+	 */
+	private boolean isXSDParticles(Object[] objArray){
+		for (Object obj : objArray) {
+			if (!(obj instanceof XSDParticle)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+	
 	/**
 	 * Returns and XSDSchema Object from an xsd
 	 * 
