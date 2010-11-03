@@ -457,7 +457,7 @@ public class ImportItemsWizard extends Wizard{
 				
 				for (String subItem : subItems) {
 					try {
-						reader = new FileReader(importFolder+"/" + subItem);
+						reader = new InputStreamReader(new FileInputStream(importFolder+"/" + subItem),"UTF-8");
 						WSDataCluster model = new WSDataCluster();
 						model = (WSDataCluster)Unmarshaller.
 						   unmarshal(WSDataCluster.class, reader);
@@ -498,7 +498,7 @@ public class ImportItemsWizard extends Wizard{
 				
 				for(String subItem : subItems) {
 				   try {
-				      reader = new FileReader(importFolder+"/" + subItem);
+					   reader = new InputStreamReader(new FileInputStream(importFolder+"/" + subItem),"UTF-8");
 				      WSDataModel model = new WSDataModel();
 				      model = (WSDataModel)Unmarshaller.
 				         unmarshal(WSDataModel.class,reader);
@@ -535,7 +535,7 @@ public class ImportItemsWizard extends Wizard{
 				
 				for(String subItem : subItems) {
 					try {
-   					   reader = new FileReader(importFolder+"/" + subItem);
+						reader = new InputStreamReader(new FileInputStream(importFolder+"/" + subItem),"UTF-8");
    					   WSMenu memu=new WSMenu();
    					   memu = (WSMenu)Unmarshaller.unmarshal(WSMenu.class, reader);
 						if (port.existsMenu(new WSExistsMenu(
@@ -572,7 +572,7 @@ public class ImportItemsWizard extends Wizard{
 				
 				for(String subItem : subItems) {
 					try {
-   					   reader = new FileReader(importFolder+"/" + subItem);
+						reader = new InputStreamReader(new FileInputStream(importFolder+"/" + subItem),"UTF-8");
    					   WSRole role = new WSRole();
    					   role = (WSRole)Unmarshaller.unmarshal(WSRole.class, reader);
 						if (port.existsRole(new WSExistsRole(
@@ -607,7 +607,7 @@ public class ImportItemsWizard extends Wizard{
 				
 				for(String subItem : subItems) {
 					try {
-					   reader = new FileReader(importFolder+"/" + subItem);
+						reader = new InputStreamReader(new FileInputStream(importFolder+"/" + subItem),"UTF-8");
 					   WSRoutingRule routingRule = new WSRoutingRule();
 					   routingRule = (WSRoutingRule)Unmarshaller.unmarshal(WSRoutingRule.class,reader);
 					
@@ -649,7 +649,7 @@ public class ImportItemsWizard extends Wizard{
 				
 				for(String subItem : subItems) {
 					try {
-					   reader = new FileReader(importFolder+"/" + subItem);
+						reader = new InputStreamReader(new FileInputStream(importFolder+"/" + subItem),"UTF-8");
 					   WSStoredProcedure model=new WSStoredProcedure();
 					   model = (WSStoredProcedure)Unmarshaller.unmarshal(WSStoredProcedure.class,reader);
 					   if(model.getRefreshCache()==null)model.setRefreshCache(false);
@@ -688,7 +688,7 @@ public class ImportItemsWizard extends Wizard{
 				
 				for(String subItem : subItems) {
 				   try {
-				      reader = new FileReader(importFolder+"/" + subItem);
+					   reader = new InputStreamReader(new FileInputStream(importFolder+"/" + subItem),"UTF-8");
 				      WSSynchronizationPlan model = new WSSynchronizationPlan();
 				      model = (WSSynchronizationPlan)Unmarshaller.
 				         unmarshal(WSSynchronizationPlan.class, reader);
@@ -755,7 +755,7 @@ public class ImportItemsWizard extends Wizard{
 				
 				for(String subItem : subItems) {
 				   try {
-				      reader = new FileReader(importFolder+"/" + subItem);
+					   reader = new InputStreamReader(new FileInputStream(importFolder+"/" + subItem),"UTF-8");
 				      WSTransformer model = new WSTransformer();
 				      model = (WSTransformer)Unmarshaller.
 				         unmarshal(WSTransformer.class,reader);
@@ -793,7 +793,7 @@ public class ImportItemsWizard extends Wizard{
 				
 				for(String subItem : subItems) {
 				   try {
-				      reader = new FileReader(importFolder+"/" + subItem);
+					   reader = new InputStreamReader(new FileInputStream(importFolder+"/" + subItem),"UTF-8");
 				      WSUniverse model = new WSUniverse();
 				      model = (WSUniverse)Unmarshaller.unmarshal(WSUniverse.class, reader);
 						if (port.existsUniverse(new WSExistsUniverse(
@@ -829,7 +829,7 @@ public class ImportItemsWizard extends Wizard{
 
 				for(String subItem : subItems) {
 				   try {
-				      reader = new FileReader(importFolder+"/" + subItem);
+					   reader = new InputStreamReader(new FileInputStream(importFolder+"/" + subItem),"UTF-8");
 				      WSView model = new WSView();
 				      model = (WSView)Unmarshaller.unmarshal(WSView.class, reader);
 				      if(model.getIsTransformerActive()==null)model.setIsTransformerActive(new WSBoolean(false));
@@ -885,13 +885,13 @@ public class ImportItemsWizard extends Wizard{
 	private void importClusterContents(TreeObject item, XtentisPort port) {
 		if(dataClusterContent.containsKey(item.getDisplayName()))
 		{
-			FileReader reader=null;
+			Reader reader=null;
 			String[] paths=dataClusterContent.get(item.getDisplayName());
 			Map<String, List<String>> conceptMap=new HashMap<String, List<String>>();
 			for (int i = 0; i < paths.length; i++) {
 				try {
 				String path=paths[i];
-				reader = new FileReader(importFolder+"/"+path);
+				reader = new InputStreamReader(new FileInputStream(importFolder+"/" + path),"UTF-8");
 				WSItem wsItem = (WSItem) Unmarshaller.unmarshal(
 						WSItem.class, reader);				
 				String key=wsItem.getWsDataClusterPK().getPk()+"##"+wsItem.getConceptName()+"##"+wsItem.getDataModelName();
