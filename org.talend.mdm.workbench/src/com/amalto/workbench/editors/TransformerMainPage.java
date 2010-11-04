@@ -106,11 +106,13 @@ import com.amalto.workbench.webservices.WSExtractedContent;
 import com.amalto.workbench.webservices.WSGetBackgroundJob;
 import com.amalto.workbench.webservices.WSGetTransformerPluginV2Details;
 import com.amalto.workbench.webservices.WSGetTransformerPluginV2SList;
+import com.amalto.workbench.webservices.WSGetTransformerV2;
 import com.amalto.workbench.webservices.WSPipeline;
 import com.amalto.workbench.webservices.WSPipelineTypedContentEntry;
 import com.amalto.workbench.webservices.WSTransformerContext;
 import com.amalto.workbench.webservices.WSTransformerContextPipeline;
 import com.amalto.workbench.webservices.WSTransformerContextPipelinePipelineItem;
+import com.amalto.workbench.webservices.WSTransformerPK;
 import com.amalto.workbench.webservices.WSTransformerPluginV2Details;
 import com.amalto.workbench.webservices.WSTransformerPluginV2SList;
 import com.amalto.workbench.webservices.WSTransformerPluginV2SListItem;
@@ -871,18 +873,20 @@ public class TransformerMainPage extends AMainPageV2 {
     }
 	protected void refreshData() {
 		try {
+			
 //			System.out.println("refreshData() ");
+			transformer=port.getTransformerV2(new WSGetTransformerV2(new WSTransformerV2PK(transformer.getName())));
+			
 			if (this.comitting) return;
 			
 			this.refreshing = true;
 			
-			WSTransformerV2 wsTransformer = (WSTransformerV2) (getXObject().getWsObject());    	
 			
 			//descriptionText.setText(wsTransformer.getDescription() == null ? "" : wsTransformer.getDescription());
-			desAntionComposite.getTextWidget().setText(wsTransformer.getDescription() == null ? "" : wsTransformer.getDescription());
+			desAntionComposite.getTextWidget().setText(transformer.getDescription() == null ? "" : transformer.getDescription());
 			
 			stepsList.removeAll();
-			WSTransformerProcessStep[] specs =  wsTransformer.getProcessSteps();
+			WSTransformerProcessStep[] specs =  transformer.getProcessSteps();
 			if (specs != null) {
 				for (int i = 0; i < specs.length; i++) {
 					stepsList.add(

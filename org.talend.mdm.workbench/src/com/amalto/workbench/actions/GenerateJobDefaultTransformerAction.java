@@ -1,9 +1,12 @@
 package com.amalto.workbench.actions;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
+import com.amalto.workbench.dialogs.InputComboDialog;
+import com.amalto.workbench.dialogs.JobProcesssOptionsDialog;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -30,6 +33,23 @@ public class GenerateJobDefaultTransformerAction extends Action{
 	}
 	
 	public void run() {
+		JobProcesssOptionsDialog dialog = new JobProcesssOptionsDialog(
+				server.getSite().getShell(),
+   				"Which schema do you want?"   				
+   		);
+   		dialog.setBlockOnOpen(true);
+   		int ret = dialog.open();
+   		if (ret == Dialog.CANCEL) return;
+   		String itemstr="";
+   		if(dialog.isExchange()) {
+   			itemstr="<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"  xmlns:mdm=\"java:com.amalto.core.plugin.base.xslt.MdmExtension\" version=\"1.0\"> <xsl:output method=\"xml\" indent=\"yes\" omit-xml-declaration=\"yes\" /> <xsl:template match=\"/\" priority=\"1\">\n"+
+   			"<exchange> <report>\n <xsl:copy-of select=\"Update\"/> </report>  <item><xsl:copy-of select='mdm:getItemProjection(Update/RevisionID,Update/DataCluster,Update/Concept,Update/Key)'/></item></exchange> "+
+   			"</xsl:template> </xsl:stylesheet>\n";
+   		}else {
+   			itemstr="<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"  xmlns:mdm=\"java:com.amalto.core.plugin.base.xslt.MdmExtension\" version=\"1.0\"> <xsl:output method=\"xml\" indent=\"yes\" omit-xml-declaration=\"yes\" /> <xsl:template match=\"/\" priority=\"1\">\n"+
+   			"<item><xsl:copy-of select='mdm:getItemProjection(Update/RevisionID,Update/DataCluster,Update/Concept,Update/Key)'/></item>"+
+   			"</xsl:template> </xsl:stylesheet>\n";
+   		}
 		if (this.server != null) { //called from ServerView
 			ISelection selection = server.getViewer().getSelection();
 			xobject = (TreeObject)((IStructuredSelection)selection).getFirstElement();
@@ -46,9 +66,7 @@ public class GenerateJobDefaultTransformerAction extends Action{
 		WSTransformerVariablesMapping[] output=new WSTransformerVariablesMapping[1];
 		output[0]=new WSTransformerVariablesMapping("item_xml","text",null);
 		
-		steps[0]=new WSTransformerProcessStep("amalto/local/transformer/plugin/xslt","Retrieve the complete item from the update report","<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"  xmlns:mdm=\"java:com.amalto.core.plugin.base.xslt.MdmExtension\" version=\"1.0\"> <xsl:output method=\"xml\" indent=\"yes\" omit-xml-declaration=\"yes\" /> <xsl:template match=\"/\" priority=\"1\">\n"+
-"<item><xsl:copy-of select='mdm:getItemProjection(Update/RevisionID,Update/DataCluster,Update/Concept,Update/Key)'/></item>"+
-"</xsl:template> </xsl:stylesheet>\n",input,output,false);
+		steps[0]=new WSTransformerProcessStep("amalto/local/transformer/plugin/xslt","Retrieve the complete item from the update report",itemstr,input,output,false);
 		//Generate the XSLT step to retrieve the item from an update report
 		//step 2
 		input=new WSTransformerVariablesMapping[1];
