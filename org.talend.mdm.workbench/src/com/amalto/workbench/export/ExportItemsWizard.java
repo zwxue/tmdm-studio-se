@@ -3,6 +3,7 @@ package com.amalto.workbench.export;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
@@ -103,7 +104,15 @@ public class ExportItemsWizard extends Wizard {
 	public boolean performFinish() {
 		
 		if(zipBtn.getSelection()){
-			exportFolder= new File(System.getProperty("user.dir")+"/temp").getAbsolutePath();
+		    //fix bug 0016873:clear the temp directory before zip the exported items.
+		   File tempFile=new File(System.getProperty("user.dir")+"/temp");
+		    if(tempFile.exists()){
+		        File[] tempFiles=tempFile.listFiles();
+		        for (File file : tempFiles) {
+		            file.delete();
+                }
+		    }
+			exportFolder= tempFile.getAbsolutePath();
 			zipfile=zip.getText().getText();
 		}
 		if(folderBtn.getSelection()){
