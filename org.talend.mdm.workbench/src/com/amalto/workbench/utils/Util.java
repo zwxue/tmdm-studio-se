@@ -731,7 +731,7 @@ public class Util {
     }
     
     
-    public static String uploadImageFile(String URL,String localFilename, String username, String password)  throws XtentisException{
+    public static String uploadImageFile(String URL,String localFilename, String username, String password,HashMap< String, String> picturePathMap )  throws XtentisException{
         System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
         System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
         /*
@@ -748,8 +748,9 @@ public class Util {
             client.setConnectionTimeout(60000);
             client.getState().setAuthenticationPreemptive(true);
             client.getState().setCredentials(null,null, new UsernamePasswordCredentials(username,password));
+            File file = new File(localFilename);
             if(!"".equalsIgnoreCase(localFilename))
-				mppost.addParameter("imageFile", new File(localFilename));
+				mppost.addParameter("imageFile", file);
             
             client.executeMethod(mppost);
             if (mppost.getStatusCode() != HttpStatus.SC_OK) {
@@ -757,8 +758,14 @@ public class Util {
             }
             response = mppost.getResponseBodyAsString();
             mppost.releaseConnection();
-            if(response.contains("upload"))
-            	return response.substring(response.indexOf("upload"), response.indexOf("}")-1);
+            if(response.contains("upload")){
+            	String returnValue = response.substring(response.indexOf("upload"), response.indexOf("}")-1);
+            	if(picturePathMap != null){
+            		String fileName1 = file.getName();
+            		picturePathMap.put(fileName1, returnValue);
+            	}
+            	return returnValue;
+            }
             else 
             	return "";
         } catch (Exception e) {

@@ -375,19 +375,19 @@ public class MenuEntryDialog extends Dialog {
 			if (wsMenuEntry.getIcon() != null){
 				if(!wsMenuEntry.getIcon().equalsIgnoreCase(getIconPathText().getText())){
 					Util.uploadImageFile(uripre +"/imageserver/secure/ImageDeleteServlet?uri="+wsMenuEntry.getIcon(), "", "admin",
-						"talend");
+						"talend",null);
 				if(!"".equalsIgnoreCase(getIconPathText().getText()))
 					icon=Util.uploadImageFile(
 						uripre + "/imageserver/secure/ImageUploadServlet",
 						getIconPathText().getText(),
-							"admin", "talend");
+							"admin", "talend",null);
 				getIconPathText().setText(icon);
 				}}
 			else if (!"".equalsIgnoreCase(getIconPathText().getText()))
 				icon=Util.uploadImageFile(
 						uripre + "/imageserver/secure/ImageUploadServlet",
 						getIconPathText().getText(),
-							"admin", "talend");
+							"admin", "talend",null);
 				getIconPathText().setText(icon);
 //			ResourcesUtil.postPicFromFile(getIdText().getText(), getIconPathText().getText(),uripre);
 		} catch (Exception e) {

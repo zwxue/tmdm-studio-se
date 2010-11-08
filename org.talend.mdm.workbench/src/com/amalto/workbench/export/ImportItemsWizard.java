@@ -2,7 +2,6 @@ package com.amalto.workbench.export;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -445,9 +444,29 @@ public class ImportItemsWizard extends Wizard{
 		});
 		LocalTreeObjectRepository.getInstance().mergeImportCategory(objs, serverRoot);
 		boolean isOverrideAll=false;
+		HashMap< String, String> picturePathMap = new HashMap<String, String>(); 
+		String[] subItems;
+		for (TreeObject item : objs) {
 
+			if (item.getType() == TreeObject.PICTURES_RESOURCE) {
+
+				subItems = item.getItems();
+
+				for (String subItem : subItems) {
+					try {
+						Util.uploadImageFile(serverRoot.getEndpointIpAddress()
+								+ "/imageserver/secure/ImageUploadServlet",
+								importFolder + "/" + subItem, serverRoot
+										.getUsername(), serverRoot
+										.getPassword(), picturePathMap);
+					} catch (Exception e2) {
+						e2.printStackTrace();
+					}
+				}
+			}
+		}
+		
 		for(TreeObject item : objs){
-			String[] subItems;
 			switch(item.getType()){
 			
 			case TreeObject.DATA_CLUSTER:
@@ -487,7 +506,7 @@ public class ImportItemsWizard extends Wizard{
 						   try{if(reader!=null)reader.close();}catch(Exception e) {}
 					   }
 					
-					importClusterContents(item,port);
+					importClusterContents(item,port,picturePathMap);
 
 				}
 				monitor.worked(1);
@@ -719,23 +738,7 @@ public class ImportItemsWizard extends Wizard{
 
 				monitor.worked(1);}
 				break;
-			case TreeObject.PICTURES_RESOURCE:
-				subItems = item.getItems();
-
-				for(String subItem : subItems) {
-				   try {
-						Util.uploadImageFile(serverRoot.getEndpointIpAddress()
-								+ "/imageserver/secure/ImageUploadServlet",
-								importFolder + "/" + subItem, serverRoot
-										.getUsername(), serverRoot
-										.getPassword());
-				   } 
-				   catch (Exception e2) {
-				      e2.printStackTrace();
-				   }
-				}
-
-				break;
+			
 		
 			//add by ymli. fix the bug:0012882: Allow workflow bars to be imported
 			case TreeObject.WORKFLOW_PROCESS:
@@ -882,7 +885,7 @@ public class ImportItemsWizard extends Wizard{
 		monitor.done();
 	}
 
-	private void importClusterContents(TreeObject item, XtentisPort port) {
+	private void importClusterContents(TreeObject item, XtentisPort port,HashMap< String, String> picturePathMap) {
 		if(dataClusterContent.containsKey(item.getDisplayName()))
 		{
 			Reader reader=null;
@@ -893,15 +896,33 @@ public class ImportItemsWizard extends Wizard{
 				String path=paths[i];
 				reader = new InputStreamReader(new FileInputStream(importFolder+"/" + path),"UTF-8");
 				WSItem wsItem = (WSItem) Unmarshaller.unmarshal(
-						WSItem.class, reader);				
+						WSItem.class, reader);	
 				String key=wsItem.getWsDataClusterPK().getPk()+"##"+wsItem.getConceptName()+"##"+wsItem.getDataModelName();
 				List<String> list=new ArrayList<String>();
 				if(!conceptMap.containsKey(key)) {
 					conceptMap.put(key, list);
 				}else {
+					//ymli; fix 0016875: set the right path of picture when import pictures
 					list=conceptMap.get(key);
+					String content = wsItem.getContent();
+					boolean isUpdate = false;
+					for(String picturekey:picturePathMap.keySet()){
+						String fileName = picturekey.substring(picturekey.indexOf("-")+1);
+						if(content.contains(fileName)){
+							String targetPicturePath = picturePathMap.get(picturekey);
+							content = updatePicturePath(content,picturekey,targetPicturePath);
+							isUpdate = true;
+							list.add(content);
+							conceptMap.put(key, list);
+						}
+						
+					}
+					if(!isUpdate){
+						list.add(content);
+						conceptMap.put(key, list);
+					}
+					
 				}
-				list.add(wsItem.getContent());
 				
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -1064,4 +1085,18 @@ public class ImportItemsWizard extends Wizard{
 		}
 		
 	}
+	/**
+	 * @author ymli
+	 * edit the path of picture
+	 * fix 0016875
+	 * @param orignalPicturepath
+	 * @param targetPicturePath
+	 * @return
+	 */
+	private static String updatePicturePath(String orignalPicturepath,String pictureName, String targetPicturePath){
+		String pictureName1= pictureName.replace("-", "/");
+		return orignalPicturepath.replaceAll(pictureName1, targetPicturePath.substring(targetPicturePath.indexOf("/")+1));
+	}
+
+	
 }
