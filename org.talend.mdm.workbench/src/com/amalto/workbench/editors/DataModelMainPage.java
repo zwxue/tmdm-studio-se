@@ -1732,8 +1732,9 @@ public class DataModelMainPage extends AMainPageV2 {
         }
         if (Util.IsEnterPrise()) {
             manager.add(setAnnotationWriteAction);
-            if (checkMandatoryElement(obj))
-                manager.add(setAnnotationNoAction);
+            // fix bug 0016982: Set role with no access, and Set the workflow access menu actions action are gone
+            // if (checkMandatoryElement(obj))
+            manager.add(setAnnotationNoAction);
         }
         // available models
         java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
@@ -1760,8 +1761,9 @@ public class DataModelMainPage extends AMainPageV2 {
         }
         if (Util.IsEnterPrise()) {
             manager.add(setAnnotationWriteAction);
-            if (checkMandatoryElement(obj))
-                manager.add(setAnnotationNoAction);
+            // fix bug 0016982: Set role with no access, and Set the workflow access menu actions action are gone
+            // if (checkMandatoryElement(obj))
+            manager.add(setAnnotationNoAction);
         }
         // available models
         java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
