@@ -49,7 +49,8 @@ public enum EInputTemplate {
 	LOGGINGSMTP("loggingsmtp","<parameters>\n\t<from>?</from>\n\t<to>?</to>\n\t<cc>?</cc>\n\t<bcc>?</bcc>\n\t<logFileName>?</logFileName>\n\t<subjectprefix>?</transformer>\n\t<logfilename>?</logfilename>\n\t<transformer>?</transformer>\n</parameters>"),
 	SMTP("smtp","<parameters>\n\t<from>?</from>\n\t<to>?</to>\n\t<cc>?</cc>\n\t<bcc>?</bcc>\n\t<logFileName>?</logFileName>\n\t<subjectprefix>?</transformer>\n\t<logfilename>?</logfilename>\n\t<transformer>?</transformer>\n</parameters>\n"),
 	SVN("svn",""),
-	WORKFLOW("workflow","<workflow-configuration>\n\t<initial-context-factory>?</initial-context-factory>\n\t<provider-uRL>?</provider-uRL>\n\t<api-type>?</api-type>\n</workflow-configuration>\n");
+	WORKFLOW("workflow","<workflow-configuration>\n\t<initial-context-factory>?</initial-context-factory>\n\t<provider-uRL>?</provider-uRL>\n\t<api-type>?</api-type>\n</workflow-configuration>\n"),
+	SYNCHRONIZATION("synchronization","<synchronization-configuration>\n\t<planName>?</planName>\n\t<action>START_DIFFERENTIAL</action>\n</synchronization-configuration>");
 	
 	
 	String name;
