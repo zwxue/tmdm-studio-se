@@ -7,9 +7,9 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Event;
 import org.talend.mdm.commmon.util.core.CommonUtil;
 
-import sun.misc.ServiceConfigurationError;
 
 import com.amalto.workbench.dialogs.ErrorExceptionDialog;
+import com.amalto.workbench.dialogs.RoleAssignmentDialog;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -34,7 +34,6 @@ import com.amalto.workbench.webservices.WSPutUniverse;
 import com.amalto.workbench.webservices.WSPutView;
 import com.amalto.workbench.webservices.WSRole;
 import com.amalto.workbench.webservices.WSRoutingRule;
-import com.amalto.workbench.webservices.WSServicePutConfiguration;
 import com.amalto.workbench.webservices.WSStoredProcedure;
 import com.amalto.workbench.webservices.WSSynchronizationPlan;
 import com.amalto.workbench.webservices.WSTransformerV2;
@@ -76,12 +75,14 @@ public class SaveXObjectAction extends Action{
 	           	
 	           	case TreeObject.DATA_MODEL:
 	           		port.putDataModel(new WSPutDataModel((WSDataModel)newWsObject));
+	                RoleAssignmentDialog.doSave(port, ((WSDataModel)newWsObject).getName(), "Data Model");
 	           		break;
 	          	case TreeObject.VIEW:
 	           		port.putView(new WSPutView((WSView)newWsObject));
 	           		break;           		
 	          	case TreeObject.DATA_CLUSTER:
 	           		port.putDataCluster(new WSPutDataCluster((WSDataCluster)newWsObject));
+	           	 RoleAssignmentDialog.doSave(port, ((WSDataCluster)newWsObject).getName(), "Data Cluster");
 	           		break;                      		
 	          	case TreeObject.STORED_PROCEDURE:
 	           		port.putStoredProcedure(new WSPutStoredProcedure((WSStoredProcedure)newWsObject));

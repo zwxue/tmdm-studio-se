@@ -4,7 +4,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.jface.action.Action;
@@ -17,6 +16,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Event;
 
+import com.amalto.workbench.dialogs.RoleAssignmentDialog;
 import com.amalto.workbench.dialogs.ViewInputDialog;
 import com.amalto.workbench.editors.AMainPage;
 import com.amalto.workbench.editors.AMainPageV2;
@@ -210,16 +210,38 @@ public class NewXObjectAction extends Action{
 	           		if (tid.open() == Window.CANCEL) return;
 	           		key  = tid.getValue();
 	           		break;
+	           	case TreeObject.DATA_CLUSTER:
+	            StringBuffer clsBuf = new StringBuffer();
+				RoleAssignmentDialog dialog = new RoleAssignmentDialog(view
+						.getSite().getShell(), xfolder, title,
+						"Data Cluster", clsBuf);
+				dialog.setBlockOnOpen(true);
+        		if(dialog.open() == Window.OK)
+        		{
+        			key = clsBuf.toString();
+        		}
+        		else return;
+				break;
+	           	case TreeObject.DATA_MODEL:
+	            StringBuffer mlBuf = new StringBuffer();
+				RoleAssignmentDialog dlg = new RoleAssignmentDialog(view
+						.getSite().getShell(), xfolder, title,
+						"Data Model", mlBuf);
+				dlg.setBlockOnOpen(true);
+        		if(dlg.open() == Window.OK)
+        		{
+        			key = mlBuf.toString();
+        		}
+        		else return;
+	           	break;
 	           	case TreeObject.SOURCE:
 	           	case TreeObject.CUSTOM_TYPE:
 	           	case TreeObject.DESTINATION:
-	           	case TreeObject.DATA_MODEL:
 	           	case TreeObject.INBOUND_ADAPTOR:         		
 	           	case TreeObject.INBOUND_PLUGIN:
 	           	case TreeObject.OUTBOUND_ADAPTOR:         		
 	           	case TreeObject.OUTBOUND_PLUGIN:
 	           
-	           	case TreeObject.DATA_CLUSTER:
 	           	case TreeObject.STORED_PROCEDURE:
 	           //	case TreeObject.ROLE:
 	           	case TreeObject.ROUTING_RULE:
