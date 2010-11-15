@@ -1699,8 +1699,9 @@ public class DataModelMainPage extends AMainPageV2 {
             if (selectedObjs.length > 1 && setAnnotationWrapWriteAction.checkInWriteType(selectedObjs)) {
                 manager.add(new Separator());
                 manager.add(setAnnotationWrapWriteAction);
-                if (checkMandatoryElement(selectedObjs))
-                    manager.add(setAnnotationWrapNoAction);
+                // fix bug 0016982: Set role with no access, and Set the workflow access menu actions action are gone
+                // if (checkMandatoryElement(selectedObjs))
+                manager.add(setAnnotationWrapNoAction);
             }
         }
         // available models
