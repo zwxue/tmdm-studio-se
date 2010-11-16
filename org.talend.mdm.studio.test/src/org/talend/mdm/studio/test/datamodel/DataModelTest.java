@@ -27,9 +27,9 @@ public class DataModelTest extends StudioTest {
                 "Data Model [HEAD]");
         node.expand();
 
-        node = node.expandNode("System").getNode("PROVISIONING");
+        node = node.expandNode("System").getNode("Reporting");
         node.doubleClick();
-        final SWTBotEditor editor = bot.editorByTitle("PROVISIONING");
+        final SWTBotEditor editor = bot.editorByTitle("Reporting");
         // bot.getDisplay().syncExec(new Runnable() {
         //
         // public void run() {
@@ -37,14 +37,33 @@ public class DataModelTest extends StudioTest {
         XObjectEditor ep = (XObjectEditor) editor.getReference().getPart(true);
         DataModelMainPage mainpage = (DataModelMainPage) ep.getPage(0);
         Tree conceptTree = mainpage.getTreeViewer().getTree();
+        SWTBotTree conceptBotTree = new SWTBotTree(conceptTree);
+        mainpage.setSchemaSelected(false);
+        Tree typesTree = mainpage.getTreeViewer().getTree();
+        SWTBotTree typesBotTree = new SWTBotTree(typesTree);
 
         //				
-        SWTBotTree tree = new SWTBotTree(conceptTree);
-        SWTBotTreeItem node1 = tree.getTreeItem("User");
-        node1.expand();
-        node1.getNode(0).expand();
-        SWTBotTreeItem userNode = node1.getNode(0).getNode("password");
+
+        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
+        conceptNode.expand();
+        conceptNode.getNode(0).expand();
+        SWTBotTreeItem userNode = conceptNode.getNode(0).getNode("ReportingName");
         userNode.setFocus();
+        checkAccessTest(userNode);
+
+        SWTBotTreeItem typeNode = conceptNode.getNode("ReportingType");
+        typeNode.setFocus();
+        addElementTest(typeNode, "conceptTest");
+
+        SWTBotTreeItem conceptTypesNode = typesBotTree.getTreeItem("ReportingType");
+        conceptTypesNode.expand();
+        addElementTest(conceptTypesNode, "typeTest");
+        // }
+        // });
+
+    }
+
+    private void checkAccessTest(SWTBotTreeItem userNode) {
         SWTBotMenu ctxMenu = userNode.select().contextMenu("Set the Roles with Write Access").click();
         SWTBotShell newViewShell = bot.shell("Set The Roles That Have Write Access");
         newViewShell.activate();
@@ -55,12 +74,22 @@ public class DataModelTest extends StudioTest {
         sleep();
         bot.button("Cancel").click();
         sleep();
-        ctxMenu = userNode.select().contextMenu("Set the Workflow Access").click();
+        // ctxMenu = userNode.select().contextMenu("Set the Workflow Access").click();
+        // sleep();
+        // bot.button("Cancel").click();
+        // sleep();
         sleep();
-        bot.button("Cancel").click();
-        sleep();
-        // }
-        // });
 
+    }
+
+    private void addElementTest(SWTBotTreeItem userNode, String name) {
+        SWTBotMenu ctxMenu = userNode.select().contextMenu("Add Element").click();
+        SWTBotShell newViewShell = bot.shell("Add a new Business Element");
+        newViewShell.activate();
+        sleep();
+        bot.textWithLabel("Business Element Name").setText(name);
+        sleep();
+        bot.button("OK").click();
+        sleep();
     }
 }
