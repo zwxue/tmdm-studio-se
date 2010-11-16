@@ -351,6 +351,14 @@ public class DataModelMainPage extends AMainPageV2 {
         this.editor = (XObjectEditor) editor;
     }
 
+    public boolean isSchemaSelected() {
+        return isSchemaSelected;
+    }
+
+    public void setSchemaSelected(boolean isSchemaSelected) {
+        this.isSchemaSelected = isSchemaSelected;
+    }
+
     public XObjectEditor getEditor() {
         return editor;
     }
@@ -1535,7 +1543,7 @@ public class DataModelMainPage extends AMainPageV2 {
                     || !Util.IsAImporedElement(decl.getTypeDefinition(), xsdSchema))
                 setAnnotationActions2(obj, manager);
         }
-        // fix bug 0012073: Enable to create element from sub element group
+        // add by rhou.fix bug 0012073: Enable to create element from sub element group
         if (obj instanceof XSDModelGroup) {
             manager.add(new Separator());
             manager.add(newParticleFromTypeAction);
@@ -1597,6 +1605,10 @@ public class DataModelMainPage extends AMainPageV2 {
             if (ns == null && !Util.IsAImporedElement((XSDComplexTypeDefinition) obj, xsdSchema)) {
                 // manager.add(newParticleFromTypeAction);
                 // manager.add(deleteTypeDefinition);
+                // add by rhou.fix bug 0012073: Enable to create element from sub element group
+                manager.add(new Separator());
+                manager.add(newParticleFromTypeAction);
+                manager.add(new Separator());
                 manager.add(editComplexTypeAction);
             }
         }
