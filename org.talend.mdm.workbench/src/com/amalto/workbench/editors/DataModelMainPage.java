@@ -860,7 +860,7 @@ public class DataModelMainPage extends AMainPageV2 {
         viewer.getTree().addMouseListener(new MouseAdapter() {
 
             @Override
-            public void mouseUp(MouseEvent e) {
+            public void mouseDown(MouseEvent e) {
                 isSchemaSelected = true;
             }
         });
@@ -1063,7 +1063,7 @@ public class DataModelMainPage extends AMainPageV2 {
         typesViewer.getTree().addMouseListener(new MouseAdapter() {
 
             @Override
-            public void mouseUp(MouseEvent e) {
+            public void mouseDown(MouseEvent e) {
                 isSchemaSelected = false;
             }
         });
