@@ -8,8 +8,8 @@ import java.util.List;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -82,16 +82,26 @@ public class RoleAssignmentDialog extends Dialog {
         instanceNameText = new Text(composite, SWT.SINGLE | SWT.BORDER);
         instanceNameText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
         instanceNameText.setFocus();
-        instanceNameText.addKeyListener(new KeyListener() {
+        // The enable status of "Ok" button should be changes as the change of the content in this text.
+        instanceNameText.addModifyListener(new ModifyListener() {
 
-            public void keyPressed(KeyEvent e) {
-            }
-
-            public void keyReleased(KeyEvent e) {
+            @Override
+            public void modifyText(ModifyEvent e) {
                 boolean enable = (instanceNameText.getText().length() > 0) && (!instanceNameText.getText().trim().equals(""));
                 RoleAssignmentDialog.this.getButton(IDialogConstants.OK_ID).setEnabled(enable);
             }
         });
+        // instanceNameText.addKeyListener(new KeyListener() {
+        //
+        // public void keyPressed(KeyEvent e) {
+        // }
+        //
+        // public void keyReleased(KeyEvent e) {
+        // boolean enable = (instanceNameText.getText().length() > 0) &&
+        // (!instanceNameText.getText().trim().equals(""));
+        // RoleAssignmentDialog.this.getButton(IDialogConstants.OK_ID).setEnabled(enable);
+        // }
+        // });
 
         Label infoLabel = new Label(composite, SWT.NONE);
         infoLabel.setText("Role Access definition");

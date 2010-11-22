@@ -23,11 +23,10 @@ public class DataModelTest extends StudioTest {
     @Test
     public void canSetRoleMenu() throws Exception {
 
-        SWTBotTreeItem node = serverTree.expandNode("http://localhost:8080/talend/TalendPort [HEAD] admin").getNode(
-                "Data Model [HEAD]");
-        node.expand();
+        SWTBotTreeItem dataModelItem = serverItem.getNode("Data Model [HEAD]");
+        dataModelItem.expand();
 
-        node = node.expandNode("System").getNode("Reporting");
+        SWTBotTreeItem node = dataModelItem.expandNode("System").getNode("Reporting");
         node.doubleClick();
         final SWTBotEditor editor = bot.editorByTitle("Reporting");
         // bot.getDisplay().syncExec(new Runnable() {

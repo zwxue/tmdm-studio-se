@@ -3,24 +3,27 @@ package org.talend.mdm.studio.test;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.swtbot.eclipse.finder.SWTEclipseBot;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 @SuppressWarnings("deprecation")
 public class StudioTest {
 
-    protected static SWTEclipseBot bot;
+    protected static SWTWorkbenchBot bot;
 
     protected static SWTBotTree serverTree;
 
     protected static Tree swtTree;
+
+    protected static SWTBotTreeItem serverItem;
     static {
-        bot = new SWTEclipseBot();
-        bot.view("Welcome").close();
+        bot = new SWTWorkbenchBot();
+        bot.viewByTitle("Welcome").close();
         login();
     }
 
@@ -67,7 +70,8 @@ public class StudioTest {
             }
         });
         serverTree = new SWTBotTree(swtTree);
-
+        serverItem = serverTree.expandNode("http://localhost:8080/talend/TalendPort [HEAD] admin");
+        serverItem.expand();
     }
 
     @BeforeClass
@@ -83,5 +87,9 @@ public class StudioTest {
 
     protected static void sleep() {
         bot.sleep(1000);
+    }
+
+    protected static void sleep(int count) {
+        bot.sleep(1000 * count);
     }
 }
