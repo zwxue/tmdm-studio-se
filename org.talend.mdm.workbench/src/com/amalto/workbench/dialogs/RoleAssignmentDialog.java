@@ -85,7 +85,6 @@ public class RoleAssignmentDialog extends Dialog {
         // The enable status of "Ok" button should be changes as the change of the content in this text.
         instanceNameText.addModifyListener(new ModifyListener() {
 
-            @Override
             public void modifyText(ModifyEvent e) {
                 boolean enable = (instanceNameText.getText().length() > 0) && (!instanceNameText.getText().trim().equals(""));
                 RoleAssignmentDialog.this.getButton(IDialogConstants.OK_ID).setEnabled(enable);
