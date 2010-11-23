@@ -12,6 +12,9 @@
 // ============================================================================
 package org.talend.mdm.studio.test.datacontainer;
 
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -20,14 +23,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * DataContainerSearchTest is a SWTBot test case for testing the search function of Data Container.
+ * DataContainerEditObjectTest is a SWTBot test case for testing the edit function of Data Container.
  * 
  * DOC rhou class global comment. Detailled comment
  */
-public class DataContainerSearchTest extends DataContainerTest {
+public class DataContainerEditObjectTest extends DataContainerTest {
 
     @Before
     public void runBeforeEveryTest() {
+
     }
 
     @After
@@ -47,10 +51,26 @@ public class DataContainerSearchTest extends DataContainerTest {
 
     @Test
     public void runTest() {
-        SWTBotTreeItem node = dataContainerItem.expandNode("System").getNode("PROVISIONING");
-        node.doubleClick();
-        bot.buttonWithTooltip("Search").click();
+        // Because the system data container can not be edited,so create a new data container first.
+        dataContainerItem.contextMenu("New").click();
+        SWTBotShell newDataContainerShell = bot.shell("New Data Container");
+        newDataContainerShell.activate();
+        SWTBotText text = bot.textWithLabel("Enter a name for the New Instance");
+        text.setText("TestDataContainer");
+        sleep();
+        bot.buttonWithTooltip("Add").click();
+        sleep();
+        bot.button("OK").click();
+        sleep();
+        bot.activeEditor().save();
+        bot.activeEditor().close();
         sleep(2);
 
+        SWTBotTreeItem node = dataContainerItem.getNode("TestDataContainer");
+        SWTBotMenu editMenu = node.contextMenu("Edit");
+        sleep();
+        editMenu.click();
+        bot.textWithLabel("Description").setText("This is a test for edit function of data container");
+        bot.activeEditor().save();
     }
 }

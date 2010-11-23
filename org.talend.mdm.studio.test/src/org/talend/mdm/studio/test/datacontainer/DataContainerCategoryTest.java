@@ -14,13 +14,11 @@ package org.talend.mdm.studio.test.datacontainer;
 
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.talend.mdm.studio.test.StudioTest;
 
 /**
  * 
@@ -28,14 +26,10 @@ import org.talend.mdm.studio.test.StudioTest;
  * 
  * DOC rhou class global comment. Detailled comment
  */
-public class DataContainerCategoryTest extends StudioTest {
-
-    private SWTBotTreeItem dataContainerItem;
+public class DataContainerCategoryTest extends DataContainerTest {
 
     @Before
     public void runBeforeEveryTest() {
-        dataContainerItem = serverItem.getNode("Data Container");
-        dataContainerItem.expand();
     }
 
     @After
@@ -46,7 +40,6 @@ public class DataContainerCategoryTest extends StudioTest {
     @BeforeClass
     public static void runBeforeClass() {
         // run for one time before all test cases
-        initServerView();
     }
 
     @AfterClass

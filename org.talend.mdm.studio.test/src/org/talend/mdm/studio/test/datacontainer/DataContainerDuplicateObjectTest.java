@@ -12,8 +12,10 @@
 // ============================================================================
 package org.talend.mdm.studio.test.datacontainer;
 
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -21,15 +23,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * DataContainerTest is a SWTBot test case for testing the new and delete functions of Data Container.
+ * DataContainerDuplicateObjectTest is a SWTBot test case for testing the duplicate function of Data Container.
  * 
  * DOC rhou class global comment. Detailled comment
- * 
  */
-public class DataContainerObjectTest extends DataContainerTest {
+public class DataContainerDuplicateObjectTest extends DataContainerTest {
 
     @Before
     public void runBeforeEveryTest() {
+
     }
 
     @After
@@ -49,8 +51,8 @@ public class DataContainerObjectTest extends DataContainerTest {
 
     @Test
     public void runTest() {
+        // Because the system data container can not be duplicated,so create a new data container first.
         dataContainerItem.contextMenu("New").click();
-        // bot.sleep(1000);
         SWTBotShell newDataContainerShell = bot.shell("New Data Container");
         newDataContainerShell.activate();
         SWTBotText text = bot.textWithLabel("Enter a name for the New Instance");
@@ -59,15 +61,19 @@ public class DataContainerObjectTest extends DataContainerTest {
         bot.buttonWithTooltip("Add").click();
         sleep();
         bot.button("OK").click();
-        bot.textWithLabel("Description").setText("This is a test for data container");
-        bot.activeEditor().save();
         sleep();
+        bot.activeEditor().save();
         bot.activeEditor().close();
         sleep(2);
-        dataContainerItem.getNode("TestDataContainer").contextMenu("Delete").click();
+
+        SWTBotTreeItem node = dataContainerItem.getNode("TestDataContainer");
+        SWTBotMenu duplicateMenu = node.contextMenu("Duplicate");
+        duplicateMenu.click();
+        SWTBotShell pasteDataContainerShell = bot.shell("Pasting instance TestDataContainer");
+        pasteDataContainerShell.activate();
+        bot.text("CopyOfTestDataContainer").setText("DuplicateDataContainer");
         sleep();
         bot.button("OK").click();
         sleep();
     }
-
 }

@@ -10,23 +10,23 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.datamodel;
+package org.talend.mdm.studio.test.datacontainer;
 
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.talend.mdm.studio.test.StudioTest;
 
 /**
- * DataModelTest is a parent class of the test classes for testing the functions of Data Model.
+ * DataContainerTest is a parent class of the test classes for testing the functions of Data Container.
  * 
  * DOC rhou class global comment. Detailled comment
  */
-public class DataModelTest extends StudioTest {
+public class DataContainerTest extends StudioTest {
 
-    protected static SWTBotTreeItem dataModelItem;
+    protected static SWTBotTreeItem dataContainerItem;
     static {
         initServerView();
-        dataModelItem = serverItem.getNode("Data Model [HEAD]");
-        dataModelItem.expand();
+        dataContainerItem = serverItem.getNode("Data Container");
+        dataContainerItem.expand();
     }
 
 }

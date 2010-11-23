@@ -20,11 +20,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * DataContainerSearchTest is a SWTBot test case for testing the search function of Data Container.
+ * DataContainerBrowseObjectTest is a SWTBot test case for testing the browse function of Data Container.
  * 
  * DOC rhou class global comment. Detailled comment
  */
-public class DataContainerSearchTest extends DataContainerTest {
+public class DataContainerBrowseObjectTest extends DataContainerTest {
 
     @Before
     public void runBeforeEveryTest() {
@@ -49,7 +49,7 @@ public class DataContainerSearchTest extends DataContainerTest {
     public void runTest() {
         SWTBotTreeItem node = dataContainerItem.expandNode("System").getNode("PROVISIONING");
         node.doubleClick();
-        bot.buttonWithTooltip("Search").click();
+        bot.buttonWithTooltip("Browse").click();
         sleep(2);
 
     }

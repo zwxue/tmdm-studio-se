@@ -48,7 +48,7 @@ public class StudioTest {
         bot.textWithLabel("Username").setText("admin");
         bot.textWithLabel("Password").setText("talend");
         bot.button("OK").click();
-        bot.sleep(20 * 1000);
+        sleep(10);
 
     }
 
