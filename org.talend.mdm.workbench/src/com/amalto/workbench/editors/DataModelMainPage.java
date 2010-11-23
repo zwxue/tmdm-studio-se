@@ -551,7 +551,7 @@ public class DataModelMainPage extends AMainPageV2 {
                         if (inputType.equals(".xsd")) {
                             xsd = Util.getXML(xmlFile);
                             xsdSchema = Util.createXsdSchema(xsd, getXObject());
-                            xsdSchema.setTargetNamespace(null);
+                            // xsdSchema.setTargetNamespace(null);
                             xsd = Util.nodeToString(xsdSchema.getDocument());
                         } else {
                             XSDDriver d = new XSDDriver();
@@ -729,7 +729,12 @@ public class DataModelMainPage extends AMainPageV2 {
     }
 
     public void validateSchema() throws IllegalAccessException {
-        final String maxoccurs_omit = "XSD: The value '1' of attribute 'maxOccurs' must be one of  as constrained by 'http://www.w3.org/2001/XMLSchema#maxOccurs_._type'";
+        final String msg_omit[] = {
+                "XSD: The value '1' of attribute 'maxOccurs' must be one of  as constrained by 'http://www.w3.org/2001/XMLSchema#maxOccurs_._type'",
+                "XSD: The attribute may not have duplicate name and target namespace",
+                "XSD: The type may not have duplicate name and target namespace",
+                "XSD: The attribute group may not have duplicate name and target namespace",
+                "The complex type may not have duplicate name" };
 
         xsdSchema.clearDiagnostics();
         xsdSchema.validate();
@@ -739,7 +744,14 @@ public class DataModelMainPage extends AMainPageV2 {
             XSDDiagnostic dia = diagnoses.get(i);
             XSDDiagnosticSeverity servity = dia.getSeverity();
             if (servity == XSDDiagnosticSeverity.ERROR_LITERAL || servity == XSDDiagnosticSeverity.FATAL_LITERAL) {
-                if (!dia.getMessage().equals(maxoccurs_omit)) {
+                boolean omit = false;
+                for (String msg : msg_omit) {
+                    if (dia.getMessage().indexOf(msg) != -1) {
+                        omit = true;
+                        break;
+                    }
+                }
+                if (!omit) {
                     error += dia.getMessage() + "\n";
                 }
             }
@@ -1173,10 +1185,10 @@ public class DataModelMainPage extends AMainPageV2 {
             if (xsd == null) {
                 schema = ((XSDTreeContentProvider) viewer.getContentProvider()).getXSDSchemaAsString();
             }
-            // aiming added remove 'targetNamespace', 'xmlns' attr, for it will cause xsd validate error, the xsd is
+            // remove 'targetNamespace', 'xmlns' attr, for it will cause xsd validate error, the xsd is
             // invalid
-            schema = schema.replaceAll("targetNamespace\\s*=\\s*\"[^\"]*\"", "");
-            schema = schema.replaceAll("xmlns\\s*=\\s*\"[^\"]*\"", "");
+            // schema = schema.replaceAll("targetNamespace\\s*=\\s*\"[^\"]*\"", "");
+            // schema = schema.replaceAll("xmlns\\s*=\\s*\"[^\"]*\"", "");
             // end
             wsObject.setXsdSchema(schema);
 
@@ -2061,10 +2073,11 @@ public class DataModelMainPage extends AMainPageV2 {
             } else {
                 tail = "simple";
             }
-            if (typeCntMap.get(type.getName() + tail) == Boolean.TRUE) {
-                throw new IllegalAccessException("XSD: The " + tail + " type may not have duplicate name " + type.getName());
+            if (typeCntMap.get(type.getName() + tail + type.getTargetNamespace()) == Boolean.TRUE) {
+                // throw new IllegalAccessException("XSD: The " + tail + " type may not have duplicate name " +
+                // type.getName());
             }
-            typeCntMap.put(type.getName() + tail, Boolean.TRUE);
+            typeCntMap.put(type.getName() + tail + type.getTargetNamespace(), Boolean.TRUE);
         }
     }
 
