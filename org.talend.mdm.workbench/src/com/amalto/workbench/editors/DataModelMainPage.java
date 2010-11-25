@@ -12,6 +12,7 @@ import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -149,7 +150,6 @@ import com.amalto.workbench.actions.XSDNewBrowseItemViewAction;
 import com.amalto.workbench.actions.XSDNewComplexTypeDefinition;
 import com.amalto.workbench.actions.XSDNewConceptAction;
 import com.amalto.workbench.actions.XSDNewElementAction;
-import com.amalto.workbench.actions.XSDNewGroupFromParticleAction;
 import com.amalto.workbench.actions.XSDNewGroupFromTypeAction;
 import com.amalto.workbench.actions.XSDNewIdentityConstraintAction;
 import com.amalto.workbench.actions.XSDNewParticleFromParticleAction;
@@ -196,9 +196,6 @@ public class DataModelMainPage extends AMainPageV2 {
 
     protected Text descriptionText;
 
-    protected Button importXSDBtn, exportBtn, sortUPBtn, sortDownBtn, expandBtn, collapseBtn, expandSelBtn, sortNaturalBtn,
-            addLanBtn, deleteLanbtn, importSchemaNsBtn;
-
     private Label langeuageLabel;
 
     private Combo languageCombo;
@@ -228,8 +225,6 @@ public class DataModelMainPage extends AMainPageV2 {
     private XSDNewParticleFromParticleAction newParticleFromParticleAction = null;
 
     private XSDNewGroupFromTypeAction newGroupFromTypeAction = null;
-
-    private XSDNewGroupFromParticleAction newGroupFromParticleAction = null;
 
     private XSDEditParticleAction editParticleAction = null;
 
@@ -306,33 +301,25 @@ public class DataModelMainPage extends AMainPageV2 {
 
     private XSDTreeContentProvider provider;
 
-    private static Map<ObjectUndoContext, Map<Integer, String>> contextToUndoAction = new HashMap<ObjectUndoContext, Map<Integer, String>>();
+    private Map<ObjectUndoContext, Map<Integer, String>> contextToUndoAction = new HashMap<ObjectUndoContext, Map<Integer, String>>();
 
-    private static Map<ObjectUndoContext, Map<Integer, String>> contextToRedoAction = new HashMap<ObjectUndoContext, Map<Integer, String>>();
+    private Map<ObjectUndoContext, Map<Integer, String>> contextToRedoAction = new HashMap<ObjectUndoContext, Map<Integer, String>>();
 
-    private static int undoLimit = 20;
-
-    private DataModelFilterDialog dataModelFilterDialog;
+    private int undoLimit = 20;
 
     private DataModelFilter dataModelFilter;
 
-    static private StructuredSelection sel;
+    private StructuredSelection sel;
 
     private SashForm sash;
 
-    FormToolkit toolkit;
-
     private TreeViewer typesViewer;
-
-    private DrillDownAdapter typesDrillDownAdapter;
 
     private TypesContentProvider typesProvider;
 
     private MenuManager typesMenuMgr;
 
     boolean isSchemaSelected = true;
-
-    XObjectEditor editor;
 
     private String modelName = "";
 
@@ -348,7 +335,6 @@ public class DataModelMainPage extends AMainPageV2 {
                 + Util.getRevision((TreeObject) ((XObjectEditorInput) editor.getEditorInput()).getModel()));
         modelName = ((XObjectEditorInput) editor.getEditorInput()).getName();
         this.dataModelName = ((XObjectEditorInput) editor.getEditorInput()).getName();
-        this.editor = (XObjectEditor) editor;
     }
 
     public boolean isSchemaSelected() {
@@ -360,16 +346,15 @@ public class DataModelMainPage extends AMainPageV2 {
     }
 
     public XObjectEditor getEditor() {
-        return editor;
+        return (XObjectEditor) super.getEditor();
     }
 
     protected void createCharacteristicsContent(FormToolkit toolkit, Composite mainComposite) {
 
         try {
-            this.toolkit = toolkit;
 
             WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
-
+            Button importXSDBtn, exportBtn, sortUPBtn, sortDownBtn, expandBtn, collapseBtn, expandSelBtn, sortNaturalBtn, addLanBtn, deleteLanbtn, importSchemaNsBtn;
             // description
             Label descriptionLabel = toolkit.createLabel(mainComposite, "Description", SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
@@ -403,10 +388,10 @@ public class DataModelMainPage extends AMainPageV2 {
                 filterBtn.addSelectionListener(new SelectionAdapter() {
 
                     public void widgetSelected(SelectionEvent e) {
-                        if (dataModelFilterDialog == null) {
-                            dataModelFilter = new DataModelFilter("", false, false, false, true);
-                            dataModelFilterDialog = new DataModelFilterDialog(getSite().getShell(), getXObject(), dataModelFilter);
-                        }
+                        dataModelFilter = new DataModelFilter("", false, false, false, true);
+                        DataModelFilterDialog dataModelFilterDialog = new DataModelFilterDialog(getSite().getShell(),
+                                getXObject(), dataModelFilter);
+
                         if (dataModelFilterDialog.open() == Dialog.OK) {
                             ((XSDTreeContentProvider) viewer.getContentProvider()).setFilter(dataModelFilter);
                             viewer.setInput(getSite());
@@ -740,6 +725,7 @@ public class DataModelMainPage extends AMainPageV2 {
         xsdSchema.validate();
         EList<XSDDiagnostic> diagnoses = xsdSchema.getAllDiagnostics();
         String error = "";
+        Set<String> errors = new HashSet<String>();
         for (int i = 0; i < diagnoses.size(); i++) {
             XSDDiagnostic dia = diagnoses.get(i);
             XSDDiagnosticSeverity servity = dia.getSeverity();
@@ -751,8 +737,9 @@ public class DataModelMainPage extends AMainPageV2 {
                         break;
                     }
                 }
-                if (!omit) {
+                if (!omit && !errors.contains(dia.getMessage())) {
                     error += dia.getMessage() + "\n";
+                    errors.add(dia.getMessage());
                 }
             }
         }
@@ -812,10 +799,8 @@ public class DataModelMainPage extends AMainPageV2 {
                         setLabelForElement((XSDElementDeclaration) ((XSDParticle) xSDCom).getContent(), isAdd);
                     }
                 }
-
             }
         }
-
     }
 
     private void setLabel(XSDAnnotationsStructure struc, String labelValue, boolean isAdd) {
@@ -1061,7 +1046,6 @@ public class DataModelMainPage extends AMainPageV2 {
         // typesViewer.getControl().setLayoutData(
         // new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-        typesDrillDownAdapter = new DrillDownAdapter(viewer);
         typesProvider = new TypesContentProvider(this.getSite(), xsdSchema, getXObject());
         typesViewer.setContentProvider(typesProvider);
 
@@ -1244,7 +1228,7 @@ public class DataModelMainPage extends AMainPageV2 {
         this.newParticleFromTypeAction = new XSDNewParticleFromTypeAction(this);
         this.newParticleFromParticleAction = new XSDNewParticleFromParticleAction(this);
         this.newGroupFromTypeAction = new XSDNewGroupFromTypeAction(this);
-        this.newGroupFromParticleAction = new XSDNewGroupFromParticleAction(this);
+
         this.editParticleAction = new XSDEditParticleAction(this);
         this.editConceptAction = new XSDEditConceptAction(this);
         this.editElementAction = new XSDEditElementAction(this);
@@ -1494,7 +1478,7 @@ public class DataModelMainPage extends AMainPageV2 {
 
             XSDElementDeclaration decl = (XSDElementDeclaration) obj;
             boolean isConcept = Util.checkConcept(decl);
-            if (decl.getTargetNamespace() == null && !Util.IsAImporedElement(decl, xsdSchema)) {
+            if (!Util.IsAImporedElement(decl, xsdSchema)) {
                 if (isConcept) {
                     manager.add(editConceptAction);
                     manager.add(deleteConceptAction);
@@ -1551,8 +1535,7 @@ public class DataModelMainPage extends AMainPageV2 {
             }
 
             // Annotations
-            if (decl.getTargetNamespace() == null && !Util.IsAImporedElement(decl, xsdSchema)
-                    || !Util.IsAImporedElement(decl.getTypeDefinition(), xsdSchema))
+            if (!Util.IsAImporedElement(decl, xsdSchema) || !Util.IsAImporedElement(decl.getTypeDefinition(), xsdSchema))
                 setAnnotationActions2(obj, manager);
         }
         // add by rhou.fix bug 0012073: Enable to create element from sub element group

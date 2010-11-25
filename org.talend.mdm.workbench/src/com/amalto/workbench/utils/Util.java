@@ -898,11 +898,8 @@ public class Util {
                     if ("X_ForeignKey".equals(appinfoSource)) {
                         String path = annotList.get(k).getFirstChild().getNodeValue();
                         list.add(getConceptFromPath(path));
-
                     }
-
                 }
-
             }
         }
     }
@@ -946,6 +943,17 @@ public class Util {
 
     }
 
+    // keep all foreignkeys in the memory to improve performance
+    static Set<String> foreignKeys;
+
+    public static Set<String> getForeignKeys() {
+        return foreignKeys;
+    }
+
+    public static void setForeignKeys(Set<String> foreignKeys) {
+        Util.foreignKeys = foreignKeys;
+    }
+
     /**
      * set the list with all the foreign concepty name in the parent
      * 
@@ -954,24 +962,15 @@ public class Util {
      * @param parent
      * @throws Exception
      */
-    public static void getForeingKeyInDataModel(Set<String> list, TreeParent parent) throws Exception {
+    public static void getForeingKeyInDataModel(Set<String> list, TreeParent parent, XtentisPort port) throws Exception {
         TreeObject[] children = parent.getChildren();
-        WSDataModel wsDataModel = null;
-        XtentisPort port = null;
-        try {
-            port = Util.getPort(parent);
-        } catch (XtentisException e) {
-            e.printStackTrace();
-        }
         for (TreeObject object : children) {
             if (object instanceof TreeParent) {
-                getForeingKeyInDataModel(list, (TreeParent) object);
+                getForeingKeyInDataModel(list, (TreeParent) object, port);
                 continue;
             }
-            wsDataModel = port.getDataModel(new WSGetDataModel(new WSDataModelPK(object.getDisplayName())));
-            XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
-            String schema = Util.nodeToString(xsdSchema.getDocument());
-            XSDSchema xsd = Util.createXsdSchema(schema, object);
+            WSDataModel wsDataModel = port.getDataModel(new WSGetDataModel(new WSDataModelPK(object.getDisplayName())));
+            XSDSchema xsd = Util.createXsdSchema(wsDataModel.getXsdSchema(), object);
             getForeingKeyInSchema(list, xsd);
         }
     }
@@ -1118,7 +1117,7 @@ public class Util {
                                     list.add(path);
                                     return list;
                                 }
-                                System.out.println(path.getValue() + "----" + primaryKey);
+                                // System.out.println(path.getValue() + "----" + primaryKey);
                             }
                         }
                         // return list;
