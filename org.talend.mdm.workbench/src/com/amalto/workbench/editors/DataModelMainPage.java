@@ -28,6 +28,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -520,6 +521,9 @@ public class DataModelMainPage extends AMainPageV2 {
                 public void widgetSelected(SelectionEvent e) {
                     FileDialog fd = new FileDialog(getSite().getShell(), SWT.OPEN);
                     fd.setFilterExtensions(new String[] { "*.xsd", "*.dtd", "*.xml" });
+                    // set the default path to the workspace.
+                    fd.setFilterPath(Platform.getInstanceLocation().getURL().getPath().substring(1));
+                    // System.out.println(Platform.getInstanceLocation().getURL().getPath());
                     fd.setText("Select the XML definition for XML Schema");
                     String filename = fd.open();
                     if (filename == null)
@@ -592,6 +596,7 @@ public class DataModelMainPage extends AMainPageV2 {
                 public void widgetSelected(SelectionEvent e) {
                     FileDialog fd = new FileDialog(getSite().getShell(), SWT.SAVE);
                     fd.setFilterExtensions(new String[] { "*.xsd" });
+                    fd.setFilterPath(Platform.getInstanceLocation().getURL().getPath().substring(1));
                     fd.setText("Save the Data Module as XSD Schema");
                     String filename = fd.open();
                     if (filename == null)

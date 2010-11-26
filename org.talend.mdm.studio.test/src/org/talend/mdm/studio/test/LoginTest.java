@@ -22,7 +22,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * LoginTest is a SWTBot test case for testing the login on the studio.
+ * LoginTest is a SWTBot test class for testing the login on the studio.
  * 
  * DOC rhou class global comment. Detailled comment
  */

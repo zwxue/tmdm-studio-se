@@ -11,7 +11,11 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-@SuppressWarnings("deprecation")
+/**
+ * StudioTest is a superclass of all the SWTBot test classes on studio,except LoginTest and LogoutTest.
+ * 
+ * DOC rhou class global comment. Detailled comment
+ */
 public class StudioTest {
 
     protected static SWTWorkbenchBot bot;

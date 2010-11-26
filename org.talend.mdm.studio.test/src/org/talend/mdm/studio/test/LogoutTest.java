@@ -10,9 +10,8 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.datacontainer;
+package org.talend.mdm.studio.test;
 
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -20,14 +19,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * DataContainerSearchTest is a SWTBot test class for testing the search function of Data Container.
+ * LogoutTest is a SWTBot test class for testing the logout on the studio.
  * 
  * DOC rhou class global comment. Detailled comment
  */
-public class DataContainerSearchTest extends DataContainerTest {
+public class LogoutTest extends StudioTest {
 
     @Before
     public void runBeforeEveryTest() {
+
     }
 
     @After
@@ -38,6 +38,7 @@ public class DataContainerSearchTest extends DataContainerTest {
     @BeforeClass
     public static void runBeforeClass() {
         // run for one time before all test cases
+        initServerView();
     }
 
     @AfterClass
@@ -47,10 +48,7 @@ public class DataContainerSearchTest extends DataContainerTest {
 
     @Test
     public void runTest() {
-        SWTBotTreeItem node = dataContainerItem.expandNode("System").getNode("PROVISIONING");
-        node.doubleClick();
-        bot.buttonWithTooltip("Search").click();
-        sleep(2);
-
+        serverItem.contextMenu("Logout").click();
+        sleep();
     }
 }

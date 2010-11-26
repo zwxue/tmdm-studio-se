@@ -10,9 +10,8 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.datacontainer;
+package org.talend.mdm.studio.test.datamodel;
 
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
@@ -23,15 +22,19 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * DataContainerEditObjectTest is a SWTBot test case for testing the edit function of Data Container.
+ * DataModelCreateTest is a SWTBot test class for testing the new and delete functions of Data Model.
  * 
  * DOC rhou class global comment. Detailled comment
+ * 
  */
-public class DataContainerEditObjectTest extends DataContainerTest {
+public class DataModelCreateTest extends DataModelTest {
+
+    private SWTBotTreeItem dataModelItem;
 
     @Before
     public void runBeforeEveryTest() {
-
+        dataModelItem = serverItem.getNode("Data Model [HEAD]");
+        dataModelItem.expand();
     }
 
     @After
@@ -42,6 +45,7 @@ public class DataContainerEditObjectTest extends DataContainerTest {
     @BeforeClass
     public static void runBeforeClass() {
         // run for one time before all test cases
+        initServerView();
     }
 
     @AfterClass
@@ -50,27 +54,30 @@ public class DataContainerEditObjectTest extends DataContainerTest {
     }
 
     @Test
-    public void runTest() {
-        // Because the system data container can not be edited,so create a new data container first.
-        dataContainerItem.contextMenu("New").click();
-        SWTBotShell newDataContainerShell = bot.shell("New Data Container");
+    public void dataModelNewTest() {
+        dataModelItem.contextMenu("New").click();
+        // bot.sleep(1000);
+        SWTBotShell newDataContainerShell = bot.shell("New Data Model");
         newDataContainerShell.activate();
         SWTBotText text = bot.textWithLabel("Enter a name for the New Instance");
-        text.setText("TestDataContainer");
+        text.setText("TestDataModel");
         sleep();
         bot.buttonWithTooltip("Add").click();
         sleep();
         bot.button("OK").click();
-        sleep();
+        bot.textWithLabel("Description").setText("This is a test for data model");
         bot.activeEditor().save();
+        sleep();
         bot.activeEditor().close();
         sleep(2);
+    }
 
-        SWTBotTreeItem node = dataContainerItem.getNode("TestDataContainer");
-        SWTBotMenu editMenu = node.contextMenu("Edit");
+    @Test
+    public void dataModelDeleteTest() {
+        dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
         sleep();
-        editMenu.click();
-        bot.textWithLabel("Description").setText("This is a test for edit function of data container");
-        bot.activeEditor().save();
+        bot.button("OK").click();
+        sleep();
+
     }
 }

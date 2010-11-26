@@ -10,23 +10,20 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.datacontainer;
+package org.talend.mdm.studio.test.role;
 
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.talend.mdm.studio.test.StudioTest;
 
 /**
- * DataContainerTest is a superclass of the test classes for testing the functions of Data Container.
- * 
  * DOC rhou class global comment. Detailled comment
  */
-public class DataContainerTest extends StudioTest {
+public class RoleTest extends StudioTest {
 
-    protected static SWTBotTreeItem dataContainerItem;
+    protected static SWTBotTreeItem roleItem;
     static {
         initServerView();
-        dataContainerItem = serverItem.getNode("Data Container");
-        dataContainerItem.expand();
+        roleItem = serverItem.getNode("Role [HEAD]");
+        roleItem.expand();
     }
-
 }

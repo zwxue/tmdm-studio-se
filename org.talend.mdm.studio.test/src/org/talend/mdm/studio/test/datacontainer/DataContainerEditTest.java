@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.datamodel;
+package org.talend.mdm.studio.test.datacontainer;
 
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
@@ -23,11 +23,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * DataModelDuplicateObjectTest is a SWTBot test case for testing the duplicate function of Data Model.
+ * DataContainerEditTest is a SWTBot test class for testing the edit function of Data Container.
  * 
  * DOC rhou class global comment. Detailled comment
  */
-public class DataModelDuplicateObjectTest extends DataModelTest {
+public class DataContainerEditTest extends DataContainerTest {
 
     @Before
     public void runBeforeEveryTest() {
@@ -51,12 +51,12 @@ public class DataModelDuplicateObjectTest extends DataModelTest {
 
     @Test
     public void runTest() {
-        // Because the system data model can not be duplicated,so create a new data model first.
-        dataModelItem.contextMenu("New").click();
-        SWTBotShell newDataModelShell = bot.shell("New Data Model");
-        newDataModelShell.activate();
+        // Because the system data container can not be edited,so create a new data container first.
+        dataContainerItem.contextMenu("New").click();
+        SWTBotShell newDataContainerShell = bot.shell("New Data Container");
+        newDataContainerShell.activate();
         SWTBotText text = bot.textWithLabel("Enter a name for the New Instance");
-        text.setText("TestDataModel");
+        text.setText("TestDataContainer");
         sleep();
         bot.buttonWithTooltip("Add").click();
         sleep();
@@ -66,14 +66,11 @@ public class DataModelDuplicateObjectTest extends DataModelTest {
         bot.activeEditor().close();
         sleep(2);
 
-        SWTBotTreeItem node = dataModelItem.getNode("TestDataModel");
-        SWTBotMenu duplicateMenu = node.contextMenu("Duplicate");
-        duplicateMenu.click();
-        SWTBotShell pasteDataModelShell = bot.shell("Pasting instance TestDataModel");
-        pasteDataModelShell.activate();
-        bot.text("CopyOfTestDataModel").setText("DuplicateDataModel");
+        SWTBotTreeItem node = dataContainerItem.getNode("TestDataContainer");
+        SWTBotMenu editMenu = node.contextMenu("Edit");
         sleep();
-        bot.button("OK").click();
-        sleep();
+        editMenu.click();
+        bot.textWithLabel("Description").setText("This is a test for edit function of data container");
+        bot.activeEditor().save();
     }
 }

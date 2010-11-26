@@ -23,11 +23,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * DataModelEditObjectTest is a SWTBot test case for testing the edit function of Data Model.
+ * DataModelCopyTest is a SWTBot test class for testing the copy and paste function of Data Model.
  * 
  * DOC rhou class global comment. Detailled comment
  */
-public class DataModelEditObjectTest extends DataModelTest {
+public class DataModelCopyTest extends DataModelTest {
 
     @Before
     public void runBeforeEveryTest() {
@@ -51,7 +51,7 @@ public class DataModelEditObjectTest extends DataModelTest {
 
     @Test
     public void runTest() {
-        // Because the system data model can not be edited,so create a new data model first.
+        // Because the system data model can not be copied and pasted,so create a new data model first.
         dataModelItem.contextMenu("New").click();
         SWTBotShell newDataModelShell = bot.shell("New Data Model");
         newDataModelShell.activate();
@@ -67,10 +67,14 @@ public class DataModelEditObjectTest extends DataModelTest {
         sleep(2);
 
         SWTBotTreeItem node = dataModelItem.getNode("TestDataModel");
-        SWTBotMenu editMenu = node.contextMenu("Edit");
-        sleep();
+        SWTBotMenu editMenu = node.contextMenu("Copy");
         editMenu.click();
-        bot.textWithLabel("Description").setText("This is a test for edit function of data container");
-        bot.activeEditor().save();
+        sleep();
+        node.contextMenu("Paste").click();
+        SWTBotShell pasteDataModelShell = bot.shell("Pasting instance TestDataModel");
+        pasteDataModelShell.activate();
+        bot.text("CopyOfTestDataModel").setText("PasteDataModel");
+        bot.button("OK").click();
+        sleep();
     }
 }

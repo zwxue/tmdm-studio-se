@@ -10,8 +10,9 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.datamodel;
+package org.talend.mdm.studio.test.datacontainer;
 
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
@@ -20,22 +21,17 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.talend.mdm.studio.test.StudioTest;
 
 /**
- * 
- * DataModelCategoryTest is a SWTBot test class for testing the new and delete functions of Data Model Category.
+ * DataContainerDuplicateTest is a SWTBot test class for testing the duplicate function of Data Container.
  * 
  * DOC rhou class global comment. Detailled comment
  */
-public class DataModelCategoryTest extends StudioTest {
-
-    private SWTBotTreeItem dataModelItem;
+public class DataContainerDuplicateTest extends DataContainerTest {
 
     @Before
     public void runBeforeEveryTest() {
-        dataModelItem = serverItem.getNode("Data Model [HEAD]");
-        dataModelItem.expand();
+
     }
 
     @After
@@ -46,7 +42,6 @@ public class DataModelCategoryTest extends StudioTest {
     @BeforeClass
     public static void runBeforeClass() {
         // run for one time before all test cases
-        initServerView();
     }
 
     @AfterClass
@@ -56,16 +51,27 @@ public class DataModelCategoryTest extends StudioTest {
 
     @Test
     public void runTest() {
-        dataModelItem.contextMenu("New Category").click();
-        // bot.sleep(1000);
-        SWTBotShell newCategoryShell = bot.shell("New Category");
-        newCategoryShell.activate();
-        SWTBotText text = bot.textWithLabel("Enter a name for the New Category");
-        text.setText("TestDataModelCategory");
+        // Because the system data container can not be duplicated,so create a new data container first.
+        dataContainerItem.contextMenu("New").click();
+        SWTBotShell newDataContainerShell = bot.shell("New Data Container");
+        newDataContainerShell.activate();
+        SWTBotText text = bot.textWithLabel("Enter a name for the New Instance");
+        text.setText("TestDataContainer");
+        sleep();
+        bot.buttonWithTooltip("Add").click();
+        sleep();
         bot.button("OK").click();
         sleep();
-        sleep();
-        dataModelItem.getNode("TestDataModelCategory").contextMenu("Delete").click();
+        bot.activeEditor().save();
+        bot.activeEditor().close();
+        sleep(2);
+
+        SWTBotTreeItem node = dataContainerItem.getNode("TestDataContainer");
+        SWTBotMenu duplicateMenu = node.contextMenu("Duplicate");
+        duplicateMenu.click();
+        SWTBotShell pasteDataContainerShell = bot.shell("Pasting instance TestDataContainer");
+        pasteDataContainerShell.activate();
+        bot.text("CopyOfTestDataContainer").setText("DuplicateDataContainer");
         sleep();
         bot.button("OK").click();
         sleep();

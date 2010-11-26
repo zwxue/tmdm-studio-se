@@ -275,4 +275,8 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
             }
         }
     }
+
+    public IFormPage getPage(int index) {
+        return formPages.get(index);
+    }
 }

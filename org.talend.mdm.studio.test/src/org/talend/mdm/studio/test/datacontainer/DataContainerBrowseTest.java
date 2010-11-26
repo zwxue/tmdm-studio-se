@@ -20,11 +20,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * DataContainerBrowseObjectTest is a SWTBot test case for testing the browse function of Data Container.
+ * DataContainerBrowseTest is a SWTBot test class for testing the browse function of Data Container.
  * 
  * DOC rhou class global comment. Detailled comment
  */
-public class DataContainerBrowseObjectTest extends DataContainerTest {
+public class DataContainerBrowseTest extends DataContainerTest {
 
     @Before
     public void runBeforeEveryTest() {

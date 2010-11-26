@@ -16,7 +16,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.talend.mdm.studio.test.StudioTest;
 
 /**
- * DataModelTest is a parent class of the test classes for testing the functions of Data Model.
+ * DataModelTest is a superclass of the test classes for testing the functions of Data Model.
  * 
  * DOC rhou class global comment. Detailled comment
  */

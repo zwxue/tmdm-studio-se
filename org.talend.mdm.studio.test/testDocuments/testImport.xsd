@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" blockDefault="" elementFormDefault="unqualified" finalDefault="">  
+  <xsd:import namespace="http://www.w3.org/2001/XMLSchema"/>  
+  <xsd:element abstract="false" name="testSimpleType" nillable="false" type="testSimpleTypeType"> 
+    <xsd:annotation> 
+      <xsd:appinfo source="X_Label_EN">testSimpleType</xsd:appinfo>  
+      <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+      <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+      <xsd:appinfo source="X_Write">System_Web</xsd:appinfo>  
+      <xsd:appinfo source="X_Hide">System_Web</xsd:appinfo>  
+      <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo> 
+    </xsd:annotation>  
+    <xsd:unique name="testSimpleType"> 
+      <xsd:selector xpath="."/>  
+      <xsd:field xpath="id"/> 
+    </xsd:unique> 
+  </xsd:element>  
+  <xsd:complexType abstract="false" mixed="false" name="testSimpleTypeType"> 
+    <xsd:all maxOccurs="1" minOccurs="1"> 
+      <xsd:element maxOccurs="1" minOccurs="1" name="id" nillable="false" type="AUTO_INCREMENT"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Label_EN">id</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Web</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Web</xsd:appinfo> 
+        </xsd:annotation> 
+      </xsd:element>  
+      <xsd:element maxOccurs="1" minOccurs="0" name="uuid" nillable="false" type="UUID"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Label_EN">uuid</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Web</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Web</xsd:appinfo> 
+        </xsd:annotation> 
+      </xsd:element>  
+      <xsd:element maxOccurs="1" minOccurs="0" name="url" nillable="false" type="URL"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Label_EN">url</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Web</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Web</xsd:appinfo> 
+        </xsd:annotation> 
+      </xsd:element>  
+      <xsd:element maxOccurs="1" minOccurs="0" name="picture" nillable="false" type="PICTURE"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Label_EN">picture</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Web</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Web</xsd:appinfo> 
+        </xsd:annotation> 
+      </xsd:element>  
+      <xsd:element maxOccurs="1" minOccurs="0" name="intType" nillable="false" type="xsd:int"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Label_EN">intType</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Web</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Web</xsd:appinfo> 
+        </xsd:annotation> 
+      </xsd:element>  
+      <xsd:element maxOccurs="1" minOccurs="0" name="integerType" nillable="false" type="xsd:integer"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Label_EN">integerType</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Web</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Web</xsd:appinfo> 
+        </xsd:annotation> 
+      </xsd:element>  
+      <xsd:element maxOccurs="1" minOccurs="0" name="longType" nillable="false" type="xsd:long"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Label_EN">longType</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Web</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Web</xsd:appinfo> 
+        </xsd:annotation> 
+      </xsd:element>  
+      <xsd:element maxOccurs="1" minOccurs="0" name="shortType" nillable="false" type="xsd:short"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Label_EN">shortType</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Web</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Web</xsd:appinfo> 
+        </xsd:annotation> 
+      </xsd:element>  
+      <xsd:element maxOccurs="1" minOccurs="0" name="doubleType" nillable="false" type="xsd:double"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Label_EN">doubleType</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Web</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Web</xsd:appinfo> 
+        </xsd:annotation> 
+      </xsd:element>  
+      <xsd:element maxOccurs="1" minOccurs="0" name="stringType" nillable="false" type="xsd:string"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Label_EN">stringType</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Web</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Web</xsd:appinfo> 
+        </xsd:annotation> 
+      </xsd:element>  
+      <xsd:element maxOccurs="1" minOccurs="0" name="dateType" nillable="false" type="xsd:date"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Label_EN">dateType</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Web</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Web</xsd:appinfo> 
+        </xsd:annotation> 
+      </xsd:element>  
+      <xsd:element maxOccurs="1" minOccurs="0" name="dateTimeType" nillable="false" type="xsd:dateTime"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Label_EN">dateTimeType</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Web</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Web</xsd:appinfo> 
+        </xsd:annotation> 
+      </xsd:element>  
+      <xsd:element maxOccurs="1" minOccurs="0" name="timeType" nillable="false" type="xsd:time"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Label_EN">timeType</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Web</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Web</xsd:appinfo> 
+        </xsd:annotation> 
+      </xsd:element>  
+      <xsd:element maxOccurs="1" minOccurs="0" name="booleanType" nillable="false" type="xsd:boolean"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Label_EN">booleanType</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Web</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Web</xsd:appinfo> 
+        </xsd:annotation> 
+      </xsd:element>  
+      <xsd:element maxOccurs="1" minOccurs="0" name="enumType" nillable="false" type="enum"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Label_EN">enumType</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Web</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Web</xsd:appinfo> 
+        </xsd:annotation> 
+      </xsd:element> 
+    </xsd:all> 
+  </xsd:complexType>  
+  <xsd:simpleType name="AUTO_INCREMENT"> 
+    <xsd:restriction base="xsd:string"/> 
+  </xsd:simpleType>  
+  <xsd:simpleType name="UUID"> 
+    <xsd:restriction base="xsd:string"/> 
+  </xsd:simpleType>  
+  <xsd:simpleType name="URL"> 
+    <xsd:restriction base="xsd:string"/> 
+  </xsd:simpleType>  
+  <xsd:simpleType name="PICTURE"> 
+    <xsd:restriction base="xsd:string"/> 
+  </xsd:simpleType>  
+  <xsd:simpleType name="enum"> 
+    <xsd:restriction base="xsd:string"> 
+      <xsd:enumeration value="1"/>  
+      <xsd:enumeration value="2"/>  
+      <xsd:enumeration value="3"/>  
+      <xsd:enumeration value="4"/>  
+      <xsd:enumeration value="5"/> 
+    </xsd:restriction> 
+  </xsd:simpleType>  
+  <xsd:element abstract="false" name="testComplexType" nillable="false" type="testComplexTypeType"> 
+    <xsd:annotation> 
+      <xsd:appinfo source="X_Label_EN">testComplexType</xsd:appinfo>  
+      <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+      <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+      <xsd:appinfo source="X_Write">System_Web</xsd:appinfo>  
+      <xsd:appinfo source="X_Write">General_Manager</xsd:appinfo> 
+    </xsd:annotation>  
+    <xsd:unique name="testComplexType"> 
+      <xsd:selector xpath="."/>  
+      <xsd:field xpath="id"/> 
+    </xsd:unique> 
+  </xsd:element>  
+  <xsd:complexType abstract="false" mixed="false" name="testComplexTypeType"> 
+    <xsd:sequence maxOccurs="1" minOccurs="1"> 
+      <xsd:element maxOccurs="1" minOccurs="1" name="id" nillable="false" type="xsd:string"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Label_EN">id</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Web</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">General_Manager</xsd:appinfo> 
+        </xsd:annotation> 
+      </xsd:element>  
+      <xsd:element maxOccurs="1" minOccurs="0" name="allType" nillable="false"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Label_EN">allType</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Web</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">General_Manager</xsd:appinfo> 
+        </xsd:annotation>  
+        <xsd:complexType mixed="false"> 
+          <xsd:all maxOccurs="1" minOccurs="1"> 
+            <xsd:element maxOccurs="1" minOccurs="1" name="all1" nillable="false" type="xsd:string"> 
+              <xsd:annotation> 
+                <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Web</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">General_Manager</xsd:appinfo> 
+              </xsd:annotation> 
+            </xsd:element>  
+            <xsd:element maxOccurs="1" minOccurs="0" name="all2" nillable="false" type="xsd:string"> 
+              <xsd:annotation> 
+                <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Web</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">General_Manager</xsd:appinfo> 
+              </xsd:annotation> 
+            </xsd:element> 
+          </xsd:all> 
+        </xsd:complexType> 
+      </xsd:element>  
+      <xsd:element maxOccurs="1" minOccurs="0" name="sequenceType" nillable="false"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Label_EN">sequenceType</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Web</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">General_Manager</xsd:appinfo> 
+        </xsd:annotation>  
+        <xsd:complexType mixed="false"> 
+          <xsd:sequence maxOccurs="1" minOccurs="1"> 
+            <xsd:element maxOccurs="1" minOccurs="1" name="sequence1" nillable="false" type="xsd:string"> 
+              <xsd:annotation> 
+                <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Web</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">General_Manager</xsd:appinfo> 
+              </xsd:annotation> 
+            </xsd:element>  
+            <xsd:element maxOccurs="3" minOccurs="0" name="sequence2" nillable="false" type="xsd:string"> 
+              <xsd:annotation> 
+                <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Web</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">General_Manager</xsd:appinfo> 
+              </xsd:annotation> 
+            </xsd:element> 
+          </xsd:sequence> 
+        </xsd:complexType> 
+      </xsd:element>  
+      <xsd:element maxOccurs="1" minOccurs="0" name="choiceType" nillable="false"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Label_EN">choiceType</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Web</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">General_Manager</xsd:appinfo> 
+        </xsd:annotation>  
+        <xsd:complexType mixed="false"> 
+          <xsd:choice maxOccurs="1" minOccurs="1"> 
+            <xsd:element maxOccurs="1" minOccurs="1" name="choice1" nillable="false" type="xsd:string"> 
+              <xsd:annotation> 
+                <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Web</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">General_Manager</xsd:appinfo> 
+              </xsd:annotation> 
+            </xsd:element>  
+            <xsd:element maxOccurs="1" minOccurs="0" name="choice2" nillable="false" type="xsd:string"> 
+              <xsd:annotation> 
+                <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Web</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">General_Manager</xsd:appinfo> 
+              </xsd:annotation> 
+            </xsd:element> 
+          </xsd:choice> 
+        </xsd:complexType> 
+      </xsd:element> 
+    </xsd:sequence> 
+  </xsd:complexType>  
+  <xsd:element abstract="false" name="testOccur" nillable="false" type="testOccurType"> 
+    <xsd:annotation> 
+      <xsd:appinfo source="X_Label_EN">testOccur</xsd:appinfo>  
+      <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+      <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+      <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo> 
+    </xsd:annotation>  
+    <xsd:unique name="testOccur"> 
+      <xsd:selector xpath="."/>  
+      <xsd:field xpath="id"/> 
+    </xsd:unique> 
+  </xsd:element>  
+  <xsd:complexType abstract="false" mixed="false" name="testOccurType"> 
+    <xsd:sequence maxOccurs="1" minOccurs="1"> 
+      <xsd:element maxOccurs="1" minOccurs="1" name="id" nillable="false" type="xsd:string"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Label_EN">id</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo> 
+        </xsd:annotation> 
+      </xsd:element>  
+      <xsd:element maxOccurs="1" minOccurs="1" name="field1" nillable="false"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Label_EN">field1</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo> 
+        </xsd:annotation>  
+        <xsd:complexType mixed="false"> 
+          <xsd:sequence maxOccurs="1" minOccurs="1"> 
+            <xsd:element maxOccurs="1" minOccurs="1" name="field11" nillable="false"> 
+              <xsd:annotation> 
+                <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+                <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo> 
+              </xsd:annotation>  
+              <xsd:complexType mixed="false"> 
+                <xsd:sequence maxOccurs="1" minOccurs="1"> 
+                  <xsd:element maxOccurs="1" minOccurs="1" name="field111" nillable="false" type="xsd:string"> 
+                    <xsd:annotation> 
+                      <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+                      <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+                      <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo> 
+                    </xsd:annotation> 
+                  </xsd:element>  
+                  <xsd:element maxOccurs="3" minOccurs="0" name="field112" nillable="false" type="xsd:string"> 
+                    <xsd:annotation> 
+                      <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+                      <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+                      <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo> 
+                    </xsd:annotation> 
+                  </xsd:element> 
+                </xsd:sequence> 
+              </xsd:complexType> 
+            </xsd:element>  
+            <xsd:element maxOccurs="3" minOccurs="0" name="field12" nillable="false"> 
+              <xsd:annotation> 
+                <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+                <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo> 
+              </xsd:annotation>  
+              <xsd:complexType mixed="false"> 
+                <xsd:sequence maxOccurs="1" minOccurs="1"> 
+                  <xsd:element maxOccurs="1" minOccurs="1" name="field121" nillable="false" type="xsd:string"> 
+                    <xsd:annotation> 
+                      <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+                      <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+                      <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo> 
+                    </xsd:annotation> 
+                  </xsd:element>  
+                  <xsd:element maxOccurs="1" minOccurs="0" name="field122" nillable="false" type="xsd:string"> 
+                    <xsd:annotation> 
+                      <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+                      <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+                      <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo> 
+                    </xsd:annotation> 
+                  </xsd:element> 
+                </xsd:sequence> 
+              </xsd:complexType> 
+            </xsd:element> 
+          </xsd:sequence> 
+        </xsd:complexType> 
+      </xsd:element>  
+      <xsd:element maxOccurs="1" minOccurs="0" name="field2" nillable="false"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Label_EN">field2</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo> 
+        </xsd:annotation>  
+        <xsd:complexType mixed="false"> 
+          <xsd:sequence maxOccurs="1" minOccurs="1"> 
+            <xsd:element maxOccurs="1" minOccurs="1" name="field21" nillable="false"> 
+              <xsd:annotation> 
+                <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+                <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo> 
+              </xsd:annotation>  
+              <xsd:complexType mixed="false"> 
+                <xsd:sequence maxOccurs="1" minOccurs="1"> 
+                  <xsd:element maxOccurs="1" minOccurs="1" name="field211" nillable="false" type="xsd:string"> 
+                    <xsd:annotation> 
+                      <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+                      <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+                      <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo> 
+                    </xsd:annotation> 
+                  </xsd:element>  
+                  <xsd:element maxOccurs="3" minOccurs="0" name="field212" nillable="false" type="xsd:string"> 
+                    <xsd:annotation> 
+                      <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+                      <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+                      <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo> 
+                    </xsd:annotation> 
+                  </xsd:element> 
+                </xsd:sequence> 
+              </xsd:complexType> 
+            </xsd:element>  
+            <xsd:element maxOccurs="2" minOccurs="0" name="field22" nillable="false"> 
+              <xsd:annotation> 
+                <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+                <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo> 
+              </xsd:annotation>  
+              <xsd:complexType mixed="false"> 
+                <xsd:sequence maxOccurs="1" minOccurs="1"> 
+                  <xsd:element maxOccurs="1" minOccurs="1" name="field221" nillable="false" type="xsd:string"> 
+                    <xsd:annotation> 
+                      <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+                      <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+                      <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo> 
+                    </xsd:annotation> 
+                  </xsd:element>  
+                  <xsd:element maxOccurs="3" minOccurs="0" name="field222" nillable="false" type="xsd:string"> 
+                    <xsd:annotation> 
+                      <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+                      <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+                      <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo> 
+                    </xsd:annotation> 
+                  </xsd:element> 
+                </xsd:sequence> 
+              </xsd:complexType> 
+            </xsd:element> 
+          </xsd:sequence> 
+        </xsd:complexType> 
+      </xsd:element> 
+    </xsd:sequence> 
+  </xsd:complexType>  
+  <xsd:element abstract="false" name="testMultiOccur" nillable="false" type="testMultiOccurType"> 
+    <xsd:annotation> 
+      <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+      <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+      <xsd:appinfo source="X_Write">System_Web</xsd:appinfo> 
+    </xsd:annotation>  
+    <xsd:unique name="testMultiOccur"> 
+      <xsd:selector xpath="."/>  
+      <xsd:field xpath="id"/> 
+    </xsd:unique> 
+  </xsd:element>  
+  <xsd:complexType abstract="false" mixed="false" name="testMultiOccurType"> 
+    <xsd:sequence maxOccurs="unbounded" minOccurs="0"> 
+      <xsd:element maxOccurs="1" minOccurs="1" name="id" nillable="false" type="xsd:string"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Web</xsd:appinfo> 
+        </xsd:annotation> 
+      </xsd:element>  
+      <xsd:element maxOccurs="1" minOccurs="0" name="name" nillable="false" type="xsd:string"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Web</xsd:appinfo> 
+        </xsd:annotation> 
+      </xsd:element>  
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="attachment" nillable="false"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Web</xsd:appinfo> 
+        </xsd:annotation>  
+        <xsd:complexType mixed="false"> 
+          <xsd:sequence maxOccurs="1" minOccurs="1"> 
+            <xsd:element maxOccurs="unbounded" minOccurs="1" name="subelement" nillable="false" type="xsd:string"> 
+              <xsd:annotation> 
+                <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Web</xsd:appinfo>  
+                <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo> 
+              </xsd:annotation> 
+            </xsd:element>  
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="subOccur" nillable="false" type="xsd:string"> 
+              <xsd:annotation> 
+                <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Web</xsd:appinfo>  
+                <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo> 
+              </xsd:annotation> 
+            </xsd:element> 
+          </xsd:sequence> 
+        </xsd:complexType> 
+      </xsd:element>  
+      <xsd:element maxOccurs="unbounded" minOccurs="1" name="attach2" nillable="false"> 
+        <xsd:annotation> 
+          <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+          <xsd:appinfo source="X_Write">System_Web</xsd:appinfo> 
+        </xsd:annotation>  
+        <xsd:complexType mixed="false"> 
+          <xsd:sequence maxOccurs="1" minOccurs="1"> 
+            <xsd:element maxOccurs="1" minOccurs="1" name="subelement" nillable="false" type="xsd:string"> 
+              <xsd:annotation> 
+                <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Web</xsd:appinfo>  
+                <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo> 
+              </xsd:annotation> 
+            </xsd:element>  
+            <xsd:element maxOccurs="unbounded" minOccurs="0" name="subOccur2" nillable="false" type="xsd:string"> 
+              <xsd:annotation> 
+                <xsd:appinfo source="X_Write">System_Admin</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Interactive</xsd:appinfo>  
+                <xsd:appinfo source="X_Write">System_Web</xsd:appinfo>  
+                <xsd:appinfo source="X_Hide">System_Interactive</xsd:appinfo> 
+              </xsd:annotation> 
+            </xsd:element> 
+          </xsd:sequence> 
+        </xsd:complexType> 
+      </xsd:element> 
+    </xsd:sequence> 
+  </xsd:complexType> 
+</xsd:schema>

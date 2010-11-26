@@ -10,8 +10,9 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.datamodel;
+package org.talend.mdm.studio.test.datacontainer;
 
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
@@ -20,22 +21,17 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.talend.mdm.studio.test.StudioTest;
 
 /**
- * DataContainerTest is a SWTBot test case for testing the new and delete functions of Data Model.
+ * DataContainerCopyTest is a SWTBot test class for testing the copy and paste functions of Data Container.
  * 
  * DOC rhou class global comment. Detailled comment
- * 
  */
-public class DataModelObjectTest extends StudioTest {
-
-    private SWTBotTreeItem dataModelItem;
+public class DataContainerCopyTest extends DataContainerTest {
 
     @Before
     public void runBeforeEveryTest() {
-        dataModelItem = serverItem.getNode("Data Model [HEAD]");
-        dataModelItem.expand();
+
     }
 
     @After
@@ -46,7 +42,6 @@ public class DataModelObjectTest extends StudioTest {
     @BeforeClass
     public static void runBeforeClass() {
         // run for one time before all test cases
-        initServerView();
     }
 
     @AfterClass
@@ -56,25 +51,30 @@ public class DataModelObjectTest extends StudioTest {
 
     @Test
     public void runTest() {
-        dataModelItem.contextMenu("New").click();
-        // bot.sleep(1000);
-        SWTBotShell newDataContainerShell = bot.shell("New Data Model");
+        // Because the system data container can not be copied and pasted,so create a new data container first.
+        dataContainerItem.contextMenu("New").click();
+        SWTBotShell newDataContainerShell = bot.shell("New Data Container");
         newDataContainerShell.activate();
         SWTBotText text = bot.textWithLabel("Enter a name for the New Instance");
-        text.setText("TestDataModel");
+        text.setText("TestDataContainer");
         sleep();
         bot.buttonWithTooltip("Add").click();
         sleep();
         bot.button("OK").click();
-        bot.textWithLabel("Description").setText("This is a test for data model");
-        bot.activeEditor().save();
         sleep();
+        bot.activeEditor().save();
         bot.activeEditor().close();
         sleep(2);
-        dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
+
+        SWTBotTreeItem node = dataContainerItem.getNode("TestDataContainer");
+        SWTBotMenu editMenu = node.contextMenu("Copy");
+        editMenu.click();
         sleep();
+        node.contextMenu("Paste").click();
+        SWTBotShell pasteDataContainerShell = bot.shell("Pasting instance TestDataContainer");
+        pasteDataContainerShell.activate();
+        bot.text("CopyOfTestDataContainer").setText("PasteDataContainer");
         bot.button("OK").click();
         sleep();
     }
-
 }
