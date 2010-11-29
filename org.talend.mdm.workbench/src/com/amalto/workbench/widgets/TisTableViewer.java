@@ -48,7 +48,7 @@ public class TisTableViewer extends ComplexTableViewer {
 
     // protected List<Line> copyLines=new ArrayList<Line>();
     // static List<Button> pastBtns=new ArrayList<Button>(); //records all paste Buttons
-    HashMap<String, HashSet<Button>> pastBtns = new HashMap<String, HashSet<Button>>();
+    static HashMap<String, HashSet<Button>> pastBtns = new HashMap<String, HashSet<Button>>();
 
     private Button copyButton;
 
