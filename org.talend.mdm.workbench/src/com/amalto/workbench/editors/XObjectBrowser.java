@@ -181,6 +181,7 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
             xobject.setWsObject(null);
             // xobject.removeListener(this);
         }
+        formPages.clear();
         super.dispose();
     }
 

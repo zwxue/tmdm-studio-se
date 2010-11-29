@@ -51,15 +51,15 @@ public class XSDDeleteConceptAction extends UndoAction {
                 ISelection selection = page.getTreeViewer().getSelection();
                 decl = (XSDElementDeclaration) ((IStructuredSelection) selection).getFirstElement();
             }
-            XtentisPort port = null;
-            try {
-                port = Util.getPort(page.getXObject());
-            } catch (XtentisException e) {
-                e.printStackTrace();
-            }
             // add by ymli. fix buy 0010029
             Set<String> list = Util.getForeignKeys();
             if (list == null) {
+                XtentisPort port = null;
+                try {
+                    port = Util.getPort(page.getXObject());
+                } catch (XtentisException e) {
+                    e.printStackTrace();
+                }
                 list = new HashSet<String>();
                 Util.getForeingKeyInDataModel(list, page.getXObject().getParent(), port);
                 Util.setForeignKeys(list);

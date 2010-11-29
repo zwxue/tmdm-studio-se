@@ -26,6 +26,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.io.IOUtils;
+import org.eclipse.core.commands.operations.IOperationHistory;
+import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
@@ -1186,7 +1188,9 @@ public class DataModelMainPage extends AMainPageV2 {
             XSDImport xsdImport = XSDFactory.eINSTANCE.createXSDImport();
             xsdImport.setNamespace("http://www.w3.org/2001/XMLSchema");
             if (xsdSchema == null) {
-                xsdSchema = Util.createXsdSchema(schema, getXObject());
+                xsdSchema = ((XSDTreeContentProvider) viewer.getContentProvider()).getXsdSchema();
+                if (xsdSchema == null)
+                    xsdSchema = Util.createXsdSchema(schema, getXObject());
             }
 
             EList<XSDSchemaContent> elist = xsdSchema.getContents();
@@ -1201,7 +1205,7 @@ public class DataModelMainPage extends AMainPageV2 {
             }
             if (xsdImport != null) {
                 xsdSchema.getContents().add(0, xsdImport);
-                wsObject.setXsdSchema(Util.nodeToString(xsdSchema.getDocument()));
+                wsObject.setXsdSchema(schema);
             }
             validateSchema();
             XMLEditor xmleditor = (getEditor()).getXmlEditor();
@@ -1906,8 +1910,9 @@ public class DataModelMainPage extends AMainPageV2 {
     public XSDSchema reConfigureXSDSchema(boolean force) {
         if (force) {
             try {
-                String schema = ((XSDTreeContentProvider) viewer.getContentProvider()).getXSDSchemaAsString();
-                xsdSchema = Util.createXsdSchema(schema, getXObject());
+                // String schema = ((XSDTreeContentProvider) viewer.getContentProvider()).getXSDSchemaAsString();
+                xsdSchema = ((XSDTreeContentProvider) viewer.getContentProvider()).getXsdSchema();// Util.createXsdSchema(schema,
+                // getXObject());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1922,7 +1927,7 @@ public class DataModelMainPage extends AMainPageV2 {
     private void initializeOperationHistory() {
 
         if (undoContext == null) {
-            undoContext = new ObjectUndoContext(this, this.getPartName());
+            undoContext = new ObjectUndoContext(this.toString(), this.getPartName());
         }
 
         PlatformUI.getWorkbench().getOperationSupport().getOperationHistory().setLimit(undoContext, undoLimit);
@@ -2215,7 +2220,7 @@ public class DataModelMainPage extends AMainPageV2 {
                 xsdSchema.getContents().add(0, xsdInclude);
             }
             String xsd = Util.nodeToString(xsdSchema.getDocument());
-            xsdSchema = Util.createXsdSchema(xsd, getXObject());
+            // xsdSchema = Util.createXsdSchema(xsd, getXObject());
             setXsdSchema(xsdSchema);
             WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
             wsObject.setXsdSchema(xsd);
@@ -2346,5 +2351,27 @@ public class DataModelMainPage extends AMainPageV2 {
                     drillDownAdapter.goInto();
             }
         }
+    }
+
+    @Override
+    public void dispose() {
+        // clear operationhistory
+        IOperationHistory history = PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
+        for (IUndoableOperation op : history.getRedoHistory(undoContext)) {
+            op.dispose();
+            op = null;
+        }
+        for (IUndoableOperation op : history.getUndoHistory(undoContext)) {
+            op.dispose();
+            op = null;
+        }
+        history.dispose(undoContext, true, true, true);
+        // clear the big objects,
+        provider = null;
+        undoContext = null;
+        xsdSchema = null;
+        contextToUndoAction.clear();
+        contextToRedoAction.clear();
+        super.dispose();
     }
 }

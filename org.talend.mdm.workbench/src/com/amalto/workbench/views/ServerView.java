@@ -58,9 +58,11 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
@@ -83,7 +85,6 @@ import com.amalto.workbench.actions.NewCategoryAction;
 import com.amalto.workbench.actions.NewXObjectAction;
 import com.amalto.workbench.actions.PasteXObjectAction;
 import com.amalto.workbench.actions.RefreshAllServerAction;
-import com.amalto.workbench.actions.RefreshCurrentEditorAction;
 import com.amalto.workbench.actions.RefreshXObjectAction;
 import com.amalto.workbench.actions.RenameXObjectAction;
 import com.amalto.workbench.actions.ServerLoginAction;
@@ -146,13 +147,14 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     protected Action serverRefreshAction;
 
     protected Action refreshAllServerAction;
+
     // protected Action serverInitAction;
     protected Action browseViewAction;
 
     protected Action copyAction;
 
     protected Action pasteAction;
-    
+
     protected Action duplicateAction;
 
     protected Action exportAction;
@@ -218,19 +220,21 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         }
         return ports;
     }
-    public java.util.List<TreeParent> getServers(){
-    	java.util.List<TreeParent> servs = new ArrayList<TreeParent>();
-    	TreeObject[] servers = contentProvider.getInvisibleRoot().getChildren();
+
+    public java.util.List<TreeParent> getServers() {
+        java.util.List<TreeParent> servs = new ArrayList<TreeParent>();
+        TreeObject[] servers = contentProvider.getInvisibleRoot().getChildren();
         for (TreeObject server : servers) {
             if (server instanceof TreeParent) {
-                if (!(((TreeParent) server).getChildren().length == 1 && ((TreeParent) server).getChildren()[0]
-                        .getDisplayName().equalsIgnoreCase("Pending..."))) {
-                	servs.add((TreeParent)server);
-                	}
+                if (!(((TreeParent) server).getChildren().length == 1 && ((TreeParent) server).getChildren()[0].getDisplayName()
+                        .equalsIgnoreCase("Pending..."))) {
+                    servs.add((TreeParent) server);
+                }
             }
         }
         return servs;
     }
+
     private DragSource createTreeDragSource() {
         DragSource dragSource = new DragSource(viewer.getTree(), DND.DROP_MOVE | DND.DROP_COPY);
         dragSource.setTransfer(new Transfer[] { TreeObjectTransfer.getInstance() });
@@ -337,13 +341,15 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             if (treeObj.getParent() == null)
                 System.out.println(treeObj.getDisplayName());
             int xtentisType = LocalTreeObjectRepository.getInstance().receiveUnCertainTreeObjectType(treeObj);
-            if ((treeObj.getType() != dragType && treeObj.getType() != TreeObject.CATEGORY_FOLDER&& !(dragType==TreeObject.JOB||dragType==TreeObject.TIS_JOB||dragType==TreeObject.WORKFLOW_PROCESS))
+            if ((treeObj.getType() != dragType && treeObj.getType() != TreeObject.CATEGORY_FOLDER && !(dragType == TreeObject.JOB
+                    || dragType == TreeObject.TIS_JOB || dragType == TreeObject.WORKFLOW_PROCESS))
                     || dragType == TreeObject.CATEGORY_FOLDER
                     || dragType == TreeObject.DATA_MODEL_RESOURCE
                     || dragType == TreeObject.DATA_MODEL_TYPES_RESOURCE
                     || dragType == TreeObject.CUSTOM_TYPES_RESOURCE
                     || dragType == TreeObject.PICTURES_RESOURCE
-                    || (treeObj.getType() == TreeObject.CATEGORY_FOLDER && xtentisType != dragType&& !(dragType==TreeObject.JOB||dragType==TreeObject.TIS_JOB||dragType==TreeObject.WORKFLOW_PROCESS))
+                    || (treeObj.getType() == TreeObject.CATEGORY_FOLDER && xtentisType != dragType && !(dragType == TreeObject.JOB
+                            || dragType == TreeObject.TIS_JOB || dragType == TreeObject.WORKFLOW_PROCESS))
                     || (treeObj.getType() == TreeObject.CATEGORY_FOLDER && treeObj.getParent().getType() == dragType && treeObj
                             .getDisplayName().equals("System"))
                     || (LocalTreeObjectRepository.getInstance().isInSystemCatalog(treeObj.getParent()))) {
@@ -387,8 +393,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                     } else if (xobj.getParent() != remoteObj && remoteObj instanceof TreeParent) {
                         subDdnList.add(xobj);
                     }
-					if(xobj.getType()==TreeObject.JOB||xobj.getType()==TreeObject.WORKFLOW_PROCESS)
-						subDdnList.add(xobj);
+                    if (xobj.getType() == TreeObject.JOB || xobj.getType() == TreeObject.WORKFLOW_PROCESS)
+                        subDdnList.add(xobj);
                 }
             }
             dndTreeObjs.removeAll(subDdnList);
@@ -407,10 +413,10 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     }
 
     public void forceAllSiteToRefresh() {
-//        TreeObject[] childs = getTreeContentProvider().getInvisibleRoot().getChildren();
-//        for (TreeObject child : childs) {
-//            (new ServerRefreshAction(this, child.getServerRoot())).run();
-//        }
+        // TreeObject[] childs = getTreeContentProvider().getInvisibleRoot().getChildren();
+        // for (TreeObject child : childs) {
+        // (new ServerRefreshAction(this, child.getServerRoot())).run();
+        // }
     }
 
     private void transformCatalog(TreeObject remoteObj, ArrayList<TreeObject> transferList) {
@@ -489,25 +495,51 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             }
         });
         viewer.setInput(getViewSite());
-        // remove mousehover listener for the server tree.
-        /*
-         * viewer.getTree().addListener (SWT.MouseHover, new Listener() { public void handleEvent(Event event) {
-         * viewer.getControl().setToolTipText(""); TreeItem item = viewer.getTree().getItem (new Point (event.x,
-         * event.y)); TreeObject xobject = (TreeObject)item.getData(); if (xobject!=null && xobject.getType() ==
-         * TreeObject.DATA_CLUSTER && xobject.isXObject()) {
-         * 
-         * try { XtentisPort port = Util.getPort(new URL( xobject.getEndpointAddress()), xobject.getUniverse(),
-         * xobject.getUsername(), xobject.getPassword()); WSDataCluster wsObject = port .getDataCluster(new
-         * WSGetDataCluster( (WSDataClusterPK) xobject.getWsKey())); String tip = ""; if (wsObject != null&&
-         * wsObject.getDescription() != null){ tip = wsObject.getDescription(); viewer.getControl().setToolTipText(tip);
-         * }
-         * 
-         * } catch (MalformedURLException e) { e.printStackTrace(); } catch (XtentisException e) { e.printStackTrace();
-         * } catch (RemoteException e) { e.printStackTrace(); }
-         * 
-         * } else viewer.getControl().setToolTipText(""); } });
-         */
+        if (getSite().getWorkbenchWindow().getActivePage() != null) {
+            getSite().getWorkbenchWindow().getActivePage().addPartListener(new IPartListener2() {
 
+                public void partVisible(IWorkbenchPartReference partRef) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                public void partOpened(IWorkbenchPartReference partRef) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                public void partInputChanged(IWorkbenchPartReference partRef) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                public void partHidden(IWorkbenchPartReference partRef) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                public void partDeactivated(IWorkbenchPartReference partRef) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                public void partClosed(IWorkbenchPartReference partRef) {
+                    // TODO Auto-generated method stub
+                    System.gc();
+                }
+
+                public void partBroughtToTop(IWorkbenchPartReference partRef) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                public void partActivated(IWorkbenchPartReference partRef) {
+                    // TODO Auto-generated method stub
+
+                }
+            });
+        }
+        ;
         viewer.getTree().addTreeListener(new TreeListener() {
 
             public void treeExpanded(TreeEvent event) {
@@ -532,7 +564,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         hookDoubleClickAction();
         hookKeyPressAction();
         contributeToActionBars();
-//        hookKeyboard();
+        // hookKeyboard();
         initView();
     }
 
@@ -632,31 +664,31 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         // }
     }
 
-//    /**
-//     * // fliu add keyboard listener into tree to assist ctrl+c, ctrl+v and del
-//     */
-//    private void hookKeyboard() {
-//        viewer.getControl().addKeyListener(new KeyListener() {
-//
-//            public void keyPressed(KeyEvent e) {
-//            }
-//
-//            public void keyReleased(KeyEvent e) {
-//                if (e.keyCode == 'c' && e.stateMask == SWT.CTRL) {
-//                    copyAction.run();
-//                } else if (e.keyCode == 'v' && e.stateMask == SWT.CTRL) {
-//                    // modifier:fiu see bug 0008905
-//                    TreeObject xobject = (TreeObject) ((IStructuredSelection) viewer.getSelection()).getFirstElement();
-//                    ((PasteXObjectAction) pasteAction).setXtentisPort(xobject);
-//                    ((PasteXObjectAction) pasteAction).setParent(xobject instanceof TreeParent ? (TreeParent) xobject : xobject
-//                            .getParent());
-//                    pasteAction.run();
-//                } else if (e.keyCode == SWT.DEL) {
-//                    deleteXObjectAction.run();
-//                }
-//            }
-//        });
-//    }
+    // /**
+    // * // fliu add keyboard listener into tree to assist ctrl+c, ctrl+v and del
+    // */
+    // private void hookKeyboard() {
+    // viewer.getControl().addKeyListener(new KeyListener() {
+    //
+    // public void keyPressed(KeyEvent e) {
+    // }
+    //
+    // public void keyReleased(KeyEvent e) {
+    // if (e.keyCode == 'c' && e.stateMask == SWT.CTRL) {
+    // copyAction.run();
+    // } else if (e.keyCode == 'v' && e.stateMask == SWT.CTRL) {
+    // // modifier:fiu see bug 0008905
+    // TreeObject xobject = (TreeObject) ((IStructuredSelection) viewer.getSelection()).getFirstElement();
+    // ((PasteXObjectAction) pasteAction).setXtentisPort(xobject);
+    // ((PasteXObjectAction) pasteAction).setParent(xobject instanceof TreeParent ? (TreeParent) xobject : xobject
+    // .getParent());
+    // pasteAction.run();
+    // } else if (e.keyCode == SWT.DEL) {
+    // deleteXObjectAction.run();
+    // }
+    // }
+    // });
+    // }
 
     private void hookContextMenu() {
         MenuManager menuMgr = new MenuManager("#PopupMenu");
@@ -741,7 +773,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             case TreeObject.ROLE:
             case TreeObject.VIEW:
             default:
-                if (xobject.getType() != TreeObject.CATEGORY_FOLDER&&xobject.getType() != TreeObject.BUILT_IN_CATEGORY_FOLDER) {
+                if (xobject.getType() != TreeObject.CATEGORY_FOLDER && xobject.getType() != TreeObject.BUILT_IN_CATEGORY_FOLDER) {
                     manager.add(exportAction);
                     manager.add(importAction);
                 }
@@ -750,7 +782,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                 }
                 if (xobject.getType() == TreeObject.JOB_REGISTRY) {
                     manager.add(new ImportTISJobAction());
-                    manager.add(new RefreshXObjectAction(ServerView.show(),xobject));
+                    manager.add(new RefreshXObjectAction(ServerView.show(), xobject));
                 }
                 if (xobject.getType() == TreeObject.JOB) {
                     manager.add(new DeleteJobAction());
@@ -788,7 +820,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                     manager.add(deleteXObjectAction);
                     manager.add(copyAction);
                     manager.add(duplicateAction);
-                } else if (xobject.getType() != TreeObject.EVENT_MANAGEMENT&&xobject.getType() != TreeObject.JOB_REGISTRY&&xobject.getType() != TreeObject.JOB&&xobject.getType() != TreeObject.BUILT_IN_CATEGORY_FOLDER
+                } else if (xobject.getType() != TreeObject.EVENT_MANAGEMENT && xobject.getType() != TreeObject.JOB_REGISTRY
+                        && xobject.getType() != TreeObject.JOB && xobject.getType() != TreeObject.BUILT_IN_CATEGORY_FOLDER
                         && LocalTreeObjectRepository.getInstance().isInSystemCatalog(xobject) == false) {
                     manager.add(newCategoryAction);
                 }
@@ -901,7 +934,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         browseRevisionAction = new BrowseRevisionAction(this);
         deleteXObjectAction = new DeleteXObjectAction(this);
         serverRefreshAction = new ServerRefreshAction(this);
-        refreshAllServerAction=new RefreshAllServerAction(this);
+        refreshAllServerAction = new RefreshAllServerAction(this);
         // serverInitAction = new ServerInitAction(this);
         browseViewAction = new BrowseViewAction(this);
         copyAction = new CopyXObjectAction(this);
@@ -911,7 +944,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         exportAction = new ExportItemsAction(this);
         importAction = new ImportItemsAction(this);
         newCategoryAction = new NewCategoryAction(this);
-        
 
     }
 
@@ -982,7 +1014,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                     switch (xo.getType()) {
 
                     case TreeObject.JOB:
-                            new DeleteJobAction().run();
+                        new DeleteJobAction().run();
 
                         break;
                     default:
@@ -1008,10 +1040,9 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                     ((PasteXObjectAction) pasteAction).setParent(xobject instanceof TreeParent ? (TreeParent) xobject : xobject
                             .getParent());
                     pasteAction.run();
-//                } else if (e.keyCode == SWT.DEL) {
-//                    deleteXObjectAction.run();
+                    // } else if (e.keyCode == SWT.DEL) {
+                    // deleteXObjectAction.run();
                 }
-            
 
             }
 

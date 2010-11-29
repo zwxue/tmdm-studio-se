@@ -17,7 +17,7 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
 public class FileSelectWidget {
-	FormToolkit factory=new WidgetFactory();
+	FormToolkit factory=WidgetFactory.getWidgetFactory();
 	
 	Composite parent;
 

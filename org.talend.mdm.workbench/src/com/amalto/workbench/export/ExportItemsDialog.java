@@ -37,7 +37,7 @@ import com.amalto.workbench.widgets.WidgetFactory;
  *
  */
 public class ExportItemsDialog extends Dialog{
-	FormToolkit toolkit=new WidgetFactory();
+	FormToolkit toolkit=WidgetFactory.getWidgetFactory();
 	private LabelCombo comboDataCluster;
 	TreeObject xObject;
 	private Map<String , String> xpathMap = new HashMap<String, String>();

@@ -1,8 +1,8 @@
 /*
  * Created on 27 oct. 2005
- *
- * To change the template for this generated file go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * 
+ * To change the template for this generated file go to Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and
+ * Comments
  */
 package com.amalto.workbench.editors;
 
@@ -27,181 +27,151 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
 import com.amalto.workbench.widgets.WidgetFactory;
 
+public abstract class AMainPage extends AFormPage implements ModifyListener {
 
-public abstract class AMainPage extends AFormPage implements ModifyListener{
-	
-	private SectionPart firstSectionPart=null;
-	
-    public AMainPage(FormEditor editor,String id, String title) {
-        super(editor,id, title);        
+    private SectionPart firstSectionPart = null;
+
+    public AMainPage(FormEditor editor, String id, String title) {
+        super(editor, id, title);
     }
 
-        
     protected void createFormContent(IManagedForm managedForm) {
         super.createFormContent(managedForm);
 
         try {
-        	
-            FormToolkit toolkit = new WidgetFactory();//managedForm.getToolkit();
-            
+
+            FormToolkit toolkit = WidgetFactory.getWidgetFactory();// managedForm.getToolkit();
+
             final ScrolledForm form = managedForm.getForm();
             TableWrapLayout formLayout = new TableWrapLayout();
             form.getBody().setLayout(formLayout);
-            
+
             formLayout.numColumns = 1;
-            
-            //create the FormPart
-            firstSectionPart = new SectionPart(
-                    form.getBody(),
-                    toolkit,
-                    Section.DESCRIPTION|ExpandableComposite.TWISTIE|ExpandableComposite.EXPANDED
-             ) ;
+
+            // create the FormPart
+            firstSectionPart = new SectionPart(form.getBody(), toolkit, Section.DESCRIPTION | ExpandableComposite.TWISTIE
+                    | ExpandableComposite.EXPANDED);
             managedForm.addPart(firstSectionPart);
 
-            //Layout the components
+            // Layout the components
             Section firstSection = firstSectionPart.getSection();
             firstSection.setText("Characteristics");
-            firstSection.setLayoutData(
-                    new TableWrapData(TableWrapData.FILL_GRAB)
-            );
-            
+            firstSection.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
+
             firstSection.addExpansionListener(new ExpansionAdapter() {
+
                 public void expansionStateChanged(ExpansionEvent e) {
                     form.reflow(true);
                 }
-            });                        
+            });
             firstSection.setDescription("The main characteristics");
-            firstSection.setLayout(new GridLayout(1,false));
-            
+            firstSection.setLayout(new GridLayout(1, false));
+
             toolkit.createCompositeSeparator(firstSection);
 
-            
             Composite charComposite = toolkit.createComposite(firstSection);
-            charComposite.setLayoutData(    
-                    new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-            );
-            GridLayout charLayout = new GridLayout(2,false);
+            charComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+            GridLayout charLayout = new GridLayout(2, false);
             charComposite.setLayout(charLayout);
-            
+
             firstSection.setClient(charComposite);
-                        
+
             createCharacteristicsContent(toolkit, charComposite);
-            
-            //adapt body add mouse/focus listener for child
-    		//WidgetFactory factory=new WidgetFactory();
+
+            // adapt body add mouse/focus listener for child
+            // WidgetFactory factory=WidgetFactory.getWidgetFactory();
             toolkit.adapt(form.getBody());
-    		
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-    }//createFormContent
+    }// createFormContent
 
- 
     /**
-     * The composite containing the actual characteristics form
-     * By default its layout is GridLayout of 2 columns
+     * The composite containing the actual characteristics form By default its layout is GridLayout of 2 columns
+     * 
      * @param charSection
      */
     protected abstract void createCharacteristicsContent(FormToolkit toolkit, Composite charSection);
-    
-    
-	protected Composite getNewSectionComposite(String title) {
-		return getNewSectionComposite(
-				title, 
-				ExpandableComposite.TWISTIE|ExpandableComposite.EXPANDED
-		);
-	}
-	protected Composite getNewSectionComposite(String title, int style) {
-		return (Composite)getNewSection(title, style).getClient();
-	}
-	
 
-	protected Section getNewSection(String title) {
-		return getNewSection(
-				title, 
-				ExpandableComposite.TWISTIE|ExpandableComposite.EXPANDED
-		);
-	}
+    protected Composite getNewSectionComposite(String title) {
+        return getNewSectionComposite(title, ExpandableComposite.TWISTIE | ExpandableComposite.EXPANDED);
+    }
 
-    
-	protected Section getNewSection(String title, int style) {
-		
-		//create the FormPart
-        SectionPart newSectionPart = new SectionPart(
-                this.getManagedForm().getForm().getBody(),
-                this.getManagedForm().getToolkit(),
-                style
-         ) ;
+    protected Composite getNewSectionComposite(String title, int style) {
+        return (Composite) getNewSection(title, style).getClient();
+    }
+
+    protected Section getNewSection(String title) {
+        return getNewSection(title, ExpandableComposite.TWISTIE | ExpandableComposite.EXPANDED);
+    }
+
+    protected Section getNewSection(String title, int style) {
+
+        // create the FormPart
+        SectionPart newSectionPart = new SectionPart(this.getManagedForm().getForm().getBody(), this.getManagedForm()
+                .getToolkit(), style);
         this.getManagedForm().addPart(newSectionPart);
 
-        //Layout the components
+        // Layout the components
         Section newSection = newSectionPart.getSection();
-        if (title!=null) newSection.setText(title);
-        newSection.setLayoutData(
-                new TableWrapData(TableWrapData.FILL_GRAB)
-        );        
+        if (title != null)
+            newSection.setText(title);
+        newSection.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
         newSection.addExpansionListener(new ExpansionAdapter() {
+
             public void expansionStateChanged(ExpansionEvent e) {
-            	AMainPage.this.getManagedForm().getForm().reflow(true);
+                AMainPage.this.getManagedForm().getForm().reflow(true);
             }
-        });                        
-        newSection.setLayout(new GridLayout(1,false));
-        
+        });
+        newSection.setLayout(new GridLayout(1, false));
+
         this.getManagedForm().getToolkit().createCompositeSeparator(newSection);
-        newSection.setClient(getNewSectionComposite(newSection)); //in case someone calls getClient directly
-  
+        newSection.setClient(getNewSectionComposite(newSection)); // in case someone calls getClient directly
+
         return newSection;
-	}
-	
-	
-	public Composite getNewSectionComposite(Section section) {
+    }
 
-        Composite newComposite =  this.getManagedForm().getToolkit().createComposite(section);
-        newComposite.setLayoutData(    
-                new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-        );
-        GridLayout charLayout = new GridLayout(2,false);
+    public Composite getNewSectionComposite(Section section) {
+
+        Composite newComposite = this.getManagedForm().getToolkit().createComposite(section);
+        newComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+        GridLayout charLayout = new GridLayout(2, false);
         newComposite.setLayout(charLayout);
-        
-        
+
         return newComposite;
-		
-	}
 
-	/**
-	 * Modify Events on the page
-	 */
-	public void modifyText(ModifyEvent e) {
-		markDirty();
-	}
-	
-	/**
-	 * Marks the page as dirty
-	 */
-	public void markDirty() {
-		firstSectionPart.markDirty();
-		commitChanges();
-	}
+    }
 
+    /**
+     * Modify Events on the page
+     */
+    public void modifyText(ModifyEvent e) {
+        markDirty();
+    }
 
-	public SectionPart getFirstSectionPart() {
-		return firstSectionPart;
-	}
+    /**
+     * Marks the page as dirty
+     */
+    public void markDirty() {
+        firstSectionPart.markDirty();
+        commitChanges();
+    }
 
+    public SectionPart getFirstSectionPart() {
+        return firstSectionPart;
+    }
 
+    // This Part is meant to track dirty states changes
+    class TopFormPart extends AbstractFormPart {
 
-	//This Part is meant to track dirty states changes
-	class TopFormPart  extends AbstractFormPart{
-		public Composite getComposite() {
-			ScrolledForm form = this.getManagedForm().getForm();
-	        Composite topComposite = this.getManagedForm().getToolkit().createComposite(form.getBody());
-            topComposite.setLayoutData(    
-            		new TableWrapData(TableWrapData.FILL_GRAB)
-            );
-            topComposite.setLayout(new GridLayout(2,false));
+        public Composite getComposite() {
+            ScrolledForm form = this.getManagedForm().getForm();
+            Composite topComposite = this.getManagedForm().getToolkit().createComposite(form.getBody());
+            topComposite.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
+            topComposite.setLayout(new GridLayout(2, false));
             return topComposite;
-		}
-	}
-
+        }
+    }
 }

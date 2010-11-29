@@ -20,7 +20,7 @@ import com.amalto.workbench.image.ImageCache;
 
 public class ValidationRuleWidget {
 	Composite parent;
-	FormToolkit toolkit=new WidgetFactory();
+	FormToolkit toolkit=WidgetFactory.getWidgetFactory();
 	private Composite composite;
 	private Button button;
 	private Text text;

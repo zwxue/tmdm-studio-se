@@ -17,7 +17,7 @@ import com.amalto.workbench.utils.Util;
 public class LabelText {
 	protected Label label;
 	protected Text text;
-	//WidgetFactory factory =new WidgetFactory();
+	//WidgetFactory factory =WidgetFactory.getWidgetFactory();
 	public LabelText(FormToolkit toolkit,Composite parent, final String labelName){
        label = toolkit.createLabel(parent, labelName, SWT.NULL);
        label.setLayoutData(

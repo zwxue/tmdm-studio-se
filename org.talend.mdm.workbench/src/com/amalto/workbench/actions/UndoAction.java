@@ -185,7 +185,7 @@ public class UndoAction extends Action {
         }
         page.setXsdSchema(xsd);
         page.refresh();
-        page.markDirty();
+        page.markDirtyWithoutCommit();
     }
 
     public XsdUndoableOperation getOperation() {

@@ -170,7 +170,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             managedForm.getForm().setText(this.getTitle());
 
             // get the toolkit
-            FormToolkit toolkit = new WidgetFactory();// managedForm.getToolkit();
+            FormToolkit toolkit = WidgetFactory.getWidgetFactory();// managedForm.getToolkit();
 
             // get the body
             Composite composite = managedForm.getForm().getBody();

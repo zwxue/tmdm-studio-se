@@ -1081,7 +1081,7 @@ public class ImportItemsWizard extends Wizard {
 
                 public void widgetSelected(SelectionEvent e) {
                     // TODO Auto-generated method stub
-                    FormToolkit toolkit = new WidgetFactory();
+                    FormToolkit toolkit = WidgetFactory.getWidgetFactory();
                     ImportExchangeOptionsDialog dlg = new ImportExchangeOptionsDialog(view.getSite().getShell(), toolkit, true,
                             zipFileRepository);
                     dlg.setBlockOnOpen(true);

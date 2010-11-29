@@ -140,6 +140,7 @@ public class XObjectRevisionBrowser extends FormEditor {
             xobject.setWsObject(null);
             // xobject.removeListener(this);
         }
+        formPages.clear();
         super.dispose();
     }
 

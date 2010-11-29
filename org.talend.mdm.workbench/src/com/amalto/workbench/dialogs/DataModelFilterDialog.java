@@ -20,7 +20,7 @@ import com.amalto.workbench.widgets.LabelCombo;
 import com.amalto.workbench.widgets.WidgetFactory;
 
 public class DataModelFilterDialog extends Dialog {
-	FormToolkit toolkit=new WidgetFactory();
+	FormToolkit toolkit=WidgetFactory.getWidgetFactory();
 	TreeObject xObject;
 	DataModelFilter dataModelFilter;
 	private LabelCombo comboRole;

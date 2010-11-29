@@ -22,7 +22,7 @@ public class PageingToolBar {
 	int totalsize;
 	int totalpage;
 	Composite parent;
-	WidgetFactory toolkit=new WidgetFactory();
+	WidgetFactory toolkit=WidgetFactory.getWidgetFactory();
 	private Label displayItems;
 	private Text pageSizeText;
 	private Button refreshBtn;

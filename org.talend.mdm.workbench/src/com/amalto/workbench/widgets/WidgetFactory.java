@@ -23,7 +23,6 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -37,60 +36,72 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.amalto.workbench.utils.Util;
 
-
 /**
- * DOC nrousseau class global comment. Detailled comment <br/> adapted from the TabbedPropertySheetWidgetFactory
+ * DOC nrousseau class global comment. Detailled comment <br/>
+ * adapted from the TabbedPropertySheetWidgetFactory
  * 
  */
 public class WidgetFactory extends FormToolkit {
-    public  FocusListener focusListener = new FocusListener( ) {
+
+    static WidgetFactory factory;
+
+    public FocusListener focusListener = new FocusListener() {
+
         public void focusGained(FocusEvent e) {
             Control control = (Control) e.widget;
             if (control instanceof Composite) {
                 Composite parent = (Composite) control;
                 setChildFocus(parent);
             } else {
-                if(control instanceof Text){
-                	((Text)control).selectAll();
-                	//System.out.println(((Text)control).getText() + " focusGained");
+                if (control instanceof Text) {
+                    ((Text) control).selectAll();
+                    // System.out.println(((Text)control).getText() + " focusGained");
                 }
-                if(control instanceof StyledText){
-                	((StyledText)control).selectAll();
+                if (control instanceof StyledText) {
+                    ((StyledText) control).selectAll();
                 }
             }
         }
-        
+
         public void focusLost(FocusEvent e) {
             Control control = (Control) e.widget;
             if (control instanceof Composite) {
                 Composite parent = (Composite) control;
                 setChildFocus(parent);
             } else {
-                    if(control instanceof Text){
-                    	Text t=(Text)control;
-                    	t.clearSelection();
-                    	//System.out.println(t.getText() + " focusLost");
-                    }
-                    if(control instanceof StyledText){
-                    	StyledText t=(StyledText)control;                    	
-                    	t.setSelection(0, 0);	                    		
-                    }
+                if (control instanceof Text) {
+                    Text t = (Text) control;
+                    t.clearSelection();
+                    // System.out.println(t.getText() + " focusLost");
+                }
+                if (control instanceof StyledText) {
+                    StyledText t = (StyledText) control;
+                    t.setSelection(0, 0);
+                }
             }
-        }        
+        }
     };
-    
-    public static TraverseListener textTraverseListener=new TraverseListener(){
 
-		public void keyTraversed(TraverseEvent e) {
-			if(e.detail == SWT.TRAVERSE_TAB_NEXT){
-				e.doit=true;
-			}			
-		}    	
+    public static TraverseListener textTraverseListener = new TraverseListener() {
+
+        public void keyTraversed(TraverseEvent e) {
+            if (e.detail == SWT.TRAVERSE_TAB_NEXT) {
+                e.doit = true;
+            }
+        }
     };
+
+    public static WidgetFactory getWidgetFactory() {
+        if (factory == null) {
+            factory = new WidgetFactory();
+        }
+        return factory;
+    }
+
     /**
      * private constructor.
      */
-    public WidgetFactory() {
+    private WidgetFactory() {
         super(Display.getCurrent());
     }
 
@@ -117,7 +128,7 @@ public class WidgetFactory extends FormToolkit {
         CTabItem tabItem = new CTabItem(tabFolder, style);
         return tabItem;
     }
-    
+
     /**
      * Creates the list as a part of the form.
      * 
@@ -142,22 +153,22 @@ public class WidgetFactory extends FormToolkit {
         composite.setBackground(getColors().getBackground());
 
         // add a focus listener
-        
-        addChildListener(composite,focusListener);
-//        composite.addFocusListener(focusListener);
-//        composite.getParent().addFocusListener(focusListener);
+
+        addChildListener(composite, focusListener);
+        // composite.addFocusListener(focusListener);
+        // composite.getParent().addFocusListener(focusListener);
         composite.setMenu(composite.getParent().getMenu());
     }
-    
-    private void addChildListener(Composite parent, FocusListener listener){
+
+    private void addChildListener(Composite parent, FocusListener listener) {
         if (parent == null) {
-           return;
+            return;
         }
         for (Control control : parent.getChildren()) {
             if ((control instanceof Combo) || (control instanceof Button)) {
                 continue;
             } else if ((control instanceof Text) || (control instanceof StyledText)) {
-                control.addFocusListener(listener); 
+                control.addFocusListener(listener);
                 control.addTraverseListener(textTraverseListener);
             } else {
                 if (control instanceof Composite) {
@@ -167,6 +178,7 @@ public class WidgetFactory extends FormToolkit {
         }
 
     }
+
     private boolean setChildFocus(Composite parent) {
         if (parent == null) {
             return false;
@@ -287,20 +299,20 @@ public class WidgetFactory extends FormToolkit {
     public CLabel createCLabel(Composite parent, String text) {
         return createCLabel(parent, text, SWT.NONE);
     }
-    
 
     public Text createText(Composite parent, String value) {
-    	// TODO Auto-generated method stub
-    	Text t=super.createText(parent, value);
-    	return t;
+        // TODO Auto-generated method stub
+        Text t = super.createText(parent, value);
+        return t;
     }
 
     public Text createText(Composite parent, String value, int style) {
-    	// TODO Auto-generated method stub
-    	Text t=super.createText(parent, value, style);
-    	Util.createCompDropTarget(t);
-    	return t;
+        // TODO Auto-generated method stub
+        Text t = super.createText(parent, value, style);
+        Util.createCompDropTarget(t);
+        return t;
     }
+
     /**
      * Creates a label as a part of the form.
      * 

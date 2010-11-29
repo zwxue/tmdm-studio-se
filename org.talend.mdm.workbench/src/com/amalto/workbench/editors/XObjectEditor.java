@@ -229,6 +229,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener {
             xobject.removeListener(this);
         }
         super.dispose();
+        formPages.clear();
     }
 
     /**

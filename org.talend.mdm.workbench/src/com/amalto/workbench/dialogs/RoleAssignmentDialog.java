@@ -112,7 +112,7 @@ public class RoleAssignmentDialog extends Dialog {
         ComplexTableViewerColumn acsColumn = roleConfigurationColumns[1];
         acsColumn.setColumnWidth(250);
         acsColumn.setComboValues(new String[] { "Read Only", "Read & Write" });
-        FormToolkit toolkit = new WidgetFactory();
+        FormToolkit toolkit = WidgetFactory.getWidgetFactory();
         complexTableViewer = new ComplexTableViewer(Arrays.asList(roleConfigurationColumns), toolkit, composite);
         complexTableViewer.setKeyColumns(new ComplexTableViewerColumn[] { roleConfigurationColumns[0] });
         complexTableViewer.create();
