@@ -25,8 +25,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.talend.mdm.studio.test.Activator;
-
-import com.amalto.workbench.utils.Util;
+import org.talend.mdm.studio.test.util.Util;
 
 /**
  * DataModelOperationTest is a SWTBot test class to test the operation associated with the import,export.filter and so
