@@ -29,12 +29,11 @@ import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.XObjectEditor;
 
 /**
- * DataModelOperationTest2 is a SWTBot test class to test the operation associated with the filter,expand,collapse,up
- * and down.
+ * DataModelContentTest is a SWTBot test class for testing the function of Data Model content.
  * 
  * DOC rhou class global comment. Detailled comment
  */
-public class DataModelOperationTest2 extends DataModelTest {
+public class DataModelContentTest extends DataModelTest {
 
     private static SWTBotTree conceptBotTree;
 
@@ -81,85 +80,117 @@ public class DataModelOperationTest2 extends DataModelTest {
     }
 
     @Test
-    public void filterTest() {
-        bot.buttonWithTooltip("Filter...").click();
-        SWTBotShell filterShell = bot.shell("Data Model Filter");
-        filterShell.activate();
-        bot.ccomboBox().setSelection(1);
+    public void newEntityTest() {
+        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
+        conceptNode.select();
+        // TODO:The context menu can not be accessed.
+
+        conceptNode.contextMenu("New Entity").click();
+        SWTBotShell newEntityShell = bot.shell("New Entity");
+        newEntityShell.activate();
+        // create a entity with a complex type
+        bot.textWithLabel("Name:").setText("ComplexTypeEntity");
         sleep();
-        bot.radio(3).click();
+        bot.button("OK").click(); // create a entity with a simple type
+        sleep(2);
+        conceptNode.contextMenu("New Entity").click();
+        newEntityShell = bot.shell("New Entity");
+        newEntityShell.activate();
+        bot.textWithLabel("Name:").setText("SimpleTypeEntity");
+        sleep();
+        bot.radio("Simple Type").click();
         sleep();
         bot.button("OK").click();
+    }
+
+    @Test
+    public void editEntityTest() {
+        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
+        conceptNode.select();
+        conceptNode.contextMenu("Edit Entity").click();
+        SWTBotShell editEntityShell = bot.shell("Edit Entity");
+        editEntityShell.activate();
+        bot.textWithLabel("Enter a new Name for the Entity").setText("TestEdit");
         sleep();
-        bot.buttonWithTooltip("Filter...").click();
-        filterShell = bot.shell("Data Model Filter");
-        filterShell.activate();
-        bot.ccomboBox().setSelection(0);
-        sleep();
-        bot.radio(0).click();
+        bot.button("OK").click();
+        sleep(2);
+        // Revert the changes
+        conceptNode.doubleClick();
+        editEntityShell = bot.shell("Edit Entity");
+        editEntityShell.activate();
+        bot.textWithLabel("Enter a new Name for the Entity").setText("Reporting");
         sleep();
         bot.button("OK").click();
     }
 
     @Test
-    public void expandTest() {
+    public void generateDefaultViewTest() {
         SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
         conceptNode.select();
-        bot.buttonWithTooltip("Expand...").click();
-        sleep(2);
-        // conceptNode.expand();
-        // conceptNode.getNode(0).expand();
-        // SWTBotTreeItem userNode = conceptNode.getNode(0).getNode("ReportingName");
-        // userNode.setFocus();
-        // sleep(3);
-    }
-
-    @Test
-    public void collapseTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select();
-        bot.buttonWithTooltip("Collapse...").click();
-        sleep(2);
-    }
-
-    @Test
-    public void expandModelGroupTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select();
-        bot.buttonWithTooltip("Expand ModelGroup...").click();
-        sleep(2);
-    }
-
-    @Test
-    public void elementUpTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.getNode("ReportingType").getNode("Cluster").select();
-        bot.buttonWithTooltip("UP...").click();
+        conceptNode.contextMenu("Generate default Browse Items Views").click();
+        SWTBotShell saveShell = bot.shell("Save Resource");
+        saveShell.activate();
+        bot.button("OK").click();
         sleep();
-        bot.buttonWithTooltip("UP...").click();
-        sleep(2);
+        SWTBotShell generateViewShell = bot.shell("Generate default Browse Items Views");
+        generateViewShell.activate();
+        bot.button("Finish").click();
     }
 
     @Test
-    public void elementDownTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.getNode("ReportingType").getNode("Cluster").select();
-        bot.buttonWithTooltip("DOWN...").click();
-        sleep();
-        bot.buttonWithTooltip("DOWN...").click();
-        sleep(2);
-    }
-
-    @Test
-    public void labelOperationTest() {
+    public void copyEntityTest() {
         SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
         conceptNode.select();
-        bot.buttonWithTooltip("Expand...").click();
+        conceptNode.contextMenu("Copy Entity").click();
         sleep();
-        bot.comboBoxWithLabel("Language:").setSelection(1);
-        bot.buttonWithTooltip("Add...").click();
+        conceptNode.select();
+        conceptNode.contextMenu("Paste Entity").click();
+        sleep();
+        SWTBotShell saveShell = bot.shell("Copy Element");
+        saveShell.activate();
+        bot.button("OK").click();
+        sleep();
+    }
+
+    @Test
+    public void changeToComplexTypeTest() {
+        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
+        conceptNode.select();
+        conceptNode.contextMenu("Change to a Complex Type").click();
+        sleep();
+        SWTBotShell changeTypeShell = bot.shell("Change To Complex Type");
+        changeTypeShell.activate();
+        bot.radio("Sequence").click();
+        bot.button("OK").click();
         sleep(2);
-        bot.buttonWithTooltip("Remove...").click();
+
+    }
+
+    @Test
+    public void changeToSimpleTypeTest() {
+        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
+        conceptNode.select();
+        conceptNode.contextMenu("Change to a Simple Type").click();
+        sleep();
+        SWTBotShell changeTypeShell = bot.shell("Make Simple Type");
+        changeTypeShell.activate();
+        bot.radio("Custom").click();
+        sleep();
+        bot.ccomboBoxWithLabel("Type").setSelection(1);
+        sleep();
+        bot.button("OK").click();
         sleep(2);
+
+    }
+
+    @Test
+    public void addKeyTest() {
+        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
+        conceptNode.select();
+        conceptNode.contextMenu("Add Key").click();
+        sleep();
+        SWTBotShell changeTypeShell = bot.shell("Add a new Key");
+        changeTypeShell.activate();
+
     }
 }
