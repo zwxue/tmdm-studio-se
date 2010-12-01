@@ -83,7 +83,6 @@ public class DataModelContentTest extends DataModelTest {
     public void newEntityTest() {
         SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
         conceptNode.select();
-        // TODO:The context menu can not be accessed.
 
         conceptNode.contextMenu("New Entity").click();
         SWTBotShell newEntityShell = bot.shell("New Entity");
@@ -101,6 +100,18 @@ public class DataModelContentTest extends DataModelTest {
         bot.radio("Simple Type").click();
         sleep();
         bot.button("OK").click();
+    }
+
+    @Test
+    public void deleteEntityTest() {
+        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
+        conceptNode.select();
+        conceptNode.contextMenu("Delete Entity").click();
+        sleep();
+        conceptNode = conceptBotTree.getTreeItem("SimpleTypeEntity");
+        conceptNode.select();
+        conceptNode.contextMenu("Delete Entity").click();
+        sleep();
     }
 
     @Test
@@ -192,5 +203,157 @@ public class DataModelContentTest extends DataModelTest {
         SWTBotShell changeTypeShell = bot.shell("Add a new Key");
         changeTypeShell.activate();
 
+    }
+
+    @Test
+    public void setLabelsTest() {
+        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
+        conceptNode.select();
+        conceptNode.contextMenu("Set the Labels").click();
+        sleep();
+        SWTBotShell shell = bot.shell("Set the Labels");
+        shell.activate();
+        bot.comboBox().setSelection(0);
+        bot.text().setText("en");
+        bot.buttonWithTooltip("Add").click();
+        sleep();
+        bot.comboBox().setSelection(1);
+        bot.text().setText("fr");
+        bot.buttonWithTooltip("Add").click();
+        sleep();
+        bot.table().select(1);
+        bot.buttonWithTooltip("Del").click();
+        sleep();
+        bot.button("OK").click();
+        sleep();
+    }
+
+    @Test
+    public void setDescriptionsTest() {
+        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
+        conceptNode.select();
+        conceptNode.contextMenu("Set the Descriptions").click();
+        sleep();
+        SWTBotShell shell = bot.shell("Set the Descriptions of This Element");
+        shell.activate();
+        bot.comboBox().setSelection(0);
+        bot.text().setText("enlish descriptions");
+        bot.buttonWithTooltip("Add").click();
+        sleep();
+        bot.comboBox().setSelection(1);
+        bot.text().setText("french descriptions");
+        bot.buttonWithTooltip("Add").click();
+        sleep();
+        bot.table().select(1);
+        bot.buttonWithTooltip("Del").click();
+        sleep();
+        bot.button("OK").click();
+    }
+
+    @Test
+    public void setLookupFieldsTest() {
+        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
+        conceptNode.select();
+        conceptNode.contextMenu("Set Lookup Fields").click();
+        sleep();
+        SWTBotShell shell = bot.shell("Set Lookup Fields");
+        shell.activate();
+        bot.ccomboBox().setSelection(0);
+        bot.buttonWithTooltip("Add").click();
+
+        bot.ccomboBox().setSelection(1);
+        bot.buttonWithTooltip("Add").click();
+
+        bot.table().select(0);
+        bot.buttonWithTooltip("Move down the selected item").click();
+        sleep(2);
+        bot.buttonWithTooltip("Move up the selected item").click();
+        sleep(2);
+
+        bot.table().select(1);
+        bot.buttonWithTooltip("Delete the selected item").click();
+        sleep();
+        bot.button("OK").click();
+    }
+
+    @Test
+    public void checkWriteAccessTest() {
+        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
+        conceptNode.select();
+        conceptNode.contextMenu("Set the Roles with Write Access").click();
+        SWTBotShell newViewShell = bot.shell("Set The Roles That Have Write Access");
+        newViewShell.activate();
+        bot.ccomboBox().setSelection(0);
+        bot.buttonWithTooltip("Add").click();
+
+        bot.ccomboBox().setSelection(1);
+        bot.buttonWithTooltip("Add").click();
+
+        bot.table().select(0);
+        bot.buttonWithTooltip("Move down the selected item").click();
+        sleep(2);
+        bot.buttonWithTooltip("Move up the selected item").click();
+        sleep(2);
+
+        bot.table().select(0);
+        bot.buttonWithTooltip("Delete the selected item").click();
+        sleep();
+        bot.button("OK").click();
+        sleep();
+    }
+
+    @Test
+    public void checkNoAccessTest() {
+        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
+        conceptNode.select();
+        conceptNode.contextMenu("Set the Roles with No Access").click();
+        SWTBotShell newViewShell = bot.shell("Set The Roles That Cannot Access This Field");
+        newViewShell.activate();
+        bot.ccomboBox().setSelection(0);
+        bot.buttonWithTooltip("Add").click();
+
+        bot.ccomboBox().setSelection(1);
+        bot.buttonWithTooltip("Add").click();
+
+        bot.table().select(0);
+        bot.buttonWithTooltip("Move down the selected item").click();
+        sleep(2);
+        bot.buttonWithTooltip("Move up the selected item").click();
+        sleep(2);
+
+        bot.table().select(1);
+        bot.buttonWithTooltip("Delete the selected item").click();
+        sleep();
+        bot.button("OK").click();
+        sleep();
+    }
+
+    @Test
+    public void checkWorkflowAccessTest() {
+        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
+        conceptNode.select();
+        conceptNode.contextMenu("Set the Workflow Access").click();
+        SWTBotShell shell = bot.shell("Set the Workflow Access");
+        shell.activate();
+    }
+
+    @Test
+    public void addValidationRuleTest() {
+        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
+        conceptNode.select();
+        conceptNode.contextMenu("Set the Validation Rule").click();
+        SWTBotShell shell = bot.shell("Add a Validation Rule");
+        shell.activate();
+        bot.text().setText("vadation rule");
+    }
+
+    @Test
+    public void deleteValidationRuleTest() {
+        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
+        conceptNode.select();
+        conceptNode.contextMenu("Set the Validation Rule").click();
+        SWTBotShell shell = bot.shell("Add a Validation Rule");
+        shell.activate();
+        bot.text().setText("vadation rule");
     }
 }
