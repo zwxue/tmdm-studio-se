@@ -60,9 +60,9 @@ public class DataContainerRecordOperationTest extends DataContainerTest {
         sleep(2);
         XObjectBrowser ep = (XObjectBrowser) bot.activeEditor().getReference().getPart(true);
         DataClusterBrowserMainPage mainpage = (DataClusterBrowserMainPage) ep.getPage(0);
-        Table conceptTree = mainpage.getResultsViewer().getTable();
+        Table table = mainpage.getResultsViewer().getTable();
 
-        SWTBotTable conceptBotTree = new SWTBotTable(conceptTree);
+        SWTBotTable conceptBotTree = new SWTBotTable(table);
         conceptBotTree.select(1, 1);
         conceptBotTree.contextMenu("New Record").click();
         SWTBotShell newDataContainerShell = bot.shell("XML Editor/Viewer");

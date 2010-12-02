@@ -33,7 +33,7 @@ import com.amalto.workbench.editors.XObjectEditor;
  * 
  * DOC rhou class global comment. Detailled comment
  */
-public class DataModelContentTest extends DataModelTest {
+public class DataModelEntityOperationTest extends DataModelTest {
 
     private static SWTBotTree conceptBotTree;
 
@@ -202,7 +202,9 @@ public class DataModelContentTest extends DataModelTest {
         sleep();
         SWTBotShell changeTypeShell = bot.shell("Add a new Key");
         changeTypeShell.activate();
-
+        bot.text().setText("Test");
+        bot.ccomboBox(0).setSelection(1);
+        bot.button("OK").click();
     }
 
     @Test
@@ -351,9 +353,9 @@ public class DataModelContentTest extends DataModelTest {
     public void deleteValidationRuleTest() {
         SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
         conceptNode.select();
-        conceptNode.contextMenu("Set the Validation Rule").click();
-        SWTBotShell shell = bot.shell("Add a Validation Rule");
+        conceptNode.contextMenu("Delete All Validation Rules").click();
+        SWTBotShell shell = bot.shell("Confirm");
         shell.activate();
-        bot.text().setText("vadation rule");
+        bot.button("OK").click();
     }
 }
