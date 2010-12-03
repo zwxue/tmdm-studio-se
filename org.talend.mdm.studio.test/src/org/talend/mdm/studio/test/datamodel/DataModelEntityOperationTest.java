@@ -157,7 +157,7 @@ public class DataModelEntityOperationTest extends DataModelTest {
         conceptNode.select();
         conceptNode.contextMenu("Paste Entity").click();
         sleep();
-        SWTBotShell saveShell = bot.shell("Copy Element");
+        SWTBotShell saveShell = bot.shell("Copy Entity");
         saveShell.activate();
         bot.button("OK").click();
         sleep();
@@ -174,7 +174,6 @@ public class DataModelEntityOperationTest extends DataModelTest {
         bot.radio("Sequence").click();
         bot.button("OK").click();
         sleep(2);
-
     }
 
     @Test
@@ -191,7 +190,6 @@ public class DataModelEntityOperationTest extends DataModelTest {
         sleep();
         bot.button("OK").click();
         sleep(2);
-
     }
 
     @Test
@@ -279,7 +277,7 @@ public class DataModelEntityOperationTest extends DataModelTest {
     }
 
     @Test
-    public void checkWriteAccessTest() {
+    public void setWriteAccessTest() {
         SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
         conceptNode.select();
         conceptNode.contextMenu("Set the Roles with Write Access").click();
@@ -305,7 +303,7 @@ public class DataModelEntityOperationTest extends DataModelTest {
     }
 
     @Test
-    public void checkNoAccessTest() {
+    public void setNoAccessTest() {
         SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
         conceptNode.select();
         conceptNode.contextMenu("Set the Roles with No Access").click();
@@ -331,7 +329,7 @@ public class DataModelEntityOperationTest extends DataModelTest {
     }
 
     @Test
-    public void checkWorkflowAccessTest() {
+    public void setWorkflowAccessTest() {
         SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
         conceptNode.select();
         conceptNode.contextMenu("Set the Workflow Access").click();

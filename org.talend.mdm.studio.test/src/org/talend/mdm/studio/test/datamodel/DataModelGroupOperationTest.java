@@ -72,7 +72,6 @@ public class DataModelGroupOperationTest extends DataModelTest {
 
     @Test
     public void addElementTest() {
-        // SWTBotTreeItem groupItem = conceptNode.getNode("ReportingType");
         groupItem.contextMenu("Add Element").click();
         SWTBotShell newEntityShell = bot.shell("Add a new Business Element");
         newEntityShell.activate();
