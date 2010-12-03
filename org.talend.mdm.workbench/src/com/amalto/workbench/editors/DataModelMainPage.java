@@ -43,10 +43,9 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -61,6 +60,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -71,6 +71,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
@@ -87,10 +89,8 @@ import org.eclipse.xsd.XSDDiagnostic;
 import org.eclipse.xsd.XSDDiagnosticSeverity;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDEnumerationFacet;
-import org.eclipse.xsd.XSDFacet;
 import org.eclipse.xsd.XSDFactory;
 import org.eclipse.xsd.XSDFractionDigitsFacet;
-import org.eclipse.xsd.XSDIdentityConstraintCategory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDImport;
 import org.eclipse.xsd.XSDInclude;
@@ -182,14 +182,21 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeObjectTransfer;
 import com.amalto.workbench.providers.ISchemaContentProvider;
-import com.amalto.workbench.providers.TypesContentProvider;
 import com.amalto.workbench.providers.TypesLabelProvider;
 import com.amalto.workbench.providers.XObjectEditorInput;
-import com.amalto.workbench.providers.XSDTreeContentProvider;
 import com.amalto.workbench.providers.XSDTreeLabelProvider;
+import com.amalto.workbench.providers.datamodel.SchemaElementSorter;
+import com.amalto.workbench.providers.datamodel.SchemaNameFilter;
+import com.amalto.workbench.providers.datamodel.SchemaRoleAccessFilter;
+import com.amalto.workbench.providers.datamodel.SchemaTreeContentProvider;
+import com.amalto.workbench.providers.datamodel.SchemaUniqueElementFilter;
+import com.amalto.workbench.providers.datamodel.TypeElementSorter;
+import com.amalto.workbench.providers.datamodel.TypeNameFilter;
+import com.amalto.workbench.providers.datamodel.TypesTreeContentProvider;
 import com.amalto.workbench.utils.DataModelFilter;
 import com.amalto.workbench.utils.FontUtils;
 import com.amalto.workbench.utils.ResourcesUtil;
+import com.amalto.workbench.utils.SchemaElementNameFilterDes;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
@@ -302,8 +309,9 @@ public class DataModelMainPage extends AMainPageV2 {
 
     private XSDSchema xsdSchema;
 
-    private XSDTreeContentProvider provider;
-
+//    private XSDTreeContentProvider provider;
+    private SchemaTreeContentProvider schemaTreeContentProvider;
+    
     private Map<ObjectUndoContext, Map<Integer, String>> contextToUndoAction = new HashMap<ObjectUndoContext, Map<Integer, String>>();
 
     private Map<ObjectUndoContext, Map<Integer, String>> contextToRedoAction = new HashMap<ObjectUndoContext, Map<Integer, String>>();
@@ -312,14 +320,15 @@ public class DataModelMainPage extends AMainPageV2 {
 
     private DataModelFilter dataModelFilter;
 
-    private StructuredSelection sel;
+//    private StructuredSelection sel;
 
     private SashForm sash;
 
     private TreeViewer typesViewer;
 
-    private TypesContentProvider typesProvider;
-
+//    private TypesContentProvider typesProvider;
+    private TypesTreeContentProvider typesTreeContentProvider;
+    
     private MenuManager typesMenuMgr;
 
     boolean isSchemaSelected = true;
@@ -332,6 +341,12 @@ public class DataModelMainPage extends AMainPageV2 {
 
     protected String uriPre;
 
+    private SchemaElementSorter schemaTreeSorter = new SchemaElementSorter();
+    private SchemaElementSorter typeTreeSorter = new TypeElementSorter();
+    
+    private SchemaElementNameFilterDes schemaElementNameFilterDes = new SchemaElementNameFilterDes();
+    private SchemaElementNameFilterDes typeElementNameFilterDes = new SchemaElementNameFilterDes();
+    
     // private XSDDeleteAnnotationSchematronAction deleteAnnotationSchematronAction;
     public DataModelMainPage(FormEditor editor) {
         super(editor, DataModelMainPage.class.getName(), "Data Model " + ((XObjectEditorInput) editor.getEditorInput()).getName()
@@ -356,14 +371,21 @@ public class DataModelMainPage extends AMainPageV2 {
 
         try {
 
+        	mainComposite.getParent().setLayout(new GridLayout());
+        	GridData gdMainComposite = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+        	gdMainComposite.widthHint = 1;
+        	gdMainComposite.heightHint = 1;
+        	mainComposite.setLayoutData(gdMainComposite);
+        	
             WSDataModel wsObject = (WSDataModel) (getXObject().getWsObject());
-            Button importXSDBtn, exportBtn, sortUPBtn, sortDownBtn, expandBtn, collapseBtn, expandSelBtn, sortNaturalBtn, addLanBtn, deleteLanbtn, importSchemaNsBtn;
+//            Button importXSDBtn, exportBtn, sortUPBtn, sortDownBtn, expandBtn, collapseBtn, expandSelBtn, sortNaturalBtn, addLanBtn, deleteLanbtn, importSchemaNsBtn;
+            Button importXSDBtn, exportBtn, addLanBtn, deleteLanbtn, importSchemaNsBtn;
             // description
             Label descriptionLabel = toolkit.createLabel(mainComposite, "Description", SWT.NULL);
-            descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
+            descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 
             descriptionText = toolkit.createText(mainComposite, "", SWT.BORDER | SWT.MULTI);
-            descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+            descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
             descriptionText.setText(wsObject.getDescription() == null ? "" : wsObject.getDescription());
             ((GridData) descriptionText.getLayoutData()).minimumHeight = 30;
             descriptionText.addModifyListener(this);
@@ -371,7 +393,7 @@ public class DataModelMainPage extends AMainPageV2 {
             Composite btnCmp = toolkit.createComposite(mainComposite);
             btnCmp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
             GridLayout gLayout = new GridLayout();
-            gLayout.numColumns = 10;
+            gLayout.numColumns = 4;
             gLayout.horizontalSpacing = 20;
             btnCmp.setLayout(gLayout);
 
@@ -383,88 +405,99 @@ public class DataModelMainPage extends AMainPageV2 {
             exportBtn.setImage(ImageCache.getCreatedImage(EImage.EXPORT.getPath()));
             exportBtn.setToolTipText("Export...");
 
-            if (Util.IsEnterPrise()) {
-                Button filterBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
-                filterBtn.setImage(ImageCache.getCreatedImage(EImage.FILTER_PS.getPath()));
-                filterBtn.setToolTipText("Filter...");
-                filterBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
-                filterBtn.addSelectionListener(new SelectionAdapter() {
+//            if (Util.IsEnterPrise()) {
+//                Button filterBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
+//                filterBtn.setImage(ImageCache.getCreatedImage(EImage.FILTER_PS.getPath()));
+//                filterBtn.setToolTipText("Filter...");
+//                filterBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+//                filterBtn.addSelectionListener(new SelectionAdapter() {
+//
+//                    public void widgetSelected(SelectionEvent e) {
+//                        dataModelFilter = new DataModelFilter("", false, false, false, true);
+//                        DataModelFilterDialog dataModelFilterDialog = new DataModelFilterDialog(getSite().getShell(),
+//                                getXObject(), dataModelFilter,schemaElementNameFilterDes);
+//
+//                        if (dataModelFilterDialog.open() == Dialog.OK) {
+////                            ((XSDTreeContentProvider) viewer.getContentProvider()).setFilter(dataModelFilter);
+////                            viewer.setInput(getSite());
+//                        	
+//                        	getSchemaRoleFilterFromSchemaTree().setDataModelFilter(dataModelFilter);
+//                        	getSchemaTopElementNameFilterFromSchemaTree().setNameFilterDes(schemaElementNameFilterDes);
+//                        	viewer.refresh();
+//                            
+//                            // ((TypesContentProvider)typesViewer.getContentProvider()).setFilter(dataModelFilter);
+//                            // typesViewer.setInput(getSite());
+//                        }
+//                    }
+//                });
+//            }
+//            expandBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
+//            expandBtn.setImage(ImageCache.getCreatedImage(EImage.EXPAND.getPath()));
+//            expandBtn.setToolTipText("Expand...");
+//            expandBtn.addSelectionListener(new SelectionAdapter() {
+//
+//                public void widgetSelected(SelectionEvent e) {
+////                    Iterator it = sel.iterator();
+////                	
+////                    while (it.hasNext()) {
+////                        Object obj = it.next();
+////                        viewer.expandToLevel(obj, 3);
+////
+////                    }
+//                	
+//                	for(Object eachSelectedObj : getSelectionInSchemaTree())
+//                		viewer.expandToLevel(eachSelectedObj, 3);
+//                }
+//            });
 
-                    public void widgetSelected(SelectionEvent e) {
-                        dataModelFilter = new DataModelFilter("", false, false, false, true);
-                        DataModelFilterDialog dataModelFilterDialog = new DataModelFilterDialog(getSite().getShell(),
-                                getXObject(), dataModelFilter);
-
-                        if (dataModelFilterDialog.open() == Dialog.OK) {
-                            ((XSDTreeContentProvider) viewer.getContentProvider()).setFilter(dataModelFilter);
-                            viewer.setInput(getSite());
-
-                            // ((TypesContentProvider)typesViewer.getContentProvider()).setFilter(dataModelFilter);
-                            // typesViewer.setInput(getSite());
-                        }
-                    }
-                });
-            }
-            expandBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
-            expandBtn.setImage(ImageCache.getCreatedImage(EImage.EXPAND.getPath()));
-            expandBtn.setToolTipText("Expand...");
-            expandBtn.addSelectionListener(new SelectionAdapter() {
-
-                public void widgetSelected(SelectionEvent e) {
-                    Iterator it = sel.iterator();
-                    while (it.hasNext()) {
-                        Object obj = it.next();
-                        viewer.expandToLevel(obj, 3);
-
-                    }
-                }
-            });
-
-            collapseBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
-            collapseBtn.setImage(ImageCache.getCreatedImage(EImage.COLLAPSE.getPath()));
-            collapseBtn.setToolTipText("Collapse...");
-            collapseBtn.addSelectionListener(new SelectionAdapter() {
-
-                public void widgetSelected(SelectionEvent e) {
-                    Iterator it = sel.iterator();
-                    while (it.hasNext()) {
-                        Object obj = it.next();
-                        viewer.collapseToLevel(obj, 3);
-                    }
-                }
-            });
-
-            expandSelBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
-            expandSelBtn.setImage(ImageCache.getCreatedImage(EImage.ACTIVITY_CATEGORY.getPath()));
-            expandSelBtn.setToolTipText("Expand ModelGroup...");
-            expandSelBtn.addSelectionListener(new SelectionAdapter() {
-
-                public void widgetSelected(SelectionEvent e) {
-                    openXSDParticle();
-                }
-            });
-
-            sortUPBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
-            sortUPBtn.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
-            sortUPBtn.setToolTipText("UP...");
-            sortUPBtn.addSelectionListener(new SelectionAdapter() {
-
-                public void widgetSelected(SelectionEvent e) {
-                    stepUp();
-                    viewer.refresh();
-                }
-            });
-
-            sortDownBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
-            sortDownBtn.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
-            sortDownBtn.setToolTipText("DOWN...");
-            sortDownBtn.addSelectionListener(new SelectionAdapter() {
-
-                public void widgetSelected(SelectionEvent e) {
-                    stepDown();
-                    viewer.refresh();
-                }
-            });
+//            collapseBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
+//            collapseBtn.setImage(ImageCache.getCreatedImage(EImage.COLLAPSE.getPath()));
+//            collapseBtn.setToolTipText("Collapse...");
+//            collapseBtn.addSelectionListener(new SelectionAdapter() {
+//
+//                public void widgetSelected(SelectionEvent e) {
+////                    Iterator it = sel.iterator();
+////                    while (it.hasNext()) {
+////                        Object obj = it.next();
+////                        viewer.collapseToLevel(obj, 3);
+////                    }
+//                	
+//                	for(Object eachSelectedObj : getSelectionInSchemaTree())
+//                		viewer.collapseToLevel(eachSelectedObj, 3);
+//                }
+//            });
+//
+//            expandSelBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
+//            expandSelBtn.setImage(ImageCache.getCreatedImage(EImage.ACTIVITY_CATEGORY.getPath()));
+//            expandSelBtn.setToolTipText("Expand ModelGroup...");
+//            expandSelBtn.addSelectionListener(new SelectionAdapter() {
+//
+//                public void widgetSelected(SelectionEvent e) {
+//                    openXSDParticle(viewer);
+//                }
+//            });
+//
+//            sortUPBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
+//            sortUPBtn.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
+//            sortUPBtn.setToolTipText("UP...");
+//            sortUPBtn.addSelectionListener(new SelectionAdapter() {
+//
+//                public void widgetSelected(SelectionEvent e) {
+//                    stepUp(viewer);
+//                    viewer.refresh();
+//                }
+//            });
+//
+//            sortDownBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
+//            sortDownBtn.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
+//            sortDownBtn.setToolTipText("DOWN...");
+//            sortDownBtn.addSelectionListener(new SelectionAdapter() {
+//
+//                public void widgetSelected(SelectionEvent e) {
+//                    stepDown(viewer);
+//                    viewer.refresh();
+//                }
+//            });
 
             importSchemaNsBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
             importSchemaNsBtn.setImage(ImageCache.getCreatedImage(EImage.CHECKIN_ACTION.getPath()));
@@ -475,7 +508,9 @@ public class DataModelMainPage extends AMainPageV2 {
             addLanGroup.setToolTipText("Add or remove languages in all Entities and elements for the current data model");
             addLanGroup.setBackground(btnCmp.getDisplay().getSystemColor(SWT.COLOR_WHITE));
             addLanGroup.setLayout(new GridLayout(4, false));
-
+            
+            addLanGroup.setLayoutData(new GridData(SWT.RIGHT,SWT.CENTER,true,false));
+            
             langeuageLabel = toolkit.createLabel(addLanGroup, "Language:");
             languageCombo = new Combo(addLanGroup, SWT.READ_ONLY);
             addLanBtn = toolkit.createButton(addLanGroup, "", SWT.NONE);
@@ -510,11 +545,11 @@ public class DataModelMainPage extends AMainPageV2 {
             importXSDBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
             exportBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
 
-            expandBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
-            collapseBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
-            expandSelBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
-            sortUPBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
-            sortDownBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+//            expandBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+//            collapseBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+//            expandSelBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+//            sortUPBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+//            sortDownBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
             importSchemaNsBtn.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
 
             importXSDBtn.addSelectionListener(new SelectionAdapter() {
@@ -830,37 +865,71 @@ public class DataModelMainPage extends AMainPageV2 {
         // new Label(schemaSash,SWT.BORDER).setText("Data-Model:Order");
         // new Label(schemaSash,SWT.NONE).setText("Define the Order data-model");
 
-        Composite schemaSash = new Composite(parent, SWT.NONE);
+//        Composite schemaSash = new Composite(parent, SWT.NONE);
+//        schemaSash.setLayout(new GridLayout());
+//        schemaSash.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+//        schemaSash.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+    	
+    	Composite schemaSash = new Composite(parent, SWT.NONE);
         schemaSash.setLayout(new GridLayout());
         schemaSash.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
         schemaSash.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-        Label title = new Label(schemaSash, SWT.VERTICAL);
+        
+        Composite compInfo = new Composite(schemaSash,SWT.NONE);
+        compInfo.setLayout(new GridLayout());
+        compInfo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+        compInfo.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+        
+        Composite compSchemaTree = new Composite(schemaSash,SWT.NONE);
+        GridLayout glCompSchemaTree = new GridLayout();
+        glCompSchemaTree.verticalSpacing = 0;
+        glCompSchemaTree.marginWidth = 0;
+        glCompSchemaTree.marginHeight = 0;
+        glCompSchemaTree.horizontalSpacing = 0;
+        compSchemaTree.setLayout(glCompSchemaTree);
+        compSchemaTree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+        compSchemaTree.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+
+    	
+        Label title = new Label(compInfo, SWT.VERTICAL);
         title.setText("Data-model: " + modelName);
         title.setFont(FontUtils.getBoldFont(title.getFont()));
-        Color blue = new Color(schemaSash.getDisplay(), 0, 0, 255);
+        Color blue = new Color(compInfo.getDisplay(), 0, 0, 255);
         title.setForeground(blue);
         title.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
-        Label des = new Label(schemaSash, SWT.VERTICAL);
+        Label des = new Label(compInfo, SWT.VERTICAL);
         des.setText("Define the " + modelName + " data-model");
         des.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
-        viewer = new TreeViewer(schemaSash, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+        ToolBar toolBarSchemaTree = createToolbarOnComposite(compSchemaTree);
+        
+        viewer = new TreeViewer(compSchemaTree, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
         viewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
         // viewer.getControl().setLayoutData(
         // new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         //		
+        
+        addToolItems2SchemaTreeToolBar(toolBarSchemaTree);
+        toolBarSchemaTree.pack();
+        
         drillDownAdapter = new DrillDownAdapter(viewer);
-        provider = new XSDTreeContentProvider(this.getSite(), xsdSchema, getXObject());
-        viewer.setContentProvider(provider);
-
-        viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-            public void selectionChanged(SelectionChangedEvent e) {
-                sel = (StructuredSelection) e.getSelection();
-
-            }
-        });
+//        provider = new XSDTreeContentProvider(this.getSite(), xsdSchema, getXObject());
+        schemaTreeContentProvider = new SchemaTreeContentProvider(this.getSite(), xsdSchema, getXObject());
+//        viewer.setContentProvider(provider);
+        viewer.setContentProvider(schemaTreeContentProvider);
+       
+        viewer.setFilters(new ViewerFilter[]{new SchemaRoleAccessFilter(null),
+        									 new SchemaNameFilter(),
+        									 new SchemaUniqueElementFilter()});
+        
+//        viewer.addSelectionChangedListener(new ISelectionChangedListener() {
+//
+//            public void selectionChanged(SelectionChangedEvent e) {
+//                sel = (StructuredSelection) e.getSelection();
+//
+//            }
+//        });
         viewer.getTree().addMouseListener(new MouseAdapter() {
 
             @Override
@@ -869,47 +938,48 @@ public class DataModelMainPage extends AMainPageV2 {
             }
         });
         viewer.setLabelProvider(new XSDTreeLabelProvider());
-        viewer.setSorter(new ViewerSorter() {
-
-            public int category(Object element) {
-                // we want facets before Base TypeDefinitions in
-                // SimpleTypeDefinition
-                if (element instanceof XSDFacet)
-                    return 100;
-                // unique keys after element declarations and before other
-                // keys
-                if (element instanceof XSDIdentityConstraintDefinition) {
-                    XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) element;
-
-                    if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL))
-                        return 300;
-                    else if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.KEY_LITERAL))
-                        return 301;
-                    else
-                        return 302;
-                }
-                return 200;
-            }
-
-            public int compare(Viewer theViewer, Object e1, Object e2) {
-                int cat1 = category(e1);
-                int cat2 = category(e2);
-                // if(cat1==cat2&&cat1==200){
-                // if(e1 instanceof XSDParticle&&e2 instanceof XSDParticle){
-                // XSDParticle xp1= (XSDParticle)e1;
-                // XSDParticle xp2= (XSDParticle)e2;
-                // String name1 = ((XSDElementDeclaration)xp1.getTerm()).getName();
-                // String name2 = ((XSDElementDeclaration)xp2.getTerm()).getName();
-                // if(isDESC)
-                // return name1.compareToIgnoreCase(name2);
-                // else
-                // return -name1.compareToIgnoreCase(name2);
-                // }
-                // }
-                //					
-                return cat1 - cat2;
-            }
-        });
+        viewer.setSorter(schemaTreeSorter);
+//        viewer.setSorter(new ViewerSorter() {
+//
+//            public int category(Object element) {
+//                // we want facets before Base TypeDefinitions in
+//                // SimpleTypeDefinition
+//                if (element instanceof XSDFacet)
+//                    return 100;
+//                // unique keys after element declarations and before other
+//                // keys
+//                if (element instanceof XSDIdentityConstraintDefinition) {
+//                    XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) element;
+//
+//                    if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL))
+//                        return 300;
+//                    else if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.KEY_LITERAL))
+//                        return 301;
+//                    else
+//                        return 302;
+//                }
+//                return 200;
+//            }
+//
+//            public int compare(Viewer theViewer, Object e1, Object e2) {
+//                int cat1 = category(e1);
+//                int cat2 = category(e2);
+//                // if(cat1==cat2&&cat1==200){
+//                // if(e1 instanceof XSDParticle&&e2 instanceof XSDParticle){
+//                // XSDParticle xp1= (XSDParticle)e1;
+//                // XSDParticle xp2= (XSDParticle)e2;
+//                // String name1 = ((XSDElementDeclaration)xp1.getTerm()).getName();
+//                // String name2 = ((XSDElementDeclaration)xp2.getTerm()).getName();
+//                // if(isDESC)
+//                // return name1.compareToIgnoreCase(name2);
+//                // else
+//                // return -name1.compareToIgnoreCase(name2);
+//                // }
+//                // }
+//                //					
+//                return cat1 - cat2;
+//            }
+//        });
         viewer.setInput(this.getSite());// getViewSite());
         viewer.getTree().addKeyListener(new KeyListener() {
 
@@ -937,9 +1007,9 @@ public class DataModelMainPage extends AMainPageV2 {
 
     }
 
-    public void stepUp() {
+    public void stepUp(TreeViewer targetTreeViewer) {
         TreeItem item;
-        TreeItem[] items = viewer.getTree().getSelection();
+        TreeItem[] items = targetTreeViewer.getTree().getSelection();
         for (int i = 0; i < items.length; i++) {
             item = items[i];
             XSDConcreteComponent component = (XSDConcreteComponent) item.getData();
@@ -966,9 +1036,9 @@ public class DataModelMainPage extends AMainPageV2 {
         this.markDirtyWithoutCommit();
     }
 
-    public void stepDown() {
+    public void stepDown(TreeViewer targetTreeViewer) {
         TreeItem item;
-        TreeItem[] items = viewer.getTree().getSelection();
+        TreeItem[] items = targetTreeViewer.getTree().getSelection();
         for (int i = items.length - 1; i >= 0; i--) {
             item = items[i];
             XSDConcreteComponent component = (XSDConcreteComponent) item.getData();
@@ -1017,7 +1087,7 @@ public class DataModelMainPage extends AMainPageV2 {
         // Splitter
         sash = new SashForm(parent, SWT.HORIZONTAL);
         sash.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
-        ((GridData) sash.getLayoutData()).heightHint = 1000;
+//        ((GridData) sash.getLayoutData()).heightHint = 1000;
         GridLayout layout = new GridLayout();
         sash.setLayout(layout);
         // sash.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
@@ -1033,29 +1103,62 @@ public class DataModelMainPage extends AMainPageV2 {
     }
 
     private void createTypeTreeComp(Composite parent) {
-        Composite TypeSash = new Composite(parent, SWT.NONE);
-        TypeSash.setLayout(new GridLayout());
-        TypeSash.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-        TypeSash.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-        Label title = new Label(TypeSash, SWT.VERTICAL);
+//        Composite TypeSash = new Composite(parent, SWT.NONE);
+//        TypeSash.setLayout(new GridLayout());
+//        TypeSash.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+//        TypeSash.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+    	
+    	Composite TypeSash = new Composite(parent, SWT.NONE);
+    	TypeSash.setLayout(new GridLayout());
+    	TypeSash.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+    	TypeSash.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+        
+        Composite compInfo = new Composite(TypeSash,SWT.NONE);
+        compInfo.setLayout(new GridLayout());
+        compInfo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+        compInfo.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+        
+        Composite compTypeTree = new Composite(TypeSash,SWT.NONE);
+        GridLayout glCompTypeTree = new GridLayout();
+        glCompTypeTree.verticalSpacing = 0;
+        glCompTypeTree.marginWidth = 0;
+        glCompTypeTree.marginHeight = 0;
+        glCompTypeTree.horizontalSpacing = 0;
+        compTypeTree.setLayout(glCompTypeTree);
+        compTypeTree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+        compTypeTree.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+
+    	
+        Label title = new Label(compInfo, SWT.VERTICAL);
         title.setText("Reusable types");
         title.setFont(FontUtils.getBoldFont(title.getFont()));
-        Color blue = new Color(TypeSash.getDisplay(), 0, 0, 255);
+        Color blue = new Color(compInfo.getDisplay(), 0, 0, 255);
         title.setForeground(blue);
         title.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
-        Label des = new Label(TypeSash, SWT.VERTICAL);
+        Label des = new Label(compInfo, SWT.VERTICAL);
         des.setText("Define the types reusable in " + modelName);
         des.setBackground(sash.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
-        typesViewer = new TreeViewer(TypeSash, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+        ToolBar toolBarTypeTree = createToolbarOnComposite(compTypeTree);
+        
+        typesViewer = new TreeViewer(compTypeTree, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
         typesViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
         // typesViewer.getControl().setLayoutData(
         // new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-        typesProvider = new TypesContentProvider(this.getSite(), xsdSchema, getXObject());
-        typesViewer.setContentProvider(typesProvider);
+        addToolItems2TypeTreeToolBar(toolBarTypeTree);
+        toolBarTypeTree.pack();
 
+        
+//        typesProvider = new TypesContentProvider(this.getSite(), xsdSchema, getXObject());
+        typesTreeContentProvider = new TypesTreeContentProvider(this.getSite(), xsdSchema, getXObject());
+//        typesViewer.setContentProvider(typesProvider);
+        typesViewer.setContentProvider(typesTreeContentProvider);
+
+        typesViewer.setFilters(new ViewerFilter[]{new SchemaRoleAccessFilter(null),
+        										  new TypeNameFilter()});
+        
         typesViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
             public void selectionChanged(SelectionChangedEvent e) {
@@ -1071,29 +1174,30 @@ public class DataModelMainPage extends AMainPageV2 {
             }
         });
         typesViewer.setLabelProvider(new TypesLabelProvider());
-        typesViewer.setSorter(new ViewerSorter() {
-
-            public int category(Object element) {
-                // we want facets before Base TypeDefinitions in
-                // SimpleTypeDefinition
-                if (element instanceof XSDFacet)
-                    return 100;
-                // unique keys after element declarations and before other
-                // keys
-                if (element instanceof XSDSimpleTypeDefinition) {
-                    return 102;
-                } else if (element instanceof XSDComplexTypeDefinition) {
-                    return 101;
-                }
-                return 200;
-            }
-
-            public int compare(Viewer theViewer, Object e1, Object e2) {
-                int cat1 = category(e1);
-                int cat2 = category(e2);
-                return cat1 - cat2;
-            }
-        });
+        typesViewer.setSorter(typeTreeSorter);
+//        typesViewer.setSorter(new ViewerSorter() {
+//
+//            public int category(Object element) {
+//                // we want facets before Base TypeDefinitions in
+//                // SimpleTypeDefinition
+//                if (element instanceof XSDFacet)
+//                    return 100;
+//                // unique keys after element declarations and before other
+//                // keys
+//                if (element instanceof XSDSimpleTypeDefinition) {
+//                    return 102;
+//                } else if (element instanceof XSDComplexTypeDefinition) {
+//                    return 101;
+//                }
+//                return 200;
+//            }
+//
+//            public int compare(Viewer theViewer, Object e1, Object e2) {
+//                int cat1 = category(e1);
+//                int cat2 = category(e2);
+//                return cat1 - cat2;
+//            }
+//        });
         typesViewer.setInput(this.getSite());// getViewSite());
         typesViewer.getTree().addKeyListener(new KeyListener() {
 
@@ -1146,12 +1250,15 @@ public class DataModelMainPage extends AMainPageV2 {
             String schema = Util.formatXsdSource(wsObject.getXsdSchema());
 
             XSDSchema xsd = Util.createXsdSchema(schema, getXObject());
-            provider.setXsdSchema(xsd);
-            ((XSDTreeContentProvider) viewer.getContentProvider()).setFilter(dataModelFilter);
+//            provider.setXsdSchema(xsd);
+            schemaTreeContentProvider.setXsdSchema(xsd);
+//            ((XSDTreeContentProvider) viewer.getContentProvider()).setFilter(dataModelFilter);
+            getSchemaRoleFilterFromSchemaTree().setDataModelFilter(dataModelFilter);
             // viewer.setAutoExpandLevel(3);
             viewer.setInput(getSite());
             // refresh types
-            typesProvider.setXsdSchema(xsd);
+//            typesProvider.setXsdSchema(xsd);
+            typesTreeContentProvider.setXsdSchema(xsd);
             typesViewer.setInput(getSite());
             reConfigureXSDSchema(true);
             // refresh xmleditor
@@ -1174,7 +1281,8 @@ public class DataModelMainPage extends AMainPageV2 {
             wsObject.setDescription(descriptionText.getText() == null ? "" : descriptionText.getText());
             String schema = xsd;
             if (xsd == null) {
-                schema = ((XSDTreeContentProvider) viewer.getContentProvider()).getXSDSchemaAsString();
+//                schema = ((XSDTreeContentProvider) viewer.getContentProvider()).getXSDSchemaAsString();
+            	schema = ((SchemaTreeContentProvider) viewer.getContentProvider()).getXSDSchemaAsString();
             }
             // remove 'targetNamespace', 'xmlns' attr, for it will cause xsd validate error, the xsd is
             // invalid
@@ -1188,7 +1296,9 @@ public class DataModelMainPage extends AMainPageV2 {
             XSDImport xsdImport = XSDFactory.eINSTANCE.createXSDImport();
             xsdImport.setNamespace("http://www.w3.org/2001/XMLSchema");
             if (xsdSchema == null) {
-                xsdSchema = ((XSDTreeContentProvider) viewer.getContentProvider()).getXsdSchema();
+//                xsdSchema = ((XSDTreeContentProvider) viewer.getContentProvider()).getXsdSchema();
+            	 xsdSchema = ((SchemaTreeContentProvider) viewer.getContentProvider()).getXsdSchema();
+                
                 if (xsdSchema == null)
                     xsdSchema = Util.createXsdSchema(schema, getXObject());
             }
@@ -1911,7 +2021,8 @@ public class DataModelMainPage extends AMainPageV2 {
         if (force) {
             try {
                 // String schema = ((XSDTreeContentProvider) viewer.getContentProvider()).getXSDSchemaAsString();
-                xsdSchema = ((XSDTreeContentProvider) viewer.getContentProvider()).getXsdSchema();// Util.createXsdSchema(schema,
+//                xsdSchema = ((XSDTreeContentProvider) viewer.getContentProvider()).getXsdSchema();// Util.createXsdSchema(schema,
+            	xsdSchema = ((SchemaTreeContentProvider) viewer.getContentProvider()).getXsdSchema();
                 // getXObject());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1974,24 +2085,60 @@ public class DataModelMainPage extends AMainPageV2 {
         return value;
     }
 
-    public void openXSDParticle() {
-        Iterator it = sel.iterator();
-        while (it.hasNext()) {
-            Object obj = it.next();
-            viewer.collapseToLevel(obj, 3);
-            if (obj instanceof XSDModelGroup) {
-                viewer.expandToLevel(obj, 1);
+    private void openXSDParticle(TreeViewer targetViewer){
+    	if(targetViewer == null)
+    		return;
+    	
+    	if(targetViewer.equals(viewer))
+    		openXSDParticleInSchemaTree();
+    	else if(targetViewer.equals(typesViewer))
+    		openXSDParticleInTypeTree();
+    }
+    
+    private void openXSDParticleInTypeTree() {
+    	for(Object eachSelectedObj : getSelectionInTypeTree()) {
+    		typesViewer.collapseToLevel(eachSelectedObj, 3);
+            if (eachSelectedObj instanceof XSDModelGroup)
+            	typesViewer.expandToLevel(eachSelectedObj, 1);
+            else if (eachSelectedObj instanceof XSDComplexTypeDefinition)
+            	typesViewer.expandToLevel(eachSelectedObj, 1); 
+    	}
+    }
+    
+    private void openXSDParticleInSchemaTree() {
+    	
+    	for(Object eachSelectedObj : getSelectionInSchemaTree()) {
+    		viewer.collapseToLevel(eachSelectedObj, 3);
+            if (eachSelectedObj instanceof XSDModelGroup) {
+            	viewer.expandToLevel(eachSelectedObj, 1);
             }
-            if (obj instanceof XSDElementDeclaration) {
-                viewer.expandToLevel(obj, 1);
-                XSDTypeDefinition type = ((XSDElementDeclaration) obj).getTypeDefinition();
+            if (eachSelectedObj instanceof XSDElementDeclaration) {
+            	viewer.expandToLevel(eachSelectedObj, 1);
+                XSDTypeDefinition type = ((XSDElementDeclaration) eachSelectedObj).getTypeDefinition();
                 if (type instanceof XSDComplexTypeDefinition) {
                     XSDModelGroup mg = (XSDModelGroup) ((XSDParticle) ((XSDComplexTypeDefinition) type).getContent()).getTerm();
                     viewer.expandToLevel(mg, 1);
                 }
             }
-
-        }
+    	}
+    	
+//        Iterator it = sel.iterator();
+//        while (it.hasNext()) {
+//            Object obj = it.next();
+//            targetTreeViewer.collapseToLevel(obj, 3);
+//            if (obj instanceof XSDModelGroup) {
+//            	targetTreeViewer.expandToLevel(obj, 1);
+//            }
+//            if (obj instanceof XSDElementDeclaration) {
+//            	targetTreeViewer.expandToLevel(obj, 1);
+//                XSDTypeDefinition type = ((XSDElementDeclaration) obj).getTypeDefinition();
+//                if (type instanceof XSDComplexTypeDefinition) {
+//                    XSDModelGroup mg = (XSDModelGroup) ((XSDParticle) ((XSDComplexTypeDefinition) type).getContent()).getTerm();
+//                    targetTreeViewer.expandToLevel(mg, 1);
+//                }
+//            }
+//
+//        }
     }
 
     private void createCompDropTarget() {
@@ -2227,6 +2374,313 @@ public class DataModelMainPage extends AMainPageV2 {
         }
     }
 
+    private ToolBar createToolbarOnComposite(Composite parentComp) {
+
+		Color backColor = sash.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND);
+		
+		Composite compToolBarBackground = new Composite(parentComp, SWT.BORDER);
+		final GridLayout glToolBarBackground = new GridLayout();
+		glToolBarBackground.verticalSpacing = 0;
+		glToolBarBackground.marginWidth = 0;
+		glToolBarBackground.marginHeight = 0;
+		glToolBarBackground.horizontalSpacing = 0;
+		compToolBarBackground.setLayout(glToolBarBackground);
+		final GridData gdToolBarBackground = new GridData(SWT.FILL, SWT.CENTER,
+				true, false);
+		compToolBarBackground.setLayoutData(gdToolBarBackground);
+		compToolBarBackground.setBackground(backColor);
+		
+		Composite compToolBar = new Composite(compToolBarBackground, SWT.NONE);
+		compToolBar.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, true,
+				true));
+		final GridLayout glToolBar = new GridLayout();
+		glToolBar.verticalSpacing = 0;
+		glToolBar.marginWidth = 0;
+		glToolBar.marginHeight = 0;
+		glToolBar.horizontalSpacing = 0;
+		compToolBar.setLayout(glToolBar);
+		compToolBar.setBackground(backColor);
+		
+		ToolBar resultToolBar = new ToolBar(compToolBar, SWT.FLAT
+				| SWT.HORIZONTAL);
+		resultToolBar.setBackground(backColor);
+
+		return resultToolBar;
+	}
+
+	private void addToolItems2SchemaTreeToolBar(ToolBar parentToolBar) {
+		
+		createExpandToolItem(parentToolBar,viewer);
+		createCollapseToolItem(parentToolBar,viewer);
+		createExpandGroupToolItem(parentToolBar,viewer);
+		createMoveUpToolItem(parentToolBar,viewer);
+		createMoveDownToolItem(parentToolBar,viewer);
+
+		createSortByLabelToolItem(parentToolBar,viewer);
+		createFiltUniqueElementToolItem(parentToolBar,viewer);
+		
+		if (Util.IsEnterPrise()) 
+			createFilterToolItem(parentToolBar,viewer);
+		
+	}
+	
+	private void addToolItems2TypeTreeToolBar(ToolBar parentToolBar) {
+		
+		createExpandToolItem(parentToolBar,typesViewer);
+		createCollapseToolItem(parentToolBar,typesViewer);
+		createExpandGroupToolItem(parentToolBar,typesViewer);
+		createMoveUpToolItem(parentToolBar,typesViewer);
+		createMoveDownToolItem(parentToolBar,typesViewer);
+		
+		createSortByLabelToolItem(parentToolBar,typesViewer);
+		
+		if (Util.IsEnterPrise()) 
+			createFilterToolItem(parentToolBar,typesViewer);
+	}
+	
+	private ToolItem createFilterToolItem(ToolBar parentToolBar, final TreeViewer targetTreeViewer) {
+		
+		ToolItem filterToolItem = new ToolItem(parentToolBar,SWT.PUSH);
+		filterToolItem.setImage(ImageCache.getCreatedImage(EImage.FILTER_PS.getPath()));
+		filterToolItem.setToolTipText("Filter...");
+ 
+		filterToolItem.addSelectionListener(new SelectionAdapter() {
+
+            public void widgetSelected(SelectionEvent e) {
+                dataModelFilter = new DataModelFilter("", false, false, false, true);
+                DataModelFilterDialog dataModelFilterDialog = new DataModelFilterDialog(getSite().getShell(),
+                        getXObject(), dataModelFilter,getSchemaElementNameFilterDesByTreeViewer(targetTreeViewer));
+
+                if (dataModelFilterDialog.open() == Dialog.OK) {
+                	getSchemaRoleFilterFromTreeViewer(targetTreeViewer).setDataModelFilter(dataModelFilter);
+					getSchemaTopElementNameFilterFromTreeViewer(targetTreeViewer)
+							.setNameFilterDes(getSchemaElementNameFilterDesByTreeViewer(targetTreeViewer));
+                	targetTreeViewer.refresh();
+                }
+            }
+        });
+		
+		return null;
+	}
+    
+	private ToolItem createExpandToolItem(ToolBar parentToolBar,final TreeViewer targetTreeViewer) {
+		
+		ToolItem expanedToolItem = new ToolItem(parentToolBar,SWT.PUSH);
+		expanedToolItem.setImage(ImageCache.getCreatedImage(EImage.EXPAND.getPath()));
+		expanedToolItem.setToolTipText("Expand...");
+		expanedToolItem.addSelectionListener(new SelectionAdapter() {
+
+            public void widgetSelected(SelectionEvent e) {
+            	IStructuredSelection selection = (IStructuredSelection)targetTreeViewer.getSelection();
+            	for(Object eachSelectedObj : selection.toArray())
+            		targetTreeViewer.expandToLevel(eachSelectedObj, 3);
+            }
+        });
+		
+		return expanedToolItem;
+	}
+	
+	private ToolItem createCollapseToolItem(ToolBar parentToolBar,final TreeViewer targetTreeViewer) {
+		
+		ToolItem collapseToolItem = new ToolItem(parentToolBar,SWT.PUSH);
+		collapseToolItem.setImage(ImageCache.getCreatedImage(EImage.COLLAPSE.getPath()));
+		collapseToolItem.setToolTipText("Collapse...");
+		collapseToolItem.addSelectionListener(new SelectionAdapter() {
+
+            public void widgetSelected(SelectionEvent e) {
+            	IStructuredSelection selection = (IStructuredSelection)targetTreeViewer.getSelection();
+            	for(Object eachSelectedObj : selection.toArray())
+            		targetTreeViewer.collapseToLevel(eachSelectedObj, 3);
+            }
+        });
+		
+		return collapseToolItem;
+	}
+	
+	private ToolItem createExpandGroupToolItem(ToolBar parentToolBar,final TreeViewer targetTreeViewer) {
+		
+		ToolItem expandGroupToolItem = new ToolItem(parentToolBar,SWT.PUSH);
+		expandGroupToolItem.setImage(ImageCache.getCreatedImage(EImage.ACTIVITY_CATEGORY.getPath()));
+		expandGroupToolItem.setToolTipText("Expand ModelGroup...");
+		expandGroupToolItem.addSelectionListener(new SelectionAdapter() {
+
+			public void widgetSelected(SelectionEvent e) {
+				openXSDParticle(targetTreeViewer);
+			}
+		});
+		
+		return expandGroupToolItem;
+	}
+	
+	private ToolItem createMoveUpToolItem(ToolBar parentToolBar,final TreeViewer targetTreeViewer) {
+		
+		ToolItem moveUpToolItem = new ToolItem(parentToolBar,SWT.PUSH);
+		moveUpToolItem.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
+		moveUpToolItem.setToolTipText("UP...");
+		moveUpToolItem.addSelectionListener(new SelectionAdapter() {
+
+	        public void widgetSelected(SelectionEvent e) {
+	            stepUp(targetTreeViewer);
+	        }
+	    });
+		
+		return moveUpToolItem;
+	}
+	
+	private ToolItem createMoveDownToolItem(ToolBar parentToolBar,final TreeViewer targetTreeViewer){
+	
+		ToolItem moveDownToolItem = new ToolItem(parentToolBar,SWT.PUSH);
+		moveDownToolItem.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
+		moveDownToolItem.setToolTipText("DOWN...");
+		moveDownToolItem.addSelectionListener(new SelectionAdapter() {
+
+			public void widgetSelected(SelectionEvent e) {
+				stepDown(targetTreeViewer);
+			}
+		});
+	
+		return moveDownToolItem;
+	}
+	
+	private ToolItem createSortByLabelToolItem(ToolBar parentToolBar,final TreeViewer targetTreeViewer){
+		
+		final ToolItem sortByLabelToolItem = new ToolItem(parentToolBar,SWT.PUSH);
+		sortByLabelToolItem.setImage(ImageCache.getCreatedImage(EImage.SORT_DESC.getPath()));
+		sortByLabelToolItem.setToolTipText("SORT DESC...");
+		sortByLabelToolItem.addSelectionListener(new SelectionAdapter() {
+
+			public void widgetSelected(SelectionEvent e) {
+				sortByLabel(sortByLabelToolItem,targetTreeViewer);
+			}
+		});
+	
+		return sortByLabelToolItem;
+	}
+	
+	private ToolItem createFiltUniqueElementToolItem(ToolBar parentToolBar,final TreeViewer targetTreeViewer) {
+		
+		final ToolItem filtUniqueElementToolItem = new ToolItem(parentToolBar,SWT.CHECK);
+		filtUniqueElementToolItem.setImage(ImageCache.getCreatedImage(EImage.ELEMENT_ONLY_SKIP.getPath()));
+		filtUniqueElementToolItem.setToolTipText("Hide Non-Unique Elements...");
+		filtUniqueElementToolItem.addSelectionListener(new SelectionAdapter() {
+
+			public void widgetSelected(SelectionEvent e) {
+				filtUniqueElement(filtUniqueElementToolItem,targetTreeViewer);
+			}
+		});
+	
+		return filtUniqueElementToolItem;
+		
+	}
+
+	private Object[] getSelectionInSchemaTree(){
+		return getSelectionInViewer(viewer);
+	}
+	
+	private Object[] getSelectionInTypeTree(){
+		return getSelectionInViewer(typesViewer);
+	}
+	
+	private Object[] getSelectionInViewer(Viewer viewer) {
+		
+		if(viewer.getSelection() == null ||
+		   !(viewer.getSelection() instanceof IStructuredSelection))
+			return new Object[0];
+		
+		return ((IStructuredSelection)viewer.getSelection()).toArray();
+		
+	}
+	
+	private SchemaRoleAccessFilter getSchemaRoleFilterFromSchemaTree(){
+		return (SchemaRoleAccessFilter) getTreeViewerFilter(viewer,SchemaRoleAccessFilter.class);
+	}
+	
+	private SchemaRoleAccessFilter getSchemaRoleFilterFromTreeViewer(TreeViewer targetViewer) {
+		return (SchemaRoleAccessFilter) getTreeViewerFilter(targetViewer,SchemaRoleAccessFilter.class);
+	}
+	
+	private SchemaNameFilter getSchemaTopElementNameFilterFromTreeViewer(TreeViewer targetViewer) {
+		return (SchemaNameFilter) getTreeViewerFilter(targetViewer,SchemaNameFilter.class);
+	}
+	
+	private SchemaUniqueElementFilter getSchemaUniqueElementFilterFromSchemaTree(){
+		return (SchemaUniqueElementFilter) getTreeViewerFilter(viewer,SchemaUniqueElementFilter.class);
+	}
+	
+	private ViewerFilter getTreeViewerFilter(TreeViewer viewer, Class<? extends ViewerFilter> filterType){
+		
+		if(viewer == null || filterType == null)
+			return null;
+		
+		for(ViewerFilter eachFilter : viewer.getFilters()) {
+			if(filterType.isAssignableFrom(eachFilter.getClass()))
+				return eachFilter;
+		}
+			
+		
+		return  null;
+	}
+	
+	private SchemaElementNameFilterDes getSchemaElementNameFilterDesByTreeViewer(TreeViewer targetViewer){
+		
+		if(typesViewer.equals(targetViewer))
+			return typeElementNameFilterDes;
+		
+		return schemaElementNameFilterDes;
+	}
+	
+	private void sortByLabel(ToolItem sortByLabelToolItem,TreeViewer targetTreeViewer){
+		
+		SchemaElementSorter sorter = getTreeViewerSchemaElementSorter(targetTreeViewer);
+		
+		if(sorter == null)
+			return;
+		
+		sortByLabelToolItem.setImage(getToolImageAfterClickSortByLabel(sorter.isSortedASC()));
+		sortByLabelToolItem.setToolTipText(getTooltipAfterClickSortByLabel(sorter.isSortedASC()));
+		
+		sorter.setSortedType(!sorter.isSortedASC());
+		
+		targetTreeViewer.refresh();
+	}
+	
+	private void filtUniqueElement(ToolItem filtUniqueElementToolItem,TreeViewer targetTreeViewer) {
+		
+		SchemaUniqueElementFilter filter = getSchemaUniqueElementFilterFromSchemaTree();
+		
+		filter.setSelector(filtUniqueElementToolItem.getSelection());
+		if(filtUniqueElementToolItem.getSelection())
+			filtUniqueElementToolItem.setToolTipText("Show Non-Unique Elements...");
+		else
+			filtUniqueElementToolItem.setToolTipText("Hide Non-Unique Elements...");
+		
+		targetTreeViewer.refresh();
+	}
+	
+	private SchemaElementSorter getTreeViewerSchemaElementSorter(TreeViewer targetTreeViewer){
+		
+		if(targetTreeViewer.getSorter() instanceof SchemaElementSorter)
+			return (SchemaElementSorter)targetTreeViewer.getSorter();
+		
+		return null;
+	}
+    
+	private Image getToolImageAfterClickSortByLabel(boolean isCurrentASC){
+		
+		if(isCurrentASC)
+			return ImageCache.getCreatedImage(EImage.SORT_ASC.getPath());
+		
+		return ImageCache.getCreatedImage(EImage.SORT_DESC.getPath());
+	}
+	
+	private String getTooltipAfterClickSortByLabel(boolean isCurrentASC) {
+
+		if (isCurrentASC)
+			return "SORT ASC...";
+
+		return "SORT DESC...";
+	}
+	
     private class DoubleClickListener implements IDoubleClickListener {
 
         private TreeViewer viewer;
@@ -2367,7 +2821,11 @@ public class DataModelMainPage extends AMainPageV2 {
         }
         history.dispose(undoContext, true, true, true);
         // clear the big objects,
-        provider = null;
+//        provider = null;
+        schemaTreeContentProvider = null;
+        typesTreeContentProvider = null;
+        schemaTreeSorter = null;
+        typeTreeSorter = null;
         undoContext = null;
         xsdSchema = null;
         contextToUndoAction.clear();

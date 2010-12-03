@@ -68,6 +68,7 @@ public enum EImage {
 	EDIT_OBJ("icons/edit_obj.gif"),
 	EDIT("icons/edit.gif"),
 	ELEMENT_ONLY("icons/element_only.gif"),
+	ELEMENT_ONLY_SKIP("icons/element_only_skip.png"),
 	ELEMENTS_ONLE_ADD("icons/elements_obj_+.gif"),
 	ELEMENTS_OBJ_CHOICE("icons/elements_obj_choice.gif"),
 	ELEMENTS_OBJ_SEQUENCE("icons/elements_obj_sequence.gif"),
@@ -276,7 +277,9 @@ public enum EImage {
 	SYNCHRONIZE("icons/synchronize.png"),
 	TRASH("icons/trash.png"),
 	UPDATEREPORT("icons/updatereport.png"),
-	WORKFLOWTASKS("icons/workflowtasks.png");
+	WORKFLOWTASKS("icons/workflowtasks.png"),
+	SORT_ASC("icons/hmenu-asc.gif"),
+	SORT_DESC("icons/hmenu-desc.gif");
 	EImage(String path){
 		this.path=path;
 		
