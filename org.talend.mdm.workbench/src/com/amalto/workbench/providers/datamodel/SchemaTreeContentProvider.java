@@ -28,290 +28,274 @@ import com.amalto.workbench.providers.ISchemaContentProvider;
 import com.amalto.workbench.utils.DataModelFilter;
 import com.amalto.workbench.utils.Util;
 
-public class SchemaTreeContentProvider implements ITreeContentProvider,
-		ISchemaContentProvider {
+public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaContentProvider {
 
-	protected XSDSchema xsdSchema;
-	protected IWorkbenchPartSite site = null;
-	protected TreeObject treeObj;
-	
-	public SchemaTreeContentProvider(IWorkbenchPartSite site,
-									 XSDSchema invisibleRoot, 
-									 TreeObject treeObject) {
-		this.site = site;
-		this.xsdSchema = invisibleRoot;
-	}
+    protected XSDSchema xsdSchema;
 
-	@Override
-	public void inputChanged(Viewer v, Object oldInput, Object newInput) {}
+    protected IWorkbenchPartSite site = null;
 
-	@Override
-	public void dispose() {}
+    protected TreeObject treeObj;
 
-	@Override
-	public Object[] getElements(Object parent) {
-		if (parent.equals(site)) {
-			return getChildren(xsdSchema);
-		}
-		return getChildren(parent);
-	}
+    public SchemaTreeContentProvider(IWorkbenchPartSite site, XSDSchema invisibleRoot, TreeObject treeObject) {
+        this.site = site;
+        this.xsdSchema = invisibleRoot;
+    }
 
-	@Override
-	public Object getParent(Object child) {
-		return null;
-	}
+    public void inputChanged(Viewer v, Object oldInput, Object newInput) {
+    }
 
-	@Override
-	public void setFilter(DataModelFilter filter) {}
+    public void dispose() {
+    }
 
-	@Override
-	public Object[] getChildren(Object parent) {
+    public Object[] getElements(Object parent) {
+        if (parent.equals(site)) {
+            return getChildren(xsdSchema);
+        }
+        return getChildren(parent);
+    }
 
-		if (parent == null) {
-			System.out.println("NULL PARENT");
-			return new Object[0];
-		}
-			
-		return findChildren(parent);
-	}
+    public Object getParent(Object child) {
+        return null;
+    }
 
-	protected Object[] findChildren(Object parent) {
-		
-		if (parent instanceof XSDSchema)
-			return getXSDSchemaChildren();
+    public void setFilter(DataModelFilter filter) {
+    }
 
-		if (parent instanceof XSDAttributeGroupDefinition)
-			return getXSDAttributeGroupDefinitionChildren((XSDAttributeGroupDefinition)parent);
+    public Object[] getChildren(Object parent) {
 
-		if (parent instanceof XSDParticle)
-			return getXSDParticleChildren((XSDParticle) parent);
+        if (parent == null) {
+            System.out.println("NULL PARENT");
+            return new Object[0];
+        }
 
-		if (parent instanceof XSDModelGroup)
-			return getXSDModelGroupChildren((XSDModelGroup)parent);
+        return findChildren(parent);
+    }
 
-		if (parent instanceof XSDSimpleTypeDefinition)
-			return getXSDSimpleTypeDefinitionChildren((XSDSimpleTypeDefinition) parent);
+    protected Object[] findChildren(Object parent) {
 
-		if (parent instanceof XSDElementDeclaration)
-			return getXSDElementDeclarationChildren((XSDElementDeclaration)parent);
+        if (parent instanceof XSDSchema)
+            return getXSDSchemaChildren();
 
-		if (parent instanceof XSDIdentityConstraintDefinition)
-			return getXSDIdentityConstraintDefinitionChildren((XSDIdentityConstraintDefinition)parent);
+        if (parent instanceof XSDAttributeGroupDefinition)
+            return getXSDAttributeGroupDefinitionChildren((XSDAttributeGroupDefinition) parent);
 
-		if (parent instanceof XSDAnnotation) 
-			return getXSDAnnotationChildren((XSDAnnotation)parent);
-		
-		// appinfos
-		if (parent instanceof Element)
-			return new Object[0];
-		
-		return new Object[0];
-	}
-	
-	protected Object[] filterOutDuplicatedElems(XSDNamedComponent[] checkedElements) {
-		List<XSDNamedComponent> list = new ArrayList<XSDNamedComponent>();
-		for (XSDNamedComponent el :  checkedElements) {
-			boolean exist = false;
-			for (XSDNamedComponent xsdEl : list) {
-				if (xsdEl.getName().equals(el.getName())
-						&& xsdEl.getTargetNamespace() != null
-						&& el.getTargetNamespace() != null
-						&& xsdEl.getTargetNamespace().equals(el.getTargetNamespace())) {
-					exist = true;
-					break;
-				} else if (xsdEl.getName().equals(el.getName())
-						&& xsdEl.getTargetNamespace() == null
-						&& el.getTargetNamespace() == null) {
-					exist = true;
-					break;
-				}
-			}
-			if (!exist
-					&& (el.getTargetNamespace() != null && !el
-							.getTargetNamespace().equals(
-									XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001))
-					|| el.getTargetNamespace() == null) {
-				list.add(el);
-			}
-		}
+        if (parent instanceof XSDParticle)
+            return getXSDParticleChildren((XSDParticle) parent);
 
-		return list.toArray(new Object[] {});
-	}
+        if (parent instanceof XSDModelGroup)
+            return getXSDModelGroupChildren((XSDModelGroup) parent);
 
-	@Override
-	public boolean hasChildren(Object parent) {
-		return getChildren(parent).length > 0;
-	}
+        if (parent instanceof XSDSimpleTypeDefinition)
+            return getXSDSimpleTypeDefinitionChildren((XSDSimpleTypeDefinition) parent);
 
-	@Override
-	public XSDSchema getXsdSchema() {
-		return xsdSchema;
-	}
+        if (parent instanceof XSDElementDeclaration)
+            return getXSDElementDeclarationChildren((XSDElementDeclaration) parent);
 
-	@Override
-	public void setXsdSchema(String xsd) {
-		try {
-			xsdSchema = Util.createXsdSchema(xsd, treeObj);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+        if (parent instanceof XSDIdentityConstraintDefinition)
+            return getXSDIdentityConstraintDefinitionChildren((XSDIdentityConstraintDefinition) parent);
 
-	@Override
-	public void setXsdSchema(XSDSchema xsdSchema) {
-		this.xsdSchema = xsdSchema;
-	}
+        if (parent instanceof XSDAnnotation)
+            return getXSDAnnotationChildren((XSDAnnotation) parent);
 
-	public String getXSDSchemaAsString() throws Exception {
-		Document document = xsdSchema.getDocument();
-		String schema = Util.nodeToString(document);
+        // appinfos
+        if (parent instanceof Element)
+            return new Object[0];
 
-		// FIXES a bug in the XSD library that puts nillable attributes in
-		// elements which are ref
-		// That is illegal according to W3C §3.3.3 / 2.2 (and Xerces)
-		Pattern p = Pattern
-				.compile("(<([a-z]+:)?element.*?)nillable=['|\"].*?['|\"](.*?ref=.*?>)");
-		schema = p.matcher(schema).replaceAll("$1 $3");
+        return new Object[0];
+    }
 
-		return schema;
-	}
-	
-	protected Object[] getXSDSchemaChildren() {
-		return filterOutDuplicatedElems(xsdSchema.getElementDeclarations()
-				.toArray(new XSDNamedComponent[xsdSchema.getElementDeclarations().size()]));
-	}
-	
-	protected Object[] getXSDAttributeGroupDefinitionChildren(XSDAttributeGroupDefinition parent){
-		XSDAttributeGroupDefinition attributeGroupDefinition = parent;
-		if (attributeGroupDefinition.getContents().size() == 0) 
-			attributeGroupDefinition = attributeGroupDefinition.getResolvedAttributeGroupDefinition();
-		return attributeGroupDefinition.getContents().toArray(
-				new Object[attributeGroupDefinition.getContents().size()]);
-	}
-	
-	protected Object[] getXSDParticleChildren(XSDParticle particle) {
+    protected Object[] filterOutDuplicatedElems(XSDNamedComponent[] checkedElements) {
+        List<XSDNamedComponent> list = new ArrayList<XSDNamedComponent>();
+        for (XSDNamedComponent el : checkedElements) {
+            boolean exist = false;
+            for (XSDNamedComponent xsdEl : list) {
+                if (xsdEl.getName().equals(el.getName()) && xsdEl.getTargetNamespace() != null && el.getTargetNamespace() != null
+                        && xsdEl.getTargetNamespace().equals(el.getTargetNamespace())) {
+                    exist = true;
+                    break;
+                } else if (xsdEl.getName().equals(el.getName()) && xsdEl.getTargetNamespace() == null
+                        && el.getTargetNamespace() == null) {
+                    exist = true;
+                    break;
+                }
+            }
+            if (!exist
+                    && (el.getTargetNamespace() != null && !el.getTargetNamespace().equals(
+                            XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001)) || el.getTargetNamespace() == null) {
+                list.add(el);
+            }
+        }
 
-		if (particle.getTerm() instanceof XSDElementDeclaration)
-			return getXSDParticleChildrenAsXSDElementDeclaration((XSDElementDeclaration)particle.getTerm());
+        return list.toArray(new Object[] {});
+    }
 
-		if (particle.getTerm() instanceof XSDModelGroup) {
-			// a ModelGroup skip it and get children directtly
-			EList<XSDParticle> list = ((XSDModelGroup) particle.getTerm()).getContents();
-			return list.toArray(new XSDParticle[list.size()]);
-		}
+    public boolean hasChildren(Object parent) {
+        return getChildren(parent).length > 0;
+    }
 
-		if (particle.getTerm() instanceof XSDWildcard) {}
+    public XSDSchema getXsdSchema() {
+        return xsdSchema;
+    }
 
-		return new Object[] {};
+    public void setXsdSchema(String xsd) {
+        try {
+            xsdSchema = Util.createXsdSchema(xsd, treeObj);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-	}
-	
-	private Object[] getXSDParticleChildrenAsXSDElementDeclaration(XSDElementDeclaration particleTerm) {
-	
-		ArrayList<Object> list = new ArrayList<Object>();
-		
-		if (particleTerm.getTypeDefinition() == null)
-			return new Object[0]; // elements with not type declaration
+    public void setXsdSchema(XSDSchema xsdSchema) {
+        this.xsdSchema = xsdSchema;
+    }
 
-		if (particleTerm.getTypeDefinition() instanceof XSDComplexTypeDefinition)
-			list.addAll(Util.getComplexTypeDefinitionChildren((XSDComplexTypeDefinition)particleTerm.getTypeDefinition()));
-		else
-			list.add(particleTerm.getTypeDefinition());
-		
-		list.addAll(particleTerm.getIdentityConstraintDefinitions());
-		
-		addEleDeclarationAnn2List(list,particleTerm);
-		
-		return list.toArray(new Object[list.size()]);
-	}
+    public String getXSDSchemaAsString() throws Exception {
+        Document document = xsdSchema.getDocument();
+        String schema = Util.nodeToString(document);
 
-	protected Object[] getXSDModelGroupChildren(XSDModelGroup parent) {
-		return parent.getContents().toArray(new Object[parent.getContents().size()]);
-	}
+        // FIXES a bug in the XSD library that puts nillable attributes in
+        // elements which are ref
+        // That is illegal according to W3C §3.3.3 / 2.2 (and Xerces)
+        Pattern p = Pattern.compile("(<([a-z]+:)?element.*?)nillable=['|\"].*?['|\"](.*?ref=.*?>)");
+        schema = p.matcher(schema).replaceAll("$1 $3");
 
-	protected Object[] getXSDSimpleTypeDefinitionChildren(XSDSimpleTypeDefinition parent) {
-		
-		switch(parent.getVariety()){
-			case ATOMIC_LITERAL:
-				return getXSDSimpleTypeDefinitionChildren_ATOMIC(parent);
-			case LIST_LITERAL:
-				return getXSDSimpleTypeDefinitionChildren_LIST(parent);
-			case UNION_LITERAL:
-				return getXSDSimpleTypeDefinitionChildren_UNION(parent);
-			default:
-				return new Object[0];
-		}
-	}
-	
-	private Object[] getXSDSimpleTypeDefinitionChildren_UNION(XSDSimpleTypeDefinition parent) {
-		return parent.getMemberTypeDefinitions().toArray(new XSDSimpleTypeDefinition[parent.getMemberTypeDefinitions().size()]);
-	}
-	
-	private Object[] getXSDSimpleTypeDefinitionChildren_LIST(XSDSimpleTypeDefinition parent) {
-		// FIXME: How do we indicate it is a LIST?
-		return new XSDSimpleTypeDefinition[] { parent.getBaseTypeDefinition() };
-	}
-	
-	private Object[] getXSDSimpleTypeDefinitionChildren_ATOMIC(XSDSimpleTypeDefinition parent) {
-		ArrayList<Object> list = new ArrayList<Object>();
-		// add Base Type if not a pre-defined type
-		if (parent != null && 
-			parent.getSchema() != null && 
-			parent.getSchema().getSchemaForSchema() != null) {
-			if (!parent.getSchema().getSchemaForSchema().getTypeDefinitions().contains(parent))
-				list.add(parent.getBaseTypeDefinition());
-		}
-			
-		list.addAll(parent.getFacetContents());
-		return list.toArray(new Object[list.size()]);
-	}
+        return schema;
+    }
 
-	protected Object[] getXSDElementDeclarationChildren(XSDElementDeclaration parent){
-		// abstract elements do not have children
-		if (parent.isAbstract())
-			return new Object[0];
+    protected Object[] getXSDSchemaChildren() {
+        return filterOutDuplicatedElems(xsdSchema.getElementDeclarations().toArray(
+                new XSDNamedComponent[xsdSchema.getElementDeclarations().size()]));
+    }
 
-		ArrayList<Object> list = new ArrayList<Object>();
+    protected Object[] getXSDAttributeGroupDefinitionChildren(XSDAttributeGroupDefinition parent) {
+        XSDAttributeGroupDefinition attributeGroupDefinition = parent;
+        if (attributeGroupDefinition.getContents().size() == 0)
+            attributeGroupDefinition = attributeGroupDefinition.getResolvedAttributeGroupDefinition();
+        return attributeGroupDefinition.getContents().toArray(new Object[attributeGroupDefinition.getContents().size()]);
+    }
 
-		// handle extensions and restrictions directly
-		if (parent.getTypeDefinition() instanceof XSDComplexTypeDefinition)
-			list.addAll(Util.getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) parent.getTypeDefinition()));
-		else
-			list.add(parent.getTypeDefinition());
-		
-		// the keys
-		list.addAll(parent.getIdentityConstraintDefinitions());
-		
-		// the annotations
-		addEleDeclarationAnn2List(list,parent);
-		
-		return list.toArray(new Object[list.size()]);
-	}
-	
-	protected Object[] getXSDIdentityConstraintDefinitionChildren(XSDIdentityConstraintDefinition parent){
-		
-		ArrayList<Object> list = new ArrayList<Object>();
-		
-		list.add(parent.getSelector());
-		list.addAll(parent.getFields());
+    protected Object[] getXSDParticleChildren(XSDParticle particle) {
 
-		return list.toArray(new Object[list.size()]);
-		
-	}
-	
-	protected Object[] getXSDAnnotationChildren(XSDAnnotation parent){
-		
-		ArrayList<Object> list = new ArrayList<Object>();
-		
-		list.addAll(parent.getUserInformation());
-		list.addAll(parent.getApplicationInformation());
-		
-		return list.toArray(new Object[list.size()]);
-		
-	}
-	
-	private void addEleDeclarationAnn2List(List<Object> list, XSDElementDeclaration element) {
-		if(element.getAnnotation() != null)
-			list.add(element.getAnnotation());
-	}
+        if (particle.getTerm() instanceof XSDElementDeclaration)
+            return getXSDParticleChildrenAsXSDElementDeclaration((XSDElementDeclaration) particle.getTerm());
+
+        if (particle.getTerm() instanceof XSDModelGroup) {
+            // a ModelGroup skip it and get children directtly
+            EList<XSDParticle> list = ((XSDModelGroup) particle.getTerm()).getContents();
+            return list.toArray(new XSDParticle[list.size()]);
+        }
+
+        if (particle.getTerm() instanceof XSDWildcard) {
+        }
+
+        return new Object[] {};
+
+    }
+
+    private Object[] getXSDParticleChildrenAsXSDElementDeclaration(XSDElementDeclaration particleTerm) {
+
+        ArrayList<Object> list = new ArrayList<Object>();
+
+        if (particleTerm.getTypeDefinition() == null)
+            return new Object[0]; // elements with not type declaration
+
+        if (particleTerm.getTypeDefinition() instanceof XSDComplexTypeDefinition)
+            list.addAll(Util.getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) particleTerm.getTypeDefinition()));
+        else
+            list.add(particleTerm.getTypeDefinition());
+
+        list.addAll(particleTerm.getIdentityConstraintDefinitions());
+
+        addEleDeclarationAnn2List(list, particleTerm);
+
+        return list.toArray(new Object[list.size()]);
+    }
+
+    protected Object[] getXSDModelGroupChildren(XSDModelGroup parent) {
+        return parent.getContents().toArray(new Object[parent.getContents().size()]);
+    }
+
+    protected Object[] getXSDSimpleTypeDefinitionChildren(XSDSimpleTypeDefinition parent) {
+
+        switch (parent.getVariety()) {
+        case ATOMIC_LITERAL:
+            return getXSDSimpleTypeDefinitionChildren_ATOMIC(parent);
+        case LIST_LITERAL:
+            return getXSDSimpleTypeDefinitionChildren_LIST(parent);
+        case UNION_LITERAL:
+            return getXSDSimpleTypeDefinitionChildren_UNION(parent);
+        default:
+            return new Object[0];
+        }
+    }
+
+    private Object[] getXSDSimpleTypeDefinitionChildren_UNION(XSDSimpleTypeDefinition parent) {
+        return parent.getMemberTypeDefinitions().toArray(new XSDSimpleTypeDefinition[parent.getMemberTypeDefinitions().size()]);
+    }
+
+    private Object[] getXSDSimpleTypeDefinitionChildren_LIST(XSDSimpleTypeDefinition parent) {
+        // FIXME: How do we indicate it is a LIST?
+        return new XSDSimpleTypeDefinition[] { parent.getBaseTypeDefinition() };
+    }
+
+    private Object[] getXSDSimpleTypeDefinitionChildren_ATOMIC(XSDSimpleTypeDefinition parent) {
+        ArrayList<Object> list = new ArrayList<Object>();
+        // add Base Type if not a pre-defined type
+        if (parent != null && parent.getSchema() != null && parent.getSchema().getSchemaForSchema() != null) {
+            if (!parent.getSchema().getSchemaForSchema().getTypeDefinitions().contains(parent))
+                list.add(parent.getBaseTypeDefinition());
+        }
+
+        list.addAll(parent.getFacetContents());
+        return list.toArray(new Object[list.size()]);
+    }
+
+    protected Object[] getXSDElementDeclarationChildren(XSDElementDeclaration parent) {
+        // abstract elements do not have children
+        if (parent.isAbstract())
+            return new Object[0];
+
+        ArrayList<Object> list = new ArrayList<Object>();
+
+        // handle extensions and restrictions directly
+        if (parent.getTypeDefinition() instanceof XSDComplexTypeDefinition)
+            list.addAll(Util.getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) parent.getTypeDefinition()));
+        else
+            list.add(parent.getTypeDefinition());
+
+        // the keys
+        list.addAll(parent.getIdentityConstraintDefinitions());
+
+        // the annotations
+        addEleDeclarationAnn2List(list, parent);
+
+        return list.toArray(new Object[list.size()]);
+    }
+
+    protected Object[] getXSDIdentityConstraintDefinitionChildren(XSDIdentityConstraintDefinition parent) {
+
+        ArrayList<Object> list = new ArrayList<Object>();
+
+        list.add(parent.getSelector());
+        list.addAll(parent.getFields());
+
+        return list.toArray(new Object[list.size()]);
+
+    }
+
+    protected Object[] getXSDAnnotationChildren(XSDAnnotation parent) {
+
+        ArrayList<Object> list = new ArrayList<Object>();
+
+        list.addAll(parent.getUserInformation());
+        list.addAll(parent.getApplicationInformation());
+
+        return list.toArray(new Object[list.size()]);
+
+    }
+
+    private void addEleDeclarationAnn2List(List<Object> list, XSDElementDeclaration element) {
+        if (element.getAnnotation() != null)
+            list.add(element.getAnnotation());
+    }
 }

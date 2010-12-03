@@ -4,27 +4,23 @@ import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintCategory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 
-class SchemaXSDElementIDSelectorOnUnique implements
-		SchemaXSDElementIDSelector {
+class SchemaXSDElementIDSelectorOnUnique implements SchemaXSDElementIDSelector {
 
-	@Override
-	public boolean isSatisfiedElement(Object parentElement, Object element) {
-		
-		if(element instanceof XSDElementDeclaration)
-			return isUniqueXSDElementDeclaration((XSDElementDeclaration)element);
-		
-		return true;
-	}
+    public boolean isSatisfiedElement(Object parentElement, Object element) {
 
-	private boolean isUniqueXSDElementDeclaration(XSDElementDeclaration element) {
+        if (element instanceof XSDElementDeclaration)
+            return isUniqueXSDElementDeclaration((XSDElementDeclaration) element);
 
-		for (XSDIdentityConstraintDefinition eachIDDef : element
-				.getIdentityConstraintDefinitions()) {
-			if (eachIDDef.getIdentityConstraintCategory().equals(
-					XSDIdentityConstraintCategory.UNIQUE_LITERAL))
-				return true;
-		}
+        return true;
+    }
 
-		return false;
-	}
+    private boolean isUniqueXSDElementDeclaration(XSDElementDeclaration element) {
+
+        for (XSDIdentityConstraintDefinition eachIDDef : element.getIdentityConstraintDefinitions()) {
+            if (eachIDDef.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL))
+                return true;
+        }
+
+        return false;
+    }
 }

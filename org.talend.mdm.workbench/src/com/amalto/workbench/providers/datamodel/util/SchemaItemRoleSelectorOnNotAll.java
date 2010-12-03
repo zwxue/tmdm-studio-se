@@ -8,74 +8,69 @@ import org.eclipse.xsd.XSDTerm;
 
 abstract class SchemaItemRoleSelectorOnNotAll implements SchemaItemRoleSelector {
 
-	@Override
-	public boolean isSatisfiedItem(String role,Object parentElement, Object element) {
-				
-		if(parentElement instanceof XSDParticle)
-			return justifyParentXSDParticle((XSDParticle)parentElement,element);
-				
-		if (parentElement instanceof XSDElementDeclaration)
-			return justifyParentXSDElementDeclaration((XSDElementDeclaration) parentElement,element);
-		
-		if (parentElement instanceof XSDIdentityConstraintDefinition)
-			return justifyParentIDConstraintDef((XSDIdentityConstraintDefinition)parentElement,element);
-		
-		
-		if (parentElement instanceof XSDAnnotation)
-			return justifyParentXSDAnnotation((XSDAnnotation)parentElement,element);
-			
-		
-		if(element instanceof XSDElementDeclaration) 
-			return justifyRootXSDElementDeclaration((XSDElementDeclaration)element,role);
-		
-		if(element instanceof XSDParticle)
-			return justifyParticleElement((XSDParticle)element,role);
-		
-		return true;
-	}
-	
-	protected boolean justifyRootXSDElementDeclaration(XSDElementDeclaration element, String role) {
-		return isRoleValid(role,element.getAnnotation()); 
-	}
-	
-	protected boolean justifyParentXSDAnnotation(XSDAnnotation parentElement,Object element) {
-		
-		return !(parentElement.getUserInformation().contains(element) ||
-				 parentElement.getApplicationInformation().contains(element));
-	}
-	
-	protected boolean justifyParentIDConstraintDef(XSDIdentityConstraintDefinition parentElement, Object element) {
+    public boolean isSatisfiedItem(String role, Object parentElement, Object element) {
 
-		return !(element.equals(parentElement.getSelector()) ||
-				 parentElement.getFields().contains(element));
-	}
-	
-	protected boolean justifyParentXSDElementDeclaration(XSDElementDeclaration parentElement, Object element) {
-		
-		return !(parentElement.getIdentityConstraintDefinitions().contains(element) ||
-				 element.equals(parentElement.getAnnotation()));
-	}
+        if (parentElement instanceof XSDParticle)
+            return justifyParentXSDParticle((XSDParticle) parentElement, element);
 
-	protected boolean justifyParticleElement(XSDParticle element, String role) {
-		
-		if (element.getTerm() instanceof XSDElementDeclaration) {
-			XSDAnnotation annotation = ((XSDElementDeclaration) element.getTerm()).getAnnotation();
-			return isRoleValid(role,annotation);
-		}
-		else
-			return false;
-		
-	}
-	
-	protected boolean justifyParentXSDParticle(XSDParticle parentElement, Object element){
-		
-		XSDTerm term = ((XSDParticle)parentElement).getTerm();
-		if (term instanceof XSDElementDeclaration)
-			return !(element.equals(((XSDElementDeclaration) term).getAnnotation()));
-		
-		return true;
-	}
-	
-	protected abstract boolean isRoleValid(String role,XSDAnnotation annotation);
-	
+        if (parentElement instanceof XSDElementDeclaration)
+            return justifyParentXSDElementDeclaration((XSDElementDeclaration) parentElement, element);
+
+        if (parentElement instanceof XSDIdentityConstraintDefinition)
+            return justifyParentIDConstraintDef((XSDIdentityConstraintDefinition) parentElement, element);
+
+        if (parentElement instanceof XSDAnnotation)
+            return justifyParentXSDAnnotation((XSDAnnotation) parentElement, element);
+
+        if (element instanceof XSDElementDeclaration)
+            return justifyRootXSDElementDeclaration((XSDElementDeclaration) element, role);
+
+        if (element instanceof XSDParticle)
+            return justifyParticleElement((XSDParticle) element, role);
+
+        return true;
+    }
+
+    protected boolean justifyRootXSDElementDeclaration(XSDElementDeclaration element, String role) {
+        return isRoleValid(role, element.getAnnotation());
+    }
+
+    protected boolean justifyParentXSDAnnotation(XSDAnnotation parentElement, Object element) {
+
+        return !(parentElement.getUserInformation().contains(element) || parentElement.getApplicationInformation().contains(
+                element));
+    }
+
+    protected boolean justifyParentIDConstraintDef(XSDIdentityConstraintDefinition parentElement, Object element) {
+
+        return !(element.equals(parentElement.getSelector()) || parentElement.getFields().contains(element));
+    }
+
+    protected boolean justifyParentXSDElementDeclaration(XSDElementDeclaration parentElement, Object element) {
+
+        return !(parentElement.getIdentityConstraintDefinitions().contains(element) || element.equals(parentElement
+                .getAnnotation()));
+    }
+
+    protected boolean justifyParticleElement(XSDParticle element, String role) {
+
+        if (element.getTerm() instanceof XSDElementDeclaration) {
+            XSDAnnotation annotation = ((XSDElementDeclaration) element.getTerm()).getAnnotation();
+            return isRoleValid(role, annotation);
+        } else
+            return false;
+
+    }
+
+    protected boolean justifyParentXSDParticle(XSDParticle parentElement, Object element) {
+
+        XSDTerm term = ((XSDParticle) parentElement).getTerm();
+        if (term instanceof XSDElementDeclaration)
+            return !(element.equals(((XSDElementDeclaration) term).getAnnotation()));
+
+        return true;
+    }
+
+    protected abstract boolean isRoleValid(String role, XSDAnnotation annotation);
+
 }
