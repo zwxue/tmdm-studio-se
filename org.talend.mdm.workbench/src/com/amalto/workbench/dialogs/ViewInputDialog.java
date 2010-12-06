@@ -25,7 +25,8 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeParent;
 
-public class ViewInputDialog extends Dialog implements  SelectionListener{
+public class ViewInputDialog extends Dialog implements SelectionListener {
+
     /**
      * The title of the dialog.
      */
@@ -50,43 +51,64 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
      * Ok button widget.
      */
     private Button okButton;
+
     private Button openDLG;
 
     /**
      * Input text widget.
      */
     private Text text;
-    
+
     /**
      * Error message label widget.
      */
     private Text errorMessageText;
-    
+
     /**
      * Error message string.
      */
-    private String errorMessage="";
-    
-    private  Label label;
+    private String errorMessage = "";
+
+    private Label label;
+
     private Button transformeButton;
+
     private Button smartViewButton;
+
     private Button beforeSavingButton;
+
     private Button beforeDeletingButton;
+
     private Button runnableProcessButton;
+
+    private Button standaloneProcessButton;
+
     private TreeParent treeParent;
+
     private IWorkbenchPartSite site;
-    private  XpathSelectDialog dlg;
-    private Composite composite;    
-   private boolean smartViewSelected=true;
+
+    private XpathSelectDialog dlg;
+
+    private Composite composite;
+
+    private boolean smartViewSelected = true;
+
     private boolean isTransfor = false;
-    private static String Smart_view="Smart_view_";
+
+    private static String Smart_view = "Smart_view_";
+
     private static String beforeSaving = "beforeSaving_";
+
     private static String beforeDeleting = "beforeDeleting_";
+
     private static String runnableProcess = "Runnable_";
-    boolean isBtnShow=true;
-    
-    
-	public ViewInputDialog(IWorkbenchPartSite site,TreeParent treeParent,Shell parentShell, String dialogTitle, String dialogMessage, String initialValue, IInputValidator validator,boolean isTransfor) {
+
+    private static String standaloneProcess = "Runnable#";
+
+    boolean isBtnShow = true;
+
+    public ViewInputDialog(IWorkbenchPartSite site, TreeParent treeParent, Shell parentShell, String dialogTitle,
+            String dialogMessage, String initialValue, IInputValidator validator, boolean isTransfor) {
         super(parentShell);
         this.site = site;
         this.title = dialogTitle;
@@ -95,20 +117,18 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
         this.treeParent = treeParent;
         this.isTransfor = isTransfor;
         if (initialValue == null) {
-			value = "";
-		} else {
-			value = initialValue;
-		}
+            value = "";
+        } else {
+            value = initialValue;
+        }
         this.validator = validator;
-    }//ViewInputDialog(
-	
-	
+    }// ViewInputDialog(
+
     public void setBtnShow(boolean isBtnShow) {
-		this.isBtnShow = isBtnShow;
-	}
+        this.isBtnShow = isBtnShow;
+    }
 
-
-	protected void buttonPressed(int buttonId) {
+    protected void buttonPressed(int buttonId) {
         if (buttonId == IDialogConstants.OK_ID) {
             value = text.getText();
         } else {
@@ -116,196 +136,203 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
         }
         super.buttonPressed(buttonId);
     }
-	protected void configureShell(Shell shell) {
+
+    protected void configureShell(Shell shell) {
         super.configureShell(shell);
         if (title != null) {
-			shell.setText(title);
-		}
+            shell.setText(title);
+        }
     }
+
     protected void createButtonsForButtonBar(Composite parent) {
         // create OK and Cancel buttons by default
-        okButton = createButton(parent, IDialogConstants.OK_ID,
-                IDialogConstants.OK_LABEL, true);
-        createButton(parent, IDialogConstants.CANCEL_ID,
-                IDialogConstants.CANCEL_LABEL, false);
-        //do this here because setting the text will set enablement on the ok
+        okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+        createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
+        // do this here because setting the text will set enablement on the ok
         // button
         okButton.setEnabled(false);
     }
-    
+
     /*
      * (non-Javadoc) Method declared on Dialog.
      */
     protected Control createDialogArea(final Composite parent) {
         // create composite
         composite = (Composite) super.createDialogArea(parent);
-        GridLayout layout = (GridLayout)composite.getLayout();
-		layout.makeColumnsEqualWidth=false;
-		layout.numColumns = 2;
-		
-		
+        GridLayout layout = (GridLayout) composite.getLayout();
+        layout.makeColumnsEqualWidth = false;
+        layout.numColumns = 2;
+
         // create message
         if (message != null) {
-        	label = new Label(composite, SWT.NONE);
+            label = new Label(composite, SWT.NONE);
             label.setText(message);
-            label.setLayoutData(new GridData(SWT.FILL,SWT.CENTER,false,false,2,1));
+            label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
             label.setFont(parent.getFont());
         }
-        
-        
+
         text = new Text(composite, getInputTextStyle());
-        text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
-                | GridData.HORIZONTAL_ALIGN_FILL));
-        
+        text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
+
         text.addModifyListener(new ModifyListener() {
+
             public void modifyText(ModifyEvent e) {
                 validateInput();
             }
-        });        
-//        xpathwidget = new XpathWidget(site,"...",treeParent,null, composite, null,false,true);
-//        XpathSelectDialog(Shell parentShell,TreeParent parent,String title,IWorkbenchPartSite site,boolean isMulti,String dataModelName)
-      
-    	   openDLG = new Button(composite,SWT.NONE);
-    	   openDLG.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
-           openDLG.addSelectionListener(this);
-           openDLG.setLayoutData(new GridData(SWT.RIGHT,SWT.CENTER,false,false,1,1));
-           openDLG.setVisible(isBtnShow);
-           openDLG.setToolTipText("Select one Entity");
-        
+        });
+        // xpathwidget = new XpathWidget(site,"...",treeParent,null, composite, null,false,true);
+        // XpathSelectDialog(Shell parentShell,TreeParent parent,String title,IWorkbenchPartSite site,boolean
+        // isMulti,String dataModelName)
+
+        openDLG = new Button(composite, SWT.NONE);
+        openDLG.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
+        openDLG.addSelectionListener(this);
+        openDLG.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+        openDLG.setVisible(isBtnShow);
+        openDLG.setToolTipText("Select one Entity");
+
         errorMessageText = new Text(composite, SWT.READ_ONLY | SWT.WRAP);
-        errorMessageText.setLayoutData(new GridData(SWT.FILL,SWT.TOP,false,false,2,1));
-        errorMessageText.setBackground(errorMessageText.getDisplay()
-                .getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+        errorMessageText.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 2, 1));
+        errorMessageText.setBackground(errorMessageText.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
         // Set the error message text
         setErrorMessage(errorMessage);
-        if(isTransfor){
-        	Group radioGroup = new Group(parent,SWT.SHADOW_NONE);
-    		radioGroup.setLayoutData(
-    				new GridData(SWT.FILL,SWT.FILL,false,false,2,1)
-    		);
-    		radioGroup.setLayout(new GridLayout(1,false));    		
-    		radioGroup.setText("select one type");
-        	
-    		transformeButton = new Button(radioGroup,SWT.RADIO);
-    		transformeButton.setText("Create a Normal Process");
-    		transformeButton.setLayoutData(
-    				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
-    		);
-    		text.setText("");
-    		transformeButton.addSelectionListener(new SelectionListener(){
+        if (isTransfor) {
+            Group radioGroup = new Group(parent, SWT.SHADOW_NONE);
+            radioGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
+            radioGroup.setLayout(new GridLayout(1, false));
+            radioGroup.setText("select one type");
 
-    			public void widgetDefaultSelected(SelectionEvent e) {
-    				
-    			}
+            transformeButton = new Button(radioGroup, SWT.RADIO);
+            transformeButton.setText("Create a Normal Process");
+            transformeButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
+            text.setText("");
+            transformeButton.addSelectionListener(new SelectionListener() {
 
-    			public void widgetSelected(SelectionEvent e) {
-    				text.setText("");
-    				label.setText(message);
-    				smartViewSelected = false;
-    				openDLG.setVisible(false);
-    				parent.layout(true);
-    				value = "";
-    			}
-    			
-    		});
-    		transformeButton.setSelection(true);
-    		smartViewButton  = new Button(radioGroup,SWT.RADIO);
-    		smartViewButton.setText("Create a Smartview Process");
-    		smartViewButton.setLayoutData(
-    				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
-    		);
-    		
-    		//smartViewButton.setSelection(true);
-    		smartViewButton.addSelectionListener(new SelectionListener(){
-    			
-    			public void widgetDefaultSelected(SelectionEvent e) {
-    				
-    			}
+                public void widgetDefaultSelected(SelectionEvent e) {
 
-    			public void widgetSelected(SelectionEvent e) {
-    				text.setText(Smart_view);
-    				label.setText("Enter a name that follows: Smart_view_<EntityName>_<language ISO code>");
-    				smartViewSelected = true;
-    				openDLG.setVisible(true);
-    				value=Smart_view;
-    			}
-    			
-    		});
-    		
-    		beforeSavingButton = new Button(radioGroup,SWT.RADIO);
-    		beforeSavingButton.setText("Create a Before-Saving Process");
-    		beforeSavingButton.setLayoutData(
-    				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
-    		);
-    		beforeSavingButton.addSelectionListener(new SelectionListener(){
+                }
 
-				public void widgetDefaultSelected(SelectionEvent e) {}
+                public void widgetSelected(SelectionEvent e) {
+                    text.setText("");
+                    label.setText(message);
+                    smartViewSelected = false;
+                    openDLG.setVisible(false);
+                    parent.layout(true);
+                    value = "";
+                }
 
-				public void widgetSelected(SelectionEvent e) {
-					text.setText(beforeSaving);
-					label.setText("Enter a name that follows: beforeSaving_<EntityName>");
-					openDLG.setVisible(true);
-					value = beforeSaving;
-				}
-    			
-    		});
-    		
-    		beforeDeletingButton = new Button(radioGroup,SWT.RADIO);
-    		beforeDeletingButton.setText("Create a Before-Deleting Process");
-    		beforeDeletingButton.setLayoutData(
-    				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
-    		);
-    		beforeDeletingButton.addSelectionListener(new SelectionListener(){
+            });
+            transformeButton.setSelection(true);
+            smartViewButton = new Button(radioGroup, SWT.RADIO);
+            smartViewButton.setText("Create a Smartview Process");
+            smartViewButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
 
-				public void widgetDefaultSelected(SelectionEvent e) {}
+            // smartViewButton.setSelection(true);
+            smartViewButton.addSelectionListener(new SelectionListener() {
 
-				public void widgetSelected(SelectionEvent e) {
-					text.setText(beforeDeleting);
-					label.setText("Enter a name that follows: beforeDeleting_<EntityName>");
-					openDLG.setVisible(true);
-					value = beforeDeleting;
-				}
-    			
-    		});
-    		
-    		runnableProcessButton = new Button(radioGroup,SWT.RADIO);
-    		runnableProcessButton.setText("Create a Runable Process");
-    		runnableProcessButton.setLayoutData(
-    				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
-    		);
-    		runnableProcessButton.addSelectionListener(new SelectionListener(){
+                public void widgetDefaultSelected(SelectionEvent e) {
 
-				public void widgetDefaultSelected(SelectionEvent e) {}
+                }
 
-				public void widgetSelected(SelectionEvent e) {
-					text.setText(runnableProcess);
-					label.setText("Enter a name that follows: Runnable_<EntityName>");
-					openDLG.setVisible(true);
-					value = runnableProcess;
-				}
-    			
-    		});
-        }else{
+                public void widgetSelected(SelectionEvent e) {
+                    text.setText(Smart_view);
+                    label.setText("Enter a name that follows: Smart_view_<EntityName>_<language ISO code>");
+                    smartViewSelected = true;
+                    openDLG.setVisible(true);
+                    value = Smart_view;
+                }
+
+            });
+
+            beforeSavingButton = new Button(radioGroup, SWT.RADIO);
+            beforeSavingButton.setText("Create a Before-Saving Process");
+            beforeSavingButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
+            beforeSavingButton.addSelectionListener(new SelectionListener() {
+
+                public void widgetDefaultSelected(SelectionEvent e) {
+                }
+
+                public void widgetSelected(SelectionEvent e) {
+                    text.setText(beforeSaving);
+                    label.setText("Enter a name that follows: beforeSaving_<EntityName>");
+                    openDLG.setVisible(true);
+                    value = beforeSaving;
+                }
+
+            });
+
+            beforeDeletingButton = new Button(radioGroup, SWT.RADIO);
+            beforeDeletingButton.setText("Create a Before-Deleting Process");
+            beforeDeletingButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
+            beforeDeletingButton.addSelectionListener(new SelectionListener() {
+
+                public void widgetDefaultSelected(SelectionEvent e) {
+                }
+
+                public void widgetSelected(SelectionEvent e) {
+                    text.setText(beforeDeleting);
+                    label.setText("Enter a name that follows: beforeDeleting_<EntityName>");
+                    openDLG.setVisible(true);
+                    value = beforeDeleting;
+                }
+
+            });
+
+            runnableProcessButton = new Button(radioGroup, SWT.RADIO);
+            runnableProcessButton.setText("Create a Runable Process");
+            runnableProcessButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
+            runnableProcessButton.addSelectionListener(new SelectionListener() {
+
+                public void widgetDefaultSelected(SelectionEvent e) {
+                }
+
+                public void widgetSelected(SelectionEvent e) {
+                    text.setText(runnableProcess);
+                    label.setText("Enter a name that follows: Runnable_<EntityName>");
+                    openDLG.setVisible(true);
+                    value = runnableProcess;
+                }
+
+            });
+
+            standaloneProcessButton = new Button(radioGroup, SWT.RADIO);
+            standaloneProcessButton.setText("Create a Standalone Process");
+            standaloneProcessButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
+            standaloneProcessButton.addSelectionListener(new SelectionListener() {
+
+                public void widgetDefaultSelected(SelectionEvent e) {
+                }
+
+                public void widgetSelected(SelectionEvent e) {
+                    text.setText(standaloneProcess);
+                    label.setText("Enter a name that follows: Runnable#name");
+                    openDLG.setVisible(true);
+                    value = standaloneProcess;
+                }
+
+            });
+        } else {
             if (value != null) {
-            	text.setText(value);
-            }        	
+                text.setText(value);
+            }
         }
-        
-		
+
         applyDialogFont(composite);
         return composite;
     }
-    
+
     protected Label getErrorMessageLabel() {
         return null;
     }
+
     protected Button getOkButton() {
         return okButton;
     }
- 
+
     protected IInputValidator getValidator() {
         return validator;
     }
+
     public String getValue() {
         return value;
     }
@@ -319,53 +346,44 @@ public class ViewInputDialog extends Dialog implements  SelectionListener{
     }
 
     public void setErrorMessage(String errorMessage) {
-    	this.errorMessage = errorMessage;
-    	if (errorMessageText != null && !errorMessageText.isDisposed()) {
-    		errorMessageText.setText(errorMessage == null ? " \n " : errorMessage); 
-    		boolean hasError = errorMessage != null && (StringConverter.removeWhiteSpaces(errorMessage)).length() > 0;
-    		errorMessageText.setEnabled(hasError);
-    		errorMessageText.setVisible(hasError);
-    		errorMessageText.getParent().update();
-    		Control button = getButton(IDialogConstants.OK_ID);
-    		if (button != null) {
-    			button.setEnabled(errorMessage == null);
-    		}
-    	}
+        this.errorMessage = errorMessage;
+        if (errorMessageText != null && !errorMessageText.isDisposed()) {
+            errorMessageText.setText(errorMessage == null ? " \n " : errorMessage);
+            boolean hasError = errorMessage != null && (StringConverter.removeWhiteSpaces(errorMessage)).length() > 0;
+            errorMessageText.setEnabled(hasError);
+            errorMessageText.setVisible(hasError);
+            errorMessageText.getParent().update();
+            Control button = getButton(IDialogConstants.OK_ID);
+            if (button != null) {
+                button.setEnabled(errorMessage == null);
+            }
+        }
     }
-    
-	
-	protected int getInputTextStyle() {
-		return SWT.SINGLE | SWT.BORDER;
-	}
 
+    protected int getInputTextStyle() {
+        return SWT.SINGLE | SWT.BORDER;
+    }
 
-	public void widgetDefaultSelected(SelectionEvent e) {
-		
-	}
+    public void widgetDefaultSelected(SelectionEvent e) {
 
+    }
 
-	public void widgetSelected(SelectionEvent e) {
-		dlg = new XpathSelectDialog(
-				composite.getShell(),
-				treeParent,"Select one Entity",
-				site,
-				false,
-				null
-		);
-		 	dlg.setBlockOnOpen(true);
-			dlg.open();
-			
-			if (dlg.getReturnCode() == Window.OK)  {
-				if(dlg.getXpath()!=null&&dlg.getXpath().length()>0){
-					int point = dlg.getXpath().indexOf("/");
-					if(point>=0)
-						text.setText(value+dlg.getXpath().substring(0, point));
-					else
-						text.setText(value+dlg.getXpath());
-				}
-				
-				dlg.close();
-			}
-	}
+    public void widgetSelected(SelectionEvent e) {
+        dlg = new XpathSelectDialog(composite.getShell(), treeParent, "Select one Entity", site, false, null);
+        dlg.setBlockOnOpen(true);
+        dlg.open();
+
+        if (dlg.getReturnCode() == Window.OK) {
+            if (dlg.getXpath() != null && dlg.getXpath().length() > 0) {
+                int point = dlg.getXpath().indexOf("/");
+                if (point >= 0)
+                    text.setText(value + dlg.getXpath().substring(0, point));
+                else
+                    text.setText(value + dlg.getXpath());
+            }
+
+            dlg.close();
+        }
+    }
 
 }
