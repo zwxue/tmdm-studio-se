@@ -91,7 +91,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
 	public static final int AnnotationWrite_ActionType=1<<3;
 	public static final int AnnotationSchematron_ActionType=1<<4;
 	public static final int AnnotationLookupField_ActionType=1<<5;
-	
+	public static final int AnnotationPrimaKeyInfo_ActionType=1<<6;
 
 	/**
 	 * @param parentShell
@@ -161,7 +161,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
 			roles=Util.getChildren(this.xObject.getServerRoot(), TreeObject.ROLE);
 			((CCombo)textControl).setItems(roles.toArray(new String[roles.size()]));
 
-		}else if(actionType==AnnotationLookupField_ActionType){
+		}else if(actionType==AnnotationLookupField_ActionType||actionType==AnnotationPrimaKeyInfo_ActionType){
 			textControl = new CCombo(composite,SWT.BORDER|SWT.READ_ONLY);
 
 			//roles=Util.getCachedXObjectsNameSet(this.xObject, TreeObject.ROLE);
@@ -275,7 +275,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
         // Create the cell editors --> We actually discard those later: not natural for an user
         CellEditor[] editors = new CellEditor[1];
         if (actionType == AnnotationOrderedListsDialog.AnnotationWrite_ActionType
-				|| actionType == AnnotationOrderedListsDialog.AnnotationHidden_ActionType || actionType==AnnotationLookupField_ActionType) {
+				|| actionType == AnnotationOrderedListsDialog.AnnotationHidden_ActionType || actionType==AnnotationLookupField_ActionType||actionType==AnnotationPrimaKeyInfo_ActionType) {
 			editors[0] = new ComboBoxCellEditor(table, roles
 					.toArray(new String[] {}), SWT.READ_ONLY);
 		}
@@ -335,7 +335,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
         		TableItem item = (TableItem) element;
         		DescriptionLine line = (DescriptionLine) item.getData();
         		String orgValue = line.getLabel();
-        		if(actionType != AnnotationWrite_ActionType && actionType != AnnotationHidden_ActionType && actionType != AnnotationLookupField_ActionType){
+        		if(actionType != AnnotationWrite_ActionType && actionType != AnnotationHidden_ActionType && actionType != AnnotationLookupField_ActionType && actionType != AnnotationPrimaKeyInfo_ActionType){
         			int targetPos = xPaths.indexOf(value.toString());
         			if (targetPos < 0) {
 						line.setLabel(value.toString());
@@ -367,7 +367,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
         		DescriptionLine line = (DescriptionLine) element;
 				String value = line.getLabel();
 				
-				if(actionType==AnnotationWrite_ActionType||actionType==AnnotationHidden_ActionType || actionType==AnnotationLookupField_ActionType){
+				if(actionType==AnnotationWrite_ActionType||actionType==AnnotationHidden_ActionType || actionType==AnnotationLookupField_ActionType || actionType==AnnotationPrimaKeyInfo_ActionType){
 					String[] attrs = roles.toArray(new String[]{});
 					return Arrays.asList(attrs).indexOf(value);
 				}
@@ -512,7 +512,8 @@ public class AnnotationOrderedListsDialog extends Dialog {
 		else if (actionType != AnnotationOrderedListsDialog.AnnotationForeignKeyInfo_ActionType
 				&& actionType != AnnotationOrderedListsDialog.AnnotationTargetSystems_ActionType
 				&& actionType != AnnotationOrderedListsDialog.AnnotationSchematron_ActionType
-				&& actionType != AnnotationOrderedListsDialog.AnnotationLookupField_ActionType) {
+				&& actionType != AnnotationOrderedListsDialog.AnnotationLookupField_ActionType
+				&& actionType != AnnotationOrderedListsDialog.AnnotationPrimaKeyInfo_ActionType) {
 			checkBox = new Button(composite, SWT.CHECK);
 			checkBox.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false,
 					true, 2, 1));

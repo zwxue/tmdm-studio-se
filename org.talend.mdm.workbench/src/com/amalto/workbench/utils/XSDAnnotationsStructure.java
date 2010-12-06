@@ -430,7 +430,18 @@ public class XSDAnnotationsStructure {
         }
         return writeAccesses;
     }
-
+    
+    public TreeMap<String, String> getPrimaryKeyInfos() {
+        TreeMap<String, String> writeAccesses = new TreeMap<String, String>();
+        LinkedHashMap<String, String> appInfos = getAppInfos("X_PrimaryKeyInfo");
+        Set<String> keys = appInfos.keySet();
+        for (Iterator iter = keys.iterator(); iter.hasNext();) {
+            String key = (String) iter.next();
+            writeAccesses.put(key, appInfos.get(key));
+        }
+        return writeAccesses;
+    }
+    
     /****************************************************************************
      * HIDDEN ACCESSES
      ****************************************************************************/

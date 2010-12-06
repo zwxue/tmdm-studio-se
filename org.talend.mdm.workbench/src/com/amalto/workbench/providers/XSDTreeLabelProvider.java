@@ -153,7 +153,9 @@ public class XSDTreeLabelProvider extends LabelProvider {
 							return "Foreign Key:  "+e.getChildNodes().item(0).getNodeValue();
 						} else if (source.equals("X_ForeignKeyInfo")) {
 							return "Foreign Key Info:  "+e.getChildNodes().item(0).getNodeValue();
-						} else if (source.equals("X_SourceSystem")) {
+						} else if (source.equals("X_PrimaryKeyInfo")) {
+                            return "Primary Key Info:  "+e.getChildNodes().item(0).getNodeValue();
+                        } else if (source.equals("X_SourceSystem")) {
 							return "Source System:  "+e.getChildNodes().item(0).getNodeValue();
 						} else if (source.equals("X_TargetSystem")) {
 							return "Target System(s):  "+e.getChildNodes().item(0).getNodeValue();

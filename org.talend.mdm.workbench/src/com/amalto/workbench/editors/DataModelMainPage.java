@@ -167,6 +167,7 @@ import com.amalto.workbench.actions.XSDSetAnnotationForeignKeyAction;
 import com.amalto.workbench.actions.XSDSetAnnotationForeignKeyInfoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationLabelAction;
 import com.amalto.workbench.actions.XSDSetAnnotationNoAction;
+import com.amalto.workbench.actions.XSDSetAnnotationPrimaryKeyInfoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWrapNoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWrapWriteAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
@@ -282,6 +283,8 @@ public class DataModelMainPage extends AMainPageV2 {
     private XSDSetAnnotationWriteAction setAnnotationWriteAction = null;
 
     private XSDAnnotationLookupFieldsAction setAnnotationLookupFieldsAction = null;
+    
+    private XSDSetAnnotationPrimaryKeyInfoAction setAnnotationPrimaryKeyInfoAction = null;
 
     private XSDSetAnnotaionDisplayFormatAction setAnnotationDisplayFomatAction = null;
 
@@ -1372,6 +1375,7 @@ public class DataModelMainPage extends AMainPageV2 {
 
         this.setAnnotationDisplayFomatAction = new XSDSetAnnotaionDisplayFormatAction(this);
         this.setAnnotationLookupFieldsAction = new XSDAnnotationLookupFieldsAction(this);
+        this.setAnnotationPrimaryKeyInfoAction = new XSDSetAnnotationPrimaryKeyInfoAction(this);
         // this.copyConceptAction = new XSDCopyConceptAction(this);
         // this.pasteConceptAction = new XSDPasteConceptAction(this);
 
@@ -1489,6 +1493,8 @@ public class DataModelMainPage extends AMainPageV2 {
                     return 113;
                 } else if (source.equals("X_Lookup_Field")) {
                     return 114;
+                } else if (source.equals("X_PrimaryKeyInfo")) {
+                    return 115;
                 }
             }
 
@@ -1849,6 +1855,7 @@ public class DataModelMainPage extends AMainPageV2 {
         if (obj instanceof XSDElementDeclaration) {
             manager.add(setAnnotationDescriptionsAction);
             manager.add(setAnnotationLookupFieldsAction);
+            manager.add(setAnnotationPrimaryKeyInfoAction);
         }
         if (obj instanceof XSDParticle) {
             manager.add(setAnnotationDescriptionsAction);
@@ -1880,6 +1887,7 @@ public class DataModelMainPage extends AMainPageV2 {
             manager.add(setAnnotationLabelAction);
             manager.add(setAnnotationDescriptionsAction);
             manager.add(setAnnotationLookupFieldsAction);
+            manager.add(setAnnotationPrimaryKeyInfoAction);
         }
 
         if (obj instanceof XSDParticle) {
@@ -2799,6 +2807,9 @@ public class DataModelMainPage extends AMainPageV2 {
                 break;
             case 114:
                 setAnnotationLookupFieldsAction.run();
+                break;
+            case 115:
+                setAnnotationPrimaryKeyInfoAction.run();
                 break;
             case -1:
                 if (drillDownAdapter.canGoInto() == true)
