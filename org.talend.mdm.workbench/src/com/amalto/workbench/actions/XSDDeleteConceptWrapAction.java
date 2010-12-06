@@ -28,7 +28,7 @@ import org.eclipse.xsd.impl.XSDElementDeclarationImpl;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
-import com.amalto.workbench.providers.XSDTreeContentProvider;
+import com.amalto.workbench.providers.datamodel.SchemaTreeContentProvider;
 import com.amalto.workbench.utils.Util;
 
 public class XSDDeleteConceptWrapAction extends UndoAction {
@@ -221,7 +221,7 @@ public class XSDDeleteConceptWrapAction extends UndoAction {
      * Author: Fliu this fun is to populate all offsprings for a specific object
      */
     private Object[] populateAllOffspring(Object obj, ArrayList offspringList) {
-        XSDTreeContentProvider provider = (XSDTreeContentProvider) viewer.getContentProvider();
+    	SchemaTreeContentProvider provider = (SchemaTreeContentProvider) viewer.getContentProvider();
         Object[] offersprings = provider.getChildren(obj);
 
         for (Object subObj : offersprings) {

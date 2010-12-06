@@ -29,7 +29,7 @@ import com.amalto.workbench.dialogs.BusinessElementInputDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
-import com.amalto.workbench.providers.XSDTreeContentProvider;
+import com.amalto.workbench.providers.datamodel.SchemaTreeContentProvider;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 
@@ -143,7 +143,7 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
        			XSDElementDeclaration newD = (XSDElementDeclaration)factory.createXSDElementDeclaration();
        			newD.setName(this.elementName);
        			newD.updateElement();
-       			XSDSimpleTypeDefinition stringType = ((XSDTreeContentProvider) page
+       			XSDSimpleTypeDefinition stringType = ((SchemaTreeContentProvider) page
 						.getTreeViewer().getContentProvider()).getXsdSchema()
 						.getSchemaForSchema().resolveSimpleTypeDefinition(
 								XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001,

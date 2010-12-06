@@ -21,7 +21,7 @@ import com.amalto.workbench.dialogs.AnnotationOrderedListsDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
-import com.amalto.workbench.providers.XSDTreeContentProvider;
+import com.amalto.workbench.providers.datamodel.SchemaTreeContentProvider;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDSetAnnotationNoAction extends UndoAction{
@@ -40,7 +40,7 @@ public class XSDSetAnnotationNoAction extends UndoAction{
 	public IStatus doAction() {
 		try {
 			
-            schema = ((XSDTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
+            schema = ((SchemaTreeContentProvider)page.getTreeViewer().getContentProvider()).getXsdSchema();
             IStructuredSelection selection = (TreeSelection)page.getTreeViewer().getSelection();
             XSDComponent xSDCom=null;
             if (selection.getFirstElement() instanceof Element) {
