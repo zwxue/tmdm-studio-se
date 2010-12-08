@@ -21,7 +21,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.amalto.workbench.editors.AMainPageV2;
+import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
@@ -36,7 +36,7 @@ public class ValidationRuleDialog extends Dialog {
 
     private TisTableViewer viewer;
 
-    AMainPageV2 page;
+    DataModelMainPage page;
 
     String pattern;
 
@@ -48,7 +48,7 @@ public class ValidationRuleDialog extends Dialog {
 
     private Text text;
 
-    public ValidationRuleDialog(Shell parentShell, String title, String pattern, AMainPageV2 page, String conceptName) {
+    public ValidationRuleDialog(Shell parentShell, String title, String pattern, DataModelMainPage page, String conceptName) {
         super(parentShell);
         this.pattern = pattern;
         this.page = page;
@@ -81,7 +81,7 @@ public class ValidationRuleDialog extends Dialog {
         columns[3].setColumnWidth(300);
         viewer = new TisTableViewer(Arrays.asList(columns), WidgetFactory.getWidgetFactory(), composite);
         viewer.setXpath(true);
-        viewer.setMainPage(page);
+        // viewer.setMainPage(page);
         viewer.setConceptName(conceptName);
         viewer.setContext(true);
         viewer.create();

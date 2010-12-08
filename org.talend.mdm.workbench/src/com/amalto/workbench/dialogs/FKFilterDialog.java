@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
-import com.amalto.workbench.editors.AMainPageV2;
+import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.models.Line;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
@@ -36,7 +36,7 @@ public class FKFilterDialog extends Dialog {
 
     private TisTableViewer viewer;
 
-    AMainPageV2 page;
+    DataModelMainPage page;
 
     String filter;
 
@@ -46,7 +46,7 @@ public class FKFilterDialog extends Dialog {
 
     Text customFiltersText;
 
-    public FKFilterDialog(Shell parentShell, String title, String filter, AMainPageV2 page, String conceptName) {
+    public FKFilterDialog(Shell parentShell, String title, String filter, DataModelMainPage page, String conceptName) {
         super(parentShell);
         this.filter = filter;
         this.page = page;
@@ -74,7 +74,7 @@ public class FKFilterDialog extends Dialog {
         columns[3].setColumnWidth(140);
         viewer = new TisTableViewer(Arrays.asList(columns), WidgetFactory.getWidgetFactory(), composite);
         viewer.setXpath(true);
-        viewer.setMainPage(page);
+        // viewer.setMainPage(page);//TODO
         // viewer.setConceptName(conceptName);
         // viewer.setContext(true);
         viewer.create();

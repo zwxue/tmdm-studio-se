@@ -66,18 +66,15 @@ public class UndoAction extends Action {
     };
 
     public void run() {
-        try {
-            operation.addContext(page.getUndoContext());
-            IStatus status = getOperationHistory().execute(operation, null, null);
 
-            // refresh xml editor
-            page.getEditor().getXmlEditor().refresh(page.getXObject());
-            if (status == Status.OK_STATUS)
-                page.reConfigureXSDSchema(true);
+        operation.addContext(page.getUndoContext());
+        try {
+            IStatus status = getOperationHistory().execute(operation, null, null);
         } catch (ExecutionException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
     }
 
     public void run(Object toDel) {
@@ -140,6 +137,7 @@ public class UndoAction extends Action {
     protected void commitDocumentToCurrent(Document currnt) {
         try {
             String value = Util.nodeToString((Node) currnt);
+            redoActionTrack.keySet().size();
             redoActionTrack.put(getActionUndoPos(), value);
         } catch (Exception e) {
             e.printStackTrace();

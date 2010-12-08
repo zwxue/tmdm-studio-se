@@ -15,7 +15,6 @@ import org.eclipse.jface.action.CoolBarManager;
 import org.eclipse.jface.action.ToolBarContributionItem;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.text.Document;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
@@ -36,14 +35,11 @@ import com.amalto.workbench.actions.SaveXObjectAction;
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.editors.xmleditor.XMLEditor;
-import com.amalto.workbench.editors.xmleditor.XMLEditorInput;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
-import com.amalto.workbench.utils.Util;
-import com.amalto.workbench.webservices.WSDataModel;
 
 public class XObjectEditor extends FormEditor implements IXObjectModelListener {
 
@@ -84,14 +80,14 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener {
             }
             switch (xobject.getType()) {
             case TreeObject.DATA_MODEL:
-                addPage(new DataModelMainPage(this));
-
-                // addPage(new DataModelEditorPage(this));
-                WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
-                Document doc = new Document(Util.formatXsdSource(wsObject.getXsdSchema()));
-                xmlEditor = new XMLEditor(this, xobject);
-                addPage(xmlEditor, new XMLEditorInput(doc));
-                this.setPageText(1, "Schema");
+                // addPage(new DataModelMainPage(this));
+                //
+                // // addPage(new DataModelEditorPage(this));
+                // WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
+                // Document doc = new Document(Util.formatXsdSource(wsObject.getXsdSchema()));
+                // xmlEditor = new XMLEditor(this, xobject);
+                // addPage(xmlEditor, new XMLEditorInput(doc));
+                // this.setPageText(1, "Schema");
 
                 break;
 
