@@ -16,13 +16,13 @@ import org.junit.Test;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.XObjectEditor;
 
-public class DataModelSchemaElementOperationTest extends DataModelTest {
+public class DataModelTypesElementOperationTest extends DataModelTest {
 
-    private static SWTBotTree conceptBotTree;
+    private static SWTBotTree typesBotTree;
 
     private static DataModelMainPage mainpage;
 
-    private static SWTBotTreeItem conceptNode;
+    private static SWTBotTreeItem typesNode;
 
     private static SWTBotTreeItem eleItem;
 
@@ -45,13 +45,13 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         final SWTBotEditor editor = bot.editorByTitle("Reporting");
         XObjectEditor ep = (XObjectEditor) editor.getReference().getPart(true);
         mainpage = (DataModelMainPage) ep.getPage(0);
-        Tree conceptTree = mainpage.getTreeViewer().getTree();
-        conceptBotTree = new SWTBotTree(conceptTree);
-        conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select().expand();
-        SWTBotTreeItem groupItem = conceptNode.getNode("ReportingType");
-        groupItem.expand();
-        eleItem = groupItem.getNode("Concept");
+        mainpage.setSchemaSelected(false);
+        Tree typesTree = mainpage.getTreeViewer().getTree();
+        typesBotTree = new SWTBotTree(typesTree);
+        typesNode = typesBotTree.getTreeItem("ReportingType");
+        typesNode.select().expand();
+        eleItem = typesNode.getNode("Concept");
+
     }
 
     @AfterClass
@@ -66,7 +66,7 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         });
     }
 
-    @Test
+    // @Test
     public void editElementTest() {
         eleItem.contextMenu("Edit Element").click();
         SWTBotShell newEntityShell = bot.shell("Edit Business Element");
@@ -87,7 +87,7 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         sleep(2);
     }
 
-    @Test
+    // @Test
     public void addElementTest() {
         // SWTBotTreeItem groupItem = conceptNode.getNode("ReportingType");
         eleItem.contextMenu("Add Element (after)").click();
@@ -100,7 +100,7 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         sleep(2);
     }
 
-    @Test
+    // @Test
     public void copyElementTest() {
         eleItem.contextMenu("Copy Element").click();
         sleep();
@@ -112,7 +112,7 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         sleep();
     }
 
-    @Test
+    // @Test
     public void changeToComplexTypeTest() {
         eleItem.contextMenu("Change to a Complex Type").click();
         sleep();
@@ -123,7 +123,7 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         sleep(2);
     }
 
-    @Test
+    // @Test
     public void changeToSimpleTypeTest() {
         eleItem.contextMenu("Change to a Simple Type").click();
         sleep();
@@ -158,7 +158,7 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         sleep();
     }
 
-    @Test
+    // @Test
     public void setDescriptionsTest() {
         eleItem.contextMenu("Set the Descriptions").click();
         sleep();
@@ -178,7 +178,7 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         bot.button("OK").click();
     }
 
-    @Test
+    // @Test
     public void setWriteAccessTest() {
         eleItem.contextMenu("Set the Roles with Write Access").click();
         SWTBotShell newViewShell = bot.shell("Set The Roles That Have Write Access");
@@ -202,7 +202,7 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         sleep();
     }
 
-    @Test
+    // @Test
     public void setNoAccessTest() {
         eleItem.contextMenu("Set the Roles with No Access").click();
         SWTBotShell newViewShell = bot.shell("Set The Roles That Cannot Access This Field");
@@ -226,14 +226,14 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         sleep();
     }
 
-    @Test
+    // @Test
     public void setWorkflowAccessTest() {
         eleItem.contextMenu("Set the Workflow Access").click();
         SWTBotShell shell = bot.shell("Set the Workflow Access");
         shell.activate();
     }
 
-    @Test
+    // @Test
     public void setForeignKeyTest() {
         Display.getDefault().syncExec(new Runnable() {
 
@@ -262,7 +262,7 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         bot.button("OK").click();
     }
 
-    @Test
+    // @Test
     public void setForeignKeyFilterTest() {
         Display.getDefault().syncExec(new Runnable() {
 
@@ -300,7 +300,7 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         SWTBotShell shell = bot.shell("Set the Foreign Key Infos");
         shell.activate();
         bot.buttonWithTooltip("Select xpath").click();
-        // test the filter of the composite by meanwhile.
+        // test the filter of the composite meanwhile.
         bot.textWithLabel("Filter:").setText("R");
         sleep();
         bot.textWithLabel("Filter:").setText("U");
@@ -311,12 +311,12 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         sleep();
         bot.button("Add").click();
         sleep();
-
         bot.buttonWithTooltip("Add").click();
+        sleep();
         bot.button("OK").click();
     }
 
-    @Test
+    // @Test
     public void setFacetTest() {
         eleItem.contextMenu("Set the facet message").click();
         sleep();
@@ -337,7 +337,7 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         sleep();
     }
 
-    @Test
+    // @Test
     public void setDisplayFormatTest() {
         eleItem.contextMenu("Set the display format").click();
         sleep();
@@ -358,7 +358,7 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         sleep();
     }
 
-    @Test
+    // @Test
     public void copyXpathTest() {
         // TODO:it dose nothing now,need to check
         eleItem.contextMenu("Copy Xpath").click();
@@ -366,15 +366,4 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
 
     }
 
-    @Test
-    public void newEntityTest() {
-        eleItem.contextMenu("New Entity").click();
-        SWTBotShell newEntityShell = bot.shell("New Entity");
-        newEntityShell.activate();
-        // create a entity with a complex type
-        bot.textWithLabel("Name:").setText("ComplexTypeEntity");
-        sleep();
-        bot.button("OK").click(); // create a entity with a simple type
-        sleep(2);
-    }
 }

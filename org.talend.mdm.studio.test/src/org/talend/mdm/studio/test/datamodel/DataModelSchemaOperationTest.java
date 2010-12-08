@@ -34,11 +34,9 @@ import com.amalto.workbench.editors.XObjectEditor;
  * 
  * DOC rhou class global comment. Detailled comment
  */
-public class DataModelSchemaOperationTest2 extends DataModelTest {
+public class DataModelSchemaOperationTest extends DataModelTest {
 
     private static SWTBotTree conceptBotTree;
-
-    private static SWTBotTree typesBotTree;
 
     private static DataModelMainPage mainpage;
 
@@ -63,9 +61,6 @@ public class DataModelSchemaOperationTest2 extends DataModelTest {
         mainpage = (DataModelMainPage) ep.getPage(0);
         Tree conceptTree = mainpage.getTreeViewer().getTree();
         conceptBotTree = new SWTBotTree(conceptTree);
-        mainpage.setSchemaSelected(false);
-        Tree typesTree = mainpage.getTreeViewer().getTree();
-        typesBotTree = new SWTBotTree(typesTree);
     }
 
     @AfterClass

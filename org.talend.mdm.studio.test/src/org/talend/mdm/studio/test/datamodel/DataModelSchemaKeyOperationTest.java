@@ -45,7 +45,6 @@ public class DataModelSchemaKeyOperationTest extends DataModelTest {
         mainpage = (DataModelMainPage) ep.getPage(0);
         Tree conceptTree = mainpage.getTreeViewer().getTree();
         conceptBotTree = new SWTBotTree(conceptTree);
-        mainpage.setSchemaSelected(false);
     }
 
     @AfterClass

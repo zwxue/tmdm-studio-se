@@ -47,7 +47,6 @@ public class DataModelSchemaGroupOperationTest extends DataModelTest {
         mainpage = (DataModelMainPage) ep.getPage(0);
         Tree conceptTree = mainpage.getTreeViewer().getTree();
         conceptBotTree = new SWTBotTree(conceptTree);
-        mainpage.setSchemaSelected(false);
         conceptNode = conceptBotTree.getTreeItem("Reporting");
         conceptNode.select().expand();
         groupItem = conceptNode.getNode("ReportingType");
@@ -66,6 +65,7 @@ public class DataModelSchemaGroupOperationTest extends DataModelTest {
         });
     }
 
+    // See bug 0012073
     @Test
     public void addElementTest() {
         groupItem.contextMenu("Add Element").click();

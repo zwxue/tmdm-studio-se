@@ -53,6 +53,7 @@ public class DataModelCreateTest extends DataModelTest {
         // run for one time after all test cases
     }
 
+    // see bug 0016453
     @Test
     public void dataModelNewTest() {
         dataModelItem.contextMenu("New").click();

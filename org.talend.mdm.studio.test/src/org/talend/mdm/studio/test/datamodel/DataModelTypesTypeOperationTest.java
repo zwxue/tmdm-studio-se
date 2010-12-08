@@ -16,7 +16,7 @@ import org.junit.Test;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.XObjectEditor;
 
-public class DataModelTypesTypeOperationtest extends DataModelTest {
+public class DataModelTypesTypeOperationTest extends DataModelTest {
 
     private static SWTBotTree typesBotTree;
 
@@ -63,31 +63,37 @@ public class DataModelTypesTypeOperationtest extends DataModelTest {
     }
 
     @Test
-    public void changeToComplexTypeTest() {
+    public void addComplexTypeTest() {
         // SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
         // conceptNode.select();
         typeNode.contextMenu("Create a Complex Type").click();
         sleep();
-        SWTBotShell changeTypeShell = bot.shell("Create a Simple Type");
+        SWTBotShell changeTypeShell = bot.shell("Create a Complex Type");
         changeTypeShell.activate();
-        bot.text().setText("TestComplexType");
+        bot.ccomboBox().setText("TestComplexType");
         bot.radio("Sequence").click();
         bot.button("OK").click();
         sleep(2);
     }
 
     @Test
-    public void changeToSimpleTypeTest() {
+    public void addSimpleTypeTest() {
         // SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
         // conceptNode.select();
+        /*
+         * typeNode.contextMenu("Create a Simple Type").click(); sleep(); SWTBotShell changeTypeShell =
+         * bot.shell("New Simple Type"); changeTypeShell.activate(); bot.text().setText("TestSimpleType");
+         * bot.radio("Custom").click(); sleep(); bot.ccomboBoxWithLabel("Type").setSelection(1); sleep();
+         * bot.button("OK").click(); sleep(2);
+         */
+
         typeNode.contextMenu("Create a Simple Type").click();
         sleep();
         SWTBotShell changeTypeShell = bot.shell("New Simple Type");
         changeTypeShell.activate();
-        bot.text().setText("TestSimpleType");
         bot.radio("Custom").click();
         sleep();
-        bot.ccomboBoxWithLabel("Type").setSelection(1);
+        bot.ccomboBoxWithLabel("Type").setSelection(0);
         sleep();
         bot.button("OK").click();
         sleep(2);
@@ -115,5 +121,15 @@ public class DataModelTypesTypeOperationtest extends DataModelTest {
         editTypeShell.activate();
         bot.text().setText("TextEditComplexType");
         bot.button("OK").click();
+    }
+
+    @Test
+    public void deleteComplexTypeTest() {
+        // SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
+        // conceptNode.expand();
+        typeNode.contextMenu("Delete type definition").click();
+        sleep();
+        bot.button("OK").click();
+        sleep();
     }
 }
