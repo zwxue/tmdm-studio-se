@@ -80,7 +80,8 @@ public class XSDEditorUtil {
 
     public static IProject createProject(TreeObject xobject) {
         IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-        String projectname = xobject.getServerRoot().getDisplayName().trim().replace("://", "").replace("/", "").replace(" ", "");
+        String projectname = xobject.getServerRoot().getDisplayName().trim().replace("://", "").replace("/", "").replace(" ", "")
+                .replace(":", "");
         IProject prj = root.getProject(projectname);
         if (prj.exists())
             return prj;

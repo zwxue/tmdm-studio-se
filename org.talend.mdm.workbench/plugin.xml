@@ -41,6 +41,13 @@
             id="com.amalto.workbench.editors.XObjectRevisionBrowser"
             name="com.amalto.workbench.editors.XObjectRevisionBrowser">
       </editor>
+      <editor
+            class="com.amalto.workbench.editors.xsdeditor.XSDEditor"
+            default="false"
+            icon="icons/appli_16x16.gif"
+            id="com.amalto.workbench.editors.xsdeditor.XSDEditor"
+            name="com.amalto.workbench.editors.xsdeditor.XSDEditor">
+      </editor>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
