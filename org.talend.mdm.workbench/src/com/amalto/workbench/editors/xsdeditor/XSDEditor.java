@@ -42,10 +42,12 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
                 String xsd = mainPage.getXSDSchemaString();
                 WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
                 wsDataModel.setXsdSchema(xsd);
-                XSDEditorUtil.createFile(xobject);
+                IFile file = XSDEditorUtil.createFile(xobject);
+                file.setContents(new ByteArrayInputStream(xsd.getBytes()), IFile.FORCE, null);
             } // save the file's contents to DataModelMainPage
 
             // InputStream in = XSDEditorUtil.createFile(xobject).getContents(true);
+            
             IDocument doc = getTextEditor().getTextViewer().getDocument();
             String xsd = doc.get();
             // DataModelMainPage
