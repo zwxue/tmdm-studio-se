@@ -13,6 +13,11 @@ import org.talend.mdm.studio.test.StudioTest;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.XObjectEditor;
 
+/**
+ * 
+ * 
+ * @deprecated The test content of this class of this class will be moved to other specific cases.
+ */
 public class DataModelOldTest extends StudioTest {
 
     @BeforeClass

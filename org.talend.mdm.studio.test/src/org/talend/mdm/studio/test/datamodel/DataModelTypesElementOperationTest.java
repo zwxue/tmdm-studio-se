@@ -246,7 +246,7 @@ public class DataModelTypesElementOperationTest extends DataModelTest {
         SWTBotShell shell = bot.shell("Set the Foreign Key");
         shell.activate();
         bot.buttonWithTooltip("Select xpath").click();
-        // test the filter of the composite by meanwhile.
+        // test the filter of the composite by meanwhile.see bug 0016511
         bot.textWithLabel("Filter:").setText("R");
         sleep();
         bot.textWithLabel("Filter:").setText("U");
