@@ -68,7 +68,6 @@ public class DataModelSchemaOperationTest extends DataModelTest {
         // run for one time after all test cases
         Display.getDefault().syncExec(new Runnable() {
 
-            @Override
             public void run() {
                 mainpage.doSave(new NullProgressMonitor());
             }

@@ -64,7 +64,6 @@ public class StudioTest {
         // bot.perspectiveById("org.talend.mdm.perstective").activate();
         view.getWidget().getDisplay().syncExec(new Runnable() {
 
-            @Override
             public void run() {
                 // SWTBotTree tree=bot.treeWithLabel("http://localhost:8080/talend/TalendPort[HEAD] admin");
                 Composite comp = (Composite) view.getWidget();

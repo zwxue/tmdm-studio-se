@@ -59,7 +59,6 @@ public class DataModelTypesElementOperationTest extends DataModelTest {
         // run for one time after all test cases
         Display.getDefault().syncExec(new Runnable() {
 
-            @Override
             public void run() {
                 mainpage.doSave(new NullProgressMonitor());
             }
@@ -237,7 +236,6 @@ public class DataModelTypesElementOperationTest extends DataModelTest {
     public void setForeignKeyTest() {
         Display.getDefault().syncExec(new Runnable() {
 
-            @Override
             public void run() {
                 mainpage.doSave(new NullProgressMonitor());
             }
@@ -266,7 +264,6 @@ public class DataModelTypesElementOperationTest extends DataModelTest {
     public void setForeignKeyFilterTest() {
         Display.getDefault().syncExec(new Runnable() {
 
-            @Override
             public void run() {
                 mainpage.doSave(new NullProgressMonitor());
             }
@@ -291,7 +288,6 @@ public class DataModelTypesElementOperationTest extends DataModelTest {
     public void setForeignKeyInfoTest() {
         Display.getDefault().syncExec(new Runnable() {
 
-            @Override
             public void run() {
                 mainpage.doSave(new NullProgressMonitor());
             }
