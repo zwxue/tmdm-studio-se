@@ -7,7 +7,6 @@ Bundle-Activator: org.talend.mdm.jobrepository.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.talend.commons,
- org.talend.commons.ui,
  org.talend.model,
  org.talend.core.runtime,
  org.talend.core,
