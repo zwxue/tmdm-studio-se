@@ -167,7 +167,7 @@ public class XSDNewIdentityConstraintAction extends UndoAction implements Select
 			if (
 					(type.equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) && 
 					(icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) &&
-					(icd.getContainer().equals(decl.getContainer()))
+					(icd.getContainer().equals(decl))
 				){
 				MessageDialog.openError(
 						page.getSite().getShell(),
