@@ -69,8 +69,8 @@ public class DataContainerDuplicateTest extends DataContainerTest {
         SWTBotTreeItem node = dataContainerItem.getNode("TestDataContainer");
         SWTBotMenu duplicateMenu = node.contextMenu("Duplicate");
         duplicateMenu.click();
-        SWTBotShell pasteDataContainerShell = bot.shell("Pasting instance TestDataContainer");
-        pasteDataContainerShell.activate();
+        SWTBotShell shell = bot.shell("Pasting instance TestDataContainer");
+        shell.activate();
         bot.text("CopyOfTestDataContainer").setText("DuplicateDataContainer");
         sleep();
         bot.button("OK").click();

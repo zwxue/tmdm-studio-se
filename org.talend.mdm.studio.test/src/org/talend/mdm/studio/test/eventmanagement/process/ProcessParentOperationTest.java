@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.eventmanagement;
+package org.talend.mdm.studio.test.eventmanagement.process;
 
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
@@ -20,6 +20,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.talend.mdm.studio.test.eventmanagement.EventManagementTest;
 
 /**
  * DOC rhou class global comment. Detailled comment
