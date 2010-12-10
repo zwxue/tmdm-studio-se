@@ -6,6 +6,7 @@ Bundle-Version: 2.2.0.qualifier
 Bundle-Activator: org.talend.mdm.jobrepository.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
+ org.talend.core.runtime,
  org.talend.core,
  org.talend.repository,
  org.talend.mdm.workbench,
