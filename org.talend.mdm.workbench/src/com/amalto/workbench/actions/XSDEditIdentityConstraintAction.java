@@ -1,23 +1,19 @@
 package com.amalto.workbench.actions;
 
-import java.util.Iterator;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
-import org.eclipse.xsd.XSDSchema;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.utils.inputvalidator.EditXSDIdentityConstraintNameValidator;
 
 public class XSDEditIdentityConstraintAction extends UndoAction{
 
@@ -43,18 +39,19 @@ public class XSDEditIdentityConstraintAction extends UndoAction{
        				"Edit Key",
        				"Enter a new Name for the Key",
        				oldName,
-       				new IInputValidator() {
-       					public String isValid(String newText) {
-       						if ((newText==null) || "".equals(newText)) return "The Entity Name cannot be empty";
-       						XSDSchema schema = XSDEditIdentityConstraintAction.this.constraint.getSchema();
-       						EList list = schema.getIdentityConstraintDefinitions();
-       						for (Iterator iter = list.iterator(); iter.hasNext(); ) {
-								XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) iter.next();
-								if (icd.getName().equals(newText)) return "This Key already exists";
-							}
-       						return null;
-       					};
-       				}
+       				new EditXSDIdentityConstraintNameValidator(constraint.getSchema())
+//       				new IInputValidator() {
+//       					public String isValid(String newText) {
+//       						if ((newText==null) || "".equals(newText)) return "The Entity Name cannot be empty";
+//       						XSDSchema schema = XSDEditIdentityConstraintAction.this.constraint.getSchema();
+//       						EList list = schema.getIdentityConstraintDefinitions();
+//       						for (Iterator iter = list.iterator(); iter.hasNext(); ) {
+//								XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) iter.next();
+//								if (icd.getName().equals(newText)) return "This Key already exists";
+//							}
+//       						return null;
+//       					};
+//       				}
        		);
             
        		id.setBlockOnOpen(true);

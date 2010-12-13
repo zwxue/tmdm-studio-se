@@ -9,6 +9,8 @@ import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.eclipse.wst.xsd.ui.internal.editor.InternalXSDMultiPageEditor;
 import org.eclipse.xsd.XSDSchema;
 
@@ -20,6 +22,8 @@ import com.amalto.workbench.webservices.WSDataModel;
 @SuppressWarnings("restriction")
 public class XSDEditor extends InternalXSDMultiPageEditor {
 
+	public static final String CONTRUIBUTIONID = "org.talend.mdm.workbench.propertyContributor.datamodel";
+	
     IEditorInput xsdInput;
 
     TreeObject xobject;
@@ -109,5 +113,30 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
             }
         });
     }
+    
+    @Override
+    public String getContributorId() {
+    	return CONTRUIBUTIONID;
+    }
 
+    @SuppressWarnings("rawtypes")
+	@Override
+    public Object getAdapter(Class type) {
+    	
+    	if (type == IPropertySheetPage.class){
+          return new TabbedPropertySheetPage(this);
+        }
+    	
+    	if(type == DataModelMainPage.class){
+    		
+    		for(int i = 0; i < getPageCount() ; i++){
+    			if(getEditor(i) instanceof DataModelMainPage){
+    				return (DataModelMainPage)getEditor(i);
+    			}
+    		}
+    	}
+    	
+    	return super.getAdapter(type);
+    	
+    }
 }

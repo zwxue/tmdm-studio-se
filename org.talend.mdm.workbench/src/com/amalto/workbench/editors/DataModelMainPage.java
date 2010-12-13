@@ -40,7 +40,9 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -198,6 +200,7 @@ import com.amalto.workbench.providers.datamodel.SchemaUniqueElementFilter;
 import com.amalto.workbench.providers.datamodel.TypeElementSorter;
 import com.amalto.workbench.providers.datamodel.TypeNameFilter;
 import com.amalto.workbench.providers.datamodel.TypesTreeContentProvider;
+import com.amalto.workbench.utils.CompositeViewersSelectionProvider;
 import com.amalto.workbench.utils.DataModelFilter;
 import com.amalto.workbench.utils.FontUtils;
 import com.amalto.workbench.utils.ResourcesUtil;
@@ -210,7 +213,7 @@ import com.amalto.workbench.webservices.WSPutDataModel;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.WidgetFactory;
 
-public class DataModelMainPage extends EditorPart implements ModifyListener {
+public class DataModelMainPage extends EditorPart implements ModifyListener{
 
     protected Text descriptionText;
 
@@ -355,6 +358,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     private SchemaElementNameFilterDes typeElementNameFilterDes = new SchemaElementNameFilterDes();
 
+    private CompositeViewersSelectionProvider selectionProvider;
+    
     WSDataModel datamodel;
 
     TreeObject xobject;
@@ -961,6 +966,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         // create type tree
         createTypeTreeComp(sash);
         // init
+        
+        selectionProvider = new CompositeViewersSelectionProvider(new Viewer[]{viewer,typesViewer});
+        
         sash.setWeights(new int[] { 50, 50 });
         return sash;
     }
@@ -1823,6 +1831,19 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     public void refresh() {
         viewer.refresh(true);
         typesViewer.refresh(true);
+        
+        if(viewer.getControl().isFocusControl()){
+        	ISelection oldSelection = viewer.getSelection();
+        	viewer.setSelection(null);
+        	viewer.setSelection(oldSelection);
+        }
+        	
+        
+        if(typesViewer.getControl().isFocusControl()){
+        	ISelection oldSelection = viewer.getSelection();
+        	typesViewer.setSelection(null);
+        	typesViewer.setSelection(oldSelection);
+        }
     }
 
     public void markDirtyWithoutCommit() {
@@ -2698,5 +2719,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     public void modifyText(ModifyEvent arg0) {
         markDirty();
+    }
+    
+    public ISelectionProvider getSelectionProvider(){
+    	return selectionProvider;
     }
 }

@@ -6,13 +6,10 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDComplexTypeContent;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
@@ -31,7 +28,7 @@ import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 
-public class XSDNewIdentityConstraintAction extends UndoAction implements SelectionListener{
+public class XSDNewIdentityConstraintAction extends UndoAction { //implements SelectionListener{
 
 	private IdentityConstraintInputDialog dialog = null;	
 	private String  keyName;
@@ -86,12 +83,16 @@ public class XSDNewIdentityConstraintAction extends UndoAction implements Select
                 return Status.CANCEL_STATUS;
             }           
             childNames = Util.getChildElementNames("",decl);
-            dialog = new IdentityConstraintInputDialog(this,page.getSite().getShell(),"Add a new Key",childNames,decl.getName());
+            dialog = new IdentityConstraintInputDialog(decl,page.getSite().getShell(),"Add a new Key",childNames,decl.getName());
             dialog.setBlockOnOpen(true);
        		int ret = dialog.open();
        		if (ret == Window.CANCEL){
                 return Status.CANCEL_STATUS;
        		}
+       		
+    		keyName = dialog.getKeyName();
+    		fieldName=dialog.getFieldName();
+    		type = dialog.getType();
        		
        		XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
        		
@@ -147,47 +148,47 @@ public class XSDNewIdentityConstraintAction extends UndoAction implements Select
 		super.runWithEvent(event);
 	}
 
-	/********************************
-	 * Listener to input dialog
-	 */
-	public void widgetDefaultSelected(SelectionEvent e) {
-	}
-
-	public void widgetSelected(SelectionEvent e) {
-		if (dialog.getReturnCode() ==  -1) return; //there was a validation error
-
-		keyName = dialog.getKeyName();
-		fieldName=dialog.getFieldName();
-		type = dialog.getType();
-		
-		//check if key does not already exist
-		EList list = schema.getIdentityConstraintDefinitions();
-		for (Iterator iter = list.iterator(); iter.hasNext(); ) {
-			XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) iter.next();
-			if (
-					(type.equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) && 
-					(icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) &&
-					(icd.getContainer().equals(decl))
-				){
-				MessageDialog.openError(
-						page.getSite().getShell(),
-						"Error", 
-						"The Business Element already has an unique key"
-				);
-				return;				
-			}			
-			if (icd.getName().equals(keyName)) {
-				MessageDialog.openError(
-						page.getSite().getShell(),
-						"Error", 
-						"The Key "+keyName+" already exist"
-				);
-				return;
-			}
-		}
-		
-		dialog.close();		
-	}
+//	/********************************
+//	 * Listener to input dialog
+//	 */
+//	public void widgetDefaultSelected(SelectionEvent e) {
+//	}
+//
+//	public void widgetSelected(SelectionEvent e) {
+//		if (dialog.getReturnCode() ==  -1) return; //there was a validation error
+//
+//		keyName = dialog.getKeyName();
+//		fieldName=dialog.getFieldName();
+//		type = dialog.getType();
+//		
+//		//check if key does not already exist
+//		EList list = schema.getIdentityConstraintDefinitions();
+//		for (Iterator iter = list.iterator(); iter.hasNext(); ) {
+//			XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) iter.next();
+//			if (
+//					(type.equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) && 
+//					(icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL)) &&
+//					(icd.getContainer().equals(decl))
+//				){
+//				MessageDialog.openError(
+//						page.getSite().getShell(),
+//						"Error", 
+//						"The Business Element already has an unique key"
+//				);
+//				return;				
+//			}			
+//			if (icd.getName().equals(keyName)) {
+//				MessageDialog.openError(
+//						page.getSite().getShell(),
+//						"Error", 
+//						"The Key "+keyName+" already exist"
+//				);
+//				return;
+//			}
+//		}
+//		
+//		dialog.close();		
+//	}
 	
 
 

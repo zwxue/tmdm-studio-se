@@ -6,7 +6,6 @@ import java.util.Iterator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -21,6 +20,7 @@ import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.inputvalidator.EditXSDEleDecNameValidator;
 
 public class XSDEditElementAction extends UndoAction{
 	
@@ -46,17 +46,18 @@ public class XSDEditElementAction extends UndoAction{
        				"Edit Element",
        				"Enter a new Name for the Element",
        				oldName,
-       				new IInputValidator() {
-       					public String isValid(String newText) {
-       						if ((newText==null) || "".equals(newText)) return "The Entity Name cannot be empty";
-       						EList list = schema.getElementDeclarations();
-       						for (Iterator iter = list.iterator(); iter.hasNext(); ) {
-								XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
-								if (d.getName().equals(newText)) return "This Entity already exists";
-							}
-       						return null;
-       					};
-       				}
+       				new EditXSDEleDecNameValidator(schema)
+//       				new IInputValidator() {
+//       					public String isValid(String newText) {
+//       						if ((newText==null) || "".equals(newText)) return "The Entity Name cannot be empty";
+//       						EList list = schema.getElementDeclarations();
+//       						for (Iterator iter = list.iterator(); iter.hasNext(); ) {
+//								XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
+//								if (d.getName().equals(newText)) return "This Entity already exists";
+//							}
+//       						return null;
+//       					};
+//       				}
        		);
             
        		id.setBlockOnOpen(true);

@@ -41,6 +41,8 @@ public class SchemaItemLabelCreator {
 	
 	public static final String XSDMODELGROUP_LABEL_NONNAME = "anonymous type ";
 	
+	public static final String XSDCOMPLEXTYPEDEF_SEPARATOR = " : ";
+	
 	protected SchemaItemLabelCreator(){}
 	
 	public synchronized static SchemaItemLabelCreator getInstance(){
@@ -71,6 +73,9 @@ public class SchemaItemLabelCreator {
 		if (element instanceof XSDSimpleTypeDefinition)
 			return getSimpleTypeDefinition((XSDSimpleTypeDefinition)element);
 	
+		if(element instanceof XSDComplexTypeDefinition)
+			return getLabelForComplexTypeDef((XSDComplexTypeDefinition)element);
+		
 		if (element instanceof XSDModelGroup)
 			return getLabelForXSDModelGroup((XSDModelGroup)element);
 
@@ -344,6 +349,17 @@ public class SchemaItemLabelCreator {
 		}
 		
 		return "?? "+element.getClass().getName()+" : "+element.toString();
+	}
+
+	protected String getLabelForComplexTypeDef(XSDComplexTypeDefinition element) {
+
+		StringBuilder label = new StringBuilder(element.getName());
+
+		if (element.getTargetNamespace() != null)
+			label.append(XSDCOMPLEXTYPEDEF_SEPARATOR
+					+ element.getTargetNamespace());
+
+		return label.toString();
 	}
 }
 
