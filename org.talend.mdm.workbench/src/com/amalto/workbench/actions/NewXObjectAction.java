@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Event;
 import com.amalto.workbench.dialogs.RoleAssignmentDialog;
 import com.amalto.workbench.dialogs.ViewInputDialog;
 import com.amalto.workbench.editors.AMainPage;
+import com.amalto.workbench.editors.AMainPageV2;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.editors.xsdeditor.XSDEditorUtil;
 import com.amalto.workbench.image.EImage;
@@ -496,7 +497,8 @@ public class NewXObjectAction extends Action {
                  */
                 if (editpart.getSelectedPage() instanceof AMainPage)
                     ((AMainPage) editpart.getSelectedPage()).markDirty();
-
+                if (editpart.getSelectedPage() instanceof AMainPageV2)
+                    ((AMainPageV2) editpart.getSelectedPage()).markDirty();
             }
         } catch (Exception e) {
             e.printStackTrace();
