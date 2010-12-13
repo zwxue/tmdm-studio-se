@@ -42,10 +42,10 @@ class SchemaTopElementNameSelectorOnPattern implements SchemaTopElementNameSelec
         for (Pattern eachPattern : patterns) {
             Matcher matcher = eachPattern.matcher(labelExtractor.getLabel(element));
             if (matcher.matches())
-                return false;
+                return true;
         }
 
-        return true;
+        return false;
     }
 
     protected boolean isTopElement(Object element) {
