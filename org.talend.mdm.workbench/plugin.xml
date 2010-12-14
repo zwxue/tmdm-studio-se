@@ -73,6 +73,73 @@
            class="com.amalto.workbench.availablemodel.JobAvailableModel">
      </model>
   </extension>
+  <extension
+        point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+     <propertyContributor
+           contributorId="org.talend.mdm.workbench.propertyContributor.datamodel"
+           labelProvider="com.amalto.workbench.detailtabs.contributor.DataModelPropLabelProvider">
+        <propertyCategory
+              category="Entity">
+        </propertyCategory>
+        <propertyCategory
+              category="Element">
+        </propertyCategory>
+        <propertyCategory
+              category="SimpleType">
+        </propertyCategory>
+        <propertyCategory
+              category="ComplexType">
+        </propertyCategory>
+     </propertyContributor>
+  </extension>
+  <extension
+        point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+     <propertyTabs
+           contributorId="org.talend.mdm.workbench.propertyContributor.datamodel">
+        <propertyTab
+              category="Entity"
+              id="org.talend.mdm.workbench.properties.entity.tab.main"
+              label="Main">
+        </propertyTab>
+        <propertyTab
+              afterTab="org.talend.mdm.workbench.properties.entity.tab.main"
+              category="Entity"
+              id="org.talend.mdm.workbench.properties.entity.tab.presentation"
+              label="Presentation">
+        </propertyTab>
+     </propertyTabs>
+  </extension>
+  <extension
+        point="org.eclipse.ui.views.properties.tabbed.propertySections">
+     <propertySections
+           contributorId="org.talend.mdm.workbench.propertyContributor.datamodel">
+        <propertySection
+              class="com.amalto.workbench.detailtabs.sections.EntityMainSection"
+              id="org.talend.mdm.workbench.properties.entity.section.main"
+              tab="org.talend.mdm.workbench.properties.entity.tab.main">
+           <input
+                 type="org.eclipse.xsd.XSDElementDeclaration">
+           </input>
+        </propertySection>
+        <propertySection
+              class="com.amalto.workbench.detailtabs.sections.PrsentationLabelSection"
+              id="org.talend.mdm.workbench.properties.entity.section.presentation.label"
+              tab="org.talend.mdm.workbench.properties.entity.tab.presentation">
+           <input
+                 type="org.eclipse.xsd.XSDElementDeclaration">
+           </input>
+        </propertySection>
+        <propertySection
+              afterSection="org.talend.mdm.workbench.properties.entity.section.presentation.label"
+              class="com.amalto.workbench.detailtabs.sections.PresentationDescriptionSection"
+              id="org.talend.mdm.workbench.properties.entity.section.presentation.description"
+              tab="org.talend.mdm.workbench.properties.entity.tab.presentation">
+           <input
+                 type="org.eclipse.xsd.XSDElementDeclaration">
+           </input>
+        </propertySection>
+     </propertySections>
+  </extension>
 
    
 </plugin>

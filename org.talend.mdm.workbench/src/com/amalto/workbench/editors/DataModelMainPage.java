@@ -213,7 +213,7 @@ import com.amalto.workbench.webservices.WSPutDataModel;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.WidgetFactory;
 
-public class DataModelMainPage extends EditorPart implements ModifyListener{
+public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     protected Text descriptionText;
 
@@ -359,7 +359,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener{
     private SchemaElementNameFilterDes typeElementNameFilterDes = new SchemaElementNameFilterDes();
 
     private CompositeViewersSelectionProvider selectionProvider;
-    
+
     WSDataModel datamodel;
 
     TreeObject xobject;
@@ -806,7 +806,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener{
         viewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
         // viewer.getControl().setLayoutData(
         // new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        //		
+        //
 
         addToolItems2SchemaTreeToolBar(toolBarSchemaTree);
         toolBarSchemaTree.pack();
@@ -966,9 +966,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener{
         // create type tree
         createTypeTreeComp(sash);
         // init
-        
-        selectionProvider = new CompositeViewersSelectionProvider(new Viewer[]{viewer,typesViewer});
-        
+
+        selectionProvider = new CompositeViewersSelectionProvider(new Viewer[] { viewer, typesViewer });
+
         sash.setWeights(new int[] { 50, 50 });
         return sash;
     }
@@ -1161,8 +1161,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener{
             RoleAssignmentDialog.doSave(port, ((WSDataModel) wsObject).getName(), "Data Model");
         } catch (Exception e) {
             e.printStackTrace();
-            ErrorExceptionDialog.openError(this.getSite().getShell(), "Error committing the page", CommonUtil
-                    .getErrMsgFromException(e));
+            ErrorExceptionDialog.openError(this.getSite().getShell(), "Error committing the page",
+                    CommonUtil.getErrMsgFromException(e));
             return 1;
         }
         dirty = false;
@@ -1831,18 +1831,17 @@ public class DataModelMainPage extends EditorPart implements ModifyListener{
     public void refresh() {
         viewer.refresh(true);
         typesViewer.refresh(true);
-        
-        if(viewer.getControl().isFocusControl()){
-        	ISelection oldSelection = viewer.getSelection();
-        	viewer.setSelection(null);
-        	viewer.setSelection(oldSelection);
+
+        if (viewer.getControl().isFocusControl()) {
+            ISelection oldSelection = viewer.getSelection();
+            viewer.setSelection(null);
+            viewer.setSelection(oldSelection);
         }
-        	
-        
-        if(typesViewer.getControl().isFocusControl()){
-        	ISelection oldSelection = viewer.getSelection();
-        	typesViewer.setSelection(null);
-        	typesViewer.setSelection(oldSelection);
+
+        if (typesViewer.getControl().isFocusControl()) {
+            ISelection oldSelection = typesViewer.getSelection();
+            typesViewer.setSelection(null);
+            typesViewer.setSelection(oldSelection);
         }
     }
 
@@ -2720,8 +2719,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener{
     public void modifyText(ModifyEvent arg0) {
         markDirty();
     }
-    
-    public ISelectionProvider getSelectionProvider(){
-    	return selectionProvider;
+
+    public ISelectionProvider getSelectionProvider() {
+        return selectionProvider;
     }
 }
