@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.eventmanagement.process;
+package org.talend.mdm.studio.test.eventmanagement.trigger;
 
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
@@ -25,11 +25,11 @@ import org.talend.mdm.studio.test.eventmanagement.EventManagementTest;
 /**
  * DOC rhou class global comment. Detailled comment
  */
-public class ProcessItemOperationtest extends EventManagementTest {
+public class TriggerItemOperationtest extends EventManagementTest {
 
-    private static SWTBotTreeItem processParentNode;
+    private static SWTBotTreeItem triggerParentNode;
 
-    private SWTBotTreeItem processNode;
+    private SWTBotTreeItem triggerNode;
 
     @Before
     public void runBeforeEveryTest() {
@@ -44,16 +44,16 @@ public class ProcessItemOperationtest extends EventManagementTest {
     @BeforeClass
     public static void runBeforeClass() {
         // run for one time before all test cases
-        processParentNode = eventManagementItem.getNode("Process [HEAD]");
-        // for normal process
-        processParentNode.contextMenu("New").click();
-        bot.text().setText("Normal_Process");
-        bot.radio("Create a Normal Process").click();
+        triggerParentNode = eventManagementItem.getNode("Trigger [HEAD]");
+        triggerParentNode.contextMenu("New").click();
+        bot.text().setText("TriggerDemo");
         bot.button("OK").click();
         sleep();
+        // set a service JNDI name before saving the editor.
+        bot.comboBox().setSelection("callJob");
         bot.activeEditor().save();
         bot.activeEditor().close();
-        processParentNode.expand();
+        triggerParentNode.expand();
         sleep(2);
     }
 
@@ -63,61 +63,61 @@ public class ProcessItemOperationtest extends EventManagementTest {
     }
 
     @Test
-    public void renameProcessTest() {
-        processNode = processParentNode.getNode("Normal_Process");
-        SWTBotMenu renameMenu = processNode.contextMenu("Rename");
+    public void renameTriggerTest() {
+        triggerNode = triggerParentNode.getNode("TriggerDemo");
+        SWTBotMenu renameMenu = triggerNode.contextMenu("Rename");
         sleep();
         renameMenu.click();
         SWTBotShell renameShell = bot.shell("Rename");
         renameShell.activate();
-        bot.textWithLabel("Please enter a new name").setText("RenameProcess");
+        bot.textWithLabel("Please enter a new name").setText("RenameTrigger");
         bot.button("OK").click();
         // revert the rename operation
-        processNode = processParentNode.getNode("RenameProcess");
-        processNode.contextMenu("Rename").click();
+        triggerNode = triggerParentNode.getNode("RenameTrigger");
+        triggerNode.contextMenu("Rename").click();
         renameShell = bot.shell("Rename");
         renameShell.activate();
-        bot.textWithLabel("Please enter a new name").setText("Normal_Process");
+        bot.textWithLabel("Please enter a new name").setText("TriggerDemo");
         bot.button("OK").click();
     }
 
     @Test
-    public void copyProcessTest() {
-        processNode = processParentNode.getNode("Normal_Process");
-        processNode.contextMenu("Copy").click();
+    public void copyTriggerTest() {
+        triggerNode = triggerParentNode.getNode("TriggerDemo");
+        triggerNode.contextMenu("Copy").click();
         sleep();
-        processNode.contextMenu("Paste").click();
-        SWTBotShell pasteProcessShell = bot.shell("Pasting instance Normal_Process");
-        pasteProcessShell.activate();
-        bot.text("CopyOfNormal_Process").setText("PasteProcess");
+        triggerNode.contextMenu("Paste").click();
+        SWTBotShell pasteTriggerShell = bot.shell("Pasting instance TriggerDemo");
+        pasteTriggerShell.activate();
+        bot.text("CopyOfTriggerDemo").setText("PasteTrigger");
         bot.button("OK").click();
         sleep();
     }
 
     @Test
-    public void duplicateProcessTest() {
-        processNode = processParentNode.getNode("Normal_Process");
-        processNode.contextMenu("Duplicate").click();
-        SWTBotShell shell = bot.shell("Pasting instance Normal_Process");
+    public void duplicateTriggerTest() {
+        triggerNode = triggerParentNode.getNode("TriggerDemo");
+        triggerNode.contextMenu("Duplicate").click();
+        SWTBotShell shell = bot.shell("Pasting instance TriggerDemo");
         shell.activate();
-        bot.text("CopyOfNormal_Process").setText("DuplicateNormal_Process");
+        bot.text("CopyOfTriggerDemo").setText("DuplicateTriggerDemo");
         sleep();
         bot.button("OK").click();
         sleep();
     }
 
     @Test
-    public void editProcessTest() {
-        processNode = processParentNode.getNode("Normal_Process");
-        processNode.contextMenu("Edit").click();
+    public void editTriggerTest() {
+        triggerNode = triggerParentNode.getNode("TriggerDemo");
+        triggerNode.contextMenu("Edit").click();
         sleep(2);
-        // The further Test for the content of Process is in the ProcessContentTest.java.
+        // The further Test for the content of Trigger is in the TriggerContentTest.java.
     }
 
     @Test
     public void deleteTest() {
-        processNode = processParentNode.getNode("DuplicateNormal_Process");
-        SWTBotMenu deleteMenu = processNode.contextMenu("Delete");
+        triggerNode = triggerParentNode.getNode("DuplicateTriggerDemo");
+        SWTBotMenu deleteMenu = triggerNode.contextMenu("Delete");
         sleep();
         deleteMenu.click();
         sleep();

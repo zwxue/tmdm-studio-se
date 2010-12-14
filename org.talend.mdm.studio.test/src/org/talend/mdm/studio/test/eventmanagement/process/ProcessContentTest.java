@@ -12,13 +12,14 @@
 // ============================================================================
 package org.talend.mdm.studio.test.eventmanagement.process;
 
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.talend.mdm.studio.test.eventmanagement.EventManagerTest;
+import org.talend.mdm.studio.test.eventmanagement.EventManagementTest;
 
 /**
  * ProcessContentTest is a test class to imitate the process to create the steps of a process.This class will imitate
@@ -27,7 +28,7 @@ import org.talend.mdm.studio.test.eventmanagement.EventManagerTest;
  * DOC rhou class global comment. Detailled comment
  * 
  */
-public class ProcessContentTest extends EventManagerTest {
+public class ProcessContentTest extends EventManagementTest {
 
     private static SWTBotTreeItem processParentNode;
 
@@ -50,32 +51,31 @@ public class ProcessContentTest extends EventManagerTest {
     @BeforeClass
     public static void runBeforeClass() {
         // run for one time before all test cases
-        // run for one time before all test cases
         processParentNode = eventManagementItem.getNode("Process [HEAD]");
         // for normal process
         processParentNode.contextMenu("New").click();
         bot.text().setText("ProcessDemo");
         bot.radio("Create a Normal Process").click();
         bot.button("OK").click();
-        sleep();
-        bot.activeEditor().save();
-        bot.activeEditor().close();
-        processParentNode.expand();
-        sleep();
-        processParentNode.getNode("ProcessDemo").doubleClick();
         sleep(2);
     }
 
     @AfterClass
     public static void runAfterClass() {
         // run for one time after all test cases
+        Display.getDefault().syncExec(new Runnable() {
+
+            public void run() {
+                bot.activeEditor().save();
+            }
+        });
     }
 
     @Test
     public void setDescriptionTest() {
         bot.buttonWithTooltip("Set the Descriptions").click();
         bot.shell("Set the Descriptions").activate();
-        bot.ccomboBox().setSelection("English");
+        bot.comboBox().setSelection("English");
         bot.text().setText("Call a job to update the operation systems with the new agent information");
         bot.buttonWithTooltip("Add").click();
         bot.button("OK").click();
@@ -93,8 +93,8 @@ public class ProcessContentTest extends EventManagerTest {
         // add the output variables.
         bot.ccomboBoxWithLabel("Output Parameters").setSelection("text");
         bot.buttonWithTooltip("Add a link for output Variables and output Parameters").click();
-
-        bot.textWithLabel("Parameters").setText(GETITEM_PARAMETERS);
+        // TODO:SWTBot doesn't support textViewer.
+        // bot.textWithLabel("Parameters").setText(GETITEM_PARAMETERS);
     }
 
     @Test
@@ -109,8 +109,8 @@ public class ProcessContentTest extends EventManagerTest {
         // add the output variables.
         bot.ccomboBoxWithLabel("Output Parameters").setSelection("codec_text");
         bot.buttonWithTooltip("Add a link for output Variables and output Parameters").click();
-
-        bot.textWithLabel("Parameters").setText(DECODE_PARAMETERS);
+        // TODO:SWTBot doesn't support textViewer.
+        // bot.textWithLabel("Parameters").setText(DECODE_PARAMETERS);
     }
 
     @Test
@@ -118,14 +118,14 @@ public class ProcessContentTest extends EventManagerTest {
         bot.textWithLabel("Step Description").setText("call job");
         bot.buttonWithTooltip("Add").click();
 
-        bot.ccomboBoxWithLabel("Plugin name").setSelection("calljob");
+        bot.ccomboBoxWithLabel("Plugin name").setSelection("callJob");
         // add the input variables.
         bot.ccomboBoxWithLabel("Input Parameters").setSelection("text");
         bot.buttonWithTooltip("Add a link for Input Variables and Process Plugin's Input Parameters").click();
         // add the output variables.
         bot.ccomboBoxWithLabel("Output Parameters").setSelection("result");
         bot.buttonWithTooltip("Add a link for output Variables and output Parameters").click();
-
-        bot.textWithLabel("Parameters").setText(CALLJOB_PARAMETERS);
+        // TODO:SWTBot doesn't support textViewer.
+        // bot.textWithLabel("Parameters").setText(CALLJOB_PARAMETERS);
     }
 }
