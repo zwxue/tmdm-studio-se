@@ -52,7 +52,8 @@ public class XSDEditorUtil {
             fold.create(true, true, null);
         }
         IFile file = fold.getFile(filename);
-
+        if (file.exists())
+            file.delete(true, null);
         if (!file.exists())
             file.create(new ByteArrayInputStream(content.getBytes()), IFile.FORCE, null);
         return file;
@@ -104,8 +105,8 @@ public class XSDEditorUtil {
         IFile pathToTempFile = XSDEditorUtil.createFile(xobject);
         final XSDEditorInput input = new XSDEditorInput(pathToTempFile);
         final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-        IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry().findEditor(
-                "com.amalto.workbench.editors.xsdeditor.XSDEditor");
+        IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
+                .findEditor("com.amalto.workbench.editors.xsdeditor.XSDEditor");
         if (activePage.findEditor(input) != null) {
             activePage.openEditor(input, desc.getId());
             return;
