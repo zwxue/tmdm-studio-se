@@ -134,11 +134,11 @@ public class TisTableViewer extends ComplexTableViewer {
 
                 @SuppressWarnings("unchecked")
                 public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                    if (xpathDialog == null) {
-                        xpathDialog = new XpathSelectDialog(table.getShell(), null, "Select Multiple XPaths", ServerView.show()
-                                .getSite(), true, getDatamodelName());
-                        xpathDialog.setConceptName(conceptName);
-                    }
+                    
+                    xpathDialog = new XpathSelectDialog(table.getShell(), null, "Select Multiple XPaths", ServerView.show()
+                            .getSite(), true, getDatamodelName());
+                    xpathDialog.setConceptName(conceptName);
+                    
                     xpathDialog.setBlockOnOpen(true);
                     xpathDialog.open();
 
