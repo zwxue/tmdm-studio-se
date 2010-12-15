@@ -18,6 +18,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -74,6 +75,8 @@ public class DataContainerDuplicateTest extends DataContainerTest {
         bot.text("CopyOfTestDataContainer").setText("DuplicateDataContainer");
         sleep();
         bot.button("OK").click();
+        SWTBotTreeItem duplicateNode = dataContainerItem.getNode("DuplicateDataContainer");
+        Assert.assertNotNull(duplicateNode);
         sleep();
     }
 }

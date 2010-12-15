@@ -14,8 +14,10 @@ package org.talend.mdm.studio.test.datacontainer;
 
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -63,6 +65,8 @@ public class DataContainerCreateTest extends DataContainerTest {
         bot.activeEditor().save();
         sleep();
         bot.activeEditor().close();
+        SWTBotTreeItem newNode = dataContainerItem.getNode("TestDataContainer");
+        Assert.assertNotNull(newNode);
         sleep(2);
 
     }

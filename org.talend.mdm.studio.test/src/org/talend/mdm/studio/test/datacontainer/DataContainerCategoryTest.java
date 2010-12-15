@@ -16,6 +16,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -58,6 +59,7 @@ public class DataContainerCategoryTest extends DataContainerTest {
         bot.button("OK").click();
         sleep();
         sleep();
+        Assert.assertNotNull(dataContainerItem.getNode("TestDataContainerCategory"));
         dataContainerItem.getNode("TestDataContainerCategory").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();

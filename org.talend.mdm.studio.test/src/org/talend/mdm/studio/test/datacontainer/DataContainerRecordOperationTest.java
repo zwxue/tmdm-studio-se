@@ -18,6 +18,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTable;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -59,10 +60,12 @@ public class DataContainerRecordOperationTest extends DataContainerTest {
         bot.buttonWithTooltip("Search").click();
         sleep(2);
         XObjectBrowser ep = (XObjectBrowser) bot.activeEditor().getReference().getPart(true);
+        Assert.assertNotNull(ep);
         DataClusterBrowserMainPage mainpage = (DataClusterBrowserMainPage) ep.getPage(0);
+        Assert.assertNotNull(mainpage);
         Table table = mainpage.getResultsViewer().getTable();
-
         SWTBotTable conceptBotTree = new SWTBotTable(table);
+        Assert.assertNotNull(conceptBotTree);
         conceptBotTree.select(1, 1);
         conceptBotTree.contextMenu("New Record").click();
         SWTBotShell newDataContainerShell = bot.shell("XML Editor/Viewer");

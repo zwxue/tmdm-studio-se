@@ -18,6 +18,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -67,6 +68,7 @@ public class DataContainerEditTest extends DataContainerTest {
         sleep(2);
 
         SWTBotTreeItem node = dataContainerItem.getNode("TestDataContainer");
+        Assert.assertNotNull(node);
         SWTBotMenu editMenu = node.contextMenu("Edit");
         sleep();
         editMenu.click();

@@ -15,6 +15,7 @@ package org.talend.mdm.studio.test.datacontainer;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -48,6 +49,7 @@ public class DataContainerBrowseTest extends DataContainerTest {
     @Test
     public void runTest() {
         SWTBotTreeItem node = dataContainerItem.expandNode("System").getNode("PROVISIONING");
+        Assert.assertNotNull(node);
         node.doubleClick();
         bot.buttonWithTooltip("Browse").click();
         sleep(2);
