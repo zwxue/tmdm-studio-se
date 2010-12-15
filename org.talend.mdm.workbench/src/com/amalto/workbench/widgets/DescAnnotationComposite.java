@@ -75,7 +75,7 @@ public class DescAnnotationComposite implements  SelectionListener{
 	         
 	        descriptionText.addModifyListener(new ModifyListener() {
 	        	public void modifyText(ModifyEvent e) {
-	        		if (descriptionValue != null && !descriptionValue.equals(descriptionText.getText())) {
+	        		if (accommodation!=null && descriptionValue != null && !descriptionValue.equals(descriptionText.getText())) {
 						accommodation.markDirtyWithoutCommit();
 					}
 	        		descriptionValue = descriptionText.getText();
@@ -100,7 +100,7 @@ public class DescAnnotationComposite implements  SelectionListener{
 	        descriptionText.setLayoutData(textGD);
 	        descriptionText.addModifyListener(new ModifyListener() {
 	        	public void modifyText(ModifyEvent e) {
-	        		if (descriptionValue != null && !descriptionValue.equals(descriptionText.getText())) {
+	        		if (accommodation!=null && descriptionValue != null && !descriptionValue.equals(descriptionText.getText())) {
 						accommodation.markDirtyWithoutCommit();
 					}
 	        		descriptionValue = descriptionText.getText();
@@ -160,7 +160,7 @@ public class DescAnnotationComposite implements  SelectionListener{
         AnnotationLanguageLabelsDialog dlg = new AnnotationLanguageLabelsDialog(
         		dataStore,
         		new DescAnnotationListener(),
-				accommodation.getPartControl().getShell(),
+        		descriptionText.getShell(),
 				dlgTitle
 		);
         
@@ -202,7 +202,7 @@ public class DescAnnotationComposite implements  SelectionListener{
 				if (!outPut.equals(descriptionText.getText()))
 				{
 					descriptionText.setText(outPut);
-					accommodation.markDirtyWithoutCommit();
+					if(accommodation!=null)accommodation.markDirtyWithoutCommit();
 				}
 
 	        }
