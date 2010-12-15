@@ -4,10 +4,13 @@ public class LanguageInfo {
 
     private String language = "";
 
+    private String languageISOCode = "";
+
     private String label = "";
 
-    public LanguageInfo(String language, String label) {
+    public LanguageInfo(String language, String languageISOCode, String label) {
         this.label = label;
+        this.languageISOCode = languageISOCode;
         this.language = language;
     }
 
@@ -25,6 +28,14 @@ public class LanguageInfo {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public String getLanguageISOCode() {
+        return languageISOCode;
+    }
+
+    public void setLanguageISOCode(String languageISOCode) {
+        this.languageISOCode = languageISOCode;
     }
 
 }

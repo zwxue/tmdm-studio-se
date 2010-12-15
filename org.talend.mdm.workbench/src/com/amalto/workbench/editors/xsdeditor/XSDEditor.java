@@ -96,6 +96,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
                             String xsd = getTextEditor().getTextViewer().getDocument().get();
                             IEditorPart[] editors = findEditors(xsdInput);
                             if (editors.length == 1 && editors[0] instanceof DataModelMainPage) {
+
                                 DataModelMainPage mainPage = (DataModelMainPage) editors[0];
 
                                 getEditorSite().setSelectionProvider(mainPage.getSelectionProvider());

@@ -75,7 +75,9 @@ public class LanguageInfoComposite extends Composite {
         Tree tree = tvInfos.getTree();
         tree.setHeaderVisible(true);
         tree.setLinesVisible(true);
-        tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+        final GridData gd_tree = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
+        gd_tree.heightHint = 80;
+        tree.setLayoutData(gd_tree);
 
         final TreeColumn colLanguage = new TreeColumn(tree, SWT.NONE);
         colLanguage.setWidth(99);
@@ -232,7 +234,8 @@ public class LanguageInfoComposite extends Composite {
         LanguageInfo correspondLangInfo = getLangInfoBySelectionOfLangCombo();
 
         if (correspondLangInfo == null) {
-            LanguageInfo newLangInfo = new LanguageInfo(comboLanguage.getText(), txtLabel.getText().trim());
+            LanguageInfo newLangInfo = new LanguageInfo(comboLanguage.getText(), Util.lang2iso.get(comboLanguage.getText()),
+                    txtLabel.getText().trim());
             infos.add(newLangInfo);
         } else {
             correspondLangInfo.setLabel(txtLabel.getText().trim());

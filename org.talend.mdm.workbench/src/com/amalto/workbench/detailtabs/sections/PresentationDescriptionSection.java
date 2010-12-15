@@ -2,6 +2,7 @@ package com.amalto.workbench.detailtabs.sections;
 
 import java.util.Map;
 
+import com.amalto.workbench.detailtabs.sections.model.LanguageInfoCollection;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class PresentationDescriptionSection extends LanguageInfoSection {
@@ -14,6 +15,11 @@ public class PresentationDescriptionSection extends LanguageInfoSection {
     @Override
     protected String getSectionTitle() {
         return "Descriptions";
+    }
+
+    @Override
+    protected LanguageInfoCollection getPreparedLangInfoCollection() {
+        return LanguageInfoCollection.createDescriptionInfoCollection(getXSDComponent(), getLangInfos());
     }
 
 }

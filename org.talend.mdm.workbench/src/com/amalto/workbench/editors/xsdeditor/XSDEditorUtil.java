@@ -118,9 +118,9 @@ public class XSDEditorUtil {
 
         final DataModelMainPage dMainPage = new DataModelMainPage(xobject);
         part.addPage(2, dMainPage, xobjectEditorinput);
-        
+
         part.getSite().setSelectionProvider(dMainPage.getSelectionProvider());
-        
+
         // add DataModelMainPage to third page, why? if don't do like this, the
         // 'Design' page opertions don't work, don't know why, TODO
 
@@ -132,7 +132,9 @@ public class XSDEditorUtil {
         folder.getItem(2).setText(xobject.getDisplayName() + " " + Util.getRevision(xobject));
         if (markdirty)
             dMainPage.markDirty();
-     
+
         PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(MDMPerspective.VIEWID_PROPERTYVIEW);
+
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(MDMPerspective.VIEWID_OUTLINE);
     }
 }

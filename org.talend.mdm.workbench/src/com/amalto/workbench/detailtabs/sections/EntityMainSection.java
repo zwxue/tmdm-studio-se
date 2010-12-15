@@ -10,7 +10,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.eclipse.xsd.XSDElementDeclaration;
 
@@ -22,10 +21,8 @@ import com.amalto.workbench.detailtabs.sections.composites.EntityKeyConfigCompos
 import com.amalto.workbench.detailtabs.sections.composites.NameConfigComposite;
 import com.amalto.workbench.detailtabs.sections.handlers.CommitHandlerFactory;
 import com.amalto.workbench.detailtabs.sections.model.EntityWrapper;
-import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 
-public class EntityMainSection extends AbstractPropertySection implements CommitBarListener {
+public class EntityMainSection extends BasePropertySection implements CommitBarListener {
 
     public static final int SPACE_BEGINING = 10;
 
@@ -98,12 +95,6 @@ public class EntityMainSection extends AbstractPropertySection implements Commit
 
     }
 
-   
-
-    protected DataModelMainPage getCurDataModelMainPage() {
-    	return (DataModelMainPage) ((XSDEditor) getPart()).getAdapter(DataModelMainPage.class);
-    }
-
     public void onReset() {
 
         entityWrapper = new EntityWrapper(entityWrapper.getSourceEntity());
@@ -113,8 +104,8 @@ public class EntityMainSection extends AbstractPropertySection implements Commit
     public void onSubmit() {
 
         try {
-            if(CommitHandlerFactory.getInstance().creatCommitHandler(entityWrapper).submit()){
-            	entityWrapper = new EntityWrapper(entityWrapper.getSourceEntity());
+            if (CommitHandlerFactory.getInstance().creatCommitHandler(entityWrapper).submit()) {
+                entityWrapper = new EntityWrapper(entityWrapper.getSourceEntity());
                 refresh();
 
                 getCurDataModelMainPage().refresh();
