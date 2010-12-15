@@ -9,21 +9,31 @@ import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.eclipse.wst.xsd.ui.internal.editor.InternalXSDMultiPageEditor;
+import org.eclipse.wst.xsd.ui.internal.editor.XSDTabbedPropertySheetPage;
 import org.eclipse.xsd.XSDSchema;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.views.MDMPerspective;
 import com.amalto.workbench.webservices.WSDataModel;
 
 @SuppressWarnings("restriction")
 public class XSDEditor extends InternalXSDMultiPageEditor {
 
-	public static final String CONTRUIBUTIONID = "org.talend.mdm.workbench.propertyContributor.datamodel";
-	
+    public static final String CONTRUIBUTIONID_DATAMODELPAGE = "org.talend.mdm.workbench.propertyContributor.datamodel";
+
+    public static final String CONTRUIBUTIONID_XSDEDITOR = "org.eclipse.wst.xsd.ui.internal.editor";
+
+    private String curContributionID = CONTRUIBUTIONID_DATAMODELPAGE;
+
     IEditorInput xsdInput;
 
     TreeObject xobject;
@@ -51,7 +61,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
             } // save the file's contents to DataModelMainPage
 
             // InputStream in = XSDEditorUtil.createFile(xobject).getContents(true);
-            
+
             IDocument doc = getTextEditor().getTextViewer().getDocument();
             String xsd = doc.get();
             // DataModelMainPage
@@ -80,10 +90,16 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
                             // DataModelMainPage
                             // InputStream in = XSDEditorUtil.createFile(xobject).getContents(true);
                             // String xsd = IOUtils.toString(in);
+
+                            curContributionID = CONTRUIBUTIONID_DATAMODELPAGE;
+
                             String xsd = getTextEditor().getTextViewer().getDocument().get();
                             IEditorPart[] editors = findEditors(xsdInput);
                             if (editors.length == 1 && editors[0] instanceof DataModelMainPage) {
                                 DataModelMainPage mainPage = (DataModelMainPage) editors[0];
+
+                                getEditorSite().setSelectionProvider(mainPage.getSelectionProvider());
+
                                 XSDSchema schema = Util.createXsdSchema(xsd, xobject);
                                 mainPage.setXsdSchema(schema);
                                 mainPage.getTypeContentProvider().setXsdSchema(schema);
@@ -92,6 +108,9 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
                             }
                         } else {
                             // save DataModelMainPage's contents to file
+                            curContributionID = CONTRUIBUTIONID_XSDEDITOR;
+                            getEditorSite().setSelectionProvider(getSelectionManager());
+
                             IEditorPart[] editors = findEditors(xsdInput);
                             if (editors.length == 1 && editors[0] instanceof DataModelMainPage) {
                                 DataModelMainPage mainPage = (DataModelMainPage) editors[0];
@@ -103,8 +122,12 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
                                     IFile file = XSDEditorUtil.createFile(xobject);
                                     file.setContents(new ByteArrayInputStream(xsd.getBytes()), IFile.FORCE, null);
                                 }
+
                             }
+
                         }
+
+                        refreshPropertyView();
                     } catch (Exception e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -113,30 +136,47 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
             }
         });
     }
-    
+
     @Override
     public String getContributorId() {
-    	return CONTRUIBUTIONID;
+        return curContributionID;
     }
 
     @SuppressWarnings("rawtypes")
-	@Override
+    @Override
     public Object getAdapter(Class type) {
-    	
-    	if (type == IPropertySheetPage.class){
-          return new TabbedPropertySheetPage(this);
+
+        if (type == IPropertySheetPage.class && CONTRUIBUTIONID_DATAMODELPAGE.equals(curContributionID)) {
+            return new TabbedPropertySheetPage(this);
         }
-    	
-    	if(type == DataModelMainPage.class){
-    		
-    		for(int i = 0; i < getPageCount() ; i++){
-    			if(getEditor(i) instanceof DataModelMainPage){
-    				return (DataModelMainPage)getEditor(i);
-    			}
-    		}
-    	}
-    	
-    	return super.getAdapter(type);
-    	
+
+        if (type == IPropertySheetPage.class && CONTRUIBUTIONID_XSDEDITOR.equals(curContributionID)) {
+            return new XSDTabbedPropertySheetPage(this);
+        }
+
+        if (type == DataModelMainPage.class) {
+
+            for (int i = 0; i < getPageCount(); i++) {
+                if (getEditor(i) instanceof DataModelMainPage) {
+                    return (DataModelMainPage) getEditor(i);
+                }
+            }
+        }
+
+        return super.getAdapter(type);
+
+    }
+
+    private void refreshPropertyView() throws PartInitException {
+
+        IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+
+        IViewPart propView = page.findView(MDMPerspective.VIEWID_PROPERTYVIEW);
+
+        if (propView != null) {
+            PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().hideView(propView);
+        }
+
+        page.showView(MDMPerspective.VIEWID_PROPERTYVIEW);
     }
 }

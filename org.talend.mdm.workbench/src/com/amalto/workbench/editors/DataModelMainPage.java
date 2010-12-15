@@ -973,6 +973,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         return sash;
     }
 
+    public ISelectionProvider getSiteSelectionProvider() {
+        return selectionProvider;
+    }
+
     private void createTypeTreeComp(Composite parent) {
 
         Composite TypeSash = new Composite(parent, SWT.NONE);
