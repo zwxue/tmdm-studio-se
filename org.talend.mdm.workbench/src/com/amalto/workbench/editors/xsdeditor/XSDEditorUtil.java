@@ -121,6 +121,10 @@ public class XSDEditorUtil {
 
         part.getSite().setSelectionProvider(dMainPage.getSelectionProvider());
 
+        //add XSDSelectionListener
+        XSDSelectionListener xsdListener=new XSDSelectionListener(part,dMainPage.getXSDSchema());
+        dMainPage.getTypesViewer().addSelectionChangedListener(xsdListener);
+        dMainPage.getElementsViewer().addSelectionChangedListener(xsdListener);
         // add DataModelMainPage to third page, why? if don't do like this, the
         // 'Design' page opertions don't work, don't know why, TODO
 

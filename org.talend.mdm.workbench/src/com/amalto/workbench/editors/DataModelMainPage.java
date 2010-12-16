@@ -45,6 +45,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -968,7 +969,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         // init
 
         selectionProvider = new CompositeViewersSelectionProvider(new Viewer[] { viewer, typesViewer });
-
+        
         sash.setWeights(new int[] { 50, 50 });
         return sash;
     }
@@ -1805,7 +1806,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         return xsdSchema;
     }
-
+    public XSDSchema getXSDSchema(){
+    	return xsdSchema;
+    }
     public String getXSDSchemaString() throws Exception {
         return ((SchemaTreeContentProvider) viewer.getContentProvider()).getXSDSchemaAsString();
     }
@@ -1817,13 +1820,18 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             return typesViewer;
         }
     }
-
+    public TreeViewer getElementsViewer(){
+    	return viewer;
+    }
+    public TreeViewer getTypesViewer(){
+    	return typesViewer;
+    }
     public void setXsdSchema(XSDSchema xsd) {
         ((ISchemaContentProvider) viewer.getContentProvider()).setXsdSchema(xsd);
         ((ISchemaContentProvider) typesViewer.getContentProvider()).setXsdSchema(xsd);
         xsdSchema = xsd;
     }
-
+    
     public ISchemaContentProvider getSchemaContentProvider() {
         return (ISchemaContentProvider) viewer.getContentProvider();
     }
@@ -1833,19 +1841,18 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     }
 
     public void refresh() {
-        viewer.refresh(true);
-        typesViewer.refresh(true);
+    	TreeItem[] items= viewer.getTree().getSelection();
+    	TreeItem[] items1= typesViewer.getTree().getSelection();
+        viewer.refresh(false);
+        typesViewer.refresh(false);
 
-        if (viewer.getControl().isFocusControl()) {
-            ISelection oldSelection = viewer.getSelection();
-            viewer.setSelection(null);
-            viewer.setSelection(oldSelection);
+        if (items.length>0) {
+        	viewer.getControl().setFocus();    
+            viewer.setSelection(new StructuredSelection(items[0].getData()));
         }
-
-        if (typesViewer.getControl().isFocusControl()) {
-            ISelection oldSelection = typesViewer.getSelection();
-            typesViewer.setSelection(null);
-            typesViewer.setSelection(oldSelection);
+        if (items1.length>0) {
+        	typesViewer.getControl().setFocus();      
+        	typesViewer.setSelection(new StructuredSelection(items1[0].getData()));
         }
     }
 
@@ -2715,9 +2722,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     @Override
     public void setFocus() {
-        // TODO Auto-generated method stub
-        if (viewer.getTree().getItemCount() > 0)
-            viewer.getTree().setSelection(viewer.getTree().getItem(0));
+  
     }
 
     public void modifyText(ModifyEvent arg0) {
