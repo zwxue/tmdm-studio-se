@@ -18,6 +18,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -74,6 +75,7 @@ public class DataModelDuplicateTest extends DataModelTest {
         bot.text("CopyOfTestDataModel").setText("DuplicateDataModel");
         sleep();
         bot.button("OK").click();
+        Assert.assertNotNull(dataModelItem.getNode("DuplicateDataModel"));
         sleep();
     }
 }

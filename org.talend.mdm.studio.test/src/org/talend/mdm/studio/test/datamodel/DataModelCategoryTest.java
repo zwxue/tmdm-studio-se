@@ -17,6 +17,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -65,6 +66,7 @@ public class DataModelCategoryTest extends StudioTest {
         bot.button("OK").click();
         sleep();
         sleep();
+        Assert.assertNotNull(dataModelItem.getNode("TestDataModelCategory"));
         dataModelItem.getNode("TestDataModelCategory").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();

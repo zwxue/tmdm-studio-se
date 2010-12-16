@@ -14,6 +14,7 @@ package org.talend.mdm.studio.test.datamodel;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
@@ -32,11 +33,13 @@ import org.talend.mdm.studio.test.util.Util;
  * 
  * DOC rhou class global comment. Detailled comment
  * 
- *see bug 0017197.
+ * see bug 0017197.
  * 
  */
 
 public class DataModelOperationTest extends DataModelTest {
+
+    private String DSTAR_DATAMODEL = "dstar.xml";
 
     @Before
     public void runBeforeEveryTest() {
@@ -76,31 +79,33 @@ public class DataModelOperationTest extends DataModelTest {
     }
 
     @Test
-    public void importXSDTest() {
-        File sourceFile = null;
-        try {
-            sourceFile = new File(FileLocator.toFileURL(Platform.getBundle(Activator.PLUGIN_ID).getEntry("testDocuments"))
-                    .getPath().substring(1)
-                    + "testImport.xsd");
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        File targetFile = new File(Platform.getInstanceLocation().getURL().getPath().substring(1) + "testImport.xsd");
-
-        try {
-            if (sourceFile != null)
-                Util.copyFile(sourceFile, targetFile);
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
+    public void importXSDTest() throws IOException, URISyntaxException {
+        // File sourceFile = null;
+        // try {
+        // sourceFile = new
+        // File(FileLocator.toFileURL(Platform.getBundle(Activator.PLUGIN_ID).getEntry("testDocuments"))
+        // .getPath().substring(1)
+        // + "testImport.xsd");
+        // } catch (IOException e1) {
+        // e1.printStackTrace();
+        // }
+        // File targetFile = new File(Platform.getInstanceLocation().getURL().getPath().substring(1) +
+        // "testImport.xsd");
+        //
+        // try {
+        // if (sourceFile != null)
+        // Util.copyFile(sourceFile, targetFile);
+        // } catch (Exception e1) {
+        // e1.printStackTrace();
+        // }
         bot.buttonWithTooltip("Import...").click();
-        // TODO: now SWTBot doesn't support native SWT dialogs,so this needs more investigation.
-        /*
-         * SWTBotShell importDataModelShell = bot.shell("Select the XML definition for XML Schema");
-         * importDataModelShell.activate(); bot.comboBox(1).setText("testxsd");
-         * System.out.println(bot.comboBox(1).getText() + "test"); bot.button("Open(O)").click();
-         */
-
+        // // TODO: now SWTBot doesn't support native SWT dialogs,so this needs more investigation.
+        // /*
+        // * SWTBotShell importDataModelShell = bot.shell("Select the XML definition for XML Schema");
+        // * importDataModelShell.activate(); bot.comboBox(1).setText("testxsd");
+        // * System.out.println(bot.comboBox(1).getText() + "test"); bot.button("Open(O)").click();
+        // */
+        Util.getFileFromCurrentPluginSampleFolder(DSTAR_DATAMODEL).getAbsolutePath();
     }
 
     @Test

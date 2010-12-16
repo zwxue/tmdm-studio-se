@@ -9,6 +9,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -173,6 +174,8 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         sleep();
         bot.table().select(1);
         bot.buttonWithTooltip("Del").click();
+        Assert.assertNull(bot.table().getTableItem(""));
+        Assert.assertNotNull(bot.table().getTableItem(""));
         sleep();
         bot.button("OK").click();
     }
@@ -198,6 +201,7 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         bot.buttonWithTooltip("Delete the selected item").click();
         sleep();
         bot.button("OK").click();
+        // Assert.assertNotNull(object);
         sleep();
     }
 

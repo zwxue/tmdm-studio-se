@@ -32,6 +32,8 @@ public class TriggerContentTest extends EventManagementTest {
 
     private static SWTBotTreeItem triggerParentNode;
 
+    private String[] array = new String[] { "DataModel  [0...1]", "Concept", "OperationType" };
+
     @Before
     public void runBeforeEveryTest() {
 
@@ -93,7 +95,7 @@ public class TriggerContentTest extends EventManagementTest {
         bot.comboBox().setSelection("UpdateReport");
         sleep();
         SWTBotTreeItem parent = bot.tree().getTreeItem("Update").expand().getNode("Update").expand();
-        parent.select(new String[] { "DataModel  [0...1]", "Concept", "OperationType" });
+        parent.select(array);
         sleep();
         bot.button("Add").click();
         sleep();
@@ -108,7 +110,53 @@ public class TriggerContentTest extends EventManagementTest {
         sleep();
         bot.button("Add").click();
         sleep();
+        for (int i = 0; i < array.length; i++) {
+            bot.table().click(i, 1);
+            bot.ccomboBox().setSelection("=");
+        }
+        bot.table().click(3, 1);
+        bot.ccomboBox().setSelection("Contains");
+        sleep();
 
+        bot.table().click(0, 2);
+        sleep();
+        bot.text().setText("DStar");
+        bot.table().click(1, 2);
+        sleep();
+        bot.text().setText("Agent");
+        bot.table().click(2, 2);
+        sleep();
+        bot.text().setText("UPDATE");
+        bot.table().click(3, 2);
+        sleep();
+        bot.text().setText("CommissionCode");
+        sleep();
+
+        bot.table().click(0, 3);
+        sleep();
+        bot.text().setText("C0");
+        bot.table().click(1, 3);
+        sleep();
+        bot.text().setText("C1");
+        bot.table().click(2, 3);
+        sleep();
+        bot.text().setText("C2");
+        bot.table().click(3, 3);
+        sleep();
+        bot.text().setText("C3");
+        sleep(2);
     }
 
+    @Test
+    public void testConditions() {
+        // bot.textInGroup("Conditions:").typeText("C0");
+        // bot.buttonInGroup("And", "Conditions").click();
+        // bot.textInGroup("Conditions:").typeText("C1");
+        // bot.buttonInGroup("And", "Conditions").click();
+        // bot.textInGroup("Conditions:").typeText("C2");
+        // bot.buttonInGroup("And", "Conditions").click();
+        // bot.textInGroup("Conditions:").typeText("C3");
+        // bot.buttonInGroup("And", "Conditions").click();
+        bot.textInGroup("Conditions:").setText("C0 And C1 And C2");
+    }
 }

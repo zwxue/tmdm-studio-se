@@ -18,6 +18,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -64,6 +65,7 @@ public class DataModelEditTest extends DataModelTest {
         sleep();
         bot.activeEditor().save();
         bot.activeEditor().close();
+        Assert.assertNull(dataModelItem.getNode("TestDataModel"));
         sleep(2);
 
         SWTBotTreeItem node = dataModelItem.getNode("TestDataModel");

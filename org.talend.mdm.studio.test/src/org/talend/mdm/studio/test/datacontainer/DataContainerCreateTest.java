@@ -76,6 +76,7 @@ public class DataContainerCreateTest extends DataContainerTest {
         dataContainerItem.getNode("TestDataContainer").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
+        Assert.assertNull(dataContainerItem.getNode("TestDataContainer"));
         sleep();
     }
 }
