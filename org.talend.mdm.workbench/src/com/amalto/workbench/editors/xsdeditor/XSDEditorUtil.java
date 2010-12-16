@@ -11,6 +11,7 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorInput;
@@ -52,11 +53,18 @@ public class XSDEditorUtil {
             fold.create(true, true, null);
         }
         IFile file = fold.getFile(filename);
-        if (file.exists())
-            file.delete(true, null);
+
         if (!file.exists())
             file.create(new ByteArrayInputStream(content.getBytes()), IFile.FORCE, null);
+        else
+            sycFileContents(file, content);
+
         return file;
+    }
+
+    private static void sycFileContents(IFile file, String content) throws Exception {
+        if (file.exists())
+            file.setContents(new ByteArrayInputStream(content.getBytes()), IFile.FORCE, new NullProgressMonitor());
     }
 
     private static boolean isEditorOpened(TreeObject xobject) throws Exception {
@@ -121,8 +129,8 @@ public class XSDEditorUtil {
 
         part.getSite().setSelectionProvider(dMainPage.getSelectionProvider());
 
-        //add XSDSelectionListener
-        XSDSelectionListener xsdListener=new XSDSelectionListener(part,dMainPage.getXSDSchema());
+        // add XSDSelectionListener
+        XSDSelectionListener xsdListener = new XSDSelectionListener(part, dMainPage.getXSDSchema());
         dMainPage.getTypesViewer().addSelectionChangedListener(xsdListener);
         dMainPage.getElementsViewer().addSelectionChangedListener(xsdListener);
         // add DataModelMainPage to third page, why? if don't do like this, the
