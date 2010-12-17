@@ -17,6 +17,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -72,6 +73,8 @@ public class ProcessItemOperationtest extends EventManagementTest {
         renameShell.activate();
         bot.textWithLabel("Please enter a new name").setText("RenameProcess");
         bot.button("OK").click();
+        Assert.assertNull(processParentNode.expand().getNode("Normal_Process"));
+        Assert.assertNotNull(processParentNode.expand().getNode("RenameProcess"));
         // revert the rename operation
         processNode = processParentNode.getNode("RenameProcess");
         processNode.contextMenu("Rename").click();
@@ -92,6 +95,7 @@ public class ProcessItemOperationtest extends EventManagementTest {
         bot.text("CopyOfNormal_Process").setText("PasteProcess");
         bot.button("OK").click();
         sleep();
+        Assert.assertNotNull(processParentNode.expand().getNode("PasteProcess"));
     }
 
     @Test
@@ -104,6 +108,7 @@ public class ProcessItemOperationtest extends EventManagementTest {
         sleep();
         bot.button("OK").click();
         sleep();
+        Assert.assertNotNull(processParentNode.expand().getNode("DuplicateNormal_Process"));
     }
 
     @Test
@@ -122,5 +127,6 @@ public class ProcessItemOperationtest extends EventManagementTest {
         deleteMenu.click();
         sleep();
         bot.button("OK").click();
+        Assert.assertNull(processParentNode.expand().getNode("DuplicateNormal_Process"));
     }
 }

@@ -27,6 +27,8 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
 
     private static SWTBotTreeItem eleItem;
 
+    private static SWTBotTreeItem groupItem;
+
     @Before
     public void runBeforeEveryTest() {
 
@@ -50,7 +52,7 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         conceptBotTree = new SWTBotTree(conceptTree);
         conceptNode = conceptBotTree.getTreeItem("Reporting");
         conceptNode.select().expand();
-        SWTBotTreeItem groupItem = conceptNode.getNode("ReportingType");
+        groupItem = conceptNode.getNode("ReportingType");
         groupItem.expand();
         eleItem = groupItem.getNode("Concept");
     }
@@ -76,15 +78,16 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         sleep();
         bot.button("OK").click(); // create a entity with a simple type
         sleep(2);
-
+        Assert.assertNotNull(groupItem.getNode("ConceptTest"));
         eleItem.contextMenu("Edit Element").click();
         newEntityShell = bot.shell("Edit Business Element");
         newEntityShell.activate();
-        // create a entity with a complex type
         bot.textWithLabel("Business Element Name").setText("Concept");
         sleep();
-        bot.button("OK").click(); // create a entity with a simple type
+        bot.button("OK").click();
         sleep(2);
+        Assert.assertNull(groupItem.getNode("ConceptTest"));
+        Assert.assertNotNull(groupItem.getNode("Concept"));
     }
 
     @Test
@@ -93,20 +96,21 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         eleItem.contextMenu("Add Element (after)").click();
         SWTBotShell newEntityShell = bot.shell("Add a new Business Element");
         newEntityShell.activate();
-        // create a entity with a complex type
         bot.textWithLabel("Business Element Name").setText("testElement");
         sleep();
-        bot.button("OK").click(); // create a entity with a simple type
+        bot.button("OK").click();
         sleep(2);
+        Assert.assertNotNull(groupItem.getNode("testElement"));
     }
 
     @Test
     public void copyElementTest() {
+        // TODO:I can not paste a element after I copy the element.
         eleItem.contextMenu("Copy Element").click();
         sleep();
         eleItem.contextMenu("Paste Element").click();
         sleep();
-        SWTBotShell saveShell = bot.shell("Copy Element");
+        SWTBotShell saveShell = bot.shell("Paste Element");
         saveShell.activate();
         bot.button("OK").click();
         sleep();
@@ -121,6 +125,7 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         bot.radio("Sequence").click();
         bot.button("OK").click();
         sleep(2);
+        // TODO:need assertion
     }
 
     @Test
@@ -156,6 +161,7 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         sleep();
         bot.button("OK").click();
         sleep();
+        Assert.assertNotNull(eleItem.expand().getNode("Annotations").expand().getNode("English Label: en"));
     }
 
     @Test
@@ -165,17 +171,16 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         SWTBotShell shell = bot.shell("Set the Descriptions of This Element");
         shell.activate();
         bot.comboBox().setSelection(0);
-        bot.text().setText("enlish descriptions");
+        bot.text().setText("enlish description");
         bot.buttonWithTooltip("Add").click();
         sleep();
         bot.comboBox().setSelection(1);
-        bot.text().setText("french descriptions");
+        bot.text().setText("french description");
         bot.buttonWithTooltip("Add").click();
         sleep();
         bot.table().select(1);
         bot.buttonWithTooltip("Del").click();
-        Assert.assertNull(bot.table().getTableItem(""));
-        Assert.assertNotNull(bot.table().getTableItem(""));
+        Assert.assertNotNull(eleItem.expand().getNode("Annotations").expand().getNode("English Description: enlish description"));
         sleep();
         bot.button("OK").click();
     }
@@ -185,10 +190,10 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         eleItem.contextMenu("Set the Roles with Write Access").click();
         SWTBotShell newViewShell = bot.shell("Set The Roles That Have Write Access");
         newViewShell.activate();
-        bot.ccomboBox().setSelection(0);
+        bot.ccomboBox().setSelection("System_Web");
         bot.buttonWithTooltip("Add").click();
 
-        bot.ccomboBox().setSelection(1);
+        bot.ccomboBox().setSelection("System_Admin");
         bot.buttonWithTooltip("Add").click();
 
         bot.table().select(0);
@@ -197,11 +202,11 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         bot.buttonWithTooltip("Move up the selected item").click();
         sleep(2);
 
-        bot.table().select(0);
+        bot.table().select("System_Web");
         bot.buttonWithTooltip("Delete the selected item").click();
         sleep();
         bot.button("OK").click();
-        // Assert.assertNotNull(object);
+        Assert.assertNotNull(eleItem.expand().getNode("Annotations").expand().getNode("Writable By : System_Admin"));
         sleep();
     }
 
@@ -210,10 +215,10 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         eleItem.contextMenu("Set the Roles with No Access").click();
         SWTBotShell newViewShell = bot.shell("Set The Roles That Cannot Access This Field");
         newViewShell.activate();
-        bot.ccomboBox().setSelection(0);
+        bot.ccomboBox().setSelection("System_Web");
         bot.buttonWithTooltip("Add").click();
 
-        bot.ccomboBox().setSelection(1);
+        bot.ccomboBox().setSelection("System_Admin");
         bot.buttonWithTooltip("Add").click();
 
         bot.table().select(0);
@@ -222,15 +227,17 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         bot.buttonWithTooltip("Move up the selected item").click();
         sleep(2);
 
-        bot.table().select(1);
+        bot.table().select("System_Admin");
         bot.buttonWithTooltip("Delete the selected item").click();
         sleep();
         bot.button("OK").click();
         sleep();
+        Assert.assertNotNull(eleItem.expand().getNode("Annotations").expand().getNode("No Access to: System_Web"));
     }
 
     @Test
     public void setWorkflowAccessTest() {
+        // TODO:check this action
         eleItem.contextMenu("Set the Workflow Access").click();
         SWTBotShell shell = bot.shell("Set the Workflow Access");
         shell.activate();
@@ -262,6 +269,7 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         shell = bot.shell("Set the Foreign Key");
         shell.activate();
         bot.button("OK").click();
+        Assert.assertNotNull(eleItem.expand().getNode("Annotations").expand().getNode("Foreign Key: Reporting"));
     }
 
     @Test
@@ -286,6 +294,7 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         bot.text().setText("filter");
         sleep();
         bot.button("OK").click();
+        Assert.assertNotNull(eleItem.expand().getNode("Annotations").expand().getNode("Foreign Key Filter: Reporting"));
     }
 
     @Test
@@ -314,6 +323,7 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
 
         bot.buttonWithTooltip("Add").click();
         bot.button("OK").click();
+        Assert.assertNotNull(eleItem.expand().getNode("Annotations").expand().getNode("Foreign Key Info: Reporting"));
     }
 
     @Test
@@ -335,6 +345,7 @@ public class DataModelSchemaElementOperationTest extends DataModelTest {
         sleep();
         bot.button("OK").click();
         sleep();
+        Assert.assertNotNull(eleItem.expand().getNode("Annotations").expand().getNode("Facet_Msg_EN: Reporting"));
     }
 
     @Test

@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.mdm.studio.test.eventmanagement.process;
 
+import junit.framework.Assert;
+
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
@@ -37,6 +39,12 @@ public class ProcessContentTest extends EventManagementTest {
     private String DECODE_PARAMETERS = "<parameters> <method>DECODE</method> <algorithm>XMLESCAPE</algorithm> </parameters>";
 
     private String CALLJOB_PARAMETERS = "";
+
+    private String firStep = "getItem";
+
+    private String secStep = "Decode XML";
+
+    private String thiStep = "call job";
 
     @Before
     public void runBeforeEveryTest() {
@@ -76,16 +84,20 @@ public class ProcessContentTest extends EventManagementTest {
         bot.buttonWithTooltip("Set the Descriptions").click();
         bot.shell("Set the Descriptions").activate();
         bot.comboBox().setSelection("English");
-        bot.text().setText("Call a job to update the operation systems with the new agent information");
+        String des = "Call a job to update the operation systems with the new agent information";
+        bot.text().setText(des);
         bot.buttonWithTooltip("Add").click();
         bot.button("OK").click();
+        Assert.assertEquals(des, bot.text(0).getText());
     }
 
     @Test
     public void setFirstStepTest() {
-        bot.textWithLabel("Step Description").setText("getItem");
-        bot.buttonWithTooltip("Add").click();
 
+        bot.textWithLabel("Step Description").setText(firStep);
+        bot.buttonWithTooltip("Add").click();
+        bot.list().select(firStep);
+        Assert.assertNotNull(bot.list().selection());
         bot.ccomboBoxWithLabel("Plugin name").setSelection("xslt");
         // add the input variables.
         bot.ccomboBoxWithLabel("Input Parameters").setSelection("xml");
@@ -93,15 +105,16 @@ public class ProcessContentTest extends EventManagementTest {
         // add the output variables.
         bot.ccomboBoxWithLabel("Output Parameters").setSelection("text");
         bot.buttonWithTooltip("Add a link for output Variables and output Parameters").click();
-        // TODO:SWTBot doesn't support textViewer.
-        // bot.textWithLabel("Parameters").setText(GETITEM_PARAMETERS);
+        bot.styledText().setText(GETITEM_PARAMETERS);
     }
 
     @Test
     public void setSecondStepTest() {
-        bot.textWithLabel("Step Description").setText("Decode XML");
-        bot.buttonWithTooltip("Add").click();
 
+        bot.textWithLabel("Step Description").setText(secStep);
+        bot.buttonWithTooltip("Add").click();
+        bot.list().select(secStep);
+        Assert.assertNotNull(bot.list().selection());
         bot.ccomboBoxWithLabel("Plugin name").setSelection("codec");
         // add the input variables.
         bot.ccomboBoxWithLabel("Input Parameters").setSelection("law_text");
@@ -109,15 +122,15 @@ public class ProcessContentTest extends EventManagementTest {
         // add the output variables.
         bot.ccomboBoxWithLabel("Output Parameters").setSelection("codec_text");
         bot.buttonWithTooltip("Add a link for output Variables and output Parameters").click();
-        // TODO:SWTBot doesn't support textViewer.
-        // bot.textWithLabel("Parameters").setText(DECODE_PARAMETERS);
+        bot.styledText().setText(DECODE_PARAMETERS);
     }
 
     @Test
     public void setThirdStepTest() {
-        bot.textWithLabel("Step Description").setText("call job");
+        bot.textWithLabel("Step Description").setText(thiStep);
         bot.buttonWithTooltip("Add").click();
-
+        bot.list().select(thiStep);
+        Assert.assertNotNull(bot.list().selection());
         bot.ccomboBoxWithLabel("Plugin name").setSelection("callJob");
         // add the input variables.
         bot.ccomboBoxWithLabel("Input Parameters").setSelection("text");
@@ -125,7 +138,6 @@ public class ProcessContentTest extends EventManagementTest {
         // add the output variables.
         bot.ccomboBoxWithLabel("Output Parameters").setSelection("result");
         bot.buttonWithTooltip("Add a link for output Variables and output Parameters").click();
-        // TODO:SWTBot doesn't support textViewer.
-        // bot.textWithLabel("Parameters").setText(CALLJOB_PARAMETERS);
+        bot.styledText().setText(CALLJOB_PARAMETERS);
     }
 }

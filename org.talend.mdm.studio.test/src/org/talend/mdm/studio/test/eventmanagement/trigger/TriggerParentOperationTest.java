@@ -17,6 +17,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -58,6 +59,7 @@ public class TriggerParentOperationTest extends EventManagementTest {
         bot.text().setText("TriggerDemo");
         bot.button("OK").click();
         sleep();
+        Assert.assertNotNull(triggerParentNode.getNode("TriggerDemo"));
     }
 
     @Test
@@ -75,12 +77,14 @@ public class TriggerParentOperationTest extends EventManagementTest {
         SWTBotText text = bot.textWithLabel("Enter a name for the New Category");
         text.setText("TestProcessCategory");
         bot.button("OK").click();
+        Assert.assertNotNull(triggerParentNode.getNode("TestProcessCategory"));
         triggerParentNode.expand();
         sleep(2);
         triggerParentNode.getNode("TestProcessCategory").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
         sleep();
+
     }
 
 }

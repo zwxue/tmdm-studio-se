@@ -17,6 +17,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -50,7 +51,7 @@ public class TriggerItemOperationtest extends EventManagementTest {
         bot.button("OK").click();
         sleep();
         // set a service JNDI name before saving the editor.
-        bot.comboBox().setSelection("callJob");
+        bot.comboBox().setSelection("callprocess");
         bot.activeEditor().save();
         bot.activeEditor().close();
         triggerParentNode.expand();
@@ -72,8 +73,10 @@ public class TriggerItemOperationtest extends EventManagementTest {
         renameShell.activate();
         bot.textWithLabel("Please enter a new name").setText("RenameTrigger");
         bot.button("OK").click();
+        // Assert.assertNull(triggerParentNode.getNode("TriggerDemo"));
         // revert the rename operation
         triggerNode = triggerParentNode.getNode("RenameTrigger");
+        Assert.assertNotNull(triggerParentNode.getNode("RenameTrigger"));
         triggerNode.contextMenu("Rename").click();
         renameShell = bot.shell("Rename");
         renameShell.activate();
@@ -92,6 +95,7 @@ public class TriggerItemOperationtest extends EventManagementTest {
         bot.text("CopyOfTriggerDemo").setText("PasteTrigger");
         bot.button("OK").click();
         sleep();
+        Assert.assertNotNull(triggerParentNode.getNode("PasteTrigger"));
     }
 
     @Test
@@ -104,6 +108,7 @@ public class TriggerItemOperationtest extends EventManagementTest {
         sleep();
         bot.button("OK").click();
         sleep();
+        Assert.assertNotNull(triggerParentNode.getNode("DuplicateTriggerDemo"));
     }
 
     @Test
@@ -122,5 +127,6 @@ public class TriggerItemOperationtest extends EventManagementTest {
         deleteMenu.click();
         sleep();
         bot.button("OK").click();
+        Assert.assertNull(triggerParentNode.getNode("DuplicateTriggerDemo"));
     }
 }

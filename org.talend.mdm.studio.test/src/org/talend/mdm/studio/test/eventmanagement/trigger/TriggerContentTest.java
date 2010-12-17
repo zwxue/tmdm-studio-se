@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -68,6 +69,7 @@ public class TriggerContentTest extends EventManagementTest {
     @Test
     public void setDescriptionTest() {
         bot.textWithLabel("Description").setText("Agent updated trigger");
+        Assert.assertEquals("Agent updated trigger", bot.textWithLabel("Description").getText());
     }
 
     @Test
@@ -79,12 +81,14 @@ public class TriggerContentTest extends EventManagementTest {
         sleep();
         bot.button("Add").click();
         sleep();
+        Assert.assertEquals("Update", bot.textWithLabel("Entity").getText());
     }
 
     @Test
     public void setServiceTest() {
         bot.comboBoxWithLabel("Service JNDI Name").setSelection("callprocess");
         bot.textWithLabel("Service Parameters").setText("process=UpdateOperationalSystems");
+        Assert.assertEquals("callprocess", bot.comboBoxWithLabel("Service JNDI Name").getText());
     }
 
     @Test
@@ -120,31 +124,38 @@ public class TriggerContentTest extends EventManagementTest {
 
         bot.table().click(0, 2);
         sleep();
-        bot.text().setText("DStar");
+        bot.text(3).setText("DStar");
+        sleep();
         bot.table().click(1, 2);
         sleep();
-        bot.text().setText("Agent");
+        bot.text(3).setText("Agent");
+        sleep();
         bot.table().click(2, 2);
         sleep();
-        bot.text().setText("UPDATE");
+        bot.text(3).setText("UPDATE");
+        sleep();
         bot.table().click(3, 2);
         sleep();
-        bot.text().setText("CommissionCode");
-        sleep();
+        bot.text(3).setText("CommissionCode");
+        sleep(2);
 
         bot.table().click(0, 3);
         sleep();
-        bot.text().setText("C0");
+        bot.text(3).setText("C0");
+        sleep();
         bot.table().click(1, 3);
         sleep();
-        bot.text().setText("C1");
+        bot.text(3).setText("C1");
+        sleep();
         bot.table().click(2, 3);
         sleep();
-        bot.text().setText("C2");
+        bot.text(3).setText("C2");
+        sleep();
         bot.table().click(3, 3);
         sleep();
-        bot.text().setText("C3");
+        bot.text(3).setText("C3");
         sleep(2);
+        Assert.assertEquals(4, bot.table().rowCount());
     }
 
     @Test
@@ -158,5 +169,7 @@ public class TriggerContentTest extends EventManagementTest {
         // bot.textInGroup("Conditions:").typeText("C3");
         // bot.buttonInGroup("And", "Conditions").click();
         bot.textInGroup("Conditions:").setText("C0 And C1 And C2");
+        sleep();
+        Assert.assertEquals("C0 And C1 And C2", bot.textInGroup("Conditions:").getText());
     }
 }
