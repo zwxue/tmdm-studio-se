@@ -1,4 +1,4 @@
-package com.amalto.workbench.detailtabs.sections.model;
+package com.amalto.workbench.detailtabs.sections.model.entity;
 
 import org.eclipse.xsd.XSDXPathDefinition;
 

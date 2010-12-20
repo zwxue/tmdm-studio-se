@@ -45,7 +45,6 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -814,7 +813,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         drillDownAdapter = new DrillDownAdapter(viewer);
         // provider = new XSDTreeContentProvider(this.getSite(), xsdSchema, xobject);
-        schemaTreeContentProvider = new SchemaTreeContentProvider(this.getSite(), xsdSchema, xobject);
+        schemaTreeContentProvider = new SchemaTreeContentProvider(this.getSite(), xsdSchema);
         // viewer.setContentProvider(provider);
         viewer.setContentProvider(schemaTreeContentProvider);
 
@@ -969,7 +968,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         // init
 
         selectionProvider = new CompositeViewersSelectionProvider(new Viewer[] { viewer, typesViewer });
-        
+
         sash.setWeights(new int[] { 50, 50 });
         return sash;
     }
@@ -1022,7 +1021,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         toolBarTypeTree.pack();
 
         // typesProvider = new TypesContentProvider(this.getSite(), xsdSchema, xobject);
-        typesTreeContentProvider = new TypesTreeContentProvider(this.getSite(), xsdSchema, xobject);
+        typesTreeContentProvider = new TypesTreeContentProvider(this.getSite(), xsdSchema);
         // typesViewer.setContentProvider(typesProvider);
         typesViewer.setContentProvider(typesTreeContentProvider);
 
@@ -1806,9 +1805,11 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         return xsdSchema;
     }
-    public XSDSchema getXSDSchema(){
-    	return xsdSchema;
+
+    public XSDSchema getXSDSchema() {
+        return xsdSchema;
     }
+
     public String getXSDSchemaString() throws Exception {
         return ((SchemaTreeContentProvider) viewer.getContentProvider()).getXSDSchemaAsString();
     }
@@ -1820,18 +1821,21 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             return typesViewer;
         }
     }
-    public TreeViewer getElementsViewer(){
-    	return viewer;
+
+    public TreeViewer getElementsViewer() {
+        return viewer;
     }
-    public TreeViewer getTypesViewer(){
-    	return typesViewer;
+
+    public TreeViewer getTypesViewer() {
+        return typesViewer;
     }
+
     public void setXsdSchema(XSDSchema xsd) {
         ((ISchemaContentProvider) viewer.getContentProvider()).setXsdSchema(xsd);
         ((ISchemaContentProvider) typesViewer.getContentProvider()).setXsdSchema(xsd);
         xsdSchema = xsd;
     }
-    
+
     public ISchemaContentProvider getSchemaContentProvider() {
         return (ISchemaContentProvider) viewer.getContentProvider();
     }
@@ -1841,18 +1845,33 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     }
 
     public void refresh() {
-    	TreeItem[] items= viewer.getTree().getSelection();
-    	TreeItem[] items1= typesViewer.getTree().getSelection();
-        viewer.refresh(false);
-        typesViewer.refresh(false);
+        // TreeItem[] items = viewer.getTree().getSelection();
+        // TreeItem[] items1 = typesViewer.getTree().getSelection();
+        // viewer.refresh(false);
+        // typesViewer.refresh(false);
+        //
+        // if (items.length > 0) {
+        // viewer.getControl().setFocus();
+        // viewer.setSelection(new StructuredSelection(items[0].getData()));
+        // }
+        // if (items1.length > 0) {
+        // typesViewer.getControl().setFocus();
+        // typesViewer.setSelection(new StructuredSelection(items1[0].getData()));
+        // }
 
-        if (items.length>0) {
-        	viewer.getControl().setFocus();    
-            viewer.setSelection(new StructuredSelection(items[0].getData()));
+        viewer.refresh(true);
+        typesViewer.refresh(true);
+
+        if (viewer.getTree().isFocusControl()) {
+            ISelection oldSelection = viewer.getSelection();
+            viewer.setSelection(null);
+            viewer.setSelection(oldSelection);
         }
-        if (items1.length>0) {
-        	typesViewer.getControl().setFocus();      
-        	typesViewer.setSelection(new StructuredSelection(items1[0].getData()));
+
+        if (typesViewer.getTree().isFocusControl()) {
+            ISelection oldSelection = typesViewer.getSelection();
+            typesViewer.setSelection(null);
+            typesViewer.setSelection(oldSelection);
         }
     }
 
@@ -2722,7 +2741,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     @Override
     public void setFocus() {
-  
+
     }
 
     public void modifyText(ModifyEvent arg0) {

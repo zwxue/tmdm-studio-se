@@ -15,11 +15,11 @@ import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
 import com.amalto.workbench.detailtabs.exception.CommitException;
 import com.amalto.workbench.detailtabs.exception.CommitValidationException;
-import com.amalto.workbench.detailtabs.sections.model.EntityWrapper;
-import com.amalto.workbench.detailtabs.sections.model.FieldWrapper;
-import com.amalto.workbench.detailtabs.sections.model.KeyWrapper;
+import com.amalto.workbench.detailtabs.sections.model.entity.EntityWrapper;
+import com.amalto.workbench.detailtabs.sections.model.entity.FieldWrapper;
+import com.amalto.workbench.detailtabs.sections.model.entity.KeyWrapper;
 
-class EntityCommitHandler extends CommitHandler {
+public class EntityCommitHandler extends CommitHandler {
 
     private static final String ERR_ENTITY_NULLENTITYNAME = "Entity name can not be empty";
 

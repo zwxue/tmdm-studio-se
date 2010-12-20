@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 
-import com.amalto.workbench.detailtabs.sections.model.LanguageInfo;
+import com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo.LanguageInfo;
 import com.amalto.workbench.detailtabs.sections.providers.LanguageInfoLabelProvider;
 import com.amalto.workbench.detailtabs.sections.providers.LanguageInfoModifier;
 import com.amalto.workbench.detailtabs.sections.providers.LanguageInfoSorter;

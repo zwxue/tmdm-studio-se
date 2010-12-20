@@ -1,4 +1,4 @@
-package com.amalto.workbench.detailtabs.sections.model;
+package com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,15 +8,14 @@ import java.util.Map;
 
 import org.eclipse.xsd.XSDComponent;
 
-public abstract class LanguageInfoCollection implements ISubmittable {
+import com.amalto.workbench.detailtabs.sections.model.annotationinfo.AnnotaionInfo;
+
+public abstract class LanguageInfoCollection extends AnnotaionInfo {
 
     private List<LanguageInfo> languageInfos = new ArrayList<LanguageInfo>();
 
-    private XSDComponent sourceXSDComponent;
-
     public LanguageInfoCollection(XSDComponent sourceXSDComponent, LanguageInfo[] initLanguageInfos) {
-
-        this.sourceXSDComponent = sourceXSDComponent;
+        super(sourceXSDComponent);
 
         for (LanguageInfo eachLangInfo : initLanguageInfos)
             languageInfos.add(eachLangInfo);
@@ -28,10 +27,6 @@ public abstract class LanguageInfoCollection implements ISubmittable {
 
     public LanguageInfo[] getLanguageInfos() {
         return languageInfos.toArray(new LanguageInfo[0]);
-    }
-
-    public XSDComponent getSourceXSDComponent() {
-        return sourceXSDComponent;
     }
 
     public Map<String, LanguageInfo> getLangCode2LangInfo() {

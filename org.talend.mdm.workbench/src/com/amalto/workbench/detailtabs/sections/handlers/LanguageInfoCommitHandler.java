@@ -7,14 +7,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.amalto.workbench.detailtabs.exception.CommitException;
 import com.amalto.workbench.detailtabs.exception.CommitValidationException;
-import com.amalto.workbench.detailtabs.sections.model.LanguageInfo;
-import com.amalto.workbench.detailtabs.sections.model.LanguageInfoCollection;
+import com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo.LanguageInfo;
+import com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo.LanguageInfoCollection;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
-abstract class LanguageInfoCommitHandler extends CommitHandler {
+abstract class LanguageInfoCommitHandler extends AnnotationInfoCommitHandler {
 
     public LanguageInfoCommitHandler(LanguageInfoCollection submittedLangInfos) {
         super(submittedLangInfos);
@@ -27,14 +26,6 @@ abstract class LanguageInfoCommitHandler extends CommitHandler {
             validateEachLanguageInfo(eachLanguage);
         }
 
-    }
-
-    @Override
-    protected boolean doSubmit() throws CommitException {
-
-        XSDAnnotationsStructure xsdAnnoStruct = getXSDAnnotationStruct();
-
-        return doSubmit_Removal(xsdAnnoStruct) | doSubmit_Update(xsdAnnoStruct) | doSubmit_Add(xsdAnnoStruct);
     }
 
     @Override
@@ -54,44 +45,8 @@ abstract class LanguageInfoCommitHandler extends CommitHandler {
         }
     }
 
-    protected XSDAnnotationsStructure getXSDAnnotationStruct() {
-        return new XSDAnnotationsStructure(getCommitedObj().getSourceXSDComponent());
-    }
-
-    private boolean doSubmit_Removal(XSDAnnotationsStructure xsdAnnoStruct) {
-
-        String[] needRemovedLangCodes = getNeedRemovedLangCodes();
-
-        for (String eachNeedRemovedLangCode : needRemovedLangCodes) {
-            removeLangInfo(xsdAnnoStruct, eachNeedRemovedLangCode);
-        }
-
-        return (needRemovedLangCodes.length > 0);
-    }
-
-    private boolean doSubmit_Update(XSDAnnotationsStructure xsdAnnoStruct) {
-
-        LanguageInfo[] needUpdatedLangInfos = getNeedUpdatedLangInfos();
-
-        for (LanguageInfo eachNeedUpdateedLangInfo : needUpdatedLangInfos) {
-            updateLangInfo(xsdAnnoStruct, eachNeedUpdateedLangInfo.getLanguageISOCode(), eachNeedUpdateedLangInfo.getLabel());
-        }
-
-        return needUpdatedLangInfos.length > 0;
-    }
-
-    private boolean doSubmit_Add(XSDAnnotationsStructure xsdAnnoStruct) {
-
-        LanguageInfo[] needAddedLangInfos = getNeedAddedLangInfos();
-
-        for (LanguageInfo eachNeedAddedLangInfo : needAddedLangInfos) {
-            addLangInfo(xsdAnnoStruct, eachNeedAddedLangInfo.getLanguageISOCode(), eachNeedAddedLangInfo.getLabel());
-        }
-
-        return needAddedLangInfos.length > 0;
-    }
-
-    protected String[] getNeedRemovedLangCodes() {
+    @Override
+    protected String[] getNeedRemovedObjs() {
 
         Set<String> results = new HashSet<String>();
 
@@ -106,9 +61,11 @@ abstract class LanguageInfoCommitHandler extends CommitHandler {
         }
 
         return results.toArray(new String[0]);
+
     }
 
-    protected LanguageInfo[] getNeedUpdatedLangInfos() {
+    @Override
+    protected LanguageInfo[] getNeedUpdatedObjs() {
 
         List<LanguageInfo> results = new ArrayList<LanguageInfo>();
 
@@ -127,10 +84,11 @@ abstract class LanguageInfoCommitHandler extends CommitHandler {
         }
 
         return results.toArray(new LanguageInfo[0]);
+
     }
 
-    protected LanguageInfo[] getNeedAddedLangInfos() {
-
+    @Override
+    protected LanguageInfo[] getNeedAddedObjs() {
         List<LanguageInfo> results = new ArrayList<LanguageInfo>();
 
         Map<String, String> originalLangCode2LangInfo = getOriginalLang2Info();
@@ -144,14 +102,40 @@ abstract class LanguageInfoCommitHandler extends CommitHandler {
         }
 
         return results.toArray(new LanguageInfo[0]);
+    }
 
+    @Override
+    protected void doRemoveEachObj(XSDAnnotationsStructure xsdAnnoStruct, Object eachNeedRemovedObj) {
+
+        if (!(eachNeedRemovedObj instanceof String))
+            return;
+
+        removeLangInfo(xsdAnnoStruct, (String) eachNeedRemovedObj);
+    }
+
+    @Override
+    protected void doUpdateEachObj(XSDAnnotationsStructure xsdAnnoStruct, Object eachNeedUpdatedObj) {
+
+        if (!(eachNeedUpdatedObj instanceof LanguageInfo))
+            return;
+
+        updateLangInfo(xsdAnnoStruct, (LanguageInfo) eachNeedUpdatedObj);
+    }
+
+    @Override
+    protected void doAddEachObj(XSDAnnotationsStructure xsdAnnoStruct, Object eachNeedAddedObj) {
+
+        if (!(eachNeedAddedObj instanceof LanguageInfo))
+            return;
+
+        addLangInfo(xsdAnnoStruct, (LanguageInfo) eachNeedAddedObj);
     }
 
     protected abstract Map<String, String> getOriginalLang2Info();
 
     protected abstract void removeLangInfo(XSDAnnotationsStructure xsdAnnoStruct, String langcode);
 
-    protected abstract void updateLangInfo(XSDAnnotationsStructure xsdAnnoStruct, String langCode, String value);
+    protected abstract void updateLangInfo(XSDAnnotationsStructure xsdAnnoStruct, LanguageInfo langInfo);
 
-    protected abstract void addLangInfo(XSDAnnotationsStructure xsdAnnoStruct, String langCode, String value);
+    protected abstract void addLangInfo(XSDAnnotationsStructure xsdAnnoStruct, LanguageInfo langInfo);
 }

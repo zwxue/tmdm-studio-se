@@ -36,7 +36,7 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
 
     protected TreeObject treeObj;
 
-    public SchemaTreeContentProvider(IWorkbenchPartSite site, XSDSchema invisibleRoot, TreeObject treeObject) {
+    public SchemaTreeContentProvider(IWorkbenchPartSite site, XSDSchema invisibleRoot) {
         this.site = site;
         this.xsdSchema = invisibleRoot;
     }

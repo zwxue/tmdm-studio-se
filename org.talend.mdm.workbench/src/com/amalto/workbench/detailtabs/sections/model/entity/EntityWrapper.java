@@ -1,4 +1,4 @@
-package com.amalto.workbench.detailtabs.sections.model;
+package com.amalto.workbench.detailtabs.sections.model.entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,10 @@ import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDSchema;
 
+import com.amalto.workbench.detailtabs.sections.handlers.CommitHandler;
+import com.amalto.workbench.detailtabs.sections.handlers.EntityCommitHandler;
+import com.amalto.workbench.detailtabs.sections.model.INameEditable;
+import com.amalto.workbench.detailtabs.sections.model.ISubmittable;
 import com.amalto.workbench.utils.inputvalidator.EditXSDEleDecNameValidator;
 
 public class EntityWrapper implements ISubmittable, INameEditable {
@@ -98,5 +102,9 @@ public class EntityWrapper implements ISubmittable, INameEditable {
             return sourceEntity.getName();
 
         return "";
+    }
+
+    public CommitHandler createCommitHandler() {
+        return new EntityCommitHandler(this);
     }
 }

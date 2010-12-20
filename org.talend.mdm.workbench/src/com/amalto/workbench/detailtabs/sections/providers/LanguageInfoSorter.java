@@ -3,7 +3,7 @@ package com.amalto.workbench.detailtabs.sections.providers;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 
-import com.amalto.workbench.detailtabs.sections.model.LanguageInfo;
+import com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo.LanguageInfo;
 
 public class LanguageInfoSorter extends ViewerSorter {
 

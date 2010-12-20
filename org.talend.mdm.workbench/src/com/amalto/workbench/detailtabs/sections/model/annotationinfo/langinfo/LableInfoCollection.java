@@ -1,8 +1,11 @@
-package com.amalto.workbench.detailtabs.sections.model;
+package com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo;
 
 import java.util.Collection;
 
 import org.eclipse.xsd.XSDComponent;
+
+import com.amalto.workbench.detailtabs.sections.handlers.CommitHandler;
+import com.amalto.workbench.detailtabs.sections.handlers.LabelCommitHandler;
 
 class LableInfoCollection extends LanguageInfoCollection {
 
@@ -17,5 +20,9 @@ class LableInfoCollection extends LanguageInfoCollection {
     @Override
     public boolean isLabelInfo() {
         return true;
+    }
+
+    public CommitHandler createCommitHandler() {
+        return new LabelCommitHandler(this);
     }
 }

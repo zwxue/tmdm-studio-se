@@ -1,4 +1,4 @@
-package com.amalto.workbench.detailtabs.sections.model;
+package com.amalto.workbench.detailtabs.sections.model.entity;
 
 import java.util.ArrayList;
 import java.util.List;

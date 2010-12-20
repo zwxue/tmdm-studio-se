@@ -5,7 +5,7 @@ import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.xsd.XSDIdentityConstraintCategory;
 
-import com.amalto.workbench.detailtabs.sections.model.KeyWrapper;
+import com.amalto.workbench.detailtabs.sections.model.entity.KeyWrapper;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 

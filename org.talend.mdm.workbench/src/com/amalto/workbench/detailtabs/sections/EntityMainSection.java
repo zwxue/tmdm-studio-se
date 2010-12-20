@@ -19,8 +19,7 @@ import com.amalto.workbench.detailtabs.sections.composites.CommitBarComposite;
 import com.amalto.workbench.detailtabs.sections.composites.CommitBarComposite.CommitBarListener;
 import com.amalto.workbench.detailtabs.sections.composites.EntityKeyConfigComposite;
 import com.amalto.workbench.detailtabs.sections.composites.NameConfigComposite;
-import com.amalto.workbench.detailtabs.sections.handlers.CommitHandlerFactory;
-import com.amalto.workbench.detailtabs.sections.model.EntityWrapper;
+import com.amalto.workbench.detailtabs.sections.model.entity.EntityWrapper;
 
 public class EntityMainSection extends BasePropertySection implements CommitBarListener {
 
@@ -104,7 +103,7 @@ public class EntityMainSection extends BasePropertySection implements CommitBarL
     public void onSubmit() {
 
         try {
-            if (CommitHandlerFactory.getInstance().creatCommitHandler(entityWrapper).submit()) {
+            if (entityWrapper.createCommitHandler().submit()) {
                 entityWrapper = new EntityWrapper(entityWrapper.getSourceEntity());
                 refresh();
 

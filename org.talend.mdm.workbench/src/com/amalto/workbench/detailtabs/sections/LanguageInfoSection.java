@@ -20,9 +20,8 @@ import com.amalto.workbench.detailtabs.exception.CommitException;
 import com.amalto.workbench.detailtabs.exception.CommitValidationException;
 import com.amalto.workbench.detailtabs.sections.composites.CommitBarComposite.CommitBarListener;
 import com.amalto.workbench.detailtabs.sections.composites.LanguageInfoComposite;
-import com.amalto.workbench.detailtabs.sections.handlers.CommitHandlerFactory;
-import com.amalto.workbench.detailtabs.sections.model.LanguageInfo;
-import com.amalto.workbench.detailtabs.sections.model.LanguageInfoCollection;
+import com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo.LanguageInfo;
+import com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo.LanguageInfoCollection;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
@@ -97,7 +96,7 @@ public abstract class LanguageInfoSection extends BasePropertySection implements
     public void onSubmit() {
 
         try {
-            if (CommitHandlerFactory.getInstance().creatCommitHandler(getPreparedLangInfoCollection()).submit()) {
+            if (getPreparedLangInfoCollection().createCommitHandler().submit()) {
 
                 initLanguageInfo(getXSDComponent());
                 refresh();

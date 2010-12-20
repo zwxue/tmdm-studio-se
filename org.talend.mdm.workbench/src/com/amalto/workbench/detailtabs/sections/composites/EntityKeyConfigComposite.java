@@ -33,9 +33,9 @@ import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintCategory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 
-import com.amalto.workbench.detailtabs.sections.model.EntityWrapper;
-import com.amalto.workbench.detailtabs.sections.model.FieldWrapper;
-import com.amalto.workbench.detailtabs.sections.model.KeyWrapper;
+import com.amalto.workbench.detailtabs.sections.model.entity.EntityWrapper;
+import com.amalto.workbench.detailtabs.sections.model.entity.FieldWrapper;
+import com.amalto.workbench.detailtabs.sections.model.entity.KeyWrapper;
 import com.amalto.workbench.detailtabs.sections.providers.FieldWrapperLabelProvider;
 import com.amalto.workbench.detailtabs.sections.providers.KeyWrapperLabelProvider;
 import com.amalto.workbench.dialogs.IdentityConstraintInputDialog;

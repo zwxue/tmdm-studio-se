@@ -9,6 +9,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.xsdeditor.XSDEditor;
+import com.amalto.workbench.models.TreeObject;
 
 public abstract class BasePropertySection extends AbstractPropertySection {
 
@@ -51,5 +52,9 @@ public abstract class BasePropertySection extends AbstractPropertySection {
 
     protected DataModelMainPage getCurDataModelMainPage() {
         return (DataModelMainPage) ((XSDEditor) getPart()).getAdapter(DataModelMainPage.class);
+    }
+
+    public TreeObject getTreeObject() {
+        return getCurDataModelMainPage().getXObject();
     }
 }

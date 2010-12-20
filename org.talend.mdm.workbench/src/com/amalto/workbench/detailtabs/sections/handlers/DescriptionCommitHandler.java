@@ -2,10 +2,11 @@ package com.amalto.workbench.detailtabs.sections.handlers;
 
 import java.util.Map;
 
-import com.amalto.workbench.detailtabs.sections.model.LanguageInfoCollection;
+import com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo.LanguageInfo;
+import com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo.LanguageInfoCollection;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
-class DescriptionCommitHandler extends LanguageInfoCommitHandler {
+public class DescriptionCommitHandler extends LanguageInfoCommitHandler {
 
     public DescriptionCommitHandler(LanguageInfoCollection submittedLangInfos) {
         super(submittedLangInfos);
@@ -17,8 +18,8 @@ class DescriptionCommitHandler extends LanguageInfoCommitHandler {
     }
 
     @Override
-    protected void addLangInfo(XSDAnnotationsStructure xsdAnnoStruct, String langCode, String value) {
-        xsdAnnoStruct.setDescription(langCode, value);
+    protected void addLangInfo(XSDAnnotationsStructure xsdAnnoStruct, LanguageInfo langInfo) {
+        xsdAnnoStruct.setDescription(langInfo.getLanguageISOCode(), langInfo.getLabel());
     }
 
     @Override
@@ -27,7 +28,7 @@ class DescriptionCommitHandler extends LanguageInfoCommitHandler {
     }
 
     @Override
-    protected void updateLangInfo(XSDAnnotationsStructure xsdAnnoStruct, String langCode, String value) {
-        xsdAnnoStruct.setDescription(langCode, value);
+    protected void updateLangInfo(XSDAnnotationsStructure xsdAnnoStruct, LanguageInfo langInfo) {
+        xsdAnnoStruct.setDescription(langInfo.getLanguageISOCode(), langInfo.getLabel());
     }
 }

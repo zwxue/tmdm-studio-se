@@ -8,7 +8,7 @@ import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Item;
 
-import com.amalto.workbench.detailtabs.sections.model.LanguageInfo;
+import com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo.LanguageInfo;
 
 public class LanguageInfoModifier implements ICellModifier {
 

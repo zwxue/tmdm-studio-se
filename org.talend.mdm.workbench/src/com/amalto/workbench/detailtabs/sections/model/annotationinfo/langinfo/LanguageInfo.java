@@ -1,4 +1,4 @@
-package com.amalto.workbench.detailtabs.sections.model;
+package com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo;
 
 public class LanguageInfo {
 

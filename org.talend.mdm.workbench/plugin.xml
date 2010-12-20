@@ -107,6 +107,12 @@
               id="org.talend.mdm.workbench.properties.entity.tab.presentation"
               label="Presentation">
         </propertyTab>
+        <propertyTab
+              afterTab="org.talend.mdm.workbench.properties.entity.tab.presentation"
+              category="Entity"
+              id="org.talend.mdm.workbench.properties.entity.tab.accessrights"
+              label="Access Rights">
+        </propertyTab>
      </propertyTabs>
   </extension>
   <extension

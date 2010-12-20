@@ -4,7 +4,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
 
-import com.amalto.workbench.detailtabs.sections.model.FieldWrapper;
+import com.amalto.workbench.detailtabs.sections.model.entity.FieldWrapper;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
