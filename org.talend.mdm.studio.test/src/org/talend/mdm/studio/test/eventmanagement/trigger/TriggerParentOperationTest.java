@@ -12,44 +12,38 @@
 // ============================================================================
 package org.talend.mdm.studio.test.eventmanagement.trigger;
 
+import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.talend.mdm.studio.test.eventmanagement.EventManagementTest;
+import org.junit.runner.RunWith;
+import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
  * DOC rhou class global comment. Detailled comment
  */
-public class TriggerParentOperationTest extends EventManagementTest {
+@RunWith(SWTBotJunit4ClassRunner.class)
+public class TriggerParentOperationTest extends TalendSWTBotForMDM {
 
     private static SWTBotTreeItem triggerParentNode;
 
+    private SWTBotTreeItem eventManagementItem;
+
     @Before
     public void runBeforeEveryTest() {
+        eventManagementItem = serverItem.getNode("Event Management");
+        eventManagementItem.expand();
 
+        triggerParentNode = eventManagementItem.getNode("Trigger [HEAD]");
     }
 
     @After
     public void runAfterEveryTest() {
 
-    }
-
-    @BeforeClass
-    public static void runBeforeClass() {
-        // run for one time before all test cases
-        triggerParentNode = eventManagementItem.getNode("Trigger [HEAD]");
-
-    }
-
-    @AfterClass
-    public static void runAfterClass() {
-        // run for one time after all test cases
     }
 
     @Test

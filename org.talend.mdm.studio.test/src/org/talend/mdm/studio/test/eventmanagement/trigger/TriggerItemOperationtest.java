@@ -12,39 +12,34 @@
 // ============================================================================
 package org.talend.mdm.studio.test.eventmanagement.trigger;
 
+import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.talend.mdm.studio.test.eventmanagement.EventManagementTest;
+import org.junit.runner.RunWith;
+import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
  * DOC rhou class global comment. Detailled comment
  */
-public class TriggerItemOperationtest extends EventManagementTest {
+@RunWith(SWTBotJunit4ClassRunner.class)
+public class TriggerItemOperationtest extends TalendSWTBotForMDM {
 
     private static SWTBotTreeItem triggerParentNode;
 
     private SWTBotTreeItem triggerNode;
 
+    private SWTBotTreeItem eventManagementItem;
+
     @Before
     public void runBeforeEveryTest() {
+        eventManagementItem = serverItem.getNode("Event Management");
+        eventManagementItem.expand();
 
-    }
-
-    @After
-    public void runAfterEveryTest() {
-
-    }
-
-    @BeforeClass
-    public static void runBeforeClass() {
-        // run for one time before all test cases
         triggerParentNode = eventManagementItem.getNode("Trigger [HEAD]");
         triggerParentNode.contextMenu("New").click();
         bot.text().setText("TriggerDemo");
@@ -58,9 +53,9 @@ public class TriggerItemOperationtest extends EventManagementTest {
         sleep(2);
     }
 
-    @AfterClass
-    public static void runAfterClass() {
-        // run for one time after all test cases
+    @After
+    public void runAfterEveryTest() {
+
     }
 
     @Test

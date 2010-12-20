@@ -1,35 +1,31 @@
 package org.talend.mdm.studio.test.eventmanagement;
 
+import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
-public class EventManagerTest extends EventManagementTest {
+@RunWith(SWTBotJunit4ClassRunner.class)
+public class EventManagerTest extends TalendSWTBotForMDM {
 
     private static SWTBotTreeItem eventManagerNode;
 
+    private SWTBotTreeItem eventManagementItem;
+
     @Before
     public void runBeforeEveryTest() {
+        eventManagementItem = serverItem.getNode("Event Management");
+        eventManagementItem.expand();
 
+        eventManagerNode = eventManagementItem.getNode("Event Manager");
     }
 
     @After
     public void runAfterEveryTest() {
 
-    }
-
-    @BeforeClass
-    public static void runBeforeClass() {
-        // run for one time before all test cases
-        eventManagerNode = eventManagementItem.getNode("Event Manager");
-    }
-
-    @AfterClass
-    public static void runAfterClass() {
-        // run for one time after all test cases
     }
 
     @Test

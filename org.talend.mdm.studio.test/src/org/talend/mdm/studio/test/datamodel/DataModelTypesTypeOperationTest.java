@@ -4,19 +4,21 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
+import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.XObjectEditor;
 
-public class DataModelTypesTypeOperationTest extends DataModelTest {
+@RunWith(SWTBotJunit4ClassRunner.class)
+public class DataModelTypesTypeOperationTest extends TalendSWTBotForMDM {
 
     private static SWTBotTree typesBotTree;
 
@@ -24,19 +26,13 @@ public class DataModelTypesTypeOperationTest extends DataModelTest {
 
     private static SWTBotTreeItem typeNode;
 
+    private SWTBotTreeItem dataModelItem;
+
     @Before
     public void runBeforeEveryTest() {
+        dataModelItem = serverItem.getNode("Data Model [HEAD]");
+        dataModelItem.expand();
 
-    }
-
-    @After
-    public void runAfterEveryTest() {
-
-    }
-
-    @BeforeClass
-    public static void runBeforeClass() {
-        // run for one time before all test cases
         SWTBotTreeItem node = dataModelItem.expandNode("System").getNode("Reporting");
         node.doubleClick();
 
@@ -50,9 +46,8 @@ public class DataModelTypesTypeOperationTest extends DataModelTest {
         typeNode.select().expand();
     }
 
-    @AfterClass
-    public static void runAfterClass() {
-        // run for one time after all test cases
+    @After
+    public void runAfterEveryTest() {
         Display.getDefault().syncExec(new Runnable() {
 
             public void run() {

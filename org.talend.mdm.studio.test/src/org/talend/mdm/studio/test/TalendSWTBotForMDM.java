@@ -16,47 +16,39 @@ import org.junit.BeforeClass;
  * 
  * DOC rhou class global comment. Detailled comment
  */
-public class StudioTest {
+public class TalendSWTBotForMDM {
 
     protected static SWTWorkbenchBot bot;
 
-    protected static SWTBotTree serverTree;
+    private static SWTBotTree serverTree;
 
-    protected static Tree swtTree;
+    private static Tree swtTree;
 
     protected static SWTBotTreeItem serverItem;
-    static {
-        bot = new SWTWorkbenchBot();
-        bot.viewByTitle("Welcome").close();
-        login();
-    }
 
-    private static void login() {
-        bot.menu("Window").menu("Open Perspective").menu("Other...").click();
-        final SWTBotShell shellShowView = bot.shell("Open Perspective");
-        shellShowView.widget.getDisplay().syncExec(new Runnable() {
+    private static boolean isLoggined = false;
 
-            public void run() {
-                shellShowView.widget.setSize(new Point(300, 600));
-            }
-        });
-        shellShowView.activate();
-        bot.table().select("MDM");
-        // bot.tree().select("MDM Server");
-        bot.button("OK").click();
-        bot.perspectiveByLabel("MDM").activate();
-        bot.viewByTitle("MDM Server").show();
+    public static void login() {
+
         bot.viewByTitle("MDM Server").toolbarButton("Add MDM Server Location").click();
         SWTBotShell shell = bot.shell("Talend MDM Studio Login");
         shell.activate();
+        sleep();
         bot.textWithLabel("Username").setText("admin");
+        sleep();
         bot.textWithLabel("Password").setText("talend");
+        sleep();
+        if (bot.comboBoxWithLabel("Version").itemCount() > 0)
+            bot.comboBoxWithLabel("Version").setSelection(0);
+        sleep();
+        bot.checkBox("Save this MDM Server Location").select();
+        sleep();
         bot.button("OK").click();
         sleep(10);
 
     }
 
-    protected static void initServerView() {
+    private static void initServerView() {
 
         final SWTBotView view = bot.viewById("org.talend.mdm.workbench.views.ServerView");
         view.show();
@@ -79,13 +71,38 @@ public class StudioTest {
 
     @BeforeClass
     public static void beforeClass() throws Exception {
-        System.out.println("beforeClass");
+        // System.out.println("beforeClass");
+        if (!isLoggined) {
+            bot = new SWTWorkbenchBot();
+            bot.viewByTitle("Welcome").close();
+            bot.menu("Window").menu("Open Perspective").menu("Other...").click();
+            final SWTBotShell shellShowView = bot.shell("Open Perspective");
+            shellShowView.widget.getDisplay().syncExec(new Runnable() {
+
+                public void run() {
+                    shellShowView.widget.setSize(new Point(300, 600));
+                }
+            });
+            shellShowView.activate();
+            bot.table().select("MDM");
+            bot.button("OK").click();
+            bot.perspectiveByLabel("MDM").activate();
+            bot.viewByTitle("MDM Server").show();
+            login();
+            initServerView();
+            isLoggined = true;
+        }
     }
 
     @AfterClass
     public static void AfterClass() {
         System.out.println("AfterClass");
+        logout();
         bot.sleep(2000);
+    }
+
+    public static void logout() {
+        serverItem.contextMenu("Logout").click();
     }
 
     protected static void sleep() {

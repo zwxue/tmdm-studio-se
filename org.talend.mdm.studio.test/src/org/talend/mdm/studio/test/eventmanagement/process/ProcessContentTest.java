@@ -15,13 +15,13 @@ package org.talend.mdm.studio.test.eventmanagement.process;
 import junit.framework.Assert;
 
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.talend.mdm.studio.test.eventmanagement.EventManagementTest;
+import org.junit.runner.RunWith;
+import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
  * ProcessContentTest is a test class to imitate the process to create the steps of a process.This class will imitate
@@ -30,7 +30,8 @@ import org.talend.mdm.studio.test.eventmanagement.EventManagementTest;
  * DOC rhou class global comment. Detailled comment
  * 
  */
-public class ProcessContentTest extends EventManagementTest {
+@RunWith(SWTBotJunit4ClassRunner.class)
+public class ProcessContentTest extends TalendSWTBotForMDM {
 
     private static SWTBotTreeItem processParentNode;
 
@@ -46,19 +47,13 @@ public class ProcessContentTest extends EventManagementTest {
 
     private String thiStep = "call job";
 
+    private SWTBotTreeItem eventManagementItem;
+
     @Before
     public void runBeforeEveryTest() {
+        eventManagementItem = serverItem.getNode("Event Management");
+        eventManagementItem.expand();
 
-    }
-
-    @After
-    public void runAfterEveryTest() {
-
-    }
-
-    @BeforeClass
-    public static void runBeforeClass() {
-        // run for one time before all test cases
         processParentNode = eventManagementItem.getNode("Process [HEAD]");
         // for normal process
         processParentNode.contextMenu("New").click();
@@ -68,9 +63,8 @@ public class ProcessContentTest extends EventManagementTest {
         sleep(2);
     }
 
-    @AfterClass
-    public static void runAfterClass() {
-        // run for one time after all test cases
+    @After
+    public void runAfterEveryTest() {
         Display.getDefault().syncExec(new Runnable() {
 
             public void run() {

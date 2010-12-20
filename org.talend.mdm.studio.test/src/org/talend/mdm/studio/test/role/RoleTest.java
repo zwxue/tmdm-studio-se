@@ -12,18 +12,29 @@
 // ============================================================================
 package org.talend.mdm.studio.test.role;
 
+import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
-import org.talend.mdm.studio.test.StudioTest;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.runner.RunWith;
+import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
  * DOC rhou class global comment. Detailled comment
  */
-public class RoleTest extends StudioTest {
+@RunWith(SWTBotJunit4ClassRunner.class)
+public class RoleTest extends TalendSWTBotForMDM {
 
-    protected static SWTBotTreeItem roleItem;
-    static {
-        initServerView();
+    private SWTBotTreeItem roleItem;
+
+    @Before
+    public void runBeforeEveryTest() {
         roleItem = serverItem.getNode("Role [HEAD]");
         roleItem.expand();
+    }
+
+    @After
+    public void runAfterEveryTest() {
+
     }
 }

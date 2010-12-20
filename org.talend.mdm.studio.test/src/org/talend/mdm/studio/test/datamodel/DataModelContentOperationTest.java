@@ -18,14 +18,16 @@ import java.net.URISyntaxException;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.Activator;
+import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 import org.talend.mdm.studio.test.util.Util;
 
 /**
@@ -36,24 +38,18 @@ import org.talend.mdm.studio.test.util.Util;
  * see bug 0017197.
  * 
  */
-
-public class DataModelOperationTest extends DataModelTest {
+@RunWith(SWTBotJunit4ClassRunner.class)
+public class DataModelContentOperationTest extends TalendSWTBotForMDM {
 
     private String DSTAR_DATAMODEL = "dstar.xml";
 
+    private SWTBotTreeItem dataModelItem;
+
     @Before
     public void runBeforeEveryTest() {
+        dataModelItem = serverItem.getNode("Data Model [HEAD]");
+        dataModelItem.expand();
 
-    }
-
-    @After
-    public void runAfterEveryTest() {
-
-    }
-
-    @BeforeClass
-    public static void runBeforeClass() {
-        // run for one time before all test cases
         dataModelItem.contextMenu("New").click();
         SWTBotShell newDataModelShell = bot.shell("New Data Model");
         newDataModelShell.activate();
@@ -66,16 +62,12 @@ public class DataModelOperationTest extends DataModelTest {
         sleep();
     }
 
-    @AfterClass
-    public static void runAfterClass() {
-        // run for one time after all test cases
+    @After
+    public void runAfterEveryTest() {
         dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
         sleep();
-    }
-
-    public void runTest() {
     }
 
     @Test

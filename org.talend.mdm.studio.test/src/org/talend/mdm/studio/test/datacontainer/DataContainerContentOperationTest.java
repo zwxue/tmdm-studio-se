@@ -13,15 +13,16 @@
 package org.talend.mdm.studio.test.datacontainer;
 
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTable;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 import com.amalto.workbench.editors.DataClusterBrowserMainPage;
 import com.amalto.workbench.editors.XObjectBrowser;
@@ -31,26 +32,20 @@ import com.amalto.workbench.editors.XObjectBrowser;
  * 
  * DOC rhou class global comment. Detailled comment
  */
-public class DataContainerRecordOperationTest extends DataContainerTest {
+@RunWith(SWTBotJunit4ClassRunner.class)
+public class DataContainerContentOperationTest extends TalendSWTBotForMDM {
+
+    protected static SWTBotTreeItem dataContainerItem;
 
     @Before
     public void runBeforeEveryTest() {
-
+        dataContainerItem = serverItem.getNode("Data Container");
+        dataContainerItem.expand();
     }
 
     @After
     public void runAfterEveryTest() {
 
-    }
-
-    @BeforeClass
-    public static void runBeforeClass() {
-        // run for one time before all test cases
-    }
-
-    @AfterClass
-    public static void runAfterClass() {
-        // run for one time after all test cases
     }
 
     @Test
@@ -67,7 +62,7 @@ public class DataContainerRecordOperationTest extends DataContainerTest {
         SWTBotTable conceptBotTree = new SWTBotTable(table);
         Assert.assertNotNull(conceptBotTree);
         conceptBotTree.select(1, 1);
-        conceptBotTree.contextMenu("New Record").click();
+        bot.table().contextMenu("Commit").click();
         SWTBotShell newDataContainerShell = bot.shell("XML Editor/Viewer");
         newDataContainerShell.activate();
     }

@@ -12,25 +12,26 @@
 // ============================================================================
 package org.talend.mdm.studio.test.datamodel;
 
+import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
- * DataModelCreateTest is a SWTBot test class for testing the new and delete functions of Data Model.
+ * dataModelTest is a superclass of the test classes for testing the functions of Data Container.
  * 
  * DOC rhou class global comment. Detailled comment
- * 
  */
-public class DataModelCreateTest extends DataModelTest {
+@RunWith(SWTBotJunit4ClassRunner.class)
+public class DataModelParentOperationTest extends TalendSWTBotForMDM {
 
-    private SWTBotTreeItem dataModelItem;
+    protected static SWTBotTreeItem dataModelItem;
 
     @Before
     public void runBeforeEveryTest() {
@@ -38,25 +39,8 @@ public class DataModelCreateTest extends DataModelTest {
         dataModelItem.expand();
     }
 
-    @After
-    public void runAfterEveryTest() {
-
-    }
-
-    @BeforeClass
-    public static void runBeforeClass() {
-        // run for one time before all test cases
-        initServerView();
-    }
-
-    @AfterClass
-    public static void runAfterClass() {
-        // run for one time after all test cases
-    }
-
-    // see bug 0016453
     @Test
-    public void dataModelNewTest() {
+    public void dataModelCreationTest() {
         dataModelItem.contextMenu("New").click();
         // bot.sleep(1000);
         SWTBotShell newDataContainerShell = bot.shell("New Data Model");
@@ -76,11 +60,41 @@ public class DataModelCreateTest extends DataModelTest {
     }
 
     @Test
-    public void dataModelDeleteTest() {
+    public void dataModelCategoryCreationTest() {
+        dataModelItem.contextMenu("New Category").click();
+        // bot.sleep(1000);
+        SWTBotShell newCategoryShell = bot.shell("New Category");
+        newCategoryShell.activate();
+        SWTBotText text = bot.textWithLabel("Enter a name for the New Category");
+        text.setText("TestDataModelCategory");
+        bot.button("OK").click();
+        Assert.assertNotNull(dataModelItem.getNode("TestDataModelCategory"));
+        sleep(2);
+    }
+
+    @Test
+    public void dataModelBroseRevisionTest() {
+        dataModelItem.contextMenu("New Category").click();
+        // bot.sleep(1000);
+        SWTBotShell newCategoryShell = bot.shell("New Category");
+        newCategoryShell.activate();
+        SWTBotText text = bot.textWithLabel("Enter a name for the New Category");
+        text.setText("TestDataModelCategory");
+        bot.button("OK").click();
+        Assert.assertNotNull(dataModelItem.getNode("TestDataModelCategory"));
+        sleep(2);
+    }
+
+    @After
+    public void runAfterEveryTest() {
         dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
         sleep();
-        Assert.assertNull(dataModelItem.getNode("TestDataModel"));
+
+        dataModelItem.getNode("TestDataModelCategory").contextMenu("Delete").click();
+        sleep();
+        bot.button("OK").click();
+        sleep();
     }
 }

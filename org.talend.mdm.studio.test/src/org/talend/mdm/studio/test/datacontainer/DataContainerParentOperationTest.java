@@ -12,45 +12,35 @@
 // ============================================================================
 package org.talend.mdm.studio.test.datacontainer;
 
+import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
- * DataContainerCreateTest is a SWTBot test class for testing the new and delete functions of Data Container.
+ * DataContainerTest is a superclass of the test classes for testing the functions of Data Container.
  * 
  * DOC rhou class global comment. Detailled comment
- * 
  */
-public class DataContainerCreateTest extends DataContainerTest {
+@RunWith(SWTBotJunit4ClassRunner.class)
+public class DataContainerParentOperationTest extends TalendSWTBotForMDM {
+
+    protected static SWTBotTreeItem dataContainerItem;
 
     @Before
     public void runBeforeEveryTest() {
-    }
-
-    @After
-    public void runAfterEveryTest() {
-
-    }
-
-    @BeforeClass
-    public static void runBeforeClass() {
-        // run for one time before all test cases
-    }
-
-    @AfterClass
-    public static void runAfterClass() {
-        // run for one time after all test cases
+        dataContainerItem = serverItem.getNode("Data Container");
+        dataContainerItem.expand();
     }
 
     @Test
-    public void dataContainerNewTest() {
+    public void dataContainerCreationTest() {
         dataContainerItem.contextMenu("New").click();
         // bot.sleep(1000);
         SWTBotShell newDataContainerShell = bot.shell("New Data Container");
@@ -72,11 +62,30 @@ public class DataContainerCreateTest extends DataContainerTest {
     }
 
     @Test
-    public void dataContainerDeleteTest() {
+    public void dataContainerCategoryCreationTest() {
+        dataContainerItem.contextMenu("New Category").click();
+        // bot.sleep(1000);
+        SWTBotShell newCategoryShell = bot.shell("New Category");
+        newCategoryShell.activate();
+        SWTBotText text = bot.textWithLabel("Enter a name for the New Category");
+        text.setText("TestDataContainerCategory");
+        bot.button("OK").click();
+        sleep();
+        SWTBotTreeItem cateNode = dataContainerItem.getNode("TestDataContainerCategory");
+        Assert.assertNotNull(cateNode);
+        sleep(2);
+    }
+
+    @After
+    public void runAfterEveryTest() {
         dataContainerItem.getNode("TestDataContainer").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
-        Assert.assertNull(dataContainerItem.getNode("TestDataContainer"));
+        sleep();
+
+        dataContainerItem.getNode("TestDataContainerCategory").contextMenu("Delete").click();
+        sleep();
+        bot.button("OK").click();
         sleep();
     }
 }

@@ -1,24 +1,34 @@
 package org.talend.mdm.studio.test.view;
 
+import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-import org.talend.mdm.studio.test.StudioTest;
+import org.junit.runner.RunWith;
+import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
-public class ViewTest extends StudioTest {
+@RunWith(SWTBotJunit4ClassRunner.class)
+public class ViewTest extends TalendSWTBotForMDM {
 
-    @BeforeClass
-    public static void beforeClass() throws Exception {
-        initServerView();
+    private SWTBotTreeItem viewItem;
+
+    @Before
+    public void runBeforeEveryTest() {
+        viewItem = serverItem.getNode("View [HEAD]");
+        viewItem.expand();
+    }
+
+    @After
+    public void runAfterEveryTest() {
+
     }
 
     @Test
     public void canCreateView() throws Exception {
         // Create a new view to test the filter of the xpath.
-        SWTBotTreeItem viewNode = serverTree.expandNode("http://localhost:8080/talend/TalendPort [HEAD] admin").getNode(
-                "View [HEAD]");
-        viewNode.contextMenu("New").click();
+        viewItem.contextMenu("New").click();
         // bot.sleep(1000);
         SWTBotShell newViewShell = bot.shell("New View");
         newViewShell.activate();
