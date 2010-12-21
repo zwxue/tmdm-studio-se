@@ -10,8 +10,9 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.datamodel;
+package org.talend.mdm.studio.test.role;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
@@ -24,68 +25,71 @@ import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
- * dataModelTest is a superclass of the test classes for testing the functions of Data Container.
+ * roleTest is a superclass of the test classes for testing the functions of Data Container.
  * 
  * DOC rhou class global comment. Detailled comment
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class DataModelParentOperationTest extends TalendSWTBotForMDM {
+public class RoleParentOperationTest extends TalendSWTBotForMDM {
 
-    protected static SWTBotTreeItem dataModelItem;
+    protected static SWTBotTreeItem roleParentItem;
 
     @Before
     public void runBeforeEveryTest() {
-        dataModelItem = serverItem.getNode("Data Model [HEAD]");
-        dataModelItem.expand();
+        roleParentItem = serverItem.getNode("Role [HEAD]");
+        roleParentItem.expand();
     }
 
     @Test
-    public void dataModelCreationTest() {
-        dataModelItem.contextMenu("New").click();
+    public void roleCreationTest() {
+        roleParentItem.contextMenu("New").click();
         // bot.sleep(1000);
-        SWTBotShell newDataContainerShell = bot.shell("New Data Model");
-        newDataContainerShell.activate();
-        SWTBotText text = bot.textWithLabel("Enter a name for the New Instance");
-        text.setText("TestDataModel");
+        SWTBotShell shell = bot.shell("New Role");
+        shell.activate();
+        SWTBotText text = bot.textWithLabel("Enter a name for the Role:");
+        text.setText("TestRole");
         sleep();
         bot.buttonWithTooltip("Add").click();
         sleep();
-        bot.button("OK").click();
-        bot.textWithLabel("Description").setText("This is a test for data model");
-        bot.activeEditor().save();
+        bot.button(IDialogConstants.NEXT_LABEL).click();
         sleep();
+
+        bot.comboBoxWithLabel("Administrator").selection();
+        bot.button(IDialogConstants.FINISH_LABEL).click();
+        bot.activeEditor().save();
         bot.activeEditor().close();
-        Assert.assertNotNull(dataModelItem.getNode("TestDataModel"));
+
+        Assert.assertNotNull(roleParentItem.getNode("TestRole"));
         sleep(2);
     }
 
     @Test
-    public void dataModelCategoryCreationTest() {
-        dataModelItem.contextMenu("New Category").click();
+    public void roleCategoryCreationTest() {
+        roleParentItem.contextMenu("New Category").click();
         // bot.sleep(1000);
         SWTBotShell newCategoryShell = bot.shell("New Category");
         newCategoryShell.activate();
         SWTBotText text = bot.textWithLabel("Enter a name for the New Category");
-        text.setText("TestDataModelCategory");
+        text.setText("TestRoleCategory");
         bot.button("OK").click();
-        Assert.assertNotNull(dataModelItem.getNode("TestDataModelCategory"));
+        Assert.assertNotNull(roleParentItem.getNode("TestRoleCategory"));
         sleep(2);
     }
 
     @Test
-    public void dataModelBroseRevisionTest() {
-        dataModelItem.contextMenu("Browse Revision").click();
+    public void roleBrowseRevisionTest() {
+        roleParentItem.contextMenu("Browse Revision").click();
         sleep(2);
     }
 
     @After
     public void runAfterEveryTest() {
-        dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
+        roleParentItem.getNode("TestRole").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
         sleep();
 
-        dataModelItem.getNode("TestDataModelCategory").contextMenu("Delete").click();
+        roleParentItem.getNode("TestRoleCategory").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
         sleep();

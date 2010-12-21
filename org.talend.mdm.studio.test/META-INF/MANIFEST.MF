@@ -16,3 +16,5 @@ Require-Bundle: org.eclipse.ui,
  org.talend.mdm.workbench,
  org.eclipse.ui.forms
 Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: sample/,
+ .
