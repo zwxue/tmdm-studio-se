@@ -222,7 +222,9 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
 	public String getTypeName() {
 		return typeName;
 	}
-	
+	public String getSuperTypeName(){
+		return conceptPanel.getSuperName();
+	}
 	public boolean isChoice(){
 		return conceptPanel.isChoice();
 	}
@@ -235,7 +237,9 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
 	{
 		return conceptPanel.getText();
 	}
-	
+	public boolean isAbstract(){
+		return conceptPanel.isAbstract();
+	}
 	public boolean isBuildIn()
 	{
 		return elemPanel.isBuiltIn();

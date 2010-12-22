@@ -98,7 +98,7 @@ public class XSDNewElementAction extends UndoAction implements SelectionListener
 
             UndoAction changeAction = null;
             if (dlg.isComplexType()) {
-                changeAction = new XSDChangeToComplexTypeAction(page, decl, dlg.getComplexType(), dlg.isChoice(), dlg.isAll());
+                changeAction = new XSDChangeToComplexTypeAction(page, decl, dlg.getComplexType(), dlg.isChoice(), dlg.isAll(),dlg.isAbstract(),dlg.getSuperTypeName());
             } else {
                 changeAction = new XSDChangeToSimpleTypeAction(page, decl, dlg.getElementType(), dlg.isBuildIn());
             }

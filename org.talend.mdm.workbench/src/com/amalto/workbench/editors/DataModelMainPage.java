@@ -1122,6 +1122,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             if (xsd == null) {
                 // schema = ((XSDTreeContentProvider) viewer.getContentProvider()).getXSDSchemaAsString();
                 schema = ((SchemaTreeContentProvider) viewer.getContentProvider()).getXSDSchemaAsString();
+                xsdSchema= ((SchemaTreeContentProvider) viewer.getContentProvider()).getXsdSchema();
             }
             // remove 'targetNamespace', 'xmlns' attr, for it will cause xsd validate error, the xsd is
             // invalid

@@ -66,10 +66,11 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 	}
 	
 	public XSDChangeToComplexTypeAction(DataModelMainPage page, XSDElementDeclaration dec,
-			String name, boolean choice, boolean all) {
+			String name, boolean choice, boolean all, boolean isAbstract,String superTypeName) {
 		
 		this(page,false);
-		
+		this.superTypeName=superTypeName;
+		this.isAbstract=isAbstract;
 		declNew = dec;
 		showDlg = false;
 		typeName = name;
