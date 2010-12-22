@@ -17,6 +17,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDCompositor;
+import org.eclipse.xsd.XSDDerivationMethod;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDFactory;
 import org.eclipse.xsd.XSDIdentityConstraintCategory;
@@ -163,7 +164,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 			XSDParticle subParticle = null;
 			XSDParticle groupParticle = null;
 			XSDElementDeclaration subElement = null;
-			
+
 			//check if already exist
 			//add by ymli; fix the bug:0012278;
 			XSDElementDeclaration parent=null;
@@ -206,19 +207,19 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
    			
        		if (complexType != null) {
        			XSDParticleImpl partCnt = (XSDParticleImpl) complexType
-       			.getContent();
+       			.getContentType();       			
        			XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt
        			.getTerm();
        			if (isChoice)
        				mdlGrp.setCompositor(XSDCompositor.CHOICE_LITERAL);
        			else if (isAll) {
        				mdlGrp.setCompositor(XSDCompositor.ALL_LITERAL);
-//					partCnt.setMaxOccurs(1);
+
        			} else {
        				mdlGrp.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
-//					partCnt.getElement().getAttributeNode("maxOccurs")
-//							.setNodeValue("unbounded");
        			}
+       			partCnt.unsetMaxOccurs();
+       			partCnt.unsetMinOccurs();
    				XSDTypeDefinition superType=null;
    				for(XSDTypeDefinition type : types)
    				{
@@ -228,9 +229,15 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
    					}
    				}
    				complexType.setName(typeName);
-   				if(superType!=null)
+   				if(superType!=null){
+   					complexType.setDerivationMethod(XSDDerivationMethod.EXTENSION_LITERAL);
    					complexType.setBaseTypeDefinition(superType);
-   				complexType.setAbstract(isAbstract);
+   				}
+   				if(isAbstract)
+   					complexType.setAbstract(isAbstract);
+   				else
+   					complexType.unsetAbstract();
+   			
        			if(parent!=null)
        				parent.updateElement();
        			if(complexType!=null)
@@ -247,8 +254,8 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
         		subElement.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));
        			
         		subParticle = factory.createXSDParticle();
-       			subParticle.setMinOccurs(1);
-       			subParticle.setMaxOccurs(1);
+        		subParticle.unsetMaxOccurs();
+        		subParticle.unsetMinOccurs();
        			subParticle.setContent(subElement);
        			subParticle.updateElement();
 
@@ -276,17 +283,22 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
        					}
        				}
        				complexType.setName(typeName);
-       				if(superType!=null)
+       				if(superType!=null){
+       					complexType.setDerivationMethod(XSDDerivationMethod.EXTENSION_LITERAL);
        					complexType.setBaseTypeDefinition(superType);
-       				complexType.setAbstract(isAbstract);
+       				}
+       				if(isAbstract)
+       					complexType.setAbstract(isAbstract);
+       				else
+       					complexType.unsetAbstract();
        				schema.getContents().add(complexType);
        			}
        			complexType.updateElement();
        			
        			//add the group
        			groupParticle = factory.createXSDParticle();
-       			groupParticle.setMinOccurs(1);
-       			groupParticle.setMaxOccurs(1);
+       			groupParticle.unsetMaxOccurs();
+       			groupParticle.unsetMinOccurs();
        			groupParticle.setContent(group);
        			groupParticle.updateElement();
        			
@@ -346,7 +358,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
    			}// if isConcept
        	    
        		decl.updateElement();
-       		
+       		schema.update();
        		page.refresh();
       		
        		declNew = null;

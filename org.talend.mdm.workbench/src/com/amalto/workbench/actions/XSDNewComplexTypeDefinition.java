@@ -13,6 +13,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDCompositor;
+import org.eclipse.xsd.XSDDerivationMethod;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDFactory;
 import org.eclipse.xsd.XSDModelGroup;
@@ -68,8 +69,8 @@ public class XSDNewComplexTypeDefinition extends UndoAction implements Selection
 		subElement.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));
 		
 		subParticle = factory.createXSDParticle();
-		subParticle.setMinOccurs(1);
-		subParticle.setMaxOccurs(1);
+		subParticle.unsetMaxOccurs();
+		subParticle.unsetMinOccurs();
 		subParticle.setContent(subElement);
 		subParticle.updateElement();
 		
@@ -93,9 +94,14 @@ public class XSDNewComplexTypeDefinition extends UndoAction implements Selection
 			}
 		}
 		complexType.setName(typeName);
-		if(superType!=null)
+		if(superType!=null){
+			complexType.setDerivationMethod(XSDDerivationMethod.EXTENSION_LITERAL);
 			complexType.setBaseTypeDefinition(superType);
-		complexType.setAbstract(isAbstract);
+		}
+		if(isAbstract)
+			complexType.setAbstract(isAbstract);
+		else
+			complexType.unsetAbstract();
 		schema.getContents().add(complexType);
 		
 		complexType.updateElement();
