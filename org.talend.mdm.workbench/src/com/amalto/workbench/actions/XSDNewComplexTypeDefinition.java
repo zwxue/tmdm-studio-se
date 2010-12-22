@@ -28,6 +28,8 @@ import com.amalto.workbench.image.ImageCache;
 public class XSDNewComplexTypeDefinition extends UndoAction implements SelectionListener{
 	private ComplexTypeInputDialog dialog;
 	String typeName = null;
+	String superTypeName;
+	boolean isAbstract;
 	boolean isChoice = false;
 	boolean isAll = false;
 	
@@ -82,7 +84,18 @@ public class XSDNewComplexTypeDefinition extends UndoAction implements Selection
    			
 		XSDComplexTypeDefinition complexType = factory.createXSDComplexTypeDefinition();
 		//complexType.setDerivationMethod(XSDDerivationMethod.EXTENSION_LITERAL);
+		XSDTypeDefinition superType=null;
+		for(XSDTypeDefinition type : list)
+		{
+			if(type.getName().equals(superTypeName)){
+				superType=type;
+				break;
+			}
+		}
 		complexType.setName(typeName);
+		if(superType!=null)
+			complexType.setBaseTypeDefinition(superType);
+		complexType.setAbstract(isAbstract);
 		schema.getContents().add(complexType);
 		
 		complexType.updateElement();
@@ -106,6 +119,8 @@ public class XSDNewComplexTypeDefinition extends UndoAction implements Selection
 	public void widgetSelected(SelectionEvent e) {
 		if (dialog.getReturnCode()==-1) return;
 		typeName = dialog.getTypeName();
+		superTypeName=dialog.getSuperName();
+		isAbstract=dialog.isAbstract();
 		isChoice = dialog.isChoice();
 		isAll = dialog.isAll();
 		

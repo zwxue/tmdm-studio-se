@@ -45,6 +45,8 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 	
 	XSDElementDeclaration declNew = null;
 	String typeName = null;
+	String superTypeName;
+	boolean isAbstract;
 	boolean isChoice = false;
 	boolean isAll = false;
 	
@@ -120,8 +122,8 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 
        		///save current Type Definition
        		//XSDTypeDefinition current = decl.getTypeDefinition();      		
+			List<XSDComplexTypeDefinition> types = Util.getComplexTypes(decl.getSchema());
        		if (showDlg) {
-       			List<XSDComplexTypeDefinition> types = Util.getComplexTypes(decl.getSchema());
        			if(tPath!=null)
 				for (int i = 0; i < tPath.getSegmentCount(); i++) {
 					if (tPath.getSegment(i) instanceof XSDElementDeclaration){
@@ -165,11 +167,11 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 			//check if already exist
 			//add by ymli; fix the bug:0012278;
 			XSDElementDeclaration parent=null;
-			 
-			if(Util.getParent(decl) instanceof XSDElementDeclaration)
-			parent = (XSDElementDeclaration)Util.getParent(decl);
-			else if(Util.getParent(decl) instanceof XSDComplexTypeDefinition)
-				complexType = (XSDComplexTypeDefinition)Util.getParent(decl);
+			Object pObject= Util.getParent(decl);
+			if(pObject instanceof XSDElementDeclaration)
+				parent = (XSDElementDeclaration)pObject;
+			else if(pObject instanceof XSDComplexTypeDefinition)
+				complexType = (XSDComplexTypeDefinition)pObject;
 				
        		if (!anonymous) {
        			EList list = schema.getTypeDefinitions();
@@ -217,28 +219,24 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 //					partCnt.getElement().getAttributeNode("maxOccurs")
 //							.setNodeValue("unbounded");
        			}
-//				partCnt.setMinOccurs(0);
+   				XSDTypeDefinition superType=null;
+   				for(XSDTypeDefinition type : types)
+   				{
+   					if(type.getName().equals(superTypeName)){
+   						superType=type;
+   						break;
+   					}
+   				}
+   				complexType.setName(typeName);
+   				if(superType!=null)
+   					complexType.setBaseTypeDefinition(superType);
+   				complexType.setAbstract(isAbstract);
        			if(parent!=null)
        				parent.updateElement();
-       			else
+       			if(complexType!=null)
        				complexType.updateElement();
        		}
-   			
-//				ArrayList<XSDTypeDefinition> types = Util.getImportedTypeDefinitionChildren(schema);
-//				for (XSDTypeDefinition type: types)
-//				{
-//					if ((type.getName().equals(typeName) && (type instanceof XSDComplexTypeDefinition))) {
-//						alreadyExists = true;
-//						Pattern mask = Pattern.compile("(.*?):(.*?)");
-//						Matcher matcher = mask.matcher(typeName);
-//						if (matcher.matches())
-//						{
-//							type.setName(matcher.group(2));
-//						}
-//						complexType = (XSDComplexTypeDefinition)type;
-//						break;
-//					}
-//				}
+
        		
        		//Create if does not exist
        		if (!alreadyExists) {
@@ -269,7 +267,18 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
        			complexType = factory.createXSDComplexTypeDefinition();
        			//complexType.setDerivationMethod(XSDDerivationMethod.EXTENSION_LITERAL);
        			if (!anonymous) {
+       				XSDTypeDefinition superType=null;
+       				for(XSDTypeDefinition type : types)
+       				{
+       					if(type.getName().equals(superTypeName)){
+       						superType=type;
+       						break;
+       					}
+       				}
        				complexType.setName(typeName);
+       				if(superType!=null)
+       					complexType.setBaseTypeDefinition(superType);
+       				complexType.setAbstract(isAbstract);
        				schema.getContents().add(complexType);
        			}
        			complexType.updateElement();
@@ -292,34 +301,6 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
        	    	decl.setTypeDefinition(complexType);
        	    }
        	    
-       	    //remove current if no more in use
-//       	FIXME: must nor remove complex types in use by other elements
-   	    	/*
-       	    if (	(current.getName()!=null) &&  //anonymous type
-       	    		(!schema.getSchemaForSchemaNamespace().equals(current.getTargetNamespace()))
-       	    	){
-       	    	List eut =Util.findElementsUsingType(schema, current.getTargetNamespace(), current.getName()); 
-       	    	if (eut.size()==0)
-       	    		schema.getContents().remove(current);  
-       	    	//else
-       	    	//	System.out.println("Type Definition "+current.getName()+" in use by "+((XSDElementDeclaration)eut.get(0)).getName());
-       	    }
-       	    */
-       	    
-       	    //remove unique key with name of concept
-   			/*
-       	    EList list = decl.getIdentityConstraintDefinitions();
-       	    XSDIdentityConstraintDefinition toRemove = null;
-       	    for (Iterator iter = list.iterator(); iter.hasNext(); ) {
-				XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) iter.next();
-				if (icd.getName().equals(decl.getName())) {
-					toRemove = icd;
-					break;
-				}
-			}
-       	    if (toRemove!=null) list.remove(toRemove);
-       	    */
-   			
    			if (isConcept) {
    				
    				//remove exisiting unique key(s)
@@ -368,20 +349,6 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
        		
        		page.refresh();
       		
-       		//FIXME: reveal the sub element created and edit it
-       		/*
-       		if (subParticle!=null) {
-       			page.getTreeViewer().setExpandedState(decl, true);
-       			page.getTreeViewer().setSelection(
-       					new StructuredSelection(groupParticle),
-       					true
-       			);
-       			ISelection sel = page.getTreeViewer().getSelection();
-       			System.out.println(sel.toString());
-       			XSDEditParticleAction editAction = new XSDEditParticleAction(page);
-       			//editAction.run();
-       		}
-       		*/
        		declNew = null;
        		page.markDirty();
        		
@@ -422,6 +389,8 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 
 	public void widgetSelected(SelectionEvent e) {
 		if (dialog.getReturnCode()==-1) return;
+		superTypeName=dialog.getSuperName();
+		isAbstract=dialog.isAbstract();
 		typeName = dialog.getTypeName();
 		isChoice = dialog.isChoice();
 		isAll = dialog.isAll();

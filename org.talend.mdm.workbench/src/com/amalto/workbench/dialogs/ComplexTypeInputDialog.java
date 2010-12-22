@@ -27,7 +27,8 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener{
 	private SelectionListener caller = null;
 	
 	private String typeName = "";
-
+	private String superTypeName="";
+	private boolean isAbstract;
 	private ConceptComposite conceptPanel = null;
 	
 	List<XSDComplexTypeDefinition> types;
@@ -37,6 +38,7 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener{
 	private boolean isXSDModelGroup=false;
 
 	private XSDCompositor typeComposite;
+	private XSDCompositor superTypeComposite;
 
 	/**
 	 * @param parentShell
@@ -58,11 +60,19 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener{
 			if (typeDefinition instanceof XSDComplexTypeDefinition) {
 				if(typeDefinition.getName()!=null)
 					this.typeName=typeDefinition.getName();
+				superTypeName=typeDefinition.getBaseType().getName();
 				XSDComplexTypeDefinition complexType = (XSDComplexTypeDefinition) typeDefinition;
 				XSDParticleImpl partCnt = (XSDParticleImpl) complexType
 						.getContent();
 				XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
 				typeComposite=mdlGrp.getCompositor();
+				
+				XSDComplexTypeDefinition superComplexType=(XSDComplexTypeDefinition) (typeDefinition.getBaseType());
+				partCnt = (XSDParticleImpl) superComplexType.getContent();
+				mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
+				superTypeComposite=mdlGrp.getCompositor();
+				
+				isAbstract=((XSDComplexTypeDefinition) typeDefinition).isAbstract();
 			}
 		}
 	}
@@ -75,15 +85,17 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener{
 		
 		// encapsulate all widgets into the ConceptComposite which can be applied to several cases
 		if (caller instanceof XSDNewComplexTypeDefinition) {
-			parent.getShell().setText("Create a Complex Type");
+			parent.getShell().setText("Complex Type Properties");
 			conceptPanel = new ConceptComposite(composite, false,types, true);
 		} else {
 			if(isXSDModelGroup)
-				parent.getShell().setText("Change Sub-Element Group");
+				parent.getShell().setText("Complex Type Properties");
 			else
-				parent.getShell().setText("Change To Complex Type");
+				parent.getShell().setText("Complex Type Properties");
 			conceptPanel = new ConceptComposite(composite, false,types, false);
 			conceptPanel.setText(typeName);
+			if(superTypeName!=null && !"anyType".equalsIgnoreCase(superTypeName))
+				conceptPanel.setSuperName(superTypeName);
 			if (typeComposite != null) {
 				if (typeComposite.equals(XSDCompositor.ALL_LITERAL))
 					conceptPanel.setAll();
@@ -92,6 +104,7 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener{
 				if (typeComposite.equals(XSDCompositor.SEQUENCE_LITERAL))
 					conceptPanel.setSequence();
 			}
+			conceptPanel.setAbstract(isAbstract);
 		}
 		conceptPanel.getTypeCombo().addModifyListener(this);
 	    return conceptPanel.getComposite();
@@ -101,16 +114,12 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener{
 	protected void createButtonsForButtonBar(Composite parent) {
 		super.createButtonsForButtonBar(parent);
 		getButton(IDialogConstants.OK_ID).addSelectionListener(this.caller);
-		/*
-	      createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-	                true);
-	        createButton(parent, IDialogConstants.CANCEL_ID,
-	                IDialogConstants.CANCEL_LABEL, false);
-	  */
 	}
 	
 	protected void okPressed() {				
 		typeName = conceptPanel.getText();
+		superTypeName=conceptPanel.getSuperName();
+		isAbstract=conceptPanel.isAbstract();
 		setReturnCode(OK);
 		//no close let Action Handler handle it
 	}
@@ -156,6 +165,12 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener{
 	}
 	public boolean isAll() {
 		return conceptPanel.isAll();
+	}
+	public boolean isAbstract(){
+		return conceptPanel.isAbstract();
+	}
+	public String getSuperName(){
+		return conceptPanel.getSuperName();
 	}
 	public String getTypeName() {
 		return typeName;
