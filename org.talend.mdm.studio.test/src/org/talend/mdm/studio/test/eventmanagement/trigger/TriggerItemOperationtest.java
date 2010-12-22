@@ -29,7 +29,7 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class TriggerItemOperationtest extends TalendSWTBotForMDM {
 
-    private static SWTBotTreeItem triggerParentNode;
+    private SWTBotTreeItem triggerParentNode;
 
     private SWTBotTreeItem triggerNode;
 

@@ -11,7 +11,7 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class EventManagerTest extends TalendSWTBotForMDM {
 
-    private static SWTBotTreeItem eventManagerNode;
+    private SWTBotTreeItem eventManagerNode;
 
     private SWTBotTreeItem eventManagementItem;
 

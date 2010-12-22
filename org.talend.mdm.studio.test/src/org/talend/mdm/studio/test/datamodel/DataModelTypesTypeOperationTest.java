@@ -20,11 +20,11 @@ import com.amalto.workbench.editors.XObjectEditor;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class DataModelTypesTypeOperationTest extends TalendSWTBotForMDM {
 
-    private static SWTBotTree typesBotTree;
+    private SWTBotTree typesBotTree;
 
-    private static DataModelMainPage mainpage;
+    private DataModelMainPage mainpage;
 
-    private static SWTBotTreeItem typeNode;
+    private SWTBotTreeItem typeNode;
 
     private SWTBotTreeItem dataModelItem;
 

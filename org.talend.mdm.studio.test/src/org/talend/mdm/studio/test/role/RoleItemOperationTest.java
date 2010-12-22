@@ -33,7 +33,7 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class RoleItemOperationTest extends TalendSWTBotForMDM {
 
-    protected static SWTBotTreeItem roleParentItem;
+    private SWTBotTreeItem roleParentItem;
 
     private SWTBotTreeItem newNode;
 

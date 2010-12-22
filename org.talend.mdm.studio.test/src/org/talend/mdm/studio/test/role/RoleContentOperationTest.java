@@ -25,27 +25,28 @@ import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
- * roleTest is a superclass of the test classes for testing the functions of Data Container.
+ * DataModelOperationTest is a SWTBot test class to test the operation associated with the import,export.
  * 
  * DOC rhou class global comment. Detailled comment
+ * 
+ * see bug 0017197.
+ * 
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class RoleParentOperationTest extends TalendSWTBotForMDM {
+public class RoleContentOperationTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem roleParentItem;
+
+    private SWTBotTreeItem roleItem;
 
     @Before
     public void runBeforeEveryTest() {
         roleParentItem = serverItem.getNode("Role [HEAD]");
         roleParentItem.expand();
-    }
 
-    @Test
-    public void roleCreationTest() {
         roleParentItem.contextMenu("New").click();
-        // bot.sleep(1000);
-        SWTBotShell shell = bot.shell("New Role");
-        shell.activate();
+        SWTBotShell newroleShell = bot.shell("New Role");
+        newroleShell.activate();
         SWTBotText text = bot.textWithLabel("Enter a name for the Role:");
         text.setText("TestRole");
         sleep();
@@ -58,27 +59,9 @@ public class RoleParentOperationTest extends TalendSWTBotForMDM {
         bot.button(IDialogConstants.FINISH_LABEL).click();
         bot.activeEditor().save();
         bot.activeEditor().close();
-
-        Assert.assertNotNull(roleParentItem.getNode("TestRole"));
-        sleep(2);
-    }
-
-    @Test
-    public void roleCategoryCreationTest() {
-        roleParentItem.contextMenu("New Category").click();
-        // bot.sleep(1000);
-        SWTBotShell newCategoryShell = bot.shell("New Category");
-        newCategoryShell.activate();
-        SWTBotText text = bot.textWithLabel("Enter a name for the New Category");
-        text.setText("TestRoleCategory");
-        bot.button("OK").click();
-        Assert.assertNotNull(roleParentItem.getNode("TestRoleCategory"));
-        sleep(2);
-    }
-
-    @Test
-    public void roleBrowseRevisionTest() {
-        roleParentItem.contextMenu("Browse Revision").click();
+        roleItem = roleParentItem.getNode("TestRole");
+        Assert.assertNotNull(roleItem);
+        roleItem.doubleClick();
         sleep(2);
     }
 
@@ -88,10 +71,34 @@ public class RoleParentOperationTest extends TalendSWTBotForMDM {
         sleep();
         bot.button("OK").click();
         sleep();
+    }
 
-        roleParentItem.getNode("TestRoleCategory").contextMenu("Delete").click();
-        sleep();
+    @Test
+    public void setDescriptionTest() {
+        bot.buttonWithTooltip("Set the Descriptions").click();
+        bot.shell("Set the Descriptions").activate();
+        bot.comboBox().setSelection("English");
+        String des = "Administrator";
+        bot.text().setText(des);
+        bot.buttonWithTooltip("Add").click();
         bot.button("OK").click();
+        Assert.assertEquals(des, bot.text(0).getText());
+    }
+
+    @Test
+    public void setPermissionTest() {
+        String type = "Object Type";
+        String instance = "Read and Write Permissins On Specific Instances";
+
+        bot.comboBoxWithLabel(type).setSelection("Data Container");
+        bot.comboBoxWithLabel(instance).setSelection("CONF");
+        bot.buttonWithTooltip("Add").click();
+        sleep();
+
+        bot.comboBoxWithLabel(type).setSelection("Data Model");
+        bot.comboBoxWithLabel(instance).setSelection("SearchTemplate");
+        bot.comboBox("Read Only").setSelection("Read & Write");
+        bot.buttonWithTooltip("Add").click();
         sleep();
     }
 }

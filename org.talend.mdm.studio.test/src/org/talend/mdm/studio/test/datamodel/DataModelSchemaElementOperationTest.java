@@ -21,20 +21,20 @@ import com.amalto.workbench.editors.XObjectEditor;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
 
-    private static SWTBotTree conceptBotTree;
+    private SWTBotTree conceptBotTree;
 
-    private static DataModelMainPage mainpage;
+    private DataModelMainPage mainpage;
 
-    private static SWTBotTreeItem conceptNode;
+    private SWTBotTreeItem conceptNode;
 
-    private static SWTBotTreeItem eleItem;
+    private SWTBotTreeItem eleItem;
 
-    private static SWTBotTreeItem groupItem;
+    private SWTBotTreeItem groupItem;
 
-    private static SWTBotTreeItem dataModelItem;
+    private SWTBotTreeItem dataModelItem;
 
     @Before
-    public static void runBeforeEveryTest() {
+    public void runBeforeEveryTest() {
         dataModelItem = serverItem.getNode("Data Model [HEAD]");
         dataModelItem.expand();
 
@@ -54,7 +54,7 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
     }
 
     @After
-    public static void runAfterEveryTest() {
+    public void runAfterEveryTest() {
         // run for one time after all test cases
         Display.getDefault().syncExec(new Runnable() {
 

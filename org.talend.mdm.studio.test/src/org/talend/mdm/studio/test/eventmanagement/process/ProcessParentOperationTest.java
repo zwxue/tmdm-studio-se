@@ -29,7 +29,7 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class ProcessParentOperationTest extends TalendSWTBotForMDM {
 
-    private static SWTBotTreeItem processParentNode;
+    private SWTBotTreeItem processParentNode;
 
     private String selEle = "Reporting";
 

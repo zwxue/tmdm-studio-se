@@ -35,7 +35,7 @@ import com.amalto.workbench.editors.XObjectBrowser;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class DataContainerContentOperationTest extends TalendSWTBotForMDM {
 
-    protected static SWTBotTreeItem dataContainerItem;
+    private SWTBotTreeItem dataContainerItem;
 
     @Before
     public void runBeforeEveryTest() {

@@ -20,11 +20,11 @@ import com.amalto.workbench.editors.XObjectEditor;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class DataModelSchemaKeyOperationTest extends TalendSWTBotForMDM {
 
-    private static DataModelMainPage mainpage;
+    private DataModelMainPage mainpage;
 
-    private static SWTBotTree conceptBotTree;
+    private SWTBotTree conceptBotTree;
 
-    private static SWTBotTreeItem keyItem;
+    private SWTBotTreeItem keyItem;
 
     private SWTBotTreeItem dataModelItem;
 

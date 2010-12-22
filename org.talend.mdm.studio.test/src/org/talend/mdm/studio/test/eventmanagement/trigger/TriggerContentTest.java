@@ -32,7 +32,7 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class TriggerContentTest extends TalendSWTBotForMDM {
 
-    private static SWTBotTreeItem triggerParentNode;
+    private SWTBotTreeItem triggerParentNode;
 
     private String[] array = new String[] { "DataModel  [0...1]", "Concept", "OperationType" };
 

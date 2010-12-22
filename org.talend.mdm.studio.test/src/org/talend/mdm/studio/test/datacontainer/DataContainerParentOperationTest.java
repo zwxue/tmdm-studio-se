@@ -31,7 +31,7 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class DataContainerParentOperationTest extends TalendSWTBotForMDM {
 
-    protected static SWTBotTreeItem dataContainerItem;
+    private SWTBotTreeItem dataContainerItem;
 
     @Before
     public void runBeforeEveryTest() {

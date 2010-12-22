@@ -38,9 +38,9 @@ import com.amalto.workbench.editors.XObjectEditor;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class DataModelSchemaOperationTest extends TalendSWTBotForMDM {
 
-    private static SWTBotTree conceptBotTree;
+    private SWTBotTree conceptBotTree;
 
-    private static DataModelMainPage mainpage;
+    private DataModelMainPage mainpage;
 
     private SWTBotTreeItem dataModelItem;
 

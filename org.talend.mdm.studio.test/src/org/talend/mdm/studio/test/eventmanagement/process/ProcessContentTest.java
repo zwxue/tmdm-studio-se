@@ -33,7 +33,7 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class ProcessContentTest extends TalendSWTBotForMDM {
 
-    private static SWTBotTreeItem processParentNode;
+    private SWTBotTreeItem processParentNode;
 
     private String GETITEM_PARAMETERS = "";
 

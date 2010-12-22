@@ -28,7 +28,7 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class TransformerItemOperationtest extends TalendSWTBotForMDM {
 
-    private static SWTBotTreeItem jobParentItem;
+    private SWTBotTreeItem jobParentItem;
 
     private SWTBotTreeItem jobCategoryItem;
 
