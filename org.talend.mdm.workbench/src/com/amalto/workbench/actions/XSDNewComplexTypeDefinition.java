@@ -109,8 +109,8 @@ public class XSDNewComplexTypeDefinition extends UndoAction implements Selection
 
 		//add the group
 		XSDParticle groupParticle  = factory.createXSDParticle();
-		groupParticle.setMinOccurs(1);
-		groupParticle.setMaxOccurs(1);
+		groupParticle.unsetMaxOccurs();
+		groupParticle.unsetMinOccurs();
 		groupParticle.setContent(group);
 		groupParticle.updateElement();
 		
