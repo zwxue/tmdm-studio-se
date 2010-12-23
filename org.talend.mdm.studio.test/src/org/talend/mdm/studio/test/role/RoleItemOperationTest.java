@@ -26,7 +26,6 @@ import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
- * roleTest is a superclass of the test classes for testing the functions of Data Container.
  * 
  * DOC rhou class global comment. Detailled comment
  */
@@ -35,7 +34,7 @@ public class RoleItemOperationTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem roleParentItem;
 
-    private SWTBotTreeItem newNode;
+    private SWTBotTreeItem roleItem;
 
     @Before
     public void runBeforeEveryTest() {
@@ -57,24 +56,24 @@ public class RoleItemOperationTest extends TalendSWTBotForMDM {
         bot.button(IDialogConstants.FINISH_LABEL).click();
         bot.activeEditor().save();
         bot.activeEditor().close();
-
-        Assert.assertNotNull(roleParentItem.getNode("TestRole"));
+        roleItem = roleParentItem.getNode("TestRole");
+        Assert.assertNotNull(roleItem);
         sleep(2);
     }
 
     @Test
     public void roleEditTest() {
-        SWTBotMenu editMenu = newNode.contextMenu("Edit");
+        SWTBotMenu editMenu = roleItem.contextMenu("Edit");
         sleep();
         editMenu.click();
     }
 
     @Test
     public void roleCopyTest() {
-        SWTBotMenu editMenu = newNode.contextMenu("Copy");
+        SWTBotMenu editMenu = roleItem.contextMenu("Copy");
         editMenu.click();
         sleep();
-        newNode.contextMenu("Paste").click();
+        roleItem.contextMenu("Paste").click();
         SWTBotShell pasteroleShell = bot.shell("Pasting instance TestRole");
         pasteroleShell.activate();
         bot.text("CopyOfTestRole").setText("PasteRole");
@@ -86,7 +85,7 @@ public class RoleItemOperationTest extends TalendSWTBotForMDM {
 
     @Test
     public void roleDuplicateTest() {
-        SWTBotMenu duplicateMenu = newNode.contextMenu("Duplicate");
+        SWTBotMenu duplicateMenu = roleItem.contextMenu("Duplicate");
         duplicateMenu.click();
         SWTBotShell shell = bot.shell("Pasting instance Testrole");
         shell.activate();
@@ -101,7 +100,7 @@ public class RoleItemOperationTest extends TalendSWTBotForMDM {
 
     @Test
     public void roleRenameTest() {
-        SWTBotMenu renameMenu = newNode.contextMenu("Rename");
+        SWTBotMenu renameMenu = roleItem.contextMenu("Rename");
         sleep();
         renameMenu.click();
         SWTBotShell renameShell = bot.shell("Rename");

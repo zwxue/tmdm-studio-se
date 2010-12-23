@@ -31,7 +31,7 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 import org.talend.mdm.studio.test.util.Util;
 
 /**
- * DataModelOperationTest is a SWTBot test class to test the operation associated with the import,export.
+ * DataModelContentOperationTest is a SWTBot test class to test the operation associated with the import,export.
  * 
  * DOC rhou class global comment. Detailled comment
  * 

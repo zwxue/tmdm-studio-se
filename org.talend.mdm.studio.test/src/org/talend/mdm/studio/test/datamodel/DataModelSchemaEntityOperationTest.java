@@ -30,7 +30,7 @@ import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.XObjectEditor;
 
 /**
- * DataModelContentTest is a SWTBot test class for testing the function of Data Model content.
+ * 
  * 
  * DOC rhou class global comment. Detailled comment
  */

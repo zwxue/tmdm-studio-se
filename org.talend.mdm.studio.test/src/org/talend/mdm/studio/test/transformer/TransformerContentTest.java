@@ -21,8 +21,6 @@ import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
- * ProcessContentTest is a test class to imitate the process to create the steps of a process.This class will imitate
- * the way to create a process like UpdateOperationalSystems in DStar.
  * 
  * DOC rhou class global comment. Detailled comment
  * 

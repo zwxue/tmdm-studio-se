@@ -25,7 +25,6 @@ import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
- * DataModelOperationTest is a SWTBot test class to test the operation associated with the import,export.
  * 
  * DOC rhou class global comment. Detailled comment
  * 

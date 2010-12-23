@@ -30,8 +30,7 @@ import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.XObjectEditor;
 
 /**
- * DataModelOperationTest2 is a SWTBot test class to test the operation associated with the filter,expand,collapse,up
- * and down.
+ * 
  * 
  * DOC rhou class global comment. Detailled comment
  */

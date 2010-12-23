@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.datacontainer;
+package org.talend.mdm.studio.test.menu;
 
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
@@ -25,65 +25,61 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
  * 
- * 
  * DOC rhou class global comment. Detailled comment
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class DataContainerParentOperationTest extends TalendSWTBotForMDM {
+public class MenuParentOperationTest extends TalendSWTBotForMDM {
 
-    private SWTBotTreeItem dataContainerItem;
+    private SWTBotTreeItem menuParentItem;
 
     @Before
     public void runBeforeEveryTest() {
-        dataContainerItem = serverItem.getNode("Data Container");
-        dataContainerItem.expand();
+        menuParentItem = serverItem.getNode("Menu [HEAD]");
+        menuParentItem.expand();
     }
 
     @Test
-    public void dataContainerCreationTest() {
-        dataContainerItem.contextMenu("New").click();
-        // bot.sleep(1000);
-        SWTBotShell newDataContainerShell = bot.shell("New Data Container");
-        newDataContainerShell.activate();
-        SWTBotText text = bot.textWithLabel("Enter a name for the New Instance");
-        text.setText("TestDataContainer");
-        sleep();
-        bot.buttonWithTooltip("Add").click();
+    public void MenuCreationTest() {
+        menuParentItem.contextMenu("New").click();
+        SWTBotShell shell = bot.shell("New Menu");
+        shell.activate();
+        SWTBotText text = bot.textWithLabel("Enter a name for the Menu:");
+        text.setText("TestMenu");
         sleep();
         bot.button("OK").click();
-        bot.textWithLabel("Description").setText("This is a test for data container");
-        bot.activeEditor().save();
         sleep();
-        bot.activeEditor().close();
-        SWTBotTreeItem newNode = dataContainerItem.getNode("TestDataContainer");
-        Assert.assertNotNull(newNode);
+        bot.activeEditor().save();
+        Assert.assertNotNull(menuParentItem.getNode("TestMenu"));
         sleep(2);
-
     }
 
     @Test
-    public void dataContainerCategoryCreationTest() {
-        dataContainerItem.contextMenu("New Category").click();
+    public void MenuCategoryCreationTest() {
+        menuParentItem.contextMenu("New Category").click();
         // bot.sleep(1000);
         SWTBotShell newCategoryShell = bot.shell("New Category");
         newCategoryShell.activate();
         SWTBotText text = bot.textWithLabel("Enter a name for the New Category");
-        text.setText("TestDataContainerCategory");
+        text.setText("TestMenuCategory");
         bot.button("OK").click();
-        sleep();
-        SWTBotTreeItem cateNode = dataContainerItem.getNode("TestDataContainerCategory");
-        Assert.assertNotNull(cateNode);
+        Assert.assertNotNull(menuParentItem.getNode("TestMenuCategory"));
+        sleep(2);
+    }
+
+    @Test
+    public void MenuBrowseRevisionTest() {
+        menuParentItem.contextMenu("Browse Revision").click();
         sleep(2);
     }
 
     @After
     public void runAfterEveryTest() {
-        dataContainerItem.getNode("TestDataContainer").contextMenu("Delete").click();
+        menuParentItem.getNode("TestMenu").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
         sleep();
 
-        dataContainerItem.getNode("TestDataContainerCategory").contextMenu("Delete").click();
+        menuParentItem.getNode("TestMenuCategory").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
         sleep();

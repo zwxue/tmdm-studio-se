@@ -25,7 +25,7 @@ import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
- * DataContainerTest is a superclass of the test classes for testing the functions of Data Container.
+ * 
  * 
  * DOC rhou class global comment. Detailled comment
  */

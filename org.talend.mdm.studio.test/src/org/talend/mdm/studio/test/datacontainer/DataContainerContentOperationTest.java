@@ -28,7 +28,7 @@ import com.amalto.workbench.editors.DataClusterBrowserMainPage;
 import com.amalto.workbench.editors.XObjectBrowser;
 
 /**
- * DataContainerRecordOperationTest is SWTBot test class to test the operation on the records.
+ * DataContainerContentOperationTest is SWTBot test class to test the operation on the records.
  * 
  * DOC rhou class global comment. Detailled comment
  */
