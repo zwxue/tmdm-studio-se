@@ -65,4 +65,24 @@ public class MDM {
         }
         return null;
     }
+    
+    /**
+     * Generate an <error code="X">msg</error> fragment
+     * 
+     * 
+     * {talendTypes} String
+     * 
+     * {Category} MDM
+     * 
+     * {param} string msg: error message.
+     * 
+     * {param} int(0) type: error type, (1:ERROR, 0:NORMAL)
+     * 
+     * {example} genErrMsg("test message",0) #  return <error code="0">test message</error>
+     */
+    public static String genErrMsg(String msg, int type){
+    	return "<error code=\""+type+"\">" + msg +"</error>";
+    }
+    
+    
 }
