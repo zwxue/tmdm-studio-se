@@ -11,6 +11,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 import com.amalto.workbench.detailtabs.sections.composites.CommitBarComposite;
 import com.amalto.workbench.detailtabs.sections.composites.CommitBarComposite.CommitBarListener;
+import com.amalto.workbench.detailtabs.sections.util.CommitBarListenerRegistry;
 
 public class CommitSection extends BasePropertySection {
 
@@ -36,6 +37,8 @@ public class CommitSection extends BasePropertySection {
         section.setClient(compSectionClient);
 
         initUIListeners();
+
+        registListenersFromGlobalRegistry();
     }
 
     @Override
@@ -71,6 +74,12 @@ public class CommitSection extends BasePropertySection {
                     addCommbarListeners();
             }
         });
+    }
 
+    private void registListenersFromGlobalRegistry() {
+
+        for (CommitBarListener eachListener : CommitBarListenerRegistry.getInstance().moveOutRegistedListeners(getParentTabID())) {
+            commitBar.addCommitListener(eachListener);
+        }
     }
 }

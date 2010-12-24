@@ -2,15 +2,15 @@ package com.amalto.workbench.detailtabs.sections.handlers;
 
 import com.amalto.workbench.detailtabs.sections.model.ISubmittable;
 
-class DefaultCommitHandler extends CommitHandler {
+class DefaultCommitHandler<T extends ISubmittable> extends CommitHandler<T> {
 
-    public DefaultCommitHandler(ISubmittable submittedObj) {
+    public DefaultCommitHandler(T submittedObj) {
         super(submittedObj);
     }
 
     @Override
     protected boolean doSubmit() {
-    	return false;
+        return false;
     }
 
     @Override

@@ -55,6 +55,14 @@ public class CommitBarComposite extends Composite {
         listeners.remove(listener);
     }
 
+    public void removeAllCommitBarListeners() {
+        listeners.clear();
+    }
+
+    public CommitBarListener[] getCommitBarListeners() {
+        return listeners.toArray(new CommitBarListener[0]);
+    }
+
     private void fireSubmit() {
         for (CommitBarListener eachListener : listeners)
             eachListener.onSubmit();
@@ -71,7 +79,6 @@ public class CommitBarComposite extends Composite {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-
                 fireSubmit();
             }
         });

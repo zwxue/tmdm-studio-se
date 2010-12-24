@@ -104,7 +104,7 @@ public class EntityWrapper implements ISubmittable, INameEditable {
         return "";
     }
 
-    public CommitHandler createCommitHandler() {
+    public CommitHandler<EntityWrapper> createCommitHandler() {
         return new EntityCommitHandler(this);
     }
 }

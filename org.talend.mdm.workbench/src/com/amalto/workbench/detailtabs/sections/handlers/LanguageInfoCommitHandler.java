@@ -13,9 +13,9 @@ import com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo.La
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
-abstract class LanguageInfoCommitHandler extends AnnotationInfoCommitHandler {
+abstract class LanguageInfoCommitHandler<T extends LanguageInfoCollection> extends AnnotationInfoCommitHandler<T> {
 
-    public LanguageInfoCommitHandler(LanguageInfoCollection submittedLangInfos) {
+    public LanguageInfoCommitHandler(T submittedLangInfos) {
         super(submittedLangInfos);
     }
 
@@ -26,11 +26,6 @@ abstract class LanguageInfoCommitHandler extends AnnotationInfoCommitHandler {
             validateEachLanguageInfo(eachLanguage);
         }
 
-    }
-
-    @Override
-    public LanguageInfoCollection getCommitedObj() {
-        return (LanguageInfoCollection) super.getCommitedObj();
     }
 
     private void validateEachLanguageInfo(LanguageInfo validatedLanguageInfo) throws CommitValidationException {

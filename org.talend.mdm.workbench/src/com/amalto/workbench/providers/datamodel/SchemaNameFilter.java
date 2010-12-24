@@ -10,25 +10,24 @@ import com.amalto.workbench.utils.SchemaElementNameFilterDes;
 
 public class SchemaNameFilter extends ViewerFilter {
 
-	protected SchemaTopElementNameSelector selector;
-	
-	public SchemaNameFilter(){
-		this(null);
-	}
-	
-	public SchemaNameFilter(SchemaElementNameFilterDes nameFilterDes){
-		setNameFilterDes(nameFilterDes);
-	}
-	
-	@Override
-	public boolean select(Viewer viewer, Object parentElement, Object element) {
-		return selector.isSatisfiedElement(parentElement, element);
-	}
+    protected SchemaTopElementNameSelector selector;
 
-	public void setNameFilterDes(SchemaElementNameFilterDes nameFilterDes){
-		
-		selector = SchemaTopElementNameSelectorFactory.getInstance()
-					.createSchemaTopElementNameSelectorOnPattern(
-						SchemaItemLabelCreator.getInstance(), nameFilterDes);
-	}
+    public SchemaNameFilter() {
+        this(null);
+    }
+
+    public SchemaNameFilter(SchemaElementNameFilterDes nameFilterDes) {
+        setNameFilterDes(nameFilterDes);
+    }
+
+    @Override
+    public boolean select(Viewer viewer, Object parentElement, Object element) {
+        return selector.isSatisfiedElement(parentElement, element);
+    }
+
+    public void setNameFilterDes(SchemaElementNameFilterDes nameFilterDes) {
+
+        selector = SchemaTopElementNameSelectorFactory.getInstance().createSchemaTopElementNameSelectorOnPattern(
+                SchemaItemLabelCreator.getInstance(), nameFilterDes);
+    }
 }

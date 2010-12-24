@@ -5,9 +5,9 @@ import com.amalto.workbench.detailtabs.exception.CommitValidationException;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.AnnotaionInfo;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
-public abstract class AnnotationInfoCommitHandler extends CommitHandler {
+public abstract class AnnotationInfoCommitHandler<T extends AnnotaionInfo> extends CommitHandler<T> {
 
-    public AnnotationInfoCommitHandler(AnnotaionInfo submittedObj) {
+    public AnnotationInfoCommitHandler(T submittedObj) {
         super(submittedObj);
     }
 
@@ -22,11 +22,6 @@ public abstract class AnnotationInfoCommitHandler extends CommitHandler {
         XSDAnnotationsStructure xsdAnnoStruct = getXSDAnnotationStruct();
 
         return doSubmit_Removal(xsdAnnoStruct) | doSubmit_Update(xsdAnnoStruct) | doSubmit_Add(xsdAnnoStruct);
-    }
-
-    @Override
-    public AnnotaionInfo getCommitedObj() {
-        return (AnnotaionInfo) super.getCommitedObj();
     }
 
     protected XSDAnnotationsStructure getXSDAnnotationStruct() {

@@ -93,6 +93,7 @@
      </propertyContributor>
   </extension>
   <extension
+        name="Entity Tabs"
         point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
      <propertyTabs
            contributorId="org.talend.mdm.workbench.propertyContributor.datamodel">
@@ -116,6 +117,20 @@
      </propertyTabs>
   </extension>
   <extension
+        name="Element Tabs"
+        point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+     <propertyTabs
+           contributorId="org.talend.mdm.workbench.propertyContributor.datamodel">
+        <propertyTab
+              afterTab="org.talend.mdm.workbench.properties.element.tab.accessrights"
+              category="Element"
+              id="org.talend.mdm.workbench.properties.element.tab.relationship"
+              label="Relationship">
+        </propertyTab>
+     </propertyTabs>
+  </extension>
+  <extension
+        name="Entity Sections"
         point="org.eclipse.ui.views.properties.tabbed.propertySections">
      <propertySections
            contributorId="org.talend.mdm.workbench.propertyContributor.datamodel">
@@ -151,6 +166,48 @@
               tab="org.talend.mdm.workbench.properties.entity.tab.presentation">
            <input
                  type="org.eclipse.xsd.XSDElementDeclaration">
+           </input>
+        </propertySection>
+     </propertySections>
+  </extension>
+  <extension
+        name="Element Sections"
+        point="org.eclipse.ui.views.properties.tabbed.propertySections">
+     <propertySections
+           contributorId="org.talend.mdm.workbench.propertyContributor.datamodel">
+        <propertySection
+              class="com.amalto.workbench.detailtabs.sections.ElementFKSection"
+              id="org.talend.mdm.workbench.properties.element.section.relationship.fk"
+              tab="org.talend.mdm.workbench.properties.element.tab.relationship">
+           <input
+                 type="org.eclipse.xsd.XSDParticle">
+           </input>
+        </propertySection>
+        <propertySection
+              afterSection="org.talend.mdm.workbench.properties.element.section.relationship.fk"
+              class="com.amalto.workbench.detailtabs.sections.ElementFKFilterSection"
+              id="org.talend.mdm.workbench.properties.element.section.relationship.fkfilter"
+              tab="org.talend.mdm.workbench.properties.element.tab.relationship">
+           <input
+                 type="org.eclipse.xsd.XSDParticle">
+           </input>
+        </propertySection>
+        <propertySection
+              afterSection="org.talend.mdm.workbench.properties.element.section.relationship.fkfilter"
+              class="com.amalto.workbench.detailtabs.sections.ElementFKInfosSection"
+              id="org.talend.mdm.workbench.properties.element.section.relationship.fkinfos"
+              tab="org.talend.mdm.workbench.properties.element.tab.relationship">
+           <input
+                 type="org.eclipse.xsd.XSDParticle">
+           </input>
+        </propertySection>
+        <propertySection
+              afterSection="org.talend.mdm.workbench.properties.element.section.relationship.fkinfos"
+              class="com.amalto.workbench.detailtabs.sections.CommitSection"
+              id="org.talend.mdm.workbench.properties.element.section.relationship.commit"
+              tab="org.talend.mdm.workbench.properties.element.tab.relationship">
+           <input
+                 type="org.eclipse.xsd.XSDParticle">
            </input>
         </propertySection>
      </propertySections>

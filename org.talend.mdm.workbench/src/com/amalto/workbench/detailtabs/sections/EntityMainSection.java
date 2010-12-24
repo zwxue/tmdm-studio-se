@@ -1,27 +1,21 @@
 package com.amalto.workbench.detailtabs.sections;
 
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.eclipse.xsd.XSDElementDeclaration;
 
-import com.amalto.workbench.detailtabs.exception.CommitException;
-import com.amalto.workbench.detailtabs.exception.CommitValidationException;
 import com.amalto.workbench.detailtabs.sections.composites.CommitBarComposite;
-import com.amalto.workbench.detailtabs.sections.composites.CommitBarComposite.CommitBarListener;
 import com.amalto.workbench.detailtabs.sections.composites.EntityKeyConfigComposite;
 import com.amalto.workbench.detailtabs.sections.composites.NameConfigComposite;
+import com.amalto.workbench.detailtabs.sections.model.ISubmittable;
 import com.amalto.workbench.detailtabs.sections.model.entity.EntityWrapper;
 
-public class EntityMainSection extends BasePropertySection implements CommitBarListener {
+public class EntityMainSection extends CommitBarListenerSection<XSDElementDeclaration> {
 
     public static final int SPACE_BEGINING = 10;
 
@@ -69,19 +63,6 @@ public class EntityMainSection extends BasePropertySection implements CommitBarL
     }
 
     @Override
-    public void setInput(IWorkbenchPart part, ISelection selection) {
-        super.setInput(part, selection);
-
-        entityWrapper = null;
-
-        Object inputedObj = ((IStructuredSelection) selection).getFirstElement();
-        if (inputedObj instanceof XSDElementDeclaration) {
-            entityWrapper = new EntityWrapper((XSDElementDeclaration) inputedObj);
-        }
-
-    }
-
-    @Override
     public void refresh() {
 
         compKeyConfig.setXSDElement(null);
@@ -94,34 +75,30 @@ public class EntityMainSection extends BasePropertySection implements CommitBarL
 
     }
 
-    public void onReset() {
-
-        entityWrapper = new EntityWrapper(entityWrapper.getSourceEntity());
-        refresh();
-    }
-
-    public void onSubmit() {
-
-        try {
-            if (entityWrapper.createCommitHandler().submit()) {
-                entityWrapper = new EntityWrapper(entityWrapper.getSourceEntity());
-                refresh();
-
-                getCurDataModelMainPage().refresh();
-                getCurDataModelMainPage().markDirty();
-            }
-        } catch (CommitException e) {
-            MessageDialog.openError(getPart().getSite().getShell(), "Commit Error", e.getMessage());
-        } catch (CommitValidationException e) {
-            MessageDialog.openError(getPart().getSite().getShell(), "Commit Validation Error", e.getMessage());
-            return;
-        }
-    }
-
     public void dispose() {
 
-        compCommitBar.removeCommitListener(this);
+        if (compCommitBar != null)
+            compCommitBar.removeCommitListener(this);
 
         super.dispose();
+    }
+
+    @Override
+    protected XSDElementDeclaration getEditedObj() {
+        return entityWrapper.getSourceEntity();
+    }
+
+    @Override
+    protected void initUIContents(XSDElementDeclaration editedObj) {
+        entityWrapper = new EntityWrapper((XSDElementDeclaration) editedObj);
+    }
+
+    @Override
+    protected ISubmittable getSubmittedObj() {
+        return entityWrapper;
+    }
+
+    @Override
+    protected void registToGolbalCommitBarListenerReg() {
     }
 }

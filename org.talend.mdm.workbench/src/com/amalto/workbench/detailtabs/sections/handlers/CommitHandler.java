@@ -4,15 +4,15 @@ import com.amalto.workbench.detailtabs.exception.CommitException;
 import com.amalto.workbench.detailtabs.exception.CommitValidationException;
 import com.amalto.workbench.detailtabs.sections.model.ISubmittable;
 
-public abstract class CommitHandler {
+public abstract class CommitHandler<T extends ISubmittable> {
 
-    protected ISubmittable submittedObj;
+    protected T submittedObj;
 
-    public CommitHandler(ISubmittable submittedObj) {
+    public CommitHandler(T submittedObj) {
         this.submittedObj = submittedObj;
     }
 
-    public ISubmittable getCommitedObj() {
+    public T getCommitedObj() {
         return submittedObj;
     }
 
@@ -30,8 +30,8 @@ public abstract class CommitHandler {
      */
     public boolean submit() throws CommitException, CommitValidationException {
 
-       validateCommit();
+        validateCommit();
 
-       return doSubmit();
+        return doSubmit();
     }
 }

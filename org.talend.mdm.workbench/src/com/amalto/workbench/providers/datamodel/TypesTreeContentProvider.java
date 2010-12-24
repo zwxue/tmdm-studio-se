@@ -9,6 +9,8 @@ import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 
+import com.amalto.workbench.utils.Util;
+
 public class TypesTreeContentProvider extends SchemaTreeContentProvider {
 
     public TypesTreeContentProvider(IWorkbenchPartSite site, XSDSchema invisibleRoot) {
@@ -44,9 +46,10 @@ public class TypesTreeContentProvider extends SchemaTreeContentProvider {
         }
     }
 
-    protected Object[] getXSDSchemaChildren() {
-        return filterOutDuplicatedElems(xsdSchema.getTypeDefinitions().toArray(
-                new XSDNamedComponent[xsdSchema.getTypeDefinitions().size()]));
+    @Override
+    protected Object[] getXSDSchemaChildren(XSDSchema schema) {
+        return Util.filterOutDuplicatedElems(schema.getTypeDefinitions().toArray(
+                new XSDNamedComponent[schema.getTypeDefinitions().size()]));
     }
 
 }

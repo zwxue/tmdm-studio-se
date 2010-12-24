@@ -2,13 +2,13 @@ package com.amalto.workbench.detailtabs.sections.handlers;
 
 import java.util.Map;
 
+import com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo.DescriptionInfoCollection;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo.LanguageInfo;
-import com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo.LanguageInfoCollection;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
-public class DescriptionCommitHandler extends LanguageInfoCommitHandler {
+public class DescriptionCommitHandler extends LanguageInfoCommitHandler<DescriptionInfoCollection> {
 
-    public DescriptionCommitHandler(LanguageInfoCollection submittedLangInfos) {
+    public DescriptionCommitHandler(DescriptionInfoCollection submittedLangInfos) {
         super(submittedLangInfos);
     }
 

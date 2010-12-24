@@ -19,6 +19,7 @@ import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.rmi.RemoteException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -90,6 +91,7 @@ import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDImport;
 import org.eclipse.xsd.XSDInclude;
 import org.eclipse.xsd.XSDModelGroup;
+import org.eclipse.xsd.XSDNamedComponent;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSchemaContent;
@@ -323,8 +325,8 @@ public class Util {
         try {
             if (xobject == null)
                 return null;
-            return getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(), xobject.getUsername(), xobject
-                    .getPassword());
+            return getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(), xobject.getUsername(),
+                    xobject.getPassword());
         } catch (MalformedURLException e) {
             throw new XtentisException("Invalid endpoint address: " + xobject.getEndpointAddress());
         }
@@ -531,8 +533,8 @@ public class Util {
      * @throws Exception
      */
     public static NodeList getNodeList(Node contextNode, String xPath, String namespace, String prefix) throws Exception {
-        XObject xo = XPathAPI.eval(contextNode, xPath, (namespace == null) ? contextNode : Util.getRootElement("nsholder",
-                namespace, prefix));
+        XObject xo = XPathAPI.eval(contextNode, xPath,
+                (namespace == null) ? contextNode : Util.getRootElement("nsholder", namespace, prefix));
         if (xo.getType() != XObject.CLASS_NODESET)
             return null;
         return xo.nodelist();
@@ -2624,6 +2626,61 @@ public class Util {
             return out.toByteArray();
         } catch (IOException e) {
         }
+        return null;
+    }
+
+    public static Object[] filterOutDuplicatedElems(XSDNamedComponent[] checkedElements) {
+
+        List<XSDNamedComponent> list = new ArrayList<XSDNamedComponent>();
+        for (XSDNamedComponent el : checkedElements) {
+            boolean exist = false;
+            for (XSDNamedComponent xsdEl : list) {
+                if (xsdEl.getName().equals(el.getName()) && xsdEl.getTargetNamespace() != null && el.getTargetNamespace() != null
+                        && xsdEl.getTargetNamespace().equals(el.getTargetNamespace())) {
+                    exist = true;
+                    break;
+                } else if (xsdEl.getName().equals(el.getName()) && xsdEl.getTargetNamespace() == null
+                        && el.getTargetNamespace() == null) {
+                    exist = true;
+                    break;
+                }
+            }
+            if (!exist
+                    && (el.getTargetNamespace() != null && !el.getTargetNamespace().equals(
+                            XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001)) || el.getTargetNamespace() == null) {
+                list.add(el);
+            }
+        }
+
+        return list.toArray(new Object[] {});
+
+    }
+
+    public static XSDSchema getXSDSchema(TreeObject treeObj, String dataModelName) {
+
+        TreeObject dataModelFolder = treeObj.findServerFolder(TreeObject.DATA_MODEL);
+
+        XtentisPort port = null;
+        try {
+            port = Util.getPort(dataModelFolder);
+        } catch (XtentisException e3) {
+            e3.printStackTrace();
+        } catch (Exception e3) {
+            e3.printStackTrace();
+        }
+        WSDataModel wsDataModel = null;
+        try {
+            wsDataModel = port.getDataModel(new WSGetDataModel(new WSDataModelPK(dataModelName)));
+        } catch (RemoteException e2) {
+            e2.printStackTrace();
+        }
+        try {
+            String schema = wsDataModel.getXsdSchema();
+            return Util.createXsdSchema(schema, dataModelFolder);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+
         return null;
     }
 }

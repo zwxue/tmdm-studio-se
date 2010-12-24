@@ -53,6 +53,9 @@ class SchemaTopElementNameSelectorOnPattern implements SchemaTopElementNameSelec
     }
 
     private void initPatterns(SchemaElementNameFilterDes nameFitlerDes) {
+
+        patterns.clear();
+
         for (String eachPattern : nameFitlerDes.getSeparatedFilterExpressions()) {
             eachPattern = eachPattern.replaceAll("\\*", ".*");
             eachPattern = eachPattern.replaceAll("\\+", ".+");

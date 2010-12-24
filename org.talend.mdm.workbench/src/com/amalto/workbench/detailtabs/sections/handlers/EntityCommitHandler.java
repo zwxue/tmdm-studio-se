@@ -19,7 +19,7 @@ import com.amalto.workbench.detailtabs.sections.model.entity.EntityWrapper;
 import com.amalto.workbench.detailtabs.sections.model.entity.FieldWrapper;
 import com.amalto.workbench.detailtabs.sections.model.entity.KeyWrapper;
 
-public class EntityCommitHandler extends CommitHandler {
+public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
 
     private static final String ERR_ENTITY_NULLENTITYNAME = "Entity name can not be empty";
 
@@ -56,11 +56,6 @@ public class EntityCommitHandler extends CommitHandler {
         validateEntityName();
 
         validateEntityKeys();
-    }
-
-    @Override
-    public EntityWrapper getCommitedObj() {
-        return (EntityWrapper) super.getCommitedObj();
     }
 
     private boolean commitEntityName() {
@@ -353,7 +348,8 @@ public class EntityCommitHandler extends CommitHandler {
 
         for (XSDIdentityConstraintDefinition eachId : getCommitedObj().getSchema().getIdentityConstraintDefinitions()) {
 
-            if (eachId.equals(checkedKeyWrapper.getSourceKey()))
+            if (eachId.equals(checkedKeyWrapper.getSourceKey())
+                    || eachId.getContainer().equals(getCommitedObj().getSourceEntity()))
                 continue;
 
             if (eachId.getName().equals(checkedKeyWrapper.getName())) {

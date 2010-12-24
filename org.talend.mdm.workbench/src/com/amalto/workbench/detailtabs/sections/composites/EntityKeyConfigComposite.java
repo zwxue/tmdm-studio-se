@@ -480,8 +480,8 @@ public class EntityKeyConfigComposite extends Composite {
 
                 try {
 
-                    SelectFieldDialog selectFieldDlg = new SelectFieldDialog(getShell(), "Select one field", Util
-                            .getChildElementNames("", entityWrapper.getSourceEntity()), selectedFields[0].getXPath());
+                    SelectFieldDialog selectFieldDlg = new SelectFieldDialog(getShell(), "Select one field",
+                            Util.getChildElementNames("", entityWrapper.getSourceEntity()), selectedFields[0].getXPath());
 
                     if (selectFieldDlg.open() != Window.OK)
                         return;
@@ -511,8 +511,8 @@ public class EntityKeyConfigComposite extends Composite {
                     if (selectedKeys.length == 0)
                         return;
 
-                    SelectFieldDialog selectFieldDlg = new SelectFieldDialog(getShell(), "Select one field", Util
-                            .getChildElementNames("", entityWrapper.getSourceEntity()), null);
+                    SelectFieldDialog selectFieldDlg = new SelectFieldDialog(getShell(), "Select one field",
+                            Util.getChildElementNames("", entityWrapper.getSourceEntity()), null);
 
                     if (selectFieldDlg.open() != Window.OK)
                         return;
@@ -554,7 +554,7 @@ public class EntityKeyConfigComposite extends Composite {
                         return;
 
                     KeyWrapper newKeyWrapper = new KeyWrapper(dialog.getKeyName(), ".", dialog.getType(),
-                            new FieldWrapper[] { new FieldWrapper(".") });
+                            new FieldWrapper[] { new FieldWrapper(dialog.getFieldName()) });
 
                     entityWrapper.addKey(newKeyWrapper);
 

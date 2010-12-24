@@ -1,4 +1,4 @@
-package com.amalto.workbench.detailtabs.sections.model.annotationinfo.simpleinfo;
+package com.amalto.workbench.detailtabs.sections.model.annotationinfo.listinfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,11 +7,11 @@ import org.eclipse.xsd.XSDComponent;
 
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.AnnotaionInfo;
 
-public abstract class SimpleAnnotationInfo extends AnnotaionInfo {
+public abstract class ListContentsAnnotationInfo extends AnnotaionInfo {
 
-    private List<String> infos = new ArrayList<String>();
+    protected List<String> infos = new ArrayList<String>();
 
-    public SimpleAnnotationInfo(XSDComponent sourceComponent, String[] infos) {
+    public ListContentsAnnotationInfo(XSDComponent sourceComponent, String[] infos) {
         super(sourceComponent);
 
         for (String eachInfo : infos) {

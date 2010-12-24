@@ -1,15 +1,12 @@
-package com.amalto.workbench.detailtabs.sections.composites;
+package com.amalto.workbench.widgets.composites;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -20,14 +17,11 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 
 import com.amalto.workbench.detailtabs.sections.providers.StringLabelProvider;
-import com.amalto.workbench.detailtabs.sections.providers.StringViewerSorter;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.ListContentProvider;
 
-public abstract class SimpleAnnotaionInfoComposite extends Composite {
-
-    protected ComboViewer comboInfos;
+public abstract class ListStringContentsComposite extends Composite {
 
     protected TreeViewer tvInfos;
 
@@ -41,17 +35,16 @@ public abstract class SimpleAnnotaionInfoComposite extends Composite {
 
     protected List<String> infos = new ArrayList<String>();
 
-    public SimpleAnnotaionInfoComposite(Composite parent, int style) {
+    public ListStringContentsComposite(Composite parent, int style, Object[] initParas) {
         super(parent, style);
+
+        initParas(initParas);
+
         final GridLayout gridLayout = new GridLayout();
         gridLayout.numColumns = 2;
         setLayout(gridLayout);
 
-        comboInfos = new ComboViewer(this, SWT.READ_ONLY);
-        comboInfos.getControl().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-        comboInfos.setContentProvider(new ListContentProvider());
-        comboInfos.setLabelProvider(new StringLabelProvider());
-        comboInfos.setSorter(new StringViewerSorter());
+        createCandidateInfoUIArea(parent);
 
         btnAdd = new Button(this, SWT.NONE);
         btnAdd.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
@@ -84,14 +77,12 @@ public abstract class SimpleAnnotaionInfoComposite extends Composite {
         btnRemove.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
         //
 
-        extentUI(parent);
+        createExtentUIArea(parent);
 
         initUIListeners();
     }
 
     protected void initUIListeners() {
-
-        initListenerForInfosCombo();
 
         initListenerForAddBtn();
 
@@ -100,18 +91,6 @@ public abstract class SimpleAnnotaionInfoComposite extends Composite {
         initListenerForUpBtn();
 
         initListenerForDownBtn();
-    }
-
-    protected void initListenerForInfosCombo() {
-
-        comboInfos.getCombo().addMouseListener(new MouseAdapter() {
-
-            @Override
-            public void mouseDown(MouseEvent e) {
-
-                comboInfos.setInput(getAllInfosInCombo());
-            }
-        });
     }
 
     protected void initListenerForAddBtn() {
@@ -166,10 +145,10 @@ public abstract class SimpleAnnotaionInfoComposite extends Composite {
 
     protected void onAdd() {
 
-        if (!hasSelectionInInfoCombo() || infos.contains(getSelectionFromInfoCombo()))
+        if (!hasCandidateInfo() || infos.contains(getCandidateInfo()))
             return;
 
-        addInfoToInfoTree(getSelectionFromInfoCombo());
+        addInfoToInfoTree(getCandidateInfo());
     }
 
     protected void onRemove() {
@@ -212,23 +191,15 @@ public abstract class SimpleAnnotaionInfoComposite extends Composite {
         tvInfos.refresh();
     }
 
-    private boolean hasSelectionInInfoCombo() {
-        return getSelectionFromInfoCombo() != null;
-    }
-
     private boolean hasSelectionInInfoTree() {
         return getSelectionFromInfoTree() != null;
-    }
-
-    private String getSelectionFromInfoCombo() {
-        return getSelectionFromInfoViewer(comboInfos);
     }
 
     private String getSelectionFromInfoTree() {
         return getSelectionFromInfoViewer(tvInfos);
     }
 
-    private String getSelectionFromInfoViewer(Viewer targetViewer) {
+    protected String getSelectionFromInfoViewer(Viewer targetViewer) {
 
         Object selectedObj = ((IStructuredSelection) targetViewer.getSelection()).getFirstElement();
 
@@ -254,13 +225,9 @@ public abstract class SimpleAnnotaionInfoComposite extends Composite {
 
     public void setAnnotaionInfos(String[] annotationInfos) {
 
-        initInfoCombo();
+        initCandidateInfoUIArea();
 
         initInfoTrees(annotationInfos);
-    }
-
-    private void initInfoCombo() {
-        comboInfos.setSelection(null);
     }
 
     private void initInfoTrees(String[] annotationInfos) {
@@ -276,7 +243,15 @@ public abstract class SimpleAnnotaionInfoComposite extends Composite {
 
     protected abstract String getInfoColTitle();
 
-    protected abstract String[] getAllInfosInCombo();
+    protected abstract void createExtentUIArea(Composite parent);
 
-    protected abstract void extentUI(Composite parent);
+    protected abstract void createCandidateInfoUIArea(Composite parent);
+
+    protected abstract boolean hasCandidateInfo();
+
+    protected abstract String getCandidateInfo();
+
+    protected abstract void initCandidateInfoUIArea();
+
+    protected abstract void initParas(Object[] paras);
 }

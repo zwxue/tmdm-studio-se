@@ -902,6 +902,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         TreeItem[] items = targetTreeViewer.getTree().getSelection();
         for (int i = 0; i < items.length; i++) {
             item = items[i];
+
+            if (!(item.getData() instanceof XSDConcreteComponent))
+                continue;
+
             XSDConcreteComponent component = (XSDConcreteComponent) item.getData();
             if (!(component instanceof XSDParticle))
                 continue;
@@ -931,6 +935,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         TreeItem[] items = targetTreeViewer.getTree().getSelection();
         for (int i = items.length - 1; i >= 0; i--) {
             item = items[i];
+
+            if (!(item.getData() instanceof XSDConcreteComponent))
+                continue;
+
             XSDConcreteComponent component = (XSDConcreteComponent) item.getData();
             if (!(component instanceof XSDParticle))
                 continue;
@@ -1122,7 +1130,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             if (xsd == null) {
                 // schema = ((XSDTreeContentProvider) viewer.getContentProvider()).getXSDSchemaAsString();
                 schema = ((SchemaTreeContentProvider) viewer.getContentProvider()).getXSDSchemaAsString();
-                xsdSchema= ((SchemaTreeContentProvider) viewer.getContentProvider()).getXsdSchema();
+                xsdSchema = ((SchemaTreeContentProvider) viewer.getContentProvider()).getXsdSchema();
             }
             // remove 'targetNamespace', 'xmlns' attr, for it will cause xsd validate error, the xsd is
             // invalid
@@ -1630,7 +1638,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         }
 
         if (selectedObjs.length > 1 && deleteConceptWrapAction.outPutDeleteActions() != null) {
-            //manager.add(deleteConceptWrapAction.outPutDeleteActions());
+            // manager.add(deleteConceptWrapAction.outPutDeleteActions());
             String title = "";
             if (Util.checkInCopyTypeElement(selectedObjs))
                 title = "Copy Entities";
@@ -2752,4 +2760,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     public ISelectionProvider getSelectionProvider() {
         return selectionProvider;
     }
+
+    public WSDataModel getDataModel() {
+        return datamodel;
+    }
+
 }

@@ -7,7 +7,7 @@ import org.eclipse.xsd.XSDComponent;
 import com.amalto.workbench.detailtabs.sections.handlers.CommitHandler;
 import com.amalto.workbench.detailtabs.sections.handlers.LabelCommitHandler;
 
-class LableInfoCollection extends LanguageInfoCollection {
+public class LableInfoCollection extends LanguageInfoCollection {
 
     public LableInfoCollection(XSDComponent sourceXSDComponent, Collection<LanguageInfo> initLanguageInfos) {
         super(sourceXSDComponent, initLanguageInfos);
@@ -22,7 +22,7 @@ class LableInfoCollection extends LanguageInfoCollection {
         return true;
     }
 
-    public CommitHandler createCommitHandler() {
+    public CommitHandler<LableInfoCollection> createCommitHandler() {
         return new LabelCommitHandler(this);
     }
 }

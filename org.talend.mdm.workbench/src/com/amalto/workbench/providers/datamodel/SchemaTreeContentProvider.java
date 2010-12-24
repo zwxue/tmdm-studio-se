@@ -1,10 +1,10 @@
 package com.amalto.workbench.providers.datamodel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.IWorkbenchPartSite;
@@ -19,7 +19,6 @@ import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.eclipse.xsd.XSDWildcard;
-import org.eclipse.xsd.util.XSDConstants;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -74,7 +73,7 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
     protected Object[] findChildren(Object parent) {
 
         if (parent instanceof XSDSchema)
-            return getXSDSchemaChildren();
+            return getXSDSchemaChildren((XSDSchema) parent);
 
         if (parent instanceof XSDAttributeGroupDefinition)
             return getXSDAttributeGroupDefinitionChildren((XSDAttributeGroupDefinition) parent);
@@ -104,31 +103,6 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
         return new Object[0];
     }
 
-    protected Object[] filterOutDuplicatedElems(XSDNamedComponent[] checkedElements) {
-        List<XSDNamedComponent> list = new ArrayList<XSDNamedComponent>();
-        for (XSDNamedComponent el : checkedElements) {
-            boolean exist = false;
-            for (XSDNamedComponent xsdEl : list) {
-                if (xsdEl.getName().equals(el.getName()) && xsdEl.getTargetNamespace() != null && el.getTargetNamespace() != null
-                        && xsdEl.getTargetNamespace().equals(el.getTargetNamespace())) {
-                    exist = true;
-                    break;
-                } else if (xsdEl.getName().equals(el.getName()) && xsdEl.getTargetNamespace() == null
-                        && el.getTargetNamespace() == null) {
-                    exist = true;
-                    break;
-                }
-            }
-            if (!exist
-                    && (el.getTargetNamespace() != null && !el.getTargetNamespace().equals(
-                            XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001)) || el.getTargetNamespace() == null) {
-                list.add(el);
-            }
-        }
-
-        return list.toArray(new Object[] {});
-    }
-
     public boolean hasChildren(Object parent) {
         return getChildren(parent).length > 0;
     }
@@ -150,6 +124,10 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
     }
 
     public String getXSDSchemaAsString() throws Exception {
+
+        if (xsdSchema == null)
+            return "";
+
         Document document = xsdSchema.getDocument();
         String schema = Util.nodeToString(document);
 
@@ -162,9 +140,9 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
         return schema;
     }
 
-    protected Object[] getXSDSchemaChildren() {
-        return filterOutDuplicatedElems(xsdSchema.getElementDeclarations().toArray(
-                new XSDNamedComponent[xsdSchema.getElementDeclarations().size()]));
+    protected Object[] getXSDSchemaChildren(XSDSchema schema) {
+        return Util.filterOutDuplicatedElems(schema.getElementDeclarations().toArray(
+                new XSDNamedComponent[schema.getElementDeclarations().size()]));
     }
 
     protected Object[] getXSDAttributeGroupDefinitionChildren(XSDAttributeGroupDefinition parent) {
@@ -177,38 +155,16 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
     protected Object[] getXSDParticleChildren(XSDParticle particle) {
 
         if (particle.getTerm() instanceof XSDElementDeclaration)
-            return getXSDParticleChildrenAsXSDElementDeclaration((XSDElementDeclaration) particle.getTerm());
+            return getXSDElementDeclarationChildren((XSDElementDeclaration) particle.getTerm());
 
-        if (particle.getTerm() instanceof XSDModelGroup) {
-            // a ModelGroup skip it and get children directtly
-            EList<XSDParticle> list = ((XSDModelGroup) particle.getTerm()).getContents();
-            return list.toArray(new XSDParticle[list.size()]);
-        }
+        if (particle.getTerm() instanceof XSDModelGroup)
+            return getXSDModelGroupChildren((XSDModelGroup) particle.getTerm());
 
         if (particle.getTerm() instanceof XSDWildcard) {
         }
 
         return new Object[] {};
 
-    }
-
-    private Object[] getXSDParticleChildrenAsXSDElementDeclaration(XSDElementDeclaration particleTerm) {
-
-        ArrayList<Object> list = new ArrayList<Object>();
-
-        if (particleTerm.getTypeDefinition() == null)
-            return new Object[0]; // elements with not type declaration
-
-        if (particleTerm.getTypeDefinition() instanceof XSDComplexTypeDefinition)
-            list.addAll(Util.getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) particleTerm.getTypeDefinition()));
-        else
-            list.add(particleTerm.getTypeDefinition());
-
-        list.addAll(particleTerm.getIdentityConstraintDefinitions());
-
-        addEleDeclarationAnn2List(list, particleTerm);
-
-        return list.toArray(new Object[list.size()]);
     }
 
     protected Object[] getXSDModelGroupChildren(XSDModelGroup parent) {
@@ -250,28 +206,6 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
         return list.toArray(new Object[list.size()]);
     }
 
-    protected Object[] getXSDElementDeclarationChildren(XSDElementDeclaration parent) {
-        // abstract elements do not have children
-        if (parent.isAbstract())
-            return new Object[0];
-
-        ArrayList<Object> list = new ArrayList<Object>();
-
-        // handle extensions and restrictions directly
-        if (parent.getTypeDefinition() instanceof XSDComplexTypeDefinition)
-            list.addAll(Util.getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) parent.getTypeDefinition()));
-        else
-            list.add(parent.getTypeDefinition());
-
-        // the keys
-        list.addAll(parent.getIdentityConstraintDefinitions());
-
-        // the annotations
-        addEleDeclarationAnn2List(list, parent);
-
-        return list.toArray(new Object[list.size()]);
-    }
-
     protected Object[] getXSDIdentityConstraintDefinitionChildren(XSDIdentityConstraintDefinition parent) {
 
         ArrayList<Object> list = new ArrayList<Object>();
@@ -294,8 +228,46 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
 
     }
 
-    private void addEleDeclarationAnn2List(List<Object> list, XSDElementDeclaration element) {
+    protected void addEleDeclarationAnn2List(List<Object> list, XSDElementDeclaration element) {
         if (element.getAnnotation() != null)
             list.add(element.getAnnotation());
+    }
+
+    protected Object[] getXSDElementDeclarationChildren_TypeDef(XSDElementDeclaration parent) {
+
+        ArrayList<Object> list = new ArrayList<Object>();
+
+        if (parent.getTypeDefinition() == null)
+            return new Object[0]; // elements with not type declaration
+
+        // handle extensions and restrictions directly
+        if (parent.getTypeDefinition() instanceof XSDComplexTypeDefinition)
+            list.addAll(Util.getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) parent.getTypeDefinition()));
+        else
+            list.add(parent.getTypeDefinition());
+
+        return list.toArray();
+    }
+
+    protected XSDIdentityConstraintDefinition[] getXSDElementDeclarationChildren_IDs(XSDElementDeclaration parent) {
+        return parent.getIdentityConstraintDefinitions().toArray(new XSDIdentityConstraintDefinition[0]);
+    }
+
+    protected Object[] getXSDElementDeclarationChildren(XSDElementDeclaration parent) {
+        // abstract elements do not have children
+        if (parent.isAbstract())
+            return new Object[0];
+
+        ArrayList<Object> list = new ArrayList<Object>();
+
+        list.addAll(Arrays.asList(getXSDElementDeclarationChildren_TypeDef(parent)));
+
+        // the keys
+        list.addAll(Arrays.asList(getXSDElementDeclarationChildren_IDs(parent)));
+
+        // the annotations
+        addEleDeclarationAnn2List(list, parent);
+
+        return list.toArray(new Object[list.size()]);
     }
 }

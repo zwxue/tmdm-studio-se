@@ -7,7 +7,7 @@ import org.eclipse.xsd.XSDComponent;
 import com.amalto.workbench.detailtabs.sections.handlers.CommitHandler;
 import com.amalto.workbench.detailtabs.sections.handlers.DescriptionCommitHandler;
 
-class DescriptionInfoCollection extends LanguageInfoCollection {
+public class DescriptionInfoCollection extends LanguageInfoCollection {
 
     public DescriptionInfoCollection(XSDComponent sourceXSDComponent, Collection<LanguageInfo> initLanguageInfos) {
         super(sourceXSDComponent, initLanguageInfos);
@@ -22,7 +22,7 @@ class DescriptionInfoCollection extends LanguageInfoCollection {
         return true;
     }
 
-    public CommitHandler createCommitHandler() {
+    public CommitHandler<DescriptionInfoCollection> createCommitHandler() {
         return new DescriptionCommitHandler(this);
     }
 }

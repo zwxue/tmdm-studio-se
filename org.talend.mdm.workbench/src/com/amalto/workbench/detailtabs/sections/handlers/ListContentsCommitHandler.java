@@ -5,12 +5,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.amalto.workbench.detailtabs.exception.CommitValidationException;
-import com.amalto.workbench.detailtabs.sections.model.annotationinfo.simpleinfo.SimpleAnnotationInfo;
+import com.amalto.workbench.detailtabs.sections.model.annotationinfo.listinfo.ListContentsAnnotationInfo;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
-public abstract class SimpleAnnotaionInfoCommitHandler extends AnnotationInfoCommitHandler {
+public abstract class ListContentsCommitHandler<T extends ListContentsAnnotationInfo> extends AnnotationInfoCommitHandler<T> {
 
-    public SimpleAnnotaionInfoCommitHandler(SimpleAnnotationInfo submittedSimpleAnnoInfo) {
+    public ListContentsCommitHandler(T submittedSimpleAnnoInfo) {
         super(submittedSimpleAnnoInfo);
     }
 
@@ -23,11 +23,6 @@ public abstract class SimpleAnnotaionInfoCommitHandler extends AnnotationInfoCom
             }
         }
 
-    }
-
-    @Override
-    public SimpleAnnotationInfo getCommitedObj() {
-        return (SimpleAnnotationInfo) super.getCommitedObj();
     }
 
     protected XSDAnnotationsStructure getXSDAnnotationStruct() {

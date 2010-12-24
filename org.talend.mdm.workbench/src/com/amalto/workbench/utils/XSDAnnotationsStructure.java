@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.xsd.XSDAnnotation;
@@ -276,7 +277,7 @@ public class XSDAnnotationsStructure {
     /****************************************************************************
      * FOREIGN KEY INFOS
      ****************************************************************************/
-    public boolean setForeignKeyInfos(ArrayList<String> xPaths) {
+    public boolean setForeignKeyInfos(List<String> xPaths) {
         removeAppInfos("X_ForeignKeyInfo");
         for (Iterator iter = xPaths.iterator(); iter.hasNext();) {
             String xPath = (String) iter.next();
@@ -430,7 +431,7 @@ public class XSDAnnotationsStructure {
         }
         return writeAccesses;
     }
-    
+
     public TreeMap<String, String> getPrimaryKeyInfos() {
         TreeMap<String, String> writeAccesses = new TreeMap<String, String>();
         LinkedHashMap<String, String> appInfos = getAppInfos("X_PrimaryKeyInfo");
@@ -441,7 +442,7 @@ public class XSDAnnotationsStructure {
         }
         return writeAccesses;
     }
-    
+
     /****************************************************************************
      * HIDDEN ACCESSES
      ****************************************************************************/
