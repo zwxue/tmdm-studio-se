@@ -39,6 +39,9 @@ public class SimpleXPathComposite extends Composite {
         this.allDataModelHolder = allDataModelHolder;
 
         final GridLayout gridLayout = new GridLayout();
+        gridLayout.marginWidth = 0;
+        gridLayout.marginHeight = 0;
+        gridLayout.horizontalSpacing = 0;
         setLayout(gridLayout);
 
         if (title != null && !"".trim().equals(title)) {
@@ -51,6 +54,8 @@ public class SimpleXPathComposite extends Composite {
         final Composite composite = new Composite(this, SWT.NONE);
         composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
         final GridLayout gridLayout_1 = new GridLayout();
+        gridLayout_1.marginWidth = 0;
+        gridLayout_1.marginHeight = 0;
         gridLayout_1.numColumns = 2;
         composite.setLayout(gridLayout_1);
 

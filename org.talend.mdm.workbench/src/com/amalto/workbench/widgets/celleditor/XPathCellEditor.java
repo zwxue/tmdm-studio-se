@@ -1,6 +1,5 @@
 package com.amalto.workbench.widgets.celleditor;
 
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -8,7 +7,7 @@ import org.eclipse.swt.widgets.Control;
 import com.amalto.workbench.dialogs.datamodel.SelectXPathDialog;
 import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 
-public class XPathCellEditor extends DialogCellEditor {
+public class XPathCellEditor extends EditableDialogCellEditor {
 
     private IAllDataModelHolder allDataModelHolder;
 

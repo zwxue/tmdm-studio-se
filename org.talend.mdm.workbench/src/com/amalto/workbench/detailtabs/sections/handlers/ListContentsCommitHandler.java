@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.amalto.workbench.detailtabs.exception.CommitValidationException;
-import com.amalto.workbench.detailtabs.sections.model.annotationinfo.listinfo.ListContentsAnnotationInfo;
+import com.amalto.workbench.detailtabs.sections.model.annotationinfo.ListContentsAnnotationInfo;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public abstract class ListContentsCommitHandler<T extends ListContentsAnnotationInfo> extends AnnotationInfoCommitHandler<T> {

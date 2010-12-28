@@ -4,7 +4,7 @@ import org.eclipse.xsd.XSDComponent;
 
 import com.amalto.workbench.detailtabs.sections.handlers.CommitHandler;
 import com.amalto.workbench.detailtabs.sections.handlers.ElementForeignKeyInfosCommitHandler;
-import com.amalto.workbench.detailtabs.sections.model.annotationinfo.listinfo.ListContentsAnnotationInfo;
+import com.amalto.workbench.detailtabs.sections.model.annotationinfo.ListContentsAnnotationInfo;
 
 public class ForeignKeyInfosAnnoInfo extends ListContentsAnnotationInfo {
 

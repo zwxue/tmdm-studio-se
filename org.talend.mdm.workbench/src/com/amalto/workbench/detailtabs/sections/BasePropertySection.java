@@ -1,6 +1,8 @@
 package com.amalto.workbench.detailtabs.sections;
 
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.ISection;
 import org.eclipse.ui.views.properties.tabbed.ITabDescriptor;
@@ -25,6 +27,24 @@ public abstract class BasePropertySection extends AbstractPropertySection {
         tabbedPropertySheetPage = aTabbedPropertySheetPage;
 
         parentTabID = tabbedPropertySheetPage.getSelectedTab().getId();
+
+        Composite compTop = getWidgetFactory().createComposite(parent);
+        compTop.setLayout(new FillLayout());
+
+        Section section = getWidgetFactory().createSection(compTop, getSectionStyle());
+        section.setText(getSectionTitle());
+        section.setLayout(new FillLayout());
+
+        if (hasTitleSeperator())
+            getWidgetFactory().createCompositeSeparator(section);
+
+        Composite compSectionClient = getWidgetFactory().createComposite(section);
+        compSectionClient.setLayout(new FillLayout());
+
+        createControlsInSection(compSectionClient);
+
+        section.setClient(compSectionClient);
+
     }
 
     public TabbedPropertySheetPage getTabbedPropertySheetPage() {
@@ -66,4 +86,16 @@ public abstract class BasePropertySection extends AbstractPropertySection {
     protected WSDataModel getDataModel() {
         return getCurDataModelMainPage().getDataModel();
     }
+
+    protected int getSectionStyle() {
+        return Section.TITLE_BAR | Section.TWISTIE | Section.EXPANDED;
+    }
+
+    protected boolean hasTitleSeperator() {
+        return true;
+    }
+
+    protected abstract String getSectionTitle();
+
+    protected abstract void createControlsInSection(Composite compSectionClient);
 }

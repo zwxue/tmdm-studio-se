@@ -6,10 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.eclipse.xsd.XSDComponent;
 
 import com.amalto.workbench.detailtabs.sections.composites.LanguageInfoComposite;
@@ -22,27 +19,6 @@ public abstract class LanguageInfoSection extends XSDComponentSection {
     protected List<LanguageInfo> langInfos = new ArrayList<LanguageInfo>();
 
     protected LanguageInfoComposite compLabel;
-
-    @Override
-    public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
-        super.createControls(parent, aTabbedPropertySheetPage);
-
-        Composite compTop = getWidgetFactory().createComposite(parent);
-        compTop.setLayout(new FillLayout());
-
-        Section section = getWidgetFactory().createSection(compTop, Section.TITLE_BAR | Section.TWISTIE | Section.EXPANDED);
-        section.setText(getSectionTitle());
-        section.setLayout(new FillLayout());
-        getWidgetFactory().createCompositeSeparator(section);
-
-        Composite compSectionClient = getWidgetFactory().createComposite(section);
-        compSectionClient.setLayout(new FillLayout());
-
-        compLabel = new LanguageInfoComposite(compSectionClient, SWT.NONE);
-
-        section.setClient(compSectionClient);
-
-    }
 
     @Override
     public void refresh() {
@@ -70,5 +46,10 @@ public abstract class LanguageInfoSection extends XSDComponentSection {
                     .getValue()));
         }
 
+    }
+
+    @Override
+    protected void createControlsInSection(Composite compSectionClient) {
+        compLabel = new LanguageInfoComposite(compSectionClient, SWT.NONE);
     }
 }

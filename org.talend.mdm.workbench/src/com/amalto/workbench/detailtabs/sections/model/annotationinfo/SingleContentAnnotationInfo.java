@@ -1,4 +1,4 @@
-package com.amalto.workbench.detailtabs.sections.model.annotationinfo.listinfo;
+package com.amalto.workbench.detailtabs.sections.model.annotationinfo;
 
 import org.eclipse.xsd.XSDComponent;
 

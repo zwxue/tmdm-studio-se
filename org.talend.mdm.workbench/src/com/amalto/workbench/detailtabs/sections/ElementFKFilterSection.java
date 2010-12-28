@@ -1,10 +1,7 @@
 package com.amalto.workbench.detailtabs.sections;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.eclipse.xsd.XSDComponent;
 
 import com.amalto.workbench.detailtabs.sections.composites.ForeignKeyFilterComposite;
@@ -20,27 +17,6 @@ public class ElementFKFilterSection extends XSDComponentSection {
     private ForeignKeyFilterComposite compFKFilter;
 
     private String filterExpression = "";
-
-    @Override
-    public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
-        super.createControls(parent, aTabbedPropertySheetPage);
-
-        Composite compTop = getWidgetFactory().createComposite(parent);
-        compTop.setLayout(new FillLayout());
-
-        Section section = getWidgetFactory().createSection(compTop, Section.TITLE_BAR | Section.TWISTIE | Section.EXPANDED);
-        section.setText("Foreign Key Filter");
-        section.setLayout(new FillLayout());
-        getWidgetFactory().createCompositeSeparator(section);
-
-        Composite compSectionClient = getWidgetFactory().createComposite(section);
-        compSectionClient.setLayout(new FillLayout());
-
-        dataModelHolder = new BasePropertySectionDataModelExtractor(this);
-        compFKFilter = new ForeignKeyFilterComposite(compSectionClient, SWT.NONE, dataModelHolder);
-
-        section.setClient(compSectionClient);
-    }
 
     @Override
     public void refresh() {
@@ -63,4 +39,14 @@ public class ElementFKFilterSection extends XSDComponentSection {
         return new ForeignKeyFilterAnnoInfo(curXSDComponent, compFKFilter.getFilterExpression());
     }
 
+    @Override
+    protected void createControlsInSection(Composite compSectionClient) {
+        dataModelHolder = new BasePropertySectionDataModelExtractor(this);
+        compFKFilter = new ForeignKeyFilterComposite(compSectionClient, SWT.NONE, dataModelHolder);
+    }
+
+    @Override
+    protected String getSectionTitle() {
+        return "Foreign Key Filter";
+    }
 }

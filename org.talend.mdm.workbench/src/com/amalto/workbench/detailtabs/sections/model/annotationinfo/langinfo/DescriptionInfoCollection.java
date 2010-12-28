@@ -17,11 +17,6 @@ public class DescriptionInfoCollection extends LanguageInfoCollection {
         super(sourceXSDComponent, initLanguageInfos);
     }
 
-    @Override
-    public boolean isDescriptionInfo() {
-        return true;
-    }
-
     public CommitHandler<DescriptionInfoCollection> createCommitHandler() {
         return new DescriptionCommitHandler(this);
     }

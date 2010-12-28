@@ -86,7 +86,7 @@ public abstract class CommitBarListenerSection<T> extends BasePropertySection im
         CommitBarListenerRegistry.getInstance().unregistListener(this);
     }
 
-    protected CommitHandler createCommotHandler() {
+    protected CommitHandler<?> createCommotHandler() {
         return getSubmittedObj().createCommitHandler();
     }
 

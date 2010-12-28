@@ -114,6 +114,24 @@
               id="org.talend.mdm.workbench.properties.entity.tab.accessrights"
               label="Access Rights">
         </propertyTab>
+        <propertyTab
+              afterTab="org.talend.mdm.workbench.properties.entity.tab.accessrights"
+              category="Entity"
+              id="org.talend.mdm.workbench.properties.entity.tab.relationship"
+              label="Relationship">
+        </propertyTab>
+        <propertyTab
+              afterTab="org.talend.mdm.workbench.properties.entity.tab.relationship"
+              category="Entity"
+              id="org.talend.mdm.workbench.properties.entity.tab.rules"
+              label="Rules">
+        </propertyTab>
+        <propertyTab
+              afterTab="org.talend.mdm.workbench.properties.entity.tab.rules"
+              category="Entity"
+              id="org.talend.mdm.workbench.properties.entity.tab.extra"
+              label="Extra">
+        </propertyTab>
      </propertyTabs>
   </extension>
   <extension
@@ -121,6 +139,23 @@
         point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
      <propertyTabs
            contributorId="org.talend.mdm.workbench.propertyContributor.datamodel">
+        <propertyTab
+              category="Element"
+              id="org.talend.mdm.workbench.properties.element.tab.main"
+              label="Main">
+        </propertyTab>
+        <propertyTab
+              afterTab="org.talend.mdm.workbench.properties.element.tab.main"
+              category="Element"
+              id="org.talend.mdm.workbench.properties.element.tab.presentation"
+              label="Presentation">
+        </propertyTab>
+        <propertyTab
+              afterTab="org.talend.mdm.workbench.properties.element.tab.presentation"
+              category="Element"
+              id="org.talend.mdm.workbench.properties.element.tab.accessrights"
+              label="Access Rights">
+        </propertyTab>
         <propertyTab
               afterTab="org.talend.mdm.workbench.properties.element.tab.accessrights"
               category="Element"
@@ -168,6 +203,23 @@
                  type="org.eclipse.xsd.XSDElementDeclaration">
            </input>
         </propertySection>
+        <propertySection
+              class="com.amalto.workbench.detailtabs.sections.LookupFieldsSection"
+              id="org.talend.mdm.workbench.properties.entity.section.extra.lookupfields"
+              tab="org.talend.mdm.workbench.properties.entity.tab.extra">
+           <input
+                 type="org.eclipse.xsd.XSDElementDeclaration">
+           </input>
+        </propertySection>
+        <propertySection
+              afterSection="org.talend.mdm.workbench.properties.entity.section.extra.lookupfields"
+              class="com.amalto.workbench.detailtabs.sections.CommitSection"
+              id="org.talend.mdm.workbench.properties.entity.section.extra.commit"
+              tab="org.talend.mdm.workbench.properties.entity.tab.extra">
+           <input
+                 type="org.eclipse.xsd.XSDElementDeclaration">
+           </input>
+        </propertySection>
      </propertySections>
   </extension>
   <extension
@@ -206,6 +258,58 @@
               class="com.amalto.workbench.detailtabs.sections.CommitSection"
               id="org.talend.mdm.workbench.properties.element.section.relationship.commit"
               tab="org.talend.mdm.workbench.properties.element.tab.relationship">
+           <input
+                 type="org.eclipse.xsd.XSDParticle">
+           </input>
+        </propertySection>
+        <propertySection
+              class="com.amalto.workbench.detailtabs.sections.PrsentationLabelSection"
+              id="org.talend.mdm.workbench.properties.element.section.presentation.label"
+              tab="org.talend.mdm.workbench.properties.element.tab.presentation">
+           <input
+                 type="org.eclipse.xsd.XSDParticle">
+           </input>
+        </propertySection>
+        <propertySection
+              afterSection="org.talend.mdm.workbench.properties.element.section.presentation.label"
+              class="com.amalto.workbench.detailtabs.sections.PresentationDescriptionSection"
+              id="org.talend.mdm.workbench.properties.element.section.presentation.description"
+              tab="org.talend.mdm.workbench.properties.element.tab.presentation">
+           <input
+                 type="org.eclipse.xsd.XSDParticle">
+           </input>
+        </propertySection>
+        <propertySection
+              afterSection="org.talend.mdm.workbench.properties.element.section.presentation.description"
+              class="com.amalto.workbench.detailtabs.sections.PresentationFacetMsgSection"
+              id="org.talend.mdm.workbench.properties.element.section.presentation.facetmsg"
+              tab="org.talend.mdm.workbench.properties.element.tab.presentation">
+           <input
+                 type="org.eclipse.xsd.XSDParticle">
+           </input>
+        </propertySection>
+        <propertySection
+              afterSection="org.talend.mdm.workbench.properties.element.section.presentation.facetmsg"
+              class="com.amalto.workbench.detailtabs.sections.PresentationDisplayFormatSection"
+              id="org.talend.mdm.workbench.properties.element.section.presentation.displayformat"
+              tab="org.talend.mdm.workbench.properties.element.tab.presentation">
+           <input
+                 type="org.eclipse.xsd.XSDParticle">
+           </input>
+        </propertySection>
+        <propertySection
+              afterSection="org.talend.mdm.workbench.properties.element.section.presentation.displayformat"
+              class="com.amalto.workbench.detailtabs.sections.CommitSection"
+              id="org.talend.mdm.workbench.properties.element.section.presentation.commit"
+              tab="org.talend.mdm.workbench.properties.element.tab.presentation">
+           <input
+                 type="org.eclipse.xsd.XSDParticle">
+           </input>
+        </propertySection>
+        <propertySection
+              class="com.amalto.workbench.detailtabs.sections.ElementMainSection"
+              id="org.talend.mdm.workbench.properties.element.section.main"
+              tab="org.talend.mdm.workbench.properties.element.tab.main">
            <input
                  type="org.eclipse.xsd.XSDParticle">
            </input>

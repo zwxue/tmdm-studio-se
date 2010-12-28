@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.eclipse.xsd.XSDComponent;
 
 import com.amalto.workbench.detailtabs.sections.model.ISubmittable;
@@ -25,27 +22,6 @@ public class ElementFKInfosSection extends XSDComponentSection {
     private List<String> fkInfos = new ArrayList<String>();
 
     private boolean isResolveAutoInWeb;
-
-    @Override
-    public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
-        super.createControls(parent, aTabbedPropertySheetPage);
-
-        Composite compTop = getWidgetFactory().createComposite(parent);
-        compTop.setLayout(new FillLayout());
-
-        Section section = getWidgetFactory().createSection(compTop, Section.TITLE_BAR | Section.TWISTIE | Section.EXPANDED);
-        section.setText("Foreign Key Infos");
-        section.setLayout(new FillLayout());
-        getWidgetFactory().createCompositeSeparator(section);
-
-        Composite compSectionClient = getWidgetFactory().createComposite(section);
-        compSectionClient.setLayout(new FillLayout());
-
-        dataModelHolder = new FixDMNameBasePropertySectionDataModelExtractor(this);
-        compXPath = new ListXPathComposite(compSectionClient, SWT.NONE, dataModelHolder, "");
-
-        section.setClient(compSectionClient);
-    }
 
     @Override
     public void refresh() {
@@ -73,4 +49,14 @@ public class ElementFKInfosSection extends XSDComponentSection {
         return new ForeignKeyInfosAnnoInfo(curXSDComponent, compXPath.getAnnotaionInfos(), compXPath.isResolveAutoInWeb());
     }
 
+    @Override
+    protected void createControlsInSection(Composite compSectionClient) {
+        dataModelHolder = new FixDMNameBasePropertySectionDataModelExtractor(this);
+        compXPath = new ListXPathComposite(compSectionClient, SWT.NONE, dataModelHolder, "");
+    }
+
+    @Override
+    protected String getSectionTitle() {
+        return "Foreign Key Infos";
+    }
 }

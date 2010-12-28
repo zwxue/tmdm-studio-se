@@ -9,7 +9,7 @@ import org.eclipse.xsd.XSDComponent;
 
 import com.amalto.workbench.detailtabs.sections.handlers.CommitHandler;
 import com.amalto.workbench.detailtabs.sections.handlers.ElementForeignKeyFilterCommitHandler;
-import com.amalto.workbench.detailtabs.sections.model.annotationinfo.listinfo.SingleContentAnnotationInfo;
+import com.amalto.workbench.detailtabs.sections.model.annotationinfo.SingleContentAnnotationInfo;
 
 public class ForeignKeyFilterAnnoInfo extends SingleContentAnnotationInfo {
 

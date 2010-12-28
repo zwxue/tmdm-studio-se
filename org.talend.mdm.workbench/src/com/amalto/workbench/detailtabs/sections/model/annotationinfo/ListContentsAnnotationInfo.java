@@ -1,11 +1,10 @@
-package com.amalto.workbench.detailtabs.sections.model.annotationinfo.listinfo;
+package com.amalto.workbench.detailtabs.sections.model.annotationinfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.xsd.XSDComponent;
 
-import com.amalto.workbench.detailtabs.sections.model.annotationinfo.AnnotaionInfo;
 
 public abstract class ListContentsAnnotationInfo extends AnnotaionInfo {
 

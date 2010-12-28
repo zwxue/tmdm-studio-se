@@ -6,7 +6,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
+import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.xsd.XSDElementDeclaration;
 
 import com.amalto.workbench.detailtabs.sections.composites.CommitBarComposite;
@@ -30,32 +30,6 @@ public class EntityMainSection extends CommitBarListenerSection<XSDElementDeclar
     private EntityKeyConfigComposite compKeyConfig;
 
     private CommitBarComposite compCommitBar;
-
-    @Override
-    public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
-        super.createControls(parent, aTabbedPropertySheetPage);
-
-        Composite compTop = getWidgetFactory().createFlatFormComposite(parent);
-        compTop.setLayout(new GridLayout());
-
-        compNameConfig = new NameConfigComposite(compTop, SWT.NONE);
-        GridData gdCompName = new GridData(SWT.FILL, SWT.CENTER, true, false);
-        compNameConfig.setLayoutData(gdCompName);
-
-        Group gpKeyConfig = new Group(compTop, SWT.NONE);
-        gpKeyConfig.setText("Key Definition");
-        gpKeyConfig.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
-        GridData gdGroupKeyConfig = new GridData(SWT.FILL, SWT.FILL, true, true);
-        gpKeyConfig.setLayoutData(gdGroupKeyConfig);
-        gpKeyConfig.setLayout(new FillLayout());
-        compKeyConfig = new EntityKeyConfigComposite(gpKeyConfig, SWT.NONE);
-
-        compCommitBar = new CommitBarComposite(compTop, SWT.NONE);
-        GridData gdCompCommitBar = new GridData(SWT.BEGINNING, SWT.TOP, false, false);
-        compCommitBar.setLayoutData(gdCompCommitBar);
-        compCommitBar.addCommitListener(this);
-
-    }
 
     @Override
     public boolean shouldUseExtraSpace() {
@@ -100,5 +74,45 @@ public class EntityMainSection extends CommitBarListenerSection<XSDElementDeclar
 
     @Override
     protected void registToGolbalCommitBarListenerReg() {
+    }
+
+    @Override
+    protected void createControlsInSection(Composite compSectionClient) {
+
+        Composite compTop = getWidgetFactory().createFlatFormComposite(compSectionClient);
+        compTop.setLayout(new GridLayout());
+
+        compNameConfig = new NameConfigComposite(compTop, SWT.NONE);
+        GridData gdCompName = new GridData(SWT.FILL, SWT.CENTER, true, false);
+        compNameConfig.setLayoutData(gdCompName);
+
+        Group gpKeyConfig = new Group(compTop, SWT.NONE);
+        gpKeyConfig.setText("Key Definition");
+        gpKeyConfig.setBackground(compSectionClient.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+        GridData gdGroupKeyConfig = new GridData(SWT.FILL, SWT.FILL, true, true);
+        gpKeyConfig.setLayoutData(gdGroupKeyConfig);
+        gpKeyConfig.setLayout(new FillLayout());
+        compKeyConfig = new EntityKeyConfigComposite(gpKeyConfig, SWT.NONE);
+
+        compCommitBar = new CommitBarComposite(compTop, SWT.NONE);
+        GridData gdCompCommitBar = new GridData(SWT.BEGINNING, SWT.TOP, false, false);
+        compCommitBar.setLayoutData(gdCompCommitBar);
+        compCommitBar.addCommitListener(this);
+
+    }
+
+    @Override
+    protected String getSectionTitle() {
+        return "";
+    }
+
+    @Override
+    protected int getSectionStyle() {
+        return Section.NO_TITLE | Section.EXPANDED;
+    }
+
+    @Override
+    protected boolean hasTitleSeperator() {
+        return false;
     }
 }

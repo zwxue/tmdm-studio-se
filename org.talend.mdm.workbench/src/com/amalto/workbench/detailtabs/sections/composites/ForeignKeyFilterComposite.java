@@ -16,8 +16,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 
-import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationship.ForeignKeyFilterAnnoInfoDefUnit;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationship.ForeignKeyFilterAnnoInfo;
+import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationship.ForeignKeyFilterAnnoInfoDefUnit;
 import com.amalto.workbench.detailtabs.sections.providers.ForeignKeyFilterCellModifier;
 import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 import com.amalto.workbench.providers.ColumnTextExtractor;
@@ -71,7 +71,7 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
     protected void fillColumnsInTree(Tree tree) {
 
         final TreeColumn colXPath = new TreeColumn(tree, SWT.NONE);
-        colXPath.setWidth(100);
+        colXPath.setWidth(200);
         colXPath.setText("XPath");
         colXPath.setImage(nillableColImage);
 
@@ -81,7 +81,7 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
         colOperator.setImage(nillableColImage);
 
         final TreeColumn colValue = new TreeColumn(tree, SWT.NONE);
-        colValue.setWidth(100);
+        colValue.setWidth(200);
         colValue.setText("Value");
         colValue.setImage(nillableColImage);
 
@@ -93,7 +93,8 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
 
     @Override
     protected ForeignKeyFilterAnnoInfoDefUnit createDefaultInfoObj() {
-        return new ForeignKeyFilterAnnoInfoDefUnit("newXPath", IConstants.VIEW_CONDITION_OPERATORS[0], "", IConstants.PREDICATES[0]);
+        return new ForeignKeyFilterAnnoInfoDefUnit("newXPath", IConstants.VIEW_CONDITION_OPERATORS[0], "",
+                IConstants.PREDICATES[0]);
     }
 
     @Override
@@ -149,7 +150,8 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
         if (hasCustomFilter())
             return ForeignKeyFilterAnnoInfo.getFKFilterByRawCustomFilterStr(getCustomFilter());
 
-        return ForeignKeyFilterAnnoInfo.getFKFilterByFKFilterCfgInfos(fkFilterInfos.toArray(new ForeignKeyFilterAnnoInfoDefUnit[0]));
+        return ForeignKeyFilterAnnoInfo.getFKFilterByFKFilterCfgInfos(fkFilterInfos
+                .toArray(new ForeignKeyFilterAnnoInfoDefUnit[0]));
     }
 
     public void setFilter(String filterExpression) {

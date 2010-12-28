@@ -17,11 +17,6 @@ public class LableInfoCollection extends LanguageInfoCollection {
         super(sourceXSDComponent, initLanguageInfos);
     }
 
-    @Override
-    public boolean isLabelInfo() {
-        return true;
-    }
-
     public CommitHandler<LableInfoCollection> createCommitHandler() {
         return new LabelCommitHandler(this);
     }

@@ -1,7 +1,6 @@
 package com.amalto.workbench.detailtabs.sections;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.views.properties.tabbed.ISection;
@@ -20,21 +19,6 @@ public class CommitSection extends BasePropertySection {
     @Override
     public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
         super.createControls(parent, aTabbedPropertySheetPage);
-
-        Composite compTop = getWidgetFactory().createComposite(parent);
-        compTop.setLayout(new FillLayout());
-
-        Section section = getWidgetFactory().createSection(compTop, Section.TITLE_BAR | Section.EXPANDED);
-        section.setText("Commit");
-        section.setLayout(new FillLayout());
-        getWidgetFactory().createCompositeSeparator(section);
-
-        Composite compSectionClient = getWidgetFactory().createComposite(section);
-        compSectionClient.setLayout(new FillLayout());
-
-        commitBar = new CommitBarComposite(compSectionClient, SWT.NONE);
-
-        section.setClient(compSectionClient);
 
         initUIListeners();
 
@@ -81,5 +65,20 @@ public class CommitSection extends BasePropertySection {
         for (CommitBarListener eachListener : CommitBarListenerRegistry.getInstance().moveOutRegistedListeners(getParentTabID())) {
             commitBar.addCommitListener(eachListener);
         }
+    }
+
+    @Override
+    protected void createControlsInSection(Composite compSectionClient) {
+        commitBar = new CommitBarComposite(compSectionClient, SWT.NONE);
+    }
+
+    @Override
+    protected String getSectionTitle() {
+        return "Commit";
+    }
+
+    @Override
+    protected int getSectionStyle() {
+        return Section.TITLE_BAR | Section.EXPANDED;
     }
 }

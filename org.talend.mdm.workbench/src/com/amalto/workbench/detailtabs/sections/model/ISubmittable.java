@@ -4,6 +4,6 @@ import com.amalto.workbench.detailtabs.sections.handlers.CommitHandler;
 
 public interface ISubmittable {
 
-    public CommitHandler createCommitHandler();
+    public CommitHandler<?> createCommitHandler();
 
 }

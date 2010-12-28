@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.PropertyResourceBundle;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -1109,7 +1110,7 @@ public class Util {
                 if (decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
 
                     String primaryKey = getTopElement(decl, elem, (XSDComplexTypeDefinition) decl.getTypeDefinition());
-                    if (!primaryKey.equalsIgnoreCase("")) {
+                    if (!"".equalsIgnoreCase(primaryKey)) {
                         EList<XSDIdentityConstraintDefinition> idtylist = decl.getIdentityConstraintDefinitions();
                         for (XSDIdentityConstraintDefinition idty : idtylist) {
                             EList<XSDXPathDefinition> fields = idty.getFields();
@@ -2682,5 +2683,42 @@ public class Util {
         }
 
         return null;
+    }
+
+    /**
+     * Replace the source string by the parameters
+     * 
+     * @param sourceString the source string with parameters,like : "This is {0} examples for {1}"
+     * @param parameters the parameters used to do the replacement, the key is the index of the parameter, the value is
+     * the content;
+     * @return the string after replacement
+     */
+    public static String replaceWithParameters(final String sourceString, Map<Integer, String> parameters) {
+        String temp = sourceString;
+
+        for (Entry<Integer, String> eachId2Content : parameters.entrySet()) {
+            Pattern pattern = Pattern.compile("\\{" + eachId2Content.getKey() + "\\}");
+            Matcher matcher = pattern.matcher(temp);
+            temp = matcher.replaceAll(eachId2Content.getValue());
+        }
+
+        return temp;
+    }
+
+    public static boolean isSimpleTypedParticle(XSDParticle curXSDParticle) {
+
+        if (curXSDParticle == null || !(curXSDParticle.getContent() instanceof XSDElementDeclaration))
+            return false;
+
+        return (((XSDElementDeclaration) curXSDParticle.getContent()).getTypeDefinition() instanceof XSDSimpleTypeDefinition);
+    }
+
+    public static String getParticleName(XSDParticle curXSDParticle) {
+
+        if (curXSDParticle == null || !(curXSDParticle.getContent() instanceof XSDElementDeclaration))
+            return "";
+
+        return ((XSDElementDeclaration) curXSDParticle.getContent()).getTypeDefinition().getName();
+
     }
 }

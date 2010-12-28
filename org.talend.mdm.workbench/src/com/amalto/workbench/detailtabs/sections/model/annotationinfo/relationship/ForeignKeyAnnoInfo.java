@@ -4,7 +4,7 @@ import org.eclipse.xsd.XSDComponent;
 
 import com.amalto.workbench.detailtabs.sections.handlers.CommitHandler;
 import com.amalto.workbench.detailtabs.sections.handlers.ElementForeighKeyCommitHandler;
-import com.amalto.workbench.detailtabs.sections.model.annotationinfo.listinfo.SingleContentAnnotationInfo;
+import com.amalto.workbench.detailtabs.sections.model.annotationinfo.SingleContentAnnotationInfo;
 
 public class ForeignKeyAnnoInfo extends SingleContentAnnotationInfo {
 

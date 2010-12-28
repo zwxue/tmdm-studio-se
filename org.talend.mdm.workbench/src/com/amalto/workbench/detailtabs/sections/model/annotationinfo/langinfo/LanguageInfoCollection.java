@@ -40,14 +40,6 @@ public abstract class LanguageInfoCollection extends AnnotaionInfo {
         return result;
     }
 
-    public boolean isLabelInfo() {
-        return false;
-    }
-
-    public boolean isDescriptionInfo() {
-        return false;
-    }
-
     public static LanguageInfoCollection createLabelInfoCollection(XSDComponent sourceXSDComponent,
             LanguageInfo[] initLanguageInfos) {
         return new LableInfoCollection(sourceXSDComponent, initLanguageInfos);
@@ -66,5 +58,25 @@ public abstract class LanguageInfoCollection extends AnnotaionInfo {
     public static LanguageInfoCollection createDescriptionInfoCollection(XSDComponent sourceXSDComponent,
             Collection<LanguageInfo> initLanguageInfos) {
         return new DescriptionInfoCollection(sourceXSDComponent, initLanguageInfos);
+    }
+
+    public static LanguageInfoCollection createFacetMsgInfoCollection(XSDComponent sourceXSDComponent,
+            LanguageInfo[] initLanguageInfos) {
+        return new FacetMsgInfoCollection(sourceXSDComponent, initLanguageInfos);
+    }
+
+    public static LanguageInfoCollection createFacetMsgInfoCollection(XSDComponent sourceXSDComponent,
+            Collection<LanguageInfo> initLanguageInfos) {
+        return new FacetMsgInfoCollection(sourceXSDComponent, initLanguageInfos);
+    }
+
+    public static LanguageInfoCollection createDisplayFormatInfoCollection(XSDComponent sourceXSDComponent,
+            LanguageInfo[] initLanguageInfos) {
+        return new DisplayFormatInfoCollection(sourceXSDComponent, initLanguageInfos);
+    }
+
+    public static LanguageInfoCollection createDisplayFormatInfoCollection(XSDComponent sourceXSDComponent,
+            Collection<LanguageInfo> initLanguageInfos) {
+        return new DisplayFormatInfoCollection(sourceXSDComponent, initLanguageInfos);
     }
 }

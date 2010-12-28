@@ -16,6 +16,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -90,6 +93,8 @@ public class EntityKeyConfigComposite extends Composite {
     private ModifyListener lTxtKeyNameModifyListener;
 
     private ModifyListener lComboSelectorModifyListner;
+
+    private MouseListener lComboSelectorMouseListener;
 
     private SelectionListener lBtnRemoveKeySelectionListner;
 
@@ -238,6 +243,10 @@ public class EntityKeyConfigComposite extends Composite {
         comboSelector.setText("");
         tvFields.setInput(new ArrayList<FieldWrapper>());
 
+        initComboSelectorContents();
+    }
+
+    private void initComboSelectorContents() {
         if (entityWrapper != null) {
             try {
                 comboSelector.setItems(Util.getChildElementNames("", entityWrapper.getSourceEntity()).toArray(new String[0]));
@@ -327,6 +336,7 @@ public class EntityKeyConfigComposite extends Composite {
         tvFields.addSelectionChangedListener(lTvFieldsSelectionListener);
         txtKeyName.addModifyListener(lTxtKeyNameModifyListener);
         comboSelector.addModifyListener(lComboSelectorModifyListner);
+        comboSelector.addMouseListener(lComboSelectorMouseListener);
         btnDeleteKey.addSelectionListener(lBtnRemoveKeySelectionListner);
         btnDeleteField.addSelectionListener(lBtnRemoveFieldListner);
         btnEditField.addSelectionListener(lBtnEditFieldListener);
@@ -395,6 +405,15 @@ public class EntityKeyConfigComposite extends Composite {
     }
 
     private void initListener2ComboSelector() {
+
+        lComboSelectorMouseListener = new MouseAdapter() {
+
+            @Override
+            public void mouseDown(MouseEvent e) {
+                initComboSelectorContents();
+            }
+
+        };
 
         lComboSelectorModifyListner = new ModifyListener() {
 
@@ -599,28 +618,6 @@ public class EntityKeyConfigComposite extends Composite {
 
         if (entityWrapper == null)
             return "The eneity can not be null";
-
-        // if (!"".equals(keyName) && keyName.equals(keyBeforeModified.getName()))
-        // return null;
-
-        // String validMsg = new EditKeyWrapperNameValidator(entityWrapper, keyBeforeModified).isValid(keyName);
-        //
-        // if (validMsg != null) {
-        // return validMsg;
-        // }
-
-        // KeyWrapper[] selectedKeys = getSelectedKeys();
-        //
-        // for (KeyWrapper eachKeyWrapper : getAllKeys()) {
-        // if (selectedKeys.length > 0 && eachKeyWrapper.equals(selectedKeys[0]))
-        // continue;
-        //
-        // if (eachKeyWrapper.getName().equals(keyName)) {
-        // return "This Key already exists";
-        // }
-        // }
-
-        // return null;
 
         return new EditKeyWrapperNameValidator(entityWrapper, keyBeforeModified).isValid(keyName);
     }
