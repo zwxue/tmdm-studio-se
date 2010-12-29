@@ -1491,44 +1491,66 @@ public class Util {
         }
         if (Util.getParent(decl) instanceof XSDElementDeclaration) {
             XSDElementDeclaration parent = (XSDElementDeclaration) Util.getParent(decl);
-            XSDComplexTypeDefinition compx = (XSDComplexTypeDefinition) parent.getTypeDefinition();
-            XSDParticleImpl partCnt = (XSDParticleImpl) compx.getContent();
-            XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
-
-            if ((maxOccurs > 1 || maxOccurs == -1) && mdlGrp.getCompositor() != XSDCompositor.SEQUENCE_LITERAL) {
-                // change the parent element to xsd:sequence
-                if (!MessageDialog.openConfirm(null, "Change to sequence type",
-                        "The complex type will be changed to sequence in response to the maxOccurs value change")) {
-                    return Status.CANCEL_STATUS;
-                }
-
-                mdlGrp.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
-                partCnt.getElement().getAttributeNode("maxOccurs").setNodeValue("unbounded");
-                partCnt.setMinOccurs(0);
-                parent.updateElement();
-            }
+            // XSDComplexTypeDefinition compx = (XSDComplexTypeDefinition) parent.getTypeDefinition();
+            // XSDParticleImpl partCnt = (XSDParticleImpl) compx.getContent();
+            // XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
+            //
+            // if ((maxOccurs > 1 || maxOccurs == -1) && mdlGrp.getCompositor() != XSDCompositor.SEQUENCE_LITERAL) {
+            // // change the parent element to xsd:sequence
+            // if (!MessageDialog.openConfirm(null, "Change to sequence type",
+            // "The complex type will be changed to sequence in response to the maxOccurs value change")) {
+            // return Status.CANCEL_STATUS;
+            // }
+            //
+            // mdlGrp.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
+            // partCnt.getElement().getAttributeNode("maxOccurs").setNodeValue("unbounded");
+            // partCnt.setMinOccurs(0);
+            // parent.updateElement();
+            // }
+            return doChangeElementTypeToSequence((XSDComplexTypeDefinition) parent.getTypeDefinition(), maxOccurs);
 
         }
         // add by ymli; fix the bug:0012278;
         else {
             if (Util.getParent(decl) instanceof XSDComplexTypeDefinition) {
-                XSDComplexTypeDefinition compx = (XSDComplexTypeDefinition) Util.getParent(decl);
-                XSDParticleImpl partCnt = (XSDParticleImpl) compx.getContent();
-                XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
-                if ((maxOccurs > 1 || maxOccurs == -1) && mdlGrp.getCompositor() != XSDCompositor.SEQUENCE_LITERAL) {
-                    // change the parent element to xsd:sequence
-                    if (!MessageDialog.openConfirm(null, "Change to sequence type",
-                            "The complex type will be changed to sequence in response to the maxOccurs value change")) {
-                        return Status.CANCEL_STATUS;
-                    }
-
-                    mdlGrp.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
-                    partCnt.getElement().getAttributeNode("maxOccurs").setNodeValue("unbounded");
-                    partCnt.setMinOccurs(0);
-                    compx.updateElement();
-                }
+                // XSDComplexTypeDefinition compx = (XSDComplexTypeDefinition) Util.getParent(decl);
+                // XSDParticleImpl partCnt = (XSDParticleImpl) compx.getContent();
+                // XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
+                // if ((maxOccurs > 1 || maxOccurs == -1) && mdlGrp.getCompositor() != XSDCompositor.SEQUENCE_LITERAL) {
+                // // change the parent element to xsd:sequence
+                // if (!MessageDialog.openConfirm(null, "Change to sequence type",
+                // "The complex type will be changed to sequence in response to the maxOccurs value change")) {
+                // return Status.CANCEL_STATUS;
+                // }
+                //
+                // mdlGrp.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
+                // partCnt.getElement().getAttributeNode("maxOccurs").setNodeValue("unbounded");
+                // partCnt.setMinOccurs(0);
+                // compx.updateElement();
+                // }
+                return doChangeElementTypeToSequence((XSDComplexTypeDefinition) Util.getParent(decl), maxOccurs);
             }
         }
+        return Status.OK_STATUS;
+    }
+
+    private static IStatus doChangeElementTypeToSequence(XSDComplexTypeDefinition compx, int maxOccurs) {
+
+        XSDParticleImpl partCnt = (XSDParticleImpl) compx.getContent();
+        XSDModelGroupImpl mdlGrp = (XSDModelGroupImpl) partCnt.getTerm();
+        if ((maxOccurs > 1 || maxOccurs == -1) && mdlGrp.getCompositor() != XSDCompositor.SEQUENCE_LITERAL) {
+            // change the parent element to xsd:sequence
+            if (!MessageDialog.openConfirm(null, "Change to sequence type",
+                    "The complex type will be changed to sequence in response to the maxOccurs value change")) {
+                return Status.CANCEL_STATUS;
+            }
+
+            mdlGrp.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
+            partCnt.getElement().setAttribute("maxOccurs", "unbounded");
+            partCnt.setMinOccurs(0);
+            compx.updateElement();
+        }
+
         return Status.OK_STATUS;
     }
 
