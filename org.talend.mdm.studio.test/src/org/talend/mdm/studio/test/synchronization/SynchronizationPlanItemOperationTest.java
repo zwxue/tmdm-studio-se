@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.storedprocedure;
+package org.talend.mdm.studio.test.synchronization;
 
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
@@ -29,7 +29,7 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
  * DOC rhou class global comment. Detailled comment
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class StoredProcedureItemOperationTest extends TalendSWTBotForMDM {
+public class SynchronizationPlanItemOperationTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem spParentItem;
 
@@ -37,16 +37,16 @@ public class StoredProcedureItemOperationTest extends TalendSWTBotForMDM {
 
     @Before
     public void runBeforeEveryTest() {
-        spParentItem = serverItem.getNode("Stored Procedure [HEAD]");
+        spParentItem = serverItem.getNode("Synchronization Plan [HEAD]");
         spParentItem.expand();
 
         spParentItem.contextMenu("New").click();
-        SWTBotShell newstoredProcedureShell = bot.shell("New Stored Procedure");
+        SWTBotShell newstoredProcedureShell = bot.shell("New Synchronization Plan");
         newstoredProcedureShell.activate();
         SWTBotText text = bot.textWithLabel("Enter a name for the new Instance:");
-        text.setText("TestStoredProcedure");
+        text.setText("TestSynchronizationPlan");
         bot.buttonWithTooltip("OK").click();
-        spItem = spParentItem.getNode("TestStoredProcedure");
+        spItem = spParentItem.getNode("TestSynchronizationPlan");
         Assert.assertNotNull(spItem);
         sleep(2);
     }
@@ -64,11 +64,11 @@ public class StoredProcedureItemOperationTest extends TalendSWTBotForMDM {
         editMenu.click();
         sleep();
         spItem.contextMenu("Paste").click();
-        SWTBotShell pastestoredProcedureShell = bot.shell("Pasting instance TestStoredProcedure");
+        SWTBotShell pastestoredProcedureShell = bot.shell("Pasting instance TestSynchronizationPlan");
         pastestoredProcedureShell.activate();
-        bot.text("CopyOfTestStoredProcedure").setText("PasteStoredProcedure");
+        bot.text("CopyOfTestSynchronizationPlan").setText("PasteSynchronizationPlan");
         bot.button("OK").click();
-        SWTBotTreeItem pasteNode = spParentItem.getNode("PasteStoredProcedure");
+        SWTBotTreeItem pasteNode = spParentItem.getNode("PasteSynchronizationPlan");
         Assert.assertNotNull(pasteNode);
         sleep(2);
     }
@@ -79,10 +79,10 @@ public class StoredProcedureItemOperationTest extends TalendSWTBotForMDM {
         duplicateMenu.click();
         SWTBotShell shell = bot.shell("Pasting instance TeststoredProcedure");
         shell.activate();
-        bot.text("CopyOfTestStoredProcedure").setText("DuplicateStoredProcedure");
+        bot.text("CopyOfTestSynchronizationPlan").setText("DuplicateSynchronizationPlan");
         sleep();
         bot.button("OK").click();
-        SWTBotTreeItem duplicateNode = spParentItem.getNode("DuplicateStoredProcedure");
+        SWTBotTreeItem duplicateNode = spParentItem.getNode("DuplicateSynchronizationPlan");
         Assert.assertNotNull(duplicateNode);
         sleep(2);
 
@@ -95,27 +95,27 @@ public class StoredProcedureItemOperationTest extends TalendSWTBotForMDM {
         renameMenu.click();
         SWTBotShell renameShell = bot.shell("Rename");
         renameShell.activate();
-        bot.textWithLabel("Please enter a new name").setText("RenameStoredProcedure");
+        bot.textWithLabel("Please enter a new name").setText("RenameSynchronizationPlan");
         bot.button("OK").click();
         sleep();
-        Assert.assertNull(spParentItem.getNode("TestStoredProcedure"));
-        Assert.assertNotNull(spParentItem.getNode("RenameStoredProcedure"));
+        Assert.assertNull(spParentItem.getNode("TestSynchronizationPlan"));
+        Assert.assertNotNull(spParentItem.getNode("RenameSynchronizationPlan"));
         sleep(2);
     }
 
     @After
     public void runAfterEveryTest() {
-        spParentItem.getNode("RenameStoredProcedure").contextMenu("Delete").click();
+        spParentItem.getNode("RenameSynchronizationPlan").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
         sleep();
 
-        spParentItem.getNode("PasteStoredProcedure").contextMenu("Delete").click();
+        spParentItem.getNode("PasteSynchronizationPlan").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
         sleep();
 
-        spParentItem.getNode("DuplicateStoredProcedure").contextMenu("Delete").click();
+        spParentItem.getNode("DuplicateSynchronizationPlan").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
         sleep();

@@ -27,7 +27,6 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
  * 
  * DOC rhou class global comment. Detailled comment
  * 
- * see bug 0017197.
  * 
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
