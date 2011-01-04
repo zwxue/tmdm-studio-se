@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.view;
+package org.talend.mdm.studio.test.view.item;
 
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
@@ -24,12 +24,10 @@ import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
- * 
- * 
  * DOC rhou class global comment. Detailled comment
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class ViewItemOperationTest extends TalendSWTBotForMDM {
+public class ViewEditTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem viewParentItem;
 
@@ -55,8 +53,11 @@ public class ViewItemOperationTest extends TalendSWTBotForMDM {
         bot.buttonWithTooltip("Select one Entity").click();
         bot.shell("Select one Entity").activate();
 
+        bot.comboBoxWithLabel("Data Models:").setSelection("CONF");
         bot.tree().select("Conf");
         bot.button("Add").click();
+        sleep();
+        bot.button("OK").click();
         setDescription();
         setElements();
         bot.activeEditor().save();
@@ -80,7 +81,6 @@ public class ViewItemOperationTest extends TalendSWTBotForMDM {
         bot.text().setText(des);
         bot.buttonWithTooltip("Add").click();
         bot.button("OK").click();
-        Assert.assertEquals(des, bot.text(0).getText());
     }
 
     @Test
@@ -90,66 +90,8 @@ public class ViewItemOperationTest extends TalendSWTBotForMDM {
         editMenu.click();
     }
 
-    @Test
-    public void viewCopyTest() {
-        SWTBotMenu editMenu = viewItem.contextMenu("Copy");
-        editMenu.click();
-        sleep();
-        viewItem.contextMenu("Paste").click();
-        SWTBotShell pasteviewShell = bot.shell("Pasting instance TestView");
-        pasteviewShell.activate();
-        bot.text("CopyOf" + PREFIX + "Conf").setText(PREFIX + "Conf" + "PasteView");
-        bot.button("OK").click();
-        SWTBotTreeItem pasteNode = viewParentItem.getNode(PREFIX + "Conf" + "PasteView");
-        Assert.assertNotNull(pasteNode);
-        sleep(2);
-    }
-
-    @Test
-    public void viewDuplicateTest() {
-        SWTBotMenu duplicateMenu = viewItem.contextMenu("Duplicate");
-        duplicateMenu.click();
-        SWTBotShell shell = bot.shell("Pasting instance Testview");
-        shell.activate();
-        bot.text("CopyOf" + PREFIX + "Conf").setText(PREFIX + "Conf" + "DuplicateView");
-        sleep();
-        bot.button("OK").click();
-        SWTBotTreeItem duplicateNode = viewParentItem.getNode(PREFIX + "Conf" + "DuplicateView");
-        Assert.assertNotNull(duplicateNode);
-        sleep(2);
-
-    }
-
-    @Test
-    public void viewRenameTest() {
-        SWTBotMenu renameMenu = viewItem.contextMenu("Rename");
-        sleep();
-        renameMenu.click();
-        SWTBotShell renameShell = bot.shell("Rename");
-        renameShell.activate();
-        bot.textWithLabel("Please enter a new name").setText("RenameView");
-        bot.button("OK").click();
-        sleep();
-        Assert.assertNull(viewParentItem.getNode("TestView"));
-        Assert.assertNotNull(viewParentItem.getNode("RenameView"));
-        sleep(2);
-    }
-
     @After
     public void runAfterEveryTest() {
-        viewParentItem.getNode("RenameView").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-
-        viewParentItem.getNode(PREFIX + "Conf" + "PasteView").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-
-        viewParentItem.getNode(PREFIX + "Conf" + "DuplicateView").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
     }
+
 }

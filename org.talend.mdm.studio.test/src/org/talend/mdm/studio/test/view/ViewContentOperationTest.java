@@ -39,7 +39,7 @@ public class ViewContentOperationTest extends TalendSWTBotForMDM {
 
     private String[] array = new String[] { "Id", "Firstname", "Lastname", "CommissionCode", "StartDate", "TermDate" };
 
-    // private String PREFIX = "Browse_items_";
+    private String PREFIX = "Browse_items_";
 
     @Before
     public void runBeforeEveryTest() {
@@ -59,8 +59,11 @@ public class ViewContentOperationTest extends TalendSWTBotForMDM {
         bot.buttonWithTooltip("Select one Entity").click();
         bot.shell("Select one Entity").activate();
 
+        bot.comboBoxWithLabel("Data Models:").setSelection("CONF");
         bot.tree().select("Conf");
         bot.button("Add").click();
+        sleep();
+        bot.button("OK").click();
         // setDescription();
         // setElements();
         // bot.activeEditor().save();
@@ -71,6 +74,15 @@ public class ViewContentOperationTest extends TalendSWTBotForMDM {
     }
 
     @Test
+    public void ViewContentTest() {
+        setDescriptionTest();
+        setViewableElementsTest();
+        setSearchableElementsTest();
+        setWhereConditionsTest();
+        bot.activeEditor().save();
+        Assert.assertNotNull(viewParentItem.getNode(PREFIX + "Conf"));
+    }
+
     public void setDescriptionTest() {
         bot.buttonWithTooltip("Set the Descriptions").click();
         bot.shell("Set the Descriptions").activate();
@@ -79,10 +91,8 @@ public class ViewContentOperationTest extends TalendSWTBotForMDM {
         bot.text().setText(des);
         bot.buttonWithTooltip("Add").click();
         bot.button("OK").click();
-        Assert.assertEquals(des, bot.text(0).getText());
     }
 
-    @Test
     public void setViewableElementsTest() {
         bot.buttonWithTooltip("Add Multiple", 0).click();
 
@@ -99,7 +109,6 @@ public class ViewContentOperationTest extends TalendSWTBotForMDM {
 
     }
 
-    @Test
     public void setSearchableElementsTest() {
         bot.buttonWithTooltip("Add Multiple", 1).click();
         bot.shell("Select Multiple XPaths").activate();
@@ -121,7 +130,6 @@ public class ViewContentOperationTest extends TalendSWTBotForMDM {
         // sleep();
     }
 
-    @Test
     public void setWhereConditionsTest() {
         bot.buttonWithTooltip("Add Multiple", 1).click();
         bot.shell("Select Multiple XPaths").activate();
@@ -134,13 +142,12 @@ public class ViewContentOperationTest extends TalendSWTBotForMDM {
         sleep();
         // TODO:add the content
 
-        Assert.assertNotNull(viewParentItem.getNode("TestView"));
         sleep(2);
     }
 
     @After
     public void runAfterEveryTest() {
-        viewParentItem.getNode("TestView").contextMenu("Delete").click();
+        viewParentItem.getNode(PREFIX + "Conf").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
         sleep();

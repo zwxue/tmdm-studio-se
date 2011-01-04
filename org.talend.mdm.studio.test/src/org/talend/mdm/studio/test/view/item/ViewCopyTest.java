@@ -10,11 +10,11 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.view;
+package org.talend.mdm.studio.test.view.item;
 
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.Assert;
@@ -24,14 +24,14 @@ import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
- * 
- * 
  * DOC rhou class global comment. Detailled comment
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class ViewParentOperationTest extends TalendSWTBotForMDM {
+public class ViewCopyTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem viewParentItem;
+
+    private SWTBotTreeItem viewItem;
 
     private String PREFIX = "Browse_items_";
 
@@ -39,10 +39,11 @@ public class ViewParentOperationTest extends TalendSWTBotForMDM {
     public void runBeforeEveryTest() {
         viewParentItem = serverItem.getNode("View [HEAD]");
         viewParentItem.expand();
+
+        createView();
     }
 
-    @Test
-    public void viewCreationTest() {
+    private void createView() {
         // Create a new view to test the filter of the xpath.
         viewParentItem.contextMenu("New").click();
         // bot.sleep(1000);
@@ -52,31 +53,17 @@ public class ViewParentOperationTest extends TalendSWTBotForMDM {
         bot.buttonWithTooltip("Select one Entity").click();
         bot.shell("Select one Entity").activate();
 
-        // Test filter of the system data model "PROVISIONING"
-        bot.comboBoxWithLabel("Data Models:").setSelection("PROVISIONING");
-        bot.textWithLabel("Filter:").setText("R");
-        sleep();
-        bot.textWithLabel("Filter:").setText("U");
-        sleep();
-        bot.textWithLabel("Filter:").setText("");
-        sleep();
-
-        // Test filter of the system data model "CONF"
         bot.comboBoxWithLabel("Data Models:").setSelection("CONF");
-        bot.textWithLabel("Filter:").setText("Au");
-        sleep();
-        bot.textWithLabel("Filter:").setText("Con");
-        sleep();
-        bot.textWithLabel("Filter:").setText("");
-        sleep();
-
         bot.tree().select("Conf");
         bot.button("Add").click();
+        sleep();
+        bot.button("OK").click();
         setDescription();
         setElements();
         bot.activeEditor().save();
         bot.activeEditor().close();
-        Assert.assertNotNull(viewParentItem.getNode(PREFIX + "Conf"));
+        viewItem = viewParentItem.getNode(PREFIX + "Conf");
+        Assert.assertNotNull(viewItem);
         sleep(2);
     }
 
@@ -94,38 +81,30 @@ public class ViewParentOperationTest extends TalendSWTBotForMDM {
         bot.text().setText(des);
         bot.buttonWithTooltip("Add").click();
         bot.button("OK").click();
-        Assert.assertEquals(des, bot.text(0).getText());
     }
 
     @Test
-    public void viewCategoryCreationTest() {
-        viewParentItem.contextMenu("New Category").click();
-        // bot.sleep(1000);
-        SWTBotShell newCategoryShell = bot.shell("New Category");
-        newCategoryShell.activate();
-        SWTBotText text = bot.textWithLabel("Enter a name for the New Category");
-        text.setText("TestViewCategory");
+    public void viewCopyTest() {
+        SWTBotMenu editMenu = viewItem.contextMenu("Copy");
+        editMenu.click();
+        sleep();
+        viewItem.contextMenu("Paste").click();
+        SWTBotShell pasteviewShell = bot.shell("Pasting instance " + PREFIX + "Conf");
+        pasteviewShell.activate();
+        bot.text("CopyOf" + PREFIX + "Conf").setText(PREFIX + "Conf" + "PasteView");
         bot.button("OK").click();
-        Assert.assertNotNull(viewParentItem.getNode("TestViewCategory"));
-        sleep(2);
-    }
-
-    @Test
-    public void viewBrowseRevisionTest() {
-        viewParentItem.contextMenu("Browse Revision").click();
+        SWTBotTreeItem pasteNode = viewParentItem.getNode(PREFIX + "Conf" + "PasteView");
+        Assert.assertNotNull(pasteNode);
         sleep(2);
     }
 
     @After
     public void runAfterEveryTest() {
-        viewParentItem.getNode("TestView").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
 
-        viewParentItem.getNode("TestViewCategory").contextMenu("Delete").click();
+        viewParentItem.getNode(PREFIX + "Conf" + "PasteView").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
         sleep();
     }
+
 }

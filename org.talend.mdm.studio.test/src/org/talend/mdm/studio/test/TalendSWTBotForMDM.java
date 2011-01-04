@@ -74,7 +74,9 @@ public class TalendSWTBotForMDM {
         // System.out.println("beforeClass");
         if (!isLoggined) {
             bot = new SWTWorkbenchBot();
-            bot.viewByTitle("Welcome").close();
+            // SWTBotView welcomeView = bot.viewByTitle("Welcome");
+            // if (welcomeView != null)
+            // welcomeView.close();
             bot.menu("Window").menu("Open Perspective").menu("Other...").click();
             final SWTBotShell shellShowView = bot.shell("Open Perspective");
             shellShowView.widget.getDisplay().syncExec(new Runnable() {
@@ -97,7 +99,7 @@ public class TalendSWTBotForMDM {
     @AfterClass
     public static void AfterClass() {
         System.out.println("AfterClass");
-        logout();
+        // logout();
         bot.sleep(2000);
     }
 
