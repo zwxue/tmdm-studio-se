@@ -10,9 +10,9 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.datacontainer;
+package org.talend.mdm.studio.test.datacontainer.item;
 
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
@@ -20,29 +20,23 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
- * 
- * 
  * DOC rhou class global comment. Detailled comment
  */
-@RunWith(SWTBotJunit4ClassRunner.class)
-public class DataContainerParentOperationTest extends TalendSWTBotForMDM {
+public class DataContainerCopyTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem dataContainerItem;
+
+    private SWTBotTreeItem newNode;
 
     @Before
     public void runBeforeEveryTest() {
         dataContainerItem = serverItem.getNode("Data Container");
         dataContainerItem.expand();
-    }
 
-    @Test
-    public void dataContainerCreationTest() {
         dataContainerItem.contextMenu("New").click();
-        // bot.sleep(1000);
         SWTBotShell newDataContainerShell = bot.shell("New Data Container");
         newDataContainerShell.activate();
         SWTBotText text = bot.textWithLabel("Enter a name for the New Instance");
@@ -55,24 +49,25 @@ public class DataContainerParentOperationTest extends TalendSWTBotForMDM {
         bot.activeEditor().save();
         sleep();
         bot.activeEditor().close();
-        SWTBotTreeItem newNode = dataContainerItem.getNode("TestDataContainer");
+        newNode = dataContainerItem.getNode("TestDataContainer");
         Assert.assertNotNull(newNode);
         sleep(2);
-
     }
 
     @Test
-    public void dataContainerCategoryCreationTest() {
-        dataContainerItem.contextMenu("New Category").click();
-        // bot.sleep(1000);
-        SWTBotShell newCategoryShell = bot.shell("New Category");
-        newCategoryShell.activate();
-        SWTBotText text = bot.textWithLabel("Enter a name for the New Category");
-        text.setText("TestDataContainerCategory");
+    public void dataContainerCopyTest() {
+        SWTBotMenu editMenu = newNode.contextMenu("Copy");
+        editMenu.click();
+        sleep();
+        newNode.contextMenu("Paste").click();
+        SWTBotShell pasteDataContainerShell = bot.shell("Pasting instance TestDataContainer");
+        pasteDataContainerShell.activate();
+        bot.text("CopyOfTestDataContainer").setText("PasteDataContainer");
         bot.button("OK").click();
         sleep();
-        SWTBotTreeItem cateNode = dataContainerItem.getNode("TestDataContainerCategory");
-        Assert.assertNotNull(cateNode);
+        bot.button("OK").click();
+        SWTBotTreeItem pasteNode = dataContainerItem.getNode("PasteDataContainer");
+        Assert.assertNotNull(pasteNode);
         sleep(2);
     }
 
@@ -83,9 +78,11 @@ public class DataContainerParentOperationTest extends TalendSWTBotForMDM {
         bot.button("OK").click();
         sleep();
 
-        dataContainerItem.getNode("TestDataContainerCategory").contextMenu("Delete").click();
+        dataContainerItem.getNode("PasteDataContainer").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
         sleep();
+
     }
+
 }

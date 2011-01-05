@@ -47,6 +47,8 @@ public class ViewContentOperationTest extends TalendSWTBotForMDM {
         viewParentItem.expand();
 
         createView();
+        viewItem = viewParentItem.getNode(PREFIX + "Conf");
+        Assert.assertNotNull(viewItem);
     }
 
     private void createView() {
@@ -68,8 +70,7 @@ public class ViewContentOperationTest extends TalendSWTBotForMDM {
         // setElements();
         // bot.activeEditor().save();
         // bot.activeEditor().close();
-        // viewItem = viewParentItem.getNode(PREFIX + "Conf");
-        // Assert.assertNotNull(viewItem);
+
         sleep(2);
     }
 

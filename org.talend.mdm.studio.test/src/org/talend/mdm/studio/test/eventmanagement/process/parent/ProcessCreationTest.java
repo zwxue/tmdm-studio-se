@@ -10,34 +10,27 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.eventmanagement.process;
+package org.talend.mdm.studio.test.eventmanagement.process.parent;
 
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
  * DOC rhou class global comment. Detailled comment
  */
-@RunWith(SWTBotJunit4ClassRunner.class)
-public class ProcessParentOperationTest extends TalendSWTBotForMDM {
+public class ProcessCreationTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem processParentNode;
 
-    private String selEle = "Reporting";
-
-    private SWTBotTreeItem eventManagementItem;
+    private String[] creation;
 
     @Before
     public void runBeforeEveryTest() {
-        eventManagementItem = serverItem.getNode("Event Management");
+        SWTBotTreeItem eventManagementItem = serverItem.getNode("Event Management");
         eventManagementItem.expand();
 
         processParentNode = eventManagementItem.getNode("Process [HEAD]");
@@ -45,11 +38,15 @@ public class ProcessParentOperationTest extends TalendSWTBotForMDM {
 
     @After
     public void runAfterEveryTest() {
-
+        processParentNode.select(creation).contextMenu("Delete").click();
+        sleep();
+        bot.button("OK").click();
+        sleep();
     }
 
     @Test
     public void newTest() {
+        String selEle = "Reporting";
         // for normal process
         processParentNode.contextMenu("New").click();
         bot.text().setText("Normal_Process");
@@ -97,29 +94,9 @@ public class ProcessParentOperationTest extends TalendSWTBotForMDM {
         bot.button("OK").click();
         sleep();
         Assert.assertNotNull(processParentNode.expand().getNode("Runnable#" + selEle));
-    }
 
-    @Test
-    public void browseRevisionTest() {
-        processParentNode.contextMenu("Browse Revision").click();
-    }
-
-    @Test
-    public void newCategoryTest() {
-        processParentNode.contextMenu("New Category").click();
-        // bot.sleep(1000);
-        SWTBotShell newCategoryShell = bot.shell("New Category");
-        newCategoryShell.activate();
-        SWTBotText text = bot.textWithLabel("Enter a name for the New Category");
-        text.setText("TestProcessCategory");
-        bot.button("OK").click();
-        Assert.assertNotNull(processParentNode.expand().getNode("TestProcessCategory"));
-        sleep(2);
-        processParentNode.getNode("TestProcessCategory").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-        Assert.assertNull(processParentNode.expand().getNode("TestProcessCategory"));
+        creation = new String[] { "Normal_Process", "Smart_view_" + selEle, "beforeSaving_" + selEle, "beforeDeleting_" + selEle,
+                "Runnable_" + selEle };
     }
 
     private void selecteXpath(String selEle) {
@@ -131,4 +108,5 @@ public class ProcessParentOperationTest extends TalendSWTBotForMDM {
         bot.button("Add").click();
         sleep();
     }
+
 }

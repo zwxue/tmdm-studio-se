@@ -10,9 +10,8 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.eventmanagement.process;
+package org.talend.mdm.studio.test.eventmanagement.process.item;
 
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
@@ -20,24 +19,18 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
  * DOC rhou class global comment. Detailled comment
  */
-@RunWith(SWTBotJunit4ClassRunner.class)
-public class ProcessItemOperationtest extends TalendSWTBotForMDM {
+public class ProcessRenameTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem processParentNode;
 
-    private SWTBotTreeItem processNode;
-
-    private SWTBotTreeItem eventManagementItem;
-
     @Before
     public void runBeforeEveryTest() {
-        eventManagementItem = serverItem.getNode("Event Management");
+        SWTBotTreeItem eventManagementItem = serverItem.getNode("Event Management");
         eventManagementItem.expand();
 
         processParentNode = eventManagementItem.getNode("Process [HEAD]");
@@ -55,11 +48,14 @@ public class ProcessItemOperationtest extends TalendSWTBotForMDM {
 
     @After
     public void runAfterEveryTest() {
+        processParentNode.getNode("RenameProcess").contextMenu("Delete").click();
+        sleep();
+        bot.button("OK").click();
     }
 
     @Test
     public void renameProcessTest() {
-        processNode = processParentNode.getNode("Normal_Process");
+        SWTBotTreeItem processNode = processParentNode.getNode("Normal_Process");
         SWTBotMenu renameMenu = processNode.contextMenu("Rename");
         sleep();
         renameMenu.click();
@@ -78,49 +74,4 @@ public class ProcessItemOperationtest extends TalendSWTBotForMDM {
         bot.button("OK").click();
     }
 
-    @Test
-    public void copyProcessTest() {
-        processNode = processParentNode.getNode("Normal_Process");
-        processNode.contextMenu("Copy").click();
-        sleep();
-        processNode.contextMenu("Paste").click();
-        SWTBotShell pasteProcessShell = bot.shell("Pasting instance Normal_Process");
-        pasteProcessShell.activate();
-        bot.text("CopyOfNormal_Process").setText("PasteProcess");
-        bot.button("OK").click();
-        sleep();
-        Assert.assertNotNull(processParentNode.expand().getNode("PasteProcess"));
-    }
-
-    @Test
-    public void duplicateProcessTest() {
-        processNode = processParentNode.getNode("Normal_Process");
-        processNode.contextMenu("Duplicate").click();
-        SWTBotShell shell = bot.shell("Pasting instance Normal_Process");
-        shell.activate();
-        bot.text("CopyOfNormal_Process").setText("DuplicateNormal_Process");
-        sleep();
-        bot.button("OK").click();
-        sleep();
-        Assert.assertNotNull(processParentNode.expand().getNode("DuplicateNormal_Process"));
-    }
-
-    @Test
-    public void editProcessTest() {
-        processNode = processParentNode.getNode("Normal_Process");
-        processNode.contextMenu("Edit").click();
-        sleep(2);
-        // The further Test for the content of Process is in the ProcessContentTest.java.
-    }
-
-    @Test
-    public void deleteTest() {
-        processNode = processParentNode.getNode("DuplicateNormal_Process");
-        SWTBotMenu deleteMenu = processNode.contextMenu("Delete");
-        sleep();
-        deleteMenu.click();
-        sleep();
-        bot.button("OK").click();
-        Assert.assertNull(processParentNode.expand().getNode("DuplicateNormal_Process"));
-    }
 }

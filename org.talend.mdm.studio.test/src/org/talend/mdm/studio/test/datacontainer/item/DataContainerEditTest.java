@@ -10,9 +10,8 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.datacontainer;
+package org.talend.mdm.studio.test.datacontainer.item;
 
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
@@ -21,16 +20,12 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
- * 
- * 
  * DOC rhou class global comment. Detailled comment
  */
-@RunWith(SWTBotJunit4ClassRunner.class)
-public class DataContainerItemOperationTest extends TalendSWTBotForMDM {
+public class DataContainerEditTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem dataContainerItem;
 
@@ -60,47 +55,12 @@ public class DataContainerItemOperationTest extends TalendSWTBotForMDM {
     }
 
     @Test
-    public void DataContainerEditTest() {
+    public void dataContainerEditTest() {
         SWTBotMenu editMenu = newNode.contextMenu("Edit");
         sleep();
         editMenu.click();
         bot.textWithLabel("Description").setText("This is a test for edit function of data container");
         bot.activeEditor().save();
-    }
-
-    @Test
-    public void dataContainerCopyTest() {
-        SWTBotMenu editMenu = newNode.contextMenu("Copy");
-        editMenu.click();
-        sleep();
-        newNode.contextMenu("Paste").click();
-        SWTBotShell pasteDataContainerShell = bot.shell("Pasting instance TestDataContainer");
-        pasteDataContainerShell.activate();
-        bot.text("CopyOfTestDataContainer").setText("PasteDataContainer");
-        bot.button("OK").click();
-        SWTBotTreeItem pasteNode = dataContainerItem.getNode("PasteDataContainer");
-        Assert.assertNotNull(pasteNode);
-        sleep(2);
-    }
-
-    @Test
-    public void dataContainerDuplicateTest() {
-        SWTBotMenu duplicateMenu = newNode.contextMenu("Duplicate");
-        duplicateMenu.click();
-        SWTBotShell shell = bot.shell("Pasting instance TestDataContainer");
-        shell.activate();
-        bot.text("CopyOfTestDataContainer").setText("DuplicateDataContainer");
-        sleep();
-        bot.button("OK").click();
-        SWTBotTreeItem duplicateNode = dataContainerItem.getNode("DuplicateDataContainer");
-        Assert.assertNotNull(duplicateNode);
-        sleep(2);
-    }
-
-    @Test
-    public void DataContainerBrowseTest() {
-        newNode.contextMenu("Browse").click();
-        sleep(2);
     }
 
     @After
@@ -110,14 +70,6 @@ public class DataContainerItemOperationTest extends TalendSWTBotForMDM {
         bot.button("OK").click();
         sleep();
 
-        dataContainerItem.getNode("PasteDataContainer").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-
-        dataContainerItem.getNode("DuplicateDataContainer").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
     }
+
 }
