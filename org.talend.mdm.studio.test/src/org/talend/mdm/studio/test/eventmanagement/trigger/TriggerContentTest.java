@@ -47,7 +47,12 @@ public class TriggerContentTest extends TalendSWTBotForMDM {
         triggerParentNode.contextMenu("New").click();
         bot.text().setText("TriggerDemo");
         bot.button("OK").click();
-        sleep(2);
+        bot.comboBoxWithLabel("Service JNDI Name").setSelection(0);
+        bot.activeEditor().save();
+        triggerParentNode.expand();
+        sleep();
+        Assert.assertNotNull(triggerParentNode.getNode("TriggerDemo"));
+
     }
 
     @After

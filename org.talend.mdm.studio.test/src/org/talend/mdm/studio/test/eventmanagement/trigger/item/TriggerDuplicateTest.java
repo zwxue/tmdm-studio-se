@@ -10,75 +10,68 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.eventmanagement.trigger;
+package org.talend.mdm.studio.test.eventmanagement.trigger.item;
 
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
  * DOC rhou class global comment. Detailled comment
  */
-@RunWith(SWTBotJunit4ClassRunner.class)
-public class TriggerParentOperationTest extends TalendSWTBotForMDM {
+public class TriggerDuplicateTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem triggerParentNode;
 
-    private SWTBotTreeItem eventManagementItem;
+    private SWTBotTreeItem triggerNode;
 
     @Before
     public void runBeforeEveryTest() {
-        eventManagementItem = serverItem.getNode("Event Management");
+        SWTBotTreeItem eventManagementItem = serverItem.getNode("Event Management");
         eventManagementItem.expand();
-
         triggerParentNode = eventManagementItem.getNode("Trigger [HEAD]");
+        triggerParentNode.contextMenu("New").click();
+        bot.text().setText("TriggerDemo");
+        bot.button("OK").click();
+        bot.comboBoxWithLabel("Service JNDI Name").setSelection(0);
+        bot.activeEditor().save();
+        triggerParentNode.expand();
+        sleep();
+        Assert.assertNotNull(triggerParentNode.getNode("TriggerDemo"));
+
     }
 
     @After
     public void runAfterEveryTest() {
+        triggerNode = triggerParentNode.getNode("TriggerDemo");
+        SWTBotMenu deleteMenu = triggerNode.contextMenu("Delete");
+        deleteMenu.click();
+        sleep();
+        bot.button("OK").click();
 
+        triggerNode = triggerParentNode.getNode("DuplicateTriggerDemo");
+        deleteMenu = triggerNode.contextMenu("Delete");
+        deleteMenu.click();
+        sleep();
+        bot.button("OK").click();
     }
 
     @Test
-    public void newTest() {
-        // for normal process
-        triggerParentNode.contextMenu("New").click();
-        bot.text().setText("TriggerDemo");
-        bot.button("OK").click();
-        sleep();
-        Assert.assertNotNull(triggerParentNode.getNode("TriggerDemo"));
-    }
-
-    @Test
-    public void browseRevisionTest() {
-        triggerParentNode.contextMenu("Browse Revision").click();
-    }
-
-    @Test
-    public void newCategoryTest() {
-        triggerParentNode.contextMenu("New Category").click();
-        // bot.sleep(1000);
-        SWTBotShell newCategoryShell = bot.shell("New Category");
-        newCategoryShell.activate();
-
-        SWTBotText text = bot.textWithLabel("Enter a name for the New Category");
-        text.setText("TestProcessCategory");
-        bot.button("OK").click();
-        Assert.assertNotNull(triggerParentNode.getNode("TestProcessCategory"));
-        triggerParentNode.expand();
-        sleep(2);
-        triggerParentNode.getNode("TestProcessCategory").contextMenu("Delete").click();
+    public void duplicateTriggerTest() {
+        triggerNode = triggerParentNode.getNode("TriggerDemo");
+        triggerNode.contextMenu("Duplicate").click();
+        SWTBotShell shell = bot.shell("Pasting instance TriggerDemo");
+        shell.activate();
+        bot.text("CopyOfTriggerDemo").setText("DuplicateTriggerDemo");
         sleep();
         bot.button("OK").click();
         sleep();
-
+        Assert.assertNotNull(triggerParentNode.getNode("DuplicateTriggerDemo"));
     }
 
 }
