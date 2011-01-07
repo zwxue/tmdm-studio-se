@@ -10,10 +10,9 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.role;
+package org.talend.mdm.studio.test.role.parent;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
@@ -21,15 +20,12 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
- * 
  * DOC rhou class global comment. Detailled comment
  */
-@RunWith(SWTBotJunit4ClassRunner.class)
-public class RoleParentOperationTest extends TalendSWTBotForMDM {
+public class RoleCreationTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem roleParentItem;
 
@@ -41,7 +37,7 @@ public class RoleParentOperationTest extends TalendSWTBotForMDM {
 
     @Test
     public void roleCreationTest() {
-        roleParentItem.contextMenu("New").click();
+        roleParentItem.contextMenu("New Role").click();
         // bot.sleep(1000);
         SWTBotShell shell = bot.shell("New Role");
         shell.activate();
@@ -62,25 +58,6 @@ public class RoleParentOperationTest extends TalendSWTBotForMDM {
         sleep(2);
     }
 
-    @Test
-    public void roleCategoryCreationTest() {
-        roleParentItem.contextMenu("New Category").click();
-        // bot.sleep(1000);
-        SWTBotShell newCategoryShell = bot.shell("New Category");
-        newCategoryShell.activate();
-        SWTBotText text = bot.textWithLabel("Enter a name for the New Category");
-        text.setText("TestRoleCategory");
-        bot.button("OK").click();
-        Assert.assertNotNull(roleParentItem.getNode("TestRoleCategory"));
-        sleep(2);
-    }
-
-    @Test
-    public void roleBrowseRevisionTest() {
-        roleParentItem.contextMenu("Browse Revision").click();
-        sleep(2);
-    }
-
     @After
     public void runAfterEveryTest() {
         roleParentItem.getNode("TestRole").contextMenu("Delete").click();
@@ -88,9 +65,6 @@ public class RoleParentOperationTest extends TalendSWTBotForMDM {
         bot.button("OK").click();
         sleep();
 
-        roleParentItem.getNode("TestRoleCategory").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
     }
+
 }

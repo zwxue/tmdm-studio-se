@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.eventmanagement.process.parent;
+package org.talend.mdm.studio.test.role.parent;
 
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
@@ -24,42 +24,36 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 /**
  * DOC rhou class global comment. Detailled comment
  */
-public class ProcessCategoryCreationTest extends TalendSWTBotForMDM {
+public class RoleCategoryCreationTest extends TalendSWTBotForMDM {
 
-    private SWTBotTreeItem processParentNode;
-
-    private String selEle = "Reporting";
-
-    private SWTBotTreeItem eventManagementItem;
+    private SWTBotTreeItem roleParentItem;
 
     @Before
     public void runBeforeEveryTest() {
-        eventManagementItem = serverItem.getNode("Event Management");
-        eventManagementItem.expand();
-
-        processParentNode = eventManagementItem.getNode("Process [HEAD]");
-    }
-
-    @After
-    public void runAfterEveryTest() {
-        processParentNode.getNode("TestProcessCategory").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
+        roleParentItem = serverItem.getNode("Role [HEAD]");
+        roleParentItem.expand();
     }
 
     @Test
-    public void newCategoryTest() {
-        processParentNode.contextMenu("New Category").click();
+    public void roleCategoryCreationTest() {
+        roleParentItem.contextMenu("New Category").click();
         // bot.sleep(1000);
         SWTBotShell newCategoryShell = bot.shell("New Category");
         newCategoryShell.activate();
         SWTBotText text = bot.textWithLabel("Enter a name for the New Category");
-        text.setText("TestProcessCategory");
+        text.setText("TestRoleCategory");
         bot.button("OK").click();
-        Assert.assertNotNull(processParentNode.expand().getNode("TestProcessCategory"));
+        Assert.assertNotNull(roleParentItem.getNode("TestRoleCategory"));
         sleep(2);
+    }
 
+    @After
+    public void runAfterEveryTest() {
+
+        roleParentItem.getNode("TestRoleCategory").contextMenu("Delete").click();
+        sleep();
+        bot.button("OK").click();
+        sleep();
     }
 
 }

@@ -43,16 +43,6 @@ public class TriggerContentTest extends TalendSWTBotForMDM {
         eventManagementItem = serverItem.getNode("Event Management");
         eventManagementItem.expand();
 
-        triggerParentNode = eventManagementItem.getNode("Trigger [HEAD]");
-        triggerParentNode.contextMenu("New").click();
-        bot.text().setText("TriggerDemo");
-        bot.button("OK").click();
-        bot.comboBoxWithLabel("Service JNDI Name").setSelection(0);
-        bot.activeEditor().save();
-        triggerParentNode.expand();
-        sleep();
-        Assert.assertNotNull(triggerParentNode.getNode("TriggerDemo"));
-
     }
 
     @After
@@ -65,8 +55,21 @@ public class TriggerContentTest extends TalendSWTBotForMDM {
         });
     }
 
+    private void init() {
+        triggerParentNode = eventManagementItem.getNode("Trigger [HEAD]");
+        triggerParentNode.contextMenu("New").click();
+        bot.text().setText("TriggerDemo");
+        bot.button("OK").click();
+        bot.comboBoxWithLabel("Service JNDI Name").setSelection(0);
+        bot.activeEditor().save();
+        triggerParentNode.expand();
+        sleep();
+        Assert.assertNotNull(triggerParentNode.getNode("TriggerDemo"));
+    }
+
     @Test
     public void setDescriptionTest() {
+        init();
         bot.textWithLabel("Description").setText("Agent updated trigger");
         Assert.assertEquals("Agent updated trigger", bot.textWithLabel("Description").getText());
     }

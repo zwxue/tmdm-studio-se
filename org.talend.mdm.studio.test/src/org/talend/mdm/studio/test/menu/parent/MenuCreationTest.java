@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.eventmanagement.process.parent;
+package org.talend.mdm.studio.test.menu.parent;
 
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
@@ -24,41 +24,37 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 /**
  * DOC rhou class global comment. Detailled comment
  */
-public class ProcessCategoryCreationTest extends TalendSWTBotForMDM {
+public class MenuCreationTest extends TalendSWTBotForMDM {
 
-    private SWTBotTreeItem processParentNode;
-
-    private String selEle = "Reporting";
-
-    private SWTBotTreeItem eventManagementItem;
+    private SWTBotTreeItem menuParentItem;
 
     @Before
     public void runBeforeEveryTest() {
-        eventManagementItem = serverItem.getNode("Event Management");
-        eventManagementItem.expand();
+        menuParentItem = serverItem.getNode("Menu [HEAD]");
+        menuParentItem.expand();
+    }
 
-        processParentNode = eventManagementItem.getNode("Process [HEAD]");
+    @Test
+    public void menuCreationTest() {
+        menuParentItem.contextMenu("New").click();
+        SWTBotShell shell = bot.shell("New Menu");
+        shell.activate();
+        SWTBotText text = bot.textWithLabel("Enter a Name for the New Instance");
+        text.setText("TestMenu");
+        sleep();
+        bot.button("OK").click();
+        sleep();
+        bot.activeEditor().save();
+        Assert.assertNotNull(menuParentItem.getNode("TestMenu"));
+        sleep(2);
     }
 
     @After
     public void runAfterEveryTest() {
-        processParentNode.getNode("TestProcessCategory").contextMenu("Delete").click();
+        menuParentItem.getNode("TestMenu").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
         sleep();
-    }
-
-    @Test
-    public void newCategoryTest() {
-        processParentNode.contextMenu("New Category").click();
-        // bot.sleep(1000);
-        SWTBotShell newCategoryShell = bot.shell("New Category");
-        newCategoryShell.activate();
-        SWTBotText text = bot.textWithLabel("Enter a name for the New Category");
-        text.setText("TestProcessCategory");
-        bot.button("OK").click();
-        Assert.assertNotNull(processParentNode.expand().getNode("TestProcessCategory"));
-        sleep(2);
 
     }
 

@@ -10,9 +10,8 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.menu;
+package org.talend.mdm.studio.test.menu.item;
 
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
@@ -21,15 +20,12 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
- * 
  * DOC rhou class global comment. Detailled comment
  */
-@RunWith(SWTBotJunit4ClassRunner.class)
-public class MenuItemOperationTest extends TalendSWTBotForMDM {
+public class MenuDuplicateTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem menuParentItem;
 
@@ -43,7 +39,7 @@ public class MenuItemOperationTest extends TalendSWTBotForMDM {
         menuParentItem.contextMenu("New").click();
         SWTBotShell shell = bot.shell("New Menu");
         shell.activate();
-        SWTBotText text = bot.textWithLabel("Enter a name for the Menu:");
+        SWTBotText text = bot.textWithLabel("Enter a Name for the New Instance");
         text.setText("TestMenu");
         sleep();
         bot.button("OK").click();
@@ -55,32 +51,10 @@ public class MenuItemOperationTest extends TalendSWTBotForMDM {
     }
 
     @Test
-    public void menuEditTest() {
-        SWTBotMenu editMenu = menuItem.contextMenu("Edit");
-        sleep();
-        editMenu.click();
-    }
-
-    @Test
-    public void menuCopyTest() {
-        SWTBotMenu editMenu = menuItem.contextMenu("Copy");
-        editMenu.click();
-        sleep();
-        menuItem.contextMenu("Paste").click();
-        SWTBotShell pastemenuShell = bot.shell("Pasting instance TestMenu");
-        pastemenuShell.activate();
-        bot.text("CopyOfTestMenu").setText("PasteMenu");
-        bot.button("OK").click();
-        SWTBotTreeItem pasteNode = menuParentItem.getNode("PasteMenu");
-        Assert.assertNotNull(pasteNode);
-        sleep(2);
-    }
-
-    @Test
     public void menuDuplicateTest() {
         SWTBotMenu duplicateMenu = menuItem.contextMenu("Duplicate");
         duplicateMenu.click();
-        SWTBotShell shell = bot.shell("Pasting instance Testmenu");
+        SWTBotShell shell = bot.shell("Pasting instance TestMenu");
         shell.activate();
         bot.text("CopyOfTestMenu").setText("DuplicateMenu");
         sleep();
@@ -91,29 +65,9 @@ public class MenuItemOperationTest extends TalendSWTBotForMDM {
 
     }
 
-    @Test
-    public void menuRenameTest() {
-        SWTBotMenu renameMenu = menuItem.contextMenu("Rename");
-        sleep();
-        renameMenu.click();
-        SWTBotShell renameShell = bot.shell("Rename");
-        renameShell.activate();
-        bot.textWithLabel("Please enter a new name").setText("RenameMenu");
-        bot.button("OK").click();
-        sleep();
-        Assert.assertNull(menuParentItem.getNode("TestMenu"));
-        Assert.assertNotNull(menuParentItem.getNode("RenameMenu"));
-        sleep(2);
-    }
-
     @After
     public void runAfterEveryTest() {
-        menuParentItem.getNode("RenameMenu").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-
-        menuParentItem.getNode("PasteMenu").contextMenu("Delete").click();
+        menuParentItem.getNode("TestMenu").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
         sleep();
@@ -122,5 +76,7 @@ public class MenuItemOperationTest extends TalendSWTBotForMDM {
         sleep();
         bot.button("OK").click();
         sleep();
+
     }
+
 }

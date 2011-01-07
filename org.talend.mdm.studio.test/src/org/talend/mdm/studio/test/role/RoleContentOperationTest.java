@@ -42,7 +42,7 @@ public class RoleContentOperationTest extends TalendSWTBotForMDM {
         roleParentItem = serverItem.getNode("Role [HEAD]");
         roleParentItem.expand();
 
-        roleParentItem.contextMenu("New").click();
+        roleParentItem.contextMenu("New Role").click();
         SWTBotShell newroleShell = bot.shell("New Role");
         newroleShell.activate();
         SWTBotText text = bot.textWithLabel("Enter a name for the Role:");
@@ -72,6 +72,11 @@ public class RoleContentOperationTest extends TalendSWTBotForMDM {
     }
 
     @Test
+    public void roleContentTest() {
+        setDescriptionTest();
+        setPermissionTest();
+    }
+
     public void setDescriptionTest() {
         bot.buttonWithTooltip("Set the Descriptions").click();
         bot.shell("Set the Descriptions").activate();
@@ -83,7 +88,6 @@ public class RoleContentOperationTest extends TalendSWTBotForMDM {
         Assert.assertEquals(des, bot.text(0).getText());
     }
 
-    @Test
     public void setPermissionTest() {
         String type = "Object Type";
         String instance = "Read and Write Permissins On Specific Instances";

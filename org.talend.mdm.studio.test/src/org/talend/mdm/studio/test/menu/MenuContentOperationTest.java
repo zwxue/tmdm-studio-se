@@ -41,6 +41,14 @@ public class MenuContentOperationTest extends TalendSWTBotForMDM {
         menuParentItem = serverItem.getNode("Menu [HEAD]");
         menuParentItem.expand();
 
+    }
+
+    @After
+    public void runAfterEveryTest() {
+
+    }
+
+    private void init() {
         menuParentItem.contextMenu("New").click();
         SWTBotShell shell = bot.shell("New Menu");
         shell.activate();
@@ -55,16 +63,9 @@ public class MenuContentOperationTest extends TalendSWTBotForMDM {
         sleep(2);
     }
 
-    @After
-    public void runAfterEveryTest() {
-        menuParentItem.getNode("TestMenu").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-    }
-
     @Test
     public void setDescriptionTest() {
+        init();
         String des = "This is a description for TestMenu";
         bot.textWithLabel("Description").setText(des);
         bot.buttonWithTooltip("Add").click();
@@ -129,6 +130,11 @@ public class MenuContentOperationTest extends TalendSWTBotForMDM {
     public void deleteEntryTest() {
         bot.tree().getTreeItem("TestMenu - [en: TestMenu]").contextMenu("Delete Entry").click();
         Assert.assertNull(bot.tree().getTreeItem("TestMenu - [en: TestMenu]"));
+        sleep();
+
+        menuParentItem.getNode("TestMenu").contextMenu("Delete").click();
+        sleep();
+        bot.button("OK").click();
         sleep();
     }
 }

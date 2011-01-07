@@ -54,13 +54,6 @@ public class ProcessContentTest extends TalendSWTBotForMDM {
         eventManagementItem = serverItem.getNode("Event Management");
         eventManagementItem.expand();
 
-        processParentNode = eventManagementItem.getNode("Process [HEAD]");
-        // for normal process
-        processParentNode.contextMenu("New").click();
-        bot.text().setText("ProcessDemo");
-        bot.radio("Create a Normal Process").click();
-        bot.button("OK").click();
-        sleep(2);
     }
 
     @After
@@ -73,16 +66,19 @@ public class ProcessContentTest extends TalendSWTBotForMDM {
         });
     }
 
-    @Test
-    public void processContentTest() {
-        setDescriptionTest();
-        setFirstStepTest();
-        setSecondStepTest();
-        setThirdStepTest();
-
+    private void init() {
+        processParentNode = eventManagementItem.getNode("Process [HEAD]");
+        // for normal process
+        processParentNode.contextMenu("New").click();
+        bot.text().setText("ProcessDemo");
+        bot.radio("Create a Normal Process").click();
+        bot.button("OK").click();
+        sleep(2);
     }
 
+    @Test
     public void setDescriptionTest() {
+        init();
         bot.buttonWithTooltip("Set the Descriptions").click();
         bot.shell("Set the Descriptions").activate();
         bot.comboBox().setSelection("English");
@@ -93,6 +89,7 @@ public class ProcessContentTest extends TalendSWTBotForMDM {
         Assert.assertEquals(des, bot.text(0).getText());
     }
 
+    @Test
     public void setFirstStepTest() {
 
         bot.textWithLabel("Step Description").setText(firStep);
@@ -109,6 +106,7 @@ public class ProcessContentTest extends TalendSWTBotForMDM {
         bot.styledText().setText(GETITEM_PARAMETERS);
     }
 
+    @Test
     public void setSecondStepTest() {
 
         bot.textWithLabel("Step Description").setText(secStep);
@@ -125,6 +123,7 @@ public class ProcessContentTest extends TalendSWTBotForMDM {
         bot.styledText().setText(DECODE_PARAMETERS);
     }
 
+    @Test
     public void setThirdStepTest() {
         bot.textWithLabel("Step Description").setText(thiStep);
         bot.buttonWithTooltip("Add").click();

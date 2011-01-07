@@ -16,7 +16,6 @@ import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,9 +45,6 @@ public class ViewContentOperationTest extends TalendSWTBotForMDM {
         viewParentItem = serverItem.getNode("View [HEAD]");
         viewParentItem.expand();
 
-        createView();
-        viewItem = viewParentItem.getNode(PREFIX + "Conf");
-        Assert.assertNotNull(viewItem);
     }
 
     private void createView() {
@@ -74,17 +70,22 @@ public class ViewContentOperationTest extends TalendSWTBotForMDM {
         sleep(2);
     }
 
-    @Test
-    public void ViewContentTest() {
-        setDescriptionTest();
-        setViewableElementsTest();
-        setSearchableElementsTest();
-        setWhereConditionsTest();
-        bot.activeEditor().save();
-        Assert.assertNotNull(viewParentItem.getNode(PREFIX + "Conf"));
+    // public void ViewContentTest() {
+    // setDescriptionTest();
+    // setViewableElementsTest();
+    // setSearchableElementsTest();
+    // setWhereConditionsTest();
+    // bot.activeEditor().save();
+    // Assert.assertNotNull(viewParentItem.getNode(PREFIX + "Conf"));
+    // }
+
+    private void init() {
+        createView();
     }
 
+    @Test
     public void setDescriptionTest() {
+        init();
         bot.buttonWithTooltip("Set the Descriptions").click();
         bot.shell("Set the Descriptions").activate();
         bot.comboBox().setSelection("English");
@@ -94,6 +95,7 @@ public class ViewContentOperationTest extends TalendSWTBotForMDM {
         bot.button("OK").click();
     }
 
+    @Test
     public void setViewableElementsTest() {
         bot.buttonWithTooltip("Add Multiple", 0).click();
 
@@ -110,6 +112,7 @@ public class ViewContentOperationTest extends TalendSWTBotForMDM {
 
     }
 
+    @Test
     public void setSearchableElementsTest() {
         bot.buttonWithTooltip("Add Multiple", 1).click();
         bot.shell("Select Multiple XPaths").activate();
@@ -131,6 +134,7 @@ public class ViewContentOperationTest extends TalendSWTBotForMDM {
         // sleep();
     }
 
+    @Test
     public void setWhereConditionsTest() {
         bot.buttonWithTooltip("Add Multiple", 1).click();
         bot.shell("Select Multiple XPaths").activate();
@@ -142,16 +146,17 @@ public class ViewContentOperationTest extends TalendSWTBotForMDM {
         bot.button("Add").click();
         sleep();
         // TODO:add the content
-
+        bot.activeEditor().save();
         sleep(2);
-    }
-
-    @After
-    public void runAfterEveryTest() {
         viewParentItem.getNode(PREFIX + "Conf").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
         sleep();
+    }
+
+    @After
+    public void runAfterEveryTest() {
+
     }
 
 }

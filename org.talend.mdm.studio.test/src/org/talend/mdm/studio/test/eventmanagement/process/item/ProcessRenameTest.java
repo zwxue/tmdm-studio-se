@@ -63,7 +63,6 @@ public class ProcessRenameTest extends TalendSWTBotForMDM {
         renameShell.activate();
         bot.textWithLabel("Please enter a new name").setText("RenameProcess");
         bot.button("OK").click();
-        Assert.assertNull(processParentNode.expand().getNode("Normal_Process"));
         Assert.assertNotNull(processParentNode.expand().getNode("RenameProcess"));
         // revert the rename operation
         processNode = processParentNode.getNode("RenameProcess");
