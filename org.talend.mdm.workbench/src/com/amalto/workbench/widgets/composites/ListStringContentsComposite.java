@@ -16,10 +16,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 
-import com.amalto.workbench.detailtabs.sections.providers.StringLabelProvider;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.ListContentProvider;
+import com.amalto.workbench.providers.ListStringLabelProvider;
 
 public abstract class ListStringContentsComposite extends Composite {
 
@@ -56,7 +56,7 @@ public abstract class ListStringContentsComposite extends Composite {
         tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 3));
 
         tvInfos.setContentProvider(new ListContentProvider());
-        tvInfos.setLabelProvider(new StringLabelProvider());
+        tvInfos.setLabelProvider(new ListStringLabelProvider());
         tvInfos.setInput(infos);
 
         final TreeColumn colInfo = new TreeColumn(tree, SWT.NONE);
@@ -175,7 +175,7 @@ public abstract class ListStringContentsComposite extends Composite {
         moveInfoDown(getSelectionFromInfoTree());
     }
 
-    public String[] getAnnotaionInfos() {
+    public String[] getInfos() {
         return infos.toArray(new String[0]);
     }
 
@@ -223,11 +223,11 @@ public abstract class ListStringContentsComposite extends Composite {
         tvInfos.refresh();
     }
 
-    public void setAnnotaionInfos(String[] annotationInfos) {
+    public void setInfos(String[] infos) {
 
         initCandidateInfoUIArea();
 
-        initInfoTrees(annotationInfos);
+        initInfoTrees(infos);
     }
 
     private void initInfoTrees(String[] annotationInfos) {

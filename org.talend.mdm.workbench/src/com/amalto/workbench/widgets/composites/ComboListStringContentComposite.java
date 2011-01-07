@@ -7,9 +7,9 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
-import com.amalto.workbench.detailtabs.sections.providers.StringLabelProvider;
 import com.amalto.workbench.detailtabs.sections.providers.StringViewerSorter;
 import com.amalto.workbench.providers.ListContentProvider;
+import com.amalto.workbench.providers.ListStringLabelProvider;
 
 public abstract class ComboListStringContentComposite extends ListStringContentsComposite {
 
@@ -25,7 +25,7 @@ public abstract class ComboListStringContentComposite extends ListStringContents
         comboInfos = new ComboViewer(this, SWT.READ_ONLY);
         comboInfos.getControl().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
         comboInfos.setContentProvider(new ListContentProvider());
-        comboInfos.setLabelProvider(new StringLabelProvider());
+        comboInfos.setLabelProvider(new ListStringLabelProvider());
         comboInfos.setSorter(new StringViewerSorter());
 
     }

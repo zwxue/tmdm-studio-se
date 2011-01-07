@@ -108,6 +108,7 @@ import org.eclipse.xsd.impl.XSDSchemaImpl;
 import org.eclipse.xsd.util.XSDConstants;
 import org.eclipse.xsd.util.XSDSchemaLocator;
 import org.osgi.framework.Bundle;
+import org.talend.mdm.commmon.util.core.EUUIDCustomType;
 import org.talend.mdm.commmon.util.core.ICoreConstants;
 import org.talend.mdm.commmon.util.workbench.Version;
 import org.talend.mdm.commmon.util.workbench.ZipToFile;
@@ -2729,7 +2730,7 @@ public class Util {
 
     public static boolean isSimpleTypedParticle(XSDParticle curXSDParticle) {
 
-        if (curXSDParticle == null || !(curXSDParticle.getContent() instanceof XSDElementDeclaration))
+        if (!isValidParticle(curXSDParticle))
             return false;
 
         return (((XSDElementDeclaration) curXSDParticle.getContent()).getTypeDefinition() instanceof XSDSimpleTypeDefinition);
@@ -2737,10 +2738,120 @@ public class Util {
 
     public static String getParticleName(XSDParticle curXSDParticle) {
 
-        if (curXSDParticle == null || !(curXSDParticle.getContent() instanceof XSDElementDeclaration))
+        if (!isValidParticle(curXSDParticle))
             return "";
 
-        return ((XSDElementDeclaration) curXSDParticle.getContent()).getTypeDefinition().getName();
+        String name = ((XSDElementDeclaration) curXSDParticle.getContent()).getName();
+
+        return (name == null ? "" : name);
+    }
+
+    public static String getParticleReferenceName(XSDParticle curXSDParticle) {
+
+        if (!isValidParticle(curXSDParticle))
+            return "";
+
+        XSDElementDeclaration ref = null;
+        if (((XSDElementDeclaration) curXSDParticle.getContent()).isElementDeclarationReference())
+            ref = ((XSDElementDeclaration) curXSDParticle.getContent()).getResolvedElementDeclaration();
+
+        return ((ref == null ? "" : ref.getQName()));
+    }
+
+    private static boolean isValidParticle(XSDParticle curXSDParticle) {
+
+        return (curXSDParticle != null && curXSDParticle.getContent() instanceof XSDElementDeclaration);
+
+    }
+
+    public static List<String> getAllCustomTypeNames(XSDSchema schema) {
+
+        List<String> customTypeNames = new ArrayList<String>();
+
+        for (String eachEUUIDCustomTypeName : EUUIDCustomType.allTypes())
+            customTypeNames.add(eachEUUIDCustomTypeName);
+
+        for (XSDTypeDefinition eachType : schema.getTypeDefinitions()) {
+
+            if (!(eachType instanceof XSDSimpleTypeDefinition))
+                continue;
+
+            if (eachType.getTargetNamespace() != null
+                    && eachType.getTargetNamespace().equals(XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001))
+                continue;
+
+            if (customTypeNames.contains(eachType.getName()))
+                continue;
+
+            customTypeNames.add(eachType.getName());
+        }
+
+        return customTypeNames;
+    }
+
+    public static boolean isCustomrType(XSDSchema schema, String typeName) {
+        return getAllCustomTypeNames(schema).contains(typeName);
+    }
+
+    public static List<XSDSimpleTypeDefinition> getAllBuildInTypes(XSDSchema schema) {
+
+        List<XSDSimpleTypeDefinition> builtInTypes = new ArrayList<XSDSimpleTypeDefinition>();
+        for (XSDTypeDefinition eachBuildInTypeDef : schema.getSchemaForSchema().getTypeDefinitions()) {
+
+            if (!(eachBuildInTypeDef instanceof XSDSimpleTypeDefinition))
+                continue;
+
+            builtInTypes.add((XSDSimpleTypeDefinition) eachBuildInTypeDef);
+        }
+
+        return builtInTypes;
+    }
+
+    public static boolean isBuildInType(XSDSchema schema, XSDSimpleTypeDefinition type) {
+        return getAllBuildInTypes(schema).contains(type);
+    }
+
+    public static boolean isSequenceComplexType(XSDComplexTypeDefinition type) {
+        return XSDCompositor.SEQUENCE_LITERAL.equals(getComplexTypeGroupType(type));
+    }
+
+    public static boolean isAllComplexType(XSDComplexTypeDefinition type) {
+        return XSDCompositor.ALL_LITERAL.equals(getComplexTypeGroupType(type));
+    }
+
+    public static boolean isChoiceComplexType(XSDComplexTypeDefinition type) {
+        return XSDCompositor.CHOICE_LITERAL.equals(getComplexTypeGroupType(type));
+    }
+
+    public static XSDCompositor getComplexTypeGroupType(XSDComplexTypeDefinition type) {
+
+        if (type == null || !(type.getContent() instanceof XSDParticle)
+                || !(((XSDParticle) type.getContent()).getContent() instanceof XSDModelGroup))
+            return null;
+
+        XSDParticle groupParticle = (XSDParticle) type.getContent();
+        XSDModelGroup group = (XSDModelGroup) groupParticle.getContent();
+
+        return group.getCompositor();
+    }
+
+    public static List<XSDTypeDefinition> getParentTypes(XSDTypeDefinition type) {
+        return getParentTypes(type, new ArrayList<XSDTypeDefinition>());
+    }
+
+    private static List<XSDTypeDefinition> getParentTypes(XSDTypeDefinition type, List<XSDTypeDefinition> results) {
+
+        XSDTypeDefinition baseType = type.getBaseType();
+
+        if (!results.contains(baseType))
+            results.add(baseType);
+
+        if (baseType == null
+                || baseType.equals(type.getSchema().resolveTypeDefinition(type.getSchema().getSchemaForSchemaNamespace(),
+                        "anyType")))
+            return results;
+
+        return getParentTypes(baseType, results);
 
     }
 }

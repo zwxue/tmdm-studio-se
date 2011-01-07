@@ -25,7 +25,7 @@ public class ElementFKInfosSection extends XSDComponentSection {
 
     @Override
     public void refresh() {
-        compXPath.setAnnotaionInfos(fkInfos.toArray(new String[0]));
+        compXPath.setInfos(fkInfos.toArray(new String[0]));
         compXPath.setIsResolveAutoInWeb(isResolveAutoInWeb);
     }
 
@@ -46,7 +46,7 @@ public class ElementFKInfosSection extends XSDComponentSection {
 
     @Override
     protected ISubmittable getSubmittedObj() {
-        return new ForeignKeyInfosAnnoInfo(curXSDComponent, compXPath.getAnnotaionInfos(), compXPath.isResolveAutoInWeb());
+        return new ForeignKeyInfosAnnoInfo(curXSDComponent, compXPath.getInfos(), compXPath.isResolveAutoInWeb());
     }
 
     @Override

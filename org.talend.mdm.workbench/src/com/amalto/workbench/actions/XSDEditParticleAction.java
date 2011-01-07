@@ -135,6 +135,7 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
                 // no more element declarations --> we create a new Declaration with String simpleType definition
                 // instead
                 // FIXME: dereferecning and element is buggy
+
                 XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
                 XSDElementDeclaration newD = (XSDElementDeclaration) factory.createXSDElementDeclaration();
                 newD.setName(this.elementName);
@@ -208,7 +209,7 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
             XSDParticle p = (XSDParticle) iter.next();
             if (p.getTerm() instanceof XSDElementDeclaration) {
                 XSDElementDeclaration thisDecl = (XSDElementDeclaration) p.getTerm();
-                if (thisDecl.getName().equals(elementName) && !initEleName.equalsIgnoreCase(elementName)) {
+                if (thisDecl.getName().equals(elementName) && initEleName != null && !initEleName.equalsIgnoreCase(elementName)) {
                     MessageDialog.openError(page.getSite().getShell(), "Error", "The Business Element " + elementName
                             + " already exists.");
                     return;

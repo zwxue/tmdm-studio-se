@@ -21,7 +21,7 @@ public class LookupFieldsSection extends XSDComponentSection {
 
     @Override
     public void refresh() {
-        compElements.setAnnotaionInfos(lookupFields.toArray(new String[0]));
+        compElements.setInfos(lookupFields.toArray(new String[0]));
     }
 
     @Override
@@ -41,7 +41,7 @@ public class LookupFieldsSection extends XSDComponentSection {
 
     @Override
     protected ISubmittable getSubmittedObj() {
-        return new LookupFieldsAnnoInfo(curXSDComponent, compElements.getAnnotaionInfos());
+        return new LookupFieldsAnnoInfo(curXSDComponent, compElements.getInfos());
     }
 
     @Override

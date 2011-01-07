@@ -44,7 +44,7 @@
       <editor
             class="com.amalto.workbench.editors.xsdeditor.XSDEditor"
             default="false"
-            icon="icons/appli_16x16.gif"
+            icon="icons/datamodel.png"
             id="com.amalto.workbench.editors.xsdeditor.XSDEditor"
             name="com.amalto.workbench.editors.xsdeditor.XSDEditor">
       </editor>
@@ -161,6 +161,30 @@
               category="Element"
               id="org.talend.mdm.workbench.properties.element.tab.relationship"
               label="Relationship">
+        </propertyTab>
+     </propertyTabs>
+  </extension>
+  <extension
+        name="SimpleType Tabs"
+        point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+     <propertyTabs
+           contributorId="org.talend.mdm.workbench.propertyContributor.datamodel">
+        <propertyTab
+              category="SimpleType"
+              id="org.talend.mdm.workbench.properties.simpletype.tab.main"
+              label="Main">
+        </propertyTab>
+     </propertyTabs>
+  </extension>
+  <extension
+        name="ComplexType Tabs"
+        point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+     <propertyTabs
+           contributorId="org.talend.mdm.workbench.propertyContributor.datamodel">
+        <propertyTab
+              category="ComplexType"
+              id="org.talend.mdm.workbench.properties.complextype.tab.main"
+              label="Main">
         </propertyTab>
      </propertyTabs>
   </extension>
@@ -312,6 +336,63 @@
               tab="org.talend.mdm.workbench.properties.element.tab.main">
            <input
                  type="org.eclipse.xsd.XSDParticle">
+           </input>
+        </propertySection>
+        <propertySection
+              afterSection="org.talend.mdm.workbench.properties.element.section.main"
+              class="com.amalto.workbench.detailtabs.sections.CommitSection"
+              id="org.talend.mdm.workbench.properties.element.section.main.commit"
+              tab="org.talend.mdm.workbench.properties.element.tab.main">
+           <input
+                 type="org.eclipse.xsd.XSDParticle">
+           </input>
+        </propertySection>
+     </propertySections>
+  </extension>
+  <extension
+        name="Simpletype Sections"
+        point="org.eclipse.ui.views.properties.tabbed.propertySections">
+     <propertySections
+           contributorId="org.talend.mdm.workbench.propertyContributor.datamodel">
+        <propertySection
+              class="com.amalto.workbench.detailtabs.sections.SimpleTypeMainSection"
+              id="org.talend.mdm.workbench.properties.simpletype.section.main"
+              tab="org.talend.mdm.workbench.properties.simpletype.tab.main">
+           <input
+                 type="org.eclipse.xsd.XSDSimpleTypeDefinition">
+           </input>
+        </propertySection>
+        <propertySection
+              afterSection="org.talend.mdm.workbench.properties.simpletype.section.main"
+              class="com.amalto.workbench.detailtabs.sections.CommitSection"
+              id="org.talend.mdm.workbench.properties.simpletype.section.main.commit"
+              tab="org.talend.mdm.workbench.properties.simpletype.tab.main">
+           <input
+                 type="org.eclipse.xsd.XSDSimpleTypeDefinition">
+           </input>
+        </propertySection>
+     </propertySections>
+  </extension>
+  <extension
+        name="Complextype Sections"
+        point="org.eclipse.ui.views.properties.tabbed.propertySections">
+     <propertySections
+           contributorId="org.talend.mdm.workbench.propertyContributor.datamodel">
+        <propertySection
+              class="com.amalto.workbench.detailtabs.sections.ComplexTypeMainSection"
+              id="org.talend.mdm.workbench.properties.complextype.section.main"
+              tab="org.talend.mdm.workbench.properties.complextype.tab.main">
+           <input
+                 type="org.eclipse.xsd.XSDComplexTypeDefinition">
+           </input>
+        </propertySection>
+        <propertySection
+              afterSection="org.talend.mdm.workbench.properties.complextype.section.main"
+              class="com.amalto.workbench.detailtabs.sections.CommitSection"
+              id="org.talend.mdm.workbench.properties.complextype.section.main.commit"
+              tab="org.talend.mdm.workbench.properties.complextype.tab.main">
+           <input
+                 type="org.eclipse.xsd.XSDComplexTypeDefinition">
            </input>
         </propertySection>
      </propertySections>

@@ -75,6 +75,12 @@ public class ForeignKeyFilterAnnoInfo extends SingleContentAnnotationInfo {
 
         StringBuffer sb = new StringBuffer();
         for (ForeignKeyFilterAnnoInfoDefUnit eachFKFilterInfo : fkFilterCfgInfos) {
+
+            if (eachFKFilterInfo.getXpath().trim().length() == 0 && eachFKFilterInfo.getOperator().trim().length() == 0
+                    && eachFKFilterInfo.getNormalizeValue().trim().length() == 0
+                    && eachFKFilterInfo.getPredicate().trim().length() == 0)
+                continue;
+
             sb.append(eachFKFilterInfo.getXpath() + "$$" + eachFKFilterInfo.getOperator() + "$$"
                     + eachFKFilterInfo.getNormalizeValue() + "$$" + eachFKFilterInfo.getPredicate() + "#");
         }

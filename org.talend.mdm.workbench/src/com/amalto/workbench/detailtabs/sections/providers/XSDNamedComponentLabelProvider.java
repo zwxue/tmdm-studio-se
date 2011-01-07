@@ -3,11 +3,11 @@ package com.amalto.workbench.detailtabs.sections.providers;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.xsd.XSDNamedComponent;
 
-public class StringLabelProvider implements ILabelProvider {
+public class XSDNamedComponentLabelProvider implements ILabelProvider {
 
     public void addListener(ILabelProviderListener listener) {
-
     }
 
     public void dispose() {
@@ -18,7 +18,6 @@ public class StringLabelProvider implements ILabelProvider {
     }
 
     public void removeListener(ILabelProviderListener listener) {
-
     }
 
     public Image getImage(Object element) {
@@ -27,10 +26,10 @@ public class StringLabelProvider implements ILabelProvider {
 
     public String getText(Object element) {
 
-        if (element == null)
+        if (!(element instanceof XSDNamedComponent))
             return "";
 
-        return element.toString();
+        return ((XSDNamedComponent) element).getName();
     }
 
 }

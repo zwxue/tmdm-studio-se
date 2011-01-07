@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -33,13 +35,18 @@ public class ElementInfoConfigComposite extends Composite {
 
     private Spinner spinMin;
 
-    public ElementInfoConfigComposite(Composite parent, int style, XSDParticle curXSDParticle) {
+    public ElementInfoConfigComposite(Composite parent, int style) {
         super(parent, style);
-
-        this.curXSDParticle = curXSDParticle;
-
         createControls();
 
+    }
+
+    public void setXSDParticle(XSDParticle curXSDParticle) {
+        this.curXSDParticle = curXSDParticle;
+
+        initUIContents();
+
+        refresh();
     }
 
     public String getElementName() {
@@ -77,10 +84,17 @@ public class ElementInfoConfigComposite extends Composite {
         if (occurenceGroup == null)
             return;
 
-        ((GridData) occurenceGroup.getLayoutData()).exclude = Util.isSimpleTypedParticle(curXSDParticle);
-        occurenceGroup.setVisible(!Util.isSimpleTypedParticle(curXSDParticle));
+        if (!hasElementReference() && Util.isSimpleTypedParticle(curXSDParticle)) {
+            spinMin.setSelection(1);
+            spinMax.setSelection(1);
+        }
 
-        occurenceGroup.getParent().layout();
+        enableOccurenceGroup(!Util.isSimpleTypedParticle(curXSDParticle) || hasElementReference());
+    }
+
+    private void enableOccurenceGroup(boolean isEnabled) {
+        spinMin.setEnabled(isEnabled);
+        spinMax.setEnabled(isEnabled);
     }
 
     private void refreshNameArea() {
@@ -132,7 +146,7 @@ public class ElementInfoConfigComposite extends Composite {
 
         spinMin = new Spinner(occurenceGroup, SWT.BORDER);
         spinMin.setSelection(1);
-        spinMin.setMinimum(-1);
+        spinMin.setMinimum(0);
         spinMin.setMaximum(Integer.MAX_VALUE);
 
         final Label label = new Label(occurenceGroup, SWT.NONE);
@@ -155,8 +169,12 @@ public class ElementInfoConfigComposite extends Composite {
 
         txtName.setText(Util.getParticleName(curXSDParticle));
         comboReference.setItems(getAllReferences());
-        spinMin.setSelection(curXSDParticle.getMinOccurs());
-        spinMax.setSelection(curXSDParticle.getMaxOccurs());
+        comboReference.setText(Util.getParticleReferenceName(curXSDParticle));
+
+        if (curXSDParticle != null) {
+            spinMin.setSelection(curXSDParticle.getMinOccurs());
+            spinMax.setSelection(curXSDParticle.getMaxOccurs());
+        }
     }
 
     private void initUIListeners() {
@@ -175,12 +193,25 @@ public class ElementInfoConfigComposite extends Composite {
 
         });
 
+        comboReference.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+
+                refresh();
+            }
+
+        });
     }
 
     private String[] getAllReferences() {
 
         ArrayList<String> elementDeclarations = new ArrayList<String>();
         elementDeclarations.add("");
+
+        if (curXSDParticle == null)
+            return elementDeclarations.toArray(new String[0]);
+
         for (XSDElementDeclaration eachXSDEleDeclaration : curXSDParticle.getSchema().getElementDeclarations()) {
             if (eachXSDEleDeclaration.getTargetNamespace() != null
                     && eachXSDEleDeclaration.getTargetNamespace().equals(IConstants.DEFAULT_NAME_SPACE))

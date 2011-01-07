@@ -1,9 +1,13 @@
 package com.amalto.workbench.detailtabs.sections.model.element;
 
+import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDParticle;
+import org.eclipse.xsd.XSDSchema;
 
 import com.amalto.workbench.detailtabs.sections.handlers.CommitHandler;
+import com.amalto.workbench.detailtabs.sections.handlers.ElementWrapperCommitHandler;
 import com.amalto.workbench.detailtabs.sections.model.ISubmittable;
+import com.amalto.workbench.utils.Util;
 
 public class ElementWrapper implements ISubmittable {
 
@@ -17,10 +21,16 @@ public class ElementWrapper implements ISubmittable {
 
     private int newMaxOcur = 1;
 
+    public ElementWrapper(XSDParticle sourceElement) {
+        this(sourceElement, Util.getParticleName(sourceElement), Util.getParticleReferenceName(sourceElement), sourceElement
+                .getMinOccurs(), sourceElement.getMaxOccurs());
+    }
+
     public ElementWrapper(XSDParticle sourceElement, String newName, String newReference, int newMinOcur, int newMaxOcur) {
 
         this.sourceElement = sourceElement;
         this.newName = newName;
+        this.newReference = newReference;
         this.newMinOcur = newMinOcur;
         this.newMaxOcur = newMaxOcur;
     }
@@ -29,12 +39,25 @@ public class ElementWrapper implements ISubmittable {
         return sourceElement;
     }
 
+    public void setSourceElement(XSDParticle element) {
+        this.sourceElement = element;
+    }
+
     public String getNewName() {
+
+        if (hasNewReference())
+            return "";
+
         return newName;
     }
 
     public void setNewName(String newName) {
+
         this.newName = newName;
+
+        if (newName == null)
+            this.newName = "";
+
     }
 
     public String getNewReference() {
@@ -42,7 +65,12 @@ public class ElementWrapper implements ISubmittable {
     }
 
     public void setNewReference(String newReference) {
+
         this.newReference = newReference;
+
+        if (newReference == null)
+            this.newReference = "";
+
     }
 
     public int getNewMinOcur() {
@@ -61,9 +89,35 @@ public class ElementWrapper implements ISubmittable {
         this.newMaxOcur = newMaxOcur;
     }
 
-    public CommitHandler<ElementWrapper> createCommitHandler() {
-        // TODO Auto-generated method stub
-        return null;
+    public String getSourceName() {
+        return Util.getParticleName(sourceElement);
     }
 
+    public String getSourceReference() {
+        return Util.getParticleReferenceName(sourceElement);
+    }
+
+    public XSDElementDeclaration getSourceXSDContent() {
+        return (XSDElementDeclaration) sourceElement.getContent();
+    }
+
+    public int getSourceMinCardinality() {
+        return sourceElement.getMinOccurs();
+    }
+
+    public int getSourceMaxCardinality() {
+        return sourceElement.getMaxOccurs();
+    }
+
+    public CommitHandler<ElementWrapper> createCommitHandler() {
+        return new ElementWrapperCommitHandler(this);
+    }
+
+    public boolean hasNewReference() {
+        return !"".equals(getNewReference());
+    }
+
+    public XSDSchema getSchema() {
+        return sourceElement.getSchema();
+    }
 }

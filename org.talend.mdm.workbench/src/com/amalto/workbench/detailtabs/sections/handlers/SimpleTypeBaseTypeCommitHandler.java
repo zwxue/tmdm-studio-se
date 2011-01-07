@@ -1,0 +1,48 @@
+package com.amalto.workbench.detailtabs.sections.handlers;
+
+import org.eclipse.xsd.XSDSimpleTypeDefinition;
+
+import com.amalto.workbench.detailtabs.exception.CommitException;
+import com.amalto.workbench.detailtabs.exception.CommitValidationException;
+import com.amalto.workbench.detailtabs.sections.model.simpletype.SimpleTypeWrapper;
+
+public class SimpleTypeBaseTypeCommitHandler extends CommitHandler<SimpleTypeWrapper> {
+
+    public SimpleTypeBaseTypeCommitHandler(SimpleTypeWrapper submittedObj) {
+        super(submittedObj);
+    }
+
+    @Override
+    protected void validateCommit() throws CommitValidationException {
+
+        XSDSimpleTypeDefinition newBaseType = getCommitedObj().getSchema().resolveSimpleTypeDefinition(
+                getCommitedObj().getSchema().getSchemaForSchemaNamespace(), getCommitedObj().getNewBaseTypeName());
+
+        if (newBaseType == null)
+            throw new CommitValidationException("The new base type " + getCommitedObj().getNewBaseTypeName() + " doesn't exist");
+
+        if (newBaseType.equals(getCommitedObj()))
+            throw new CommitValidationException("The new base type can not equal to the simple type itself");
+    }
+
+    @Override
+    protected boolean doSubmit() throws CommitException {
+
+        if (getCommitedObj().getXSDSimpleType().getBaseType().getName().equals(getCommitedObj().getNewBaseTypeName()))
+            return false;
+
+        XSDSimpleTypeDefinition newBaseType = getCommitedObj().getNewBaseType();
+        if (!getCommitedObj().isBaseTypeExists()) {
+            newBaseType = getCommitedObj().getSchema().resolveSimpleTypeDefinition(getCommitedObj().getNewBaseTypeName());
+            newBaseType.setBaseTypeDefinition(getCommitedObj().getNewBaseType());
+            getCommitedObj().getSchema().getContents().add(newBaseType);
+        }
+
+        getCommitedObj().getXSDSimpleType().setBaseTypeDefinition(newBaseType);
+        getCommitedObj().getXSDSimpleType().getFacetContents().removeAll(getCommitedObj().getXSDSimpleType().getFacetContents());
+        getCommitedObj().getXSDSimpleType().updateElement();
+
+        return true;
+    }
+
+}
