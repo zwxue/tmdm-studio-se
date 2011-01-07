@@ -1638,7 +1638,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         }
 
         if (selectedObjs.length > 1 && deleteConceptWrapAction.outPutDeleteActions() != null) {
-            // manager.add(deleteConceptWrapAction.outPutDeleteActions());
+
+            if (!isType)
+                manager.add(deleteConceptWrapAction.outPutDeleteActions());
+
             String title = "";
             if (Util.checkInCopyTypeElement(selectedObjs))
                 title = "Copy Entities";
