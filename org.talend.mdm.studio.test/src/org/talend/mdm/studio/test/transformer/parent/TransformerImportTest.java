@@ -10,21 +10,18 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.transformer;
+package org.talend.mdm.studio.test.transformer.parent;
 
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
  * DOC rhou class global comment. Detailled comment
  */
-@RunWith(SWTBotJunit4ClassRunner.class)
-public class TransformerParentOperationTest extends TalendSWTBotForMDM {
+public class TransformerImportTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem jobParentItem;
 
@@ -43,10 +40,7 @@ public class TransformerParentOperationTest extends TalendSWTBotForMDM {
     @Test
     public void importJobTest() {
         jobParentItem.contextMenu("Import a TIS Job Archive ").click();
+        // TODO:SWTBot does not support the FileDialog,need further investigation.
     }
 
-    @Test
-    public void refreshJobTest() {
-        jobParentItem.contextMenu("Refresh").click();
-    }
 }

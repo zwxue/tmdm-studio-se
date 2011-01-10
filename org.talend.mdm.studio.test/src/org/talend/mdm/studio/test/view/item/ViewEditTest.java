@@ -64,6 +64,7 @@ public class ViewEditTest extends TalendSWTBotForMDM {
         bot.activeEditor().close();
         viewItem = viewParentItem.getNode(PREFIX + "Conf");
         Assert.assertNotNull(viewItem);
+        viewItem.doubleClick();
         sleep(2);
     }
 
@@ -92,6 +93,11 @@ public class ViewEditTest extends TalendSWTBotForMDM {
 
     @After
     public void runAfterEveryTest() {
+
+        viewParentItem.getNode(PREFIX + "Conf").contextMenu("Delete").click();
+        sleep();
+        bot.button("OK").click();
+        sleep();
     }
 
 }

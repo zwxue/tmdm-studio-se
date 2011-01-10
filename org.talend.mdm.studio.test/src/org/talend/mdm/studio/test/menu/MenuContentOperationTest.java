@@ -52,7 +52,7 @@ public class MenuContentOperationTest extends TalendSWTBotForMDM {
         menuParentItem.contextMenu("New").click();
         SWTBotShell shell = bot.shell("New Menu");
         shell.activate();
-        SWTBotText text = bot.textWithLabel("Enter a name for the Menu:");
+        SWTBotText text = bot.textWithLabel("Enter a Name for the New Instance");
         text.setText("TestMenu");
         sleep();
         bot.button("OK").click();

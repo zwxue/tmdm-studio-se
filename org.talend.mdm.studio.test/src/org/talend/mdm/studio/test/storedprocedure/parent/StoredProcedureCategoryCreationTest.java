@@ -10,9 +10,8 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.storedprocedure;
+package org.talend.mdm.studio.test.storedprocedure.parent;
 
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
@@ -20,15 +19,12 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
- * 
  * DOC rhou class global comment. Detailled comment
  */
-@RunWith(SWTBotJunit4ClassRunner.class)
-public class StoredProcedureParentOperationTest extends TalendSWTBotForMDM {
+public class StoredProcedureCategoryCreationTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem spParentItem;
 
@@ -36,19 +32,6 @@ public class StoredProcedureParentOperationTest extends TalendSWTBotForMDM {
     public void runBeforeEveryTest() {
         spParentItem = serverItem.getNode("Stored Procedure [HEAD]");
         spParentItem.expand();
-    }
-
-    @Test
-    public void storedProcedureCreationTest() {
-        spParentItem.contextMenu("New").click();
-        // bot.sleep(1000);
-        SWTBotShell shell = bot.shell("New Stored Procedure");
-        shell.activate();
-        SWTBotText text = bot.textWithLabel("Enter a name for the new instance");
-        text.setText("TestStoredProcedure");
-        bot.buttonWithTooltip("OK").click();
-        Assert.assertNotNull(spParentItem.getNode("TestStoredProcedure"));
-        sleep(2);
     }
 
     @Test
@@ -64,22 +47,13 @@ public class StoredProcedureParentOperationTest extends TalendSWTBotForMDM {
         sleep(2);
     }
 
-    @Test
-    public void storedProcedureBrowseRevisionTest() {
-        spParentItem.contextMenu("Browse Revision").click();
-        sleep(2);
-    }
-
     @After
     public void runAfterEveryTest() {
-        spParentItem.getNode("TestStoredProcedure").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
 
         spParentItem.getNode("TestStoredProcedureCategory").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
         sleep();
     }
+
 }

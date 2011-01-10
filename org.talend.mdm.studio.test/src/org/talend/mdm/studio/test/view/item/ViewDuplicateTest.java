@@ -64,6 +64,7 @@ public class ViewDuplicateTest extends TalendSWTBotForMDM {
         bot.activeEditor().close();
         viewItem = viewParentItem.getNode(PREFIX + "Conf");
         Assert.assertNotNull(viewItem);
+        viewItem.doubleClick();
         sleep(2);
     }
 
@@ -87,7 +88,7 @@ public class ViewDuplicateTest extends TalendSWTBotForMDM {
     public void viewDuplicateTest() {
         SWTBotMenu duplicateMenu = viewItem.contextMenu("Duplicate");
         duplicateMenu.click();
-        SWTBotShell shell = bot.shell("Pasting instance Testview");
+        SWTBotShell shell = bot.shell("Pasting instance " + PREFIX + "Conf");
         shell.activate();
         bot.text("CopyOf" + PREFIX + "Conf").setText(PREFIX + "Conf" + "DuplicateView");
         sleep();
@@ -100,6 +101,11 @@ public class ViewDuplicateTest extends TalendSWTBotForMDM {
 
     @After
     public void runAfterEveryTest() {
+
+        viewParentItem.getNode(PREFIX + "Conf").contextMenu("Delete").click();
+        sleep();
+        bot.button("OK").click();
+        sleep();
 
         viewParentItem.getNode(PREFIX + "Conf" + "DuplicateView").contextMenu("Delete").click();
         sleep();

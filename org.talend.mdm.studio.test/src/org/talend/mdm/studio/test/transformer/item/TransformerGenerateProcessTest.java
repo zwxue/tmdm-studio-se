@@ -10,52 +10,41 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.transformer;
+package org.talend.mdm.studio.test.transformer.item;
 
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
  * DOC rhou class global comment. Detailled comment
  */
-@RunWith(SWTBotJunit4ClassRunner.class)
-public class TransformerItemOperationtest extends TalendSWTBotForMDM {
-
-    private SWTBotTreeItem jobParentItem;
-
-    private SWTBotTreeItem jobCategoryItem;
+public class TransformerGenerateProcessTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem jobItem;
 
-    private SWTBotTreeItem eventManagementItem;
-
     private SWTBotTreeItem processParentNode;
-
-    private SWTBotTreeItem triggerParentNode;
 
     private String PRIFIX = "CallJob_";
 
+    private String name;
+
     @Before
     public void runBeforeEveryTest() {
-        jobParentItem = serverItem.getNode("Job Repository");
+        SWTBotTreeItem jobParentItem = serverItem.getNode("Job Repository");
         jobParentItem.expand();
 
-        eventManagementItem = serverItem.getNode("Event Management");
+        SWTBotTreeItem eventManagementItem = serverItem.getNode("Event Management");
         eventManagementItem.expand();
 
         processParentNode = eventManagementItem.getNode("Process [HEAD]");
         processParentNode.expand();
-        triggerParentNode = eventManagementItem.getNode("Trigger [HEAD]");
-        triggerParentNode.expand();
 
-        jobCategoryItem = jobParentItem.getNode("Deployed Jobs");
+        SWTBotTreeItem jobCategoryItem = jobParentItem.getNode("Deployed Jobs");
         if (jobCategoryItem.getItems().length > 0) {
             jobItem = jobCategoryItem.getNode(0);
         }
@@ -63,6 +52,10 @@ public class TransformerItemOperationtest extends TalendSWTBotForMDM {
 
     @After
     public void runAfterEveryTest() {
+        processParentNode.getNode(PRIFIX + name).contextMenu("Delete").click();
+        sleep();
+        bot.button("OK").click();
+        sleep();
     }
 
     @Test
@@ -73,27 +66,9 @@ public class TransformerItemOperationtest extends TalendSWTBotForMDM {
             final SWTBotShell shell = bot.shell("Which schema do you want?");
             shell.activate();
             bot.button("OK").click();
-            Assert.assertNotNull(triggerParentNode.getNode(PRIFIX + name));
-            sleep();
-        }
-    }
-
-    @Test
-    public void generateTriggerTest() {
-        if (jobItem != null) {
-            String name = jobItem.getText();
-            jobItem.contextMenu("Generate Talend Job Caller Trigger").click();
             Assert.assertNotNull(processParentNode.getNode(PRIFIX + name));
             sleep();
         }
     }
 
-    @Test
-    public void deleteTest() {
-        if (jobItem != null) {
-            jobItem.contextMenu("Delete").click();
-            sleep();
-            Assert.assertNull(jobItem);
-        }
-    }
 }

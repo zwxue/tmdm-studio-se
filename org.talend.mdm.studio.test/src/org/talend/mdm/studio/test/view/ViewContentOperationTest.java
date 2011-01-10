@@ -70,15 +70,6 @@ public class ViewContentOperationTest extends TalendSWTBotForMDM {
         sleep(2);
     }
 
-    // public void ViewContentTest() {
-    // setDescriptionTest();
-    // setViewableElementsTest();
-    // setSearchableElementsTest();
-    // setWhereConditionsTest();
-    // bot.activeEditor().save();
-    // Assert.assertNotNull(viewParentItem.getNode(PREFIX + "Conf"));
-    // }
-
     private void init() {
         createView();
     }

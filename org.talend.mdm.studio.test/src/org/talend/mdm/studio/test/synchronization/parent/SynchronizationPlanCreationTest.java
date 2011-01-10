@@ -10,9 +10,8 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.synchronization;
+package org.talend.mdm.studio.test.synchronization.parent;
 
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
@@ -20,15 +19,12 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
- * 
  * DOC rhou class global comment. Detailled comment
  */
-@RunWith(SWTBotJunit4ClassRunner.class)
-public class SynchronizationPlanParentOperationTest extends TalendSWTBotForMDM {
+public class SynchronizationPlanCreationTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem spParentItem;
 
@@ -43,28 +39,13 @@ public class SynchronizationPlanParentOperationTest extends TalendSWTBotForMDM {
         spParentItem.contextMenu("New").click();
         SWTBotShell shell = bot.shell("New Synchronization Plan");
         shell.activate();
-        SWTBotText text = bot.textWithLabel("Enter a name for the new instance");
+        SWTBotText text = bot.textWithLabel("Enter a Name for the New Instance");
         text.setText("TestSynchronizationPlan");
-        bot.buttonWithTooltip("OK").click();
-        Assert.assertNotNull(spParentItem.getNode("TestSynchronizationPlan"));
-        sleep(2);
-    }
-
-    @Test
-    public void synchronizationPlanCategoryCreationTest() {
-        spParentItem.contextMenu("New Category").click();
-        SWTBotShell newCategoryShell = bot.shell("New Category");
-        newCategoryShell.activate();
-        SWTBotText text = bot.textWithLabel("Enter a name for the New Category");
-        text.setText("TestSynchronizationPlanCategory");
         bot.button("OK").click();
-        Assert.assertNotNull(spParentItem.getNode("TestSynchronizationPlanCategory"));
         sleep(2);
-    }
-
-    @Test
-    public void synchronizationPlanBrowseRevisionTest() {
-        spParentItem.contextMenu("Browse Revision").click();
+        bot.activeEditor().save();
+        sleep();
+        Assert.assertNotNull(spParentItem.getNode("TestSynchronizationPlan"));
         sleep(2);
     }
 
@@ -74,10 +55,6 @@ public class SynchronizationPlanParentOperationTest extends TalendSWTBotForMDM {
         sleep();
         bot.button("OK").click();
         sleep();
-
-        spParentItem.getNode("TestSynchronizationPlanCategory").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
     }
+
 }

@@ -64,6 +64,7 @@ public class ViewRenameTest extends TalendSWTBotForMDM {
         bot.activeEditor().close();
         viewItem = viewParentItem.getNode(PREFIX + "Conf");
         Assert.assertNotNull(viewItem);
+        viewItem.doubleClick();
         sleep(2);
     }
 
@@ -93,7 +94,6 @@ public class ViewRenameTest extends TalendSWTBotForMDM {
         bot.textWithLabel("Please enter a new name").setText("RenameView");
         bot.button("OK").click();
         sleep();
-        Assert.assertNull(viewParentItem.getNode("TestView"));
         Assert.assertNotNull(viewParentItem.getNode("RenameView"));
         sleep(2);
     }

@@ -10,9 +10,9 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.storedprocedure;
+package org.talend.mdm.studio.test.storedprocedure.item;
 
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
@@ -20,18 +20,12 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
- * 
  * DOC rhou class global comment. Detailled comment
- * 
- * 
- * 
  */
-@RunWith(SWTBotJunit4ClassRunner.class)
-public class StoredProcedureContentOperationTest extends TalendSWTBotForMDM {
+public class StoredProcedureCopyTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem spParentItem;
 
@@ -42,58 +36,47 @@ public class StoredProcedureContentOperationTest extends TalendSWTBotForMDM {
         spParentItem = serverItem.getNode("Stored Procedure [HEAD]");
         spParentItem.expand();
 
-    }
-
-    private void init() {
         spParentItem.contextMenu("New").click();
-        SWTBotShell newspShell = bot.shell("New Stored Procedure");
-        newspShell.activate();
+        SWTBotShell newstoredProcedureShell = bot.shell("New Stored Procedure");
+        newstoredProcedureShell.activate();
         SWTBotText text = bot.textWithLabel("Enter a Name for the New Instance");
         text.setText("TestStoredProcedure");
+        bot.button("OK").click();
         sleep();
-        bot.buttonWithTooltip("OK").click();
+        bot.activeEditor().save();
+        sleep();
         spItem = spParentItem.getNode("TestStoredProcedure");
         Assert.assertNotNull(spItem);
-        spItem.doubleClick();
+        sleep(2);
+    }
+
+    @Test
+    public void storedProcedureCopyTest() {
+        SWTBotMenu editMenu = spItem.contextMenu("Copy");
+        editMenu.click();
+        sleep();
+        spItem.contextMenu("Paste").click();
+        SWTBotShell pastestoredProcedureShell = bot.shell("Pasting instance TestStoredProcedure");
+        pastestoredProcedureShell.activate();
+        bot.text("CopyOfTestStoredProcedure").setText("PasteStoredProcedure");
+        bot.button("OK").click();
+        SWTBotTreeItem pasteNode = spParentItem.getNode("PasteStoredProcedure");
+        Assert.assertNotNull(pasteNode);
         sleep(2);
     }
 
     @After
     public void runAfterEveryTest() {
-
-    }
-
-    @Test
-    public void storedProcedureContentTest() {
-        init();
-        setDescriptionTest();
-        setProcedureTest();
-        executeProcedureTest();
-    }
-
-    @Test
-    public void setDescriptionTest() {
-        String des = "This is a stored procedure";
-        bot.textWithLabel("Descriptions").setText(des);
-        Assert.assertEquals(des, bot.textWithLabel("Descriptions").getText());
-    }
-
-    @Test
-    public void setProcedureTest() {
-        String pro = "";
-        bot.styledText().setText(pro);
-        Assert.assertEquals(pro, bot.styledText().getText());
-    }
-
-    @Test
-    public void executeProcedureTest() {
-        String pro = "";
-        bot.comboBox().setSelection("SearchTemplate");
-        bot.button("Execute Procedure").click();
-
         spParentItem.getNode("TestStoredProcedure").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
         sleep();
+
+        spParentItem.getNode("PasteStoredProcedure").contextMenu("Delete").click();
+        sleep();
+        bot.button("OK").click();
+        sleep();
+
     }
+
 }

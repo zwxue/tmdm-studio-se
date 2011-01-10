@@ -10,9 +10,8 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.storedprocedure;
+package org.talend.mdm.studio.test.storedprocedure.parent;
 
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
@@ -20,80 +19,40 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
- * 
  * DOC rhou class global comment. Detailled comment
- * 
- * 
- * 
  */
-@RunWith(SWTBotJunit4ClassRunner.class)
-public class StoredProcedureContentOperationTest extends TalendSWTBotForMDM {
+public class StoredProcedureCreationTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem spParentItem;
-
-    private SWTBotTreeItem spItem;
 
     @Before
     public void runBeforeEveryTest() {
         spParentItem = serverItem.getNode("Stored Procedure [HEAD]");
         spParentItem.expand();
-
     }
 
-    private void init() {
+    @Test
+    public void storedProcedureCreationTest() {
         spParentItem.contextMenu("New").click();
-        SWTBotShell newspShell = bot.shell("New Stored Procedure");
-        newspShell.activate();
+        // bot.sleep(1000);
+        SWTBotShell shell = bot.shell("New Stored Procedure");
+        shell.activate();
         SWTBotText text = bot.textWithLabel("Enter a Name for the New Instance");
         text.setText("TestStoredProcedure");
-        sleep();
         bot.buttonWithTooltip("OK").click();
-        spItem = spParentItem.getNode("TestStoredProcedure");
-        Assert.assertNotNull(spItem);
-        spItem.doubleClick();
+        Assert.assertNotNull(spParentItem.getNode("TestStoredProcedure"));
         sleep(2);
     }
 
     @After
     public void runAfterEveryTest() {
-
-    }
-
-    @Test
-    public void storedProcedureContentTest() {
-        init();
-        setDescriptionTest();
-        setProcedureTest();
-        executeProcedureTest();
-    }
-
-    @Test
-    public void setDescriptionTest() {
-        String des = "This is a stored procedure";
-        bot.textWithLabel("Descriptions").setText(des);
-        Assert.assertEquals(des, bot.textWithLabel("Descriptions").getText());
-    }
-
-    @Test
-    public void setProcedureTest() {
-        String pro = "";
-        bot.styledText().setText(pro);
-        Assert.assertEquals(pro, bot.styledText().getText());
-    }
-
-    @Test
-    public void executeProcedureTest() {
-        String pro = "";
-        bot.comboBox().setSelection("SearchTemplate");
-        bot.button("Execute Procedure").click();
-
         spParentItem.getNode("TestStoredProcedure").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
         sleep();
     }
+
 }

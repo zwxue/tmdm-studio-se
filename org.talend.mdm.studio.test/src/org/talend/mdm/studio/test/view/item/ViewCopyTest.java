@@ -64,6 +64,7 @@ public class ViewCopyTest extends TalendSWTBotForMDM {
         bot.activeEditor().close();
         viewItem = viewParentItem.getNode(PREFIX + "Conf");
         Assert.assertNotNull(viewItem);
+        viewItem.doubleClick();
         sleep(2);
     }
 

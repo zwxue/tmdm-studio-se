@@ -76,7 +76,6 @@ public class ViewCreationTest extends TalendSWTBotForMDM {
         sleep();
         bot.activeEditor().save();
         sleep();
-        bot.button("OK").click();
         bot.activeEditor().close();
         Assert.assertNotNull(viewParentItem.getNode(PREFIX + "Conf"));
         sleep(2);
