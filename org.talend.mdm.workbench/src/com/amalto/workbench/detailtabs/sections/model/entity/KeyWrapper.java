@@ -50,10 +50,6 @@ public class KeyWrapper {
         return type;
     }
 
-    public void setType(XSDIdentityConstraintCategory type) {
-        this.type = type;
-    }
-
     public String getName() {
         return name;
     }
@@ -84,5 +80,9 @@ public class KeyWrapper {
 
     public boolean isUserCreated() {
         return getSourceKey() == null;
+    }
+
+    public boolean isUniqueKey() {
+        return XSDIdentityConstraintCategory.UNIQUE_LITERAL.equals(getType());
     }
 }

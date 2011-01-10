@@ -2807,8 +2807,8 @@ public class Util {
         return builtInTypes;
     }
 
-    public static boolean isBuildInType(XSDSchema schema, XSDSimpleTypeDefinition type) {
-        return getAllBuildInTypes(schema).contains(type);
+    public static boolean isBuildInType(XSDSimpleTypeDefinition type) {
+        return getAllBuildInTypes(type.getSchema()).contains(type);
     }
 
     public static boolean isSequenceComplexType(XSDComplexTypeDefinition type) {

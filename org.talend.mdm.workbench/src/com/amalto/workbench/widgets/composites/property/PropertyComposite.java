@@ -21,6 +21,8 @@ public class PropertyComposite extends Composite {
 
     private TreeViewer tvProperty;
 
+    private PropertyModifier propModifier;
+
     private List<IPropertySource<?>> propertySources = new ArrayList<IPropertySource<?>>();
 
     @SuppressWarnings("unchecked")
@@ -47,6 +49,7 @@ public class PropertyComposite extends Composite {
         hideEmptyLabel(lblLabel);
 
         tvProperty = new TreeViewer(this, SWT.FULL_SELECTION | SWT.BORDER);
+        propModifier = new PropertyModifier(tvProperty);
         tvProperty.setContentProvider(new ListContentProvider());
         tvProperty.setLabelProvider(new CommonTableLabelProvider<IPropertySource<?>>(new ColumnTextExtractor[] {
                 new ColumnTextExtractor<IPropertySource<?>>("getPropertyName"),
@@ -54,7 +57,7 @@ public class PropertyComposite extends Composite {
         tvProperty.setSorter(new PropertySourceSorter());
         tvProperty.setCellEditors(new CellEditor[2]);
         tvProperty.setColumnProperties(PropertyModifier.COLPROPS);
-        tvProperty.setCellModifier(new PropertyModifier(tvProperty));
+        tvProperty.setCellModifier(propModifier);
         tvProperty.setInput(propertySources);
 
         Tree tree = tvProperty.getTree();
@@ -115,5 +118,9 @@ public class PropertyComposite extends Composite {
 
         ((GridData) label.getLayoutData()).exclude = true;
         label.setVisible(false);
+    }
+
+    public void setEditable(boolean isEditable) {
+        tvProperty.setCellModifier(isEditable ? propModifier : null);
     }
 }

@@ -365,6 +365,7 @@ public class EntityKeyConfigComposite extends Composite {
                 Object selectedObj = ((IStructuredSelection) event.getSelection()).getFirstElement();
                 if (selectedObj instanceof KeyWrapper) {
                     txtKeyName.setText(((KeyWrapper) selectedObj).getName());
+                    txtKeyName.setEditable(!((KeyWrapper) selectedObj).isUniqueKey());
                     comboSelector.setText(((KeyWrapper) selectedObj).getSelector());
                     tvFields.setInput(Arrays.asList(((KeyWrapper) selectedObj).getFields()));
                 }
@@ -641,7 +642,7 @@ public class EntityKeyConfigComposite extends Composite {
         private KeyWrapper targetKeyWrapper;
 
         public EditKeyWrapperNameValidator(EntityWrapper entityWrapper, KeyWrapper targetKeyWrapper) {
-            super(entityWrapper.getSchema());
+            super(targetKeyWrapper.getSourceKey());
 
             this.entityWrapper = entityWrapper;
             this.targetKeyWrapper = targetKeyWrapper;
@@ -651,7 +652,12 @@ public class EntityKeyConfigComposite extends Composite {
         public String isValid(String newText) {
 
             if (newText == null || "".equals(newText.trim()))
-                return "The Key Name cannot be empty";
+                return "The key name cannot be empty";
+
+            if (XSDIdentityConstraintCategory.UNIQUE_LITERAL.equals(targetKeyWrapper.getType())
+                    && !entityWrapper.getName().equals(targetKeyWrapper.getName())) {
+                return "The unique key name must be equal to the name of it's parent entity";
+            }
 
             for (XSDIdentityConstraintDefinition eachKey : getSchema().getIdentityConstraintDefinitions()) {
 
@@ -660,7 +666,7 @@ public class EntityKeyConfigComposite extends Composite {
                 }
 
                 if (eachKey.getName().equals(newText)) {
-                    return "The Key " + newText + " already exist";
+                    return "The key " + newText + " already exist";
                 }
             }
 
@@ -670,7 +676,7 @@ public class EntityKeyConfigComposite extends Composite {
                     continue;
 
                 if (eachKeyWrapper.getName().equals(newText)) {
-                    return "The Key " + newText + " already exist";
+                    return "The key " + newText + " already exist";
                 }
             }
 

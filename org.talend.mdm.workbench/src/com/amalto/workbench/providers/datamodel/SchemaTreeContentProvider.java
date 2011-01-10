@@ -202,7 +202,9 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
                 list.add(parent.getBaseTypeDefinition());
         }
 
-        list.addAll(parent.getFacetContents());
+        if (!Util.isBuildInType(parent))
+            list.addAll(parent.getFacetContents());
+
         return list.toArray(new Object[list.size()]);
     }
 

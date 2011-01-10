@@ -275,20 +275,20 @@ public class SimpleTypeConfigComposite extends Composite {
     }
 
     private void refresh() {
- 
-        boolean isBuildInType = Util.isBuildInType(xsdSimpleType.getSchema(), xsdSimpleType);
-        
+
+        boolean isBuildInType = Util.isBuildInType(xsdSimpleType);
+
         txtName.setEnabled(!isBuildInType);
         radCustomTypes.setEnabled(!isBuildInType);
         radBuildInTypes.setEnabled(!isBuildInType);
-        compProperty.setEnabled(!isBuildInType);
-        
+        compProperty.setEditable(!isBuildInType);
+
         comboCustomTypes.getCombo().setEnabled(radCustomTypes.getSelection() && !isBuildInType);
         comboBuildInTypes.getCombo().setEnabled(radBuildInTypes.getSelection() && !isBuildInType);
 
         initUIContentForCompFacet(getSelectedBaseType());
     }
-    
+
     public XSDSimpleTypeDefinition getSelectedBaseType() {
 
         if (radCustomTypes.getSelection())

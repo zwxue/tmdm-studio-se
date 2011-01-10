@@ -5,7 +5,7 @@ import org.eclipse.jface.viewers.Viewer;
 
 import com.amalto.workbench.providers.CommonTableCellModifier;
 
-public class PropertyModifier extends CommonTableCellModifier<IPropertySource> {
+public class PropertyModifier extends CommonTableCellModifier<IPropertySource<?>> {
 
     public static final String COL_PROP_NAME = "name";
 
@@ -19,6 +19,7 @@ public class PropertyModifier extends CommonTableCellModifier<IPropertySource> {
         this.viewer = viewer;
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public boolean canModify(Object element, String property) {
 
@@ -28,7 +29,10 @@ public class PropertyModifier extends CommonTableCellModifier<IPropertySource> {
         if (viewer.getCellEditors().length < 2)
             return false;
 
-        boolean canModify = (element instanceof IPropertySource) && (((IPropertySource) element).getCellEditor() != null);
+        if (!viewer.getControl().isEnabled())
+            return false;
+
+        boolean canModify = (element instanceof IPropertySource) && (((IPropertySource<?>) element).getCellEditor() != null);
 
         if (canModify) {
             viewer.getCellEditors()[1] = ((IPropertySource) element).getCellEditor();
