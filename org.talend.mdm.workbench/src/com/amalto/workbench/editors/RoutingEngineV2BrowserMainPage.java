@@ -189,12 +189,12 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 public void handleEvent(Event event) {
                 	if (suspendButton.getSelection()) {
                 		suspendSubscriptionEngine();
-                		suspendButton.setText("Resume");
-                		suspendButton.redraw();
+                		//suspendButton.setText("Resume");
+                		//suspendButton.redraw();
                 	} else {
                 		resumeSubscriptionEngine();
-                		suspendButton.setText("Suspend");
-                		suspendButton.redraw();
+                		//suspendButton.setText("Suspend");
+                		//suspendButton.redraw();
                 	}
             	};
             });    

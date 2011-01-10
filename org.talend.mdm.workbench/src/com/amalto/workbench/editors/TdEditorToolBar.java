@@ -55,7 +55,9 @@ public class TdEditorToolBar {
     public CoolBar getToolbarControl() {
         return coolBar;
     }
-
+    public ToolBarManager getToolBarManager(){
+    	return defaultToolBarMgr;
+    }
 
     public void addActions(Action... actions) {
         assert actions != null;

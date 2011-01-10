@@ -4,8 +4,6 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	xmlns:tns="urn-com-amalto-xtentis-webservice"
 	>
-
-	<xsd:include schemaLocation="xtentis-core.xsd"/>
 	
 	<!-- *****************************************************
 		Workflow Objects
@@ -115,5 +113,43 @@
 	</xsd:complexType>
 	<xsd:element name="WSWorkflowDeleteProcessInstancesRequest" type="tns:WSWorkflowDeleteProcessInstancesRequest"/>
 	
-		
+	<xsd:complexType name="WSUnassignTask">
+		<xsd:all>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="taskUUID" type="xsd:string"/>
+		</xsd:all>		
+	</xsd:complexType>
+	<xsd:element name="WSUnassignTask" type="tns:WSUnassignTask"/>
+	
+	<xsd:complexType name="WSAssignTask">
+		<xsd:all>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="taskUUID" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="candicates" type="tns:WSStringArray"/>
+		</xsd:all>		
+	</xsd:complexType>
+	<xsd:element name="WSAssignTask" type="tns:WSAssignTask"/>
+					
+	<xsd:complexType name="WSSetTaskPriority">
+		<xsd:all>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="taskUUID" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="priority" type="xsd:string"/>
+		</xsd:all>		
+	</xsd:complexType>
+	<xsd:element name="WSSetTaskPriority" type="tns:WSSetTaskPriority"/>
+	
+	<xsd:complexType name="WSSuspendTask">
+		<xsd:all>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="taskUUID" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="assignTask" type="xsd:boolean"/>
+		</xsd:all>		
+	</xsd:complexType>
+	<xsd:element name="WSSuspendTask" type="tns:WSSuspendTask"/>
+	
+	<xsd:complexType name="WSStartProcessInstance">
+		<xsd:all>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="processUUID" type="tns:WSWorkflowProcessDefinitionUUID"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="variable" type="tns:WSHashMap"/>
+		</xsd:all>		
+	</xsd:complexType>
+	<xsd:element name="WSStartProcessInstance" type="tns:WSStartProcessInstance"/>
+				
 </xsd:schema>

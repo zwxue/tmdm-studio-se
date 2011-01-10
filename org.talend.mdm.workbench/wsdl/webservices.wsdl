@@ -22,7 +22,7 @@
     		xmlns:tns="urn-com-amalto-xtentis-webservice"
 			>
 			
-			<xsd:import namespace="urn-com-amalto-xtentis-webservice" schemaLocation="xtentis.xsd"/>
+			<xsd:include schemaLocation="xtentis.xsd"/>
     	</xsd:schema>
 	</types>
 
@@ -327,6 +327,20 @@
     <message name="getItemPKsByFullCriteriaResponse">
         <part name="wsItemPKsByFullCriteriaResponse" element="tns:WSItemPKsByCriteriaResponse"/>
     </message>
+    
+    <message name="countItemsByCustomFKFiltersRequest">
+        <part name="wsCountItemsByCustomFKFilters" element="tns:WSCountItemsByCustomFKFilters"/>
+    </message>
+    <message name="countItemsByCustomFKFiltersResponse">
+        <part name="wsCountItemsByCustomFKFiltersResponse" element="tns:WSString"/>
+    </message>
+    
+    <message name="getItemsByCustomFKFiltersRequest">
+        <part name="wsGetItemsByCustomFKFilters" element="tns:WSGetItemsByCustomFKFilters"/>
+    </message>
+    <message name="getItemsByCustomFKFiltersResponse">
+        <part name="wsGetItemsByCustomFKFiltersResponse" element="tns:WSStringArray"/>
+    </message>
 	
 	<message name="viewSearchRequest">
 		<part name="wsViewSearch" element="tns:WSViewSearch"/>
@@ -373,6 +387,12 @@
 	<message name="putItemResponse">
 		<part name="wsItemPK" element="tns:WSItemPK"/>
 	</message>
+	<message name="partialPutItemRequest">
+		<part name="wsPartialPutItem" element="tns:WSPartialPutItem"/>
+	</message>
+	<message name="partialPutItemResponse">
+		<part name="wsItemPK" element="tns:WSItemPK"/>
+	</message>	
     <message name="putItemByOperatorTypeRequest">
         <part name="putItemByOperatorType" element="tns:WSPutItemByOperatorType"/>
     </message>
@@ -1295,8 +1315,7 @@
 	<message name="workflowGetProcessInstancesResponse">
 		<part name="processlist" element="tns:WSProcessInstanceArray"></part>
 	</message>
-	
-	
+		
 	<message name="workflowDeleteProcessInstancesRequest">
 	    <part name="deleteWolkflowRequest" element="tns:WSWorkflowDeleteProcessInstancesRequest"></part>
 	</message>
@@ -1304,7 +1323,37 @@
 		<part name="deleteWolkflowResponse" element="tns:WSBoolean"></part>
 	</message>
 	
+	<message name="workflowUnassignTaskRequest">
+	    <part name="task" element="tns:WSUnassignTask"></part>
+	</message>
+	<message name="workflowUnassignTaskResponse">
+		<part name="result" element="tns:WSBoolean"></part>
+	</message>
+	<message name="workflowAssignTaskRequest">
+	    <part name="task" element="tns:WSAssignTask"></part>
+	</message>
+	<message name="workflowAssignTaskResponse">
+		<part name="result" element="tns:WSBoolean"></part>
+	</message>
+	<message name="workflowSetTaskPriorityRequest">
+	    <part name="task" element="tns:WSSetTaskPriority"></part>
+	</message>
+	<message name="workflowSetTaskPriorityResponse">
+		<part name="result" element="tns:WSBoolean"></part>
+	</message>
+	<message name="workflowSuspendTaskRequest">
+	    <part name="task" element="tns:WSSuspendTask"></part>
+	</message>
+	<message name="workflowSuspendTaskResponse">
+		<part name="result" element="tns:WSBoolean"></part>
+	</message>
 	
+	<message name="workflowStartProcessInstanceRequest">
+	    <part name="task" element="tns:WSStartProcessInstance"></part>
+	</message>
+	<message name="workflowStartProcessInstanceResponse">
+		<part name="result" element="tns:WSBoolean"></part>
+	</message>					
 	<message name="getMDMJobRequest">
 	  <part name="mdmJobRequest" element="tns:WSMDMNULL"></part>
 	</message>
@@ -1515,6 +1564,14 @@
 		<operation name="getItemPKsByFullCriteria">
             <input message="tns:getItemPKsByFullCriteriaRequest"/>
             <output message="tns:getItemPKsByFullCriteriaResponse"/>
+        </operation>
+        <operation name="countItemsByCustomFKFilters">
+            <input message="tns:countItemsByCustomFKFiltersRequest"/>
+            <output message="tns:countItemsByCustomFKFiltersResponse"/>
+        </operation>
+        <operation name="getItemsByCustomFKFilters">
+            <input message="tns:getItemsByCustomFKFiltersRequest"/>
+            <output message="tns:getItemsByCustomFKFiltersResponse"/>
         </operation>				
 		<operation name="viewSearch">
 			<input message="tns:viewSearchRequest"/>
@@ -1546,6 +1603,11 @@
 			<input message="tns:putItemRequest"/>
 			<output message="tns:putItemResponse"/>
 		</operation>
+		<operation name="partialPutItem">
+			<input message="tns:partialPutItemRequest"/>
+			<output message="tns:partialPutItemResponse"/>
+		</operation>	
+			
         <operation name="putItemByOperatorType">
             <input message="tns:putItemByOperatorTypeRequest"/>
             <output message="tns:putItemByOperatorTypeResponse"/>
@@ -2140,6 +2202,27 @@
 			<output message="tns:workflowDeleteProcessInstancesResponse"/>
 		</operation>
 		
+		<operation name="workflowUnassignTask">
+            <input message="tns:workflowUnassignTaskRequest"/>
+			<output message="tns:workflowUnassignTaskResponse"/>
+		</operation>
+		<operation name="workflowAssignTask">
+            <input message="tns:workflowAssignTaskRequest"/>
+			<output message="tns:workflowAssignTaskResponse"/>
+		</operation>
+		<operation name="workflowSetTaskPriority">
+            <input message="tns:workflowSetTaskPriorityRequest"/>
+			<output message="tns:workflowSetTaskPriorityResponse"/>
+		</operation>
+		<operation name="workflowSuspendTask">
+            <input message="tns:workflowSuspendTaskRequest"/>
+			<output message="tns:workflowSuspendTaskResponse"/>
+		</operation>
+		<operation name="workflowStartProcessInstance">
+            <input message="tns:workflowStartProcessInstanceRequest"/>
+			<output message="tns:workflowStartProcessInstanceResponse"/>
+		</operation>
+												
 		<operation name="getMDMJob">
 		    <input message="tns:getMDMJobRequest"/>
 		    <output message="tns:getMDMJobResponse"/>
@@ -2384,6 +2467,16 @@
             <input><soap:body use="literal"/></input>
             <output><soap:body use="literal"/></output>
         </operation>
+        <operation name="countItemsByCustomFKFilters">
+            <soap:operation/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+        </operation>
+        <operation name="getItemsByCustomFKFilters">
+            <soap:operation/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+        </operation>
 		<operation name="viewSearch">
 			<soap:operation/>
 			<input><soap:body use="literal"/></input>
@@ -2423,6 +2516,11 @@
 			<input><soap:body use="literal"/></input>
 			<output><soap:body use="literal"/></output>
 		</operation>
+		<operation name="partialPutItem">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>		
         <operation name="putItemByOperatorType">
             <soap:operation/>
             <input><soap:body use="literal"/></input>
@@ -3161,7 +3259,32 @@
 			<input><soap:body use="literal"/></input>
 			<output><soap:body use="literal"/></output>
 		</operation>
-		
+
+		<operation name="workflowUnassignTask">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>
+		<operation name="workflowAssignTask">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>
+		<operation name="workflowSetTaskPriority">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>
+		<operation name="workflowSuspendTask">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>
+		<operation name="workflowStartProcessInstance">
+			<soap:operation/>
+			<input><soap:body use="literal"/></input>
+			<output><soap:body use="literal"/></output>
+		</operation>										
 		<operation name="getMDMJob">
 	        <soap:operation/>
 			<input><soap:body use="literal"/></input>

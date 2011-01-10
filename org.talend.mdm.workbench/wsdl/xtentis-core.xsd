@@ -95,7 +95,21 @@
 		</xsd:sequence>		
 	</xsd:complexType>
 	<xsd:element name="WSLinkedHashMap" type="tns:WSLinkedHashMap"/>
-	
+
+	<xsd:complexType name="WSHashMap">		
+		<xsd:sequence>
+				<xsd:element maxOccurs="unbounded" minOccurs="1" name="entry" nillable="true">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="key" nillable="true" type="xsd:string"/>
+						<xsd:element maxOccurs="1" minOccurs="1" name="value" nillable="true" type="xsd:string"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSHashMap" type="tns:WSHashMap"/>
+		
 	<xsd:complexType name="WSTypedContent">
 		<xsd:sequence>
 			<xsd:element maxOccurs="1" minOccurs="0" name="url" nillable="true" type="xsd:string"/>
@@ -885,6 +899,39 @@
 	</xsd:complexType>
 	<xsd:element name="WSItemPKsByCriteriaResponse" type="tns:WSItemPKsByCriteriaResponse"/>
 	
+    <xsd:complexType name="WSCountItemsByCustomFKFilters">
+        <xsd:annotation>
+            <xsd:documentation>
+                Count items based on customized FK filters
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="1" name="wsDataClusterPK" nillable="false" type="tns:WSDataClusterPK"/>
+            <xsd:element maxOccurs="1" minOccurs="1" name="conceptName" nillable="false" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="1" name="injectedXpath" nillable="false" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="WSCountItemsByCustomFKFilters" type="tns:WSCountItemsByCustomFKFilters"/>
+    
+    <xsd:complexType name="WSGetItemsByCustomFKFilters">
+        <xsd:annotation>
+            <xsd:documentation>
+                Return items based on customized FK filters
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element maxOccurs="1" minOccurs="1" name="wsDataClusterPK" nillable="false" type="tns:WSDataClusterPK"/>
+            <xsd:element maxOccurs="1" minOccurs="1" name="conceptName" nillable="false" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="1" name="viewablePaths" nillable="false" type="tns:WSStringArray"/>
+            <xsd:element maxOccurs="1" minOccurs="1" name="injectedXpath" nillable="false" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="1" name="skip" nillable="false" type="xsd:int"/>
+            <xsd:element maxOccurs="1" minOccurs="1" name="maxItems" nillable="false" type="xsd:int"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="orderBy" nillable="true" type="xsd:string"/>
+            <xsd:element maxOccurs="1" minOccurs="0" name="direction" nillable="true" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="WSGetItemsByCustomFKFilters" type="tns:WSGetItemsByCustomFKFilters"/>
+	
 	<xsd:complexType name="WSGetBusinessConceptValue">
 		<xsd:annotation>
 			<xsd:documentation>
@@ -1055,6 +1102,23 @@
 	</xsd:complexType>
 	<xsd:element name="WSPutItem" type="tns:WSPutItem"/>
 	
+	<xsd:complexType name="WSPartialPutItem">
+		<xsd:annotation>
+			<xsd:documentation>
+				Partial Puts an item in the xml storage.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+		<xsd:element maxOccurs="1" minOccurs="1" name="xml" nillable="false" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="1" name="datacluster" nillable="false" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="1" name="pivot" nillable="false" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="0" name="datamodel" nillable="false" type="xsd:string"/>		
+			<xsd:element maxOccurs="1" minOccurs="0" name="keyXPath" nillable="false" type="xsd:string"/>
+			<xsd:element maxOccurs="1" minOccurs="0" default="-1" name="startingPosition" nillable="false" type="xsd:int"/>
+			<xsd:element default="false" maxOccurs="1" minOccurs="0" name="overwrite" nillable="false" type="xsd:boolean"/>
+		</xsd:sequence>		
+	</xsd:complexType>
+	<xsd:element name="WSPartialPutItem" type="tns:WSPartialPutItem"/>	
     <xsd:complexType name="WSPutItemByOperatorType">
         <xsd:annotation>
             <xsd:documentation>

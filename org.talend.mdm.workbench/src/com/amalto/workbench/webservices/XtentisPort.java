@@ -78,6 +78,10 @@ public interface XtentisPort extends java.rmi.Remote {
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSItemPKsByCriteriaResponse getItemPKsByFullCriteria(com.amalto.workbench.webservices.WSGetItemPKsByFullCriteria wsGetItemPKsByFullCriteria) throws 
          java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSString countItemsByCustomFKFilters(com.amalto.workbench.webservices.WSCountItemsByCustomFKFilters wsCountItemsByCustomFKFilters) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSStringArray getItemsByCustomFKFilters(com.amalto.workbench.webservices.WSGetItemsByCustomFKFilters wsGetItemsByCustomFKFilters) throws 
+         java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSStringArray viewSearch(com.amalto.workbench.webservices.WSViewSearch wsViewSearch) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSStringArray xPathsSearch(com.amalto.workbench.webservices.WSXPathsSearch wsXPathsSearch) throws 
@@ -91,6 +95,8 @@ public interface XtentisPort extends java.rmi.Remote {
     public com.amalto.workbench.webservices.WSStringArray quickSearch(com.amalto.workbench.webservices.WSQuickSearch wsQuickSearch) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSItemPK putItem(com.amalto.workbench.webservices.WSPutItem wsPutItem) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSItemPK partialPutItem(com.amalto.workbench.webservices.WSPartialPutItem wsPartialPutItem) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSItemPK putItemByOperatorType(com.amalto.workbench.webservices.WSPutItemByOperatorType putItemByOperatorType) throws 
          java.rmi.RemoteException;
@@ -353,6 +359,16 @@ public interface XtentisPort extends java.rmi.Remote {
     public com.amalto.workbench.webservices.WSProcessInstanceArray workflowGetProcessInstances(com.amalto.workbench.webservices.WSWorkflowGetProcessInstances uuid) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSBoolean workflowDeleteProcessInstances(com.amalto.workbench.webservices.WSWorkflowDeleteProcessInstancesRequest deleteWolkflowRequest) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSBoolean workflowUnassignTask(com.amalto.workbench.webservices.WSUnassignTask task) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSBoolean workflowAssignTask(com.amalto.workbench.webservices.WSAssignTask task) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSBoolean workflowSetTaskPriority(com.amalto.workbench.webservices.WSSetTaskPriority task) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSBoolean workflowSuspendTask(com.amalto.workbench.webservices.WSSuspendTask task) throws 
+         java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSBoolean workflowStartProcessInstance(com.amalto.workbench.webservices.WSStartProcessInstance task) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSMDMJobArray getMDMJob(com.amalto.workbench.webservices.WSMDMNULL mdmJobRequest) throws 
          java.rmi.RemoteException;
