@@ -25,126 +25,112 @@ import com.amalto.workbench.image.ImageCache;
 
 public class FacetsListInputDialog extends Dialog {
 
-	protected  List itemsList=null;
-	protected Text newItemText = null;
-	
-	private ArrayList items = null;
+    protected List itemsList = null;
 
-	private SelectionListener caller = null;
-	private String title = "";
-	
+    protected Text newItemText = null;
 
-	/**
-	 * @param parentShell
-	 */
-	public FacetsListInputDialog(SelectionListener caller, Shell parentShell, String title) {
-		this(caller,parentShell,title,new ArrayList());
-	}
+    private ArrayList items = null;
 
-	/**
-	 * @param parentShell
-	 */
-	public FacetsListInputDialog(
-			SelectionListener caller, 
-			Shell parentShell, 
-			String title,
-			ArrayList items
-			) {
-		super(parentShell);
-		this.caller = caller;
-		this.title = title;
-		this.items = items;
-	}
+    private SelectionListener caller = null;
 
-	
+    private String title = "";
 
-	protected Control createDialogArea(Composite parent) {
-		//Should not really be here but well,....
-		parent.getShell().setText(this.title);
-		
-		Composite composite = (Composite) super.createDialogArea(parent);
-		
-		GridLayout layout = (GridLayout)composite.getLayout();
-		layout.numColumns = 2;
-		//layout.verticalSpacing = 10;
-		
-		Label serverLabel = new Label(composite, SWT.NONE);
-		serverLabel.setLayoutData(
-				new GridData(SWT.FILL,SWT.FILL,false,true,1,1)
-		);
-		serverLabel.setText("New Item");
+    /**
+     * @param parentShell
+     */
+    public FacetsListInputDialog(SelectionListener caller, Shell parentShell, String title) {
+        this(caller, parentShell, title, new ArrayList());
+    }
 
-		newItemText = new Text(composite, SWT.NONE);
-		newItemText.setLayoutData(
-				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-		);
-		newItemText.setText("");
-		((GridData)newItemText.getLayoutData()).widthHint = 100;
+    /**
+     * @param parentShell
+     */
+    public FacetsListInputDialog(SelectionListener caller, Shell parentShell, String title, ArrayList items) {
+        super(parentShell);
+        this.caller = caller;
+        this.title = title;
+        this.items = items;
+    }
 
-		Button addButton = new Button(composite,SWT.PUSH);
-		addButton.setLayoutData(
-				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-		);
-		addButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
-		addButton.setToolTipText("Add");
-		parent.getShell().setDefaultButton(addButton);
-		addButton.addSelectionListener(new SelectionAdapter() {
+    protected Control createDialogArea(Composite parent) {
+        // Should not really be here but well,....
+        parent.getShell().setText(this.title);
+
+        Composite composite = (Composite) super.createDialogArea(parent);
+
+        GridLayout layout = (GridLayout) composite.getLayout();
+        layout.numColumns = 2;
+        // layout.verticalSpacing = 10;
+
+        Label serverLabel = new Label(composite, SWT.NONE);
+        serverLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
+        serverLabel.setText("New Item");
+
+        newItemText = new Text(composite, SWT.NONE);
+        newItemText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+        newItemText.setText("");
+        ((GridData) newItemText.getLayoutData()).widthHint = 100;
+
+        Button addButton = new Button(composite, SWT.PUSH);
+        addButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+        addButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
+        addButton.setToolTipText("Add");
+        parent.getShell().setDefaultButton(addButton);
+        addButton.addSelectionListener(new SelectionAdapter() {
+
             public void widgetSelected(SelectionEvent event) {
-            	if (! "".equals(newItemText.getText()))
-            		if (! Arrays.asList(itemsList.getItems()).contains(newItemText.getText()))
-            			itemsList.add(newItemText.getText());
-            }
-        });
-		
-		Button deleteButton = new Button(composite,SWT.PUSH);
-		deleteButton.setLayoutData(
-				new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-		);
-		deleteButton.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
-		deleteButton.setToolTipText("Delete");
-		deleteButton.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
-            	ArrayList<String> backup = new ArrayList<String>(Arrays.asList(itemsList.getItems()));
-            	java.util.List sels = Arrays.asList(itemsList.getSelection());
-            	for (Iterator iter = sels.iterator(); iter.hasNext(); ) {
-					String sel = (String) iter.next();
-					backup.remove(sel);
-				}
-            	itemsList.setItems(backup.toArray(new String[backup.size()]));
+                if (!"".equals(newItemText.getText()))
+                    if (!Arrays.asList(itemsList.getItems()).contains(newItemText.getText())) {
+                        itemsList.add(newItemText.getText());
+                        newItemText.setText("");
+                    }
             }
         });
 
-		itemsList = new List(composite,SWT.MULTI |SWT.V_SCROLL);
-		itemsList.setLayoutData(
-				new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
-		);
-		((GridData)itemsList.getLayoutData()).heightHint = 100;
-		for (Iterator iter = items.iterator(); iter.hasNext(); ) {
-			String item = (String) iter.next();
-			itemsList.add(item);
-		}
-				
-	    return composite;
-	}
+        Button deleteButton = new Button(composite, SWT.PUSH);
+        deleteButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+        deleteButton.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
+        deleteButton.setToolTipText("Delete");
+        deleteButton.addSelectionListener(new SelectionAdapter() {
 
-	
-	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,false);
-	    createButton(parent, IDialogConstants.CANCEL_ID,IDialogConstants.CANCEL_LABEL, false);
-		getButton(IDialogConstants.OK_ID).addSelectionListener(this.caller);
-	  
-	}
-	
-	protected void okPressed() {
-		items = new ArrayList<String>();
-		items.addAll(Arrays.asList(itemsList.getItems()));
-		setReturnCode(OK);
-		//no close let Action Handler handle it
-	}
+            public void widgetSelected(SelectionEvent event) {
+                ArrayList<String> backup = new ArrayList<String>(Arrays.asList(itemsList.getItems()));
+                java.util.List sels = Arrays.asList(itemsList.getSelection());
+                for (Iterator iter = sels.iterator(); iter.hasNext();) {
+                    String sel = (String) iter.next();
+                    backup.remove(sel);
+                }
+                itemsList.setItems(backup.toArray(new String[backup.size()]));
+            }
+        });
 
-	public ArrayList getItems() {
-		return items;
-	}
-	
+        itemsList = new List(composite, SWT.MULTI | SWT.V_SCROLL);
+        itemsList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+        ((GridData) itemsList.getLayoutData()).heightHint = 100;
+        for (Iterator iter = items.iterator(); iter.hasNext();) {
+            String item = (String) iter.next();
+            itemsList.add(item);
+        }
+
+        return composite;
+    }
+
+    protected void createButtonsForButtonBar(Composite parent) {
+        createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, false);
+        createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
+        getButton(IDialogConstants.OK_ID).addSelectionListener(this.caller);
+
+    }
+
+    protected void okPressed() {
+        items = new ArrayList<String>();
+        items.addAll(Arrays.asList(itemsList.getItems()));
+        setReturnCode(OK);
+        // no close let Action Handler handle it
+    }
+
+    public ArrayList getItems() {
+        return items;
+    }
 
 }
