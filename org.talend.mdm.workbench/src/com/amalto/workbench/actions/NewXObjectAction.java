@@ -65,8 +65,10 @@ import com.amalto.workbench.webservices.WSSynchronizationPlanItemsSynchronizatio
 import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
 import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizations;
 import com.amalto.workbench.webservices.WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations;
+import com.amalto.workbench.webservices.WSTransformerProcessStep;
 import com.amalto.workbench.webservices.WSTransformerV2;
 import com.amalto.workbench.webservices.WSTransformerV2PK;
+import com.amalto.workbench.webservices.WSTransformerVariablesMapping;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniverseItemsRevisionIDs;
 import com.amalto.workbench.webservices.WSUniversePK;
@@ -189,8 +191,9 @@ public class NewXObjectAction extends Action {
 
             case TreeObject.VIEW:
 
-                ViewInputDialog tid = new ViewInputDialog(view.getSite(), (TreeParent) view.getRoot().getChildren()[0]
-                        .findServerFolder(TreeObject.TRANSFORMER), view.getSite().getShell(), title,// "New "+IConstants.TALEND+" Object Instance",
+                ViewInputDialog tid = new ViewInputDialog(view.getSite(),
+                        (TreeParent) view.getRoot().getChildren()[0].findServerFolder(TreeObject.TRANSFORMER), view.getSite()
+                                .getShell(), title,// "New "+IConstants.TALEND+" Object Instance",
                         "Enter a Name for the New Instance", "Browse_items_", new IInputValidator() {
 
                             public String isValid(String newText) {
@@ -302,8 +305,8 @@ public class NewXObjectAction extends Action {
                     return;
                 }
                 // add
-                WSDataModelPK[] dataModelPKs = Util.getAllDataModelPKs(new URL(xobject.getEndpointAddress()), xobject
-                        .getUniverse(), xobject.getUsername(), xobject.getPassword());
+                WSDataModelPK[] dataModelPKs = Util.getAllDataModelPKs(new URL(xobject.getEndpointAddress()),
+                        xobject.getUniverse(), xobject.getUsername(), xobject.getPassword());
                 String firstDataModel = null;
                 for (int i = 0; i < dataModelPKs.length; i++) {
                     if (dataModelPKs[i].getPk().indexOf("XMLSCHEMA--") == -1) {
@@ -316,8 +319,8 @@ public class NewXObjectAction extends Action {
                             "Please create a Data Model before editing a View");
                     return;
                 }
-                WSDataClusterPK[] dataClusterPKs = Util.getAllDataClusterPKs(new URL(xobject.getEndpointAddress()), xobject
-                        .getUniverse(), xobject.getUsername(), xobject.getPassword());
+                WSDataClusterPK[] dataClusterPKs = Util.getAllDataClusterPKs(new URL(xobject.getEndpointAddress()),
+                        xobject.getUniverse(), xobject.getUsername(), xobject.getPassword());
                 String firstItemCluster = null;
                 for (int i = 0; i < dataClusterPKs.length; i++) {
                     if (!dataClusterPKs[i].getPk().equals("CACHE")) { // FIXME: hardcoded CACHE
@@ -406,6 +409,36 @@ public class NewXObjectAction extends Action {
                 }
                 // add
                 WSTransformerV2 transformer = new WSTransformerV2((String) key, "", null);
+                if (key.toString().startsWith("Smart_view_")) {
+                    final String parameters = "<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='1.0'>\n"
+                            + "   <xsl:output method='html' indent='yes' omit-xml-declaration='yes'/>\n"
+                            + "   <xsl:template match='/'>\n" + "       <html>\n"
+                            + "          <head><title>Smart View</title></head>\n" + "          <body>\n"
+                            + "            <h1>This is the default Smart View for: <xsl:value-of select='./text()'/></h1>\n"
+                            + "            <xsl:copy-of select='.'/>\n" + "            <!-- Customize the stylesheet -->\n"
+                            + "          </body>\n" + "       </html>\n" + "    </xsl:template>" + "</xsl:stylesheet>";
+
+                    final String TRANSFORMER_PLUGIN = "amalto/local/transformer/plugin/xslt";
+
+                    List<WSTransformerVariablesMapping> inItems = new ArrayList<WSTransformerVariablesMapping>();
+                    WSTransformerVariablesMapping inputLine = new WSTransformerVariablesMapping();
+                    inputLine.setPipelineVariable("_DEFAULT_");
+                    inputLine.setPluginVariable("xml");
+                    inItems.add(inputLine);
+
+                    List<WSTransformerVariablesMapping> outItems = new ArrayList<WSTransformerVariablesMapping>();
+                    WSTransformerVariablesMapping outputLine = new WSTransformerVariablesMapping();
+                    outputLine.setPipelineVariable("html");
+                    outputLine.setPluginVariable("text");
+                    outItems.add(outputLine);
+
+                    ArrayList<WSTransformerProcessStep> list = new ArrayList<WSTransformerProcessStep>();
+                    WSTransformerProcessStep step = new WSTransformerProcessStep(TRANSFORMER_PLUGIN, "Stylesheet", parameters,
+                            inItems.toArray(new WSTransformerVariablesMapping[inItems.size()]),
+                            outItems.toArray(new WSTransformerVariablesMapping[outItems.size()]), false);
+                    list.add(step);
+                    transformer.setProcessSteps(list.toArray(new WSTransformerProcessStep[list.size()]));
+                }
                 newInstance = new TreeObject((String) key, xfolder.getServerRoot(), TreeObject.TRANSFORMER,
                         new WSTransformerV2PK((String) key), transformer);
                 break;
@@ -439,8 +472,8 @@ public class NewXObjectAction extends Action {
                         .getStrings()) {// IConstants.XTENTISOBJECTS){
                     objectsId.add(new WSUniverseXtentisObjectsRevisionIDs(object, ""));
                 }
-                WSUniverse universe = new WSUniverse((String) key, "", objectsId
-                        .toArray(new WSUniverseXtentisObjectsRevisionIDs[objectsId.size()]), "",
+                WSUniverse universe = new WSUniverse((String) key, "",
+                        objectsId.toArray(new WSUniverseXtentisObjectsRevisionIDs[objectsId.size()]), "",
                         new WSUniverseItemsRevisionIDs[] {});
                 newInstance = new TreeObject((String) key, xfolder.getServerRoot(), TreeObject.UNIVERSE, new WSUniversePK(
                         (String) key), universe);
@@ -488,9 +521,12 @@ public class NewXObjectAction extends Action {
             {
                 LocalTreeObjectRepository.getInstance().mergeNewTreeObject(newInstance);
 
-                XObjectEditor editpart = (XObjectEditor) view.getSite().getWorkbenchWindow().getActivePage().openEditor(
-                        new XObjectEditorInput(newInstance, newInstance.getDisplayName()),
-                        "com.amalto.workbench.editors.XObjectEditor");
+                XObjectEditor editpart = (XObjectEditor) view
+                        .getSite()
+                        .getWorkbenchWindow()
+                        .getActivePage()
+                        .openEditor(new XObjectEditorInput(newInstance, newInstance.getDisplayName()),
+                                "com.amalto.workbench.editors.XObjectEditor");
 
                 /*
                  * make the new page dirty
