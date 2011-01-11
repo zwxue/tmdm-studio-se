@@ -396,9 +396,8 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener{
         		} catch (Exception ex) {
         			MessageDialog.openError(
         					StoredProcedureMainPage.this.getSite().getShell(),
-        					"Error",
-        					"Unable to execute the procedure:\n"+
-        					ex.getClass().getName()+": "+ex.getMessage()
+        					"Error",        					
+        					ex.getMessage()
         					);
         		}
 			}
