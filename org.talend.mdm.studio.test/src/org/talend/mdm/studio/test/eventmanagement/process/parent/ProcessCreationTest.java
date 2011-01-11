@@ -52,6 +52,7 @@ public class ProcessCreationTest extends TalendSWTBotForMDM {
         bot.text().setText("Normal_Process");
         bot.radio("Create a Normal Process").click();
         bot.button("OK").click();
+        bot.activeEditor().save();
         sleep();
         Assert.assertNotNull(processParentNode.expand().getNode("Normal_Process"));
 
@@ -60,6 +61,7 @@ public class ProcessCreationTest extends TalendSWTBotForMDM {
         bot.radio("Create a Smartview Process").click();
         selecteXpath(selEle);
         bot.button("OK").click();
+        bot.activeEditor().save();
         sleep();
         Assert.assertNotNull(processParentNode.expand().getNode("Smart_view_" + selEle));
 
@@ -68,6 +70,7 @@ public class ProcessCreationTest extends TalendSWTBotForMDM {
         bot.radio("Create a Before-Saving Process").click();
         selecteXpath(selEle);
         bot.button("OK").click();
+        bot.activeEditor().save();
         sleep();
         Assert.assertNotNull(processParentNode.expand().getNode("beforeSaving_" + selEle));
 
@@ -76,6 +79,7 @@ public class ProcessCreationTest extends TalendSWTBotForMDM {
         bot.radio("Create a Before-Deleting Process").click();
         selecteXpath(selEle);
         bot.button("OK").click();
+        bot.activeEditor().save();
         sleep();
         Assert.assertNotNull(processParentNode.expand().getNode("beforeDeleting_" + selEle));
 
@@ -84,6 +88,7 @@ public class ProcessCreationTest extends TalendSWTBotForMDM {
         bot.radio("Create a Runable Process").click();
         selecteXpath(selEle);
         bot.button("OK").click();
+        bot.activeEditor().save();
         sleep();
         Assert.assertNotNull(processParentNode.expand().getNode("Runnable_" + selEle));
 
@@ -92,6 +97,7 @@ public class ProcessCreationTest extends TalendSWTBotForMDM {
         bot.radio("Create a Standalone Process").click();
         selecteXpath(selEle);
         bot.button("OK").click();
+        bot.activeEditor().save();
         sleep();
         Assert.assertNotNull(processParentNode.expand().getNode("Runnable#" + selEle));
 

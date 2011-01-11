@@ -10,9 +10,8 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.version;
+package org.talend.mdm.studio.test.version.parent;
 
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
@@ -20,15 +19,12 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
- * 
  * DOC rhou class global comment. Detailled comment
  */
-@RunWith(SWTBotJunit4ClassRunner.class)
-public class VersionParentOperationTest extends TalendSWTBotForMDM {
+public class VersionCreationTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem sversionParentItem;
 
@@ -44,23 +40,12 @@ public class VersionParentOperationTest extends TalendSWTBotForMDM {
         // bot.sleep(1000);
         SWTBotShell shell = bot.shell("New Version");
         shell.activate();
-        SWTBotText text = bot.textWithLabel("Enter a name for the new instance");
+        SWTBotText text = bot.textWithLabel("Enter a Name for the New Instance");
         text.setText("TestVersion");
-        bot.buttonWithTooltip("OK").click();
-        Assert.assertNotNull(sversionParentItem.getNode("TestVersion"));
-        sleep(2);
-    }
-
-    @Test
-    public void versionCategoryCreationTest() {
-        sversionParentItem.contextMenu("New Category").click();
-        // bot.sleep(1000);
-        SWTBotShell newCategoryShell = bot.shell("New Category");
-        newCategoryShell.activate();
-        SWTBotText text = bot.textWithLabel("Enter a name for the New Category");
-        text.setText("TestVersionCategory");
         bot.button("OK").click();
-        Assert.assertNotNull(sversionParentItem.getNode("TestVersionCategory"));
+        bot.activeEditor().save();
+        sleep();
+        Assert.assertNotNull(sversionParentItem.getNode("TestVersion"));
         sleep(2);
     }
 
@@ -70,10 +55,6 @@ public class VersionParentOperationTest extends TalendSWTBotForMDM {
         sleep();
         bot.button("OK").click();
         sleep();
-
-        sversionParentItem.getNode("TestVersionCategory").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
     }
+
 }

@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.menu.item;
+package org.talend.mdm.studio.test.version.item;
 
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
@@ -25,47 +25,47 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 /**
  * DOC rhou class global comment. Detailled comment
  */
-public class MenuRenameTest extends TalendSWTBotForMDM {
+public class VersionRenameTest extends TalendSWTBotForMDM {
 
-    private SWTBotTreeItem menuParentItem;
+    private SWTBotTreeItem versionParentItem;
 
-    private SWTBotTreeItem menuItem;
+    private SWTBotTreeItem spItem;
 
     @Before
     public void runBeforeEveryTest() {
-        menuParentItem = serverItem.getNode("Menu [HEAD]");
-        menuParentItem.expand();
+        versionParentItem = serverItem.getNode("Version");
+        versionParentItem.expand();
 
-        menuParentItem.contextMenu("New").click();
-        SWTBotShell shell = bot.shell("New Menu");
-        shell.activate();
+        versionParentItem.contextMenu("New").click();
+        SWTBotShell newversionShell = bot.shell("New Version");
+        newversionShell.activate();
         SWTBotText text = bot.textWithLabel("Enter a Name for the New Instance");
-        text.setText("TestMenu");
+        text.setText("TestVersion");
         bot.button("OK").click();
-        sleep();
         bot.activeEditor().save();
-        menuItem = menuParentItem.getNode("TestMenu");
-        Assert.assertNotNull(menuItem);
+        sleep();
+        spItem = versionParentItem.getNode("TestVersion");
+        Assert.assertNotNull(spItem);
         sleep(2);
     }
 
     @Test
-    public void menuRenameTest() {
-        SWTBotMenu renameMenu = menuItem.contextMenu("Rename");
+    public void versionRenameTest() {
+        SWTBotMenu renameMenu = spItem.contextMenu("Rename");
         sleep();
         renameMenu.click();
         SWTBotShell renameShell = bot.shell("Rename");
         renameShell.activate();
-        bot.textWithLabel("Please enter a new name").setText("RenameMenu");
+        bot.textWithLabel("Please enter a new name").setText("RenameVersion");
         bot.button("OK").click();
         sleep();
-        Assert.assertNotNull(menuParentItem.getNode("RenameMenu"));
+        Assert.assertNotNull(versionParentItem.getNode("RenameVersion"));
         sleep(2);
     }
 
     @After
     public void runAfterEveryTest() {
-        menuParentItem.getNode("RenameMenu").contextMenu("Delete").click();
+        versionParentItem.getNode("RenameVersion").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
         sleep();

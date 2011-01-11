@@ -30,7 +30,7 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
  * 
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class ViewContentOperationTest extends TalendSWTBotForMDM {
+public class ViewContentTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem viewParentItem;
 

@@ -33,7 +33,7 @@ import com.amalto.workbench.editors.XObjectBrowser;
  * DOC rhou class global comment. Detailled comment
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class DataContainerContentOperationTest extends TalendSWTBotForMDM {
+public class DataContainerContentTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem dataContainerItem;
 

@@ -39,7 +39,7 @@ public class ProcessBrowseRevisionTest extends TalendSWTBotForMDM {
 
     @After
     public void runAfterEveryTest() {
-
+        bot.activeEditor().close();
     }
 
     @Test

@@ -31,7 +31,7 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
  * 
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class RoleContentOperationTest extends TalendSWTBotForMDM {
+public class RoleContentTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem roleParentItem;
 
@@ -42,6 +42,14 @@ public class RoleContentOperationTest extends TalendSWTBotForMDM {
         roleParentItem = serverItem.getNode("Role [HEAD]");
         roleParentItem.expand();
 
+    }
+
+    @After
+    public void runAfterEveryTest() {
+
+    }
+
+    private void init() {
         roleParentItem.contextMenu("New Role").click();
         SWTBotShell newroleShell = bot.shell("New Role");
         newroleShell.activate();
@@ -63,21 +71,15 @@ public class RoleContentOperationTest extends TalendSWTBotForMDM {
         sleep(2);
     }
 
-    @After
-    public void runAfterEveryTest() {
-        roleParentItem.getNode("TestRole").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-    }
+    // @Test
+    // public void roleContentTest() {
+    // setDescriptionTest();
+    // setPermissionTest();
+    // }
 
     @Test
-    public void roleContentTest() {
-        setDescriptionTest();
-        setPermissionTest();
-    }
-
     public void setDescriptionTest() {
+        init();
         bot.buttonWithTooltip("Set the Descriptions").click();
         bot.shell("Set the Descriptions").activate();
         bot.comboBox().setSelection("English");
@@ -88,6 +90,7 @@ public class RoleContentOperationTest extends TalendSWTBotForMDM {
         Assert.assertEquals(des, bot.text(0).getText());
     }
 
+    @Test
     public void setPermissionTest() {
         String type = "Object Type";
         String instance = "Read and Write Permissins On Specific Instances";
@@ -101,6 +104,11 @@ public class RoleContentOperationTest extends TalendSWTBotForMDM {
         bot.comboBoxWithLabel(instance).setSelection("SearchTemplate");
         bot.comboBox("Read Only").setSelection("Read & Write");
         bot.buttonWithTooltip("Add").click();
+        sleep();
+
+        roleParentItem.getNode("TestRole").contextMenu("Delete").click();
+        sleep();
+        bot.button("OK").click();
         sleep();
     }
 }

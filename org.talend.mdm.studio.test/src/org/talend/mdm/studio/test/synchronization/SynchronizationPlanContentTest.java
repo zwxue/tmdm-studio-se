@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.storedprocedure;
+package org.talend.mdm.studio.test.synchronization;
 
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
@@ -28,10 +28,9 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
  * DOC rhou class global comment. Detailled comment
  * 
  * 
- * 
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class StoredProcedureContentOperationTest extends TalendSWTBotForMDM {
+public class SynchronizationPlanContentTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem spParentItem;
 
@@ -39,20 +38,22 @@ public class StoredProcedureContentOperationTest extends TalendSWTBotForMDM {
 
     @Before
     public void runBeforeEveryTest() {
-        spParentItem = serverItem.getNode("Stored Procedure [HEAD]");
+        spParentItem = serverItem.getNode("Synchronization Plan [HEAD]");
         spParentItem.expand();
 
     }
 
     private void init() {
         spParentItem.contextMenu("New").click();
-        SWTBotShell newspShell = bot.shell("New Stored Procedure");
+        SWTBotShell newspShell = bot.shell("New Synchronization Plan");
         newspShell.activate();
         SWTBotText text = bot.textWithLabel("Enter a Name for the New Instance");
-        text.setText("TestStoredProcedure");
+        text.setText("TestSynchronizationPlan");
         sleep();
-        bot.buttonWithTooltip("OK").click();
-        spItem = spParentItem.getNode("TestStoredProcedure");
+        bot.button("OK").click();
+        bot.activeEditor().save();
+        sleep();
+        spItem = spParentItem.getNode("TestSynchronizationPlan");
         Assert.assertNotNull(spItem);
         spItem.doubleClick();
         sleep(2);
@@ -64,36 +65,35 @@ public class StoredProcedureContentOperationTest extends TalendSWTBotForMDM {
     }
 
     @Test
-    public void storedProcedureContentTest() {
-        init();
-        setDescriptionTest();
-        setProcedureTest();
-        executeProcedureTest();
-    }
-
-    @Test
     public void setDescriptionTest() {
+        init();
         String des = "This is a stored procedure";
         bot.textWithLabel("Descriptions").setText(des);
         Assert.assertEquals(des, bot.textWithLabel("Descriptions").getText());
     }
 
     @Test
-    public void setProcedureTest() {
-        String pro = "";
-        bot.styledText().setText(pro);
-        Assert.assertEquals(pro, bot.styledText().getText());
+    public void checkServerTest() {
+        bot.textWithLabel("Name").setText("Test");
+        bot.textWithLabel("URL").setText("http://localhost:8080/talend/TalendPort");
+        bot.textWithLabel("Username").setText("admin");
+        bot.textWithLabel("Password").setText("talend");
+        bot.button("Check").click();
     }
 
     @Test
-    public void executeProcedureTest() {
-        String pro = "";
-        bot.comboBox().setSelection("SearchTemplate");
-        bot.button("Execute Procedure").click();
+    public void addRecordsSPTest() {
+        // TODO:need more detailed test codes with version after the version is created.
+    }
 
-        spParentItem.getNode("TestStoredProcedure").contextMenu("Delete").click();
+    @Test
+    public void checkActionTest() {
+        bot.buttonWithTooltip("Start Full").click();
+        // TODO:need assertion;
+        spParentItem.getNode("TestSynchronizationPlan").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
         sleep();
+
     }
 }

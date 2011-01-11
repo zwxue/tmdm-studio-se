@@ -101,6 +101,10 @@ public class ViewCopyTest extends TalendSWTBotForMDM {
 
     @After
     public void runAfterEveryTest() {
+        viewParentItem.getNode(PREFIX + "Conf").contextMenu("Delete").click();
+        sleep();
+        bot.button("OK").click();
+        sleep();
 
         viewParentItem.getNode(PREFIX + "Conf" + "PasteView").contextMenu("Delete").click();
         sleep();

@@ -39,7 +39,7 @@ import org.talend.mdm.studio.test.util.Util;
  * 
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class DataModelContentOperationTest extends TalendSWTBotForMDM {
+public class DataModelContentTest extends TalendSWTBotForMDM {
 
     private String DSTAR_DATAMODEL = "dstar.xml";
 

@@ -38,7 +38,7 @@ public class TriggerBrowseRevisionTest extends TalendSWTBotForMDM {
 
     @After
     public void runAfterEveryTest() {
-
+        bot.activeEditor().close();
     }
 
     @Test

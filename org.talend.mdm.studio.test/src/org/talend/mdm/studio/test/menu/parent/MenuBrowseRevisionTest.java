@@ -39,6 +39,7 @@ public class MenuBrowseRevisionTest extends TalendSWTBotForMDM {
 
     @After
     public void runAfterEveryTest() {
+        bot.activeEditor().close();
     }
 
 }

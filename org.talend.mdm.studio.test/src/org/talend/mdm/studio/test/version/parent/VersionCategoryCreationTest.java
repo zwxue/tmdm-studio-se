@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.storedprocedure.parent;
+package org.talend.mdm.studio.test.version.parent;
 
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
@@ -24,34 +24,32 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 /**
  * DOC rhou class global comment. Detailled comment
  */
-public class StoredProcedureCreationTest extends TalendSWTBotForMDM {
+public class VersionCategoryCreationTest extends TalendSWTBotForMDM {
 
-    private SWTBotTreeItem spParentItem;
+    private SWTBotTreeItem sversionParentItem;
 
     @Before
     public void runBeforeEveryTest() {
-        spParentItem = serverItem.getNode("Stored Procedure [HEAD]");
-        spParentItem.expand();
+        sversionParentItem = serverItem.getNode("Version");
+        sversionParentItem.expand();
     }
 
     @Test
-    public void storedProcedureCreationTest() {
-        spParentItem.contextMenu("New").click();
+    public void versionCategoryCreationTest() {
+        sversionParentItem.contextMenu("New Category").click();
         // bot.sleep(1000);
-        SWTBotShell shell = bot.shell("New Stored Procedure");
-        shell.activate();
-        SWTBotText text = bot.textWithLabel("Enter a Name for the New Instance");
-        text.setText("TestStoredProcedure");
+        SWTBotShell newCategoryShell = bot.shell("New Category");
+        newCategoryShell.activate();
+        SWTBotText text = bot.textWithLabel("Enter a name for the New Category");
+        text.setText("TestVersionCategory");
         bot.button("OK").click();
-        bot.activeEditor().save();
-        sleep();
-        Assert.assertNotNull(spParentItem.getNode("TestStoredProcedure"));
+        Assert.assertNotNull(sversionParentItem.getNode("TestVersionCategory"));
         sleep(2);
     }
 
     @After
     public void runAfterEveryTest() {
-        spParentItem.getNode("TestStoredProcedure").contextMenu("Delete").click();
+        sversionParentItem.getNode("TestVersionCategory").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
         sleep();

@@ -30,7 +30,7 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
  * 
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class MenuContentOperationTest extends TalendSWTBotForMDM {
+public class MenuContentTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem menuParentItem;
 
@@ -56,8 +56,8 @@ public class MenuContentOperationTest extends TalendSWTBotForMDM {
         text.setText("TestMenu");
         sleep();
         bot.button("OK").click();
-        sleep();
         bot.activeEditor().save();
+        sleep();
         menuItem = menuParentItem.getNode("TestMenu");
         Assert.assertNotNull(menuItem);
         sleep(2);
@@ -68,7 +68,6 @@ public class MenuContentOperationTest extends TalendSWTBotForMDM {
         init();
         String des = "This is a description for TestMenu";
         bot.textWithLabel("Description").setText(des);
-        bot.buttonWithTooltip("Add").click();
         bot.button("OK").click();
         Assert.assertEquals(des, bot.textWithLabel("Description").getText());
     }

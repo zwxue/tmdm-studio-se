@@ -57,6 +57,7 @@ public class ServiceConfigurationTest extends TalendSWTBotForMDM {
         sleep();
 
         scItem.doubleClick();
+        sleep();
         bot.comboBox().setSelection("smtp");
         bot.button("Check").click();
         Assert.assertEquals("Connection sucessfully!", bot.text(1).getText());

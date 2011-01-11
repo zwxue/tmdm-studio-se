@@ -10,9 +10,8 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.version;
+package org.talend.mdm.studio.test.version.item;
 
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
@@ -21,15 +20,12 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
- * 
  * DOC rhou class global comment. Detailled comment
  */
-@RunWith(SWTBotJunit4ClassRunner.class)
-public class VersionItemOperationTest extends TalendSWTBotForMDM {
+public class VersionDuplicateTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem versionParentItem;
 
@@ -43,33 +39,13 @@ public class VersionItemOperationTest extends TalendSWTBotForMDM {
         versionParentItem.contextMenu("New").click();
         SWTBotShell newversionShell = bot.shell("New Version");
         newversionShell.activate();
-        SWTBotText text = bot.textWithLabel("Enter a name for the new Instance:");
+        SWTBotText text = bot.textWithLabel("Enter a Name for the New Instance");
         text.setText("TestVersion");
-        bot.buttonWithTooltip("OK").click();
+        bot.button("OK").click();
+        bot.activeEditor().save();
+        sleep();
         spItem = versionParentItem.getNode("TestVersion");
         Assert.assertNotNull(spItem);
-        sleep(2);
-    }
-
-    @Test
-    public void versionEditTest() {
-        SWTBotMenu editMenu = spItem.contextMenu("Edit");
-        sleep();
-        editMenu.click();
-    }
-
-    @Test
-    public void versionCopyTest() {
-        SWTBotMenu editMenu = spItem.contextMenu("Copy");
-        editMenu.click();
-        sleep();
-        spItem.contextMenu("Paste").click();
-        SWTBotShell pasteversionShell = bot.shell("Pasting instance TestVersion");
-        pasteversionShell.activate();
-        bot.text("CopyOfTestVersion").setText("PasteVersion");
-        bot.button("OK").click();
-        SWTBotTreeItem pasteNode = versionParentItem.getNode("PasteVersion");
-        Assert.assertNotNull(pasteNode);
         sleep(2);
     }
 
@@ -77,7 +53,7 @@ public class VersionItemOperationTest extends TalendSWTBotForMDM {
     public void versionDuplicateTest() {
         SWTBotMenu duplicateMenu = spItem.contextMenu("Duplicate");
         duplicateMenu.click();
-        SWTBotShell shell = bot.shell("Pasting instance Testversion");
+        SWTBotShell shell = bot.shell("Pasting instance TestVersion");
         shell.activate();
         bot.text("CopyOfTestVersion").setText("DuplicateVersion");
         sleep();
@@ -88,29 +64,9 @@ public class VersionItemOperationTest extends TalendSWTBotForMDM {
 
     }
 
-    @Test
-    public void versionRenameTest() {
-        SWTBotMenu renameMenu = spItem.contextMenu("Rename");
-        sleep();
-        renameMenu.click();
-        SWTBotShell renameShell = bot.shell("Rename");
-        renameShell.activate();
-        bot.textWithLabel("Please enter a new name").setText("RenameVersion");
-        bot.button("OK").click();
-        sleep();
-        Assert.assertNull(versionParentItem.getNode("TestVersion"));
-        Assert.assertNotNull(versionParentItem.getNode("RenameVersion"));
-        sleep(2);
-    }
-
     @After
     public void runAfterEveryTest() {
-        versionParentItem.getNode("RenameVersion").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-
-        versionParentItem.getNode("PasteVersion").contextMenu("Delete").click();
+        versionParentItem.getNode("TestVersion").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
         sleep();
@@ -120,4 +76,5 @@ public class VersionItemOperationTest extends TalendSWTBotForMDM {
         bot.button("OK").click();
         sleep();
     }
+
 }
