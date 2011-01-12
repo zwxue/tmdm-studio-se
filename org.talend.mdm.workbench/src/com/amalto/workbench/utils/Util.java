@@ -1547,8 +1547,6 @@ public class Util {
             }
 
             mdlGrp.setCompositor(XSDCompositor.SEQUENCE_LITERAL);
-            partCnt.getElement().setAttribute("maxOccurs", "unbounded");
-            partCnt.setMinOccurs(0);
             compx.updateElement();
         }
 

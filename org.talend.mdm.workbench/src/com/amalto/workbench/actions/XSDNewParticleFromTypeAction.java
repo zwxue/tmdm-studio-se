@@ -98,12 +98,20 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
             group.getContents().add(group.getContents().size(), particle);
             group.updateElement();
 
+            if (Util.changeElementTypeToSequence(decl, maxOccurs) == Status.CANCEL_STATUS) {
+                return Status.CANCEL_STATUS;
+            }
             // fix 0010248. add annotion from parent
 
             if (dialog.isInherit()) {
                 XSDTerm totm = particle.getTerm();
                 XSDElementDeclaration concept = null;
-                concept = (XSDElementDeclaration) Util.getParent(particle);
+                Object obj = Util.getParent(particle);
+                if (obj instanceof XSDElementDeclaration)
+                    concept = (XSDElementDeclaration) obj;
+                else {
+                    concept = (XSDElementDeclaration) ((XSDParticle) particle).getContent();
+                }
                 XSDAnnotation fromannotation = null;
                 if (concept != null)
                     fromannotation = concept.getAnnotation();
@@ -171,8 +179,8 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
 
         } catch (Exception e) {
             e.printStackTrace();
-            MessageDialog.openError(this.page.getSite().getShell(), "Error", "An error occured trying to paste Entities: "
-                    + e.getLocalizedMessage());
+            MessageDialog.openError(this.page.getSite().getShell(), "Error",
+                    "An error occured trying to paste Entities: " + e.getLocalizedMessage());
         }
         return infor;
     }
