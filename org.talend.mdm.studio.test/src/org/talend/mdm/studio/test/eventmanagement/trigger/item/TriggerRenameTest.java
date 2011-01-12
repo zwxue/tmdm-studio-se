@@ -51,8 +51,8 @@ public class TriggerRenameTest extends TalendSWTBotForMDM {
         triggerNode = triggerParentNode.getNode("RenameTrigger");
         SWTBotMenu deleteMenu = triggerNode.contextMenu("Delete");
         deleteMenu.click();
-        sleep();
         bot.button("OK").click();
+        sleep();
     }
 
     @Test

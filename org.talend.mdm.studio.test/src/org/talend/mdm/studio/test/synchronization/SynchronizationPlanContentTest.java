@@ -68,8 +68,8 @@ public class SynchronizationPlanContentTest extends TalendSWTBotForMDM {
     public void setDescriptionTest() {
         init();
         String des = "This is a stored procedure";
-        bot.textWithLabel("Descriptions").setText(des);
-        Assert.assertEquals(des, bot.textWithLabel("Descriptions").getText());
+        bot.textWithLabel("Description").setText(des);
+        Assert.assertEquals(des, bot.textWithLabel("Description").getText());
     }
 
     @Test
