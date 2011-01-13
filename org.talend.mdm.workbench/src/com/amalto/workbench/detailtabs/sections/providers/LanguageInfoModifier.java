@@ -64,7 +64,7 @@ public class LanguageInfoModifier implements ICellModifier {
             onModfiyColumnLable(modifiedLangInfo, (String) value);
         }
 
-        viewer.update(element, new String[0]);
+        viewer.refresh();
     }
 
     private void onModfiyColumnLanguage(LanguageInfo modifiedElement, Integer newSelectedIndex) {

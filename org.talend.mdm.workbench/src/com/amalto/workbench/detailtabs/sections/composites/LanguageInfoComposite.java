@@ -201,7 +201,7 @@ public class LanguageInfoComposite extends Composite {
 
         LanguageInfo selectedLangInfo = getSelectedLanguageInfo();
 
-        comboLanguage.select(allLanguages.indexOf(selectedLangInfo));
+        comboLanguage.select(allLanguages.indexOf(selectedLangInfo.getLanguage()));
         txtLabel.setText(selectedLangInfo.getLabel());
     }
 
