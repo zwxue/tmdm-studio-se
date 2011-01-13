@@ -1,19 +1,23 @@
 package com.amalto.workbench.detailtabs.sections.util.simpletype;
 
-import org.eclipse.xsd.XSDFacet;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 
+import com.amalto.workbench.detailtabs.sections.model.simpletype.propsource.SimpleTypeFacetIntegerPropertySource;
 import com.amalto.workbench.utils.IConstants;
+import com.amalto.workbench.widgets.composites.property.IPropertySource;
 
-public class SimpleTypeLengthFacetPropSourceBuilder extends SimpleTypeIntegerFacetPropSourceBuilder {
+public class SimpleTypeLengthFacetPropSourceBuilder extends SimpleTypeFacetPropSourceBuilder {
 
     @Override
-    protected String getPropName() {
-        return IConstants.SIMPLETYPE_FACETNAME_LENGTH;
+    protected IPropertySource<?> doCreatePropSource(XSDSimpleTypeDefinition simpleType, Composite cellEditorParent,
+            Object sourceFacetValue) {
+        return new SimpleTypeFacetIntegerPropertySource(cellEditorParent, IConstants.SIMPLETYPE_FACETNAME_LENGTH,
+                (Integer) sourceFacetValue);
     }
 
     @Override
-    protected XSDFacet getSourceSimpleTypeFacet(XSDSimpleTypeDefinition simpleType) {
-        return simpleType.getLengthFacet();
+    protected Object getSourceFacetValue(XSDSimpleTypeDefinition simpleType) {
+        return SimpleTypeFacetValueExtractor.getIntFacetValue(simpleType.getLengthFacet());
     }
 }

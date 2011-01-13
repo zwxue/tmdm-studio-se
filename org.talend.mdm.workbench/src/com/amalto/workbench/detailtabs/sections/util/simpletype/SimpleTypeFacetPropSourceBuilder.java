@@ -21,7 +21,7 @@ public abstract class SimpleTypeFacetPropSourceBuilder {
         if (builder == null)
             return null;
 
-        return builder.doCreatePropSource(cellEditorParent, builder.getSourceFacetValue(simpleType));
+        return builder.doCreatePropSource(simpleType, cellEditorParent, builder.getSourceFacetValue(simpleType));
     }
 
     private static SimpleTypeFacetPropSourceBuilder getPropSourceBuilder(String facetPropName) {
@@ -63,12 +63,13 @@ public abstract class SimpleTypeFacetPropSourceBuilder {
             facetName2Builder.put(facetPropName, new SimpleTypeMinExclusiveFacetPropSourceBuilder());
 
         if (IConstants.SIMPLETYPE_FACETNAME_WHITESPACE.equals(facetPropName))
-            facetName2Builder.put(facetPropName, new SimpleTypeArrayWhiteSpacePropSourceBuilder());
+            facetName2Builder.put(facetPropName, new SimpleTypeWhiteSpacePropSourceBuilder());
 
         return facetName2Builder.get(facetPropName);
     }
 
-    protected abstract IPropertySource<?> doCreatePropSource(Composite cellEditorParent, Object sourceFacetValue);
+    protected abstract IPropertySource<?> doCreatePropSource(XSDSimpleTypeDefinition simpleType, Composite cellEditorParent,
+            Object sourceFacetValue);
 
     protected abstract Object getSourceFacetValue(XSDSimpleTypeDefinition simpleType);
 

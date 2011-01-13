@@ -13,7 +13,7 @@ public class SimpleTypeWrapperCommitHandler extends CompositeCommitHandler<Simpl
     protected CommitHandler<SimpleTypeWrapper>[] createChildHandlers() {
 
         return new CommitHandler[] { new SimpleTypeNameCommitHandler(getCommitedObj()),
-                new SimpleTypeBaseTypeCommitHandler(getCommitedObj()), new SimpleTypeFacetCommitHandler(getCommitedObj()) };
+                new SimpleTypeBaseTypeCommitHandler(getCommitedObj()), new SimpleTypeFacetCommitHandlerGroup(getCommitedObj()) };
     }
 
 }

@@ -37,6 +37,7 @@ import com.amalto.workbench.dialogs.InputComboDialog;
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.utils.Util;
 
 public class XSDEditFacetAction extends UndoAction {
 
@@ -376,19 +377,20 @@ public class XSDEditFacetAction extends UndoAction {
         String stringValue = "0";
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
-        dialog = new InputDialog(page.getSite().getShell(), "TotalDigits Facet",
+        dialog = new InputDialog(page.getSite().getShell(), "MaxInclusive Facet",
                 "Enter a new value for the facet; 0 to remove it", stringValue == null ? "" : stringValue, new IInputValidator() {
 
                     public String isValid(String newText) {
-                        double val;
-                        try {
-                            val = Double.parseDouble(newText);
-                        } catch (Exception e) {
-                            return "The value must be a non negative double";
-                        }
-                        if (val < 0)
-                            return "The value must be a non negative double";
-                        return null;
+                        // double val;
+                        // try {
+                        // val = Double.parseDouble(newText);
+                        // } catch (Exception e) {
+                        // return "The value must be a non negative double";
+                        // }
+                        // if (val < 0)
+                        // return "The value must be a non negative double";
+                        // return null;
+                        return isValidBoundaryNumber(std, newText);
                     }
                 });
         dialog.setBlockOnOpen(true);
@@ -398,10 +400,11 @@ public class XSDEditFacetAction extends UndoAction {
 
         if (currentValue != null)
             std.getFacetContents().remove(currentValue);
-        int intValue = Integer.parseInt(((InputDialog) dialog).getValue());
-        if (intValue > 0) {
+        // int intValue = Integer.parseInt(((InputDialog) dialog).getValue());
+        if (Double.parseDouble(((InputDialog) dialog).getValue()) > 0) {
             XSDMaxInclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMaxInclusiveFacet();
-            f.setLexicalValue("" + intValue);
+            // f.setLexicalValue("" + intValue);
+            f.setLexicalValue("" + getValidBoundaryNumber(std, ((InputDialog) dialog).getValue()));
             std.getFacetContents().add(f);
         }
     }
@@ -411,19 +414,20 @@ public class XSDEditFacetAction extends UndoAction {
         String stringValue = "0";
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
-        dialog = new InputDialog(page.getSite().getShell(), "TotalDigits Facet",
+        dialog = new InputDialog(page.getSite().getShell(), "MaxExclusive Facet",
                 "Enter a new value for the facet; 0 to remove it", stringValue == null ? "" : stringValue, new IInputValidator() {
 
                     public String isValid(String newText) {
-                        double val;
-                        try {
-                            val = Double.parseDouble(newText);
-                        } catch (Exception e) {
-                            return "The value must be a non negative double";
-                        }
-                        if (val < 0)
-                            return "The value must be a non negative double";
-                        return null;
+                        // double val;
+                        // try {
+                        // val = Double.parseDouble(newText);
+                        // } catch (Exception e) {
+                        // return "The value must be a non negative double";
+                        // }
+                        // if (val < 0)
+                        // return "The value must be a non negative double";
+                        // return null;
+                        return isValidBoundaryNumber(std, newText);
                     }
                 });
         dialog.setBlockOnOpen(true);
@@ -434,10 +438,11 @@ public class XSDEditFacetAction extends UndoAction {
         if (currentValue != null)
             std.getFacetContents().remove(currentValue);
         // double intValue = Double.parseDouble(((InputDialog)dialog).getValue());
-        int intValue = Integer.parseInt(((InputDialog) dialog).getValue());
-        if (intValue > 0) {
+        // int intValue = Integer.parseInt(((InputDialog) dialog).getValue());
+        if (Double.parseDouble(((InputDialog) dialog).getValue()) > 0) {
             XSDMaxExclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMaxExclusiveFacet();
-            f.setLexicalValue("" + intValue);
+            // f.setLexicalValue("" + intValue);
+            f.setLexicalValue("" + getValidBoundaryNumber(std, ((InputDialog) dialog).getValue()));
             std.getFacetContents().add(f);
         }
     }
@@ -447,19 +452,20 @@ public class XSDEditFacetAction extends UndoAction {
         String stringValue = "0";
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
-        dialog = new InputDialog(page.getSite().getShell(), "TotalDigits Facet",
+        dialog = new InputDialog(page.getSite().getShell(), "MinInclusive Facet",
                 "Enter a new value for the facet; 0 to remove it", stringValue == null ? "" : stringValue, new IInputValidator() {
 
                     public String isValid(String newText) {
-                        double val;
-                        try {
-                            val = Double.parseDouble(newText);
-                        } catch (Exception e) {
-                            return "The value must be a non negative double";
-                        }
-                        if (val < 0)
-                            return "The value must be a non negative double";
-                        return null;
+                        // double val;
+                        // try {
+                        // val = Double.parseDouble(newText);
+                        // } catch (Exception e) {
+                        // return "The value must be a non negative double";
+                        // }
+                        // if (val < 0)
+                        // return "The value must be a non negative double";
+                        // return null;
+                        return isValidBoundaryNumber(std, newText);
                     }
                 });
         dialog.setBlockOnOpen(true);
@@ -469,11 +475,12 @@ public class XSDEditFacetAction extends UndoAction {
 
         if (currentValue != null)
             std.getFacetContents().remove(currentValue);
-        int intValue = Integer.parseInt(((InputDialog) dialog).getValue());
+        // int intValue = Integer.parseInt(((InputDialog) dialog).getValue());
         // double intValue = Double.parseDouble(((InputDialog)dialog).getValue());
-        if (intValue > 0) {
+        if (Double.parseDouble(((InputDialog) dialog).getValue()) > 0) {
             XSDMinInclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMinInclusiveFacet();
-            f.setLexicalValue("" + intValue);
+            // f.setLexicalValue("" + intValue);
+            f.setLexicalValue("" + getValidBoundaryNumber(std, ((InputDialog) dialog).getValue()));
             std.getFacetContents().add(f);
         }
     }
@@ -483,19 +490,20 @@ public class XSDEditFacetAction extends UndoAction {
         String stringValue = "0";
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
-        dialog = new InputDialog(page.getSite().getShell(), "TotalDigits Facet",
+        dialog = new InputDialog(page.getSite().getShell(), "MinExclusive Facet",
                 "Enter a new value for the facet; 0 to remove it", stringValue == null ? "" : stringValue, new IInputValidator() {
 
                     public String isValid(String newText) {
-                        double val;
-                        try {
-                            val = Double.parseDouble(newText);
-                        } catch (Exception e) {
-                            return "The value must be a non negative double";
-                        }
-                        if (val < 0)
-                            return "The value must be a non negative double";
-                        return null;
+                        // double val;
+                        // try {
+                        // val = Double.parseDouble(newText);
+                        // } catch (Exception e) {
+                        // return "The value must be a non negative double";
+                        // }
+                        // if (val < 0)
+                        // return "The value must be a non negative double";
+                        // return null;
+                        return isValidBoundaryNumber(std, newText);
                     }
                 });
         dialog.setBlockOnOpen(true);
@@ -505,11 +513,12 @@ public class XSDEditFacetAction extends UndoAction {
 
         if (currentValue != null)
             std.getFacetContents().remove(currentValue);
-        int intValue = Integer.parseInt(((InputDialog) dialog).getValue());
+        // int intValue = Integer.parseInt(((InputDialog) dialog).getValue());
         // double intValue = Double.parseDouble(((InputDialog)dialog).getValue());
-        if (intValue > 0) {
+        if (Double.parseDouble(((InputDialog) dialog).getValue()) > 0) {
             XSDMinExclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMinExclusiveFacet();
-            f.setLexicalValue("" + intValue);
+            // f.setLexicalValue("" + intValue);
+            f.setLexicalValue("" + getValidBoundaryNumber(std, ((InputDialog) dialog).getValue()));
             std.getFacetContents().add(f);
         }
     }
@@ -535,5 +544,78 @@ public class XSDEditFacetAction extends UndoAction {
             f.setLexicalValue("" + stirngValue);
             std.getFacetContents().add(f);
         }
+    }
+
+    private Object getValidBoundaryNumber(XSDSimpleTypeDefinition type, String text) {
+
+        try {
+            if (Util.isDouble(type) || Util.isDecimal(type))
+                return Double.parseDouble(text);
+
+            if (Util.isFloat(type))
+                return Float.parseFloat(text);
+
+            return Integer.parseInt(text);
+        } catch (Exception e) {
+            return text;
+        }
+
+    }
+
+    private String isValidBoundaryNumber(XSDSimpleTypeDefinition type, String text) {
+
+        if (Util.isDouble(type) || Util.isDecimal(type))
+            return isValidBoundaryDoubleNumber(text);
+
+        if (Util.isFloat(type))
+            return isValidBoundaryFloatNumber(text);
+
+        return isValidBoundaryIntNumber(text);
+    }
+
+    private String isValidBoundaryIntNumber(String text) {
+
+        try {
+            int tempVal = Integer.parseInt(text);
+
+            if (tempVal < 0)
+                return "The value must be a non negative int";
+
+        } catch (Exception e) {
+            return "The value must be a non negative int";
+        }
+
+        return null;
+
+    }
+
+    private String isValidBoundaryFloatNumber(String text) {
+
+        try {
+            Float tempVal = Float.parseFloat(text);
+
+            if (tempVal < 0)
+                return "The value must be a non negative float";
+
+        } catch (Exception e) {
+            return "The value must be a non negative float";
+        }
+
+        return null;
+    }
+
+    private String isValidBoundaryDoubleNumber(String text) {
+
+        try {
+            Double tempVal = Double.parseDouble(text);
+
+            if (tempVal < 0)
+                return "The value must be a non negative double";
+
+        } catch (Exception e) {
+            return "The value must be a non negative double";
+        }
+
+        return null;
     }
 }

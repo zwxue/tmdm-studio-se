@@ -1,7 +1,6 @@
 package com.amalto.workbench.detailtabs.sections.composites;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
@@ -28,19 +27,12 @@ import com.amalto.workbench.widgets.composites.ComplexAnnotaionInfoComposite;
 
 public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<ForeignKeyFilterAnnoInfoDefUnit> {
 
-    private List<ForeignKeyFilterAnnoInfoDefUnit> fkFilterInfos;
-
     private Text txtCustomFilter;
 
     private IAllDataModelHolder dataModelHolder;
 
     public ForeignKeyFilterComposite(Composite parent, int style, IAllDataModelHolder dataModelHolder) {
         super(parent, style, new Object[] { dataModelHolder });
-    }
-
-    @Override
-    protected List<ForeignKeyFilterAnnoInfoDefUnit> getInfos() {
-        return fkFilterInfos;
     }
 
     @SuppressWarnings("unchecked")
@@ -128,7 +120,7 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
 
     @Override
     protected void initParameters(Object[] parameters) {
-        fkFilterInfos = new ArrayList<ForeignKeyFilterAnnoInfoDefUnit>();
+        infos = new ArrayList<ForeignKeyFilterAnnoInfoDefUnit>();
 
         for (Object eachPara : parameters) {
 
@@ -150,8 +142,7 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
         if (hasCustomFilter())
             return ForeignKeyFilterAnnoInfo.getFKFilterByRawCustomFilterStr(getCustomFilter());
 
-        return ForeignKeyFilterAnnoInfo.getFKFilterByFKFilterCfgInfos(fkFilterInfos
-                .toArray(new ForeignKeyFilterAnnoInfoDefUnit[0]));
+        return ForeignKeyFilterAnnoInfo.getFKFilterByFKFilterCfgInfos(infos.toArray(new ForeignKeyFilterAnnoInfoDefUnit[0]));
     }
 
     public void setFilter(String filterExpression) {
@@ -159,5 +150,9 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
         txtCustomFilter.setText(ForeignKeyFilterAnnoInfo.getCustomFilterInfo(filterExpression));
         setInfos(ForeignKeyFilterAnnoInfo.getFKFilterCfgInfos(filterExpression));
 
+    }
+
+    @Override
+    protected void createTopExtentArea() {
     }
 }

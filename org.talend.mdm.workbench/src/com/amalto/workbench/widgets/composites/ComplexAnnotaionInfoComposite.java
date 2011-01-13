@@ -44,6 +44,8 @@ public abstract class ComplexAnnotaionInfoComposite<T> extends Composite {
 
     protected Image nillableColImage = ImageCache.getCreatedImage(EImage.WILDCARD.getPath());
 
+    protected List<T> infos;
+
     public ComplexAnnotaionInfoComposite(Composite parent, int style, Object[] initParameters) {
         super(parent, style);
 
@@ -285,16 +287,25 @@ public abstract class ComplexAnnotaionInfoComposite<T> extends Composite {
         return tvInfos;
     }
 
+    public void setInfos(List<T> objs) {
+
+        if (objs == null)
+            return;
+
+        infos = objs;
+        tvInfos.setInput(infos);
+    }
+
     public void setInfos(T[] objs) {
 
-        getInfos().clear();
+        infos.clear();
 
         for (T eachInputedObj : objs) {
 
             if (eachInputedObj == null)
                 continue;
 
-            getInfos().add(eachInputedObj);
+            infos.add(eachInputedObj);
         }
 
         this.tvInfos.refresh();
@@ -307,9 +318,13 @@ public abstract class ComplexAnnotaionInfoComposite<T> extends Composite {
         nillableColImage.dispose();
     }
 
-    protected abstract List<T> getInfos();
+    protected List<T> getInfos() {
+        return infos;
+    }
 
     protected abstract ITableLabelProvider getLabelProviderForViewer();
+
+    protected abstract void createTopExtentArea();
 
     protected abstract void createExtentArea();
 

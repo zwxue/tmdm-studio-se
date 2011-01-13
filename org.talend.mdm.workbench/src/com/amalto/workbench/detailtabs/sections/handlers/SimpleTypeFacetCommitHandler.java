@@ -1,63 +1,324 @@
 package com.amalto.workbench.detailtabs.sections.handlers;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.eclipse.xsd.XSDConstrainingFacet;
+import org.eclipse.xsd.XSDFacet;
+import org.eclipse.xsd.util.XSDSchemaBuildingTools;
 
+import com.amalto.workbench.detailtabs.exception.CommitException;
+import com.amalto.workbench.detailtabs.exception.CommitValidationException;
 import com.amalto.workbench.detailtabs.sections.model.simpletype.SimpleTypeWrapper;
 import com.amalto.workbench.utils.IConstants;
+import com.amalto.workbench.utils.Util;
 
-public class SimpleTypeFacetCommitHandler extends CompositeCommitHandler<SimpleTypeWrapper> {
+public abstract class SimpleTypeFacetCommitHandler extends CommitHandler<SimpleTypeWrapper> {
 
-    public SimpleTypeFacetCommitHandler(SimpleTypeWrapper submittable) {
-        super(submittable);
+    protected String facetName = "";
+
+    public SimpleTypeFacetCommitHandler(SimpleTypeWrapper submittedObj, String facetName) {
+        super(submittedObj);
+
+        this.facetName = facetName;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    protected CommitHandler<SimpleTypeWrapper>[] createChildHandlers() {
-
-        List<CommitHandler<SimpleTypeWrapper>> results = new ArrayList<CommitHandler<SimpleTypeWrapper>>();
-
-        for (String eachFacetName : getCommitedObj().getFacetNames()) {
-
-            if (eachFacetName.equals(IConstants.SIMPLETYPE_FACETNAME_PATTERN))
-                results.add(new SimpleTypeFacetCommitHandler_Pattern(getCommitedObj()));
-
-            if (eachFacetName.equals(IConstants.SIMPLETYPE_FACETNAME_ENUM))
-                results.add(new SimpleTypeFacetCommitHandler_Enum(getCommitedObj()));
-
-            if (eachFacetName.equals(IConstants.SIMPLETYPE_FACETNAME_LENGTH))
-                results.add(new SimpleTypeFacetCommitHandler_Length(getCommitedObj()));
-
-            if (eachFacetName.equals(IConstants.SIMPLETYPE_FACETNAME_MINLENGTH))
-                results.add(new SimpleTypeFacetCommitHandler_MinLength(getCommitedObj()));
-
-            if (eachFacetName.equals(IConstants.SIMPLETYPE_FACETNAME_MAXLENGTH))
-                results.add(new SimpleTypeFacetCommitHandler_MaxLength(getCommitedObj()));
-
-            if (eachFacetName.equals(IConstants.SIMPLETYPE_FACETNAME_TOTALDIGITS))
-                results.add(new SimpleTypeFacetCommitHandler_TotalDigits(getCommitedObj()));
-
-            if (eachFacetName.equals(IConstants.SIMPLETYPE_FACETNAME_FRACTIONDIGITS))
-                results.add(new SimpleTypeFacetCommitHandler_FractionDigits(getCommitedObj()));
-
-            if (eachFacetName.equals(IConstants.SIMPLETYPE_FACETNAME_MAXINCLUSIVE))
-                results.add(new SimpleTypeFacetCommitHandler_MaxInclusive(getCommitedObj()));
-
-            if (eachFacetName.equals(IConstants.SIMPLETYPE_FACETNAME_MAXEXCLUSIVE))
-                results.add(new SimpleTypeFacetCommitHandler_MaxExclusive(getCommitedObj()));
-
-            if (eachFacetName.equals(IConstants.SIMPLETYPE_FACETNAME_MININCLUSIVE))
-                results.add(new SimpleTypeFacetCommitHandler_MinInclusive(getCommitedObj()));
-
-            if (eachFacetName.equals(IConstants.SIMPLETYPE_FACETNAME_MINEXCLUSIVE))
-                results.add(new SimpleTypeFacetCommitHandler_MinExclusive(getCommitedObj()));
-
-            if (eachFacetName.equals(IConstants.SIMPLETYPE_FACETNAME_WHITESPACE))
-                results.add(new SimpleTypeFacetCommitHandler_WhiteSpace(getCommitedObj()));
-        }
-
-        return results.toArray(new CommitHandler[0]);
+    protected boolean doSubmit() throws CommitException {
+        return getCommitHelper().doCommit(facetName);
     }
 
+    @Override
+    protected void validateCommit() throws CommitValidationException {
+        getCommitHelper().validateCommit(facetName);
+    }
+
+    protected abstract XSDFacet[] getOldFacets();
+
+    protected abstract XSDConstrainingFacet creatNewFacet();
+
+    protected abstract SimpleTypeFacetCommitHandlerHelper getCommitHelper();
+}
+
+class SimpleTypeFacetCommitHandler_FractionDigits extends SimpleTypeFacetCommitHandler {
+
+    public SimpleTypeFacetCommitHandler_FractionDigits(SimpleTypeWrapper submittedObj) {
+        super(submittedObj, IConstants.SIMPLETYPE_FACETNAME_FRACTIONDIGITS);
+    }
+
+    @Override
+    protected XSDFacet[] getOldFacets() {
+        return new XSDFacet[] { getCommitedObj().getXSDSimpleType().getFractionDigitsFacet() };
+    }
+
+    @Override
+    protected XSDConstrainingFacet creatNewFacet() {
+        return XSDSchemaBuildingTools.getXSDFactory().createXSDFractionDigitsFacet();
+    }
+
+    @Override
+    protected SimpleTypeFacetCommitHandlerHelper getCommitHelper() {
+        return SimpleTypeFacetCommitHandlerHelper.createHelperForIntFacet(this);
+    }
+}
+
+class SimpleTypeFacetCommitHandler_TotalDigits extends SimpleTypeFacetCommitHandler {
+
+    public SimpleTypeFacetCommitHandler_TotalDigits(SimpleTypeWrapper submittedObj) {
+        super(submittedObj, IConstants.SIMPLETYPE_FACETNAME_TOTALDIGITS);
+    }
+
+    @Override
+    protected XSDFacet[] getOldFacets() {
+        return new XSDFacet[] { getCommitedObj().getXSDSimpleType().getTotalDigitsFacet() };
+    }
+
+    @Override
+    protected XSDConstrainingFacet creatNewFacet() {
+        return XSDSchemaBuildingTools.getXSDFactory().createXSDTotalDigitsFacet();
+    }
+
+    @Override
+    protected SimpleTypeFacetCommitHandlerHelper getCommitHelper() {
+        return SimpleTypeFacetCommitHandlerHelper.createHelperForIntFacet(this);
+    }
+
+}
+
+class SimpleTypeFacetCommitHandler_MaxLength extends SimpleTypeFacetCommitHandler {
+
+    public SimpleTypeFacetCommitHandler_MaxLength(SimpleTypeWrapper submittedObj) {
+        super(submittedObj, IConstants.SIMPLETYPE_FACETNAME_MAXLENGTH);
+    }
+
+    @Override
+    protected XSDFacet[] getOldFacets() {
+        return new XSDFacet[] { getCommitedObj().getXSDSimpleType().getMaxLengthFacet() };
+    }
+
+    @Override
+    protected XSDConstrainingFacet creatNewFacet() {
+        return XSDSchemaBuildingTools.getXSDFactory().createXSDMaxLengthFacet();
+    }
+
+    @Override
+    protected SimpleTypeFacetCommitHandlerHelper getCommitHelper() {
+        return SimpleTypeFacetCommitHandlerHelper.createHelperForIntFacet(this);
+    }
+}
+
+class SimpleTypeFacetCommitHandler_MinLength extends SimpleTypeFacetCommitHandler {
+
+    public SimpleTypeFacetCommitHandler_MinLength(SimpleTypeWrapper submittedObj) {
+        super(submittedObj, IConstants.SIMPLETYPE_FACETNAME_MINLENGTH);
+    }
+
+    @Override
+    protected XSDFacet[] getOldFacets() {
+        return new XSDFacet[] { getCommitedObj().getXSDSimpleType().getMinLengthFacet() };
+    }
+
+    @Override
+    protected XSDConstrainingFacet creatNewFacet() {
+        return XSDSchemaBuildingTools.getXSDFactory().createXSDMinLengthFacet();
+    }
+
+    @Override
+    protected SimpleTypeFacetCommitHandlerHelper getCommitHelper() {
+        return SimpleTypeFacetCommitHandlerHelper.createHelperForIntFacet(this);
+    }
+}
+
+class SimpleTypeFacetCommitHandler_Length extends SimpleTypeFacetCommitHandler {
+
+    public SimpleTypeFacetCommitHandler_Length(SimpleTypeWrapper submittedObj) {
+        super(submittedObj, IConstants.SIMPLETYPE_FACETNAME_LENGTH);
+    }
+
+    @Override
+    protected XSDFacet[] getOldFacets() {
+        return new XSDFacet[] { getCommitedObj().getXSDSimpleType().getLengthFacet() };
+    }
+
+    @Override
+    protected XSDConstrainingFacet creatNewFacet() {
+        return XSDSchemaBuildingTools.getXSDFactory().createXSDLengthFacet();
+    }
+
+    @Override
+    protected SimpleTypeFacetCommitHandlerHelper getCommitHelper() {
+        return SimpleTypeFacetCommitHandlerHelper.createHelperForIntFacet(this);
+    }
+}
+
+class SimpleTypeFacetCommitHandler_Enum extends SimpleTypeFacetCommitHandler {
+
+    public SimpleTypeFacetCommitHandler_Enum(SimpleTypeWrapper submittedObj) {
+        super(submittedObj, IConstants.SIMPLETYPE_FACETNAME_ENUM);
+    }
+
+    @Override
+    protected XSDFacet[] getOldFacets() {
+        return getCommitedObj().getXSDSimpleType().getEnumerationFacets().toArray(new XSDFacet[0]);
+    }
+
+    @Override
+    protected XSDConstrainingFacet creatNewFacet() {
+        return XSDSchemaBuildingTools.getXSDFactory().createXSDEnumerationFacet();
+    }
+
+    @Override
+    protected SimpleTypeFacetCommitHandlerHelper getCommitHelper() {
+        return SimpleTypeFacetCommitHandlerHelper.createHelperForStringArrayFacet(this);
+    }
+
+}
+
+class SimpleTypeFacetCommitHandler_Pattern extends SimpleTypeFacetCommitHandler {
+
+    public SimpleTypeFacetCommitHandler_Pattern(SimpleTypeWrapper submittedObj) {
+        super(submittedObj, IConstants.SIMPLETYPE_FACETNAME_PATTERN);
+    }
+
+    @Override
+    protected XSDFacet[] getOldFacets() {
+        return getCommitedObj().getXSDSimpleType().getPatternFacets().toArray(new XSDFacet[0]);
+    }
+
+    @Override
+    protected XSDConstrainingFacet creatNewFacet() {
+        return XSDSchemaBuildingTools.getXSDFactory().createXSDPatternFacet();
+    }
+
+    @Override
+    protected SimpleTypeFacetCommitHandlerHelper getCommitHelper() {
+        return SimpleTypeFacetCommitHandlerHelper.createHelperForStringArrayFacet(this);
+    }
+}
+
+class SimpleTypeFacetCommitHandler_WhiteSpace extends SimpleTypeFacetCommitHandler {
+
+    public SimpleTypeFacetCommitHandler_WhiteSpace(SimpleTypeWrapper submittedObj) {
+        super(submittedObj, IConstants.SIMPLETYPE_FACETNAME_WHITESPACE);
+    }
+
+    @Override
+    protected XSDFacet[] getOldFacets() {
+        return new XSDFacet[] { getCommitedObj().getXSDSimpleType().getWhiteSpaceFacet() };
+    }
+
+    @Override
+    protected XSDConstrainingFacet creatNewFacet() {
+        return XSDSchemaBuildingTools.getXSDFactory().createXSDWhiteSpaceFacet();
+    }
+
+    @Override
+    protected SimpleTypeFacetCommitHandlerHelper getCommitHelper() {
+        return SimpleTypeFacetCommitHandlerHelper.createHelperForStringFacet(this);
+    }
+}
+
+class SimpleTypeFacetCommitHandler_MaxExclusive extends SimpleTypeFacetCommitHandler {
+
+    public SimpleTypeFacetCommitHandler_MaxExclusive(SimpleTypeWrapper submittedObj) {
+        super(submittedObj, IConstants.SIMPLETYPE_FACETNAME_MAXEXCLUSIVE);
+    }
+
+    @Override
+    protected XSDFacet[] getOldFacets() {
+        return new XSDFacet[] { getCommitedObj().getXSDSimpleType().getMaxExclusiveFacet() };
+    }
+
+    @Override
+    protected XSDConstrainingFacet creatNewFacet() {
+        return XSDSchemaBuildingTools.getXSDFactory().createXSDMaxExclusiveFacet();
+    }
+
+    @Override
+    protected SimpleTypeFacetCommitHandlerHelper getCommitHelper() {
+
+        if (Util.isDouble(getCommitedObj().getXSDSimpleType()) || Util.isFloat(getCommitedObj().getXSDSimpleType())
+                || Util.isDecimal(getCommitedObj().getXSDSimpleType()))
+            return SimpleTypeFacetCommitHandlerHelper.createHelperForDoubleFacet(this);
+
+        return SimpleTypeFacetCommitHandlerHelper.createHelperForIntFacet(this);
+    }
+}
+
+class SimpleTypeFacetCommitHandler_MaxInclusive extends SimpleTypeFacetCommitHandler {
+
+    public SimpleTypeFacetCommitHandler_MaxInclusive(SimpleTypeWrapper submittedObj) {
+        super(submittedObj, IConstants.SIMPLETYPE_FACETNAME_MAXINCLUSIVE);
+    }
+
+    @Override
+    protected XSDFacet[] getOldFacets() {
+        return new XSDFacet[] { getCommitedObj().getXSDSimpleType().getMaxInclusiveFacet() };
+    }
+
+    @Override
+    protected XSDConstrainingFacet creatNewFacet() {
+        return XSDSchemaBuildingTools.getXSDFactory().createXSDMaxInclusiveFacet();
+    }
+
+    @Override
+    protected SimpleTypeFacetCommitHandlerHelper getCommitHelper() {
+
+        if (Util.isDouble(getCommitedObj().getXSDSimpleType()) || Util.isFloat(getCommitedObj().getXSDSimpleType())
+                || Util.isDecimal(getCommitedObj().getXSDSimpleType()))
+            return SimpleTypeFacetCommitHandlerHelper.createHelperForDoubleFacet(this);
+
+        return SimpleTypeFacetCommitHandlerHelper.createHelperForIntFacet(this);
+    }
+}
+
+class SimpleTypeFacetCommitHandler_MinExclusive extends SimpleTypeFacetCommitHandler {
+
+    public SimpleTypeFacetCommitHandler_MinExclusive(SimpleTypeWrapper submittedObj) {
+        super(submittedObj, IConstants.SIMPLETYPE_FACETNAME_MINEXCLUSIVE);
+    }
+
+    @Override
+    protected XSDFacet[] getOldFacets() {
+        return new XSDFacet[] { getCommitedObj().getXSDSimpleType().getMinExclusiveFacet() };
+    }
+
+    @Override
+    protected XSDConstrainingFacet creatNewFacet() {
+        return XSDSchemaBuildingTools.getXSDFactory().createXSDMinExclusiveFacet();
+    }
+
+    @Override
+    protected SimpleTypeFacetCommitHandlerHelper getCommitHelper() {
+
+        if (Util.isDouble(getCommitedObj().getXSDSimpleType()) || Util.isFloat(getCommitedObj().getXSDSimpleType())
+                || Util.isDecimal(getCommitedObj().getXSDSimpleType()))
+            return SimpleTypeFacetCommitHandlerHelper.createHelperForDoubleFacet(this);
+
+        return SimpleTypeFacetCommitHandlerHelper.createHelperForIntFacet(this);
+    }
+}
+
+class SimpleTypeFacetCommitHandler_MinInclusive extends SimpleTypeFacetCommitHandler {
+
+    public SimpleTypeFacetCommitHandler_MinInclusive(SimpleTypeWrapper submittedObj) {
+        super(submittedObj, IConstants.SIMPLETYPE_FACETNAME_MININCLUSIVE);
+    }
+
+    @Override
+    protected XSDFacet[] getOldFacets() {
+        return new XSDFacet[] { getCommitedObj().getXSDSimpleType().getMinInclusiveFacet() };
+    }
+
+    @Override
+    protected XSDConstrainingFacet creatNewFacet() {
+        return XSDSchemaBuildingTools.getXSDFactory().createXSDMinInclusiveFacet();
+    }
+
+    @Override
+    protected SimpleTypeFacetCommitHandlerHelper getCommitHelper() {
+
+        if (Util.isDouble(getCommitedObj().getXSDSimpleType()) || Util.isFloat(getCommitedObj().getXSDSimpleType())
+                || Util.isDecimal(getCommitedObj().getXSDSimpleType()))
+            return SimpleTypeFacetCommitHandlerHelper.createHelperForDoubleFacet(this);
+
+        return SimpleTypeFacetCommitHandlerHelper.createHelperForIntFacet(this);
+    }
 }

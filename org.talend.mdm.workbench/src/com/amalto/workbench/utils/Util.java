@@ -2852,4 +2852,30 @@ public class Util {
         return getParentTypes(baseType, results);
 
     }
+
+    public static boolean isDouble(XSDSimpleTypeDefinition simpleType) {
+        return isSpecifiedBuildInType(simpleType, "double");
+    }
+
+    public static boolean isFloat(XSDSimpleTypeDefinition simpleType) {
+        return isSpecifiedBuildInType(simpleType, "float");
+    }
+
+    public static boolean isDecimal(XSDSimpleTypeDefinition simpleType) {
+        return isSpecifiedBuildInType(simpleType, "decimal");
+    }
+
+    public static boolean isSpecifiedBuildInType(XSDSimpleTypeDefinition simpleType, String buildInTypeName) {
+
+        if (simpleType == null || simpleType.getSchema() == null)
+            return false;
+
+        XSDSimpleTypeDefinition systemDoubleType = simpleType.getSchema().resolveSimpleTypeDefinition(
+                simpleType.getSchema().getSchemaForSchemaNamespace(), buildInTypeName);
+
+        if (systemDoubleType == null)
+            return false;
+
+        return systemDoubleType.equals(simpleType.getBaseType());
+    }
 }

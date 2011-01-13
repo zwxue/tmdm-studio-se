@@ -1,20 +1,24 @@
 package com.amalto.workbench.detailtabs.sections.util.simpletype;
 
-import org.eclipse.xsd.XSDFacet;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 
+import com.amalto.workbench.detailtabs.sections.model.simpletype.propsource.SimpleTypeFacetIntegerPropertySource;
 import com.amalto.workbench.utils.IConstants;
+import com.amalto.workbench.widgets.composites.property.IPropertySource;
 
-public class SimpleTypeMaxLengthFacetPropSourceBuilder extends SimpleTypeIntegerFacetPropSourceBuilder {
+public class SimpleTypeMaxLengthFacetPropSourceBuilder extends SimpleTypeFacetPropSourceBuilder {
 
     @Override
-    protected XSDFacet getSourceSimpleTypeFacet(XSDSimpleTypeDefinition simpleType) {
-        return simpleType.getMaxLengthFacet();
+    protected IPropertySource<?> doCreatePropSource(XSDSimpleTypeDefinition simpleType, Composite cellEditorParent,
+            Object sourceFacetValue) {
+        return new SimpleTypeFacetIntegerPropertySource(cellEditorParent, IConstants.SIMPLETYPE_FACETNAME_MAXLENGTH,
+                (Integer) sourceFacetValue);
     }
 
     @Override
-    protected String getPropName() {
-        return IConstants.SIMPLETYPE_FACETNAME_MAXLENGTH;
+    protected Object getSourceFacetValue(XSDSimpleTypeDefinition simpleType) {
+        return SimpleTypeFacetValueExtractor.getIntFacetValue(simpleType.getMaxLengthFacet());
     }
 
 }

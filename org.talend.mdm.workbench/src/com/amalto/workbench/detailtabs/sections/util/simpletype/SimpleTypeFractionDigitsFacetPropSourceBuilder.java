@@ -1,20 +1,24 @@
 package com.amalto.workbench.detailtabs.sections.util.simpletype;
 
-import org.eclipse.xsd.XSDFacet;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 
+import com.amalto.workbench.detailtabs.sections.model.simpletype.propsource.SimpleTypeFacetIntegerPropertySource;
 import com.amalto.workbench.utils.IConstants;
+import com.amalto.workbench.widgets.composites.property.IPropertySource;
 
-public class SimpleTypeFractionDigitsFacetPropSourceBuilder extends SimpleTypeIntegerFacetPropSourceBuilder {
+public class SimpleTypeFractionDigitsFacetPropSourceBuilder extends SimpleTypeFacetPropSourceBuilder {
 
     @Override
-    protected XSDFacet getSourceSimpleTypeFacet(XSDSimpleTypeDefinition simpleType) {
-        return simpleType.getFractionDigitsFacet();
+    protected IPropertySource<?> doCreatePropSource(XSDSimpleTypeDefinition simpleType, Composite cellEditorParent,
+            Object sourceFacetValue) {
+        return new SimpleTypeFacetIntegerPropertySource(cellEditorParent, IConstants.SIMPLETYPE_FACETNAME_FRACTIONDIGITS,
+                (Integer) sourceFacetValue);
     }
 
     @Override
-    protected String getPropName() {
-        return IConstants.SIMPLETYPE_FACETNAME_FRACTIONDIGITS;
+    protected Object getSourceFacetValue(XSDSimpleTypeDefinition simpleType) {
+        return SimpleTypeFacetValueExtractor.getIntFacetValue(simpleType.getFractionDigitsFacet());
     }
 
 }
