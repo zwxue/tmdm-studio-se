@@ -12,15 +12,18 @@
 // ============================================================================
 package org.talend.mdm.studio.test.synchronization.parent;
 
+import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
  * DOC rhou class global comment. Detailled comment
  */
+@RunWith(SWTBotJunit4ClassRunner.class)
 public class SynchronizationPlanBrowseRevisionTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem spParentItem;

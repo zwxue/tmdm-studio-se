@@ -12,22 +12,25 @@
 // ============================================================================
 package org.talend.mdm.studio.test.workflow.parent;
 
+import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
  * DOC rhou class global comment. Detailled comment
  */
+@RunWith(SWTBotJunit4ClassRunner.class)
 public class WorkflowRefreshTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem workflowParentItem;
 
     @Before
     public void runBeforeEveryTest() {
-        workflowParentItem = serverItem.getNode("workflow");
+        workflowParentItem = serverItem.getNode("Workflow");
         workflowParentItem.expand();
 
     }

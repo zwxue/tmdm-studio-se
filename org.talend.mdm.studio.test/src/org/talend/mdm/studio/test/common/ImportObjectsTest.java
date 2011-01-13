@@ -10,10 +10,9 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package org.talend.mdm.studio.test.transformer.parent;
+package org.talend.mdm.studio.test.common;
 
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,26 +23,28 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
  * DOC rhou class global comment. Detailled comment
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class TransformerImportTest extends TalendSWTBotForMDM {
-
-    private SWTBotTreeItem jobParentItem;
+public class ImportObjectsTest extends TalendSWTBotForMDM {
 
     @Before
     public void runBeforeEveryTest() {
-        jobParentItem = serverItem.getNode("Job Repository");
-        jobParentItem.expand();
-
     }
 
     @After
     public void runAfterEveryTest() {
-
     }
 
     @Test
-    public void importJobTest() {
-        jobParentItem.contextMenu("Import a TIS Job Archive ").click();
-        // TODO:SWTBot does not support the FileDialog,need further investigation.
+    public void importObjectsTest() {
+        serverItem.contextMenu("Import").click();
+        bot.shell("Import Objects").activate();
+        bot.radio("Select archive file:").click();
+        bot.button("Import from Talend Exchange").click();
+        bot.shell("Import from Talend Exchange options").activate();
+        bot.table().select(1);
+        bot.button("OK").click();
+        sleep(3);
+        bot.button("Finish").click();
+        bot.shell("Confirm Overwrite").activate();
+        bot.button("Yes To All").click();
     }
-
 }

@@ -13,6 +13,7 @@
 package org.talend.mdm.studio.test.role.parent;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
@@ -20,11 +21,13 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
  * DOC rhou class global comment. Detailled comment
  */
+@RunWith(SWTBotJunit4ClassRunner.class)
 public class RoleCreationTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem roleParentItem;

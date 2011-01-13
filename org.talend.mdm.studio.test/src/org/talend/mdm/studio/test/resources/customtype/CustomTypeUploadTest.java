@@ -15,16 +15,19 @@ package org.talend.mdm.studio.test.resources.customtype;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 import org.talend.mdm.studio.test.util.Util;
 
 /**
  * DOC rhou class global comment. Detailled comment
  */
+@RunWith(SWTBotJunit4ClassRunner.class)
 public class CustomTypeUploadTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem customTypeParentNode;
