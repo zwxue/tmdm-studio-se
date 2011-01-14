@@ -120,6 +120,7 @@ public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
 
             XSDIdentityConstraintDefinition newKey = factory.createXSDIdentityConstraintDefinition();
             newKey.setName(eachKeyWrapper.getName());
+            newKey.setIdentityConstraintCategory(eachKeyWrapper.getType());
 
             XSDXPathDefinition selector = factory.createXSDXPathDefinition();
             selector.setValue(eachKeyWrapper.getSelector());

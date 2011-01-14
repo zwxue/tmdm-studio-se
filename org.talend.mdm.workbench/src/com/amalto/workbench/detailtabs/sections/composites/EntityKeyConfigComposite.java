@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintCategory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
+import org.eclipse.xsd.XSDSchema;
 
 import com.amalto.workbench.detailtabs.sections.model.entity.EntityWrapper;
 import com.amalto.workbench.detailtabs.sections.model.entity.FieldWrapper;
@@ -683,6 +684,10 @@ public class EntityKeyConfigComposite extends Composite {
             return null;
         }
 
+        @Override
+        public XSDSchema getSchema() {
+            return entityWrapper.getSchema();
+        }
     }
 
     class NewKeyWrapperValidator extends NewXSDIndentityConstraintValidator {
