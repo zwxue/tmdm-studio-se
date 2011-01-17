@@ -50,7 +50,7 @@ public abstract class AMainPage extends AFormPage implements ModifyListener {
 
             // create the FormPart
             firstSectionPart = new SectionPart(form.getBody(), toolkit, Section.DESCRIPTION | ExpandableComposite.TWISTIE
-                    | ExpandableComposite.EXPANDED);
+                    | ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR);
             managedForm.addPart(firstSectionPart);
 
             // Layout the components
@@ -67,7 +67,7 @@ public abstract class AMainPage extends AFormPage implements ModifyListener {
             firstSection.setDescription("The main characteristics");
             firstSection.setLayout(new GridLayout(1, false));
 
-            toolkit.createCompositeSeparator(firstSection);
+            // toolkit.createCompositeSeparator(firstSection);
 
             Composite charComposite = toolkit.createComposite(firstSection);
             charComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -96,7 +96,8 @@ public abstract class AMainPage extends AFormPage implements ModifyListener {
     protected abstract void createCharacteristicsContent(FormToolkit toolkit, Composite charSection);
 
     protected Composite getNewSectionComposite(String title) {
-        return getNewSectionComposite(title, ExpandableComposite.TWISTIE | ExpandableComposite.EXPANDED);
+        return getNewSectionComposite(title, ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE
+                | ExpandableComposite.EXPANDED);
     }
 
     protected Composite getNewSectionComposite(String title, int style) {
@@ -104,7 +105,7 @@ public abstract class AMainPage extends AFormPage implements ModifyListener {
     }
 
     protected Section getNewSection(String title) {
-        return getNewSection(title, ExpandableComposite.TWISTIE | ExpandableComposite.EXPANDED);
+        return getNewSection(title, ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.EXPANDED);
     }
 
     protected Section getNewSection(String title, int style) {
@@ -127,7 +128,7 @@ public abstract class AMainPage extends AFormPage implements ModifyListener {
         });
         newSection.setLayout(new GridLayout(1, false));
 
-        this.getManagedForm().getToolkit().createCompositeSeparator(newSection);
+        // this.getManagedForm().getToolkit().createCompositeSeparator(newSection);
         newSection.setClient(getNewSectionComposite(newSection)); // in case someone calls getClient directly
 
         return newSection;

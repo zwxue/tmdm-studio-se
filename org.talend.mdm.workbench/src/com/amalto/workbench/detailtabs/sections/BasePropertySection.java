@@ -92,7 +92,7 @@ public abstract class BasePropertySection extends AbstractPropertySection {
     }
 
     protected boolean hasTitleSeperator() {
-        return true;
+        return false;
     }
 
     protected abstract String getSectionTitle();

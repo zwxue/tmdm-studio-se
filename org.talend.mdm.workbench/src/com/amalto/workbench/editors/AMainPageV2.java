@@ -177,7 +177,8 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
     protected abstract void createCharacteristicsContent(FormToolkit toolkit, Composite charSection);
 
     protected Composite getNewSectionComposite(String title) {
-        return getNewSectionComposite(title, ExpandableComposite.TWISTIE | ExpandableComposite.EXPANDED);
+        return getNewSectionComposite(title, ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE
+                | ExpandableComposite.EXPANDED);
     }
 
     protected Composite getNewSectionComposite(String title, int style) {
@@ -185,7 +186,7 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
     }
 
     protected Section getNewSection(String title) {
-        return getNewSection(title, ExpandableComposite.TWISTIE | ExpandableComposite.EXPANDED);
+        return getNewSection(title, ExpandableComposite.TITLE_BAR | ExpandableComposite.TWISTIE | ExpandableComposite.EXPANDED);
     }
 
     protected Section getNewSection(String title, int style) {
@@ -208,7 +209,7 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
         });
         newSection.setLayout(new GridLayout(1, false));
 
-        this.getManagedForm().getToolkit().createCompositeSeparator(newSection);
+        // this.getManagedForm().getToolkit().createCompositeSeparator(newSection);
         newSection.setClient(getNewSectionComposite(newSection)); // in case someone calls getClient directly
 
         return newSection;
