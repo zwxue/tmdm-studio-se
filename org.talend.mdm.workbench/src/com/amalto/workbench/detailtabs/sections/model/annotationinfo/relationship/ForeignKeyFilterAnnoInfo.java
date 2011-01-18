@@ -37,9 +37,8 @@ public class ForeignKeyFilterAnnoInfo extends SingleContentAnnotationInfo {
 
     public static ForeignKeyFilterAnnoInfoDefUnit[] getFKFilterCfgInfos(String filterExpression) {
 
-        if (isCustomFilter(filterExpression)) {
+        if ("".equals(filterExpression) || isCustomFilter(filterExpression))
             return new ForeignKeyFilterAnnoInfoDefUnit[0];
-        }
 
         List<ForeignKeyFilterAnnoInfoDefUnit> fkFilterInfos = new ArrayList<ForeignKeyFilterAnnoInfoDefUnit>();
 
