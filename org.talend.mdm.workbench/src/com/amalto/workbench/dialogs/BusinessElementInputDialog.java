@@ -123,12 +123,13 @@ public class BusinessElementInputDialog extends Dialog {
 		((GridData)refCombo.getLayoutData()).widthHint = 200;
 		
 		
-		if(refCombo.getText()!=""&&refCombo.getText()!=null){
+		if(refCombo.getText().length()>0){
 			elementNameText.setText("");
 			elementNameText.setEditable(false);
 		}
 		else{
 			elementNameText.setEditable(true);
+			elementNameText.setText(getElementName()==null? "" : getElementName());
 		}
 		
 		
@@ -140,12 +141,13 @@ public class BusinessElementInputDialog extends Dialog {
 			}
 
 			public void widgetSelected(SelectionEvent e) {
-				if(refCombo.getText()!=""&&refCombo.getText()!=null){
+				if(refCombo.getText().length()>0){
 					elementNameText.setText("");
 					elementNameText.setEditable(false);
 				}
 				else{
 					elementNameText.setEditable(true);
+					elementNameText.setText(getElementName()==null? "" : getElementName());
 				}
 								
 			}});
