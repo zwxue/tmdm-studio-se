@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import org.dom4j.Document;
@@ -34,6 +35,8 @@ import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeViewerListener;
+import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
@@ -51,11 +54,14 @@ import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.TreeEvent;
 import org.eclipse.swt.events.TreeListener;
 import org.eclipse.swt.graphics.Cursor;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener2;
@@ -468,7 +474,43 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     }
 
     protected TreeViewer createTreeViewer(Composite parent) {
-        viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+        viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL) {
+
+            public Object[] getSortedChildren(Object obj) {
+                Object[] objs = super.getSortedChildren(obj);
+                Arrays.sort(objs);
+                return objs;
+            }
+        };
+
+        viewer.addTreeListener(new ITreeViewerListener() {
+
+            public void treeCollapsed(TreeExpansionEvent event) {
+                setTreeNodeImage(event, false);
+            }
+
+            public void treeExpanded(TreeExpansionEvent event) {
+                setTreeNodeImage(event, true);
+            }
+
+            private void setTreeNodeImage(TreeExpansionEvent event, boolean expand) {
+                Object elem = event.getElement();
+                if (!(elem instanceof TreeParent))
+                    return;
+                TreeParent parent = (TreeParent) elem;
+                if (parent.getType() == TreeObject.BUILT_IN_CATEGORY_FOLDER) {
+                    Image imgOpen = ImageCache.getCreatedImage("icons/folder_open_deployed-jobs.png");
+                    Image imgClose = ImageCache.getCreatedImage("icons/folder_deployed-jobs.png");
+                    if (parent.getDisplayName().equals("Source Jobs")) {
+                        imgOpen = ImageCache.getCreatedImage("icons/folder_open_source-jobs.png");
+                        imgClose = ImageCache.getCreatedImage("icons/folder_source-jobs.png");
+                    }
+                    Widget widget = ServerView.this.getViewer().testFindItem(event.getElement());
+                    TreeItem item = (TreeItem) widget;
+                    item.setImage(expand ? imgOpen : imgClose);
+                }
+            }
+        });
         return viewer;
     }
 
@@ -659,7 +701,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         // NodeList serverInfo = server.getChildNodes();
         // for (int j = 0; j < serverInfo.getLength(); j++) {
         // serverInfo.item(j).getNodeName();
-        //						
+        //
         // }
         // }
     }

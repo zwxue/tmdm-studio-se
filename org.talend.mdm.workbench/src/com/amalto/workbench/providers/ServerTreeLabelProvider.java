@@ -99,10 +99,14 @@ public class ServerTreeLabelProvider extends LabelProvider implements IColorProv
             return ImageCache.getCreatedImage(EImage.UNIVERSE.getPath());
         else if (object.getType() == TreeObject.SYNCHRONIZATIONPLAN)
             return ImageCache.getCreatedImage(EImage.SYNCHRONIZATIONPLAN.getPath());
-        else if (object.getType() == TreeObject.CATEGORY_FOLDER||object.getType() == TreeObject.BUILT_IN_CATEGORY_FOLDER)
+        else if (object.getType() == TreeObject.CATEGORY_FOLDER)
             return ImageCache.getCreatedImage("icons/folder.gif");
-
-        else if (object.getType() == TreeObject._INVISIBLE)
+        else if (object.getType() == TreeObject.BUILT_IN_CATEGORY_FOLDER) {
+            if (object.getDisplayName().equals("Deployed Jobs"))
+                return ImageCache.getCreatedImage("icons/folder_deployed-jobs.png");
+            else
+                return ImageCache.getCreatedImage("icons/folder_source-jobs.png");
+        } else if (object.getType() == TreeObject._INVISIBLE)
             return ImageCache.getCreatedImage(EImage.SANDGLASS.getPath());
 
         return ImageCache.getCreatedImage("icons/phased_out.gif");
