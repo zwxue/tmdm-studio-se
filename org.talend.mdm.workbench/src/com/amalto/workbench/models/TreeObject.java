@@ -415,7 +415,6 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
         return false;
     }
 
-    @Override
     public int compareTo(TreeObject o) {
         if (o == this)
             return 0;
