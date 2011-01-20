@@ -15,12 +15,14 @@ import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.amalto.workbench.dialogs.ResourceSelectDialog;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeObjectTransfer;
+import com.amalto.workbench.proposal.ContentProposalAdapterExtended;
 import com.amalto.workbench.utils.WidgetUtils;
 import com.amalto.workbench.views.ServerView;
 
@@ -90,9 +92,16 @@ public class ExtensibleTextContentEditorPage extends ExtensibleContentEditorPage
             }
 
             public void drop(DropTargetEvent event) {
+
                 if (event.data instanceof TreeObject[])
-                    textViewer.getTextWidget().setText(
-                            textViewer.getTextWidget().getText() + ((TreeObject[]) event.data)[0].getDisplayName());
+                    if (((TreeObject[]) event.data)[0].getType() == TreeObject.TRANSFORMER)
+                        textViewer.getTextWidget().setText(
+                                textViewer.getTextWidget().getText().replace("?", "")
+                                        + ((TreeObject[]) event.data)[0].getDisplayName());
+                    else
+                        textViewer.getTextWidget().setText(
+                                textViewer.getTextWidget().getText() + ((TreeObject[]) event.data)[0].getDisplayName());
+
             }
         });
 
@@ -154,5 +163,14 @@ public class ExtensibleTextContentEditorPage extends ExtensibleContentEditorPage
             return "";
 
         return textViewer.getDocument().get().trim();
+    }
+
+    @Override
+    public void setContentProposal(String[] proposals, char[] autoActiveCharactors) {
+
+        ContentProposalAdapterExtended adapter = WidgetUtils.addContentProposal(textViewer.getTextWidget(), proposals,
+                autoActiveCharactors);
+        adapter.setPopupSize(new Point(300, 250));
+
     }
 }

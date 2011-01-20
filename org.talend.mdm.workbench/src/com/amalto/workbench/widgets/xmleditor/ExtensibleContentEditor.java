@@ -16,6 +16,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
@@ -79,6 +80,19 @@ public class ExtensibleContentEditor extends Composite {
             ((ExtensibleContentEditorPage) eachItem.getControl()).setContent(content);
         }
 
+    }
+
+    public ExtensibleEditorContent getContent() {
+
+        int index = tabFolderEditors.getSelectionIndex();
+        if (index == -1)
+            return new ExtensibleEditorContent("");
+
+        Control control = tabFolderEditors.getItem(index).getControl();
+        if (!(control instanceof ExtensibleContentEditorPage))
+            return new ExtensibleEditorContent("");
+
+        return ((ExtensibleContentEditorPage) control).getContent();
     }
 
     protected void createPages(List<ExtensibleContentEditorPageDescription> creatorDescriptions) {
@@ -186,10 +200,8 @@ public class ExtensibleContentEditor extends Composite {
     protected void clearTabFolder() {
 
         for (TabItem eachTabItem : tabFolderEditors.getItems()) {
-
-            eachTabItem.dispose();
-
             eachTabItem.getControl().dispose();
+            eachTabItem.dispose();
         }
 
     }
@@ -241,6 +253,18 @@ public class ExtensibleContentEditor extends Composite {
                 continue;
 
             ((ExtensibleContentEditorPage) eachTabItem.getControl()).clearExternalResources();
+        }
+
+    }
+
+    public void setContentProposal(String[] proposals, char[] autoActiveCharactors) {
+
+        for (TabItem eachTabItem : tabFolderEditors.getItems()) {
+
+            if (!(eachTabItem.getControl() instanceof ExtensibleContentEditorPage))
+                continue;
+
+            ((ExtensibleContentEditorPage) eachTabItem.getControl()).setContentProposal(proposals, autoActiveCharactors);
         }
 
     }

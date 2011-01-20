@@ -720,6 +720,9 @@ public class TransformerMainPage extends AMainPageV2 {
     }
 
     protected void refreshStep(int index) {
+
+        currentPlugin = index;
+
         if (index < 0) {
             stepWidget.inputViewer.setInput(new ArrayList<WSTransformerVariablesMapping>());
             stepWidget.outputViewer.setInput(new ArrayList<WSTransformerVariablesMapping>());

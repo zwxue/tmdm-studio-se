@@ -188,11 +188,13 @@ public class XpathWidget implements SelectionListener {
     }
 
     public String getText() {
-        return descriptionText.getText().replaceAll("\\s+", "").trim();
+        // return descriptionText.getText().replaceAll("\\s+", "").trim();
+        return descriptionText.getText().trim();
     }
 
     public void setText(String text) {
-        descriptionText.setText(text.replaceAll("\\s+", "").trim());
+        // descriptionText.setText(text.replaceAll("\\s+", "").trim());
+        descriptionText.setText(text == null ? "" : text.trim());
     }
 
     public boolean isReadOnly() {

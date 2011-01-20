@@ -65,6 +65,10 @@ public abstract class ExtensibleContentEditorPage extends Composite {
         return listeners.toArray(new ExtensibleContentEditorPageListener[0]);
     }
 
+    public void setContentProposal(String[] proposals, char[] autoActiveCharactors) {
+
+    }
+
     public abstract void refresh();
 
     public abstract void saveContentFromUI() throws ExtensibleContentEditorPageSaveException;
