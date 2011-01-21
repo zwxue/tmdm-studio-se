@@ -29,6 +29,7 @@ public abstract class EditableDialogCellEditor extends DialogCellEditor {
             @Override
             public void focusLost(FocusEvent e) {
                 doSetValue(txtEdit.getText().trim());
+                EditableDialogCellEditor.this.deactivate();
             }
         });
 
@@ -51,6 +52,7 @@ public abstract class EditableDialogCellEditor extends DialogCellEditor {
             txtEdit.selectAll();
             txtEdit.setFocus();
         }
+
     }
 
     @Override
@@ -59,10 +61,14 @@ public abstract class EditableDialogCellEditor extends DialogCellEditor {
             return;
         }
 
+        activate();
+
         String text = "";//$NON-NLS-1$
         if (value != null) {
             text = value.toString();
         }
         txtEdit.setText(text);
+
     }
+
 }

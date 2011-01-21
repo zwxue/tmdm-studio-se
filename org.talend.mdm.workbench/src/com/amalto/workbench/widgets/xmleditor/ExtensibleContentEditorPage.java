@@ -6,6 +6,8 @@ import java.util.List;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
+
 public abstract class ExtensibleContentEditorPage extends Composite {
 
     protected ExtensibleEditorContent content;
@@ -65,9 +67,9 @@ public abstract class ExtensibleContentEditorPage extends Composite {
         return listeners.toArray(new ExtensibleContentEditorPageListener[0]);
     }
 
-    public void setContentProposal(String[] proposals, char[] autoActiveCharactors) {
+    public abstract void reloadExternalInfo();
 
-    }
+    public abstract void setExternalInfoHolder(ExternalInfoHolder<?> externalInfoHolder);
 
     public abstract void refresh();
 

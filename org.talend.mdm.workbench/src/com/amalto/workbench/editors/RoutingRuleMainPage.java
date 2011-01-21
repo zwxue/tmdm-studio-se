@@ -9,6 +9,8 @@ package com.amalto.workbench.editors;
 import java.awt.event.TextEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
@@ -59,16 +61,15 @@ import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WidgetUtils;
 import com.amalto.workbench.utils.XmlUtil;
+import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSGetServicesList;
-import com.amalto.workbench.webservices.WSGetTransformerV2PKs;
 import com.amalto.workbench.webservices.WSRoutingRule;
 import com.amalto.workbench.webservices.WSRoutingRuleExpression;
 import com.amalto.workbench.webservices.WSServiceGetDocument;
 import com.amalto.workbench.webservices.WSServicesList;
 import com.amalto.workbench.webservices.WSServicesListItem;
 import com.amalto.workbench.webservices.WSString;
-import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.ConditionWidget;
@@ -78,6 +79,7 @@ import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditorPage;
 import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditorPageListener;
 import com.amalto.workbench.widgets.xmleditor.ExtensibleEditorContent;
 import com.amalto.workbench.widgets.xmleditor.ExtensibleTextContentEditor;
+import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
 
 public class RoutingRuleMainPage extends AMainPageV2 {
 
@@ -91,6 +93,10 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
     // protected Text serviceParametersText;
     protected ExtensibleTextContentEditor serviceParametersEditor;
+
+    private ParameterEditorListener parameterEditorListener;
+
+    private Map<String, ExternalInfoHolder<?>> externalInfoName2Holder = new HashMap<String, ExternalInfoHolder<?>>();
 
     // protected ListViewer routingExpressionsViewer;
     protected XpathWidget xpathWidget;
@@ -152,8 +158,21 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             if (treeParent == null) {// if it is a new page,treeParent should be ROUTING_RULE
                 treeParent = this.getXObject().getServerRoot().findServerFolder(TreeObject.ROUTING_RULE);
             }
+
+            initExternalInfoHolder();
+
         } catch (Exception e) {/* no versioning support on old cores */
         }
+    }
+
+    private void initExternalInfoHolder() {
+
+        try {
+            externalInfoName2Holder.put("callprocess", ExternalInfoHolder.getAllProcessesNamesHolder(Util.getPort(getXObject())));
+        } catch (XtentisException e) {
+            e.printStackTrace();
+        }
+
     }
 
     protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
@@ -286,6 +305,9 @@ public class RoutingRuleMainPage extends AMainPageV2 {
                             helpPara = "";
                     // serviceParametersText.setText(XmlUtil.formatXmlSource(helpPara));
                     serviceParametersEditor.setPageGroup(serviceName);
+                    serviceParametersEditor.addExtensibleXMLEditorPageListener(parameterEditorListener);
+                    if (externalInfoName2Holder.containsKey(serviceName))
+                        serviceParametersEditor.setExternalInfoHolder(externalInfoName2Holder.get(serviceName));
                     serviceParametersEditor.setContent(XmlUtil.formatXmlSource(helpPara));
                     markDirtyWithoutCommit();
                     initParamterProposal(serviceNameCombo.getText());
@@ -360,14 +382,8 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             // gdServiceParameter.widthHint = 200;
             gdServiceParameter.heightHint = 150;
             serviceParametersEditor.setLayoutData(gdServiceParameter);
-            serviceParametersEditor.addExtensibleXMLEditorPageListener(new ExtensibleContentEditorPageListener() {
+            parameterEditorListener = new ParameterEditorListener();
 
-                public void onXMLDocumentChanged(ExtensibleContentEditorPage source, ExtensibleEditorContent newCotent) {
-                    if (refreshing)
-                        return;
-                    markDirtyWithoutCommit();
-                }
-            });
             // serviceParametersText = toolkit.createText(serviceGroup, "",SWT.BORDER|SWT.MULTI|SWT.V_SCROLL|SWT.WRAP);
             // serviceParametersText.setLayoutData(
             // new GridData(SWT.FILL,SWT.FILL,true,false,2,1)
@@ -479,25 +495,25 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
     private void initParamterProposal(String jndi) {
         if ("callprocess".equals(jndi)) {
-            // add content proposal to paramter
-            WSTransformerV2PK[] transformerPKs = null;
-            try {
-                transformerPKs = Util.getPort(getXObject()).getTransformerV2PKs(new WSGetTransformerV2PKs(""))
-                        .getWsTransformerV2PK();
-            } catch (Exception e) {
-                System.out.println("No Transformers");
-            }
-            java.util.List<String> proposals = new ArrayList<String>();
-            if (transformerPKs != null)
-                for (WSTransformerV2PK pk : transformerPKs) {
-                    if (pk.getPk() != null && pk.getPk().length() > 0)
-                        proposals.add(pk.getPk());
-                }
-            // ContentProposalAdapterExtended adapter = WidgetUtils.addContentProposal(serviceParametersText,
-            // (String[]) proposals.toArray(new String[proposals.size()]), new char[] { ' ', '=' });
-            // adapter.setPopupSize(new Point(300, 250));
-            serviceParametersEditor.setContentProposal((String[]) proposals.toArray(new String[proposals.size()]), new char[] {
-                    ' ', '=' });
+            // // add content proposal to paramter
+            // WSTransformerV2PK[] transformerPKs = null;
+            // try {
+            // transformerPKs = Util.getPort(getXObject()).getTransformerV2PKs(new WSGetTransformerV2PKs(""))
+            // .getWsTransformerV2PK();
+            // } catch (Exception e) {
+            // System.out.println("No Transformers");
+            // }
+            // java.util.List<String> proposals = new ArrayList<String>();
+            // if (transformerPKs != null)
+            // for (WSTransformerV2PK pk : transformerPKs) {
+            // if (pk.getPk() != null && pk.getPk().length() > 0)
+            // proposals.add(pk.getPk());
+            // }
+            // // ContentProposalAdapterExtended adapter = WidgetUtils.addContentProposal(serviceParametersText,
+            // // (String[]) proposals.toArray(new String[proposals.size()]), new char[] { ' ', '=' });
+            // // adapter.setPopupSize(new Point(300, 250));
+
+            serviceParametersEditor.reloadExternalInfo();
         }
     }
 
@@ -520,6 +536,9 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             // XmlUtil.formatXmlSource(wsRoutingRule
             // .getParameters()));
             serviceParametersEditor.setPageGroup(serviceNameCombo.getText().trim());
+            if (externalInfoName2Holder.containsKey(serviceNameCombo.getText().trim()))
+                serviceParametersEditor.setExternalInfoHolder(externalInfoName2Holder.get(serviceNameCombo.getText().trim()));
+            serviceParametersEditor.addExtensibleXMLEditorPageListener(parameterEditorListener);
             serviceParametersEditor.setContent(wsRoutingRule.getParameters() == null ? "" : XmlUtil.formatXmlSource(wsRoutingRule
                     .getParameters()));
 
@@ -600,6 +619,9 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
     public void dispose() {
         super.dispose();
+
+        externalInfoName2Holder.clear();
+        externalInfoName2Holder = null;
 
         serviceParametersEditor.dispose();
 
@@ -718,4 +740,15 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
     }
 
+    class ParameterEditorListener implements ExtensibleContentEditorPageListener {
+
+        public void onXMLDocumentChanged(ExtensibleContentEditorPage source, ExtensibleEditorContent newCotent) {
+
+            if (refreshing)
+                return;
+            markDirtyWithoutCommit();
+
+        }
+
+    }
 }

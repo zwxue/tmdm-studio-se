@@ -20,9 +20,11 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
+import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
+
 public class ExtensibleContentEditor extends Composite {
 
-    public static final String EXTENSIONID = "extensibleXMLEditorPage";
+    public static final String EXTENSIONID = "org.talend.mdm.workbench.extensibleXMLEditorPage";
 
     protected TabFolder tabFolderEditors;
 
@@ -257,14 +259,26 @@ public class ExtensibleContentEditor extends Composite {
 
     }
 
-    public void setContentProposal(String[] proposals, char[] autoActiveCharactors) {
+    public void setExternalInfoHolder(ExternalInfoHolder<?> externalInfoHolder) {
 
         for (TabItem eachTabItem : tabFolderEditors.getItems()) {
 
             if (!(eachTabItem.getControl() instanceof ExtensibleContentEditorPage))
                 continue;
 
-            ((ExtensibleContentEditorPage) eachTabItem.getControl()).setContentProposal(proposals, autoActiveCharactors);
+            ((ExtensibleContentEditorPage) eachTabItem.getControl()).setExternalInfoHolder(externalInfoHolder);
+        }
+
+    }
+
+    public void reloadExternalInfo() {
+
+        for (TabItem eachTabItem : tabFolderEditors.getItems()) {
+
+            if (!(eachTabItem.getControl() instanceof ExtensibleContentEditorPage))
+                continue;
+
+            ((ExtensibleContentEditorPage) eachTabItem.getControl()).reloadExternalInfo();
         }
 
     }
