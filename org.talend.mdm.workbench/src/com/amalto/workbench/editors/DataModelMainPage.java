@@ -141,6 +141,7 @@ import com.amalto.workbench.actions.XSDChangeBaseTypeAction;
 import com.amalto.workbench.actions.XSDChangeToComplexTypeAction;
 import com.amalto.workbench.actions.XSDChangeToSimpleTypeAction;
 import com.amalto.workbench.actions.XSDCopyConceptAction;
+import com.amalto.workbench.actions.XSDDefaultValueRuleAction;
 import com.amalto.workbench.actions.XSDDeleteConceptAction;
 import com.amalto.workbench.actions.XSDDeleteConceptWrapAction;
 import com.amalto.workbench.actions.XSDDeleteElementAction;
@@ -179,6 +180,7 @@ import com.amalto.workbench.actions.XSDSetAnnotationWrapNoAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWrapWriteAction;
 import com.amalto.workbench.actions.XSDSetAnnotationWriteAction;
 import com.amalto.workbench.actions.XSDSetFacetMessageAction;
+import com.amalto.workbench.actions.XSDVisibleRuleAction;
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.dialogs.DataModelFilterDialog;
@@ -275,7 +277,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     private XSDGetXPathAction getXPathAction = null;
 
     private XSDSetAnnotationForeignKeyAction setAnnotationForeignKeyAction = null;
-
+    private XSDVisibleRuleAction visibleRuleAction; 
+    private XSDDefaultValueRuleAction defaultValueRuleAction;
+    
     private XSDSetAnnotationFKFilterAction setAnnotationFKFilterAction = null;
 
     private XSDSetAnnotationWrapWriteAction setAnnotationWrapWriteAction = null;
@@ -1217,6 +1221,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         this.setAnnotationLabelAction = new XSDSetAnnotationLabelAction(this);
         this.setAnnotationDescriptionsAction = new XSDSetAnnotationDescriptionsAction(this);
         this.setAnnotationForeignKeyAction = new XSDSetAnnotationForeignKeyAction(this, dataModelName);
+        visibleRuleAction = new XSDVisibleRuleAction(this, dataModelName);
+        defaultValueRuleAction = new XSDDefaultValueRuleAction(this, dataModelName);
         this.setAnnotationFKFilterAction = new XSDSetAnnotationFKFilterAction(this, dataModelName);
         this.setAnnotationForeignKeyInfoAction = new XSDSetAnnotationForeignKeyInfoAction(this, dataModelName);
         this.setAnnotationWriteAction = new XSDSetAnnotationWriteAction(this);
@@ -1337,6 +1343,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                     return 114;
                 } else if (source.equals("X_PrimaryKeyInfo")) {
                     return 115;
+                }else if (source.equals("X_Visible_Rule")) {
+                    return 116;
+                }else if (source.equals("X_Default_Value_Rule")) {
+                    return 117;
                 }
             }
 
@@ -1708,13 +1718,15 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             manager.add(setAnnotationLabelAction);
             manager.add(setAnnotationForeignKeyAction);
             manager.add(setAnnotationFKFilterAction);
-            manager.add(setAnnotationForeignKeyInfoAction);
+            manager.add(setAnnotationForeignKeyInfoAction);           
         }
         if (Util.IsEnterPrise()) {
             manager.add(setAnnotationWriteAction);
             // fix bug 0016982: Set role with no access, and Set the workflow access menu actions action are gone
             // if (checkMandatoryElement(obj))
             manager.add(setAnnotationNoAction);
+            manager.add(visibleRuleAction);
+            manager.add(defaultValueRuleAction);
         }
         // available models
         java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
@@ -1745,6 +1757,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             // fix bug 0016982: Set role with no access, and Set the workflow access menu actions action are gone
             // if (checkMandatoryElement(obj))
             manager.add(setAnnotationNoAction);
+            manager.add(visibleRuleAction);
+            manager.add(defaultValueRuleAction);
         }
         // available models
         java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
@@ -2675,6 +2689,12 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             case 115:
                 setAnnotationPrimaryKeyInfoAction.run();
                 break;
+            case 116:
+            	visibleRuleAction.run();
+            	break;
+            case 117:
+            	defaultValueRuleAction.run();
+            	break;            	
             case -1:
                 if (drillDownAdapter.canGoInto() == true)
                     drillDownAdapter.goInto();

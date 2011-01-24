@@ -151,7 +151,11 @@ public class XSDTreeLabelProvider extends LabelProvider {
 							return Util.iso2lang.get(source.substring(8).toLowerCase())+" Label: "+e.getChildNodes().item(0).getNodeValue();
 						} else if (source.equals("X_ForeignKey")) {
 							return "Foreign Key:  "+e.getChildNodes().item(0).getNodeValue();
-						} else if (source.equals("X_ForeignKeyInfo")) {
+						} else if (source.equals("X_Visible_Rule")) {
+							return "Visible Rule:  "+e.getChildNodes().item(0).getNodeValue();
+						}else if (source.equals("X_Default_Value_Rule")) {
+							return "Default Value Rule:  "+e.getChildNodes().item(0).getNodeValue();
+						}else if (source.equals("X_ForeignKeyInfo")) {
 							return "Foreign Key Info:  "+e.getChildNodes().item(0).getNodeValue();
 						} else if (source.equals("X_PrimaryKeyInfo")) {
                             return "Primary Key Info:  "+e.getChildNodes().item(0).getNodeValue();
@@ -376,6 +380,10 @@ public class XSDTreeLabelProvider extends LabelProvider {
 							return ImageCache.getCreatedImage( EImage.LABEL.getPath());
 						} else if (source.equals("X_ForeignKey")) {
 							return ImageCache.getCreatedImage( EImage.PRIMARYKEY.getPath());
+						}else if (source.equals("X_Visible_Rule")) {
+							return ImageCache.getCreatedImage( EImage.ROUTINE.getPath());
+						}else if (source.equals("X_Default_Value_Rule")) {
+							return ImageCache.getCreatedImage( EImage.ROUTINE.getPath());
 						} else if (source.equals("X_ForeignKeyInfo")) {
 							return ImageCache.getCreatedImage( EImage.KEYINFO.getPath());
 							//fix bug 0013194 by rhou.

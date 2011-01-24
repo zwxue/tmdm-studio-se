@@ -275,6 +275,32 @@ public class XSDAnnotationsStructure {
     }
 
     /****************************************************************************
+     * Visible Rule
+     ****************************************************************************/
+
+    public boolean setVisibleRule(String xPath) {
+        boolean somethingChanged = setAppInfo("X_Visible_Rule", xPath, true);
+        hasChanged = hasChanged | somethingChanged;
+        return somethingChanged;
+    }
+
+    public String getVisibleRule() {
+        return getAppInfoValue("X_Visible_Rule");
+    }
+    /****************************************************************************
+     * Default Value Rule
+     ****************************************************************************/
+
+    public boolean setDefaultValueRule(String xPath) {
+        boolean somethingChanged = setAppInfo("X_Default_Value_Rule", xPath, true);
+        hasChanged = hasChanged | somethingChanged;
+        return somethingChanged;
+    }
+
+    public String getDefaultValueRule() {
+        return getAppInfoValue("X_Default_Value_Rule");
+    }   
+    /****************************************************************************
      * FOREIGN KEY INFOS
      ****************************************************************************/
     public boolean setForeignKeyInfos(List<String> xPaths) {

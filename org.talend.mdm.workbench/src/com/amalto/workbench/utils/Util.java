@@ -494,7 +494,19 @@ public class Util {
             return m.group(1);
         return null;
     }
-
+    
+    /**
+     * get the concept name from the child elment
+     * @param child
+     * @return
+     */
+    public static String getConceptName(XSDConcreteComponent child){
+    	if(child.getContainer() instanceof XSDElementDeclaration && child.getContainer().getContainer() instanceof XSDSchema){
+    		return child.getContainer().getElement().getAttributes().getNamedItem("name").getNodeValue();
+    	}else{
+    		return getConceptName(child.getContainer());
+    	}
+    }
     /**
      * Generates an xml string from a node (not pretty formatted)
      * 
