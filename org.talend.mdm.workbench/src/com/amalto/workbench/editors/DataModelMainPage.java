@@ -1725,8 +1725,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             // fix bug 0016982: Set role with no access, and Set the workflow access menu actions action are gone
             // if (checkMandatoryElement(obj))
             manager.add(setAnnotationNoAction);
+            if (obj instanceof XSDParticle) {
             manager.add(visibleRuleAction);
             manager.add(defaultValueRuleAction);
+            }
         }
         // available models
         java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
@@ -1757,8 +1759,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             // fix bug 0016982: Set role with no access, and Set the workflow access menu actions action are gone
             // if (checkMandatoryElement(obj))
             manager.add(setAnnotationNoAction);
+            if (obj instanceof XSDParticle) {
             manager.add(visibleRuleAction);
             manager.add(defaultValueRuleAction);
+            }
         }
         // available models
         java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();

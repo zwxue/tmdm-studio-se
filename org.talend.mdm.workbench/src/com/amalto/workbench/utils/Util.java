@@ -504,8 +504,10 @@ public class Util {
     	if(child.getContainer() instanceof XSDElementDeclaration && child.getContainer().getContainer() instanceof XSDSchema){
     		return child.getContainer().getElement().getAttributes().getNamedItem("name").getNodeValue();
     	}else{
+    		if(child!=null && child.getContainer()!=null)
     		return getConceptName(child.getContainer());
     	}
+    	return null;
     }
     /**
      * Generates an xml string from a node (not pretty formatted)
