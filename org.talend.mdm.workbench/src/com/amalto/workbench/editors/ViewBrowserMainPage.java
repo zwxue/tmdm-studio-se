@@ -147,6 +147,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 					else if (wc.getOperator().equals(WSWhereOperator.NOT_EQUALS)) text+="!=";
 					else if (wc.getOperator().equals(WSWhereOperator.STARTSWITH)) text+="Starts With";
 					else if (wc.getOperator().equals(WSWhereOperator.STRICTCONTAINS)) text+="Strict Contains";
+					else if (wc.getOperator().equals(WSWhereOperator.EMPTY_NULL)) text+="Is Empty Or Null";
 					text+=" ";
 					if (!wc.getOperator().equals(WSWhereOperator.JOIN)) text+="\"";
 					text+=wc.getRightValueOrPath();

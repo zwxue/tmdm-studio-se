@@ -4,7 +4,7 @@ public interface IConstants {
 
     /* Conditions operator */
     static final String[] COMPOSITE_VIEW_CONDITION_OPERATORS = { "Contains", "Join With", "Contains Text Of", "Starts With",
-            "Strict Contains", "=", "!=", ">", ">=", "<", "<=" };
+            "Strict Contains", "Is Empty Or Null", "=", "!=", ">", ">=", "<", "<=" };
 
     static final String[] VIEW_CONDITION_OPERATORS = { "Contains", "Contains Text Of", "Starts With", "Strict Contains", "=",
             "!=", ">", ">=", "<", "<=" };

@@ -29,9 +29,9 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.PropertyResourceBundle;
 import java.util.Set;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -327,8 +327,8 @@ public class Util {
         try {
             if (xobject == null)
                 return null;
-            return getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(), xobject.getUsername(),
-                    xobject.getPassword());
+            return getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(), xobject.getUsername(), xobject
+                    .getPassword());
         } catch (MalformedURLException e) {
             throw new XtentisException("Invalid endpoint address: " + xobject.getEndpointAddress());
         }
@@ -549,8 +549,8 @@ public class Util {
      * @throws Exception
      */
     public static NodeList getNodeList(Node contextNode, String xPath, String namespace, String prefix) throws Exception {
-        XObject xo = XPathAPI.eval(contextNode, xPath,
-                (namespace == null) ? contextNode : Util.getRootElement("nsholder", namespace, prefix));
+        XObject xo = XPathAPI.eval(contextNode, xPath, (namespace == null) ? contextNode : Util.getRootElement("nsholder",
+                namespace, prefix));
         if (xo.getType() != XObject.CLASS_NODESET)
             return null;
         return xo.nodelist();
@@ -2203,6 +2203,8 @@ public class Util {
             operator = "Starts With";
         else if (wc.getOperator().equals(WSWhereOperator.STRICTCONTAINS))
             operator = "Strict Contains";
+        else if (wc.getOperator().equals(WSWhereOperator.EMPTY_NULL))
+            operator = "Is Empty Or Null";
         list.add(operator);
         list.add(wc.getRightValueOrPath());
 
@@ -2326,6 +2328,8 @@ public class Util {
             operator = WSWhereOperator.STARTSWITH;
         else if (values[1].equals("Strict Contains"))
             operator = WSWhereOperator.STRICTCONTAINS;
+        else if (values[1].equals("Is Empty Or Null"))
+            operator = WSWhereOperator.EMPTY_NULL;
         wc.setOperator(operator);
         wc.setRightValueOrPath(values[2]);
         WSStringPredicate predicate = null;
