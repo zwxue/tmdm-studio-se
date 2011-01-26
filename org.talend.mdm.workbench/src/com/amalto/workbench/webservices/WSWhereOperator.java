@@ -61,9 +61,16 @@ public class WSWhereOperator {
         this.value = value;
         valueMap.put(this.toString(), this);
     }
+    public WSWhereOperator() {
+    	
+    }
     
     public java.lang.String getValue() {
         return value;
+    }
+    
+    public void setValue(java.lang.String value) {
+    	this.value=value;
     }
     
     public static WSWhereOperator fromValue(java.lang.String value)
