@@ -75,13 +75,13 @@ import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.ConditionWidget;
 import com.amalto.workbench.widgets.TisTableViewer;
 import com.amalto.workbench.widgets.XpathWidget;
-import com.amalto.workbench.widgets.xmleditor.TriggerCallProcessSourcePageCreator;
 import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditor;
 import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditorPage;
 import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditorPageDescription;
 import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditorPageListener;
 import com.amalto.workbench.widgets.xmleditor.ExtensibleEditorContent;
 import com.amalto.workbench.widgets.xmleditor.ExtensibleTextContentEditorPageCreator;
+import com.amalto.workbench.widgets.xmleditor.TriggerCallProcessSourcePageCreator;
 import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
 
 public class RoutingRuleMainPage extends AMainPageV2 {
@@ -178,8 +178,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
             initExternalInfoHolderForEachType("callprocess", new ExternalInfoHolder<?>[] { allProcessNamesHolder });
             initExternalInfoHolderForEachType("smtp", new ExternalInfoHolder<?>[] { allProcessNamesHolder });
-            initExternalInfoHolderForEachType("callJob", new ExternalInfoHolder<?>[] { allProcessNamesHolder, allJobInfosHolder,
-                    mdmServerInfoHolder });
+            initExternalInfoHolderForEachType("callJob", new ExternalInfoHolder<?>[] { allJobInfosHolder, mdmServerInfoHolder });
 
         } catch (XtentisException e) {
             e.printStackTrace();
@@ -324,19 +323,13 @@ public class RoutingRuleMainPage extends AMainPageV2 {
                         else
                             helpPara = "";
                     // serviceParametersText.setText(XmlUtil.formatXmlSource(helpPara));
-                    serviceParametersEditor.setPageGroup(serviceName);
-                    addSourceServiceParameterEditorPage(serviceName);
-                    serviceParametersEditor.addExtensibleXMLEditorPageListener(parameterEditorListener);
-                    if (externalInfoName2Holder.containsKey(serviceName)) {
-                        for (ExternalInfoHolder<?> eachInfoHolder : externalInfoName2Holder.get(serviceName)) {
-                            serviceParametersEditor.setExternalInfoHolder(eachInfoHolder);
-                        }
-                    }
+                    refreshParameterEditor(serviceName);
 
                     serviceParametersEditor.setContent(XmlUtil.formatXmlSource(helpPara));
                     markDirtyWithoutCommit();
                     initParamterProposal(serviceNameCombo.getText());
                 }
+
             });
 
             WSServicesList list = Util.getPort(getXObject()).getServicesList(new WSGetServicesList(""));
@@ -571,14 +564,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             // serviceParametersText.setText(wsRoutingRule.getParameters() == null ? "" :
             // XmlUtil.formatXmlSource(wsRoutingRule
             // .getParameters()));
-            serviceParametersEditor.setPageGroup(serviceNameCombo.getText().trim());
-            addSourceServiceParameterEditorPage(serviceNameCombo.getText().trim());
-            if (externalInfoName2Holder.containsKey(serviceNameCombo.getText().trim())) {
-                for (ExternalInfoHolder eachInfoHolder : externalInfoName2Holder.get(serviceNameCombo.getText().trim())) {
-                    serviceParametersEditor.setExternalInfoHolder(eachInfoHolder);
-                }
-            }
-            serviceParametersEditor.addExtensibleXMLEditorPageListener(parameterEditorListener);
+            refreshParameterEditor(serviceNameCombo.getText().trim());
             serviceParametersEditor.setContent(wsRoutingRule.getParameters() == null ? "" : XmlUtil.formatXmlSource(wsRoutingRule
                     .getParameters()));
 
@@ -778,6 +764,17 @@ public class RoutingRuleMainPage extends AMainPageV2 {
     protected void createActions() {
         // TODO Auto-generated method stub
 
+    }
+
+    private void refreshParameterEditor(String serviceName) {
+        serviceParametersEditor.setPageGroup(serviceName);
+        addSourceServiceParameterEditorPage(serviceName);
+        serviceParametersEditor.addExtensibleXMLEditorPageListener(parameterEditorListener);
+        if (externalInfoName2Holder.containsKey(serviceName)) {
+            for (ExternalInfoHolder<?> eachInfoHolder : externalInfoName2Holder.get(serviceName)) {
+                serviceParametersEditor.setExternalInfoHolder(eachInfoHolder);
+            }
+        }
     }
 
     class ParameterEditorListener implements ExtensibleContentEditorPageListener {

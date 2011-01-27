@@ -11,8 +11,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Set;
 import java.util.TreeMap;
@@ -118,6 +120,7 @@ import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditorPageDescrip
 import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditorPageListener;
 import com.amalto.workbench.widgets.xmleditor.ExtensibleEditorContent;
 import com.amalto.workbench.widgets.xmleditor.ExtensibleTextContentEditorPageCreator;
+import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
 
 public class TransformerMainPage extends AMainPageV2 {
 
@@ -150,6 +153,10 @@ public class TransformerMainPage extends AMainPageV2 {
 
     // protected TextViewer parametersTextViewer;
     protected ExtensibleContentEditor parameterEditor;
+
+    private ProcessPluginParameterEditorListener parameterEditorListener;
+
+    private Map<String, ArrayList<ExternalInfoHolder<?>>> externalInfoName2Holder = new HashMap<String, ArrayList<ExternalInfoHolder<?>>>();
 
     SetupTransformerInputVariablesDialog transformerDialog = null;
 
@@ -191,6 +198,7 @@ public class TransformerMainPage extends AMainPageV2 {
         super(editor, TransformerMainPage.class.getName(), "Process " + ((XObjectEditorInput) editor.getEditorInput()).getName()
                 + Util.getRevision((TreeObject) ((XObjectEditorInput) editor.getEditorInput()).getModel()));
 
+        initExternalInfoHolder();
     }
 
     public java.util.List<Line> getCacheList() {
@@ -595,25 +603,24 @@ public class TransformerMainPage extends AMainPageV2 {
 
             parameterEditor = new ExtensibleContentEditor(parametersGroup, SWT.NONE, EXCONTENTEDITOR_ID);
             parameterEditor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4, 1));
-            parameterEditor.setPageGroup("");
-            parameterEditor.addPage(new ExtensibleContentEditorPageDescription("Source", Integer.MAX_VALUE,
-                    new ExtensibleTextContentEditorPageCreator(), false));
-            parameterEditor.addExtensibleXMLEditorPageListener(new ExtensibleContentEditorPageListener() {
-
-                public void onXMLDocumentChanged(ExtensibleContentEditorPage source, ExtensibleEditorContent newCotent) {
-                    if (refreshing)
-                        return;
-                    if (TransformerMainPage.this.stepsList.getSelectionIndex() == -1)
-                        return;
-                    // commit as we go
-                    TransformerMainPage.this.comitting = true;
-                    // ((WSTransformerV2)getXObject().getWsObject())
-                    transformer.getProcessSteps()[stepsList.getSelectionIndex()].setParameters(newCotent.getContent());
-                    TransformerMainPage.this.comitting = false;
-                    markDirtyWithoutCommit();
-
-                }
-            });
+            parameterEditorListener = new ProcessPluginParameterEditorListener();
+            refreshParameterEditor();
+            // parameterEditor.addExtensibleXMLEditorPageListener(new ExtensibleContentEditorPageListener() {
+            //
+            // public void onXMLDocumentChanged(ExtensibleContentEditorPage source, ExtensibleEditorContent newCotent) {
+            // if (refreshing)
+            // return;
+            // if (TransformerMainPage.this.stepsList.getSelectionIndex() == -1)
+            // return;
+            // // commit as we go
+            // TransformerMainPage.this.comitting = true;
+            // // ((WSTransformerV2)getXObject().getWsObject())
+            // transformer.getProcessSteps()[stepsList.getSelectionIndex()].setParameters(newCotent.getContent());
+            // TransformerMainPage.this.comitting = false;
+            // markDirtyWithoutCommit();
+            //
+            // }
+            // });
 
             // parametersTextViewer = new SourceViewer(parametersGroup, new VerticalRuler(10), SWT.V_SCROLL);
             // parametersTextViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4, 1));
@@ -683,6 +690,24 @@ public class TransformerMainPage extends AMainPageV2 {
 
     }
 
+    public void refreshParameterEditor() {
+        setParameterEditorPageGroup(pluginsCombo.getText().trim());
+        parameterEditor.addExtensibleXMLEditorPageListener(parameterEditorListener);
+        if (externalInfoName2Holder.containsKey(pluginsCombo.getText().trim())) {
+            for (ExternalInfoHolder<?> eachInfoHolder : externalInfoName2Holder.get(pluginsCombo.getText().trim())) {
+                parameterEditor.setExternalInfoHolder(eachInfoHolder);
+            }
+        }
+    }
+
+    private void setParameterEditorPageGroup(String pagegroup) {
+
+        parameterEditor.setPageGroup(pagegroup);
+        parameterEditor.addPage(new ExtensibleContentEditorPageDescription("Source", Integer.MAX_VALUE,
+                new ExtensibleTextContentEditorPageCreator(), false));
+
+    }
+
     protected void performSelect(int index) {
         currentPlugin = index;
         if (index >= 0) {
@@ -744,6 +769,7 @@ public class TransformerMainPage extends AMainPageV2 {
         // parametersTextViewer.setDocument(new Document(XmlUtil.formatXmlSource(transformer.getProcessSteps()[index]
         // .getParameters())));
 
+        refreshParameterEditor();
         parameterEditor.setContent(XmlUtil.formatXmlSource(transformer.getProcessSteps()[index].getParameters()));
 
         stepWidget.setProcessStep(transformer.getProcessSteps()[index], index);
@@ -901,6 +927,10 @@ public class TransformerMainPage extends AMainPageV2 {
         super.dispose();
         // if (parametersTextViewer.getUndoManager() != null)
         // parametersTextViewer.getUndoManager().disconnect();
+
+        externalInfoName2Holder.clear();
+        externalInfoName2Holder = null;
+
         parameterEditor.dispose();
 
         windowTarget.dispose();
@@ -1249,6 +1279,9 @@ public class TransformerMainPage extends AMainPageV2 {
                     inputViewer.setInput(new ArrayList<WSTransformerVariablesMapping>());
                     outputViewer.setInput(new ArrayList<WSTransformerVariablesMapping>());
                     String jndi = pluginsCombo.getText();
+
+                    refreshParameterEditor();
+
                     if (EInputTemplate.getXtentisObjexts().get(jndi) != null) {
                         String document = EInputTemplate.getXtentisObjexts().get(jndi).getContent();
                         // parametersTextViewer.setDocument(new Document(document));
@@ -1414,4 +1447,45 @@ public class TransformerMainPage extends AMainPageV2 {
     // });
     //
     // }
+
+    private void initExternalInfoHolder() {
+
+        try {
+            ExternalInfoHolder<?> allJobInfosHolder = ExternalInfoHolder.getAllJobInfosHolder(Util.getPort(getXObject()));
+            ExternalInfoHolder<?> mdmServerInfoHolder = ExternalInfoHolder.getAllMDMServerInfoHolder(Util.getPort(getXObject()));
+
+            initExternalInfoHolderForEachType("callJob", new ExternalInfoHolder<?>[] { allJobInfosHolder, mdmServerInfoHolder });
+
+        } catch (XtentisException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void initExternalInfoHolderForEachType(String operaType, ExternalInfoHolder<?>[] infoHolders) {
+
+        ArrayList<ExternalInfoHolder<?>> externalInfoHolders = new ArrayList<ExternalInfoHolder<?>>();
+        externalInfoHolders.addAll(Arrays.asList(infoHolders));
+        externalInfoName2Holder.put(operaType, externalInfoHolders);
+
+    }
+
+    class ProcessPluginParameterEditorListener implements ExtensibleContentEditorPageListener {
+
+        public void onXMLDocumentChanged(ExtensibleContentEditorPage source, ExtensibleEditorContent newCotent) {
+
+            if (refreshing)
+                return;
+            if (TransformerMainPage.this.stepsList.getSelectionIndex() == -1)
+                return;
+            // commit as we go
+            TransformerMainPage.this.comitting = true;
+            // ((WSTransformerV2)getXObject().getWsObject())
+            transformer.getProcessSteps()[stepsList.getSelectionIndex()].setParameters(newCotent.getContent());
+            TransformerMainPage.this.comitting = false;
+            markDirtyWithoutCommit();
+
+        }
+
+    }
 }
