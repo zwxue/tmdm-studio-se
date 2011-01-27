@@ -112,10 +112,12 @@ import com.amalto.workbench.webservices.WSTypedContent;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.DescAnnotationComposite;
 import com.amalto.workbench.widgets.LabelCombo;
+import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditor;
 import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditorPage;
+import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditorPageDescription;
 import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditorPageListener;
 import com.amalto.workbench.widgets.xmleditor.ExtensibleEditorContent;
-import com.amalto.workbench.widgets.xmleditor.ExtensibleTextContentEditor;
+import com.amalto.workbench.widgets.xmleditor.ExtensibleTextContentEditorPageCreator;
 
 public class TransformerMainPage extends AMainPageV2 {
 
@@ -147,7 +149,7 @@ public class TransformerMainPage extends AMainPageV2 {
     protected Text pluginDescription;
 
     // protected TextViewer parametersTextViewer;
-    protected ExtensibleTextContentEditor parameterEditor;
+    protected ExtensibleContentEditor parameterEditor;
 
     SetupTransformerInputVariablesDialog transformerDialog = null;
 
@@ -591,9 +593,11 @@ public class TransformerMainPage extends AMainPageV2 {
             ((GridData) parametersGroup.getLayoutData()).minimumHeight = 300;
             parametersGroup.setLayout(new GridLayout(1, true));
 
-            parameterEditor = new ExtensibleTextContentEditor(parametersGroup, SWT.NONE, EXCONTENTEDITOR_ID);
+            parameterEditor = new ExtensibleContentEditor(parametersGroup, SWT.NONE, EXCONTENTEDITOR_ID);
             parameterEditor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4, 1));
             parameterEditor.setPageGroup("");
+            parameterEditor.addPage(new ExtensibleContentEditorPageDescription("Source", Integer.MAX_VALUE,
+                    new ExtensibleTextContentEditorPageCreator(), false));
             parameterEditor.addExtensibleXMLEditorPageListener(new ExtensibleContentEditorPageListener() {
 
                 public void onXMLDocumentChanged(ExtensibleContentEditorPage source, ExtensibleEditorContent newCotent) {

@@ -75,10 +75,13 @@ import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 import com.amalto.workbench.widgets.ConditionWidget;
 import com.amalto.workbench.widgets.TisTableViewer;
 import com.amalto.workbench.widgets.XpathWidget;
+import com.amalto.workbench.widgets.xmleditor.TriggerCallProcessSourcePageCreator;
+import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditor;
 import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditorPage;
+import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditorPageDescription;
 import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditorPageListener;
 import com.amalto.workbench.widgets.xmleditor.ExtensibleEditorContent;
-import com.amalto.workbench.widgets.xmleditor.ExtensibleTextContentEditor;
+import com.amalto.workbench.widgets.xmleditor.ExtensibleTextContentEditorPageCreator;
 import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
 
 public class RoutingRuleMainPage extends AMainPageV2 {
@@ -92,11 +95,11 @@ public class RoutingRuleMainPage extends AMainPageV2 {
     protected Combo serviceNameCombo;
 
     // protected Text serviceParametersText;
-    protected ExtensibleTextContentEditor serviceParametersEditor;
+    protected ExtensibleContentEditor serviceParametersEditor;
 
     private ParameterEditorListener parameterEditorListener;
 
-    private Map<String, ExternalInfoHolder<?>> externalInfoName2Holder = new HashMap<String, ExternalInfoHolder<?>>();
+    private Map<String, ArrayList<ExternalInfoHolder<?>>> externalInfoName2Holder = new HashMap<String, ArrayList<ExternalInfoHolder<?>>>();
 
     // protected ListViewer routingExpressionsViewer;
     protected XpathWidget xpathWidget;
@@ -168,10 +171,27 @@ public class RoutingRuleMainPage extends AMainPageV2 {
     private void initExternalInfoHolder() {
 
         try {
-            externalInfoName2Holder.put("callprocess", ExternalInfoHolder.getAllProcessesNamesHolder(Util.getPort(getXObject())));
+            ExternalInfoHolder<?> allProcessNamesHolder = ExternalInfoHolder.getAllProcessesNamesHolder(Util
+                    .getPort(getXObject()));
+            ExternalInfoHolder<?> allJobInfosHolder = ExternalInfoHolder.getAllJobInfosHolder(Util.getPort(getXObject()));
+            ExternalInfoHolder<?> mdmServerInfoHolder = ExternalInfoHolder.getAllMDMServerInfoHolder(Util.getPort(getXObject()));
+
+            initExternalInfoHolderForEachType("callprocess", new ExternalInfoHolder<?>[] { allProcessNamesHolder });
+            initExternalInfoHolderForEachType("smtp", new ExternalInfoHolder<?>[] { allProcessNamesHolder });
+            initExternalInfoHolderForEachType("callJob", new ExternalInfoHolder<?>[] { allProcessNamesHolder, allJobInfosHolder,
+                    mdmServerInfoHolder });
+
         } catch (XtentisException e) {
             e.printStackTrace();
         }
+
+    }
+
+    private void initExternalInfoHolderForEachType(String operaType, ExternalInfoHolder<?>[] infoHolders) {
+
+        ArrayList<ExternalInfoHolder<?>> externalInfoHolders = new ArrayList<ExternalInfoHolder<?>>();
+        externalInfoHolders.addAll(Arrays.asList(infoHolders));
+        externalInfoName2Holder.put(operaType, externalInfoHolders);
 
     }
 
@@ -305,9 +325,14 @@ public class RoutingRuleMainPage extends AMainPageV2 {
                             helpPara = "";
                     // serviceParametersText.setText(XmlUtil.formatXmlSource(helpPara));
                     serviceParametersEditor.setPageGroup(serviceName);
+                    addSourceServiceParameterEditorPage(serviceName);
                     serviceParametersEditor.addExtensibleXMLEditorPageListener(parameterEditorListener);
-                    if (externalInfoName2Holder.containsKey(serviceName))
-                        serviceParametersEditor.setExternalInfoHolder(externalInfoName2Holder.get(serviceName));
+                    if (externalInfoName2Holder.containsKey(serviceName)) {
+                        for (ExternalInfoHolder<?> eachInfoHolder : externalInfoName2Holder.get(serviceName)) {
+                            serviceParametersEditor.setExternalInfoHolder(eachInfoHolder);
+                        }
+                    }
+
                     serviceParametersEditor.setContent(XmlUtil.formatXmlSource(helpPara));
                     markDirtyWithoutCommit();
                     initParamterProposal(serviceNameCombo.getText());
@@ -376,11 +401,11 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             Label serviceParametersLabel = toolkit.createLabel(serviceGroup, "Service Parameters", SWT.NULL);
             serviceParametersLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 2, 1));
 
-            serviceParametersEditor = new ExtensibleTextContentEditor(serviceGroup, SWT.BORDER | SWT.MULTI | SWT.WRAP,
+            serviceParametersEditor = new ExtensibleContentEditor(serviceGroup, SWT.BORDER | SWT.MULTI | SWT.WRAP,
                     EXCONTENTEDITOR_ID);
             GridData gdServiceParameter = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
             // gdServiceParameter.widthHint = 200;
-            gdServiceParameter.heightHint = 150;
+            gdServiceParameter.heightHint = 200;
             serviceParametersEditor.setLayoutData(gdServiceParameter);
             parameterEditorListener = new ParameterEditorListener();
 
@@ -478,6 +503,16 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
     }// createCharacteristicsContent
 
+    private void addSourceServiceParameterEditorPage(String serviceName) {
+
+        if ("callprocess".equals(serviceName))
+            serviceParametersEditor.addPage(new ExtensibleContentEditorPageDescription("Source", Integer.MAX_VALUE,
+                    new TriggerCallProcessSourcePageCreator(), false));
+        else
+            serviceParametersEditor.addPage(new ExtensibleContentEditorPageDescription("Source", Integer.MAX_VALUE,
+                    new ExtensibleTextContentEditorPageCreator(), false));
+    }
+
     private void initConditionProposal() {
         // add content proposal to conditions
         java.util.List<Line> lines = (java.util.List<Line>) conditionViewer.getViewer().getInput();
@@ -494,7 +529,8 @@ public class RoutingRuleMainPage extends AMainPageV2 {
     }
 
     private void initParamterProposal(String jndi) {
-        if ("callprocess".equals(jndi)) {
+        if (externalInfoName2Holder.containsKey(jndi)) {
+            // if ("callprocess".equals(jndi)) {
             // // add content proposal to paramter
             // WSTransformerV2PK[] transformerPKs = null;
             // try {
@@ -536,8 +572,12 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             // XmlUtil.formatXmlSource(wsRoutingRule
             // .getParameters()));
             serviceParametersEditor.setPageGroup(serviceNameCombo.getText().trim());
-            if (externalInfoName2Holder.containsKey(serviceNameCombo.getText().trim()))
-                serviceParametersEditor.setExternalInfoHolder(externalInfoName2Holder.get(serviceNameCombo.getText().trim()));
+            addSourceServiceParameterEditorPage(serviceNameCombo.getText().trim());
+            if (externalInfoName2Holder.containsKey(serviceNameCombo.getText().trim())) {
+                for (ExternalInfoHolder eachInfoHolder : externalInfoName2Holder.get(serviceNameCombo.getText().trim())) {
+                    serviceParametersEditor.setExternalInfoHolder(eachInfoHolder);
+                }
+            }
             serviceParametersEditor.addExtensibleXMLEditorPageListener(parameterEditorListener);
             serviceParametersEditor.setContent(wsRoutingRule.getParameters() == null ? "" : XmlUtil.formatXmlSource(wsRoutingRule
                     .getParameters()));

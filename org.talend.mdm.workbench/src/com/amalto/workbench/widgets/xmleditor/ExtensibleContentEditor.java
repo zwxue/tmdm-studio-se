@@ -99,14 +99,18 @@ public class ExtensibleContentEditor extends Composite {
 
     protected void createPages(List<ExtensibleContentEditorPageDescription> creatorDescriptions) {
 
-        for (ExtensibleContentEditorPageDescription eachCreatorDes : creatorDescriptions) {
+        for (ExtensibleContentEditorPageDescription eachCreatorDes : creatorDescriptions)
+            addPage(eachCreatorDes);
+    }
 
-            TabItem item = new TabItem(tabFolderEditors, SWT.NONE);
-            item.setText(eachCreatorDes.getLabel());
-            item.setControl(eachCreatorDes.getCreator().createXMLEditorPage(tabFolderEditors, SWT.NONE));
+    public void addPage(ExtensibleContentEditorPageDescription creatorDescription) {
 
-            item.getControl().setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
-        }
+        TabItem item = new TabItem(tabFolderEditors, SWT.NONE);
+        item.setText(creatorDescription.getLabel());
+        item.setControl(creatorDescription.getCreator().createXMLEditorPage(tabFolderEditors, SWT.NONE));
+
+        item.getControl().setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
+
     }
 
     protected int getDefaultPageIndex(List<ExtensibleContentEditorPageDescription> creatorDescriptions) {

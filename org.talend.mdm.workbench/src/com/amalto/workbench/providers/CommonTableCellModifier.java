@@ -44,7 +44,7 @@ public abstract class CommonTableCellModifier<T> implements ICellModifier {
             return false;
 
         try {
-            prop2ValueModifier.get(property).modify(getWorkflowAccessInfoFromSelection(element), value);
+            prop2ValueModifier.get(property).modify(getRealModifiedItem(element), value);
         } catch (Exception e) {
             return false;
         }
@@ -53,7 +53,7 @@ public abstract class CommonTableCellModifier<T> implements ICellModifier {
     }
 
     @SuppressWarnings("unchecked")
-    private T getWorkflowAccessInfoFromSelection(Object selection) {
+    private T getRealModifiedItem(Object selection) {
 
         if (!(selection instanceof Item))
             return null;

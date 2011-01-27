@@ -15,14 +15,12 @@ import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.amalto.workbench.dialogs.ResourceSelectDialog;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeObjectTransfer;
-import com.amalto.workbench.proposal.ContentProposalAdapterExtended;
 import com.amalto.workbench.utils.WidgetUtils;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
@@ -30,8 +28,6 @@ import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
 public class ExtensibleTextContentEditorPage extends ExtensibleContentEditorPage {
 
     protected TextViewer textViewer;
-
-    protected ExternalInfoHolder<?> allProcessNamesHolder;
 
     public ExtensibleTextContentEditorPage(Composite parent, int style) {
         super(parent, style);
@@ -170,27 +166,10 @@ public class ExtensibleTextContentEditorPage extends ExtensibleContentEditorPage
 
     @Override
     public void setExternalInfoHolder(ExternalInfoHolder<?> externalInfoHolder) {
-
-        if (externalInfoHolder == null || !ExternalInfoHolder.INFOID_ALLPROCESSNAMES.equals(externalInfoHolder.getId()))
-            return;
-
-        allProcessNamesHolder = externalInfoHolder;
-
-        refreshProposal();
-
     }
 
     @Override
     public void reloadExternalInfo() {
-        refreshProposal();
     }
 
-    private void refreshProposal() {
-
-        ContentProposalAdapterExtended adapter = WidgetUtils.addContentProposal(textViewer.getTextWidget(),
-                (String[]) allProcessNamesHolder.getExternalInfo(), new char[] { ' ', '=' });
-
-        adapter.setPopupSize(new Point(300, 250));
-
-    }
 }
