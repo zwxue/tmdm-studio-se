@@ -1453,9 +1453,15 @@ public class TransformerMainPage extends AMainPageV2 {
         try {
             ExternalInfoHolder<?> allJobInfosHolder = ExternalInfoHolder.getAllJobInfosHolder(Util.getPort(getXObject()));
             ExternalInfoHolder<?> mdmServerInfoHolder = ExternalInfoHolder.getAllMDMServerInfoHolder(Util.getPort(getXObject()));
+            ExternalInfoHolder<?> allVarCandidatesHolder = ExternalInfoHolder
+                    .getProcessAllCallJobVarsCandidatesHolder((WSTransformerV2) getXObject().getWsObject());
+            ExternalInfoHolder<?> workflowInfoHolder = ExternalInfoHolder.getAllWorkflowInfoHolder(Util.getPort(getXObject()));
+            ExternalInfoHolder<?> allDataModelHolderProxy = ExternalInfoHolder.getAllDataModelInfoHolderProxy(getXObject());
 
-            initExternalInfoHolderForEachType("callJob", new ExternalInfoHolder<?>[] { allJobInfosHolder, mdmServerInfoHolder });
-
+            initExternalInfoHolderForEachType("callJob", new ExternalInfoHolder<?>[] { allJobInfosHolder, mdmServerInfoHolder,
+                    allVarCandidatesHolder });
+            initExternalInfoHolderForEachType("workflowtrigger", new ExternalInfoHolder<?>[] { workflowInfoHolder,
+                    allDataModelHolderProxy });
         } catch (XtentisException e) {
             e.printStackTrace();
         }

@@ -9,6 +9,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Text;
 
 import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditorPage;
+import com.amalto.workbench.widgets.xmleditor.pagecontent.ExtensibleXMLEditorPageContent;
 
 public class ExtensiblePageContentTextModifyListener implements ModifyListener {
 
@@ -16,19 +17,19 @@ public class ExtensiblePageContentTextModifyListener implements ModifyListener {
 
     private Text text;
 
-    private Object modifiedObj;
+    private ExtensibleXMLEditorPageContent modifiedObj;
 
     private String modifyMethodName;
 
     private String multiValueDelimiter;
 
-    public ExtensiblePageContentTextModifyListener(ExtensibleContentEditorPage parentPage, Text text, Object modifiedObj,
-            String modifyMethodName) {
+    public ExtensiblePageContentTextModifyListener(ExtensibleContentEditorPage parentPage, Text text,
+            ExtensibleXMLEditorPageContent modifiedObj, String modifyMethodName) {
         this(parentPage, text, modifiedObj, modifyMethodName, null);
     }
 
-    public ExtensiblePageContentTextModifyListener(ExtensibleContentEditorPage parentPage, Text text, Object modifiedObj,
-            String modifyMethodName, String multiValueDelimiter) {
+    public ExtensiblePageContentTextModifyListener(ExtensibleContentEditorPage parentPage, Text text,
+            ExtensibleXMLEditorPageContent modifiedObj, String modifyMethodName, String multiValueDelimiter) {
 
         this.parentPage = parentPage;
         this.text = text;
@@ -53,6 +54,7 @@ public class ExtensiblePageContentTextModifyListener implements ModifyListener {
         try {
             Method method = modifiedObj.getClass().getMethod(modifyMethodName, List.class);
             method.invoke(modifiedObj, fromMultiValuesExpression(text.getText().trim(), multiValueDelimiter));
+            parentPage.getContent().setContent(modifiedObj.toXMLExpression());
             parentPage.notifyOnXMLDocumentChanged();
         } catch (Exception e) {
             e.printStackTrace();
@@ -65,6 +67,7 @@ public class ExtensiblePageContentTextModifyListener implements ModifyListener {
         try {
             Method method = modifiedObj.getClass().getMethod(modifyMethodName, String.class);
             method.invoke(modifiedObj, text.getText().trim());
+            parentPage.getContent().setContent(modifiedObj.toXMLExpression());
             parentPage.notifyOnXMLDocumentChanged();
         } catch (Exception e) {
             e.printStackTrace();

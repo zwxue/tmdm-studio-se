@@ -69,6 +69,10 @@ public abstract class ExtensibleXMLEditorPageContent {
         return parent.selectNodes("./" + relativePath);
     }
 
+    protected String getPathRelativeToRoot(String tagName) {
+        return getRootElementName() + "/" + tagName;
+    }
+
     protected abstract String getRootElementName();
 
     protected abstract void fillXMLDoc(Node parent);

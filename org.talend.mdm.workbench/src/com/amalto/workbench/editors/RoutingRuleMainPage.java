@@ -174,11 +174,13 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             ExternalInfoHolder<?> allProcessNamesHolder = ExternalInfoHolder.getAllProcessesNamesHolder(Util
                     .getPort(getXObject()));
             ExternalInfoHolder<?> allJobInfosHolder = ExternalInfoHolder.getAllJobInfosHolder(Util.getPort(getXObject()));
+            ExternalInfoHolder<?> allVarCandidatesHolder = ExternalInfoHolder.getTriggerAllCallJobVarsCandidatesHolder();
             ExternalInfoHolder<?> mdmServerInfoHolder = ExternalInfoHolder.getAllMDMServerInfoHolder(Util.getPort(getXObject()));
 
             initExternalInfoHolderForEachType("callprocess", new ExternalInfoHolder<?>[] { allProcessNamesHolder });
             initExternalInfoHolderForEachType("smtp", new ExternalInfoHolder<?>[] { allProcessNamesHolder });
-            initExternalInfoHolderForEachType("callJob", new ExternalInfoHolder<?>[] { allJobInfosHolder, mdmServerInfoHolder });
+            initExternalInfoHolderForEachType("callJob", new ExternalInfoHolder<?>[] { allJobInfosHolder, mdmServerInfoHolder,
+                    allVarCandidatesHolder });
 
         } catch (XtentisException e) {
             e.printStackTrace();
