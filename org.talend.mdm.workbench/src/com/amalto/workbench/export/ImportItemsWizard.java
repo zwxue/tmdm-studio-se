@@ -2,6 +2,7 @@ package com.amalto.workbench.export;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -57,6 +60,7 @@ import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.Util;
+import com.amalto.workbench.utils.XmlUtil;
 import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSAutoIncrement;
@@ -72,6 +76,7 @@ import com.amalto.workbench.webservices.WSExistsRole;
 import com.amalto.workbench.webservices.WSExistsRoutingRule;
 import com.amalto.workbench.webservices.WSExistsStoredProcedure;
 import com.amalto.workbench.webservices.WSExistsSynchronizationPlan;
+import com.amalto.workbench.webservices.WSExistsTransformer;
 import com.amalto.workbench.webservices.WSExistsTransformerV2;
 import com.amalto.workbench.webservices.WSExistsUniverse;
 import com.amalto.workbench.webservices.WSExistsView;
@@ -85,6 +90,7 @@ import com.amalto.workbench.webservices.WSPutRole;
 import com.amalto.workbench.webservices.WSPutRoutingRule;
 import com.amalto.workbench.webservices.WSPutStoredProcedure;
 import com.amalto.workbench.webservices.WSPutSynchronizationPlan;
+import com.amalto.workbench.webservices.WSPutTransformer;
 import com.amalto.workbench.webservices.WSPutTransformerV2;
 import com.amalto.workbench.webservices.WSPutUniverse;
 import com.amalto.workbench.webservices.WSPutView;
@@ -99,6 +105,8 @@ import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSStringPredicate;
 import com.amalto.workbench.webservices.WSSynchronizationPlan;
 import com.amalto.workbench.webservices.WSSynchronizationPlanPK;
+import com.amalto.workbench.webservices.WSTransformer;
+import com.amalto.workbench.webservices.WSTransformerPK;
 import com.amalto.workbench.webservices.WSTransformerV2;
 import com.amalto.workbench.webservices.WSTransformerV2PK;
 import com.amalto.workbench.webservices.WSUniverse;
@@ -786,24 +794,51 @@ public class ImportItemsWizard extends Wizard {
                 for (String subItem : subItems) {
                     try {
                         reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");
-                        WSTransformerV2 model = new WSTransformerV2();
-                        model = (WSTransformerV2) Unmarshaller.unmarshal(WSTransformerV2.class, reader);
-                        if (port.existsTransformerV2(new WSExistsTransformerV2(new WSTransformerV2PK(model.getName()))).is_true()) {
-                            if (!isOverrideAll) {
-                                int result = isOveride(model.getName(), TreeObject.TRANSFORMER_);
-                                if (result == IDialogConstants.CANCEL_ID) {
-                                    return;
-                                }
-                                if (result == IDialogConstants.YES_TO_ALL_ID) {
-                                    isOverrideAll = true;
-                                }
-                                if (result == IDialogConstants.NO_ID) {
-                                    break;
-                                }
+                        
+                        if(isV2Transformer(importFolder + "/" + subItem)) {
+                            
+                            WSTransformerV2 model = new WSTransformerV2();
+                            model = (WSTransformerV2) Unmarshaller.unmarshal(WSTransformerV2.class, reader);
+                            if (port.existsTransformerV2(new WSExistsTransformerV2(new WSTransformerV2PK(model.getName()))).is_true()) {
+                                if (!isOverrideAll) {
+                                    int result = isOveride(model.getName(), TreeObject.TRANSFORMER_);
+                                    if (result == IDialogConstants.CANCEL_ID) {
+                                        return;
+                                    }
+                                    if (result == IDialogConstants.YES_TO_ALL_ID) {
+                                        isOverrideAll = true;
+                                    }
+                                    if (result == IDialogConstants.NO_ID) {
+                                        break;
+                                    }
 
+                                }
                             }
+                            port.putTransformerV2(new WSPutTransformerV2(model));
+                            
+                        }else {
+                            
+                            WSTransformer model = new WSTransformer();
+                            model = (WSTransformer) Unmarshaller.unmarshal(WSTransformer.class, reader);
+                            if (port.existsTransformer(new WSExistsTransformer(new WSTransformerPK(model.getName()))).is_true()) {
+                                if (!isOverrideAll) {
+                                    int result = isOveride(model.getName(), TreeObject.TRANSFORMER_);
+                                    if (result == IDialogConstants.CANCEL_ID) {
+                                        return;
+                                    }
+                                    if (result == IDialogConstants.YES_TO_ALL_ID) {
+                                        isOverrideAll = true;
+                                    }
+                                    if (result == IDialogConstants.NO_ID) {
+                                        break;
+                                    }
+
+                                }
+                            }
+                            port.putTransformer(new WSPutTransformer(model));
+                            
                         }
-                        port.putTransformerV2(new WSPutTransformerV2(model));
+                        
                     } catch (Exception e2) {
                         e2.printStackTrace();
                     } finally {
@@ -920,6 +955,19 @@ public class ImportItemsWizard extends Wizard {
         }
 
         monitor.done();
+    }
+
+    private boolean isV2Transformer(String inputPath) throws DocumentException, FileNotFoundException {
+        
+        boolean isV2Transformer=false;
+        Document document = XmlUtil.parse(new FileInputStream(inputPath));
+        if(document!=null&&document.getRootElement()!=null) {
+            String rootElementName=document.getRootElement().getName();
+            if(rootElementName.equals(WSTransformerV2.class.getSimpleName())) {
+                isV2Transformer=true;
+            }
+        }
+        return isV2Transformer;
     }
 
     private void importClusterContents(TreeObject item, XtentisPort port, HashMap<String, String> picturePathMap) {
