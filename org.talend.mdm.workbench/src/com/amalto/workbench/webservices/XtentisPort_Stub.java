@@ -1219,9 +1219,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of viewSearch
+     *  implementation of getItemsByCustomFKFilters
      */
-    public com.amalto.workbench.webservices.WSStringArray viewSearch(com.amalto.workbench.webservices.WSViewSearch wsViewSearch)
+    public com.amalto.workbench.webservices.WSStringArray getItemsByCustomFKFilters(com.amalto.workbench.webservices.WSGetItemsByCustomFKFilters wsGetItemsByCustomFKFilters)
         throws java.rmi.RemoteException {
         
         try {
@@ -1229,12 +1229,12 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(viewSearch_OPCODE);
+            _request.setOperationCode(getItemsByCustomFKFilters_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_viewSearch_WSViewSearch_QNAME);
-            _bodyBlock.setValue(wsViewSearch);
-            _bodyBlock.setSerializer(ns1_myWSViewSearch_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getItemsByCustomFKFilters_WSGetItemsByCustomFKFilters_QNAME);
+            _bodyBlock.setValue(wsGetItemsByCustomFKFilters);
+            _bodyBlock.setSerializer(ns1_myWSGetItemsByCustomFKFilters_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
@@ -1407,9 +1407,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of getItemPKsByFullCriteria
+     *  implementation of getItemPKsByCriteria
      */
-    public com.amalto.workbench.webservices.WSItemPKsByCriteriaResponse getItemPKsByFullCriteria(com.amalto.workbench.webservices.WSGetItemPKsByFullCriteria wsGetItemPKsByFullCriteria)
+    public com.amalto.workbench.webservices.WSItemPKsByCriteriaResponse getItemPKsByCriteria(com.amalto.workbench.webservices.WSGetItemPKsByCriteria wsGetItemPKsByCriteria)
         throws java.rmi.RemoteException {
         
         try {
@@ -1417,12 +1417,12 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(getItemPKsByFullCriteria_OPCODE);
+            _request.setOperationCode(getItemPKsByCriteria_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getItemPKsByFullCriteria_WSGetItemPKsByFullCriteria_QNAME);
-            _bodyBlock.setValue(wsGetItemPKsByFullCriteria);
-            _bodyBlock.setSerializer(ns1_myWSGetItemPKsByFullCriteria_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getItemPKsByCriteria_WSGetItemPKsByCriteria_QNAME);
+            _bodyBlock.setValue(wsGetItemPKsByCriteria);
+            _bodyBlock.setSerializer(ns1_myWSGetItemPKsByCriteria_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
@@ -1501,9 +1501,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of getItemsPivotIndex
+     *  implementation of xPathsSearch
      */
-    public com.amalto.workbench.webservices.WSStringArray getItemsPivotIndex(com.amalto.workbench.webservices.WSGetItemsPivotIndex wsGetItemsPivotIndex)
+    public com.amalto.workbench.webservices.WSStringArray xPathsSearch(com.amalto.workbench.webservices.WSXPathsSearch wsXPathsSearch)
         throws java.rmi.RemoteException {
         
         try {
@@ -1511,12 +1511,12 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(getItemsPivotIndex_OPCODE);
+            _request.setOperationCode(xPathsSearch_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getItemsPivotIndex_WSGetItemsPivotIndex_QNAME);
-            _bodyBlock.setValue(wsGetItemsPivotIndex);
-            _bodyBlock.setSerializer(ns1_myWSGetItemsPivotIndex_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_xPathsSearch_WSXPathsSearch_QNAME);
+            _bodyBlock.setValue(wsXPathsSearch);
+            _bodyBlock.setSerializer(ns1_myWSXPathsSearch_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
@@ -1595,9 +1595,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of getItemPKsByCriteria
+     *  implementation of getItems
      */
-    public com.amalto.workbench.webservices.WSItemPKsByCriteriaResponse getItemPKsByCriteria(com.amalto.workbench.webservices.WSGetItemPKsByCriteria wsGetItemPKsByCriteria)
+    public com.amalto.workbench.webservices.WSStringArray getItems(com.amalto.workbench.webservices.WSGetItems wsGetItems)
         throws java.rmi.RemoteException {
         
         try {
@@ -1605,24 +1605,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(getItemPKsByCriteria_OPCODE);
+            _request.setOperationCode(getItems_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getItemPKsByCriteria_WSGetItemPKsByCriteria_QNAME);
-            _bodyBlock.setValue(wsGetItemPKsByCriteria);
-            _bodyBlock.setSerializer(ns1_myWSGetItemPKsByCriteria_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getItems_WSGetItems_QNAME);
+            _bodyBlock.setValue(wsGetItems);
+            _bodyBlock.setSerializer(ns1_myWSGetItems_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSItemPKsByCriteriaResponse _result = null;
+            com.amalto.workbench.webservices.WSStringArray _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSItemPKsByCriteriaResponse)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSStringArray)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSItemPKsByCriteriaResponse)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSStringArray)_responseObj;
             }
             
             return _result;
@@ -2863,9 +2863,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of xPathsSearch
+     *  implementation of viewSearch
      */
-    public com.amalto.workbench.webservices.WSStringArray xPathsSearch(com.amalto.workbench.webservices.WSXPathsSearch wsXPathsSearch)
+    public com.amalto.workbench.webservices.WSStringArray viewSearch(com.amalto.workbench.webservices.WSViewSearch wsViewSearch)
         throws java.rmi.RemoteException {
         
         try {
@@ -2873,12 +2873,12 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(xPathsSearch_OPCODE);
+            _request.setOperationCode(viewSearch_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_xPathsSearch_WSXPathsSearch_QNAME);
-            _bodyBlock.setValue(wsXPathsSearch);
-            _bodyBlock.setSerializer(ns1_myWSXPathsSearch_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_viewSearch_WSViewSearch_QNAME);
+            _bodyBlock.setValue(wsViewSearch);
+            _bodyBlock.setSerializer(ns1_myWSViewSearch_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
@@ -4414,9 +4414,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of getItemsByCustomFKFilters
+     *  implementation of countItemsByCustomFKFilters
      */
-    public com.amalto.workbench.webservices.WSStringArray getItemsByCustomFKFilters(com.amalto.workbench.webservices.WSGetItemsByCustomFKFilters wsGetItemsByCustomFKFilters)
+    public com.amalto.workbench.webservices.WSString countItemsByCustomFKFilters(com.amalto.workbench.webservices.WSCountItemsByCustomFKFilters wsCountItemsByCustomFKFilters)
         throws java.rmi.RemoteException {
         
         try {
@@ -4424,24 +4424,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(getItemsByCustomFKFilters_OPCODE);
+            _request.setOperationCode(countItemsByCustomFKFilters_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getItemsByCustomFKFilters_WSGetItemsByCustomFKFilters_QNAME);
-            _bodyBlock.setValue(wsGetItemsByCustomFKFilters);
-            _bodyBlock.setSerializer(ns1_myWSGetItemsByCustomFKFilters_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_countItemsByCustomFKFilters_WSCountItemsByCustomFKFilters_QNAME);
+            _bodyBlock.setValue(wsCountItemsByCustomFKFilters);
+            _bodyBlock.setSerializer(ns1_myWSCountItemsByCustomFKFilters_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSStringArray _result = null;
+            com.amalto.workbench.webservices.WSString _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSStringArray)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSString)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSStringArray)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSString)_responseObj;
             }
             
             return _result;
@@ -7140,53 +7140,6 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of getItems
-     */
-    public com.amalto.workbench.webservices.WSStringArray getItems(com.amalto.workbench.webservices.WSGetItems wsGetItems)
-        throws java.rmi.RemoteException {
-        
-        try {
-            
-            StreamingSenderState _state = _start(_handlerChain);
-            
-            InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(getItems_OPCODE);
-            
-            
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getItems_WSGetItems_QNAME);
-            _bodyBlock.setValue(wsGetItems);
-            _bodyBlock.setSerializer(ns1_myWSGetItems_LiteralSerializer);
-            _request.setBody(_bodyBlock);
-            
-            _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
-            
-            _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
-            
-            com.amalto.workbench.webservices.WSStringArray _result = null;
-            Object _responseObj = _state.getResponse().getBody().getValue();
-            if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSStringArray)((SOAPDeserializationState) _responseObj).getInstance();
-            } else {
-                _result = (com.amalto.workbench.webservices.WSStringArray)_responseObj;
-            }
-            
-            return _result;
-            
-        } catch (RemoteException e) {
-            // let this one through unchanged
-            throw e;
-        } catch (JAXRPCException e) {
-            throw new RemoteException(e.getMessage(), e);
-        } catch (Exception e) {
-            if (e instanceof RuntimeException) {
-                throw (RuntimeException)e;
-            } else {
-                throw new RemoteException(e.getMessage(), e);
-            }
-        }
-    }
-    
-    /*
      *  implementation of getView
      */
     public com.amalto.workbench.webservices.WSView getView(com.amalto.workbench.webservices.WSGetView wsViewPK)
@@ -7638,6 +7591,53 @@ public class XtentisPort_Stub
                 _result = (com.amalto.workbench.webservices.WSString)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
                 _result = (com.amalto.workbench.webservices.WSString)_responseObj;
+            }
+            
+            return _result;
+            
+        } catch (RemoteException e) {
+            // let this one through unchanged
+            throw e;
+        } catch (JAXRPCException e) {
+            throw new RemoteException(e.getMessage(), e);
+        } catch (Exception e) {
+            if (e instanceof RuntimeException) {
+                throw (RuntimeException)e;
+            } else {
+                throw new RemoteException(e.getMessage(), e);
+            }
+        }
+    }
+    
+    /*
+     *  implementation of getItemsPivotIndex
+     */
+    public com.amalto.workbench.webservices.WSStringArray getItemsPivotIndex(com.amalto.workbench.webservices.WSGetItemsPivotIndex wsGetItemsPivotIndex)
+        throws java.rmi.RemoteException {
+        
+        try {
+            
+            StreamingSenderState _state = _start(_handlerChain);
+            
+            InternalSOAPMessage _request = _state.getRequest();
+            _request.setOperationCode(getItemsPivotIndex_OPCODE);
+            
+            
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getItemsPivotIndex_WSGetItemsPivotIndex_QNAME);
+            _bodyBlock.setValue(wsGetItemsPivotIndex);
+            _bodyBlock.setSerializer(ns1_myWSGetItemsPivotIndex_LiteralSerializer);
+            _request.setBody(_bodyBlock);
+            
+            _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
+            
+            _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
+            
+            com.amalto.workbench.webservices.WSStringArray _result = null;
+            Object _responseObj = _state.getResponse().getBody().getValue();
+            if (_responseObj instanceof SOAPDeserializationState) {
+                _result = (com.amalto.workbench.webservices.WSStringArray)((SOAPDeserializationState) _responseObj).getInstance();
+            } else {
+                _result = (com.amalto.workbench.webservices.WSStringArray)_responseObj;
             }
             
             return _result;
@@ -8738,9 +8738,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of countItemsByCustomFKFilters
+     *  implementation of getItemPKsByFullCriteria
      */
-    public com.amalto.workbench.webservices.WSString countItemsByCustomFKFilters(com.amalto.workbench.webservices.WSCountItemsByCustomFKFilters wsCountItemsByCustomFKFilters)
+    public com.amalto.workbench.webservices.WSItemPKsByCriteriaResponse getItemPKsByFullCriteria(com.amalto.workbench.webservices.WSGetItemPKsByFullCriteria wsGetItemPKsByFullCriteria)
         throws java.rmi.RemoteException {
         
         try {
@@ -8748,24 +8748,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(countItemsByCustomFKFilters_OPCODE);
+            _request.setOperationCode(getItemPKsByFullCriteria_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_countItemsByCustomFKFilters_WSCountItemsByCustomFKFilters_QNAME);
-            _bodyBlock.setValue(wsCountItemsByCustomFKFilters);
-            _bodyBlock.setSerializer(ns1_myWSCountItemsByCustomFKFilters_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getItemPKsByFullCriteria_WSGetItemPKsByFullCriteria_QNAME);
+            _bodyBlock.setValue(wsGetItemPKsByFullCriteria);
+            _bodyBlock.setSerializer(ns1_myWSGetItemPKsByFullCriteria_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSString _result = null;
+            com.amalto.workbench.webservices.WSItemPKsByCriteriaResponse _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSString)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSItemPKsByCriteriaResponse)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSString)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSItemPKsByCriteriaResponse)_responseObj;
             }
             
             return _result;
@@ -9007,8 +9007,8 @@ public class XtentisPort_Stub
             case getTransformer_OPCODE:
                 _deserialize_getTransformer(bodyReader, deserializationContext, state);
                 break;
-            case viewSearch_OPCODE:
-                _deserialize_viewSearch(bodyReader, deserializationContext, state);
+            case getItemsByCustomFKFilters_OPCODE:
+                _deserialize_getItemsByCustomFKFilters(bodyReader, deserializationContext, state);
                 break;
             case workflowGetProcessInstances_OPCODE:
                 _deserialize_workflowGetProcessInstances(bodyReader, deserializationContext, state);
@@ -9019,20 +9019,20 @@ public class XtentisPort_Stub
             case checkServiceConfiguration_OPCODE:
                 _deserialize_checkServiceConfiguration(bodyReader, deserializationContext, state);
                 break;
-            case getItemPKsByFullCriteria_OPCODE:
-                _deserialize_getItemPKsByFullCriteria(bodyReader, deserializationContext, state);
+            case getItemPKsByCriteria_OPCODE:
+                _deserialize_getItemPKsByCriteria(bodyReader, deserializationContext, state);
                 break;
             case executeRoutingOrderV2Asynchronously_OPCODE:
                 _deserialize_executeRoutingOrderV2Asynchronously(bodyReader, deserializationContext, state);
                 break;
-            case getItemsPivotIndex_OPCODE:
-                _deserialize_getItemsPivotIndex(bodyReader, deserializationContext, state);
+            case xPathsSearch_OPCODE:
+                _deserialize_xPathsSearch(bodyReader, deserializationContext, state);
                 break;
             case deleteDataModel_OPCODE:
                 _deserialize_deleteDataModel(bodyReader, deserializationContext, state);
                 break;
-            case getItemPKsByCriteria_OPCODE:
-                _deserialize_getItemPKsByCriteria(bodyReader, deserializationContext, state);
+            case getItems_OPCODE:
+                _deserialize_getItems(bodyReader, deserializationContext, state);
                 break;
             case routeItemV2_OPCODE:
                 _deserialize_routeItemV2(bodyReader, deserializationContext, state);
@@ -9112,8 +9112,8 @@ public class XtentisPort_Stub
             case getCurrentUniverse_OPCODE:
                 _deserialize_getCurrentUniverse(bodyReader, deserializationContext, state);
                 break;
-            case xPathsSearch_OPCODE:
-                _deserialize_xPathsSearch(bodyReader, deserializationContext, state);
+            case viewSearch_OPCODE:
+                _deserialize_viewSearch(bodyReader, deserializationContext, state);
                 break;
             case partialPutItem_OPCODE:
                 _deserialize_partialPutItem(bodyReader, deserializationContext, state);
@@ -9211,8 +9211,8 @@ public class XtentisPort_Stub
             case routingEngineV2Action_OPCODE:
                 _deserialize_routingEngineV2Action(bodyReader, deserializationContext, state);
                 break;
-            case getItemsByCustomFKFilters_OPCODE:
-                _deserialize_getItemsByCustomFKFilters(bodyReader, deserializationContext, state);
+            case countItemsByCustomFKFilters_OPCODE:
+                _deserialize_countItemsByCustomFKFilters(bodyReader, deserializationContext, state);
                 break;
             case existsDataModel_OPCODE:
                 _deserialize_existsDataModel(bodyReader, deserializationContext, state);
@@ -9385,9 +9385,6 @@ public class XtentisPort_Stub
             case versioningGetItemHistory_OPCODE:
                 _deserialize_versioningGetItemHistory(bodyReader, deserializationContext, state);
                 break;
-            case getItems_OPCODE:
-                _deserialize_getItems(bodyReader, deserializationContext, state);
-                break;
             case getView_OPCODE:
                 _deserialize_getView(bodyReader, deserializationContext, state);
                 break;
@@ -9417,6 +9414,9 @@ public class XtentisPort_Stub
                 break;
             case getTransformerPluginV2Configuration_OPCODE:
                 _deserialize_getTransformerPluginV2Configuration(bodyReader, deserializationContext, state);
+                break;
+            case getItemsPivotIndex_OPCODE:
+                _deserialize_getItemsPivotIndex(bodyReader, deserializationContext, state);
                 break;
             case getSynchronizationPlanObjectsAlgorithms_OPCODE:
                 _deserialize_getSynchronizationPlanObjectsAlgorithms(bodyReader, deserializationContext, state);
@@ -9487,8 +9487,8 @@ public class XtentisPort_Stub
             case deleteRole_OPCODE:
                 _deserialize_deleteRole(bodyReader, deserializationContext, state);
                 break;
-            case countItemsByCustomFKFilters_OPCODE:
-                _deserialize_countItemsByCustomFKFilters(bodyReader, deserializationContext, state);
+            case getItemPKsByFullCriteria_OPCODE:
+                _deserialize_getItemPKsByFullCriteria(bodyReader, deserializationContext, state);
                 break;
             case workflowStartProcessInstance_OPCODE:
                 _deserialize_workflowStartProcessInstance(bodyReader, deserializationContext, state);
@@ -9832,14 +9832,14 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the viewSearch operation.
+     * This method deserializes the body of the getItemsByCustomFKFilters operation.
      */
-    private void _deserialize_viewSearch(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+    private void _deserialize_getItemsByCustomFKFilters(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
         Object myWSStringArrayObj =
-            ns1_myWSStringArray_LiteralSerializer.deserialize(ns1_viewSearch_WSStringArray_QNAME,
+            ns1_myWSStringArray_LiteralSerializer.deserialize(ns1_getItemsByCustomFKFilters_WSStringArray_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_viewSearch_WSStringArray_QNAME);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getItemsByCustomFKFilters_WSStringArray_QNAME);
         bodyBlock.setValue(myWSStringArrayObj);
         state.getResponse().setBody(bodyBlock);
     }
@@ -9884,14 +9884,14 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the getItemPKsByFullCriteria operation.
+     * This method deserializes the body of the getItemPKsByCriteria operation.
      */
-    private void _deserialize_getItemPKsByFullCriteria(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+    private void _deserialize_getItemPKsByCriteria(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
         Object myWSItemPKsByCriteriaResponseObj =
-            ns1_myWSItemPKsByCriteriaResponse_LiteralSerializer.deserialize(ns1_getItemPKsByFullCriteria_WSItemPKsByCriteriaResponse_QNAME,
+            ns1_myWSItemPKsByCriteriaResponse_LiteralSerializer.deserialize(ns1_getItemPKsByCriteria_WSItemPKsByCriteriaResponse_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getItemPKsByFullCriteria_WSItemPKsByCriteriaResponse_QNAME);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getItemPKsByCriteria_WSItemPKsByCriteriaResponse_QNAME);
         bodyBlock.setValue(myWSItemPKsByCriteriaResponseObj);
         state.getResponse().setBody(bodyBlock);
     }
@@ -9910,14 +9910,14 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the getItemsPivotIndex operation.
+     * This method deserializes the body of the xPathsSearch operation.
      */
-    private void _deserialize_getItemsPivotIndex(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+    private void _deserialize_xPathsSearch(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
         Object myWSStringArrayObj =
-            ns1_myWSStringArray_LiteralSerializer.deserialize(ns1_getItemsPivotIndex_WSStringArray_QNAME,
+            ns1_myWSStringArray_LiteralSerializer.deserialize(ns1_xPathsSearch_WSStringArray_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getItemsPivotIndex_WSStringArray_QNAME);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_xPathsSearch_WSStringArray_QNAME);
         bodyBlock.setValue(myWSStringArrayObj);
         state.getResponse().setBody(bodyBlock);
     }
@@ -9936,15 +9936,15 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the getItemPKsByCriteria operation.
+     * This method deserializes the body of the getItems operation.
      */
-    private void _deserialize_getItemPKsByCriteria(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSItemPKsByCriteriaResponseObj =
-            ns1_myWSItemPKsByCriteriaResponse_LiteralSerializer.deserialize(ns1_getItemPKsByCriteria_WSItemPKsByCriteriaResponse_QNAME,
+    private void _deserialize_getItems(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSStringArrayObj =
+            ns1_myWSStringArray_LiteralSerializer.deserialize(ns1_getItems_WSStringArray_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getItemPKsByCriteria_WSItemPKsByCriteriaResponse_QNAME);
-        bodyBlock.setValue(myWSItemPKsByCriteriaResponseObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getItems_WSStringArray_QNAME);
+        bodyBlock.setValue(myWSStringArrayObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -10287,14 +10287,14 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the xPathsSearch operation.
+     * This method deserializes the body of the viewSearch operation.
      */
-    private void _deserialize_xPathsSearch(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+    private void _deserialize_viewSearch(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
         Object myWSStringArrayObj =
-            ns1_myWSStringArray_LiteralSerializer.deserialize(ns1_xPathsSearch_WSStringArray_QNAME,
+            ns1_myWSStringArray_LiteralSerializer.deserialize(ns1_viewSearch_WSStringArray_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_xPathsSearch_WSStringArray_QNAME);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_viewSearch_WSStringArray_QNAME);
         bodyBlock.setValue(myWSStringArrayObj);
         state.getResponse().setBody(bodyBlock);
     }
@@ -10716,15 +10716,15 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the getItemsByCustomFKFilters operation.
+     * This method deserializes the body of the countItemsByCustomFKFilters operation.
      */
-    private void _deserialize_getItemsByCustomFKFilters(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSStringArrayObj =
-            ns1_myWSStringArray_LiteralSerializer.deserialize(ns1_getItemsByCustomFKFilters_WSStringArray_QNAME,
+    private void _deserialize_countItemsByCustomFKFilters(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSStringObj =
+            ns1_myWSString_LiteralSerializer.deserialize(ns1_countItemsByCustomFKFilters_WSString_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getItemsByCustomFKFilters_WSStringArray_QNAME);
-        bodyBlock.setValue(myWSStringArrayObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_countItemsByCustomFKFilters_WSString_QNAME);
+        bodyBlock.setValue(myWSStringObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -11470,19 +11470,6 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the getItems operation.
-     */
-    private void _deserialize_getItems(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSStringArrayObj =
-            ns1_myWSStringArray_LiteralSerializer.deserialize(ns1_getItems_WSStringArray_QNAME,
-                bodyReader, deserializationContext);
-        
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getItems_WSStringArray_QNAME);
-        bodyBlock.setValue(myWSStringArrayObj);
-        state.getResponse().setBody(bodyBlock);
-    }
-    
-    /*
      * This method deserializes the body of the getView operation.
      */
     private void _deserialize_getView(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
@@ -11609,6 +11596,19 @@ public class XtentisPort_Stub
         
         SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getTransformerPluginV2Configuration_WSString_QNAME);
         bodyBlock.setValue(myWSStringObj);
+        state.getResponse().setBody(bodyBlock);
+    }
+    
+    /*
+     * This method deserializes the body of the getItemsPivotIndex operation.
+     */
+    private void _deserialize_getItemsPivotIndex(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSStringArrayObj =
+            ns1_myWSStringArray_LiteralSerializer.deserialize(ns1_getItemsPivotIndex_WSStringArray_QNAME,
+                bodyReader, deserializationContext);
+        
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getItemsPivotIndex_WSStringArray_QNAME);
+        bodyBlock.setValue(myWSStringArrayObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -11912,15 +11912,15 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the countItemsByCustomFKFilters operation.
+     * This method deserializes the body of the getItemPKsByFullCriteria operation.
      */
-    private void _deserialize_countItemsByCustomFKFilters(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSStringObj =
-            ns1_myWSString_LiteralSerializer.deserialize(ns1_countItemsByCustomFKFilters_WSString_QNAME,
+    private void _deserialize_getItemPKsByFullCriteria(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSItemPKsByCriteriaResponseObj =
+            ns1_myWSItemPKsByCriteriaResponse_LiteralSerializer.deserialize(ns1_getItemPKsByFullCriteria_WSItemPKsByCriteriaResponse_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_countItemsByCustomFKFilters_WSString_QNAME);
-        bodyBlock.setValue(myWSStringObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getItemPKsByFullCriteria_WSItemPKsByCriteriaResponse_QNAME);
+        bodyBlock.setValue(myWSItemPKsByCriteriaResponseObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -12307,15 +12307,15 @@ public class XtentisPort_Stub
     private static final int putVersioningSystemConfiguration_OPCODE = 22;
     private static final int deleteTransformerV2_OPCODE = 23;
     private static final int getTransformer_OPCODE = 24;
-    private static final int viewSearch_OPCODE = 25;
+    private static final int getItemsByCustomFKFilters_OPCODE = 25;
     private static final int workflowGetProcessInstances_OPCODE = 26;
     private static final int workflowDeleteProcessInstances_OPCODE = 27;
     private static final int checkServiceConfiguration_OPCODE = 28;
-    private static final int getItemPKsByFullCriteria_OPCODE = 29;
+    private static final int getItemPKsByCriteria_OPCODE = 29;
     private static final int executeRoutingOrderV2Asynchronously_OPCODE = 30;
-    private static final int getItemsPivotIndex_OPCODE = 31;
+    private static final int xPathsSearch_OPCODE = 31;
     private static final int deleteDataModel_OPCODE = 32;
-    private static final int getItemPKsByCriteria_OPCODE = 33;
+    private static final int getItems_OPCODE = 33;
     private static final int routeItemV2_OPCODE = 34;
     private static final int putItem_OPCODE = 35;
     private static final int existsRoutingRule_OPCODE = 36;
@@ -12342,7 +12342,7 @@ public class XtentisPort_Stub
     private static final int resolveSynchronizationItem_OPCODE = 57;
     private static final int getBusinessConcepts_OPCODE = 58;
     private static final int getCurrentUniverse_OPCODE = 59;
-    private static final int xPathsSearch_OPCODE = 60;
+    private static final int viewSearch_OPCODE = 60;
     private static final int partialPutItem_OPCODE = 61;
     private static final int checkSchema_OPCODE = 62;
     private static final int getServiceConfiguration_OPCODE = 63;
@@ -12375,7 +12375,7 @@ public class XtentisPort_Stub
     private static final int deleteSynchronizationItem_OPCODE = 90;
     private static final int isItemModifiedByOther_OPCODE = 91;
     private static final int routingEngineV2Action_OPCODE = 92;
-    private static final int getItemsByCustomFKFilters_OPCODE = 93;
+    private static final int countItemsByCustomFKFilters_OPCODE = 93;
     private static final int existsDataModel_OPCODE = 94;
     private static final int versioningGetUniverseVersions_OPCODE = 95;
     private static final int getFullPathValues_OPCODE = 96;
@@ -12433,17 +12433,17 @@ public class XtentisPort_Stub
     private static final int deleteDataCluster_OPCODE = 148;
     private static final int deleteUniverse_OPCODE = 149;
     private static final int versioningGetItemHistory_OPCODE = 150;
-    private static final int getItems_OPCODE = 151;
-    private static final int getView_OPCODE = 152;
-    private static final int putSynchronizationItem_OPCODE = 153;
-    private static final int getTransformerV2PKs_OPCODE = 154;
-    private static final int putTransformerV2_OPCODE = 155;
-    private static final int getServiceDocument_OPCODE = 156;
-    private static final int synchronizationGetUnsynchronizedItemPKs_OPCODE = 157;
-    private static final int initMDM_OPCODE = 158;
-    private static final int getStoredProcedure_OPCODE = 159;
-    private static final int existsTransformerPluginV2_OPCODE = 160;
-    private static final int getTransformerPluginV2Configuration_OPCODE = 161;
+    private static final int getView_OPCODE = 151;
+    private static final int putSynchronizationItem_OPCODE = 152;
+    private static final int getTransformerV2PKs_OPCODE = 153;
+    private static final int putTransformerV2_OPCODE = 154;
+    private static final int getServiceDocument_OPCODE = 155;
+    private static final int synchronizationGetUnsynchronizedItemPKs_OPCODE = 156;
+    private static final int initMDM_OPCODE = 157;
+    private static final int getStoredProcedure_OPCODE = 158;
+    private static final int existsTransformerPluginV2_OPCODE = 159;
+    private static final int getTransformerPluginV2Configuration_OPCODE = 160;
+    private static final int getItemsPivotIndex_OPCODE = 161;
     private static final int getSynchronizationPlanObjectsAlgorithms_OPCODE = 162;
     private static final int versioningRestoreItems_OPCODE = 163;
     private static final int putDBDataCluster_OPCODE = 164;
@@ -12467,7 +12467,7 @@ public class XtentisPort_Stub
     private static final int updateItemMetadata_OPCODE = 182;
     private static final int extractUsingTransformerThruView_OPCODE = 183;
     private static final int deleteRole_OPCODE = 184;
-    private static final int countItemsByCustomFKFilters_OPCODE = 185;
+    private static final int getItemPKsByFullCriteria_OPCODE = 185;
     private static final int workflowStartProcessInstance_OPCODE = 186;
     private static final int getObjectsForRoles_OPCODE = 187;
     private static final int runQuery_OPCODE = 188;
@@ -12607,10 +12607,10 @@ public class XtentisPort_Stub
     private static final QName ns1_getTransformer_WSTransformer_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSTransformer");
     private static final QName ns1_WSTransformer_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSTransformer");
     private CombinedSerializer ns1_myWSTransformer_LiteralSerializer;
-    private static final QName ns1_viewSearch_WSViewSearch_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSViewSearch");
-    private static final QName ns1_WSViewSearch_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSViewSearch");
-    private CombinedSerializer ns1_myWSViewSearch_LiteralSerializer;
-    private static final QName ns1_viewSearch_WSStringArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
+    private static final QName ns1_getItemsByCustomFKFilters_WSGetItemsByCustomFKFilters_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItemsByCustomFKFilters");
+    private static final QName ns1_WSGetItemsByCustomFKFilters_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItemsByCustomFKFilters");
+    private CombinedSerializer ns1_myWSGetItemsByCustomFKFilters_LiteralSerializer;
+    private static final QName ns1_getItemsByCustomFKFilters_WSStringArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
     private static final QName ns1_workflowGetProcessInstances_WSWorkflowGetProcessInstances_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSWorkflowGetProcessInstances");
     private static final QName ns1_WSWorkflowGetProcessInstances_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSWorkflowGetProcessInstances");
     private CombinedSerializer ns1_myWSWorkflowGetProcessInstances_LiteralSerializer;
@@ -12627,10 +12627,10 @@ public class XtentisPort_Stub
     private static final QName ns1_checkServiceConfiguration_WSCheckServiceConfigResponse_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSCheckServiceConfigResponse");
     private static final QName ns1_WSCheckServiceConfigResponse_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSCheckServiceConfigResponse");
     private CombinedSerializer ns1_myWSCheckServiceConfigResponse_LiteralSerializer;
-    private static final QName ns1_getItemPKsByFullCriteria_WSGetItemPKsByFullCriteria_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItemPKsByFullCriteria");
-    private static final QName ns1_WSGetItemPKsByFullCriteria_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItemPKsByFullCriteria");
-    private CombinedSerializer ns1_myWSGetItemPKsByFullCriteria_LiteralSerializer;
-    private static final QName ns1_getItemPKsByFullCriteria_WSItemPKsByCriteriaResponse_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSItemPKsByCriteriaResponse");
+    private static final QName ns1_getItemPKsByCriteria_WSGetItemPKsByCriteria_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItemPKsByCriteria");
+    private static final QName ns1_WSGetItemPKsByCriteria_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItemPKsByCriteria");
+    private CombinedSerializer ns1_myWSGetItemPKsByCriteria_LiteralSerializer;
+    private static final QName ns1_getItemPKsByCriteria_WSItemPKsByCriteriaResponse_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSItemPKsByCriteriaResponse");
     private static final QName ns1_WSItemPKsByCriteriaResponse_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSItemPKsByCriteriaResponse");
     private CombinedSerializer ns1_myWSItemPKsByCriteriaResponse_LiteralSerializer;
     private static final QName ns1_executeRoutingOrderV2Asynchronously_WSExecuteRoutingOrderV2Asynchronously_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExecuteRoutingOrderV2Asynchronously");
@@ -12639,20 +12639,20 @@ public class XtentisPort_Stub
     private static final QName ns1_executeRoutingOrderV2Asynchronously_WSRoutingOrderV2PK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderV2PK");
     private static final QName ns1_WSRoutingOrderV2PK_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderV2PK");
     private CombinedSerializer ns1_myWSRoutingOrderV2PK_LiteralSerializer;
-    private static final QName ns1_getItemsPivotIndex_WSGetItemsPivotIndex_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItemsPivotIndex");
-    private static final QName ns1_WSGetItemsPivotIndex_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItemsPivotIndex");
-    private CombinedSerializer ns1_myWSGetItemsPivotIndex_LiteralSerializer;
-    private static final QName ns1_getItemsPivotIndex_WSStringArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
+    private static final QName ns1_xPathsSearch_WSXPathsSearch_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSXPathsSearch");
+    private static final QName ns1_WSXPathsSearch_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSXPathsSearch");
+    private CombinedSerializer ns1_myWSXPathsSearch_LiteralSerializer;
+    private static final QName ns1_xPathsSearch_WSStringArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
     private static final QName ns1_deleteDataModel_WSDeleteDataModel_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteDataModel");
     private static final QName ns1_WSDeleteDataModel_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteDataModel");
     private CombinedSerializer ns1_myWSDeleteDataModel_LiteralSerializer;
     private static final QName ns1_deleteDataModel_WSDataModelPK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataModelPK");
     private static final QName ns1_WSDataModelPK_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataModelPK");
     private CombinedSerializer ns1_myWSDataModelPK_LiteralSerializer;
-    private static final QName ns1_getItemPKsByCriteria_WSGetItemPKsByCriteria_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItemPKsByCriteria");
-    private static final QName ns1_WSGetItemPKsByCriteria_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItemPKsByCriteria");
-    private CombinedSerializer ns1_myWSGetItemPKsByCriteria_LiteralSerializer;
-    private static final QName ns1_getItemPKsByCriteria_WSItemPKsByCriteriaResponse_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSItemPKsByCriteriaResponse");
+    private static final QName ns1_getItems_WSGetItems_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItems");
+    private static final QName ns1_WSGetItems_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItems");
+    private CombinedSerializer ns1_myWSGetItems_LiteralSerializer;
+    private static final QName ns1_getItems_WSStringArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
     private static final QName ns1_routeItemV2_WSRouteItemV2_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRouteItemV2");
     private static final QName ns1_WSRouteItemV2_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRouteItemV2");
     private CombinedSerializer ns1_myWSRouteItemV2_LiteralSerializer;
@@ -12778,10 +12778,10 @@ public class XtentisPort_Stub
     private static final QName ns1_WSGetCurrentUniverse_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetCurrentUniverse");
     private CombinedSerializer ns1_myWSGetCurrentUniverse_LiteralSerializer;
     private static final QName ns1_getCurrentUniverse_WSUniverse_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSUniverse");
-    private static final QName ns1_xPathsSearch_WSXPathsSearch_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSXPathsSearch");
-    private static final QName ns1_WSXPathsSearch_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSXPathsSearch");
-    private CombinedSerializer ns1_myWSXPathsSearch_LiteralSerializer;
-    private static final QName ns1_xPathsSearch_WSStringArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
+    private static final QName ns1_viewSearch_WSViewSearch_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSViewSearch");
+    private static final QName ns1_WSViewSearch_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSViewSearch");
+    private CombinedSerializer ns1_myWSViewSearch_LiteralSerializer;
+    private static final QName ns1_viewSearch_WSStringArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
     private static final QName ns1_partialPutItem_WSPartialPutItem_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPartialPutItem");
     private static final QName ns1_WSPartialPutItem_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPartialPutItem");
     private CombinedSerializer ns1_myWSPartialPutItem_LiteralSerializer;
@@ -12938,10 +12938,10 @@ public class XtentisPort_Stub
     private static final QName ns1_routingEngineV2Action_WSRoutingEngineV2Status_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingEngineV2Status");
     private static final QName ns1_WSRoutingEngineV2Status_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingEngineV2Status");
     private CombinedSerializer ns1myns1_WSRoutingEngineV2Status__WSRoutingEngineV2Status_LiteralSerializer;
-    private static final QName ns1_getItemsByCustomFKFilters_WSGetItemsByCustomFKFilters_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItemsByCustomFKFilters");
-    private static final QName ns1_WSGetItemsByCustomFKFilters_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItemsByCustomFKFilters");
-    private CombinedSerializer ns1_myWSGetItemsByCustomFKFilters_LiteralSerializer;
-    private static final QName ns1_getItemsByCustomFKFilters_WSStringArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
+    private static final QName ns1_countItemsByCustomFKFilters_WSCountItemsByCustomFKFilters_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSCountItemsByCustomFKFilters");
+    private static final QName ns1_WSCountItemsByCustomFKFilters_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSCountItemsByCustomFKFilters");
+    private CombinedSerializer ns1_myWSCountItemsByCustomFKFilters_LiteralSerializer;
+    private static final QName ns1_countItemsByCustomFKFilters_WSString_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSString");
     private static final QName ns1_existsDataModel_WSExistsDataModel_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExistsDataModel");
     private static final QName ns1_WSExistsDataModel_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExistsDataModel");
     private CombinedSerializer ns1_myWSExistsDataModel_LiteralSerializer;
@@ -13212,10 +13212,6 @@ public class XtentisPort_Stub
     private static final QName ns1_versioningGetItemHistory_WSVersioningItemHistory_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningItemHistory");
     private static final QName ns1_WSVersioningItemHistory_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningItemHistory");
     private CombinedSerializer ns1_myWSVersioningItemHistory_LiteralSerializer;
-    private static final QName ns1_getItems_WSGetItems_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItems");
-    private static final QName ns1_WSGetItems_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItems");
-    private CombinedSerializer ns1_myWSGetItems_LiteralSerializer;
-    private static final QName ns1_getItems_WSStringArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
     private static final QName ns1_getView_WSGetView_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetView");
     private static final QName ns1_WSGetView_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetView");
     private CombinedSerializer ns1_myWSGetView_LiteralSerializer;
@@ -13262,6 +13258,10 @@ public class XtentisPort_Stub
     private static final QName ns1_WSTransformerPluginV2GetConfiguration_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginV2GetConfiguration");
     private CombinedSerializer ns1_myWSTransformerPluginV2GetConfiguration_LiteralSerializer;
     private static final QName ns1_getTransformerPluginV2Configuration_WSString_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSString");
+    private static final QName ns1_getItemsPivotIndex_WSGetItemsPivotIndex_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItemsPivotIndex");
+    private static final QName ns1_WSGetItemsPivotIndex_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItemsPivotIndex");
+    private CombinedSerializer ns1_myWSGetItemsPivotIndex_LiteralSerializer;
+    private static final QName ns1_getItemsPivotIndex_WSStringArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
     private static final QName ns1_getSynchronizationPlanObjectsAlgorithms_WSGetSynchronizationPlanObjectsAlgorithms_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetSynchronizationPlanObjectsAlgorithms");
     private static final QName ns1_WSGetSynchronizationPlanObjectsAlgorithms_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetSynchronizationPlanObjectsAlgorithms");
     private CombinedSerializer ns1_myWSGetSynchronizationPlanObjectsAlgorithms_LiteralSerializer;
@@ -13362,10 +13362,10 @@ public class XtentisPort_Stub
     private static final QName ns1_WSDeleteRole_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteRole");
     private CombinedSerializer ns1_myWSDeleteRole_LiteralSerializer;
     private static final QName ns1_deleteRole_WSRolePK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRolePK");
-    private static final QName ns1_countItemsByCustomFKFilters_WSCountItemsByCustomFKFilters_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSCountItemsByCustomFKFilters");
-    private static final QName ns1_WSCountItemsByCustomFKFilters_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSCountItemsByCustomFKFilters");
-    private CombinedSerializer ns1_myWSCountItemsByCustomFKFilters_LiteralSerializer;
-    private static final QName ns1_countItemsByCustomFKFilters_WSString_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSString");
+    private static final QName ns1_getItemPKsByFullCriteria_WSGetItemPKsByFullCriteria_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItemPKsByFullCriteria");
+    private static final QName ns1_WSGetItemPKsByFullCriteria_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItemPKsByFullCriteria");
+    private CombinedSerializer ns1_myWSGetItemPKsByFullCriteria_LiteralSerializer;
+    private static final QName ns1_getItemPKsByFullCriteria_WSItemPKsByCriteriaResponse_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSItemPKsByCriteriaResponse");
     private static final QName ns1_workflowStartProcessInstance_WSStartProcessInstance_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStartProcessInstance");
     private static final QName ns1_WSStartProcessInstance_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStartProcessInstance");
     private CombinedSerializer ns1_myWSStartProcessInstance_LiteralSerializer;
