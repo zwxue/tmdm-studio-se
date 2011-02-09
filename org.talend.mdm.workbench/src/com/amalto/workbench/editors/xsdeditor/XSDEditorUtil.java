@@ -125,7 +125,7 @@ public class XSDEditorUtil {
         IEditorInput xobjectEditorinput = new XObjectEditorInput(xobject, xobject.getDisplayName());
 
         final DataModelMainPage dMainPage = new DataModelMainPage(xobject);
-        part.addPage(2, dMainPage, xobjectEditorinput);
+        part.addPage(0, dMainPage, xobjectEditorinput);
 
         part.getSite().setSelectionProvider(dMainPage.getSelectionProvider());
 
@@ -141,7 +141,7 @@ public class XSDEditorUtil {
         part.setActiveEditor(dMainPage);
 
         CTabFolder folder = (CTabFolder) dMainPage.getMainControl().getParent();
-        folder.getItem(2).setText(xobject.getDisplayName() + " " + Util.getRevision(xobject));
+        folder.getItem(0).setText(xobject.getDisplayName() + " " + Util.getRevision(xobject));
         if (markdirty)
             dMainPage.markDirty();
 

@@ -47,6 +47,15 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
     }
 
     @Override
+    public String getPartName() {
+    	// TODO Auto-generated method stub
+    	String part= super.getPartName();
+    	if(part.endsWith(".xsd")){
+    		return part.substring(0,part.length()-4);
+    	}
+    	return part;
+    }
+    @Override
     public void doSave(IProgressMonitor monitor) {
         // TODO Auto-generated method stub
         super.doSave(monitor);
