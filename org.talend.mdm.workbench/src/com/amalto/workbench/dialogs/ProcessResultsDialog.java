@@ -74,7 +74,7 @@ public class ProcessResultsDialog extends Dialog {
             	public void modifyText(ModifyEvent e) {
             		String output = variablesCombo.getText();
     				if (output.startsWith(TransformerMainPage.DEFAULT_DISPLAY))
-    					output = TransformerMainPage.DEFAULT_VAR+output.substring(TransformerMainPage.DEFAULT_DISPLAY.length());
+    					output = "Incoming document (_DEFAULT_)";//TransformerMainPage.DEFAULT_VAR+output.substring(TransformerMainPage.DEFAULT_DISPLAY.length());
             		ProcessResultsDialog.this.variablesViewer.setDocument(new Document(getText(output)));
             	}
             });
@@ -165,7 +165,7 @@ public class ProcessResultsDialog extends Dialog {
             for (Iterator iter = outputs.iterator(); iter.hasNext(); ) {
 				String output = (String) iter.next();
 				if (output.startsWith(TransformerMainPage.DEFAULT_VAR))
-					output = TransformerMainPage.DEFAULT_DISPLAY+output.substring(TransformerMainPage.DEFAULT_VAR.length());
+					output = "Incoming document (_DEFAULT_)";//TransformerMainPage.DEFAULT_DISPLAY+output.substring(TransformerMainPage.DEFAULT_VAR.length());
 				variablesCombo.add(output);
 			}
             variablesCombo.select(0);
