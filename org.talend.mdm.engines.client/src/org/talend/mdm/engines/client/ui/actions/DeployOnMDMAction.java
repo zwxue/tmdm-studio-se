@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2006-2010 Talend Inc. - www.talend.com
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -43,7 +43,7 @@ import org.talend.repository.ui.actions.AContextualAction;
  */
 public final class DeployOnMDMAction extends AContextualAction {
 
-    private static final String EXPORTJOBSCRIPTS = "Deploy on Talend MDM"; //$NON-NLS-1$
+    private static final String EXPORTJOBSCRIPTS = "Deploy to Talend MDM";
 
     /*
      * (non-Javadoc)
