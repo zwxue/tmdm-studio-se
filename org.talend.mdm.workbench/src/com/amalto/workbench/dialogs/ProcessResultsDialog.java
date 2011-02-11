@@ -138,6 +138,7 @@ public class ProcessResultsDialog extends Dialog {
 	private static Pattern p=Pattern.compile(".*charset\\s*=[\"|']?(.+)[\"|']([\\s|;].*)?");
 	protected String getText(String output) {
 		WSExtractedContent ct = resultsMap.get(output);
+		if(ct==null) return "";
 		String contentType = ct.getContentType();
 		byte[] bytes = ct.getWsByteArray().getBytes();
 		if (bytes==null) return "";	
