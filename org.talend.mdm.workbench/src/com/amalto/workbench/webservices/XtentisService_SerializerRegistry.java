@@ -290,6 +290,11 @@ public class XtentisService_SerializerRegistry implements SerializerConstants {
             registerSerializer(mapping2,com.amalto.workbench.webservices.WSDeleteDataCluster.class, type, serializer);
         }
         {
+            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSWorkflowProcessDefinitionUUID");
+            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSWorkflowProcessDefinitionUUID_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
+            registerSerializer(mapping2,com.amalto.workbench.webservices.WSWorkflowProcessDefinitionUUID.class, type, serializer);
+        }
+        {
             QName type = new QName("urn-com-amalto-xtentis-webservice", "WSRole");
             CombinedSerializer serializer = new com.amalto.workbench.webservices.WSRole_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
             registerSerializer(mapping2,com.amalto.workbench.webservices.WSRole.class, type, serializer);
@@ -584,11 +589,6 @@ public class XtentisService_SerializerRegistry implements SerializerConstants {
             QName type = new QName("urn-com-amalto-xtentis-webservice", "WSTransformerPluginV2GetConfiguration");
             CombinedSerializer serializer = new com.amalto.workbench.webservices.WSTransformerPluginV2GetConfiguration_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
             registerSerializer(mapping2,com.amalto.workbench.webservices.WSTransformerPluginV2GetConfiguration.class, type, serializer);
-        }
-        {
-            QName type = new QName("urn-com-amalto-xtentis-webservice", "WSWorkflowProcessDefinitionUUID");
-            CombinedSerializer serializer = new com.amalto.workbench.webservices.WSWorkflowProcessDefinitionUUID_LiteralSerializer(type, "", DONT_ENCODE_TYPE);
-            registerSerializer(mapping2,com.amalto.workbench.webservices.WSWorkflowProcessDefinitionUUID.class, type, serializer);
         }
         {
             QName type = new QName("urn-com-amalto-xtentis-webservice", "WSPutBusinessConcept");

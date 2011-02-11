@@ -373,9 +373,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of getViewPKs
+     *  implementation of getConceptsInDataClusterWithRevisions
      */
-    public com.amalto.workbench.webservices.WSViewPKArray getViewPKs(com.amalto.workbench.webservices.WSGetViewPKs regexp)
+    public com.amalto.workbench.webservices.WSConceptRevisionMap getConceptsInDataClusterWithRevisions(com.amalto.workbench.webservices.WSGetConceptsInDataClusterWithRevisions wsGetConceptsInDataClusterWithRevisions)
         throws java.rmi.RemoteException {
         
         try {
@@ -383,24 +383,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(getViewPKs_OPCODE);
+            _request.setOperationCode(getConceptsInDataClusterWithRevisions_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getViewPKs_WSGetViewPKs_QNAME);
-            _bodyBlock.setValue(regexp);
-            _bodyBlock.setSerializer(ns1_myWSGetViewPKs_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getConceptsInDataClusterWithRevisions_WSGetConceptsInDataClusterWithRevisions_QNAME);
+            _bodyBlock.setValue(wsGetConceptsInDataClusterWithRevisions);
+            _bodyBlock.setSerializer(ns1_myWSGetConceptsInDataClusterWithRevisions_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSViewPKArray _result = null;
+            com.amalto.workbench.webservices.WSConceptRevisionMap _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSViewPKArray)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSConceptRevisionMap)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSViewPKArray)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSConceptRevisionMap)_responseObj;
             }
             
             return _result;
@@ -655,9 +655,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of getConceptsInDataClusterWithRevisions
+     *  implementation of getConceptsInDataCluster
      */
-    public com.amalto.workbench.webservices.WSConceptRevisionMap getConceptsInDataClusterWithRevisions(com.amalto.workbench.webservices.WSGetConceptsInDataClusterWithRevisions wsGetConceptsInDataClusterWithRevisions)
+    public com.amalto.workbench.webservices.WSStringArray getConceptsInDataCluster(com.amalto.workbench.webservices.WSGetConceptsInDataCluster wsGetConceptsInDataCluster)
         throws java.rmi.RemoteException {
         
         try {
@@ -665,24 +665,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(getConceptsInDataClusterWithRevisions_OPCODE);
+            _request.setOperationCode(getConceptsInDataCluster_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getConceptsInDataClusterWithRevisions_WSGetConceptsInDataClusterWithRevisions_QNAME);
-            _bodyBlock.setValue(wsGetConceptsInDataClusterWithRevisions);
-            _bodyBlock.setSerializer(ns1_myWSGetConceptsInDataClusterWithRevisions_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getConceptsInDataCluster_WSGetConceptsInDataCluster_QNAME);
+            _bodyBlock.setValue(wsGetConceptsInDataCluster);
+            _bodyBlock.setSerializer(ns1_myWSGetConceptsInDataCluster_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSConceptRevisionMap _result = null;
+            com.amalto.workbench.webservices.WSStringArray _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSConceptRevisionMap)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSStringArray)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSConceptRevisionMap)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSStringArray)_responseObj;
             }
             
             return _result;
@@ -1548,9 +1548,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of deleteDataModel
+     *  implementation of putDataModel
      */
-    public com.amalto.workbench.webservices.WSDataModelPK deleteDataModel(com.amalto.workbench.webservices.WSDeleteDataModel wsDeleteDataModel)
+    public com.amalto.workbench.webservices.WSDataModelPK putDataModel(com.amalto.workbench.webservices.WSPutDataModel wsDataModel)
         throws java.rmi.RemoteException {
         
         try {
@@ -1558,12 +1558,12 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(deleteDataModel_OPCODE);
+            _request.setOperationCode(putDataModel_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_deleteDataModel_WSDeleteDataModel_QNAME);
-            _bodyBlock.setValue(wsDeleteDataModel);
-            _bodyBlock.setSerializer(ns1_myWSDeleteDataModel_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_putDataModel_WSPutDataModel_QNAME);
+            _bodyBlock.setValue(wsDataModel);
+            _bodyBlock.setSerializer(ns1_myWSPutDataModel_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
@@ -1971,9 +1971,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of deleteBusinessConcept
+     *  implementation of checkSchema
      */
-    public com.amalto.workbench.webservices.WSString deleteBusinessConcept(com.amalto.workbench.webservices.WSDeleteBusinessConcept wsDeleteBusinessConcept)
+    public com.amalto.workbench.webservices.WSString checkSchema(com.amalto.workbench.webservices.WSCheckSchema wsSchema)
         throws java.rmi.RemoteException {
         
         try {
@@ -1981,12 +1981,12 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(deleteBusinessConcept_OPCODE);
+            _request.setOperationCode(checkSchema_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_deleteBusinessConcept_WSDeleteBusinessConcept_QNAME);
-            _bodyBlock.setValue(wsDeleteBusinessConcept);
-            _bodyBlock.setSerializer(ns1_myWSDeleteBusinessConcept_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_checkSchema_WSCheckSchema_QNAME);
+            _bodyBlock.setValue(wsSchema);
+            _bodyBlock.setSerializer(ns1_myWSCheckSchema_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
@@ -2300,9 +2300,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of putView
+     *  implementation of existsView
      */
-    public com.amalto.workbench.webservices.WSViewPK putView(com.amalto.workbench.webservices.WSPutView wsView)
+    public com.amalto.workbench.webservices.WSBoolean existsView(com.amalto.workbench.webservices.WSExistsView wsViewPK)
         throws java.rmi.RemoteException {
         
         try {
@@ -2310,24 +2310,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(putView_OPCODE);
+            _request.setOperationCode(existsView_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_putView_WSPutView_QNAME);
-            _bodyBlock.setValue(wsView);
-            _bodyBlock.setSerializer(ns1_myWSPutView_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_existsView_WSExistsView_QNAME);
+            _bodyBlock.setValue(wsViewPK);
+            _bodyBlock.setSerializer(ns1_myWSExistsView_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSViewPK _result = null;
+            com.amalto.workbench.webservices.WSBoolean _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSViewPK)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSBoolean)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSViewPK)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSBoolean)_responseObj;
             }
             
             return _result;
@@ -2769,9 +2769,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of getBusinessConcepts
+     *  implementation of deleteBusinessConcept
      */
-    public com.amalto.workbench.webservices.WSStringArray getBusinessConcepts(com.amalto.workbench.webservices.WSGetBusinessConcepts wsGetBusinessConcepts)
+    public com.amalto.workbench.webservices.WSString deleteBusinessConcept(com.amalto.workbench.webservices.WSDeleteBusinessConcept wsDeleteBusinessConcept)
         throws java.rmi.RemoteException {
         
         try {
@@ -2779,24 +2779,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(getBusinessConcepts_OPCODE);
+            _request.setOperationCode(deleteBusinessConcept_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getBusinessConcepts_WSGetBusinessConcepts_QNAME);
-            _bodyBlock.setValue(wsGetBusinessConcepts);
-            _bodyBlock.setSerializer(ns1_myWSGetBusinessConcepts_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_deleteBusinessConcept_WSDeleteBusinessConcept_QNAME);
+            _bodyBlock.setValue(wsDeleteBusinessConcept);
+            _bodyBlock.setSerializer(ns1_myWSDeleteBusinessConcept_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSStringArray _result = null;
+            com.amalto.workbench.webservices.WSString _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSStringArray)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSString)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSStringArray)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSString)_responseObj;
             }
             
             return _result;
@@ -2957,9 +2957,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of checkSchema
+     *  implementation of deleteDataModel
      */
-    public com.amalto.workbench.webservices.WSString checkSchema(com.amalto.workbench.webservices.WSCheckSchema wsSchema)
+    public com.amalto.workbench.webservices.WSDataModelPK deleteDataModel(com.amalto.workbench.webservices.WSDeleteDataModel wsDeleteDataModel)
         throws java.rmi.RemoteException {
         
         try {
@@ -2967,24 +2967,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(checkSchema_OPCODE);
+            _request.setOperationCode(deleteDataModel_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_checkSchema_WSCheckSchema_QNAME);
-            _bodyBlock.setValue(wsSchema);
-            _bodyBlock.setSerializer(ns1_myWSCheckSchema_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_deleteDataModel_WSDeleteDataModel_QNAME);
+            _bodyBlock.setValue(wsDeleteDataModel);
+            _bodyBlock.setSerializer(ns1_myWSDeleteDataModel_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSString _result = null;
+            com.amalto.workbench.webservices.WSDataModelPK _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSString)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSDataModelPK)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSString)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSDataModelPK)_responseObj;
             }
             
             return _result;
@@ -3239,9 +3239,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of getBusinessConceptKey
+     *  implementation of putBusinessConceptSchema
      */
-    public com.amalto.workbench.webservices.WSConceptKey getBusinessConceptKey(com.amalto.workbench.webservices.WSGetBusinessConceptKey wsGetBusinessConceptKey)
+    public com.amalto.workbench.webservices.WSString putBusinessConceptSchema(com.amalto.workbench.webservices.WSPutBusinessConceptSchema wsPutBusinessConceptSchema)
         throws java.rmi.RemoteException {
         
         try {
@@ -3249,24 +3249,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(getBusinessConceptKey_OPCODE);
+            _request.setOperationCode(putBusinessConceptSchema_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getBusinessConceptKey_WSGetBusinessConceptKey_QNAME);
-            _bodyBlock.setValue(wsGetBusinessConceptKey);
-            _bodyBlock.setSerializer(ns1_myWSGetBusinessConceptKey_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_putBusinessConceptSchema_WSPutBusinessConceptSchema_QNAME);
+            _bodyBlock.setValue(wsPutBusinessConceptSchema);
+            _bodyBlock.setSerializer(ns1_myWSPutBusinessConceptSchema_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSConceptKey _result = null;
+            com.amalto.workbench.webservices.WSString _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSConceptKey)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSString)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSConceptKey)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSString)_responseObj;
             }
             
             return _result;
@@ -3333,9 +3333,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of existsDataCluster
+     *  implementation of getDataCluster
      */
-    public com.amalto.workbench.webservices.WSBoolean existsDataCluster(com.amalto.workbench.webservices.WSExistsDataCluster wsExistsDataCluster)
+    public com.amalto.workbench.webservices.WSDataCluster getDataCluster(com.amalto.workbench.webservices.WSGetDataCluster wsDataClusterPK)
         throws java.rmi.RemoteException {
         
         try {
@@ -3343,24 +3343,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(existsDataCluster_OPCODE);
+            _request.setOperationCode(getDataCluster_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_existsDataCluster_WSExistsDataCluster_QNAME);
-            _bodyBlock.setValue(wsExistsDataCluster);
-            _bodyBlock.setSerializer(ns1_myWSExistsDataCluster_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getDataCluster_WSGetDataCluster_QNAME);
+            _bodyBlock.setValue(wsDataClusterPK);
+            _bodyBlock.setSerializer(ns1_myWSGetDataCluster_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSBoolean _result = null;
+            com.amalto.workbench.webservices.WSDataCluster _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSBoolean)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSDataCluster)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSBoolean)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSDataCluster)_responseObj;
             }
             
             return _result;
@@ -3897,9 +3897,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of existsDBDataCluster
+     *  implementation of existsDataCluster
      */
-    public com.amalto.workbench.webservices.WSBoolean existsDBDataCluster(com.amalto.workbench.webservices.WSExistsDBDataCluster wsExistsDBDataCluster)
+    public com.amalto.workbench.webservices.WSBoolean existsDataCluster(com.amalto.workbench.webservices.WSExistsDataCluster wsExistsDataCluster)
         throws java.rmi.RemoteException {
         
         try {
@@ -3907,12 +3907,12 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(existsDBDataCluster_OPCODE);
+            _request.setOperationCode(existsDataCluster_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_existsDBDataCluster_WSExistsDBDataCluster_QNAME);
-            _bodyBlock.setValue(wsExistsDBDataCluster);
-            _bodyBlock.setSerializer(ns1_myWSExistsDBDataCluster_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_existsDataCluster_WSExistsDataCluster_QNAME);
+            _bodyBlock.setValue(wsExistsDataCluster);
+            _bodyBlock.setSerializer(ns1_myWSExistsDataCluster_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
@@ -3944,9 +3944,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of putBusinessConceptSchema
+     *  implementation of putBusinessConcept
      */
-    public com.amalto.workbench.webservices.WSString putBusinessConceptSchema(com.amalto.workbench.webservices.WSPutBusinessConceptSchema wsPutBusinessConceptSchema)
+    public com.amalto.workbench.webservices.WSString putBusinessConcept(com.amalto.workbench.webservices.WSPutBusinessConcept wsPutBusinessConcept)
         throws java.rmi.RemoteException {
         
         try {
@@ -3954,12 +3954,12 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(putBusinessConceptSchema_OPCODE);
+            _request.setOperationCode(putBusinessConcept_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_putBusinessConceptSchema_WSPutBusinessConceptSchema_QNAME);
-            _bodyBlock.setValue(wsPutBusinessConceptSchema);
-            _bodyBlock.setSerializer(ns1_myWSPutBusinessConceptSchema_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_putBusinessConcept_WSPutBusinessConcept_QNAME);
+            _bodyBlock.setValue(wsPutBusinessConcept);
+            _bodyBlock.setSerializer(ns1_myWSPutBusinessConcept_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
@@ -4555,9 +4555,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of getFullPathValues
+     *  implementation of getBusinessConceptValue
      */
-    public com.amalto.workbench.webservices.WSStringArray getFullPathValues(com.amalto.workbench.webservices.WSGetFullPathValues wsGetFullPathValues)
+    public com.amalto.workbench.webservices.WSString getBusinessConceptValue(com.amalto.workbench.webservices.WSGetBusinessConceptValue wsGetBusinessConceptValue)
         throws java.rmi.RemoteException {
         
         try {
@@ -4565,24 +4565,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(getFullPathValues_OPCODE);
+            _request.setOperationCode(getBusinessConceptValue_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getFullPathValues_WSGetFullPathValues_QNAME);
-            _bodyBlock.setValue(wsGetFullPathValues);
-            _bodyBlock.setSerializer(ns1_myWSGetFullPathValues_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getBusinessConceptValue_WSGetBusinessConceptValue_QNAME);
+            _bodyBlock.setValue(wsGetBusinessConceptValue);
+            _bodyBlock.setSerializer(ns1_myWSGetBusinessConceptValue_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSStringArray _result = null;
+            com.amalto.workbench.webservices.WSString _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSStringArray)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSString)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSStringArray)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSString)_responseObj;
             }
             
             return _result;
@@ -4602,9 +4602,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of getDataCluster
+     *  implementation of getDataClusterPKs
      */
-    public com.amalto.workbench.webservices.WSDataCluster getDataCluster(com.amalto.workbench.webservices.WSGetDataCluster wsDataClusterPK)
+    public com.amalto.workbench.webservices.WSDataClusterPKArray getDataClusterPKs(com.amalto.workbench.webservices.WSRegexDataClusterPKs regexp)
         throws java.rmi.RemoteException {
         
         try {
@@ -4612,24 +4612,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(getDataCluster_OPCODE);
+            _request.setOperationCode(getDataClusterPKs_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getDataCluster_WSGetDataCluster_QNAME);
-            _bodyBlock.setValue(wsDataClusterPK);
-            _bodyBlock.setSerializer(ns1_myWSGetDataCluster_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getDataClusterPKs_WSRegexDataClusterPKs_QNAME);
+            _bodyBlock.setValue(regexp);
+            _bodyBlock.setSerializer(ns1_myWSRegexDataClusterPKs_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSDataCluster _result = null;
+            com.amalto.workbench.webservices.WSDataClusterPKArray _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSDataCluster)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSDataClusterPKArray)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSDataCluster)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSDataClusterPKArray)_responseObj;
             }
             
             return _result;
@@ -5260,9 +5260,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of deleteView
+     *  implementation of putView
      */
-    public com.amalto.workbench.webservices.WSViewPK deleteView(com.amalto.workbench.webservices.WSDeleteView wsViewDel)
+    public com.amalto.workbench.webservices.WSViewPK putView(com.amalto.workbench.webservices.WSPutView wsView)
         throws java.rmi.RemoteException {
         
         try {
@@ -5270,12 +5270,12 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(deleteView_OPCODE);
+            _request.setOperationCode(putView_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_deleteView_WSDeleteView_QNAME);
-            _bodyBlock.setValue(wsViewDel);
-            _bodyBlock.setSerializer(ns1_myWSDeleteView_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_putView_WSPutView_QNAME);
+            _bodyBlock.setValue(wsView);
+            _bodyBlock.setSerializer(ns1_myWSPutView_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
@@ -5777,9 +5777,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of getBusinessConceptValue
+     *  implementation of deleteView
      */
-    public com.amalto.workbench.webservices.WSString getBusinessConceptValue(com.amalto.workbench.webservices.WSGetBusinessConceptValue wsGetBusinessConceptValue)
+    public com.amalto.workbench.webservices.WSViewPK deleteView(com.amalto.workbench.webservices.WSDeleteView wsViewDel)
         throws java.rmi.RemoteException {
         
         try {
@@ -5787,24 +5787,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(getBusinessConceptValue_OPCODE);
+            _request.setOperationCode(deleteView_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getBusinessConceptValue_WSGetBusinessConceptValue_QNAME);
-            _bodyBlock.setValue(wsGetBusinessConceptValue);
-            _bodyBlock.setSerializer(ns1_myWSGetBusinessConceptValue_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_deleteView_WSDeleteView_QNAME);
+            _bodyBlock.setValue(wsViewDel);
+            _bodyBlock.setSerializer(ns1_myWSDeleteView_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSString _result = null;
+            com.amalto.workbench.webservices.WSViewPK _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSString)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSViewPK)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSString)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSViewPK)_responseObj;
             }
             
             return _result;
@@ -5824,9 +5824,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of existsView
+     *  implementation of getView
      */
-    public com.amalto.workbench.webservices.WSBoolean existsView(com.amalto.workbench.webservices.WSExistsView wsViewPK)
+    public com.amalto.workbench.webservices.WSView getView(com.amalto.workbench.webservices.WSGetView wsViewPK)
         throws java.rmi.RemoteException {
         
         try {
@@ -5834,24 +5834,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(existsView_OPCODE);
+            _request.setOperationCode(getView_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_existsView_WSExistsView_QNAME);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getView_WSGetView_QNAME);
             _bodyBlock.setValue(wsViewPK);
-            _bodyBlock.setSerializer(ns1_myWSExistsView_LiteralSerializer);
+            _bodyBlock.setSerializer(ns1_myWSGetView_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSBoolean _result = null;
+            com.amalto.workbench.webservices.WSView _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSBoolean)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSView)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSBoolean)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSView)_responseObj;
             }
             
             return _result;
@@ -6858,9 +6858,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of getDataClusterPKs
+     *  implementation of getBusinessConceptKey
      */
-    public com.amalto.workbench.webservices.WSDataClusterPKArray getDataClusterPKs(com.amalto.workbench.webservices.WSRegexDataClusterPKs regexp)
+    public com.amalto.workbench.webservices.WSConceptKey getBusinessConceptKey(com.amalto.workbench.webservices.WSGetBusinessConceptKey wsGetBusinessConceptKey)
         throws java.rmi.RemoteException {
         
         try {
@@ -6868,24 +6868,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(getDataClusterPKs_OPCODE);
+            _request.setOperationCode(getBusinessConceptKey_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getDataClusterPKs_WSRegexDataClusterPKs_QNAME);
-            _bodyBlock.setValue(regexp);
-            _bodyBlock.setSerializer(ns1_myWSRegexDataClusterPKs_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getBusinessConceptKey_WSGetBusinessConceptKey_QNAME);
+            _bodyBlock.setValue(wsGetBusinessConceptKey);
+            _bodyBlock.setSerializer(ns1_myWSGetBusinessConceptKey_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSDataClusterPKArray _result = null;
+            com.amalto.workbench.webservices.WSConceptKey _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSDataClusterPKArray)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSConceptKey)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSDataClusterPKArray)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSConceptKey)_responseObj;
             }
             
             return _result;
@@ -6999,9 +6999,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of deleteDataCluster
+     *  implementation of putDBDataCluster
      */
-    public com.amalto.workbench.webservices.WSDataClusterPK deleteDataCluster(com.amalto.workbench.webservices.WSDeleteDataCluster wsDeleteDataCluster)
+    public com.amalto.workbench.webservices.WSBoolean putDBDataCluster(com.amalto.workbench.webservices.WSPutDBDataCluster wsDataCluster)
         throws java.rmi.RemoteException {
         
         try {
@@ -7009,24 +7009,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(deleteDataCluster_OPCODE);
+            _request.setOperationCode(putDBDataCluster_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_deleteDataCluster_WSDeleteDataCluster_QNAME);
-            _bodyBlock.setValue(wsDeleteDataCluster);
-            _bodyBlock.setSerializer(ns1_myWSDeleteDataCluster_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_putDBDataCluster_WSPutDBDataCluster_QNAME);
+            _bodyBlock.setValue(wsDataCluster);
+            _bodyBlock.setSerializer(ns1_myWSPutDBDataCluster_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSDataClusterPK _result = null;
+            com.amalto.workbench.webservices.WSBoolean _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSDataClusterPK)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSBoolean)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSDataClusterPK)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSBoolean)_responseObj;
             }
             
             return _result;
@@ -7140,9 +7140,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of getView
+     *  implementation of existsItem
      */
-    public com.amalto.workbench.webservices.WSView getView(com.amalto.workbench.webservices.WSGetView wsViewPK)
+    public com.amalto.workbench.webservices.WSBoolean existsItem(com.amalto.workbench.webservices.WSExistsItem wsExistsItem)
         throws java.rmi.RemoteException {
         
         try {
@@ -7150,24 +7150,71 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(getView_OPCODE);
+            _request.setOperationCode(existsItem_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getView_WSGetView_QNAME);
-            _bodyBlock.setValue(wsViewPK);
-            _bodyBlock.setSerializer(ns1_myWSGetView_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_existsItem_WSExistsItem_QNAME);
+            _bodyBlock.setValue(wsExistsItem);
+            _bodyBlock.setSerializer(ns1_myWSExistsItem_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSView _result = null;
+            com.amalto.workbench.webservices.WSBoolean _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSView)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSBoolean)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSView)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSBoolean)_responseObj;
+            }
+            
+            return _result;
+            
+        } catch (RemoteException e) {
+            // let this one through unchanged
+            throw e;
+        } catch (JAXRPCException e) {
+            throw new RemoteException(e.getMessage(), e);
+        } catch (Exception e) {
+            if (e instanceof RuntimeException) {
+                throw (RuntimeException)e;
+            } else {
+                throw new RemoteException(e.getMessage(), e);
+            }
+        }
+    }
+    
+    /*
+     *  implementation of getViewPKs
+     */
+    public com.amalto.workbench.webservices.WSViewPKArray getViewPKs(com.amalto.workbench.webservices.WSGetViewPKs regexp)
+        throws java.rmi.RemoteException {
+        
+        try {
+            
+            StreamingSenderState _state = _start(_handlerChain);
+            
+            InternalSOAPMessage _request = _state.getRequest();
+            _request.setOperationCode(getViewPKs_OPCODE);
+            
+            
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getViewPKs_WSGetViewPKs_QNAME);
+            _bodyBlock.setValue(regexp);
+            _bodyBlock.setSerializer(ns1_myWSGetViewPKs_LiteralSerializer);
+            _request.setBody(_bodyBlock);
+            
+            _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
+            
+            _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
+            
+            com.amalto.workbench.webservices.WSViewPKArray _result = null;
+            Object _responseObj = _state.getResponse().getBody().getValue();
+            if (_responseObj instanceof SOAPDeserializationState) {
+                _result = (com.amalto.workbench.webservices.WSViewPKArray)((SOAPDeserializationState) _responseObj).getInstance();
+            } else {
+                _result = (com.amalto.workbench.webservices.WSViewPKArray)_responseObj;
             }
             
             return _result;
@@ -7751,9 +7798,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of putDBDataCluster
+     *  implementation of putDataCluster
      */
-    public com.amalto.workbench.webservices.WSBoolean putDBDataCluster(com.amalto.workbench.webservices.WSPutDBDataCluster wsDataCluster)
+    public com.amalto.workbench.webservices.WSDataClusterPK putDataCluster(com.amalto.workbench.webservices.WSPutDataCluster wsDataCluster)
         throws java.rmi.RemoteException {
         
         try {
@@ -7761,24 +7808,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(putDBDataCluster_OPCODE);
+            _request.setOperationCode(putDataCluster_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_putDBDataCluster_WSPutDBDataCluster_QNAME);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_putDataCluster_WSPutDataCluster_QNAME);
             _bodyBlock.setValue(wsDataCluster);
-            _bodyBlock.setSerializer(ns1_myWSPutDBDataCluster_LiteralSerializer);
+            _bodyBlock.setSerializer(ns1_myWSPutDataCluster_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSBoolean _result = null;
+            com.amalto.workbench.webservices.WSDataClusterPK _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSBoolean)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSDataClusterPK)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSBoolean)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSDataClusterPK)_responseObj;
             }
             
             return _result;
@@ -7798,9 +7845,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of putBusinessConcept
+     *  implementation of getBusinessConcepts
      */
-    public com.amalto.workbench.webservices.WSString putBusinessConcept(com.amalto.workbench.webservices.WSPutBusinessConcept wsPutBusinessConcept)
+    public com.amalto.workbench.webservices.WSStringArray getBusinessConcepts(com.amalto.workbench.webservices.WSGetBusinessConcepts wsGetBusinessConcepts)
         throws java.rmi.RemoteException {
         
         try {
@@ -7808,24 +7855,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(putBusinessConcept_OPCODE);
+            _request.setOperationCode(getBusinessConcepts_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_putBusinessConcept_WSPutBusinessConcept_QNAME);
-            _bodyBlock.setValue(wsPutBusinessConcept);
-            _bodyBlock.setSerializer(ns1_myWSPutBusinessConcept_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getBusinessConcepts_WSGetBusinessConcepts_QNAME);
+            _bodyBlock.setValue(wsGetBusinessConcepts);
+            _bodyBlock.setSerializer(ns1_myWSGetBusinessConcepts_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSString _result = null;
+            com.amalto.workbench.webservices.WSStringArray _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSString)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSStringArray)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSString)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSStringArray)_responseObj;
             }
             
             return _result;
@@ -7892,9 +7939,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of putDataCluster
+     *  implementation of existsDBDataCluster
      */
-    public com.amalto.workbench.webservices.WSDataClusterPK putDataCluster(com.amalto.workbench.webservices.WSPutDataCluster wsDataCluster)
+    public com.amalto.workbench.webservices.WSBoolean existsDBDataCluster(com.amalto.workbench.webservices.WSExistsDBDataCluster wsExistsDBDataCluster)
         throws java.rmi.RemoteException {
         
         try {
@@ -7902,24 +7949,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(putDataCluster_OPCODE);
+            _request.setOperationCode(existsDBDataCluster_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_putDataCluster_WSPutDataCluster_QNAME);
-            _bodyBlock.setValue(wsDataCluster);
-            _bodyBlock.setSerializer(ns1_myWSPutDataCluster_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_existsDBDataCluster_WSExistsDBDataCluster_QNAME);
+            _bodyBlock.setValue(wsExistsDBDataCluster);
+            _bodyBlock.setSerializer(ns1_myWSExistsDBDataCluster_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSDataClusterPK _result = null;
+            com.amalto.workbench.webservices.WSBoolean _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSDataClusterPK)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSBoolean)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSDataClusterPK)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSBoolean)_responseObj;
             }
             
             return _result;
@@ -8033,9 +8080,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of existsItem
+     *  implementation of getItem
      */
-    public com.amalto.workbench.webservices.WSBoolean existsItem(com.amalto.workbench.webservices.WSExistsItem wsExistsItem)
+    public com.amalto.workbench.webservices.WSItem getItem(com.amalto.workbench.webservices.WSGetItem wsGetItem)
         throws java.rmi.RemoteException {
         
         try {
@@ -8043,24 +8090,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(existsItem_OPCODE);
+            _request.setOperationCode(getItem_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_existsItem_WSExistsItem_QNAME);
-            _bodyBlock.setValue(wsExistsItem);
-            _bodyBlock.setSerializer(ns1_myWSExistsItem_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getItem_WSGetItem_QNAME);
+            _bodyBlock.setValue(wsGetItem);
+            _bodyBlock.setSerializer(ns1_myWSGetItem_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSBoolean _result = null;
+            com.amalto.workbench.webservices.WSItem _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSBoolean)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSItem)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSBoolean)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSItem)_responseObj;
             }
             
             return _result;
@@ -8315,9 +8362,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of getConceptsInDataCluster
+     *  implementation of deleteDataCluster
      */
-    public com.amalto.workbench.webservices.WSStringArray getConceptsInDataCluster(com.amalto.workbench.webservices.WSGetConceptsInDataCluster wsGetConceptsInDataCluster)
+    public com.amalto.workbench.webservices.WSDataClusterPK deleteDataCluster(com.amalto.workbench.webservices.WSDeleteDataCluster wsDeleteDataCluster)
         throws java.rmi.RemoteException {
         
         try {
@@ -8325,24 +8372,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(getConceptsInDataCluster_OPCODE);
+            _request.setOperationCode(deleteDataCluster_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getConceptsInDataCluster_WSGetConceptsInDataCluster_QNAME);
-            _bodyBlock.setValue(wsGetConceptsInDataCluster);
-            _bodyBlock.setSerializer(ns1_myWSGetConceptsInDataCluster_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_deleteDataCluster_WSDeleteDataCluster_QNAME);
+            _bodyBlock.setValue(wsDeleteDataCluster);
+            _bodyBlock.setSerializer(ns1_myWSDeleteDataCluster_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSStringArray _result = null;
+            com.amalto.workbench.webservices.WSDataClusterPK _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSStringArray)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSDataClusterPK)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSStringArray)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSDataClusterPK)_responseObj;
             }
             
             return _result;
@@ -8409,9 +8456,9 @@ public class XtentisPort_Stub
     }
     
     /*
-     *  implementation of getItem
+     *  implementation of getFullPathValues
      */
-    public com.amalto.workbench.webservices.WSItem getItem(com.amalto.workbench.webservices.WSGetItem wsGetItem)
+    public com.amalto.workbench.webservices.WSStringArray getFullPathValues(com.amalto.workbench.webservices.WSGetFullPathValues wsGetFullPathValues)
         throws java.rmi.RemoteException {
         
         try {
@@ -8419,71 +8466,24 @@ public class XtentisPort_Stub
             StreamingSenderState _state = _start(_handlerChain);
             
             InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(getItem_OPCODE);
+            _request.setOperationCode(getFullPathValues_OPCODE);
             
             
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getItem_WSGetItem_QNAME);
-            _bodyBlock.setValue(wsGetItem);
-            _bodyBlock.setSerializer(ns1_myWSGetItem_LiteralSerializer);
+            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_getFullPathValues_WSGetFullPathValues_QNAME);
+            _bodyBlock.setValue(wsGetFullPathValues);
+            _bodyBlock.setSerializer(ns1_myWSGetFullPathValues_LiteralSerializer);
             _request.setBody(_bodyBlock);
             
             _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
             
             _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
             
-            com.amalto.workbench.webservices.WSItem _result = null;
+            com.amalto.workbench.webservices.WSStringArray _result = null;
             Object _responseObj = _state.getResponse().getBody().getValue();
             if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSItem)((SOAPDeserializationState) _responseObj).getInstance();
+                _result = (com.amalto.workbench.webservices.WSStringArray)((SOAPDeserializationState) _responseObj).getInstance();
             } else {
-                _result = (com.amalto.workbench.webservices.WSItem)_responseObj;
-            }
-            
-            return _result;
-            
-        } catch (RemoteException e) {
-            // let this one through unchanged
-            throw e;
-        } catch (JAXRPCException e) {
-            throw new RemoteException(e.getMessage(), e);
-        } catch (Exception e) {
-            if (e instanceof RuntimeException) {
-                throw (RuntimeException)e;
-            } else {
-                throw new RemoteException(e.getMessage(), e);
-            }
-        }
-    }
-    
-    /*
-     *  implementation of putDataModel
-     */
-    public com.amalto.workbench.webservices.WSDataModelPK putDataModel(com.amalto.workbench.webservices.WSPutDataModel wsDataModel)
-        throws java.rmi.RemoteException {
-        
-        try {
-            
-            StreamingSenderState _state = _start(_handlerChain);
-            
-            InternalSOAPMessage _request = _state.getRequest();
-            _request.setOperationCode(putDataModel_OPCODE);
-            
-            
-            SOAPBlockInfo _bodyBlock = new SOAPBlockInfo(ns1_putDataModel_WSPutDataModel_QNAME);
-            _bodyBlock.setValue(wsDataModel);
-            _bodyBlock.setSerializer(ns1_myWSPutDataModel_LiteralSerializer);
-            _request.setBody(_bodyBlock);
-            
-            _state.getMessageContext().setProperty(HttpClientTransport.HTTP_SOAPACTION_PROPERTY, "");
-            
-            _send((String) _getProperty(ENDPOINT_ADDRESS_PROPERTY), _state);
-            
-            com.amalto.workbench.webservices.WSDataModelPK _result = null;
-            Object _responseObj = _state.getResponse().getBody().getValue();
-            if (_responseObj instanceof SOAPDeserializationState) {
-                _result = (com.amalto.workbench.webservices.WSDataModelPK)((SOAPDeserializationState) _responseObj).getInstance();
-            } else {
-                _result = (com.amalto.workbench.webservices.WSDataModelPK)_responseObj;
+                _result = (com.amalto.workbench.webservices.WSStringArray)_responseObj;
             }
             
             return _result;
@@ -8953,8 +8953,8 @@ public class XtentisPort_Stub
             case putItemByOperatorType_OPCODE:
                 _deserialize_putItemByOperatorType(bodyReader, deserializationContext, state);
                 break;
-            case getViewPKs_OPCODE:
-                _deserialize_getViewPKs(bodyReader, deserializationContext, state);
+            case getConceptsInDataClusterWithRevisions_OPCODE:
+                _deserialize_getConceptsInDataClusterWithRevisions(bodyReader, deserializationContext, state);
                 break;
             case putTransformer_OPCODE:
                 _deserialize_putTransformer(bodyReader, deserializationContext, state);
@@ -8971,8 +8971,8 @@ public class XtentisPort_Stub
             case getSynchronizationPlanItemsAlgorithms_OPCODE:
                 _deserialize_getSynchronizationPlanItemsAlgorithms(bodyReader, deserializationContext, state);
                 break;
-            case getConceptsInDataClusterWithRevisions_OPCODE:
-                _deserialize_getConceptsInDataClusterWithRevisions(bodyReader, deserializationContext, state);
+            case getConceptsInDataCluster_OPCODE:
+                _deserialize_getConceptsInDataCluster(bodyReader, deserializationContext, state);
                 break;
             case versioningTagUniverse_OPCODE:
                 _deserialize_versioningTagUniverse(bodyReader, deserializationContext, state);
@@ -9028,8 +9028,8 @@ public class XtentisPort_Stub
             case xPathsSearch_OPCODE:
                 _deserialize_xPathsSearch(bodyReader, deserializationContext, state);
                 break;
-            case deleteDataModel_OPCODE:
-                _deserialize_deleteDataModel(bodyReader, deserializationContext, state);
+            case putDataModel_OPCODE:
+                _deserialize_putDataModel(bodyReader, deserializationContext, state);
                 break;
             case getItems_OPCODE:
                 _deserialize_getItems(bodyReader, deserializationContext, state);
@@ -9055,8 +9055,8 @@ public class XtentisPort_Stub
             case getObjectsForUniverses_OPCODE:
                 _deserialize_getObjectsForUniverses(bodyReader, deserializationContext, state);
                 break;
-            case deleteBusinessConcept_OPCODE:
-                _deserialize_deleteBusinessConcept(bodyReader, deserializationContext, state);
+            case checkSchema_OPCODE:
+                _deserialize_checkSchema(bodyReader, deserializationContext, state);
                 break;
             case putStoredProcedure_OPCODE:
                 _deserialize_putStoredProcedure(bodyReader, deserializationContext, state);
@@ -9076,8 +9076,8 @@ public class XtentisPort_Stub
             case logout_OPCODE:
                 _deserialize_logout(bodyReader, deserializationContext, state);
                 break;
-            case putView_OPCODE:
-                _deserialize_putView(bodyReader, deserializationContext, state);
+            case existsView_OPCODE:
+                _deserialize_existsView(bodyReader, deserializationContext, state);
                 break;
             case deleteItem_OPCODE:
                 _deserialize_deleteItem(bodyReader, deserializationContext, state);
@@ -9106,8 +9106,8 @@ public class XtentisPort_Stub
             case resolveSynchronizationItem_OPCODE:
                 _deserialize_resolveSynchronizationItem(bodyReader, deserializationContext, state);
                 break;
-            case getBusinessConcepts_OPCODE:
-                _deserialize_getBusinessConcepts(bodyReader, deserializationContext, state);
+            case deleteBusinessConcept_OPCODE:
+                _deserialize_deleteBusinessConcept(bodyReader, deserializationContext, state);
                 break;
             case getCurrentUniverse_OPCODE:
                 _deserialize_getCurrentUniverse(bodyReader, deserializationContext, state);
@@ -9118,8 +9118,8 @@ public class XtentisPort_Stub
             case partialPutItem_OPCODE:
                 _deserialize_partialPutItem(bodyReader, deserializationContext, state);
                 break;
-            case checkSchema_OPCODE:
-                _deserialize_checkSchema(bodyReader, deserializationContext, state);
+            case deleteDataModel_OPCODE:
+                _deserialize_deleteDataModel(bodyReader, deserializationContext, state);
                 break;
             case getServiceConfiguration_OPCODE:
                 _deserialize_getServiceConfiguration(bodyReader, deserializationContext, state);
@@ -9136,14 +9136,14 @@ public class XtentisPort_Stub
             case existsSynchronizationItem_OPCODE:
                 _deserialize_existsSynchronizationItem(bodyReader, deserializationContext, state);
                 break;
-            case getBusinessConceptKey_OPCODE:
-                _deserialize_getBusinessConceptKey(bodyReader, deserializationContext, state);
+            case putBusinessConceptSchema_OPCODE:
+                _deserialize_putBusinessConceptSchema(bodyReader, deserializationContext, state);
                 break;
             case versioningCommitItems_OPCODE:
                 _deserialize_versioningCommitItems(bodyReader, deserializationContext, state);
                 break;
-            case existsDataCluster_OPCODE:
-                _deserialize_existsDataCluster(bodyReader, deserializationContext, state);
+            case getDataCluster_OPCODE:
+                _deserialize_getDataCluster(bodyReader, deserializationContext, state);
                 break;
             case dropItem_OPCODE:
                 _deserialize_dropItem(bodyReader, deserializationContext, state);
@@ -9178,11 +9178,11 @@ public class XtentisPort_Stub
             case versioningGetInfo_OPCODE:
                 _deserialize_versioningGetInfo(bodyReader, deserializationContext, state);
                 break;
-            case existsDBDataCluster_OPCODE:
-                _deserialize_existsDBDataCluster(bodyReader, deserializationContext, state);
+            case existsDataCluster_OPCODE:
+                _deserialize_existsDataCluster(bodyReader, deserializationContext, state);
                 break;
-            case putBusinessConceptSchema_OPCODE:
-                _deserialize_putBusinessConceptSchema(bodyReader, deserializationContext, state);
+            case putBusinessConcept_OPCODE:
+                _deserialize_putBusinessConcept(bodyReader, deserializationContext, state);
                 break;
             case putRole_OPCODE:
                 _deserialize_putRole(bodyReader, deserializationContext, state);
@@ -9220,11 +9220,11 @@ public class XtentisPort_Stub
             case versioningGetUniverseVersions_OPCODE:
                 _deserialize_versioningGetUniverseVersions(bodyReader, deserializationContext, state);
                 break;
-            case getFullPathValues_OPCODE:
-                _deserialize_getFullPathValues(bodyReader, deserializationContext, state);
+            case getBusinessConceptValue_OPCODE:
+                _deserialize_getBusinessConceptValue(bodyReader, deserializationContext, state);
                 break;
-            case getDataCluster_OPCODE:
-                _deserialize_getDataCluster(bodyReader, deserializationContext, state);
+            case getDataClusterPKs_OPCODE:
+                _deserialize_getDataClusterPKs(bodyReader, deserializationContext, state);
                 break;
             case existsTransformer_OPCODE:
                 _deserialize_existsTransformer(bodyReader, deserializationContext, state);
@@ -9265,8 +9265,8 @@ public class XtentisPort_Stub
             case getRoutingOrderV2sByCriteria_OPCODE:
                 _deserialize_getRoutingOrderV2sByCriteria(bodyReader, deserializationContext, state);
                 break;
-            case deleteView_OPCODE:
-                _deserialize_deleteView(bodyReader, deserializationContext, state);
+            case putView_OPCODE:
+                _deserialize_putView(bodyReader, deserializationContext, state);
                 break;
             case versioningGetObjectsVersions_OPCODE:
                 _deserialize_versioningGetObjectsVersions(bodyReader, deserializationContext, state);
@@ -9298,11 +9298,11 @@ public class XtentisPort_Stub
             case versioningTagItems_OPCODE:
                 _deserialize_versioningTagItems(bodyReader, deserializationContext, state);
                 break;
-            case getBusinessConceptValue_OPCODE:
-                _deserialize_getBusinessConceptValue(bodyReader, deserializationContext, state);
+            case deleteView_OPCODE:
+                _deserialize_deleteView(bodyReader, deserializationContext, state);
                 break;
-            case existsView_OPCODE:
-                _deserialize_existsView(bodyReader, deserializationContext, state);
+            case getView_OPCODE:
+                _deserialize_getView(bodyReader, deserializationContext, state);
                 break;
             case getAutoIncrement_OPCODE:
                 _deserialize_getAutoIncrement(bodyReader, deserializationContext, state);
@@ -9367,8 +9367,8 @@ public class XtentisPort_Stub
             case putItemArray_OPCODE:
                 _deserialize_putItemArray(bodyReader, deserializationContext, state);
                 break;
-            case getDataClusterPKs_OPCODE:
-                _deserialize_getDataClusterPKs(bodyReader, deserializationContext, state);
+            case getBusinessConceptKey_OPCODE:
+                _deserialize_getBusinessConceptKey(bodyReader, deserializationContext, state);
                 break;
             case versioningGetItemsVersions_OPCODE:
                 _deserialize_versioningGetItemsVersions(bodyReader, deserializationContext, state);
@@ -9376,8 +9376,8 @@ public class XtentisPort_Stub
             case deleteMenu_OPCODE:
                 _deserialize_deleteMenu(bodyReader, deserializationContext, state);
                 break;
-            case deleteDataCluster_OPCODE:
-                _deserialize_deleteDataCluster(bodyReader, deserializationContext, state);
+            case putDBDataCluster_OPCODE:
+                _deserialize_putDBDataCluster(bodyReader, deserializationContext, state);
                 break;
             case deleteUniverse_OPCODE:
                 _deserialize_deleteUniverse(bodyReader, deserializationContext, state);
@@ -9385,8 +9385,11 @@ public class XtentisPort_Stub
             case versioningGetItemHistory_OPCODE:
                 _deserialize_versioningGetItemHistory(bodyReader, deserializationContext, state);
                 break;
-            case getView_OPCODE:
-                _deserialize_getView(bodyReader, deserializationContext, state);
+            case existsItem_OPCODE:
+                _deserialize_existsItem(bodyReader, deserializationContext, state);
+                break;
+            case getViewPKs_OPCODE:
+                _deserialize_getViewPKs(bodyReader, deserializationContext, state);
                 break;
             case putSynchronizationItem_OPCODE:
                 _deserialize_putSynchronizationItem(bodyReader, deserializationContext, state);
@@ -9424,17 +9427,17 @@ public class XtentisPort_Stub
             case versioningRestoreItems_OPCODE:
                 _deserialize_versioningRestoreItems(bodyReader, deserializationContext, state);
                 break;
-            case putDBDataCluster_OPCODE:
-                _deserialize_putDBDataCluster(bodyReader, deserializationContext, state);
+            case putDataCluster_OPCODE:
+                _deserialize_putDataCluster(bodyReader, deserializationContext, state);
                 break;
-            case putBusinessConcept_OPCODE:
-                _deserialize_putBusinessConcept(bodyReader, deserializationContext, state);
+            case getBusinessConcepts_OPCODE:
+                _deserialize_getBusinessConcepts(bodyReader, deserializationContext, state);
                 break;
             case executeRoutingOrderV2Synchronously_OPCODE:
                 _deserialize_executeRoutingOrderV2Synchronously(bodyReader, deserializationContext, state);
                 break;
-            case putDataCluster_OPCODE:
-                _deserialize_putDataCluster(bodyReader, deserializationContext, state);
+            case existsDBDataCluster_OPCODE:
+                _deserialize_existsDBDataCluster(bodyReader, deserializationContext, state);
                 break;
             case getUniversePKs_OPCODE:
                 _deserialize_getUniversePKs(bodyReader, deserializationContext, state);
@@ -9442,8 +9445,8 @@ public class XtentisPort_Stub
             case ping_OPCODE:
                 _deserialize_ping(bodyReader, deserializationContext, state);
                 break;
-            case existsItem_OPCODE:
-                _deserialize_existsItem(bodyReader, deserializationContext, state);
+            case getItem_OPCODE:
+                _deserialize_getItem(bodyReader, deserializationContext, state);
                 break;
             case getRoutingOrderV2PKsByCriteria_OPCODE:
                 _deserialize_getRoutingOrderV2PKsByCriteria(bodyReader, deserializationContext, state);
@@ -9460,17 +9463,14 @@ public class XtentisPort_Stub
             case synchronizationGetItemXML_OPCODE:
                 _deserialize_synchronizationGetItemXML(bodyReader, deserializationContext, state);
                 break;
-            case getConceptsInDataCluster_OPCODE:
-                _deserialize_getConceptsInDataCluster(bodyReader, deserializationContext, state);
+            case deleteDataCluster_OPCODE:
+                _deserialize_deleteDataCluster(bodyReader, deserializationContext, state);
                 break;
             case removeDroppedItem_OPCODE:
                 _deserialize_removeDroppedItem(bodyReader, deserializationContext, state);
                 break;
-            case getItem_OPCODE:
-                _deserialize_getItem(bodyReader, deserializationContext, state);
-                break;
-            case putDataModel_OPCODE:
-                _deserialize_putDataModel(bodyReader, deserializationContext, state);
+            case getFullPathValues_OPCODE:
+                _deserialize_getFullPathValues(bodyReader, deserializationContext, state);
                 break;
             case executeTransformerV2_OPCODE:
                 _deserialize_executeTransformerV2(bodyReader, deserializationContext, state);
@@ -9598,15 +9598,15 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the getViewPKs operation.
+     * This method deserializes the body of the getConceptsInDataClusterWithRevisions operation.
      */
-    private void _deserialize_getViewPKs(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSViewPKArrayObj =
-            ns1_myWSViewPKArray_LiteralSerializer.deserialize(ns1_getViewPKs_WSViewPKArray_QNAME,
+    private void _deserialize_getConceptsInDataClusterWithRevisions(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSConceptRevisionMapObj =
+            ns1_myWSConceptRevisionMap_LiteralSerializer.deserialize(ns1_getConceptsInDataClusterWithRevisions_WSConceptRevisionMap_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getViewPKs_WSViewPKArray_QNAME);
-        bodyBlock.setValue(myWSViewPKArrayObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getConceptsInDataClusterWithRevisions_WSConceptRevisionMap_QNAME);
+        bodyBlock.setValue(myWSConceptRevisionMapObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -9676,15 +9676,15 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the getConceptsInDataClusterWithRevisions operation.
+     * This method deserializes the body of the getConceptsInDataCluster operation.
      */
-    private void _deserialize_getConceptsInDataClusterWithRevisions(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSConceptRevisionMapObj =
-            ns1_myWSConceptRevisionMap_LiteralSerializer.deserialize(ns1_getConceptsInDataClusterWithRevisions_WSConceptRevisionMap_QNAME,
+    private void _deserialize_getConceptsInDataCluster(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSStringArrayObj =
+            ns1_myWSStringArray_LiteralSerializer.deserialize(ns1_getConceptsInDataCluster_WSStringArray_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getConceptsInDataClusterWithRevisions_WSConceptRevisionMap_QNAME);
-        bodyBlock.setValue(myWSConceptRevisionMapObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getConceptsInDataCluster_WSStringArray_QNAME);
+        bodyBlock.setValue(myWSStringArrayObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -9923,14 +9923,14 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the deleteDataModel operation.
+     * This method deserializes the body of the putDataModel operation.
      */
-    private void _deserialize_deleteDataModel(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+    private void _deserialize_putDataModel(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
         Object myWSDataModelPKObj =
-            ns1_myWSDataModelPK_LiteralSerializer.deserialize(ns1_deleteDataModel_WSDataModelPK_QNAME,
+            ns1_myWSDataModelPK_LiteralSerializer.deserialize(ns1_putDataModel_WSDataModelPK_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_deleteDataModel_WSDataModelPK_QNAME);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_putDataModel_WSDataModelPK_QNAME);
         bodyBlock.setValue(myWSDataModelPKObj);
         state.getResponse().setBody(bodyBlock);
     }
@@ -10040,14 +10040,14 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the deleteBusinessConcept operation.
+     * This method deserializes the body of the checkSchema operation.
      */
-    private void _deserialize_deleteBusinessConcept(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+    private void _deserialize_checkSchema(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
         Object myWSStringObj =
-            ns1_myWSString_LiteralSerializer.deserialize(ns1_deleteBusinessConcept_WSString_QNAME,
+            ns1_myWSString_LiteralSerializer.deserialize(ns1_checkSchema_WSString_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_deleteBusinessConcept_WSString_QNAME);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_checkSchema_WSString_QNAME);
         bodyBlock.setValue(myWSStringObj);
         state.getResponse().setBody(bodyBlock);
     }
@@ -10131,15 +10131,15 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the putView operation.
+     * This method deserializes the body of the existsView operation.
      */
-    private void _deserialize_putView(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSViewPKObj =
-            ns1_myWSViewPK_LiteralSerializer.deserialize(ns1_putView_WSViewPK_QNAME,
+    private void _deserialize_existsView(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSBooleanObj =
+            ns1_myWSBoolean_LiteralSerializer.deserialize(ns1_existsView_WSBoolean_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_putView_WSViewPK_QNAME);
-        bodyBlock.setValue(myWSViewPKObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_existsView_WSBoolean_QNAME);
+        bodyBlock.setValue(myWSBooleanObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -10261,15 +10261,15 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the getBusinessConcepts operation.
+     * This method deserializes the body of the deleteBusinessConcept operation.
      */
-    private void _deserialize_getBusinessConcepts(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSStringArrayObj =
-            ns1_myWSStringArray_LiteralSerializer.deserialize(ns1_getBusinessConcepts_WSStringArray_QNAME,
+    private void _deserialize_deleteBusinessConcept(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSStringObj =
+            ns1_myWSString_LiteralSerializer.deserialize(ns1_deleteBusinessConcept_WSString_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getBusinessConcepts_WSStringArray_QNAME);
-        bodyBlock.setValue(myWSStringArrayObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_deleteBusinessConcept_WSString_QNAME);
+        bodyBlock.setValue(myWSStringObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -10313,15 +10313,15 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the checkSchema operation.
+     * This method deserializes the body of the deleteDataModel operation.
      */
-    private void _deserialize_checkSchema(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSStringObj =
-            ns1_myWSString_LiteralSerializer.deserialize(ns1_checkSchema_WSString_QNAME,
+    private void _deserialize_deleteDataModel(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSDataModelPKObj =
+            ns1_myWSDataModelPK_LiteralSerializer.deserialize(ns1_deleteDataModel_WSDataModelPK_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_checkSchema_WSString_QNAME);
-        bodyBlock.setValue(myWSStringObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_deleteDataModel_WSDataModelPK_QNAME);
+        bodyBlock.setValue(myWSDataModelPKObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -10391,15 +10391,15 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the getBusinessConceptKey operation.
+     * This method deserializes the body of the putBusinessConceptSchema operation.
      */
-    private void _deserialize_getBusinessConceptKey(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSConceptKeyObj =
-            ns1_myWSConceptKey_LiteralSerializer.deserialize(ns1_getBusinessConceptKey_WSConceptKey_QNAME,
+    private void _deserialize_putBusinessConceptSchema(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSStringObj =
+            ns1_myWSString_LiteralSerializer.deserialize(ns1_putBusinessConceptSchema_WSString_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getBusinessConceptKey_WSConceptKey_QNAME);
-        bodyBlock.setValue(myWSConceptKeyObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_putBusinessConceptSchema_WSString_QNAME);
+        bodyBlock.setValue(myWSStringObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -10417,15 +10417,15 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the existsDataCluster operation.
+     * This method deserializes the body of the getDataCluster operation.
      */
-    private void _deserialize_existsDataCluster(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSBooleanObj =
-            ns1_myWSBoolean_LiteralSerializer.deserialize(ns1_existsDataCluster_WSBoolean_QNAME,
+    private void _deserialize_getDataCluster(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSDataClusterObj =
+            ns1_myWSDataCluster_LiteralSerializer.deserialize(ns1_getDataCluster_WSDataCluster_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_existsDataCluster_WSBoolean_QNAME);
-        bodyBlock.setValue(myWSBooleanObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getDataCluster_WSDataCluster_QNAME);
+        bodyBlock.setValue(myWSDataClusterObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -10573,27 +10573,27 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the existsDBDataCluster operation.
+     * This method deserializes the body of the existsDataCluster operation.
      */
-    private void _deserialize_existsDBDataCluster(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+    private void _deserialize_existsDataCluster(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
         Object myWSBooleanObj =
-            ns1_myWSBoolean_LiteralSerializer.deserialize(ns1_existsDBDataCluster_WSBoolean_QNAME,
+            ns1_myWSBoolean_LiteralSerializer.deserialize(ns1_existsDataCluster_WSBoolean_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_existsDBDataCluster_WSBoolean_QNAME);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_existsDataCluster_WSBoolean_QNAME);
         bodyBlock.setValue(myWSBooleanObj);
         state.getResponse().setBody(bodyBlock);
     }
     
     /*
-     * This method deserializes the body of the putBusinessConceptSchema operation.
+     * This method deserializes the body of the putBusinessConcept operation.
      */
-    private void _deserialize_putBusinessConceptSchema(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+    private void _deserialize_putBusinessConcept(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
         Object myWSStringObj =
-            ns1_myWSString_LiteralSerializer.deserialize(ns1_putBusinessConceptSchema_WSString_QNAME,
+            ns1_myWSString_LiteralSerializer.deserialize(ns1_putBusinessConcept_WSString_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_putBusinessConceptSchema_WSString_QNAME);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_putBusinessConcept_WSString_QNAME);
         bodyBlock.setValue(myWSStringObj);
         state.getResponse().setBody(bodyBlock);
     }
@@ -10755,28 +10755,28 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the getFullPathValues operation.
+     * This method deserializes the body of the getBusinessConceptValue operation.
      */
-    private void _deserialize_getFullPathValues(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSStringArrayObj =
-            ns1_myWSStringArray_LiteralSerializer.deserialize(ns1_getFullPathValues_WSStringArray_QNAME,
+    private void _deserialize_getBusinessConceptValue(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSStringObj =
+            ns1_myWSString_LiteralSerializer.deserialize(ns1_getBusinessConceptValue_WSString_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getFullPathValues_WSStringArray_QNAME);
-        bodyBlock.setValue(myWSStringArrayObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getBusinessConceptValue_WSString_QNAME);
+        bodyBlock.setValue(myWSStringObj);
         state.getResponse().setBody(bodyBlock);
     }
     
     /*
-     * This method deserializes the body of the getDataCluster operation.
+     * This method deserializes the body of the getDataClusterPKs operation.
      */
-    private void _deserialize_getDataCluster(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSDataClusterObj =
-            ns1_myWSDataCluster_LiteralSerializer.deserialize(ns1_getDataCluster_WSDataCluster_QNAME,
+    private void _deserialize_getDataClusterPKs(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSDataClusterPKArrayObj =
+            ns1_myWSDataClusterPKArray_LiteralSerializer.deserialize(ns1_getDataClusterPKs_WSDataClusterPKArray_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getDataCluster_WSDataCluster_QNAME);
-        bodyBlock.setValue(myWSDataClusterObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getDataClusterPKs_WSDataClusterPKArray_QNAME);
+        bodyBlock.setValue(myWSDataClusterPKArrayObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -10950,14 +10950,14 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the deleteView operation.
+     * This method deserializes the body of the putView operation.
      */
-    private void _deserialize_deleteView(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+    private void _deserialize_putView(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
         Object myWSViewPKObj =
-            ns1_myWSViewPK_LiteralSerializer.deserialize(ns1_deleteView_WSViewPK_QNAME,
+            ns1_myWSViewPK_LiteralSerializer.deserialize(ns1_putView_WSViewPK_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_deleteView_WSViewPK_QNAME);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_putView_WSViewPK_QNAME);
         bodyBlock.setValue(myWSViewPKObj);
         state.getResponse().setBody(bodyBlock);
     }
@@ -11093,28 +11093,28 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the getBusinessConceptValue operation.
+     * This method deserializes the body of the deleteView operation.
      */
-    private void _deserialize_getBusinessConceptValue(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSStringObj =
-            ns1_myWSString_LiteralSerializer.deserialize(ns1_getBusinessConceptValue_WSString_QNAME,
+    private void _deserialize_deleteView(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSViewPKObj =
+            ns1_myWSViewPK_LiteralSerializer.deserialize(ns1_deleteView_WSViewPK_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getBusinessConceptValue_WSString_QNAME);
-        bodyBlock.setValue(myWSStringObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_deleteView_WSViewPK_QNAME);
+        bodyBlock.setValue(myWSViewPKObj);
         state.getResponse().setBody(bodyBlock);
     }
     
     /*
-     * This method deserializes the body of the existsView operation.
+     * This method deserializes the body of the getView operation.
      */
-    private void _deserialize_existsView(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSBooleanObj =
-            ns1_myWSBoolean_LiteralSerializer.deserialize(ns1_existsView_WSBoolean_QNAME,
+    private void _deserialize_getView(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSViewObj =
+            ns1_myWSView_LiteralSerializer.deserialize(ns1_getView_WSView_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_existsView_WSBoolean_QNAME);
-        bodyBlock.setValue(myWSBooleanObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getView_WSView_QNAME);
+        bodyBlock.setValue(myWSViewObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -11392,15 +11392,15 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the getDataClusterPKs operation.
+     * This method deserializes the body of the getBusinessConceptKey operation.
      */
-    private void _deserialize_getDataClusterPKs(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSDataClusterPKArrayObj =
-            ns1_myWSDataClusterPKArray_LiteralSerializer.deserialize(ns1_getDataClusterPKs_WSDataClusterPKArray_QNAME,
+    private void _deserialize_getBusinessConceptKey(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSConceptKeyObj =
+            ns1_myWSConceptKey_LiteralSerializer.deserialize(ns1_getBusinessConceptKey_WSConceptKey_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getDataClusterPKs_WSDataClusterPKArray_QNAME);
-        bodyBlock.setValue(myWSDataClusterPKArrayObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getBusinessConceptKey_WSConceptKey_QNAME);
+        bodyBlock.setValue(myWSConceptKeyObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -11431,15 +11431,15 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the deleteDataCluster operation.
+     * This method deserializes the body of the putDBDataCluster operation.
      */
-    private void _deserialize_deleteDataCluster(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSDataClusterPKObj =
-            ns1_myWSDataClusterPK_LiteralSerializer.deserialize(ns1_deleteDataCluster_WSDataClusterPK_QNAME,
+    private void _deserialize_putDBDataCluster(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSBooleanObj =
+            ns1_myWSBoolean_LiteralSerializer.deserialize(ns1_putDBDataCluster_WSBoolean_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_deleteDataCluster_WSDataClusterPK_QNAME);
-        bodyBlock.setValue(myWSDataClusterPKObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_putDBDataCluster_WSBoolean_QNAME);
+        bodyBlock.setValue(myWSBooleanObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -11470,15 +11470,28 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the getView operation.
+     * This method deserializes the body of the existsItem operation.
      */
-    private void _deserialize_getView(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSViewObj =
-            ns1_myWSView_LiteralSerializer.deserialize(ns1_getView_WSView_QNAME,
+    private void _deserialize_existsItem(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSBooleanObj =
+            ns1_myWSBoolean_LiteralSerializer.deserialize(ns1_existsItem_WSBoolean_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getView_WSView_QNAME);
-        bodyBlock.setValue(myWSViewObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_existsItem_WSBoolean_QNAME);
+        bodyBlock.setValue(myWSBooleanObj);
+        state.getResponse().setBody(bodyBlock);
+    }
+    
+    /*
+     * This method deserializes the body of the getViewPKs operation.
+     */
+    private void _deserialize_getViewPKs(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSViewPKArrayObj =
+            ns1_myWSViewPKArray_LiteralSerializer.deserialize(ns1_getViewPKs_WSViewPKArray_QNAME,
+                bodyReader, deserializationContext);
+        
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getViewPKs_WSViewPKArray_QNAME);
+        bodyBlock.setValue(myWSViewPKArrayObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -11639,28 +11652,28 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the putDBDataCluster operation.
+     * This method deserializes the body of the putDataCluster operation.
      */
-    private void _deserialize_putDBDataCluster(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSBooleanObj =
-            ns1_myWSBoolean_LiteralSerializer.deserialize(ns1_putDBDataCluster_WSBoolean_QNAME,
+    private void _deserialize_putDataCluster(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSDataClusterPKObj =
+            ns1_myWSDataClusterPK_LiteralSerializer.deserialize(ns1_putDataCluster_WSDataClusterPK_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_putDBDataCluster_WSBoolean_QNAME);
-        bodyBlock.setValue(myWSBooleanObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_putDataCluster_WSDataClusterPK_QNAME);
+        bodyBlock.setValue(myWSDataClusterPKObj);
         state.getResponse().setBody(bodyBlock);
     }
     
     /*
-     * This method deserializes the body of the putBusinessConcept operation.
+     * This method deserializes the body of the getBusinessConcepts operation.
      */
-    private void _deserialize_putBusinessConcept(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSStringObj =
-            ns1_myWSString_LiteralSerializer.deserialize(ns1_putBusinessConcept_WSString_QNAME,
+    private void _deserialize_getBusinessConcepts(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSStringArrayObj =
+            ns1_myWSStringArray_LiteralSerializer.deserialize(ns1_getBusinessConcepts_WSStringArray_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_putBusinessConcept_WSString_QNAME);
-        bodyBlock.setValue(myWSStringObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getBusinessConcepts_WSStringArray_QNAME);
+        bodyBlock.setValue(myWSStringArrayObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -11678,15 +11691,15 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the putDataCluster operation.
+     * This method deserializes the body of the existsDBDataCluster operation.
      */
-    private void _deserialize_putDataCluster(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSDataClusterPKObj =
-            ns1_myWSDataClusterPK_LiteralSerializer.deserialize(ns1_putDataCluster_WSDataClusterPK_QNAME,
+    private void _deserialize_existsDBDataCluster(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSBooleanObj =
+            ns1_myWSBoolean_LiteralSerializer.deserialize(ns1_existsDBDataCluster_WSBoolean_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_putDataCluster_WSDataClusterPK_QNAME);
-        bodyBlock.setValue(myWSDataClusterPKObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_existsDBDataCluster_WSBoolean_QNAME);
+        bodyBlock.setValue(myWSBooleanObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -11717,15 +11730,15 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the existsItem operation.
+     * This method deserializes the body of the getItem operation.
      */
-    private void _deserialize_existsItem(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSBooleanObj =
-            ns1_myWSBoolean_LiteralSerializer.deserialize(ns1_existsItem_WSBoolean_QNAME,
+    private void _deserialize_getItem(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSItemObj =
+            ns1_myWSItem_LiteralSerializer.deserialize(ns1_getItem_WSItem_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_existsItem_WSBoolean_QNAME);
-        bodyBlock.setValue(myWSBooleanObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getItem_WSItem_QNAME);
+        bodyBlock.setValue(myWSItemObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -11795,15 +11808,15 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the getConceptsInDataCluster operation.
+     * This method deserializes the body of the deleteDataCluster operation.
      */
-    private void _deserialize_getConceptsInDataCluster(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSStringArrayObj =
-            ns1_myWSStringArray_LiteralSerializer.deserialize(ns1_getConceptsInDataCluster_WSStringArray_QNAME,
+    private void _deserialize_deleteDataCluster(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSDataClusterPKObj =
+            ns1_myWSDataClusterPK_LiteralSerializer.deserialize(ns1_deleteDataCluster_WSDataClusterPK_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getConceptsInDataCluster_WSStringArray_QNAME);
-        bodyBlock.setValue(myWSStringArrayObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_deleteDataCluster_WSDataClusterPK_QNAME);
+        bodyBlock.setValue(myWSDataClusterPKObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -11821,28 +11834,15 @@ public class XtentisPort_Stub
     }
     
     /*
-     * This method deserializes the body of the getItem operation.
+     * This method deserializes the body of the getFullPathValues operation.
      */
-    private void _deserialize_getItem(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSItemObj =
-            ns1_myWSItem_LiteralSerializer.deserialize(ns1_getItem_WSItem_QNAME,
+    private void _deserialize_getFullPathValues(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
+        Object myWSStringArrayObj =
+            ns1_myWSStringArray_LiteralSerializer.deserialize(ns1_getFullPathValues_WSStringArray_QNAME,
                 bodyReader, deserializationContext);
         
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getItem_WSItem_QNAME);
-        bodyBlock.setValue(myWSItemObj);
-        state.getResponse().setBody(bodyBlock);
-    }
-    
-    /*
-     * This method deserializes the body of the putDataModel operation.
-     */
-    private void _deserialize_putDataModel(XMLReader bodyReader, SOAPDeserializationContext deserializationContext, StreamingSenderState state) throws Exception {
-        Object myWSDataModelPKObj =
-            ns1_myWSDataModelPK_LiteralSerializer.deserialize(ns1_putDataModel_WSDataModelPK_QNAME,
-                bodyReader, deserializationContext);
-        
-        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_putDataModel_WSDataModelPK_QNAME);
-        bodyBlock.setValue(myWSDataModelPKObj);
+        SOAPBlockInfo bodyBlock = new SOAPBlockInfo(ns1_getFullPathValues_WSStringArray_QNAME);
+        bodyBlock.setValue(myWSStringArrayObj);
         state.getResponse().setBody(bodyBlock);
     }
     
@@ -12289,13 +12289,13 @@ public class XtentisPort_Stub
     private static final int executeStoredProcedure_OPCODE = 4;
     private static final int executeTransformerV2AsJob_OPCODE = 5;
     private static final int putItemByOperatorType_OPCODE = 6;
-    private static final int getViewPKs_OPCODE = 7;
+    private static final int getConceptsInDataClusterWithRevisions_OPCODE = 7;
     private static final int putTransformer_OPCODE = 8;
     private static final int versioningRestoreItemByRevision_OPCODE = 9;
     private static final int versioningRestoreUniverse_OPCODE = 10;
     private static final int workflowSetTaskPriority_OPCODE = 11;
     private static final int getSynchronizationPlanItemsAlgorithms_OPCODE = 12;
-    private static final int getConceptsInDataClusterWithRevisions_OPCODE = 13;
+    private static final int getConceptsInDataCluster_OPCODE = 13;
     private static final int versioningTagUniverse_OPCODE = 14;
     private static final int getMDMJob_OPCODE = 15;
     private static final int workflowDeploy_OPCODE = 16;
@@ -12314,7 +12314,7 @@ public class XtentisPort_Stub
     private static final int getItemPKsByCriteria_OPCODE = 29;
     private static final int executeRoutingOrderV2Asynchronously_OPCODE = 30;
     private static final int xPathsSearch_OPCODE = 31;
-    private static final int deleteDataModel_OPCODE = 32;
+    private static final int putDataModel_OPCODE = 32;
     private static final int getItems_OPCODE = 33;
     private static final int routeItemV2_OPCODE = 34;
     private static final int putItem_OPCODE = 35;
@@ -12323,14 +12323,14 @@ public class XtentisPort_Stub
     private static final int putBackgroundJob_OPCODE = 38;
     private static final int putMenu_OPCODE = 39;
     private static final int getObjectsForUniverses_OPCODE = 40;
-    private static final int deleteBusinessConcept_OPCODE = 41;
+    private static final int checkSchema_OPCODE = 41;
     private static final int putStoredProcedure_OPCODE = 42;
     private static final int putItemWithReport_OPCODE = 43;
     private static final int deleteItems_OPCODE = 44;
     private static final int getRoutingRule_OPCODE = 45;
     private static final int existsRole_OPCODE = 46;
     private static final int logout_OPCODE = 47;
-    private static final int putView_OPCODE = 48;
+    private static final int existsView_OPCODE = 48;
     private static final int deleteItem_OPCODE = 49;
     private static final int existsMenu_OPCODE = 50;
     private static final int putMDMJob_OPCODE = 51;
@@ -12340,19 +12340,19 @@ public class XtentisPort_Stub
     private static final int connectorInteraction_OPCODE = 55;
     private static final int deleteRoutingRule_OPCODE = 56;
     private static final int resolveSynchronizationItem_OPCODE = 57;
-    private static final int getBusinessConcepts_OPCODE = 58;
+    private static final int deleteBusinessConcept_OPCODE = 58;
     private static final int getCurrentUniverse_OPCODE = 59;
     private static final int viewSearch_OPCODE = 60;
     private static final int partialPutItem_OPCODE = 61;
-    private static final int checkSchema_OPCODE = 62;
+    private static final int deleteDataModel_OPCODE = 62;
     private static final int getServiceConfiguration_OPCODE = 63;
     private static final int getTransformerPluginV2sList_OPCODE = 64;
     private static final int workflowGetTaskList_OPCODE = 65;
     private static final int getDataModel_OPCODE = 66;
     private static final int existsSynchronizationItem_OPCODE = 67;
-    private static final int getBusinessConceptKey_OPCODE = 68;
+    private static final int putBusinessConceptSchema_OPCODE = 68;
     private static final int versioningCommitItems_OPCODE = 69;
-    private static final int existsDataCluster_OPCODE = 70;
+    private static final int getDataCluster_OPCODE = 70;
     private static final int dropItem_OPCODE = 71;
     private static final int putTransformerPluginV2Configuration_OPCODE = 72;
     private static final int getObjectsForSynchronizationPlans_OPCODE = 73;
@@ -12364,8 +12364,8 @@ public class XtentisPort_Stub
     private static final int synchronizationGetObjectXML_OPCODE = 79;
     private static final int getSynchronizationItem_OPCODE = 80;
     private static final int versioningGetInfo_OPCODE = 81;
-    private static final int existsDBDataCluster_OPCODE = 82;
-    private static final int putBusinessConceptSchema_OPCODE = 83;
+    private static final int existsDataCluster_OPCODE = 82;
+    private static final int putBusinessConcept_OPCODE = 83;
     private static final int putRole_OPCODE = 84;
     private static final int versioningTagObjects_OPCODE = 85;
     private static final int existsStoredProcedure_OPCODE = 86;
@@ -12378,8 +12378,8 @@ public class XtentisPort_Stub
     private static final int countItemsByCustomFKFilters_OPCODE = 93;
     private static final int existsDataModel_OPCODE = 94;
     private static final int versioningGetUniverseVersions_OPCODE = 95;
-    private static final int getFullPathValues_OPCODE = 96;
-    private static final int getDataCluster_OPCODE = 97;
+    private static final int getBusinessConceptValue_OPCODE = 96;
+    private static final int getDataClusterPKs_OPCODE = 97;
     private static final int existsTransformer_OPCODE = 98;
     private static final int deleteMDMJob_OPCODE = 99;
     private static final int processFileUsingTransformer_OPCODE = 100;
@@ -12393,7 +12393,7 @@ public class XtentisPort_Stub
     private static final int getSynchronizationPlan_OPCODE = 108;
     private static final int extractThroughTransformerV2_OPCODE = 109;
     private static final int getRoutingOrderV2sByCriteria_OPCODE = 110;
-    private static final int deleteView_OPCODE = 111;
+    private static final int putView_OPCODE = 111;
     private static final int versioningGetObjectsVersions_OPCODE = 112;
     private static final int workflowGetProcessDefinitions_OPCODE = 113;
     private static final int getSynchronizationPlanPKs_OPCODE = 114;
@@ -12404,8 +12404,8 @@ public class XtentisPort_Stub
     private static final int loadDroppedItem_OPCODE = 119;
     private static final int getRole_OPCODE = 120;
     private static final int versioningTagItems_OPCODE = 121;
-    private static final int getBusinessConceptValue_OPCODE = 122;
-    private static final int existsView_OPCODE = 123;
+    private static final int deleteView_OPCODE = 122;
+    private static final int getView_OPCODE = 123;
     private static final int getAutoIncrement_OPCODE = 124;
     private static final int getRoutingOrderV2_OPCODE = 125;
     private static final int putUniverse_OPCODE = 126;
@@ -12427,41 +12427,41 @@ public class XtentisPort_Stub
     private static final int workflowUnDeploy_OPCODE = 142;
     private static final int deleteRoutingOrderV2_OPCODE = 143;
     private static final int putItemArray_OPCODE = 144;
-    private static final int getDataClusterPKs_OPCODE = 145;
+    private static final int getBusinessConceptKey_OPCODE = 145;
     private static final int versioningGetItemsVersions_OPCODE = 146;
     private static final int deleteMenu_OPCODE = 147;
-    private static final int deleteDataCluster_OPCODE = 148;
+    private static final int putDBDataCluster_OPCODE = 148;
     private static final int deleteUniverse_OPCODE = 149;
     private static final int versioningGetItemHistory_OPCODE = 150;
-    private static final int getView_OPCODE = 151;
-    private static final int putSynchronizationItem_OPCODE = 152;
-    private static final int getTransformerV2PKs_OPCODE = 153;
-    private static final int putTransformerV2_OPCODE = 154;
-    private static final int getServiceDocument_OPCODE = 155;
-    private static final int synchronizationGetUnsynchronizedItemPKs_OPCODE = 156;
-    private static final int initMDM_OPCODE = 157;
-    private static final int getStoredProcedure_OPCODE = 158;
-    private static final int existsTransformerPluginV2_OPCODE = 159;
-    private static final int getTransformerPluginV2Configuration_OPCODE = 160;
-    private static final int getItemsPivotIndex_OPCODE = 161;
-    private static final int getSynchronizationPlanObjectsAlgorithms_OPCODE = 162;
-    private static final int versioningRestoreItems_OPCODE = 163;
-    private static final int putDBDataCluster_OPCODE = 164;
-    private static final int putBusinessConcept_OPCODE = 165;
-    private static final int executeRoutingOrderV2Synchronously_OPCODE = 166;
-    private static final int putDataCluster_OPCODE = 167;
-    private static final int getUniversePKs_OPCODE = 168;
-    private static final int ping_OPCODE = 169;
-    private static final int existsItem_OPCODE = 170;
-    private static final int getRoutingOrderV2PKsByCriteria_OPCODE = 171;
-    private static final int versioningRestoreObjects_OPCODE = 172;
-    private static final int getDataModelPKs_OPCODE = 173;
-    private static final int updateItemArrayMetadata_OPCODE = 174;
-    private static final int synchronizationGetItemXML_OPCODE = 175;
-    private static final int getConceptsInDataCluster_OPCODE = 176;
-    private static final int removeDroppedItem_OPCODE = 177;
-    private static final int getItem_OPCODE = 178;
-    private static final int putDataModel_OPCODE = 179;
+    private static final int existsItem_OPCODE = 151;
+    private static final int getViewPKs_OPCODE = 152;
+    private static final int putSynchronizationItem_OPCODE = 153;
+    private static final int getTransformerV2PKs_OPCODE = 154;
+    private static final int putTransformerV2_OPCODE = 155;
+    private static final int getServiceDocument_OPCODE = 156;
+    private static final int synchronizationGetUnsynchronizedItemPKs_OPCODE = 157;
+    private static final int initMDM_OPCODE = 158;
+    private static final int getStoredProcedure_OPCODE = 159;
+    private static final int existsTransformerPluginV2_OPCODE = 160;
+    private static final int getTransformerPluginV2Configuration_OPCODE = 161;
+    private static final int getItemsPivotIndex_OPCODE = 162;
+    private static final int getSynchronizationPlanObjectsAlgorithms_OPCODE = 163;
+    private static final int versioningRestoreItems_OPCODE = 164;
+    private static final int putDataCluster_OPCODE = 165;
+    private static final int getBusinessConcepts_OPCODE = 166;
+    private static final int executeRoutingOrderV2Synchronously_OPCODE = 167;
+    private static final int existsDBDataCluster_OPCODE = 168;
+    private static final int getUniversePKs_OPCODE = 169;
+    private static final int ping_OPCODE = 170;
+    private static final int getItem_OPCODE = 171;
+    private static final int getRoutingOrderV2PKsByCriteria_OPCODE = 172;
+    private static final int versioningRestoreObjects_OPCODE = 173;
+    private static final int getDataModelPKs_OPCODE = 174;
+    private static final int updateItemArrayMetadata_OPCODE = 175;
+    private static final int synchronizationGetItemXML_OPCODE = 176;
+    private static final int deleteDataCluster_OPCODE = 177;
+    private static final int removeDroppedItem_OPCODE = 178;
+    private static final int getFullPathValues_OPCODE = 179;
     private static final int executeTransformerV2_OPCODE = 180;
     private static final int getTransformerPluginV2Details_OPCODE = 181;
     private static final int updateItemMetadata_OPCODE = 182;
@@ -12513,12 +12513,12 @@ public class XtentisPort_Stub
     private static final QName ns1_putItemByOperatorType_WSItemPK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSItemPK");
     private static final QName ns1_WSItemPK_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSItemPK");
     private CombinedSerializer ns1_myWSItemPK_LiteralSerializer;
-    private static final QName ns1_getViewPKs_WSGetViewPKs_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetViewPKs");
-    private static final QName ns1_WSGetViewPKs_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetViewPKs");
-    private CombinedSerializer ns1_myWSGetViewPKs_LiteralSerializer;
-    private static final QName ns1_getViewPKs_WSViewPKArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSViewPKArray");
-    private static final QName ns1_WSViewPKArray_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSViewPKArray");
-    private CombinedSerializer ns1_myWSViewPKArray_LiteralSerializer;
+    private static final QName ns1_getConceptsInDataClusterWithRevisions_WSGetConceptsInDataClusterWithRevisions_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetConceptsInDataClusterWithRevisions");
+    private static final QName ns1_WSGetConceptsInDataClusterWithRevisions_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetConceptsInDataClusterWithRevisions");
+    private CombinedSerializer ns1_myWSGetConceptsInDataClusterWithRevisions_LiteralSerializer;
+    private static final QName ns1_getConceptsInDataClusterWithRevisions_WSConceptRevisionMap_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSConceptRevisionMap");
+    private static final QName ns1_WSConceptRevisionMap_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSConceptRevisionMap");
+    private CombinedSerializer ns1_myWSConceptRevisionMap_LiteralSerializer;
     private static final QName ns1_putTransformer_WSPutTransformer_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutTransformer");
     private static final QName ns1_WSPutTransformer_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutTransformer");
     private CombinedSerializer ns1_myWSPutTransformer_LiteralSerializer;
@@ -12541,12 +12541,10 @@ public class XtentisPort_Stub
     private static final QName ns1_WSGetSynchronizationPlanItemsAlgorithms_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetSynchronizationPlanItemsAlgorithms");
     private CombinedSerializer ns1_myWSGetSynchronizationPlanItemsAlgorithms_LiteralSerializer;
     private static final QName ns1_getSynchronizationPlanItemsAlgorithms_WSStringArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
-    private static final QName ns1_getConceptsInDataClusterWithRevisions_WSGetConceptsInDataClusterWithRevisions_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetConceptsInDataClusterWithRevisions");
-    private static final QName ns1_WSGetConceptsInDataClusterWithRevisions_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetConceptsInDataClusterWithRevisions");
-    private CombinedSerializer ns1_myWSGetConceptsInDataClusterWithRevisions_LiteralSerializer;
-    private static final QName ns1_getConceptsInDataClusterWithRevisions_WSConceptRevisionMap_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSConceptRevisionMap");
-    private static final QName ns1_WSConceptRevisionMap_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSConceptRevisionMap");
-    private CombinedSerializer ns1_myWSConceptRevisionMap_LiteralSerializer;
+    private static final QName ns1_getConceptsInDataCluster_WSGetConceptsInDataCluster_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetConceptsInDataCluster");
+    private static final QName ns1_WSGetConceptsInDataCluster_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetConceptsInDataCluster");
+    private CombinedSerializer ns1_myWSGetConceptsInDataCluster_LiteralSerializer;
+    private static final QName ns1_getConceptsInDataCluster_WSStringArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
     private static final QName ns1_versioningTagUniverse_WSVersioningTagUniverse_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningTagUniverse");
     private static final QName ns1_WSVersioningTagUniverse_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningTagUniverse");
     private CombinedSerializer ns1_myWSVersioningTagUniverse_LiteralSerializer;
@@ -12643,10 +12641,10 @@ public class XtentisPort_Stub
     private static final QName ns1_WSXPathsSearch_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSXPathsSearch");
     private CombinedSerializer ns1_myWSXPathsSearch_LiteralSerializer;
     private static final QName ns1_xPathsSearch_WSStringArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
-    private static final QName ns1_deleteDataModel_WSDeleteDataModel_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteDataModel");
-    private static final QName ns1_WSDeleteDataModel_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteDataModel");
-    private CombinedSerializer ns1_myWSDeleteDataModel_LiteralSerializer;
-    private static final QName ns1_deleteDataModel_WSDataModelPK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataModelPK");
+    private static final QName ns1_putDataModel_WSPutDataModel_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutDataModel");
+    private static final QName ns1_WSPutDataModel_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutDataModel");
+    private CombinedSerializer ns1_myWSPutDataModel_LiteralSerializer;
+    private static final QName ns1_putDataModel_WSDataModelPK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataModelPK");
     private static final QName ns1_WSDataModelPK_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataModelPK");
     private CombinedSerializer ns1_myWSDataModelPK_LiteralSerializer;
     private static final QName ns1_getItems_WSGetItems_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItems");
@@ -12687,10 +12685,10 @@ public class XtentisPort_Stub
     private static final QName ns1_WSGetObjectsForUniverses_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetObjectsForUniverses");
     private CombinedSerializer ns1_myWSGetObjectsForUniverses_LiteralSerializer;
     private static final QName ns1_getObjectsForUniverses_WSStringArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
-    private static final QName ns1_deleteBusinessConcept_WSDeleteBusinessConcept_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteBusinessConcept");
-    private static final QName ns1_WSDeleteBusinessConcept_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteBusinessConcept");
-    private CombinedSerializer ns1_myWSDeleteBusinessConcept_LiteralSerializer;
-    private static final QName ns1_deleteBusinessConcept_WSString_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSString");
+    private static final QName ns1_checkSchema_WSCheckSchema_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSCheckSchema");
+    private static final QName ns1_WSCheckSchema_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSCheckSchema");
+    private CombinedSerializer ns1_myWSCheckSchema_LiteralSerializer;
+    private static final QName ns1_checkSchema_WSString_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSString");
     private static final QName ns1_putStoredProcedure_WSPutStoredProcedure_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutStoredProcedure");
     private static final QName ns1_WSPutStoredProcedure_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutStoredProcedure");
     private CombinedSerializer ns1_myWSPutStoredProcedure_LiteralSerializer;
@@ -12721,12 +12719,10 @@ public class XtentisPort_Stub
     private static final QName ns1_WSLogout_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSLogout");
     private CombinedSerializer ns1_myWSLogout_LiteralSerializer;
     private static final QName ns1_logout_WSString_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSString");
-    private static final QName ns1_putView_WSPutView_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutView");
-    private static final QName ns1_WSPutView_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutView");
-    private CombinedSerializer ns1_myWSPutView_LiteralSerializer;
-    private static final QName ns1_putView_WSViewPK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSViewPK");
-    private static final QName ns1_WSViewPK_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSViewPK");
-    private CombinedSerializer ns1_myWSViewPK_LiteralSerializer;
+    private static final QName ns1_existsView_WSExistsView_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExistsView");
+    private static final QName ns1_WSExistsView_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExistsView");
+    private CombinedSerializer ns1_myWSExistsView_LiteralSerializer;
+    private static final QName ns1_existsView_WSBoolean_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSBoolean");
     private static final QName ns1_deleteItem_WSDeleteItem_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteItem");
     private static final QName ns1_WSDeleteItem_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteItem");
     private CombinedSerializer ns1_myWSDeleteItem_LiteralSerializer;
@@ -12770,10 +12766,10 @@ public class XtentisPort_Stub
     private static final QName ns1_resolveSynchronizationItem_WSSynchronizationItem_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationItem");
     private static final QName ns1_WSSynchronizationItem_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationItem");
     private CombinedSerializer ns1_myWSSynchronizationItem_LiteralSerializer;
-    private static final QName ns1_getBusinessConcepts_WSGetBusinessConcepts_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConcepts");
-    private static final QName ns1_WSGetBusinessConcepts_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConcepts");
-    private CombinedSerializer ns1_myWSGetBusinessConcepts_LiteralSerializer;
-    private static final QName ns1_getBusinessConcepts_WSStringArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
+    private static final QName ns1_deleteBusinessConcept_WSDeleteBusinessConcept_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteBusinessConcept");
+    private static final QName ns1_WSDeleteBusinessConcept_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteBusinessConcept");
+    private CombinedSerializer ns1_myWSDeleteBusinessConcept_LiteralSerializer;
+    private static final QName ns1_deleteBusinessConcept_WSString_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSString");
     private static final QName ns1_getCurrentUniverse_WSGetCurrentUniverse_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetCurrentUniverse");
     private static final QName ns1_WSGetCurrentUniverse_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetCurrentUniverse");
     private CombinedSerializer ns1_myWSGetCurrentUniverse_LiteralSerializer;
@@ -12786,10 +12782,10 @@ public class XtentisPort_Stub
     private static final QName ns1_WSPartialPutItem_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPartialPutItem");
     private CombinedSerializer ns1_myWSPartialPutItem_LiteralSerializer;
     private static final QName ns1_partialPutItem_WSItemPK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSItemPK");
-    private static final QName ns1_checkSchema_WSCheckSchema_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSCheckSchema");
-    private static final QName ns1_WSCheckSchema_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSCheckSchema");
-    private CombinedSerializer ns1_myWSCheckSchema_LiteralSerializer;
-    private static final QName ns1_checkSchema_WSString_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSString");
+    private static final QName ns1_deleteDataModel_WSDeleteDataModel_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteDataModel");
+    private static final QName ns1_WSDeleteDataModel_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteDataModel");
+    private CombinedSerializer ns1_myWSDeleteDataModel_LiteralSerializer;
+    private static final QName ns1_deleteDataModel_WSDataModelPK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataModelPK");
     private static final QName ns1_getServiceConfiguration_WSServiceGetConfiguration_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSServiceGetConfiguration");
     private static final QName ns1_WSServiceGetConfiguration_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSServiceGetConfiguration");
     private CombinedSerializer ns1_myWSServiceGetConfiguration_LiteralSerializer;
@@ -12816,20 +12812,20 @@ public class XtentisPort_Stub
     private static final QName ns1_WSExistsSynchronizationItem_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExistsSynchronizationItem");
     private CombinedSerializer ns1_myWSExistsSynchronizationItem_LiteralSerializer;
     private static final QName ns1_existsSynchronizationItem_WSBoolean_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSBoolean");
-    private static final QName ns1_getBusinessConceptKey_WSGetBusinessConceptKey_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConceptKey");
-    private static final QName ns1_WSGetBusinessConceptKey_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConceptKey");
-    private CombinedSerializer ns1_myWSGetBusinessConceptKey_LiteralSerializer;
-    private static final QName ns1_getBusinessConceptKey_WSConceptKey_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSConceptKey");
-    private static final QName ns1_WSConceptKey_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSConceptKey");
-    private CombinedSerializer ns1_myWSConceptKey_LiteralSerializer;
+    private static final QName ns1_putBusinessConceptSchema_WSPutBusinessConceptSchema_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutBusinessConceptSchema");
+    private static final QName ns1_WSPutBusinessConceptSchema_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutBusinessConceptSchema");
+    private CombinedSerializer ns1_myWSPutBusinessConceptSchema_LiteralSerializer;
+    private static final QName ns1_putBusinessConceptSchema_WSString_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSString");
     private static final QName ns1_versioningCommitItems_WSVersioningCommitItems_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningCommitItems");
     private static final QName ns1_WSVersioningCommitItems_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningCommitItems");
     private CombinedSerializer ns1_myWSVersioningCommitItems_LiteralSerializer;
     private static final QName ns1_versioningCommitItems_WSBackgroundJobPK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPK");
-    private static final QName ns1_existsDataCluster_WSExistsDataCluster_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExistsDataCluster");
-    private static final QName ns1_WSExistsDataCluster_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExistsDataCluster");
-    private CombinedSerializer ns1_myWSExistsDataCluster_LiteralSerializer;
-    private static final QName ns1_existsDataCluster_WSBoolean_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSBoolean");
+    private static final QName ns1_getDataCluster_WSGetDataCluster_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetDataCluster");
+    private static final QName ns1_WSGetDataCluster_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetDataCluster");
+    private CombinedSerializer ns1_myWSGetDataCluster_LiteralSerializer;
+    private static final QName ns1_getDataCluster_WSDataCluster_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataCluster");
+    private static final QName ns1_WSDataCluster_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataCluster");
+    private CombinedSerializer ns1_myWSDataCluster_LiteralSerializer;
     private static final QName ns1_dropItem_WSDropItem_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDropItem");
     private static final QName ns1_WSDropItem_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDropItem");
     private CombinedSerializer ns1_myWSDropItem_LiteralSerializer;
@@ -12884,14 +12880,14 @@ public class XtentisPort_Stub
     private static final QName ns1_versioningGetInfo_WSVersioningInfo_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningInfo");
     private static final QName ns1_WSVersioningInfo_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningInfo");
     private CombinedSerializer ns1_myWSVersioningInfo_LiteralSerializer;
-    private static final QName ns1_existsDBDataCluster_WSExistsDBDataCluster_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExistsDBDataCluster");
-    private static final QName ns1_WSExistsDBDataCluster_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExistsDBDataCluster");
-    private CombinedSerializer ns1_myWSExistsDBDataCluster_LiteralSerializer;
-    private static final QName ns1_existsDBDataCluster_WSBoolean_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSBoolean");
-    private static final QName ns1_putBusinessConceptSchema_WSPutBusinessConceptSchema_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutBusinessConceptSchema");
-    private static final QName ns1_WSPutBusinessConceptSchema_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutBusinessConceptSchema");
-    private CombinedSerializer ns1_myWSPutBusinessConceptSchema_LiteralSerializer;
-    private static final QName ns1_putBusinessConceptSchema_WSString_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSString");
+    private static final QName ns1_existsDataCluster_WSExistsDataCluster_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExistsDataCluster");
+    private static final QName ns1_WSExistsDataCluster_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExistsDataCluster");
+    private CombinedSerializer ns1_myWSExistsDataCluster_LiteralSerializer;
+    private static final QName ns1_existsDataCluster_WSBoolean_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSBoolean");
+    private static final QName ns1_putBusinessConcept_WSPutBusinessConcept_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutBusinessConcept");
+    private static final QName ns1_WSPutBusinessConcept_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutBusinessConcept");
+    private CombinedSerializer ns1_myWSPutBusinessConcept_LiteralSerializer;
+    private static final QName ns1_putBusinessConcept_WSString_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSString");
     private static final QName ns1_putRole_WSPutRole_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutRole");
     private static final QName ns1_WSPutRole_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutRole");
     private CombinedSerializer ns1_myWSPutRole_LiteralSerializer;
@@ -12952,16 +12948,16 @@ public class XtentisPort_Stub
     private static final QName ns1_versioningGetUniverseVersions_WSVersioningUniverseVersions_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningUniverseVersions");
     private static final QName ns1_WSVersioningUniverseVersions_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningUniverseVersions");
     private CombinedSerializer ns1_myWSVersioningUniverseVersions_LiteralSerializer;
-    private static final QName ns1_getFullPathValues_WSGetFullPathValues_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetFullPathValues");
-    private static final QName ns1_WSGetFullPathValues_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetFullPathValues");
-    private CombinedSerializer ns1_myWSGetFullPathValues_LiteralSerializer;
-    private static final QName ns1_getFullPathValues_WSStringArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
-    private static final QName ns1_getDataCluster_WSGetDataCluster_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetDataCluster");
-    private static final QName ns1_WSGetDataCluster_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetDataCluster");
-    private CombinedSerializer ns1_myWSGetDataCluster_LiteralSerializer;
-    private static final QName ns1_getDataCluster_WSDataCluster_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataCluster");
-    private static final QName ns1_WSDataCluster_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataCluster");
-    private CombinedSerializer ns1_myWSDataCluster_LiteralSerializer;
+    private static final QName ns1_getBusinessConceptValue_WSGetBusinessConceptValue_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConceptValue");
+    private static final QName ns1_WSGetBusinessConceptValue_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConceptValue");
+    private CombinedSerializer ns1_myWSGetBusinessConceptValue_LiteralSerializer;
+    private static final QName ns1_getBusinessConceptValue_WSString_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSString");
+    private static final QName ns1_getDataClusterPKs_WSRegexDataClusterPKs_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRegexDataClusterPKs");
+    private static final QName ns1_WSRegexDataClusterPKs_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRegexDataClusterPKs");
+    private CombinedSerializer ns1_myWSRegexDataClusterPKs_LiteralSerializer;
+    private static final QName ns1_getDataClusterPKs_WSDataClusterPKArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataClusterPKArray");
+    private static final QName ns1_WSDataClusterPKArray_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataClusterPKArray");
+    private CombinedSerializer ns1_myWSDataClusterPKArray_LiteralSerializer;
     private static final QName ns1_existsTransformer_WSExistsTransformer_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExistsTransformer");
     private static final QName ns1_WSExistsTransformer_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExistsTransformer");
     private CombinedSerializer ns1_myWSExistsTransformer_LiteralSerializer;
@@ -13024,10 +13020,12 @@ public class XtentisPort_Stub
     private static final QName ns1_getRoutingOrderV2sByCriteria_WSRoutingOrderV2Array_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderV2Array");
     private static final QName ns1_WSRoutingOrderV2Array_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRoutingOrderV2Array");
     private CombinedSerializer ns1_myWSRoutingOrderV2Array_LiteralSerializer;
-    private static final QName ns1_deleteView_WSDeleteView_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteView");
-    private static final QName ns1_WSDeleteView_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteView");
-    private CombinedSerializer ns1_myWSDeleteView_LiteralSerializer;
-    private static final QName ns1_deleteView_WSViewPK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSViewPK");
+    private static final QName ns1_putView_WSPutView_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutView");
+    private static final QName ns1_WSPutView_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutView");
+    private CombinedSerializer ns1_myWSPutView_LiteralSerializer;
+    private static final QName ns1_putView_WSViewPK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSViewPK");
+    private static final QName ns1_WSViewPK_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSViewPK");
+    private CombinedSerializer ns1_myWSViewPK_LiteralSerializer;
     private static final QName ns1_versioningGetObjectsVersions_WSVersioningGetObjectsVersions_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningGetObjectsVersions");
     private static final QName ns1_WSVersioningGetObjectsVersions_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningGetObjectsVersions");
     private CombinedSerializer ns1_myWSVersioningGetObjectsVersions_LiteralSerializer;
@@ -13078,14 +13076,16 @@ public class XtentisPort_Stub
     private static final QName ns1_WSVersioningTagItems_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningTagItems");
     private CombinedSerializer ns1_myWSVersioningTagItems_LiteralSerializer;
     private static final QName ns1_versioningTagItems_WSBackgroundJobPK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPK");
-    private static final QName ns1_getBusinessConceptValue_WSGetBusinessConceptValue_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConceptValue");
-    private static final QName ns1_WSGetBusinessConceptValue_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConceptValue");
-    private CombinedSerializer ns1_myWSGetBusinessConceptValue_LiteralSerializer;
-    private static final QName ns1_getBusinessConceptValue_WSString_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSString");
-    private static final QName ns1_existsView_WSExistsView_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExistsView");
-    private static final QName ns1_WSExistsView_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExistsView");
-    private CombinedSerializer ns1_myWSExistsView_LiteralSerializer;
-    private static final QName ns1_existsView_WSBoolean_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSBoolean");
+    private static final QName ns1_deleteView_WSDeleteView_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteView");
+    private static final QName ns1_WSDeleteView_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteView");
+    private CombinedSerializer ns1_myWSDeleteView_LiteralSerializer;
+    private static final QName ns1_deleteView_WSViewPK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSViewPK");
+    private static final QName ns1_getView_WSGetView_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetView");
+    private static final QName ns1_WSGetView_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetView");
+    private CombinedSerializer ns1_myWSGetView_LiteralSerializer;
+    private static final QName ns1_getView_WSView_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSView");
+    private static final QName ns1_WSView_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSView");
+    private CombinedSerializer ns1_myWSView_LiteralSerializer;
     private static final QName ns1_getAutoIncrement_WSAutoIncrement_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSAutoIncrement");
     private static final QName ns1_WSAutoIncrement_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSAutoIncrement");
     private CombinedSerializer ns1_myWSAutoIncrement_LiteralSerializer;
@@ -13180,12 +13180,12 @@ public class XtentisPort_Stub
     private static final QName ns1_WSPutItemArray_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutItemArray");
     private CombinedSerializer ns1_myWSPutItemArray_LiteralSerializer;
     private static final QName ns1_putItemArray_WSItemPKArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSItemPKArray");
-    private static final QName ns1_getDataClusterPKs_WSRegexDataClusterPKs_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRegexDataClusterPKs");
-    private static final QName ns1_WSRegexDataClusterPKs_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRegexDataClusterPKs");
-    private CombinedSerializer ns1_myWSRegexDataClusterPKs_LiteralSerializer;
-    private static final QName ns1_getDataClusterPKs_WSDataClusterPKArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataClusterPKArray");
-    private static final QName ns1_WSDataClusterPKArray_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataClusterPKArray");
-    private CombinedSerializer ns1_myWSDataClusterPKArray_LiteralSerializer;
+    private static final QName ns1_getBusinessConceptKey_WSGetBusinessConceptKey_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConceptKey");
+    private static final QName ns1_WSGetBusinessConceptKey_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConceptKey");
+    private CombinedSerializer ns1_myWSGetBusinessConceptKey_LiteralSerializer;
+    private static final QName ns1_getBusinessConceptKey_WSConceptKey_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSConceptKey");
+    private static final QName ns1_WSConceptKey_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSConceptKey");
+    private CombinedSerializer ns1_myWSConceptKey_LiteralSerializer;
     private static final QName ns1_versioningGetItemsVersions_WSVersioningGetItemsVersions_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningGetItemsVersions");
     private static final QName ns1_WSVersioningGetItemsVersions_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningGetItemsVersions");
     private CombinedSerializer ns1_myWSVersioningGetItemsVersions_LiteralSerializer;
@@ -13196,12 +13196,10 @@ public class XtentisPort_Stub
     private static final QName ns1_WSDeleteMenu_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteMenu");
     private CombinedSerializer ns1_myWSDeleteMenu_LiteralSerializer;
     private static final QName ns1_deleteMenu_WSMenuPK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSMenuPK");
-    private static final QName ns1_deleteDataCluster_WSDeleteDataCluster_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteDataCluster");
-    private static final QName ns1_WSDeleteDataCluster_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteDataCluster");
-    private CombinedSerializer ns1_myWSDeleteDataCluster_LiteralSerializer;
-    private static final QName ns1_deleteDataCluster_WSDataClusterPK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataClusterPK");
-    private static final QName ns1_WSDataClusterPK_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataClusterPK");
-    private CombinedSerializer ns1_myWSDataClusterPK_LiteralSerializer;
+    private static final QName ns1_putDBDataCluster_WSPutDBDataCluster_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutDBDataCluster");
+    private static final QName ns1_WSPutDBDataCluster_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutDBDataCluster");
+    private CombinedSerializer ns1_myWSPutDBDataCluster_LiteralSerializer;
+    private static final QName ns1_putDBDataCluster_WSBoolean_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSBoolean");
     private static final QName ns1_deleteUniverse_WSDeleteUniverse_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteUniverse");
     private static final QName ns1_WSDeleteUniverse_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteUniverse");
     private CombinedSerializer ns1_myWSDeleteUniverse_LiteralSerializer;
@@ -13212,12 +13210,16 @@ public class XtentisPort_Stub
     private static final QName ns1_versioningGetItemHistory_WSVersioningItemHistory_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningItemHistory");
     private static final QName ns1_WSVersioningItemHistory_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningItemHistory");
     private CombinedSerializer ns1_myWSVersioningItemHistory_LiteralSerializer;
-    private static final QName ns1_getView_WSGetView_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetView");
-    private static final QName ns1_WSGetView_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetView");
-    private CombinedSerializer ns1_myWSGetView_LiteralSerializer;
-    private static final QName ns1_getView_WSView_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSView");
-    private static final QName ns1_WSView_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSView");
-    private CombinedSerializer ns1_myWSView_LiteralSerializer;
+    private static final QName ns1_existsItem_WSExistsItem_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExistsItem");
+    private static final QName ns1_WSExistsItem_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExistsItem");
+    private CombinedSerializer ns1_myWSExistsItem_LiteralSerializer;
+    private static final QName ns1_existsItem_WSBoolean_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSBoolean");
+    private static final QName ns1_getViewPKs_WSGetViewPKs_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetViewPKs");
+    private static final QName ns1_WSGetViewPKs_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetViewPKs");
+    private CombinedSerializer ns1_myWSGetViewPKs_LiteralSerializer;
+    private static final QName ns1_getViewPKs_WSViewPKArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSViewPKArray");
+    private static final QName ns1_WSViewPKArray_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSViewPKArray");
+    private CombinedSerializer ns1_myWSViewPKArray_LiteralSerializer;
     private static final QName ns1_putSynchronizationItem_WSPutSynchronizationItem_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutSynchronizationItem");
     private static final QName ns1_WSPutSynchronizationItem_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutSynchronizationItem");
     private CombinedSerializer ns1_myWSPutSynchronizationItem_LiteralSerializer;
@@ -13270,22 +13272,24 @@ public class XtentisPort_Stub
     private static final QName ns1_WSVersioningRestoreItems_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSVersioningRestoreItems");
     private CombinedSerializer ns1_myWSVersioningRestoreItems_LiteralSerializer;
     private static final QName ns1_versioningRestoreItems_WSBackgroundJobPK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSBackgroundJobPK");
-    private static final QName ns1_putDBDataCluster_WSPutDBDataCluster_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutDBDataCluster");
-    private static final QName ns1_WSPutDBDataCluster_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutDBDataCluster");
-    private CombinedSerializer ns1_myWSPutDBDataCluster_LiteralSerializer;
-    private static final QName ns1_putDBDataCluster_WSBoolean_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSBoolean");
-    private static final QName ns1_putBusinessConcept_WSPutBusinessConcept_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutBusinessConcept");
-    private static final QName ns1_WSPutBusinessConcept_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutBusinessConcept");
-    private CombinedSerializer ns1_myWSPutBusinessConcept_LiteralSerializer;
-    private static final QName ns1_putBusinessConcept_WSString_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSString");
-    private static final QName ns1_executeRoutingOrderV2Synchronously_WSExecuteRoutingOrderV2Synchronously_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExecuteRoutingOrderV2Synchronously");
-    private static final QName ns1_WSExecuteRoutingOrderV2Synchronously_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExecuteRoutingOrderV2Synchronously");
-    private CombinedSerializer ns1_myWSExecuteRoutingOrderV2Synchronously_LiteralSerializer;
-    private static final QName ns1_executeRoutingOrderV2Synchronously_WSString_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSString");
     private static final QName ns1_putDataCluster_WSPutDataCluster_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutDataCluster");
     private static final QName ns1_WSPutDataCluster_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutDataCluster");
     private CombinedSerializer ns1_myWSPutDataCluster_LiteralSerializer;
     private static final QName ns1_putDataCluster_WSDataClusterPK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataClusterPK");
+    private static final QName ns1_WSDataClusterPK_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataClusterPK");
+    private CombinedSerializer ns1_myWSDataClusterPK_LiteralSerializer;
+    private static final QName ns1_getBusinessConcepts_WSGetBusinessConcepts_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConcepts");
+    private static final QName ns1_WSGetBusinessConcepts_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetBusinessConcepts");
+    private CombinedSerializer ns1_myWSGetBusinessConcepts_LiteralSerializer;
+    private static final QName ns1_getBusinessConcepts_WSStringArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
+    private static final QName ns1_executeRoutingOrderV2Synchronously_WSExecuteRoutingOrderV2Synchronously_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExecuteRoutingOrderV2Synchronously");
+    private static final QName ns1_WSExecuteRoutingOrderV2Synchronously_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExecuteRoutingOrderV2Synchronously");
+    private CombinedSerializer ns1_myWSExecuteRoutingOrderV2Synchronously_LiteralSerializer;
+    private static final QName ns1_executeRoutingOrderV2Synchronously_WSString_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSString");
+    private static final QName ns1_existsDBDataCluster_WSExistsDBDataCluster_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExistsDBDataCluster");
+    private static final QName ns1_WSExistsDBDataCluster_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExistsDBDataCluster");
+    private CombinedSerializer ns1_myWSExistsDBDataCluster_LiteralSerializer;
+    private static final QName ns1_existsDBDataCluster_WSBoolean_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSBoolean");
     private static final QName ns1_getUniversePKs_WSGetUniversePKs_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetUniversePKs");
     private static final QName ns1_WSGetUniversePKs_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetUniversePKs");
     private CombinedSerializer ns1_myWSGetUniversePKs_LiteralSerializer;
@@ -13294,10 +13298,12 @@ public class XtentisPort_Stub
     private static final QName ns1_WSPing_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPing");
     private CombinedSerializer ns1_myWSPing_LiteralSerializer;
     private static final QName ns1_ping_WSString_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSString");
-    private static final QName ns1_existsItem_WSExistsItem_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExistsItem");
-    private static final QName ns1_WSExistsItem_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExistsItem");
-    private CombinedSerializer ns1_myWSExistsItem_LiteralSerializer;
-    private static final QName ns1_existsItem_WSBoolean_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSBoolean");
+    private static final QName ns1_getItem_WSGetItem_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItem");
+    private static final QName ns1_WSGetItem_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItem");
+    private CombinedSerializer ns1_myWSGetItem_LiteralSerializer;
+    private static final QName ns1_getItem_WSItem_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSItem");
+    private static final QName ns1_WSItem_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSItem");
+    private CombinedSerializer ns1_myWSItem_LiteralSerializer;
     private static final QName ns1_getRoutingOrderV2PKsByCriteria_WSGetRoutingOrderV2PKsByCriteria_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetRoutingOrderV2PKsByCriteria");
     private static final QName ns1_WSGetRoutingOrderV2PKsByCriteria_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetRoutingOrderV2PKsByCriteria");
     private CombinedSerializer ns1_myWSGetRoutingOrderV2PKsByCriteria_LiteralSerializer;
@@ -13322,24 +13328,18 @@ public class XtentisPort_Stub
     private static final QName ns1_WSSynchronizationGetItemXML_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSSynchronizationGetItemXML");
     private CombinedSerializer ns1_myWSSynchronizationGetItemXML_LiteralSerializer;
     private static final QName ns1_synchronizationGetItemXML_WSString_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSString");
-    private static final QName ns1_getConceptsInDataCluster_WSGetConceptsInDataCluster_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetConceptsInDataCluster");
-    private static final QName ns1_WSGetConceptsInDataCluster_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetConceptsInDataCluster");
-    private CombinedSerializer ns1_myWSGetConceptsInDataCluster_LiteralSerializer;
-    private static final QName ns1_getConceptsInDataCluster_WSStringArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
+    private static final QName ns1_deleteDataCluster_WSDeleteDataCluster_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteDataCluster");
+    private static final QName ns1_WSDeleteDataCluster_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDeleteDataCluster");
+    private CombinedSerializer ns1_myWSDeleteDataCluster_LiteralSerializer;
+    private static final QName ns1_deleteDataCluster_WSDataClusterPK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataClusterPK");
     private static final QName ns1_removeDroppedItem_WSRemoveDroppedItem_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRemoveDroppedItem");
     private static final QName ns1_WSRemoveDroppedItem_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSRemoveDroppedItem");
     private CombinedSerializer ns1_myWSRemoveDroppedItem_LiteralSerializer;
     private static final QName ns1_removeDroppedItem_WSDroppedItemPK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDroppedItemPK");
-    private static final QName ns1_getItem_WSGetItem_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItem");
-    private static final QName ns1_WSGetItem_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetItem");
-    private CombinedSerializer ns1_myWSGetItem_LiteralSerializer;
-    private static final QName ns1_getItem_WSItem_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSItem");
-    private static final QName ns1_WSItem_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSItem");
-    private CombinedSerializer ns1_myWSItem_LiteralSerializer;
-    private static final QName ns1_putDataModel_WSPutDataModel_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutDataModel");
-    private static final QName ns1_WSPutDataModel_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSPutDataModel");
-    private CombinedSerializer ns1_myWSPutDataModel_LiteralSerializer;
-    private static final QName ns1_putDataModel_WSDataModelPK_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSDataModelPK");
+    private static final QName ns1_getFullPathValues_WSGetFullPathValues_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetFullPathValues");
+    private static final QName ns1_WSGetFullPathValues_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSGetFullPathValues");
+    private CombinedSerializer ns1_myWSGetFullPathValues_LiteralSerializer;
+    private static final QName ns1_getFullPathValues_WSStringArray_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSStringArray");
     private static final QName ns1_executeTransformerV2_WSExecuteTransformerV2_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExecuteTransformerV2");
     private static final QName ns1_WSExecuteTransformerV2_TYPE_QNAME = new QName("urn-com-amalto-xtentis-webservice", "WSExecuteTransformerV2");
     private CombinedSerializer ns1_myWSExecuteTransformerV2_LiteralSerializer;

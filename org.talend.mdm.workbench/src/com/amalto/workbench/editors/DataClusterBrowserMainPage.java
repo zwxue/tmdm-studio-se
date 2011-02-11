@@ -108,6 +108,7 @@ import com.amalto.workbench.webservices.WSStringArray;
 import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSUniverseItemsRevisionIDs;
 import com.amalto.workbench.webservices.WSUniversePK;
+import com.amalto.workbench.webservices.WSUpdateMetadataItem;
 import com.amalto.workbench.webservices.WSVersioningGetItemContent;
 import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.CalendarSelectWidget;
@@ -122,6 +123,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
     protected static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
 
     protected Button checkFTSearchButton;
+
+    protected Button showTaskIdCB;
 
     protected Text searchText;
 
@@ -196,7 +199,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     }
                 }// keyReleased
             }// keyListener
-                    );
+            );
             // to
             Label toLabel = toolkit.createLabel(composite, "To", SWT.NULL);
             toLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -245,6 +248,13 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             searchText.addKeyListener(keylistener);
 
             checkFTSearchButton = toolkit.createButton(composite, "Use Full Text Search", SWT.CHECK);
+            checkFTSearchButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+
+            Label fill = toolkit.createLabel(composite, "", SWT.NULL);
+            fill.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 8, 1));
+
+            showTaskIdCB = toolkit.createButton(composite, "Show Task ID", SWT.CHECK);
+            showTaskIdCB.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
 
             // pagetoolbar
             pageToolBar = new PageingToolBar(composite);
@@ -267,7 +277,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     try {
                         new EditItemAction(DataClusterBrowserMainPage.this.getSite().getShell(), resultsViewer).run();
                     } catch (Exception e) {
-                        MessageDialog.openError(DataClusterBrowserMainPage.this.getSite().getShell(), "Error",
+                        MessageDialog.openError(
+                                DataClusterBrowserMainPage.this.getSite().getShell(),
+                                "Error",
                                 "Unable to display the element as a tree:\n" + e.getClass().getName() + ": "
                                         + e.getLocalizedMessage());
                     }
@@ -291,6 +303,22 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
     }// createFormContent
 
     public void doSearch() {
+        // @temp yguo , show taskid column
+        // DataClusterBrowserMainPage.this.resultsViewer.refresh(true);
+        // DataClusterBrowserMainPage.this.resultsViewer.
+        if (showTaskIdCB.getSelection()) {
+            if (DataClusterBrowserMainPage.this.resultsViewer.getTable().getColumnCount() != 4) {
+                final TableColumn column3 = new TableColumn(DataClusterBrowserMainPage.this.resultsViewer.getTable(), SWT.LEFT, 3);
+                column3.setText("TaskId");
+                column3.setWidth(150);
+            }
+        } else {
+            // @temp yguo , remove the taskid column
+            if (DataClusterBrowserMainPage.this.resultsViewer.getTable().getColumnCount() == 4) {
+                DataClusterBrowserMainPage.this.resultsViewer.getTable().getColumn(3).dispose();
+            }
+        }
+
         DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(true));
         pageToolBar.getComposite().setVisible(true);
         pageToolBar.getComposite().layout(true);
@@ -535,8 +563,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             searchText.setFocus();
         } catch (Exception e) {
             e.printStackTrace();
-            MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page", "Error refreshing the page: "
-                    + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
+                    "Error refreshing the page: " + e.getLocalizedMessage());
         }
     }
 
@@ -563,8 +591,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
         } catch (Exception e) {
             e.printStackTrace();
-            MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page", "Error comitting the page: "
-                    + e.getLocalizedMessage());
+            MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page",
+                    "Error comitting the page: " + e.getLocalizedMessage());
         }
     }
 
@@ -597,6 +625,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 manager.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
                 manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new EditItemAction(DataClusterBrowserMainPage.this
                         .getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
+                manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new EditTaskIdAction(
+                        DataClusterBrowserMainPage.this.getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
                 manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new PhysicalDeleteItemsAction(
                         DataClusterBrowserMainPage.this.getSite().getShell(), DataClusterBrowserMainPage.this.resultsViewer));
                 manager.appendToGroup(IWorkbenchActionConstants.MB_ADDITIONS, new LogicalDeleteItemsAction(
@@ -696,6 +726,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             // see 0015909
             String clusterName = URLEncoder.encode(((WSDataClusterPK) getXObject().getWsKey()).getPk(), "utf-8");
             WSDataClusterPK clusterPk = new WSDataClusterPK(clusterName);
+            // @temp yguo, get item with taskid or get taskid by specify wsitempk.
             WSItemPKsByCriteriaResponseResults[] results = port.getItemPKsByFullCriteria(
                     new WSGetItemPKsByFullCriteria(new WSGetItemPKsByCriteria(clusterPk, concept, search, keys, from, to, start,
                             limit), useFTSearch)).getResults();
@@ -714,8 +745,9 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                             .getTextContent());
                     continue;
                 }
+                // port.getItem(new WSGetItem(results[i].getWsItemPK()));
                 ress.add(new LineItem(results[i].getDate(), results[i].getWsItemPK().getConceptName(), results[i].getWsItemPK()
-                        .getIds()));
+                        .getIds(), results[i].getTaskId()));
             }
             pageToolBar.setTotalsize(totalSize);
             pageToolBar.refreshUI();
@@ -821,13 +853,63 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             } catch (Exception e) {
                 e.printStackTrace();
-                MessageDialog.openError(shell, "Error", "An error occured trying to view the result as a DOM tree: "
-                        + e.getLocalizedMessage());
+                MessageDialog.openError(shell, "Error",
+                        "An error occured trying to view the result as a DOM tree: " + e.getLocalizedMessage());
             }
         }
 
         public void runWithEvent(Event event) {
             super.runWithEvent(event);
+        }
+
+    }
+
+    class EditTaskIdAction extends Action {
+
+        protected Shell shell = null;
+
+        protected Viewer viewer;
+
+        public EditTaskIdAction(Shell shell, Viewer viewer) {
+            super();
+            this.shell = shell;
+            this.viewer = viewer;
+            setImageDescriptor(ImageCache.getImage("icons/default.gif"));
+            setText("Edit TaskId");
+            setToolTipText("Edit taskId of the record");
+        }
+
+        public void run() {
+            try {
+                super.run();
+                final XtentisPort port = Util.getPort(getXObject());
+                IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
+                LineItem li = (LineItem) selection.getFirstElement();
+
+                InputDialog input = new InputDialog(DataClusterBrowserMainPage.this.getSite().getShell(), "Edit TaskId",
+                        "Please input the new taskid.", li.getTaskId(), null);
+                input.setBlockOnOpen(true);
+
+                if (input.open() == Window.OK) {
+                    input.getValue();
+                    li.setTaskId(input.getValue());
+                    // @temp yguo, save the taskid to db.
+                    WSUpdateMetadataItem wsUpdateMetadataItem = new WSUpdateMetadataItem();
+                    WSItemPK wsItemPK = new WSItemPK();
+                    wsItemPK.setWsDataClusterPK((WSDataClusterPK) getXObject().getWsKey());
+                    wsItemPK.setConceptName(li.getConcept());
+                    wsItemPK.setIds(li.getIds());
+                    wsUpdateMetadataItem.setWsItemPK(wsItemPK);
+                    wsUpdateMetadataItem.setTaskId(input.getValue());
+                    port.updateItemMetadata(wsUpdateMetadataItem);
+                    // @temp yguo, refresh the data
+                    viewer.refresh();
+                }
+            } catch (Exception e) {
+                MessageDialog.openError(shell, "Error saving the Record",
+                        "An error occured trying save the Record:\n\n " + e.getLocalizedMessage());
+                return;
+            }
         }
 
     }
@@ -890,8 +972,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             } catch (Exception e) {
                 e.printStackTrace();
-                MessageDialog.openError(shell, "Error", "An error occured trying to compare items with each other: "
-                        + e.getLocalizedMessage());
+                MessageDialog.openError(shell, "Error",
+                        "An error occured trying to compare items with each other: " + e.getLocalizedMessage());
             }
         }
     }
@@ -955,8 +1037,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             } catch (Exception e) {
                 e.printStackTrace();
-                MessageDialog.openError(shell, "Error", "An error occured trying to compare Record with svn: "
-                        + e.getLocalizedMessage());
+                MessageDialog.openError(shell, "Error",
+                        "An error occured trying to compare Record with svn: " + e.getLocalizedMessage());
             }
         }
     }
@@ -1027,8 +1109,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             } catch (Exception e) {
                 e.printStackTrace();
-                MessageDialog.openError(shell, "Error", "An error occured trying to delete the Records: "
-                        + e.getLocalizedMessage());
+                MessageDialog.openError(shell, "Error",
+                        "An error occured trying to delete the Records: " + e.getLocalizedMessage());
             }
         }
 
@@ -1136,8 +1218,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             } catch (Exception e) {
                 e.printStackTrace();
-                MessageDialog.openError(shell, "Error", "An error occured trying to delete the Records: "
-                        + e.getLocalizedMessage());
+                MessageDialog.openError(shell, "Error",
+                        "An error occured trying to delete the Records: " + e.getLocalizedMessage());
             }
         }
 
@@ -1187,8 +1269,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     monitor.done();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    MessageDialog.openError(shell, "Error Deleting", "An error occured trying to delete the Records:\n\n "
-                            + e.getLocalizedMessage());
+                    MessageDialog.openError(shell, "Error Deleting",
+                            "An error occured trying to delete the Records:\n\n " + e.getLocalizedMessage());
                 }// try
 
             }// run
@@ -1263,8 +1345,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             } catch (Exception e) {
                 e.printStackTrace();
-                MessageDialog.openError(shell, "Error", "An error occured trying to view the result as a DOM tree: "
-                        + e.getLocalizedMessage());
+                MessageDialog.openError(shell, "Error",
+                        "An error occured trying to view the result as a DOM tree: " + e.getLocalizedMessage());
             }
         }
 
@@ -1354,8 +1436,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     port = Util.getPort(getXObject());
                 } catch (Exception e) {
                     e.printStackTrace();
-                    MessageDialog.openError(shell, "Error Routing", "An error occured trying to route the Records:\n\n "
-                            + e.getLocalizedMessage());
+                    MessageDialog.openError(shell, "Error Routing",
+                            "An error occured trying to route the Records:\n\n " + e.getLocalizedMessage());
                 }// try
 
                 int i = 0;
@@ -1409,6 +1491,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 return li.getConcept();
             case 2:
                 return Util.joinStrings(li.getIds(), ".");
+            case 3:
+                return li.getTaskId();
             default:
                 return "???????";
             }
