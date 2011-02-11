@@ -142,6 +142,8 @@ public class XSDEditorUtil {
 
         CTabFolder folder = (CTabFolder) dMainPage.getMainControl().getParent();
         folder.getItem(0).setText(xobject.getDisplayName() + " " + Util.getRevision(xobject));
+        folder.getItem(1).setText("Schema Design");
+        folder.getItem(2).setText("Schema Source");
         if (markdirty)
             dMainPage.markDirty();
 
