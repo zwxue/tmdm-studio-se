@@ -31,7 +31,7 @@ import com.amalto.workbench.webservices.WSExtractedContent;
 public class ProcessResultsDialog extends Dialog {
 
 	private final static int BUTTON_CLOSE = 10;
-
+	private static final String DEFAULT_DISPLAY_TEXT="Incoming document (_DEFAULT_)";
 
 	protected Combo variablesCombo;
 	protected SourceViewer variablesViewer;
@@ -74,8 +74,12 @@ public class ProcessResultsDialog extends Dialog {
             	public void modifyText(ModifyEvent e) {
             		String output = variablesCombo.getText();
     				if (output.startsWith(TransformerMainPage.DEFAULT_DISPLAY))
-    					output = "Incoming document (_DEFAULT_)";//TransformerMainPage.DEFAULT_VAR+output.substring(TransformerMainPage.DEFAULT_DISPLAY.length());
-            		ProcessResultsDialog.this.variablesViewer.setDocument(new Document(getText(output)));
+    					output = DEFAULT_DISPLAY_TEXT;//TransformerMainPage.DEFAULT_VAR+output.substring(TransformerMainPage.DEFAULT_DISPLAY.length());
+    				String text=variablesCombo.getText();
+    				if(text.equals(DEFAULT_DISPLAY_TEXT)){
+    					text=TransformerMainPage.DEFAULT_DISPLAY;
+    				}
+    	            variablesViewer.setDocument(new Document(getText(text)));
             	}
             });
             /*
@@ -166,12 +170,15 @@ public class ProcessResultsDialog extends Dialog {
             for (Iterator iter = outputs.iterator(); iter.hasNext(); ) {
 				String output = (String) iter.next();
 				if (output.startsWith(TransformerMainPage.DEFAULT_VAR))
-					output = "Incoming document (_DEFAULT_)";//TransformerMainPage.DEFAULT_DISPLAY+output.substring(TransformerMainPage.DEFAULT_VAR.length());
+					output = DEFAULT_DISPLAY_TEXT;//TransformerMainPage.DEFAULT_DISPLAY+output.substring(TransformerMainPage.DEFAULT_VAR.length());
 				variablesCombo.add(output);
 			}
             variablesCombo.select(0);
-			
-            variablesViewer.setDocument(new Document(getText(variablesCombo.getText())));
+			String text=variablesCombo.getText();
+			if(text.equals(DEFAULT_DISPLAY_TEXT)){
+				text=TransformerMainPage.DEFAULT_DISPLAY;
+			}
+            variablesViewer.setDocument(new Document(getText(text)));
             
 		} catch (Exception e) {
 			e.printStackTrace();

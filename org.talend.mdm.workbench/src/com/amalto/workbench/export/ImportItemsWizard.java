@@ -525,8 +525,11 @@ public class ImportItemsWizard extends Wizard {
                         }
                     }
 
-                    importClusterContents(item, port, picturePathMap);
-
+                    try {
+						importClusterContents(item, port, picturePathMap);
+					} catch (Exception e) {
+						MessageDialog.openWarning(null, "Warning", e.getLocalizedMessage());
+					}
                 }
                 monitor.worked(1);
                 break;
@@ -970,7 +973,7 @@ public class ImportItemsWizard extends Wizard {
         return isV2Transformer;
     }
 
-    private void importClusterContents(TreeObject item, XtentisPort port, HashMap<String, String> picturePathMap) {
+    private void importClusterContents(TreeObject item, XtentisPort port, HashMap<String, String> picturePathMap)throws Exception {
         if (dataClusterContent.containsKey(item.getDisplayName())) {
             Reader reader = null;
             String[] paths = dataClusterContent.get(item.getDisplayName());
@@ -1029,7 +1032,8 @@ public class ImportItemsWizard extends Wizard {
                 try {
                     bulkloadClient.load(entry.getValue());
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    //MessageDialog.openWarning(null, "Warning", "Importing  Entity: "+ concept+ " in Data Container: "+cluster + " Error --> "+e.getLocalizedMessage());
+                	throw new Exception("Importing  Entity: "+ concept+ " in Data Container: "+cluster + " occurs error --> "+e.getLocalizedMessage());
                 }
             }
         }
