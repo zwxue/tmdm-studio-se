@@ -225,7 +225,7 @@ public class SelectXPathComposite extends Composite {
                     if (((XSDParticle) component).getTerm() instanceof XSDElementDeclaration)
                         path = "/" + ((XSDElementDeclaration) ((XSDParticle) component).getTerm()).getName() + path;
                 } else if (component instanceof XSDElementDeclaration) {
-                    path = ((XSDElementDeclaration) component).getName() + path;
+                    path = "/" + ((XSDElementDeclaration) component).getName() + path;
                 }
                 item = item.getParentItem();
 

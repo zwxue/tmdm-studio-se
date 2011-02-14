@@ -2,9 +2,7 @@ package com.amalto.workbench.dialogs;
 
 import java.awt.Panel;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.List;
-
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -38,7 +36,6 @@ import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDSchema;
 
-
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XPathTreeContentProvider;
@@ -51,284 +48,297 @@ import com.amalto.workbench.webservices.WSDataModelPK;
 import com.amalto.workbench.webservices.WSGetDataModel;
 import com.amalto.workbench.webservices.XtentisPort;
 
-
 public class XpathSelectDialog extends Dialog {
-	protected Label schemaLabel = null;
-	protected Combo languagesCombo;
-	protected TreeViewer domViewer;
-	private String title = "Select Xpath";
-	protected TreeParent parent;
-	protected Combo dataModelCombo ;
-	//protected TreeObject xobject;
-	protected DrillDownAdapter drillDownAdapter;
-	protected IWorkbenchPartSite site ;
-	protected Panel panel;
-	protected Text xpathText;
-	private Text filterText;
-	protected Button add;
-	protected SelectionListener listener;
-	//TODO:check This two static String and there related static methods may cause some problems.
-	public  String dataModelName;
-	private String xpath="";
-	private boolean isMulti=true;
-	protected String conceptName;
-	protected static String context;
-	private XSDSchema xsdSchema;
+
+    protected Label schemaLabel = null;
+
+    protected Combo languagesCombo;
+
+    protected TreeViewer domViewer;
+
+    private String title = "Select Xpath";
+
+    protected TreeParent parent;
+
+    protected Combo dataModelCombo;
+
+    // protected TreeObject xobject;
+    protected DrillDownAdapter drillDownAdapter;
+
+    protected IWorkbenchPartSite site;
+
+    protected Panel panel;
+
+    protected Text xpathText;
+
+    private Text filterText;
+
+    protected Button add;
+
+    protected SelectionListener listener;
+
+    // TODO:check This two static String and there related static methods may cause some problems.
+    public String dataModelName;
+
+    private String xpath = "";
+
+    private boolean isMulti = true;
+
+    protected String conceptName;
+
+    protected static String context;
+
+    private XSDSchema xsdSchema;
+
     private List<String> avaiList;
-	
-	public XpathSelectDialog(Shell parentShell,TreeParent parent,String title,IWorkbenchPartSite site,boolean isMulti,String dataModelName) {
-		super(parentShell);
-		this.title = title;
-		this.parent = parent;
-		this.site = site;
-		this.isMulti=isMulti;
-		if(dataModelName!=null)
-		this.dataModelName =dataModelName;//default dataModel
-		if(this.site==null) this.site=ServerView.show().getSite();
-	}
 
-	private  String getXpath(StructuredSelection sel){
+    public XpathSelectDialog(Shell parentShell, TreeParent parent, String title, IWorkbenchPartSite site, boolean isMulti,
+            String dataModelName) {
+        super(parentShell);
+        this.title = title;
+        this.parent = parent;
+        this.site = site;
+        this.isMulti = isMulti;
+        if (dataModelName != null)
+            this.dataModelName = dataModelName;// default dataModel
+        if (this.site == null)
+            this.site = ServerView.show().getSite();
+    }
 
-		String path ="";
-		String totalXpath="";
-            TreeItem item;
-            TreeItem[] items = domViewer.getTree().getSelection();
-            for(int i=0;i<items.length;i++){
-            	item = items[i];
-            	XSDConcreteComponent component = (XSDConcreteComponent)item.getData();
-            	if(!(component instanceof XSDParticle)&&!(component instanceof XSDElementDeclaration))
-            		continue;
-            	do {
-                	 component = (XSDConcreteComponent)item.getData();
-                	if (component instanceof XSDParticle) {
-                		if (((XSDParticle)component).getTerm() instanceof XSDElementDeclaration)
-                			path = "/"+((XSDElementDeclaration)((XSDParticle)component).getTerm()).getName()+path;
-                	} else if (component instanceof XSDElementDeclaration) {
-                			path=((XSDElementDeclaration)component).getName()+path;
-                	}
-                	item = item.getParentItem();
-                	
-                } while (item!=null);
-            	if(i==0)
-            		totalXpath = path;
-            	else
-            		totalXpath +="&"+path;
-            	path="";
-            }//for(i=0
-            if(context!=null && conceptName!=null){
-	
-				if(totalXpath.equals(conceptName)){
-					totalXpath=totalXpath.replaceAll(conceptName, "/");
-				}else{
-					totalXpath=totalXpath.replaceAll(conceptName+"/", "");
-				}
-				if(totalXpath.equals(context)|| totalXpath.equals(context.replaceAll(conceptName+"/", ""))){
-					totalXpath=".";
-				}
-				if(totalXpath.indexOf('/')==-1 && !totalXpath.equals(".") && !"/".equals(totalXpath) && !"/".equals(context) && !context.equals(conceptName)){
-					totalXpath="../"+totalXpath;
-				}
+    private String getXpath(StructuredSelection sel) {
+
+        String path = "";
+        String totalXpath = "";
+        TreeItem item;
+        TreeItem[] items = domViewer.getTree().getSelection();
+        for (int i = 0; i < items.length; i++) {
+            item = items[i];
+            XSDConcreteComponent component = (XSDConcreteComponent) item.getData();
+            if (!(component instanceof XSDParticle) && !(component instanceof XSDElementDeclaration))
+                continue;
+            do {
+                component = (XSDConcreteComponent) item.getData();
+                if (component instanceof XSDParticle) {
+                    if (((XSDParticle) component).getTerm() instanceof XSDElementDeclaration)
+                        path = "/" + ((XSDElementDeclaration) ((XSDParticle) component).getTerm()).getName() + path;
+                } else if (component instanceof XSDElementDeclaration) {
+                    path = "/" + ((XSDElementDeclaration) component).getName() + path;
+                }
+                item = item.getParentItem();
+
+            } while (item != null);
+            if (i == 0)
+                totalXpath = path;
+            else
+                totalXpath += "&" + path;
+            path = "";
+        }// for(i=0
+        if (context != null && conceptName != null) {
+
+            if (totalXpath.equals(conceptName)) {
+                totalXpath = totalXpath.replaceAll(conceptName, "/");
+            } else {
+                totalXpath = totalXpath.replaceAll(conceptName + "/", "");
             }
-           return totalXpath;     
+            if (totalXpath.equals(context) || totalXpath.equals(context.replaceAll(conceptName + "/", ""))) {
+                totalXpath = ".";
+            }
+            if (totalXpath.indexOf('/') == -1 && !totalXpath.equals(".") && !"/".equals(totalXpath) && !"/".equals(context)
+                    && !context.equals(conceptName)) {
+                totalXpath = "../" + totalXpath;
+            }
         }
-		
-	protected Control createDialogArea (Composite parent) {
-		parent.getShell().setText(this.title);
-		Composite composite = (Composite) super.createDialogArea(parent);
-		GridLayout layout = (GridLayout)composite.getLayout();
-		layout.makeColumnsEqualWidth=false;
-		layout.numColumns = 2;
-		Label datamoelsLabel = new Label(composite, SWT.NONE);
-		GridData dg= new GridData(SWT.FILL,SWT.FILL,false,true,1,1);
-		datamoelsLabel.setLayoutData(dg);
-		datamoelsLabel.setText("Data Models:");
-		dg= new GridData(SWT.FILL,SWT.FILL,true,true,1,1);
-		dg.widthHint=400;
-		dataModelCombo = new Combo(composite,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
-		dataModelCombo.setLayoutData(dg);
-		if(this.parent==null){
-			this.parent=(TreeParent)ServerView.show().getRoot().getChildren()[0];
-		}
-		final TreeParent tree = this.parent.findServerFolder(TreeObject.DATA_MODEL);
-		
+        return totalXpath;
+    }
 
-		
-		//filter the datamodel according to conceptName
-		avaiList=Util.getDataModel(this.parent, dataModelName, conceptName);
-		
-		
-		dataModelCombo.setItems(avaiList.toArray(new String[avaiList.size()]));
-		dataModelCombo.addSelectionListener(new SelectionListener() {
-			public void widgetDefaultSelected(
-					org.eclipse.swt.events.SelectionEvent e) {}
+    protected Control createDialogArea(Composite parent) {
+        parent.getShell().setText(this.title);
+        Composite composite = (Composite) super.createDialogArea(parent);
+        GridLayout layout = (GridLayout) composite.getLayout();
+        layout.makeColumnsEqualWidth = false;
+        layout.numColumns = 2;
+        Label datamoelsLabel = new Label(composite, SWT.NONE);
+        GridData dg = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
+        datamoelsLabel.setLayoutData(dg);
+        datamoelsLabel.setText("Data Models:");
+        dg = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+        dg.widthHint = 400;
+        dataModelCombo = new Combo(composite, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.SINGLE);
+        dataModelCombo.setLayoutData(dg);
+        if (this.parent == null) {
+            this.parent = (TreeParent) ServerView.show().getRoot().getChildren()[0];
+        }
+        final TreeParent tree = this.parent.findServerFolder(TreeObject.DATA_MODEL);
 
-			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-				changeDomTree(tree,"");
-			}
-		});
-		schemaLabel = new Label(composite, SWT.NONE);
-		schemaLabel.setText("Xpath:");
-		schemaLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true,1, 1));
-		((GridData) schemaLabel.getLayoutData()).widthHint = 10;
-		xpathText = new Text(composite, SWT.BORDER);
-		xpathText.setEditable(false);
-		xpathText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,1));
-		
-		//add the filter for the xpath,see bug 0016511: Entity filtering in select multiple xpath dialog:
-		Label filterLabel =new Label(composite, SWT.NONE);
-		filterLabel.setText("Filter:");
-		filterLabel.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true, false,1,1));
-		filterText=new Text(composite,SWT.BORDER);
-		filterText.setEditable(true);
-		filterText.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,1,1));
-		if(conceptName!=null)
-		    filterText.setText(conceptName);
-		else
-		    filterText.setText("");
-        filterText.addModifyListener(new ModifyListener() {
-            public void modifyText(ModifyEvent e) {
-                String filter = ((Text) e.widget).getText();
-                changeDomTree(tree,filter);
+        // filter the datamodel according to conceptName
+        avaiList = Util.getDataModel(this.parent, dataModelName, conceptName);
+
+        dataModelCombo.setItems(avaiList.toArray(new String[avaiList.size()]));
+        dataModelCombo.addSelectionListener(new SelectionListener() {
+
+            public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
+            }
+
+            public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+                changeDomTree(tree, "");
             }
         });
-		if (isMulti) {
-			domViewer = new TreeViewer(composite, SWT.H_SCROLL | SWT.MULTI
-					| SWT.V_SCROLL | SWT.BORDER);
-		} else {
-			domViewer = new TreeViewer(composite, SWT.H_SCROLL | SWT.V_SCROLL
-					| SWT.BORDER);
-		}
-		int index = avaiList.indexOf(dataModelName);
-		if (index < 0)
-			dataModelCombo.select(0);
-		else
-			dataModelCombo.select(index);
+        schemaLabel = new Label(composite, SWT.NONE);
+        schemaLabel.setText("Xpath:");
+        schemaLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
+        ((GridData) schemaLabel.getLayoutData()).widthHint = 10;
+        xpathText = new Text(composite, SWT.BORDER);
+        xpathText.setEditable(false);
+        xpathText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-		changeDomTree(tree,filterText.getText());
+        // add the filter for the xpath,see bug 0016511: Entity filtering in select multiple xpath dialog:
+        Label filterLabel = new Label(composite, SWT.NONE);
+        filterLabel.setText("Filter:");
+        filterLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+        filterText = new Text(composite, SWT.BORDER);
+        filterText.setEditable(true);
+        filterText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+        if (conceptName != null)
+            filterText.setText(conceptName);
+        else
+            filterText.setText("");
+        filterText.addModifyListener(new ModifyListener() {
 
-		domViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
-		((GridData) domViewer.getControl().getLayoutData()).heightHint = 400;
-		((GridData) domViewer.getControl().getLayoutData()).widthHint = 400;
-		return composite;
-	}
-	
-	private void changeDomTree(final TreeParent pObject,String filter) {
-		String modelDisplay = dataModelCombo.getText();
-		if(modelDisplay.length()==0) return;
-		this.dataModelName = modelDisplay;
-        //this.selectedDataModelName = modelDisplay;
-		//xobject = pObject.findObject(TreeObject.DATA_MODEL, modelDisplay);
-		XtentisPort port = null;
-		try {
-			port = Util.getPort(pObject);
-		} catch (XtentisException e3) {
-			e3.printStackTrace();
-		} catch (Exception e3) {
-			e3.printStackTrace();
-		}
-		WSDataModel wsDataModel = null;
-		try {
-			wsDataModel = port.getDataModel(new WSGetDataModel(
-					new WSDataModelPK(dataModelName)));
-		} catch (RemoteException e2) {
-			e2.printStackTrace();
-		}
-		try {
-			//XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
-			String schema = wsDataModel.getXsdSchema();//Util.nodeToString(xsdSchema.getDocument());
-			XSDSchema xsd= Util.createXsdSchema(schema, pObject);
-			provideViwerContent(xsd,filter);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-	}// changeDomTree(
-	
+            public void modifyText(ModifyEvent e) {
+                String filter = ((Text) e.widget).getText();
+                changeDomTree(tree, filter);
+            }
+        });
+        if (isMulti) {
+            domViewer = new TreeViewer(composite, SWT.H_SCROLL | SWT.MULTI | SWT.V_SCROLL | SWT.BORDER);
+        } else {
+            domViewer = new TreeViewer(composite, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+        }
+        int index = avaiList.indexOf(dataModelName);
+        if (index < 0)
+            dataModelCombo.select(0);
+        else
+            dataModelCombo.select(index);
 
-	
-	
-	  protected void provideViwerContent(XSDSchema xsdSchema,String filter) {
-		 this.xsdSchema=xsdSchema;
-		drillDownAdapter = new DrillDownAdapter(domViewer);
-		domViewer.setLabelProvider(new XSDTreeLabelProvider());
-		XPathTreeContentProvider  provider=new XPathTreeContentProvider(this.site,
-				xsdSchema, parent,filter);
-		//filter the entity with the filter text but not the concept name.
-//		provider.setConceptName(this.conceptName);
-		domViewer.setContentProvider(provider);
+        changeDomTree(tree, filterText.getText());
 
-		domViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			public void selectionChanged(SelectionChangedEvent e) {
-				StructuredSelection sel = (StructuredSelection) e
-						.getSelection();
-				xpath = getXpath(sel);
-				xpathText.setText(xpath);
-				getButton(IDialogConstants.OK_ID).setEnabled(xpath.length()>0);
-			}
-		});
-		domViewer.getControl().setLayoutData(
-				new GridData(SWT.FILL, SWT.FILL, false, true));
-		domViewer.setSorter(new ViewerSorter() {
-			public int category(Object element) {
-				// we want facets before Base TypeDefinitions in
-				// SimpleTypeDefinition
-				if (element instanceof XSDFacet)
-					return 100;
-				// unique keys after element declarations and before other keys
-				if (element instanceof XSDIdentityConstraintDefinition) {
-					XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) element;
-					if (icd.getIdentityConstraintCategory().equals(
-							XSDIdentityConstraintCategory.UNIQUE_LITERAL))
-						return 300;
-					else if (icd.getIdentityConstraintCategory().equals(
-							XSDIdentityConstraintCategory.KEY_LITERAL))
-						return 301;
-					else
-						return 302;
-				}
-				return 200;
-			}
+        domViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+        ((GridData) domViewer.getControl().getLayoutData()).heightHint = 400;
+        ((GridData) domViewer.getControl().getLayoutData()).widthHint = 400;
+        return composite;
+    }
 
-			public int compare(Viewer theViewer, Object e1, Object e2) {
-				int cat1 = category(e1);
-				int cat2 = category(e2);
-				return cat1 - cat2;
-			}
-		});
-		domViewer.setInput(site);
-	}
+    private void changeDomTree(final TreeParent pObject, String filter) {
+        String modelDisplay = dataModelCombo.getText();
+        if (modelDisplay.length() == 0)
+            return;
+        this.dataModelName = modelDisplay;
+        // this.selectedDataModelName = modelDisplay;
+        // xobject = pObject.findObject(TreeObject.DATA_MODEL, modelDisplay);
+        XtentisPort port = null;
+        try {
+            port = Util.getPort(pObject);
+        } catch (XtentisException e3) {
+            e3.printStackTrace();
+        } catch (Exception e3) {
+            e3.printStackTrace();
+        }
+        WSDataModel wsDataModel = null;
+        try {
+            wsDataModel = port.getDataModel(new WSGetDataModel(new WSDataModelPK(dataModelName)));
+        } catch (RemoteException e2) {
+            e2.printStackTrace();
+        }
+        try {
+            // XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
+            String schema = wsDataModel.getXsdSchema();// Util.nodeToString(xsdSchema.getDocument());
+            XSDSchema xsd = Util.createXsdSchema(schema, pObject);
+            provideViwerContent(xsd, filter);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+    }// changeDomTree(
 
-	protected Control createButtonBar(Composite parent) {
-		Control btnBar = super.createButtonBar(parent);
-		getButton(IDialogConstants.OK_ID).setText("Add");
-		return btnBar;
-	}
+    protected void provideViwerContent(XSDSchema xsdSchema, String filter) {
+        this.xsdSchema = xsdSchema;
+        drillDownAdapter = new DrillDownAdapter(domViewer);
+        domViewer.setLabelProvider(new XSDTreeLabelProvider());
+        XPathTreeContentProvider provider = new XPathTreeContentProvider(this.site, xsdSchema, parent, filter);
+        // filter the entity with the filter text but not the concept name.
+        // provider.setConceptName(this.conceptName);
+        domViewer.setContentProvider(provider);
 
-	public String getXpath() {
-		return xpath;
-	}
+        domViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
-	public  String getDataModelName() {
-		return dataModelName;
-	}
+            public void selectionChanged(SelectionChangedEvent e) {
+                StructuredSelection sel = (StructuredSelection) e.getSelection();
+                xpath = getXpath(sel);
+                xpathText.setText(xpath);
+                getButton(IDialogConstants.OK_ID).setEnabled(xpath.length() > 0);
+            }
+        });
+        domViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true));
+        domViewer.setSorter(new ViewerSorter() {
 
-	public void setDataModelName(String dataModelName) {
-		this.dataModelName = dataModelName;
-	}
+            public int category(Object element) {
+                // we want facets before Base TypeDefinitions in
+                // SimpleTypeDefinition
+                if (element instanceof XSDFacet)
+                    return 100;
+                // unique keys after element declarations and before other keys
+                if (element instanceof XSDIdentityConstraintDefinition) {
+                    XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) element;
+                    if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL))
+                        return 300;
+                    else if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.KEY_LITERAL))
+                        return 301;
+                    else
+                        return 302;
+                }
+                return 200;
+            }
 
-	public String getConceptName() {
-		return conceptName;
-	}
+            public int compare(Viewer theViewer, Object e1, Object e2) {
+                int cat1 = category(e1);
+                int cat2 = category(e2);
+                return cat1 - cat2;
+            }
+        });
+        domViewer.setInput(site);
+    }
 
-	public void setConceptName(String conceptName) {
-		this.conceptName = conceptName;
-	}
+    protected Control createButtonBar(Composite parent) {
+        Control btnBar = super.createButtonBar(parent);
+        getButton(IDialogConstants.OK_ID).setText("Add");
+        return btnBar;
+    }
 
-	public static String getContext() {
-		return context;
-	}
+    public String getXpath() {
+        return xpath;
+    }
 
-	public static void setContext(String c) {
-		context = c;
-	}
+    public String getDataModelName() {
+        return dataModelName;
+    }
+
+    public void setDataModelName(String dataModelName) {
+        this.dataModelName = dataModelName;
+    }
+
+    public String getConceptName() {
+        return conceptName;
+    }
+
+    public void setConceptName(String conceptName) {
+        this.conceptName = conceptName;
+    }
+
+    public static String getContext() {
+        return context;
+    }
+
+    public static void setContext(String c) {
+        context = c;
+    }
 
 }
