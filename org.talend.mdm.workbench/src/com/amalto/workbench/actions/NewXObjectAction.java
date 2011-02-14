@@ -199,7 +199,9 @@ public class NewXObjectAction extends Action {
                             public String isValid(String newText) {
                                 if ((newText == null) || "".equals(newText))
                                     return "The Name cannot be empty";
-                                if (!Pattern.matches("\\w*(\\s*|#|\\w+)+\\w+#*", newText)) {
+                                // yyun: bug 16141: the empty charactors inside the string isn't permitted
+                                // if (!Pattern.matches("\\w*(\\s*|#|\\w+)+\\w+#*", newText)) {
+                                if (!Pattern.matches("\\w*(#|\\w+)+\\w+#*", newText)) {
                                     return "The name cannot contain invalid character!";
                                 }
                                 return null;

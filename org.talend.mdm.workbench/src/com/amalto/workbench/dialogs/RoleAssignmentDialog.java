@@ -86,7 +86,9 @@ public class RoleAssignmentDialog extends Dialog {
         instanceNameText.addModifyListener(new ModifyListener() {
 
             public void modifyText(ModifyEvent e) {
-                boolean enable = (instanceNameText.getText().length() > 0) && (!instanceNameText.getText().trim().equals(""));
+                String name = instanceNameText.getText().trim();
+                boolean enable = (name.length() > 0) && (!"".equals(name))
+                        && (name.replaceAll("\\s", "").length() == name.length());
                 RoleAssignmentDialog.this.getButton(IDialogConstants.OK_ID).setEnabled(enable);
             }
         });
