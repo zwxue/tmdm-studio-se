@@ -29,9 +29,9 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.PropertyResourceBundle;
 import java.util.Set;
-import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -327,8 +327,8 @@ public class Util {
         try {
             if (xobject == null)
                 return null;
-            return getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(), xobject.getUsername(), xobject
-                    .getPassword());
+            return getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(), xobject.getUsername(),
+                    xobject.getPassword());
         } catch (MalformedURLException e) {
             throw new XtentisException("Invalid endpoint address: " + xobject.getEndpointAddress());
         }
@@ -494,21 +494,23 @@ public class Util {
             return m.group(1);
         return null;
     }
-    
+
     /**
      * get the concept name from the child elment
+     * 
      * @param child
      * @return
      */
-    public static String getConceptName(XSDConcreteComponent child){
-    	if(child.getContainer() instanceof XSDElementDeclaration && child.getContainer().getContainer() instanceof XSDSchema){
-    		return child.getContainer().getElement().getAttributes().getNamedItem("name").getNodeValue();
-    	}else{
-    		if(child!=null && child.getContainer()!=null)
-    		return getConceptName(child.getContainer());
-    	}
-    	return null;
+    public static String getConceptName(XSDConcreteComponent child) {
+        if (child.getContainer() instanceof XSDElementDeclaration && child.getContainer().getContainer() instanceof XSDSchema) {
+            return child.getContainer().getElement().getAttributes().getNamedItem("name").getNodeValue();
+        } else {
+            if (child != null && child.getContainer() != null)
+                return getConceptName(child.getContainer());
+        }
+        return null;
     }
+
     /**
      * Generates an xml string from a node (not pretty formatted)
      * 
@@ -549,8 +551,8 @@ public class Util {
      * @throws Exception
      */
     public static NodeList getNodeList(Node contextNode, String xPath, String namespace, String prefix) throws Exception {
-        XObject xo = XPathAPI.eval(contextNode, xPath, (namespace == null) ? contextNode : Util.getRootElement("nsholder",
-                namespace, prefix));
+        XObject xo = XPathAPI.eval(contextNode, xPath,
+                (namespace == null) ? contextNode : Util.getRootElement("nsholder", namespace, prefix));
         if (xo.getType() != XObject.CLASS_NODESET)
             return null;
         return xo.nodelist();
@@ -2880,6 +2882,10 @@ public class Util {
     }
 
     public static boolean isDecimal(XSDSimpleTypeDefinition simpleType) {
+
+        if (isSpecifiedBuildInType(simpleType, "integer"))
+            return false;
+
         return isSpecifiedBuildInType(simpleType, "decimal");
     }
 
@@ -2894,6 +2900,6 @@ public class Util {
         if (systemDoubleType == null)
             return false;
 
-        return systemDoubleType.equals(simpleType.getBaseType());
+        return simpleType.equals(systemDoubleType) || systemDoubleType.equals(simpleType.getBaseType());
     }
 }

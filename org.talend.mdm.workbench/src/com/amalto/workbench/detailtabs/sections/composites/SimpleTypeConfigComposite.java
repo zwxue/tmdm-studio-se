@@ -166,8 +166,8 @@ public class SimpleTypeConfigComposite extends Composite {
 
         for (String eachFacetName : baseTypeDef.getValidFacets()) {
 
-            IPropertySource<?> propSource = SimpleTypeFacetPropSourceBuilder.createFacetPropSource(xsdSimpleType, eachFacetName,
-                    compProperty.getPropertyViewer().getTree());
+            IPropertySource<?> propSource = SimpleTypeFacetPropSourceBuilder.createFacetPropSource(xsdSimpleType, baseTypeDef,
+                    eachFacetName, compProperty.getPropertyViewer().getTree());
 
             if (propSource == null)
                 continue;

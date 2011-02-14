@@ -234,8 +234,8 @@ class SimpleTypeFacetCommitHandler_MaxExclusive extends SimpleTypeFacetCommitHan
     @Override
     protected SimpleTypeFacetCommitHandlerHelper getCommitHelper() {
 
-        if (Util.isDouble(getCommitedObj().getXSDSimpleType()) || Util.isFloat(getCommitedObj().getXSDSimpleType())
-                || Util.isDecimal(getCommitedObj().getXSDSimpleType()))
+        if (Util.isDouble(getCommitedObj().getNewBaseType()) || Util.isFloat(getCommitedObj().getNewBaseType())
+                || Util.isDecimal(getCommitedObj().getNewBaseType()))
             return SimpleTypeFacetCommitHandlerHelper.createHelperForDoubleFacet(this);
 
         return SimpleTypeFacetCommitHandlerHelper.createHelperForIntFacet(this);
@@ -261,8 +261,8 @@ class SimpleTypeFacetCommitHandler_MaxInclusive extends SimpleTypeFacetCommitHan
     @Override
     protected SimpleTypeFacetCommitHandlerHelper getCommitHelper() {
 
-        if (Util.isDouble(getCommitedObj().getXSDSimpleType()) || Util.isFloat(getCommitedObj().getXSDSimpleType())
-                || Util.isDecimal(getCommitedObj().getXSDSimpleType()))
+        if (Util.isDouble(getCommitedObj().getNewBaseType()) || Util.isFloat(getCommitedObj().getNewBaseType())
+                || Util.isDecimal(getCommitedObj().getNewBaseType()))
             return SimpleTypeFacetCommitHandlerHelper.createHelperForDoubleFacet(this);
 
         return SimpleTypeFacetCommitHandlerHelper.createHelperForIntFacet(this);
@@ -288,8 +288,8 @@ class SimpleTypeFacetCommitHandler_MinExclusive extends SimpleTypeFacetCommitHan
     @Override
     protected SimpleTypeFacetCommitHandlerHelper getCommitHelper() {
 
-        if (Util.isDouble(getCommitedObj().getXSDSimpleType()) || Util.isFloat(getCommitedObj().getXSDSimpleType())
-                || Util.isDecimal(getCommitedObj().getXSDSimpleType()))
+        if (Util.isDouble(getCommitedObj().getNewBaseType()) || Util.isFloat(getCommitedObj().getNewBaseType())
+                || Util.isDecimal(getCommitedObj().getNewBaseType()))
             return SimpleTypeFacetCommitHandlerHelper.createHelperForDoubleFacet(this);
 
         return SimpleTypeFacetCommitHandlerHelper.createHelperForIntFacet(this);
@@ -315,8 +315,8 @@ class SimpleTypeFacetCommitHandler_MinInclusive extends SimpleTypeFacetCommitHan
     @Override
     protected SimpleTypeFacetCommitHandlerHelper getCommitHelper() {
 
-        if (Util.isDouble(getCommitedObj().getXSDSimpleType()) || Util.isFloat(getCommitedObj().getXSDSimpleType())
-                || Util.isDecimal(getCommitedObj().getXSDSimpleType()))
+        if (Util.isDouble(getCommitedObj().getNewBaseType()) || Util.isFloat(getCommitedObj().getNewBaseType())
+                || Util.isDecimal(getCommitedObj().getNewBaseType()))
             return SimpleTypeFacetCommitHandlerHelper.createHelperForDoubleFacet(this);
 
         return SimpleTypeFacetCommitHandlerHelper.createHelperForIntFacet(this);

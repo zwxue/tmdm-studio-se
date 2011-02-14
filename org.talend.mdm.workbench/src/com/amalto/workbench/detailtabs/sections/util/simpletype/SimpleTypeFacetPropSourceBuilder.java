@@ -13,15 +13,15 @@ public abstract class SimpleTypeFacetPropSourceBuilder {
 
     private static Map<String, SimpleTypeFacetPropSourceBuilder> facetName2Builder = new HashMap<String, SimpleTypeFacetPropSourceBuilder>();
 
-    public static IPropertySource<?> createFacetPropSource(XSDSimpleTypeDefinition simpleType, String facetPropName,
-            Composite cellEditorParent) {
+    public static IPropertySource<?> createFacetPropSource(XSDSimpleTypeDefinition oldSimpleType,
+            XSDSimpleTypeDefinition targetSimpleType, String facetPropName, Composite cellEditorParent) {
 
         SimpleTypeFacetPropSourceBuilder builder = getPropSourceBuilder(facetPropName);
 
         if (builder == null)
             return null;
 
-        return builder.doCreatePropSource(simpleType, cellEditorParent, builder.getSourceFacetValue(simpleType));
+        return builder.doCreatePropSource(targetSimpleType, cellEditorParent, builder.getSourceFacetValue(oldSimpleType));
     }
 
     private static SimpleTypeFacetPropSourceBuilder getPropSourceBuilder(String facetPropName) {
@@ -68,8 +68,30 @@ public abstract class SimpleTypeFacetPropSourceBuilder {
         return facetName2Builder.get(facetPropName);
     }
 
-    protected abstract IPropertySource<?> doCreatePropSource(XSDSimpleTypeDefinition simpleType, Composite cellEditorParent,
-            Object sourceFacetValue);
+    protected Integer toIntegerQuielty(Object value) {
+
+        try {
+            return (Integer) value;
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    protected Double toDoubleQuietly(Object value) {
+
+        if (value == null)
+            return 0d;
+
+        try {
+            return Double.parseDouble(value.toString());
+        } catch (Exception e) {
+            return 0d;
+        }
+
+    }
+
+    protected abstract IPropertySource<?> doCreatePropSource(XSDSimpleTypeDefinition targetSimpleType,
+            Composite cellEditorParent, Object sourceFacetValue);
 
     protected abstract Object getSourceFacetValue(XSDSimpleTypeDefinition simpleType);
 

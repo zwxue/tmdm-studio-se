@@ -17,11 +17,11 @@ public class SimpleTypeMinExclusiveFacetPropSourceBuilder extends SimpleTypeFace
 
         if (Util.isDouble(simpleType) || Util.isDecimal(simpleType) || Util.isFloat(simpleType)) {
             return new SimpleTypeFacetDoublePropertySource(cellEditorParent, IConstants.SIMPLETYPE_FACETNAME_MINEXCLUSIVE,
-                    (Double) sourceFacetValue);
+                    toDoubleQuietly(sourceFacetValue));
         }
 
         return new SimpleTypeFacetIntegerPropertySource(cellEditorParent, IConstants.SIMPLETYPE_FACETNAME_MINEXCLUSIVE,
-                (Integer) sourceFacetValue);
+                toIntegerQuielty(sourceFacetValue));
     }
 
     @Override

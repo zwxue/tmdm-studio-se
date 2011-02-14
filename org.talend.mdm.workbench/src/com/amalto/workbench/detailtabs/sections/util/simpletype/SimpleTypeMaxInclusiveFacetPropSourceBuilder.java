@@ -17,11 +17,11 @@ public class SimpleTypeMaxInclusiveFacetPropSourceBuilder extends SimpleTypeFace
 
         if (Util.isDouble(simpleType) || Util.isDecimal(simpleType) || Util.isFloat(simpleType)) {
             return new SimpleTypeFacetDoublePropertySource(cellEditorParent, IConstants.SIMPLETYPE_FACETNAME_MAXINCLUSIVE,
-                    (Double) sourceFacetValue);
+                    toDoubleQuietly(sourceFacetValue));
         }
 
         return new SimpleTypeFacetIntegerPropertySource(cellEditorParent, IConstants.SIMPLETYPE_FACETNAME_MAXINCLUSIVE,
-                (Integer) sourceFacetValue);
+                toIntegerQuielty(sourceFacetValue));
     }
 
     @Override
