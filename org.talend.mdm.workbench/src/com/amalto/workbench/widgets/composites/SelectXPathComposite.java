@@ -52,18 +52,26 @@ public class SelectXPathComposite extends Composite {
 
     private SchemaNameFilter xpathTopElementNameFilter;
 
+    private boolean isAbsolutePath = false;
+
     public SelectXPathComposite(Composite parent, int style, IAllDataModelHolder allDataModelHolder,
             String defaultSelectedDataModel) {
-        this(parent, style, allDataModelHolder, defaultSelectedDataModel, null);
+        this(parent, style, allDataModelHolder, defaultSelectedDataModel, null, false);
     }
 
     public SelectXPathComposite(Composite parent, int style, IAllDataModelHolder allDataModelHolder,
             String defaultSelectedDataModel, String conceptName) {
+        this(parent, style, allDataModelHolder, defaultSelectedDataModel, conceptName, false);
+    }
+
+    public SelectXPathComposite(Composite parent, int style, IAllDataModelHolder allDataModelHolder,
+            String defaultSelectedDataModel, String conceptName, boolean isAbsolutePath) {
         super(parent, style);
 
         this.allDataModelHolder = allDataModelHolder;
         this.defaultSelectedDataModel = defaultSelectedDataModel;
         this.conceptName = conceptName;
+        this.isAbsolutePath = isAbsolutePath;
 
         final GridLayout gridLayout = new GridLayout();
         gridLayout.numColumns = 2;
@@ -225,7 +233,7 @@ public class SelectXPathComposite extends Composite {
                     if (((XSDParticle) component).getTerm() instanceof XSDElementDeclaration)
                         path = "/" + ((XSDElementDeclaration) ((XSDParticle) component).getTerm()).getName() + path;
                 } else if (component instanceof XSDElementDeclaration) {
-                    path = "/" + ((XSDElementDeclaration) component).getName() + path;
+                    path = (isAbsolutePath ? "/" : "") + ((XSDElementDeclaration) component).getName() + path;
                 }
                 item = item.getParentItem();
 

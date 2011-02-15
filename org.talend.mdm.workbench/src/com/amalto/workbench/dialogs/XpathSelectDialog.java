@@ -92,13 +92,21 @@ public class XpathSelectDialog extends Dialog {
 
     private List<String> avaiList;
 
+    private boolean isAbsolutePath = false;
+
     public XpathSelectDialog(Shell parentShell, TreeParent parent, String title, IWorkbenchPartSite site, boolean isMulti,
             String dataModelName) {
+        this(parentShell, parent, title, site, isMulti, dataModelName, false);
+    }
+
+    public XpathSelectDialog(Shell parentShell, TreeParent parent, String title, IWorkbenchPartSite site, boolean isMulti,
+            String dataModelName, boolean isAbsolutePath) {
         super(parentShell);
         this.title = title;
         this.parent = parent;
         this.site = site;
         this.isMulti = isMulti;
+        this.isAbsolutePath = isAbsolutePath;
         if (dataModelName != null)
             this.dataModelName = dataModelName;// default dataModel
         if (this.site == null)
@@ -140,7 +148,7 @@ public class XpathSelectDialog extends Dialog {
                     if (((XSDParticle) component).getTerm() instanceof XSDElementDeclaration)
                         path = "/" + ((XSDElementDeclaration) ((XSDParticle) component).getTerm()).getName() + path;
                 } else if (component instanceof XSDElementDeclaration) {
-                    path = "/" + ((XSDElementDeclaration) component).getName() + path;
+                    path = (isAbsolutePath ? "/" : "") + ((XSDElementDeclaration) component).getName() + path;
                 }
                 item = item.getParentItem();
 

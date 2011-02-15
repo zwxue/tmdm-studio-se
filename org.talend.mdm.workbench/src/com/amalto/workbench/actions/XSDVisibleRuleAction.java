@@ -26,7 +26,6 @@ public class XSDVisibleRuleAction extends UndoAction {
 
     protected String dataModelName;
 
-
     public XSDVisibleRuleAction(DataModelMainPage page, String dataModelName) {
         super(page);
         setImageDescriptor(ImageCache.getImage(EImage.ROUTINE.getPath()));
@@ -66,16 +65,16 @@ public class XSDVisibleRuleAction extends UndoAction {
                 throw new RuntimeException("Unable to edit an annotation for object of type " + xSDCom.getClass().getName());
             }
 
-
-            ValidationRuleExcpressDialog dlg=new ValidationRuleExcpressDialog(page.getSite().getShell(),"Build Validation Rule Expression ", struc.getVisibleRule(),conceptName);
-       		dlg.create();
-       		dlg.getShell().setMaximized(false);
-       		//dlg.getShell().setSize(new Point(640,560));	       		
-       		dlg.setBlockOnOpen(true);
-       		int ret = dlg.open();
-       		if (ret == Window.OK) {
+            ValidationRuleExcpressDialog dlg = new ValidationRuleExcpressDialog(page.getSite().getShell(),
+                    "Build Validation Rule Expression ", struc.getVisibleRule(), conceptName, true);
+            dlg.create();
+            dlg.getShell().setMaximized(false);
+            // dlg.getShell().setSize(new Point(640,560));
+            dlg.setBlockOnOpen(true);
+            int ret = dlg.open();
+            if (ret == Window.OK) {
                 struc.setVisibleRule(dlg.getExpression());
-       		}
+            }
             if (struc.hasChanged()) {
                 page.refresh();
                 page.getTreeViewer().expandToLevel(xSDCom, 2);
@@ -84,8 +83,8 @@ public class XSDVisibleRuleAction extends UndoAction {
 
         } catch (Exception e) {
             e.printStackTrace();
-            MessageDialog.openError(page.getSite().getShell(), "Error", "An error occured trying to set a Visible Rule: "
-                    + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), "Error",
+                    "An error occured trying to set a Visible Rule: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;
