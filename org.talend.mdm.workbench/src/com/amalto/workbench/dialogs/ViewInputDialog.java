@@ -374,13 +374,14 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         dlg.open();
 
         if (dlg.getReturnCode() == Window.OK) {
-            if (dlg.getXpath() != null && dlg.getXpath().length() > 0) {
-                int point = dlg.getXpath().indexOf("/");
-                if (point >= 0)
-                    text.setText(value + dlg.getXpath().substring(0, point));
-                else
-                    text.setText(value + dlg.getXpath());
-            }
+            // if (dlg.getXpath() != null && dlg.getXpath().length() > 0) {
+            // int point = dlg.getXpath().indexOf("/");
+            // if (point >= 0)
+            // text.setText(value + dlg.getXpath().substring(0, point));
+            // else
+            // text.setText(value + dlg.getXpath());
+            // }
+            text.setText(value + dlg.getEntityName());
 
             dlg.close();
         }

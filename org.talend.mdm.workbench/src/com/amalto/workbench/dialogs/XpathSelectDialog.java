@@ -105,6 +105,24 @@ public class XpathSelectDialog extends Dialog {
             this.site = ServerView.show().getSite();
     }
 
+    public String getEntityName() {
+
+        if (xpath == null || "".equals(xpath))
+            return "";
+
+        String[] parts = xpath.split("/");
+
+        for (String eachPart : parts) {
+
+            if ("".equals(eachPart))
+                continue;
+
+            return eachPart;
+        }
+
+        return "";
+    }
+
     private String getXpath(StructuredSelection sel) {
 
         String path = "";
