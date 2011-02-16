@@ -66,13 +66,14 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
                 WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
                 wsDataModel.setXsdSchema(xsd);
                 IFile file = XSDEditorUtil.createFile(xobject);
-                file.setContents(new ByteArrayInputStream(xsd.getBytes()), IFile.FORCE, null);
+                file.setCharset("utf-8", null);
+                file.setContents(new ByteArrayInputStream(xsd.getBytes("utf-8")), IFile.FORCE, null);
             } // save the file's contents to DataModelMainPage
 
             // InputStream in = XSDEditorUtil.createFile(xobject).getContents(true);
 
             IDocument doc = getTextEditor().getTextViewer().getDocument();
-            String xsd = doc.get();
+            String xsd = doc.get();            
             // DataModelMainPage
             IEditorPart[] editors = findEditors(xsdInput);
             if (editors.length == 1 && editors[0] instanceof DataModelMainPage) {
@@ -130,7 +131,8 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
                                     WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
                                     wsDataModel.setXsdSchema(xsd);
                                     IFile file = XSDEditorUtil.createFile(xobject);
-                                    file.setContents(new ByteArrayInputStream(xsd.getBytes()), IFile.FORCE, null);
+                                    file.setCharset("utf-8", null);
+                                    file.setContents(new ByteArrayInputStream(xsd.getBytes("utf-8")), IFile.FORCE, null);
                                 }
 
                             }
