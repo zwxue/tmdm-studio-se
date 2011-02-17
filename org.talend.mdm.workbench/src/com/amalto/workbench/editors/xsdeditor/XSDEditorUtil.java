@@ -55,7 +55,7 @@ public class XSDEditorUtil {
         IFile file = fold.getFile(filename);
 
         if (!file.exists())
-            file.create(new ByteArrayInputStream(content.getBytes()), IFile.FORCE, null);
+            file.create(new ByteArrayInputStream(content.getBytes("utf-8")), IFile.FORCE, null);
         else
             sycFileContents(file, content);
 
@@ -64,7 +64,7 @@ public class XSDEditorUtil {
 
     private static void sycFileContents(IFile file, String content) throws Exception {
         if (file.exists())
-            file.setContents(new ByteArrayInputStream(content.getBytes()), IFile.FORCE, new NullProgressMonitor());
+            file.setContents(new ByteArrayInputStream(content.getBytes("utf-8")), IFile.FORCE, new NullProgressMonitor());
     }
 
     private static boolean isEditorOpened(TreeObject xobject) throws Exception {
