@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import java.io.BufferedReader;
@@ -25,71 +37,65 @@ import com.amalto.workbench.webservices.XtentisPort;
 /**
  * @deprecated
  * 
- *
+ * 
  */
 public class ServerInitAction extends Action {
 
-	private ServerView view = null;
-		
-	public ServerInitAction(ServerView view) {
-		super();
-		this.view = view;
-		setImageDescriptor(ImageCache.getImage( "icons/zap.gif"));
-		setText("Initialize");
-		setToolTipText("Initializes an "+IConstants.TALEND+" MDM Server");
+    private ServerView view = null;
 
-	}
-	
-	public void run() {
-		try {
-			super.run();
-			boolean confirm = MessageDialog.openConfirm(view.getSite().getShell(), "Initialize the MDM server", "Are you sure you want to initialize the MDM server?");
-			if (! confirm) return;
-			boolean zap = MessageDialog.openQuestion(view.getSite().getShell(),"Initalize MDM server","Do you want top zap all existing data");
-			if (zap) zap = MessageDialog.openConfirm(view.getSite().getShell(), "Initialize the MDM server", "Are you sure you want to zap all the data?");
-			
-			FileDialog fd = new FileDialog(view.getSite().getShell(),SWT.OPEN);
-			fd.setText("Select the XML Schema definition for XML Schema (xmlSchema.xsd)");
-			String filename = fd.open();
-			if (filename == null) return;
-			
-		    BufferedReader in = null;
-	        in = new BufferedReader(
-	        			new InputStreamReader(
-	        			        new FileInputStream(filename),
-	        			        "utf-8"
-	        			)
-	        );
-		    String xml="";
-	        String line;
-	        while ((line=in.readLine())!=null) xml+=line+"\n";
-			
+    public ServerInitAction(ServerView view) {
+        super();
+        this.view = view;
+        setImageDescriptor(ImageCache.getImage("icons/zap.gif"));
+        setText("Initialize");
+        setToolTipText("Initializes an " + IConstants.TALEND + " MDM Server");
+
+    }
+
+    public void run() {
+        try {
+            super.run();
+            boolean confirm = MessageDialog.openConfirm(view.getSite().getShell(), "Initialize the MDM server",
+                    "Are you sure you want to initialize the MDM server?");
+            if (!confirm)
+                return;
+            boolean zap = MessageDialog.openQuestion(view.getSite().getShell(), "Initalize MDM server",
+                    "Do you want top zap all existing data");
+            if (zap)
+                zap = MessageDialog.openConfirm(view.getSite().getShell(), "Initialize the MDM server",
+                        "Are you sure you want to zap all the data?");
+
+            FileDialog fd = new FileDialog(view.getSite().getShell(), SWT.OPEN);
+            fd.setText("Select the XML Schema definition for XML Schema (xmlSchema.xsd)");
+            String filename = fd.open();
+            if (filename == null)
+                return;
+
+            BufferedReader in = null;
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "utf-8"));
+            String xml = "";
+            String line;
+            while ((line = in.readLine()) != null)
+                xml += line + "\n";
+
             ISelection selection = view.getViewer().getSelection();
-            TreeObject xobject = (TreeObject)((IStructuredSelection)selection).getFirstElement();
-			XtentisPort port = Util.getPort(
-					new URL(xobject.getEndpointAddress()),
-					xobject.getUniverse(),
-					xobject.getUsername(),
-					xobject.getPassword()
-			);
-			
-			port.initMDM(new WSInitData(zap,xml));
-			xobject.getServerRoot().fireEvent(IXObjectModelListener.NEED_REFRESH, null, xobject.getServerRoot());
-			MessageDialog.openInformation(view.getSite().getShell(), "Initialize the MDM server", "Initialization completed");
-              
-		} catch (Exception e) {
-			e.printStackTrace();
-			MessageDialog.openError(
-					view.getSite().getShell(),
-					"Error", 
-					"An error occured trying to initilaize the MDM server: "+e.getLocalizedMessage()
-			);
-		}		
-	}
-	public void runWithEvent(Event event) {
-		super.runWithEvent(event);
-	}
-	
+            TreeObject xobject = (TreeObject) ((IStructuredSelection) selection).getFirstElement();
+            XtentisPort port = Util.getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(), xobject.getUsername(),
+                    xobject.getPassword());
 
+            port.initMDM(new WSInitData(zap, xml));
+            xobject.getServerRoot().fireEvent(IXObjectModelListener.NEED_REFRESH, null, xobject.getServerRoot());
+            MessageDialog.openInformation(view.getSite().getShell(), "Initialize the MDM server", "Initialization completed");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            MessageDialog.openError(view.getSite().getShell(), "Error", "An error occured trying to initilaize the MDM server: "
+                    + e.getLocalizedMessage());
+        }
+    }
+
+    public void runWithEvent(Event event) {
+        super.runWithEvent(event);
+    }
 
 }

@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
@@ -6,6 +18,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
@@ -32,6 +46,8 @@ import com.amalto.workbench.providers.datamodel.SchemaTreeContentProvider;
 import com.amalto.workbench.utils.Util;
 
 public class XSDDeleteConceptWrapAction extends UndoAction {
+
+    private static Log log = LogFactory.getLog(XSDDeleteConceptWrapAction.class);
 
     private TreeViewer viewer = null;
 
@@ -77,7 +93,7 @@ public class XSDDeleteConceptWrapAction extends UndoAction {
                 if (delObjs.size() > 1) {
                     deleteLabel += elemDesc.substring(0, backPos) + " these " + delObjs.size() + " "
                             + (!sameType ? "Objects" : elemDesc.substring(backPos + 1));
-                    if (deleteLabel.endsWith("y")) {
+                    if (deleteLabel.endsWith("y")) {//$NON-NLS-1$
                         deleteLabel = deleteLabel.substring(0, deleteLabel.length() - 1) + "ies";
                     } else
                         deleteLabel = deleteLabel + "s";
@@ -139,9 +155,10 @@ public class XSDDeleteConceptWrapAction extends UndoAction {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
-            MessageDialog.openError(page.getSite().getShell(), "Error", "An error occured trying to remove Entity: "
-                    + e.getLocalizedMessage());
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
+            MessageDialog.openError(page.getSite().getShell(), "Error",
+                    "An error occured trying to remove Entity: " + e.getLocalizedMessage());
 
             return (results.indexOf(Status.OK_STATUS) >= 0 ? Status.OK_STATUS : Status.CANCEL_STATUS);
         }
@@ -221,7 +238,7 @@ public class XSDDeleteConceptWrapAction extends UndoAction {
      * Author: Fliu this fun is to populate all offsprings for a specific object
      */
     private Object[] populateAllOffspring(Object obj, ArrayList offspringList) {
-    	SchemaTreeContentProvider provider = (SchemaTreeContentProvider) viewer.getContentProvider();
+        SchemaTreeContentProvider provider = (SchemaTreeContentProvider) viewer.getContentProvider();
         Object[] offersprings = provider.getChildren(obj);
 
         for (Object subObj : offersprings) {
@@ -245,10 +262,10 @@ public class XSDDeleteConceptWrapAction extends UndoAction {
         if (checkInSameClassType(delObjs.toArray(), comp.getClass())) {
             String actionTxt = clsAction.get(comp.getClass()).getText();
             if (delObjs.size() > 1) {
-                if (actionTxt.endsWith("y")) {
-                    actionTxt = actionTxt.substring(0, actionTxt.length() - 1) + "ies";
+                if (actionTxt.endsWith("y")) {//$NON-NLS-1$
+                    actionTxt = actionTxt.substring(0, actionTxt.length() - 1) + "ies";//$NON-NLS-1$
                 } else
-                    actionTxt = actionTxt + "s";
+                    actionTxt = actionTxt + "s";//$NON-NLS-1$
             }
             setText(actionTxt);
         } else

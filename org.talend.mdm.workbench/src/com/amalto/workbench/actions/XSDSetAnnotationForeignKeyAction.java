@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import org.eclipse.core.runtime.IStatus;
@@ -102,8 +114,8 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
 
         } catch (Exception e) {
             e.printStackTrace();
-            MessageDialog.openError(page.getSite().getShell(), "Error", "An error occured trying to set a Foreign Key: "
-                    + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), "Error",
+                    "An error occured trying to set a Foreign Key: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;

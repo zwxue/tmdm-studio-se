@@ -1,9 +1,23 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -21,6 +35,8 @@ import com.amalto.workbench.utils.XtentisException;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class XSDDeleteConceptAction extends UndoAction {
+
+    private static Log log = LogFactory.getLog(XSDDeleteConceptAction.class);
 
     // private DataModelMainPage page = null;
     private XSDElementDeclaration xsdElem = null;
@@ -65,10 +81,10 @@ public class XSDDeleteConceptAction extends UndoAction {
                 Util.setForeignKeys(list);
             }
             if (list.contains(decl.getName())) {
-                boolean confirmed = MessageDialog.openConfirm(page.getSite().getShell(), "Confirm Delete", "The \""
-                        + decl.getName()
-                        + "\" Entity is referred to by at least one foreign key. Are you sure you want to proceed?\n"
-                        + "\nIf you click OK, this will leave one reference or more to a non-existing Entity.");
+                boolean confirmed = MessageDialog.openConfirm(page.getSite().getShell(), "Confirm Delete",
+                        "The \"" + decl.getName()
+                                + "\" Entity is referred to by at least one foreign key. Are you sure you want to proceed?\n"
+                                + "\nIf you click OK, this will leave one reference or more to a non-existing Entity.");
                 if (!confirmed) {
                     return Status.CANCEL_STATUS;
                 }
@@ -87,9 +103,10 @@ public class XSDDeleteConceptAction extends UndoAction {
             page.markDirtyWithoutCommit();
 
         } catch (Exception e) {
-            e.printStackTrace();
-            MessageDialog.openError(page.getSite().getShell(), "Error", "An error occured trying to remove Entity: "
-                    + e.getLocalizedMessage());
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
+            MessageDialog.openError(page.getSite().getShell(), "Error",
+                    "An error occured trying to remove Entity: " + e.getLocalizedMessage());
 
             return Status.CANCEL_STATUS;
         }

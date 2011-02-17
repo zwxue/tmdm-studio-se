@@ -1,7 +1,21 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -16,6 +30,8 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 
 public class XSDDeleteElementAction extends UndoAction {
+
+    private static Log log = LogFactory.getLog(XSDDeleteElementAction.class);
 
     private XSDElementDeclaration xsdElem = null;
 
@@ -69,9 +85,10 @@ public class XSDDeleteElementAction extends UndoAction {
             page.markDirtyWithoutCommit();
 
         } catch (Exception e) {
-            e.printStackTrace();
-            MessageDialog.openError(page.getSite().getShell(), "Error", "An error occured trying to remove the Element: "
-                    + e.getLocalizedMessage());
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
+            MessageDialog.openError(page.getSite().getShell(), "Error",
+                    "An error occured trying to remove the Element: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;

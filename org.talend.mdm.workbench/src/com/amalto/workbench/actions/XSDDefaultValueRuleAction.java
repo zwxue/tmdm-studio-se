@@ -1,5 +1,19 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
@@ -8,8 +22,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.xsd.XSDAnnotation;
 import org.eclipse.xsd.XSDComponent;
 import org.w3c.dom.Element;
@@ -23,6 +35,8 @@ import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDDefaultValueRuleAction extends UndoAction {
+
+    private static Log log = LogFactory.getLog(XSDDefaultValueRuleAction.class);
 
     protected SimpleXpathInputDialog sxid = null;
 
@@ -67,16 +81,16 @@ public class XSDDefaultValueRuleAction extends UndoAction {
                 throw new RuntimeException("Unable to edit an annotation for object of type " + xSDCom.getClass().getName());
             }
 
-
-            ValidationRuleExcpressDialog dlg=new ValidationRuleExcpressDialog(page.getSite().getShell(),"Build Default Value Rule Expression ", struc.getDefaultValueRule(),conceptName);
-       		dlg.create();
-       		dlg.getShell().setMaximized(false);
-       		//dlg.getShell().setSize(new Point(640,560));	       		
-       		dlg.setBlockOnOpen(true);
-       		int ret = dlg.open();
-       		if (ret == Window.OK) {
+            ValidationRuleExcpressDialog dlg = new ValidationRuleExcpressDialog(page.getSite().getShell(),
+                    "Build Default Value Rule Expression ", struc.getDefaultValueRule(), conceptName);
+            dlg.create();
+            dlg.getShell().setMaximized(false);
+            // dlg.getShell().setSize(new Point(640,560));
+            dlg.setBlockOnOpen(true);
+            int ret = dlg.open();
+            if (ret == Window.OK) {
                 struc.setDefaultValueRule(dlg.getExpression());
-       		}
+            }
             if (struc.hasChanged()) {
                 page.refresh();
                 page.getTreeViewer().expandToLevel(xSDCom, 2);
@@ -84,7 +98,9 @@ public class XSDDefaultValueRuleAction extends UndoAction {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
+
             MessageDialog.openError(page.getSite().getShell(), "Error", "An error occured trying to set a Default Value Rule: "
                     + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;

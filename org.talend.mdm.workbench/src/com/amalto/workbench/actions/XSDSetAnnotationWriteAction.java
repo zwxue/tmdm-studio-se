@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
@@ -25,82 +37,74 @@ import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDSetAnnotationWriteAction extends UndoAction {
 
-	protected AnnotationOrderedListsDialog dlg = null;
+    protected AnnotationOrderedListsDialog dlg = null;
 
-	public XSDSetAnnotationWriteAction(DataModelMainPage page) {
-		super(page);
-		setImageDescriptor(ImageCache.getImage( EImage.SECURITYANNOTATION.getPath()));
-		setText("Set the Roles with Write Access");
-		setToolTipText("Set the Roles That Have Write Access");
-	}
+    public XSDSetAnnotationWriteAction(DataModelMainPage page) {
+        super(page);
+        setImageDescriptor(ImageCache.getImage(EImage.SECURITYANNOTATION.getPath()));
+        setText("Set the Roles with Write Access");
+        setToolTipText("Set the Roles That Have Write Access");
+    }
 
-	public IStatus doAction() {
-		try {
-            IStructuredSelection selection = (TreeSelection)page.getTreeViewer().getSelection();
-            XSDComponent xSDCom=null;
+    public IStatus doAction() {
+        try {
+            IStructuredSelection selection = (TreeSelection) page.getTreeViewer().getSelection();
+            XSDComponent xSDCom = null;
             if (selection.getFirstElement() instanceof Element) {
-				TreePath tPath = ((TreeSelection) selection).getPaths()[0];
-				for (int i = 0; i < tPath.getSegmentCount(); i++) {
-					if (tPath.getSegment(i) instanceof XSDAnnotation)
-						xSDCom = (XSDAnnotation) (tPath.getSegment(i));
-				}
-			} else
-            xSDCom = (XSDComponent)selection.getFirstElement();
- 		   XSDAnnotationsStructure struc =new XSDAnnotationsStructure(xSDCom);
- 		   struc.setXSDSchema(schema);
-//			IStructuredSelection selection = (IStructuredSelection) page
-//					.getTreeViewer().getSelection();
-//			XSDAnnotationsStructure struc = new XSDAnnotationsStructure(
-//					(XSDComponent) selection.getFirstElement());
-			if (struc.getAnnotation() == null) {
-				throw new RuntimeException(
-						"Unable to edit an annotation for object of type "
-								+ xSDCom.getClass()
-										.getName());
-			}
+                TreePath tPath = ((TreeSelection) selection).getPaths()[0];
+                for (int i = 0; i < tPath.getSegmentCount(); i++) {
+                    if (tPath.getSegment(i) instanceof XSDAnnotation)
+                        xSDCom = (XSDAnnotation) (tPath.getSegment(i));
+                }
+            } else
+                xSDCom = (XSDComponent) selection.getFirstElement();
+            XSDAnnotationsStructure struc = new XSDAnnotationsStructure(xSDCom);
+            struc.setXSDSchema(schema);
+            // IStructuredSelection selection = (IStructuredSelection) page
+            // .getTreeViewer().getSelection();
+            // XSDAnnotationsStructure struc = new XSDAnnotationsStructure(
+            // (XSDComponent) selection.getFirstElement());
+            if (struc.getAnnotation() == null) {
+                throw new RuntimeException("Unable to edit an annotation for object of type " + xSDCom.getClass().getName());
+            }
 
-			dlg = new AnnotationOrderedListsDialog(new ArrayList(struc
-					.getWriteAccesses().values()), new SelectionListener() {
-				public void widgetDefaultSelected(SelectionEvent e) {
-				}
+            dlg = new AnnotationOrderedListsDialog(new ArrayList(struc.getWriteAccesses().values()), new SelectionListener() {
 
-				public void widgetSelected(SelectionEvent e) {
-					dlg.close();
-				}
-			}, page.getSite().getShell(),
-					"Set The Roles That Have Write Access", "Roles", page,
-					AnnotationOrderedListsDialog.AnnotationWrite_ActionType,
-					null);
+                public void widgetDefaultSelected(SelectionEvent e) {
+                }
 
-			dlg.setBlockOnOpen(true);
-			int ret = dlg.open();
-			if (ret == Window.CANCEL) {
-	            return Status.CANCEL_STATUS;
-			}
+                public void widgetSelected(SelectionEvent e) {
+                    dlg.close();
+                }
+            }, page.getSite().getShell(), "Set The Roles That Have Write Access", "Roles", page,
+                    AnnotationOrderedListsDialog.AnnotationWrite_ActionType, null);
 
-			struc.setAccessRole(dlg.getXPaths(), dlg.getRecursive(),
-					(IStructuredContentProvider) page.getTreeViewer()
-							.getContentProvider(), "X_Write");
+            dlg.setBlockOnOpen(true);
+            int ret = dlg.open();
+            if (ret == Window.CANCEL) {
+                return Status.CANCEL_STATUS;
+            }
 
-			if (struc.hasChanged()) {
-				page.refresh();
-				page.getTreeViewer().expandToLevel(xSDCom,
-						2);
-				page.markDirty();
-			}
+            struc.setAccessRole(dlg.getXPaths(), dlg.getRecursive(), (IStructuredContentProvider) page.getTreeViewer()
+                    .getContentProvider(), "X_Write");
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			MessageDialog.openError(page.getSite().getShell(), "Error",
-					"An error occured trying to set the Write Access: "
-							+ e.getLocalizedMessage());
+            if (struc.hasChanged()) {
+                page.refresh();
+                page.getTreeViewer().expandToLevel(xSDCom, 2);
+                page.markDirty();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            MessageDialog.openError(page.getSite().getShell(), "Error",
+                    "An error occured trying to set the Write Access: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;
-		}
+        }
         return Status.OK_STATUS;
-	}
+    }
 
-	public void runWithEvent(Event event) {
-		super.runWithEvent(event);
-	}
+    public void runWithEvent(Event event) {
+        super.runWithEvent(event);
+    }
 
 }

@@ -1,9 +1,23 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
@@ -34,6 +48,8 @@ import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 
 public class XSDEditParticleAction extends UndoAction implements SelectionListener {
+
+    private static Log log = LogFactory.getLog(XSDEditParticleAction.class);
 
     private BusinessElementInputDialog dialog = null;
 
@@ -127,8 +143,8 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
                 decl.setResolvedElementDeclaration(newRef);
                 decl.setTypeDefinition(null);
                 Element elem = decl.getElement();
-                if (elem.getAttributes().getNamedItem("type") != null)
-                    elem.getAttributes().removeNamedItem("type");
+                if (elem.getAttributes().getNamedItem("type") != null)//$NON-NLS-1$
+                    elem.getAttributes().removeNamedItem("type");//$NON-NLS-1$
                 decl.updateElement();
             } else if (ref != null) {
                 // fliu
@@ -162,10 +178,10 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
             if (maxOccurs > -1) {
                 selParticle.setMaxOccurs(this.maxOccurs);
             } else {
-                if (selParticle.getElement().getAttributeNode("maxOccurs") != null)
-                    selParticle.getElement().getAttributeNode("maxOccurs").setNodeValue("unbounded");
+                if (selParticle.getElement().getAttributeNode("maxOccurs") != null)//$NON-NLS-1$
+                    selParticle.getElement().getAttributeNode("maxOccurs").setNodeValue("unbounded");//$NON-NLS-1$//$NON-NLS-2$
                 else {
-                    selParticle.getElement().setAttribute("maxOccurs", "unbounded");
+                    selParticle.getElement().setAttribute("maxOccurs", "unbounded");//$NON-NLS-1$//$NON-NLS-2$
                 }
             }
 
@@ -175,7 +191,8 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
             page.markDirty();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error", "An error occured trying to Edit a Business Elementt: "
                     + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;

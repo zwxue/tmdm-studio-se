@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import java.net.URL;
@@ -6,6 +18,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.apache.commons.logging.Log;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -79,6 +92,8 @@ import com.amalto.workbench.webservices.WSWhereCondition;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class NewXObjectAction extends Action {
+
+    private static Log log = LogFactory.getLog(NewXObjectAction.class);
 
     private ServerView view = null;
 
@@ -169,7 +184,7 @@ public class NewXObjectAction extends Action {
                         view.getSite().getShell(),
                         title,// "New "+IConstants.TALEND+" Object Instance",
                         "Enter a Name for the New Instance                                                                                  ",
-                        "Smart_view_", new IInputValidator() {
+                        "Smart_view_", new IInputValidator() {//$NON-NLS-1$
 
                             public String isValid(String newText) {
                                 if ((newText == null) || "".equals(newText))
@@ -196,14 +211,14 @@ public class NewXObjectAction extends Action {
                 ViewInputDialog tid = new ViewInputDialog(view.getSite(),
                         (TreeParent) view.getRoot().getChildren()[0].findServerFolder(TreeObject.TRANSFORMER), view.getSite()
                                 .getShell(), title,// "New "+IConstants.TALEND+" Object Instance",
-                        "Enter a Name for the New Instance", "Browse_items_", new IInputValidator() {
+                        "Enter a Name for the New Instance", "Browse_items_", new IInputValidator() {//$NON-NLS-2$
 
                             public String isValid(String newText) {
                                 if ((newText == null) || "".equals(newText))
                                     return "The Name cannot be empty";
                                 // yyun: bug 16141: the empty charactors inside the string isn't permitted
                                 // if (!Pattern.matches("\\w*(\\s*|#|\\w+)+\\w+#*", newText)) {
-                                if (!Pattern.matches("\\w*(#|\\w*)+\\w+#*", newText)) {
+                                if (!Pattern.matches("\\w*(#|\\w*)+\\w+#*", newText)) {//$NON-NLS-1$
                                     return "The name cannot contain invalid character!";
                                 }
                                 return null;
@@ -260,7 +275,7 @@ public class NewXObjectAction extends Action {
                                     return "The Name cannot be empty";
                                 // yyun: bug 16141: the empty charactors inside the string isn't permitted
                                 // if (!Pattern.matches("\\w*(\\s*|#|\\.|\\w+)+\\w+", newText)) {
-                                if (!Pattern.matches("\\w*(#|\\.|\\w*)+\\w+", newText)) {
+                                if (!Pattern.matches("\\w*(#|\\.|\\w*)+\\w+", newText)) {//$NON-NLS-1$
                                     return "The name cannot contain invalid character!";
                                 }
                                 return null;
@@ -292,8 +307,8 @@ public class NewXObjectAction extends Action {
                     return;
                 }
                 // add
-                WSDataModel wsDataModel = new WSDataModel((String) key, "", "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                        + "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"/>");
+                WSDataModel wsDataModel = new WSDataModel((String) key, "", "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"//$NON-NLS-1$//$NON-NLS-2$
+                        + "<xsd:schema xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"/>");//$NON-NLS-1$
                 port.putDataModel(new WSPutDataModel(wsDataModel));
                 newInstance = new TreeObject((String) key, xfolder.getServerRoot(), TreeObject.DATA_MODEL, new WSDataModelPK(
                         (String) key), wsDataModel);
@@ -315,7 +330,7 @@ public class NewXObjectAction extends Action {
                         xobject.getUniverse(), xobject.getUsername(), xobject.getPassword());
                 String firstDataModel = null;
                 for (int i = 0; i < dataModelPKs.length; i++) {
-                    if (dataModelPKs[i].getPk().indexOf("XMLSCHEMA--") == -1) {
+                    if (dataModelPKs[i].getPk().indexOf("XMLSCHEMA--") == -1) {//$NON-NLS-1$
                         firstDataModel = dataModelPKs[i].getPk();
                         break;
                     }
@@ -415,31 +430,31 @@ public class NewXObjectAction extends Action {
                 }
                 // add
                 WSTransformerV2 transformer = new WSTransformerV2((String) key, "", null);
-                if (key.toString().startsWith("Smart_view_")) {
-                    final String parameters = "<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='1.0'>\n"
-                            + "   <xsl:output method='html' indent='yes' omit-xml-declaration='yes'/>\n"
-                            + "   <xsl:template match='/'>\n" + "       <html>\n"
-                            + "          <head><title>Smart View</title></head>\n" + "          <body>\n"
-                            + "            <h1>This is the default Smart View for: <xsl:value-of select='./text()'/></h1>\n"
-                            + "            <xsl:copy-of select='.'/>\n" + "            <!-- Customize the stylesheet -->\n"
-                            + "          </body>\n" + "       </html>\n" + "    </xsl:template>" + "</xsl:stylesheet>";
+                if (key.toString().startsWith("Smart_view_")) {//$NON-NLS-1$
+                    final String parameters = "<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='1.0'>\n"//$NON-NLS-1$
+                            + "   <xsl:output method='html' indent='yes' omit-xml-declaration='yes'/>\n"//$NON-NLS-1$
+                            + "   <xsl:template match='/'>\n" + "       <html>\n"//$NON-NLS-1$//$NON-NLS-2$
+                            + "          <head><title>Smart View</title></head>\n" + "          <body>\n"//$NON-NLS-1$//$NON-NLS-2$ 
+                            + "            <h1>This is the default Smart View for: <xsl:value-of select='./text()'/></h1>\n"//$NON-NLS-1$
+                            + "            <xsl:copy-of select='.'/>\n" + "            <!-- Customize the stylesheet -->\n"//$NON-NLS-1$//$NON-NLS-2$
+                            + "          </body>\n" + "       </html>\n" + "    </xsl:template>" + "</xsl:stylesheet>";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
 
-                    final String TRANSFORMER_PLUGIN = "amalto/local/transformer/plugin/xslt";
+                    final String TRANSFORMER_PLUGIN = "amalto/local/transformer/plugin/xslt";//$NON-NLS-1$
 
                     List<WSTransformerVariablesMapping> inItems = new ArrayList<WSTransformerVariablesMapping>();
                     WSTransformerVariablesMapping inputLine = new WSTransformerVariablesMapping();
-                    inputLine.setPipelineVariable("_DEFAULT_");
-                    inputLine.setPluginVariable("xml");
+                    inputLine.setPipelineVariable("_DEFAULT_");//$NON-NLS-1$
+                    inputLine.setPluginVariable("xml");//$NON-NLS-1$
                     inItems.add(inputLine);
 
                     List<WSTransformerVariablesMapping> outItems = new ArrayList<WSTransformerVariablesMapping>();
                     WSTransformerVariablesMapping outputLine = new WSTransformerVariablesMapping();
-                    outputLine.setPipelineVariable("html");
-                    outputLine.setPluginVariable("text");
+                    outputLine.setPipelineVariable("html");//$NON-NLS-1$
+                    outputLine.setPluginVariable("text");//$NON-NLS-1$
                     outItems.add(outputLine);
 
                     ArrayList<WSTransformerProcessStep> list = new ArrayList<WSTransformerProcessStep>();
-                    WSTransformerProcessStep step = new WSTransformerProcessStep(TRANSFORMER_PLUGIN, "Stylesheet", parameters,
+                    WSTransformerProcessStep step = new WSTransformerProcessStep(TRANSFORMER_PLUGIN, "Stylesheet", parameters,//$NON-NLS-1$
                             inItems.toArray(new WSTransformerVariablesMapping[inItems.size()]),
                             outItems.toArray(new WSTransformerVariablesMapping[outItems.size()]), false);
                     list.add(step);
@@ -459,7 +474,7 @@ public class NewXObjectAction extends Action {
                 }
                 // add
                 WSMenu menu = new WSMenu((String) key, "", new WSMenuEntry[] { new WSMenuEntry((String) key,
-                        new WSMenuMenuEntriesDescriptions[] { new WSMenuMenuEntriesDescriptions("en", (String) key) }, null,
+                        new WSMenuMenuEntriesDescriptions[] { new WSMenuMenuEntriesDescriptions("en", (String) key) }, null,//$NON-NLS-1$
                         null, null, null) });
                 newInstance = new TreeObject((String) key, xfolder.getServerRoot(), TreeObject.MENU, new WSMenuPK((String) key),
                         menu);
@@ -543,7 +558,8 @@ public class NewXObjectAction extends Action {
                     ((AMainPageV2) editpart.getSelectedPage()).markDirty();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
             MessageDialog.openError(view.getSite().getShell(), "Error", "An error occured trying to create a new "
                     + IConstants.TALEND + " Object Instance: " + e.getLocalizedMessage());
         }

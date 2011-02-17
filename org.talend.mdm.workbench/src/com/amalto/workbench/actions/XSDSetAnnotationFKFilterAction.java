@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import org.eclipse.core.runtime.IStatus;
@@ -23,92 +35,92 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDSetAnnotationFKFilterAction extends UndoAction {
-	protected FKFilterDialog fkd = null;
-	protected String dataModelName;
-	
-	public XSDSetAnnotationFKFilterAction(DataModelMainPage page,String dataModelName) {
-		super(page);
-		setImageDescriptor(ImageCache.getImage( EImage.FILTER_PS.getPath()));
-		setText("Set the Foreign Key Filter");
-		setToolTipText("Set the Foreign Key Filter");
-		this.dataModelName = dataModelName;
-	}
-	
-	public IStatus doAction() {
-		try {
-			
-			if(page.isDirty()){
-				boolean save = MessageDialog.openConfirm(page.getSite().getShell(), "Save Resource", "'"+page.getXObject().getDisplayName()+"' has been modified. Save changes?");
-				
-				if(save)
-					page.SaveWithForce(new NullProgressMonitor());
-					
-				else
-					return Status.CANCEL_STATUS;
-			}
-            IStructuredSelection selection = (TreeSelection)page.getTreeViewer().getSelection();
-            XSDComponent xSDCom=null;
-            String conceptName=null;
-			if (selection.getFirstElement() instanceof Element) {
-				TreePath tPath = ((TreeSelection) selection).getPaths()[0];
-				for (int i = 0; i < tPath.getSegmentCount(); i++) {
-					if (tPath.getSegment(i) instanceof XSDAnnotation)
-						xSDCom = (XSDAnnotation) (tPath.getSegment(i));
-				}
-			}else
-				xSDCom=(XSDComponent)selection.getFirstElement();
-            if(xSDCom instanceof XSDElementDeclaration){
-            	conceptName=xSDCom.getElement().getAttributes().getNamedItem("name").getNodeValue();
+
+    protected FKFilterDialog fkd = null;
+
+    protected String dataModelName;
+
+    public XSDSetAnnotationFKFilterAction(DataModelMainPage page, String dataModelName) {
+        super(page);
+        setImageDescriptor(ImageCache.getImage(EImage.FILTER_PS.getPath()));
+        setText("Set the Foreign Key Filter");
+        setToolTipText("Set the Foreign Key Filter");
+        this.dataModelName = dataModelName;
+    }
+
+    public IStatus doAction() {
+        try {
+
+            if (page.isDirty()) {
+                boolean save = MessageDialog.openConfirm(page.getSite().getShell(), "Save Resource", "'"
+                        + page.getXObject().getDisplayName() + "' has been modified. Save changes?");
+
+                if (save)
+                    page.SaveWithForce(new NullProgressMonitor());
+
+                else
+                    return Status.CANCEL_STATUS;
             }
-			if(xSDCom instanceof XSDParticle) {
-				//conceptName=getConceptName(xSDCom);
-			}
-            XSDAnnotationsStructure struc=null;
-			if(xSDCom!=null)
-            		    struc =new XSDAnnotationsStructure(xSDCom);
-            if (struc==null||struc.getAnnotation() == null) {
-            	throw new RuntimeException("Unable to edit an annotation for object of type "+xSDCom.getClass().getName());
+            IStructuredSelection selection = (TreeSelection) page.getTreeViewer().getSelection();
+            XSDComponent xSDCom = null;
+            String conceptName = null;
+            if (selection.getFirstElement() instanceof Element) {
+                TreePath tPath = ((TreeSelection) selection).getPaths()[0];
+                for (int i = 0; i < tPath.getSegmentCount(); i++) {
+                    if (tPath.getSegment(i) instanceof XSDAnnotation)
+                        xSDCom = (XSDAnnotation) (tPath.getSegment(i));
+                }
+            } else
+                xSDCom = (XSDComponent) selection.getFirstElement();
+            if (xSDCom instanceof XSDElementDeclaration) {
+                conceptName = xSDCom.getElement().getAttributes().getNamedItem("name").getNodeValue();
             }
-            
-       		
-            fkd=new FKFilterDialog(page.getSite().getShell(), "Set Foreign Key Filter", struc.getFKFilter(), page, conceptName);
-            
+            if (xSDCom instanceof XSDParticle) {
+                // conceptName=getConceptName(xSDCom);
+            }
+            XSDAnnotationsStructure struc = null;
+            if (xSDCom != null)
+                struc = new XSDAnnotationsStructure(xSDCom);
+            if (struc == null || struc.getAnnotation() == null) {
+                throw new RuntimeException("Unable to edit an annotation for object of type " + xSDCom.getClass().getName());
+            }
+
+            fkd = new FKFilterDialog(page.getSite().getShell(), "Set Foreign Key Filter", struc.getFKFilter(), page, conceptName);
+
             fkd.setBlockOnOpen(true);
-       		int ret = fkd.open();
-       		if (ret == Window.CANCEL){
+            int ret = fkd.open();
+            if (ret == Window.CANCEL) {
                 return Status.CANCEL_STATUS;
-       		}
-       		
-       		String fkfilter=fkd.getFilter();
-       		struc.setFKFilter(fkfilter);
-       		
-       		if (struc.hasChanged()) {
-       			page.refresh();
-       			page.getTreeViewer().expandToLevel(xSDCom, 2);
-       			page.markDirty();
-       		}
-       		
-       
-		} catch (Exception e) {
-			e.printStackTrace();
-			MessageDialog.openError(
-					page.getSite().getShell(),
-					"Error", 
-					"An error occured trying to set a FK Filter: "+e.getLocalizedMessage()
-			);
+            }
+
+            String fkfilter = fkd.getFilter();
+            struc.setFKFilter(fkfilter);
+
+            if (struc.hasChanged()) {
+                page.refresh();
+                page.getTreeViewer().expandToLevel(xSDCom, 2);
+                page.markDirty();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            MessageDialog.openError(page.getSite().getShell(), "Error",
+                    "An error occured trying to set a FK Filter: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;
-		}
+        }
         return Status.OK_STATUS;
-	}
-	private String getConceptName(XSDConcreteComponent element) {
-		XSDConcreteComponent parent=element.getContainer();
-		if(parent instanceof XSDElementDeclaration) {
-			return ((XSDElementDeclaration)parent).getElement().getAttributes().getNamedItem("name").getNodeValue();
-		}else {
-			return getConceptName(parent);
-		}
-	}
-	public void runWithEvent(Event event) {
-		super.runWithEvent(event);
-	}
+    }
+
+    private String getConceptName(XSDConcreteComponent element) {
+        XSDConcreteComponent parent = element.getContainer();
+        if (parent instanceof XSDElementDeclaration) {
+            return ((XSDElementDeclaration) parent).getElement().getAttributes().getNamedItem("name").getNodeValue();
+        } else {
+            return getConceptName(parent);
+        }
+    }
+
+    public void runWithEvent(Event event) {
+        super.runWithEvent(event);
+    }
 }

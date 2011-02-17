@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 /**
@@ -6,6 +18,8 @@ package com.amalto.workbench.actions;
 
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.commands.operations.IOperationHistory;
@@ -25,6 +39,8 @@ import com.amalto.workbench.utils.Util;
 
 public class UndoAction extends Action {
 
+    private static Log log = LogFactory.getLog(UndoAction);
+
     protected DataModelMainPage page;
 
     protected XSDSchema schema = null;
@@ -43,7 +59,6 @@ public class UndoAction extends Action {
 
         public XsdUndoableOperation(String label) {
             super(label);
-            // TODO Auto-generated constructor stub
         }
 
         @Override
@@ -54,13 +69,11 @@ public class UndoAction extends Action {
 
         @Override
         public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-            // TODO Auto-generated method stub
             return UndoAction.this.redo();
         }
 
         @Override
         public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-            // TODO Auto-generated method stub
             return UndoAction.this.undo();
         }
     };
@@ -71,8 +84,8 @@ public class UndoAction extends Action {
         try {
             IStatus status = getOperationHistory().execute(operation, null, null);
         } catch (ExecutionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
         }
 
     }
@@ -90,7 +103,8 @@ public class UndoAction extends Action {
     }
 
     protected IStatus execute() {
-        System.out.println(getText() + " execute....");
+        // System.out.println(getText() + " execute....");
+        log.info(getText() + " execute...."); //$NON-NLS-1$
         String oldValue = beforeDoAction();
 
         if (doAction() == Status.CANCEL_STATUS) {
@@ -125,7 +139,8 @@ public class UndoAction extends Action {
             oldValue = undoActionTrack.get(getActionUndoPos());
             undoActionTrack.put(getActionUndoPos(), value);
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
         }
         return oldValue;
     }
@@ -140,7 +155,8 @@ public class UndoAction extends Action {
             redoActionTrack.keySet().size();
             redoActionTrack.put(getActionUndoPos(), value);
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
         }
     }
 
@@ -178,7 +194,8 @@ public class UndoAction extends Action {
         try {
             xsd = Util.createXsdSchema(content, page.getXObject());
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
             return;
         }
         page.setXsdSchema(xsd);

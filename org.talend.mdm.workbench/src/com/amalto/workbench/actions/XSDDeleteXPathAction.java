@@ -1,5 +1,19 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -14,82 +28,75 @@ import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
-public class XSDDeleteXPathAction extends UndoAction{
+public class XSDDeleteXPathAction extends UndoAction {
 
-	private XSDXPathDefinition xsdPath = null;
-	
-	public XSDDeleteXPathAction(DataModelMainPage page) {
-		super(page);
-		setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
-		setText("Delete Field");
-		setToolTipText("Delete a Field");
-	}
-	
-	public void run(Object toDel) {
-		if (!(toDel instanceof XSDXPathDefinition)) {
-			return;
-		}
-		xsdPath = (XSDXPathDefinition) toDel;
-		run();
-	}
-	
-	public IStatus doAction() {
-		try {
-			
+    private static Log log = LogFactory.getLog(XSDDeleteXPathAction.class);
+
+    private XSDXPathDefinition xsdPath = null;
+
+    public XSDDeleteXPathAction(DataModelMainPage page) {
+        super(page);
+        setImageDescriptor(ImageCache.getImage(EImage.DELETE_OBJ.getPath()));
+        setText("Delete Field");
+        setToolTipText("Delete a Field");
+    }
+
+    public void run(Object toDel) {
+        if (!(toDel instanceof XSDXPathDefinition)) {
+            return;
+        }
+        xsdPath = (XSDXPathDefinition) toDel;
+        run();
+    }
+
+    public IStatus doAction() {
+        try {
+
             // xsdPath is to support the multiple delete action on key press,
-			// which each delete action on xpath must be explicit passed a xsd path to
-			// delete
+            // which each delete action on xpath must be explicit passed a xsd path to
+            // delete
             XSDXPathDefinition xpath = xsdPath;
             if (xpath == null) {
-				ISelection selection = page.getTreeViewer().getSelection();
-				xpath = (XSDXPathDefinition) ((IStructuredSelection) selection)
-						.getFirstElement();
-			}
+                ISelection selection = page.getTreeViewer().getSelection();
+                xpath = (XSDXPathDefinition) ((IStructuredSelection) selection).getFirstElement();
+            }
             XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) xpath.getContainer();
-            if (icd == null)  return Status.CANCEL_STATUS;
-            
+            if (icd == null)
+                return Status.CANCEL_STATUS;
+
             if (xpath.getVariety().equals(XSDXPathVariety.SELECTOR_LITERAL)) {
-    			MessageDialog.openError(
-    					page.getSite().getShell(),
-    					"Error", 
-    					"The Selector cannot be deleted"
-    			);
+                MessageDialog.openError(page.getSite().getShell(), "Error", "The Selector cannot be deleted");
                 return Status.CANCEL_STATUS;
             }
-            
-            if (icd.getFields().size()==1) {
-    			MessageDialog.openError(
-    					page.getSite().getShell(),
-    					"Error", 
-    					"The Key must contain at least one field"
-    			);
-                return Status.CANCEL_STATUS;          	
+
+            if (icd.getFields().size() == 1) {
+                MessageDialog.openError(page.getSite().getShell(), "Error", "The Key must contain at least one field");
+                return Status.CANCEL_STATUS;
             }
-           
+
             icd.getFields().remove(xpath);
             icd.updateElement();
             xsdPath = null;
-       		page.refresh();
-       		page.markDirty();
-       
-		} catch (Exception e) {
-			e.printStackTrace();
-			MessageDialog.openError(
-					page.getSite().getShell(),
-					"Error", 
-					"An error occured trying to remove a Field: "+e.getLocalizedMessage()
-			);
-			
+            page.refresh();
+            page.markDirty();
+
+        } catch (Exception e) {
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
+            MessageDialog.openError(page.getSite().getShell(), "Error",
+                    "An error occured trying to remove a Field: " + e.getLocalizedMessage());
+
             return Status.CANCEL_STATUS;
-		}	
+        }
         return Status.OK_STATUS;
-	}
-	public void runWithEvent(Event event) {
-		super.runWithEvent(event);
-	}
-	
+    }
+
+    public void runWithEvent(Event event) {
+        super.runWithEvent(event);
+    }
+
     public void setXSDTODel(XSDXPathDefinition elem) {
-    	xsdPath = elem;
-	}
+        xsdPath = elem;
+    }
 
 }

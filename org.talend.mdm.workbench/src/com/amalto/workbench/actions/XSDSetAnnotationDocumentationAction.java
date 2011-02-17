@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import org.eclipse.core.runtime.IStatus;
@@ -15,67 +27,60 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
-public class XSDSetAnnotationDocumentationAction extends UndoAction{	
-	
-	public XSDSetAnnotationDocumentationAction(DataModelMainPage page) {
-		super(page);
-		setImageDescriptor(ImageCache.getImage( EImage.DOCUMENTATION.getPath()));
-		setText("Set the Documentation");
-		setToolTipText("Set the Documentation for this element");
-	}
-	
-	public IStatus doAction() {
-		try {
-			
-            IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
-            XSDAnnotationsStructure struc = new XSDAnnotationsStructure((XSDComponent)selection.getFirstElement());
-            if (struc.getAnnotation() == null) {
-            	throw new RuntimeException("Unable to edit an annotation for object of type "+selection.getFirstElement().getClass().getName());
-            }
-            
-       		InputDialog id = new InputDialog(
-       				page.getSite().getShell(),
-       				"Set the Documentation",
-       				"Enter a text for the documentation - Leave BLANK to delete the Documentation",
-       				struc.getDocumentation(),
-       				new IInputValidator() {
-       					public String isValid(String newText) {
-       						return null;
-       					};
-       				}
-       		);
-            
-       		id.setBlockOnOpen(true);
-       		int ret = id.open();
-       		if (ret == Window.CANCEL) {
-                return Status.CANCEL_STATUS;
-       		}
-       		
-       		struc.setDocumentation("".equals(id.getValue()) ? null : id.getValue());
-       		
-       		if (struc.hasChanged()) {
-       			page.refresh();
-       			page.getTreeViewer().expandToLevel(selection.getFirstElement(), 2);
-       			page.markDirty();
-       		}
-       		
-       
-		} catch (Exception e) {
-			e.printStackTrace();
-			MessageDialog.openError(
-					page.getSite().getShell(),
-					"Error", 
-					"An error occured trying to set the Documentation: "+e.getLocalizedMessage()
-			);
-            return Status.CANCEL_STATUS;
-		}
-		
-        return Status.OK_STATUS;
-	}
-	public void runWithEvent(Event event) {
-		super.runWithEvent(event);
-	}
-	
+public class XSDSetAnnotationDocumentationAction extends UndoAction {
 
+    public XSDSetAnnotationDocumentationAction(DataModelMainPage page) {
+        super(page);
+        setImageDescriptor(ImageCache.getImage(EImage.DOCUMENTATION.getPath()));
+        setText("Set the Documentation");
+        setToolTipText("Set the Documentation for this element");
+    }
+
+    public IStatus doAction() {
+        try {
+
+            IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
+            XSDAnnotationsStructure struc = new XSDAnnotationsStructure((XSDComponent) selection.getFirstElement());
+            if (struc.getAnnotation() == null) {
+                throw new RuntimeException("Unable to edit an annotation for object of type "
+                        + selection.getFirstElement().getClass().getName());
+            }
+
+            InputDialog id = new InputDialog(page.getSite().getShell(), "Set the Documentation",
+                    "Enter a text for the documentation - Leave BLANK to delete the Documentation", struc.getDocumentation(),
+                    new IInputValidator() {
+
+                        public String isValid(String newText) {
+                            return null;
+                        };
+                    });
+
+            id.setBlockOnOpen(true);
+            int ret = id.open();
+            if (ret == Window.CANCEL) {
+                return Status.CANCEL_STATUS;
+            }
+
+            struc.setDocumentation("".equals(id.getValue()) ? null : id.getValue());
+
+            if (struc.hasChanged()) {
+                page.refresh();
+                page.getTreeViewer().expandToLevel(selection.getFirstElement(), 2);
+                page.markDirty();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            MessageDialog.openError(page.getSite().getShell(), "Error",
+                    "An error occured trying to set the Documentation: " + e.getLocalizedMessage());
+            return Status.CANCEL_STATUS;
+        }
+
+        return Status.OK_STATUS;
+    }
+
+    public void runWithEvent(Event event) {
+        super.runWithEvent(event);
+    }
 
 }

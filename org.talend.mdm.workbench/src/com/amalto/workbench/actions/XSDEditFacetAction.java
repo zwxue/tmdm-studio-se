@@ -1,9 +1,23 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
@@ -41,6 +55,8 @@ import com.amalto.workbench.utils.Util;
 
 public class XSDEditFacetAction extends UndoAction {
 
+    private static Log log = LogFactory.getLog(XSDEditFacetAction.class);
+
     protected String facetName = null;
 
     // protected XSDSchema schema = null;
@@ -77,29 +93,29 @@ public class XSDEditFacetAction extends UndoAction {
             /**
              * totalDigits, fractionDigits, maxInclusive, maxExclusive, minInclusive, minExclusive
              */
-            if (facetName.equals("pattern")) {
+            if (facetName.equals("pattern")) {//$NON-NLS-1$
                 editPattern();
-            } else if (facetName.equals("enumeration")) {
+            } else if (facetName.equals("enumeration")) {//$NON-NLS-1$
                 editEnumeration();
-            } else if (facetName.equals("length")) {
+            } else if (facetName.equals("length")) {//$NON-NLS-1$
                 editLength();
-            } else if (facetName.equals("minLength")) {
+            } else if (facetName.equals("minLength")) {//$NON-NLS-1$
                 editMinLength();
-            } else if (facetName.equals("maxLength")) {
+            } else if (facetName.equals("maxLength")) {//$NON-NLS-1$
                 editMaxLength();
-            } else if (facetName.equals("totalDigits")) {
+            } else if (facetName.equals("totalDigits")) {//$NON-NLS-1$
                 editTotalDigits();
-            } else if (facetName.equals("fractionDigits")) {
+            } else if (facetName.equals("fractionDigits")) {//$NON-NLS-1$
                 editFractionDigits();
-            } else if (facetName.equals("maxInclusive")) {
+            } else if (facetName.equals("maxInclusive")) {//$NON-NLS-1$
                 editMaxInclusive();
-            } else if (facetName.equals("maxExclusive")) {
+            } else if (facetName.equals("maxExclusive")) {//$NON-NLS-1$
                 editMaxExclusive();
-            } else if (facetName.equals("minInclusive")) {
+            } else if (facetName.equals("minInclusive")) {//$NON-NLS-1$
                 editMinInclusive();
-            } else if (facetName.equals("minExclusive")) {
+            } else if (facetName.equals("minExclusive")) {//$NON-NLS-1$
                 editMinExclusive();
-            } else if (facetName.equals("whiteSpace")) {
+            } else if (facetName.equals("whiteSpace")) {//$NON-NLS-1$
                 editWhiteSpace();
             }
 
@@ -114,7 +130,8 @@ public class XSDEditFacetAction extends UndoAction {
             page.markDirty();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to edit a Facet: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;

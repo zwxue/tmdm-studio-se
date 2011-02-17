@@ -1,8 +1,22 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import java.util.Iterator;
 import java.util.regex.Pattern;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
@@ -21,6 +35,8 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 
 public class XSDEditComplexTypeAction extends UndoAction {
+
+    private static Log log = LogFactory.getLog(XSDEditComplexTypeAction.class);
 
     public XSDEditComplexTypeAction(DataModelMainPage page) {
         super(page);
@@ -44,8 +60,8 @@ public class XSDEditComplexTypeAction extends UndoAction {
                             if ((newText == null) || "".equals(newText))
                                 return "The Complex Type Name cannot be empty";
 
-                            if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()
-                                    || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())
+                            if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()//$NON-NLS-1$
+                                    || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())//$NON-NLS-1$//$NON-NLS-2$
                                 return "The name cannot contain the empty characters";
 
                             EList list = schema.getTypeDefinitions();
@@ -73,7 +89,8 @@ public class XSDEditComplexTypeAction extends UndoAction {
             page.markDirty();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to edit an Entity: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;

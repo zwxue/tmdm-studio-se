@@ -1,5 +1,19 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 
@@ -11,49 +25,45 @@ import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.views.ServerView;
 
 public class RefreshAllServerAction extends Action {
-	private ServerView view;
 
-		
-	public RefreshAllServerAction(ServerView view) {
-		super();
-		this.view = view;
-		setImageDescriptor(ImageCache.getImage( EImage.REFRESH.getPath()));
-		setText("Refresh");
-		setToolTipText("Refresh All the Server");
-	}
-	
-	public void run() {
+    private static Log log = LogFactory.getLog(RefreshAllServerAction.class);
 
-			doRun();
-		
-	}
-	public void doRun(){
-		for( TreeParent serverRoot:view.getServers()) {
-			try {
-					String server = (String)serverRoot.getWsKey();  //we are at server root
-					
-		            XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(
-		                	server,
-		                	serverRoot.getUsername(),
-		                	serverRoot.getPassword(),
-		                	serverRoot.getUser().getUniverse(),
-		                	view
-		                );
-					
-					new ProgressMonitorDialog(view.getSite().getShell()).run(
-							true, 
-							true, 
-							retriever
-					);
-					serverRoot.synchronizeWith(retriever.getServerRoot());
-					ServerView.show().getViewer().refresh();
-					LocalTreeObjectRepository.getInstance().setLazySaveStrategy(false, serverRoot);
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-				//throw new Exception("Error while refreshing the "+IConstants.TALEND+" Server Objects: "+e.getLocalizedMessage());			
-			}
-		}
-	}
+    private ServerView view;
+
+    public RefreshAllServerAction(ServerView view) {
+        super();
+        this.view = view;
+        setImageDescriptor(ImageCache.getImage(EImage.REFRESH.getPath()));
+        setText("Refresh");
+        setToolTipText("Refresh All the Server");
+    }
+
+    public void run() {
+
+        doRun();
+
+    }
+
+    public void doRun() {
+        for (TreeParent serverRoot : view.getServers()) {
+            try {
+                String server = (String) serverRoot.getWsKey(); // we are at server root
+
+                XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(server, serverRoot.getUsername(),
+                        serverRoot.getPassword(), serverRoot.getUser().getUniverse(), view);
+
+                new ProgressMonitorDialog(view.getSite().getShell()).run(true, true, retriever);
+                serverRoot.synchronizeWith(retriever.getServerRoot());
+                ServerView.show().getViewer().refresh();
+                LocalTreeObjectRepository.getInstance().setLazySaveStrategy(false, serverRoot);
+
+            } catch (Exception e) {
+                // e.printStackTrace();
+                log.error(e.getStackTrace());
+                // throw new
+                // Exception("Error while refreshing the "+IConstants.TALEND+" Server Objects: "+e.getLocalizedMessage());
+            }
+        }
+    }
 
 }

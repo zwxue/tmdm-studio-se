@@ -1,7 +1,21 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import java.net.URL;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -49,6 +63,8 @@ import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class EditXObjectAction extends Action {
+
+    private static Log log = LogFactory.getLog(EditXObjectAction.class);
 
     private ServerView view = null;
 
@@ -165,12 +181,13 @@ public class EditXObjectAction extends Action {
                 this.page = view.getSite().getWorkbenchWindow().getActivePage();
 
             this.page.openEditor(new XObjectEditorInput(xobject, xobject.getDisplayName()),
-                    "com.amalto.workbench.editors.XObjectEditor");
+                    "com.amalto.workbench.editors.XObjectEditor"); //$NON-NLS-1$
 
         } catch (Exception e) {
-            e.printStackTrace();
-            MessageDialog.openError(view.getSite().getShell(), "Error", "An error occured trying to open the editor: "
-                    + e.getLocalizedMessage());
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
+            MessageDialog.openError(view.getSite().getShell(), "Error",
+                    "An error occured trying to open the editor: " + e.getLocalizedMessage());
         }
     }
 

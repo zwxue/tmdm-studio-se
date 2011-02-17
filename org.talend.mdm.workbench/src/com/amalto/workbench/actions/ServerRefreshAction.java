@@ -1,5 +1,19 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -16,69 +30,69 @@ import com.amalto.workbench.views.ServerView;
 
 public class ServerRefreshAction extends Action {
 
-	protected ServerView view = null;
-	protected String server = null;
+    private static Log log = LogFactory.getLog(ServerRefreshAction.class);
+
+    protected ServerView view = null;
+
+    protected String server = null;
+
     protected TreeParent serverRoot = null;
+
     protected TreeParent forcedRoot = null;
+
     protected TreeParent newRoot = null;
-	
-	
-	
-	public ServerRefreshAction(ServerView view, TreeParent forcedRoot) {
-		this(view);
-		this.forcedRoot = forcedRoot;
-	}
-		
-	public ServerRefreshAction(ServerView view) {
-		super();
-		this.view = view;
-		setImageDescriptor(ImageCache.getImage( EImage.REFRESH.getPath()));
-		setText("Refresh");
-		setToolTipText("Refresh the "+IConstants.TALEND+" Server Object(s)");
-	}
-	
-	public void run() {
-		try {
-			doRun();
-		} catch (Exception e) {
-			e.printStackTrace();
-			MessageDialog.openError(view.getSite().getShell(), "Error", "Error while refreshing the "+IConstants.TALEND+" Server Objects: "+e.getLocalizedMessage());
-		}
-	}
-	public void doRun()throws Exception{
-		try {
-			if (forcedRoot == null)
-				//get it dynamically
-				serverRoot = (TreeParent)((IStructuredSelection)view.getViewer().getSelection()).getFirstElement();
-			else
-				serverRoot = forcedRoot;
-			if(serverRoot==null) return;
-			server = (String)serverRoot.getWsKey();  //we are at server root
-			
-            XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(
-                	server,
-                	serverRoot.getUsername(),
-                	serverRoot.getPassword(),
-                	serverRoot.getUser().getUniverse(),
-                	view
-                );
-			
-			new ProgressMonitorDialog(view.getSite().getShell()).run(
-					true, 
-					true, 
-					retriever
-			);
-			ServerRefreshAction.this.serverRoot.synchronizeWith(retriever.getServerRoot());
-			ServerView.show().getViewer().refresh();
-			LocalTreeObjectRepository.getInstance().setLazySaveStrategy(false, serverRoot);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new Exception("Error while refreshing the "+IConstants.TALEND+" Server Objects: "+e.getLocalizedMessage());			
-		}
-	}
-	public void runWithEvent(Event event) {
-		super.runWithEvent(event);
-	}
-	
+
+    public ServerRefreshAction(ServerView view, TreeParent forcedRoot) {
+        this(view);
+        this.forcedRoot = forcedRoot;
+    }
+
+    public ServerRefreshAction(ServerView view) {
+        super();
+        this.view = view;
+        setImageDescriptor(ImageCache.getImage(EImage.REFRESH.getPath()));
+        setText("Refresh");
+        setToolTipText("Refresh the " + IConstants.TALEND + " Server Object(s)");
+    }
+
+    public void run() {
+        try {
+            doRun();
+        } catch (Exception e) {
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
+            MessageDialog.openError(view.getSite().getShell(), "Error", "Error while refreshing the " + IConstants.TALEND
+                    + " Server Objects: " + e.getLocalizedMessage());
+        }
+    }
+
+    public void doRun() throws Exception {
+        try {
+            if (forcedRoot == null)
+                // get it dynamically
+                serverRoot = (TreeParent) ((IStructuredSelection) view.getViewer().getSelection()).getFirstElement();
+            else
+                serverRoot = forcedRoot;
+            if (serverRoot == null)
+                return;
+            server = (String) serverRoot.getWsKey(); // we are at server root
+
+            XtentisServerObjectsRetriever retriever = new XtentisServerObjectsRetriever(server, serverRoot.getUsername(),
+                    serverRoot.getPassword(), serverRoot.getUser().getUniverse(), view);
+
+            new ProgressMonitorDialog(view.getSite().getShell()).run(true, true, retriever);
+            ServerRefreshAction.this.serverRoot.synchronizeWith(retriever.getServerRoot());
+            ServerView.show().getViewer().refresh();
+            LocalTreeObjectRepository.getInstance().setLazySaveStrategy(false, serverRoot);
+        } catch (Exception e) {
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
+            throw new Exception("Error while refreshing the " + IConstants.TALEND + " Server Objects: " + e.getLocalizedMessage());
+        }
+    }
+
+    public void runWithEvent(Event event) {
+        super.runWithEvent(event);
+    }
 
 }

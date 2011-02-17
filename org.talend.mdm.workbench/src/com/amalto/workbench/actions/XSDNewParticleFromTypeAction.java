@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
@@ -7,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
@@ -35,6 +49,8 @@ import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDNewParticleFromTypeAction extends UndoAction implements SelectionListener {
+
+    private static Log log = LogFactory.getLog(XSDNewParticleFromTypeAction.class);
 
     private BusinessElementInputDialog dialog = null;
 
@@ -72,7 +88,10 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
             } else if (selection.getFirstElement() instanceof XSDModelGroup) {
                 group = (XSDModelGroup) selection.getFirstElement();
             } else {
-                System.out.println("UNKNOWN SELECTION: " + selection.getFirstElement().getClass().getName() + "  --  "
+                // System.out.println("UNKNOWN SELECTION: " + selection.getFirstElement().getClass().getName() +
+                // "  --  "
+                // + selection.getFirstElement());
+                log.info("UNKNOWN SELECTION: " + selection.getFirstElement().getClass().getName() + "  --  "
                         + selection.getFirstElement());
                 return Status.CANCEL_STATUS;
             }
@@ -128,7 +147,8 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
             page.markDirty();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to create a new Business Element: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;
@@ -150,8 +170,8 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
                 struc.setAccessRole(lists, false, (IStructuredContentProvider) page.getTreeViewer().getContentProvider(),
                         (String) keys.toArray()[i]);
             } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                // e.printStackTrace();
+                log.error(e.getStackTrace());
             }
         }
     }
@@ -163,9 +183,9 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
             if (oldAnn != null) {
                 for (int i = 0; i < oldAnn.getApplicationInformation().size(); i++) {
                     Element oldElem = oldAnn.getApplicationInformation().get(i);
-                    String type = oldElem.getAttributes().getNamedItem("source").getNodeValue();
+                    String type = oldElem.getAttributes().getNamedItem("source").getNodeValue();//$NON-NLS-1$
                     // X_Write,X_Hide,X_Workflow
-                    if (type.equals("X_Write") || type.equals("X_Hide") || type.equals("X_Workflow")) {
+                    if (type.equals("X_Write") || type.equals("X_Hide") || type.equals("X_Workflow")) {//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                         if (!infor.containsKey(type)) {
                             List typeList = new ArrayList<String>();
                             typeList.add(oldElem.getFirstChild().getNodeValue());
@@ -178,7 +198,8 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
             MessageDialog.openError(this.page.getSite().getShell(), "Error",
                     "An error occured trying to paste Entities: " + e.getLocalizedMessage());
         }

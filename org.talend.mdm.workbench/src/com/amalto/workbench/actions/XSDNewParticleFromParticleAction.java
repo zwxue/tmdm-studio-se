@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
@@ -7,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
@@ -35,238 +49,227 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
-import com.amalto.workbench.utils.XtentisException;
 
-public class XSDNewParticleFromParticleAction extends UndoAction implements SelectionListener{
+public class XSDNewParticleFromParticleAction extends UndoAction implements SelectionListener {
 
-	private BusinessElementInputDialog dialog = null;
-	private XSDParticle selParticle = null;
-	
-	private String  elementName;
-	private String  refName;
-	private int minOccurs;
-	private int maxOccurs;
-	
-	public XSDNewParticleFromParticleAction(DataModelMainPage page) {
-		super(page);
-		setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
-		setText("Add Element (after)");
-		setToolTipText("Add a new Business Element after this one. Add from the Type to add at First Position.");
-	}
-	
-	public IStatus doAction() {
-		try {
-            IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
+    private static Log log = LogFactory.getLog(XSDNewParticleFromParticleAction.class);
+
+    private BusinessElementInputDialog dialog = null;
+
+    private XSDParticle selParticle = null;
+
+    private String elementName;
+
+    private String refName;
+
+    private int minOccurs;
+
+    private int maxOccurs;
+
+    public XSDNewParticleFromParticleAction(DataModelMainPage page) {
+        super(page);
+        setImageDescriptor(ImageCache.getImage(EImage.ADD_OBJ.getPath()));
+        setText("Add Element (after)");
+        setToolTipText("Add a new Business Element after this one. Add from the Type to add at First Position.");
+    }
+
+    public IStatus doAction() {
+        try {
+            IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
             selParticle = (XSDParticle) selection.getFirstElement();
-            
-            if (!(selParticle.getContainer() instanceof XSDModelGroup))  return Status.CANCEL_STATUS;;
-            
-            XSDModelGroup group = (XSDModelGroup) selParticle.getContainer();
-            //get position of the selected particle in the container
-            int index = 0;
-            int i=0; 
-            for (Iterator iter = group.getContents().iterator(); iter.hasNext(); ) {
-				XSDParticle p = (XSDParticle) iter.next();
-				if (p.equals(selParticle)) {
-					index = i;
-					break;
-				}
-				i++;
-			}
-            
-            EList<XSDElementDeclaration> eDecls  = schema.getElementDeclarations();
-			ArrayList<String> elementDeclarations = new ArrayList<String>();
-			for (Iterator iter = eDecls.iterator(); iter.hasNext(); ) {
-				XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
-				if(d.getTargetNamespace() != null && d.getTargetNamespace().equals(IConstants.DEFAULT_NAME_SPACE))continue;
-				elementDeclarations.add(d.getQName() + (d.getTargetNamespace() != null ? " : " + d.getTargetNamespace() : ""));
-			}
-			elementDeclarations.add("");
-			
-            dialog = new BusinessElementInputDialog(this,page.getSite().getShell(),"Add a new Business Element", null, null, elementDeclarations, 0, 1,true);
-            dialog.setBlockOnOpen(true);
-       		int ret = dialog.open();
-       		if (ret == Dialog.CANCEL){
+
+            if (!(selParticle.getContainer() instanceof XSDModelGroup))
                 return Status.CANCEL_STATUS;
-       		}
-       		
-       		XSDElementDeclaration elem = (XSDElementDeclaration) selParticle.getContent();
-       		if(Util.changeElementTypeToSequence(elem, maxOccurs) == Status.CANCEL_STATUS)
-       		{
-       			return Status.CANCEL_STATUS;
-       		}
-       		
-       		XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
-       		
-       		XSDElementDeclaration decl = factory.createXSDElementDeclaration();
-       		decl.setName(this.elementName);
-       		if (!refName.equals(""))
-       		{
-       			XSDElementDeclaration ref = Util.findReference(refName, schema);
-       			if (ref != null)
-       			{
-       				decl.setResolvedElementDeclaration(ref);
-       			}
-       		}
-       		else
-       		{
-       		  decl.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));
-       		}
-       		
-       		XSDParticle particle = factory.createXSDParticle();
-       		particle.setContent(decl);
-       		particle.setMinOccurs(this.minOccurs);
-       		if(maxOccurs > -1)
-       		{
-       			particle.setMaxOccurs(this.maxOccurs);
-       		}
-       		else
-       		{
-       			particle.setMaxOccurs(this.maxOccurs);
-           		group.getContents().add(group.getContents().size(),particle);
-           		group.updateElement();
-       			if(particle.getElement().getAttributeNode("maxOccurs") != null)
-       				particle.getElement().getAttributeNode("maxOccurs").setNodeValue("unbounded");
-       			else
-       			{
-       				particle.getElement().setAttribute("maxOccurs", "unbounded");
-       			}
-       		}
-       		if(maxOccurs > -1)
-       		{
-           		group.getContents().add(group.getContents().size(),particle);
-           		group.updateElement();
-       		}
+            ;
 
-       		
-       	//fix 0010248. add annotion from parent
-       		
-			if (dialog.isInherit()) {
-				XSDTerm totm = particle.getTerm();
-				XSDElementDeclaration concept = null;
-				if(Util.getParent(selParticle) instanceof XSDElementDeclaration)
-					concept = (XSDElementDeclaration) Util.getParent(selParticle);
-				else if(Util.getParent(selParticle) instanceof XSDComplexTypeDefinition){
-					if (selParticle instanceof XSDParticle) 
-						concept = (XSDElementDeclaration) ((XSDParticle) selParticle).getContent();
-					 else if (selParticle instanceof XSDElementDeclaration) 
-						concept= (XSDElementDeclaration) selParticle;
-				}
-				XSDAnnotation fromannotation = null;
-				if (concept != null)
-					fromannotation = concept.getAnnotation();
-				if (fromannotation != null) {
-					XSDAnnotationsStructure struc = new XSDAnnotationsStructure(totm);
-					if (((XSDElementDeclaration) totm).getType() != null) 
-						addAnnotion(struc, fromannotation);
-				}
-			
-			}
-			
-       		page.refresh();
-       		page.getTreeViewer().setSelection(new StructuredSelection(particle),true);
-       		page.markDirty();
-       
-		} catch (Exception e) {
-			e.printStackTrace();
-			MessageDialog.openError(
-					page.getSite().getShell(),
-					"Error", 
-					"An error occured trying to create a new Business Element: "+e.getLocalizedMessage()
-			);
-			
+            XSDModelGroup group = (XSDModelGroup) selParticle.getContainer();
+            // get position of the selected particle in the container
+            int index = 0;
+            int i = 0;
+            for (Iterator iter = group.getContents().iterator(); iter.hasNext();) {
+                XSDParticle p = (XSDParticle) iter.next();
+                if (p.equals(selParticle)) {
+                    index = i;
+                    break;
+                }
+                i++;
+            }
+
+            EList<XSDElementDeclaration> eDecls = schema.getElementDeclarations();
+            ArrayList<String> elementDeclarations = new ArrayList<String>();
+            for (Iterator iter = eDecls.iterator(); iter.hasNext();) {
+                XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
+                if (d.getTargetNamespace() != null && d.getTargetNamespace().equals(IConstants.DEFAULT_NAME_SPACE))
+                    continue;
+                elementDeclarations.add(d.getQName() + (d.getTargetNamespace() != null ? " : " + d.getTargetNamespace() : ""));
+            }
+            elementDeclarations.add("");
+
+            dialog = new BusinessElementInputDialog(this, page.getSite().getShell(), "Add a new Business Element", null, null,
+                    elementDeclarations, 0, 1, true);
+            dialog.setBlockOnOpen(true);
+            int ret = dialog.open();
+            if (ret == Dialog.CANCEL) {
+                return Status.CANCEL_STATUS;
+            }
+
+            XSDElementDeclaration elem = (XSDElementDeclaration) selParticle.getContent();
+            if (Util.changeElementTypeToSequence(elem, maxOccurs) == Status.CANCEL_STATUS) {
+                return Status.CANCEL_STATUS;
+            }
+
+            XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
+
+            XSDElementDeclaration decl = factory.createXSDElementDeclaration();
+            decl.setName(this.elementName);
+            if (!refName.equals("")) {
+                XSDElementDeclaration ref = Util.findReference(refName, schema);
+                if (ref != null) {
+                    decl.setResolvedElementDeclaration(ref);
+                }
+            } else {
+                decl.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));//$NON-NLS-1$
+            }
+
+            XSDParticle particle = factory.createXSDParticle();
+            particle.setContent(decl);
+            particle.setMinOccurs(this.minOccurs);
+            if (maxOccurs > -1) {
+                particle.setMaxOccurs(this.maxOccurs);
+            } else {
+                particle.setMaxOccurs(this.maxOccurs);
+                group.getContents().add(group.getContents().size(), particle);
+                group.updateElement();
+                if (particle.getElement().getAttributeNode("maxOccurs") != null)//$NON-NLS-1$
+                    particle.getElement().getAttributeNode("maxOccurs").setNodeValue("unbounded");//$NON-NLS-1$//$NON-NLS-2$
+                else {
+                    particle.getElement().setAttribute("maxOccurs", "unbounded");//$NON-NLS-1$//$NON-NLS-2$
+                }
+            }
+            if (maxOccurs > -1) {
+                group.getContents().add(group.getContents().size(), particle);
+                group.updateElement();
+            }
+
+            // fix 0010248. add annotion from parent
+
+            if (dialog.isInherit()) {
+                XSDTerm totm = particle.getTerm();
+                XSDElementDeclaration concept = null;
+                if (Util.getParent(selParticle) instanceof XSDElementDeclaration)
+                    concept = (XSDElementDeclaration) Util.getParent(selParticle);
+                else if (Util.getParent(selParticle) instanceof XSDComplexTypeDefinition) {
+                    if (selParticle instanceof XSDParticle)
+                        concept = (XSDElementDeclaration) ((XSDParticle) selParticle).getContent();
+                    else if (selParticle instanceof XSDElementDeclaration)
+                        concept = (XSDElementDeclaration) selParticle;
+                }
+                XSDAnnotation fromannotation = null;
+                if (concept != null)
+                    fromannotation = concept.getAnnotation();
+                if (fromannotation != null) {
+                    XSDAnnotationsStructure struc = new XSDAnnotationsStructure(totm);
+                    if (((XSDElementDeclaration) totm).getType() != null)
+                        addAnnotion(struc, fromannotation);
+                }
+
+            }
+
+            page.refresh();
+            page.getTreeViewer().setSelection(new StructuredSelection(particle), true);
+            page.markDirty();
+
+        } catch (Exception e) {
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
+            MessageDialog.openError(page.getSite().getShell(), "Error",
+                    "An error occured trying to create a new Business Element: " + e.getLocalizedMessage());
+
             return Status.CANCEL_STATUS;
-		}
-		
+        }
+
         return Status.OK_STATUS;
-	}
-	
-	public void runWithEvent(Event event) {
-		super.runWithEvent(event);
-	}
+    }
 
-	public void addAnnotion(XSDAnnotationsStructure struc,XSDAnnotation xsdannotationparent){
-		Map infor = new HashMap<String, ArrayList<String>>();
-		infor = cloneXSDAnnotation(xsdannotationparent);
-		Set keys = infor.keySet();
-		for(int i = 0;i<infor.size();i++){
-			ArrayList<String> lists = (ArrayList<String>) infor.get(keys.toArray()[i]);
-		try {
-			struc.setAccessRole(lists, false, (IStructuredContentProvider) page.getTreeViewer()
-						.getContentProvider(), (String) keys.toArray()[i]);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		}
-	}
-	
-	public Map cloneXSDAnnotation(XSDAnnotation oldAnn) {
-		XSDAnnotation xsdannotation = XSDFactory.eINSTANCE.createXSDAnnotation();
-		Map infor = new HashMap<String, List>();
-		try {
-			if (oldAnn != null) {
-				for (int i = 0; i < oldAnn.getApplicationInformation().size(); i++) {
-					Element oldElem = oldAnn.getApplicationInformation().get(i);
-					String type = oldElem.getAttributes().getNamedItem("source").getNodeValue();
-					//X_Write,X_Hide,X_Workflow
-					if(type.equals("X_Write")||type.equals("X_Hide")||type.equals("X_Workflow")){
-					if (!infor.containsKey(type)) {
-						List typeList = new ArrayList<String>();
-						typeList.add(oldElem.getFirstChild().getNodeValue());
-						infor.put(type, typeList);
-					} else {
-						((List) infor.get(type)).add(oldElem.getFirstChild()
-								.getNodeValue());
-					}
-				}
-				}
-			}
+    public void runWithEvent(Event event) {
+        super.runWithEvent(event);
+    }
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			MessageDialog.openError(this.page.getSite().getShell(), "Error",
-					"An error occured trying to paste Entities: "
-							+ e.getLocalizedMessage());
-		}
-		return infor;
-	}
-	
-	
-	
-	/********************************
-	 * Listener to input dialog
-	 */
-	public void widgetDefaultSelected(SelectionEvent e) {
-	}
+    public void addAnnotion(XSDAnnotationsStructure struc, XSDAnnotation xsdannotationparent) {
+        Map infor = new HashMap<String, ArrayList<String>>();
+        infor = cloneXSDAnnotation(xsdannotationparent);
+        Set keys = infor.keySet();
+        for (int i = 0; i < infor.size(); i++) {
+            ArrayList<String> lists = (ArrayList<String>) infor.get(keys.toArray()[i]);
+            try {
+                struc.setAccessRole(lists, false, (IStructuredContentProvider) page.getTreeViewer().getContentProvider(),
+                        (String) keys.toArray()[i]);
+            } catch (Exception e) {
+                // e.printStackTrace();
+                log.error(e.getStackTrace());
+            }
+        }
+    }
 
-	public void widgetSelected(SelectionEvent e) {
-		if (dialog.getReturnCode() ==  -1) return; //there was a validation error	
-		elementName = dialog.getElementName();
-		refName = dialog.getRefName();
-		minOccurs = dialog.getMinOccurs();
-		maxOccurs = dialog.getMaxOccurs();
-		
-		//check that this element does not already exist
+    public Map cloneXSDAnnotation(XSDAnnotation oldAnn) {
+        XSDAnnotation xsdannotation = XSDFactory.eINSTANCE.createXSDAnnotation();
+        Map infor = new HashMap<String, List>();
+        try {
+            if (oldAnn != null) {
+                for (int i = 0; i < oldAnn.getApplicationInformation().size(); i++) {
+                    Element oldElem = oldAnn.getApplicationInformation().get(i);
+                    String type = oldElem.getAttributes().getNamedItem("source").getNodeValue();
+                    // X_Write,X_Hide,X_Workflow
+                    if (type.equals("X_Write") || type.equals("X_Hide") || type.equals("X_Workflow")) {
+                        if (!infor.containsKey(type)) {
+                            List typeList = new ArrayList<String>();
+                            typeList.add(oldElem.getFirstChild().getNodeValue());
+                            infor.put(type, typeList);
+                        } else {
+                            ((List) infor.get(type)).add(oldElem.getFirstChild().getNodeValue());
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
+            MessageDialog.openError(this.page.getSite().getShell(), "Error",
+                    "An error occured trying to paste Entities: " + e.getLocalizedMessage());
+        }
+        return infor;
+    }
+
+    /********************************
+     * Listener to input dialog
+     */
+    public void widgetDefaultSelected(SelectionEvent e) {
+    }
+
+    public void widgetSelected(SelectionEvent e) {
+        if (dialog.getReturnCode() == -1)
+            return; // there was a validation error
+        elementName = dialog.getElementName();
+        refName = dialog.getRefName();
+        minOccurs = dialog.getMinOccurs();
+        maxOccurs = dialog.getMaxOccurs();
+
+        // check that this element does not already exist
         XSDModelGroup group = (XSDModelGroup) selParticle.getContainer();
-        //get position of the selected particle in the container
-        for (Iterator iter = group.getContents().iterator(); iter.hasNext(); ) {
-			XSDParticle p = (XSDParticle) iter.next();
-			if (p.getTerm() instanceof XSDElementDeclaration) {
-				XSDElementDeclaration thisDecl = (XSDElementDeclaration) p.getTerm();
-				if (thisDecl.getName().equals(elementName)) {
-					MessageDialog.openError(
-							page.getSite().getShell(),
-							"Error", 
-							"The Business Element "+elementName+" already exists."
-					);
-					return;
-				}
-			}
-		}//for
-		dialog.close();		
-	}
-	
-
+        // get position of the selected particle in the container
+        for (Iterator iter = group.getContents().iterator(); iter.hasNext();) {
+            XSDParticle p = (XSDParticle) iter.next();
+            if (p.getTerm() instanceof XSDElementDeclaration) {
+                XSDElementDeclaration thisDecl = (XSDElementDeclaration) p.getTerm();
+                if (thisDecl.getName().equals(elementName)) {
+                    MessageDialog.openError(page.getSite().getShell(), "Error", "The Business Element " + elementName
+                            + " already exists.");
+                    return;
+                }
+            }
+        }// for
+        dialog.close();
+    }
 
 }

@@ -1,5 +1,19 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
@@ -18,6 +32,8 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.inputvalidator.EditXSDIdentityConstraintNameValidator;
 
 public class XSDEditIdentityConstraintAction extends UndoAction {
+
+    private static Log log = LogFactory.getLog(XSDEditIdentityConstraintAction.class);
 
     protected XSDIdentityConstraintDefinition constraint;
 
@@ -72,7 +88,8 @@ public class XSDEditIdentityConstraintAction extends UndoAction {
             page.markDirty();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to edit an Entity: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;

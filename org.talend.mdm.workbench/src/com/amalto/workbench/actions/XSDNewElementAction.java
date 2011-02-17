@@ -1,8 +1,22 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -23,6 +37,8 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
 public class XSDNewElementAction extends UndoAction implements SelectionListener {
+
+    private static Log log = LogFactory.getLog(XSDNewElementAction.class);
 
     // protected DataModelMainPage page = null;
 
@@ -59,9 +75,10 @@ public class XSDNewElementAction extends UndoAction implements SelectionListener
                 return Status.CANCEL_STATUS;
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            MessageDialog.openError(page.getSite().getShell(), "Error", "An error occured trying to create a new Element: "
-                    + e.getLocalizedMessage());
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
+            MessageDialog.openError(page.getSite().getShell(), "Error",
+                    "An error occured trying to create a new Element: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;
@@ -81,13 +98,13 @@ public class XSDNewElementAction extends UndoAction implements SelectionListener
      * author: fliu this fun is to support button click event invoked from the new expansion of Element creation dialog
      */
     public void widgetSelected(SelectionEvent e) {
-        NewConceptOrElementDialog dlg = (NewConceptOrElementDialog) ((Widget) e.getSource()).getData("dialog");
+        NewConceptOrElementDialog dlg = (NewConceptOrElementDialog) ((Widget) e.getSource()).getData("dialog");//$NON-NLS-1$
         if (dlg.getReturnCode() == Window.OK) {
             XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
 
             XSDElementDeclaration decl = factory.createXSDElementDeclaration();
             decl.setName(dlg.getTypeName());
-            decl.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));
+            decl.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));//$NON-NLS-1$
 
             schema.getContents().add(decl);
             // schema.getElementDeclarations().add(decl);
@@ -98,7 +115,8 @@ public class XSDNewElementAction extends UndoAction implements SelectionListener
 
             UndoAction changeAction = null;
             if (dlg.isComplexType()) {
-                changeAction = new XSDChangeToComplexTypeAction(page, decl, dlg.getComplexType(), dlg.isChoice(), dlg.isAll(),dlg.isAbstract(),dlg.getSuperTypeName());
+                changeAction = new XSDChangeToComplexTypeAction(page, decl, dlg.getComplexType(), dlg.isChoice(), dlg.isAll(),
+                        dlg.isAbstract(), dlg.getSuperTypeName());
             } else {
                 changeAction = new XSDChangeToSimpleTypeAction(page, decl, dlg.getElementType(), dlg.isBuildIn());
             }

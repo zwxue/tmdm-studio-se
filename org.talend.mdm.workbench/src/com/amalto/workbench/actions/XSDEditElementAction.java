@@ -1,8 +1,22 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
@@ -22,84 +36,79 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.inputvalidator.EditXSDEleDecNameValidator;
 
-public class XSDEditElementAction extends UndoAction{
-	
-	public XSDEditElementAction(DataModelMainPage page) {
-		super(page);
-		setImageDescriptor(ImageCache.getImage(EImage.EDIT_OBJ.getPath()));
-		setText("Edit Element");
-		setToolTipText("Edit an Element");
-	}
-	
-	public IStatus doAction() {
-		try {
+public class XSDEditElementAction extends UndoAction {
+
+    private static Log log = LogFactory.getLog(XSDEditElementAction.class);
+
+    public XSDEditElementAction(DataModelMainPage page) {
+        super(page);
+        setImageDescriptor(ImageCache.getImage(EImage.EDIT_OBJ.getPath()));
+        setText("Edit Element");
+        setToolTipText("Edit an Element");
+    }
+
+    public IStatus doAction() {
+        try {
             ISelection selection = page.getTreeViewer().getSelection();
-            XSDElementDeclaration decl = (XSDElementDeclaration)((IStructuredSelection)selection).getFirstElement();
+            XSDElementDeclaration decl = (XSDElementDeclaration) ((IStructuredSelection) selection).getFirstElement();
             ArrayList<Object> objList = new ArrayList<Object>();
-    		IStructuredContentProvider provider = (IStructuredContentProvider) page
-			.getTreeViewer().getContentProvider();
+            IStructuredContentProvider provider = (IStructuredContentProvider) page.getTreeViewer().getContentProvider();
             Object[] objs = Util.getAllObject(page.getSite(), objList, provider);
             String oldName = decl.getName();
-            
-       		InputDialog id = new InputDialog(
-       				page.getSite().getShell(),
-       				"Edit Element",
-       				"Enter a new Name for the Element",
-       				oldName,
-       				new EditXSDEleDecNameValidator(schema)
-//       				new IInputValidator() {
-//       					public String isValid(String newText) {
-//       						if ((newText==null) || "".equals(newText)) return "The Entity Name cannot be empty";
-//       						EList list = schema.getElementDeclarations();
-//       						for (Iterator iter = list.iterator(); iter.hasNext(); ) {
-//								XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
-//								if (d.getName().equals(newText)) return "This Entity already exists";
-//							}
-//       						return null;
-//       					};
-//       				}
-       		);
-            
-       		id.setBlockOnOpen(true);
-       		int ret = id.open();
-       		if (ret == Window.CANCEL) {
-				return Status.CANCEL_STATUS;
-			}
-       		
-       		decl.setName(id.getValue());
-       		decl.updateElement();
+
+            InputDialog id = new InputDialog(page.getSite().getShell(), "Edit Element", "Enter a new Name for the Element",
+                    oldName, new EditXSDEleDecNameValidator(schema)
+            // new IInputValidator() {
+            // public String isValid(String newText) {
+            // if ((newText==null) || "".equals(newText)) return "The Entity Name cannot be empty";
+            // EList list = schema.getElementDeclarations();
+            // for (Iterator iter = list.iterator(); iter.hasNext(); ) {
+            // XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
+            // if (d.getName().equals(newText)) return "This Entity already exists";
+            // }
+            // return null;
+            // };
+            // }
+            );
+
+            id.setBlockOnOpen(true);
+            int ret = id.open();
+            if (ret == Window.CANCEL) {
+                return Status.CANCEL_STATUS;
+            }
+
+            decl.setName(id.getValue());
+            decl.updateElement();
             Util.updateReference(decl, objs, id.getValue());
-       	    //change unique key with new name of concept
-       	    EList list = decl.getIdentityConstraintDefinitions();
-       	    XSDIdentityConstraintDefinition toUpdate = null;
-       	    for (Iterator iter = list.iterator(); iter.hasNext(); ) {
-				XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) iter.next();
-				if (icd.getName().equals(oldName)) {
-					toUpdate = icd;
-					break;
-				}
-			}
-       	    if (toUpdate!=null) {
-       	    	toUpdate.setName(id.getValue());
-       	    	toUpdate.updateElement();
-       	    }
-       	           		
-       		page.refresh();
-       		page.markDirty();
-       
-		} catch (Exception e) {
-			e.printStackTrace();
-			MessageDialog.openError(
-					page.getSite().getShell(),
-					"Error", 
-					"An error occured trying to edit an Element: "+e.getLocalizedMessage()
-			);
+            // change unique key with new name of concept
+            EList list = decl.getIdentityConstraintDefinitions();
+            XSDIdentityConstraintDefinition toUpdate = null;
+            for (Iterator iter = list.iterator(); iter.hasNext();) {
+                XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) iter.next();
+                if (icd.getName().equals(oldName)) {
+                    toUpdate = icd;
+                    break;
+                }
+            }
+            if (toUpdate != null) {
+                toUpdate.setName(id.getValue());
+                toUpdate.updateElement();
+            }
+
+            page.refresh();
+            page.markDirty();
+
+        } catch (Exception e) {
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
+            MessageDialog.openError(page.getSite().getShell(), "Error",
+                    "An error occured trying to edit an Element: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;
-		}
+        }
         return Status.OK_STATUS;
-	}
-	
-	public void runWithEvent(Event event) {
-		super.runWithEvent(event);
-	}
+    }
+
+    public void runWithEvent(Event event) {
+        super.runWithEvent(event);
+    }
 }

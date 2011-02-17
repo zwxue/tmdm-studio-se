@@ -1,8 +1,22 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -27,6 +41,8 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
 public class XSDNewConceptAction extends UndoAction implements SelectionListener {
+
+    private static Log log = LogFactory.getLog(XSDNewConceptAction.class);
 
     // protected DataModelMainPage page = null;
     private XSDElementDeclaration decl;
@@ -66,8 +82,8 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
             }
         } catch (Exception e) {
             e.printStackTrace();
-            MessageDialog.openError(page.getSite().getShell(), "Error", "An error occured trying to create a new Entity: "
-                    + e.getLocalizedMessage());
+            MessageDialog.openError(page.getSite().getShell(), "Error",
+                    "An error occured trying to create a new Entity: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;
         }
         return Status.OK_STATUS;
@@ -116,7 +132,8 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
             getOperationHistory();
             UndoAction changeAction = null;
             if (dlg.isComplexType()) {
-                changeAction = new XSDChangeToComplexTypeAction(page, decl, dlg.getComplexType(), dlg.isChoice(), dlg.isAll(), dlg.isAbstract(),dlg.getSuperTypeName());
+                changeAction = new XSDChangeToComplexTypeAction(page, decl, dlg.getComplexType(), dlg.isChoice(), dlg.isAll(),
+                        dlg.isAbstract(), dlg.getSuperTypeName());
             } else {
                 changeAction = new XSDChangeToSimpleTypeAction(page, decl, dlg.getElementType(), dlg.isBuildIn());
             }

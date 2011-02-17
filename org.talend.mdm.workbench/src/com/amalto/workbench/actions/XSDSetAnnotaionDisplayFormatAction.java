@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import java.util.LinkedHashMap;
@@ -23,74 +35,74 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDSetAnnotaionDisplayFormatAction extends UndoAction {
-	protected AnnotationLanguageLabelsDialog dlg = null;
-	protected String dataModelName;
-	public XSDSetAnnotaionDisplayFormatAction(DataModelMainPage page) {
-		super(page);
-		setImageDescriptor(ImageCache.getImage( EImage.THIN_MIN_VIEW.getPath()));
-		setText("Set the display format");
-		setToolTipText("Set the display format for the content of this element");
-		// TODO Auto-generated constructor stub
-	}
-	public IStatus doAction() {
-		try {
-            IStructuredSelection selection = (TreeSelection)page.getTreeViewer().getSelection();
-            XSDComponent xSDCom=null;
+
+    protected AnnotationLanguageLabelsDialog dlg = null;
+
+    protected String dataModelName;
+
+    public XSDSetAnnotaionDisplayFormatAction(DataModelMainPage page) {
+        super(page);
+        setImageDescriptor(ImageCache.getImage(EImage.THIN_MIN_VIEW.getPath()));
+        setText("Set the display format");
+        setToolTipText("Set the display format for the content of this element");
+        // TODO Auto-generated constructor stub
+    }
+
+    public IStatus doAction() {
+        try {
+            IStructuredSelection selection = (TreeSelection) page.getTreeViewer().getSelection();
+            XSDComponent xSDCom = null;
             if (selection.getFirstElement() instanceof Element) {
-				TreePath tPath = ((TreeSelection) selection).getPaths()[0];
-				for (int i = 0; i < tPath.getSegmentCount(); i++) {
-					if (tPath.getSegment(i) instanceof XSDAnnotation)
-						xSDCom = (XSDAnnotation) (tPath.getSegment(i));
-				}
-			} else
-            xSDCom = (XSDComponent)selection.getFirstElement();
- 		   XSDAnnotationsStructure struc =new XSDAnnotationsStructure(xSDCom);
-//            IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
-//            XSDAnnotationsStructure struc = new XSDAnnotationsStructure((XSDComponent)selection.getFirstElement());
+                TreePath tPath = ((TreeSelection) selection).getPaths()[0];
+                for (int i = 0; i < tPath.getSegmentCount(); i++) {
+                    if (tPath.getSegment(i) instanceof XSDAnnotation)
+                        xSDCom = (XSDAnnotation) (tPath.getSegment(i));
+                }
+            } else
+                xSDCom = (XSDComponent) selection.getFirstElement();
+            XSDAnnotationsStructure struc = new XSDAnnotationsStructure(xSDCom);
+            // IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
+            // XSDAnnotationsStructure struc = new XSDAnnotationsStructure((XSDComponent)selection.getFirstElement());
             if (struc.getAnnotation() == null) {
-            	throw new RuntimeException("Unable to edit an annotation for object of type "+selection.getFirstElement().getClass().getName());
+                throw new RuntimeException("Unable to edit an annotation for object of type "
+                        + selection.getFirstElement().getClass().getName());
             }
 
-            dlg = new AnnotationLanguageLabelsDialog(
-            		struc.getDisplayFormat(),
-            		new SelectionListener() {
-            			public void widgetDefaultSelected(SelectionEvent e) {}
-            			public void widgetSelected(SelectionEvent e) {
-            				dlg.close();
-            			}
-            		},
-       				page.getSite().getShell(),
-       				"Set the display format for the content of this element"
-       		);
-            
-       		dlg.setBlockOnOpen(true);
-       		int ret = dlg.open();
-       		if (ret == Window.CANCEL){
+            dlg = new AnnotationLanguageLabelsDialog(struc.getDisplayFormat(), new SelectionListener() {
+
+                public void widgetDefaultSelected(SelectionEvent e) {
+                }
+
+                public void widgetSelected(SelectionEvent e) {
+                    dlg.close();
+                }
+            }, page.getSite().getShell(), "Set the display format for the content of this element");
+
+            dlg.setBlockOnOpen(true);
+            int ret = dlg.open();
+            if (ret == Window.CANCEL) {
                 return Status.CANCEL_STATUS;
-       		}
-       		LinkedHashMap<String, String> fomats = dlg.getDescriptionsMap();
-       		struc.setDisplayFormat(fomats);
-       		
-       		if (struc.hasChanged()) {
-       			page.refresh();
-       			page.getTreeViewer().expandToLevel(selection.getFirstElement(), 2);
-       			page.markDirty();
-       		}
-       		
-       
-		} catch (Exception e) {
-			e.printStackTrace();
-			MessageDialog.openError(
-					page.getSite().getShell(),
-					"Error", 
-					"An error occured trying to set a fomat: "+e.getLocalizedMessage()
-			);
+            }
+            LinkedHashMap<String, String> fomats = dlg.getDescriptionsMap();
+            struc.setDisplayFormat(fomats);
+
+            if (struc.hasChanged()) {
+                page.refresh();
+                page.getTreeViewer().expandToLevel(selection.getFirstElement(), 2);
+                page.markDirty();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            MessageDialog.openError(page.getSite().getShell(), "Error",
+                    "An error occured trying to set a fomat: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;
-		}
-		
+        }
+
         return Status.OK_STATUS;
-	}
-	public void runWithEvent(Event event) {
-		super.runWithEvent(event);
-	}
+    }
+
+    public void runWithEvent(Event event) {
+        super.runWithEvent(event);
+    }
 }

@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import java.util.regex.Matcher;
@@ -43,7 +55,7 @@ public class NewCategoryAction extends Action {
                     public String isValid(String newText) {
                         if ((newText == null) || "".equals(newText))
                             return "The Name cannot be empty";
-                        Pattern p = Pattern.compile("([\\s*|\\W*]+)");
+                        Pattern p = Pattern.compile("([\\s*|\\W*]+)");//$NON-NLS-1$ 
                         Matcher m = p.matcher(newText);
                         if (m.find()) {
                             m.group(1);

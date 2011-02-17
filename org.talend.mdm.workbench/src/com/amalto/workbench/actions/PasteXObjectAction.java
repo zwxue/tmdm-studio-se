@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import java.net.URL;
@@ -6,6 +18,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -88,6 +102,8 @@ import com.amalto.workbench.webservices.XtentisPort;
 
 public class PasteXObjectAction extends Action {
 
+    private static Log log = LogFactory.getLog(PaseXObjectAction.class);
+
     private ServerView view = null;
 
     private XtentisPort destPort = null;
@@ -116,8 +132,8 @@ public class PasteXObjectAction extends Action {
             destPort = Util.getPort(new URL(remoteTreeObject.getEndpointAddress()), remoteTreeObject.getUniverse(),
                     remoteTreeObject.getUsername(), remoteTreeObject.getPassword());
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
         }
     }
 
@@ -160,10 +176,10 @@ public class PasteXObjectAction extends Action {
                                     "A Data Model with the name \""
                                             + (latestValue != null ? newKey.getPk() : key.getPk())
                                             + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
-                                    "CopyOf"
+                                    "CopyOf"//$NON-NLS-1$ 
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject
-                                                    .getEndpointAddress().split(":")[0]
-                                                    + " ") + key.getPk(), new IInputValidator() {
+                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),
+                                    new IInputValidator() {
 
                                         public String isValid(String newText) {
                                             if ((newText == null) || "".equals(newText))
@@ -189,8 +205,8 @@ public class PasteXObjectAction extends Action {
                                 originalDataModel.getXsdSchema());
                         // write the new model
                         destPort.putDataModel(new WSPutDataModel(newDataModel));
-                        TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot() : selected
-                                .getServerRoot(), xobject.getType(), newKey, null);
+                        TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot()
+                                : selected.getServerRoot(), xobject.getType(), newKey, null);
                         newTreeObject(newObj, selected);
 
                         list.remove(xobject);
@@ -209,10 +225,10 @@ public class PasteXObjectAction extends Action {
                                     "A View with the name \""
                                             + (latestValue != null ? newKey.getPk() : key.getPk())
                                             + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
-                                    "CopyOf"
+                                    "CopyOf"//$NON-NLS-1$ 
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject
-                                                    .getEndpointAddress().split(":")[0]
-                                                    + " ") + key.getPk(), new IInputValidator() {
+                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),
+                                    new IInputValidator() {
 
                                         public String isValid(String newText) {
                                             if ((newText == null) || "".equals(newText))
@@ -234,15 +250,15 @@ public class PasteXObjectAction extends Action {
                         XtentisPort originalPort = Util.getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(),
                                 xobject.getUsername(), xobject.getPassword());
                         WSView originalView = originalPort.getView(new WSGetView(key));
-                        WSView newView = new WSView(newKey.getPk(), originalView.getDescription(), originalView
-                                .getViewableBusinessElements(), originalView.getWhereConditions(), originalView
-                                .getSearchableBusinessElements(), null, new WSBoolean(false)
+                        WSView newView = new WSView(newKey.getPk(), originalView.getDescription(),
+                                originalView.getViewableBusinessElements(), originalView.getWhereConditions(),
+                                originalView.getSearchableBusinessElements(), null, new WSBoolean(false)
 
                         );
                         // write the new model
                         destPort.putView(new WSPutView(newView));
-                        TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot() : xobject
-                                .getServerRoot(), xobject.getType(), newKey, null);
+                        TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot()
+                                : xobject.getServerRoot(), xobject.getType(), newKey, null);
                         newTreeObject(newObj, selected);
 
                         list.remove(xobject);
@@ -251,8 +267,8 @@ public class PasteXObjectAction extends Action {
                         break;
                     case TreeObject.DATA_CLUSTER: {
                         WSDataClusterPK key = (WSDataClusterPK) xobject.getWsKey();
-                        WSDataClusterPK newKey = latestValue != null ? (WSDataClusterPK) latestValue : new WSDataClusterPK(key
-                                .getPk());
+                        WSDataClusterPK newKey = latestValue != null ? (WSDataClusterPK) latestValue : new WSDataClusterPK(
+                                key.getPk());
                         if (destPort.existsDataCluster(
                                 new WSExistsDataCluster(latestValue != null ? (WSDataClusterPK) latestValue
                                         : (WSDataClusterPK) xobject.getWsKey())).is_true()) {
@@ -262,10 +278,10 @@ public class PasteXObjectAction extends Action {
                                     "A Data Container with the name \""
                                             + (latestValue != null ? newKey.getPk() : key.getPk())
                                             + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
-                                    "CopyOf"
+                                    "CopyOf"//$NON-NLS-1$ 
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject
-                                                    .getEndpointAddress().split(":")[0]
-                                                    + " ") + key.getPk(), new IInputValidator() {
+                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),
+                                    new IInputValidator() {
 
                                         public String isValid(String newText) {
                                             if ((newText == null) || "".equals(newText))
@@ -291,8 +307,8 @@ public class PasteXObjectAction extends Action {
                                 originalDataCluster.getVocabulary());
                         // write the new model
                         destPort.putDataCluster(new WSPutDataCluster(newDataCluster));
-                        TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot() : xobject
-                                .getServerRoot(), xobject.getType(), newKey, null);
+                        TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot()
+                                : xobject.getServerRoot(), xobject.getType(), newKey, null);
                         newTreeObject(newObj, selected);
                         copyXObjectContent(((WSDataClusterPK) xobject.getWsKey()).getPk(), newKey.getPk(), newObj.getUniverse(),
                                 TreeObject.DATA_CLUSTER);
@@ -313,10 +329,10 @@ public class PasteXObjectAction extends Action {
                                     "A Stored Procedure with the name \""
                                             + (latestValue != null ? newKey.getPk() : key.getPk())
                                             + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
-                                    "CopyOf"
+                                    "CopyOf"//$NON-NLS-1$ 
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject
-                                                    .getEndpointAddress().split(":")[0]
-                                                    + " ") + key.getPk(), new IInputValidator() {
+                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),
+                                    new IInputValidator() {
 
                                         public String isValid(String newText) {
                                             if ((newText == null) || "".equals(newText))
@@ -339,13 +355,13 @@ public class PasteXObjectAction extends Action {
                                 xobject.getUsername(), xobject.getPassword());
                         WSStoredProcedure originalStoredProcedure = originalPort
                                 .getStoredProcedure(new WSGetStoredProcedure(key));
-                        WSStoredProcedure newStoredProcedure = new WSStoredProcedure(newKey.getPk(), originalStoredProcedure
-                                .getDescription(), originalStoredProcedure.getProcedure(), originalStoredProcedure
-                                .getRefreshCache());
+                        WSStoredProcedure newStoredProcedure = new WSStoredProcedure(newKey.getPk(),
+                                originalStoredProcedure.getDescription(), originalStoredProcedure.getProcedure(),
+                                originalStoredProcedure.getRefreshCache());
                         // write the new model
                         destPort.putStoredProcedure(new WSPutStoredProcedure(newStoredProcedure));
-                        TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot() : xobject
-                                .getServerRoot(), xobject.getType(), newKey, null);
+                        TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot()
+                                : xobject.getServerRoot(), xobject.getType(), newKey, null);
                         newTreeObject(newObj, selected);
 
                         list.remove(xobject);
@@ -364,10 +380,10 @@ public class PasteXObjectAction extends Action {
                                     "A Role with the name \""
                                             + (latestValue != null ? newKey.getPk() : key.getPk())
                                             + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
-                                    "CopyOf"
+                                    "CopyOf"//$NON-NLS-1$ 
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject
-                                                    .getEndpointAddress().split(":")[0]
-                                                    + " ") + key.getPk(), new IInputValidator() {
+                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),
+                                    new IInputValidator() {
 
                                         public String isValid(String newText) {
                                             if ((newText == null) || "".equals(newText))
@@ -389,12 +405,12 @@ public class PasteXObjectAction extends Action {
                         XtentisPort originalPort = Util.getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(),
                                 xobject.getUsername(), xobject.getPassword());
                         WSRole originalRole = originalPort.getRole(new WSGetRole(key));
-                        WSRole newRole = new WSRole(newKey.getPk(), originalRole.getDescription(), originalRole
-                                .getSpecification());
+                        WSRole newRole = new WSRole(newKey.getPk(), originalRole.getDescription(),
+                                originalRole.getSpecification());
                         // write the new model
                         destPort.putRole(new WSPutRole(newRole));
-                        TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot() : xobject
-                                .getServerRoot(), xobject.getType(), newKey, null);
+                        TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot()
+                                : xobject.getServerRoot(), xobject.getType(), newKey, null);
                         newTreeObject(newObj, selected);
 
                         list.remove(xobject);
@@ -403,8 +419,8 @@ public class PasteXObjectAction extends Action {
                         break;
                     case TreeObject.ROUTING_RULE: {
                         WSRoutingRulePK key = (WSRoutingRulePK) xobject.getWsKey();
-                        WSRoutingRulePK newKey = latestValue != null ? (WSRoutingRulePK) latestValue : new WSRoutingRulePK(key
-                                .getPk());
+                        WSRoutingRulePK newKey = latestValue != null ? (WSRoutingRulePK) latestValue : new WSRoutingRulePK(
+                                key.getPk());
                         if (destPort.existsRoutingRule(
                                 new WSExistsRoutingRule(latestValue != null ? (WSRoutingRulePK) latestValue
                                         : (WSRoutingRulePK) xobject.getWsKey())).is_true()) {
@@ -414,10 +430,10 @@ public class PasteXObjectAction extends Action {
                                     "A Trigger with the name \""
                                             + (latestValue != null ? newKey.getPk() : key.getPk())
                                             + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
-                                    "CopyOf"
+                                    "CopyOf"//$NON-NLS-1$ 
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject
-                                                    .getEndpointAddress().split(":")[0]
-                                                    + " ") + key.getPk(), new IInputValidator() {
+                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),
+                                    new IInputValidator() {
 
                                         public String isValid(String newText) {
                                             if ((newText == null) || "".equals(newText))
@@ -440,14 +456,14 @@ public class PasteXObjectAction extends Action {
                                 xobject.getUsername(), xobject.getPassword());
                         WSRoutingRule originalRoutingRule = originalPort.getRoutingRule(new WSGetRoutingRule(key));
                         WSRoutingRule newRoutingRule = new WSRoutingRule(newKey.getPk(), originalRoutingRule.getDescription(),
-                                originalRoutingRule.isSynchronous(), originalRoutingRule.getConcept(), originalRoutingRule
-                                        .getServiceJNDI(), originalRoutingRule.getParameters(), originalRoutingRule
-                                        .getWsRoutingRuleExpressions(), originalRoutingRule.getCondition(), originalRoutingRule
-                                        .getDeactive());
+                                originalRoutingRule.isSynchronous(), originalRoutingRule.getConcept(),
+                                originalRoutingRule.getServiceJNDI(), originalRoutingRule.getParameters(),
+                                originalRoutingRule.getWsRoutingRuleExpressions(), originalRoutingRule.getCondition(),
+                                originalRoutingRule.getDeactive());
                         // write the new model
                         destPort.putRoutingRule(new WSPutRoutingRule(newRoutingRule));
-                        TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot() : xobject
-                                .getServerRoot(), xobject.getType(), newKey, null);
+                        TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot()
+                                : xobject.getServerRoot(), xobject.getType(), newKey, null);
                         newTreeObject(newObj, selected);
 
                         list.remove(xobject);
@@ -467,10 +483,10 @@ public class PasteXObjectAction extends Action {
                                     "A Process with the name \""
                                             + (latestValue != null ? newKey.getPk() : key.getPk())
                                             + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
-                                    "CopyOf"
+                                    "CopyOf"//$NON-NLS-1$ 
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject
-                                                    .getEndpointAddress().split(":")[0]
-                                                    + " ") + key.getPk(), new IInputValidator() {
+                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),
+                                    new IInputValidator() {
 
                                         public String isValid(String newText) {
                                             if ((newText == null) || "".equals(newText))
@@ -496,8 +512,8 @@ public class PasteXObjectAction extends Action {
                                 originalTransformer.getDescription(), originalTransformer.getProcessSteps());
                         // write the new model
                         destPort.putTransformerV2(new WSPutTransformerV2(newTransformer));
-                        TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot() : xobject
-                                .getServerRoot(), xobject.getType(), newKey, null);
+                        TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot()
+                                : xobject.getServerRoot(), xobject.getType(), newKey, null);
                         newTreeObject(newObj, selected);
 
                         list.remove(xobject);
@@ -516,10 +532,10 @@ public class PasteXObjectAction extends Action {
                                     "A Menu with the name \""
                                             + (latestValue != null ? newKey.getPk() : key.getPk())
                                             + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
-                                    "CopyOf"
+                                    "CopyOf"//$NON-NLS-1$ 
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject
-                                                    .getEndpointAddress().split(":")[0]
-                                                    + " ") + key.getPk(), new IInputValidator() {
+                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),
+                                    new IInputValidator() {
 
                                         public String isValid(String newText) {
                                             if ((newText == null) || "".equals(newText))
@@ -544,8 +560,8 @@ public class PasteXObjectAction extends Action {
                         WSMenu newMenu = new WSMenu(newKey.getPk(), originalMenu.getDescription(), originalMenu.getMenuEntries());
                         // write the new model
                         destPort.putMenu(new WSPutMenu(newMenu));
-                        TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot() : xobject
-                                .getServerRoot(), xobject.getType(), newKey, null);
+                        TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot()
+                                : xobject.getServerRoot(), xobject.getType(), newKey, null);
                         newTreeObject(newObj, selected);
 
                         list.remove(xobject);
@@ -565,10 +581,10 @@ public class PasteXObjectAction extends Action {
                                     "A Version with the name \""
                                             + (latestValue != null ? newKey.getPk() : key.getPk())
                                             + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
-                                    "CopyOf"
+                                    "CopyOf"//$NON-NLS-1$ 
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject
-                                                    .getEndpointAddress().split(":")[0]
-                                                    + " ") + key.getPk(), new IInputValidator() {
+                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),
+                                    new IInputValidator() {
 
                                         public String isValid(String newText) {
                                             if ((newText == null) || "".equals(newText))
@@ -595,8 +611,8 @@ public class PasteXObjectAction extends Action {
                                 originalUniverse.getItemsRevisionIDs());
                         // write the new model
                         destPort.putUniverse(new WSPutUniverse(newUniverse));
-                        TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot() : xobject
-                                .getServerRoot(), xobject.getType(), newKey, null);
+                        TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot()
+                                : xobject.getServerRoot(), xobject.getType(), newKey, null);
                         newTreeObject(newObj, selected);
 
                         list.remove(xobject);
@@ -617,10 +633,10 @@ public class PasteXObjectAction extends Action {
                                     "A SynchronizationPlan with the name \""
                                             + (latestValue != null ? newKey.getPk() : key.getPk())
                                             + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
-                                    "CopyOf"
+                                    "CopyOf"//$NON-NLS-1$ 
                                             + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject
-                                                    .getEndpointAddress().split(":")[0]
-                                                    + " ") + key.getPk(), new IInputValidator() {
+                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),
+                                    new IInputValidator() {
 
                                         public String isValid(String newText) {
                                             if ((newText == null) || "".equals(newText))
@@ -645,16 +661,17 @@ public class PasteXObjectAction extends Action {
                                 .getSynchronizationPlan(new WSGetSynchronizationPlan(key));
                         WSSynchronizationPlan newSynchronizationPlan = new WSSynchronizationPlan(newKey.getPk(),
                                 originalSynchronizationPlan.getDescription(), originalSynchronizationPlan.getRemoteSystemName(),
-                                originalSynchronizationPlan.getRemoteSystemURL(), originalSynchronizationPlan
-                                        .getRemoteSystemUsername(), originalSynchronizationPlan.getRemoteSystemPassword(),
-                                originalSynchronizationPlan.getTisURL(), originalSynchronizationPlan.getTisUsername(),
-                                originalSynchronizationPlan.getTisPassword(), originalSynchronizationPlan.getTisParameters(),
-                                originalSynchronizationPlan.getXtentisObjectsSynchronizations(), originalSynchronizationPlan
-                                        .getItemsSynchronizations());
+                                originalSynchronizationPlan.getRemoteSystemURL(),
+                                originalSynchronizationPlan.getRemoteSystemUsername(),
+                                originalSynchronizationPlan.getRemoteSystemPassword(), originalSynchronizationPlan.getTisURL(),
+                                originalSynchronizationPlan.getTisUsername(), originalSynchronizationPlan.getTisPassword(),
+                                originalSynchronizationPlan.getTisParameters(),
+                                originalSynchronizationPlan.getXtentisObjectsSynchronizations(),
+                                originalSynchronizationPlan.getItemsSynchronizations());
                         // write the new model
                         destPort.putSynchronizationPlan(new WSPutSynchronizationPlan(newSynchronizationPlan));
-                        TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot() : xobject
-                                .getServerRoot(), xobject.getType(), newKey, null);
+                        TreeObject newObj = new TreeObject(newKey.getPk(), parent != null ? parent.getServerRoot()
+                                : xobject.getServerRoot(), xobject.getType(), newKey, null);
                         newTreeObject(newObj, selected);
 
                         list.remove(xobject);
@@ -673,9 +690,10 @@ public class PasteXObjectAction extends Action {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
-            MessageDialog.openError(view.getSite().getShell(), "Error", "An error occured trying to copy: "
-                    + e.getLocalizedMessage());
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
+            MessageDialog.openError(view.getSite().getShell(), "Error",
+                    "An error occured trying to copy: " + e.getLocalizedMessage());
         } finally {
             keyTrackMap.clear();
             // refresh view
@@ -729,8 +747,8 @@ public class PasteXObjectAction extends Action {
                 if (dlg.getReturnCode() == Window.OK) {
                     for (WSItemPKsByCriteriaResponseResults result : results) {
                         if (dlg.getMDMDataModelUrls().contains(result.getWsItemPK().getConceptName())) {
-                            WSSynchronizationGetItemXML getItemXML = new WSSynchronizationGetItemXML(revisionID, result
-                                    .getWsItemPK());
+                            WSSynchronizationGetItemXML getItemXML = new WSSynchronizationGetItemXML(revisionID,
+                                    result.getWsItemPK());
                             WSString xmlForm = destPort.synchronizationGetItemXML(getItemXML);
                             Document doc = Util.parse(xmlForm.getValue());
                             NodeList clusterNameList = Util.getNodeList(doc, "/ii/c");
@@ -739,14 +757,15 @@ public class PasteXObjectAction extends Action {
                                 node.setTextContent(newXObjectPk);
                             }
 
-                            WSSynchronizationPutItemXML putItemXML = new WSSynchronizationPutItemXML(revisionID, Util
-                                    .nodeToString(doc));
+                            WSSynchronizationPutItemXML putItemXML = new WSSynchronizationPutItemXML(revisionID,
+                                    Util.nodeToString(doc));
                             destPort.synchronizationPutItemXML(putItemXML);
                         }
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                // e.printStackTrace();
+                log.error(e.getStackTrace());
             }
 
             break;

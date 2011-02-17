@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
@@ -23,88 +35,87 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.datamodel.SchemaTreeContentProvider;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
+
 /**
  * set the Roles with Hidden Accesses when selections is multiple
+ * 
  * @author liyanmei
  */
 public class XSDSetAnnotationWrapNoAction extends UndoAction {
-	protected AnnotationOrderedListsDialog dlg = null;
-	protected String dataModelName;
-	protected boolean isChanged = false;
 
-	public XSDSetAnnotationWrapNoAction(DataModelMainPage page,String dataModelName) {
-		super(page);
-		setImageDescriptor(ImageCache.getImage( EImage.SECURITYANNOTATION.getPath()));
-		setText("Set the Roles with No Access");
-		setToolTipText("Set the Roles That Cannot See This Field");
-		this.dataModelName = dataModelName;
-	}
+    protected AnnotationOrderedListsDialog dlg = null;
 
-	public IStatus doAction() {
-		try {
+    protected String dataModelName;
 
-			schema = ((SchemaTreeContentProvider) page.getTreeViewer().getContentProvider()).getXsdSchema();
-			IStructuredSelection selections = (TreeSelection) page.getTreeViewer().getSelection();
-			XSDComponent xSDCom = null;
-			XSDAnnotationsStructure struc = new XSDAnnotationsStructure(xSDCom);
-			dlg = new AnnotationOrderedListsDialog(new ArrayList(), new SelectionListener() {
-				public void widgetDefaultSelected(SelectionEvent e) {
-				}
+    protected boolean isChanged = false;
 
-				public void widgetSelected(SelectionEvent e) {
-					dlg.close();
-				}
-			}, page.getSite().getShell(),
-					"Set The Roles That Cannot Access This Field", "Roles",
-					page,
-					AnnotationOrderedListsDialog.AnnotationHidden_ActionType,
-					dataModelName);
+    public XSDSetAnnotationWrapNoAction(DataModelMainPage page, String dataModelName) {
+        super(page);
+        setImageDescriptor(ImageCache.getImage(EImage.SECURITYANNOTATION.getPath()));
+        setText("Set the Roles with No Access");
+        setToolTipText("Set the Roles That Cannot See This Field");
+        this.dataModelName = dataModelName;
+    }
 
-			dlg.setBlockOnOpen(true);
-			int ret = dlg.open();
-			if (ret == Window.CANCEL) {
-				return Status.CANCEL_STATUS;
-			}
+    public IStatus doAction() {
+        try {
 
-			for (Iterator iterator = selections.iterator(); iterator.hasNext();) {
-				Object toHid = (Object) iterator.next();
-				if (toHid instanceof Element) {
-					TreePath tPath = ((TreeSelection) selections).getPaths()[0];
-					for (int i = 0; i < tPath.getSegmentCount(); i++) {
-						if (tPath.getSegment(i) instanceof XSDAnnotation)
-							xSDCom = (XSDAnnotation) (tPath.getSegment(i));
-					}
-				} else
-					xSDCom = (XSDComponent) toHid;
-				struc = new XSDAnnotationsStructure(xSDCom);
-				if (struc.getAnnotation() == null) {
-					throw new RuntimeException(
-							"Unable to edit an annotation for object of type "
-									+ xSDCom.getClass().getName());
-				}
+            schema = ((SchemaTreeContentProvider) page.getTreeViewer().getContentProvider()).getXsdSchema();
+            IStructuredSelection selections = (TreeSelection) page.getTreeViewer().getSelection();
+            XSDComponent xSDCom = null;
+            XSDAnnotationsStructure struc = new XSDAnnotationsStructure(xSDCom);
+            dlg = new AnnotationOrderedListsDialog(new ArrayList(), new SelectionListener() {
 
-				struc.setAccessRole(dlg.getXPaths(), dlg.getRecursive(),
-						(IStructuredContentProvider) page.getTreeViewer()
-								.getContentProvider(), "X_Hide");
+                public void widgetDefaultSelected(SelectionEvent e) {
+                }
 
-				if (struc.hasChanged())
-					isChanged = true;
-			}
+                public void widgetSelected(SelectionEvent e) {
+                    dlg.close();
+                }
+            }, page.getSite().getShell(), "Set The Roles That Cannot Access This Field", "Roles", page,
+                    AnnotationOrderedListsDialog.AnnotationHidden_ActionType, dataModelName);
 
-			if (isChanged) {
-				page.refresh();
-				page.getTreeViewer().expandToLevel(xSDCom, 2);
-				page.markDirty();
-			}
+            dlg.setBlockOnOpen(true);
+            int ret = dlg.open();
+            if (ret == Window.CANCEL) {
+                return Status.CANCEL_STATUS;
+            }
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			MessageDialog.openError(page.getSite().getShell(), "Error",
-					"An error occured trying to set the No Access: "
-							+ e.getLocalizedMessage());
-			return Status.CANCEL_STATUS;
-		}
-		return Status.OK_STATUS;
-	}
+            for (Iterator iterator = selections.iterator(); iterator.hasNext();) {
+                Object toHid = (Object) iterator.next();
+                if (toHid instanceof Element) {
+                    TreePath tPath = ((TreeSelection) selections).getPaths()[0];
+                    for (int i = 0; i < tPath.getSegmentCount(); i++) {
+                        if (tPath.getSegment(i) instanceof XSDAnnotation)
+                            xSDCom = (XSDAnnotation) (tPath.getSegment(i));
+                    }
+                } else
+                    xSDCom = (XSDComponent) toHid;
+                struc = new XSDAnnotationsStructure(xSDCom);
+                if (struc.getAnnotation() == null) {
+                    throw new RuntimeException("Unable to edit an annotation for object of type " + xSDCom.getClass().getName());
+                }
+
+                struc.setAccessRole(dlg.getXPaths(), dlg.getRecursive(), (IStructuredContentProvider) page.getTreeViewer()
+                        .getContentProvider(), "X_Hide");
+
+                if (struc.hasChanged())
+                    isChanged = true;
+            }
+
+            if (isChanged) {
+                page.refresh();
+                page.getTreeViewer().expandToLevel(xSDCom, 2);
+                page.markDirty();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            MessageDialog.openError(page.getSite().getShell(), "Error",
+                    "An error occured trying to set the No Access: " + e.getLocalizedMessage());
+            return Status.CANCEL_STATUS;
+        }
+        return Status.OK_STATUS;
+    }
 
 }

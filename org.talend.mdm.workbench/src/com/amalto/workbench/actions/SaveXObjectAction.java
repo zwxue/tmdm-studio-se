@@ -1,12 +1,25 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import java.net.URL;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Event;
 import org.talend.mdm.commmon.util.core.CommonUtil;
-
 
 import com.amalto.workbench.dialogs.ErrorExceptionDialog;
 import com.amalto.workbench.dialogs.RoleAssignmentDialog;
@@ -41,120 +54,116 @@ import com.amalto.workbench.webservices.WSUniverse;
 import com.amalto.workbench.webservices.WSView;
 import com.amalto.workbench.webservices.XtentisPort;
 
-public class SaveXObjectAction extends Action{
+public class SaveXObjectAction extends Action {
 
-	protected XObjectEditor editor = null;
-	//private TreeObject initialXObject = null;
-	int state=-1; //0: success 1:failed 
-	
-	public SaveXObjectAction(XObjectEditor editor) {
-		super();
-		this.editor = editor;
-		//this.initialXObject = initialXObject;
-		setImageDescriptor(ImageCache.getImage(EImage.SAVE_EDIT.getPath()));
-	}
-	
-	public void run() {
-		try {
+    private static Log log = LogFactory.getLog(SaveXObjectAction.class);
 
-			TreeObject xobject = (TreeObject)((XObjectEditorInput)editor.getEditorInput()).getModel();
-			Object newWsObject = xobject.getWsObject();
-			
-            if (!xobject.isXObject()) return;
-                                    
-//          Access to server and get port
-			XtentisPort port = Util.getPort(
-					new URL(xobject.getEndpointAddress()),
-					xobject.getUniverse(),
-					xobject.getUsername(),
-					xobject.getPassword()
-			);
-              
-            switch(xobject.getType()) {
-            
-	           	
-	           	case TreeObject.DATA_MODEL:
-	           		port.putDataModel(new WSPutDataModel((WSDataModel)newWsObject));
-	                RoleAssignmentDialog.doSave(port, ((WSDataModel)newWsObject).getName(), "Data Model");
-	           		break;
-	          	case TreeObject.VIEW:
-	           		port.putView(new WSPutView((WSView)newWsObject));
-	           		break;           		
-	          	case TreeObject.DATA_CLUSTER:
-	           		port.putDataCluster(new WSPutDataCluster((WSDataCluster)newWsObject));
-	           	 RoleAssignmentDialog.doSave(port, ((WSDataCluster)newWsObject).getName(), "Data Cluster");
-	           		break;                      		
-	          	case TreeObject.STORED_PROCEDURE:
-	           		port.putStoredProcedure(new WSPutStoredProcedure((WSStoredProcedure)newWsObject));
-	           		break;   
-	          	case TreeObject.ROLE:
-	           		port.putRole(new WSPutRole((WSRole)newWsObject));
-	           		break;   
-	          	case TreeObject.ROUTING_RULE:
-	           		port.putRoutingRule(new WSPutRoutingRule((WSRoutingRule)newWsObject));
-	           		break;   
-	          	case TreeObject.TRANSFORMER:
-	           		port.putTransformerV2(new WSPutTransformerV2((WSTransformerV2)newWsObject));
-	           		break;   	 
-	          	case TreeObject.MENU:
-	           		port.putMenu(new WSPutMenu((WSMenu)newWsObject));
-	           		break;   	 	
-	          	case TreeObject.UNIVERSE:
-	           		port.putUniverse(new WSPutUniverse((WSUniverse)newWsObject));
-	           		break;   	 	
+    protected XObjectEditor editor = null;
 
-	          	case TreeObject.SYNCHRONIZATIONPLAN:
-	           		port.putSynchronizationPlan(new WSPutSynchronizationPlan((WSSynchronizationPlan)newWsObject));
-	           		break;   
-	          	case TreeObject.SERVICE_CONFIGURATION:
-	           		break;   
-	          	default:
-	           		MessageDialog.openError(this.editor.getSite().getShell(), "Error", "Unknown "+IConstants.TALEND+" Object Type: "+xobject.getType());
-	           		return;
-            }//switch
-            
-            //notify listeners that the data has been persisted
+    // private TreeObject initialXObject = null;
+    int state = -1; // 0: success 1:failed
+
+    public SaveXObjectAction(XObjectEditor editor) {
+        super();
+        this.editor = editor;
+        // this.initialXObject = initialXObject;
+        setImageDescriptor(ImageCache.getImage(EImage.SAVE_EDIT.getPath()));
+    }
+
+    public void run() {
+        try {
+
+            TreeObject xobject = (TreeObject) ((XObjectEditorInput) editor.getEditorInput()).getModel();
+            Object newWsObject = xobject.getWsObject();
+
+            if (!xobject.isXObject())
+                return;
+
+            // Access to server and get port
+            XtentisPort port = Util.getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(), xobject.getUsername(),
+                    xobject.getPassword());
+
+            switch (xobject.getType()) {
+
+            case TreeObject.DATA_MODEL:
+                port.putDataModel(new WSPutDataModel((WSDataModel) newWsObject));
+                RoleAssignmentDialog.doSave(port, ((WSDataModel) newWsObject).getName(), "Data Model");//$NON-NLS-1$ 
+                break;
+            case TreeObject.VIEW:
+                port.putView(new WSPutView((WSView) newWsObject));
+                break;
+            case TreeObject.DATA_CLUSTER:
+                port.putDataCluster(new WSPutDataCluster((WSDataCluster) newWsObject));
+                RoleAssignmentDialog.doSave(port, ((WSDataCluster) newWsObject).getName(), "Data Cluster");//$NON-NLS-1$ 
+                break;
+            case TreeObject.STORED_PROCEDURE:
+                port.putStoredProcedure(new WSPutStoredProcedure((WSStoredProcedure) newWsObject));
+                break;
+            case TreeObject.ROLE:
+                port.putRole(new WSPutRole((WSRole) newWsObject));
+                break;
+            case TreeObject.ROUTING_RULE:
+                port.putRoutingRule(new WSPutRoutingRule((WSRoutingRule) newWsObject));
+                break;
+            case TreeObject.TRANSFORMER:
+                port.putTransformerV2(new WSPutTransformerV2((WSTransformerV2) newWsObject));
+                break;
+            case TreeObject.MENU:
+                port.putMenu(new WSPutMenu((WSMenu) newWsObject));
+                break;
+            case TreeObject.UNIVERSE:
+                port.putUniverse(new WSPutUniverse((WSUniverse) newWsObject));
+                break;
+
+            case TreeObject.SYNCHRONIZATIONPLAN:
+                port.putSynchronizationPlan(new WSPutSynchronizationPlan((WSSynchronizationPlan) newWsObject));
+                break;
+            case TreeObject.SERVICE_CONFIGURATION:
+                break;
+            default:
+                MessageDialog.openError(this.editor.getSite().getShell(), "Error", "Unknown " + IConstants.TALEND
+                        + " Object Type: " + xobject.getType());
+                return;
+            }// switch
+
+            // notify listeners that the data has been persisted
             if (xobject.getParent() == null) {
-            	//add the item to the tree
-            	if (xobject.getType() != TreeObject.DOCUMENT) {
-            		TreeParent folder = xobject.findServerFolder(xobject.getType());
-            		folder.addChild(xobject);
-            	}
-            	xobject.fireEvent(IXObjectModelListener.SAVE, xobject.getParent(), xobject);
-                //new object notify the server root that it needs a refresh (actually not needed for this but a good time to do it)
-                //xobject.getServerRoot().fireEvent(IXObjectModelListener.NEED_REFRESH, null, xobject.getServerRoot());
+                // add the item to the tree
+                if (xobject.getType() != TreeObject.DOCUMENT) {
+                    TreeParent folder = xobject.findServerFolder(xobject.getType());
+                    folder.addChild(xobject);
+                }
+                xobject.fireEvent(IXObjectModelListener.SAVE, xobject.getParent(), xobject);
+                // new object notify the server root that it needs a refresh (actually not needed for this but a good
+                // time to do it)
+                // xobject.getServerRoot().fireEvent(IXObjectModelListener.NEED_REFRESH, null, xobject.getServerRoot());
             } else {
-                //existing object saved
+                // existing object saved
                 xobject.fireEvent(IXObjectModelListener.SAVE, xobject.getParent(), xobject);
             }
-            state=0;
+            state = 0;
 
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-			ErrorExceptionDialog.openError(
-					this.editor.getSite().getShell(), 
-					"Error Occured on Saving", 
-					CommonUtil.getErrMsgFromException(e)
-					);
-			state=1;
-		}		
-	}
-	public int getState() {
-		return state;
-	}
+        } catch (Exception e) {
 
-	public void runWithEvent(Event event) {
-		super.runWithEvent(event);
-	}
+            // e.printStackTrace();
+            log.error(e.getStackTrace());
+            ErrorExceptionDialog.openError(this.editor.getSite().getShell(), "Error Occured on Saving",
+                    CommonUtil.getErrMsgFromException(e));
+            state = 1;
+        }
+    }
 
-	
+    public int getState() {
+        return state;
+    }
 
-	/***************************************
-	 * Uploading of the document and save
-	 * 
-	 ***************************************/
-	
+    public void runWithEvent(Event event) {
+        super.runWithEvent(event);
+    }
 
+    /***************************************
+     * Uploading of the document and save
+     * 
+     ***************************************/
 
 }

@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import java.util.List;
@@ -22,88 +34,86 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 
-public class XSDNewXPathAction extends UndoAction{
+public class XSDNewXPathAction extends UndoAction {
 
-	private XSDIdentityConstraintDefinition icd = null;
-	
-	public XSDNewXPathAction(DataModelMainPage page) {
-		super(page);
-		setImageDescriptor(ImageCache.getImage(EImage.ADD_NEWXPATH.getPath()));
-		setText("New Field");
-		setToolTipText("Create a new Field");
-	}
-	
-	public IStatus doAction() {
-		try {
+    private XSDIdentityConstraintDefinition icd = null;
+
+    public XSDNewXPathAction(DataModelMainPage page) {
+        super(page);
+        setImageDescriptor(ImageCache.getImage(EImage.ADD_NEWXPATH.getPath()));
+        setText("New Field");
+        setToolTipText("Create a new Field");
+    }
+
+    public IStatus doAction() {
+        try {
             int index = 0;
-            IStructuredSelection selection = (IStructuredSelection)page.getTreeViewer().getSelection();
+            IStructuredSelection selection = (IStructuredSelection) page.getTreeViewer().getSelection();
             if (selection.getFirstElement() instanceof XSDIdentityConstraintDefinition) {
-            	icd = (XSDIdentityConstraintDefinition) selection.getFirstElement();
+                icd = (XSDIdentityConstraintDefinition) selection.getFirstElement();
             } else if (selection.getFirstElement() instanceof XSDXPathDefinition) {
-            	XSDXPathDefinition xpath = (XSDXPathDefinition)selection.getFirstElement();
-            	icd = (XSDIdentityConstraintDefinition)xpath.getContainer();
-            	if (xpath.getVariety().equals(XSDXPathVariety.FIELD_LITERAL))
-            		index = icd.getFields().indexOf(xpath)+1;
-            	else
-            		index = 0;
+                XSDXPathDefinition xpath = (XSDXPathDefinition) selection.getFirstElement();
+                icd = (XSDIdentityConstraintDefinition) xpath.getContainer();
+                if (xpath.getVariety().equals(XSDXPathVariety.FIELD_LITERAL))
+                    index = icd.getFields().indexOf(xpath) + 1;
+                else
+                    index = 0;
             } else {
-            	MessageDialog.openError(this.page.getSite().getShell(),"Error", "huhhh: "+selection.getFirstElement().getClass().getName());
+                MessageDialog.openError(this.page.getSite().getShell(), "Error", "huhhh: "
+                        + selection.getFirstElement().getClass().getName());
                 return Status.CANCEL_STATUS;
             }
-            
-//       		InputDialog id = new InputDialog(
-//       				page.getSite().getShell(),
-//       				"New XPath",
-//       				"Enter a new XPath to the field",
-//       				null,
-//       				new IInputValidator() {
-//       					public String isValid(String newText) {
-//       						if ((newText==null) || "".equals(newText)) return "The XPath cannot be empty";
-//       						return null;
-//       					};
-//       				}
-//       		);
-            
-            List<String> childNames = Util.getChildElementNames("",(XSDElementDeclaration)icd.getContainer());
-            SelectFieldDialog id=new SelectFieldDialog(page.getSite().getShell(),"Select one field",childNames,null);
-            id.create();            
-       		id.setBlockOnOpen(true);
-       		int ret = id.open();
-       		if (ret == Dialog.CANCEL) {
-				return Status.CANCEL_STATUS;
-			}
-       		String field=id.getField();
-       		if(field.length()==0) return Status.CANCEL_STATUS;;
-       		XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
-       		
-       		XSDXPathDefinition xpath = factory.createXSDXPathDefinition();
-       		xpath.setValue(field);
-       		xpath.setVariety(XSDXPathVariety.FIELD_LITERAL);
-       		
-       		icd.getFields().add(index,xpath);
-       		icd.updateElement();
-       		
-       		page.refresh();
-       		page.getTreeViewer().setSelection(new StructuredSelection(xpath),true);
-       		page.markDirty();
-       
-		} catch (Exception e) {
-			e.printStackTrace();
-			MessageDialog.openError(
-					page.getSite().getShell(),
-					"Error", 
-					"An error occured trying to create a new Field: "+e.getLocalizedMessage()
-			);
-            return Status.CANCEL_STATUS;
-		}
-		
-        return Status.OK_STATUS;
-	}
-	
-	public void runWithEvent(Event event) {
-		super.runWithEvent(event);
-	}
-	
 
+            // InputDialog id = new InputDialog(
+            // page.getSite().getShell(),
+            // "New XPath",
+            // "Enter a new XPath to the field",
+            // null,
+            // new IInputValidator() {
+            // public String isValid(String newText) {
+            // if ((newText==null) || "".equals(newText)) return "The XPath cannot be empty";
+            // return null;
+            // };
+            // }
+            // );
+
+            List<String> childNames = Util.getChildElementNames("", (XSDElementDeclaration) icd.getContainer());
+            SelectFieldDialog id = new SelectFieldDialog(page.getSite().getShell(), "Select one field", childNames, null);
+            id.create();
+            id.setBlockOnOpen(true);
+            int ret = id.open();
+            if (ret == Dialog.CANCEL) {
+                return Status.CANCEL_STATUS;
+            }
+            String field = id.getField();
+            if (field.length() == 0)
+                return Status.CANCEL_STATUS;
+            ;
+            XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
+
+            XSDXPathDefinition xpath = factory.createXSDXPathDefinition();
+            xpath.setValue(field);
+            xpath.setVariety(XSDXPathVariety.FIELD_LITERAL);
+
+            icd.getFields().add(index, xpath);
+            icd.updateElement();
+
+            page.refresh();
+            page.getTreeViewer().setSelection(new StructuredSelection(xpath), true);
+            page.markDirty();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            MessageDialog.openError(page.getSite().getShell(), "Error",
+                    "An error occured trying to create a new Field: " + e.getLocalizedMessage());
+            return Status.CANCEL_STATUS;
+        }
+
+        return Status.OK_STATUS;
+    }
+
+    public void runWithEvent(Event event) {
+        super.runWithEvent(event);
+    }
 
 }
