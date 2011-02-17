@@ -173,15 +173,30 @@ public class IdentityConstraintInputDialog extends Dialog {
 
     protected void okPressed() {
         // keyName = keyNameText.getText();
-        fieldName = fieldNameCombo.getText();
-        keyName = keyNameText.getText();
+        fieldName = fieldNameCombo.getText().trim();
+        keyName = keyNameText.getText().trim();
         if ((keyName == null) || ("".equals(keyName))) {
-            MessageDialog.openError(this.getShell(), "Error", "The Key Name cannot be empty");
+            MessageDialog.openError(this.getShell(), "Error", "The Key name cannot be empty");
             setReturnCode(-1);
             keyNameText.setFocus();
             // fieldNameCombo.setFocus();
             return;
         }
+
+        if (keyName.replaceAll("\\s", "").length() != keyName.length()) {
+            MessageDialog.openError(this.getShell(), "Error", "The Key name cannot contain the empty characters");
+            setReturnCode(-1);
+            keyNameText.setFocus();
+            return;
+        }
+
+        if (fieldName.replaceAll("\\s", "").length() != fieldName.length()) {
+            MessageDialog.openError(this.getShell(), "Error", "The field name cannot contain the empty characters");
+            setReturnCode(-1);
+            fieldNameCombo.setFocus();
+            return;
+        }
+
         // if ((fieldName==null) || ("".equals(fieldName))) {
         // MessageDialog.openError(
         // this.getShell(),

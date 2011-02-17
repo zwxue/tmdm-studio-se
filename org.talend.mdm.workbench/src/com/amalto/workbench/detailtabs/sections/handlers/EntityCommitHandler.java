@@ -23,9 +23,13 @@ public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
 
     private static final String ERR_ENTITY_NULLENTITYNAME = "Entity name can not be empty";
 
+    private static final String ERR_ENTITY_CONTAINEMPTY = "Entity name can not contain the empty characters";
+
     private static final String ERR_ENTITY_DULPLICATEENTITYNAME = "Entity name has been existed";
 
     private static final String ERR_KEY_NULLKEYNAME = "Key name can not be empty";
+
+    private static final String ERR_KEY_CONTAINEMPTY = "Key name can not contain the empty characters";
 
     private static final String ERR_KEY_DUPLICATEKEYNAME = "Key name has been existed";
 
@@ -276,6 +280,9 @@ public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
             throw new CommitValidationException(ERR_ENTITY_NULLENTITYNAME);
         }
 
+        if (getCommitedObj().getName().replaceAll("\\s", "").length() != getCommitedObj().getName().length())
+            throw new CommitValidationException(ERR_ENTITY_CONTAINEMPTY);
+
         for (XSDElementDeclaration eachElement : getCommitedObj().getSchema().getElementDeclarations()) {
 
             if (eachElement.equals(getCommitedObj().getSourceEntity()))
@@ -345,6 +352,10 @@ public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
 
         if (checkedKeyWrapper.getName() == null || "".equals(checkedKeyWrapper.getName().trim())) {
             throw new CommitValidationException(ERR_KEY_NULLKEYNAME);
+        }
+
+        if (checkedKeyWrapper.getName().replaceAll("\\s", "").length() != checkedKeyWrapper.getName().length()) {
+            throw new CommitValidationException(ERR_KEY_CONTAINEMPTY);
         }
 
         for (XSDIdentityConstraintDefinition eachId : getCommitedObj().getSchema().getIdentityConstraintDefinitions()) {

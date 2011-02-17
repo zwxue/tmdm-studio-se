@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -18,8 +16,16 @@ import org.dom4j.io.XMLWriter;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -31,320 +37,356 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import sun.security.util.Password;
-
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
+import com.amalto.workbench.providers.ListContentProvider;
+import com.amalto.workbench.utils.MDMServerDef;
 import com.amalto.workbench.utils.PasswordUtil;
+import com.amalto.workbench.utils.PreferenceMDMServerExtractor;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSUniversePK;
 
 public class LoginDialog extends Dialog {
-	
-//	private static String f = System.getProperty("user.dir")+"/.mdmworkbench.conf";
-//	private static String f = System.getProperty("user.dir")+"/mdm_workbench_config.xml";
-	private static String f = Platform.getInstanceLocation().getURL().getPath()+"/mdm_workbench_config.xml"; 
 
-	private Collection<String> endpoints;
+    // private static String f = System.getProperty("user.dir")+"/.mdmworkbench.conf";
+    // private static String f = System.getProperty("user.dir")+"/mdm_workbench_config.xml";
+    private static String f = Platform.getInstanceLocation().getURL().getPath() + "/mdm_workbench_config.xml";
 
-//	private Collection<String> universes;
+    // private Collection<String> endpoints;
 
-	private Combo endpointsCombo=null;
-	private Text userText=null;
-	private Text passwordText=null;
-	private Button savePasswordButton;
-	private SelectionListener caller = null;
-	private String title = "";
+    // private Collection<String> universes;
 
-	private Combo universeCombo;
-	private Group authenticationGroup;
+    private ComboViewer endpointsCombo = null;
 
-	private Document logininfoDocument;
-	private List<WSUniversePK> universes;
+    private Text userText = null;
 
+    private Text passwordText = null;
 
-	/**
-	 * @param parentShell
-	 */
-	public LoginDialog(SelectionListener caller, Shell parentShell, String title,List<WSUniversePK> universes) {
-		super(parentShell);
-		this.caller = caller;
-		this.title = title;
-		this.universes=universes;
-		setDefaultImage(ImageCache.getCreatedImage(EImage.TALEND_PICTO.getPath()));
-	}
+    private Button savePasswordButton;
 
+    private SelectionListener caller = null;
 
-	protected Control createDialogArea(Composite parent) {
-		//this dialog is just used to crate a new server,so there is no need to initiate any information.
-/*		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder;
+    private String title = "";
 
-				try {
-					builder = factory.newDocumentBuilder();
-						logininfoDocument = builder.parse(new File(f));
-					} catch (SAXException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					} catch (ParserConfigurationException e) {
-					e.printStackTrace();
-				}*/
-//					if(logininfoDocument!=null)
-//					for (int i = 0; i < logininfoDocument.getChildNodes().getLength(); i++) {
-//						logininfoDocument.getChildNodes().item(i)
-//					}	
-					
-		endpoints = Arrays.asList(new String[]{Util.default_endpoint_address});
-/*		try {
-			properties.loadFromXML(new FileInputStream(f));
-			if (properties.getProperty("url")!=null)	 
-				endpoints=Arrays.asList(properties.getProperty("url").split(","));
-		} catch (Exception e) {}
+    private Combo universeCombo;
 
-		universes = Arrays.asList(new String[]{""});
-		try {
-			properties.load(new FileInputStream(f));
-			if (properties.getProperty("universes")!=null)	 
-				universes=Arrays.asList(properties.getProperty("universes").split(","));
-		} catch (Exception e) {}
-		*/
-		//Should not really be here but well,....
-		parent.getShell().setText(this.title);
-		
-		Composite composite = (Composite) super.createDialogArea(parent);
-		
-		GridLayout layout = (GridLayout)composite.getLayout();
-		layout.numColumns = 2;
-		//layout.verticalSpacing = 10;
-		
-		Label endpointsLabel = new Label(composite, SWT.NONE);
-		endpointsLabel.setLayoutData(
-				new GridData(SWT.FILL,SWT.CENTER,true,false,1,1)
-		);
-		endpointsLabel.setText("Server");
+    private Group authenticationGroup;
 
-		endpointsCombo = new Combo(composite, SWT.NONE);
-		endpointsCombo.setLayoutData(
-			new GridData(SWT.FILL,SWT.CENTER,true,false,1,1)
-		);
-		((GridData)endpointsCombo.getLayoutData()).widthHint = 400;
-		for (Iterator<String> iter = endpoints.iterator(); iter.hasNext(); ) {
-			String host = iter.next();
-			endpointsCombo.add(host);	
-		}
-		endpointsCombo.select(0);
-		
-		authenticationGroup=new Group(composite, SWT.NONE);
-		authenticationGroup.setVisible(true);
-		authenticationGroup.setText("Authentication");
-		authenticationGroup.setLayoutData(
-				new GridData(SWT.FILL,SWT.CENTER,true,false,2,1)
-			);
-		authenticationGroup.setLayout(new GridLayout(2,false));
-		
-		Label usernameLabel = new Label(authenticationGroup, SWT.NONE);
-		usernameLabel.setLayoutData(
-			new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
-		);
-		usernameLabel.setText("Username");
+    private Document logininfoDocument;
 
-		userText = new Text(authenticationGroup, SWT.BORDER);
-		userText.setLayoutData(
-			new GridData(SWT.FILL,SWT.CENTER,true,false,1,1)
-		);
-		userText.setDoubleClickEnabled(false);
+    private List<WSUniversePK> universes;
 
-		Label passwordLabel = new Label(authenticationGroup, SWT.NONE);
-		passwordLabel.setLayoutData(
-			new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
-		);
-		passwordLabel.setText("Password");
+    /**
+     * @param parentShell
+     */
+    public LoginDialog(SelectionListener caller, Shell parentShell, String title, List<WSUniversePK> universes) {
+        super(parentShell);
+        this.caller = caller;
+        this.title = title;
+        this.universes = universes;
+        setDefaultImage(ImageCache.getCreatedImage(EImage.TALEND_PICTO.getPath()));
+    }
 
-		passwordText = new Text(authenticationGroup, SWT.PASSWORD|SWT.BORDER);
-		passwordText.setLayoutData(
-			new GridData(SWT.FILL,SWT.CENTER,true,false,1,1)
-		);
-		
-		//check Enterprise
-		if(Util.IsEnterPrise()){
-		//universe
-		Label universeLabel = new Label(composite, SWT.NONE);
-		universeLabel.setLayoutData(
-			new GridData(SWT.FILL,SWT.CENTER,false,false,1,1)
-		);
-		universeLabel.setText("Version");
-			universeCombo = new Combo(composite, SWT.NONE);
-			universeCombo.setLayoutData(
-				new GridData(SWT.FILL,SWT.CENTER,true,false,1,1)
-			);
-			((GridData)universeCombo.getLayoutData()).widthHint = 300;
-			if(universes!=null){
-	    		java.util.List<String> hostList=new ArrayList<String>();
-			for (int i = 0; i < universes.size(); i++) {
-				String host = universes.get(i).getPk();
-				if (!hostList.contains(host)) {
-					universeCombo.add(host);	
-					hostList.add(host);
-				}
-				}
-			}
-//			universeCombo.select(0);
-		}
-		
-		savePasswordButton = new Button(composite, SWT.CHECK);
-		savePasswordButton.setText("Save this MDM Server Location");
-		savePasswordButton.setLayoutData(
-				new GridData(SWT.FILL,SWT.CENTER,true,false,2,1)
-		);
-		
-	   return composite;
-	}
+    protected Control createDialogArea(Composite parent) {
+        // this dialog is just used to crate a new server,so there is no need to initiate any information.
+        /*
+         * DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(); DocumentBuilder builder;
+         * 
+         * try { builder = factory.newDocumentBuilder(); logininfoDocument = builder.parse(new File(f)); } catch
+         * (SAXException e) { e.printStackTrace(); } catch (IOException e) { e.printStackTrace(); } catch
+         * (ParserConfigurationException e) { e.printStackTrace(); }
+         */
+        // if(logininfoDocument!=null)
+        // for (int i = 0; i < logininfoDocument.getChildNodes().getLength(); i++) {
+        // logininfoDocument.getChildNodes().item(i)
+        // }
 
-	
-	protected void createButtonsForButtonBar(Composite parent) {
-		super.createButtonsForButtonBar(parent);
-		getButton(IDialogConstants.OK_ID).addSelectionListener(this.caller);
-		/*
-	       createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-	                true);
-	        createButton(parent, IDialogConstants.CANCEL_ID,
-	                IDialogConstants.CANCEL_LABEL, false);
-	  */
-	}
-	
-	protected void okPressed() {
-		boolean isExist=false;
-		//save hosts
-/*			String currentHost = endpointsCombo.getText();
-			String endpointsString = currentHost;
-			int i =0;
-			for (Iterator<String> iter = endpoints.iterator(); iter.hasNext(); ) {
-				String endpoint = iter.next();
-				if (! endpoint.equals(currentHost)) endpointsString+=","+endpoint;
-				if (++i == 10) break;
-			}*/
-		
-	    SAXReader reader = new SAXReader();
-	    Element root =null;
-	    if(new File(f).exists()){
-	    	try {
-				logininfoDocument = reader.read(new File(f));
-			} catch (DocumentException e) {
-				e.printStackTrace();
-			}
-	    	root=logininfoDocument.getRootElement();
-	    	isExist=checkServer(root);
-	    }
-	    else{
-	    	logininfoDocument = DocumentHelper.createDocument();
-	    	root=logininfoDocument.addElement("MDMServer");
-	    }
-	    
-	    	if(!isExist)
-	    		addServer(root);
+        // endpoints = Arrays.asList(new String[]{Util.default_endpoint_address});
+        // endpoints = Arrays.asList(getInitMDMServers());
+        /*
+         * try { properties.loadFromXML(new FileInputStream(f)); if (properties.getProperty("url")!=null)
+         * endpoints=Arrays.asList(properties.getProperty("url").split(",")); } catch (Exception e) {}
+         * 
+         * universes = Arrays.asList(new String[]{""}); try { properties.load(new FileInputStream(f)); if
+         * (properties.getProperty("universes")!=null)
+         * universes=Arrays.asList(properties.getProperty("universes").split(",")); } catch (Exception e) {}
+         */
+        // Should not really be here but well,....
+        parent.getShell().setText(this.title);
 
-	    	
-	    	XMLWriter writer;
-			try {
-				writer = new XMLWriter(new FileWriter(f));
-				writer.write(logininfoDocument);
-				writer.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-	    	
-			
-			
-/*			properties.setProperty("endpoints", endpointsString);
-			//save universe
-			String currentUniverse = universeCombo.getText();
-			String universeString = currentUniverse;
-			i =0;
-			for (Iterator<String> iter = universes.iterator(); iter.hasNext(); ) {
-				String universe = iter.next();
-				if (! universe.equals(currentUniverse)) universeString+=","+universe;
-				if (++i == 5) break;
-			}
-			properties.setProperty("universes", universeString);
-			if(savePasswordButton.getSelection()==true){
-				properties.setProperty("user", usernameText.getText());
-				properties.setProperty("password", passwordText.getText());
-			}
-		   FileOutputStream fos =
-		        new FileOutputStream(f);
-			properties.storeToXML(fos, null);
-			fos.close();*/
-		
-		setReturnCode(OK);
-		//no close let Action Handler handle it
-	}
-	
-private boolean checkServer(Element root) {
-	List properties = root.elements("properties");
-	for (Iterator iterator = properties.iterator(); iterator.hasNext();) {
-		Element ele = (Element) iterator.next();
-		if (ele.element("url").getText().equals(endpointsCombo.getText())
-				&& ele.element("user").getText().equals(userText.getText())
-				&& ele.element("password").getText().equals(passwordText.getText())
-				&& ele.element("universe").getText().equals(
-						universeCombo.getText()))
-				return true;
-	}
-	return false;
-	}
+        Composite composite = (Composite) super.createDialogArea(parent);
 
+        GridLayout layout = (GridLayout) composite.getLayout();
+        layout.numColumns = 2;
+        // layout.verticalSpacing = 10;
 
-private void addServer(Element root) {
-	Element prop = root.addElement("properties");
-	
-	Element url = prop.addElement("url");
-	Element user = prop.addElement("user");
-	Element password = prop.addElement("password");
-	Element universe = prop.addElement("universe");
+        Label endpointsLabel = new Label(composite, SWT.NONE);
+        endpointsLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        endpointsLabel.setText("Server");
 
-	url.setText(endpointsCombo.getText());
-	user.setText(userText.getText());
-	if(savePasswordButton.getSelection()==true)
-		password.setText(PasswordUtil.encryptPassword(passwordText.getText()));
-	else
-		root.remove(prop);
-	if(Util.IsEnterPrise())
-		universe.setText(universeCombo.getText());		
-	}
+        endpointsCombo = new ComboViewer(composite, SWT.NONE);
+        endpointsCombo.setContentProvider(new ListContentProvider());
+        endpointsCombo.setLabelProvider(new MDMServerLabelProvider());
+        endpointsCombo.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        ((GridData) endpointsCombo.getCombo().getLayoutData()).widthHint = 400;
+        // for (Iterator<String> iter = endpoints.iterator(); iter.hasNext();) {
+        // String host = iter.next();
+        // endpointsCombo.add(host);
+        // }
+        // endpointsCombo.select(0);
+        MDMServerDef[] serverDefs = getInitMDMServers();
+        endpointsCombo.setInput(serverDefs);
 
+        authenticationGroup = new Group(composite, SWT.NONE);
+        authenticationGroup.setVisible(true);
+        authenticationGroup.setText("Authentication");
+        authenticationGroup.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+        authenticationGroup.setLayout(new GridLayout(2, false));
 
-//	public Properties getProperties() {
-//		return properties;
-//	}
+        Label usernameLabel = new Label(authenticationGroup, SWT.NONE);
+        usernameLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+        usernameLabel.setText("Username");
 
+        userText = new Text(authenticationGroup, SWT.BORDER);
+        userText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        userText.setDoubleClickEnabled(false);
 
-	public void saveUserTypes(){
-		
-	}
-	
+        Label passwordLabel = new Label(authenticationGroup, SWT.NONE);
+        passwordLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+        passwordLabel.setText("Password");
 
-	public String getPasswordText() {
-		return passwordText.getText().trim();
-	}
+        passwordText = new Text(authenticationGroup, SWT.PASSWORD | SWT.BORDER);
+        passwordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
+        // check Enterprise
+        if (Util.IsEnterPrise()) {
+            // universe
+            Label universeLabel = new Label(composite, SWT.NONE);
+            universeLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+            universeLabel.setText("Version");
+            universeCombo = new Combo(composite, SWT.NONE);
+            universeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+            ((GridData) universeCombo.getLayoutData()).widthHint = 300;
+            if (universes != null) {
+                java.util.List<String> hostList = new ArrayList<String>();
+                for (int i = 0; i < universes.size(); i++) {
+                    String host = universes.get(i).getPk();
+                    if (!hostList.contains(host)) {
+                        universeCombo.add(host);
+                        hostList.add(host);
+                    }
+                }
+            }
+            // universeCombo.select(0);
+        }
 
-	public String getUsernameText() {
-		return userText.getText().trim();
-	}
-	
-	public String getServer() {
-		return endpointsCombo.getText().trim();
-	}
+        savePasswordButton = new Button(composite, SWT.CHECK);
+        savePasswordButton.setText("Save this MDM Server Location");
+        savePasswordButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 
-	public String getUniverse() {
-		if(Util.IsEnterPrise()){
-			return universeCombo.getText().trim();
-		}
-		else{
-			return "";
-		}			
-	}
+        endpointsCombo.addSelectionChangedListener(new ISelectionChangedListener() {
 
+            public void selectionChanged(SelectionChangedEvent arg0) {
+                onSelectMDMServer();
+
+            }
+        });
+        endpointsCombo.setSelection(new StructuredSelection(serverDefs[0]));
+
+        return composite;
+    }
+
+    protected void createButtonsForButtonBar(Composite parent) {
+        super.createButtonsForButtonBar(parent);
+        getButton(IDialogConstants.OK_ID).addSelectionListener(this.caller);
+        /*
+         * createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true); createButton(parent,
+         * IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
+         */
+    }
+
+    protected void okPressed() {
+        boolean isExist = false;
+        // save hosts
+        /*
+         * String currentHost = endpointsCombo.getText(); String endpointsString = currentHost; int i =0; for
+         * (Iterator<String> iter = endpoints.iterator(); iter.hasNext(); ) { String endpoint = iter.next(); if (!
+         * endpoint.equals(currentHost)) endpointsString+=","+endpoint; if (++i == 10) break; }
+         */
+
+        SAXReader reader = new SAXReader();
+        Element root = null;
+        if (new File(f).exists()) {
+            try {
+                logininfoDocument = reader.read(new File(f));
+            } catch (DocumentException e) {
+                e.printStackTrace();
+            }
+            root = logininfoDocument.getRootElement();
+            isExist = checkServer(root);
+        } else {
+            logininfoDocument = DocumentHelper.createDocument();
+            root = logininfoDocument.addElement("MDMServer");
+        }
+
+        if (!isExist)
+            addServer(root);
+
+        XMLWriter writer;
+        try {
+            writer = new XMLWriter(new FileWriter(f));
+            writer.write(logininfoDocument);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        /*
+         * properties.setProperty("endpoints", endpointsString); //save universe String currentUniverse =
+         * universeCombo.getText(); String universeString = currentUniverse; i =0; for (Iterator<String> iter =
+         * universes.iterator(); iter.hasNext(); ) { String universe = iter.next(); if (!
+         * universe.equals(currentUniverse)) universeString+=","+universe; if (++i == 5) break; }
+         * properties.setProperty("universes", universeString); if(savePasswordButton.getSelection()==true){
+         * properties.setProperty("user", usernameText.getText()); properties.setProperty("password",
+         * passwordText.getText()); } FileOutputStream fos = new FileOutputStream(f); properties.storeToXML(fos, null);
+         * fos.close();
+         */
+
+        setReturnCode(OK);
+        // no close let Action Handler handle it
+    }
+
+    private boolean checkServer(Element root) {
+        List properties = root.elements("properties");
+        for (Iterator iterator = properties.iterator(); iterator.hasNext();) {
+            Element ele = (Element) iterator.next();
+
+            if (ele.element("url").getText().equals(endpointsCombo.getCombo().getText().trim())
+                    && ele.element("user").getText().equals(userText.getText())
+                    && ele.element("password").getText().equals(passwordText.getText())
+                    && ele.element("universe").getText().equals(universeCombo.getText()))
+                return true;
+        }
+        return false;
+    }
+
+    private void addServer(Element root) {
+        Element prop = root.addElement("properties");
+
+        Element url = prop.addElement("url");
+        Element user = prop.addElement("user");
+        Element password = prop.addElement("password");
+        Element universe = prop.addElement("universe");
+
+        url.setText(endpointsCombo.getCombo().getText().trim());
+        user.setText(userText.getText());
+        if (savePasswordButton.getSelection() == true)
+            password.setText(PasswordUtil.encryptPassword(passwordText.getText()));
+        else
+            root.remove(prop);
+        if (Util.IsEnterPrise())
+            universe.setText(universeCombo.getText());
+    }
+
+    // public Properties getProperties() {
+    // return properties;
+    // }
+
+    public void saveUserTypes() {
+
+    }
+
+    public String getPasswordText() {
+        return passwordText.getText().trim();
+    }
+
+    public String getUsernameText() {
+        return userText.getText().trim();
+    }
+
+    public String getServer() {
+        return endpointsCombo.getCombo().getText().trim();
+    }
+
+    public String getUniverse() {
+        if (Util.IsEnterPrise()) {
+            return universeCombo.getText().trim();
+        } else {
+            return "";
+        }
+    }
+
+    private MDMServerDef[] getInitMDMServers() {
+
+        MDMServerDef[] servers = PreferenceMDMServerExtractor.getInstence().getMDMServerDefiniions();
+
+        MDMServerDef defaultMDMServerDef = new MDMServerDef();
+
+        if (servers.length == 0)
+            return new MDMServerDef[] { defaultMDMServerDef };
+
+        List<MDMServerDef> mdmServers = new ArrayList<MDMServerDef>();
+        for (MDMServerDef eachServerDef : servers) {
+
+            mdmServers.add(eachServerDef);
+
+            if (eachServerDef.getUrl().equals(defaultMDMServerDef.getUrl()))
+                defaultMDMServerDef = eachServerDef;
+
+        }
+
+        // move the default url to the first position
+        mdmServers.remove(defaultMDMServerDef);
+        mdmServers.add(0, defaultMDMServerDef);
+
+        return mdmServers.toArray(new MDMServerDef[0]);
+    }
+
+    private MDMServerDef getSelectedMDMServerDef() {
+
+        IStructuredSelection selection = (IStructuredSelection) endpointsCombo.getSelection();
+        if (selection.isEmpty())
+            return null;
+
+        return (MDMServerDef) selection.getFirstElement();
+    }
+
+    private void onSelectMDMServer() {
+
+        MDMServerDef selectedServer = getSelectedMDMServerDef();
+
+        endpointsCombo.getCombo().setToolTipText(selectedServer == null ? "" : selectedServer.getDesc());
+        userText.setText(selectedServer == null ? "" : selectedServer.getUser());
+        passwordText.setText(selectedServer == null ? "" : selectedServer.getPasswd());
+
+    }
+}
+
+class MDMServerLabelProvider implements ILabelProvider {
+
+    public void addListener(ILabelProviderListener element) {
+    }
+
+    public void dispose() {
+    }
+
+    public boolean isLabelProperty(Object element, String arg1) {
+        return false;
+    }
+
+    public void removeListener(ILabelProviderListener listener) {
+    }
+
+    public Image getImage(Object element) {
+        return null;
+    }
+
+    public String getText(Object element) {
+
+        if (!(element instanceof MDMServerDef))
+            return "";
+
+        return ((MDMServerDef) element).getUrl();
+    }
 
 }

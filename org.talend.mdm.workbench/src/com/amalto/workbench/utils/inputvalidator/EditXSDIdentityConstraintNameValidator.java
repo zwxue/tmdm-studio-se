@@ -1,5 +1,7 @@
 package com.amalto.workbench.utils.inputvalidator;
 
+import java.util.regex.Pattern;
+
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDIdentityConstraintCategory;
@@ -26,15 +28,19 @@ public class EditXSDIdentityConstraintNameValidator implements IInputValidator {
     public String isValid(String newText) {
 
         if ((newText == null) || "".equals(newText))
-            return "The Entity Name cannot be empty";
+            return "The unique key name cannot be empty";
+
+        if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()
+                || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())
+            return "The unique key name cannot contain the empty characters";
 
         if (XSDIdentityConstraintCategory.UNIQUE_LITERAL.equals(key.getIdentityConstraintCategory())
-                && !newText.equals(((XSDElementDeclaration) key.getContainer()).getName())) {
+                && !newText.trim().equals(((XSDElementDeclaration) key.getContainer()).getName())) {
             return "The unique key name must be equal to the name of it's parent entity";
         }
 
         for (XSDIdentityConstraintDefinition eachId : getSchema().getIdentityConstraintDefinitions()) {
-            if (eachId.getName().equals(newText))
+            if (eachId.getName().equals(newText.trim()))
                 return "This Key already exists";
         }
 

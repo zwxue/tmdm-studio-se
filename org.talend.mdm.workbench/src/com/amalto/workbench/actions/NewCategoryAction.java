@@ -49,6 +49,7 @@ public class NewCategoryAction extends Action {
                             m.group(1);
                             return "The name cannot contains invalid character!";
                         }
+
                         TreeObject[] childList = xfolder.getChildren();
                         for (TreeObject theObj : childList) {
                             if (theObj.getType() == TreeObject.CATEGORY_FOLDER) {

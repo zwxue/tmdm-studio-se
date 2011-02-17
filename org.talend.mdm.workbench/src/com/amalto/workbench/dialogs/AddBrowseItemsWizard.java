@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -302,21 +303,28 @@ public class AddBrowseItemsWizard extends Wizard {
 
                 public void modify(Object element, String property, Object value) {
                     TableItem item = (TableItem) element;
+
+                    if (Pattern.compile("^\\s+\\w+\\s*").matcher(value.toString()).matches()
+                            || value.toString().trim().replaceAll("\\s", "").length() != value.toString().trim().length()) {
+                        MessageDialog.openInformation(null, "Warnning", "The name cannot contain the empty characters");
+                        return;
+                    }
+
                     XSDElementDeclaration elem = (XSDElementDeclaration) item.getData();
-                    if (!(BROWSE_ITEMS + elem.getName()).equals(value.toString())) {
+                    if (!(BROWSE_ITEMS + elem.getName()).equals(value.toString().trim())) {
                         for (XSDElementDeclaration theElem : declList) {
                             if (theElem == elem)
                                 continue;
-                            if ((BROWSE_ITEMS + theElem.getName()).equals(value.toString())) {
+                            if ((BROWSE_ITEMS + theElem.getName()).equals(value.toString().trim())) {
                                 MessageDialog.openInformation(null, "Warnning", "The Browse Items name already exists");
                                 return;
                             }
                         }
                         List<Line> lines = browseItemToRoles.get(BROWSE_ITEMS + elem.getName());
                         browseItemToRoles.remove(BROWSE_ITEMS + elem.getName());
-                        int prex = value.toString().indexOf(BROWSE_ITEMS);
-                        elem.setName(value.toString().substring(prex + BROWSE_ITEMS.length()));
-                        browseItemToRoles.put(value.toString(), lines);
+                        int prex = value.toString().trim().indexOf(BROWSE_ITEMS);
+                        elem.setName(value.toString().trim().substring(prex + BROWSE_ITEMS.length()));
+                        browseItemToRoles.put(value.toString().trim(), lines);
                         refreshRoleView(BROWSE_ITEMS + elem.getName());
                         browseViewer.update(elem, null);
                     }
@@ -352,8 +360,8 @@ public class AddBrowseItemsWizard extends Wizard {
                 ComplexTableViewerColumn acsColumn = roleConfigurationColumns[1];
                 acsColumn.setColumnWidth(250);
                 acsColumn.setComboValues(new String[] { "Read Only", "Read & Write" });
-                complexTableViewer = new ComplexTableViewer(Arrays.asList(roleConfigurationColumns), WidgetFactory
-                        .getWidgetFactory(), composite);
+                complexTableViewer = new ComplexTableViewer(Arrays.asList(roleConfigurationColumns),
+                        WidgetFactory.getWidgetFactory(), composite);
                 complexTableViewer.setKeyColumns(new ComplexTableViewerColumn[] { roleConfigurationColumns[0] });
                 complexTableViewer.create();
                 complexTableViewer.getViewer().setInput(new ArrayList<Line>());

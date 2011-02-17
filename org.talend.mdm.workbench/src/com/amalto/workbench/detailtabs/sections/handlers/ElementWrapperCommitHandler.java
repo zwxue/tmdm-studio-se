@@ -128,6 +128,9 @@ public class ElementWrapperCommitHandler extends CommitHandler<ElementWrapper> {
                 && ((getCommitedObj().getNewReference() == null) || "".equals(getCommitedObj().getNewReference())))
             throw new CommitValidationException("The Business Element Name cannot be empty if the reference is empty");
 
+        if (getCommitedObj().getNewName().replaceAll("\\s", "").length() != getCommitedObj().getNewName().length())
+            throw new CommitValidationException("The Business Element Name cannot contain the empty characters");
+
         if (getCommitedObj().hasNewReference()
                 && (Util.findReference(getCommitedObj().getNewReference(), getCommitedObj().getSchema()) == null))
             throw new CommitValidationException("The Referenced Element " + getCommitedObj().getNewReference()
