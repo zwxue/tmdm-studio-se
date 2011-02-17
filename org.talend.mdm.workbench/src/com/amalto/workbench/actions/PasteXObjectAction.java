@@ -102,7 +102,7 @@ import com.amalto.workbench.webservices.XtentisPort;
 
 public class PasteXObjectAction extends Action {
 
-    private static Log log = LogFactory.getLog(PaseXObjectAction.class);
+    private static Log log = LogFactory.getLog(PasteXObjectAction.class);
 
     private ServerView view = null;
 

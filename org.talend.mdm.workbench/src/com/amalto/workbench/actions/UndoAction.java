@@ -39,7 +39,7 @@ import com.amalto.workbench.utils.Util;
 
 public class UndoAction extends Action {
 
-    private static Log log = LogFactory.getLog(UndoAction);
+    private static Log log = LogFactory.getLog(UndoAction.class);
 
     protected DataModelMainPage page;
 
