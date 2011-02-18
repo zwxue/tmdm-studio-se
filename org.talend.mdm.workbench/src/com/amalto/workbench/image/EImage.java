@@ -282,7 +282,8 @@ public enum EImage {
     UPDATEREPORT("icons/updatereport.png"),
     WORKFLOWTASKS("icons/workflowtasks.png"),
     SORT_ASC("icons/hmenu-asc.gif"),
-    SORT_DESC("icons/hmenu-desc.gif");
+    SORT_DESC("icons/hmenu-desc.gif"),
+    INTENT("icons/indent.png");
 
     EImage(String path) {
         this.path = path;

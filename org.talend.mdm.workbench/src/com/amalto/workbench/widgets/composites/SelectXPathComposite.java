@@ -162,7 +162,14 @@ public class SelectXPathComposite extends Composite {
 
             @Override
             public void mouseDown(MouseEvent e) {
-                comboDataModels.setItems(allDataModelHolder.getAllDataModelNames());
+
+                String old = comboDataModels.getText().trim();
+                String[] allModels = allDataModelHolder.getAllDataModelNames();
+
+                comboDataModels.setItems(allModels);
+
+                if (Arrays.asList(allModels).contains(old))
+                    comboDataModels.setText(old);
             }
 
         });

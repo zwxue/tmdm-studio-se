@@ -192,6 +192,8 @@ public class TransformerMainPage extends AMainPageV2 {
 
     private Section section;
 
+    private Button btnAutoIntent;
+
     java.util.List<Line> cacheList; // remember the setup transformerinputvariablesdialog's input list
 
     public TransformerMainPage(FormEditor editor) {
@@ -595,6 +597,19 @@ public class TransformerMainPage extends AMainPageV2 {
 
             stepWidget = new TransformerStepWidget(toolkit, specsComposite);
             stepWidget.create();
+
+            btnAutoIntent = new Button(specsComposite, SWT.TOGGLE);
+            btnAutoIntent.setImage(ImageCache.getCreatedImage(EImage.INTENT.getPath()));
+            btnAutoIntent.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 4, 1));
+            btnAutoIntent.addSelectionListener(new SelectionAdapter() {
+
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    onClickAutoIntentButton();
+                }
+
+            });
+
             Group parametersGroup = new Group(specsComposite, SWT.SHADOW_NONE);
             parametersGroup.setText("Parameters");
             parametersGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4, 1));
@@ -770,7 +785,12 @@ public class TransformerMainPage extends AMainPageV2 {
         // .getParameters())));
 
         refreshParameterEditor();
-        parameterEditor.setContent(XmlUtil.formatXmlSource(transformer.getProcessSteps()[index].getParameters()));
+
+        String content = transformer.getProcessSteps()[index].getParameters();
+        if (btnAutoIntent.getSelection())
+            content = XmlUtil.formatXmlSource(content);
+
+        parameterEditor.setContent(content);
 
         stepWidget.setProcessStep(transformer.getProcessSteps()[index], index);
         disabledButton.setSelection(transformer.getProcessSteps()[index].getDisabled());
@@ -1476,21 +1496,53 @@ public class TransformerMainPage extends AMainPageV2 {
 
     }
 
+    private void onClickAutoIntentButton() {
+
+        if (!btnAutoIntent.getSelection())
+            return;
+
+        String oldParameters = parameterEditor.getContent().getContent();
+
+        if (stepsList.getItemCount() > 0 && currentPlugin == -1) {
+            refreshStep(0);
+        } else {
+            refreshStep(currentPlugin);
+        }
+
+        if (!oldParameters.equals(parameterEditor.getContent().getContent()))
+            commitParameters(parameterEditor.getContent().getContent());
+    }
+
+    private void commitParameters(String parameter) {
+
+        if (refreshing)
+            return;
+        if (TransformerMainPage.this.stepsList.getSelectionIndex() == -1)
+            return;
+        // commit as we go
+        TransformerMainPage.this.comitting = true;
+        // ((WSTransformerV2)getXObject().getWsObject())
+        transformer.getProcessSteps()[stepsList.getSelectionIndex()].setParameters(parameter);
+        TransformerMainPage.this.comitting = false;
+        markDirtyWithoutCommit();
+
+    }
+
     class ProcessPluginParameterEditorListener implements ExtensibleContentEditorPageListener {
 
         public void onXMLDocumentChanged(ExtensibleContentEditorPage source, ExtensibleEditorContent newCotent) {
 
-            if (refreshing)
-                return;
-            if (TransformerMainPage.this.stepsList.getSelectionIndex() == -1)
-                return;
-            // commit as we go
-            TransformerMainPage.this.comitting = true;
-            // ((WSTransformerV2)getXObject().getWsObject())
-            transformer.getProcessSteps()[stepsList.getSelectionIndex()].setParameters(newCotent.getContent());
-            TransformerMainPage.this.comitting = false;
-            markDirtyWithoutCommit();
-
+            // if (refreshing)
+            // return;
+            // if (TransformerMainPage.this.stepsList.getSelectionIndex() == -1)
+            // return;
+            // // commit as we go
+            // TransformerMainPage.this.comitting = true;
+            // // ((WSTransformerV2)getXObject().getWsObject())
+            // transformer.getProcessSteps()[stepsList.getSelectionIndex()].setParameters(newCotent.getContent());
+            // TransformerMainPage.this.comitting = false;
+            // markDirtyWithoutCommit();
+            commitParameters(newCotent.getContent());
         }
 
     }
