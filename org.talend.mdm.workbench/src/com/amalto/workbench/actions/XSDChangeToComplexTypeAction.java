@@ -376,7 +376,6 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
             page.markDirty();
 
         } catch (Exception e) {
-            // e.printStackTrace();
             log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to change to Complex Type: " + e.getLocalizedMessage());

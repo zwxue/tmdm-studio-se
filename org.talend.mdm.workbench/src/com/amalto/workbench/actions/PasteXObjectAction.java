@@ -764,7 +764,6 @@ public class PasteXObjectAction extends Action {
                     }
                 }
             } catch (Exception e) {
-                // e.printStackTrace();
                 log.error(e.getStackTrace());
             }
 

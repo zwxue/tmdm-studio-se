@@ -73,10 +73,8 @@ public class RefreshXObjectAction extends Action {
             // RefreshXObjectAction.this.xobject.synchronizeWith();
             // ServerView.show().getViewer().refresh(xobject);
         } catch (InvocationTargetException e) {
-            // e.printStackTrace();
             log.error(e.getStackTrace());
         } catch (InterruptedException e) {
-            // e.printStackTrace();
             log.error(e.getStackTrace());
         }
     }

@@ -184,7 +184,6 @@ public class EditXObjectAction extends Action {
                     "com.amalto.workbench.editors.XObjectEditor"); //$NON-NLS-1$
 
         } catch (Exception e) {
-            // e.printStackTrace();
             log.error(e.getStackTrace());
             MessageDialog.openError(view.getSite().getShell(), "Error",
                     "An error occured trying to open the editor: " + e.getLocalizedMessage());

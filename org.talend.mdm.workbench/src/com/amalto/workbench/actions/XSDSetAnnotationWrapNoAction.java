@@ -15,6 +15,8 @@ package com.amalto.workbench.actions;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -42,6 +44,8 @@ import com.amalto.workbench.utils.XSDAnnotationsStructure;
  * @author liyanmei
  */
 public class XSDSetAnnotationWrapNoAction extends UndoAction {
+
+    private static Log log = LogFactory.getLog(XSDSetAnnotationWrapNoAction.class);
 
     protected AnnotationOrderedListsDialog dlg = null;
 
@@ -72,7 +76,7 @@ public class XSDSetAnnotationWrapNoAction extends UndoAction {
                 public void widgetSelected(SelectionEvent e) {
                     dlg.close();
                 }
-            }, page.getSite().getShell(), "Set The Roles That Cannot Access This Field", "Roles", page,
+            }, page.getSite().getShell(), "Set The Roles That Cannot Access This Field", "Roles", page,//$NON-NLS-2$
                     AnnotationOrderedListsDialog.AnnotationHidden_ActionType, dataModelName);
 
             dlg.setBlockOnOpen(true);
@@ -97,7 +101,7 @@ public class XSDSetAnnotationWrapNoAction extends UndoAction {
                 }
 
                 struc.setAccessRole(dlg.getXPaths(), dlg.getRecursive(), (IStructuredContentProvider) page.getTreeViewer()
-                        .getContentProvider(), "X_Hide");
+                        .getContentProvider(), "X_Hide");//$NON-NLS-1$
 
                 if (struc.hasChanged())
                     isChanged = true;
@@ -110,7 +114,7 @@ public class XSDSetAnnotationWrapNoAction extends UndoAction {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to set the No Access: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;

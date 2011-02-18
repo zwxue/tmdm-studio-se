@@ -14,6 +14,8 @@ package com.amalto.workbench.actions;
 
 import java.util.LinkedHashMap;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -40,6 +42,8 @@ import com.amalto.workbench.utils.XSDAnnotationsStructure;
  * bugID: 0009157
  */
 public class XSDSetFacetMessageAction extends UndoAction {
+
+    private static Log log = LogFactory.getLog(XSDSetFacetMessageAction.class);
 
     protected AnnotationLanguageLabelsDialog dlg = null;
 
@@ -97,7 +101,7 @@ public class XSDSetFacetMessageAction extends UndoAction {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to set a multilingual facet error messages: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;

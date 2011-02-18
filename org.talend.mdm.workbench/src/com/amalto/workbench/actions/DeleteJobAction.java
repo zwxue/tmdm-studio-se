@@ -15,6 +15,8 @@ package com.amalto.workbench.actions;
 import java.net.URL;
 import java.util.Iterator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
 import com.amalto.workbench.image.EImage;
@@ -23,6 +25,8 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
 
 public class DeleteJobAction extends AbstractAction {
+
+    private static Log log = LogFactory.getLog(DeleteJobAction.class);
 
     public DeleteJobAction() {
         super();
@@ -43,7 +47,7 @@ public class DeleteJobAction extends AbstractAction {
             try {
                 deleteJob(xobject);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getStackTrace());
             }
         }
 

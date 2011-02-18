@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
@@ -49,6 +51,8 @@ import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDPasteConceptAction extends UndoAction {
+
+    private static Log log = LogFactory.getLog(XSDPasteConceptAction.class);
 
     private DataModelMainPage page;
 
@@ -99,7 +103,7 @@ public class XSDPasteConceptAction extends UndoAction {
 
                         new_copy_concept = (XSDElementDeclaration) copy_concept.cloneConcreteComponent(true, false);
                         InputDialog id = new InputDialog(page.getSite().getShell(), "Copy Element",
-                                "Enter a new Name for the Element", "Copy_of_" + copy_concept.getName(), new IInputValidator() {
+                                "Enter a new Name for the Element", "Copy_of_" + copy_concept.getName(), new IInputValidator() {//$NON-NLS-2$
 
                                     public String isValid(String newText) {
                                         if ((newText == null) || "".equals(newText))
@@ -186,7 +190,7 @@ public class XSDPasteConceptAction extends UndoAction {
             } else
                 return Status.CANCEL_STATUS;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to Paste Entity: " + e.getLocalizedMessage());
 
@@ -327,8 +331,7 @@ public class XSDPasteConceptAction extends UndoAction {
                 struc.setAccessRole(lists, false, (IStructuredContentProvider) page.getTreeViewer().getContentProvider(),
                         (String) keys.toArray()[i]);
             } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                log.error(e.getStackTrace());
             }
         }
     }
@@ -380,7 +383,7 @@ public class XSDPasteConceptAction extends UndoAction {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getStackTrace());
             MessageDialog.openError(this.page.getSite().getShell(), "Error",
                     "An error occured trying to paste Entities: " + e.getLocalizedMessage());
         }

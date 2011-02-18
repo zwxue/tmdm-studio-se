@@ -14,6 +14,8 @@ package com.amalto.workbench.actions;
 
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.Dialog;
@@ -35,6 +37,8 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 
 public class XSDNewXPathAction extends UndoAction {
+
+    private static Log log = LogFactory.getLog(XSDNewXPathAction.class);
 
     private XSDIdentityConstraintDefinition icd = null;
 
@@ -103,7 +107,7 @@ public class XSDNewXPathAction extends UndoAction {
             page.markDirty();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to create a new Field: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;

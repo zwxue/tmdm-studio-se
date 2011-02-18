@@ -212,7 +212,6 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
             page.markDirty();
 
         } catch (Exception e) {
-            // e.printStackTrace();
             log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to change to Simple Type: " + e.getLocalizedMessage());

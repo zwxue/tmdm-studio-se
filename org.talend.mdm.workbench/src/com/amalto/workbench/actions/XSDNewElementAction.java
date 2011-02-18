@@ -75,7 +75,6 @@ public class XSDNewElementAction extends UndoAction implements SelectionListener
                 return Status.CANCEL_STATUS;
             }
         } catch (Exception e) {
-            // e.printStackTrace();
             log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to create a new Element: " + e.getLocalizedMessage());

@@ -12,6 +12,8 @@
 // ============================================================================
 package com.amalto.workbench.actions;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
@@ -35,6 +37,8 @@ import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDSetAnnotationForeignKeyAction extends UndoAction {
+
+    private static Log log = LogFactory.getLog(XSDSetAnnotationForeignKeyAction.class);
 
     protected SimpleXpathInputDialog sxid = null;
 
@@ -113,7 +117,7 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to set a Foreign Key: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;

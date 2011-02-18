@@ -81,7 +81,7 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
                 return Status.CANCEL_STATUS;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to create a new Entity: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;
@@ -103,13 +103,13 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
      * author: fliu .this fun is to support button click event invoked from the new expansion of Concept creation dialog
      */
     public void widgetSelected(SelectionEvent e) {
-        NewConceptOrElementDialog dlg = (NewConceptOrElementDialog) ((Widget) e.getSource()).getData("dialog");
+        NewConceptOrElementDialog dlg = (NewConceptOrElementDialog) ((Widget) e.getSource()).getData("dialog");//$NON-NLS-1$
         if (dlg.getReturnCode() == Window.OK) {
             XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
 
             decl = factory.createXSDElementDeclaration();
             decl.setName(dlg.getTypeName());
-            decl.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));
+            decl.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));//$NON-NLS-1$
             XSDIdentityConstraintDefinition uniqueKey = factory.createXSDIdentityConstraintDefinition();
             uniqueKey.setIdentityConstraintCategory(XSDIdentityConstraintCategory.UNIQUE_LITERAL);
             uniqueKey.setName(dlg.getTypeName());

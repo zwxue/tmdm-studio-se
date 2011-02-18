@@ -88,9 +88,6 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
             } else if (selection.getFirstElement() instanceof XSDModelGroup) {
                 group = (XSDModelGroup) selection.getFirstElement();
             } else {
-                // System.out.println("UNKNOWN SELECTION: " + selection.getFirstElement().getClass().getName() +
-                // "  --  "
-                // + selection.getFirstElement());
                 log.info("UNKNOWN SELECTION: " + selection.getFirstElement().getClass().getName() + "  --  "
                         + selection.getFirstElement());
                 return Status.CANCEL_STATUS;
@@ -107,7 +104,7 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
 
             XSDElementDeclaration decl = factory.createXSDElementDeclaration();
             decl.setName(this.elementName);
-            decl.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));
+            decl.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));//$NON-NLS-1$
 
             XSDParticle particle = factory.createXSDParticle();
             particle.setContent(decl);
@@ -147,7 +144,6 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
             page.markDirty();
 
         } catch (Exception e) {
-            // e.printStackTrace();
             log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to create a new Business Element: " + e.getLocalizedMessage());
@@ -170,7 +166,6 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
                 struc.setAccessRole(lists, false, (IStructuredContentProvider) page.getTreeViewer().getContentProvider(),
                         (String) keys.toArray()[i]);
             } catch (Exception e) {
-                // e.printStackTrace();
                 log.error(e.getStackTrace());
             }
         }
@@ -198,7 +193,6 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
             }
 
         } catch (Exception e) {
-            // e.printStackTrace();
             log.error(e.getStackTrace());
             MessageDialog.openError(this.page.getSite().getShell(), "Error",
                     "An error occured trying to paste Entities: " + e.getLocalizedMessage());

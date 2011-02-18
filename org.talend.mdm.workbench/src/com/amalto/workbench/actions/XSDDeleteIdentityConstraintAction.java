@@ -80,7 +80,6 @@ public class XSDDeleteIdentityConstraintAction extends UndoAction {
             page.markDirty();
 
         } catch (Exception e) {
-            // e.printStackTrace();
             log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to remove Entity: " + e.getLocalizedMessage());

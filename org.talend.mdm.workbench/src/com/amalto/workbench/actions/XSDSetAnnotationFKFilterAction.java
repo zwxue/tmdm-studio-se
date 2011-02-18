@@ -12,6 +12,8 @@
 // ============================================================================
 package com.amalto.workbench.actions;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
@@ -35,6 +37,8 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDSetAnnotationFKFilterAction extends UndoAction {
+
+    private static Log log = LogFactory.getLog(XSDSetAnnotationFKFilterAction.class);
 
     protected FKFilterDialog fkd = null;
 
@@ -73,7 +77,7 @@ public class XSDSetAnnotationFKFilterAction extends UndoAction {
             } else
                 xSDCom = (XSDComponent) selection.getFirstElement();
             if (xSDCom instanceof XSDElementDeclaration) {
-                conceptName = xSDCom.getElement().getAttributes().getNamedItem("name").getNodeValue();
+                conceptName = xSDCom.getElement().getAttributes().getNamedItem("name").getNodeValue();//$NON-NLS-1$
             }
             if (xSDCom instanceof XSDParticle) {
                 // conceptName=getConceptName(xSDCom);
@@ -103,7 +107,7 @@ public class XSDSetAnnotationFKFilterAction extends UndoAction {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to set a FK Filter: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;
@@ -114,7 +118,7 @@ public class XSDSetAnnotationFKFilterAction extends UndoAction {
     private String getConceptName(XSDConcreteComponent element) {
         XSDConcreteComponent parent = element.getContainer();
         if (parent instanceof XSDElementDeclaration) {
-            return ((XSDElementDeclaration) parent).getElement().getAttributes().getNamedItem("name").getNodeValue();
+            return ((XSDElementDeclaration) parent).getElement().getAttributes().getNamedItem("name").getNodeValue();//$NON-NLS-1$
         } else {
             return getConceptName(parent);
         }

@@ -12,6 +12,8 @@
 // ============================================================================
 package com.amalto.workbench.actions;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -32,6 +34,8 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDSetAnnotationSourceSystemAction extends UndoAction {
+
+    private static Log log = LogFactory.getLog(XSDSetAnnotationSourceSystemAction.class);
 
     public XSDSetAnnotationSourceSystemAction(DataModelMainPage page) {
         super(page);
@@ -85,7 +89,7 @@ public class XSDSetAnnotationSourceSystemAction extends UndoAction {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to set a Forign Key: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;

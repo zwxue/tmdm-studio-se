@@ -89,7 +89,6 @@ public class XSDEditComplexTypeAction extends UndoAction {
             page.markDirty();
 
         } catch (Exception e) {
-            // e.printStackTrace();
             log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to edit an Entity: " + e.getLocalizedMessage());

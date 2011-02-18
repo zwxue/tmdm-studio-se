@@ -111,7 +111,6 @@ public class CopyXObjectAction extends Action {
             }
 
         } catch (Exception e) {
-            // e.printStackTrace();
             log.error(e.getStackTrace());
             MessageDialog.openError(view.getSite().getShell(), "Error",
                     "An error occured trying to copy: " + e.getLocalizedMessage());

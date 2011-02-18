@@ -16,6 +16,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -38,6 +40,8 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDSetAnnotationDescriptionsAction extends UndoAction {
+
+    private static Log log = LogFactory.getLog(XSDSetAnnotationDescriptionsAction.class);
 
     public XSDSetAnnotationDescriptionsAction(DataModelMainPage page) {
         super(page);
@@ -91,7 +95,7 @@ public class XSDSetAnnotationDescriptionsAction extends UndoAction {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to create a new Element: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;

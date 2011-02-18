@@ -99,7 +99,6 @@ public class XSDAnnotationLookupFieldsAction extends UndoAction {
             }
 
         } catch (Exception e) {
-            // e.printStackTrace();
             log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to set the Lookup Fields: " + e.getLocalizedMessage());

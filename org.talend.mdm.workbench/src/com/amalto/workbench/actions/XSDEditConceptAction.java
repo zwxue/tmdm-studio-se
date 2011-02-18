@@ -108,7 +108,6 @@ public class XSDEditConceptAction extends UndoAction {
             // page.refreshPage();
 
         } catch (Exception e) {
-            // e.printStackTrace();
             log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to edit an Entity: " + e.getLocalizedMessage());

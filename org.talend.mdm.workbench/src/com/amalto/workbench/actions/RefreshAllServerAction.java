@@ -58,7 +58,6 @@ public class RefreshAllServerAction extends Action {
                 LocalTreeObjectRepository.getInstance().setLazySaveStrategy(false, serverRoot);
 
             } catch (Exception e) {
-                // e.printStackTrace();
                 log.error(e.getStackTrace());
                 // throw new
                 // Exception("Error while refreshing the "+IConstants.TALEND+" Server Objects: "+e.getLocalizedMessage());

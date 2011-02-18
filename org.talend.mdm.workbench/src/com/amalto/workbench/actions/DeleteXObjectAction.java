@@ -135,7 +135,6 @@ public class DeleteXObjectAction extends Action {
             // view.getViewer().refresh();
 
         } catch (Exception e) {
-            // e.printStackTrace();
             log.error(e.getStackTrace());
             MessageDialog.openError(view.getSite().getShell(), "Error", "An error occured trying to delete the "
                     + IConstants.TALEND + " object: " + e.getLocalizedMessage());

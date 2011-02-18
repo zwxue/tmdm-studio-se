@@ -11,6 +11,9 @@
 //
 // ============================================================================
 package com.amalto.workbench.actions;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
@@ -31,8 +34,9 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
-
 public class XSDVisibleRuleAction extends UndoAction {
+
+    private static Log log = LogFactory.getLog(XSDVisibleRuleAction.class);
 
     protected SimpleXpathInputDialog sxid = null;
 
@@ -94,7 +98,7 @@ public class XSDVisibleRuleAction extends UndoAction {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to set a Visible Rule: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;

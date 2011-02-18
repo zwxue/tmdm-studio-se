@@ -191,7 +191,6 @@ public class XSDEditParticleAction extends UndoAction implements SelectionListen
             page.markDirty();
 
         } catch (Exception e) {
-            // e.printStackTrace();
             log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error", "An error occured trying to Edit a Business Elementt: "
                     + e.getLocalizedMessage());

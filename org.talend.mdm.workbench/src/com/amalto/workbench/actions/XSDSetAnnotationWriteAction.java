@@ -14,6 +14,8 @@ package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -36,6 +38,8 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDSetAnnotationWriteAction extends UndoAction {
+
+    private static Log log = LogFactory.getLog(XSDSetAnnotationWriteAction.class);
 
     protected AnnotationOrderedListsDialog dlg = null;
 
@@ -76,7 +80,7 @@ public class XSDSetAnnotationWriteAction extends UndoAction {
                 public void widgetSelected(SelectionEvent e) {
                     dlg.close();
                 }
-            }, page.getSite().getShell(), "Set The Roles That Have Write Access", "Roles", page,
+            }, page.getSite().getShell(), "Set The Roles That Have Write Access", "Roles", page,//$NON-NLS-2$
                     AnnotationOrderedListsDialog.AnnotationWrite_ActionType, null);
 
             dlg.setBlockOnOpen(true);
@@ -86,7 +90,7 @@ public class XSDSetAnnotationWriteAction extends UndoAction {
             }
 
             struc.setAccessRole(dlg.getXPaths(), dlg.getRecursive(), (IStructuredContentProvider) page.getTreeViewer()
-                    .getContentProvider(), "X_Write");
+                    .getContentProvider(), "X_Write");//$NON-NLS-1$
 
             if (struc.hasChanged()) {
                 page.refresh();
@@ -95,7 +99,7 @@ public class XSDSetAnnotationWriteAction extends UndoAction {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to set the Write Access: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;

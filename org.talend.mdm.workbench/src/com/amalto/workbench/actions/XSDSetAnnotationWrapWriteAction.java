@@ -15,6 +15,8 @@ package com.amalto.workbench.actions;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -48,6 +50,8 @@ import com.amalto.workbench.utils.XSDAnnotationsStructure;
  */
 public class XSDSetAnnotationWrapWriteAction extends UndoAction {
 
+    private static Log log = LogFactory.getLog(XSDSetAnnotationWrapWriteAction.class);
+
     protected AnnotationOrderedListsDialog dlg = null;
 
     protected boolean isChanged = false;
@@ -75,7 +79,7 @@ public class XSDSetAnnotationWrapWriteAction extends UndoAction {
                 public void widgetSelected(SelectionEvent e) {
                     dlg.close();
                 }
-            }, page.getSite().getShell(), "Set The Roles That Have Write Access", "Roles", page,
+            }, page.getSite().getShell(), "Set The Roles That Have Write Access", "Roles", page,//$NON-NLS-2$
                     AnnotationOrderedListsDialog.AnnotationWrite_ActionType, null);
 
             dlg.setBlockOnOpen(true);
@@ -101,7 +105,7 @@ public class XSDSetAnnotationWrapWriteAction extends UndoAction {
                 }
 
                 struc.setAccessRole(dlg.getXPaths(), dlg.getRecursive(), (IStructuredContentProvider) page.getTreeViewer()
-                        .getContentProvider(), "X_Write");
+                        .getContentProvider(), "X_Write");//$NON-NLS-1$
 
                 if (struc.hasChanged())
                     isChanged = true;
@@ -114,7 +118,7 @@ public class XSDSetAnnotationWrapWriteAction extends UndoAction {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to set the Write Access: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;

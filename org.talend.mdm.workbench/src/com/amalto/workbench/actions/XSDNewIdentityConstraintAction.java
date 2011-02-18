@@ -58,7 +58,7 @@ public class XSDNewIdentityConstraintAction extends UndoAction { // implements S
 
     public XSDNewIdentityConstraintAction(DataModelMainPage page) {
         super(page);
-        setImageDescriptor(ImageCache.getImage("icons/add_obj.gif"));
+        setImageDescriptor(ImageCache.getImage("icons/add_obj.gif"));//$NON-NLS-1$
         setText("Add Key");
         setToolTipText("Add a new Key");
     }
@@ -156,7 +156,6 @@ public class XSDNewIdentityConstraintAction extends UndoAction { // implements S
             page.markDirty();
 
         } catch (Exception e) {
-            // e.printStackTrace();
             log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to create a new Key: " + e.getLocalizedMessage());

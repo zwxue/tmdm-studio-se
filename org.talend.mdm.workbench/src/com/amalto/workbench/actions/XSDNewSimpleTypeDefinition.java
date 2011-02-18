@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
@@ -34,6 +36,8 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
 public class XSDNewSimpleTypeDefinition extends UndoAction implements SelectionListener {
+
+    private static Log log = LogFactory.getLog(XSDNewSimpleTypeDefinition.class);
 
     private SimpleTypeInputDialog dialog;
 

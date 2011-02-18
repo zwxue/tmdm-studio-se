@@ -137,8 +137,6 @@ public class GenerateJobDefaultTransformerAction extends Action {
                 folder.addChild(obj);
 
             } catch (Exception e) {
-                // TODO Auto-generated catch block
-                // e.printStackTrace();
                 log.error(e.getStackTrace());
             }
 

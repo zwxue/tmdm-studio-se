@@ -14,6 +14,8 @@ package com.amalto.workbench.actions;
 
 import java.util.LinkedHashMap;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -36,6 +38,8 @@ import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDSetAnnotaionDisplayFormatAction extends UndoAction {
 
+    private static Log log = LogFactory.getLog(XSDSetAnnotaionDisplayFormatAction.class);
+
     protected AnnotationLanguageLabelsDialog dlg = null;
 
     protected String dataModelName;
@@ -45,7 +49,6 @@ public class XSDSetAnnotaionDisplayFormatAction extends UndoAction {
         setImageDescriptor(ImageCache.getImage(EImage.THIN_MIN_VIEW.getPath()));
         setText("Set the display format");
         setToolTipText("Set the display format for the content of this element");
-        // TODO Auto-generated constructor stub
     }
 
     public IStatus doAction() {
@@ -93,7 +96,7 @@ public class XSDSetAnnotaionDisplayFormatAction extends UndoAction {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to set a fomat: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;

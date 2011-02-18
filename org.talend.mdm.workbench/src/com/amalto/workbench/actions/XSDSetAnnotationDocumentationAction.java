@@ -12,6 +12,8 @@
 // ============================================================================
 package com.amalto.workbench.actions;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -28,6 +30,8 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDSetAnnotationDocumentationAction extends UndoAction {
+
+    private static Log log = LogFactory.getLog(XSDSetAnnotationDocumentationAction.class);
 
     public XSDSetAnnotationDocumentationAction(DataModelMainPage page) {
         super(page);
@@ -70,7 +74,7 @@ public class XSDSetAnnotationDocumentationAction extends UndoAction {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getStackTrace());
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to set the Documentation: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;
