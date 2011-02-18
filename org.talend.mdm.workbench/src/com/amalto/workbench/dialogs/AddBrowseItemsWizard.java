@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.dialogs;
 
 import java.net.URL;
@@ -11,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
@@ -65,6 +79,8 @@ import com.amalto.workbench.widgets.WidgetFactory;
 
 public class AddBrowseItemsWizard extends Wizard {
 
+    private static Log log = LogFactory.getLog(AddBrowseItemsWizard.class);
+
     private DataModelMainPage page;
 
     private XtentisPort port;
@@ -73,9 +89,9 @@ public class AddBrowseItemsWizard extends Wizard {
 
     private Map<String, List<Line>> browseItemToRoles = new HashMap<String, List<Line>>();
 
-    private static String INSTANCE_NAME = "Browse Item View";
+    private static String INSTANCE_NAME = "Browse Item View";//$NON-NLS-1$
 
-    private static String BROWSE_ITEMS = "Browse_items_";
+    private static String BROWSE_ITEMS = "Browse_items_";//$NON-NLS-1$
 
     private static ComplexTableViewerColumn[] roleConfigurationColumns = new ComplexTableViewerColumn[] {
             new ComplexTableViewerColumn("Role Name", false, "", "", "", ComplexTableViewerColumn.COMBO_STYLE, new String[] {}, 0),
@@ -112,8 +128,7 @@ public class AddBrowseItemsWizard extends Wizard {
                         .getXObject().getUsername(), page.getXObject().getPassword());
             }
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error(e.getStackTrace());
         }
 
         return port;
@@ -136,8 +151,8 @@ public class AddBrowseItemsWizard extends Wizard {
                     for (XSDXPathDefinition path : xpathList) {
                         String key = decl.getName();
                         // remove
-                        key = key.replaceFirst("#.*", "");
-                        key += "/" + path.getValue();
+                        key = key.replaceFirst("#.*", "");//$NON-NLS-1$
+                        key += "/" + path.getValue();//$NON-NLS-1$
                         keys.add(key);
                     }
 
@@ -149,9 +164,9 @@ public class AddBrowseItemsWizard extends Wizard {
                 if (decl.getAnnotation() != null)
                     labels = new XSDAnnotationsStructure(decl.getAnnotation()).getLabels();
                 if (labels.size() == 0)
-                    labels.put("EN", decl.getName());
+                    labels.put("EN", decl.getName());//$NON-NLS-1$
                 for (String lan : labels.keySet()) {
-                    desc.append("[" + lan.toUpperCase() + ":" + labels.get(lan) + "]");
+                    desc.append("[" + lan.toUpperCase() + ":" + labels.get(lan) + "]");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                 }
                 view.setDescription(desc.toString());
                 wrap.setWsView(view);
@@ -184,11 +199,11 @@ public class AddBrowseItemsWizard extends Wizard {
             getRole.setWsRolePK(new WSRolePK(roleName));
             WSRole role = port.getRole(getRole);
             for (WSRoleSpecification spec : role.getSpecification()) {
-                if (spec.getObjectType().equals("View")) {
+                if (spec.getObjectType().equals("View")) {//$NON-NLS-1$
                     WSRoleSpecificationInstance[] specInstance = spec.getInstance();
                     WSRoleSpecificationInstance newInstance = new WSRoleSpecificationInstance();
                     newInstance.setInstanceName(browseItem);
-                    newInstance.setWritable(keyValues.get(1).value.equals("Read Only") ? false : true);
+                    newInstance.setWritable(keyValues.get(1).value.equals("Read Only") ? false : true);//$NON-NLS-1$
                     WSRoleSpecificationInstance[] newSpecInstance = new WSRoleSpecificationInstance[specInstance.length + 1];
                     System.arraycopy(specInstance, 0, newSpecInstance, 0, specInstance.length);
                     newSpecInstance[specInstance.length] = newInstance;
@@ -211,7 +226,6 @@ public class AddBrowseItemsWizard extends Wizard {
                 newBrowseItemView(browse);
                 modifyRolesWithAttachedBrowseItem(browse, roles);
             } catch (RemoteException e) {
-                // TODO Auto-generated catch block
                 MessageDialog.openError(page.getSite().getShell(), "Error", "An error occured trying to save the browse view : "
                         + e.getLocalizedMessage());
                 return false;
@@ -304,8 +318,8 @@ public class AddBrowseItemsWizard extends Wizard {
                 public void modify(Object element, String property, Object value) {
                     TableItem item = (TableItem) element;
 
-                    if (Pattern.compile("^\\s+\\w+\\s*").matcher(value.toString()).matches()
-                            || value.toString().trim().replaceAll("\\s", "").length() != value.toString().trim().length()) {
+                    if (Pattern.compile("^\\s+\\w+\\s*").matcher(value.toString()).matches()//$NON-NLS-1$
+                            || value.toString().trim().replaceAll("\\s", "").length() != value.toString().trim().length()) {//$NON-NLS-1$
                         MessageDialog.openInformation(null, "Warnning", "The name cannot contain the empty characters");
                         return;
                     }

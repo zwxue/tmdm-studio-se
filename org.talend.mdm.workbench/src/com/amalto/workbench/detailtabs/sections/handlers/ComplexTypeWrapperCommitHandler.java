@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.detailtabs.sections.handlers;
 
 import org.eclipse.xsd.XSDCompositor;
@@ -34,7 +46,7 @@ class ComplexTypeNameCommitHandler extends CommitHandler<ComplexTypeWrapper> {
         if (getCommitedObj().getNewTypeName() == null || "".equals(getCommitedObj().getNewTypeName().trim()))
             throw new CommitValidationException("The name of the complex type can not be empty");
 
-        if (getCommitedObj().getNewTypeName().replaceAll("\\s", "").length() != getCommitedObj().getNewTypeName().length())
+        if (getCommitedObj().getNewTypeName().replaceAll("\\s", "").length() != getCommitedObj().getNewTypeName().length())//$NON-NLS-1$
             throw new CommitValidationException("The name of the complex type can not contain the empty characters");
 
     }

@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.detailtabs.sections.composites;
 
 import java.util.ArrayList;
@@ -327,7 +339,7 @@ public class SimpleTypeConfigComposite extends Composite {
 
         if (!xsdSimpleType.getSchema().getTypeDefinitions().contains(curSelectedCustomBaseType))
             return xsdSimpleType.getSchema().resolveSimpleTypeDefinition(xsdSimpleType.getSchema().getSchemaForSchemaNamespace(),
-                    "string");
+                    "string");//$NON-NLS-1$
 
         return curSelectedCustomBaseType;
     }

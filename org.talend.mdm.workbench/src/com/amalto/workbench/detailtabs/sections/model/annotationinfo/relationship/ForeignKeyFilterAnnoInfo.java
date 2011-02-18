@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationship;
 
 import java.util.ArrayList;
@@ -13,7 +25,7 @@ import com.amalto.workbench.detailtabs.sections.model.annotationinfo.SingleConte
 
 public class ForeignKeyFilterAnnoInfo extends SingleContentAnnotationInfo {
 
-    private static final String CUSTOM_FILTERS_PREFIX = "$CFFP:";
+    private static final String CUSTOM_FILTERS_PREFIX = "$CFFP:";//$NON-NLS-1$
 
     public ForeignKeyFilterAnnoInfo(XSDComponent sourceComponent, String fkFilter) {
         super(sourceComponent, fkFilter);
@@ -43,9 +55,9 @@ public class ForeignKeyFilterAnnoInfo extends SingleContentAnnotationInfo {
         List<ForeignKeyFilterAnnoInfoDefUnit> fkFilterInfos = new ArrayList<ForeignKeyFilterAnnoInfoDefUnit>();
 
         if (filterExpression != null) {
-            String[] criterias = filterExpression.split("#");
+            String[] criterias = filterExpression.split("#");//$NON-NLS-1$
             for (String cria : criterias) {
-                String[] values = cria.split("\\$\\$");
+                String[] values = cria.split("\\$\\$");//$NON-NLS-1$
                 List<String> list = new ArrayList<String>();
                 list.addAll(Arrays.asList(values));
                 int num = 4 - list.size();
@@ -53,7 +65,7 @@ public class ForeignKeyFilterAnnoInfo extends SingleContentAnnotationInfo {
                     list.add("");
                 }
 
-                fkFilterInfos.add(new ForeignKeyFilterAnnoInfoDefUnit(list.get(0), list.get(1), list.get(2).replaceAll("&quot;",
+                fkFilterInfos.add(new ForeignKeyFilterAnnoInfoDefUnit(list.get(0), list.get(1), list.get(2).replaceAll("&quot;",//$NON-NLS-1$
                         "\""), list.get(3)));
 
             }
@@ -80,8 +92,8 @@ public class ForeignKeyFilterAnnoInfo extends SingleContentAnnotationInfo {
                     && eachFKFilterInfo.getPredicate().trim().length() == 0)
                 continue;
 
-            sb.append(eachFKFilterInfo.getXpath() + "$$" + eachFKFilterInfo.getOperator() + "$$"
-                    + eachFKFilterInfo.getNormalizeValue() + "$$" + eachFKFilterInfo.getPredicate() + "#");
+            sb.append(eachFKFilterInfo.getXpath() + "$$" + eachFKFilterInfo.getOperator() + "$$"//$NON-NLS-1$//$NON-NLS-2$
+                    + eachFKFilterInfo.getNormalizeValue() + "$$" + eachFKFilterInfo.getPredicate() + "#");//$NON-NLS-1$//$NON-NLS-2$
         }
 
         return sb.toString();

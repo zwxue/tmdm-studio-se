@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.detailtabs.sections.model.simpletype.propsource;
 
 import org.eclipse.jface.viewers.CellEditor;
@@ -23,12 +35,12 @@ public class SimpleTypeFacetIntegerPropertySource extends SimpleTypeFacetPropert
 
     @Override
     public CellEditorValueExtractor<IPropertySource<Integer>> getCellEditorValueExtractor() {
-        return new CellEditorValueExtractor<IPropertySource<Integer>>("getPropertyValueLabel");
+        return new CellEditorValueExtractor<IPropertySource<Integer>>("getPropertyValueLabel");//$NON-NLS-1$
     }
 
     @Override
     public CellEditorValueModifier<IPropertySource<Integer>> getCellEditorValueModifier() {
-        return new CellEditorValueModifier<IPropertySource<Integer>>("setPropertyValueByLabel", "getPropertyValueLabel");
+        return new CellEditorValueModifier<IPropertySource<Integer>>("setPropertyValueByLabel", "getPropertyValueLabel");//$NON-NLS-1$//$NON-NLS-2$
     }
 
 }

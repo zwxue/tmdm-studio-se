@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.detailtabs.sections.composites;
 
 import java.util.ArrayList;
@@ -118,7 +130,7 @@ public class ElementInfoConfigComposite extends Composite {
         txtName.setLayoutData(gd_txtName);
 
         final Label lblReference = new Label(this, SWT.NONE);
-        lblReference.setText("Reference");
+        lblReference.setText("Reference");//$NON-NLS-1$
 
         comboReference = new Combo(this, SWT.READ_ONLY);
         final GridData gd_comboReference = new GridData(SWT.FILL, SWT.CENTER, true, false);
@@ -127,7 +139,7 @@ public class ElementInfoConfigComposite extends Composite {
         occurenceGroup = new Group(this, SWT.NONE);
         final GridData gd_occurenceGroup = new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1);
         occurenceGroup.setLayoutData(gd_occurenceGroup);
-        occurenceGroup.setText("Occurence");
+        occurenceGroup.setText("Occurence");//$NON-NLS-1$
         final GridLayout gridLayout_2 = new GridLayout();
         gridLayout_2.numColumns = 3;
         occurenceGroup.setLayout(gridLayout_2);
@@ -135,14 +147,14 @@ public class ElementInfoConfigComposite extends Composite {
         final Label lblMinOcur = new Label(occurenceGroup, SWT.NONE);
         final GridData gd_lblMinOcur = new GridData(SWT.CENTER, SWT.CENTER, false, false);
         lblMinOcur.setLayoutData(gd_lblMinOcur);
-        lblMinOcur.setText("Min");
+        lblMinOcur.setText("Min");//$NON-NLS-1$
 
         new Label(occurenceGroup, SWT.NONE);
 
         final Label lblMaxOcur = new Label(occurenceGroup, SWT.NONE);
         final GridData gd_lblMaxOcur = new GridData(SWT.CENTER, SWT.CENTER, false, false);
         lblMaxOcur.setLayoutData(gd_lblMaxOcur);
-        lblMaxOcur.setText("Max");
+        lblMaxOcur.setText("Max");//$NON-NLS-1$
 
         spinMin = new Spinner(occurenceGroup, SWT.BORDER);
         spinMin.setSelection(1);

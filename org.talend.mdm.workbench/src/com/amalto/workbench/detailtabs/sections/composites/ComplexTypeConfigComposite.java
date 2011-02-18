@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.detailtabs.sections.composites;
 
 import java.util.ArrayList;
@@ -76,13 +88,13 @@ public class ComplexTypeConfigComposite extends Composite {
 
         radGroupAll = new Button(gpGroup, SWT.RADIO);
         radGroupAll.setSelection(true);
-        radGroupAll.setText("All");
+        radGroupAll.setText("All");//$NON-NLS-1$
 
         radGroupSequence = new Button(gpGroup, SWT.RADIO);
-        radGroupSequence.setText("Sequence");
+        radGroupSequence.setText("Sequence");//$NON-NLS-1$
 
         radGroupChoice = new Button(gpGroup, SWT.RADIO);
-        radGroupChoice.setText("Choice");
+        radGroupChoice.setText("Choice");//$NON-NLS-1$
 
         initUIListener();
     }
@@ -267,6 +279,6 @@ public class ComplexTypeConfigComposite extends Composite {
 
     private XSDComplexTypeDefinition getDefaultExtends() {
         return complextType.getSchema().resolveComplexTypeDefinition(complextType.getSchema().getSchemaForSchemaNamespace(),
-                "anyType");
+                "anyType");//$NON-NLS-1$
     }
 }
