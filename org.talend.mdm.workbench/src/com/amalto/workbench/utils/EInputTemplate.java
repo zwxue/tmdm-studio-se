@@ -84,7 +84,9 @@ public enum EInputTemplate {
              "<workflow-configuration>\n\t<initial-context-factory>?</initial-context-factory>\n\t<provider-uRL>?</provider-uRL>\n\t<api-type>?</api-type>\n</workflow-configuration>\n"),
     SYNCHRONIZATION(
                     "synchronization",
-                    "<synchronization-configuration>\n\t<planName>?</planName>\n\t<action>START_DIFFERENTIAL</action>\n</synchronization-configuration>");
+                    "<synchronization-configuration>\n\t<planName>?</planName>\n\t<action>START_DIFFERENTIAL</action>\n</synchronization-configuration>"),
+
+    MIME("mime", "<parameters>\n\t<mimetype>?</mimetype>\n</parameters>");
 
     String name;
 
