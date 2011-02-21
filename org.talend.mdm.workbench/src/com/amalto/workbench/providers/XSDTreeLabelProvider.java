@@ -167,7 +167,13 @@ public class XSDTreeLabelProvider extends LabelProvider {
 							return Util.iso2lang.get(source.substring(14).toLowerCase())+" Description: "+e.getChildNodes().item(0).getNodeValue();
 						} else if (source.equals("X_Write")) {
 							return "Writable By : "+e.getChildNodes().item(0).getNodeValue();
-						}else if (source.equals("X_Lookup_Field")) {
+						}else if (source.equals("X_Create")) {
+                            return "Creatable By : " + e.getChildNodes().item(0).getNodeValue();
+                        }else if (source.equals("X_LogicalDelete")) {
+                            return "Logical Deletable By : " + e.getChildNodes().item(0).getNodeValue();
+                        }else if (source.equals("X_PhysicalDelete")) {
+                            return "Physical Deletable By : " + e.getChildNodes().item(0).getNodeValue();
+                        }else if (source.equals("X_Lookup_Field")) {
 							return "Look Field : "+e.getChildNodes().item(0).getNodeValue();
 						} else if (source.equals("X_Workflow")) {
 							return "Workflow access : "+e.getChildNodes().item(0).getNodeValue();							
@@ -396,6 +402,12 @@ public class XSDTreeLabelProvider extends LabelProvider {
 						} else if (source.startsWith("X_Description_")) {
 							return ImageCache.getCreatedImage( EImage.DOCUMENTATION.getPath());
 						} else if (source.equals("X_Write")) {
+							return ImageCache.getCreatedImage( EImage.SECURITYANNOTATION.getPath());
+						}else if (source.equals("X_Create")) {
+							return ImageCache.getCreatedImage( EImage.SECURITYANNOTATION.getPath());
+						}else if (source.equals("X_LogicalDelete")) {
+							return ImageCache.getCreatedImage( EImage.SECURITYANNOTATION.getPath());
+						}else if (source.equals("X_PhysicalDelete")) {
 							return ImageCache.getCreatedImage( EImage.SECURITYANNOTATION.getPath());
 						}else if (source.equals("X_Lookup_Field")) {
 							return ImageCache.getCreatedImage( EImage.BROWSE.getPath());

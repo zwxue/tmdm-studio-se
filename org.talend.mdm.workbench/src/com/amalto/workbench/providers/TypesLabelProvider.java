@@ -180,6 +180,12 @@ public class TypesLabelProvider extends LabelProvider {
                                     + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_Write")) {
                             return "Writable By : " + e.getChildNodes().item(0).getNodeValue();
+                        }else if (source.equals("X_Create")) {
+                            return "Creatable By : " + e.getChildNodes().item(0).getNodeValue();
+                        }else if (source.equals("X_LogicalDelete")) {
+                            return "Logical Deletable By : " + e.getChildNodes().item(0).getNodeValue();
+                        }else if (source.equals("X_PhysicalDelete")) {
+                            return "Physical Deletable By : " + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_Hide")) {
                             return "No Access to : " + e.getChildNodes().item(0).getNodeValue();
                         } else {

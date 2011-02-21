@@ -300,6 +300,7 @@ public class XSDAnnotationsStructure {
     public String getDefaultValueRule() {
         return getAppInfoValue("X_Default_Value_Rule");
     }   
+    
     /****************************************************************************
      * FOREIGN KEY INFOS
      ****************************************************************************/
@@ -447,6 +448,49 @@ public class XSDAnnotationsStructure {
         return writeAccesses;
     }
 
+    /****************************************************************************
+     * X_Physical_Delete
+     ****************************************************************************/
+
+    public TreeMap<String, String> getPhysicalDelete() {
+    	 TreeMap<String, String> writeAccesses = new TreeMap<String, String>();
+         LinkedHashMap<String, String> appInfos = getAppInfos("X_PhysicalDelete");
+         Set<String> keys = appInfos.keySet();
+         for (Iterator iter = keys.iterator(); iter.hasNext();) {
+             String key = (String) iter.next();
+             writeAccesses.put(key, appInfos.get(key));
+         }
+         return writeAccesses;    	
+    }
+ 
+    /****************************************************************************
+     * X_Create
+     ****************************************************************************/
+    public TreeMap<String, String> getCreate() {
+    	TreeMap<String, String> writeAccesses = new TreeMap<String, String>();
+        LinkedHashMap<String, String> appInfos = getAppInfos("X_Create");
+        Set<String> keys = appInfos.keySet();
+        for (Iterator iter = keys.iterator(); iter.hasNext();) {
+            String key = (String) iter.next();
+            writeAccesses.put(key, appInfos.get(key));
+        }
+        return writeAccesses;    	
+    }
+
+    /****************************************************************************
+     * X_Logical_Delete
+     ****************************************************************************/
+
+    public TreeMap<String, String> getLogicalDelete() {
+    	TreeMap<String, String> writeAccesses = new TreeMap<String, String>();
+        LinkedHashMap<String, String> appInfos = getAppInfos("X_LogicalDelete");
+        Set<String> keys = appInfos.keySet();
+        for (Iterator iter = keys.iterator(); iter.hasNext();) {
+            String key = (String) iter.next();
+            writeAccesses.put(key, appInfos.get(key));
+        }
+        return writeAccesses;    
+    }
     public TreeMap<String, String> getLookupFields() {
         TreeMap<String, String> writeAccesses = new TreeMap<String, String>();
         LinkedHashMap<String, String> appInfos = getAppInfos("X_Lookup_Field");
