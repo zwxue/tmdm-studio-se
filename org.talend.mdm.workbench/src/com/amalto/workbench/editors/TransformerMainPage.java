@@ -1,9 +1,15 @@
-/*
- * Created on 27 oct. 2005
- * 
- * To change the template for this generated file go to Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and
- * Comments
- */
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.editors;
 
 import java.lang.reflect.InvocationTargetException;
@@ -195,6 +201,10 @@ public class TransformerMainPage extends AMainPageV2 {
     private Button btnAutoIntent;
 
     java.util.List<Line> cacheList; // remember the setup transformerinputvariablesdialog's input list
+
+    private static final String TOOLTIP_AUTOINTENT_ENABLE = "Auto-intent enabled";
+
+    private static final String TOOLTIP_AUTOINTENT_DISABLE = "Auto-intent disabled";
 
     public TransformerMainPage(FormEditor editor) {
         super(editor, TransformerMainPage.class.getName(), "Process " + ((XObjectEditorInput) editor.getEditorInput()).getName()
@@ -601,11 +611,14 @@ public class TransformerMainPage extends AMainPageV2 {
             btnAutoIntent = new Button(specsComposite, SWT.TOGGLE);
             btnAutoIntent.setImage(ImageCache.getCreatedImage(EImage.INTENT.getPath()));
             btnAutoIntent.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 4, 1));
+            refreshAutoIntentTooltip();
             btnAutoIntent.addSelectionListener(new SelectionAdapter() {
 
                 @Override
                 public void widgetSelected(SelectionEvent e) {
-                    onClickAutoIntentButton();
+                    // onClickAutoIntentButton();
+
+                    refreshAutoIntentTooltip();
                 }
 
             });
@@ -1496,22 +1509,22 @@ public class TransformerMainPage extends AMainPageV2 {
 
     }
 
-    private void onClickAutoIntentButton() {
-
-        if (!btnAutoIntent.getSelection())
-            return;
-
-        String oldParameters = parameterEditor.getContent().getContent();
-
-        if (stepsList.getItemCount() > 0 && currentPlugin == -1) {
-            refreshStep(0);
-        } else {
-            refreshStep(currentPlugin);
-        }
-
-        if (!oldParameters.equals(parameterEditor.getContent().getContent()))
-            commitParameters(parameterEditor.getContent().getContent());
-    }
+    // private void onClickAutoIntentButton() {
+    //
+    // if (!btnAutoIntent.getSelection())
+    // return;
+    //
+    // String oldParameters = parameterEditor.getContent().getContent();
+    //
+    // if (stepsList.getItemCount() > 0 && currentPlugin == -1) {
+    // refreshStep(0);
+    // } else {
+    // refreshStep(currentPlugin);
+    // }
+    //
+    // if (!oldParameters.equals(parameterEditor.getContent().getContent()))
+    // commitParameters(parameterEditor.getContent().getContent());
+    // }
 
     private void commitParameters(String parameter) {
 
@@ -1526,6 +1539,14 @@ public class TransformerMainPage extends AMainPageV2 {
         TransformerMainPage.this.comitting = false;
         markDirtyWithoutCommit();
 
+    }
+
+    private void refreshAutoIntentTooltip() {
+
+        if (btnAutoIntent == null)
+            return;
+
+        btnAutoIntent.setToolTipText(btnAutoIntent.getSelection() ? TOOLTIP_AUTOINTENT_ENABLE : TOOLTIP_AUTOINTENT_DISABLE);
     }
 
     class ProcessPluginParameterEditorListener implements ExtensibleContentEditorPageListener {
