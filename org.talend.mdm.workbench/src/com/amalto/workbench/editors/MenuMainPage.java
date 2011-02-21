@@ -18,6 +18,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -71,6 +73,8 @@ import com.amalto.workbench.webservices.WSMenuEntry;
 import com.amalto.workbench.webservices.WSMenuMenuEntriesDescriptions;
 
 public class MenuMainPage extends AMainPageV2 {
+
+    private static Log log = LogFactory.getLog(MenuMainPage.class);
 
     public final static int LOCATION_BEFORE = 0;
 
@@ -231,7 +235,7 @@ public class MenuMainPage extends AMainPageV2 {
             refreshData();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
     }// createCharacteristicsContent
@@ -250,7 +254,7 @@ public class MenuMainPage extends AMainPageV2 {
             this.refreshing = false;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
                     "Error refreshing the page: " + e.getLocalizedMessage());
         }
@@ -271,7 +275,7 @@ public class MenuMainPage extends AMainPageV2 {
             this.comitting = false;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error commiting the page",
                     "Error comitting the page: " + e.getLocalizedMessage());
         }
@@ -334,7 +338,7 @@ public class MenuMainPage extends AMainPageV2 {
         }
 
         public void widgetSelected(SelectionEvent e) {
-            MenuEntryDialog dlg = (MenuEntryDialog) ((Widget) e.getSource()).getData("dialog");
+            MenuEntryDialog dlg = (MenuEntryDialog) ((Widget) e.getSource()).getData("dialog");//$NON-NLS-1$
             if (dlg.getReturnCode() == Window.OK) {
                 String id = dlg.getIdText().getText();
                 if ("".equals(id)) {
@@ -390,7 +394,7 @@ public class MenuMainPage extends AMainPageV2 {
             super();
             this.viewer = view;
             treeEntry = (TreeEntry) ((IStructuredSelection) viewer.getSelection()).getFirstElement();
-            setImageDescriptor(ImageCache.getImage("icons/edit_obj.gif"));
+            setImageDescriptor(ImageCache.getImage("icons/edit_obj.gif"));//$NON-NLS-1$
             setText("Edit");
             setToolTipText("Edit ThisMenu Entry");
         }
@@ -406,7 +410,7 @@ public class MenuMainPage extends AMainPageV2 {
                 dlg.open();
 
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 MessageDialog.openError(
                         viewer.getControl().getShell(),
                         "Error",
@@ -455,7 +459,7 @@ public class MenuMainPage extends AMainPageV2 {
                 label = "Add a menu entry after this entry";
                 break;
             }
-            setImageDescriptor(ImageCache.getImage("icons/add_obj.gif"));
+            setImageDescriptor(ImageCache.getImage("icons/add_obj.gif"));//$NON-NLS-1$
             setText(label);
             setToolTipText("Add a menu entry");
         }
@@ -473,7 +477,7 @@ public class MenuMainPage extends AMainPageV2 {
                     addSubMenu(treeEntry, position);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 MessageDialog.openError(viewer.getControl().getShell(), "Error", "An error occured trying to add a Menu Entry: "
                         + e.getLocalizedMessage());
             }
@@ -557,7 +561,7 @@ public class MenuMainPage extends AMainPageV2 {
             super();
             this.viewer = view;
             treeEntry = (TreeEntry) ((IStructuredSelection) viewer.getSelection()).getFirstElement();
-            setImageDescriptor(ImageCache.getImage("icons/delete_obj.gif"));
+            setImageDescriptor(ImageCache.getImage("icons/delete_obj.gif"));//$NON-NLS-1$
             setText("Delete Entry");
             setToolTipText("Delete This Menu Entry");
         }
@@ -588,7 +592,7 @@ public class MenuMainPage extends AMainPageV2 {
                 // mark dirty
                 markDirtyWithoutCommit();
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 MessageDialog.openError(
                         viewer.getControl().getShell(),
                         "Error",

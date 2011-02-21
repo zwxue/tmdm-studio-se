@@ -16,6 +16,8 @@ import java.text.SimpleDateFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
@@ -75,7 +77,9 @@ import com.amalto.workbench.widgets.WidgetFactory;
 
 public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectModelListener {
 
-    protected static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+    private static Log log = LogFactory.getLog(ItemsTrashBrowserMainPage.class);
+
+    protected static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");//$NON-NLS-1$
 
     protected Text searchText;
 
@@ -180,7 +184,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
             WidgetFactory factory = WidgetFactory.getWidgetFactory();
             factory.adapt(managedForm.getForm().getBody());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }// createFormContent
 
@@ -344,7 +348,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
             searchText.setFocus();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
                     "Error refreshing the page: " + e.getLocalizedMessage());
         }
@@ -354,7 +358,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
         try {
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page",
                     "Error comitting the page: " + e.getLocalizedMessage());
         }
@@ -444,7 +448,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
             return new LineItem[0];
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000"))
                 MessageDialog.openError(this.getSite().getShell(), "Too Many Results",
                         "More than 10000 results returned by the search. \nPlease narrow your search.");
@@ -495,7 +499,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
 
                 // mask
                 String projection = wsDroppedItem.getProjection();
-                Pattern pLoad = Pattern.compile(".*?(<c>.*?</t>).*?(<p>(.*)</p>|<p/>).*", Pattern.DOTALL);
+                Pattern pLoad = Pattern.compile(".*?(<c>.*?</t>).*?(<p>(.*)</p>|<p/>).*", Pattern.DOTALL);//$NON-NLS-1$
                 Matcher m = pLoad.matcher(projection);
                 if (m.matches()) {
                     if (m.group(2) == null || m.group(2).equals("<p/>")) {
@@ -528,7 +532,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                 d.open();
 
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 MessageDialog.openError(shell, "Error",
                         "An error occured trying to view the result as a DOM tree: " + e.getLocalizedMessage());
             }
@@ -580,7 +584,6 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                 ItemsTrashBrowserMainPage.this.resultsViewer.setInput(getResults(false));
 
             } catch (Exception e) {
-                // e.printStackTrace();
                 MessageDialog.openError(shell, "Error",
                         "An error occured trying to restore the selected dropped Record:\n\n" + e.getLocalizedMessage());
             }
@@ -606,7 +609,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
             super();
             this.shell = shell;
             this.viewer = viewer;
-            setImageDescriptor(ImageCache.getImage("icons/delete_obj.gif"));
+            setImageDescriptor(ImageCache.getImage("icons/delete_obj.gif"));//$NON-NLS-1$
             IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
             setText("Remove the dropped Record");
             setToolTipText("Remove the dropped Record");
@@ -634,7 +637,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                 ItemsTrashBrowserMainPage.this.resultsViewer.setInput(getResults(false));
 
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 MessageDialog.openError(shell, "Error",
                         "An error occured trying to delete the Records: " + e.getLocalizedMessage());
             }

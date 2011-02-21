@@ -12,6 +12,8 @@
 // ============================================================================
 package com.amalto.workbench.editors;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -34,6 +36,8 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import com.amalto.workbench.widgets.WidgetFactory;
 
 public abstract class AMainPage extends AFormPage implements ModifyListener {
+
+    private static Log log = LogFactory.getLog(AMainPage.class);
 
     private SectionPart firstSectionPart = null;
 
@@ -89,7 +93,7 @@ public abstract class AMainPage extends AFormPage implements ModifyListener {
             toolkit.adapt(form.getBody());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
     }// createFormContent

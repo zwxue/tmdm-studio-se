@@ -14,6 +14,8 @@ package com.amalto.workbench.dialogs;
 
 import java.util.ArrayList;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.Document;
@@ -37,6 +39,8 @@ import org.w3c.dom.NodeList;
 import com.amalto.workbench.image.ImageCache;
 
 public class TextViewDialog extends Dialog {
+
+    private static Log log = LogFactory.getLog(TextViewDialog.class);
 
     private final static int BUTTON_CLOSE = 10;
 
@@ -72,7 +76,7 @@ public class TextViewDialog extends Dialog {
 
             return composite;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getShell(), "Error",
                     "An error occured trying to create the Views Search window: " + e.getLocalizedMessage());
             return null;

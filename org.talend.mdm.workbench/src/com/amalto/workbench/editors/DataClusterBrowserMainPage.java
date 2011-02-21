@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
@@ -124,9 +126,9 @@ import com.amalto.workbench.widgets.WidgetFactory;
 
 public class DataClusterBrowserMainPage extends AMainPage implements IXObjectModelListener, IPagingListener {
 
-    // private boolean refreshing;
+    private static Log log = LogFactory.getLog(DataClusterBrowserMainPage.class);
 
-    protected static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+    protected static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");//$NON-NLS-1$
 
     protected Button checkFTSearchButton;
 
@@ -304,7 +306,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             toolkit.adapt(composite);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }// createFormContent
 
@@ -495,7 +497,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             String[] concepts;
             // long beforeTime = System .currentTimeMillis();
 
-            String clusterName = URLEncoder.encode(cluster.getName(), "utf-8");
+            String clusterName = URLEncoder.encode(cluster.getName(), "utf-8");//$NON-NLS-1$
             String query = "count(collection('" + clusterName + "')/ii/n)";
             WSStringArray array = port.runQuery(new WSRunQuery(null, new WSDataClusterPK(clusterName), query, null));
             // WSString count2 = port.count(new WSCount(new WSDataClusterPK(cluster.getName()), "*", null, 100));
@@ -568,7 +570,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             conceptCombo.select(0);
             searchText.setFocus();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
                     "Error refreshing the page: " + e.getLocalizedMessage());
         }
@@ -596,7 +598,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
         try {
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page",
                     "Error comitting the page: " + e.getLocalizedMessage());
         }
@@ -678,8 +680,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             long from = -1;
             long to = -1;
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
-            Pattern pattern = Pattern.compile("^\\d{4}\\d{2}\\d{2} \\d{2}:\\d{2}:\\d{2}$");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");//$NON-NLS-1$
+            Pattern pattern = Pattern.compile("^\\d{4}\\d{2}\\d{2} \\d{2}:\\d{2}:\\d{2}$");//$NON-NLS-1$
 
             if (!"".equals(fromText.getText())) {
 
@@ -759,7 +761,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             pageToolBar.refreshUI();
             return (LineItem[]) ress.toArray(new LineItem[ress.size()]);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000"))
                 MessageDialog.openError(this.getSite().getShell(), "Too Many Results",
                         "More than 10000 results returned by the search. \nPlease narrow your search.");
@@ -793,7 +795,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             super();
             this.shell = shell;
             this.viewer = viewer;
-            setImageDescriptor(ImageCache.getImage("icons/edit_obj.gif"));
+            setImageDescriptor(ImageCache.getImage("icons/edit_obj.gif"));//$NON-NLS-1$
             setText("Edit Record");
             setToolTipText("View as a DOM Tree or edit the XML source");
         }
@@ -814,7 +816,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 ArrayList<String> dataModels = new ArrayList<String>();
                 if (dmPKs != null) {
                     for (int i = 0; i < dmPKs.length; i++) {
-                        if (!"XMLSCHEMA---".equals(dmPKs[i].getPk()))
+                        if (!"XMLSCHEMA---".equals(dmPKs[i].getPk()))//$NON-NLS-1$
                             dataModels.add(dmPKs[i].getPk());
                     }
                 }
@@ -858,7 +860,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 d.open();
 
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 MessageDialog.openError(shell, "Error",
                         "An error occured trying to view the result as a DOM tree: " + e.getLocalizedMessage());
             }
@@ -977,7 +979,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 }
 
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 MessageDialog.openError(shell, "Error",
                         "An error occured trying to compare items with each other: " + e.getLocalizedMessage());
             }
@@ -1042,7 +1044,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 }
 
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 MessageDialog.openError(shell, "Error",
                         "An error occured trying to compare Record with svn: " + e.getLocalizedMessage());
             }
@@ -1114,7 +1116,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(false));
 
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 MessageDialog.openError(shell, "Error",
                         "An error occured trying to delete the Records: " + e.getLocalizedMessage());
             }
@@ -1168,7 +1170,6 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
                     monitor.done();
                 } catch (Exception e) {
-                    // e.printStackTrace();
                     MessageDialog.openError(shell, "Error logically Deleting",
                             "An error occured trying to logically delete the Records:\n\n" + e.getLocalizedMessage());
                 }// try
@@ -1188,7 +1189,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             super();
             this.shell = shell;
             this.viewer = viewer;
-            setImageDescriptor(ImageCache.getImage("icons/delete_obj.gif"));
+            setImageDescriptor(ImageCache.getImage("icons/delete_obj.gif"));//$NON-NLS-1$
             IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
             if (selection.size() == 1)
                 setText("Physically delete the selected Record");
@@ -1223,7 +1224,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 DataClusterBrowserMainPage.this.resultsViewer.setInput(getResults(false));
 
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 MessageDialog.openError(shell, "Error",
                         "An error occured trying to delete the Records: " + e.getLocalizedMessage());
             }
@@ -1274,7 +1275,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
                     monitor.done();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage(), e);
                     MessageDialog.openError(shell, "Error Deleting",
                             "An error occured trying to delete the Records:\n\n " + e.getLocalizedMessage());
                 }// try
@@ -1350,7 +1351,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 DataClusterBrowserMainPage.this.doSearch();
 
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 MessageDialog.openError(shell, "Error",
                         "An error occured trying to view the result as a DOM tree: " + e.getLocalizedMessage());
             }
@@ -1378,7 +1379,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             super();
             this.shell = shell;
             this.viewer = viewer;
-            setImageDescriptor(ImageCache.getImage("icons/execute.gif"));
+            setImageDescriptor(ImageCache.getImage("icons/execute.gif"));//$NON-NLS-1$
             IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
             if (selection.size() == 1)
                 setText("Route the selected Record");
@@ -1410,7 +1411,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         diwp);
 
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 MessageDialog.openError(shell, "Error", "An error occured trying route the Records: " + e.getLocalizedMessage());
             }
         }
@@ -1441,7 +1442,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 try {
                     port = Util.getPort(getXObject());
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage(), e);
                     MessageDialog.openError(shell, "Error Routing",
                             "An error occured trying to route the Records:\n\n " + e.getLocalizedMessage());
                 }// try
@@ -1462,7 +1463,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         port.routeItemV2(new WSRouteItemV2(new WSItemPK((WSDataClusterPK) getXObject().getWsKey(), lineItem
                                 .getConcept(), lineItem.getIds())));
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        log.error(e.getMessage(), e);
                         MessageDialog.openError(shell, "Error Routing", "An error occured trying to route the item '" + itemID
                                 + "':\n\n " + e.getLocalizedMessage());
                     }// try

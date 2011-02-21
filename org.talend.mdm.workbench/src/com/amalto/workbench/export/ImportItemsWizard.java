@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -134,6 +136,8 @@ import com.amalto.workbench.widgets.WidgetFactory;
 
 public class ImportItemsWizard extends Wizard {
 
+    private static Log log = LogFactory.getLog(ImportItemsWizard.class);
+
     private IStructuredSelection sel;
 
     private RepositoryCheckTreeViewer treeViewer;
@@ -181,7 +185,7 @@ public class ImportItemsWizard extends Wizard {
             try {
                 ZipToFile.unZipFile(zipfile, importFolder);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         }
         if (folderBtn.getSelection()) {
@@ -200,7 +204,7 @@ public class ImportItemsWizard extends Wizard {
                     port.initMDM(null);
                     return Status.OK_STATUS;
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage(), e);
                     return Status.CANCEL_STATUS;
                 } finally {
                     new UIJob("Refreshing server") {
@@ -292,7 +296,7 @@ public class ImportItemsWizard extends Wizard {
             try {
                 ZipToFile.unZipFile(zipfile, importFolder);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         }
         if (folderBtn.getSelection()) {
@@ -434,7 +438,7 @@ public class ImportItemsWizard extends Wizard {
             } catch (Exception e) {
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } finally {
             try {
                 if (reader != null)
@@ -492,7 +496,7 @@ public class ImportItemsWizard extends Wizard {
                         Util.uploadImageFile(serverRoot.getEndpointIpAddress() + "/imageserver/secure/ImageUploadServlet",//$NON-NLS-1$
                                 importFolder + "/" + subItem, serverRoot.getUsername(), serverRoot.getPassword(), picturePathMap);
                     } catch (Exception e2) {
-                        e2.printStackTrace();
+                        log.error(e2.getMessage(), e2);
                     }
                 }
             }
@@ -528,7 +532,7 @@ public class ImportItemsWizard extends Wizard {
                         }
                         port.putDataCluster(new WSPutDataCluster(model));
                     } catch (Exception e1) {
-                        e1.printStackTrace();
+                        log.error(e1.getMessage(), e1);
                     } finally {
                         try {
                             if (reader != null)
@@ -571,7 +575,7 @@ public class ImportItemsWizard extends Wizard {
                         }
                         port.putDataModel(new WSPutDataModel(model));
                     } catch (Exception e2) {
-                        e2.printStackTrace();
+                        log.error(e2.getMessage(), e2);
                     } finally {
                         try {
                             if (reader != null)
@@ -609,7 +613,7 @@ public class ImportItemsWizard extends Wizard {
                         }
                         port.putMenu(new WSPutMenu(memu));
                     } catch (Exception e2) {
-                        e2.printStackTrace();
+                        log.error(e2.getMessage(), e2);
                     } finally {
                         try {
                             if (reader != null)
@@ -648,7 +652,7 @@ public class ImportItemsWizard extends Wizard {
                             }
                             port.putRole(new WSPutRole(role));
                         } catch (Exception e2) {
-                            e2.printStackTrace();
+                            log.error(e2.getMessage(), e2);
                         } finally {
                             try {
                                 if (reader != null)
@@ -694,7 +698,7 @@ public class ImportItemsWizard extends Wizard {
                         }
                         port.putRoutingRule(new WSPutRoutingRule(routingRule));
                     } catch (Exception e2) {
-                        e2.printStackTrace();
+                        log.error(e2.getMessage(), e2);
                     } finally {
                         try {
                             if (reader != null)
@@ -736,7 +740,7 @@ public class ImportItemsWizard extends Wizard {
                         port.putStoredProcedure(new WSPutStoredProcedure(model));
 
                     } catch (Exception e2) {
-                        e2.printStackTrace();
+                        log.error(e2.getMessage(), e2);
                     } finally {
                         try {
                             if (reader != null)
@@ -776,7 +780,7 @@ public class ImportItemsWizard extends Wizard {
                             }
                             port.putSynchronizationPlan(new WSPutSynchronizationPlan(model));
                         } catch (Exception e2) {
-                            e2.printStackTrace();
+                            log.error(e2.getMessage(), e2);
                         } finally {
                             try {
                                 if (reader != null)
@@ -856,7 +860,7 @@ public class ImportItemsWizard extends Wizard {
                         }
 
                     } catch (Exception e2) {
-                        e2.printStackTrace();
+                        log.error(e2.getMessage(), e2);
                     } finally {
                         try {
                             if (reader != null)
@@ -895,7 +899,7 @@ public class ImportItemsWizard extends Wizard {
                             }
                             port.putUniverse(new WSPutUniverse(model));
                         } catch (Exception e2) {
-                            e2.printStackTrace();
+                            log.error(e2.getMessage(), e2);
                         } finally {
                             try {
                                 if (reader != null)
@@ -955,7 +959,7 @@ public class ImportItemsWizard extends Wizard {
 
                         port.putView(new WSPutView(model));
                     } catch (Exception e2) {
-                        e2.printStackTrace();
+                        log.error(e2.getMessage(), e2);
                     } finally {
                         try {
                             if (reader != null)
@@ -1024,7 +1028,7 @@ public class ImportItemsWizard extends Wizard {
                     }
 
                 } catch (Exception e1) {
-                    e1.printStackTrace();
+                    log.error(e1.getMessage(), e1);
                 } finally {
                     try {
                         if (reader != null)

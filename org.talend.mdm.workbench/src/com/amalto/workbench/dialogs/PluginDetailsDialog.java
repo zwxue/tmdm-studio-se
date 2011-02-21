@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -35,6 +37,8 @@ import org.eclipse.swt.widgets.Text;
 import com.amalto.workbench.utils.FontUtils;
 
 public class PluginDetailsDialog extends Dialog {
+
+    private static Log log = LogFactory.getLog(PluginDetailsDialog.class);
 
     protected TabFolder tabFolder;
 
@@ -127,7 +131,7 @@ public class PluginDetailsDialog extends Dialog {
 
             return composite;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getShell(), "Error",
                     "An error occured trying to create the DOM Viewer " + e.getLocalizedMessage());
             return null;

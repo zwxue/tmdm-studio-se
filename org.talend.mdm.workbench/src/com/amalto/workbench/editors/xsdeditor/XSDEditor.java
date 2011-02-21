@@ -14,6 +14,8 @@ package com.amalto.workbench.editors.xsdeditor;
 
 import java.io.ByteArrayInputStream;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IPageChangedListener;
@@ -40,9 +42,11 @@ import com.amalto.workbench.webservices.WSDataModel;
 @SuppressWarnings("restriction")
 public class XSDEditor extends InternalXSDMultiPageEditor {
 
-    public static final String CONTRUIBUTIONID_DATAMODELPAGE = "org.talend.mdm.workbench.propertyContributor.datamodel";
+    private static Log log = LogFactory.getLog(XSDEditor.class);
 
-    public static final String CONTRUIBUTIONID_XSDEDITOR = "org.eclipse.wst.xsd.ui.internal.editor";
+    public static final String CONTRUIBUTIONID_DATAMODELPAGE = "org.talend.mdm.workbench.propertyContributor.datamodel";//$NON-NLS-1$
+
+    public static final String CONTRUIBUTIONID_XSDEDITOR = "org.eclipse.wst.xsd.ui.internal.editor";//$NON-NLS-1$
 
     private String curContributionID = CONTRUIBUTIONID_DATAMODELPAGE;
 
@@ -62,7 +66,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
     public String getPartName() {
         // TODO Auto-generated method stub
         String part = super.getPartName();
-        if (part.endsWith(".xsd")) {
+        if (part.endsWith(".xsd")) {//$NON-NLS-1$
             return part.substring(0, part.length() - 4);
         }
         return part;
@@ -79,8 +83,8 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
                 WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
                 wsDataModel.setXsdSchema(xsd);
                 IFile file = XSDEditorUtil.createFile(xobject);
-                file.setCharset("utf-8", null);
-                file.setContents(new ByteArrayInputStream(xsd.getBytes("utf-8")), IFile.FORCE, null);
+                file.setCharset("utf-8", null);//$NON-NLS-1$
+                file.setContents(new ByteArrayInputStream(xsd.getBytes("utf-8")), IFile.FORCE, null);//$NON-NLS-1$
             } // save the file's contents to DataModelMainPage
 
             // InputStream in = XSDEditorUtil.createFile(xobject).getContents(true);
@@ -95,8 +99,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
             }
 
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -154,8 +157,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
 
                         refreshPropertyView();
                     } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        log.error(e.getMessage(), e);
                     }
                 }
             }

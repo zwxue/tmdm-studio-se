@@ -14,6 +14,8 @@ package com.amalto.workbench.editors.xsdeditor;
 
 import java.io.ByteArrayInputStream;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -40,6 +42,8 @@ import com.amalto.workbench.webservices.WSDataModel;
 
 public class XSDEditorUtil {
 
+    private static Log log = LogFactory.getLog(XSDEditorUtil.class);
+
     private static String getXObjectPath(TreeObject xobject) {
         String name = xobject.getDisplayName().replace(" ", "");
         if (xobject.getParent().getDisplayName().startsWith(EXtentisObjects.DataMODEL.getDisplayName())) {
@@ -53,7 +57,7 @@ public class XSDEditorUtil {
     public static IFile createFile(TreeObject xobject) throws Exception {
         WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
 
-        String filename = xobject.getDisplayName().replace(" ", "") + ".xsd";
+        String filename = xobject.getDisplayName().replace(" ", "") + ".xsd";//$NON-NLS-3$
         String content = wsDataModel.getXsdSchema();
 
         IProject project = createProject(xobject);
@@ -67,7 +71,7 @@ public class XSDEditorUtil {
         IFile file = fold.getFile(filename);
 
         if (!file.exists())
-            file.create(new ByteArrayInputStream(content.getBytes("utf-8")), IFile.FORCE, null);
+            file.create(new ByteArrayInputStream(content.getBytes("utf-8")), IFile.FORCE, null);//$NON-NLS-1$
         else
             sycFileContents(file, content);
 
@@ -76,13 +80,13 @@ public class XSDEditorUtil {
 
     private static void sycFileContents(IFile file, String content) throws Exception {
         if (file.exists())
-            file.setContents(new ByteArrayInputStream(content.getBytes("utf-8")), IFile.FORCE, new NullProgressMonitor());
+            file.setContents(new ByteArrayInputStream(content.getBytes("utf-8")), IFile.FORCE, new NullProgressMonitor());//$NON-NLS-1$
     }
 
     private static boolean isEditorOpened(TreeObject xobject) throws Exception {
         WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
 
-        String filename = xobject.getDisplayName().replace(" ", "") + ".xsd";
+        String filename = xobject.getDisplayName().replace(" ", "") + ".xsd";//$NON-NLS-3$
         String content = wsDataModel.getXsdSchema();
 
         IProject project = createProject(xobject);
@@ -109,13 +113,13 @@ public class XSDEditorUtil {
             return prj;
         final IWorkspace workspace = ResourcesPlugin.getWorkspace();
         final IProjectDescription desc = workspace.newProjectDescription(projectname);
-        desc.setNatureIds(new String[] { "org.talend.mdm.schema.nature" });
+        desc.setNatureIds(new String[] { "org.talend.mdm.schema.nature" });//$NON-NLS-1$
         desc.setComment("Talend MDM DataModel Project");
         try {
             prj.create(desc, null);
             prj.open(IResource.BACKGROUND_REFRESH, null);
         } catch (CoreException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return prj;
     }

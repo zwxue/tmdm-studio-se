@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -60,8 +62,8 @@ import com.amalto.workbench.webservices.WSUniversePK;
 
 public class LoginDialog extends Dialog {
 
-    // private static String f = System.getProperty("user.dir")+"/.mdmworkbench.conf";
-    // private static String f = System.getProperty("user.dir")+"/mdm_workbench_config.xml";
+    private static Log log = LogFactory.getLog(LoginDialog.class);
+
     private static String f = Platform.getInstanceLocation().getURL().getPath() + "/mdm_workbench_config.xml";//$NON-NLS-1$
 
     // private Collection<String> endpoints;
@@ -232,7 +234,7 @@ public class LoginDialog extends Dialog {
             try {
                 logininfoDocument = reader.read(new File(f));
             } catch (DocumentException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
             root = logininfoDocument.getRootElement();
             isExist = checkServer(root);
@@ -250,7 +252,7 @@ public class LoginDialog extends Dialog {
             writer.write(logininfoDocument);
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
         /*

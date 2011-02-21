@@ -23,6 +23,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -64,6 +66,8 @@ import com.amalto.workbench.webservices.WSRegexDataModelPKs;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class SelectImportedModulesDialog extends Dialog {
+
+    private static Log log = LogFactory.getLog(SelectImportedModulesDialog.class);
 
     private String title;
 
@@ -167,7 +171,7 @@ public class SelectImportedModulesDialog extends Dialog {
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
                 FileDialog fd = new FileDialog(shell.getShell(), SWT.SAVE);
-                fd.setFilterExtensions(new String[] { "*.xsd" });
+                fd.setFilterExtensions(new String[] { "*.xsd" });//$NON-NLS-1$
                 fd.setText("import XSD Schema");
                 String filename = fd.open();
 
@@ -177,8 +181,7 @@ public class SelectImportedModulesDialog extends Dialog {
                 try {
                     System.out.println(file.toURL());
                 } catch (MalformedURLException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
+                    log.error(e1.getMessage(), e1);
                 }
                 XSDDesc xsdDesc = buildUp(filename, LOCAL, 0);
                 include(xsdDesc);
@@ -214,7 +217,7 @@ public class SelectImportedModulesDialog extends Dialog {
                             dlg.retrieveDataModels(schemaList, false);
                         }
                     } catch (Exception es) {
-                        es.printStackTrace();
+                        log.error(es.getMessage(), es);
                         return;
                     }
                     dlg.setBlockOnOpen(true);
@@ -354,7 +357,7 @@ public class SelectImportedModulesDialog extends Dialog {
                 }
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error(ex.getMessage(), ex);
         }
     }
 

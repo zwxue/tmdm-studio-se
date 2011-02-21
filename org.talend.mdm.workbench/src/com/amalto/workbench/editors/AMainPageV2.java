@@ -16,6 +16,8 @@ import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
@@ -55,6 +57,8 @@ import com.amalto.workbench.widgets.TisTableViewer;
 import com.amalto.workbench.widgets.WidgetFactory;
 
 public abstract class AMainPageV2 extends AFormPage implements ModifyListener, Observer {
+
+    private static Log log = LogFactory.getLog(AMainPageV2.class);
 
     protected boolean comitting;
 
@@ -153,7 +157,7 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
             // WidgetFactory factory=WidgetFactory.getWidgetFactory();
             toolkit.adapt(form.getBody());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
     }// createFormContent
@@ -338,7 +342,7 @@ public abstract class AMainPageV2 extends AFormPage implements ModifyListener, O
             port = Util.getPort(getXObject());
             return port;
         } catch (XtentisException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return null;
     }

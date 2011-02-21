@@ -15,6 +15,8 @@ package com.amalto.workbench.editors;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -44,7 +46,9 @@ import com.amalto.workbench.providers.XObjectBrowserInput;
 
 public class XObjectBrowser extends FormEditor implements IXObjectModelListener {
 
-    public static String ID = "com.amalto.workbench.editors.XObjectBrowser";
+    private static Log log = LogFactory.getLog(XObjectBrowser.class);
+
+    public static String ID = "com.amalto.workbench.editors.XObjectBrowser";//$NON-NLS-1$
 
     private ArrayList<IFormPage> formPages = new ArrayList<IFormPage>();
 
@@ -92,7 +96,7 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
                     addPage(new RoutingEngineV2BrowserMainPage(this));
                 } catch (PartInitException e) {
                     // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    log.error(e.getMessage(), e);
                 }
                 break;
 

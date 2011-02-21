@@ -16,6 +16,8 @@ import java.awt.Panel;
 import java.rmi.RemoteException;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -62,6 +64,8 @@ import com.amalto.workbench.webservices.WSGetDataModel;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class ResourceSelectDialog extends Dialog {
+
+    private static Log log = LogFactory.getLog(ResourceSelectDialog.class);
 
     protected ResourceSelectDialog(IShellProvider parentShell) {
         super(parentShell);
@@ -321,15 +325,15 @@ public class ResourceSelectDialog extends Dialog {
         try {
             port = Util.getPort(pObject);
         } catch (XtentisException e3) {
-            e3.printStackTrace();
+            log.error(e3.getMessage(), e3);
         } catch (Exception e3) {
-            e3.printStackTrace();
+            log.error(e3.getMessage(), e3);
         }
         WSDataModel wsDataModel = null;
         try {
             wsDataModel = port.getDataModel(new WSGetDataModel(new WSDataModelPK(dataModelName)));
         } catch (RemoteException e2) {
-            e2.printStackTrace();
+            log.error(e2.getMessage(), e2);
         }
         try {
             // XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
@@ -337,7 +341,7 @@ public class ResourceSelectDialog extends Dialog {
             XSDSchema xsd = Util.createXsdSchema(schema, pObject);
             provideViwerContent(xsd);
         } catch (Exception e1) {
-            e1.printStackTrace();
+            log.error(e1.getMessage(), e1);
         }
     }// changeDomTree(
 

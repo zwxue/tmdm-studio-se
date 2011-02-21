@@ -14,6 +14,8 @@ package com.amalto.workbench.editors;
 
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -33,6 +35,8 @@ import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.Util;
 
 public class JobMainPage extends AMainPage implements IXObjectModelListener {
+
+    private static Log log = LogFactory.getLog(JobMainPage.class);
 
     protected String jobName;
 
@@ -92,13 +96,14 @@ public class JobMainPage extends AMainPage implements IXObjectModelListener {
             // );
             // ((GridData)separator.getLayoutData()).heightHint = 2;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
+
         }
     }
 
     public void checkServiceStatus() {
         try {//
-            if (jobName.endsWith(".zip")) {
+            if (jobName.endsWith(".zip")) {//$NON-NLS-1$
                 statusLabel.setText("Ready");
                 return;
             }
@@ -118,8 +123,7 @@ public class JobMainPage extends AMainPage implements IXObjectModelListener {
                 statusLabel.setText("Fail");
             method.releaseConnection();
         } catch (Exception e) {
-
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error",
                     "An error occured trying to check the job : " + e.getLocalizedMessage());
         }

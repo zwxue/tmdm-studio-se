@@ -15,6 +15,8 @@ package com.amalto.workbench.editors;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dom4j.DocumentException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -55,6 +57,8 @@ import com.amalto.workbench.webservices.WSVersioningSystemConfiguration;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class ServiceConfigrationMainPage extends AMainPageV2 {
+
+    private static Log log = LogFactory.getLog(ServiceConfigrationMainPage.class);
 
     private Combo serviceNameCombo;
 
@@ -108,7 +112,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
                         errorLabel.setText("");
                     }
                 } catch (RemoteException e1) {
-                    e1.printStackTrace();
+                    log.error(e1.getMessage(), e1);
                 }
                 markDirty();
             }
@@ -132,7 +136,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
                 // serviceNameCombo.add("");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
         // default parameters button
@@ -219,7 +223,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
                         msg = "Connection failed, please check your url, username and password";
                     }
                 } catch (RemoteException e1) {
-                    e1.printStackTrace();
+                    log.error(e1.getMessage(), e1);
                     msg = e1.getLocalizedMessage();
                 }
                 errorLabel.setForeground(isok ? errorLabel.getDisplay().getSystemColor(SWT.COLOR_BLUE) : errorLabel.getDisplay()
@@ -241,7 +245,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
             try {
                 doc = XmlUtil.formatPretty(doc, "UTF-8");
             } catch (DocumentException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         }
         return doc;
@@ -260,7 +264,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
                 }
             }
         } catch (Exception e1) {
-            e1.printStackTrace();
+            log.error(e1.getMessage(), e1);
         }
     }
 

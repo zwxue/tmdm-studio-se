@@ -12,6 +12,8 @@
 // ============================================================================
 package com.amalto.workbench.editors;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.TextEvent;
@@ -28,6 +30,8 @@ import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.webservices.WSDataCluster;
 
 public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
+
+    private static Log log = LogFactory.getLog(DataClusterMainPage.class);
 
     protected Text descriptionText;
 
@@ -161,7 +165,7 @@ public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
             refreshData();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
     }// createCharacteristicsContent
@@ -208,7 +212,7 @@ public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
             this.refreshing = false;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
                     "Error refreshing the page: " + e.getLocalizedMessage());
         }
@@ -245,7 +249,7 @@ public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
 
             this.comitting = false;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page",
                     "Error comitting the page: " + e.getLocalizedMessage());
         }

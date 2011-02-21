@@ -15,6 +15,8 @@ package com.amalto.workbench.editors;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.CoolBarManager;
@@ -48,6 +50,8 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.XObjectEditorInput;
 
 public class XObjectEditor extends FormEditor implements IXObjectModelListener {
+
+    private static Log log = LogFactory.getLog(XObjectEditor.class);
 
     public ArrayList<IFormPage> formPages = new ArrayList<IFormPage>();
 
@@ -130,7 +134,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener {
                     addPage(new RoutingRuleMainPage(this));
                 } catch (PartInitException e) {
                     // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    log.error(e.getMessage(), e);
                 }
                 break;
             case TreeObject.TRANSFORMER:
@@ -138,14 +142,14 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener {
                     addPage(new TransformerMainPage(this));
                 } catch (PartInitException e) {
                     // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    log.error(e.getMessage(), e);
                 }
                 break;
             case TreeObject.JOB:
                 try {
                     addPage(new JobMainPage(this));
                 } catch (PartInitException e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage(), e);
                 }
                 break;
             default:

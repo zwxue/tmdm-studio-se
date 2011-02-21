@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -47,7 +49,8 @@ import com.amalto.workbench.webservices.XtentisPort;
 
 public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
 
-                                                         // {
+    private static Log log = LogFactory.getLog(BrowseRevisionMainPage.class); // {
+
     protected org.eclipse.swt.widgets.List revisionIDList;
 
     protected org.eclipse.swt.widgets.List universeList;
@@ -175,7 +178,7 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
 
             revisionIDList.setSelection(0);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
     }
@@ -213,9 +216,9 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
             }
             this.comitting = false;
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } catch (XtentisException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
     }
@@ -248,7 +251,7 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
 
             refreshing = false;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
                     "Error refreshing the page: " + e.getLocalizedMessage());
         }

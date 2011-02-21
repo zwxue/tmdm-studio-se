@@ -528,7 +528,7 @@ public class EntityKeyConfigComposite extends Composite {
                     tvFields.refresh();
 
                 } catch (Exception exp) {
-                    exp.printStackTrace();
+                    log.error(exp.getMessage(), exp);
                 }
             }
         };
@@ -566,7 +566,7 @@ public class EntityKeyConfigComposite extends Composite {
                     tvFields.setSelection(new StructuredSelection(newFieldWrapper));
 
                 } catch (Exception exp) {
-                    exp.printStackTrace();
+                    log.error(exp.getMessage(), exp);
                 }
 
             }
@@ -600,7 +600,7 @@ public class EntityKeyConfigComposite extends Composite {
                     tvKeys.setSelection(new StructuredSelection(newKeyWrapper));
 
                 } catch (Exception exp) {
-                    exp.printStackTrace();
+                    log.error(exp.getMessage(), exp);
                 }
 
             }

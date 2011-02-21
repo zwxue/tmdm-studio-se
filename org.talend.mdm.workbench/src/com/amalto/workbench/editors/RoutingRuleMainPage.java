@@ -18,6 +18,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -92,6 +94,8 @@ import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
 
 public class RoutingRuleMainPage extends AMainPageV2 {
 
+    private static Log log = LogFactory.getLog(RoutingRuleMainPage.class);
+
     protected Text descriptionText;
 
     protected Text objectTypeText; // Concept
@@ -128,13 +132,13 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
     protected TreeParent treeParent;
 
-    private static String ROUTE_SERVICE = "amalto/local/service/";
+    private static String ROUTE_SERVICE = "amalto/local/service/";//$NON-NLS-1$
 
     private String dataModelName;
 
     private Text conditionText;
 
-    private final static String EXCONTENTEDITOR_ID = "trigger";
+    private final static String EXCONTENTEDITOR_ID = "trigger";//$NON-NLS-1$
 
     private ComplexTableViewerColumn[] conditionsColumns = new ComplexTableViewerColumn[] {
             new ComplexTableViewerColumn("XPath", false, "newXPath", "newXPath", "", ComplexTableViewerColumn.XPATH_STYLE,
@@ -183,13 +187,13 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             ExternalInfoHolder<?> allVarCandidatesHolder = ExternalInfoHolder.getTriggerAllCallJobVarsCandidatesHolder();
             ExternalInfoHolder<?> mdmServerInfoHolder = ExternalInfoHolder.getAllMDMServerInfoHolder(Util.getPort(getXObject()));
 
-            initExternalInfoHolderForEachType("callprocess", new ExternalInfoHolder<?>[] { allProcessNamesHolder });
-            initExternalInfoHolderForEachType("smtp", new ExternalInfoHolder<?>[] { allProcessNamesHolder });
-            initExternalInfoHolderForEachType("callJob", new ExternalInfoHolder<?>[] { allJobInfosHolder, mdmServerInfoHolder,
+            initExternalInfoHolderForEachType("callprocess", new ExternalInfoHolder<?>[] { allProcessNamesHolder });//$NON-NLS-1$
+            initExternalInfoHolderForEachType("smtp", new ExternalInfoHolder<?>[] { allProcessNamesHolder });//$NON-NLS-1$
+            initExternalInfoHolderForEachType("callJob", new ExternalInfoHolder<?>[] { allJobInfosHolder, mdmServerInfoHolder,//$NON-NLS-1$
                     allVarCandidatesHolder });
 
         } catch (XtentisException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
     }
@@ -376,7 +380,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
                         doc = document.getDocument();
                         desc = document.getDescription();
                     } catch (Exception e1) {
-                        doc = "N/A";
+                        doc = "N/A";//$NON-NLS-1$
                     } finally {
                         showUpDialog(desc, doc);
                     }
@@ -499,7 +503,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
     }// createCharacteristicsContent
@@ -596,7 +600,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             initParamterProposal(serviceNameCombo.getText());
             // initConditionProposal();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
                     "Error refreshing the page: " + e.getLocalizedMessage());
         }
@@ -641,7 +645,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             ServerView view = ServerView.show();
             view.getViewer().refresh();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page",
                     "Error comitting the page: " + e.getLocalizedMessage());
         }

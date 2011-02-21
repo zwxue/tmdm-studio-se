@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
@@ -98,9 +100,9 @@ import com.amalto.workbench.widgets.WidgetFactory;
 
 public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjectModelListener {
 
-    // private boolean refreshing;
+    private static Log log = LogFactory.getLog(RoutingEngineV2BrowserMainPage.class);
 
-    protected static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+    protected static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");//$NON-NLS-1$
 
     protected Label statusLabel;
 
@@ -324,7 +326,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             if ((servicesList != null) && (servicesList.length > 0)) {
                 String[] services = new String[servicesList.length];
                 for (int i = 0; i < servicesList.length; i++) {
-                    services[i] = servicesList[i].getJndiName().replaceFirst("amalto/local/service/", "");
+                    services[i] = servicesList[i].getJndiName().replaceFirst("amalto/local/service/", "");//$NON-NLS-1$
                 }
                 Arrays.sort(services);
                 for (int i = 0; i < services.length; i++) {
@@ -385,7 +387,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             factory.adapt(managedForm.getForm().getBody());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }// createFormContent
 
@@ -522,7 +524,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             idText.setFocus();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
                     "Error refreshing the page: " + e.getLocalizedMessage());
         }
@@ -532,7 +534,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
         try {
             // Nothing to do
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page",
                     "Error comitting the page: " + e.getLocalizedMessage());
         }
@@ -591,8 +593,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             long from = -1;
             long to = -1;
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
-            Pattern pattern = Pattern.compile("^\\d{4}\\d{2}\\d{2} \\d{2}:\\d{2}:\\d{2}$");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");//$NON-NLS-1$
+            Pattern pattern = Pattern.compile("^\\d{4}\\d{2}\\d{2} \\d{2}:\\d{2}:\\d{2}$");//$NON-NLS-1$
 
             if (!"".equals(fromText.getText())) {
                 String dateTimeText = fromText.getText().trim();
@@ -669,7 +671,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
             return results;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000"))
                 MessageDialog.openError(this.getSite().getShell(), "Too Many Results",
                         "More than 10000 results returned by the search. \nPlease narrow your search.");
@@ -709,7 +711,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             super();
             this.shell = shell;
             this.viewer = viewer;
-            setImageDescriptor(ImageCache.getImage("icons/edit_obj.gif"));
+            setImageDescriptor(ImageCache.getImage("icons/edit_obj.gif"));//$NON-NLS-1$
             setText("Edit Item");
             setToolTipText("View Routing Order details");
         }
@@ -737,7 +739,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 d.open();
 
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 MessageDialog.openError(shell, "Error",
                         "An error occured trying to view the Routing Order: " + e.getLocalizedMessage());
             }
@@ -765,7 +767,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             super();
             this.shell = shell;
             this.viewer = viewer;
-            setImageDescriptor(ImageCache.getImage("icons/delete_obj.gif"));
+            setImageDescriptor(ImageCache.getImage("icons/delete_obj.gif"));//$NON-NLS-1$
             IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
             if (selection.size() == 1)
                 setText("Delete the selected item");
@@ -799,7 +801,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 RoutingEngineV2BrowserMainPage.this.resultsViewer.setInput(getResults());
 
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 MessageDialog.openError(shell, "Error",
                         "An error occured trying to view the result as a DOM tree: " + e.getLocalizedMessage());
             }
@@ -848,7 +850,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
                     monitor.done();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage(), e);
                     MessageDialog.openError(shell, "Error Deleting",
                             "An error occured trying to delete the items:\n\n " + e.getLocalizedMessage());
                 }// try
@@ -914,7 +916,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 RoutingEngineV2BrowserMainPage.this.resultsViewer.setInput(getResults());
 
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 MessageDialog.openError(shell, "Error",
                         "An error occured trying to execute the Routing Order(s): " + e.getLocalizedMessage());
             }
@@ -948,7 +950,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 try {
                     port = Util.getPort(getXObject());
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage(), e);
                     MessageDialog.openError(shell, "Error Executing",
                             "An error occured trying to execute the Routing Order:\n\n " + e.getLocalizedMessage());
                 }// try
@@ -978,7 +980,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                         }
                         monitor.worked(1);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        log.error(e.getMessage(), e);
                         MessageDialog.openError(shell, "Error Executing",
                                 "An error occured trying to execute the Routing Order:\n\n " + e.getLocalizedMessage());
                     }// try
@@ -1020,7 +1022,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 }
                 return sdf.format(cal.getTime());
             case 2:
-                return ro.getServiceJNDI().replaceFirst("amalto/local/service/", "");
+                return ro.getServiceJNDI().replaceFirst("amalto/local/service/", "");//$NON-NLS-1$//$NON-NLS-2$
             case 3:
                 return ro.getMessage();
             default:
@@ -1105,7 +1107,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                     WSRoutingEngineV2ActionCode.START));
             statusLabel.setText(status.getValue());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error",
                     "An error occured trying to start the router: " + e.getLocalizedMessage());
         }
@@ -1118,7 +1120,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                     WSRoutingEngineV2ActionCode.STOP));
             statusLabel.setText(status.getValue());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error",
                     "An error occured trying to susend the router: " + e.getLocalizedMessage());
         }
@@ -1131,7 +1133,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                     WSRoutingEngineV2ActionCode.SUSPEND));
             statusLabel.setText(status.getValue());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error",
                     "An error occured trying to suspend the router: " + e.getLocalizedMessage());
         }
@@ -1144,7 +1146,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                     WSRoutingEngineV2ActionCode.RESUME));
             statusLabel.setText(status.getValue());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error",
                     "An error occured trying to resume the router: " + e.getLocalizedMessage());
         }

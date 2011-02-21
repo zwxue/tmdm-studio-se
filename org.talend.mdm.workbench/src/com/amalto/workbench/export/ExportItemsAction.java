@@ -12,6 +12,8 @@
 // ============================================================================
 package com.amalto.workbench.export;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -25,6 +27,8 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.views.ServerView;
 
 public class ExportItemsAction extends Action {
+
+    private static Log log = LogFactory.getLog(ExportItemsAction.class);
 
     private ServerView view = null;
 
@@ -70,7 +74,7 @@ public class ExportItemsAction extends Action {
             // //dialog.getShell().setSize(new Point(500,200));
             // dialog.open();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(view.getSite().getShell(), "Error",
                     "An error occured trying to Export Data Container: " + e.getLocalizedMessage());
         }

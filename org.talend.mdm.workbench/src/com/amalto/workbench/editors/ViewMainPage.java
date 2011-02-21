@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -71,6 +73,8 @@ import com.amalto.workbench.widgets.DescAnnotationComposite;
 import com.amalto.workbench.widgets.TisTableViewer;
 
 public class ViewMainPage extends AMainPageV2 implements ITextListener {
+
+    private static Log log = LogFactory.getLog(ViewMainPage.class);
 
     protected DescAnnotationComposite desAntionComposite;
 
@@ -224,7 +228,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
             refreshData();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
     }// createCharacteristicsContent
@@ -281,7 +285,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
             this.refreshing = false;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
                     "Error refreshing the page: " + e.getLocalizedMessage());
         }
@@ -300,9 +304,9 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
                 wsObject = (WSView) getXObject().getWsObject();
             }
         } catch (XtentisException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return wsObject;
     }
@@ -349,7 +353,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
             this.comitting = false;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page",
                     "Error comitting the page: " + e.getLocalizedMessage());
         }
@@ -376,9 +380,9 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
                     try {
                         wsConceptKey = Util.getPort(getXObject()).getBusinessConceptKey(wsGetBusinessConceptKey);
                     } catch (RemoteException e) {
-                        e.printStackTrace();
+                        log.error(e.getMessage(), e);
                     } catch (XtentisException e) {
-                        e.printStackTrace();
+                        log.error(e.getMessage(), e);
                     }
 
                     if (wsConceptKey != null) {
@@ -434,9 +438,9 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
                     try {
                         new ProgressMonitorDialog(this.getSite().getShell()).run(false, true, autoFixProcess);
                     } catch (InvocationTargetException e) {
-                        e.printStackTrace();
+                        log.error(e.getMessage(), e);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        log.error(e.getMessage(), e);
                     }
 
                 }
@@ -566,7 +570,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
                 viewableViewer.getViewer().refresh();
                 monitor.done();
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 MessageDialog.openError(parentShell, "Error Auto Fix",
                         "An error occured trying to fix issues automatically:\n\n " + e.getLocalizedMessage());
             }// try

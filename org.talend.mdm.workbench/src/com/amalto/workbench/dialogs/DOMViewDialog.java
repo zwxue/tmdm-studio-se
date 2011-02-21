@@ -17,6 +17,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -54,6 +56,8 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 
 public class DOMViewDialog extends Dialog {
+
+    private static Log log = LogFactory.getLog(DOMViewDialog.class);
 
     public final static int BUTTON_CLOSE = 10;
 
@@ -161,7 +165,8 @@ public class DOMViewDialog extends Dialog {
                                 node = Util.parse(sourceViewer.getDocument().get());
 
                             } catch (Exception ex) {
-                                ex.printStackTrace();
+
+                                log.error(ex.getMessage(), ex);
                                 tabFolder.setSelection(1);
                                 MessageDialog.openError(DOMViewDialog.this.getShell(), "The XML is not valid",
                                         "The XML is not valid:\n\n" + ex.getLocalizedMessage());
@@ -225,7 +230,7 @@ public class DOMViewDialog extends Dialog {
 
             return composite;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getShell(), "Error",
                     "An error occured trying to create the DOM Viewer " + e.getLocalizedMessage());
             return null;

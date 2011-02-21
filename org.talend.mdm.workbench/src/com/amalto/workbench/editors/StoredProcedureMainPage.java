@@ -17,6 +17,8 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -84,6 +86,8 @@ import com.amalto.workbench.webservices.WSStringArray;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class StoredProcedureMainPage extends AMainPage implements ITextListener {
+
+    private static Log log = LogFactory.getLog(StoredProcedureMainPage.class);
 
     protected Text descriptionText;
 
@@ -223,7 +227,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
             dataClusterCombo.select(0);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
     }// createCharacteristicsContent
@@ -325,7 +329,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
                     int number = 0;
 
                     while (true) {
-                        Pattern p = Pattern.compile(".*[^\\\\]%" + number + "[^\\d].*", Pattern.DOTALL);
+                        Pattern p = Pattern.compile(".*[^\\\\]%" + number + "[^\\d].*", Pattern.DOTALL);//$NON-NLS-1$//$NON-NLS-2$
                         Matcher m = p.matcher(proc);
                         if (!m.matches())
                             break;
@@ -398,7 +402,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
             super();
             this.shell = shell;
             this.viewer = viewer;
-            setImageDescriptor(ImageCache.getImage("icons/add_obj.gif"));
+            setImageDescriptor(ImageCache.getImage("icons/add_obj.gif"));//$NON-NLS-1$
             setText("Details");
             setToolTipText("View in Details");
         }
@@ -410,7 +414,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
                 IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
                 String result = (String) selection.getFirstElement();
                 // clean up highlights
-                result = result.replaceAll("\\s*__h", "").replaceAll("h__\\s*", "");
+                result = result.replaceAll("\\s*__h", "").replaceAll("h__\\s*", "");//$NON-NLS-1$//$NON-NLS-2$
 
                 // try to parse it
                 try {
@@ -431,7 +435,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
                     d.open();
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 MessageDialog.openError(shell, "Error",
                         "An error occured trying to view the result as a DOM tree: " + e.getLocalizedMessage());
             }
@@ -443,15 +447,15 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
 
     }
 
-    protected static Pattern highlightLeft = Pattern.compile("\\s*__h");
+    protected static Pattern highlightLeft = Pattern.compile("\\s*__h");//$NON-NLS-1$
 
-    protected static Pattern highlightRight = Pattern.compile("h__\\s*");
+    protected static Pattern highlightRight = Pattern.compile("h__\\s*");//$NON-NLS-1$
 
-    protected static Pattern emptyTags = Pattern.compile("\\s*<(.*?)\\/>\\s*");
+    protected static Pattern emptyTags = Pattern.compile("\\s*<(.*?)\\/>\\s*");//$NON-NLS-1$
 
-    protected static Pattern openingTags = Pattern.compile("\\s*<([^\\/].*?[^\\/])>\\s*");
+    protected static Pattern openingTags = Pattern.compile("\\s*<([^\\/].*?[^\\/])>\\s*");//$NON-NLS-1$
 
-    protected static Pattern closingTags = Pattern.compile("\\s*</(.*?)>\\s*");
+    protected static Pattern closingTags = Pattern.compile("\\s*</(.*?)>\\s*");//$NON-NLS-1$
 
     class XMLTableLabelProvider implements ITableLabelProvider {
 

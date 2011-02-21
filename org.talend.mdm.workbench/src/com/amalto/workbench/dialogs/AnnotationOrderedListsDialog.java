@@ -17,6 +17,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -64,6 +66,8 @@ import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.utils.Util;
 
 public class AnnotationOrderedListsDialog extends Dialog {
+
+    private static Log log = LogFactory.getLog(AnnotationOrderedListsDialog.class);
 
     protected Control textControl;
 
@@ -156,8 +160,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
         try {
             childNames = Util.getChildElementNames(decl.getName(), decl);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return childNames;
     }

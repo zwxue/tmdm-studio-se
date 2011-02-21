@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.SWT;
@@ -43,6 +45,8 @@ import com.amalto.workbench.widgets.TisTableViewer;
 import com.amalto.workbench.widgets.WidgetFactory;
 
 public class ValidationRuleDialog extends Dialog {
+
+    private static Log log = LogFactory.getLog(ValidationRuleDialog.class);
 
     String title;
 
@@ -126,8 +130,9 @@ public class ValidationRuleDialog extends Dialog {
         try {
             e = Util.parse(pattern).getDocumentElement();
         } catch (Exception e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+
+            log.error(e1.getMessage(), e1);
+
         }
         if (e.getAttributes().getNamedItem("name") != null)
             name = e.getAttributes().getNamedItem("name").getTextContent();

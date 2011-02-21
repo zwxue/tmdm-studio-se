@@ -56,7 +56,7 @@ public abstract class AFormPage extends FormPage {
 
         IActionBars bars = getEditorSite().getActionBars();
         IToolBarManager toolBarManager = bars.getToolBarManager();
-        if (toolBarManager.find("RefreshCurrentEditorAction") == null) {
+        if (toolBarManager.find("RefreshCurrentEditorAction") == null) {//$NON-NLS-1$
             toolBarManager.add(new RefreshCurrentEditorAction());
             toolBarManager.add(new Separator());
         }

@@ -162,7 +162,7 @@ public class Utilities {
                             }
                         }
                     } catch (CoreException ex) {
-                        ex.printStackTrace();
+                        log.error(ex.getMessage(), ex);
                     }
                 } else if (o instanceof IAdaptable) {
                     IAdaptable a = (IAdaptable) o;

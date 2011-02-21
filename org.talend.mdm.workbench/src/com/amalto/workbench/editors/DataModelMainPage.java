@@ -32,6 +32,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoableOperation;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
@@ -222,6 +224,8 @@ import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.WidgetFactory;
 
 public class DataModelMainPage extends EditorPart implements ModifyListener {
+
+    private static Log log = LogFactory.getLog(DataModelMainPage.class);
 
     protected Text descriptionText;
 
@@ -491,7 +495,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 @Override
                 public void widgetSelected(SelectionEvent e) {
                     FileDialog fd = new FileDialog(getSite().getShell(), SWT.OPEN);
-                    fd.setFilterExtensions(new String[] { "*.xsd", "*.dtd", "*.xml" });
+                    fd.setFilterExtensions(new String[] { "*.xsd", "*.dtd", "*.xml" });//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                     // set the default path to the workspace.
                     fd.setFilterPath(Platform.getInstanceLocation().getURL().getPath().substring(1));
                     // System.out.println(Platform.getInstanceLocation().getURL().getPath());
@@ -515,14 +519,14 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                             xsd = Util.nodeToString(xsdSchema.getDocument());
                         } else {
                             XSDDriver d = new XSDDriver();
-                            infer = d.doMain(new String[] { xmlFile, "out.xsd" });
+                            infer = d.doMain(new String[] { xmlFile, "out.xsd" });//$NON-NLS-1$
                             if (infer == 0) {
                                 xsd = d.outputXSD();
                             }
                         }
 
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        log.error(e.getMessage(), e);
                         infer = 2;
                     } finally {
                         if (infer == 0 && !xsd.equals("")) {
@@ -555,8 +559,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                                     "There is no element node in the imported xsd schema");
                         }
                     } catch (Exception e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+
+                        log.error(e.getMessage(), e);
                     }
                 }
             });
@@ -566,7 +570,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 @Override
                 public void widgetSelected(SelectionEvent e) {
                     FileDialog fd = new FileDialog(getSite().getShell(), SWT.SAVE);
-                    fd.setFilterExtensions(new String[] { "*.xsd" });
+                    fd.setFilterExtensions(new String[] { "*.xsd" });//$NON-NLS-1$
                     fd.setFilterPath(Platform.getInstanceLocation().getURL().getPath().substring(1));
                     fd.setText("Save the Data Module as XSD Schema");
                     String filename = fd.open();
@@ -621,7 +625,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             initializeOperationHistory();
 
         } catch (Exception e) {
-            e.printStackTrace();
+
+            log.error(e.getMessage(), e);
         }
 
     }// createCharacteristicsContent
@@ -655,7 +660,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                             MessageDialog.openInformation(getSite().getShell(), "Import XSDSchema",
                                     "The operation for importing XSDSchema completed successfully!");
                         } catch (Exception ex) {
-                            ex.printStackTrace();
+                            log.error(ex.getMessage(), ex);
                             String detail = "";
                             if (ex.getMessage() != null && !ex.getMessage().equals("")) {
                                 detail += " , due to" + "\n" + ex.getMessage();
@@ -1124,7 +1129,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             reConfigureXSDSchema(true);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             ErrorExceptionDialog.openError(this.getSite().getShell(), "Error refreshing the page", "Error refreshing the page: "
                     + e.getLocalizedMessage());
         }
@@ -1167,7 +1172,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             for (XSDSchemaContent cnt : elist) {
                 if (cnt instanceof XSDImport) {
                     XSDImport imp = (XSDImport) cnt;
-                    if (imp.getNamespace().equals("http://www.w3.org/2001/XMLSchema")) {
+                    if (imp.getNamespace().equals("http://www.w3.org/2001/XMLSchema")) {//$NON-NLS-1$
                         xsdImport = null;
                         break;
                     }
@@ -1185,7 +1190,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             port.putDataModel(new WSPutDataModel((WSDataModel) wsObject));
             RoleAssignmentDialog.doSave(port, ((WSDataModel) wsObject).getName(), "Data Model");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             ErrorExceptionDialog.openError(this.getSite().getShell(), "Error committing the page",
                     CommonUtil.getErrMsgFromException(e));
             return 1;

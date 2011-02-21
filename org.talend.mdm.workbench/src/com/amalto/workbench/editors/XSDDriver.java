@@ -22,6 +22,8 @@ import java.io.OutputStreamWriter;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.xml.sax.SAXException;
 
 import com.thaiopensource.relaxng.edit.SchemaCollection;
@@ -43,6 +45,8 @@ import com.thaiopensource.util.Version;
 import com.thaiopensource.xml.sax.ErrorHandlerImpl;
 
 public class XSDDriver {
+
+    private static Log log = LogFactory.getLog(XSDDriver.class);
 
     static private final Localizer localizer = new Localizer(XSDDriver.class);
 
@@ -77,13 +81,13 @@ public class XSDDriver {
                 inputType = inputType.substring(1);
         }
         InputFormat inFormat;
-        if (inputType.equalsIgnoreCase("rng"))
+        if (inputType.equalsIgnoreCase("rng"))//$NON-NLS-1$
             inFormat = new SAXParseInputFormat();
-        else if (inputType.equalsIgnoreCase("rnc"))
+        else if (inputType.equalsIgnoreCase("rnc"))//$NON-NLS-1$
             inFormat = new CompactParseInputFormat();
-        else if (inputType.equalsIgnoreCase("dtd"))
+        else if (inputType.equalsIgnoreCase("dtd"))//$NON-NLS-1$
             inFormat = new DtdInputFormat();
-        else if (inputType.equalsIgnoreCase("xml"))
+        else if (inputType.equalsIgnoreCase("xml"))//$NON-NLS-1$
             inFormat = new XmlInputFormat();
         else {
             error(localizer.message("unrecognized_input_type", inputType));
@@ -96,13 +100,13 @@ public class XSDDriver {
             if (outputType.length() > 0)
                 outputType = outputType.substring(1);
         }
-        if (outputType.equalsIgnoreCase("dtd"))
+        if (outputType.equalsIgnoreCase("dtd"))//$NON-NLS-1$
             of = new DtdOutputFormat();
-        else if (outputType.equalsIgnoreCase("rng"))
+        else if (outputType.equalsIgnoreCase("rng"))//$NON-NLS-1$
             of = new RngOutputFormat();
-        else if (outputType.equalsIgnoreCase("xsd"))
+        else if (outputType.equalsIgnoreCase("xsd"))//$NON-NLS-1$
             of = new XsdOutputFormat();
-        else if (outputType.equalsIgnoreCase("rnc"))
+        else if (outputType.equalsIgnoreCase("rnc"))//$NON-NLS-1$
             of = new RncOutputFormat();
         else {
             error(localizer.message("unrecognized_output_type", outputType));
@@ -121,7 +125,7 @@ public class XSDDriver {
             of.output(sc, od, outputParams.toArray(new String[0]), inputType.toLowerCase(), eh);
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
 
             return 1;
         }
@@ -157,7 +161,7 @@ public class XSDDriver {
             reader.close();
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } finally {
             boolean result = false;
             int tryCount = 0;
@@ -179,7 +183,7 @@ public class XSDDriver {
             writer.close();
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             return null;
         }
 
@@ -196,7 +200,7 @@ public class XSDDriver {
             out.close();
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             return null;
         }
         return "SUCCESS";

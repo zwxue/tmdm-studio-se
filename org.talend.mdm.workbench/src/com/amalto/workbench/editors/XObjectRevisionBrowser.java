@@ -18,6 +18,8 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.graphics.Image;
@@ -39,7 +41,9 @@ import com.amalto.workbench.webservices.XtentisPort;
 
 public class XObjectRevisionBrowser extends FormEditor {
 
-    public static String ID = "com.amalto.workbench.editors.XObjectRevisionBrowser";
+    private static Log log = LogFactory.getLog(XObjectRevisionBrowser.class);
+
+    public static String ID = "com.amalto.workbench.editors.XObjectRevisionBrowser";//$NON-NLS-1$
 
     private ArrayList<IFormPage> formPages = new ArrayList<IFormPage>();
 
@@ -116,12 +120,12 @@ public class XObjectRevisionBrowser extends FormEditor {
                     port.putUniverse(new WSPutUniverse(wsUniverse));
             }
         } catch (RemoteException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
 
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } catch (XtentisException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
         monitor.done();

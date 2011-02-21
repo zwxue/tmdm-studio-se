@@ -15,6 +15,8 @@ package com.amalto.workbench.editors;
 import java.net.URL;
 import java.util.regex.Pattern;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -70,7 +72,7 @@ import com.amalto.workbench.webservices.XtentisPort;
 
 public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListener {
 
-    // private boolean refreshing;
+    private static Log log = LogFactory.getLog(ViewBrowserMainPage.class);
 
     protected Combo dataClusterCombo;
 
@@ -139,46 +141,46 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                     WSWhereCondition wc = (WSWhereCondition) element;
                     String text = wc.getLeftPath() + " ";
                     if (wc.getOperator().equals(WSWhereOperator.CONTAINS))
-                        text += "Contains";
+                        text += "Contains";//$NON-NLS-1$
                     else if (wc.getOperator().equals(WSWhereOperator.EQUALS))
-                        text += "=";
+                        text += "=";//$NON-NLS-1$
                     else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN))
-                        text += ">";
+                        text += ">";//$NON-NLS-1$
                     else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN_OR_EQUAL))
-                        text += ">=";
+                        text += ">=";//$NON-NLS-1$
                     else if (wc.getOperator().equals(WSWhereOperator.JOIN))
-                        text += "Contains Text Of";
+                        text += "Contains Text Of";//$NON-NLS-1$
                     else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN))
-                        text += "<";
+                        text += "<";//$NON-NLS-1$
                     else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN_OR_EQUAL))
-                        text += "<=";
+                        text += "<=";//$NON-NLS-1$
                     else if (wc.getOperator().equals(WSWhereOperator.NOT_EQUALS))
-                        text += "!=";
+                        text += "!=";//$NON-NLS-1$
                     else if (wc.getOperator().equals(WSWhereOperator.STARTSWITH))
-                        text += "Starts With";
+                        text += "Starts With";//$NON-NLS-1$
                     else if (wc.getOperator().equals(WSWhereOperator.STRICTCONTAINS))
-                        text += "Strict Contains";
+                        text += "Strict Contains";//$NON-NLS-1$
                     else if (wc.getOperator().equals(WSWhereOperator.EMPTY_NULL))
-                        text += "Is Empty Or Null";
-                    text += " ";
+                        text += "Is Empty Or Null";//$NON-NLS-1$
+                    text += " ";//$NON-NLS-1$
                     if (!wc.getOperator().equals(WSWhereOperator.JOIN))
-                        text += "\"";
+                        text += "\"";//$NON-NLS-1$
                     text += wc.getRightValueOrPath();
                     if (!wc.getOperator().equals(WSWhereOperator.JOIN))
-                        text += "\"";
-                    text += " ";
+                        text += "\"";//$NON-NLS-1$
+                    text += " ";//$NON-NLS-1$
                     if (wc.getStringPredicate().equals(WSStringPredicate.AND))
-                        text += "[and]";
+                        text += "[and]";//$NON-NLS-1$
                     else if (wc.getStringPredicate().equals(WSStringPredicate.EXACTLY))
-                        text += "[exactly]";
+                        text += "[exactly]";//$NON-NLS-1$
                     else if (wc.getStringPredicate().equals(WSStringPredicate.NONE))
-                        text += "";
+                        text += "";//$NON-NLS-1$
                     else if (wc.getStringPredicate().equals(WSStringPredicate.NOT))
-                        text += "[not]";
+                        text += "[not]";//$NON-NLS-1$
                     else if (wc.getStringPredicate().equals(WSStringPredicate.OR))
-                        text += "[or]";
+                        text += "[or]";//$NON-NLS-1$
                     else if (wc.getStringPredicate().equals(WSStringPredicate.STRICTAND))
-                        text += "[strict and]";
+                        text += "[strict and]";//$NON-NLS-1$
                     return text;
                 }
 
@@ -263,7 +265,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             hookContextMenu();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
     }// createCharacteristicsContent
@@ -322,7 +324,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             searchText.setFocus();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
                     "Error refreshing the page: " + e.getLocalizedMessage());
         }
@@ -332,7 +334,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
         try {
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error comtiting the page",
                     "Error comitting the page: " + e.getLocalizedMessage());
         }
@@ -391,7 +393,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
              */
             return results;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000"))
                 MessageDialog.openError(this.getSite().getShell(), "Too Many Results",
                         "More than 10000 results returned by the search. \nPlease narrow your search.");
@@ -431,7 +433,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                 String xml = (String) selection.getFirstElement();
 
                 // clean up highlights
-                xml = xml.replaceAll("\\s*__h", "").replaceAll("h__\\s*", "");
+                xml = xml.replaceAll("\\s*__h", "").replaceAll("h__\\s*", "");//$NON-NLS-1$//$NON-NLS-2$
 
                 final DOMViewDialog d = new DOMViewDialog(ViewBrowserMainPage.this.getSite().getShell(), Util.parse(xml));
                 d.addListener(new Listener() {
@@ -446,7 +448,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                 d.close();
 
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 MessageDialog.openError(shell, "Error",
                         "An error occured trying to view the result as a DOM tree: " + e.getLocalizedMessage());
             }
@@ -458,15 +460,15 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 
     }
 
-    protected static Pattern highlightLeft = Pattern.compile("\\s*__h");
+    protected static Pattern highlightLeft = Pattern.compile("\\s*__h");//$NON-NLS-1$
 
-    protected static Pattern highlightRight = Pattern.compile("h__\\s*");
+    protected static Pattern highlightRight = Pattern.compile("h__\\s*");//$NON-NLS-1$
 
-    protected static Pattern emptyTags = Pattern.compile("\\s*<(.*?)\\/>\\s*");
+    protected static Pattern emptyTags = Pattern.compile("\\s*<(.*?)\\/>\\s*");//$NON-NLS-1$
 
-    protected static Pattern openingTags = Pattern.compile("\\s*<([^\\/].*?[^\\/])>\\s*");
+    protected static Pattern openingTags = Pattern.compile("\\s*<([^\\/].*?[^\\/])>\\s*");//$NON-NLS-1$
 
-    protected static Pattern closingTags = Pattern.compile("\\s*</(.*?)>\\s*");
+    protected static Pattern closingTags = Pattern.compile("\\s*</(.*?)>\\s*");//$NON-NLS-1$
 
     class XMLTableLabelProvider implements ITableLabelProvider {
 

@@ -25,6 +25,8 @@ import java.util.Observable;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -129,6 +131,8 @@ import com.amalto.workbench.widgets.xmleditor.ExtensibleTextContentEditorPageCre
 import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
 
 public class TransformerMainPage extends AMainPageV2 {
+
+    private static Log log = LogFactory.getLog(TransformerMainPage.class);
 
     static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 
@@ -309,14 +313,14 @@ public class TransformerMainPage extends AMainPageV2 {
                                     dialog.setBlockOnOpen(false);
                                     dialog.open();
                                 } catch (Exception e) {
-                                    e.printStackTrace();
+                                    log.error(e.getMessage(), e);
                                     throw new RuntimeException(e);
                                 }
                             }
                         });
 
                     } catch (Exception e1) {
-                        e1.printStackTrace();
+                        log.error(e1.getMessage(), e1);
                     }
                 }
             };
@@ -325,7 +329,7 @@ public class TransformerMainPage extends AMainPageV2 {
                     true, progress);
 
         } catch (Exception e1) {
-            e1.printStackTrace();
+            log.error(e1.getMessage(), e1);
         }
 
     }
@@ -404,7 +408,7 @@ public class TransformerMainPage extends AMainPageV2 {
                         transformerDialog.open();
 
                     } catch (Exception ex) {
-                        ex.printStackTrace();
+                        log.error(ex.getMessage(), ex);
                     }
                 };
             });
@@ -698,7 +702,7 @@ public class TransformerMainPage extends AMainPageV2 {
             // markDirtyWithoutCommit();
             // }
             // } catch (BadLocationException e) {
-            // e.printStackTrace();
+            // log.error(e.getMessage(), e);
             // }
             // }
             // }
@@ -713,7 +717,7 @@ public class TransformerMainPage extends AMainPageV2 {
             refreshData();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
     }
@@ -771,7 +775,7 @@ public class TransformerMainPage extends AMainPageV2 {
             TransformerMainPage.this.stepsList.forceFocus();
             markDirtyWithoutCommit();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error(ex.getMessage(), ex);
         }
 
     }
@@ -939,7 +943,7 @@ public class TransformerMainPage extends AMainPageV2 {
             this.refreshing = false;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
                     "Error refreshing the page: " + e.getLocalizedMessage());
         }
@@ -1496,7 +1500,7 @@ public class TransformerMainPage extends AMainPageV2 {
             initExternalInfoHolderForEachType("workflowtrigger", new ExternalInfoHolder<?>[] { workflowInfoHolder,
                     allDataModelHolderProxy });
         } catch (XtentisException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
     }

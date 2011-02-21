@@ -17,6 +17,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -41,6 +43,8 @@ import org.w3c.dom.NodeList;
 import com.amalto.workbench.image.ImageCache;
 
 public class QueryParametersDialog extends Dialog {
+
+    private static Log log = LogFactory.getLog(QueryParametersDialog.class);
 
     public final static int BUTTON_OK = 10;
 
@@ -85,7 +89,7 @@ public class QueryParametersDialog extends Dialog {
 
             return composite;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getShell(), "Error", "An error occured trying to create the Query Parameters dialog "
                     + e.getLocalizedMessage());
             return null;

@@ -25,6 +25,8 @@ import java.util.regex.Pattern;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
@@ -95,6 +97,8 @@ import com.amalto.workbench.widgets.RepositoryCheckTreeViewer;
 
 public class ExportItemsWizard extends Wizard {
 
+    private static Log log = LogFactory.getLog(ExportItemsWizard.class);
+
     private IStructuredSelection sel;
 
     private RepositoryCheckTreeViewer treeViewer;
@@ -142,14 +146,14 @@ public class ExportItemsWizard extends Wizard {
                     doexport(objs, monitor);
                     return Status.OK_STATUS;
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage(), e);
                     return Status.CANCEL_STATUS;
                 } finally {
                     if (zipfile != null && new File(exportFolder).exists()) {
                         try {
                             ZipToFile.zipFile(exportFolder, zipfile);
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            log.error(e.getMessage(), e);
                         }
                         ZipToFile.deleteDirectory(new File(exportFolder));
                     }
@@ -496,7 +500,7 @@ public class ExportItemsWizard extends Wizard {
             output.close();
             inputSteam.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -514,7 +518,7 @@ public class ExportItemsWizard extends Wizard {
             fo.flush();
             fo.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 

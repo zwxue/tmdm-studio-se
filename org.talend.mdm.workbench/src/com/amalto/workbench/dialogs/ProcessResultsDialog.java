@@ -20,6 +20,8 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.Document;
@@ -41,6 +43,8 @@ import com.amalto.workbench.editors.TransformerMainPage;
 import com.amalto.workbench.webservices.WSExtractedContent;
 
 public class ProcessResultsDialog extends Dialog {
+
+    private static Log log = LogFactory.getLog(ProcessResultsDialog.class);
 
     private final static int BUTTON_CLOSE = 10;
 
@@ -113,7 +117,7 @@ public class ProcessResultsDialog extends Dialog {
             return composite;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getShell(), "Error",
                     "An error occured trying to create the Views Search window: " + e.getLocalizedMessage());
             return null;
@@ -178,7 +182,7 @@ public class ProcessResultsDialog extends Dialog {
             variablesViewer.setDocument(new Document(getText(text)));
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.getShell(), "Error refreshing the page",
                     "Error refreshing the page: " + e.getLocalizedMessage());
         }

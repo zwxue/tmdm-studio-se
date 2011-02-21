@@ -20,6 +20,8 @@ import java.util.Comparator;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -47,6 +49,8 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 
 public class ImportExchangeOptionsDialog extends Dialog implements SelectionListener {
+
+    private static Log log = LogFactory.getLog(ImportExchangeOptionsDialog.class);
 
     private Button exportsBtn, dataModelBtn, executeBtn;
 
@@ -132,7 +136,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
                     item.setText(new String[] { datum.get(COLUMN_EXTENSION_NAME).toString(),
                             datum.get(COLUMN_REVISION_NAME).toString(), datum.get(COLUMN_URL_NAME).toString() });
                 } catch (JSONException je) {
-                    je.printStackTrace();
+                    log.error(je.getMessage(), je);
                 }
             }
         });
@@ -191,7 +195,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
                             }
                             return valueA.compareTo(valueB) < 0 ? 1 : -1;
                         } catch (JSONException je) {
-                            je.printStackTrace();
+                            log.error(je.getMessage(), je);
                             return -1;
                         }
                     }
@@ -235,7 +239,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
             }
             exchangeDwnTable.setItemCount(dataContent.length);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -303,15 +307,4 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
         }
     }
 
-    // private void getImportedXSDList()
-    // {
-    // try {
-    // for (int idx : exchangeDwnTable.getSelectionIndices()) {
-    // JSONObject json = dataContent[idx];
-    // imports.add(json.getString("url"));
-    // }
-    // } catch (JSONException je) {
-    // je.printStackTrace();
-    // }
-    // }
 }
