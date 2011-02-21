@@ -123,7 +123,7 @@ public class DeleteXObjectAction extends Action {
                         deleteTreeObject(toDelList);
                         return Status.OK_STATUS;
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        log.error(e.getMessage(), e);
                         return Status.CANCEL_STATUS;
                     }
                 }

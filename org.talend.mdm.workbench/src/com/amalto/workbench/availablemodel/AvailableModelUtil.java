@@ -15,11 +15,15 @@ package com.amalto.workbench.availablemodel;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 
 public class AvailableModelUtil {
+
+    private static Log log = LogFactory.getLog(AvailableModelUtil.class);
 
     public static List<IAvailableModel> getAvailableModels() {
         try {
@@ -37,7 +41,7 @@ public class AvailableModelUtil {
 
             return models;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return new ArrayList<IAvailableModel>();
     }

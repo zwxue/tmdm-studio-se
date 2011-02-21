@@ -74,7 +74,8 @@ public class XSDDeleteConceptAction extends UndoAction {
                 try {
                     port = Util.getPort(page.getXObject());
                 } catch (XtentisException e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage(), e);
+                    ;
                 }
                 list = new HashSet<String>();
                 Util.getForeingKeyInDataModel(list, page.getXObject().getParent(), port);

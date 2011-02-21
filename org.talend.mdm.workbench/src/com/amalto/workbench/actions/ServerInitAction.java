@@ -17,6 +17,8 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -40,6 +42,8 @@ import com.amalto.workbench.webservices.XtentisPort;
  * 
  */
 public class ServerInitAction extends Action {
+
+    private Log log = LogFactory.getLog(ServerInitAction.class);
 
     private ServerView view = null;
 
@@ -88,7 +92,7 @@ public class ServerInitAction extends Action {
             MessageDialog.openInformation(view.getSite().getShell(), "Initialize the MDM server", "Initialization completed");
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(view.getSite().getShell(), "Error", "An error occured trying to initilaize the MDM server: "
                     + e.getLocalizedMessage());
         }

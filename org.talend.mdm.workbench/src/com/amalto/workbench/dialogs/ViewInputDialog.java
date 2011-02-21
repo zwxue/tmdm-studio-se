@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.dialogs;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -95,15 +107,15 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
 
     private boolean isTransfor = false;
 
-    private static String Smart_view = "Smart_view_";
+    private static String Smart_view = "Smart_view_";//$NON-NLS-1$
 
-    private static String beforeSaving = "beforeSaving_";
+    private static String beforeSaving = "beforeSaving_";//$NON-NLS-1$
 
-    private static String beforeDeleting = "beforeDeleting_";
+    private static String beforeDeleting = "beforeDeleting_";//$NON-NLS-1$
 
-    private static String runnableProcess = "Runnable_";
+    private static String runnableProcess = "Runnable_";//$NON-NLS-1$
 
-    private static String standaloneProcess = "Runnable#";
+    private static String standaloneProcess = "Runnable#";//$NON-NLS-1$
 
     boolean isBtnShow = true;
 

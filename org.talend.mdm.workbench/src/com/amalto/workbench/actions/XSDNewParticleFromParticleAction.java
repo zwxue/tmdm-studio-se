@@ -204,7 +204,6 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
                 struc.setAccessRole(lists, false, (IStructuredContentProvider) page.getTreeViewer().getContentProvider(),
                         (String) keys.toArray()[i]);
             } catch (Exception e) {
-                // e.printStackTrace();
                 log.error(e.getMessage(), e);
             }
         }
@@ -232,7 +231,6 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
             }
 
         } catch (Exception e) {
-            // e.printStackTrace();
             log.error(e.getMessage(), e);
             MessageDialog.openError(this.page.getSite().getShell(), "Error",
                     "An error occured trying to paste Entities: " + e.getLocalizedMessage());

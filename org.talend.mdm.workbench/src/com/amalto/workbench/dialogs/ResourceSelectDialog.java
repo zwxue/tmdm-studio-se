@@ -1,11 +1,20 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.dialogs;
-
 
 import java.awt.Panel;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -54,348 +63,368 @@ import com.amalto.workbench.webservices.XtentisPort;
 
 public class ResourceSelectDialog extends Dialog {
 
-	protected ResourceSelectDialog(IShellProvider parentShell) {
-		super(parentShell);
-	}
+    protected ResourceSelectDialog(IShellProvider parentShell) {
+        super(parentShell);
+    }
 
-	private static final long serialVersionUID = 1L;
-	protected Label schemaLabel = null;
-	protected Combo languagesCombo;
-	protected TreeViewer domViewer;
-	private String title = "Select Xpath";
-	protected TreeParent parent;
-	protected Label datamoelsLabel;
-	protected Combo dataModelCombo ;
-	
-	protected Button isResource;
-	protected Button isXpath;
-	protected TreeParent tree ;
-	//private static String f = System.getProperty("user.dir")+"/mdm_workbench_config.xml";
-	
-	//protected TreeObject xobject;
-	//protected DrillDownAdapter drillDownAdapter;
-	protected IWorkbenchPartSite site ;
-	protected Panel panel;
-	protected Text xpathText;
-	protected Button add;
-	protected SelectionListener listener;
-	//TODO:check This two static String and there related static methods may cause some problems.
-	protected static String dataModelName;
-	private String xpath="";
-	private boolean isMulti=true;
-	protected String conceptName;
-	protected static String context;
-	private XSDSchema xsdSchema;
-	private ServerTreeContentProvider contentProvider;
-	//private int dragType = -1;
-	//private ArrayList<TreeObject> dndTreeObjs = new ArrayList<TreeObject>();
-	
-//	public ResourceSelectDialog(Shell parentShell,TreeParent parent,String title,IWorkbenchPartSite site,boolean isMulti,String dataModelName) {
-	public ResourceSelectDialog(Shell parentShell,TreeParent parent,String title,IWorkbenchPartSite site) {
-		super(parentShell);
-		this.title = title;
-		this.parent = parent;
-		this.site = site;
-		this.isMulti=isMulti;
-		if(dataModelName!=null)
-		this.dataModelName =dataModelName;//default dataModel
-	}
+    private static final long serialVersionUID = 1L;
 
-	private  String getXpath(StructuredSelection sel){
+    protected Label schemaLabel = null;
 
-		String path ="";
-		String totalXpath="";
-            TreeItem item;
-            TreeItem[] items = domViewer.getTree().getSelection();
-            for(int i=0;i<items.length;i++){
-            	item = items[i];
-            	XSDConcreteComponent component = (XSDConcreteComponent)item.getData();
-            	if(!(component instanceof XSDParticle)&&!(component instanceof XSDElementDeclaration))
-            		continue;
-            	do {
-                	 component = (XSDConcreteComponent)item.getData();
-                	if (component instanceof XSDParticle) {
-                		if (((XSDParticle)component).getTerm() instanceof XSDElementDeclaration)
-                			path = "/"+((XSDElementDeclaration)((XSDParticle)component).getTerm()).getName()+path;
-                	} else if (component instanceof XSDElementDeclaration) {
-                			path=((XSDElementDeclaration)component).getName()+path;
-                	}
-                	item = item.getParentItem();
-                	
-                } while (item!=null);
-            	if(i==0)
-            		totalXpath = path;
-            	else
-            		totalXpath +="&"+path;
-            	path="";
-            }//for(i=0
-            if(context!=null && conceptName!=null){
-	
-				if(totalXpath.equals(conceptName)){
-					totalXpath=totalXpath.replaceAll(conceptName, "/");
-				}else{
-					totalXpath=totalXpath.replaceAll(conceptName+"/", "");
-				}
-				if(totalXpath.equals(context)|| totalXpath.equals(context.replaceAll(conceptName+"/", ""))){
-					totalXpath=".";
-				}
-				if(totalXpath.indexOf('/')==-1 && !totalXpath.equals(".") && !"/".equals(totalXpath) && !"/".equals(context) && !context.equals(conceptName)){
-					totalXpath="../"+totalXpath;
-				}
+    protected Combo languagesCombo;
+
+    protected TreeViewer domViewer;
+
+    private String title = "Select Xpath";
+
+    protected TreeParent parent;
+
+    protected Label datamoelsLabel;
+
+    protected Combo dataModelCombo;
+
+    protected Button isResource;
+
+    protected Button isXpath;
+
+    protected TreeParent tree;
+
+    // private static String f = System.getProperty("user.dir")+"/mdm_workbench_config.xml";
+
+    // protected TreeObject xobject;
+    // protected DrillDownAdapter drillDownAdapter;
+    protected IWorkbenchPartSite site;
+
+    protected Panel panel;
+
+    protected Text xpathText;
+
+    protected Button add;
+
+    protected SelectionListener listener;
+
+    // TODO:check This two static String and there related static methods may cause some problems.
+    protected static String dataModelName;
+
+    private String xpath = "";
+
+    private boolean isMulti = true;
+
+    protected String conceptName;
+
+    protected static String context;
+
+    private XSDSchema xsdSchema;
+
+    private ServerTreeContentProvider contentProvider;
+
+    // private int dragType = -1;
+    // private ArrayList<TreeObject> dndTreeObjs = new ArrayList<TreeObject>();
+
+    // public ResourceSelectDialog(Shell parentShell,TreeParent parent,String title,IWorkbenchPartSite site,boolean
+    // isMulti,String dataModelName) {
+    public ResourceSelectDialog(Shell parentShell, TreeParent parent, String title, IWorkbenchPartSite site) {
+        super(parentShell);
+        this.title = title;
+        this.parent = parent;
+        this.site = site;
+        this.isMulti = isMulti;
+        if (dataModelName != null)
+            this.dataModelName = dataModelName;// default dataModel
+    }
+
+    private String getXpath(StructuredSelection sel) {
+
+        String path = "";
+        String totalXpath = "";
+        TreeItem item;
+        TreeItem[] items = domViewer.getTree().getSelection();
+        for (int i = 0; i < items.length; i++) {
+            item = items[i];
+            XSDConcreteComponent component = (XSDConcreteComponent) item.getData();
+            if (!(component instanceof XSDParticle) && !(component instanceof XSDElementDeclaration))
+                continue;
+            do {
+                component = (XSDConcreteComponent) item.getData();
+                if (component instanceof XSDParticle) {
+                    if (((XSDParticle) component).getTerm() instanceof XSDElementDeclaration)
+                        path = "/" + ((XSDElementDeclaration) ((XSDParticle) component).getTerm()).getName() + path;
+                } else if (component instanceof XSDElementDeclaration) {
+                    path = ((XSDElementDeclaration) component).getName() + path;
+                }
+                item = item.getParentItem();
+
+            } while (item != null);
+            if (i == 0)
+                totalXpath = path;
+            else
+                totalXpath += "&" + path;
+            path = "";
+        }// for(i=0
+        if (context != null && conceptName != null) {
+
+            if (totalXpath.equals(conceptName)) {
+                totalXpath = totalXpath.replaceAll(conceptName, "/");
+            } else {
+                totalXpath = totalXpath.replaceAll(conceptName + "/", "");
             }
-           return totalXpath;     
+            if (totalXpath.equals(context) || totalXpath.equals(context.replaceAll(conceptName + "/", ""))) {
+                totalXpath = ".";
+            }
+            if (totalXpath.indexOf('/') == -1 && !totalXpath.equals(".") && !"/".equals(totalXpath) && !"/".equals(context)
+                    && !context.equals(conceptName)) {
+                totalXpath = "../" + totalXpath;
+            }
         }
-		
-	protected Control createDialogArea (Composite parent) {
-		parent.getShell().setText(this.title);
-		Composite composite = (Composite) super.createDialogArea(parent);
-		GridLayout layout = (GridLayout)composite.getLayout();
-		layout.makeColumnsEqualWidth=false;
-		layout.numColumns = 3;
-		datamoelsLabel = new Label(composite, SWT.NONE);
-		GridData dg= new GridData(SWT.FILL,SWT.FILL,false,true,1,1);
-		datamoelsLabel.setLayoutData(dg);
-		datamoelsLabel.setText("Data Models:");
-		dg= new GridData(SWT.FILL,SWT.FILL,true,true,2,1);
-		dg.widthHint=400;
-		dataModelCombo = new Combo(composite,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
-		dataModelCombo.setLayoutData(dg);
-		if(this.parent==null){
-			this.parent=(TreeParent)ServerView.show().getRoot().getChildren()[0];
-		}
-		tree = this.parent.findServerFolder(TreeObject.DATA_MODEL);
-		//tree.getParent().getChildren();
-		
-		//filter the datamodel according to conceptName
-		List<String> avaiList=Util.getDataModel(this.parent, null, conceptName);
-		dataModelCombo.setItems(avaiList.toArray(new String[avaiList.size()]));
-		dataModelCombo.addSelectionListener(new SelectionListener() {
-			public void widgetDefaultSelected(
-					org.eclipse.swt.events.SelectionEvent e) {}
+        return totalXpath;
+    }
 
-			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-				changeDomTree(tree);
-			}
-		});
-		schemaLabel = new Label(composite, SWT.NONE);
-		schemaLabel.setText("Xpath: ");
-		schemaLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true,1, 1));
-		((GridData) schemaLabel.getLayoutData()).widthHint = 10;
-		
-		
-		
-		xpathText = new Text(composite, SWT.BORDER);
-		xpathText.setEditable(false);
-		xpathText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2,1));
-		
-		Composite radioComposite =(Composite) super.createDialogArea(parent);
-		GridLayout radioLayout = (GridLayout)radioComposite.getLayout();
-		radioLayout.makeColumnsEqualWidth = false;
-		radioLayout.numColumns =2;
-		radioLayout.marginRight=280;
-		
-		isXpath = new Button(radioComposite, SWT.RADIO);
-		isXpath.setText("Browse XPath");
-		isXpath.setLayoutData(new GridData(SWT.FILL, SWT.LEFT, true, true,1, 1));
-		isXpath.setSelection(true);
-		((GridData) isXpath.getLayoutData()).widthHint = 60;
-		isXpath.addSelectionListener(new SelectionListener() {
-			public void widgetSelected(SelectionEvent e) {
-				datamoelsLabel.setVisible(true);
-				dataModelCombo.setVisible(true);
-				schemaLabel.setText("Xpath: ");
-				changeDomTree(tree);
-				domViewer.refresh(tree);
-			}
-			
-			public void widgetDefaultSelected(SelectionEvent e) {
-			}
-		});
-		isResource = new Button(radioComposite, SWT.RADIO);
-		isResource.setText("Browse Resource");
-		isResource.setLayoutData(new GridData(SWT.FILL, SWT.LEFT, false, true,1, 1));
-		((GridData) isResource.getLayoutData()).widthHint = 120;
-		isResource.addSelectionListener(new SelectionListener() {
-			public void widgetSelected(SelectionEvent e) {
-				datamoelsLabel.setVisible(false);
-				dataModelCombo.setVisible(false);
-				schemaLabel.setText("Resource: ");
-				//domViewer.setContentProvider(null);
-				domViewer.refresh(tree);
-				
-				changeToResource();
-			}
-			public void widgetDefaultSelected(SelectionEvent e) {}});
-		
-		
-		
-		if (isMulti) {
-			domViewer = new TreeViewer(parent, SWT.H_SCROLL | SWT.MULTI| SWT.V_SCROLL | SWT.BORDER);
-		} else {
-			domViewer = new TreeViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL  | SWT.BORDER);
-		}
-		int index = avaiList.indexOf(dataModelName);
-		if (index < 0)
-			dataModelCombo.select(0);
-		else
-			dataModelCombo.select(index);
+    protected Control createDialogArea(Composite parent) {
+        parent.getShell().setText(this.title);
+        Composite composite = (Composite) super.createDialogArea(parent);
+        GridLayout layout = (GridLayout) composite.getLayout();
+        layout.makeColumnsEqualWidth = false;
+        layout.numColumns = 3;
+        datamoelsLabel = new Label(composite, SWT.NONE);
+        GridData dg = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
+        datamoelsLabel.setLayoutData(dg);
+        datamoelsLabel.setText("Data Models:");
+        dg = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
+        dg.widthHint = 400;
+        dataModelCombo = new Combo(composite, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.SINGLE);
+        dataModelCombo.setLayoutData(dg);
+        if (this.parent == null) {
+            this.parent = (TreeParent) ServerView.show().getRoot().getChildren()[0];
+        }
+        tree = this.parent.findServerFolder(TreeObject.DATA_MODEL);
+        // tree.getParent().getChildren();
 
-		changeDomTree(tree);
+        // filter the datamodel according to conceptName
+        List<String> avaiList = Util.getDataModel(this.parent, null, conceptName);
+        dataModelCombo.setItems(avaiList.toArray(new String[avaiList.size()]));
+        dataModelCombo.addSelectionListener(new SelectionListener() {
 
-		domViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
-		((GridData) domViewer.getControl().getLayoutData()).heightHint = 400;
-		((GridData) domViewer.getControl().getLayoutData()).widthHint = 400;
-		return composite;
-	}
-	private void changeToResource(){
-		//drillDownAdapter = new DrillDownAdapter(domViewer);
-		
-		contentProvider=new ServerTreeContentProvider(ServerView.show().getSite(),parent.getServerRoot());
-		setTreeContentProvider(contentProvider);
-		domViewer.setLabelProvider(new ServerTreeLabelProvider());
-		domViewer.setSorter(new ViewerSorter()
-		{
-		    public int category(Object element) {
-		    	if (element instanceof TreeParent)
-		    	{
-		    		TreeParent category = (TreeParent)element;
-		    		if (category.getType() == TreeObject.CATEGORY_FOLDER)
-		    			return -1;
-		    	}
-		        return 0;
-		    }
-		}
-		);
-		domViewer.setInput(ServerView.show().getSite());
-	}
-	
+            public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
+            }
 
-	private void setTreeContentProvider(ServerTreeContentProvider treeContentProvider) {
-		if(this.domViewer.getContentProvider()!=null){
-			this.domViewer.getContentProvider().dispose();
-		}
-		domViewer.setContentProvider(treeContentProvider);
-	}
-	
-	private void changeDomTree(final TreeParent pObject) {
-		String modelDisplay = dataModelCombo.getText();
-		if(modelDisplay.length()==0) return;
-		this.dataModelName = modelDisplay;
-        //this.selectedDataModelName = modelDisplay;
-		//xobject = pObject.findObject(TreeObject.DATA_MODEL, modelDisplay);
-		XtentisPort port = null;
-		try {
-			port = Util.getPort(pObject);
-		} catch (XtentisException e3) {
-			e3.printStackTrace();
-		} catch (Exception e3) {
-			e3.printStackTrace();
-		}
-		WSDataModel wsDataModel = null;
-		try {
-			wsDataModel = port.getDataModel(new WSGetDataModel(
-					new WSDataModelPK(dataModelName)));
-		} catch (RemoteException e2) {
-			e2.printStackTrace();
-		}
-		try {
-			//XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
-			String schema = wsDataModel.getXsdSchema();//Util.nodeToString(xsdSchema.getDocument());
-			XSDSchema xsd= Util.createXsdSchema(schema, pObject);
-			provideViwerContent(xsd);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-	}// changeDomTree(
-	
+            public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+                changeDomTree(tree);
+            }
+        });
+        schemaLabel = new Label(composite, SWT.NONE);
+        schemaLabel.setText("Xpath: ");
+        schemaLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
+        ((GridData) schemaLabel.getLayoutData()).widthHint = 10;
 
-	
-	
-	  protected void provideViwerContent(XSDSchema xsdSchema) {
-		this.xsdSchema=xsdSchema;
-		//drillDownAdapter = new DrillDownAdapter(domViewer);
-		domViewer.setLabelProvider(new XSDTreeLabelProvider());
-		XPathTreeContentProvider  provider=new XPathTreeContentProvider(this.site,xsdSchema, parent,"");
-		provider.setConceptName(this.conceptName);
-		domViewer.setContentProvider(provider);
+        xpathText = new Text(composite, SWT.BORDER);
+        xpathText.setEditable(false);
+        xpathText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1));
 
-		domViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			public void selectionChanged(SelectionChangedEvent e) {
-				StructuredSelection sel = (StructuredSelection) e.getSelection();
-				if(isXpath.getSelection())
-					xpath = getXpath(sel);
-				else
-				{
-					TreeObject selectNode = (TreeObject) sel.getFirstElement();
-					if(selectNode!=null)
-						xpath  = selectNode.getDisplayName();
-					else
-						xpath  = "";
-				}
-				sel.getFirstElement();
-				xpathText.setText(xpath);
-				getButton(IDialogConstants.OK_ID).setEnabled(xpath.length()>0);
-			}
-		});
-		domViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true));
-		domViewer.setSorter(new ViewerSorter() {
-			public int category(Object element) {
-				// we want facets before Base TypeDefinitions in
-				// SimpleTypeDefinition
-				if (element instanceof XSDFacet)
-					return 100;
-				// unique keys after element declarations and before other keys
-				if (element instanceof XSDIdentityConstraintDefinition) {
-					XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) element;
-					if (icd.getIdentityConstraintCategory().equals(
-							XSDIdentityConstraintCategory.UNIQUE_LITERAL))
-						return 300;
-					else if (icd.getIdentityConstraintCategory().equals(
-							XSDIdentityConstraintCategory.KEY_LITERAL))
-						return 301;
-					else
-						return 302;
-				}
-				return 200;
-			}
+        Composite radioComposite = (Composite) super.createDialogArea(parent);
+        GridLayout radioLayout = (GridLayout) radioComposite.getLayout();
+        radioLayout.makeColumnsEqualWidth = false;
+        radioLayout.numColumns = 2;
+        radioLayout.marginRight = 280;
 
-			public int compare(Viewer theViewer, Object e1, Object e2) {
-				int cat1 = category(e1);
-				int cat2 = category(e2);
-				return cat1 - cat2;
-			}
-		});
-		domViewer.setInput(site);
-	}
+        isXpath = new Button(radioComposite, SWT.RADIO);
+        isXpath.setText("Browse XPath");
+        isXpath.setLayoutData(new GridData(SWT.FILL, SWT.LEFT, true, true, 1, 1));
+        isXpath.setSelection(true);
+        ((GridData) isXpath.getLayoutData()).widthHint = 60;
+        isXpath.addSelectionListener(new SelectionListener() {
 
-	protected Control createButtonBar(Composite parent) {
-		Control btnBar = super.createButtonBar(parent);
-		getButton(IDialogConstants.OK_ID).setText("OK");
-		return btnBar;
-	}
+            public void widgetSelected(SelectionEvent e) {
+                datamoelsLabel.setVisible(true);
+                dataModelCombo.setVisible(true);
+                schemaLabel.setText("Xpath: ");
+                changeDomTree(tree);
+                domViewer.refresh(tree);
+            }
 
-	public String getXpath() {
-		return xpath;
-	}
+            public void widgetDefaultSelected(SelectionEvent e) {
+            }
+        });
+        isResource = new Button(radioComposite, SWT.RADIO);
+        isResource.setText("Browse Resource");
+        isResource.setLayoutData(new GridData(SWT.FILL, SWT.LEFT, false, true, 1, 1));
+        ((GridData) isResource.getLayoutData()).widthHint = 120;
+        isResource.addSelectionListener(new SelectionListener() {
 
-	public static String getDataModelName() {
-		return dataModelName;
-	}
+            public void widgetSelected(SelectionEvent e) {
+                datamoelsLabel.setVisible(false);
+                dataModelCombo.setVisible(false);
+                schemaLabel.setText("Resource: ");
+                // domViewer.setContentProvider(null);
+                domViewer.refresh(tree);
 
-	public String getConceptName() {
-		return conceptName;
-	}
+                changeToResource();
+            }
 
-	public void setConceptName(String conceptName) {
-		this.conceptName = conceptName;
-	}
+            public void widgetDefaultSelected(SelectionEvent e) {
+            }
+        });
 
-	public static String getContext() {
-		return context;
-	}
+        if (isMulti) {
+            domViewer = new TreeViewer(parent, SWT.H_SCROLL | SWT.MULTI | SWT.V_SCROLL | SWT.BORDER);
+        } else {
+            domViewer = new TreeViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+        }
+        int index = avaiList.indexOf(dataModelName);
+        if (index < 0)
+            dataModelCombo.select(0);
+        else
+            dataModelCombo.select(index);
 
-	public static void setContext(String c) {
-		context = c;
-	}
+        changeDomTree(tree);
+
+        domViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
+        ((GridData) domViewer.getControl().getLayoutData()).heightHint = 400;
+        ((GridData) domViewer.getControl().getLayoutData()).widthHint = 400;
+        return composite;
+    }
+
+    private void changeToResource() {
+        // drillDownAdapter = new DrillDownAdapter(domViewer);
+
+        contentProvider = new ServerTreeContentProvider(ServerView.show().getSite(), parent.getServerRoot());
+        setTreeContentProvider(contentProvider);
+        domViewer.setLabelProvider(new ServerTreeLabelProvider());
+        domViewer.setSorter(new ViewerSorter() {
+
+            public int category(Object element) {
+                if (element instanceof TreeParent) {
+                    TreeParent category = (TreeParent) element;
+                    if (category.getType() == TreeObject.CATEGORY_FOLDER)
+                        return -1;
+                }
+                return 0;
+            }
+        });
+        domViewer.setInput(ServerView.show().getSite());
+    }
+
+    private void setTreeContentProvider(ServerTreeContentProvider treeContentProvider) {
+        if (this.domViewer.getContentProvider() != null) {
+            this.domViewer.getContentProvider().dispose();
+        }
+        domViewer.setContentProvider(treeContentProvider);
+    }
+
+    private void changeDomTree(final TreeParent pObject) {
+        String modelDisplay = dataModelCombo.getText();
+        if (modelDisplay.length() == 0)
+            return;
+        this.dataModelName = modelDisplay;
+        // this.selectedDataModelName = modelDisplay;
+        // xobject = pObject.findObject(TreeObject.DATA_MODEL, modelDisplay);
+        XtentisPort port = null;
+        try {
+            port = Util.getPort(pObject);
+        } catch (XtentisException e3) {
+            e3.printStackTrace();
+        } catch (Exception e3) {
+            e3.printStackTrace();
+        }
+        WSDataModel wsDataModel = null;
+        try {
+            wsDataModel = port.getDataModel(new WSGetDataModel(new WSDataModelPK(dataModelName)));
+        } catch (RemoteException e2) {
+            e2.printStackTrace();
+        }
+        try {
+            // XSDSchema xsdSchema = Util.getXSDSchema(wsDataModel.getXsdSchema());
+            String schema = wsDataModel.getXsdSchema();// Util.nodeToString(xsdSchema.getDocument());
+            XSDSchema xsd = Util.createXsdSchema(schema, pObject);
+            provideViwerContent(xsd);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+    }// changeDomTree(
+
+    protected void provideViwerContent(XSDSchema xsdSchema) {
+        this.xsdSchema = xsdSchema;
+        // drillDownAdapter = new DrillDownAdapter(domViewer);
+        domViewer.setLabelProvider(new XSDTreeLabelProvider());
+        XPathTreeContentProvider provider = new XPathTreeContentProvider(this.site, xsdSchema, parent, "");
+        provider.setConceptName(this.conceptName);
+        domViewer.setContentProvider(provider);
+
+        domViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+            public void selectionChanged(SelectionChangedEvent e) {
+                StructuredSelection sel = (StructuredSelection) e.getSelection();
+                if (isXpath.getSelection())
+                    xpath = getXpath(sel);
+                else {
+                    TreeObject selectNode = (TreeObject) sel.getFirstElement();
+                    if (selectNode != null)
+                        xpath = selectNode.getDisplayName();
+                    else
+                        xpath = "";
+                }
+                sel.getFirstElement();
+                xpathText.setText(xpath);
+                getButton(IDialogConstants.OK_ID).setEnabled(xpath.length() > 0);
+            }
+        });
+        domViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true));
+        domViewer.setSorter(new ViewerSorter() {
+
+            public int category(Object element) {
+                // we want facets before Base TypeDefinitions in
+                // SimpleTypeDefinition
+                if (element instanceof XSDFacet)
+                    return 100;
+                // unique keys after element declarations and before other keys
+                if (element instanceof XSDIdentityConstraintDefinition) {
+                    XSDIdentityConstraintDefinition icd = (XSDIdentityConstraintDefinition) element;
+                    if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.UNIQUE_LITERAL))
+                        return 300;
+                    else if (icd.getIdentityConstraintCategory().equals(XSDIdentityConstraintCategory.KEY_LITERAL))
+                        return 301;
+                    else
+                        return 302;
+                }
+                return 200;
+            }
+
+            public int compare(Viewer theViewer, Object e1, Object e2) {
+                int cat1 = category(e1);
+                int cat2 = category(e2);
+                return cat1 - cat2;
+            }
+        });
+        domViewer.setInput(site);
+    }
+
+    protected Control createButtonBar(Composite parent) {
+        Control btnBar = super.createButtonBar(parent);
+        getButton(IDialogConstants.OK_ID).setText("OK");
+        return btnBar;
+    }
+
+    public String getXpath() {
+        return xpath;
+    }
+
+    public static String getDataModelName() {
+        return dataModelName;
+    }
+
+    public String getConceptName() {
+        return conceptName;
+    }
+
+    public void setConceptName(String conceptName) {
+        this.conceptName = conceptName;
+    }
+
+    public static String getContext() {
+        return context;
+    }
+
+    public static void setContext(String c) {
+        context = c;
+    }
 
 }

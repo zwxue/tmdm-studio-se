@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.dialogs;
 
 import org.eclipse.jface.dialogs.Dialog;
@@ -10,65 +22,66 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
 public class JobProcesssOptionsDialog extends Dialog {
-	private String title;
-	private boolean isExchange = true;
-	private Button btnExchange;
-	private Button btnItem;
 
-	public JobProcesssOptionsDialog(Shell parentShell, String dialogTitle) {
-		super(parentShell);
-		this.title = dialogTitle;
-	}
+    private String title;
 
-	protected Control createDialogArea(Composite parent) {
-		// Should not really be here but well,....
-		parent.getShell().setText(this.title);
+    private boolean isExchange = true;
 
-		Composite composite = (Composite) super.createDialogArea(parent);
+    private Button btnExchange;
 
-		GridLayout layout = (GridLayout) composite.getLayout();
-		layout.numColumns = 1;
+    private Button btnItem;
 
-		btnExchange = new Button(composite, SWT.RADIO);
-		btnExchange.setSelection(true);
-		btnExchange.setText("Send a complete \"exchange\" document");
+    public JobProcesssOptionsDialog(Shell parentShell, String dialogTitle) {
+        super(parentShell);
+        this.title = dialogTitle;
+    }
 
-		btnItem = new Button(composite, SWT.RADIO);
-		btnItem
-				.setText("Only send an \"item\" document (backward compatibility)");
+    protected Control createDialogArea(Composite parent) {
+        // Should not really be here but well,....
+        parent.getShell().setText(this.title);
 
-		return composite;
-	}
+        Composite composite = (Composite) super.createDialogArea(parent);
 
-	protected void buttonPressed(int buttonId) {
+        GridLayout layout = (GridLayout) composite.getLayout();
+        layout.numColumns = 1;
 
-		isExchange = btnExchange.getSelection();
+        btnExchange = new Button(composite, SWT.RADIO);
+        btnExchange.setSelection(true);
+        btnExchange.setText("Send a complete \"exchange\" document");
 
-		super.buttonPressed(buttonId);
-	}
+        btnItem = new Button(composite, SWT.RADIO);
+        btnItem.setText("Only send an \"item\" document (backward compatibility)");
 
-	protected void configureShell(Shell shell) {
-		super.configureShell(shell);
-		if (title != null) {
-			shell.setText(title);
-		}
-	}
+        return composite;
+    }
 
-	protected void createButtonsForButtonBar(Composite parent) {
-		// create OK and Cancel buttons by default
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-				true);
-		createButton(parent, IDialogConstants.CANCEL_ID,
-				IDialogConstants.CANCEL_LABEL, false);
+    protected void buttonPressed(int buttonId) {
 
-	}
+        isExchange = btnExchange.getSelection();
 
-	public boolean isExchange() {
-		return isExchange;
-	}
+        super.buttonPressed(buttonId);
+    }
 
-	public void setExchange(boolean isExchange) {
-		this.isExchange = isExchange;
-	}
+    protected void configureShell(Shell shell) {
+        super.configureShell(shell);
+        if (title != null) {
+            shell.setText(title);
+        }
+    }
+
+    protected void createButtonsForButtonBar(Composite parent) {
+        // create OK and Cancel buttons by default
+        createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+        createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
+
+    }
+
+    public boolean isExchange() {
+        return isExchange;
+    }
+
+    public void setExchange(boolean isExchange) {
+        this.isExchange = isExchange;
+    }
 
 }

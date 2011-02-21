@@ -14,6 +14,8 @@ package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -37,6 +39,8 @@ import com.amalto.workbench.providers.datamodel.SchemaTreeContentProvider;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDSetAnnotationNoAction extends UndoAction {
+
+    private static Log log = LogFactory.getLog(XSDSetAnnotationNoAction.class);
 
     protected AnnotationOrderedListsDialog dlg = null;
 
@@ -99,7 +103,7 @@ public class XSDSetAnnotationNoAction extends UndoAction {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to set the No Access: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;

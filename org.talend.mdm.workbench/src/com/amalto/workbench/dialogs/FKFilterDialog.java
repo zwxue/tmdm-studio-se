@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.dialogs;
 
 import java.util.ArrayList;
@@ -177,7 +189,7 @@ public class FKFilterDialog extends Dialog {
                 String value = line.keyValues.get(2).value;
                 value = normalizeValue(value);
                 String predicate = line.keyValues.get(3).value;
-                sb.append(xpath + "$$" + operator + "$$" + value + "$$" + predicate + "#");
+                sb.append(xpath + "$$" + operator + "$$" + value + "$$" + predicate + "#");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
             }
             // rules.add(sb.toString());
         }
@@ -187,8 +199,8 @@ public class FKFilterDialog extends Dialog {
 
     private String normalizeValue(String value) {
         if (value != null && value.trim().length() > 0) {
-            value = value.replaceAll("\"", "&quot;");
-            value = value.replaceAll("'", "&quot;");
+            value = value.replaceAll("\"", "&quot;");//$NON-NLS-1$//$NON-NLS-2$
+            value = value.replaceAll("'", "&quot;");//$NON-NLS-1$//$NON-NLS-2$
         }
         return value;
     }
@@ -200,9 +212,9 @@ public class FKFilterDialog extends Dialog {
     public List<Line> buildLine(String criteria) {
         List<Line> lines = new ArrayList<Line>();
         if (criteria != null) {
-            String[] criterias = criteria.split("#");
+            String[] criterias = criteria.split("#");//$NON-NLS-1$
             for (String cria : criterias) {
-                String[] values = cria.split("\\$\\$");
+                String[] values = cria.split("\\$\\$");//$NON-NLS-1$
                 List<String> list = new ArrayList<String>();
                 list.addAll(Arrays.asList(values));
                 int num = 4 - list.size();
@@ -212,7 +224,7 @@ public class FKFilterDialog extends Dialog {
                 // filter value
                 if (list.get(2) != null && list.get(2).length() > 0) {
                     String value = list.get(2);
-                    value = value.replaceAll("&quot;", "\"");
+                    value = value.replaceAll("&quot;", "\"");//$NON-NLS-1$//$NON-NLS-2$
                     list.set(2, value);
                 }
                 Line line = new Line(columns, list.toArray(new String[list.size()]));

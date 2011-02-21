@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.dialogs;
 
 import java.util.List;
@@ -78,8 +90,8 @@ public class SelectFieldDialog extends Dialog {
             return false;
         }
 
-        if (Pattern.compile("^\\s+\\w+\\s*").matcher(fieldNameCombo.getText()).matches()
-                || fieldNameCombo.getText().trim().replaceAll("\\s", "").length() != fieldNameCombo.getText().trim().length()) {
+        if (Pattern.compile("^\\s+\\w+\\s*").matcher(fieldNameCombo.getText()).matches()//$NON-NLS-1$
+                || fieldNameCombo.getText().trim().replaceAll("\\s", "").length() != fieldNameCombo.getText().trim().length()) {//$NON-NLS-1$
 
             MessageDialog.openError(getShell(), "Error", "The field name cannot contain the empty characters");
             return false;

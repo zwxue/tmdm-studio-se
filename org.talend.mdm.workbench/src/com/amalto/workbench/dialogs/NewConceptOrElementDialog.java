@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.dialogs;
 
 import java.util.Iterator;
@@ -124,7 +136,7 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
         boolean valid = true;
         typeName = typeNameText.getText().trim();
 
-        getButton(IDialogConstants.OK_ID).setData("dialog", NewConceptOrElementDialog.this);
+        getButton(IDialogConstants.OK_ID).setData("dialog", NewConceptOrElementDialog.this);//$NON-NLS-1$
         // no close let Action Handler handle it
     }
 
@@ -137,12 +149,12 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
             infoLabel.setText("The Element Name cannot be empty or blank");
             getButton(IDialogConstants.OK_ID).setEnabled(false);
             return;
-        } else if (typeNameText.getText().replaceAll("\\s", "").length() != typeNameText.getText().length()) {
+        } else if (typeNameText.getText().replaceAll("\\s", "").length() != typeNameText.getText().length()) {//$NON-NLS-1$//$NON-NLS-2$
             infoLabel.setText("The name cannot contain the empty characters");
             getButton(IDialogConstants.OK_ID).setEnabled(false);
             return;
         } else if (simpleTypeBtn.getSelection()
-                && (elemPanel.getText().trim().equals("") || elemPanel.getText().replaceAll("\\s", "").length() != elemPanel
+                && (elemPanel.getText().trim().equals("") || elemPanel.getText().replaceAll("\\s", "").length() != elemPanel//$NON-NLS-1$//$NON-NLS-2$
                         .getText().length())) {
             infoLabel.setText("The combo value cannot be empty or contain empty characters");
             getButton(IDialogConstants.OK_ID).setEnabled(false);

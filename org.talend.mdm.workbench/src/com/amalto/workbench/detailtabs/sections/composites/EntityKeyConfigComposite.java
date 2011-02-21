@@ -17,6 +17,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -64,6 +66,8 @@ import com.amalto.workbench.utils.inputvalidator.EditXSDIdentityConstraintNameVa
 import com.amalto.workbench.utils.inputvalidator.NewXSDIndentityConstraintValidator;
 
 public class EntityKeyConfigComposite extends Composite {
+
+    private static Log log = LogFactory.getLog(EntityKeyConfigComposite.class);
 
     private EntityWrapper entityWrapper;
 
@@ -264,7 +268,7 @@ public class EntityKeyConfigComposite extends Composite {
             try {
                 comboSelector.setItems(Util.getChildElementNames("", entityWrapper.getSourceEntity()).toArray(new String[0]));
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
                 comboSelector.setItems(new String[0]);
             }
         }

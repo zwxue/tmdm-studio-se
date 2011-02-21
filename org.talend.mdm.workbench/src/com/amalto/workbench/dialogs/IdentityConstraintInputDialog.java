@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.dialogs;
 
 import java.util.List;
@@ -183,14 +195,14 @@ public class IdentityConstraintInputDialog extends Dialog {
             return;
         }
 
-        if (keyName.replaceAll("\\s", "").length() != keyName.length()) {
+        if (keyName.replaceAll("\\s", "").length() != keyName.length()) {//$NON-NLS-1$
             MessageDialog.openError(this.getShell(), "Error", "The Key name cannot contain the empty characters");
             setReturnCode(-1);
             keyNameText.setFocus();
             return;
         }
 
-        if (fieldName.replaceAll("\\s", "").length() != fieldName.length()) {
+        if (fieldName.replaceAll("\\s", "").length() != fieldName.length()) {//$NON-NLS-1$
             MessageDialog.openError(this.getShell(), "Error", "The field name cannot contain the empty characters");
             setReturnCode(-1);
             fieldNameCombo.setFocus();
@@ -226,9 +238,9 @@ public class IdentityConstraintInputDialog extends Dialog {
     private XSDIdentityConstraintCategory getTypeFromUI() {
 
         String selection = (typeCombo.getText()).toUpperCase();
-        if (selection.indexOf("UNIQUE") >= 0)
+        if (selection.indexOf("UNIQUE") >= 0)//$NON-NLS-1$
             return XSDIdentityConstraintCategory.UNIQUE_LITERAL;
-        else if (selection.indexOf("FOREIGN") >= 0)
+        else if (selection.indexOf("FOREIGN") >= 0)//$NON-NLS-1$
             return XSDIdentityConstraintCategory.KEYREF_LITERAL;
         else
             return XSDIdentityConstraintCategory.KEY_LITERAL;

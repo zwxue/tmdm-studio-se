@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.dialogs;
 
 import java.util.List;
@@ -114,8 +126,8 @@ public class SimpleTypeInputDialog extends Dialog implements ModifyListener {
             return;
         }
 
-        if (Pattern.compile("^\\s+\\w+\\s*").matcher(type).matches()
-                || type.trim().replaceAll("\\s", "").length() != type.trim().length()) {
+        if (Pattern.compile("^\\s+\\w+\\s*").matcher(type).matches()//$NON-NLS-1$
+                || type.trim().replaceAll("\\s", "").length() != type.trim().length()) {//$NON-NLS-1$//$NON-NLS-2$
             infoLabel.setText("The name cannot contain the empty characters");
             getButton(IDialogConstants.OK_ID).setEnabled(false);
             return;

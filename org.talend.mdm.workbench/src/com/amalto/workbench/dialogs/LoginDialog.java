@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.dialogs;
 
 import java.io.File;
@@ -50,7 +62,7 @@ public class LoginDialog extends Dialog {
 
     // private static String f = System.getProperty("user.dir")+"/.mdmworkbench.conf";
     // private static String f = System.getProperty("user.dir")+"/mdm_workbench_config.xml";
-    private static String f = Platform.getInstanceLocation().getURL().getPath() + "/mdm_workbench_config.xml";
+    private static String f = Platform.getInstanceLocation().getURL().getPath() + "/mdm_workbench_config.xml";//$NON-NLS-1$
 
     // private Collection<String> endpoints;
 
@@ -257,26 +269,26 @@ public class LoginDialog extends Dialog {
     }
 
     private boolean checkServer(Element root) {
-        List properties = root.elements("properties");
+        List properties = root.elements("properties");//$NON-NLS-1$
         for (Iterator iterator = properties.iterator(); iterator.hasNext();) {
             Element ele = (Element) iterator.next();
 
-            if (ele.element("url").getText().equals(endpointsCombo.getCombo().getText().trim())
-                    && ele.element("user").getText().equals(userText.getText())
-                    && ele.element("password").getText().equals(passwordText.getText())
-                    && ele.element("universe").getText().equals(universeCombo.getText()))
+            if (ele.element("url").getText().equals(endpointsCombo.getCombo().getText().trim())//$NON-NLS-1$
+                    && ele.element("user").getText().equals(userText.getText())//$NON-NLS-1$
+                    && ele.element("password").getText().equals(passwordText.getText())//$NON-NLS-1$
+                    && ele.element("universe").getText().equals(universeCombo.getText()))//$NON-NLS-1$
                 return true;
         }
         return false;
     }
 
     private void addServer(Element root) {
-        Element prop = root.addElement("properties");
+        Element prop = root.addElement("properties");//$NON-NLS-1$
 
-        Element url = prop.addElement("url");
-        Element user = prop.addElement("user");
-        Element password = prop.addElement("password");
-        Element universe = prop.addElement("universe");
+        Element url = prop.addElement("url");//$NON-NLS-1$
+        Element user = prop.addElement("user");//$NON-NLS-1$
+        Element password = prop.addElement("password");//$NON-NLS-1$
+        Element universe = prop.addElement("universe");//$NON-NLS-1$
 
         url.setText(endpointsCombo.getCombo().getText().trim());
         user.setText(userText.getText());

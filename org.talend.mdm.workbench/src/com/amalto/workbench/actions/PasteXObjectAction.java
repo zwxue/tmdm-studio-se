@@ -132,7 +132,6 @@ public class PasteXObjectAction extends Action {
             destPort = Util.getPort(new URL(remoteTreeObject.getEndpointAddress()), remoteTreeObject.getUniverse(),
                     remoteTreeObject.getUsername(), remoteTreeObject.getPassword());
         } catch (Exception e) {
-            // e.printStackTrace();
             log.error(e.getMessage(), e);
         }
     }
@@ -690,7 +689,6 @@ public class PasteXObjectAction extends Action {
             }
 
         } catch (Exception e) {
-            // e.printStackTrace();
             log.error(e.getMessage(), e);
             MessageDialog.openError(view.getSite().getShell(), "Error",
                     "An error occured trying to copy: " + e.getLocalizedMessage());

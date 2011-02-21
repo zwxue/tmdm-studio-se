@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.export;
 
 import java.io.File;
@@ -202,7 +214,7 @@ public class ImportItemsWizard extends Wizard {
                     }.schedule();
 
                     if (zipfile != null) {
-                        importFolder = System.getProperty("user.dir") + "/temp";
+                        importFolder = System.getProperty("user.dir") + "/temp";//$NON-NLS-1$//$NON-NLS-2$
                         ZipToFile.deleteDirectory(new File(importFolder));
                     }
                 }
@@ -274,7 +286,7 @@ public class ImportItemsWizard extends Wizard {
     public void parse() {
         if (zipBtn.getSelection()) {
             zipfile = zip.getText().getText();
-            importFolder = System.getProperty("user.dir") + File.separator + "temp" + File.separator + "tmp"
+            importFolder = System.getProperty("user.dir") + File.separator + "temp" + File.separator + "tmp"//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                     + System.currentTimeMillis();
             checkUpExchangeImport(true);
             try {
@@ -288,7 +300,7 @@ public class ImportItemsWizard extends Wizard {
         }
         InputStreamReader reader = null;
         try {
-            reader = new InputStreamReader(new FileInputStream(importFolder + "/exportitems.xml"), "UTF-8");
+            reader = new InputStreamReader(new FileInputStream(importFolder + "/exportitems.xml"), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
             Exports exports = (Exports) Unmarshaller.unmarshal(Exports.class, reader);
             String[] orgSchemas = exports.getSchemas();
             int idx = 0;
@@ -477,7 +489,7 @@ public class ImportItemsWizard extends Wizard {
 
                 for (String subItem : subItems) {
                     try {
-                        Util.uploadImageFile(serverRoot.getEndpointIpAddress() + "/imageserver/secure/ImageUploadServlet",
+                        Util.uploadImageFile(serverRoot.getEndpointIpAddress() + "/imageserver/secure/ImageUploadServlet",//$NON-NLS-1$
                                 importFolder + "/" + subItem, serverRoot.getUsername(), serverRoot.getPassword(), picturePathMap);
                     } catch (Exception e2) {
                         e2.printStackTrace();
@@ -496,7 +508,7 @@ public class ImportItemsWizard extends Wizard {
 
                 for (String subItem : subItems) {
                     try {
-                        reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");
+                        reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
                         WSDataCluster model = new WSDataCluster();
                         model = (WSDataCluster) Unmarshaller.unmarshal(WSDataCluster.class, reader);
                         if (port.existsDataCluster(new WSExistsDataCluster(new WSDataClusterPK(model.getName()))).is_true()) {
@@ -526,10 +538,10 @@ public class ImportItemsWizard extends Wizard {
                     }
 
                     try {
-						importClusterContents(item, port, picturePathMap);
-					} catch (Exception e) {
-						MessageDialog.openWarning(null, "Warning", e.getLocalizedMessage());
-					}
+                        importClusterContents(item, port, picturePathMap);
+                    } catch (Exception e) {
+                        MessageDialog.openWarning(null, "Warning", e.getLocalizedMessage());
+                    }
                 }
                 monitor.worked(1);
                 break;
@@ -539,7 +551,7 @@ public class ImportItemsWizard extends Wizard {
 
                 for (String subItem : subItems) {
                     try {
-                        reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");
+                        reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
                         WSDataModel model = new WSDataModel();
                         model = (WSDataModel) Unmarshaller.unmarshal(WSDataModel.class, reader);
                         if (port.existsDataModel(new WSExistsDataModel(new WSDataModelPK(model.getName()))).is_true()) {
@@ -577,7 +589,7 @@ public class ImportItemsWizard extends Wizard {
 
                 for (String subItem : subItems) {
                     try {
-                        reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");
+                        reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
                         WSMenu memu = new WSMenu();
                         memu = (WSMenu) Unmarshaller.unmarshal(WSMenu.class, reader);
                         if (port.existsMenu(new WSExistsMenu(new WSMenuPK(memu.getName()))).is_true()) {
@@ -616,7 +628,7 @@ public class ImportItemsWizard extends Wizard {
 
                     for (String subItem : subItems) {
                         try {
-                            reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");
+                            reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
                             WSRole role = new WSRole();
                             role = (WSRole) Unmarshaller.unmarshal(WSRole.class, reader);
                             if (port.existsRole(new WSExistsRole(new WSRolePK(role.getName()))).is_true()) {
@@ -655,7 +667,7 @@ public class ImportItemsWizard extends Wizard {
 
                 for (String subItem : subItems) {
                     try {
-                        reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");
+                        reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
                         WSRoutingRule routingRule = new WSRoutingRule();
                         routingRule = (WSRoutingRule) Unmarshaller.unmarshal(WSRoutingRule.class, reader);
 
@@ -700,7 +712,7 @@ public class ImportItemsWizard extends Wizard {
 
                 for (String subItem : subItems) {
                     try {
-                        reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");
+                        reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
                         WSStoredProcedure model = new WSStoredProcedure();
                         model = (WSStoredProcedure) Unmarshaller.unmarshal(WSStoredProcedure.class, reader);
                         if (model.getRefreshCache() == null)
@@ -743,7 +755,7 @@ public class ImportItemsWizard extends Wizard {
 
                     for (String subItem : subItems) {
                         try {
-                            reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");
+                            reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
                             WSSynchronizationPlan model = new WSSynchronizationPlan();
                             model = (WSSynchronizationPlan) Unmarshaller.unmarshal(WSSynchronizationPlan.class, reader);
                             if (port.existsSynchronizationPlan(
@@ -796,13 +808,14 @@ public class ImportItemsWizard extends Wizard {
 
                 for (String subItem : subItems) {
                     try {
-                        reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");
-                        
-                        if(isV2Transformer(importFolder + "/" + subItem)) {
-                            
+                        reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
+
+                        if (isV2Transformer(importFolder + "/" + subItem)) {
+
                             WSTransformerV2 model = new WSTransformerV2();
                             model = (WSTransformerV2) Unmarshaller.unmarshal(WSTransformerV2.class, reader);
-                            if (port.existsTransformerV2(new WSExistsTransformerV2(new WSTransformerV2PK(model.getName()))).is_true()) {
+                            if (port.existsTransformerV2(new WSExistsTransformerV2(new WSTransformerV2PK(model.getName())))
+                                    .is_true()) {
                                 if (!isOverrideAll) {
                                     int result = isOveride(model.getName(), TreeObject.TRANSFORMER_);
                                     if (result == IDialogConstants.CANCEL_ID) {
@@ -818,9 +831,9 @@ public class ImportItemsWizard extends Wizard {
                                 }
                             }
                             port.putTransformerV2(new WSPutTransformerV2(model));
-                            
-                        }else {
-                            
+
+                        } else {
+
                             WSTransformer model = new WSTransformer();
                             model = (WSTransformer) Unmarshaller.unmarshal(WSTransformer.class, reader);
                             if (port.existsTransformer(new WSExistsTransformer(new WSTransformerPK(model.getName()))).is_true()) {
@@ -839,9 +852,9 @@ public class ImportItemsWizard extends Wizard {
                                 }
                             }
                             port.putTransformer(new WSPutTransformer(model));
-                            
+
                         }
-                        
+
                     } catch (Exception e2) {
                         e2.printStackTrace();
                     } finally {
@@ -862,7 +875,7 @@ public class ImportItemsWizard extends Wizard {
 
                     for (String subItem : subItems) {
                         try {
-                            reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");
+                            reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
                             WSUniverse model = new WSUniverse();
                             model = (WSUniverse) Unmarshaller.unmarshal(WSUniverse.class, reader);
                             if (port.existsUniverse(new WSExistsUniverse(new WSUniversePK(model.getName()))).is_true()) {
@@ -901,7 +914,7 @@ public class ImportItemsWizard extends Wizard {
 
                 for (String subItem : subItems) {
                     try {
-                        reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");
+                        reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
                         WSView model = new WSView();
                         model = (WSView) Unmarshaller.unmarshal(WSView.class, reader);
                         if (model.getIsTransformerActive() == null)
@@ -961,19 +974,20 @@ public class ImportItemsWizard extends Wizard {
     }
 
     private boolean isV2Transformer(String inputPath) throws DocumentException, FileNotFoundException {
-        
-        boolean isV2Transformer=false;
+
+        boolean isV2Transformer = false;
         Document document = XmlUtil.parse(new FileInputStream(inputPath));
-        if(document!=null&&document.getRootElement()!=null) {
-            String rootElementName=document.getRootElement().getName();
-            if(rootElementName.equals(WSTransformerV2.class.getSimpleName())) {
-                isV2Transformer=true;
+        if (document != null && document.getRootElement() != null) {
+            String rootElementName = document.getRootElement().getName();
+            if (rootElementName.equals(WSTransformerV2.class.getSimpleName())) {
+                isV2Transformer = true;
             }
         }
         return isV2Transformer;
     }
 
-    private void importClusterContents(TreeObject item, XtentisPort port, HashMap<String, String> picturePathMap)throws Exception {
+    private void importClusterContents(TreeObject item, XtentisPort port, HashMap<String, String> picturePathMap)
+            throws Exception {
         if (dataClusterContent.containsKey(item.getDisplayName())) {
             Reader reader = null;
             String[] paths = dataClusterContent.get(item.getDisplayName());
@@ -981,9 +995,9 @@ public class ImportItemsWizard extends Wizard {
             for (int i = 0; i < paths.length; i++) {
                 try {
                     String path = paths[i];
-                    reader = new InputStreamReader(new FileInputStream(importFolder + "/" + path), "UTF-8");
+                    reader = new InputStreamReader(new FileInputStream(importFolder + "/" + path), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
                     WSItem wsItem = (WSItem) Unmarshaller.unmarshal(WSItem.class, reader);
-                    String key = wsItem.getWsDataClusterPK().getPk() + "##" + wsItem.getConceptName() + "##"
+                    String key = wsItem.getWsDataClusterPK().getPk() + "##" + wsItem.getConceptName() + "##"//$NON-NLS-1$//$NON-NLS-2$
                             + wsItem.getDataModelName();
                     List<String> list = null;
                     list = conceptMap.get(key);
@@ -1020,9 +1034,9 @@ public class ImportItemsWizard extends Wizard {
                 }
             }
             // store the items to db using bulkloadclient
-            String url = item.getEndpointIpAddress() + "/datamanager/loadServlet";
+            String url = item.getEndpointIpAddress() + "/datamanager/loadServlet";//$NON-NLS-1$
             for (Entry<String, List<String>> entry : conceptMap.entrySet()) {
-                String[] keys = entry.getKey().split("##");
+                String[] keys = entry.getKey().split("##");//$NON-NLS-1$
                 String cluster = keys[0];
                 String concept = keys[1];
                 String datamodel = keys[2];
@@ -1032,8 +1046,10 @@ public class ImportItemsWizard extends Wizard {
                 try {
                     bulkloadClient.load(entry.getValue());
                 } catch (Exception e) {
-                    //MessageDialog.openWarning(null, "Warning", "Importing  Entity: "+ concept+ " in Data Container: "+cluster + " Error --> "+e.getLocalizedMessage());
-                	throw new Exception("Importing  Entity: "+ concept+ " in Data Container: "+cluster + " occurs error --> "+e.getLocalizedMessage());
+                    // MessageDialog.openWarning(null, "Warning", "Importing  Entity: "+ concept+
+                    // " in Data Container: "+cluster + " Error --> "+e.getLocalizedMessage());
+                    throw new Exception("Importing  Entity: " + concept + " in Data Container: " + cluster + " occurs error --> "
+                            + e.getLocalizedMessage());
                 }
             }
         }
@@ -1093,7 +1109,7 @@ public class ImportItemsWizard extends Wizard {
             folderBtn = new Button(composite, SWT.RADIO);
             folderBtn.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             folderBtn.setText("Select root directory:");
-            folder = new FileSelectWidget(composite, "", new String[] { "*.*" }, "", false);
+            folder = new FileSelectWidget(composite, "", new String[] { "*.*" }, "", false);//$NON-NLS-1$//$NON-NLS-2$
             // folder.getCmp().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
             // false, 1, 1));
             folderBtn.addSelectionListener(new SelectionListener() {
@@ -1115,7 +1131,7 @@ public class ImportItemsWizard extends Wizard {
             zipBtn = new Button(composite, SWT.RADIO);
             zipBtn.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             zipBtn.setText("Select archive file:");
-            zip = new FileSelectWidget(composite, "", new String[] { "*.zip" }, "", true);
+            zip = new FileSelectWidget(composite, "", new String[] { "*.zip" }, "", true);//$NON-NLS-1$//$NON-NLS-2$
             // zip.getCmp().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
             // false, 1, 1));
             ((GridData) zip.getText().getLayoutData()).widthHint = 200;
@@ -1188,8 +1204,8 @@ public class ImportItemsWizard extends Wizard {
      * @return
      */
     private static String updatePicturePath(String orignalPicturepath, String pictureName, String targetPicturePath) {
-        String pictureName1 = pictureName.replace("-", "/");
-        return orignalPicturepath.replaceAll(pictureName1, targetPicturePath.substring(targetPicturePath.indexOf("/") + 1));
+        String pictureName1 = pictureName.replace("-", "/");//$NON-NLS-1$//$NON-NLS-2$
+        return orignalPicturepath.replaceAll(pictureName1, targetPicturePath.substring(targetPicturePath.indexOf("/") + 1));//$NON-NLS-1$
     }
 
 }

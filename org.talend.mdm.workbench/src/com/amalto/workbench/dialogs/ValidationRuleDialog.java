@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.dialogs;
 
 import java.util.ArrayList;
@@ -105,7 +117,7 @@ public class ValidationRuleDialog extends Dialog {
 
     private List<Line> parseRules() {
         List<Line> lines = new ArrayList<Line>();
-        pattern = pattern.replaceAll("\\r\\n|\\n", "");
+        pattern = pattern.replaceAll("\\r\\n|\\n", "");//$NON-NLS-1$//$NON-NLS-2$
         String context = "";
         String type = "";
         String express = "";
@@ -168,19 +180,19 @@ public class ValidationRuleDialog extends Dialog {
         TableItem[] items = viewer.getViewer().getTable().getItems();
         // List<String> rules=new ArrayList<String>();
         StringBuffer sb = new StringBuffer();
-        sb = sb.append("<pattern " + "name=\"" + text.getText() + "\" >\n");
+        sb = sb.append("<pattern " + "name=\"" + text.getText() + "\" >\n");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 
         if (items.length > 0) {
             for (TableItem item : items) {
                 Line line = (Line) item.getData();
-                sb = sb.append("<rule context=\"");
+                sb = sb.append("<rule context=\"");//$NON-NLS-1$
 
                 String type = line.keyValues.get(0).value;
                 String context = line.keyValues.get(1).value;
                 String express = line.keyValues.get(2).value;
-                express = express.replaceAll("<", "&lt;");
-                express = express.replaceAll("\"", "&quot;");
-                express = express.replaceAll("\'", "&apos;");
+                express = express.replaceAll("<", "&lt;");//$NON-NLS-1$//$NON-NLS-2$
+                express = express.replaceAll("\"", "&quot;");//$NON-NLS-1$//$NON-NLS-2$
+                express = express.replaceAll("\'", "&apos;");//$NON-NLS-1$//$NON-NLS-2$
                 String msg = line.keyValues.get(3).value;
                 if (conceptName != null) {
                     if (context.equals(conceptName)) {
@@ -189,16 +201,16 @@ public class ValidationRuleDialog extends Dialog {
                         context = context.replaceAll(conceptName + "/", "");
                     }
                 }
-                sb = sb.append(context).append("\">");
-                sb = sb.append("<" + type.toLowerCase() + " test=\"" + express + "\">");
-                sb = sb.append("<![CDATA[" + msg + "]]>");
-                sb = sb.append("</" + type.toLowerCase() + ">");
-                sb = sb.append("</rule>\n");
+                sb = sb.append(context).append("\">");//$NON-NLS-1$
+                sb = sb.append("<" + type.toLowerCase() + " test=\"" + express + "\">");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                sb = sb.append("<![CDATA[" + msg + "]]>");//$NON-NLS-1$//$NON-NLS-2$
+                sb = sb.append("</" + type.toLowerCase() + ">");//$NON-NLS-1$//$NON-NLS-2$
+                sb = sb.append("</rule>\n");//$NON-NLS-1$
             }
             // rules.add(sb.toString());
         }
 
-        sb = sb.append("</pattern>\n");
+        sb = sb.append("</pattern>\n");//$NON-NLS-1$
 
         return pattern = sb.toString();
     }

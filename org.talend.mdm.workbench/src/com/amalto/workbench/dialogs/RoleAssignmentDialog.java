@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.dialogs;
 
 import java.rmi.RemoteException;
@@ -88,7 +100,7 @@ public class RoleAssignmentDialog extends Dialog {
             public void modifyText(ModifyEvent e) {
                 String name = instanceNameText.getText().trim();
                 boolean enable = (name.length() > 0) && (!"".equals(name))
-                        && (name.replaceAll("\\s", "").length() == name.length());
+                        && (name.replaceAll("\\s", "").length() == name.length());//$NON-NLS-1$//$NON-NLS-2$
                 RoleAssignmentDialog.this.getButton(IDialogConstants.OK_ID).setEnabled(enable);
             }
         });

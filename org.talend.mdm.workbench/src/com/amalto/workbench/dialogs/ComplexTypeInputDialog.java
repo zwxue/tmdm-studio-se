@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.dialogs;
 
 import java.util.List;
@@ -126,8 +138,8 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
 
         String type = conceptPanel.getText();
 
-        if (Pattern.compile("^\\s+\\w+\\s*").matcher(type).matches()
-                || type.trim().replaceAll("\\s", "").length() != type.trim().length()) {
+        if (Pattern.compile("^\\s+\\w+\\s*").matcher(type).matches()//$NON-NLS-1$
+                || type.trim().replaceAll("\\s", "").length() != type.trim().length()) {//$NON-NLS-1$
             conceptPanel.setMessage("The name cannot contain the empty characters");
             getButton(IDialogConstants.OK_ID).setEnabled(false);
             return;
@@ -137,7 +149,7 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
 
         for (XSDTypeDefinition specType : xsdSchema.getTypeDefinitions()) {
             String typeToCompare = specType.getName();
-            int delimiter = type.indexOf(" : ");
+            int delimiter = type.indexOf(" : ");//$NON-NLS-1$
             if (delimiter != -1) {
                 type = type.substring(0, delimiter);
             }

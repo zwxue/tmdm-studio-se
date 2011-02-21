@@ -15,6 +15,8 @@ package com.amalto.workbench.compare;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.compare.CompareConfiguration;
 import org.eclipse.compare.CompareUI;
 import org.eclipse.core.resources.IFile;
@@ -30,6 +32,8 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import com.amalto.workbench.utils.XmlUtil;
 
 public class CompareManager {
+
+    private static Log log = LogFactory.getLog(CompareManager.class);
 
     static CompareManager instance = new CompareManager();
 
@@ -51,7 +55,7 @@ public class CompareManager {
             prj.create(desc, null);
             prj.open(IResource.BACKGROUND_REFRESH, null);
         } catch (CoreException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return prj;
     }

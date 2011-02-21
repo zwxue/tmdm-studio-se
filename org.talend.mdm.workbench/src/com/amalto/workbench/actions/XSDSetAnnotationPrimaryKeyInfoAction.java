@@ -14,6 +14,8 @@ package com.amalto.workbench.actions;
 
 import java.util.ArrayList;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -36,6 +38,8 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.XSDAnnotationsStructure;
 
 public class XSDSetAnnotationPrimaryKeyInfoAction extends UndoAction {
+
+    private static Log log = LogFactory.getLog(XSDSetAnnotationPrimaryKeyInfoAction.class);
 
     protected AnnotationOrderedListsDialog dlg = null;
 
@@ -92,7 +96,7 @@ public class XSDSetAnnotationPrimaryKeyInfoAction extends UndoAction {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             MessageDialog.openError(page.getSite().getShell(), "Error", "An error occured trying to set the Primary Key Infos: "
                     + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;
