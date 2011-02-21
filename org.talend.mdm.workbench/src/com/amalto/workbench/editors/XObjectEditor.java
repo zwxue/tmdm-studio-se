@@ -1,9 +1,15 @@
-/*
- * Created on 27 oct. 2005
- * 
- * To change the template for this generated file go to Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and
- * Comments
- */
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.editors;
 
 import java.util.ArrayList;
@@ -65,8 +71,8 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener {
             TreeObject xobject = (TreeObject) ((XObjectEditorInput) this.getEditorInput()).getModel();
 
             // backup initial object
-            this.initialXObject = new TreeObject(xobject.getDisplayName(), xobject.getServerRoot(), xobject.getType(), xobject
-                    .getWsKey(), xobject.getWsObject(), xobject.getAdditionalInfo());
+            this.initialXObject = new TreeObject(xobject.getDisplayName(), xobject.getServerRoot(), xobject.getType(),
+                    xobject.getWsKey(), xobject.getWsObject(), xobject.getAdditionalInfo());
 
             if (!xobject.isXObject())
                 return;

@@ -1,9 +1,15 @@
-/*
- * Created on 27 oct. 2005
- *
- * To change the template for this generated file go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
- */
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.editors;
 
 import java.net.URL;
@@ -77,452 +83,431 @@ import com.amalto.workbench.webservices.WSStoredProcedurePK;
 import com.amalto.workbench.webservices.WSStringArray;
 import com.amalto.workbench.webservices.XtentisPort;
 
-public class StoredProcedureMainPage extends AMainPage implements ITextListener{
+public class StoredProcedureMainPage extends AMainPage implements ITextListener {
 
-	protected Text descriptionText;
-	protected SourceViewer procedureViewer;
-	protected TableViewer resultsViewer;
-	protected Combo dataClusterCombo;
-	protected Label resultsLabel;
-	
-	protected LinkedList<String> currentParameters = new LinkedList<String>();
-	
-	private boolean refreshing = false;
-	private boolean comitting = false;
-	private Button refreshCacheBtn;
-	
+    protected Text descriptionText;
+
+    protected SourceViewer procedureViewer;
+
+    protected TableViewer resultsViewer;
+
+    protected Combo dataClusterCombo;
+
+    protected Label resultsLabel;
+
+    protected LinkedList<String> currentParameters = new LinkedList<String>();
+
+    private boolean refreshing = false;
+
+    private boolean comitting = false;
+
+    private Button refreshCacheBtn;
+
     public StoredProcedureMainPage(FormEditor editor) {
-        super(
-        		editor,
-        		StoredProcedureMainPage.class.getName(),
-        		"Stored Procedure "+((XObjectEditorInput)editor.getEditorInput()).getName()
-        		+Util.getRevision((TreeObject)((XObjectEditorInput)editor.getEditorInput()).getModel())
-        );        
+        super(editor, StoredProcedureMainPage.class.getName(), "Stored Procedure "
+                + ((XObjectEditorInput) editor.getEditorInput()).getName()
+                + Util.getRevision((TreeObject) ((XObjectEditorInput) editor.getEditorInput()).getModel()));
     }
 
-	protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
+    protected void createCharacteristicsContent(FormToolkit toolkit, Composite charComposite) {
 
         try {
-        	
-        	WSStoredProcedure wsStoredProcedure = (WSStoredProcedure) (getXObject().getWsObject());
 
+            WSStoredProcedure wsStoredProcedure = (WSStoredProcedure) (getXObject().getWsObject());
 
-            //description
+            // description
             Label descriptionLabel = toolkit.createLabel(charComposite, "Description", SWT.NULL);
-            descriptionLabel.setLayoutData(
-            		new GridData(SWT.BEGINNING,SWT.CENTER,false,false,1,1)
-            );
-            
-            descriptionText = toolkit.createText(charComposite, "",SWT.BORDER|SWT.MULTI);
-            descriptionText.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-            );
-            descriptionText.setText(wsStoredProcedure.getDescription()==null ? "" : wsStoredProcedure.getDescription());
+            descriptionLabel.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 1, 1));
+
+            descriptionText = toolkit.createText(charComposite, "", SWT.BORDER | SWT.MULTI);
+            descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+            descriptionText.setText(wsStoredProcedure.getDescription() == null ? "" : wsStoredProcedure.getDescription());
             descriptionText.addModifyListener(this);
-//            Util.createCompDropTarget(descriptionText);
-            //Procedure
-            Group storedProcedureGroup = new Group(charComposite,SWT.SHADOW_NONE);
+            // Util.createCompDropTarget(descriptionText);
+            // Procedure
+            Group storedProcedureGroup = new Group(charComposite, SWT.SHADOW_NONE);
             storedProcedureGroup.setText("Procedure");
-            storedProcedureGroup.setLayout(new GridLayout(1,true));
-            storedProcedureGroup.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
-            );
-            
-            ((GridData)storedProcedureGroup.getLayoutData()).minimumHeight = 100;
+            storedProcedureGroup.setLayout(new GridLayout(1, true));
+            storedProcedureGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+
+            ((GridData) storedProcedureGroup.getLayoutData()).minimumHeight = 100;
             procedureViewer = new SourceViewer(storedProcedureGroup, new VerticalRuler(10), SWT.V_SCROLL);
-            procedureViewer.getControl().setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,true,true,1,1)
-            );
+            procedureViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
             procedureViewer.addTextListener(this);
             WidgetUtils.initRedoUndo(procedureViewer);
-            refreshCacheBtn=toolkit.createButton(charComposite, "Refresh the cache after execution(recommended for updates)", SWT.CHECK);
-            refreshCacheBtn.setLayoutData(
-                    new GridData(SWT.FILL,SWT.FILL,true,true,2,1)
-            );
+            refreshCacheBtn = toolkit.createButton(charComposite, "Refresh the cache after execution(recommended for updates)",
+                    SWT.CHECK);
+            refreshCacheBtn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
             refreshCacheBtn.addSelectionListener(new SelectionListener() {
-				
-				public void widgetSelected(SelectionEvent e) {
-					markDirty();
-					
-				}
-				
-				public void widgetDefaultSelected(SelectionEvent e) {
-					markDirty();
-					
-				}
-			});
+
+                public void widgetSelected(SelectionEvent e) {
+                    markDirty();
+
+                }
+
+                public void widgetDefaultSelected(SelectionEvent e) {
+                    markDirty();
+
+                }
+            });
             /************************************************************
              * Execute Stored Procedure
              ************************************************************/
-            
+
             createCompDropTarget();
             Composite resultsGroup = this.getNewSectionComposite("Execute Procedure");
             resultsGroup.setLayout(new GridLayout(4, false));
-            
-            //data cluster
-            Hyperlink dataClusterLink = toolkit.createHyperlink(resultsGroup, "Data Container",SWT.NULL);
-            dataClusterLink.setLayoutData(
-                    new GridData(SWT.FILL,SWT.CENTER,false,true,1,1)
-            );         
+
+            // data cluster
+            Hyperlink dataClusterLink = toolkit.createHyperlink(resultsGroup, "Data Container", SWT.NULL);
+            dataClusterLink.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
             dataClusterLink.addHyperlinkListener(new IHyperlinkListener() {
-            	public void linkEntered(org.eclipse.ui.forms.events.HyperlinkEvent e) {}
-				public void linkExited(org.eclipse.ui.forms.events.HyperlinkEvent e) {}
-				public void linkActivated(org.eclipse.ui.forms.events.HyperlinkEvent e) {
-					TreeParent serverRoot = StoredProcedureMainPage.this.getXObject().getServerRoot();
-					TreeObject iaObject = new TreeObject(
-							StoredProcedureMainPage.this.dataClusterCombo.getText(),
-							serverRoot,
-							TreeObject.DATA_CLUSTER,
-							new WSDataClusterPK(StoredProcedureMainPage.this.dataClusterCombo.getText()),
-							null
-					);
-					(new EditXObjectAction(iaObject,StoredProcedureMainPage.this.getSite().getPage())).run();
-            	};
+
+                public void linkEntered(org.eclipse.ui.forms.events.HyperlinkEvent e) {
+                }
+
+                public void linkExited(org.eclipse.ui.forms.events.HyperlinkEvent e) {
+                }
+
+                public void linkActivated(org.eclipse.ui.forms.events.HyperlinkEvent e) {
+                    TreeParent serverRoot = StoredProcedureMainPage.this.getXObject().getServerRoot();
+                    TreeObject iaObject = new TreeObject(StoredProcedureMainPage.this.dataClusterCombo.getText(), serverRoot,
+                            TreeObject.DATA_CLUSTER,
+                            new WSDataClusterPK(StoredProcedureMainPage.this.dataClusterCombo.getText()), null);
+                    (new EditXObjectAction(iaObject, StoredProcedureMainPage.this.getSite().getPage())).run();
+                };
             });
-            dataClusterCombo = new Combo(resultsGroup,SWT.READ_ONLY |SWT.DROP_DOWN|SWT.SINGLE);
-            dataClusterCombo.setLayoutData(
-                    new GridData(SWT.BEGINNING,SWT.NONE,false,false,1,1)
-            );
-            
-            Button executeButton = new Button(resultsGroup,SWT.PUSH);
+            dataClusterCombo = new Combo(resultsGroup, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.SINGLE);
+            dataClusterCombo.setLayoutData(new GridData(SWT.BEGINNING, SWT.NONE, false, false, 1, 1));
+
+            Button executeButton = new Button(resultsGroup, SWT.PUSH);
             executeButton.setText("Execute Procedure");
             executeButton.addMouseListener(new MouseListener() {
-            	public void mouseUp(MouseEvent e) {
-            		executeProcedure();
-            	}
-            	public void mouseDoubleClick(MouseEvent e) {}
-            	public void mouseDown(MouseEvent e) {}
-            });
-            
-            resultsLabel = toolkit.createLabel(resultsGroup, "                                                                                                           ", SWT.NULL);
-            resultsLabel.setLayoutData(
-            		new GridData(SWT.BEGINNING,SWT.CENTER,true,false,1,1)
-            );
 
-            
+                public void mouseUp(MouseEvent e) {
+                    executeProcedure();
+                }
+
+                public void mouseDoubleClick(MouseEvent e) {
+                }
+
+                public void mouseDown(MouseEvent e) {
+                }
+            });
+
+            resultsLabel = toolkit
+                    .createLabel(
+                            resultsGroup,
+                            "                                                                                                           ",
+                            SWT.NULL);
+            resultsLabel.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, true, false, 1, 1));
+
             resultsViewer = new TableViewer(resultsGroup);
-            resultsViewer.getControl().setLayoutData(    
-                    new GridData(SWT.FILL,SWT.FILL,true,true,4,1)
-            );
-            ((GridData)resultsViewer.getControl().getLayoutData()).heightHint=300;
+            resultsViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4, 1));
+            ((GridData) resultsViewer.getControl().getLayoutData()).heightHint = 300;
             resultsViewer.setContentProvider(new ArrayContentProvider());
             resultsViewer.setLabelProvider(new XMLTableLabelProvider());
             resultsViewer.addDoubleClickListener(new IDoubleClickListener() {
-            	public void doubleClick(DoubleClickEvent event) {
-            		//String result = (String)((IStructuredSelection)event.getSelection()).getFirstElement();
-            		resultsViewer.setSelection(event.getSelection());
-            		new ResultsViewAction(
-            				StoredProcedureMainPage.this.getSite().getShell(),
-            				resultsViewer
-            		).run();
-            	}
+
+                public void doubleClick(DoubleClickEvent event) {
+                    // String result = (String)((IStructuredSelection)event.getSelection()).getFirstElement();
+                    resultsViewer.setSelection(event.getSelection());
+                    new ResultsViewAction(StoredProcedureMainPage.this.getSite().getShell(), resultsViewer).run();
+                }
             });
-            
+
             hookContextMenu();
-            
+
             refreshData();
-            
+
             dataClusterCombo.select(0);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-    }//createCharacteristicsContent
+    }// createCharacteristicsContent
 
+    protected void refreshData() {
+        if (this.comitting)
+            return;
 
-	protected void refreshData() {
-		if (this.comitting) return;
-		
-		this.refreshing = true;
-		
-    	WSStoredProcedure wsStoredProcedure = (WSStoredProcedure) (getXObject().getWsObject());    	
-    	String s;
-    	
-    	s = wsStoredProcedure.getDescription()==null ? "" : wsStoredProcedure.getDescription();
-    	if (!s.equals(descriptionText.getText())) descriptionText.setText(s);
-    	
-    	Document doc = new Document(wsStoredProcedure.getProcedure());
+        this.refreshing = true;
+
+        WSStoredProcedure wsStoredProcedure = (WSStoredProcedure) (getXObject().getWsObject());
+        String s;
+
+        s = wsStoredProcedure.getDescription() == null ? "" : wsStoredProcedure.getDescription();
+        if (!s.equals(descriptionText.getText()))
+            descriptionText.setText(s);
+
+        Document doc = new Document(wsStoredProcedure.getProcedure());
         procedureViewer.setDocument(doc);
-        refreshCacheBtn.setSelection(wsStoredProcedure.getRefreshCache()!=null&&wsStoredProcedure.getRefreshCache().booleanValue()?true:false);
+        refreshCacheBtn.setSelection(wsStoredProcedure.getRefreshCache() != null
+                && wsStoredProcedure.getRefreshCache().booleanValue() ? true : false);
         dataClusterCombo.removeAll();
         WSDataClusterPK[] dataClusterPKs;
         try {
-	        dataClusterPKs = Util.getAllDataClusterPKs(
-	        		new URL(getXObject().getEndpointAddress()),
-	        		getXObject().getUniverse(),
-	        		getXObject().getUsername(),
-	        		getXObject().getPassword()
-	        );
+            dataClusterPKs = Util.getAllDataClusterPKs(new URL(getXObject().getEndpointAddress()), getXObject().getUniverse(),
+                    getXObject().getUsername(), getXObject().getPassword());
         } catch (Exception ex) {
-        	MessageDialog.openError(
-        			StoredProcedureMainPage.this.getSite().getShell(),
-        			"Error",
-        			"Unable to get the list of Data Containers:\n"+
-        			ex.getClass().getName()+": "+ex.getLocalizedMessage()
-        	);
-        	this.refreshing = false;
-        	return;
+            MessageDialog.openError(StoredProcedureMainPage.this.getSite().getShell(), "Error",
+                    "Unable to get the list of Data Containers:\n" + ex.getClass().getName() + ": " + ex.getLocalizedMessage());
+            this.refreshing = false;
+            return;
         }
-        if (
-        		(dataClusterPKs == null) || (dataClusterPKs.length == 0)
-        		|| ((dataClusterPKs.length==1) && ("CACHE".equals(dataClusterPKs[0].getPk())))
-        	) {
-        	MessageDialog.openError(
-        			this.getSite().getShell(), 
-        			"Error", 
-        			"Please create Data Containers before editing an Inbound Adaptor");
-        	return;
+        if ((dataClusterPKs == null) || (dataClusterPKs.length == 0)
+                || ((dataClusterPKs.length == 1) && ("CACHE".equals(dataClusterPKs[0].getPk())))) {
+            MessageDialog.openError(this.getSite().getShell(), "Error",
+                    "Please create Data Containers before editing an Inbound Adaptor");
+            return;
         }
         dataClusterCombo.add("[ALL]");
-        for (int  i = 0; i < dataClusterPKs.length; i++) {
-        	if (!"CACHE".equals(dataClusterPKs[i].getPk()))	//FIXME: hardcoded CACHE 
-        		dataClusterCombo.add(dataClusterPKs[i].getPk());
-		}
-    	
-    	this.refreshing = false;
-	}
-	
-	protected void commit() {
-		if (this.refreshing) return;
-		
-		this.comitting = true;
-		
-    	WSStoredProcedure wsStoredProcedure = (WSStoredProcedure) (getXObject().getWsObject());
-		wsStoredProcedure.setDescription(descriptionText.getText());
-		wsStoredProcedure.setProcedure(procedureViewer.getDocument().get());
-		wsStoredProcedure.setRefreshCache(refreshCacheBtn.getSelection());
-		this.comitting = false;
-	}
+        for (int i = 0; i < dataClusterPKs.length; i++) {
+            if (!"CACHE".equals(dataClusterPKs[i].getPk())) // FIXME: hardcoded CACHE
+                dataClusterCombo.add(dataClusterPKs[i].getPk());
+        }
 
-	//no specific actions here
-	public void createActions() {
-		return;
-	}
-	
-	public void textChanged(TextEvent event) {
-		if (this.refreshing) return;
-		//markDirty();
-		markDirty();
-	}
-		
-	private void hookContextMenu() {
-		MenuManager menuMgr = new MenuManager();
-		menuMgr.setRemoveAllWhenShown(true);
-		menuMgr.addMenuListener(new IMenuListener() {
-			public void menuAboutToShow(IMenuManager manager) {
-				//ViewBrowserMainPage.this.fillContextMenu(manager);
-				manager.add(
-						new ResultsViewAction(
-								StoredProcedureMainPage.this.getSite().getShell(),
-								StoredProcedureMainPage.this.resultsViewer
-						)
-				);
-			}
-		});
-		Menu menu = menuMgr.createContextMenu(resultsViewer.getControl());
-		resultsViewer.getControl().setMenu(menu);
-		getSite().registerContextMenu(menuMgr, resultsViewer);
-	}
-	
-	protected void executeProcedure() {
-		BusyIndicator.showWhile(this.getPartControl().getDisplay(), new Runnable() {
-			public void run() {
-           		WSDataClusterPK dcpk = null;
-        		if (! "[ALL]".equals(dataClusterCombo.getText())) 
-        			dcpk = new WSDataClusterPK(dataClusterCombo.getText());
-        		try {
-        			String proc = procedureViewer.getDocument().get();
-        			//read parameters
-        			int number=0;
-        			
-        			while(true) {
-        				Pattern p = Pattern.compile(".*[^\\\\]%"+number+"[^\\d].*", Pattern.DOTALL);
-        				Matcher m = p.matcher(proc);
-        				if (! m.matches()) 
-        					break;
-        				else
-        					++number;
-        			}
-        			String[] ps = null;
-        			if (number>0) {
-            			//transfer current parameters to new array
-            			ps = new String[number];
-            			for (int i = 0; i < number; i++) {
-							if (i<currentParameters.size()) 
-								ps[i] = currentParameters.get(i);
-							else
-								ps[i] = "";
-            			}
-            			//call parameters window
-            			QueryParametersDialog dialog = 
-            				new QueryParametersDialog(
-            					StoredProcedureMainPage.this.getSite().getShell(),
-            					ps
-            				);
-            			dialog.setBlockOnOpen(true);
-            			dialog.open();
-            			if (dialog.getButtonPressed() == QueryParametersDialog.BUTTON_CANCEL) return;
-            			ps = dialog.getParameters();
-            			//Apply parameters
-            			for (int i = 0; i < ps.length; i++) {
-//            				transfer parameters back into current parameters
-							if (i<currentParameters.size()) 
-								currentParameters.set(i, ps[i]);
-							else
-								currentParameters.add(ps[i]);
-							//replace parameters
-//							proc=proc.replaceAll("([^\\\\])%"+i+"([^\\d])", "$1"+ps[i]+"$2");
-						}
-        			}
-        			//perform call
-//            		String[] results = 
-//            		Util.getPort(getXObject()).runQuery(
-//            				new WSRunQuery(
-//            					null,
-//            					dcpk,
-//            					proc,
-//            					currentParameters.toArray(new String[currentParameters.size()])
-//            				)
-//            		).getStrings();
+        this.refreshing = false;
+    }
 
-            		XtentisPort port=Util.getPort(getXObject());
-            		WSStoredProcedure wsStoredProcedure = (WSStoredProcedure) (getXObject().getWsObject());
-            		port.putStoredProcedure(new WSPutStoredProcedure(wsStoredProcedure));
-            		WSStringArray array=port.executeStoredProcedure(new WSExecuteStoredProcedure(new WSStoredProcedurePK(wsStoredProcedure.getName()),null,dcpk,currentParameters.toArray(new String[currentParameters.size()])));
-            		String[] results=array.getStrings();
-            		resultsLabel.setText("Procedure returned "+results.length+" Records.");
-            		resultsViewer.setInput(results);
-        		} catch (Exception ex) {
-        			MessageDialog.openError(
-        					StoredProcedureMainPage.this.getSite().getShell(),
-        					"Error",        					
-        					ex.getMessage()
-        					);
-        		}
-			}
-		});
-	}
+    protected void commit() {
+        if (this.refreshing)
+            return;
 
-	
-	class ResultsViewAction extends Action{
+        this.comitting = true;
 
-		private Shell shell = null;
-		private Viewer viewer;
-		
-		public ResultsViewAction(Shell shell, Viewer viewer) {
-			super();
-			this.shell = shell;
-			this.viewer = viewer;
-			setImageDescriptor(ImageCache.getImage( "icons/add_obj.gif"));
-			setText("Details");
-			setToolTipText("View in Details");
-		}
-		
-		public void run() {
-			try {
-				super.run();
-				
-				IStructuredSelection selection=((IStructuredSelection)viewer.getSelection());
-				String result = (String) selection.getFirstElement();
-				//clean up highlights
-				result = result.replaceAll("\\s*__h", "").replaceAll("h__\\s*", "");
-	            
-				//try to parse it
-				try {
-					final DOMViewDialog d = new DOMViewDialog(
-							shell, 
-							Util.parse(result)
-					);
-					d.setBlockOnOpen(true);
-					d.addListener(new Listener() {
-						public void handleEvent(Event event) {
-							if (event.button == DOMViewDialog.BUTTON_CLOSE)
-								d.close();
-						}
-					});
-					d.open();
-				} catch (Exception e) {
-					//not an XML
-					Dialog d = new TextViewDialog(
-							shell, 
-							result
-					);
-					d.setBlockOnOpen(true);
-					d.open();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				MessageDialog.openError(
-						shell,
-						"Error", 
-						"An error occured trying to view the result as a DOM tree: "+e.getLocalizedMessage()
-				);
-			}		
-		}
-		public void runWithEvent(Event event) {
-			super.runWithEvent(event);
-		}
+        WSStoredProcedure wsStoredProcedure = (WSStoredProcedure) (getXObject().getWsObject());
+        wsStoredProcedure.setDescription(descriptionText.getText());
+        wsStoredProcedure.setProcedure(procedureViewer.getDocument().get());
+        wsStoredProcedure.setRefreshCache(refreshCacheBtn.getSelection());
+        this.comitting = false;
+    }
 
-	}
-	
-	protected static Pattern highlightLeft = Pattern.compile("\\s*__h");
-	protected static Pattern highlightRight = Pattern.compile("h__\\s*");
-	protected static Pattern emptyTags = Pattern.compile("\\s*<(.*?)\\/>\\s*");
-	protected static Pattern openingTags = Pattern.compile("\\s*<([^\\/].*?[^\\/])>\\s*");
-	protected static Pattern closingTags = Pattern.compile("\\s*</(.*?)>\\s*");
-	class XMLTableLabelProvider implements  ITableLabelProvider {
+    // no specific actions here
+    public void createActions() {
+        return;
+    }
 
-		public Image getColumnImage(Object element, int columnIndex) {
-			return null;
-		}
+    public void textChanged(TextEvent event) {
+        if (this.refreshing)
+            return;
+        // markDirty();
+        markDirty();
+    }
 
-		public String getColumnText(Object element, int columnIndex) {
-			String xml = (String) element;
-			xml =highlightLeft.matcher(xml).replaceAll("");
-			xml =highlightRight.matcher(xml).replaceAll("");
-			xml =emptyTags.matcher(xml).replaceAll("[$1]");
-			xml =openingTags.matcher(xml).replaceAll("[$1: ");
-			xml =closingTags.matcher(xml).replaceAll("]");
-			if (xml.length()>=150)
-				return xml.substring(0, 150)+"...";
-			return xml;
-		}
+    private void hookContextMenu() {
+        MenuManager menuMgr = new MenuManager();
+        menuMgr.setRemoveAllWhenShown(true);
+        menuMgr.addMenuListener(new IMenuListener() {
 
-		public void addListener(ILabelProviderListener listener) {
-		}
+            public void menuAboutToShow(IMenuManager manager) {
+                // ViewBrowserMainPage.this.fillContextMenu(manager);
+                manager.add(new ResultsViewAction(StoredProcedureMainPage.this.getSite().getShell(),
+                        StoredProcedureMainPage.this.resultsViewer));
+            }
+        });
+        Menu menu = menuMgr.createContextMenu(resultsViewer.getControl());
+        resultsViewer.getControl().setMenu(menu);
+        getSite().registerContextMenu(menuMgr, resultsViewer);
+    }
 
-		public void dispose() {
-		}
+    protected void executeProcedure() {
+        BusyIndicator.showWhile(this.getPartControl().getDisplay(), new Runnable() {
 
-		public boolean isLabelProperty(Object element, String property) {
-			return false;
-		}
+            public void run() {
+                WSDataClusterPK dcpk = null;
+                if (!"[ALL]".equals(dataClusterCombo.getText()))
+                    dcpk = new WSDataClusterPK(dataClusterCombo.getText());
+                try {
+                    String proc = procedureViewer.getDocument().get();
+                    // read parameters
+                    int number = 0;
 
-		public void removeListener(ILabelProviderListener listener) {
-		}
+                    while (true) {
+                        Pattern p = Pattern.compile(".*[^\\\\]%" + number + "[^\\d].*", Pattern.DOTALL);
+                        Matcher m = p.matcher(proc);
+                        if (!m.matches())
+                            break;
+                        else
+                            ++number;
+                    }
+                    String[] ps = null;
+                    if (number > 0) {
+                        // transfer current parameters to new array
+                        ps = new String[number];
+                        for (int i = 0; i < number; i++) {
+                            if (i < currentParameters.size())
+                                ps[i] = currentParameters.get(i);
+                            else
+                                ps[i] = "";
+                        }
+                        // call parameters window
+                        QueryParametersDialog dialog = new QueryParametersDialog(StoredProcedureMainPage.this.getSite()
+                                .getShell(), ps);
+                        dialog.setBlockOnOpen(true);
+                        dialog.open();
+                        if (dialog.getButtonPressed() == QueryParametersDialog.BUTTON_CANCEL)
+                            return;
+                        ps = dialog.getParameters();
+                        // Apply parameters
+                        for (int i = 0; i < ps.length; i++) {
+                            // transfer parameters back into current parameters
+                            if (i < currentParameters.size())
+                                currentParameters.set(i, ps[i]);
+                            else
+                                currentParameters.add(ps[i]);
+                            // replace parameters
+                            // proc=proc.replaceAll("([^\\\\])%"+i+"([^\\d])", "$1"+ps[i]+"$2");
+                        }
+                    }
+                    // perform call
+                    // String[] results =
+                    // Util.getPort(getXObject()).runQuery(
+                    // new WSRunQuery(
+                    // null,
+                    // dcpk,
+                    // proc,
+                    // currentParameters.toArray(new String[currentParameters.size()])
+                    // )
+                    // ).getStrings();
 
-	}
+                    XtentisPort port = Util.getPort(getXObject());
+                    WSStoredProcedure wsStoredProcedure = (WSStoredProcedure) (getXObject().getWsObject());
+                    port.putStoredProcedure(new WSPutStoredProcedure(wsStoredProcedure));
+                    WSStringArray array = port.executeStoredProcedure(new WSExecuteStoredProcedure(new WSStoredProcedurePK(
+                            wsStoredProcedure.getName()), null, dcpk, currentParameters.toArray(new String[currentParameters
+                            .size()])));
+                    String[] results = array.getStrings();
+                    resultsLabel.setText("Procedure returned " + results.length + " Records.");
+                    resultsViewer.setInput(results);
+                } catch (Exception ex) {
+                    MessageDialog.openError(StoredProcedureMainPage.this.getSite().getShell(), "Error", ex.getMessage());
+                }
+            }
+        });
+    }
 
-	private void createCompDropTarget() {
-		DropTarget dropTarget = new DropTarget(procedureViewer.getTextWidget(),  DND.DROP_MOVE|DND.DROP_LINK);
-		dropTarget.setTransfer(new TreeObjectTransfer[] { TreeObjectTransfer.getInstance() });
-		dropTarget.addDropListener(new DropTargetAdapter() {
+    class ResultsViewAction extends Action {
 
-			public void dragEnter(DropTargetEvent event) {
-			}
-			public void dragLeave(DropTargetEvent event) {
-			}
-			public void dragOver(DropTargetEvent event) {
-				event.feedback |= DND.FEEDBACK_EXPAND | DND.FEEDBACK_SCROLL;
-			}
-			
-			public void drop(DropTargetEvent event) {
-				if (event.data instanceof TreeObject[])
-					procedureViewer.getTextWidget().setText(procedureViewer.getTextWidget().getText()+((TreeObject[])event.data)[0].getDisplayName());	
-			}
-		});
-		
-	}
+        private Shell shell = null;
+
+        private Viewer viewer;
+
+        public ResultsViewAction(Shell shell, Viewer viewer) {
+            super();
+            this.shell = shell;
+            this.viewer = viewer;
+            setImageDescriptor(ImageCache.getImage("icons/add_obj.gif"));
+            setText("Details");
+            setToolTipText("View in Details");
+        }
+
+        public void run() {
+            try {
+                super.run();
+
+                IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
+                String result = (String) selection.getFirstElement();
+                // clean up highlights
+                result = result.replaceAll("\\s*__h", "").replaceAll("h__\\s*", "");
+
+                // try to parse it
+                try {
+                    final DOMViewDialog d = new DOMViewDialog(shell, Util.parse(result));
+                    d.setBlockOnOpen(true);
+                    d.addListener(new Listener() {
+
+                        public void handleEvent(Event event) {
+                            if (event.button == DOMViewDialog.BUTTON_CLOSE)
+                                d.close();
+                        }
+                    });
+                    d.open();
+                } catch (Exception e) {
+                    // not an XML
+                    Dialog d = new TextViewDialog(shell, result);
+                    d.setBlockOnOpen(true);
+                    d.open();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                MessageDialog.openError(shell, "Error",
+                        "An error occured trying to view the result as a DOM tree: " + e.getLocalizedMessage());
+            }
+        }
+
+        public void runWithEvent(Event event) {
+            super.runWithEvent(event);
+        }
+
+    }
+
+    protected static Pattern highlightLeft = Pattern.compile("\\s*__h");
+
+    protected static Pattern highlightRight = Pattern.compile("h__\\s*");
+
+    protected static Pattern emptyTags = Pattern.compile("\\s*<(.*?)\\/>\\s*");
+
+    protected static Pattern openingTags = Pattern.compile("\\s*<([^\\/].*?[^\\/])>\\s*");
+
+    protected static Pattern closingTags = Pattern.compile("\\s*</(.*?)>\\s*");
+
+    class XMLTableLabelProvider implements ITableLabelProvider {
+
+        public Image getColumnImage(Object element, int columnIndex) {
+            return null;
+        }
+
+        public String getColumnText(Object element, int columnIndex) {
+            String xml = (String) element;
+            xml = highlightLeft.matcher(xml).replaceAll("");
+            xml = highlightRight.matcher(xml).replaceAll("");
+            xml = emptyTags.matcher(xml).replaceAll("[$1]");
+            xml = openingTags.matcher(xml).replaceAll("[$1: ");
+            xml = closingTags.matcher(xml).replaceAll("]");
+            if (xml.length() >= 150)
+                return xml.substring(0, 150) + "...";
+            return xml;
+        }
+
+        public void addListener(ILabelProviderListener listener) {
+        }
+
+        public void dispose() {
+        }
+
+        public boolean isLabelProperty(Object element, String property) {
+            return false;
+        }
+
+        public void removeListener(ILabelProviderListener listener) {
+        }
+
+    }
+
+    private void createCompDropTarget() {
+        DropTarget dropTarget = new DropTarget(procedureViewer.getTextWidget(), DND.DROP_MOVE | DND.DROP_LINK);
+        dropTarget.setTransfer(new TreeObjectTransfer[] { TreeObjectTransfer.getInstance() });
+        dropTarget.addDropListener(new DropTargetAdapter() {
+
+            public void dragEnter(DropTargetEvent event) {
+            }
+
+            public void dragLeave(DropTargetEvent event) {
+            }
+
+            public void dragOver(DropTargetEvent event) {
+                event.feedback |= DND.FEEDBACK_EXPAND | DND.FEEDBACK_SCROLL;
+            }
+
+            public void drop(DropTargetEvent event) {
+                if (event.data instanceof TreeObject[])
+                    procedureViewer.getTextWidget().setText(
+                            procedureViewer.getTextWidget().getText() + ((TreeObject[]) event.data)[0].getDisplayName());
+            }
+        });
+
+    }
 
 }

@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.editors.xsdeditor;
 
 import java.io.ByteArrayInputStream;
@@ -48,13 +60,14 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
 
     @Override
     public String getPartName() {
-    	// TODO Auto-generated method stub
-    	String part= super.getPartName();
-    	if(part.endsWith(".xsd")){
-    		return part.substring(0,part.length()-4);
-    	}
-    	return part;
+        // TODO Auto-generated method stub
+        String part = super.getPartName();
+        if (part.endsWith(".xsd")) {
+            return part.substring(0, part.length() - 4);
+        }
+        return part;
     }
+
     @Override
     public void doSave(IProgressMonitor monitor) {
         // TODO Auto-generated method stub
@@ -73,7 +86,7 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
             // InputStream in = XSDEditorUtil.createFile(xobject).getContents(true);
 
             IDocument doc = getTextEditor().getTextViewer().getDocument();
-            String xsd = doc.get();            
+            String xsd = doc.get();
             // DataModelMainPage
             IEditorPart[] editors = findEditors(xsdInput);
             if (editors.length == 1 && editors[0] instanceof DataModelMainPage) {

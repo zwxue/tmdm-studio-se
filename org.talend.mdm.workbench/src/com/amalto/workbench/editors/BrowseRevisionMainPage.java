@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.editors;
 
 import java.net.MalformedURLException;
@@ -25,7 +37,6 @@ import com.amalto.workbench.actions.EditXObjectAction;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.XObjectBrowserInput;
-import com.amalto.workbench.providers.XObjectEditorInput;
 import com.amalto.workbench.utils.EXtentisObjects;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
@@ -35,245 +46,219 @@ import com.amalto.workbench.webservices.WSUniverseXtentisObjectsRevisionIDs;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
-															// {
-	protected org.eclipse.swt.widgets.List revisionIDList;
-	protected org.eclipse.swt.widgets.List universeList;
-	protected TreeParent parent;
-	protected TreeObject object;
-	protected List<String> deleteRevisionIDs = new ArrayList<String>();
-	protected List<WSUniverse> universes;
 
-	public BrowseRevisionMainPage(FormEditor editor) {
-		super(editor, BrowseRevisionMainPage.class.getName(),
-				"Revision Browser "
-						+ ((XObjectBrowserInput) editor.getEditorInput())
-								.getName().replaceAll("\\[.*\\]", "").trim());
+                                                         // {
+    protected org.eclipse.swt.widgets.List revisionIDList;
 
-	}
+    protected org.eclipse.swt.widgets.List universeList;
 
-	@Override
-	protected void createCharacteristicsContent(FormToolkit toolkit,
-			Composite mainComposite) {
+    protected TreeParent parent;
 
-		// revisionID
+    protected TreeObject object;
 
-		Composite revisionIDComposite = toolkit.createComposite(mainComposite);
-		revisionIDComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
-				true, true, 1, 1));
-		revisionIDComposite.setLayout(new GridLayout(1, true));
+    protected List<String> deleteRevisionIDs = new ArrayList<String>();
 
-		Label revisionLabel = toolkit.createLabel(revisionIDComposite,
-				"RevisionID");
-		revisionLabel.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER,
-				false, true, 1, 1));
-		revisionIDList = new org.eclipse.swt.widgets.List(revisionIDComposite,
-				SWT.V_SCROLL | SWT.BORDER | SWT.LINE_SOLID);
-		revisionIDList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-				true, 5, 1));
-		((GridData) revisionIDList.getLayoutData()).heightHint = 100;
+    protected List<WSUniverse> universes;
 
-		// universe
-		Composite universeComposite = toolkit
-				.createComposite(revisionIDComposite);
-		universeComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-				true, 1, 1));
-		universeComposite.setLayout(new GridLayout(1, true));
+    public BrowseRevisionMainPage(FormEditor editor) {
+        super(editor, BrowseRevisionMainPage.class.getName(), "Revision Browser "
+                + ((XObjectBrowserInput) editor.getEditorInput()).getName().replaceAll("\\[.*\\]", "").trim());
 
-		Label universeLabel = toolkit
-				.createLabel(universeComposite, "Version");
-		universeLabel.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER,
-				false, true, 1, 1));
-		universeList = new org.eclipse.swt.widgets.List(universeComposite,
-				SWT.V_SCROLL | SWT.BORDER | SWT.LINE_SOLID);
-		universeList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
-				2, 1));
-		((GridData) universeList.getLayoutData()).heightHint = 150;
+    }
 
-		try {
-			final XtentisPort port = Util.getPort(getXObject());
+    @Override
+    protected void createCharacteristicsContent(FormToolkit toolkit, Composite mainComposite) {
 
-			revisionIDList.addSelectionListener(new SelectionListener() {
+        // revisionID
 
-				public void widgetDefaultSelected(SelectionEvent e) {
-				}
+        Composite revisionIDComposite = toolkit.createComposite(mainComposite);
+        revisionIDComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+        revisionIDComposite.setLayout(new GridLayout(1, true));
 
-				public void widgetSelected(SelectionEvent e) {
+        Label revisionLabel = toolkit.createLabel(revisionIDComposite, "RevisionID");
+        revisionLabel.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, true, 1, 1));
+        revisionIDList = new org.eclipse.swt.widgets.List(revisionIDComposite, SWT.V_SCROLL | SWT.BORDER | SWT.LINE_SOLID);
+        revisionIDList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 5, 1));
+        ((GridData) revisionIDList.getLayoutData()).heightHint = 100;
 
-					if (revisionIDList.getSelection()[0]
-							.equals(IConstants.HEAD)) {
-						universeList.removeAll();
-						universeList.add(IConstants.HEAD, 0);
-						return;
-					} else {
-						universeList.removeAll();
-						if (!"".equals(revisionIDList.getSelection()[0])) {
-							int index = BrowseRevisionMainPage.this
-									.getXObject().getDisplayName().indexOf("[");
-							String objectName = "";
-							if (index > 0)
-								objectName = BrowseRevisionMainPage.this
-										.getXObject().getDisplayName()
-										.substring(0, index - 1);
-							List<String> universes = Util
-									.getUniverseBYRevisionID(port,
-											revisionIDList.getSelection()[0],
-											objectName);
-							universeList.setItems(universes
-									.toArray(new String[universes.size()]));
-							// universeList.add(IConstants.HEAD, 0);
-						}
+        // universe
+        Composite universeComposite = toolkit.createComposite(revisionIDComposite);
+        universeComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+        universeComposite.setLayout(new GridLayout(1, true));
 
-					}
-				}
-			});
-			revisionIDList.addKeyListener(new KeyListener() {
+        Label universeLabel = toolkit.createLabel(universeComposite, "Version");
+        universeLabel.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, true, 1, 1));
+        universeList = new org.eclipse.swt.widgets.List(universeComposite, SWT.V_SCROLL | SWT.BORDER | SWT.LINE_SOLID);
+        universeList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+        ((GridData) universeList.getLayoutData()).heightHint = 150;
 
-				public void keyPressed(KeyEvent e) {
-				}
+        try {
+            final XtentisPort port = Util.getPort(getXObject());
 
-				public void keyReleased(KeyEvent e) {
-					if (e.keyCode == SWT.DEL) {
-						if (!revisionIDList.getSelection()[0].equals("HEAD")) {
-							BrowseRevisionMainPage.this.comitting = true;
-							deleteRevisionIDs
-									.add(revisionIDList.getSelection()[0]);
-							revisionIDList
-									.remove(revisionIDList.getSelection()[0]);
-							BrowseRevisionMainPage.this.comitting = false;
-							markDirty();
-						}
-					}
-				}
-			});
-			universeList.addMouseListener(new MouseListener() {
+            revisionIDList.addSelectionListener(new SelectionListener() {
 
-				public void mouseDoubleClick(MouseEvent e) {
-					EditXObjectAction action;
-					parent = BrowseRevisionMainPage.this.getXObject().getServerRoot();
-					TreeObject[] objects = parent.getChildren();
-					TreeObject[] subObjects;
-					for (int i = 0; i < objects.length; i++) {
-						if (objects[i].getDisplayName().equals("Version")) {
-							subObjects = ((TreeParent) objects[i]).getChildren();
-							for (int j = 0; j < subObjects.length; j++) {
-								if (subObjects[j].getDisplayName().endsWith(universeList.getSelection()[0])) {
-									action = new EditXObjectAction(subObjects[j],BrowseRevisionMainPage.this.getSite().getPage());
-									action.run();
-									break;
-								}
+                public void widgetDefaultSelected(SelectionEvent e) {
+                }
 
-							}
-						}
+                public void widgetSelected(SelectionEvent e) {
 
-					}
+                    if (revisionIDList.getSelection()[0].equals(IConstants.HEAD)) {
+                        universeList.removeAll();
+                        universeList.add(IConstants.HEAD, 0);
+                        return;
+                    } else {
+                        universeList.removeAll();
+                        if (!"".equals(revisionIDList.getSelection()[0])) {
+                            int index = BrowseRevisionMainPage.this.getXObject().getDisplayName().indexOf("[");
+                            String objectName = "";
+                            if (index > 0)
+                                objectName = BrowseRevisionMainPage.this.getXObject().getDisplayName().substring(0, index - 1);
+                            List<String> universes = Util.getUniverseBYRevisionID(port, revisionIDList.getSelection()[0],
+                                    objectName);
+                            universeList.setItems(universes.toArray(new String[universes.size()]));
+                            // universeList.add(IConstants.HEAD, 0);
+                        }
 
-				}
+                    }
+                }
+            });
+            revisionIDList.addKeyListener(new KeyListener() {
 
-				public void mouseDown(MouseEvent e) {
+                public void keyPressed(KeyEvent e) {
+                }
 
-				}
+                public void keyReleased(KeyEvent e) {
+                    if (e.keyCode == SWT.DEL) {
+                        if (!revisionIDList.getSelection()[0].equals("HEAD")) {
+                            BrowseRevisionMainPage.this.comitting = true;
+                            deleteRevisionIDs.add(revisionIDList.getSelection()[0]);
+                            revisionIDList.remove(revisionIDList.getSelection()[0]);
+                            BrowseRevisionMainPage.this.comitting = false;
+                            markDirty();
+                        }
+                    }
+                }
+            });
+            universeList.addMouseListener(new MouseListener() {
 
-				public void mouseUp(MouseEvent e) {
+                public void mouseDoubleClick(MouseEvent e) {
+                    EditXObjectAction action;
+                    parent = BrowseRevisionMainPage.this.getXObject().getServerRoot();
+                    TreeObject[] objects = parent.getChildren();
+                    TreeObject[] subObjects;
+                    for (int i = 0; i < objects.length; i++) {
+                        if (objects[i].getDisplayName().equals("Version")) {
+                            subObjects = ((TreeParent) objects[i]).getChildren();
+                            for (int j = 0; j < subObjects.length; j++) {
+                                if (subObjects[j].getDisplayName().endsWith(universeList.getSelection()[0])) {
+                                    action = new EditXObjectAction(subObjects[j], BrowseRevisionMainPage.this.getSite().getPage());
+                                    action.run();
+                                    break;
+                                }
 
-				}
+                            }
+                        }
 
-			});
+                    }
 
-			revisionIDList.setSelection(0);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+                }
 
-	}
+                public void mouseDown(MouseEvent e) {
 
-	@Override
-	protected void commit() {
+                }
 
-		try {
-			if (this.refreshing)
-				return;
-			this.comitting = true;
+                public void mouseUp(MouseEvent e) {
 
-			XtentisPort port;
-			port = Util.getPort(new URL(getXObject().getEndpointAddress()),
-					getXObject().getUniverse(), getXObject().getUsername(),
-					getXObject().getPassword());
+                }
 
-			for (int i = 0; i < deleteRevisionIDs.size(); i++) {
+            });
 
-				String revisionID = deleteRevisionIDs.get(i);
-				if (!"".equals(revisionID)) {
-					int index = BrowseRevisionMainPage.this.getXObject()
-							.getDisplayName().indexOf("[");
-					String objectName = "";
-					if (index > 0)
-						objectName = BrowseRevisionMainPage.this.getXObject()
-								.getDisplayName().substring(0, index - 1);
+            revisionIDList.setSelection(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-					universes = Util.getWSUniverseBYRevisionID(port,
-							revisionID, objectName);
-					for (WSUniverse universe : universes) {
-						WSUniverseXtentisObjectsRevisionIDs[] rids = universe
-								.getXtentisObjectsRevisionIDs();
-						for (int j = 0; j < rids.length; j++) {
-							if (rids[j].getXtentisObjectName().equals(
-									objectName))
-								rids[j].setRevisionID("");
-						}
-					}
-				}
-			}
-			this.comitting = false;
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (XtentisException e) {
-			e.printStackTrace();
-		}
+    }
 
-	}
+    @Override
+    protected void commit() {
 
-	public List<WSUniverse> getUniverses() {
-		return universes;
-	}
+        try {
+            if (this.refreshing)
+                return;
+            this.comitting = true;
 
-	@Override
-	protected void refreshData() {
-		if (comitting)
-			return;
+            XtentisPort port;
+            port = Util.getPort(new URL(getXObject().getEndpointAddress()), getXObject().getUniverse(), getXObject()
+                    .getUsername(), getXObject().getPassword());
 
-		BrowseRevisionMainPage.this.refreshing = true;
-		try {
-			final XtentisPort port = Util.getPort(getXObject());
-			Map<String, List<String>> map = Util.getUniverseMap(port);
-			String displayname = getXObject().getDisplayName().replaceAll("\\[.*\\]",
-					"").trim();
-			List<String> revisions;
-			String name=EXtentisObjects.getXtentisObjectName(displayname);
-			revisions = map.get(name.trim());
-			if (revisions!=null && revisions.contains(""))
-				revisions.remove("");
-			if (revisions != null) {
-				revisionIDList.setItems(revisions.toArray(new String[revisions
-						.size()]));
-			}
-			revisionIDList.add(IConstants.HEAD, 0);
-			universeList.add(IConstants.HEAD, 0);
-			revisionIDList.setSelection(0);
+            for (int i = 0; i < deleteRevisionIDs.size(); i++) {
 
-			refreshing = false;
-		} catch (Exception e) {
-			e.printStackTrace();
-			MessageDialog.openError(this.getSite().getShell(),
-					"Error refreshing the page", "Error refreshing the page: "
-							+ e.getLocalizedMessage());
-		}
+                String revisionID = deleteRevisionIDs.get(i);
+                if (!"".equals(revisionID)) {
+                    int index = BrowseRevisionMainPage.this.getXObject().getDisplayName().indexOf("[");
+                    String objectName = "";
+                    if (index > 0)
+                        objectName = BrowseRevisionMainPage.this.getXObject().getDisplayName().substring(0, index - 1);
 
-	}
+                    universes = Util.getWSUniverseBYRevisionID(port, revisionID, objectName);
+                    for (WSUniverse universe : universes) {
+                        WSUniverseXtentisObjectsRevisionIDs[] rids = universe.getXtentisObjectsRevisionIDs();
+                        for (int j = 0; j < rids.length; j++) {
+                            if (rids[j].getXtentisObjectName().equals(objectName))
+                                rids[j].setRevisionID("");
+                        }
+                    }
+                }
+            }
+            this.comitting = false;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (XtentisException e) {
+            e.printStackTrace();
+        }
 
-	@Override
-	protected void createActions() {
-		// TODO Auto-generated method stub
+    }
 
-	}
+    public List<WSUniverse> getUniverses() {
+        return universes;
+    }
+
+    @Override
+    protected void refreshData() {
+        if (comitting)
+            return;
+
+        BrowseRevisionMainPage.this.refreshing = true;
+        try {
+            final XtentisPort port = Util.getPort(getXObject());
+            Map<String, List<String>> map = Util.getUniverseMap(port);
+            String displayname = getXObject().getDisplayName().replaceAll("\\[.*\\]", "").trim();
+            List<String> revisions;
+            String name = EXtentisObjects.getXtentisObjectName(displayname);
+            revisions = map.get(name.trim());
+            if (revisions != null && revisions.contains(""))
+                revisions.remove("");
+            if (revisions != null) {
+                revisionIDList.setItems(revisions.toArray(new String[revisions.size()]));
+            }
+            revisionIDList.add(IConstants.HEAD, 0);
+            universeList.add(IConstants.HEAD, 0);
+            revisionIDList.setSelection(0);
+
+            refreshing = false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            MessageDialog.openError(this.getSite().getShell(), "Error refreshing the page",
+                    "Error refreshing the page: " + e.getLocalizedMessage());
+        }
+
+    }
+
+    @Override
+    protected void createActions() {
+        // TODO Auto-generated method stub
+
+    }
 
 }

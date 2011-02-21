@@ -1,9 +1,15 @@
-/*
- * Created on 27 oct. 2005
- * 
- * To change the template for this generated file go to Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and
- * Comments
- */
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.editors;
 
 import java.io.File;
@@ -277,9 +283,11 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     private XSDGetXPathAction getXPathAction = null;
 
     private XSDSetAnnotationForeignKeyAction setAnnotationForeignKeyAction = null;
-    private XSDVisibleRuleAction visibleRuleAction; 
+
+    private XSDVisibleRuleAction visibleRuleAction;
+
     private XSDDefaultValueRuleAction defaultValueRuleAction;
-    
+
     private XSDSetAnnotationFKFilterAction setAnnotationFKFilterAction = null;
 
     private XSDSetAnnotationWrapWriteAction setAnnotationWrapWriteAction = null;
@@ -1343,9 +1351,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                     return 114;
                 } else if (source.equals("X_PrimaryKeyInfo")) {
                     return 115;
-                }else if (source.equals("X_Visible_Rule")) {
+                } else if (source.equals("X_Visible_Rule")) {
                     return 116;
-                }else if (source.equals("X_Default_Value_Rule")) {
+                } else if (source.equals("X_Default_Value_Rule")) {
                     return 117;
                 }
             }
@@ -1718,7 +1726,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             manager.add(setAnnotationLabelAction);
             manager.add(setAnnotationForeignKeyAction);
             manager.add(setAnnotationFKFilterAction);
-            manager.add(setAnnotationForeignKeyInfoAction);           
+            manager.add(setAnnotationForeignKeyInfoAction);
         }
         if (Util.IsEnterPrise()) {
             manager.add(setAnnotationWriteAction);
@@ -1726,8 +1734,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             // if (checkMandatoryElement(obj))
             manager.add(setAnnotationNoAction);
             if (obj instanceof XSDParticle) {
-            manager.add(visibleRuleAction);
-            manager.add(defaultValueRuleAction);
+                manager.add(visibleRuleAction);
+                manager.add(defaultValueRuleAction);
             }
         }
         // available models
@@ -1760,8 +1768,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             // if (checkMandatoryElement(obj))
             manager.add(setAnnotationNoAction);
             if (obj instanceof XSDParticle) {
-            manager.add(visibleRuleAction);
-            manager.add(defaultValueRuleAction);
+                manager.add(visibleRuleAction);
+                manager.add(defaultValueRuleAction);
             }
         }
         // available models
@@ -2694,11 +2702,11 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 setAnnotationPrimaryKeyInfoAction.run();
                 break;
             case 116:
-            	visibleRuleAction.run();
-            	break;
+                visibleRuleAction.run();
+                break;
             case 117:
-            	defaultValueRuleAction.run();
-            	break;            	
+                defaultValueRuleAction.run();
+                break;
             case -1:
                 if (drillDownAdapter.canGoInto() == true)
                     drillDownAdapter.goInto();

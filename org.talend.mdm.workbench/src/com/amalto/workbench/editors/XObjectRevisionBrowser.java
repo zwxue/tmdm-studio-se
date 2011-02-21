@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.editors;
 
 import java.net.MalformedURLException;
@@ -97,8 +109,8 @@ public class XObjectRevisionBrowser extends FormEditor {
 
                 // Access to server and get port
 
-                XtentisPort port = Util.getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(), xobject
-                        .getUsername(), xobject.getPassword());
+                XtentisPort port = Util.getPort(new URL(xobject.getEndpointAddress()), xobject.getUniverse(),
+                        xobject.getUsername(), xobject.getPassword());
                 List<WSUniverse> universes = ((BrowseRevisionMainPage) formPages.get(i)).getUniverses();
                 for (WSUniverse wsUniverse : universes)
                     port.putUniverse(new WSPutUniverse(wsUniverse));
