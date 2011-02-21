@@ -98,7 +98,7 @@ public class XSDVisibleRuleAction extends UndoAction {
             }
 
         } catch (Exception e) {
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to set a Visible Rule: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;

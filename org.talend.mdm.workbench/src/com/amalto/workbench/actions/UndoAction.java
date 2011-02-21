@@ -84,7 +84,7 @@ public class UndoAction extends Action {
         try {
             IStatus status = getOperationHistory().execute(operation, null, null);
         } catch (ExecutionException e) {
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
         }
 
     }
@@ -137,7 +137,7 @@ public class UndoAction extends Action {
             oldValue = undoActionTrack.get(getActionUndoPos());
             undoActionTrack.put(getActionUndoPos(), value);
         } catch (Exception e) {
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
         }
         return oldValue;
     }
@@ -152,7 +152,7 @@ public class UndoAction extends Action {
             redoActionTrack.keySet().size();
             redoActionTrack.put(getActionUndoPos(), value);
         } catch (Exception e) {
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -190,7 +190,7 @@ public class UndoAction extends Action {
         try {
             xsd = Util.createXsdSchema(content, page.getXObject());
         } catch (Exception e) {
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
             return;
         }
         page.setXsdSchema(xsd);

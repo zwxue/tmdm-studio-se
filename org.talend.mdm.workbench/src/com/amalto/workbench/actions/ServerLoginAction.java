@@ -76,7 +76,7 @@ public class ServerLoginAction extends Action implements SelectionListener {
             dialog.setBlockOnOpen(true);
             dialog.open();
         } catch (Exception e) {
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
         }
     }
 

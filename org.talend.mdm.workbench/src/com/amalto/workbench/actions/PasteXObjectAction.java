@@ -133,7 +133,7 @@ public class PasteXObjectAction extends Action {
                     remoteTreeObject.getUsername(), remoteTreeObject.getPassword());
         } catch (Exception e) {
             // e.printStackTrace();
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -691,7 +691,7 @@ public class PasteXObjectAction extends Action {
 
         } catch (Exception e) {
             // e.printStackTrace();
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
             MessageDialog.openError(view.getSite().getShell(), "Error",
                     "An error occured trying to copy: " + e.getLocalizedMessage());
         } finally {
@@ -764,7 +764,7 @@ public class PasteXObjectAction extends Action {
                     }
                 }
             } catch (Exception e) {
-                log.error(e.getStackTrace());
+                log.error(e.getMessage(), e);
             }
 
             break;

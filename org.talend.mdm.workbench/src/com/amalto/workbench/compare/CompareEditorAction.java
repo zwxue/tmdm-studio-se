@@ -64,7 +64,7 @@ public class CompareEditorAction implements IWorkbenchWindowActionDelegate {
             leftF.create(new ByteArrayInputStream(left.getBytes()), IFile.FORCE, null);
             rightF.create(new ByteArrayInputStream(right.getBytes()), IFile.FORCE, null);
         } catch (CoreException e) {
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
         }
 
         ResourceCompareInput input = new ResourceCompareInput(cc);

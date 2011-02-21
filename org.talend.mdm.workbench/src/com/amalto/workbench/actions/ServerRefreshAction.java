@@ -59,7 +59,7 @@ public class ServerRefreshAction extends Action {
         try {
             doRun();
         } catch (Exception e) {
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
             MessageDialog.openError(view.getSite().getShell(), "Error", "Error while refreshing the " + IConstants.TALEND
                     + " Server Objects: " + e.getLocalizedMessage());
         }
@@ -84,7 +84,7 @@ public class ServerRefreshAction extends Action {
             ServerView.show().getViewer().refresh();
             LocalTreeObjectRepository.getInstance().setLazySaveStrategy(false, serverRoot);
         } catch (Exception e) {
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
             throw new Exception("Error while refreshing the " + IConstants.TALEND + " Server Objects: " + e.getLocalizedMessage());
         }
     }

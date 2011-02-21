@@ -139,7 +139,7 @@ public class XSDChangeBaseTypeAction extends UndoAction implements SelectionList
             page.markDirty();
 
         } catch (Exception e) {
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to change the Base Type Definition: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;

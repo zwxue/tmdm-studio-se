@@ -180,7 +180,7 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
             page.markDirty();
 
         } catch (Exception e) {
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to create a new Business Element: " + e.getLocalizedMessage());
 
@@ -205,7 +205,7 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
                         (String) keys.toArray()[i]);
             } catch (Exception e) {
                 // e.printStackTrace();
-                log.error(e.getStackTrace());
+                log.error(e.getMessage(), e);
             }
         }
     }
@@ -233,7 +233,7 @@ public class XSDNewParticleFromParticleAction extends UndoAction implements Sele
 
         } catch (Exception e) {
             // e.printStackTrace();
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.page.getSite().getShell(), "Error",
                     "An error occured trying to paste Entities: " + e.getLocalizedMessage());
         }

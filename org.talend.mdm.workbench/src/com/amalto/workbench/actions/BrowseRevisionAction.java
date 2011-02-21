@@ -51,7 +51,7 @@ public class BrowseRevisionAction extends Action {
                     .openEditor(new XObjectBrowserInput(xobject, xobject.getDisplayName()), XObjectRevisionBrowser.ID);
 
         } catch (Exception e) {
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
             ErrorExceptionDialog.openError(server.getSite().getShell(), "Error",
                     "An error occured trying to open the view browser: " + e.getLocalizedMessage());
         }

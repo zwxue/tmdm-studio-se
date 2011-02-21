@@ -144,7 +144,7 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
             page.markDirty();
 
         } catch (Exception e) {
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to create a new Business Element: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;
@@ -166,7 +166,7 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
                 struc.setAccessRole(lists, false, (IStructuredContentProvider) page.getTreeViewer().getContentProvider(),
                         (String) keys.toArray()[i]);
             } catch (Exception e) {
-                log.error(e.getStackTrace());
+                log.error(e.getMessage(), e);
             }
         }
     }
@@ -193,7 +193,7 @@ public class XSDNewParticleFromTypeAction extends UndoAction implements Selectio
             }
 
         } catch (Exception e) {
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.page.getSite().getShell(), "Error",
                     "An error occured trying to paste Entities: " + e.getLocalizedMessage());
         }

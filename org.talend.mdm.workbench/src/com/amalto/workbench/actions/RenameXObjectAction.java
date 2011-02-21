@@ -53,7 +53,7 @@ public class RenameXObjectAction extends Action {
             if (TreeObjectUtil.renameTreeOjects(xobject, view))
                 TreeObjectUtil.deleteTreeObject(xobject, view);
         } catch (Exception e) {
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
         }
     }
 }

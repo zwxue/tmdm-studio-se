@@ -73,7 +73,7 @@ public class XSDGetXPathAction extends UndoAction {
             // System.out.println("PATH: "+path);
             clipboard.setContents(new Object[] { path }, new Transfer[] { TextTransfer.getInstance() });
         } catch (Exception e) {
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to remove Entity: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;

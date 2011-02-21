@@ -559,7 +559,7 @@ public class NewXObjectAction extends Action {
                     ((AMainPageV2) editpart.getSelectedPage()).markDirty();
             }
         } catch (Exception e) {
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
             MessageDialog.openError(view.getSite().getShell(), "Error", "An error occured trying to create a new "
                     + IConstants.TALEND + " Object Instance: " + e.getLocalizedMessage());
         }

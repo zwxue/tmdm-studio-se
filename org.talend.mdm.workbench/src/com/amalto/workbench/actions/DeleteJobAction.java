@@ -47,7 +47,7 @@ public class DeleteJobAction extends AbstractAction {
             try {
                 deleteJob(xobject);
             } catch (Exception e) {
-                log.error(e.getStackTrace());
+                log.error(e.getMessage(), e);
             }
         }
 

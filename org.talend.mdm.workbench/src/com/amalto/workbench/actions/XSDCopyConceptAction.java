@@ -68,7 +68,7 @@ public class XSDCopyConceptAction extends Action {
             }
 
         } catch (Exception e) {
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to copy Entity: " + e.getLocalizedMessage());
 

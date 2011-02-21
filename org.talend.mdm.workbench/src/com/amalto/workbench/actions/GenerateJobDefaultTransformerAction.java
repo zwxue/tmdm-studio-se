@@ -137,7 +137,7 @@ public class GenerateJobDefaultTransformerAction extends Action {
                 folder.addChild(obj);
 
             } catch (Exception e) {
-                log.error(e.getStackTrace());
+                log.error(e.getMessage(), e);
             }
 
         } catch (Exception e) {

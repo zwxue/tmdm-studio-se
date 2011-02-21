@@ -190,7 +190,7 @@ public class XSDPasteConceptAction extends UndoAction {
             } else
                 return Status.CANCEL_STATUS;
         } catch (Exception e) {
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to Paste Entity: " + e.getLocalizedMessage());
 
@@ -331,7 +331,7 @@ public class XSDPasteConceptAction extends UndoAction {
                 struc.setAccessRole(lists, false, (IStructuredContentProvider) page.getTreeViewer().getContentProvider(),
                         (String) keys.toArray()[i]);
             } catch (Exception e) {
-                log.error(e.getStackTrace());
+                log.error(e.getMessage(), e);
             }
         }
     }
@@ -383,7 +383,7 @@ public class XSDPasteConceptAction extends UndoAction {
             }
 
         } catch (Exception e) {
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
             MessageDialog.openError(this.page.getSite().getShell(), "Error",
                     "An error occured trying to paste Entities: " + e.getLocalizedMessage());
         }

@@ -508,7 +508,7 @@ public class ResourceCompareInput extends CompareEditorInput {
             }
 
         } catch (Exception e) {
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
             MessageDialog.openError(null, "Error", "An error occured trying to commit: " + e.getLocalizedMessage());
         }
 

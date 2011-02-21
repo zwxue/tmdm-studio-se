@@ -118,7 +118,7 @@ public class XSDNewGroupFromTypeAction extends UndoAction implements SelectionLi
             page.markDirty();
 
         } catch (Exception e) {
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
             MessageDialog.openError(page.getSite().getShell(), "Error",
                     "An error occured trying to create a new Business Element: " + e.getLocalizedMessage());
             return Status.CANCEL_STATUS;

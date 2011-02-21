@@ -128,7 +128,7 @@ public class AddBrowseItemsWizard extends Wizard {
                         .getXObject().getUsername(), page.getXObject().getPassword());
             }
         } catch (Exception e) {
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
         }
 
         return port;

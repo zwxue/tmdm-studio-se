@@ -145,7 +145,7 @@ public class SaveXObjectAction extends Action {
 
         } catch (Exception e) {
 
-            log.error(e.getStackTrace());
+            log.error(e.getMessage(), e);
             ErrorExceptionDialog.openError(this.editor.getSite().getShell(), "Error Occured on Saving",
                     CommonUtil.getErrMsgFromException(e));
             state = 1;
