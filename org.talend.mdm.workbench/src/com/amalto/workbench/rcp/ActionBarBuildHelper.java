@@ -38,7 +38,6 @@ import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.internal.WorkbenchPlugin;
-import org.eclipse.ui.internal.ide.actions.OpenLocalFileAction;
 import org.eclipse.ui.internal.registry.ActionSetRegistry;
 import org.eclipse.ui.internal.registry.IActionSetDescriptor;
 import org.eclipse.ui.internal.registry.PerspectiveDescriptor;
@@ -47,11 +46,10 @@ import org.eclipse.ui.internal.registry.ViewDescriptor;
 import org.eclipse.ui.internal.registry.ViewRegistry;
 import org.eclipse.ui.views.IViewDescriptor;
 
-
 /**
  * DOC aiming class global comment. Detailled comment
  */
-public class ActionBarBuildHelper  {
+public class ActionBarBuildHelper {
 
     protected IWorkbenchAction introAction;
 
@@ -68,7 +66,6 @@ public class ActionBarBuildHelper  {
     protected MenuManager fileMenu;
 
     protected ICoolBarManager coolBar;
-
 
     protected static final String GROUP_UNDO = "group undo"; //$NON-NLS-1$
 
@@ -92,8 +89,6 @@ public class ActionBarBuildHelper  {
         this.window = window;
     }
 
-
-
     protected void removeAction(final ActionSetRegistry reg, final IActionSetDescriptor actionSet) {
         IExtension ext = actionSet.getConfigurationElement().getDeclaringExtension();
         reg.removeExtension(ext, new Object[] { actionSet });
@@ -103,8 +98,7 @@ public class ActionBarBuildHelper  {
             "org.eclipse.ui.edit.text.actionSet.convertLineDelimitersTo", //$NON-NLS-1$
             "org.eclipse.ui.edit.text.actionSet.annotationNavigation", "org.eclipse.ui.NavigateActionSet", //$NON-NLS-1$ //$NON-NLS-2$
             "org.eclipse.ui.WorkingSetActionSet", "org.eclipse.ui.edit.text.actionSet.navigation", //$NON-NLS-1$ //$NON-NLS-2$
-            "org.eclipse.search.searchActionSet",
-            "org.eclipse.ui.externaltools.ExternalToolsSet", "org.talend.repository.bootTalendActionSet" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            "org.eclipse.search.searchActionSet", "org.eclipse.ui.externaltools.ExternalToolsSet", "org.talend.repository.bootTalendActionSet" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
     public void fillMenuBar(final IMenuManager menuBar) {
 
@@ -122,8 +116,7 @@ public class ActionBarBuildHelper  {
             }
         }
 
-        fileMenu = new MenuManager(
-               "File", IWorkbenchActionConstants.M_FILE); //$NON-NLS-1$
+        fileMenu = new MenuManager("File", IWorkbenchActionConstants.M_FILE); //$NON-NLS-1$
         menuBar.add(fileMenu);
         // MenuManager subFile = new MenuManager("&New", IWorkbenchActionConstants.NEW_EXT);
         // subFile.add(ActionFactory.NEW.create(window));
@@ -131,18 +124,18 @@ public class ActionBarBuildHelper  {
 
         IWorkbenchAction closeAction = ActionFactory.CLOSE.create(window);
         fileMenu.add(closeAction);
-        //actionBarConfigurer.registerGlobalAction(closeAction);
+        // actionBarConfigurer.registerGlobalAction(closeAction);
 
         IWorkbenchAction closeAllAction = ActionFactory.CLOSE_ALL.create(window);
         fileMenu.add(closeAllAction);
-        //actionBarConfigurer.registerGlobalAction(closeAllAction);
+        // actionBarConfigurer.registerGlobalAction(closeAllAction);
         fileMenu.add(new Separator());
 
         fileMenu.add(ActionFactory.SAVE.create(window));
 
         IWorkbenchAction saveAllAction = ActionFactory.SAVE_ALL.create(window);
         fileMenu.add(saveAllAction);
-        //actionBarConfigurer.registerGlobalAction(saveAllAction);
+        // actionBarConfigurer.registerGlobalAction(saveAllAction);
         // fileMenu.add(ActionFactory.SAVE_AS.create(window));
         fileMenu.add(new Separator());
         fileMenu.add(ActionFactory.PRINT.create(window));
@@ -152,14 +145,12 @@ public class ActionBarBuildHelper  {
 
         fileMenu.add(ActionFactory.IMPORT.create(window));
 
-
         fileMenu.add(new Separator());
         fileMenu.add(ActionFactory.QUIT.create(window));
 
         fileMenu.add(new Separator());
 
-        editMenu = new MenuManager(
-                "Edit", IWorkbenchActionConstants.M_EDIT); //$NON-NLS-1$
+        editMenu = new MenuManager("Edit", IWorkbenchActionConstants.M_EDIT); //$NON-NLS-1$
         menuBar.add(editMenu);
         editMenu.add(new Separator(GROUP_UNDO));
         editMenu.add(new Separator(GROUP_COPY));
@@ -173,8 +164,7 @@ public class ActionBarBuildHelper  {
         editMenu.appendToGroup(GROUP_DELETE, ActionFactory.SELECT_ALL.create(window));
         editMenu.add(new GroupMarker(IWorkbenchActionConstants.FIND_EXT));
 
-        MenuManager navigateMenu = new MenuManager(
-               "Navigate", IWorkbenchActionConstants.M_NAVIGATE); //$NON-NLS-1$
+        MenuManager navigateMenu = new MenuManager("Navigate", IWorkbenchActionConstants.M_NAVIGATE); //$NON-NLS-1$
         navigateMenu.add(new GroupMarker(IWorkbenchActionConstants.NAV_START));
         navigateMenu.add(new GroupMarker(IWorkbenchActionConstants.MB_ADDITIONS));
         navigateMenu.add(new GroupMarker(IWorkbenchActionConstants.SHOW_EXT));
@@ -187,11 +177,7 @@ public class ActionBarBuildHelper  {
 
         menuBar.add(navigateMenu);
 
-
-
-
-        windowMenu = new MenuManager(
-                "Window", IWorkbenchActionConstants.M_WINDOW); //$NON-NLS-1$
+        windowMenu = new MenuManager("Window", IWorkbenchActionConstants.M_WINDOW); //$NON-NLS-1$
         menuBar.add(windowMenu);
 
         windowMenu.add(new ShowViewAction());
@@ -201,8 +187,7 @@ public class ActionBarBuildHelper  {
 
         windowMenu.add(ActionFactory.PREFERENCES.create(window));
 
-        helpMenu = new MenuManager(
-                "Help", IWorkbenchActionConstants.M_HELP); //$NON-NLS-1$
+        helpMenu = new MenuManager("Help", IWorkbenchActionConstants.M_HELP); //$NON-NLS-1$
         menuBar.add(helpMenu);
 
         introAction = ActionFactory.INTRO.create(window);
@@ -234,7 +219,6 @@ public class ActionBarBuildHelper  {
         }
     }
 
-
     public void preWindowOpen(IWorkbenchWindowConfigurer configurer) {
 
     }
@@ -248,7 +232,6 @@ public class ActionBarBuildHelper  {
 
         List<IPerspectiveDescriptor> perspectivesToDelete = new ArrayList<IPerspectiveDescriptor>();
 
-
         for (IPerspectiveDescriptor desc : perspectivesToDelete) {
             PerspectiveDescriptor perspDesc = (PerspectiveDescriptor) desc;
             PerspectiveRegistry registry = (PerspectiveRegistry) window.getWorkbench().getPerspectiveRegistry();
@@ -256,10 +239,9 @@ public class ActionBarBuildHelper  {
             registry.removeExtension(perspDesc.getConfigElement().getDeclaringExtension(), descriptors);
         }
 
-        String[] viewsId = { "org.eclipse.pde.runtime.RegistryBrowser", "org.eclipse.pde.ui.DependenciesView",
-                "org.eclipse.pde.ui.PluginsView", "org.eclipse.team.sync.views.SynchronizeView",
-                "org.eclipse.team.ui.GenericHistoryView" };
-
+        String[] viewsId = { "org.eclipse.pde.runtime.RegistryBrowser", "org.eclipse.pde.ui.DependenciesView",//$NON-NLS-1$//$NON-NLS-2$
+                "org.eclipse.pde.ui.PluginsView", "org.eclipse.team.sync.views.SynchronizeView",//$NON-NLS-1$//$NON-NLS-2$
+                "org.eclipse.team.ui.GenericHistoryView" };//$NON-NLS-1$
 
         List<IViewDescriptor> viewsToDelete = new ArrayList<IViewDescriptor>();
 
@@ -276,7 +258,7 @@ public class ActionBarBuildHelper  {
             registry.removeExtension(viewDesc.getConfigurationElement().getDeclaringExtension(), descriptors);
         }
 
-        String[] prefsId = { "org.eclipse.team.ui.TeamPreferences" };
+        String[] prefsId = { "org.eclipse.team.ui.TeamPreferences" };//$NON-NLS-1$
         List<IPreferenceNode> prefsToDelete = new ArrayList<IPreferenceNode>();
         for (IPreferenceNode node : window.getWorkbench().getPreferenceManager().getRootSubNodes()) {
             if (ArrayUtils.contains(prefsId, node.getId())) {

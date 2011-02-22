@@ -1,9 +1,23 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.providers;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -40,6 +54,8 @@ import com.amalto.workbench.webservices.XtentisPort;
 
 public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
 
+    private static Log log = LogFactory.getLog(XtentisServerObjectsRetriever.class);
+
     ServerView view;
 
     private String endpointaddress;
@@ -73,12 +89,11 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             // server
             String displayName = endpointaddress;
             serverRoot = new TreeParent(displayName, null, TreeObject._SERVER_, endpointaddress, ("".equals(universe) ? ""
-                    : universe + "/")
-                    + username + ":" + (password == null ? "" : password));
+                    : universe + "/") + username + ":" + (password == null ? "" : password));
 
             // init load category
             monitor.subTask("load category...");
-            
+
             LocalTreeObjectRepository.getInstance().startUp(view, endpointaddress, username, password);
             LocalTreeObjectRepository.getInstance().switchOnListening();
             LocalTreeObjectRepository.getInstance().setLazySaveStrategy(true, serverRoot);
@@ -95,7 +110,8 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             // displayName +=
             // " (v"+version.getMajor()+"."+version.getMinor()+"."+version.getRevision()+"_"+version.getBuild()+")";
             // } catch (Exception e) {
-            // e.printStackTrace();
+            //
+            // log.error(e.getMessage(), e);
             // }
             WSUniverse wUuniverse = null;
             wUuniverse = port.getCurrentUniverse(new WSGetCurrentUniverse());
@@ -121,13 +137,14 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             try {
                 xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs();
             } catch (Exception e) {
-                e.printStackTrace();
+
+                log.error(e.getMessage(), e);
             }
             if (xdmPKs != null) {
                 monitor.subTask("Loading Data Models");
                 for (int i = 0; i < xdmPKs.length; i++) {
                     String name = xdmPKs[i].getPk();
-                    if (!name.startsWith("XMLSCHEMA")) {
+                    if (!name.startsWith("XMLSCHEMA")) {//$NON-NLS-1$
                         TreeObject obj = new TreeObject(name, serverRoot, TreeObject.DATA_MODEL, xdmPKs[i], null // no
                         // storage
                         // to
@@ -149,13 +166,14 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             try {
                 xdcPKs = port.getDataClusterPKs(new WSRegexDataClusterPKs("")).getWsDataClusterPKs();
             } catch (Exception e) {
-                e.printStackTrace();
+
+                log.error(e.getMessage(), e);
             }
             if (xdcPKs != null) {
                 monitor.subTask("Loading Data Containers");
                 for (int i = 0; i < xdcPKs.length; i++) {
                     String name = xdcPKs[i].getPk();
-                    if (!("CACHE".equals(name))) { // FIXME: Hardcoded CACHE
+                    if (!("CACHE".equals(name))) { // FIXME: Hardcoded CACHE//$NON-NLS-1$
                         TreeObject obj = new TreeObject(name, serverRoot, TreeObject.DATA_CLUSTER, xdcPKs[i], null // no
                         // storage
                         // to
@@ -238,7 +256,8 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             try {
                 viewPKs = port.getViewPKs((new WSGetViewPKs(""))).getWsViewPK();
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
+
             }
             if (viewPKs != null) {
                 monitor.subTask("Loading Views");
@@ -264,7 +283,8 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             try {
                 spk = port.getStoredProcedurePKs(new WSRegexStoredProcedure("")).getWsStoredProcedurePK();
             } catch (Exception e) {
-                e.printStackTrace();
+
+                log.error(e.getMessage(), e);
             }
             if (spk != null) {
                 monitor.subTask("Loading Stored Procedures");
@@ -349,7 +369,8 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
         } catch (Exception e) {
             if (monitor.isCanceled())
                 throw new InterruptedException("User Cancel");
-            e.printStackTrace();
+
+            log.error(e.getMessage(), e);
             throw new InvocationTargetException(new XtentisException(e.getLocalizedMessage()));
         }
     }// run

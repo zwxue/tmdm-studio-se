@@ -25,7 +25,6 @@ import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.models.TreeParent;
 
-
 /**
  * DOC hcw class global comment. Detailled comment
  */
@@ -87,8 +86,8 @@ public class CheckboxRepositoryTreeViewer extends ContainerCheckedTreeViewer imp
             if (idIsValid(repositoryNode)) {
                 expanded.put(repositoryNode.getDisplayName(), false);
             }
-            if(repositoryNode instanceof TreeParent)
-            	emptyExpandedChildren((TreeParent)repositoryNode);
+            if (repositoryNode instanceof TreeParent)
+                emptyExpandedChildren((TreeParent) repositoryNode);
         }
     }
 
@@ -103,21 +102,21 @@ public class CheckboxRepositoryTreeViewer extends ContainerCheckedTreeViewer imp
 
     private void emptyExpandedChildren(TreeParent repositoryNode) {
         for (TreeObject children : repositoryNode.getChildren()) {
-   
-            if(children instanceof TreeParent)
-            	emptyExpandedChildren((TreeParent)children);
-            else{
-	            if (idIsValid(children)) {
-	                expanded.remove(children.getDisplayName());
-	            }
+
+            if (children instanceof TreeParent)
+                emptyExpandedChildren((TreeParent) children);
+            else {
+                if (idIsValid(children)) {
+                    expanded.remove(children.getDisplayName());
+                }
             }
         }
     }
 
     private boolean idIsValid(TreeObject repositoryNode) {
-//        String id = repositoryNode.getId();
-//        return id != null && !TreeObject.NO_ID.equals(id);
-    	return true;
+        // String id = repositoryNode.getId();
+        // return id != null && !TreeObject.NO_ID.equals(id);
+        return true;
     }
 
 }

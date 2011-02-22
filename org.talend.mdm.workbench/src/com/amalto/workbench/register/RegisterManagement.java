@@ -63,9 +63,10 @@ public class RegisterManagement {
         try {
             IBrandingService brandingService = (IBrandingService) GlobalServiceRegister.getDefault().getService(
                     IBrandingService.class);
-            result = proxy.registerUserWithAllUserInformationsAndReturnId(email, country, designerVersion, brandingService
-                    .getShortProductName(), projectLanguage, osName, osVersion, javaVersion, totalMemory + "", memRAM //$NON-NLS-1$
-                    + "", nbProc + ""); //$NON-NLS-1$ //$NON-NLS-2$
+            result = proxy.registerUserWithAllUserInformationsAndReturnId(email, country, designerVersion,
+                    brandingService.getShortProductName(), projectLanguage, osName, osVersion, javaVersion,
+                    totalMemory + "", memRAM //$NON-NLS-1$
+                            + "", nbProc + ""); //$NON-NLS-1$ //$NON-NLS-2$
             if (result.signum() > 0) {
                 PlatformUI.getPreferenceStore().setValue("REGISTRATION_DONE", 1); //$NON-NLS-1$
                 validateRegistration(brandingService.getAcronym(), result.longValue());
@@ -80,17 +81,17 @@ public class RegisterManagement {
     public static void validateRegistration(String acronym, long registNumber) throws Exception {
         URL registURL = null;
         try {
-            registURL = new URL("http://www.talend.com/designer_post_reg.php?prd=" + acronym + "&cid=" + registNumber);
+            registURL = new URL("http://www.talend.com/designer_post_reg.php?prd=" + acronym + "&cid=" + registNumber);//$NON-NLS-1$//$NON-NLS-2$
             PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(registURL);
         } catch (PartInitException e) {
             // if no default browser (like on linux), try to open directly with firefox.
             try {
-                Runtime.getRuntime().exec("firefox " + registURL.toString());
+                Runtime.getRuntime().exec("firefox " + registURL.toString());//$NON-NLS-1$s
             } catch (IOException e2) {
                 if (PlatformUI.getWorkbench().getBrowserSupport().isInternalWebBrowserAvailable()) {
                     IWebBrowser browser;
                     try {
-                        browser = PlatformUI.getWorkbench().getBrowserSupport().createBrowser("registrationId");
+                        browser = PlatformUI.getWorkbench().getBrowserSupport().createBrowser("registrationId");//$NON-NLS-1$
                         browser.openURL(registURL);
                     } catch (PartInitException e1) {
                         throw e1;
@@ -147,7 +148,8 @@ public class RegisterManagement {
     // System.out.println(result);
     // } catch (BusinessException e) {
     // // TODO Auto-generated catch block
-    // e.printStackTrace();
+    //
+    // log.error(e.getMessage(), e);
     // }
     // }
 }

@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.rcp;
 
 import org.eclipse.jface.action.ICoolBarManager;
@@ -9,14 +21,18 @@ import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 
 public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
+
     private IWorkbenchAction introAction;
 
     private IWorkbenchWindow window;
+
     ActionBarBuildHelper helper;
-    private  IActionBarConfigurer actionBarConfigurer;
-    public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {    	
+
+    private IActionBarConfigurer actionBarConfigurer;
+
+    public ApplicationActionBarAdvisor(IActionBarConfigurer configurer) {
         super(configurer);
-        this.actionBarConfigurer=configurer;
+        this.actionBarConfigurer = configurer;
         if (helper == null) {
             helper = new ActionBarBuildHelper();
         }
@@ -28,7 +44,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
         helper.setWindow(myWindow);
         introAction = ActionFactory.INTRO.create(myWindow);
         register(introAction);
-        CloseIntroAction  action= new CloseIntroAction();
+        CloseIntroAction action = new CloseIntroAction();
         register(action);
         registerGlobalActions();
     }
@@ -65,5 +81,5 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
     protected void fillCoolBar(ICoolBarManager coolBar) {
         helper.fillCoolBar(coolBar);
     }
-    
+
 }

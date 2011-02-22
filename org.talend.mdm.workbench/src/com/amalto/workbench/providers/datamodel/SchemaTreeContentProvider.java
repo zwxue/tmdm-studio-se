@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.providers.datamodel;
 
 import java.util.ArrayList;
@@ -5,6 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.IWorkbenchPartSite;
@@ -22,12 +36,15 @@ import org.eclipse.xsd.XSDWildcard;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.amalto.workbench.actions.XSDGetXPathAction;
 import com.amalto.workbench.models.TreeObject;
 import com.amalto.workbench.providers.ISchemaContentProvider;
 import com.amalto.workbench.utils.DataModelFilter;
 import com.amalto.workbench.utils.Util;
 
 public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaContentProvider {
+
+    private static Log log = LogFactory.getLog(XSDGetXPathAction.class);
 
     protected XSDSchema xsdSchema;
 
@@ -115,7 +132,8 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
         try {
             xsdSchema = Util.createXsdSchema(xsd, treeObj);
         } catch (Exception e) {
-            e.printStackTrace();
+
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -134,8 +152,8 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
         // FIXES a bug in the XSD library that puts nillable attributes in
         // elements which are ref
         // That is illegal according to W3C §3.3.3 / 2.2 (and Xerces)
-        Pattern p = Pattern.compile("(<([a-z]+:)?element.*?)nillable=['|\"].*?['|\"](.*?ref=.*?>)");
-        schema = p.matcher(schema).replaceAll("$1 $3");
+        Pattern p = Pattern.compile("(<([a-z]+:)?element.*?)nillable=['|\"].*?['|\"](.*?ref=.*?>)");//$NON-NLS-1$
+        schema = p.matcher(schema).replaceAll("$1 $3");//$NON-NLS-1$
 
         return schema;
     }

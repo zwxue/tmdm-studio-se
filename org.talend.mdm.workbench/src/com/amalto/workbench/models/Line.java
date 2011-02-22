@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.models;
 
 import java.util.ArrayList;
@@ -7,33 +19,33 @@ import com.amalto.workbench.widgets.ComplexTableViewerColumn;
 
 /**
  * The instance of complexTableViewer
+ * 
  * @author aiming
- *
+ * 
  */
-public class Line implements  Cloneable{
-	/**
-	 * key is the TableColumn name, value is the  column's value
-	 */
-	public List<KeyValue> keyValues=new ArrayList<KeyValue>();
-	public Line(ComplexTableViewerColumn[] keys,String[]values ){
-		for(int i=0; i<keys.length && i<values.length; i++){
-			keyValues.add(new KeyValue(keys[i].getName(),values[i]));
-		}
-	}
-	public Line( List<KeyValue> keyValues){
-		this.keyValues=keyValues;
-	}
-	
+public class Line implements Cloneable {
 
-        
-    public Line clone()
-    {
-    	List<KeyValue> copyKeyValues = new ArrayList<KeyValue>();
-    	for (KeyValue kv: keyValues)
-    	{
-    		KeyValue kkvv=new KeyValue(kv.key,kv.value);
-    		copyKeyValues.add(kkvv);
-    	}
-    	return new Line(copyKeyValues);
+    /**
+     * key is the TableColumn name, value is the column's value
+     */
+    public List<KeyValue> keyValues = new ArrayList<KeyValue>();
+
+    public Line(ComplexTableViewerColumn[] keys, String[] values) {
+        for (int i = 0; i < keys.length && i < values.length; i++) {
+            keyValues.add(new KeyValue(keys[i].getName(), values[i]));
+        }
+    }
+
+    public Line(List<KeyValue> keyValues) {
+        this.keyValues = keyValues;
+    }
+
+    public Line clone() {
+        List<KeyValue> copyKeyValues = new ArrayList<KeyValue>();
+        for (KeyValue kv : keyValues) {
+            KeyValue kkvv = new KeyValue(kv.key, kv.value);
+            copyKeyValues.add(kkvv);
+        }
+        return new Line(copyKeyValues);
     }
 }

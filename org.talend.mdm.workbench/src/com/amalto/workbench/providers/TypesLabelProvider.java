@@ -1,7 +1,21 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.providers;
 
 import java.util.Iterator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -35,6 +49,8 @@ import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.utils.Util;
 
 public class TypesLabelProvider extends LabelProvider {
+
+    private static Log log = LogFactory.getLog(TypesLabelProvider.class);
 
     public String getText(Object obj) {
 
@@ -180,11 +196,11 @@ public class TypesLabelProvider extends LabelProvider {
                                     + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_Write")) {
                             return "Writable By : " + e.getChildNodes().item(0).getNodeValue();
-                        }else if (source.equals("X_Create")) {
+                        } else if (source.equals("X_Create")) {
                             return "Creatable By : " + e.getChildNodes().item(0).getNodeValue();
-                        }else if (source.equals("X_LogicalDelete")) {
+                        } else if (source.equals("X_LogicalDelete")) {
                             return "Logical Deletable By : " + e.getChildNodes().item(0).getNodeValue();
-                        }else if (source.equals("X_PhysicalDelete")) {
+                        } else if (source.equals("X_PhysicalDelete")) {
                             return "Physical Deletable By : " + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_Hide")) {
                             return "No Access to : " + e.getChildNodes().item(0).getNodeValue();
@@ -198,7 +214,8 @@ public class TypesLabelProvider extends LabelProvider {
                     return Util.nodeToString((Element) obj);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+
+                log.error(e.getMessage(), e);
             }
         }
 
@@ -271,10 +288,10 @@ public class TypesLabelProvider extends LabelProvider {
                     return ImageCache.getCreatedImage(EImage.COMPLEX_SEQUENCE.getPath());
                 }
             } else if (xsdTerm instanceof XSDWildcard) {
-                return ImageCache.getCreatedImage("icons/wildcard.gif");
+                return ImageCache.getCreatedImage("icons/wildcard.gif");//$NON-NLS-1$
             } else {
                 System.out.println("ERROR XSD Term " + xsdTerm.getClass().getName());
-                return ImageCache.getCreatedImage("icons/error.gif");
+                return ImageCache.getCreatedImage("icons/error.gif");//$NON-NLS-1$
             }
         }
 
@@ -299,7 +316,7 @@ public class TypesLabelProvider extends LabelProvider {
                 }
             } else {
                 // simple Type!!!
-                return ImageCache.getCreatedImage("icons/error.gif");
+                return ImageCache.getCreatedImage("icons/error.gif");//$NON-NLS-1$
             }
         }
 
@@ -329,23 +346,23 @@ public class TypesLabelProvider extends LabelProvider {
         if (obj instanceof XSDXPathDefinition) {
             XSDXPathDefinition xpath = (XSDXPathDefinition) obj;
             if (xpath.getVariety().equals(XSDXPathVariety.FIELD_LITERAL))
-                return ImageCache.getCreatedImage("icons/field.gif");
-            return ImageCache.getCreatedImage("icons/selector.gif");
+                return ImageCache.getCreatedImage("icons/field.gif");//$NON-NLS-1$
+            return ImageCache.getCreatedImage("icons/selector.gif");//$NON-NLS-1$
         }
 
         if (obj instanceof XSDAttributeGroupDefinition) {
-            return ImageCache.getCreatedImage("icons/attribute_group.gif");
+            return ImageCache.getCreatedImage("icons/attribute_group.gif");//$NON-NLS-1$
         }
 
         if (obj instanceof XSDAttributeUse) {
             XSDAttributeUse att = (XSDAttributeUse) obj;
-            if ("xmlns".equals(att.getAttributeDeclaration().getTargetNamespace())) {
+            if ("xmlns".equals(att.getAttributeDeclaration().getTargetNamespace())) {//$NON-NLS-1$
                 return ImageCache.getCreatedImage(EImage.ANNOTATION.getPath());
             }
             if (att.getUse().equals(XSDAttributeUseCategory.REQUIRED_LITERAL))
-                return ImageCache.getCreatedImage("icons/attribute_mandatory.gif");
+                return ImageCache.getCreatedImage("icons/attribute_mandatory.gif");//$NON-NLS-1$
             else
-                return ImageCache.getCreatedImage("icons/attribute.gif");
+                return ImageCache.getCreatedImage("icons/attribute.gif");//$NON-NLS-1$
         }
 
         if (obj instanceof XSDAnnotation) {
@@ -355,26 +372,26 @@ public class TypesLabelProvider extends LabelProvider {
         if (obj instanceof Element) {
             try {
                 Element e = (Element) obj;
-                if (e.getLocalName().equals("documentation")) {
+                if (e.getLocalName().equals("documentation")) {//$NON-NLS-1$
                     return ImageCache.getCreatedImage(EImage.DOCUMENTATION.getPath());
-                } else if (e.getLocalName().equals("appinfo")) {
-                    String source = e.getAttribute("source");
+                } else if (e.getLocalName().equals("appinfo")) {//$NON-NLS-1$
+                    String source = e.getAttribute("source");//$NON-NLS-1$
                     if (source != null) {
-                        if (source.startsWith("X_Label_")) {
+                        if (source.startsWith("X_Label_")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.LABEL.getPath());
-                        } else if (source.equals("X_ForeignKey")) {
+                        } else if (source.equals("X_ForeignKey")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.PRIMARYKEY.getPath());
-                        } else if (source.equals("X_ForeignKeyInfo")) {
+                        } else if (source.equals("X_ForeignKeyInfo")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.KEYINFO.getPath());
-                        } else if (source.equals("X_SourceSystem")) {
+                        } else if (source.equals("X_SourceSystem")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.SOURCESYSTEM.getPath());
-                        } else if (source.equals("X_TargetSystem")) {
+                        } else if (source.equals("X_TargetSystem")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.TARGETSYSTEM.getPath());
-                        } else if (source.startsWith("X_Description_")) {
+                        } else if (source.startsWith("X_Description_")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.DOCUMENTATION.getPath());
-                        } else if (source.equals("X_Write")) {
+                        } else if (source.equals("X_Write")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.SECURITYANNOTATION.getPath());
-                        } else if (source.equals("X_Hide")) {
+                        } else if (source.equals("X_Hide")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.SECURITYANNOTATION.getPath());
                         } else {
                             return ImageCache.getCreatedImage(EImage.DOCUMENTATION.getPath());
@@ -386,7 +403,8 @@ public class TypesLabelProvider extends LabelProvider {
                     return ImageCache.getCreatedImage(EImage.DOCUMENTATION.getPath());
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+
+                log.error(e.getMessage(), e);
             }
         }
 

@@ -20,14 +20,14 @@ import org.eclipse.ui.PlatformUI;
  */
 public class CloseIntroAction extends Action {
 
-    private static final String ACTION_ID = "org.talend.rcp.intro.CloseIntroAction";
+    private static final String ACTION_ID = "org.talend.rcp.intro.CloseIntroAction";//$NON-NLS-1$
 
     /**
      * wchen CloseIntroAction constructor comment.
      */
     public CloseIntroAction() {
         setId(ACTION_ID);
-        setActionDefinitionId("org.talend.rcp.command.closeIntro");
+        setActionDefinitionId("org.talend.rcp.command.closeIntro");//$NON-NLS-1$
 
     }
 

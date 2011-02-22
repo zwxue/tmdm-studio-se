@@ -39,7 +39,6 @@ import com.amalto.workbench.Messages;
 import com.amalto.workbench.service.GlobalServiceRegister;
 import com.amalto.workbench.service.branding.IBrandingService;
 
-
 /**
  * Page for new project details. <br/>
  * 
@@ -47,12 +46,14 @@ import com.amalto.workbench.service.branding.IBrandingService;
  * 
  */
 public class RegisterWizardPage extends WizardPage {
-	public static final String MAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*(\\.[_A-Za-z0-9-]+)"; //$NON-NLS-1$
-	   /**
+
+    public static final String MAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*(\\.[_A-Za-z0-9-]+)"; //$NON-NLS-1$
+
+    /**
      * 
      */
     private static final String DESCRIPTION = Messages.getString("RegisterWizardPage.description", //$NON-NLS-1$
-            ((IBrandingService) GlobalServiceRegister.getDefault().getService(IBrandingService.class)).getFullProductName()); //$NON-NLS-1$
+            ((IBrandingService) GlobalServiceRegister.getDefault().getService(IBrandingService.class)).getFullProductName());
 
     /** EMail field. */
     private Text emailText;
@@ -171,13 +172,13 @@ public class RegisterWizardPage extends WizardPage {
         emailStatus = createOkStatus();
         // Email Name
         if (emailText.getText().length() == 0) {
-            emailStatus = new Status(IStatus.ERROR, MDMWorbenchPlugin.ID, IStatus.OK, Messages
-                    .getString("RegisterWizardPage.emailEmpty"), null); //$NON-NLS-1$
+            emailStatus = new Status(IStatus.ERROR, MDMWorbenchPlugin.ID, IStatus.OK,
+                    Messages.getString("RegisterWizardPage.emailEmpty"), null); //$NON-NLS-1$
         } else {
             // Reg Exp validation
             if (!Pattern.matches(MAIL_PATTERN, emailText.getText())) {
-                emailStatus = new Status(IStatus.ERROR, MDMWorbenchPlugin.ID, IStatus.OK, Messages
-                        .getString("RegisterWizardPage.emailNotValid"), null); //$NON-NLS-1$
+                emailStatus = new Status(IStatus.ERROR, MDMWorbenchPlugin.ID, IStatus.OK,
+                        Messages.getString("RegisterWizardPage.emailNotValid"), null); //$NON-NLS-1$
             }
         }
         updatePageStatus();
@@ -241,7 +242,7 @@ public class RegisterWizardPage extends WizardPage {
         IBrandingService brandingService = (IBrandingService) GlobalServiceRegister.getDefault().getService(
                 IBrandingService.class);
         legalInfos.setText(Messages.getString("RegisterWizardPage.legalinfos", brandingService.getCorporationName())); //$NON-NLS-1$
-        }
+    }
 
     protected void createHttpProxy(Composite composite, int columnSpan) {
         Group group = new Group(composite, SWT.NONE);

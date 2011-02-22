@@ -15,6 +15,8 @@ package com.amalto.workbench.service;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -25,10 +27,12 @@ import com.amalto.workbench.Messages;
 /**
  * DOC qian class global comment. A global service register provides the service registration and acquirement. <br/>
  * 
- * $Id: talend-code-templates.xml 1 2006-09-29 17:06:40 +0000 (星期五, 29 九月 2006) nrousseau $
+ * $Id: talend-code-templates.xml 1 2006-09-29 17:06:40 +0000 () nrousseau $
  * 
  */
 public class GlobalServiceRegister {
+
+    private static Log log = LogFactory.getLog(GlobalServiceRegister.class);
 
     // The shared instance
     private static GlobalServiceRegister instance = new GlobalServiceRegister();
@@ -85,7 +89,7 @@ public class GlobalServiceRegister {
                     return (IService) service;
                 }
             } catch (CoreException e) {
-               e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         }
         return null;

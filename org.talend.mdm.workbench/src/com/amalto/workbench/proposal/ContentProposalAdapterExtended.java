@@ -21,6 +21,8 @@ package com.amalto.workbench.proposal;
 
 import java.util.ArrayList;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.oro.text.regex.MalformedPatternException;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.PatternCompiler;
@@ -60,7 +62,6 @@ import org.eclipse.swt.widgets.Text;
 
 import com.amalto.workbench.utils.thread.AsynchronousThreading;
 
-
 /**
  * <br>
  * ***************************************************************************** <br>
@@ -86,6 +87,8 @@ import com.amalto.workbench.utils.thread.AsynchronousThreading;
  * @author amaumont for modified class
  */
 public class ContentProposalAdapterExtended {
+
+    private static Log log = LogFactory.getLog(ContentProposalAdapterExtended.class);
 
     /**
      * 
@@ -179,12 +182,12 @@ public class ContentProposalAdapterExtended {
                     // System.out.println("1");
                     return;
                 }
-                //                
+                //
                 if (e.type == SWT.FocusOut && e.widget == proposalTable && hasFocus() && !hasJustAccepted) {
                     // System.out.println(2);
                     return;
                 }
-                //                
+                //
                 if (e.type == SWT.Deactivate && hasFocus() && !hasJustAccepted) {
                     // System.out.println(3);
                     return;
@@ -233,7 +236,6 @@ public class ContentProposalAdapterExtended {
                     scrollbarClicked = true;
                     return;
                 }
-
 
                 // For all other events, merely getting them dictates closure.
                 authorizedClose();
@@ -1192,7 +1194,7 @@ public class ContentProposalAdapterExtended {
                                 pattern = compiler.compile(".*\\W" + Perl5Compiler.quotemeta(currentFilter) + ".*", //$NON-NLS-1$ //$NON-NLS-2$
                                         Perl5Compiler.CASE_INSENSITIVE_MASK | Perl5Compiler.MULTILINE_MASK);
                             } catch (MalformedPatternException e) {
-                                e.printStackTrace();
+                                log.error(e.getMessage(), e);
                             }
                             if (matcher.matches(string, pattern)) {
                                 listOthers.add(proposals[i]);
@@ -1228,8 +1230,7 @@ public class ContentProposalAdapterExtended {
 
     }
 
-    class ProposalListener implements Listener{
-
+    class ProposalListener implements Listener {
 
         public void handleEvent(Event e) {
             if (!isEnabled) {
@@ -1393,8 +1394,9 @@ public class ContentProposalAdapterExtended {
 
         private String hex(int i) {
             return "[0x" + Integer.toHexString(i) + ']'; //$NON-NLS-1$
-        }    	
+        }
     }
+
     /**
      * Flag that controls the printing of debug info.
      */
@@ -1526,7 +1528,7 @@ public class ContentProposalAdapterExtended {
     /*
      * The listener we install on the control.
      */
-    private  Listener controlListener;
+    private Listener controlListener;
 
     /*
      * The list of listeners who wish to be notified when something significant happens with the proposals.
@@ -1573,9 +1575,9 @@ public class ContentProposalAdapterExtended {
      * then proposals will be activated automatically when any of the auto activation characters are typed.
      * @param autoActivationCharacters An array of characters that trigger auto-activation of content proposal. If
      * specified, these characters will trigger auto-activation of the proposal popup, regardless of whether an explicit
-     * invocation keyStroke was specified. If this parameter is <code>null</code>, then only a specified keyStroke
-     * will invoke content proposal. If this parameter is <code>null</code> and the keyStroke parameter is
-     * <code>null</code>, then all alphanumeric characters will auto-activate content proposal.
+     * invocation keyStroke was specified. If this parameter is <code>null</code>, then only a specified keyStroke will
+     * invoke content proposal. If this parameter is <code>null</code> and the keyStroke parameter is <code>null</code>,
+     * then all alphanumeric characters will auto-activate content proposal.
      */
     public ContentProposalAdapterExtended(Control control, IControlContentAdapter controlContentAdapter,
             IContentProposalProvider proposalProvider, KeyStroke keyStroke, char[] autoActivationCharacters) {
@@ -1657,9 +1659,9 @@ public class ContentProposalAdapterExtended {
      * 
      * @return An array of characters that trigger auto-activation of content proposal. If specified, these characters
      * will trigger auto-activation of the proposal popup, regardless of whether an explicit invocation keyStroke was
-     * specified. If this parameter is <code>null</code>, then only a specified keyStroke will invoke content
-     * proposal. If this value is <code>null</code> and the keyStroke value is <code>null</code>, then all
-     * alphanumeric characters will auto-activate content proposal.
+     * specified. If this parameter is <code>null</code>, then only a specified keyStroke will invoke content proposal.
+     * If this value is <code>null</code> and the keyStroke value is <code>null</code>, then all alphanumeric characters
+     * will auto-activate content proposal.
      */
     public char[] getAutoActivationCharacters() {
         if (autoActivateString == null) {
@@ -1673,9 +1675,9 @@ public class ContentProposalAdapterExtended {
      * 
      * @param autoActivationCharacters An array of characters that trigger auto-activation of content proposal. If
      * specified, these characters will trigger auto-activation of the proposal popup, regardless of whether an explicit
-     * invocation keyStroke was specified. If this parameter is <code>null</code>, then only a specified keyStroke
-     * will invoke content proposal. If this parameter is <code>null</code> and the keyStroke value is
-     * <code>null</code>, then all alphanumeric characters will auto-activate content proposal.
+     * invocation keyStroke was specified. If this parameter is <code>null</code>, then only a specified keyStroke will
+     * invoke content proposal. If this parameter is <code>null</code> and the keyStroke value is <code>null</code>,
+     * then all alphanumeric characters will auto-activate content proposal.
      * 
      */
     public void setAutoActivationCharacters(char[] autoActivationCharacters) {
@@ -1706,8 +1708,8 @@ public class ContentProposalAdapterExtended {
      * Get the integer style that indicates how an accepted proposal affects the control's content.
      * 
      * @return a constant indicating how an accepted proposal should affect the control's content. Should be one of
-     * <code>PROPOSAL_INSERT</code>, <code>PROPOSAL_REPLACE</code>, or <code>PROPOSAL_IGNORE</code>. (Default
-     * is <code>PROPOSAL_INSERT</code>).
+     * <code>PROPOSAL_INSERT</code>, <code>PROPOSAL_REPLACE</code>, or <code>PROPOSAL_IGNORE</code>. (Default is
+     * <code>PROPOSAL_INSERT</code>).
      */
     public int getProposalAcceptanceStyle() {
         return proposalAcceptanceStyle;
@@ -1805,8 +1807,8 @@ public class ContentProposalAdapterExtended {
     /**
      * Set the boolean flag that determines whether the adapter is enabled.
      * 
-     * @param enabled <code>true</code> if the adapter is enabled and responding to user input, <code>false</code>
-     * if it is ignoring user input.
+     * @param enabled <code>true</code> if the adapter is enabled and responding to user input, <code>false</code> if it
+     * is ignoring user input.
      * 
      */
     public void setEnabled(boolean enabled) {
@@ -1822,8 +1824,7 @@ public class ContentProposalAdapterExtended {
 
     /**
      * Add the specified listener to the list of content proposal listeners that are notified when content proposals are
-     * chosen.
-     * </p>
+     * chosen. </p>
      * 
      * @param listener the IContentProposalListener to be added as a listener. Must not be <code>null</code>. If an
      * attempt is made to register an instance which is already registered with this instance, this method has no
@@ -1834,7 +1835,7 @@ public class ContentProposalAdapterExtended {
     public void addContentProposalListener(IContentProposalListener listener) {
         proposalListeners.add(listener);
     }
-    
+
     /*
      * Add our listener to the control. Debug information to be left in until this support is stable on all platforms.
      */
@@ -1847,21 +1848,21 @@ public class ContentProposalAdapterExtended {
             return;
         }
         controlListener = new ProposalListener();
-        
-        Listener[] listeners=control.getListeners(SWT.KeyDown);
-        for(Listener lis:listeners) {
-        	if(lis instanceof ProposalListener)
-        	control.removeListener(SWT.KeyDown, lis);
+
+        Listener[] listeners = control.getListeners(SWT.KeyDown);
+        for (Listener lis : listeners) {
+            if (lis instanceof ProposalListener)
+                control.removeListener(SWT.KeyDown, lis);
         }
-        listeners=control.getListeners(SWT.KeyUp);
-        for(Listener lis:listeners) {
-        	if(lis instanceof ProposalListener)
-        	control.removeListener(SWT.KeyUp, lis);
+        listeners = control.getListeners(SWT.KeyUp);
+        for (Listener lis : listeners) {
+            if (lis instanceof ProposalListener)
+                control.removeListener(SWT.KeyUp, lis);
         }
-        listeners=control.getListeners(SWT.Traverse);
-        for(Listener lis:listeners) {
-        	if(lis instanceof ProposalListener)
-        	control.removeListener(SWT.Traverse, lis);
+        listeners = control.getListeners(SWT.Traverse);
+        for (Listener lis : listeners) {
+            if (lis instanceof ProposalListener)
+                control.removeListener(SWT.Traverse, lis);
         }
         control.addListener(SWT.KeyDown, controlListener);
         control.addListener(SWT.KeyUp, controlListener);
@@ -1911,7 +1912,7 @@ public class ContentProposalAdapterExtended {
 
         // Remove the selected text before applying proposal. See bug 0004266: Replace value with context value using
         // CTRL+Space.
-        removeSelectedText();       
+        removeSelectedText();
         switch (proposalAcceptanceStyle) {
         case (PROPOSAL_REPLACE):
             setControlContent(proposal.getContent(), proposal.getCursorPosition());

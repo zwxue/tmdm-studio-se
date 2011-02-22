@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.models;
 
 import java.util.ArrayList;
@@ -13,7 +25,7 @@ import com.amalto.workbench.utils.UserInfo;
 
 public class TreeObject implements IAdaptable, Comparable<TreeObject> {
 
-    public static final String UNKNOWN = "Unknown";
+    public static final String UNKNOWN = "Unknown";//$NON-NLS-1$
 
     public final static int _ROOT_ = -1;
 
@@ -98,43 +110,43 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
     public final static int DATA_CLUSTER_CONTENTS = 23;
 
     // export folder name
-    public final static String DATACONTAINER = "datacontainer";
+    public final static String DATACONTAINER = "datacontainer";//$NON-NLS-1$
 
-    public final static String DATACONTAINER_COTENTS = "datacontainerContents";
+    public final static String DATACONTAINER_COTENTS = "datacontainerContents";//$NON-NLS-1$
 
-    public final static String DATAMODEL_ = "datamodel";
+    public final static String DATAMODEL_ = "datamodel";//$NON-NLS-1$
 
-    public final static String DATAMODELTYPES_ = "datamodelTypes";
+    public final static String DATAMODELTYPES_ = "datamodelTypes";//$NON-NLS-1$
 
-    public final static String PICTURES_ = "pictures";
+    public final static String PICTURES_ = "pictures";//$NON-NLS-1$
 
-    public final static String MENU_ = "menu";
+    public final static String MENU_ = "menu";//$NON-NLS-1$
 
-    public final static String ROLE_ = "role";
+    public final static String ROLE_ = "role";//$NON-NLS-1$
 
-    public final static String ROUTINGRULE_ = "routingrule";
+    public final static String ROUTINGRULE_ = "routingrule";//$NON-NLS-1$
 
-    public final static String STOREDPROCEDURE_ = "storedprocedure";
+    public final static String STOREDPROCEDURE_ = "storedprocedure";//$NON-NLS-1$
 
-    public final static String SYNCHRONIZATIONPLAN_ = "synchronizationplan";
+    public final static String SYNCHRONIZATIONPLAN_ = "synchronizationplan";//$NON-NLS-1$
 
-    public final static String TRANSFORMER_ = "transformer";
+    public final static String TRANSFORMER_ = "transformer";//$NON-NLS-1$
 
-    public final static String UNIVERSE_ = "universe";
+    public final static String UNIVERSE_ = "universe";//$NON-NLS-1$
 
-    public final static String VIEW_ = "view";
+    public final static String VIEW_ = "view";//$NON-NLS-1$
 
-    public final static String DATAMODEL_URI = "/pubcomponent/secure/dataModels/";
+    public final static String DATAMODEL_URI = "/pubcomponent/secure/dataModels/";//$NON-NLS-1$
 
-    public final static String DATAMODELTYPES_URI = "/pubcomponent/secure/dataModelsTypes/";
+    public final static String DATAMODELTYPES_URI = "/pubcomponent/secure/dataModelsTypes/";//$NON-NLS-1$
 
-    public final static String CUSTOM_TYPES_URI = "/pubcomponent/secure/customTypesSets/";
+    public final static String CUSTOM_TYPES_URI = "/pubcomponent/secure/customTypesSets/";//$NON-NLS-1$
 
-    public final static String PICTURES_URI = "/pubcomponent/secure/pictures/";
+    public final static String PICTURES_URI = "/pubcomponent/secure/pictures/";//$NON-NLS-1$
 
-    public final static String BARFILE_URI = "/pubcomponent/secure/barFile/";
+    public final static String BARFILE_URI = "/pubcomponent/secure/barFile/";//$NON-NLS-1$
 
-    public final static String BARFILE_PATH = "/workflow/";
+    public final static String BARFILE_PATH = "/workflow/";//$NON-NLS-1$
 
     private String displayName;
 
@@ -363,7 +375,7 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
         String portAddress = getEndpointAddress();
 
         if (portAddress != null) {
-            int cutPos = portAddress.indexOf("/talend/TalendPort");
+            int cutPos = portAddress.indexOf("/talend/TalendPort");//$NON-NLS-1$
             if (cutPos != -1)
                 return portAddress.substring(0, cutPos);
         }
@@ -376,8 +388,8 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
         String portAddress = getEndpointAddress();
 
         if (portAddress != null) {
-            int startPos = portAddress.indexOf("://");
-            int endPos = portAddress.lastIndexOf(":");
+            int startPos = portAddress.indexOf("://");//$NON-NLS-1$
+            int endPos = portAddress.lastIndexOf(":");//$NON-NLS-1$
             if (endPos != -1 && startPos != -1)
                 return portAddress.substring(startPos + 3, endPos);
         }
@@ -388,12 +400,12 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
     public String getEndpointPort() {
 
         String portAddress = getEndpointAddress();
-        Pattern p = Pattern.compile(":(\\d+?)/");
+        Pattern p = Pattern.compile(":(\\d+?)/");//$NON-NLS-1$
         Matcher m = p.matcher(portAddress);
         if (m.find()) {
             return m.group(1);
         } else {
-            return "8080";
+            return "8080";//$NON-NLS-1$
         }
 
     }

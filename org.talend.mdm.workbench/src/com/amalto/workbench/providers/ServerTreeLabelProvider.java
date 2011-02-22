@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.providers;
 
 import org.eclipse.jface.viewers.IColorProvider;
@@ -100,16 +112,16 @@ public class ServerTreeLabelProvider extends LabelProvider implements IColorProv
         else if (object.getType() == TreeObject.SYNCHRONIZATIONPLAN)
             return ImageCache.getCreatedImage(EImage.SYNCHRONIZATIONPLAN.getPath());
         else if (object.getType() == TreeObject.CATEGORY_FOLDER)
-            return ImageCache.getCreatedImage("icons/folder.gif");
+            return ImageCache.getCreatedImage("icons/folder.gif");//$NON-NLS-1$
         else if (object.getType() == TreeObject.BUILT_IN_CATEGORY_FOLDER) {
-            if (object.getDisplayName().equals("Deployed Jobs"))
-                return ImageCache.getCreatedImage("icons/folder_deployed-jobs.png");
+            if (object.getDisplayName().equals("Deployed Jobs"))//$NON-NLS-1$
+                return ImageCache.getCreatedImage("icons/folder_deployed-jobs.png");//$NON-NLS-1$
             else
-                return ImageCache.getCreatedImage("icons/folder_source-jobs.png");
+                return ImageCache.getCreatedImage("icons/folder_source-jobs.png");//$NON-NLS-1$
         } else if (object.getType() == TreeObject._INVISIBLE)
             return ImageCache.getCreatedImage(EImage.SANDGLASS.getPath());
 
-        return ImageCache.getCreatedImage("icons/phased_out.gif");
+        return ImageCache.getCreatedImage("icons/phased_out.gif");//$NON-NLS-1$
 
     }
 

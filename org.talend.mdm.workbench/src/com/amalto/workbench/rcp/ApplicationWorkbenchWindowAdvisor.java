@@ -1,5 +1,19 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.rcp;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Shell;
@@ -14,7 +28,6 @@ import sun.management.ManagementFactory;
 
 import com.amalto.workbench.MDMWorbenchPlugin;
 import com.amalto.workbench.Messages;
-import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.register.RegisterManagement;
 import com.amalto.workbench.register.RegisterWizard;
 import com.amalto.workbench.register.RegisterWizardDialog;
@@ -23,6 +36,8 @@ import com.amalto.workbench.service.branding.IBrandingService;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
+    private static Log log = LogFactory.getLog(ApplicationWorkbenchWindowAdvisor.class);
+
     public ApplicationWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
         super(configurer);
     }
@@ -30,12 +45,11 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
     public ActionBarAdvisor createActionBarAdvisor(IActionBarConfigurer configurer) {
         return new ApplicationActionBarAdvisor(configurer);
     }
-    
+
     public void preWindowOpen() {
-    	
-    	
+
         IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
-        
+
         configurer.setInitialSize(new Point(1200, 950));
         configurer.setShowCoolBar(true);
         configurer.setShowStatusLine(true);
@@ -43,8 +57,9 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
         configurer.setShowPerspectiveBar(true);
         configurer.configureEditorAreaDropListener(new EditorAreaDropAdapter(configurer.getWindow()));
 
-        //configurer.setTitle("Talend MDM Studio (3.2.0M2)");
+        // configurer.setTitle("Talend MDM Studio (3.2.0M2)");
     }
+
     @Override
     public void postWindowOpen() {
         // Start Web Service Registration
@@ -56,7 +71,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
                 dialog.setTitle(Messages.getString("RegisterWizard.windowTitle")); //$NON-NLS-1$
                 if (dialog.open() == WizardDialog.OK) {
 
-                    String projectLanguage = "java";
+                    String projectLanguage = "java";//$NON-NLS-1$
 
                     // OS
                     String osName = System.getProperty("os.name"); //$NON-NLS-1$
@@ -76,17 +91,22 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
                     // CPU
                     int nbProc = Runtime.getRuntime().availableProcessors();
 
-                    RegisterManagement.register(registerWizard.getEmail(), registerWizard.getCountry(), registerWizard
-                            .isProxyEnabled(), registerWizard.getProxyHost(), registerWizard.getProxyPort(),
-                            MDMWorbenchPlugin.getDefault().getBundle().getHeaders().get(
-                                    org.osgi.framework.Constants.BUNDLE_VERSION).toString(), projectLanguage, osName,
+                    RegisterManagement.register(
+                            registerWizard.getEmail(),
+                            registerWizard.getCountry(),
+                            registerWizard.isProxyEnabled(),
+                            registerWizard.getProxyHost(),
+                            registerWizard.getProxyPort(),
+                            MDMWorbenchPlugin.getDefault().getBundle().getHeaders()
+                                    .get(org.osgi.framework.Constants.BUNDLE_VERSION).toString(), projectLanguage, osName,
                             osVersion, javaVersion, totalMemory, memRAM, nbProc);
                 } else {
                     RegisterManagement.decrementTry();
                 }
             }
         } catch (Exception e) {
-        	e.printStackTrace();
+
+            log.error(e.getMessage(), e);
             // Do nothing : registration web service error is not a problem
         }
         IBrandingService service = (IBrandingService) GlobalServiceRegister.getDefault().getService(IBrandingService.class);

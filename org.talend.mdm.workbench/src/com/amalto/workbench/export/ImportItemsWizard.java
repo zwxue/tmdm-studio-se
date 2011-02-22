@@ -172,7 +172,7 @@ public class ImportItemsWizard extends Wizard {
         try {
             port = Util.getPort((TreeObject) sel.getFirstElement());
         } catch (XtentisException e3) {
-            e3.printStackTrace();
+            log.error(e3.getMessage(), e3);
         }
     }
 

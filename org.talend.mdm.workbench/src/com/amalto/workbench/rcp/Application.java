@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.rcp;
 
 import org.eclipse.equinox.app.IApplication;
@@ -11,36 +23,41 @@ import org.eclipse.ui.PlatformUI;
  */
 public class Application implements IApplication {
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.equinox.app.IApplication#start(org.eclipse.equinox.app.IApplicationContext)
-	 */
-	public Object start(IApplicationContext context) throws Exception {
-		Display display = PlatformUI.createDisplay();
-		try {
-			int returnCode = PlatformUI.createAndRunWorkbench(display, new ApplicationWorkbenchAdvisor());
-			if (returnCode == PlatformUI.RETURN_RESTART)
-				return IApplication.EXIT_RESTART;
-			else
-				return IApplication.EXIT_OK;
-		} finally {
-			display.dispose();
-		}
-		
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.eclipse.equinox.app.IApplication#start(org.eclipse.equinox.app.IApplicationContext)
+     */
+    public Object start(IApplicationContext context) throws Exception {
+        Display display = PlatformUI.createDisplay();
+        try {
+            int returnCode = PlatformUI.createAndRunWorkbench(display, new ApplicationWorkbenchAdvisor());
+            if (returnCode == PlatformUI.RETURN_RESTART)
+                return IApplication.EXIT_RESTART;
+            else
+                return IApplication.EXIT_OK;
+        } finally {
+            display.dispose();
+        }
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.equinox.app.IApplication#stop()
-	 */
-	public void stop() {
-		final IWorkbench workbench = PlatformUI.getWorkbench();
-		if (workbench == null)
-			return;
-		final Display display = workbench.getDisplay();
-		display.syncExec(new Runnable() {
-			public void run() {
-				if (!display.isDisposed())
-					workbench.close();
-			}
-		});
-	}
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.eclipse.equinox.app.IApplication#stop()
+     */
+    public void stop() {
+        final IWorkbench workbench = PlatformUI.getWorkbench();
+        if (workbench == null)
+            return;
+        final Display display = workbench.getDisplay();
+        display.syncExec(new Runnable() {
+
+            public void run() {
+                if (!display.isDisposed())
+                    workbench.close();
+            }
+        });
+    }
 }
