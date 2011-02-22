@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.widgets;
 
 import java.io.InputStream;
@@ -108,16 +120,16 @@ public class SchematronExpressBuilder {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             org.w3c.dom.Document document;
-            in = SchematronExpressBuilder.class.getResourceAsStream("XPathFunc.xml");
+            in = SchematronExpressBuilder.class.getResourceAsStream("XPathFunc.xml");//$NON-NLS-1$
             document = builder.parse(in);
-            NodeList list = document.getElementsByTagName("category");
+            NodeList list = document.getElementsByTagName("category");//$NON-NLS-1$
             categories = new ArrayList<XPathFunc>();
             for (int i = 0; i < list.getLength(); i++) {
                 XPathFunc xpathFunc = new XPathFunc();
                 Node node = list.item(i);// get the number i node
                 NamedNodeMap map = node.getAttributes();
 
-                Node nameNode = map.getNamedItem("name");
+                Node nameNode = map.getNamedItem("name");//$NON-NLS-1$
                 xpathFunc.setCategory(nameNode.getTextContent());
 
                 java.util.List<KeyValue> keylist = new ArrayList<KeyValue>();
@@ -125,10 +137,10 @@ public class SchematronExpressBuilder {
                     Node n = node.getChildNodes().item(j);
                     NamedNodeMap fmap = n.getAttributes();
                     if (fmap != null && fmap.getLength() > 0) {
-                        Node n1 = fmap.getNamedItem("name");
-                        Node n2 = fmap.getNamedItem("help");
+                        Node n1 = fmap.getNamedItem("name");//$NON-NLS-1$
+                        Node n2 = fmap.getNamedItem("help");//$NON-NLS-1$
                         String help = n2.getTextContent();
-                        help = help.replaceAll("\\n", "\n");
+                        help = help.replaceAll("\\n", "\n");//$NON-NLS-1$//$NON-NLS-2$
                         KeyValue kv = new KeyValue(n1.getTextContent(), help);
                         keylist.add(kv);
                     }
@@ -206,7 +218,7 @@ public class SchematronExpressBuilder {
 
         Composite com2 = new Composite(bottomCom, 0);
         com2.setLayout(getLayout(4));
-        String[] strs2 = { "=", "!=", ">", "<" };
+        String[] strs2 = { "=", "!=", ">", "<" };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
         for (String str : strs2) {
             final Button btn = new Button(com2, SWT.PUSH);
             btn.setText(str);
@@ -224,7 +236,7 @@ public class SchematronExpressBuilder {
 
         Composite com3 = new Composite(bottomCom, 0);
         com3.setLayout(getLayout(4));
-        String[] strs3 = { "and", "or" };
+        String[] strs3 = { "and", "or" };//$NON-NLS-1$//$NON-NLS-2$
         for (int i = 0; i < strs3.length; i++) {
             final Button btn = new Button(com3, SWT.PUSH);
 
@@ -241,7 +253,7 @@ public class SchematronExpressBuilder {
 
         Composite com4 = new Composite(bottomCom, 0);
         com4.setLayout(getLayout(3));
-        String[] strs4 = { ")", "(" };
+        String[] strs4 = { ")", "(" };//$NON-NLS-1$//$NON-NLS-2$
         for (int i = 0; i < strs4.length; i++) {
             final Button btn = new Button(com4, SWT.PUSH);
             btn.setText(strs4[i]);
@@ -255,7 +267,7 @@ public class SchematronExpressBuilder {
             });
         }
         Button xpathButton = new Button(com4, SWT.PUSH);
-        xpathButton.setText("xpath");
+        xpathButton.setText("xpath");//$NON-NLS-1$
         xpathButton.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent e) {

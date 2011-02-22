@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.widgets;
 
 import java.util.ArrayList;
@@ -134,11 +146,11 @@ public class TisTableViewer extends ComplexTableViewer {
 
                 @SuppressWarnings("unchecked")
                 public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                    
+
                     xpathDialog = new XpathSelectDialog(table.getShell(), null, "Select Multiple XPaths", ServerView.show()
                             .getSite(), true, getDatamodelName());
                     xpathDialog.setConceptName(conceptName);
-                    
+
                     xpathDialog.setBlockOnOpen(true);
                     xpathDialog.open();
 

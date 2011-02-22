@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.widgets;
 
 import java.util.ArrayList;
@@ -98,20 +110,24 @@ public class ConceptComposite {
         });
 
         final Group radioGroup = new Group(parent, SWT.SHADOW_NONE);
-        radioGroup.setText(encloseTextField ? "" : "Sub-Elements Group");
+        radioGroup.setText(encloseTextField ? "" : "Sub-Elements Group");//$NON-NLS-1$
+
         radioGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1));
         radioGroup.setLayout(new GridLayout(1, false));
 
         allButton = new Button(radioGroup, SWT.RADIO);
-        allButton.setText("All");
+        allButton.setText("All");//$NON-NLS-1$
+
         allButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
 
         sequenceButton = new Button(radioGroup, SWT.RADIO);
-        sequenceButton.setText("Sequence");
+        sequenceButton.setText("Sequence");//$NON-NLS-1$
+
         sequenceButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
 
         choiceButton = new Button(radioGroup, SWT.RADIO);
-        choiceButton.setText("Choice");
+        choiceButton.setText("Choice");//$NON-NLS-1$
+
         choiceButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
         allButton.setSelection(true);
 

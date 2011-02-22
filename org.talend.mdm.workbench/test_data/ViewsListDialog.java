@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.dialogs;
 
 import org.eclipse.jface.action.IMenuListener;
@@ -131,7 +143,7 @@ public class ViewsListDialog extends Dialog {
 			
 		    return composite;
 		} catch (Exception e) {
-			e.printStackTrace();
+		    log.error(e.getMessage(), e);
 			MessageDialog.openError(
 					this.getShell(),
 					"Error", 
@@ -175,7 +187,7 @@ public class ViewsListDialog extends Dialog {
 			);
 			viewsListViewer.setInput(ViewsListDialog.this.results);
 		} catch (Exception exx) {
-			exx.printStackTrace();
+		    log.error(exx.getMessage(), exx);
 			MessageDialog.openError(
 					ViewsListDialog.this.getShell(),
 					"Error", 

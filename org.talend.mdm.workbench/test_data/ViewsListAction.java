@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.actions;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -23,7 +35,7 @@ public class ViewsListAction extends AServerViewAction{
 			dialog.open();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+		    log.error(e.getMessage(), e);
 			MessageDialog.openError(
 					getServerView().getSite().getShell(),
 					"Error", 
