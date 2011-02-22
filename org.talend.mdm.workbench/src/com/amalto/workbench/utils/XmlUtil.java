@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.utils;
 
 import java.io.File;
@@ -31,12 +43,15 @@ import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
 
+import com.amalto.workbench.actions.XSDGetXPathAction;
 import com.amalto.workbench.utils.callback.AttributeProcess;
 import com.amalto.workbench.utils.callback.DocumentCreate;
 import com.amalto.workbench.utils.callback.ElementProcess;
 import com.amalto.workbench.utils.callback.NodeProcess;
 
 public final class XmlUtil {
+
+    private static Log log = LogFactory.getLog(XSDGetXPathAction.class);
 
     private static final Log logger = LogFactory.getLog(XmlUtil.class);
 
@@ -238,8 +253,7 @@ public final class XmlUtil {
             xmlwriter.write(document);
             result = writer.toString().replaceAll("<\\?xml.*?\\?>", "").trim();
         } catch (Exception e) {
-
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
 
         } finally {
             try {
@@ -361,7 +375,7 @@ public final class XmlUtil {
     // try {
     // System.out.println(XmlUtil.formatCompact(xml, "UTF-8"));
     // } catch (DocumentException e) {
-    // e.printStackTrace();
+    // log.error(e.getMessage(), e);
     // }
     // }
     // }

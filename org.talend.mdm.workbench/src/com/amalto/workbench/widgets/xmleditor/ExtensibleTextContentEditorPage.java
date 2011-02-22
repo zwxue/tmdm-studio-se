@@ -1,5 +1,7 @@
 package com.amalto.workbench.widgets.xmleditor;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.ITextListener;
@@ -26,6 +28,8 @@ import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
 
 public class ExtensibleTextContentEditorPage extends ExtensibleContentEditorPage {
+
+    private static Log log = LogFactory.getLog(ExtensibleTextContentEditorPage.class);
 
     protected TextViewer textViewer;
 
@@ -145,7 +149,7 @@ public class ExtensibleTextContentEditorPage extends ExtensibleContentEditorPage
                         notifyOnXMLDocumentChanged();
                     }
                 } catch (BadLocationException e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage(), e);
                 }
             }
 

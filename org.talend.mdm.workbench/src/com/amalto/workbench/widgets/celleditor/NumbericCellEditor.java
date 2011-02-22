@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.widgets.celleditor;
 
 import java.util.regex.Pattern;
@@ -10,9 +22,9 @@ import org.eclipse.swt.widgets.Control;
 
 public class NumbericCellEditor extends TextCellEditor {
 
-    public static final String REGX_POSITIVENUMBER = "^[\\d]+\\d*";
+    public static final String REGX_POSITIVENUMBER = "^[\\d]+\\d*";//$NON-NLS-1$
 
-    public static final String REGX_POSITIVDOUBLE = "^[\\d]+\\d*.?\\d*";
+    public static final String REGX_POSITIVDOUBLE = "^[\\d]+\\d*.?\\d*";//$NON-NLS-1$
 
     private String regx = "";
 

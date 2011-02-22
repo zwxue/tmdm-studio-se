@@ -45,7 +45,7 @@ public abstract class ExtensibleXMLEditorPageContent {
         fillXMLDoc(xmlDoc);
 
         try {
-            return XmlUtil.formatPretty(XmlUtil.toXml(xmlDoc), "UTF-8");
+            return XmlUtil.formatPretty(XmlUtil.toXml(xmlDoc), "UTF-8");//$NON-NLS-1$
         } catch (DocumentException e) {
             return "";
         }

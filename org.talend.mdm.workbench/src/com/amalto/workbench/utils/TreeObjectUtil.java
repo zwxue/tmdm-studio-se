@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.utils;
 
 import java.net.URL;
@@ -6,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
@@ -82,6 +96,8 @@ import com.amalto.workbench.webservices.WSViewPK;
 import com.amalto.workbench.webservices.XtentisPort;
 
 public class TreeObjectUtil {
+
+    private static Log log = LogFactory.getLog(TreeObjectUtil.class);
 
     public static boolean renameTreeOjects(TreeObject object, ServerView view) throws Exception {
 
@@ -350,8 +366,8 @@ public class TreeObjectUtil {
                 if ((newText == null) || "".equals(newText))
                     return "The name cannot be empty";
 
-                if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()
-                        || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())
+                if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()//$NON-NLS-1$
+                        || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())//$NON-NLS-1$
                     return "The name cannot contain the empty characters";
 
                 newText = newText.trim();
@@ -378,7 +394,7 @@ public class TreeObjectUtil {
                                             new WSExistsSynchronizationPlan(new WSSynchronizationPlanPK(newText))).is_true())))
                         return "The name already exists";
                 } catch (RemoteException e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage(), e);
                 }
                 return null;
             };

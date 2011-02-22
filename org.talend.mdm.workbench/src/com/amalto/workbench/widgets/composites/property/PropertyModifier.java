@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.widgets.composites.property;
 
 import org.eclipse.jface.viewers.ColumnViewer;
@@ -7,9 +19,9 @@ import com.amalto.workbench.providers.CommonTableCellModifier;
 
 public class PropertyModifier extends CommonTableCellModifier<IPropertySource<?>> {
 
-    public static final String COL_PROP_NAME = "name";
+    public static final String COL_PROP_NAME = "name";//$NON-NLS-1$
 
-    public static final String COL_PROP_VALUE = "value";
+    public static final String COL_PROP_VALUE = "value";//$NON-NLS-1$
 
     public static final String[] COLPROPS = new String[] { COL_PROP_NAME, COL_PROP_VALUE };
 

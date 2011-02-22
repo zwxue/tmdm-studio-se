@@ -8,6 +8,8 @@ import java.util.Comparator;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.source.SourceViewer;
@@ -36,6 +38,8 @@ import com.amalto.workbench.utils.WidgetUtils;
 import com.amalto.workbench.views.ServerView;
 
 public class SchematronExpressBuilder {
+
+    private static Log log = LogFactory.getLog(SchematronExpressBuilder.class);
 
     Composite parent;
 
@@ -74,7 +78,7 @@ public class SchematronExpressBuilder {
             parseFunxml();
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         create();
     }
@@ -94,7 +98,7 @@ public class SchematronExpressBuilder {
             sourceViewer.getDocument().replace(sel.x, sel.y, text);
             sourceViewer.setSelectedRange(sel.x + text.length(), sel.y);
         } catch (BadLocationException e1) {
-            e1.printStackTrace();
+            log.error(e1.getMessage(), e1);
         }
     }
 

@@ -1,6 +1,15 @@
-/*
- * Created on 22 sept. 2005
- */
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.utils;
 
 import java.io.BufferedInputStream;
@@ -54,6 +63,8 @@ import org.apache.commons.httpclient.methods.MultipartPostMethod;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
@@ -157,6 +168,8 @@ import com.sun.org.apache.xpath.internal.objects.XObject;
  * @author bgrieder
  */
 public class Util {
+
+    private static Log log = LogFactory.getLog(Util.class);
 
     public static LinkedHashMap<String, String> iso2lang = new LinkedHashMap<String, String>();
 
@@ -390,7 +403,7 @@ public class Util {
 
             return (XtentisPort) stub;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             throw new XtentisException("Unable to access endpoint at: " + url + ": " + e.getLocalizedMessage());
         }
     }
@@ -398,7 +411,7 @@ public class Util {
     /*
      * public static WSDataModel[] getAllDataModels(URL url, String username, String password) throws XtentisException{
      * try { XtentisPort port = Util.getPort(url,username,password); return port.getDataModels(new
-     * WSRegexDataModels("*")).getWsDataModels(); } catch (Exception e) { e.printStackTrace(); throw new
+     * WSRegexDataModels("*")).getWsDataModels(); } catch (Exception e) {log.error(e.getMessage(), e); throw new
      * XtentisException( "Unable to retrieve all Data Models" +": "+e.getLocalizedMessage()); } }
      */
 
@@ -408,7 +421,7 @@ public class Util {
             XtentisPort port = Util.getPort(url, universe, username, password);
             return port.getDataModelPKs(new WSRegexDataModelPKs("*")).getWsDataModelPKs();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             throw new XtentisException("Unable to retrieve all Data Model Names" + ": " + e.getLocalizedMessage());
         }
     }
@@ -419,7 +432,7 @@ public class Util {
             XtentisPort port = Util.getPort(url, universe, username, password);
             return port.getDataClusterPKs(new WSRegexDataClusterPKs("*")).getWsDataClusterPKs();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             throw new XtentisException("Unable to retrieve all Data Container Names" + ": " + e.getLocalizedMessage());
         }
     }
@@ -432,7 +445,7 @@ public class Util {
             XtentisPort port = Util.getPort(url, universe, username, password);
             return port.getViewPKs(new WSGetViewPKs(regex)).getWsViewPK();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             throw new XtentisException("Unable to retrieve all the Outbound Adaptors" + ": " + e.getLocalizedMessage());
         }
     }
@@ -618,7 +631,7 @@ public class Util {
             }
             return d;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             String err = "Unable to parse the document" + ": " + e.getClass().getName() + ": " + e.getLocalizedMessage() + "\n "
                     + xmlString;
             throw new Exception(err);
@@ -717,7 +730,7 @@ public class Util {
             return response;
         } catch (Exception e) {
             mppost.releaseConnection();
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             throw new XtentisException(e.getClass().getName() + ": " + e.getLocalizedMessage());
         }
     }
@@ -761,7 +774,7 @@ public class Util {
                 return "";
         } catch (Exception e) {
             mppost.releaseConnection();
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             throw new XtentisException(e.getClass().getName() + ": " + e.getLocalizedMessage());
         }
     }
@@ -1447,7 +1460,7 @@ public class Util {
                         }
                     }
                 } catch (Exception e1) {
-                    e1.printStackTrace();
+                    log.error(e1.getMessage(), e1);
                 }
             }
         }
@@ -1582,7 +1595,7 @@ public class Util {
             }
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         // List<String> buffer = new ArrayList<String>();
         // buffer = retrieveXSDComponentPath(component, schema, buffer);
@@ -1598,7 +1611,7 @@ public class Util {
         // if(l.getLength() > 0)
         // return false;
         // } catch (Exception e) {
-        // e.printStackTrace();
+        // log.error(e.getMessage(), e);
         // }
         return true;
     }
@@ -1614,7 +1627,7 @@ public class Util {
             }
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return true;
     }
@@ -1941,7 +1954,7 @@ public class Util {
             try {
                 resource.getContents().add(schema);
             } catch (Exception ex) {
-                ex.printStackTrace();
+                log.error(ex.getMessage(), ex);
             }
             // Add the root schema to the resource that was created above
             Iterator<Integer> iter = schemaMonitor.values().iterator();
@@ -2034,7 +2047,7 @@ public class Util {
             }
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } finally {
             if (is != null)
                 try {
@@ -2559,7 +2572,7 @@ public class Util {
             xmlwriter.close();
             return str;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return xsdSource;
 
@@ -2706,21 +2719,21 @@ public class Util {
         try {
             port = Util.getPort(dataModelFolder);
         } catch (XtentisException e3) {
-            e3.printStackTrace();
+            log.error(e3.getMessage(), e3);
         } catch (Exception e3) {
-            e3.printStackTrace();
+            log.error(e3.getMessage(), e3);
         }
         WSDataModel wsDataModel = null;
         try {
             wsDataModel = port.getDataModel(new WSGetDataModel(new WSDataModelPK(dataModelName)));
         } catch (RemoteException e2) {
-            e2.printStackTrace();
+            log.error(e2.getMessage(), e2);
         }
         try {
             String schema = wsDataModel.getXsdSchema();
             return Util.createXsdSchema(schema, dataModelFolder);
         } catch (Exception e1) {
-            e1.printStackTrace();
+            log.error(e1.getMessage(), e1);
         }
 
         return null;

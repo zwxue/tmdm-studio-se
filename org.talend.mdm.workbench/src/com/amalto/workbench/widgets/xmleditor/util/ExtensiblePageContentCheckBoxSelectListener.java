@@ -2,6 +2,8 @@ package com.amalto.workbench.widgets.xmleditor.util;
 
 import java.lang.reflect.Method;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -10,6 +12,8 @@ import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditorPage;
 import com.amalto.workbench.widgets.xmleditor.pagecontent.ExtensibleXMLEditorPageContent;
 
 public class ExtensiblePageContentCheckBoxSelectListener extends SelectionAdapter {
+
+    private static Log log = LogFactory.getLog(ExtensiblePageContentCheckBoxSelectListener.class);
 
     private ExtensibleContentEditorPage parentPage;
 
@@ -40,7 +44,7 @@ public class ExtensiblePageContentCheckBoxSelectListener extends SelectionAdapte
             parentPage.getContent().setContent(modifiedObj.toXMLExpression());
             parentPage.notifyOnXMLDocumentChanged();
         } catch (Exception exp) {
-            exp.printStackTrace();
+            log.error(exp.getMessage(), exp);
         }
     }
 }

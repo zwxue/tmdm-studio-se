@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.views;
 
 import org.eclipse.ui.IFolderLayout;
@@ -8,11 +20,11 @@ import com.amalto.workbench.availablemodel.AvailableModelUtil;
 
 public class MDMPerspective implements IPerspectiveFactory {
 
-    public static final String PERPECTIVE_ID = "org.talend.mdm.perspective";
+    public static final String PERPECTIVE_ID = "org.talend.mdm.perspective";//$NON-NLS-1$
 
-    public static final String VIEWID_PROPERTYVIEW = "org.eclipse.ui.views.PropertySheet";
+    public static final String VIEWID_PROPERTYVIEW = "org.eclipse.ui.views.PropertySheet";//$NON-NLS-1$
 
-    public static final String VIEWID_OUTLINE = "org.eclipse.ui.views.ContentOutline";
+    public static final String VIEWID_OUTLINE = "org.eclipse.ui.views.ContentOutline";//$NON-NLS-1$
 
     static {
         // scan availabelmodel extention point
@@ -22,7 +34,7 @@ public class MDMPerspective implements IPerspectiveFactory {
     public void createInitialLayout(IPageLayout layout) {
 
         // leftTopLayout
-        IFolderLayout leftTopLayout = layout.createFolder("navigatorLayout", IPageLayout.LEFT, new Float(0.32),
+        IFolderLayout leftTopLayout = layout.createFolder("navigatorLayout", IPageLayout.LEFT, new Float(0.32),//$NON-NLS-1$
                 IPageLayout.ID_EDITOR_AREA);
         leftTopLayout.addView(ServerView.VIEW_ID);
 

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
@@ -38,12 +40,12 @@ import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSVersioningUniverseVersionsTagStructure;
 
-
 /**
- * @author achen
- * DOC achen class global comment. Detailled comment
+ * @author achen DOC achen class global comment. Detailled comment
  */
 public class RepositoryCheckTreeViewer {
+
+    private static Log log = LogFactory.getLog(RepositoryCheckTreeViewer.class);
 
     private FilteredCheckboxTree filteredCheckboxTree;
 
@@ -59,36 +61,43 @@ public class RepositoryCheckTreeViewer {
 
     private Button moveButton;
 
-	private TreeParent serverRoot;
-	
-	private List<TreeObject> checkItems;
-	private String defaultTagText;
-	
-	private boolean isTagEditable;
-	
-	private VersionTagWidget vwidget;
-	
-	private SelectionListener tagSelectionListener;
-	private SelectionListener restoreSelectionListener;
-	private IDoubleClickListener tagsViewerDoubleClickListener;
-	private ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries;
+    private TreeParent serverRoot;
 
-    public RepositoryCheckTreeViewer(IStructuredSelection selection,String defaultTagText, boolean isTagEditable) {
-    	this.selection=selection;
-    		serverRoot=  ((TreeObject)selection.getFirstElement()).getServerRoot();
-        checkItems=selection.toList();
+    private List<TreeObject> checkItems;
+
+    private String defaultTagText;
+
+    private boolean isTagEditable;
+
+    private VersionTagWidget vwidget;
+
+    private SelectionListener tagSelectionListener;
+
+    private SelectionListener restoreSelectionListener;
+
+    private IDoubleClickListener tagsViewerDoubleClickListener;
+
+    private ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries;
+
+    public RepositoryCheckTreeViewer(IStructuredSelection selection, String defaultTagText, boolean isTagEditable) {
+        this.selection = selection;
+        serverRoot = ((TreeObject) selection.getFirstElement()).getServerRoot();
+        checkItems = selection.toList();
         this.defaultTagText = defaultTagText;
         this.isTagEditable = isTagEditable;
     }
-    public RepositoryCheckTreeViewer(IStructuredSelection selection){
-    	this.selection=selection;
-    	 serverRoot=  ((TreeObject)selection.getFirstElement()).getServerRoot();
-    	 checkItems=selection.toList();
+
+    public RepositoryCheckTreeViewer(IStructuredSelection selection) {
+        this.selection = selection;
+        serverRoot = ((TreeObject) selection.getFirstElement()).getServerRoot();
+        checkItems = selection.toList();
     }
-    public void setCheckItems(List<TreeObject> list){
-    	checkItems=list;
-    	refresh();
+
+    public void setCheckItems(List<TreeObject> list) {
+        checkItems = list;
+        refresh();
     }
+
     public SashForm createContents(Composite parent) {
         // Splitter
         final GridData data = new GridData();
@@ -98,16 +107,16 @@ public class RepositoryCheckTreeViewer {
         sash.setLayoutData(data);
 
         GridLayout layout = new GridLayout();
-        layout.marginLeft=0;
-        layout.marginRight=0;        
+        layout.marginLeft = 0;
+        layout.marginRight = 0;
         sash.setLayout(layout);
         // create tree
         createItemList(sash);
         // create button
         Composite buttonComposite = new Composite(sash, SWT.ERROR);
         layout = new GridLayout();
-        layout.marginLeft=0;
-        layout.marginRight=0;         
+        layout.marginLeft = 0;
+        layout.marginRight = 0;
         buttonComposite.setLayout(layout);
 
         moveButton = new Button(buttonComposite, SWT.PUSH);
@@ -119,19 +128,18 @@ public class RepositoryCheckTreeViewer {
         layoutData.horizontalAlignment = GridData.CENTER;
         layoutData.grabExcessHorizontalSpace = true;
         layoutData.grabExcessVerticalSpace = true;
-        layoutData.widthHint = 30;        
+        layoutData.widthHint = 30;
         moveButton.setLayoutData(layoutData);
-        
-        //create version composite
+
+        // create version composite
         Composite versionComposite = new Composite(sash, SWT.NONE);
-        layout=new GridLayout();
-        layout.marginLeft=0;
-        layout.marginRight=0;
+        layout = new GridLayout();
+        layout.marginLeft = 0;
+        layout.marginRight = 0;
         versionComposite.setLayout(layout);
-        vwidget=new VersionTagWidget(versionComposite,"Universe",defaultTagText,isTagEditable,
-        		                     tagSelectionListener,restoreSelectionListener,tagsViewerDoubleClickListener,
-        		                     this.hisEntries);
-        
+        vwidget = new VersionTagWidget(versionComposite, "Universe", defaultTagText, isTagEditable, tagSelectionListener,
+                restoreSelectionListener, tagsViewerDoubleClickListener, this.hisEntries);
+
         sash.setWeights(new int[] { 20, 2, 21 });
         // add listner
         moveButton.addSelectionListener(new SelectionAdapter() {
@@ -141,7 +149,7 @@ public class RepositoryCheckTreeViewer {
                 if (moveButton.getText().equals("<<")) { //$NON-NLS-1$
                     sash.setWeights(new int[] { 0, 2, 23 });
                     moveButton.setText(">>"); //$NON-NLS-1$
-                   
+
                 } else if (moveButton.getText().equals(">>")) { //$NON-NLS-1$
                     sash.setWeights(new int[] { 20, 2, 21 });
                     moveButton.setText("<<"); //$NON-NLS-1$    
@@ -152,9 +160,11 @@ public class RepositoryCheckTreeViewer {
 
         return sash;
     }
-    Label itemLabel=null;
 
-	private TreeViewer viewer;
+    Label itemLabel = null;
+
+    private TreeViewer viewer;
+
     /**
      * 
      * @param workArea
@@ -175,32 +185,34 @@ public class RepositoryCheckTreeViewer {
         // force loading all nodes
         viewer = exportItemsTreeViewer.getViewer();
 
-
         refresh();
         return itemComposite;
     }
-    public void refresh(){
+
+    public void refresh() {
         // if user has select some items in repository view, mark them as checked
-        for(TreeObject obj: checkItems){
-        	if(obj instanceof TreeParent)
-        		repositoryNodes.addAll(Util.getChildrenObj((TreeParent)obj));
-        	else
-        		repositoryNodes.add(obj);
+        for (TreeObject obj : checkItems) {
+            if (obj instanceof TreeParent)
+                repositoryNodes.addAll(Util.getChildrenObj((TreeParent) obj));
+            else
+                repositoryNodes.add(obj);
         }
-        ((CheckboxTreeViewer) viewer).setCheckedElements(repositoryNodes.toArray());      	
+        ((CheckboxTreeViewer) viewer).setCheckedElements(repositoryNodes.toArray());
     }
-    
-    public void setItemText(String text){
-    	itemLabel.setText(text);
+
+    public void setItemText(String text) {
+        itemLabel.setText(text);
     }
-    
+
     public TreeViewer getViewer() {
-		return viewer;
-	}
-	public void setViewer(TreeViewer viewer) {
-		this.viewer = viewer;
-	}
-	private void expandParent(TreeViewer viewer, TreeObject node) {
+        return viewer;
+    }
+
+    public void setViewer(TreeViewer viewer) {
+        this.viewer = viewer;
+    }
+
+    private void expandParent(TreeViewer viewer, TreeObject node) {
         TreeParent parent = node.getParent();
         if (parent != null) {
             expandParent(viewer, parent);
@@ -212,33 +224,33 @@ public class RepositoryCheckTreeViewer {
         CheckboxTreeViewer viewer = (CheckboxTreeViewer) exportItemsTreeViewer.getViewer();
         List<TreeObject> ret = new ArrayList<TreeObject>();
         for (int i = 0; i < viewer.getCheckedElements().length; i++) {
-        	TreeObject node = (TreeObject) viewer.getCheckedElements()[i];
+            TreeObject node = (TreeObject) viewer.getCheckedElements()[i];
             if (node.isXObject()) {
                 ret.add(node);
             }
         }
         return (TreeObject[]) ret.toArray(new TreeObject[0]);
     }
+
     private ServerTreeContentProvider contentProvider;
-    public void setRoot(TreeParent root){
-    	contentProvider.setRoot(root);
+
+    public void setRoot(TreeParent root) {
+        contentProvider.setRoot(root);
     }
+
     private void createTreeViewer(Composite itemComposite) {
         filteredCheckboxTree = new FilteredCheckboxTree(itemComposite, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI) {
 
-           
-
-			@Override
+            @Override
             protected CheckboxTreeViewer doCreateTreeViewer(Composite parent, int style) {
                 exportItemsTreeViewer = new CheckboxRepositoryView();
                 try {
                     exportItemsTreeViewer.init(repositoryView.getViewSite());
                 } catch (PartInitException e) {
-                     e.printStackTrace();
+                    log.error(e.getMessage(), e);
                 }
                 exportItemsTreeViewer.createPartControl(parent);
-                contentProvider=new ServerTreeContentProvider(repositoryView.getSite(),
-                		serverRoot);
+                contentProvider = new ServerTreeContentProvider(repositoryView.getSite(), serverRoot);
                 exportItemsTreeViewer.getViewer().setContentProvider(contentProvider);
                 exportItemsTreeViewer.getViewer().setLabelProvider(new ServerTreeLabelProvider());
                 exportItemsTreeViewer.getViewer().setInput(repositoryView.getSite());
@@ -253,13 +265,13 @@ public class RepositoryCheckTreeViewer {
 
             @Override
             protected boolean isNodeCollectable(TreeItem item) {
-//                Object obj = item.getData();
-//                if (obj instanceof RepositoryNode) {
-//                    RepositoryNode node = (RepositoryNode) obj;
-//                    if (node.getObjectType() == ERepositoryObjectType.METADATA_CONNECTIONS) {
-//                        return true;
-//                    }
-//                }
+                // Object obj = item.getData();
+                // if (obj instanceof RepositoryNode) {
+                // RepositoryNode node = (RepositoryNode) obj;
+                // if (node.getObjectType() == ERepositoryObjectType.METADATA_CONNECTIONS) {
+                // return true;
+                // }
+                // }
                 return false;
             }
         };
@@ -267,7 +279,7 @@ public class RepositoryCheckTreeViewer {
 
             @Override
             public boolean select(Viewer viewer, Object parentElement, Object element) {
-            	TreeObject node = (TreeObject) element;
+                TreeObject node = (TreeObject) element;
                 return filterRepositoryNode(node);
             }
         });
@@ -285,17 +297,17 @@ public class RepositoryCheckTreeViewer {
         if (node == null) {
             return false;
         }
-        //remove the filter for resource to provide the function to import and export resources.
-		if (node.getType() == TreeObject.SUBSCRIPTION_ENGINE
-				|| node.getType() == TreeObject.SERVICE_CONFIGURATION
-				||!Util.IsEnterPrise()&& node.getType() == TreeObject.WORKFLOW
-				||!Util.IsEnterPrise()&& node.getType() == TreeObject.WORKFLOW_PROCESS
-   		||node.getType() == TreeObject.JOB || node.getType() == TreeObject.JOB_REGISTRY){
-        	return false;
+        // remove the filter for resource to provide the function to import and export resources.
+        if (node.getType() == TreeObject.SUBSCRIPTION_ENGINE || node.getType() == TreeObject.SERVICE_CONFIGURATION
+                || !Util.IsEnterPrise() && node.getType() == TreeObject.WORKFLOW || !Util.IsEnterPrise()
+                && node.getType() == TreeObject.WORKFLOW_PROCESS || node.getType() == TreeObject.JOB
+                || node.getType() == TreeObject.JOB_REGISTRY) {
+            return false;
         }
-        if(!Util.IsEnterPrise()){
-        	if(node.getType() == TreeObject.ROLE || node.getType() == TreeObject.UNIVERSE||node.getType() == TreeObject.SYNCHRONIZATIONPLAN){
-            	return false;
+        if (!Util.IsEnterPrise()) {
+            if (node.getType() == TreeObject.ROLE || node.getType() == TreeObject.UNIVERSE
+                    || node.getType() == TreeObject.SYNCHRONIZATIONPLAN) {
+                return false;
             }
         }
         return true;
@@ -358,70 +370,65 @@ public class RepositoryCheckTreeViewer {
         });
         // setButtonLayoutData(collapseBtn);
     }
-    
-    
 
     public SelectionListener getTagSelectionListener() {
-		return tagSelectionListener;
-	}
+        return tagSelectionListener;
+    }
 
-	public void setTagSelectionListener(SelectionListener tagSelectionListener) {
-		this.tagSelectionListener = tagSelectionListener;
-	}
+    public void setTagSelectionListener(SelectionListener tagSelectionListener) {
+        this.tagSelectionListener = tagSelectionListener;
+    }
 
-	public SelectionListener getRestoreSelectionListener() {
-		return restoreSelectionListener;
-	}
+    public SelectionListener getRestoreSelectionListener() {
+        return restoreSelectionListener;
+    }
 
-	public void setRestoreSelectionListener(
-			SelectionListener restoreSelectionListener) {
-		this.restoreSelectionListener = restoreSelectionListener;
-	}
+    public void setRestoreSelectionListener(SelectionListener restoreSelectionListener) {
+        this.restoreSelectionListener = restoreSelectionListener;
+    }
 
-	public IDoubleClickListener getTagsViewerDoubleClickListener() {
-		return tagsViewerDoubleClickListener;
-	}
+    public IDoubleClickListener getTagsViewerDoubleClickListener() {
+        return tagsViewerDoubleClickListener;
+    }
 
-	public void setTagsViewerDoubleClickListener(
-			IDoubleClickListener tagsViewerDoubleClickListener) {
-		this.tagsViewerDoubleClickListener = tagsViewerDoubleClickListener;
-	}
-	
-	public void setHisEntries(ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries) {
-		
-		this.hisEntries=hisEntries;
+    public void setTagsViewerDoubleClickListener(IDoubleClickListener tagsViewerDoubleClickListener) {
+        this.tagsViewerDoubleClickListener = tagsViewerDoubleClickListener;
+    }
 
-	}
-	
-	public String getComment() {
-		
-		return vwidget.getCommentText().getText().trim();
+    public void setHisEntries(ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries) {
 
-	}
-	
+        this.hisEntries = hisEntries;
+
+    }
+
+    public String getComment() {
+
+        return vwidget.getCommentText().getText().trim();
+
+    }
+
     public String getTagText() {
-		
-		return vwidget.getTagText().getText().trim();
 
-	}
-    
+        return vwidget.getTagText().getText().trim();
+
+    }
+
     public void refreshHistoryTable(ArrayList<WSVersioningUniverseVersionsTagStructure> hisEntries) {
-    	this.vwidget.refreshData(hisEntries);
-	}
-    
+        this.vwidget.refreshData(hisEntries);
+    }
+
     public TableViewer getTagsViewer() {
-    	
-    	return this.vwidget.getTagsViewer();
 
-	}
+        return this.vwidget.getTagsViewer();
 
-	/**
+    }
+
+    /**
      * 
      * A repository view with checkbox on the left.
      */
     class CheckboxRepositoryView extends ServerView {
 
-      
         protected TreeViewer createTreeViewer(Composite parent) {
             return new CheckboxRepositoryTreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
         }
@@ -434,8 +441,9 @@ public class RepositoryCheckTreeViewer {
         @Override
         public void createPartControl(Composite parent) {
             super.createPartControl(parent);
-            
+
         }
+
         @Override
         public void initView() {
         }

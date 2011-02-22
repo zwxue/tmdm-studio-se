@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.utils;
 
 import java.io.File;
@@ -18,6 +30,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -42,6 +56,8 @@ import com.amalto.workbench.webservices.XtentisPort;
 
 public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeViewerListener {
 
+    private static Log log = LogFactory.getLog(LocalTreeObjectRepository.class);
+
     private ServerView view;
 
     private boolean internalCheck = false;
@@ -52,23 +68,23 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 
     private HashMap<String, Element> outPutSchemas = new HashMap<String, Element>();
 
-    private static String config = System.getProperty("user.dir") + "/.treeObjectConfig.xml";
+    private static String config = System.getProperty("user.dir") + "/.treeObjectConfig.xml";//$NON-NLS-1$//$NON-NLS-2$
 
     private static String rootPath = "/" + ICoreConstants.DEFAULT_CATEGORY_ROOT;
 
-    private static String DEFAULT_CATALOG = "System";
+    private static String DEFAULT_CATALOG = "System";//$NON-NLS-1$
 
-    private static String EXPAND_NAME = "Expand";
+    private static String EXPAND_NAME = "Expand";//$NON-NLS-1$
 
-    private static String EXPAND_VALUE = "true";
+    private static String EXPAND_VALUE = "true";//$NON-NLS-1$
 
-    private static String COLLAPSE_VALUE = "false";
+    private static String COLLAPSE_VALUE = "false";//$NON-NLS-1$
 
-    private static String UNIVERSE = "Universe";
+    private static String UNIVERSE = "Universe";//$NON-NLS-1$
 
-    private static String URL = "Url";
+    private static String URL = "Url";//$NON-NLS-1$
 
-    private static String REALNAME = "Name";
+    private static String REALNAME = "Name";//$NON-NLS-1$
 
     private static int XTENTIS_LEVEL = 4;
 
@@ -130,9 +146,10 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
             saveCredential(ur, user, pwd, doc, port, true);
             doUpgrade(UnifyUrl(ur));
         } catch (Exception e) {
-            e.printStackTrace();
-            String empty = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-            empty += "<" + ICoreConstants.DEFAULT_CATEGORY_ROOT + "/>";
+
+            log.error(e.getMessage(), e);
+            String empty = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";//$NON-NLS-1$
+            empty += "<" + ICoreConstants.DEFAULT_CATEGORY_ROOT + "/>";//$NON-NLS-1$//$NON-NLS-2$
             WSCategoryData newData = new WSCategoryData();
             newData.setCategorySchema(empty);
             try {
@@ -234,7 +251,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
                 break;
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            log.error(ex.getMessage(), ex);
         }
     }
 
@@ -268,7 +285,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
                 try {
                     port.getMDMCategory(new WSCategoryData(doc.asXML()));
                 } catch (RemoteException e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage(), e);
                 }
             }
         }
@@ -276,7 +293,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 
     private String convertSpecCharToDigital(String res) {
         String cpy = "", trail = ".";
-        Pattern mask = Pattern.compile("[\\W]+");
+        Pattern mask = Pattern.compile("[\\W]+");//$NON-NLS-1$
         for (int id = 0; id < res.length(); id++) {
             String slip = "" + res.charAt(id);
             Matcher matcher = mask.matcher(slip);
@@ -287,7 +304,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
                 cpy += slip;
         }
 
-        mask = Pattern.compile("[\\d]+");
+        mask = Pattern.compile("[\\d]+");//$NON-NLS-1$
         String chead = "" + cpy.charAt(0);
         Matcher match = mask.matcher(chead);
         if (match.find()) {
@@ -305,9 +322,9 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
     }
 
     private String filterOutBlank(String input) {
-        Pattern mask = Pattern.compile("([\\s]+)");
+        Pattern mask = Pattern.compile("([\\s]+)");//$NON-NLS-1$
         String res = mask.matcher(input).replaceAll("");
-        res = res.replaceAll("\\[\\w+\\]", "");
+        res = res.replaceAll("\\[\\w+\\]", "");//$NON-NLS-1$
 
         return convertSpecCharToDigital(res);
     }
@@ -320,7 +337,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
         String xpath = getXPathForTreeObject(treeObj);
         Document doc = credentials.get(UnifyUrl(treeObj.getServerRoot().getWsKey().toString())).doc;
         if (doc.selectNodes(xpath).isEmpty()) {
-            xpath = xpath.replaceAll("\\[.*\\]", "");
+            xpath = xpath.replaceAll("\\[.*\\]", "");//$NON-NLS-1$
             if (doc.selectNodes(xpath).isEmpty())
                 xpath = getXPathForTreeObject(treeObj.getParent() != null ? treeObj.getParent() : treeObj.getServerRoot());
             if (xpath != null) {
@@ -332,7 +349,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
                     // process and trigger is in special, as they are located in EventManagement which is in the same
                     // level as data container and data model
                     if (treeObj.getType() == TreeObject.TRANSFORMER && treeObj.getParent() == null) {
-                        xpath += "/EventManagement[text() = '33']";
+                        xpath += "/EventManagement[text() = '33']";//$NON-NLS-1$
                     }
                     elemTop = (Element) doc.selectNodes(xpath).get(0);
                 }
@@ -352,7 +369,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
     }
 
     private void addChild(TreeObject parent, TreeObject child) {
-        if (parent.getParent() == null && parent.getDisplayName().equals("INVISIBLE ROOT"))
+        if (parent.getParent() == null && parent.getDisplayName().equals("INVISIBLE ROOT"))//$NON-NLS-1$
             return;
 
         String xpath = getXPathForTreeObject(child);
@@ -389,7 +406,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
     }
 
     private void removeChild(TreeObject parent, TreeObject child) {
-        if (parent.getParent() == null && parent.getDisplayName().equals("INVISIBLE ROOT"))
+        if (parent.getParent() == null && parent.getDisplayName().equals("INVISIBLE ROOT"))//$NON-NLS-1$
             return;
 
         if (synchronize) {
@@ -456,7 +473,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
     }
 
     private void recurseTreeObjectForXPath(TreeObject theObj, List<String> list) {
-        if (theObj.getParent() == null && theObj.getDisplayName().equals("INVISIBLE ROOT")) {
+        if (theObj.getParent() == null && theObj.getDisplayName().equals("INVISIBLE ROOT")) {//$NON-NLS-1$
             list.add(rootPath);
             return;
         } else if (theObj instanceof TreeParent && theObj.getServerRoot() == theObj) {
@@ -482,7 +499,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
     }
 
     private String UnifyUrl(String url) {
-        Pattern mask = Pattern.compile("http://(.*?):(.*)");
+        Pattern mask = Pattern.compile("http://(.*?):(.*)");//$NON-NLS-1$
         Matcher matcher = mask.matcher(url);
         if (matcher.find()) {
             String ip = matcher.group(1);
@@ -492,11 +509,11 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
                 InetAddress addr = InetAddress.getLocalHost();
                 ipAlias = addr.getHostAddress().toString();
                 hostName = addr.getHostName().toString();
-                if (ip.equals("127.0.0.1") || ip.equals(ipAlias) || ip.equals(hostName) || ip.equals("localhost")) {
-                    url = "http://" + ipAlias + ":" + matcher.group(2);
+                if (ip.equals("127.0.0.1") || ip.equals(ipAlias) || ip.equals(hostName) || ip.equals("localhost")) {//$NON-NLS-1$//$NON-NLS-2$
+                    url = "http://" + ipAlias + ":" + matcher.group(2);//$NON-NLS-1$
                 }
             } catch (UnknownHostException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         }
         return url;
@@ -869,7 +886,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
     public int receiveUnCertainTreeObjectType(TreeObject xobj) {
         String path = this.getXPathForTreeObject(xobj);
         int level = XTENTIS_LEVEL;
-        if (path.startsWith("/category/admin/EventManagement")) {
+        if (path.startsWith("/category/admin/EventManagement")) {//$NON-NLS-1$
             level = XTENTIS_LEVEL + 1;
         }
         Document doc = credentials.get(UnifyUrl(xobj.getServerRoot().getWsKey().toString())).doc;
@@ -931,7 +948,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
 
     public boolean isInSystemCatalog(TreeObject xobject) {
         if (xobject instanceof TreeParent) {
-            if (xobject.getType() == TreeObject.CATEGORY_FOLDER && xobject.getDisplayName().equals("System")) {
+            if (xobject.getType() == TreeObject.CATEGORY_FOLDER && xobject.getDisplayName().equals("System")) {//$NON-NLS-1$
                 Document doc = credentials.get(UnifyUrl(xobject.getServerRoot().getWsKey().toString())).doc;
                 String path = this.getXPathForTreeObject(xobject);
                 List<Element> elems = doc.selectNodes(path);
@@ -1124,7 +1141,7 @@ public class LocalTreeObjectRepository implements IXObjectModelListener, ITreeVi
             Document doc = saxReader.read(new StringReader(schema));
             return doc.getRootElement();
         } catch (DocumentException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
         return null;

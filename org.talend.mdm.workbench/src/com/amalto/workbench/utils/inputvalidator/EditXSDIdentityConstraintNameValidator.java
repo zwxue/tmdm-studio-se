@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.utils.inputvalidator;
 
 import java.util.regex.Pattern;
@@ -30,8 +42,8 @@ public class EditXSDIdentityConstraintNameValidator implements IInputValidator {
         if ((newText == null) || "".equals(newText))
             return "The unique key name cannot be empty";
 
-        if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()
-                || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())
+        if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()//$NON-NLS-1$
+                || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())//$NON-NLS-1$
             return "The unique key name cannot contain the empty characters";
 
         if (XSDIdentityConstraintCategory.UNIQUE_LITERAL.equals(key.getIdentityConstraintCategory())

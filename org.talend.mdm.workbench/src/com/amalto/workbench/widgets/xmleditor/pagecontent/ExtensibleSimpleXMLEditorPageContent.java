@@ -7,11 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
 
 public abstract class ExtensibleSimpleXMLEditorPageContent extends ExtensibleXMLEditorPageContent {
+
+    private static Log log = LogFactory.getLog(ExtensibleSimpleXMLEditorPageContent.class);
 
     protected List<String> singleValuePropNames = new ArrayList<String>();
 
@@ -96,7 +100,7 @@ public abstract class ExtensibleSimpleXMLEditorPageContent extends ExtensibleXML
             Method method = getClass().getMethod(valuePropName2GetMethod.get(prop));
             propValue = method.invoke(this).toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             rootElement.addElement(prop).setText("");
             return;
         }
@@ -116,7 +120,7 @@ public abstract class ExtensibleSimpleXMLEditorPageContent extends ExtensibleXML
             Method method = getClass().getMethod(valuePropName2GetMethod.get(prop));
             propValues = (List<String>) method.invoke(this);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             rootElement.addElement(prop).setText("");
             return;
         }

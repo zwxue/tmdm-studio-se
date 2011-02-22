@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.utils;
 
 import java.util.HashMap;
@@ -12,28 +24,28 @@ import com.amalto.workbench.models.TreeObject;
  * 
  */
 public enum EXtentisObjects {
-    DataCluster("Data Container", "Data Cluster", TreeObject.DATA_CLUSTER, false),
-    DataMODEL("Data Model", "Data Model", TreeObject.DATA_MODEL, true),
-    DataMODELRESOURCE("Data Model", "Data Model Resource", TreeObject.DATA_MODEL_RESOURCE, true),
-    DataMODELTYPESRESOURCE("Data Model Type", "Data Model Type Resource", TreeObject.DATA_MODEL_TYPES_RESOURCE, true),
-    CUSTOMTYPESRESOURCE("Custom Type", "Custom Type Resource", TreeObject.CUSTOM_TYPES_RESOURCE),
-    PICTURESRESOURCE("Pictures", "Pictures Resource", TreeObject.PICTURES_RESOURCE),
-    Role("Role", "Role", TreeObject.ROLE, true),
-    RoutingRule("Trigger", "Routing Rule", TreeObject.ROUTING_RULE, true),
-    StoredProcedure("Stored Procedure", "Stored Procedure", TreeObject.STORED_PROCEDURE, true),
-    Transformer("Process", "Transformer V2", TreeObject.TRANSFORMER, true),
-    TransformerPlugin("Process Plugin", "Transformer Plugin V2", TreeObject.TRANSFORMER_PLUGIN),
-    View("View", "View", TreeObject.VIEW, true),
-    Menu("Menu", "Menu", TreeObject.MENU, true),
-    SubscriptionEngine("Event Manager", "Subscription Engine", TreeObject.SUBSCRIPTION_ENGINE),
-    Universe("Version", "Universe", TreeObject.UNIVERSE),
-    SynchronizationPlan("Synchronization Plan", "Synchronization Plan", TreeObject.SYNCHRONIZATIONPLAN, true),
-    ServiceConfiguration("Service Configuration", "Service Configuration", TreeObject.SERVICE_CONFIGURATION),
-    Workflow("Workflow", "Workflow Processes", TreeObject.WORKFLOW),
-    JobRegistry("Job Repository", "Job Repository", TreeObject.JOB_REGISTRY),
-    Resources("Resources", "Resources", TreeObject.RESOURCES),
-    EventManagement("Event Management", "Event Management", TreeObject.EVENT_MANAGEMENT),
-    CustomType("Custom Type", "Custom Type", TreeObject.CUSTOM_TYPE);
+    DataCluster("Data Container", "Data Cluster", TreeObject.DATA_CLUSTER, false), //$NON-NLS-1$//$NON-NLS-2$
+    DataMODEL("Data Model", "Data Model", TreeObject.DATA_MODEL, true), //$NON-NLS-1$//$NON-NLS-2$
+    DataMODELRESOURCE("Data Model", "Data Model Resource", TreeObject.DATA_MODEL_RESOURCE, true), //$NON-NLS-1$//$NON-NLS-2$
+    DataMODELTYPESRESOURCE("Data Model Type", "Data Model Type Resource", TreeObject.DATA_MODEL_TYPES_RESOURCE, true), //$NON-NLS-1$//$NON-NLS-2$
+    CUSTOMTYPESRESOURCE("Custom Type", "Custom Type Resource", TreeObject.CUSTOM_TYPES_RESOURCE), //$NON-NLS-1$//$NON-NLS-2$
+    PICTURESRESOURCE("Pictures", "Pictures Resource", TreeObject.PICTURES_RESOURCE), //$NON-NLS-1$//$NON-NLS-2$
+    Role("Role", "Role", TreeObject.ROLE, true), //$NON-NLS-1$//$NON-NLS-2$
+    RoutingRule("Trigger", "Routing Rule", TreeObject.ROUTING_RULE, true), //$NON-NLS-1$//$NON-NLS-2$
+    StoredProcedure("Stored Procedure", "Stored Procedure", TreeObject.STORED_PROCEDURE, true), //$NON-NLS-1$//$NON-NLS-2$
+    Transformer("Process", "Transformer V2", TreeObject.TRANSFORMER, true), //$NON-NLS-1$//$NON-NLS-2$
+    TransformerPlugin("Process Plugin", "Transformer Plugin V2", TreeObject.TRANSFORMER_PLUGIN), //$NON-NLS-1$//$NON-NLS-2$
+    View("View", "View", TreeObject.VIEW, true), //$NON-NLS-1$//$NON-NLS-2$
+    Menu("Menu", "Menu", TreeObject.MENU, true), //$NON-NLS-1$//$NON-NLS-2$
+    SubscriptionEngine("Event Manager", "Subscription Engine", TreeObject.SUBSCRIPTION_ENGINE), //$NON-NLS-1$//$NON-NLS-2$
+    Universe("Version", "Universe", TreeObject.UNIVERSE), //$NON-NLS-1$//$NON-NLS-2$
+    SynchronizationPlan("Synchronization Plan", "Synchronization Plan", TreeObject.SYNCHRONIZATIONPLAN, true), //$NON-NLS-1$//$NON-NLS-2$
+    ServiceConfiguration("Service Configuration", "Service Configuration", TreeObject.SERVICE_CONFIGURATION), //$NON-NLS-1$//$NON-NLS-2$
+    Workflow("Workflow", "Workflow Processes", TreeObject.WORKFLOW), //$NON-NLS-1$//$NON-NLS-2$
+    JobRegistry("Job Repository", "Job Repository", TreeObject.JOB_REGISTRY), //$NON-NLS-1$//$NON-NLS-2$
+    Resources("Resources", "Resources", TreeObject.RESOURCES), //$NON-NLS-1$//$NON-NLS-2$
+    EventManagement("Event Management", "Event Management", TreeObject.EVENT_MANAGEMENT), //$NON-NLS-1$//$NON-NLS-2$
+    CustomType("Custom Type", "Custom Type", TreeObject.CUSTOM_TYPE);//$NON-NLS-1$//$NON-NLS-2$
 
     private String displayName;
 

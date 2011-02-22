@@ -19,6 +19,8 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -43,12 +45,14 @@ import sun.misc.BASE64Encoder;
 
 public class ResourcesUtil {
 
+    private static Log log = LogFactory.getLog(ResourcesUtil.class);
+
     // Handle it using an HTTP client connector
-    private static final String dmURI = "/pubcomponent/secure/dataModels";
+    private static final String dmURI = "/pubcomponent/secure/dataModels";//$NON-NLS-1$
 
-    private static final String cmURI = "/pubcomponent/secure/customTypesSets";
+    private static final String cmURI = "/pubcomponent/secure/customTypesSets";//$NON-NLS-1$
 
-    private static final String picURI = "/pubcomponent/secure/pictures";
+    private static final String picURI = "/pubcomponent/secure/pictures";//$NON-NLS-1$
 
     public static void main(String[] args) {
 
@@ -60,7 +64,7 @@ public class ResourcesUtil {
         try {
             postResourcesFromFile("demo2", "d:/bud.xsd", "http://localhost:8080" + cmURI);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -87,9 +91,9 @@ public class ResourcesUtil {
         } catch (HttpException e) {
 
             System.out.println("Please check your provided http address!");
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } finally {
             getMethod.releaseConnection();
         }
@@ -104,10 +108,10 @@ public class ResourcesUtil {
             return get.getResponseBodyAsStream();
         } catch (HttpException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return null;
     }
@@ -129,9 +133,9 @@ public class ResourcesUtil {
         try {
             responseBody = httpclient.execute(httpget, responseHandler);
         } catch (ClientProtocolException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         httpclient.getConnectionManager().shutdown();
         return responseBody;

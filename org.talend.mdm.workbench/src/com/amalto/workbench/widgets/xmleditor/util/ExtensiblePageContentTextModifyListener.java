@@ -4,6 +4,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Text;
@@ -12,6 +14,8 @@ import com.amalto.workbench.widgets.xmleditor.ExtensibleContentEditorPage;
 import com.amalto.workbench.widgets.xmleditor.pagecontent.ExtensibleXMLEditorPageContent;
 
 public class ExtensiblePageContentTextModifyListener implements ModifyListener {
+
+    private static Log log = LogFactory.getLog(ExtensiblePageContentTextModifyListener.class);
 
     private ExtensibleContentEditorPage parentPage;
 
@@ -57,7 +61,7 @@ public class ExtensiblePageContentTextModifyListener implements ModifyListener {
             parentPage.getContent().setContent(modifiedObj.toXMLExpression());
             parentPage.notifyOnXMLDocumentChanged();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
     }
@@ -70,7 +74,7 @@ public class ExtensiblePageContentTextModifyListener implements ModifyListener {
             parentPage.getContent().setContent(modifiedObj.toXMLExpression());
             parentPage.notifyOnXMLDocumentChanged();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
     }

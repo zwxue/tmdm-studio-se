@@ -1,18 +1,30 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.utils;
 
 public class MDMServerDef {
 
     private String desc = "";
 
-    private String host = "localhost";
+    private String host = "localhost";//$NON-NLS-1$
 
-    private String port = "8080";
+    private String port = "8080";//$NON-NLS-1$
 
     private String user = "";
 
     private String passwd = "";
 
-    private String path = "/talend/TalendPort";
+    private String path = "/talend/TalendPort";//$NON-NLS-1$
 
     public MDMServerDef(String desc, String host, String port, String path, String user, String passwd) {
 
@@ -25,7 +37,7 @@ public class MDMServerDef {
     }
 
     public MDMServerDef(String desc, String host, String port, String user, String passwd) {
-        this(desc, host, port, "/talend/TalendPort", user, passwd);
+        this(desc, host, port, "/talend/TalendPort", user, passwd);//$NON-NLS-1$
     }
 
     public MDMServerDef() {
@@ -81,7 +93,7 @@ public class MDMServerDef {
     }
 
     public String getUrl() {
-        StringBuilder sb = new StringBuilder("http://");
+        StringBuilder sb = new StringBuilder("http://");//$NON-NLS-1$
 
         sb.append(host);
         sb.append(":");

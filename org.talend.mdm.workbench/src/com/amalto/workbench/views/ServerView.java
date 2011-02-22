@@ -1,3 +1,15 @@
+// ============================================================================
+//
+// Copyright (C) 2006-2011 Talend Inc. - www.talend.com
+//
+// This source code is available under agreement available at
+// %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
+//
+// You should have received a copy of the agreement
+// along with this program; if not, write to Talend SA
+// 9 rue Pages 92150 Suresnes, France
+//
+// ============================================================================
 package com.amalto.workbench.views;
 
 import java.io.File;
@@ -12,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -132,7 +146,9 @@ import com.amalto.workbench.webservices.XtentisPort;
  */
 public class ServerView extends ViewPart implements IXObjectModelListener {
 
-    public static final String VIEW_ID = "org.talend.mdm.workbench.views.ServerView";
+    private static Log log = LogFactory.getLog(ServerView.class);
+
+    public static final String VIEW_ID = "org.talend.mdm.workbench.views.ServerView";//$NON-NLS-1$
 
     protected TreeViewer viewer;
 
@@ -178,7 +194,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     private int dragType = -1;
 
     // private static String f = System.getProperty("user.dir")+"/mdm_workbench_config.xml";
-    private static String f = Platform.getInstanceLocation().getURL().getPath() + "/mdm_workbench_config.xml";
+    private static String f = Platform.getInstanceLocation().getURL().getPath() + "/mdm_workbench_config.xml";//$NON-NLS-1$
 
     private BrowseRevisionAction browseRevisionAction;
 
@@ -199,7 +215,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             try {
                 part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(VIEW_ID);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         }
         return (ServerView) part;
@@ -222,7 +238,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                 }
             }
         } catch (XtentisException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return ports;
     }
@@ -357,7 +373,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                     || (treeObj.getType() == TreeObject.CATEGORY_FOLDER && xtentisType != dragType && !(dragType == TreeObject.JOB
                             || dragType == TreeObject.TIS_JOB || dragType == TreeObject.WORKFLOW_PROCESS))
                     || (treeObj.getType() == TreeObject.CATEGORY_FOLDER && treeObj.getParent().getType() == dragType && treeObj
-                            .getDisplayName().equals("System"))
+                            .getDisplayName().equals("System"))//$NON-NLS-1$
                     || (LocalTreeObjectRepository.getInstance().isInSystemCatalog(treeObj.getParent()))) {
                 event.detail = DND.DROP_NONE;
             } else {
@@ -367,7 +383,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                         break;
                     } else {
                         if (tos.getParent().getType() == TreeObject.CATEGORY_FOLDER
-                                && tos.getParent().getDisplayName().equals("System")) {
+                                && tos.getParent().getDisplayName().equals("System")) {//$NON-NLS-1$
                             event.detail = DND.DROP_NONE;
                         }
                         event.detail = DND.DROP_MOVE;
@@ -499,11 +515,11 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                     return;
                 TreeParent parent = (TreeParent) elem;
                 if (parent.getType() == TreeObject.BUILT_IN_CATEGORY_FOLDER) {
-                    Image imgOpen = ImageCache.getCreatedImage("icons/folder_open_deployed-jobs.png");
-                    Image imgClose = ImageCache.getCreatedImage("icons/folder_deployed-jobs.png");
-                    if (parent.getDisplayName().equals("Source Jobs")) {
-                        imgOpen = ImageCache.getCreatedImage("icons/folder_open_source-jobs.png");
-                        imgClose = ImageCache.getCreatedImage("icons/folder_source-jobs.png");
+                    Image imgOpen = ImageCache.getCreatedImage("icons/folder_open_deployed-jobs.png");//$NON-NLS-1$
+                    Image imgClose = ImageCache.getCreatedImage("icons/folder_deployed-jobs.png");//$NON-NLS-1$
+                    if (parent.getDisplayName().equals("Source Jobs")) {//$NON-NLS-1$
+                        imgOpen = ImageCache.getCreatedImage("icons/folder_open_source-jobs.png");//$NON-NLS-1$
+                        imgClose = ImageCache.getCreatedImage("icons/folder_source-jobs.png");//$NON-NLS-1$
                     }
                     Widget widget = ServerView.this.getViewer().testFindItem(event.getElement());
                     TreeItem item = (TreeItem) widget;
@@ -521,7 +537,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
         viewer = createTreeViewer(parent);
         drillDownAdapter = new DrillDownAdapter(viewer);
-        contentProvider = new ServerTreeContentProvider(this.getSite(), new TreeParent("INVISIBLE ROOT", null, TreeObject._ROOT_,
+        contentProvider = new ServerTreeContentProvider(this.getSite(), new TreeParent("INVISIBLE ROOT", null, TreeObject._ROOT_,//$NON-NLS-1$
                 null, null));
         setTreeContentProvider(contentProvider);
         viewer.setLabelProvider(new ServerTreeLabelProvider());
@@ -664,16 +680,16 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             try {
                 logininfoDocument = reader.read(file);
             } catch (DocumentException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
             Element root = logininfoDocument.getRootElement();
             // boolean bl = false;
-            for (Iterator i = root.elementIterator("properties"); i.hasNext();) {
+            for (Iterator i = root.elementIterator("properties"); i.hasNext();) {//$NON-NLS-1$
                 Element server = (Element) i.next();
-                String url = server.selectSingleNode("url").getText();
-                String user = server.selectSingleNode("user").getText();
-                String password = PasswordUtil.decryptPassword(server.selectSingleNode("password").getText());
-                String universe = server.selectSingleNode("universe").getText();
+                String url = server.selectSingleNode("url").getText();//$NON-NLS-1$
+                String user = server.selectSingleNode("user").getText();//$NON-NLS-1$
+                String password = PasswordUtil.decryptPassword(server.selectSingleNode("password").getText());//$NON-NLS-1$
+                String universe = server.selectSingleNode("universe").getText();//$NON-NLS-1$
                 if (!("".equalsIgnoreCase(url) || "".equalsIgnoreCase(user) || "".equalsIgnoreCase(password)))
                     initServerTreeParent(url, user, password, universe);
                 // initServerTree(url, user, password, universe);
@@ -689,11 +705,11 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         // else
         // logininfoDocument = builder.parse(new File(f));
         // } catch (SAXException e) {
-        // e.printStackTrace();
+        // log.error(e.getMessage(), e);
         // } catch (IOException e) {
-        // e.printStackTrace();
+        // log.error(e.getMessage(), e);
         // } catch (ParserConfigurationException e) {
-        // e.printStackTrace();
+        // log.error(e.getMessage(), e);
         // }
         // NodeList properties = logininfoDocument.getElementsByTagName("properties");
         // for (int i = 0; i < properties.getLength(); i++) {
@@ -733,7 +749,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     // }
 
     private void hookContextMenu() {
-        MenuManager menuMgr = new MenuManager("#PopupMenu");
+        MenuManager menuMgr = new MenuManager("#PopupMenu");//$NON-NLS-1$
         menuMgr.setRemoveAllWhenShown(true);
         menuMgr.addMenuListener(new IMenuListener() {
 
@@ -767,7 +783,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                 return;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
         if (xobject == null) {
@@ -958,7 +974,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                         try {
                             Util.getPort(new URL(endpointAddress), universe, username, password).logout(new WSLogout());
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            log.error(e.getMessage(), e);
                         }
                     }
                 });
@@ -1156,11 +1172,11 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             port = Util.getPort(new URL(url), universe, username, password);
             wUuniverse = port.getCurrentUniverse(new WSGetCurrentUniverse());
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } catch (XtentisException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } catch (RemoteException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         user.setUsername(username);
         user.setPassword(password);
@@ -1217,10 +1233,10 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             getViewer().expandToLevel(serverRoot, 1);
         } catch (InterruptedException ie) {
             return;
-        } catch (InvocationTargetException ite) {
-            ite.printStackTrace();
+        } catch (InvocationTargetException e) {
+            log.error(e.getMessage(), e);
             deleteReserved(url, username, universe);
-            ErrorExceptionDialog.openError(this.getSite().getShell(), "Error", CommonUtil.getErrMsgFromException(ite.getCause()));
+            ErrorExceptionDialog.openError(this.getSite().getShell(), "Error", CommonUtil.getErrMsgFromException(e.getCause()));
         }
     }
 
@@ -1228,14 +1244,14 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         SAXReader reader = new SAXReader();
 
         OutputFormat format = OutputFormat.createPrettyPrint();
-        format.setEncoding("GBK");
+        format.setEncoding("GBK");//$NON-NLS-1$
         File file = new File(f);
         if (file.exists()) {
             Document logininfoDocument = null;
             try {
                 logininfoDocument = reader.read(file);
             } catch (DocumentException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
             Element root = logininfoDocument.getRootElement();
             deleteServer(root, url, user, universe);
@@ -1244,17 +1260,17 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                 writer.write(logininfoDocument);
                 writer.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         }
     }
 
     private void deleteServer(Element root, String url, String user, String universe) {
-        java.util.List properties = root.elements("properties");
+        java.util.List properties = root.elements("properties");//$NON-NLS-1$
         for (Iterator iterator = properties.iterator(); iterator.hasNext();) {
             Element ele = (Element) iterator.next();
-            if (ele.element("url").getText().equals(url) && ele.element("user").getText().equals(user)
-                    && ele.element("universe").getText().equals(universe))
+            if (ele.element("url").getText().equals(url) && ele.element("user").getText().equals(user)//$NON-NLS-1$//$NON-NLS-2$
+                    && ele.element("universe").getText().equals(universe))//$NON-NLS-1$
                 root.remove(ele);
         }
     }
