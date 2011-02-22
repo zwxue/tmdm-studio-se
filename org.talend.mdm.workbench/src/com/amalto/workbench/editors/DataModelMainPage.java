@@ -89,7 +89,6 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -224,6 +223,8 @@ import com.amalto.workbench.webservices.XtentisPort;
 import com.amalto.workbench.widgets.WidgetFactory;
 
 public class DataModelMainPage extends EditorPart implements ModifyListener {
+
+    public static final String ADDITIONMENUID = "talend.menuadition.datamodel";
 
     private static Log log = LogFactory.getLog(DataModelMainPage.class);
 
@@ -1390,7 +1391,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         });
         Menu menu = menuMgr.createContextMenu(viewer.getControl());
         viewer.getControl().setMenu(menu);
-        getSite().registerContextMenu(menuMgr, viewer);
+        // yyun : for fix bug 18343, the pop menu should not regist itself as the global one, otherwise the
+        // popmenu in the XSD Editor plugin will make the menu dirty
+        // getSite().registerContextMenu(menuMgr, viewer);
     }
 
     private void hookTypesContextMenu() {
@@ -1404,7 +1407,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         });
         Menu menu = typesMenuMgr.createContextMenu(typesViewer.getControl());
         typesViewer.getControl().setMenu(menu);
-        getSite().registerContextMenu(typesMenuMgr, typesViewer);
+        // yyun : for fix bug 18343, the pop menu should not regist itself as the global one, otherwise the
+        // popmenu in the XSD Editor plugin will make the menu dirty
+        // getSite().registerContextMenu(typesMenuMgr, typesViewer);
     }
 
     protected void fillContextMenu(IMenuManager manager, boolean isType) {
@@ -1447,7 +1452,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         }
         manager.add(new Separator());
         if ((selection == null) || (selection.getFirstElement() == null)) {
-            manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+            manager.add(new Separator(ADDITIONMENUID));
             // add by ymli, fix bug 0009770
             String title = "";
             if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() == 1)
@@ -1715,7 +1720,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
         drillDownAdapter.addNavigationActions(manager);
         // Other plug-ins can contribute there actions here
-        manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+        manager.add(new Separator(ADDITIONMENUID));
         deleteConceptWrapAction.clearExtraClassToDel();
     }
 

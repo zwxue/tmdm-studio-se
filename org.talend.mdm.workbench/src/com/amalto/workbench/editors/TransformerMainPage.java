@@ -613,6 +613,7 @@ public class TransformerMainPage extends AMainPageV2 {
             stepWidget.create();
 
             btnAutoIntent = new Button(specsComposite, SWT.TOGGLE);
+            btnAutoIntent.setSelection(true);
             btnAutoIntent.setImage(ImageCache.getCreatedImage(EImage.INTENT.getPath()));
             btnAutoIntent.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 4, 1));
             refreshAutoIntentTooltip();
