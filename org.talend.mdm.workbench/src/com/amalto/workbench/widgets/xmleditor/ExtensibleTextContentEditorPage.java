@@ -37,7 +37,7 @@ public class ExtensibleTextContentEditorPage extends ExtensibleContentEditorPage
         super(parent, style);
         setLayout(new FillLayout());
 
-        textViewer = new SourceViewer(this, new VerticalRuler(10), SWT.V_SCROLL);
+        textViewer = new SourceViewer(this, new VerticalRuler(10), SWT.H_SCROLL | SWT.V_SCROLL);
 
         initUIListeners();
     }

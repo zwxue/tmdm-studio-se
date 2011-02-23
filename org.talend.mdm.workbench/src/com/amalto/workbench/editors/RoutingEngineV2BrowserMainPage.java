@@ -151,8 +151,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             composite.setLayout(new GridLayout(1, false));
 
             // Create a Router status holder
-            Composite statusComposite = toolkit.createComposite(composite);
-            statusComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
+            Composite statusComposite = toolkit.createComposite(composite, SWT.NONE);
+            statusComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
             statusComposite.setLayout(new GridLayout(5, false));
 
             // status
@@ -201,17 +201,17 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             });
 
             Composite separator = toolkit.createCompositeSeparator(composite);
-            separator.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
+            separator.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
             ((GridData) separator.getLayoutData()).heightHint = 2;
 
             // first Line of routing Orders
             Composite firstLineComposite = toolkit.createComposite(composite);
-            firstLineComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
+            firstLineComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
             firstLineComposite.setLayout(new GridLayout(9, false));
 
             // Routing Orders Label
             Label routingOrdersLabel = toolkit.createLabel(firstLineComposite, "Routing Orders ", SWT.NULL);
-            routingOrdersLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 9, 1));
+            routingOrdersLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 9, 1));
 
             final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
 
@@ -359,7 +359,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             resultsViewer = new TableViewer(table);
 
             resultsViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-            ((GridData) resultsViewer.getControl().getLayoutData()).heightHint = 500;
+            // ((GridData) resultsViewer.getControl().getLayoutData()).heightHint = 500;
             resultsViewer.setContentProvider(new ArrayContentProvider());
             resultsViewer.setLabelProvider(new ClusterTableLabelProvider());
             resultsViewer.addDoubleClickListener(new IDoubleClickListener() {

@@ -185,15 +185,19 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             // get the body
             Composite composite = managedForm.getForm().getBody();
-            composite.setLayout(new GridLayout(9, false));
+            // composite.setLayout(new GridLayout(9, false));
+            composite.setLayout(new GridLayout());
 
             // We do not implement IFormPart: we do not care about lifecycle management
+            Composite compFirstLine = toolkit.createComposite(composite, SWT.NONE);
+            compFirstLine.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
+            compFirstLine.setLayout(new GridLayout(9, false));
 
             // from
-            Label fromLabel = toolkit.createLabel(composite, "From", SWT.NULL);
+            Label fromLabel = toolkit.createLabel(compFirstLine, "From", SWT.NULL);
             fromLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
-            CalendarSelectWidget fromCalendar = new CalendarSelectWidget(toolkit, composite, true);
+            CalendarSelectWidget fromCalendar = new CalendarSelectWidget(toolkit, compFirstLine, true);
             fromText = fromCalendar.getText();
             fromText.addKeyListener(new KeyListener() {
 
@@ -209,25 +213,25 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             }// keyListener
             );
             // to
-            Label toLabel = toolkit.createLabel(composite, "To", SWT.NULL);
+            Label toLabel = toolkit.createLabel(compFirstLine, "To", SWT.NULL);
             toLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
-            CalendarSelectWidget toCalendar = new CalendarSelectWidget(toolkit, composite, false);
+            CalendarSelectWidget toCalendar = new CalendarSelectWidget(toolkit, compFirstLine, false);
             toText = toCalendar.getText();
             toText.addKeyListener(keylistener);
 
-            Label conceptLabel = toolkit.createLabel(composite, "Entity", SWT.NULL);
+            Label conceptLabel = toolkit.createLabel(compFirstLine, "Entity", SWT.NULL);
             conceptLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-            conceptCombo = new Combo(composite, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.MULTI);
-            conceptCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-            ((GridData) conceptCombo.getLayoutData()).widthHint = 180;
+            conceptCombo = new Combo(compFirstLine, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.MULTI);
+            conceptCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+            // ((GridData) conceptCombo.getLayoutData()).widthHint = 180;
             conceptCombo.addKeyListener(keylistener);
 
             // search
-            Button bSearch = toolkit.createButton(composite, "", SWT.CENTER);
+            Button bSearch = toolkit.createButton(compFirstLine, "", SWT.CENTER);
             bSearch.setImage(ImageCache.getCreatedImage(EImage.BROWSE.getPath()));
             bSearch.setToolTipText("Search");
-            bSearch.setLayoutData(new GridData(SWT.NONE, SWT.CENTER, false, false, 1, 1));
+            bSearch.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
             bSearch.addListener(SWT.Selection, new Listener() {
 
                 public void handleEvent(Event event) {
@@ -239,30 +243,34 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             /**********
              * Second Line
              */
-            Label keyLabel = toolkit.createLabel(composite, "Keys", SWT.NULL);
+            Composite compSecondLine = toolkit.createComposite(composite, SWT.NONE);
+            compSecondLine.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
+            compSecondLine.setLayout(new GridLayout(9, false));
+
+            Label keyLabel = toolkit.createLabel(compSecondLine, "Keys", SWT.NULL);
             keyLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-            keyText = toolkit.createText(composite, "", SWT.BORDER | SWT.MULTI);
-            keyText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 5, 1));
+            keyText = toolkit.createText(compSecondLine, "", SWT.BORDER | SWT.MULTI);
+            keyText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
             keyText.addKeyListener(keylistener);
 
             /***
              * Search Text
              */
-            Label descriptionLabel = toolkit.createLabel(composite, "Keywords", SWT.NULL);
+            Label descriptionLabel = toolkit.createLabel(compSecondLine, "Keywords", SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-            searchText = toolkit.createText(composite, "", SWT.BORDER | SWT.MULTI);
-            searchText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+            searchText = toolkit.createText(compSecondLine, "", SWT.BORDER | SWT.MULTI);
+            searchText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
             // searchText.addModifyListener(this);
             searchText.addKeyListener(keylistener);
 
-            checkFTSearchButton = toolkit.createButton(composite, "Use Full Text Search", SWT.CHECK);
+            checkFTSearchButton = toolkit.createButton(compSecondLine, "Use Full Text Search", SWT.CHECK);
             checkFTSearchButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
-            Label fill = toolkit.createLabel(composite, "", SWT.NULL);
+            Label fill = toolkit.createLabel(compSecondLine, "", SWT.NULL);
             fill.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 8, 1));
 
-            showTaskIdCB = toolkit.createButton(composite, "Show Task ID", SWT.CHECK);
-            showTaskIdCB.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
+            showTaskIdCB = toolkit.createButton(compSecondLine, "Show Task ID", SWT.CHECK);
+            showTaskIdCB.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
             // pagetoolbar
             pageToolBar = new PageingToolBar(composite);
@@ -274,8 +282,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             resultsViewer = new TableViewer(composite, style);
             initTable(resultsViewer.getTable());
 
-            resultsViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 9, 1));
-            ((GridData) resultsViewer.getControl().getLayoutData()).heightHint = DEFAULT_VIEWER_HEIGHT;
+            resultsViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+            // ((GridData) resultsViewer.getControl().getLayoutData()).heightHint = DEFAULT_VIEWER_HEIGHT;
             resultsViewer.setContentProvider(new ArrayContentProvider());
             resultsViewer.setLabelProvider(new ClusterTableLabelProvider());
             resultsViewer.addDoubleClickListener(new IDoubleClickListener() {
@@ -338,14 +346,14 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
      * readjust the viewer height
      */
     private void readjustViewerHeight() {
-        LineItem[] items = (LineItem[]) resultsViewer.getInput();
-        GridData grid = (GridData) resultsViewer.getTable().getLayoutData();
-        int actualHeight = 14 * items.length;
-        if (actualHeight < DEFAULT_VIEWER_HEIGHT)
-            actualHeight = DEFAULT_VIEWER_HEIGHT;
-        grid.heightHint = actualHeight;
+        // LineItem[] items = (LineItem[]) resultsViewer.getInput();
+        // GridData grid = (GridData) resultsViewer.getTable().getLayoutData();
+        // int actualHeight = 14 * items.length;
+        // if (actualHeight < DEFAULT_VIEWER_HEIGHT)
+        // actualHeight = DEFAULT_VIEWER_HEIGHT;
+        // grid.heightHint = actualHeight;
         resultsViewer.refresh();
-        getManagedForm().reflow(true);
+        // getManagedForm().reflow(true);
     }
 
     public TableViewer getResultsViewer() {
