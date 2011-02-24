@@ -74,8 +74,9 @@ public enum EInputTemplate {
     SMTP("smtp",//$NON-NLS-1$
          "<parameters>\n\t<from>?</from>\n\t<to>?</to>\n\t<cc>?</cc>\n\t<bcc>?</bcc>\n\t<subjectprefix>?</subjectprefix>\n\t<logfilename>?</logfilename>\n\t<process>?</process>\n</parameters>\n"), //$NON-NLS-1$
     SVN("svn", ""), //$NON-NLS-1$
-    WORKFLOW("workflow",//$NON-NLS-1$
-             "<workflow-configuration>\n\t<initial-context-factory>?</initial-context-factory>\n\t<provider-uRL>?</provider-uRL>\n\t<api-type>?</api-type>\n</workflow-configuration>\n"), //$NON-NLS-1$
+    WORKFLOW(
+            "workflow",
+   "<parameters>\n\t\t<processId>?</processId>\n\t\t<processVersion>?</processVersion>\n\t\t<variable>\n\t\t\t<scope>?</scope>\n\t\t\t<name>?</name>\n\t\t\t<type>?</type>\n\t\t\t<fromItem>?</fromItem>\n\t\t\t<xpath>?</xpath>\n\t\t</variable>\n\t\t<variable>\n\t\t\t<scope>?</scope>\n\t\t\t<activityId>?</activityId>\n\t\t\t<name>?</name>\n\t\t\t<type>?</type>\n\t\t\t<fromItem>?</fromItem>\n\t\t\t<value>?</value>\n\t\t</variable>\n\t</parameters>\n\n"),
     SYNCHRONIZATION("synchronization",//$NON-NLS-1$
                     "<synchronization-configuration>\n\t<planName>?</planName>\n\t<action>START_DIFFERENTIAL</action>\n</synchronization-configuration>"), //$NON-NLS-1$
 
