@@ -51,7 +51,7 @@ public class CalendarSelectWidget {
     public CalendarSelectWidget(FormToolkit toolkit, final Composite composite, boolean hasDefaultTime) {
         // from
 
-        text = toolkit.createText(composite, "", SWT.BORDER | SWT.MULTI);
+        text = toolkit.createText(composite, "", SWT.BORDER);
         text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
         ((GridData) text.getLayoutData()).widthHint = 100;
         if (hasDefaultTime) {

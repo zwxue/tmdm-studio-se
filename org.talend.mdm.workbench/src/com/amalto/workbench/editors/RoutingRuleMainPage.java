@@ -213,7 +213,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             // description
             Label descriptionLabel = toolkit.createLabel(charComposite, "Description", SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-            descriptionText = toolkit.createText(charComposite, "", SWT.BORDER | SWT.MULTI);
+            descriptionText = toolkit.createText(charComposite, "", SWT.BORDER);
             descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
             descriptionText.addModifyListener(new ModifyListener() {
 
@@ -235,7 +235,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             layout.marginWidth = 0;
             typeComposite.setLayout(layout);
 
-            objectTypeText = toolkit.createText(typeComposite, "", SWT.BORDER | SWT.MULTI);
+            objectTypeText = toolkit.createText(typeComposite, "", SWT.BORDER);
             objectTypeText.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING, SWT.CENTER, false, false, 1, 1));
             ((GridData) objectTypeText.getLayoutData()).widthHint = 300;
             // objectTypeText.setLocation(descriptionText.getLocation().x,descriptionText.getLocation().y+10);

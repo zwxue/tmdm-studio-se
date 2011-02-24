@@ -87,7 +87,7 @@ public class DescAnnotationComposite implements SelectionListener {
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
         }
         if (isBtnRight) {
-            descriptionText = toolkit.createText(descAntionHolder, "", SWT.BORDER | SWT.MULTI);
+            descriptionText = toolkit.createText(descAntionHolder, "", SWT.BORDER);
             textGD = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
             descriptionText.setLayoutData(textGD);
 
@@ -114,7 +114,7 @@ public class DescAnnotationComposite implements SelectionListener {
             annotationButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
             annotationButton.setToolTipText("Set the Descriptions");
 
-            descriptionText = toolkit.createText(descAntionHolder, "", SWT.BORDER | SWT.MULTI);
+            descriptionText = toolkit.createText(descAntionHolder, "", SWT.BORDER);
             textGD = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
             descriptionText.setLayoutData(textGD);
             descriptionText.addModifyListener(new ModifyListener() {

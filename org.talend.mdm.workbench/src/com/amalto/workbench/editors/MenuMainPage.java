@@ -108,7 +108,7 @@ public class MenuMainPage extends AMainPageV2 {
             // description
             Label descriptionLabel = toolkit.createLabel(mainComposite, "Description", SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
-            descriptionText = toolkit.createText(mainComposite, "", SWT.BORDER | SWT.MULTI);
+            descriptionText = toolkit.createText(mainComposite, "", SWT.BORDER);
             descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
             ((GridData) descriptionText.getLayoutData()).minimumHeight = 30;
             descriptionText.addModifyListener(new ModifyListener() {

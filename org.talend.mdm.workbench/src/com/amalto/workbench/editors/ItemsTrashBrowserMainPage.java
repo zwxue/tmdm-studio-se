@@ -118,7 +118,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
              */
             Label descriptionLabel = toolkit.createLabel(composite, "Keywords", SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-            searchText = toolkit.createText(composite, "*", SWT.BORDER | SWT.MULTI);
+            searchText = toolkit.createText(composite, "*", SWT.BORDER);
             searchText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
             // searchText.addModifyListener(this);
             searchText.addKeyListener(new KeyListener() {

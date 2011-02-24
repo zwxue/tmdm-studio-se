@@ -60,7 +60,7 @@ public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
             // description
             Label descriptionLabel = toolkit.createLabel(mainComposite, "Description", SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-            descriptionText = toolkit.createText(mainComposite, "", SWT.BORDER | SWT.MULTI);
+            descriptionText = toolkit.createText(mainComposite, "", SWT.BORDER);
             descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
             ((GridData) descriptionText.getLayoutData()).minimumHeight = 30;
             descriptionText.addModifyListener(this);

@@ -269,7 +269,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             Label documentTypeLabel = toolkit.createLabel(searchLineComposite, "Document Type", SWT.NULL);
             documentTypeLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             // DocumentType
-            documentTypeText = toolkit.createText(searchLineComposite, "", SWT.BORDER | SWT.MULTI);
+            documentTypeText = toolkit.createText(searchLineComposite, "", SWT.BORDER);
             documentTypeText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
             ((GridData) documentTypeText.getLayoutData()).widthHint = 120;
             documentTypeText.addKeyListener(new KeyListener() {
@@ -288,7 +288,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             Label idLabel = toolkit.createLabel(searchLineComposite, "Item IDs", SWT.NULL);
             idLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             // ID
-            idText = toolkit.createText(searchLineComposite, "", SWT.BORDER | SWT.MULTI);
+            idText = toolkit.createText(searchLineComposite, "", SWT.BORDER);
             idText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
             idText.addKeyListener(new KeyListener() {
 
@@ -339,7 +339,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             Label anyFieldLabel = toolkit.createLabel(searchLineComposite, "Any Field", SWT.NULL);
             anyFieldLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             // anyField
-            anyFieldText = toolkit.createText(searchLineComposite, "", SWT.BORDER | SWT.MULTI);
+            anyFieldText = toolkit.createText(searchLineComposite, "", SWT.BORDER);
             anyFieldText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
             anyFieldText.addKeyListener(new KeyListener() {
 

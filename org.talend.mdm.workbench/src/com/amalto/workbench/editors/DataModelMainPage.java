@@ -422,7 +422,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             Label descriptionLabel = toolkit.createLabel(mainComposite, "Description", SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 
-            descriptionText = toolkit.createText(mainComposite, "", SWT.BORDER | SWT.MULTI);
+            descriptionText = toolkit.createText(mainComposite, "", SWT.BORDER);
             descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
             descriptionText.setText(wsObject.getDescription() == null ? "" : wsObject.getDescription());
             ((GridData) descriptionText.getLayoutData()).minimumHeight = 30;

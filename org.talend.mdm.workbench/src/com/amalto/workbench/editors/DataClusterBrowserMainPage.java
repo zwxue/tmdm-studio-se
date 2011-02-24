@@ -249,7 +249,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             Label keyLabel = toolkit.createLabel(compSecondLine, "Keys", SWT.NULL);
             keyLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-            keyText = toolkit.createText(compSecondLine, "", SWT.BORDER | SWT.MULTI);
+            keyText = toolkit.createText(compSecondLine, "", SWT.BORDER);
             keyText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
             keyText.addKeyListener(keylistener);
 
@@ -258,7 +258,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
              */
             Label descriptionLabel = toolkit.createLabel(compSecondLine, "Keywords", SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-            searchText = toolkit.createText(compSecondLine, "", SWT.BORDER | SWT.MULTI);
+            searchText = toolkit.createText(compSecondLine, "", SWT.BORDER);
             searchText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
             // searchText.addModifyListener(this);
             searchText.addKeyListener(keylistener);

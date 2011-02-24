@@ -123,7 +123,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
             Label descriptionLabel = toolkit.createLabel(charComposite, "Description", SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 1, 1));
 
-            descriptionText = toolkit.createText(charComposite, "", SWT.BORDER | SWT.MULTI);
+            descriptionText = toolkit.createText(charComposite, "", SWT.BORDER);
             descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
             descriptionText.setText(wsStoredProcedure.getDescription() == null ? "" : wsStoredProcedure.getDescription());
             descriptionText.addModifyListener(this);
