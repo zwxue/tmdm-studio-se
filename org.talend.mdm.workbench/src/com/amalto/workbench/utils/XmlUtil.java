@@ -304,7 +304,7 @@ public final class XmlUtil {
 
         String text = toXml(document);
 
-        System.out.println(text);
+        log.info(text);
     }
 
     public static String formatXmlSource(String xmlSource) {

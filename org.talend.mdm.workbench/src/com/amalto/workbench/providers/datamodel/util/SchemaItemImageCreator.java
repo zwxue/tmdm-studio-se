@@ -114,7 +114,7 @@ public class SchemaItemImageCreator {
     }
 
     protected Image getImageForXSDParticle_WrongStatus(XSDParticle element) {
-        System.out.println("ERROR XSD Term " + element.getTerm().getClass().getName());
+        log.info("ERROR XSD Term " + element.getTerm().getClass().getName());
         return ImageCache.getCreatedImage(EImage.ERROR.getPath());
     }
 
@@ -148,7 +148,7 @@ public class SchemaItemImageCreator {
     }
 
     protected Image getImageForXSDComplexTypeDef_WrangStatus(XSDComplexTypeDefinition element) {
-        System.out.println("ERROR XSD Type Content: " + element.getContent().getClass().getName());
+        log.info("ERROR XSD Type Content: " + element.getContent().getClass().getName());
         return ImageCache.getCreatedImage(EImage.ERROR.getPath());
     }
 

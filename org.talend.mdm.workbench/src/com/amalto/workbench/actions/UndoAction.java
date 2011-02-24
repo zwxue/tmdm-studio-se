@@ -172,14 +172,15 @@ public class UndoAction extends Action {
      * @return
      */
     protected IStatus undo() {
-        System.out.println(getText() + " undo....");
+        log.info(getText() + " undo....");
+
         String doc = undoActionTrack.get(getActionUndoPos() - 1);
         refresh(doc);
         return Status.OK_STATUS;
     }
 
     protected IStatus redo() {
-        System.out.println(getText() + " redo....");
+        log.info(getText() + " redo....");
         String doc = redoActionTrack.get(getActionUndoPos());
         refresh(doc);
         return Status.OK_STATUS;

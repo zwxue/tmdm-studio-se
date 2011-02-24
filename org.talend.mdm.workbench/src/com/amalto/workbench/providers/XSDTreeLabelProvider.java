@@ -53,7 +53,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
 
     public String getText(Object obj) {
 
-        // System.out.println("getText   "+obj.getClass().getName());
+        // log.info("getText   "+obj.getClass().getName());
 
         if (obj instanceof XSDElementDeclaration) {
             String name = ((XSDElementDeclaration) obj).getName();
@@ -76,7 +76,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
                     name += " [" + ((XSDElementDeclaration) xsdTerm).getName() + "]";
                 }
             } else if (content instanceof XSDModelGroup) {
-                // System.out.println("SHOULD NOT HAPPEN????");
+                // log.info("SHOULD NOT HAPPEN????");
                 if (xsdParticle.getContainer() instanceof XSDComplexTypeDefinition) {
                     String ctdName = ((XSDComplexTypeDefinition) xsdParticle.getContainer()).getName();
                     name = (ctdName != null ? ctdName : "");
@@ -300,7 +300,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
             } else if (xsdTerm instanceof XSDWildcard) {
                 return ImageCache.getCreatedImage("icons/wildcard.gif");
             } else {
-                System.out.println("ERROR XSD Term " + xsdTerm.getClass().getName());
+                log.info("ERROR XSD Term " + xsdTerm.getClass().getName());
                 return ImageCache.getCreatedImage("icons/error.gif");
             }
         }
@@ -326,7 +326,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
                 }
             } else {
                 // simple Type!!!
-                System.out.println("ERROR XSD Type Content: " + ctc.getClass().getName());
+                log.info("ERROR XSD Type Content: " + ctc.getClass().getName());
                 return ImageCache.getCreatedImage("icons/error.gif");//$NON-NLS-1$
             }
         }

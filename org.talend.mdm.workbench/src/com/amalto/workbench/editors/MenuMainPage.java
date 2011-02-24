@@ -523,14 +523,14 @@ public class MenuMainPage extends AMainPageV2 {
                 menu.setMenuEntries(list.toArray(new WSMenuEntry[list.size()]));
                 viewer.setExpandedState(menu, true);
                 viewer.refresh(menu, true);
-                System.out.println("THere ");
+                log.info("THere ");
                 return;
             }
 
             // sub menu of a menu entry
             WSMenuEntry wsParent = entry.getParentTreeEntry().getWsMenuEntry();
             if ((wsParent.getSubMenus() == null) || (wsParent.getSubMenus().length == 0)) { // no submenus yet
-                System.out.println("Here ");
+                log.info("Here ");
                 wsParent.setSubMenus(new WSMenuEntry[] { entry.getWsMenuEntry() });
                 viewer.setExpandedState(entry.getParentTreeEntry(), true);
                 viewer.refresh(entry.getParentTreeEntry(), true);

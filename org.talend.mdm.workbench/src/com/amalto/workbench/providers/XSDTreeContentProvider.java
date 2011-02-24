@@ -87,9 +87,9 @@ public class XSDTreeContentProvider implements IStructuredContentProvider, ITree
     public Object[] getChildren(Object parent) {
 
         if (parent == null) {
-            System.out.println("NULL PARENT");
+            log.info("NULL PARENT");
         }
-        // System.out.println("get Children "+parent.getClass().getName()+ " -- "+parent.toString());
+        // log.info("get Children "+parent.getClass().getName()+ " -- "+parent.toString());
 
         if (parent instanceof XSDSchema) {
             EList xsdElementDeclarations = xsdSchema.getElementDeclarations();
@@ -260,7 +260,7 @@ public class XSDTreeContentProvider implements IStructuredContentProvider, ITree
             return new Object[0];
         }
 
-        // System.out.println("getChildren: UNPROCESSED PARENT: "+parent.getClass().getName()+": "+parent);
+        // log.info("getChildren: UNPROCESSED PARENT: "+parent.getClass().getName()+": "+parent);
 
         return new Object[0];
     }

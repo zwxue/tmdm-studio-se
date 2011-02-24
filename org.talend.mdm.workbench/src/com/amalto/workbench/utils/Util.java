@@ -1150,7 +1150,7 @@ public class Util {
                                     list.add(path);
                                     return list;
                                 }
-                                // System.out.println(path.getValue() + "----" + primaryKey);
+                                // log.info(path.getValue() + "----" + primaryKey);
                             }
                         }
                         // return list;
@@ -2082,7 +2082,7 @@ public class Util {
                 }
             }
         } catch (Exception e) {
-            System.out.println("No Universes");
+            log.info("No Universes");
         }
         return map;
     }
@@ -2105,7 +2105,7 @@ public class Util {
                 }
             }
         } catch (Exception e) {
-            System.out.println("No Universes");
+            log.info("No Universes");
         }
         return map;
     }
@@ -2127,7 +2127,7 @@ public class Util {
                     }
                 }
             } catch (Exception e) {
-                System.out.println("No Universes");
+                log.info("No Universes");
             }
         }
         return list;
@@ -2149,7 +2149,7 @@ public class Util {
                 }
             }
         } catch (Exception e) {
-            System.out.println("No Universes");
+            log.info("No Universes");
         }
         return list;
     }
@@ -2409,9 +2409,9 @@ public class Util {
     }
 
     public static ArrayList<Object> getComplexTypeDefinitionChildren(XSDComplexTypeDefinition complexTypeDefinition) {
-        // System.out.println("getComplexTypeDefinitionChildren "+complexTypeDefinition+": "+complexTypeDefinition.getContent());
+        // log.info("getComplexTypeDefinitionChildren "+complexTypeDefinition+": "+complexTypeDefinition.getContent());
 
-        // System.out.println(
+        // log.info(
         // "getComplexTypeDefinitionChildren BASE TYPE "+
         // complexTypeDefinition.getBaseTypeDefinition().getName()+" : "+
         // complexTypeDefinition.getDerivationMethod().getName()
@@ -2459,7 +2459,7 @@ public class Util {
 
         // xsd Particle: we have a model group
         if (xsdComplexTypeContent instanceof XSDParticle) {
-            // System.out.println("Model Group?: "+((XSDParticle)xsdComplexTypeContent).getTerm());
+            // log.info("Model Group?: "+((XSDParticle)xsdComplexTypeContent).getTerm());
             if (((XSDParticle) xsdComplexTypeContent).getTerm() instanceof XSDModelGroup) {
                 // return the model group
                 list.add(((XSDParticle) xsdComplexTypeContent).getTerm());

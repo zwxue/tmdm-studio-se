@@ -159,37 +159,37 @@ public class ContentProposalAdapterExtended {
 
                 }
 
-                // System.out.println(e + " " + hasFocus() + " " + control.isFocusControl());
-                // System.out.println("hasJustAccepetd="+hasJustAccepetd);
+                // log.info(e + " " + hasFocus() + " " + control.isFocusControl());
+                // log.info("hasJustAccepetd="+hasJustAccepetd);
 
                 if (e.type == SWT.MouseDown && e.widget == proposalTable) {
-                    // System.out.println("Mouse down");
+                    // log.info("Mouse down");
                     return;
                 }
 
                 if (e.type == SWT.MouseDoubleClick) {
-                    // System.out.println("Mouse double click");
+                    // log.info("Mouse double click");
                     acceptCurrentProposal();
                     return;
                 }
 
                 if (e.type == SWT.Deactivate) {
-                    // System.out.println("Deactivate");
+                    // log.info("Deactivate");
                     return;
                 }
 
                 if (e.type == SWT.FocusOut && e.widget == control && control.isFocusControl() && !hasJustAccepted) {
-                    // System.out.println("1");
+                    // log.info("1");
                     return;
                 }
                 //
                 if (e.type == SWT.FocusOut && e.widget == proposalTable && hasFocus() && !hasJustAccepted) {
-                    // System.out.println(2);
+                    // log.info(2);
                     return;
                 }
                 //
                 if (e.type == SWT.Deactivate && hasFocus() && !hasJustAccepted) {
-                    // System.out.println(3);
+                    // log.info(3);
                     return;
                 }
 
@@ -220,8 +220,8 @@ public class ContentProposalAdapterExtended {
                                 }
                                 //System.out.println(Messages.getString("ContentProposalAdapterExtended.closeFocusout")); //$NON-NLS-1$
                                 /*
-                                 * System.out.println(e); System.out.println(e.display.getFocusControl());
-                                 * System.out.println(e.display.getActiveShell());
+                                 * log.info(e); log.info(e.display.getFocusControl());
+                                 * log.info(e.display.getActiveShell());
                                  */
                                 authorizedClose();
                             }
@@ -312,8 +312,8 @@ public class ContentProposalAdapterExtended {
              * 
              */
             public void handleEvent(Event e) {
-                // System.out.println(e);
-                // System.out.println(EventUtil.getEventName(e.type));
+                // log.info(e);
+                // log.info(EventUtil.getEventName(e.type));
                 if (!isValid()) {
                     return;
                 }
@@ -448,14 +448,14 @@ public class ContentProposalAdapterExtended {
                             // text on ARROW_LEFT as we would with BS.
                             // if (contents.length() > 0) {
                             updateIntialFilterText();
-                            // System.out.println("update proposal :" + filterText +" .equals(" +
+                            // log.info("update proposal :" + filterText +" .equals(" +
                             // previousFilterText);
-                            // System.out.println("cursorPosition :" + cursorPosition +" .equals(" +
+                            // log.info("cursorPosition :" + cursorPosition +" .equals(" +
                             // lastCursorPosition);
                             // );
                             if (cursorPosition == lastCursorPosition || !filterText.equals(previousFilterText)
                                     && previousFilterText != null) {
-                                // System.out.println("update proposal!!!");
+                                // log.info("update proposal!!!");
                                 asyncRecomputeProposals(filterText);
                                 previousFilterText = filterText;
                             }
@@ -543,7 +543,7 @@ public class ContentProposalAdapterExtended {
                             } else if (filterStyle == FILTER_CHARACTER) {
                                 filterText = String.valueOf(key);
                             }
-                            // System.out.println("default: " + filterText);
+                            // log.info("default: " + filterText);
                             // Recompute proposals after processing this event.
                             asyncRecomputeProposals(filterText);
                         }
@@ -717,7 +717,7 @@ public class ContentProposalAdapterExtended {
             if (controlContentAdapter instanceof IControlContentAdapterExtended
                     && (filterStyle == FILTER_CUMULATIVE || filterStyle == FILTER_CUMULATIVE_ALL_START_WORDS)) {
                 filterText = ((IControlContentAdapterExtended) controlContentAdapter).getFilterValue(getControl());
-                // System.out.println("Update initialfilter: "+filterText);
+                // log.info("Update initialfilter: "+filterText);
             }
         }
 
@@ -968,7 +968,7 @@ public class ContentProposalAdapterExtended {
             if (!isValid() || proposals == null || index >= proposals.length) {
                 return;
             }
-            // System.out.println("setSelection");
+            // log.info("setSelection");
             proposalTable.setSelection(index);
             proposalTable.showSelection();
 
@@ -985,7 +985,7 @@ public class ContentProposalAdapterExtended {
          */
         @Override
         public int open() {
-            // System.out.println("open");
+            // log.info("open");
 
             hasJustAccepted = false;
             int value = super.open();
@@ -1018,7 +1018,7 @@ public class ContentProposalAdapterExtended {
         }
 
         public boolean authorizedClose() {
-            // System.out.println("real close");
+            // log.info("real close");
             popupCloser.removeListeners();
             if (infoPopup != null) {
                 infoPopup.close();
@@ -1118,7 +1118,7 @@ public class ContentProposalAdapterExtended {
             IContentProposal proposal = getSelectedProposal();
 
             hasJustAccepted = true;
-            // System.out.println("acceptCurrentProposal");
+            // log.info("acceptCurrentProposal");
             authorizedClose();
             proposalAccepted(proposal);
         }
@@ -1128,7 +1128,7 @@ public class ContentProposalAdapterExtended {
          * open.
          */
         private void recomputeProposals(String filterText) {
-            // System.out.println("Recompute :"+ filterText);
+            // log.info("Recompute :"+ filterText);
             setProposals(getProposals(filterText));
         }
 
@@ -1164,7 +1164,7 @@ public class ContentProposalAdapterExtended {
                 return proposals;
             }
 
-            // System.out.println("\nfilterString="+filterString);
+            // log.info("\nfilterString="+filterString);
             // Check each string for a match. Use the string displayed to the
             // user, not the proposal content.
             ArrayList listBegin = new ArrayList();
@@ -1174,7 +1174,7 @@ public class ContentProposalAdapterExtended {
             String currentFilter = EMPTY;
             for (int indexStartFilter = 0; results == 0 && continueSearching && indexStartFilter < filterString.length(); indexStartFilter++) {
                 currentFilter = filterString.substring(indexStartFilter);
-                // System.out.println("currentFilter="+currentFilter);
+                // log.info("currentFilter="+currentFilter);
 
                 for (int i = 0; i < proposals.length; i++) {
                     String string = getString(proposals[i]);
@@ -1216,7 +1216,7 @@ public class ContentProposalAdapterExtended {
                 filterText = currentFilter;
             }
 
-            // System.out.println("Final filterText="+filterText);
+            // log.info("Final filterText="+filterText);
 
             return (IContentProposal[]) list.toArray(new IContentProposal[listBegin.size()]);
         }
@@ -1389,7 +1389,7 @@ public class ContentProposalAdapterExtended {
             sb.append("; doit=" + e.doit); //$NON-NLS-1$
             sb.append("; detail=" + e.detail + hex(e.detail)); //$NON-NLS-1$
             sb.append("; widget=" + e.widget); //$NON-NLS-1$
-            System.out.println(sb);
+            log.info(sb);
         }
 
         private String hex(int i) {
@@ -1841,7 +1841,7 @@ public class ContentProposalAdapterExtended {
      */
     private void addControlListener(Control control) {
         if (DEBUG) {
-            System.out.println("ContentProposalListener#installControlListener()"); //$NON-NLS-1$
+            log.info("ContentProposalListener#installControlListener()"); //$NON-NLS-1$
         }
 
         if (controlListener != null) {
@@ -1869,7 +1869,7 @@ public class ContentProposalAdapterExtended {
         control.addListener(SWT.Traverse, controlListener);
 
         if (DEBUG) {
-            System.out.println("ContentProposalAdapter#installControlListener() - installed"); //$NON-NLS-1$
+            log.info("ContentProposalAdapter#installControlListener() - installed"); //$NON-NLS-1$
         }
     }
 

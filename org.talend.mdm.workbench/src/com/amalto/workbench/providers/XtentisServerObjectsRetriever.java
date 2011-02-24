@@ -201,7 +201,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             try {
                 transformerPKs = port.getTransformerV2PKs(new WSGetTransformerV2PKs("")).getWsTransformerV2PK();
             } catch (Exception e) {
-                System.out.println("No Transformers");
+                log.info("No Transformers");
             }
             TreeParent transformers = null;
             transformers = new TreeParent(EXtentisObjects.Transformer.getDisplayName(), serverRoot, TreeObject.TRANSFORMER, null,
@@ -227,7 +227,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             try {
                 routingRulePKs = port.getRoutingRulePKs(new WSGetRoutingRulePKs("")).getWsRoutingRulePKs();
             } catch (Exception e) {
-                System.out.println("NO ROUTING RULES");
+                log.info("NO ROUTING RULES");
             }
             TreeParent rules = null;
             rules = new TreeParent(EXtentisObjects.RoutingRule.getDisplayName(), serverRoot, TreeObject.ROUTING_RULE, null, null);
@@ -314,7 +314,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             try {
                 menuPKs = port.getMenuPKs(new WSGetMenuPKs("*")).getWsMenuPK();
             } catch (Exception e) {
-                System.out.println("No Menus");
+                log.info("No Menus");
                 // This server IS old
                 hasMenus = false;
             }

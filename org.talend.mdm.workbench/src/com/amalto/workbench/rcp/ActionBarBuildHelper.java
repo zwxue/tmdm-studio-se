@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IContributionItem;
@@ -50,6 +52,8 @@ import org.eclipse.ui.views.IViewDescriptor;
  * DOC aiming class global comment. Detailled comment
  */
 public class ActionBarBuildHelper {
+
+    private static Log log = LogFactory.getLog(ActionBarBuildHelper.class);
 
     protected IWorkbenchAction introAction;
 
@@ -207,7 +211,7 @@ public class ActionBarBuildHelper {
     }
 
     public void printCoolBar() {
-        System.out.println("coolBar-" + coolBar); //$NON-NLS-1$
+        log.info("coolBar-" + coolBar); //$NON-NLS-1$
 
         IContributionItem[] items = coolBar.getItems();
         for (IContributionItem item : items) {
@@ -301,11 +305,11 @@ public class ActionBarBuildHelper {
     }
 
     private void printItemId(IContributionManager menuBar) {
-        System.out.println("IContributionManager-" + menuBar); //$NON-NLS-1$
+        log.info("IContributionManager-" + menuBar); //$NON-NLS-1$
         IContributionItem[] items = menuBar.getItems();
         for (IContributionItem item : items) {
             if (item.isVisible())
-                System.out.println(" " + item.getId()); //$NON-NLS-1$
+                log.info(" " + item.getId()); //$NON-NLS-1$
         }
     }
 

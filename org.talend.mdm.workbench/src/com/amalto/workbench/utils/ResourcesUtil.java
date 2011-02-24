@@ -90,7 +90,7 @@ public class ResourcesUtil {
             return responseBody;
         } catch (HttpException e) {
 
-            System.out.println("Please check your provided http address!");
+            log.info("Please check your provided http address!");
             log.error(e.getMessage(), e);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
@@ -125,7 +125,7 @@ public class ResourcesUtil {
 
         HttpGet httpget = new HttpGet(uri);
 
-        System.out.println("executing request" + httpget.getRequestLine());
+        log.info("executing request" + httpget.getRequestLine());
 
         // Create a response handler
         ResponseHandler<String> responseHandler = new BasicResponseHandler();
@@ -216,7 +216,7 @@ public class ResourcesUtil {
     }
 
     public static void postResourcesFromContentString(String content, String uri, String typeName) throws Exception {
-        System.out.println(content);
+        log.info(content);
         HttpPost httppost = new HttpPost(uri);
         List<BasicNameValuePair> nvps = new ArrayList<BasicNameValuePair>();
         nvps.add(new BasicNameValuePair("domainObjectName", typeName));
@@ -232,7 +232,7 @@ public class ResourcesUtil {
                 new AuthScope(getEndpointHost(uri), Integer.valueOf(getEndpointPort(uri))),
                 new UsernamePasswordCredentials("admin", "talend"));
 
-        System.out.println("executing request" + httppost.getRequestLine());
+        log.info("executing request" + httppost.getRequestLine());
         HttpResponse response = httpclient.execute(httppost);
         HttpEntity entity = response.getEntity();
 

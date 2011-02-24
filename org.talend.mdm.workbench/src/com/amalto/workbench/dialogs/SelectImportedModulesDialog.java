@@ -179,7 +179,7 @@ public class SelectImportedModulesDialog extends Dialog {
                     return;
                 File file = new File(filename);
                 try {
-                    System.out.println(file.toURL());
+                    log.info(file.toURL());
                 } catch (MalformedURLException e1) {
                     log.error(e1.getMessage(), e1);
                 }

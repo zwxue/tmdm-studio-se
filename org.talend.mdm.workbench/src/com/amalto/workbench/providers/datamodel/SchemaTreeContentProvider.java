@@ -80,7 +80,7 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
     public Object[] getChildren(Object parent) {
 
         if (parent == null) {
-            System.out.println("NULL PARENT");
+            log.info("NULL PARENT");
             return new Object[0];
         }
 

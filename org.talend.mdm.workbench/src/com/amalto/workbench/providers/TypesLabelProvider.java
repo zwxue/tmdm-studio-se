@@ -290,7 +290,7 @@ public class TypesLabelProvider extends LabelProvider {
             } else if (xsdTerm instanceof XSDWildcard) {
                 return ImageCache.getCreatedImage("icons/wildcard.gif");//$NON-NLS-1$
             } else {
-                System.out.println("ERROR XSD Term " + xsdTerm.getClass().getName());
+                log.info("ERROR XSD Term " + xsdTerm.getClass().getName());
                 return ImageCache.getCreatedImage("icons/error.gif");//$NON-NLS-1$
             }
         }

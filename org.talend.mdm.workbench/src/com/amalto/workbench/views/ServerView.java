@@ -361,7 +361,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         if (obj instanceof TreeObject) {
             TreeObject treeObj = (TreeObject) obj;
             if (treeObj.getParent() == null)
-                System.out.println(treeObj.getDisplayName());
+                log.info(treeObj.getDisplayName());
             int xtentisType = LocalTreeObjectRepository.getInstance().receiveUnCertainTreeObjectType(treeObj);
             if ((treeObj.getType() != dragType && treeObj.getType() != TreeObject.CATEGORY_FOLDER && !(dragType == TreeObject.JOB
                     || dragType == TreeObject.TIS_JOB || dragType == TreeObject.WORKFLOW_PROCESS))
