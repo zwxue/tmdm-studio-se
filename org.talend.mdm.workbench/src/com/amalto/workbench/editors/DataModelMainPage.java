@@ -1712,8 +1712,12 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         }
         // available models
         java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
-        for (IAvailableModel model : availablemodels) {
+        for (int i=0; i<availablemodels.size(); i++) {
+        	IAvailableModel model= availablemodels.get(i);
             model.fillContextMenu(obj, manager, this, dataModelName);
+            if(i==0){
+            	manager.add(new Separator());
+            }
         }
 
         manager.add(new Separator());
@@ -1739,6 +1743,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             manager.add(setAnnotationForeignKeyInfoAction);
         }
         if (Util.IsEnterPrise()) {
+        	manager.add(new Separator());
             manager.add(setAnnotationWriteAction);
             // fix bug 0016982: Set role with no access, and Set the workflow access menu actions action are gone
             // if (checkMandatoryElement(obj))
@@ -1750,8 +1755,12 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         }
         // available models
         java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
-        for (IAvailableModel model : availablemodels) {
+        for (int i=0; i<availablemodels.size(); i++) {
+        	IAvailableModel model= availablemodels.get(i);
             model.fillContextMenu(obj, manager, this, dataModelName);
+            if(i==0){
+            	manager.add(new Separator());
+            }
         }
         // manager.add(setAnnotationSchematronAction);
         // manager.add(setAnnotationSourceSystemAction);
@@ -1773,6 +1782,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             manager.add(setAnnotationLabelAction);
         }
         if (Util.IsEnterPrise()) {
+        	manager.add(new Separator());
             manager.add(setAnnotationWriteAction);
             // fix bug 0016982: Set role with no access, and Set the workflow access menu actions action are gone
             // if (checkMandatoryElement(obj))
@@ -1784,8 +1794,12 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         }
         // available models
         java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
-        for (IAvailableModel model : availablemodels) {
+        for (int i=0; i<availablemodels.size(); i++) {
+        	IAvailableModel model= availablemodels.get(i);
             model.fillContextMenu(obj, manager, this, dataModelName);
+            if(i==0){
+            	manager.add(new Separator());
+            }
         }
         // manager.add(setAnnotationTargetSystemsAction);
         // manager.add(setAnnotationSourceSystemAction);
