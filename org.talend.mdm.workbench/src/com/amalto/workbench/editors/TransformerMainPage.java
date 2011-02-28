@@ -1164,7 +1164,7 @@ public class TransformerMainPage extends AMainPageV2 {
         }
 
         private void createInput() {
-            Composite inputComposite = toolkit.createComposite(mainComposite, SWT.BORDER);
+            Composite inputComposite = toolkit.createComposite(mainComposite, SWT.NONE);
             inputComposite.setLayoutData(new GridData(SWT.FILL, SWT.RIGHT, true, true, 1, 1));
             inputComposite.setLayout(new GridLayout(3, false));
 
@@ -1218,7 +1218,7 @@ public class TransformerMainPage extends AMainPageV2 {
         }
 
         private void createOutput() {
-            Composite outputComposite = toolkit.createComposite(mainComposite, SWT.BORDER);
+            Composite outputComposite = toolkit.createComposite(mainComposite, SWT.NONE);
             outputComposite.setLayoutData(new GridData(SWT.FILL, SWT.RIGHT, true, true, 1, 1));
             outputComposite.setLayout(new GridLayout(3, false));
 

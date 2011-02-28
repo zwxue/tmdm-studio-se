@@ -11,6 +11,7 @@
 //
 // ============================================================================
 package com.amalto.workbench.widgets;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.layout.GridData;
@@ -19,7 +20,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-
 
 public class LabelCombo {
 
@@ -32,7 +32,9 @@ public class LabelCombo {
     public LabelCombo(FormToolkit toolkit, Composite parent, final String labelName, int comboStyle, int columns) {
         composite = toolkit.createComposite(parent);
         composite.setLayoutData(new GridData(SWT.FILL, SWT.RIGHT, true, true, 1, 1));
-        composite.setLayout(new GridLayout(columns, false));
+        GridLayout layout = new GridLayout(columns, false);
+        layout.marginWidth = 0;
+        composite.setLayout(layout);
 
         label = toolkit.createLabel(composite, labelName, SWT.NULL);
         label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));

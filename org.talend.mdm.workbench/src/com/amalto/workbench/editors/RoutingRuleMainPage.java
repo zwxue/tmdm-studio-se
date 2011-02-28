@@ -406,8 +406,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             Label serviceParametersLabel = toolkit.createLabel(serviceGroup, "Service Parameters", SWT.NULL);
             serviceParametersLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 2, 1));
 
-            serviceParametersEditor = new ExtensibleContentEditor(serviceGroup, SWT.BORDER | SWT.MULTI | SWT.WRAP,
-                    EXCONTENTEDITOR_ID);
+            serviceParametersEditor = new ExtensibleContentEditor(serviceGroup, SWT.MULTI | SWT.WRAP, EXCONTENTEDITOR_ID);
             GridData gdServiceParameter = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
             // gdServiceParameter.widthHint = 200;
             gdServiceParameter.heightHint = 200;
