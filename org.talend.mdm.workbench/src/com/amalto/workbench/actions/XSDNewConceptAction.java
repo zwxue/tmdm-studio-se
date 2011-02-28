@@ -115,11 +115,13 @@ public class XSDNewConceptAction extends UndoAction implements SelectionListener
             uniqueKey.setName(dlg.getTypeName());
             XSDXPathDefinition selector = factory.createXSDXPathDefinition();
             selector.setVariety(XSDXPathVariety.SELECTOR_LITERAL);
-            selector.setValue(".");
+            selector.setValue(".");//$NON-NLS-1$
+
             uniqueKey.setSelector(selector);
             XSDXPathDefinition field = factory.createXSDXPathDefinition();
             field.setVariety(XSDXPathVariety.FIELD_LITERAL);
-            field.setValue(".");
+            field.setValue(".");//$NON-NLS-1$
+
             uniqueKey.getFields().add(field);
             decl.getIdentityConstraintDefinitions().add(uniqueKey);
 

@@ -53,7 +53,7 @@ public class GenerateJobDefaultTransformerAction extends Action {
         int ret = dialog.open();
         if (ret == Dialog.CANCEL)
             return;
-        String itemstr = "";
+        String itemstr = "";//$NON-NLS-1$
         if (dialog.isExchange()) {
             itemstr = "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"  xmlns:mdm=\"java:com.amalto.core.plugin.base.xslt.MdmExtension\" version=\"1.0\"> <xsl:output method=\"xml\" indent=\"yes\" omit-xml-declaration=\"yes\" /> <xsl:template match=\"/\" priority=\"1\">\n" //$NON-NLS-1$
                     + "<exchange> <report>\n <xsl:copy-of select=\"Update\"/> </report>  <item><xsl:copy-of select='mdm:getItemProjection(Update/RevisionID,Update/DataCluster,Update/Concept,Update/Key)'/></item></exchange> "//$NON-NLS-1$ 

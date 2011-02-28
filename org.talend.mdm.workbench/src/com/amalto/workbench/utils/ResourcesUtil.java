@@ -90,7 +90,7 @@ public class ResourcesUtil {
             return responseBody;
         } catch (HttpException e) {
 
-            log.info("Please check your provided http address!");
+            // log.error("Please check your provided http address!");
             log.error(e.getMessage(), e);
         } catch (IOException e) {
             log.error(e.getMessage(), e);

@@ -57,7 +57,7 @@ public class XSDNewElementAction extends UndoAction implements SelectionListener
                 XSDTypeDefinition type = (XSDTypeDefinition) iter.next();
                 if (type instanceof XSDSimpleTypeDefinition)
                     customTypes
-                            .add(type.getName() + (type.getTargetNamespace() != null ? " : " + type.getTargetNamespace() : ""));
+                            .add(type.getName() + (type.getTargetNamespace() != null ? " : " + type.getTargetNamespace() : ""));//$NON-NLS-1$
             }
             ArrayList builtInTypes = new ArrayList();
             for (Iterator iter = schema.getSchemaForSchema().getTypeDefinitions().iterator(); iter.hasNext();) {

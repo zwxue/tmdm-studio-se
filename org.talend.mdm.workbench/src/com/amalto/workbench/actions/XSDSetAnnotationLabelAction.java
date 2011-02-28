@@ -125,7 +125,7 @@ public class XSDSetAnnotationLabelAction extends UndoAction {
         }
 
         public void widgetSelected(SelectionEvent e) {
-            AnnotationLanguageLabelsDialog dlg = (AnnotationLanguageLabelsDialog) ((Widget) e.getSource()).getData("dialog");
+            AnnotationLanguageLabelsDialog dlg = (AnnotationLanguageLabelsDialog) ((Widget) e.getSource()).getData("dialog");//$NON-NLS-1$
             if (dlg.getReturnCode() == Window.OK) {
                 // No particular check on content
                 /*

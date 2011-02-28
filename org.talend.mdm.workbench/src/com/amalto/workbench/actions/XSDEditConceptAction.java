@@ -61,7 +61,7 @@ public class XSDEditConceptAction extends UndoAction {
                     oldName, new IInputValidator() {
 
                         public String isValid(String newText) {
-                            if ((newText == null) || "".equals(newText))
+                            if ((newText == null) || "".equals(newText))//$NON-NLS-1$
                                 return "The Entity Name cannot be empty";
 
                             if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()//$NON-NLS-1$

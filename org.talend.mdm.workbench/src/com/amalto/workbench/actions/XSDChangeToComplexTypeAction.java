@@ -175,7 +175,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
             }
 
             XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
-            boolean anonymous = (typeName == null) || ("".equals(typeName));
+            boolean anonymous = (typeName == null) || ("".equals(typeName));//$NON-NLS-1$
             boolean alreadyExists = false;
 
             XSDComplexTypeDefinition complexType = null;
@@ -195,10 +195,10 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
 
             if (!anonymous) {
                 EList list = schema.getTypeDefinitions();
-                String ns = "";
-                if (typeName.lastIndexOf(" : ") != -1) {
-                    ns = typeName.substring(typeName.lastIndexOf(" : ") + 3);
-                    typeName = typeName.substring(0, typeName.lastIndexOf(" : "));
+                String ns = "";//$NON-NLS-1$
+                if (typeName.lastIndexOf(" : ") != -1) {//$NON-NLS-1$
+                    ns = typeName.substring(typeName.lastIndexOf(" : ") + 3);//$NON-NLS-1$
+                    typeName = typeName.substring(0, typeName.lastIndexOf(" : "));//$NON-NLS-1$
                 }
                 for (Iterator iter = list.iterator(); iter.hasNext();) {
                     XSDTypeDefinition td = (XSDTypeDefinition) iter.next();
@@ -357,7 +357,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
                     uniqueKey.setName(decl.getName());
                     XSDXPathDefinition selector = factory.createXSDXPathDefinition();
                     selector.setVariety(XSDXPathVariety.SELECTOR_LITERAL);
-                    selector.setValue(".");
+                    selector.setValue(".");//$NON-NLS-1$
                     uniqueKey.setSelector(selector);
                     XSDXPathDefinition field = factory.createXSDXPathDefinition();
                     field.setVariety(XSDXPathVariety.FIELD_LITERAL);
@@ -423,7 +423,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
     }
 
     private boolean validateType() {
-        if (!"".equals(typeName)) {
+        if (!"".equals(typeName)) {//$NON-NLS-1$
             EList list = schema.getTypeDefinitions();
             for (Iterator iter = list.iterator(); iter.hasNext();) {
                 XSDTypeDefinition td = (XSDTypeDefinition) iter.next();

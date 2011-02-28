@@ -86,7 +86,7 @@ public class EditXObjectAction extends Action {
     }
 
     private void setDetails() {
-        setImageDescriptor(ImageCache.getImage("icons/edit.gif"));
+        setImageDescriptor(ImageCache.getImage("icons/edit.gif"));//$NON-NLS-1$
         setText("Edit");
         setToolTipText("Edit/View this instance of the " + IConstants.TALEND + " Object");
     }

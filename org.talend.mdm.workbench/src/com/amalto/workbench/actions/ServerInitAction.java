@@ -50,7 +50,7 @@ public class ServerInitAction extends Action {
     public ServerInitAction(ServerView view) {
         super();
         this.view = view;
-        setImageDescriptor(ImageCache.getImage("icons/zap.gif"));
+        setImageDescriptor(ImageCache.getImage("icons/zap.gif"));//$NON-NLS-1$
         setText("Initialize");
         setToolTipText("Initializes an " + IConstants.TALEND + " MDM Server");
 
@@ -76,11 +76,11 @@ public class ServerInitAction extends Action {
                 return;
 
             BufferedReader in = null;
-            in = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "utf-8"));
-            String xml = "";
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "utf-8"));//$NON-NLS-1$
+            String xml = "";//$NON-NLS-1$
             String line;
             while ((line = in.readLine()) != null)
-                xml += line + "\n";
+                xml += line + "\n";//$NON-NLS-1$
 
             ISelection selection = view.getViewer().getSelection();
             TreeObject xobject = (TreeObject) ((IStructuredSelection) selection).getFirstElement();

@@ -52,15 +52,15 @@ public class GenerateJobDefaultTriggerAction extends Action {
             return;
 
         try {
-            String parameter = "";
+            String parameter = "";//$NON-NLS-1$
             String server = "http://" + xobject.getEndpointHost() + ":" + xobject.getEndpointPort();//$NON-NLS-1$ //$NON-NLS-2$ 
 
             String filename = xobject.getDisplayName();
             String jobname = null;
             String jobversion = null;
             if (filename.lastIndexOf("_") > 0 && filename.lastIndexOf(".") > 0) {//$NON-NLS-1$ //$NON-NLS-2$ 
-                jobname = filename.substring(0, filename.lastIndexOf("_"));
-                jobversion = filename.substring(0, filename.lastIndexOf("."));
+                jobname = filename.substring(0, filename.lastIndexOf("_"));//$NON-NLS-1$
+                jobversion = filename.substring(0, filename.lastIndexOf("."));//$NON-NLS-1$
             }
             if (jobname == null || jobname.length() == 0)
                 return;

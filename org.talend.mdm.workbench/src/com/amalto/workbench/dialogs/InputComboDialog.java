@@ -73,7 +73,7 @@ public class InputComboDialog extends Dialog {
         inputCombo = new Combo(composite, SWT.READ_ONLY);
         inputCombo.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
         inputCombo.setItems(values);
-        inputCombo.add("");
+        inputCombo.add("");//$NON-NLS-1$
         for (String pro : values) {
             if (pro.equals(value)) {
                 inputCombo.setText(pro);

@@ -87,7 +87,7 @@ public class XSDSetAnnotationPrimaryKeyInfoAction extends UndoAction {
             }
 
             struc.setAccessRole(dlg.getXPaths(), false, (IStructuredContentProvider) page.getTreeViewer().getContentProvider(),
-                    "X_PrimaryKeyInfo");
+                    "X_PrimaryKeyInfo");//$NON-NLS-1$
 
             if (struc.hasChanged()) {
                 page.refresh();

@@ -2082,7 +2082,7 @@ public class Util {
                 }
             }
         } catch (Exception e) {
-            log.info("No Universes");
+            log.error(e.getMessage(), e);
         }
         return map;
     }
@@ -2105,7 +2105,7 @@ public class Util {
                 }
             }
         } catch (Exception e) {
-            log.info("No Universes");
+            log.error(e.getMessage(), e);
         }
         return map;
     }
@@ -2127,7 +2127,7 @@ public class Util {
                     }
                 }
             } catch (Exception e) {
-                log.info("No Universes");
+                log.error(e.getMessage(), e);
             }
         }
         return list;
@@ -2149,7 +2149,7 @@ public class Util {
                 }
             }
         } catch (Exception e) {
-            log.info("No Universes");
+            log.error(e.getMessage(), e);
         }
         return list;
     }

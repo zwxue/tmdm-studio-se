@@ -70,7 +70,7 @@ public class RoleWhereCondition {
         try {
             Marshaller.marshal(this, sw);
         } catch (Exception e) {
-            log.info("toString() ERROR MARSHALLING WhereCondition");
+            // log.error("toString() ERROR MARSHALLING WhereCondition");
             log.error(e.getMessage(), e);
         }
         return sw.toString();
@@ -81,7 +81,7 @@ public class RoleWhereCondition {
         try {
             rwc = (RoleWhereCondition) Unmarshaller.unmarshal(RoleWhereCondition.class, new StringReader(marshalledWC));
         } catch (Exception e) {
-            log.info("toString() ERROR UNMARSHALLING WhereCondition");
+            // log.error("toString() ERROR UNMARSHALLING WhereCondition");
             log.error(e.getMessage(), e);
         }
         return rwc;

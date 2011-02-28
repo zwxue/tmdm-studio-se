@@ -65,7 +65,7 @@ public class XSDSetAnnotationDocumentationAction extends UndoAction {
                 return Status.CANCEL_STATUS;
             }
 
-            struc.setDocumentation("".equals(id.getValue()) ? null : id.getValue());
+            struc.setDocumentation("".equals(id.getValue()) ? null : id.getValue());//$NON-NLS-1$
 
             if (struc.hasChanged()) {
                 page.refresh();

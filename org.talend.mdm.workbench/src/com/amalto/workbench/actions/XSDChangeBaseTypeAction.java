@@ -103,7 +103,7 @@ public class XSDChangeBaseTypeAction extends UndoAction implements SelectionList
                 // check if simple type definition already exists
                 XSDSimpleTypeDefinition std = schema.resolveSimpleTypeDefinition(typeName);
                 if (!schema.getTypeDefinitions().contains(std)) {
-                    std.setBaseTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));
+                    std.setBaseTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));//$NON-NLS-1$
                     schema.getContents().add(std);
                 }
                 typedef.setBaseTypeDefinition(std);

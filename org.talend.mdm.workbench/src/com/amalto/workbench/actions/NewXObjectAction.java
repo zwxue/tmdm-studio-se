@@ -98,7 +98,7 @@ public class NewXObjectAction extends Action {
 
     private ServerView view = null;
 
-    private String title = "";
+    private String title = "";//$NON-NLS-1$
 
     public NewXObjectAction(ServerView view) {
         super();
@@ -188,11 +188,11 @@ public class NewXObjectAction extends Action {
                         "Smart_view_", new IInputValidator() {//$NON-NLS-1$
 
                             public String isValid(String newText) {
-                                if ((newText == null) || "".equals(newText))
+                                if ((newText == null) || "".equals(newText))//$NON-NLS-1$
                                     return "The Name cannot be empty";
                                 // yyun: bug 16141: the empty charactors inside the string isn't permitted
                                 // if (!Pattern.matches("\\w*(\\s*|#|\\w+)+\\w+", newText)) {
-                                if (!Pattern.matches("\\w*(#|\\w*)+\\w+#*", newText)) {
+                                if (!Pattern.matches("\\w*(#|\\w*)+\\w+#*", newText)) {//$NON-NLS-1$
                                     return "The name cannot contains invalid character!";
                                 }
                                 return null;
@@ -215,7 +215,7 @@ public class NewXObjectAction extends Action {
                         "Enter a Name for the New Instance", "Browse_items_", new IInputValidator() {//$NON-NLS-2$
 
                             public String isValid(String newText) {
-                                if ((newText == null) || "".equals(newText))
+                                if ((newText == null) || "".equals(newText))//$NON-NLS-1$
                                     return "The Name cannot be empty";
                                 // yyun: bug 16141: the empty charactors inside the string isn't permitted
                                 // if (!Pattern.matches("\\w*(\\s*|#|\\w+)+\\w+#*", newText)) {
@@ -272,7 +272,7 @@ public class NewXObjectAction extends Action {
                         "Enter a Name for the New Instance", null, new IInputValidator() {
 
                             public String isValid(String newText) {
-                                if ((newText == null) || "".equals(newText))
+                                if ((newText == null) || "".equals(newText))//$NON-NLS-1$
                                     return "The Name cannot be empty";
                                 // yyun: bug 16141: the empty charactors inside the string isn't permitted
                                 // if (!Pattern.matches("\\w*(\\s*|#|\\.|\\w+)+\\w+", newText)) {
@@ -355,7 +355,7 @@ public class NewXObjectAction extends Action {
                             "Please create a Data Container for Records before editing a View");
                     return;
                 }
-                WSView wsview = new WSView((String) key, "", new String[] {}, new WSWhereCondition[0], new String[] {}, null,
+                WSView wsview = new WSView((String) key, "", new String[] {}, new WSWhereCondition[0], new String[] {}, null,//$NON-NLS-1$
                         new WSBoolean(false));
                 // port.putView(new WSPutView(view));
                 newInstance = new TreeObject((String) key, xfolder.getServerRoot(), TreeObject.VIEW, new WSViewPK((String) key),
@@ -371,7 +371,7 @@ public class NewXObjectAction extends Action {
                     return;
                 }
                 // add
-                WSDataCluster dc = new WSDataCluster((String) key, "", "" // vocabulary
+                WSDataCluster dc = new WSDataCluster((String) key, "", "" // vocabulary//$NON-NLS-1$//$NON-NLS-2$
                 );
                 newInstance = new TreeObject((String) key, xfolder.getServerRoot(), TreeObject.DATA_CLUSTER, new WSDataClusterPK(
                         (String) key), dc);
@@ -386,7 +386,7 @@ public class NewXObjectAction extends Action {
                     return;
                 }
                 // add
-                WSStoredProcedure storedProcedure = new WSStoredProcedure((String) key, "", "", false);
+                WSStoredProcedure storedProcedure = new WSStoredProcedure((String) key, "", "", false);//$NON-NLS-1$//$NON-NLS-2$
                 newInstance = new TreeObject((String) key, xfolder.getServerRoot(), TreeObject.STORED_PROCEDURE,
                         new WSStoredProcedurePK((String) key), storedProcedure);
                 break;
@@ -400,7 +400,7 @@ public class NewXObjectAction extends Action {
                     return;
                 }
                 // add
-                WSRole role = new WSRole((String) key, "", null);
+                WSRole role = new WSRole((String) key, "", null);//$NON-NLS-1$
 
                 newInstance = new TreeObject((String) key, xfolder.getServerRoot(), TreeObject.ROLE, new WSRolePK((String) key),
                         role);
@@ -415,7 +415,7 @@ public class NewXObjectAction extends Action {
                     return;
                 }
                 // add
-                WSRoutingRule routingRule = new WSRoutingRule((String) key, "", false, "*", "", "",
+                WSRoutingRule routingRule = new WSRoutingRule((String) key, "", false, "*", "", "",//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
                         new WSRoutingRuleExpression[0], null, false);
                 newInstance = new TreeObject((String) key, xfolder.getServerRoot(), TreeObject.ROUTING_RULE, new WSRoutingRulePK(
                         (String) key), routingRule);
@@ -430,7 +430,7 @@ public class NewXObjectAction extends Action {
                     return;
                 }
                 // add
-                WSTransformerV2 transformer = new WSTransformerV2((String) key, "", null);
+                WSTransformerV2 transformer = new WSTransformerV2((String) key, "", null);//$NON-NLS-1$
                 if (key.toString().startsWith("Smart_view_")) {//$NON-NLS-1$
                     final String parameters = "<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='1.0'>\n"//$NON-NLS-1$
                             + "   <xsl:output method='html' indent='yes' omit-xml-declaration='yes'/>\n"//$NON-NLS-1$
@@ -474,7 +474,7 @@ public class NewXObjectAction extends Action {
                     return;
                 }
                 // add
-                WSMenu menu = new WSMenu((String) key, "", new WSMenuEntry[] { new WSMenuEntry((String) key,
+                WSMenu menu = new WSMenu((String) key, "", new WSMenuEntry[] { new WSMenuEntry((String) key,//$NON-NLS-1$
                         new WSMenuMenuEntriesDescriptions[] { new WSMenuMenuEntriesDescriptions("en", (String) key) }, null,//$NON-NLS-1$
                         null, null, null) });
                 newInstance = new TreeObject((String) key, xfolder.getServerRoot(), TreeObject.MENU, new WSMenuPK((String) key),
@@ -490,12 +490,12 @@ public class NewXObjectAction extends Action {
                 }
                 // add
                 List<WSUniverseXtentisObjectsRevisionIDs> objectsId = new ArrayList<WSUniverseXtentisObjectsRevisionIDs>();
-                for (String object : port.getObjectsForUniverses(new WSGetObjectsForUniverses(new String[] { ".*" }))
+                for (String object : port.getObjectsForUniverses(new WSGetObjectsForUniverses(new String[] { ".*" }))//$NON-NLS-1$
                         .getStrings()) {// IConstants.XTENTISOBJECTS){
-                    objectsId.add(new WSUniverseXtentisObjectsRevisionIDs(object, ""));
+                    objectsId.add(new WSUniverseXtentisObjectsRevisionIDs(object, ""));//$NON-NLS-1$
                 }
-                WSUniverse universe = new WSUniverse((String) key, "",
-                        objectsId.toArray(new WSUniverseXtentisObjectsRevisionIDs[objectsId.size()]), "",
+                WSUniverse universe = new WSUniverse((String) key, "",//$NON-NLS-1$
+                        objectsId.toArray(new WSUniverseXtentisObjectsRevisionIDs[objectsId.size()]), "",//$NON-NLS-1$
                         new WSUniverseItemsRevisionIDs[] {});
                 newInstance = new TreeObject((String) key, xfolder.getServerRoot(), TreeObject.UNIVERSE, new WSUniversePK(
                         (String) key), universe);
@@ -512,14 +512,14 @@ public class NewXObjectAction extends Action {
                 // add
                 List<WSSynchronizationPlanXtentisObjectsSynchronizations> objectsId = new ArrayList<WSSynchronizationPlanXtentisObjectsSynchronizations>();
                 for (String object : port.getObjectsForSynchronizationPlans(
-                        new WSGetObjectsForSynchronizationPlans(new String[] { ".*" })).getStrings()) {// IConstants.XTENTISOBJECTS){
+                        new WSGetObjectsForSynchronizationPlans(new String[] { ".*" })).getStrings()) {// IConstants.XTENTISOBJECTS){//$NON-NLS-1$
                     objectsId.add(new WSSynchronizationPlanXtentisObjectsSynchronizations(object,
                             new WSSynchronizationPlanXtentisObjectsSynchronizationsSynchronizations[0]));
                 }
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(0);
-                WSSynchronizationPlan synchronizationPlan = new WSSynchronizationPlan((String) key, "", "", "", "", "", "", "",
-                        "", "", objectsId.toArray(new WSSynchronizationPlanXtentisObjectsSynchronizations[objectsId.size()]),
+                WSSynchronizationPlan synchronizationPlan = new WSSynchronizationPlan((String) key, "", "", "", "", "", "", "",//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$//$NON-NLS-7$
+                        "", "", objectsId.toArray(new WSSynchronizationPlanXtentisObjectsSynchronizations[objectsId.size()]),//$NON-NLS-1$//$NON-NLS-2$
                         new WSSynchronizationPlanItemsSynchronizations[] {});
                 newInstance = new TreeObject((String) key, xfolder.getServerRoot(), TreeObject.SYNCHRONIZATIONPLAN,
                         new WSSynchronizationPlanPK((String) key), synchronizationPlan);

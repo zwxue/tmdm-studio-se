@@ -102,7 +102,7 @@ public class XSDSetAnnotationForeignKeyAction extends UndoAction {
                 return Status.CANCEL_STATUS;
             }
 
-            String fk = "".equals(sxid.getXpath()) ? null : sxid.getXpath().replaceAll("'|\"", "");
+            String fk = "".equals(sxid.getXpath()) ? null : sxid.getXpath().replaceAll("'|\"", "");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
             // keep the foreignkey in memory to improve performance
             if (Util.getForeignKeys() != null && fk != null) {
                 if (struc.getForeignKey() != null)

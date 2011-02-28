@@ -48,7 +48,7 @@ public class ServerLoginAction extends Action implements SelectionListener {
     public ServerLoginAction(ServerView view) {
         super();
         this.view = view;
-        setImageDescriptor(ImageCache.getImage("icons/startserveraction.gif"));
+        setImageDescriptor(ImageCache.getImage("icons/startserveraction.gif"));//$NON-NLS-1$
         setText("Login");
         // setToolTipText("Login to an "+IConstants.TALEND+" Server");
         setToolTipText("Add MDM Server Location");
@@ -65,7 +65,7 @@ public class ServerLoginAction extends Action implements SelectionListener {
                 if (ports != null) {
                     for (Iterator iterator = ports.iterator(); iterator.hasNext();) {
                         XtentisPort port = (XtentisPort) iterator.next();
-                        universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();
+                        universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
 
                         if (universePKs != null && universePKs.length > 0)
                             CollectionUtils.addAll(universes, universePKs);

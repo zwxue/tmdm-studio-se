@@ -88,9 +88,9 @@ public class TypesContentProvider implements IStructuredContentProvider, ITreeCo
 
     public Object[] getChildren(Object parent) {
 
-        if (parent == null) {
-            log.info("NULL PARENT");
-        }
+        // if (parent == null) {
+        // log.info("NULL PARENT");
+        // }
         // log.info("get Children "+parent.getClass().getName()+ " -- "+parent.toString());
 
         if (parent instanceof XSDSchema) {

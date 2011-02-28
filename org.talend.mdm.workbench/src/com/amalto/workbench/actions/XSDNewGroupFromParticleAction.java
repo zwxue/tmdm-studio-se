@@ -93,7 +93,7 @@ public class XSDNewGroupFromParticleAction extends UndoAction implements Selecti
             // add an element declaration
             XSDElementDeclaration subElement = factory.createXSDElementDeclaration();
             subElement.setName("subelement");//$NON-NLS-1$
-            subElement.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));
+            subElement.setTypeDefinition(schema.resolveSimpleTypeDefinition(schema.getSchemaForSchemaNamespace(), "string"));//$NON-NLS-1$
 
             XSDParticle subParticle = factory.createXSDParticle();
             subParticle.setMinOccurs(1);

@@ -523,7 +523,7 @@ public class MenuMainPage extends AMainPageV2 {
                 menu.setMenuEntries(list.toArray(new WSMenuEntry[list.size()]));
                 viewer.setExpandedState(menu, true);
                 viewer.refresh(menu, true);
-                log.info("THere ");
+                log.info("There ");
                 return;
             }
 

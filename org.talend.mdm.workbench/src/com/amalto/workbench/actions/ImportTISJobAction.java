@@ -102,8 +102,8 @@ public class ImportTISJobAction extends Action {
                     jobFolder = new TreeParent("Deployed Jobs", xobject.getServerRoot(), TreeObject.CATEGORY_FOLDER, null, null);//$NON-NLS-1$ 
 
                 TreeObject obj = new TreeObject(
-                        // fileDialog.getFileName(),
-                        info.getJobname() + "_" + info.getJobversion() + info.getSuffix(), xobject.getServerRoot(),
+                // fileDialog.getFileName(),
+                        info.getJobname() + "_" + info.getJobversion() + info.getSuffix(), xobject.getServerRoot(),//$NON-NLS-1$
                         TreeObject.JOB, info, null);
                 if (!xobject.containsChild(obj)) {
                     ((TreeParent) jobFolder).addChild(obj);
@@ -137,8 +137,8 @@ public class ImportTISJobAction extends Action {
             ZipEntry z = null;
 
             try {
-                String jobName = "";
-                String jobVersion = "";
+                String jobName = "";//$NON-NLS-1$
+                String jobVersion = "";//$NON-NLS-1$
                 // war
                 if (fileName.endsWith(".war")) {//$NON-NLS-1$ 
                     while ((z = in.getNextEntry()) != null) {

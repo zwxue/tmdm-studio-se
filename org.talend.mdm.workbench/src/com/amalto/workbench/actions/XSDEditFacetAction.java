@@ -210,11 +210,11 @@ public class XSDEditFacetAction extends UndoAction {
 
     private void editLength() {
         XSDLengthFacet currentValue = std.getLengthFacet();
-        String stringValue = "0";
+        String stringValue = "0";//$NON-NLS-1$
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
         dialog = new InputDialog(page.getSite().getShell(), "Length Facet", "Enter a new value for the facet; 0 to remove it",
-                stringValue == null ? "" : stringValue, new IInputValidator() {
+                stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-1$
 
                     public String isValid(String newText) {
                         int val;
@@ -239,7 +239,7 @@ public class XSDEditFacetAction extends UndoAction {
         int intValue = Integer.parseInt(((InputDialog) dialog).getValue());
         if (intValue > 0) {
             XSDLengthFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDLengthFacet();
-            f.setLexicalValue("" + intValue);
+            f.setLexicalValue("" + intValue);//$NON-NLS-1$
             std.getFacetContents().add(f);
         }
 
@@ -247,11 +247,11 @@ public class XSDEditFacetAction extends UndoAction {
 
     private void editMinLength() {
         XSDMinLengthFacet currentValue = std.getMinLengthFacet();
-        String stringValue = "0";
+        String stringValue = "0";//$NON-NLS-1$
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
         dialog = new InputDialog(page.getSite().getShell(), "MinLength Facet", "Enter a new value for the facet; 0 to remove it",
-                stringValue == null ? "" : stringValue, new IInputValidator() {
+                stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-1$
 
                     public String isValid(String newText) {
                         int val;
@@ -276,7 +276,7 @@ public class XSDEditFacetAction extends UndoAction {
         int intValue = Integer.parseInt(((InputDialog) dialog).getValue());
         if (intValue > 0) {
             XSDMinLengthFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMinLengthFacet();
-            f.setLexicalValue("" + intValue);
+            f.setLexicalValue("" + intValue);//$NON-NLS-1$
             std.getFacetContents().add(f);
         }
 
@@ -284,11 +284,11 @@ public class XSDEditFacetAction extends UndoAction {
 
     private void editMaxLength() {
         XSDMaxLengthFacet currentValue = std.getMaxLengthFacet();
-        String stringValue = "0";
+        String stringValue = "0";//$NON-NLS-1$
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
         dialog = new InputDialog(page.getSite().getShell(), "MaxLength Facet", "Enter a new value for the facet; 0 to remove it",
-                stringValue == null ? "" : stringValue, new IInputValidator() {
+                stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-1$
 
                     public String isValid(String newText) {
                         int val;
@@ -312,7 +312,7 @@ public class XSDEditFacetAction extends UndoAction {
         int intValue = Integer.parseInt(((InputDialog) dialog).getValue());
         if (intValue > 0) {
             XSDMaxLengthFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMaxLengthFacet();
-            f.setLexicalValue("" + intValue);
+            f.setLexicalValue("" + intValue);//$NON-NLS-1$
             std.getFacetContents().add(f);
         }
 
@@ -320,11 +320,11 @@ public class XSDEditFacetAction extends UndoAction {
 
     private void editTotalDigits() {
         XSDTotalDigitsFacet currentValue = std.getTotalDigitsFacet();
-        String stringValue = "0";
+        String stringValue = "0";//$NON-NLS-1$
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
         dialog = new InputDialog(page.getSite().getShell(), "TotalDigits Facet",
-                "Enter a new value for the facet; 0 to remove it", stringValue == null ? "" : stringValue, new IInputValidator() {
+                "Enter a new value for the facet; 0 to remove it", stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-1$
 
                     public String isValid(String newText) {
                         int val;
@@ -348,18 +348,18 @@ public class XSDEditFacetAction extends UndoAction {
         int intValue = Integer.parseInt(((InputDialog) dialog).getValue());
         if (intValue > 0) {
             XSDTotalDigitsFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDTotalDigitsFacet();
-            f.setLexicalValue("" + intValue);
+            f.setLexicalValue("" + intValue);//$NON-NLS-1$
             std.getFacetContents().add(f);
         }
     }
 
     private void editFractionDigits() {
         XSDFractionDigitsFacet currentValue = std.getFractionDigitsFacet();
-        String stringValue = "0";
+        String stringValue = "0";//$NON-NLS-1$
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
         dialog = new InputDialog(page.getSite().getShell(), "TotalDigits Facet",
-                "Enter a new value for the facet; 0 to remove it", stringValue == null ? "" : stringValue, new IInputValidator() {
+                "Enter a new value for the facet; 0 to remove it", stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-2$
 
                     public String isValid(String newText) {
                         int val;
@@ -383,18 +383,18 @@ public class XSDEditFacetAction extends UndoAction {
         int intValue = Integer.parseInt(((InputDialog) dialog).getValue());
         if (intValue > 0) {
             XSDFractionDigitsFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDFractionDigitsFacet();
-            f.setLexicalValue("" + intValue);
+            f.setLexicalValue("" + intValue);//$NON-NLS-1$
             std.getFacetContents().add(f);
         }
     }
 
     private void editMaxInclusive() {
         XSDMaxInclusiveFacet currentValue = std.getMaxInclusiveFacet();
-        String stringValue = "0";
+        String stringValue = "0";//$NON-NLS-1$
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
         dialog = new InputDialog(page.getSite().getShell(), "MaxInclusive Facet",
-                "Enter a new value for the facet; 0 to remove it", stringValue == null ? "" : stringValue, new IInputValidator() {
+                "Enter a new value for the facet; 0 to remove it", stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-2$
 
                     public String isValid(String newText) {
                         // double val;
@@ -420,18 +420,18 @@ public class XSDEditFacetAction extends UndoAction {
         if (Double.parseDouble(((InputDialog) dialog).getValue()) > 0) {
             XSDMaxInclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMaxInclusiveFacet();
             // f.setLexicalValue("" + intValue);
-            f.setLexicalValue("" + getValidBoundaryNumber(std, ((InputDialog) dialog).getValue()));
+            f.setLexicalValue("" + getValidBoundaryNumber(std, ((InputDialog) dialog).getValue()));//$NON-NLS-1$
             std.getFacetContents().add(f);
         }
     }
 
     private void editMaxExclusive() {
         XSDMaxExclusiveFacet currentValue = std.getMaxExclusiveFacet();
-        String stringValue = "0";
+        String stringValue = "0";//$NON-NLS-1$
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
         dialog = new InputDialog(page.getSite().getShell(), "MaxExclusive Facet",
-                "Enter a new value for the facet; 0 to remove it", stringValue == null ? "" : stringValue, new IInputValidator() {
+                "Enter a new value for the facet; 0 to remove it", stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-2$
 
                     public String isValid(String newText) {
                         // double val;
@@ -458,18 +458,18 @@ public class XSDEditFacetAction extends UndoAction {
         if (Double.parseDouble(((InputDialog) dialog).getValue()) > 0) {
             XSDMaxExclusiveFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDMaxExclusiveFacet();
             // f.setLexicalValue("" + intValue);
-            f.setLexicalValue("" + getValidBoundaryNumber(std, ((InputDialog) dialog).getValue()));
+            f.setLexicalValue("" + getValidBoundaryNumber(std, ((InputDialog) dialog).getValue()));//$NON-NLS-1$
             std.getFacetContents().add(f);
         }
     }
 
     private void editMinInclusive() {
         XSDMinInclusiveFacet currentValue = std.getMinInclusiveFacet();
-        String stringValue = "0";
+        String stringValue = "0";//$NON-NLS-1$
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
         dialog = new InputDialog(page.getSite().getShell(), "MinInclusive Facet",
-                "Enter a new value for the facet; 0 to remove it", stringValue == null ? "" : stringValue, new IInputValidator() {
+                "Enter a new value for the facet; 0 to remove it", stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-2$
 
                     public String isValid(String newText) {
                         // double val;
@@ -507,7 +507,7 @@ public class XSDEditFacetAction extends UndoAction {
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
         dialog = new InputDialog(page.getSite().getShell(), "MinExclusive Facet",
-                "Enter a new value for the facet; 0 to remove it", stringValue == null ? "" : stringValue, new IInputValidator() {
+                "Enter a new value for the facet; 0 to remove it", stringValue == null ? "" : stringValue, new IInputValidator() {//$NON-NLS-2$
 
                     public String isValid(String newText) {
                         // double val;
@@ -540,9 +540,9 @@ public class XSDEditFacetAction extends UndoAction {
     }
 
     private void editWhiteSpace() {
-        String[] values = { "preserve", "replace", "collapse" };
+        String[] values = { "preserve", "replace", "collapse" };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
         XSDWhiteSpaceFacet currentValue = std.getWhiteSpaceFacet();
-        String stringValue = "preserve";
+        String stringValue = "preserve";//$NON-NLS-1$
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
         dialog = new InputComboDialog(page.getSite().getShell(), "WhiteSpace Facet", "Select a new value for the facet", values,
@@ -557,7 +557,7 @@ public class XSDEditFacetAction extends UndoAction {
         String stirngValue = ((InputComboDialog) dialog).getValue();
         if (stirngValue != null && stirngValue.length() > 0) {
             XSDWhiteSpaceFacet f = (XSDSchemaBuildingTools.getXSDFactory()).createXSDWhiteSpaceFacet();
-            f.setLexicalValue("" + stirngValue);
+            f.setLexicalValue("" + stirngValue);//$NON-NLS-1$
             std.getFacetContents().add(f);
         }
     }

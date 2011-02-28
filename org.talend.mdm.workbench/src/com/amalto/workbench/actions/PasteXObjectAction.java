@@ -176,12 +176,12 @@ public class PasteXObjectAction extends Action {
                                             + (latestValue != null ? newKey.getPk() : key.getPk())
                                             + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
                                     "CopyOf"//$NON-NLS-1$ 
-                                            + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject
-                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),
+                                            + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
+                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
 
                                         public String isValid(String newText) {
-                                            if ((newText == null) || "".equals(newText))
+                                            if ((newText == null) || "".equals(newText))//$NON-NLS-1$
                                                 return "The name cannot be empty";
                                             return null;
                                         };
@@ -225,12 +225,12 @@ public class PasteXObjectAction extends Action {
                                             + (latestValue != null ? newKey.getPk() : key.getPk())
                                             + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
                                     "CopyOf"//$NON-NLS-1$ 
-                                            + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject
-                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),
+                                            + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
+                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
 
                                         public String isValid(String newText) {
-                                            if ((newText == null) || "".equals(newText))
+                                            if ((newText == null) || "".equals(newText))//$NON-NLS-1$
                                                 return "The name cannot be empty";
                                             return null;
                                         };
@@ -278,12 +278,12 @@ public class PasteXObjectAction extends Action {
                                             + (latestValue != null ? newKey.getPk() : key.getPk())
                                             + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
                                     "CopyOf"//$NON-NLS-1$ 
-                                            + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject
-                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),
+                                            + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
+                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
 
                                         public String isValid(String newText) {
-                                            if ((newText == null) || "".equals(newText))
+                                            if ((newText == null) || "".equals(newText))//$NON-NLS-1$
                                                 return "The name cannot be empty";
                                             return null;
                                         };
@@ -329,12 +329,12 @@ public class PasteXObjectAction extends Action {
                                             + (latestValue != null ? newKey.getPk() : key.getPk())
                                             + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
                                     "CopyOf"//$NON-NLS-1$ 
-                                            + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject
-                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),
+                                            + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
+                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
 
                                         public String isValid(String newText) {
-                                            if ((newText == null) || "".equals(newText))
+                                            if ((newText == null) || "".equals(newText))//$NON-NLS-1$
                                                 return "The name cannot be empty";
                                             return null;
                                         };
@@ -380,12 +380,12 @@ public class PasteXObjectAction extends Action {
                                             + (latestValue != null ? newKey.getPk() : key.getPk())
                                             + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
                                     "CopyOf"//$NON-NLS-1$ 
-                                            + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject
-                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),
+                                            + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
+                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
 
                                         public String isValid(String newText) {
-                                            if ((newText == null) || "".equals(newText))
+                                            if ((newText == null) || "".equals(newText))//$NON-NLS-1$
                                                 return "The name cannot be empty";
                                             return null;
                                         };
@@ -430,12 +430,12 @@ public class PasteXObjectAction extends Action {
                                             + (latestValue != null ? newKey.getPk() : key.getPk())
                                             + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
                                     "CopyOf"//$NON-NLS-1$ 
-                                            + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject
-                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),
+                                            + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
+                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
 
                                         public String isValid(String newText) {
-                                            if ((newText == null) || "".equals(newText))
+                                            if ((newText == null) || "".equals(newText))//$NON-NLS-1$
                                                 return "The name cannot be empty";
                                             return null;
                                         };
@@ -483,12 +483,12 @@ public class PasteXObjectAction extends Action {
                                             + (latestValue != null ? newKey.getPk() : key.getPk())
                                             + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
                                     "CopyOf"//$NON-NLS-1$ 
-                                            + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject
-                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),
+                                            + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
+                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
 
                                         public String isValid(String newText) {
-                                            if ((newText == null) || "".equals(newText))
+                                            if ((newText == null) || "".equals(newText))//$NON-NLS-1$
                                                 return "The name cannot be empty";
                                             return null;
                                         };
@@ -532,8 +532,8 @@ public class PasteXObjectAction extends Action {
                                             + (latestValue != null ? newKey.getPk() : key.getPk())
                                             + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
                                     "CopyOf"//$NON-NLS-1$ 
-                                            + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject
-                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),
+                                            + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
+                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
 
                                         public String isValid(String newText) {
@@ -581,12 +581,12 @@ public class PasteXObjectAction extends Action {
                                             + (latestValue != null ? newKey.getPk() : key.getPk())
                                             + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
                                     "CopyOf"//$NON-NLS-1$ 
-                                            + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject
-                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),
+                                            + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
+                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
 
                                         public String isValid(String newText) {
-                                            if ((newText == null) || "".equals(newText))
+                                            if ((newText == null) || "".equals(newText))//$NON-NLS-1$
                                                 return "The name cannot be empty";
                                             return null;
                                         };
@@ -633,12 +633,12 @@ public class PasteXObjectAction extends Action {
                                             + (latestValue != null ? newKey.getPk() : key.getPk())
                                             + "\" already exists.\nEnter a new name if you do not want to overwrite the existing object",
                                     "CopyOf"//$NON-NLS-1$ 
-                                            + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject
-                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),
+                                            + (selected.getEndpointAddress().equals(xobject.getEndpointAddress()) ? "" : xobject//$NON-NLS-1$
+                                                    .getEndpointAddress().split(":")[0] + " ") + key.getPk(),//$NON-NLS-1$//$NON-NLS-2$
                                     new IInputValidator() {
 
                                         public String isValid(String newText) {
-                                            if ((newText == null) || "".equals(newText))
+                                            if ((newText == null) || "".equals(newText))//$NON-NLS-1$
                                                 return "The name cannot be empty";
                                             return null;
                                         };
@@ -749,7 +749,7 @@ public class PasteXObjectAction extends Action {
                                     result.getWsItemPK());
                             WSString xmlForm = destPort.synchronizationGetItemXML(getItemXML);
                             Document doc = Util.parse(xmlForm.getValue());
-                            NodeList clusterNameList = Util.getNodeList(doc, "/ii/c");
+                            NodeList clusterNameList = Util.getNodeList(doc, "/ii/c");//$NON-NLS-1$
                             for (int i = 0; i < clusterNameList.getLength(); i++) {
                                 Node node = clusterNameList.item(i);
                                 node.setTextContent(newXObjectPk);

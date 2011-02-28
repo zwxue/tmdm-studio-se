@@ -92,7 +92,7 @@ public class UndoAction extends Action {
     public void run(Object toDel) {
     }
 
-    protected XsdUndoableOperation operation = new XsdUndoableOperation("");
+    protected XsdUndoableOperation operation = new XsdUndoableOperation("");//$NON-NLS-1$
 
     /**
      * need override by subclass
@@ -173,7 +173,6 @@ public class UndoAction extends Action {
      */
     protected IStatus undo() {
         log.info(getText() + " undo....");
-
         String doc = undoActionTrack.get(getActionUndoPos() - 1);
         refresh(doc);
         return Status.OK_STATUS;

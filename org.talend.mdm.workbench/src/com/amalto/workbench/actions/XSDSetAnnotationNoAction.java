@@ -94,7 +94,7 @@ public class XSDSetAnnotationNoAction extends UndoAction {
             }
 
             struc.setAccessRole(dlg.getXPaths(), dlg.getRecursive(), (IStructuredContentProvider) page.getTreeViewer()
-                    .getContentProvider(), "X_Hide");
+                    .getContentProvider(), "X_Hide");//$NON-NLS-1$
 
             if (struc.hasChanged()) {
                 page.refresh();

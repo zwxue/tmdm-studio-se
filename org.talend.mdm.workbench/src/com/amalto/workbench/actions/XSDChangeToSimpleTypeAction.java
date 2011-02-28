@@ -146,11 +146,11 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
                 uniqueKey.setName(decl.getName());
                 XSDXPathDefinition selector = factory.createXSDXPathDefinition();
                 selector.setVariety(XSDXPathVariety.SELECTOR_LITERAL);
-                selector.setValue(".");
+                selector.setValue(".");//$NON-NLS-1$
                 uniqueKey.setSelector(selector);
                 XSDXPathDefinition field = factory.createXSDXPathDefinition();
                 field.setVariety(XSDXPathVariety.FIELD_LITERAL);
-                field.setValue(".");
+                field.setValue(".");//$NON-NLS-1$
                 uniqueKey.getFields().add(field);
                 decl.getIdentityConstraintDefinitions().add(uniqueKey);
             }
@@ -165,10 +165,10 @@ public class XSDChangeToSimpleTypeAction extends UndoAction implements Selection
                 // check if concept already exists
                 if (typeName != null && typeName.length() > 0) {
                     XSDSimpleTypeDefinition std = null;
-                    String ns = "";
-                    if (typeName.lastIndexOf(" : ") != -1) {
-                        ns = typeName.substring(typeName.lastIndexOf(" : ") + 3);
-                        typeName = typeName.substring(0, typeName.lastIndexOf(" : "));
+                    String ns = "";//$NON-NLS-1$
+                    if (typeName.lastIndexOf(" : ") != -1) {//$NON-NLS-1$
+                        ns = typeName.substring(typeName.lastIndexOf(" : ") + 3);//$NON-NLS-1$
+                        typeName = typeName.substring(0, typeName.lastIndexOf(" : "));//$NON-NLS-1$
                     }
                     for (XSDTypeDefinition typeDef : schema.getTypeDefinitions()) {
                         if (typeDef instanceof XSDSimpleTypeDefinition) {
