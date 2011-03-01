@@ -264,8 +264,18 @@ public class XPathTreeContentProvider extends XSDTreeContentProvider {
         // }
 
         // Attributes
-        if (complexTypeDefinition.getAttributeContents() != null)
+        if (complexTypeDefinition.getAttributeContents() != null) {
             list.addAll(complexTypeDefinition.getAttributeContents());
+            XSDTypeDefinition baseTypeDef = complexTypeDefinition.getBaseTypeDefinition();
+            while (baseTypeDef instanceof XSDComplexTypeDefinition
+                    && (baseTypeDef.getTargetNamespace() == null || !baseTypeDef.getTargetNamespace().equals(
+                            XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001))) {
+                XSDComplexTypeDefinition parentType = (XSDComplexTypeDefinition) baseTypeDef;
+                list.addAll(((XSDComplexTypeDefinition) baseTypeDef).getAttributeContents());
+                list.addAll(getComplexTypeDefinitionChildren(parentType));
+                baseTypeDef = baseTypeDef.getBaseType();
+            }
+        }
 
         // //Annotations
         // if (complexTypeDefinition.getAnnotations()!=null)
