@@ -1361,6 +1361,12 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                     return 116;
                 } else if (source.equals("X_Default_Value_Rule")) {
                     return 117;
+                }else if (source.equals("X_Create")) {
+                    return 118;
+                }else if (source.equals("X_PhysicalDelete")) {
+                    return 119;
+                }else if (source.equals("X_LogicalDelete")) {
+                    return 120;
                 }
             }
 
@@ -1715,7 +1721,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         for (int i=0; i<availablemodels.size(); i++) {
         	IAvailableModel model= availablemodels.get(i);
             model.fillContextMenu(obj, manager, this, dataModelName);
-            if(i==0){
+            if(i==1){
             	manager.add(new Separator());
             }
         }
@@ -1758,7 +1764,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         for (int i=0; i<availablemodels.size(); i++) {
         	IAvailableModel model= availablemodels.get(i);
             model.fillContextMenu(obj, manager, this, dataModelName);
-            if(i==0){
+            if(i==1){
             	manager.add(new Separator());
             }
         }
@@ -1797,7 +1803,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         for (int i=0; i<availablemodels.size(); i++) {
         	IAvailableModel model= availablemodels.get(i);
             model.fillContextMenu(obj, manager, this, dataModelName);
-            if(i==0){
+            if(i==1){
             	manager.add(new Separator());
             }
         }
