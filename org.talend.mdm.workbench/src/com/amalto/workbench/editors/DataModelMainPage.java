@@ -1323,49 +1323,49 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             return 212;
         if (decl instanceof Element) {
             Element e = (Element) decl;
-            if (e.getLocalName().equals("appinfo")) {
+            if (e.getLocalName().equals("appinfo")) {//$NON-NLS-1$
             }
-            String source = e.getAttribute("source");
+            String source = e.getAttribute("source");//$NON-NLS-1$
             if (source != null) {
-                if (source.startsWith("X_Label_")) {
+                if (source.startsWith("X_Label_")) {//$NON-NLS-1$
                     return 101;
-                } else if (source.equals("X_ForeignKey")) {
+                } else if (source.equals("X_ForeignKey")) {//$NON-NLS-1$
                     return 102;
-                } else if (source.equals("X_ForeignKeyInfo")) {
+                } else if (source.equals("X_ForeignKeyInfo")) {//$NON-NLS-1$
                     return 103;
-                } else if (source.equals("X_SourceSystem")) {
+                } else if (source.equals("X_SourceSystem")) {//$NON-NLS-1$
                     return 104;
-                } else if (source.equals("X_TargetSystem")) {
+                } else if (source.equals("X_TargetSystem")) {//$NON-NLS-1$
                     return 105;
-                } else if (source.startsWith("X_Description_")) {
+                } else if (source.startsWith("X_Description_")) {//$NON-NLS-1$
                     return 106;
-                } else if (source.equals("X_Write")) {
+                } else if (source.equals("X_Write")) {//$NON-NLS-1$
                     return 107;
-                } else if (source.equals("X_Hide")) {
+                } else if (source.equals("X_Hide")) {//$NON-NLS-1$
                     return 108;
-                } else if (source.equals("X_Schematron")) {
+                } else if (source.equals("X_Schematron")) {//$NON-NLS-1$
                     return 109;
-                } else if (source.startsWith("X_Facet_")) {
+                } else if (source.startsWith("X_Facet_")) {//$NON-NLS-1$
                     return 110;
-                } else if (source.startsWith("X_Workflow")) {
+                } else if (source.startsWith("X_Workflow")) {//$NON-NLS-1$
                     return 111;
-                } else if (source.startsWith("X_ForeignKey_Filter")) {
+                } else if (source.startsWith("X_ForeignKey_Filter")) {//$NON-NLS-1$
                     return 112;
-                } else if (source.startsWith("X_Display_Format_")) {
+                } else if (source.startsWith("X_Display_Format_")) {//$NON-NLS-1$
                     return 113;
-                } else if (source.equals("X_Lookup_Field")) {
+                } else if (source.equals("X_Lookup_Field")) {//$NON-NLS-1$
                     return 114;
-                } else if (source.equals("X_PrimaryKeyInfo")) {
+                } else if (source.equals("X_PrimaryKeyInfo")) {//$NON-NLS-1$
                     return 115;
-                } else if (source.equals("X_Visible_Rule")) {
+                } else if (source.equals("X_Visible_Rule")) {//$NON-NLS-1$
                     return 116;
-                } else if (source.equals("X_Default_Value_Rule")) {
+                } else if (source.equals("X_Default_Value_Rule")) {//$NON-NLS-1$
                     return 117;
-                }else if (source.equals("X_Create")) {
+                }else if (source.equals("X_Create")) {//$NON-NLS-1$
                     return 118;
-                }else if (source.equals("X_PhysicalDelete")) {
+                }else if (source.equals("X_PhysicalDelete")) {//$NON-NLS-1$
                     return 119;
-                }else if (source.equals("X_LogicalDelete")) {
+                }else if (source.equals("X_LogicalDelete")) {//$NON-NLS-1$
                     return 120;
                 }
             }
