@@ -49,12 +49,12 @@ public class CommonTableLabelProvider<T> implements ITableLabelProvider {
     public String getColumnText(Object element, int columnIndex) {
 
         if (element == null || colTxtExtractors.length <= columnIndex)
-            return "";
+            return "";//$NON-NLS-1$
 
         try {
             return colTxtExtractors[columnIndex].getColText((T) element);
         } catch (Exception e) {
-            return "";
+            return "";//$NON-NLS-1$
         }
     }
 

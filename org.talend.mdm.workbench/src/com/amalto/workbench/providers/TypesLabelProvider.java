@@ -60,7 +60,7 @@ public class TypesLabelProvider extends LabelProvider {
             String name = ((XSDElementDeclaration) obj).getName();
             if (((XSDElementDeclaration) obj).isAbstract())
                 name += "   (abstract)";
-            String tail = ((XSDElementDeclaration) obj).getTargetNamespace() == null ? "" : " : "
+            String tail = ((XSDElementDeclaration) obj).getTargetNamespace() == null ? "" : " : "//$NON-NLS-1$//$NON-NLS-2$
                     + ((XSDElementDeclaration) obj).getTargetNamespace();
             return name + tail;
         }
@@ -69,18 +69,18 @@ public class TypesLabelProvider extends LabelProvider {
             XSDParticle xsdParticle = (XSDParticle) obj;
             XSDParticleContent content = xsdParticle.getContent();
             XSDTerm xsdTerm = xsdParticle.getTerm();
-            String name = "";
+            String name = "";//$NON-NLS-1$
             if (content instanceof XSDElementDeclaration) {
                 XSDElementDeclaration decl = (XSDElementDeclaration) content;
-                name += (decl.getName() == null ? "" : decl.getName());
+                name += (decl.getName() == null ? "" : decl.getName());//$NON-NLS-1$
                 if (decl.getTypeDefinition() == null) {
-                    name += " [" + ((XSDElementDeclaration) xsdTerm).getName() + "]";
+                    name += " [" + ((XSDElementDeclaration) xsdTerm).getName() + "]";//$NON-NLS-1$//$NON-NLS-2$
                 }
             } else if (content instanceof XSDModelGroup) {
                 // System.out.println("SHOULD NOT HAPPEN????");
                 if (xsdParticle.getContainer() instanceof XSDComplexTypeDefinition) {
                     String ctdName = ((XSDComplexTypeDefinition) xsdParticle.getContainer()).getName();
-                    name = (ctdName != null ? ctdName : "");
+                    name = (ctdName != null ? ctdName : "");//$NON-NLS-1$
                 }
                 /*
                  * int type = ((XSDModelGroup)xsdTerm).getCompositor().getValue(); switch (type) { case
@@ -88,14 +88,14 @@ public class TypesLabelProvider extends LabelProvider {
                  * XSDCompositor.SEQUENCE: name= ""; break; }
                  */
             } else {
-                name = "[Any]";
+                name = "[Any]";//$NON-NLS-1$
             }
             if (!((xsdParticle.getMinOccurs() == 1) && (xsdParticle.getMaxOccurs() == 1))) {
-                name += "  [";
+                name += "  [";//$NON-NLS-1$
                 name += xsdParticle.getMinOccurs();
-                name += "...";
-                name += (xsdParticle.getMaxOccurs() == -1) ? "many" : "" + xsdParticle.getMaxOccurs();
-                name += "]";
+                name += "...";//$NON-NLS-1$
+                name += (xsdParticle.getMaxOccurs() == -1) ? "many" : "" + xsdParticle.getMaxOccurs();//$NON-NLS-1$//$NON-NLS-2$
+                name += "]";//$NON-NLS-1$
             }
             return name;
         }
@@ -112,14 +112,14 @@ public class TypesLabelProvider extends LabelProvider {
             XSDParticle particle = (XSDParticle) (((XSDModelGroup) obj).getContainer());
             String name = ((XSDComplexTypeDefinition) particle.getContainer()).getName();
             if (name == null)
-                name = "";
+                name = "";//$NON-NLS-1$
             // return the occurence
             if (!((particle.getMinOccurs() == 1) && (particle.getMaxOccurs() == 1))) {
-                name += "  [";
+                name += "  [";//$NON-NLS-1$
                 name += particle.getMinOccurs();
-                name += "...";
-                name += (particle.getMaxOccurs() == -1) ? "many" : "" + particle.getMaxOccurs();
-                name += "]";
+                name += "...";//$NON-NLS-1$
+                name += (particle.getMaxOccurs() == -1) ? "many" : "" + particle.getMaxOccurs();//$NON-NLS-1$//$NON-NLS-2$
+                name += "]";//$NON-NLS-1$
             }
             return name;
 
@@ -137,7 +137,7 @@ public class TypesLabelProvider extends LabelProvider {
          */
 
         if (obj instanceof XSDFacet) {
-            return ((XSDFacet) obj).getFacetName() + ": " + ((XSDFacet) obj).getLexicalValue();
+            return ((XSDFacet) obj).getFacetName() + ": " + ((XSDFacet) obj).getLexicalValue();//$NON-NLS-1$
         }
 
         if (obj instanceof XSDIdentityConstraintDefinition) {
@@ -151,9 +151,9 @@ public class TypesLabelProvider extends LabelProvider {
 
         if (obj instanceof XSDAttributeGroupDefinition) {
             XSDAttributeGroupDefinition attributeGroupDefinition = (XSDAttributeGroupDefinition) obj;
-            String name = (attributeGroupDefinition.getName() == null ? "" : attributeGroupDefinition.getName());
+            String name = (attributeGroupDefinition.getName() == null ? "" : attributeGroupDefinition.getName());//$NON-NLS-1$
             if (attributeGroupDefinition.getContents().size() == 0) // a ref
-                name += " [" + attributeGroupDefinition.getResolvedAttributeGroupDefinition().getName() + "]";
+                name += " [" + attributeGroupDefinition.getResolvedAttributeGroupDefinition().getName() + "]";//$NON-NLS-1$//$NON-NLS-2$
             return name;
         }
 
@@ -161,51 +161,51 @@ public class TypesLabelProvider extends LabelProvider {
             XSDAttributeUse attributeUse = (XSDAttributeUse) obj;
             String name = attributeUse.getAttributeDeclaration().getName();
             if (name == null)
-                name = " [" + attributeUse.getAttributeDeclaration().getResolvedAttributeDeclaration().getName() + "]";
+                name = " [" + attributeUse.getAttributeDeclaration().getResolvedAttributeDeclaration().getName() + "]";//$NON-NLS-1$//$NON-NLS-2$
             return name;
         }
 
         if (obj instanceof XSDAnnotation) {
             // XSDAnnotation annotation = (XSDAnnotation) obj;
-            return "Annotations";
+            return "Annotations";//$NON-NLS-1$
         }
 
         if (obj instanceof Element) {
             try {
                 Element e = (Element) obj;
-                if (e.getLocalName().equals("documentation")) {
+                if (e.getLocalName().equals("documentation")) {//$NON-NLS-1$
                     return "Documentation: " + e.getChildNodes().item(0).getNodeValue();
-                } else if (e.getLocalName().equals("appinfo")) {
-                    String source = e.getAttribute("source");
+                } else if (e.getLocalName().equals("appinfo")) {//$NON-NLS-1$
+                    String source = e.getAttribute("source");//$NON-NLS-1$
                     if (source != null) {
-                        if (source.startsWith("X_Label_")) {
+                        if (source.startsWith("X_Label_")) {//$NON-NLS-1$
                             return Util.iso2lang.get(source.substring(8).toLowerCase()) + " Label: "
                                     + e.getChildNodes().item(0).getNodeValue();
-                        } else if (source.equals("X_ForeignKey")) {
+                        } else if (source.equals("X_ForeignKey")) {//$NON-NLS-1$
                             return "Foreign Key:  " + e.getChildNodes().item(0).getNodeValue();
-                        } else if (source.equals("X_ForeignKeyInfo")) {
+                        } else if (source.equals("X_ForeignKeyInfo")) {//$NON-NLS-1$
                             return "Foreign Key Info:  " + e.getChildNodes().item(0).getNodeValue();
-                        } else if (source.equals("X_ForeignKey_Filter")) {
+                        } else if (source.equals("X_ForeignKey_Filter")) {//$NON-NLS-1$
                             return "Foreign Key Filter:  " + e.getChildNodes().item(0).getNodeValue();
-                        } else if (source.equals("X_SourceSystem")) {
+                        } else if (source.equals("X_SourceSystem")) {//$NON-NLS-1$
                             return "Source System:  " + e.getChildNodes().item(0).getNodeValue();
-                        } else if (source.equals("X_TargetSystem")) {
+                        } else if (source.equals("X_TargetSystem")) {//$NON-NLS-1$
                             return "Target System(s):  " + e.getChildNodes().item(0).getNodeValue();
-                        } else if (source.startsWith("X_Description_")) {
+                        } else if (source.startsWith("X_Description_")) {//$NON-NLS-1$
                             return Util.iso2lang.get(source.substring(14).toLowerCase()) + " Description: "
                                     + e.getChildNodes().item(0).getNodeValue();
-                        } else if (source.equals("X_Write")) {
+                        } else if (source.equals("X_Write")) {//$NON-NLS-1$
                             return "Writable By : " + e.getChildNodes().item(0).getNodeValue();
-                        } else if (source.equals("X_Create")) {
+                        } else if (source.equals("X_Create")) {//$NON-NLS-1$
                             return "Creatable By : " + e.getChildNodes().item(0).getNodeValue();
-                        } else if (source.equals("X_LogicalDelete")) {
+                        } else if (source.equals("X_LogicalDelete")) {//$NON-NLS-1$
                             return "Logical Deletable By : " + e.getChildNodes().item(0).getNodeValue();
-                        } else if (source.equals("X_PhysicalDelete")) {
+                        } else if (source.equals("X_PhysicalDelete")) {//$NON-NLS-1$
                             return "Physical Deletable By : " + e.getChildNodes().item(0).getNodeValue();
-                        } else if (source.equals("X_Hide")) {
+                        } else if (source.equals("X_Hide")) {//$NON-NLS-1$
                             return "No Access to : " + e.getChildNodes().item(0).getNodeValue();
                         } else {
-                            return source + ": " + Util.nodeToString((Element) obj);
+                            return source + ": " + Util.nodeToString((Element) obj);//$NON-NLS-1$
                         }
                     } else {
                         return Util.nodeToString((Element) obj);
@@ -220,8 +220,8 @@ public class TypesLabelProvider extends LabelProvider {
         }
 
         if (obj == null)
-            return "NULL";
-        return "?? " + obj.getClass().getName() + " : " + obj.toString();
+            return "NULL";//$NON-NLS-1$
+        return "?? " + obj.getClass().getName() + " : " + obj.toString();//$NON-NLS-1$//$NON-NLS-2$
 
     }
 
@@ -408,15 +408,15 @@ public class TypesLabelProvider extends LabelProvider {
             }
         }
 
-        return ImageCache.getCreatedImage("icons/tree_object.gif");
+        return ImageCache.getCreatedImage("icons/tree_object.gif");//$NON-NLS-1$
         // return PlatformUI.getWorkbench().getSharedImages().getCreatedImage(ISharedImages.IMG_OBJ_ELEMENT);
     }
 
     public String getComplexTypeDefinition(XSDComplexTypeDefinition definition) {
-        String s = "";
+        String s = "";//$NON-NLS-1$
         s = definition.getName();
 
-        String tail = definition.getTargetNamespace() == null ? "" : " : " + definition.getTargetNamespace();
+        String tail = definition.getTargetNamespace() == null ? "" : " : " + definition.getTargetNamespace();//$NON-NLS-1$//$NON-NLS-2$
         return s + tail + getAppendedBaseTypeName(definition);
     }
 
@@ -426,7 +426,7 @@ public class TypesLabelProvider extends LabelProvider {
      * @param xsdSimpleTypeDefinition a simple type definition in the schema for schema.
      */
     public String getSimpleTypeDefinition(XSDSimpleTypeDefinition xsdSimpleTypeDefinition) {
-        String s = "";
+        String s = "";//$NON-NLS-1$
         if (xsdSimpleTypeDefinition == null) {
         } else if (xsdSimpleTypeDefinition.getEffectiveEnumerationFacet() != null) {
             /*
@@ -442,31 +442,31 @@ public class TypesLabelProvider extends LabelProvider {
             s += xsdSimpleTypeDefinition.getName();
         } else if ((XSDVariety.UNION_LITERAL == xsdSimpleTypeDefinition.getVariety())
                 | (XSDVariety.LIST_LITERAL == xsdSimpleTypeDefinition.getVariety())) {
-            s += "(";
+            s += "(";//$NON-NLS-1$
             for (Iterator members = xsdSimpleTypeDefinition.getMemberTypeDefinitions().iterator(); members.hasNext();) {
                 XSDSimpleTypeDefinition memberTypeDefinition = (XSDSimpleTypeDefinition) members.next();
                 s += getSimpleTypeDefinition(memberTypeDefinition);
                 if (members.hasNext()) {
-                    s += " | ";
+                    s += " | ";//$NON-NLS-1$
                 }
             }
-            s += ")";
+            s += ")";//$NON-NLS-1$
             if (xsdSimpleTypeDefinition.getMemberTypeDefinitions().isEmpty()) {
-                s = xsdSimpleTypeDefinition.getVariety() + "";
+                s = xsdSimpleTypeDefinition.getVariety() + "";//$NON-NLS-1$
             }
         } else if ((XSDVariety.UNION_LITERAL == xsdSimpleTypeDefinition.getVariety())
                 | (XSDVariety.LIST_LITERAL == xsdSimpleTypeDefinition.getVariety())) {
-            s += "List of ";
+            s += "List of ";//$NON-NLS-1$
             s += getSimpleTypeDefinition(xsdSimpleTypeDefinition.getItemTypeDefinition());
         } else if (xsdSimpleTypeDefinition.getName() != null) {
             s += xsdSimpleTypeDefinition.getName();
         } else if (xsdSimpleTypeDefinition.getEffectivePatternFacet() != null) {
             // s+= xsdSimpleTypeDefinition.getEffectivePatternFacet().getLexicalValue());
-            s += "a restricted xpath expression";
+            s += "a restricted xpath expression";//$NON-NLS-1$
         } else {
-            s += "***";
+            s += "***";//$NON-NLS-1$
         }
-        String tail = xsdSimpleTypeDefinition.getTargetNamespace() == null ? "" : " : "
+        String tail = xsdSimpleTypeDefinition.getTargetNamespace() == null ? "" : " : "//$NON-NLS-1$//$NON-NLS-2$
                 + xsdSimpleTypeDefinition.getTargetNamespace();
         return s + tail + getAppendedBaseTypeName(xsdSimpleTypeDefinition);
     }
@@ -475,9 +475,9 @@ public class TypesLabelProvider extends LabelProvider {
 
         XSDTypeDefinition baseType = type.getBaseType();
 
-        if (baseType == null || "anyType".equals(baseType.getName()))
-            return "";
+        if (baseType == null || "anyType".equals(baseType.getName()))//$NON-NLS-1$
+            return "";//$NON-NLS-1$
 
-        return " : " + baseType.getName();
+        return " : " + baseType.getName();//$NON-NLS-1$
     }
 }

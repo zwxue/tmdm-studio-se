@@ -11,6 +11,7 @@
 //
 // ============================================================================
 package com.amalto.workbench.providers;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -22,7 +23,6 @@ import com.amalto.workbench.editors.XObjectBrowser;
 import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
-
 
 public class XObjectEditorInput implements IEditorInput, IXObjectModelListener {
 
@@ -73,7 +73,7 @@ public class XObjectEditorInput implements IEditorInput, IXObjectModelListener {
 
     public String getToolTipText() {
         TreeObject xobject = (TreeObject) model;
-        return xobject.getServerRoot().getDisplayName() + " - " + TreeObject.getTypeName(xobject.getType()) + " - "
+        return xobject.getServerRoot().getDisplayName() + " - " + TreeObject.getTypeName(xobject.getType()) + " - "//$NON-NLS-1$//$NON-NLS-2$
                 + xobject.getDisplayName();
     }
 

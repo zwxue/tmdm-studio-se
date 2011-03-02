@@ -143,7 +143,7 @@ public class SchemaTreeContentProvider implements ITreeContentProvider, ISchemaC
     public String getXSDSchemaAsString() throws Exception {
 
         if (xsdSchema == null)
-            return "";
+            return "";//$NON-NLS-1$
 
         Document document = xsdSchema.getDocument();
         String schema = Util.nodeToString(document);

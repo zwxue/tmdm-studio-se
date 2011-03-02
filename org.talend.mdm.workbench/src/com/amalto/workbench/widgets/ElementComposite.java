@@ -58,7 +58,7 @@ public class ElementComposite {
         // layout.verticalSpacing = 10;
 
         Group radioGroup = new Group(parent, SWT.SHADOW_NONE);
-        radioGroup.setText(encloseTextField ? "" : "Simple Types");//$NON-NLS-2$
+        radioGroup.setText(encloseTextField ? "" : "Simple Types");//$NON-NLS-1$//$NON-NLS-2$
         radioGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1));
         radioGroup.setLayout(new GridLayout(1, false));
 
@@ -111,7 +111,7 @@ public class ElementComposite {
                         if (!uuidtypes.contains(name))
                             typeCombo.add(name);
                     }
-                    typeCombo.indexOf("");
+                    typeCombo.indexOf("");//$NON-NLS-1$
                     typeCombo.setEditable(true);
                     tipLabel.setText("Leave blank for anonymous");
                 }
@@ -129,7 +129,7 @@ public class ElementComposite {
                     }
                     typeCombo.select(0);
                     typeCombo.setEditable(false);
-                    tipLabel.setText("");
+                    tipLabel.setText("");//$NON-NLS-1$
                 }
             }
         });

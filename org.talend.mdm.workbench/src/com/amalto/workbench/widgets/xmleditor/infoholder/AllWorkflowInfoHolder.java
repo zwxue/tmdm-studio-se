@@ -37,7 +37,7 @@ public class AllWorkflowInfoHolder extends ExternalInfoHolder<WorkflowInfo[]> {
 
         WSWorkflowProcessDefinitionUUIDArray array;
         try {
-            array = port.workflowGetProcessDefinitions(new WSWorkflowGetProcessDefinitions(".*"));
+            array = port.workflowGetProcessDefinitions(new WSWorkflowGetProcessDefinitions(".*"));//$NON-NLS-1$
         } catch (RemoteException e) {
             return new WorkflowInfo[0];
         }

@@ -150,7 +150,7 @@ public class EditableComboBoxCellEditor extends CellEditor {
             for (int i = 0; i < items.length; i++) {
                 comboBox.add(items[i], i);
             }
-            comboBox.setText("");
+            comboBox.setText("");//$NON-NLS-1$
         }
     }
 

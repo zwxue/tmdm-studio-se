@@ -34,7 +34,6 @@ import org.eclipse.ui.internal.misc.StatusUtil;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.eclipse.ui.views.IViewDescriptor;
 
-
 /**
  * Displays a window for view selection. <br/>
  * 
@@ -78,7 +77,7 @@ public class ShowViewAction extends Action {
                 for (int i = 0; i < com.length; i++) {
                     Control control2 = com[i];
                     if (control2 instanceof Label) {
-                        ((Label) control2).setText("");
+                        ((Label) control2).setText("");//$NON-NLS-1$
                     }
                     if (control2 instanceof FilteredTree) {
                         Tree tree = ((FilteredTree) control2).getViewer().getTree();

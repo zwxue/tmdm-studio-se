@@ -39,7 +39,7 @@ public class ConditionWidget {
         conditionComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         conditionComposite.setLayout(new GridLayout(3, false));
 
-        conditionText = toolkit.createText(conditionComposite, "", SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
+        conditionText = toolkit.createText(conditionComposite, "", SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);//$NON-NLS-1$
         conditionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 3));
 
         Composite conditionBtnComposite = toolkit.createComposite(conditionComposite, SWT.NULL);
@@ -48,26 +48,26 @@ public class ConditionWidget {
         ButtonListenr listener = new ButtonListenr();
         Button btnLeft = toolkit.createButton(conditionBtnComposite, "(", SWT.PUSH);//$NON-NLS-1$
         btnLeft.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, false, true, 1, 1));
-        btnLeft.setData("(");
+        btnLeft.setData("(");//$NON-NLS-1$
         btnLeft.addSelectionListener(listener);
 
         Button btnRight = toolkit.createButton(conditionBtnComposite, ")", SWT.PUSH);//$NON-NLS-1$
         btnRight.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, false, true, 1, 1));
-        btnRight.setData(")");
+        btnRight.setData(")");//$NON-NLS-1$
         btnRight.addSelectionListener(listener);
 
         Button btnAnd = toolkit.createButton(conditionBtnComposite, "And", SWT.PUSH);//$NON-NLS-1$
         btnAnd.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, false, true, 1, 1));
-        btnAnd.setData("&&");
+        btnAnd.setData("&&");//$NON-NLS-1$
         btnAnd.addSelectionListener(listener);
 
         Button btnOr = toolkit.createButton(conditionBtnComposite, "Or", SWT.PUSH);//$NON-NLS-1$
-        btnOr.setData("||");
+        btnOr.setData("||");//$NON-NLS-1$
         btnOr.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, false, true, 1, 1));
         btnOr.addSelectionListener(listener);
 
         Button btnNot = toolkit.createButton(conditionBtnComposite, "Not", SWT.PUSH);//$NON-NLS-1$
-        btnNot.setData("!");
+        btnNot.setData("!");//$NON-NLS-1$
         btnNot.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, false, true, 1, 1));
         btnNot.addSelectionListener(listener);
 
@@ -84,7 +84,7 @@ public class ConditionWidget {
             // TODO Auto-generated method stub
             if (e.widget instanceof Button) {
                 Button btn = (Button) e.widget;
-                String condition = conditionText.getText() + " " + btn.getText();
+                String condition = conditionText.getText() + " " + btn.getText();//$NON-NLS-1$
                 conditionText.setText(condition);
                 conditionText.setFocus();
                 page.markDirty();

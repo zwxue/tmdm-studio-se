@@ -11,6 +11,7 @@
 //
 // ============================================================================
 package com.amalto.workbench.widgets;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -50,7 +51,6 @@ import com.amalto.workbench.providers.ServerTreeLabelProvider;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.views.ServerView;
 import com.amalto.workbench.webservices.WSVersioningUniverseVersionsTagStructure;
-
 
 /**
  * @author achen DOC achen class global comment. Detailled comment
@@ -149,7 +149,7 @@ public class RepositoryCheckTreeViewer {
         layout.marginLeft = 0;
         layout.marginRight = 0;
         versionComposite.setLayout(layout);
-        vwidget = new VersionTagWidget(versionComposite, "Universe", defaultTagText, isTagEditable, tagSelectionListener,
+        vwidget = new VersionTagWidget(versionComposite, "Universe", defaultTagText, isTagEditable, tagSelectionListener,//$NON-NLS-1$
                 restoreSelectionListener, tagsViewerDoubleClickListener, this.hisEntries);
 
         sash.setWeights(new int[] { 20, 2, 21 });

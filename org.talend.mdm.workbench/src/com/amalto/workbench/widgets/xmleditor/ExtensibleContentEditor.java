@@ -24,13 +24,13 @@ import com.amalto.workbench.widgets.xmleditor.infoholder.ExternalInfoHolder;
 
 public class ExtensibleContentEditor extends Composite {
 
-    public static final String EXTENSIONID = "org.talend.mdm.workbench.extensibleXMLEditorPage";
+    public static final String EXTENSIONID = "org.talend.mdm.workbench.extensibleXMLEditorPage";//$NON-NLS-1$
 
     protected TabFolder tabFolderEditors;
 
     private int lastSelectedTabIndex;
 
-    private String id = "";
+    private String id = "";//$NON-NLS-1$
 
     public ExtensibleContentEditor(Composite parent, int style, String id) {
         super(parent, style);
@@ -88,11 +88,11 @@ public class ExtensibleContentEditor extends Composite {
 
         int index = tabFolderEditors.getSelectionIndex();
         if (index == -1)
-            return new ExtensibleEditorContent("");
+            return new ExtensibleEditorContent("");//$NON-NLS-1$
 
         Control control = tabFolderEditors.getItem(index).getControl();
         if (!(control instanceof ExtensibleContentEditorPage))
-            return new ExtensibleEditorContent("");
+            return new ExtensibleEditorContent("");//$NON-NLS-1$
 
         return ((ExtensibleContentEditorPage) control).getContent();
     }
@@ -143,7 +143,7 @@ public class ExtensibleContentEditor extends Composite {
 
         for (IConfigurationElement eachElement : Platform.getExtensionRegistry().getConfigurationElementsFor(EXTENSIONID)) {
 
-            if (!id.equals(eachElement.getAttribute("editorId")) || !group.equals(eachElement.getAttribute("group")))
+            if (!id.equals(eachElement.getAttribute("editorId")) || !group.equals(eachElement.getAttribute("group")))//$NON-NLS-1$//$NON-NLS-2$
                 continue;
 
             ExtensibleContentEditorPageCreator creator = getPageCreator(eachElement);
@@ -170,7 +170,7 @@ public class ExtensibleContentEditor extends Composite {
     protected ExtensibleContentEditorPageCreator getPageCreator(IConfigurationElement eachElement) {
 
         try {
-            Object creatorObj = eachElement.createExecutableExtension("class");
+            Object creatorObj = eachElement.createExecutableExtension("class");//$NON-NLS-1$
 
             if (creatorObj instanceof ExtensibleContentEditorPageCreator)
                 return (ExtensibleContentEditorPageCreator) creatorObj;
@@ -185,19 +185,19 @@ public class ExtensibleContentEditor extends Composite {
     protected int getPageIndex(IConfigurationElement eachElement) {
 
         try {
-            return Integer.parseInt(eachElement.getAttribute("index"));
+            return Integer.parseInt(eachElement.getAttribute("index"));//$NON-NLS-1$
         } catch (Exception e) {
             return Integer.MAX_VALUE;
         }
     }
 
     protected String getPageLabel(IConfigurationElement eachElement) {
-        return eachElement.getAttribute("label");
+        return eachElement.getAttribute("label");//$NON-NLS-1$
     }
 
     protected boolean isDefaultPage(IConfigurationElement eachElement) {
         try {
-            return Boolean.parseBoolean(eachElement.getAttribute("isDefault"));
+            return Boolean.parseBoolean(eachElement.getAttribute("isDefault"));//$NON-NLS-1$
         } catch (Exception e) {
             return false;
         }

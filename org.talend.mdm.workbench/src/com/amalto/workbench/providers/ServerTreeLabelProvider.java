@@ -48,7 +48,7 @@ public class ServerTreeLabelProvider extends LabelProvider implements IColorProv
                     AServerViewAction action = (AServerViewAction) actionClass.newInstance();
                     return action.getText();
                 } catch (Exception ex) {
-                    return "ERROR...";
+                    return "ERROR...";//$NON-NLS-1$
                 }
             }
 

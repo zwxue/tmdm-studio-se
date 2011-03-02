@@ -11,13 +11,13 @@
 //
 // ============================================================================
 package com.amalto.workbench.widgets.composites;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
 import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
-
 
 public class ListXPathComposite extends ListStringContentsComposite {
 
@@ -51,14 +51,14 @@ public class ListXPathComposite extends ListStringContentsComposite {
     @Override
     protected void createCandidateInfoUIArea(Composite parent) {
 
-        compSimpleXPath = new SimpleXPathComposite(this, SWT.NONE, xpathAreaTitle, allDataModelHolder, "");
+        compSimpleXPath = new SimpleXPathComposite(this, SWT.NONE, xpathAreaTitle, allDataModelHolder, "");//$NON-NLS-1$
         compSimpleXPath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
     }
 
     @Override
     protected boolean hasCandidateInfo() {
-        return !("".equals(compSimpleXPath.getXPath()));
+        return !("".equals(compSimpleXPath.getXPath()));//$NON-NLS-1$
     }
 
     @Override
@@ -68,7 +68,7 @@ public class ListXPathComposite extends ListStringContentsComposite {
 
     @Override
     protected void initCandidateInfoUIArea() {
-        compSimpleXPath.setXPath("");
+        compSimpleXPath.setXPath("");//$NON-NLS-1$
     }
 
     public boolean isResolveAutoInWeb() {

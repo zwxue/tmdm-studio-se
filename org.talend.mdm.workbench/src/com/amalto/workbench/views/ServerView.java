@@ -673,7 +673,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         SAXReader reader = new SAXReader();
 
         OutputFormat format = OutputFormat.createPrettyPrint();
-        format.setEncoding("GBK");
+        format.setEncoding("GBK");//$NON-NLS-1$
         File file = new File(f);
         if (file.exists()) {
             Document logininfoDocument = null;
@@ -690,7 +690,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                 String user = server.selectSingleNode("user").getText();//$NON-NLS-1$
                 String password = PasswordUtil.decryptPassword(server.selectSingleNode("password").getText());//$NON-NLS-1$
                 String universe = server.selectSingleNode("universe").getText();//$NON-NLS-1$
-                if (!("".equalsIgnoreCase(url) || "".equalsIgnoreCase(user) || "".equalsIgnoreCase(password)))
+                if (!("".equalsIgnoreCase(url) || "".equalsIgnoreCase(user) || "".equalsIgnoreCase(password)))//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                     initServerTreeParent(url, user, password, universe);
                 // initServerTree(url, user, password, universe);
             }
@@ -941,8 +941,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                 // All the tabs related to an MDM server connection should go away when loging out
                 IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
                 int length = page.getEditors().length;
-                String version = "";
-                String tabEndpointAddress = "";
+                String version = "";//$NON-NLS-1$
+                String tabEndpointAddress = "";//$NON-NLS-1$
                 String unserName = null;
                 int j = 0;
                 for (int i = 0; i < length; i++) {
@@ -1042,16 +1042,16 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     }
 
     protected void initServerContent(TreeObject xo) {
-        String universe = "";
-        String username = "";
-        String password = "";
-        if (xo.getWsObject().toString().contains("/")) {
-            universe = xo.getWsObject().toString().split("/")[0];
-            username = xo.getWsObject().toString().split("/")[1].split(":")[0];
-            password = xo.getWsObject().toString().split("/")[1].split(":")[1];
+        String universe = "";//$NON-NLS-1$
+        String username = "";//$NON-NLS-1$
+        String password = "";//$NON-NLS-1$
+        if (xo.getWsObject().toString().contains("/")) {//$NON-NLS-1$
+            universe = xo.getWsObject().toString().split("/")[0];//$NON-NLS-1$
+            username = xo.getWsObject().toString().split("/")[1].split(":")[0];//$NON-NLS-1$//$NON-NLS-2$
+            password = xo.getWsObject().toString().split("/")[1].split(":")[1];//$NON-NLS-1$//$NON-NLS-2$
         } else {
-            username = xo.getWsObject().toString().split(":")[0];
-            password = xo.getWsObject().toString().split(":")[1];
+            username = xo.getWsObject().toString().split(":")[0];//$NON-NLS-1$
+            password = xo.getWsObject().toString().split(":")[1];//$NON-NLS-1$
         }
         initServerTree(xo.getWsKey().toString(), username, password, universe);
         // xo.getServerRoot().getParent().removeChild(xo.getServerRoot());
@@ -1185,9 +1185,9 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         user.setWsUuniverse(wUuniverse);
 
         serverRoot.setUser(user);
-        if ("".equalsIgnoreCase(universe))
-            universe = "HEAD";
-        serverRoot.setDisplayName(url + " [" + universe + "] " + username);
+        if ("".equalsIgnoreCase(universe))//$NON-NLS-1$
+            universe = "HEAD";//$NON-NLS-1$
+        serverRoot.setDisplayName(url + " [" + universe + "] " + username);//$NON-NLS-1$//$NON-NLS-2$
         TreeObject obj = new TreeObject("Pending...", serverRoot, TreeObject._INVISIBLE, null, null);
         ArrayList list = new ArrayList() {
         };

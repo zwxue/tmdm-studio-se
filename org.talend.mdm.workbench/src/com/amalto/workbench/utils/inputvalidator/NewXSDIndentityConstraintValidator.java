@@ -31,7 +31,7 @@ public class NewXSDIndentityConstraintValidator {
 
     public String isValid(String keyName, XSDIdentityConstraintCategory type, XSDElementDeclaration element) {
 
-        if (keyName == null || "".equals(keyName.trim()))
+        if (keyName == null || "".equals(keyName.trim()))//$NON-NLS-1$
             return "The Key Name cannot be empty";
 
         for (XSDIdentityConstraintDefinition eachKey : schema.getIdentityConstraintDefinitions()) {

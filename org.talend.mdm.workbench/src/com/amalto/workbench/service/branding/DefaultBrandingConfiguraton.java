@@ -14,7 +14,7 @@ package com.amalto.workbench.service.branding;
 
 public class DefaultBrandingConfiguraton implements IBrandingConfiguration {
 
-    private String title = "";
+    private String title = "";//$NON-NLS-1$
 
     public String getAdditionalTitle() {
 

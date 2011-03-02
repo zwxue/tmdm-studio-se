@@ -26,7 +26,7 @@ public class ColumnTextExtractor<T> {
 
     public void setAccessMethodName(String accessMethodName) {
 
-        if (accessMethodName == null || "".equals(accessMethodName.trim()))
+        if (accessMethodName == null || "".equals(accessMethodName.trim()))//$NON-NLS-1$
             return;
 
         this.accessMethodName = accessMethodName;
@@ -35,12 +35,12 @@ public class ColumnTextExtractor<T> {
     public String getColText(T annoInfo) {
 
         if (annoInfo == null)
-            return "";
+            return "";//$NON-NLS-1$
 
         try {
             return annoInfo.getClass().getMethod(accessMethodName).invoke(annoInfo).toString();
         } catch (Exception e) {
-            return "";
+            return "";//$NON-NLS-1$
         }
     }
 }

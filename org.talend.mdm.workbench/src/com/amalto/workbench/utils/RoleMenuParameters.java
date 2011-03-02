@@ -28,7 +28,7 @@ public class RoleMenuParameters {
 
     private static Log log = LogFactory.getLog(RoleMenuParameters.class);
 
-    private String parentID = "";
+    private String parentID = "";//$NON-NLS-1$
 
     private int position = 0;
 

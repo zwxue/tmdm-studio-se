@@ -84,9 +84,9 @@ public class ExportItemsDialog extends Dialog {
         layout.numColumns = 1;
 
         Matcher matcher;
-        final String dataCluster = "Data Container";
-        final String all = "ALL";
-        String xobjectName = "";
+        final String dataCluster = "Data Container";//$NON-NLS-1$
+        final String all = "ALL";//$NON-NLS-1$
+        String xobjectName = "";//$NON-NLS-1$
         xobjectName = xObject.getDisplayName();
         if (xobjectName.equals(dataCluster))
             xobjectName = all;
@@ -102,27 +102,27 @@ public class ExportItemsDialog extends Dialog {
         for (TreeObject treeObj : xObject.getServerRoot().getChildren()) {
             if (treeObj.getDisplayName().startsWith(dataCluster))
                 continue;
-            String revision, xobject = "";
-            String xpath = "";
+            String revision, xobject = "";//$NON-NLS-1$
+            String xpath = "";//$NON-NLS-1$
 
             matcher = filter(treeObj.getDisplayName());
             if (matcher.matches()) {
-                xobject = matcher.group(1).replace(" ", "");
+                xobject = matcher.group(1).replace(" ", "");//$NON-NLS-1$//$NON-NLS-2$
                 revision = matcher.group(3);
-                if (xobject.equalsIgnoreCase("Process")) {
-                    xobject = "TransformerV2";
+                if (xobject.equalsIgnoreCase("Process")) {//$NON-NLS-1$
+                    xobject = "TransformerV2";//$NON-NLS-1$
                 }
                 if (revision.equals(IConstants.HEAD)) {
-                    xpath = "amaltoOBJECTS" + xobject;
+                    xpath = "amaltoOBJECTS" + xobject;//$NON-NLS-1$
                 } else {
-                    xpath = "R-" + revision + "/" + "amaltoOBJECTS" + xobject;
+                    xpath = "R-" + revision + "/" + "amaltoOBJECTS" + xobject;//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                 }
-            } else if (treeObj.getDisplayName().equals("Version")) {
+            } else if (treeObj.getDisplayName().equals("Version")) {//$NON-NLS-1$
                 xobject = treeObj.getDisplayName();
-                xpath = "amaltoOBJECTS" + treeObj.getDisplayName();
+                xpath = "amaltoOBJECTS" + treeObj.getDisplayName();//$NON-NLS-1$
             }
 
-            if (!xpath.equals("")) {
+            if (!xpath.equals("")) {//$NON-NLS-1$
                 xpathMap.put(treeObj.getDisplayName(), xpath);
                 dcs.add(treeObj.getDisplayName());
             }
@@ -133,7 +133,7 @@ public class ExportItemsDialog extends Dialog {
 
         // file
 
-        fw = new FileSelectWidget(composite, "Target      ", new String[] { "*.*", "*.zip" }, comboDataCluster.getCombo()
+        fw = new FileSelectWidget(composite, "Target      ", new String[] { "*.*", "*.zip" }, comboDataCluster.getCombo()//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                 .getText(), false);
         comboDataCluster.getCombo().addSelectionListener(new SelectionListener() {
 
@@ -152,7 +152,7 @@ public class ExportItemsDialog extends Dialog {
     }
 
     private Matcher filter(String name) {
-        Pattern bracket = Pattern.compile("(.*?)(\\s*)\\[(\\w+)\\]");
+        Pattern bracket = Pattern.compile("(.*?)(\\s*)\\[(\\w+)\\]");//$NON-NLS-1$
         Matcher matcher = bracket.matcher(name);
         return matcher;
     }
@@ -180,7 +180,7 @@ public class ExportItemsDialog extends Dialog {
         dataCluster = comboDataCluster.getCombo().getText();
         dataCluster = xpathMap.get(dataCluster);
         filename = fw.getText().getText().trim();
-        Job job = new Job("Export Data Containers : " + dataCluster + " ...") {
+        Job job = new Job("Export Data Containers : " + dataCluster + " ...") {//$NON-NLS-2$
 
             @Override
             public IStatus run(IProgressMonitor monitor) {

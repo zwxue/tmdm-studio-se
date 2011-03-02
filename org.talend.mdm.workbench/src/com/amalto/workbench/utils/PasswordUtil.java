@@ -37,7 +37,7 @@ public class PasswordUtil {
 
     public static void main(String args[]) {
         Base64 base64 = new Base64();
-        String str = "qwe";
+        String str = "qwe";//$NON-NLS-1$
         byte[] enbytes = null;
         String encodeStr = null;
         byte[] debytes = null;

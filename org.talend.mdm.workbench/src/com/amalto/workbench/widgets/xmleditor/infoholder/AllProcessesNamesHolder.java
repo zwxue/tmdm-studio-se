@@ -35,7 +35,7 @@ class AllProcessesNamesHolder extends ExternalInfoHolder<String[]> {
 
         WSTransformerV2PK[] transformerPKs = null;
         try {
-            transformerPKs = port.getTransformerV2PKs(new WSGetTransformerV2PKs("")).getWsTransformerV2PK();
+            transformerPKs = port.getTransformerV2PKs(new WSGetTransformerV2PKs("")).getWsTransformerV2PK();//$NON-NLS-1$
         } catch (Exception e) {
             return new String[0];
         }

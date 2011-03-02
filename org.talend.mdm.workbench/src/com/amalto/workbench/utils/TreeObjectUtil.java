@@ -363,11 +363,11 @@ public class TreeObjectUtil {
         id = new InputDialog(shell, "Rename", "Please enter a new name", displayName, new IInputValidator() {
 
             public String isValid(String newText) {
-                if ((newText == null) || "".equals(newText))
+                if ((newText == null) || "".equals(newText))//$NON-NLS-1$
                     return "The name cannot be empty";
 
                 if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()//$NON-NLS-1$
-                        || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())//$NON-NLS-1$
+                        || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())//$NON-NLS-1$//$NON-NLS-2$
                     return "The name cannot contain the empty characters";
 
                 newText = newText.trim();
@@ -476,7 +476,7 @@ public class TreeObjectUtil {
             throws RemoteException {
         if (Util.IsEnterPrise()) {
             String revision = retrieveRevisionID(port, objectType);
-            WSRolePK[] pks = port.getRolePKs(new WSGetRolePKs(".*")).getWsRolePK();
+            WSRolePK[] pks = port.getRolePKs(new WSGetRolePKs(".*")).getWsRolePK();//$NON-NLS-1$
             if (pks == null)
                 return;
             for (WSRolePK pk : pks) {
@@ -493,7 +493,7 @@ public class TreeObjectUtil {
                             }
                         }
                         if (newSpecInstanceLst.size() < specInstance.length) {
-                            String revisionForRole = retrieveRevisionID(port, "Role");
+                            String revisionForRole = retrieveRevisionID(port, "Role");//$NON-NLS-1$
                             if (revisionForRole == null || revision == null || !revisionForRole.equals(revision))
                                 break;
                             spec.setInstance(newSpecInstanceLst.toArray(new WSRoleSpecificationInstance[] {}));
@@ -522,10 +522,10 @@ public class TreeObjectUtil {
         WSUniverseXtentisObjectsRevisionIDs[] ids = wUuniverse.getXtentisObjectsRevisionIDs();
         for (WSUniverseXtentisObjectsRevisionIDs id : ids) {
             if (id.getXtentisObjectName().equals(xtentisName) && Util.IsEnterPrise()) {
-                return id.getRevisionID().replaceAll("\\[", "").replaceAll("\\]", "");
+                return id.getRevisionID().replaceAll("\\[", "").replaceAll("\\]", "");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
             }
         }
-        if (wUuniverse.getName().equals("[HEAD]"))
+        if (wUuniverse.getName().equals("[HEAD]"))//$NON-NLS-1$
             return wUuniverse.getName();
         return null;
     }

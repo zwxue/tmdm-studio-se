@@ -71,14 +71,14 @@ public abstract class ExtensibleSimpleXMLEditorPageContent extends ExtensibleXML
             singleValuePropName2Value.put(
                     eachSingleValueProp,
                     getSingleValueFromXMLDoc((Document) parent, eachSingleValueProp, valuePropName2DefaultValue
-                            .containsKey(eachSingleValueProp) ? valuePropName2DefaultValue.get(eachSingleValueProp) : "?"));
+                            .containsKey(eachSingleValueProp) ? valuePropName2DefaultValue.get(eachSingleValueProp) : "?"));//$NON-NLS-1$
         }
 
         for (String eachMultiValuesProp : multiValuesPropNames) {
             multiValuesPropName2Value.put(
                     eachMultiValuesProp,
                     getValuesFromXMLDoc((Document) parent, eachMultiValuesProp, multiValuesPropName2Delimiter
-                            .containsKey(eachMultiValuesProp) ? multiValuesPropName2Delimiter.get(eachMultiValuesProp) : ","));
+                            .containsKey(eachMultiValuesProp) ? multiValuesPropName2Delimiter.get(eachMultiValuesProp) : ","));//$NON-NLS-1$
         }
 
         initSingleValueFields(singleValuePropName2Value);
@@ -87,7 +87,7 @@ public abstract class ExtensibleSimpleXMLEditorPageContent extends ExtensibleXML
     }
 
     protected String getDefaultValue() {
-        return "?";
+        return "?";//$NON-NLS-1$
     }
 
     protected void doAddSingleValueElement(Element rootElement, String prop) {
@@ -95,13 +95,13 @@ public abstract class ExtensibleSimpleXMLEditorPageContent extends ExtensibleXML
         if (!valuePropName2GetMethod.containsKey(prop))
             return;
 
-        String propValue = "";
+        String propValue = "";//$NON-NLS-1$
         try {
             Method method = getClass().getMethod(valuePropName2GetMethod.get(prop));
             propValue = method.invoke(this).toString();
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            rootElement.addElement(prop).setText("");
+            rootElement.addElement(prop).setText("");//$NON-NLS-1$
             return;
         }
 
@@ -121,19 +121,19 @@ public abstract class ExtensibleSimpleXMLEditorPageContent extends ExtensibleXML
             propValues = (List<String>) method.invoke(this);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            rootElement.addElement(prop).setText("");
+            rootElement.addElement(prop).setText("");//$NON-NLS-1$
             return;
         }
 
         rootElement.addElement(prop).setText(
                 getListContentExpression(propValues,
-                        (multiValuesPropName2Delimiter.containsKey(prop)) ? multiValuesPropName2Delimiter.get(prop) : ","));
+                        (multiValuesPropName2Delimiter.containsKey(prop)) ? multiValuesPropName2Delimiter.get(prop) : ","));//$NON-NLS-1$
 
     }
 
     protected String getListContentExpression(List<String> values, String delimiter) {
 
-        String result = "";
+        String result = "";//$NON-NLS-1$
 
         for (String eachValue : values)
             result += (eachValue + delimiter);
@@ -159,7 +159,7 @@ public abstract class ExtensibleSimpleXMLEditorPageContent extends ExtensibleXML
 
         List<Object> results = new ArrayList<Object>();
 
-        List<?> nodes = xmlDoc.selectNodes("/" + getRootElementName() + "/" + valueName);
+        List<?> nodes = xmlDoc.selectNodes("/" + getRootElementName() + "/" + valueName);//$NON-NLS-1$//$NON-NLS-2$
 
         if (nodes == null || nodes.isEmpty())
             return results;
@@ -170,7 +170,7 @@ public abstract class ExtensibleSimpleXMLEditorPageContent extends ExtensibleXML
                 continue;
 
             String nodeValue = ((Node) eachNode).getText();
-            if (nodeValue == null || "".equals(nodeValue.trim()))
+            if (nodeValue == null || "".equals(nodeValue.trim()))//$NON-NLS-1$
                 continue;
 
             if (delimiter == null) {
@@ -186,7 +186,7 @@ public abstract class ExtensibleSimpleXMLEditorPageContent extends ExtensibleXML
 
     protected void addSingleValueName(String name) {
 
-        if (name == null || "".equals(name.trim()) || singleValuePropNames.contains(name))
+        if (name == null || "".equals(name.trim()) || singleValuePropNames.contains(name))//$NON-NLS-1$
             return;
 
         singleValuePropNames.add(name);
@@ -194,7 +194,7 @@ public abstract class ExtensibleSimpleXMLEditorPageContent extends ExtensibleXML
 
     protected void addMultiValuesName(String name) {
 
-        if (name == null || "".equals(name.trim()) || multiValuesPropNames.contains(name))
+        if (name == null || "".equals(name.trim()) || multiValuesPropNames.contains(name))//$NON-NLS-1$
             return;
 
         multiValuesPropNames.add(name);
@@ -202,7 +202,7 @@ public abstract class ExtensibleSimpleXMLEditorPageContent extends ExtensibleXML
 
     protected void addAllOrderedPropNames(String name) {
 
-        if (name == null || "".equals(name.trim()) || allOrderedValuePropNames.contains(name))
+        if (name == null || "".equals(name.trim()) || allOrderedValuePropNames.contains(name))//$NON-NLS-1$
             return;
 
         allOrderedValuePropNames.add(name);
@@ -211,7 +211,7 @@ public abstract class ExtensibleSimpleXMLEditorPageContent extends ExtensibleXML
 
     protected void addValuePropName2GetMethod(String prop, String getMethod) {
 
-        if (prop == null || "".equals(prop.trim()) || getMethod == null || "".equals(getMethod.trim()))
+        if (prop == null || "".equals(prop.trim()) || getMethod == null || "".equals(getMethod.trim()))//$NON-NLS-1$//$NON-NLS-2$
             return;
 
         valuePropName2GetMethod.put(prop, getMethod);
@@ -219,15 +219,15 @@ public abstract class ExtensibleSimpleXMLEditorPageContent extends ExtensibleXML
 
     protected void addMultiValuesProp2Delimiter(String prop, String delimiter) {
 
-        if (prop == null || "".equals(prop.trim()))
+        if (prop == null || "".equals(prop.trim()))//$NON-NLS-1$
             return;
 
-        multiValuesPropName2Delimiter.put(prop, delimiter == null ? "" : delimiter);
+        multiValuesPropName2Delimiter.put(prop, delimiter == null ? "" : delimiter);//$NON-NLS-1$
     }
 
     protected void addPropName2DefaultValue(String prop, Object defaultValue) {
 
-        if (prop == null || "".equals(prop.trim()))
+        if (prop == null || "".equals(prop.trim()))//$NON-NLS-1$
             return;
 
         valuePropName2DefaultValue.put(prop, defaultValue);

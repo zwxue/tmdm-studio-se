@@ -45,23 +45,23 @@ public class SAXErrorHandler extends DefaultHandler {
 
     public void warning(SAXParseException ex) throws SAXException {
         setErrors(formatError("Warning", ex));//$NON-NLS-1$
-        setErrors("\n");
+        setErrors("\n");//$NON-NLS-1$
     }
 
     public void error(SAXParseException ex) throws SAXException {
-        setErrors(formatError("Error", ex));
-        setErrors("\n");
+        setErrors(formatError("Error", ex));//$NON-NLS-1$
+        setErrors("\n");//$NON-NLS-1$
     }
 
     public void fatalError(SAXParseException ex) throws SAXException {
         setErrors(formatError("Fatal Error", ex));//$NON-NLS-1$
-        setErrors("\n");
+        setErrors("\n");//$NON-NLS-1$
         throw ex;
     }
 
     private String formatError(String type, SAXParseException ex) {
-        String error = "";
-        error = "[" + type + "] ";
+        String error = "";//$NON-NLS-1$
+        error = "[" + type + "] ";//$NON-NLS-1$//$NON-NLS-2$
         String systemId = ex.getSystemId();
         if (systemId != null) {
             int index = systemId.lastIndexOf('/');
@@ -70,20 +70,20 @@ public class SAXErrorHandler extends DefaultHandler {
             error = error + systemId;
         }
         String msg = ex.getMessage();
-        msg = namespacesP.matcher(msg).replaceAll("");
-        msg = bracketsP.matcher(msg).replaceAll("");
-        msg = commaP.matcher(msg).replaceAll("");
-        error = error + ":" + ex.getLineNumber() + ":" + ex.getColumnNumber() + ": " + msg;
+        msg = namespacesP.matcher(msg).replaceAll("");//$NON-NLS-1$
+        msg = bracketsP.matcher(msg).replaceAll("");//$NON-NLS-1$
+        msg = commaP.matcher(msg).replaceAll("");//$NON-NLS-1$
+        error = error + ":" + ex.getLineNumber() + ":" + ex.getColumnNumber() + ": " + msg;//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
         return error;
     }
 
     public String getErrors() {
-        return (errors == null) ? "" : errors;
+        return (errors == null) ? "" : errors;//$NON-NLS-1$
     }
 
     public void setErrors(String error) {
         if (errors == null)
-            errors = "";
+            errors = "";//$NON-NLS-1$
         errors += error;
     }
 

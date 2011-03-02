@@ -26,7 +26,7 @@ public class XPathCellEditor extends EditableDialogCellEditor {
     private String defaultDataModelName;
 
     public XPathCellEditor(Composite parent, IAllDataModelHolder allDataModelHolder) {
-        this(parent, allDataModelHolder, "");
+        this(parent, allDataModelHolder, "");//$NON-NLS-1$
     }
 
     public XPathCellEditor(Composite parent, IAllDataModelHolder allDataModelHolder, String defaultDataModelName) {

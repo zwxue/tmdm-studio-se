@@ -276,7 +276,7 @@ public class ImportItemsWizard extends Wizard {
 
     private void checkUpExchangeImport(boolean check) {
         if (check) {
-            if (!zipFileRepository.toString().equals("")) {
+            if (!zipFileRepository.toString().equals("")) {//$NON-NLS-1$
                 int pos = zipFileRepository.toString().lastIndexOf(File.separator);
                 importFolder = zipFileRepository.toString().substring(0, pos);
             }
@@ -494,7 +494,7 @@ public class ImportItemsWizard extends Wizard {
                 for (String subItem : subItems) {
                     try {
                         Util.uploadImageFile(serverRoot.getEndpointIpAddress() + "/imageserver/secure/ImageUploadServlet",//$NON-NLS-1$
-                                importFolder + "/" + subItem, serverRoot.getUsername(), serverRoot.getPassword(), picturePathMap);
+                                importFolder + "/" + subItem, serverRoot.getUsername(), serverRoot.getPassword(), picturePathMap);//$NON-NLS-1$
                     } catch (Exception e2) {
                         log.error(e2.getMessage(), e2);
                     }
@@ -800,7 +800,7 @@ public class ImportItemsWizard extends Wizard {
                 // available models
                 java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
                 for (IAvailableModel model : availablemodels) {
-                    if (model.toString().indexOf("WorkflowAvailableModel") != -1) {
+                    if (model.toString().indexOf("WorkflowAvailableModel") != -1) {//$NON-NLS-1$
                         model.doImport(item, importFolder);
                     }
                 }
@@ -814,7 +814,7 @@ public class ImportItemsWizard extends Wizard {
                     try {
                         reader = new InputStreamReader(new FileInputStream(importFolder + "/" + subItem), "UTF-8");//$NON-NLS-1$//$NON-NLS-2$
 
-                        if (isV2Transformer(importFolder + "/" + subItem)) {
+                        if (isV2Transformer(importFolder + "/" + subItem)) {//$NON-NLS-1$
 
                             WSTransformerV2 model = new WSTransformerV2();
                             model = (WSTransformerV2) Unmarshaller.unmarshal(WSTransformerV2.class, reader);
@@ -924,7 +924,7 @@ public class ImportItemsWizard extends Wizard {
                         if (model.getIsTransformerActive() == null)
                             model.setIsTransformerActive(new WSBoolean(false));
                         if (model.getTransformerPK() == null)
-                            model.setTransformerPK("");
+                            model.setTransformerPK("");//$NON-NLS-1$
                         // TODO: because the operator and stringPredicate can not be export,so if there is any where
                         // condition
                         // now it will add the default operator and string predicate for all the where conditions
@@ -1013,7 +1013,7 @@ public class ImportItemsWizard extends Wizard {
                     String content = wsItem.getContent();
                     boolean isUpdate = false;
                     for (String picturekey : picturePathMap.keySet()) {
-                        String fileName = picturekey.substring(picturekey.indexOf("-") + 1);
+                        String fileName = picturekey.substring(picturekey.indexOf("-") + 1);//$NON-NLS-1$
                         if (content.contains(fileName)) {
                             String targetPicturePath = picturePathMap.get(picturekey);
                             content = updatePicturePath(content, picturekey, targetPicturePath);
@@ -1113,7 +1113,7 @@ public class ImportItemsWizard extends Wizard {
             folderBtn = new Button(composite, SWT.RADIO);
             folderBtn.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             folderBtn.setText("Select root directory:");
-            folder = new FileSelectWidget(composite, "", new String[] { "*.*" }, "", false);//$NON-NLS-1$//$NON-NLS-2$
+            folder = new FileSelectWidget(composite, "", new String[] { "*.*" }, "", false);//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
             // folder.getCmp().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
             // false, 1, 1));
             folderBtn.addSelectionListener(new SelectionListener() {

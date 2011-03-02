@@ -105,7 +105,7 @@ public class TisTableViewer extends ComplexTableViewer {
         layout.marginHeight = 0;
         stepUpDownComposite.setLayout(layout);
         //
-        addButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);
+        addButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
         addButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         addButton.setToolTipText("Add");
         if (isXpath()) {
@@ -135,7 +135,7 @@ public class TisTableViewer extends ComplexTableViewer {
         });
         // Add Multi
         if (isAddMulti()) {
-            Button selNewPathButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);
+            Button selNewPathButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
             selNewPathButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
             selNewPathButton.setToolTipText("Add Multiple");
             selNewPathButton.setImage(ImageCache.getCreatedImage(EImage.SELECT_NEWXPATH.getPath()));
@@ -155,7 +155,7 @@ public class TisTableViewer extends ComplexTableViewer {
                     xpathDialog.open();
 
                     if (xpathDialog.getReturnCode() == Window.OK) {
-                        String[] xpaths = xpathDialog.getXpath().split("&");
+                        String[] xpaths = xpathDialog.getXpath().split("&");//$NON-NLS-1$
                         for (String xpath : xpaths) {
                             // check uniqueness by concatenating all the values
                             List<Line> list = (List<Line>) getViewer().getInput();
@@ -174,7 +174,7 @@ public class TisTableViewer extends ComplexTableViewer {
                 };
             });
         }
-        deleteButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);
+        deleteButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
         deleteButton.setToolTipText("Delete the selected item");
         deleteButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         deleteButton.addSelectionListener(new SelectionListener() {
@@ -195,7 +195,7 @@ public class TisTableViewer extends ComplexTableViewer {
         });
         deleteButton.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
         // delete all
-        Button deleteAllButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);
+        Button deleteAllButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
         deleteAllButton.setToolTipText("Delete all items");
         deleteAllButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         deleteAllButton.addSelectionListener(new SelectionListener() {
@@ -213,7 +213,7 @@ public class TisTableViewer extends ComplexTableViewer {
         });
         deleteAllButton.setImage(ImageCache.getCreatedImage(EImage.PROGRESS_REMALL.getPath()));
 
-        upButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);
+        upButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
         upButton.setToolTipText("Move up the selected item");
         upButton.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
         upButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
@@ -244,7 +244,7 @@ public class TisTableViewer extends ComplexTableViewer {
                 }
             };
         });
-        downButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);
+        downButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
         downButton.setToolTipText("Move down the selected item");
         downButton.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
         downButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
@@ -276,7 +276,7 @@ public class TisTableViewer extends ComplexTableViewer {
             };
         });
 
-        copyButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);
+        copyButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
         copyButton.setToolTipText("Copy the selected items");
         copyButton.setImage(ImageCache.getCreatedImage(EImage.COPY.getPath()));
         copyButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
@@ -310,7 +310,7 @@ public class TisTableViewer extends ComplexTableViewer {
                 }
             }
         });
-        pastButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);
+        pastButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
         pastButton.setToolTipText("Paste the selected item");
         pastButton.setImage(ImageCache.getCreatedImage(EImage.PASTE.getPath()));
         pastButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
@@ -418,7 +418,7 @@ public class TisTableViewer extends ComplexTableViewer {
                         }
                     }
                 }
-                return "";
+                return "";//$NON-NLS-1$
             }
 
             public Image getColumnImage(Object element, int columnIndex) {
@@ -477,7 +477,7 @@ public class TisTableViewer extends ComplexTableViewer {
                 }
                 for (KeyValue keyvalue : line.keyValues) {
                     if (property.equals(keyvalue.key)) {
-                        if (keyvalue.value.equals("")) {
+                        if (keyvalue.value.equals("")) {//$NON-NLS-1$
                             return columns.get(columnIndex).getNillDisplay();
                         }
                         return keyvalue.value;
@@ -557,7 +557,7 @@ public class TisTableViewer extends ComplexTableViewer {
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < columns.size(); i++) {
             ComplexTableViewerColumn column = columns.get(i);
-            sb = sb.append(column.name).append("#");
+            sb = sb.append(column.name).append("#");//$NON-NLS-1$
         }
         return sb.toString();
     }

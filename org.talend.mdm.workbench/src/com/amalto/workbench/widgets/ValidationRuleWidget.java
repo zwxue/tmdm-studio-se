@@ -66,10 +66,10 @@ public class ValidationRuleWidget {
         layout.marginBottom = 0;
         composite.setLayout(layout);
 
-        text = toolkit.createText(composite, "", SWT.BORDER | SWT.MULTI | SWT.LEFT);
+        text = toolkit.createText(composite, "", SWT.BORDER | SWT.MULTI | SWT.LEFT);//$NON-NLS-1$
         textGD = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
         text.setLayoutData(textGD);
-        button = toolkit.createButton(composite, "", SWT.PUSH);
+        button = toolkit.createButton(composite, "", SWT.PUSH);//$NON-NLS-1$
         button.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 
         button.addSelectionListener(new SelectionAdapter() {

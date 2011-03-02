@@ -34,7 +34,7 @@ public class LabelText {
     public LabelText(FormToolkit toolkit, Composite parent, final String labelName) {
         label = toolkit.createLabel(parent, labelName, SWT.NULL);
         label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
-        text = toolkit.createText(parent, "", SWT.BORDER);
+        text = toolkit.createText(parent, "", SWT.BORDER);//$NON-NLS-1$
         text.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         // text.addFocusListener(factory.focusListener);
         // Util.createCompDropTarget(text);

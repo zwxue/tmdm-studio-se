@@ -214,7 +214,7 @@ public class RegisterUserBindingStub extends org.apache.axis.client.Stub impleme
         } else {
             super.service = service;
         }
-        ((org.apache.axis.client.Service) super.service).setTypeMappingVersion("1.2");
+        ((org.apache.axis.client.Service) super.service).setTypeMappingVersion("1.2");//$NON-NLS-1$
         java.lang.Class cls;
         javax.xml.namespace.QName qName;
         javax.xml.namespace.QName qName2;

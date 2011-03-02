@@ -23,11 +23,11 @@ import com.amalto.workbench.dialogs.SimpleListStringContentDialog;
 
 public class ListStringContentDialogCellEditor extends EditableDialogCellEditor {
 
-    public static final String DEFAULT_INFODELIMITER = "<;>";
+    public static final String DEFAULT_INFODELIMITER = "<;>";//$NON-NLS-1$
 
-    private String dialogTitle = "";
+    private String dialogTitle = "";//$NON-NLS-1$
 
-    private String infoLabel = "";
+    private String infoLabel = "";//$NON-NLS-1$
 
     private String infoDelimiter = DEFAULT_INFODELIMITER;
 
@@ -62,21 +62,21 @@ public class ListStringContentDialogCellEditor extends EditableDialogCellEditor 
 
     private String translateInfosToStr(String[] infos) {
 
-        String result = "";
+        String result = "";//$NON-NLS-1$
 
         if (infos.length == 0)
-            return "";
+            return "";//$NON-NLS-1$
 
         for (String eachInfo : infos) {
 
-            if ("".equals(eachInfo.trim()))
+            if ("".equals(eachInfo.trim()))//$NON-NLS-1$
                 continue;
 
             result += (eachInfo + infoDelimiter);
         }
 
-        if ("".equals(result.trim()))
-            return "";
+        if ("".equals(result.trim()))//$NON-NLS-1$
+            return "";//$NON-NLS-1$
 
         return result.substring(0, result.length() - infoDelimiter.length());
     }
@@ -88,7 +88,7 @@ public class ListStringContentDialogCellEditor extends EditableDialogCellEditor 
 
         String curValue = (String) getValue();
 
-        if ("".equals(curValue.trim()))
+        if ("".equals(curValue.trim()))//$NON-NLS-1$
             return new String[0];
 
         String[] infos = curValue.split(infoDelimiter);
@@ -99,7 +99,7 @@ public class ListStringContentDialogCellEditor extends EditableDialogCellEditor 
         List<String> results = new ArrayList<String>();
         for (String eachInfo : infos) {
 
-            if ("".equals(eachInfo.trim()))
+            if ("".equals(eachInfo.trim()))//$NON-NLS-1$
                 continue;
 
             results.add(eachInfo);

@@ -26,7 +26,7 @@ public class NumbericCellEditor extends TextCellEditor {
 
     public static final String REGX_POSITIVDOUBLE = "^[\\d]+\\d*.?\\d*";//$NON-NLS-1$
 
-    private String regx = "";
+    private String regx = "";//$NON-NLS-1$
 
     protected NumbericCellEditor(Composite parent, int style, String regx) {
         super(parent, style);

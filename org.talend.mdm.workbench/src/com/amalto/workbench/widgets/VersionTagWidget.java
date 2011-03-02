@@ -74,7 +74,7 @@ public class VersionTagWidget {
         tagText = new Text(tagGroup, SWT.BORDER);
         tagText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         if (defaultTagText == null)
-            defaultTagText = "";
+            defaultTagText = "";//$NON-NLS-1$
         tagText.setText(defaultTagText);
         tagText.setEditable(isTagEditable);
 
@@ -84,7 +84,7 @@ public class VersionTagWidget {
 
         commentText = new Text(tagGroup, SWT.MULTI | SWT.WRAP | SWT.BORDER | SWT.V_SCROLL);
         commentText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        commentText.setText("");
+        commentText.setText("");//$NON-NLS-1$
         ((GridData) commentText.getLayoutData()).widthHint = 250;
         ((GridData) commentText.getLayoutData()).heightHint = 25;
         commentText.forceFocus();
@@ -109,8 +109,8 @@ public class VersionTagWidget {
 
             public String getColumnText(Object element, int columnIndex) {
                 WSVersioningUniverseVersionsTagStructure entry = (WSVersioningUniverseVersionsTagStructure) element;
-                return entry.getTagName() + " - " + entry.getLastComment() + "  [" + entry.getLastDate() + " "
-                        + entry.getLastAuthor() + "]";
+                return entry.getTagName() + " - " + entry.getLastComment() + "  [" + entry.getLastDate() + " "//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                        + entry.getLastAuthor() + "]";//$NON-NLS-1$
             }
 
             public Image getColumnImage(Object element, int columnIndex) {

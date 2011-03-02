@@ -52,7 +52,7 @@ public class TableViewWrapper {
 
         public DeleteItemAction(ObserverMetaData obsv) {
             super();
-            setImageDescriptor(ImageCache.getImage("icons/delete_obj.gif"));//$NON-NLS-1$//$NON-NLS-2$
+            setImageDescriptor(ImageCache.getImage("icons/delete_obj.gif"));//$NON-NLS-1$
             setText("Delete the selected item(s)");
             setToolTipText("Delete the selected item(s)");
 
@@ -75,7 +75,7 @@ public class TableViewWrapper {
 
         public RenameItemAction(ObserverMetaData obsv) {
             super();
-            setImageDescriptor(ImageCache.getImage("icons/rename.png"));//$NON-NLS-1$//$NON-NLS-2$
+            setImageDescriptor(ImageCache.getImage("icons/rename.png"));//$NON-NLS-1$
             setText("Rename");
             setToolTipText("Rename");
 

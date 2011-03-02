@@ -88,8 +88,8 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             monitor.beginTask("Loading " + IConstants.TALEND + " Server Objects", "admin".equals(username) ? 12 : 9);
             // server
             String displayName = endpointaddress;
-            serverRoot = new TreeParent(displayName, null, TreeObject._SERVER_, endpointaddress, ("".equals(universe) ? ""
-                    : universe + "/") + username + ":" + (password == null ? "" : password));
+            serverRoot = new TreeParent(displayName, null, TreeObject._SERVER_, endpointaddress, ("".equals(universe) ? ""//$NON-NLS-1$//$NON-NLS-2$
+                    : universe + "/") + username + ":" + (password == null ? "" : password));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 
             // init load category
             monitor.subTask("load category...");
@@ -164,7 +164,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                     TreeObject.DATA_CLUSTER, null, null);
             WSDataClusterPK[] xdcPKs = null;
             try {
-                xdcPKs = port.getDataClusterPKs(new WSRegexDataClusterPKs("")).getWsDataClusterPKs();
+                xdcPKs = port.getDataClusterPKs(new WSRegexDataClusterPKs("")).getWsDataClusterPKs();//$NON-NLS-1$
             } catch (Exception e) {
 
                 log.error(e.getMessage(), e);
@@ -199,7 +199,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             // transformer
             WSTransformerV2PK[] transformerPKs = null;
             try {
-                transformerPKs = port.getTransformerV2PKs(new WSGetTransformerV2PKs("")).getWsTransformerV2PK();
+                transformerPKs = port.getTransformerV2PKs(new WSGetTransformerV2PKs("")).getWsTransformerV2PK();//$NON-NLS-1$
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
@@ -225,7 +225,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             // routing rule
             WSRoutingRulePK[] routingRulePKs = null;
             try {
-                routingRulePKs = port.getRoutingRulePKs(new WSGetRoutingRulePKs("")).getWsRoutingRulePKs();
+                routingRulePKs = port.getRoutingRulePKs(new WSGetRoutingRulePKs("")).getWsRoutingRulePKs();//$NON-NLS-1$
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
             }
@@ -254,7 +254,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             TreeParent views = new TreeParent(EXtentisObjects.View.getDisplayName(), serverRoot, TreeObject.VIEW, null, null);
             WSViewPK[] viewPKs = null;
             try {
-                viewPKs = port.getViewPKs((new WSGetViewPKs(""))).getWsViewPK();
+                viewPKs = port.getViewPKs((new WSGetViewPKs(""))).getWsViewPK();//$NON-NLS-1$
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
 
@@ -281,7 +281,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                     TreeObject.STORED_PROCEDURE, null, null);
             WSStoredProcedurePK[] spk = null;
             try {
-                spk = port.getStoredProcedurePKs(new WSRegexStoredProcedure("")).getWsStoredProcedurePK();
+                spk = port.getStoredProcedurePKs(new WSRegexStoredProcedure("")).getWsStoredProcedurePK();//$NON-NLS-1$
             } catch (Exception e) {
 
                 log.error(e.getMessage(), e);
@@ -312,7 +312,7 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             WSMenuPK[] menuPKs = null;
             boolean hasMenus = true;
             try {
-                menuPKs = port.getMenuPKs(new WSGetMenuPKs("*")).getWsMenuPK();
+                menuPKs = port.getMenuPKs(new WSGetMenuPKs("*")).getWsMenuPK();//$NON-NLS-1$
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
                 // This server IS old
@@ -398,24 +398,24 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
                 for (WSUniverseXtentisObjectsRevisionIDs id : ids) {
                     if (id.getXtentisObjectName().equals(object.getName())) {
                         if (id.getRevisionID() != null && id.getRevisionID().length() > 0) {
-                            node.setDisplayName(node.getDisplayName() + " ["
-                                    + id.getRevisionID().replaceAll("\\[", "").replaceAll("\\]", "").trim() + "]");
+                            node.setDisplayName(node.getDisplayName() + " ["//$NON-NLS-1$
+                                    + id.getRevisionID().replaceAll("\\[", "").replaceAll("\\]", "").trim() + "]");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$
                         } else {
-                            node.setDisplayName(node.getDisplayName() + " [" + IConstants.HEAD + "]");
+                            node.setDisplayName(node.getDisplayName() + " [" + IConstants.HEAD + "]");//$NON-NLS-1$//$NON-NLS-2$
                         }
                         isSet = true;
                         break;
                     }
                 }
                 if (!isSet) {
-                    node.setDisplayName(node.getDisplayName() + " [" + IConstants.HEAD + "]");
+                    node.setDisplayName(node.getDisplayName() + " [" + IConstants.HEAD + "]");//$NON-NLS-1$//$NON-NLS-2$
                 }
             }
-            String name = serverRoot.getDisplayName() + " ["
-                    + universe.getName().replaceAll("\\[", "").replaceAll("\\]", "").trim() + "]" + " " + username;
+            String name = serverRoot.getDisplayName() + " ["//$NON-NLS-1$
+                    + universe.getName().replaceAll("\\[", "").replaceAll("\\]", "").trim() + "]" + " " + username;//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
             serverRoot.setDisplayName(name);
         } else {
-            String name = serverRoot.getDisplayName() + " " + username;
+            String name = serverRoot.getDisplayName() + " " + username;//$NON-NLS-1$
             serverRoot.setDisplayName(name);
         }
     }
@@ -434,17 +434,17 @@ public class XtentisServerObjectsRetriever implements IRunnableWithProgress {
             for (WSUniverseXtentisObjectsRevisionIDs id : ids) {
                 if (id.getXtentisObjectName().equals(object.getName())) {
                     if (id.getRevisionID() != null && id.getRevisionID().length() > 0) {
-                        node.setDisplayName(node.getDisplayName() + " ["
-                                + id.getRevisionID().replaceAll("\\[", "").replaceAll("\\]", "").trim() + "]");
+                        node.setDisplayName(node.getDisplayName() + " ["//$NON-NLS-1$
+                                + id.getRevisionID().replaceAll("\\[", "").replaceAll("\\]", "").trim() + "]");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$
                     } else {
-                        node.setDisplayName(node.getDisplayName() + " [" + IConstants.HEAD + "]");
+                        node.setDisplayName(node.getDisplayName() + " [" + IConstants.HEAD + "]");//$NON-NLS-1$//$NON-NLS-2$
                     }
                     isSet = true;
                     break;
                 }
             }
             if (!isSet) {
-                node.setDisplayName(node.getDisplayName() + " [" + IConstants.HEAD + "]");
+                node.setDisplayName(node.getDisplayName() + " [" + IConstants.HEAD + "]");//$NON-NLS-1$//$NON-NLS-2$
             }
         }
     }

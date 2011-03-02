@@ -174,146 +174,146 @@ public class Util {
     public static LinkedHashMap<String, String> iso2lang = new LinkedHashMap<String, String>();
 
     static {
-        iso2lang.put("en", "English");
-        iso2lang.put("fr", "French");
-        iso2lang.put("es", "Spanish");
-        iso2lang.put("ab", "Abkhazian");
-        iso2lang.put("aa", "Afar");
-        iso2lang.put("af", "Afrikaans");
-        iso2lang.put("sq", "Albanian");
-        iso2lang.put("am", "Amharic");
-        iso2lang.put("ar", "Arabic");
-        iso2lang.put("hy", "Armenian");
-        iso2lang.put("as", "Assamese");
-        iso2lang.put("ay", "Aymara");
-        iso2lang.put("az", "Azerbaijani");
-        iso2lang.put("ba", "Bashkir");
-        iso2lang.put("eu", "Basque");
-        iso2lang.put("bn", "Bengali (Bangla)");
-        iso2lang.put("dz", "Bhutani");
-        iso2lang.put("bh", "Bihari");
-        iso2lang.put("bi", "Bislama");
-        iso2lang.put("br", "Breton");
-        iso2lang.put("bg", "Bulgarian");
-        iso2lang.put("my", "Burmese");
-        iso2lang.put("be", "Byelorussian");
-        iso2lang.put("km", "Cambodian");
-        iso2lang.put("ca", "Catalan");
-        iso2lang.put("zh", "Chinese");
-        iso2lang.put("co", "Corsican");
-        iso2lang.put("hr", "Croatian");
-        iso2lang.put("cs", "Czech");
-        iso2lang.put("da", "Danish");
-        iso2lang.put("nl", "Dutch");
-        iso2lang.put("eo", "Esperanto");
-        iso2lang.put("et", "Estonian");
-        iso2lang.put("fo", "Faeroese");
-        iso2lang.put("fa", "Farsi");
-        iso2lang.put("fj", "Fiji");
-        iso2lang.put("fi", "Finnish");
-        iso2lang.put("fy", "Frisian");
-        iso2lang.put("gl", "Galician");
-        iso2lang.put("ka", "Georgian");
-        iso2lang.put("de", "German");
-        iso2lang.put("el", "Greek");
-        iso2lang.put("kl", "Greenlandic");
-        iso2lang.put("gn", "Guarani");
-        iso2lang.put("gu", "Gujarati");
-        iso2lang.put("ha", "Hausa");
-        iso2lang.put("iw, he", "Hebrew");
-        iso2lang.put("hi", "Hindi");
-        iso2lang.put("hu", "Hungarian");
-        iso2lang.put("is", "Icelandic");
-        iso2lang.put("in, id", "Indonesian");
-        iso2lang.put("ia", "Interlingua");
-        iso2lang.put("ie", "Interlingue");
-        iso2lang.put("iu", "Inuktitut");
-        iso2lang.put("ik", "Inupiak");
-        iso2lang.put("ga", "Irish");
-        iso2lang.put("it", "Italian");
-        iso2lang.put("ja", "Japanese");
-        iso2lang.put("ji", "Yiddish");
-        iso2lang.put("jw", "Javanese");
-        iso2lang.put("kn", "Kannada");
-        iso2lang.put("ks", "Kashmiri");
-        iso2lang.put("kk", "Kazakh");
-        iso2lang.put("rw", "Kinyarwanda");
-        iso2lang.put("ky", "Kirghiz");
-        iso2lang.put("rn", "Kirundi");
-        iso2lang.put("ko", "Korean");
-        iso2lang.put("ku", "Kurdish");
-        iso2lang.put("lo", "Laothian");
-        iso2lang.put("la", "Latin");
-        iso2lang.put("lv", "Latvian (Lettish)");
-        iso2lang.put("ln", "Lingala");
-        iso2lang.put("lt", "Lithuanian");
-        iso2lang.put("mk", "Macedonian");
-        iso2lang.put("mg", "Malagasy");
-        iso2lang.put("ms", "Malay");
-        iso2lang.put("ml", "Malayalam");
-        iso2lang.put("mt", "Maltese");
-        iso2lang.put("gv", "Manx Gaelic");
-        iso2lang.put("mi", "Maori");
-        iso2lang.put("mr", "Marathi");
-        iso2lang.put("mo", "Moldavian");
-        iso2lang.put("mn", "Mongolian");
-        iso2lang.put("na", "Nauru");
-        iso2lang.put("ne", "Nepali");
-        iso2lang.put("no", "Norwegian");
-        iso2lang.put("oc", "Occitan");
-        iso2lang.put("or", "Oriya");
-        iso2lang.put("om", "Oromo (Afan)");
-        iso2lang.put("ps", "Pashto (Pushto)");
-        iso2lang.put("pl", "Polish");
-        iso2lang.put("pt", "Portuguese");
-        iso2lang.put("pa", "Punjabi");
-        iso2lang.put("qu", "Quechua");
-        iso2lang.put("rm", "Rhaeto-Romance");
-        iso2lang.put("ro", "Romanian");
-        iso2lang.put("ru", "Russian");
-        iso2lang.put("sm", "Samoan");
-        iso2lang.put("sg", "Sangro");
-        iso2lang.put("sa", "Sanskrit");
-        iso2lang.put("gd", "Scots Gaelic");
-        iso2lang.put("sr", "Serbian");
-        iso2lang.put("sh", "Serbo-Croatian");
-        iso2lang.put("st", "Sesotho");
-        iso2lang.put("tn", "Setswana");
-        iso2lang.put("sn", "Shona");
-        iso2lang.put("sd", "Sindhi");
-        iso2lang.put("si", "Singhalese");
-        iso2lang.put("ss", "Siswati");
-        iso2lang.put("sk", "Slovak");
-        iso2lang.put("sl", "Slovenian");
-        iso2lang.put("so", "Somali");
-        iso2lang.put("su", "Sundanese");
-        iso2lang.put("sw", "Swahili");
-        iso2lang.put("sv", "Swedish");
-        iso2lang.put("tl", "Tagalog");
-        iso2lang.put("tg", "Tajik");
-        iso2lang.put("ta", "Tamil");
-        iso2lang.put("tt", "Tatar");
-        iso2lang.put("te", "Telugu");
-        iso2lang.put("th", "Thai");
-        iso2lang.put("bo", "Tibetan");
-        iso2lang.put("ti", "Tigrinya");
-        iso2lang.put("to", "Tonga");
-        iso2lang.put("ts", "Tsonga");
-        iso2lang.put("tr", "Turkish");
-        iso2lang.put("tk", "Turkmen");
-        iso2lang.put("tw", "Twi");
-        iso2lang.put("ug", "Uighur");
-        iso2lang.put("uk", "Ukrainian");
-        iso2lang.put("ur", "Urdu");
-        iso2lang.put("uz", "Uzbek");
-        iso2lang.put("vi", "Vietnamese");
-        iso2lang.put("vo", "Volapük");
-        iso2lang.put("cy", "Welsh");
-        iso2lang.put("wo", "Wolof");
-        iso2lang.put("xh", "Xhosa");
-        iso2lang.put("yi", "Yiddish");
-        iso2lang.put("yo", "Yoruba");
-        iso2lang.put("zu", "Zulu");
+        iso2lang.put("en", "English");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("fr", "French");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("es", "Spanish");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ab", "Abkhazian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("aa", "Afar");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("af", "Afrikaans");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("sq", "Albanian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("am", "Amharic");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ar", "Arabic");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("hy", "Armenian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("as", "Assamese");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ay", "Aymara");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("az", "Azerbaijani");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ba", "Bashkir");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("eu", "Basque");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("bn", "Bengali (Bangla)");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("dz", "Bhutani");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("bh", "Bihari");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("bi", "Bislama");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("br", "Breton");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("bg", "Bulgarian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("my", "Burmese");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("be", "Byelorussian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("km", "Cambodian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ca", "Catalan");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("zh", "Chinese");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("co", "Corsican");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("hr", "Croatian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("cs", "Czech");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("da", "Danish");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("nl", "Dutch");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("eo", "Esperanto");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("et", "Estonian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("fo", "Faeroese");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("fa", "Farsi");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("fj", "Fiji");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("fi", "Finnish");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("fy", "Frisian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("gl", "Galician");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ka", "Georgian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("de", "German");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("el", "Greek");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("kl", "Greenlandic");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("gn", "Guarani");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("gu", "Gujarati");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ha", "Hausa");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("iw, he", "Hebrew");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("hi", "Hindi");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("hu", "Hungarian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("is", "Icelandic");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("in, id", "Indonesian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ia", "Interlingua");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ie", "Interlingue");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("iu", "Inuktitut");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ik", "Inupiak");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ga", "Irish");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("it", "Italian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ja", "Japanese");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ji", "Yiddish");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("jw", "Javanese");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("kn", "Kannada");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ks", "Kashmiri");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("kk", "Kazakh");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("rw", "Kinyarwanda");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ky", "Kirghiz");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("rn", "Kirundi");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ko", "Korean");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ku", "Kurdish");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("lo", "Laothian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("la", "Latin");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("lv", "Latvian (Lettish)");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ln", "Lingala");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("lt", "Lithuanian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("mk", "Macedonian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("mg", "Malagasy");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ms", "Malay");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ml", "Malayalam");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("mt", "Maltese");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("gv", "Manx Gaelic");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("mi", "Maori");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("mr", "Marathi");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("mo", "Moldavian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("mn", "Mongolian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("na", "Nauru");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ne", "Nepali");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("no", "Norwegian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("oc", "Occitan");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("or", "Oriya");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("om", "Oromo (Afan)");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ps", "Pashto (Pushto)");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("pl", "Polish");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("pt", "Portuguese");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("pa", "Punjabi");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("qu", "Quechua");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("rm", "Rhaeto-Romance");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ro", "Romanian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ru", "Russian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("sm", "Samoan");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("sg", "Sangro");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("sa", "Sanskrit");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("gd", "Scots Gaelic");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("sr", "Serbian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("sh", "Serbo-Croatian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("st", "Sesotho");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("tn", "Setswana");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("sn", "Shona");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("sd", "Sindhi");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("si", "Singhalese");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ss", "Siswati");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("sk", "Slovak");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("sl", "Slovenian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("so", "Somali");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("su", "Sundanese");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("sw", "Swahili");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("sv", "Swedish");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("tl", "Tagalog");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("tg", "Tajik");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ta", "Tamil");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("tt", "Tatar");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("te", "Telugu");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("th", "Thai");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("bo", "Tibetan");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ti", "Tigrinya");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("to", "Tonga");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ts", "Tsonga");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("tr", "Turkish");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("tk", "Turkmen");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("tw", "Twi");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ug", "Uighur");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("uk", "Ukrainian");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("ur", "Urdu");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("uz", "Uzbek");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("vi", "Vietnamese");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("vo", "Volapük");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("cy", "Welsh");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("wo", "Wolof");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("xh", "Xhosa");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("yi", "Yiddish");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("yo", "Yoruba");//$NON-NLS-1$//$NON-NLS-2$
+        iso2lang.put("zu", "Zulu");//$NON-NLS-1$//$NON-NLS-2$
     }
 
     public static LinkedHashMap<String, String> lang2iso = new LinkedHashMap<String, String>();
@@ -330,7 +330,7 @@ public class Util {
         }
     }
 
-    public static String default_endpoint_address = "http://localhost:8080/talend/TalendPort";
+    public static String default_endpoint_address = "http://localhost:8080/talend/TalendPort";//$NON-NLS-1$
 
     /*********************************************************************
      * WEB SERVICES
@@ -364,7 +364,7 @@ public class Util {
 
             // deactivate Certificate validation on all https connections by creating a non validating ssl socket
             // factory
-            SSLContext context = SSLContext.getInstance("TLS");
+            SSLContext context = SSLContext.getInstance("TLS");//$NON-NLS-1$
             X509TrustManager mgr = new X509TrustManager() {
 
                 public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
@@ -393,7 +393,7 @@ public class Util {
             stub._setProperty(Stub.ENDPOINT_ADDRESS_PROPERTY, url.toString());
             if (username != null) {
                 if (universe != null)
-                    stub._setProperty(Stub.USERNAME_PROPERTY, universe + "/" + username);
+                    stub._setProperty(Stub.USERNAME_PROPERTY, universe + "/" + username);//$NON-NLS-1$
                 else
                     stub._setProperty(Stub.USERNAME_PROPERTY, username);
 
@@ -419,7 +419,7 @@ public class Util {
             throws XtentisException {
         try {
             XtentisPort port = Util.getPort(url, universe, username, password);
-            return port.getDataModelPKs(new WSRegexDataModelPKs("*")).getWsDataModelPKs();
+            return port.getDataModelPKs(new WSRegexDataModelPKs("*")).getWsDataModelPKs();//$NON-NLS-1$
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new XtentisException("Unable to retrieve all Data Model Names" + ": " + e.getLocalizedMessage());
@@ -430,7 +430,7 @@ public class Util {
             throws XtentisException {
         try {
             XtentisPort port = Util.getPort(url, universe, username, password);
-            return port.getDataClusterPKs(new WSRegexDataClusterPKs("*")).getWsDataClusterPKs();
+            return port.getDataClusterPKs(new WSRegexDataClusterPKs("*")).getWsDataClusterPKs();//$NON-NLS-1$
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new XtentisException("Unable to retrieve all Data Container Names" + ": " + e.getLocalizedMessage());
@@ -440,8 +440,8 @@ public class Util {
     public static WSViewPK[] getAllViewPKs(URL url, String universe, String username, String password, String regex)
             throws XtentisException {
         try {
-            if ((regex == null) || ("".equals(regex)))
-                regex = "*";
+            if ((regex == null) || ("".equals(regex)))//$NON-NLS-1$
+                regex = "*";//$NON-NLS-1$
             XtentisPort port = Util.getPort(url, universe, username, password);
             return port.getViewPKs(new WSGetViewPKs(regex)).getWsViewPK();
         } catch (Exception e) {
@@ -484,9 +484,9 @@ public class Util {
     public static String joinStrings(String[] strings, String separator) {
         if (strings == null)
             return null;
-        String res = "";
+        String res = "";//$NON-NLS-1$
         for (int i = 0; i < strings.length; i++) {
-            res += (i > 0) ? separator : "";
+            res += (i > 0) ? separator : "";//$NON-NLS-1$
             res += strings[i];
         }
         return res;
@@ -499,9 +499,9 @@ public class Util {
      * @return the concept Name
      */
     public static String getConceptFromPath(String path) {
-        Pattern p = Pattern.compile("(.*?)[\\[|/].*");
-        if (!path.endsWith("/"))
-            path += "/";
+        Pattern p = Pattern.compile("(.*?)[\\[|/].*");//$NON-NLS-1$
+        if (!path.endsWith("/"))//$NON-NLS-1$
+            path += "/";//$NON-NLS-1$
         Matcher m = p.matcher(path);
         if (m.matches())
             return m.group(1);
@@ -516,7 +516,7 @@ public class Util {
      */
     public static String getConceptName(XSDConcreteComponent child) {
         if (child.getContainer() instanceof XSDElementDeclaration && child.getContainer().getContainer() instanceof XSDSchema) {
-            return child.getContainer().getElement().getAttributes().getNamedItem("name").getNodeValue();
+            return child.getContainer().getElement().getAttributes().getNamedItem("name").getNodeValue();//$NON-NLS-1$
         } else {
             if (child != null && child.getContainer() != null)
                 return getConceptName(child.getContainer());
@@ -534,8 +534,8 @@ public class Util {
     public static String nodeToString(Node n) throws Exception {
         StringWriter sw = new StringWriter();
         Transformer transformer = TransformerFactory.newInstance().newTransformer();
-        transformer.setOutputProperty("omit-xml-declaration", "yes");
-        transformer.setOutputProperty("indent", "yes");
+        transformer.setOutputProperty("omit-xml-declaration", "yes");//$NON-NLS-1$//$NON-NLS-2$
+        transformer.setOutputProperty("indent", "yes");//$NON-NLS-1$//$NON-NLS-2$
         transformer.transform(new DOMSource(n), new StreamResult(sw));
         return sw.toString();
     }
@@ -565,7 +565,7 @@ public class Util {
      */
     public static NodeList getNodeList(Node contextNode, String xPath, String namespace, String prefix) throws Exception {
         XObject xo = XPathAPI.eval(contextNode, xPath,
-                (namespace == null) ? contextNode : Util.getRootElement("nsholder", namespace, prefix));
+                (namespace == null) ? contextNode : Util.getRootElement("nsholder", namespace, prefix));//$NON-NLS-1$
         if (xo.getType() != XObject.CLASS_NODESET)
             return null;
         return xo.nodelist();
@@ -584,9 +584,9 @@ public class Util {
             factory.setNamespaceAware(true);
             DocumentBuilder builder = factory.newDocumentBuilder();
             DOMImplementation impl = builder.getDOMImplementation();
-            Document namespaceHolder = impl.createDocument(namespace, (prefix == null ? "" : prefix + ":") + elementName, null);
+            Document namespaceHolder = impl.createDocument(namespace, (prefix == null ? "" : prefix + ":") + elementName, null);//$NON-NLS-1$//$NON-NLS-2$
             rootNS = namespaceHolder.getDocumentElement();
-            rootNS.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:" + prefix, namespace);
+            rootNS.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:" + prefix, namespace);//$NON-NLS-1$//$NON-NLS-2$
         } catch (Exception e) {
             String err = "Error creating a namespace holder document: " + e.getLocalizedMessage();
             throw new Exception(err);
@@ -609,22 +609,22 @@ public class Util {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             documentBuilderFactory.setNamespaceAware(true);
             documentBuilderFactory.setValidating((schema != null));
-            documentBuilderFactory.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-                    "http://www.w3.org/2001/XMLSchema");
+            documentBuilderFactory.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaLanguage",//$NON-NLS-1$
+                    "http://www.w3.org/2001/XMLSchema");//$NON-NLS-1$
             if (schema != null) {
-                documentBuilderFactory.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaSource", new InputSource(
+                documentBuilderFactory.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaSource", new InputSource(//$NON-NLS-1$
                         new StringReader(schema)));
             }
 
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
             documentBuilder.setErrorHandler(seh);
-            if (xmlString == null || xmlString.length() == 0 || xmlString.matches("\\s+"))
+            if (xmlString == null || xmlString.length() == 0 || xmlString.matches("\\s+"))//$NON-NLS-1$
                 return d;
             d = documentBuilder.parse(new InputSource(new StringReader(xmlString)));
 
             if (schema != null) {
                 String errors = seh.getErrors();
-                if (!errors.equals("")) {
+                if (!errors.equals("")) {//$NON-NLS-1$
                     String err = "Document  did not parse against schema: \n" + errors + "\n" + xmlString;
                     throw new Exception(err);
                 }
@@ -647,13 +647,13 @@ public class Util {
         ;
 
         // test for hard-coded values
-        if (xPath.startsWith("\"") && xPath.endsWith("\""))
+        if (xPath.startsWith("\"") && xPath.endsWith("\""))//$NON-NLS-1$//$NON-NLS-2$
             return new String[] { xPath.substring(1, xPath.length() - 1) };
 
         // test for incomplete path (elements missing /text())
-        if (!xPath.matches(".*@[^/\\]]+")) // attribute
-            if (!xPath.endsWith(")")) // function
-                xPath += "/text()";
+        if (!xPath.matches(".*@[^/\\]]+")) // attribute//$NON-NLS-1$
+            if (!xPath.endsWith(")")) // function//$NON-NLS-1$
+                xPath += "/text()";//$NON-NLS-1$
 
         try {
             XObject xo = XPathAPI.eval(contextNode, xPath, namespaceNode);
@@ -695,8 +695,8 @@ public class Util {
      *********************************************************************/
     public static String uploadFileToAppServer(String URL, String localFilename, String username, String password)
             throws XtentisException {
-        System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
-        System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
+        System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");//$NON-NLS-1$//$NON-NLS-2$
+        System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");//$NON-NLS-1$//$NON-NLS-2$
         /*
          * System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.commons.httpclient", "debug");
          * System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire.header", "debug");
@@ -713,9 +713,9 @@ public class Util {
             client.getState().setAuthenticationPreemptive(true);
             client.getState().setCredentials(null, null, new UsernamePasswordCredentials(username, password));
             // if delete a job, mppost will not addParameter, otherwise there is an exception.
-            if (URL.indexOf("deletefile") == -1) {
-                if (URL.indexOf("deployjob") != -1) {
-                    fileName = URL.substring(URL.indexOf("=") + 1);
+            if (URL.indexOf("deletefile") == -1) {//$NON-NLS-1$
+                if (URL.indexOf("deployjob") != -1) {//$NON-NLS-1$
+                    fileName = URL.substring(URL.indexOf("=") + 1);//$NON-NLS-1$
                 }
                 mppost.addParameter(fileName, new File(localFilename));
             }
@@ -737,8 +737,8 @@ public class Util {
 
     public static String uploadImageFile(String URL, String localFilename, String username, String password,
             HashMap<String, String> picturePathMap) throws XtentisException {
-        System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
-        System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
+        System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");//$NON-NLS-1$//$NON-NLS-2$
+        System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");//$NON-NLS-1$//$NON-NLS-2$
         /*
          * System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.commons.httpclient", "debug");
          * System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire.header", "debug");
@@ -755,7 +755,7 @@ public class Util {
             client.getState().setCredentials(null, null, new UsernamePasswordCredentials(username, password));
             File file = new File(localFilename);
             if (!"".equalsIgnoreCase(localFilename))
-                mppost.addParameter("imageFile", file);
+                mppost.addParameter("imageFile", file);//$NON-NLS-1$
 
             client.executeMethod(mppost);
             if (mppost.getStatusCode() != HttpStatus.SC_OK) {
@@ -763,19 +763,19 @@ public class Util {
             }
             response = mppost.getResponseBodyAsString();
             mppost.releaseConnection();
-            if (response.contains("upload")) {
-                String returnValue = response.substring(response.indexOf("upload"), response.indexOf("}") - 1);
+            if (response.contains("upload")) {//$NON-NLS-1$
+                String returnValue = response.substring(response.indexOf("upload"), response.indexOf("}") - 1);//$NON-NLS-1$//$NON-NLS-2$
                 if (picturePathMap != null) {
                     String fileName1 = file.getName();
                     picturePathMap.put(fileName1, returnValue);
                 }
                 return returnValue;
             } else
-                return "";
+                return "";//$NON-NLS-1$
         } catch (Exception e) {
             mppost.releaseConnection();
             log.error(e.getMessage(), e);
-            throw new XtentisException(e.getClass().getName() + ": " + e.getLocalizedMessage());
+            throw new XtentisException(e.getClass().getName() + ": " + e.getLocalizedMessage());//$NON-NLS-1$
         }
     }
 
@@ -923,12 +923,12 @@ public class Util {
 
             List<Element> annotList = annotation.getApplicationInformation();
             for (int k = 0; k < annotList.size(); k++) {
-                if ("appinfo".equals(annotList.get(k).getLocalName())) {
-                    Node source = annotList.get(k).getAttributes().getNamedItem("source");
+                if ("appinfo".equals(annotList.get(k).getLocalName())) {//$NON-NLS-1$
+                    Node source = annotList.get(k).getAttributes().getNamedItem("source");//$NON-NLS-1$
                     if (source == null)
                         continue;
-                    String appinfoSource = annotList.get(k).getAttributes().getNamedItem("source").getNodeValue();
-                    if ("X_ForeignKey".equals(appinfoSource)) {
+                    String appinfoSource = annotList.get(k).getAttributes().getNamedItem("source").getNodeValue();//$NON-NLS-1$
+                    if ("X_ForeignKey".equals(appinfoSource)) {//$NON-NLS-1$
                         String path = annotList.get(k).getFirstChild().getNodeValue();
                         list.add(getConceptFromPath(path));
                     }
@@ -1140,7 +1140,7 @@ public class Util {
                 if (decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
 
                     String primaryKey = getTopElement(decl, elem, (XSDComplexTypeDefinition) decl.getTypeDefinition());
-                    if (!"".equalsIgnoreCase(primaryKey)) {
+                    if (!"".equalsIgnoreCase(primaryKey)) {//$NON-NLS-1$
                         EList<XSDIdentityConstraintDefinition> idtylist = decl.getIdentityConstraintDefinitions();
                         for (XSDIdentityConstraintDefinition idty : idtylist) {
                             EList<XSDXPathDefinition> fields = idty.getFields();
@@ -1179,13 +1179,13 @@ public class Util {
                          * (spec != null) return spec.getName();
                          */
                         if (ele.getTypeDefinition() instanceof XSDComplexTypeDefinition)
-                            return ele.getName() + "/"
+                            return ele.getName() + "/"//$NON-NLS-1$
                                     + getTopElement(ele, son, (XSDComplexTypeDefinition) ele.getTypeDefinition());
                     }
                 }
             }
         }
-        return "";
+        return "";//$NON-NLS-1$
 
     }
 
@@ -1215,7 +1215,7 @@ public class Util {
         ArrayList<XSDElementDeclaration> holder = new ArrayList<XSDElementDeclaration>();
         if (decl.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
             XSDComplexTypeDefinition type = (XSDComplexTypeDefinition) decl.getTypeDefinition();
-            String typeDesc = type.getTargetNamespace() + " : " + type.getName();
+            String typeDesc = type.getTargetNamespace() + " : " + type.getName();//$NON-NLS-1$
             if (complexTypes.indexOf(typeDesc) != -1)
                 return holder;
             if (type.getContent() instanceof XSDParticle) {
@@ -1364,8 +1364,8 @@ public class Util {
 
     public static XSDElementDeclaration findReference(String refName, XSDSchema schema) {
         EList eDecls = schema.getElementDeclarations();
-        if (refName.indexOf(" : ") != -1) {
-            refName = refName.substring(0, refName.indexOf(" : "));
+        if (refName.indexOf(" : ") != -1) {//$NON-NLS-1$
+            refName = refName.substring(0, refName.indexOf(" : "));//$NON-NLS-1$
         }
         for (Iterator iter = eDecls.iterator(); iter.hasNext();) {
             XSDElementDeclaration d = (XSDElementDeclaration) iter.next();
@@ -1447,14 +1447,14 @@ public class Util {
         if (datamodel != null) {
             avaiList.clear();
             avaiList.add(datamodel);
-        } else if (conceptName != null && !conceptName.contains("*")) {
+        } else if (conceptName != null && !conceptName.contains("*")) {//$NON-NLS-1$
             for (String data : systemDataModelValues) {
                 try {
                     WSDataModel dm = Util.getPort(obj).getDataModel(new WSGetDataModel(new WSDataModelPK(data)));
                     if (dm != null) {
                         // XSDSchema xsdSchema = Util.getXSDSchema(dm.getXsdSchema());
                         String schema = dm.getXsdSchema();
-                        Pattern p = Pattern.compile("<xsd:element(.*?)name=\"" + conceptName + "\"");
+                        Pattern p = Pattern.compile("<xsd:element(.*?)name=\"" + conceptName + "\"");//$NON-NLS-1$//$NON-NLS-2$
                         if (!p.matcher(schema).find()) {
                             avaiList.remove(data);
                         }
@@ -1500,10 +1500,10 @@ public class Util {
                         if (part.getTerm() instanceof XSDElementDeclaration) {
                             XSDElementDeclaration el = (XSDElementDeclaration) part.getTerm();
                             if (el.getTypeDefinition() instanceof XSDSimpleTypeDefinition) {
-                                String child = parentxpath.length() == 0 ? el.getName() : parentxpath + "/" + el.getName();
+                                String child = parentxpath.length() == 0 ? el.getName() : parentxpath + "/" + el.getName();//$NON-NLS-1$
                                 childNames.add(child);
                             } else {
-                                String parent = parentxpath.length() == 0 ? el.getName() : parentxpath + "/" + el.getName();
+                                String parent = parentxpath.length() == 0 ? el.getName() : parentxpath + "/" + el.getName();//$NON-NLS-1$
                                 childNames.addAll(getChildElementNames(parent, el));
                             }
                         }
@@ -1667,11 +1667,11 @@ public class Util {
 
     public static List<String> retrieveXSDComponentPath(Object component, XSDSchema schema, List<String> buffer) {
         String name = null;
-        String elemType = "element";
+        String elemType = "element";//$NON-NLS-1$
         if (component instanceof XSDElementDeclaration) {
             XSDElementDeclaration decl = (XSDElementDeclaration) component;
             name = decl.getName();
-            buffer.add("//xsd:element[@name='" + name + "']");
+            buffer.add("//xsd:element[@name='" + name + "']");//$NON-NLS-1$//$NON-NLS-2$
             if (decl.getContainer() instanceof XSDSchemaImpl)
                 return buffer;
             else
@@ -1689,8 +1689,7 @@ public class Util {
                         prefix = entry.getKey();
                 }
                 name = ((XSDElementDeclaration) term).getName();
-                buffer.add("//xsd:element[@name='" + name + "' or @ref='" + (prefix != null ? (prefix + ":" + name) : name)
-                        + "']");
+                buffer.add("//xsd:element[@name='" + name + "' or @ref='" + (prefix != null ? (prefix + ":" + name) : name) + "']");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
                 return retrieveXSDComponentPath(particle.getContainer(), schema, buffer);
             } else {
                 retrieveXSDComponentPath(particle.getContainer(), schema, buffer);
@@ -1698,7 +1697,7 @@ public class Util {
         } else if (component instanceof XSDComplexTypeDefinition) {
             XSDComplexTypeDefinition type = (XSDComplexTypeDefinition) component;
             name = type.getName();
-            buffer.add("//xsd:complexType" + (name != null ? "[@name='" + name + "']" : ""));
+            buffer.add("//xsd:complexType" + (name != null ? "[@name='" + name + "']" : ""));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
             if (type.getContainer() instanceof XSDSchemaImpl)
                 return buffer;
             return retrieveXSDComponentPath(type.getContainer(), schema, buffer);
@@ -1707,25 +1706,25 @@ public class Util {
             // Object elem = tPath.getSegment(0);
             // return retrieveXSDComponentPath(elem, schema, buffer, selection);
             String typeName = ((XSDSimpleTypeDefinition) component).getName();
-            buffer.add("//xsd:simpleType[@name='" + typeName + "']");
+            buffer.add("//xsd:simpleType[@name='" + typeName + "']");//$NON-NLS-1$//$NON-NLS-2$
             return buffer;
         } else if (component instanceof XSDModelGroup) {
             XSDModelGroup group = (XSDModelGroup) component;
             String literal = group.getCompositor().getLiteral();
-            buffer.add("//xsd:" + literal);
+            buffer.add("//xsd:" + literal);//$NON-NLS-1$
             return retrieveXSDComponentPath(group.getContainer(), schema, buffer);
         } else if (component instanceof XSDIdentityConstraintDefinition) {
             XSDIdentityConstraintDefinition identify = (XSDIdentityConstraintDefinition) component;
             XSDConcreteComponent c = identify.getContainer();
-            buffer.add("//xsd:unique[@name='" + identify.getName() + "']");
+            buffer.add("//xsd:unique[@name='" + identify.getName() + "']");//$NON-NLS-1$//$NON-NLS-2$
             return retrieveXSDComponentPath(c, schema, buffer);
         } else if (component instanceof XSDXPathDefinition) {
             XSDXPathDefinition path = (XSDXPathDefinition) component;
-            buffer.add("//xsd:field[@xpath='" + path.getValue() + "']");
+            buffer.add("//xsd:field[@xpath='" + path.getValue() + "']");//$NON-NLS-1$//$NON-NLS-2$
             return retrieveXSDComponentPath(path.getContainer(), schema, buffer);
         } else if (component instanceof XSDAnnotation) {
             XSDAnnotation annon = (XSDAnnotation) component;
-            buffer.add("//xsd:annotation");
+            buffer.add("//xsd:annotation");//$NON-NLS-1$
             return retrieveXSDComponentPath(annon.getContainer(), schema, buffer);
         } else
             return buffer;
@@ -1738,7 +1737,7 @@ public class Util {
         try {
             BASE64Encoder encoder = new BASE64Encoder();
             StringBuffer buffer = new StringBuffer();
-            String credentials = encoder.encode(new String(treeObj.getServerRoot().getUsername() + ":"
+            String credentials = encoder.encode(new String(treeObj.getServerRoot().getUsername() + ":"//$NON-NLS-1$
                     + treeObj.getServerRoot().getPassword()).getBytes());
 
             URL urlCn = new URL(url);
@@ -1746,8 +1745,8 @@ public class Util {
             conn.setAllowUserInteraction(true);
             conn.setDoOutput(true);
             conn.setDoInput(true);
-            conn.setRequestProperty("Authorization", "Basic " + credentials);
-            conn.setRequestProperty("Expect", "100-continue");
+            conn.setRequestProperty("Authorization", "Basic " + credentials);//$NON-NLS-1$//$NON-NLS-2$
+            conn.setRequestProperty("Expect", "100-continue");//$NON-NLS-1$//$NON-NLS-2$
 
             doc = new InputStreamReader(conn.getInputStream());
             BufferedReader reader = new BufferedReader(doc);
@@ -1769,14 +1768,14 @@ public class Util {
         int imp = 0;
         for (XSDImport xsdImport : imports) {
             String ns = xsdImport.getNamespace();
-            if (ns.equals(""))
+            if (ns.equals(""))//$NON-NLS-1$
                 continue;
-            int last = ns.lastIndexOf("/");
+            int last = ns.lastIndexOf("/");//$NON-NLS-1$
             if (!nsMap.containsValue(ns)) {
-                if (ns.equals("http://www.w3.org/XML/1998/namespace")) {
-                    nsMap.put("xml", ns);
+                if (ns.equals("http://www.w3.org/XML/1998/namespace")) {//$NON-NLS-1$
+                    nsMap.put("xml", ns);//$NON-NLS-1$
                 } else {
-                    nsMap.put(ns.substring(last + 1).replaceAll("[\\W]", ""), ns);
+                    nsMap.put(ns.substring(last + 1).replaceAll("[\\W]", ""), ns);//$NON-NLS-1$//$NON-NLS-2$
                 }
             }
 
@@ -1829,9 +1828,9 @@ public class Util {
         for (XSDSchemaContent schemaCnt : list) {
             if (schemaCnt instanceof XSDImport) {
                 XSDImportImpl xsdImpl = (XSDImportImpl) schemaCnt;
-                if (xsdImpl.getNamespace() == null || xsdImpl.getNamespace().trim().equals("")) {
+                if (xsdImpl.getNamespace() == null || xsdImpl.getNamespace().trim().equals("")) {//$NON-NLS-1$
                     URI fileURI = URI.createFileURI(xsdImpl.getSchemaLocation());
-                    xsdImpl.setNamespace(fileURI.toFileString().replaceAll("[\\W]", ""));
+                    xsdImpl.setNamespace(fileURI.toFileString().replaceAll("[\\W]", ""));//$NON-NLS-1$//$NON-NLS-2$
                 }
                 if (xsdImpl.getSchemaLocation() == null)
                     continue;
@@ -1849,7 +1848,7 @@ public class Util {
             throws Exception {
         FileInputStream fin = null;
         try {
-            final String xsdFileName = System.getProperty("user.dir") + "/.xsdModel.xml";
+            final String xsdFileName = System.getProperty("user.dir") + "/.xsdModel.xml";//$NON-NLS-1$//$NON-NLS-2$
             URI fileURI = URI.createFileURI(xsdFileName);
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             documentBuilderFactory.setNamespaceAware(true);
@@ -1861,25 +1860,25 @@ public class Util {
             String schemaLocation = rawData;
             documentBuilder = documentBuilderFactory.newDocumentBuilder();
             if (rawData == null)
-                return XSDSchemaImpl.getSchemaForSchema("http://www.w3.org/2001/XMLSchema");
-            if (namespaceURI == null && rawData.endsWith(".xsd") && rawData.indexOf(File.separator) > 0) {
+                return XSDSchemaImpl.getSchemaForSchema("http://www.w3.org/2001/XMLSchema");//$NON-NLS-1$
+            if (namespaceURI == null && rawData.endsWith(".xsd") && rawData.indexOf(File.separator) > 0) {//$NON-NLS-1$
                 File rawFile = new File(rawData);
                 if (!rawFile.exists()) {
                     throw new IllegalArgumentException(rawData);
                 }
             }
             // import namespace="http://xxx" schemaLocation="xxxx"
-            if (namespaceURI != null && schemaLocation.endsWith(".xsd")) {
-                URL url = new java.net.URI(namespaceURI + "/" + rawData).toURL();
+            if (namespaceURI != null && schemaLocation.endsWith(".xsd")) {//$NON-NLS-1$
+                URL url = new java.net.URI(namespaceURI + "/" + rawData).toURL();//$NON-NLS-1$
                 uri = false;
                 rawData = IOUtils.toString(url.openConnection().getInputStream());
-                rawData = rawData.replaceAll("<!DOCTYPE(.*?)>", "");
+                rawData = rawData.replaceAll("<!DOCTYPE(.*?)>", "");//$NON-NLS-1$//$NON-NLS-2$
             }
-            if (rawData.equals("http://www.w3.org/2001/03/xml.xsd")) {
-                URL url = new java.net.URI("http://www.w3.org/2001/03/xml.xsd").toURL();
+            if (rawData.equals("http://www.w3.org/2001/03/xml.xsd")) {//$NON-NLS-1$
+                URL url = new java.net.URI("http://www.w3.org/2001/03/xml.xsd").toURL();//$NON-NLS-1$
                 uri = false;
                 rawData = IOUtils.toString(url.openConnection().getInputStream());
-                rawData = rawData.replaceAll("<!DOCTYPE(.*?)>", "");
+                rawData = rawData.replaceAll("<!DOCTYPE(.*?)>", "");//$NON-NLS-1$//$NON-NLS-2$
             }
 
             if (uri) {
@@ -1943,12 +1942,12 @@ public class Util {
                 }
             });
             // import namespace="http://xxx" schemaLocation="xxxx"
-            if (namespaceURI != null && schemaLocation.endsWith(".xsd")) {
+            if (namespaceURI != null && schemaLocation.endsWith(".xsd")) {//$NON-NLS-1$
                 schema.setSchemaLocation(schemaLocation);
             } else {
                 schema.setSchemaLocation(fileURI.toString());
                 // set the schema for schema QName prefix to "xsd"
-                schema.setSchemaForSchemaQNamePrefix("xsd");
+                schema.setSchemaForSchemaQNamePrefix("xsd");//$NON-NLS-1$
             }
             // catch up the NPE to make sure data model can still run in case of unknown conflict
             try {
@@ -2070,7 +2069,7 @@ public class Util {
         WSUniversePK[] universePKs = null;
         // boolean hasUniverses = true;
         try {
-            universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();
+            universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
             for (WSUniversePK pk : universePKs) {
                 WSUniverse universe = port.getUniverse(new WSGetUniverse(pk));
                 for (WSUniverseXtentisObjectsRevisionIDs id : universe.getXtentisObjectsRevisionIDs()) {
@@ -2093,7 +2092,7 @@ public class Util {
         WSUniversePK[] universePKs = null;
         // boolean hasUniverses = true;
         try {
-            universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();
+            universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
             for (WSUniversePK pk : universePKs) {
                 WSUniverse universe = port.getUniverse(new WSGetUniverse(pk));
                 for (WSUniverseXtentisObjectsRevisionIDs id : universe.getXtentisObjectsRevisionIDs()) {
@@ -2117,7 +2116,7 @@ public class Util {
         objectName = EXtentisObjects.getXtentisObjectName(objectName1);
         if (objectName != null) {
             try {
-                universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();
+                universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
                 for (WSUniversePK pk : universePKs) {
                     WSUniverse universe = port.getUniverse(new WSGetUniverse(pk));
                     for (WSUniverseXtentisObjectsRevisionIDs id : universe.getXtentisObjectsRevisionIDs()) {
@@ -2137,10 +2136,10 @@ public class Util {
         List<WSUniverse> list = new ArrayList<WSUniverse>();
         String objectName = objectName1;
         WSUniversePK[] universePKs = null;
-        if (objectName1.equals("Transformer"))
-            objectName = "Transformer V2";
+        if (objectName1.equals("Transformer"))//$NON-NLS-1$
+            objectName = "Transformer V2";//$NON-NLS-1$
         try {
-            universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();
+            universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
             for (WSUniversePK pk : universePKs) {
                 WSUniverse universe = port.getUniverse(new WSGetUniverse(pk));
                 for (WSUniverseXtentisObjectsRevisionIDs id : universe.getXtentisObjectsRevisionIDs()) {
@@ -2195,47 +2194,47 @@ public class Util {
     public static String[] convertWhereCondition(WSWhereCondition wc) {
         List<String> list = new ArrayList<String>();
         list.add(wc.getLeftPath());
-        String operator = "";
+        String operator = "";//$NON-NLS-1$
         if (wc.getOperator().equals(WSWhereOperator.CONTAINS))
-            operator = "Contains";
+            operator = "Contains";//$NON-NLS-1$
         else if (wc.getOperator().equals(WSWhereOperator.EQUALS))
-            operator = "=";
+            operator = "=";//$NON-NLS-1$
         else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN))
-            operator = ">";
+            operator = ">";//$NON-NLS-1$
         else if (wc.getOperator().equals(WSWhereOperator.GREATER_THAN_OR_EQUAL))
-            operator = ">=";
+            operator = ">=";//$NON-NLS-1$
         else if (wc.getOperator().equals(WSWhereOperator.CONTAINS_TEXT_OF))
-            operator = "Contains Text Of";
+            operator = "Contains Text Of";//$NON-NLS-1$
         else if (wc.getOperator().equals(WSWhereOperator.JOIN))
-            operator = "Join With";
+            operator = "Join With";//$NON-NLS-1$
         else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN))
-            operator = "<";
+            operator = "<";//$NON-NLS-1$
         else if (wc.getOperator().equals(WSWhereOperator.LOWER_THAN_OR_EQUAL))
-            operator = "<=";
+            operator = "<=";//$NON-NLS-1$
         else if (wc.getOperator().equals(WSWhereOperator.NOT_EQUALS))
-            operator = "!=";
+            operator = "!=";//$NON-NLS-1$
         else if (wc.getOperator().equals(WSWhereOperator.STARTSWITH))
-            operator = "Starts With";
+            operator = "Starts With";//$NON-NLS-1$
         else if (wc.getOperator().equals(WSWhereOperator.STRICTCONTAINS))
-            operator = "Strict Contains";
+            operator = "Strict Contains";//$NON-NLS-1$
         else if (wc.getOperator().equals(WSWhereOperator.EMPTY_NULL))
-            operator = "Is Empty Or Null";
+            operator = "Is Empty Or Null";//$NON-NLS-1$
         list.add(operator);
         list.add(wc.getRightValueOrPath());
 
-        String predicate = "";
+        String predicate = "";//$NON-NLS-1$
         if (wc.getStringPredicate().equals(WSStringPredicate.AND))
-            predicate = "And";
+            predicate = "And";//$NON-NLS-1$
         else if (wc.getStringPredicate().equals(WSStringPredicate.EXACTLY))
-            predicate = "Exactly";
+            predicate = "Exactly";//$NON-NLS-1$
         else if (wc.getStringPredicate().equals(WSStringPredicate.NONE))
-            predicate = "";
+            predicate = "";//$NON-NLS-1$
         else if (wc.getStringPredicate().equals(WSStringPredicate.NOT))
-            predicate = "Not";
+            predicate = "Not";//$NON-NLS-1$
         else if (wc.getStringPredicate().equals(WSStringPredicate.OR))
-            predicate = "Or";
+            predicate = "Or";//$NON-NLS-1$
         else if (wc.getStringPredicate().equals(WSStringPredicate.STRICTAND))
-            predicate = "Strict And";
+            predicate = "Strict And";//$NON-NLS-1$
         list.add(predicate);
         return list.toArray(new String[list.size()]);
     }
@@ -2252,32 +2251,32 @@ public class Util {
     public static String[] convertRouteCondition(WSRoutingRuleExpression wc) {
         List<String> list = new ArrayList<String>();
         list.add(wc.getXpath());
-        String operator = "";
+        String operator = "";//$NON-NLS-1$
         if (wc.getWsOperator().equals(WSRoutingRuleOperator.CONTAINS))
-            operator = "Contains";
+            operator = "Contains";//$NON-NLS-1$
         else if (wc.getWsOperator().equals(WSRoutingRuleOperator.EQUALS))
-            operator = "=";
+            operator = "=";//$NON-NLS-1$
         else if (wc.getWsOperator().equals(WSRoutingRuleOperator.GREATER_THAN))
-            operator = ">";
+            operator = ">";//$NON-NLS-1$
         else if (wc.getWsOperator().equals(WSRoutingRuleOperator.GREATER_THAN_OR_EQUAL))
-            operator = ">=";
+            operator = ">=";//$NON-NLS-1$
         else if (wc.getWsOperator().equals(WSRoutingRuleOperator.MATCHES))
-            operator = "Matches";
+            operator = "Matches";//$NON-NLS-1$
         else if (wc.getWsOperator().equals(WSRoutingRuleOperator.LOWER_THAN))
-            operator = "<";
+            operator = "<";//$NON-NLS-1$
         else if (wc.getWsOperator().equals(WSRoutingRuleOperator.LOWER_THAN_OR_EQUAL))
-            operator = "<=";
+            operator = "<=";//$NON-NLS-1$
         else if (wc.getWsOperator().equals(WSRoutingRuleOperator.NOT_EQUALS))
-            operator = "!=";
+            operator = "!=";//$NON-NLS-1$
         else if (wc.getWsOperator().equals(WSRoutingRuleOperator.STARTSWITH))
-            operator = "Starts With";
+            operator = "Starts With";//$NON-NLS-1$
         else if (wc.getWsOperator().equals(WSRoutingRuleOperator.IS_NULL))
-            operator = "Is Null";
+            operator = "Is Null";//$NON-NLS-1$
         else if (wc.getWsOperator().equals(WSRoutingRuleOperator.IS_NOT_NULL))
-            operator = "Is Not Null";
+            operator = "Is Not Null";//$NON-NLS-1$
         list.add(operator);
         list.add(wc.getValue());
-        list.add(wc.getName() == null ? "" : wc.getName());
+        list.add(wc.getName() == null ? "" : wc.getName());//$NON-NLS-1$
         return list.toArray(new String[list.size()]);
     }
 
@@ -2287,27 +2286,27 @@ public class Util {
         wc.setXpath(values[0]);
 
         WSRoutingRuleOperator operator = null;
-        if (values[1].equals("Contains"))
+        if (values[1].equals("Contains"))//$NON-NLS-1$
             operator = WSRoutingRuleOperator.CONTAINS;
-        else if (values[1].equals("Matches"))
+        else if (values[1].equals("Matches"))//$NON-NLS-1$
             operator = WSRoutingRuleOperator.MATCHES;
-        else if (values[1].equals("="))
+        else if (values[1].equals("="))//$NON-NLS-1$
             operator = WSRoutingRuleOperator.EQUALS;
-        else if (values[1].equals(">"))
+        else if (values[1].equals(">"))//$NON-NLS-1$
             operator = WSRoutingRuleOperator.GREATER_THAN;
-        else if (values[1].equals(">="))
+        else if (values[1].equals(">="))//$NON-NLS-1$
             operator = WSRoutingRuleOperator.GREATER_THAN_OR_EQUAL;
-        else if (values[1].equals("<"))
+        else if (values[1].equals("<"))//$NON-NLS-1$
             operator = WSRoutingRuleOperator.LOWER_THAN;
-        else if (values[1].equals("<="))
+        else if (values[1].equals("<="))//$NON-NLS-1$
             operator = WSRoutingRuleOperator.LOWER_THAN_OR_EQUAL;
-        else if (values[1].equals("!="))
+        else if (values[1].equals("!="))//$NON-NLS-1$
             operator = WSRoutingRuleOperator.NOT_EQUALS;
-        else if (values[1].equals("Starts With"))
+        else if (values[1].equals("Starts With"))//$NON-NLS-1$
             operator = WSRoutingRuleOperator.STARTSWITH;
-        else if (values[1].equals("Is Null"))
+        else if (values[1].equals("Is Null"))//$NON-NLS-1$
             operator = WSRoutingRuleOperator.IS_NULL;
-        else if (values[1].equals("Is Not Null"))
+        else if (values[1].equals("Is Not Null"))//$NON-NLS-1$
             operator = WSRoutingRuleOperator.IS_NOT_NULL;
         wc.setWsOperator(operator);
         wc.setValue(values[2]);
@@ -2321,44 +2320,44 @@ public class Util {
         wc.setLeftPath(values[0]);
 
         WSWhereOperator operator = null;
-        if (values[1].equals("Contains"))
+        if (values[1].equals("Contains"))//$NON-NLS-1$
             operator = WSWhereOperator.CONTAINS;
-        else if (values[1].equals("Contains Text Of"))
+        else if (values[1].equals("Contains Text Of"))//$NON-NLS-1$
             operator = WSWhereOperator.CONTAINS_TEXT_OF;
-        else if (values[1].equals("Join With")) {
+        else if (values[1].equals("Join With")) {//$NON-NLS-1$
             operator = WSWhereOperator.JOIN;
-        } else if (values[1].equals("="))
+        } else if (values[1].equals("="))//$NON-NLS-1$
             operator = WSWhereOperator.EQUALS;
-        else if (values[1].equals(">"))
+        else if (values[1].equals(">"))//$NON-NLS-1$
             operator = WSWhereOperator.GREATER_THAN;
-        else if (values[1].equals(">="))
+        else if (values[1].equals(">="))//$NON-NLS-1$
             operator = WSWhereOperator.GREATER_THAN_OR_EQUAL;
-        else if (values[1].equals("<"))
+        else if (values[1].equals("<"))//$NON-NLS-1$
             operator = WSWhereOperator.LOWER_THAN;
-        else if (values[1].equals("<="))
+        else if (values[1].equals("<="))//$NON-NLS-1$
             operator = WSWhereOperator.LOWER_THAN_OR_EQUAL;
-        else if (values[1].equals("!="))
+        else if (values[1].equals("!="))//$NON-NLS-1$
             operator = WSWhereOperator.NOT_EQUALS;
-        else if (values[1].equals("Starts With"))
+        else if (values[1].equals("Starts With"))//$NON-NLS-1$
             operator = WSWhereOperator.STARTSWITH;
-        else if (values[1].equals("Strict Contains"))
+        else if (values[1].equals("Strict Contains"))//$NON-NLS-1$
             operator = WSWhereOperator.STRICTCONTAINS;
-        else if (values[1].equals("Is Empty Or Null"))
+        else if (values[1].equals("Is Empty Or Null"))//$NON-NLS-1$
             operator = WSWhereOperator.EMPTY_NULL;
         wc.setOperator(operator);
         wc.setRightValueOrPath(values[2]);
         WSStringPredicate predicate = null;
-        if (values[3].equals(""))
+        if (values[3].equals(""))//$NON-NLS-1$
             predicate = WSStringPredicate.NONE;
-        else if (values[3].equals("Or"))
+        else if (values[3].equals("Or"))//$NON-NLS-1$
             predicate = WSStringPredicate.OR;
-        if (values[3].equals("And"))
+        if (values[3].equals("And"))//$NON-NLS-1$
             predicate = WSStringPredicate.AND;
-        if (values[3].equals("Strict And"))
+        if (values[3].equals("Strict And"))//$NON-NLS-1$
             predicate = WSStringPredicate.STRICTAND;
-        if (values[3].equals("Exactly"))
+        if (values[3].equals("Exactly"))//$NON-NLS-1$
             predicate = WSStringPredicate.EXACTLY;
-        if (values[3].equals("Not"))
+        if (values[3].equals("Not"))//$NON-NLS-1$
             predicate = WSStringPredicate.NOT;
         wc.setStringPredicate(predicate);
 
@@ -2366,12 +2365,12 @@ public class Util {
     }
 
     public static String getRevision(TreeObject xobject) {
-        String revision = "";
+        String revision = "";//$NON-NLS-1$
         if (xobject.getType() != TreeObject.DATA_CLUSTER && xobject.getType() != TreeObject.UNIVERSE) {
             TreeParent parent = xobject.findServerFolder(xobject.getType());
 
             if (parent != null) {
-                Pattern p = Pattern.compile("\\[.*\\]");
+                Pattern p = Pattern.compile("\\[.*\\]");//$NON-NLS-1$
                 Matcher m = p.matcher(parent.getDisplayName());
                 while (m.find()) {
                     revision = m.group();
@@ -2393,14 +2392,14 @@ public class Util {
         return rc;
     }
 
-    private static Pattern pLoad = Pattern.compile(".*?(<c>.*?</t>).*?(<p>(.*)</p>|<p/>).*", Pattern.DOTALL);
+    private static Pattern pLoad = Pattern.compile(".*?(<c>.*?</t>).*?(<p>(.*)</p>|<p/>).*", Pattern.DOTALL);//$NON-NLS-1$
 
     public static String getItemContent(String xmlstring) {
         Matcher m = null;
         m = pLoad.matcher(xmlstring);
         if (m.matches()) {
-            if (m.group(2) == null || m.group(2).equals("<p/>")) {
-                return "";
+            if (m.group(2) == null || m.group(2).equals("<p/>")) {//$NON-NLS-1$
+                return "";//$NON-NLS-1$
             } else {
                 return m.group(3);
             }
@@ -2434,7 +2433,7 @@ public class Util {
         }
 
         // check if we are extending a complex Definition
-        if ("extension".equals(complexTypeDefinition.getDerivationMethod().getName())) {
+        if ("extension".equals(complexTypeDefinition.getDerivationMethod().getName())) {//$NON-NLS-1$
             if (complexTypeDefinition.getBaseTypeDefinition() instanceof XSDComplexTypeDefinition) {
                 list.addAll(getComplexTypeDefinitionChildren((XSDComplexTypeDefinition) complexTypeDefinition
                         .getBaseTypeDefinition()));
@@ -2509,7 +2508,7 @@ public class Util {
         return xsdSchema;
     }
 
-    private static String ENTERPRISE_ID = "org.talend.mdm.workbench.enterprise";
+    private static String ENTERPRISE_ID = "org.talend.mdm.workbench.enterprise";//$NON-NLS-1$
 
     public static boolean IsEnterPrise() {
         return Platform.getBundle(ENTERPRISE_ID) != null;
@@ -2518,7 +2517,7 @@ public class Util {
     public static String getNewLabelString(String oldString) {
         String newLabel = null;
         newLabel = EXtentisObjects.getXtentisObjectDisplayName(oldString);
-        if ("Routing Engine V2".equals(oldString)) {
+        if ("Routing Engine V2".equals(oldString)) {//$NON-NLS-1$
             newLabel = EXtentisObjects.SubscriptionEngine.getDisplayName();
         }
         if (newLabel == null)
@@ -2529,31 +2528,31 @@ public class Util {
 
     public static Image getMenuImage(String menuName) {
         String menu = EImage.MENU.getPath();
-        if (menuName.startsWith("Browse"))
+        if (menuName.startsWith("Browse"))//$NON-NLS-1$
             menu = EImage.BROWSE_MENU.getPath();
-        else if (menuName.equalsIgnoreCase("Cross Referencing"))
+        else if (menuName.equalsIgnoreCase("Cross Referencing"))//$NON-NLS-1$
             menu = EImage.CROSSREF.getPath();
-        else if (menuName.equalsIgnoreCase("Hierarchical View"))
+        else if (menuName.equalsIgnoreCase("Hierarchical View"))//$NON-NLS-1$
             menu = EImage.HIER_VIEW.getPath();
-        else if (menuName.equalsIgnoreCase("ItemsTrash"))
+        else if (menuName.equalsIgnoreCase("ItemsTrash"))//$NON-NLS-1$
             menu = EImage.TRASH.getPath();
-        else if (menuName.equalsIgnoreCase("logging"))
+        else if (menuName.equalsIgnoreCase("logging"))//$NON-NLS-1$
             menu = EImage.MENU.getPath();
-        else if (menuName.equalsIgnoreCase("Manage users"))
+        else if (menuName.equalsIgnoreCase("Manage users"))//$NON-NLS-1$
             menu = EImage.MANAGE_USERS.getPath();
-        else if (menuName.equalsIgnoreCase("Reporting"))
+        else if (menuName.equalsIgnoreCase("Reporting"))//$NON-NLS-1$
             menu = EImage.REPORTING.getPath();
-        else if (menuName.equalsIgnoreCase("Service Schedule"))
+        else if (menuName.equalsIgnoreCase("Service Schedule"))//$NON-NLS-1$
             menu = EImage.MENU.getPath();
-        else if (menuName.equalsIgnoreCase("SynchronizationAction"))
+        else if (menuName.equalsIgnoreCase("SynchronizationAction"))//$NON-NLS-1$
             menu = EImage.SYNCHRONIZE.getPath();
-        else if (menuName.equalsIgnoreCase("SynchronizationItem"))
+        else if (menuName.equalsIgnoreCase("SynchronizationItem"))//$NON-NLS-1$
             menu = EImage.SYNCHRO_ITEM.getPath();
-        else if (menuName.equalsIgnoreCase("Universe Manager"))
+        else if (menuName.equalsIgnoreCase("Universe Manager"))//$NON-NLS-1$
             menu = EImage.UNIVERSE.getPath();
-        else if (menuName.equalsIgnoreCase("UpdateReport"))
+        else if (menuName.equalsIgnoreCase("UpdateReport"))//$NON-NLS-1$
             menu = EImage.UPDATEREPORT.getPath();
-        else if (menuName.equalsIgnoreCase("WorkflowTasks"))
+        else if (menuName.equalsIgnoreCase("WorkflowTasks"))//$NON-NLS-1$
             menu = EImage.WORKFLOWTASKS.getPath();
         return ImageCache.getImage(menu).createImage();
     }
@@ -2564,7 +2563,7 @@ public class Util {
             org.dom4j.Document document = reader.read(new StringReader(xsdSource));
             StringWriter writer = new StringWriter();
             OutputFormat format = OutputFormat.createPrettyPrint();
-            format.setEncoding("UTF-8");
+            format.setEncoding("UTF-8");//$NON-NLS-1$
             XMLWriter xmlwriter = new XMLWriter(writer, format);
             xmlwriter.write(document);
             String str = writer.toString();
@@ -2633,12 +2632,12 @@ public class Util {
 
     public static String checkOnVersionCompatibility(String url, String username, String password, String universe) {
         IProduct product = Platform.getProduct();
-        String versionComp = "";
+        String versionComp = "";//$NON-NLS-1$
         try {
-            URL resourceURL = product.getDefiningBundle().getResource("/about.mappings");
+            URL resourceURL = product.getDefiningBundle().getResource("/about.mappings");//$NON-NLS-1$
             PropertyResourceBundle bundle = new PropertyResourceBundle(resourceURL.openStream());
-            String studioVersion = bundle.getString("1").trim();
-            Pattern vsnPtn = Pattern.compile("^(\\d+)\\.(\\d+)(\\.)*(\\d*)$");
+            String studioVersion = bundle.getString("1").trim();//$NON-NLS-1$
+            Pattern vsnPtn = Pattern.compile("^(\\d+)\\.(\\d+)(\\.)*(\\d*)$");//$NON-NLS-1$
             Matcher match = vsnPtn.matcher(studioVersion);
             if (!match.find()) {
                 return null;
@@ -2647,7 +2646,7 @@ public class Util {
 
             int major = Integer.parseInt(match.group(1));
             int minor = Integer.parseInt(match.group(2));
-            int rev = match.group(4) != null && !match.group(4).equals("") ? Integer.parseInt(match.group(4)) : 0;
+            int rev = match.group(4) != null && !match.group(4).equals("") ? Integer.parseInt(match.group(4)) : 0;//$NON-NLS-1$
             XtentisPort port = Util.getPort(new URL(url), universe, username, password);
             WSVersion wsVersion = port.getComponentVersion(new WSGetComponentVersion(WSComponent.DataManager, null));
             versionComp += " while the MDM server is " + wsVersion.getMajor() + "." + wsVersion.getMinor() + "."
@@ -2751,7 +2750,7 @@ public class Util {
         String temp = sourceString;
 
         for (Entry<Integer, String> eachId2Content : parameters.entrySet()) {
-            Pattern pattern = Pattern.compile("\\{" + eachId2Content.getKey() + "\\}");
+            Pattern pattern = Pattern.compile("\\{" + eachId2Content.getKey() + "\\}");//$NON-NLS-1$//$NON-NLS-2$
             Matcher matcher = pattern.matcher(temp);
             temp = matcher.replaceAll(eachId2Content.getValue());
         }
@@ -2770,23 +2769,23 @@ public class Util {
     public static String getParticleName(XSDParticle curXSDParticle) {
 
         if (!isValidParticle(curXSDParticle))
-            return "";
+            return "";//$NON-NLS-1$
 
         String name = ((XSDElementDeclaration) curXSDParticle.getContent()).getName();
 
-        return (name == null ? "" : name);
+        return (name == null ? "" : name);//$NON-NLS-1$
     }
 
     public static String getParticleReferenceName(XSDParticle curXSDParticle) {
 
         if (!isValidParticle(curXSDParticle))
-            return "";
+            return "";//$NON-NLS-1$
 
         XSDElementDeclaration ref = null;
         if (((XSDElementDeclaration) curXSDParticle.getContent()).isElementDeclarationReference())
             ref = ((XSDElementDeclaration) curXSDParticle.getContent()).getResolvedElementDeclaration();
 
-        return ((ref == null ? "" : ref.getQName()));
+        return ((ref == null ? "" : ref.getQName()));//$NON-NLS-1$
     }
 
     private static boolean isValidParticle(XSDParticle curXSDParticle) {
@@ -2879,7 +2878,7 @@ public class Util {
 
         if (baseType == null
                 || baseType.equals(type.getSchema().resolveTypeDefinition(type.getSchema().getSchemaForSchemaNamespace(),
-                        "anyType")))
+                        "anyType")))//$NON-NLS-1$
             return results;
 
         return getParentTypes(baseType, results);
@@ -2887,19 +2886,19 @@ public class Util {
     }
 
     public static boolean isDouble(XSDSimpleTypeDefinition simpleType) {
-        return isSpecifiedBuildInType(simpleType, "double");
+        return isSpecifiedBuildInType(simpleType, "double");//$NON-NLS-1$
     }
 
     public static boolean isFloat(XSDSimpleTypeDefinition simpleType) {
-        return isSpecifiedBuildInType(simpleType, "float");
+        return isSpecifiedBuildInType(simpleType, "float");//$NON-NLS-1$
     }
 
     public static boolean isDecimal(XSDSimpleTypeDefinition simpleType) {
 
-        if (isSpecifiedBuildInType(simpleType, "integer"))
+        if (isSpecifiedBuildInType(simpleType, "integer"))//$NON-NLS-1$
             return false;
 
-        return isSpecifiedBuildInType(simpleType, "decimal");
+        return isSpecifiedBuildInType(simpleType, "decimal");//$NON-NLS-1$
     }
 
     public static boolean isSpecifiedBuildInType(XSDSimpleTypeDefinition simpleType, String buildInTypeName) {

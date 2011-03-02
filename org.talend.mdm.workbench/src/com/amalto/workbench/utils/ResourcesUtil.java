@@ -62,7 +62,7 @@ public class ResourcesUtil {
         // getResourcesNameListFromURI("http://localhost:8080"+cmURI);
         // getResourcesMapFromURI("http://localhost:8080"+cmURI);
         try {
-            postResourcesFromFile("demo2", "d:/bud.xsd", "http://localhost:8080" + cmURI);
+            postResourcesFromFile("demo2", "d:/bud.xsd", "http://localhost:8080" + cmURI);//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
@@ -79,7 +79,7 @@ public class ResourcesUtil {
             httpClient.setConnectionTimeout(60000);
             httpClient.getState().setAuthenticationPreemptive(true);
             httpClient.getState().setCredentials(null, null,
-                    new org.apache.commons.httpclient.UsernamePasswordCredentials("admin", "talend"));
+                    new org.apache.commons.httpclient.UsernamePasswordCredentials("admin", "talend"));//$NON-NLS-1$//$NON-NLS-2$
 
             int statusCode = httpClient.executeMethod(getMethod);
             if (statusCode != HttpStatus.SC_OK) {
@@ -121,7 +121,7 @@ public class ResourcesUtil {
 
         httpclient.getCredentialsProvider().setCredentials(
                 new AuthScope(getEndpointHost(uri), Integer.valueOf(getEndpointPort(uri))),
-                new UsernamePasswordCredentials("admin", "talend"));
+                new UsernamePasswordCredentials("admin", "talend"));//$NON-NLS-1$//$NON-NLS-2$
 
         HttpGet httpget = new HttpGet(uri);
 
@@ -129,7 +129,7 @@ public class ResourcesUtil {
 
         // Create a response handler
         ResponseHandler<String> responseHandler = new BasicResponseHandler();
-        String responseBody = "";
+        String responseBody = "";//$NON-NLS-1$
         try {
             responseBody = httpclient.execute(httpget, responseHandler);
         } catch (ClientProtocolException e) {
@@ -148,14 +148,14 @@ public class ResourcesUtil {
         Document document = parsXMLString(responseBody);
         if (document == null)
             return contentMap;
-        for (Iterator iterator = document.getRootElement().elementIterator("entry"); iterator.hasNext();) {
+        for (Iterator iterator = document.getRootElement().elementIterator("entry"); iterator.hasNext();) {//$NON-NLS-1$
             Element element = (Element) iterator.next();
-            Element nameElement = element.element("name");
-            Element uriElement = element.element("uri");
+            Element nameElement = element.element("name");//$NON-NLS-1$
+            Element uriElement = element.element("uri");//$NON-NLS-1$
             if (nameElement != null && uriElement != null) {
                 contentMap.put(nameElement.getStringValue(), uriElement.getStringValue());
             } else {
-                contentMap.put(element.getStringValue(), uri + "/" + element.getStringValue());
+                contentMap.put(element.getStringValue(), uri + "/" + element.getStringValue());//$NON-NLS-1$
             }
         }
         return contentMap;
@@ -168,9 +168,9 @@ public class ResourcesUtil {
         Document document = parsXMLString(responseBody);
         if (document == null)
             return nameList;
-        for (Iterator iterator = document.getRootElement().elementIterator("entry"); iterator.hasNext();) {
+        for (Iterator iterator = document.getRootElement().elementIterator("entry"); iterator.hasNext();) {//$NON-NLS-1$
             Element element = (Element) iterator.next();
-            Element nameElement = element.element("name");
+            Element nameElement = element.element("name");//$NON-NLS-1$
             if (nameElement != null) {
                 nameList.add(nameElement.getStringValue());
             } else {
@@ -219,8 +219,8 @@ public class ResourcesUtil {
         log.info(content);
         HttpPost httppost = new HttpPost(uri);
         List<BasicNameValuePair> nvps = new ArrayList<BasicNameValuePair>();
-        nvps.add(new BasicNameValuePair("domainObjectName", typeName));
-        nvps.add(new BasicNameValuePair("domainObjectContent", content));
+        nvps.add(new BasicNameValuePair("domainObjectName", typeName));//$NON-NLS-1$
+        nvps.add(new BasicNameValuePair("domainObjectContent", content));//$NON-NLS-1$
         httppost.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
         postContent(uri, httppost);
     }
@@ -230,7 +230,7 @@ public class ResourcesUtil {
 
         httpclient.getCredentialsProvider().setCredentials(
                 new AuthScope(getEndpointHost(uri), Integer.valueOf(getEndpointPort(uri))),
-                new UsernamePasswordCredentials("admin", "talend"));
+                new UsernamePasswordCredentials("admin", "talend"));//$NON-NLS-1$//$NON-NLS-2$
 
         log.info("executing request" + httppost.getRequestLine());
         HttpResponse response = httpclient.execute(httppost);
@@ -269,8 +269,8 @@ public class ResourcesUtil {
     public static String getEndpointHost(String uri) {
 
         if (uri != null) {
-            int startPos = uri.indexOf("//") + 2;
-            int endPos = uri.indexOf(":", startPos);
+            int startPos = uri.indexOf("//") + 2;//$NON-NLS-1$
+            int endPos = uri.indexOf(":", startPos);//$NON-NLS-1$
             if (endPos != -1 && startPos != -1)
                 return uri.substring(startPos, endPos);
         }
@@ -281,9 +281,9 @@ public class ResourcesUtil {
     public static String getEndpointPort(String uri) {
 
         if (uri != null) {
-            String[] splitString = uri.split(":", 3);
+            String[] splitString = uri.split(":", 3);//$NON-NLS-1$
             if (splitString[splitString.length - 1] != null)
-                return splitString[2].substring(0, splitString[2].indexOf("/"));
+                return splitString[2].substring(0, splitString[2].indexOf("/"));//$NON-NLS-1$
         }
 
         return uri;

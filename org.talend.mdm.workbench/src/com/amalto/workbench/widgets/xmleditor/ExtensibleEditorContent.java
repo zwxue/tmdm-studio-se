@@ -2,7 +2,7 @@ package com.amalto.workbench.widgets.xmleditor;
 
 public class ExtensibleEditorContent {
 
-    protected String content = "";
+    protected String content = "";//$NON-NLS-1$
 
     public ExtensibleEditorContent(String content) {
 
@@ -17,7 +17,7 @@ public class ExtensibleEditorContent {
     public void setContent(String content) {
 
         if (content == null)
-            this.content = "";
+            this.content = "";//$NON-NLS-1$
         else
             this.content = content;
     }

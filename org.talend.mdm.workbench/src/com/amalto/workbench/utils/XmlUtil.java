@@ -76,7 +76,7 @@ public final class XmlUtil {
     public static Document parse(String fileName) throws DocumentException {
         InputStream is = null;
         try {
-            is = XmlUtil.class.getResourceAsStream("/" + fileName);
+            is = XmlUtil.class.getResourceAsStream("/" + fileName);//$NON-NLS-1$
             Document document = parse(is);
             return document;
         } finally {
@@ -183,7 +183,7 @@ public final class XmlUtil {
 
         List<String> urls = new ArrayList();
 
-        List list = document.selectNodes("//a/@href");
+        List list = document.selectNodes("//a/@href");//$NON-NLS-1$
 
         for (Iterator iter = list.iterator(); iter.hasNext();) {
             Attribute attribute = (Attribute) iter.next();
@@ -209,10 +209,10 @@ public final class XmlUtil {
 
         OutputFormat format = null;
 
-        if (printMode.toLowerCase().equals("pretty")) {
+        if (printMode.toLowerCase().equals("pretty")) {//$NON-NLS-1$
             // Pretty print the document
             format = OutputFormat.createPrettyPrint();
-        } else if (printMode.toLowerCase().equals("compact")) {
+        } else if (printMode.toLowerCase().equals("compact")) {//$NON-NLS-1$
             // Compact format
             format = OutputFormat.createCompactFormat();
         }
@@ -251,7 +251,7 @@ public final class XmlUtil {
         try {
 
             xmlwriter.write(document);
-            result = writer.toString().replaceAll("<\\?xml.*?\\?>", "").trim();
+            result = writer.toString().replaceAll("<\\?xml.*?\\?>", "").trim();//$NON-NLS-1$//$NON-NLS-2$
         } catch (Exception e) {
             log.error(e.getMessage(), e);
 
@@ -319,7 +319,7 @@ public final class XmlUtil {
             Document document = reader.read(stringReader);
             writer = new StringWriter();
             OutputFormat format = OutputFormat.createPrettyPrint();
-            format.setEncoding("UTF-8");
+            format.setEncoding("UTF-8");//$NON-NLS-1$
             format.setIndentSize(4);
             format.setSuppressDeclaration(true);
             xmlwriter = new XMLWriter(writer, format);

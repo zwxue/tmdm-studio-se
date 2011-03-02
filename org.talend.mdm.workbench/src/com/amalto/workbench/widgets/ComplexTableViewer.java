@@ -215,7 +215,7 @@ public class ComplexTableViewer {
     protected String[] getTextValues() {
         List<String> values = new ArrayList<String>();
         for (ComplexTableViewerColumn column : columns) {
-            String text = "";
+            String text = "";//$NON-NLS-1$
             if (column.isCombo()) {
                 text = ((CCombo) column.getControl()).getText();
             } else if (column.isText()) {
@@ -265,11 +265,11 @@ public class ComplexTableViewer {
                 label.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
             }
             if (!column.isNillable()) {
-                label.setText(label.getText() + "(*)");
+                label.setText(label.getText() + "(*)");//$NON-NLS-1$
                 label.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
             }
             if (column.isUnique()) {
-                label.setText(label.getText() + "(U)");
+                label.setText(label.getText() + "(U)");//$NON-NLS-1$
                 label.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLUE));
             }
             i++;
@@ -294,7 +294,7 @@ public class ComplexTableViewer {
                 }
                 if (column.isComboEditable()) {
                     combo.setEditable(true);
-                    combo.setText("");
+                    combo.setText("");//$NON-NLS-1$
                 }
                 column.setControl(combo);
             } else {
@@ -318,7 +318,7 @@ public class ComplexTableViewer {
             }
         }
 
-        addButton = toolkit.createButton(mainComposite, "", SWT.PUSH | SWT.CENTER);
+        addButton = toolkit.createButton(mainComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
         addButton.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, false, 1, 1));
         addButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
         addButton.setToolTipText("Add");
@@ -330,12 +330,12 @@ public class ComplexTableViewer {
             @SuppressWarnings("unchecked")
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
 
-                String uniqueVal = "";
-                String keyVal = "";
+                String uniqueVal = "";//$NON-NLS-1$
+                String keyVal = "";//$NON-NLS-1$
                 // Make sure texts are not nill (empty) where not authorized
                 for (Iterator<ComplexTableViewerColumn> iterator = columns.iterator(); iterator.hasNext();) {
                     ComplexTableViewerColumn column = iterator.next();
-                    String text = "";
+                    String text = "";//$NON-NLS-1$
                     if (column.isCombo()) {
                         text = ((CCombo) column.getControl()).getText();
                     } else if (column.isText()) {
@@ -363,15 +363,15 @@ public class ComplexTableViewer {
                     if (keyColumns != null && Arrays.asList(keyColumns).indexOf(column) >= 0) {
                         keyVal += text;
                     }
-                    uniqueVal += "." + text;
+                    uniqueVal += "." + text;//$NON-NLS-1$
                 }
 
                 // check uniqueness by concatenating all the values
                 List<Line> list = (List<Line>) getViewer().getInput();
                 for (Line line : list) {
-                    String thisLineVal = "";
+                    String thisLineVal = "";//$NON-NLS-1$
                     for (KeyValue keyvalue : line.keyValues) {
-                        thisLineVal += "." + keyvalue.value;
+                        thisLineVal += "." + keyvalue.value;//$NON-NLS-1$
                     }
                     if (thisLineVal.equals(uniqueVal) || (keyVal.length() > 0 && thisLineVal.indexOf(keyVal) >= 0)) {
                         MessageDialog.openInformation(null, ERROR_ITEMALREADYEXISTS_TITLE, ERROR_ITEMALREADYEXISTS_CONTENT);
@@ -439,7 +439,7 @@ public class ComplexTableViewer {
         stepUpDownComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
         stepUpDownComposite.setLayout(new GridLayout(1, false));
 
-        upButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);
+        upButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
         upButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         upButton.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
         upButton.setToolTipText("Move down the selected item");
@@ -470,7 +470,7 @@ public class ComplexTableViewer {
                 }
             };
         });
-        downButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);
+        downButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
         downButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         downButton.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
         downButton.setToolTipText("Move down the selected item");
@@ -501,7 +501,7 @@ public class ComplexTableViewer {
                 }
             };
         });
-        deleteButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);
+        deleteButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
         deleteButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         deleteButton.setToolTipText("Delete the selected item");
         deleteButton.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
@@ -591,7 +591,7 @@ public class ComplexTableViewer {
                         }
                     }
                 }
-                return "";
+                return "";//$NON-NLS-1$
             }
 
             public Image getColumnImage(Object element, int columnIndex) {
@@ -649,7 +649,7 @@ public class ComplexTableViewer {
                 }
                 for (KeyValue keyvalue : line.keyValues) {
                     if (property.equals(keyvalue.key)) {
-                        if (keyvalue.value.equals("")) {
+                        if (keyvalue.value.equals("")) {//$NON-NLS-1$
                             return columns.get(columnIndex).getNillDisplay();
                         }
                         return keyvalue.value;
@@ -677,7 +677,7 @@ public class ComplexTableViewer {
                     if (line == null) {
                         Control control = columns.get(columnIndex).getControl();
                         if (control instanceof Text) {
-                            ((Text) control).setText("");
+                            ((Text) control).setText("");//$NON-NLS-1$
                         }
                         if (control instanceof CCombo) {
                             ((CCombo) control).select(0);

@@ -21,10 +21,10 @@ public class SchemaElementNameFilterDes {
 
     private String sourceFilterExpression = new String();
 
-    private static final String SEPARATOR = ",";
+    private static final String SEPARATOR = ",";//$NON-NLS-1$
 
     public SchemaElementNameFilterDes() {
-        this(false, "");
+        this(false, "");//$NON-NLS-1$
     }
 
     public SchemaElementNameFilterDes(boolean enable, String sourceFilterExpression) {
@@ -47,7 +47,7 @@ public class SchemaElementNameFilterDes {
     public void setSourceFilterExpression(String sourceFilterExpression) {
 
         if (sourceFilterExpression == null)
-            this.sourceFilterExpression = "";
+            this.sourceFilterExpression = "";//$NON-NLS-1$
         else if (!sourceFilterExpression.equals(this.sourceFilterExpression))
             this.sourceFilterExpression = sourceFilterExpression;
     }
@@ -57,7 +57,7 @@ public class SchemaElementNameFilterDes {
         List<String> filterExpressions = new ArrayList<String>();
 
         for (String eachExpression : getSourceFilterExpression().split(SEPARATOR)) {
-            if (!"".equals(eachExpression.trim()))
+            if (!"".equals(eachExpression.trim()))//$NON-NLS-1$
                 filterExpressions.add(eachExpression);
         }
 

@@ -41,29 +41,29 @@ public class SchemaItemLabelCreator {
 
     public static final String XSDELEMENTDECLARATION_SUFFIX_ABSTRACT = "   (abstract)";//$NON-NLS-1$
 
-    public static final String XSDELEMENTDECLARATION_SEPARATOR_TARGETNAMESPACE = " : ";
+    public static final String XSDELEMENTDECLARATION_SEPARATOR_TARGETNAMESPACE = " : ";//$NON-NLS-1$
 
     public static final String XSDPARTICLE_MULTIPLICITY_MANY = "many";//$NON-NLS-1$
 
-    public static final String XSDPARTICLE_MULTIPLICITY_STARTTAG = "[";
+    public static final String XSDPARTICLE_MULTIPLICITY_STARTTAG = "[";//$NON-NLS-1$
 
-    public static final String XSDPARTICLE_MULTIPLICITY_ENDTAG = "]";
+    public static final String XSDPARTICLE_MULTIPLICITY_ENDTAG = "]";//$NON-NLS-1$
 
-    public static final String XSDPARTICLE_MULTIPLICITY_SEPARATOR = "...";
+    public static final String XSDPARTICLE_MULTIPLICITY_SEPARATOR = "...";//$NON-NLS-1$
 
-    public static final String XSDPARTICLE_PREFIX_DEFAULT = "[Any]";
+    public static final String XSDPARTICLE_PREFIX_DEFAULT = "[Any]";//$NON-NLS-1$
 
-    public static final String XSDPARTICLE_SEPARATOR = " ";
+    public static final String XSDPARTICLE_SEPARATOR = " ";//$NON-NLS-1$
 
-    public static final String XSDSIMPLETYPEDEF_SEPARATOR = " : ";
+    public static final String XSDSIMPLETYPEDEF_SEPARATOR = " : ";//$NON-NLS-1$
 
     public static final String XSDANNOTATION_LABEL_DEFAULT = "Annotations";//$NON-NLS-1$
 
-    public static final String XSDSIMPLETYPEDEF_PREFIX_NOTKNOWN = "";
+    public static final String XSDSIMPLETYPEDEF_PREFIX_NOTKNOWN = "";//$NON-NLS-1$
 
     public static final String XSDMODELGROUP_LABEL_NONNAME = "anonymous type ";//$NON-NLS-1$
 
-    public static final String XSDCOMPLEXTYPEDEF_SEPARATOR = " : ";
+    public static final String XSDCOMPLEXTYPEDEF_SEPARATOR = " : ";//$NON-NLS-1$
 
     protected SchemaItemLabelCreator() {
     }
@@ -79,7 +79,7 @@ public class SchemaItemLabelCreator {
     public String getLabel(Object schemaElement) {
 
         if (schemaElement == null)
-            return "NULL";
+            return "NULL";//$NON-NLS-1$
 
         return getLabelForNotNullElement(schemaElement);
 
@@ -123,7 +123,7 @@ public class SchemaItemLabelCreator {
         if (element instanceof Element)
             return getLableForElement((Element) element);
 
-        return "?? " + element.getClass().getName() + " : " + element.toString();
+        return "?? " + element.getClass().getName() + " : " + element.toString();//$NON-NLS-1$//$NON-NLS-2$
 
     }
 
@@ -163,7 +163,7 @@ public class SchemaItemLabelCreator {
             prefix.append(content.getName());
 
         if (content.getTypeDefinition() == null)
-            prefix.append(" [" + ((XSDElementDeclaration) element.getTerm()).getName() + "]");
+            prefix.append(" [" + ((XSDElementDeclaration) element.getTerm()).getName() + "]");//$NON-NLS-1$//$NON-NLS-2$
 
         return prefix.toString();
     }
@@ -208,32 +208,32 @@ public class SchemaItemLabelCreator {
 
     protected String getPrefixForXSDSimpleTypeDefinition(XSDSimpleTypeDefinition element) {
 
-        String s = "";
+        String s = "";//$NON-NLS-1$
         if (element == null) {
         } else if (element.getEffectiveEnumerationFacet() != null) {
             s += element.getName() != null ? element.getName() : element.getBaseTypeDefinition().getName();
         } else if (element.getElement() != null && element.getElement().hasAttribute(XSDConstants.ID_ATTRIBUTE)) {
             s += element.getName();
         } else if ((XSDVariety.UNION_LITERAL == element.getVariety()) || (XSDVariety.LIST_LITERAL == element.getVariety())) {
-            s += "(";
+            s += "(";//$NON-NLS-1$
             for (Iterator<?> members = element.getMemberTypeDefinitions().iterator(); members.hasNext();) {
                 XSDSimpleTypeDefinition memberTypeDefinition = (XSDSimpleTypeDefinition) members.next();
                 s += getSimpleTypeDefinition(memberTypeDefinition);
                 if (members.hasNext()) {
-                    s += " | ";
+                    s += " | ";//$NON-NLS-1$
                 }
             }
-            s += ")";
+            s += ")";//$NON-NLS-1$
             if (element.getMemberTypeDefinitions().isEmpty()) {
-                s = element.getVariety() + "";
+                s = element.getVariety() + "";//$NON-NLS-1$
             }
         } else if ((XSDVariety.UNION_LITERAL == element.getVariety()) | (XSDVariety.LIST_LITERAL == element.getVariety())) {
-            s += "List of ";
+            s += "List of ";//$NON-NLS-1$
             s += getSimpleTypeDefinition(element.getItemTypeDefinition());
         } else if (element.getName() != null) {
             s += element.getName();
         } else if (element.getEffectivePatternFacet() != null) {
-            s += "a restricted xpath expression";
+            s += "a restricted xpath expression";//$NON-NLS-1$
         } else {
             s += XSDSIMPLETYPEDEF_PREFIX_NOTKNOWN;
         }
@@ -245,7 +245,7 @@ public class SchemaItemLabelCreator {
 
         if (element.getTargetNamespace() == null || XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001.equals(element.getTargetNamespace())
                 || XSDConstants.SCHEMA_FOR_SCHEMA_URI_1999.equals(element.getTargetNamespace()))
-            return "";
+            return "";//$NON-NLS-1$
 
         return XSDSIMPLETYPEDEF_SEPARATOR + element.getTargetNamespace();
 
@@ -260,12 +260,12 @@ public class SchemaItemLabelCreator {
 
         name += getMulticityLabelForXSDParticle(particle);
 
-        String tail = particle.getSchema().getTargetNamespace() == null ? "" : " : " + particle.getSchema().getTargetNamespace();
+        String tail = particle.getSchema().getTargetNamespace() == null ? "" : " : " + particle.getSchema().getTargetNamespace();//$NON-NLS-1$//$NON-NLS-2$
         return name + tail;
     }
 
     protected String getLabelForXSDFacet(XSDFacet element) {
-        return element.getFacetName() + ": " + element.getLexicalValue();
+        return element.getFacetName() + ": " + element.getLexicalValue();//$NON-NLS-1$
     }
 
     protected String getLabelForXSDIDConDef(XSDIdentityConstraintDefinition element) {
@@ -284,7 +284,7 @@ public class SchemaItemLabelCreator {
             label.append(element.getName());
 
         if (element.getContents().size() == 0)
-            label.append(" [" + element.getResolvedAttributeGroupDefinition().getName() + "]");
+            label.append(" [" + element.getResolvedAttributeGroupDefinition().getName() + "]");//$NON-NLS-1$//$NON-NLS-2$
 
         return label.toString();
 
@@ -294,7 +294,7 @@ public class SchemaItemLabelCreator {
 
         String name = element.getAttributeDeclaration().getName();
         if (name == null)
-            name = " [" + element.getAttributeDeclaration().getResolvedAttributeDeclaration().getName() + "]";
+            name = " [" + element.getAttributeDeclaration().getResolvedAttributeDeclaration().getName() + "]";//$NON-NLS-1$//$NON-NLS-2$
         return name;
     }
 
@@ -304,56 +304,56 @@ public class SchemaItemLabelCreator {
 
     protected String getLableForElement(Element element) {
         try {
-            if (element.getLocalName().equals("documentation")) {
-                return "Documentation: " + element.getChildNodes().item(0).getNodeValue();
-            } else if (element.getLocalName().equals("appinfo")) {
-                String source = element.getAttribute("source");
+            if (element.getLocalName().equals("documentation")) {//$NON-NLS-1$
+                return "Documentation: " + element.getChildNodes().item(0).getNodeValue();//$NON-NLS-1$
+            } else if (element.getLocalName().equals("appinfo")) {//$NON-NLS-1$
+                String source = element.getAttribute("source");//$NON-NLS-1$
                 if (source != null) {
-                    if (source.startsWith("X_Label_")) {
-                        return Util.iso2lang.get(source.substring(8).toLowerCase()) + " Label: "
+                    if (source.startsWith("X_Label_")) {//$NON-NLS-1$
+                        return Util.iso2lang.get(source.substring(8).toLowerCase()) + " Label: "//$NON-NLS-1$
                                 + element.getChildNodes().item(0).getNodeValue();
-                    } else if (source.equals("X_ForeignKey")) {
-                        return "Foreign Key:  " + element.getChildNodes().item(0).getNodeValue();
-                    } else if (source.equals("X_ForeignKeyInfo")) {
-                        return "Foreign Key Info:  " + element.getChildNodes().item(0).getNodeValue();
-                    } else if (source.equals("X_SourceSystem")) {
-                        return "Source System:  " + element.getChildNodes().item(0).getNodeValue();
-                    } else if (source.equals("X_TargetSystem")) {
-                        return "Target System(s):  " + element.getChildNodes().item(0).getNodeValue();
-                    } else if (source.startsWith("X_Description_")) {
-                        return Util.iso2lang.get(source.substring(14).toLowerCase()) + " Description: "
+                    } else if (source.equals("X_ForeignKey")) {//$NON-NLS-1$
+                        return "Foreign Key:  " + element.getChildNodes().item(0).getNodeValue();//$NON-NLS-1$
+                    } else if (source.equals("X_ForeignKeyInfo")) {//$NON-NLS-1$
+                        return "Foreign Key Info:  " + element.getChildNodes().item(0).getNodeValue();//$NON-NLS-1$
+                    } else if (source.equals("X_SourceSystem")) {//$NON-NLS-1$
+                        return "Source System:  " + element.getChildNodes().item(0).getNodeValue();//$NON-NLS-1$
+                    } else if (source.equals("X_TargetSystem")) {//$NON-NLS-1$
+                        return "Target System(s):  " + element.getChildNodes().item(0).getNodeValue();//$NON-NLS-1$
+                    } else if (source.startsWith("X_Description_")) {//$NON-NLS-1$
+                        return Util.iso2lang.get(source.substring(14).toLowerCase()) + " Description: "//$NON-NLS-1$
                                 + element.getChildNodes().item(0).getNodeValue();
-                    } else if (source.equals("X_Write")) {
-                        return "Writable By : " + element.getChildNodes().item(0).getNodeValue();
-                    } else if (source.equals("X_Lookup_Field")) {
-                        return "Look Field : " + element.getChildNodes().item(0).getNodeValue();
-                    } else if (source.equals("X_Workflow")) {
-                        return "Workflow access : " + element.getChildNodes().item(0).getNodeValue();
-                    } else if (source.equals("X_Hide")) {
-                        return "No Access to : " + element.getChildNodes().item(0).getNodeValue();
+                    } else if (source.equals("X_Write")) {//$NON-NLS-1$
+                        return "Writable By : " + element.getChildNodes().item(0).getNodeValue();//$NON-NLS-1$
+                    } else if (source.equals("X_Lookup_Field")) {//$NON-NLS-1$
+                        return "Look Field : " + element.getChildNodes().item(0).getNodeValue();//$NON-NLS-1$
+                    } else if (source.equals("X_Workflow")) {//$NON-NLS-1$
+                        return "Workflow access : " + element.getChildNodes().item(0).getNodeValue();//$NON-NLS-1$
+                    } else if (source.equals("X_Hide")) {//$NON-NLS-1$
+                        return "No Access to : " + element.getChildNodes().item(0).getNodeValue();//$NON-NLS-1$
 
-                    } else if (source.startsWith("X_Facet")) {
-                        return source.substring(2, 7) + "_Msg_" + source.substring(8) + ": "
+                    } else if (source.startsWith("X_Facet")) {//$NON-NLS-1$
+                        return source.substring(2, 7) + "_Msg_" + source.substring(8) + ": "//$NON-NLS-1$//$NON-NLS-2$
                                 + element.getChildNodes().item(0).getNodeValue();
 
-                    } else if (source.startsWith("X_Display_Format_")) {
-                        return source + ": " + element.getChildNodes().item(0).getNodeValue();
-                    } else if (source.equals("X_Schematron")) {
+                    } else if (source.startsWith("X_Display_Format_")) {//$NON-NLS-1$
+                        return source + ": " + element.getChildNodes().item(0).getNodeValue();//$NON-NLS-1$
+                    } else if (source.equals("X_Schematron")) {//$NON-NLS-1$
 
-                        String pattern = (String) element.getFirstChild().getUserData("pattern_name");
+                        String pattern = (String) element.getFirstChild().getUserData("pattern_name");//$NON-NLS-1$
                         if (pattern == null) {
                             Element el = Util.parse(element.getChildNodes().item(0).getNodeValue()).getDocumentElement();
-                            if (el.getAttributes().getNamedItem("name") != null)
-                                pattern = el.getAttributes().getNamedItem("name").getTextContent();
+                            if (el.getAttributes().getNamedItem("name") != null)//$NON-NLS-1$
+                                pattern = el.getAttributes().getNamedItem("name").getTextContent();//$NON-NLS-1$
                         }
-                        return "Validation Rule: " + (pattern == null ? "" : pattern);
-                    } else if (source.equals("X_Retrieve_FKinfos")) {
-                        return "Foreign Key resolution:  " + element.getChildNodes().item(0).getNodeValue();
+                        return "Validation Rule: " + (pattern == null ? "" : pattern);//$NON-NLS-1$//$NON-NLS-2$
+                    } else if (source.equals("X_Retrieve_FKinfos")) {//$NON-NLS-1$
+                        return "Foreign Key resolution:  " + element.getChildNodes().item(0).getNodeValue();//$NON-NLS-1$
                     }
-                    if (source.equals("X_ForeignKey_Filter")) {
-                        return "Foreign Key Filter:  " + element.getChildNodes().item(0).getNodeValue();
+                    if (source.equals("X_ForeignKey_Filter")) {//$NON-NLS-1$
+                        return "Foreign Key Filter:  " + element.getChildNodes().item(0).getNodeValue();//$NON-NLS-1$
                     } else {
-                        return source + ": " + Util.nodeToString(element);
+                        return source + ": " + Util.nodeToString(element);//$NON-NLS-1$
                     }
                 } else {
                     return Util.nodeToString(element);
@@ -365,7 +365,7 @@ public class SchemaItemLabelCreator {
             log.error(e.getMessage(), e);
         }
 
-        return "?? " + element.getClass().getName() + " : " + element.toString();
+        return "?? " + element.getClass().getName() + " : " + element.toString();//$NON-NLS-1$//$NON-NLS-2$
     }
 
     protected String getLabelForComplexTypeDef(XSDComplexTypeDefinition element) {

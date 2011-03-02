@@ -28,11 +28,11 @@ public class EditXSDEleDecNameValidator implements IInputValidator {
 
     // @Override
     public String isValid(String newText) {
-        if (newText == null || "".equals(newText.trim()))
+        if (newText == null || "".equals(newText.trim()))//$NON-NLS-1$
             return "The Entity Name cannot be empty";
 
         if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()//$NON-NLS-1$
-                || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())//$NON-NLS-1$
+                || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())//$NON-NLS-1$//$NON-NLS-2$
             return "The name cannot contain the empty characters";
 
         for (XSDElementDeclaration eachElement : schema.getElementDeclarations()) {

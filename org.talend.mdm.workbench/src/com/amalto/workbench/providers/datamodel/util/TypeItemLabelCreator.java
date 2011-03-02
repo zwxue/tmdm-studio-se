@@ -18,9 +18,9 @@ public class TypeItemLabelCreator extends SchemaItemLabelCreator {
 
     protected static TypeItemLabelCreator INSTANCE;
 
-    public static final String XSDSIMPLETYPEDEF_PREFIX_NOTKNOWN = "***";
+    public static final String XSDSIMPLETYPEDEF_PREFIX_NOTKNOWN = "***";//$NON-NLS-1$
 
-    public static final String XSDMODELGROUP_LABEL_NONNAME = "";
+    public static final String XSDMODELGROUP_LABEL_NONNAME = "";//$NON-NLS-1$
 
     private TypeItemLabelCreator() {
     }
@@ -37,7 +37,7 @@ public class TypeItemLabelCreator extends SchemaItemLabelCreator {
     protected String getSuffixForXSDSimpleTypeDefinition(XSDSimpleTypeDefinition element) {
 
         if (element.getTargetNamespace() == null)
-            return "";
+            return "";//$NON-NLS-1$
 
         return XSDSIMPLETYPEDEF_SEPARATOR + element.getTargetNamespace();
 

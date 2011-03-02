@@ -52,20 +52,20 @@ public class PropertyComposite extends Composite {
         final Label lblTitle = new Label(this, SWT.NONE);
         final GridData gd_lblTitle = new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1);
         lblTitle.setLayoutData(gd_lblTitle);
-        lblTitle.setText((title == null ? "" : title));
+        lblTitle.setText((title == null ? "" : title));//$NON-NLS-1$
         hideEmptyLabel(lblTitle);
 
         final Label lblLabel = new Label(this, SWT.NONE);
         lblLabel.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
-        lblLabel.setText((label == null ? "" : label));
+        lblLabel.setText((label == null ? "" : label));//$NON-NLS-1$
         hideEmptyLabel(lblLabel);
 
         tvProperty = new TreeViewer(this, SWT.FULL_SELECTION | SWT.BORDER);
         propModifier = new PropertyModifier(tvProperty);
         tvProperty.setContentProvider(new ListContentProvider());
         tvProperty.setLabelProvider(new CommonTableLabelProvider<IPropertySource<?>>(new ColumnTextExtractor[] {
-                new ColumnTextExtractor<IPropertySource<?>>("getPropertyName"),
-                new ColumnTextExtractor<IPropertySource<?>>("getPropertyValueLabel") }));
+                new ColumnTextExtractor<IPropertySource<?>>("getPropertyName"),//$NON-NLS-1$
+                new ColumnTextExtractor<IPropertySource<?>>("getPropertyValueLabel") }));//$NON-NLS-1$
         tvProperty.setSorter(new PropertySourceSorter());
         tvProperty.setCellEditors(new CellEditor[2]);
         tvProperty.setColumnProperties(PropertyModifier.COLPROPS);
@@ -79,11 +79,11 @@ public class PropertyComposite extends Composite {
 
         final TreeColumn colName = new TreeColumn(tree, SWT.NONE);
         colName.setWidth(150);
-        colName.setText((propNameColLabel == null ? "name" : propNameColLabel));
+        colName.setText((propNameColLabel == null ? "name" : propNameColLabel));//$NON-NLS-1$
 
         final TreeColumn colValue = new TreeColumn(tree, SWT.NONE);
         colValue.setWidth(330);
-        colValue.setText((propValueColLabel == null ? "value" : propValueColLabel));
+        colValue.setText((propValueColLabel == null ? "value" : propValueColLabel));//$NON-NLS-1$
     }
 
     public void setPropertySources(IPropertySource<?>[] propSources) {
@@ -125,7 +125,7 @@ public class PropertyComposite extends Composite {
 
     private void hideEmptyLabel(Label label) {
 
-        if (!label.getText().trim().equals(""))
+        if (!label.getText().trim().equals(""))//$NON-NLS-1$
             return;
 
         ((GridData) label.getLayoutData()).exclude = true;

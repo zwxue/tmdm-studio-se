@@ -34,7 +34,7 @@ public enum EInputTemplate {
                      "<parameters>\n\t\t<CrossRef>\n\t\t\t<xrefName>?</xrefName>\n\t\t\t<xrefCluster>?</xrefCluster>\n\t\t\t<xrefRootElement>?</xrefRootElement>\n\t\t\t<xrefIn>\n\t\t\t\t<mapping>\n\t\t\t\t\t<xrefElement>?</xrefElement>\n\t\t\t\t\t<xrefPath>?</xrefPath>\n\t\t\t\t</mapping>\n\t\t\t</xrefIn>\n\t\t\t<xrefOut>\n\t\t\t\t<mapping>\n\t\t\t\t\t<xrefElement>?</xrefElement>\n\t\t\t\t\t<xrefPath>?</xrefPath>\n\t\t\t\t</mapping>\n\t\t\t</xrefOut>\n\t\t</CrossRef>\n</parameters>"), //$NON-NLS-1$
     CSVPARSER("csvparser",//$NON-NLS-1$
               "<parameters>\n\t\t<separator>?</separator>\n\t\t<headersOnFirstLine>?</headersOnFirstLine>\n\t\t<template>\n\t\t<![CDATA[\n\t\t\t<MyXml>\n\t\t\t\t\t<Field1>?</Field1>\n\t\t\t\t\t<Combo>?</Combo>\n\t\t\t\t\t<NotInterpreted>?</NotInterpreted>\n\t\t\t\t\t<HeaderReference>?</HeaderReference>\n\t\t\t\t\t[LOOP lineNumber.*]\n\t\t\t\t\t<Line>\n\t\t\t\t\t\t\t<Quantity>?</Quantity> \n\t\t\t\t\t</Line>\n\t\t\t\t\t[/LOOP] \n\t\t\t</MyXml>\n\t\t]]>\n\t\t</template>\n</parameters>"), //$NON-NLS-1$
-    DUMPANDGO("dumpandgo", ""), //$NON-NLS-1$
+    DUMPANDGO("dumpandgo", ""), //$NON-NLS-1$//$NON-NLS-2$
     FIXEDLENGTHPARSER("fixedlengthparser",//$NON-NLS-1$
                       "<parameters>\n\t\t<template>\n\t\t\t<MyXml>\n\t\t\t\t\t<Field1>?</Field1> \n\t\t\t\t\t<Combo>?</Combo>\n\t\t\t\t\t<NotInterpreted>?</NotInterpreted>\n\t\t\t</MyXml>\n\t\t</template>\n</parameters>"), //$NON-NLS-1$
     GROUPEDLINESREADER("groupedlinesreader",//$NON-NLS-1$
@@ -48,7 +48,7 @@ public enum EInputTemplate {
            "<parameters>\n\t\t<regexp>?</regexp>\n\t\t<contentType>?</contentType>\n\t\t<resultPattern><![CDATA[\n\t\t\t\t<result>?</result>\n\t\t]]></resultPattern>\n</parameters>"), //$NON-NLS-1$
     REPLACE("replace",//$NON-NLS-1$
             "<parameters>\n\t\t<regexp>?</regexp>\n\t\t<contentType>?</contentType>\n\t\t<replacement>?</replacement>\n</parameters>"), //$NON-NLS-1$
-    ROUTE("route", ""), //$NON-NLS-1$
+    ROUTE("route", ""), //$NON-NLS-1$//$NON-NLS-2$
     TISCALL("callJob",//$NON-NLS-1$
             "<configuration>\n\t\t<url>?</url>\n\t\t<contextParam>\n\t\t\t<name>?</name>\n\t\t\t<value>?</value>\n\t\t</contextParam>\n\t\t<username>?</username>\n\t\t<password>?</password>\n</configuration>\n\n\n"), //$NON-NLS-1$
     WORKFLOWTRIGGER("workflowtrigger",//$NON-NLS-1$
@@ -63,20 +63,19 @@ public enum EInputTemplate {
 
     // RoutingRole(trigger)
     CALLTRANSFORMER("callprocess", "process=?"), //$NON-NLS-1$//$NON-NLS-2$
-    DUMPTOCONSOLE("dumptoconsole", ""), //$NON-NLS-1$
+    DUMPTOCONSOLE("dumptoconsole", ""), //$NON-NLS-1$//$NON-NLS-2$
     ITEMDISPATCHER("itemdispatcher",//$NON-NLS-1$
                    "<parameters>\n\t<transformer>\n\t\t<allInOne>?</allInOne>\n\t\t<assignTo>?</assignTo>\n\t</transformer>\n</parameters>"), //$NON-NLS-1$
     JDBC("jdbc",//$NON-NLS-1$
          "<parameters>\n\t<driverClassName>?</driverClassName>\n\t<url>?</url>\n\t<username>?</username>\n\t<password>?</password>\n\t<transformer>?</transformer>\n</parameters>"), //$NON-NLS-1$
-    LOGGING("logging", ""), //$NON-NLS-1$
+    LOGGING("logging", ""), //$NON-NLS-1$//$NON-NLS-2$
     LOGGINGSMTP("loggingsmtp",//$NON-NLS-1$
                 "<parameters>\n\t<from>?</from>\n\t<to>?</to>\n\t<cc>?</cc>\n\t<bcc>?</bcc>\n\t<logFileName>?</logFileName>\n\t<subjectprefix>?</subjectprefix>\n\t<logfilename>?</logfilename>\n\t<transformer>?</transformer>\n</parameters>"), //$NON-NLS-1$
     SMTP("smtp",//$NON-NLS-1$
          "<parameters>\n\t<from>?</from>\n\t<to>?</to>\n\t<cc>?</cc>\n\t<bcc>?</bcc>\n\t<subjectprefix>?</subjectprefix>\n\t<logfilename>?</logfilename>\n\t<process>?</process>\n</parameters>\n"), //$NON-NLS-1$
-    SVN("svn", ""), //$NON-NLS-1$
-    WORKFLOW(
-            "workflow",//$NON-NLS-1$
-   "<parameters>\n\t\t<processId>?</processId>\n\t\t<processVersion>?</processVersion>\n\t\t<variable>\n\t\t\t<scope>?</scope>\n\t\t\t<name>?</name>\n\t\t\t<type>?</type>\n\t\t\t<fromItem>?</fromItem>\n\t\t\t<xpath>?</xpath>\n\t\t</variable>\n\t\t<variable>\n\t\t\t<scope>?</scope>\n\t\t\t<activityId>?</activityId>\n\t\t\t<name>?</name>\n\t\t\t<type>?</type>\n\t\t\t<fromItem>?</fromItem>\n\t\t\t<value>?</value>\n\t\t</variable>\n\t</parameters>\n\n"),//$NON-NLS-1$
+    SVN("svn", ""), //$NON-NLS-1$//$NON-NLS-2$
+    WORKFLOW("workflow",//$NON-NLS-1$
+             "<parameters>\n\t\t<processId>?</processId>\n\t\t<processVersion>?</processVersion>\n\t\t<variable>\n\t\t\t<scope>?</scope>\n\t\t\t<name>?</name>\n\t\t\t<type>?</type>\n\t\t\t<fromItem>?</fromItem>\n\t\t\t<xpath>?</xpath>\n\t\t</variable>\n\t\t<variable>\n\t\t\t<scope>?</scope>\n\t\t\t<activityId>?</activityId>\n\t\t\t<name>?</name>\n\t\t\t<type>?</type>\n\t\t\t<fromItem>?</fromItem>\n\t\t\t<value>?</value>\n\t\t</variable>\n\t</parameters>\n\n"), //$NON-NLS-1$
     SYNCHRONIZATION("synchronization",//$NON-NLS-1$
                     "<synchronization-configuration>\n\t<planName>?</planName>\n\t<action>START_DIFFERENTIAL</action>\n</synchronization-configuration>"), //$NON-NLS-1$
 

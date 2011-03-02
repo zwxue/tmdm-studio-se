@@ -37,7 +37,7 @@ public class SimpleXPathComposite extends Composite {
 
     private Label lblTitle;
 
-    private String defaultDataModelForSelect = "";
+    private String defaultDataModelForSelect = "";//$NON-NLS-1$
 
     private IAllDataModelHolder allDataModelHolder;
 
@@ -56,7 +56,7 @@ public class SimpleXPathComposite extends Composite {
         gridLayout.horizontalSpacing = 0;
         setLayout(gridLayout);
 
-        if (title != null && !"".trim().equals(title)) {
+        if (title != null && !"".trim().equals(title)) {//$NON-NLS-1$
             lblTitle = new Label(this, SWT.NONE);
             final GridData gd_lblTitle = new GridData(SWT.FILL, SWT.CENTER, true, false);
             lblTitle.setLayoutData(gd_lblTitle);
@@ -82,7 +82,7 @@ public class SimpleXPathComposite extends Composite {
     }
 
     public String getXPath() {
-        return txtXPath.getText().trim().replaceAll("'|\"", "");
+        return txtXPath.getText().trim().replaceAll("'|\"", "");//$NON-NLS-1$//$NON-NLS-2$
     }
 
     public void setXPath(String xpath) {

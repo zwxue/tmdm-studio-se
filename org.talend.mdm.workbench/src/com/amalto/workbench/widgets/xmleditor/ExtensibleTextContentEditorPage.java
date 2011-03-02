@@ -98,9 +98,8 @@ public class ExtensibleTextContentEditorPage extends ExtensibleContentEditorPage
 
                 if (event.data instanceof TreeObject[])
                     if (((TreeObject[]) event.data)[0].getType() == TreeObject.TRANSFORMER)
-                        textViewer.getTextWidget().setText(
-                                textViewer.getTextWidget().getText().replace("?", "")
-                                        + ((TreeObject[]) event.data)[0].getDisplayName());
+                        textViewer.getTextWidget().setText(textViewer.getTextWidget().getText().replace("?", "")//$NON-NLS-1$//$NON-NLS-2$
+                                + ((TreeObject[]) event.data)[0].getDisplayName());
                     else
                         textViewer.getTextWidget().setText(
                                 textViewer.getTextWidget().getText() + ((TreeObject[]) event.data)[0].getDisplayName());
@@ -163,7 +162,7 @@ public class ExtensibleTextContentEditorPage extends ExtensibleContentEditorPage
     private String getCurrentContent() {
 
         if (textViewer.getDocument() == null || textViewer.getDocument().get() == null)
-            return "";
+            return "";//$NON-NLS-1$
 
         return textViewer.getDocument().get().trim();
     }

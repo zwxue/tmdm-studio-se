@@ -63,7 +63,7 @@ public class ConceptComposite {
         // layout.verticalSpacing = 10;
         final List<String> typeNames = new ArrayList<String>();
         for (XSDComplexTypeDefinition type : types) {
-            typeNames.add(type.getName() + (type.getTargetNamespace() != null ? " : " + type.getTargetNamespace() : ""));
+            typeNames.add(type.getName() + (type.getTargetNamespace() != null ? " : " + type.getTargetNamespace() : ""));//$NON-NLS-1$//$NON-NLS-2$
         }
         typeNameLabel = new Label(parent, SWT.NONE);
         typeNameLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
@@ -101,8 +101,8 @@ public class ConceptComposite {
                 typeNames1.addAll(typeNames);
                 if (typeNameText.getText().trim().length() > 0) {
                     typeNames1.remove(typeNameText.getText());
-                    if (!typeNames1.contains("")) {
-                        typeNames1.add(0, "");
+                    if (!typeNames1.contains("")) {//$NON-NLS-1$
+                        typeNames1.add(0, "");//$NON-NLS-1$
                     }
                     superTypeNameText.setItems(typeNames1.toArray(new String[typeNames1.size()]));
                 }
@@ -110,7 +110,7 @@ public class ConceptComposite {
         });
 
         final Group radioGroup = new Group(parent, SWT.SHADOW_NONE);
-        radioGroup.setText(encloseTextField ? "" : "Sub-Elements Group");//$NON-NLS-1$
+        radioGroup.setText(encloseTextField ? "" : "Sub-Elements Group");//$NON-NLS-1$//$NON-NLS-2$
 
         radioGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1));
         radioGroup.setLayout(new GridLayout(1, false));
@@ -140,8 +140,8 @@ public class ConceptComposite {
         superTypeNameText = new CCombo(parent, SWT.SINGLE | SWT.BORDER);
         superTypeNameText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1));
 
-        if (!typeNames.contains("")) {
-            typeNames.add(0, "");
+        if (!typeNames.contains("")) {//$NON-NLS-1$
+            typeNames.add(0, "");//$NON-NLS-1$
         }
 
         superTypeNameText.setItems(typeNames.toArray(new String[typeNames.size()]));

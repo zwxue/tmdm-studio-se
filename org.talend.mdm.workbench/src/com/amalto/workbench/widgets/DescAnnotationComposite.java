@@ -87,7 +87,7 @@ public class DescAnnotationComposite implements SelectionListener {
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
         }
         if (isBtnRight) {
-            descriptionText = toolkit.createText(descAntionHolder, "", SWT.BORDER);
+            descriptionText = toolkit.createText(descAntionHolder, "", SWT.BORDER);//$NON-NLS-1$
             textGD = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
             descriptionText.setLayoutData(textGD);
 
@@ -101,20 +101,20 @@ public class DescAnnotationComposite implements SelectionListener {
                     fillDataStore(descriptionText.getText());
                 }
             });
-            annotationButton = toolkit.createButton(descAntionHolder, "", SWT.PUSH);
+            annotationButton = toolkit.createButton(descAntionHolder, "", SWT.PUSH);//$NON-NLS-1$
             annotationButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
             annotationButton.addSelectionListener(this);
             annotationButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
             annotationButton.setToolTipText("Set the Descriptions");
 
         } else {
-            annotationButton = toolkit.createButton(descAntionHolder, "", SWT.PUSH);
+            annotationButton = toolkit.createButton(descAntionHolder, "", SWT.PUSH);//$NON-NLS-1$
             annotationButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
             annotationButton.addSelectionListener(this);
             annotationButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
             annotationButton.setToolTipText("Set the Descriptions");
 
-            descriptionText = toolkit.createText(descAntionHolder, "", SWT.BORDER);
+            descriptionText = toolkit.createText(descAntionHolder, "", SWT.BORDER);//$NON-NLS-1$
             textGD = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
             descriptionText.setLayoutData(textGD);
             descriptionText.addModifyListener(new ModifyListener() {
@@ -157,8 +157,8 @@ public class DescAnnotationComposite implements SelectionListener {
             }
         }
 
-        if (!find && !text.equals("")) {
-            dataStore.put("en", text);
+        if (!find && !text.equals("")) {//$NON-NLS-1$
+            dataStore.put("en", text);//$NON-NLS-1$
         }
     }
 
@@ -201,11 +201,11 @@ public class DescAnnotationComposite implements SelectionListener {
         }
 
         public void widgetSelected(SelectionEvent e) {
-            AnnotationLanguageLabelsDialog dlg = (AnnotationLanguageLabelsDialog) ((Widget) e.getSource()).getData("dialog");
+            AnnotationLanguageLabelsDialog dlg = (AnnotationLanguageLabelsDialog) ((Widget) e.getSource()).getData("dialog");//$NON-NLS-1$
             if (dlg.getReturnCode() == Window.OK) {
-                String outPut = "";
+                String outPut = "";//$NON-NLS-1$
                 for (Map.Entry<String, String> m : dataStore.entrySet()) {
-                    outPut += "[" + m.getKey().toUpperCase() + ":" + m.getValue() + "]";
+                    outPut += "[" + m.getKey().toUpperCase() + ":" + m.getValue() + "]";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                 }
 
                 if (!outPut.equals(descriptionText.getText())) {

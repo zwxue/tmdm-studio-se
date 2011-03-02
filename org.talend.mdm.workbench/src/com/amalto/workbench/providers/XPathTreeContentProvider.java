@@ -330,7 +330,7 @@ public class XPathTreeContentProvider extends XSDTreeContentProvider {
                                         XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001)) || (conceptName == null && el
                                 .getTargetNamespace() == null))) {
                     // Add filter for the contentprovider which is used to construct the xpath tree.
-                    if (filter.equalsIgnoreCase("") || el.getName().toLowerCase().startsWith(filter.toLowerCase()))
+                    if (filter.equalsIgnoreCase("") || el.getName().toLowerCase().startsWith(filter.toLowerCase()))//$NON-NLS-1$
                         list.add(el);
                 }
 

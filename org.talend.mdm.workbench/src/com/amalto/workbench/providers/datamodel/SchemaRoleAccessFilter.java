@@ -41,7 +41,7 @@ public class SchemaRoleAccessFilter extends ViewerFilter {
 
     @Override
     public boolean select(Viewer viewer, Object parentElement, Object element) {
-        return schemaItemRoleSelector.isSatisfiedItem(dataModelFilter == null ? "" : dataModelFilter.getRole(), parentElement,
+        return schemaItemRoleSelector.isSatisfiedItem(dataModelFilter == null ? "" : dataModelFilter.getRole(), parentElement,//$NON-NLS-1$
                 element);
     }
 

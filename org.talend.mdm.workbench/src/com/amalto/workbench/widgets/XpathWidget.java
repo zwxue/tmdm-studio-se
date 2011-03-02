@@ -91,12 +91,12 @@ public class XpathWidget implements SelectionListener {
     }
 
     public XpathWidget(Composite parent, AMainPageV2 page, boolean isMulti) {
-        this("", page.getXObject().getParent(), null, parent, page, false, false, "");
+        this("", page.getXObject().getParent(), null, parent, page, false, false, "");//$NON-NLS-1$//$NON-NLS-2$
         this.isMulti = isMulti;
     }
 
     public XpathWidget(Composite parent, boolean isMulti) {
-        this("", null, null, parent, null, false, false, "");
+        this("", null, null, parent, null, false, false, "");//$NON-NLS-1$//$NON-NLS-2$
         this.isMulti = isMulti;
     }
 
@@ -132,22 +132,22 @@ public class XpathWidget implements SelectionListener {
             }
         };
         if (isButtonLeft) {
-            annotationButton = toolkit.createButton(xpathAntionHolder, "", SWT.PUSH);
+            annotationButton = toolkit.createButton(xpathAntionHolder, "", SWT.PUSH);//$NON-NLS-1$
             annotationButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
             annotationButton.addSelectionListener(this);
             if (readOnly) {
-                descriptionText = toolkit.createText(xpathAntionHolder, "", SWT.BORDER | SWT.MULTI | SWT.LEFT | SWT.READ_ONLY);
+                descriptionText = toolkit.createText(xpathAntionHolder, "", SWT.BORDER | SWT.MULTI | SWT.LEFT | SWT.READ_ONLY);//$NON-NLS-1$
             } else {
-                descriptionText = toolkit.createText(xpathAntionHolder, "", SWT.BORDER | SWT.MULTI | SWT.LEFT);
+                descriptionText = toolkit.createText(xpathAntionHolder, "", SWT.BORDER | SWT.MULTI | SWT.LEFT);//$NON-NLS-1$
             }
             descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
             descriptionText.addModifyListener(listenr);
 
         } else {
             if (readOnly) {
-                descriptionText = toolkit.createText(xpathAntionHolder, "", SWT.BORDER | SWT.MULTI | SWT.LEFT | SWT.READ_ONLY);
+                descriptionText = toolkit.createText(xpathAntionHolder, "", SWT.BORDER | SWT.MULTI | SWT.LEFT | SWT.READ_ONLY);//$NON-NLS-1$
             } else {
-                descriptionText = toolkit.createText(xpathAntionHolder, "", SWT.BORDER | SWT.MULTI | SWT.LEFT);
+                descriptionText = toolkit.createText(xpathAntionHolder, "", SWT.BORDER | SWT.MULTI | SWT.LEFT);//$NON-NLS-1$
             }
             descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
             descriptionText.addModifyListener(listenr);
@@ -206,7 +206,7 @@ public class XpathWidget implements SelectionListener {
 
     public void setText(String text) {
         // descriptionText.setText(text.replaceAll("\\s+", "").trim());
-        descriptionText.setText(text == null ? "" : text.trim());
+        descriptionText.setText(text == null ? "" : text.trim());//$NON-NLS-1$
     }
 
     public boolean isReadOnly() {

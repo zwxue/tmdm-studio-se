@@ -73,7 +73,7 @@ public class XObjectBrowserInput implements IEditorInput, IXObjectModelListener 
 
     public String getToolTipText() {
         TreeObject xobject = (TreeObject) model;
-        return xobject.getServerRoot().getDisplayName() + " - " + TreeObject.getTypeName(xobject.getType()) + " - "
+        return xobject.getServerRoot().getDisplayName() + " - " + TreeObject.getTypeName(xobject.getType()) + " - "//$NON-NLS-1$//$NON-NLS-2$
                 + xobject.getDisplayName();
     }
 

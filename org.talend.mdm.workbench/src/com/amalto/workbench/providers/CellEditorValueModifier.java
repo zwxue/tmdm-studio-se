@@ -67,7 +67,7 @@ public class CellEditorValueModifier<T> {
     protected Object translateNewValueToModelAcceptable(Object newValue) {
 
         if (newValue == null)
-            return "";
+            return "";//$NON-NLS-1$
 
         return newValue.toString();
     }

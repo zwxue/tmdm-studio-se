@@ -73,7 +73,7 @@ public class FileSelectWidget {
             label.setText(this.label);
             label.setLayoutData(gd);
         }
-        text = factory.createText(parent, "", SWT.SINGLE | SWT.BORDER);
+        text = factory.createText(parent, "", SWT.SINGLE | SWT.BORDER);//$NON-NLS-1$
         gd = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
         /*
          * if(label.length()>0){ gd=new GridData(SWT.FILL,SWT.FILL,true,true,1,1); }else{ gd=new
@@ -82,7 +82,7 @@ public class FileSelectWidget {
         text.setLayoutData(gd);
         text.setText(filename);
         button = new Button(parent, SWT.PUSH);
-        button.setText("");
+        button.setText("");//$NON-NLS-1$
         button.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
         gd = new GridData(SWT.RIGHT, SWT.TOP, false, false, 1, 1);
         button.setLayoutData(gd);

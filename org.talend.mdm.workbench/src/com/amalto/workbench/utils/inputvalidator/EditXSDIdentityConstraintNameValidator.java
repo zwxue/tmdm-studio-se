@@ -39,11 +39,11 @@ public class EditXSDIdentityConstraintNameValidator implements IInputValidator {
     // @Override
     public String isValid(String newText) {
 
-        if ((newText == null) || "".equals(newText))
+        if ((newText == null) || "".equals(newText))//$NON-NLS-1$
             return "The unique key name cannot be empty";
 
         if (Pattern.compile("^\\s+\\w+\\s*").matcher(newText).matches()//$NON-NLS-1$
-                || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())//$NON-NLS-1$
+                || newText.trim().replaceAll("\\s", "").length() != newText.trim().length())//$NON-NLS-1$//$NON-NLS-2$
             return "The unique key name cannot contain the empty characters";
 
         if (XSDIdentityConstraintCategory.UNIQUE_LITERAL.equals(key.getIdentityConstraintCategory())

@@ -30,11 +30,11 @@ public class ComplexTableViewerColumn {
 
     boolean isNillable = false;
 
-    String nillValue = "";
+    String nillValue = "";//$NON-NLS-1$
 
-    String nillDisplay = "";
+    String nillDisplay = "";//$NON-NLS-1$
 
-    private String defaultValue = "";
+    private String defaultValue = "";//$NON-NLS-1$
 
     private int style;
 
@@ -215,8 +215,8 @@ public class ComplexTableViewerColumn {
     public boolean equals(Object obj) {
         if (obj instanceof ComplexTableViewerColumn) {
             ComplexTableViewerColumn compareObj = (ComplexTableViewerColumn) obj;
-            String compareName = compareObj.getName() == null ? "" : compareObj.getName();
-            String currentName = name == null ? "" : name;
+            String compareName = compareObj.getName() == null ? "" : compareObj.getName();//$NON-NLS-1$
+            String currentName = name == null ? "" : name;//$NON-NLS-1$
             return compareName.equals(currentName);
         }
         return false;
@@ -224,7 +224,7 @@ public class ComplexTableViewerColumn {
 
     @Override
     public int hashCode() {
-        String currentName = name == null ? "" : name;
+        String currentName = name == null ? "" : name;//$NON-NLS-1$
         return currentName.hashCode();
     }
 

@@ -199,8 +199,8 @@ public class ExportItemsWizard extends Wizard {
                         sw = new StringWriter();
                         Marshaller.marshal(cluster, sw);
                         encodedID = URLEncoder.encode(cluster.getName(), "UTF-8");//$NON-NLS-1$
-                        writeString(sw.toString(), TreeObject.DATACONTAINER + "/" + encodedID);
-                        items.add(TreeObject.DATACONTAINER + "/" + encodedID);
+                        writeString(sw.toString(), TreeObject.DATACONTAINER + "/" + encodedID);//$NON-NLS-1$
+                        items.add(TreeObject.DATACONTAINER + "/" + encodedID);//$NON-NLS-1$
 
                         obj.setItems(items.toArray(new String[items.size()]));
                         exports.add(obj);
@@ -227,8 +227,8 @@ public class ExportItemsWizard extends Wizard {
                         sw = new StringWriter();
                         Marshaller.marshal(model, sw);
                         encodedID = URLEncoder.encode(model.getName(), "UTF-8");//$NON-NLS-1$
-                        writeString(sw.toString(), TreeObject.DATAMODEL_ + "/" + encodedID);
-                        items.add(TreeObject.DATAMODEL_ + "/" + encodedID);
+                        writeString(sw.toString(), TreeObject.DATAMODEL_ + "/" + encodedID);//$NON-NLS-1$
+                        items.add(TreeObject.DATAMODEL_ + "/" + encodedID);//$NON-NLS-1$
                         obj.setItems(items.toArray(new String[items.size()]));
                         exports.add(obj);
                     } catch (Exception e) {
@@ -247,8 +247,8 @@ public class ExportItemsWizard extends Wizard {
                         sw = new StringWriter();
                         Marshaller.marshal(menu, sw);
                         encodedID = URLEncoder.encode(menu.getName(), "UTF-8");//$NON-NLS-1$
-                        writeString(sw.toString(), TreeObject.MENU_ + "/" + encodedID);
-                        items.add(TreeObject.MENU_ + "/" + encodedID);
+                        writeString(sw.toString(), TreeObject.MENU_ + "/" + encodedID);//$NON-NLS-1$
+                        items.add(TreeObject.MENU_ + "/" + encodedID);//$NON-NLS-1$
 
                         obj.setItems(items.toArray(new String[items.size()]));
                         exports.add(obj);
@@ -274,7 +274,7 @@ public class ExportItemsWizard extends Wizard {
                         Marshaller.marshal(get.getResponseBody(), sw);
                         encodedID = URLEncoder.encode(obj.getDisplayName(), "UTF-8");//$NON-NLS-1$
                         writeInputStream(get.getResponseBodyAsStream(), TreeObject.PICTURES_ + "/" + encodedID);
-                        items.add(TreeObject.PICTURES_ + "/" + encodedID);
+                        items.add(TreeObject.PICTURES_ + "/" + encodedID);//$NON-NLS-1$
 
                         obj.setItems(items.toArray(new String[items.size()]));
                         exports.add(obj);
@@ -296,8 +296,8 @@ public class ExportItemsWizard extends Wizard {
                             sw = new StringWriter();
                             Marshaller.marshal(role, sw);
                             encodedID = URLEncoder.encode(role.getName(), "UTF-8");//$NON-NLS-1$
-                            writeString(sw.toString(), TreeObject.ROLE_ + "/" + encodedID);
-                            items.add(TreeObject.ROLE_ + "/" + encodedID);
+                            writeString(sw.toString(), TreeObject.ROLE_ + "/" + encodedID);//$NON-NLS-1$
+                            items.add(TreeObject.ROLE_ + "/" + encodedID);//$NON-NLS-1$
 
                             obj.setItems(items.toArray(new String[items.size()]));
                             exports.add(obj);
@@ -318,8 +318,8 @@ public class ExportItemsWizard extends Wizard {
                         sw = new StringWriter();
                         Marshaller.marshal(RoutingRule, sw);
                         encodedID = URLEncoder.encode(RoutingRule.getName(), "UTF-8");//$NON-NLS-1$
-                        writeString(sw.toString(), TreeObject.ROUTINGRULE_ + "/" + encodedID);
-                        items.add(TreeObject.ROUTINGRULE_ + "/" + encodedID);
+                        writeString(sw.toString(), TreeObject.ROUTINGRULE_ + "/" + encodedID);//$NON-NLS-1$
+                        items.add(TreeObject.ROUTINGRULE_ + "/" + encodedID);//$NON-NLS-1$
                         obj.setItems(items.toArray(new String[items.size()]));
                         exports.add(obj);
                     } catch (Exception e) {
@@ -338,8 +338,8 @@ public class ExportItemsWizard extends Wizard {
                         sw = new StringWriter();
                         Marshaller.marshal(StoredProcedure, sw);
                         encodedID = URLEncoder.encode(StoredProcedure.getName(), "UTF-8");//$NON-NLS-1$
-                        writeString(sw.toString(), TreeObject.STOREDPROCEDURE_ + "/" + encodedID);
-                        items.add(TreeObject.STOREDPROCEDURE_ + "/" + encodedID);
+                        writeString(sw.toString(), TreeObject.STOREDPROCEDURE_ + "/" + encodedID);//$NON-NLS-1$
+                        items.add(TreeObject.STOREDPROCEDURE_ + "/" + encodedID);//$NON-NLS-1$
 
                         obj.setItems(items.toArray(new String[items.size()]));
                         exports.add(obj);
@@ -360,8 +360,8 @@ public class ExportItemsWizard extends Wizard {
                             sw = new StringWriter();
                             Marshaller.marshal(SynchronizationPlan, sw);
                             encodedID = URLEncoder.encode(SynchronizationPlan.getName(), "UTF-8");//$NON-NLS-1$
-                            writeString(sw.toString(), TreeObject.SYNCHRONIZATIONPLAN_ + "/" + encodedID);
-                            items.add(TreeObject.SYNCHRONIZATIONPLAN_ + "/" + encodedID);
+                            writeString(sw.toString(), TreeObject.SYNCHRONIZATIONPLAN_ + "/" + encodedID);//$NON-NLS-1$
+                            items.add(TreeObject.SYNCHRONIZATIONPLAN_ + "/" + encodedID);//$NON-NLS-1$
 
                             obj.setItems(items.toArray(new String[items.size()]));
                             exports.add(obj);
@@ -383,8 +383,8 @@ public class ExportItemsWizard extends Wizard {
                         sw = new StringWriter();
                         Marshaller.marshal(transformer, sw);
                         encodedID = URLEncoder.encode(transformer.getName(), "UTF-8");//$NON-NLS-1$
-                        writeString(sw.toString(), TreeObject.TRANSFORMER_ + "/" + encodedID);
-                        items.add(TreeObject.TRANSFORMER_ + "/" + encodedID);
+                        writeString(sw.toString(), TreeObject.TRANSFORMER_ + "/" + encodedID);//$NON-NLS-1$
+                        items.add(TreeObject.TRANSFORMER_ + "/" + encodedID);//$NON-NLS-1$
 
                         obj.setItems(items.toArray(new String[items.size()]));
                         exports.add(obj);
@@ -404,8 +404,8 @@ public class ExportItemsWizard extends Wizard {
                             sw = new StringWriter();
                             Marshaller.marshal(universe, sw);
                             encodedID = URLEncoder.encode(universe.getName(), "UTF-8");//$NON-NLS-1$
-                            writeString(sw.toString(), TreeObject.UNIVERSE_ + "/" + encodedID);
-                            items.add(TreeObject.UNIVERSE_ + "/" + encodedID);
+                            writeString(sw.toString(), TreeObject.UNIVERSE_ + "/" + encodedID);//$NON-NLS-1$
+                            items.add(TreeObject.UNIVERSE_ + "/" + encodedID);//$NON-NLS-1$
 
                             obj.setItems(items.toArray(new String[items.size()]));
                             exports.add(obj);
@@ -425,8 +425,8 @@ public class ExportItemsWizard extends Wizard {
                         sw = new StringWriter();
                         Marshaller.marshal(View, sw);
                         encodedID = URLEncoder.encode(View.getName(), "UTF-8");//$NON-NLS-1$
-                        writeString(sw.toString(), TreeObject.VIEW_ + "/" + encodedID);
-                        items.add(TreeObject.VIEW_ + "/" + encodedID);
+                        writeString(sw.toString(), TreeObject.VIEW_ + "/" + encodedID);//$NON-NLS-1$
+                        items.add(TreeObject.VIEW_ + "/" + encodedID);//$NON-NLS-1$
 
                         obj.setItems(items.toArray(new String[items.size()]));
                         exports.add(obj);
@@ -443,7 +443,7 @@ public class ExportItemsWizard extends Wizard {
                         DefaultHttpClient httpclient = new DefaultHttpClient();
                         httpclient.getCredentialsProvider().setCredentials(
                                 new AuthScope(obj.getEndpointHost(), Integer.valueOf(obj.getEndpointPort())),
-                                new UsernamePasswordCredentials("admin", "talend"));
+                                new UsernamePasswordCredentials("admin", "talend"));//$NON-NLS-1$//$NON-NLS-2$
                         HttpGet httpget = new HttpGet(workflowURL);
                         // System.out.println("executing request" + httpget.getRequestLine());
                         HttpResponse response = httpclient.execute(httpget);
@@ -486,7 +486,7 @@ public class ExportItemsWizard extends Wizard {
     // add by ymli;fix the bug:0012771
     private void writeInputStream(InputStream inputSteam, String filename) {
         try {
-            File f = new File(exportFolder + "/" + filename);
+            File f = new File(exportFolder + "/" + filename);//$NON-NLS-1$
             if (!f.getParentFile().getParentFile().exists()) {
                 f.getParentFile().getParentFile().mkdir();
             }
@@ -506,7 +506,7 @@ public class ExportItemsWizard extends Wizard {
 
     private void writeString(String outputStr, String filename) {
         try {
-            File f = new File(exportFolder + "/" + filename);
+            File f = new File(exportFolder + "/" + filename);//$NON-NLS-1$
             if (!f.getParentFile().getParentFile().exists()) {
                 f.getParentFile().getParentFile().mkdir();
             }
@@ -575,7 +575,7 @@ public class ExportItemsWizard extends Wizard {
             folderBtn = new Button(composite, SWT.RADIO);
             folderBtn.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 1, 1));
             folderBtn.setText("Select root directory:");
-            folder = new FileSelectWidget(composite, "", new String[] { "*.*" }, "", false);
+            folder = new FileSelectWidget(composite, "", new String[] { "*.*" }, "", false);//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
             folder.getCmp().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
             folderBtn.addSelectionListener(new SelectionListener() {
@@ -593,7 +593,7 @@ public class ExportItemsWizard extends Wizard {
             zipBtn = new Button(composite, SWT.RADIO);
             zipBtn.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 1, 1));
             zipBtn.setText("Select archive file:");
-            zip = new FileSelectWidget(composite, "", new String[] { "*.zip" }, "", true);//$NON-NLS-1$
+            zip = new FileSelectWidget(composite, "", new String[] { "*.zip" }, "", true);//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
             zip.getCmp().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
             zipBtn.addSelectionListener(new SelectionListener() {
 
@@ -640,15 +640,15 @@ public class ExportItemsWizard extends Wizard {
                 StringWriter sw1 = new StringWriter();
                 Marshaller.marshal(wsitem, sw1);
 
-                String uniqueId = pk.getPk() + "." + wsitem.getConceptName();
+                String uniqueId = pk.getPk() + "." + wsitem.getConceptName();//$NON-NLS-1$
                 for (String id : wsitem.getIds()) {
-                    uniqueId = uniqueId + "." + id;
+                    uniqueId = uniqueId + "." + id;//$NON-NLS-1$
                 }
                 encodedID = URLEncoder.encode(uniqueId, "UTF-8");//$NON-NLS-1$
-                writeString(sw1.toString(), TreeObject.DATACONTAINER_COTENTS + "/" + pk.getPk() + "/" + encodedID);
-                items1.add(TreeObject.DATACONTAINER_COTENTS + "/" + pk.getPk() + "/" + encodedID);
+                writeString(sw1.toString(), TreeObject.DATACONTAINER_COTENTS + "/" + pk.getPk() + "/" + encodedID);//$NON-NLS-1$//$NON-NLS-2$
+                items1.add(TreeObject.DATACONTAINER_COTENTS + "/" + pk.getPk() + "/" + encodedID);//$NON-NLS-1$//$NON-NLS-2$
             }
-            TreeObject obj1 = new TreeObject("", null, TreeObject.DATA_CLUSTER_CONTENTS, null, null);
+            TreeObject obj1 = new TreeObject("", null, TreeObject.DATA_CLUSTER_CONTENTS, null, null);//$NON-NLS-1$
             obj1.setItems(items1.toArray(new String[items1.size()]));
             exports.add(obj1);
         } catch (Exception e) {

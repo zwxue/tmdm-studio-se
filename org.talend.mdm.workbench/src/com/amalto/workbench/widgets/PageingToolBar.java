@@ -159,13 +159,13 @@ public class PageingToolBar {
         comp.setLayout(layout);
         // firstpage
         GridData gd = new GridData();
-        firstPageBtn = toolkit.createButton(comp, "", SWT.PUSH);
+        firstPageBtn = toolkit.createButton(comp, "", SWT.PUSH);//$NON-NLS-1$
         firstPageBtn.setToolTipText("First Page");
         firstPageBtn.setImage(ImageCache.getCreatedImage("icons/page-first.gif"));//$NON-NLS-1$
         firstPageBtn.setLayoutData(gd);
         // previous page
         gd = new GridData();
-        prevPageBtn = toolkit.createButton(comp, "", SWT.PUSH);
+        prevPageBtn = toolkit.createButton(comp, "", SWT.PUSH);//$NON-NLS-1$
         prevPageBtn.setToolTipText("Previous Page");
         prevPageBtn.setImage(ImageCache.getCreatedImage("icons/page-prev.gif"));//$NON-NLS-1$
         prevPageBtn.setLayoutData(gd);
@@ -176,7 +176,7 @@ public class PageingToolBar {
         Label label = toolkit.createLabel(comp, "Page", SWT.NULL);
         gd = new GridData();
         label.setLayoutData(gd);
-        pageText = toolkit.createText(comp, "" + page);
+        pageText = toolkit.createText(comp, "" + page);//$NON-NLS-1$
         gd = new GridData();
         gd.widthHint = 25;
         pageText.setLayoutData(gd);
@@ -192,13 +192,13 @@ public class PageingToolBar {
 
         // nextpage
         gd = new GridData();
-        nextPageBtn = toolkit.createButton(comp, "", SWT.PUSH);
+        nextPageBtn = toolkit.createButton(comp, "", SWT.PUSH);//$NON-NLS-1$
         nextPageBtn.setToolTipText("Next Page");
         nextPageBtn.setImage(ImageCache.getCreatedImage("icons/page-next.gif"));//$NON-NLS-1$
         nextPageBtn.setLayoutData(gd);
         // last page
         gd = new GridData();
-        lastPageBtn = toolkit.createButton(comp, "", SWT.PUSH);
+        lastPageBtn = toolkit.createButton(comp, "", SWT.PUSH);//$NON-NLS-1$
         lastPageBtn.setToolTipText("Last Page");
         lastPageBtn.setImage(ImageCache.getCreatedImage("icons/page-last.gif"));//$NON-NLS-1$
         lastPageBtn.setLayoutData(gd);
@@ -221,14 +221,14 @@ public class PageingToolBar {
         gd = new GridData();
         label3.setLayoutData(gd);
 
-        pageSizeText = toolkit.createText(comp, "" + pagesize);
+        pageSizeText = toolkit.createText(comp, "" + pagesize);//$NON-NLS-1$
         gd = new GridData();
         gd.widthHint = 25;
         pageSizeText.setLayoutData(gd);
         pageSizeText.addKeyListener(keylistener);
 
         // display items
-        displayItems = toolkit.createLabel(comp, "");
+        displayItems = toolkit.createLabel(comp, "");//$NON-NLS-1$
         gd = new GridData(SWT.RIGHT, SWT.CENTER, true, true);
         displayItems.setLayoutData(gd);
 
@@ -299,8 +299,8 @@ public class PageingToolBar {
     public void refreshUI() {
         long count = page * pagesize > totalsize ? totalsize : page * pagesize;
         displayItems.setText("Display items of " + ((page - 1) * pagesize + 1) + "-" + count + " of " + totalsize);
-        pageSizeText.setText("" + pagesize);
-        pageText.setText("" + page);
+        pageSizeText.setText("" + pagesize);//$NON-NLS-1$
+        pageText.setText("" + page);//$NON-NLS-1$
         totalPage.setText("of " + totalpage);
         if (page <= 1) {
             firstPageBtn.setImage(ImageCache.getCreatedImage("icons/page-first-disabled.gif"));//$NON-NLS-1$

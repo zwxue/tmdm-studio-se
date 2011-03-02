@@ -59,8 +59,8 @@ public class XSDTreeLabelProvider extends LabelProvider {
             String name = ((XSDElementDeclaration) obj).getName();
             if (((XSDElementDeclaration) obj).isAbstract())
                 name += "   (abstract)";
-            String tail = ((XSDElementDeclaration) obj).getTargetNamespace() != null ? " : "
-                    + ((XSDElementDeclaration) obj).getTargetNamespace() : "";
+            String tail = ((XSDElementDeclaration) obj).getTargetNamespace() != null ? " : "//$NON-NLS-1$
+                    + ((XSDElementDeclaration) obj).getTargetNamespace() : "";//$NON-NLS-1$
             return name + tail;
         }
 
@@ -68,29 +68,29 @@ public class XSDTreeLabelProvider extends LabelProvider {
             XSDParticle xsdParticle = (XSDParticle) obj;
             XSDParticleContent content = xsdParticle.getContent();
             XSDTerm xsdTerm = xsdParticle.getTerm();
-            String name = "";
+            String name = "";//$NON-NLS-1$
             if (content instanceof XSDElementDeclaration) {
                 XSDElementDeclaration decl = (XSDElementDeclaration) content;
-                name += (decl.getName() == null ? "" : decl.getName());
+                name += (decl.getName() == null ? "" : decl.getName());//$NON-NLS-1$
                 if (decl.getTypeDefinition() == null) {
-                    name += " [" + ((XSDElementDeclaration) xsdTerm).getName() + "]";
+                    name += " [" + ((XSDElementDeclaration) xsdTerm).getName() + "]";//$NON-NLS-1$//$NON-NLS-2$
                 }
             } else if (content instanceof XSDModelGroup) {
                 // log.info("SHOULD NOT HAPPEN????");
                 if (xsdParticle.getContainer() instanceof XSDComplexTypeDefinition) {
                     String ctdName = ((XSDComplexTypeDefinition) xsdParticle.getContainer()).getName();
-                    name = (ctdName != null ? ctdName : "");
+                    name = (ctdName != null ? ctdName : "");//$NON-NLS-1$
                 }
 
             } else {
-                name = "[Any]";
+                name = "[Any]";//$NON-NLS-1$
             }
             if (!((xsdParticle.getMinOccurs() == 1) && (xsdParticle.getMaxOccurs() == 1))) {
-                name += "  [";
+                name += "  [";//$NON-NLS-1$
                 name += xsdParticle.getMinOccurs();
-                name += "...";
-                name += (xsdParticle.getMaxOccurs() == -1) ? "many" : "" + xsdParticle.getMaxOccurs();
-                name += "]";
+                name += "...";//$NON-NLS-1$
+                name += (xsdParticle.getMaxOccurs() == -1) ? "many" : "" + xsdParticle.getMaxOccurs();//$NON-NLS-1$//$NON-NLS-2$
+                name += "]";//$NON-NLS-1$
             }
             return name;
         }
@@ -104,23 +104,23 @@ public class XSDTreeLabelProvider extends LabelProvider {
             XSDParticle particle = (XSDParticle) (((XSDModelGroup) obj).getContainer());
             String name = ((XSDComplexTypeDefinition) particle.getContainer()).getName();
             if (name == null)
-                name = "anonymous type ";
+                name = "anonymous type ";//$NON-NLS-1$
             // return the occurence
             if (!((particle.getMinOccurs() == 1) && (particle.getMaxOccurs() == 1))) {
-                name += "  [";
+                name += "  [";//$NON-NLS-1$
                 name += particle.getMinOccurs();
-                name += "...";
-                name += (particle.getMaxOccurs() == -1) ? "many" : "" + particle.getMaxOccurs();
-                name += "]";
+                name += "...";//$NON-NLS-1$
+                name += (particle.getMaxOccurs() == -1) ? "many" : "" + particle.getMaxOccurs();//$NON-NLS-1$//$NON-NLS-2$
+                name += "]";//$NON-NLS-1$
             }
-            String tail = particle.getSchema().getTargetNamespace() == null ? "" : " : "
+            String tail = particle.getSchema().getTargetNamespace() == null ? "" : " : "//$NON-NLS-1$//$NON-NLS-2$
                     + particle.getSchema().getTargetNamespace();
             return name + tail;
 
         }
 
         if (obj instanceof XSDFacet) {
-            return ((XSDFacet) obj).getFacetName() + ": " + ((XSDFacet) obj).getLexicalValue();
+            return ((XSDFacet) obj).getFacetName() + ": " + ((XSDFacet) obj).getLexicalValue();//$NON-NLS-1$
         }
 
         if (obj instanceof XSDIdentityConstraintDefinition) {
@@ -134,9 +134,9 @@ public class XSDTreeLabelProvider extends LabelProvider {
 
         if (obj instanceof XSDAttributeGroupDefinition) {
             XSDAttributeGroupDefinition attributeGroupDefinition = (XSDAttributeGroupDefinition) obj;
-            String name = (attributeGroupDefinition.getName() == null ? "" : attributeGroupDefinition.getName());
+            String name = (attributeGroupDefinition.getName() == null ? "" : attributeGroupDefinition.getName());//$NON-NLS-1$
             if (attributeGroupDefinition.getContents().size() == 0) // a ref
-                name += " [" + attributeGroupDefinition.getResolvedAttributeGroupDefinition().getName() + "]";
+                name += " [" + attributeGroupDefinition.getResolvedAttributeGroupDefinition().getName() + "]";//$NON-NLS-1$//$NON-NLS-2$
             return name;
         }
 
@@ -144,13 +144,13 @@ public class XSDTreeLabelProvider extends LabelProvider {
             XSDAttributeUse attributeUse = (XSDAttributeUse) obj;
             String name = attributeUse.getAttributeDeclaration().getName();
             if (name == null)
-                name = " [" + attributeUse.getAttributeDeclaration().getResolvedAttributeDeclaration().getName() + "]";
+                name = " [" + attributeUse.getAttributeDeclaration().getResolvedAttributeDeclaration().getName() + "]";//$NON-NLS-1$//$NON-NLS-2$
             return name;
         }
 
         if (obj instanceof XSDAnnotation) {
             // XSDAnnotation annotation = (XSDAnnotation) obj;
-            return "Annotations";
+            return "Annotations";//$NON-NLS-1$
         }
 
         if (obj instanceof Element) {
@@ -201,7 +201,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
                                     + e.getChildNodes().item(0).getNodeValue();
                             // made schematron show:Schematron: schematron
                         } else if (source.startsWith("X_Display_Format_")) {//$NON-NLS-1$
-                            return source + ": " + e.getChildNodes().item(0).getNodeValue();
+                            return source + ": " + e.getChildNodes().item(0).getNodeValue();//$NON-NLS-1$
                         } else if (source.equals("X_Schematron")) {//$NON-NLS-1$
 
                             String pattern = (String) e.getFirstChild().getUserData("pattern_name");//$NON-NLS-1$
@@ -217,7 +217,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
                         if (source.equals("X_ForeignKey_Filter")) {//$NON-NLS-1$
                             return "Foreign Key Filter:  " + e.getChildNodes().item(0).getNodeValue();
                         } else {
-                            return source + ": " + Util.nodeToString((Element) obj);
+                            return source + ": " + Util.nodeToString((Element) obj);//$NON-NLS-1$
                         }
                     } else {
                         return Util.nodeToString((Element) obj);
@@ -232,8 +232,8 @@ public class XSDTreeLabelProvider extends LabelProvider {
         }
 
         if (obj == null)
-            return "NULL";
-        return "?? " + obj.getClass().getName() + " : " + obj.toString();
+            return "NULL";//$NON-NLS-1$
+        return "?? " + obj.getClass().getName() + " : " + obj.toString();//$NON-NLS-1$//$NON-NLS-2$
 
     }
 
@@ -298,10 +298,10 @@ public class XSDTreeLabelProvider extends LabelProvider {
                     return ImageCache.getCreatedImage(EImage.COMPLEX_SEQUENCE.getPath());
                 }
             } else if (xsdTerm instanceof XSDWildcard) {
-                return ImageCache.getCreatedImage("icons/wildcard.gif");
+                return ImageCache.getCreatedImage("icons/wildcard.gif");//$NON-NLS-1$
             } else {
                 log.info("ERROR XSD Term " + xsdTerm.getClass().getName());
-                return ImageCache.getCreatedImage("icons/error.gif");
+                return ImageCache.getCreatedImage("icons/error.gif");//$NON-NLS-1$
             }
         }
 
@@ -367,7 +367,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
 
         if (obj instanceof XSDAttributeUse) {
             XSDAttributeUse att = (XSDAttributeUse) obj;
-            if ("xmlns".equals(att.getAttributeDeclaration().getTargetNamespace())) {
+            if ("xmlns".equals(att.getAttributeDeclaration().getTargetNamespace())) {//$NON-NLS-1$
                 return ImageCache.getCreatedImage(EImage.ANNOTATION.getPath());
             }
             if (att.getUse().equals(XSDAttributeUseCategory.REQUIRED_LITERAL))
@@ -453,7 +453,7 @@ public class XSDTreeLabelProvider extends LabelProvider {
      * @param xsdSimpleTypeDefinition a simple type definition in the schema for schema.
      */
     public String getSimpleTypeDefinition(XSDSimpleTypeDefinition xsdSimpleTypeDefinition) {
-        String s = "";
+        String s = "";//$NON-NLS-1$
         if (xsdSimpleTypeDefinition == null) {
         } else if (xsdSimpleTypeDefinition.getEffectiveEnumerationFacet() != null) {
             /*
@@ -471,35 +471,35 @@ public class XSDTreeLabelProvider extends LabelProvider {
             s += xsdSimpleTypeDefinition.getName();
         } else if ((XSDVariety.UNION_LITERAL == xsdSimpleTypeDefinition.getVariety())
                 || (XSDVariety.LIST_LITERAL == xsdSimpleTypeDefinition.getVariety())) {
-            s += "(";
+            s += "(";//$NON-NLS-1$
             for (Iterator members = xsdSimpleTypeDefinition.getMemberTypeDefinitions().iterator(); members.hasNext();) {
                 XSDSimpleTypeDefinition memberTypeDefinition = (XSDSimpleTypeDefinition) members.next();
                 s += getSimpleTypeDefinition(memberTypeDefinition);
                 if (members.hasNext()) {
-                    s += " | ";
+                    s += " | ";//$NON-NLS-1$
                 }
             }
-            s += ")";
+            s += ")";//$NON-NLS-1$
             if (xsdSimpleTypeDefinition.getMemberTypeDefinitions().isEmpty()) {
-                s = xsdSimpleTypeDefinition.getVariety() + "";
+                s = xsdSimpleTypeDefinition.getVariety() + "";//$NON-NLS-1$
             }
         } else if ((XSDVariety.UNION_LITERAL == xsdSimpleTypeDefinition.getVariety())
                 | (XSDVariety.LIST_LITERAL == xsdSimpleTypeDefinition.getVariety())) {
-            s += "List of ";
+            s += "List of ";//$NON-NLS-1$
             s += getSimpleTypeDefinition(xsdSimpleTypeDefinition.getItemTypeDefinition());
         } else if (xsdSimpleTypeDefinition.getName() != null) {
             s += xsdSimpleTypeDefinition.getName();
         } else if (xsdSimpleTypeDefinition.getEffectivePatternFacet() != null) {
             // s+= xsdSimpleTypeDefinition.getEffectivePatternFacet().getLexicalValue());
-            s += "a restricted xpath expression";
+            s += "a restricted xpath expression";//$NON-NLS-1$
         } else {
-            s += "";
+            s += "";//$NON-NLS-1$
         }
-        String tail = xsdSimpleTypeDefinition.getTargetNamespace() == null ? "" : xsdSimpleTypeDefinition.getTargetNamespace();
+        String tail = xsdSimpleTypeDefinition.getTargetNamespace() == null ? "" : xsdSimpleTypeDefinition.getTargetNamespace();//$NON-NLS-1$
         if (tail.equals(XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001) || tail.equals(XSDConstants.SCHEMA_FOR_SCHEMA_URI_1999))
-            tail = "";
-        else if (!tail.equals(""))
-            tail = " : " + tail;
+            tail = "";//$NON-NLS-1$
+        else if (!tail.equals(""))//$NON-NLS-1$
+            tail = " : " + tail;//$NON-NLS-1$
         return s + tail;
     }
 

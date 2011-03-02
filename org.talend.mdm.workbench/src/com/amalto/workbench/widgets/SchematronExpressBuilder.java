@@ -182,7 +182,7 @@ public class SchematronExpressBuilder {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                sourceViewer.setDocument(new Document(""));
+                sourceViewer.setDocument(new Document(""));//$NON-NLS-1$
             }
         });
 
@@ -201,7 +201,7 @@ public class SchematronExpressBuilder {
 
         Composite com1 = new Composite(bottomCom, 0);
         com1.setLayout(getLayout(4));
-        String[] strs1 = { "+", "-", "*", "div" };
+        String[] strs1 = { "+", "-", "*", "div" };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
         for (String str : strs1) {
             final Button btn = new Button(com1, SWT.PUSH);
             btn.setText(str);

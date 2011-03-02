@@ -101,7 +101,7 @@ public class XSDAnnotationsStructure {
         for (Iterator iter = list.iterator(); iter.hasNext();) {
             Element ann = (Element) iter.next();
             String name = ann.getLocalName();
-            if ("documentation".equals(name.toLowerCase())) {
+            if ("documentation".equals(name.toLowerCase())) {//$NON-NLS-1$
                 documentation = ann;
                 break;
             }
@@ -160,7 +160,7 @@ public class XSDAnnotationsStructure {
         if (declaration.getAnnotation() == null) {
             declaration.setAnnotation(annotation);
         }
-        Element appinfo = annotation.createUserInformation("documentation");
+        Element appinfo = annotation.createUserInformation("documentation");//$NON-NLS-1$
         Node text = appinfo.getOwnerDocument().createTextNode(value);
         appinfo.appendChild(text);
         annotation.getElement().appendChild(appinfo);
@@ -173,13 +173,13 @@ public class XSDAnnotationsStructure {
      ****************************************************************************/
 
     public boolean removeLabel(String countryCode) {
-        boolean somethingChanged = removeAppInfos("X_Label_" + countryCode.toUpperCase());
+        boolean somethingChanged = removeAppInfos("X_Label_" + countryCode.toUpperCase());//$NON-NLS-1$
         hasChanged = hasChanged | somethingChanged;
         return somethingChanged;
     }
 
     public boolean removeAllLabels() {
-        boolean somethingChanged = removeAppInfos("X_Label_.*");
+        boolean somethingChanged = removeAppInfos("X_Label_.*");//$NON-NLS-1$
         hasChanged = hasChanged | somethingChanged;
         return somethingChanged;
     }
@@ -187,7 +187,7 @@ public class XSDAnnotationsStructure {
     public boolean setLabel(String countryCode, String label) {
         if (countryCode == null)
             return false;
-        boolean somethingChanged = setAppInfo("X_Label_" + countryCode.toUpperCase(), label, true);
+        boolean somethingChanged = setAppInfo("X_Label_" + countryCode.toUpperCase(), label, true);//$NON-NLS-1$
         hasChanged = hasChanged | somethingChanged;
         return somethingChanged;
     }
@@ -206,7 +206,7 @@ public class XSDAnnotationsStructure {
 
     public LinkedHashMap<String, String> getLabels() {
         LinkedHashMap<String, String> labels = new LinkedHashMap<String, String>();
-        LinkedHashMap<String, String> appInfos = getAppInfos("X_Label_.*");
+        LinkedHashMap<String, String> appInfos = getAppInfos("X_Label_.*");//$NON-NLS-1$
         Set<String> keys = appInfos.keySet();
         for (Iterator iter = keys.iterator(); iter.hasNext();) {
             String key = (String) iter.next();
@@ -220,13 +220,13 @@ public class XSDAnnotationsStructure {
      ****************************************************************************/
 
     public boolean removeDescription(String countryCode) {
-        boolean somethingChanged = removeAppInfos("X_Description_" + countryCode.toUpperCase());
+        boolean somethingChanged = removeAppInfos("X_Description_" + countryCode.toUpperCase());//$NON-NLS-1$
         hasChanged = hasChanged | somethingChanged;
         return somethingChanged;
     }
 
     public boolean removeAllDescriptions() {
-        boolean somethingChanged = removeAppInfos("X_Description_.*");
+        boolean somethingChanged = removeAppInfos("X_Description_.*");//$NON-NLS-1$
         hasChanged = hasChanged | somethingChanged;
         return somethingChanged;
     }
@@ -234,7 +234,7 @@ public class XSDAnnotationsStructure {
     public boolean setDescription(String countryCode, String description) {
         if (countryCode == null)
             return false;
-        boolean somethingChanged = setAppInfo("X_Description_" + countryCode.toUpperCase(), description, true);
+        boolean somethingChanged = setAppInfo("X_Description_" + countryCode.toUpperCase(), description, true);//$NON-NLS-1$
         hasChanged = hasChanged | somethingChanged;
         return somethingChanged;
     }
@@ -253,7 +253,7 @@ public class XSDAnnotationsStructure {
 
     public LinkedHashMap<String, String> getDescriptions() {
         LinkedHashMap<String, String> descriptions = new LinkedHashMap<String, String>();
-        LinkedHashMap<String, String> appInfos = getAppInfos("X_Description_.*");
+        LinkedHashMap<String, String> appInfos = getAppInfos("X_Description_.*");//$NON-NLS-1$
         Set<String> keys = appInfos.keySet();
         for (Iterator iter = keys.iterator(); iter.hasNext();) {
             String key = (String) iter.next();
@@ -333,7 +333,7 @@ public class XSDAnnotationsStructure {
 
     public boolean setRetrieveFKinfos(boolean retrieveFKinfos) {
         removeAppInfos("X_Retrieve_FKinfos");//$NON-NLS-1$
-        addAppInfo("X_Retrieve_FKinfos", retrieveFKinfos + "");//$NON-NLS-1$
+        addAppInfo("X_Retrieve_FKinfos", retrieveFKinfos + "");//$NON-NLS-1$//$NON-NLS-2$
         hasChanged = true;
         return true;
     }
@@ -343,7 +343,7 @@ public class XSDAnnotationsStructure {
         Set<String> keys = appInfos.keySet();
         for (Iterator iter = keys.iterator(); iter.hasNext();) {
             String key = (String) iter.next();
-            return "true".equals(appInfos.get(key));
+            return "true".equals(appInfos.get(key));//$NON-NLS-1$
         }
 
         return false;
@@ -573,7 +573,7 @@ public class XSDAnnotationsStructure {
         removeAppInfos("X_TargetSystem");//$NON-NLS-1$
         for (Iterator iter = systems.iterator(); iter.hasNext();) {
             String role = (String) iter.next();
-            addAppInfo("X_TargetSystem", role);
+            addAppInfo("X_TargetSystem", role);//$NON-NLS-1$
         }
         hasChanged = true;
         return true;
@@ -612,7 +612,7 @@ public class XSDAnnotationsStructure {
 
     public boolean setSchematron(int num, String system) {
         TreeMap<String, String> infos = getSchematrons();
-        infos.put(ICoreConstants.X_Schematron + "_" + num, system);
+        infos.put(ICoreConstants.X_Schematron + "_" + num, system);//$NON-NLS-1$
         setSchematrons(infos.values());
         // return setForeignKeyInfos(new ArrayList(infos.values()));
         return true;
@@ -620,7 +620,7 @@ public class XSDAnnotationsStructure {
 
     public void addSchematron(String pattern) {
         TreeMap<String, String> infos = getSchematrons();
-        infos.put(ICoreConstants.X_Schematron + "_" + (infos.size() + 1), pattern);
+        infos.put(ICoreConstants.X_Schematron + "_" + (infos.size() + 1), pattern);//$NON-NLS-1$
         setSchematrons(infos.values());
     }
 
@@ -665,7 +665,7 @@ public class XSDAnnotationsStructure {
 
     public boolean setWorkflow(int num, String system) {
         TreeMap<String, String> infos = getSchematrons();
-        infos.put(ICoreConstants.X_Workflow + "_" + num, system);
+        infos.put(ICoreConstants.X_Workflow + "_" + num, system);//$NON-NLS-1$
         setSchematrons(infos.values());
         // return setForeignKeyInfos(new ArrayList(infos.values()));
         return true;
@@ -673,7 +673,7 @@ public class XSDAnnotationsStructure {
 
     public void addWorkflow(String pattern) {
         TreeMap<String, String> infos = getSchematrons();
-        infos.put(ICoreConstants.X_Workflow + "_" + (infos.size() + 1), pattern);
+        infos.put(ICoreConstants.X_Workflow + "_" + (infos.size() + 1), pattern);//$NON-NLS-1$
         setSchematrons(infos.values());
     }
 
@@ -712,14 +712,14 @@ public class XSDAnnotationsStructure {
         Iterator<String> isos = Util.iso2lang.keySet().iterator();
         while (isos.hasNext()) {
             String lang = isos.next();
-            removeAppInfos("X_Facet_" + lang.toUpperCase());
+            removeAppInfos("X_Facet_" + lang.toUpperCase());//$NON-NLS-1$
         }
 
         Iterator<String> isoIter = facts.keySet().iterator();
         while (isoIter.hasNext()) {
             String iso = isoIter.next();
-            removeAppInfos("X_Facet_" + iso.toUpperCase());
-            addAppInfo("X_Facet_" + iso.toUpperCase(), facts.get(iso));
+            removeAppInfos("X_Facet_" + iso.toUpperCase());//$NON-NLS-1$
+            addAppInfo("X_Facet_" + iso.toUpperCase(), facts.get(iso));//$NON-NLS-1$
         }
 
         hasChanged = true;
@@ -829,7 +829,7 @@ public class XSDAnnotationsStructure {
             if ("appinfo".equals(name.toLowerCase())) {//$NON-NLS-1$
                 name = ann.getAttribute("source");//$NON-NLS-1$
                 if (name.equals(regex)) {
-                    appInfos.put(name + "_" + i, ann.getFirstChild().getNodeValue());
+                    appInfos.put(name + "_" + i, ann.getFirstChild().getNodeValue());//$NON-NLS-1$
                     i++;
                 } else if (name.matches(regex)) {
                     appInfos.put(name, ann.getFirstChild().getNodeValue());

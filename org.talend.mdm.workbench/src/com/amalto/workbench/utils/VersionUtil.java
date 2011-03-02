@@ -35,7 +35,7 @@ public class VersionUtil {
         String type = null;
         switch (xobjectType) {
         case TreeObject._SERVER_:
-            type = "Root";
+            type = "Root";//$NON-NLS-1$
             break;
         /*
          * case TreeObject.INBOUND_ADAPTOR : type = "Inbound Adaptor"; break; case TreeObject.INBOUND_PLUGIN: type =
@@ -45,37 +45,37 @@ public class VersionUtil {
          * "Item";
          */
         case TreeObject.VIEW:
-            type = "View";
+            type = "View";//$NON-NLS-1$
             break;
         case TreeObject.DATA_MODEL:
-            type = "Data Model";
+            type = "Data Model";//$NON-NLS-1$
             break;
         /*
          * case TreeObject.SOURCE: type = "Source"; break;
          */
         case TreeObject.DATA_CLUSTER:
-            type = "Data Cluster";
+            type = "Data Cluster";//$NON-NLS-1$
             break;
         case TreeObject.ROLE:
-            type = "Role";
+            type = "Role";//$NON-NLS-1$
             break;
         case TreeObject.STORED_PROCEDURE:
-            type = "Stored Procedure";
+            type = "Stored Procedure";//$NON-NLS-1$
             break;
         case TreeObject.TRANSFORMER:
-            type = "Transformer V2";
+            type = "Transformer V2";//$NON-NLS-1$
             break;
         case TreeObject.MENU:
-            type = "Menu";
+            type = "Menu";//$NON-NLS-1$
             break;
         case TreeObject.ROUTING_RULE:
-            type = "Routing Rule";
+            type = "Routing Rule";//$NON-NLS-1$
             break;
         case TreeObject.UNIVERSE:
-            type = "Universe";
+            type = "Universe";//$NON-NLS-1$
             break;
         case TreeObject.SYNCHRONIZATIONPLAN:
-            type = "Synchronization Plan";
+            type = "Synchronization Plan";//$NON-NLS-1$
             break;
         }
         return type;

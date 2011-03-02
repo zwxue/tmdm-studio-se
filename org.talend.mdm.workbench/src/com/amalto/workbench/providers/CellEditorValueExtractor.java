@@ -23,19 +23,19 @@ public class CellEditorValueExtractor<T> {
     public Object getValue(T info) {
 
         if (info == null)
-            return "";
+            return "";//$NON-NLS-1$
 
         Object result = getInfoContent(info);
 
         if (result == null)
-            return "";
+            return "";//$NON-NLS-1$
 
         return result;
     }
 
     protected Object getInfoContent(T info) {
 
-        if (inforAccessMethod == null || "".equals(inforAccessMethod.trim()))
+        if (inforAccessMethod == null || "".equals(inforAccessMethod.trim()))//$NON-NLS-1$
             return null;
 
         try {

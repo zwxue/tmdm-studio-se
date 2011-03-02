@@ -11,6 +11,7 @@
 //
 // ============================================================================
 package com.amalto.workbench.widgets.composites;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,7 +43,6 @@ import com.amalto.workbench.providers.XSDTreeLabelProvider;
 import com.amalto.workbench.providers.datamodel.SchemaNameFilter;
 import com.amalto.workbench.providers.datamodel.XPathContentProvider;
 import com.amalto.workbench.utils.SchemaElementNameFilterDes;
-
 
 public class SelectXPathComposite extends Composite {
 
@@ -145,7 +145,7 @@ public class SelectXPathComposite extends Composite {
 
     private void initFilterText() {
 
-        txtFilter.setText("*");
+        txtFilter.setText("*");//$NON-NLS-1$
 
         if (conceptName != null)
             txtFilter.setText(conceptName);
@@ -190,7 +190,7 @@ public class SelectXPathComposite extends Composite {
 
             @Override
             public void widgetSelected(SelectionEvent event) {
-                txtXPath.setText("");
+                txtXPath.setText("");//$NON-NLS-1$
                 tvXPath.setInput(allDataModelHolder.getDataModel(comboDataModels.getText().trim()));
             }
         });
@@ -229,16 +229,16 @@ public class SelectXPathComposite extends Composite {
 
     private String getFilterExpression() {
 
-        if ("".equals(txtFilter.getText().trim()))
-            return "*";
+        if ("".equals(txtFilter.getText().trim()))//$NON-NLS-1$
+            return "*";//$NON-NLS-1$
 
         return txtFilter.getText().trim();
     }
 
     private String getXpath() {
 
-        String path = "";
-        String totalXpath = "";
+        String path = "";//$NON-NLS-1$
+        String totalXpath = "";//$NON-NLS-1$
         TreeItem item;
         TreeItem[] items = tvXPath.getTree().getSelection();
         for (int i = 0; i < items.length; i++) {
@@ -250,9 +250,9 @@ public class SelectXPathComposite extends Composite {
                 component = (XSDConcreteComponent) item.getData();
                 if (component instanceof XSDParticle) {
                     if (((XSDParticle) component).getTerm() instanceof XSDElementDeclaration)
-                        path = "/" + ((XSDElementDeclaration) ((XSDParticle) component).getTerm()).getName() + path;
+                        path = "/" + ((XSDElementDeclaration) ((XSDParticle) component).getTerm()).getName() + path;//$NON-NLS-1$
                 } else if (component instanceof XSDElementDeclaration) {
-                    path = (isAbsolutePath ? "/" : "") + ((XSDElementDeclaration) component).getName() + path;
+                    path = (isAbsolutePath ? "/" : "") + ((XSDElementDeclaration) component).getName() + path;//$NON-NLS-1$//$NON-NLS-2$
                 }
                 item = item.getParentItem();
 
@@ -260,22 +260,22 @@ public class SelectXPathComposite extends Composite {
             if (i == 0)
                 totalXpath = path;
             else
-                totalXpath += "&" + path;
-            path = "";
+                totalXpath += "&" + path;//$NON-NLS-1$
+            path = "";//$NON-NLS-1$
         }// for(i=0
         if (context != null && conceptName != null) {
 
             if (totalXpath.equals(conceptName)) {
-                totalXpath = totalXpath.replaceAll(conceptName, "/");
+                totalXpath = totalXpath.replaceAll(conceptName, "/");//$NON-NLS-1$
             } else {
-                totalXpath = totalXpath.replaceAll(conceptName + "/", "");
+                totalXpath = totalXpath.replaceAll(conceptName + "/", "");//$NON-NLS-1$//$NON-NLS-2$
             }
-            if (totalXpath.equals(context) || totalXpath.equals(context.replaceAll(conceptName + "/", ""))) {
-                totalXpath = ".";
+            if (totalXpath.equals(context) || totalXpath.equals(context.replaceAll(conceptName + "/", ""))) {//$NON-NLS-1$//$NON-NLS-2$
+                totalXpath = ".";//$NON-NLS-1$
             }
-            if (totalXpath.indexOf('/') == -1 && !totalXpath.equals(".") && !"/".equals(totalXpath) && !"/".equals(context)
+            if (totalXpath.indexOf('/') == -1 && !totalXpath.equals(".") && !"/".equals(totalXpath) && !"/".equals(context)//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                     && !context.equals(conceptName)) {
-                totalXpath = "../" + totalXpath;
+                totalXpath = "../" + totalXpath;//$NON-NLS-1$
             }
         }
         return totalXpath;

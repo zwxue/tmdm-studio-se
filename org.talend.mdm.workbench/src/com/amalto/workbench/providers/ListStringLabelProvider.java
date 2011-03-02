@@ -38,7 +38,7 @@ public class ListStringLabelProvider implements ILabelProvider {
     public String getText(Object element) {
 
         if (element == null)
-            return "";
+            return "";//$NON-NLS-1$
 
         return element.toString();
     }

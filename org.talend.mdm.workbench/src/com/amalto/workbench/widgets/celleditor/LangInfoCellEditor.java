@@ -45,10 +45,10 @@ public class LangInfoCellEditor extends EditableDialogCellEditor {
 
     private String translateLangInfo(LanguageInfo[] langInfos) {
 
-        String result = "";
+        String result = "";//$NON-NLS-1$
 
         for (LanguageInfo eachLangInfo : langInfos)
-            result += "[" + eachLangInfo.getLanguageISOCode().toUpperCase() + ":" + eachLangInfo.getLabel() + "]";
+            result += "[" + eachLangInfo.getLanguageISOCode().toUpperCase() + ":" + eachLangInfo.getLabel() + "]";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 
         return result;
     }
@@ -72,8 +72,8 @@ public class LangInfoCellEditor extends EditableDialogCellEditor {
                 results.add(new LanguageInfo(country, countryISOCode, desc));
         }
 
-        if (!find && !expression.equals(""))
-            results.add(new LanguageInfo("English", "en", expression));
+        if (!find && !expression.equals(""))//$NON-NLS-1$
+            results.add(new LanguageInfo("English", "en", expression));//$NON-NLS-1$//$NON-NLS-2$
 
         return results.toArray(new LanguageInfo[0]);
     }

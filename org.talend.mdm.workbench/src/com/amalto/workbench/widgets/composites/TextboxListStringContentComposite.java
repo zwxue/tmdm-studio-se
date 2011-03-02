@@ -11,11 +11,11 @@
 //
 // ============================================================================
 package com.amalto.workbench.widgets.composites;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
-
 
 public class TextboxListStringContentComposite extends ListStringContentsComposite {
 
@@ -48,7 +48,7 @@ public class TextboxListStringContentComposite extends ListStringContentsComposi
 
     @Override
     protected boolean hasCandidateInfo() {
-        return !"".equals(txtInput.getText().trim());
+        return !"".equals(txtInput.getText().trim());//$NON-NLS-1$
     }
 
     @Override
@@ -58,7 +58,7 @@ public class TextboxListStringContentComposite extends ListStringContentsComposi
 
     @Override
     protected void initCandidateInfoUIArea() {
-        txtInput.setText("");
+        txtInput.setText("");//$NON-NLS-1$
     }
 
     @Override

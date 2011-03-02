@@ -2,9 +2,9 @@ package com.amalto.workbench.widgets.xmleditor.util;
 
 public class WorkflowInfo {
 
-    private String name = "";
+    private String name = "";//$NON-NLS-1$
 
-    private String version = "";
+    private String version = "";//$NON-NLS-1$
 
     public WorkflowInfo(String name, String version) {
         this.name = name;

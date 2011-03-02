@@ -14,15 +14,15 @@ package com.amalto.workbench.utils;
 
 public class MDMServerDef {
 
-    private String desc = "";
+    private String desc = "";//$NON-NLS-1$
 
     private String host = "localhost";//$NON-NLS-1$
 
     private String port = "8080";//$NON-NLS-1$
 
-    private String user = "";
+    private String user = "";//$NON-NLS-1$
 
-    private String passwd = "";
+    private String passwd = "";//$NON-NLS-1$
 
     private String path = "/talend/TalendPort";//$NON-NLS-1$
 
@@ -96,7 +96,7 @@ public class MDMServerDef {
         StringBuilder sb = new StringBuilder("http://");//$NON-NLS-1$
 
         sb.append(host);
-        sb.append(":");
+        sb.append(":");//$NON-NLS-1$
         sb.append(port);
         sb.append(path);
 

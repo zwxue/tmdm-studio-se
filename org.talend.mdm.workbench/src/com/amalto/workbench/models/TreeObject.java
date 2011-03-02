@@ -355,27 +355,27 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
     }
 
     public String getUsername() {
-    	if(getServerRoot()!=null)
-    		return getServerRoot().getUser().getUsername();
-    	return null;
+        if (getServerRoot() != null)
+            return getServerRoot().getUser().getUsername();
+        return null;
     }
 
     public String getPassword() {
-    	if(getServerRoot()!=null)
-    		return getServerRoot().getUser().getPassword();
-    	return null;
+        if (getServerRoot() != null)
+            return getServerRoot().getUser().getPassword();
+        return null;
     }
 
     public String getUniverse() {
-    	if(getServerRoot()!=null)
-    		return getServerRoot().getUser().getUniverse();
-    	return null;
+        if (getServerRoot() != null)
+            return getServerRoot().getUser().getUniverse();
+        return null;
     }
 
     public String getEndpointAddress() {
-    	if(getServerRoot()!=null)
-    		return getServerRoot().getWsKey().toString();
-    	return null;
+        if (getServerRoot() != null)
+            return getServerRoot().getWsKey().toString();
+        return null;
     }
 
     public String getEndpointIpAddress() {
@@ -408,8 +408,8 @@ public class TreeObject implements IAdaptable, Comparable<TreeObject> {
     public String getEndpointPort() {
 
         String portAddress = getEndpointAddress();
-        if(portAddress==null)
-        	return "8080";
+        if (portAddress == null)
+            return "8080";//$NON-NLS-1$
         Pattern p = Pattern.compile(":(\\d+?)/");//$NON-NLS-1$
         Matcher m = p.matcher(portAddress);
         if (m.find()) {

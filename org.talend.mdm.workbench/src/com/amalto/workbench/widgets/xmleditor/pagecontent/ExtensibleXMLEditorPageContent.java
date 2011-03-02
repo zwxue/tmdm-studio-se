@@ -47,7 +47,7 @@ public abstract class ExtensibleXMLEditorPageContent {
         try {
             return XmlUtil.formatPretty(XmlUtil.toXml(xmlDoc), "UTF-8");//$NON-NLS-1$
         } catch (DocumentException e) {
-            return "";
+            return "";//$NON-NLS-1$
         }
     }
 
@@ -56,7 +56,7 @@ public abstract class ExtensibleXMLEditorPageContent {
         if (parent == null)
             return valueForNull;
 
-        Node node = parent.selectSingleNode("./" + relativePath);
+        Node node = parent.selectSingleNode("./" + relativePath);//$NON-NLS-1$
 
         if (node == null)
             return valueForNull;
@@ -66,11 +66,11 @@ public abstract class ExtensibleXMLEditorPageContent {
 
     protected List<?> getXMLNodesByPath(Node parent, String relativePath) {
 
-        return parent.selectNodes("./" + relativePath);
+        return parent.selectNodes("./" + relativePath);//$NON-NLS-1$
     }
 
     protected String getPathRelativeToRoot(String tagName) {
-        return getRootElementName() + "/" + tagName;
+        return getRootElementName() + "/" + tagName;//$NON-NLS-1$
     }
 
     protected abstract String getRootElementName();

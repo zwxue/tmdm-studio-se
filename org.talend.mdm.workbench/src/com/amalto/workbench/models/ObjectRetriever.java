@@ -43,7 +43,7 @@ public class ObjectRetriever implements IRunnableWithProgress {
 
     private String universe;
 
-    private String objectName = "";
+    private String objectName = "";//$NON-NLS-1$
 
     /**
      * @author ymli refresh the parentObject

@@ -38,7 +38,7 @@ import com.amalto.workbench.dialogs.CalendarDialog;
  */
 public class CalendarSelectWidget {
 
-    final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+    final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");//$NON-NLS-1$
 
     Button btn;
 
@@ -51,7 +51,7 @@ public class CalendarSelectWidget {
     public CalendarSelectWidget(FormToolkit toolkit, final Composite composite, boolean hasDefaultTime) {
         // from
 
-        text = toolkit.createText(composite, "", SWT.BORDER);
+        text = toolkit.createText(composite, "", SWT.BORDER);//$NON-NLS-1$
         text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
         ((GridData) text.getLayoutData()).widthHint = 100;
         if (hasDefaultTime) {
@@ -62,7 +62,7 @@ public class CalendarSelectWidget {
             text.pack();
         }
 
-        btn = toolkit.createButton(composite, "", SWT.CENTER | SWT.ARROW | SWT.DOWN);
+        btn = toolkit.createButton(composite, "", SWT.CENTER | SWT.ARROW | SWT.DOWN);//$NON-NLS-1$
         btn.addListener(SWT.Selection, new Listener() {
 
             public void handleEvent(Event event) {
