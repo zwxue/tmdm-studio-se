@@ -126,7 +126,7 @@ public class ComplexTypeConfigComposite extends Composite {
     }
 
     private void fillUIContentsInTxtName() {
-        txtName.setText(complextType.getName());
+        txtName.setText(complextType.getName() == null ? "" : complextType.getName());
     }
 
     private void initUIContentsInComboExtends() {

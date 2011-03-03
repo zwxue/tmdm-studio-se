@@ -146,7 +146,7 @@ public class SimpleTypeConfigComposite extends Composite {
     }
 
     private void initUIContentForTxtName() {
-        txtName.setText(xsdSimpleType.getName());
+        txtName.setText(xsdSimpleType.getName() == null ? "" : xsdSimpleType.getName());
     }
 
     private void initUIContentForComboBuildInTypes() {
