@@ -224,7 +224,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener {
     private void updateTitle() {
         IEditorInput input = this.getEditorInput();
         setPartName(input.getName());
-        setContentDescription("");
+        setContentDescription("");//$NON-NLS-1$
     }
 
     public void dispose() {
@@ -314,7 +314,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener {
         TreeObject object = (TreeObject) ((XObjectEditorInput) this.getEditorInput()).getModel();
 
         if (object.getType() == TreeObject._SERVER_)
-            return ImageCache.getCreatedImage("icons/talend-picto-small.gif");
+            return ImageCache.getCreatedImage("icons/talend-picto-small.gif");//$NON-NLS-1$
         else if (object.getType() == TreeObject.DATA_CLUSTER)
             return ImageCache.getCreatedImage(EImage.DATA_CLUSTER.getPath());
         else if (object.getType() == TreeObject.DATA_MODEL)
@@ -348,7 +348,7 @@ public class XObjectEditor extends FormEditor implements IXObjectModelListener {
         else if (object.getType() == TreeObject.JOB)
             return ImageCache.getCreatedImage(EImage.JOB.getPath());
 
-        return ImageCache.getCreatedImage("icons/error.gif");
+        return ImageCache.getCreatedImage("icons/error.gif");//$NON-NLS-1$
     }
 
     public XMLEditor getXmlEditor() {

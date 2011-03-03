@@ -158,10 +158,10 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             // status
             Label descriptionLabel = toolkit.createLabel(statusComposite, "Event Manager Status: ", SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
-            statusLabel = toolkit.createLabel(statusComposite, "                                           ", SWT.NULL);
+            statusLabel = toolkit.createLabel(statusComposite, "                                           ", SWT.NULL);//$NON-NLS-1$
             statusLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
             // start/stop/suspend/resume
-            Button startButton = toolkit.createButton(statusComposite, "", SWT.TOGGLE);
+            Button startButton = toolkit.createButton(statusComposite, "", SWT.TOGGLE);//$NON-NLS-1$
             startButton.setImage(ImageCache.getCreatedImage(EImage.RUN_EXC.getPath()));
             startButton.setToolTipText("Start");
             startButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
@@ -171,7 +171,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                     startSubscriptionEngine();
                 };
             });
-            Button stopButton = toolkit.createButton(statusComposite, "", SWT.TOGGLE);
+            Button stopButton = toolkit.createButton(statusComposite, "", SWT.TOGGLE);//$NON-NLS-1$
             stopButton.setImage(ImageCache.getCreatedImage(EImage.STOP.getPath()));
             stopButton.setToolTipText("Stop");
             stopButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
@@ -181,7 +181,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                     stopSubscriptionEngine();
                 };
             });
-            suspendButton = toolkit.createButton(statusComposite, "", SWT.TOGGLE);
+            suspendButton = toolkit.createButton(statusComposite, "", SWT.TOGGLE);//$NON-NLS-1$
             suspendButton.setImage(ImageCache.getCreatedImage(EImage.SUSPEND.getPath()));
             suspendButton.setToolTipText("Suspend");
             suspendButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
@@ -213,7 +213,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             Label routingOrdersLabel = toolkit.createLabel(firstLineComposite, "Routing Orders ", SWT.NULL);
             routingOrdersLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 9, 1));
 
-            final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+            final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");//$NON-NLS-1$
 
             // from
             Label fromLabel = toolkit.createLabel(firstLineComposite, "From", SWT.NULL);
@@ -243,9 +243,9 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 }// keyReleased
             }// keyListener
                     );
-            statusCombo.add("FAILED");
-            statusCombo.add("COMPLETED");
-            statusCombo.add("ACTIVE");
+            statusCombo.add("FAILED");//$NON-NLS-1$
+            statusCombo.add("COMPLETED");//$NON-NLS-1$
+            statusCombo.add("ACTIVE");//$NON-NLS-1$
             statusCombo.select(0);
 
             // to
@@ -269,7 +269,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             Label documentTypeLabel = toolkit.createLabel(searchLineComposite, "Document Type", SWT.NULL);
             documentTypeLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             // DocumentType
-            documentTypeText = toolkit.createText(searchLineComposite, "", SWT.BORDER);
+            documentTypeText = toolkit.createText(searchLineComposite, "", SWT.BORDER);//$NON-NLS-1$
             documentTypeText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
             ((GridData) documentTypeText.getLayoutData()).widthHint = 120;
             documentTypeText.addKeyListener(new KeyListener() {
@@ -288,7 +288,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             Label idLabel = toolkit.createLabel(searchLineComposite, "Item IDs", SWT.NULL);
             idLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             // ID
-            idText = toolkit.createText(searchLineComposite, "", SWT.BORDER);
+            idText = toolkit.createText(searchLineComposite, "", SWT.BORDER);//$NON-NLS-1$
             idText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
             idText.addKeyListener(new KeyListener() {
 
@@ -339,7 +339,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             Label anyFieldLabel = toolkit.createLabel(searchLineComposite, "Any Field", SWT.NULL);
             anyFieldLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             // anyField
-            anyFieldText = toolkit.createText(searchLineComposite, "", SWT.BORDER);
+            anyFieldText = toolkit.createText(searchLineComposite, "", SWT.BORDER);//$NON-NLS-1$
             anyFieldText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
             anyFieldText.addKeyListener(new KeyListener() {
 
@@ -635,15 +635,15 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             WSRoutingOrderV2Status status = null;
 
             String statusText = statusCombo.getItem(statusCombo.getSelectionIndex());
-            if ("ACTIVE".equals(statusText)) {
+            if ("ACTIVE".equals(statusText)) {//$NON-NLS-1$
                 timeCreatedMin = from;
                 timeCreatedMax = to;
                 status = WSRoutingOrderV2Status.ACTIVE;
-            } else if ("COMPLETED".equals(statusText)) {
+            } else if ("COMPLETED".equals(statusText)) {//$NON-NLS-1$
                 timeLastRunCompletedMin = from;
                 timeLastRunCompletedMax = to;
                 status = WSRoutingOrderV2Status.COMPLETED;
-            } else if ("FAILED".equals(statusText)) {
+            } else if ("FAILED".equals(statusText)) {//$NON-NLS-1$
                 timeLastRunCompletedMin = from;
                 timeLastRunCompletedMax = to;
                 status = WSRoutingOrderV2Status.FAILED;
@@ -656,12 +656,13 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 serviceJNDI = null;
 
             WSRoutingOrderV2[] results = port.getRoutingOrderV2SByCriteria(
-                    new WSGetRoutingOrderV2SByCriteria(new WSRoutingOrderV2SearchCriteria(status, "*".equals(anyFieldText
-                            .getText()) || "".equals(anyFieldText.getText()) ? null : anyFieldText.getText(), null,
+                    new WSGetRoutingOrderV2SByCriteria(new WSRoutingOrderV2SearchCriteria(status, "*".equals(anyFieldText//$NON-NLS-1$
+                            .getText()) || "".equals(anyFieldText.getText()) ? null : anyFieldText.getText(), null,//$NON-NLS-1$
                             timeCreatedMin, timeCreatedMax, timeScheduledMin, timeScheduledMax, timeLastRunStartedMin,
-                            timeLastRunStartedMax, timeLastRunCompletedMin, timeLastRunCompletedMax, "*".equals(documentTypeText
-                                    .getText()) || "".equals(documentTypeText.getText()) ? null : documentTypeText.getText(), "*"
-                                    .equals(idText.getText()) || "".equals(idText.getText()) ? null : idText.getText(),
+                            timeLastRunStartedMax, timeLastRunCompletedMin, timeLastRunCompletedMax, "*".equals(documentTypeText//$NON-NLS-1$
+                                    .getText()) || "".equals(documentTypeText.getText()) ? null : documentTypeText.getText(), "*"//$NON-NLS-1$//$NON-NLS-2$
+                                    .equals(idText.getText())
+                                    || "".equals(idText.getText()) ? null : idText.getText(),//$NON-NLS-1$
                             serviceJNDI, null, null))).getWsRoutingOrder();
 
             if (results == null) {
@@ -672,7 +673,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             return results;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000"))
+            if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000"))//$NON-NLS-1$
                 MessageDialog.openError(this.getSite().getShell(), "Too Many Results",
                         "More than 10000 results returned by the search. \nPlease narrow your search.");
             else
@@ -773,7 +774,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 setText("Delete the selected item");
             else
                 setText("Delete these " + selection.size() + " selected Routing Orders");
-            setToolTipText("Delete the selected Routing Order" + (selection.size() > 1 ? "s" : ""));
+            setToolTipText("Delete the selected Routing Order" + (selection.size() > 1 ? "s" : ""));//$NON-NLS-1$//$NON-NLS-2$
         }
 
         public void run() {
@@ -879,7 +880,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             this.shell = shell;
             this.viewer = viewer;
             this.synchronously = synchronously;
-            setImageDescriptor(ImageCache.getImage("icons/execute.gif"));
+            setImageDescriptor(ImageCache.getImage("icons/execute.gif"));//$NON-NLS-1$
             IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
             if (selection.size() == 1)
                 setText("Execute " + (synchronously ? "synchronously" : "asynchronously") + " the selected Routing Order ");
@@ -887,7 +888,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                 setText("Execute " + (synchronously ? "synchronously" : "asynchronously") + " the " + selection.size()
                         + " selected Routing Order");
             setToolTipText("Execute " + (synchronously ? "synchronously" : "asynchronously") + " the selected Routing Order"
-                    + (selection.size() > 1 ? "s" : ""));
+                    + (selection.size() > 1 ? "s" : ""));//$NON-NLS-1$//$NON-NLS-2$
         }
 
         public void run() {
@@ -955,7 +956,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
                             "An error occured trying to execute the Routing Order:\n\n " + e.getLocalizedMessage());
                 }// try
 
-                String results = "";
+                String results = "";//$NON-NLS-1$
                 for (Iterator<WSRoutingOrderV2> iter = lineItems.iterator(); iter.hasNext();) {
 
                     WSRoutingOrderV2 lineItem = iter.next();
@@ -989,7 +990,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
                 monitor.done();
                 MessageDialog.openInformation(shell, "Execution Completed", lineItems.size() + " Routing Orders were executed"
-                        + ("".equals(results) ? "" : "\n" + results));
+                        + ("".equals(results) ? "" : "\n" + results));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 
             }// run
         }// class DeleteItemsWithProgress
@@ -1012,7 +1013,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             WSRoutingOrderV2 ro = (WSRoutingOrderV2) element;
             switch (columnIndex) {
             case 0:
-                return ro.getWsItemPK().getConceptName() + "[" + Util.joinStrings(ro.getWsItemPK().getIds(), ".") + "]";
+                return ro.getWsItemPK().getConceptName() + "[" + Util.joinStrings(ro.getWsItemPK().getIds(), ".") + "]";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
             case 1:
                 Calendar cal = Calendar.getInstance();
                 if (WSRoutingOrderV2Status.ACTIVE.equals(ro.getStatus())) {
@@ -1026,7 +1027,7 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
             case 3:
                 return ro.getMessage();
             default:
-                return "???????";
+                return "???????";//$NON-NLS-1$
             }
         }
 
@@ -1072,8 +1073,8 @@ public class RoutingEngineV2BrowserMainPage extends AMainPage implements IXObjec
 
             switch (column) {
             case 0: // id
-                String d1 = ro1.getWsItemPK().getConceptName() + "[" + Util.joinStrings(ro1.getWsItemPK().getIds(), ".") + "]";
-                String d2 = ro2.getWsItemPK().getConceptName() + "[" + Util.joinStrings(ro2.getWsItemPK().getIds(), ".") + "]";
+                String d1 = ro1.getWsItemPK().getConceptName() + "[" + Util.joinStrings(ro1.getWsItemPK().getIds(), ".") + "]";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                String d2 = ro2.getWsItemPK().getConceptName() + "[" + Util.joinStrings(ro2.getWsItemPK().getIds(), ".") + "]";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                 res = d1.compareToIgnoreCase(d2);
                 break;
             case 1: // date

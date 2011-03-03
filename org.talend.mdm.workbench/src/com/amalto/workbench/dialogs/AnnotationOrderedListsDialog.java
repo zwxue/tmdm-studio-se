@@ -83,9 +83,9 @@ public class AnnotationOrderedListsDialog extends Dialog {
 
     private SelectionListener caller = null;
 
-    private String title = "";
+    private String title = "";//$NON-NLS-1$
 
-    private String columnName = "";
+    private String columnName = "";//$NON-NLS-1$
 
     private boolean recursive = true;
 
@@ -227,7 +227,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
         if (actionType == AnnotationOrderedListsDialog.AnnotationForeignKeyInfo_ActionType) {
             Button xpathButton = new Button(composite, SWT.PUSH | SWT.CENTER);
             xpathButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-            xpathButton.setText("...");
+            xpathButton.setText("...");//$NON-NLS-1$
             xpathButton.setToolTipText("Select xpath");
             xpathButton.addSelectionListener(new SelectionListener() {
 
@@ -351,7 +351,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
                 case 0:
                     return line.getLabel();
                 }
-                return "";
+                return "";//$NON-NLS-1$
             }
 
             public Image getColumnImage(Object element, int columnIndex) {
@@ -623,7 +623,7 @@ public class AnnotationOrderedListsDialog extends Dialog {
         } else if (textControl instanceof Text) {
             return ((Text) textControl).getText();
         } else {
-            return "";
+            return "";//$NON-NLS-1$
         }
 
     }

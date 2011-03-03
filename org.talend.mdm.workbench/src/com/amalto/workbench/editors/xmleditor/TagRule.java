@@ -19,7 +19,7 @@ import org.eclipse.jface.text.rules.MultiLineRule;
 public class TagRule extends MultiLineRule {
 
     public TagRule(IToken token) {
-        super("<", ">", token);
+        super("<", ">", token);//$NON-NLS-1$//$NON-NLS-2$
     }
 
     protected boolean sequenceDetected(ICharacterScanner scanner, char[] sequence, boolean eofAllowed) {

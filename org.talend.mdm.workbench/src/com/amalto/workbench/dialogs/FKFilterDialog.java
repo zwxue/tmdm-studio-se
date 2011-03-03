@@ -42,7 +42,7 @@ import com.amalto.workbench.widgets.WidgetFactory;
 
 public class FKFilterDialog extends Dialog {
 
-    private static final String CUSTOM_FILTERS_PREFIX = "$CFFP:";
+    private static final String CUSTOM_FILTERS_PREFIX = "$CFFP:";//$NON-NLS-1$
 
     String title;
 
@@ -73,12 +73,12 @@ public class FKFilterDialog extends Dialog {
         composite.setLayout(new GridLayout(2, false));
 
         columns = new ComplexTableViewerColumn[] {
-                new ComplexTableViewerColumn("XPath", false, "newXPath", "newXPath", "", ComplexTableViewerColumn.XPATH_STYLE,
+                new ComplexTableViewerColumn("XPath", false, "newXPath", "newXPath", "", ComplexTableViewerColumn.XPATH_STYLE,//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
                         new String[] {}, 0),
-                new ComplexTableViewerColumn("Operator", false, "", "", "", ComplexTableViewerColumn.COMBO_STYLE,
+                new ComplexTableViewerColumn("Operator", false, "", "", "", ComplexTableViewerColumn.COMBO_STYLE,//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
                         IConstants.VIEW_CONDITION_OPERATORS, 0),
-                new ComplexTableViewerColumn("Value", false, "", "", "", ComplexTableViewerColumn.XPATH_STYLE, new String[] {}, 0),
-                new ComplexTableViewerColumn("Predicate", true, "", "", "", ComplexTableViewerColumn.COMBO_STYLE,
+                new ComplexTableViewerColumn("Value", false, "", "", "", ComplexTableViewerColumn.XPATH_STYLE, new String[] {}, 0),//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
+                new ComplexTableViewerColumn("Predicate", true, "", "", "", ComplexTableViewerColumn.COMBO_STYLE,//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
                         IConstants.PREDICATES, 0), };
         columns[0].setColumnWidth(200);
         columns[1].setColumnWidth(140);
@@ -219,7 +219,7 @@ public class FKFilterDialog extends Dialog {
                 list.addAll(Arrays.asList(values));
                 int num = 4 - list.size();
                 for (int i = 0; i < num; i++) {
-                    list.add("");
+                    list.add("");//$NON-NLS-1$
                 }
                 // filter value
                 if (list.get(2) != null && list.get(2).length() > 0) {

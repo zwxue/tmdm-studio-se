@@ -58,7 +58,7 @@ public class XSDDriver {
 
     private final ErrorHandlerImpl eh = new ErrorHandlerImpl();
 
-    private static final String DEFAULT_OUTPUT_ENCODING = "UTF-8";
+    private static final String DEFAULT_OUTPUT_ENCODING = "UTF-8";//$NON-NLS-1$
 
     private static final int DEFAULT_LINE_LENGTH = 72;
 
@@ -139,9 +139,9 @@ public class XSDDriver {
     }
 
     static private String extension(String s) {
-        int dot = s.lastIndexOf(".");
+        int dot = s.lastIndexOf(".");//$NON-NLS-1$
         if (dot < 0)
-            return "";
+            return "";//$NON-NLS-1$
         return s.substring(dot);
     }
 
@@ -155,7 +155,7 @@ public class XSDDriver {
             String nextLine = bufferedReader.readLine();
             while (nextLine != null) {
                 buffer.append(nextLine);
-                buffer.append("\r\n");
+                buffer.append("\r\n");//$NON-NLS-1$
                 nextLine = bufferedReader.readLine();
             }
             reader.close();

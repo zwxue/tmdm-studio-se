@@ -47,9 +47,9 @@ public class BusinessElementInputDialog extends Dialog {
 
     protected Button checkBox;
 
-    private String elementName = "";
+    private String elementName = "";//$NON-NLS-1$
 
-    private String refName = "";
+    private String refName = "";//$NON-NLS-1$
 
     private int minOccurs = 0;
 
@@ -59,7 +59,7 @@ public class BusinessElementInputDialog extends Dialog {
 
     private SelectionListener caller = null;
 
-    private String title = "";
+    private String title = "";//$NON-NLS-1$
 
     // fix 0010248
     private boolean inherit = true;
@@ -76,7 +76,7 @@ public class BusinessElementInputDialog extends Dialog {
      * @param parentShell
      */
     public BusinessElementInputDialog(SelectionListener caller, Shell parentShell, String title, boolean isNew) {
-        this(caller, parentShell, title, "", "", new ArrayList<String>(), 0, 1, isNew);
+        this(caller, parentShell, title, "", "", new ArrayList<String>(), 0, 1, isNew);//$NON-NLS-1$//$NON-NLS-2$
     }
 
     /**
@@ -111,7 +111,7 @@ public class BusinessElementInputDialog extends Dialog {
 
         elementNameText = new Text(composite, SWT.BORDER);
         elementNameText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        elementNameText.setText(getElementName() == null ? "" : getElementName());
+        elementNameText.setText(getElementName() == null ? "" : getElementName());//$NON-NLS-1$
         ((GridData) elementNameText.getLayoutData()).widthHint = 200;
         // elementNameText.setSize(100, 22);
 
@@ -122,15 +122,15 @@ public class BusinessElementInputDialog extends Dialog {
         refCombo = new Combo(composite, SWT.DROP_DOWN | SWT.SIMPLE | SWT.READ_ONLY);
         refCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         refCombo.setItems(elementDeclarations.toArray(new String[elementDeclarations.size()]));
-        refCombo.setText(getRefName() == null ? "" : getRefName());
+        refCombo.setText(getRefName() == null ? "" : getRefName());//$NON-NLS-1$
         ((GridData) refCombo.getLayoutData()).widthHint = 200;
 
         if (refCombo.getText().length() > 0) {
-            elementNameText.setText("");
+            elementNameText.setText("");//$NON-NLS-1$
             elementNameText.setEditable(false);
         } else {
             elementNameText.setEditable(true);
-            elementNameText.setText(getElementName() == null ? "" : getElementName());
+            elementNameText.setText(getElementName() == null ? "" : getElementName());//$NON-NLS-1$
         }
 
         refCombo.addSelectionListener(new SelectionListener() {
@@ -141,11 +141,11 @@ public class BusinessElementInputDialog extends Dialog {
 
             public void widgetSelected(SelectionEvent e) {
                 if (refCombo.getText().length() > 0) {
-                    elementNameText.setText("");
+                    elementNameText.setText("");//$NON-NLS-1$
                     elementNameText.setEditable(false);
                 } else {
                     elementNameText.setEditable(true);
-                    elementNameText.setText(getElementName() == null ? "" : getElementName());
+                    elementNameText.setText(getElementName() == null ? "" : getElementName());//$NON-NLS-1$
                 }
 
             }
@@ -158,7 +158,7 @@ public class BusinessElementInputDialog extends Dialog {
         minOccursText = new Text(composite, SWT.NONE);
         minOccursText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         minOccursText.setDoubleClickEnabled(false);
-        minOccursText.setText("" + getMinOccurs());
+        minOccursText.setText("" + getMinOccurs());//$NON-NLS-1$
 
         Label maxLabel = new Label(composite, SWT.NONE);
         maxLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
@@ -166,7 +166,7 @@ public class BusinessElementInputDialog extends Dialog {
 
         maxOccursText = new Text(composite, SWT.NONE);
         maxOccursText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        maxOccursText.setText(getMaxOccurs() == -1 ? "" : "" + getMaxOccurs());
+        maxOccursText.setText(getMaxOccurs() == -1 ? "" : "" + getMaxOccurs());//$NON-NLS-1$//$NON-NLS-2$
 
         if (isNew && Util.IsEnterPrise()) {
             checkBox = new Button(composite, SWT.CHECK);
@@ -200,7 +200,7 @@ public class BusinessElementInputDialog extends Dialog {
     protected void okPressed() {
         elementName = elementNameText.getText().trim();
         refName = refCombo.getText();
-        if (((elementName == null) || ("".equals(elementName))) && ((refName == null) || "".equals(refName))) {
+        if (((elementName == null) || ("".equals(elementName))) && ((refName == null) || "".equals(refName))) {//$NON-NLS-1$//$NON-NLS-2$
             MessageDialog.openError(this.getShell(), "Error",
                     "The Business Element Name cannot be empty if the reference is empty");
             setReturnCode(-1);
@@ -208,14 +208,14 @@ public class BusinessElementInputDialog extends Dialog {
             return;
         }
 
-        if (elementName.replaceAll("\\s", "").length() != elementName.length()) {//$NON-NLS-1$
+        if (elementName.replaceAll("\\s", "").length() != elementName.length()) {//$NON-NLS-1$//$NON-NLS-2$
             MessageDialog.openError(this.getShell(), "Error", "The Business Element Name cannot contain the empty characters");
             setReturnCode(-1);
             elementNameText.setFocus();
             return;
         }
 
-        if ("".equals(minOccursText.getText()) && "".equals(maxOccursText.getText())) {
+        if ("".equals(minOccursText.getText()) && "".equals(maxOccursText.getText())) {//$NON-NLS-1$//$NON-NLS-2$
             minOccurs = 1;
             maxOccurs = 1;
             return;
@@ -235,7 +235,7 @@ public class BusinessElementInputDialog extends Dialog {
             return;
         }
 
-        if ("".equals(maxOccursText.getText())) {
+        if ("".equals(maxOccursText.getText())) {//$NON-NLS-1$
             maxOccurs = -1;
         } else {
             try {

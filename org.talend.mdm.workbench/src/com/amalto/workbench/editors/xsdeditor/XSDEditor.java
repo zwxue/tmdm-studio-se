@@ -147,8 +147,8 @@ public class XSDEditor extends InternalXSDMultiPageEditor {
                                     WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
                                     wsDataModel.setXsdSchema(xsd);
                                     IFile file = XSDEditorUtil.createFile(xobject);
-                                    file.setCharset("utf-8", null);
-                                    file.setContents(new ByteArrayInputStream(xsd.getBytes("utf-8")), IFile.FORCE, null);
+                                    file.setCharset("utf-8", null);//$NON-NLS-1$
+                                    file.setContents(new ByteArrayInputStream(xsd.getBytes("utf-8")), IFile.FORCE, null);//$NON-NLS-1$
                                 }
 
                             }

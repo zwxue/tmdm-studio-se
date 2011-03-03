@@ -145,8 +145,8 @@ public class XObjectRevisionBrowser extends FormEditor {
 
     private void updateTitle() {
         IEditorInput input = this.getEditorInput();
-        setPartName(input.getName().replaceAll("\\[.*\\]", ""));
-        setContentDescription("");
+        setPartName(input.getName().replaceAll("\\[.*\\]", ""));//$NON-NLS-1$//$NON-NLS-2$
+        setContentDescription("");//$NON-NLS-1$
     }
 
     public void dispose() {

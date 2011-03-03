@@ -81,7 +81,7 @@ public class VariableDefinitionDialog extends Dialog {
 
         inputVariable = input;
         String transformType = type;
-        transformType = transformType.split(" ")[1];
+        transformType = transformType.split(" ")[1];//$NON-NLS-1$
 
         if (transformType.startsWith(SMART_VIEW_TRANSFORMER) && plugin.equals("xslt")) {//$NON-NLS-1$
             if (input)

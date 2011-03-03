@@ -224,7 +224,7 @@ import com.amalto.workbench.widgets.WidgetFactory;
 
 public class DataModelMainPage extends EditorPart implements ModifyListener {
 
-    public static final String ADDITIONMENUID = "talend.menuadition.datamodel";
+    public static final String ADDITIONMENUID = "talend.menuadition.datamodel";//$NON-NLS-1$
 
     private static Log log = LogFactory.getLog(DataModelMainPage.class);
 
@@ -359,7 +359,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     boolean isSchemaSelected = true;
 
-    private String modelName = "";
+    private String modelName = "";//$NON-NLS-1$
 
     private boolean isChange = false;
 
@@ -422,9 +422,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             Label descriptionLabel = toolkit.createLabel(mainComposite, "Description", SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 
-            descriptionText = toolkit.createText(mainComposite, "", SWT.BORDER);
+            descriptionText = toolkit.createText(mainComposite, "", SWT.BORDER);//$NON-NLS-1$
             descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
-            descriptionText.setText(wsObject.getDescription() == null ? "" : wsObject.getDescription());
+            descriptionText.setText(wsObject.getDescription() == null ? "" : wsObject.getDescription());//$NON-NLS-1$
             ((GridData) descriptionText.getLayoutData()).minimumHeight = 30;
             descriptionText.addModifyListener(this);
             // Util.createCompDropTarget(descriptionText);
@@ -435,15 +435,15 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             gLayout.horizontalSpacing = 20;
             btnCmp.setLayout(gLayout);
 
-            importXSDBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
+            importXSDBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);//$NON-NLS-1$
             importXSDBtn.setImage(ImageCache.getCreatedImage(EImage.IMPORT.getPath()));
             importXSDBtn.setToolTipText("Import...");
 
-            exportBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
+            exportBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);//$NON-NLS-1$
             exportBtn.setImage(ImageCache.getCreatedImage(EImage.EXPORT.getPath()));
             exportBtn.setToolTipText("Export...");
 
-            importSchemaNsBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);
+            importSchemaNsBtn = toolkit.createButton(btnCmp, "", SWT.PUSH);//$NON-NLS-1$
             importSchemaNsBtn.setImage(ImageCache.getCreatedImage(EImage.CHECKIN_ACTION.getPath()));
             importSchemaNsBtn.setToolTipText("import/include specific Schema Namespace ...");
 
@@ -457,10 +457,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
             langeuageLabel = toolkit.createLabel(addLanGroup, "Language:");
             languageCombo = new Combo(addLanGroup, SWT.READ_ONLY);
-            addLanBtn = toolkit.createButton(addLanGroup, "", SWT.NONE);
+            addLanBtn = toolkit.createButton(addLanGroup, "", SWT.NONE);//$NON-NLS-1$
             addLanBtn.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
             addLanBtn.setToolTipText("Add...");
-            deleteLanbtn = toolkit.createButton(addLanGroup, "", SWT.NONE);
+            deleteLanbtn = toolkit.createButton(addLanGroup, "", SWT.NONE);//$NON-NLS-1$
             deleteLanbtn.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
             deleteLanbtn.setToolTipText("Remove...");
             Set<String> languages = Util.lang2iso.keySet();
@@ -510,10 +510,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
                 private void inferXsdFromXml(String xmlFile) {
                     int infer = 0;
-                    String xsd = "";
+                    String xsd = "";//$NON-NLS-1$
                     try {
-                        String inputType = xmlFile.substring(xmlFile.lastIndexOf("."));
-                        if (inputType.equals(".xsd")) {
+                        String inputType = xmlFile.substring(xmlFile.lastIndexOf("."));//$NON-NLS-1$
+                        if (inputType.equals(".xsd")) {//$NON-NLS-1$
                             xsd = Util.getXML(xmlFile);
                             xsdSchema = Util.createXsdSchema(xsd, xobject);
                             // xsdSchema.setTargetNamespace(null);
@@ -530,7 +530,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                         log.error(e.getMessage(), e);
                         infer = 2;
                     } finally {
-                        if (infer == 0 && !xsd.equals("")) {
+                        if (infer == 0 && !xsd.equals("")) {//$NON-NLS-1$
                             WSDataModel wsObj = (WSDataModel) (xobject.getWsObject());
                             wsObj.setXsdSchema(xsd);
                             validateSchema(xsd);
@@ -550,7 +550,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                         NodeList nodeList = schema.getDocument().getDocumentElement().getChildNodes();
                         for (int idx = 0; idx < nodeList.getLength(); idx++) {
                             Node node = nodeList.item(idx);
-                            if (node instanceof Element && node.getLocalName().indexOf("element") >= 0) {
+                            if (node instanceof Element && node.getLocalName().indexOf("element") >= 0) {//$NON-NLS-1$
                                 elem = true;
                                 break;
                             }
@@ -662,8 +662,8 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                                     "The operation for importing XSDSchema completed successfully!");
                         } catch (Exception ex) {
                             log.error(ex.getMessage(), ex);
-                            String detail = "";
-                            if (ex.getMessage() != null && !ex.getMessage().equals("")) {
+                            String detail = "";//$NON-NLS-1$
+                            if (ex.getMessage() != null && !ex.getMessage().equals("")) {//$NON-NLS-1$
                                 detail += " , due to" + "\n" + ex.getMessage();
                             }
                             setXsdSchema(schemaCpy);
@@ -692,7 +692,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         xsdSchema.clearDiagnostics();
         xsdSchema.validate();
         EList<XSDDiagnostic> diagnoses = xsdSchema.getAllDiagnostics();
-        String error = "";
+        String error = "";//$NON-NLS-1$
         Set<String> errors = new HashSet<String>();
         for (int i = 0; i < diagnoses.size(); i++) {
             XSDDiagnostic dia = diagnoses.get(i);
@@ -706,12 +706,12 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                     }
                 }
                 if (!omit && !errors.contains(dia.getMessage())) {
-                    error += dia.getMessage() + "\n";
+                    error += dia.getMessage() + "\n";//$NON-NLS-1$
                     errors.add(dia.getMessage());
                 }
             }
         }
-        if (!error.equals("")) {
+        if (!error.equals("")) {//$NON-NLS-1$
             throw new IllegalAccessException(error);
         }
 
@@ -1111,7 +1111,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
             WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
             String s;
-            s = wsObject.getDescription() == null ? "" : wsObject.getDescription();
+            s = wsObject.getDescription() == null ? "" : wsObject.getDescription();//$NON-NLS-1$
             if (!s.equals(descriptionText.getText()))
                 descriptionText.setText(s);
             String schema = Util.formatXsdSource(wsObject.getXsdSchema());
@@ -1143,7 +1143,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     public int save(String xsd) {
         try {
             WSDataModel wsObject = (WSDataModel) (xobject.getWsObject());
-            wsObject.setDescription(descriptionText.getText() == null ? "" : descriptionText.getText());
+            wsObject.setDescription(descriptionText.getText() == null ? "" : descriptionText.getText());//$NON-NLS-1$
             String schema = xsd;
             if (xsd == null) {
                 // schema = ((XSDTreeContentProvider) viewer.getContentProvider()).getXSDSchemaAsString();
@@ -1160,7 +1160,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             // fliu added '<xsd:import namespace="http://www.w3.org/2001/XMLSchema"/>', which is meant to make xsdSchema
             // compatible with allNNI and other new simple Types
             XSDImport xsdImport = XSDFactory.eINSTANCE.createXSDImport();
-            xsdImport.setNamespace("http://www.w3.org/2001/XMLSchema");
+            xsdImport.setNamespace("http://www.w3.org/2001/XMLSchema");//$NON-NLS-1$
             if (xsdSchema == null) {
                 // xsdSchema = ((XSDTreeContentProvider) viewer.getContentProvider()).getXsdSchema();
                 xsdSchema = ((SchemaTreeContentProvider) viewer.getContentProvider()).getXsdSchema();
@@ -1361,11 +1361,11 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                     return 116;
                 } else if (source.equals("X_Default_Value_Rule")) {//$NON-NLS-1$
                     return 117;
-                }else if (source.equals("X_Create")) {//$NON-NLS-1$
+                } else if (source.equals("X_Create")) {//$NON-NLS-1$
                     return 118;
-                }else if (source.equals("X_PhysicalDelete")) {//$NON-NLS-1$
+                } else if (source.equals("X_PhysicalDelete")) {//$NON-NLS-1$
                     return 119;
-                }else if (source.equals("X_LogicalDelete")) {//$NON-NLS-1$
+                } else if (source.equals("X_LogicalDelete")) {//$NON-NLS-1$
                     return 120;
                 }
             }
@@ -1460,7 +1460,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         if ((selection == null) || (selection.getFirstElement() == null)) {
             manager.add(new Separator(ADDITIONMENUID));
             // add by ymli, fix bug 0009770
-            String title = "";
+            String title = "";//$NON-NLS-1$
             if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() == 1)
                 title = "Paste Entity";
             else if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() > 1)
@@ -1501,7 +1501,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                  * boolean isMulti = false; if(WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size()>1)
                  * isMulti = true;
                  */
-                String title = "";
+                String title = "";//$NON-NLS-1$
                 if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() > 1)
                     title = "Paste Entities";
                 else if (WorkbenchClipboard.getWorkbenchClipboard().getConcepts().size() == 1)
@@ -1676,7 +1676,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             if (!isType)
                 manager.add(deleteConceptWrapAction.outPutDeleteActions());
 
-            String title = "";
+            String title = "";//$NON-NLS-1$
             if (Util.checkInCopyTypeElement(selectedObjs))
                 title = "Copy Entities";
             else if (Util.checkInCOpyTypeParticle(selectedObjs))
@@ -1718,11 +1718,11 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         }
         // available models
         java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
-        for (int i=0; i<availablemodels.size(); i++) {
-        	IAvailableModel model= availablemodels.get(i);
+        for (int i = 0; i < availablemodels.size(); i++) {
+            IAvailableModel model = availablemodels.get(i);
             model.fillContextMenu(obj, manager, this, dataModelName);
-            if(i==1){
-            	manager.add(new Separator());
+            if (i == 1) {
+                manager.add(new Separator());
             }
         }
 
@@ -1749,7 +1749,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             manager.add(setAnnotationForeignKeyInfoAction);
         }
         if (Util.IsEnterPrise()) {
-        	manager.add(new Separator());
+            manager.add(new Separator());
             manager.add(setAnnotationWriteAction);
             // fix bug 0016982: Set role with no access, and Set the workflow access menu actions action are gone
             // if (checkMandatoryElement(obj))
@@ -1761,11 +1761,11 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         }
         // available models
         java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
-        for (int i=0; i<availablemodels.size(); i++) {
-        	IAvailableModel model= availablemodels.get(i);
+        for (int i = 0; i < availablemodels.size(); i++) {
+            IAvailableModel model = availablemodels.get(i);
             model.fillContextMenu(obj, manager, this, dataModelName);
-            if(i==1){
-            	manager.add(new Separator());
+            if (i == 1) {
+                manager.add(new Separator());
             }
         }
         // manager.add(setAnnotationSchematronAction);
@@ -1788,7 +1788,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             manager.add(setAnnotationLabelAction);
         }
         if (Util.IsEnterPrise()) {
-        	manager.add(new Separator());
+            manager.add(new Separator());
             manager.add(setAnnotationWriteAction);
             // fix bug 0016982: Set role with no access, and Set the workflow access menu actions action are gone
             // if (checkMandatoryElement(obj))
@@ -1800,11 +1800,11 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         }
         // available models
         java.util.List<IAvailableModel> availablemodels = AvailableModelUtil.getAvailableModels();
-        for (int i=0; i<availablemodels.size(); i++) {
-        	IAvailableModel model= availablemodels.get(i);
+        for (int i = 0; i < availablemodels.size(); i++) {
+            IAvailableModel model = availablemodels.get(i);
             model.fillContextMenu(obj, manager, this, dataModelName);
-            if(i==1){
-            	manager.add(new Separator());
+            if (i == 1) {
+                manager.add(new Separator());
             }
         }
         // manager.add(setAnnotationTargetSystemsAction);
@@ -2139,7 +2139,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     private void validateType() throws IllegalAccessException {
         HashMap<String, Boolean> typeCntMap = new HashMap<String, Boolean>();
         EList<XSDTypeDefinition> types = xsdSchema.getTypeDefinitions();
-        String tail = "";
+        String tail = "";//$NON-NLS-1$
         for (XSDTypeDefinition type : types) {
             if (type instanceof XSDComplexTypeDefinition) {
                 tail = "complex";
@@ -2205,7 +2205,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     }
 
     private void performImport(List<String> list) throws Exception {
-        Pattern httpUrl = Pattern.compile("(http|https|ftp):(\\//|\\\\)(.*)(\\:)+(.*)");
+        Pattern httpUrl = Pattern.compile("(http|https|ftp):(\\//|\\\\)(.*)(\\:)+(.*)");//$NON-NLS-1$
 
         for (String fileName : list) {
             Matcher match = httpUrl.matcher(fileName);
@@ -2225,17 +2225,17 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     private void importSchemaFromFile(String fileName) throws Exception {
         InputSource source = null;
-        Pattern httpUrl = Pattern.compile("^(http|https|ftp):(\\//|\\\\)(.*)(\\.)+(xsd)$");
+        Pattern httpUrl = Pattern.compile("^(http|https|ftp):(\\//|\\\\)(.*)(\\.)+(xsd)$");//$NON-NLS-1$
         Matcher match = httpUrl.matcher(fileName);
         if (match.matches()) {
             URL url = new URL(fileName);
             String urlContent = IOUtils.toString(url.openConnection().getInputStream());
-            urlContent = urlContent.replaceAll("<!DOCTYPE(.*?)>", "");
+            urlContent = urlContent.replaceAll("<!DOCTYPE(.*?)>", "");//$NON-NLS-1$//$NON-NLS-2$
             source = new InputSource(IOUtils.toInputStream(urlContent));
             importSchema(source, fileName);
         } else {
-            String inputType = fileName.substring(fileName.lastIndexOf("."));
-            if (!inputType.equals(".xsd"))
+            String inputType = fileName.substring(fileName.lastIndexOf("."));//$NON-NLS-1$
+            if (!inputType.equals(".xsd"))//$NON-NLS-1$
                 return;
             File file = new File(fileName);
 
@@ -2246,14 +2246,14 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     }
 
     private void importSchema(InputSource source, String uri) throws Exception {
-        String ns = "";
+        String ns = "";//$NON-NLS-1$
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         documentBuilderFactory.setNamespaceAware(true);
         documentBuilderFactory.setValidating(false);
 
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         Document document = documentBuilder.parse(source);
-        ns = document.getDocumentElement().getAttribute("targetNamespace");
+        ns = document.getDocumentElement().getAttribute("targetNamespace");//$NON-NLS-1$
         if (xsdSchema == null)
             xsdSchema = getXSDSchema(Util.nodeToString(document));
         else {
@@ -2263,7 +2263,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         boolean exist = false;
         for (int i = 0; i < xsdSchema.getContents().size(); i++) {
             XSDSchemaContent xsdComp = xsdSchema.getContents().get(i);
-            if (ns != null && !ns.equals("")) {
+            if (ns != null && !ns.equals("")) {//$NON-NLS-1$
                 // import xsdschema
                 if (xsdComp instanceof XSDImport && ((XSDImport) xsdComp).getNamespace().equals(ns)) {
                     for (Map.Entry entry : xsdSchema.getQNamePrefixToNamespaceMap().entrySet()) {
@@ -2287,9 +2287,9 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         }
 
         if (!exist) {
-            if (ns != null && !ns.equals("")) {
-                int last = ns.lastIndexOf("/");
-                xsdSchema.getQNamePrefixToNamespaceMap().put(ns.substring(last + 1).replaceAll("[\\W]", ""), ns);
+            if (ns != null && !ns.equals("")) {//$NON-NLS-1$
+                int last = ns.lastIndexOf("/");//$NON-NLS-1$
+                xsdSchema.getQNamePrefixToNamespaceMap().put(ns.substring(last + 1).replaceAll("[\\W]", ""), ns);//$NON-NLS-1$//$NON-NLS-2$
                 XSDImport xsdImport = XSDFactory.eINSTANCE.createXSDImport();
                 xsdImport.setNamespace(ns);
                 xsdImport.setSchemaLocation(uri);
@@ -2377,7 +2377,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         filterToolItem.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent e) {
-                dataModelFilter = new DataModelFilter("", false, false, false, true);
+                dataModelFilter = new DataModelFilter("", false, false, false, true);//$NON-NLS-1$
                 DataModelFilterDialog dataModelFilterDialog = new DataModelFilterDialog(getSite().getShell(), xobject,
                         dataModelFilter, getSchemaElementNameFilterDesByTreeViewer(targetTreeViewer));
 
@@ -2655,40 +2655,40 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 break;
             case 201:
                 // new XSDEditFacetAction(viewer,"whiteSpace").run();
-                initxsdEditFacetAction("whiteSpace");
+                initxsdEditFacetAction("whiteSpace");//$NON-NLS-1$
                 break;
             case 202:
-                initxsdEditFacetAction("length");
+                initxsdEditFacetAction("length");//$NON-NLS-1$
                 break;
             case 203:
-                initxsdEditFacetAction("minLength");
+                initxsdEditFacetAction("minLength");//$NON-NLS-1$
                 break;
             case 204:
-                initxsdEditFacetAction("maxLength");
+                initxsdEditFacetAction("maxLength");//$NON-NLS-1$
                 break;
             case 205:
-                initxsdEditFacetAction("totalDigits");
+                initxsdEditFacetAction("totalDigits");//$NON-NLS-1$
                 break;
             case 206:
-                initxsdEditFacetAction("fractionDigits");
+                initxsdEditFacetAction("fractionDigits");//$NON-NLS-1$
                 break;
             case 207:
-                initxsdEditFacetAction("maxInclusive");
+                initxsdEditFacetAction("maxInclusive");//$NON-NLS-1$
                 break;
             case 208:
-                initxsdEditFacetAction("maxExclusive");
+                initxsdEditFacetAction("maxExclusive");//$NON-NLS-1$
                 break;
             case 209:
-                initxsdEditFacetAction("minInclusive");
+                initxsdEditFacetAction("minInclusive");//$NON-NLS-1$
                 break;
             case 210:
-                initxsdEditFacetAction("minExclusive");
+                initxsdEditFacetAction("minExclusive");//$NON-NLS-1$
                 break;
             case 211:
-                initxsdEditFacetAction("pattern");
+                initxsdEditFacetAction("pattern");//$NON-NLS-1$
                 break;
             case 212:
-                initxsdEditFacetAction("enumeration");
+                initxsdEditFacetAction("enumeration");//$NON-NLS-1$
                 break;
             case 101:
                 setAnnotationLabelAction.run();
@@ -2799,7 +2799,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     @Override
     public boolean isSaveAsAllowed() {
-        // TODO Auto-generated method stub
         return true;
     }
 

@@ -256,8 +256,8 @@ public class EntityKeyConfigComposite extends Composite {
     }
 
     private void initUIContents() {
-        txtKeyName.setText("");
-        comboSelector.setText("");
+        txtKeyName.setText("");//$NON-NLS-1$
+        comboSelector.setText("");//$NON-NLS-1$
         tvFields.setInput(new ArrayList<FieldWrapper>());
 
         initComboSelectorContents();
@@ -266,7 +266,7 @@ public class EntityKeyConfigComposite extends Composite {
     private void initComboSelectorContents() {
         if (entityWrapper != null) {
             try {
-                comboSelector.setItems(Util.getChildElementNames("", entityWrapper.getSourceEntity()).toArray(new String[0]));
+                comboSelector.setItems(Util.getChildElementNames("", entityWrapper.getSourceEntity()).toArray(new String[0]));//$NON-NLS-1$
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
                 comboSelector.setItems(new String[0]);
@@ -285,12 +285,12 @@ public class EntityKeyConfigComposite extends Composite {
         btnEditField.setEnabled(isFieldSelected() && isKeySelected());
 
         lblKeyNameErrIndicator.setVisible(false);
-        lblKeyNameErrIndicator.setToolTipText("");
+        lblKeyNameErrIndicator.setToolTipText("");//$NON-NLS-1$
         KeyWrapper[] selectedKeys = getSelectedKeys();
         if (selectedKeys.length > 0) {
             String errMsg = isKeyNameValid(txtKeyName.getText().trim(), selectedKeys[0]);
             lblKeyNameErrIndicator.setVisible(errMsg != null);
-            lblKeyNameErrIndicator.setToolTipText(errMsg == null ? "" : errMsg);
+            lblKeyNameErrIndicator.setToolTipText(errMsg == null ? "" : errMsg);//$NON-NLS-1$
         }
 
         tvKeys.refresh();
@@ -414,7 +414,7 @@ public class EntityKeyConfigComposite extends Composite {
 
                 String errMsg = isKeyNameValid(txtKeyName.getText().trim(), selectedKeys[0]);
                 lblKeyNameErrIndicator.setVisible(errMsg != null);
-                lblKeyNameErrIndicator.setToolTipText(errMsg == null ? "" : errMsg);
+                lblKeyNameErrIndicator.setToolTipText(errMsg == null ? "" : errMsg);//$NON-NLS-1$
 
                 getSelectedKeys()[0].setName(txtKeyName.getText().trim());
                 tvKeys.refresh();
@@ -518,7 +518,7 @@ public class EntityKeyConfigComposite extends Composite {
                 try {
 
                     SelectFieldDialog selectFieldDlg = new SelectFieldDialog(getShell(), "Select one field",
-                            Util.getChildElementNames("", entityWrapper.getSourceEntity()), selectedFields[0].getXPath());
+                            Util.getChildElementNames("", entityWrapper.getSourceEntity()), selectedFields[0].getXPath());//$NON-NLS-1$
 
                     if (selectFieldDlg.open() != Window.OK)
                         return;
@@ -549,12 +549,12 @@ public class EntityKeyConfigComposite extends Composite {
                         return;
 
                     SelectFieldDialog selectFieldDlg = new SelectFieldDialog(getShell(), "Select one field",
-                            Util.getChildElementNames("", entityWrapper.getSourceEntity()), null);
+                            Util.getChildElementNames("", entityWrapper.getSourceEntity()), null);//$NON-NLS-1$
 
                     if (selectFieldDlg.open() != Window.OK)
                         return;
 
-                    if ("".equals(selectFieldDlg.getField().trim()))
+                    if ("".equals(selectFieldDlg.getField().trim()))//$NON-NLS-1$
                         return;
 
                     FieldWrapper newFieldWrapper = new FieldWrapper(selectFieldDlg.getField().trim());
@@ -590,7 +590,7 @@ public class EntityKeyConfigComposite extends Composite {
                     if (dialog.open() != Window.OK)
                         return;
 
-                    KeyWrapper newKeyWrapper = new KeyWrapper(dialog.getKeyName(), ".", dialog.getType(),
+                    KeyWrapper newKeyWrapper = new KeyWrapper(dialog.getKeyName(), ".", dialog.getType(),//$NON-NLS-1$
                             new FieldWrapper[] { new FieldWrapper(dialog.getFieldName()) });
 
                     entityWrapper.addKey(newKeyWrapper);
@@ -626,7 +626,7 @@ public class EntityKeyConfigComposite extends Composite {
 
     private boolean isSelectorValid(String selector) {
 
-        if (selector == null || "".equals(selector.trim()))
+        if (selector == null || "".equals(selector.trim()))//$NON-NLS-1$
             return false;
 
         return true;
@@ -668,7 +668,7 @@ public class EntityKeyConfigComposite extends Composite {
         @Override
         public String isValid(String newText) {
 
-            if (newText == null || "".equals(newText.trim()))
+            if (newText == null || "".equals(newText.trim()))//$NON-NLS-1$
                 return "The key name cannot be empty";
 
             if (XSDIdentityConstraintCategory.UNIQUE_LITERAL.equals(targetKeyWrapper.getType())
@@ -719,7 +719,7 @@ public class EntityKeyConfigComposite extends Composite {
         @Override
         public String isValid(String keyName, XSDIdentityConstraintCategory type, XSDElementDeclaration element) {
 
-            if (keyName == null || "".equals(keyName.trim()))
+            if (keyName == null || "".equals(keyName.trim()))//$NON-NLS-1$
                 return "The Key Name cannot be empty";
 
             for (XSDIdentityConstraintDefinition eachKey : getSchema().getIdentityConstraintDefinitions()) {

@@ -96,7 +96,7 @@ public class XpathSelectDialog extends Dialog {
     // TODO:check This two static String and there related static methods may cause some problems.
     public String dataModelName;
 
-    private String xpath = "";
+    private String xpath = "";//$NON-NLS-1$
 
     private boolean isMulti = true;
 
@@ -131,26 +131,26 @@ public class XpathSelectDialog extends Dialog {
 
     public String getEntityName() {
 
-        if (xpath == null || "".equals(xpath))
-            return "";
+        if (xpath == null || "".equals(xpath))//$NON-NLS-1$
+            return "";//$NON-NLS-1$
 
         String[] parts = xpath.split("/");//$NON-NLS-1$
 
         for (String eachPart : parts) {
 
-            if ("".equals(eachPart))
+            if ("".equals(eachPart))//$NON-NLS-1$
                 continue;
 
             return eachPart;
         }
 
-        return "";
+        return "";//$NON-NLS-1$
     }
 
     private String getXpath(StructuredSelection sel) {
 
-        String path = "";
-        String totalXpath = "";
+        String path = "";//$NON-NLS-1$
+        String totalXpath = "";//$NON-NLS-1$
         TreeItem item;
         TreeItem[] items = domViewer.getTree().getSelection();
         for (int i = 0; i < items.length; i++) {
@@ -162,9 +162,9 @@ public class XpathSelectDialog extends Dialog {
                 component = (XSDConcreteComponent) item.getData();
                 if (component instanceof XSDParticle) {
                     if (((XSDParticle) component).getTerm() instanceof XSDElementDeclaration)
-                        path = "/" + ((XSDElementDeclaration) ((XSDParticle) component).getTerm()).getName() + path;
+                        path = "/" + ((XSDElementDeclaration) ((XSDParticle) component).getTerm()).getName() + path;//$NON-NLS-1$
                 } else if (component instanceof XSDElementDeclaration) {
-                    path = (isAbsolutePath ? "/" : "") + ((XSDElementDeclaration) component).getName() + path;
+                    path = (isAbsolutePath ? "/" : "") + ((XSDElementDeclaration) component).getName() + path;//$NON-NLS-1$//$NON-NLS-2$
                 }
                 item = item.getParentItem();
 
@@ -172,22 +172,22 @@ public class XpathSelectDialog extends Dialog {
             if (i == 0)
                 totalXpath = path;
             else
-                totalXpath += "&" + path;
-            path = "";
+                totalXpath += "&" + path;//$NON-NLS-1$
+            path = "";//$NON-NLS-1$
         }// for(i=0
         if (context != null && conceptName != null) {
 
             if (totalXpath.equals(conceptName)) {
-                totalXpath = totalXpath.replaceAll(conceptName, "/");
+                totalXpath = totalXpath.replaceAll(conceptName, "/");//$NON-NLS-1$
             } else {
-                totalXpath = totalXpath.replaceAll(conceptName + "/", "");
+                totalXpath = totalXpath.replaceAll(conceptName + "/", "");//$NON-NLS-1$//$NON-NLS-2$
             }
-            if (totalXpath.equals(context) || totalXpath.equals(context.replaceAll(conceptName + "/", ""))) {
-                totalXpath = ".";
+            if (totalXpath.equals(context) || totalXpath.equals(context.replaceAll(conceptName + "/", ""))) {//$NON-NLS-1$//$NON-NLS-2$
+                totalXpath = ".";//$NON-NLS-1$
             }
-            if (totalXpath.indexOf('/') == -1 && !totalXpath.equals(".") && !"/".equals(totalXpath) && !"/".equals(context)
+            if (totalXpath.indexOf('/') == -1 && !totalXpath.equals(".") && !"/".equals(totalXpath) && !"/".equals(context)//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                     && !context.equals(conceptName)) {
-                totalXpath = "../" + totalXpath;
+                totalXpath = "../" + totalXpath;//$NON-NLS-1$
             }
         }
         return totalXpath;
@@ -222,7 +222,7 @@ public class XpathSelectDialog extends Dialog {
             }
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                changeDomTree(tree, "");
+                changeDomTree(tree, "");//$NON-NLS-1$
             }
         });
         schemaLabel = new Label(composite, SWT.NONE);
@@ -243,7 +243,7 @@ public class XpathSelectDialog extends Dialog {
         if (conceptName != null)
             filterText.setText(conceptName);
         else
-            filterText.setText("");
+            filterText.setText("");//$NON-NLS-1$
         filterText.addModifyListener(new ModifyListener() {
 
             public void modifyText(ModifyEvent e) {

@@ -23,9 +23,9 @@ public class KeyWrapper {
 
     private XSDIdentityConstraintDefinition sourceKey;
 
-    private String name = "";
+    private String name = "";//$NON-NLS-1$
 
-    private String selector = "";
+    private String selector = "";//$NON-NLS-1$
 
     private XSDIdentityConstraintCategory type;
 

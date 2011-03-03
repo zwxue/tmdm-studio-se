@@ -14,7 +14,7 @@ package com.amalto.workbench.detailtabs.sections.model.simpletype;
 
 public abstract class SimpleTypeFacetInfo<T> {
 
-    protected String propName = "";
+    protected String propName = "";//$NON-NLS-1$
 
     protected T propValue;
 

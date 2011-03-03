@@ -72,7 +72,7 @@ public class JobMainPage extends AMainPage implements IXObjectModelListener {
             statusComposite.setLayout(new GridLayout(3, false));
             Label descriptionLabel = toolkit.createLabel(statusComposite, "Service Status: ", SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-            statusLabel = toolkit.createLabel(statusComposite, "                                           ", SWT.NULL);
+            statusLabel = toolkit.createLabel(statusComposite, "                                           ", SWT.NULL);//$NON-NLS-1$
             statusLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
             // start/stop/suspend/resume
             Button checkButton = toolkit.createButton(statusComposite, "Check", SWT.CENTER);
@@ -107,10 +107,10 @@ public class JobMainPage extends AMainPage implements IXObjectModelListener {
                 statusLabel.setText("Ready");
                 return;
             }
-            String job = this.jobName.substring(0, this.jobName.lastIndexOf("_"));
-            String jobversion = this.jobName.substring(0, this.jobName.lastIndexOf("."));
-            String URLPath = "http://" + getXObject().getEndpointHost() + ":" + getXObject().getEndpointPort() + "/" + jobversion
-                    + "/services/" + job;
+            String job = this.jobName.substring(0, this.jobName.lastIndexOf("_"));//$NON-NLS-1$
+            String jobversion = this.jobName.substring(0, this.jobName.lastIndexOf("."));//$NON-NLS-1$
+            String URLPath = "http://" + getXObject().getEndpointHost() + ":" + getXObject().getEndpointPort() + "/" + jobversion//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                    + "/services/" + job;//$NON-NLS-1$
             org.apache.commons.httpclient.HttpClient client = new org.apache.commons.httpclient.HttpClient();
             HttpMethod method = new GetMethod(URLPath);
 

@@ -91,12 +91,12 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
     private String concept;
 
     private ComplexTableViewerColumn[] viewableElementColumns = new ComplexTableViewerColumn[] { new ComplexTableViewerColumn(
-            "XPath", false, "newXPath", "newXPath", "", ComplexTableViewerColumn.XPATH_STYLE, new String[] {}, 0) };
+            "XPath", false, "newXPath", "newXPath", "", ComplexTableViewerColumn.XPATH_STYLE, new String[] {}, 0) };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
 
     private TisTableViewer viewableViewer;
 
     private ComplexTableViewerColumn[] searchableElementColumns = new ComplexTableViewerColumn[] { new ComplexTableViewerColumn(
-            "XPath", false, "newXPath", "newXPath", "", ComplexTableViewerColumn.XPATH_STYLE, new String[] {}, 0) };
+            "XPath", false, "newXPath", "newXPath", "", ComplexTableViewerColumn.XPATH_STYLE, new String[] {}, 0) };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
 
     private TisTableViewer searchableViewer;
 
@@ -182,7 +182,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
             viewableViewer = new TisTableViewer(Arrays.asList(viewableElementColumns), toolkit, viewablehGroup);
             viewableViewer.setXpath(true);
             if (viewName.startsWith("Browse_items_")) {
-                concept = viewName.replaceAll("Browse_items_", "").replaceAll("#.*", "");
+                concept = viewName.replaceAll("Browse_items_", "").replaceAll("#.*", "");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
+
             }
             viewableViewer.setConceptName(concept);
             viewableViewer.setMainPage(this);
@@ -243,7 +244,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
 
             WSView wsObject = getWsViewObject();
 
-            desAntionComposite.setText(wsObject.getDescription() == null ? "" : wsObject.getDescription());
+            desAntionComposite.setText(wsObject.getDescription() == null ? "" : wsObject.getDescription());//$NON-NLS-1$
 
             btnRunProcess.setSelection(wsObject.getIsTransformerActive().is_true());
             if (btnRunProcess.getSelection()) {
@@ -251,7 +252,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
                 cboProcessList.setText(wsObject.getTransformerPK());
             } else {
                 cboProcessList.setEnabled(false);
-                cboProcessList.setText("");
+                cboProcessList.setText("");//$NON-NLS-1$
             }
 
             java.util.List<Line> vlines = new ArrayList<Line>();
@@ -362,9 +363,9 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
     public void doSave(IProgressMonitor monitor) {
         super.doSave(monitor);
         if (this.viewName != null && this.viewName.length() > 0) {
-            if (viewName.matches("Browse_items.*")) {
+            if (viewName.matches("Browse_items.*")) {//$NON-NLS-1$
                 // lastDataModelName=XpathSelectDialog.getDataModelName();
-                String concept = viewName.replaceAll("Browse_items_", "").replaceAll("#.*", "");
+                String concept = viewName.replaceAll("Browse_items_", "").replaceAll("#.*", "");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
                 java.util.List<String> avaiList = Util.getDataModel(this.getXObject(), null, concept);
                 if (avaiList.size() > 0)
                     lastDataModelName = avaiList.get(0);
@@ -396,8 +397,8 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
 
                         String[] keys = wsConceptKey.getFields();
                         for (int i = 0; i < keys.length; i++) {
-                            if (".".equals(wsConceptKey.getSelector()))
-                                keys[i] = "/" + concept + "/" + keys[i];
+                            if (".".equals(wsConceptKey.getSelector()))//$NON-NLS-1$
+                                keys[i] = "/" + concept + "/" + keys[i];//$NON-NLS-1$//$NON-NLS-2$
                             else
                                 keys[i] = wsConceptKey.getSelector() + keys[i];
                         }
@@ -407,9 +408,9 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
                             String id = ids[i];
 
                             // need to care about more case
-                            if (id.startsWith("/")) {
+                            if (id.startsWith("/")) {//$NON-NLS-1$
                                 id = id.substring(1);
-                            } else if (id.startsWith("//")) {
+                            } else if (id.startsWith("//")) {//$NON-NLS-1$
                                 id = id.substring(2);
                             }
 
@@ -589,7 +590,7 @@ public class ViewMainPage extends AMainPageV2 implements ITextListener {
 
     @Override
     public boolean beforeDoSave() {
-        if (desAntionComposite.getText().trim().equals("")) {
+        if (desAntionComposite.getText().trim().equals("")) {//$NON-NLS-1$en
             MessageDialog.openError(this.getSite().getShell(), "Error saving", "Description cannot be empty");
             return false;
         }

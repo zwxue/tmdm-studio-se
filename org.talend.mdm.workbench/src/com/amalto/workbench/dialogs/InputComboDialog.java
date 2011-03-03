@@ -30,7 +30,7 @@ public class InputComboDialog extends Dialog {
 
     private String message;
 
-    private String value = "";
+    private String value = "";//$NON-NLS-1$
 
     public String getValue() {
         return value;

@@ -50,7 +50,7 @@ public class CompareManager {
         final IWorkspace workspace = ResourcesPlugin.getWorkspace();
         final IProjectDescription desc = workspace.newProjectDescription(label);
         desc.setNatureIds(new String[] { MdmNature.ID });
-        desc.setComment("");
+        desc.setComment("");//$NON-NLS-1$
         try {
             prj.create(desc, null);
             prj.open(IResource.BACKGROUND_REFRESH, null);
@@ -85,10 +85,10 @@ public class CompareManager {
         cc.setLeftEditable(leftEditable);
         cc.setRightEditable(rightEditable);
         if (leftLabel == null)
-            leftLabel = "";
+            leftLabel = "";//$NON-NLS-1$
         cc.setLeftLabel(leftLabel);
         if (rightLabel == null)
-            rightLabel = "";
+            rightLabel = "";//$NON-NLS-1$
         cc.setRightLabel(rightLabel);
         ResourceCompareInput input = new ResourceCompareInput(cc);
         StructuredSelection sel = new StructuredSelection(new IFile[] { leftF, rightF });

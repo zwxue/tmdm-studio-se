@@ -75,13 +75,13 @@ class SimpleTypeFacetCommitHandlerHelper_StringFacet extends SimpleTypeFacetComm
         if (oldValue.equals(newValue))
             return false;
 
-        if (!"".equals(oldValue))
+        if (!"".equals(oldValue))//$NON-NLS-1$
             commitHandler.getCommitedObj().getXSDSimpleType().getFacetContents()
                     .removeAll(Arrays.asList(commitHandler.getOldFacets()));
 
-        if (!"".equals(newValue)) {
+        if (!"".equals(newValue)) {//$NON-NLS-1$
             XSDConstrainingFacet f = commitHandler.creatNewFacet();
-            f.setLexicalValue("" + newValue);
+            f.setLexicalValue("" + newValue);//$NON-NLS-1$
             commitHandler.getCommitedObj().getXSDSimpleType().getFacetContents().add(f);
         }
 
@@ -92,12 +92,12 @@ class SimpleTypeFacetCommitHandlerHelper_StringFacet extends SimpleTypeFacetComm
     protected String getOldFacetValue() {
 
         if (commitHandler.getOldFacets().length == 0)
-            return "";
+            return "";//$NON-NLS-1$
 
         XSDFacet facet = commitHandler.getOldFacets()[0];
 
         if (facet == null || facet.getLexicalValue() == null)
-            return "";
+            return "";//$NON-NLS-1$
 
         return facet.getLexicalValue();
     }
@@ -134,7 +134,7 @@ class SimpleTypeFacetCommitHandlerHelper_DoubleFacet extends SimpleTypeFacetComm
 
         if (newValue > 0) {
             XSDConstrainingFacet f = commitHandler.creatNewFacet();
-            f.setLexicalValue("" + newValue);
+            f.setLexicalValue("" + newValue);//$NON-NLS-1$
             commitHandler.getCommitedObj().getXSDSimpleType().getFacetContents().add(f);
         }
 
@@ -184,7 +184,7 @@ class SimpleTypeFacetCommitHandlerHelper_IntFacet extends SimpleTypeFacetCommitH
 
         if (newValue > 0) {
             XSDConstrainingFacet f = commitHandler.creatNewFacet();
-            f.setLexicalValue("" + newValue);
+            f.setLexicalValue("" + newValue);//$NON-NLS-1$
             commitHandler.getCommitedObj().getXSDSimpleType().getFacetContents().add(f);
         }
 
@@ -268,7 +268,7 @@ class SimpleTypeFacetCommitHandlerHelper_StringArrayFacet extends SimpleTypeFace
         List<String> oldPatterns = new ArrayList<String>();
         for (XSDFacet eachOldFacet : commitHandler.getOldFacets()) {
 
-            if (eachOldFacet.getLexicalValue() == null || "".equals(eachOldFacet.getLexicalValue().trim()))
+            if (eachOldFacet.getLexicalValue() == null || "".equals(eachOldFacet.getLexicalValue().trim()))//$NON-NLS-1$
                 continue;
 
             oldPatterns.add(eachOldFacet.getLexicalValue());

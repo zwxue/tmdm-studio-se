@@ -85,13 +85,13 @@ public class SelectFieldDialog extends Dialog {
 
     private boolean validateInput() {
 
-        if ("".equals(fieldNameCombo.getText().trim())) {
+        if ("".equals(fieldNameCombo.getText().trim())) {//$NON-NLS-1$
             MessageDialog.openError(getShell(), "Error", "The field name cannot be empty");
             return false;
         }
 
         if (Pattern.compile("^\\s+\\w+\\s*").matcher(fieldNameCombo.getText()).matches()//$NON-NLS-1$
-                || fieldNameCombo.getText().trim().replaceAll("\\s", "").length() != fieldNameCombo.getText().trim().length()) {//$NON-NLS-1$
+                || fieldNameCombo.getText().trim().replaceAll("\\s", "").length() != fieldNameCombo.getText().trim().length()) {//$NON-NLS-1$//$NON-NLS-2$
 
             MessageDialog.openError(getShell(), "Error", "The field name cannot contain the empty characters");
             return false;

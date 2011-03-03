@@ -51,10 +51,10 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
     @Override
     protected ITableLabelProvider getLabelProviderForViewer() {
         return new CommonTableLabelProvider<ForeignKeyFilterAnnoInfoDefUnit>(new ColumnTextExtractor[] {
-                new ColumnTextExtractor<ForeignKeyFilterAnnoInfoDefUnit>("getXpath"),
-                new ColumnTextExtractor<ForeignKeyFilterAnnoInfoDefUnit>("getOperator"),
-                new ColumnTextExtractor<ForeignKeyFilterAnnoInfoDefUnit>("getValue"),
-                new ColumnTextExtractor<ForeignKeyFilterAnnoInfoDefUnit>("getPredicate") });
+                new ColumnTextExtractor<ForeignKeyFilterAnnoInfoDefUnit>("getXpath"),//$NON-NLS-1$
+                new ColumnTextExtractor<ForeignKeyFilterAnnoInfoDefUnit>("getOperator"),//$NON-NLS-1$
+                new ColumnTextExtractor<ForeignKeyFilterAnnoInfoDefUnit>("getValue"),//$NON-NLS-1$
+                new ColumnTextExtractor<ForeignKeyFilterAnnoInfoDefUnit>("getPredicate") });//$NON-NLS-1$
     }
 
     @Override
@@ -97,7 +97,7 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
 
     @Override
     protected ForeignKeyFilterAnnoInfoDefUnit createDefaultInfoObj() {
-        return new ForeignKeyFilterAnnoInfoDefUnit("newXPath", IConstants.VIEW_CONDITION_OPERATORS[0], "",//$NON-NLS-1$
+        return new ForeignKeyFilterAnnoInfoDefUnit("newXPath", IConstants.VIEW_CONDITION_OPERATORS[0], "",//$NON-NLS-1$//$NON-NLS-2$
                 IConstants.PREDICATES[0]);
     }
 
@@ -146,7 +146,7 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
     }
 
     private boolean hasCustomFilter() {
-        return !"".equals(getCustomFilter().trim());
+        return !"".equals(getCustomFilter().trim());//$NON-NLS-1$
     }
 
     public String getFilterExpression() {

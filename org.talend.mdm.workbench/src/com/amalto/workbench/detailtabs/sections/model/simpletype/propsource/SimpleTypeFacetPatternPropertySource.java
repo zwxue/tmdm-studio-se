@@ -11,14 +11,14 @@
 //
 // ============================================================================
 package com.amalto.workbench.detailtabs.sections.model.simpletype.propsource;
+
 import org.eclipse.swt.widgets.Composite;
 
 import com.amalto.workbench.utils.IConstants;
 
-
 public class SimpleTypeFacetPatternPropertySource extends SimpleTypeFacetListStrPropertySource {
 
-    public static final String DELIMITER = " ; ";
+    public static final String DELIMITER = " ; ";//$NON-NLS-1$
 
     public SimpleTypeFacetPatternPropertySource(Composite cellEditorParent, String[] values) {
         super(cellEditorParent, IConstants.SIMPLETYPE_FACETNAME_PATTERN, values, DELIMITER);

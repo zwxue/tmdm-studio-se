@@ -55,7 +55,7 @@ public class ProjectDecisionDialog extends Dialog {
 
     private SelectionListener caller = null;
 
-    private String title = "";
+    private String title = "";//$NON-NLS-1$
 
     /**
      * @param parentShell
@@ -83,22 +83,22 @@ public class ProjectDecisionDialog extends Dialog {
         try {
 
             // process the decision
-            String dataClusterName = "";
-            String dataModelName = "";
+            String dataClusterName = "";//$NON-NLS-1$
+            String dataModelName = "";//$NON-NLS-1$
             boolean doOverwrite = true;
             Matcher m = dp.matcher(decision);
             if (m.matches()) {
                 dataClusterName = m.group(1);
                 dataModelName = m.group(2);
                 if (m.groupCount() >= 4)
-                    doOverwrite = (!"false".equals(m.group(3)));
+                    doOverwrite = (!"false".equals(m.group(3)));//$NON-NLS-1$
             }
 
             XtentisPort port = Util.getPort(new URL(transformerObject.getEndpointAddress()), transformerObject.getUniverse(),
                     transformerObject.getUsername(), transformerObject.getPassword());
 
             // Grab the available Clusters
-            WSDataClusterPK[] dcpks = port.getDataClusterPKs(new WSRegexDataClusterPKs(".*")).getWsDataClusterPKs();
+            WSDataClusterPK[] dcpks = port.getDataClusterPKs(new WSRegexDataClusterPKs(".*")).getWsDataClusterPKs();//$NON-NLS-1$
 
             Label dataClustersLabel = new Label(composite, SWT.NULL);
             dataClustersLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -117,7 +117,7 @@ public class ProjectDecisionDialog extends Dialog {
             dataClustersCombo.select(dataClusterSelect);
 
             // Grab the available Models
-            WSDataModelPK[] dmpks = port.getDataModelPKs(new WSRegexDataModelPKs(".*")).getWsDataModelPKs();
+            WSDataModelPK[] dmpks = port.getDataModelPKs(new WSRegexDataModelPKs(".*")).getWsDataModelPKs();//$NON-NLS-1$
 
             Label dataModelsLabel = new Label(composite, SWT.NULL);
             dataModelsLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -193,7 +193,7 @@ public class ProjectDecisionDialog extends Dialog {
     }
 
     public String getDecision() {
-        return "PROJECT(" + getDataClusterName() + "," + getDataModelName() + "," + (doOverwrite() ? "true" : "false") + ")";
+        return "PROJECT(" + getDataClusterName() + "," + getDataModelName() + "," + (doOverwrite() ? "true" : "false") + ")";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$
     }
 
 }

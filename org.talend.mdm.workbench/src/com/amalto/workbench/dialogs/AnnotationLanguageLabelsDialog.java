@@ -68,7 +68,7 @@ public class AnnotationLanguageLabelsDialog extends Dialog {
 
     private SelectionListener caller = null;
 
-    private String title = "";
+    private String title = "";//$NON-NLS-1$
 
     /**
      * @param parentShell
@@ -228,7 +228,7 @@ public class AnnotationLanguageLabelsDialog extends Dialog {
                 case 1:
                     return line.getLabel();
                 }
-                return "";
+                return "";//$NON-NLS-1$
             }
 
             public Image getColumnImage(Object element, int columnIndex) {

@@ -221,7 +221,7 @@ public class ImportExchangeOptionsDialog extends Dialog implements SelectionList
     private void fillInTable() {
         exchangeDwnTable.removeAll();
         HttpClient client = new HttpClient();
-        String url = EXCHANGE_DOWNLOAD_URL + (export ? "2" : "1");
+        String url = EXCHANGE_DOWNLOAD_URL + (export ? "2" : "1");//$NON-NLS-1$//$NON-NLS-2$
         GetMethod get = new GetMethod(url);
         try {
             client.executeMethod(get);

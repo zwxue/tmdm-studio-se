@@ -65,7 +65,7 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
 
     public BrowseRevisionMainPage(FormEditor editor) {
         super(editor, BrowseRevisionMainPage.class.getName(), "Revision Browser "
-                + ((XObjectBrowserInput) editor.getEditorInput()).getName().replaceAll("\\[.*\\]", "").trim());
+                + ((XObjectBrowserInput) editor.getEditorInput()).getName().replaceAll("\\[.*\\]", "").trim());//$NON-NLS-1$//$NON-NLS-2$
 
     }
 
@@ -111,9 +111,9 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
                         return;
                     } else {
                         universeList.removeAll();
-                        if (!"".equals(revisionIDList.getSelection()[0])) {
-                            int index = BrowseRevisionMainPage.this.getXObject().getDisplayName().indexOf("[");
-                            String objectName = "";
+                        if (!"".equals(revisionIDList.getSelection()[0])) {//$NON-NLS-1$
+                            int index = BrowseRevisionMainPage.this.getXObject().getDisplayName().indexOf("[");//$NON-NLS-1$
+                            String objectName = "";//$NON-NLS-1$
                             if (index > 0)
                                 objectName = BrowseRevisionMainPage.this.getXObject().getDisplayName().substring(0, index - 1);
                             List<String> universes = Util.getUniverseBYRevisionID(port, revisionIDList.getSelection()[0],
@@ -132,7 +132,7 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
 
                 public void keyReleased(KeyEvent e) {
                     if (e.keyCode == SWT.DEL) {
-                        if (!revisionIDList.getSelection()[0].equals("HEAD")) {
+                        if (!revisionIDList.getSelection()[0].equals("HEAD")) {//$NON-NLS-1$
                             BrowseRevisionMainPage.this.comitting = true;
                             deleteRevisionIDs.add(revisionIDList.getSelection()[0]);
                             revisionIDList.remove(revisionIDList.getSelection()[0]);
@@ -150,7 +150,7 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
                     TreeObject[] objects = parent.getChildren();
                     TreeObject[] subObjects;
                     for (int i = 0; i < objects.length; i++) {
-                        if (objects[i].getDisplayName().equals("Version")) {
+                        if (objects[i].getDisplayName().equals("Version")) {//$NON-NLS-1$
                             subObjects = ((TreeParent) objects[i]).getChildren();
                             for (int j = 0; j < subObjects.length; j++) {
                                 if (subObjects[j].getDisplayName().endsWith(universeList.getSelection()[0])) {
@@ -198,9 +198,9 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
             for (int i = 0; i < deleteRevisionIDs.size(); i++) {
 
                 String revisionID = deleteRevisionIDs.get(i);
-                if (!"".equals(revisionID)) {
-                    int index = BrowseRevisionMainPage.this.getXObject().getDisplayName().indexOf("[");
-                    String objectName = "";
+                if (!"".equals(revisionID)) {//$NON-NLS-1$
+                    int index = BrowseRevisionMainPage.this.getXObject().getDisplayName().indexOf("[");//$NON-NLS-1$
+                    String objectName = "";//$NON-NLS-1$
                     if (index > 0)
                         objectName = BrowseRevisionMainPage.this.getXObject().getDisplayName().substring(0, index - 1);
 
@@ -209,7 +209,7 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
                         WSUniverseXtentisObjectsRevisionIDs[] rids = universe.getXtentisObjectsRevisionIDs();
                         for (int j = 0; j < rids.length; j++) {
                             if (rids[j].getXtentisObjectName().equals(objectName))
-                                rids[j].setRevisionID("");
+                                rids[j].setRevisionID("");//$NON-NLS-1$
                         }
                     }
                 }
@@ -236,12 +236,12 @@ public class BrowseRevisionMainPage extends AMainPageV2 {// implements Observer
         try {
             final XtentisPort port = Util.getPort(getXObject());
             Map<String, List<String>> map = Util.getUniverseMap(port);
-            String displayname = getXObject().getDisplayName().replaceAll("\\[.*\\]", "").trim();
+            String displayname = getXObject().getDisplayName().replaceAll("\\[.*\\]", "").trim();//$NON-NLS-1$//$NON-NLS-2$
             List<String> revisions;
             String name = EXtentisObjects.getXtentisObjectName(displayname);
             revisions = map.get(name.trim());
-            if (revisions != null && revisions.contains(""))
-                revisions.remove("");
+            if (revisions != null && revisions.contains(""))//$NON-NLS-1$
+                revisions.remove("");//$NON-NLS-1$
             if (revisions != null) {
                 revisionIDList.setItems(revisions.toArray(new String[revisions.size()]));
             }

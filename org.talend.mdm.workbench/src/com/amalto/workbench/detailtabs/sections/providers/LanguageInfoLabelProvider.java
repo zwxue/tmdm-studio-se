@@ -45,7 +45,7 @@ public class LanguageInfoLabelProvider implements ITableLabelProvider {
             return getColumnTextByIndex((LanguageInfo) element, columnIndex);
         }
 
-        return "";
+        return "";//$NON-NLS-1$
     }
 
     private String getColumnTextByIndex(LanguageInfo element, int columnIndex) {

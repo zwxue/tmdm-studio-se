@@ -141,11 +141,11 @@ public class RoutingRuleMainPage extends AMainPageV2 {
     private final static String EXCONTENTEDITOR_ID = "trigger";//$NON-NLS-1$
 
     private ComplexTableViewerColumn[] conditionsColumns = new ComplexTableViewerColumn[] {
-            new ComplexTableViewerColumn("XPath", false, "newXPath", "newXPath", "", ComplexTableViewerColumn.XPATH_STYLE,
+            new ComplexTableViewerColumn("XPath", false, "newXPath", "newXPath", "", ComplexTableViewerColumn.XPATH_STYLE,//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
                     new String[] {}, 0),
-            new ComplexTableViewerColumn("Operator", false, "", "", "", ComplexTableViewerColumn.COMBO_STYLE,
-                    IConstants.ROUTE_CONDITION_OPERATORS, 0), new ComplexTableViewerColumn("Value", false, "", ""),
-            new ComplexTableViewerColumn("Condition Id", false, "", "", true) };
+            new ComplexTableViewerColumn("Operator", false, "", "", "", ComplexTableViewerColumn.COMBO_STYLE,//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
+                    IConstants.ROUTE_CONDITION_OPERATORS, 0), new ComplexTableViewerColumn("Value", false, "", ""),//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+            new ComplexTableViewerColumn("Condition Id", false, "", "", true) };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 
     private TisTableViewer conditionViewer;
 
@@ -213,7 +213,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             // description
             Label descriptionLabel = toolkit.createLabel(charComposite, "Description", SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-            descriptionText = toolkit.createText(charComposite, "", SWT.BORDER);
+            descriptionText = toolkit.createText(charComposite, "", SWT.BORDER);//$NON-NLS-1$
             descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
             descriptionText.addModifyListener(new ModifyListener() {
 
@@ -235,7 +235,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             layout.marginWidth = 0;
             typeComposite.setLayout(layout);
 
-            objectTypeText = toolkit.createText(typeComposite, "", SWT.BORDER);
+            objectTypeText = toolkit.createText(typeComposite, "", SWT.BORDER);//$NON-NLS-1$
             objectTypeText.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING, SWT.CENTER, false, false, 1, 1));
             ((GridData) objectTypeText.getLayoutData()).widthHint = 300;
             // objectTypeText.setLocation(descriptionText.getLocation().x,descriptionText.getLocation().y+10);
@@ -247,7 +247,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
                     markDirtyWithoutCommit();
                 }
             });
-            xpathButton = toolkit.createButton(typeComposite, "", SWT.PUSH);
+            xpathButton = toolkit.createButton(typeComposite, "", SWT.PUSH);//$NON-NLS-1$
             xpathButton.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
             xpathButton.setToolTipText("Select an Entity");
             xpathButton.addSelectionListener(new SelectionListener() {
@@ -266,7 +266,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
                     xpathDialog.open();
                     if (xpathDialog.getReturnCode() == Window.OK) {
                         String xpath = xpathDialog.getXpath();
-                        int index = xpathDialog.getXpath().indexOf("/");
+                        int index = xpathDialog.getXpath().indexOf("/");//$NON-NLS-1$
                         if (index > 0) {
                             xpath = xpathDialog.getXpath().substring(0, index);
                         }
@@ -344,7 +344,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
             });
 
-            WSServicesList list = Util.getPort(getXObject()).getServicesList(new WSGetServicesList(""));
+            WSServicesList list = Util.getPort(getXObject()).getServicesList(new WSGetServicesList(""));//$NON-NLS-1$
             WSServicesListItem[] items = list.getItem();
             if (items != null) {
                 String[] sortedList = new String[items.length];
@@ -359,7 +359,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             }
 
             // default parameters button
-            defultParameterBtn = toolkit.createButton(subPanel, "", SWT.PUSH);
+            defultParameterBtn = toolkit.createButton(subPanel, "", SWT.PUSH);//$NON-NLS-1$
             defultParameterBtn.setImage(ImageCache.getCreatedImage(EImage.HELP_CONTENTS.getPath()));
             defultParameterBtn.setToolTipText("Help...");
             defultParameterBtn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
@@ -371,8 +371,8 @@ public class RoutingRuleMainPage extends AMainPageV2 {
                 public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
                     if (serviceNameCombo.getText().trim().length() == 0)
                         return;
-                    String doc = "";
-                    String desc = "";
+                    String doc = "";//$NON-NLS-1$
+                    String desc = "";//$NON-NLS-1$
                     // WSRoutingRule wsObject = (WSRoutingRule) (getXObject().getWsObject());
                     try {
                         XtentisPort port = Util.getPort(getXObject());
@@ -509,11 +509,11 @@ public class RoutingRuleMainPage extends AMainPageV2 {
 
     private void addSourceServiceParameterEditorPage(String serviceName) {
 
-        if ("callprocess".equals(serviceName))
-            serviceParametersEditor.addPage(new ExtensibleContentEditorPageDescription("Source", Integer.MAX_VALUE,
+        if ("callprocess".equals(serviceName))//$NON-NLS-1$
+            serviceParametersEditor.addPage(new ExtensibleContentEditorPageDescription("Source", Integer.MAX_VALUE,//$NON-NLS-1$
                     new TriggerCallProcessSourcePageCreator(), false));
         else
-            serviceParametersEditor.addPage(new ExtensibleContentEditorPageDescription("Source", Integer.MAX_VALUE,
+            serviceParametersEditor.addPage(new ExtensibleContentEditorPageDescription("Source", Integer.MAX_VALUE,//$NON-NLS-1$
                     new ExtensibleTextContentEditorPageCreator(), false));
     }
 
@@ -571,12 +571,12 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             if (wsRoutingRule.getDeactive() != null)
                 deactiveButton.setSelection(wsRoutingRule.getDeactive());
             // serviceNameText.setText(wsRoutingRule.getServiceJNDI().replaceFirst("amalto/local/service/", ""));
-            serviceNameCombo.setText(wsRoutingRule.getServiceJNDI().replaceFirst("amalto/local/service/", ""));
+            serviceNameCombo.setText(wsRoutingRule.getServiceJNDI().replaceFirst("amalto/local/service/", ""));//$NON-NLS-1$//$NON-NLS-2$
             // serviceParametersText.setText(wsRoutingRule.getParameters() == null ? "" :
             // XmlUtil.formatXmlSource(wsRoutingRule
             // .getParameters()));
             refreshParameterEditor(serviceNameCombo.getText().trim());
-            serviceParametersEditor.setContent(wsRoutingRule.getParameters() == null ? "" : XmlUtil.formatXmlSource(wsRoutingRule
+            serviceParametersEditor.setContent(wsRoutingRule.getParameters() == null ? "" : XmlUtil.formatXmlSource(wsRoutingRule//$NON-NLS-1$
                     .getParameters()));
 
             objectTypeText.setText(wsRoutingRule.getConcept());
@@ -593,7 +593,7 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             if (wsRoutingRule.getCondition() != null)
                 conditionText.setText(wsRoutingRule.getCondition());
             this.refreshing = false;
-            if (objectTypeText.getText().length() > 0 && !objectTypeText.getText().equals("*")) {
+            if (objectTypeText.getText().length() > 0 && !objectTypeText.getText().equals("*")) {//$NON-NLS-1$
                 conditionViewer.setConceptName(objectTypeText.getText());
             }
             initParamterProposal(serviceNameCombo.getText());
@@ -617,12 +617,12 @@ public class RoutingRuleMainPage extends AMainPageV2 {
             ws.setDescription(descriptionText.getText());
             ws.setConcept(objectTypeText.getText());
 
-            ws.setServiceJNDI(serviceNameCombo.getText().contains("/") ? serviceNameCombo.getText() : "amalto/local/service/"
+            ws.setServiceJNDI(serviceNameCombo.getText().contains("/") ? serviceNameCombo.getText() : "amalto/local/service/"//$NON-NLS-1$//$NON-NLS-2$
                     + serviceNameCombo.getText());
             // ws.setParameters("".equals(serviceParametersText.getText()) ? null : serviceParametersText.getText());
 
             String curServiceParameter = serviceParametersEditor.getContent().getContent();
-            ws.setParameters("".equals(curServiceParameter) ? null : curServiceParameter);
+            ws.setParameters("".equals(curServiceParameter) ? null : curServiceParameter);//$NON-NLS-1$
             serviceParametersEditor.clearExternalResources();
 
             ws.setSynchronous(isSynchronousButton.getSelection());

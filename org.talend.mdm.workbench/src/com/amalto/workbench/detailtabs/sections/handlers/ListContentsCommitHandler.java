@@ -30,7 +30,7 @@ public abstract class ListContentsCommitHandler<T extends ListContentsAnnotation
     protected void validateCommit() throws CommitValidationException {
 
         for (String eachSubmittedSimpleAnnoInfoValue : getCommitedObj().getInfos()) {
-            if (eachSubmittedSimpleAnnoInfoValue == null || "".equals(eachSubmittedSimpleAnnoInfoValue.trim())) {
+            if (eachSubmittedSimpleAnnoInfoValue == null || "".equals(eachSubmittedSimpleAnnoInfoValue.trim())) {//$NON-NLS-1$
                 throw new CommitValidationException("The " + getMsgHeader() + " can not contains empty content");
             }
         }

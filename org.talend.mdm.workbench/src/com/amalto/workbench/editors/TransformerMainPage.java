@@ -142,7 +142,7 @@ public class TransformerMainPage extends AMainPageV2 {
 
     public final static String TRANSFORMER_PLUGIN = "amalto/local/transformer/plugin/"; //$NON-NLS-1$
 
-    private final static String EXCONTENTEDITOR_ID = "process";
+    private final static String EXCONTENTEDITOR_ID = "process";//$NON-NLS-1$
 
     protected Text stepText;
 
@@ -351,7 +351,7 @@ public class TransformerMainPage extends AMainPageV2 {
              * //((WSTransformerV2)getXObject().getWsObject()) transformer.setDescription(descriptionText.getText());
              * TransformerMainPage.this.comitting= false; //markDirtyWithoutCommit(); markDirtyWithoutCommit(); } });
              */
-            desAntionComposite = new DescAnnotationComposite("Description", " ...", toolkit, descriptionComposite,
+            desAntionComposite = new DescAnnotationComposite("Description", " ...", toolkit, descriptionComposite,//$NON-NLS-1$
                     (AMainPageV2) this, false);
             desAntionComposite.getTextWidget().addModifyListener(new ModifyListener() {
 
@@ -366,7 +366,7 @@ public class TransformerMainPage extends AMainPageV2 {
             });
 
             // File Process
-            Button processButton = toolkit.createButton(descriptionComposite, "", SWT.PUSH);
+            Button processButton = toolkit.createButton(descriptionComposite, "", SWT.PUSH);//$NON-NLS-1$
             processButton.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 1, 1));
             processButton.setImage(ImageCache.getCreatedImage(EImage.RUN_EXC.getPath()));
             processButton.setToolTipText("Execute...");
@@ -423,7 +423,7 @@ public class TransformerMainPage extends AMainPageV2 {
             Label l3 = toolkit.createLabel(sequenceComposite, "Step Description", SWT.NULL);
             l3.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
 
-            stepText = toolkit.createText(sequenceComposite, "", SWT.BORDER | SWT.SINGLE);
+            stepText = toolkit.createText(sequenceComposite, "", SWT.BORDER | SWT.SINGLE);//$NON-NLS-1$
             stepText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4, 1));
             stepText.addKeyListener(new KeyListener() {
 
@@ -441,7 +441,7 @@ public class TransformerMainPage extends AMainPageV2 {
                 }
 
             });
-            Button addStepButton = toolkit.createButton(sequenceComposite, "", SWT.PUSH);
+            Button addStepButton = toolkit.createButton(sequenceComposite, "", SWT.PUSH);//$NON-NLS-1$
             addStepButton.setLayoutData(new GridData(SWT.CENTER, SWT.FILL, false, true, 1, 1));
             addStepButton.setToolTipText("Add");
             addStepButton.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
@@ -526,7 +526,7 @@ public class TransformerMainPage extends AMainPageV2 {
                     }
                 };
             });
-            Button stepDownButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);
+            Button stepDownButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
             stepDownButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
             stepDownButton.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
             stepDownButton.setToolTipText("Move down the selected item");
@@ -557,7 +557,7 @@ public class TransformerMainPage extends AMainPageV2 {
                     }
                 };
             });
-            Button deleteStepButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);
+            Button deleteStepButton = toolkit.createButton(stepUpDownComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
             deleteStepButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
             deleteStepButton.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
             deleteStepButton.setToolTipText("Delete the selected item");
@@ -1139,7 +1139,7 @@ public class TransformerMainPage extends AMainPageV2 {
             LabelCombo outputP = new LabelCombo(toolkit, outputComposite, "Output Parameters", SWT.BORDER | SWT.READ_ONLY, 1);
             outputParams = outputP.getCombo();
 
-            outputLinkButton = toolkit.createButton(outputComposite, "", SWT.PUSH | SWT.CENTER);
+            outputLinkButton = toolkit.createButton(outputComposite, "", SWT.PUSH | SWT.CENTER);//$NON-NLS-1$
             outputLinkButton.setImage(ImageCache.getCreatedImage(EImage.SYNCED.getPath()));
             outputLinkButton.setToolTipText("Link");
             outputLinkButton.setToolTipText("Add a link for output Variables and output Parameters");
@@ -1221,7 +1221,7 @@ public class TransformerMainPage extends AMainPageV2 {
                 }
             });
             // feed the combo once
-            WSTransformerPluginV2SList list = port.getTransformerPluginV2SList(new WSGetTransformerPluginV2SList("EN"));
+            WSTransformerPluginV2SList list = port.getTransformerPluginV2SList(new WSGetTransformerPluginV2SList("EN"));//$NON-NLS-1$
 
             WSTransformerPluginV2SListItem[] items = list.getItem();
 
@@ -1236,8 +1236,8 @@ public class TransformerMainPage extends AMainPageV2 {
                     pluginsCombo.add(jndi);
                     // add input variables and output variables
                     WSTransformerPluginV2Details details = port
-                            .getTransformerPluginV2Details(new WSGetTransformerPluginV2Details(jndi.contains("/") ? jndi
-                                    : TRANSFORMER_PLUGIN + jndi, "en"));
+                            .getTransformerPluginV2Details(new WSGetTransformerPluginV2Details(jndi.contains("/") ? jndi//$NON-NLS-1$
+                                    : TRANSFORMER_PLUGIN + jndi, "en"));//$NON-NLS-1$
                     java.util.List<String> input = new ArrayList<String>();
                     for (WSTransformerPluginV2VariableDescriptor v : details.getInputVariableDescriptors()) {
                         input.add(v.getVariableName());

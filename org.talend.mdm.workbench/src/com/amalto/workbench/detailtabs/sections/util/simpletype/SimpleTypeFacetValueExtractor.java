@@ -40,17 +40,17 @@ public class SimpleTypeFacetValueExtractor {
     public static String getStringFacetValue(XSDFacet facet) {
 
         if (facet == null)
-            return "";
+            return "";//$NON-NLS-1$
 
-        String result = "";
+        String result = "";//$NON-NLS-1$
 
         try {
             result = facet.getLexicalValue();
         } catch (Exception e) {
-            return "";
+            return "";//$NON-NLS-1$
         }
 
-        return (result == null ? "" : result);
+        return (result == null ? "" : result);//$NON-NLS-1$
     }
 
     public static Integer getIntFacetValue(XSDFacet facet) {

@@ -79,7 +79,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
     /**
      * Error message string.
      */
-    private String errorMessage = "";
+    private String errorMessage = "";//$NON-NLS-1$
 
     private Label label;
 
@@ -129,7 +129,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
         this.treeParent = treeParent;
         this.isTransfor = isTransfor;
         if (initialValue == null) {
-            value = "";
+            value = "";//$NON-NLS-1$
         } else {
             value = initialValue;
         }
@@ -217,7 +217,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
             transformeButton = new Button(radioGroup, SWT.RADIO);
             transformeButton.setText("Create a Normal Process");
             transformeButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-            text.setText("");
+            text.setText("");//$NON-NLS-1$
             transformeButton.addSelectionListener(new SelectionListener() {
 
                 public void widgetDefaultSelected(SelectionEvent e) {
@@ -225,12 +225,12 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
                 }
 
                 public void widgetSelected(SelectionEvent e) {
-                    text.setText("");
+                    text.setText("");//$NON-NLS-1$
                     label.setText(message);
                     smartViewSelected = false;
                     openDLG.setVisible(false);
                     parent.layout(true);
-                    value = "";
+                    value = "";//$NON-NLS-1$
                 }
 
             });
@@ -360,7 +360,7 @@ public class ViewInputDialog extends Dialog implements SelectionListener {
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
         if (errorMessageText != null && !errorMessageText.isDisposed()) {
-            errorMessageText.setText(errorMessage == null ? " \n " : errorMessage);
+            errorMessageText.setText(errorMessage == null ? " \n " : errorMessage);//$NON-NLS-1$
             boolean hasError = errorMessage != null && (StringConverter.removeWhiteSpaces(errorMessage)).length() > 0;
             errorMessageText.setEnabled(hasError);
             errorMessageText.setVisible(hasError);

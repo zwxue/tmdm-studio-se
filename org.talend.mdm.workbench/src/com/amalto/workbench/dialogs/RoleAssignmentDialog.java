@@ -64,8 +64,8 @@ public class RoleAssignmentDialog extends Dialog {
     private static ThreadLocal<List<RoleEntry>> roleEntries;
 
     private static ComplexTableViewerColumn[] roleConfigurationColumns = new ComplexTableViewerColumn[] {
-            new ComplexTableViewerColumn("Role Name", false, "", "", "", ComplexTableViewerColumn.COMBO_STYLE, new String[] {}, 0),
-            new ComplexTableViewerColumn("Access", false, "", "", "", ComplexTableViewerColumn.COMBO_STYLE, new String[] {}, 0) };
+            new ComplexTableViewerColumn("Role Name", false, "", "", "", ComplexTableViewerColumn.COMBO_STYLE, new String[] {}, 0),//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
+            new ComplexTableViewerColumn("Access", false, "", "", "", ComplexTableViewerColumn.COMBO_STYLE, new String[] {}, 0) };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
 
     public RoleAssignmentDialog(Shell parentShell, TreeParent root, String title, String type, StringBuffer outBuffer) {
         super(parentShell);
@@ -99,7 +99,7 @@ public class RoleAssignmentDialog extends Dialog {
 
             public void modifyText(ModifyEvent e) {
                 String name = instanceNameText.getText().trim();
-                boolean enable = (name.length() > 0) && (!"".equals(name))
+                boolean enable = (name.length() > 0) && (!"".equals(name))//$NON-NLS-1$
                         && (name.replaceAll("\\s", "").length() == name.length());//$NON-NLS-1$//$NON-NLS-2$
                 RoleAssignmentDialog.this.getButton(IDialogConstants.OK_ID).setEnabled(enable);
             }

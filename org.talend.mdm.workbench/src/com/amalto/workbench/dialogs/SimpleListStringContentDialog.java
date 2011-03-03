@@ -30,9 +30,9 @@ public class SimpleListStringContentDialog extends Dialog {
 
     private String[] infos = new String[0];
 
-    private String label = "";
+    private String label = "";//$NON-NLS-1$
 
-    private String title = "";
+    private String title = "";//$NON-NLS-1$
 
     public SimpleListStringContentDialog(Shell parentShell, String title, String label, String[] initInfos) {
         super(parentShell);

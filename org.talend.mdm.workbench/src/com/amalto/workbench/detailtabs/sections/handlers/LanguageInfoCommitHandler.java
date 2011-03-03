@@ -41,7 +41,7 @@ abstract class LanguageInfoCommitHandler<T extends LanguageInfoCollection> exten
     }
 
     private void validateEachLanguageInfo(LanguageInfo validatedLanguageInfo) throws CommitValidationException {
-        if ("".equals(validatedLanguageInfo.getLabel().trim())) {
+        if ("".equals(validatedLanguageInfo.getLabel().trim())) {//$NON-NLS-1$
             throw new CommitValidationException("The content of " + validatedLanguageInfo.getLanguage() + " can not be empty");
         }
 

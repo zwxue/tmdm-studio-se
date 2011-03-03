@@ -18,13 +18,13 @@ import com.amalto.workbench.utils.IConstants;
 
 public class ForeignKeyFilterAnnoInfoDefUnit {
 
-    private String xpath = "";
+    private String xpath = "";//$NON-NLS-1$
 
-    private String operator = "";
+    private String operator = "";//$NON-NLS-1$
 
-    private String value = "";
+    private String value = "";//$NON-NLS-1$
 
-    private String predicate = "";
+    private String predicate = "";//$NON-NLS-1$
 
     public ForeignKeyFilterAnnoInfoDefUnit(String xpath, String operator, String value, String predicate) {
 

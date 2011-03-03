@@ -202,7 +202,7 @@ public class ResourceCompareInput extends CompareEditorInput {
         private Button[] buttons;
 
         public SelectAncestorDialog(Shell parentShell, IResource[] theResources) {
-            super(parentShell, "", null, "", MessageDialog.QUESTION, new String[] { IDialogConstants.OK_LABEL,
+            super(parentShell, "", null, "", MessageDialog.QUESTION, new String[] { IDialogConstants.OK_LABEL,//$NON-NLS-1$//$NON-NLS-2$
                     IDialogConstants.CANCEL_LABEL }, 0);
             this.theResources = theResources;
         }
@@ -499,9 +499,9 @@ public class ResourceCompareInput extends CompareEditorInput {
             toCommitContent = XmlUtil.formatCompact(toCommitContent, "UTF-8");//$NON-NLS-1$
             if (this.compareHeadInfo.isItem()) {
                 Util.getPort(compareHeadInfo.getXobject()).putItem(
-                        new WSPutItem((WSDataClusterPK) compareHeadInfo.getXobject().getWsKey(), toCommitContent, ""
+                        new WSPutItem((WSDataClusterPK) compareHeadInfo.getXobject().getWsKey(), toCommitContent, ""//$NON-NLS-1$
                                 .equals(compareHeadInfo.getDataModelName()) ? null : new WSDataModelPK(compareHeadInfo
-                                .getDataModelName()), false));
+                                        .getDataModelName()), false));
             } else {
                 // TODO add support for Object(s)
 

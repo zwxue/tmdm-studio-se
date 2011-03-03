@@ -84,11 +84,11 @@ public class MenuEntryDialog extends Dialog {
 
     private SelectionListener caller = null;
 
-    private String title = "";
+    private String title = "";//$NON-NLS-1$
 
     private boolean isChanged = true;
 
-    private String uripre = "";
+    private String uripre = "";//$NON-NLS-1$
 
     /**
      * @param parentShell
@@ -301,7 +301,7 @@ public class MenuEntryDialog extends Dialog {
                 case 1:
                     return line.getLabel();
                 }
-                return "";
+                return "";//$NON-NLS-1$
             }
 
             public Image getColumnImage(Object element, int columnIndex) {
@@ -369,10 +369,10 @@ public class MenuEntryDialog extends Dialog {
         descriptionsViewer.refresh();
 
         if (wsMenuEntry != null) {
-            idText.setText(wsMenuEntry.getId() == null ? "" : wsMenuEntry.getId());
-            contextText.setText(wsMenuEntry.getContext() == null ? "" : wsMenuEntry.getContext());
-            applicationNameText.setText(wsMenuEntry.getApplication() == null ? "" : wsMenuEntry.getApplication());
-            iconPathText.setFilename(wsMenuEntry.getIcon() == null ? "" : wsMenuEntry.getIcon());
+            idText.setText(wsMenuEntry.getId() == null ? "" : wsMenuEntry.getId());//$NON-NLS-1$
+            contextText.setText(wsMenuEntry.getContext() == null ? "" : wsMenuEntry.getContext());//$NON-NLS-1$
+            applicationNameText.setText(wsMenuEntry.getApplication() == null ? "" : wsMenuEntry.getApplication());//$NON-NLS-1$
+            iconPathText.setFilename(wsMenuEntry.getIcon() == null ? "" : wsMenuEntry.getIcon());//$NON-NLS-1$
             descriptionsViewer.setInput(descriptionsMap);
         }
 
@@ -392,18 +392,18 @@ public class MenuEntryDialog extends Dialog {
         setReturnCode(OK);
         getButton(IDialogConstants.OK_ID).setData("dialog", MenuEntryDialog.this);//$NON-NLS-1$
         try {
-            String icon = "";
+            String icon = "";//$NON-NLS-1$
             // if(!wsMenuEntry.getIcon().equalsIgnoreCase(getIconPathText().getText())){
             if (wsMenuEntry.getIcon() != null) {
                 if (!wsMenuEntry.getIcon().equalsIgnoreCase(getIconPathText().getText())) {
-                    Util.uploadImageFile(uripre + "/imageserver/secure/ImageDeleteServlet?uri=" + wsMenuEntry.getIcon(), "",//$NON-NLS-1$
+                    Util.uploadImageFile(uripre + "/imageserver/secure/ImageDeleteServlet?uri=" + wsMenuEntry.getIcon(), "",//$NON-NLS-1$//$NON-NLS-2$
                             "admin", "talend", null);//$NON-NLS-1$//$NON-NLS-2$
-                    if (!"".equalsIgnoreCase(getIconPathText().getText()))
+                    if (!"".equalsIgnoreCase(getIconPathText().getText()))//$NON-NLS-1$
                         icon = Util.uploadImageFile(uripre + "/imageserver/secure/ImageUploadServlet", getIconPathText()//$NON-NLS-1$
                                 .getText(), "admin", "talend", null);//$NON-NLS-1$//$NON-NLS-2$
                     getIconPathText().setText(icon);
                 }
-            } else if (!"".equalsIgnoreCase(getIconPathText().getText()))
+            } else if (!"".equalsIgnoreCase(getIconPathText().getText()))//$NON-NLS-1$
                 icon = Util.uploadImageFile(uripre + "/imageserver/secure/ImageUploadServlet", getIconPathText().getText(),//$NON-NLS-1$
                         "admin", "talend", null);//$NON-NLS-1$//$NON-NLS-2$
             getIconPathText().setText(icon);
@@ -418,7 +418,7 @@ public class MenuEntryDialog extends Dialog {
     @Override
     protected void cancelPressed() {
         setReturnCode(CANCEL);
-        getButton(IDialogConstants.CANCEL_ID).setData("dialog", MenuEntryDialog.this);
+        getButton(IDialogConstants.CANCEL_ID).setData("dialog", MenuEntryDialog.this);//$NON-NLS-1$
         // no close let Action Handler handle it
     }
 

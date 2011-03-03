@@ -38,7 +38,7 @@ public class JobAvailableModel extends AbstractAvailableModel {
             WSMDMJob[] jobPKs = port.getMDMJob(new WSMDMNULL()).getWsMDMJob();
             if (jobPKs != null) {
                 for (int i = 0; i < jobPKs.length; i++) {
-                    String name = jobPKs[i].getJobName() + "_" + jobPKs[i].getJobVersion() + jobPKs[i].getSuffix();
+                    String name = jobPKs[i].getJobName() + "_" + jobPKs[i].getJobVersion() + jobPKs[i].getSuffix();//$NON-NLS-1$
                     TreeObject obj = new TreeObject(name, serverRoot, TreeObject.JOB, name, null);
                     deployedJob.addChild(obj);
                 }

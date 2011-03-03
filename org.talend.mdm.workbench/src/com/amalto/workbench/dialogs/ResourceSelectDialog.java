@@ -110,7 +110,7 @@ public class ResourceSelectDialog extends Dialog {
     // TODO:check This two static String and there related static methods may cause some problems.
     protected static String dataModelName;
 
-    private String xpath = "";
+    private String xpath = "";//$NON-NLS-1$
 
     private boolean isMulti = true;
 
@@ -139,8 +139,8 @@ public class ResourceSelectDialog extends Dialog {
 
     private String getXpath(StructuredSelection sel) {
 
-        String path = "";
-        String totalXpath = "";
+        String path = "";//$NON-NLS-1$
+        String totalXpath = "";//$NON-NLS-1$
         TreeItem item;
         TreeItem[] items = domViewer.getTree().getSelection();
         for (int i = 0; i < items.length; i++) {
@@ -152,7 +152,7 @@ public class ResourceSelectDialog extends Dialog {
                 component = (XSDConcreteComponent) item.getData();
                 if (component instanceof XSDParticle) {
                     if (((XSDParticle) component).getTerm() instanceof XSDElementDeclaration)
-                        path = "/" + ((XSDElementDeclaration) ((XSDParticle) component).getTerm()).getName() + path;
+                        path = "/" + ((XSDElementDeclaration) ((XSDParticle) component).getTerm()).getName() + path;//$NON-NLS-1$
                 } else if (component instanceof XSDElementDeclaration) {
                     path = ((XSDElementDeclaration) component).getName() + path;
                 }
@@ -162,22 +162,22 @@ public class ResourceSelectDialog extends Dialog {
             if (i == 0)
                 totalXpath = path;
             else
-                totalXpath += "&" + path;
-            path = "";
+                totalXpath += "&" + path;//$NON-NLS-1$
+            path = "";//$NON-NLS-1$
         }// for(i=0
         if (context != null && conceptName != null) {
 
             if (totalXpath.equals(conceptName)) {
-                totalXpath = totalXpath.replaceAll(conceptName, "/");
+                totalXpath = totalXpath.replaceAll(conceptName, "/");//$NON-NLS-1$
             } else {
-                totalXpath = totalXpath.replaceAll(conceptName + "/", "");
+                totalXpath = totalXpath.replaceAll(conceptName + "/", "");//$NON-NLS-1$//$NON-NLS-2$
             }
-            if (totalXpath.equals(context) || totalXpath.equals(context.replaceAll(conceptName + "/", ""))) {
-                totalXpath = ".";
+            if (totalXpath.equals(context) || totalXpath.equals(context.replaceAll(conceptName + "/", ""))) {//$NON-NLS-1$//$NON-NLS-2$
+                totalXpath = ".";//$NON-NLS-1$
             }
-            if (totalXpath.indexOf('/') == -1 && !totalXpath.equals(".") && !"/".equals(totalXpath) && !"/".equals(context)
+            if (totalXpath.indexOf('/') == -1 && !totalXpath.equals(".") && !"/".equals(totalXpath) && !"/".equals(context)//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                     && !context.equals(conceptName)) {
-                totalXpath = "../" + totalXpath;
+                totalXpath = "../" + totalXpath;//$NON-NLS-1$
             }
         }
         return totalXpath;
@@ -349,7 +349,7 @@ public class ResourceSelectDialog extends Dialog {
         this.xsdSchema = xsdSchema;
         // drillDownAdapter = new DrillDownAdapter(domViewer);
         domViewer.setLabelProvider(new XSDTreeLabelProvider());
-        XPathTreeContentProvider provider = new XPathTreeContentProvider(this.site, xsdSchema, parent, "");
+        XPathTreeContentProvider provider = new XPathTreeContentProvider(this.site, xsdSchema, parent, "");//$NON-NLS-1$
         provider.setConceptName(this.conceptName);
         domViewer.setContentProvider(provider);
 
@@ -364,7 +364,7 @@ public class ResourceSelectDialog extends Dialog {
                     if (selectNode != null)
                         xpath = selectNode.getDisplayName();
                     else
-                        xpath = "";
+                        xpath = "";//$NON-NLS-1$
                 }
                 sel.getFirstElement();
                 xpathText.setText(xpath);

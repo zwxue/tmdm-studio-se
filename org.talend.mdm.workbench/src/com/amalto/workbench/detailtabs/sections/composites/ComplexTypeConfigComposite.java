@@ -132,7 +132,7 @@ public class ComplexTypeConfigComposite extends Composite {
     private void initUIContentsInComboExtends() {
         fillCandidatsInComboExtends();
 
-        comboExtends.setSelection(new StructuredSelection(""));
+        comboExtends.setSelection(new StructuredSelection(""));//$NON-NLS-1$
         if (complextType.getBaseType() != null)
             comboExtends.setSelection(new StructuredSelection(complextType.getBaseType()));
     }
@@ -158,7 +158,7 @@ public class ComplexTypeConfigComposite extends Composite {
 
             allExtends.add(eachComplexType);
         }
-        allExtends.add(0, "");
+        allExtends.add(0, "");//$NON-NLS-1$
         comboExtends.setInput(allExtends);
         comboExtends.setSelection(oldSection);
     }
@@ -191,13 +191,13 @@ public class ComplexTypeConfigComposite extends Composite {
                 XSDComplexTypeDefinition curSelectedExtends = getExtends();
 
                 if (isGroupAll())
-                    comboExtends.setSelection(new StructuredSelection(""));
+                    comboExtends.setSelection(new StructuredSelection(""));//$NON-NLS-1$
 
                 if (isGroupSequence() && !Util.isSequenceComplexType(curSelectedExtends))
-                    comboExtends.setSelection(new StructuredSelection(""));
+                    comboExtends.setSelection(new StructuredSelection(""));//$NON-NLS-1$
 
                 if (isGroupChoice() && !Util.isChoiceComplexType(curSelectedExtends))
-                    comboExtends.setSelection(new StructuredSelection(""));
+                    comboExtends.setSelection(new StructuredSelection(""));//$NON-NLS-1$
 
                 fillCandidatsInComboExtends();
 

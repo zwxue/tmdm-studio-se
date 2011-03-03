@@ -45,7 +45,7 @@ public class FacetsListInputDialog extends Dialog {
 
     private SelectionListener caller = null;
 
-    private String title = "";
+    private String title = "";//$NON-NLS-1$
 
     /**
      * @param parentShell
@@ -80,7 +80,7 @@ public class FacetsListInputDialog extends Dialog {
 
         newItemText = new Text(composite, SWT.NONE);
         newItemText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        newItemText.setText("");
+        newItemText.setText("");//$NON-NLS-1$
         ((GridData) newItemText.getLayoutData()).widthHint = 100;
 
         Button addButton = new Button(composite, SWT.PUSH);
@@ -91,10 +91,10 @@ public class FacetsListInputDialog extends Dialog {
         addButton.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent event) {
-                if (!"".equals(newItemText.getText()))
+                if (!"".equals(newItemText.getText()))//$NON-NLS-1$
                     if (!Arrays.asList(itemsList.getItems()).contains(newItemText.getText())) {
                         itemsList.add(newItemText.getText());
-                        newItemText.setText("");
+                        newItemText.setText("");//$NON-NLS-1$
                     }
             }
         });

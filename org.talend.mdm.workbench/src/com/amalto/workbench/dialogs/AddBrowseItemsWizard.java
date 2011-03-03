@@ -94,8 +94,8 @@ public class AddBrowseItemsWizard extends Wizard {
     private static String BROWSE_ITEMS = "Browse_items_";//$NON-NLS-1$
 
     private static ComplexTableViewerColumn[] roleConfigurationColumns = new ComplexTableViewerColumn[] {
-            new ComplexTableViewerColumn("Role Name", false, "", "", "", ComplexTableViewerColumn.COMBO_STYLE, new String[] {}, 0),
-            new ComplexTableViewerColumn("Access", false, "", "", "", ComplexTableViewerColumn.COMBO_STYLE, new String[] {}, 0) };
+            new ComplexTableViewerColumn("Role Name", false, "", "", "", ComplexTableViewerColumn.COMBO_STYLE, new String[] {}, 0),//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
+            new ComplexTableViewerColumn("Access", false, "", "", "", ComplexTableViewerColumn.COMBO_STYLE, new String[] {}, 0) };//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
 
     public AddBrowseItemsWizard(DataModelMainPage launchPage, List<XSDElementDeclaration> list) {
         super();
@@ -141,7 +141,7 @@ public class AddBrowseItemsWizard extends Wizard {
                 XtentisPort port = getXtentisPort();
                 WSView view = new WSView();
                 view.setIsTransformerActive(new WSBoolean(false));
-                view.setTransformerPK("");
+                view.setTransformerPK("");//$NON-NLS-1$
                 WSPutView wrap = new WSPutView();
                 view.setName(browseItem);
                 EList<XSDIdentityConstraintDefinition> idtylist = decl.getIdentityConstraintDefinitions();
@@ -151,7 +151,7 @@ public class AddBrowseItemsWizard extends Wizard {
                     for (XSDXPathDefinition path : xpathList) {
                         String key = decl.getName();
                         // remove
-                        key = key.replaceFirst("#.*", "");//$NON-NLS-1$
+                        key = key.replaceFirst("#.*", "");//$NON-NLS-1$//$NON-NLS-2$
                         key += "/" + path.getValue();//$NON-NLS-1$
                         keys.add(key);
                     }
@@ -319,7 +319,7 @@ public class AddBrowseItemsWizard extends Wizard {
                     TableItem item = (TableItem) element;
 
                     if (Pattern.compile("^\\s+\\w+\\s*").matcher(value.toString()).matches()//$NON-NLS-1$
-                            || value.toString().trim().replaceAll("\\s", "").length() != value.toString().trim().length()) {//$NON-NLS-1$
+                            || value.toString().trim().replaceAll("\\s", "").length() != value.toString().trim().length()) {//$NON-NLS-1$//$NON-NLS-2$
                         MessageDialog.openInformation(null, "Warnning", "The name cannot contain the empty characters");
                         return;
                     }

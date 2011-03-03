@@ -139,7 +139,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 
                 public String getText(Object element) {
                     WSWhereCondition wc = (WSWhereCondition) element;
-                    String text = wc.getLeftPath() + " ";
+                    String text = wc.getLeftPath() + " ";//$NON-NLS-1$
                     if (wc.getOperator().equals(WSWhereOperator.CONTAINS))
                         text += "Contains";//$NON-NLS-1$
                     else if (wc.getOperator().equals(WSWhereOperator.EQUALS))
@@ -211,7 +211,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             dataClusterCombo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
             ((GridData) dataClusterCombo.getLayoutData()).minimumWidth = 100;
 
-            searchText = toolkit.createText(resultsGroup, "", SWT.BORDER);
+            searchText = toolkit.createText(resultsGroup, "", SWT.BORDER);//$NON-NLS-1$
             searchText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
             // ((GridData)searchText.getLayoutData()).minimumWidth = 200;
             // searchText.addModifyListener(this);
@@ -239,7 +239,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 
             resultsLabel = toolkit.createLabel(resultsGroup, "Search", SWT.NULL);
             resultsLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 4, 1));
-            resultsLabel.setText("                                          ");
+            resultsLabel.setText("                                          ");//$NON-NLS-1$
 
             resultsViewer = new TableViewer(resultsGroup);
             resultsViewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4, 1));
@@ -379,8 +379,8 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             XtentisPort port = Util.getPort(getXObject());
 
             String[] results = port.quickSearch(
-                    new WSQuickSearch(new WSDataClusterPK(dataClusterCombo.getText()), (WSViewPK) getXObject().getWsKey(), (""
-                            .equals(searchText.getText()) ? "*" : searchText.getText()), 10, // max Items
+                    new WSQuickSearch(new WSDataClusterPK(dataClusterCombo.getText()), (WSViewPK) getXObject().getWsKey(), (""//$NON-NLS-1$
+                            .equals(searchText.getText()) ? "*" : searchText.getText()), 10, // max Items//$NON-NLS-1$
                             0, // skip
                             Integer.MAX_VALUE, // spell threshold
                             true, // do AND between words
@@ -394,7 +394,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             return results;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000"))
+            if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000"))//$NON-NLS-1$
                 MessageDialog.openError(this.getSite().getShell(), "Too Many Results",
                         "More than 10000 results returned by the search. \nPlease narrow your search.");
             else
@@ -420,7 +420,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
             super();
             this.shell = shell;
             this.viewer = viewer;
-            setImageDescriptor(ImageCache.getImage("icons/add_obj.gif"));
+            setImageDescriptor(ImageCache.getImage("icons/add_obj.gif"));//$NON-NLS-1$
             setText("View Tree");
             setToolTipText("View as a DOM Tree");
         }
@@ -433,7 +433,7 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
                 String xml = (String) selection.getFirstElement();
 
                 // clean up highlights
-                xml = xml.replaceAll("\\s*__h", "").replaceAll("h__\\s*", "");//$NON-NLS-1$//$NON-NLS-2$
+                xml = xml.replaceAll("\\s*__h", "").replaceAll("h__\\s*", "");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
 
                 final DOMViewDialog d = new DOMViewDialog(ViewBrowserMainPage.this.getSite().getShell(), Util.parse(xml));
                 d.addListener(new Listener() {
@@ -478,13 +478,13 @@ public class ViewBrowserMainPage extends AMainPage implements IXObjectModelListe
 
         public String getColumnText(Object element, int columnIndex) {
             String xml = (String) element;
-            xml = highlightLeft.matcher(xml).replaceAll("");
-            xml = highlightRight.matcher(xml).replaceAll("");
-            xml = emptyTags.matcher(xml).replaceAll("[$1]");
-            xml = openingTags.matcher(xml).replaceAll("[$1: ");
-            xml = closingTags.matcher(xml).replaceAll("]");
+            xml = highlightLeft.matcher(xml).replaceAll("");//$NON-NLS-1$
+            xml = highlightRight.matcher(xml).replaceAll("");//$NON-NLS-1$
+            xml = emptyTags.matcher(xml).replaceAll("[$1]");//$NON-NLS-1$
+            xml = openingTags.matcher(xml).replaceAll("[$1: ");//$NON-NLS-1$
+            xml = closingTags.matcher(xml).replaceAll("]");//$NON-NLS-1$
             if (xml.length() >= 150)
-                return xml.substring(0, 150) + "...";
+                return xml.substring(0, 150) + "...";//$NON-NLS-1$
             return xml;
         }
 

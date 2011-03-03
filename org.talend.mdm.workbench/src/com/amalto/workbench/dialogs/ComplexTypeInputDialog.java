@@ -39,9 +39,9 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
 
     private SelectionListener caller = null;
 
-    private String typeName = "";
+    private String typeName = "";//$NON-NLS-1$
 
-    private String superTypeName = "";
+    private String superTypeName = "";//$NON-NLS-1$
 
     private boolean isAbstract;
 
@@ -103,7 +103,7 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
                 parent.getShell().setText("Complex Type Properties");
             conceptPanel = new ConceptComposite(composite, false, types, false);
             conceptPanel.setText(typeName);
-            if (superTypeName != null && !"anyType".equalsIgnoreCase(superTypeName))
+            if (superTypeName != null && !"anyType".equalsIgnoreCase(superTypeName))//$NON-NLS-1$
                 conceptPanel.setSuperName(superTypeName);
             if (typeComposite != null) {
                 if (typeComposite.equals(XSDCompositor.ALL_LITERAL))
@@ -139,7 +139,7 @@ public class ComplexTypeInputDialog extends Dialog implements ModifyListener {
         String type = conceptPanel.getText();
 
         if (Pattern.compile("^\\s+\\w+\\s*").matcher(type).matches()//$NON-NLS-1$
-                || type.trim().replaceAll("\\s", "").length() != type.trim().length()) {//$NON-NLS-1$
+                || type.trim().replaceAll("\\s", "").length() != type.trim().length()) {//$NON-NLS-1$//$NON-NLS-2$
             conceptPanel.setMessage("The name cannot contain the empty characters");
             getButton(IDialogConstants.OK_ID).setEnabled(false);
             return;

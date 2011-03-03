@@ -61,9 +61,9 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
 
     private SelectionListener caller = null;
 
-    private String typeName = "";
+    private String typeName = "";//$NON-NLS-1$
 
-    private String title = "";
+    private String title = "";//$NON-NLS-1$
 
     private ConceptComposite conceptPanel = null;
 
@@ -145,7 +145,7 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
             conceptPanel.setText(typeNameText.getText() + "Type");
         }
 
-        if (typeNameText.getText().trim().equals("")) {
+        if (typeNameText.getText().trim().equals("")) {//$NON-NLS-1$
             infoLabel.setText("The Element Name cannot be empty or blank");
             getButton(IDialogConstants.OK_ID).setEnabled(false);
             return;
@@ -154,13 +154,13 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
             getButton(IDialogConstants.OK_ID).setEnabled(false);
             return;
         } else if (simpleTypeBtn.getSelection()
-                && (elemPanel.getText().trim().equals("") || elemPanel.getText().replaceAll("\\s", "").length() != elemPanel//$NON-NLS-1$//$NON-NLS-2$
+                && (elemPanel.getText().trim().equals("") || elemPanel.getText().replaceAll("\\s", "").length() != elemPanel//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                         .getText().length())) {
             infoLabel.setText("The combo value cannot be empty or contain empty characters");
             getButton(IDialogConstants.OK_ID).setEnabled(false);
             return;
-        } else if (complexTypeBtn.getSelection() && !conceptPanel.getText().trim().equals("")
-                && conceptPanel.getText().replaceAll("\\s", "").length() != conceptPanel.getText().length()) {
+        } else if (complexTypeBtn.getSelection() && !conceptPanel.getText().trim().equals("")//$NON-NLS-1$
+                && conceptPanel.getText().replaceAll("\\s", "").length() != conceptPanel.getText().length()) {//$NON-NLS-1$//$NON-NLS-2$
             infoLabel.setText("The combo value cannot be empty or contain empty characters");
             getButton(IDialogConstants.OK_ID).setEnabled(false);
             return;
@@ -184,12 +184,12 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
             }
         }
         getButton(IDialogConstants.OK_ID).setEnabled(true);
-        infoLabel.setText("");
+        infoLabel.setText("");//$NON-NLS-1$
     }
 
     private void validateType(String typeName, boolean forConcept) {
         getButton(IDialogConstants.OK_ID).setEnabled(true);
-        infoLabel.setText("");
+        infoLabel.setText("");//$NON-NLS-1$
 
         for (XSDTypeDefinition specType : schema.getTypeDefinitions()) {
             if (forConcept && specType instanceof XSDSimpleTypeDefinition)
@@ -198,7 +198,7 @@ public class NewConceptOrElementDialog extends Dialog implements ModifyListener,
                 continue;
 
             String typeToCompare = typeName;
-            int delimiter = typeToCompare.indexOf(" : ");
+            int delimiter = typeToCompare.indexOf(" : ");//$NON-NLS-1$
             if (delimiter != -1) {
                 typeToCompare = typeToCompare.substring(0, delimiter);
             }

@@ -537,7 +537,7 @@ public class PasteXObjectAction extends Action {
                                     new IInputValidator() {
 
                                         public String isValid(String newText) {
-                                            if ((newText == null) || "".equals(newText))
+                                            if ((newText == null) || "".equals(newText))//$NON-NLS-1$
                                                 return "The name cannot be empty";
                                             return null;
                                         };

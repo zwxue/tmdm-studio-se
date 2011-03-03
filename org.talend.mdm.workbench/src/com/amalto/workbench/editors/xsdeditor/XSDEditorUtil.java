@@ -45,19 +45,19 @@ public class XSDEditorUtil {
     private static Log log = LogFactory.getLog(XSDEditorUtil.class);
 
     private static String getXObjectPath(TreeObject xobject) {
-        String name = xobject.getDisplayName().replace(" ", "");
+        String name = xobject.getDisplayName().replace(" ", "");//$NON-NLS-1$//$NON-NLS-2$
         if (xobject.getParent().getDisplayName().startsWith(EXtentisObjects.DataMODEL.getDisplayName())) {
             // the datamodel root
-            return xobject.getParent().getDisplayName().replace(" ", "") + "/" + name;
+            return xobject.getParent().getDisplayName().replace(" ", "") + "/" + name;//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
         } else {
-            return getXObjectPath(xobject.getParent()) + "/" + name;
+            return getXObjectPath(xobject.getParent()) + "/" + name;//$NON-NLS-1$
         }
     }
 
     public static IFile createFile(TreeObject xobject) throws Exception {
         WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
 
-        String filename = xobject.getDisplayName().replace(" ", "") + ".xsd";//$NON-NLS-3$
+        String filename = xobject.getDisplayName().replace(" ", "") + ".xsd";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
         String content = wsDataModel.getXsdSchema();
 
         IProject project = createProject(xobject);
@@ -86,7 +86,7 @@ public class XSDEditorUtil {
     private static boolean isEditorOpened(TreeObject xobject) throws Exception {
         WSDataModel wsDataModel = (WSDataModel) xobject.getWsObject();
 
-        String filename = xobject.getDisplayName().replace(" ", "") + ".xsd";//$NON-NLS-3$
+        String filename = xobject.getDisplayName().replace(" ", "") + ".xsd";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
         String content = wsDataModel.getXsdSchema();
 
         IProject project = createProject(xobject);
@@ -106,8 +106,8 @@ public class XSDEditorUtil {
 
     public static IProject createProject(TreeObject xobject) {
         IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-        String projectname = xobject.getServerRoot().getDisplayName().trim().replace("://", "").replace("/", "").replace(" ", "")
-                .replace(":", "");
+        String projectname = xobject.getServerRoot().getDisplayName().trim().replace("://", "").replace("/", "").replace(" ", "")//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$
+                .replace(":", "");//$NON-NLS-1$//$NON-NLS-2$
         IProject prj = root.getProject(projectname);
         if (prj.exists())
             return prj;
@@ -130,7 +130,7 @@ public class XSDEditorUtil {
         final XSDEditorInput input = new XSDEditorInput(pathToTempFile);
         final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
         IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
-                .findEditor("com.amalto.workbench.editors.xsdeditor.XSDEditor");
+                .findEditor("com.amalto.workbench.editors.xsdeditor.XSDEditor");//$NON-NLS-1$
         if (activePage.findEditor(input) != null) {
             activePage.openEditor(input, desc.getId());
             return;
@@ -157,7 +157,7 @@ public class XSDEditorUtil {
         part.setActiveEditor(dMainPage);
 
         CTabFolder folder = (CTabFolder) dMainPage.getMainControl().getParent();
-        folder.getItem(0).setText(xobject.getDisplayName() + " " + Util.getRevision(xobject));
+        folder.getItem(0).setText(xobject.getDisplayName() + " " + Util.getRevision(xobject));//$NON-NLS-1$
         folder.getItem(1).setText("Schema Design");
         folder.getItem(2).setText("Schema Source");
         if (markdirty)

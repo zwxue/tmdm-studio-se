@@ -60,7 +60,7 @@ public class ValidationRuleDialog extends Dialog {
 
     String conceptName;
 
-    String name = "";
+    String name = "";//$NON-NLS-1$
 
     private Text text;
 
@@ -83,13 +83,13 @@ public class ValidationRuleDialog extends Dialog {
         text = new Text(composite, SWT.BORDER);
         text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
         columns = new ComplexTableViewerColumn[] {
-                new ComplexTableViewerColumn("Type", false, "", "", "", ComplexTableViewerColumn.COMBO_STYLE,
+                new ComplexTableViewerColumn("Type", false, "", "", "", ComplexTableViewerColumn.COMBO_STYLE,//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
                         IConstants.SCHEMATRON_TYPES, 0),
-                new ComplexTableViewerColumn("Context XPath", false, "newXPath", "newXPath", "",
+                new ComplexTableViewerColumn("Context XPath", false, "newXPath", "newXPath", "",//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
                         ComplexTableViewerColumn.XPATH_STYLE, new String[] {}, 0),
-                new ComplexTableViewerColumn("Expression", false, "", "", "", ComplexTableViewerColumn.VALIDATIONRULE_STYLE,
+                new ComplexTableViewerColumn("Expression", false, "", "", "", ComplexTableViewerColumn.VALIDATIONRULE_STYLE,//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
                         new String[] {}, 0),
-                new ComplexTableViewerColumn("Message", false, "", "", "", ComplexTableViewerColumn.MULTIMESSAGE_STYLE,
+                new ComplexTableViewerColumn("Message", false, "", "", "", ComplexTableViewerColumn.MULTIMESSAGE_STYLE,//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
                         new String[] {}, 0), };
         columns[0].setColumnWidth(70);
         columns[1].setColumnWidth(130);
@@ -122,10 +122,10 @@ public class ValidationRuleDialog extends Dialog {
     private List<Line> parseRules() {
         List<Line> lines = new ArrayList<Line>();
         pattern = pattern.replaceAll("\\r\\n|\\n", "");//$NON-NLS-1$//$NON-NLS-2$
-        String context = "";
-        String type = "";
-        String express = "";
-        String msg = "";
+        String context = "";//$NON-NLS-1$
+        String type = "";//$NON-NLS-1$
+        String express = "";//$NON-NLS-1$
+        String msg = "";//$NON-NLS-1$
         Element e = null;
         try {
             e = Util.parse(pattern).getDocumentElement();
@@ -134,17 +134,17 @@ public class ValidationRuleDialog extends Dialog {
             log.error(e1.getMessage(), e1);
 
         }
-        if (e.getAttributes().getNamedItem("name") != null)
-            name = e.getAttributes().getNamedItem("name").getTextContent();
-        text.setText("Product Type".equals(name) ? "" : name);
-        NodeList rulelist = e.getElementsByTagName("rule");
+        if (e.getAttributes().getNamedItem("name") != null)//$NON-NLS-1$
+            name = e.getAttributes().getNamedItem("name").getTextContent();//$NON-NLS-1$
+        text.setText("Product Type".equals(name) ? "" : name);//$NON-NLS-1$//$NON-NLS-2$
+        NodeList rulelist = e.getElementsByTagName("rule");//$NON-NLS-1$
         for (int i = 0; i < rulelist.getLength(); i++) {
             Node r = rulelist.item(i);
-            context = r.getAttributes().getNamedItem("context").getTextContent();
+            context = r.getAttributes().getNamedItem("context").getTextContent();//$NON-NLS-1$
             for (int j = 0; j < r.getChildNodes().getLength(); j++) {
                 if (r.getChildNodes().item(j).getNodeType() == Node.ELEMENT_NODE) {
                     type = r.getChildNodes().item(j).getNodeName();
-                    express = r.getChildNodes().item(j).getAttributes().getNamedItem("test").getTextContent();
+                    express = r.getChildNodes().item(j).getAttributes().getNamedItem("test").getTextContent();//$NON-NLS-1$
                     msg = r.getChildNodes().item(j).getTextContent();
                     break;
                 }
@@ -201,9 +201,9 @@ public class ValidationRuleDialog extends Dialog {
                 String msg = line.keyValues.get(3).value;
                 if (conceptName != null) {
                     if (context.equals(conceptName)) {
-                        context = context.replaceAll(conceptName, "/");
+                        context = context.replaceAll(conceptName, "/");//$NON-NLS-1$
                     } else {
-                        context = context.replaceAll(conceptName + "/", "");
+                        context = context.replaceAll(conceptName + "/", "");//$NON-NLS-1$//$NON-NLS-2$
                     }
                 }
                 sb = sb.append(context).append("\">");//$NON-NLS-1$

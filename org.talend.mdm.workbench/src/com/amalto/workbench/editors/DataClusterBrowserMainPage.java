@@ -249,7 +249,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
 
             Label keyLabel = toolkit.createLabel(compSecondLine, "Keys", SWT.NULL);
             keyLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-            keyText = toolkit.createText(compSecondLine, "", SWT.BORDER);
+            keyText = toolkit.createText(compSecondLine, "", SWT.BORDER);//$NON-NLS-1$
             keyText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
             keyText.addKeyListener(keylistener);
 
@@ -258,7 +258,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
              */
             Label descriptionLabel = toolkit.createLabel(compSecondLine, "Keywords", SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-            searchText = toolkit.createText(compSecondLine, "", SWT.BORDER);
+            searchText = toolkit.createText(compSecondLine, "", SWT.BORDER);//$NON-NLS-1$
             searchText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
             // searchText.addModifyListener(this);
             searchText.addKeyListener(keylistener);
@@ -266,7 +266,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             checkFTSearchButton = toolkit.createButton(compSecondLine, "Use Full Text Search", SWT.CHECK);
             checkFTSearchButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
-            Label fill = toolkit.createLabel(compSecondLine, "", SWT.NULL);
+            Label fill = toolkit.createLabel(compSecondLine, "", SWT.NULL);//$NON-NLS-1$
             fill.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 8, 1));
 
             showTaskIdCB = toolkit.createButton(compSecondLine, "Show Task ID", SWT.CHECK);
@@ -494,11 +494,11 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             // addRevisionID(concepts);
 
             WSUniverse currentUniverse = port.getCurrentUniverse(new WSGetCurrentUniverse());
-            String currentUniverseName = "";
+            String currentUniverseName = "";//$NON-NLS-1$
             if (currentUniverse != null)
                 currentUniverseName = currentUniverse.getName();
-            if (currentUniverseName != null && currentUniverseName.equals("[HEAD]"))
-                currentUniverseName = "";
+            if (currentUniverseName != null && currentUniverseName.equals("[HEAD]"))//$NON-NLS-1$
+                currentUniverseName = "";//$NON-NLS-1$
 
             // add by myli; fix the bug:0013077: if the data is too much, just get the entities from the model instead
             // of from the container.
@@ -506,7 +506,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             // long beforeTime = System .currentTimeMillis();
 
             String clusterName = URLEncoder.encode(cluster.getName(), "utf-8");//$NON-NLS-1$
-            String query = "count(collection('" + clusterName + "')/ii/n)";
+            String query = "count(collection('" + clusterName + "')/ii/n)";//$NON-NLS-1$//$NON-NLS-2$
             WSStringArray array = port.runQuery(new WSRunQuery(null, new WSDataClusterPK(clusterName), query, null));
             // WSString count2 = port.count(new WSCount(new WSDataClusterPK(cluster.getName()), "*", null, 100));
             long count = Long.valueOf(array.getStrings()[0]);
@@ -534,18 +534,18 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         if (object.getType() == TreeObject.DATA_MODEL)
                             break;
                     }
-                    String revision = "";
+                    String revision = "";//$NON-NLS-1$
                     if (object != null)
-                        revision = object.getDisplayName().substring(object.getDisplayName().indexOf("[") + 1,
-                                object.getDisplayName().indexOf("]"));
+                        revision = object.getDisplayName().substring(object.getDisplayName().indexOf("[") + 1,//$NON-NLS-1$
+                                object.getDisplayName().indexOf("]"));//$NON-NLS-1$
                     for (int i = 0; i < concepts.length; i++) {
                         String concept = concepts[i];
-                        if (revision == null || revision.equals(""))
-                            revision = "HEAD";
-                        concepts[i] = concept + " " + "[" + revision + "]";
+                        if (revision == null || revision.equals(""))//$NON-NLS-1$
+                            revision = "HEAD";//$NON-NLS-1$
+                        concepts[i] = concept + " " + "[" + revision + "]";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                     }
                     conceptCombo.removeAll();
-                    conceptCombo.add("*");
+                    conceptCombo.add("*");//$NON-NLS-1$
                     for (int i = 0; i < concepts.length; i++)
                         conceptCombo.add(concepts[i]);
                     // System.out.println(count.getValue());
@@ -565,12 +565,12 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     WSConceptRevisionMapMapEntry entry = wsConceptRevisionMapMapEntries[i];
                     String concept = entry.getConcept();
                     String revision = entry.getRevision();
-                    if (revision == null || revision.equals(""))
-                        revision = "HEAD";
-                    concepts[i] = concept + " " + "[" + revision + "]";
+                    if (revision == null || revision.equals(""))//$NON-NLS-1$
+                        revision = "HEAD";//$NON-NLS-1$
+                    concepts[i] = concept + " " + "[" + revision + "]";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                 }
                 conceptCombo.removeAll();
-                conceptCombo.add("*");
+                conceptCombo.add("*");//$NON-NLS-1$
                 for (int i = 0; i < concepts.length; i++) {
                     conceptCombo.add(concepts[i]);
                 }
@@ -592,13 +592,13 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             boolean isSet = false;
             for (WSUniverseItemsRevisionIDs id : ids) {
                 if (Pattern.compile(id.getConceptPattern()).matcher(concepts[i]).matches()) {
-                    concepts[i] = concepts[i] + " [" + id.getRevisionID() + "]";
+                    concepts[i] = concepts[i] + " [" + id.getRevisionID() + "]";//$NON-NLS-1$//$NON-NLS-2$
                     isSet = true;
                     break;
                 }
             }
             if (!isSet)
-                concepts[i] = concepts[i] + " [" + IConstants.HEAD + "]";
+                concepts[i] = concepts[i] + " [" + IConstants.HEAD + "]";//$NON-NLS-1$//$NON-NLS-2$
         }
     }
 
@@ -691,7 +691,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");//$NON-NLS-1$
             Pattern pattern = Pattern.compile("^\\d{4}\\d{2}\\d{2} \\d{2}:\\d{2}:\\d{2}$");//$NON-NLS-1$
 
-            if (!"".equals(fromText.getText())) {
+            if (!"".equals(fromText.getText())) {//$NON-NLS-1$
 
                 String dateTimeText = fromText.getText().trim();
                 Matcher matcher = pattern.matcher(dateTimeText);
@@ -723,24 +723,24 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             }
 
             String concept = conceptCombo.getText();
-            if ("*".equals(concept) | "".equals(concept))
+            if ("*".equals(concept) | "".equals(concept))//$NON-NLS-1$//$NON-NLS-2$
                 concept = null;
             if (concept != null) {
-                concept = concept.replaceAll("\\[.*\\]", "").trim();
+                concept = concept.replaceAll("\\[.*\\]", "").trim();//$NON-NLS-1$//$NON-NLS-2$
             }
             String keys = keyText.getText();
-            if ("*".equals(keys) | "".equals(keys))
+            if ("*".equals(keys) | "".equals(keys))//$NON-NLS-1$//$NON-NLS-2$
                 keys = null;
 
             boolean useFTSearch = checkFTSearchButton.getSelection();
             String search = searchText.getText();
-            if ("*".equals(search) | "".equals(search))
+            if ("*".equals(search) | "".equals(search))//$NON-NLS-1$//$NON-NLS-2$
                 search = null;
 
             int start = pageToolBar.getStart();
             int limit = pageToolBar.getLimit();
             // see 0015909
-            String clusterName = URLEncoder.encode(((WSDataClusterPK) getXObject().getWsKey()).getPk(), "utf-8");
+            String clusterName = URLEncoder.encode(((WSDataClusterPK) getXObject().getWsKey()).getPk(), "utf-8");//$NON-NLS-1$
             WSDataClusterPK clusterPk = new WSDataClusterPK(clusterName);
             // @temp yguo, get item with taskid or get taskid by specify wsitempk.
             WSItemPKsByCriteriaResponseResults[] results = port.getItemPKsByFullCriteria(
@@ -770,7 +770,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             return (LineItem[]) ress.toArray(new LineItem[ress.size()]);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000"))
+            if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000"))//$NON-NLS-1$
                 MessageDialog.openError(this.getSite().getShell(), "Too Many Results",
                         "More than 10000 results returned by the search. \nPlease narrow your search.");
             else
@@ -820,7 +820,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         .getConcept().trim(), li.getIds())));
                 String xml = wsItem.getContent();
 
-                WSDataModelPK[] dmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("*")).getWsDataModelPKs();
+                WSDataModelPK[] dmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("*")).getWsDataModelPKs();//$NON-NLS-1$
                 ArrayList<String> dataModels = new ArrayList<String>();
                 if (dmPKs != null) {
                     for (int i = 0; i < dmPKs.length; i++) {
@@ -845,12 +845,13 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                                                     null,
                                                     "Confirm",
                                                     "This object was also modified by somebody else. If you save now, you will overwrite his or her changes. Are you sure you want to do that?")) {
-                                        port.putItem(new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(), ""
+                                        port.putItem(new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(),
+                                                ""//$NON-NLS-1$
                                                 .equals(d.getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()),
                                                 false));
                                     }
                                 } else {
-                                    port.putItem(new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(), "".equals(d
+                                    port.putItem(new WSPutItem((WSDataClusterPK) getXObject().getWsKey(), d.getXML(), "".equals(d//$NON-NLS-1$
                                             .getDataModelName()) ? null : new WSDataModelPK(d.getDataModelName()), false));
                                 }
                                 // previousDataModel = d.getDataModelName();
@@ -890,7 +891,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             super();
             this.shell = shell;
             this.viewer = viewer;
-            setImageDescriptor(ImageCache.getImage("icons/default.gif"));
+            setImageDescriptor(ImageCache.getImage("icons/default.gif"));//$NON-NLS-1$
             setText("Edit TaskId");
             setToolTipText("Edit taskId of the record");
         }
@@ -982,8 +983,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     compareHeadInfo.setItem(true);
                     compareHeadInfo.setDataModelName(leftWSItem.getDataModelName());
                     CompareManager.getInstance().compareTwoStream(leftItemXmlContent, rightItemXmlContent, true, compareHeadInfo,
-                            leftWSItemPK.getConceptName() + "." + Util.joinStrings(leftWSItemPK.getIds(), "."),
-                            rightWSItemPK.getConceptName() + "." + Util.joinStrings(rightWSItemPK.getIds(), "."), true, false);
+                            leftWSItemPK.getConceptName() + "." + Util.joinStrings(leftWSItemPK.getIds(), "."),//$NON-NLS-1$//$NON-NLS-2$
+                            rightWSItemPK.getConceptName() + "." + Util.joinStrings(rightWSItemPK.getIds(), "."), true, false);//$NON-NLS-1$//$NON-NLS-2$
                 }
 
             } catch (Exception e) {
@@ -1036,7 +1037,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                 try {
                     svnContent = Util.getPort(getXObject()).versioningGetItemContent(
                             new WSVersioningGetItemContent(ICoreConstants.DEFAULT_SVN, new WSItemPK(wsItem.getWsDataClusterPK(),
-                                    wsItem.getConceptName(), wsItem.getIds()), "-1"));
+                                    wsItem.getConceptName(), wsItem.getIds()), "-1"));//$NON-NLS-1$
                 } catch (Exception e) {
                     MessageDialog.openWarning(null, "Warning", e.getLocalizedMessage());
                     return;
@@ -1076,7 +1077,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             super();
             this.shell = shell;
             this.viewer = viewer;
-            setImageDescriptor(ImageCache.getImage("icons/delete_obj.gif"));
+            setImageDescriptor(ImageCache.getImage("icons/delete_obj.gif"));//$NON-NLS-1$
 
             IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
             if (selection.size() == 1)
@@ -1084,7 +1085,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             else
                 setText("Logically delete these " + selection.size() + " Records");
 
-            setToolTipText("Logically delete the Selected Record" + (selection.size() > 1 ? "s" : ""));
+            setToolTipText("Logically delete the Selected Record" + (selection.size() > 1 ? "s" : ""));//$NON-NLS-1$//$NON-NLS-2$
         }
 
         public void run() {
@@ -1102,7 +1103,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                         + lineItems.size() + " Records to trash?\nSet Part-Path:", "/", new IInputValidator() {
 
                     public String isValid(String newText) {
-                        if ((newText == null) || !newText.matches("^\\/.*$"))
+                        if ((newText == null) || !newText.matches("^\\/.*$"))//$NON-NLS-1$
                             return "Illegal Part-Path";
                         return null;
                     };
@@ -1162,8 +1163,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     int i = 0;
                     for (Iterator<LineItem> iter = lineItems.iterator(); iter.hasNext();) {
                         LineItem lineItem = iter.next();
-                        String itemID = ((WSDataClusterPK) xObject.getWsKey()).getPk() + "." + lineItem.getConcept() + "."
-                                + Util.joinStrings(lineItem.getIds(), ".");
+                        String itemID = ((WSDataClusterPK) xObject.getWsKey()).getPk() + "." + lineItem.getConcept() + "."//$NON-NLS-1$//$NON-NLS-2$
+                                + Util.joinStrings(lineItem.getIds(), ".");//$NON-NLS-1$
                         monitor.subTask("Processing Record " + (i++) + ": " + itemID);
                         if (monitor.isCanceled()) {
                             MessageDialog.openWarning(this.parentShell, "User canceled the logically delete",
@@ -1204,7 +1205,7 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
             else
                 setText("Physically delete these " + selection.size() + " Records");
 
-            setToolTipText("Physically delete the selected Record" + (selection.size() > 1 ? "s" : ""));
+            setToolTipText("Physically delete the selected Record" + (selection.size() > 1 ? "s" : ""));//$NON-NLS-1$//$NON-NLS-2$
         }
 
         public void run() {
@@ -1267,8 +1268,8 @@ public class DataClusterBrowserMainPage extends AMainPage implements IXObjectMod
                     int i = 0;
                     for (Iterator<LineItem> iter = lineItems.iterator(); iter.hasNext();) {
                         LineItem lineItem = iter.next();
-                        String itemID = ((WSDataClusterPK) getXObject().getWsKey()).getPk() + "." + lineItem.getConcept() + "."
-                                + Util.joinStrings(lineItem.getIds(), ".");
+                        String itemID = ((WSDataClusterPK) getXObject().getWsKey()).getPk() + "." + lineItem.getConcept() + "."//$NON-NLS-1$//$NON-NLS-2$
+                                + Util.joinStrings(lineItem.getIds(), ".");//$NON-NLS-1$
                         monitor.subTask("Processing Record " + (i++) + ": " + itemID);
                         if (monitor.isCanceled()) {
                             MessageDialog.openWarning(this.parentShell, "User Canceled the delete",

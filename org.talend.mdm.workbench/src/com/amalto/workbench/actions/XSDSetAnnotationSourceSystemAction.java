@@ -80,7 +80,7 @@ public class XSDSetAnnotationSourceSystemAction extends UndoAction {
                 return Status.CANCEL_STATUS;
             }
 
-            struc.setSourceSystem("".equals(id.getValue()) ? null : id.getValue());
+            struc.setSourceSystem("".equals(id.getValue()) ? null : id.getValue());//$NON-NLS-1$
 
             if (struc.hasChanged()) {
                 page.refresh();

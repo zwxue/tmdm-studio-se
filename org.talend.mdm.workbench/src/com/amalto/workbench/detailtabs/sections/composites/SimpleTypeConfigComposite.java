@@ -113,7 +113,7 @@ public class SimpleTypeConfigComposite extends Composite {
         comboBuildInTypes.setLabelProvider(new XSDNamedComponentLabelProvider());
         comboBuildInTypes.setSorter(new SchemaElementSorter());
 
-        compProperty = new PropertyComposite(this, SWT.NONE, "", "", "Facet", "Value");
+        compProperty = new PropertyComposite(this, SWT.NONE, "", "", "Facet", "Value");//$NON-NLS-1$//$NON-NLS-2$
         GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
         data.horizontalSpan = 2;
         data.heightHint = 200;
@@ -358,7 +358,7 @@ class CustomTypeSorter extends ViewerSorter {
         String typeName1 = getTypeName(e1);
         String typeName2 = getTypeName(e2);
 
-        if ("".equals(typeName1) || "".equals(typeName2))
+        if ("".equals(typeName1) || "".equals(typeName2))//$NON-NLS-1$//$NON-NLS-2$
             return super.compare(viewer, e1, e2);
 
         int typeCode1 = getTypeCode(typeName1);
@@ -386,6 +386,6 @@ class CustomTypeSorter extends ViewerSorter {
         if (typeObj instanceof String)
             return (String) typeObj;
 
-        return "";
+        return "";//$NON-NLS-1$
     }
 }

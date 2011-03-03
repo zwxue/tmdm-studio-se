@@ -141,11 +141,11 @@ public class ProcessResultsDialog extends Dialog {
     protected String getText(String output) {
         WSExtractedContent ct = resultsMap.get(output);
         if (ct == null)
-            return "";
+            return "";//$NON-NLS-1$
         String contentType = ct.getContentType();
         byte[] bytes = ct.getWsByteArray().getBytes();
         if (bytes == null)
-            return "";
+            return "";//$NON-NLS-1$
         // extract charset
         String charset = "UTF8";//$NON-NLS-1$
         Matcher m = p.matcher(contentType);

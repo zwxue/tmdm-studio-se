@@ -45,7 +45,7 @@ public class SimpleTypeInputDialog extends Dialog implements ModifyListener {
 
     private XSDSchema xsdSchema = null;
 
-    private String title = "";
+    private String title = "";//$NON-NLS-1$
 
     private String typeName = null;
 
@@ -116,11 +116,11 @@ public class SimpleTypeInputDialog extends Dialog implements ModifyListener {
 
     public void modifyText(ModifyEvent e) {
         getButton(IDialogConstants.OK_ID).setEnabled(true);
-        infoLabel.setText("");
+        infoLabel.setText("");//$NON-NLS-1$
 
         String type = elemPanel.getText();
 
-        if ("".equals(type.trim())) {
+        if ("".equals(type.trim())) {//$NON-NLS-1$
             infoLabel.setText("The name cannot contain the empty");
             getButton(IDialogConstants.OK_ID).setEnabled(false);
             return;
@@ -137,7 +137,7 @@ public class SimpleTypeInputDialog extends Dialog implements ModifyListener {
 
         for (XSDTypeDefinition simpType : xsdSchema.getTypeDefinitions()) {
             String typeToCompare = simpType.getName();
-            int delimiter = type.indexOf(" : ");
+            int delimiter = type.indexOf(" : ");//$NON-NLS-1$
             if (delimiter != -1) {
                 type = type.substring(0, delimiter);
             }

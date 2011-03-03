@@ -196,7 +196,7 @@ public class QueryParametersDialog extends Dialog {
                 if (((Element) obj).getChildNodes().getLength() > 1)
                     return e.getLocalName();
                 else
-                    return e.getLocalName() + ": " + e.getTextContent();
+                    return e.getLocalName() + ": " + e.getTextContent();//$NON-NLS-1$
             }
             return "?? " + obj.getClass().getName() + " : " + obj.toString();//$NON-NLS-1$//$NON-NLS-2$
 

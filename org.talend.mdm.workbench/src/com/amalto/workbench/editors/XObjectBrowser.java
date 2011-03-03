@@ -181,7 +181,7 @@ public class XObjectBrowser extends FormEditor implements IXObjectModelListener 
     private void updateTitle() {
         IEditorInput input = this.getEditorInput();
         setPartName(input.getName());
-        setContentDescription("");
+        setContentDescription("");//$NON-NLS-1$
     }
 
     public void dispose() {

@@ -70,7 +70,7 @@ public class ElementInfoConfigComposite extends Composite {
     }
 
     public boolean hasElementReference() {
-        return !("".equals(getElementReference()));
+        return !("".equals(getElementReference()));//$NON-NLS-1$
     }
 
     public int getMinCardinality() {
@@ -112,7 +112,7 @@ public class ElementInfoConfigComposite extends Composite {
     private void refreshNameArea() {
 
         if (hasElementReference())
-            txtName.setText("");
+            txtName.setText("");//$NON-NLS-1$
 
         txtName.setEditable(!hasElementReference());
     }
@@ -162,7 +162,7 @@ public class ElementInfoConfigComposite extends Composite {
         spinMin.setMaximum(Integer.MAX_VALUE);
 
         final Label label = new Label(occurenceGroup, SWT.NONE);
-        label.setText("----->");
+        label.setText("----->");//$NON-NLS-1$
 
         spinMax = new Spinner(occurenceGroup, SWT.BORDER);
         spinMax.setLayoutData(new GridData());
@@ -219,7 +219,7 @@ public class ElementInfoConfigComposite extends Composite {
     private String[] getAllReferences() {
 
         ArrayList<String> elementDeclarations = new ArrayList<String>();
-        elementDeclarations.add("");
+        elementDeclarations.add("");//$NON-NLS-1$
 
         if (curXSDParticle == null)
             return elementDeclarations.toArray(new String[0]);
@@ -230,8 +230,8 @@ public class ElementInfoConfigComposite extends Composite {
                 continue;
 
             elementDeclarations.add(eachXSDEleDeclaration.getQName()
-                    + (eachXSDEleDeclaration.getTargetNamespace() != null ? " : " + eachXSDEleDeclaration.getTargetNamespace()
-                            : ""));
+                    + (eachXSDEleDeclaration.getTargetNamespace() != null ? " : " + eachXSDEleDeclaration.getTargetNamespace()//$NON-NLS-1$
+                    : ""));//$NON-NLS-1$
         }
 
         return elementDeclarations.toArray(new String[0]);

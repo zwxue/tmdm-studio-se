@@ -34,7 +34,7 @@ public class SelectXPathDialog extends Dialog {
 
     private String conceptName;
 
-    private String selectedXPath = "";
+    private String selectedXPath = "";//$NON-NLS-1$
 
     public SelectXPathDialog(Shell parentShell, IAllDataModelHolder allDataModelHolder) {
         this(parentShell, allDataModelHolder, null, null);
@@ -83,7 +83,7 @@ public class SelectXPathDialog extends Dialog {
     }
 
     public String getSelectedXPath() {
-        return selectedXPath.replaceAll("'|\"", "");//$NON-NLS-1$
+        return selectedXPath.replaceAll("'|\"", "");//$NON-NLS-1$//$NON-NLS-2$
     }
 
     @Override

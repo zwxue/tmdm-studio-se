@@ -123,9 +123,9 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
             Label descriptionLabel = toolkit.createLabel(charComposite, "Description", SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 1, 1));
 
-            descriptionText = toolkit.createText(charComposite, "", SWT.BORDER);
+            descriptionText = toolkit.createText(charComposite, "", SWT.BORDER);//$NON-NLS-1$
             descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-            descriptionText.setText(wsStoredProcedure.getDescription() == null ? "" : wsStoredProcedure.getDescription());
+            descriptionText.setText(wsStoredProcedure.getDescription() == null ? "" : wsStoredProcedure.getDescription());//$NON-NLS-1$
             descriptionText.addModifyListener(this);
             // Util.createCompDropTarget(descriptionText);
             // Procedure
@@ -202,7 +202,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
             resultsLabel = toolkit
                     .createLabel(
                             resultsGroup,
-                            "                                                                                                           ",
+                            "                                                                                                           ",//$NON-NLS-1$
                             SWT.NULL);
             resultsLabel.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, true, false, 1, 1));
 
@@ -241,7 +241,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
         WSStoredProcedure wsStoredProcedure = (WSStoredProcedure) (getXObject().getWsObject());
         String s;
 
-        s = wsStoredProcedure.getDescription() == null ? "" : wsStoredProcedure.getDescription();
+        s = wsStoredProcedure.getDescription() == null ? "" : wsStoredProcedure.getDescription();//$NON-NLS-1$
         if (!s.equals(descriptionText.getText()))
             descriptionText.setText(s);
 
@@ -261,14 +261,14 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
             return;
         }
         if ((dataClusterPKs == null) || (dataClusterPKs.length == 0)
-                || ((dataClusterPKs.length == 1) && ("CACHE".equals(dataClusterPKs[0].getPk())))) {
+                || ((dataClusterPKs.length == 1) && ("CACHE".equals(dataClusterPKs[0].getPk())))) {//$NON-NLS-1$
             MessageDialog.openError(this.getSite().getShell(), "Error",
                     "Please create Data Containers before editing an Inbound Adaptor");
             return;
         }
-        dataClusterCombo.add("[ALL]");
+        dataClusterCombo.add("[ALL]");//$NON-NLS-1$
         for (int i = 0; i < dataClusterPKs.length; i++) {
-            if (!"CACHE".equals(dataClusterPKs[i].getPk())) // FIXME: hardcoded CACHE
+            if (!"CACHE".equals(dataClusterPKs[i].getPk())) // FIXME: hardcoded CACHE//$NON-NLS-1$
                 dataClusterCombo.add(dataClusterPKs[i].getPk());
         }
 
@@ -321,7 +321,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
 
             public void run() {
                 WSDataClusterPK dcpk = null;
-                if (!"[ALL]".equals(dataClusterCombo.getText()))
+                if (!"[ALL]".equals(dataClusterCombo.getText()))//$NON-NLS-1$
                     dcpk = new WSDataClusterPK(dataClusterCombo.getText());
                 try {
                     String proc = procedureViewer.getDocument().get();
@@ -344,7 +344,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
                             if (i < currentParameters.size())
                                 ps[i] = currentParameters.get(i);
                             else
-                                ps[i] = "";
+                                ps[i] = "";//$NON-NLS-1$
                         }
                         // call parameters window
                         QueryParametersDialog dialog = new QueryParametersDialog(StoredProcedureMainPage.this.getSite()
@@ -414,7 +414,7 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
                 IStructuredSelection selection = ((IStructuredSelection) viewer.getSelection());
                 String result = (String) selection.getFirstElement();
                 // clean up highlights
-                result = result.replaceAll("\\s*__h", "").replaceAll("h__\\s*", "");//$NON-NLS-1$//$NON-NLS-2$
+                result = result.replaceAll("\\s*__h", "").replaceAll("h__\\s*", "");//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
 
                 // try to parse it
                 try {
@@ -465,13 +465,13 @@ public class StoredProcedureMainPage extends AMainPage implements ITextListener 
 
         public String getColumnText(Object element, int columnIndex) {
             String xml = (String) element;
-            xml = highlightLeft.matcher(xml).replaceAll("");
-            xml = highlightRight.matcher(xml).replaceAll("");
-            xml = emptyTags.matcher(xml).replaceAll("[$1]");
-            xml = openingTags.matcher(xml).replaceAll("[$1: ");
-            xml = closingTags.matcher(xml).replaceAll("]");
+            xml = highlightLeft.matcher(xml).replaceAll("");//$NON-NLS-1$
+            xml = highlightRight.matcher(xml).replaceAll("");//$NON-NLS-1$
+            xml = emptyTags.matcher(xml).replaceAll("[$1]");//$NON-NLS-1$
+            xml = openingTags.matcher(xml).replaceAll("[$1: ");//$NON-NLS-1$
+            xml = closingTags.matcher(xml).replaceAll("]");//$NON-NLS-1$
             if (xml.length() >= 150)
-                return xml.substring(0, 150) + "...";
+                return xml.substring(0, 150) + "...";//$NON-NLS-1$
             return xml;
         }
 

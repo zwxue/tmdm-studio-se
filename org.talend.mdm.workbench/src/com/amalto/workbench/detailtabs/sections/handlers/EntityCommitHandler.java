@@ -288,11 +288,11 @@ public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
 
     private void validateEntityName() throws CommitValidationException {
 
-        if (getCommitedObj().getName() == null || "".equals(getCommitedObj().getName().trim())) {
+        if (getCommitedObj().getName() == null || "".equals(getCommitedObj().getName().trim())) {//$NON-NLS-1$
             throw new CommitValidationException(ERR_ENTITY_NULLENTITYNAME);
         }
 
-        if (getCommitedObj().getName().replaceAll("\\s", "").length() != getCommitedObj().getName().length())
+        if (getCommitedObj().getName().replaceAll("\\s", "").length() != getCommitedObj().getName().length())//$NON-NLS-1$//$NON-NLS-2$
             throw new CommitValidationException(ERR_ENTITY_CONTAINEMPTY);
 
         for (XSDElementDeclaration eachElement : getCommitedObj().getSchema().getElementDeclarations()) {
@@ -301,7 +301,7 @@ public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
                 continue;
 
             if (eachElement.getName().equals(getCommitedObj().getName())) {
-                throw new CommitValidationException(ERR_ENTITY_DULPLICATEENTITYNAME + " : " + getCommitedObj().getName());
+                throw new CommitValidationException(ERR_ENTITY_DULPLICATEENTITYNAME + " : " + getCommitedObj().getName());//$NON-NLS-1$
             }
         }
 
@@ -362,11 +362,11 @@ public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
 
     private void validateEachKeyName(KeyWrapper checkedKeyWrapper) throws CommitValidationException {
 
-        if (checkedKeyWrapper.getName() == null || "".equals(checkedKeyWrapper.getName().trim())) {
+        if (checkedKeyWrapper.getName() == null || "".equals(checkedKeyWrapper.getName().trim())) {//$NON-NLS-1$
             throw new CommitValidationException(ERR_KEY_NULLKEYNAME);
         }
 
-        if (checkedKeyWrapper.getName().replaceAll("\\s", "").length() != checkedKeyWrapper.getName().length()) {
+        if (checkedKeyWrapper.getName().replaceAll("\\s", "").length() != checkedKeyWrapper.getName().length()) {//$NON-NLS-1$//$NON-NLS-2$
             throw new CommitValidationException(ERR_KEY_CONTAINEMPTY);
         }
 
@@ -377,15 +377,15 @@ public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
                 continue;
 
             if (eachId.getName().equals(checkedKeyWrapper.getName())) {
-                throw new CommitValidationException(ERR_KEY_DUPLICATEKEYNAME + " : " + checkedKeyWrapper.getName());
+                throw new CommitValidationException(ERR_KEY_DUPLICATEKEYNAME + " : " + checkedKeyWrapper.getName());//$NON-NLS-1$
             }
         }
     }
 
     private void validateEachKeySelector(KeyWrapper checkedKeyWrapper) throws CommitValidationException {
 
-        if (checkedKeyWrapper.getSelector() == null || "".equals(checkedKeyWrapper.getSelector().trim())) {
-            throw new CommitValidationException(ERR_SELECTOR_WRONGFORMAT + " : key " + checkedKeyWrapper.getName());
+        if (checkedKeyWrapper.getSelector() == null || "".equals(checkedKeyWrapper.getSelector().trim())) {//$NON-NLS-1$
+            throw new CommitValidationException(ERR_SELECTOR_WRONGFORMAT + " : key " + checkedKeyWrapper.getName());//$NON-NLS-1$
         }
 
     }
@@ -393,14 +393,14 @@ public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
     private void validateEachKeyFieldsCount(KeyWrapper checkedKeyWrapper) throws CommitValidationException {
 
         if (checkedKeyWrapper.getFields().length == 0) {
-            throw new CommitValidationException(ERR_KEY_NOFIELDS + " : key " + checkedKeyWrapper.getName());
+            throw new CommitValidationException(ERR_KEY_NOFIELDS + " : key " + checkedKeyWrapper.getName());//$NON-NLS-1$
         }
     }
 
     private void validateEachField(KeyWrapper checkedKeyWrapper, FieldWrapper eachFieldWrapper) throws CommitValidationException {
 
-        if (eachFieldWrapper.getXPath() == null || "".equals(eachFieldWrapper.getXPath().trim())) {
-            throw new CommitValidationException(ERR_FIELD_WRONGFORMAT + " : key " + checkedKeyWrapper.getName());
+        if (eachFieldWrapper.getXPath() == null || "".equals(eachFieldWrapper.getXPath().trim())) {//$NON-NLS-1$
+            throw new CommitValidationException(ERR_FIELD_WRONGFORMAT + " : key " + checkedKeyWrapper.getName());//$NON-NLS-1$
         }
 
     }

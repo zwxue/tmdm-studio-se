@@ -36,15 +36,15 @@ public class SimpleXpathInputDialog extends Dialog {
 
     private DataModelMainPage parentPage;
 
-    private String title = "";
+    private String title = "";//$NON-NLS-1$
 
-    private String dialogMessage = "";
+    private String dialogMessage = "";//$NON-NLS-1$
 
-    private String initialValue = "";
+    private String initialValue = "";//$NON-NLS-1$
 
     private SelectionListener caller = null;
 
-    private String xpath = "";
+    private String xpath = "";//$NON-NLS-1$
 
     private String dataModelName;
 
@@ -113,7 +113,7 @@ public class SimpleXpathInputDialog extends Dialog {
         textControl.forceFocus();
 
         // init value
-        textControl.setText(initialValue == null ? "" : initialValue);
+        textControl.setText(initialValue == null ? "" : initialValue);//$NON-NLS-1$
 
         return composite;
     }

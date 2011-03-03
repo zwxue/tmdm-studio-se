@@ -17,7 +17,7 @@ import java.util.List;
 
 public class SimpleTypeStringListFacetInfo extends SimpleTypeFacetInfo<String[]> {
 
-    private String delimiter = " ; ";
+    private String delimiter = " ; ";//$NON-NLS-1$
 
     public SimpleTypeStringListFacetInfo(String propName, String[] propValue, String delimiter) {
         super(propName, propValue);
@@ -28,14 +28,14 @@ public class SimpleTypeStringListFacetInfo extends SimpleTypeFacetInfo<String[]>
     @Override
     protected String getValueLabel(String[] values) {
 
-        String result = "";
+        String result = "";//$NON-NLS-1$
 
         for (String eachValue : values) {
             result += (eachValue + delimiter);
         }
 
         if (result.length() < 1)
-            return "";
+            return "";//$NON-NLS-1$
 
         return result.substring(0, result.length() - delimiter.length());
     }
@@ -43,7 +43,7 @@ public class SimpleTypeStringListFacetInfo extends SimpleTypeFacetInfo<String[]>
     @Override
     protected String[] parseLabel(String label) {
 
-        if (label == null || "".equals(label.trim()))
+        if (label == null || "".equals(label.trim()))//$NON-NLS-1$
             return new String[0];
 
         String[] infos = label.split(delimiter);
@@ -54,7 +54,7 @@ public class SimpleTypeStringListFacetInfo extends SimpleTypeFacetInfo<String[]>
         List<String> results = new ArrayList<String>();
         for (String eachInfo : infos) {
 
-            if ("".equals(eachInfo.trim()))
+            if ("".equals(eachInfo.trim()))//$NON-NLS-1$
                 continue;
 
             results.add(eachInfo);

@@ -60,7 +60,7 @@ public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
             // description
             Label descriptionLabel = toolkit.createLabel(mainComposite, "Description", SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
-            descriptionText = toolkit.createText(mainComposite, "", SWT.BORDER);
+            descriptionText = toolkit.createText(mainComposite, "", SWT.BORDER);//$NON-NLS-1$
             descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
             ((GridData) descriptionText.getLayoutData()).minimumHeight = 30;
             descriptionText.addModifyListener(this);
@@ -179,7 +179,8 @@ public class DataClusterMainPage extends AMainPageV2 implements ITextListener {
 
             WSDataCluster wsObject = (WSDataCluster) (getXObject().getWsObject());
 
-            descriptionText.setText(wsObject.getDescription() == null ? "" : wsObject.getDescription());
+            descriptionText.setText(wsObject.getDescription() == null ? "" : wsObject.getDescription());//$NON-NLS-1$
+
             /*
              * if (wsObject.getWsDataClusterType().equals(WSDataClusterType.CACHE)) dataClusterTypeCombo.select(1); else
              * dataClusterTypeCombo.select(0);

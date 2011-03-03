@@ -17,7 +17,7 @@ import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 public class FixDMNameBasePropertySectionDataModelExtractor extends BasePropertySectionDataModelExtractor {
 
     public FixDMNameBasePropertySectionDataModelExtractor(BasePropertySection propSection) {
-        this(propSection, "");
+        this(propSection, "");//$NON-NLS-1$
     }
 
     public FixDMNameBasePropertySectionDataModelExtractor(BasePropertySection propSection, String defaultDataModel) {
@@ -27,7 +27,7 @@ public class FixDMNameBasePropertySectionDataModelExtractor extends BaseProperty
     @Override
     public String[] getAllDataModelNames() {
 
-        if (defaultDataModel == null || "".equals(defaultDataModel.trim()))
+        if (defaultDataModel == null || "".equals(defaultDataModel.trim()))//$NON-NLS-1$
             return new String[0];
 
         return new String[] { defaultDataModel };

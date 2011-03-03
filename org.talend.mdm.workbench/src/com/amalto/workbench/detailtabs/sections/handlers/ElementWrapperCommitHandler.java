@@ -66,7 +66,7 @@ public class ElementWrapperCommitHandler extends CommitHandler<ElementWrapper> {
             }
 
             getCommitedObj().getSourceXSDContent().setName(
-                    "".equals(getCommitedObj().getNewName()) ? null : getCommitedObj().getNewName());
+                    "".equals(getCommitedObj().getNewName()) ? null : getCommitedObj().getNewName());//$NON-NLS-1$
             if (keyPath != null) {
                 XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
                 XSDXPathDefinition field = factory.createXSDXPathDefinition();
@@ -79,15 +79,15 @@ public class ElementWrapperCommitHandler extends CommitHandler<ElementWrapper> {
                 decl.setResolvedElementDeclaration(newRef);
                 decl.setTypeDefinition(null);
                 Element elem = decl.getElement();
-                if (elem.getAttributes().getNamedItem("type") != null)
-                    elem.getAttributes().removeNamedItem("type");
+                if (elem.getAttributes().getNamedItem("type") != null)//$NON-NLS-1$
+                    elem.getAttributes().removeNamedItem("type");//$NON-NLS-1$
                 decl.updateElement();
             } else if (ref != null) {
 
                 getCommitedObj().getSourceXSDContent().setName(getCommitedObj().getNewName());
                 getCommitedObj().getSourceXSDContent().setTypeDefinition(
                         getCommitedObj().getSchema().getSchemaForSchema()
-                                .resolveSimpleTypeDefinition(XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001, "string"));
+                                .resolveSimpleTypeDefinition(XSDConstants.SCHEMA_FOR_SCHEMA_URI_2001, "string"));//$NON-NLS-1$
 
                 // XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
                 // XSDElementDeclaration newD = (XSDElementDeclaration) factory.createXSDElementDeclaration();
@@ -115,7 +115,7 @@ public class ElementWrapperCommitHandler extends CommitHandler<ElementWrapper> {
             if (getCommitedObj().getNewMaxOcur() > -1) {
                 getCommitedObj().getSourceElement().setMaxOccurs(getCommitedObj().getNewMaxOcur());
             } else {
-                getCommitedObj().getSourceElement().getElement().setAttribute("maxOccurs", "unbounded");
+                getCommitedObj().getSourceElement().getElement().setAttribute("maxOccurs", "unbounded");//$NON-NLS-1$//$NON-NLS-2$
             }
 
             getCommitedObj().getSourceElement().updateElement();
@@ -136,11 +136,11 @@ public class ElementWrapperCommitHandler extends CommitHandler<ElementWrapper> {
 
     private void validateElementNameAndReference() throws CommitValidationException {
 
-        if (((getCommitedObj().getNewName() == null) || ("".equals(getCommitedObj().getNewName())))
-                && ((getCommitedObj().getNewReference() == null) || "".equals(getCommitedObj().getNewReference())))
+        if (((getCommitedObj().getNewName() == null) || ("".equals(getCommitedObj().getNewName())))//$NON-NLS-1$
+                && ((getCommitedObj().getNewReference() == null) || "".equals(getCommitedObj().getNewReference())))//$NON-NLS-1$
             throw new CommitValidationException("The Business Element Name cannot be empty if the reference is empty");
 
-        if (getCommitedObj().getNewName().replaceAll("\\s", "").length() != getCommitedObj().getNewName().length())
+        if (getCommitedObj().getNewName().replaceAll("\\s", "").length() != getCommitedObj().getNewName().length())//$NON-NLS-1$//$NON-NLS-2$
             throw new CommitValidationException("The Business Element Name cannot contain the empty characters");
 
         if (getCommitedObj().hasNewReference()

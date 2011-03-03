@@ -118,7 +118,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
              */
             Label descriptionLabel = toolkit.createLabel(composite, "Keywords", SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-            searchText = toolkit.createText(composite, "*", SWT.BORDER);
+            searchText = toolkit.createText(composite, "*", SWT.BORDER);//$NON-NLS-1$
             searchText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
             // searchText.addModifyListener(this);
             searchText.addKeyListener(new KeyListener() {
@@ -135,7 +135,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                     );
 
             // search
-            Button bSearch = toolkit.createButton(composite, "", SWT.CENTER);
+            Button bSearch = toolkit.createButton(composite, "", SWT.CENTER);//$NON-NLS-1$
             bSearch.setImage(ImageCache.getCreatedImage(EImage.BROWSE.getPath()));
             bSearch.setToolTipText("Search");
             bSearch.setLayoutData(new GridData(SWT.NONE, SWT.CENTER, false, false, 1, 1));
@@ -449,7 +449,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
             return new LineItem[0];
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000"))
+            if ((e.getLocalizedMessage() != null) && e.getLocalizedMessage().contains("10000"))//$NON-NLS-1$
                 MessageDialog.openError(this.getSite().getShell(), "Too Many Results",
                         "More than 10000 results returned by the search. \nPlease narrow your search.");
             else
@@ -479,7 +479,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
             super();
             this.shell = shell;
             this.viewer = viewer;
-            setImageDescriptor(ImageCache.getImage("icons/edit_obj.gif"));
+            setImageDescriptor(ImageCache.getImage("icons/edit_obj.gif"));//$NON-NLS-1$
             setText("Display Dropped Record");
             setToolTipText("View a DOM Tree of the XML source");
         }
@@ -502,16 +502,16 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                 Pattern pLoad = Pattern.compile(".*?(<c>.*?</t>).*?(<p>(.*)</p>|<p/>).*", Pattern.DOTALL);//$NON-NLS-1$
                 Matcher m = pLoad.matcher(projection);
                 if (m.matches()) {
-                    if (m.group(2) == null || m.group(2).equals("<p/>")) {
-                        projection = "";
+                    if (m.group(2) == null || m.group(2).equals("<p/>")) {//$NON-NLS-1$
+                        projection = "";//$NON-NLS-1$
                     } else {
                         projection = m.group(3);
                     }
                 }
 
-                String userName = wsDroppedItem.getInsertionUserName() == null ? "undefine" : wsDroppedItem
+                String userName = wsDroppedItem.getInsertionUserName() == null ? "undefine" : wsDroppedItem//$NON-NLS-1$
                         .getInsertionUserName();
-                String droppedTime = wsDroppedItem.getInsertionTime() == null ? "undefine" : sdf.format(wsDroppedItem
+                String droppedTime = wsDroppedItem.getInsertionTime() == null ? "undefine" : sdf.format(wsDroppedItem//$NON-NLS-1$
                         .getInsertionTime());
                 String desc = "This Record was dropped by " + userName + " on " + droppedTime;
 
@@ -558,7 +558,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
             super();
             this.shell = shell;
             this.viewer = viewer;
-            setImageDescriptor(ImageCache.getImage("icons/add_obj.gif"));
+            setImageDescriptor(ImageCache.getImage("icons/add_obj.gif"));//$NON-NLS-1$
             setText("Restore the dropped Record");
             setToolTipText("Restore the dropped Record");
         }
@@ -667,13 +667,13 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
             case 1:
                 return li.getConcept();
             case 2:
-                return Util.joinStrings(li.getIds(), ".");
+                return Util.joinStrings(li.getIds(), ".");//$NON-NLS-1$
             case 3:
                 return li.getRevision();
             case 4:
                 return li.getPartPath();
             default:
-                return "???????";
+                return "???????";//$NON-NLS-1$
             }
         }
 
@@ -724,7 +724,7 @@ public class ItemsTrashBrowserMainPage extends AMainPage implements IXObjectMode
                 res = li1.getConcept().compareToIgnoreCase(li2.getConcept());
                 break;
             case 2:
-                res = Util.joinStrings(li1.getIds(), ".").compareToIgnoreCase(Util.joinStrings(li2.getIds(), "."));
+                res = Util.joinStrings(li1.getIds(), ".").compareToIgnoreCase(Util.joinStrings(li2.getIds(), "."));//$NON-NLS-1$//$NON-NLS-2$
                 break;
             case 3:
                 res = li1.getRevision().compareToIgnoreCase(li2.getRevision());

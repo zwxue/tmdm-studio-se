@@ -25,9 +25,9 @@ public class ElementWrapper implements ISubmittable {
 
     private XSDParticle sourceElement;
 
-    private String newName = "";
+    private String newName = "";//$NON-NLS-1$
 
-    private String newReference = "";
+    private String newReference = "";//$NON-NLS-1$
 
     private int newMinOcur = 1;
 
@@ -58,7 +58,7 @@ public class ElementWrapper implements ISubmittable {
     public String getNewName() {
 
         if (hasNewReference())
-            return "";
+            return "";//$NON-NLS-1$
 
         return newName;
     }
@@ -68,7 +68,7 @@ public class ElementWrapper implements ISubmittable {
         this.newName = newName;
 
         if (newName == null)
-            this.newName = "";
+            this.newName = "";//$NON-NLS-1$
 
     }
 
@@ -81,7 +81,7 @@ public class ElementWrapper implements ISubmittable {
         this.newReference = newReference;
 
         if (newReference == null)
-            this.newReference = "";
+            this.newReference = "";//$NON-NLS-1$
 
     }
 
@@ -126,7 +126,7 @@ public class ElementWrapper implements ISubmittable {
     }
 
     public boolean hasNewReference() {
-        return !"".equals(getNewReference());
+        return !"".equals(getNewReference());//$NON-NLS-1$
     }
 
     public XSDSchema getSchema() {

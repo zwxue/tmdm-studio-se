@@ -39,7 +39,7 @@ public class XSDNamedComponentLabelProvider implements ILabelProvider {
     public String getText(Object element) {
 
         if (!(element instanceof XSDNamedComponent))
-            return "";
+            return "";//$NON-NLS-1$
 
         return ((XSDNamedComponent) element).getName();
     }

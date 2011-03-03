@@ -108,7 +108,7 @@ public class MenuMainPage extends AMainPageV2 {
             // description
             Label descriptionLabel = toolkit.createLabel(mainComposite, "Description", SWT.NULL);
             descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
-            descriptionText = toolkit.createText(mainComposite, "", SWT.BORDER);
+            descriptionText = toolkit.createText(mainComposite, "", SWT.BORDER);//$NON-NLS-1$
             descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
             ((GridData) descriptionText.getLayoutData()).minimumHeight = 30;
             descriptionText.addModifyListener(new ModifyListener() {
@@ -187,10 +187,10 @@ public class MenuMainPage extends AMainPageV2 {
                 @Override
                 public String getText(Object element) {
                     WSMenuEntry wsMenuEntry = ((TreeEntry) element).getWsMenuEntry();
-                    String label = wsMenuEntry.getId() + " - ";
+                    String label = wsMenuEntry.getId() + " - ";//$NON-NLS-1$
                     for (int j = 0; j < wsMenuEntry.getDescriptions().length; j++) {
-                        label += "[" + wsMenuEntry.getDescriptions()[j].getLanguage() + ": "
-                                + wsMenuEntry.getDescriptions()[j].getLabel() + "] ";
+                        label += "[" + wsMenuEntry.getDescriptions()[j].getLanguage() + ": "//$NON-NLS-1$//$NON-NLS-2$
+                                + wsMenuEntry.getDescriptions()[j].getLabel() + "] ";//$NON-NLS-1$
                     }
                     if (label.length() > 200)
                         label = label.substring(0, 197) + "...";
@@ -199,7 +199,7 @@ public class MenuMainPage extends AMainPageV2 {
 
                 @Override
                 public Image getImage(Object element) {
-                    return ImageCache.getImage("icons/menu.gif").createImage();
+                    return ImageCache.getImage("icons/menu.gif").createImage();//$NON-NLS-1$
                 }
             });
 
@@ -341,7 +341,7 @@ public class MenuMainPage extends AMainPageV2 {
             MenuEntryDialog dlg = (MenuEntryDialog) ((Widget) e.getSource()).getData("dialog");//$NON-NLS-1$
             if (dlg.getReturnCode() == Window.OK) {
                 String id = dlg.getIdText().getText();
-                if ("".equals(id)) {
+                if ("".equals(id)) {//$NON-NLS-1$
                     MessageDialog.openError(viewer.getControl().getShell(), "Error", "The ID cannot be empty");
                     return;
                 }
@@ -354,11 +354,11 @@ public class MenuMainPage extends AMainPageV2 {
                 }
                 treeEntry.getWsMenuEntry().setId(id);
                 treeEntry.getWsMenuEntry().setContext(
-                        "".equals(dlg.getContextText().getText()) ? null : dlg.getContextText().getText());
+                        "".equals(dlg.getContextText().getText()) ? null : dlg.getContextText().getText());//$NON-NLS-1$
                 treeEntry.getWsMenuEntry().setApplication(
-                        "".equals(dlg.getApplicationNameText().getText()) ? null : dlg.getApplicationNameText().getText());
+                        "".equals(dlg.getApplicationNameText().getText()) ? null : dlg.getApplicationNameText().getText());//$NON-NLS-1$
                 treeEntry.getWsMenuEntry().setIcon(
-                        "".equals(dlg.getIconPathText().getText()) ? null : dlg.getIconPathText().getText());
+                        "".equals(dlg.getIconPathText().getText()) ? null : dlg.getIconPathText().getText());//$NON-NLS-1$
                 WSMenuMenuEntriesDescriptions[] wsDescriptions = new WSMenuMenuEntriesDescriptions[descriptions.size()];
                 Set<String> isoCodes = descriptions.keySet();
                 int i = 0;
@@ -440,17 +440,17 @@ public class MenuMainPage extends AMainPageV2 {
             super();
             this.viewer = view;
             this.location = location;
-            String label = "";
+            String label = "";//$NON-NLS-1$
             TreeEntry currentEntry = (TreeEntry) ((IStructuredSelection) viewer.getSelection()).getFirstElement();
             switch (location) {
             case LOCATION_UNDER:
                 position = 0;
-                treeEntry = new TreeEntry(currentEntry, new WSMenuEntry("", null, "", "", "", null));
+                treeEntry = new TreeEntry(currentEntry, new WSMenuEntry("", null, "", "", "", null));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
                 label = "Add a sub menu entry to " + currentEntry.getWsMenuEntry().getId();
                 break;
             case LOCATION_BEFORE:
                 position = findSubMenuPosition(currentEntry);
-                treeEntry = new TreeEntry(currentEntry.getParentTreeEntry(), new WSMenuEntry("", null, "", "", "", null));
+                treeEntry = new TreeEntry(currentEntry.getParentTreeEntry(), new WSMenuEntry("", null, "", "", "", null));//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$
                 label = "Add a menu entry before this entry";
                 break;
             case LOCATION_AFTER:

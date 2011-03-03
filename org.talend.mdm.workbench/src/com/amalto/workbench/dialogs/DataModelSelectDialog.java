@@ -108,7 +108,7 @@ public class DataModelSelectDialog extends org.eclipse.jface.dialogs.Dialog {
                 if (selectNode != null && selectNode.getType() == TreeObject.DATA_MODEL)
                     xpath = selectNode.getDisplayName();
                 else
-                    xpath = "";
+                    xpath = "";//$NON-NLS-1$
                 sel.getFirstElement();
 
                 getButton(IDialogConstants.OK_ID).setEnabled(xpath.length() > 0);

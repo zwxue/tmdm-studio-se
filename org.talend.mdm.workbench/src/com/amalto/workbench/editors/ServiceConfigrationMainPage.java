@@ -105,11 +105,11 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
                     return;
                 String serviceName = serviceNameCombo.getText();
                 try {
-                    if (serviceName != null && !"".equals(serviceName)) {
+                    if (serviceName != null && !"".equals(serviceName)) {//$NON-NLS-1$
                         document = port.getServiceDocument(new WSString(serviceName.trim()));
                         String documentConfigure = ServiceConfigrationMainPage.this.formartXml(document.getConfigure());
                         serviceConfigurationsText.setText(documentConfigure);
-                        errorLabel.setText("");
+                        errorLabel.setText("");//$NON-NLS-1$
                     }
                 } catch (RemoteException e1) {
                     log.error(e1.getMessage(), e1);
@@ -119,7 +119,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         });
         try {
             port = Util.getPort(getXObject());
-            WSServicesList list = port.getServicesList(new WSGetServicesList(""));
+            WSServicesList list = port.getServicesList(new WSGetServicesList(""));//$NON-NLS-1$
             WSServicesListItem[] items = list.getItem();
             if (items != null) {
                 String[] sortedList = new String[items.length];
@@ -140,7 +140,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         }
 
         // default parameters button
-        defultParameterBtn = toolkit.createButton(subPanel, "", SWT.PUSH);
+        defultParameterBtn = toolkit.createButton(subPanel, "", SWT.PUSH);//$NON-NLS-1$
         defultParameterBtn.setImage(ImageCache.getCreatedImage(EImage.HELP_CONTENTS.getPath()));
         defultParameterBtn.setToolTipText("Help...");
         defultParameterBtn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
@@ -152,8 +152,8 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
                 if (serviceNameCombo.getText().trim().length() == 0)
                     return;
-                String doc = "";
-                String desc = "";
+                String doc = "";//$NON-NLS-1$
+                String desc = "";//$NON-NLS-1$
                 // WSRoutingRule wsObject = (WSRoutingRule) (getXObject().getWsObject());
                 try {
                     // XtentisPort port=Util.getPort(getXObject());
@@ -162,7 +162,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
                     desc = document.getDescription();
                     doc = document.getDefaultConfig();
                 } catch (Exception e1) {
-                    doc = "N/A";
+                    doc = "N/A";//$NON-NLS-1$
                 } finally {
                     showUpDialog(desc, doc);
                 }
@@ -190,7 +190,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         // Service Parameters
         Label serviceConfigurationsLabel = toolkit.createLabel(serviceGroup, "Service Configuration", SWT.NULL);
         serviceConfigurationsLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 2, 1));
-        serviceConfigurationsText = toolkit.createText(serviceGroup, "", SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.WRAP);
+        serviceConfigurationsText = toolkit.createText(serviceGroup, "", SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.WRAP);//$NON-NLS-1$
 
         serviceConfigurationsText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
         ((GridData) serviceConfigurationsText.getLayoutData()).widthHint = 200;
@@ -211,7 +211,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
             public void widgetSelected(SelectionEvent e) {
                 if (serviceNameCombo.getText().trim().length() == 0)
                     return;
-                String msg = "";
+                String msg = "";//$NON-NLS-1$
                 boolean isok = false;
                 try {
                     WSCheckServiceConfigResponse result = port.checkServiceConfiguration(new WSCheckServiceConfigRequest(
@@ -243,7 +243,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         // format output
         if (doc != null && doc.length() > 0) {
             try {
-                doc = XmlUtil.formatPretty(doc, "UTF-8");
+                doc = XmlUtil.formatPretty(doc, "UTF-8");//$NON-NLS-1$
             } catch (DocumentException e) {
                 log.error(e.getMessage(), e);
             }
@@ -252,14 +252,14 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
     }
 
     protected void saveChanges() {
-        ws.setJndiName(serviceNameCombo.getText().contains("/") ? serviceNameCombo.getText() : "amalto/local/service/"
+        ws.setJndiName(serviceNameCombo.getText().contains("/") ? serviceNameCombo.getText() : "amalto/local/service/"//$NON-NLS-1$//$NON-NLS-2$
                 + serviceNameCombo.getText());
         ws.setConfiguration(serviceConfigurationsText.getText());
         try {
-            if (!"".equalsIgnoreCase(ws.getJndiName()) && !"".equalsIgnoreCase(ws.getConfiguration())) {
+            if (!"".equalsIgnoreCase(ws.getJndiName()) && !"".equalsIgnoreCase(ws.getConfiguration())) {//$NON-NLS-1$//$NON-NLS-2$
                 port.putServiceConfiguration(ws);
                 // there maybe several svn settings, so we need to put it on VersionSystem
-                if (serviceNameCombo.getText().equalsIgnoreCase("svn")) {
+                if (serviceNameCombo.getText().equalsIgnoreCase("svn")) {//$NON-NLS-1$
                     port.putVersioningSystemConfiguration(getDefaultSvn(serviceConfigurationsText.getText()));
                 }
             }
@@ -270,12 +270,12 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 
     private WSPutVersioningSystemConfiguration getDefaultSvn(String svnConfig) throws Exception {
         Node e = Util.parse(svnConfig).getDocumentElement();
-        String jndi = serviceNameCombo.getText().contains("/") ? serviceNameCombo.getText() : "amalto/local/service/"
+        String jndi = serviceNameCombo.getText().contains("/") ? serviceNameCombo.getText() : "amalto/local/service/"//$NON-NLS-1$//$NON-NLS-2$
                 + serviceNameCombo.getText();
-        String url = Util.getFirstTextNode(e, "./url");
-        String username = Util.getFirstTextNode(e, "./username");
-        String password = Util.getFirstTextNode(e, "./password");
-        String autocommit = Util.getFirstTextNode(e, "./autocommit");
+        String url = Util.getFirstTextNode(e, "./url");//$NON-NLS-1$
+        String username = Util.getFirstTextNode(e, "./username");//$NON-NLS-1$
+        String password = Util.getFirstTextNode(e, "./password");//$NON-NLS-1$
+        String autocommit = Util.getFirstTextNode(e, "./autocommit");//$NON-NLS-1$
         WSPutVersioningSystemConfiguration conf = new WSPutVersioningSystemConfiguration(new WSVersioningSystemConfiguration(
                 ICoreConstants.DEFAULT_SVN, ICoreConstants.DEFAULT_SVN, url, username, password, autocommit, jndi));
         return conf;

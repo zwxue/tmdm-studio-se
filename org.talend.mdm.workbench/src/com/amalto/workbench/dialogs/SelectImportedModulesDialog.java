@@ -93,7 +93,7 @@ public class SelectImportedModulesDialog extends Dialog {
 
     private static final Image OTHER_WEB = ImageCache.getCreatedImage(EImage.SERVERNAVIGATOR.getPath());
 
-    private static String EXCHANGE_DOWNLOAD_URL = "http://www.talendforge.org/exchange/mdm/api/get_last_extensions.php";
+    private static String EXCHANGE_DOWNLOAD_URL = "http://www.talendforge.org/exchange/mdm/api/get_last_extensions.php";//$NON-NLS-1$
 
     private String LOCAL_MDM_URL = null;
 
@@ -106,7 +106,7 @@ public class SelectImportedModulesDialog extends Dialog {
 
         String endpointIpAddress = treeObject.getEndpointIpAddress();
         if (endpointIpAddress != null && endpointIpAddress.length() > 0) {
-            LOCAL_MDM_URL = endpointIpAddress + "/pubcomponent/secure/dataModelsTypes/";
+            LOCAL_MDM_URL = endpointIpAddress + "/pubcomponent/secure/dataModelsTypes/";//$NON-NLS-1$
         }
     }
 
@@ -205,11 +205,11 @@ public class SelectImportedModulesDialog extends Dialog {
                     try {
                         ArrayList<String> schemaList = new ArrayList<String>();
                         XtentisPort port = Util.getPort(treeObject);
-                        WSDataModelPK[] xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs();
+                        WSDataModelPK[] xdmPKs = port.getDataModelPKs(new WSRegexDataModelPKs("")).getWsDataModelPKs();//$NON-NLS-1$
                         if (xdmPKs != null) {
                             for (int i = 0; i < xdmPKs.length; i++) {
                                 String name = xdmPKs[i].getPk();
-                                if (!name.startsWith("XMLSCHEMA")) {
+                                if (!name.startsWith("XMLSCHEMA")) {//$NON-NLS-1$
                                     schemaList.add(name);
                                 }
                             }
@@ -225,7 +225,7 @@ public class SelectImportedModulesDialog extends Dialog {
                     if (dlg.getReturnCode() == Window.OK) {
                         List<String> urls = dlg.getMDMDataModelUrls();
                         for (String url : urls) {
-                            XSDDesc xsdDesc = buildUp(LOCAL_MDM_URL + url + "/types", MDM_WEB, 1);
+                            XSDDesc xsdDesc = buildUp(LOCAL_MDM_URL + url + "/types", MDM_WEB, 1);//$NON-NLS-1$
                             include(xsdDesc);
                         }
                         getButton(IDialogConstants.OK_ID).setEnabled(true);
@@ -246,7 +246,7 @@ public class SelectImportedModulesDialog extends Dialog {
 
             public void widgetSelected(SelectionEvent e) {
                 HttpClient client = new HttpClient();
-                String importFolder = System.getProperty("user.dir");
+                String importFolder = System.getProperty("user.dir");//$NON-NLS-1$
                 StringBuffer repository = new StringBuffer();
                 ImportExchangeOptionsDialog dlg = new ImportExchangeOptionsDialog(shell.getShell(), null, false, repository);
                 dlg.setBlockOnOpen(true);
@@ -254,7 +254,7 @@ public class SelectImportedModulesDialog extends Dialog {
                 if (ret == Window.OK) {
                     File dir = new File(repository.toString());
                     for (File file : dir.listFiles()) {
-                        if (file.getName().endsWith(".xsd")) {
+                        if (file.getName().endsWith(".xsd")) {//$NON-NLS-1$
                             XSDDesc xsdDesc = buildUp(file.getAbsolutePath(), MDM_WEB, 1);
                             include(xsdDesc);
                         }
@@ -281,7 +281,7 @@ public class SelectImportedModulesDialog extends Dialog {
                         "Enter a text for the URL of XSD Schema resource", "", new IInputValidator() {
 
                             public String isValid(String newText) {
-                                if ((newText == null) || "".equals(newText))
+                                if ((newText == null) || "".equals(newText))//$NON-NLS-1$
                                     return "The name cannot be empty";
                                 return null;
                             };
@@ -330,7 +330,7 @@ public class SelectImportedModulesDialog extends Dialog {
         xsdDescList.clear();
         try {
             for (XSDSchemaContent cnt : xsdSchema.getContents()) {
-                String schemaLocation = "";
+                String schemaLocation = "";//$NON-NLS-1$
                 if (cnt instanceof XSDImportImpl) {
                     XSDImportImpl imp = (XSDImportImpl) cnt;
                     schemaLocation = imp.getSchemaLocation();
@@ -350,7 +350,7 @@ public class SelectImportedModulesDialog extends Dialog {
                         int type = local ? 1 : 2;
                         XSDDesc xsdDesc = buildUp(schemaLocation, img, type);
                         xsdDescList.add(xsdDesc);
-                    } else if (!schemaLocation.equals("")) {
+                    } else if (!schemaLocation.equals("")) {//$NON-NLS-1$
                         XSDDesc xsdDesc = buildUp(schemaLocation, LOCAL, 0);
                         xsdDescList.add(xsdDesc);
                     }

@@ -18,7 +18,7 @@ public class FieldWrapper {
 
     private XSDXPathDefinition sourceFiled;
 
-    private String xpath = "";
+    private String xpath = "";//$NON-NLS-1$
 
     public FieldWrapper(String xpath) {
         this.xpath = xpath;
@@ -38,7 +38,7 @@ public class FieldWrapper {
 
     public void setXPath(String xpath) {
 
-        if (xpath == null || "".equals(xpath.trim()))
+        if (xpath == null || "".equals(xpath.trim()))//$NON-NLS-1$
             return;
 
         this.xpath = xpath;

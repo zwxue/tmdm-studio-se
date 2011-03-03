@@ -39,7 +39,7 @@ public class KeyWrapperLabelProvider implements ILabelProvider {
         if (element instanceof KeyWrapper)
             return ((KeyWrapper) element).getName();
 
-        return "";
+        return "";//$NON-NLS-1$
     }
 
     public void addListener(ILabelProviderListener listener) {

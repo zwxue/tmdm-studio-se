@@ -115,7 +115,7 @@ public class EntityMainSection extends CommitBarListenerSection<XSDElementDeclar
 
     @Override
     protected String getSectionTitle() {
-        return "";
+        return "";//$NON-NLS-1$
     }
 
     @Override

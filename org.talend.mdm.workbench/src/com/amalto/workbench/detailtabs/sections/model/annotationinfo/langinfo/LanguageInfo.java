@@ -14,11 +14,11 @@ package com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo;
 
 public class LanguageInfo {
 
-    private String language = "";
+    private String language = "";//$NON-NLS-1$
 
-    private String languageISOCode = "";
+    private String languageISOCode = "";//$NON-NLS-1$
 
-    private String label = "";
+    private String label = "";//$NON-NLS-1$
 
     public LanguageInfo(String language, String languageISOCode, String label) {
         this.label = label;

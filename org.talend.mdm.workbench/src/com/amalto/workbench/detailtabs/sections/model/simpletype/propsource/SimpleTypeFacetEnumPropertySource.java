@@ -18,7 +18,7 @@ import com.amalto.workbench.utils.IConstants;
 
 public class SimpleTypeFacetEnumPropertySource extends SimpleTypeFacetListStrPropertySource {
 
-    public static final String DELIMITER = " ; ";
+    public static final String DELIMITER = " ; ";//$NON-NLS-1$
 
     public SimpleTypeFacetEnumPropertySource(Composite cellEditorParent, String[] values) {
         super(cellEditorParent, IConstants.SIMPLETYPE_FACETNAME_ENUM, values, DELIMITER);

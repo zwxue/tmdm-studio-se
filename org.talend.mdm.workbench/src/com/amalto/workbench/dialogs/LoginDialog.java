@@ -80,7 +80,7 @@ public class LoginDialog extends Dialog {
 
     private SelectionListener caller = null;
 
-    private String title = "";
+    private String title = "";//$NON-NLS-1$
 
     private Combo universeCombo;
 
@@ -240,7 +240,7 @@ public class LoginDialog extends Dialog {
             isExist = checkServer(root);
         } else {
             logininfoDocument = DocumentHelper.createDocument();
-            root = logininfoDocument.addElement("MDMServer");
+            root = logininfoDocument.addElement("MDMServer");//$NON-NLS-1$
         }
 
         if (!isExist)
@@ -326,7 +326,7 @@ public class LoginDialog extends Dialog {
         if (Util.IsEnterPrise()) {
             return universeCombo.getText().trim();
         } else {
-            return "";
+            return "";//$NON-NLS-1$
         }
     }
 
@@ -369,9 +369,9 @@ public class LoginDialog extends Dialog {
 
         MDMServerDef selectedServer = getSelectedMDMServerDef();
 
-        endpointsCombo.getCombo().setToolTipText(selectedServer == null ? "" : selectedServer.getDesc());
-        userText.setText(selectedServer == null ? "" : selectedServer.getUser());
-        passwordText.setText(selectedServer == null ? "" : selectedServer.getPasswd());
+        endpointsCombo.getCombo().setToolTipText(selectedServer == null ? "" : selectedServer.getDesc());//$NON-NLS-1$
+        userText.setText(selectedServer == null ? "" : selectedServer.getUser());//$NON-NLS-1$
+        passwordText.setText(selectedServer == null ? "" : selectedServer.getPasswd());//$NON-NLS-1$
 
     }
 }
@@ -398,7 +398,7 @@ class MDMServerLabelProvider implements ILabelProvider {
     public String getText(Object element) {
 
         if (!(element instanceof MDMServerDef))
-            return "";
+            return "";//$NON-NLS-1$
 
         return ((MDMServerDef) element).getUrl();
     }

@@ -39,16 +39,16 @@ public class IdentityConstraintInputDialog extends Dialog {
 
     private CCombo fieldNameCombo = null;
 
-    private String keyName = "";
+    private String keyName = "";//$NON-NLS-1$
 
-    private String fieldName = "";
+    private String fieldName = "";//$NON-NLS-1$
 
     private XSDIdentityConstraintCategory type;
 
     private List<String> deElements;
 
     // private SelectionListener caller = null;
-    private String title = "";
+    private String title = "";//$NON-NLS-1$
 
     private Text keyNameText;
 
@@ -131,8 +131,8 @@ public class IdentityConstraintInputDialog extends Dialog {
 
         typeCombo = new CCombo(composite, SWT.DROP_DOWN | SWT.READ_ONLY | SWT.BORDER);
         typeCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        typeCombo.add("Unique Key");
-        typeCombo.add("Simple Key");
+        typeCombo.add("Unique Key");//$NON-NLS-1$
+        typeCombo.add("Simple Key");//$NON-NLS-1$
         typeCombo.select(0);
         // typeList.add("Foreign Key"); -- FIXME: foreign keys not supported now
 
@@ -161,11 +161,11 @@ public class IdentityConstraintInputDialog extends Dialog {
     }
 
     public boolean isUniqueKey() {
-        return "Unique Key".equals(typeCombo.getText().trim());
+        return "Unique Key".equals(typeCombo.getText().trim());//$NON-NLS-1$
     }
 
     public boolean isSimpleKey() {
-        return "Simple Key".equals(typeCombo.getText().trim());
+        return "Simple Key".equals(typeCombo.getText().trim());//$NON-NLS-1$
     }
 
     protected void createButtonsForButtonBar(Composite parent) {
@@ -187,7 +187,7 @@ public class IdentityConstraintInputDialog extends Dialog {
         // keyName = keyNameText.getText();
         fieldName = fieldNameCombo.getText().trim();
         keyName = keyNameText.getText().trim();
-        if ((keyName == null) || ("".equals(keyName))) {
+        if ((keyName == null) || ("".equals(keyName))) {//$NON-NLS-1$
             MessageDialog.openError(this.getShell(), "Error", "The Key name cannot be empty");
             setReturnCode(-1);
             keyNameText.setFocus();
@@ -195,14 +195,14 @@ public class IdentityConstraintInputDialog extends Dialog {
             return;
         }
 
-        if (keyName.replaceAll("\\s", "").length() != keyName.length()) {//$NON-NLS-1$
+        if (keyName.replaceAll("\\s", "").length() != keyName.length()) {//$NON-NLS-1$//$NON-NLS-2$
             MessageDialog.openError(this.getShell(), "Error", "The Key name cannot contain the empty characters");
             setReturnCode(-1);
             keyNameText.setFocus();
             return;
         }
 
-        if (fieldName.replaceAll("\\s", "").length() != fieldName.length()) {//$NON-NLS-1$
+        if (fieldName.replaceAll("\\s", "").length() != fieldName.length()) {//$NON-NLS-1$//$NON-NLS-2$
             MessageDialog.openError(this.getShell(), "Error", "The field name cannot contain the empty characters");
             setReturnCode(-1);
             fieldNameCombo.setFocus();
@@ -272,7 +272,7 @@ public class IdentityConstraintInputDialog extends Dialog {
 
     private boolean validInput() {
 
-        if ("".equals(keyNameText.getText().trim())) {
+        if ("".equals(keyNameText.getText().trim())) {//$NON-NLS-1$
             MessageDialog.openError(this.getShell(), "Error", "The Key Name cannot be empty");
             keyNameText.setFocus();
             return false;

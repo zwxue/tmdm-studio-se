@@ -86,7 +86,7 @@ public class NewGroupDialog extends Dialog {
         minOccursText = new Text(composite, SWT.NONE);
         minOccursText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         minOccursText.setDoubleClickEnabled(false);
-        minOccursText.setText("" + getMinOccurs());
+        minOccursText.setText("" + getMinOccurs());//$NON-NLS-1$
 
         Label maxOccursLabel = new Label(composite, SWT.NONE);
         maxOccursLabel.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
@@ -94,7 +94,7 @@ public class NewGroupDialog extends Dialog {
 
         maxOccursText = new Text(composite, SWT.NONE);
         maxOccursText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-        maxOccursText.setText(getMaxOccurs() == -1 ? "" : "" + getMaxOccurs());
+        maxOccursText.setText(getMaxOccurs() == -1 ? "" : "" + getMaxOccurs());//$NON-NLS-1$//$NON-NLS-2$
 
         return composite;
     }
@@ -109,7 +109,7 @@ public class NewGroupDialog extends Dialog {
     }
 
     protected void okPressed() {
-        if ("".equals(minOccursText.getText()) && "".equals(maxOccursText.getText())) {
+        if ("".equals(minOccursText.getText()) && "".equals(maxOccursText.getText())) {//$NON-NLS-1$//$NON-NLS-2$
             minOccurs = 1;
             maxOccurs = 1;
             return;
@@ -129,7 +129,7 @@ public class NewGroupDialog extends Dialog {
             return;
         }
 
-        if ("".equals(maxOccursText.getText())) {
+        if ("".equals(maxOccursText.getText())) {//$NON-NLS-1$
             maxOccurs = -1;
         } else {
             try {

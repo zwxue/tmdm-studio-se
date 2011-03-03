@@ -28,7 +28,7 @@ public class ElementFKSection extends XSDComponentSection {
 
     private SimpleXPathComposite compSimpleXPath;
 
-    private String xpath = "";
+    private String xpath = "";//$NON-NLS-1$
 
     @Override
     public void refresh() {
@@ -41,7 +41,7 @@ public class ElementFKSection extends XSDComponentSection {
 
         xpath = new XSDAnnotationsStructure(curXSDComponent).getForeignKey();
         if (xpath == null)
-            xpath = "";
+            xpath = "";//$NON-NLS-1$
 
         dataModelHolder.setDefaultDataModel(getDataModelName());
         compSimpleXPath.setDefaultDataModelForSelect(getDataModelName());
@@ -57,7 +57,7 @@ public class ElementFKSection extends XSDComponentSection {
     protected void createControlsInSection(Composite compSectionClient) {
         dataModelHolder = new FixDMNameBasePropertySectionDataModelExtractor(this);
         compSimpleXPath = new SimpleXPathComposite(compSectionClient, SWT.NONE, SimpleXPathComposite.DEFAULTTITLE,
-                dataModelHolder, "");
+                dataModelHolder, "");//$NON-NLS-1$
     }
 
     @Override

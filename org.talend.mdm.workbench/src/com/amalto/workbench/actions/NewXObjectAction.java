@@ -345,7 +345,7 @@ public class NewXObjectAction extends Action {
                         xobject.getUniverse(), xobject.getUsername(), xobject.getPassword());
                 String firstItemCluster = null;
                 for (int i = 0; i < dataClusterPKs.length; i++) {
-                    if (!dataClusterPKs[i].getPk().equals("CACHE")) { // FIXME: hardcoded CACHE
+                    if (!dataClusterPKs[i].getPk().equals("CACHE")) { // FIXME: hardcoded CACHE//$NON-NLS-1$
                         firstItemCluster = dataClusterPKs[i].getPk();
                         break;
                     }

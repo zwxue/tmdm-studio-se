@@ -28,7 +28,7 @@ public class ElementFKFilterSection extends XSDComponentSection {
 
     private ForeignKeyFilterComposite compFKFilter;
 
-    private String filterExpression = "";
+    private String filterExpression = "";//$NON-NLS-1$
 
     @Override
     public void refresh() {
@@ -41,7 +41,7 @@ public class ElementFKFilterSection extends XSDComponentSection {
 
         filterExpression = new XSDAnnotationsStructure(curXSDComponent).getFKFilter();
         if (filterExpression == null)
-            filterExpression = "";
+            filterExpression = "";//$NON-NLS-1$
 
         dataModelHolder.setDefaultDataModel(getDataModelName());
     }

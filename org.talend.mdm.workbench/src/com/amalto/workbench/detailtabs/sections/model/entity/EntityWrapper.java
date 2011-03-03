@@ -31,7 +31,7 @@ public class EntityWrapper implements ISubmittable, INameEditable {
 
     private EditXSDEleDecNameValidator nameValidator;
 
-    private String name = "";
+    private String name = "";//$NON-NLS-1$
 
     private List<KeyWrapper> keys = new ArrayList<KeyWrapper>();
 

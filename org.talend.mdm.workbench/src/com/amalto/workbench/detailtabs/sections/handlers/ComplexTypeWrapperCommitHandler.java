@@ -43,10 +43,10 @@ class ComplexTypeNameCommitHandler extends CommitHandler<ComplexTypeWrapper> {
     @Override
     protected void validateCommit() throws CommitValidationException {
 
-        if (getCommitedObj().getNewTypeName() == null || "".equals(getCommitedObj().getNewTypeName().trim()))
+        if (getCommitedObj().getNewTypeName() == null || "".equals(getCommitedObj().getNewTypeName().trim()))//$NON-NLS-1$
             throw new CommitValidationException("The name of the complex type can not be empty");
 
-        if (getCommitedObj().getNewTypeName().replaceAll("\\s", "").length() != getCommitedObj().getNewTypeName().length())//$NON-NLS-1$
+        if (getCommitedObj().getNewTypeName().replaceAll("\\s", "").length() != getCommitedObj().getNewTypeName().length())//$NON-NLS-1$//$NON-NLS-2$
             throw new CommitValidationException("The name of the complex type can not contain the empty characters");
 
     }

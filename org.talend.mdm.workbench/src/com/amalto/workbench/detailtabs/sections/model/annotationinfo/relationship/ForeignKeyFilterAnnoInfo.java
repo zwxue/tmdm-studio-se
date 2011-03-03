@@ -44,12 +44,12 @@ public class ForeignKeyFilterAnnoInfo extends SingleContentAnnotationInfo {
         if (isCustomFilter(filterExpression))
             return filterExpression;
 
-        return "";
+        return "";//$NON-NLS-1$
     }
 
     public static ForeignKeyFilterAnnoInfoDefUnit[] getFKFilterCfgInfos(String filterExpression) {
 
-        if ("".equals(filterExpression) || isCustomFilter(filterExpression))
+        if ("".equals(filterExpression) || isCustomFilter(filterExpression))//$NON-NLS-1$
             return new ForeignKeyFilterAnnoInfoDefUnit[0];
 
         List<ForeignKeyFilterAnnoInfoDefUnit> fkFilterInfos = new ArrayList<ForeignKeyFilterAnnoInfoDefUnit>();
@@ -62,11 +62,11 @@ public class ForeignKeyFilterAnnoInfo extends SingleContentAnnotationInfo {
                 list.addAll(Arrays.asList(values));
                 int num = 4 - list.size();
                 for (int i = 0; i < num; i++) {
-                    list.add("");
+                    list.add("");//$NON-NLS-1$
                 }
 
                 fkFilterInfos.add(new ForeignKeyFilterAnnoInfoDefUnit(list.get(0), list.get(1), list.get(2).replaceAll("&quot;",//$NON-NLS-1$
-                        "\""), list.get(3)));
+                        "\""), list.get(3)));//$NON-NLS-1$
 
             }
         }

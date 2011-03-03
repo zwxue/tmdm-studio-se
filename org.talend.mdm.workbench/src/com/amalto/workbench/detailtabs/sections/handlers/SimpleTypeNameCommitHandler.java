@@ -28,7 +28,7 @@ public class SimpleTypeNameCommitHandler extends CommitHandler<SimpleTypeWrapper
         if ("".equals(getCommitedObj().getNewTypeName().trim()))
             throw new CommitValidationException("The new type name can not be empty");
 
-        if (getCommitedObj().getNewTypeName().replaceAll("\\s", "").length() != getCommitedObj().getNewTypeName().length())
+        if (getCommitedObj().getNewTypeName().replaceAll("\\s", "").length() != getCommitedObj().getNewTypeName().length())//$NON-NLS-1$//$NON-NLS-2$
             throw new CommitValidationException("The new type name can not contain the empty characters");
     }
 

@@ -71,9 +71,9 @@ public class NameConfigComposite extends Composite {
 
         remvoeUIListener();
 
-        txtName.setText("");
+        txtName.setText("");//$NON-NLS-1$
         lblNameErrIndicator.setVisible(false);
-        lblNameErrIndicator.setToolTipText("");
+        lblNameErrIndicator.setToolTipText("");//$NON-NLS-1$
 
         if (target != null) {
             txtName.setText(target.getName());
@@ -94,7 +94,7 @@ public class NameConfigComposite extends Composite {
                 String errMsg = target.validNewName(txtName.getText().trim());
 
                 lblNameErrIndicator.setVisible(errMsg != null);
-                lblNameErrIndicator.setToolTipText(errMsg == null ? "" : errMsg);
+                lblNameErrIndicator.setToolTipText(errMsg == null ? "" : errMsg);//$NON-NLS-1$
 
                 target.setName(txtName.getText().trim());
             }

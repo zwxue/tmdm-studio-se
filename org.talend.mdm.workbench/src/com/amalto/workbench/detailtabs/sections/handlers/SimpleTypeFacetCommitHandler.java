@@ -24,7 +24,7 @@ import com.amalto.workbench.utils.Util;
 
 public abstract class SimpleTypeFacetCommitHandler extends CommitHandler<SimpleTypeWrapper> {
 
-    protected String facetName = "";
+    protected String facetName = "";//$NON-NLS-1$
 
     public SimpleTypeFacetCommitHandler(SimpleTypeWrapper submittedObj, String facetName) {
         super(submittedObj);

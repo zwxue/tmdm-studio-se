@@ -53,7 +53,7 @@ public class NewCategoryAction extends Action {
                 new IInputValidator() {
 
                     public String isValid(String newText) {
-                        if ((newText == null) || "".equals(newText))
+                        if ((newText == null) || "".equals(newText))//$NON-NLS-1$
                             return "The Name cannot be empty";
                         Pattern p = Pattern.compile("([\\s*|\\W*]+)");//$NON-NLS-1$ 
                         Matcher m = p.matcher(newText);

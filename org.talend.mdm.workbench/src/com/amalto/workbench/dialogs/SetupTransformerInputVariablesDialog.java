@@ -91,23 +91,23 @@ public class SetupTransformerInputVariablesDialog extends Dialog {
                 true, // is Nillable ?
                 "_DEFAULT_", // Nill value//$NON-NLS-1$
                 "_DEFAULT_", // Nill display//$NON-NLS-1$
-                "", // Default Value
+                "", // Default Value//$NON-NLS-1$
                 ComplexTableViewerColumn.COMBO_STYLE, // is Combo ?
                 inputVariables.toArray(new String[inputVariables.size()]), // Combo Values
                 0 // Text Lines
                 ), new ComplexTableViewerColumn("Content Type", // name
                         false, // is Nillable ?
-                        "", // Nill value
-                        "", // Nill display
+                        "", // Nill value//$NON-NLS-1$
+                        "", // Nill display//$NON-NLS-1$
                         "text/xml", // Default Value//$NON-NLS-1$
                         ComplexTableViewerColumn.COMBO_STYLE, // is Combo ?
                         EContentType.allTypes().toArray(new String[EContentType.allTypes().size()]), // Combo Values
                         0 // Text Lines
                 ), new ComplexTableViewerColumn("Value", // name
                         true, // is Nillable ?
-                        "", // Nill value
-                        "", // Nill display
-                        "", // Default Value
+                        "", // Nill value//$NON-NLS-1$
+                        "", // Nill display//$NON-NLS-1$
+                        "", // Default Value//$NON-NLS-1$
                         ComplexTableViewerColumn.TEXT_STYLE, // is Combo ?
                         null, // Combo Values
                         10 // Text Lines
