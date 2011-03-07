@@ -12,12 +12,15 @@
 // ============================================================================
 package com.amalto.workbench.editors;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.DocumentException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -55,6 +58,7 @@ import com.amalto.workbench.webservices.WSServicesListItem;
 import com.amalto.workbench.webservices.WSString;
 import com.amalto.workbench.webservices.WSVersioningSystemConfiguration;
 import com.amalto.workbench.webservices.XtentisPort;
+import com.sun.xml.bind.StringInputStream;
 
 public class ServiceConfigrationMainPage extends AMainPageV2 {
 
@@ -77,6 +81,12 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
     private WSServicePutConfiguration ws = new WSServicePutConfiguration();
 
     private Text errorLabel;
+
+    private static final String CHECKMSG_NOSELECTION = ""; //$NON-NLS-1$
+
+    private static final String CHECKMSG_SUCCESSFULCONN = "Connection sucessfully!";
+
+    private static final String CHECKMSG_ERRORCONN = "Connection failed, please check your url, username and password";
 
     public ServiceConfigrationMainPage(FormEditor editor) {
         super(editor, ServiceConfigrationMainPage.class.getName(), ((XObjectEditorInput) editor.getEditorInput()).getName());
@@ -209,23 +219,26 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         checkButton.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent e) {
-                if (serviceNameCombo.getText().trim().length() == 0)
-                    return;
-                String msg = "";//$NON-NLS-1$
-                boolean isok = false;
-                try {
-                    WSCheckServiceConfigResponse result = port.checkServiceConfiguration(new WSCheckServiceConfigRequest(
-                            serviceNameCombo.getText().trim(), serviceConfigurationsText.getText()));
-                    isok = result.getCheckResult();
-                    if (isok) {
-                        msg = "Connection sucessfully!";
-                    } else {
-                        msg = "Connection failed, please check your url, username and password";
-                    }
-                } catch (RemoteException e1) {
-                    log.error(e1.getMessage(), e1);
-                    msg = e1.getLocalizedMessage();
-                }
+                // if (serviceNameCombo.getText().trim().length() == 0)
+                // return;
+                //                String msg = "";//$NON-NLS-1$
+                // boolean isok = false;
+                // try {
+                // WSCheckServiceConfigResponse result = port.checkServiceConfiguration(new WSCheckServiceConfigRequest(
+                // serviceNameCombo.getText().trim(), serviceConfigurationsText.getText()));
+                // isok = result.getCheckResult();
+                // if (isok) {
+                // msg = "Connection sucessfully!";
+                // } else {
+                // msg = "Connection failed, please check your url, username and password";
+                // }
+                // } catch (RemoteException e1) {
+                // log.error(e1.getMessage(), e1);
+                // msg = e1.getLocalizedMessage();
+                // }
+                String msg = getContentsCheckResult();
+                boolean isok = msg.equals(CHECKMSG_SUCCESSFULCONN);
+
                 errorLabel.setForeground(isok ? errorLabel.getDisplay().getSystemColor(SWT.COLOR_BLUE) : errorLabel.getDisplay()
                         .getSystemColor(SWT.COLOR_RED));
                 errorLabel.setText(msg);
@@ -283,7 +296,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 
     @Override
     protected void commit() {
-        saveChanges();
+        // saveChanges();
     }
 
     @Override
@@ -300,4 +313,63 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 
     }
 
+    @Override
+    public void doSave(IProgressMonitor monitor) {
+
+        String msg = checkValidXML();
+
+        if (msg != null) {
+            MessageDialog.openError(getSite().getShell(), "Error", msg);
+            return;
+        }
+
+        saveChanges();
+        super.doSave(monitor);
+    }
+
+    private String getContentsCheckResult() {
+
+        if (serviceNameCombo.getText().trim().length() == 0)
+            return CHECKMSG_NOSELECTION;
+
+        WSCheckServiceConfigResponse result;
+        try {
+            result = port.checkServiceConfiguration(new WSCheckServiceConfigRequest(serviceNameCombo.getText().trim(),
+                    serviceConfigurationsText.getText()));
+
+            if (result.getCheckResult()) {
+                return CHECKMSG_SUCCESSFULCONN;
+            } else {
+                return CHECKMSG_ERRORCONN;
+            }
+        } catch (RemoteException e) {
+            log.error(e.getMessage(), e);
+            return e.getLocalizedMessage();
+        }
+    }
+
+    private String checkValidXML() {
+
+        if (serviceConfigurationsText == null)
+            return null;
+
+        StringInputStream inStream = null;
+
+        try {
+            inStream = new StringInputStream(serviceConfigurationsText.getText());
+            XmlUtil.parse(inStream);
+        } catch (Exception e) {
+            return e.getMessage();
+        } finally {
+            if (inStream != null)
+                try {
+                    inStream.close();
+                } catch (IOException e) {
+
+                }
+        }
+
+        return null;
+
+    }
 }
