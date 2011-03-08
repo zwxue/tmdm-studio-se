@@ -143,7 +143,6 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
                         continue;
                     serviceNameCombo.add(sortedList[i]);
                 }
-                // serviceNameCombo.add("");
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -164,9 +163,9 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
                     return;
                 String doc = "";//$NON-NLS-1$
                 String desc = "";//$NON-NLS-1$
-                // WSRoutingRule wsObject = (WSRoutingRule) (getXObject().getWsObject());
+
                 try {
-                    // XtentisPort port=Util.getPort(getXObject());
+
                     WSServiceGetDocument document = port.getServiceDocument(new WSString(serviceNameCombo.getText().trim()));
 
                     desc = document.getDescription();
@@ -179,7 +178,6 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
             };
 
             private void showUpDialog(String desc, String doc) {
-                // doc = ServiceConfigrationMainPage.this.formartXml(doc);
 
                 final PluginDetailsDialog dialog = new PluginDetailsDialog(getSite().getShell(), desc, doc, null,
                         "Default Service Configuration");
@@ -211,7 +209,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
             public void modifyText(ModifyEvent e) {
                 if (refreshing)
                     return;
-                // markDirty();
+
                 markDirtyWithoutCommit();
             }
         });
@@ -219,37 +217,19 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
         checkButton.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent e) {
-                // if (serviceNameCombo.getText().trim().length() == 0)
-                // return;
-                //                String msg = "";//$NON-NLS-1$
-                // boolean isok = false;
-                // try {
-                // WSCheckServiceConfigResponse result = port.checkServiceConfiguration(new WSCheckServiceConfigRequest(
-                // serviceNameCombo.getText().trim(), serviceConfigurationsText.getText()));
-                // isok = result.getCheckResult();
-                // if (isok) {
-                // msg = "Connection sucessfully!";
-                // } else {
-                // msg = "Connection failed, please check your url, username and password";
-                // }
-                // } catch (RemoteException e1) {
-                // log.error(e1.getMessage(), e1);
-                // msg = e1.getLocalizedMessage();
-                // }
-                String msg = getContentsCheckResult();
-                boolean isok = msg.equals(CHECKMSG_SUCCESSFULCONN);
 
-                errorLabel.setForeground(isok ? errorLabel.getDisplay().getSystemColor(SWT.COLOR_BLUE) : errorLabel.getDisplay()
-                        .getSystemColor(SWT.COLOR_RED));
+                String msg = getContentsCheckResult();
+
+                errorLabel.setForeground(CHECKMSG_SUCCESSFULCONN.equals(msg) ? errorLabel.getDisplay().getSystemColor(
+                        SWT.COLOR_BLUE) : errorLabel.getDisplay().getSystemColor(SWT.COLOR_RED));
                 errorLabel.setText(msg);
             }
         });
         errorLabel = new Text(serviceGroup, SWT.WRAP);
         GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 2);
-        // gd.heightHint=200;
+        gd.heightHint = 400;
         errorLabel.setLayoutData(gd);
-        // errorLabel.setImage(ImageCache.getImage( EImage.WARNING_CO.getPath()).createImage());
-        // errorLabel.setVisible(false);
+
     }
 
     private String formartXml(String doc) {
@@ -296,20 +276,15 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 
     @Override
     protected void commit() {
-        // saveChanges();
     }
 
     @Override
     protected void createActions() {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     protected void refreshData() {
-        // if (this.comitting) return;
-        // this.refreshing = true;
-        // this.refreshing = false;
 
     }
 
