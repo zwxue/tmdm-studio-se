@@ -27,12 +27,10 @@ import org.talend.core.context.Context;
 import org.talend.core.context.RepositoryContext;
 import org.talend.core.language.ECodeLanguage;
 import org.talend.core.model.repository.ERepositoryObjectType;
-import org.talend.mdm.engines.client.Activator;
-import org.talend.mdm.engines.client.ui.preferences.MDMPreferenceInitializer;
 import org.talend.mdm.engines.client.ui.wizards.DeployOnMDMExportWizard;
-import org.talend.repository.model.RepositoryNode;
 import org.talend.repository.model.IRepositoryNode.ENodeType;
 import org.talend.repository.model.IRepositoryNode.EProperties;
+import org.talend.repository.model.RepositoryNode;
 import org.talend.repository.ui.actions.AContextualAction;
 
 /**
@@ -72,7 +70,9 @@ public final class DeployOnMDMAction extends AContextualAction {
     }
 
     public boolean isVisible() {
-        return isEnabled() && Activator.getDefault().getPreferenceStore().getBoolean(MDMPreferenceInitializer.MDM_STATUS);
+        // return isEnabled() &&
+        // Activator.getDefault().getPreferenceStore().getBoolean(MDMPreferenceInitializer.MDM_STATUS);
+        return isEnabled();
     }
 
     public DeployOnMDMAction() {

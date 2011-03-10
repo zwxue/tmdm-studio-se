@@ -13,12 +13,8 @@
 package org.talend.mdm.engines.client.ui.preferences;
 
 import org.apache.log4j.Logger;
-import org.eclipse.gmf.runtime.common.ui.preferences.CheckBoxFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -36,7 +32,7 @@ public class MDMPreferencePage extends FieldEditorPreferencePage implements IWor
 
     protected static Logger log = Logger.getLogger(MDMPreferencePage.class);
 
-    protected CheckBoxFieldEditor spagoBiCheckButton;
+    // protected CheckBoxFieldEditor spagoBiCheckButton;
 
     protected MDMServerEditor editor;
 
@@ -68,38 +64,39 @@ public class MDMPreferencePage extends FieldEditorPreferencePage implements IWor
     protected void createFieldEditors() {
         parent = getFieldEditorParent();
 
-        spagoBiCheckButton = new CheckBoxFieldEditor(MDMPreferenceInitializer.MDM_STATUS, Messages
-                .getString("MDMPreferencePage.spagoBiCheckButton"), parent); //$NON-NLS-1$
-        editor = new MDMServerEditor(MDMPreferenceInitializer.MDM_SERVER, Messages
-                .getString("MDMPreferencePage.technicalStatusLabel"), parent); //$NON-NLS-1$
+        // spagoBiCheckButton = new CheckBoxFieldEditor(MDMPreferenceInitializer.MDM_STATUS, Messages
+        //                .getString("MDMPreferencePage.spagoBiCheckButton"), parent); //$NON-NLS-1$
+        editor = new MDMServerEditor(MDMPreferenceInitializer.MDM_SERVER,
+                Messages.getString("MDMPreferencePage.technicalStatusLabel"), parent); //$NON-NLS-1$
         addField(editor);
 
         updateEnableStateFromPreferences();
 
-        SelectionListener listener = new SelectionListener() {
-
-            public void widgetDefaultSelected(SelectionEvent e) {
-            }
-
-            public void widgetSelected(SelectionEvent e) {
-                IPreferenceStore preferenceStore = getPreferenceStore();
-                preferenceStore.setValue(MDMPreferenceInitializer.MDM_STATUS, ((Button) e.getSource()).getSelection());
-                updateEnableStateFromDisplay();
-            }
-        };
-        spagoBiCheckButton.getCheckbox().addSelectionListener(listener);
+        // SelectionListener listener = new SelectionListener() {
+        //
+        // public void widgetDefaultSelected(SelectionEvent e) {
+        // }
+        //
+        // public void widgetSelected(SelectionEvent e) {
+        // IPreferenceStore preferenceStore = getPreferenceStore();
+        // preferenceStore.setValue(MDMPreferenceInitializer.MDM_STATUS, ((Button) e.getSource()).getSelection());
+        // updateEnableStateFromDisplay();
+        // }
+        // };
+        // spagoBiCheckButton.getCheckbox().addSelectionListener(listener);
     }
 
-    private void updateEnableStateFromDisplay() {
-        boolean spago = spagoBiCheckButton.getBooleanValue();
-        editor.setEnabled(spago, parent);
-    }
+    // private void updateEnableStateFromDisplay() {
+    // boolean spago = spagoBiCheckButton.getBooleanValue();
+    // editor.setEnabled(spago, parent);
+    // }
 
     private void updateEnableStateFromPreferences() {
         IPreferenceStore preferenceStore = getPreferenceStore();
-        boolean spago = preferenceStore.getBoolean(MDMPreferenceInitializer.MDM_STATUS);
-        spagoBiCheckButton.getCheckbox().setSelection(spago);
-        editor.setEnabled(spago, parent);
+        // boolean spago = preferenceStore.getBoolean(MDMPreferenceInitializer.MDM_STATUS);
+        // spagoBiCheckButton.getCheckbox().setSelection(spago);
+        // editor.setEnabled(spago, parent);
+        editor.setEnabled(true, parent);
     }
 
     @Override
@@ -134,7 +131,7 @@ public class MDMPreferencePage extends FieldEditorPreferencePage implements IWor
     @Override
     protected void performDefaults() {
         super.performDefaults();
-        updateEnableStateFromDisplay();
+        // updateEnableStateFromDisplay();
     }
 
 }
