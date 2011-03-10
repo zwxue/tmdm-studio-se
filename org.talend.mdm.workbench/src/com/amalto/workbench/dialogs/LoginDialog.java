@@ -76,6 +76,8 @@ public class LoginDialog extends Dialog {
 
     private Text passwordText = null;
 
+    private Text descriptionText;
+
     private Button savePasswordButton;
 
     private SelectionListener caller = null;
@@ -150,6 +152,13 @@ public class LoginDialog extends Dialog {
         // endpointsCombo.select(0);
         MDMServerDef[] serverDefs = getInitMDMServers();
         endpointsCombo.setInput(serverDefs);
+
+        Label descriptionLabel = new Label(composite, SWT.NONE);
+        descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        descriptionLabel.setText("Description");
+
+        descriptionText = new Text(composite, SWT.BORDER);
+        descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
         authenticationGroup = new Group(composite, SWT.NONE);
         authenticationGroup.setVisible(true);
@@ -243,8 +252,10 @@ public class LoginDialog extends Dialog {
             root = logininfoDocument.addElement("MDMServer");//$NON-NLS-1$
         }
 
-        if (!isExist)
+        if (!isExist) {
             addServer(root);
+            updateServerListInPreference();
+        }
 
         XMLWriter writer;
         try {
@@ -332,7 +343,7 @@ public class LoginDialog extends Dialog {
 
     private MDMServerDef[] getInitMDMServers() {
 
-        MDMServerDef[] servers = PreferenceMDMServerExtractor.getInstence().getMDMServerDefiniions();
+        MDMServerDef[] servers = PreferenceMDMServerExtractor.getInstence().getMDMServerDefinitions();
 
         MDMServerDef defaultMDMServerDef = new MDMServerDef();
 
@@ -374,6 +385,28 @@ public class LoginDialog extends Dialog {
         passwordText.setText(selectedServer == null ? "" : selectedServer.getPasswd());//$NON-NLS-1$
 
     }
+
+    private void updateServerListInPreference() {
+
+        String description = descriptionText.getText().trim();//$NON-NLS-1$
+        if ("".equals(description)) { //$NON-NLS-1$
+            description = getDefaultConnectionDescription();
+        }
+
+        PreferenceMDMServerExtractor.getInstence().updateMDMServerDefinitionsBy(endpointsCombo.getCombo().getText().trim(),
+                userText.getText().trim(), passwordText.getText(), description);
+    }
+
+    private String getDefaultConnectionDescription() {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(userText.getText().trim());
+        sb.append("-");//$NON-NLS-1$
+        sb.append(endpointsCombo.getCombo().getText().trim());
+
+        return sb.toString();
+    }
 }
 
 class MDMServerLabelProvider implements ILabelProvider {
@@ -402,5 +435,4 @@ class MDMServerLabelProvider implements ILabelProvider {
 
         return ((MDMServerDef) element).getUrl();
     }
-
 }

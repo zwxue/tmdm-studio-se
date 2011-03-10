@@ -12,22 +12,22 @@
 // ============================================================================
 package com.amalto.workbench.utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.Platform;
 
 public class PreferenceMDMServerExtractor {
 
+    private static final String PREFERENCENODE = "instance"; //$NON-NLS-1$
+
     private static final String ENGINE_DESCRIPTION_DELIMITER = "#o#"; //$NON-NLS-1$
 
     private static final String SPAGOBISERVER_DELIMITER = ";"; //$NON-NLS-1$
 
     private static final String PLUGIN_QUALIFIER = "org.talend.mdm.engines.client"; //$NON-NLS-1$
-
-    private static final String PREF_KEY_ENABLED = "MDMPreferencePage.spagoBiCheckButton"; //$NON-NLS-1$
-
-    private static final String PREF_KEY_ENABLED_OLD = "SpagoBiPreferencePage.spagoBiCheckButton"; //$NON-NLS-1$
 
     private static final String PREF_KEY_SERVERS_OLD = "org.talend.repository.properties.spagobiserver"; //$NON-NLS-1$
 
@@ -56,18 +56,9 @@ public class PreferenceMDMServerExtractor {
         return INSTANCE;
     }
 
-    public MDMServerDef[] getMDMServerDefiniions() {
+    public MDMServerDef[] getMDMServerDefinitions() {
 
         Map<String, MDMServerDef> results = new HashMap<String, MDMServerDef>();
-
-        String enabled = Platform.getPreferencesService().getString(PLUGIN_QUALIFIER, PREF_KEY_ENABLED, null, null);
-        if (enabled == null) {
-            // when this plug-in is used in a 3.2.1
-            enabled = Platform.getPreferencesService().getString(PLUGIN_QUALIFIER, PREF_KEY_ENABLED_OLD, null, null);
-        }
-        if (enabled == null || !Boolean.valueOf(enabled)) {
-            return results.values().toArray(new MDMServerDef[0]);
-        }
 
         String mdmServerString = Platform.getPreferencesService().getString(PLUGIN_QUALIFIER, PREF_KEY_SERVERS, null, null);
         if (mdmServerString == null) {
@@ -92,5 +83,83 @@ public class PreferenceMDMServerExtractor {
         }
 
         return results.values().toArray(new MDMServerDef[0]);
+    }
+
+    public void updateMDMServerDefinitionsBy(String url, String username, String password, String description) {
+
+        MDMServerDef serverDef = MDMServerDef.parse(url, username, password, description);
+
+        if (serverDef == null)
+            return;
+
+        updateMDMServerDefinitionsBy(serverDef);
+    }
+
+    public void updateMDMServerDefinitionsBy(MDMServerDef serverDef) {
+
+        if (serverDef == null)
+            return;
+
+        List<MDMServerDef> servers = new ArrayList<MDMServerDef>();
+
+        for (MDMServerDef eachCurrentMDMServerDef : getMDMServerDefinitions()) {
+
+            if (eachCurrentMDMServerDef.getHost().equals(serverDef.getHost())
+                    && eachCurrentMDMServerDef.getPort().equals(serverDef.getPort())
+                    && eachCurrentMDMServerDef.getUser().equals(serverDef.getUser())
+                    && eachCurrentMDMServerDef.getPasswd().equals(serverDef.getPasswd())) {
+                servers.add(serverDef);
+            } else {
+                servers.add(eachCurrentMDMServerDef);
+            }
+        }
+
+        if (!servers.contains(serverDef))
+            servers.add(serverDef);
+
+        // String propName = PREF_KEY_SERVERS;
+        // if (Platform.getPreferencesService().getString(PLUGIN_QUALIFIER, PREF_KEY_SERVERS, null, null) == null) {
+        // // when this plug-in is used in a 3.2.1
+        // propName = PREF_KEY_SERVERS_OLD;
+        // }
+
+        Platform.getPreferencesService().getRootNode().node(PREFERENCENODE).node(PLUGIN_QUALIFIER)
+                .put(PREF_KEY_SERVERS, toMDMServerPreferenceString(servers.toArray(new MDMServerDef[0])));
+
+    }
+
+    private String toMDMServerPreferenceString(MDMServerDef[] serverDef) {
+
+        StringBuilder sb = new StringBuilder();
+
+        for (MDMServerDef eachServerDef : serverDef) {
+
+            sb.append(toMDMServerPreferenceString(eachServerDef));
+            sb.append(SPAGOBISERVER_DELIMITER);
+        }
+
+        String result = sb.toString();
+        return result.substring(0, result.length() - SPAGOBISERVER_DELIMITER.length());
+    }
+
+    private String toMDMServerPreferenceString(MDMServerDef serverDef) {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(serverDef.getDesc());
+        sb.append(ENGINE_DESCRIPTION_DELIMITER);
+
+        sb.append(serverDef.getHost());
+        sb.append(ENGINE_DESCRIPTION_DELIMITER);
+
+        sb.append(serverDef.getPort());
+        sb.append(ENGINE_DESCRIPTION_DELIMITER);
+
+        sb.append(serverDef.getUser());
+        sb.append(ENGINE_DESCRIPTION_DELIMITER);
+
+        sb.append(serverDef.getPasswd());
+
+        return sb.toString();
     }
 }

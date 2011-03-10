@@ -12,6 +12,9 @@
 // ============================================================================
 package com.amalto.workbench.utils;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class MDMServerDef {
 
     private String desc = "";//$NON-NLS-1$
@@ -25,6 +28,8 @@ public class MDMServerDef {
     private String passwd = "";//$NON-NLS-1$
 
     private String path = "/talend/TalendPort";//$NON-NLS-1$
+
+    public static final String PATTERN_URL = "^http://(.+):(\\d+)(/.*)";//$NON-NLS-1$
 
     public MDMServerDef(String desc, String host, String port, String path, String user, String passwd) {
 
@@ -101,5 +106,19 @@ public class MDMServerDef {
         sb.append(path);
 
         return sb.toString();
+    }
+
+    public static MDMServerDef parse(String url, String user, String passwd, String desc) {
+
+        Matcher m = Pattern.compile(PATTERN_URL).matcher(url);
+
+        if (!m.find())
+            return null;
+
+        String host = m.group(1);
+        String port = m.group(2);
+        String path = m.group(3);
+
+        return new MDMServerDef(desc, host, port, path, user, passwd);
     }
 }
