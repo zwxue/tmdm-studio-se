@@ -466,12 +466,12 @@ public class XSDAnnotationsStructure {
     }
 
     /****************************************************************************
-     * X_Physical_Delete
+     * X_Deny_PhysicalDelete
      ****************************************************************************/
 
-    public TreeMap<String, String> getPhysicalDelete() {
+    public TreeMap<String, String> getDenyPhysicalDelete() {
         TreeMap<String, String> writeAccesses = new TreeMap<String, String>();
-        LinkedHashMap<String, String> appInfos = getAppInfos("X_PhysicalDelete");//$NON-NLS-1$
+        LinkedHashMap<String, String> appInfos = getAppInfos("X_Deny_PhysicalDelete");//$NON-NLS-1$
         Set<String> keys = appInfos.keySet();
         for (Iterator iter = keys.iterator(); iter.hasNext();) {
             String key = (String) iter.next();
@@ -481,11 +481,11 @@ public class XSDAnnotationsStructure {
     }
 
     /****************************************************************************
-     * X_Create
+     * X_Deny_Create
      ****************************************************************************/
-    public TreeMap<String, String> getCreate() {
+    public TreeMap<String, String> getDenyCreate() {
         TreeMap<String, String> writeAccesses = new TreeMap<String, String>();
-        LinkedHashMap<String, String> appInfos = getAppInfos("X_Create");//$NON-NLS-1$
+        LinkedHashMap<String, String> appInfos = getAppInfos("X_Deny_Create");//$NON-NLS-1$
         Set<String> keys = appInfos.keySet();
         for (Iterator iter = keys.iterator(); iter.hasNext();) {
             String key = (String) iter.next();
@@ -495,12 +495,12 @@ public class XSDAnnotationsStructure {
     }
 
     /****************************************************************************
-     * X_Logical_Delete
+     * X_Deny_LogicalDelete
      ****************************************************************************/
 
-    public TreeMap<String, String> getLogicalDelete() {
+    public TreeMap<String, String> getDenyLogicalDelete() {
         TreeMap<String, String> writeAccesses = new TreeMap<String, String>();
-        LinkedHashMap<String, String> appInfos = getAppInfos("X_LogicalDelete");//$NON-NLS-1$
+        LinkedHashMap<String, String> appInfos = getAppInfos("X_Deny_LogicalDelete");//$NON-NLS-1$
         Set<String> keys = appInfos.keySet();
         for (Iterator iter = keys.iterator(); iter.hasNext();) {
             String key = (String) iter.next();
