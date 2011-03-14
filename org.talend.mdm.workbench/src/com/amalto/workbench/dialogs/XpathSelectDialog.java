@@ -222,7 +222,7 @@ public class XpathSelectDialog extends Dialog {
             }
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                changeDomTree(tree, "");//$NON-NLS-1$
+                changeDomTree(tree, filterText.getText());//$NON-NLS-1$
             }
         });
         schemaLabel = new Label(composite, SWT.NONE);
