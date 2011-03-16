@@ -37,7 +37,7 @@ public class ProcessContentTest extends TalendSWTBotForMDM {
 
     private String GETITEM_PARAMETERS = "";
 
-    private String DECODE_PARAMETERS = "<parameters> <method>DECODE</method> <algorithm>XMLESCAPE</algorithm> </parameters>";
+    private String DECODE_PARAMETERS = "<parameters>                  <method>DECODE</method> <algorithm>XMLESCAPE</algorithm> </parameters>";
 
     private String CALLJOB_PARAMETERS = "";
 
@@ -121,6 +121,9 @@ public class ProcessContentTest extends TalendSWTBotForMDM {
         bot.ccomboBoxWithLabel("Output Parameters").setSelection("codec_text");
         bot.buttonWithTooltip("Add a link for output Variables and output Parameters").click();
         bot.styledText().setText(DECODE_PARAMETERS);
+        //new feature in 4.2,see bug 0017999
+        bot.buttonWithTooltip("Auto-indent enabled").click();
+        bot.activeEditor().save();
     }
 
     @Test

@@ -63,7 +63,12 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
             }
         });
     }
-
+    //new feature in 4.2,see bug 0017128
+    @Test
+    public void autoPlaceCursorTest(){
+        eleItem.select();
+        bot.cTabItem(2).activate();
+    }
     @Test
     public void editElementTest() {
         eleItem.contextMenu("Edit Element").click();

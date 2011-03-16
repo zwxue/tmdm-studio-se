@@ -59,6 +59,7 @@ public class ProcessCreationTest extends TalendSWTBotForMDM {
         sleep();
         Assert.assertNotNull(processParentNode.expand().getNode("Normal_Process"));
 
+        //new feature in 4.2,see bug 0017997.
         // for smartview process
         processParentNode.contextMenu("New").click();
         bot.radio("Create a Smartview Process").click();
