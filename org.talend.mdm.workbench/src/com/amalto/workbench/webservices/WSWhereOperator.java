@@ -61,16 +61,9 @@ public class WSWhereOperator {
         this.value = value;
         valueMap.put(this.toString(), this);
     }
-    public WSWhereOperator() {
-    	
-    }
     
     public java.lang.String getValue() {
         return value;
-    }
-    
-    public void setValue(java.lang.String value) {
-    	this.value=value;
     }
     
     public static WSWhereOperator fromValue(java.lang.String value)
@@ -100,8 +93,8 @@ public class WSWhereOperator {
         } else if (NO_OPERATOR.value.equals(value)) {
             return NO_OPERATOR;
         } else if (FULLTEXTSEARCH.value.equals(value)) {
-            return FULLTEXTSEARCH;            
-        } else if (EMPTY_NULL.value.equals(value)){
+            return FULLTEXTSEARCH;
+        } else if (EMPTY_NULL.value.equals(value)) {
             return EMPTY_NULL;
         }
         throw new IllegalArgumentException();
@@ -139,7 +132,7 @@ public class WSWhereOperator {
             return NO_OPERATOR;
         } else if (value.equals(_FULLTEXTSEARCHString)) {
             return FULLTEXTSEARCH;
-        } else if (value.equals(_EMPTY_NULLString)){
+        } else if (value.equals(_EMPTY_NULLString)) {
             return EMPTY_NULL;
         }
         throw new IllegalArgumentException();

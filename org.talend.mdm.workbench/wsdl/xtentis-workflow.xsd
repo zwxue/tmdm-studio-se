@@ -143,7 +143,15 @@
 		</xsd:all>		
 	</xsd:complexType>
 	<xsd:element name="WSSuspendTask" type="tns:WSSuspendTask"/>
-	
+
+	<xsd:complexType name="WSResumeTask">
+		<xsd:all>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="taskUUID" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="assignTask" type="xsd:boolean"/>
+		</xsd:all>		
+	</xsd:complexType>
+	<xsd:element name="WSResumeTask" type="tns:WSResumeTask"/>
+		
 	<xsd:complexType name="WSStartProcessInstance">
 		<xsd:all>
 			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="processUUID" type="tns:WSWorkflowProcessDefinitionUUID"/>
