@@ -14,11 +14,16 @@ package com.amalto.workbench.actions;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 
+import com.amalto.workbench.editors.xsdeditor.XSDEditorInput;
+import com.amalto.workbench.editors.xsdeditor.XSDEditorUtil;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.TreeObject;
@@ -48,10 +53,16 @@ public class RenameXObjectAction extends Action {
         ISelection selection = view.getViewer().getSelection();
         TreeObject xobject = (TreeObject) ((IStructuredSelection) selection).getFirstElement();
         this.page = view.getSite().getWorkbenchWindow().getActivePage();
-        page.closeEditor(page.findEditor(new XObjectEditorInput(xobject, xobject.getDisplayName())), true);
         try {
-            if (TreeObjectUtil.renameTreeOjects(xobject, view))
-                TreeObjectUtil.deleteTreeObject(xobject, view);
+	        IEditorInput input= new XObjectEditorInput(xobject, xobject.getDisplayName());
+	        if(xobject.getType()==TreeObject.DATA_MODEL){
+	            IFile pathToTempFile = XSDEditorUtil.createFile(xobject);
+	            input = new XSDEditorInput(pathToTempFile);
+	        }
+	        IEditorPart part= page.findEditor(input);
+	        page.closeEditor(part, true);
+	            if (TreeObjectUtil.renameTreeOjects(xobject, view))
+	                TreeObjectUtil.deleteTreeObject(xobject, view);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
