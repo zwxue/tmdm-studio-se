@@ -48,6 +48,7 @@ public class ViewContentTest extends TalendSWTBotForMDM {
     }
 
     private void createView() {
+        //new feature in 4.2,see bug 0016511.
         // Create a new view to test the filter of the xpath.
         viewParentItem.contextMenu("New").click();
         // bot.sleep(1000);
@@ -127,7 +128,7 @@ public class ViewContentTest extends TalendSWTBotForMDM {
 
     @Test
     public void setWhereConditionsTest() {
-        bot.buttonWithTooltip("Add Multiple", 1).click();
+        bot.buttonWithTooltip("Add Multiple", 2).click();
         bot.shell("Select Multiple XPaths").activate();
         bot.comboBox().setSelection("Agent");
         sleep();

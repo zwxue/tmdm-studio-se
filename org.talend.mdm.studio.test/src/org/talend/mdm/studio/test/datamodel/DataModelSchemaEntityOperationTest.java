@@ -12,6 +12,8 @@
 // ============================================================================
 package org.talend.mdm.studio.test.datamodel;
 
+import junit.framework.Assert;
+
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
@@ -79,8 +81,9 @@ public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
         // create a entity with a complex type
         bot.textWithLabel("Name:").setText("ComplexTypeEntity");
         sleep();
-        bot.button("OK").click(); // create a entity with a simple type
+        bot.button("OK").click(); 
         sleep(2);
+        // create a entity with a simple type
         conceptNode.contextMenu("New Entity").click();
         newEntityShell = bot.shell("New Entity");
         newEntityShell.activate();
@@ -114,6 +117,9 @@ public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
         sleep();
         bot.button("OK").click();
         sleep(2);
+        Assert.assertEquals("TestEdit", conceptNode.getText());
+        //new feature in 4.2,see bug 0017070:
+        Assert.assertNotNull(conceptNode.getNode("TestEdit"));
         // Revert the changes
         conceptNode.doubleClick();
         editEntityShell = bot.shell("Edit Entity");
