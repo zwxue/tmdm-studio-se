@@ -383,7 +383,7 @@ public class LoginDialog extends Dialog {
         endpointsCombo.getCombo().setToolTipText(selectedServer == null ? "" : selectedServer.getDesc());//$NON-NLS-1$
         userText.setText(selectedServer == null ? "" : selectedServer.getUser());//$NON-NLS-1$
         passwordText.setText(selectedServer == null ? "" : selectedServer.getPasswd());//$NON-NLS-1$
-
+        descriptionText.setText(selectedServer == null ? "" : selectedServer.getDesc());//$NON-NLS-1$
     }
 
     private void updateServerListInPreference() {
