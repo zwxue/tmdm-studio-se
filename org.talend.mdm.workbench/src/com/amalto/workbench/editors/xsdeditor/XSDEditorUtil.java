@@ -141,7 +141,7 @@ public class XSDEditorUtil {
         IEditorInput xobjectEditorinput = new XObjectEditorInput(xobject, xobject.getDisplayName());
 
         final DataModelMainPage dMainPage = new DataModelMainPage(xobject);
-        part.addPage(0, dMainPage, xobjectEditorinput);
+        part.addPage(dMainPage, xobjectEditorinput);
 
         part.getSite().setSelectionProvider(dMainPage.getSelectionProvider());
 
@@ -149,17 +149,17 @@ public class XSDEditorUtil {
         XSDSelectionListener xsdListener = new XSDSelectionListener(part, dMainPage.getXSDSchema());
         dMainPage.getTypesViewer().addSelectionChangedListener(xsdListener);
         dMainPage.getElementsViewer().addSelectionChangedListener(xsdListener);
-        // add DataModelMainPage to third page, why? if don't do like this, the
-        // 'Design' page opertions don't work, don't know why, TODO
+       
 
         part.setXSDInput(xobjectEditorinput);
         part.setXObject(xobject);
         part.setActiveEditor(dMainPage);
-
+        
+        //can't add DataModelMainPage the 3rd page, see 0019663
         CTabFolder folder = (CTabFolder) dMainPage.getMainControl().getParent();
-        folder.getItem(0).setText(xobject.getDisplayName() + " " + Util.getRevision(xobject));//$NON-NLS-1$
-        folder.getItem(1).setText("Schema Design");
-        folder.getItem(2).setText("Schema Source");
+        folder.getItem(2).setText(xobject.getDisplayName() + " " + Util.getRevision(xobject));//$NON-NLS-1$
+        folder.getItem(0).setText("Schema Design");
+        folder.getItem(1).setText("Schema Source");
         if (markdirty)
             dMainPage.markDirty();
 
