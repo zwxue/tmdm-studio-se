@@ -10,10 +10,16 @@ import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.Date;
+import java.util.List;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.URIUtil;
-
+import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
+import org.eclipse.swtbot.swt.finder.results.VoidResult;
+import org.eclipse.ui.internal.views.properties.tabbed.view.TabbedPropertyList;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 /**
  * DOC rhou class global comment. Detailled comment
  */
@@ -81,5 +87,43 @@ public class Util {
         URL unescapedURL = FileLocator.toFileURL(url);
         URI escapedURI = new URI(unescapedURL.getProtocol(), unescapedURL.getPath(), unescapedURL.getQuery());
         return escapedURI;
+    }
+    
+    /**
+     * look for all the widget of type TalendTabbedPropertyList and select the tab at index for all of them
+     * 
+     * @param index index of the tab to select in aTalendTabbedPropertyList TalendTabbedPropertyList(values start from
+     * 0)
+     */
+    public static void selecteTalendTabbedPropertyListAtIndex(SWTBot bot,final int index) {
+        // look for all the widgets of type TabbedPropertyList
+        final List<TabbedPropertyList> controls = bot.getFinder().findControls(
+                new BaseMatcher<TabbedPropertyList>() {
+
+                    // @Override
+                    public boolean matches(Object item) {
+                        if (item instanceof TabbedPropertyList) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+
+                    // @Override
+                    public void describeTo(Description description) {
+                        description.appendText("looking for widget of type TabbedPropertyList");
+                    }
+                });
+
+        // select the desired tab in the UI thread
+        UIThreadRunnable.syncExec(new VoidResult() {
+
+            // @Override
+            public void run() {
+                for (TabbedPropertyList ttpl : controls) {
+                    ttpl.getElementAt(index);
+                }
+            }
+        });
     }
 }
