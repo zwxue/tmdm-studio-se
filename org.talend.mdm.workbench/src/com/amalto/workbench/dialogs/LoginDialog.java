@@ -381,9 +381,10 @@ public class LoginDialog extends Dialog {
         MDMServerDef selectedServer = getSelectedMDMServerDef();
 
         endpointsCombo.getCombo().setToolTipText(selectedServer == null ? "" : selectedServer.getDesc());//$NON-NLS-1$
-        userText.setText(selectedServer == null ? "" : selectedServer.getUser());//$NON-NLS-1$
-        passwordText.setText(selectedServer == null ? "" : selectedServer.getPasswd());//$NON-NLS-1$
+        //userText.setText(selectedServer == null ? "" : selectedServer.getUser());//$NON-NLS-1$
+        //passwordText.setText(selectedServer == null ? "" : selectedServer.getPasswd());//$NON-NLS-1$
         descriptionText.setText(selectedServer == null ? "" : selectedServer.getDesc());//$NON-NLS-1$
+        userText.setFocus();
     }
 
     private void updateServerListInPreference() {
