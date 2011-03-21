@@ -47,7 +47,7 @@ public class CommitBarComposite extends Composite {
         gd_btnSubmit.heightHint = 18;
         gd_btnSubmit.widthHint = 74;
         btnSubmit.setLayoutData(gd_btnSubmit);
-        btnSubmit.setText("Submit");
+        btnSubmit.setText("Apply");
 
         btnReset = new Button(this, SWT.NONE);
         btnReset.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
