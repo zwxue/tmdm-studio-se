@@ -1515,7 +1515,23 @@ public class Util {
         }
         return childNames;
     }
-
+    public static List<String> getChildElementNames(XSDSchema schema, String concept) throws Exception{
+    	List<String> childNames = new ArrayList<String>();
+    	EList xsdElementDeclarations = schema.getElementDeclarations();
+        List<String> list = new ArrayList<String>();
+        XSDElementDeclaration conceptEl=null;
+        for (XSDElementDeclaration el : (XSDElementDeclaration[]) xsdElementDeclarations
+                .toArray(new XSDElementDeclaration[xsdElementDeclarations.size()])) {
+            if (el.getName().equals(concept)) {
+                conceptEl=el;
+                break;
+            }
+        }
+        if(conceptEl!=null){
+        	childNames.addAll(getChildElementNames(conceptEl.getName(), conceptEl));
+        }
+        return childNames;
+    }
     public static IStatus changeElementTypeToSequence(XSDElementDeclaration decl, int maxOccurs) {
         if (maxOccurs < -1) {
             MessageDialog.openError(null, "error", "max occurance value should be greater than -1");

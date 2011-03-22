@@ -50,6 +50,7 @@
 			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="processInstanceNb" type="xsd:string"/>
 			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="processInstanceUUID" type="xsd:string"/>
 			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="processDefineUUID" type="xsd:string"/>
+			<xsd:element minOccurs="1" maxOccurs="1"  nillable="false" name="priority" type="xsd:string"/>
 		</xsd:all>		
 	</xsd:complexType>
 	<xsd:element name="WSProcessTaskInstance" type="tns:WSProcessTaskInstance"/>
