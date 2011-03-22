@@ -31,6 +31,7 @@ public class WSProcessTaskInstance_LiteralSerializer extends LiteralObjectSerial
     private static final QName ns1_processInstanceNb_QNAME = new QName("", "processInstanceNb");
     private static final QName ns1_processInstanceUUID_QNAME = new QName("", "processInstanceUUID");
     private static final QName ns1_processDefineUUID_QNAME = new QName("", "processDefineUUID");
+    private static final QName ns1_priority_QNAME = new QName("", "priority");
     
     public WSProcessTaskInstance_LiteralSerializer(QName type, String encodingStyle) {
         this(type, encodingStyle, false);
@@ -132,6 +133,14 @@ public class WSProcessTaskInstance_LiteralSerializer extends LiteralObjectSerial
                 instance.setProcessDefineUUID((java.lang.String)member);
                 reader.nextElementContent();
             }
+            else if (elementName.equals(ns1_priority_QNAME)) {
+                member = ns3_myns3_string__java_lang_String_String_Serializer.deserialize(ns1_priority_QNAME, reader, context);
+                if (member == null) {
+                    throw new DeserializationException("literal.unexpectedNull");
+                }
+                instance.setPriority((java.lang.String)member);
+                reader.nextElementContent();
+            }
             else {
                 throw new DeserializationException("literal.unexpectedElementName", new Object[] { elementName, reader.getName()});
             }
@@ -185,5 +194,9 @@ public class WSProcessTaskInstance_LiteralSerializer extends LiteralObjectSerial
             throw new SerializationException("literal.unexpectedNull");
         }
         ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getProcessDefineUUID(), ns1_processDefineUUID_QNAME, null, writer, context);
+        if (instance.getPriority() == null) {
+            throw new SerializationException("literal.unexpectedNull");
+        }
+        ns3_myns3_string__java_lang_String_String_Serializer.serialize(instance.getPriority(), ns1_priority_QNAME, null, writer, context);
     }
 }
