@@ -40,7 +40,8 @@ import com.amalto.workbench.editors.XObjectEditor;
  * DOC rhou class global comment. Detailled comment
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class DataModelSchemaMainSectionEntityTest extends TalendSWTBotForMDM {
+public class DataModelSchemaEntityAccessRightsTabTest extends
+		TalendSWTBotForMDM {
 
 	private SWTBotTree conceptBotTree;
 
@@ -80,8 +81,8 @@ public class DataModelSchemaMainSectionEntityTest extends TalendSWTBotForMDM {
 		conceptBotTree = new SWTBotTree(conceptTree);
 
 		newEntity();
-		bot.viewById(IPageLayout.ID_PROP_SHEET).show();
-		Util.selecteTalendTabbedPropertyListAtIndex(bot, 0);
+		bot.viewById(IPageLayout.ID_PROP_SHEET).setFocus();
+		Util.selecteTalendTabbedPropertyListAtIndex(bot, 1);
 	}
 
 	@After
@@ -90,6 +91,11 @@ public class DataModelSchemaMainSectionEntityTest extends TalendSWTBotForMDM {
 
 			public void run() {
 				mainpage.doSave(new NullProgressMonitor());
+				dataModelItem.getNode("TestDataModel").contextMenu("Delete")
+						.click();
+				sleep();
+				bot.button("OK").click();
+				sleep();
 			}
 		});
 	}
@@ -109,66 +115,74 @@ public class DataModelSchemaMainSectionEntityTest extends TalendSWTBotForMDM {
 	}
 
 	@Test
-	public void editEntityTest() {
-		bot.textWithLabel("Name").setText("RenameEntity");
-		bot.button("Submit").click();
-		Assert.assertEquals("RenameEntity", conceptNode.getText());
+	public void addLabelsTest() {
+		bot.text(0).setText("en");
+		bot.buttonWithTooltip("Add", 0).click();
+		bot.button("Apply").click();
+		Assert.assertNotNull(conceptNode.getNode("Annotations").expand()
+				.getNode("English Label:en"));
 	}
 
 	@Test
-	public void addKeyTest() {
-		bot.buttonWithTooltip("Add key...").click();
-		SWTBotShell shell = bot.shell("Add a new Key");
-		shell.activate();
-		bot.ccomboBox(0).setSelection(1);
-		bot.text().setText("Test");
-		bot.button("OK").click();
-
-		bot.button("Submit").click();
-		Assert.assertNotNull(conceptNode.getNode("Test"));
+	public void deleteLabelsTest() {
+		bot.text(0).setText("en");
+		bot.buttonWithTooltip("Del", 0).click();
+		bot.button("Apply").click();
+		Assert.assertNull(conceptNode.getNode("Annotations").expand()
+				.getNode("English Label:en"));
 	}
 
 	@Test
-	public void deleteKeyTest() {
-		bot.tree(0).select("Test");
-		bot.buttonWithTooltip("Delete keys").click();
-
-		bot.button("Submit").click();
-		Assert.assertTrue(conceptNode.getNode("Test") == null);
+	public void addDescriptionsTest() {
+		bot.text(0).setText("en");
+		bot.buttonWithTooltip("Add", 1).click();
+		bot.button("Apply").click();
+		Assert.assertNotNull(conceptNode.getNode("Annotations").expand()
+				.getNode("English Description: en"));
 	}
 
 	@Test
-	public void addFieldTest() {
-		bot.buttonWithTooltip("Add field...").click();
-		SWTBotShell shell = bot.shell("Select one field");
-		shell.activate();
-		bot.ccomboBox().setText("Test");
-		bot.button("OK").click();
-
-		bot.button("Submit").click();
-		Assert.assertNotNull(conceptNode.getNode("Test").getNode("Test"));
+	public void deleteDescriptionsTest() {
+		bot.text(0).setText("en");
+		bot.buttonWithTooltip("Del", 1).click();
+		bot.button("Apply").click();
+		Assert.assertNull(conceptNode.getNode("Annotations").expand()
+				.getNode("English Description: en"));
 	}
 
 	@Test
-	public void editFieldTest() {
-		bot.tree(0).select("Test");
-		bot.buttonWithTooltip("Edit Field...").click();
-		SWTBotShell shell = bot.shell("Select one field");
-		shell.activate();
-		bot.ccomboBox().setText("Test1");
-		bot.button("OK").click();
+	public void setWriteAccessTest() {
+		bot.comboBox(0).setSelection(0);
+		bot.buttonWithTooltip("Add", 0).click();
+		bot.button("Apply").click();
 
-		bot.button("Submit").click();
-		Assert.assertNotNull(conceptNode.getNode("Test1").getNode("Test"));
+		bot.tree(0).select(0);
+		bot.buttonWithTooltip("Del", 0).click();
+		bot.button("Apply").click();
+
+		// bot.comboBox(0).setSelection(1);
+		// bot.buttonWithTooltip("Add",0).click();
+		//
+		// bot.table().select(0);
+		// bot.buttonWithTooltip("Move down",0).click();
+		// sleep(2);
+		// bot.buttonWithTooltip("Move up",0).click();
+		// sleep(2);
 	}
 
 	@Test
-	public void deleteFieldTest() {
-		bot.tree(0).select("Test1");
-		bot.buttonWithTooltip("Delete Fields").click();
+	public void setNoAccessTest() {
+		bot.comboBox(1).setSelection(0);
+		bot.buttonWithTooltip("Add", 1).click();
+		bot.button("Apply").click();
 
-		bot.button("Submit").click();
-		Assert.assertTrue(conceptNode.getNode("Test").getNode("Test1") == null);
+		bot.tree(1).select(0);
+		bot.buttonWithTooltip("Del", 1).click();
+		bot.button("Apply").click();
+	}
+
+	@Test
+	public void setWorkflowAccessTest() {
 	}
 
 }

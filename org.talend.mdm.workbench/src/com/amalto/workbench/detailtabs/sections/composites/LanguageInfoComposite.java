@@ -49,245 +49,264 @@ import com.amalto.workbench.utils.Util;
 
 public class LanguageInfoComposite extends Composite {
 
-    private final List<String> allLanguages;
+	private final List<String> allLanguages;
 
-    private TreeViewer tvInfos;
+	private TreeViewer tvInfos;
 
-    private Text txtLabel;
+	private Text txtLabel;
 
-    private Button btnAdd;
+	private Button btnAdd;
 
-    private Button btnRemove;
+	private Button btnRemove;
 
-    private Combo comboLanguage;
+	private Combo comboLanguage;
 
-    private List<LanguageInfo> infos = new ArrayList<LanguageInfo>();
+	private List<LanguageInfo> infos = new ArrayList<LanguageInfo>();
 
-    public LanguageInfoComposite(Composite parent, int style) {
-        super(parent, style);
+	public LanguageInfoComposite(Composite parent, int style) {
+		super(parent, style);
 
-        allLanguages = Arrays.asList(Util.lang2iso.keySet().toArray(new String[0]));
+		allLanguages = Arrays.asList(Util.lang2iso.keySet().toArray(
+				new String[0]));
 
-        final GridLayout gridLayout = new GridLayout();
-        gridLayout.numColumns = 4;
-        setLayout(gridLayout);
+		final GridLayout gridLayout = new GridLayout();
+		gridLayout.numColumns = 4;
+		setLayout(gridLayout);
 
-        comboLanguage = new Combo(this, SWT.READ_ONLY | SWT.DROP_DOWN | SWT.SINGLE);
-        final GridData gd_comboLanguage = new GridData();
-        comboLanguage.setLayoutData(gd_comboLanguage);
+		comboLanguage = new Combo(this, SWT.READ_ONLY | SWT.DROP_DOWN
+				| SWT.SINGLE);
+		final GridData gd_comboLanguage = new GridData();
+		comboLanguage.setLayoutData(gd_comboLanguage);
 
-        txtLabel = new Text(this, SWT.BORDER);
-        final GridData gd_txtLabel = new GridData(SWT.FILL, SWT.CENTER, true, false);
-        txtLabel.setLayoutData(gd_txtLabel);
+		txtLabel = new Text(this, SWT.BORDER);
+		final GridData gd_txtLabel = new GridData(SWT.FILL, SWT.CENTER, true,
+				false);
+		txtLabel.setLayoutData(gd_txtLabel);
 
-        btnAdd = new Button(this, SWT.NONE);
-        btnAdd.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
+		btnAdd = new Button(this, SWT.NONE);
+		btnAdd.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
+		btnAdd.setToolTipText("Add");
 
-        tvInfos = new TreeViewer(this, SWT.BORDER | SWT.FULL_SELECTION);
-        Tree tree = tvInfos.getTree();
-        tree.setHeaderVisible(true);
-        tree.setLinesVisible(true);
-        final GridData gd_tree = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
-        gd_tree.heightHint = 80;
-        tree.setLayoutData(gd_tree);
+		tvInfos = new TreeViewer(this, SWT.BORDER | SWT.FULL_SELECTION);
+		Tree tree = tvInfos.getTree();
+		tree.setHeaderVisible(true);
+		tree.setLinesVisible(true);
+		final GridData gd_tree = new GridData(SWT.FILL, SWT.FILL, true, true,
+				2, 1);
+		gd_tree.heightHint = 80;
+		tree.setLayoutData(gd_tree);
 
-        final TreeColumn colLanguage = new TreeColumn(tree, SWT.NONE);
-        colLanguage.setWidth(99);
-        colLanguage.setText("Language");
+		final TreeColumn colLanguage = new TreeColumn(tree, SWT.NONE);
+		colLanguage.setWidth(99);
+		colLanguage.setText("Language");
 
-        final TreeColumn colLabel = new TreeColumn(tree, SWT.NONE);
-        colLabel.setWidth(242);
-        colLabel.setText("Label");
+		final TreeColumn colLabel = new TreeColumn(tree, SWT.NONE);
+		colLabel.setWidth(242);
+		colLabel.setText("Label");
 
-        btnRemove = new Button(this, SWT.NONE);
-        final GridData gd_btnRemove = new GridData(SWT.LEFT, SWT.TOP, false, false);
-        btnRemove.setLayoutData(gd_btnRemove);
-        btnRemove.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
-        //
+		btnRemove = new Button(this, SWT.NONE);
+		final GridData gd_btnRemove = new GridData(SWT.LEFT, SWT.TOP, false,
+				false);
+		btnRemove.setLayoutData(gd_btnRemove);
+		btnRemove.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ
+				.getPath()));
+		btnRemove.setToolTipText("Del");
+		//
 
-        tvInfos.setContentProvider(new ListContentProvider());
-        tvInfos.setLabelProvider(new LanguageInfoLabelProvider());
-        tvInfos.setSorter(new LanguageInfoSorter());
+		tvInfos.setContentProvider(new ListContentProvider());
+		tvInfos.setLabelProvider(new LanguageInfoLabelProvider());
+		tvInfos.setSorter(new LanguageInfoSorter());
 
-        initUIListeners();
-    }
+		initUIListeners();
+	}
 
-    public void setLanguageInfos(LanguageInfo[] initLanguageInfos) {
-        initUIContent(initLanguageInfos);
+	public void setLanguageInfos(LanguageInfo[] initLanguageInfos) {
+		initUIContent(initLanguageInfos);
 
-        tvInfos.refresh();
-    }
+		tvInfos.refresh();
+	}
 
-    public LanguageInfo[] getLanguageInfos() {
-        return infos.toArray(new LanguageInfo[0]);
-    }
+	public LanguageInfo[] getLanguageInfos() {
+		return infos.toArray(new LanguageInfo[0]);
+	}
 
-    private void initUIContent(LanguageInfo[] initLanguageInfos) {
+	private void initUIContent(LanguageInfo[] initLanguageInfos) {
 
-        initLanguageCombo();
+		initLanguageCombo();
 
-        initLanguageInfos(initLanguageInfos);
-    }
+		initLanguageInfos(initLanguageInfos);
+	}
 
-    private void initLanguageCombo() {
+	private void initLanguageCombo() {
 
-        comboLanguage.removeAll();
+		comboLanguage.removeAll();
 
-        for (String eachLanguage : allLanguages)
-            comboLanguage.add(eachLanguage);
+		for (String eachLanguage : allLanguages)
+			comboLanguage.add(eachLanguage);
 
-        comboLanguage.select(0);
-    }
+		comboLanguage.select(0);
+	}
 
-    private void initLanguageInfos(LanguageInfo[] initLanguageInfos) {
+	private void initLanguageInfos(LanguageInfo[] initLanguageInfos) {
 
-        infos.clear();
+		infos.clear();
 
-        for (LanguageInfo eachLanguageInfo : initLanguageInfos) {
-            infos.add(eachLanguageInfo);
-        }
+		for (LanguageInfo eachLanguageInfo : initLanguageInfos) {
+			infos.add(eachLanguageInfo);
+		}
 
-        tvInfos.setInput(infos);
-    }
+		tvInfos.setInput(infos);
+	}
 
-    private void initUIListeners() {
+	private void initUIListeners() {
 
-        initUIListenerOfLabelText();
+		initUIListenerOfLabelText();
 
-        initUIListenerOfAddButton();
+		initUIListenerOfAddButton();
 
-        initUIListenerOfAddRemove();
+		initUIListenerOfAddRemove();
 
-        initUIListenerOfLangInfoTree();
-    }
+		initUIListenerOfLangInfoTree();
+	}
 
-    private void initUIListenerOfLabelText() {
-        txtLabel.addModifyListener(new ModifyListener() {
+	private void initUIListenerOfLabelText() {
+		txtLabel.addModifyListener(new ModifyListener() {
 
-            public void modifyText(ModifyEvent e) {
-                onMidifyLabelText();
-            }
-        });
-    }
+			public void modifyText(ModifyEvent e) {
+				onMidifyLabelText();
+			}
+		});
+	}
 
-    private void initUIListenerOfLangInfoTree() {
+	private void initUIListenerOfLangInfoTree() {
 
-        tvInfos.addSelectionChangedListener(new ISelectionChangedListener() {
+		tvInfos.addSelectionChangedListener(new ISelectionChangedListener() {
 
-            public void selectionChanged(SelectionChangedEvent event) {
-                onSelectLanguageInfoFrTree();
-            }
-        });
+			public void selectionChanged(SelectionChangedEvent event) {
+				onSelectLanguageInfoFrTree();
+			}
+		});
 
-        tvInfos.setColumnProperties(new String[] { LanguageInfoModifier.COL_PROP_LANG, LanguageInfoModifier.COL_PROP_LABLE });
-        tvInfos.setCellEditors(new CellEditor[] { new ComboBoxCellEditor(tvInfos.getTree(), allLanguages.toArray(new String[0])),
-                new TextCellEditor(tvInfos.getTree()) });
+		tvInfos.setColumnProperties(new String[] {
+				LanguageInfoModifier.COL_PROP_LANG,
+				LanguageInfoModifier.COL_PROP_LABLE });
+		tvInfos.setCellEditors(new CellEditor[] {
+				new ComboBoxCellEditor(tvInfos.getTree(), allLanguages
+						.toArray(new String[0])),
+				new TextCellEditor(tvInfos.getTree()) });
 
-        tvInfos.setCellModifier(new LanguageInfoModifier(tvInfos, infos, allLanguages));
-    }
+		tvInfos.setCellModifier(new LanguageInfoModifier(tvInfos, infos,
+				allLanguages));
+	}
 
-    private void initUIListenerOfAddRemove() {
-        btnRemove.addSelectionListener(new SelectionAdapter() {
+	private void initUIListenerOfAddRemove() {
+		btnRemove.addSelectionListener(new SelectionAdapter() {
 
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                onRemoveLanguageInfo();
-            }
-        });
-    }
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				onRemoveLanguageInfo();
+			}
+		});
+	}
 
-    private void initUIListenerOfAddButton() {
-        btnAdd.addSelectionListener(new SelectionAdapter() {
+	private void initUIListenerOfAddButton() {
+		btnAdd.addSelectionListener(new SelectionAdapter() {
 
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                onAddLanguageInfo();
-            }
-        });
-    }
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				onAddLanguageInfo();
+			}
+		});
+	}
 
-    private void onSelectLanguageInfoFrTree() {
+	private void onSelectLanguageInfoFrTree() {
 
-        if (!isLanguageInfoSelected())
-            return;
+		if (!isLanguageInfoSelected())
+			return;
 
-        LanguageInfo selectedLangInfo = getSelectedLanguageInfo();
+		LanguageInfo selectedLangInfo = getSelectedLanguageInfo();
 
-        comboLanguage.select(allLanguages.indexOf(selectedLangInfo.getLanguage()));
-        txtLabel.setText(selectedLangInfo.getLabel());
-    }
+		comboLanguage.select(allLanguages.indexOf(selectedLangInfo
+				.getLanguage()));
+		txtLabel.setText(selectedLangInfo.getLabel());
+	}
 
-    private void onMidifyLabelText() {
+	private void onMidifyLabelText() {
 
-        LanguageInfo correspondLangInfo = getLangInfoBySelectionOfLangCombo();
+		LanguageInfo correspondLangInfo = getLangInfoBySelectionOfLangCombo();
 
-        if (correspondLangInfo == null)
-            return;
+		if (correspondLangInfo == null)
+			return;
 
-        if (correspondLangInfo.getLabel().equals(txtLabel.getText().trim()))
-            return;
+		if (correspondLangInfo.getLabel().equals(txtLabel.getText().trim()))
+			return;
 
-        if ("".equals(txtLabel.getText().trim())) {
-            MessageDialog.openWarning(getShell(), "Warning", "the information can not be empty");
-            txtLabel.setText(correspondLangInfo.getLabel());
-        }
+		if ("".equals(txtLabel.getText().trim())) {
+			MessageDialog.openWarning(getShell(), "Warning",
+					"the information can not be empty");
+			txtLabel.setText(correspondLangInfo.getLabel());
+		}
 
-        correspondLangInfo.setLabel(txtLabel.getText().trim());
-        tvInfos.refresh();
-    }
+		correspondLangInfo.setLabel(txtLabel.getText().trim());
+		tvInfos.refresh();
+	}
 
-    private void onAddLanguageInfo() {
+	private void onAddLanguageInfo() {
 
-        if ("".equals(txtLabel.getText().trim())) {
-            MessageDialog.openWarning(getShell(), "Warning", "the information can not be empty");
-            return;
-        }
+		if ("".equals(txtLabel.getText().trim())) {
+			MessageDialog.openWarning(getShell(), "Warning",
+					"the information can not be empty");
+			return;
+		}
 
-        LanguageInfo correspondLangInfo = getLangInfoBySelectionOfLangCombo();
+		LanguageInfo correspondLangInfo = getLangInfoBySelectionOfLangCombo();
 
-        if (correspondLangInfo == null) {
-            LanguageInfo newLangInfo = new LanguageInfo(comboLanguage.getText(), Util.lang2iso.get(comboLanguage.getText()),
-                    txtLabel.getText().trim());
-            infos.add(newLangInfo);
-        } else {
-            correspondLangInfo.setLabel(txtLabel.getText().trim());
-        }
+		if (correspondLangInfo == null) {
+			LanguageInfo newLangInfo = new LanguageInfo(
+					comboLanguage.getText(), Util.lang2iso.get(comboLanguage
+							.getText()), txtLabel.getText().trim());
+			infos.add(newLangInfo);
+		} else {
+			correspondLangInfo.setLabel(txtLabel.getText().trim());
+		}
 
-        tvInfos.refresh();
-    }
+		tvInfos.refresh();
+	}
 
-    private void onRemoveLanguageInfo() {
+	private void onRemoveLanguageInfo() {
 
-        infos.remove(getSelectedLanguageInfo());
-        tvInfos.refresh();
+		infos.remove(getSelectedLanguageInfo());
+		tvInfos.refresh();
 
-    }
+	}
 
-    private LanguageInfo getLangInfoBySelectionOfLangCombo() {
+	private LanguageInfo getLangInfoBySelectionOfLangCombo() {
 
-        for (LanguageInfo eachCurLanguageInfo : infos) {
-            if (eachCurLanguageInfo.getLanguage().equals(comboLanguage.getText())) {
-                return eachCurLanguageInfo;
-            }
-        }
+		for (LanguageInfo eachCurLanguageInfo : infos) {
+			if (eachCurLanguageInfo.getLanguage().equals(
+					comboLanguage.getText())) {
+				return eachCurLanguageInfo;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    private LanguageInfo getSelectedLanguageInfo() {
+	private LanguageInfo getSelectedLanguageInfo() {
 
-        if (tvInfos.getSelection() == null || tvInfos.getSelection().isEmpty())
-            return null;
+		if (tvInfos.getSelection() == null || tvInfos.getSelection().isEmpty())
+			return null;
 
-        Object selectedObj = ((IStructuredSelection) tvInfos.getSelection()).getFirstElement();
+		Object selectedObj = ((IStructuredSelection) tvInfos.getSelection())
+				.getFirstElement();
 
-        if (selectedObj instanceof LanguageInfo)
-            return (LanguageInfo) selectedObj;
+		if (selectedObj instanceof LanguageInfo)
+			return (LanguageInfo) selectedObj;
 
-        return null;
-    }
+		return null;
+	}
 
-    private boolean isLanguageInfoSelected() {
-        return (getSelectedLanguageInfo() != null);
-    }
+	private boolean isLanguageInfoSelected() {
+		return (getSelectedLanguageInfo() != null);
+	}
 }
