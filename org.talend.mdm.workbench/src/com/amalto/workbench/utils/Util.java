@@ -41,6 +41,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.PropertyResourceBundle;
 import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -2913,5 +2915,28 @@ public class Util {
             return false;
 
         return simpleType.equals(systemDoubleType) || systemDoubleType.equals(simpleType.getBaseType());
+    }
+
+    public static ByteArrayOutputStream retrieveJarEntryAsBytes(File barFile, String entryName) {
+        JarInputStream jarIn = null;
+        ByteArrayOutputStream outBytes = new ByteArrayOutputStream();
+
+        try {
+            jarIn = new JarInputStream(new FileInputStream(barFile));
+            JarEntry entry;
+            byte[] buf = new byte[4096];
+            while ((entry = jarIn.getNextJarEntry()) != null) {
+                if (entry.toString().equals(entryName)) {
+                    int read;
+                    while ((read = jarIn.read(buf, 0, 4096)) != -1) {
+                        outBytes.write(buf, 0, read);
+                    }
+                    if (outBytes.toByteArray().length > 0)
+                        return outBytes;
+                }
+            }
+        } catch (Exception e) {
+        }
+        return null;
     }
 }
