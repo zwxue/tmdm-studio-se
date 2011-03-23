@@ -35,6 +35,8 @@ public class CommitSection extends BasePropertySection {
         initUIListeners();
 
         registListenersFromGlobalRegistry();
+        
+        CommitBarListenerRegistry.getInstance().registCommitSection(this);
     }
 
     @Override
@@ -83,7 +85,15 @@ public class CommitSection extends BasePropertySection {
     protected void createControlsInSection(Composite compSectionClient) {
         commitBar = new CommitBarComposite(compSectionClient, SWT.NONE);
     }
-
+    
+    @Override
+    public void dispose() {    	
+    	super.dispose();
+    	CommitBarListenerRegistry.getInstance().unregistCommitSection(this);
+    }
+    public CommitBarComposite getCommitBar(){
+    	return commitBar;
+    }
     @Override
     protected String getSectionTitle() {
         return "Commit";

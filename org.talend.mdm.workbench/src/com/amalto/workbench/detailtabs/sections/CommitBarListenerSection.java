@@ -17,6 +17,9 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.views.properties.tabbed.ISection;
+import org.eclipse.ui.views.properties.tabbed.ITabDescriptor;
+import org.eclipse.ui.views.properties.tabbed.ITabSelectionListener;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 import com.amalto.workbench.detailtabs.exception.CommitException;
@@ -89,12 +92,24 @@ public abstract class CommitBarListenerSection<T> extends BasePropertySection im
 
     protected void registToGolbalCommitBarListenerReg() {
         CommitBarListenerRegistry.getInstance().registListener(getParentTabID(), this);
+        
+        registCommitSectionListener();
     }
-
+    /**
+     * regist current tab's commit section listener to current section if it failed to register
+     * in case: commit bar is no top of tab.
+     */
+    protected void registCommitSectionListener(){
+        	for(CommitSection sec: CommitBarListenerRegistry.getInstance().getCommitSecs()){                		
+    			if(!sec.getCommitBar().getCommitBarListeners().contains(CommitBarListenerSection.this)){
+    				sec.getCommitBar().addCommitListener(CommitBarListenerSection.this);
+    				break;
+    			}                		
+        	}                	
+    }
     @Override
     public void dispose() {
         super.dispose();
-
         CommitBarListenerRegistry.getInstance().unregistListener(this);
     }
 

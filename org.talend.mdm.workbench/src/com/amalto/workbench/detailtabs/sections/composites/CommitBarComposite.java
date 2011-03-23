@@ -71,8 +71,8 @@ public class CommitBarComposite extends Composite {
         listeners.clear();
     }
 
-    public CommitBarListener[] getCommitBarListeners() {
-        return listeners.toArray(new CommitBarListener[0]);
+    public List<CommitBarListener> getCommitBarListeners() {
+        return listeners;
     }
 
     private void fireSubmit() {

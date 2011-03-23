@@ -94,6 +94,11 @@ public class EntityMainSection extends CommitBarListenerSection<XSDElementDeclar
         Composite compTop = getWidgetFactory().createFlatFormComposite(compSectionClient);
         compTop.setLayout(new GridLayout());
 
+        compCommitBar = new CommitBarComposite(compTop, SWT.NONE);
+        GridData gdCompCommitBar = new GridData(SWT.BEGINNING, SWT.TOP, false, false);
+        compCommitBar.setLayoutData(gdCompCommitBar);
+        compCommitBar.addCommitListener(this);
+        
         compNameConfig = new NameConfigComposite(compTop, SWT.NONE);
         GridData gdCompName = new GridData(SWT.FILL, SWT.CENTER, true, false);
         compNameConfig.setLayoutData(gdCompName);
@@ -105,11 +110,6 @@ public class EntityMainSection extends CommitBarListenerSection<XSDElementDeclar
         gpKeyConfig.setLayoutData(gdGroupKeyConfig);
         gpKeyConfig.setLayout(new FillLayout());
         compKeyConfig = new EntityKeyConfigComposite(gpKeyConfig, SWT.NONE);
-
-        compCommitBar = new CommitBarComposite(compTop, SWT.NONE);
-        GridData gdCompCommitBar = new GridData(SWT.BEGINNING, SWT.TOP, false, false);
-        compCommitBar.setLayoutData(gdCompCommitBar);
-        compCommitBar.addCommitListener(this);
 
     }
 

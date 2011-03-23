@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.amalto.workbench.detailtabs.sections.CommitSection;
 import com.amalto.workbench.detailtabs.sections.composites.CommitBarComposite.CommitBarListener;
 
 public class CommitBarListenerRegistry {
@@ -27,6 +28,8 @@ public class CommitBarListenerRegistry {
     private static CommitBarListenerRegistry INSTANCE;
 
     private Map<String, List<CommitBarListener>> tabId2Listeners = new HashMap<String, List<CommitBarListener>>();
+    
+    private List<CommitSection> commitSecs=new ArrayList<CommitSection>();
 
     private CommitBarListenerRegistry() {
     }
@@ -87,4 +90,17 @@ public class CommitBarListenerRegistry {
             tabId2Listeners.remove(eachNeedRemovedTabId);
         }
     }
+    
+    public void registCommitSection(CommitSection sec){
+    	commitSecs.add(sec);
+    }
+    public void unregistCommitSection(CommitSection sec){
+    	commitSecs.remove(sec);
+    }
+
+	public List<CommitSection> getCommitSecs() {
+		return commitSecs;
+	}
+    
+    
 }
