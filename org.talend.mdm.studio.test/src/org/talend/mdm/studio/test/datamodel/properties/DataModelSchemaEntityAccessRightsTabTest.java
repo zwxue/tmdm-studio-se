@@ -82,7 +82,7 @@ public class DataModelSchemaEntityAccessRightsTabTest extends
 
 		newEntity();
 		bot.viewById(IPageLayout.ID_PROP_SHEET).setFocus();
-		Util.selecteTalendTabbedPropertyListAtIndex(bot, 1);
+		Util.selecteTalendTabbedPropertyListAtIndex(bot, 2);
 	}
 
 	@After
@@ -112,42 +112,6 @@ public class DataModelSchemaEntityAccessRightsTabTest extends
 		conceptNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
 		conceptNode.select();
 		bot.buttonWithTooltip("Expand...").click();
-	}
-
-	@Test
-	public void addLabelsTest() {
-		bot.text(0).setText("en");
-		bot.buttonWithTooltip("Add", 0).click();
-		bot.button("Apply").click();
-		Assert.assertNotNull(conceptNode.getNode("Annotations").expand()
-				.getNode("English Label:en"));
-	}
-
-	@Test
-	public void deleteLabelsTest() {
-		bot.text(0).setText("en");
-		bot.buttonWithTooltip("Del", 0).click();
-		bot.button("Apply").click();
-		Assert.assertNull(conceptNode.getNode("Annotations").expand()
-				.getNode("English Label:en"));
-	}
-
-	@Test
-	public void addDescriptionsTest() {
-		bot.text(0).setText("en");
-		bot.buttonWithTooltip("Add", 1).click();
-		bot.button("Apply").click();
-		Assert.assertNotNull(conceptNode.getNode("Annotations").expand()
-				.getNode("English Description: en"));
-	}
-
-	@Test
-	public void deleteDescriptionsTest() {
-		bot.text(0).setText("en");
-		bot.buttonWithTooltip("Del", 1).click();
-		bot.button("Apply").click();
-		Assert.assertNull(conceptNode.getNode("Annotations").expand()
-				.getNode("English Description: en"));
 	}
 
 	@Test

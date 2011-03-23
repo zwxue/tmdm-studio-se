@@ -40,7 +40,7 @@ import com.amalto.workbench.editors.XObjectEditor;
  * DOC rhou class global comment. Detailled comment
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class DataModelSchemaEntityRulesTabTest extends TalendSWTBotForMDM {
+public class DataModelSchemaEntityExtraTabTest extends TalendSWTBotForMDM {
 
 	private SWTBotTree conceptBotTree;
 
@@ -80,8 +80,9 @@ public class DataModelSchemaEntityRulesTabTest extends TalendSWTBotForMDM {
 		conceptBotTree = new SWTBotTree(conceptTree);
 
 		newEntity();
+		newElement();
 		bot.viewById(IPageLayout.ID_PROP_SHEET).setFocus();
-		Util.selecteTalendTabbedPropertyListAtIndex(bot, 3);
+		Util.selecteTalendTabbedPropertyListAtIndex(bot, 4);
 	}
 
 	@After
@@ -113,21 +114,29 @@ public class DataModelSchemaEntityRulesTabTest extends TalendSWTBotForMDM {
 		bot.buttonWithTooltip("Expand...").click();
 	}
 
-	@Test
-	public void addValidationRuleTest() {
-		bot.buttonWithTooltip("Add", 0).click();
-		SWTBotShell shell = bot.shell("Add a Validation Rule");
-		shell.activate();
-		bot.text().setText("ValidationRule");
+	public void newElement() {
+		conceptBotTree.getTreeItem("ComplexTypeEntityType")
+				.contextMenu("Add Element").click();
 
-		bot.buttonWithTooltip("Add", 1).click();
-		bot.button("Apply").click();
+		SWTBotShell newElementShell = bot.shell("Add a new Business Element");
+		newElementShell.activate();
+		bot.textWithLabel("Business Element Name").setText("Ele");
+		sleep();
+		bot.button("OK").click();
+		sleep(2);
+		conceptNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
+		conceptNode.select();
+		bot.buttonWithTooltip("Expand...").click();
 	}
 
 	@Test
-	public void deleteValidationRuleTest() {
-		bot.tree(0).select(0);
-		bot.buttonWithTooltip("Del", 0).click();
+	public void setLookupFieldsTest() {
+		bot.comboBox().setSelection(0);
+		bot.buttonWithTooltip("Add").click();
+		bot.button("Apply").click();
+
+		bot.tree().select(0);
+		bot.buttonWithTooltip("Del").click();
 		bot.button("Apply").click();
 	}
 

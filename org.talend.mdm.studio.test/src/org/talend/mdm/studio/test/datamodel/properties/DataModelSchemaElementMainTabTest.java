@@ -40,7 +40,7 @@ import com.amalto.workbench.editors.XObjectEditor;
  * DOC rhou class global comment. Detailled comment
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class DataModelSchemaEntityRulesTabTest extends TalendSWTBotForMDM {
+public class DataModelSchemaElementMainTabTest extends TalendSWTBotForMDM {
 
 	private SWTBotTree conceptBotTree;
 
@@ -48,7 +48,9 @@ public class DataModelSchemaEntityRulesTabTest extends TalendSWTBotForMDM {
 
 	private SWTBotTreeItem dataModelItem;
 
-	private SWTBotTreeItem conceptNode;
+	private SWTBotTreeItem entityNode;
+
+	private SWTBotTreeItem elementNode;
 
 	@Before
 	public void runBeforeEveryTest() {
@@ -80,8 +82,9 @@ public class DataModelSchemaEntityRulesTabTest extends TalendSWTBotForMDM {
 		conceptBotTree = new SWTBotTree(conceptTree);
 
 		newEntity();
+		newElement();
 		bot.viewById(IPageLayout.ID_PROP_SHEET).setFocus();
-		Util.selecteTalendTabbedPropertyListAtIndex(bot, 3);
+		Util.selecteTalendTabbedPropertyListAtIndex(bot, 0);
 	}
 
 	@After
@@ -108,26 +111,29 @@ public class DataModelSchemaEntityRulesTabTest extends TalendSWTBotForMDM {
 		sleep();
 		bot.button("OK").click();
 		sleep(2);
-		conceptNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
-		conceptNode.select();
+		entityNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
+		entityNode.select();
 		bot.buttonWithTooltip("Expand...").click();
 	}
 
-	@Test
-	public void addValidationRuleTest() {
-		bot.buttonWithTooltip("Add", 0).click();
-		SWTBotShell shell = bot.shell("Add a Validation Rule");
-		shell.activate();
-		bot.text().setText("ValidationRule");
+	public void newElement() {
+		conceptBotTree.getTreeItem("ComplexTypeEntityType")
+				.contextMenu("Add Element").click();
 
-		bot.buttonWithTooltip("Add", 1).click();
-		bot.button("Apply").click();
+		SWTBotShell newElementShell = bot.shell("Add a new Business Element");
+		newElementShell.activate();
+		bot.textWithLabel("Business Element Name").setText("Ele");
+		sleep();
+		bot.button("OK").click();
+		sleep(2);
+		elementNode = entityNode.getNode("Ele");
+		elementNode.select().expand();
 	}
 
 	@Test
-	public void deleteValidationRuleTest() {
-		bot.tree(0).select(0);
-		bot.buttonWithTooltip("Del", 0).click();
+	public void editElementTest() {
+		bot.textWithLabel("Name").setText("Element");
+		bot.comboBoxWithLabel("Reference").setSelection(0);
 		bot.button("Apply").click();
 	}
 

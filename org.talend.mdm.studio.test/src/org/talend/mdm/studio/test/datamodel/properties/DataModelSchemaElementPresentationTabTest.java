@@ -40,7 +40,8 @@ import com.amalto.workbench.editors.XObjectEditor;
  * DOC rhou class global comment. Detailled comment
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class DataModelSchemaEntityRulesTabTest extends TalendSWTBotForMDM {
+public class DataModelSchemaElementPresentationTabTest extends
+		TalendSWTBotForMDM {
 
 	private SWTBotTree conceptBotTree;
 
@@ -48,7 +49,9 @@ public class DataModelSchemaEntityRulesTabTest extends TalendSWTBotForMDM {
 
 	private SWTBotTreeItem dataModelItem;
 
-	private SWTBotTreeItem conceptNode;
+	private SWTBotTreeItem entityNode;
+
+	private SWTBotTreeItem elementNode;
 
 	@Before
 	public void runBeforeEveryTest() {
@@ -80,8 +83,9 @@ public class DataModelSchemaEntityRulesTabTest extends TalendSWTBotForMDM {
 		conceptBotTree = new SWTBotTree(conceptTree);
 
 		newEntity();
+		newElement();
 		bot.viewById(IPageLayout.ID_PROP_SHEET).setFocus();
-		Util.selecteTalendTabbedPropertyListAtIndex(bot, 3);
+		Util.selecteTalendTabbedPropertyListAtIndex(bot, 1);
 	}
 
 	@After
@@ -108,27 +112,99 @@ public class DataModelSchemaEntityRulesTabTest extends TalendSWTBotForMDM {
 		sleep();
 		bot.button("OK").click();
 		sleep(2);
-		conceptNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
-		conceptNode.select();
+		entityNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
+		entityNode.select();
 		bot.buttonWithTooltip("Expand...").click();
 	}
 
-	@Test
-	public void addValidationRuleTest() {
-		bot.buttonWithTooltip("Add", 0).click();
-		SWTBotShell shell = bot.shell("Add a Validation Rule");
-		shell.activate();
-		bot.text().setText("ValidationRule");
+	public void newElement() {
+		conceptBotTree.getTreeItem("ComplexTypeEntityType")
+				.contextMenu("Add Element").click();
 
-		bot.buttonWithTooltip("Add", 1).click();
+		SWTBotShell newElementShell = bot.shell("Add a new Business Element");
+		newElementShell.activate();
+		bot.textWithLabel("Business Element Name").setText("Ele");
+		sleep();
+		bot.button("OK").click();
+		sleep(2);
+		elementNode = entityNode.getNode("Ele");
+		elementNode.select().expand();
+	}
+
+	@Test
+	public void editElementTest() {
+		bot.textWithLabel("Name").setText("Element");
+		bot.comboBoxWithLabel("Reference").setSelection(0);
+		bot.button("Apply").click();
+		elementNode = entityNode.getNode("Element");
+	}
+
+	@Test
+	public void setDisplayFormatTest() {
+		bot.comboBox(0).setSelection(0);
+		bot.text(0).setText("test error format in English");
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.comboBox(0).setSelection(1);
+		bot.text(0).setText("test error format in French");
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.tree(0).select(1);
+		bot.buttonWithTooltip("Del").click();
 		bot.button("Apply").click();
 	}
 
 	@Test
-	public void deleteValidationRuleTest() {
-		bot.tree(0).select(0);
-		bot.buttonWithTooltip("Del", 0).click();
+	public void setLabelsTest() {
+		bot.comboBox(1).setSelection(0);
+		bot.text(1).setText("en");
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.comboBox(1).setSelection(1);
+		bot.text(1).setText("fr");
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.tree(1).select(1);
+		bot.buttonWithTooltip("Del").click();
 		bot.button("Apply").click();
+		Assert.assertNotNull(elementNode.expand().getNode("Annotations")
+				.expand().getNode("English Label: en"));
+	}
+
+	@Test
+	public void setDescriptionsTest() {
+		bot.comboBox(2).setSelection(0);
+		bot.text(2).setText("enlish description");
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.comboBox(2).setSelection(1);
+		bot.text(2).setText("french description");
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.tree(2).select(1);
+		bot.buttonWithTooltip("Del").click();
+		bot.button("Apply").click();
+		Assert.assertNotNull(elementNode.expand().getNode("Annotations")
+				.expand().getNode("English Description: enlish description"));
+	}
+
+	@Test
+	public void setFacetTest() {
+		bot.comboBox(3).setSelection(0);
+		bot.text(3).setText("test error facet in English");
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.comboBox(3).setSelection(1);
+		bot.text(3).setText("test error facet in French");
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.tree(3).select(1);
+		bot.buttonWithTooltip("Del").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+		Assert.assertNotNull(elementNode.expand().getNode("Annotations")
+				.expand().getNode("Facet_Msg_EN: Reporting"));
 	}
 
 }
