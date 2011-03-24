@@ -606,11 +606,12 @@ public class TransformerMainPage extends AMainPageV2 {
             stepWidget = new TransformerStepWidget(toolkit, specsComposite);
             stepWidget.create();
 
-            btnAutoIndent = new Button(specsComposite, SWT.TOGGLE);
+            btnAutoIndent = new Button(specsComposite, SWT.CHECK);
             btnAutoIndent.setSelection(true);
+            btnAutoIndent.setText("Auto-indent");
             btnAutoIndent.setImage(ImageCache.getCreatedImage(EImage.INTENT.getPath()));
             btnAutoIndent.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 4, 1));
-            refreshAutoIndentTooltip();
+            //refreshAutoIndentTooltip();
             btnAutoIndent.addSelectionListener(new SelectionAdapter() {
 
                 @Override
