@@ -45,7 +45,7 @@ public class ElementFKSection extends XSDComponentSection {
 
         dataModelHolder.setDefaultDataModel(getDataModelName());
         compSimpleXPath.setDefaultDataModelForSelect(getDataModelName());
-
+        dataModelHolder.setDefaultEntity(getEntityName());
     }
 
     @Override
@@ -57,7 +57,7 @@ public class ElementFKSection extends XSDComponentSection {
     protected void createControlsInSection(Composite compSectionClient) {
         dataModelHolder = new FixDMNameBasePropertySectionDataModelExtractor(this);
         compSimpleXPath = new SimpleXPathComposite(compSectionClient, SWT.NONE, SimpleXPathComposite.DEFAULTTITLE,
-                dataModelHolder, "");//$NON-NLS-1$
+                dataModelHolder, dataModelHolder.getDefaultDataModel());//$NON-NLS-1$
     }
 
     @Override

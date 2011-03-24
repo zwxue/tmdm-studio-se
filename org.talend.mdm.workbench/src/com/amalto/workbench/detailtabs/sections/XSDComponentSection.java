@@ -13,6 +13,9 @@
 package com.amalto.workbench.detailtabs.sections;
 
 import org.eclipse.xsd.XSDComponent;
+import org.eclipse.xsd.XSDConcreteComponent;
+import org.eclipse.xsd.XSDElementDeclaration;
+import org.eclipse.xsd.XSDSchema;
 
 public abstract class XSDComponentSection extends CommitBarListenerSection<XSDComponent> {
 
@@ -26,5 +29,18 @@ public abstract class XSDComponentSection extends CommitBarListenerSection<XSDCo
     @Override
     protected void initUIContents(XSDComponent editedObj) {
         curXSDComponent = editedObj;
+    }
+    
+    protected String getEntityName(){
+    	String entity= getEntity(curXSDComponent);
+    	return entity;
+    }
+    
+    private String getEntity(XSDConcreteComponent com){
+    	if(com.getContainer() instanceof XSDSchema && com instanceof XSDElementDeclaration){
+    		return ((XSDElementDeclaration)com).getName();   		
+    	}else{
+    		return getEntity(com.getContainer());
+    	}
     }
 }

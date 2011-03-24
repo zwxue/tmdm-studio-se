@@ -75,7 +75,7 @@ public class SelectXPathDialog extends Dialog {
 
     @Override
     protected Point getInitialSize() {
-        return new Point(500, 375);
+        return new Point(500, 575);
     }
 
     protected int getShellStyle() {

@@ -44,6 +44,7 @@ public class ElementFKFilterSection extends XSDComponentSection {
             filterExpression = "";//$NON-NLS-1$
 
         dataModelHolder.setDefaultDataModel(getDataModelName());
+        dataModelHolder.setDefaultEntity(getEntityName());
     }
 
     @Override

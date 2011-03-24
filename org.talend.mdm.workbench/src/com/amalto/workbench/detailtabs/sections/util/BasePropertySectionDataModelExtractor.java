@@ -22,7 +22,7 @@ import com.amalto.workbench.utils.Util;
 public class BasePropertySectionDataModelExtractor extends BasePropertySectionGlobalInfoExtractor implements IAllDataModelHolder {
 
     protected String defaultDataModel = "";//$NON-NLS-1$
-
+    protected String defaultEntity = "";//$NON-NLS-1$
     public BasePropertySectionDataModelExtractor(BasePropertySection propSection) {
         this(propSection, "");//$NON-NLS-1$
     }
@@ -52,4 +52,13 @@ public class BasePropertySectionDataModelExtractor extends BasePropertySectionGl
     public void setDefaultDataModel(String defaultDataModel) {
         this.defaultDataModel = defaultDataModel;
     }
+
+	public String getDefaultEntity() {
+		return defaultEntity;
+	}
+
+	public void setDefaultEntity(String defaultEntity) {
+		this.defaultEntity = defaultEntity;
+	}
+    
 }

@@ -18,6 +18,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -121,7 +122,7 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
     protected CellEditor[] getCellEditors() {
         return new CellEditor[] { new XPathCellEditor(tvInfos.getTree(), dataModelHolder),
                 new ComboBoxCellEditor(tvInfos.getTree(), IConstants.VIEW_CONDITION_OPERATORS, SWT.READ_ONLY),
-                new XPathCellEditor(tvInfos.getTree(), dataModelHolder),
+                new TextCellEditor(tvInfos.getTree()),
                 new ComboBoxCellEditor(tvInfos.getTree(), IConstants.PREDICATES, SWT.READ_ONLY) };
     }
 

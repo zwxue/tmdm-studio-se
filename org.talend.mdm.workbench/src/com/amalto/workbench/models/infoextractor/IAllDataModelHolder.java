@@ -21,4 +21,8 @@ public interface IAllDataModelHolder {
     public boolean hasDataModel();
 
     public XSDSchema getDataModel(String dataModelName);
+    
+    public String getDefaultDataModel();
+    
+    public String getDefaultEntity();
 }

@@ -23,16 +23,9 @@ public class XPathCellEditor extends EditableDialogCellEditor {
 
     private IAllDataModelHolder allDataModelHolder;
 
-    private String defaultDataModelName;
-
     public XPathCellEditor(Composite parent, IAllDataModelHolder allDataModelHolder) {
-        this(parent, allDataModelHolder, "");//$NON-NLS-1$
-    }
-
-    public XPathCellEditor(Composite parent, IAllDataModelHolder allDataModelHolder, String defaultDataModelName) {
         super(parent);
         this.allDataModelHolder = allDataModelHolder;
-        this.defaultDataModelName = defaultDataModelName;
     }
 
     public IAllDataModelHolder getAllDataModelHolder() {
@@ -47,18 +40,11 @@ public class XPathCellEditor extends EditableDialogCellEditor {
         this.allDataModelHolder = allDataModelHolder;
     }
 
-    public String getDefaultDataModelName() {
-        return defaultDataModelName;
-    }
-
-    public void setDefaultDataModelName(String defaultDataModelName) {
-        this.defaultDataModelName = defaultDataModelName;
-    }
 
     @Override
     protected Object openDialogBox(Control cellEditorWindow) {
 
-        SelectXPathDialog dialog = new SelectXPathDialog(cellEditorWindow.getShell(), allDataModelHolder, defaultDataModelName);
+        SelectXPathDialog dialog = new SelectXPathDialog(cellEditorWindow.getShell(), allDataModelHolder, allDataModelHolder.getDefaultDataModel(),allDataModelHolder.getDefaultEntity());
 
         if (dialog.open() != Window.OK)
             return null;

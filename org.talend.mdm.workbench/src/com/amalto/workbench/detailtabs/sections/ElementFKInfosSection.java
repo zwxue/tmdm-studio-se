@@ -54,6 +54,7 @@ public class ElementFKInfosSection extends XSDComponentSection {
 
         isResolveAutoInWeb = annoStruct.getRetrieveFKinfos();
         dataModelHolder.setDefaultDataModel(getDataModelName());
+        dataModelHolder.setDefaultEntity(getEntityName());
     }
 
     @Override
