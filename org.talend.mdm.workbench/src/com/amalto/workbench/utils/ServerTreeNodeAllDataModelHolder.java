@@ -37,15 +37,11 @@ public class ServerTreeNodeAllDataModelHolder implements IAllDataModelHolder {
         return Util.getXSDSchema(treeNode, dataModelName);
     }
 
-	@Override
 	public String getDefaultDataModel() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public String getDefaultEntity() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
