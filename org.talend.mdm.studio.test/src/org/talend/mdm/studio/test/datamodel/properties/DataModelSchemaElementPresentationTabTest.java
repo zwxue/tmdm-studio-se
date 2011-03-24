@@ -114,7 +114,7 @@ public class DataModelSchemaElementPresentationTabTest extends
 		sleep(2);
 		entityNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
 		entityNode.select();
-		bot.buttonWithTooltip("Expand...").click();
+		bot.buttonWithTooltip("Expand...", 0).click();
 	}
 
 	public void newElement() {
@@ -129,14 +129,6 @@ public class DataModelSchemaElementPresentationTabTest extends
 		sleep(2);
 		elementNode = entityNode.getNode("Ele");
 		elementNode.select().expand();
-	}
-
-	@Test
-	public void editElementTest() {
-		bot.textWithLabel("Name").setText("Element");
-		bot.comboBoxWithLabel("Reference").setSelection(0);
-		bot.button("Apply").click();
-		elementNode = entityNode.getNode("Element");
 	}
 
 	@Test

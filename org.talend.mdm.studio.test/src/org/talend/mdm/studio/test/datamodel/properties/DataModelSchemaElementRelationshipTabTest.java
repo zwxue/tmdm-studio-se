@@ -85,7 +85,7 @@ public class DataModelSchemaElementRelationshipTabTest extends
 		newEntity();
 		newElement();
 		bot.viewById(IPageLayout.ID_PROP_SHEET).setFocus();
-		Util.selecteTalendTabbedPropertyListAtIndex(bot, 0);
+		Util.selecteTalendTabbedPropertyListAtIndex(bot, 3);
 	}
 
 	@After
@@ -114,7 +114,7 @@ public class DataModelSchemaElementRelationshipTabTest extends
 		sleep(2);
 		entityNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
 		entityNode.select();
-		bot.buttonWithTooltip("Expand...").click();
+		bot.buttonWithTooltip("Expand...", 0).click();
 	}
 
 	public void newElement() {
@@ -132,29 +132,29 @@ public class DataModelSchemaElementRelationshipTabTest extends
 	}
 
 	@Test
-	public void setWriteAccessTest() {
-		bot.comboBox(0).setSelection(0);
+	public void setForeignKeyTest() {
+		bot.buttonWithTooltip("Select xpath", 0).click();
+		bot.tree().select(0);
+		bot.button("OK").click();
+		bot.button("Apply").click();
+	}
+
+	@Test
+	public void setForeignKeyFilterTest() {
 		bot.buttonWithTooltip("Add", 0).click();
-		bot.button("Apply").click();
+		bot.buttonWithTooltip("Select Xpath", 1).click();
 
-		bot.tree(0).select(0);
-		bot.buttonWithTooltip("Del", 0).click();
+		bot.tree().expandNode("BrowseItem").select("Owner");
+		bot.button("OK").click();
 		bot.button("Apply").click();
 	}
 
 	@Test
-	public void setNoAccessTest() {
-		bot.comboBox(1).setSelection(0);
+	public void setForeignKeyInfoTest() {
+		bot.buttonWithTooltip("Select xpath", 2).click();
+		bot.tree().select(0);
+		bot.button("OK").click();
 		bot.buttonWithTooltip("Add", 1).click();
-		bot.button("Apply").click();
-
-		bot.tree(1).select(0);
-		bot.buttonWithTooltip("Del", 1).click();
-		bot.button("Apply").click();
-	}
-
-	@Test
-	public void setWorkflowAccessTest() {
 	}
 
 }

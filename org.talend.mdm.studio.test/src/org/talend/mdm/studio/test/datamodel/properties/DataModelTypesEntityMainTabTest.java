@@ -40,15 +40,15 @@ import com.amalto.workbench.editors.XObjectEditor;
  * DOC rhou class global comment. Detailled comment
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class DataModelSchemaEntityMainTabTest extends TalendSWTBotForMDM {
+public class DataModelTypesEntityMainTabTest extends TalendSWTBotForMDM {
 
-	private SWTBotTree conceptBotTree;
+	private SWTBotTree typesBotTree;
 
 	private DataModelMainPage mainpage;
 
 	private SWTBotTreeItem dataModelItem;
 
-	private SWTBotTreeItem conceptNode;
+	private SWTBotTreeItem typeNode;
 
 	@Before
 	public void runBeforeEveryTest() {
@@ -76,10 +76,10 @@ public class DataModelSchemaEntityMainTabTest extends TalendSWTBotForMDM {
 		final SWTBotEditor editor = bot.editorByTitle("TestDataModel");
 		XObjectEditor ep = (XObjectEditor) editor.getReference().getPart(true);
 		mainpage = (DataModelMainPage) ep.getPage(0);
-		Tree conceptTree = mainpage.getTreeViewer().getTree();
-		conceptBotTree = new SWTBotTree(conceptTree);
+		Tree typesTree = mainpage.getTypesViewer().getTree();
+		typesBotTree = new SWTBotTree(typesTree);
 
-		newEntity();
+		addComplexType();
 		bot.viewById(IPageLayout.ID_PROP_SHEET).setFocus();
 		Util.selecteTalendTabbedPropertyListAtIndex(bot, 0);
 	}
@@ -99,81 +99,32 @@ public class DataModelSchemaEntityMainTabTest extends TalendSWTBotForMDM {
 		});
 	}
 
-	public void newEntity() {
-		conceptBotTree.contextMenu("New Entity").click();
-		SWTBotShell newEntityShell = bot.shell("New Entity");
-		newEntityShell.activate();
-		// create a entity with a complex type
-		bot.textWithLabel("Name:").setText("ComplexTypeEntity");
+	private void addComplexType() {
+		typesBotTree.contextMenu("Create a Complex Type").click();
 		sleep();
+		SWTBotShell changeTypeShell = bot.shell("Complex Type Properties");
+		changeTypeShell.activate();
+		bot.ccomboBox(0).setText("TestComplexType");
+		bot.radio("Sequence").click();
 		bot.button("OK").click();
 		sleep(2);
-		conceptNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
-		conceptNode.select();
-		bot.buttonWithTooltip("Expand...", 0).click();
+
+		typeNode = typesBotTree.getTreeItem("TestComplexType");
+		typeNode.select();
+		bot.buttonWithTooltip("Expand...", 1).click();
 	}
 
 	@Test
-	public void editEntityTest() {
-		bot.textWithLabel("Name").setText("RenameEntity");
+	public void editTypeNameTest() {
+		bot.textWithLabel("Name").setText("ComplexType");
 		bot.button("Apply").click();
-		Assert.assertEquals("RenameEntity", conceptNode.getText());
+		Assert.assertEquals("ComplexType", typeNode.getText());
 	}
 
 	@Test
-	public void addKeyTest() {
-		bot.buttonWithTooltip("Add key...").click();
-		SWTBotShell shell = bot.shell("Add a new Key");
-		shell.activate();
-		bot.ccomboBox(0).setSelection(1);
-		bot.text().setText("Test");
-		bot.button("OK").click();
-
-		bot.button("Apply").click();
-		Assert.assertNotNull(conceptNode.getNode("Test"));
-	}
-
-	@Test
-	public void deleteKeyTest() {
-		bot.tree(0).select("Test");
-		bot.buttonWithTooltip("Delete keys").click();
-
-		bot.button("Apply").click();
-		Assert.assertTrue(conceptNode.getNode("Test") == null);
-	}
-
-	@Test
-	public void addFieldTest() {
-		bot.buttonWithTooltip("Add field...").click();
-		SWTBotShell shell = bot.shell("Select one field");
-		shell.activate();
-		bot.ccomboBox().setText("Test");
-		bot.button("OK").click();
-
-		bot.button("Apply").click();
-		Assert.assertNotNull(conceptNode.getNode("Test").getNode("Test"));
-	}
-
-	@Test
-	public void editFieldTest() {
-		bot.tree(0).select("Test");
-		bot.buttonWithTooltip("Edit Field...").click();
-		SWTBotShell shell = bot.shell("Select one field");
-		shell.activate();
-		bot.ccomboBox().setText("Test1");
-		bot.button("OK").click();
-
-		bot.button("Apply").click();
-		Assert.assertNotNull(conceptNode.getNode("Test1").getNode("Test"));
-	}
-
-	@Test
-	public void deleteFieldTest() {
-		bot.tree(0).select("Test1");
-		bot.buttonWithTooltip("Delete Fields").click();
-
-		bot.button("Apply").click();
-		Assert.assertTrue(conceptNode.getNode("Test").getNode("Test1") == null);
+	public void changeGroupTest() {
+		bot.button("All").click();
+		bot.button().click();
 	}
 
 }

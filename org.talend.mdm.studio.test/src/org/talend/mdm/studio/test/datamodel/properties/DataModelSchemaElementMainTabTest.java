@@ -113,7 +113,7 @@ public class DataModelSchemaElementMainTabTest extends TalendSWTBotForMDM {
 		sleep(2);
 		entityNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
 		entityNode.select();
-		bot.buttonWithTooltip("Expand...").click();
+		bot.buttonWithTooltip("Expand...", 0).click();
 	}
 
 	public void newElement() {

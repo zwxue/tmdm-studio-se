@@ -111,7 +111,7 @@ public class DataModelSchemaEntityPresentationTabTest extends
 		sleep(2);
 		conceptNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
 		conceptNode.select();
-		bot.buttonWithTooltip("Expand...").click();
+		bot.buttonWithTooltip("Expand...", 0).click();
 	}
 
 	@Test

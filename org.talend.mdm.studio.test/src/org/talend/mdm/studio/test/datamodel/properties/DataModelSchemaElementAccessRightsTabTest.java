@@ -85,7 +85,7 @@ public class DataModelSchemaElementAccessRightsTabTest extends
 		newEntity();
 		newElement();
 		bot.viewById(IPageLayout.ID_PROP_SHEET).setFocus();
-		Util.selecteTalendTabbedPropertyListAtIndex(bot, 0);
+		Util.selecteTalendTabbedPropertyListAtIndex(bot, 2);
 	}
 
 	@After
@@ -114,7 +114,7 @@ public class DataModelSchemaElementAccessRightsTabTest extends
 		sleep(2);
 		entityNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
 		entityNode.select();
-		bot.buttonWithTooltip("Expand...").click();
+		bot.buttonWithTooltip("Expand...", 0).click();
 	}
 
 	public void newElement() {
