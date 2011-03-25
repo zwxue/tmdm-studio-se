@@ -45,11 +45,14 @@ public class FileSelectWidget {
     boolean isFile;
 
     private Button button;
-
-    public FileSelectWidget(Composite parent, String label, String[] fileExtents, String filename, boolean isFile) {
+    
+    int type;
+    
+    public FileSelectWidget(Composite parent, String label, String[] fileExtents, String filename, boolean isFile, int type) {
         this.label = label;
         this.filename = filename;
         this.fileExtents = fileExtents;
+        this.type=type;
         // this.parent=factory.createComposite(parent,0);
         this.parent = parent;
         if (parent.getLayout() == null) {
@@ -61,7 +64,9 @@ public class FileSelectWidget {
         this.isFile = isFile;
         create();
     }
-
+    public FileSelectWidget(Composite parent, String label, String[] fileExtents, String filename, boolean isFile) {
+    	this(parent,label,fileExtents,filename,isFile,SWT.OPEN);
+    }
     public Text getText() {
         return text;
     }
@@ -97,7 +102,7 @@ public class FileSelectWidget {
 
             public void widgetSelected(SelectionEvent e) {
                 if (isFile) {
-                    FileDialog fileDialog = new FileDialog(parent.getShell(), SWT.OPEN);
+                    FileDialog fileDialog = new FileDialog(parent.getShell(), type);
                     fileDialog.setFilterExtensions(fileExtents);
                     fileDialog.setFileName(filename);
                     String name = fileDialog.open();

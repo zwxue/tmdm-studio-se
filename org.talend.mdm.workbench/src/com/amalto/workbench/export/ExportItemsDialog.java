@@ -134,7 +134,7 @@ public class ExportItemsDialog extends Dialog {
         // file
 
         fw = new FileSelectWidget(composite, "Target      ", new String[] { "*.*", "*.zip" }, comboDataCluster.getCombo()//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-                .getText(), false);
+                .getText(), false, SWT.SAVE);
         comboDataCluster.getCombo().addSelectionListener(new SelectionListener() {
 
             public void widgetDefaultSelected(SelectionEvent e) {

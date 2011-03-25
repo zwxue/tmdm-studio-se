@@ -575,7 +575,7 @@ public class ExportItemsWizard extends Wizard {
             folderBtn = new Button(composite, SWT.RADIO);
             folderBtn.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 1, 1));
             folderBtn.setText("Select root directory:");
-            folder = new FileSelectWidget(composite, "", new String[] { "*.*" }, "", false);//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+            folder = new FileSelectWidget(composite, "", new String[] { "*.*" }, "", false,SWT.SAVE);//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
             folder.getCmp().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 
             folderBtn.addSelectionListener(new SelectionListener() {
@@ -593,7 +593,7 @@ public class ExportItemsWizard extends Wizard {
             zipBtn = new Button(composite, SWT.RADIO);
             zipBtn.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 1, 1));
             zipBtn.setText("Select archive file:");
-            zip = new FileSelectWidget(composite, "", new String[] { "*.zip" }, "", true);//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+            zip = new FileSelectWidget(composite, "", new String[] { "*.zip" }, "", true,SWT.SAVE);//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
             zip.getCmp().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
             zipBtn.addSelectionListener(new SelectionListener() {
 
