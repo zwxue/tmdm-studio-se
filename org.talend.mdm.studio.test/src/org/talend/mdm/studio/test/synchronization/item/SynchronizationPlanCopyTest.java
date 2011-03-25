@@ -30,55 +30,62 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class SynchronizationPlanCopyTest extends TalendSWTBotForMDM {
 
-    private SWTBotTreeItem spParentItem;
+	private SWTBotTreeItem spParentItem;
 
-    private SWTBotTreeItem spItem;
+	private SWTBotTreeItem spItem;
 
-    @Before
-    public void runBeforeEveryTest() {
-        spParentItem = serverItem.getNode("Synchronization Plan [HEAD]");
-        spParentItem.expand();
+	@Before
+	public void runBeforeEveryTest() {
+		spParentItem = serverItem.getNode("Synchronization Plan [HEAD]");
 
-        spParentItem.contextMenu("New").click();
-        SWTBotShell newSynchronizationPlanShell = bot.shell("New Synchronization Plan");
-        newSynchronizationPlanShell.activate();
-        SWTBotText text = bot.textWithLabel("Enter a Name for the New Instance");
-        text.setText("TestSynchronizationPlan");
-        bot.button("OK").click();
-        sleep(2);
-        bot.activeEditor().save();
-        sleep();
-        spItem = spParentItem.getNode("TestSynchronizationPlan");
-        Assert.assertNotNull(spItem);
-        sleep(2);
-    }
+		spParentItem.contextMenu("New").click();
+		SWTBotShell newSynchronizationPlanShell = bot
+				.shell("New Synchronization Plan");
+		newSynchronizationPlanShell.activate();
+		SWTBotText text = bot
+				.textWithLabel("Enter a Name for the New Instance");
+		text.setText("TestSynchronizationPlan");
+		bot.button("OK").click();
+		sleep(2);
+		bot.activeEditor().save();
+		sleep();
+		spParentItem.expand();
+		spItem = spParentItem.getNode("TestSynchronizationPlan");
+		Assert.assertNotNull(spItem);
+		sleep(2);
+	}
 
-    @Test
-    public void synchronizationPlanCopyTest() {
-        SWTBotMenu editMenu = spItem.contextMenu("Copy");
-        editMenu.click();
-        sleep();
-        spItem.contextMenu("Paste").click();
-        SWTBotShell pasteSynchronizationPlanShell = bot.shell("Pasting instance TestSynchronizationPlan");
-        pasteSynchronizationPlanShell.activate();
-        bot.text("CopyOfTestSynchronizationPlan").setText("PasteSynchronizationPlan");
-        bot.button("OK").click();
-        SWTBotTreeItem pasteNode = spParentItem.getNode("PasteSynchronizationPlan");
-        Assert.assertNotNull(pasteNode);
-        sleep(2);
-    }
+	@Test
+	public void synchronizationPlanCopyTest() {
+		SWTBotMenu editMenu = spItem.contextMenu("Copy");
+		editMenu.click();
+		sleep();
+		spItem.contextMenu("Paste").click();
+		SWTBotShell pasteSynchronizationPlanShell = bot
+				.shell("Pasting instance TestSynchronizationPlan");
+		pasteSynchronizationPlanShell.activate();
+		bot.text("CopyOfTestSynchronizationPlan").setText(
+				"PasteSynchronizationPlan");
+		bot.button("OK").click();
+		SWTBotTreeItem pasteNode = spParentItem
+				.getNode("PasteSynchronizationPlan");
+		Assert.assertNotNull(pasteNode);
+		sleep(2);
+	}
 
-    @After
-    public void runAfterEveryTest() {
-        spParentItem.getNode("TestSynchronizationPlan").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
+	@After
+	public void runAfterEveryTest() {
+		spParentItem.getNode("TestSynchronizationPlan").contextMenu("Delete")
+				.click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
 
-        spParentItem.getNode("PasteSynchronizationPlan").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-    }
+		spParentItem.getNode("PasteSynchronizationPlan").contextMenu("Delete")
+				.click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+	}
 
 }

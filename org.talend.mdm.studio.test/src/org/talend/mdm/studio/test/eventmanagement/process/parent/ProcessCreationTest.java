@@ -27,96 +27,106 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class ProcessCreationTest extends TalendSWTBotForMDM {
 
-    private SWTBotTreeItem processParentNode;
+	private SWTBotTreeItem processParentNode;
 
-    private String[] creation;
+	private String[] creation;
 
-    @Before
-    public void runBeforeEveryTest() {
-        SWTBotTreeItem eventManagementItem = serverItem.getNode("Event Management");
-        eventManagementItem.expand();
+	@Before
+	public void runBeforeEveryTest() {
+		SWTBotTreeItem eventManagementItem = serverItem
+				.getNode("Event Management");
+		eventManagementItem.expand();
 
-        processParentNode = eventManagementItem.getNode("Process [HEAD]");
-    }
+		processParentNode = eventManagementItem.getNode("Process [HEAD]");
+	}
 
-    @After
-    public void runAfterEveryTest() {
-        processParentNode.select(creation).contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-    }
+	@After
+	public void runAfterEveryTest() {
+		processParentNode.expand();
+		for (String process : creation) {
+			processParentNode.getNode(process).contextMenu("Delete").click();
+		}
+		sleep();
+		bot.button("OK").click();
+		sleep();
+	}
 
-    @Test
-    public void newTest() {
-        String selEle = "Reporting";
-        // for normal process
-        processParentNode.contextMenu("New").click();
-        bot.text().setText("Normal_Process");
-        bot.radio("Create a Normal Process").click();
-        bot.button("OK").click();
-        bot.activeEditor().save();
-        sleep();
-        Assert.assertNotNull(processParentNode.expand().getNode("Normal_Process"));
+	@Test
+	public void newTest() {
+		String selEle = "Reporting";
+		// for normal process
+		processParentNode.contextMenu("New").click();
+		bot.text().setText("Normal_Process");
+		bot.radio("Create a Normal Process").click();
+		bot.button("OK").click();
+		bot.activeEditor().save();
+		sleep();
+		Assert.assertNotNull(processParentNode.expand().getNode(
+				"Normal_Process"));
 
-        //new feature in 4.2,see bug 0017997.
-        // for smartview process
-        processParentNode.contextMenu("New").click();
-        bot.radio("Create a Smartview Process").click();
-        selecteXpath(selEle);
-        bot.button("OK").click();
-        bot.activeEditor().save();
-        sleep();
-        Assert.assertNotNull(processParentNode.expand().getNode("Smart_view_" + selEle));
+		// new feature in 4.2,see bug 0017997.
+		// for smartview process
+		processParentNode.contextMenu("New").click();
+		bot.radio("Create a Smartview Process").click();
+		selecteXpath(selEle);
+		bot.button("OK").click();
+		bot.activeEditor().save();
+		sleep();
+		Assert.assertNotNull(processParentNode.expand().getNode(
+				"Smart_view_" + selEle));
 
-        // for normal process
-        processParentNode.contextMenu("New").click();
-        bot.radio("Create a Before-Saving Process").click();
-        selecteXpath(selEle);
-        bot.button("OK").click();
-        bot.activeEditor().save();
-        sleep();
-        Assert.assertNotNull(processParentNode.expand().getNode("beforeSaving_" + selEle));
+		// for normal process
+		processParentNode.contextMenu("New").click();
+		bot.radio("Create a Before-Saving Process").click();
+		selecteXpath(selEle);
+		bot.button("OK").click();
+		bot.activeEditor().save();
+		sleep();
+		Assert.assertNotNull(processParentNode.expand().getNode(
+				"beforeSaving_" + selEle));
 
-        // for normal process
-        processParentNode.contextMenu("New").click();
-        bot.radio("Create a Before-Deleting Process").click();
-        selecteXpath(selEle);
-        bot.button("OK").click();
-        bot.activeEditor().save();
-        sleep();
-        Assert.assertNotNull(processParentNode.expand().getNode("beforeDeleting_" + selEle));
+		// for normal process
+		processParentNode.contextMenu("New").click();
+		bot.radio("Create a Before-Deleting Process").click();
+		selecteXpath(selEle);
+		bot.button("OK").click();
+		bot.activeEditor().save();
+		sleep();
+		Assert.assertNotNull(processParentNode.expand().getNode(
+				"beforeDeleting_" + selEle));
 
-        // for normal process
-        processParentNode.contextMenu("New").click();
-        bot.radio("Create a Runable Process").click();
-        selecteXpath(selEle);
-        bot.button("OK").click();
-        bot.activeEditor().save();
-        sleep();
-        Assert.assertNotNull(processParentNode.expand().getNode("Runnable_" + selEle));
+		// for normal process
+		processParentNode.contextMenu("New").click();
+		bot.radio("Create a Runable Process").click();
+		selecteXpath(selEle);
+		bot.button("OK").click();
+		bot.activeEditor().save();
+		sleep();
+		Assert.assertNotNull(processParentNode.expand().getNode(
+				"Runnable_" + selEle));
 
-        // for normal process
-        processParentNode.contextMenu("New").click();
-        bot.radio("Create a Standalone Process").click();
-        selecteXpath(selEle);
-        bot.button("OK").click();
-        bot.activeEditor().save();
-        sleep();
-        Assert.assertNotNull(processParentNode.expand().getNode("Runnable#" + selEle));
+		// for normal process
+		processParentNode.contextMenu("New").click();
+		bot.radio("Create a Standalone Process").click();
+		selecteXpath(selEle);
+		bot.button("OK").click();
+		bot.activeEditor().save();
+		sleep();
+		Assert.assertNotNull(processParentNode.expand().getNode(
+				"Runnable#" + selEle));
+		creation = new String[] { "Normal_Process", "Smart_view_" + selEle,
+				"beforeSaving_" + selEle, "beforeDeleting_" + selEle,
+				"Runnable_" + selEle };
+	}
 
-        creation = new String[] { "Normal_Process", "Smart_view_" + selEle, "beforeSaving_" + selEle, "beforeDeleting_" + selEle,
-                "Runnable_" + selEle };
-    }
-
-    private void selecteXpath(String selEle) {
-        bot.buttonWithTooltip("Select one Entity").click();
-        bot.comboBox().setSelection(selEle);
-        sleep();
-        bot.tree().select(selEle);
-        sleep();
-        bot.button("Add").click();
-        sleep();
-    }
+	private void selecteXpath(String selEle) {
+		bot.buttonWithTooltip("Select one Entity").click();
+		bot.comboBox().setSelection(selEle);
+		sleep();
+		bot.tree().select(selEle);
+		sleep();
+		bot.button("Add").click();
+		sleep();
+	}
 
 }

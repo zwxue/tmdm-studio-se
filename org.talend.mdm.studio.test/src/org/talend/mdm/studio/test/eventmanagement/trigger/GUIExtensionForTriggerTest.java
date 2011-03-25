@@ -20,46 +20,62 @@ import org.junit.Before;
 import org.junit.Test;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
-
 /**
- * DOC rhou  class global comment. Detailled comment
+ * DOC rhou class global comment. Detailled comment
  */
 public class GUIExtensionForTriggerTest extends TalendSWTBotForMDM {
-    private SWTBotTreeItem triggerParentNode;
+	private SWTBotTreeItem triggerParentNode;
 
-    private SWTBotTreeItem eventManagementItem;
+	private SWTBotTreeItem eventManagementItem;
 
-    @Before
-    public void runBeforeEveryTest() {
-        eventManagementItem = serverItem.getNode("Event Management");
-        eventManagementItem.expand();
+	@Before
+	public void runBeforeEveryTest() {
+		eventManagementItem = serverItem.getNode("Event Management");
+		eventManagementItem.expand();
+		initTrigger();
 
-    }
+	}
 
-    @After
-    public void runAfterEveryTest() {
-        Display.getDefault().syncExec(new Runnable() {
+	private void initTrigger() {
+		triggerParentNode = eventManagementItem.getNode("Trigger [HEAD]");
+		triggerParentNode.contextMenu("New").click();
+		bot.text().setText("TriggerDemo");
+		bot.button("OK").click();
+	}
 
-            public void run() {
-                bot.activeEditor().save();
-            }
-        });
-    }
-    //new feature in 4.2,see bug 0017974:
-    @Test
-    public void extensionForTriggerTest() {
-        triggerParentNode = eventManagementItem.getNode("Trigger [HEAD]");
-        triggerParentNode.contextMenu("New").click();
-        bot.text().setText("TriggerDemo");
-        bot.button("OK").click();
-        bot.comboBoxWithLabel("Service JNDI Name").setSelection(0);
-        String process= bot.tree().select(1).getText();
-        bot.tabItem(1).activate();
-        Assert.assertEquals("process="+process,bot.styledText().getText());
-        bot.activeEditor().save();
-        triggerParentNode.expand();
-        sleep();
-    }
+	@After
+	public void runAfterEveryTest() {
+		Display.getDefault().syncExec(new Runnable() {
 
+			public void run() {
+				bot.activeEditor().save();
+			}
+		});
+	}
+
+	// new feature in 4.2,see bug 0017974:
+	@Test
+	public void classProcessTest() {
+		bot.comboBoxWithLabel("Service JNDI Name").setSelection("callprocess");
+		String process = bot.tree().select(1).getText();
+		bot.tabItem(1).activate();
+		Assert.assertEquals("process=" + process, bot.styledText().getText());
+		bot.activeEditor().save();
+		triggerParentNode.expand();
+		sleep();
+	}
+
+	// new feature in 4.2,see bug 0017975:
+	@Test
+	public void smtpTest() {
+		bot.comboBoxWithLabel("Service JNDI Name").setSelection("smtp");
+		bot.textWithLabel("From").setText("smtp@talend.com");
+		bot.textWithLabel("To").setText("smtp@talend.com");
+		bot.textWithLabel("CC").setText("");
+		bot.textWithLabel("BCC").setText("");
+		bot.textWithLabel("Subject").setText("Test");
+		bot.textWithLabel("LogFile").setText("");
+		sleep();
+	}
 
 }
