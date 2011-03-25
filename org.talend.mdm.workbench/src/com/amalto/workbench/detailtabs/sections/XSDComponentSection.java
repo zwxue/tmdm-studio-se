@@ -37,6 +37,7 @@ public abstract class XSDComponentSection extends CommitBarListenerSection<XSDCo
     }
     
     private String getEntity(XSDConcreteComponent com){
+    	if(com==null) return null;
     	if(com.getContainer() instanceof XSDSchema && com instanceof XSDElementDeclaration){
     		return ((XSDElementDeclaration)com).getName();   		
     	}else{
