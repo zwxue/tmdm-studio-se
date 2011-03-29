@@ -32,7 +32,7 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 import org.talend.mdm.studio.test.util.Util;
 
 import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.editors.XObjectEditor;
+import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 
 /**
  * 
@@ -74,8 +74,13 @@ public class DataModelSchemaEntityExtraTabTest extends TalendSWTBotForMDM {
 		sleep(2);
 
 		final SWTBotEditor editor = bot.editorByTitle("TestDataModel");
-		XObjectEditor ep = (XObjectEditor) editor.getReference().getPart(true);
-		mainpage = (DataModelMainPage) ep.getPage(0);
+		Display.getDefault().syncExec(new Runnable() {
+
+			public void run() {
+				XSDEditor ep = (XSDEditor) editor.getReference().getPart(true);
+				mainpage = (DataModelMainPage) ep.getSelectedPage();
+			}
+		});
 		Tree conceptTree = mainpage.getTreeViewer().getTree();
 		conceptBotTree = new SWTBotTree(conceptTree);
 
@@ -91,13 +96,11 @@ public class DataModelSchemaEntityExtraTabTest extends TalendSWTBotForMDM {
 
 			public void run() {
 				mainpage.doSave(new NullProgressMonitor());
-				dataModelItem.getNode("TestDataModel").contextMenu("Delete")
-						.click();
-				sleep();
-				bot.button("OK").click();
-				sleep();
+				bot.activeEditor().close();
 			}
 		});
+		dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
+		bot.button("OK").click();
 	}
 
 	public void newEntity() {
@@ -111,7 +114,7 @@ public class DataModelSchemaEntityExtraTabTest extends TalendSWTBotForMDM {
 		sleep(2);
 		conceptNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
 		conceptNode.select();
-		bot.buttonWithTooltip("Expand...", 0).click();
+		bot.toolbarButtonWithTooltip("Expand...", 0).click();
 	}
 
 	public void newElement() {
@@ -126,7 +129,7 @@ public class DataModelSchemaEntityExtraTabTest extends TalendSWTBotForMDM {
 		sleep(2);
 		conceptNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
 		conceptNode.select();
-		bot.buttonWithTooltip("Expand...").click();
+		bot.toolbarButtonWithTooltip("Expand...").click();
 	}
 
 	@Test

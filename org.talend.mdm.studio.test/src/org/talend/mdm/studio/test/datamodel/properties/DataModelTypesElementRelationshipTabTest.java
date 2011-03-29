@@ -32,7 +32,7 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 import org.talend.mdm.studio.test.util.Util;
 
 import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.editors.XObjectEditor;
+import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 
 /**
  * 
@@ -58,10 +58,6 @@ public class DataModelTypesElementRelationshipTabTest extends
 		dataModelItem = serverItem.getNode("Data Model [HEAD]");
 		dataModelItem.expand();
 
-		SWTBotTreeItem node = dataModelItem.expandNode("System").getNode(
-				"Reporting");
-		node.doubleClick();
-
 		dataModelItem.contextMenu("New").click();
 		SWTBotShell newDataContainerShell = bot.shell("New Data Model");
 		newDataContainerShell.activate();
@@ -74,17 +70,22 @@ public class DataModelTypesElementRelationshipTabTest extends
 		bot.button("OK").click();
 		sleep();
 		Assert.assertNotNull(dataModelItem.getNode("TestDataModel"));
-		sleep(2);
+		sleep(4);
 
 		final SWTBotEditor editor = bot.editorByTitle("TestDataModel");
-		XObjectEditor ep = (XObjectEditor) editor.getReference().getPart(true);
-		mainpage = (DataModelMainPage) ep.getPage(0);
+		Display.getDefault().syncExec(new Runnable() {
+
+			public void run() {
+				XSDEditor ep = (XSDEditor) editor.getReference().getPart(true);
+				mainpage = (DataModelMainPage) ep.getSelectedPage();
+			}
+		});
 		Tree typesTree = mainpage.getTypesViewer().getTree();
 		typesBotTree = new SWTBotTree(typesTree);
 
 		addComplexType();
 		bot.viewById(IPageLayout.ID_PROP_SHEET).setFocus();
-		Util.selecteTalendTabbedPropertyListAtIndex(bot, 0);
+		Util.selecteTalendTabbedPropertyListAtIndex(bot, 3);
 	}
 
 	@After
@@ -93,13 +94,11 @@ public class DataModelTypesElementRelationshipTabTest extends
 
 			public void run() {
 				mainpage.doSave(new NullProgressMonitor());
-				dataModelItem.getNode("TestDataModel").contextMenu("Delete")
-						.click();
-				sleep();
-				bot.button("OK").click();
-				sleep();
+				bot.activeEditor().close();
 			}
 		});
+		dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
+		bot.button("OK").click();
 	}
 
 	private void addComplexType() {
@@ -114,7 +113,7 @@ public class DataModelTypesElementRelationshipTabTest extends
 
 		typeNode = typesBotTree.getTreeItem("TestComplexType");
 		typeNode.select();
-		bot.buttonWithTooltip("Expand...", 1).click();
+		bot.toolbarButtonWithTooltip("Expand...", 1).click();
 		elementNode = typeNode.getNode("subelement").select();
 	}
 

@@ -29,49 +29,50 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class TriggerRenameTest extends TalendSWTBotForMDM {
 
-    private SWTBotTreeItem triggerParentNode;
+	private SWTBotTreeItem triggerParentNode;
 
-    private SWTBotTreeItem triggerNode;
+	private SWTBotTreeItem triggerNode;
 
-    @Before
-    public void runBeforeEveryTest() {
-        SWTBotTreeItem eventManagementItem = serverItem.getNode("Event Management");
-        eventManagementItem.expand();
-        triggerParentNode = eventManagementItem.getNode("Trigger [HEAD]");
-        triggerParentNode.contextMenu("New").click();
-        bot.text().setText("TriggerDemo");
-        bot.button("OK").click();
-        bot.comboBoxWithLabel("Service JNDI Name").setSelection(0);
-        bot.activeEditor().save();
-        triggerParentNode.expand();
-        sleep();
-        Assert.assertNotNull(triggerParentNode.getNode("TriggerDemo"));
+	@Before
+	public void runBeforeEveryTest() {
+		SWTBotTreeItem eventManagementItem = serverItem
+				.getNode("Event Management");
+		eventManagementItem.expand();
+		triggerParentNode = eventManagementItem.getNode("Trigger [HEAD]");
+		triggerParentNode.contextMenu("New").click();
+		bot.text().setText("TriggerDemo");
+		bot.button("OK").click();
+		bot.comboBox().setSelection(0);
+		bot.activeEditor().save();
+		triggerParentNode.expand();
+		sleep();
+		Assert.assertNotNull(triggerParentNode.getNode("TriggerDemo"));
 
-    }
+	}
 
-    @After
-    public void runAfterEveryTest() {
-        triggerNode = triggerParentNode.getNode("RenameTrigger");
-        SWTBotMenu deleteMenu = triggerNode.contextMenu("Delete");
-        deleteMenu.click();
-        bot.button("OK").click();
-        sleep();
-    }
+	@After
+	public void runAfterEveryTest() {
+		triggerNode = triggerParentNode.getNode("RenameTrigger");
+		SWTBotMenu deleteMenu = triggerNode.contextMenu("Delete");
+		deleteMenu.click();
+		bot.button("OK").click();
+		sleep();
+	}
 
-    @Test
-    public void renameTriggerTest() {
-        triggerNode = triggerParentNode.getNode("TriggerDemo");
-        SWTBotMenu renameMenu = triggerNode.contextMenu("Rename");
-        sleep();
-        renameMenu.click();
-        SWTBotShell renameShell = bot.shell("Rename");
-        renameShell.activate();
-        bot.textWithLabel("Please enter a new name").setText("RenameTrigger");
-        bot.button("OK").click();
-        // Assert.assertNull(triggerParentNode.getNode("TriggerDemo"));
-        // revert the rename operation
-        triggerNode = triggerParentNode.getNode("RenameTrigger");
-        Assert.assertNotNull(triggerParentNode.getNode("RenameTrigger"));
-    }
+	@Test
+	public void renameTriggerTest() {
+		triggerNode = triggerParentNode.getNode("TriggerDemo");
+		SWTBotMenu renameMenu = triggerNode.contextMenu("Rename");
+		sleep();
+		renameMenu.click();
+		SWTBotShell renameShell = bot.shell("Rename");
+		renameShell.activate();
+		bot.textWithLabel("Please enter a new name").setText("RenameTrigger");
+		bot.button("OK").click();
+		// Assert.assertNull(triggerParentNode.getNode("TriggerDemo"));
+		// revert the rename operation
+		triggerNode = triggerParentNode.getNode("RenameTrigger");
+		Assert.assertNotNull(triggerParentNode.getNode("RenameTrigger"));
+	}
 
 }

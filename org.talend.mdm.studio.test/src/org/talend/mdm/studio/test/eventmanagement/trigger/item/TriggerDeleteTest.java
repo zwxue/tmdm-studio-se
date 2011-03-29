@@ -28,38 +28,39 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class TriggerDeleteTest extends TalendSWTBotForMDM {
 
-    private SWTBotTreeItem triggerParentNode;
+	private SWTBotTreeItem triggerParentNode;
 
-    private SWTBotTreeItem triggerNode;
+	private SWTBotTreeItem triggerNode;
 
-    @Before
-    public void runBeforeEveryTest() {
-        SWTBotTreeItem eventManagementItem = serverItem.getNode("Event Management");
-        eventManagementItem.expand();
-        triggerParentNode = eventManagementItem.getNode("Trigger [HEAD]");
-        triggerParentNode.contextMenu("New").click();
-        bot.text().setText("TriggerDemo");
-        bot.button("OK").click();
-        bot.comboBoxWithLabel("Service JNDI Name").setSelection(0);
-        bot.activeEditor().save();
-        triggerParentNode.expand();
-        sleep();
-        Assert.assertNotNull(triggerParentNode.getNode("TriggerDemo"));
+	@Before
+	public void runBeforeEveryTest() {
+		SWTBotTreeItem eventManagementItem = serverItem
+				.getNode("Event Management");
+		eventManagementItem.expand();
+		triggerParentNode = eventManagementItem.getNode("Trigger [HEAD]");
+		triggerParentNode.contextMenu("New").click();
+		bot.text().setText("TriggerDemo");
+		bot.button("OK").click();
+		bot.comboBox().setSelection(0);
+		bot.activeEditor().save();
+		triggerParentNode.expand();
+		sleep();
+		Assert.assertNotNull(triggerParentNode.getNode("TriggerDemo"));
 
-    }
+	}
 
-    @After
-    public void runAfterEveryTest() {
-    }
+	@After
+	public void runAfterEveryTest() {
+	}
 
-    @Test
-    public void deleteTest() {
-        triggerNode = triggerParentNode.getNode("TriggerDemo");
-        SWTBotMenu deleteMenu = triggerNode.contextMenu("Delete");
-        sleep();
-        deleteMenu.click();
-        sleep();
-        bot.button("OK").click();
-    }
+	@Test
+	public void deleteTest() {
+		triggerNode = triggerParentNode.getNode("TriggerDemo");
+		SWTBotMenu deleteMenu = triggerNode.contextMenu("Delete");
+		sleep();
+		deleteMenu.click();
+		sleep();
+		bot.button("OK").click();
+	}
 
 }

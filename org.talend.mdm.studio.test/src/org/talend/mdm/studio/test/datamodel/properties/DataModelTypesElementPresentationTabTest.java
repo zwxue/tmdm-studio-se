@@ -94,13 +94,11 @@ public class DataModelTypesElementPresentationTabTest extends
 
 			public void run() {
 				mainpage.doSave(new NullProgressMonitor());
-				dataModelItem.getNode("TestDataModel").contextMenu("Delete")
-						.click();
-				sleep();
-				bot.button("OK").click();
-				sleep();
+				bot.activeEditor().close();
 			}
 		});
+		dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
+		bot.button("OK").click();
 	}
 
 	private void addComplexType() {
@@ -123,11 +121,11 @@ public class DataModelTypesElementPresentationTabTest extends
 	public void setDisplayFormatTest() {
 		bot.comboBox(0).setSelection(0);
 		bot.text(0).setText("test error format in English");
-		bot.buttonWithTooltip("Add").click();
+		bot.buttonWithTooltip("Add", 0).click();
 		sleep();
 		bot.comboBox(0).setSelection(1);
 		bot.text(0).setText("test error format in French");
-		bot.buttonWithTooltip("Add").click();
+		bot.buttonWithTooltip("Add", 0).click();
 		sleep();
 		bot.tree(0).select(1);
 		bot.buttonWithTooltip("Del").click();
@@ -138,11 +136,11 @@ public class DataModelTypesElementPresentationTabTest extends
 	public void setLabelsTest() {
 		bot.comboBox(1).setSelection(0);
 		bot.text(1).setText("en");
-		bot.buttonWithTooltip("Add").click();
+		bot.buttonWithTooltip("Add", 1).click();
 		sleep();
 		bot.comboBox(1).setSelection(1);
 		bot.text(1).setText("fr");
-		bot.buttonWithTooltip("Add").click();
+		bot.buttonWithTooltip("Add", 1).click();
 		sleep();
 		bot.tree(1).select(1);
 		bot.buttonWithTooltip("Del").click();
@@ -155,11 +153,11 @@ public class DataModelTypesElementPresentationTabTest extends
 	public void setDescriptionsTest() {
 		bot.comboBox(2).setSelection(0);
 		bot.text(2).setText("enlish description");
-		bot.buttonWithTooltip("Add").click();
+		bot.buttonWithTooltip("Add", 2).click();
 		sleep();
 		bot.comboBox(2).setSelection(1);
 		bot.text(2).setText("french description");
-		bot.buttonWithTooltip("Add").click();
+		bot.buttonWithTooltip("Add", 2).click();
 		sleep();
 		bot.tree(2).select(1);
 		bot.buttonWithTooltip("Del").click();
@@ -172,16 +170,16 @@ public class DataModelTypesElementPresentationTabTest extends
 	public void setFacetTest() {
 		bot.comboBox(3).setSelection(0);
 		bot.text(3).setText("test error facet in English");
-		bot.buttonWithTooltip("Add").click();
+		bot.buttonWithTooltip("Add", 3).click();
 		sleep();
 		bot.comboBox(3).setSelection(1);
 		bot.text(3).setText("test error facet in French");
-		bot.buttonWithTooltip("Add").click();
+		bot.buttonWithTooltip("Add", 3).click();
 		sleep();
 		bot.tree(3).select(1);
 		bot.buttonWithTooltip("Del").click();
 		sleep();
-		bot.button("OK").click();
+		bot.button("Apply").click();
 		sleep();
 		Assert.assertNotNull(elementNode.expand().getNode("Annotations")
 				.expand().getNode("Facet_Msg_EN: Reporting"));

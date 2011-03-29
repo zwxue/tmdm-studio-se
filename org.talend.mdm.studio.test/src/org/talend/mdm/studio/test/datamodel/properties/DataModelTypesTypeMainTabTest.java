@@ -40,7 +40,7 @@ import com.amalto.workbench.editors.XObjectEditor;
  * DOC rhou class global comment. Detailled comment
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class DataModelTypesEntityMainTabTest extends TalendSWTBotForMDM {
+public class DataModelTypesTypeMainTabTest extends TalendSWTBotForMDM {
 
 	private SWTBotTree typesBotTree;
 
@@ -90,13 +90,11 @@ public class DataModelTypesEntityMainTabTest extends TalendSWTBotForMDM {
 
 			public void run() {
 				mainpage.doSave(new NullProgressMonitor());
-				dataModelItem.getNode("TestDataModel").contextMenu("Delete")
-						.click();
-				sleep();
-				bot.button("OK").click();
-				sleep();
+				bot.activeEditor().close();
 			}
 		});
+		dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
+		bot.button("OK").click();
 	}
 
 	private void addComplexType() {
@@ -111,7 +109,7 @@ public class DataModelTypesEntityMainTabTest extends TalendSWTBotForMDM {
 
 		typeNode = typesBotTree.getTreeItem("TestComplexType");
 		typeNode.select();
-		bot.buttonWithTooltip("Expand...", 1).click();
+		bot.toolbarButtonWithTooltip("Expand...", 1).click();
 	}
 
 	@Test

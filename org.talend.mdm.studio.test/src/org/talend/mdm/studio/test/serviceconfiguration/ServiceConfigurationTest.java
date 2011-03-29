@@ -28,39 +28,36 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class ServiceConfigurationTest extends TalendSWTBotForMDM {
 
-    private SWTBotTreeItem scItem;
+	private SWTBotTreeItem scItem;
 
-    @Before
-    public void runBeforeEveryTest() {
-        scItem = serverItem.getNode("Service Configuration");
-        scItem.expand();
+	@Before
+	public void runBeforeEveryTest() {
+		scItem = serverItem.getNode("Service Configuration");
+		scItem.expand();
+		scItem.doubleClick();
+	}
 
-    }
+	@After
+	public void runAfterEveryTest() {
 
-    @After
-    public void runAfterEveryTest() {
+	}
 
-    }
+	@Test
+	public void serviceConfigurationContentTest() {
 
-    @Test
-    public void serviceConfigurationContentTest() {
-        scItem.doubleClick();
-        bot.comboBox().setSelection("smtp");
-        bot.button("Check").click();
-        Assert.assertEquals("Connection sucessfully!", bot.text(1).getText());
-        sleep();
+		bot.comboBox().setSelection("smtp");
+		bot.button("Check").click();
+		Assert.assertEquals("Connection sucessfully!", bot.text(1).getText());
+		sleep();
 
-        scItem.doubleClick();
-        bot.comboBox().setSelection("smtp");
-        bot.button("Check").click();
-        Assert.assertEquals("Connection sucessfully!", bot.text(1).getText());
-        sleep();
+		bot.comboBox().setSelection("svn");
+		bot.button("Check").click();
+		Assert.assertEquals("Connection sucessfully!", bot.text(1).getText());
+		sleep();
 
-        scItem.doubleClick();
-        sleep();
-        bot.comboBox().setSelection("smtp");
-        bot.button("Check").click();
-        Assert.assertEquals("Connection sucessfully!", bot.text(1).getText());
-        sleep();
-    }
+		bot.comboBox().setSelection("workflow");
+		bot.button("Check").click();
+		Assert.assertEquals("Connection sucessfully!", bot.text(1).getText());
+		sleep();
+	}
 }

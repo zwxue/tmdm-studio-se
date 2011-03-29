@@ -29,53 +29,55 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class TriggerCopyTest extends TalendSWTBotForMDM {
 
-    private SWTBotTreeItem triggerParentNode;
+	private SWTBotTreeItem triggerParentNode;
 
-    private SWTBotTreeItem triggerNode;
+	private SWTBotTreeItem triggerNode;
 
-    @Before
-    public void runBeforeEveryTest() {
-        SWTBotTreeItem eventManagementItem = serverItem.getNode("Event Management");
-        eventManagementItem.expand();
-        triggerParentNode = eventManagementItem.getNode("Trigger [HEAD]");
-        triggerParentNode.contextMenu("New").click();
-        bot.text().setText("TriggerDemo");
-        bot.button("OK").click();
-        bot.comboBoxWithLabel("Service JNDI Name").setSelection(0);
-        bot.activeEditor().save();
-        triggerParentNode.expand();
-        sleep();
-        Assert.assertNotNull(triggerParentNode.getNode("TriggerDemo"));
+	@Before
+	public void runBeforeEveryTest() {
+		SWTBotTreeItem eventManagementItem = serverItem
+				.getNode("Event Management");
+		eventManagementItem.expand();
+		triggerParentNode = eventManagementItem.getNode("Trigger [HEAD]");
+		triggerParentNode.contextMenu("New").click();
+		bot.text().setText("TriggerDemo");
+		bot.button("OK").click();
+		bot.comboBox().setSelection(0);
+		bot.activeEditor().save();
+		triggerParentNode.expand();
+		sleep();
+		Assert.assertNotNull(triggerParentNode.getNode("TriggerDemo"));
 
-    }
+	}
 
-    @After
-    public void runAfterEveryTest() {
-        triggerNode = triggerParentNode.getNode("TriggerDemo");
-        SWTBotMenu deleteMenu = triggerNode.contextMenu("Delete");
-        deleteMenu.click();
-        sleep();
-        bot.button("OK").click();
+	@After
+	public void runAfterEveryTest() {
+		triggerNode = triggerParentNode.getNode("TriggerDemo");
+		SWTBotMenu deleteMenu = triggerNode.contextMenu("Delete");
+		deleteMenu.click();
+		sleep();
+		bot.button("OK").click();
 
-        triggerNode = triggerParentNode.getNode("PasteTrigger");
-        deleteMenu = triggerNode.contextMenu("Delete");
-        deleteMenu.click();
-        sleep();
-        bot.button("OK").click();
-    }
+		triggerNode = triggerParentNode.getNode("PasteTrigger");
+		deleteMenu = triggerNode.contextMenu("Delete");
+		deleteMenu.click();
+		sleep();
+		bot.button("OK").click();
+	}
 
-    @Test
-    public void copyTriggerTest() {
-        triggerNode = triggerParentNode.getNode("TriggerDemo");
-        triggerNode.contextMenu("Copy").click();
-        sleep();
-        triggerNode.contextMenu("Paste").click();
-        SWTBotShell pasteTriggerShell = bot.shell("Pasting instance TriggerDemo");
-        pasteTriggerShell.activate();
-        bot.text("CopyOfTriggerDemo").setText("PasteTrigger");
-        bot.button("OK").click();
-        sleep();
-        Assert.assertNotNull(triggerParentNode.getNode("PasteTrigger"));
-    }
+	@Test
+	public void copyTriggerTest() {
+		triggerNode = triggerParentNode.getNode("TriggerDemo");
+		triggerNode.contextMenu("Copy").click();
+		sleep();
+		triggerNode.contextMenu("Paste").click();
+		SWTBotShell pasteTriggerShell = bot
+				.shell("Pasting instance TriggerDemo");
+		pasteTriggerShell.activate();
+		bot.text("CopyOfTriggerDemo").setText("PasteTrigger");
+		bot.button("OK").click();
+		sleep();
+		Assert.assertNotNull(triggerParentNode.getNode("PasteTrigger"));
+	}
 
 }

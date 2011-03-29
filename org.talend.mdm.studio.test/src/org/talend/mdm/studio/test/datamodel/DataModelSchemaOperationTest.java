@@ -37,117 +37,119 @@ import com.amalto.workbench.editors.XObjectEditor;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class DataModelSchemaOperationTest extends TalendSWTBotForMDM {
 
-    private SWTBotTree conceptBotTree;
+	private SWTBotTree conceptBotTree;
 
-    private DataModelMainPage mainpage;
+	private DataModelMainPage mainpage;
 
-    private SWTBotTreeItem dataModelItem;
+	private SWTBotTreeItem dataModelItem;
 
-    @Before
-    public void runBeforeEveryTest() {
-        dataModelItem = serverItem.getNode("Data Model [HEAD]");
-        dataModelItem.expand();
+	@Before
+	public void runBeforeEveryTest() {
+		dataModelItem = serverItem.getNode("Data Model [HEAD]");
+		dataModelItem.expand();
 
-        SWTBotTreeItem node = dataModelItem.expandNode("System").getNode("Reporting");
-        node.doubleClick();
+		SWTBotTreeItem node = dataModelItem.expandNode("System").getNode(
+				"Reporting");
+		node.doubleClick();
 
-        final SWTBotEditor editor = bot.editorByTitle("Reporting");
-        XObjectEditor ep = (XObjectEditor) editor.getReference().getPart(true);
-        mainpage = (DataModelMainPage) ep.getPage(0);
-        Tree conceptTree = mainpage.getTreeViewer().getTree();
-        conceptBotTree = new SWTBotTree(conceptTree);
-    }
+		final SWTBotEditor editor = bot.editorByTitle("Reporting");
+		XObjectEditor ep = (XObjectEditor) editor.getReference().getPart(true);
+		mainpage = (DataModelMainPage) ep.getPage(0);
+		Tree conceptTree = mainpage.getTreeViewer().getTree();
+		conceptBotTree = new SWTBotTree(conceptTree);
+	}
 
-    @After
-    public void runAfterEveryTest() {
-        Display.getDefault().syncExec(new Runnable() {
+	@After
+	public void runAfterEveryTest() {
+		Display.getDefault().syncExec(new Runnable() {
 
-            public void run() {
-                mainpage.doSave(new NullProgressMonitor());
-            }
-        });
-    }
+			public void run() {
+				mainpage.doSave(new NullProgressMonitor());
+			}
+		});
+	}
 
-    // @Test
-    public void filterTest() {
-        bot.toolbarRadioButtonWithTooltip("Filter...").click();
-        SWTBotShell filterShell = bot.shell("Data Model Filter");
-        filterShell.activate();
-        bot.ccomboBox().setSelection(1);
-        sleep();
-        bot.radio(3).click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-        bot.toolbarButtonWithTooltip("Filter...").click();
-        filterShell = bot.shell("Data Model Filter");
-        filterShell.activate();
-        bot.ccomboBox().setSelection(0);
-        sleep();
-        bot.radio(0).click();
-        sleep();
-        bot.button("OK").click();
-    }
+	// @Test
+	public void filterTest() {
+		bot.toolbarRadioButtonWithTooltip("Filter...").click();
+		SWTBotShell filterShell = bot.shell("Data Model Filter");
+		filterShell.activate();
+		bot.ccomboBox().setSelection(1);
+		sleep();
+		bot.radio(3).click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+		bot.toolbarButtonWithTooltip("Filter...").click();
+		filterShell = bot.shell("Data Model Filter");
+		filterShell.activate();
+		bot.ccomboBox().setSelection(0);
+		sleep();
+		bot.radio(0).click();
+		sleep();
+		bot.button("OK").click();
+	}
 
-    @Test
-    public void expandTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select();
-        bot.toolbarToggleButtonWithTooltip("Expand...").click();
-        sleep(2);
-        // conceptNode.expand();
-        // conceptNode.getNode(0).expand();
-        // SWTBotTreeItem userNode = conceptNode.getNode(0).getNode("ReportingName");
-        // userNode.setFocus();
-        // sleep(3);
-    }
+	@Test
+	public void expandTest() {
+		SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
+		conceptNode.select();
+		bot.toolbarButtonWithTooltip("Expand...").click();
+		sleep(2);
+		// conceptNode.expand();
+		// conceptNode.getNode(0).expand();
+		// SWTBotTreeItem userNode =
+		// conceptNode.getNode(0).getNode("ReportingName");
+		// userNode.setFocus();
+		// sleep(3);
+	}
 
-    // @Test
-    public void collapseTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select();
-        bot.toolbarButtonWithTooltip("Collapse...").click();
-        sleep(2);
-    }
+	// @Test
+	public void collapseTest() {
+		SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
+		conceptNode.select();
+		bot.toolbarButtonWithTooltip("Collapse...").click();
+		sleep(2);
+	}
 
-    // @Test
-    public void expandModelGroupTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select();
-        bot.toolbarButtonWithTooltip("Expand ModelGroup...").click();
-        sleep(2);
-    }
+	// @Test
+	public void expandModelGroupTest() {
+		SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
+		conceptNode.select();
+		bot.toolbarButtonWithTooltip("Expand ModelGroup...").click();
+		sleep(2);
+	}
 
-    // @Test
-    public void elementUpTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.getNode("ReportingType").getNode("Cluster").select();
-        bot.toolbarButtonWithTooltip("UP...").click();
-        sleep();
-        bot.toolbarButtonWithTooltip("UP...").click();
-        sleep(2);
-    }
+	// @Test
+	public void elementUpTest() {
+		SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
+		conceptNode.getNode("ReportingType").getNode("Cluster").select();
+		bot.toolbarButtonWithTooltip("UP...").click();
+		sleep();
+		bot.toolbarButtonWithTooltip("UP...").click();
+		sleep(2);
+	}
 
-    // @Test
-    public void elementDownTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.getNode("ReportingType").getNode("Cluster").select();
-        bot.toolbarButtonWithTooltip("DOWN...").click();
-        sleep();
-        bot.toolbarButtonWithTooltip("DOWN...").click();
-        sleep(2);
-    }
+	// @Test
+	public void elementDownTest() {
+		SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
+		conceptNode.getNode("ReportingType").getNode("Cluster").select();
+		bot.toolbarButtonWithTooltip("DOWN...").click();
+		sleep();
+		bot.toolbarButtonWithTooltip("DOWN...").click();
+		sleep(2);
+	}
 
-    // @Test
-    public void labelOperationTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select();
-        bot.toolbarButtonWithTooltip("Expand...").click();
-        sleep();
-        bot.comboBoxWithLabel("Language:").setSelection(1);
-        bot.buttonWithTooltip("Add...").click();
-        sleep(2);
-        bot.buttonWithTooltip("Remove...").click();
-        sleep(2);
-    }
+	// @Test
+	public void labelOperationTest() {
+		SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
+		conceptNode.select();
+		bot.toolbarButtonWithTooltip("Expand...").click();
+		sleep();
+		bot.comboBoxWithLabel("Language:").setSelection(1);
+		bot.buttonWithTooltip("Add...").click();
+		sleep(2);
+		bot.buttonWithTooltip("Remove...").click();
+		sleep(2);
+	}
 }
