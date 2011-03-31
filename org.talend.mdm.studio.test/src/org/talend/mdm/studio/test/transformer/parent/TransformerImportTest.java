@@ -26,24 +26,25 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class TransformerImportTest extends TalendSWTBotForMDM {
 
-    private SWTBotTreeItem jobParentItem;
+	private SWTBotTreeItem jobParentItem;
 
-    @Before
-    public void runBeforeEveryTest() {
-        jobParentItem = serverItem.getNode("Job Repository");
-        jobParentItem.expand();
+	@Before
+	public void runBeforeEveryTest() {
+		jobParentItem = serverItem.getNode("Job Repository");
+		jobParentItem.expand();
 
-    }
+	}
 
-    @After
-    public void runAfterEveryTest() {
+	@After
+	public void runAfterEveryTest() {
 
-    }
+	}
 
-    @Test
-    public void importJobTest() {
-        jobParentItem.contextMenu("Import a TIS Job Archive ").click();
-        // TODO:SWTBot does not support the FileDialog,need further investigation.
-    }
+	@Test
+	public void importJobTest() {
+		// jobParentItem.contextMenu("Import a TIS Job Archive").click();
+		// TODO:SWTBot does not support the FileDialog,need further
+		// investigation.
+	}
 
 }

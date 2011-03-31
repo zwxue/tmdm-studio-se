@@ -30,44 +30,46 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class StoredProcedurezEditTest extends TalendSWTBotForMDM {
 
-    private SWTBotTreeItem spParentItem;
+	private SWTBotTreeItem spParentItem;
 
-    private SWTBotTreeItem spItem;
+	private SWTBotTreeItem spItem;
 
-    @Before
-    public void runBeforeEveryTest() {
-        spParentItem = serverItem.getNode("Stored Procedure [HEAD]");
-        spParentItem.expand();
+	@Before
+	public void runBeforeEveryTest() {
+		spParentItem = serverItem.getNode("Stored Procedure [HEAD]");
 
-        spParentItem.contextMenu("New").click();
-        SWTBotShell newstoredProcedureShell = bot.shell("New Stored Procedure");
-        newstoredProcedureShell.activate();
-        SWTBotText text = bot.textWithLabel("Enter a Name for the New Instance");
-        text.setText("TestStoredProcedure");
-        bot.button("OK").click();
-        bot.activeEditor().save();
-        sleep();
-        spItem = spParentItem.getNode("TestStoredProcedure");
-        Assert.assertNotNull(spItem);
-        sleep(2);
-    }
+		spParentItem.contextMenu("New").click();
+		SWTBotShell newstoredProcedureShell = bot.shell("New Stored Procedure");
+		newstoredProcedureShell.activate();
+		SWTBotText text = bot
+				.textWithLabel("Enter a Name for the New Instance");
+		text.setText("TestStoredProcedure");
+		bot.button("OK").click();
+		bot.activeEditor().save();
+		spParentItem.expand();
+		sleep();
+		spItem = spParentItem.getNode("TestStoredProcedure");
+		Assert.assertNotNull(spItem);
+		sleep(2);
+	}
 
-    @Test
-    public void storedProcedureEditTest() {
-        SWTBotMenu editMenu = spItem.contextMenu("Edit");
-        sleep();
-        editMenu.click();
-    }
+	@Test
+	public void storedProcedureEditTest() {
+		SWTBotMenu editMenu = spItem.contextMenu("Edit");
+		editMenu.click();
+		sleep(2);
+	}
 
-    @After
-    public void runAfterEveryTest() {
+	@After
+	public void runAfterEveryTest() {
 
-        bot.activeEditor().close();
-        spParentItem.getNode("TestStoredProcedure").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
+		bot.activeEditor().close();
+		spParentItem.getNode("TestStoredProcedure").contextMenu("Delete")
+				.click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
 
-    }
+	}
 
 }

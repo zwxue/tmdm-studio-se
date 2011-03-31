@@ -13,6 +13,7 @@
 package org.talend.mdm.studio.test.eventmanagement.trigger.item;
 
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.Assert;
@@ -51,6 +52,12 @@ public class TriggerEditTest extends TalendSWTBotForMDM {
 	@After
 	public void runAfterEveryTest() {
 		bot.activeEditor().close();
+		triggerNode = triggerParentNode.getNode("TriggerDemo");
+		SWTBotMenu deleteMenu = triggerNode.contextMenu("Delete");
+		deleteMenu.click();
+		sleep();
+		bot.button("OK").click();
+
 	}
 
 	@Test

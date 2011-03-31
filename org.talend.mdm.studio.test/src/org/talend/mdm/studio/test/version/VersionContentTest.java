@@ -33,65 +33,69 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class VersionContentTest extends TalendSWTBotForMDM {
 
-    private SWTBotTreeItem versionParentItem;
+	private SWTBotTreeItem versionParentItem;
 
-    private SWTBotTreeItem versionItem;
+	private SWTBotTreeItem versionItem;
 
-    @Before
-    public void runBeforeEveryTest() {
-        versionParentItem = serverItem.getNode("Version");
-        versionParentItem.expand();
+	@Before
+	public void runBeforeEveryTest() {
+		versionParentItem = serverItem.getNode("Version");
+		versionParentItem.expand();
 
-    }
+	}
 
-    private void init() {
-        versionParentItem.contextMenu("New").click();
-        SWTBotShell newspShell = bot.shell("New Version");
-        newspShell.activate();
-        SWTBotText text = bot.textWithLabel("Enter a Name for the New Instance");
-        text.setText("TestVersion");
-        sleep();
-        bot.button("OK").click();
-        bot.activeEditor().save();
-        sleep();
-        versionItem = versionParentItem.getNode("TestVersion");
-        Assert.assertNotNull(versionItem);
-        versionItem.doubleClick();
-        sleep(2);
-    }
+	private void init() {
+		versionParentItem.contextMenu("New").click();
+		SWTBotShell newspShell = bot.shell("New Version");
+		newspShell.activate();
+		SWTBotText text = bot
+				.textWithLabel("Enter a Name for the New Instance");
+		text.setText("TestVersion");
+		sleep();
+		bot.button("OK").click();
+		bot.activeEditor().save();
+		sleep();
+		versionItem = versionParentItem.getNode("TestVersion");
+		Assert.assertNotNull(versionItem);
+		versionItem.doubleClick();
+		sleep(2);
+	}
 
-    @After
-    public void runAfterEveryTest() {
+	@After
+	public void runAfterEveryTest() {
+		versionItem.contextMenu("Delete").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+	}
 
-    }
+	@Test
+	public void setDescriptionTest() {
+		init();
+		String des = "This is a Version";
+		bot.textWithLabel("Description").setText(des);
+		Assert.assertEquals(des, bot.textWithLabel("Description").getText());
+	}
 
-    @Test
-    public void setDescriptionTest() {
-        init();
-        String des = "This is a Version";
-        bot.textWithLabel("Description").setText(des);
-        Assert.assertEquals(des, bot.textWithLabel("Description").getText());
-    }
+	@Test
+	public void setEntityIDTest() {
+		bot.textWithLabel("Default Revision ID").setText("r1");
+		bot.buttonWithTooltip("Add").click();
+		// String pro = "";
+		// bot.styledText().setText(pro);
+		// Assert.assertEquals(pro, bot.styledText().getText());
+	}
 
-    @Test
-    public void setEntityIDTest() {
-        bot.textWithLabel("Default Revision ID").setText("r1");
-        bot.buttonWithTooltip("Add").click();
-        // String pro = "";
-        // bot.styledText().setText(pro);
-        // Assert.assertEquals(pro, bot.styledText().getText());
-    }
+	@Test
+	public void setSOIDTest() {
+		// TODO:need further task.
+		String pro = "";
+		bot.ccomboBox().setSelection("SearchTemplate");
+		bot.button("Execute Procedure").click();
 
-    @Test
-    public void setSOIDTest() {
-        // TODO:need further task.
-        String pro = "";
-        bot.ccomboBox().setSelection("SearchTemplate");
-        bot.button("Execute Procedure").click();
-
-        versionParentItem.getNode("TestVersion").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-    }
+		versionParentItem.getNode("TestVersion").contextMenu("Delete").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+	}
 }

@@ -45,10 +45,8 @@ public class ProcessCreationTest extends TalendSWTBotForMDM {
 		processParentNode.expand();
 		for (String process : creation) {
 			processParentNode.getNode(process).contextMenu("Delete").click();
+			bot.button("OK").click();
 		}
-		sleep();
-		bot.button("OK").click();
-		sleep();
 	}
 
 	@Test
@@ -60,6 +58,7 @@ public class ProcessCreationTest extends TalendSWTBotForMDM {
 		bot.radio("Create a Normal Process").click();
 		bot.button("OK").click();
 		bot.activeEditor().save();
+		bot.activeEditor().close();
 		sleep();
 		Assert.assertNotNull(processParentNode.expand().getNode(
 				"Normal_Process"));
@@ -71,6 +70,7 @@ public class ProcessCreationTest extends TalendSWTBotForMDM {
 		selecteXpath(selEle);
 		bot.button("OK").click();
 		bot.activeEditor().save();
+		bot.activeEditor().close();
 		sleep();
 		Assert.assertNotNull(processParentNode.expand().getNode(
 				"Smart_view_" + selEle));
@@ -81,6 +81,7 @@ public class ProcessCreationTest extends TalendSWTBotForMDM {
 		selecteXpath(selEle);
 		bot.button("OK").click();
 		bot.activeEditor().save();
+		bot.activeEditor().close();
 		sleep();
 		Assert.assertNotNull(processParentNode.expand().getNode(
 				"beforeSaving_" + selEle));
@@ -91,6 +92,7 @@ public class ProcessCreationTest extends TalendSWTBotForMDM {
 		selecteXpath(selEle);
 		bot.button("OK").click();
 		bot.activeEditor().save();
+		bot.activeEditor().close();
 		sleep();
 		Assert.assertNotNull(processParentNode.expand().getNode(
 				"beforeDeleting_" + selEle));
@@ -101,6 +103,7 @@ public class ProcessCreationTest extends TalendSWTBotForMDM {
 		selecteXpath(selEle);
 		bot.button("OK").click();
 		bot.activeEditor().save();
+		bot.activeEditor().close();
 		sleep();
 		Assert.assertNotNull(processParentNode.expand().getNode(
 				"Runnable_" + selEle));
@@ -111,12 +114,13 @@ public class ProcessCreationTest extends TalendSWTBotForMDM {
 		selecteXpath(selEle);
 		bot.button("OK").click();
 		bot.activeEditor().save();
+		bot.activeEditor().close();
 		sleep();
 		Assert.assertNotNull(processParentNode.expand().getNode(
 				"Runnable#" + selEle));
 		creation = new String[] { "Normal_Process", "Smart_view_" + selEle,
 				"beforeSaving_" + selEle, "beforeDeleting_" + selEle,
-				"Runnable_" + selEle };
+				"Runnable#" + selEle, "Runnable_" + selEle };
 	}
 
 	private void selecteXpath(String selEle) {

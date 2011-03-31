@@ -43,15 +43,13 @@ import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 public class DataModelTypesElementRelationshipTabTest extends
 		TalendSWTBotForMDM {
 
-	private SWTBotTree typesBotTree;
+	private SWTBotTree elementsBotTree;
 
 	private DataModelMainPage mainpage;
 
 	private SWTBotTreeItem dataModelItem;
 
 	private SWTBotTreeItem typeNode;
-
-	private SWTBotTreeItem elementNode;
 
 	@Before
 	public void runBeforeEveryTest() {
@@ -80,12 +78,27 @@ public class DataModelTypesElementRelationshipTabTest extends
 				mainpage = (DataModelMainPage) ep.getSelectedPage();
 			}
 		});
-		Tree typesTree = mainpage.getTypesViewer().getTree();
-		typesBotTree = new SWTBotTree(typesTree);
-
-		addComplexType();
+		Tree elemetnsTree = mainpage.getElementsViewer().getTree();
+		elementsBotTree = new SWTBotTree(elemetnsTree);
+		newEntity();
+		// addComplexType();
 		bot.viewById(IPageLayout.ID_PROP_SHEET).setFocus();
 		Util.selecteTalendTabbedPropertyListAtIndex(bot, 3);
+	}
+
+	public void newEntity() {
+		elementsBotTree.contextMenu("New Entity").click();
+		SWTBotShell newEntityShell = bot.shell("New Entity");
+		newEntityShell.activate();
+		// create a entity with a complex type
+		bot.textWithLabel("Name:").setText("ComplexTypeEntity");
+		sleep();
+		bot.button("OK").click();
+		sleep(2);
+		typeNode = elementsBotTree.getTreeItem("ComplexTypeEntityType")
+				.expand().getNode("subelement");
+		typeNode.select();
+		bot.toolbarButtonWithTooltip("Expand...", 0).click();
 	}
 
 	@After
@@ -101,25 +114,9 @@ public class DataModelTypesElementRelationshipTabTest extends
 		bot.button("OK").click();
 	}
 
-	private void addComplexType() {
-		typesBotTree.contextMenu("Create a Complex Type").click();
-		sleep();
-		SWTBotShell changeTypeShell = bot.shell("Complex Type Properties");
-		changeTypeShell.activate();
-		bot.ccomboBox(0).setText("TestComplexType");
-		bot.radio("Sequence").click();
-		bot.button("OK").click();
-		sleep(2);
-
-		typeNode = typesBotTree.getTreeItem("TestComplexType");
-		typeNode.select();
-		bot.toolbarButtonWithTooltip("Expand...", 1).click();
-		elementNode = typeNode.getNode("subelement").select();
-	}
-
 	@Test
 	public void setForeignKeyTest() {
-		bot.buttonWithTooltip("Select xpath", 0).click();
+		bot.buttonWithTooltip("Select Xpath", 0).click();
 		bot.tree().select(0);
 		bot.button("OK").click();
 		bot.button("Apply").click();
@@ -137,7 +134,7 @@ public class DataModelTypesElementRelationshipTabTest extends
 
 	@Test
 	public void setForeignKeyInfoTest() {
-		bot.buttonWithTooltip("Select xpath", 2).click();
+		bot.buttonWithTooltip("Select Xpath", 2).click();
 		bot.tree().select(0);
 		bot.button("OK").click();
 		bot.buttonWithTooltip("Add", 1).click();

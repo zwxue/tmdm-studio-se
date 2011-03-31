@@ -28,30 +28,31 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class TransformerContentTest extends TalendSWTBotForMDM {
 
-    private SWTBotTreeItem jobParentItem;
+	private SWTBotTreeItem jobParentItem;
 
-    private SWTBotTreeItem jobCategoryItem;
+	private SWTBotTreeItem jobCategoryItem;
 
-    private SWTBotTreeItem jobItem;
+	private SWTBotTreeItem jobItem = null;
 
-    @Before
-    public void runBeforeEveryTest() {
-        jobParentItem = serverItem.getNode("Job Repository");
-        jobParentItem.expand();
+	@Before
+	public void runBeforeEveryTest() {
+		jobParentItem = serverItem.getNode("Job Repository");
+		jobParentItem.expand();
 
-        jobCategoryItem = jobParentItem.getNode("Deployed Jobs");
-        if (jobCategoryItem.getItems().length > 0) {
-            jobItem = jobCategoryItem.getNode(0);
-            jobItem.doubleClick();
-        }
-    }
+		jobCategoryItem = jobParentItem.getNode("Deployed Jobs");
+		if (jobCategoryItem.getItems().length > 0) {
+			jobItem = jobCategoryItem.getNode(0);
+			jobItem.doubleClick();
+		}
+	}
 
-    @After
-    public void runAfterEveryTest() {
-    }
+	@After
+	public void runAfterEveryTest() {
+	}
 
-    @Test
-    public void checkTest() {
-        bot.button("Check").click();
-    }
+	@Test
+	public void checkTest() {
+		if (jobItem != null)
+			bot.button("Check").click();
+	}
 }

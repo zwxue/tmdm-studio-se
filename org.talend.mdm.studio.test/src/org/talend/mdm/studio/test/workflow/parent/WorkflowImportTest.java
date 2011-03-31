@@ -26,24 +26,25 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class WorkflowImportTest extends TalendSWTBotForMDM {
 
-    private SWTBotTreeItem workflowParentItem;
+	private SWTBotTreeItem workflowParentItem;
 
-    @Before
-    public void runBeforeEveryTest() {
-        workflowParentItem = serverItem.getNode("Workflow");
-        workflowParentItem.expand();
+	@Before
+	public void runBeforeEveryTest() {
+		workflowParentItem = serverItem.getNode("Workflow");
+		workflowParentItem.expand();
 
-    }
+	}
 
-    @After
-    public void runAfterEveryTest() {
+	@After
+	public void runAfterEveryTest() {
 
-    }
+	}
 
-    @Test
-    public void importworkflowTest() {
-        workflowParentItem.contextMenu("Import a Process Archive ").click();
-        // TODO:SWTBot does not support the FileDialog,need further investigation.
-    }
+	@Test
+	public void importworkflowTest() {
+		// workflowParentItem.contextMenu("Import a Process Archive").click();
+		// TODO:SWTBot does not support the FileDialog,need further
+		// investigation.
+	}
 
 }

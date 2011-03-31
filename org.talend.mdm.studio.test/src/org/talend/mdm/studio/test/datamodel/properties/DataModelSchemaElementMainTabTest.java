@@ -57,10 +57,6 @@ public class DataModelSchemaElementMainTabTest extends TalendSWTBotForMDM {
 		dataModelItem = serverItem.getNode("Data Model [HEAD]");
 		dataModelItem.expand();
 
-		SWTBotTreeItem node = dataModelItem.expandNode("System").getNode(
-				"Reporting");
-		node.doubleClick();
-
 		dataModelItem.contextMenu("New").click();
 		SWTBotShell newDataContainerShell = bot.shell("New Data Model");
 		newDataContainerShell.activate();
@@ -82,7 +78,7 @@ public class DataModelSchemaElementMainTabTest extends TalendSWTBotForMDM {
 				mainpage = (DataModelMainPage) ep.getSelectedPage();
 			}
 		});
-		Tree conceptTree = mainpage.getTreeViewer().getTree();
+		Tree conceptTree = mainpage.getElementsViewer().getTree();
 		conceptBotTree = new SWTBotTree(conceptTree);
 
 		newEntity();

@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.mdm.studio.test.view.item;
 
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
@@ -29,84 +30,90 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class ViewRenameTest extends TalendSWTBotForMDM {
 
-    private SWTBotTreeItem viewParentItem;
+	private SWTBotTreeItem viewParentItem;
 
-    private SWTBotTreeItem viewItem;
+	private SWTBotTreeItem viewItem;
 
-    private String PREFIX = "Browse_items_";
+	private String PREFIX = "Browse_items_";
 
-    @Before
-    public void runBeforeEveryTest() {
-        viewParentItem = serverItem.getNode("View [HEAD]");
-        viewParentItem.expand();
+	@Before
+	public void runBeforeEveryTest() {
+		viewParentItem = serverItem.getNode("View [HEAD]");
+		viewParentItem.expand();
 
-        createView();
-    }
+		createView();
+	}
 
-    private void createView() {
-        // Create a new view to test the filter of the xpath.
-        viewParentItem.contextMenu("New").click();
-        // bot.sleep(1000);
-        SWTBotShell newViewShell = bot.shell("New View");
-        newViewShell.activate();
-        // bot.buttonWithLabel("...").click();
-        bot.buttonWithTooltip("Select one Entity").click();
-        bot.shell("Select one Entity").activate();
+	private void createView() {
+		// Create a new view to test the filter of the xpath.
+		viewParentItem.contextMenu("New").click();
+		// bot.sleep(1000);
+		SWTBotShell newViewShell = bot.shell("New View");
+		newViewShell.activate();
+		// bot.buttonWithLabel("...").click();
+		bot.buttonWithTooltip("Select one Entity").click();
+		bot.shell("Select one Entity").activate();
 
-        bot.comboBoxWithLabel("Data Models:").setSelection("CONF");
-        bot.tree().select("Conf");
-        bot.button("Add").click();
-        sleep();
-        bot.button("OK").click();
-        setDescription();
-        setElements();
-        bot.activeEditor().save();
-        sleep(2);
-        bot.shell("Verify Report").activate();
-        bot.button("OK").click();
-        bot.activeEditor().close();
-        viewItem = viewParentItem.getNode(PREFIX + "Conf");
-        Assert.assertNotNull(viewItem);
-        viewItem.doubleClick();
-        sleep(2);
-    }
+		bot.comboBoxWithLabel("Data Models:").setSelection("CONF");
+		bot.tree().select("Conf");
+		bot.button("Add").click();
+		sleep();
+		bot.button("OK").click();
+		setDescription();
+		setElements();
+		// bot.activeShell().close();
+		Display.getDefault().asyncExec(new Runnable() {
+			public void run() {
+				bot.activeEditor().save();
+				// Util.getShell(bot, "Verify Report").forceActive();
+				// // bot.shell("Verify Report").close();
+				// // bot.button("OK").click();
+				// // bot.activeEditor().close();
+			}
+		});
+		bot.activeEditor().close();
+		viewItem = viewParentItem.getNode(PREFIX + "Conf");
+		Assert.assertNotNull(viewItem);
+		viewItem.doubleClick();
+		sleep(2);
+	}
 
-    private void setElements() {
-        bot.buttonWithTooltip("Add", 0).click();
-        bot.buttonWithTooltip("Add", 1).click();
+	private void setElements() {
+		bot.buttonWithTooltip("Add", 0).click();
+		bot.buttonWithTooltip("Add", 1).click();
 
-    }
+	}
 
-    private void setDescription() {
-        bot.buttonWithTooltip("Set the Descriptions").click();
-        bot.shell("Set the Descriptions").activate();
-        bot.comboBox().setSelection("English");
-        String des = "Conf";
-        bot.text().setText(des);
-        bot.buttonWithTooltip("Add").click();
-        bot.button("OK").click();
-    }
+	private void setDescription() {
+		bot.buttonWithTooltip("Set the Descriptions").click();
+		bot.shell("Set the Descriptions").activate();
+		bot.comboBox().setSelection("English");
+		String des = "Conf";
+		bot.text().setText(des);
+		bot.buttonWithTooltip("Add").click();
+		bot.button("OK").click();
+	}
 
-    @Test
-    public void viewRenameTest() {
-        SWTBotMenu renameMenu = viewItem.contextMenu("Rename");
-        sleep();
-        renameMenu.click();
-        SWTBotShell renameShell = bot.shell("Rename");
-        renameShell.activate();
-        bot.textWithLabel("Please enter a new name").setText("RenameView");
-        bot.button("OK").click();
-        sleep();
-        Assert.assertNotNull(viewParentItem.getNode("RenameView"));
-        sleep(2);
-    }
+	@Test
+	public void viewRenameTest() {
+		SWTBotMenu renameMenu = viewItem.contextMenu("Rename");
+		sleep();
+		renameMenu.click();
+		SWTBotShell renameShell = bot.shell("Rename");
+		renameShell.activate();
+		bot.textWithLabel("Please enter a new name").setText("RenameView");
+		bot.button("OK").click();
+		sleep();
+		Assert.assertNotNull(viewParentItem.getNode("RenameView"));
+		sleep(2);
+	}
 
-    @After
-    public void runAfterEveryTest() {
-        viewParentItem.getNode("RenameView").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-    }
+	@After
+	public void runAfterEveryTest() {
+		viewParentItem.getNode("RenameView").contextMenu("Delete").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+	}
 
 }

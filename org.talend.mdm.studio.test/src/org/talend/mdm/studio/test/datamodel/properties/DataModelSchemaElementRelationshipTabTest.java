@@ -58,10 +58,6 @@ public class DataModelSchemaElementRelationshipTabTest extends
 		dataModelItem = serverItem.getNode("Data Model [HEAD]");
 		dataModelItem.expand();
 
-		SWTBotTreeItem node = dataModelItem.expandNode("System").getNode(
-				"Reporting");
-		node.doubleClick();
-
 		dataModelItem.contextMenu("New").click();
 		SWTBotShell newDataContainerShell = bot.shell("New Data Model");
 		newDataContainerShell.activate();
@@ -83,7 +79,7 @@ public class DataModelSchemaElementRelationshipTabTest extends
 				mainpage = (DataModelMainPage) ep.getSelectedPage();
 			}
 		});
-		Tree conceptTree = mainpage.getTreeViewer().getTree();
+		Tree conceptTree = mainpage.getElementsViewer().getTree();
 		conceptBotTree = new SWTBotTree(conceptTree);
 
 		newEntity();
