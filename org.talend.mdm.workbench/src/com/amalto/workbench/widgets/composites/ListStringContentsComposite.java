@@ -60,7 +60,8 @@ public abstract class ListStringContentsComposite extends Composite {
 
         btnAdd = new Button(this, SWT.NONE);
         btnAdd.setImage(ImageCache.getCreatedImage(EImage.ADD_OBJ.getPath()));
-
+        btnAdd.setToolTipText("Add");
+        
         tvInfos = new TreeViewer(this, SWT.FULL_SELECTION | SWT.BORDER);
         Tree tree = tvInfos.getTree();
         tree.setLinesVisible(true);
@@ -78,15 +79,18 @@ public abstract class ListStringContentsComposite extends Composite {
         btnUp = new Button(this, SWT.NONE);
         btnUp.setImage(ImageCache.getCreatedImage(EImage.PREV_NAV.getPath()));
         btnUp.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false));
-
+		btnUp.setToolTipText("Up");
+		
         btnDown = new Button(this, SWT.NONE);
         btnDown.setImage(ImageCache.getCreatedImage(EImage.NEXT_NAV.getPath()));
         final GridData gd_btnDown = new GridData(SWT.CENTER, SWT.TOP, false, false);
         btnDown.setLayoutData(gd_btnDown);
-
+        btnDown.setToolTipText("Down");
+        
         btnRemove = new Button(this, SWT.NONE);
         btnRemove.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false));
         btnRemove.setImage(ImageCache.getCreatedImage(EImage.DELETE_OBJ.getPath()));
+        btnRemove.setToolTipText("Del");
         //
 
         createExtentUIArea(parent);

@@ -77,7 +77,7 @@ public class SimpleXPathComposite extends Composite {
 
         btnSelectXPath = new Button(composite, SWT.NONE);
         btnSelectXPath.setImage(ImageCache.getCreatedImage(EImage.DOTS_BUTTON.getPath()));
-
+        btnSelectXPath.setToolTipText("Select Xpath");
         initUIListeners();
     }
 
