@@ -104,34 +104,24 @@ public class RoleAssignmentDialog extends Dialog {
                 RoleAssignmentDialog.this.getButton(IDialogConstants.OK_ID).setEnabled(enable);
             }
         });
-        // instanceNameText.addKeyListener(new KeyListener() {
-        //
-        // public void keyPressed(KeyEvent e) {
-        // }
-        //
-        // public void keyReleased(KeyEvent e) {
-        // boolean enable = (instanceNameText.getText().length() > 0) &&
-        // (!instanceNameText.getText().trim().equals(""));
-        // RoleAssignmentDialog.this.getButton(IDialogConstants.OK_ID).setEnabled(enable);
-        // }
-        // });
 
-        Label infoLabel = new Label(composite, SWT.NONE);
-        infoLabel.setText("Role Access definition");
-        ComplexTableViewerColumn ruleColumn = roleConfigurationColumns[0];
-        ruleColumn.setColumnWidth(250);
-        // List<String> roles=Util.getCachedXObjectsNameSet(page.getXObject(), TreeObject.ROLE);
-        List<String> roles = Util.getChildren(root.getServerRoot(), TreeObject.ROLE);
-        ruleColumn.setComboValues(roles.toArray(new String[] {}));
-        ComplexTableViewerColumn acsColumn = roleConfigurationColumns[1];
-        acsColumn.setColumnWidth(250);
-        acsColumn.setComboValues(new String[] { "Read Only", "Read & Write" });
-        FormToolkit toolkit = WidgetFactory.getWidgetFactory();
-        complexTableViewer = new ComplexTableViewer(Arrays.asList(roleConfigurationColumns), toolkit, composite);
-        complexTableViewer.setKeyColumns(new ComplexTableViewerColumn[] { roleConfigurationColumns[0] });
-        complexTableViewer.create();
-        complexTableViewer.getViewer().setInput(new ArrayList<Line>());
-
+        if(Util.IsEnterPrise()){
+	        Label infoLabel = new Label(composite, SWT.NONE);
+	        infoLabel.setText("Role Access definition");
+	        ComplexTableViewerColumn ruleColumn = roleConfigurationColumns[0];
+	        ruleColumn.setColumnWidth(250);
+	        // List<String> roles=Util.getCachedXObjectsNameSet(page.getXObject(), TreeObject.ROLE);
+	        List<String> roles = Util.getChildren(root.getServerRoot(), TreeObject.ROLE);
+	        ruleColumn.setComboValues(roles.toArray(new String[] {}));
+	        ComplexTableViewerColumn acsColumn = roleConfigurationColumns[1];
+	        acsColumn.setColumnWidth(250);
+	        acsColumn.setComboValues(new String[] { "Read Only", "Read & Write" });
+	        FormToolkit toolkit = WidgetFactory.getWidgetFactory();
+	        complexTableViewer = new ComplexTableViewer(Arrays.asList(roleConfigurationColumns), toolkit, composite);
+	        complexTableViewer.setKeyColumns(new ComplexTableViewerColumn[] { roleConfigurationColumns[0] });
+	        complexTableViewer.create();
+	        complexTableViewer.getViewer().setInput(new ArrayList<Line>());
+        }
         return composite;
     }
 
@@ -145,11 +135,12 @@ public class RoleAssignmentDialog extends Dialog {
     protected void okPressed() {
         // no close let Action Handler handle it
         outBuffer.append(instanceNameText.getText().trim());
-        List<Line> inputs = (List<Line>) complexTableViewer.getViewer().getInput();
-        List<RoleEntry> list = roleEntries.get();
-        RoleEntry entry = new RoleEntry(inputs, instanceNameText.getText().trim(), typeName);
-        list.add(entry);
-
+        if(Util.IsEnterPrise()){
+	        List<Line> inputs = (List<Line>) complexTableViewer.getViewer().getInput();
+	        List<RoleEntry> list = roleEntries.get();
+	        RoleEntry entry = new RoleEntry(inputs, instanceNameText.getText().trim(), typeName);
+	        list.add(entry);
+        }
         super.okPressed();
     }
 
