@@ -1155,7 +1155,6 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
             // schema = schema.replaceAll("targetNamespace\\s*=\\s*\"[^\"]*\"", "");
             // schema = schema.replaceAll("xmlns\\s*=\\s*\"[^\"]*\"", "");
             // end
-            wsObject.setXsdSchema(schema);
 
             // fliu added '<xsd:import namespace="http://www.w3.org/2001/XMLSchema"/>', which is meant to make xsdSchema
             // compatible with allNNI and other new simple Types
@@ -1165,9 +1164,10 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 // xsdSchema = ((XSDTreeContentProvider) viewer.getContentProvider()).getXsdSchema();
                 xsdSchema = ((SchemaTreeContentProvider) viewer.getContentProvider()).getXsdSchema();
 
-                if (xsdSchema == null)
-                    xsdSchema = Util.createXsdSchema(schema, xobject);
             }
+            if (xsdSchema == null || !xsd.equals(wsObject.getXsdSchema()))
+            	xsdSchema = Util.createXsdSchema(schema, xobject);
+            wsObject.setXsdSchema(schema);
 
             EList<XSDSchemaContent> elist = xsdSchema.getContents();
             for (XSDSchemaContent cnt : elist) {
