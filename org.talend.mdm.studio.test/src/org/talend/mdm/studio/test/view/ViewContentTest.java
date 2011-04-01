@@ -36,8 +36,8 @@ public class ViewContentTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem viewItem;
 
-    private String[] array = new String[] { "Id", "Firstname", "Lastname", "CommissionCode", "StartDate", "TermDate" };
-
+//    private String[] array = new String[] { "Id", "Firstname", "Lastname", "CommissionCode", "StartDate", "TermDate" };
+private String[] array=new String[]{"id","Config"};
     private String PREFIX = "Browse_items_";
 
     @Before
@@ -92,9 +92,9 @@ public class ViewContentTest extends TalendSWTBotForMDM {
         bot.buttonWithTooltip("Add Multiple", 0).click();
 
         bot.shell("Select Multiple XPaths").activate();
-        bot.comboBox().setSelection("Agent");
+        bot.comboBox().setSelection("Conf");
         sleep();
-        SWTBotTreeItem parent = bot.tree().getTreeItem("Agent").expand().getNode("Agent").expand();
+        SWTBotTreeItem parent = bot.tree().getTreeItem("Conf").expand().getNode(0).expand();
         parent.select(array);
         sleep();
         bot.button("Add").click();
@@ -110,7 +110,7 @@ public class ViewContentTest extends TalendSWTBotForMDM {
         bot.shell("Select Multiple XPaths").activate();
         bot.comboBox().setSelection("Agent");
         sleep();
-        SWTBotTreeItem parent = bot.tree().getTreeItem("Agent").expand().getNode("Agent").expand();
+        SWTBotTreeItem parent = bot.tree().getTreeItem("Conf").expand().getNode(0).expand();
         parent.select(array);
         sleep();
         bot.button("Add").click();
@@ -132,8 +132,8 @@ public class ViewContentTest extends TalendSWTBotForMDM {
         bot.shell("Select Multiple XPaths").activate();
         bot.comboBox().setSelection("Agent");
         sleep();
-        SWTBotTreeItem parent = bot.tree().getTreeItem("Agent").expand().getNode("Agent").expand();
-        parent.select("Status");
+        SWTBotTreeItem parent = bot.tree().getTreeItem("Conf").expand().getNode(0).expand();
+        parent.select("Config");
         sleep();
         bot.button("Add").click();
         sleep();

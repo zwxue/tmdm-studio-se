@@ -45,7 +45,6 @@ public class ViewCreationTest extends TalendSWTBotForMDM {
         // bot.sleep(1000);
         SWTBotShell newViewShell = bot.shell("New View");
         newViewShell.activate();
-        // bot.buttonWithLabel("...").click();
         bot.buttonWithTooltip("Select one Entity").click();
         bot.shell("Select one Entity").activate();
 
@@ -73,10 +72,10 @@ public class ViewCreationTest extends TalendSWTBotForMDM {
         bot.button("OK").click();
         setDescription();
         setElements();
-        sleep();
         bot.activeEditor().save();
         sleep();
         bot.activeEditor().close();
+        viewParentItem.expand();
         Assert.assertNotNull(viewParentItem.getNode(PREFIX + "Conf"));
         sleep(2);
     }

@@ -42,7 +42,7 @@ public class WorkflowRefreshTest extends TalendSWTBotForMDM {
 
     @Test
     public void refreshworkflowTest() {
-        workflowParentItem.contextMenu("Refresh").click();
+//        workflowParentItem.contextMenu("Refresh").click();
     }
 
 }

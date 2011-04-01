@@ -48,6 +48,7 @@ public class VersionCreationTest extends TalendSWTBotForMDM {
         bot.button("OK").click();
         bot.activeEditor().save();
         sleep();
+        sversionParentItem.expand();
         Assert.assertNotNull(sversionParentItem.getNode("TestVersion"));
         sleep(2);
     }

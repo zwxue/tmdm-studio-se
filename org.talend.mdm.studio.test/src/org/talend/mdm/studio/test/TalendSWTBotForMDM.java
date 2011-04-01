@@ -16,6 +16,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
+import org.eclipse.swtbot.eclipse.finder.waits.Conditions;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
@@ -32,18 +33,21 @@ public class TalendSWTBotForMDM {
 
     protected static SWTWorkbenchBot bot;
 
+    protected static SWTBotTreeItem serverItem;
+    
     private static SWTBotTree serverTree;
 
     private static Tree swtTree;
 
-    protected static SWTBotTreeItem serverItem;
-
     private static boolean isLoggined = false;
-
+    
+    private static final long ONE_MINUTE_IN_MILLISEC = 60000;
+    
     public static void login() {
 
         bot.viewByTitle("MDM Server").toolbarButton("Add MDM Server Location").click();
         SWTBotShell shell = bot.shell("Talend MDM Studio Login");
+        bot.waitUntil(Conditions.shellIsActive("Talend MDM Studio Login"),ONE_MINUTE_IN_MILLISEC*10);
         shell.activate();
         sleep();
         bot.textWithLabel("Username").setText("admin");
@@ -57,7 +61,6 @@ public class TalendSWTBotForMDM {
         sleep();
         bot.button("OK").click();
         sleep(10);
-
     }
 
     private static void initServerView() {
@@ -89,6 +92,8 @@ public class TalendSWTBotForMDM {
             // SWTBotView welcomeView = bot.viewByTitle("Welcome");
             // if (welcomeView != null)
             // welcomeView.close();
+            
+            
             bot.menu("Window").menu("Open Perspective").menu("Other...").click();
             final SWTBotShell shellShowView = bot.shell("Open Perspective");
             shellShowView.widget.getDisplay().syncExec(new Runnable() {
@@ -102,8 +107,12 @@ public class TalendSWTBotForMDM {
             bot.button("OK").click();
             bot.perspectiveByLabel("MDM").activate();
             bot.viewByTitle("MDM Server").show();
-            login();
+            
+            
+            
+             login();
             initServerView();
+            bot.waitUntil(Conditions.widgetIsEnabled(serverTree),ONE_MINUTE_IN_MILLISEC*10);
             isLoggined = true;
         }
     }

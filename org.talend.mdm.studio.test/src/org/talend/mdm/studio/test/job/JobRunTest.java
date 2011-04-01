@@ -44,6 +44,7 @@ public class JobRunTest extends TalendSWTBotForMDM {
     //new feature in 4.2,see bug 0018022,0018002
     @Test
     public void jobRunTest(){
-    	jobItem.contextMenu("Run").click();
+    	if(jobItem!=null)
+        	jobItem.contextMenu("Run").click();
     }
 }

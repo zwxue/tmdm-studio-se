@@ -62,15 +62,7 @@ public class ViewRenameTest extends TalendSWTBotForMDM {
 		setDescription();
 		setElements();
 		// bot.activeShell().close();
-		Display.getDefault().asyncExec(new Runnable() {
-			public void run() {
-				bot.activeEditor().save();
-				// Util.getShell(bot, "Verify Report").forceActive();
-				// // bot.shell("Verify Report").close();
-				// // bot.button("OK").click();
-				// // bot.activeEditor().close();
-			}
-		});
+		bot.activeEditor().save();
 		bot.activeEditor().close();
 		viewItem = viewParentItem.getNode(PREFIX + "Conf");
 		Assert.assertNotNull(viewItem);
