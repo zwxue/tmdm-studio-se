@@ -35,6 +35,8 @@ public class TransformerGenerateTriggerTest extends TalendSWTBotForMDM {
 
     private String name;
 
+	private SWTBotTreeItem jobCategoryItem;
+
     @Before
     public void runBeforeEveryTest() {
         SWTBotTreeItem jobParentItem = serverItem.getNode("Job Repository");
@@ -46,7 +48,7 @@ public class TransformerGenerateTriggerTest extends TalendSWTBotForMDM {
         processParentNode = eventManagementItem.getNode("Process [HEAD]");
         processParentNode.expand();
 
-        SWTBotTreeItem jobCategoryItem = jobParentItem.getNode("Deployed Jobs");
+       jobCategoryItem = jobParentItem.getNode("Deployed Jobs");
         if (jobCategoryItem.getItems().length > 0) {
             jobItem = jobCategoryItem.getNode(0);
         }
@@ -54,10 +56,11 @@ public class TransformerGenerateTriggerTest extends TalendSWTBotForMDM {
 
     @After
     public void runAfterEveryTest() {
+    	 if (jobCategoryItem.getItems().length > 0) {
         processParentNode.getNode(PRIFIX + name).contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
-        sleep();
+        sleep();}
     }
 
     @Test

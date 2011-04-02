@@ -46,8 +46,9 @@ public class StoredProcedureCreationTest extends TalendSWTBotForMDM {
         SWTBotText text = bot.textWithLabel("Enter a Name for the New Instance");
         text.setText("TestStoredProcedure");
         bot.button("OK").click();
+        sleep(2);
         bot.activeEditor().save();
-        sleep();
+        spParentItem.expand();
         Assert.assertNotNull(spParentItem.getNode("TestStoredProcedure"));
         sleep(2);
     }

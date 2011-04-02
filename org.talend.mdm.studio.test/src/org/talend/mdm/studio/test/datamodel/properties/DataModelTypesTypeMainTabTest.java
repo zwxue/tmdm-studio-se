@@ -32,7 +32,7 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 import org.talend.mdm.studio.test.util.Util;
 
 import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.editors.XObjectEditor;
+import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 
 /**
  * 
@@ -55,10 +55,6 @@ public class DataModelTypesTypeMainTabTest extends TalendSWTBotForMDM {
 		dataModelItem = serverItem.getNode("Data Model [HEAD]");
 		dataModelItem.expand();
 
-		SWTBotTreeItem node = dataModelItem.expandNode("System").getNode(
-				"Reporting");
-		node.doubleClick();
-
 		dataModelItem.contextMenu("New").click();
 		SWTBotShell newDataContainerShell = bot.shell("New Data Model");
 		newDataContainerShell.activate();
@@ -74,8 +70,13 @@ public class DataModelTypesTypeMainTabTest extends TalendSWTBotForMDM {
 		sleep(2);
 
 		final SWTBotEditor editor = bot.editorByTitle("TestDataModel");
-		XObjectEditor ep = (XObjectEditor) editor.getReference().getPart(true);
-		mainpage = (DataModelMainPage) ep.getPage(0);
+		Display.getDefault().syncExec(new Runnable() {
+
+			public void run() {
+				XSDEditor ep = (XSDEditor) editor.getReference().getPart(true);
+				mainpage = (DataModelMainPage) ep.getSelectedPage();
+			}
+		});
 		Tree typesTree = mainpage.getTypesViewer().getTree();
 		typesBotTree = new SWTBotTree(typesTree);
 

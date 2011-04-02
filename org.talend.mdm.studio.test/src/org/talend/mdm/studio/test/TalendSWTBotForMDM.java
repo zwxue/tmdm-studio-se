@@ -31,7 +31,7 @@ import org.junit.BeforeClass;
  */
 public class TalendSWTBotForMDM {
 
-    protected static SWTWorkbenchBot bot;
+    protected static SWTWorkbenchBot bot = new SWTWorkbenchBot();
 
     protected static SWTBotTreeItem serverItem;
     
@@ -86,9 +86,8 @@ public class TalendSWTBotForMDM {
 
     @BeforeClass
     public static void beforeClass() throws Exception {
-        // System.out.println("beforeClass");
+         System.out.println("beforeClass");
         if (!isLoggined) {
-            bot = new SWTWorkbenchBot();
             // SWTBotView welcomeView = bot.viewByTitle("Welcome");
             // if (welcomeView != null)
             // welcomeView.close();
@@ -108,15 +107,26 @@ public class TalendSWTBotForMDM {
             bot.perspectiveByLabel("MDM").activate();
             bot.viewByTitle("MDM Server").show();
             
-            
-            
              login();
             initServerView();
             bot.waitUntil(Conditions.widgetIsEnabled(serverTree),ONE_MINUTE_IN_MILLISEC*10);
             isLoggined = true;
         }
     }
-
+private static void importDemo(){
+    serverItem.contextMenu("Import").click();
+    bot.shell("Import Objects").activate();
+    bot.radio("Select archive file:").click();
+    bot.button("Import from Talend Exchange").click();
+    bot.shell("Import from Talend Exchange options").activate();
+    bot.table().select(1);
+    bot.button("OK").click();
+    bot.waitUntil(Conditions.shellCloses(bot.shell("Import from Talend Exchange options")));
+    sleep(3);
+    bot.button("Finish").click();
+    bot.shell("Confirm Overwrite").activate();
+    bot.button("Yes To All").click();
+}
     @AfterClass
     public static void AfterClass() {
         System.out.println("AfterClass");

@@ -25,7 +25,7 @@ public class EventManagerTest extends TalendSWTBotForMDM {
 
     @After
     public void runAfterEveryTest() {
-
+    	bot.activeEditor().close();
     }
 
     @Test

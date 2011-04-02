@@ -33,7 +33,8 @@ public class JobRunTest extends TalendSWTBotForMDM {
     public void runBeforeEveryTest() {
         jobParentItem = serverItem.getNode("Job Repository");
         jobParentItem.expand();
-        jobItem=jobParentItem.getNode("Source Jobs").getNode(0);
+        if(jobParentItem.getNodes().contains("Source Jobs"))
+        	jobItem=jobParentItem.getNode("Source Jobs").getNode(0);
 
     }
 

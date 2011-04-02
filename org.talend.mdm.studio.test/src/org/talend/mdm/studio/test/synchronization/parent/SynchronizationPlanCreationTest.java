@@ -48,6 +48,7 @@ public class SynchronizationPlanCreationTest extends TalendSWTBotForMDM {
         sleep(2);
         bot.activeEditor().save();
         sleep();
+        spParentItem.expand();
         Assert.assertNotNull(spParentItem.getNode("TestSynchronizationPlan"));
         sleep(2);
     }

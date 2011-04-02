@@ -52,6 +52,7 @@ public class StoredProcedureContentTest extends TalendSWTBotForMDM {
         text.setText("TestStoredProcedure");
         sleep();
         bot.button("OK").click();
+        spParentItem.expand();
         spItem = spParentItem.getNode("TestStoredProcedure");
         Assert.assertNotNull(spItem);
         spItem.doubleClick();
@@ -83,7 +84,7 @@ public class StoredProcedureContentTest extends TalendSWTBotForMDM {
         String pro = "";
         bot.comboBox().setSelection("SearchTemplate");
         bot.button("Execute Procedure").click();
-
+        spParentItem.expand();
         spParentItem.getNode("TestStoredProcedure").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();

@@ -27,7 +27,7 @@ import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 import com.amalto.workbench.editors.DataModelMainPage;
-import com.amalto.workbench.editors.XObjectEditor;
+import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class DataModelSchemaGroupOperationTest extends TalendSWTBotForMDM {
@@ -51,8 +51,13 @@ public class DataModelSchemaGroupOperationTest extends TalendSWTBotForMDM {
         node.doubleClick();
 
         final SWTBotEditor editor = bot.editorByTitle("Reporting");
-        XObjectEditor ep = (XObjectEditor) editor.getReference().getPart(true);
-        mainpage = (DataModelMainPage) ep.getPage(0);
+		Display.getDefault().syncExec(new Runnable() {
+
+			public void run() {
+				XSDEditor ep = (XSDEditor) editor.getReference().getPart(true);
+				mainpage = (DataModelMainPage) ep.getSelectedPage();
+			}
+		});
         Tree conceptTree = mainpage.getTreeViewer().getTree();
         conceptBotTree = new SWTBotTree(conceptTree);
         conceptNode = conceptBotTree.getTreeItem("Reporting");

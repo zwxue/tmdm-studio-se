@@ -92,24 +92,21 @@ private String[] array=new String[]{"id","Config"};
         bot.buttonWithTooltip("Add Multiple", 0).click();
 
         bot.shell("Select Multiple XPaths").activate();
-        bot.comboBox().setSelection("Conf");
-        sleep();
+//        bot.comboBox().setSelection("CONF");
+//        sleep();
         SWTBotTreeItem parent = bot.tree().getTreeItem("Conf").expand().getNode(0).expand();
         parent.select(array);
         sleep();
         bot.button("Add").click();
         sleep();
-
-        bot.buttonWithTooltip("Add Multiple", 1).click();
-
     }
 
     @Test
     public void setSearchableElementsTest() {
         bot.buttonWithTooltip("Add Multiple", 1).click();
         bot.shell("Select Multiple XPaths").activate();
-        bot.comboBox().setSelection("Agent");
-        sleep();
+//        bot.comboBox().setSelection("Agent");
+//        sleep();
         SWTBotTreeItem parent = bot.tree().getTreeItem("Conf").expand().getNode(0).expand();
         parent.select(array);
         sleep();
@@ -130,8 +127,8 @@ private String[] array=new String[]{"id","Config"};
     public void setWhereConditionsTest() {
         bot.buttonWithTooltip("Add Multiple", 2).click();
         bot.shell("Select Multiple XPaths").activate();
-        bot.comboBox().setSelection("Agent");
-        sleep();
+//        bot.comboBox().setSelection("Agent");
+//        sleep();
         SWTBotTreeItem parent = bot.tree().getTreeItem("Conf").expand().getNode(0).expand();
         parent.select("Config");
         sleep();

@@ -14,6 +14,7 @@ package org.talend.mdm.studio.test.view;
 
 import junit.framework.Assert;
 
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotCombo;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.Before;
@@ -60,8 +61,10 @@ public class IsEmptyOrNullOperatorTest extends TalendSWTBotForMDM {
     public void isEmptyOrNullOperatorTest() {
         init();
         bot.buttonWithTooltip("Add", 2).click();
-        bot.table().click(0, 1);
-        bot.comboBox().setSelection("IsEmptyOrNull");
+        bot.table(2).click(0, 1);
+        SWTBotCombo com=bot.comboBox();
+        com.setFocus();
+        com.setSelection("IsEmptyOrNull");
         Assert.assertEquals("IsEmptyOrNull",bot.ccomboBox().getText());
     }
 }
