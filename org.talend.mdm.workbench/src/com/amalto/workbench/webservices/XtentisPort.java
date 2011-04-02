@@ -10,6 +10,8 @@ public interface XtentisPort extends java.rmi.Remote {
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSString ping(com.amalto.workbench.webservices.WSPing wsPing) throws 
          java.rmi.RemoteException;
+    public com.amalto.workbench.webservices.WSString refreshCache(com.amalto.workbench.webservices.WSRefreshCache refreshCache) throws 
+         java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSString logout(com.amalto.workbench.webservices.WSLogout wsLogout) throws 
          java.rmi.RemoteException;
     public com.amalto.workbench.webservices.WSInt initMDM(com.amalto.workbench.webservices.WSInitData initData) throws 

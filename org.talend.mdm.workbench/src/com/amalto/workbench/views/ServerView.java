@@ -109,6 +109,7 @@ import com.amalto.workbench.actions.RefreshXObjectAction;
 import com.amalto.workbench.actions.RenameXObjectAction;
 import com.amalto.workbench.actions.ServerLoginAction;
 import com.amalto.workbench.actions.ServerRefreshAction;
+import com.amalto.workbench.actions.ServerRefreshCacheAction;
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.dialogs.ErrorExceptionDialog;
@@ -167,6 +168,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     protected Action deleteXObjectAction;
 
     protected Action serverRefreshAction;
+    protected Action serverRefreshCacheAction;
 
     protected Action refreshAllServerAction;
 
@@ -796,6 +798,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                 manager.add(loginAction);
                 manager.add(logoutAction);
                 manager.add(serverRefreshAction);
+                manager.add(serverRefreshCacheAction);
                 manager.add(importAction);
                 manager.add(exportAction);
 
@@ -992,6 +995,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         browseRevisionAction = new BrowseRevisionAction(this);
         deleteXObjectAction = new DeleteXObjectAction(this);
         serverRefreshAction = new ServerRefreshAction(this);
+        serverRefreshCacheAction=new ServerRefreshCacheAction(this);
         refreshAllServerAction = new RefreshAllServerAction(this);
         // serverInitAction = new ServerInitAction(this);
         browseViewAction = new BrowseViewAction(this);

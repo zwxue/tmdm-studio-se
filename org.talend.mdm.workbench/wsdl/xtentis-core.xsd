@@ -187,7 +187,12 @@
 		</xsd:sequence>
 	</xsd:complexType> 
 	<xsd:element name="WSPing" type="tns:WSPing"/>
-
+	<xsd:complexType name="WSRefreshCache">
+		<xsd:sequence>
+			<xsd:element maxOccurs="1" minOccurs="1" name="type" nillable="true" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType> 
+	<xsd:element name="WSRefreshCache" type="tns:WSRefreshCache"/>
 	<xsd:complexType name="WSLogout">
 		<xsd:sequence>
 			<xsd:element maxOccurs="1" minOccurs="0" name="dummy" nillable="true" type="xsd:string"/>
@@ -1044,6 +1049,8 @@
             <xsd:element maxOccurs="1" minOccurs="1" name="labelXpath" nillable="false" type="xsd:string"/>
             <xsd:element maxOccurs="1" minOccurs="0" name="fatherPK" nillable="true" type="xsd:string"/>
             <xsd:element maxOccurs="1" minOccurs="0" name="whereItem" nillable="true" type="tns:WSWhereItem"/>
+            <xsd:element maxOccurs="1" minOccurs="1" name="start" nillable="false" type="xsd:int"/>
+            <xsd:element maxOccurs="1" minOccurs="1" name="limit" nillable="false" type="xsd:int"/>
         </xsd:sequence>
     </xsd:complexType>
     <xsd:element name="WSGetChildrenItems" type="tns:WSGetChildrenItems"/>
