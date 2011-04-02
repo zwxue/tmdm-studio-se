@@ -72,13 +72,13 @@ public class LoginDialog extends Dialog {
 
     // private Collection<String> universes;
 
-    private ComboViewer endpointsCombo = null;
+    private ComboViewer descCombo = null;
 
     private Text userText = null;
 
     private Text passwordText = null;
 
-    private Text descriptionText;
+    private Text urlText;
 
     private Button savePasswordButton;
 
@@ -141,29 +141,27 @@ public class LoginDialog extends Dialog {
 
         Label endpointsLabel = new Label(composite, SWT.NONE);
         endpointsLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-        endpointsLabel.setText("Server");
-
-        endpointsCombo = new ComboViewer(composite, SWT.NONE);
-        endpointsCombo.setContentProvider(new ListContentProvider());
-        endpointsCombo.setLabelProvider(new MDMServerLabelProvider());
-        endpointsCombo.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-        ((GridData) endpointsCombo.getCombo().getLayoutData()).widthHint = 400;
+        endpointsLabel.setText("Description(*)");
+        endpointsLabel.setForeground(endpointsLabel.getDisplay().getSystemColor(SWT.COLOR_RED));
+        endpointsLabel.setToolTipText("Description is unique and mandatory!");
+        descCombo = new ComboViewer(composite, SWT.NONE);
+        descCombo.setContentProvider(new ListContentProvider());
+        descCombo.setLabelProvider(new MDMServerLabelProvider());
+        descCombo.getCombo().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        ((GridData) descCombo.getCombo().getLayoutData()).widthHint = 400;
         // for (Iterator<String> iter = endpoints.iterator(); iter.hasNext();) {
         // String host = iter.next();
         // endpointsCombo.add(host);
         // }
         // endpointsCombo.select(0);
         MDMServerDef[] serverDefs = getInitMDMServers();
-        endpointsCombo.setInput(serverDefs);
+        descCombo.setInput(serverDefs);
 
         Label descriptionLabel = new Label(composite, SWT.NONE);
         descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-        descriptionLabel.setText("Description(*)");
-        descriptionLabel.setForeground(descriptionLabel.getDisplay().getSystemColor(SWT.COLOR_RED));
-        descriptionLabel.setToolTipText("Description is unique and mandatory!");
-
-        descriptionText = new Text(composite, SWT.BORDER);
-        descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        descriptionLabel.setText("Server");
+        urlText = new Text(composite, SWT.BORDER);
+        urlText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
         authenticationGroup = new Group(composite, SWT.NONE);
         authenticationGroup.setVisible(true);
@@ -212,14 +210,14 @@ public class LoginDialog extends Dialog {
         savePasswordButton.setText("Save this MDM Server Location");
         savePasswordButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 
-        endpointsCombo.addSelectionChangedListener(new ISelectionChangedListener() {
+        descCombo.addSelectionChangedListener(new ISelectionChangedListener() {
 
             public void selectionChanged(SelectionChangedEvent arg0) {
                 onSelectMDMServer();
 
             }
         });
-        endpointsCombo.setSelection(new StructuredSelection(serverDefs[0]));
+        descCombo.setSelection(new StructuredSelection(serverDefs[0]));
 
         return composite;
     }
@@ -239,9 +237,9 @@ public class LoginDialog extends Dialog {
 
 	protected void okPressed() {
         boolean isExist = false;
-        if(descriptionText.getText().trim().length()==0){
+        if(descCombo.getCombo().getText().trim().length()==0){
         	MessageDialog.openWarning(null, "Warning", "Description is mandatory!");
-        	descriptionText.setFocus();
+        	descCombo.getCombo().setFocus();
         	isOK=false;
         	return;
         }
@@ -259,9 +257,9 @@ public class LoginDialog extends Dialog {
         }
         //check description unique
         for(MDMServerDef def:PreferenceMDMServerExtractor.getInstence().getMDMServerDefinitions()){
-        	if(def.getDesc().equals(descriptionText.getText()) && !def.getUrl().equals(endpointsCombo.getCombo().getText())){
+        	if(def.getDesc().equals(descCombo.getCombo().getText()) && !def.getUrl().equals(urlText.getText())){
         		MessageDialog.openWarning(null, "Warning", "Description is already exists, please use another one!");
-        		descriptionText.setFocus();
+        		descCombo.getCombo().setFocus();
         		isOK=false;
         		return;
         	}
@@ -316,7 +314,7 @@ public class LoginDialog extends Dialog {
         for (Iterator iterator = properties.iterator(); iterator.hasNext();) {
             Element ele = (Element) iterator.next();
 
-            if (ele.element("url").getText().equals(endpointsCombo.getCombo().getText().trim())//$NON-NLS-1$
+            if (ele.element("url").getText().equals(urlText.getText().trim())//$NON-NLS-1$
                     && ele.element("user").getText().equals(userText.getText())//$NON-NLS-1$
                     && ele.element("password").getText().equals(passwordText.getText())//$NON-NLS-1$
                     && ele.element("universe").getText().equals(universeCombo.getText()))//$NON-NLS-1$
@@ -333,7 +331,7 @@ public class LoginDialog extends Dialog {
         Element password = prop.addElement("password");//$NON-NLS-1$
         Element universe = prop.addElement("universe");//$NON-NLS-1$
 
-        url.setText(endpointsCombo.getCombo().getText().trim());
+        url.setText(urlText.getText().trim());
         user.setText(userText.getText());
         if (savePasswordButton.getSelection() == true)
             password.setText(PasswordUtil.encryptPassword(passwordText.getText()));
@@ -360,7 +358,7 @@ public class LoginDialog extends Dialog {
     }
 
     public String getServer() {
-        return endpointsCombo.getCombo().getText().trim();
+        return urlText.getText().trim();
     }
 
     public String getUniverse() {
@@ -399,7 +397,7 @@ public class LoginDialog extends Dialog {
 
     private MDMServerDef getSelectedMDMServerDef() {
 
-        IStructuredSelection selection = (IStructuredSelection) endpointsCombo.getSelection();
+        IStructuredSelection selection = (IStructuredSelection) descCombo.getSelection();
         if (selection.isEmpty())
             return null;
 
@@ -410,21 +408,21 @@ public class LoginDialog extends Dialog {
 
         MDMServerDef selectedServer = getSelectedMDMServerDef();
 
-        endpointsCombo.getCombo().setToolTipText(selectedServer == null ? "" : selectedServer.getDesc());//$NON-NLS-1$
+        descCombo.getCombo().setText(selectedServer == null ? "" : selectedServer.getDesc());//$NON-NLS-1$
         userText.setText(selectedServer == null ? "" : selectedServer.getUser());//$NON-NLS-1$
         passwordText.setText(selectedServer == null ? "" : selectedServer.getPasswd());//$NON-NLS-1$
-        descriptionText.setText(selectedServer == null ? "" : selectedServer.getDesc());//$NON-NLS-1$
+        urlText.setText(selectedServer == null ? "" : selectedServer.getUrl());//$NON-NLS-1$
         userText.setFocus();
     }
 
     private void updateServerListInPreference() {
 
-        String description = descriptionText.getText().trim();//$NON-NLS-1$
+        String description = descCombo.getCombo().getText().trim();//$NON-NLS-1$
         if ("".equals(description)) { //$NON-NLS-1$
             description = getDefaultConnectionDescription();
         }
 
-        PreferenceMDMServerExtractor.getInstence().updateMDMServerDefinitionsBy(endpointsCombo.getCombo().getText().trim(),
+        PreferenceMDMServerExtractor.getInstence().updateMDMServerDefinitionsBy(urlText.getText().trim(),
                 userText.getText().trim(), passwordText.getText(), description);
     }
 
@@ -434,7 +432,7 @@ public class LoginDialog extends Dialog {
 
         sb.append(userText.getText().trim());
         sb.append("-");//$NON-NLS-1$
-        sb.append(endpointsCombo.getCombo().getText().trim());
+        sb.append(urlText.getText().trim());
 
         return sb.toString();
     }
@@ -464,6 +462,6 @@ class MDMServerLabelProvider implements ILabelProvider {
         if (!(element instanceof MDMServerDef))
             return "";//$NON-NLS-1$
 
-        return ((MDMServerDef) element).getUrl();
+        return ((MDMServerDef) element).getDesc();
     }
 }

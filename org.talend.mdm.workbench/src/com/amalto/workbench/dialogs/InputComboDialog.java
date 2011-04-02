@@ -86,6 +86,7 @@ public class InputComboDialog extends Dialog {
 	        errorMessageText.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
 	        errorMessageText.setBackground(errorMessageText.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 	        errorMessageText.setText(txtValue);
+	        errorMessageText.setEditable(false);
         }
         
         //applyDialogFont(composite);
