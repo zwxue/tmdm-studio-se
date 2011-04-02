@@ -546,7 +546,7 @@ public class XSDEditFacetAction extends UndoAction {
         if (currentValue != null)
             stringValue = currentValue.getLexicalValue();
         dialog = new InputComboDialog(page.getSite().getShell(), "WhiteSpace Facet", "Select a new value for the facet", values,
-                stringValue);
+                stringValue,null);
         dialog.setBlockOnOpen(true);
         int ret = dialog.open();
         if (ret == Dialog.CANCEL)

@@ -43,9 +43,10 @@ public class InputComboDialog extends Dialog {
     private Text errorMessageText;
 
     private String[] values;
-
+    
+    private String txtValue;
     public InputComboDialog(Shell parentShell, String dialogTitle, String dialogMessage, String[] dialogValues,
-            String initialValue) {
+            String initialValue, String txtValue) {
         super(parentShell);
         // TODO Auto-generated constructor stub
         this.message = dialogMessage;
@@ -53,7 +54,7 @@ public class InputComboDialog extends Dialog {
         this.message = dialogMessage;
         this.values = dialogValues;
         this.value = initialValue;
-
+        this.txtValue=txtValue;
     }
 
     protected Control createDialogArea(Composite parent) {
@@ -79,13 +80,15 @@ public class InputComboDialog extends Dialog {
                 inputCombo.setText(pro);
                 break;
             }
+        }        
+        if(txtValue!=null){
+	        errorMessageText = new Text(composite, SWT.BORDER);
+	        errorMessageText.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
+	        errorMessageText.setBackground(errorMessageText.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+	        errorMessageText.setText(txtValue);
         }
-
-        errorMessageText = new Text(composite, SWT.READ_ONLY | SWT.WRAP);
-        errorMessageText.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
-        errorMessageText.setBackground(errorMessageText.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
-
-        applyDialogFont(composite);
+        
+        //applyDialogFont(composite);
         return composite;
     }
 
@@ -105,6 +108,13 @@ public class InputComboDialog extends Dialog {
         }
     }
 
+    public Combo getCombo(){
+    	return inputCombo;
+    }
+    
+    public Text getText(){
+    	return errorMessageText;
+    }
     protected void createButtonsForButtonBar(Composite parent) {
         // create OK and Cancel buttons by default
         okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);

@@ -90,7 +90,7 @@ public class ServerLoginAction extends Action implements SelectionListener {
      ***************************************/
     public void widgetSelected(SelectionEvent e) {
         int buttonId = ((Integer) e.widget.getData()).intValue();
-        if (IDialogConstants.OK_ID != buttonId)
+        if (IDialogConstants.OK_ID != buttonId || !dialog.isOK())
             return;
         String url = dialog.getServer();
         String username = dialog.getUsernameText();

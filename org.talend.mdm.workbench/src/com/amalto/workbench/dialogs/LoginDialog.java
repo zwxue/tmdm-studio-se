@@ -30,6 +30,8 @@ import org.dom4j.io.XMLWriter;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.resource.ColorRegistry;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -91,7 +93,8 @@ public class LoginDialog extends Dialog {
     private Document logininfoDocument;
 
     private List<WSUniversePK> universes;
-
+    
+    private boolean isOK;
     /**
      * @param parentShell
      */
@@ -155,7 +158,9 @@ public class LoginDialog extends Dialog {
 
         Label descriptionLabel = new Label(composite, SWT.NONE);
         descriptionLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-        descriptionLabel.setText("Description");
+        descriptionLabel.setText("Description(*)");
+        descriptionLabel.setForeground(descriptionLabel.getDisplay().getSystemColor(SWT.COLOR_RED));
+        descriptionLabel.setToolTipText("Description is unique and mandatory!");
 
         descriptionText = new Text(composite, SWT.BORDER);
         descriptionText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -169,7 +174,7 @@ public class LoginDialog extends Dialog {
         Label usernameLabel = new Label(authenticationGroup, SWT.NONE);
         usernameLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
         usernameLabel.setText("Username");
-
+        
         userText = new Text(authenticationGroup, SWT.BORDER);
         userText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         userText.setDoubleClickEnabled(false);
@@ -177,7 +182,7 @@ public class LoginDialog extends Dialog {
         Label passwordLabel = new Label(authenticationGroup, SWT.NONE);
         passwordLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
         passwordLabel.setText("Password");
-
+        
         passwordText = new Text(authenticationGroup, SWT.PASSWORD | SWT.BORDER);
         passwordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
@@ -228,15 +233,40 @@ public class LoginDialog extends Dialog {
          */
     }
 
-    protected void okPressed() {
-        boolean isExist = false;
-        // save hosts
-        /*
-         * String currentHost = endpointsCombo.getText(); String endpointsString = currentHost; int i =0; for
-         * (Iterator<String> iter = endpoints.iterator(); iter.hasNext(); ) { String endpoint = iter.next(); if (!
-         * endpoint.equals(currentHost)) endpointsString+=","+endpoint; if (++i == 10) break; }
-         */
+    public boolean isOK() {
+		return isOK;
+	}
 
+	protected void okPressed() {
+        boolean isExist = false;
+        if(descriptionText.getText().trim().length()==0){
+        	MessageDialog.openWarning(null, "Warning", "Description is mandatory!");
+        	descriptionText.setFocus();
+        	isOK=false;
+        	return;
+        }
+        if(userText.getText().trim().length()==0){
+        	MessageDialog.openWarning(null, "Warning", "Username is mandatory!");
+        	userText.setFocus();
+        	isOK=false;
+        	return;
+        }
+        if(passwordText.getText().trim().length()==0){
+        	MessageDialog.openWarning(null, "Warning", "Password is mandatory!");
+        	passwordText.setFocus();
+        	isOK=false;
+        	return;
+        }
+        //check description unique
+        for(MDMServerDef def:PreferenceMDMServerExtractor.getInstence().getMDMServerDefinitions()){
+        	if(def.getDesc().equals(descriptionText.getText()) && !def.getUrl().equals(endpointsCombo.getCombo().getText())){
+        		MessageDialog.openWarning(null, "Warning", "Description is already exists, please use another one!");
+        		descriptionText.setFocus();
+        		isOK=false;
+        		return;
+        	}
+        }
+        isOK=true;
         SAXReader reader = new SAXReader();
         Element root = null;
         if (new File(f).exists()) {
