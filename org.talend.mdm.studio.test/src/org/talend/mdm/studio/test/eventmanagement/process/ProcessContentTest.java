@@ -122,7 +122,7 @@ public class ProcessContentTest extends TalendSWTBotForMDM {
         bot.buttonWithTooltip("Add a link for output Variables and output Parameters").click();
         bot.styledText().setText(DECODE_PARAMETERS);
         //new feature in 4.2,see bug 0017999
-        bot.buttonWithTooltip("Auto-indent enabled").click();
+        bot.checkBoxWithLabel("Auto-indent enabled").click();
         bot.activeEditor().save();
     }
 

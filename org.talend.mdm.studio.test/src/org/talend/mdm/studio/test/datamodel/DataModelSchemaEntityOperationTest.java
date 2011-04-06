@@ -50,7 +50,7 @@ public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
         dataModelItem = serverItem.getNode("Data Model [HEAD]");
         dataModelItem.expand();
 
-        SWTBotTreeItem node = dataModelItem.expandNode("System").getNode("Reporting");
+        SWTBotTreeItem node = dataModelItem.expandNode("System").expand().getNode("Reporting");
         node.doubleClick();
 
         final SWTBotEditor editor = bot.editorByTitle("Reporting");

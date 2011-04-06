@@ -51,7 +51,7 @@ public class ProcessRenameTest extends TalendSWTBotForMDM {
 
     @After
     public void runAfterEveryTest() {
-        processParentNode.getNode("RenameProcess").contextMenu("Delete").click();
+        processParentNode.getNode("Normal_Process").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();
     }

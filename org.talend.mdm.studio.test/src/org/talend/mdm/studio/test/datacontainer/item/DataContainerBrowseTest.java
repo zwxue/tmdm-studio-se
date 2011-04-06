@@ -27,7 +27,7 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
  * DOC rhou class global comment. Detailled comment
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class DataContaineBrowseTest extends TalendSWTBotForMDM {
+public class DataContainerBrowseTest extends TalendSWTBotForMDM {
 
     private SWTBotTreeItem dataContainerItem;
 

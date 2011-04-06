@@ -109,6 +109,7 @@ public class TalendSWTBotForMDM {
             
              login();
             initServerView();
+            importDemo();
             bot.waitUntil(Conditions.widgetIsEnabled(serverTree),ONE_MINUTE_IN_MILLISEC*10);
             isLoggined = true;
         }
@@ -121,7 +122,9 @@ private static void importDemo(){
     bot.shell("Import from Talend Exchange options").activate();
     bot.table().select(1);
     bot.button("OK").click();
-    bot.waitUntil(Conditions.shellCloses(bot.shell("Import from Talend Exchange options")));
+//    bot.waitUntil(Conditions.shellCloses(bot.shell("Import from Talend Exchange options")));
+    sleep();
+    bot.waitUntil(Conditions.shellIsActive("Import Objects"));
     sleep(3);
     bot.button("Finish").click();
     bot.shell("Confirm Overwrite").activate();

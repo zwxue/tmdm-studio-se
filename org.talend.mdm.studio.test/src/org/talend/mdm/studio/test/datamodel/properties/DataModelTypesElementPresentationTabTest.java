@@ -152,7 +152,7 @@ public class DataModelTypesElementPresentationTabTest extends
 	@Test
 	public void setDescriptionsTest() {
 		bot.comboBox(2).setSelection(0);
-		bot.text(2).setText("enlish description");
+		bot.text(2).setText("english description");
 		bot.buttonWithTooltip("Add", 2).click();
 		sleep();
 		bot.comboBox(2).setSelection(1);

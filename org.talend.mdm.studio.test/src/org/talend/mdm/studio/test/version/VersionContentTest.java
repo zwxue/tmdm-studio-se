@@ -79,7 +79,7 @@ public class VersionContentTest extends TalendSWTBotForMDM {
 
 	@Test
 	public void setEntityIDTest() {
-		bot.textWithLabel("Default Revision ID").setText("r1");
+		bot.text(1).setText("r1");
 		bot.buttonWithTooltip("Add").click();
 		// String pro = "";
 		// bot.styledText().setText(pro);

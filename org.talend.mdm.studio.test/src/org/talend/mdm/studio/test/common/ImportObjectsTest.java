@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.mdm.studio.test.common;
 
+import org.eclipse.swtbot.eclipse.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.junit.After;
 import org.junit.Before;
@@ -42,6 +43,7 @@ public class ImportObjectsTest extends TalendSWTBotForMDM {
         bot.shell("Import from Talend Exchange options").activate();
         bot.table().select(1);
         bot.button("OK").click();
+        bot.waitUntil(Conditions.shellIsActive("Import Objects"));
         sleep(3);
         bot.button("Finish").click();
         bot.shell("Confirm Overwrite").activate();

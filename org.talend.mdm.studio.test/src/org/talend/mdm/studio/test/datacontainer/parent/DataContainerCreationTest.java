@@ -46,6 +46,7 @@ public class DataContainerCreationTest extends TalendSWTBotForMDM {
         SWTBotText text = bot.textWithLabel("Enter a name for the New Instance");
         // new feature in 4.2,see bug 0016141
         text.setText("Test DataContainer");
+        Assert.assertFalse(bot.button("OK").isEnabled());
         sleep(2);
         text.setText("TestDataContainer");
         bot.buttonWithTooltip("Add").click();

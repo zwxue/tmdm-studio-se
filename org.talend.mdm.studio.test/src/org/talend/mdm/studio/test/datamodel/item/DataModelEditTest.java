@@ -67,12 +67,6 @@ public class DataModelEditTest extends TalendSWTBotForMDM {
         sleep();
         bot.button("OK").click();
         sleep();
-
-        dataModelItem.getNode("PasteDataModel").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-
     }
 
 }

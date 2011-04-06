@@ -41,12 +41,14 @@ public class RoleContentTest extends TalendSWTBotForMDM {
     public void runBeforeEveryTest() {
         roleParentItem = serverItem.getNode("Role [HEAD]");
         roleParentItem.expand();
-
+        roleItem = roleParentItem.getNode("Manager_MWest");
+        roleItem.doubleClick();
+        sleep(2);
     }
 
     @After
     public void runAfterEveryTest() {
-
+    	bot.activeEditor().close();
     }
 
     private void init() {
@@ -71,17 +73,10 @@ public class RoleContentTest extends TalendSWTBotForMDM {
         sleep(2);
     }
 
-    // @Test
-    // public void roleContentTest() {
-    // setDescriptionTest();
-    // setPermissionTest();
-    // }
-
     @Test
     public void setDescriptionTest() {
-        init();
         bot.buttonWithTooltip("Set the Descriptions").click();
-        bot.shell("Set the Descriptions").activate();
+        bot.shell("Set the Description of the Role").activate();
         bot.comboBox().setSelection("English");
         String des = "Administrator";
         bot.text().setText(des);

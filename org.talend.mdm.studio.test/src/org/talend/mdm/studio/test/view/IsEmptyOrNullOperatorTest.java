@@ -17,6 +17,7 @@ import junit.framework.Assert;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotCombo;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
@@ -37,7 +38,14 @@ public class IsEmptyOrNullOperatorTest extends TalendSWTBotForMDM {
         viewParentItem.expand();
 
     }
-
+    @After
+    public void runAfterEveryTest() {
+    	bot.activeEditor().close();
+        viewParentItem.getNode(PREFIX + "Conf").contextMenu("Delete").click();
+        sleep();
+        bot.button("OK").click();
+        sleep();
+    }
     private void createView() {
         viewParentItem.contextMenu("New").click();
         SWTBotShell newViewShell = bot.shell("New View");

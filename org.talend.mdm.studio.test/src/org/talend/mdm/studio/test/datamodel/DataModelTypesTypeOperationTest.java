@@ -45,7 +45,7 @@ public class DataModelTypesTypeOperationTest extends TalendSWTBotForMDM {
 		dataModelItem = serverItem.getNode("Data Model [HEAD]");
 		dataModelItem.expand();
 
-		SWTBotTreeItem node = dataModelItem.expandNode("System").getNode(
+		SWTBotTreeItem node = dataModelItem.expandNode("System").expand().getNode(
 				"Reporting");
 		node.doubleClick();
 

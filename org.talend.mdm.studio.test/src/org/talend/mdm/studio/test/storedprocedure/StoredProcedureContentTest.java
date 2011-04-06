@@ -50,8 +50,9 @@ public class StoredProcedureContentTest extends TalendSWTBotForMDM {
         newspShell.activate();
         SWTBotText text = bot.textWithLabel("Enter a Name for the New Instance");
         text.setText("TestStoredProcedure");
-        sleep();
         bot.button("OK").click();
+        bot.activeEditor().save();
+        sleep();
         spParentItem.expand();
         spItem = spParentItem.getNode("TestStoredProcedure");
         Assert.assertNotNull(spItem);
@@ -69,7 +70,7 @@ public class StoredProcedureContentTest extends TalendSWTBotForMDM {
         init();
         String des = "This is a stored procedure";
         bot.textWithLabel("Description").setText(des);
-        Assert.assertEquals(des, bot.textWithLabel("Descriptions").getText());
+        Assert.assertEquals(des, bot.textWithLabel("Description").getText());
     }
 
     @Test

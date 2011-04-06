@@ -122,7 +122,7 @@ public class DataModelTypesTypeMainTabTest extends TalendSWTBotForMDM {
 
 	@Test
 	public void changeGroupTest() {
-		bot.button("All").click();
+		bot.radioInGroup("All").click();
 		bot.button().click();
 	}
 

@@ -68,13 +68,12 @@ public class MenuContentTest extends TalendSWTBotForMDM {
         init();
         String des = "This is a description for TestMenu";
         bot.textWithLabel("Description").setText(des);
-        bot.button("OK").click();
         Assert.assertEquals(des, bot.textWithLabel("Description").getText());
     }
 
     @Test
     public void editMenuEntryTest() {
-        bot.tree().getTreeItem("TestMenu - [en: TestMenu]").contextMenu("Edit").click();
+        bot.tree().contextMenu("Edit").click();
         bot.shell("Edit the Menu Entry TestMenu").activate();
         bot.textWithLabel("Context").setText("TestMenu");
         bot.textWithLabel("Application").setText("TestMenu");
@@ -85,7 +84,7 @@ public class MenuContentTest extends TalendSWTBotForMDM {
 
     @Test
     public void addBeforeEntryTest() {
-        bot.tree().getTreeItem("TestMenu - [en: TestMenu]").contextMenu("Add a menu entry before this entry").click();
+        bot.tree().contextMenu("Add a menu entry before this entry").click();
         bot.shell("Edit the Menu Entry TestMenu").activate();
         bot.textWithLabel("ID").setText("BeforeEntry");
         bot.textWithLabel("Context").setText("BeforeEntry");
@@ -99,7 +98,7 @@ public class MenuContentTest extends TalendSWTBotForMDM {
 
     @Test
     public void addAfterEntryTest() {
-        bot.tree().getTreeItem("TestMenu - [en: TestMenu]").contextMenu("Add a menu entry after this entry").click();
+        bot.tree().contextMenu("Add a menu entry after this entry").click();
         bot.shell("Edit the Menu Entry TestMenu").activate();
         bot.textWithLabel("ID").setText("AfterEntry");
         bot.textWithLabel("Context").setText("AfterEntry");
@@ -113,7 +112,7 @@ public class MenuContentTest extends TalendSWTBotForMDM {
 
     @Test
     public void addSubEntryTest() {
-        bot.tree().getTreeItem("TestMenu - [en: TestMenu]").contextMenu("Add a menu entry after this entry").click();
+        bot.tree().contextMenu("Add a menu entry after this entry").click();
         bot.shell("Edit the Menu Entry TestMenu").activate();
         bot.textWithLabel("ID").setText("SubEntry");
         bot.textWithLabel("Context").setText("SubEntry");
@@ -127,7 +126,7 @@ public class MenuContentTest extends TalendSWTBotForMDM {
 
     @Test
     public void deleteEntryTest() {
-        bot.tree().getTreeItem("TestMenu - [en: TestMenu]").contextMenu("Delete Entry").click();
+        bot.tree().contextMenu("Delete Entry").click();
         Assert.assertNull(bot.tree().getTreeItem("TestMenu - [en: TestMenu]"));
         sleep();
 
