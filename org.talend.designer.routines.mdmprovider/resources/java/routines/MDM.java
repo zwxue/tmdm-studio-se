@@ -10,7 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-package routines.system;
+package routines;
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -129,6 +129,8 @@ public class MDM {
     }
     
     /**
+     * get repeating element in xmlString according to the xpath & position
+     * 
      * {talendTypes} String
      * 
      * {Category} MDM
@@ -152,6 +154,8 @@ public class MDM {
     }
     
     /**
+     * check repeating elements in xmlString according to xpath & text
+     * 
      * {talendTypes} Boolean
      * 
      * {Category} MDM 
@@ -174,6 +178,8 @@ public class MDM {
     }
     
     /**
+     * list repeating elements in xmlString according to xpath & delimiter
+     * 
      * {talendTypes} String
      * 
      * {Category} MDM 
@@ -199,6 +205,8 @@ public class MDM {
     }
     
 	/**
+	 * add repeating elements in xmlString according to xpath & text
+	 * 
      * {talendTypes} String
      * 
      * {Category} MDM 
@@ -298,23 +306,4 @@ public class MDM {
         return sw.toString().replaceAll("\r\n", "\n");
     }
     
-	public static void main(String[] args) {
-		String xml="<item><Features><Colors><Color>Red</Color><Color>White</Color><Color>Black</Color></Colors></Features></item>";
-		String xPath="Features/Colors/Color";
-		try {
-			String list=listRepeatingElement(xml,xPath,',');
-			System.out.println(list);
-			boolean ret=hasRepeatingElement(xml, xPath, "Red");
-			System.out.println(ret);
-			
-			String str=getRepeatingElement(xml, xPath, 1);
-			System.out.println(str);
-			
-			str=addRepeatingElement(xml,xPath,"reeedd");
-			System.out.println(str);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }
