@@ -1165,7 +1165,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 xsdSchema = ((SchemaTreeContentProvider) viewer.getContentProvider()).getXsdSchema();
 
             }
-            if (xsdSchema == null || !xsd.equals(wsObject.getXsdSchema()))
+            if (xsdSchema == null || (xsd!=null && !xsd.equals(wsObject.getXsdSchema())))
             	xsdSchema = Util.createXsdSchema(schema, xobject);
             wsObject.setXsdSchema(schema);
 
