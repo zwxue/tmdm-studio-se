@@ -238,7 +238,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
 
     protected DrillDownAdapter drillDownAdapter;
 
-    // private XSDNewConceptAction newConceptAction = null;
+     private XSDNewConceptAction newConceptAction = null;
     private XSDDeleteConceptAction deleteConceptAction = null;
 
     private XSDDeleteConceptWrapAction deleteConceptWrapAction = null;
@@ -1206,7 +1206,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
     }
 
     protected void createActions() {
-        // this.newConceptAction = new XSDNewConceptAction(this);
+         this.newConceptAction = new XSDNewConceptAction(this);
         this.deleteConceptAction = new XSDDeleteConceptAction(this);
         this.newBrowseItemAction = new XSDNewBrowseItemViewAction(this);
         this.deleteConceptWrapAction = new XSDDeleteConceptWrapAction(this);
@@ -1430,7 +1430,7 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
         Object obj = selection.getFirstElement();
 
         if (!isType)
-            manager.add(new XSDNewConceptAction(this));
+            manager.add(newConceptAction);
         else {
             manager.add(newComplexTypeAction);
             manager.add(newSimpleTypeAction);
