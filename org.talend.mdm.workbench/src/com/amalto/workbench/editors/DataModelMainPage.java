@@ -1455,6 +1455,11 @@ public class DataModelMainPage extends EditorPart implements ModifyListener {
                 if (deleteConceptWrapAction.checkOutAllConcept(selectedObjs))
                     manager.add(newBrowseItemAction);
             }
+            if (Util.IsEnterPrise() && obj instanceof XSDComplexTypeDefinition && selectedObjs.length == 1) {
+            		manager.add(new Separator());
+	                manager.add(setAnnotationWriteAction);	
+	                manager.add(setAnnotationNoAction);
+            }
         }
         manager.add(new Separator());
         if ((selection == null) || (selection.getFirstElement() == null)) {
