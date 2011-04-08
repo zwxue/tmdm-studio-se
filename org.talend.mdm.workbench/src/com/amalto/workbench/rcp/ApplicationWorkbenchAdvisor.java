@@ -41,9 +41,11 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
         PlatformUI.getPreferenceStore().setValue(IWorkbenchPreferenceConstants.SHOW_TRADITIONAL_STYLE_TABS, false);
         PlatformUI.getPreferenceStore().setDefault(IWorkbenchPreferenceConstants.DOCK_PERSPECTIVE_BAR,
                 IWorkbenchPreferenceConstants.TOP_RIGHT);
+        
     }
 
     @Override
     public void postStartup() {
+    	PerspectiveReviewUtil.setPerspectiveTabs();
     }
 }

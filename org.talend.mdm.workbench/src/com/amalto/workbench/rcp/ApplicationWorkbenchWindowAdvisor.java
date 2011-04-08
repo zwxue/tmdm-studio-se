@@ -56,12 +56,13 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
         configurer.setShowProgressIndicator(true);
         configurer.setShowPerspectiveBar(true);
         configurer.configureEditorAreaDropListener(new EditorAreaDropAdapter(configurer.getWindow()));
-
+        
         // configurer.setTitle("Talend MDM Studio (3.2.0M2)");
     }
 
     @Override
     public void postWindowOpen() {
+    	PerspectiveReviewUtil.regisitPerspectiveBarSelectListener(); 
         // Start Web Service Registration
         try {
             if (!RegisterManagement.isProductRegistered()) {
