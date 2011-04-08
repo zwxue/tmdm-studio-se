@@ -47,7 +47,7 @@ public class VersionDuplicateTest extends TalendSWTBotForMDM {
         bot.button("OK").click();
         bot.activeEditor().save();
         sleep();
-        spItem = versionParentItem.getNode("TestVersion");
+        spItem = versionParentItem.expand().getNode("TestVersion");
         Assert.assertNotNull(spItem);
         sleep(2);
     }

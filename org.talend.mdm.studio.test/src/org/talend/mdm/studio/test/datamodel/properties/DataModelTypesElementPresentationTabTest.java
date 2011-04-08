@@ -163,7 +163,7 @@ public class DataModelTypesElementPresentationTabTest extends
 		bot.buttonWithTooltip("Del").click();
 		bot.button("Apply").click();
 		Assert.assertNotNull(elementNode.expand().getNode("Annotations")
-				.expand().getNode("English Description: enlish description"));
+				.expand().getNode("English Description: english description"));
 	}
 
 	@Test

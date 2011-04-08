@@ -70,7 +70,7 @@ public class ProcessContentTest extends TalendSWTBotForMDM {
         processParentNode = eventManagementItem.getNode("Process [HEAD]");
         // for normal process
         processParentNode.contextMenu("New").click();
-        bot.text().setText("ProcessDemo");
+        bot.text().setText("ProcessDemoTest");
         bot.radio("Create a Normal Process").click();
         bot.button("OK").click();
         sleep(2);
@@ -122,7 +122,7 @@ public class ProcessContentTest extends TalendSWTBotForMDM {
         bot.buttonWithTooltip("Add a link for output Variables and output Parameters").click();
         bot.styledText().setText(DECODE_PARAMETERS);
         //new feature in 4.2,see bug 0017999
-        bot.checkBoxWithLabel("Auto-indent enabled").click();
+        bot.checkBox("Auto-indent").select();
         bot.activeEditor().save();
     }
 
@@ -139,6 +139,6 @@ public class ProcessContentTest extends TalendSWTBotForMDM {
         // add the output variables.
         bot.ccomboBoxWithLabel("Output Parameters").setSelection("result");
         bot.buttonWithTooltip("Add a link for output Variables and output Parameters").click();
-        bot.styledText().setText(CALLJOB_PARAMETERS);
+//        bot.tabItem("Source").Text(CALLJOB_PARAMETERS);
     }
 }

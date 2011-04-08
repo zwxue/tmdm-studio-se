@@ -50,6 +50,8 @@ public class TalendSWTBotForMDM {
         bot.waitUntil(Conditions.shellIsActive("Talend MDM Studio Login"),ONE_MINUTE_IN_MILLISEC*10);
         shell.activate();
         sleep();
+//        bot.comboBoxWithLabel("Description(*)").setText("administrator");
+//        sleep();
         bot.textWithLabel("Username").setText("admin");
         sleep();
         bot.textWithLabel("Password").setText("talend");
@@ -125,8 +127,11 @@ private static void importDemo(){
 //    bot.waitUntil(Conditions.shellCloses(bot.shell("Import from Talend Exchange options")));
     sleep();
     bot.waitUntil(Conditions.shellIsActive("Import Objects"));
+    SWTBotShell shell = bot.shell("Import Objects");
     sleep(3);
     bot.button("Finish").click();
+    bot.waitUntil(Conditions.shellCloses(shell));
+    sleep();
     bot.shell("Confirm Overwrite").activate();
     bot.button("Yes To All").click();
 }

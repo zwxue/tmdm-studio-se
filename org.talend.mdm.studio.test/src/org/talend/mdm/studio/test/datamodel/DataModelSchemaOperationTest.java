@@ -72,6 +72,7 @@ public class DataModelSchemaOperationTest extends TalendSWTBotForMDM {
 				mainpage.doSave(new NullProgressMonitor());
 			}
 		});
+		bot.activeEditor().close();
 	}
 
 	// @Test

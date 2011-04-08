@@ -61,7 +61,7 @@ public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
 				mainpage = (DataModelMainPage) ep.getSelectedPage();
 			}
 		});
-        Tree conceptTree = mainpage.getTreeViewer().getTree();
+        Tree conceptTree = mainpage.getElementsViewer().getTree();
         conceptBotTree = new SWTBotTree(conceptTree);
     }
 
@@ -73,6 +73,7 @@ public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
                 mainpage.doSave(new NullProgressMonitor());
             }
         });
+    	bot.activeEditor().close();
     }
 
     @Test

@@ -55,7 +55,7 @@ public class VersionContentTest extends TalendSWTBotForMDM {
 		bot.button("OK").click();
 		bot.activeEditor().save();
 		sleep();
-		versionItem = versionParentItem.getNode("TestVersion");
+		versionItem = versionParentItem.expand().getNode("TestVersion");
 		Assert.assertNotNull(versionItem);
 		versionItem.doubleClick();
 		sleep(2);

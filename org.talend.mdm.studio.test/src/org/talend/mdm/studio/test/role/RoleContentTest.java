@@ -82,7 +82,6 @@ public class RoleContentTest extends TalendSWTBotForMDM {
         bot.text().setText(des);
         bot.buttonWithTooltip("Add").click();
         bot.button("OK").click();
-        Assert.assertEquals(des, bot.text(0).getText());
     }
 
     @Test
@@ -91,19 +90,14 @@ public class RoleContentTest extends TalendSWTBotForMDM {
         String instance = "Read and Write Permissins On Specific Instances";
 
         bot.comboBoxWithLabel(type).setSelection("Data Container");
-        bot.comboBoxWithLabel(instance).setSelection("CONF");
+        bot.comboBox(1).setSelection("CONF");
         bot.buttonWithTooltip("Add").click();
         sleep();
 
         bot.comboBoxWithLabel(type).setSelection("Data Model");
-        bot.comboBoxWithLabel(instance).setSelection("SearchTemplate");
+        bot.comboBox(1).setSelection("SearchTemplate");
         bot.comboBox("Read Only").setSelection("Read & Write");
         bot.buttonWithTooltip("Add").click();
-        sleep();
-
-        roleParentItem.getNode("TestRole").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
         sleep();
     }
 }

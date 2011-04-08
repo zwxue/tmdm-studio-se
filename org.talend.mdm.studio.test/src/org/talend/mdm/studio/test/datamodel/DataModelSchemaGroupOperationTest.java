@@ -58,7 +58,7 @@ public class DataModelSchemaGroupOperationTest extends TalendSWTBotForMDM {
 				mainpage = (DataModelMainPage) ep.getSelectedPage();
 			}
 		});
-        Tree conceptTree = mainpage.getTreeViewer().getTree();
+        Tree conceptTree = mainpage.getElementsViewer().getTree();
         conceptBotTree = new SWTBotTree(conceptTree);
         conceptNode = conceptBotTree.getTreeItem("Reporting");
         conceptNode.select().expand();
@@ -73,6 +73,7 @@ public class DataModelSchemaGroupOperationTest extends TalendSWTBotForMDM {
                 mainpage.doSave(new NullProgressMonitor());
             }
         });
+    	bot.activeEditor().close();
     }
 
     //new feature in 4.2,See bug 0012073

@@ -13,6 +13,7 @@
 package org.talend.mdm.studio.test.eventmanagement.trigger;
 
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.Assert;
@@ -51,6 +52,10 @@ public class GUIExtensionForTriggerTest extends TalendSWTBotForMDM {
 				bot.activeEditor().save();
 			}
 		});
+		SWTBotMenu deleteMenu = triggerParentNode.getNode("TriggerDemo").contextMenu("Delete");
+		deleteMenu.click();
+		sleep();
+		bot.button("OK").click();
 	}
 
 	// new feature in 4.2,see bug 0017974:

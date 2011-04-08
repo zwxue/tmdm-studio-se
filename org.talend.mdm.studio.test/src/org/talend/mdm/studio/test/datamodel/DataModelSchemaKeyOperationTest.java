@@ -68,6 +68,7 @@ public class DataModelSchemaKeyOperationTest extends TalendSWTBotForMDM {
                 mainpage.doSave(new NullProgressMonitor());
             }
         });
+    	bot.activeEditor().close();
     }
 
     @Test

@@ -68,7 +68,6 @@ public class DataModelTypesTypeMainTabTest extends TalendSWTBotForMDM {
 		sleep();
 		Assert.assertNotNull(dataModelItem.getNode("TestDataModel"));
 		sleep(2);
-
 		final SWTBotEditor editor = bot.editorByTitle("TestDataModel");
 		Display.getDefault().syncExec(new Runnable() {
 
@@ -88,7 +87,6 @@ public class DataModelTypesTypeMainTabTest extends TalendSWTBotForMDM {
 	@After
 	public void runAfterEveryTest() {
 		Display.getDefault().syncExec(new Runnable() {
-
 			public void run() {
 				mainpage.doSave(new NullProgressMonitor());
 				bot.activeEditor().close();
@@ -122,7 +120,7 @@ public class DataModelTypesTypeMainTabTest extends TalendSWTBotForMDM {
 
 	@Test
 	public void changeGroupTest() {
-		bot.radioInGroup("All").click();
+		bot.radioInGroup("All","Sub-Elements Group").click();
 		bot.button().click();
 	}
 

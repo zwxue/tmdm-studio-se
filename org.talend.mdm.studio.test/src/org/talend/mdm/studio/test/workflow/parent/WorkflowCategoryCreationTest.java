@@ -50,8 +50,8 @@ public class WorkflowCategoryCreationTest extends TalendSWTBotForMDM {
         bot.button("OK").click();
         sleep();
         workflowParentItem.expand();
-        Assert.assertNotNull(workflowParentItem.getNode("TestWorkflowCategory"));
         sleep(2);
+        Assert.assertNotNull(workflowParentItem.getNode("TestWorkflowCategory"));
     }
 
     @After

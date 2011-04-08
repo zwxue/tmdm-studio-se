@@ -72,6 +72,7 @@ public class DataModelTypesTypeOperationTest extends TalendSWTBotForMDM {
 				mainpage.doSave(new NullProgressMonitor());
 			}
 		});
+		bot.activeEditor().close();
 	}
 
 	@Test
@@ -135,6 +136,14 @@ public class DataModelTypesTypeOperationTest extends TalendSWTBotForMDM {
 		editTypeShell.activate();
 		bot.text().setText("TextEditComplexType");
 		bot.button("OK").click();
+		//revert the changes
+		typeNode.contextMenu("Edit a Complex Type").click();
+		sleep();
+		editTypeShell = bot.shell("Edit Complex Type");
+		editTypeShell.activate();
+		bot.text().setText("ReportingType");
+		bot.button("OK").click();
+		
 	}
 
 	@Test
