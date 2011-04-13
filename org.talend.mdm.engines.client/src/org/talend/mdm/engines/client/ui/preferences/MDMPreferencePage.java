@@ -22,7 +22,7 @@ import org.talend.commons.ui.runtime.exception.ExceptionHandler;
 import org.talend.mdm.engines.client.Activator;
 import org.talend.mdm.engines.client.i18n.Messages;
 
-/**
+/**@deprecated
  * Preference for the MDMServer values.
  * 
  * $Id: MDMPreferencePage.java 2738 2007-04-26 13:12:27Z cantoine $

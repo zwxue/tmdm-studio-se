@@ -16,7 +16,7 @@ import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.talend.mdm.engines.client.Activator;
 
-/**
+/**@deprecated
  * Preference Initializer for the designer.
  * 
  * $Id: PreferenceInitializer.java 5392 2007-08-29 06:24:20Z yzhang $

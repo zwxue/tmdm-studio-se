@@ -9,20 +9,5 @@
 		    level="101"
 		    name="Deploy on Talend MDM"/>
    </extension>
-   <extension
-         point="org.eclipse.ui.preferencePages">
-      <page
-            category="org.talend.designer.core.ui.preferences.ImportExportPreferencePage"
-            class="org.talend.mdm.engines.client.ui.preferences.MDMPreferencePage"
-            id="org.talend.repository.prefs.mdm"
-            name="Talend MDM Server">
-      </page>
-   </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.talend.mdm.engines.client.ui.preferences.MDMPreferenceInitializer">
-      </initializer>
-   </extension>
 
 </plugin>

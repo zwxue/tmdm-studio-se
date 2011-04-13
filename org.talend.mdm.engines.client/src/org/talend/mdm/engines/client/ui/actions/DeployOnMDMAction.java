@@ -33,6 +33,8 @@ import org.talend.repository.model.IRepositoryNode.EProperties;
 import org.talend.repository.model.RepositoryNode;
 import org.talend.repository.ui.actions.AContextualAction;
 
+import com.amalto.workbench.utils.MDMServerHelper;
+
 /**
  * Action used to export job scripts. <br/>
  * 
@@ -57,7 +59,10 @@ public final class DeployOnMDMAction extends AContextualAction {
             setEnabled(false);
             return;
         }
-
+        if(MDMServerHelper.getServers().size()==0){
+            setEnabled(false);
+            return;
+        }
         List<RepositoryNode> nodes = (List<RepositoryNode>) selection.toList();
         for (RepositoryNode node : nodes) {
             if (node.getType() != ENodeType.REPOSITORY_ELEMENT

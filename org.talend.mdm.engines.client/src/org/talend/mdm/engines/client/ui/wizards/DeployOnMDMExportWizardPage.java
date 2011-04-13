@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -67,6 +68,8 @@ import org.talend.repository.ui.wizards.exportjob.scriptsmanager.JobJavaScriptsW
 import org.talend.repository.ui.wizards.exportjob.scriptsmanager.JobScriptsManager;
 import org.talend.repository.ui.wizards.exportjob.scriptsmanager.JobScriptsManager.ExportChoice;
 
+import com.amalto.workbench.utils.MDMServerDef;
+
 /**
  * Page of the Job Scripts Export Wizard. <br/>
  * 
@@ -105,7 +108,7 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
     private LabelledCombo exportTypeCombo;
 
     private SpagoBiServer mdmServer = null;
-
+    
     /**
      * Create an instance of this class.
      * 
@@ -238,24 +241,14 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
      */
     protected void createOptions(Composite optionsGroup, Font font) {
         // create directory structure radios
-        List<SpagoBiServer> listServerSapgo = null;
+        List<MDMServerDef> listServerSapgo = com.amalto.workbench.utils.MDMServerHelper.getServers();
         List<String> listEngine = new ArrayList<String>();
 
-        // TODO SML remove unused lines if this fabulous code works fine
-        // ProxyRepositoryFactory proxyRepositoryFactory = ProxyRepositoryFactory.getInstance();
-        // try {
-        // listServerSapgo = proxyRepositoryFactory.getSpagoBiServer();
         if (mdmServer == null) {
-            listServerSapgo = MDMServerHelper.parse(Activator.getDefault().getPreferenceStore().getString(
-                    MDMPreferenceInitializer.MDM_SERVER));
-
-            if (listServerSapgo != null && !listServerSapgo.isEmpty()) {
-                Iterator<SpagoBiServer> iterator = listServerSapgo.iterator();
-                while (iterator.hasNext()) {
-                    SpagoBiServer spagoBiServer = iterator.next();
-                    listEngine.add(spagoBiServer.getShortDescription());
-                }
-            }
+        
+        	for(MDMServerDef serv:listServerSapgo){
+        		listEngine.add(serv.getDesc());
+        	}
             serverSpagoBi = new LabelledCombo(
                     optionsGroup,
                     Messages.getString("DeployOnMDMExportWizardPage.SpagoBI.Server"), Messages.getString("DeployOnMDMExportWizardPage.SpecifyServer.PublishJob"), listEngine); //$NON-NLS-1$ //$NON-NLS-2$
@@ -437,29 +430,23 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
 
         // retrieve user, password, host, port from selected SpagoBiServer
 
-        SpagoBiServer spagoBiServer = mdmServer;
-        if (spagoBiServer == null) {
-            String selectedSpagoBiEngineName = serverSpagoBi.getItem(serverSpagoBi.getSelectionIndex());
+        MDMServerDef server = null;
 
-            List<SpagoBiServer> listServerSapgo = null;
+        String selectedSpagoBiEngineName = serverSpagoBi.getItem(serverSpagoBi.getSelectionIndex());
 
-            listServerSapgo = MDMServerHelper.parse(Activator.getDefault().getPreferenceStore().getString(
-                    MDMPreferenceInitializer.MDM_SERVER));
-            if (listServerSapgo != null && !listServerSapgo.isEmpty()) {
-                Iterator<SpagoBiServer> iterator = listServerSapgo.iterator();
-                while (iterator.hasNext()) {
-                    spagoBiServer = iterator.next();
-                    if (spagoBiServer.getShortDescription().equals(selectedSpagoBiEngineName)) {
-                        break;
-                    }
-                }
-            }
+        List<MDMServerDef> listServerSapgo = com.amalto.workbench.utils.MDMServerHelper.getServers();
+        for(MDMServerDef serv:listServerSapgo){
+        	if(selectedSpagoBiEngineName.equals(serv.getDesc())){
+        		server=serv;
+        		break;
+        	}
         }
+      
 
-        String user = spagoBiServer.getLogin();// "admin";
-        String password = spagoBiServer.getPassword();// "talend";
-        String host = spagoBiServer.getHost();
-        String port = spagoBiServer.getPort();
+        String user = server.getUser();// "admin";
+        String password = server.getPasswd();// "talend";
+        String host = server.getHost();
+        String port = server.getPort();
         // todo deploy to mdm server
 
         String filename = getDestinationValue();

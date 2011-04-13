@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.talend.mdm.engines.client.i18n.Messages;
 
-/**
+/**@deprecated
  * DOC cantoine class global comment. Detailled comment <br/>
  * 
  * $Id: MDMServerDialog.java 2738 2007-03-28 13:12:27Z cantoine $

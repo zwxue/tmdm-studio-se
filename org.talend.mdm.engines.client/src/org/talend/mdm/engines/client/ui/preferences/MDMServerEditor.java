@@ -31,7 +31,7 @@ import org.talend.mdm.engines.client.Activator;
 import org.talend.mdm.engines.client.i18n.Messages;
 import org.talend.mdm.engines.client.ui.wizards.MDMServerHelper;
 
-/**
+/**@deprecated
  * DOC cantoine class global comment. Detailled comment <br/>
  * 
  * $Id: MDMServerEditor.java 2738 2007-04-27 13:12:27Z cantoine $

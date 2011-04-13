@@ -19,7 +19,7 @@ import java.util.List;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.properties.SpagoBiServer;
 
-/**
+/**@deprecated
  * DOC cantoine class global comment. Detailled comment <br/>
  * 
  * $Id: SpagoBiServerHelper.java 2738 2007-04-27 13:12:27Z cantoine $
