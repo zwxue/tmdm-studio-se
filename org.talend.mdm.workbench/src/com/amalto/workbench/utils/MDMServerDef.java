@@ -28,9 +28,10 @@ public class MDMServerDef {
     private String passwd = "";//$NON-NLS-1$
 
     private String path = "/talend/TalendPort";//$NON-NLS-1$
-
+    
     public static final String PATTERN_URL = "^http://(.+):(\\d+)(/.*)";//$NON-NLS-1$
 
+    
     public MDMServerDef(String desc, String host, String port, String path, String user, String passwd) {
 
         this.desc = desc;

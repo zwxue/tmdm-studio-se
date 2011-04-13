@@ -57,6 +57,7 @@ import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.ListContentProvider;
 import com.amalto.workbench.utils.MDMServerDef;
+import com.amalto.workbench.utils.MDMServerHelper;
 import com.amalto.workbench.utils.PasswordUtil;
 import com.amalto.workbench.utils.PreferenceMDMServerExtractor;
 import com.amalto.workbench.utils.Util;
@@ -255,15 +256,7 @@ public class LoginDialog extends Dialog {
         	isOK=false;
         	return;
         }
-        //check description unique
-        for(MDMServerDef def:PreferenceMDMServerExtractor.getInstence().getMDMServerDefinitions()){
-        	if(def.getDesc().equals(descCombo.getCombo().getText()) && !def.getUrl().equals(urlText.getText())){
-        		MessageDialog.openWarning(null, "Warning", "Description is already exists, please use another one!");
-        		descCombo.getCombo().setFocus();
-        		isOK=false;
-        		return;
-        	}
-        }
+
         isOK=true;
         SAXReader reader = new SAXReader();
         Element root = null;
@@ -279,10 +272,18 @@ public class LoginDialog extends Dialog {
             logininfoDocument = DocumentHelper.createDocument();
             root = logininfoDocument.addElement("MDMServer");//$NON-NLS-1$
         }
-
+        //check description unique
+        Element descEl=    checkServerDesc(root);    
+    	if( descEl!=null && !urlText.getText().equals(descEl.element("url").getText())){
+    		MessageDialog.openWarning(null, "Warning", "Description is already exists, please use another one!");
+    		descCombo.getCombo().setFocus();
+    		isOK=false;
+    		return;
+    	}      
+        isOK=true;
         if (!isExist) {
             addServer(root);
-            updateServerListInPreference();
+            //updateServerListInPreference();
         }
 
         XMLWriter writer;
@@ -308,7 +309,15 @@ public class LoginDialog extends Dialog {
         setReturnCode(OK);
         // no close let Action Handler handle it
     }
-
+	private Element checkServerDesc(Element root){
+        List properties = root.elements("properties");//$NON-NLS-1$
+        for (Iterator iterator = properties.iterator(); iterator.hasNext();) {
+            Element ele = (Element) iterator.next();
+            if (descCombo.getCombo().getText().trim().equals(ele.element("desc").getText()))//$NON-NLS-1$                    
+                return ele;
+        }
+        return null;
+	}
     private boolean checkServer(Element root) {
         List properties = root.elements("properties");//$NON-NLS-1$
         for (Iterator iterator = properties.iterator(); iterator.hasNext();) {
@@ -330,7 +339,8 @@ public class LoginDialog extends Dialog {
         Element user = prop.addElement("user");//$NON-NLS-1$
         Element password = prop.addElement("password");//$NON-NLS-1$
         Element universe = prop.addElement("universe");//$NON-NLS-1$
-
+        Element desc = prop.addElement("desc");//$NON-NLS-1$
+        desc.setText(descCombo.getCombo().getText().trim());
         url.setText(urlText.getText().trim());
         user.setText(userText.getText());
         if (savePasswordButton.getSelection() == true)
@@ -368,14 +378,17 @@ public class LoginDialog extends Dialog {
             return "";//$NON-NLS-1$
         }
     }
-
+    /**
+     * 
+     * @return
+     */
     private MDMServerDef[] getInitMDMServers() {
 
-        MDMServerDef[] servers = PreferenceMDMServerExtractor.getInstence().getMDMServerDefinitions();
+    	List<MDMServerDef> servers = MDMServerHelper.getServers();
 
         MDMServerDef defaultMDMServerDef = new MDMServerDef();
 
-        if (servers.length == 0)
+        if (servers.size() == 0)
             return new MDMServerDef[] { defaultMDMServerDef };
 
         List<MDMServerDef> mdmServers = new ArrayList<MDMServerDef>();
@@ -415,6 +428,9 @@ public class LoginDialog extends Dialog {
         userText.setFocus();
     }
 
+    /**
+     * @deprecated
+     */
     private void updateServerListInPreference() {
 
         String description = descCombo.getCombo().getText().trim();//$NON-NLS-1$

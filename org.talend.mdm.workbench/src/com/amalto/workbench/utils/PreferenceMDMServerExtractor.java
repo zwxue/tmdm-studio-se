@@ -19,6 +19,11 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.Platform;
 
+/**
+ * @deprecated
+ * @author achen
+ *
+ */
 public class PreferenceMDMServerExtractor {
 
     private static final String PREFERENCENODE = "instance"; //$NON-NLS-1$
