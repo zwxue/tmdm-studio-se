@@ -46,6 +46,7 @@ public class DataModelRenameTest extends TalendSWTBotForMDM {
         bot.buttonWithTooltip("Add").click();
         bot.button("OK").click();
         sleep(2);
+        bot.activeEditor().save();
         SWTBotTreeItem newNode = dataModelItem.getNode("TestDataModel");
         Assert.assertNotNull(newNode);
         sleep(2);
@@ -68,7 +69,6 @@ public class DataModelRenameTest extends TalendSWTBotForMDM {
 
     @After
     public void runAfterEveryTest() {
-
         dataModelItem.getNode("RenameDataModel").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();

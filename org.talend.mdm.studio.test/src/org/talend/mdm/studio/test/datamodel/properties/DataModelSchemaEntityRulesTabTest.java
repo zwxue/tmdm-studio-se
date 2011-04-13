@@ -119,14 +119,14 @@ public class DataModelSchemaEntityRulesTabTest extends TalendSWTBotForMDM {
 		shell.activate();
 		bot.text().setText("ValidationRule");
 
-		bot.buttonWithTooltip("Add", 1).click();
+		bot.button("OK").click();
 		bot.button("Apply").click();
 	}
 
 	@Test
 	public void deleteValidationRuleTest() {
 		bot.tree(0).select(0);
-		bot.buttonWithTooltip("Del", 0).click();
+		bot.buttonWithTooltip("Remove", 0).click();
 		bot.button("Apply").click();
 	}
 

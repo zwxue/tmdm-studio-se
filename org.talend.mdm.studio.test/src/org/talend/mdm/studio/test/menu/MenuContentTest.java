@@ -40,12 +40,15 @@ public class MenuContentTest extends TalendSWTBotForMDM {
     public void runBeforeEveryTest() {
         menuParentItem = serverItem.getNode("Menu [HEAD]");
         menuParentItem.expand();
-
+        init();
     }
 
     @After
     public void runAfterEveryTest() {
-
+        menuParentItem.getNode("TestMenu").contextMenu("Delete").click();
+        sleep();
+        bot.button("OK").click();
+        sleep();
     }
 
     private void init() {
@@ -65,7 +68,6 @@ public class MenuContentTest extends TalendSWTBotForMDM {
 
     @Test
     public void setDescriptionTest() {
-        init();
         String des = "This is a description for TestMenu";
         bot.textWithLabel("Description").setText(des);
         Assert.assertEquals(des, bot.textWithLabel("Description").getText());
@@ -130,9 +132,5 @@ public class MenuContentTest extends TalendSWTBotForMDM {
         Assert.assertNull(bot.tree().getTreeItem("TestMenu - [en: TestMenu]"));
         sleep();
 
-        menuParentItem.getNode("TestMenu").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
     }
 }

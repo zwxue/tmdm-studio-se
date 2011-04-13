@@ -44,6 +44,8 @@ public class DataModelTypesElementRelationshipTabTest extends
 		TalendSWTBotForMDM {
 
 	private SWTBotTree elementsBotTree;
+	
+	private SWTBotTree typesBotTree;
 
 	private DataModelMainPage mainpage;
 
@@ -80,7 +82,10 @@ public class DataModelTypesElementRelationshipTabTest extends
 		});
 		Tree elemetnsTree = mainpage.getElementsViewer().getTree();
 		elementsBotTree = new SWTBotTree(elemetnsTree);
+		Tree typesTree = mainpage.getTypesViewer().getTree();
+		typesBotTree = new SWTBotTree(typesTree);
 		newEntity();
+		bot.activeEditor().save();
 		// addComplexType();
 		bot.viewById(IPageLayout.ID_PROP_SHEET).setFocus();
 		Util.selecteTalendTabbedPropertyListAtIndex(bot, 3);
@@ -95,7 +100,7 @@ public class DataModelTypesElementRelationshipTabTest extends
 		sleep();
 		bot.button("OK").click();
 		sleep(2);
-		typeNode = elementsBotTree.getTreeItem("ComplexTypeEntityType")
+		typeNode = typesBotTree.getTreeItem("ComplexTypeEntityType")
 				.expand().getNode("subelement");
 		typeNode.select();
 		bot.toolbarButtonWithTooltip("Expand...", 0).click();
@@ -125,16 +130,14 @@ public class DataModelTypesElementRelationshipTabTest extends
 	@Test
 	public void setForeignKeyFilterTest() {
 		bot.buttonWithTooltip("Add", 0).click();
-		bot.buttonWithTooltip("Select Xpath", 1).click();
-
-		bot.tree().expandNode("BrowseItem").select("Owner");
-		bot.button("OK").click();
+		bot.table().click(0,0);
+		bot.text().setText("BrowseItem/Owner");
 		bot.button("Apply").click();
 	}
 
 	@Test
 	public void setForeignKeyInfoTest() {
-		bot.buttonWithTooltip("Select Xpath", 2).click();
+		bot.buttonWithTooltip("Select Xpath", 1).click();
 		bot.tree().select(0);
 		bot.button("OK").click();
 		bot.buttonWithTooltip("Add", 1).click();

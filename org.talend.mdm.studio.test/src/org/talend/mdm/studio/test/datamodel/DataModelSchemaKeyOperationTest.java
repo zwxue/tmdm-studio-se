@@ -95,8 +95,8 @@ public class DataModelSchemaKeyOperationTest extends TalendSWTBotForMDM {
         sleep();
         SWTBotShell changeTypeShell = bot.shell("Add a new Key");
         changeTypeShell.activate();
-        bot.text().setText("addKeyTest");
-        bot.ccomboBox(0).setSelection(1);
+        bot.ccomboBox(1).setSelection(1);
+        bot.text().setText("Test");
         bot.button("OK").click();
     }
 

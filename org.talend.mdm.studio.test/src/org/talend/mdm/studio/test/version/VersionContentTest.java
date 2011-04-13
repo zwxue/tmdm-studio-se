@@ -63,10 +63,7 @@ public class VersionContentTest extends TalendSWTBotForMDM {
 
 	@After
 	public void runAfterEveryTest() {
-		versionItem.contextMenu("Delete").click();
-		sleep();
-		bot.button("OK").click();
-		sleep();
+
 	}
 
 	@Test
@@ -94,6 +91,11 @@ public class VersionContentTest extends TalendSWTBotForMDM {
 		bot.button("Execute Procedure").click();
 
 		versionParentItem.getNode("TestVersion").contextMenu("Delete").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+		
+		versionItem.contextMenu("Delete").click();
 		sleep();
 		bot.button("OK").click();
 		sleep();

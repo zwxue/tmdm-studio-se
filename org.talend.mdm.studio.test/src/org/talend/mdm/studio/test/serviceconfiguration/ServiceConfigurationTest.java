@@ -12,6 +12,7 @@
 // ============================================================================
 package org.talend.mdm.studio.test.serviceconfiguration;
 
+import org.eclipse.swtbot.eclipse.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
@@ -33,6 +34,7 @@ public class ServiceConfigurationTest extends TalendSWTBotForMDM {
 		scItem = serverItem.getNode("Service Configuration");
 		scItem.expand();
 		scItem.doubleClick();
+		sleep(2);
 	}
 
 	@After

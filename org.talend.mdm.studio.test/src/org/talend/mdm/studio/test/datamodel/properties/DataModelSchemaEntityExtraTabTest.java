@@ -114,7 +114,7 @@ public class DataModelSchemaEntityExtraTabTest extends TalendSWTBotForMDM {
 	}
 
 	public void newElement() {
-		conceptBotTree.getTreeItem("ComplexTypeEntityType")
+		conceptBotTree.getTreeItem("ComplexTypeEntity").getNode("ComplexTypeEntityType")
 				.contextMenu("Add Element").click();
 
 		SWTBotShell newElementShell = bot.shell("Add a new Business Element");

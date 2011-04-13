@@ -6,6 +6,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
@@ -25,9 +26,9 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
 
     private DataModelMainPage mainpage;
 
-    private SWTBotTreeItem conceptNode;
+    private SWTBotTreeItem entityNode;
 
-    private SWTBotTreeItem eleItem;
+    private SWTBotTreeItem elementNode;
 
     private SWTBotTreeItem groupItem;
 
@@ -35,13 +36,24 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
 
     @Before
     public void runBeforeEveryTest() {
-        dataModelItem = serverItem.getNode("Data Model [HEAD]");
-        dataModelItem.expand();
+		dataModelItem = serverItem.getNode("Data Model [HEAD]");
+		dataModelItem.expand();
 
-        SWTBotTreeItem node = dataModelItem.expandNode("System").expand().getNode("Reporting");
-        node.doubleClick();
+		dataModelItem.contextMenu("New").click();
+		SWTBotShell newDataContainerShell = bot.shell("New Data Model");
+		newDataContainerShell.activate();
+		SWTBotText text = bot
+				.textWithLabel("Enter a name for the New Instance");
+		text.setText("TestDataModel");
+		sleep();
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+		Assert.assertNotNull(dataModelItem.getNode("TestDataModel"));
+		sleep(2);
 
-        final SWTBotEditor editor = bot.editorByTitle("Reporting");
+		final SWTBotEditor editor = bot.editorByTitle("TestDataModel");
 		Display.getDefault().syncExec(new Runnable() {
 
 			public void run() {
@@ -49,14 +61,11 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
 				mainpage = (DataModelMainPage) ep.getSelectedPage();
 			}
 		});
-        Tree conceptTree = mainpage.getElementsViewer().getTree();
-        conceptBotTree = new SWTBotTree(conceptTree);
-        conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select().expand();
-        groupItem = conceptNode.getNode("ReportingType");
-        groupItem.expand();
-        eleItem = groupItem.getNode("Concept");
-    }
+		Tree conceptTree = mainpage.getElementsViewer().getTree();
+		conceptBotTree = new SWTBotTree(conceptTree);
+		newEntity();
+    	newElement();
+	}
 
     @After
     public void runAfterEveryTest() {
@@ -69,15 +78,42 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
         });
     	bot.activeEditor().close();
     }
+    
+    public void newEntity() {
+    	conceptBotTree.contextMenu("New Entity").click();
+    	SWTBotShell newEntityShell = bot.shell("New Entity");
+    	newEntityShell.activate();
+    	// create a entity with a complex type
+    	bot.textWithLabel("Name:").setText("ComplexTypeEntity");
+    	sleep();
+    	bot.button("OK").click();
+    	sleep(2);
+    	entityNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
+    	entityNode.select();
+    	bot.toolbarButtonWithTooltip("Expand...", 0).click();
+    }
+	public void newElement() {
+		SWTBotTreeItem typeNode = entityNode.getNode("ComplexTypeEntityType");
+		typeNode.contextMenu("Add Element").click();
+
+		SWTBotShell newElementShell = bot.shell("Add a new Business Element");
+		newElementShell.activate();
+		bot.textWithLabel("Business Element Name").setText("Ele");
+		sleep();
+		bot.button("OK").click();
+		sleep(2);
+		elementNode = typeNode.getNode("Ele [0...1]");
+		elementNode.select().expand();
+	}
     //new feature in 4.2,see bug 0017128
     @Test
     public void autoPlaceCursorTest(){
-        eleItem.select();
+        elementNode.select();
         bot.cTabItem(2).activate();
     }
     @Test
     public void editElementTest() {
-        eleItem.contextMenu("Edit Element").click();
+        elementNode.contextMenu("Edit Element").click();
         SWTBotShell newEntityShell = bot.shell("Edit Business Element");
         newEntityShell.activate();
         // create a entity with a complex type
@@ -86,7 +122,7 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
         bot.button("OK").click(); // create a entity with a simple type
         sleep(2);
         Assert.assertNotNull(groupItem.getNode("ConceptTest"));
-        eleItem.contextMenu("Edit Element").click();
+        elementNode.contextMenu("Edit Element").click();
         newEntityShell = bot.shell("Edit Business Element");
         newEntityShell.activate();
         bot.textWithLabel("Business Element Name").setText("Concept");
@@ -100,7 +136,7 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
     @Test
     public void addElementTest() {
         // SWTBotTreeItem groupItem = conceptNode.getNode("ReportingType");
-        eleItem.contextMenu("Add Element (after)").click();
+        elementNode.contextMenu("Add Element (after)").click();
         SWTBotShell newEntityShell = bot.shell("Add a new Business Element");
         newEntityShell.activate();
         bot.textWithLabel("Business Element Name").setText("testElement");
@@ -113,9 +149,9 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
     @Test
     public void copyElementTest() {
         // TODO:I can not paste a element after I copy the element.
-        eleItem.contextMenu("Copy Element").click();
+        elementNode.contextMenu("Copy Element").click();
         sleep();
-        eleItem.contextMenu("Paste Element").click();
+        elementNode.contextMenu("Paste Element").click();
         sleep();
         SWTBotShell saveShell = bot.shell("Paste Element");
         saveShell.activate();
@@ -125,7 +161,7 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
 
     @Test
     public void changeToComplexTypeTest() {
-        eleItem.contextMenu("Change to a Complex Type").click();
+        elementNode.contextMenu("Change to a Complex Type").click();
         sleep();
         SWTBotShell changeTypeShell = bot.shell("Change To Complex Type");
         changeTypeShell.activate();
@@ -137,7 +173,7 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
 
     @Test
     public void changeToSimpleTypeTest() {
-        eleItem.contextMenu("Change to a Simple Type").click();
+        elementNode.contextMenu("Change to a Simple Type").click();
         sleep();
         SWTBotShell changeTypeShell = bot.shell("Make Simple Type");
         changeTypeShell.activate();
@@ -151,7 +187,7 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
 
     @Test
     public void setLabelsTest() {
-        eleItem.contextMenu("Set the Labels").click();
+        elementNode.contextMenu("Set the Labels").click();
         sleep();
         SWTBotShell shell = bot.shell("Set the Labels");
         shell.activate();
@@ -168,12 +204,12 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
         sleep();
         bot.button("OK").click();
         sleep();
-        Assert.assertNotNull(eleItem.expand().getNode("Annotations").expand().getNode("English Label: en"));
+        Assert.assertNotNull(elementNode.expand().getNode("Annotations").expand().getNode("English Label: en"));
     }
 
     @Test
     public void setDescriptionsTest() {
-        eleItem.contextMenu("Set the Descriptions").click();
+        elementNode.contextMenu("Set the Descriptions").click();
         sleep();
         SWTBotShell shell = bot.shell("Set the Descriptions of This Element");
         shell.activate();
@@ -187,14 +223,14 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
         sleep();
         bot.table().select(1);
         bot.buttonWithTooltip("Del").click();
-        Assert.assertNotNull(eleItem.expand().getNode("Annotations").expand().getNode("English Description: enlish description"));
+        Assert.assertNotNull(elementNode.expand().getNode("Annotations").expand().getNode("English Description: enlish description"));
         sleep();
         bot.button("OK").click();
     }
 
     @Test
     public void setWriteAccessTest() {
-        eleItem.contextMenu("Set the Roles with Write Access").click();
+        elementNode.contextMenu("Set the Roles with Write Access").click();
         SWTBotShell newViewShell = bot.shell("Set The Roles That Have Write Access");
         newViewShell.activate();
         bot.ccomboBox().setSelection("System_Web");
@@ -213,13 +249,13 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
         bot.buttonWithTooltip("Delete the selected item").click();
         sleep();
         bot.button("OK").click();
-        Assert.assertNotNull(eleItem.expand().getNode("Annotations").expand().getNode("Writable By : System_Admin"));
+        Assert.assertNotNull(elementNode.expand().getNode("Annotations").expand().getNode("Writable By : System_Admin"));
         sleep();
     }
 
     @Test
     public void setNoAccessTest() {
-        eleItem.contextMenu("Set the Roles with No Access").click();
+        elementNode.contextMenu("Set the Roles with No Access").click();
         SWTBotShell newViewShell = bot.shell("Set The Roles That Cannot Access This Field");
         newViewShell.activate();
         bot.ccomboBox().setSelection("System_Web");
@@ -239,13 +275,13 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
         sleep();
         bot.button("OK").click();
         sleep();
-        Assert.assertNotNull(eleItem.expand().getNode("Annotations").expand().getNode("No Access to: System_Web"));
+        Assert.assertNotNull(elementNode.expand().getNode("Annotations").expand().getNode("No Access to: System_Web"));
     }
 
     @Test
     public void setWorkflowAccessTest() {
         // TODO:check this action
-        eleItem.contextMenu("Set the Workflow Access").click();
+        elementNode.contextMenu("Set the Workflow Access").click();
         SWTBotShell shell = bot.shell("Set the Workflow Access");
         shell.activate();
     }
@@ -258,7 +294,7 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
                 mainpage.doSave(new NullProgressMonitor());
             }
         });
-        eleItem.contextMenu("Set the Foreign Key").click();
+        elementNode.contextMenu("Set the Foreign Key").click();
         SWTBotShell shell = bot.shell("Set the Foreign Key");
         shell.activate();
         bot.buttonWithTooltip("Select xpath").click();
@@ -276,7 +312,7 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
         shell = bot.shell("Set the Foreign Key");
         shell.activate();
         bot.button("OK").click();
-        Assert.assertNotNull(eleItem.expand().getNode("Annotations").expand().getNode("Foreign Key: Reporting"));
+        Assert.assertNotNull(elementNode.expand().getNode("Annotations").expand().getNode("Foreign Key: Reporting"));
     }
 
     @Test
@@ -287,7 +323,7 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
                 mainpage.doSave(new NullProgressMonitor());
             }
         });
-        eleItem.contextMenu("Set the Foreign Key Filter").click();
+        elementNode.contextMenu("Set the Foreign Key Filter").click();
         SWTBotShell shell = bot.shell("Set Foreign Key Filter");
         shell.activate();
         bot.buttonWithTooltip("Add").click();
@@ -301,7 +337,7 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
         bot.text().setText("filter");
         sleep();
         bot.button("OK").click();
-        Assert.assertNotNull(eleItem.expand().getNode("Annotations").expand().getNode("Foreign Key Filter: Reporting"));
+        Assert.assertNotNull(elementNode.expand().getNode("Annotations").expand().getNode("Foreign Key Filter: Reporting"));
     }
 
     @Test
@@ -312,7 +348,7 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
                 mainpage.doSave(new NullProgressMonitor());
             }
         });
-        eleItem.contextMenu("Set the Foreign Key Infos").click();
+        elementNode.contextMenu("Set the Foreign Key Infos").click();
         SWTBotShell shell = bot.shell("Set the Foreign Key Infos");
         shell.activate();
         bot.buttonWithTooltip("Select xpath").click();
@@ -330,12 +366,12 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
 
         bot.buttonWithTooltip("Add").click();
         bot.button("OK").click();
-        Assert.assertNotNull(eleItem.expand().getNode("Annotations").expand().getNode("Foreign Key Info: Reporting"));
+        Assert.assertNotNull(elementNode.expand().getNode("Annotations").expand().getNode("Foreign Key Info: Reporting"));
     }
 
     @Test
     public void setFacetTest() {
-        eleItem.contextMenu("Set the facet message").click();
+        elementNode.contextMenu("Set the facet message").click();
         sleep();
         SWTBotShell shell = bot.shell("Set multilingual facet error messages for the content of this element");
         shell.activate();
@@ -352,12 +388,12 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
         sleep();
         bot.button("OK").click();
         sleep();
-        Assert.assertNotNull(eleItem.expand().getNode("Annotations").expand().getNode("Facet_Msg_EN: Reporting"));
+        Assert.assertNotNull(elementNode.expand().getNode("Annotations").expand().getNode("Facet_Msg_EN: Reporting"));
     }
 
     @Test
     public void setDisplayFormatTest() {
-        eleItem.contextMenu("Set the display format").click();
+        elementNode.contextMenu("Set the display format").click();
         sleep();
         SWTBotShell shell = bot.shell("Set the display format for the content of this element");
         shell.activate();
@@ -379,14 +415,14 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
     @Test
     public void copyXpathTest() {
         // TODO:it dose nothing now,need to check
-        eleItem.contextMenu("Copy Xpath").click();
+        elementNode.contextMenu("Copy Xpath").click();
         sleep();
 
     }
 
     @Test
     public void newEntityTest() {
-        eleItem.contextMenu("New Entity").click();
+        elementNode.contextMenu("New Entity").click();
         SWTBotShell newEntityShell = bot.shell("New Entity");
         newEntityShell.activate();
         // create a entity with a complex type

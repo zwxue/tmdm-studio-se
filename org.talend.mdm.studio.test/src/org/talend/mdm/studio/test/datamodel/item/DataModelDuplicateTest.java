@@ -69,6 +69,8 @@ public class DataModelDuplicateTest extends TalendSWTBotForMDM {
 
     @After
     public void runAfterEveryTest() {
+    	bot.activeEditor().save();
+    	bot.activeEditor().close();
         dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
         sleep();
         bot.button("OK").click();

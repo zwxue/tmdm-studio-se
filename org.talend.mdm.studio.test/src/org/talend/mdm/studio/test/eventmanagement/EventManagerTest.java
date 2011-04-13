@@ -25,7 +25,7 @@ public class EventManagerTest extends TalendSWTBotForMDM {
 
     @After
     public void runAfterEveryTest() {
-    	bot.activeEditor().close();
+    
     }
 
     @Test
@@ -54,6 +54,6 @@ public class EventManagerTest extends TalendSWTBotForMDM {
         // bot.comboBoxWithLabel("Status").setSelection(2);
         // bot.buttonWithTooltip("Search").click();
         // sleep();
-
+    	bot.activeEditor().close();
     }
 }

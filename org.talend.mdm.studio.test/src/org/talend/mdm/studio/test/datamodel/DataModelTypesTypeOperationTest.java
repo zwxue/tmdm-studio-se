@@ -148,7 +148,7 @@ public class DataModelTypesTypeOperationTest extends TalendSWTBotForMDM {
 
 	@Test
 	public void deleteComplexTypeTest() {
-		typeNode.contextMenu("Delete type definition").click();
+		typesBotTree.getTreeItem("ReportingType").contextMenu("Delete type definition").click();
 		sleep();
 		bot.button("OK").click();
 		sleep();

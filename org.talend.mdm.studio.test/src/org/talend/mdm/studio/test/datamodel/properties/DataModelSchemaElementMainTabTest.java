@@ -115,8 +115,8 @@ public class DataModelSchemaElementMainTabTest extends TalendSWTBotForMDM {
 	}
 
 	public void newElement() {
-		conceptBotTree.getTreeItem("ComplexTypeEntityType")
-				.contextMenu("Add Element").click();
+		SWTBotTreeItem typeNode = entityNode.getNode("ComplexTypeEntityType");
+		typeNode.contextMenu("Add Element").click();
 
 		SWTBotShell newElementShell = bot.shell("Add a new Business Element");
 		newElementShell.activate();
@@ -124,7 +124,7 @@ public class DataModelSchemaElementMainTabTest extends TalendSWTBotForMDM {
 		sleep();
 		bot.button("OK").click();
 		sleep(2);
-		elementNode = entityNode.getNode("Ele");
+		elementNode = typeNode.getNode("Ele [0...1]");
 		elementNode.select().expand();
 	}
 

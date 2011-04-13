@@ -20,13 +20,16 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
+import org.eclipse.ui.IPageLayout;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
+import org.talend.mdm.studio.test.util.Util;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.xsdeditor.XSDEditor;
@@ -44,16 +47,29 @@ public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
     private DataModelMainPage mainpage;
 
     private SWTBotTreeItem dataModelItem;
+    
+	private SWTBotTreeItem conceptNode;
 
     @Before
     public void runBeforeEveryTest() {
-        dataModelItem = serverItem.getNode("Data Model [HEAD]");
-        dataModelItem.expand();
+		dataModelItem = serverItem.getNode("Data Model [HEAD]");
+		dataModelItem.expand();
 
-        SWTBotTreeItem node = dataModelItem.expandNode("System").expand().getNode("Reporting");
-        node.doubleClick();
+		dataModelItem.contextMenu("New").click();
+		SWTBotShell newDataContainerShell = bot.shell("New Data Model");
+		newDataContainerShell.activate();
+		SWTBotText text = bot
+				.textWithLabel("Enter a name for the New Instance");
+		text.setText("TestDataModel");
+		sleep();
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+		Assert.assertNotNull(dataModelItem.getNode("TestDataModel"));
+		sleep(2);
 
-        final SWTBotEditor editor = bot.editorByTitle("Reporting");
+		final SWTBotEditor editor = bot.editorByTitle("TestDataModel");
 		Display.getDefault().syncExec(new Runnable() {
 
 			public void run() {
@@ -61,52 +77,65 @@ public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
 				mainpage = (DataModelMainPage) ep.getSelectedPage();
 			}
 		});
-        Tree conceptTree = mainpage.getElementsViewer().getTree();
-        conceptBotTree = new SWTBotTree(conceptTree);
-    }
+		Tree conceptTree = mainpage.getElementsViewer().getTree();
+		conceptBotTree = new SWTBotTree(conceptTree);
+		newEntity();
+	}
 
     @After
     public void runAfterEveryTest() {
-        Display.getDefault().syncExec(new Runnable() {
+		Display.getDefault().syncExec(new Runnable() {
 
-            public void run() {
-                mainpage.doSave(new NullProgressMonitor());
-            }
-        });
-    	bot.activeEditor().close();
+			public void run() {
+				mainpage.doSave(new NullProgressMonitor());
+				bot.activeEditor().close();
+			}
+		});
+		dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
+		bot.button("OK").click();
+	}
+    public void newEntity() {
+    	conceptBotTree.contextMenu("New Entity").click();
+    	SWTBotShell newEntityShell = bot.shell("New Entity");
+    	newEntityShell.activate();
+    	// create a entity with a complex type
+    	bot.textWithLabel("Name:").setText("ComplexTypeEntity");
+    	sleep();
+    	bot.button("OK").click();
+    	sleep(2);
+    	conceptNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
+    	conceptNode.select();
+    	bot.toolbarButtonWithTooltip("Expand...", 0).click();
     }
+	public void newElement() {
+		conceptBotTree.getTreeItem("ComplexTypeEntity").getNode("ComplexTypeEntityType")
+				.contextMenu("Add Element").click();
 
+		SWTBotShell newElementShell = bot.shell("Add a new Business Element");
+		newElementShell.activate();
+		bot.textWithLabel("Business Element Name").setText("Ele");
+		sleep();
+		bot.button("OK").click();
+		sleep(2);
+		conceptNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
+		conceptNode.select();
+		bot.toolbarButtonWithTooltip("Expand...").click();
+	}
     @Test
     public void newEntityTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select();
-
-        conceptNode.contextMenu("New Entity").click();
-        SWTBotShell newEntityShell = bot.shell("New Entity");
-        newEntityShell.activate();
-        // create a entity with a complex type
-        bot.textWithLabel("Name:").setText("ComplexTypeEntity");
-        sleep();
-        bot.button("OK").click(); 
-        sleep(2);
-        // create a entity with a simple type
-        conceptNode.contextMenu("New Entity").click();
-        newEntityShell = bot.shell("New Entity");
-        newEntityShell.activate();
-        bot.textWithLabel("Name:").setText("SimpleTypeEntity");
-        sleep();
-        bot.radio("Simple Type").click();
-        sleep();
-        bot.button("OK").click();
-    }
+    	conceptNode.contextMenu("New Entity").click();
+		SWTBotShell newEntityShell = bot.shell("New Entity");
+		newEntityShell.activate();
+		// create a entity with a complex type
+		bot.textWithLabel("Name:").setText("newEntity");
+		sleep();
+		bot.button("OK").click();
+		sleep(2);
+	}
 
     @Test
     public void deleteEntityTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
-        conceptNode.select();
-        conceptNode.contextMenu("Delete Entity").click();
-        sleep();
-        conceptNode = conceptBotTree.getTreeItem("SimpleTypeEntity");
+        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("newEntity");
         conceptNode.select();
         conceptNode.contextMenu("Delete Entity").click();
         sleep();
@@ -114,35 +143,22 @@ public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
 
     @Test
     public void editEntityTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select();
         conceptNode.contextMenu("Edit Entity").click();
         SWTBotShell editEntityShell = bot.shell("Edit Entity");
         editEntityShell.activate();
-        bot.textWithLabel("Enter a new Name for the Entity").setText("TestEdit");
+        bot.textWithLabel("Enter a new Name for the Entity").setText("EditEntity");
         sleep();
         bot.button("OK").click();
         sleep(2);
-        Assert.assertEquals("TestEdit", conceptNode.getText());
+        Assert.assertEquals("EditEntity", conceptNode.getText());
         //new feature in 4.2,see bug 0017070:
-        Assert.assertNotNull(conceptNode.getNode("TestEdit"));
-        // Revert the changes
-        conceptNode.doubleClick();
-        editEntityShell = bot.shell("Edit Entity");
-        editEntityShell.activate();
-        bot.textWithLabel("Enter a new Name for the Entity").setText("Reporting");
-        sleep();
-        bot.button("OK").click();
+//        Assert.assertNotNull(conceptNode.getNode("EditEntity"));
     }
 
     @Test
     public void generateDefaultViewTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select();
+    	bot.activeEditor().save();
         conceptNode.contextMenu("Generate default Browse Items Views").click();
-        SWTBotShell saveShell = bot.shell("Save Resource");
-        saveShell.activate();
-        bot.button("OK").click();
         sleep();
         SWTBotShell generateViewShell = bot.shell("Generate default Browse Items Views");
         generateViewShell.activate();
@@ -151,8 +167,6 @@ public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
 
     @Test
     public void copyEntityTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select();
         conceptNode.contextMenu("Copy Entity").click();
         sleep();
         conceptNode.select();
@@ -163,24 +177,9 @@ public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
         bot.button("OK").click();
         sleep();
     }
-
-    @Test
-    public void changeToComplexTypeTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select();
-        conceptNode.contextMenu("Change to a Complex Type").click();
-        sleep();
-        SWTBotShell changeTypeShell = bot.shell("Change To Complex Type");
-        changeTypeShell.activate();
-        bot.radio("Sequence").click();
-        bot.button("OK").click();
-        sleep(2);
-    }
-
+    
     @Test
     public void changeToSimpleTypeTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select();
         conceptNode.contextMenu("Change to a Simple Type").click();
         sleep();
         SWTBotShell changeTypeShell = bot.shell("Make Simple Type");
@@ -192,24 +191,33 @@ public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
         bot.button("OK").click();
         sleep(2);
     }
+    @Test
+    public void changeToComplexTypeTest() {
+        conceptNode.contextMenu("Change to a Complex Type").click();
+        sleep();
+        SWTBotShell changeTypeShell = bot.shell("Change To Complex Type");
+        changeTypeShell.activate();
+        bot.radio("Sequence").click();
+        bot.button("OK").click();
+        sleep(2);
+    }
+
+
 
     @Test
     public void addKeyTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select();
         conceptNode.contextMenu("Add Key").click();
         sleep();
         SWTBotShell changeTypeShell = bot.shell("Add a new Key");
         changeTypeShell.activate();
-        bot.text().setText("Test");
+        bot.comboBox(1).setSelection(1);
         bot.ccomboBox(0).setSelection(1);
+        bot.text().setText("Test");
         bot.button("OK").click();
     }
 
     @Test
     public void setLabelsTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select();
         conceptNode.contextMenu("Set the Labels").click();
         sleep();
         SWTBotShell shell = bot.shell("Set the Labels");
@@ -231,8 +239,6 @@ public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
 
     @Test
     public void setDescriptionsTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select();
         conceptNode.contextMenu("Set the Descriptions").click();
         sleep();
         SWTBotShell shell = bot.shell("Set the Descriptions of This Element");
@@ -253,8 +259,7 @@ public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
 
     @Test
     public void setLookupFieldsTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select();
+    	newElement();
         conceptNode.contextMenu("Set Lookup Fields").click();
         sleep();
         SWTBotShell shell = bot.shell("Set Lookup Fields");
@@ -279,8 +284,6 @@ public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
 
     @Test
     public void setWriteAccessTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select();
         conceptNode.contextMenu("Set the Roles with Write Access").click();
         SWTBotShell newViewShell = bot.shell("Set The Roles That Have Write Access");
         newViewShell.activate();
@@ -305,8 +308,6 @@ public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
 
     @Test
     public void setNoAccessTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select();
         conceptNode.contextMenu("Set the Roles with No Access").click();
         SWTBotShell newViewShell = bot.shell("Set The Roles That Cannot Access This Field");
         newViewShell.activate();
@@ -331,27 +332,25 @@ public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
 
     @Test
     public void setWorkflowAccessTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select();
         conceptNode.contextMenu("Set the Workflow Access").click();
         SWTBotShell shell = bot.shell("Set the Workflow Access");
         shell.activate();
+        bot.buttonWithTooltip("Add").click();
+        bot.button("OK").click();
     }
 
     @Test
     public void addValidationRuleTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select();
         conceptNode.contextMenu("Set the Validation Rule").click();
         SWTBotShell shell = bot.shell("Add a Validation Rule");
         shell.activate();
         bot.text().setText("vadation rule");
+        bot.buttonWithTooltip("Add").click();
+        bot.button("OK").click();
     }
 
     @Test
     public void deleteValidationRuleTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select();
         conceptNode.contextMenu("Delete All Validation Rules").click();
         SWTBotShell shell = bot.shell("Confirm");
         shell.activate();

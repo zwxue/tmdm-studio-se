@@ -124,7 +124,7 @@ public class DataModelSchemaEntityMainTabTest extends TalendSWTBotForMDM {
 		bot.buttonWithTooltip("Add key...").click();
 		SWTBotShell shell = bot.shell("Add a new Key");
 		shell.activate();
-		bot.ccomboBox(0).setSelection(1);
+		bot.ccomboBoxWithLabel("Type").setSelection(1);
 		bot.text().setText("Test");
 		bot.button("OK").click();
 
@@ -134,7 +134,7 @@ public class DataModelSchemaEntityMainTabTest extends TalendSWTBotForMDM {
 
 	@Test
 	public void deleteKeyTest() {
-		bot.tree(0).select("Test");
+		bot.treeInGroup("Key Definition",0).select("Test");
 		bot.buttonWithTooltip("Delete keys").click();
 
 		bot.button("Apply").click();
@@ -155,7 +155,7 @@ public class DataModelSchemaEntityMainTabTest extends TalendSWTBotForMDM {
 
 	@Test
 	public void editFieldTest() {
-		bot.tree(0).select("Test");
+		bot.treeInGroup("Key Definition",1).select("Test");
 		bot.buttonWithTooltip("Edit Field...").click();
 		SWTBotShell shell = bot.shell("Select one field");
 		shell.activate();
@@ -163,7 +163,7 @@ public class DataModelSchemaEntityMainTabTest extends TalendSWTBotForMDM {
 		bot.button("OK").click();
 
 		bot.button("Apply").click();
-		Assert.assertNotNull(conceptNode.getNode("Test1").getNode("Test"));
+		Assert.assertNotNull(conceptNode.getNode("Test").getNode("Test1"));
 	}
 
 	@Test

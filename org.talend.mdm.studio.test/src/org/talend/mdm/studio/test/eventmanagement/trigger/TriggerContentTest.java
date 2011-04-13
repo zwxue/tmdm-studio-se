@@ -182,7 +182,7 @@ public class TriggerContentTest extends TalendSWTBotForMDM {
 		sleep();
 		Assert.assertEquals("C0 And C1 And C2", bot.textInGroup("Conditions:")
 				.getText());
-		
+		bot.activeEditor().save();
 		SWTBotMenu deleteMenu = triggerParentNode.getNode("TriggerDemo").contextMenu("Delete");
 		deleteMenu.click();
 		sleep();

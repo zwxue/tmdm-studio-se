@@ -108,9 +108,15 @@ public class DataModelSchemaEntityPresentationTabTest extends
 		sleep();
 		bot.button("OK").click();
 		sleep(2);
+		expand();
+
+	}
+
+	private void expand() {
 		conceptNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
 		conceptNode.select();
 		bot.toolbarButtonWithTooltip("Expand...", 0).click();
+		
 	}
 
 	@Test
@@ -118,31 +124,31 @@ public class DataModelSchemaEntityPresentationTabTest extends
 		bot.text(0).setText("en");
 		bot.buttonWithTooltip("Add", 0).click();
 		bot.button("Apply").click();
+		expand();
 		Assert.assertNotNull(conceptNode.getNode("Annotations").expand()
 				.getNode("English Label:en"));
 	}
 
 	@Test
 	public void deleteLabelsTest() {
-		bot.text(0).setText("en");
+		bot.table(0).select(0);
 		bot.buttonWithTooltip("Del", 0).click();
 		bot.button("Apply").click();
-		Assert.assertNull(conceptNode.getNode("Annotations").expand()
-				.getNode("English Label:en"));
 	}
 
 	@Test
 	public void addDescriptionsTest() {
-		bot.text(0).setText("en");
+		bot.text(1).setText("en");
 		bot.buttonWithTooltip("Add", 1).click();
 		bot.button("Apply").click();
+		expand();
 		Assert.assertNotNull(conceptNode.getNode("Annotations").expand()
 				.getNode("English Description: en"));
 	}
 
 	@Test
 	public void deleteDescriptionsTest() {
-		bot.text(0).setText("en");
+		bot.table(1).select(0);
 		bot.buttonWithTooltip("Del", 1).click();
 		bot.button("Apply").click();
 		Assert.assertNull(conceptNode.getNode("Annotations").expand()

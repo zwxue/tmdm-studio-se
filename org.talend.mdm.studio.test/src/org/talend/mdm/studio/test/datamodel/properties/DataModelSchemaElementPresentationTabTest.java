@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
@@ -116,8 +117,8 @@ public class DataModelSchemaElementPresentationTabTest extends
 	}
 
 	public void newElement() {
-		conceptBotTree.getTreeItem("ComplexTypeEntityType")
-				.contextMenu("Add Element").click();
+		SWTBotTreeItem typeNode = entityNode.getNode("ComplexTypeEntityType");
+		typeNode.contextMenu("Add Element").click();
 
 		SWTBotShell newElementShell = bot.shell("Add a new Business Element");
 		newElementShell.activate();
@@ -125,7 +126,7 @@ public class DataModelSchemaElementPresentationTabTest extends
 		sleep();
 		bot.button("OK").click();
 		sleep(2);
-		elementNode = entityNode.getNode("Ele");
+		elementNode = typeNode.getNode("Ele [0...1]");
 		elementNode.select().expand();
 	}
 

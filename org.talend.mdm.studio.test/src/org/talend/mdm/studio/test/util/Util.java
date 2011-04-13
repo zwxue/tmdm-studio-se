@@ -16,12 +16,15 @@ import java.util.List;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.URIUtil;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.finders.UIThreadRunnable;
 import org.eclipse.swtbot.swt.finder.results.VoidResult;
+import org.eclipse.swtbot.swt.finder.waits.DefaultCondition;
 import org.eclipse.ui.internal.views.properties.tabbed.view.TabbedPropertyList;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 
 /**
  * DOC rhou class global comment. Detailled comment
@@ -157,4 +160,49 @@ public class Util {
 			}
 		});
 	}
+
+	/**
+	 * Wait for shell closed
+	 * 
+	 */
+	public class WaitForShellClosed extends DefaultCondition {
+		Matcher<Shell> matcher;
+		Shell parent;
+
+		public WaitForShellClosed(Matcher<Shell> matcher) {
+			this(matcher, null);
+		}
+
+		public WaitForShellClosed(Matcher<Shell> matcher, Shell parent) {
+			this.matcher = matcher;
+			this.parent = parent;
+		}
+
+		@Override
+		public String getFailureMessage() {
+			return "Found shell " + matcher;
+		}
+
+		/**
+		 * test the shell exists
+		 * 
+		 * @return true if not exist, false if exists
+		 */
+		@Override
+		public boolean test() throws Exception {
+			int count = 0;
+			Shell[] shells = null;
+			if (parent != null)
+				shells = parent.getShells();
+			else
+				shells = bot.getFinder().getShells();
+			for (Shell shell : shells) {
+				if (matcher.matches(shell)) {
+					count++;
+				}
+			}
+			return !(count > 0);
+		}
+	}
+
 }

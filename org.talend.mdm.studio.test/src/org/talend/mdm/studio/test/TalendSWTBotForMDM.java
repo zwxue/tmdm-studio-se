@@ -25,132 +25,141 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 /**
- * StudioTest is a superclass of all the SWTBot test classes on studio,except LoginTest and LogoutTest.
+ * StudioTest is a superclass of all the SWTBot test classes on studio,except
+ * LoginTest and LogoutTest.
  * 
  * DOC rhou class global comment. Detailled comment
  */
 public class TalendSWTBotForMDM {
 
-    protected static SWTWorkbenchBot bot = new SWTWorkbenchBot();
+	protected static SWTWorkbenchBot bot = new SWTWorkbenchBot();
 
-    protected static SWTBotTreeItem serverItem;
-    
-    private static SWTBotTree serverTree;
+	protected static SWTBotTreeItem serverItem;
 
-    private static Tree swtTree;
+	private static SWTBotTree serverTree;
 
-    private static boolean isLoggined = false;
-    
-    private static final long ONE_MINUTE_IN_MILLISEC = 60000;
-    
-    public static void login() {
+	private static Tree swtTree;
 
-        bot.viewByTitle("MDM Server").toolbarButton("Add MDM Server Location").click();
-        SWTBotShell shell = bot.shell("Talend MDM Studio Login");
-        bot.waitUntil(Conditions.shellIsActive("Talend MDM Studio Login"),ONE_MINUTE_IN_MILLISEC*10);
-        shell.activate();
-        sleep();
-//        bot.comboBoxWithLabel("Description(*)").setText("administrator");
-//        sleep();
-        bot.textWithLabel("Username").setText("admin");
-        sleep();
-        bot.textWithLabel("Password").setText("talend");
-        sleep();
-        if (bot.comboBoxWithLabel("Version").itemCount() > 0)
-            bot.comboBoxWithLabel("Version").setSelection(0);
-        sleep();
-        bot.checkBox("Save this MDM Server Location").select();
-        sleep();
-        bot.button("OK").click();
-        sleep(10);
-    }
+	private static boolean isLoggined = false;
 
-    private static void initServerView() {
+	private static final long ONE_MINUTE_IN_MILLISEC = 60000;
 
-        final SWTBotView view = bot.viewById("org.talend.mdm.workbench.views.ServerView");
-        view.show();
-        view.setFocus();
-        // bot.perspectiveById("org.talend.mdm.perstective").activate();
-        view.getWidget().getDisplay().syncExec(new Runnable() {
+	public static void login() {
 
-            public void run() {
-                // SWTBotTree tree=bot.treeWithLabel("http://localhost:8080/talend/TalendPort[HEAD] admin");
-                Composite comp = (Composite) view.getWidget();
-                comp = (Composite) comp.getChildren()[0];
+		bot.viewByTitle("MDM Server").toolbarButton("Add MDM Server Location")
+				.click();
+		SWTBotShell shell = bot.shell("Talend MDM Studio Login");
+		bot.waitUntil(Conditions.shellIsActive("Talend MDM Studio Login"),
+				ONE_MINUTE_IN_MILLISEC * 10);
+		shell.activate();
+		sleep();
+		bot.comboBoxWithLabel("Description(*)").setText("administrator");
+		sleep();
+		bot.textWithLabel("Username").setText("admin");
+		sleep();
+		bot.textWithLabel("Password").setText("talend");
+		sleep();
+		if (bot.comboBoxWithLabel("Version").itemCount() > 0)
+			bot.comboBoxWithLabel("Version").setSelection(0);
+		sleep();
+		bot.checkBox("Save this MDM Server Location").select();
+		sleep();
+		bot.button("OK").click();
+		sleep(10);
+		// bot.waitUntil(Conditions.shellCloses(bot.activeShell()));
+	}
 
-                swtTree = (Tree) comp.getChildren()[0];
-            }
-        });
-        serverTree = new SWTBotTree(swtTree);
-        serverItem = serverTree.expandNode("http://localhost:8080/talend/TalendPort [HEAD] admin");
-        serverItem.expand();
-    }
+	private static void initServerView() {
+		final SWTBotView view = bot
+				.viewById("org.talend.mdm.workbench.views.ServerView");
+		view.show();
+		view.setFocus();
+		// bot.perspectiveById("org.talend.mdm.perstective").activate();
+		view.getWidget().getDisplay().syncExec(new Runnable() {
 
-    @BeforeClass
-    public static void beforeClass() throws Exception {
-         System.out.println("beforeClass");
-        if (!isLoggined) {
-            // SWTBotView welcomeView = bot.viewByTitle("Welcome");
-            // if (welcomeView != null)
-            // welcomeView.close();
-            
-            
-            bot.menu("Window").menu("Open Perspective").menu("Other...").click();
-            final SWTBotShell shellShowView = bot.shell("Open Perspective");
-            shellShowView.widget.getDisplay().syncExec(new Runnable() {
+			public void run() {
+				// SWTBotTree
+				// tree=bot.treeWithLabel("http://localhost:8080/talend/TalendPort[HEAD] admin");
+				Composite comp = (Composite) view.getWidget();
+				comp = (Composite) comp.getChildren()[0];
 
-                public void run() {
-                    shellShowView.widget.setSize(new Point(300, 600));
-                }
-            });
-            shellShowView.activate();
-            bot.table().select("MDM");
-            bot.button("OK").click();
-            bot.perspectiveByLabel("MDM").activate();
-            bot.viewByTitle("MDM Server").show();
-            
-             login();
-            initServerView();
-            importDemo();
-            bot.waitUntil(Conditions.widgetIsEnabled(serverTree),ONE_MINUTE_IN_MILLISEC*10);
-            isLoggined = true;
-        }
-    }
-private static void importDemo(){
-    serverItem.contextMenu("Import").click();
-    bot.shell("Import Objects").activate();
-    bot.radio("Select archive file:").click();
-    bot.button("Import from Talend Exchange").click();
-    bot.shell("Import from Talend Exchange options").activate();
-    bot.table().select(1);
-    bot.button("OK").click();
-//    bot.waitUntil(Conditions.shellCloses(bot.shell("Import from Talend Exchange options")));
-    sleep();
-    bot.waitUntil(Conditions.shellIsActive("Import Objects"));
-    SWTBotShell shell = bot.shell("Import Objects");
-    sleep(3);
-    bot.button("Finish").click();
-    bot.waitUntil(Conditions.shellCloses(shell));
-    sleep();
-    bot.shell("Confirm Overwrite").activate();
-    bot.button("Yes To All").click();
-}
-    @AfterClass
-    public static void AfterClass() {
-        System.out.println("AfterClass");
-        // logout();
-        bot.sleep(2000);
-    }
+				swtTree = (Tree) comp.getChildren()[0];
+			}
+		});
+		serverTree = new SWTBotTree(swtTree);
+		serverItem = serverTree
+				.expandNode("http://localhost:8080/talend/TalendPort [HEAD] admin");
+		serverItem.expand();
+	}
 
-    public static void logout() {
-        serverItem.contextMenu("Logout").click();
-    }
+	@BeforeClass
+	public static void beforeClass() throws Exception {
+		System.out.println("beforeClass");
+		if (!isLoggined) {
+			// SWTBotView welcomeView = bot.viewByTitle("Welcome");
+			// if (welcomeView != null)
+			// welcomeView.close();
+			bot.menu("Window").menu("Open Perspective").menu("Other...")
+					.click();
+			final SWTBotShell shellShowView = bot.shell("Open Perspective");
+			bot.waitUntil(Conditions.shellIsActive("Open Perspective"));
+			shellShowView.widget.getDisplay().syncExec(new Runnable() {
 
-    protected static void sleep() {
-        bot.sleep(1000);
-    }
+				public void run() {
+					shellShowView.widget.setSize(new Point(300, 600));
+				}
+			});
+			shellShowView.activate();
+			bot.table().select("MDM");
+			bot.button("OK").click();
+			bot.perspectiveByLabel("MDM").activate();
+			bot.viewByTitle("MDM Server").show();
 
-    protected static void sleep(int count) {
-        bot.sleep(1000 * count);
-    }
+			login();
+			initServerView();
+			importDemo();
+			bot.waitUntil(Conditions.widgetIsEnabled(serverTree),
+					ONE_MINUTE_IN_MILLISEC * 10);
+			isLoggined = true;
+		}
+	}
+
+	private static void importDemo() {
+		serverItem.contextMenu("Import").click();
+		bot.shell("Import Objects").activate();
+		bot.radio("Select archive file:").click();
+		bot.button("Import from Talend Exchange").click();
+		bot.shell("Import from Talend Exchange options").activate();
+		bot.table().select(1);
+		bot.button("OK").click();
+		bot.waitUntil(Conditions.shellIsActive("Import Objects"));
+		SWTBotShell shell = bot.shell("Import Objects");
+		sleep(5);
+		bot.button("Finish").click();
+		bot.waitUntil(Conditions.shellCloses(shell));
+		sleep();
+		bot.shell("Confirm Overwrite").activate();
+		bot.button("Yes To All").click();
+		bot.waitUntil(Conditions.shellCloses(bot.shell("Progress Information")),
+				ONE_MINUTE_IN_MILLISEC * 10);
+	}
+
+	@AfterClass
+	public static void AfterClass() {
+		System.out.println("AfterClass");
+		// logout();
+		bot.sleep(2000);
+	}
+
+	public static void logout() {
+		serverItem.contextMenu("Logout").click();
+	}
+
+	protected static void sleep() {
+		bot.sleep(1000);
+	}
+
+	protected static void sleep(int count) {
+		bot.sleep(1000 * count);
+	}
 }
