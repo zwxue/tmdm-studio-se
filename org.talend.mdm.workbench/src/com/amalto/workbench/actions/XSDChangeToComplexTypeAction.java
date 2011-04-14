@@ -241,7 +241,11 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
                         break;
                     }
                 }
-                complexType.setName(typeName);
+                // modified by jsxie; fix the bug: 0019688 
+                complexType.setName(decl.getTypeDefinition().getName());
+
+                 
+                
                 if (superType != null) {
                     complexType.setDerivationMethod(XSDDerivationMethod.EXTENSION_LITERAL);
                     complexType.setBaseTypeDefinition(superType);
@@ -286,6 +290,7 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
                 complexType = factory.createXSDComplexTypeDefinition();
                 // complexType.setDerivationMethod(XSDDerivationMethod.EXTENSION_LITERAL);
                 if (!anonymous) {
+//                if (true) {
                     XSDTypeDefinition superType = null;
                     for (XSDTypeDefinition type : types) {
                         if (type.getName().equals(superTypeName)) {
