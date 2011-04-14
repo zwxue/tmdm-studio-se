@@ -14,6 +14,7 @@ package org.talend.mdm.studio.test.common;
 
 import org.eclipse.swtbot.eclipse.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +27,9 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class ImportObjectsTest extends TalendSWTBotForMDM {
 
-    @Before
+    private static final long ONE_MINUTE_IN_MILLISEC = 60000;
+
+	@Before
     public void runBeforeEveryTest() {
     }
 
@@ -36,17 +39,24 @@ public class ImportObjectsTest extends TalendSWTBotForMDM {
 
     @Test
     public void importObjectsTest() {
-        serverItem.contextMenu("Import").click();
-        bot.shell("Import Objects").activate();
-        bot.radio("Select archive file:").click();
-        bot.button("Import from Talend Exchange").click();
-        bot.shell("Import from Talend Exchange options").activate();
-        bot.table().select(1);
-        bot.button("OK").click();
-        bot.waitUntil(Conditions.shellIsActive("Import Objects"));
-        sleep(3);
-        bot.button("Finish").click();
-        bot.shell("Confirm Overwrite").activate();
-        bot.button("Yes To All").click();
+		serverItem.contextMenu("Import").click();
+		bot.shell("Import Objects").activate();
+		bot.radio("Select archive file:").click();
+		bot.button("Import from Talend Exchange").click();
+		bot.shell("Import from Talend Exchange options").activate();
+		bot.table().select(1);
+		bot.button("OK").click();
+		bot.waitUntil(Conditions.shellIsActive("Import Objects"));
+		SWTBotShell shell = bot.shell("Import Objects");
+		sleep(5);
+		bot.button("Finish").click();
+		bot.waitUntil(Conditions.shellCloses(shell));
+		sleep();
+		bot.shell("Confirm Overwrite").activate();
+		bot.button("Yes To All").click();
+		bot.waitUntil(Conditions.shellCloses(bot.shell("Progress Information")),
+				ONE_MINUTE_IN_MILLISEC * 10);
+	
+    	
     }
 }

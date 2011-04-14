@@ -45,9 +45,10 @@ public class VersionRenameTest extends TalendSWTBotForMDM {
         SWTBotText text = bot.textWithLabel("Enter a Name for the New Instance");
         text.setText("TestVersion");
         bot.button("OK").click();
+        sleep();
         bot.activeEditor().save();
         sleep();
-        spItem = versionParentItem.getNode("TestVersion");
+        spItem = versionParentItem.expand().getNode("TestVersion");
         Assert.assertNotNull(spItem);
         sleep(2);
     }

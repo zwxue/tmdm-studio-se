@@ -31,6 +31,7 @@ public class EventManagerTest extends TalendSWTBotForMDM {
     @Test
     public void browseTest() {
         eventManagerNode.contextMenu("Browse").click();
+        sleep(2);
     }
 
     @Test

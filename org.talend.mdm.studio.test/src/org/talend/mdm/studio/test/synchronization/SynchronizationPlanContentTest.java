@@ -88,6 +88,7 @@ public class SynchronizationPlanContentTest extends TalendSWTBotForMDM {
 
     @Test
     public void checkActionTest() {
+    	bot.activeEditor().save();
         bot.buttonWithTooltip("Start Full").click();
         // TODO:need assertion;
         spParentItem.getNode("TestSynchronizationPlan").contextMenu("Delete").click();

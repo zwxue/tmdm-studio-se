@@ -126,7 +126,7 @@ public class DataModelSchemaEntityPresentationTabTest extends
 		bot.button("Apply").click();
 		expand();
 		Assert.assertNotNull(conceptNode.getNode("Annotations").expand()
-				.getNode("English Label:en"));
+				.getNode("English Label: en"));
 	}
 
 	@Test

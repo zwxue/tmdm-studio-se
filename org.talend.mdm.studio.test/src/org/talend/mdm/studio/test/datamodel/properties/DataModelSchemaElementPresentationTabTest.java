@@ -126,7 +126,7 @@ public class DataModelSchemaElementPresentationTabTest extends
 		sleep();
 		bot.button("OK").click();
 		sleep(2);
-		elementNode = typeNode.getNode("Ele [0...1]");
+		elementNode = typeNode.getNode("Ele  [0...1]");
 		elementNode.select().expand();
 	}
 

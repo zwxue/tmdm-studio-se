@@ -69,15 +69,16 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
 
     @After
     public void runAfterEveryTest() {
-        // run for one time after all test cases
-        Display.getDefault().syncExec(new Runnable() {
+		Display.getDefault().syncExec(new Runnable() {
 
-            public void run() {
-                mainpage.doSave(new NullProgressMonitor());
-            }
-        });
-    	bot.activeEditor().close();
-    }
+			public void run() {
+				mainpage.doSave(new NullProgressMonitor());
+				bot.activeEditor().close();
+			}
+		});
+		dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
+		bot.button("OK").click();
+	}
     
     public void newEntity() {
     	conceptBotTree.contextMenu("New Entity").click();
@@ -102,35 +103,32 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
 		sleep();
 		bot.button("OK").click();
 		sleep(2);
-		elementNode = typeNode.getNode("Ele [0...1]");
+		elementNode = typeNode.getNode("Ele  [0...1]");
 		elementNode.select().expand();
 	}
     //new feature in 4.2,see bug 0017128
     @Test
     public void autoPlaceCursorTest(){
         elementNode.select();
+        bot.cTabItem(1).activate();
+        sleep();
         bot.cTabItem(2).activate();
+    	entityNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
+    	entityNode.select();
+    	bot.toolbarButtonWithTooltip("Expand...", 0).click();
+        elementNode.select();
     }
     @Test
     public void editElementTest() {
         elementNode.contextMenu("Edit Element").click();
-        SWTBotShell newEntityShell = bot.shell("Edit Business Element");
-        newEntityShell.activate();
-        // create a entity with a complex type
+        SWTBotShell newEleShell = bot.shell("Edit Business Element");
+        newEleShell.activate();
         bot.textWithLabel("Business Element Name").setText("ConceptTest");
         sleep();
-        bot.button("OK").click(); // create a entity with a simple type
+        bot.button("OK").click(); 
         sleep(2);
-        Assert.assertNotNull(groupItem.getNode("ConceptTest"));
+        Assert.assertNotNull(groupItem.getNode("ConceptTest  [0...1]"));
         elementNode.contextMenu("Edit Element").click();
-        newEntityShell = bot.shell("Edit Business Element");
-        newEntityShell.activate();
-        bot.textWithLabel("Business Element Name").setText("Concept");
-        sleep();
-        bot.button("OK").click();
-        sleep(2);
-        Assert.assertNull(groupItem.getNode("ConceptTest"));
-        Assert.assertNotNull(groupItem.getNode("Concept"));
     }
 
     @Test
@@ -143,7 +141,7 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
         sleep();
         bot.button("OK").click();
         sleep(2);
-        Assert.assertNotNull(groupItem.getNode("testElement"));
+        Assert.assertNotNull(groupItem.getNode("testElement  [0...1]"));
     }
 
     @Test

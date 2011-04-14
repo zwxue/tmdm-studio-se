@@ -85,16 +85,8 @@ public class VersionContentTest extends TalendSWTBotForMDM {
 
 	@Test
 	public void setSOIDTest() {
-		// TODO:need further task.
-		String pro = "";
-		bot.ccomboBox().setSelection("SearchTemplate");
-		bot.button("Execute Procedure").click();
+		bot.ccomboBoxWithLabel("Data Model").setText("DataModel");
 
-		versionParentItem.getNode("TestVersion").contextMenu("Delete").click();
-		sleep();
-		bot.button("OK").click();
-		sleep();
-		
 		versionItem.contextMenu("Delete").click();
 		sleep();
 		bot.button("OK").click();

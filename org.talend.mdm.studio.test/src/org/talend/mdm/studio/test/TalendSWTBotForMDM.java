@@ -66,7 +66,8 @@ public class TalendSWTBotForMDM {
 		sleep();
 		bot.button("OK").click();
 		sleep(10);
-		// bot.waitUntil(Conditions.shellCloses(bot.activeShell()));
+		bot.waitUntil(Conditions.shellCloses(bot.shell("Progress Information")),
+				ONE_MINUTE_IN_MILLISEC * 10);
 	}
 
 	private static void initServerView() {
