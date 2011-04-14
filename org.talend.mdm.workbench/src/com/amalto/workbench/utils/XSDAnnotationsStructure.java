@@ -25,6 +25,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.xsd.XSDAnnotation;
+import org.eclipse.xsd.XSDComplexTypeDefinition;
 import org.eclipse.xsd.XSDComponent;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDFactory;
@@ -49,7 +50,7 @@ public class XSDAnnotationsStructure {
     XSDElementDeclaration declaration;
 
     XSDSchema schema;
-
+    XSDComponent componet;
     /**
      * "Clever" Constructor that finds or creates annotations of an XSDComponent object
      * 
@@ -74,7 +75,17 @@ public class XSDAnnotationsStructure {
                 annotation = declaration.getAnnotation();
             }
         }
-
+        if(component instanceof XSDComplexTypeDefinition){
+        	XSDComplexTypeDefinition def = (XSDComplexTypeDefinition) component;    
+        	XSDParticle paticle=(XSDParticle)def.getContent();
+        	componet=paticle.getTerm();
+        	if (def.getAnnotation() == null) {
+                XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
+                annotation = factory.createXSDAnnotation();
+            } else {
+                annotation = declaration.getAnnotation();
+            }
+        }
         if (component instanceof XSDParticle) {
             XSDTerm term = ((XSDParticle) component).getTerm();
             if (term instanceof XSDElementDeclaration) {
@@ -378,7 +389,11 @@ public class XSDAnnotationsStructure {
         String xsdString = Util.nodeToString(xsd.getDocument().getDocumentElement());
         if (recursive) {
             ArrayList<Object> objList = new ArrayList<Object>();
-            Object[] objs = Util.getAllObject(declaration, objList, provider);
+            XSDComponent  component=declaration;
+            if(declaration==null){
+            	component=this.componet;
+            }
+            Object[] objs = Util.getAllObject(component, objList, provider);
 
             while (objs.length > 0) {
                 Object[] objCpys = objs;
@@ -900,17 +915,19 @@ public class XSDAnnotationsStructure {
         ArrayList<Element> list = new ArrayList<Element>();
         list.addAll(annotation.getApplicationInformation());
         list.addAll(annotation.getUserInformation());
-
+        
+        if(componet!=null)
+        	hasChanged = true;
         if (list.size() == 0) {
             // remove the annotation from the declaration
-            if (declaration.getAnnotation() != null) {
+            if (declaration!=null && declaration.getAnnotation() != null) {
                 declaration.getElement().removeChild(annotation.getElement());
                 declaration.setAnnotation(null);
                 hasChanged = true;
             }
         } else {
             // attach the annotation to the declaration
-            if (declaration.getAnnotation() == null) {
+            if (declaration!=null && declaration.getAnnotation() == null) {
                 declaration.setAnnotation(annotation);
                 hasChanged = true;
             }
