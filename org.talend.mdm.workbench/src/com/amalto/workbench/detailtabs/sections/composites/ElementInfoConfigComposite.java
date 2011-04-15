@@ -96,12 +96,12 @@ public class ElementInfoConfigComposite extends Composite {
         if (occurenceGroup == null)
             return;
 
-        if (!hasElementReference() && Util.isSimpleTypedParticle(curXSDParticle)) {
-            spinMin.setSelection(1);
-            spinMax.setSelection(1);
-        }
+//        if (!hasElementReference() && Util.isSimpleTypedParticle(curXSDParticle)) {
+//            spinMin.setSelection(1);
+//            spinMax.setSelection(1);
+//        }
 
-        enableOccurenceGroup(!Util.isSimpleTypedParticle(curXSDParticle) || hasElementReference());
+//        enableOccurenceGroup(!Util.isSimpleTypedParticle(curXSDParticle) || hasElementReference());
     }
 
     private void enableOccurenceGroup(boolean isEnabled) {

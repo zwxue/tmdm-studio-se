@@ -107,32 +107,40 @@ public class ElementWrapperCommitHandler extends CommitHandler<ElementWrapper> {
                 // }
             }
 
-            if (Util.changeElementTypeToSequence(decl, getCommitedObj().getNewMaxOcur()) == Status.CANCEL_STATUS) {
-                return false;
-            }
+    		int newMaxOcur = getCommitedObj().getNewMaxOcur();
+			if (Util.changeElementTypeToSequence(decl, newMaxOcur) == Status.CANCEL_STATUS) {
+				return false;
+			}
 
-            getCommitedObj().getSourceElement().setMinOccurs(getCommitedObj().getNewMinOcur());
-            if (getCommitedObj().getNewMaxOcur() > -1) {
-                getCommitedObj().getSourceElement().setMaxOccurs(getCommitedObj().getNewMaxOcur());
-            } else {
-                getCommitedObj().getSourceElement().getElement().setAttribute("maxOccurs", "unbounded");//$NON-NLS-1$//$NON-NLS-2$
-            }
+			int newMinOcur = getCommitedObj().getNewMinOcur();
+			getCommitedObj().getSourceElement().setMinOccurs(newMinOcur);
+			if (newMaxOcur == -1 || (newMaxOcur == 0 & newMinOcur == 0)) {
+				getCommitedObj().getSourceElement().getElement()
+						.setAttribute("maxOccurs", "unbounded");//$NON-NLS-1$//$NON-NLS-2$
+			} else {
+				getCommitedObj().getSourceElement().setMaxOccurs(newMaxOcur);
+			}
 
-            getCommitedObj().getSourceElement().updateElement();
-        } catch (Exception e) {
-            throw new CommitException(e.getMessage(), e);
-        }
+			getCommitedObj().getSourceElement().updateElement();
+		} catch (Exception e) {
+			throw new CommitException(e.getMessage(), e);
+		}
 
-        return true;
+		return true;
     }
 
-    private void validateCardinality() throws CommitValidationException {
-        if (getCommitedObj().getNewMinOcur() < 0)
-            throw new CommitValidationException("The Minimum Occurence must be greater or equal to Zero");
+	private void validateCardinality() throws CommitValidationException {
+		int newMinOcur = getCommitedObj().getNewMinOcur();
+		if (newMinOcur < 0)
+			throw new CommitValidationException(
+					"The Minimum Occurence must be greater or equal to Zero");
 
-        if (getCommitedObj().getNewMaxOcur() > 0 && getCommitedObj().getNewMaxOcur() < getCommitedObj().getNewMinOcur())
-            throw new CommitValidationException("The maximum Occurence should be greater or equal to the Minimum Occurence");
-    }
+		int newMaxOcur = getCommitedObj().getNewMaxOcur();
+		if (newMaxOcur > -1
+				&& newMaxOcur < newMinOcur)
+			throw new CommitValidationException(
+					"The maximum Occurence should be greater or equal to the Minimum Occurence");
+	}
 
     private void validateElementNameAndReference() throws CommitValidationException {
 
