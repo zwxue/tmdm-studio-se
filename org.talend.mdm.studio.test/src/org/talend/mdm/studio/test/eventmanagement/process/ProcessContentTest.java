@@ -86,7 +86,7 @@ public class ProcessContentTest extends TalendSWTBotForMDM {
         bot.text().setText(des);
         bot.buttonWithTooltip("Add").click();
         bot.button("OK").click();
-        Assert.assertEquals(des, bot.text(0).getText());
+        Assert.assertEquals("[EN:"+des+"]", bot.text(0).getText());
     }
 
     @Test

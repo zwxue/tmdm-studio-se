@@ -61,7 +61,7 @@ public class GUIExtensionForTriggerTest extends TalendSWTBotForMDM {
 	// new feature in 4.2,see bug 0017974:
 	@Test
 	public void classProcessTest() {
-		bot.comboBox().setSelection("callprocess");
+		bot.comboBoxWithLabel("Service JNDI Name").setSelection("callprocess");
 		String process = bot.tree().select(1).getText();
 		bot.tabItem(1).activate();
 		Assert.assertEquals("process=" + process, bot.styledText().getText());

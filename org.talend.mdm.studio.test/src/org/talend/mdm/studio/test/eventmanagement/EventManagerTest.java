@@ -31,7 +31,7 @@ public class EventManagerTest extends TalendSWTBotForMDM {
     @Test
     public void browseTest() {
         eventManagerNode.contextMenu("Browse").click();
-        sleep(2);
+        sleep(5);
     }
 
     @Test
@@ -46,15 +46,9 @@ public class EventManagerTest extends TalendSWTBotForMDM {
 
     @Test
     public void searchTest() {
-        // bot.comboBoxWithLabel("Status").setSelection(0);
-        // bot.buttonWithTooltip("Search").click();
-        // sleep();
         bot.comboBoxWithLabel("Status").setSelection(1);
         bot.buttonWithTooltip("Search").click();
         sleep();
-        // bot.comboBoxWithLabel("Status").setSelection(2);
-        // bot.buttonWithTooltip("Search").click();
-        // sleep();
     	bot.activeEditor().close();
     }
 }

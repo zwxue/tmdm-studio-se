@@ -21,6 +21,7 @@ import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
+import org.eclipse.ui.IPageLayout;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
@@ -65,7 +66,6 @@ public class TalendSWTBotForMDM {
 		bot.checkBox("Save this MDM Server Location").select();
 		sleep();
 		bot.button("OK").click();
-		sleep(10);
 		bot.waitUntil(Conditions.shellCloses(bot.shell("Progress Information")),
 				ONE_MINUTE_IN_MILLISEC * 10);
 	}
@@ -130,11 +130,13 @@ public class TalendSWTBotForMDM {
 		bot.shell("Import Objects").activate();
 		bot.radio("Select archive file:").click();
 		bot.button("Import from Talend Exchange").click();
-		bot.shell("Import from Talend Exchange options").activate();
+		SWTBotShell importDstarShell=bot.shell("Import from Talend Exchange options");
+		importDstarShell.activate();
 		bot.table().select(1);
 		bot.button("OK").click();
 		bot.waitUntil(Conditions.shellIsActive("Import Objects"));
 		SWTBotShell shell = bot.shell("Import Objects");
+		bot.waitUntil(Conditions.shellCloses(importDstarShell));
 		sleep(5);
 		bot.button("Finish").click();
 		bot.waitUntil(Conditions.shellCloses(shell));

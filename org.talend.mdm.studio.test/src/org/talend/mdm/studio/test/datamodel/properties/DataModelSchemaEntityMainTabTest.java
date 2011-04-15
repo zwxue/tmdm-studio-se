@@ -55,6 +55,13 @@ public class DataModelSchemaEntityMainTabTest extends TalendSWTBotForMDM {
 		dataModelItem = serverItem.getNode("Data Model [HEAD]");
 		dataModelItem.expand();
 
+	}
+
+	@After
+	public void runAfterEveryTest() {
+		
+	}
+	public void	newDataModel(){
 		dataModelItem.contextMenu("New").click();
 		SWTBotShell newDataContainerShell = bot.shell("New Data Model");
 		newDataContainerShell.activate();
@@ -79,25 +86,8 @@ public class DataModelSchemaEntityMainTabTest extends TalendSWTBotForMDM {
 		});
 		Tree conceptTree = mainpage.getElementsViewer().getTree();
 		conceptBotTree = new SWTBotTree(conceptTree);
-
-		newEntity();
-		bot.viewById(IPageLayout.ID_PROP_SHEET).setFocus();
-		Util.selecteTalendTabbedPropertyListAtIndex(bot, 0);
+		
 	}
-
-	@After
-	public void runAfterEveryTest() {
-		Display.getDefault().syncExec(new Runnable() {
-
-			public void run() {
-				mainpage.doSave(new NullProgressMonitor());
-				bot.activeEditor().close();
-			}
-		});
-		dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
-		bot.button("OK").click();
-	}
-
 	public void newEntity() {
 		conceptBotTree.contextMenu("New Entity").click();
 		SWTBotShell newEntityShell = bot.shell("New Entity");
@@ -114,6 +104,12 @@ public class DataModelSchemaEntityMainTabTest extends TalendSWTBotForMDM {
 
 	@Test
 	public void editEntityTest() {
+		newDataModel();
+		newEntity();
+		bot.viewById(IPageLayout.ID_PROP_SHEET).setFocus();
+		Util.selecteTalendTabbedPropertyListAtIndex(bot, 0);
+		
+		
 		bot.textWithLabel("Name").setText("RenameEntity");
 		bot.button("Apply").click();
 		Assert.assertEquals("RenameEntity", conceptNode.getText());
@@ -173,6 +169,18 @@ public class DataModelSchemaEntityMainTabTest extends TalendSWTBotForMDM {
 
 		bot.button("Apply").click();
 		Assert.assertTrue(conceptNode.getNode("Test").getNode("Test1") == null);
+		
+		
+		Display.getDefault().syncExec(new Runnable() {
+
+			public void run() {
+				mainpage.doSave(new NullProgressMonitor());
+				bot.activeEditor().close();
+			}
+		});
+		dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
+		bot.button("OK").click();
+	
 	}
 
 }

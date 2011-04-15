@@ -56,6 +56,13 @@ public class DataModelSchemaEntityPresentationTabTest extends
 		dataModelItem = serverItem.getNode("Data Model [HEAD]");
 		dataModelItem.expand();
 
+	}
+
+	@After
+	public void runAfterEveryTest() {
+		
+	}
+	public void newDatamodel(){
 		dataModelItem.contextMenu("New").click();
 		SWTBotShell newDataContainerShell = bot.shell("New Data Model");
 		newDataContainerShell.activate();
@@ -80,25 +87,8 @@ public class DataModelSchemaEntityPresentationTabTest extends
 		});
 		Tree conceptTree = mainpage.getElementsViewer().getTree();
 		conceptBotTree = new SWTBotTree(conceptTree);
-
-		newEntity();
-		bot.viewById(IPageLayout.ID_PROP_SHEET).setFocus();
-		Util.selecteTalendTabbedPropertyListAtIndex(bot, 1);
+		
 	}
-
-	@After
-	public void runAfterEveryTest() {
-		Display.getDefault().syncExec(new Runnable() {
-
-			public void run() {
-				mainpage.doSave(new NullProgressMonitor());
-				bot.activeEditor().close();
-			}
-		});
-		dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
-		bot.button("OK").click();
-	}
-
 	public void newEntity() {
 		conceptBotTree.contextMenu("New Entity").click();
 		SWTBotShell newEntityShell = bot.shell("New Entity");
@@ -121,6 +111,12 @@ public class DataModelSchemaEntityPresentationTabTest extends
 
 	@Test
 	public void addLabelsTest() {
+		newDatamodel();
+		newEntity();
+		bot.viewById(IPageLayout.ID_PROP_SHEET).setFocus();
+		Util.selecteTalendTabbedPropertyListAtIndex(bot, 1);
+		
+		
 		bot.text(0).setText("en");
 		bot.buttonWithTooltip("Add", 0).click();
 		bot.button("Apply").click();
@@ -153,6 +149,18 @@ public class DataModelSchemaEntityPresentationTabTest extends
 		bot.button("Apply").click();
 		Assert.assertNull(conceptNode.getNode("Annotations").expand()
 				.getNode("English Description: en"));
+		
+
+		Display.getDefault().syncExec(new Runnable() {
+
+			public void run() {
+				mainpage.doSave(new NullProgressMonitor());
+				bot.activeEditor().close();
+			}
+		});
+		dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
+		bot.button("OK").click();
+	
 	}
 
 }
