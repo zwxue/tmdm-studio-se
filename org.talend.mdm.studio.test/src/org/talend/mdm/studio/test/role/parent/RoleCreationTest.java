@@ -38,7 +38,7 @@ public class RoleCreationTest extends TalendSWTBotForMDM {
         roleParentItem.expand();
     }
 
-    @Test
+//    @Test
     public void roleCreationTest() {
         roleParentItem.contextMenu("New Role").click();
         // bot.sleep(1000);

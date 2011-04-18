@@ -70,7 +70,7 @@ public class IsEmptyOrNullOperatorTest extends TalendSWTBotForMDM {
         init();
         bot.buttonWithTooltip("Add", 2).click();
         bot.table(2).click(0, 1);
-        SWTBotCombo com=bot.comboBox(1);
+        SWTBotCombo com=bot.comboBox();
         com.setFocus();
         com.setSelection("IsEmptyOrNull");
         Assert.assertEquals("IsEmptyOrNull",bot.ccomboBox().getText());

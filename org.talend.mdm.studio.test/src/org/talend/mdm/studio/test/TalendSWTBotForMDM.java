@@ -137,7 +137,7 @@ public class TalendSWTBotForMDM {
 		bot.waitUntil(Conditions.shellIsActive("Import Objects"));
 		SWTBotShell shell = bot.shell("Import Objects");
 		bot.waitUntil(Conditions.shellCloses(importDstarShell));
-		sleep(5);
+		sleep(10);
 		bot.button("Finish").click();
 		bot.waitUntil(Conditions.shellCloses(shell));
 		sleep();
