@@ -94,10 +94,8 @@ public class EntityMainSection extends
 	@Override
 	protected void initUIContents(XSDElementDeclaration editedObj) {
 
-		if (entityWrapper == null || editedObj != xsdElementDeclaration) {
-			entityWrapper = new EntityWrapper(editedObj);
-			this.xsdElementDeclaration = editedObj;
-		}
+		entityWrapper = new EntityWrapper(editedObj);
+		this.xsdElementDeclaration = editedObj;
 
 		compNameConfig.setTarget(entityWrapper);
 		compKeyConfig.setXSDElement(entityWrapper);
