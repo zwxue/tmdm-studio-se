@@ -33,375 +33,417 @@ import com.amalto.workbench.detailtabs.sections.model.entity.KeyWrapper;
 
 public class EntityCommitHandler extends CommitHandler<EntityWrapper> {
 
-    private static final String ERR_ENTITY_NULLENTITYNAME = "Entity name can not be empty";
+	private static final String ERR_ENTITY_NULLENTITYNAME = "Entity name can not be empty";
 
-    private static final String ERR_ENTITY_CONTAINEMPTY = "Entity name can not contain the empty characters";
+	private static final String ERR_ENTITY_CONTAINEMPTY = "Entity name can not contain the empty characters";
 
-    private static final String ERR_ENTITY_DULPLICATEENTITYNAME = "Entity name has been existed";
+	private static final String ERR_ENTITY_DULPLICATEENTITYNAME = "Entity name has been existed";
 
-    private static final String ERR_KEY_NULLKEYNAME = "Key name can not be empty";
+	private static final String ERR_KEY_NULLKEYNAME = "Key name can not be empty";
 
-    private static final String ERR_KEY_CONTAINEMPTY = "Key name can not contain the empty characters";
+	private static final String ERR_KEY_CONTAINEMPTY = "Key name can not contain the empty characters";
 
-    private static final String ERR_KEY_DUPLICATEKEYNAME = "Key name has been existed";
+	private static final String ERR_KEY_DUPLICATEKEYNAME = "Key name has been existed";
 
-    private static final String ERR_KEY_NOFIELDS = "The must be at least one field";
+	private static final String ERR_KEY_NOFIELDS = "The must be at least one field";
 
-    private static final String ERR_KEY_MULTIUNIQUE = "The must be one unique key at most";
+	private static final String ERR_KEY_MULTIUNIQUE = "The must be one unique key at most";
 
-    private static final String ERR_SELECTOR_WRONGFORMAT = "The Key's selector is in wrong format";
+	private static final String ERR_SELECTOR_WRONGFORMAT = "The Key's selector is in wrong format";
 
-    private static final String ERR_FIELD_WRONGFORMAT = "The Key's field is in wrong format";
+	private static final String ERR_FIELD_WRONGFORMAT = "The Key's field is in wrong format";
 
-    public EntityCommitHandler(EntityWrapper entityWrapper) {
-        super(entityWrapper);
-    }
+	public EntityCommitHandler(EntityWrapper entityWrapper) {
+		super(entityWrapper);
+	}
 
-    protected boolean doSubmit() throws CommitException {
+	protected boolean doSubmit() throws CommitException {
 
-        try {
-            return (commitEntityName() | commitEnitityKeys());
-        } catch (Exception e) {
-            throw new CommitException(e.getMessage(), e);
-        }
+		try {
+			return (commitEntityName() | commitEnitityKeys());
+		} catch (Exception e) {
+			throw new CommitException(e.getMessage(), e);
+		}
 
-    }
+	}
 
-    protected void validateCommit() throws CommitValidationException {
+	protected void validateCommit() throws CommitValidationException {
 
-        validateEntityName();
+		validateEntityName();
 
-        validateEntityKeys();
-    }
+		validateEntityKeys();
+	}
 
-    private boolean commitEntityName() {
+	private boolean commitEntityName() {
 
-        if (getCommitedObj().getSourceEntity().getName().equals(getCommitedObj().getName())) {
-            return false;
-        }
+		XSDElementDeclaration xsdElementDeclaration = getCommitedObj()
+				.getSourceEntity();
+		String oldName = xsdElementDeclaration.getName();
+		if (oldName.equals(getCommitedObj().getName())) {
+			return false;
+		}
 
-        getCommitedObj().getSourceEntity().setName(getCommitedObj().getName());
-        getCommitedObj().getSourceEntity().updateElement();
+		xsdElementDeclaration.setName(getCommitedObj().getName());
+		xsdElementDeclaration.updateElement();
+		// to correct unique's name
+		for (Object idConsObj : xsdElementDeclaration
+				.getIdentityConstraintDefinitions()) {
+			XSDIdentityConstraintDefinition idCons = (XSDIdentityConstraintDefinition) idConsObj;
+			if (idCons.getName().equals(oldName)) {
+				idCons.setName(xsdElementDeclaration.getName());
+				idCons.updateElement();
+				break;
+			}
+		}
+		return true;
+	}
 
-        return true;
-    }
+	private boolean commitEnitityKeys() {
 
-    private boolean commitEnitityKeys() {
+		return commitKeyRemoval() | commitKeyUpdate() | commitKeyAddition();
+	}
 
-        return commitKeyRemoval() | commitKeyUpdate() | commitKeyAddition();
-    }
+	private boolean commitKeyRemoval() {
 
-    private boolean commitKeyRemoval() {
+		boolean hasChanges = false;
 
-        boolean hasChanges = false;
+		for (XSDIdentityConstraintDefinition eachNeedRemovedKey : getNeedRemovedKeys()) {
+			getCommitedObj().getSourceEntity()
+					.getIdentityConstraintDefinitions()
+					.remove(eachNeedRemovedKey);
+			getCommitedObj().getSourceEntity().updateElement();
 
-        for (XSDIdentityConstraintDefinition eachNeedRemovedKey : getNeedRemovedKeys()) {
-            getCommitedObj().getSourceEntity().getIdentityConstraintDefinitions().remove(eachNeedRemovedKey);
-            getCommitedObj().getSourceEntity().updateElement();
+			hasChanges = true;
+		}
 
-            hasChanges = true;
-        }
+		return hasChanges;
+	}
 
-        return hasChanges;
-    }
+	private boolean commitKeyUpdate() {
 
-    private boolean commitKeyUpdate() {
+		boolean hasChanges = false;
 
-        boolean hasChanges = false;
+		for (KeyWrapper eachKeyWrapper : getCommitedObj().getKeys()) {
 
-        for (KeyWrapper eachKeyWrapper : getCommitedObj().getKeys()) {
+			if (eachKeyWrapper.isUserCreated())
+				continue;
 
-            if (eachKeyWrapper.isUserCreated())
-                continue;
+			hasChanges = hasChanges 
+					| commitKeyUpdate_Selector(eachKeyWrapper)
+					| commitKeyUpdate_Fields(eachKeyWrapper);
+		}
 
-            hasChanges = hasChanges | commiKeyUpdate_Name(eachKeyWrapper) | commitKeyUpdate_Selector(eachKeyWrapper)
-                    | commitKeyUpdate_Fields(eachKeyWrapper);
-        }
+		return hasChanges;
+	}
 
-        return hasChanges;
-    }
+	private boolean commitKeyAddition() {
 
-    private boolean commitKeyAddition() {
+		boolean hasChanges = false;
 
-        boolean hasChanges = false;
+		for (KeyWrapper eachKeyWrapper : getCommitedObj().getKeys()) {
 
-        for (KeyWrapper eachKeyWrapper : getCommitedObj().getKeys()) {
+			if (!eachKeyWrapper.isUserCreated())
+				continue;
 
-            if (!eachKeyWrapper.isUserCreated())
-                continue;
+			hasChanges = true;
 
-            hasChanges = true;
+			XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
 
-            XSDFactory factory = XSDSchemaBuildingTools.getXSDFactory();
+			XSDIdentityConstraintDefinition newKey = factory
+					.createXSDIdentityConstraintDefinition();
+			newKey.setName(eachKeyWrapper.getName());
+			newKey.setIdentityConstraintCategory(eachKeyWrapper.getType());
 
-            XSDIdentityConstraintDefinition newKey = factory.createXSDIdentityConstraintDefinition();
-            newKey.setName(eachKeyWrapper.getName());
-            newKey.setIdentityConstraintCategory(eachKeyWrapper.getType());
+			XSDXPathDefinition selector = factory.createXSDXPathDefinition();
+			selector.setValue(eachKeyWrapper.getSelector());
+			selector.setVariety(XSDXPathVariety.SELECTOR_LITERAL);
+			newKey.setSelector(selector);
 
-            XSDXPathDefinition selector = factory.createXSDXPathDefinition();
-            selector.setValue(eachKeyWrapper.getSelector());
-            selector.setVariety(XSDXPathVariety.SELECTOR_LITERAL);
-            newKey.setSelector(selector);
+			for (FieldWrapper newFields : eachKeyWrapper.getFields()) {
+				XSDXPathDefinition field = factory.createXSDXPathDefinition();
+				field.setValue(newFields.getXPath());
+				field.setVariety(XSDXPathVariety.FIELD_LITERAL);
+				newKey.getFields().add(field);
+			}
 
-            for (FieldWrapper newFields : eachKeyWrapper.getFields()) {
-                XSDXPathDefinition field = factory.createXSDXPathDefinition();
-                field.setValue(newFields.getXPath());
-                field.setVariety(XSDXPathVariety.FIELD_LITERAL);
-                newKey.getFields().add(field);
-            }
+			getCommitedObj().getSourceEntity()
+					.getIdentityConstraintDefinitions().add(newKey);
+			getCommitedObj().getSourceEntity().updateElement();
+		}
 
-            getCommitedObj().getSourceEntity().getIdentityConstraintDefinitions().add(newKey);
-            getCommitedObj().getSourceEntity().updateElement();
-        }
+		return hasChanges;
+	}
 
-        return hasChanges;
-    }
+	private boolean commitKeyUpdate_Selector(KeyWrapper keyWrapper) {
 
-    private boolean commitKeyUpdate_Selector(KeyWrapper keyWrapper) {
+		if (keyWrapper.getSourceKey().getSelector().getValue()
+				.equals(keyWrapper.getSelector()))
+			return false;
 
-        if (keyWrapper.getSourceKey().getSelector().getValue().equals(keyWrapper.getSelector()))
-            return false;
+		XSDXPathDefinition newXpath = XSDSchemaBuildingTools.getXSDFactory()
+				.createXSDXPathDefinition();
+		newXpath.setValue(keyWrapper.getSelector());
+		newXpath.setVariety(XSDXPathVariety.SELECTOR_LITERAL);
+		keyWrapper.getSourceKey().setSelector(newXpath);
+		keyWrapper.getSourceKey().updateElement();
 
-        XSDXPathDefinition newXpath = XSDSchemaBuildingTools.getXSDFactory().createXSDXPathDefinition();
-        newXpath.setValue(keyWrapper.getSelector());
-        newXpath.setVariety(XSDXPathVariety.SELECTOR_LITERAL);
-        keyWrapper.getSourceKey().setSelector(newXpath);
-        keyWrapper.getSourceKey().updateElement();
+		return true;
+	}
 
-        return true;
-    }
+	private boolean commiKeyUpdate_Name(KeyWrapper keyWrapper) {
 
-    private boolean commiKeyUpdate_Name(KeyWrapper keyWrapper) {
+		if (keyWrapper.getSourceKey().getName().equals(keyWrapper.getName()))
+			return false;
 
-        if (keyWrapper.getSourceKey().getName().equals(keyWrapper.getName()))
-            return false;
+		keyWrapper.getSourceKey().setName(keyWrapper.getName());
+		keyWrapper.getSourceKey().updateElement();
 
-        keyWrapper.getSourceKey().setName(keyWrapper.getName());
-        keyWrapper.getSourceKey().updateElement();
+		return true;
+	}
 
-        return true;
-    }
+	private boolean commitKeyUpdate_Fields(KeyWrapper keyWrapper) {
 
-    private boolean commitKeyUpdate_Fields(KeyWrapper keyWrapper) {
+		return commitKeyUpdate_Fields_Removal(keyWrapper)
+				| commitKeyUpdate_Fields_Update(keyWrapper)
+				| commitKeyUpdate_Fields_Addition(keyWrapper);
 
-        return commitKeyUpdate_Fields_Removal(keyWrapper) | commitKeyUpdate_Fields_Update(keyWrapper)
-                | commitKeyUpdate_Fields_Addition(keyWrapper);
+	}
 
-    }
+	private boolean commitKeyUpdate_Fields_Removal(KeyWrapper keyWrapper) {
 
-    private boolean commitKeyUpdate_Fields_Removal(KeyWrapper keyWrapper) {
+		boolean hasChanges = false;
 
-        boolean hasChanges = false;
+		for (XSDXPathDefinition eachNeedRemovedField : getNeedRemovedFields(keyWrapper)) {
+			keyWrapper.getSourceKey().getFields().remove(eachNeedRemovedField);
+			keyWrapper.getSourceKey().updateElement();
 
-        for (XSDXPathDefinition eachNeedRemovedField : getNeedRemovedFields(keyWrapper)) {
-            keyWrapper.getSourceKey().getFields().remove(eachNeedRemovedField);
-            keyWrapper.getSourceKey().updateElement();
+			hasChanges = true;
+		}
 
-            hasChanges = true;
-        }
+		return hasChanges;
+	}
 
-        return hasChanges;
-    }
+	private boolean commitKeyUpdate_Fields_Update(KeyWrapper keyWrapper) {
 
-    private boolean commitKeyUpdate_Fields_Update(KeyWrapper keyWrapper) {
+		boolean hasChanges = false;
 
-        boolean hasChanges = false;
+		for (FieldWrapper eachField : keyWrapper.getFields()) {
 
-        for (FieldWrapper eachField : keyWrapper.getFields()) {
+			if (eachField.isUserCreated())
+				continue;
 
-            if (eachField.isUserCreated())
-                continue;
+			if (eachField.getSourceField().getValue()
+					.equals(eachField.getXPath()))
+				continue;
 
-            if (eachField.getSourceField().getValue().equals(eachField.getXPath()))
-                continue;
+			eachField.getSourceField().setValue(eachField.getXPath());
+			eachField.getSourceField().updateElement();
 
-            eachField.getSourceField().setValue(eachField.getXPath());
-            eachField.getSourceField().updateElement();
+			hasChanges = true;
+		}
 
-            hasChanges = true;
-        }
+		return hasChanges;
+	}
 
-        return hasChanges;
-    }
+	private boolean commitKeyUpdate_Fields_Addition(KeyWrapper keyWrapper) {
 
-    private boolean commitKeyUpdate_Fields_Addition(KeyWrapper keyWrapper) {
+		boolean hasChanges = false;
 
-        boolean hasChanges = false;
+		for (FieldWrapper eachField : keyWrapper.getFields()) {
+			if (!eachField.isUserCreated())
+				continue;
 
-        for (FieldWrapper eachField : keyWrapper.getFields()) {
-            if (!eachField.isUserCreated())
-                continue;
+			XSDXPathDefinition newXpath = XSDSchemaBuildingTools
+					.getXSDFactory().createXSDXPathDefinition();
+			newXpath.setValue(eachField.getXPath());
+			newXpath.setVariety(XSDXPathVariety.FIELD_LITERAL);
 
-            XSDXPathDefinition newXpath = XSDSchemaBuildingTools.getXSDFactory().createXSDXPathDefinition();
-            newXpath.setValue(eachField.getXPath());
-            newXpath.setVariety(XSDXPathVariety.FIELD_LITERAL);
+			keyWrapper.getSourceKey().getFields().add(newXpath);
+			keyWrapper.getSourceKey().updateElement();
 
-            keyWrapper.getSourceKey().getFields().add(newXpath);
-            keyWrapper.getSourceKey().updateElement();
+			hasChanges = true;
+		}
 
-            hasChanges = true;
-        }
+		return hasChanges;
+	}
 
-        return hasChanges;
-    }
+	private XSDXPathDefinition[] getNeedRemovedFields(KeyWrapper keyWrapper) {
 
-    private XSDXPathDefinition[] getNeedRemovedFields(KeyWrapper keyWrapper) {
+		List<XSDXPathDefinition> curLeftFields = new ArrayList<XSDXPathDefinition>();
+		List<XSDXPathDefinition> needRemovedFields = new ArrayList<XSDXPathDefinition>();
 
-        List<XSDXPathDefinition> curLeftFields = new ArrayList<XSDXPathDefinition>();
-        List<XSDXPathDefinition> needRemovedFields = new ArrayList<XSDXPathDefinition>();
+		for (FieldWrapper eachField : keyWrapper.getFields()) {
+			if (!eachField.isUserCreated()) {
+				curLeftFields.add(eachField.getSourceField());
+			}
+		}
 
-        for (FieldWrapper eachField : keyWrapper.getFields()) {
-            if (!eachField.isUserCreated()) {
-                curLeftFields.add(eachField.getSourceField());
-            }
-        }
+		for (XSDXPathDefinition eachSourceField : keyWrapper.getSourceKey()
+				.getFields()) {
+			if (!curLeftFields.contains(eachSourceField)) {
+				needRemovedFields.add(eachSourceField);
+			}
+		}
 
-        for (XSDXPathDefinition eachSourceField : keyWrapper.getSourceKey().getFields()) {
-            if (!curLeftFields.contains(eachSourceField)) {
-                needRemovedFields.add(eachSourceField);
-            }
-        }
+		return needRemovedFields.toArray(new XSDXPathDefinition[0]);
+	}
 
-        return needRemovedFields.toArray(new XSDXPathDefinition[0]);
-    }
+	private XSDIdentityConstraintDefinition[] getNeedRemovedKeys() {
 
-    private XSDIdentityConstraintDefinition[] getNeedRemovedKeys() {
+		List<XSDIdentityConstraintDefinition> curLeftSourceKeys = new ArrayList<XSDIdentityConstraintDefinition>();
+		List<XSDIdentityConstraintDefinition> needRemovedKeys = new ArrayList<XSDIdentityConstraintDefinition>();
 
-        List<XSDIdentityConstraintDefinition> curLeftSourceKeys = new ArrayList<XSDIdentityConstraintDefinition>();
-        List<XSDIdentityConstraintDefinition> needRemovedKeys = new ArrayList<XSDIdentityConstraintDefinition>();
+		for (KeyWrapper eachKeyWrapper : getCommitedObj().getKeys()) {
+			if (!eachKeyWrapper.isUserCreated()) {
+				curLeftSourceKeys.add(eachKeyWrapper.getSourceKey());
+			}
+		}
 
-        for (KeyWrapper eachKeyWrapper : getCommitedObj().getKeys()) {
-            if (!eachKeyWrapper.isUserCreated()) {
-                curLeftSourceKeys.add(eachKeyWrapper.getSourceKey());
-            }
-        }
+		for (XSDIdentityConstraintDefinition eachSourceKey : getCommitedObj()
+				.getSourceEntity().getIdentityConstraintDefinitions()) {
+			if (!curLeftSourceKeys.contains(eachSourceKey)) {
+				needRemovedKeys.add(eachSourceKey);
+			}
+		}
 
-        for (XSDIdentityConstraintDefinition eachSourceKey : getCommitedObj().getSourceEntity()
-                .getIdentityConstraintDefinitions()) {
-            if (!curLeftSourceKeys.contains(eachSourceKey)) {
-                needRemovedKeys.add(eachSourceKey);
-            }
-        }
+		return needRemovedKeys.toArray(new XSDIdentityConstraintDefinition[0]);
+	}
 
-        return needRemovedKeys.toArray(new XSDIdentityConstraintDefinition[0]);
-    }
+	private void validateEntityName() throws CommitValidationException {
 
-    private void validateEntityName() throws CommitValidationException {
+		if (getCommitedObj().getName() == null
+				|| "".equals(getCommitedObj().getName().trim())) {//$NON-NLS-1$
+			throw new CommitValidationException(ERR_ENTITY_NULLENTITYNAME);
+		}
 
-        if (getCommitedObj().getName() == null || "".equals(getCommitedObj().getName().trim())) {//$NON-NLS-1$
-            throw new CommitValidationException(ERR_ENTITY_NULLENTITYNAME);
-        }
+		if (getCommitedObj().getName().replaceAll("\\s", "").length() != getCommitedObj().getName().length())//$NON-NLS-1$//$NON-NLS-2$
+			throw new CommitValidationException(ERR_ENTITY_CONTAINEMPTY);
 
-        if (getCommitedObj().getName().replaceAll("\\s", "").length() != getCommitedObj().getName().length())//$NON-NLS-1$//$NON-NLS-2$
-            throw new CommitValidationException(ERR_ENTITY_CONTAINEMPTY);
+		for (XSDElementDeclaration eachElement : getCommitedObj().getSchema()
+				.getElementDeclarations()) {
 
-        for (XSDElementDeclaration eachElement : getCommitedObj().getSchema().getElementDeclarations()) {
+			if (eachElement.equals(getCommitedObj().getSourceEntity()))
+				continue;
 
-            if (eachElement.equals(getCommitedObj().getSourceEntity()))
-                continue;
+			if (eachElement.getName().equals(getCommitedObj().getName())) {
+				throw new CommitValidationException(
+						ERR_ENTITY_DULPLICATEENTITYNAME
+								+ " : " + getCommitedObj().getName());//$NON-NLS-1$
+			}
+		}
 
-            if (eachElement.getName().equals(getCommitedObj().getName())) {
-                throw new CommitValidationException(ERR_ENTITY_DULPLICATEENTITYNAME + " : " + getCommitedObj().getName());//$NON-NLS-1$
-            }
-        }
+	}
 
-    }
+	private void validateEntityKeys() throws CommitValidationException {
 
-    private void validateEntityKeys() throws CommitValidationException {
+		for (KeyWrapper eachKeyWrapper : getCommitedObj().getKeys()) {
+			validateEachKey(eachKeyWrapper);
+		}
 
-        for (KeyWrapper eachKeyWrapper : getCommitedObj().getKeys()) {
-            validateEachKey(eachKeyWrapper);
-        }
+		validateKeyUnique();
 
-        validateKeyUnique();
+		validateDuplicateKeyNameInEntityWrapper();
+	}
 
-        validateDuplicateKeyNameInEntityWrapper();
-    }
+	private void validateKeyUnique() throws CommitValidationException {
 
-    private void validateKeyUnique() throws CommitValidationException {
+		int uniqueKeyCount = 0;
 
-        int uniqueKeyCount = 0;
+		for (KeyWrapper eachKeyWrapper : getCommitedObj().getKeys()) {
+			if (eachKeyWrapper.getType() == XSDIdentityConstraintCategory.UNIQUE_LITERAL) {
+				uniqueKeyCount++;
+			}
+		}
 
-        for (KeyWrapper eachKeyWrapper : getCommitedObj().getKeys()) {
-            if (eachKeyWrapper.getType() == XSDIdentityConstraintCategory.UNIQUE_LITERAL) {
-                uniqueKeyCount++;
-            }
-        }
+		if (uniqueKeyCount > 1) {
+			throw new CommitValidationException(ERR_KEY_MULTIUNIQUE);
+		}
 
-        if (uniqueKeyCount > 1) {
-            throw new CommitValidationException(ERR_KEY_MULTIUNIQUE);
-        }
+	}
 
-    }
+	private void validateDuplicateKeyNameInEntityWrapper()
+			throws CommitValidationException {
 
-    private void validateDuplicateKeyNameInEntityWrapper() throws CommitValidationException {
+		Set<String> keyWrapperNames = new HashSet<String>();
 
-        Set<String> keyWrapperNames = new HashSet<String>();
+		for (KeyWrapper eachKeyWrapper : getCommitedObj().getKeys()) {
+			keyWrapperNames.add(eachKeyWrapper.getName());
+		}
 
-        for (KeyWrapper eachKeyWrapper : getCommitedObj().getKeys()) {
-            keyWrapperNames.add(eachKeyWrapper.getName());
-        }
+		if (keyWrapperNames.size() != getCommitedObj().getKeys().length) {
+			throw new CommitValidationException(ERR_KEY_DUPLICATEKEYNAME);
+		}
+	}
 
-        if (keyWrapperNames.size() != getCommitedObj().getKeys().length) {
-            throw new CommitValidationException(ERR_KEY_DUPLICATEKEYNAME);
-        }
-    }
+	private void validateEachKey(KeyWrapper checkedKeyWrapper)
+			throws CommitValidationException {
 
-    private void validateEachKey(KeyWrapper checkedKeyWrapper) throws CommitValidationException {
+		validateEachKeyName(checkedKeyWrapper);
 
-        validateEachKeyName(checkedKeyWrapper);
+		validateEachKeySelector(checkedKeyWrapper);
 
-        validateEachKeySelector(checkedKeyWrapper);
+		validateEachKeyFieldsCount(checkedKeyWrapper);
 
-        validateEachKeyFieldsCount(checkedKeyWrapper);
+		for (FieldWrapper eachFieldWrapper : checkedKeyWrapper.getFields()) {
+			validateEachField(checkedKeyWrapper, eachFieldWrapper);
+		}
+	}
 
-        for (FieldWrapper eachFieldWrapper : checkedKeyWrapper.getFields()) {
-            validateEachField(checkedKeyWrapper, eachFieldWrapper);
-        }
-    }
+	private void validateEachKeyName(KeyWrapper checkedKeyWrapper)
+			throws CommitValidationException {
 
-    private void validateEachKeyName(KeyWrapper checkedKeyWrapper) throws CommitValidationException {
+		if (checkedKeyWrapper.getName() == null
+				|| "".equals(checkedKeyWrapper.getName().trim())) {//$NON-NLS-1$
+			throw new CommitValidationException(ERR_KEY_NULLKEYNAME);
+		}
 
-        if (checkedKeyWrapper.getName() == null || "".equals(checkedKeyWrapper.getName().trim())) {//$NON-NLS-1$
-            throw new CommitValidationException(ERR_KEY_NULLKEYNAME);
-        }
+		if (checkedKeyWrapper.getName().replaceAll("\\s", "").length() != checkedKeyWrapper.getName().length()) {//$NON-NLS-1$//$NON-NLS-2$
+			throw new CommitValidationException(ERR_KEY_CONTAINEMPTY);
+		}
 
-        if (checkedKeyWrapper.getName().replaceAll("\\s", "").length() != checkedKeyWrapper.getName().length()) {//$NON-NLS-1$//$NON-NLS-2$
-            throw new CommitValidationException(ERR_KEY_CONTAINEMPTY);
-        }
+		for (XSDIdentityConstraintDefinition eachId : getCommitedObj()
+				.getSchema().getIdentityConstraintDefinitions()) {
 
-        for (XSDIdentityConstraintDefinition eachId : getCommitedObj().getSchema().getIdentityConstraintDefinitions()) {
+			if (eachId.equals(checkedKeyWrapper.getSourceKey())
+					|| eachId.getContainer().equals(
+							getCommitedObj().getSourceEntity()))
+				continue;
 
-            if (eachId.equals(checkedKeyWrapper.getSourceKey())
-                    || eachId.getContainer().equals(getCommitedObj().getSourceEntity()))
-                continue;
+			if (eachId.getName().equals(checkedKeyWrapper.getName())) {
+				throw new CommitValidationException(ERR_KEY_DUPLICATEKEYNAME
+						+ " : " + checkedKeyWrapper.getName());//$NON-NLS-1$
+			}
+		}
+	}
 
-            if (eachId.getName().equals(checkedKeyWrapper.getName())) {
-                throw new CommitValidationException(ERR_KEY_DUPLICATEKEYNAME + " : " + checkedKeyWrapper.getName());//$NON-NLS-1$
-            }
-        }
-    }
+	private void validateEachKeySelector(KeyWrapper checkedKeyWrapper)
+			throws CommitValidationException {
 
-    private void validateEachKeySelector(KeyWrapper checkedKeyWrapper) throws CommitValidationException {
+		if (checkedKeyWrapper.getSelector() == null
+				|| "".equals(checkedKeyWrapper.getSelector().trim())) {//$NON-NLS-1$
+			throw new CommitValidationException(ERR_SELECTOR_WRONGFORMAT
+					+ " : key " + checkedKeyWrapper.getName());//$NON-NLS-1$
+		}
 
-        if (checkedKeyWrapper.getSelector() == null || "".equals(checkedKeyWrapper.getSelector().trim())) {//$NON-NLS-1$
-            throw new CommitValidationException(ERR_SELECTOR_WRONGFORMAT + " : key " + checkedKeyWrapper.getName());//$NON-NLS-1$
-        }
+	}
 
-    }
+	private void validateEachKeyFieldsCount(KeyWrapper checkedKeyWrapper)
+			throws CommitValidationException {
 
-    private void validateEachKeyFieldsCount(KeyWrapper checkedKeyWrapper) throws CommitValidationException {
+		if (checkedKeyWrapper.getFields().length == 0) {
+			throw new CommitValidationException(ERR_KEY_NOFIELDS
+					+ " : key " + checkedKeyWrapper.getName());//$NON-NLS-1$
+		}
+	}
 
-        if (checkedKeyWrapper.getFields().length == 0) {
-            throw new CommitValidationException(ERR_KEY_NOFIELDS + " : key " + checkedKeyWrapper.getName());//$NON-NLS-1$
-        }
-    }
+	private void validateEachField(KeyWrapper checkedKeyWrapper,
+			FieldWrapper eachFieldWrapper) throws CommitValidationException {
 
-    private void validateEachField(KeyWrapper checkedKeyWrapper, FieldWrapper eachFieldWrapper) throws CommitValidationException {
+		if (eachFieldWrapper.getXPath() == null
+				|| "".equals(eachFieldWrapper.getXPath().trim())) {//$NON-NLS-1$
+			throw new CommitValidationException(ERR_FIELD_WRONGFORMAT
+					+ " : key " + checkedKeyWrapper.getName());//$NON-NLS-1$
+		}
 
-        if (eachFieldWrapper.getXPath() == null || "".equals(eachFieldWrapper.getXPath().trim())) {//$NON-NLS-1$
-            throw new CommitValidationException(ERR_FIELD_WRONGFORMAT + " : key " + checkedKeyWrapper.getName());//$NON-NLS-1$
-        }
-
-    }
+	}
 }
