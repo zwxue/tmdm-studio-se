@@ -981,7 +981,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                         }
                     }
                 });
-                deleteReserved(endpointAddress, username, universe);
+                //don't delete the server
+                //deleteReserved(endpointAddress, username, universe);
             }
         };
 
