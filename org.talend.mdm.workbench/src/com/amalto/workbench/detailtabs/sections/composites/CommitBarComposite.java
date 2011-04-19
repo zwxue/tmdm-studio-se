@@ -23,93 +23,103 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
+import com.amalto.workbench.detailtabs.sections.util.CommitBarListenerRegistry;
+
 public class CommitBarComposite extends Composite {
 
-    private Button btnSubmit;
+	private Button btnSubmit;
 
-    private Button btnReset;
+	private Button btnReset;
 
-    private List<CommitBarListener> listeners = new ArrayList<CommitBarListener>();
+	private List<CommitBarListener> listeners = new ArrayList<CommitBarListener>();
 
-    public CommitBarComposite(Composite parent, int style) {
-        super(parent, style);
+	public CommitBarComposite(Composite parent, int style) {
+		super(parent, style);
 
-        final GridLayout gridLayout = new GridLayout();
-        gridLayout.horizontalSpacing = 10;
-        gridLayout.makeColumnsEqualWidth = true;
-        gridLayout.numColumns = 2;
-        setLayout(gridLayout);
+		final GridLayout gridLayout = new GridLayout();
+		gridLayout.horizontalSpacing = 10;
+		gridLayout.makeColumnsEqualWidth = true;
+		gridLayout.numColumns = 2;
+		setLayout(gridLayout);
 
-        setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+		setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
-        btnSubmit = new Button(this, SWT.NONE);
-        final GridData gd_btnSubmit = new GridData(SWT.FILL, SWT.FILL, false, false);
-        gd_btnSubmit.heightHint = 18;
-        gd_btnSubmit.widthHint = 74;
-        btnSubmit.setLayoutData(gd_btnSubmit);
-        btnSubmit.setText("Apply");
+		btnSubmit = new Button(this, SWT.NONE);
+		final GridData gd_btnSubmit = new GridData(SWT.FILL, SWT.FILL, false,
+				false);
+		gd_btnSubmit.heightHint = 18;
+		gd_btnSubmit.widthHint = 74;
+		btnSubmit.setLayoutData(gd_btnSubmit);
+		btnSubmit.setText("Apply");
 
-        btnReset = new Button(this, SWT.NONE);
-        btnReset.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
-        btnReset.setText("Reset");
+		btnReset = new Button(this, SWT.NONE);
+		btnReset.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
+		btnReset.setText("Reset");
 
-        initUIListeners();
-    }
+		initUIListeners();
+	}
 
-    public void addCommitListener(CommitBarListener listener) {
-        if (listener != null && !listeners.contains(listener)) {
-            listeners.add(listener);
-        }
+	public void addCommitListener(CommitBarListener listener) {
+		if (listener != null && !listeners.contains(listener)) {
+			listeners.add(listener);
+		}
 
-    }
+	}
 
-    public void removeCommitListener(CommitBarListener listener) {
-        listeners.remove(listener);
-    }
+	public void removeCommitListener(CommitBarListener listener) {
+		listeners.remove(listener);
+	}
 
-    public void removeAllCommitBarListeners() {
-        listeners.clear();
-    }
+	public void removeAllCommitBarListeners() {
+		listeners.clear();
+	}
 
-    public List<CommitBarListener> getCommitBarListeners() {
-        return listeners;
-    }
+	public List<CommitBarListener> getCommitBarListeners() {
+		return listeners;
+	}
 
-    private void fireSubmit() {
-        for (CommitBarListener eachListener : listeners)
-            eachListener.onSubmit();
-    }
+	private void fireSubmit() {
+		for (CommitBarListener eachListener : listeners)
+			eachListener.onSubmit();
+	}
 
-    private void fireReset() {
-        for (CommitBarListener eachListener : listeners)
-            eachListener.onReset();
-    }
+	public void fireSubmitAllTabs() {
+		for (CommitBarListener eachListener : CommitBarListenerRegistry
+				.getInstance().getAllRegistedListeners())
+			eachListener.onSubmit();
+	}
 
-    private void initUIListeners() {
+	private void fireReset() {
+		for (CommitBarListener eachListener : listeners)
+			eachListener.onReset();
+	}
 
-        btnSubmit.addSelectionListener(new SelectionAdapter() {
+	private void initUIListeners() {
 
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                fireSubmit();
-            }
-        });
+		btnSubmit.addSelectionListener(new SelectionAdapter() {
 
-        btnReset.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+//				fireSubmit();
+				fireSubmitAllTabs();
+			}
+		});
 
-            @Override
-            public void widgetSelected(SelectionEvent e) {
+		btnReset.addSelectionListener(new SelectionAdapter() {
 
-                fireReset();
-            }
-        });
-    }
+			@Override
+			public void widgetSelected(SelectionEvent e) {
 
-    public interface CommitBarListener {
+				fireReset();
+			}
+		});
+	}
 
-        public void onReset();
+	public interface CommitBarListener {
 
-        public void onSubmit();
+		public void onReset();
 
-    }
+		public void onSubmit();
+
+	}
 }

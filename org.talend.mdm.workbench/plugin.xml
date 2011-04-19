@@ -195,6 +195,15 @@
      <propertySections
            contributorId="org.talend.mdm.workbench.propertyContributor.datamodel">
         <propertySection
+              class="com.amalto.workbench.detailtabs.sections.CommitSection"
+              id="org.talend.mdm.workbench.properties.entity.section.main"
+              tab="org.talend.mdm.workbench.properties.entity.tab.main">
+           <input
+                 type="org.eclipse.xsd.XSDElementDeclaration">
+           </input>
+        </propertySection>
+        <propertySection
+              afterSection="org.talend.mdm.workbench.properties.entity.section.main"
               class="com.amalto.workbench.detailtabs.sections.EntityMainSection"
               id="org.talend.mdm.workbench.properties.entity.section.main"
               tab="org.talend.mdm.workbench.properties.entity.tab.main">

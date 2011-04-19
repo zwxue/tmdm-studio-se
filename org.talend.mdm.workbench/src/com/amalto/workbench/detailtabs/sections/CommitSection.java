@@ -26,81 +26,90 @@ import com.amalto.workbench.detailtabs.sections.util.CommitBarListenerRegistry;
 
 public class CommitSection extends BasePropertySection {
 
-    private CommitBarComposite commitBar;
+	private CommitBarComposite commitBar;
 
-    @Override
-    public void createControls(Composite parent, TabbedPropertySheetPage aTabbedPropertySheetPage) {
-        super.createControls(parent, aTabbedPropertySheetPage);
+	@Override
+	public void createControls(Composite parent,
+			TabbedPropertySheetPage aTabbedPropertySheetPage) {
+		super.createControls(parent, aTabbedPropertySheetPage);
 
-        initUIListeners();
+		initUIListeners();
 
-        registListenersFromGlobalRegistry();
-        
-        CommitBarListenerRegistry.getInstance().registCommitSection(this);
-    }
+		registListenersFromGlobalRegistry();
 
-    @Override
-    public boolean shouldUseExtraSpace() {
-        return true;
-    }
+		CommitBarListenerRegistry.getInstance().registCommitSection(this);
+	}
 
-    private void addCommbarListeners() {
+	@Override
+	public boolean shouldUseExtraSpace() {
+		return true;
+	}
 
-        for (ISection eachSelection : getCurrentTabSections()) {
+	private void addCommbarListeners() {
 
-            if (!(eachSelection instanceof BasePropertySection))
-                continue;
+		for (ISection eachSelection : getCurrentTabSections()) {
 
-            if (!(eachSelection instanceof CommitBarListener))
-                continue;
+			if (!(eachSelection instanceof BasePropertySection))
+				continue;
 
-            if (!((BasePropertySection) eachSelection).getParentTabID().equals(getParentTabID()))
-                continue;
+			if (!(eachSelection instanceof CommitBarListener))
+				continue;
 
-            commitBar.addCommitListener((CommitBarListener) eachSelection);
-        }
+			if (!((BasePropertySection) eachSelection).getParentTabID().equals(
+					getParentTabID()))
+				continue;
 
-    }
+			commitBar.addCommitListener((CommitBarListener) eachSelection);
+		}
 
-    private void initUIListeners() {
+	}
 
-        tabbedPropertySheetPage.addTabSelectionListener(new ITabSelectionListener() {
+	private void initUIListeners() {
 
-            public void tabSelected(ITabDescriptor tabDescriptor) {
+		tabbedPropertySheetPage
+				.addTabSelectionListener(new ITabSelectionListener() {
 
-                if (tabDescriptor.getId().equals(getParentTabID()))
-                    addCommbarListeners();
-            }
-        });
-    }
+					public void tabSelected(ITabDescriptor tabDescriptor) {
 
-    private void registListenersFromGlobalRegistry() {
+						if (tabDescriptor.getId().equals(getParentTabID())) {
+							addCommbarListeners();
+							getCommitBar().fireSubmitAllTabs();
+						}
 
-        for (CommitBarListener eachListener : CommitBarListenerRegistry.getInstance().moveOutRegistedListeners(getParentTabID())) {
-            commitBar.addCommitListener(eachListener);
-        }
-    }
+					}
+				});
+	}
 
-    @Override
-    protected void createControlsInSection(Composite compSectionClient) {
-        commitBar = new CommitBarComposite(compSectionClient, SWT.NONE);
-    }
-    
-    @Override
-    public void dispose() {    	
-    	super.dispose();
-    	CommitBarListenerRegistry.getInstance().unregistCommitSection(this);
-    }
-    public CommitBarComposite getCommitBar(){
-    	return commitBar;
-    }
-    @Override
-    protected String getSectionTitle() {
-        return "Commit";
-    }
+	private void registListenersFromGlobalRegistry() {
 
-    @Override
-    protected int getSectionStyle() {
-        return Section.TITLE_BAR | Section.EXPANDED;
-    }
+		for (CommitBarListener eachListener : CommitBarListenerRegistry
+				.getInstance().moveOutRegistedListeners(getParentTabID())) {
+			commitBar.addCommitListener(eachListener);
+		}
+	}
+
+	@Override
+	protected void createControlsInSection(Composite compSectionClient) {
+		commitBar = new CommitBarComposite(compSectionClient, SWT.NONE);
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		CommitBarListenerRegistry.getInstance().unregistCommitSection(this);
+	}
+
+	public CommitBarComposite getCommitBar() {
+		return commitBar;
+	}
+
+	@Override
+	protected String getSectionTitle() {
+		return "Commit";
+	}
+
+	@Override
+	protected int getSectionStyle() {
+		return Section.TITLE_BAR | Section.EXPANDED;
+	}
 }
