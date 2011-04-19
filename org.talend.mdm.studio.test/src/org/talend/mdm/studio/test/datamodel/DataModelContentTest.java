@@ -24,14 +24,14 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.Activator;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 import org.talend.mdm.studio.test.util.Util;
 
 /**
- * DataModelContentOperationTest is a SWTBot test class to test the operation associated with the import,export.
+ * DataModelContentOperationTest is a SWTBot test class to test the operation
+ * associated with the import,export.
  * 
  * DOC rhou class global comment. Detailled comment
  * 
@@ -41,92 +41,106 @@ import org.talend.mdm.studio.test.util.Util;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class DataModelContentTest extends TalendSWTBotForMDM {
 
-    private String DSTAR_DATAMODEL = "dstar.xsd";
+	private String DSTAR_DATAMODEL = "DStar.xsd";
 
-    private SWTBotTreeItem dataModelItem;
+	private SWTBotTreeItem dataModelItem;
 
-    @Before
-    public void runBeforeEveryTest() {
-        dataModelItem = serverItem.getNode("Data Model [HEAD]");
-        dataModelItem.expand();
+	@Before
+	public void runBeforeEveryTest() {
+		dataModelItem = serverItem.getNode("Data Model [HEAD]");
+		dataModelItem.expand();
 
-        dataModelItem.contextMenu("New").click();
-        SWTBotShell newDataModelShell = bot.shell("New Data Model");
-        newDataModelShell.activate();
-        SWTBotText text = bot.textWithLabel("Enter a name for the New Instance");
-        text.setText("TestDataModel");
-        sleep();
-        bot.buttonWithTooltip("Add").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-    }
+		dataModelItem.contextMenu("New").click();
+		SWTBotShell newDataModelShell = bot.shell("New Data Model");
+		newDataModelShell.activate();
+		SWTBotText text = bot
+				.textWithLabel("Enter a name for the New Instance");
+		text.setText("TestDataModel");
+		sleep();
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+	}
 
-    @After
-    public void runAfterEveryTest() {
-    	bot.activeEditor().save();
-    	bot.activeEditor().close();
-        dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-    }
+	@After
+	public void runAfterEveryTest() {
+		bot.activeEditor().save();
+		bot.activeEditor().close();
+		dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+	}
 
-    @Test
-    public void importXSDTest() throws IOException, URISyntaxException {
-        // File sourceFile = null;
-        // try {
-        // sourceFile = new
-        // File(FileLocator.toFileURL(Platform.getBundle(Activator.PLUGIN_ID).getEntry("testDocuments"))
-        // .getPath().substring(1)
-        // + "testImport.xsd");
-        // } catch (IOException e1) {
-        // e1.printStackTrace();
-        // }
-        // File targetFile = new File(Platform.getInstanceLocation().getURL().getPath().substring(1) +
-        // "testImport.xsd");
-        //
-        // try {
-        // if (sourceFile != null)
-        // Util.copyFile(sourceFile, targetFile);
-        // } catch (Exception e1) {
-        // e1.printStackTrace();
-        // }
-        bot.buttonWithTooltip("Import...").click();
-        // // TODO: now SWTBot doesn't support native SWT dialogs,so this needs more investigation.
-        // /*
-        // * SWTBotShell importDataModelShell = bot.shell("Select the XML definition for XML Schema");
-        // * importDataModelShell.activate(); bot.comboBox(1).setText("testxsd");
-        // * System.out.println(bot.comboBox(1).getText() + "test"); bot.button("Open(O)").click();
-        // */
-        Util.getFileFromCurrentPluginSampleFolder(DSTAR_DATAMODEL).getAbsolutePath();
-    }
+	// @Test
+	public void importXSDTest() throws IOException, URISyntaxException {
+		// File sourceFile = null;
+		// try {
+		// sourceFile = new
+		// File(FileLocator.toFileURL(Platform.getBundle(Activator.PLUGIN_ID).getEntry("testDocuments"))
+		// .getPath().substring(1)
+		// + "testImport.xsd");
+		// } catch (IOException e1) {
+		// e1.printStackTrace();
+		// }
+		// File targetFile = new
+		// File(Platform.getInstanceLocation().getURL().getPath().substring(1) +
+		// "testImport.xsd");
+		//
+		// try {
+		// if (sourceFile != null)
+		// Util.copyFile(sourceFile, targetFile);
+		// } catch (Exception e1) {
+		// e1.printStackTrace();
+		// }
+		bot.buttonWithTooltip("Import...").click();
+		// // TODO: now SWTBot doesn't support native SWT dialogs,so this needs
+		// more investigation.
+		// /*
+		// * SWTBotShell importDataModelShell =
+		// bot.shell("Select the XML definition for XML Schema");
+		// * importDataModelShell.activate();
+		// bot.comboBox(1).setText("testxsd");
+		// * System.out.println(bot.comboBox(1).getText() + "test");
+		// bot.button("Open(O)").click();
+		// */
+		Util.getFileFromCurrentPluginSampleFolder(DSTAR_DATAMODEL)
+				.getAbsolutePath();
+	}
 
-    @Test
-    public void importXSDSchemaFromLocalTest() {
-        File sourceFile = null;
-        try {
-            sourceFile = new File(FileLocator.toFileURL(Platform.getBundle(Activator.PLUGIN_ID).getEntry("testDocuments"))
-                    .getPath().substring(1)
-                    + "testImport.xsd");
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        File targetFile = new File(Platform.getInstanceLocation().getURL().getPath().substring(1) + "testImport.xsd");
+	// @Test
+	public void importXSDSchemaFromLocalTest() {
+		File sourceFile = null;
+		try {
+			sourceFile = new File(FileLocator
+					.toFileURL(
+							Platform.getBundle(Activator.PLUGIN_ID).getEntry(
+									"testDocuments")).getPath().substring(1)
+					+ "testImport.xsd");
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		File targetFile = new File(Platform.getInstanceLocation().getURL()
+				.getPath().substring(1)
+				+ "testImport.xsd");
 
-        try {
-            if (sourceFile != null)
-                Util.copyFile(sourceFile, targetFile);
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
-        bot.buttonWithTooltip("import/include specific Schema Namespace ...").click();
-        SWTBotShell importXSDSchemaShell = bot.shell("Import xsd schema modules");
-        importXSDSchemaShell.activate();
-        bot.button("Add xsd from local").click();
-        /*
-         * bot.comboBox(0).setText("testxsd"); System.out.println(bot.comboBox(1).getText() + "test");
-         * bot.button("Open(O)").click();
-         */
-    }
+		try {
+			if (sourceFile != null)
+				Util.copyFile(sourceFile, targetFile);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		bot.buttonWithTooltip("import/include specific Schema Namespace ...")
+				.click();
+		SWTBotShell importXSDSchemaShell = bot
+				.shell("Import xsd schema modules");
+		importXSDSchemaShell.activate();
+		bot.button("Add xsd from local").click();
+		/*
+		 * bot.comboBox(0).setText("testxsd");
+		 * System.out.println(bot.comboBox(1).getText() + "test");
+		 * bot.button("Open(O)").click();
+		 */
+	}
 }

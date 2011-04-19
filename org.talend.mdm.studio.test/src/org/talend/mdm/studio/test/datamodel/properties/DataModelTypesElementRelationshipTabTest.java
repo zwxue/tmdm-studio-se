@@ -44,7 +44,7 @@ public class DataModelTypesElementRelationshipTabTest extends
 		TalendSWTBotForMDM {
 
 	private SWTBotTree elementsBotTree;
-	
+
 	private SWTBotTree typesBotTree;
 
 	private DataModelMainPage mainpage;
@@ -100,10 +100,10 @@ public class DataModelTypesElementRelationshipTabTest extends
 		sleep();
 		bot.button("OK").click();
 		sleep(2);
-		typeNode = typesBotTree.getTreeItem("ComplexTypeEntityType")
-				.expand().getNode("subelement");
+		typeNode = typesBotTree.getTreeItem("ComplexTypeEntityType").expand()
+				.getNode("subelement");
 		typeNode.select();
-		bot.toolbarButtonWithTooltip("Expand...", 0).click();
+		bot.toolbarButtonWithTooltip("Expand...", 1).click();
 	}
 
 	@After
@@ -130,8 +130,8 @@ public class DataModelTypesElementRelationshipTabTest extends
 	@Test
 	public void setForeignKeyFilterTest() {
 		bot.buttonWithTooltip("Add", 0).click();
-		bot.table().click(0,0);
-		bot.text().setText("BrowseItem/Owner");
+		bot.tree().select(0);
+		// bot.text().setText("BrowseItem/Owner");
 		bot.button("Apply").click();
 	}
 

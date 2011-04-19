@@ -16,7 +16,6 @@ import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
@@ -26,23 +25,23 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class TransformerRefreshTest extends TalendSWTBotForMDM {
 
-    private SWTBotTreeItem jobParentItem;
+	private SWTBotTreeItem jobParentItem;
 
-    @Before
-    public void runBeforeEveryTest() {
-        jobParentItem = serverItem.getNode("Job Repository");
-        jobParentItem.expand();
+	@Before
+	public void runBeforeEveryTest() {
+		jobParentItem = serverItem.getNode("Job Repository");
+		jobParentItem.expand();
 
-    }
+	}
 
-    @After
-    public void runAfterEveryTest() {
+	@After
+	public void runAfterEveryTest() {
 
-    }
+	}
 
-    @Test
-    public void refreshJobTest() {
-        jobParentItem.contextMenu("Refresh").click();
-    }
+	// @Test
+	public void refreshJobTest() {
+		jobParentItem.contextMenu("Refresh").click();
+	}
 
 }

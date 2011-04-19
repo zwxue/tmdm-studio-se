@@ -27,18 +27,18 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class ImportObjectsTest extends TalendSWTBotForMDM {
 
-    private static final long ONE_MINUTE_IN_MILLISEC = 60000;
+	private static final long ONE_MINUTE_IN_MILLISEC = 60000;
 
 	@Before
-    public void runBeforeEveryTest() {
-    }
+	public void runBeforeEveryTest() {
+	}
 
-    @After
-    public void runAfterEveryTest() {
-    }
+	@After
+	public void runAfterEveryTest() {
+	}
 
-    @Test
-    public void importObjectsTest() {
+	@Test
+	public void importObjectsTest() {
 		serverItem.contextMenu("Import").click();
 		bot.shell("Import Objects").activate();
 		bot.radio("Select archive file:").click();
@@ -48,15 +48,15 @@ public class ImportObjectsTest extends TalendSWTBotForMDM {
 		bot.button("OK").click();
 		bot.waitUntil(Conditions.shellIsActive("Import Objects"));
 		SWTBotShell shell = bot.shell("Import Objects");
-		sleep(5);
+		sleep(10);
 		bot.button("Finish").click();
 		bot.waitUntil(Conditions.shellCloses(shell));
 		sleep();
 		bot.shell("Confirm Overwrite").activate();
 		bot.button("Yes To All").click();
-		bot.waitUntil(Conditions.shellCloses(bot.shell("Progress Information")),
+		bot.waitUntil(
+				Conditions.shellCloses(bot.shell("Progress Information")),
 				ONE_MINUTE_IN_MILLISEC * 10);
-	
-    	
-    }
+
+	}
 }

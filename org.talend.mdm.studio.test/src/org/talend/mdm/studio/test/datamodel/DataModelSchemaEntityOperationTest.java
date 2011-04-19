@@ -23,13 +23,11 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
-import org.eclipse.ui.IPageLayout;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
-import org.talend.mdm.studio.test.util.Util;
 
 import com.amalto.workbench.editors.DataModelMainPage;
 import com.amalto.workbench.editors.xsdeditor.XSDEditor;
@@ -42,32 +40,22 @@ import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
 
-    private SWTBotTree conceptBotTree;
+	private SWTBotTree conceptBotTree;
 
-    private DataModelMainPage mainpage;
+	private DataModelMainPage mainpage;
 
-    private SWTBotTreeItem dataModelItem;
-    
+	private SWTBotTreeItem dataModelItem;
+
 	private SWTBotTreeItem conceptNode;
 
-    @Before
-    public void runBeforeEveryTest() {
+	@Before
+	public void runBeforeEveryTest() {
 		dataModelItem = serverItem.getNode("Data Model [HEAD]");
 		dataModelItem.expand();
-
-		dataModelItem.contextMenu("New").click();
-		SWTBotShell newDataContainerShell = bot.shell("New Data Model");
-		newDataContainerShell.activate();
-		SWTBotText text = bot
-				.textWithLabel("Enter a name for the New Instance");
-		text.setText("TestDataModel");
-		sleep();
-		bot.buttonWithTooltip("Add").click();
-		sleep();
-		bot.button("OK").click();
-		sleep();
-		Assert.assertNotNull(dataModelItem.getNode("TestDataModel"));
-		sleep(2);
+		if (dataModelItem.getNodes().contains("TestDataModel"))
+			dataModelItem.getNode("TestDataModel").doubleClick();
+		else
+			newDatamodel();
 
 		final SWTBotEditor editor = bot.editorByTitle("TestDataModel");
 		Display.getDefault().syncExec(new Runnable() {
@@ -82,8 +70,24 @@ public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
 		newEntity();
 	}
 
-    @After
-    public void runAfterEveryTest() {
+	private void newDatamodel() {
+		dataModelItem.contextMenu("New").click();
+		SWTBotShell newDataContainerShell = bot.shell("New Data Model");
+		newDataContainerShell.activate();
+		SWTBotText text = bot
+				.textWithLabel("Enter a name for the New Instance");
+		text.setText("TestDataModel");
+		sleep();
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+		Assert.assertNotNull(dataModelItem.getNode("TestDataModel"));
+		sleep(2);
+	}
+
+	@After
+	public void runAfterEveryTest() {
 		Display.getDefault().syncExec(new Runnable() {
 
 			public void run() {
@@ -94,22 +98,25 @@ public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
 		dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
 		bot.button("OK").click();
 	}
-    public void newEntity() {
-    	conceptBotTree.contextMenu("New Entity").click();
-    	SWTBotShell newEntityShell = bot.shell("New Entity");
-    	newEntityShell.activate();
-    	// create a entity with a complex type
-    	bot.textWithLabel("Name:").setText("ComplexTypeEntity");
-    	sleep();
-    	bot.button("OK").click();
-    	sleep(2);
-    	conceptNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
-    	conceptNode.select();
-    	bot.toolbarButtonWithTooltip("Expand...", 0).click();
-    }
+
+	public void newEntity() {
+		conceptBotTree.contextMenu("New Entity").click();
+		SWTBotShell newEntityShell = bot.shell("New Entity");
+		newEntityShell.activate();
+		// create a entity with a complex type
+		bot.textWithLabel("Name:").setText("ComplexTypeEntity");
+		sleep();
+		bot.button("OK").click();
+		sleep(2);
+		conceptNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
+		conceptNode.select();
+		bot.toolbarButtonWithTooltip("Expand...", 0).click();
+	}
+
 	public void newElement() {
-		conceptBotTree.getTreeItem("ComplexTypeEntity").getNode("ComplexTypeEntityType")
-				.contextMenu("Add Element").click();
+		conceptBotTree.getTreeItem("ComplexTypeEntity")
+				.getNode("ComplexTypeEntityType").contextMenu("Add Element")
+				.click();
 
 		SWTBotShell newElementShell = bot.shell("Add a new Business Element");
 		newElementShell.activate();
@@ -121,9 +128,10 @@ public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
 		conceptNode.select();
 		bot.toolbarButtonWithTooltip("Expand...").click();
 	}
-    @Test
-    public void newEntityTest() {
-    	conceptNode.contextMenu("New Entity").click();
+
+	@Test
+	public void newEntityTest() {
+		conceptNode.contextMenu("New Entity").click();
 		SWTBotShell newEntityShell = bot.shell("New Entity");
 		newEntityShell.activate();
 		// create a entity with a complex type
@@ -133,227 +141,228 @@ public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
 		sleep(2);
 	}
 
-    @Test
-    public void deleteEntityTest() {
-        SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("newEntity");
-        conceptNode.select();
-        conceptNode.contextMenu("Delete Entity").click();
-        sleep();
-    }
+	@Test
+	public void deleteEntityTest() {
+		conceptNode.select();
+		conceptNode.contextMenu("Delete Entity").click();
+		sleep();
+	}
 
-    @Test
-    public void editEntityTest() {
-        conceptNode.contextMenu("Edit Entity").click();
-        SWTBotShell editEntityShell = bot.shell("Edit Entity");
-        editEntityShell.activate();
-        bot.textWithLabel("Enter a new Name for the Entity").setText("EditEntity");
-        sleep();
-        bot.button("OK").click();
-        sleep(2);
-        Assert.assertEquals("EditEntity", conceptNode.getText());
-        //new feature in 4.2,see bug 0017070:
-//        Assert.assertNotNull(conceptNode.getNode("EditEntity"));
-    }
+	@Test
+	public void editEntityTest() {
+		conceptNode.contextMenu("Edit Entity").click();
+		SWTBotShell editEntityShell = bot.shell("Edit Entity");
+		editEntityShell.activate();
+		bot.textWithLabel("Enter a new Name for the Entity").setText(
+				"EditEntity");
+		sleep();
+		bot.button("OK").click();
+		sleep(2);
+		Assert.assertEquals("EditEntity", conceptNode.getText());
+		// new feature in 4.2,see bug 0017070:
+		// Assert.assertNotNull(conceptNode.getNode("EditEntity"));
+	}
 
-    @Test
-    public void generateDefaultViewTest() {
-    	bot.activeEditor().save();
-        conceptNode.contextMenu("Generate default Browse Items Views").click();
-        sleep();
-        SWTBotShell generateViewShell = bot.shell("Generate default Browse Items Views");
-        generateViewShell.activate();
-        bot.button("Finish").click();
-    }
+	@Test
+	public void generateDefaultViewTest() {
+		bot.activeEditor().save();
+		conceptNode.contextMenu("Generate default Browse Items Views").click();
+		sleep();
+		SWTBotShell generateViewShell = bot
+				.shell("Generate default Browse Items Views");
+		generateViewShell.activate();
+		bot.button("Finish").click();
+	}
 
-    @Test
-    public void copyEntityTest() {
-        conceptNode.contextMenu("Copy Entity").click();
-        sleep();
-        conceptNode.select();
-        conceptNode.contextMenu("Paste Entity").click();
-        sleep();
-        SWTBotShell saveShell = bot.shell("Copy Entity");
-        saveShell.activate();
-        bot.button("OK").click();
-        sleep();
-    }
-    
-    @Test
-    public void changeToSimpleTypeTest() {
-        conceptNode.contextMenu("Change to a Simple Type").click();
-        sleep();
-        SWTBotShell changeTypeShell = bot.shell("Make Simple Type");
-        changeTypeShell.activate();
-        bot.radio("Custom").click();
-        sleep();
-        bot.ccomboBoxWithLabel("Type").setSelection(1);
-        sleep();
-        bot.button("OK").click();
-        sleep(2);
-    }
-    @Test
-    public void changeToComplexTypeTest() {
-        conceptNode.contextMenu("Change to a Complex Type").click();
-        sleep();
-        SWTBotShell changeTypeShell = bot.shell("Change To Complex Type");
-        changeTypeShell.activate();
-        bot.radio("Sequence").click();
-        bot.button("OK").click();
-        sleep(2);
-    }
+	// @Test
+	public void copyEntityTest() {
+		conceptNode.contextMenu("Copy Entity").click();
+		sleep();
+		conceptNode.select();
+		conceptNode.contextMenu("Paste Entity").click();
+		sleep();
+		SWTBotShell saveShell = bot.shell("Copy Entity");
+		saveShell.activate();
+		bot.button("OK").click();
+		sleep();
+	}
 
+	@Test
+	public void changeToSimpleTypeTest() {
+		conceptNode.contextMenu("Change to a Simple Type").click();
+		sleep();
+		SWTBotShell changeTypeShell = bot.shell("Make Simple Type");
+		changeTypeShell.activate();
+		bot.radio("Custom").click();
+		sleep();
+		bot.ccomboBoxWithLabel("Type").setSelection(1);
+		sleep();
+		bot.button("OK").click();
+		sleep(2);
+	}
 
+	@Test
+	public void changeToComplexTypeTest() {
+		conceptNode.contextMenu("Change to a Complex Type").click();
+		sleep();
+		SWTBotShell changeTypeShell = bot.shell("Complex Type Properties");
+		changeTypeShell.activate();
+		bot.radio("Sequence").click();
+		bot.button("OK").click();
+		sleep(2);
+	}
 
-    @Test
-    public void addKeyTest() {
-        conceptNode.contextMenu("Add Key").click();
-        sleep();
-        SWTBotShell changeTypeShell = bot.shell("Add a new Key");
-        changeTypeShell.activate();
-        bot.comboBox(1).setSelection(1);
-        bot.ccomboBox(0).setSelection(1);
-        bot.text().setText("Test");
-        bot.button("OK").click();
-    }
+	@Test
+	public void addKeyTest() {
+		conceptNode.contextMenu("Add Key").click();
+		sleep();
+		SWTBotShell changeTypeShell = bot.shell("Add a new Key");
+		changeTypeShell.activate();
+		bot.ccomboBox(1).setSelection(1);
+		bot.text().setText("Test");
+		bot.button("OK").click();
+	}
 
-    @Test
-    public void setLabelsTest() {
-        conceptNode.contextMenu("Set the Labels").click();
-        sleep();
-        SWTBotShell shell = bot.shell("Set the Labels");
-        shell.activate();
-        bot.comboBox().setSelection(0);
-        bot.text().setText("en");
-        bot.buttonWithTooltip("Add").click();
-        sleep();
-        bot.comboBox().setSelection(1);
-        bot.text().setText("fr");
-        bot.buttonWithTooltip("Add").click();
-        sleep();
-        bot.table().select(1);
-        bot.buttonWithTooltip("Del").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-    }
+	@Test
+	public void setLabelsTest() {
+		conceptNode.contextMenu("Set the Labels").click();
+		sleep();
+		SWTBotShell shell = bot.shell("Set the Labels");
+		shell.activate();
+		bot.comboBox().setSelection(0);
+		bot.text().setText("en");
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.comboBox().setSelection(1);
+		bot.text().setText("fr");
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.table().select(1);
+		bot.buttonWithTooltip("Del").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+	}
 
-    @Test
-    public void setDescriptionsTest() {
-        conceptNode.contextMenu("Set the Descriptions").click();
-        sleep();
-        SWTBotShell shell = bot.shell("Set the Descriptions of This Element");
-        shell.activate();
-        bot.comboBox().setSelection(0);
-        bot.text().setText("enlish descriptions");
-        bot.buttonWithTooltip("Add").click();
-        sleep();
-        bot.comboBox().setSelection(1);
-        bot.text().setText("french descriptions");
-        bot.buttonWithTooltip("Add").click();
-        sleep();
-        bot.table().select(1);
-        bot.buttonWithTooltip("Del").click();
-        sleep();
-        bot.button("OK").click();
-    }
+	@Test
+	public void setDescriptionsTest() {
+		conceptNode.contextMenu("Set the Descriptions").click();
+		sleep();
+		SWTBotShell shell = bot.shell("Set the Descriptions of This Element");
+		shell.activate();
+		bot.comboBox().setSelection(0);
+		bot.text().setText("enlish descriptions");
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.comboBox().setSelection(1);
+		bot.text().setText("french descriptions");
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.table().select(1);
+		bot.buttonWithTooltip("Del").click();
+		sleep();
+		bot.button("OK").click();
+	}
 
-    @Test
-    public void setLookupFieldsTest() {
-    	newElement();
-        conceptNode.contextMenu("Set Lookup Fields").click();
-        sleep();
-        SWTBotShell shell = bot.shell("Set Lookup Fields");
-        shell.activate();
-        bot.ccomboBox().setSelection(0);
-        bot.buttonWithTooltip("Add").click();
+	@Test
+	public void setLookupFieldsTest() {
+		newElement();
+		conceptNode.contextMenu("Set Lookup Fields").click();
+		sleep();
+		SWTBotShell shell = bot.shell("Set Lookup Fields");
+		shell.activate();
+		bot.ccomboBox().setSelection(0);
+		bot.buttonWithTooltip("Add").click();
 
-        bot.ccomboBox().setSelection(1);
-        bot.buttonWithTooltip("Add").click();
+		bot.ccomboBox().setSelection(1);
+		bot.buttonWithTooltip("Add").click();
 
-        bot.table().select(0);
-        bot.buttonWithTooltip("Move down the selected item").click();
-        sleep(2);
-        bot.buttonWithTooltip("Move up the selected item").click();
-        sleep(2);
+		bot.table().select(0);
+		bot.buttonWithTooltip("Move down the selected item").click();
+		sleep(2);
+		bot.buttonWithTooltip("Move up the selected item").click();
+		sleep(2);
 
-        bot.table().select(1);
-        bot.buttonWithTooltip("Delete the selected item").click();
-        sleep();
-        bot.button("OK").click();
-    }
+		bot.table().select(1);
+		bot.buttonWithTooltip("Delete the selected item").click();
+		sleep();
+		bot.button("OK").click();
+	}
 
-    @Test
-    public void setWriteAccessTest() {
-        conceptNode.contextMenu("Set the Roles with Write Access").click();
-        SWTBotShell newViewShell = bot.shell("Set The Roles That Have Write Access");
-        newViewShell.activate();
-        bot.ccomboBox().setSelection(0);
-        bot.buttonWithTooltip("Add").click();
+	@Test
+	public void setWriteAccessTest() {
+		conceptNode.contextMenu("Set the Roles with Write Access").click();
+		SWTBotShell newViewShell = bot
+				.shell("Set The Roles That Have Write Access");
+		newViewShell.activate();
+		bot.ccomboBox().setSelection(0);
+		bot.buttonWithTooltip("Add").click();
 
-        bot.ccomboBox().setSelection(1);
-        bot.buttonWithTooltip("Add").click();
+		bot.ccomboBox().setSelection(1);
+		bot.buttonWithTooltip("Add").click();
 
-        bot.table().select(0);
-        bot.buttonWithTooltip("Move down the selected item").click();
-        sleep(2);
-        bot.buttonWithTooltip("Move up the selected item").click();
-        sleep(2);
+		bot.table().select(0);
+		bot.buttonWithTooltip("Move down the selected item").click();
+		sleep(2);
+		bot.buttonWithTooltip("Move up the selected item").click();
+		sleep(2);
 
-        bot.table().select(0);
-        bot.buttonWithTooltip("Delete the selected item").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-    }
+		bot.table().select(0);
+		bot.buttonWithTooltip("Delete the selected item").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+	}
 
-    @Test
-    public void setNoAccessTest() {
-        conceptNode.contextMenu("Set the Roles with No Access").click();
-        SWTBotShell newViewShell = bot.shell("Set The Roles That Cannot Access This Field");
-        newViewShell.activate();
-        bot.ccomboBox().setSelection(0);
-        bot.buttonWithTooltip("Add").click();
+	@Test
+	public void setNoAccessTest() {
+		conceptNode.contextMenu("Set the Roles with No Access").click();
+		SWTBotShell newViewShell = bot
+				.shell("Set The Roles That Cannot Access This Field");
+		newViewShell.activate();
+		bot.ccomboBox().setSelection(0);
+		bot.buttonWithTooltip("Add").click();
 
-        bot.ccomboBox().setSelection(1);
-        bot.buttonWithTooltip("Add").click();
+		bot.ccomboBox().setSelection(1);
+		bot.buttonWithTooltip("Add").click();
 
-        bot.table().select(0);
-        bot.buttonWithTooltip("Move down the selected item").click();
-        sleep(2);
-        bot.buttonWithTooltip("Move up the selected item").click();
-        sleep(2);
+		bot.table().select(0);
+		bot.buttonWithTooltip("Move down the selected item").click();
+		sleep(2);
+		bot.buttonWithTooltip("Move up the selected item").click();
+		sleep(2);
 
-        bot.table().select(1);
-        bot.buttonWithTooltip("Delete the selected item").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-    }
+		bot.table().select(1);
+		bot.buttonWithTooltip("Delete the selected item").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+	}
 
-    @Test
-    public void setWorkflowAccessTest() {
-        conceptNode.contextMenu("Set the Workflow Access").click();
-        SWTBotShell shell = bot.shell("Set the Workflow Access");
-        shell.activate();
-        bot.buttonWithTooltip("Add").click();
-        bot.button("OK").click();
-    }
+	// @Test
+	public void setWorkflowAccessTest() {
+		conceptNode.contextMenu("Set the Workflow Access").click();
+		SWTBotShell shell = bot.shell("Set the Workflow Access");
+		shell.activate();
+		bot.buttonWithTooltip("Add").click();
+		bot.button("OK").click();
+	}
 
-    @Test
-    public void addValidationRuleTest() {
-        conceptNode.contextMenu("Set the Validation Rule").click();
-        SWTBotShell shell = bot.shell("Add a Validation Rule");
-        shell.activate();
-        bot.text().setText("vadation rule");
-        bot.buttonWithTooltip("Add").click();
-        bot.button("OK").click();
-    }
+	// @Test
+	public void addValidationRuleTest() {
+		conceptNode.contextMenu("Set the Validation Rule").click();
+		SWTBotShell shell = bot.shell("Add a Validation Rule");
+		shell.activate();
+		bot.text().setText("vadation rule");
+		bot.buttonWithTooltip("Add").click();
+		bot.button("OK").click();
+	}
 
-    @Test
-    public void deleteValidationRuleTest() {
-        conceptNode.contextMenu("Delete All Validation Rules").click();
-        SWTBotShell shell = bot.shell("Confirm");
-        shell.activate();
-        bot.button("OK").click();
-    }
+	// @Test
+	public void deleteValidationRuleTest() {
+		conceptNode.contextMenu("Delete All Validation Rules").click();
+		SWTBotShell shell = bot.shell("Confirm");
+		shell.activate();
+		bot.button("OK").click();
+	}
 }

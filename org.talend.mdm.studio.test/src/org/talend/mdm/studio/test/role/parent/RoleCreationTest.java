@@ -20,7 +20,6 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
@@ -30,44 +29,44 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class RoleCreationTest extends TalendSWTBotForMDM {
 
-    private SWTBotTreeItem roleParentItem;
+	private SWTBotTreeItem roleParentItem;
 
-    @Before
-    public void runBeforeEveryTest() {
-        roleParentItem = serverItem.getNode("Role [HEAD]");
-        roleParentItem.expand();
-    }
+	@Before
+	public void runBeforeEveryTest() {
+		roleParentItem = serverItem.getNode("Role [HEAD]");
+		roleParentItem.expand();
+	}
 
-//    @Test
-    public void roleCreationTest() {
-        roleParentItem.contextMenu("New Role").click();
-        // bot.sleep(1000);
-        SWTBotShell shell = bot.shell("New Role");
-        shell.activate();
-        SWTBotText text = bot.textWithLabel("Enter a name for the Role:");
-        text.setText("TestRole");
-        sleep();
-        bot.buttonWithTooltip("Add").click();
-        sleep();
-        bot.button(IDialogConstants.NEXT_LABEL).click();
-        sleep();
+	// @Test
+	public void roleCreationTest() {
+		roleParentItem.contextMenu("New Role").click();
+		// bot.sleep(1000);
+		SWTBotShell shell = bot.shell("New Role");
+		shell.activate();
+		SWTBotText text = bot.textWithLabel("Enter a name for the Role:");
+		text.setText("TestRole");
+		sleep();
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.button(IDialogConstants.NEXT_LABEL).click();
+		sleep();
 
-        bot.comboBoxWithLabel("Administrator").selection();
-        bot.button(IDialogConstants.FINISH_LABEL).click();
-        bot.activeEditor().save();
-        bot.activeEditor().close();
+		bot.comboBoxWithLabel("Administrator").selection();
+		bot.button(IDialogConstants.FINISH_LABEL).click();
+		bot.activeEditor().save();
+		bot.activeEditor().close();
 
-        Assert.assertNotNull(roleParentItem.getNode("TestRole"));
-        sleep(2);
-    }
+		Assert.assertNotNull(roleParentItem.getNode("TestRole"));
+		sleep(2);
+	}
 
-    @After
-    public void runAfterEveryTest() {
-        roleParentItem.getNode("TestRole").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
+	@After
+	public void runAfterEveryTest() {
+		roleParentItem.getNode("TestRole").contextMenu("Delete").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
 
-    }
+	}
 
 }

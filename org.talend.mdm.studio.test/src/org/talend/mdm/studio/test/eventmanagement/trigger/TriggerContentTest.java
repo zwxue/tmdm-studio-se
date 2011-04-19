@@ -45,6 +45,7 @@ public class TriggerContentTest extends TalendSWTBotForMDM {
 	public void runBeforeEveryTest() {
 		eventManagementItem = serverItem.getNode("Event Management");
 		eventManagementItem.expand();
+		triggerParentNode = eventManagementItem.getNode("Trigger [HEAD]");
 
 	}
 
@@ -59,7 +60,6 @@ public class TriggerContentTest extends TalendSWTBotForMDM {
 	}
 
 	private void init() {
-		triggerParentNode = eventManagementItem.getNode("Trigger [HEAD]");
 		triggerParentNode.contextMenu("New").click();
 		bot.text().setText("TriggerDemo");
 		bot.button("OK").click();
@@ -73,7 +73,7 @@ public class TriggerContentTest extends TalendSWTBotForMDM {
 	@Test
 	public void setDescriptionTest() {
 		init();
-		bot.textWithLabel("Description").setText("Agent updated trigger");
+		bot.text(0).setText("Agent updated trigger");
 		Assert.assertEquals("Agent updated trigger",
 				bot.textWithLabel("Description").getText());
 	}
@@ -183,7 +183,8 @@ public class TriggerContentTest extends TalendSWTBotForMDM {
 		Assert.assertEquals("C0 And C1 And C2", bot.textInGroup("Conditions:")
 				.getText());
 		bot.activeEditor().save();
-		SWTBotMenu deleteMenu = eventManagementItem.getNode("Trigger [HEAD]").getNode("TriggerDemo").contextMenu("Delete");
+		SWTBotMenu deleteMenu = triggerParentNode.getNode("TriggerDemo")
+				.contextMenu("Delete");
 		deleteMenu.click();
 		sleep();
 		bot.button("OK").click();
