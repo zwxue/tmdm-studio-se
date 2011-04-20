@@ -14,7 +14,6 @@ package org.talend.mdm.studio.test.datamodel.properties;
 
 import junit.framework.Assert;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
@@ -55,12 +54,11 @@ public class DataModelSchemaEntityRulesTabTest extends TalendSWTBotForMDM {
 		dataModelItem = serverItem.getNode("Data Model [HEAD]");
 		dataModelItem.expand();
 
-
 	}
 
 	@After
 	public void runAfterEveryTest() {
-		
+
 	}
 
 	public void newDataModel() {
@@ -88,9 +86,9 @@ public class DataModelSchemaEntityRulesTabTest extends TalendSWTBotForMDM {
 		});
 		Tree conceptTree = mainpage.getElementsViewer().getTree();
 		conceptBotTree = new SWTBotTree(conceptTree);
-		
+
 	}
-	
+
 	public void newEntity() {
 		conceptBotTree.contextMenu("New Entity").click();
 		SWTBotShell newEntityShell = bot.shell("New Entity");
@@ -111,8 +109,8 @@ public class DataModelSchemaEntityRulesTabTest extends TalendSWTBotForMDM {
 		newEntity();
 		bot.viewById(IPageLayout.ID_PROP_SHEET).setFocus();
 		Util.selecteTalendTabbedPropertyListAtIndex(bot, 3);
-		
-		bot.buttonWithTooltip("Add", 1).click();
+
+		bot.buttonWithTooltip("Add", 0).click();
 		SWTBotShell shell = bot.shell("Add a Validation Rule");
 		shell.activate();
 		bot.text().setText("ValidationRule");
@@ -124,20 +122,13 @@ public class DataModelSchemaEntityRulesTabTest extends TalendSWTBotForMDM {
 	@Test
 	public void deleteValidationRuleTest() {
 		bot.tree(0).select(0);
-		bot.buttonWithTooltip("Remove", 1).click();
+		bot.buttonWithTooltip("Remove", 0).click();
 		bot.button("Apply").click();
-		
-
-		Display.getDefault().syncExec(new Runnable() {
-
-			public void run() {
-				mainpage.doSave(new NullProgressMonitor());
-				bot.activeEditor().close();
-			}
-		});
+		bot.activeEditor().save();
+		bot.activeEditor().close();
 		dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
 		bot.button("OK").click();
-	
+
 	}
 
 }

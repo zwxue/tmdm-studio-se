@@ -55,13 +55,26 @@ public class DataModelSchemaEntityMainTabTest extends TalendSWTBotForMDM {
 		dataModelItem = serverItem.getNode("Data Model [HEAD]");
 		dataModelItem.expand();
 
+		newDataModel();
+		newEntity();
+		bot.viewById(IPageLayout.ID_PROP_SHEET).setFocus();
+		Util.selecteTalendTabbedPropertyListAtIndex(bot, 0);
 	}
 
 	@After
 	public void runAfterEveryTest() {
-		
+		Display.getDefault().syncExec(new Runnable() {
+
+			public void run() {
+				mainpage.doSave(new NullProgressMonitor());
+				bot.activeEditor().close();
+			}
+		});
+		dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
+		bot.button("OK").click();
 	}
-	public void	newDataModel(){
+
+	public void newDataModel() {
 		dataModelItem.contextMenu("New").click();
 		SWTBotShell newDataContainerShell = bot.shell("New Data Model");
 		newDataContainerShell.activate();
@@ -86,8 +99,9 @@ public class DataModelSchemaEntityMainTabTest extends TalendSWTBotForMDM {
 		});
 		Tree conceptTree = mainpage.getElementsViewer().getTree();
 		conceptBotTree = new SWTBotTree(conceptTree);
-		
+
 	}
+
 	public void newEntity() {
 		conceptBotTree.contextMenu("New Entity").click();
 		SWTBotShell newEntityShell = bot.shell("New Entity");
@@ -104,12 +118,6 @@ public class DataModelSchemaEntityMainTabTest extends TalendSWTBotForMDM {
 
 	@Test
 	public void editEntityTest() {
-		newDataModel();
-		newEntity();
-		bot.viewById(IPageLayout.ID_PROP_SHEET).setFocus();
-		Util.selecteTalendTabbedPropertyListAtIndex(bot, 0);
-		
-		
 		bot.textWithLabel("Name").setText("RenameEntity");
 		bot.button("Apply").click();
 		Assert.assertEquals("RenameEntity", conceptNode.getText());
@@ -130,11 +138,10 @@ public class DataModelSchemaEntityMainTabTest extends TalendSWTBotForMDM {
 
 	@Test
 	public void deleteKeyTest() {
-		bot.treeInGroup("Key Definition",0).select("Test");
+		addKeyTest();
+		bot.treeInGroup("Key Definition", 0).select("Test");
 		bot.buttonWithTooltip("Delete keys").click();
-
 		bot.button("Apply").click();
-		Assert.assertTrue(conceptNode.getNode("Test") == null);
 	}
 
 	@Test
@@ -146,41 +153,31 @@ public class DataModelSchemaEntityMainTabTest extends TalendSWTBotForMDM {
 		bot.button("OK").click();
 
 		bot.button("Apply").click();
-		Assert.assertNotNull(conceptNode.getNode("Test").getNode("Test"));
+		Assert.assertNotNull(conceptNode.getNode("ComplexTypeEntity").getNode(
+				"Test"));
 	}
 
 	@Test
 	public void editFieldTest() {
-		bot.treeInGroup("Key Definition",1).select("Test");
+		bot.treeInGroup("Key Definition", 1).select(0);
 		bot.buttonWithTooltip("Edit Field...").click();
 		SWTBotShell shell = bot.shell("Select one field");
 		shell.activate();
-		bot.ccomboBox().setText("Test1");
+		bot.ccomboBox().setText("Test");
 		bot.button("OK").click();
 
 		bot.button("Apply").click();
-		Assert.assertNotNull(conceptNode.getNode("Test").getNode("Test1"));
+		Assert.assertNotNull(conceptNode.getNode("ComplexTypeEntity").getNode(
+				"Test"));
 	}
 
 	@Test
 	public void deleteFieldTest() {
-		bot.tree(0).select("Test1");
+		addFieldTest();
+		bot.treeInGroup("Key Definition", 1).select("Test");
 		bot.buttonWithTooltip("Delete Fields").click();
-
 		bot.button("Apply").click();
-		Assert.assertTrue(conceptNode.getNode("Test").getNode("Test1") == null);
-		
-		
-		Display.getDefault().syncExec(new Runnable() {
 
-			public void run() {
-				mainpage.doSave(new NullProgressMonitor());
-				bot.activeEditor().close();
-			}
-		});
-		dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
-		bot.button("OK").click();
-	
 	}
 
 }

@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.mdm.studio.test.view.item;
 
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
@@ -71,9 +70,23 @@ public class ViewRenameTest extends TalendSWTBotForMDM {
 	}
 
 	private void setElements() {
-		bot.buttonWithTooltip("Add", 0).click();
+		setViewableElementsTest();
 		bot.buttonWithTooltip("Add", 1).click();
 
+	}
+
+	private void setViewableElementsTest() {
+		bot.buttonWithTooltip("Add Multiple", 0).click();
+
+		bot.shell("Select Multiple XPaths").activate();
+		// bot.comboBox().setSelection("CONF");
+		// sleep();
+		SWTBotTreeItem parent = bot.tree().getTreeItem("Conf").expand()
+				.getNode(0).expand();
+		parent.select("id");
+		sleep();
+		bot.button("Add").click();
+		sleep();
 	}
 
 	private void setDescription() {

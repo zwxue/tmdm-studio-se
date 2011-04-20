@@ -38,8 +38,29 @@ public class IsEmptyOrNullOperatorTest extends TalendSWTBotForMDM {
 
 	}
 
+	private void setElements() {
+		setViewableElementsTest();
+		bot.buttonWithTooltip("Add", 1).click();
+
+	}
+
+	private void setViewableElementsTest() {
+		bot.buttonWithTooltip("Add Multiple", 0).click();
+
+		bot.shell("Select Multiple XPaths").activate();
+		// bot.comboBox().setSelection("CONF");
+		// sleep();
+		SWTBotTreeItem parent = bot.tree().getTreeItem("Conf").expand()
+				.getNode(0).expand();
+		parent.select("id");
+		sleep();
+		bot.button("Add").click();
+		sleep();
+	}
+
 	@After
 	public void runAfterEveryTest() {
+		bot.activeEditor().save();
 		bot.activeEditor().close();
 		viewParentItem.getNode(PREFIX + "Conf").contextMenu("Delete").click();
 		sleep();
@@ -64,6 +85,7 @@ public class IsEmptyOrNullOperatorTest extends TalendSWTBotForMDM {
 
 	private void init() {
 		createView();
+		setElements();
 	}
 
 	// new feature in 4.2,see bug 0018359.

@@ -28,79 +28,93 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class ViewCreationTest extends TalendSWTBotForMDM {
 
-    private SWTBotTreeItem viewParentItem;
+	private SWTBotTreeItem viewParentItem;
 
-    private String PREFIX = "Browse_items_";
+	private String PREFIX = "Browse_items_";
 
-    @Before
-    public void runBeforeEveryTest() {
-        viewParentItem = serverItem.getNode("View [HEAD]");
-        viewParentItem.expand();
-    }
+	@Before
+	public void runBeforeEveryTest() {
+		viewParentItem = serverItem.getNode("View [HEAD]");
+		viewParentItem.expand();
+	}
 
-    @Test
-    public void viewCreationTest() {
-        // Create a new view to test the filter of the xpath.
-        viewParentItem.contextMenu("New").click();
-        // bot.sleep(1000);
-        SWTBotShell newViewShell = bot.shell("New View");
-        newViewShell.activate();
-        bot.buttonWithTooltip("Select one Entity").click();
-        bot.shell("Select one Entity").activate();
+	@Test
+	public void viewCreationTest() {
+		// Create a new view to test the filter of the xpath.
+		viewParentItem.contextMenu("New").click();
+		// bot.sleep(1000);
+		SWTBotShell newViewShell = bot.shell("New View");
+		newViewShell.activate();
+		bot.buttonWithTooltip("Select one Entity").click();
+		bot.shell("Select one Entity").activate();
 
-        // Test filter of the system data model "PROVISIONING"
-        bot.comboBoxWithLabel("Data Models:").setSelection("PROVISIONING");
-        bot.textWithLabel("Filter:").setText("R");
-        sleep();
-        bot.textWithLabel("Filter:").setText("U");
-        sleep();
-        bot.textWithLabel("Filter:").setText("");
-        sleep();
+		// Test filter of the system data model "PROVISIONING"
+		bot.comboBoxWithLabel("Data Models:").setSelection("PROVISIONING");
+		bot.textWithLabel("Filter:").setText("R");
+		sleep();
+		bot.textWithLabel("Filter:").setText("U");
+		sleep();
+		bot.textWithLabel("Filter:").setText("");
+		sleep();
 
-        // Test filter of the system data model "CONF"
-        bot.comboBoxWithLabel("Data Models:").setSelection("CONF");
-        bot.textWithLabel("Filter:").setText("Au");
-        sleep();
-        bot.textWithLabel("Filter:").setText("Con");
-        sleep();
-        bot.textWithLabel("Filter:").setText("");
-        sleep();
+		// Test filter of the system data model "CONF"
+		bot.comboBoxWithLabel("Data Models:").setSelection("CONF");
+		bot.textWithLabel("Filter:").setText("Au");
+		sleep();
+		bot.textWithLabel("Filter:").setText("Con");
+		sleep();
+		bot.textWithLabel("Filter:").setText("");
+		sleep();
 
-        bot.tree().select("Conf");
-        bot.button("Add").click();
-        sleep();
-        bot.button("OK").click();
-        setDescription();
-        setElements();
-        bot.activeEditor().save();
-        sleep();
-        bot.activeEditor().close();
-        viewParentItem.expand();
-        Assert.assertNotNull(viewParentItem.getNode(PREFIX + "Conf"));
-        sleep(2);
-    }
+		bot.tree().select("Conf");
+		bot.button("Add").click();
+		sleep();
+		bot.button("OK").click();
+		setDescription();
+		setElements();
+		bot.activeEditor().save();
+		sleep();
+		bot.activeEditor().close();
+		viewParentItem.expand();
+		Assert.assertNotNull(viewParentItem.getNode(PREFIX + "Conf"));
+		sleep(2);
+	}
 
-    private void setElements() {
-        bot.buttonWithTooltip("Add", 0).click();
-        bot.buttonWithTooltip("Add", 1).click();
+	private void setElements() {
+		setViewableElementsTest();
+		bot.buttonWithTooltip("Add", 1).click();
 
-    }
+	}
 
-    private void setDescription() {
-        bot.buttonWithTooltip("Set the Descriptions").click();
-        bot.shell("Set the Descriptions").activate();
-        bot.comboBox().setSelection("English");
-        String des = "Conf";
-        bot.text().setText(des);
-        bot.buttonWithTooltip("Add").click();
-        bot.button("OK").click();
-    }
+	private void setViewableElementsTest() {
+		bot.buttonWithTooltip("Add Multiple", 0).click();
 
-    @After
-    public void runAfterEveryTest() {
-        viewParentItem.getNode(PREFIX + "Conf").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-    }
+		bot.shell("Select Multiple XPaths").activate();
+		// bot.comboBox().setSelection("CONF");
+		// sleep();
+		SWTBotTreeItem parent = bot.tree().getTreeItem("Conf").expand()
+				.getNode(0).expand();
+		parent.select("id");
+		sleep();
+		bot.button("Add").click();
+		sleep();
+	}
+
+	private void setDescription() {
+		bot.buttonWithTooltip("Set the Descriptions").click();
+		bot.shell("Set the Descriptions").activate();
+		bot.comboBox().setSelection("English");
+		String des = "Conf";
+		bot.text().setText(des);
+		bot.buttonWithTooltip("Add").click();
+		bot.button("OK").click();
+	}
+
+	@After
+	public void runAfterEveryTest() {
+		viewParentItem.getNode(PREFIX + "Conf").contextMenu("Delete").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+	}
 }
