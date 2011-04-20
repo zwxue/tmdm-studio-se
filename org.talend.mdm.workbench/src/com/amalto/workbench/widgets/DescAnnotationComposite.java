@@ -187,9 +187,10 @@ public class DescAnnotationComposite implements SelectionListener {
 			
 		}
 		// only text or blank or null 
-		else if ( !text.equals("")){   //$NON-NLS-1$
+		else if ( !text.equals("") && text.indexOf("[")== -1){    //$NON-NLS-1$ //$NON-NLS-2$
 			dataStore.put("en", text);//$NON-NLS-1$
 		}
+		
 		//  the original code ,use regular expression
 		
 		else {
