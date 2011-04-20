@@ -146,21 +146,71 @@ public class DescAnnotationComposite implements SelectionListener {
 
     private void fillDataStore(String text) {
         dataStore.clear();
-        boolean find = false;
-        Matcher match = DESC_PATTERN.matcher(text);
-        while (match.find()) {
-            find = true;
-            String country = match.group(1).trim().toLowerCase();
-            String desc = match.group(2).trim();
-            if (Util.iso2lang.get(country) != null) {
-                dataStore.put(country, desc);
-            }
-        }
+        
+      // modified by jsxie  to fix the bug 19542        
+		int enIndex =text.indexOf("[EN:");   //$NON-NLS-1$
+		int frIndex =text.indexOf("[FR:");   //$NON-NLS-1$
+		
+		if(enIndex >= 0 && frIndex >=0 ){
+			// EN first
+			if(enIndex < frIndex ){
+			   String enDesc = text.substring(enIndex+4,frIndex-1);
+			   String frDesc = text.substring(frIndex+4,text.length()-1 );
+			  
+               dataStore.put("en", enDesc);  //$NON-NLS-1$
+               dataStore.put("fr", frDesc);  //$NON-NLS-1$
+			   
+			   
+			}
+			// FR first
+			else{
+				String enDesc = text.substring(enIndex+4,text.length()-1);
+				String frDesc = text.substring(frIndex+4,enIndex-1 );
+				
+	           
+	            dataStore.put("fr", frDesc);  //$NON-NLS-1$
+	            dataStore.put("en", enDesc);  //$NON-NLS-1$
 
-        if (!find && !text.equals("")) {//$NON-NLS-1$
-            dataStore.put("en", text);//$NON-NLS-1$
-        }
-    }
+			}
+		}
+		// only EN
+		else if (enIndex>=0 && frIndex==-1){
+			   String enDesc = text.substring(enIndex+4,text.length()-1);
+			   dataStore.put("en", enDesc);   //$NON-NLS-1$
+			
+		}
+		//only FR
+		else if(frIndex>=0 && enIndex==-1){
+			   String frDesc = text.substring(frIndex+4,text.length()-1);
+			   
+			   dataStore.put("fr", frDesc);   //$NON-NLS-1$
+			
+		}
+		// only text or blank or null 
+		else if ( !text.equals("")){   //$NON-NLS-1$
+			dataStore.put("en", text);//$NON-NLS-1$
+		}
+		//  the original code ,use regular expression
+		
+		else {
+	        boolean find = false;
+	        Matcher match = DESC_PATTERN.matcher(text);
+	        
+	        while (match.find()) {
+	            find = true;
+	            String country = match.group(1).trim().toLowerCase();
+	            String desc = match.group(2).trim();
+	            if (Util.iso2lang.get(country) != null) {
+	                dataStore.put(country, desc);
+	            }
+	        }
+	      if (!find && !text.equals("")) {//$NON-NLS-1$
+	      dataStore.put("en", text);//$NON-NLS-1$
+	  }
+			
+  }
+        
+ }
 
     public String getText() {
         return descriptionText.getText();
@@ -205,7 +255,7 @@ public class DescAnnotationComposite implements SelectionListener {
             if (dlg.getReturnCode() == Window.OK) {
                 String outPut = "";//$NON-NLS-1$
                 for (Map.Entry<String, String> m : dataStore.entrySet()) {
-                    outPut += "[" + m.getKey().toUpperCase() + ":" + m.getValue() + "]";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                    outPut += "[" + m.getKey().toUpperCase() + ":" + m.getValue() + "]";//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$ 
                 }
 
                 if (!outPut.equals(descriptionText.getText())) {
