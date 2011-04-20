@@ -242,9 +242,14 @@ public class XSDChangeToComplexTypeAction extends UndoAction implements Selectio
                     }
                 }
                 // modified by jsxie; fix the bug: 0019688 
-                complexType.setName(decl.getTypeDefinition().getName());
-
-                 
+ 
+                if (!anonymous) {
+                    complexType.setName(typeName);
+                }
+                else{
+                	 complexType.setName(decl.getTypeDefinition().getName());
+                }
+               
                 
                 if (superType != null) {
                     complexType.setDerivationMethod(XSDDerivationMethod.EXTENSION_LITERAL);
