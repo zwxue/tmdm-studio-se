@@ -51,6 +51,7 @@ import org.eclipse.xsd.XSDIdentityConstraintCategory;
 import org.eclipse.xsd.XSDIdentityConstraintDefinition;
 import org.eclipse.xsd.XSDSchema;
 
+import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.detailtabs.sections.model.entity.EntityWrapper;
 import com.amalto.workbench.detailtabs.sections.model.entity.FieldWrapper;
 import com.amalto.workbench.detailtabs.sections.model.entity.KeyWrapper;
@@ -123,6 +124,14 @@ public class EntityKeyConfigComposite extends Composite {
 
     private SelectionListener lBtnEditFieldListener;
 
+    private XSDElementDeclaration xsdElementDeclaration;
+    private BasePropertySection section;
+    
+    public EntityKeyConfigComposite(Composite parent, int style, BasePropertySection section,XSDElementDeclaration xsdElementDeclaration) {
+    	this(parent,style);
+    	this.section=section;
+    	this.xsdElementDeclaration=xsdElementDeclaration;
+    }
     public EntityKeyConfigComposite(Composite parent, int style) {
         super(parent, style);
         setLayout(new FillLayout());
@@ -418,6 +427,8 @@ public class EntityKeyConfigComposite extends Composite {
 
                 getSelectedKeys()[0].setName(txtKeyName.getText().trim());
                 tvKeys.refresh();
+				
+		        if(section!=null)section.autoCommit();
             }
         };
     }
@@ -448,6 +459,8 @@ public class EntityKeyConfigComposite extends Composite {
                 }
 
                 getSelectedKeys()[0].setSelector(comboSelector.getText().trim());
+                
+                if(section!=null)section.autoCommit();
             }
         };
     }
@@ -469,6 +482,8 @@ public class EntityKeyConfigComposite extends Composite {
                 tvKeys.setInput(Arrays.asList(entityWrapper.getKeys()));
 
                 selectFirstKeyInCurKeyList();
+                
+                if(section!=null)section.autoCommit();
             }
 
         };
@@ -499,6 +514,8 @@ public class EntityKeyConfigComposite extends Composite {
                     selectedKeys[0].removeField(eachRemovedField);
 
                 tvFields.setInput(Arrays.asList(selectedKeys[0].getFields()));
+                
+                if(section!=null)section.autoCommit();
             }
 
         };
@@ -526,7 +543,7 @@ public class EntityKeyConfigComposite extends Composite {
                     selectedFields[0].setXPath(selectFieldDlg.getField().trim());
 
                     tvFields.refresh();
-
+                    if(section!=null)section.autoCommit();
                 } catch (Exception exp) {
                     log.error(exp.getMessage(), exp);
                 }
@@ -565,6 +582,7 @@ public class EntityKeyConfigComposite extends Composite {
 
                     tvFields.setSelection(new StructuredSelection(newFieldWrapper));
 
+                    if(section!=null)section.autoCommit();
                 } catch (Exception exp) {
                     log.error(exp.getMessage(), exp);
                 }

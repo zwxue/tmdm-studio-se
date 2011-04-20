@@ -55,6 +55,6 @@ public class SimpleTypeMainSection extends CommitBarListenerSection<XSDSimpleTyp
 
     @Override
     protected void createControlsInSection(Composite compSectionClient) {
-        compSimpleTypeConfig = new SimpleTypeConfigComposite(compSectionClient, SWT.NONE);
+        compSimpleTypeConfig = new SimpleTypeConfigComposite(compSectionClient, SWT.NONE,this);
     }
 }

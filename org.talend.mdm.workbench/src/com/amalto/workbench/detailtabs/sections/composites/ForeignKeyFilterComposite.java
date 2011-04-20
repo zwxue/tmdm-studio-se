@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 
+import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationship.ForeignKeyFilterAnnoInfo;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.relationship.ForeignKeyFilterAnnoInfoDefUnit;
 import com.amalto.workbench.detailtabs.sections.providers.ForeignKeyFilterCellModifier;
@@ -44,8 +45,12 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
 
     private IAllDataModelHolder dataModelHolder;
 
+    public ForeignKeyFilterComposite(Composite parent, int style, IAllDataModelHolder dataModelHolder,BasePropertySection section) {
+    	super(parent,style,new Object[] { dataModelHolder },section);
+    	
+    }
     public ForeignKeyFilterComposite(Composite parent, int style, IAllDataModelHolder dataModelHolder) {
-        super(parent, style, new Object[] { dataModelHolder });
+        super(parent, style, new Object[] { dataModelHolder },null);
     }
 
     @SuppressWarnings("unchecked")
@@ -128,7 +133,9 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
 
     @Override
     protected ICellModifier getCellModifier() {
-        return new ForeignKeyFilterCellModifier(tvInfos);
+        ForeignKeyFilterCellModifier modifier=new ForeignKeyFilterCellModifier(tvInfos);
+        modifier.setSection(section);
+        return modifier;
     }
 
     @Override
@@ -159,10 +166,11 @@ public class ForeignKeyFilterComposite extends ComplexAnnotaionInfoComposite<For
     }
 
     public void setFilter(String filterExpression) {
-
-        txtCustomFilter.setText(ForeignKeyFilterAnnoInfo.getCustomFilterInfo(filterExpression));
+    	String filter=ForeignKeyFilterAnnoInfo.getCustomFilterInfo(filterExpression);
+    	if(section!=null && !txtCustomFilter.getText().equals(filter))section.autoCommit();
+        txtCustomFilter.setText(filter);
         setInfos(ForeignKeyFilterAnnoInfo.getFKFilterCfgInfos(filterExpression));
-
+        
     }
 
     @Override

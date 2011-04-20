@@ -27,6 +27,8 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -42,6 +44,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.xsd.XSDSimpleTypeDefinition;
 import org.talend.mdm.commmon.util.core.EUUIDCustomType;
 
+import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.detailtabs.sections.providers.XSDNamedComponentLabelProvider;
 import com.amalto.workbench.detailtabs.sections.util.simpletype.SimpleTypeFacetPropSourceBuilder;
 import com.amalto.workbench.providers.ListContentProvider;
@@ -66,9 +69,11 @@ public class SimpleTypeConfigComposite extends Composite {
     private Button radCustomTypes;
 
     private Button radBuildInTypes;
+    protected BasePropertySection section;
+    public SimpleTypeConfigComposite(Composite parent, int style,BasePropertySection section) {
+    	super(parent,style);
+    	this.section=section;
 
-    public SimpleTypeConfigComposite(Composite parent, int style) {
-        super(parent, style);
         final GridLayout gridLayout = new GridLayout();
         gridLayout.numColumns = 2;
         setLayout(gridLayout);
@@ -113,7 +118,7 @@ public class SimpleTypeConfigComposite extends Composite {
         comboBuildInTypes.setLabelProvider(new XSDNamedComponentLabelProvider());
         comboBuildInTypes.setSorter(new SchemaElementSorter());
 
-        compProperty = new PropertyComposite(this, SWT.NONE, "", "", "Facet", "Value");//$NON-NLS-1$//$NON-NLS-2$
+        compProperty = new PropertyComposite(this, SWT.NONE, "", "", "Facet", "Value",section);//$NON-NLS-1$//$NON-NLS-2$
         GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
         data.horizontalSpan = 2;
         data.heightHint = 200;
@@ -217,9 +222,18 @@ public class SimpleTypeConfigComposite extends Composite {
         initUIListenerForBaseTypeRadioBtns();
 
         initUIListenerForBaseTypeCombos();
+        initUIListenerForText();
 
     }
-
+    private void initUIListenerForText(){
+    	txtName.addModifyListener(new ModifyListener() {
+			
+			public void modifyText(ModifyEvent e) {
+				if(section!=null && !txtName.getText().equals(xsdSimpleType.getName()))
+					section.autoCommit();				
+			}
+		});
+    }
     private void initUIListenerForBaseTypeRadioBtns() {
 
         radCustomTypes.addSelectionListener(new SelectionAdapter() {
@@ -235,7 +249,7 @@ public class SimpleTypeConfigComposite extends Composite {
 
             @Override
             public void widgetSelected(SelectionEvent e) {
-                refresh();
+                refresh();                
             }
 
         });
@@ -299,6 +313,7 @@ public class SimpleTypeConfigComposite extends Composite {
         comboBuildInTypes.getCombo().setEnabled(radBuildInTypes.getSelection() && !isBuildInType);
 
         initUIContentForCompFacet(getSelectedBaseType());
+        
     }
 
     public XSDSimpleTypeDefinition getSelectedBaseType() {

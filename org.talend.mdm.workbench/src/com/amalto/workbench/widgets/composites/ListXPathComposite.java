@@ -13,10 +13,13 @@
 package com.amalto.workbench.widgets.composites;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
+import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 
 public class ListXPathComposite extends ListStringContentsComposite {
@@ -28,9 +31,10 @@ public class ListXPathComposite extends ListStringContentsComposite {
     private IAllDataModelHolder allDataModelHolder;
 
     private String xpathAreaTitle;
-
-    public ListXPathComposite(Composite parent, int style, IAllDataModelHolder allDataModelHolder, String xpathAreaTitle) {
-        super(parent, style, new Object[] { allDataModelHolder, xpathAreaTitle });
+    protected BasePropertySection section;
+    public ListXPathComposite(Composite parent, int style, IAllDataModelHolder allDataModelHolder, String xpathAreaTitle,BasePropertySection section) {
+        super(parent, style, new Object[] { allDataModelHolder, xpathAreaTitle },section);
+        this.section=section;
     }
 
     @Override
@@ -45,17 +49,25 @@ public class ListXPathComposite extends ListStringContentsComposite {
         chkResolveAutoInWeb.setText("Resolve automatically in the Web");
         chkResolveAutoInWeb.setSelection(true);
         chkResolveAutoInWeb.setLayoutData(new GridData());
-
+        
     }
-
+    private void initUIListener(){
+    	chkResolveAutoInWeb.addSelectionListener(new SelectionAdapter() {
+    		@Override
+    		public void widgetSelected(SelectionEvent e) {
+    			if(section!=null)section.autoCommit();
+    		}
+		});
+    }
+    
     @Override
     protected void createCandidateInfoUIArea(Composite parent) {
 
-        compSimpleXPath = new SimpleXPathComposite(this, SWT.NONE, xpathAreaTitle, allDataModelHolder, "");//$NON-NLS-1$
+        compSimpleXPath = new SimpleXPathComposite(this, SWT.NONE, xpathAreaTitle, allDataModelHolder, "",section);//$NON-NLS-1$
         compSimpleXPath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
     }
-
+    
     @Override
     protected boolean hasCandidateInfo() {
         return !("".equals(compSimpleXPath.getXPath()));//$NON-NLS-1$

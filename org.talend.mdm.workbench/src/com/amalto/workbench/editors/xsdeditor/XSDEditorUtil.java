@@ -109,9 +109,15 @@ public class XSDEditorUtil {
         String projectname = xobject.getServerRoot().getDisplayName().trim().replace("://", "").replace("/", "").replace(" ", "")//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$//$NON-NLS-5$//$NON-NLS-6$
                 .replace(":", "");//$NON-NLS-1$//$NON-NLS-2$
         IProject prj = root.getProject(projectname);
-        if (prj.exists())
+        if (prj.exists()){
+        	try {
+				prj.open(null);
+			} catch (CoreException e) {
+				log.error(e.getMessage(), e);
+			}
             return prj;
-        final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+        }
+        final IWorkspace workspace = ResourcesPlugin.getWorkspace();        
         final IProjectDescription desc = workspace.newProjectDescription(projectname);
         desc.setNatureIds(new String[] { "org.talend.mdm.schema.nature" });//$NON-NLS-1$
         desc.setComment("Talend MDM DataModel Project");

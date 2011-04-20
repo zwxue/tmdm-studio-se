@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 
+import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo.LanguageInfo;
 import com.amalto.workbench.detailtabs.sections.providers.LanguageInfoLabelProvider;
 import com.amalto.workbench.detailtabs.sections.providers.LanguageInfoModifier;
@@ -62,10 +63,11 @@ public class LanguageInfoComposite extends Composite {
 	private Combo comboLanguage;
 
 	private List<LanguageInfo> infos = new ArrayList<LanguageInfo>();
-
-	public LanguageInfoComposite(Composite parent, int style) {
+	protected BasePropertySection section;
+ 
+	public LanguageInfoComposite(Composite parent, int style,BasePropertySection section) {
 		super(parent, style);
-
+		this.section=section;
 		allLanguages = Arrays.asList(Util.lang2iso.keySet().toArray(
 				new String[0]));
 
@@ -76,6 +78,7 @@ public class LanguageInfoComposite extends Composite {
 		comboLanguage = new Combo(this, SWT.READ_ONLY | SWT.DROP_DOWN
 				| SWT.SINGLE);
 		final GridData gd_comboLanguage = new GridData();
+		gd_comboLanguage.widthHint=120;
 		comboLanguage.setLayoutData(gd_comboLanguage);
 
 		txtLabel = new Text(this, SWT.BORDER);
@@ -97,7 +100,7 @@ public class LanguageInfoComposite extends Composite {
 		tree.setLayoutData(gd_tree);
 
 		final TreeColumn colLanguage = new TreeColumn(tree, SWT.NONE);
-		colLanguage.setWidth(99);
+		colLanguage.setWidth(120);
 		colLanguage.setText("Language");
 
 		final TreeColumn colLabel = new TreeColumn(tree, SWT.NONE);
@@ -194,9 +197,10 @@ public class LanguageInfoComposite extends Composite {
 				new ComboBoxCellEditor(tvInfos.getTree(), allLanguages
 						.toArray(new String[0])),
 				new TextCellEditor(tvInfos.getTree()) });
-
-		tvInfos.setCellModifier(new LanguageInfoModifier(tvInfos, infos,
-				allLanguages));
+		LanguageInfoModifier modifier=new LanguageInfoModifier(tvInfos, infos,
+				allLanguages,section);
+		
+		tvInfos.setCellModifier(modifier);
 	}
 
 	private void initUIListenerOfAddRemove() {
@@ -249,6 +253,7 @@ public class LanguageInfoComposite extends Composite {
 
 		correspondLangInfo.setLabel(txtLabel.getText().trim());
 		tvInfos.refresh();
+		if(section!=null)section.autoCommit();
 	}
 
 	private void onAddLanguageInfo() {
@@ -271,13 +276,14 @@ public class LanguageInfoComposite extends Composite {
 		}
 
 		tvInfos.refresh();
+		if(section!=null)section.autoCommit();
 	}
 
 	private void onRemoveLanguageInfo() {
 
 		infos.remove(getSelectedLanguageInfo());
 		tvInfos.refresh();
-
+		if(section!=null)section.autoCommit();
 	}
 
 	private LanguageInfo getLangInfoBySelectionOfLangCombo() {

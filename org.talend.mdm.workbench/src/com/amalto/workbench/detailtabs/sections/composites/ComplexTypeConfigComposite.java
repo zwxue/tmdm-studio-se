@@ -22,6 +22,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -38,6 +40,7 @@ import org.eclipse.xsd.XSDModelGroup;
 import org.eclipse.xsd.XSDParticle;
 import org.eclipse.xsd.XSDTypeDefinition;
 
+import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.detailtabs.sections.providers.XSDNamedComponentLabelProvider;
 import com.amalto.workbench.providers.ListContentProvider;
 import com.amalto.workbench.providers.datamodel.SchemaElementSorter;
@@ -56,7 +59,13 @@ public class ComplexTypeConfigComposite extends Composite {
     private Button radGroupChoice;
 
     private XSDComplexTypeDefinition complextType;
-
+    private BasePropertySection section;
+    private XSDComplexTypeDefinition complexType;
+    public ComplexTypeConfigComposite(Composite parent, int style, BasePropertySection section,XSDComplexTypeDefinition complexType) {
+    	this(parent, style);
+    	this.section=section;
+    	this.complextType=complexType;
+    }
     public ComplexTypeConfigComposite(Composite parent, int style) {
         super(parent, style);
         final GridLayout gridLayout = new GridLayout();
@@ -164,21 +173,29 @@ public class ComplexTypeConfigComposite extends Composite {
     }
 
     private void initUIListener() {
-
+    	initUIListenerForText();
         initUIListenerForComboExtends();
 
         initUIListenerForRadGroupTypes();
     }
-
+    private void initUIListenerForText(){
+    	txtName.addModifyListener(new ModifyListener() {
+			
+			public void modifyText(ModifyEvent e) {
+				if(section!=null && !complextType.getName().equals(txtName.getText()))
+				section.autoCommit();
+			}
+		});
+    }
     private void initUIListenerForComboExtends() {
 
         comboExtends.addSelectionChangedListener(new ISelectionChangedListener() {
 
             public void selectionChanged(SelectionChangedEvent event) {
-                refresh();
+                refresh();                
             }
         });
-
+        
     }
 
     private void initUIListenerForRadGroupTypes() {
@@ -202,6 +219,8 @@ public class ComplexTypeConfigComposite extends Composite {
                 fillCandidatsInComboExtends();
 
                 refresh();
+                if(section!=null && getGroupTypeCompositor()!=Util.getComplexTypeGroupType(complextType))
+                section.autoCommit();
             }
 
         };

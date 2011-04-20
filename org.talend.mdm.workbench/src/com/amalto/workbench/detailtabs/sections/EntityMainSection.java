@@ -135,7 +135,7 @@ public class EntityMainSection extends
 		// compCommitBar.setLayoutData(gdCompCommitBar);
 		// compCommitBar.addCommitListener(this);
 
-		compNameConfig = new NameConfigComposite(compTop, SWT.NONE);
+		compNameConfig = new NameConfigComposite(compTop, SWT.NONE,this);
 		GridData gdCompName = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		compNameConfig.setLayoutData(gdCompName);
 
@@ -146,7 +146,7 @@ public class EntityMainSection extends
 		GridData gdGroupKeyConfig = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gpKeyConfig.setLayoutData(gdGroupKeyConfig);
 		gpKeyConfig.setLayout(new FillLayout());
-		compKeyConfig = new EntityKeyConfigComposite(gpKeyConfig, SWT.NONE);
+		compKeyConfig = new EntityKeyConfigComposite(gpKeyConfig, SWT.NONE,this,xsdElementDeclaration);
 
 	}
 

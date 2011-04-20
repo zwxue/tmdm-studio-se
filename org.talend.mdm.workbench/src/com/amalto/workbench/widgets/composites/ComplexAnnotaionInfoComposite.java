@@ -30,6 +30,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 
+import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.ListContentProvider;
@@ -57,10 +58,11 @@ public abstract class ComplexAnnotaionInfoComposite<T> extends Composite {
     protected Image nillableColImage = ImageCache.getCreatedImage(EImage.WILDCARD.getPath());
 
     protected List<T> infos;
+    protected BasePropertySection section;
 
-    public ComplexAnnotaionInfoComposite(Composite parent, int style, Object[] initParameters) {
+    public ComplexAnnotaionInfoComposite(Composite parent, int style, Object[] initParameters,BasePropertySection section) {
         super(parent, style);
-
+        this.section=section;
         initParameters(initParameters);
 
         setLayout(new GridLayout());
@@ -164,6 +166,7 @@ public abstract class ComplexAnnotaionInfoComposite<T> extends Composite {
                 getInfos().add(createdDefaultObj);
 
                 tvInfos.refresh();
+                if(section!=null)section.autoCommit();
             }
         });
     }
@@ -180,6 +183,7 @@ public abstract class ComplexAnnotaionInfoComposite<T> extends Composite {
                 getInfos().remove(getSelection());
 
                 tvInfos.refresh();
+                if(section!=null)section.autoCommit();
             }
         });
     }
@@ -194,6 +198,7 @@ public abstract class ComplexAnnotaionInfoComposite<T> extends Composite {
                 getInfos().clear();
 
                 tvInfos.refresh();
+                if(section!=null)section.autoCommit();
             }
         });
 
@@ -209,6 +214,7 @@ public abstract class ComplexAnnotaionInfoComposite<T> extends Composite {
                     return;
 
                 moveInfoUp(getSelection());
+                if(section!=null)section.autoCommit();
             }
         });
     }
@@ -224,7 +230,7 @@ public abstract class ComplexAnnotaionInfoComposite<T> extends Composite {
                     return;
 
                 moveInfoDown(getSelection());
-
+                if(section!=null)section.autoCommit();
             }
         });
 
@@ -260,6 +266,7 @@ public abstract class ComplexAnnotaionInfoComposite<T> extends Composite {
                 getInfos().add(cloneCopyedObj(copyedObj));
 
                 tvInfos.refresh();
+                if(section!=null)section.autoCommit();
             }
         });
 

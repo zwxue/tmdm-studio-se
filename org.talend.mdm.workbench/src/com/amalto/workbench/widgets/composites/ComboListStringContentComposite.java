@@ -19,6 +19,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
+import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.detailtabs.sections.providers.StringViewerSorter;
 import com.amalto.workbench.providers.ListContentProvider;
 import com.amalto.workbench.providers.ListStringLabelProvider;
@@ -27,14 +28,14 @@ public abstract class ComboListStringContentComposite extends ListStringContents
 
     protected ComboViewer comboInfos;
 
-    public ComboListStringContentComposite(Composite parent, int style, Object[] initParas) {
-        super(parent, style, initParas);
-    }
+    public ComboListStringContentComposite(Composite parent, int style, Object[] initParas,BasePropertySection section) {
+        super(parent, style, initParas,section);
+    }        
 
     @Override
     protected void createCandidateInfoUIArea(Composite parent) {
 
-        comboInfos = new ComboViewer(this, SWT.READ_ONLY);
+        comboInfos = new ComboViewer(this, SWT.DROP_DOWN);
         comboInfos.getControl().setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
         comboInfos.setContentProvider(new ListContentProvider());
         comboInfos.setLabelProvider(new ListStringLabelProvider());
@@ -44,7 +45,7 @@ public abstract class ComboListStringContentComposite extends ListStringContents
 
     @Override
     protected void initUIListeners() {
-        initListenerForInfosCombo();
+        initListenerForInfosCombo();        
         super.initUIListeners();
     }
 

@@ -45,7 +45,7 @@ public class AnnotationLangInfoDialog extends Dialog {
         Composite container = (Composite) super.createDialogArea(parent);
         container.setLayout(new FillLayout());
 
-        compLangInfo = new LanguageInfoComposite(container, SWT.NONE);
+        compLangInfo = new LanguageInfoComposite(container, SWT.NONE,null);
         compLangInfo.setLanguageInfos(langInfos.toArray(new LanguageInfo[0]));
 
         return container;

@@ -13,6 +13,8 @@
 package com.amalto.workbench.detailtabs.sections;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.views.properties.tabbed.ISection;
@@ -27,17 +29,23 @@ import com.amalto.workbench.detailtabs.sections.util.CommitBarListenerRegistry;
 public class CommitSection extends BasePropertySection {
 
 	private CommitBarComposite commitBar;
-
+	private String title="Commit";
 	@Override
 	public void createControls(Composite parent,
 			TabbedPropertySheetPage aTabbedPropertySheetPage) {
 		super.createControls(parent, aTabbedPropertySheetPage);
-
+		
 		initUIListeners();
 
 		registListenersFromGlobalRegistry();
 
 		CommitBarListenerRegistry.getInstance().registCommitSection(this);
+		CommitBarListenerRegistry.getInstance().registCommitSection(getParentTabID(), this);
+		
+		//hide the commit section
+		section.setVisible(false);
+		section.setExpanded(false); 
+		section.layout(true); 
 	}
 
 	@Override
@@ -74,6 +82,7 @@ public class CommitSection extends BasePropertySection {
 						if (tabDescriptor.getId().equals(getParentTabID())) {
 							addCommbarListeners();
 							getCommitBar().fireSubmitAllTabs();
+							resetCommitSection();
 						}
 
 					}
@@ -91,21 +100,38 @@ public class CommitSection extends BasePropertySection {
 	@Override
 	protected void createControlsInSection(Composite compSectionClient) {
 		commitBar = new CommitBarComposite(compSectionClient, SWT.NONE);
+		SelectionListener listener=new SelectionListener() {
+			
+			public void widgetSelected(SelectionEvent e) {
+				resetCommitSection();
+				
+			}
+			
+			public void widgetDefaultSelected(SelectionEvent e) {
+				resetCommitSection();				
+			}
+		};
+		commitBar.getBtnSubmit().addSelectionListener(listener);
+		commitBar.getBtnReset().addSelectionListener(listener);
 	}
 
 	@Override
 	public void dispose() {
 		super.dispose();
 		CommitBarListenerRegistry.getInstance().unregistCommitSection(this);
+		CommitBarListenerRegistry.getInstance().unregistCommitSection(getParentTabID());
 	}
 
 	public CommitBarComposite getCommitBar() {
 		return commitBar;
 	}
-
+	public void setTitle(String title){
+		this.title=title;
+		section.setText(title);
+	}
 	@Override
 	protected String getSectionTitle() {
-		return "Commit";
+		return title;
 	}
 
 	@Override

@@ -17,18 +17,20 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import com.amalto.workbench.detailtabs.sections.BasePropertySection;
+
 public class TextboxListStringContentComposite extends ListStringContentsComposite {
 
     protected Text txtInput;
 
     protected String colTitle;
 
-    public TextboxListStringContentComposite(Composite parent, int style, String colTitle) {
-        super(parent, style, new Object[] { colTitle });
+    public TextboxListStringContentComposite(Composite parent, int style, String colTitle,BasePropertySection section) {
+        super(parent, style, new Object[] { colTitle },section);
     }
 
-    protected TextboxListStringContentComposite(Composite parent, int style, Object[] initParas) {
-        super(parent, style, initParas);
+    protected TextboxListStringContentComposite(Composite parent, int style, Object[] initParas,BasePropertySection section) {
+        super(parent, style, initParas,section);
     }
 
     @Override

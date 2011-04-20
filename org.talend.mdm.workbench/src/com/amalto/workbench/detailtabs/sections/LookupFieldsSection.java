@@ -63,7 +63,7 @@ public class LookupFieldsSection extends XSDComponentSection {
 
     @Override
     protected void createControlsInSection(Composite compSectionClient) {
-        compElements = new SelectElementsOfEntityComposite(compSectionClient, SWT.NONE, "Lookup Fields", null);
+        compElements = new SelectElementsOfEntityComposite(compSectionClient, SWT.NONE, "Lookup Fields", null,this);
     }
 
 }

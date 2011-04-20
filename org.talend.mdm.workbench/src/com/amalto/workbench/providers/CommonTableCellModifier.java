@@ -19,13 +19,25 @@ import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Item;
 
+import com.amalto.workbench.detailtabs.sections.BasePropertySection;
+
 public abstract class CommonTableCellModifier<T> implements ICellModifier {
 
     protected Map<String, CellEditorValueExtractor<T>> prop2ValueIndexExtractor = new HashMap<String, CellEditorValueExtractor<T>>();
 
     protected Map<String, CellEditorValueModifier<T>> prop2ValueModifier = new HashMap<String, CellEditorValueModifier<T>>();
 
-    public boolean canModify(Object element, String property) {
+    protected BasePropertySection section;
+    
+    public BasePropertySection getSection() {
+		return section;
+	}
+
+	public void setSection(BasePropertySection section) {
+		this.section = section;
+	}
+
+	public boolean canModify(Object element, String property) {
         return false;
     }
 
@@ -48,6 +60,7 @@ public abstract class CommonTableCellModifier<T> implements ICellModifier {
 
         if (getViewer() != null)
             getViewer().refresh();
+        if(section!=null)section.autoCommit();
     }
 
     private boolean doModify(Object element, String property, Object value) {

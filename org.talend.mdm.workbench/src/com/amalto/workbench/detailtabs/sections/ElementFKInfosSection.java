@@ -65,7 +65,7 @@ public class ElementFKInfosSection extends XSDComponentSection {
     @Override
     protected void createControlsInSection(Composite compSectionClient) {
         dataModelHolder = new FixDMNameBasePropertySectionDataModelExtractor(this);
-        compXPath = new ListXPathComposite(compSectionClient, SWT.NONE, dataModelHolder, "");//$NON-NLS-1$
+        compXPath = new ListXPathComposite(compSectionClient, SWT.NONE, dataModelHolder, "",this);//$NON-NLS-1$
     }
 
     @Override

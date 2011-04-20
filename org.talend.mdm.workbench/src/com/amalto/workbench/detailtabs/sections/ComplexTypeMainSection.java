@@ -52,7 +52,7 @@ public class ComplexTypeMainSection extends CommitBarListenerSection<XSDComplexT
 
     @Override
     protected void createControlsInSection(Composite compSectionClient) {
-        compComplexType = new ComplexTypeConfigComposite(compSectionClient, SWT.NONE);
+        compComplexType = new ComplexTypeConfigComposite(compSectionClient, SWT.NONE,this, complexType);
     }
 
 }

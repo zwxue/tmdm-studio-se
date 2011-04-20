@@ -15,6 +15,8 @@ package com.amalto.workbench.detailtabs.sections.composites;
 import java.util.ArrayList;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -30,6 +32,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.xsd.XSDElementDeclaration;
 import org.eclipse.xsd.XSDParticle;
 
+import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.Util;
 
@@ -46,7 +49,12 @@ public class ElementInfoConfigComposite extends Composite {
     private Spinner spinMax;
 
     private Spinner spinMin;
-
+    private BasePropertySection section;
+    public ElementInfoConfigComposite(Composite parent, int style,BasePropertySection section,XSDParticle curXSDParticle) {
+    	this(parent,style);
+    	this.section=section;
+    	this.curXSDParticle=curXSDParticle;
+    }
     public ElementInfoConfigComposite(Composite parent, int style) {
         super(parent, style);
         createControls();
@@ -192,8 +200,33 @@ public class ElementInfoConfigComposite extends Composite {
     private void initUIListeners() {
 
         initUIListenerForComboReference();
+        initTextListener();
+        initSpinListener();
     }
-
+    private void initSpinListener(){
+    	spinMin.addModifyListener(new ModifyListener() {
+			
+			public void modifyText(ModifyEvent e) {
+				 if(section!=null && curXSDParticle.getMinOccurs()!=spinMin.getSelection())
+		                section.autoCommit();								
+			}
+		});
+    	spinMax.addModifyListener(new ModifyListener() {
+			
+			public void modifyText(ModifyEvent e) {
+				 if(section!=null && curXSDParticle.getMaxOccurs()!=spinMax.getSelection())
+		                section.autoCommit();								
+			}
+		});
+    }
+    private void initTextListener(){
+    	txtName.addModifyListener(new ModifyListener() {			
+			public void modifyText(ModifyEvent e) {				
+				 if(section!=null && !txtName.getText().equals(Util.getParticleName(curXSDParticle)))
+		                section.autoCommit();
+			}
+		});
+    }
     private void initUIListenerForComboReference() {
 
         comboReference.addMouseListener(new MouseAdapter() {
@@ -211,6 +244,8 @@ public class ElementInfoConfigComposite extends Composite {
             public void widgetSelected(SelectionEvent e) {
 
                 refresh();
+                if(section!=null && !Util.getParticleReferenceName(curXSDParticle).equals(comboReference.getText()))
+	                section.autoCommit();		
             }
 
         });

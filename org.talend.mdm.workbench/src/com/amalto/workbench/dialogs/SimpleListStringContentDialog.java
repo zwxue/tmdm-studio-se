@@ -58,7 +58,7 @@ public class SimpleListStringContentDialog extends Dialog {
         gridLayout.marginHeight = 0;
         container.setLayout(gridLayout);
 
-        compInfos = new TextboxListStringContentComposite(container, SWT.NONE, label);
+        compInfos = new TextboxListStringContentComposite(container, SWT.NONE, label,null);
         compInfos.setInfos(infos);
         compInfos.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 

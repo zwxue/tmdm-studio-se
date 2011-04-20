@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Item;
 
+import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.detailtabs.sections.model.annotationinfo.langinfo.LanguageInfo;
 
 
@@ -33,7 +34,12 @@ public class LanguageInfoModifier implements ICellModifier {
     private List<String> allLanguages = new ArrayList<String>();
 
     private TreeViewer viewer;
-
+    
+    protected BasePropertySection section;
+    public LanguageInfoModifier(TreeViewer viewer, List<LanguageInfo> allLanguageInfos, List<String> allLanguages,BasePropertySection section) {
+    	this(viewer,allLanguageInfos,allLanguages);
+    	this.section=section;
+    }
     public LanguageInfoModifier(TreeViewer viewer, List<LanguageInfo> allLanguageInfos, List<String> allLanguages) {
         this.allLanguageInfos = allLanguageInfos;
         this.allLanguages = allLanguages;
@@ -77,6 +83,7 @@ public class LanguageInfoModifier implements ICellModifier {
         }
 
         viewer.refresh();
+        if(section!=null) section.autoCommit();
     }
 
     private void onModfiyColumnLanguage(LanguageInfo modifiedElement, Integer newSelectedIndex) {

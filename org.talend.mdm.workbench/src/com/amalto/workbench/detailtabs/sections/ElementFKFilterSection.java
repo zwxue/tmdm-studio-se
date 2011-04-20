@@ -55,7 +55,7 @@ public class ElementFKFilterSection extends XSDComponentSection {
     @Override
     protected void createControlsInSection(Composite compSectionClient) {
         dataModelHolder = new BasePropertySectionDataModelExtractor(this);
-        compFKFilter = new ForeignKeyFilterComposite(compSectionClient, SWT.NONE, dataModelHolder);
+        compFKFilter = new ForeignKeyFilterComposite(compSectionClient, SWT.NONE, dataModelHolder,this);
     }
 
     @Override

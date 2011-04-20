@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.detailtabs.sections.model.INameEditable;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -38,6 +39,12 @@ public class NameConfigComposite extends Composite {
 
     private Image errIcon = ImageCache.getImage(EImage.ERROR.getPath()).createImage();
 
+    protected BasePropertySection section;
+    public NameConfigComposite(Composite parent, int style,BasePropertySection section) {
+    	this(parent,style);
+    	this.section=section;
+    }
+    
     public NameConfigComposite(Composite parent, int style) {
         super(parent, style);
 
@@ -97,6 +104,7 @@ public class NameConfigComposite extends Composite {
                 lblNameErrIndicator.setToolTipText(errMsg == null ? "" : errMsg);//$NON-NLS-1$
 
                 target.setName(txtName.getText().trim());
+                if(section!=null)section.autoCommit();
             }
         };
     }

@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 
+import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.providers.ColumnTextExtractor;
 import com.amalto.workbench.providers.CommonTableLabelProvider;
 import com.amalto.workbench.providers.ListContentProvider;
@@ -39,7 +40,7 @@ public class PropertyComposite extends Composite {
 
     @SuppressWarnings("unchecked")
     public PropertyComposite(Composite parent, int style, String title, String label, String propNameColLabel,
-            String propValueColLabel) {
+            String propValueColLabel,BasePropertySection section) {
         super(parent, style);
         final GridLayout gridLayout = new GridLayout();
         gridLayout.verticalSpacing = 0;
@@ -62,6 +63,7 @@ public class PropertyComposite extends Composite {
 
         tvProperty = new TreeViewer(this, SWT.FULL_SELECTION | SWT.BORDER);
         propModifier = new PropertyModifier(tvProperty);
+        propModifier.setSection(section);
         tvProperty.setContentProvider(new ListContentProvider());
         tvProperty.setLabelProvider(new CommonTableLabelProvider<IPropertySource<?>>(new ColumnTextExtractor[] {
                 new ColumnTextExtractor<IPropertySource<?>>("getPropertyName"),//$NON-NLS-1$

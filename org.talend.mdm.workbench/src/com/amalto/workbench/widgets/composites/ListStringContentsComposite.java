@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 
+import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.providers.ListContentProvider;
@@ -46,10 +47,12 @@ public abstract class ListStringContentsComposite extends Composite {
     protected Button btnRemove;
 
     protected List<String> infos = new ArrayList<String>();
+    
+    protected BasePropertySection section;
 
-    public ListStringContentsComposite(Composite parent, int style, Object[] initParas) {
+    public ListStringContentsComposite(Composite parent, int style, Object[] initParas,BasePropertySection section) {
         super(parent, style);
-
+        this.section=section;
         initParas(initParas);
 
         final GridLayout gridLayout = new GridLayout();
@@ -73,7 +76,7 @@ public abstract class ListStringContentsComposite extends Composite {
         tvInfos.setInput(infos);
 
         final TreeColumn colInfo = new TreeColumn(tree, SWT.NONE);
-        colInfo.setWidth(350);
+        colInfo.setWidth(300);
         colInfo.setText(getInfoColTitle());
 
         btnUp = new Button(this, SWT.NONE);
@@ -199,12 +202,14 @@ public abstract class ListStringContentsComposite extends Composite {
         infos.add(info);
 
         tvInfos.refresh();
+        if(section!=null)section.autoCommit();
     }
 
     private void removeInfoFromInfoTree(String info) {
         infos.remove(info);
 
         tvInfos.refresh();
+        if(section!=null)section.autoCommit();
     }
 
     private boolean hasSelectionInInfoTree() {

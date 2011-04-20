@@ -14,6 +14,7 @@ package com.amalto.workbench.widgets.composites;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.models.infoextractor.IElementsOfEntityHolder;
 
 public class SelectElementsOfEntityComposite extends ComboListStringContentComposite {
@@ -22,8 +23,8 @@ public class SelectElementsOfEntityComposite extends ComboListStringContentCompo
 
     private String colTitle = "Fields";//$NON-NLS-1$s
 
-    public SelectElementsOfEntityComposite(Composite parent, int style, String colTitle, IElementsOfEntityHolder elementsHolder) {
-        super(parent, style, new Object[] { colTitle, elementsHolder });
+    public SelectElementsOfEntityComposite(Composite parent, int style, String colTitle, IElementsOfEntityHolder elementsHolder,BasePropertySection section) {
+        super(parent, style, new Object[] { colTitle, elementsHolder },section);
     }
 
     public IElementsOfEntityHolder getElementsHolder() {

@@ -78,7 +78,7 @@ public class CommitBarComposite extends Composite {
 		return listeners;
 	}
 
-	private void fireSubmit() {
+	public void fireSubmit() {
 		for (CommitBarListener eachListener : listeners)
 			eachListener.onSubmit();
 	}
@@ -100,8 +100,8 @@ public class CommitBarComposite extends Composite {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-//				fireSubmit();
-				fireSubmitAllTabs();
+				fireSubmit();
+				//fireSubmitAllTabs();
 			}
 		});
 
@@ -113,6 +113,22 @@ public class CommitBarComposite extends Composite {
 				fireReset();
 			}
 		});
+	}
+
+	public Button getBtnSubmit() {
+		return btnSubmit;
+	}
+
+	public void setBtnSubmit(Button btnSubmit) {
+		this.btnSubmit = btnSubmit;
+	}
+
+	public Button getBtnReset() {
+		return btnReset;
+	}
+
+	public void setBtnReset(Button btnReset) {
+		this.btnReset = btnReset;
 	}
 
 	public interface CommitBarListener {

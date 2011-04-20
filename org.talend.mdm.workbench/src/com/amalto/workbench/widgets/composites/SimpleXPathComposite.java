@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
+import com.amalto.workbench.detailtabs.sections.BasePropertySection;
 import com.amalto.workbench.dialogs.datamodel.SelectXPathDialog;
 import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
@@ -42,11 +43,11 @@ public class SimpleXPathComposite extends Composite {
     private IAllDataModelHolder allDataModelHolder;
 
     public static final String DEFAULTTITLE = "Enter an xPath for the Foreign Key - Leave BLANK to delete the Foreign Key";
-
+    protected BasePropertySection section;
     public SimpleXPathComposite(Composite parent, int style, String title, IAllDataModelHolder allDataModelHolder,
-            String defaultDataModelForSelect) {
+            String defaultDataModelForSelect,BasePropertySection section) {
         super(parent, style);
-
+        this.section=section;
         this.defaultDataModelForSelect = defaultDataModelForSelect;
         this.allDataModelHolder = allDataModelHolder;
 
@@ -111,6 +112,9 @@ public class SimpleXPathComposite extends Composite {
                     return;
 
                 txtXPath.setText(dialog.getSelectedXPath());
+                if(section!=null ){
+                	section.autoCommit();
+                }
             }
         });
     }

@@ -62,6 +62,6 @@ public abstract class LanguageInfoSection extends XSDComponentSection {
 
     @Override
     protected void createControlsInSection(Composite compSectionClient) {
-        compLabel = new LanguageInfoComposite(compSectionClient, SWT.NONE);
+        compLabel = new LanguageInfoComposite(compSectionClient, SWT.NONE,this);
     }
 }
