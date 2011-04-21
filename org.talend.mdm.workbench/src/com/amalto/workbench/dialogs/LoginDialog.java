@@ -285,7 +285,7 @@ public class LoginDialog extends Dialog {
             addServer(root);
             //updateServerListInPreference();
         }
-
+        if(descEl!=null) return;
         XMLWriter writer;
         try {
             writer = new XMLWriter(new FileWriter(f));
