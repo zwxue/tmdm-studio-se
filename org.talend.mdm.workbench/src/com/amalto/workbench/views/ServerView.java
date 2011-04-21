@@ -692,63 +692,19 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                 String user = server.selectSingleNode("user").getText();//$NON-NLS-1$
                 String password = PasswordUtil.decryptPassword(server.selectSingleNode("password").getText());//$NON-NLS-1$
                 String universe = server.selectSingleNode("universe").getText();//$NON-NLS-1$
+                String saved=null;
+                if(server.selectSingleNode("saved")!=null){
+                	saved=server.selectSingleNode("saved").getText();//$NON-NLS-1$
+                }
+                if(saved==null || Boolean.valueOf(saved)==false) continue;
                 if (!("".equalsIgnoreCase(url) || "".equalsIgnoreCase(user) || "".equalsIgnoreCase(password)))//$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
                     initServerTreeParent(url, user, password, universe);
                 // initServerTree(url, user, password, universe);
             }
         }
-        // DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        // DocumentBuilder builder;
-        //
-        // try {
-        // builder = factory.newDocumentBuilder();
-        // if(!new File(f).exists())
-        // return;
-        // else
-        // logininfoDocument = builder.parse(new File(f));
-        // } catch (SAXException e) {
-        // log.error(e.getMessage(), e);
-        // } catch (IOException e) {
-        // log.error(e.getMessage(), e);
-        // } catch (ParserConfigurationException e) {
-        // log.error(e.getMessage(), e);
-        // }
-        // NodeList properties = logininfoDocument.getElementsByTagName("properties");
-        // for (int i = 0; i < properties.getLength(); i++) {
-        // Node server = properties.item(i);
-        // NodeList serverInfo = server.getChildNodes();
-        // for (int j = 0; j < serverInfo.getLength(); j++) {
-        // serverInfo.item(j).getNodeName();
-        //
-        // }
-        // }
+
     }
 
-    // /**
-    // * // fliu add keyboard listener into tree to assist ctrl+c, ctrl+v and del
-    // */
-    // private void hookKeyboard() {
-    // viewer.getControl().addKeyListener(new KeyListener() {
-    //
-    // public void keyPressed(KeyEvent e) {
-    // }
-    //
-    // public void keyReleased(KeyEvent e) {
-    // if (e.keyCode == 'c' && e.stateMask == SWT.CTRL) {
-    // copyAction.run();
-    // } else if (e.keyCode == 'v' && e.stateMask == SWT.CTRL) {
-    // // modifier:fiu see bug 0008905
-    // TreeObject xobject = (TreeObject) ((IStructuredSelection) viewer.getSelection()).getFirstElement();
-    // ((PasteXObjectAction) pasteAction).setXtentisPort(xobject);
-    // ((PasteXObjectAction) pasteAction).setParent(xobject instanceof TreeParent ? (TreeParent) xobject : xobject
-    // .getParent());
-    // pasteAction.run();
-    // } else if (e.keyCode == SWT.DEL) {
-    // deleteXObjectAction.run();
-    // }
-    // }
-    // });
-    // }
 
     private void hookContextMenu() {
         MenuManager menuMgr = new MenuManager("#PopupMenu");//$NON-NLS-1$

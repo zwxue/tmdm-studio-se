@@ -61,77 +61,7 @@ public class PreferenceMDMServerExtractor {
         return INSTANCE;
     }
 
-    public MDMServerDef[] getMDMServerDefinitions() {
 
-        Map<String, MDMServerDef> results = new HashMap<String, MDMServerDef>();
-
-        String mdmServerString = Platform.getPreferencesService().getString(PLUGIN_QUALIFIER, PREF_KEY_SERVERS, null, null);
-        if (mdmServerString == null) {
-            // when this plug-in is used in a 3.2.1
-            mdmServerString = Platform.getPreferencesService().getString(PLUGIN_QUALIFIER, PREF_KEY_SERVERS_OLD, null, null);
-        }
-
-        if (mdmServerString != null) {
-            String[] servers = mdmServerString.split(SPAGOBISERVER_DELIMITER);
-            for (String server : servers) {
-                String[] splits = server.split(ENGINE_DESCRIPTION_DELIMITER);
-                MDMServerDef serv = null;
-
-                if (splits.length < 5)
-                    continue;
-
-                serv = new MDMServerDef(splits[SERVERDEF_INDEX_DES], splits[SERVERDEF_INDEX_HOST], splits[SERVERDEF_INDEX_PORT],
-                        splits[SERVERDEF_INDEX_USER], splits[SERVERDEF_INDEX_PASSWORD]);
-
-                results.put(serv.getUrl(), serv);
-            }
-        }
-
-        return results.values().toArray(new MDMServerDef[0]);
-    }
-
-    public void updateMDMServerDefinitionsBy(String url, String username, String password, String description) {
-
-        MDMServerDef serverDef = MDMServerDef.parse(url, username, password, description);
-
-        if (serverDef == null)
-            return;
-
-        updateMDMServerDefinitionsBy(serverDef);
-    }
-
-    public void updateMDMServerDefinitionsBy(MDMServerDef serverDef) {
-
-        if (serverDef == null)
-            return;
-
-        List<MDMServerDef> servers = new ArrayList<MDMServerDef>();
-
-        for (MDMServerDef eachCurrentMDMServerDef : getMDMServerDefinitions()) {
-
-            if (eachCurrentMDMServerDef.getHost().equals(serverDef.getHost())
-                    && eachCurrentMDMServerDef.getPort().equals(serverDef.getPort())
-                    && eachCurrentMDMServerDef.getUser().equals(serverDef.getUser())
-                    && eachCurrentMDMServerDef.getPasswd().equals(serverDef.getPasswd())) {
-                servers.add(serverDef);
-            } else {
-                servers.add(eachCurrentMDMServerDef);
-            }
-        }
-
-        if (!servers.contains(serverDef))
-            servers.add(serverDef);
-
-        // String propName = PREF_KEY_SERVERS;
-        // if (Platform.getPreferencesService().getString(PLUGIN_QUALIFIER, PREF_KEY_SERVERS, null, null) == null) {
-        // // when this plug-in is used in a 3.2.1
-        // propName = PREF_KEY_SERVERS_OLD;
-        // }
-
-        Platform.getPreferencesService().getRootNode().node(PREFERENCENODE).node(PLUGIN_QUALIFIER)
-                .put(PREF_KEY_SERVERS, toMDMServerPreferenceString(servers.toArray(new MDMServerDef[0])));
-
-    }
 
     private String toMDMServerPreferenceString(MDMServerDef[] serverDef) {
 

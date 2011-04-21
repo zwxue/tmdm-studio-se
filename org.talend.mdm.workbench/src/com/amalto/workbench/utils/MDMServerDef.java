@@ -26,13 +26,17 @@ public class MDMServerDef {
     private String user = "";//$NON-NLS-1$
 
     private String passwd = "";//$NON-NLS-1$
-
+    
+    private boolean saved=false;
+    
+    private boolean connected=false;
+    
     private String path = "/talend/TalendPort";//$NON-NLS-1$
     
     public static final String PATTERN_URL = "^http://(.+):(\\d+)(/.*)";//$NON-NLS-1$
 
     
-    public MDMServerDef(String desc, String host, String port, String path, String user, String passwd) {
+    public MDMServerDef(String desc, String host, String port, String path, String user, String passwd, boolean saved, boolean connected) {
 
         this.desc = desc;
         this.host = host;
@@ -40,17 +44,23 @@ public class MDMServerDef {
         this.path = path;
         this.user = user;
         this.passwd = passwd;
+        this.saved=saved;
+        this.connected=connected;
     }
 
-    public MDMServerDef(String desc, String host, String port, String user, String passwd) {
-        this(desc, host, port, "/talend/TalendPort", user, passwd);//$NON-NLS-1$
+    public MDMServerDef(String desc, String host, String port, String user, String passwd, boolean saved, boolean connected) {
+        this(desc, host, port, "/talend/TalendPort", user, passwd, saved,connected);//$NON-NLS-1$
     }
 
     public MDMServerDef() {
 
     }
 
-    public String getDesc() {
+    public boolean isSaved() {
+		return saved;
+	}
+
+	public String getDesc() {
         return desc;
     }
 
@@ -109,7 +119,7 @@ public class MDMServerDef {
         return sb.toString();
     }
 
-    public static MDMServerDef parse(String url, String user, String passwd, String desc) {
+    public static MDMServerDef parse(String url, String user, String passwd, String desc, boolean saved, boolean connected) {
 
         Matcher m = Pattern.compile(PATTERN_URL).matcher(url);
 
@@ -120,6 +130,6 @@ public class MDMServerDef {
         String port = m.group(2);
         String path = m.group(3);
 
-        return new MDMServerDef(desc, host, port, path, user, passwd);
+        return new MDMServerDef(desc, host, port, path, user, passwd, saved, connected);
     }
 }
