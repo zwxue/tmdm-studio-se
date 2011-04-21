@@ -14,7 +14,6 @@ package com.amalto.workbench.utils;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -34,42 +33,46 @@ public class MDMServerHelper {
 
     private static Log log = LogFactory.getLog(LoginDialog.class);
 
-    public static List<MDMServerDef> getServers() {       
-       	SAXReader reader = new SAXReader();
-        Element root = null;
-        Document logininfoDocument=null;
+    public static List<MDMServerDef> getServers() {
+        List<MDMServerDef> defs = new ArrayList<MDMServerDef>();
+        Element root;
+        Document logininfoDocument;
         if (new File(workbenchConfigFile).exists()) {
+            SAXReader reader = new SAXReader();
             try {
                 logininfoDocument = reader.read(new File(workbenchConfigFile));
             } catch (DocumentException e) {
                 log.error(e.getMessage(), e);
+                return defs;
             }
             root = logininfoDocument.getRootElement();
         } else {
             logininfoDocument = DocumentHelper.createDocument();
-            root = logininfoDocument.addElement("MDMServer");//$NON-NLS-1$
+            root = logininfoDocument.addElement("MDMServer"); //$NON-NLS-1$
         }
-        List<MDMServerDef> defs=new ArrayList<MDMServerDef>();
-        List properties = root.elements("properties");//$NON-NLS-1$
-        for (Iterator iterator = properties.iterator(); iterator.hasNext();) {
-            Element ele = (Element) iterator.next();
-            String password=ele.element("password").getText();//$NON-NLS-1$
-            
-            String connected=ele.element("connected").getText();//$NON-NLS-1$
-            boolean con=false;
-            if(connected!=null && Boolean.valueOf(connected)==true){
-            	con=true;
-            }
 
-            String saved=ele.element("saved").getText();//$NON-NLS-1$
-            boolean sav=false;
-            if(saved!=null && Boolean.valueOf(saved)==true){
-            	sav=true;
-            }
-            
-            password=PasswordUtil.decryptPassword(password);
-            MDMServerDef def=MDMServerDef.parse(ele.element("url").getText(), ele.element("user").getText(), password, ele.element("desc").getText(),sav,con);//$NON-NLS-1$ //$NON-NLS-2 $//$NON-NLS-3$
-            defs.add(def);            
+        List<Element> properties = root.elements("properties"); //$NON-NLS-1$
+        for (Element ele : properties) {
+            String password = ele.element("password").getText(); //$NON-NLS-1$
+
+            String connected = ele.element("connected").getText(); //$NON-NLS-1$
+            boolean con;
+            if (connected != null && Boolean.valueOf(connected) == true)
+                con = true;
+            else
+                con = false;
+
+            String saved = ele.element("saved").getText();//$NON-NLS-1$
+            boolean sav;
+            if (saved != null && Boolean.valueOf(saved) == true)
+                sav = true;
+            else
+                sav = false;
+
+            password = PasswordUtil.decryptPassword(password);
+            MDMServerDef def = MDMServerDef.parse(ele.element("url").getText(), ele.element("user").getText(), password, ele //$NON-NLS-1$ //$NON-NLS-2$
+                    .element("desc").getText(), sav, con); //$NON-NLS-1$
+            defs.add(def);
         }
         return defs;
     }
