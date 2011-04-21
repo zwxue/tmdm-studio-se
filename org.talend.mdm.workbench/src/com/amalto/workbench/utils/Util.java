@@ -1180,9 +1180,15 @@ public class Util {
                          * findOutSpecialSonElement( (XSDElementDeclaration) pt.getContent(), son, complexTypes); if
                          * (spec != null) return spec.getName();
                          */
-                        if (ele.getTypeDefinition() instanceof XSDComplexTypeDefinition)
-                            return ele.getName() + "/"//$NON-NLS-1$
-                                    + getTopElement(ele, son, (XSDComplexTypeDefinition) ele.getTypeDefinition());
+//                        if (ele.getTypeDefinition() instanceof XSDComplexTypeDefinition) {
+//    	
+//                        	return ele.getName() + "/"//$NON-NLS-1$
+//                                    + getTopElement(ele, son, (XSDComplexTypeDefinition) ele.getTypeDefinition());
+//
+//
+//                        }
+                        
+                        
                     }
                 }
             }
@@ -1608,6 +1614,10 @@ public class Util {
             return true;
         try {
             String xsd = nodeToString(schema.getDocument().getDocumentElement());
+//            if(true){
+//            	return false;
+//            }
+            
             if (xsd.indexOf(componentName) != -1) {
                 return false;
             }
@@ -2171,25 +2181,26 @@ public class Util {
         return list;
     }
 
-    public static boolean hasUniverse(TreeObject xobject) {
-        if (xobject.isXObject())
-            return false;
-        switch (xobject.getType()) {
-        case TreeObject.DATA_MODEL:
-        case TreeObject.VIEW:
-        case TreeObject.MENU:
-        case TreeObject.ROLE:
-        case TreeObject.ROUTING_RULE:
-        case TreeObject.SYNCHRONIZATIONPLAN:
-        case TreeObject.STORED_PROCEDURE:
-        case TreeObject.TRANSFORMER:
-            return true;
-        default:
-            return false;
-        }
-    }
 
-    public static boolean hasTags(TreeObject xobject) {
+    public static boolean hasUniverse(TreeObject xobject) {
+	    if (xobject.isXObject())
+	        return false;
+	    switch (xobject.getType()) {
+	    case TreeObject.DATA_MODEL:
+	    case TreeObject.VIEW:
+	    case TreeObject.MENU:
+	    case TreeObject.ROLE:
+	    case TreeObject.ROUTING_RULE:
+	    case TreeObject.SYNCHRONIZATIONPLAN:
+	    case TreeObject.STORED_PROCEDURE:
+	    case TreeObject.TRANSFORMER:
+	        return true;
+	    default:
+	        return false;
+	    }
+	}
+
+	public static boolean hasTags(TreeObject xobject) {
         if (xobject.isXObject())
             return true;
         switch (xobject.getType()) {
