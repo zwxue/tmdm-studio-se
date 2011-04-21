@@ -22,7 +22,8 @@ import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
 /**
- * ViewContentOperationTest is a SWTBot test class to imitate the process to create a view like Browse_items_Agent.
+ * ViewContentOperationTest is a SWTBot test class to imitate the process to
+ * create a view like Browse_items_Agent.
  * 
  * DOC rhou class global comment. Detailled comment
  * 
@@ -32,120 +33,124 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class ViewContentTest extends TalendSWTBotForMDM {
 
-    private SWTBotTreeItem viewParentItem;
+	private SWTBotTreeItem viewParentItem;
 
-    private SWTBotTreeItem viewItem;
+	private SWTBotTreeItem viewItem;
 
-//    private String[] array = new String[] { "Id", "Firstname", "Lastname", "CommissionCode", "StartDate", "TermDate" };
-private String[] array=new String[]{"id","Config"};
-    private String PREFIX = "Browse_items_";
+	// private String[] array = new String[] { "Id", "Firstname", "Lastname",
+	// "CommissionCode", "StartDate", "TermDate" };
+	private String[] array = new String[] { "id", "Config" };
+	private String PREFIX = "Browse_items_";
 
-    @Before
-    public void runBeforeEveryTest() {
-        viewParentItem = serverItem.getNode("View [HEAD]");
-        viewParentItem.expand();
+	@Before
+	public void runBeforeEveryTest() {
+		viewParentItem = serverItem.getNode("View [HEAD]");
+		viewParentItem.expand();
+		init();
+	}
 
-    }
+	private void createView() {
+		// new feature in 4.2,see bug 0016511.
+		// Create a new view to test the filter of the xpath.
+		viewParentItem.contextMenu("New").click();
+		// bot.sleep(1000);
+		SWTBotShell newViewShell = bot.shell("New View");
+		newViewShell.activate();
+		// bot.buttonWithLabel("...").click();
+		bot.buttonWithTooltip("Select one Entity").click();
+		bot.shell("Select one Entity").activate();
 
-    private void createView() {
-        //new feature in 4.2,see bug 0016511.
-        // Create a new view to test the filter of the xpath.
-        viewParentItem.contextMenu("New").click();
-        // bot.sleep(1000);
-        SWTBotShell newViewShell = bot.shell("New View");
-        newViewShell.activate();
-        // bot.buttonWithLabel("...").click();
-        bot.buttonWithTooltip("Select one Entity").click();
-        bot.shell("Select one Entity").activate();
+		bot.comboBoxWithLabel("Data Models:").setSelection("CONF");
+		bot.tree().select("Conf");
+		bot.button("Add").click();
+		sleep();
+		bot.button("OK").click();
+		// setDescription();
+		// setElements();
+		// bot.activeEditor().save();
+		// bot.activeEditor().close();
 
-        bot.comboBoxWithLabel("Data Models:").setSelection("CONF");
-        bot.tree().select("Conf");
-        bot.button("Add").click();
-        sleep();
-        bot.button("OK").click();
-        // setDescription();
-        // setElements();
-        // bot.activeEditor().save();
-        // bot.activeEditor().close();
+		sleep(2);
+	}
 
-        sleep(2);
-    }
+	private void init() {
+		createView();
+	}
 
-    private void init() {
-        createView();
-    }
+	@Test
+	public void setDescriptionTest() {
 
-    @Test
-    public void setDescriptionTest() {
-        init();
-        bot.buttonWithTooltip("Set the Descriptions").click();
-        bot.shell("Set the Descriptions").activate();
-        bot.comboBox().setSelection("English");
-        String des = "Conf";
-        bot.text().setText(des);
-        bot.buttonWithTooltip("Add").click();
-        bot.button("OK").click();
-    }
+		bot.buttonWithTooltip("Set the Descriptions").click();
+		bot.shell("Set the Descriptions").activate();
+		bot.comboBox().setSelection("English");
+		String des = "Conf";
+		bot.text().setText(des);
+		bot.buttonWithTooltip("Add").click();
+		bot.button("OK").click();
+		sleep();
+	}
 
-    @Test
-    public void setViewableElementsTest() {
-        bot.buttonWithTooltip("Add Multiple", 0).click();
+	@Test
+	public void setViewableElementsTest() {
+		bot.buttonWithTooltip("Add Multiple", 0).click();
+		bot.shell("Select Multiple XPaths").activate();
+		// bot.comboBox().setSelection("CONF");
+		// sleep();
+		SWTBotTreeItem parent = bot.tree().getTreeItem("Conf").expand()
+				.getNode(0).expand();
+		parent.select(array);
+		sleep();
+		bot.button("Add").click();
+		sleep();
+	}
 
-        bot.shell("Select Multiple XPaths").activate();
-//        bot.comboBox().setSelection("CONF");
-//        sleep();
-        SWTBotTreeItem parent = bot.tree().getTreeItem("Conf").expand().getNode(0).expand();
-        parent.select(array);
-        sleep();
-        bot.button("Add").click();
-        sleep();
-    }
+	@Test
+	public void setSearchableElementsTest() {
+		bot.buttonWithTooltip("Add Multiple", 1).click();
+		bot.shell("Select Multiple XPaths").activate();
+		// bot.comboBox().setSelection("Agent");
+		// sleep();
+		SWTBotTreeItem parent = bot.tree().getTreeItem("Conf").expand()
+				.getNode(0).expand();
+		parent.select(array);
+		sleep();
+		bot.button("Add").click();
+		sleep();
 
-    @Test
-    public void setSearchableElementsTest() {
-        bot.buttonWithTooltip("Add Multiple", 1).click();
-        bot.shell("Select Multiple XPaths").activate();
-//        bot.comboBox().setSelection("Agent");
-//        sleep();
-        SWTBotTreeItem parent = bot.tree().getTreeItem("Conf").expand().getNode(0).expand();
-        parent.select(array);
-        sleep();
-        bot.button("Add").click();
-        sleep();
+		// bot.buttonWithTooltip("Add Multiple", 1).click();
+		// bot.shell("Select Multiple XPaths").activate();
+		// bot.comboBox().setSelection("Agent");
+		// sleep();
+		// bot.tree().select("Agent");
+		// sleep();
+		// bot.button("Add").click();
+		// sleep();
+	}
 
-        // bot.buttonWithTooltip("Add Multiple", 1).click();
-        // bot.shell("Select Multiple XPaths").activate();
-        // bot.comboBox().setSelection("Agent");
-        // sleep();
-        // bot.tree().select("Agent");
-        // sleep();
-        // bot.button("Add").click();
-        // sleep();
-    }
+	@Test
+	public void setWhereConditionsTest() {
+		bot.buttonWithTooltip("Add Multiple", 2).click();
+		bot.shell("Select Multiple XPaths").activate();
+		// bot.comboBox().setSelection("Agent");
+		// sleep();
+		SWTBotTreeItem parent = bot.tree().getTreeItem("Conf").expand()
+				.getNode(0).expand();
+		parent.select("Config");
+		sleep();
+		bot.button("Add").click();
+		sleep();
 
-    @Test
-    public void setWhereConditionsTest() {
-        bot.buttonWithTooltip("Add Multiple", 2).click();
-        bot.shell("Select Multiple XPaths").activate();
-//        bot.comboBox().setSelection("Agent");
-//        sleep();
-        SWTBotTreeItem parent = bot.tree().getTreeItem("Conf").expand().getNode(0).expand();
-        parent.select("Config");
-        sleep();
-        bot.button("Add").click();
-        sleep();
-        // TODO:add the content
-        bot.activeEditor().save();
-        sleep(2);
-        viewParentItem.getNode(PREFIX + "Conf").contextMenu("Delete").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-    }
+	}
 
-    @After
-    public void runAfterEveryTest() {
-
-    }
+	@After
+	public void runAfterEveryTest() {
+		// TODO:add the content
+		bot.activeEditor().save();
+		sleep(2);
+		viewParentItem.getNode(PREFIX + "Conf").contextMenu("Delete").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+	}
 
 }

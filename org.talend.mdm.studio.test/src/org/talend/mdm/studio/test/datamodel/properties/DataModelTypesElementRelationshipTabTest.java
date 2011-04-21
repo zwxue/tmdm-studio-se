@@ -43,7 +43,7 @@ import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 public class DataModelTypesElementRelationshipTabTest extends
 		TalendSWTBotForMDM {
 
-	private SWTBotTree elementsBotTree;
+	private SWTBotTree conceptBotTree;
 
 	private SWTBotTree typesBotTree;
 
@@ -81,7 +81,7 @@ public class DataModelTypesElementRelationshipTabTest extends
 			}
 		});
 		Tree elemetnsTree = mainpage.getElementsViewer().getTree();
-		elementsBotTree = new SWTBotTree(elemetnsTree);
+		conceptBotTree = new SWTBotTree(elemetnsTree);
 		Tree typesTree = mainpage.getTypesViewer().getTree();
 		typesBotTree = new SWTBotTree(typesTree);
 		newEntity();
@@ -92,7 +92,7 @@ public class DataModelTypesElementRelationshipTabTest extends
 	}
 
 	public void newEntity() {
-		elementsBotTree.contextMenu("New Entity").click();
+		conceptBotTree.contextMenu("New Entity").click();
 		SWTBotShell newEntityShell = bot.shell("New Entity");
 		newEntityShell.activate();
 		// create a entity with a complex type

@@ -12,12 +12,15 @@
 // ============================================================================
 package org.talend.mdm.studio.test.datamodel;
 
+import junit.framework.Assert;
+
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
@@ -32,25 +35,38 @@ import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class DataModelTypesElementOperationTest extends TalendSWTBotForMDM {
 
-    private SWTBotTree typesBotTree;
+	private SWTBotTree conceptBotTree;
 
-    private DataModelMainPage mainpage;
+	private SWTBotTree typesBotTree;
 
-    private SWTBotTreeItem typesNode;
+	private DataModelMainPage mainpage;
 
-    private SWTBotTreeItem eleItem;
+	private SWTBotTreeItem dataModelItem;
 
-    private SWTBotTreeItem dataModelItem;
+	private SWTBotTreeItem typeNode;
 
-    @Before
-    public void runBeforeEveryTest() {
-        dataModelItem = serverItem.getNode("Data Model [HEAD]");
-        dataModelItem.expand();
+	private SWTBotTreeItem elementNode;
 
-        SWTBotTreeItem node = dataModelItem.expandNode("System").expand().getNode("Reporting");
-        node.doubleClick();
+	@Before
+	public void runBeforeEveryTest() {
+		dataModelItem = serverItem.getNode("Data Model [HEAD]");
+		dataModelItem.expand();
 
-        final SWTBotEditor editor = bot.editorByTitle("Reporting");
+		dataModelItem.contextMenu("New").click();
+		SWTBotShell newDataContainerShell = bot.shell("New Data Model");
+		newDataContainerShell.activate();
+		SWTBotText text = bot
+				.textWithLabel("Enter a name for the New Instance");
+		text.setText("TestDataModel");
+		sleep();
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+		Assert.assertNotNull(dataModelItem.getNode("TestDataModel"));
+		sleep(4);
+
+		final SWTBotEditor editor = bot.editorByTitle("TestDataModel");
 		Display.getDefault().syncExec(new Runnable() {
 
 			public void run() {
@@ -58,321 +74,362 @@ public class DataModelTypesElementOperationTest extends TalendSWTBotForMDM {
 				mainpage = (DataModelMainPage) ep.getSelectedPage();
 			}
 		});
-        mainpage.setSchemaSelected(false);
-        Tree typesTree = mainpage.getTreeViewer().getTree();
-        typesBotTree = new SWTBotTree(typesTree);
-        typesNode = typesBotTree.getTreeItem("ReportingType");
-        typesNode.select().expand();
-        eleItem = typesNode.getNode("Concept");
+		Tree elemetnsTree = mainpage.getElementsViewer().getTree();
+		conceptBotTree = new SWTBotTree(elemetnsTree);
+		Tree typesTree = mainpage.getTypesViewer().getTree();
+		typesBotTree = new SWTBotTree(typesTree);
+		newEntity();
+		bot.activeEditor().save();
 
-    }
+	}
 
-    @After
-    public void runAfterEveryTest() {
-        Display.getDefault().syncExec(new Runnable() {
+	public void newEntity() {
+		conceptBotTree.contextMenu("New Entity").click();
+		SWTBotShell newEntityShell = bot.shell("New Entity");
+		newEntityShell.activate();
+		// create a entity with a complex type
+		bot.textWithLabel("Name:").setText("ComplexTypeEntity");
+		sleep();
+		bot.button("OK").click();
+		sleep(2);
+		elementNode = typesBotTree.getTreeItem("ComplexTypeEntityType")
+				.expand().getNode("subelement");
+	}
 
-            public void run() {
-                mainpage.doSave(new NullProgressMonitor());
-            }
-        });
-    	bot.activeEditor().close();
-    }
+	@After
+	public void runAfterEveryTest() {
+		Display.getDefault().syncExec(new Runnable() {
 
-    // @Test
-    public void editElementTest() {
-        eleItem.contextMenu("Edit Element").click();
-        SWTBotShell newEntityShell = bot.shell("Edit Business Element");
-        newEntityShell.activate();
-        // create a entity with a complex type
-        bot.textWithLabel("Business Element Name").setText("ConceptTest");
-        sleep();
-        bot.button("OK").click(); // create a entity with a simple type
-        sleep(2);
+			public void run() {
+				mainpage.doSave(new NullProgressMonitor());
+				bot.activeEditor().close();
+			}
+		});
+		dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
+		bot.button("OK").click();
+	}
 
-        eleItem.contextMenu("Edit Element").click();
-        newEntityShell = bot.shell("Edit Business Element");
-        newEntityShell.activate();
-        // create a entity with a complex type
-        bot.textWithLabel("Business Element Name").setText("Concept");
-        sleep();
-        bot.button("OK").click(); // create a entity with a simple type
-        sleep(2);
-    }
+	@Test
+	public void CreateComplexType() {
+		elementNode.contextMenu("Create a Complex Type").click();
+		sleep();
+		SWTBotShell changeTypeShell = bot.shell("Complex Type Properties");
+		changeTypeShell.activate();
+		bot.ccomboBox(0).setText("ComplexType");
+		bot.radio("Sequence").click();
+		bot.button("OK").click();
+		sleep(2);
+		Assert.assertNotNull(typesBotTree.getTreeItem("ComplexType"));
+	}
 
-    // @Test
-    public void addElementTest() {
-        // SWTBotTreeItem groupItem = conceptNode.getNode("ReportingType");
-        eleItem.contextMenu("Add Element (after)").click();
-        SWTBotShell newEntityShell = bot.shell("Add a new Business Element");
-        newEntityShell.activate();
-        // create a entity with a complex type
-        bot.textWithLabel("Business Element Name").setText("testElement");
-        sleep();
-        bot.button("OK").click(); // create a entity with a simple type
-        sleep(2);
-    }
+	@Test
+	public void CreateSimpleType() {
+		elementNode.contextMenu("Create a Simple Type").click();
+		sleep();
+		SWTBotShell changeTypeShell = bot.shell("New Simple Type");
+		changeTypeShell.activate();
+		bot.radio("Custom").click();
+		sleep();
+		bot.ccomboBoxWithLabel("Type").setSelection(0);
+		sleep();
+		bot.button("OK").click();
+		sleep();
+		Assert.assertNotNull(typesBotTree.getTreeItem("PICTURE : string"));
+	}
 
-    // @Test
-    public void copyElementTest() {
-        eleItem.contextMenu("Copy Element").click();
-        sleep();
-        eleItem.contextMenu("Paste Element").click();
-        sleep();
-        SWTBotShell saveShell = bot.shell("Copy Element");
-        saveShell.activate();
-        bot.button("OK").click();
-        sleep();
-    }
+	@Test
+	public void editElementTest() {
+		elementNode.contextMenu("Edit Element").click();
+		SWTBotShell newEntityShell = bot.shell("Edit Business Element");
+		newEntityShell.activate();
+		// create a entity with a complex type
+		bot.textWithLabel("Business Element Name").setText("element");
+		sleep();
+		bot.button("OK").click(); // create a entity with a simple type
+		sleep(2);
+	}
 
-    // @Test
-    public void changeToComplexTypeTest() {
-        eleItem.contextMenu("Change to a Complex Type").click();
-        sleep();
-        SWTBotShell changeTypeShell = bot.shell("Change To Complex Type");
-        changeTypeShell.activate();
-        bot.radio("Sequence").click();
-        bot.button("OK").click();
-        sleep(2);
-    }
+	@Test
+	public void addElementTest() {
+		// SWTBotTreeItem groupItem = conceptNode.getNode("ReportingType");
+		elementNode.contextMenu("Add Element (after)").click();
+		SWTBotShell newEntityShell = bot.shell("Add a new Business Element");
+		newEntityShell.activate();
+		// create a entity with a complex type
+		bot.textWithLabel("Business Element Name").setText("element");
+		sleep();
+		bot.button("OK").click(); // create a entity with a simple type
+		sleep(2);
+		Assert.assertNotNull(typeNode.expand().getNode("element  [0...1]"));
+	}
 
-    // @Test
-    public void changeToSimpleTypeTest() {
-        eleItem.contextMenu("Change to a Simple Type").click();
-        sleep();
-        SWTBotShell changeTypeShell = bot.shell("Make Simple Type");
-        changeTypeShell.activate();
-        bot.radio("Custom").click();
-        sleep();
-        bot.ccomboBoxWithLabel("Type").setSelection(0);
-        sleep();
-        bot.button("OK").click();
-        sleep(2);
-    }
+	// @Test
+	public void copyElementTest() {
+		elementNode.contextMenu("Copy Element").click();
+		sleep();
+		elementNode.contextMenu("Paste Element").click();
+		sleep();
+		SWTBotShell saveShell = bot.shell("Copy Element");
+		saveShell.activate();
+		bot.button("OK").click();
+		sleep();
+	}
 
-    @Test
-    public void setLabelsTest() {
-        eleItem.contextMenu("Set the Labels").click();
-        sleep();
-        SWTBotShell shell = bot.shell("Set the Labels");
-        shell.activate();
-        bot.comboBox().setSelection(0);
-        bot.text().setText("en");
-        bot.buttonWithTooltip("Add").click();
-        sleep();
-        bot.comboBox().setSelection(1);
-        bot.text().setText("fr");
-        bot.buttonWithTooltip("Add").click();
-        sleep();
-        bot.table().select(1);
-        bot.buttonWithTooltip("Del").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-    }
+	@Test
+	public void changeToComplexTypeTest() {
+		elementNode.contextMenu("Change to a Complex Type").click();
+		sleep();
+		SWTBotShell changeTypeShell = bot.shell("Complex Type Properties");
+		changeTypeShell.activate();
+		bot.radio("Sequence").click();
+		bot.button("OK").click();
+		sleep(2);
+	}
 
-    // @Test
-    public void setDescriptionsTest() {
-        eleItem.contextMenu("Set the Descriptions").click();
-        sleep();
-        SWTBotShell shell = bot.shell("Set the Descriptions of This Element");
-        shell.activate();
-        bot.comboBox().setSelection(0);
-        bot.text().setText("enlish descriptions");
-        bot.buttonWithTooltip("Add").click();
-        sleep();
-        bot.comboBox().setSelection(1);
-        bot.text().setText("french descriptions");
-        bot.buttonWithTooltip("Add").click();
-        sleep();
-        bot.table().select(1);
-        bot.buttonWithTooltip("Del").click();
-        sleep();
-        bot.button("OK").click();
-    }
+	@Test
+	public void changeToSimpleTypeTest() {
+		elementNode.contextMenu("Change to a Simple Type").click();
+		sleep();
+		SWTBotShell changeTypeShell = bot.shell("Make Simple Type");
+		changeTypeShell.activate();
+		bot.radio("Custom").click();
+		sleep();
+		bot.ccomboBoxWithLabel("Type").setSelection(0);
+		sleep();
+		bot.button("OK").click();
+		sleep(2);
+	}
 
-    // @Test
-    public void setWriteAccessTest() {
-        eleItem.contextMenu("Set the Roles with Write Access").click();
-        SWTBotShell newViewShell = bot.shell("Set The Roles That Have Write Access");
-        newViewShell.activate();
-        bot.ccomboBox().setSelection(0);
-        bot.buttonWithTooltip("Add").click();
+	@Test
+	public void setLabelsTest() {
+		elementNode.contextMenu("Set the Labels").click();
+		sleep();
+		SWTBotShell shell = bot.shell("Set the Labels");
+		shell.activate();
+		bot.comboBox().setSelection(0);
+		bot.text().setText("en");
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.comboBox().setSelection(1);
+		bot.text().setText("fr");
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.table().select(1);
+		bot.buttonWithTooltip("Del").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+	}
 
-        bot.ccomboBox().setSelection(1);
-        bot.buttonWithTooltip("Add").click();
+	@Test
+	public void setDescriptionsTest() {
+		elementNode.contextMenu("Set the Descriptions").click();
+		sleep();
+		SWTBotShell shell = bot.shell("Set the Descriptions of This Element");
+		shell.activate();
+		bot.comboBox().setSelection(0);
+		bot.text().setText("enlish descriptions");
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.comboBox().setSelection(1);
+		bot.text().setText("french descriptions");
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.table().select(1);
+		bot.buttonWithTooltip("Del").click();
+		sleep();
+		bot.button("OK").click();
+	}
 
-        bot.table().select(0);
-        bot.buttonWithTooltip("Move down the selected item").click();
-        sleep(2);
-        bot.buttonWithTooltip("Move up the selected item").click();
-        sleep(2);
+	@Test
+	public void setWriteAccessTest() {
+		elementNode.contextMenu("Set the Roles with Write Access").click();
+		SWTBotShell newViewShell = bot
+				.shell("Set The Roles That Have Write Access");
+		newViewShell.activate();
+		bot.ccomboBox().setSelection(0);
+		bot.buttonWithTooltip("Add").click();
 
-        bot.table().select(0);
-        bot.buttonWithTooltip("Delete the selected item").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-    }
+		bot.ccomboBox().setSelection(1);
+		bot.buttonWithTooltip("Add").click();
 
-    // @Test
-    public void setNoAccessTest() {
-        eleItem.contextMenu("Set the Roles with No Access").click();
-        SWTBotShell newViewShell = bot.shell("Set The Roles That Cannot Access This Field");
-        newViewShell.activate();
-        bot.ccomboBox().setSelection(0);
-        bot.buttonWithTooltip("Add").click();
+		bot.table().select(0);
+		bot.buttonWithTooltip("Move down the selected item").click();
+		sleep(2);
+		bot.buttonWithTooltip("Move up the selected item").click();
+		sleep(2);
 
-        bot.ccomboBox().setSelection(1);
-        bot.buttonWithTooltip("Add").click();
+		bot.table().select(0);
+		bot.buttonWithTooltip("Delete the selected item").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+	}
 
-        bot.table().select(0);
-        bot.buttonWithTooltip("Move down the selected item").click();
-        sleep(2);
-        bot.buttonWithTooltip("Move up the selected item").click();
-        sleep(2);
+	@Test
+	public void setNoAccessTest() {
+		elementNode.contextMenu("Set the Roles with No Access").click();
+		SWTBotShell newViewShell = bot
+				.shell("Set The Roles That Cannot Access This Field");
+		newViewShell.activate();
+		bot.ccomboBox().setSelection(0);
+		bot.buttonWithTooltip("Add").click();
 
-        bot.table().select(1);
-        bot.buttonWithTooltip("Delete the selected item").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-    }
+		bot.ccomboBox().setSelection(1);
+		bot.buttonWithTooltip("Add").click();
 
-    // @Test
-    public void setWorkflowAccessTest() {
-        eleItem.contextMenu("Set the Workflow Access").click();
-        SWTBotShell shell = bot.shell("Set the Workflow Access");
-        shell.activate();
-    }
+		bot.table().select(0);
+		bot.buttonWithTooltip("Move down the selected item").click();
+		sleep(2);
+		bot.buttonWithTooltip("Move up the selected item").click();
+		sleep(2);
 
-    // @Test
-    public void setForeignKeyTest() {
-        Display.getDefault().syncExec(new Runnable() {
+		bot.table().select(1);
+		bot.buttonWithTooltip("Delete the selected item").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+	}
 
-            public void run() {
-                mainpage.doSave(new NullProgressMonitor());
-            }
-        });
-        eleItem.contextMenu("Set the Foreign Key").click();
-        SWTBotShell shell = bot.shell("Set the Foreign Key");
-        shell.activate();
-        bot.buttonWithTooltip("Select xpath").click();
-        // test the filter of the composite by meanwhile.see bug 0016511
-        bot.textWithLabel("Filter:").setText("R");
-        sleep();
-        bot.textWithLabel("Filter:").setText("U");
-        sleep();
-        bot.textWithLabel("Filter:").setText("");
-        sleep();
-        bot.tree().select("Reporting");
-        sleep();
-        bot.button("Add").click();
-        sleep();
-        shell = bot.shell("Set the Foreign Key");
-        shell.activate();
-        bot.button("OK").click();
-    }
+	// @Test
+	public void setWorkflowAccessTest() {
+		elementNode.contextMenu("Set the Workflow Access").click();
+		SWTBotShell shell = bot.shell("Set the Workflow Access");
+		shell.activate();
+	}
 
-    // @Test
-    public void setForeignKeyFilterTest() {
-        Display.getDefault().syncExec(new Runnable() {
+	@Test
+	public void setForeignKeyTest() {
+		Display.getDefault().syncExec(new Runnable() {
 
-            public void run() {
-                mainpage.doSave(new NullProgressMonitor());
-            }
-        });
-        eleItem.contextMenu("Set the Foreign Key Filter").click();
-        SWTBotShell shell = bot.shell("Set Foreign Key Filter");
-        shell.activate();
-        bot.buttonWithTooltip("Add").click();
-        bot.buttonWithTooltip("Select Xpath").click();
+			public void run() {
+				mainpage.doSave(new NullProgressMonitor());
+			}
+		});
+		elementNode.contextMenu("Set the Foreign Key").click();
+		SWTBotShell shell = bot.shell("Set the Foreign Key");
+		shell.activate();
+		bot.buttonWithTooltip("Select xpath").click();
+		// test the filter of the composite by meanwhile.see bug 0016511
+		bot.textWithLabel("Filter:").setText("R");
+		sleep();
+		bot.textWithLabel("Filter:").setText("U");
+		sleep();
+		bot.textWithLabel("Filter:").setText("");
+		sleep();
+		bot.tree().select(0);
+		sleep();
+		bot.button("Add").click();
+		sleep();
+		shell = bot.shell("Set the Foreign Key");
+		shell.activate();
+		bot.button("OK").click();
+	}
 
-        bot.tree().expandNode("BrowseItem").select("Owner");
-        sleep();
-        bot.button("Add").click();
-        sleep();
+	@Test
+	public void setForeignKeyFilterTest() {
+		Display.getDefault().syncExec(new Runnable() {
 
-        bot.text().setText("filter");
-        sleep();
-        bot.button("OK").click();
-    }
+			public void run() {
+				mainpage.doSave(new NullProgressMonitor());
+			}
+		});
+		elementNode.contextMenu("Set the Foreign Key Filter").click();
+		SWTBotShell shell = bot.shell("Set Foreign Key Filter");
+		shell.activate();
+		bot.buttonWithTooltip("Add").click();
+		// TODO:check
+		// bot.buttonWithTooltip("Select Xpath").click();
+		//
+		// bot.tree().expandNode("BrowseItem").select("Owner");
+		// sleep();
+		// bot.button("Add").click();
+		// sleep();
 
-    @Test
-    public void setForeignKeyInfoTest() {
-        Display.getDefault().syncExec(new Runnable() {
+		bot.text().setText("filter");
+		sleep();
+		bot.button("OK").click();
+	}
 
-            public void run() {
-                mainpage.doSave(new NullProgressMonitor());
-            }
-        });
-        eleItem.contextMenu("Set the Foreign Key Infos").click();
-        SWTBotShell shell = bot.shell("Set the Foreign Key Infos");
-        shell.activate();
-        bot.buttonWithTooltip("Select xpath").click();
-        // test the filter of the composite meanwhile.
-        bot.textWithLabel("Filter:").setText("R");
-        sleep();
-        bot.textWithLabel("Filter:").setText("U");
-        sleep();
-        bot.textWithLabel("Filter:").setText("");
-        sleep();
-        bot.tree().select("Reporting");
-        sleep();
-        bot.button("Add").click();
-        sleep();
-        bot.buttonWithTooltip("Add").click();
-        sleep();
-        bot.button("OK").click();
-    }
+	@Test
+	public void setForeignKeyInfoTest() {
+		Display.getDefault().syncExec(new Runnable() {
 
-    // @Test
-    public void setFacetTest() {
-        eleItem.contextMenu("Set the facet message").click();
-        sleep();
-        SWTBotShell shell = bot.shell("Set multilingual facet error messages for the content of this element");
-        shell.activate();
-        bot.comboBox().setSelection(0);
-        bot.text().setText("test error facet in English");
-        bot.buttonWithTooltip("Add").click();
-        sleep();
-        bot.comboBox().setSelection(1);
-        bot.text().setText("test error facet in French");
-        bot.buttonWithTooltip("Add").click();
-        sleep();
-        bot.table().select(1);
-        bot.buttonWithTooltip("Del").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-    }
+			public void run() {
+				mainpage.doSave(new NullProgressMonitor());
+			}
+		});
+		elementNode.contextMenu("Set the Foreign Key Infos").click();
+		SWTBotShell shell = bot.shell("Set the Foreign Key Infos");
+		shell.activate();
+		bot.buttonWithTooltip("Select xpath").click();
+		// test the filter of the composite meanwhile.
+		bot.textWithLabel("Filter:").setText("R");
+		sleep();
+		bot.textWithLabel("Filter:").setText("U");
+		sleep();
+		bot.textWithLabel("Filter:").setText("");
+		sleep();
+		bot.tree().select(0);
+		sleep();
+		bot.button("Add").click();
+		sleep();
+		shell.activate();
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.button("OK").click();
+	}
 
-    // @Test
-    public void setDisplayFormatTest() {
-        eleItem.contextMenu("Set the display format").click();
-        sleep();
-        SWTBotShell shell = bot.shell("Set the display format for the content of this element");
-        shell.activate();
-        bot.comboBox().setSelection(0);
-        bot.text().setText("test error format in English");
-        bot.buttonWithTooltip("Add").click();
-        sleep();
-        bot.comboBox().setSelection(1);
-        bot.text().setText("test error format in French");
-        bot.buttonWithTooltip("Add").click();
-        sleep();
-        bot.table().select(1);
-        bot.buttonWithTooltip("Del").click();
-        sleep();
-        bot.button("OK").click();
-        sleep();
-    }
+	@Test
+	public void setFacetTest() {
+		elementNode.contextMenu("Set the facet message").click();
+		sleep();
+		SWTBotShell shell = bot
+				.shell("Set multilingual facet error messages for the content of this element");
+		shell.activate();
+		bot.comboBox().setSelection(0);
+		bot.text().setText("test error facet in English");
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.comboBox().setSelection(1);
+		bot.text().setText("test error facet in French");
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.table().select(1);
+		bot.buttonWithTooltip("Del").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+	}
 
-    // @Test
-    public void copyXpathTest() {
-        // TODO:it dose nothing now,need to check
-        eleItem.contextMenu("Copy Xpath").click();
-        sleep();
+	@Test
+	public void setDisplayFormatTest() {
+		elementNode.contextMenu("Set the display format").click();
+		sleep();
+		SWTBotShell shell = bot
+				.shell("Set the display format for the content of this element");
+		shell.activate();
+		bot.comboBox().setSelection(0);
+		bot.text().setText("test error format in English");
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.comboBox().setSelection(1);
+		bot.text().setText("test error format in French");
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.table().select(1);
+		bot.buttonWithTooltip("Del").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+	}
 
-    }
+	// @Test
+	public void copyXpathTest() {
+		// TODO:it dose nothing now,need to check
+		elementNode.contextMenu("Copy Xpath").click();
+		sleep();
+
+	}
 
 }

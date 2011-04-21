@@ -12,12 +12,15 @@
 // ============================================================================
 package org.talend.mdm.studio.test.datamodel;
 
+import junit.framework.Assert;
+
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
@@ -32,25 +35,24 @@ import com.amalto.workbench.editors.xsdeditor.XSDEditor;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class DataModelSchemaGroupOperationTest extends TalendSWTBotForMDM {
 
-    private SWTBotTree conceptBotTree;
+	private SWTBotTree conceptBotTree;
 
-    private DataModelMainPage mainpage;
+	private DataModelMainPage mainpage;
 
-    private SWTBotTreeItem conceptNode;
+	private SWTBotTreeItem dataModelItem;
 
-    private SWTBotTreeItem groupItem;
+	private SWTBotTreeItem groupNode;
 
-    private SWTBotTreeItem dataModelItem;
+	@Before
+	public void runBeforeEveryTest() {
+		dataModelItem = serverItem.getNode("Data Model [HEAD]");
+		dataModelItem.expand();
+		if (dataModelItem.getNodes().contains("TestDataModel"))
+			dataModelItem.getNode("TestDataModel").doubleClick();
+		else
+			newDatamodel();
 
-    @Before
-    public void runBeforeEveryTest() {
-        dataModelItem = serverItem.getNode("Data Model [HEAD]");
-        dataModelItem.expand();
-
-        SWTBotTreeItem node = dataModelItem.expandNode("System").expand().getNode("Reporting");
-        node.doubleClick();
-
-        final SWTBotEditor editor = bot.editorByTitle("Reporting");
+		final SWTBotEditor editor = bot.editorByTitle("TestDataModel");
 		Display.getDefault().syncExec(new Runnable() {
 
 			public void run() {
@@ -58,59 +60,88 @@ public class DataModelSchemaGroupOperationTest extends TalendSWTBotForMDM {
 				mainpage = (DataModelMainPage) ep.getSelectedPage();
 			}
 		});
-        Tree conceptTree = mainpage.getElementsViewer().getTree();
-        conceptBotTree = new SWTBotTree(conceptTree);
-        conceptNode = conceptBotTree.getTreeItem("Reporting");
-        conceptNode.select().expand();
-        groupItem = conceptNode.getNode("ReportingType");
-    }
+		Tree conceptTree = mainpage.getElementsViewer().getTree();
+		conceptBotTree = new SWTBotTree(conceptTree);
+		newEntity();
+	}
 
-    @After
-    public void runAfterEveryTest() {
-        Display.getDefault().syncExec(new Runnable() {
+	private void newDatamodel() {
+		dataModelItem.contextMenu("New").click();
+		SWTBotShell newDataContainerShell = bot.shell("New Data Model");
+		newDataContainerShell.activate();
+		SWTBotText text = bot
+				.textWithLabel("Enter a name for the New Instance");
+		text.setText("TestDataModel");
+		sleep();
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+		Assert.assertNotNull(dataModelItem.getNode("TestDataModel"));
+		sleep(2);
+	}
 
-            public void run() {
-                mainpage.doSave(new NullProgressMonitor());
-            }
-        });
-    	bot.activeEditor().close();
-    }
+	private void newEntity() {
+		conceptBotTree.contextMenu("New Entity").click();
+		SWTBotShell newEntityShell = bot.shell("New Entity");
+		newEntityShell.activate();
+		// create a entity with a complex type
+		bot.textWithLabel("Name:").setText("ComplexTypeEntity");
+		sleep();
+		bot.button("OK").click();
+		sleep(2);
+		groupNode = conceptBotTree.getTreeItem("ComplexTypeEntity").expand()
+				.getNode("ComplexTypeEntityType");
+	}
 
-    //new feature in 4.2,See bug 0012073
-    @Test
-    public void addElementTest() {
-        groupItem.contextMenu("Add Element").click();
-        SWTBotShell newEntityShell = bot.shell("Add a new Business Element");
-        newEntityShell.activate();
-        // create a entity with a complex type
-        bot.textWithLabel("Business Element Name").setText("testElement");
-        sleep();
-        bot.button("OK").click(); // create a entity with a simple type
-        sleep(2);
-    }
+	@After
+	public void runAfterEveryTest() {
+		Display.getDefault().syncExec(new Runnable() {
 
-    @Test
-    public void changeSubElementGroupTest() {
-        groupItem.contextMenu("Change Sub-Element Group").click();
-        sleep();
-        SWTBotShell changeTypeShell = bot.shell("Change Sub-Element Group");
-        changeTypeShell.activate();
-        bot.radio("Choice").click();
-        bot.button("OK").click();
-        sleep(2);
+			public void run() {
+				mainpage.doSave(new NullProgressMonitor());
+				bot.activeEditor().close();
+			}
+		});
+		dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
+		bot.button("OK").click();
+	}
 
-    }
+	// new feature in 4.2,See bug 0012073
+	@Test
+	public void addElementTest() {
+		groupNode.contextMenu("Add Element").click();
+		SWTBotShell newEntityShell = bot.shell("Add a new Business Element");
+		newEntityShell.activate();
+		// create a entity with a complex type
+		bot.textWithLabel("Business Element Name").setText("testElement");
+		sleep();
+		bot.button("OK").click(); // create a entity with a simple type
+		sleep(2);
+	}
 
-    @Test
-    public void newEntityTest() {
-        groupItem.contextMenu("New Entity").click();
-        SWTBotShell newEntityShell = bot.shell("New Entity");
-        newEntityShell.activate();
-        // create a entity with a complex type
-        bot.textWithLabel("Name:").setText("ComplexTypeEntity");
-        sleep();
-        bot.button("OK").click(); // create a entity with a simple type
-        sleep(2);
-    }
+	@Test
+	public void changeSubElementGroupTest() {
+		groupNode.contextMenu("Change Sub-Element Group").click();
+		sleep();
+		SWTBotShell changeTypeShell = bot.shell("Change Sub-Element Group");
+		changeTypeShell.activate();
+		bot.radio("Choice").click();
+		bot.button("OK").click();
+		sleep(2);
+
+	}
+
+	@Test
+	public void newEntityTest() {
+		groupNode.contextMenu("New Entity").click();
+		SWTBotShell newEntityShell = bot.shell("New Entity");
+		newEntityShell.activate();
+		// create a entity with a complex type
+		bot.textWithLabel("Name:").setText("ComplexEntity");
+		sleep();
+		bot.button("OK").click(); // create a entity with a simple type
+		sleep(2);
+	}
 
 }

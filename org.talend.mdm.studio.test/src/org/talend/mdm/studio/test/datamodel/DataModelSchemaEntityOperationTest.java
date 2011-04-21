@@ -99,7 +99,7 @@ public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
 		bot.button("OK").click();
 	}
 
-	public void newEntity() {
+	private void newEntity() {
 		conceptBotTree.contextMenu("New Entity").click();
 		SWTBotShell newEntityShell = bot.shell("New Entity");
 		newEntityShell.activate();
@@ -113,7 +113,7 @@ public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
 		bot.toolbarButtonWithTooltip("Expand...", 0).click();
 	}
 
-	public void newElement() {
+	private void newElement() {
 		conceptBotTree.getTreeItem("ComplexTypeEntity")
 				.getNode("ComplexTypeEntityType").contextMenu("Add Element")
 				.click();

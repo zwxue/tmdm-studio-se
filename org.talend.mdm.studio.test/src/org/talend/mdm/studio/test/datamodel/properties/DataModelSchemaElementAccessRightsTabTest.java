@@ -16,6 +16,7 @@ import junit.framework.Assert;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
@@ -79,16 +80,8 @@ public class DataModelSchemaElementAccessRightsTabTest extends
 				mainpage = (DataModelMainPage) ep.getSelectedPage();
 			}
 		});
-		// Tree typesTree = mainpage.getTypesViewer().getTree();
-		// typesBotTree = new SWTBotTree(typesTree);
-		//
-		// final SWTBotEditor editor = bot.editorByTitle("TestDataModel");
-		// XObjectEditor ep = (XObjectEditor)
-		// editor.getReference().getPart(true);
-		// mainpage = (DataModelMainPage) ep.getPage(0);
-		// Tree conceptTree = mainpage.getElementsViewer().getTree();
-		// conceptBotTree = new SWTBotTree(conceptTree);
-		conceptBotTree = bot.tree(0);
+		Tree conceptTree = mainpage.getElementsViewer().getTree();
+		conceptBotTree = new SWTBotTree(conceptTree);
 		newEntity();
 		newElement();
 		bot.viewById(IPageLayout.ID_PROP_SHEET).setFocus();

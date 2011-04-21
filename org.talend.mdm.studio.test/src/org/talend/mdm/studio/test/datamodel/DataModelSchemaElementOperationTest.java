@@ -5,6 +5,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.eclipse.swtbot.swt.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
@@ -362,8 +363,11 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
 		SWTBotShell shell = bot.shell("Set the Foreign Key Infos");
 		shell.activate();
 		bot.buttonWithTooltip("Select xpath").click();
+		SWTBotShell shell1 = bot.shell("Select Xpath ...");
+		shell1.activate();
 		bot.tree().select(0);
 		bot.button("Add").click();
+		bot.waitUntil(Conditions.shellCloses(shell1));
 		bot.button("Ok").click();
 	}
 

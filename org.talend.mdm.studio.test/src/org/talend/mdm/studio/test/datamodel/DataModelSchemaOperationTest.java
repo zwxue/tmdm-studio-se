@@ -12,12 +12,15 @@
 // ============================================================================
 package org.talend.mdm.studio.test.datamodel;
 
+import junit.framework.Assert;
+
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
@@ -43,16 +46,20 @@ public class DataModelSchemaOperationTest extends TalendSWTBotForMDM {
 
 	private SWTBotTreeItem dataModelItem;
 
+	private SWTBotTreeItem entityNode;
+
+	private SWTBotTreeItem elementNode;
+
 	@Before
 	public void runBeforeEveryTest() {
 		dataModelItem = serverItem.getNode("Data Model [HEAD]");
 		dataModelItem.expand();
+		if (dataModelItem.getNodes().contains("TestDataModel"))
+			dataModelItem.getNode("TestDataModel").doubleClick();
+		else
+			newDatamodel();
 
-		SWTBotTreeItem node = dataModelItem.expandNode("System").expand().getNode(
-				"Reporting");
-		node.doubleClick();
-
-		final SWTBotEditor editor = bot.editorByTitle("Reporting");
+		final SWTBotEditor editor = bot.editorByTitle("TestDataModel");
 		Display.getDefault().syncExec(new Runnable() {
 
 			public void run() {
@@ -60,8 +67,53 @@ public class DataModelSchemaOperationTest extends TalendSWTBotForMDM {
 				mainpage = (DataModelMainPage) ep.getSelectedPage();
 			}
 		});
-		Tree conceptTree = mainpage.getTreeViewer().getTree();
+		Tree conceptTree = mainpage.getElementsViewer().getTree();
 		conceptBotTree = new SWTBotTree(conceptTree);
+		newEntity();
+		newElement();
+	}
+
+	private void newDatamodel() {
+		dataModelItem.contextMenu("New").click();
+		SWTBotShell newDataContainerShell = bot.shell("New Data Model");
+		newDataContainerShell.activate();
+		SWTBotText text = bot
+				.textWithLabel("Enter a name for the New Instance");
+		text.setText("TestDataModel");
+		sleep();
+		bot.buttonWithTooltip("Add").click();
+		sleep();
+		bot.button("OK").click();
+		sleep();
+		Assert.assertNotNull(dataModelItem.getNode("TestDataModel"));
+		sleep(2);
+	}
+
+	private void newEntity() {
+		conceptBotTree.contextMenu("New Entity").click();
+		SWTBotShell newEntityShell = bot.shell("New Entity");
+		newEntityShell.activate();
+		// create a entity with a complex type
+		bot.textWithLabel("Name:").setText("ComplexTypeEntity");
+		sleep();
+		bot.button("OK").click();
+		sleep(2);
+		entityNode = conceptBotTree.getTreeItem("ComplexTypeEntity");
+		entityNode.select();
+	}
+
+	private void newElement() {
+		entityNode.expand().getNode("ComplexTypeEntityType")
+				.contextMenu("Add Element").click();
+
+		SWTBotShell newElementShell = bot.shell("Add a new Business Element");
+		newElementShell.activate();
+		bot.textWithLabel("Business Element Name").setText("Ele");
+		sleep();
+		bot.button("OK").click();
+		sleep(2);
+		elementNode = entityNode.expand().getNode("ComplexTypeEntityType")
+				.expand().getNode("Ele  [0...1])");
 	}
 
 	@After
@@ -70,12 +122,14 @@ public class DataModelSchemaOperationTest extends TalendSWTBotForMDM {
 
 			public void run() {
 				mainpage.doSave(new NullProgressMonitor());
+				bot.activeEditor().close();
 			}
 		});
-		bot.activeEditor().close();
+		dataModelItem.getNode("TestDataModel").contextMenu("Delete").click();
+		bot.button("OK").click();
 	}
 
-	// @Test
+	@Test
 	public void filterTest() {
 		bot.toolbarRadioButtonWithTooltip("Filter...").click();
 		SWTBotShell filterShell = bot.shell("Data Model Filter");
@@ -98,58 +152,42 @@ public class DataModelSchemaOperationTest extends TalendSWTBotForMDM {
 
 	@Test
 	public void expandTest() {
-		SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-		conceptNode.select();
+		entityNode.select();
 		bot.toolbarButtonWithTooltip("Expand...").click();
 		sleep(2);
-		// conceptNode.expand();
-		// conceptNode.getNode(0).expand();
-		// SWTBotTreeItem userNode =
-		// conceptNode.getNode(0).getNode("ReportingName");
-		// userNode.setFocus();
-		// sleep(3);
 	}
 
-	// @Test
+	@Test
 	public void collapseTest() {
-		SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-		conceptNode.select();
+		entityNode.select();
 		bot.toolbarButtonWithTooltip("Collapse...").click();
 		sleep(2);
 	}
 
-	// @Test
+	@Test
 	public void expandModelGroupTest() {
-		SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-		conceptNode.select();
+		entityNode.select();
 		bot.toolbarButtonWithTooltip("Expand ModelGroup...").click();
 		sleep(2);
 	}
 
-	// @Test
+	@Test
 	public void elementUpTest() {
-		SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-		conceptNode.getNode("ReportingType").getNode("Cluster").select();
-		bot.toolbarButtonWithTooltip("UP...").click();
-		sleep();
+		elementNode.select();
 		bot.toolbarButtonWithTooltip("UP...").click();
 		sleep(2);
 	}
 
-	// @Test
+	@Test
 	public void elementDownTest() {
-		SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-		conceptNode.getNode("ReportingType").getNode("Cluster").select();
+		entityNode.expand().getNode("ComplexTypeEntityType").expand()
+				.getNode("subelement").select();
 		bot.toolbarButtonWithTooltip("DOWN...").click();
-		sleep();
-		bot.toolbarButtonWithTooltip("DOWN...").click();
-		sleep(2);
 	}
 
-	// @Test
+	@Test
 	public void labelOperationTest() {
-		SWTBotTreeItem conceptNode = conceptBotTree.getTreeItem("Reporting");
-		conceptNode.select();
+		entityNode.select();
 		bot.toolbarButtonWithTooltip("Expand...").click();
 		sleep();
 		bot.comboBoxWithLabel("Language:").setSelection(1);
