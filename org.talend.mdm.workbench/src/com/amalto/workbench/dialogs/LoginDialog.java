@@ -244,6 +244,12 @@ public class LoginDialog extends Dialog {
         	isOK=false;
         	return;
         }
+        if(urlText.getText().trim().length()==0){
+        	MessageDialog.openWarning(null, "Warning", "Server is mandatory!");
+        	urlText.setFocus();
+        	isOK=false;
+        	return;
+        }        
         if(userText.getText().trim().length()==0){
         	MessageDialog.openWarning(null, "Warning", "Username is mandatory!");
         	userText.setFocus();
@@ -323,9 +329,16 @@ public class LoginDialog extends Dialog {
 
             if (ele.element("url").getText().equals(urlText.getText().trim())//$NON-NLS-1$
                     && ele.element("user").getText().equals(userText.getText())//$NON-NLS-1$
-                    && ele.element("password").getText().equals(PasswordUtil.encryptPassword(passwordText.getText()))//$NON-NLS-1$
-                    && ele.element("universe").getText().equals(universeCombo.getText()))//$NON-NLS-1$
+                    && ele.element("password").getText().equals(PasswordUtil.encryptPassword(passwordText.getText()))){//$NON-NLS-1$
+                    
+                if(Util.IsEnterPrise()){
+    				if(ele.element("universe").getText().equals(
+    					universeCombo.getText())){
+    						return ele;
+    				}
+    			}
                 return ele;
+            }
         }
         return null;
     }
