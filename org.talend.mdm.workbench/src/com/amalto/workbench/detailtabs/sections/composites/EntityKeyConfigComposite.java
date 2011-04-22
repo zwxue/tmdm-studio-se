@@ -616,6 +616,7 @@ public class EntityKeyConfigComposite extends Composite {
                     tvKeys.setInput(Arrays.asList(entityWrapper.getKeys()));
 
                     tvKeys.setSelection(new StructuredSelection(newKeyWrapper));
+                    if(section!=null)section.autoCommit();
 
                 } catch (Exception exp) {
                     log.error(exp.getMessage(), exp);

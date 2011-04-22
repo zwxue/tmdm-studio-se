@@ -317,7 +317,8 @@ public class LoginDialog extends Dialog {
         List properties = root.elements("properties");//$NON-NLS-1$
         for (Iterator iterator = properties.iterator(); iterator.hasNext();) {
             Element ele = (Element) iterator.next();
-            if (descCombo.getCombo().getText().trim().equals(ele.element("desc").getText()))//$NON-NLS-1$                    
+            String desc=ele.element("desc")!=null?ele.element("desc").getText():"";
+            if (descCombo.getCombo().getText().trim().equals(desc))//$NON-NLS-1$                    
                 return ele;
         }
         return null;
