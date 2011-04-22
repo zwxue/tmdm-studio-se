@@ -196,12 +196,12 @@ public class TypesLabelProvider extends LabelProvider {
                                     + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_Write")) {//$NON-NLS-1$
                             return "Writable By : " + e.getChildNodes().item(0).getNodeValue();
-                        } else if (source.equals("X_Create")) {//$NON-NLS-1$
-                            return "Creatable By : " + e.getChildNodes().item(0).getNodeValue();
-                        } else if (source.equals("X_LogicalDelete")) {//$NON-NLS-1$
-                            return "Logical Deletable By : " + e.getChildNodes().item(0).getNodeValue();
-                        } else if (source.equals("X_PhysicalDelete")) {//$NON-NLS-1$
-                            return "Physical Deletable By : " + e.getChildNodes().item(0).getNodeValue();
+                        } else if (source.equals("X_Deny_Create")) {//$NON-NLS-1$
+                            return "No Creatable By : " + e.getChildNodes().item(0).getNodeValue();
+                        } else if (source.equals("X_Deny_LogicalDelete")) {//$NON-NLS-1$
+                            return "No Logical Deletable By : " + e.getChildNodes().item(0).getNodeValue();
+                        } else if (source.equals("X_Deny_PhysicalDelete")) {//$NON-NLS-1$
+                            return "No Physical Deletable By : " + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_Hide")) {//$NON-NLS-1$
                             return "No Access to : " + e.getChildNodes().item(0).getNodeValue();
                         } else {
@@ -392,6 +392,12 @@ public class TypesLabelProvider extends LabelProvider {
                         } else if (source.equals("X_Write")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.SECURITYANNOTATION.getPath());
                         } else if (source.equals("X_Hide")) {//$NON-NLS-1$
+                            return ImageCache.getCreatedImage(EImage.SECURITYANNOTATION.getPath());
+                        }else if (source.equals("X_Deny_Create")) {//$NON-NLS-1$
+                            return ImageCache.getCreatedImage(EImage.SECURITYANNOTATION.getPath());
+                        } else if (source.equals("X_Deny_LogicalDelete")) {//$NON-NLS-1$
+                            return ImageCache.getCreatedImage(EImage.SECURITYANNOTATION.getPath());
+                        } else if (source.equals("X_Deny_PhysicalDelete")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.SECURITYANNOTATION.getPath());
                         } else {
                             return ImageCache.getCreatedImage(EImage.DOCUMENTATION.getPath());

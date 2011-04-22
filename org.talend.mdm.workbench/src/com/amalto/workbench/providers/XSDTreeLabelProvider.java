@@ -183,12 +183,12 @@ public class XSDTreeLabelProvider extends LabelProvider {
                                     + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_Write")) {//$NON-NLS-1$
                             return "Writable By : " + e.getChildNodes().item(0).getNodeValue();
-                        } else if (source.equals("X_Create")) {//$NON-NLS-1$
-                            return "Creatable By : " + e.getChildNodes().item(0).getNodeValue();
-                        } else if (source.equals("X_LogicalDelete")) {//$NON-NLS-1$
-                            return "Logical Deletable By : " + e.getChildNodes().item(0).getNodeValue();
-                        } else if (source.equals("X_PhysicalDelete")) {//$NON-NLS-1$
-                            return "Physical Deletable By : " + e.getChildNodes().item(0).getNodeValue();
+                        } else if (source.equals("X_Deny_Create")) {//$NON-NLS-1$
+                            return "No Creatable By : " + e.getChildNodes().item(0).getNodeValue();
+                        } else if (source.equals("X_Deny_LogicalDelete")) {//$NON-NLS-1$
+                            return "No Logical Deletable By : " + e.getChildNodes().item(0).getNodeValue();
+                        } else if (source.equals("X_Deny_PhysicalDelete")) {//$NON-NLS-1$
+                            return "No Physical Deletable By : " + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_Lookup_Field")) {//$NON-NLS-1$
                             return "Look Field : " + e.getChildNodes().item(0).getNodeValue();
                         } else if (source.equals("X_Workflow")) {//$NON-NLS-1$
@@ -409,11 +409,11 @@ public class XSDTreeLabelProvider extends LabelProvider {
                             return ImageCache.getCreatedImage(EImage.DOCUMENTATION.getPath());
                         } else if (source.equals("X_Write")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.SECURITYANNOTATION.getPath());
-                        } else if (source.equals("X_Create")) {//$NON-NLS-1$
+                        } else if (source.equals("X_Deny_Create")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.SECURITYANNOTATION.getPath());
-                        } else if (source.equals("X_LogicalDelete")) {//$NON-NLS-1$
+                        } else if (source.equals("X_Deny_LogicalDelete")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.SECURITYANNOTATION.getPath());
-                        } else if (source.equals("X_PhysicalDelete")) {//$NON-NLS-1$
+                        } else if (source.equals("X_Deny_PhysicalDelete")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.SECURITYANNOTATION.getPath());
                         } else if (source.equals("X_Lookup_Field")) {//$NON-NLS-1$
                             return ImageCache.getCreatedImage(EImage.BROWSE.getPath());
