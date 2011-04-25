@@ -346,7 +346,7 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
 		//
 		// // bot.textInGroup("Custom filters").setText("filter");
 		// sleep();
-		// bot.button("OK").click();
+		bot.button("OK").click();
 		// Assert.assertNotNull(elementNode.expand().getNode("Annotations")
 		// .expand().getNode("Foreign Key Filter: Reporting"));
 	}
@@ -368,6 +368,7 @@ public class DataModelSchemaElementOperationTest extends TalendSWTBotForMDM {
 		bot.tree().select(0);
 		bot.button("Add").click();
 		bot.waitUntil(Conditions.shellCloses(shell1));
+		shell.activate();
 		bot.button("Ok").click();
 	}
 

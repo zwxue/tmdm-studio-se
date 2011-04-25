@@ -117,11 +117,11 @@ public class DataModelSchemaEntityAccessRightsTabTest extends
 	public void setWriteAccessTest() {
 		bot.comboBox(0).setSelection(0);
 		bot.buttonWithTooltip("Add", 0).click();
-		bot.button("Apply").click();
+		// bot.button("Apply").click();
 
 		bot.tree(0).select(0);
 		bot.buttonWithTooltip("Del", 0).click();
-		bot.button("Apply").click();
+		// bot.button("Apply").click();
 
 		// bot.comboBox(0).setSelection(1);
 		// bot.buttonWithTooltip("Add",0).click();
@@ -137,11 +137,11 @@ public class DataModelSchemaEntityAccessRightsTabTest extends
 	public void setNoAccessTest() {
 		bot.comboBox(1).setSelection(0);
 		bot.buttonWithTooltip("Add", 1).click();
-		bot.button("Apply").click();
+		// bot.button("Apply").click();
 
 		bot.tree(1).select(0);
 		bot.buttonWithTooltip("Del", 1).click();
-		bot.button("Apply").click();
+		// bot.button("Apply").click();
 	}
 
 	@Test

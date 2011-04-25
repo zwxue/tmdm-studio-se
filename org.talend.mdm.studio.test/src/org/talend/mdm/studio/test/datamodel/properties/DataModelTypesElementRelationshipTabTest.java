@@ -124,7 +124,7 @@ public class DataModelTypesElementRelationshipTabTest extends
 		bot.buttonWithTooltip("Select Xpath", 0).click();
 		bot.tree().select(0);
 		bot.button("OK").click();
-		bot.button("Apply").click();
+		// bot.button("Apply").click();
 	}
 
 	@Test
@@ -132,7 +132,7 @@ public class DataModelTypesElementRelationshipTabTest extends
 		bot.buttonWithTooltip("Add", 0).click();
 		bot.tree().select(0);
 		// bot.text().setText("BrowseItem/Owner");
-		bot.button("Apply").click();
+		// bot.button("Apply").click();
 	}
 
 	@Test

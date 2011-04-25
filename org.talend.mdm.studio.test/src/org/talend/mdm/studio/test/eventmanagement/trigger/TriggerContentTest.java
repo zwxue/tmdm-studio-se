@@ -12,7 +12,6 @@
 // ============================================================================
 package org.talend.mdm.studio.test.eventmanagement.trigger;
 
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
@@ -51,12 +50,7 @@ public class TriggerContentTest extends TalendSWTBotForMDM {
 
 	@After
 	public void runAfterEveryTest() {
-		Display.getDefault().syncExec(new Runnable() {
 
-			public void run() {
-				bot.activeEditor().save();
-			}
-		});
 	}
 
 	private void init() {

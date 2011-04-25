@@ -113,7 +113,7 @@ public class DataModelSchemaOperationTest extends TalendSWTBotForMDM {
 		bot.button("OK").click();
 		sleep(2);
 		elementNode = entityNode.expand().getNode("ComplexTypeEntityType")
-				.expand().getNode("Ele  [0...1])");
+				.expand().getNode("Ele  [0...1]");
 	}
 
 	@After

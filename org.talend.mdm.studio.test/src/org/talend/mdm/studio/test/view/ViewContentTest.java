@@ -46,7 +46,7 @@ public class ViewContentTest extends TalendSWTBotForMDM {
 	public void runBeforeEveryTest() {
 		viewParentItem = serverItem.getNode("View [HEAD]");
 		viewParentItem.expand();
-		init();
+
 	}
 
 	private void createView() {
@@ -79,7 +79,6 @@ public class ViewContentTest extends TalendSWTBotForMDM {
 
 	@Test
 	public void setDescriptionTest() {
-
 		bot.buttonWithTooltip("Set the Descriptions").click();
 		bot.shell("Set the Descriptions").activate();
 		bot.comboBox().setSelection("English");
@@ -92,6 +91,7 @@ public class ViewContentTest extends TalendSWTBotForMDM {
 
 	@Test
 	public void setViewableElementsTest() {
+		init();
 		bot.buttonWithTooltip("Add Multiple", 0).click();
 		bot.shell("Select Multiple XPaths").activate();
 		// bot.comboBox().setSelection("CONF");
@@ -140,17 +140,18 @@ public class ViewContentTest extends TalendSWTBotForMDM {
 		bot.button("Add").click();
 		sleep();
 
-	}
-
-	@After
-	public void runAfterEveryTest() {
-		// TODO:add the content
 		bot.activeEditor().save();
 		sleep(2);
 		viewParentItem.getNode(PREFIX + "Conf").contextMenu("Delete").click();
 		sleep();
 		bot.button("OK").click();
 		sleep();
+	}
+
+	@After
+	public void runAfterEveryTest() {
+		// TODO:add the content
+
 	}
 
 }

@@ -160,7 +160,8 @@ public class DataModelTypesElementOperationTest extends TalendSWTBotForMDM {
 		sleep();
 		bot.button("OK").click(); // create a entity with a simple type
 		sleep(2);
-		Assert.assertNotNull(typeNode.expand().getNode("element  [0...1]"));
+		Assert.assertNotNull(typesBotTree.getTreeItem("ComplexTypeEntityType")
+				.expand().getNode("element  [0...1]"));
 	}
 
 	// @Test

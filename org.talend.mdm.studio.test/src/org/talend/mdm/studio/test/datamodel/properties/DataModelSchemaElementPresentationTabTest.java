@@ -19,7 +19,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
@@ -102,7 +101,7 @@ public class DataModelSchemaElementPresentationTabTest extends
 		bot.button("OK").click();
 	}
 
-	public void newEntity() {
+	private void newEntity() {
 		conceptBotTree.contextMenu("New Entity").click();
 		SWTBotShell newEntityShell = bot.shell("New Entity");
 		newEntityShell.activate();
@@ -116,7 +115,7 @@ public class DataModelSchemaElementPresentationTabTest extends
 		bot.toolbarButtonWithTooltip("Expand...", 0).click();
 	}
 
-	public void newElement() {
+	private void newElement() {
 		SWTBotTreeItem typeNode = entityNode.getNode("ComplexTypeEntityType");
 		typeNode.contextMenu("Add Element").click();
 
@@ -134,30 +133,30 @@ public class DataModelSchemaElementPresentationTabTest extends
 	public void setDisplayFormatTest() {
 		bot.comboBox(0).setSelection(0);
 		bot.text(0).setText("test error format in English");
-		bot.buttonWithTooltip("Add").click();
+		bot.buttonWithTooltip("Add", 0).click();
 		sleep();
 		bot.comboBox(0).setSelection(1);
 		bot.text(0).setText("test error format in French");
-		bot.buttonWithTooltip("Add").click();
+		bot.buttonWithTooltip("Add", 0).click();
 		sleep();
 		bot.tree(0).select(1);
-		bot.buttonWithTooltip("Del").click();
-		bot.button("Apply").click();
+		bot.buttonWithTooltip("Del", 0).click();
+		// bot.button("Apply").click();
 	}
 
 	@Test
 	public void setLabelsTest() {
 		bot.comboBox(1).setSelection(0);
 		bot.text(1).setText("en");
-		bot.buttonWithTooltip("Add").click();
+		bot.buttonWithTooltip("Add", 1).click();
 		sleep();
 		bot.comboBox(1).setSelection(1);
 		bot.text(1).setText("fr");
-		bot.buttonWithTooltip("Add").click();
+		bot.buttonWithTooltip("Add", 1).click();
 		sleep();
 		bot.tree(1).select(1);
-		bot.buttonWithTooltip("Del").click();
-		bot.button("Apply").click();
+		bot.buttonWithTooltip("Del", 1).click();
+		// bot.button("Apply").click();
 		Assert.assertNotNull(elementNode.expand().getNode("Annotations")
 				.expand().getNode("English Label: en"));
 	}
@@ -166,15 +165,15 @@ public class DataModelSchemaElementPresentationTabTest extends
 	public void setDescriptionsTest() {
 		bot.comboBox(2).setSelection(0);
 		bot.text(2).setText("enlish description");
-		bot.buttonWithTooltip("Add").click();
+		bot.buttonWithTooltip("Add", 2).click();
 		sleep();
 		bot.comboBox(2).setSelection(1);
 		bot.text(2).setText("french description");
-		bot.buttonWithTooltip("Add").click();
+		bot.buttonWithTooltip("Add", 2).click();
 		sleep();
 		bot.tree(2).select(1);
-		bot.buttonWithTooltip("Del").click();
-		bot.button("Apply").click();
+		bot.buttonWithTooltip("Del", 2).click();
+		// bot.button("Apply").click();
 		Assert.assertNotNull(elementNode.expand().getNode("Annotations")
 				.expand().getNode("English Description: enlish description"));
 	}
@@ -183,14 +182,14 @@ public class DataModelSchemaElementPresentationTabTest extends
 	public void setFacetTest() {
 		bot.comboBox(3).setSelection(0);
 		bot.text(3).setText("test error facet in English");
-		bot.buttonWithTooltip("Add").click();
+		bot.buttonWithTooltip("Add", 3).click();
 		sleep();
 		bot.comboBox(3).setSelection(1);
 		bot.text(3).setText("test error facet in French");
-		bot.buttonWithTooltip("Add").click();
+		bot.buttonWithTooltip("Add", 3).click();
 		sleep();
 		bot.tree(3).select(1);
-		bot.buttonWithTooltip("Del").click();
+		bot.buttonWithTooltip("Del", 3).click();
 		sleep();
 		bot.button("OK").click();
 		sleep();

@@ -11,44 +11,44 @@ import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 @RunWith(SWTBotJunit4ClassRunner.class)
 public class EventManagerTest extends TalendSWTBotForMDM {
 
-    private SWTBotTreeItem eventManagerNode;
+	private SWTBotTreeItem eventManagerNode;
 
-    private SWTBotTreeItem eventManagementItem;
+	private SWTBotTreeItem eventManagementItem;
 
-    @Before
-    public void runBeforeEveryTest() {
-        eventManagementItem = serverItem.getNode("Event Management");
-        eventManagementItem.expand();
+	@Before
+	public void runBeforeEveryTest() {
+		eventManagementItem = serverItem.getNode("Event Management");
+		eventManagementItem.expand();
 
-        eventManagerNode = eventManagementItem.getNode("Event Manager");
-    }
+		eventManagerNode = eventManagementItem.getNode("Event Manager");
+	}
 
-    @After
-    public void runAfterEveryTest() {
-    
-    }
+	@After
+	public void runAfterEveryTest() {
 
-    @Test
-    public void browseTest() {
-        eventManagerNode.contextMenu("Browse").click();
-        sleep(5);
-    }
+	}
 
-    @Test
-    public void statusTest() {
-        bot.buttonWithTooltip("Start").click();
-        sleep();
-        bot.buttonWithTooltip("Suspend").click();
-        sleep();
-        bot.buttonWithTooltip("Stop").click();
-        sleep();
-    }
+	@Test
+	public void browseTest() {
+		eventManagerNode.contextMenu("Browse").click();
+		sleep(5);
+	}
 
-    @Test
-    public void searchTest() {
-        bot.comboBoxWithLabel("Status").setSelection(1);
-        bot.buttonWithTooltip("Search").click();
-        sleep();
-    	bot.activeEditor().close();
-    }
+	// @Test
+	public void statusTest() {
+		bot.buttonWithTooltip("Start").click();
+		sleep();
+		bot.buttonWithTooltip("Suspend").click();
+		sleep();
+		bot.buttonWithTooltip("Stop").click();
+		sleep();
+	}
+
+	@Test
+	public void searchTest() {
+		bot.comboBoxWithLabel("Status").setSelection(1);
+		bot.buttonWithTooltip("Search").click();
+		sleep();
+		bot.activeEditor().close();
+	}
 }

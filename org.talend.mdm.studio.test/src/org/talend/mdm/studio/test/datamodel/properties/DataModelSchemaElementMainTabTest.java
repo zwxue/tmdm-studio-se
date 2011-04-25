@@ -132,7 +132,7 @@ public class DataModelSchemaElementMainTabTest extends TalendSWTBotForMDM {
 	public void editElementTest() {
 		bot.textWithLabel("Name").setText("Element");
 		bot.comboBoxWithLabel("Reference").setSelection(0);
-		bot.button("Apply").click();
+		// bot.button("Apply").click();
 	}
 
 }

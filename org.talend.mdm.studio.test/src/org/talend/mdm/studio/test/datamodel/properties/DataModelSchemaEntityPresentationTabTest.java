@@ -126,7 +126,7 @@ public class DataModelSchemaEntityPresentationTabTest extends
 	public void addLabelsTest() {
 		bot.text(0).setText("en");
 		bot.buttonWithTooltip("Add", 0).click();
-		bot.button("Apply").click();
+		// bot.button("Apply").click();
 		expand();
 		Assert.assertNotNull(conceptNode.getNode("Annotations").expand()
 				.getNode("English Label: en"));
@@ -137,14 +137,14 @@ public class DataModelSchemaEntityPresentationTabTest extends
 		addLabelsTest();
 		bot.tree(0).select(0);
 		bot.buttonWithTooltip("Del", 0).click();
-		bot.button("Apply").click();
+		// bot.button("Apply").click();
 	}
 
 	@Test
 	public void addDescriptionsTest() {
 		bot.text(1).setText("en");
 		bot.buttonWithTooltip("Add", 1).click();
-		bot.button("Apply").click();
+		// bot.button("Apply").click();
 		expand();
 		Assert.assertNotNull(conceptNode.getNode("Annotations").expand()
 				.getNode("English Description: en"));
@@ -155,7 +155,7 @@ public class DataModelSchemaEntityPresentationTabTest extends
 		addDescriptionsTest();
 		bot.tree(1).select(0);
 		bot.buttonWithTooltip("Del", 1).click();
-		bot.button("Apply").click();
+		// bot.button("Apply").click();
 	}
 
 }

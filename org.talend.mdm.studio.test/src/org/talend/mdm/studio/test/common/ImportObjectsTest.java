@@ -17,7 +17,6 @@ import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 
@@ -37,7 +36,7 @@ public class ImportObjectsTest extends TalendSWTBotForMDM {
 	public void runAfterEveryTest() {
 	}
 
-	@Test
+	// @Test
 	public void importObjectsTest() {
 		serverItem.contextMenu("Import").click();
 		bot.shell("Import Objects").activate();

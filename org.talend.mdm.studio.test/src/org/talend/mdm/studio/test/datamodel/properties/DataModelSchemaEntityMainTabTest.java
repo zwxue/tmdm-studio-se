@@ -119,7 +119,7 @@ public class DataModelSchemaEntityMainTabTest extends TalendSWTBotForMDM {
 	@Test
 	public void editEntityTest() {
 		bot.textWithLabel("Name").setText("RenameEntity");
-		bot.button("Apply").click();
+		// bot.button("Apply").click();
 		Assert.assertEquals("RenameEntity", conceptNode.getText());
 	}
 
@@ -132,7 +132,7 @@ public class DataModelSchemaEntityMainTabTest extends TalendSWTBotForMDM {
 		bot.text().setText("Test");
 		bot.button("OK").click();
 
-		bot.button("Apply").click();
+		// bot.button("Apply").click();
 		Assert.assertNotNull(conceptNode.getNode("Test"));
 	}
 
@@ -141,7 +141,7 @@ public class DataModelSchemaEntityMainTabTest extends TalendSWTBotForMDM {
 		addKeyTest();
 		bot.treeInGroup("Key Definition", 0).select("Test");
 		bot.buttonWithTooltip("Delete keys").click();
-		bot.button("Apply").click();
+		// bot.button("Apply").click();
 	}
 
 	@Test
@@ -152,7 +152,7 @@ public class DataModelSchemaEntityMainTabTest extends TalendSWTBotForMDM {
 		bot.ccomboBox().setText("Test");
 		bot.button("OK").click();
 
-		bot.button("Apply").click();
+		// bot.button("Apply").click();
 		Assert.assertNotNull(conceptNode.getNode("ComplexTypeEntity").getNode(
 				"Test"));
 	}
@@ -166,7 +166,7 @@ public class DataModelSchemaEntityMainTabTest extends TalendSWTBotForMDM {
 		bot.ccomboBox().setText("Test");
 		bot.button("OK").click();
 
-		bot.button("Apply").click();
+		// bot.button("Apply").click();
 		Assert.assertNotNull(conceptNode.getNode("ComplexTypeEntity").getNode(
 				"Test"));
 	}
@@ -176,7 +176,7 @@ public class DataModelSchemaEntityMainTabTest extends TalendSWTBotForMDM {
 		addFieldTest();
 		bot.treeInGroup("Key Definition", 1).select("Test");
 		bot.buttonWithTooltip("Delete Fields").click();
-		bot.button("Apply").click();
+		// bot.button("Apply").click();
 
 	}
 

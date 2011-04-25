@@ -114,8 +114,9 @@ public class DataModelSchemaEntityExtraTabTest extends TalendSWTBotForMDM {
 	}
 
 	public void newElement() {
-		conceptBotTree.getTreeItem("ComplexTypeEntity").getNode("ComplexTypeEntityType")
-				.contextMenu("Add Element").click();
+		conceptBotTree.getTreeItem("ComplexTypeEntity")
+				.getNode("ComplexTypeEntityType").contextMenu("Add Element")
+				.click();
 
 		SWTBotShell newElementShell = bot.shell("Add a new Business Element");
 		newElementShell.activate();
@@ -132,11 +133,11 @@ public class DataModelSchemaEntityExtraTabTest extends TalendSWTBotForMDM {
 	public void setLookupFieldsTest() {
 		bot.comboBox().setSelection(0);
 		bot.buttonWithTooltip("Add").click();
-		bot.button("Apply").click();
+		// bot.button("Apply").click();
 
 		bot.tree().select(0);
 		bot.buttonWithTooltip("Del").click();
-		bot.button("Apply").click();
+		// bot.button("Apply").click();
 	}
 
 }

@@ -124,7 +124,7 @@ public class DataModelSchemaGroupOperationTest extends TalendSWTBotForMDM {
 	public void changeSubElementGroupTest() {
 		groupNode.contextMenu("Change Sub-Element Group").click();
 		sleep();
-		SWTBotShell changeTypeShell = bot.shell("Change Sub-Element Group");
+		SWTBotShell changeTypeShell = bot.shell("Complex Type Properties");
 		changeTypeShell.activate();
 		bot.radio("Choice").click();
 		bot.button("OK").click();

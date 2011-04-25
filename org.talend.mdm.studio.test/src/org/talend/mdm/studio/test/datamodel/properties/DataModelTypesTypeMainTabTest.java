@@ -114,13 +114,13 @@ public class DataModelTypesTypeMainTabTest extends TalendSWTBotForMDM {
 	@Test
 	public void editTypeNameTest() {
 		bot.textWithLabel("Name").setText("ComplexType");
-		bot.button("Apply").click();
+		// bot.button("Apply").click();
 		Assert.assertEquals("ComplexType", typeNode.getText());
 	}
 
 	@Test
 	public void changeGroupTest() {
-		bot.radioInGroup("All","Sub-Elements Group").click();
+		bot.radioInGroup("All", "Sub-Elements Group").click();
 		bot.button().click();
 	}
 

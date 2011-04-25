@@ -3,7 +3,6 @@ package org.talend.mdm.studio.test.eventmanagement.process.plugins;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.eclipse.finder.waits.Conditions;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
@@ -32,12 +31,7 @@ public class PartialUpdatePluginTest extends TalendSWTBotForMDM {
 
 	@After
 	public void runAfterEveryTest() {
-		Display.getDefault().syncExec(new Runnable() {
-
-			public void run() {
-				bot.activeEditor().save();
-			}
-		});
+		bot.activeEditor().close();
 	}
 
 	private void init() {
@@ -67,7 +61,7 @@ public class PartialUpdatePluginTest extends TalendSWTBotForMDM {
 		processParentNode.expand().getNode("PartialUpdateProcess")
 				.doubleClick();
 		sleep(2);
-		bot.tree().select(0);
+		// bot.tree().select(0);
 		bot.buttonWithTooltip("Execute...").click();
 		bot.textWithLabel("Value").setText(testValue);
 		bot.buttonWithTooltip("Add").click();
@@ -79,7 +73,7 @@ public class PartialUpdatePluginTest extends TalendSWTBotForMDM {
 				.doubleClick();
 		bot.buttonWithTooltip("Search").click();
 		bot.table().doubleClick(0, 0);
-		bot.activeEditor().close();
+
 		// TODO:the tabitem doesn't show.
 		// bot.tabItem(1).activate();
 		// String result = bot.styledText().getText();
