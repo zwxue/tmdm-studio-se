@@ -38,237 +38,288 @@ import com.amalto.workbench.utils.Util;
 
 public class ElementInfoConfigComposite extends Composite {
 
-    private Combo comboReference;
+	private Combo comboReference;
 
-    private Text txtName;
+	private Text txtName;
 
-    private XSDParticle curXSDParticle;
+	private XSDParticle curXSDParticle;
 
-    private Group occurenceGroup;
+	private Group occurenceGroup;
 
-    private Spinner spinMax;
+	private Spinner spinMax;
 
-    private Spinner spinMin;
-    private BasePropertySection section;
-    public ElementInfoConfigComposite(Composite parent, int style,BasePropertySection section,XSDParticle curXSDParticle) {
-    	this(parent,style);
-    	this.section=section;
-    	this.curXSDParticle=curXSDParticle;
-    }
-    public ElementInfoConfigComposite(Composite parent, int style) {
-        super(parent, style);
-        createControls();
+	private Spinner spinMin;
+	private BasePropertySection section;
 
-    }
+	public ElementInfoConfigComposite(Composite parent, int style,
+			BasePropertySection section, XSDParticle curXSDParticle) {
+		this(parent, style);
+		this.section = section;
+		this.curXSDParticle = curXSDParticle;
+	}
 
-    public void setXSDParticle(XSDParticle curXSDParticle) {
-        this.curXSDParticle = curXSDParticle;
+	public ElementInfoConfigComposite(Composite parent, int style) {
+		super(parent, style);
+		createControls();
 
-        initUIContents();
+	}
 
-        refresh();
-    }
+	public void setXSDParticle(XSDParticle curXSDParticle) {
+		this.curXSDParticle = curXSDParticle;
 
-    public String getElementName() {
-        return txtName.getText().trim();
-    }
+		initUIContents();
 
-    public String getElementReference() {
-        return comboReference.getText().trim();
-    }
+		refresh();
+	}
 
-    public boolean hasElementReference() {
-        return !("".equals(getElementReference()));//$NON-NLS-1$
-    }
+	public String getElementName() {
+		return txtName.getText().trim();
+	}
 
-    public int getMinCardinality() {
-        return spinMin.getSelection();
-    }
+	public String getElementReference() {
+		return comboReference.getText().trim();
+	}
 
-    public int getMaxCardinality() {
-        return spinMax.getSelection();
-    }
+	public boolean hasElementReference() {
+		return !("".equals(getElementReference()));//$NON-NLS-1$
+	}
 
-    public XSDParticle getElement() {
-        return curXSDParticle;
-    }
+	public int getMinCardinality() {
+		return spinMin.getSelection();
+	}
 
-    public void refresh() {
+	public int getMaxCardinality() {
+		return spinMax.getSelection();
+	}
 
-        refreshCardinalityArea();
+	public XSDParticle getElement() {
+		return curXSDParticle;
+	}
 
-        refreshNameArea();
-    }
+	public void refresh() {
 
-    private void refreshCardinalityArea() {
-        if (occurenceGroup == null)
-            return;
+		refreshCardinalityArea();
 
-//        if (!hasElementReference() && Util.isSimpleTypedParticle(curXSDParticle)) {
-//            spinMin.setSelection(1);
-//            spinMax.setSelection(1);
-//        }
+		refreshNameArea();
+	}
 
-//        enableOccurenceGroup(!Util.isSimpleTypedParticle(curXSDParticle) || hasElementReference());
-    }
+	private void refreshCardinalityArea() {
+		if (occurenceGroup == null)
+			return;
 
-    private void enableOccurenceGroup(boolean isEnabled) {
-        spinMin.setEnabled(isEnabled);
-        spinMax.setEnabled(isEnabled);
-    }
+		// if (!hasElementReference() &&
+		// Util.isSimpleTypedParticle(curXSDParticle)) {
+		// spinMin.setSelection(1);
+		// spinMax.setSelection(1);
+		// }
 
-    private void refreshNameArea() {
+		// enableOccurenceGroup(!Util.isSimpleTypedParticle(curXSDParticle) ||
+		// hasElementReference());
+	}
 
-        if (hasElementReference())
-            txtName.setText("");//$NON-NLS-1$
+	private void enableOccurenceGroup(boolean isEnabled) {
+		spinMin.setEnabled(isEnabled);
+		spinMax.setEnabled(isEnabled);
+	}
 
-        txtName.setEditable(!hasElementReference());
-    }
+	private void refreshNameArea() {
 
-    private void createControls() {
-        final GridLayout gridLayout = new GridLayout();
-        gridLayout.numColumns = 2;
-        setLayout(gridLayout);
+		if (hasElementReference())
+			txtName.setText("");//$NON-NLS-1$
 
-        final Label lblName = new Label(this, SWT.NONE);
-        lblName.setText("Name");
+		txtName.setEditable(!hasElementReference());
+	}
 
-        txtName = new Text(this, SWT.BORDER);
-        final GridData gd_txtName = new GridData(SWT.FILL, SWT.CENTER, true, false);
-        txtName.setLayoutData(gd_txtName);
+	private void createControls() {
+		final GridLayout gridLayout = new GridLayout();
+		gridLayout.numColumns = 2;
+		setLayout(gridLayout);
 
-        final Label lblReference = new Label(this, SWT.NONE);
-        lblReference.setText("Reference");//$NON-NLS-1$
+		final Label lblName = new Label(this, SWT.NONE);
+		lblName.setText("Name");
 
-        comboReference = new Combo(this, SWT.READ_ONLY);
-        final GridData gd_comboReference = new GridData(SWT.FILL, SWT.CENTER, true, false);
-        comboReference.setLayoutData(gd_comboReference);
+		txtName = new Text(this, SWT.BORDER);
+		final GridData gd_txtName = new GridData(SWT.FILL, SWT.CENTER, true,
+				false);
+		txtName.setLayoutData(gd_txtName);
 
-        occurenceGroup = new Group(this, SWT.NONE);
-        final GridData gd_occurenceGroup = new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1);
-        occurenceGroup.setLayoutData(gd_occurenceGroup);
-        occurenceGroup.setText("Occurence");//$NON-NLS-1$
-        final GridLayout gridLayout_2 = new GridLayout();
-        gridLayout_2.numColumns = 3;
-        occurenceGroup.setLayout(gridLayout_2);
+		final Label lblReference = new Label(this, SWT.NONE);
+		lblReference.setText("Reference");//$NON-NLS-1$
 
-        final Label lblMinOcur = new Label(occurenceGroup, SWT.NONE);
-        final GridData gd_lblMinOcur = new GridData(SWT.CENTER, SWT.CENTER, false, false);
-        lblMinOcur.setLayoutData(gd_lblMinOcur);
-        lblMinOcur.setText("Min");//$NON-NLS-1$
+		comboReference = new Combo(this, SWT.READ_ONLY);
+		final GridData gd_comboReference = new GridData(SWT.FILL, SWT.CENTER,
+				true, false);
+		comboReference.setLayoutData(gd_comboReference);
 
-        new Label(occurenceGroup, SWT.NONE);
+		occurenceGroup = new Group(this, SWT.NONE);
+		final GridData gd_occurenceGroup = new GridData(SWT.LEFT, SWT.CENTER,
+				false, false, 2, 1);
+		occurenceGroup.setLayoutData(gd_occurenceGroup);
+		occurenceGroup.setText("Occurence");//$NON-NLS-1$
+		final GridLayout gridLayout_2 = new GridLayout();
+		gridLayout_2.numColumns = 3;
+		occurenceGroup.setLayout(gridLayout_2);
 
-        final Label lblMaxOcur = new Label(occurenceGroup, SWT.NONE);
-        final GridData gd_lblMaxOcur = new GridData(SWT.CENTER, SWT.CENTER, false, false);
-        lblMaxOcur.setLayoutData(gd_lblMaxOcur);
-        lblMaxOcur.setText("Max");//$NON-NLS-1$
+		final Label lblMinOcur = new Label(occurenceGroup, SWT.NONE);
+		final GridData gd_lblMinOcur = new GridData(SWT.CENTER, SWT.CENTER,
+				false, false);
+		lblMinOcur.setLayoutData(gd_lblMinOcur);
+		lblMinOcur.setText("Min");//$NON-NLS-1$
 
-        spinMin = new Spinner(occurenceGroup, SWT.BORDER);
-        spinMin.setSelection(1);
-        spinMin.setMinimum(0);
-        spinMin.setMaximum(Integer.MAX_VALUE);
+		new Label(occurenceGroup, SWT.NONE);
 
-        final Label label = new Label(occurenceGroup, SWT.NONE);
-        label.setText("----->");//$NON-NLS-1$
+		final Label lblMaxOcur = new Label(occurenceGroup, SWT.NONE);
+		final GridData gd_lblMaxOcur = new GridData(SWT.CENTER, SWT.CENTER,
+				false, false);
+		lblMaxOcur.setLayoutData(gd_lblMaxOcur);
+		lblMaxOcur.setText("Max");//$NON-NLS-1$
 
-        spinMax = new Spinner(occurenceGroup, SWT.BORDER);
-        spinMax.setLayoutData(new GridData());
-        spinMax.setMaximum(Integer.MAX_VALUE);
-        spinMax.setMinimum(-1);
-        spinMax.setSelection(1);
+		spinMin = new Spinner(occurenceGroup, SWT.BORDER);
+		spinMin.setSelection(1);
+		spinMin.setMinimum(0);
+		spinMin.setMaximum(Integer.MAX_VALUE);
 
-        initUIContents();
+		final Label label = new Label(occurenceGroup, SWT.NONE);
+		label.setText("----->");//$NON-NLS-1$
 
-        initUIListeners();
+		spinMax = new Spinner(occurenceGroup, SWT.BORDER);
+		spinMax.setLayoutData(new GridData());
+		spinMax.setMaximum(Integer.MAX_VALUE);
+		spinMax.setMinimum(-1);
+		spinMax.setSelection(1);
 
-        refresh();
-    }
+		initUIContents();
 
-    private void initUIContents() {
+		initUIListeners();
 
-        txtName.setText(Util.getParticleName(curXSDParticle));
-        comboReference.setItems(getAllReferences());
-        comboReference.setText(Util.getParticleReferenceName(curXSDParticle));
+		refresh();
+	}
 
-        if (curXSDParticle != null) {
-            spinMin.setSelection(curXSDParticle.getMinOccurs());
-            spinMax.setSelection(curXSDParticle.getMaxOccurs());
-        }
-    }
+	private void initUIContents() {
 
-    private void initUIListeners() {
+		String name = Util.getParticleName(curXSDParticle);
+		removeTextListener();
+		txtName.setText(name);
+		if (name != null) {
+			int length = name.length();
+			if (length >= caretOffset) {
+				txtName.setSelection(caretOffset, caretOffset);
+			} else {
+				txtName.setSelection(length, length);
+			}
+		}
+		addTextListener();
+		comboReference.setItems(getAllReferences());
+		comboReference.setText(Util.getParticleReferenceName(curXSDParticle));
 
-        initUIListenerForComboReference();
-        initTextListener();
-        initSpinListener();
-    }
-    private void initSpinListener(){
-    	spinMin.addModifyListener(new ModifyListener() {
-			
+		if (curXSDParticle != null) {
+			spinMin.setSelection(curXSDParticle.getMinOccurs());
+			spinMax.setSelection(curXSDParticle.getMaxOccurs());
+		}
+	}
+
+	private void initUIListeners() {
+
+		initUIListenerForComboReference();
+		initTextListener();
+		initSpinListener();
+	}
+
+	private void initSpinListener() {
+		spinMin.addModifyListener(new ModifyListener() {
+
 			public void modifyText(ModifyEvent e) {
-				 if(section!=null && curXSDParticle.getMinOccurs()!=spinMin.getSelection())
-		                section.autoCommit();								
+				if (section != null
+						&& curXSDParticle.getMinOccurs() != spinMin
+								.getSelection())
+					section.autoCommit();
 			}
 		});
-    	spinMax.addModifyListener(new ModifyListener() {
-			
+		spinMax.addModifyListener(new ModifyListener() {
+
 			public void modifyText(ModifyEvent e) {
-				 if(section!=null && curXSDParticle.getMaxOccurs()!=spinMax.getSelection())
-		                section.autoCommit();								
+				if (section != null
+						&& curXSDParticle.getMaxOccurs() != spinMax
+								.getSelection())
+					section.autoCommit();
 			}
 		});
-    }
-    private void initTextListener(){
-    	txtName.addModifyListener(new ModifyListener() {			
-			public void modifyText(ModifyEvent e) {				
-				 if(section!=null && !txtName.getText().equals(Util.getParticleName(curXSDParticle)))
-		                section.autoCommit();
+	}
+
+	private int caretOffset;
+
+	private ModifyListener textListener;
+
+	private void initTextListener() {
+
+		textListener = new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				caretOffset = txtName.getCaretPosition();
+				if (section != null
+						&& !txtName.getText().equals(
+								Util.getParticleName(curXSDParticle)))
+					section.autoCommit();
 			}
+		};
+	}
+
+	private void addTextListener() {
+		if (textListener != null)
+			txtName.addModifyListener(textListener);
+	}
+
+	public void removeTextListener() {
+		if (textListener != null)
+			txtName.removeModifyListener(textListener);
+	}
+
+	private void initUIListenerForComboReference() {
+
+		comboReference.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+				comboReference.setItems(getAllReferences());
+			}
+
 		});
-    }
-    private void initUIListenerForComboReference() {
 
-        comboReference.addMouseListener(new MouseAdapter() {
+		comboReference.addSelectionListener(new SelectionAdapter() {
 
-            @Override
-            public void mouseDown(MouseEvent e) {
-                comboReference.setItems(getAllReferences());
-            }
+			@Override
+			public void widgetSelected(SelectionEvent e) {
 
-        });
+				refresh();
+				if (section != null
+						&& !Util.getParticleReferenceName(curXSDParticle)
+								.equals(comboReference.getText()))
+					section.autoCommit();
+			}
 
-        comboReference.addSelectionListener(new SelectionAdapter() {
+		});
+	}
 
-            @Override
-            public void widgetSelected(SelectionEvent e) {
+	private String[] getAllReferences() {
 
-                refresh();
-                if(section!=null && !Util.getParticleReferenceName(curXSDParticle).equals(comboReference.getText()))
-	                section.autoCommit();		
-            }
+		ArrayList<String> elementDeclarations = new ArrayList<String>();
+		elementDeclarations.add("");//$NON-NLS-1$
 
-        });
-    }
+		if (curXSDParticle == null)
+			return elementDeclarations.toArray(new String[0]);
 
-    private String[] getAllReferences() {
+		for (XSDElementDeclaration eachXSDEleDeclaration : curXSDParticle
+				.getSchema().getElementDeclarations()) {
+			if (eachXSDEleDeclaration.getTargetNamespace() != null
+					&& eachXSDEleDeclaration.getTargetNamespace().equals(
+							IConstants.DEFAULT_NAME_SPACE))
+				continue;
 
-        ArrayList<String> elementDeclarations = new ArrayList<String>();
-        elementDeclarations.add("");//$NON-NLS-1$
+			elementDeclarations
+					.add(eachXSDEleDeclaration.getQName()
+							+ (eachXSDEleDeclaration.getTargetNamespace() != null ? " : " + eachXSDEleDeclaration.getTargetNamespace()//$NON-NLS-1$
+									: ""));//$NON-NLS-1$
+		}
 
-        if (curXSDParticle == null)
-            return elementDeclarations.toArray(new String[0]);
-
-        for (XSDElementDeclaration eachXSDEleDeclaration : curXSDParticle.getSchema().getElementDeclarations()) {
-            if (eachXSDEleDeclaration.getTargetNamespace() != null
-                    && eachXSDEleDeclaration.getTargetNamespace().equals(IConstants.DEFAULT_NAME_SPACE))
-                continue;
-
-            elementDeclarations.add(eachXSDEleDeclaration.getQName()
-                    + (eachXSDEleDeclaration.getTargetNamespace() != null ? " : " + eachXSDEleDeclaration.getTargetNamespace()//$NON-NLS-1$
-                    : ""));//$NON-NLS-1$
-        }
-
-        return elementDeclarations.toArray(new String[0]);
-    }
+		return elementDeclarations.toArray(new String[0]);
+	}
 }

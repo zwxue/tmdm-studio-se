@@ -397,4 +397,7 @@ public class SchematronExpressBuilder {
     public String getText() {
         return sourceViewer.getTextWidget().getText();
     }
+    public SourceViewer getSourceViewer(){
+    	return sourceViewer;
+    }
 }

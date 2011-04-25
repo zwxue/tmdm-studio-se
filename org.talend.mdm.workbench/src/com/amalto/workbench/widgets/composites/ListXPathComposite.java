@@ -24,84 +24,99 @@ import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 
 public class ListXPathComposite extends ListStringContentsComposite {
 
-    private Button chkResolveAutoInWeb;
+	private Button chkResolveAutoInWeb;
 
-    private SimpleXPathComposite compSimpleXPath;
+	private SimpleXPathComposite compSimpleXPath;
 
-    private IAllDataModelHolder allDataModelHolder;
+	private IAllDataModelHolder allDataModelHolder;
 
-    private String xpathAreaTitle;
-    protected BasePropertySection section;
-    public ListXPathComposite(Composite parent, int style, IAllDataModelHolder allDataModelHolder, String xpathAreaTitle,BasePropertySection section) {
-        super(parent, style, new Object[] { allDataModelHolder, xpathAreaTitle },section);
-        this.section=section;
-    }
+	private String xpathAreaTitle;
+	protected BasePropertySection section;
+	SelectionAdapter selectionListener = new SelectionAdapter() {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			if (section != null)
+				section.autoCommit();
+		}
+	};
 
-    @Override
-    protected String getInfoColTitle() {
-        return "XPath";
-    }
+	public ListXPathComposite(Composite parent, int style,
+			IAllDataModelHolder allDataModelHolder, String xpathAreaTitle,
+			BasePropertySection section) {
+		super(parent, style,
+				new Object[] { allDataModelHolder, xpathAreaTitle }, section);
+		this.section = section;
 
-    @Override
-    protected void createExtentUIArea(Composite parent) {
+	}
 
-        chkResolveAutoInWeb = new Button(this, SWT.CHECK);
-        chkResolveAutoInWeb.setText("Resolve automatically in the Web");
-        chkResolveAutoInWeb.setSelection(true);
-        chkResolveAutoInWeb.setLayoutData(new GridData());
-        
-    }
-    private void initUIListener(){
-    	chkResolveAutoInWeb.addSelectionListener(new SelectionAdapter() {
-    		@Override
-    		public void widgetSelected(SelectionEvent e) {
-    			if(section!=null)section.autoCommit();
-    		}
-		});
-    }
-    
-    @Override
-    protected void createCandidateInfoUIArea(Composite parent) {
+	@Override
+	protected String getInfoColTitle() {
+		return "XPath";
+	}
 
-        compSimpleXPath = new SimpleXPathComposite(this, SWT.NONE, xpathAreaTitle, allDataModelHolder, "",section);//$NON-NLS-1$
-        compSimpleXPath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+	@Override
+	protected void createExtentUIArea(Composite parent) {
 
-    }
-    
-    @Override
-    protected boolean hasCandidateInfo() {
-        return !("".equals(compSimpleXPath.getXPath()));//$NON-NLS-1$
-    }
+		chkResolveAutoInWeb = new Button(this, SWT.CHECK);
+		chkResolveAutoInWeb.setText("Resolve automatically in the Web");
+		chkResolveAutoInWeb.setSelection(true);
+		chkResolveAutoInWeb.setLayoutData(new GridData());
 
-    @Override
-    protected String getCandidateInfo() {
-        return compSimpleXPath.getXPath();
-    }
+	}
 
-    @Override
-    protected void initCandidateInfoUIArea() {
-        compSimpleXPath.setXPath("");//$NON-NLS-1$
-    }
+	public void addUIListener() {
 
-    public boolean isResolveAutoInWeb() {
-        return chkResolveAutoInWeb.getSelection();
-    }
+		chkResolveAutoInWeb.addSelectionListener(selectionListener);
+	}
 
-    public void setIsResolveAutoInWeb(boolean isResolveAutoInWeb) {
-        chkResolveAutoInWeb.setSelection(isResolveAutoInWeb);
-    }
+	public void removeUIListener() {
+		chkResolveAutoInWeb.removeSelectionListener(selectionListener);
+	}
 
-    @Override
-    protected void initParas(Object[] paras) {
+	@Override
+	protected void createCandidateInfoUIArea(Composite parent) {
 
-        for (Object eachPara : paras) {
+		compSimpleXPath = new SimpleXPathComposite(this, SWT.NONE,
+				xpathAreaTitle, allDataModelHolder, "", section);//$NON-NLS-1$
+		compSimpleXPath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false));
 
-            if (eachPara instanceof IAllDataModelHolder)
-                allDataModelHolder = (IAllDataModelHolder) eachPara;
+	}
 
-            if (eachPara instanceof String)
-                xpathAreaTitle = (String) eachPara;
-        }
+	@Override
+	protected boolean hasCandidateInfo() {
+		return !("".equals(compSimpleXPath.getXPath()));//$NON-NLS-1$
+	}
 
-    }
+	@Override
+	protected String getCandidateInfo() {
+		return compSimpleXPath.getXPath();
+	}
+
+	@Override
+	protected void initCandidateInfoUIArea() {
+		compSimpleXPath.setXPath("");//$NON-NLS-1$
+	}
+
+	public boolean isResolveAutoInWeb() {
+		return chkResolveAutoInWeb.getSelection();
+	}
+
+	public void setIsResolveAutoInWeb(boolean isResolveAutoInWeb) {
+		chkResolveAutoInWeb.setSelection(isResolveAutoInWeb);
+	}
+
+	@Override
+	protected void initParas(Object[] paras) {
+
+		for (Object eachPara : paras) {
+
+			if (eachPara instanceof IAllDataModelHolder)
+				allDataModelHolder = (IAllDataModelHolder) eachPara;
+
+			if (eachPara instanceof String)
+				xpathAreaTitle = (String) eachPara;
+		}
+
+	}
 }

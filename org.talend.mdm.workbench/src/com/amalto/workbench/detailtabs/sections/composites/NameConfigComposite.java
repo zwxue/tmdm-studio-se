@@ -83,12 +83,21 @@ public class NameConfigComposite extends Composite {
         lblNameErrIndicator.setToolTipText("");//$NON-NLS-1$
 
         if (target != null) {
-            txtName.setText(target.getName());
+            String name = target.getName();
+			txtName.setText(name);
+    		if (name != null) {
+    			int length = name.length();
+				if (length >= caretOffset) {
+    				txtName.setSelection(caretOffset,caretOffset);
+    			} else {
+    				txtName.setSelection(length,length);
+    			}
+    		}
         }
 
         addUIListener();
     }
-
+    private int caretOffset;
     private void initUIListener() {
 
         lTxtNameListener = new ModifyListener() {
@@ -104,6 +113,7 @@ public class NameConfigComposite extends Composite {
                 lblNameErrIndicator.setToolTipText(errMsg == null ? "" : errMsg);//$NON-NLS-1$
 
                 target.setName(txtName.getText().trim());
+                caretOffset = txtName.getCaretPosition();
                 if(section!=null)section.autoCommit();
             }
         };

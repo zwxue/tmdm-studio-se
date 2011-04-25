@@ -242,6 +242,7 @@ public abstract class ListStringContentsComposite extends Composite {
         infos.remove(info);
         infos.add(newIndex, info);
         tvInfos.refresh();
+        if(section!=null)section.autoCommit();
     }
 
     public void setInfos(String[] infos) {

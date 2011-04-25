@@ -328,7 +328,16 @@ public class XSDAnnotationsStructure {
     public String getDefaultValueRule() {
         return getAppInfoValue("X_Default_Value_Rule");//$NON-NLS-1$
     }
-
+    //PRIMARY KEY INFOS
+    public boolean setPrimaryKeyInfos(List<String> xPaths) {
+        removeAppInfos("X_PrimaryKeyInfo");//$NON-NLS-1$
+        for (Iterator iter = xPaths.iterator(); iter.hasNext();) {
+            String xPath = (String) iter.next();
+            addAppInfo("X_PrimaryKeyInfo", xPath);//$NON-NLS-1$
+        }
+        hasChanged = true;
+        return true;
+    }
     /****************************************************************************
      * FOREIGN KEY INFOS
      ****************************************************************************/

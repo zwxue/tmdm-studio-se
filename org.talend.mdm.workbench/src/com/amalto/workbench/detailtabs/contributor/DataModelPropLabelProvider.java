@@ -14,7 +14,7 @@ package com.amalto.workbench.detailtabs.contributor;
 
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.graphics.Image;
 
 import com.amalto.workbench.providers.datamodel.util.SchemaItemImageCreator;
@@ -24,16 +24,16 @@ public class DataModelPropLabelProvider implements ILabelProvider {
 
     public Image getImage(Object element) {
 
-        if (element instanceof TreeSelection)
-            return SchemaItemImageCreator.getInstance().getImage(((TreeSelection) element).getFirstElement());
+        if (element instanceof StructuredSelection)
+            return SchemaItemImageCreator.getInstance().getImage(((StructuredSelection) element).getFirstElement());
 
         return SchemaItemImageCreator.getInstance().getImage(element);
     }
 
     public String getText(Object element) {
 
-        if (element instanceof TreeSelection)
-            return SchemaItemLabelCreator.getInstance().getLabel(((TreeSelection) element).getFirstElement());
+        if (element instanceof StructuredSelection)
+            return SchemaItemLabelCreator.getInstance().getLabel(((StructuredSelection) element).getFirstElement());
 
         return SchemaItemLabelCreator.getInstance().getLabel(element);
     }

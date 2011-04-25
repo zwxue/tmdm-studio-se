@@ -38,7 +38,9 @@ public class ElementFKInfosSection extends XSDComponentSection {
     @Override
     public void refresh() {
         compXPath.setInfos(fkInfos.toArray(new String[0]));
+        compXPath.removeUIListener();
         compXPath.setIsResolveAutoInWeb(isResolveAutoInWeb);
+        compXPath.addUIListener();
     }
 
     @Override

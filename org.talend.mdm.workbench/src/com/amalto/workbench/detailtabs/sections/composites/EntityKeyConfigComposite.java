@@ -198,7 +198,7 @@ public class EntityKeyConfigComposite extends Composite {
         lblSelector.setText("Selector");
         lblSelector.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
-        comboSelector = new Combo(compKeyInfo, SWT.NONE);
+        comboSelector = new Combo(compKeyInfo, SWT.READ_ONLY);
         final GridData gd_comboSelector = new GridData(SWT.FILL, SWT.CENTER, true, false);
         comboSelector.setLayoutData(gd_comboSelector);
 
