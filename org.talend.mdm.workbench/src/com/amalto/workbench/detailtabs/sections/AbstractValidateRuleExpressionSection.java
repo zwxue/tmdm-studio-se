@@ -50,7 +50,6 @@ public abstract class AbstractValidateRuleExpressionSection extends
 
 		textListener = new ITextListener() {
 
-			@Override
 			public void textChanged(TextEvent event) {
 				caretOffset = textWidget.getCaretOffset();
 				AbstractValidateRuleExpressionSection.this.autoCommit();

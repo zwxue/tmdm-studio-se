@@ -12,7 +12,6 @@ public class DefaultValueAnnoInfo extends SingleContentAnnotationInfo {
 		super(sourceComponent, defaultValue);
 	}
 
-	@Override
 	public CommitHandler<DefaultValueAnnoInfo> createCommitHandler() {
  
 		return new DefaultValueCommitHandler( this);

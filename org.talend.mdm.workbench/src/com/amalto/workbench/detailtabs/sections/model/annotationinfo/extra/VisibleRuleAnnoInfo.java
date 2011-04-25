@@ -12,7 +12,6 @@ public class VisibleRuleAnnoInfo extends SingleContentAnnotationInfo {
 		super(sourceComponent, defaultValue);
 	}
 
-	@Override
 	public CommitHandler<VisibleRuleAnnoInfo> createCommitHandler() {
  
 		return new VisibleRuleCommitHandler( this);
