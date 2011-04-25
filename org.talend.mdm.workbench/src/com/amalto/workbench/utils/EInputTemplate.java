@@ -77,9 +77,7 @@ public enum EInputTemplate {
     WORKFLOW("workflow",//$NON-NLS-1$
              "<parameters>\n\t\t<processId>?</processId>\n\t\t<processVersion>?</processVersion>\n\t\t<variable>\n\t\t\t<scope>?</scope>\n\t\t\t<name>?</name>\n\t\t\t<type>?</type>\n\t\t\t<fromItem>?</fromItem>\n\t\t\t<xpath>?</xpath>\n\t\t</variable>\n\t\t<variable>\n\t\t\t<scope>?</scope>\n\t\t\t<activityId>?</activityId>\n\t\t\t<name>?</name>\n\t\t\t<type>?</type>\n\t\t\t<fromItem>?</fromItem>\n\t\t\t<value>?</value>\n\t\t</variable>\n\t</parameters>\n\n"), //$NON-NLS-1$
     SYNCHRONIZATION("synchronization",//$NON-NLS-1$
-                    "<synchronization-configuration>\n\t<planName>?</planName>\n\t<action>START_DIFFERENTIAL</action>\n</synchronization-configuration>"), //$NON-NLS-1$
-
-    MIME("mime", "<parameters>\n\t<mimetype>?</mimetype>\n</parameters>");//$NON-NLS-1$//$NON-NLS-2$
+                    "<synchronization-configuration>\n\t<planName>?</planName>\n\t<action>START_DIFFERENTIAL</action>\n</synchronization-configuration>"); //$NON-NLS-1$
 
     String name;
 
