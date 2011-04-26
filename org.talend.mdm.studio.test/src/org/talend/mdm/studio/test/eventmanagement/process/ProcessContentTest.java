@@ -14,7 +14,6 @@ package org.talend.mdm.studio.test.eventmanagement.process;
 
 import junit.framework.Assert;
 
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
@@ -40,8 +39,6 @@ public class ProcessContentTest extends TalendSWTBotForMDM {
 
 	private String DECODE_PARAMETERS = "<parameters>                  <method>DECODE</method> <algorithm>XMLESCAPE</algorithm> </parameters>";
 
-	private String CALLJOB_PARAMETERS = "";
-
 	private String firStep = "getItem";
 
 	private String secStep = "Decode XML";
@@ -59,12 +56,6 @@ public class ProcessContentTest extends TalendSWTBotForMDM {
 
 	@After
 	public void runAfterEveryTest() {
-		Display.getDefault().syncExec(new Runnable() {
-
-			public void run() {
-				bot.activeEditor().save();
-			}
-		});
 	}
 
 	private void init() {

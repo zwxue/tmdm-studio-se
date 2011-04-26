@@ -14,8 +14,7 @@ Require-Bundle: org.eclipse.ui,
  org.apache.log4j,
  org.talend.mdm.commmon,
  org.talend.mdm.workbench,
- org.eclipse.ui.forms,
- org.talend.mdm.workbench.enterprise
+ org.eclipse.ui.forms
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: sample/,
  .

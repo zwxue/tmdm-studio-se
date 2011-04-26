@@ -130,32 +130,17 @@ public class DataModelSchemaElementPresentationTabTest extends
 	}
 
 	@Test
-	public void setDisplayFormatTest() {
+	public void setLabelsTest() {
 		bot.comboBox(0).setSelection(0);
-		bot.text(0).setText("test error format in English");
+		bot.text(0).setText("en");
 		bot.buttonWithTooltip("Add", 0).click();
 		sleep();
 		bot.comboBox(0).setSelection(1);
-		bot.text(0).setText("test error format in French");
+		bot.text(0).setText("fr");
 		bot.buttonWithTooltip("Add", 0).click();
 		sleep();
 		bot.tree(0).select(1);
 		bot.buttonWithTooltip("Del", 0).click();
-		// bot.button("Apply").click();
-	}
-
-	@Test
-	public void setLabelsTest() {
-		bot.comboBox(1).setSelection(0);
-		bot.text(1).setText("en");
-		bot.buttonWithTooltip("Add", 1).click();
-		sleep();
-		bot.comboBox(1).setSelection(1);
-		bot.text(1).setText("fr");
-		bot.buttonWithTooltip("Add", 1).click();
-		sleep();
-		bot.tree(1).select(1);
-		bot.buttonWithTooltip("Del", 1).click();
 		// bot.button("Apply").click();
 		Assert.assertNotNull(elementNode.expand().getNode("Annotations")
 				.expand().getNode("English Label: en"));
@@ -163,16 +148,16 @@ public class DataModelSchemaElementPresentationTabTest extends
 
 	@Test
 	public void setDescriptionsTest() {
-		bot.comboBox(2).setSelection(0);
-		bot.text(2).setText("enlish description");
-		bot.buttonWithTooltip("Add", 2).click();
+		bot.comboBox(1).setSelection(0);
+		bot.text(1).setText("enlish description");
+		bot.buttonWithTooltip("Add", 1).click();
 		sleep();
-		bot.comboBox(2).setSelection(1);
-		bot.text(2).setText("french description");
-		bot.buttonWithTooltip("Add", 2).click();
+		bot.comboBox(1).setSelection(1);
+		bot.text(1).setText("french description");
+		bot.buttonWithTooltip("Add", 1).click();
 		sleep();
-		bot.tree(2).select(1);
-		bot.buttonWithTooltip("Del", 2).click();
+		bot.tree(1).select(1);
+		bot.buttonWithTooltip("Del", 1).click();
 		// bot.button("Apply").click();
 		Assert.assertNotNull(elementNode.expand().getNode("Annotations")
 				.expand().getNode("English Description: enlish description"));
@@ -180,21 +165,34 @@ public class DataModelSchemaElementPresentationTabTest extends
 
 	@Test
 	public void setFacetTest() {
+		bot.comboBox(2).setSelection(0);
+		bot.text(2).setText("test error facet in English");
+		bot.buttonWithTooltip("Add", 2).click();
+		sleep();
+		bot.comboBox(2).setSelection(1);
+		bot.text(2).setText("test error facet in French");
+		bot.buttonWithTooltip("Add", 2).click();
+		sleep();
+		bot.tree(2).select(1);
+		bot.buttonWithTooltip("Del", 2).click();
+		sleep();
+		Assert.assertNotNull(elementNode.expand().getNode("Annotations")
+				.expand().getNode("Facet_Msg_EN: test error facet in English"));
+	}
+
+	@Test
+	public void setDisplayFormatTest() {
 		bot.comboBox(3).setSelection(0);
-		bot.text(3).setText("test error facet in English");
+		bot.text(3).setText("test error format in English");
 		bot.buttonWithTooltip("Add", 3).click();
 		sleep();
 		bot.comboBox(3).setSelection(1);
-		bot.text(3).setText("test error facet in French");
+		bot.text(3).setText("test error format in French");
 		bot.buttonWithTooltip("Add", 3).click();
 		sleep();
 		bot.tree(3).select(1);
 		bot.buttonWithTooltip("Del", 3).click();
-		sleep();
-		bot.button("OK").click();
-		sleep();
-		Assert.assertNotNull(elementNode.expand().getNode("Annotations")
-				.expand().getNode("Facet_Msg_EN: Reporting"));
+		// bot.button("Apply").click();
 	}
 
 }

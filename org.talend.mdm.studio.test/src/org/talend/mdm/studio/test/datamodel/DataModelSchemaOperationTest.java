@@ -129,7 +129,7 @@ public class DataModelSchemaOperationTest extends TalendSWTBotForMDM {
 		bot.button("OK").click();
 	}
 
-	@Test
+	// @Test
 	public void filterTest() {
 		bot.toolbarRadioButtonWithTooltip("Filter...").click();
 		SWTBotShell filterShell = bot.shell("Data Model Filter");

@@ -121,7 +121,6 @@ public class DataModelTypesTypeMainTabTest extends TalendSWTBotForMDM {
 	@Test
 	public void changeGroupTest() {
 		bot.radioInGroup("All", "Sub-Elements Group").click();
-		bot.button().click();
 	}
 
 }

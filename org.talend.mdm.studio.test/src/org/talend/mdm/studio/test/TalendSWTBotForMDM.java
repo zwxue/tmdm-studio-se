@@ -118,7 +118,7 @@ public class TalendSWTBotForMDM {
 
 			login();
 			initServerView();
-			importDemo();
+			// importDemo();
 			bot.waitUntil(Conditions.widgetIsEnabled(serverTree),
 					ONE_MINUTE_IN_MILLISEC * 10);
 			isLoggined = true;
