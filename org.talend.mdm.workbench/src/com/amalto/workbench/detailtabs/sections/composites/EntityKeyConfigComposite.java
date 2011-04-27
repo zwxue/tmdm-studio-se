@@ -198,7 +198,7 @@ public class EntityKeyConfigComposite extends Composite {
         lblSelector.setText("Selector");
         lblSelector.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 
-        comboSelector = new Combo(compKeyInfo, SWT.READ_ONLY);
+        comboSelector = new Combo(compKeyInfo, SWT.BORDER);
         final GridData gd_comboSelector = new GridData(SWT.FILL, SWT.CENTER, true, false);
         comboSelector.setLayoutData(gd_comboSelector);
 
@@ -275,7 +275,9 @@ public class EntityKeyConfigComposite extends Composite {
     private void initComboSelectorContents() {
         if (entityWrapper != null) {
             try {
-                comboSelector.setItems(Util.getChildElementNames("", entityWrapper.getSourceEntity()).toArray(new String[0]));//$NON-NLS-1$
+            	List<String> list =Util.getChildElementNames("", entityWrapper.getSourceEntity());
+            	list.add(0,".");
+                comboSelector.setItems(list.toArray(new String[0]));//$NON-NLS-1$
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
                 comboSelector.setItems(new String[0]);
