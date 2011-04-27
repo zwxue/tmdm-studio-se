@@ -344,6 +344,15 @@ public class DataModelSchemaEntityOperationTest extends TalendSWTBotForMDM {
 		conceptNode.contextMenu("Set the Workflow Access").click();
 		SWTBotShell shell = bot.shell("Set the Workflow Access");
 		shell.activate();
+		bot.buttonWithTooltip("Add Multiple").click();
+		bot.button("OK").click();
+	}
+
+	@Test
+	public void genarateWorkflowTest() {
+		conceptNode.contextMenu("Genarate Workflow").click();
+		SWTBotShell shell = bot.shell("Genarate Workflow");
+		shell.activate();
 		bot.buttonWithTooltip("Add").click();
 		bot.button("OK").click();
 	}

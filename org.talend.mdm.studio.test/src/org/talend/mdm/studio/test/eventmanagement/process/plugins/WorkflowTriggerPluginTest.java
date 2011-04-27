@@ -10,7 +10,6 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
-
 package org.talend.mdm.studio.test.eventmanagement.process.plugins;
 
 import java.io.IOException;
@@ -24,7 +23,11 @@ import org.junit.Test;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 import org.talend.mdm.studio.test.util.Util;
 
-public class PartialUpdatePluginTest extends TalendSWTBotForMDM {
+/**
+ * @author
+ * 
+ */
+public class WorkflowTriggerPluginTest extends TalendSWTBotForMDM {
 	private SWTBotTreeItem processParentNode;
 
 	private static final long ONE_MINUTE_IN_MILLISEC = 60000;
@@ -32,8 +35,6 @@ public class PartialUpdatePluginTest extends TalendSWTBotForMDM {
 	private String testValue = "<Patent><id>3</id><firstname>ss</firstname><lastname>ff</lastname><children><child>[5]</child><child>[6]</child><child>[7]</child><child>[8]</child></children></Patent>";
 
 	private SWTBotTreeItem eventManagementItem;
-
-	private String expectedResult = "<Patent><id>3</id><firstname>ss</firstname><lastname>ff</lastname><children><child>[1]</child><child>[2]</child><child>[5]</child><child>[6]</child><child>[7]</child><child>[8]</child><child>[3]</child><child>[4]</child></children></Patent>";;
 
 	@Before
 	public void runBeforeEveryTest() {
@@ -56,7 +57,7 @@ public class PartialUpdatePluginTest extends TalendSWTBotForMDM {
 		try {
 			bot.text(1).setText(
 					Util.getFileFromCurrentPluginSampleFolder(
-							"PartialUpdate.zip").getAbsolutePath());
+							"WorkflowTrigger.zip").getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (URISyntaxException e) {
@@ -71,7 +72,7 @@ public class PartialUpdatePluginTest extends TalendSWTBotForMDM {
 
 	@Test
 	public void partialUpdatePluginTest() {
-		processParentNode.expand().getNode("PartialUpdateProcess")
+		processParentNode.expand().getNode("StartWorkflow_DStar_Agency_1.0")
 				.doubleClick();
 		sleep(2);
 		// bot.tree().select(0);
@@ -81,16 +82,7 @@ public class PartialUpdatePluginTest extends TalendSWTBotForMDM {
 		bot.button("OK").click();
 		bot.button("Close").click();
 		bot.activeEditor().close();
-		// Check:
-		serverItem.getNode("Data Container").expand().getNode("PartialUpdate")
-				.doubleClick();
-		bot.buttonWithTooltip("Search").click();
-		bot.table().doubleClick(0, 0);
-
-		// TODO:the tabitem doesn't show.
-		// bot.tabItem(1).activate();
-		// String result = bot.styledText().getText();
-		// Assert.assertEquals(result, expectedResult);
+		// TODO: Check the result:
 	}
 
 }
