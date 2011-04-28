@@ -372,32 +372,7 @@
                  type="org.eclipse.xsd.XSDParticle">
            </input>
         </propertySection>
-        <propertySection
-              class="com.amalto.workbench.detailtabs.sections.VisibleRuleSection"
-              id="org.talend.mdm.workbench.properties.element.section.rule.visiblerule"
-              tab="org.talend.mdm.workbench.properties.element.tab.rules">
-           <input
-                 type="org.eclipse.xsd.XSDParticle">
-           </input>
-        </propertySection>
-        <propertySection
-              afterSection="org.talend.mdm.workbench.properties.element.section.rule.visiblerule"
-              class="com.amalto.workbench.detailtabs.sections.DefaultValueSection"
-              id="org.talend.mdm.workbench.properties.element.section.rule.defaultvalue"
-              tab="org.talend.mdm.workbench.properties.element.tab.rules">
-           <input
-                 type="org.eclipse.xsd.XSDParticle">
-           </input>
-        </propertySection> 
-        <propertySection
-              afterSection="org.talend.mdm.workbench.properties.element.section.rule.defaultvalue"
-              class="com.amalto.workbench.detailtabs.sections.CommitSection"
-              id="org.talend.mdm.workbench.properties.element.section.rule.commit"
-              tab="org.talend.mdm.workbench.properties.element.tab.rules">
-           <input
-                 type="org.eclipse.xsd.XSDParticle">
-           </input>
-        </propertySection>
+
      </propertySections>
   </extension>
   <extension

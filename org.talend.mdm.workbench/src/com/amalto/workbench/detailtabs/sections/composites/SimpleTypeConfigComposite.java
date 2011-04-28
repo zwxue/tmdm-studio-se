@@ -151,7 +151,18 @@ public class SimpleTypeConfigComposite extends Composite {
     }
 
     private void initUIContentForTxtName() {
-        txtName.setText(xsdSimpleType.getName() == null ? "" : xsdSimpleType.getName());
+    	removeNameTxtListener();
+        String name = xsdSimpleType.getName() == null ? "" : xsdSimpleType.getName();
+		txtName.setText(name);
+		if (name != null) {
+			int length = name.length();
+			if (length >= caretOffset) {
+				txtName.setSelection(caretOffset,caretOffset);
+			} else {
+				txtName.setSelection(length,length);
+			}
+		}
+		addNameTxtListener();
     }
 
     private void initUIContentForComboBuildInTypes() {
@@ -220,19 +231,28 @@ public class SimpleTypeConfigComposite extends Composite {
     private void initUIListeners() {
 
         initUIListenerForBaseTypeRadioBtns();
-
         initUIListenerForBaseTypeCombos();
         initUIListenerForText();
 
     }
+    private int caretOffset;
+    ModifyListener nameTxtListener;
     private void initUIListenerForText(){
-    	txtName.addModifyListener(new ModifyListener() {
+    nameTxtListener = new ModifyListener() {
 			
 			public void modifyText(ModifyEvent e) {
+				caretOffset = txtName.getCaretPosition();
 				if(section!=null && !txtName.getText().equals(xsdSimpleType.getName()))
 					section.autoCommit();				
 			}
-		});
+		};
+		
+    }
+    private void addNameTxtListener(){
+    	txtName.addModifyListener(nameTxtListener);
+    }
+    private void removeNameTxtListener(){
+    	txtName.removeModifyListener(nameTxtListener);
     }
     private void initUIListenerForBaseTypeRadioBtns() {
 
@@ -261,7 +281,9 @@ public class SimpleTypeConfigComposite extends Composite {
         comboCustomTypes.addSelectionChangedListener(new ISelectionChangedListener() {
 
             public void selectionChanged(SelectionChangedEvent event) {
-                refresh();
+                if(section!=null && getSelectedBaseTypeName().length()>0){
+					section.autoCommit();			
+                }
             }
         });
 
@@ -283,7 +305,9 @@ public class SimpleTypeConfigComposite extends Composite {
         comboBuildInTypes.addSelectionChangedListener(new ISelectionChangedListener() {
 
             public void selectionChanged(SelectionChangedEvent event) {
-                refresh();
+                if(section!=null && getSelectedBaseTypeName().length()>0){
+					section.autoCommit();			
+                }
             }
         });
 

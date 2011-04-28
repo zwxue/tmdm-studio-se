@@ -58,13 +58,12 @@ public class ComplexTypeConfigComposite extends Composite {
 
     private Button radGroupChoice;
 
-    private XSDComplexTypeDefinition complextType;
-    private BasePropertySection section;
     private XSDComplexTypeDefinition complexType;
+    private BasePropertySection section;
     public ComplexTypeConfigComposite(Composite parent, int style, BasePropertySection section,XSDComplexTypeDefinition complexType) {
     	this(parent, style);
     	this.section=section;
-    	this.complextType=complexType;
+    	this.complexType=complexType;
     }
     public ComplexTypeConfigComposite(Composite parent, int style) {
         super(parent, style);
@@ -110,7 +109,7 @@ public class ComplexTypeConfigComposite extends Composite {
 
     public void setComplexType(XSDComplexTypeDefinition complextType) {
 
-        this.complextType = complextType;
+        this.complexType = complextType;
 
         initUIContents();
     }
@@ -127,7 +126,7 @@ public class ComplexTypeConfigComposite extends Composite {
     }
 
     private void initUIContentsInGroup() {
-        XSDParticle groupParticle = (XSDParticle) complextType.getContent();
+        XSDParticle groupParticle = (XSDParticle) complexType.getContent();
         XSDModelGroup group = (XSDModelGroup) groupParticle.getContent();
         radGroupAll.setSelection(XSDCompositor.ALL_LITERAL.equals(group.getCompositor()));
         radGroupSequence.setSelection(XSDCompositor.SEQUENCE_LITERAL.equals(group.getCompositor()));
@@ -135,15 +134,26 @@ public class ComplexTypeConfigComposite extends Composite {
     }
 
     private void fillUIContentsInTxtName() {
-        txtName.setText(complextType.getName() == null ? "" : complextType.getName());
+    	removeNameTxtListener();
+        String name =complexType.getName() == null ? "" : complexType.getName();
+		txtName.setText(name);
+		if (name != null) {
+			int length = name.length();
+			if (length >= caretOffset) {
+				txtName.setSelection(caretOffset,caretOffset);
+			} else {
+				txtName.setSelection(length,length);
+			}
+		}
+		addNameTxtListener();
     }
 
     private void initUIContentsInComboExtends() {
         fillCandidatsInComboExtends();
 
         comboExtends.setSelection(new StructuredSelection(""));//$NON-NLS-1$
-        if (complextType.getBaseType() != null)
-            comboExtends.setSelection(new StructuredSelection(complextType.getBaseType()));
+        if (complexType.getBaseType() != null)
+            comboExtends.setSelection(new StructuredSelection(complexType.getBaseType()));
     }
 
     private void fillCandidatsInComboExtends() {
@@ -151,12 +161,12 @@ public class ComplexTypeConfigComposite extends Composite {
         ISelection oldSection = comboExtends.getSelection();
 
         List<Object> allExtends = new ArrayList<Object>();
-        for (XSDComplexTypeDefinition eachComplexType : Util.getComplexTypes(complextType.getSchema())) {
+        for (XSDComplexTypeDefinition eachComplexType : Util.getComplexTypes(complexType.getSchema())) {
 
-            if (eachComplexType.equals(complextType) || Util.isAllComplexType(eachComplexType))
+            if (eachComplexType.equals(complexType) || Util.isAllComplexType(eachComplexType))
                 continue;
 
-            if (Util.getParentTypes(eachComplexType).contains(complextType))
+            if (Util.getParentTypes(eachComplexType).contains(complexType))
                 continue;
 
             if (Util.isSequenceComplexType(eachComplexType) && !radGroupSequence.getSelection())
@@ -178,14 +188,23 @@ public class ComplexTypeConfigComposite extends Composite {
 
         initUIListenerForRadGroupTypes();
     }
+    private int caretOffset;
+    ModifyListener nameTxtListener;
     private void initUIListenerForText(){
-    	txtName.addModifyListener(new ModifyListener() {
+    	nameTxtListener= new ModifyListener() {
 			
 			public void modifyText(ModifyEvent e) {
-				if(section!=null && !complextType.getName().equals(txtName.getText()))
+				caretOffset = txtName.getCaretPosition();
+				if(section!=null && !complexType.getName().equals(txtName.getText()))
 				section.autoCommit();
 			}
-		});
+		};
+    }
+    private void addNameTxtListener(){
+    	txtName.addModifyListener(nameTxtListener);
+    }
+    private void removeNameTxtListener(){
+    	txtName.removeModifyListener(nameTxtListener);
     }
     private void initUIListenerForComboExtends() {
 
@@ -219,7 +238,7 @@ public class ComplexTypeConfigComposite extends Composite {
                 fillCandidatsInComboExtends();
 
                 refresh();
-                if(section!=null && getGroupTypeCompositor()!=Util.getComplexTypeGroupType(complextType))
+                if(section!=null && getGroupTypeCompositor()!=Util.getComplexTypeGroupType(complexType))
                 section.autoCommit();
             }
 
@@ -297,7 +316,7 @@ public class ComplexTypeConfigComposite extends Composite {
     }
 
     private XSDComplexTypeDefinition getDefaultExtends() {
-        return complextType.getSchema().resolveComplexTypeDefinition(complextType.getSchema().getSchemaForSchemaNamespace(),
+        return complexType.getSchema().resolveComplexTypeDefinition(complexType.getSchema().getSchemaForSchemaNamespace(),
                 "anyType");//$NON-NLS-1$
     }
 }
