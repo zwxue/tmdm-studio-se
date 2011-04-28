@@ -275,9 +275,9 @@ public class EntityKeyConfigComposite extends Composite {
     private void initComboSelectorContents() {
         if (entityWrapper != null) {
             try {
-            	List<String> list =Util.getChildElementNames("", entityWrapper.getSourceEntity());
-            	list.add(0,".");
-                comboSelector.setItems(list.toArray(new String[0]));//$NON-NLS-1$
+            	List<String> list =Util.getChildElementNames("", entityWrapper.getSourceEntity());//$NON-NLS-1$
+            	list.add(0,".");//$NON-NLS-1$
+                comboSelector.setItems(list.toArray(new String[0]));
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
                 comboSelector.setItems(new String[0]);
