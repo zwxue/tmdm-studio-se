@@ -213,7 +213,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
                 markDirtyWithoutCommit();
             }
         });
-        checkButton = toolkit.createButton(serviceGroup, "Verify", SWT.NONE);
+        checkButton = toolkit.createButton(serviceGroup, "Check", SWT.NONE);
         checkButton.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent e) {
