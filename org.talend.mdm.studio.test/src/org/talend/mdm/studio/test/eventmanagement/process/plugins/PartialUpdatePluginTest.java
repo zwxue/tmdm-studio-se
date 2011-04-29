@@ -17,13 +17,16 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import org.eclipse.swtbot.eclipse.finder.waits.Conditions;
+import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 import org.talend.mdm.studio.test.util.Util;
 
+@RunWith(SWTBotJunit4ClassRunner.class)
 public class PartialUpdatePluginTest extends TalendSWTBotForMDM {
 	private SWTBotTreeItem processParentNode;
 

@@ -10,6 +10,7 @@
 // 9 rue Pages 92150 Suresnes, France
 //
 // ============================================================================
+
 package org.talend.mdm.studio.test.eventmanagement.process.plugins;
 
 import java.io.IOException;
@@ -30,14 +31,16 @@ import org.talend.mdm.studio.test.util.Util;
  * 
  */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class WorkflowTriggerPluginTest extends TalendSWTBotForMDM {
+public class XsltPluginTest extends TalendSWTBotForMDM {
 	private SWTBotTreeItem processParentNode;
 
 	private static final long ONE_MINUTE_IN_MILLISEC = 60000;
 
-	private String testValue = "<Patent><id>3</id><firstname>ss</firstname><lastname>ff</lastname><children><child>[5]</child><child>[6]</child><child>[7]</child><child>[8]</child></children></Patent>";
+	private String testValue = "<Update><UserName>administrator</UserName><Source>genericUI</Source><TimeInMillis>1303979134937</TimeInMillis><OperationType>UPDATE</OperationType><RevisionID>null</RevisionID><DataCluster>DStar</DataCluster><DataModel>DStar</DataModel><Concept>Agency</Concept><Key>1</Key></Update>";
 
 	private SWTBotTreeItem eventManagementItem;
+
+	private String expectedResult = "";;
 
 	@Before
 	public void runBeforeEveryTest() {
@@ -58,9 +61,11 @@ public class WorkflowTriggerPluginTest extends TalendSWTBotForMDM {
 		bot.shell("Import Objects").activate();
 		bot.radio("Select archive file:").click();
 		try {
-			bot.text(1).setText(
-					Util.getFileFromCurrentPluginSampleFolder(
-							"WorkflowTrigger.zip").getAbsolutePath());
+			bot.text(1)
+					.setText(
+							Util.getFileFromCurrentPluginSampleFolder(
+									"DStar_AgentCommission--2.0.zip")
+									.getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (URISyntaxException e) {
@@ -75,17 +80,22 @@ public class WorkflowTriggerPluginTest extends TalendSWTBotForMDM {
 
 	@Test
 	public void partialUpdatePluginTest() {
-		processParentNode.expand().getNode("StartWorkflow_DStar_Agency_1.0")
-				.doubleClick();
+		processParentNode.expand().getNode("Runnable_Agent").doubleClick();
 		sleep(2);
-		// bot.tree().select(0);
 		bot.buttonWithTooltip("Execute...").click();
+		bot.comboBoxWithLabel("Input Variables").setSelection("_DEFAULT_");
+		bot.comboBoxWithLabel("Content Type(*)").setSelection("text/xml");
 		bot.textWithLabel("Value").setText(testValue);
 		bot.buttonWithTooltip("Add").click();
 		bot.button("OK").click();
+		// TODO Check:
+		bot.comboBox().setSelection("item_pk");
+		// Assert.assertEquals(bot.text().getText(), "");
+		bot.comboBox().setSelection("output");
+		// Assert.assertEquals(bot.text().getText(), expectedResult);
 		bot.button("Close").click();
 		bot.activeEditor().close();
-		// TODO: Check the result:
+
 	}
 
 }
