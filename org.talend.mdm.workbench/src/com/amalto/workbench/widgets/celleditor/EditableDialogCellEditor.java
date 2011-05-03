@@ -36,21 +36,24 @@ public abstract class EditableDialogCellEditor extends DialogCellEditor {
         txtEdit = new Text(cell, SWT.NONE);
         txtEdit.setFont(cell.getFont());
         txtEdit.setBackground(cell.getBackground());
-//        txtEdit.addFocusListener(new FocusAdapter() {
-//
-//            @Override
-//            public void focusLost(FocusEvent e) {
-//                doSetValue(txtEdit.getText().trim());
-//                EditableDialogCellEditor.this.deactivate();
-//            }
-//        });
+        // txtEdit.addFocusListener(new FocusAdapter() {
+        //
+        // @Override
+        // public void focusLost(FocusEvent e) {
+        // doSetValue(txtEdit.getText().trim());
+        // EditableDialogCellEditor.this.deactivate();
+        // }
+        // });
 
         txtEdit.addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.keyCode == 13)
+                if (e.keyCode == 13) {
+                    markDirty();
                     doSetValue(txtEdit.getText());
+                    fireApplyEditorValue();
+                }
             }
         });
 

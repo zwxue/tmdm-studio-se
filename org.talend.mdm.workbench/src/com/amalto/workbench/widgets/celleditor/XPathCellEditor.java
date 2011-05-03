@@ -21,11 +21,23 @@ import com.amalto.workbench.models.infoextractor.IAllDataModelHolder;
 
 public class XPathCellEditor extends EditableDialogCellEditor {
 
+    public interface IXPathUpdate {
+
+        public String updateXPath(String xpath);
+    }
+
     private IAllDataModelHolder allDataModelHolder;
+
+    private IXPathUpdate xpathUpdate = null;
 
     public XPathCellEditor(Composite parent, IAllDataModelHolder allDataModelHolder) {
         super(parent);
         this.allDataModelHolder = allDataModelHolder;
+    }
+
+    public XPathCellEditor(Composite parent, IAllDataModelHolder allDataModelHolder, IXPathUpdate xpathUpdate) {
+        this(parent, allDataModelHolder);
+        this.xpathUpdate = xpathUpdate;
     }
 
     public IAllDataModelHolder getAllDataModelHolder() {
@@ -40,16 +52,21 @@ public class XPathCellEditor extends EditableDialogCellEditor {
         this.allDataModelHolder = allDataModelHolder;
     }
 
-
     @Override
     protected Object openDialogBox(Control cellEditorWindow) {
 
-        SelectXPathDialog dialog = new SelectXPathDialog(cellEditorWindow.getShell(), allDataModelHolder, allDataModelHolder.getDefaultDataModel(),allDataModelHolder.getDefaultEntity());
+        SelectXPathDialog dialog = new SelectXPathDialog(cellEditorWindow.getShell(), allDataModelHolder,
+                allDataModelHolder.getDefaultDataModel(), allDataModelHolder.getDefaultEntity());
 
         if (dialog.open() != Window.OK)
             return null;
 
-        return dialog.getSelectedXPath();
+        String xpath = dialog.getSelectedXPath();
+        if (xpathUpdate != null) {
+            return xpathUpdate.updateXPath(xpath);
+        }
+        return xpath;
+
     }
 
 }
