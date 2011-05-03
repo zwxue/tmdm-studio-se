@@ -59,6 +59,7 @@ import com.amalto.workbench.webservices.WSExistsView;
 import com.amalto.workbench.webservices.WSGetConceptsInDataClusterWithRevisions;
 import com.amalto.workbench.webservices.WSGetDataCluster;
 import com.amalto.workbench.webservices.WSGetDataModel;
+import com.amalto.workbench.webservices.WSGetItem;
 import com.amalto.workbench.webservices.WSGetItemPKsByCriteria;
 import com.amalto.workbench.webservices.WSGetMenu;
 import com.amalto.workbench.webservices.WSGetRole;
@@ -68,11 +69,13 @@ import com.amalto.workbench.webservices.WSGetSynchronizationPlan;
 import com.amalto.workbench.webservices.WSGetTransformerV2;
 import com.amalto.workbench.webservices.WSGetUniverse;
 import com.amalto.workbench.webservices.WSGetView;
+import com.amalto.workbench.webservices.WSItem;
 import com.amalto.workbench.webservices.WSItemPKsByCriteriaResponseResults;
 import com.amalto.workbench.webservices.WSMenu;
 import com.amalto.workbench.webservices.WSMenuPK;
 import com.amalto.workbench.webservices.WSPutDataCluster;
 import com.amalto.workbench.webservices.WSPutDataModel;
+import com.amalto.workbench.webservices.WSPutItem;
 import com.amalto.workbench.webservices.WSPutMenu;
 import com.amalto.workbench.webservices.WSPutRole;
 import com.amalto.workbench.webservices.WSPutRoutingRule;
@@ -745,19 +748,22 @@ public class PasteXObjectAction extends Action {
                 if (dlg.getReturnCode() == Window.OK) {
                     for (WSItemPKsByCriteriaResponseResults result : results) {
                         if (dlg.getMDMDataModelUrls().contains(result.getWsItemPK().getConceptName())) {
-                            WSSynchronizationGetItemXML getItemXML = new WSSynchronizationGetItemXML(revisionID,
-                                    result.getWsItemPK());
-                            WSString xmlForm = destPort.synchronizationGetItemXML(getItemXML);
-                            Document doc = Util.parse(xmlForm.getValue());
-                            NodeList clusterNameList = Util.getNodeList(doc, "/ii/c");//$NON-NLS-1$
-                            for (int i = 0; i < clusterNameList.getLength(); i++) {
-                                Node node = clusterNameList.item(i);
-                                node.setTextContent(newXObjectPk);
-                            }
-
-                            WSSynchronizationPutItemXML putItemXML = new WSSynchronizationPutItemXML(revisionID,
-                                    Util.nodeToString(doc));
-                            destPort.synchronizationPutItemXML(putItemXML);
+                        	WSItem item=destPort.getItem(new WSGetItem(result.getWsItemPK()));
+                        	//item.setWsDataClusterPK(new WSDataClusterPK(newXObjectPk));
+//                            WSSynchronizationGetItemXML getItemXML = new WSSynchronizationGetItemXML(revisionID,
+//                                    result.getWsItemPK());
+//                            WSString xmlForm = destPort.synchronizationGetItemXML(getItemXML);
+//                            Document doc = Util.parse(xmlForm.getValue());
+//                            NodeList clusterNameList = Util.getNodeList(doc, "/ii/c");//$NON-NLS-1$
+//                            for (int i = 0; i < clusterNameList.getLength(); i++) {
+//                                Node node = clusterNameList.item(i);
+//                                node.setTextContent(newXObjectPk);
+//                            }
+//
+//                            WSSynchronizationPutItemXML putItemXML = new WSSynchronizationPutItemXML(revisionID,
+//                                    Util.nodeToString(doc));
+//                            destPort.synchronizationPutItemXML(putItemXML);
+                        	destPort.putItem(new WSPutItem(new WSDataClusterPK(newXObjectPk), item.getContent(), new WSDataModelPK(item.getDataModelName()), false));
                         }
                     }
                 }
