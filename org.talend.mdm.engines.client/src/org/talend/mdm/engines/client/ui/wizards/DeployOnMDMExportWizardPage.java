@@ -431,17 +431,19 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         // retrieve user, password, host, port from selected SpagoBiServer
 
         MDMServerDef server = null;
-
-        String selectedSpagoBiEngineName = serverSpagoBi.getItem(serverSpagoBi.getSelectionIndex());
-
-        List<MDMServerDef> listServerSapgo = com.amalto.workbench.utils.MDMServerHelper.getServers();
-        for(MDMServerDef serv:listServerSapgo){
-        	if(selectedSpagoBiEngineName.equals(serv.getDesc())){
-        		server=serv;
-        		break;
-        	}
+        if(mdmServer==null){
+	        String selectedSpagoBiEngineName = serverSpagoBi.getItem(serverSpagoBi.getSelectionIndex());
+	
+	        List<MDMServerDef> listServerSapgo = com.amalto.workbench.utils.MDMServerHelper.getServers();
+	        for(MDMServerDef serv:listServerSapgo){
+	        	if(selectedSpagoBiEngineName.equals(serv.getDesc())){
+	        		server=serv;
+	        		break;
+	        	}
+	        }
+        }else{
+        	server= new MDMServerDef(mdmServer.getShortDescription(), mdmServer.getHost(), mdmServer.getPort(), mdmServer.getLogin(), mdmServer.getPassword(),true,true);
         }
-      
 
         String user = server.getUser();// "admin";
         String password = server.getPasswd();// "talend";
@@ -450,8 +452,8 @@ public abstract class DeployOnMDMExportWizardPage extends WizardFileSystemResour
         // todo deploy to mdm server
 
         String filename = getDestinationValue();
-        String mdmServerUploadURL = "http://" + host + ":" + port + "/datamanager/uploadFile?deployjob="
-                + new File(filename).getName()+"&jobpath="+jobPath;
+        String mdmServerUploadURL = "http://" + host + ":" + port + "/datamanager/uploadFile?deployjob="//$NON-NLS-1$ //$NON-NLS-2$
+                + new File(filename).getName()+"&jobpath="+jobPath; //$NON-NLS-1$
         try {
             ProxyUtil.uploadFileToAppServer(mdmServerUploadURL, filename, user, password);
         } catch (Exception e) {
