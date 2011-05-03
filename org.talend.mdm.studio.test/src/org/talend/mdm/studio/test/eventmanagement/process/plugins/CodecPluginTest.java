@@ -26,21 +26,16 @@ import org.junit.runner.RunWith;
 import org.talend.mdm.studio.test.TalendSWTBotForMDM;
 import org.talend.mdm.studio.test.util.Util;
 
-/**
- * @author
- * 
- */
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class XsltPluginTest extends TalendSWTBotForMDM {
+public class CodecPluginTest extends TalendSWTBotForMDM {
 	private SWTBotTreeItem processParentNode;
 
 	private static final long ONE_MINUTE_IN_MILLISEC = 60000;
 
-	private String testValue = "<Update><UserName>administrator</UserName><Source>genericUI</Source><TimeInMillis>1303979134937</TimeInMillis><OperationType>UPDATE</OperationType><RevisionID>null</RevisionID><DataCluster>DStar</DataCluster><DataModel>DStar</DataModel><Concept>Agency</Concept><Key>1</Key></Update>";
-
+	private String testValue = "<item xmlns:mdm=\"java:com.amalto.core.plugin.base.xslt.MdmExtension\">&lt;Agency&gt;&lt;Id&gt;PANAME&lt;/Id&gt;&lt;Name&gt;Paris&lt;/Name&gt;&lt;City&gt;Paris&lt;/City&gt;&lt;State/&gt;&lt;Zip&gt;75000&lt;/Zip&gt;&lt;/Agency&gt;</item>";
 	private SWTBotTreeItem eventManagementItem;
 
-	private String expectedResult = "";;
+	private String expectedResult = "<item xmlns:mdm=\"java:com.amalto.core.plugin.base.xslt.MdmExtension\"><Agency><Id>PANAME</Id><Name>Paris</Name><City>Paris</City><State/><Zip>75000</Zip></Agency></item>";
 
 	@Before
 	public void runBeforeEveryTest() {
@@ -61,11 +56,9 @@ public class XsltPluginTest extends TalendSWTBotForMDM {
 		bot.shell("Import Objects").activate();
 		bot.radio("Select archive file:").click();
 		try {
-			bot.text(1)
-					.setText(
-							Util.getFileFromCurrentPluginSampleFolder(
-									"DStar_AgentCommission--2.0.zip")
-									.getAbsolutePath());
+			bot.text(1).setText(
+					Util.getFileFromCurrentPluginSampleFolder("Codec.zip")
+							.getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (URISyntaxException e) {
@@ -79,8 +72,8 @@ public class XsltPluginTest extends TalendSWTBotForMDM {
 	}
 
 	@Test
-	public void xsltPluginTest() {
-		processParentNode.expand().getNode("Runnable_Agent").doubleClick();
+	public void batchProjectPluginTest() {
+		processParentNode.expand().getNode("CodecPluginTest").doubleClick();
 		sleep(2);
 		bot.buttonWithTooltip("Execute...").click();
 		bot.comboBoxWithLabel("Input Variables").setSelection("_DEFAULT_");
@@ -89,9 +82,7 @@ public class XsltPluginTest extends TalendSWTBotForMDM {
 		bot.buttonWithTooltip("Add").click();
 		bot.button("OK").click();
 		// TODO Check:
-		bot.comboBox().setSelection("item_pk");
-		// Assert.assertEquals(bot.text().getText(), "");
-		bot.comboBox().setSelection("output");
+		bot.comboBox().setSelection("result");
 		// Assert.assertEquals(bot.text().getText(), expectedResult);
 		bot.button("Close").click();
 		bot.activeEditor().close();
