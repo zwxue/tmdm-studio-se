@@ -84,7 +84,7 @@ public class ServiceConfigrationMainPage extends AMainPageV2 {
 
     private static final String CHECKMSG_NOSELECTION = ""; //$NON-NLS-1$
 
-    private static final String CHECKMSG_SUCCESSFULCONN = "Connection sucessfully!";
+    private static final String CHECKMSG_SUCCESSFULCONN = "Connection succeeded!";
 
     private static final String CHECKMSG_ERRORCONN = "Connection failed, please check your url, username and password";
 

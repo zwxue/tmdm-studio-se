@@ -50,7 +50,7 @@ public class ServerRefreshCacheAction extends Action {
         this.view = view;
         setImageDescriptor(ImageCache.getImage(EImage.REFRESH.getPath()));
         setText("Refresh Cache");
-        setToolTipText("Refresh the item & object cache");
+        setToolTipText("Refresh the item & object caches");
     }
 
     public void run() {
