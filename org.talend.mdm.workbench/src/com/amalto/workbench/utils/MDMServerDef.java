@@ -27,16 +27,18 @@ public class MDMServerDef {
 
     private String passwd = "";//$NON-NLS-1$
     
-    private boolean saved=false;
-    
-    private boolean connected=false;
-    
+    private String universe = ""; //$NON-NLS-1$
+
+    private boolean saved = false;
+
+    private boolean connected = false;
+
     private String path = "/talend/TalendPort";//$NON-NLS-1$
-    
+
     public static final String PATTERN_URL = "^http://(.+):(\\d+)(/.*)";//$NON-NLS-1$
 
-    
-    public MDMServerDef(String desc, String host, String port, String path, String user, String passwd, boolean saved, boolean connected) {
+    public MDMServerDef(String desc, String host, String port, String path, String user, String passwd, String universe, boolean saved,
+            boolean connected) {
 
         this.desc = desc;
         this.host = host;
@@ -44,12 +46,9 @@ public class MDMServerDef {
         this.path = path;
         this.user = user;
         this.passwd = passwd;
-        this.saved=saved;
-        this.connected=connected;
-    }
-
-    public MDMServerDef(String desc, String host, String port, String user, String passwd, boolean saved, boolean connected) {
-        this(desc, host, port, "/talend/TalendPort", user, passwd, saved,connected);//$NON-NLS-1$
+        this.universe = universe;
+        this.saved = saved;
+        this.connected = connected;
     }
 
     public MDMServerDef() {
@@ -57,10 +56,14 @@ public class MDMServerDef {
     }
 
     public boolean isSaved() {
-		return saved;
-	}
+        return saved;
+    }
 
-	public String getDesc() {
+    public boolean isConnected() {
+        return connected;
+    }
+
+    public String getDesc() {
         return desc;
     }
 
@@ -107,6 +110,14 @@ public class MDMServerDef {
     public void setPath(String path) {
         this.path = path;
     }
+    
+    public String getUniverse() {
+        return universe;
+    }
+    
+    public void setUniverse(String universe) {
+        this.universe = universe;
+    }
 
     public String getUrl() {
         StringBuilder sb = new StringBuilder("http://");//$NON-NLS-1$
@@ -119,7 +130,7 @@ public class MDMServerDef {
         return sb.toString();
     }
 
-    public static MDMServerDef parse(String url, String user, String passwd, String desc, boolean saved, boolean connected) {
+    public static MDMServerDef parse(String url, String user, String passwd, String universe, String desc, boolean saved, boolean connected) {
 
         Matcher m = Pattern.compile(PATTERN_URL).matcher(url);
 
@@ -130,6 +141,6 @@ public class MDMServerDef {
         String port = m.group(2);
         String path = m.group(3);
 
-        return new MDMServerDef(desc, host, port, path, user, passwd, saved, connected);
+        return new MDMServerDef(desc, host, port, path, user, passwd, universe, saved, connected);
     }
 }

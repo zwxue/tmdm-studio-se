@@ -50,11 +50,10 @@ public class ServerLoginAction extends Action implements SelectionListener {
         this.view = view;
         setImageDescriptor(ImageCache.getImage("icons/startserveraction.gif"));//$NON-NLS-1$
         setText("Login");
-        // setToolTipText("Login to an "+IConstants.TALEND+" Server");
         setToolTipText("Add MDM Server Location");
-
     }
 
+    @Override
     public void run() {
         try {
             super.run();
@@ -63,8 +62,8 @@ public class ServerLoginAction extends Action implements SelectionListener {
                 WSUniversePK[] universePKs = null;
                 List<XtentisPort> ports = view.getPorts();
                 if (ports != null) {
-                    for (Iterator iterator = ports.iterator(); iterator.hasNext();) {
-                        XtentisPort port = (XtentisPort) iterator.next();
+                    for (Iterator<XtentisPort> iterator = ports.iterator(); iterator.hasNext();) {
+                        XtentisPort port = iterator.next();
                         universePKs = port.getUniversePKs(new WSGetUniversePKs("*")).getWsUniversePK();//$NON-NLS-1$
 
                         if (universePKs != null && universePKs.length > 0)
@@ -80,6 +79,7 @@ public class ServerLoginAction extends Action implements SelectionListener {
         }
     }
 
+    @Override
     public void runWithEvent(Event event) {
         super.runWithEvent(event);
     }
@@ -92,6 +92,7 @@ public class ServerLoginAction extends Action implements SelectionListener {
         int buttonId = ((Integer) e.widget.getData()).intValue();
         if (IDialogConstants.OK_ID != buttonId || !dialog.isOK())
             return;
+        String desc = dialog.getDescription();
         String url = dialog.getServer();
         String username = dialog.getUsernameText();
         String password = dialog.getPasswordText();
@@ -104,7 +105,7 @@ public class ServerLoginAction extends Action implements SelectionListener {
             return;
         }
 
-        view.initServerTree(url, username, password, universe);
+        view.initServerTree(desc, url, username, password, universe);
 
     }
 

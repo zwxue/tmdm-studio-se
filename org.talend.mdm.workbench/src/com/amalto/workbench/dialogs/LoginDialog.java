@@ -27,12 +27,10 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
-import org.eclipse.core.internal.resources.SavedState;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.resource.ColorRegistry;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -41,6 +39,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
@@ -60,19 +59,12 @@ import com.amalto.workbench.providers.ListContentProvider;
 import com.amalto.workbench.utils.MDMServerDef;
 import com.amalto.workbench.utils.MDMServerHelper;
 import com.amalto.workbench.utils.PasswordUtil;
-import com.amalto.workbench.utils.PreferenceMDMServerExtractor;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.webservices.WSUniversePK;
 
 public class LoginDialog extends Dialog {
 
-    private static Log log = LogFactory.getLog(LoginDialog.class);
-
-    private static String f = Platform.getInstanceLocation().getURL().getPath() + "/mdm_workbench_config.xml";//$NON-NLS-1$
-
-    // private Collection<String> endpoints;
-
-    // private Collection<String> universes;
+    private static final Log log = LogFactory.getLog(LoginDialog.class);
 
     private ComboViewer descCombo = null;
 
@@ -83,6 +75,8 @@ public class LoginDialog extends Dialog {
     private Text urlText;
 
     private Button savePasswordButton;
+
+    private Button connectOnStartupButton;
 
     private SelectionListener caller = null;
 
@@ -95,8 +89,9 @@ public class LoginDialog extends Dialog {
     private Document logininfoDocument;
 
     private List<WSUniversePK> universes;
-    
+
     private boolean isOK;
+
     /**
      * @param parentShell
      */
@@ -108,30 +103,8 @@ public class LoginDialog extends Dialog {
         setDefaultImage(ImageCache.getCreatedImage(EImage.TALEND_PICTO.getPath()));
     }
 
+    @Override
     protected Control createDialogArea(Composite parent) {
-        // this dialog is just used to crate a new server,so there is no need to initiate any information.
-        /*
-         * DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(); DocumentBuilder builder;
-         * 
-         * try { builder = factory.newDocumentBuilder(); logininfoDocument = builder.parse(new File(f)); } catch
-         * (SAXException e) { e.printStackTrace(); } catch (IOException e) { e.printStackTrace(); } catch
-         * (ParserConfigurationException e) { e.printStackTrace(); }
-         */
-        // if(logininfoDocument!=null)
-        // for (int i = 0; i < logininfoDocument.getChildNodes().getLength(); i++) {
-        // logininfoDocument.getChildNodes().item(i)
-        // }
-
-        // endpoints = Arrays.asList(new String[]{Util.default_endpoint_address});
-        // endpoints = Arrays.asList(getInitMDMServers());
-        /*
-         * try { properties.loadFromXML(new FileInputStream(f)); if (properties.getProperty("url")!=null)
-         * endpoints=Arrays.asList(properties.getProperty("url").split(",")); } catch (Exception e) {}
-         * 
-         * universes = Arrays.asList(new String[]{""}); try { properties.load(new FileInputStream(f)); if
-         * (properties.getProperty("universes")!=null)
-         * universes=Arrays.asList(properties.getProperty("universes").split(",")); } catch (Exception e) {}
-         */
         // Should not really be here but well,....
         parent.getShell().setText(this.title);
 
@@ -174,7 +147,7 @@ public class LoginDialog extends Dialog {
         Label usernameLabel = new Label(authenticationGroup, SWT.NONE);
         usernameLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
         usernameLabel.setText("Username");
-        
+
         userText = new Text(authenticationGroup, SWT.BORDER);
         userText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         userText.setDoubleClickEnabled(false);
@@ -182,7 +155,7 @@ public class LoginDialog extends Dialog {
         Label passwordLabel = new Label(authenticationGroup, SWT.NONE);
         passwordLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
         passwordLabel.setText("Password");
-        
+
         passwordText = new Text(authenticationGroup, SWT.PASSWORD | SWT.BORDER);
         passwordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
@@ -209,8 +182,23 @@ public class LoginDialog extends Dialog {
         }
 
         savePasswordButton = new Button(composite, SWT.CHECK);
-        savePasswordButton.setText("Save this MDM Server Location");
+        savePasswordButton.setText("Save password");
         savePasswordButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+        savePasswordButton.addSelectionListener(new SelectionListener() {
+
+            public void widgetDefaultSelected(SelectionEvent e) {
+            }
+
+            public void widgetSelected(SelectionEvent e) {
+                boolean savePassword = savePasswordButton.getSelection();
+                connectOnStartupButton.setEnabled(savePassword);
+            }
+        });
+
+        connectOnStartupButton = new Button(composite, SWT.CHECK);
+        connectOnStartupButton.setEnabled(false);
+        connectOnStartupButton.setText("Automatically connect on startup");
+        connectOnStartupButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 
         descCombo.addSelectionChangedListener(new ISelectionChangedListener() {
 
@@ -224,157 +212,149 @@ public class LoginDialog extends Dialog {
         return composite;
     }
 
+    @Override
     protected void createButtonsForButtonBar(Composite parent) {
         super.createButtonsForButtonBar(parent);
         getButton(IDialogConstants.OK_ID).addSelectionListener(this.caller);
-        /*
-         * createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true); createButton(parent,
-         * IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
-         */
     }
 
     public boolean isOK() {
-		return isOK;
-	}
+        return isOK;
+    }
 
-	protected void okPressed() {        
-        if(descCombo.getCombo().getText().trim().length()==0){
-        	MessageDialog.openWarning(null, "Warning", "Description is mandatory!");
-        	descCombo.getCombo().setFocus();
-        	isOK=false;
-        	return;
+    @Override
+    protected void okPressed() {
+        String desc = descCombo.getCombo().getText().trim();
+        if (desc.length() == 0) {
+            MessageDialog.openWarning(null, "Warning", "Description is mandatory!");
+            descCombo.getCombo().setFocus();
+            isOK = false;
+            return;
         }
-        if(urlText.getText().trim().length()==0){
-        	MessageDialog.openWarning(null, "Warning", "Server is mandatory!");
-        	urlText.setFocus();
-        	isOK=false;
-        	return;
-        }        
-        if(userText.getText().trim().length()==0){
-        	MessageDialog.openWarning(null, "Warning", "Username is mandatory!");
-        	userText.setFocus();
-        	isOK=false;
-        	return;
+        if (urlText.getText().trim().length() == 0) {
+            MessageDialog.openWarning(null, "Warning", "Server is mandatory!");
+            urlText.setFocus();
+            isOK = false;
+            return;
         }
-        if(passwordText.getText().trim().length()==0){
-        	MessageDialog.openWarning(null, "Warning", "Password is mandatory!");
-        	passwordText.setFocus();
-        	isOK=false;
-        	return;
+        if (userText.getText().trim().length() == 0) {
+            MessageDialog.openWarning(null, "Warning", "Username is mandatory!");
+            userText.setFocus();
+            isOK = false;
+            return;
+        }
+        if (passwordText.getText().trim().length() == 0) {
+            MessageDialog.openWarning(null, "Warning", "Password is mandatory!");
+            passwordText.setFocus();
+            isOK = false;
+            return;
         }
 
-        isOK=true;
-        SAXReader reader = new SAXReader();
-        Element root = null;
-        Element savedEl=null;
-        if (new File(f).exists()) {
+        Element root;
+        Element server;
+        if (new File(MDMServerHelper.workbenchConfigFile).exists()) {
             try {
-                logininfoDocument = reader.read(new File(f));
+                SAXReader reader = new SAXReader();
+                logininfoDocument = reader.read(new File(MDMServerHelper.workbenchConfigFile));
             } catch (DocumentException e) {
                 log.error(e.getMessage(), e);
+                isOK = false;
+                return;
             }
             root = logininfoDocument.getRootElement();
-            savedEl = checkServerSaved(root);
+            server = getServer(root, desc);
         } else {
             logininfoDocument = DocumentHelper.createDocument();
-            root = logininfoDocument.addElement("MDMServer");//$NON-NLS-1$
+            root = logininfoDocument.addElement(MDMServerHelper.ROOT);
+            server = null;
         }
-        //check description unique
-        Element descEl=    checkServerDesc(root);    
-    	if( descEl!=null && !urlText.getText().equals(descEl.element("url").getText())){//$NON-NLS-1$
-    		MessageDialog.openWarning(null, "Warning", "Description is already exists, please use another one!");
-    		descCombo.getCombo().setFocus();
-    		isOK=false;
-    		return;
-    	}      
-        isOK=true;
-        if (savedEl==null) {
-            addServer(root,savePasswordButton.getSelection());            
-        }else{
-        	Element connected1=savedEl.element("connected");//$NON-NLS-1$
-        	if(connected1==null)
-        		connected1 = savedEl.addElement("connected");//$NON-NLS-1$
-        	connected1.setText("true");//$NON-NLS-1$
-        	Element saved1=savedEl.element("saved");//$NON-NLS-1$
-        	if(saved1==null)
-        		saved1 = savedEl.addElement("saved");//$NON-NLS-1$
-        	saved1.setText(String.valueOf(savePasswordButton.getSelection()));
+
+        boolean savePassword = savePasswordButton.getSelection();
+        boolean connectOnStartup = savePassword && connectOnStartupButton.getSelection();
+
+        if (server == null) {
+            addServer(root, savePassword, connectOnStartup);
+        } else {
+            setServerProperties(server, savePassword, connectOnStartup);
         }
+
         XMLWriter writer;
         try {
-            writer = new XMLWriter(new FileWriter(f));
+            writer = new XMLWriter(new FileWriter(MDMServerHelper.workbenchConfigFile));
             writer.write(logininfoDocument);
             writer.close();
         } catch (IOException e) {
             log.error(e.getMessage(), e);
+            isOK = false;
+            return;
         }
 
-
+        isOK = true;
         setReturnCode(OK);
         // no close let Action Handler handle it
     }
-	private Element checkServerDesc(Element root){
-        List properties = root.elements("properties");//$NON-NLS-1$
-        for (Iterator iterator = properties.iterator(); iterator.hasNext();) {
-            Element ele = (Element) iterator.next();
-            String desc=ele.element("desc")!=null?ele.element("desc").getText():"";
-            if (descCombo.getCombo().getText().trim().equals(desc))//$NON-NLS-1$                    
-                return ele;
-        }
-        return null;
-	}
-    private Element checkServerSaved(Element root) {
-        List properties = root.elements("properties");//$NON-NLS-1$
-        for (Iterator iterator = properties.iterator(); iterator.hasNext();) {
-            Element ele = (Element) iterator.next();
 
-            if (ele.element("url").getText().equals(urlText.getText().trim())//$NON-NLS-1$
-                    && ele.element("user").getText().equals(userText.getText())//$NON-NLS-1$
-                    && ele.element("password").getText().equals(PasswordUtil.encryptPassword(passwordText.getText()))){//$NON-NLS-1$
-                    
-                if(Util.IsEnterPrise()){
-    				if(ele.element("universe").getText().equals(
-    					universeCombo.getText())){
-    						return ele;
-    				}
-    			}
+    private Element getServer(Element root, String matchingDesc) {
+        List<?> properties = root.elements(MDMServerHelper.PROPERTIES);
+        for (Iterator<?> iterator = properties.iterator(); iterator.hasNext();) {
+            Element ele = (Element) iterator.next();
+            String desc = ele.element(MDMServerHelper.DESC) != null ? ele.element(MDMServerHelper.DESC).getText() : ""; //$NON-NLS-1$
+            if (matchingDesc.equals(desc))
                 return ele;
-            }
         }
         return null;
     }
 
-    private void addServer(Element root , boolean saved) {
-        Element prop = root.addElement("properties");//$NON-NLS-1$
-
-        Element url = prop.addElement("url");//$NON-NLS-1$
-        Element user = prop.addElement("user");//$NON-NLS-1$
-        Element password = prop.addElement("password");//$NON-NLS-1$
-        Element universe = prop.addElement("universe");//$NON-NLS-1$
-        Element desc = prop.addElement("desc");//$NON-NLS-1$
-        Element saved1 = prop.addElement("saved");//$NON-NLS-1$
-        Element connected1 = prop.addElement("connected");//$NON-NLS-1$
+    private void addServer(Element root, boolean savePassword, boolean connectOnStartup) {
+        Element prop = root.addElement(MDMServerHelper.PROPERTIES);
+        setServerProperties(prop, savePassword, connectOnStartup);
+        Element desc = prop.element(MDMServerHelper.DESC);
+        if (desc == null)
+            desc = prop.addElement(MDMServerHelper.DESC);
         desc.setText(descCombo.getCombo().getText().trim());
-        url.setText(urlText.getText().trim());
-        user.setText(userText.getText());
-        password.setText(PasswordUtil.encryptPassword(passwordText.getText()));
-        if (saved)
-        	saved1.setText("true");
-        else
-        	saved1.setText("false");
-        
-        connected1.setText("true");
-        
-        if (Util.IsEnterPrise())
-            universe.setText(universeCombo.getText());
     }
 
-    // public Properties getProperties() {
-    // return properties;
-    // }
+    private void setServerProperties(Element prop, boolean savePassword, boolean connectOnStartup) {
+        Element url = prop.element(MDMServerHelper.URL);
+        if (url == null)
+            url = prop.addElement(MDMServerHelper.URL);
+        url.setText(urlText.getText().trim());
+
+        Element user = prop.element(MDMServerHelper.USER);
+        if (user == null)
+            user = prop.addElement(MDMServerHelper.USER);
+        user.setText(userText.getText());
+
+        Element password = prop.element(MDMServerHelper.PASSWORD);
+        if (password == null)
+            password = prop.addElement(MDMServerHelper.PASSWORD);
+        if (savePassword)
+            password.setText(PasswordUtil.encryptPassword(passwordText.getText()));
+        else
+            password.setText(""); //$NON-NLS-1$
+
+        Element universe = prop.element(MDMServerHelper.UNIVERSE);
+        if (universe == null)
+            universe = prop.addElement(MDMServerHelper.UNIVERSE);
+        universe.setText(getUniverse());
+
+        Element saved = prop.element(MDMServerHelper.SAVED);
+        if (saved == null)
+            saved = prop.addElement(MDMServerHelper.SAVED);
+        saved.setText(String.valueOf(savePassword));
+
+        Element connected = prop.element(MDMServerHelper.CONNECTED);
+        if (connected == null)
+            connected = prop.addElement(MDMServerHelper.CONNECTED);
+        connected.setText(String.valueOf(connectOnStartup));
+    }
 
     public void saveUserTypes() {
 
+    }
+
+    public String getDescription() {
+        return descCombo.getCombo().getText().trim();
     }
 
     public String getPasswordText() {
@@ -390,40 +370,20 @@ public class LoginDialog extends Dialog {
     }
 
     public String getUniverse() {
-        if (Util.IsEnterPrise()) {
+        if (Util.IsEnterPrise())
             return universeCombo.getText().trim();
-        } else {
-            return "";//$NON-NLS-1$
-        }
+        return "";//$NON-NLS-1$
     }
-    /**
-     * 
-     * @return
-     */
+
     private MDMServerDef[] getInitMDMServers() {
 
-    	List<MDMServerDef> servers = MDMServerHelper.getServers();
-
+        List<MDMServerDef> servers = MDMServerHelper.getServers();
         MDMServerDef defaultMDMServerDef = new MDMServerDef();
 
-        if (servers.size() == 0)
-            return new MDMServerDef[] { defaultMDMServerDef };
+        // add the default url to the first position
+        servers.add(0, defaultMDMServerDef);
 
-        List<MDMServerDef> mdmServers = new ArrayList<MDMServerDef>();
-        for (MDMServerDef eachServerDef : servers) {
-
-            mdmServers.add(eachServerDef);
-
-            if (eachServerDef.getUrl().equals(defaultMDMServerDef.getUrl()))
-                defaultMDMServerDef = eachServerDef;
-
-        }
-
-        // move the default url to the first position
-        mdmServers.remove(defaultMDMServerDef);
-        mdmServers.add(0, defaultMDMServerDef);
-
-        return mdmServers.toArray(new MDMServerDef[0]);
+        return servers.toArray(new MDMServerDef[0]);
     }
 
     private MDMServerDef getSelectedMDMServerDef() {
@@ -444,18 +404,9 @@ public class LoginDialog extends Dialog {
         passwordText.setText(selectedServer == null ? "" : selectedServer.getPasswd());//$NON-NLS-1$
         urlText.setText(selectedServer == null ? "" : selectedServer.getUrl());//$NON-NLS-1$
         userText.setFocus();
-        savePasswordButton.setSelection(selectedServer == null ?false:selectedServer.isSaved());
-    }
-
-    private String getDefaultConnectionDescription() {
-
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(userText.getText().trim());
-        sb.append("-");//$NON-NLS-1$
-        sb.append(urlText.getText().trim());
-
-        return sb.toString();
+        savePasswordButton.setSelection(selectedServer == null ? false : selectedServer.isSaved());
+        connectOnStartupButton.setSelection(selectedServer == null ? false : selectedServer.isConnected());
+        connectOnStartupButton.setEnabled(selectedServer == null ? false : selectedServer.isSaved());
     }
 }
 
