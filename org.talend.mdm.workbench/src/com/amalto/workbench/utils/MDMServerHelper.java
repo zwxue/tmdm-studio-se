@@ -86,7 +86,7 @@ public class MDMServerHelper {
         return defs;
     }
 
-    public void deleteServer(String desc) {
+    public static void deleteServer(String desc) {
         SAXReader reader = new SAXReader();
         File file = new File(MDMServerHelper.workbenchConfigFile);
         if (file.exists()) {
@@ -109,7 +109,7 @@ public class MDMServerHelper {
         }
     }
 
-    private void deleteServer(Element root, String desc) {
+    private static void deleteServer(Element root, String desc) {
         java.util.List<?> properties = root.elements(MDMServerHelper.PROPERTIES);
         for (Iterator<?> iterator = properties.iterator(); iterator.hasNext();) {
             Element ele = (Element) iterator.next();

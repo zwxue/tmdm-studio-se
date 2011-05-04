@@ -14,7 +14,6 @@ package com.amalto.workbench.views;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.Authenticator;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -66,11 +65,9 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.DrillDownAdapter;
@@ -97,16 +94,14 @@ import com.amalto.workbench.actions.RefreshAllServerAction;
 import com.amalto.workbench.actions.RefreshXObjectAction;
 import com.amalto.workbench.actions.RenameXObjectAction;
 import com.amalto.workbench.actions.ServerLoginAction;
+import com.amalto.workbench.actions.ServerLogoutAction;
 import com.amalto.workbench.actions.ServerRefreshAction;
 import com.amalto.workbench.actions.ServerRefreshCacheAction;
 import com.amalto.workbench.availablemodel.AvailableModelUtil;
 import com.amalto.workbench.availablemodel.IAvailableModel;
 import com.amalto.workbench.dialogs.ErrorExceptionDialog;
-import com.amalto.workbench.editors.XObjectBrowser;
-import com.amalto.workbench.editors.XObjectEditor;
 import com.amalto.workbench.export.ExportItemsAction;
 import com.amalto.workbench.export.ImportItemsAction;
-import com.amalto.workbench.image.EImage;
 import com.amalto.workbench.image.ImageCache;
 import com.amalto.workbench.models.IXObjectModelListener;
 import com.amalto.workbench.models.TreeObject;
@@ -114,9 +109,7 @@ import com.amalto.workbench.models.TreeObjectTransfer;
 import com.amalto.workbench.models.TreeParent;
 import com.amalto.workbench.providers.ServerTreeContentProvider;
 import com.amalto.workbench.providers.ServerTreeLabelProvider;
-import com.amalto.workbench.providers.XObjectBrowserInput;
 import com.amalto.workbench.providers.XtentisServerObjectsRetriever;
-import com.amalto.workbench.utils.IConstants;
 import com.amalto.workbench.utils.LocalTreeObjectRepository;
 import com.amalto.workbench.utils.MDMServerDef;
 import com.amalto.workbench.utils.MDMServerHelper;
@@ -124,7 +117,6 @@ import com.amalto.workbench.utils.UserInfo;
 import com.amalto.workbench.utils.Util;
 import com.amalto.workbench.utils.WorkbenchClipboard;
 import com.amalto.workbench.utils.XtentisException;
-import com.amalto.workbench.webservices.WSLogout;
 import com.amalto.workbench.webservices.XtentisPort;
 
 /**
@@ -146,6 +138,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
     protected Action loginAction;
 
     protected Action logoutAction;
+
+    protected Action logoutAndRemoveAction;
 
     protected Action newXObjectAction;
 
@@ -697,6 +691,7 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
             case TreeObject._SERVER_:
                 manager.add(loginAction);
                 manager.add(logoutAction);
+                manager.add(logoutAndRemoveAction);
                 manager.add(serverRefreshAction);
                 manager.add(serverRefreshCacheAction);
                 manager.add(importAction);
@@ -824,72 +819,8 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
     private void makeActions() {
         loginAction = new ServerLoginAction(this);
-
-        logoutAction = new Action() {
-
-            @Override
-            public void run() {
-                TreeParent serverRoot = (TreeParent) ((IStructuredSelection) ServerView.this.viewer.getSelection())
-                        .getFirstElement();
-
-                final String universe = serverRoot.getUniverse();
-                final String username = serverRoot.getUsername();
-                final String password = serverRoot.getPassword();
-                final String endpointAddress = serverRoot.getEndpointAddress();
-
-                TreeParent root = serverRoot.getParent();
-
-                LocalTreeObjectRepository.getInstance().switchOffListening();
-                LocalTreeObjectRepository.getInstance().setLazySaveStrategy(false, (TreeParent) serverRoot);
-                // add by ymli; fix the bug:0011948:
-                // All the tabs related to an MDM server connection should go away when loging out
-                IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-                int length = page.getEditors().length;
-                String version = "";//$NON-NLS-1$
-                String tabEndpointAddress = "";//$NON-NLS-1$
-                String unserName = null;
-                int j = 0;
-                for (int i = 0; i < length; i++) {
-                    IEditorPart part = page.getEditors()[i - j];
-                    if (part instanceof XObjectBrowser) {
-                        version = ((TreeObject) ((XObjectBrowserInput) part.getEditorInput()).getModel()).getUniverse();
-                        tabEndpointAddress = ((TreeObject) ((XObjectBrowserInput) part.getEditorInput()).getModel())
-                                .getEndpointAddress();
-                        unserName = ((TreeObject) ((XObjectBrowserInput) part.getEditorInput()).getModel()).getUsername();
-                    } else if (part instanceof XObjectEditor) {
-                        version = ((XObjectEditor) part).getInitialXObject().getServerRoot().getUniverse();
-                        tabEndpointAddress = ((XObjectEditor) part).getInitialXObject().getServerRoot().getEndpointAddress();
-                        unserName = ((XObjectEditor) part).getInitialXObject().getServerRoot().getUsername();
-                    }
-                    if (serverRoot.getUniverse().equals(version) && endpointAddress.equals(tabEndpointAddress)
-                            && serverRoot.getUsername().equals(unserName)) {
-                        page.closeEditor(part, false);
-                        j++;
-                    }
-                }
-
-                serverRoot.getParent().removeChild(serverRoot);
-                ServerView.this.viewer.refresh();
-
-                // attempt logout on the server side
-                ServerView.this.viewer.getControl().getDisplay().syncExec(new Runnable() {
-
-                    public void run() {
-                        try {
-                            Util.getPort(new URL(endpointAddress), universe, username, password).logout(new WSLogout());
-                        } catch (Exception e) {
-                            log.error(e.getMessage(), e);
-                        }
-                    }
-                });
-                // don't delete the server
-                // deleteReserved(endpointAddress, username, universe);
-            }
-        };
-
-        logoutAction.setText("Logout");
-        logoutAction.setToolTipText("Logout From the " + IConstants.TALEND + " Server");
-        logoutAction.setImageDescriptor(ImageCache.getImage(EImage.LOGOUT.getPath()));
+        logoutAction = new ServerLogoutAction(this, false);
+        logoutAndRemoveAction = new ServerLogoutAction(this, true);
 
         editXObjectAction = new EditXObjectAction(this);
         newXObjectAction = new NewXObjectAction(this);
@@ -908,7 +839,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         exportAction = new ExportItemsAction(this);
         importAction = new ImportItemsAction(this);
         newCategoryAction = new NewCategoryAction(this);
-
     }
 
     private void hookDoubleClickAction() {
@@ -962,7 +892,9 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
 
                     case TreeObject.JOB:
                         new DeleteJobAction().run();
-
+                        break;
+                    case TreeObject._SERVER_:
+                        logoutAndRemoveAction.run();
                         break;
                     default:
                         // MessageDialog.openError(getSite().getShell(),
@@ -973,7 +905,6 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
                     }// switch
 
                 }
-
             }
 
             public void keyReleased(KeyEvent e) {
@@ -1078,13 +1009,12 @@ public class ServerView extends ViewPart implements IXObjectModelListener {
         } else {
             displayName.append(" "); //$NON-NLS-1$
         }
-        
+
         displayName.append(username);
         serverRoot.setDisplayName(displayName.toString());
 
         TreeObject obj = new TreeObject("Pending...", serverRoot, TreeObject._INVISIBLE, null, null);
-        ArrayList list = new ArrayList() {
-        };
+        ArrayList list = new ArrayList();
         list.add(obj);
         serverRoot.setChildren(list);
         TreeParent invisibleRoot = getTreeContentProvider().getInvisibleRoot();
